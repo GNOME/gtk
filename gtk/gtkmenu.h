@@ -152,6 +152,22 @@ void       gtk_menu_popup_for_device      (GtkMenu             *menu,
                                            GDestroyNotify       destroy,
                                            guint                button,
                                            guint32              activate_time);
+GDK_AVAILABLE_IN_3_22
+void       gtk_menu_popup_at_rect         (GtkMenu             *menu,
+                                           GdkWindow           *rect_window,
+                                           const GdkRectangle  *rect,
+                                           GdkGravity           rect_anchor,
+                                           GdkGravity           menu_anchor,
+                                           const GdkEvent      *trigger_event);
+GDK_AVAILABLE_IN_3_22
+void       gtk_menu_popup_at_widget       (GtkMenu             *menu,
+                                           GtkWidget           *widget,
+                                           GdkGravity           widget_anchor,
+                                           GdkGravity           menu_anchor,
+                                           const GdkEvent      *trigger_event);
+GDK_AVAILABLE_IN_3_22
+void       gtk_menu_popup_at_pointer      (GtkMenu             *menu,
+                                           const GdkEvent      *trigger_event);
 
 /* Position the menu according to its position function. Called
  * from gtkmenuitem.c when a menu-item changes its allocation

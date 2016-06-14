@@ -2246,6 +2246,9 @@ gtk_menu_new_from_model
 gtk_menu_set_screen
 gtk_menu_reorder_child
 gtk_menu_attach
+gtk_menu_popup_at_rect
+gtk_menu_popup_at_widget
+gtk_menu_popup_at_pointer
 gtk_menu_popup_for_device
 gtk_menu_popup
 gtk_menu_set_accel_group

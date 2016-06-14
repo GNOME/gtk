@@ -387,6 +387,9 @@ HTML_IMAGES = \
 	$(srcdir)/images/panes.png					\
 	$(srcdir)/images/pagesetupdialog.png				\
 	$(srcdir)/images/placessidebar.png				\
+	$(srcdir)/images/popup-anchors.png				\
+	$(srcdir)/images/popup-flip.png					\
+	$(srcdir)/images/popup-slide.png				\
 	$(srcdir)/images/printdialog.png				\
 	$(srcdir)/images/progressbar.png				\
 	$(srcdir)/images/radio-group.png				\

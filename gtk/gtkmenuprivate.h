@@ -53,6 +53,16 @@ struct _GtkMenuPrivate
   gint                position_x;
   gint                position_y;
 
+  GdkWindow         *rect_window;
+  GdkRectangle       rect;
+  GtkWidget         *widget;
+  GdkGravity         rect_anchor;
+  GdkGravity         menu_anchor;
+  GdkAnchorHints     anchor_hints;
+  gint               rect_anchor_dx;
+  gint               rect_anchor_dy;
+  GdkWindowTypeHint  menu_type_hint;
+
   guint toggle_size;
   guint accel_size;
 
@@ -129,6 +139,14 @@ struct _GtkMenuPrivate
   gdouble drag_start_y;
   gint initial_drag_offset;
 };
+
+G_GNUC_INTERNAL
+void gtk_menu_update_scroll_offset (GtkMenu            *menu,
+                                    const GdkRectangle *flipped_rect,
+                                    const GdkRectangle *final_rect,
+                                    gboolean            flipped_x,
+                                    gboolean            flipped_y,
+                                    gpointer            user_data);
 
 G_END_DECLS
 

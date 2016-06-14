@@ -137,6 +137,7 @@
 
 
 #include "a11y/gtkmenuaccessible.h"
+#include "gdk/gdk-private.h"
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
                                          * extends below the submenu
@@ -183,6 +184,7 @@ typedef struct
 
 enum {
   MOVE_SCROLL,
+  POPPED_UP,
   LAST_SIGNAL
 };
 
@@ -195,7 +197,11 @@ enum {
   PROP_TEAROFF_STATE,
   PROP_TEAROFF_TITLE,
   PROP_MONITOR,
-  PROP_RESERVE_TOGGLE_SIZE
+  PROP_RESERVE_TOGGLE_SIZE,
+  PROP_ANCHOR_HINTS,
+  PROP_RECT_ANCHOR_DX,
+  PROP_RECT_ANCHOR_DY,
+  PROP_MENU_TYPE_HINT
 };
 
 enum {
@@ -562,6 +568,57 @@ gtk_menu_class_init (GtkMenuClass *class)
                                 GTK_TYPE_SCROLL_TYPE);
 
   /**
+   * GtkMenu::popped-up:
+   * @menu: the #GtkMenu that popped up
+   * @flipped_rect: (nullable): the position of @menu after any possible
+   *                flipping or %NULL if the backend can't obtain it
+   * @final_rect: (nullable): the final position of @menu or %NULL if the
+   *              backend can't obtain it
+   * @flipped_x: %TRUE if the anchors were flipped horizontally
+   * @flipped_y: %TRUE if the anchors were flipped vertically
+   *
+   * Emitted when the position of @menu is finalized after being popped up
+   * using gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (), or
+   * gtk_menu_popup_at_pointer ().
+   *
+   * @menu might be flipped over the anchor rectangle in order to keep it
+   * on-screen, in which case @flipped_x and @flipped_y will be set to %TRUE
+   * accordingly.
+   *
+   * @flipped_rect is the ideal position of @menu after any possible flipping,
+   * but before any possible sliding. @final_rect is @flipped_rect, but possibly
+   * translated in the case that flipping is still ineffective in keeping @menu
+   * on-screen.
+   *
+   * ![](popup-slide.png)
+   *
+   * The blue menu is @menu's ideal position, the green menu is @flipped_rect,
+   * and the red menu is @final_rect.
+   *
+   * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
+   * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
+   * #GtkMenu:rect-anchor-dx, #GtkMenu:rect-anchor-dy, and
+   * #GtkMenu:menu-type-hint.
+   *
+   * Since: 3.22
+   * Stability: Unstable
+   */
+  menu_signals[POPPED_UP] =
+    g_signal_new_class_handler (I_("popped-up"),
+                                G_OBJECT_CLASS_TYPE (gobject_class),
+                                G_SIGNAL_RUN_FIRST,
+                                NULL,
+                                NULL,
+                                NULL,
+                                _gtk_marshal_VOID__POINTER_POINTER_BOOLEAN_BOOLEAN,
+                                G_TYPE_NONE,
+                                4,
+                                G_TYPE_POINTER,
+                                G_TYPE_POINTER,
+                                G_TYPE_BOOLEAN,
+                                G_TYPE_BOOLEAN);
+
+  /**
    * GtkMenu:active:
    *
    * The index of the currently selected menu item, or -1 if no
@@ -692,6 +749,120 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                          P_("A boolean that indicates whether the menu reserves space for toggles and icons"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkMenu:anchor-hints:
+   *
+   * Positioning hints for aligning the menu relative to a rectangle.
+   *
+   * These hints determine how the menu should be positioned in the case that
+   * the menu would fall off-screen if placed in its ideal position.
+   *
+   * ![](popup-flip.png)
+   *
+   * For example, %GDK_ANCHOR_FLIP_Y will replace %GDK_GRAVITY_NORTH_WEST with
+   * %GDK_GRAVITY_SOUTH_WEST and vice versa if the menu extends beyond the
+   * bottom edge of the monitor.
+   *
+   * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
+   * gtk_menu_popup_at_pointer (), #GtkMenu:rect-anchor-dx,
+   * #GtkMenu:rect-anchor-dy, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
+   *
+   * Since: 3.22
+   * Stability: Unstable
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ANCHOR_HINTS,
+                                   g_param_spec_flags ("anchor-hints",
+                                                       P_("Anchor hints"),
+                                                       P_("Positioning hints for when the menu might fall off-screen"),
+                                                       GDK_TYPE_ANCHOR_HINTS,
+                                                       GDK_ANCHOR_FLIP |
+                                                       GDK_ANCHOR_SLIDE |
+                                                       GDK_ANCHOR_RESIZE,
+                                                       G_PARAM_READWRITE |
+                                                       G_PARAM_CONSTRUCT |
+                                                       G_PARAM_STATIC_NAME |
+                                                       G_PARAM_STATIC_NICK |
+                                                       G_PARAM_STATIC_BLURB));
+
+  /**
+   * GtkMenu:rect-anchor-dx:
+   *
+   * Horizontal offset to apply to the menu, i.e. the rectangle or widget
+   * anchor.
+   *
+   * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
+   * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
+   * #GtkMenu:rect-anchor-dy, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
+   *
+   * Since: 3.22
+   * Stability: Unstable
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_RECT_ANCHOR_DX,
+                                   g_param_spec_int ("rect-anchor-dx",
+                                                     P_("Rect anchor dx"),
+                                                     P_("Rect anchor horizontal offset"),
+                                                     G_MININT,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READWRITE |
+                                                     G_PARAM_CONSTRUCT |
+                                                     G_PARAM_STATIC_NAME |
+                                                     G_PARAM_STATIC_NICK |
+                                                     G_PARAM_STATIC_BLURB));
+
+  /**
+   * GtkMenu:rect-anchor-dy:
+   *
+   * Vertical offset to apply to the menu, i.e. the rectangle or widget anchor.
+   *
+   * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
+   * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
+   * #GtkMenu:rect-anchor-dx, #GtkMenu:menu-type-hint, and #GtkMenu::popped-up.
+   *
+   * Since: 3.22
+   * Stability: Unstable
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_RECT_ANCHOR_DY,
+                                   g_param_spec_int ("rect-anchor-dy",
+                                                     P_("Rect anchor dy"),
+                                                     P_("Rect anchor vertical offset"),
+                                                     G_MININT,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READWRITE |
+                                                     G_PARAM_CONSTRUCT |
+                                                     G_PARAM_STATIC_NAME |
+                                                     G_PARAM_STATIC_NICK |
+                                                     G_PARAM_STATIC_BLURB));
+
+  /**
+   * GtkMenu:menu-type-hint:
+   *
+   * The #GdkWindowTypeHint to use for the menu's #GdkWindow.
+   *
+   * See gtk_menu_popup_at_rect (), gtk_menu_popup_at_widget (),
+   * gtk_menu_popup_at_pointer (), #GtkMenu:anchor-hints,
+   * #GtkMenu:rect-anchor-dx, #GtkMenu:rect-anchor-dy, and #GtkMenu::popped-up.
+   *
+   * Since: 3.22
+   * Stability: Unstable
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_MENU_TYPE_HINT,
+                                   g_param_spec_enum ("menu-type-hint",
+                                                      P_("Menu type hint"),
+                                                      P_("Menu window type hint"),
+                                                      GDK_TYPE_WINDOW_TYPE_HINT,
+                                                      GDK_WINDOW_TYPE_HINT_POPUP_MENU,
+                                                      G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT |
+                                                      G_PARAM_STATIC_NAME |
+                                                      G_PARAM_STATIC_NICK |
+                                                      G_PARAM_STATIC_BLURB));
 
   /**
    * GtkMenu:horizontal-padding:
@@ -964,6 +1135,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
     case PROP_RESERVE_TOGGLE_SIZE:
       gtk_menu_set_reserve_toggle_size (menu, g_value_get_boolean (value));
       break;
+    case PROP_ANCHOR_HINTS:
+      menu->priv->anchor_hints = g_value_get_flags (value);
+      break;
+    case PROP_RECT_ANCHOR_DX:
+      menu->priv->rect_anchor_dx = g_value_get_int (value);
+      break;
+    case PROP_RECT_ANCHOR_DY:
+      menu->priv->rect_anchor_dy = g_value_get_int (value);
+      break;
+    case PROP_MENU_TYPE_HINT:
+      menu->priv->menu_type_hint = g_value_get_enum (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1007,6 +1190,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_RESERVE_TOGGLE_SIZE:
       g_value_set_boolean (value, gtk_menu_get_reserve_toggle_size (menu));
+      break;
+    case PROP_ANCHOR_HINTS:
+      g_value_set_flags (value, menu->priv->anchor_hints);
+      break;
+    case PROP_RECT_ANCHOR_DX:
+      g_value_set_int (value, menu->priv->rect_anchor_dx);
+      break;
+    case PROP_RECT_ANCHOR_DY:
+      g_value_set_int (value, menu->priv->rect_anchor_dy);
+      break;
+    case PROP_MENU_TYPE_HINT:
+      g_value_set_enum (value, menu->priv->menu_type_hint);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1168,6 +1363,23 @@ gtk_menu_init (GtkMenu *menu)
 }
 
 static void
+moved_to_rect_cb (GdkWindow          *window,
+                  const GdkRectangle *flipped_rect,
+                  const GdkRectangle *final_rect,
+                  gboolean            flipped_x,
+                  gboolean            flipped_y,
+                  GtkMenu            *menu)
+{
+  g_signal_emit (menu,
+                 menu_signals[POPPED_UP],
+                 0,
+                 flipped_rect,
+                 final_rect,
+                 flipped_x,
+                 flipped_y);
+}
+
+static void
 gtk_menu_destroy (GtkWidget *widget)
 {
   GtkMenu *menu = GTK_MENU (widget);
@@ -1194,7 +1406,10 @@ gtk_menu_destroy (GtkWidget *widget)
   g_clear_object (&priv->accel_group);
 
   if (priv->toplevel)
-    gtk_widget_destroy (priv->toplevel);
+    {
+      g_signal_handlers_disconnect_by_func (priv->toplevel, moved_to_rect_cb, menu);
+      gtk_widget_destroy (priv->toplevel);
+    }
 
   if (priv->tearoff_window)
     gtk_widget_destroy (priv->tearoff_window);
@@ -1549,53 +1764,16 @@ associate_menu_grab_transfer_window (GtkMenu *menu)
   g_object_set_data (G_OBJECT (toplevel_window), I_("gdk-attached-grab-window"), transfer_window);
 }
 
-/**
- * gtk_menu_popup_for_device:
- * @menu: a #GtkMenu
- * @device: (allow-none): a #GdkDevice
- * @parent_menu_shell: (allow-none): the menu shell containing the triggering
- *     menu item, or %NULL
- * @parent_menu_item: (allow-none): the menu item whose activation triggered
- *     the popup, or %NULL
- * @func: (allow-none): a user supplied function used to position the menu,
- *     or %NULL
- * @data: (allow-none): user supplied data to be passed to @func
- * @destroy: (allow-none): destroy notify for @data
- * @button: the mouse button which was pressed to initiate the event
- * @activate_time: the time at which the activation event occurred
- *
- * Displays a menu and makes it available for selection.
- *
- * Applications can use this function to display context-sensitive menus,
- * and will typically supply %NULL for the @parent_menu_shell,
- * @parent_menu_item, @func, @data and @destroy parameters. The default
- * menu positioning function will position the menu at the current position
- * of @device (or its corresponding pointer).
- *
- * The @button parameter should be the mouse button pressed to initiate
- * the menu popup. If the menu popup was initiated by something other than
- * a mouse button press, such as a mouse button release or a keypress,
- * @button should be 0.
- *
- * The @activate_time parameter is used to conflict-resolve initiation of
- * concurrent requests for mouse/keyboard grab requests. To function
- * properly, this needs to be the time stamp of the user event (such as
- * a mouse click or key press) that caused the initiation of the popup.
- * Only if no such event is available, gtk_get_current_event_time() can
- * be used instead.
- *
- * Since: 3.0
- */
-void
-gtk_menu_popup_for_device (GtkMenu             *menu,
-                           GdkDevice           *device,
-                           GtkWidget           *parent_menu_shell,
-                           GtkWidget           *parent_menu_item,
-                           GtkMenuPositionFunc  func,
-                           gpointer             data,
-                           GDestroyNotify       destroy,
-                           guint                button,
-                           guint32              activate_time)
+static void
+gtk_menu_popup_internal (GtkMenu             *menu,
+                         GdkDevice           *device,
+                         GtkWidget           *parent_menu_shell,
+                         GtkWidget           *parent_menu_item,
+                         GtkMenuPositionFunc  func,
+                         gpointer             data,
+                         GDestroyNotify       destroy,
+                         guint                button,
+                         guint32              activate_time)
 {
   GtkMenuPrivate *priv = menu->priv;
   GtkWidget *widget;
@@ -1802,6 +1980,73 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
 }
 
 /**
+ * gtk_menu_popup_for_device:
+ * @menu: a #GtkMenu
+ * @device: (allow-none): a #GdkDevice
+ * @parent_menu_shell: (allow-none): the menu shell containing the triggering
+ *     menu item, or %NULL
+ * @parent_menu_item: (allow-none): the menu item whose activation triggered
+ *     the popup, or %NULL
+ * @func: (allow-none): a user supplied function used to position the menu,
+ *     or %NULL
+ * @data: (allow-none): user supplied data to be passed to @func
+ * @destroy: (allow-none): destroy notify for @data
+ * @button: the mouse button which was pressed to initiate the event
+ * @activate_time: the time at which the activation event occurred
+ *
+ * Displays a menu and makes it available for selection.
+ *
+ * Applications can use this function to display context-sensitive menus,
+ * and will typically supply %NULL for the @parent_menu_shell,
+ * @parent_menu_item, @func, @data and @destroy parameters. The default
+ * menu positioning function will position the menu at the current position
+ * of @device (or its corresponding pointer).
+ *
+ * The @button parameter should be the mouse button pressed to initiate
+ * the menu popup. If the menu popup was initiated by something other than
+ * a mouse button press, such as a mouse button release or a keypress,
+ * @button should be 0.
+ *
+ * The @activate_time parameter is used to conflict-resolve initiation of
+ * concurrent requests for mouse/keyboard grab requests. To function
+ * properly, this needs to be the time stamp of the user event (such as
+ * a mouse click or key press) that caused the initiation of the popup.
+ * Only if no such event is available, gtk_get_current_event_time() can
+ * be used instead.
+ *
+ * Since: 3.0
+ */
+void
+gtk_menu_popup_for_device (GtkMenu             *menu,
+                           GdkDevice           *device,
+                           GtkWidget           *parent_menu_shell,
+                           GtkWidget           *parent_menu_item,
+                           GtkMenuPositionFunc  func,
+                           gpointer             data,
+                           GDestroyNotify       destroy,
+                           guint                button,
+                           guint32              activate_time)
+{
+  GtkMenuPrivate *priv;
+
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = menu->priv;
+  priv->rect_window = NULL;
+  priv->widget = NULL;
+
+  gtk_menu_popup_internal (menu,
+                           device,
+                           parent_menu_shell,
+                           parent_menu_item,
+                           func,
+                           data,
+                           destroy,
+                           button,
+                           activate_time);
+}
+
+/**
  * gtk_menu_popup:
  * @menu: a #GtkMenu
  * @parent_menu_shell: (allow-none): the menu shell containing the
@@ -1851,6 +2096,347 @@ gtk_menu_popup (GtkMenu             *menu,
                              parent_menu_item,
                              func, data, NULL,
                              button, activate_time);
+}
+
+static GdkDevice *
+get_device_for_event (const GdkEvent *event)
+{
+  GdkDevice *device = NULL;
+  GdkSeat *seat = NULL;
+  GdkScreen *screen = NULL;
+  GdkDisplay *display = NULL;
+
+  device = gdk_event_get_device (event);
+
+  if (device)
+    return device;
+
+  seat = gdk_event_get_seat (event);
+
+  if (!seat)
+    {
+      screen = gdk_event_get_screen (event);
+
+      if (screen)
+        display = gdk_screen_get_display (screen);
+
+      if (!display)
+        {
+          g_warning ("no display for event, using default");
+          display = gdk_display_get_default ();
+        }
+
+      if (display)
+        seat = gdk_display_get_default_seat (display);
+    }
+
+  return seat ? gdk_seat_get_pointer (seat) : NULL;
+}
+
+/**
+ * gtk_menu_popup_at_rect:
+ * @menu: the #GtkMenu to pop up
+ * @rect_window: (not nullable): the #GdkWindow @rect is relative to
+ * @rect: (not nullable): the #GdkRectangle to align @menu with
+ * @rect_anchor: the point on @rect to align with @menu's anchor point
+ * @menu_anchor: the point on @menu to align with @rect's anchor point
+ * @trigger_event: (nullable): the #GdkEvent that initiated this request or
+ *                 %NULL if it's the current event
+ *
+ * Displays @menu and makes it available for selection.
+ *
+ * See gtk_menu_popup_at_widget () and gtk_menu_popup_at_pointer (), which
+ * handle more common cases for popping up menus.
+ *
+ * @menu will be positioned at @rect, aligning their anchor points. @rect is
+ * relative to the top-left corner of @rect_window. @rect_anchor and
+ * @menu_anchor determine anchor points on @rect and @menu to pin together.
+ * @menu can optionally be offset by #GtkMenu:rect-anchor-dx and
+ * #GtkMenu:rect-anchor-dy.
+ *
+ * Anchors should be specified under the assumption that the text direction is
+ * left-to-right; they will be flipped horizontally automatically if the text
+ * direction is right-to-left.
+ *
+ * Other properties that influence the behaviour of this function are
+ * #GtkMenu:anchor-hints and #GtkMenu:menu-type-hint. Connect to the
+ * #GtkMenu::popped-up signal to find out how it was actually positioned.
+ *
+ * Since: 3.22
+ * Stability: Unstable
+ */
+void
+gtk_menu_popup_at_rect (GtkMenu            *menu,
+                        GdkWindow          *rect_window,
+                        const GdkRectangle *rect,
+                        GdkGravity          rect_anchor,
+                        GdkGravity          menu_anchor,
+                        const GdkEvent     *trigger_event)
+{
+  GtkMenuPrivate *priv;
+  GdkEvent *current_event = NULL;
+  GdkDevice *device = NULL;
+  guint button = 0;
+  guint32 activate_time = GDK_CURRENT_TIME;
+
+  g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_if_fail (GDK_IS_WINDOW (rect_window));
+  g_return_if_fail (rect);
+
+  priv = menu->priv;
+  priv->rect_window = rect_window;
+  priv->rect = *rect;
+  priv->widget = NULL;
+  priv->rect_anchor = rect_anchor;
+  priv->menu_anchor = menu_anchor;
+
+  if (!trigger_event)
+    {
+      current_event = gtk_get_current_event ();
+      trigger_event = current_event;
+    }
+
+  if (trigger_event)
+    {
+      device = get_device_for_event (trigger_event);
+      gdk_event_get_button (trigger_event, &button);
+      activate_time = gdk_event_get_time (trigger_event);
+    }
+  else
+    g_warning ("no trigger event for menu popup");
+
+  gtk_menu_popup_internal (menu,
+                           device,
+                           NULL,
+                           NULL,
+                           NULL,
+                           NULL,
+                           NULL,
+                           button,
+                           activate_time);
+
+  g_clear_pointer (&current_event, gdk_event_free);
+}
+
+/**
+ * gtk_menu_popup_at_widget:
+ * @menu: the #GtkMenu to pop up
+ * @widget: (not nullable): the #GtkWidget to align @menu with
+ * @widget_anchor: the point on @widget to align with @menu's anchor point
+ * @menu_anchor: the point on @menu to align with @widget's anchor point
+ * @trigger_event: (nullable): the #GdkEvent that initiated this request or
+ *                 %NULL if it's the current event
+ *
+ * Displays @menu and makes it available for selection.
+ *
+ * See gtk_menu_popup_at_pointer () to pop up a menu at the master pointer.
+ * gtk_menu_popup_at_rect () also allows you to position a menu at an arbitrary
+ * rectangle.
+ *
+ * ![](popup-anchors.png)
+ *
+ * @menu will be positioned at @widget, aligning their anchor points.
+ * @widget_anchor and @menu_anchor determine anchor points on @widget and @menu
+ * to pin together. @menu can optionally be offset by #GtkMenu:rect-anchor-dx
+ * and #GtkMenu:rect-anchor-dy.
+ *
+ * Anchors should be specified under the assumption that the text direction is
+ * left-to-right; they will be flipped horizontally automatically if the text
+ * direction is right-to-left.
+ *
+ * Other properties that influence the behaviour of this function are
+ * #GtkMenu:anchor-hints and #GtkMenu:menu-type-hint. Connect to the
+ * #GtkMenu::popped-up signal to find out how it was actually positioned.
+ *
+ * Since: 3.22
+ * Stability: Unstable
+ */
+void
+gtk_menu_popup_at_widget (GtkMenu        *menu,
+                          GtkWidget      *widget,
+                          GdkGravity      widget_anchor,
+                          GdkGravity      menu_anchor,
+                          const GdkEvent *trigger_event)
+{
+  GtkMenuPrivate *priv;
+  GdkEvent *current_event = NULL;
+  GdkDevice *device = NULL;
+  guint button = 0;
+  guint32 activate_time = GDK_CURRENT_TIME;
+  GtkWidget *parent_menu_shell = NULL;
+  GtkWidget *parent_menu_item = NULL;
+
+  g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = menu->priv;
+  priv->rect_window = NULL;
+  priv->widget = widget;
+  priv->rect_anchor = widget_anchor;
+  priv->menu_anchor = menu_anchor;
+
+  if (!trigger_event)
+    {
+      current_event = gtk_get_current_event ();
+      trigger_event = current_event;
+    }
+
+  if (trigger_event)
+    {
+      device = get_device_for_event (trigger_event);
+      gdk_event_get_button (trigger_event, &button);
+      activate_time = gdk_event_get_time (trigger_event);
+    }
+  else
+    g_warning ("no trigger event for menu popup");
+
+  if (GTK_IS_MENU_ITEM (priv->widget))
+    {
+      parent_menu_item = priv->widget;
+
+      if (GTK_IS_MENU_SHELL (gtk_widget_get_parent (parent_menu_item)))
+        parent_menu_shell = gtk_widget_get_parent (parent_menu_item);
+    }
+
+  gtk_menu_popup_internal (menu,
+                           device,
+                           parent_menu_shell,
+                           parent_menu_item,
+                           NULL,
+                           NULL,
+                           NULL,
+                           button,
+                           activate_time);
+
+  g_clear_pointer (&current_event, gdk_event_free);
+}
+
+/**
+ * gtk_menu_popup_at_pointer:
+ * @menu: the #GtkMenu to pop up
+ * @trigger_event: (nullable): the #GdkEvent that initiated this request or
+ *                 %NULL if it's the current event
+ *
+ * Displays @menu and makes it available for selection.
+ *
+ * See gtk_menu_popup_at_widget () to pop up a menu at a widget.
+ * gtk_menu_popup_at_rect () also allows you to position a menu at an arbitrary
+ * rectangle.
+ *
+ * @menu will be positioned at the pointer associated with @trigger_event.
+ *
+ * Properties that influence the behaviour of this function are
+ * #GtkMenu:anchor-hints, #GtkMenu:rect-anchor-dx, #GtkMenu:rect-anchor-dy, and
+ * #GtkMenu:menu-type-hint. Connect to the #GtkMenu::popped-up signal to find
+ * out how it was actually positioned.
+ *
+ * Since: 3.22
+ * Stability: Unstable
+ */
+void
+gtk_menu_popup_at_pointer (GtkMenu        *menu,
+                           const GdkEvent *trigger_event)
+{
+  GdkEvent *current_event = NULL;
+  GdkWindow *rect_window = NULL;
+  GdkDevice *device = NULL;
+  GdkRectangle rect = { 0, 0, 1, 1 };
+
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  if (!trigger_event)
+    {
+      current_event = gtk_get_current_event ();
+      trigger_event = current_event;
+    }
+
+  if (trigger_event)
+    {
+      rect_window = gdk_event_get_window (trigger_event);
+
+      if (rect_window)
+        {
+          device = get_device_for_event (trigger_event);
+
+          if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+            device = gdk_device_get_associated_device (device);
+
+          if (device)
+            gdk_window_get_device_position (rect_window, device, &rect.x, &rect.y, NULL);
+        }
+    }
+  else
+    g_warning ("no trigger event for menu popup");
+
+  gtk_menu_popup_at_rect (menu,
+                          rect_window,
+                          &rect,
+                          GDK_GRAVITY_SOUTH_EAST,
+                          GDK_GRAVITY_NORTH_WEST,
+                          trigger_event);
+
+  g_clear_pointer (&current_event, gdk_event_free);
+}
+
+static void
+get_arrows_border (GtkMenu   *menu,
+                   GtkBorder *border)
+{
+  GtkMenuPrivate *priv = menu->priv;
+  gint top_arrow_height, bottom_arrow_height;
+
+  gtk_css_gadget_get_preferred_size (priv->top_arrow_gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     &top_arrow_height, NULL,
+                                     NULL, NULL);
+  gtk_css_gadget_get_preferred_size (priv->bottom_arrow_gadget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     -1,
+                                     &bottom_arrow_height, NULL,
+                                     NULL, NULL);
+
+  border->top = priv->upper_arrow_visible ? top_arrow_height : 0;
+  border->bottom = priv->lower_arrow_visible ? bottom_arrow_height : 0;
+  border->left = border->right = 0;
+}
+
+/**
+ * gtk_menu_update_scroll_offset:
+ * @menu: the #GtkMenu that popped up
+ * @flipped_rect: (nullable): the position of @menu after any possible flipping
+ *                or %NULL if unknown
+ * @final_rect: (nullable): the final position of @menu or %NULL if unknown
+ * @flipped_x: %TRUE if the anchors were flipped horizontally
+ * @flipped_y: %TRUE if the anchors were flipped vertically
+ * @user_data: user data
+ *
+ * Updates the scroll offset of @menu based on the amount of sliding done while
+ * positioning @menu. Connect this to the #GtkMenu::popped-up signal to keep the
+ * contents of the menu vertically aligned with their ideal position, for combo
+ * boxes for example.
+ *
+ * Since: 3.22
+ * Stability: Private
+ */
+void
+gtk_menu_update_scroll_offset (GtkMenu            *menu,
+                               const GdkRectangle *flipped_rect,
+                               const GdkRectangle *final_rect,
+                               gboolean            flipped_x,
+                               gboolean            flipped_y,
+                               gpointer            user_data)
+{
+  GtkBorder arrows_border;
+
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  if (!flipped_rect || !final_rect)
+    return;
+
+  get_arrows_border (menu, &arrows_border);
+  menu->priv->scroll_offset = arrows_border.top + (final_rect->y - flipped_rect->y);
+  gtk_menu_scroll_to (menu, menu->priv->scroll_offset);
 }
 
 /**
@@ -2515,29 +3101,6 @@ gtk_menu_reorder_child (GtkMenu   *menu,
 
       menu_queue_resize (menu);
     }
-}
-
-static void
-get_arrows_border (GtkMenu   *menu,
-                   GtkBorder *border)
-{
-  GtkMenuPrivate *priv = menu->priv;
-  gint top_arrow_height, bottom_arrow_height;
-
-  gtk_css_gadget_get_preferred_size (priv->top_arrow_gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     &top_arrow_height, NULL,
-                                     NULL, NULL);
-  gtk_css_gadget_get_preferred_size (priv->bottom_arrow_gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     &bottom_arrow_height, NULL,
-                                     NULL, NULL);
-
-  border->top = priv->upper_arrow_visible ? top_arrow_height : 0;
-  border->bottom = priv->lower_arrow_visible ? bottom_arrow_height : 0;
-  border->left = border->right = 0;
 }
 
 static void
@@ -4280,8 +4843,8 @@ gtk_menu_deactivate (GtkMenuShell *menu_shell)
 }
 
 static void
-gtk_menu_position (GtkMenu  *menu,
-                   gboolean  set_scroll_offset)
+gtk_menu_position_legacy (GtkMenu  *menu,
+                          gboolean  set_scroll_offset)
 {
   GtkMenuPrivate *priv = menu->priv;
   GtkWidget *widget;
@@ -4517,6 +5080,104 @@ gtk_menu_position (GtkMenu  *menu,
 
   if (set_scroll_offset)
     priv->scroll_offset = scroll_offset;
+}
+
+static GdkGravity
+get_horizontally_flipped_anchor (GdkGravity anchor)
+{
+  switch (anchor)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+      return GDK_GRAVITY_NORTH_EAST;
+    case GDK_GRAVITY_NORTH:
+      return GDK_GRAVITY_NORTH;
+    case GDK_GRAVITY_NORTH_EAST:
+      return GDK_GRAVITY_NORTH_WEST;
+    case GDK_GRAVITY_WEST:
+      return GDK_GRAVITY_EAST;
+    case GDK_GRAVITY_CENTER:
+      return GDK_GRAVITY_CENTER;
+    case GDK_GRAVITY_EAST:
+      return GDK_GRAVITY_WEST;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return GDK_GRAVITY_SOUTH_EAST;
+    case GDK_GRAVITY_SOUTH:
+      return GDK_GRAVITY_SOUTH;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return GDK_GRAVITY_SOUTH_WEST;
+    }
+
+  g_warning ("unknown GdkGravity: %d", anchor);
+  return anchor;
+}
+
+static void
+gtk_menu_position (GtkMenu  *menu,
+                   gboolean  set_scroll_offset)
+{
+  GtkMenuPrivate *priv = menu->priv;
+  GdkWindow *rect_window = NULL;
+  GdkRectangle rect;
+  GtkTextDirection text_direction = GTK_TEXT_DIR_NONE;
+  GdkGravity rect_anchor;
+  GdkGravity menu_anchor;
+  GdkWindow *toplevel;
+
+  if (priv->rect_window)
+    {
+      rect_window = priv->rect_window;
+      rect = priv->rect;
+    }
+  else if (priv->widget)
+    {
+      rect_window = gtk_widget_get_window (priv->widget);
+      gtk_widget_get_allocation (priv->widget, &rect);
+      text_direction = gtk_widget_get_direction (priv->widget);
+    }
+
+  if (!rect_window)
+    {
+      gtk_menu_position_legacy (menu, set_scroll_offset);
+      return;
+    }
+
+  /* Realize so we have the proper width and height to figure out
+   * the right place to popup the menu.
+   */
+  gtk_widget_realize (priv->toplevel);
+
+  if (!gtk_widget_get_visible (priv->toplevel))
+    gtk_window_set_type_hint (GTK_WINDOW (priv->toplevel), priv->menu_type_hint);
+
+  if (text_direction == GTK_TEXT_DIR_NONE)
+    text_direction = gtk_widget_get_direction (GTK_WIDGET (menu));
+
+  if (text_direction == GTK_TEXT_DIR_RTL)
+    {
+      rect_anchor = get_horizontally_flipped_anchor (priv->rect_anchor);
+      menu_anchor = get_horizontally_flipped_anchor (priv->menu_anchor);
+    }
+  else
+    {
+      rect_anchor = priv->rect_anchor;
+      menu_anchor = priv->menu_anchor;
+    }
+
+  toplevel = gtk_widget_get_window (priv->toplevel);
+
+  gdk_window_set_transient_for (toplevel, rect_window);
+
+  g_signal_handlers_disconnect_by_func (toplevel, moved_to_rect_cb, menu);
+  g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb), menu);
+
+  GDK_PRIVATE_CALL (gdk_window_move_to_rect) (toplevel,
+                                              &rect,
+                                              rect_anchor,
+                                              menu_anchor,
+                                              priv->anchor_hints,
+                                              priv->rect_anchor_dx,
+                                              priv->rect_anchor_dy);
 }
 
 static void
