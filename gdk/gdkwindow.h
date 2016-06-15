@@ -245,6 +245,49 @@ typedef enum
   GDK_GRAVITY_STATIC
 } GdkGravity;
 
+/**
+ * GdkAnchorHints:
+ * @GDK_ANCHOR_FLIP_X: allow flipping anchors horizontally
+ * @GDK_ANCHOR_FLIP_Y: allow flipping anchors vertically
+ * @GDK_ANCHOR_SLIDE_X: allow sliding window horizontally
+ * @GDK_ANCHOR_SLIDE_Y: allow sliding window vertically
+ * @GDK_ANCHOR_RESIZE_X: allow resizing window horizontally
+ * @GDK_ANCHOR_RESIZE_Y: allow resizing window vertically
+ * @GDK_ANCHOR_FLIP: allow flipping anchors on both axes
+ * @GDK_ANCHOR_SLIDE: allow sliding window on both axes
+ * @GDK_ANCHOR_RESIZE: allow resizing window on both axes
+ *
+ * Positioning hints for aligning a window relative to a rectangle.
+ *
+ * These hints determine how the window should be positioned in the case that
+ * the window would fall off-screen if placed in its ideal position.
+ *
+ * For example, %GDK_ANCHOR_FLIP_X will replace %GDK_GRAVITY_NORTH_WEST with
+ * %GDK_GRAVITY_NORTH_EAST and vice versa if the window extends beyond the left
+ * or right edges of the monitor.
+ *
+ * If %GDK_ANCHOR_SLIDE_X is set, the window can be shifted horizontally to fit
+ * on-screen. If %GDK_ANCHOR_RESIZE_X is set, the window can be shrunken
+ * horizontally to fit.
+ *
+ * In general, when multiple flags are set, flipping should take precedence over
+ * sliding, which should take precedence over resizing.
+ *
+ * Since: 3.22
+ * Stability: Unstable
+ */
+typedef enum
+{
+  GDK_ANCHOR_FLIP_X   = 1 << 0,
+  GDK_ANCHOR_FLIP_Y   = 1 << 1,
+  GDK_ANCHOR_SLIDE_X  = 1 << 2,
+  GDK_ANCHOR_SLIDE_Y  = 1 << 3,
+  GDK_ANCHOR_RESIZE_X = 1 << 4,
+  GDK_ANCHOR_RESIZE_Y = 1 << 5,
+  GDK_ANCHOR_FLIP     = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_FLIP_Y,
+  GDK_ANCHOR_SLIDE    = GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y,
+  GDK_ANCHOR_RESIZE   = GDK_ANCHOR_RESIZE_X | GDK_ANCHOR_RESIZE_Y
+} GdkAnchorHints;
 
 /**
  * GdkWindowEdge:

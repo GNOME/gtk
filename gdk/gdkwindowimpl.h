@@ -75,6 +75,13 @@ struct _GdkWindowImplClass
                                          gint             y,
                                          gint             width,
                                          gint             height);
+  void         (* move_to_rect)         (GdkWindow       *window,
+                                         const GdkRectangle *rect,
+                                         GdkGravity       rect_anchor,
+                                         GdkGravity       window_anchor,
+                                         GdkAnchorHints   anchor_hints,
+                                         gint             rect_anchor_dx,
+                                         gint             rect_anchor_dy);
   void         (* set_background)       (GdkWindow       *window,
                                          cairo_pattern_t *pattern);
 

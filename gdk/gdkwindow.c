@@ -148,6 +148,7 @@ enum {
   TO_EMBEDDER,
   FROM_EMBEDDER,
   CREATE_SURFACE,
+  MOVED_TO_RECT,
   LAST_SIGNAL
 };
 
@@ -476,6 +477,46 @@ gdk_window_class_init (GdkWindowClass *klass)
                   2,
                   G_TYPE_INT,
                   G_TYPE_INT);
+
+  /**
+   * GdkWindow::moved-to-rect:
+   * @window: the #GdkWindow that moved
+   * @flipped_rect: (nullable): the position of @window after any possible
+   *                flipping or %NULL if the backend can't obtain it
+   * @final_rect: (nullable): the final position of @window or %NULL if the
+   *              backend can't obtain it
+   * @flipped_x: %TRUE if the anchors were flipped horizontally
+   * @flipped_y: %TRUE if the anchors were flipped vertically
+   *
+   * Emitted when the position of @window is finalized after being moved to a
+   * destination rectangle.
+   *
+   * @window might be flipped over the destination rectangle in order to keep
+   * it on-screen, in which case @flipped_x and @flipped_y will be set to %TRUE
+   * accordingly.
+   *
+   * @flipped_rect is the ideal position of @window after any possible
+   * flipping, but before any possible sliding. @final_rect is @flipped_rect,
+   * but possibly translated in the case that flipping is still ineffective in
+   * keeping @window on-screen.
+   *
+   * Since: 3.22
+   * Stability: Private
+   */
+  signals[MOVED_TO_RECT] =
+    g_signal_new (g_intern_static_string ("moved-to-rect"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL,
+                  NULL,
+                  _gdk_marshal_VOID__POINTER_POINTER_BOOLEAN_BOOLEAN,
+                  G_TYPE_NONE,
+                  4,
+                  G_TYPE_POINTER,
+                  G_TYPE_POINTER,
+                  G_TYPE_BOOLEAN,
+                  G_TYPE_BOOLEAN);
 }
 
 static void
@@ -6137,6 +6178,60 @@ gdk_window_move_resize (GdkWindow *window,
   gdk_window_move_resize_internal (window, TRUE, x, y, width, height);
 }
 
+/**
+ * gdk_window_move_to_rect:
+ * @window: the #GdkWindow to move
+ * @rect: (not nullable): the destination #GdkRectangle to align @window with
+ * @rect_anchor: the point on @rect to align with @window's anchor point
+ * @window_anchor: the point on @window to align with @rect's anchor point
+ * @anchor_hints: positioning hints to use when limited on space
+ * @rect_anchor_dx: horizontal offset to shift @window, i.e. @rect's anchor
+ *                  point
+ * @rect_anchor_dy: vertical offset to shift @window, i.e. @rect's anchor point
+ *
+ * Moves @window to @rect, aligning their anchor points.
+ *
+ * @rect is relative to the top-left corner of the window that @window is
+ * transient for. @rect_anchor and @window_anchor determine anchor points on
+ * @rect and @window to pin together. @rect's anchor point can optionally be
+ * offset by @rect_anchor_dx and @rect_anchor_dy, which is equivalent to
+ * offsetting the position of @window.
+ *
+ * @anchor_hints determines how @window will be moved if the anchor points cause
+ * it to move off-screen. For example, %GDK_ANCHOR_FLIP_X will replace
+ * %GDK_GRAVITY_NORTH_WEST with %GDK_GRAVITY_NORTH_EAST and vice versa if
+ * @window extends beyond the left or right edges of the monitor.
+ *
+ * Connect to the #GdkWindow::moved-to-rect signal to find out how it was
+ * actually positioned.
+ *
+ * Since: 3.22
+ * Stability: Private
+ */
+void
+gdk_window_move_to_rect (GdkWindow          *window,
+                         const GdkRectangle *rect,
+                         GdkGravity          rect_anchor,
+                         GdkGravity          window_anchor,
+                         GdkAnchorHints      anchor_hints,
+                         gint                rect_anchor_dx,
+                         gint                rect_anchor_dy)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (window->transient_for);
+  g_return_if_fail (rect);
+
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class->move_to_rect (window,
+                            rect,
+                            rect_anchor,
+                            window_anchor,
+                            anchor_hints,
+                            rect_anchor_dx,
+                            rect_anchor_dy);
+}
 
 /**
  * gdk_window_scroll:
