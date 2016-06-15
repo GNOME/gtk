@@ -308,9 +308,11 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
                                    GtkAllocation *child_allocation)
 {
   GtkWidget *child;
-  GtkRevealerTransitionType transition;
   GtkBorder padding;
   gint vertical_padding, horizontal_padding;
+  GtkRequisition minimum_size;
+  GtkRequisition natural_size;
+
 
   g_return_if_fail (revealer != NULL);
   g_return_if_fail (allocation != NULL);
@@ -327,19 +329,21 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
-    {
-      transition = effective_transition (revealer);
-      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
-          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-        gtk_widget_get_preferred_width_for_height (child, MAX (0, allocation->height - vertical_padding), NULL,
-                                                   &child_allocation->width);
-      else
-        gtk_widget_get_preferred_height_for_width (child, MAX (0, allocation->width - horizontal_padding), NULL,
-                                                   &child_allocation->height);
-    }
+    gtk_widget_get_preferred_size (child, &minimum_size, &natural_size);
 
-  child_allocation->width = MAX (child_allocation->width, allocation->width - horizontal_padding);
-  child_allocation->height = MAX (child_allocation->height, allocation->height - vertical_padding);
+  if (natural_size.width > allocation->width - horizontal_padding)
+      child_allocation->width = CLAMP (allocation->width - horizontal_padding,
+                                       minimum_size.width,
+                                       natural_size.width);
+  else
+      child_allocation->width = allocation->width - horizontal_padding;
+
+  if (natural_size.height > allocation->height - vertical_padding)
+      child_allocation->height = CLAMP (allocation->height - vertical_padding,
+                                        minimum_size.height,
+                                        natural_size.height);
+  else
+      child_allocation->height = allocation->height - vertical_padding;
 }
 
 static void
