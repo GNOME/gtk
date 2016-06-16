@@ -356,6 +356,10 @@ struct _GdkWindow
 
   gint abs_x, abs_y; /* Absolute offset in impl */
   gint width, height;
+  gint shadow_top;
+  gint shadow_left;
+  gint shadow_right;
+  gint shadow_bottom;
 
   guint num_offscreen_children;
 
