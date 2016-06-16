@@ -1472,7 +1472,7 @@ else
     CUPS_API_MAJOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $1}'`
     CUPS_API_MINOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $2}'`
 
-    if test $CUPS_API_MAJOR -gt 1 -o \
+    if test $CUPS_API_MAJOR -lt 1 -o \
             $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -lt 2; then
       AC_MSG_ERROR([CUPS >= 1.2 not found])
     fi
