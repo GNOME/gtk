@@ -27,8 +27,9 @@ typedef struct _GtkStyleCascadeIter GtkStyleCascadeIter;
 typedef struct _GtkStyleProviderData GtkStyleProviderData;
 
 struct _GtkStyleCascadeIter {
-  int parent_index; /* pointing at last index that was returned, not next one that should be returned */
-  int index;        /* pointing at last index that was returned, not next one that should be returned */
+  int  n_cascades;
+  int *cascade_index;  /* each one points at last index that was returned, */
+                       /* not next one that should be returned */
 };
 
 struct _GtkStyleProviderData
@@ -42,54 +43,55 @@ static GtkStyleProvider *
 gtk_style_cascade_iter_next (GtkStyleCascade     *cascade,
                              GtkStyleCascadeIter *iter)
 {
-  if (iter->parent_index > 0)
+  GtkStyleCascade *cas;
+  int ix, highest_priority_index = 0;
+  GtkStyleProviderData *highest_priority_data = NULL;
+
+  for (cas = cascade, ix = 0; ix < iter->n_cascades; cas = cas->parent, ix++)
     {
-      if (iter->index > 0)
-        {
-          GtkStyleProviderData *data, *parent_data;
+      if (iter->cascade_index[ix] <= 0)
+        continue;
 
-          data = &g_array_index (cascade->providers, GtkStyleProviderData, iter->index - 1);
-          parent_data = &g_array_index (cascade->parent->providers, GtkStyleProviderData, iter->parent_index - 1);
-
-          if (data->priority >= parent_data->priority)
-            {
-              iter->index--;
-              return data->provider;
-            }
-          else
-            {
-              iter->parent_index--;
-              return parent_data->provider;
-            }
-        }
-      else
+      GtkStyleProviderData *data = &g_array_index (cas->providers,
+                                                   GtkStyleProviderData,
+                                                   iter->cascade_index[ix] - 1);
+      if (highest_priority_data == NULL || data->priority > highest_priority_data->priority)
         {
-          iter->parent_index--;
-          return g_array_index (cascade->parent->providers, GtkStyleProviderData, iter->parent_index).provider;
+          highest_priority_index = ix;
+          highest_priority_data = data;
         }
     }
-  else
+
+  if (highest_priority_data != NULL)
     {
-      if (iter->index > 0)
-        {
-          iter->index--;
-          return g_array_index (cascade->providers, GtkStyleProviderData, iter->index).provider;
-        }
-      else
-        {
-          return NULL;
-        }
+      iter->cascade_index[highest_priority_index]--;
+      return highest_priority_data->provider;
     }
+  return NULL;
 }
 
 static GtkStyleProvider *
 gtk_style_cascade_iter_init (GtkStyleCascade     *cascade,
                              GtkStyleCascadeIter *iter)
 {
-  iter->parent_index = cascade->parent ? cascade->parent->providers->len : 0;
-  iter->index = cascade->providers->len;
+  GtkStyleCascade *cas = cascade;
+  int ix;
+
+  iter->n_cascades = 1;
+  while ((cas = cas->parent) != NULL)
+    iter->n_cascades++;
+
+  iter->cascade_index = g_new (int, iter->n_cascades);
+  for (cas = cascade, ix = 0; ix < iter->n_cascades; cas = cas->parent, ix++)
+    iter->cascade_index[ix] = cas->providers->len;
 
   return gtk_style_cascade_iter_next (cascade, iter);
+}
+
+static void
+gtk_style_cascade_iter_clear (GtkStyleCascadeIter *iter)
+{
+  g_free (iter->cascade_index);
 }
 
 static gboolean
@@ -112,9 +114,13 @@ gtk_style_cascade_get_style_property (GtkStyleProvider *provider,
                                                  state,
                                                  pspec,
                                                  value))
-        return TRUE;
+        {
+          gtk_style_cascade_iter_clear (&iter);
+          return TRUE;
+        }
     }
 
+  gtk_style_cascade_iter_clear (&iter);
   return FALSE;
 }
 
@@ -141,9 +147,13 @@ gtk_style_cascade_get_settings (GtkStyleProviderPrivate *provider)
           
       settings = _gtk_style_provider_private_get_settings (GTK_STYLE_PROVIDER_PRIVATE (item));
       if (settings)
-        return settings;
+        {
+          gtk_style_cascade_iter_clear (&iter);
+          return settings;
+        }
     }
 
+  gtk_style_cascade_iter_clear (&iter);
   return NULL;
 }
 
@@ -164,7 +174,10 @@ gtk_style_cascade_get_color (GtkStyleProviderPrivate *provider,
         {
           color = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (item), name);
           if (color)
-            return color;
+            {
+              gtk_style_cascade_iter_clear (&iter);
+              return color;
+            }
         }
       else
         {
@@ -172,6 +185,7 @@ gtk_style_cascade_get_color (GtkStyleProviderPrivate *provider,
         }
     }
 
+  gtk_style_cascade_iter_clear (&iter);
   return NULL;
 }
 
@@ -201,9 +215,13 @@ gtk_style_cascade_get_keyframes (GtkStyleProviderPrivate *provider,
           
       keyframes = _gtk_style_provider_private_get_keyframes (GTK_STYLE_PROVIDER_PRIVATE (item), name);
       if (keyframes)
-        return keyframes;
+        {
+          gtk_style_cascade_iter_clear (&iter);
+          return keyframes;
+        }
     }
 
+  gtk_style_cascade_iter_clear (&iter);
   return NULL;
 }
 
@@ -236,6 +254,7 @@ gtk_style_cascade_lookup (GtkStyleProviderPrivate *provider,
           g_warn_if_reached ();
         }
     }
+  gtk_style_cascade_iter_clear (&iter);
 }
 
 static void
@@ -303,8 +322,6 @@ _gtk_style_cascade_set_parent (GtkStyleCascade *cascade,
 {
   gtk_internal_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
   gtk_internal_return_if_fail (parent == NULL || GTK_IS_STYLE_CASCADE (parent));
-  if (parent)
-    gtk_internal_return_if_fail (parent->parent == NULL);
 
   if (cascade->parent == parent)
     return;
