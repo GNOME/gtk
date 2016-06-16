@@ -413,7 +413,7 @@ gdk_window_begin_paint_rect
 gdk_window_begin_paint_region
 gdk_window_end_paint
 gdk_window_begin_draw_frame
-gdk_window_end_draw_fram
+gdk_window_end_draw_frame
 gdk_window_should_draw
 gdk_window_get_visible_region
 GdkWindowInvalidateHandlerFunc
