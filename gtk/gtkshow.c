@@ -24,6 +24,10 @@
 
 #include "gtkshow.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
 /**
  * gtk_show_uri:
  * @screen: (allow-none): screen to show the uri on
@@ -70,8 +74,54 @@ gtk_show_uri (GdkScreen    *screen,
   gdk_app_launch_context_set_screen (context, screen);
   gdk_app_launch_context_set_timestamp (context, timestamp);
 
-  ret = g_app_info_launch_default_for_uri (uri, (GAppLaunchContext*)context, error);
+  ret = g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), error);
   g_object_unref (context);
 
   return ret;
+}
+
+gboolean
+gtk_show_uri_on_window (GtkWindow   *parent,
+                        const char  *uri,
+                        guint32      timestamp,
+                        GError     **error)
+{
+  GdkAppLaunchContext *context;
+  gboolean ret;
+  GdkDisplay *display;
+
+  g_return_val_if_fail (uri != NULL, FALSE);
+
+  if (parent)
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
+  else
+    display = gdk_display_get_default ();
+
+  context = gdk_display_get_app_launch_context (display);
+
+  if (parent)
+    {
+      GdkWindow *window = gtk_widget_get_window (GTK_WIDGET (parent));
+#ifdef GDK_WINDOWING_X11
+      if (GDK_IS_X11_WINDOW(window))
+        {
+          char *parent_window_str;
+
+          parent_window_str = g_strdup_printf ("x11:%x", (guint32)gdk_x11_window_get_xid (window));
+          g_app_launch_context_setenv (G_APP_LAUNCH_CONTEXT (context),
+                                       "PARENT_WINDOW_ID",
+                                       parent_window_str);
+          g_free (parent_window_str);
+        }
+#endif
+    }
+
+  gdk_app_launch_context_set_timestamp (context, timestamp);
+
+  ret = g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), error);
+
+  g_object_unref (context);
+
+  return ret;
+
 }
