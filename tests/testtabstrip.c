@@ -2,14 +2,10 @@
 
 static int count = 1;
 
-static void
-add_child (GtkWidget  *stack,
-           const char *title)
+static GtkWidget *
+make_child (const char *title)
 {
-  char *name;
   GtkWidget *sw, *tv;
-
-  name = g_strdup_printf ("tab%d", count++);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   tv = gtk_text_view_new ();
@@ -18,8 +14,21 @@ add_child (GtkWidget  *stack,
   gtk_container_add (GTK_CONTAINER (sw), tv);
   gtk_widget_show_all (sw);
 
-  gtk_stack_add_titled (GTK_STACK (stack), sw, name, title);
-  gtk_stack_set_visible_child (GTK_STACK (stack), sw);
+  return sw;
+}
+
+static void
+add_child (GtkWidget  *stack,
+           const char *title)
+{
+  char *name;
+  GtkWidget *child;
+
+  name = g_strdup_printf ("tab%d", count++);
+
+  child = make_child (title);
+  gtk_stack_add_titled (GTK_STACK (stack), child, name, title);
+  gtk_stack_set_visible_child (GTK_STACK (stack), child);
 
   g_free (name);
 }
@@ -27,11 +36,23 @@ add_child (GtkWidget  *stack,
 static void
 add_stack_child (GtkWidget *stack)
 {
+  GtkWidget *child;
+  char *name;
   char *title;
 
+  name = g_strdup_printf ("tab%d", count++);
   title = g_strdup_printf ("Page %d", count);
-  add_child (stack, title);
+
+  child = make_child (title);
+  gtk_container_add_with_properties (GTK_CONTAINER (stack),
+                                     child,
+                                     "name", name,
+                                     "title", title,
+                                     "position", 3,
+                                     NULL);
+
   g_free (title);
+  g_free (name);
 }
 
 static void
@@ -83,7 +104,9 @@ main (int argc, char *argv[])
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, css, -1, NULL);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (), provider, 800);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (provider),
+                                             800);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 800);

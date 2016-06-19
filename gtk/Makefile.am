@@ -907,6 +907,7 @@ gtk_base_c_sources = 		\
 	gtktab.c		\
 	gtksimpletab.c		\
 	gtkclosabletab.c	\
+	gtktabs.c		\
 	gtktabstrip.c		\
 	gtktestutils.c		\
 	gtktextattributes.c	\

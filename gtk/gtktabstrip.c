@@ -28,6 +28,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkbutton.h"
 #include "gtkbox.h"
+#include "gtktabsprivate.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkboxgadgetprivate.h"
 #include "gtkwidgetprivate.h"
@@ -412,7 +413,7 @@ gtk_tab_strip_init (GtkTabStrip *self)
   gtk_box_gadget_set_gadget_expand (GTK_BOX_GADGET (priv->gadget), G_OBJECT (priv->scrolledwindow), TRUE);
   update_scrolling (self);
 
-  priv->tabs = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  priv->tabs = g_object_new (GTK_TYPE_TABS, NULL);
   gtk_widget_show (priv->tabs);
   gtk_container_add (GTK_CONTAINER (priv->scrolledwindow), priv->tabs);
 
@@ -442,9 +443,7 @@ gtk_tab_strip_child_position_changed (GtkTabStrip *self,
                            "position", &position,
                            NULL);
 
-  gtk_container_child_set (GTK_CONTAINER (priv->tabs), GTK_WIDGET (tab),
-                           "position", position,
-                           NULL);
+  gtk_tabs_reorder_child (GTK_TABS (priv->tabs), GTK_WIDGET (tab), position);
 }
 
 static void
@@ -621,12 +620,12 @@ gtk_tab_strip_stack_add (GtkTabStrip *self,
                            G_CALLBACK (gtk_tab_strip_child_needs_attention_changed), self,
                            G_CONNECT_SWAPPED);
 
-  gtk_box_pack_start (GTK_BOX (priv->tabs), GTK_WIDGET (tab), TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (priv->tabs), GTK_WIDGET (tab));
 
   g_object_bind_property (widget, "visible", tab, "visible", G_BINDING_SYNC_CREATE);
 
   gtk_tab_strip_child_title_changed (self, NULL, widget);
-  gtk_tab_strip_stack_notify_visible_child (self, NULL, stack);
+  //gtk_tab_strip_stack_notify_visible_child (self, NULL, stack);
 }
 
 static void
