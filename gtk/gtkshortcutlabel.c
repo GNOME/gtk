@@ -150,6 +150,21 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
     {
       switch (ch)
         {
+        case '<':
+          labels[i++] = "&lt;";
+          break;
+        case '>':
+          labels[i++] = "&gt;";
+          break;
+        case '&':
+          labels[i++] = "&amp;";
+          break;
+        case '"':
+          labels[i++] = "&quot;";
+          break;
+        case '\'':
+          labels[i++] = "&apos;";
+          break;
         case '\\':
           labels[i++] = C_("keyboard label", "Backslash");
           break;
