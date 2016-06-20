@@ -417,5 +417,14 @@
       currently shown in the UI is to use a #GtkStack (with some 'filler'
       widget, e.g. an empty #GtkBox, in another page).
     </para>
+
+    <para>
+      GtkScrolledWindow now respects the natural size of its child and passes
+      it along. This may change the size distribution of layouts involving
+      scrolled windows (they may take up more space than before). In most
+      cases, setting suitable values for #GtkScrolledWindow:max-content-width
+      and #GtkScrolledWindow:max-content-height will allow control over the
+      size of the scrolled window.
+    </para>
   </section>
 </chapter>
