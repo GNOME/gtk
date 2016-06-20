@@ -1,3 +1,72 @@
+Overview of Changes in GTK+ 3.21.3
+==================================
+
+* GtkStack now has its own accessible implementation which only
+  shows the currently visible child
+
+* The GtkSizeGroup::ignore-hidden property has been documented as
+  not working.
+
+* GDK_SOURCE_TRACKPOINT has been added to the GdkInputSource enumeration
+  to allow special-casing this kind of input device
+
+* Wayland:
+  - Use separate devices to differentiate between various sources of
+    scroll events
+  - Fall back to using shm_open if memfds are unavailable
+
+* Styling of text in GtkScale and GtkProgressBar can now be influenced
+  by the proper CSS nodes
+
+* GtkScrolledWindow has new max-content-width/height properties to
+  control its size
+
+* GtkFileChooser search has been fixed to work with trackers FTS5 syntax
+
+* Bugs fixed:
+  79229 GtkScale with a big number of digits and value pos set to...
+ 118959 GtkScale value '-0'
+ 556254 Test properties of type GObject in the 'object' test
+ 578626 Vertical Scale Widget sometimes not allocating enough room...
+ 674215 [patch] regression with updating tooltips
+ 708148 gtk_tree_view_get_path_at_pos mistakenly identifies column...
+ 710471 Make gtk_scrolled_window_remove() smart
+ 742281 GtkScrolledWindow should have max-content-height and max-c...
+ 745622 Selected text not highlighted in GtkInfoBar
+ 751409 gtk_style_context_add_provider() does not propagate to chi...
+ 753202 change cursor for click scrolling
+ 764203 Default background color for the 'textview border' node
+ 765410 Scrollbar does not update since 3.20
+ 765595 Modal popover does not close when focus leaves it
+ 766341 Do not rely on memfd as it requires a fairly recent kernel
+ 766372 Scale omits value in various size calculations, causing in...
+ 766569 Better size requisition for GTK_SCROLL_NATURAL children
+ 766675 Add appropriate frame drawing API to GdkWindow
+ 766860 tiled (snapped, half-maximized) windows in Wayland aren't ...
+ 766878 placesview: Do not mark icon name as translatable
+ 767052 Wayland: Iconifying a modal dialog makes the app unusable
+ 767058 GtkInfoBar: right-click/context menu all white
+ 767093 wayland: Provide information about scroll devices
+ 767100 Add an input source type for trackpoints
+ 767108 Separators not correctly placed in GtkPopover
+ 767238 Fix long standing regression in min-content-width/min-conte...
+ 767241 wayland: Long window titles crash clients
+ 767310 High-contrast theme doesn't show focus rectangle in default...
+ 767312 gtk_widget_path_append_for_widget() misses classes unless g...
+ 767468 Popover over a treeview cellrenderer is hidden immediately ...
+ 767705 GtkActionHelper: Change a message to a warning
+ 767766 CUPS 2.X detected incorrectly by configure
+ 767795 Warning when the "accelerator" property of GtkShortcutsShor...
+
+Translation updates:
+ Thai
+ Catalan
+ Occitan
+ Spanish
+ Scottish Gaelic
+ Brazilian Portuguese
+
+
 Overview of Changes in GTK+ 3.21.2
 ==================================
 
