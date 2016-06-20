@@ -43,8 +43,11 @@ static gboolean
 finish_search (GtkButton *button)
 {
   show_find_button ();
-  g_source_remove (search_progress_id);
-  search_progress_id = 0;
+  if (search_progress_id)
+    {
+      g_source_remove (search_progress_id);
+      search_progress_id = 0;
+    }
   return G_SOURCE_REMOVE;
 }
 
@@ -71,7 +74,11 @@ static void
 stop_search (GtkButton *button,
              gpointer   data)
 {
-  g_source_remove (finish_search_id);
+  if (finish_search_id)
+    {
+      g_source_remove (finish_search_id);
+      finish_search_id = 0;
+    }
   finish_search (button);
 }
 
