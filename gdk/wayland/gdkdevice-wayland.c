@@ -1058,6 +1058,9 @@ primary_selection_selection (void                                *data,
   GdkWaylandSeat *seat = data;
   GdkAtom selection;
 
+  if (!seat->keyboard_focus)
+    return;
+
   GDK_NOTE (EVENTS,
             g_message ("primary selection selection, device %p, data offer %p",
                        gtk_primary_selection_device, gtk_primary_offer));
