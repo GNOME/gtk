@@ -57,6 +57,7 @@ Overview of Changes in GTK+ 3.21.3
  767705 GtkActionHelper: Change a message to a warning
  767766 CUPS 2.X detected incorrectly by configure
  767795 Warning when the "accelerator" property of GtkShortcutsShor...
+ 
 
 Translation updates:
  Thai
@@ -119,6 +120,7 @@ Overview of Changes in GTK+ 3.21.2
  766643 Frozen windows when unmapped with pending configure event
  766737 stack: Only map children when necessary
  766782 OpenGL in broadway leads to segmentation fault
+ 767848 crash in the window test
 
 * Translation updates:
  Arabic
