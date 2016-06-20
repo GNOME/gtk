@@ -197,6 +197,9 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
 
   if (GTK_IS_SHORTCUTS_SHORTCUT (child))
     {
+      GEnumClass *class;
+      GEnumValue *value;
+
       g_object_get (child,
                     "accelerator", &accelerator,
                     "title", &title,
@@ -207,7 +210,13 @@ gtk_shortcuts_window_add_search_item (GtkWidget *child, gpointer data)
                     "action-name", &action_name,
                     NULL);
 
-      hash_key = g_strdup_printf ("%s-%s", title, accelerator);
+      class = G_ENUM_CLASS (g_type_class_ref (GTK_TYPE_SHORTCUT_TYPE));
+      value = g_enum_get_value (class, shortcut_type);
+
+      hash_key = g_strdup_printf ("%s-%s-%s", title, value->value_nick, accelerator);
+
+      g_type_class_unref (class);
+
       if (g_hash_table_contains (priv->search_items_hash, hash_key))
         {
           g_free (hash_key);
