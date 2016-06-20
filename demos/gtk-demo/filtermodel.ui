@@ -24,6 +24,12 @@
       </row>
     </data>
   </object>
+  <object class="GtkAdjustment" id="adj">
+    <property name="lower">5</property>
+    <property name="upper">50</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">5</property>
+  </object>
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Filter Model</property>
     <child>
@@ -63,7 +69,10 @@
               <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                 <property name="title" translatable="yes">Width</property>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                  <object class="GtkCellRendererSpin" id="cellrenderertext1">
+                    <property name="editable">1</property>
+                    <property name="adjustment">adj</property>
+                  </object>
                 </child>
               </object>
             </child>
@@ -71,7 +80,10 @@
               <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                 <property name="title" translatable="yes">Height</property>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                  <object class="GtkCellRendererSpin" id="cellrenderertext2">
+                    <property name="editable">1</property>
+                    <property name="adjustment">adj</property>
+                  </object>
                 </child>
               </object>
             </child>

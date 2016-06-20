@@ -6,6 +6,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <stdlib.h>
 
 enum {
   WIDTH_COLUMN,
@@ -83,6 +84,28 @@ visible_func (GtkTreeModel *model,
   return width < 10;
 }
 
+static void
+cell_edited (GtkCellRendererSpin *cell,
+             const char          *path_string,
+             const char          *new_text,
+             GtkListStore        *store)
+{
+  int val;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  int column;
+
+  path = gtk_tree_path_new_from_string (path_string);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+  gtk_tree_path_free (path);
+
+  column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
+
+  val = atoi (new_text);
+
+  gtk_list_store_set (store, &iter, column, val, -1);
+}
+
 GtkWidget *
 do_filtermodel (GtkWidget *do_widget)
 {
@@ -106,15 +129,21 @@ do_filtermodel (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
+      store = (GtkListStore*)gtk_builder_get_object (builder, "liststore1");
+
       column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn1");
       cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext1");
       gtk_tree_view_column_set_cell_data_func (column, cell,
                                                format_number, GINT_TO_POINTER (WIDTH_COLUMN), NULL);
+      g_object_set_data (G_OBJECT (cell), "column", GINT_TO_POINTER (WIDTH_COLUMN));
+      g_signal_connect (cell, "edited", G_CALLBACK (cell_edited), store);
 
       column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn2");
       cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext2");
       gtk_tree_view_column_set_cell_data_func (column, cell,
                                                format_number, GINT_TO_POINTER (HEIGHT_COLUMN), NULL);
+      g_object_set_data (G_OBJECT (cell), "column", GINT_TO_POINTER (HEIGHT_COLUMN));
+      g_signal_connect (cell, "edited", G_CALLBACK (cell_edited), store);
 
       column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn3");
       cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext3");
@@ -135,7 +164,6 @@ do_filtermodel (GtkWidget *do_widget)
       cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrendererpixbuf1");
       gtk_tree_view_column_add_attribute (column, cell, "visible", SQUARE_COLUMN);
 
-      store = (GtkListStore*)gtk_builder_get_object (builder, "liststore1");
       tree = (GtkWidget*)gtk_builder_get_object (builder, "treeview2");
 
       types[WIDTH_COLUMN] = G_TYPE_INT;
