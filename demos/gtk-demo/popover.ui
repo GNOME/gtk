@@ -59,6 +59,7 @@
             <property name="visible">1</property>
             <property name="can_focus">1</property>
             <property name="shadow_type">in</property>
+            <property name="max-content-height">100</property>
             <child>
               <object class="GtkTreeView" id="treeview1">
                 <property name="visible">1</property>

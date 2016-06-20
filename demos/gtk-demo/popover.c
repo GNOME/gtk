@@ -51,9 +51,6 @@ create_complex_popover (GtkWidget       *parent,
   popover = create_popover (parent, content, GTK_POS_BOTTOM);
   g_object_unref (content);
 
-  gtk_widget_set_size_request (popover, 200, -1);
-  gtk_widget_set_vexpand (popover, TRUE);
-
   gtk_widget_set_margin_start (popover, 10);
   gtk_widget_set_margin_end (popover, 10);
   gtk_widget_set_margin_bottom (popover, 10);
