@@ -1280,6 +1280,9 @@ gtk_list_box_invalidate_sort (GtkListBox *box)
 
   g_return_if_fail (GTK_IS_LIST_BOX (box));
 
+  if (priv->sort_func == NULL)
+    return;
+
   g_sequence_sort (priv->children, (GCompareDataFunc)do_sort, box);
   g_sequence_foreach (priv->children, gtk_list_box_css_node_foreach, &previous);
 
