@@ -683,7 +683,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   GtkAllocation allocation;
   gint border_radius;
   GtkStyleContext *context;
-  GtkBorder margin, border;
+  GtkBorder margin, border, widget_margin;
   GtkStateFlags state;
 
   gtk_popover_get_pointing_to (popover, &rect);
@@ -709,11 +709,18 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   get_margin (widget, &margin);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    rect.x += gtk_widget_get_margin_start (widget);
+    {
+      widget_margin.left = gtk_widget_get_margin_start (widget);
+      widget_margin.right = gtk_widget_get_margin_end (widget);
+    }
   else
-    rect.x += gtk_widget_get_margin_end (widget);
+    {
+      widget_margin.left = gtk_widget_get_margin_end (widget);
+      widget_margin.right = gtk_widget_get_margin_start (widget);
+    }
 
-  rect.y += gtk_widget_get_margin_top (widget);
+  widget_margin.top = gtk_widget_get_margin_top (widget);
+  widget_margin.bottom = gtk_widget_get_margin_bottom (widget);
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_style_context_get_state (context);
@@ -727,20 +734,20 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 
   if (pos == GTK_POS_BOTTOM || pos == GTK_POS_RIGHT)
     {
-      base = TAIL_HEIGHT + ((pos == GTK_POS_BOTTOM) ? border.top : border.left);
-      tip = 0;
+      tip = ((pos == GTK_POS_BOTTOM) ? border.top + widget_margin.top : border.left + widget_margin.left);
+      base = tip + TAIL_HEIGHT;
       gap_side = (priv->final_position == GTK_POS_BOTTOM) ? GTK_POS_TOP : GTK_POS_LEFT;
     }
   else if (pos == GTK_POS_TOP)
     {
-      base = allocation.height - TAIL_HEIGHT - border.bottom;
-      tip = allocation.height;
+      base = allocation.height - TAIL_HEIGHT - border.bottom - widget_margin.bottom;
+      tip = base + TAIL_HEIGHT;
       gap_side = GTK_POS_BOTTOM;
     }
   else if (pos == GTK_POS_LEFT)
     {
-      base = allocation.width - TAIL_HEIGHT - border.right;
-      tip = allocation.width;
+      base = allocation.width - TAIL_HEIGHT - border.right - widget_margin.right;
+      tip = base + TAIL_HEIGHT;
       gap_side = GTK_POS_RIGHT;
     }
   else
@@ -748,7 +755,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 
   if (POS_IS_VERTICAL (pos))
     {
-      tip_pos = rect.x + (rect.width / 2);
+      tip_pos = rect.x + (rect.width / 2) + widget_margin.left;
       initial_x = CLAMP (tip_pos - TAIL_GAP_WIDTH / 2,
                          border_radius + margin.left + TAIL_HEIGHT,
                          allocation.width - TAIL_GAP_WIDTH - margin.right - border_radius - TAIL_HEIGHT);
@@ -764,7 +771,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
     }
   else
     {
-      tip_pos = rect.y + (rect.height / 2);
+      tip_pos = rect.y + (rect.height / 2) + widget_margin.top;
 
       initial_x = base;
       initial_y = CLAMP (tip_pos - TAIL_GAP_WIDTH / 2,
