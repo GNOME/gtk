@@ -87,72 +87,26 @@ filechooser_portal_data_free (FilechooserPortalData *data)
 }
 
 static void
-one_file_response (GDBusConnection  *connection,
-                   const gchar      *sender_name,
-                   const gchar      *object_path,
-                   const gchar      *interface_name,
-                   const gchar      *signal_name,
-                   GVariant         *parameters,
-                   gpointer          user_data)
+file_response (GDBusConnection  *connection,
+               const gchar      *sender_name,
+               const gchar      *object_path,
+               const gchar      *interface_name,
+               const gchar      *signal_name,
+               GVariant         *parameters,
+               gpointer          user_data)
 {
   GtkFileChooserNative *self = user_data;
   FilechooserPortalData *data = self->mode_data;
   guint32 portal_response;
   int gtk_response;
-  char *uri, *handle;
-  GVariant *response_data;
-
-  g_variant_get (parameters, "(&ou&s@a{sv})", &handle, &portal_response, &uri, &response_data);
-
-  if (data->portal_handle == NULL ||
-      strcmp (handle, data->portal_handle) != 0)
-    return;
-
-  g_slist_free_full (self->custom_files, g_object_unref);
-  self->custom_files = g_slist_prepend (NULL, g_file_new_for_uri (uri));
-
-  switch (portal_response)
-    {
-    case 0:
-      gtk_response = GTK_RESPONSE_OK;
-      break;
-    case 1:
-      gtk_response = GTK_RESPONSE_CANCEL;
-      break;
-    case 2:
-    default:
-      gtk_response = GTK_RESPONSE_DELETE_EVENT;
-      break;
-    }
-
-  filechooser_portal_data_free (data);
-  self->mode_data = NULL;
-
-  _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (self), gtk_response);
-}
-
-static void
-multi_file_response (GDBusConnection  *connection,
-                     const gchar      *sender_name,
-                     const gchar      *object_path,
-                     const gchar      *interface_name,
-                     const gchar      *signal_name,
-                     GVariant         *parameters,
-                     gpointer          user_data)
-{
-  GtkFileChooserNative *self = user_data;
-  FilechooserPortalData *data = self->mode_data;
-  guint32 portal_response;
-  int gtk_response;
-  char *handle;
   char **uris;
   int i;
   GVariant *response_data;
 
-  g_variant_get (parameters, "(&ou^a&s@a{sv})", &handle, &portal_response, &uris, &response_data);
+  g_variant_get (parameters, "(u^a&s@a{sv})", &portal_response, &uris, &response_data);
 
   if (data->portal_handle == NULL ||
-      strcmp (handle, data->portal_handle) != 0)
+      strcmp (object_path, data->portal_handle) != 0)
     return;
 
   g_slist_free_full (self->custom_files, g_object_unref);
@@ -187,11 +141,11 @@ send_close (FilechooserPortalData *data)
   GError *error = NULL;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
-                                            "/org/freedesktop/portal/desktop",
-                                            "org.freedesktop.portal.FileChooser",
+                                            data->portal_handle,
+                                            "org.freedesktop.portal.Request",
                                             "Close");
   g_dbus_message_set_body (message,
-                           g_variant_new ("(o)", data->portal_handle));
+                           g_variant_new ("()"));
 
   if (!g_dbus_connection_send_message (data->connection,
                                        message,
@@ -275,8 +229,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   GtkFileChooserAction action;
   gboolean multiple;
   const char *method_name;
-  const char *signal_name;
-  GDBusSignalCallback signal_callback;
   const char *use_portal;
   gchar *path;
 
@@ -312,23 +264,11 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
 
   if (action == GTK_FILE_CHOOSER_ACTION_OPEN && !multiple)
-    {
-      method_name = "OpenFile";
-      signal_name = "OpenFileResponse";
-      signal_callback = one_file_response;
-    }
+    method_name = "OpenFile";
   else if (action == GTK_FILE_CHOOSER_ACTION_OPEN && multiple)
-    {
-      method_name = "OpenFiles";
-      signal_name = "OpenFilesResponse";
-      signal_callback = multi_file_response;
-    }
+    method_name = "OpenFiles";
   else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    {
-      method_name = "SaveFile";
-      signal_name = "SaveFileResponse";
-      signal_callback = one_file_response;
-    }
+    method_name = "SaveFile";
   else
     {
       g_warning ("GTK_FILE_CHOOSER_ACTION_%s is not supported by GtkFileChooserNativePortal", action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ? "SELECT_FOLDER" : "CREATE_FOLDER");
@@ -406,12 +346,12 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   data->portal_response_signal_id =
     g_dbus_connection_signal_subscribe (data->connection,
                                         "org.freedesktop.portal.Desktop",
-                                        "org.freedesktop.portal.FileChooser",
-                                        signal_name,
-                                        "/org/freedesktop/portal/desktop",
+                                        "org.freedesktop.portal.FileChooserRequest",
+                                        "Response",
+                                        NULL,
                                         NULL,
                                         G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
-                                        signal_callback,
+                                        file_response,
                                         self, NULL);
 
   g_dbus_connection_send_message_with_reply (data->connection,
