@@ -175,8 +175,9 @@ dismiss_current_popup (GtkColorEditor *editor)
       editor->priv->popup_position = 0;
       if (editor->priv->popdown_focus)
         {
-          gtk_widget_grab_focus (editor->priv->popdown_focus);
-          editor->priv->popdown_focus = NULL;
+          if (gtk_widget_is_visible (editor->priv->popdown_focus))
+            gtk_widget_grab_focus (editor->priv->popdown_focus);
+          g_clear_object (&editor->priv->popdown_focus);
         }
     }
 }
@@ -218,7 +219,7 @@ popup_edit (GtkWidget      *widget,
     {
       dismiss_current_popup (editor);
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (editor));
-      editor->priv->popdown_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+      g_set_object (&editor->priv->popdown_focus, gtk_window_get_focus (GTK_WINDOW (toplevel)));
       editor->priv->current_popup = popup;
       editor->priv->popup_position = position;
       gtk_widget_show (popup);
@@ -396,6 +397,16 @@ gtk_color_editor_init (GtkColorEditor *editor)
 }
 
 static void
+gtk_color_editor_dispose (GObject *object)
+{
+  GtkColorEditor *editor = GTK_COLOR_EDITOR (object);
+
+  dismiss_current_popup (editor);
+
+  G_OBJECT_CLASS (gtk_color_editor_parent_class)->dispose (object);
+}
+
+static void
 gtk_color_editor_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
@@ -463,6 +474,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  object_class->dispose = gtk_color_editor_dispose;
   object_class->get_property = gtk_color_editor_get_property;
   object_class->set_property = gtk_color_editor_set_property;
 
