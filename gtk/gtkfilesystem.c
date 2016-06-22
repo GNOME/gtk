@@ -902,33 +902,16 @@ _gtk_file_has_native_path (GFile *file)
   return has_native_path;
 }
 
-static const gchar * const remote_types[] = {
-  "afp",
-  "google-drive",
-  "sftp",
-  "webdav",
-  "ftp",
-  "nfs",
-  "cifs",
-  NULL
-};
-
 gboolean
 _gtk_file_consider_as_remote (GFile *file)
 {
   GFileInfo *info;
   gboolean is_remote;
 
-  info = g_file_query_filesystem_info (file, "filesystem::type", NULL, NULL);
+  info = g_file_query_filesystem_info (file, G_FILE_ATTRIBUTE_FILESYSTEM_REMOTE, NULL, NULL);
   if (info)
     {
-      const gchar *type;
-
-      type = g_file_info_get_attribute_string (info, "filesystem::type");
-      if (type != NULL)
-        is_remote = g_strv_contains (remote_types, type);
-      else
-        is_remote = FALSE;
+      is_remote = g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_FILESYSTEM_REMOTE);
 
       g_object_unref (info);
     }
