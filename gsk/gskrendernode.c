@@ -41,8 +41,6 @@ gsk_render_node_dispose (GObject *gobject)
   GskRenderNode *self = GSK_RENDER_NODE (gobject);
   GskRenderNodeIter iter;
 
-  gsk_render_node_set_invalidate_func (self, NULL, NULL, NULL);
-
   gsk_render_node_iter_init (&iter, self);
   while (gsk_render_node_iter_next (&iter, NULL))
     gsk_render_node_iter_remove (&iter);
@@ -51,18 +49,11 @@ gsk_render_node_dispose (GObject *gobject)
 }
 
 static void
-gsk_render_node_real_resize (GskRenderNode *node)
-{
-}
-
-static void
 gsk_render_node_class_init (GskRenderNodeClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->dispose = gsk_render_node_dispose;
-
-  klass->resize = gsk_render_node_real_resize;
 }
 
 static void
@@ -74,6 +65,8 @@ gsk_render_node_init (GskRenderNode *self)
   graphene_matrix_init_identity (&self->child_transform);
 
   self->opacity = 1.0;
+
+  self->is_mutable = TRUE;
 }
 
 /**
@@ -204,6 +197,13 @@ gsk_render_node_insert_child_internal (GskRenderNode   *node,
       return;
     }
 
+  if (!node->is_mutable)
+    {
+      g_critical ("The render node of type '%s' is immutable.",
+                  G_OBJECT_TYPE_NAME (node));
+      return;
+    }
+
   insert_func (node, child, insert_func_data);
 
   g_object_ref (child);
@@ -215,21 +215,6 @@ gsk_render_node_insert_child_internal (GskRenderNode   *node,
   node->n_children += 1;
   node->age += 1;
   node->needs_world_matrix_update = TRUE;
-
-  /* Transfer invalidated children to the current top-level */
-  if (child->invalidated_descendants != NULL)
-    {
-      if (node->parent == NULL)
-        node->invalidated_descendants = child->invalidated_descendants;
-      else
-        {
-          GskRenderNode *tmp = gsk_render_node_get_toplevel (node);
-
-          tmp->invalidated_descendants = child->invalidated_descendants;
-        }
-
-      child->invalidated_descendants = NULL;
-    }
 
   if (child->prev_sibling == NULL)
     node->first_child = child;
@@ -297,6 +282,62 @@ insert_child_at_pos (GskRenderNode *node,
 }
 
 /**
+ * gsk_render_node_append_child:
+ * @node: a #GskRenderNode
+ * @child: a #GskRenderNode
+ *
+ * Appends @child to the list of children of @node.
+ *
+ * This function acquires a reference on @child.
+ *
+ * Returns: (transfer none): the #GskRenderNode
+ *
+ * Since: 3.22
+ */
+GskRenderNode *
+gsk_render_node_append_child (GskRenderNode *node,
+                              GskRenderNode *child)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
+  g_return_val_if_fail (node->is_mutable, node);
+
+  gsk_render_node_insert_child_internal (node, child,
+					 insert_child_at_pos,
+					 GINT_TO_POINTER (node->n_children));
+
+  return node;
+}
+
+/**
+ * gsk_render_node_prepend_child:
+ * @node: a #GskRenderNode
+ * @child: a #GskRenderNode
+ *
+ * Prepends @child to the list of children of @node.
+ *
+ * This function acquires a reference on @child.
+ *
+ * Returns: (transfer none): the #GskRenderNode
+ *
+ * Since: 3.22
+ */
+GskRenderNode *
+gsk_render_node_prepend_child (GskRenderNode *node,
+                               GskRenderNode *child)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
+  g_return_val_if_fail (node->is_mutable, node);
+
+  gsk_render_node_insert_child_internal (node, child,
+                                         insert_child_at_pos,
+                                         GINT_TO_POINTER (0));
+
+  return node;
+}
+
+/**
  * gsk_render_node_insert_child_at_pos:
  * @node: a #GskRenderNode
  * @child: a #GskRenderNode
@@ -322,6 +363,7 @@ gsk_render_node_insert_child_at_pos (GskRenderNode *node,
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
+  g_return_val_if_fail (node->is_mutable, node);
 
   gsk_render_node_insert_child_internal (node, child,
 					 insert_child_at_pos,
@@ -382,6 +424,7 @@ gsk_render_node_insert_child_before (GskRenderNode *node,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
   g_return_val_if_fail (sibling == NULL || GSK_IS_RENDER_NODE (sibling), node);
+  g_return_val_if_fail (node->is_mutable, node);
 
   gsk_render_node_insert_child_internal (node, child, insert_child_before, sibling);
 
@@ -440,6 +483,7 @@ gsk_render_node_insert_child_after (GskRenderNode *node,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
   g_return_val_if_fail (sibling == NULL || GSK_IS_RENDER_NODE (sibling), node);
+  g_return_val_if_fail (node->is_mutable, node);
 
   if (sibling != NULL)
     g_return_val_if_fail (sibling->parent == node, node);
@@ -500,6 +544,8 @@ gsk_render_node_replace_child (GskRenderNode *node,
   g_return_val_if_fail (new_child->parent == NULL, node);
   g_return_val_if_fail (old_child->parent == node, node);
 
+  g_return_val_if_fail (node->is_mutable, node);
+
   clos.prev_sibling = old_child->prev_sibling;
   clos.next_sibling = old_child->next_sibling;
   gsk_render_node_remove_child (node, old_child);
@@ -529,6 +575,7 @@ gsk_render_node_remove_child (GskRenderNode *node,
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
+  g_return_val_if_fail (node->is_mutable, node);
 
   if (child->parent != node)
     {
@@ -582,6 +629,7 @@ gsk_render_node_remove_all_children (GskRenderNode *node)
   GskRenderNodeIter iter;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (node->is_mutable, node);
 
   if (node->n_children == 0)
     return node;
@@ -631,13 +679,12 @@ gsk_render_node_set_bounds (GskRenderNode         *node,
                             const graphene_rect_t *bounds)
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (node->is_mutable);
 
   if (bounds == NULL)
     graphene_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
   else
     graphene_rect_init_from_rect (&node->bounds, bounds);
-
-  gsk_render_node_queue_invalidate (node, GSK_RENDER_NODE_CHANGES_UPDATE_BOUNDS);
 }
 
 /**
@@ -673,6 +720,7 @@ gsk_render_node_set_transform (GskRenderNode           *node,
                                const graphene_matrix_t *transform)
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (node->is_mutable);
 
   if (transform == NULL)
     graphene_matrix_init_identity (&node->transform);
@@ -680,7 +728,6 @@ gsk_render_node_set_transform (GskRenderNode           *node,
     graphene_matrix_init_from_matrix (&node->transform, transform);
 
   node->transform_set = !graphene_matrix_is_identity (&node->transform);
-  gsk_render_node_queue_invalidate (node, GSK_RENDER_NODE_CHANGES_UPDATE_TRANSFORM);
 }
 
 /**
@@ -697,10 +744,8 @@ void
 gsk_render_node_set_child_transform (GskRenderNode           *node,
                                      const graphene_matrix_t *transform)
 {
-  GskRenderNodeIter iter;
-  GskRenderNode *child;
-
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (node->is_mutable);
 
   if (transform == NULL)
     graphene_matrix_init_identity (&node->child_transform);
@@ -708,11 +753,6 @@ gsk_render_node_set_child_transform (GskRenderNode           *node,
     graphene_matrix_init_from_matrix (&node->child_transform, transform);
 
   node->child_transform_set = !graphene_matrix_is_identity (&node->child_transform);
-
-  /* We need to invalidate the world matrix for our children */
-  gsk_render_node_iter_init (&iter, node);
-  while (gsk_render_node_iter_next (&iter, &child))
-    gsk_render_node_queue_invalidate (child, GSK_RENDER_NODE_CHANGES_UPDATE_TRANSFORM);
 }
 
 /**
@@ -730,10 +770,9 @@ gsk_render_node_set_opacity (GskRenderNode *node,
                              double         opacity)
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (node->is_mutable);
 
   node->opacity = CLAMP (opacity, 0.0, 1.0);
-
-  gsk_render_node_queue_invalidate (node, GSK_RENDER_NODE_CHANGES_UPDATE_OPACITY);
 }
 
 /**
@@ -770,10 +809,9 @@ gsk_render_node_set_hidden (GskRenderNode *node,
                             gboolean       hidden)
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (node->is_mutable);
 
   node->hidden = !!hidden;
-
-  gsk_render_node_queue_invalidate (node, GSK_RENDER_NODE_CHANGES_UPDATE_VISIBILITY);
 }
 
 /**
@@ -813,10 +851,9 @@ gsk_render_node_set_opaque (GskRenderNode *node,
                             gboolean       opaque)
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (node->is_mutable);
 
   node->opaque = !!opaque;
-
-  gsk_render_node_queue_invalidate (node, GSK_RENDER_NODE_CHANGES_UPDATE_OPACITY);
 }
 
 /**
@@ -863,31 +900,6 @@ gsk_render_node_contains (GskRenderNode *node,
       return TRUE;
 
   return FALSE;
-}
-
-/**
- * gsk_render_node_set_surface:
- * @node: a #GskRenderNode
- * @surface: (nullable): a Cairo surface
- *
- * Sets the contents of the #GskRenderNode.
- *
- * The @node will acquire a reference on the given @surface.
- *
- * Since: 3.22
- */
-void
-gsk_render_node_set_surface (GskRenderNode   *node,
-                             cairo_surface_t *surface)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-
-  g_clear_pointer (&node->surface, cairo_surface_destroy);
-
-  if (surface != NULL)
-    node->surface = cairo_surface_reference (surface);
-
-  gsk_render_node_queue_invalidate (node, GSK_RENDER_NODE_CHANGES_UPDATE_SURFACE);
 }
 
 /*< private >
@@ -1014,168 +1026,6 @@ gsk_render_node_get_world_matrix (GskRenderNode     *node,
   *mv = node->world_matrix;
 }
 
-void
-gsk_render_node_set_invalidate_func (GskRenderNode               *node,
-                                     GskRenderNodeInvalidateFunc  invalidate_func,
-                                     gpointer                     func_data,
-                                     GDestroyNotify               destroy_func_data)
-{
-  if (node->parent != NULL)
-    {
-      g_critical ("Render node of type '%s' is not a root node. Only root "
-                  "nodes can have an invalidation function.",
-                  G_OBJECT_TYPE_NAME (node));
-      return;
-    }
-
-  if (node->invalidate_func != NULL)
-    {
-      if (node->destroy_func_data != NULL)
-        node->destroy_func_data (node->func_data);
-    }
-
-  node->invalidate_func = invalidate_func;
-  node->func_data = func_data;
-  node->destroy_func_data = destroy_func_data;
-}
-
-GskRenderNodeChanges
-gsk_render_node_get_current_state (GskRenderNode *node)
-{
-  GskRenderNodeChanges res = 0;
-
-  if (node->needs_resize)
-    res |= GSK_RENDER_NODE_CHANGES_UPDATE_BOUNDS;
-  if (node->needs_world_matrix_update)
-    res |= GSK_RENDER_NODE_CHANGES_UPDATE_TRANSFORM;
-  if (node->needs_content_update)
-    res |= GSK_RENDER_NODE_CHANGES_UPDATE_SURFACE;
-  if (node->needs_opacity_update)
-    res |= GSK_RENDER_NODE_CHANGES_UPDATE_OPACITY;
-  if (node->needs_visibility_update)
-    res |= GSK_RENDER_NODE_CHANGES_UPDATE_VISIBILITY;
-
-  return res;
-}
-
-GskRenderNodeChanges
-gsk_render_node_get_last_state (GskRenderNode *node)
-{
-  return node->last_state_change;
-}
-
-void
-gsk_render_node_queue_invalidate (GskRenderNode        *node,
-                                  GskRenderNodeChanges  changes)
-{
-  GskRenderNodeChanges cur_invalidated_bits = 0;
-  GskRenderNode *root;
-  int i;
-
-  cur_invalidated_bits = gsk_render_node_get_current_state (node);
-  if ((cur_invalidated_bits & changes) != 0)
-    return;
-
-  node->needs_resize = (changes & GSK_RENDER_NODE_CHANGES_UPDATE_BOUNDS) != 0;
-  node->needs_world_matrix_update = (changes & GSK_RENDER_NODE_CHANGES_UPDATE_TRANSFORM) != 0;
-  node->needs_content_update = (changes & GSK_RENDER_NODE_CHANGES_UPDATE_SURFACE) != 0;
-  node->needs_opacity_update = (changes & GSK_RENDER_NODE_CHANGES_UPDATE_OPACITY) != 0;
-  node->needs_visibility_update = (changes & GSK_RENDER_NODE_CHANGES_UPDATE_VISIBILITY) != 0;
-
-  if (node->parent == NULL)
-    {
-      GSK_NOTE (RENDER_NODE, g_print ("Invalid node [%p] is top-level\n", node));
-      return;
-    }
-
-  root = gsk_render_node_get_toplevel (node);
-
-  if (root->invalidated_descendants == NULL)
-    root->invalidated_descendants = g_ptr_array_new ();
-
-  for (i = 0; i < root->invalidated_descendants->len; i++)
-    {
-      if (node == g_ptr_array_index (root->invalidated_descendants, i))
-        {
-          GSK_NOTE (RENDER_NODE, g_print ("Node [%p] already invalidated; skipping...\n", node));
-          return;
-        }
-    }
-
-  GSK_NOTE (RENDER_NODE, g_print ("Adding node [%p] to list of invalid descendants of [%p]\n", node, root));
-  g_ptr_array_add (root->invalidated_descendants, node);
-}
-
-void
-gsk_render_node_validate (GskRenderNode *node)
-{
-  GPtrArray *invalidated_descendants;
-  gboolean call_invalidate_func;
-  int i;
-
-  node->last_state_change = gsk_render_node_get_current_state (node);
-
-  /* We call the invalidation function if our state changed, or if
-   * the descendants state has changed
-   */
-  call_invalidate_func = node->last_state_change != 0 ||
-                         node->invalidated_descendants != NULL;
-
-  gsk_render_node_maybe_resize (node);
-  gsk_render_node_update_world_matrix (node, FALSE);
-  node->needs_content_update = FALSE;
-  node->needs_visibility_update = FALSE;
-  node->needs_opacity_update = FALSE;
-
-  /* Steal the array of invalidated descendants, so that changes caused by
-   * the validation will not cause recursions
-   */
-  invalidated_descendants = node->invalidated_descendants;
-  node->invalidated_descendants = NULL;
-
-  if (invalidated_descendants != NULL)
-    {
-      for (i = 0; i < invalidated_descendants->len; i++)
-        {
-          GskRenderNode *child = g_ptr_array_index (invalidated_descendants, i);
-
-          child->last_state_change = 0;
-
-          GSK_NOTE (RENDER_NODE, g_print ("Validating descendant node [%p] (resize:%s, transform:%s)\n",
-                                          child,
-                                          child->needs_resize ? "yes" : "no",
-                                          child->needs_world_matrix_update ? "yes" : "no"));
-
-          child->last_state_change = gsk_render_node_get_current_state (child);
-
-          gsk_render_node_maybe_resize (child);
-          gsk_render_node_update_world_matrix (child, FALSE);
-
-          child->needs_content_update = FALSE;
-          child->needs_visibility_update = FALSE;
-          child->needs_opacity_update = FALSE;
-        }
-    }
-
-  g_clear_pointer (&invalidated_descendants, g_ptr_array_unref);
-
-  if (call_invalidate_func && node->invalidate_func != NULL)
-    node->invalidate_func (node, node->func_data);
-}
-
-void
-gsk_render_node_maybe_resize (GskRenderNode *node)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-
-  if (!node->needs_resize)
-    return;
-
-  GSK_RENDER_NODE_GET_CLASS (node)->resize (node);
-
-  node->needs_resize = FALSE;
-}
-
 /**
  * gsk_render_node_set_name:
  * @node: a #GskRenderNode
@@ -1197,23 +1047,12 @@ gsk_render_node_set_name (GskRenderNode *node,
   node->name = g_strdup (name);
 }
 
-static cairo_user_data_key_t render_node_context_key;
-
-static void
-surface_invalidate (void *data)
-{
-  GskRenderNode *node = data;
-
-  gsk_render_node_queue_invalidate (node, GSK_RENDER_NODE_CHANGES_UPDATE_SURFACE);
-}
-
 /**
  * gsk_render_node_get_draw_context:
  * @node: a #GskRenderNode
  *
  * Creates a Cairo context for drawing using the surface associated
- * to the render node. If no surface has been attached to the render
- * node, a new surface will be created as a side effect.
+ * to the render node.
  *
  * Returns: (transfer full): a Cairo context used for drawing; use
  *   cairo_destroy() when done drawing
@@ -1226,6 +1065,7 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
   cairo_t *res;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (node->is_mutable, NULL);
 
   if (node->surface == NULL)
     node->surface = cairo_image_surface_create (node->opaque ? CAIRO_FORMAT_RGB24
@@ -1240,7 +1080,21 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
                    node->bounds.size.width, node->bounds.size.height);
   cairo_clip (res);
 
-  cairo_set_user_data (res, &render_node_context_key, node, surface_invalidate);
-
   return res;
+}
+
+void
+gsk_render_node_make_immutable (GskRenderNode *node)
+{
+  GskRenderNodeIter iter;
+  GskRenderNode *child;
+
+  if (!node->is_mutable)
+    return;
+
+  node->is_mutable = FALSE;
+
+  gsk_render_node_iter_init (&iter, node);
+  while (gsk_render_node_iter_next (&iter, &child))
+    gsk_render_node_make_immutable (child);
 }

@@ -164,7 +164,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	listmodel			\
 	testpopup			\
 	testpopupat			\
-	testgskrenderer			\
 	$(NULL)
 
 if USE_X11
@@ -284,7 +283,6 @@ testtitlebar_DEPENDENCIES = $(TEST_DEPS)
 testwindowsize_DEPENDENCIES = $(TEST_DEPS)
 listmodel_DEPENDENCIES = $(TEST_DEPS)
 foreigndrawing_DEPENDENCIES = $(TEST_DEPS)
-testgskrenderer_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -498,8 +496,6 @@ testglblending_SOURCES =	\
 listmodel_SOURCES = listmodel.c
 
 foreigndrawing_SOURCES = foreigndrawing.c
-
-testgskrenderer_SOURCES = testgskrenderer.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\

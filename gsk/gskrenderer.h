@@ -69,44 +69,37 @@ void                    gsk_renderer_get_scaling_filters        (GskRenderer    
                                                                  GskScalingFilter        *min_filter,
                                                                  GskScalingFilter        *mag_filter);
 GDK_AVAILABLE_IN_3_22
+void                    gsk_renderer_set_scale_factor           (GskRenderer             *renderer,
+                                                                 int                      scale_factor);
+GDK_AVAILABLE_IN_3_22
+int                     gsk_renderer_get_scale_factor           (GskRenderer             *renderer);
+GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_set_auto_clear             (GskRenderer             *renderer,
                                                                  gboolean                 clear);
 GDK_AVAILABLE_IN_3_22
 gboolean                gsk_renderer_get_auto_clear             (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_root_node              (GskRenderer             *renderer,
-                                                                 GskRenderNode           *root);
+void                    gsk_renderer_set_use_alpha              (GskRenderer             *renderer,
+                                                                 gboolean                 use_alpha);
 GDK_AVAILABLE_IN_3_22
-GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer             *renderer);
-GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_surface                (GskRenderer             *renderer,
-                                                                 cairo_surface_t         *surface);
-GDK_AVAILABLE_IN_3_22
-cairo_surface_t *       gsk_renderer_get_surface                (GskRenderer             *renderer);
+gboolean                gsk_renderer_get_use_alpha              (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_set_window                 (GskRenderer             *renderer,
                                                                  GdkWindow               *window);
 GDK_AVAILABLE_IN_3_22
 GdkWindow *             gsk_renderer_get_window                 (GskRenderer             *renderer);
-GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_draw_context           (GskRenderer             *renderer,
-                                                                 cairo_t                 *cr);
-GDK_AVAILABLE_IN_3_22
-cairo_t *               gsk_renderer_get_draw_context           (GskRenderer             *renderer);
+
 GDK_AVAILABLE_IN_3_22
 GdkDisplay *            gsk_renderer_get_display                (GskRenderer             *renderer);
-GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_use_alpha              (GskRenderer             *renderer,
-                                                                 gboolean                 use_alpha);
-GDK_AVAILABLE_IN_3_22
-gboolean                gsk_renderer_get_use_alpha              (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_3_22
 gboolean                gsk_renderer_realize                    (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_render                     (GskRenderer             *renderer);
+void                    gsk_renderer_render                     (GskRenderer             *renderer,
+                                                                 GskRenderNode           *root,
+                                                                 GdkDrawingContext       *context);
 
 G_END_DECLS
 
