@@ -47,6 +47,12 @@ gboolean        gdk_drawing_context_is_valid            (GdkDrawingContext *cont
 
 GDK_AVAILABLE_IN_3_22
 cairo_t *       gdk_drawing_context_get_cairo_context   (GdkDrawingContext *context);
+GDK_AVAILABLE_IN_3_22
+void            gdk_drawing_context_draw_from_gl        (GdkDrawingContext *context,
+                                                         int                gl_object_type,
+                                                         int                gl_object,
+                                                         int                scale_factor,
+                                                         cairo_region_t    *clip_region);
 
 G_END_DECLS
 
