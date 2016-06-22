@@ -29,7 +29,6 @@
 #include "gskrendererprivate.h"
 
 #include "gskdebugprivate.h"
-#include "gskcairorendererprivate.h"
 #include "gskglrendererprivate.h"
 #include "gskrendernodeprivate.h"
 
@@ -50,9 +49,6 @@ typedef struct
 {
   GObject parent_instance;
 
-  GdkDisplay *display;
-  GdkWindow *window;
-
   graphene_rect_t viewport;
   graphene_matrix_t modelview;
   graphene_matrix_t projection;
@@ -60,16 +56,14 @@ typedef struct
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
 
+  GdkWindow *window;
+  GdkDrawingContext *drawing_context;
   GskRenderNode *root_node;
+  GdkDisplay *display;
 
-  cairo_surface_t *surface;
-  cairo_t *draw_context;
+  int scale_factor;
 
   gboolean is_realized : 1;
-  gboolean needs_viewport_resize : 1;
-  gboolean needs_modelview_update : 1;
-  gboolean needs_projection_update : 1;
-  gboolean needs_tree_validation : 1;
   gboolean auto_clear : 1;
   gboolean use_alpha : 1;
 } GskRendererPrivate;
@@ -83,11 +77,12 @@ enum {
   PROP_MINIFICATION_FILTER,
   PROP_MAGNIFICATION_FILTER,
   PROP_AUTO_CLEAR,
+  PROP_USE_ALPHA,
+  PROP_SCALE_FACTOR,
+  PROP_WINDOW,
   PROP_ROOT_NODE,
   PROP_DISPLAY,
-  PROP_WINDOW,
-  PROP_SURFACE,
-  PROP_USE_ALPHA,
+  PROP_DRAWING_CONTEXT,
 
   N_PROPS
 };
@@ -111,34 +106,11 @@ gsk_renderer_real_unrealize (GskRenderer *self)
 }
 
 static void
-gsk_renderer_real_render (GskRenderer *self)
+gsk_renderer_real_render (GskRenderer *self,
+                          GskRenderNode *root,
+                          GdkDrawingContext *context)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, render);
-}
-
-static void
-gsk_renderer_real_resize_viewport (GskRenderer *self,
-                                   const graphene_rect_t *viewport)
-{
-}
-
-static void
-gsk_renderer_real_update (GskRenderer *self,
-                          const graphene_matrix_t *mv,
-                          const graphene_matrix_t *proj)
-{
-}
-
-static void
-gsk_renderer_real_validate_tree (GskRenderer *self,
-                                 GskRenderNode *root)
-{
-}
-
-static void
-gsk_renderer_real_clear_tree (GskRenderer *self,
-                              GskRenderNode *old_root)
-{
 }
 
 static void
@@ -149,11 +121,7 @@ gsk_renderer_dispose (GObject *gobject)
 
   gsk_renderer_unrealize (self);
 
-  g_clear_pointer (&priv->surface, cairo_surface_destroy);
-  g_clear_pointer (&priv->draw_context, cairo_destroy);
-
   g_clear_object (&priv->window);
-  g_clear_object (&priv->root_node);
   g_clear_object (&priv->display);
 
   G_OBJECT_CLASS (gsk_renderer_parent_class)->dispose (gobject);
@@ -194,12 +162,12 @@ gsk_renderer_set_property (GObject      *gobject,
       gsk_renderer_set_auto_clear (self, g_value_get_boolean (value));
       break;
 
-    case PROP_ROOT_NODE:
-      gsk_renderer_set_root_node (self, g_value_get_object (value));
+    case PROP_USE_ALPHA:
+      gsk_renderer_set_use_alpha (self, g_value_get_boolean (value));
       break;
 
-    case PROP_SURFACE:
-      gsk_renderer_set_surface (self, g_value_get_boxed (value));
+    case PROP_SCALE_FACTOR:
+      gsk_renderer_set_scale_factor (self, g_value_get_int (value));
       break;
 
     case PROP_WINDOW:
@@ -207,11 +175,8 @@ gsk_renderer_set_property (GObject      *gobject,
       break;
 
     case PROP_DISPLAY:
+      /* Construct-only */
       priv->display = g_value_dup_object (value);
-      break;
-
-    case PROP_USE_ALPHA:
-      gsk_renderer_set_use_alpha (self, g_value_get_boolean (value));
       break;
     }
 }
@@ -251,24 +216,28 @@ gsk_renderer_get_property (GObject    *gobject,
       g_value_set_boolean (value, priv->auto_clear);
       break;
 
-    case PROP_ROOT_NODE:
-      g_value_set_object (value, priv->root_node);
+    case PROP_USE_ALPHA:
+      g_value_set_boolean (value, priv->use_alpha);
       break;
 
-    case PROP_SURFACE:
-      g_value_set_boxed (value, priv->surface);
-      break;
-
-    case PROP_DISPLAY:
-      g_value_set_object (value, priv->display);
+    case PROP_SCALE_FACTOR:
+      g_value_set_int (value, priv->scale_factor);
       break;
 
     case PROP_WINDOW:
       g_value_set_object (value, priv->window);
       break;
 
-    case PROP_USE_ALPHA:
-      g_value_set_boolean (value, priv->use_alpha);
+    case PROP_ROOT_NODE:
+      g_value_set_object (value, priv->root_node);
+      break;
+
+    case PROP_DRAWING_CONTEXT:
+      g_value_set_object (value, priv->drawing_context);
+      break;
+
+    case PROP_DISPLAY:
+      g_value_set_object (value, priv->display);
       break;
     }
 }
@@ -297,10 +266,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
 
   klass->realize = gsk_renderer_real_realize;
   klass->unrealize = gsk_renderer_real_unrealize;
-  klass->resize_viewport = gsk_renderer_real_resize_viewport;
-  klass->update = gsk_renderer_real_update;
-  klass->validate_tree = gsk_renderer_real_validate_tree;
-  klass->clear_tree = gsk_renderer_real_clear_tree;
   klass->render = gsk_renderer_real_render;
 
   gobject_class->constructed = gsk_renderer_constructed;
@@ -448,27 +413,8 @@ gsk_renderer_class_init (GskRendererClass *klass)
                          "Root Node",
                          "The root render node to render",
                          GSK_TYPE_RENDER_NODE,
-                         G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS |
-                         G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GskRenderer:surface:
-   *
-   * The target rendering surface.
-   *
-   * See also: #GskRenderer:window.
-   *
-   * Since: 3.22
-   */
-  gsk_renderer_properties[PROP_SURFACE] =
-    g_param_spec_boxed ("surface",
-			"Surface",
-			"The Cairo surface used to render to",
-			CAIRO_GOBJECT_TYPE_SURFACE,
-			G_PARAM_READWRITE |
-			G_PARAM_STATIC_STRINGS |
-			G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READABLE |
+                         G_PARAM_STATIC_STRINGS);
 
   /**
    * GskRenderer:display:
@@ -486,22 +432,46 @@ gsk_renderer_class_init (GskRendererClass *klass)
 			 G_PARAM_CONSTRUCT_ONLY |
 			 G_PARAM_STATIC_STRINGS);
 
-  /**
-   * GskRenderer:window:
-   *
-   * The #GdkWindow used to create a target surface, if #GskRenderer:surface
-   * is not explicitly set.
-   *
-   * Since: 3.22
-   */
   gsk_renderer_properties[PROP_WINDOW] =
     g_param_spec_object ("window",
                          "Window",
-                         "The GdkWindow associated to the renderer",
+                         "The window associated to the renderer",
                          GDK_TYPE_WINDOW,
                          G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS |
-                         G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GskRenderer:scale-factor:
+   *
+   * The scale factor used when rendering.
+   *
+   * Since: 3.22
+   */
+  gsk_renderer_properties[PROP_SCALE_FACTOR] =
+    g_param_spec_int ("scale-factor",
+                      "Scale Factor",
+                      "The scaling factor of the renderer",
+                      1, G_MAXINT,
+                      1,
+                      G_PARAM_READWRITE |
+                      G_PARAM_STATIC_STRINGS |
+                      G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GskRenderer:drawing-context:
+   *
+   * The drawing context used when rendering.
+   *
+   * Since: 3.22
+   */
+  gsk_renderer_properties[PROP_DRAWING_CONTEXT] =
+    g_param_spec_object ("drawing-context",
+                         "Drawing Context",
+                         "The drawing context used by the renderer",
+                         GDK_TYPE_DRAWING_CONTEXT,
+                         G_PARAM_READABLE |
+                         G_PARAM_STATIC_STRINGS);
 
   /**
    * GskRenderer:use-alpha:
@@ -531,6 +501,7 @@ gsk_renderer_init (GskRenderer *self)
   graphene_matrix_init_identity (&priv->projection);
 
   priv->auto_clear = TRUE;
+  priv->scale_factor = 1;
 
   priv->min_filter = GSK_SCALING_FILTER_LINEAR;
   priv->mag_filter = GSK_SCALING_FILTER_LINEAR;
@@ -565,9 +536,6 @@ gsk_renderer_set_viewport (GskRenderer           *renderer,
     return;
 
   graphene_rect_init_from_rect (&priv->viewport, viewport);
-  priv->needs_viewport_resize = TRUE;
-  priv->needs_modelview_update = TRUE;
-  priv->needs_projection_update = TRUE;
 
   g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_VIEWPORT]);
 }
@@ -618,8 +586,6 @@ gsk_renderer_set_modelview (GskRenderer             *renderer,
   else
     graphene_matrix_init_from_matrix (&priv->modelview, modelview);
 
-  priv->needs_modelview_update = TRUE;
-
   g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_MODELVIEW]);
 }
 
@@ -666,8 +632,6 @@ gsk_renderer_set_projection (GskRenderer             *renderer,
   else
     graphene_matrix_init_from_matrix (&priv->projection, projection);
 
-  priv->needs_projection_update = TRUE;
-
   g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_PROJECTION]);
 }
 
@@ -690,67 +654,6 @@ gsk_renderer_get_projection (GskRenderer       *renderer,
   g_return_if_fail (projection != NULL);
 
   graphene_matrix_init_from_matrix (projection, &priv->projection);
-}
-
-static void
-gsk_renderer_invalidate_tree (GskRenderNode *node,
-                              gpointer       data)
-{
-  GskRenderer *self = data;
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-
-  GSK_NOTE (RENDERER, g_print ("Invalidating tree.\n"));
-
-  /* Since the scene graph has changed in some way, we need to re-validate it. */
-  priv->needs_tree_validation = TRUE;
-}
-
-/**
- * gsk_renderer_set_root_node:
- * @renderer: a #GskRenderer
- * @root: (nullable): a #GskRenderNode
- *
- * Sets the root node of the scene graph to be rendered.
- *
- * The #GskRenderer will acquire a reference on @root.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_set_root_node (GskRenderer   *renderer,
-                            GskRenderNode *root)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-  GskRenderNode *old_root;
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-  g_return_if_fail (GSK_IS_RENDER_NODE (root));
-
-  old_root = priv->root_node != NULL ? g_object_ref (priv->root_node) : NULL;
-
-  if (g_set_object (&priv->root_node, root))
-    {
-      /* We need to unset the invalidate function on the old instance */
-      if (old_root != NULL)
-        {
-          gsk_render_node_set_invalidate_func (old_root, NULL, NULL, NULL);
-          gsk_renderer_clear_tree (renderer, old_root);
-          g_object_unref (old_root);
-        }
-
-      if (priv->root_node != NULL)
-        gsk_render_node_set_invalidate_func (priv->root_node,
-                                             gsk_renderer_invalidate_tree,
-                                             renderer,
-                                             NULL);
-
-      /* If we don't have a root node, there's really no point in validating a
-       * tree that it's not going to be drawn
-       */
-      priv->needs_tree_validation = priv->root_node != NULL;
-
-      g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_ROOT_NODE]);
-    }
 }
 
 /**
@@ -819,112 +722,100 @@ gsk_renderer_get_scaling_filters (GskRenderer      *renderer,
     *mag_filter = priv->mag_filter;
 }
 
-/**
- * gsk_renderer_set_surface:
- * @renderer: a #GskRenderer
- * @surface: (nullable): a Cairo surface
- *
- * Sets the #cairo_surface_t used as the target rendering surface.
- *
- * This function will acquire a reference to @surface.
- *
- * See also: gsk_renderer_set_window()
- *
- * Since: 3.22
- */
 void
-gsk_renderer_set_surface (GskRenderer     *renderer,
-                          cairo_surface_t *surface)
+gsk_renderer_set_scale_factor (GskRenderer *renderer,
+                               int          scale_factor)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_if_fail (GSK_IS_RENDERER (renderer));
 
-  if (priv->surface == surface)
-    return;
-
-  g_clear_pointer (&priv->surface, cairo_surface_destroy);
-
-  if (surface != NULL)
-    priv->surface = cairo_surface_reference (surface);
-
-  g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_SURFACE]);
-}
-
-/**
- * gsk_renderer_get_surface:
- * @renderer: a #GskRenderer
- *
- * Retrieve the target rendering surface used by @renderer.
- *
- * If you did not use gsk_renderer_set_surface(), a compatible surface
- * will be created by using the #GdkWindow passed to gsk_renderer_set_window().
- *
- * Returns: (transfer none) (nullable): a Cairo surface
- *
- * Since: 3.22
- */
-cairo_surface_t *
-gsk_renderer_get_surface (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-
-  if (priv->surface != NULL)
-    return priv->surface;
-
-  if (priv->window != NULL)
+  if (priv->scale_factor != scale_factor)
     {
-      int scale = gdk_window_get_scale_factor (priv->window);
-      int width = gdk_window_get_width (priv->window);
-      int height = gdk_window_get_height (priv->window);
-      cairo_content_t content;
+      priv->scale_factor = scale_factor;
 
-      if (priv->use_alpha)
-        content = CAIRO_CONTENT_COLOR_ALPHA;
-      else
-        content = CAIRO_CONTENT_COLOR;
-
-      GSK_NOTE (RENDERER, g_print ("Creating surface from window [%p] (w:%d, h:%d, s:%d, a:%s)\n",
-                                   priv->window,
-                                   width, height, scale,
-                                   priv->use_alpha ? "y" : "n"));
-
-      priv->surface = gdk_window_create_similar_surface (priv->window,
-                                                         content,
-                                                         width, height);
+      g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_SCALE_FACTOR]);
     }
+}
 
-  return priv->surface;
+int
+gsk_renderer_get_scale_factor (GskRenderer *renderer)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), 1);
+
+  return priv->scale_factor;
 }
 
 void
-gsk_renderer_set_draw_context (GskRenderer *renderer,
-                               cairo_t     *cr)
+gsk_renderer_set_window (GskRenderer *renderer,
+                         GdkWindow   *window)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_if_fail (GSK_IS_RENDERER (renderer));
+  g_return_if_fail (!priv->is_realized);
+  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
 
-  if (priv->draw_context == cr)
-    return;
-
-  g_clear_pointer (&priv->draw_context, cairo_destroy);
-  priv->draw_context = cr != NULL ? cairo_reference (cr) : NULL;
+  if (g_set_object (&priv->window, window))
+    g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_WINDOW]);
 }
 
-cairo_t *
-gsk_renderer_get_draw_context (GskRenderer *renderer)
+/**
+ * gsk_renderer_get_window:
+ * @renderer: a #GskRenderer
+ *
+ * Retrieves the #GdkWindow set using gsk_renderer_set_window().
+ *
+ * Returns: (transfer none) (nullable): a #GdkWindow
+ *
+ * Since: 3.22
+ */
+GdkWindow *
+gsk_renderer_get_window (GskRenderer *renderer)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
 
-  if (priv->draw_context != NULL)
-    return priv->draw_context;
+  return priv->window;
+}
 
-  return cairo_create (gsk_renderer_get_surface (renderer));
+/*< private >
+ * gsk_renderer_get_root_node:
+ * @renderer: a #GskRenderer
+ *
+ * Retrieves the #GskRenderNode used by @renderer.
+ *
+ * Returns: (transfer none) (nullable): a #GskRenderNode
+ */
+GskRenderNode *
+gsk_renderer_get_root_node (GskRenderer *renderer)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
+
+  return priv->root_node;
+}
+
+/*< private >
+ * gsk_renderer_get_drawing_context:
+ * @renderer: a #GskRenderer
+ *
+ * Retrieves the #GdkDrawingContext used by @renderer.
+ *
+ * Returns: (transfer none) (nullable): a #GdkDrawingContext
+ */
+GdkDrawingContext *
+gsk_renderer_get_drawing_context (GskRenderer *renderer)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
+
+  return priv->drawing_context;
 }
 
 /**
@@ -945,26 +836,6 @@ gsk_renderer_get_display (GskRenderer *renderer)
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
 
   return priv->display;
-}
-
-/**
- * gsk_renderer_get_root_node:
- * @renderer: a #GskRenderer
- *
- * Retrieves the root node of the scene graph.
- *
- * Returns: (transfer none) (nullable): a #GskRenderNode
- *
- * Since: 3.22
- */
-GskRenderNode *
-gsk_renderer_get_root_node (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-
-  return priv->root_node;
 }
 
 /*< private >
@@ -988,51 +859,6 @@ gsk_renderer_is_realized (GskRenderer *renderer)
 }
 
 /**
- * gsk_renderer_set_window:
- * @renderer: a #GskRenderer
- * @window: (nullable): a #GdkWindow
- *
- * Sets the #GdkWindow used to create the target rendering surface.
- *
- * See also: gsk_renderer_set_surface()
- *
- * Since: 3.22
- */
-void
-gsk_renderer_set_window (GskRenderer *renderer,
-                         GdkWindow   *window)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
-  g_return_if_fail (!priv->is_realized);
-
-  if (g_set_object (&priv->window, window))
-    g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_WINDOW]);
-}
-
-/**
- * gsk_renderer_get_window:
- * @renderer: a #GskRenderer
- *
- * Retrieves the #GdkWindow set with gsk_renderer_set_window().
- *
- * Returns: (transfer none) (nullable): a #GdkWindow
- *
- * Since: 3.22
- */
-GdkWindow *
-gsk_renderer_get_window (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-
-  return priv->window;
-}
-
-/**
  * gsk_renderer_realize:
  * @renderer: a #GskRenderer
  *
@@ -1050,12 +876,6 @@ gsk_renderer_realize (GskRenderer *renderer)
 
   if (priv->is_realized)
     return TRUE;
-
-  if (priv->window == NULL && priv->surface == NULL)
-    {
-      g_critical ("No rendering surface has been set.");
-      return FALSE;
-    }
 
   priv->is_realized = GSK_RENDERER_GET_CLASS (renderer)->realize (renderer);
 
@@ -1085,156 +905,41 @@ gsk_renderer_unrealize (GskRenderer *renderer)
   priv->is_realized = FALSE;
 }
 
-/*< private >
- * gsk_renderer_maybe_resize_viewport:
- * @renderer: a #GskRenderer
- *
- * Optionally resize the viewport of @renderer.
- *
- * This function should be called by gsk_renderer_render().
- *
- * This function may call @GskRendererClass.resize_viewport().
- */
-void
-gsk_renderer_maybe_resize_viewport (GskRenderer *renderer)
-{
-  GskRendererClass *renderer_class = GSK_RENDERER_GET_CLASS (renderer);
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  if (priv->needs_viewport_resize)
-    {
-      renderer_class->resize_viewport (renderer, &priv->viewport);
-      priv->needs_viewport_resize = FALSE;
-
-      GSK_NOTE (RENDERER, g_print ("Viewport size: %g x %g\n",
-                                   priv->viewport.size.width,
-                                   priv->viewport.size.height));
-
-      /* If the target surface has been created from a window, we need
-       * to clear it, so that it gets recreated with the right size
-       */
-      if (priv->window != NULL && priv->surface != NULL)
-        g_clear_pointer (&priv->surface, cairo_surface_destroy);
-    }
-}
-
-/*< private >
- * gsk_renderer_maybe_update:
- * @renderer: a #GskRenderer
- *
- * Optionally recomputes the modelview-projection matrix used by
- * the @renderer.
- *
- * This function should be called by gsk_renderer_render().
- *
- * This function may call @GskRendererClass.update().
- */
-void
-gsk_renderer_maybe_update (GskRenderer *renderer)
-{
-  GskRendererClass *renderer_class = GSK_RENDERER_GET_CLASS (renderer);
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  if (priv->needs_modelview_update || priv->needs_projection_update)
-    {
-      renderer_class->update (renderer, &priv->modelview, &priv->projection);
-      priv->needs_modelview_update = FALSE;
-      priv->needs_projection_update = FALSE;
-    }
-}
-
-void
-gsk_renderer_clear_tree (GskRenderer   *renderer,
-                         GskRenderNode *old_root)
-{
-  GSK_RENDERER_GET_CLASS (renderer)->clear_tree (renderer, old_root);
-}
-
-/*< private >
- * gsk_renderer_maybe_validate_tree:
- * @renderer: a #GskRenderer
- *
- * Optionally validates the #GskRenderNode scene graph, and uses it
- * to generate more efficient intermediate representations depending
- * on the type of @renderer.
- *
- * This function should be called by gsk_renderer_render().
- *
- * This function may call @GskRendererClas.validate_tree().
- */
-void
-gsk_renderer_maybe_validate_tree (GskRenderer *renderer)
-{
-  GskRendererClass *renderer_class = GSK_RENDERER_GET_CLASS (renderer);
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  if (priv->root_node == NULL)
-    return;
-
-  /* Ensure that the render nodes are valid; this will change the
-   * needs_tree_validation flag on the renderer, if needed
-   */
-  gsk_render_node_validate (priv->root_node);
-
-  if (priv->needs_tree_validation)
-    {
-      /* Ensure that the Renderer can update itself */
-      renderer_class->validate_tree (renderer, priv->root_node);
-      priv->needs_tree_validation = FALSE;
-    }
-}
-
-/*< private >
- * gsk_renderer_maybe_clear:
- * @renderer: a #GskRenderer
- *
- * Optionally calls @GskRendererClass.clear(), depending on the value
- * of #GskRenderer:auto-clear.
- *
- * This function should be called by gsk_renderer_render().
- */
-void
-gsk_renderer_maybe_clear (GskRenderer *renderer)
-{
-  GskRendererClass *renderer_class = GSK_RENDERER_GET_CLASS (renderer);
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  if (priv->auto_clear)
-    renderer_class->clear (renderer);
-}
-
 /**
  * gsk_renderer_render:
- * @renderer: a#GskRenderer
+ * @renderer: a #GskRenderer
+ * @root: a #GskRenderNode
+ * @context: a #GdkDrawingContext
  *
- * Renders the scene graph associated to @renderer, using the
- * given target surface.
+ * Renders the scene graph, described by a tree of #GskRenderNode instances,
+ * using the given #GdkDrawingContext.
+ *
+ * The @renderer will acquire a reference on the #GskRenderNode tree while
+ * the rendering is in progress, and will make the tree immutable.
  *
  * Since: 3.22
  */
 void
-gsk_renderer_render (GskRenderer *renderer)
+gsk_renderer_render (GskRenderer       *renderer,
+                     GskRenderNode     *root,
+                     GdkDrawingContext *context)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_if_fail (GSK_IS_RENDERER (renderer));
   g_return_if_fail (priv->is_realized);
-  g_return_if_fail (priv->root_node != NULL);
+  g_return_if_fail (GSK_IS_RENDER_NODE (root));
+  g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
 
-  /* We need to update the viewport and the modelview, to allow renderers
-   * to update their clip region and/or frustum; this allows them to cull
-   * render nodes in the tree validation phase
-   */
-  gsk_renderer_maybe_resize_viewport (renderer);
+  g_set_object (&priv->root_node, root);
+  g_set_object (&priv->drawing_context, context);
 
-  gsk_renderer_maybe_update (renderer);
+  gsk_render_node_make_immutable (root);
 
-  gsk_renderer_maybe_validate_tree (renderer);
+  GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, context);
 
-  /* Clear the output surface */
-  gsk_renderer_maybe_clear (renderer);
-
-  GSK_RENDERER_GET_CLASS (renderer)->render (renderer);
+  g_clear_object (&priv->root_node);
+  g_clear_object (&priv->drawing_context);
 }
 
 /**
@@ -1345,7 +1050,7 @@ gsk_renderer_get_use_alpha (GskRenderer *renderer)
  *
  * Creates an appropriate #GskRenderer instance for the given @display.
  *
- * Returns: (transfer full): a #GskRenderer
+ * Returns: (transfer full) (nullable): a #GskRenderer
  *
  * Since: 3.22
  */
@@ -1364,10 +1069,7 @@ gsk_renderer_get_for_display (GdkDisplay *display)
     }
 
   if (use_software[0] != '0')
-    {
-      renderer_type = GSK_TYPE_CAIRO_RENDERER;
-      goto out;
-    }
+    return NULL;
 
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
@@ -1377,9 +1079,9 @@ gsk_renderer_get_for_display (GdkDisplay *display)
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (display))
     renderer_type = GSK_TYPE_GL_RENDERER;
-  else
 #endif
-    renderer_type = GSK_TYPE_CAIRO_RENDERER;
+  else
+    return NULL;
 
   GSK_NOTE (RENDERER, g_print ("Creating renderer of type '%s' for display '%s'\n",
                                g_type_name (renderer_type),
@@ -1387,6 +1089,5 @@ gsk_renderer_get_for_display (GdkDisplay *display)
 
   g_assert (renderer_type != G_TYPE_INVALID);
 
-out:
   return g_object_new (renderer_type, "display", display, NULL);
 }

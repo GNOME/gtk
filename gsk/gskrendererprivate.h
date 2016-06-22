@@ -39,28 +39,15 @@ struct _GskRendererClass
   gboolean (* realize) (GskRenderer *renderer);
   void (* unrealize) (GskRenderer *renderer);
 
-  void (* resize_viewport) (GskRenderer *renderer,
-                            const graphene_rect_t *viewport);
-  void (* update) (GskRenderer *renderer,
-                   const graphene_matrix_t *modelview,
-                   const graphene_matrix_t *projection);
-  void (* validate_tree) (GskRenderer *renderer,
-                          GskRenderNode *root);
-  void (* clear_tree) (GskRenderer *renderer,
-                       GskRenderNode *old_root);
-  void (* clear) (GskRenderer *renderer);
-  void (* render) (GskRenderer *renderer);
+  void (* render) (GskRenderer *renderer,
+                   GskRenderNode *root,
+                   GdkDrawingContext *context);
 };
 
 gboolean gsk_renderer_is_realized (GskRenderer *renderer);
 
-void gsk_renderer_clear_tree (GskRenderer *renderer,
-                              GskRenderNode *old_root);
-
-void gsk_renderer_maybe_resize_viewport (GskRenderer *renderer);
-void gsk_renderer_maybe_update (GskRenderer *renderer);
-void gsk_renderer_maybe_validate_tree (GskRenderer *renderer);
-void gsk_renderer_maybe_clear (GskRenderer *renderer);
+GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer *renderer);
+GdkDrawingContext *     gsk_renderer_get_drawing_context        (GskRenderer *renderer);
 
 G_END_DECLS
 

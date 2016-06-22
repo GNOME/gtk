@@ -123,21 +123,28 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
 }
 
 static void
-gsk_cairo_renderer_resize_viewport (GskRenderer           *renderer,
-                                    const graphene_rect_t *viewport)
+gsk_cairo_renderer_render (GskRenderer *renderer,
+                           GskRenderNode *root,
+                           GdkDrawingContext *context)
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
+  cairo_t *cr = gdk_drawing_context_get_cairo_context (context); 
 
-  self->viewport = *viewport;
-}
+  gsk_renderer_get_viewport (renderer, &self->viewport);
 
-static void
-gsk_cairo_renderer_render (GskRenderer *renderer)
-{
-  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
-  cairo_surface_t *target = gsk_renderer_get_surface (renderer);
-  GskRenderNode *root = gsk_renderer_get_root_node (renderer);
-  cairo_t *cr = cairo_create (target);
+  if (gsk_renderer_get_auto_clear (renderer))
+    {
+      cairo_save (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+      if (gsk_renderer_get_use_alpha (renderer))
+        cairo_set_source_rgba (cr, 0, 0, 0, 0);
+      else
+        cairo_set_source_rgb (cr, 0, 0, 0);
+
+      cairo_paint (cr);
+      cairo_restore (cr);
+    }
 
   if (GSK_RENDER_MODE_CHECK (GEOMETRY))
     {
@@ -154,26 +161,6 @@ gsk_cairo_renderer_render (GskRenderer *renderer)
     }
 
   gsk_cairo_renderer_render_node (self, root, cr);
-
-  cairo_destroy (cr);
-}
-
-static void
-gsk_cairo_renderer_clear (GskRenderer *renderer)
-{
-  cairo_surface_t *surface = gsk_renderer_get_surface (renderer);
-  cairo_t *cr = cairo_create (surface);
-
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-
-  if (gsk_renderer_get_use_alpha (renderer))
-    cairo_set_source_rgba (cr, 0, 0, 0, 0);
-  else
-    cairo_set_source_rgb (cr, 0, 0, 0);
-
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
 }
 
 static void
@@ -183,8 +170,6 @@ gsk_cairo_renderer_class_init (GskCairoRendererClass *klass)
 
   renderer_class->realize = gsk_cairo_renderer_realize;
   renderer_class->unrealize = gsk_cairo_renderer_unrealize;
-  renderer_class->resize_viewport = gsk_cairo_renderer_resize_viewport;
-  renderer_class->clear = gsk_cairo_renderer_clear;
   renderer_class->render = gsk_cairo_renderer_render;
 }
 
