@@ -53,6 +53,12 @@ GDK_AVAILABLE_IN_3_22
 GskRenderNode *         gsk_render_node_get_previous_sibling    (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_3_22
+GskRenderNode *         gsk_render_node_append_child            (GskRenderNode *node,
+                                                                 GskRenderNode *child);
+GDK_AVAILABLE_IN_3_22
+GskRenderNode *         gsk_render_node_prepend_child           (GskRenderNode *node,
+                                                                 GskRenderNode *child);
+GDK_AVAILABLE_IN_3_22
 GskRenderNode *         gsk_render_node_insert_child_at_pos     (GskRenderNode *node,
                                                                  GskRenderNode *child,
                                                                  int            index_);
@@ -102,9 +108,6 @@ void                    gsk_render_node_set_opaque              (GskRenderNode *
                                                                  gboolean       opaque);
 GDK_AVAILABLE_IN_3_22
 gboolean                gsk_render_node_is_opaque               (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
-void                    gsk_render_node_set_surface             (GskRenderNode   *node,
-                                                                 cairo_surface_t *surface);
 GDK_AVAILABLE_IN_3_22
 cairo_t *               gsk_render_node_get_draw_context        (GskRenderNode   *node);
 

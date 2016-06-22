@@ -432,15 +432,8 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
   gdk_gl_context_make_current (self->context);
 
   GSK_NOTE (OPENGL, g_print ("Creating buffers and programs\n"));
-
   gsk_gl_renderer_create_buffers (self);
   gsk_gl_renderer_create_program (self);
-
-  self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), 16);
-  g_array_set_clear_func (self->opaque_render_items, render_item_clear);
-
-  self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), 16);
-  g_array_set_clear_func (self->opaque_render_items, render_item_clear);
 
   return TRUE;
 }
@@ -466,18 +459,22 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 }
 
 static void
-gsk_gl_renderer_resize_viewport (GskRenderer           *renderer,
+gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
                                  const graphene_rect_t *viewport)
 {
+  GSK_NOTE (OPENGL, g_print ("glViewport(0, 0, %g, %g)\n",
+                             viewport->size.width,
+                             viewport->size.height));
+
+  glViewport (viewport->origin.x, viewport->origin.y,
+              viewport->size.width, viewport->size.height);
 }
 
 static void
-gsk_gl_renderer_update (GskRenderer             *renderer,
-                        const graphene_matrix_t *modelview,
-                        const graphene_matrix_t *projection)
+gsk_gl_renderer_update_frustum (GskGLRenderer           *self,
+                                const graphene_matrix_t *modelview,
+                                const graphene_matrix_t *projection)
 {
-  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-
   GSK_NOTE (OPENGL, g_print ("Updating the modelview/projection\n"));
 
   graphene_matrix_multiply (modelview, projection, &self->mvp);
@@ -662,6 +659,7 @@ get_gl_scaling_filters (GskRenderer *renderer,
     }
 }
 
+#if 0
 static gboolean
 check_in_frustum (const graphene_frustum_t *frustum,
                   RenderItem               *item)
@@ -673,6 +671,7 @@ check_in_frustum (const graphene_frustum_t *frustum,
 
   return graphene_frustum_intersects_box (frustum, &aabb);
 }
+#endif
 
 static float
 project_item (const graphene_matrix_t *projection,
@@ -748,19 +747,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   gsk_renderer_get_projection (GSK_RENDERER (self), &projection);
   item.z = project_item (&projection, &mv);
 
-  /* Discard the item if it's outside of the frustum as determined by the
-   * viewport and the projection matrix
-   */
-#if 0
-  if (!check_in_frustum (&self->frustum, &item))
-    {
-      GSK_NOTE (OPENGL, g_print ("Node <%s>[%p] culled by frustum\n",
-                                 node->name != NULL ? node->name : "unnamed",
-                                 node));
-      return;
-    }
-#endif
-
   /* TODO: This should really be an asset atlas, to avoid uploading a ton
    * of textures. Ideally we could use a single Cairo surface to get around
    * the GL texture limits and reorder the texture data on the CPU side and
@@ -787,7 +773,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   if (gsk_render_node_is_opaque (node) && gsk_render_node_get_opacity (node) == 1.f)
     g_array_append_val (self->opaque_render_items, item);
   else
-    g_array_append_val (self->transparent_render_items, item);
+    g_array_prepend_val (self->transparent_render_items, item);
 
 recurse_children:
   gsk_render_node_iter_init (&iter, node);
@@ -795,198 +781,72 @@ recurse_children:
     gsk_gl_renderer_add_render_item (self, child);
 }
 
-static int
-opaque_item_cmp (gconstpointer _a,
-                 gconstpointer _b)
-{
-  const RenderItem *a = _a;
-  const RenderItem *b = _b;
-
-  if (a->z != b->z)
-    {
-      if (a->z > b->z)
-        return 1;
-
-      return -1;
-    }
-
-  if (a != b)
-    {
-      if ((gsize) a > (gsize) b)
-        return 1;
-
-      return -1;
-    }
-
-  return 0;
-}
-
-static int
-transparent_item_cmp (gconstpointer _a,
-                      gconstpointer _b)
-{
-  const RenderItem *a = _a;
-  const RenderItem *b = _b;
-
-  if (a->z != b->z)
-    {
-     if (a->z < b->z)
-       return 1;
-
-     return -1;
-    }
-
-  if (a != b)
-    {
-      if ((gsize) a < (gsize) b)
-        return 1;
-
-      return -1;
-    }
-
-  return 0;
-}
-
-static void
-gsk_gl_renderer_validate_tree (GskRenderer   *renderer,
+static gboolean
+gsk_gl_renderer_validate_tree (GskGLRenderer *self,
                                GskRenderNode *root)
 {
-  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  gboolean clear_items = FALSE;
-  int i;
+  int n_children;
 
   if (self->context == NULL)
-    return;
+    return FALSE;
+
+  n_children = gsk_render_node_get_n_children (root);
+  if (n_children == 0)
+    return FALSE;
 
   gdk_gl_context_make_current (self->context);
 
-  if (self->opaque_render_items->len > 0 || self->transparent_render_items->len > 0)
-    {
-      /* If we only changed the opacity and transformations then there is no
-       * reason to clear the render items
-       */
-      for (i = 0; i < self->opaque_render_items->len; i++)
-        {
-          RenderItem *item = &g_array_index (self->opaque_render_items, RenderItem, i);
-          GskRenderNodeChanges changes = gsk_render_node_get_last_state (item->node);
+  self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_children);
+  self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_children);
 
-          if (changes == 0)
-            continue;
-
-          if ((changes & GSK_RENDER_NODE_CHANGES_UPDATE_OPACITY) != 0)
-            {
-              item->opaque = gsk_render_node_is_opaque (item->node);
-              item->opacity = gsk_render_node_get_opacity (item->node);
-              changes &= ~GSK_RENDER_NODE_CHANGES_UPDATE_OPACITY;
-            }
-
-          if (changes & GSK_RENDER_NODE_CHANGES_UPDATE_TRANSFORM)
-            {
-              gsk_render_node_get_world_matrix (item->node, &item->mvp);
-              changes &= ~ GSK_RENDER_NODE_CHANGES_UPDATE_TRANSFORM;
-            }
-
-          if (changes != 0)
-            {
-              clear_items = TRUE;
-              break;
-            }
-        }
-
-      for (i = 0; i < self->transparent_render_items->len; i++)
-        {
-          RenderItem *item = &g_array_index (self->transparent_render_items, RenderItem, i);
-          GskRenderNodeChanges changes = gsk_render_node_get_last_state (item->node);
-
-          if (changes == 0)
-            continue;
-
-          if ((changes & GSK_RENDER_NODE_CHANGES_UPDATE_OPACITY) != 0)
-            {
-              item->opaque = gsk_render_node_is_opaque (item->node);
-              item->opacity = gsk_render_node_get_opacity (item->node);
-              changes &= ~GSK_RENDER_NODE_CHANGES_UPDATE_OPACITY;
-            }
-
-          if (changes & GSK_RENDER_NODE_CHANGES_UPDATE_TRANSFORM)
-            {
-              gsk_render_node_get_world_matrix (item->node, &item->mvp);
-              changes &= ~ GSK_RENDER_NODE_CHANGES_UPDATE_TRANSFORM;
-            }
-
-          if (changes != 0)
-            {
-              clear_items = TRUE;
-              break;
-            }
-        }
-    }
-  else
-    clear_items = TRUE;
-
-  if (!clear_items)
-    {
-      GSK_NOTE (OPENGL, g_print ("Tree is still valid\n"));
-      goto out;
-    }
-
-  for (i = 0; i < self->opaque_render_items->len; i++)
-    render_item_clear (&g_array_index (self->opaque_render_items, RenderItem, i));
-  for (i = 0; i < self->transparent_render_items->len; i++)
-    render_item_clear (&g_array_index (self->transparent_render_items, RenderItem, i));
-
-  g_array_set_size (self->opaque_render_items, 0);
-  g_array_set_size (self->transparent_render_items, 0);
+  g_array_set_clear_func (self->opaque_render_items, render_item_clear);
+  g_array_set_clear_func (self->transparent_render_items, render_item_clear);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
-  gsk_gl_renderer_add_render_item (self, gsk_renderer_get_root_node (renderer));
+  gsk_gl_renderer_add_render_item (self, root);
 
-  GSK_NOTE (OPENGL, g_print ("Sorting render nodes\n"));
-  g_array_sort (self->opaque_render_items, opaque_item_cmp);
-  g_array_sort (self->transparent_render_items, transparent_item_cmp);
-
-out:
   GSK_NOTE (OPENGL, g_print ("Total render items: %d (opaque:%d, transparent:%d)\n",
                              self->opaque_render_items->len + self->transparent_render_items->len,
                              self->opaque_render_items->len,
                              self->transparent_render_items->len));
+
+  return TRUE;
 }
 
 static void
-gsk_gl_renderer_clear_tree (GskRenderer *renderer,
-                            GskRenderNode *root_node)
+gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 {
-  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-
   if (self->context == NULL)
     return;
 
-  gdk_gl_context_make_current (self->context);
-
   g_clear_pointer (&self->opaque_render_items, g_array_unref);
   g_clear_pointer (&self->transparent_render_items, g_array_unref);
-
-  if (gsk_renderer_is_realized (renderer))
-    {
-      self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), 16);
-      g_array_set_clear_func (self->opaque_render_items, render_item_clear);
-
-      self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), 16);
-      g_array_set_clear_func (self->opaque_render_items, render_item_clear);
-    }
 }
 
 static void
-gsk_gl_renderer_clear (GskRenderer *renderer)
+gsk_gl_renderer_clear (GskGLRenderer *self)
 {
+  int clear_bits = GL_COLOR_BUFFER_BIT;
+
+  if (self->has_depth_buffer)
+    clear_bits |= GL_DEPTH_BUFFER_BIT;
+  if (self->has_stencil_buffer)
+    clear_bits |= GL_STENCIL_BUFFER_BIT;
+
+  GSK_NOTE (OPENGL, g_print ("Clearing viewport\n"));
+  glClearColor (0, 0, 0, 0);
+  glClear (clear_bits);
 }
 
 static void
-gsk_gl_renderer_render (GskRenderer *renderer)
+gsk_gl_renderer_render (GskRenderer *renderer,
+                        GskRenderNode *root,
+                        GdkDrawingContext *context)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  graphene_matrix_t modelview, projection;
   graphene_rect_t viewport;
-  int scale, status, clear_bits;
+  int status;
   guint i;
 
   if (self->context == NULL)
@@ -1008,22 +868,16 @@ gsk_gl_renderer_render (GskRenderer *renderer)
   /* Ensure that the viewport is up to date */
   status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
   if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
-    {
-      GSK_NOTE (OPENGL, g_print ("glViewport(0, 0, %g, %g)\n",
-                                 viewport.size.width,
-                                 viewport.size.height));
-      glViewport (0, 0, viewport.size.width, viewport.size.height);
-    }
+    gsk_gl_renderer_resize_viewport (self, &viewport);
 
-  clear_bits = GL_COLOR_BUFFER_BIT;
-  if (self->has_depth_buffer)
-    clear_bits |= GL_DEPTH_BUFFER_BIT;
-  if (self->has_stencil_buffer)
-    clear_bits |= GL_STENCIL_BUFFER_BIT;
+  gsk_gl_renderer_clear (self);
 
-  GSK_NOTE (OPENGL, g_print ("Clearing viewport\n"));
-  glClearColor (0, 0, 0, 0);
-  glClear (clear_bits);
+  gsk_renderer_get_modelview (renderer, &modelview);
+  gsk_renderer_get_projection (renderer, &projection);
+  gsk_gl_renderer_update_frustum (self, &modelview, &projection);
+
+  if (!gsk_gl_renderer_validate_tree (self, root))
+    goto out;
 
   /* Opaque pass: front-to-back */
   GSK_NOTE (OPENGL, g_print ("Rendering %u opaque items\n", self->opaque_render_items->len));
@@ -1050,15 +904,18 @@ gsk_gl_renderer_render (GskRenderer *renderer)
   /* Draw the output of the GL rendering to the window */
   GSK_NOTE (OPENGL, g_print ("Drawing GL content on Cairo surface using a %s\n",
                              self->texture_id != 0 ? "texture" : "renderbuffer"));
-  scale = 1;
-  gdk_cairo_draw_from_gl (gsk_renderer_get_draw_context (renderer),
-                          gsk_renderer_get_window (renderer),
+
+out:
+  gdk_cairo_draw_from_gl (gdk_drawing_context_get_cairo_context (context),
+                          gdk_drawing_context_get_window (context),
                           self->texture_id != 0 ? self->texture_id : self->render_buffer,
                           self->texture_id != 0 ? GL_TEXTURE : GL_RENDERBUFFER,
-                          scale,
+                          gsk_renderer_get_scale_factor (renderer),
                           0, 0, viewport.size.width, viewport.size.height);
 
   gdk_gl_context_make_current (self->context);
+
+  gsk_gl_renderer_clear_tree (self);
 }
 
 static void
@@ -1071,11 +928,6 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
 
   renderer_class->realize = gsk_gl_renderer_realize;
   renderer_class->unrealize = gsk_gl_renderer_unrealize;
-  renderer_class->resize_viewport = gsk_gl_renderer_resize_viewport;
-  renderer_class->update = gsk_gl_renderer_update;
-  renderer_class->clear = gsk_gl_renderer_clear;
-  renderer_class->validate_tree = gsk_gl_renderer_validate_tree;
-  renderer_class->clear_tree = gsk_gl_renderer_clear_tree;
   renderer_class->render = gsk_gl_renderer_render;
 }
 
@@ -1088,28 +940,4 @@ gsk_gl_renderer_init (GskGLRenderer *self)
 
   self->has_depth_buffer = TRUE;
   self->has_stencil_buffer = TRUE;
-}
-
-void
-gsk_gl_renderer_set_context (GskGLRenderer *renderer,
-                             GdkGLContext  *context)
-{
-  g_return_if_fail (GSK_IS_GL_RENDERER (renderer));
-  g_return_if_fail (context == NULL || GDK_IS_GL_CONTEXT (context));
-
-  if (gsk_renderer_is_realized (GSK_RENDERER (renderer)))
-    return;
-
-  if (gdk_gl_context_get_display (context) != gsk_renderer_get_display (GSK_RENDERER (renderer)))
-    return;
-
-  g_set_object (&renderer->context, context);
-}
-
-GdkGLContext *
-gsk_gl_renderer_get_context (GskGLRenderer *renderer)
-{
-  g_return_val_if_fail (GSK_IS_GL_RENDERER (renderer), NULL);
-
-  return renderer->context;
 }
