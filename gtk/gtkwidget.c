@@ -17463,15 +17463,30 @@ gtk_widget_render (GtkWidget            *widget,
       /* We only render double buffered on native windows */
       if (!gdk_window_has_native (window))
         return;
-    }
 
-  context = gdk_window_begin_draw_frame (window, region);
-  cr = gdk_drawing_context_get_cairo_context (context);
+      context = gdk_window_begin_draw_frame (window, region);
+      cr = gdk_drawing_context_get_cairo_context (context);
+    }
+  else
+    {
+      /* This is annoying, but it has to stay because Firefox
+       * disables double buffering on a top-level GdkWindow,
+       * which breaks the drawing context.
+       *
+       * Candidate for deletion in the next major API bump.
+       */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      cr = gdk_cairo_create (window);
+G_GNUC_END_IGNORE_DEPRECATIONS
+    }
 
   do_clip = _gtk_widget_get_translation_to_window (widget, window, &x, &y);
   cairo_translate (cr, -x, -y);
 
   gtk_widget_draw_internal (widget, cr, do_clip);
 
-  gdk_window_end_draw_frame (window, context);
+  if (priv->double_buffered)
+    gdk_window_end_draw_frame (window, context);
+  else
+    cairo_destroy (cr);
 }
