@@ -30,6 +30,7 @@
 #endif
 
 #include <gdk/gdk.h>
+#include <gsk/gsk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtktypes.h>
@@ -593,12 +594,14 @@ struct _GtkWidgetClass
   void         (*queue_draw_region)           (GtkWidget         *widget,
 					       const cairo_region_t *region);
 
+  GskRenderNode *(* get_render_node) (GtkWidget *widget,
+                                      GskRenderer *renderer);
+
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
 
   /* Padding for future expansion */
-  void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
 };
 

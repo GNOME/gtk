@@ -7252,6 +7252,8 @@ _gtk_window_set_allocation (GtkWindow           *window,
     {
       graphene_rect_t viewport;
       graphene_matrix_t projection;
+      graphene_matrix_t modelview;
+      graphene_point3d_t tmp;
 
       graphene_rect_init (&viewport, 0, 0, allocation->width, allocation->height);
       gsk_renderer_set_viewport (priv->renderer, &viewport);
@@ -7261,6 +7263,10 @@ _gtk_window_set_allocation (GtkWindow           *window,
                                   0, allocation->height,
                                   -1, 1);
       gsk_renderer_set_projection (priv->renderer, &projection);
+
+      graphene_matrix_init_translate (&modelview,
+                                      graphene_point3d_init (&tmp, 0.f, 0.f, 0.f));
+      gsk_renderer_set_modelview (priv->renderer, &modelview);
     }
 
   get_shadow_width (window, &window_border);

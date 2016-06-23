@@ -296,6 +296,9 @@ void              gtk_widget_render                        (GtkWidget           
                                                             const cairo_region_t *region);
 
 
+GskRenderNode *   gtk_widget_get_render_node               (GtkWidget   *widget,
+                                                            GskRenderer *renderer);
+
 /* inline getters */
 
 static inline gboolean
