@@ -1124,8 +1124,8 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
         }
     }
 
-  side[GTK_PACK_START] += start_width;
-  side[GTK_PACK_END] += end_width;
+  side[0] += start_width;
+  side[1] += end_width;
 
   /* We don't enforce css borders on the center widget, to make
    * title/subtitle combinations fit without growing the header
