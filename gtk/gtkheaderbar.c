@@ -1035,8 +1035,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
                                                  &title_minimum_size,
                                                  &title_natural_size);
     }
-
-  if (priv->label_box != NULL)
+  else if (priv->label_box != NULL)
     {
       gtk_widget_get_preferred_width_for_height (priv->label_box,
                                                  height,
@@ -1150,8 +1149,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   if (priv->custom_title != NULL &&
       gtk_widget_get_visible (priv->custom_title))
     gtk_widget_size_allocate (priv->custom_title, &child_allocation);
-
-  if (priv->label_box != NULL)
+  else if (priv->label_box != NULL)
     gtk_widget_size_allocate (priv->label_box, &child_allocation);
 
   child_allocation.y = allocation->y;
