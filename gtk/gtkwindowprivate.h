@@ -142,6 +142,8 @@ gboolean      gtk_window_export_handle   (GtkWindow               *window,
                                           gpointer                 user_data);
 void          gtk_window_unexport_handle (GtkWindow               *window);
 
+GskRenderer *gtk_window_get_renderer (GtkWindow *window);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */
