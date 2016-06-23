@@ -1133,14 +1133,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   child_allocation.y = allocation->y;
   child_allocation.height = allocation->height;
 
-  width = MAX (side[0], side[1]);
-
-  if (allocation->width - 2 * width >= title_natural_size)
-    child_size = MIN (title_natural_size, allocation->width - 2 * width);
-  else if (allocation->width - side[0] - side[1] >= title_natural_size)
-    child_size = MIN (title_natural_size, allocation->width - side[0] - side[1]);
-  else
-    child_size = allocation->width - side[0] - side[1];
+  child_size = MIN (allocation->width - side[0] - side[1], title_natural_size);
 
   child_allocation.x = allocation->x + (allocation->width - child_size) / 2;
   child_allocation.width = child_size;
