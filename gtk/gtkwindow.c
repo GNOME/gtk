@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <graphene.h>
 
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
@@ -271,6 +272,8 @@ struct _GtkWindowPrivate
   GdkWindow *hardcoded_window;
 
   GtkCssNode *decoration_node;
+
+  GskRenderer *renderer;
 };
 
 static const GtkTargetEntry dnd_dest_targets [] = {
@@ -7159,6 +7162,16 @@ gtk_window_realize (GtkWidget *widget)
 
   _gtk_widget_get_allocation (widget, &allocation);
 
+  if (priv->renderer == NULL)
+    {
+      graphene_rect_t viewport;
+
+      priv->renderer = gsk_renderer_get_for_display (gtk_widget_get_display (widget));
+
+      graphene_rect_init (&viewport, 0, 0, allocation.width, allocation.height);
+      gsk_renderer_set_viewport (priv->renderer, &viewport);
+    }
+
   if (gtk_widget_get_parent_window (widget))
     {
       gtk_container_set_default_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
@@ -7181,6 +7194,9 @@ gtk_window_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, gdk_window);
       gtk_widget_register_window (widget, gdk_window);
       gtk_widget_set_realized (widget, TRUE);
+
+      gsk_renderer_set_window (priv->renderer, gdk_window);
+      gsk_renderer_realize (priv->renderer);
 
       return;
     }
@@ -7274,6 +7290,10 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, gdk_window);
   gtk_widget_register_window (widget, gdk_window);
   gtk_widget_set_realized (widget, TRUE);
+
+  gsk_renderer_set_window (priv->renderer, gdk_window);
+  gsk_renderer_set_use_alpha (priv->renderer, TRUE);
+  gsk_renderer_realize (priv->renderer);
 
   attributes.x = allocation.x;
   attributes.y = allocation.y;
@@ -7395,6 +7415,9 @@ gtk_window_realize (GtkWidget *widget)
     }
 
   check_scale_changed (window);
+
+  /* Renderer */
+  gsk_renderer_realize (priv->renderer);
 }
 
 static void
@@ -7421,6 +7444,9 @@ gtk_window_unrealize (GtkWidget *widget)
   GtkWindowGeometryInfo *info;
   GList *link;
   gint i;
+
+  if (priv->renderer != NULL)
+    gsk_renderer_unrealize (priv->renderer);
 
   /* On unrealize, we reset the size of the window such
    * that we will re-apply the default sizing stuff
@@ -7568,6 +7594,21 @@ _gtk_window_set_allocation (GtkWindow           *window,
   child_allocation.y = 0;
   child_allocation.width = allocation->width;
   child_allocation.height = allocation->height;
+
+  if (priv->renderer != NULL)
+    {
+      graphene_rect_t viewport;
+      graphene_matrix_t projection;
+
+      graphene_rect_init (&viewport, 0, 0, allocation->width, allocation->height);
+      gsk_renderer_set_viewport (priv->renderer, &viewport);
+
+      graphene_matrix_init_ortho (&projection,
+                                  0, allocation->width,
+                                  0, allocation->height,
+                                  -1, 1);
+      gsk_renderer_set_projection (priv->renderer, &projection);
+    }
 
   get_shadow_width (window, &window_border);
 
@@ -12630,4 +12671,12 @@ gtk_window_set_hardcoded_window (GtkWindow *window,
   g_return_if_fail (!_gtk_widget_get_realized (GTK_WIDGET (window)));
 
   g_set_object (&priv->hardcoded_window, gdk_window);
+}
+
+GskRenderer *
+gtk_window_get_renderer (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  return priv->renderer;
 }

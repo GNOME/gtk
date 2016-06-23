@@ -135,6 +135,8 @@ void       gtk_window_set_hardcoded_window (GtkWindow *window,
 
 GdkScreen *_gtk_window_get_screen (GtkWindow *window);
 
+GskRenderer *gtk_window_get_renderer (GtkWindow *window);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */
