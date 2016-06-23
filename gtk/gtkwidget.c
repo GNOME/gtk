@@ -17447,28 +17447,128 @@ gtk_widget_reset_controllers (GtkWidget *widget)
     }
 }
 
+GskRenderer *
+gtk_widget_get_renderer (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = _gtk_widget_get_toplevel (widget);
+  if (_gtk_widget_is_toplevel (toplevel))
+    return gtk_window_get_renderer (GTK_WINDOW (toplevel));
+
+  return NULL;
+}
+
+GskRenderNode *
+gtk_widget_get_render_node (GtkWidget   *widget,
+                            GskRenderer *renderer)
+{
+  GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
+  GskRenderNode *node;
+
+  if (klass->get_render_node == NULL)
+    {
+      GskRenderNode *tmp;
+      graphene_rect_t bounds;
+      GtkAllocation clip;
+      cairo_t *cr;
+
+      gtk_widget_get_clip (widget, &clip);
+      graphene_rect_init (&bounds, clip.x, clip.y, clip.width, clip.height);
+
+      tmp = gsk_render_node_new ();
+      gsk_render_node_set_bounds (tmp, &bounds);
+      cr = gsk_render_node_get_draw_context (tmp);
+
+      gtk_widget_draw (widget, cr);
+
+      cairo_destroy (cr);
+
+      node = tmp;
+    }
+  else
+    {
+      node = klass->get_render_node (widget, renderer);
+
+      if (klass->draw != NULL ||
+          g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
+        {
+          GskRenderNode *tmp;
+          graphene_rect_t bounds;
+          GtkAllocation clip;
+          gboolean result;
+          cairo_t *cr;
+
+          gtk_widget_get_clip (widget, &clip);
+          graphene_rect_init (&bounds, clip.x, clip.y, clip.width, clip.height);
+
+          tmp = gsk_render_node_new ();
+          gsk_render_node_set_bounds (tmp, &bounds);
+          cr = gsk_render_node_get_draw_context (tmp);
+
+          if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
+            {
+              g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
+            }
+          else if (klass->draw != NULL)
+            {
+              klass->draw (widget, cr);
+            }
+
+          cairo_destroy (cr);
+
+          if (node != NULL)
+            {
+              gsk_render_node_append_child (node, tmp);
+              gsk_render_node_unref (tmp);
+            }
+          else
+            {
+              node = tmp;
+            }
+        }
+    }
+
+  return node;
+}
+
 void
 gtk_widget_render (GtkWidget            *widget,
                    GdkWindow            *window,
                    const cairo_region_t *region)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GdkDrawingContext *context;
-  gboolean do_clip;
-  cairo_t *cr;
-  int x, y;
 
   if (priv->double_buffered)
     {
+      GdkDrawingContext *context;
+      GskRenderer *renderer;
+      GskRenderNode *root;
+
       /* We only render double buffered on native windows */
       if (!gdk_window_has_native (window))
         return;
 
+      renderer = gtk_widget_get_renderer (widget);
+      if (renderer == NULL)
+        return;
+
+      root = gtk_widget_get_render_node (widget, renderer);
+      if (root == NULL)
+        return;
+
       context = gdk_window_begin_draw_frame (window, region);
-      cr = gdk_drawing_context_get_cairo_context (context);
+      gsk_renderer_render (renderer, root, context);
+      gdk_window_end_draw_frame (window, context);
+
+      gsk_render_node_unref (root);
     }
   else
     {
+      gboolean do_clip;
+      cairo_t *cr;
+      int x, y;
+
       /* This is annoying, but it has to stay because Firefox
        * disables double buffering on a top-level GdkWindow,
        * which breaks the drawing context.
@@ -17478,15 +17578,12 @@ gtk_widget_render (GtkWidget            *widget,
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       cr = gdk_cairo_create (window);
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+      do_clip = _gtk_widget_get_translation_to_window (widget, window, &x, &y);
+      cairo_translate (cr, -x, -y);
+
+      gtk_widget_draw_internal (widget, cr, do_clip);
+
+      cairo_destroy (cr);
     }
-
-  do_clip = _gtk_widget_get_translation_to_window (widget, window, &x, &y);
-  cairo_translate (cr, -x, -y);
-
-  gtk_widget_draw_internal (widget, cr, do_clip);
-
-  if (priv->double_buffered)
-    gdk_window_end_draw_frame (window, context);
-  else
-    cairo_destroy (cr);
 }
