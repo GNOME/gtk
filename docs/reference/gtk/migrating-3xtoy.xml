@@ -426,5 +426,12 @@
       and #GtkScrolledWindow:max-content-height will allow control over the
       size of the scrolled window.
     </para>
+
+    <para>
+      GtkHeaderBar now respects the hexpand property for its custom title
+      widget and its packed children. This change may inadvertently cause the
+      layout of those children to change, if they unintentionally had hexpand
+      set before.
+    </para>
   </section>
 </chapter>

@@ -997,7 +997,11 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   gint nvis_children;
   gint title_minimum_size;
   gint title_natural_size;
+  gboolean title_expands;
   gint start_width, end_width;
+  gint uniform_expand_bonus[2] = { 0 };
+  gint leftover_expand_bonus[2] = { 0 };
+  gint nexpand_children[2] = { 0 };
   gint side[2];
   GList *l;
   gint i;
@@ -1024,6 +1028,9 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
       if (!gtk_widget_get_visible (child->widget))
         continue;
 
+      if (gtk_widget_compute_expand (child->widget, GTK_ORIENTATION_HORIZONTAL))
+        nexpand_children[child->pack_type]++;
+
       gtk_widget_get_preferred_width_for_height (child->widget,
                                                  height,
                                                  &sizes[i].minimum_size,
@@ -1049,6 +1056,8 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
                                                &title_minimum_size,
                                                &title_natural_size);
   width -= title_natural_size;
+
+  title_expands = gtk_widget_compute_expand (title_widget, GTK_ORIENTATION_HORIZONTAL);
 
   start_width = 0;
   if (priv->titlebar_start_box != NULL)
@@ -1095,6 +1104,31 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
         }
     }
 
+  /* figure out how much space is left on each side of the title,
+   * and earkmark that space for the expanded children.
+   *
+   * If the title itself is expanded, then it gets half the spoils
+   * from each side.
+   */
+  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; packing++)
+    {
+      gint side_free_space;
+
+      side_free_space = allocation->width / 2 - title_natural_size / 2 - side[packing];
+
+      if (side_free_space > 0 && nexpand_children[packing] > 0)
+        {
+          width -= side_free_space;
+
+          if (title_expands)
+            side_free_space -= side_free_space / 2;
+
+          side[packing] += side_free_space;
+          uniform_expand_bonus[packing] = side_free_space / nexpand_children[packing];
+          leftover_expand_bonus[packing] = side_free_space % nexpand_children[packing];
+        }
+    }
+
   /* allocate the children on both sides of the title */
   for (packing = GTK_PACK_START; packing <= GTK_PACK_END; packing++)
     {
@@ -1116,6 +1150,22 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
             goto next;
 
           child_size = sizes[i].minimum_size;
+
+          /* if this child is expanded, give it extra space from the reserves */
+          if (gtk_widget_compute_expand (child->widget, GTK_ORIENTATION_HORIZONTAL))
+            {
+              gint expand_bonus;
+
+              expand_bonus = uniform_expand_bonus[packing];
+
+              if (leftover_expand_bonus[packing] > 0)
+                {
+                  expand_bonus++;
+                  leftover_expand_bonus[packing]--;
+                }
+
+              child_size += expand_bonus;
+            }
 
           child_allocation.width = child_size;
 
@@ -1152,6 +1202,15 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
 
   child_allocation.x = allocation->x + (allocation->width - child_size) / 2;
   child_allocation.width = child_size;
+
+  /* if the title widget is expanded, then grow it by all the available
+   * free space, and recenter it
+   */
+  if (title_expands && width > 0)
+    {
+      child_allocation.width += width;
+      child_allocation.x -= width / 2;
+    }
 
   if (allocation->x + side[0] > child_allocation.x)
     child_allocation.x = allocation->x + side[0];
