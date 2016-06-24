@@ -1074,7 +1074,28 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
 
   width = gtk_distribute_natural_allocation (MAX (0, width), nvis_children, sizes);
 
-  side[0] = side[1] = 0;
+  /* compute the nominal size of the children filling up each side of
+   * the title in titlebar
+   */
+  side[0] = start_width;
+  side[1] = end_width;
+  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; packing++)
+    {
+      i = 0;
+      for (l = priv->children; l != NULL; l = l->next)
+        {
+          child = l->data;
+          if (!gtk_widget_get_visible (child->widget))
+            continue;
+
+          if (child->pack_type == packing)
+            side[packing] += sizes[i].minimum_size + priv->spacing;
+
+          i++;
+        }
+    }
+
+  /* allocate the children on both sides of the title */
   for (packing = GTK_PACK_START; packing <= GTK_PACK_END; packing++)
     {
       child_allocation.y = allocation->y;
@@ -1111,8 +1132,6 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
               x -= priv->spacing;
             }
 
-          side[packing] += child_size + priv->spacing;
-
           if (direction == GTK_TEXT_DIR_RTL)
             child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
@@ -1122,9 +1141,6 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
           i++;
         }
     }
-
-  side[0] += start_width;
-  side[1] += end_width;
 
   /* We don't enforce css borders on the center widget, to make
    * title/subtitle combinations fit without growing the header
