@@ -989,6 +989,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
                                   gpointer             unused)
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkWidget *title_widget;
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkRequestedSize *sizes;
@@ -1034,21 +1035,19 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   title_minimum_size = 0;
   title_natural_size = 0;
 
-  if (priv->custom_title &&
+  if (priv->custom_title != NULL &&
       gtk_widget_get_visible (priv->custom_title))
-    {
-      gtk_widget_get_preferred_width_for_height (priv->custom_title,
-                                                 height,
-                                                 &title_minimum_size,
-                                                 &title_natural_size);
-    }
+    title_widget = priv->custom_title;
   else if (priv->label_box != NULL)
-    {
-      gtk_widget_get_preferred_width_for_height (priv->label_box,
-                                                 height,
-                                                 &title_minimum_size,
-                                                 &title_natural_size);
-    }
+    title_widget = priv->label_box;
+  else
+    title_widget = NULL;
+
+  if (title_widget)
+    gtk_widget_get_preferred_width_for_height (title_widget,
+                                               height,
+                                               &title_minimum_size,
+                                               &title_natural_size);
   width -= title_natural_size;
 
   start_width = 0;
@@ -1146,11 +1145,8 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   if (direction == GTK_TEXT_DIR_RTL)
     child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
-  if (priv->custom_title != NULL &&
-      gtk_widget_get_visible (priv->custom_title))
-    gtk_widget_size_allocate (priv->custom_title, &child_allocation);
-  else if (priv->label_box != NULL)
-    gtk_widget_size_allocate (priv->label_box, &child_allocation);
+  if (title_widget != NULL)
+    gtk_widget_size_allocate (title_widget, &child_allocation);
 
   child_allocation.y = allocation->y;
   child_allocation.height = height;
