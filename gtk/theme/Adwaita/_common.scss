@@ -285,7 +285,7 @@ entry {
 
     &:backdrop:disabled { @include entry(backdrop-insensitive); }
 
-    selection { &:focus, & { @extend %selected_items; }}
+    selection { @extend %selected_items; }
 
     // entry error and warning style
     @each $e_type, $e_color in (error, $error_color),
@@ -296,7 +296,7 @@ entry {
 
         &:focus { @include entry(focus, $e_color); }
 
-        &:selected { &:focus, & { background-color: $e_color; }}
+        selection { background-color: $e_color; }
       }
     }
 
