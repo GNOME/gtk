@@ -3847,48 +3847,50 @@ paned {
 /**************
  * GtkInfoBar *
  **************/
-infobar { border-style: none; }
+infobar {
+  border-style: none;
 
-.info,
-.question,
-.warning,
-.error {
-  &:backdrop, & {
-    label, & { color: $selected_fg_color; }
-    background-color: $selected_bg_color;
-    border-color: darken($selected_bg_color, 10%);
-  }
+  &.info,
+  &.question,
+  &.warning,
+  &.error {
+    &:backdrop, & {
+      label, & { color: $selected_fg_color; }
+      background-color: $selected_bg_color;
+      border-color: darken($selected_bg_color, 10%);
+    }
 
-  text-shadow: 0 1px darken($selected_bg_color, 10%);
+    text-shadow: 0 1px darken($selected_bg_color, 10%);
 
-  &:backdrop { text-shadow: none; }
+    &:backdrop { text-shadow: none; }
 
-  button {
-    // FIXME: extend selection mode buttons
-    @include button(normal, $selected_bg_color, $selected_fg_color, none);
+    button {
+      // FIXME: extend selection mode buttons
+      @include button(normal, $selected_bg_color, $selected_fg_color, none);
 
-    &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, none); }
+      &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, none); }
 
-    &:active,
-    &:checked { @include button(active, $selected_bg_color, $selected_fg_color, none); }
+      &:active,
+      &:checked { @include button(active, $selected_bg_color, $selected_fg_color, none); }
 
-    &:disabled { @include button(insensitive,$selected_bg_color,$selected_fg_color,none); }
+      &:disabled { @include button(insensitive,$selected_bg_color,$selected_fg_color,none); }
 
-    &:backdrop {
-      @include button(backdrop, $selected_bg_color, $selected_fg_color, none);
-      border-color: _border_color($selected_bg_color);
-
-      &:disabled {
-        @include button(backdrop-insensitive, $selected_bg_color,
-                        $selected_fg_color, none);
+      &:backdrop {
+        @include button(backdrop, $selected_bg_color, $selected_fg_color, none);
         border-color: _border_color($selected_bg_color);
+
+        &:disabled {
+          @include button(backdrop-insensitive, $selected_bg_color,
+                          $selected_fg_color, none);
+          border-color: _border_color($selected_bg_color);
+        }
       }
     }
+
+    selection { background-color: darken($selected_bg_color, 10%); }
+
+    *:link { @extend %link_selected; }
   }
-
-  selection { background-color: darken($selected_bg_color, 10%); }
-
-  *:link { @extend %link_selected; }
 }
 
 
