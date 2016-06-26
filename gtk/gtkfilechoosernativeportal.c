@@ -55,6 +55,7 @@ typedef struct {
   GDBusConnection *connection;
   char *portal_handle;
   guint portal_response_signal_id;
+  GDBusSignalCallback signal_callback;
   gboolean modal;
 
   gboolean hidden;
@@ -239,6 +240,19 @@ open_file_msg_cb (GObject *source_object,
       filechooser_portal_data_free (data);
       self->mode_data = NULL;
     }
+  else
+    {
+      data->portal_response_signal_id =
+        g_dbus_connection_signal_subscribe (data->connection,
+                                            "org.freedesktop.portal.Desktop",
+                                            "org.freedesktop.portal.Request",
+                                            "Response",
+                                            data->portal_handle,
+                                            NULL,
+                                            G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
+                                            data->signal_callback,
+                                            self, NULL);
+    }
 
   g_object_unref (reply);
 }
@@ -266,7 +280,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
 {
   FilechooserPortalData *data;
   GtkWindow *transient_for;
-  guint update_preview_signal;
   GDBusConnection *connection;
   char *parent_window_str;
   GDBusMessage *message;
@@ -274,8 +287,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   GtkFileChooserAction action;
   gboolean multiple;
   const char *method_name;
-  const char *signal_name;
-  GDBusSignalCallback signal_callback;
 
   if (!gtk_should_use_portal ())
     return FALSE;
@@ -288,23 +299,11 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
 
   if (action == GTK_FILE_CHOOSER_ACTION_OPEN && !multiple)
-    {
-      method_name = "OpenFile";
-      signal_name = "OpenFileResponse";
-      signal_callback = one_file_response;
-    }
+    method_name = "OpenFile";
   else if (action == GTK_FILE_CHOOSER_ACTION_OPEN && multiple)
-    {
-      method_name = "OpenFiles";
-      signal_name = "OpenFilesResponse";
-      signal_callback = multi_file_response;
-    }
+    method_name = "OpenFiles";
   else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    {
-      method_name = "SaveFile";
-      signal_name = "SaveFileResponse";
-      signal_callback = one_file_response;
-    }
+    method_name = "SaveFile";
   else
     {
       g_warning ("GTK_FILE_CHOOSER_ACTION_%s is not supported by GtkFileChooserNativePortal", action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ? "SELECT_FOLDER" : "CREATE_FOLDER");
@@ -314,6 +313,11 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   data = g_new0 (FilechooserPortalData, 1);
   data->self = g_object_ref (self);
   data->connection = connection;
+
+  if (strcmp (method_name, "OpenFiles") == 0)
+    data->signal_callback = multi_file_response;
+  else
+    data->signal_callback = one_file_response;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
                                             "/org/freedesktop/portal/desktop",
@@ -378,17 +382,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
                                           gtk_native_dialog_get_title (GTK_NATIVE_DIALOG (self)),
                                           g_variant_builder_end (&opt_builder)));
   g_free (parent_window_str);
-
-  data->portal_response_signal_id =
-    g_dbus_connection_signal_subscribe (data->connection,
-                                        "org.freedesktop.portal.Desktop",
-                                        "org.freedesktop.portal.FileChooser",
-                                        signal_name,
-                                        "/org/freedesktop/portal/desktop",
-                                        NULL,
-                                        G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
-                                        signal_callback,
-                                        self, NULL);
 
   g_dbus_connection_send_message_with_reply (data->connection,
                                              message,
