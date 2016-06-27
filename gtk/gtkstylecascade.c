@@ -49,10 +49,11 @@ gtk_style_cascade_iter_next (GtkStyleCascade     *cascade,
 
   for (cas = cascade, ix = 0; ix < iter->n_cascades; cas = cas->parent, ix++)
     {
+      GtkStyleProviderData *data;
       if (iter->cascade_index[ix] <= 0)
         continue;
 
-      GtkStyleProviderData *data = &g_array_index (cas->providers,
+      data = &g_array_index (cas->providers,
                                                    GtkStyleProviderData,
                                                    iter->cascade_index[ix] - 1);
       if (highest_priority_data == NULL || data->priority > highest_priority_data->priority)
