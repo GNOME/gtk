@@ -111,25 +111,27 @@ gdk_device_win32_query_state (GdkDevice        *device,
   GdkScreen *screen;
   POINT point;
   HWND hwnd, hwndc;
+  GdkWindowImplWin32 *impl;
 
   screen = gdk_window_get_screen (window);
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_WINDOW_HWND (window);
   GetCursorPos (&point);
 
   if (root_x)
-    *root_x = point.x;
+    *root_x = point.x / impl->window_scale;
 
   if (root_y)
-    *root_y = point.y;
+    *root_y = point.y / impl->window_scale;
 
   ScreenToClient (hwnd, &point);
 
   if (win_x)
-    *win_x = point.x;
+    *win_x = point.x / impl->window_scale;
 
   if (win_y)
-    *win_y = point.y;
+    *win_y = point.y / impl->window_scale;
 
   if (window == gdk_screen_get_root_window (screen))
     {
@@ -197,6 +199,7 @@ _gdk_device_win32_window_at_position (GdkDevice       *device,
                                       gboolean         get_toplevel)
 {
   GdkWindow *window = NULL;
+  GdkWindowImplWin32 *impl = NULL;
   POINT screen_pt, client_pt;
   HWND hwnd, hwndc;
   RECT rect;
@@ -249,12 +252,15 @@ _gdk_device_win32_window_at_position (GdkDevice       *device,
       /* If we didn't hit any window at that point, return the desktop */
       if (hwnd == NULL)
         {
-          if (win_x)
-            *win_x = screen_pt.x + _gdk_offset_x;
-          if (win_y)
-            *win_y = screen_pt.y + _gdk_offset_y;
+          window = gdk_get_default_root_window ();
+          impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-          return gdk_get_default_root_window ();
+          if (win_x)
+            *win_x = (screen_pt.x + _gdk_offset_x) / impl->window_scale;
+          if (win_y)
+            *win_y = (screen_pt.y + _gdk_offset_y) / impl->window_scale;
+
+          return window;
         }
 
       window = gdk_win32_handle_table_lookup (hwnd);
@@ -262,10 +268,12 @@ _gdk_device_win32_window_at_position (GdkDevice       *device,
 
   if (window && (win_x || win_y))
     {
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
       if (win_x)
-        *win_x = client_pt.x;
+        *win_x = client_pt.x / impl->window_scale;
       if (win_y)
-        *win_y = client_pt.y;
+        *win_y = client_pt.y / impl->window_scale;
     }
 
   return window;

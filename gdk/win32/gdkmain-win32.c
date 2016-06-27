@@ -831,6 +831,7 @@ _gdk_win32_message_to_string (UINT msg)
       CASE (WT_PACKET);
       CASE (WT_CSRCHANGE);
       CASE (WT_PROXIMITY);
+      CASE (WM_DPICHANGED);
 #undef CASE
     default:
       if (msg >= WM_HANDHELDFIRST && msg <= WM_HANDHELDLAST)

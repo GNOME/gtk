@@ -96,6 +96,14 @@ enum _GdkW32WindowDragOp
 
 typedef enum _GdkW32WindowDragOp GdkW32WindowDragOp;
 
+typedef enum _GdkWin32MonitorDpiType
+{
+  MDT_EFFECTIVE_DPI  = 0,
+  MDT_ANGULAR_DPI    = 1,
+  MDT_RAW_DPI        = 2,
+  MDT_DEFAULT        = MDT_EFFECTIVE_DPI
+} GdkWin32MonitorDpiType;
+
 struct _GdkW32DragMoveResizeContext
 {
   /* The window that is being moved/resized */
@@ -333,6 +341,11 @@ struct _GdkWindowImplWin32
    * They are removed at the first opportunity (usually WM_INITMENU).
    */
   LONG_PTR temp_styles;
+
+  /* scale of window on HiDPI */
+  gint window_scale;
+  gint unscaled_width;
+  gint unscaled_height;
 };
 
 struct _GdkWindowImplWin32Class
@@ -351,6 +364,8 @@ void  _gdk_win32_window_tmp_unset_parent_bg (GdkWindow *window);
 void  _gdk_win32_window_tmp_reset_parent_bg (GdkWindow *window);
 
 void  _gdk_win32_window_update_style_bits   (GdkWindow *window);
+
+gint  _gdk_win32_window_get_scale_factor    (GdkWindow *window);
 
 G_END_DECLS
 
