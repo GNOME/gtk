@@ -889,6 +889,7 @@ gdk_input_other_event (GdkDisplay *display,
   GdkEventMask masktest;
   guint key_state;
   POINT pt;
+  GdkWindowImplWin32 *impl;
 
   PACKET packet;
   gint root_x, root_y;
@@ -1034,15 +1035,17 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
           if (window->parent == gdk_get_default_root_window () || window->parent == NULL)
             return FALSE;
 
-          pt.x = x;
-          pt.y = y;
+          impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+          pt.x = x * impl->window_scale;
+          pt.y = y * impl->window_scale;
           ClientToScreen (GDK_WINDOW_HWND (window), &pt);
           g_object_unref (window);
           window = window->parent;
+          impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
           g_object_ref (window);
           ScreenToClient (GDK_WINDOW_HWND (window), &pt);
-          x = pt.x;
-          y = pt.y;
+          x = pt.x / impl->window_scale;
+          y = pt.y / impl->window_scale;
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... propagating to %p %+d%+d\n",
                                               GDK_WINDOW_HWND (window), x, y));
         }

@@ -591,6 +591,7 @@ enum_monitor (HMONITOR hmonitor,
           GdkWin32Monitor *w32mon;
           GdkMonitor *mon;
           GdkRectangle rect;
+          guint scale;
 
           memset (&dd_monitor, 0, sizeof (dd_monitor));
           dd_monitor.cb = sizeof (dd_monitor);
@@ -680,17 +681,18 @@ enum_monitor (HMONITOR hmonitor,
           /* This is the reason this function exists. This data is not available
            * via other functions.
            */
-          rect.x = monitor_info.rcMonitor.left;
-          rect.y = monitor_info.rcMonitor.top;
-          rect.width = monitor_info.rcMonitor.right - monitor_info.rcMonitor.left;
-          rect.height = monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top;
+          scale = gdk_monitor_get_scale_factor (mon);
+          rect.x = monitor_info.rcMonitor.left / scale;
+          rect.y = monitor_info.rcMonitor.top / scale;
+          rect.width = (monitor_info.rcMonitor.right - monitor_info.rcMonitor.left) / scale;
+          rect.height = (monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top) / scale;
           gdk_monitor_set_position (mon, rect.x, rect.y);
           gdk_monitor_set_size (mon, rect.width, rect.height);
 
-          rect.x = monitor_info.rcWork.left;
-          rect.y = monitor_info.rcWork.top;
-          rect.width = monitor_info.rcWork.right - monitor_info.rcWork.left;
-          rect.height = monitor_info.rcWork.bottom - monitor_info.rcWork.top;
+          rect.x = monitor_info.rcWork.left / scale;
+          rect.y = monitor_info.rcWork.top / scale;
+          rect.width = (monitor_info.rcWork.right - monitor_info.rcWork.left) / scale;
+          rect.height = (monitor_info.rcWork.bottom - monitor_info.rcWork.top) / scale;
           w32mon->work_rect = rect;
 
           if (monitor_info.dwFlags & MONITORINFOF_PRIMARY && i != 0)

@@ -50,6 +50,7 @@ init_root_window_size (GdkWin32Screen *screen)
   int monitor_count;
   GdkMonitor *monitor;
   gboolean changed;
+  GdkWindowImplWin32 *root_impl;
 
   monitor_count = gdk_display_get_n_monitors (display);
   monitor = gdk_display_get_monitor (display, 0);
@@ -68,6 +69,10 @@ init_root_window_size (GdkWin32Screen *screen)
             screen->root_window->height != result.height;
   screen->root_window->width = result.width;
   screen->root_window->height = result.height;
+  root_impl = GDK_WINDOW_IMPL_WIN32 (screen->root_window->impl);
+
+  root_impl->unscaled_width = result.width * root_impl->window_scale;
+  root_impl->unscaled_height = result.height * root_impl->window_scale;
 
   return changed;
 }
@@ -79,6 +84,7 @@ init_root_window (GdkWin32Screen *screen_win32)
   GdkWindow *window;
   GdkWindowImplWin32 *impl_win32;
   gboolean changed;
+  GdkWin32Display *win32_display;
 
   screen = GDK_SCREEN (screen_win32);
 
@@ -103,6 +109,18 @@ init_root_window (GdkWin32Screen *screen_win32)
   window->abs_y = 0;
   /* width and height already initialised in init_root_window_size() */
   window->viewable = TRUE;
+  win32_display = GDK_WIN32_DISPLAY (_gdk_display);
+
+  if (win32_display->dpi_aware_type != PROCESS_DPI_UNAWARE)
+    impl_win32->window_scale = _gdk_win32_display_get_monitor_scale_factor (win32_display,
+                                                                            NULL,
+                                                                            impl_win32->handle,
+                                                                            NULL);
+  else
+    impl_win32->window_scale = 1;
+
+  impl_win32->unscaled_width = window->width * impl_win32->window_scale;
+  impl_win32->unscaled_height = window->height * impl_win32->window_scale;
 
   gdk_win32_handle_table_insert ((HANDLE *) &impl_win32->handle, window);
 
@@ -115,28 +133,7 @@ static void
 gdk_win32_screen_init (GdkWin32Screen *win32_screen)
 {
   GdkScreen *screen = GDK_SCREEN (win32_screen);
-  HDC screen_dc;
-  int logpixelsx = -1;
-  const gchar *font_resolution;
-
-  screen_dc = GetDC (NULL);
-
-  if (screen_dc)
-    {
-      logpixelsx = GetDeviceCaps(screen_dc, LOGPIXELSX);
-      ReleaseDC (NULL, screen_dc);
-    }
-
-  font_resolution = g_getenv ("GDK_WIN32_FONT_RESOLUTION");
-  if (font_resolution)
-    {
-      int env_logpixelsx = atol (font_resolution);
-      if (env_logpixelsx > 0)
-        logpixelsx = env_logpixelsx;
-    }
-
-  if (logpixelsx > 0)
-    _gdk_screen_set_resolution (screen, logpixelsx);
+  _gdk_win32_screen_set_font_resolution (win32_screen);
 
   _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
   init_root_window (win32_screen);
@@ -154,6 +151,37 @@ _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen)
 
   if (monitors_changed)
     g_signal_emit_by_name (screen, "monitors-changed");
+}
+
+void
+_gdk_win32_screen_set_font_resolution (GdkWin32Screen *win32_screen)
+{
+  GdkScreen *screen = GDK_SCREEN (win32_screen);
+  int logpixelsx = -1;
+  const gchar *font_resolution;
+
+  font_resolution = g_getenv ("GDK_WIN32_FONT_RESOLUTION");
+  if (font_resolution)
+    {
+      int env_logpixelsx = atol (font_resolution);
+      if (env_logpixelsx > 0)
+        logpixelsx = env_logpixelsx;
+    }
+  else
+    {
+      gint dpi = -1;
+      GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_screen_get_display (screen));
+      guint scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, &dpi);
+
+      /* If we have a scale that is at least 2, don't scale up the fonts */
+      if (scale >= 2)
+        logpixelsx = USER_DEFAULT_SCREEN_DPI;
+      else
+        logpixelsx = dpi;
+    }
+
+  if (logpixelsx > 0)
+    _gdk_screen_set_resolution (screen, logpixelsx);
 }
 
 static GdkDisplay *

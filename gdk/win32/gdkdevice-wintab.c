@@ -121,26 +121,28 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   GdkScreen *screen;
   POINT point;
   HWND hwnd, hwndc;
+  GdkWindowImplWin32 *impl;
 
   device_wintab = GDK_DEVICE_WINTAB (device);
   screen = gdk_window_get_screen (window);
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_WINDOW_HWND (window);
   GetCursorPos (&point);
 
   if (root_x)
-    *root_x = point.x;
+    *root_x = point.x / impl->window_scale;
 
   if (root_y)
-    *root_y = point.y;
+    *root_y = point.y / impl->window_scale;
 
   ScreenToClient (hwnd, &point);
 
   if (win_x)
-    *win_x = point.x;
+    *win_x = point.x / impl->window_scale;
 
   if (win_y)
-    *win_y = point.y;
+    *win_y = point.y / impl->window_scale;
 
   if (window == gdk_get_default_root_window ())
     {

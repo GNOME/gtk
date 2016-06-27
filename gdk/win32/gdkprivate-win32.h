@@ -97,6 +97,9 @@
 #ifndef WM_MOUSEHWHEEL
 #define WM_MOUSEHWHEEL 0x20E
 #endif
+#ifndef WM_DPICHANGED
+#define WM_DPICHANGED 0x02E0
+#endif
 
 /* According to
  * http://blog.airesoft.co.uk/2009/11/wm_messages/
@@ -185,7 +188,8 @@ HRGN	  _gdk_win32_cairo_region_to_hrgn (const cairo_region_t *region,
 					   gint                  x_origin,
 					   gint                  y_origin);
 
-cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN hrgn);
+cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
+                                              guint scale);
 
 void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
 					 RECT      *RECT);
@@ -544,8 +548,10 @@ gboolean _gdk_win32_window_fill_min_max_info    (GdkWindow  *window,
 
 gboolean _gdk_win32_window_lacks_wm_decorations (GdkWindow *window);
 
-BOOL WINAPI GtkShowWindow (HWND hwnd,
-                           int  cmd_show);
+BOOL WINAPI GtkShowWindow (GdkWindow *window,
+                           int        cmd_show);
+
+void     _gdk_win32_screen_set_font_resolution (GdkWin32Screen *win32_screen);
 
 /* Initialization */
 void _gdk_win32_windowing_init (void);
