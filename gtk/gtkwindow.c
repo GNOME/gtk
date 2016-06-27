@@ -1429,8 +1429,7 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
                                gdouble               y,
                                GtkWindow            *window)
 {
-  GtkWidget *event_widget, *widget;
-  gboolean window_drag = FALSE;
+  GtkWidget *widget;
   GdkEventSequence *sequence;
   GtkWindowRegion region;
   GtkWindowPrivate *priv;
@@ -1478,24 +1477,12 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
   else if (button != GDK_BUTTON_PRIMARY)
     return;
 
-  event_widget = gtk_get_event_widget ((GdkEvent*) event);
-
   if (region == GTK_WINDOW_REGION_TITLE)
     gdk_window_raise (_gtk_widget_get_window (widget));
 
   switch (region)
     {
     case GTK_WINDOW_REGION_CONTENT:
-      if (event_widget != widget)
-        gtk_widget_style_get (event_widget, "window-dragging", &window_drag, NULL);
-
-      if (!window_drag)
-        {
-          gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                          sequence, GTK_EVENT_SEQUENCE_DENIED);
-          return;
-        }
-      /* fall thru */
     case GTK_WINDOW_REGION_TITLE:
       if (n_press == 2)
         gtk_window_titlebar_action (window, event, button, n_press);
@@ -1535,6 +1522,8 @@ drag_gesture_begin_cb (GtkGestureDrag *gesture,
 {
   GdkEventSequence *sequence;
   GtkWindowRegion region;
+  GtkWidget *event_widget;
+  gboolean widget_drag;
   const GdkEvent *event;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -1545,8 +1534,23 @@ drag_gesture_begin_cb (GtkGestureDrag *gesture,
 
   region = get_active_region_type (window, (GdkEventAny*) event, x, y);
 
-  if (region != GTK_WINDOW_REGION_TITLE)
-    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+  switch (region)
+    {
+      case GTK_WINDOW_REGION_TITLE:
+        /* Claim it */
+        break;
+      case GTK_WINDOW_REGION_CONTENT:
+        event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
+        gtk_widget_style_get (event_widget, "window-dragging", &widget_drag, NULL);
+
+        if (!widget_drag)
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+
+        break;
+      default:
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+    }
 }
 
 static void
