@@ -325,18 +325,13 @@ handle_touch_event (GdkWindow           *window,
 
   for (i = 0; i < n; i++)
     {
-      switch (mir_touch_event_action (mir_touch_event, i))
-        {
-        case mir_touch_action_up:
-          gdk_event = gdk_event_new (GDK_TOUCH_END);
-          break;
-        case mir_touch_action_down:
-          gdk_event = gdk_event_new (GDK_TOUCH_BEGIN);
-          break;
-        case mir_touch_action_change:
-          gdk_event = gdk_event_new (GDK_TOUCH_UPDATE);
-          break;
-        }
+      MirTouchAction action = mir_touch_event_action (mir_touch_event, i);
+      if (action == mir_touch_action_up)
+        gdk_event = gdk_event_new (GDK_TOUCH_END);
+      else if (action == mir_touch_action_down)
+        gdk_event = gdk_event_new (GDK_TOUCH_BEGIN);
+      else
+        gdk_event = gdk_event_new (GDK_TOUCH_UPDATE);
 
       gdk_event->touch.window = window;
       gdk_event->touch.sequence = GINT_TO_POINTER (mir_touch_event_id (mir_touch_event, i));
