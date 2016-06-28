@@ -45,13 +45,6 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-/*
- * Define GNOME additional states to xdg-shell
- * The current reserved range for GNOME is 0x1000 - 0x1FFF
- */
-
-#define XDG_SURFACE_STATE_GNOME_TILED 0x1000
-
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
@@ -182,6 +175,10 @@ struct _GdkWindowImplWayland
     gint rect_anchor_dx;
     gint rect_anchor_dy;
   } pending_move_to_rect;
+
+  struct {
+    GdkWindowState state;
+  } pending;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -1252,15 +1249,14 @@ xdg_surface_configure (void               *data,
           break;
         case XDG_SURFACE_STATE_RESIZING:
           break;
-        /* GNOME additional states to xdg-shell */
-        case XDG_SURFACE_STATE_GNOME_TILED:
-          new_state |= GDK_WINDOW_STATE_TILED;
-          break;
         default:
           /* Unknown state */
           break;
         }
     }
+
+  new_state |= impl->pending.state;
+  impl->pending.state = 0;
 
   fixed_size =
     new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_TILED);
@@ -2204,6 +2200,38 @@ gdk_wayland_window_get_type_hint (GdkWindow *window)
 }
 
 static void
+gtk_surface_configure (void                *data,
+                       struct gtk_surface1 *gtk_surface,
+                       struct wl_array     *states)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowState new_state = 0;
+  uint32_t *p;
+
+  wl_array_for_each (p, states)
+    {
+      uint32_t state = *p;
+
+      switch (state)
+        {
+        case GTK_SURFACE1_STATE_TILED:
+          new_state |= GDK_WINDOW_STATE_TILED;
+          break;
+        default:
+          /* Unknown state */
+          break;
+        }
+    }
+
+  impl->pending.state |= new_state;
+}
+
+static const struct gtk_surface1_listener gtk_surface_listener = {
+  gtk_surface_configure
+};
+
+static void
 gdk_wayland_window_init_gtk_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
@@ -2220,6 +2248,9 @@ gdk_wayland_window_init_gtk_surface (GdkWindow *window)
   impl->display_server.gtk_surface =
     gtk_shell1_get_gtk_surface (display->gtk_shell,
                                 impl->display_server.wl_surface);
+  gtk_surface1_add_listener (impl->display_server.gtk_surface,
+                             &gtk_surface_listener,
+                             window);
 }
 
 static void
