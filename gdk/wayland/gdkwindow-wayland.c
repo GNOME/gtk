@@ -1262,24 +1262,24 @@ xdg_surface_configure (void               *data,
         }
     }
 
-   fixed_size =
-       new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_TILED);
+  fixed_size =
+    new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_TILED);
 
-    /* According to xdg_shell, an xdg_surface.configure with size 0x0
-     * should be interpreted as that it is up to the client to set a
-     * size.
-     *
-     * When transitioning from maximize or fullscreen state, this means
-     * the client should configure its size back to what it was before
-     * being maximize or fullscreen.
-     */
-   if (width == 0 && height == 0 && !fixed_size)
+  /* According to xdg_shell, an xdg_surface.configure with size 0x0
+   * should be interpreted as that it is up to the client to set a
+   * size.
+   *
+   * When transitioning from maximize or fullscreen state, this means
+   * the client should configure its size back to what it was before
+   * being maximize or fullscreen.
+   */
+  if (width == 0 && height == 0 && !fixed_size)
     {
       width = impl->saved_width;
       height = impl->saved_height;
     }
 
-   if (width > 0 && height > 0)
+  if (width > 0 && height > 0)
     {
       GdkWindowHints geometry_mask = impl->geometry_mask;
 
