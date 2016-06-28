@@ -1429,12 +1429,13 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
                                gdouble               y,
                                GtkWindow            *window)
 {
-  GtkWidget *widget;
+  GtkWidget *event_widget, *widget;
   GdkEventSequence *sequence;
   GtkWindowRegion region;
   GtkWindowPrivate *priv;
   const GdkEvent *event;
   guint button;
+  gboolean window_drag = FALSE;
 
   widget = GTK_WIDGET (window);
   priv = gtk_window_get_instance_private (window);
@@ -1477,12 +1478,25 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
   else if (button != GDK_BUTTON_PRIMARY)
     return;
 
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
   if (region == GTK_WINDOW_REGION_TITLE)
     gdk_window_raise (_gtk_widget_get_window (widget));
 
   switch (region)
     {
     case GTK_WINDOW_REGION_CONTENT:
+      if (event_widget != widget)
+        gtk_widget_style_get (event_widget, "window-dragging", &window_drag, NULL);
+
+      if (!window_drag)
+        {
+          gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                          sequence, GTK_EVENT_SEQUENCE_DENIED);
+          return;
+        }
+      /* fall through */
+
     case GTK_WINDOW_REGION_TITLE:
       if (n_press == 2)
         gtk_window_titlebar_action (window, event, button, n_press);
