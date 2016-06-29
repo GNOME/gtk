@@ -3003,7 +3003,14 @@ gdk_window_fullscreen (GdkWindow *window)
       clear_toplevel_order ();
     }
 
-  SetSystemUIMode (kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+  if ([NSWindow respondsToSelector:@selector(toggleFullScreen:)])
+    {
+       [impl->toplevel toggleFullScreen:nil];
+    }
+  else
+    {
+      SetSystemUIMode (kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+    }
 
   gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
 }
@@ -3022,14 +3029,21 @@ gdk_window_unfullscreen (GdkWindow *window)
   geometry = get_fullscreen_geometry (window);
   if (geometry)
     {
-      SetSystemUIMode (kUIModeNormal, 0);
+      if ([NSWindow respondsToSelector:@selector(toggleFullScreen:)])
+        {
+          [impl->toplevel toggleFullScreen:nil];
+        }
+      else
+        {
+	  SetSystemUIMode (kUIModeNormal, 0);
+	}
 
       move_resize_window_internal (window,
                                    geometry->x,
                                    geometry->y,
                                    geometry->width,
                                    geometry->height);
-      
+
       gdk_window_set_decorations (window, geometry->decor);
 
       g_object_set_data (G_OBJECT (window), FULLSCREEN_DATA, NULL);
