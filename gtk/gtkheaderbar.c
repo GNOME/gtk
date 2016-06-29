@@ -997,7 +997,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   gint nvis_children;
   gint title_minimum_size;
   gint title_natural_size;
-  gboolean title_expands;
+  gboolean title_expands = FALSE;
   gint start_width, end_width;
   gint uniform_expand_bonus[2] = { 0 };
   gint leftover_expand_bonus[2] = { 0 };
@@ -1051,13 +1051,15 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
     title_widget = NULL;
 
   if (title_widget)
-    gtk_widget_get_preferred_width_for_height (title_widget,
-                                               height,
-                                               &title_minimum_size,
-                                               &title_natural_size);
-  width -= title_natural_size;
+    {
+      gtk_widget_get_preferred_width_for_height (title_widget,
+                                                 height,
+                                                 &title_minimum_size,
+                                                 &title_natural_size);
+      width -= title_natural_size;
 
-  title_expands = gtk_widget_compute_expand (title_widget, GTK_ORIENTATION_HORIZONTAL);
+      title_expands = gtk_widget_compute_expand (title_widget, GTK_ORIENTATION_HORIZONTAL);
+    }
 
   start_width = 0;
   if (priv->titlebar_start_box != NULL)
