@@ -405,7 +405,8 @@ gdk_wayland_device_query_state (GdkDevice        *device,
   if (root_window)
     *root_window = gdk_screen_get_root_window (default_screen);
   if (child_window)
-    *child_window = seat->pointer_focus;
+    /* Set child only if actually a child of the given window, as XIQueryPointer() does */
+    *child_window = g_list_find (window->children, seat->pointer_focus) ? seat->pointer_focus : NULL;
   if (mask)
     *mask = seat->button_modifiers | seat->key_modifiers;
 
