@@ -35,6 +35,7 @@
 #include <string.h>
 
 typedef struct _SelectionBuffer SelectionBuffer;
+typedef struct _SelectionData SelectionData;
 typedef struct _StoredSelection StoredSelection;
 typedef struct _AsyncWriteData AsyncWriteData;
 typedef struct _DataOfferData DataOfferData;
@@ -80,22 +81,26 @@ struct _AsyncWriteData
   gsize index;
 };
 
+struct _SelectionData
+{
+  DataOfferData *offer;
+  GHashTable *buffers; /* Hashtable of target_atom->SelectionBuffer */
+};
+
 enum {
   ATOM_PRIMARY,
   ATOM_CLIPBOARD,
-  ATOM_DND
+  ATOM_DND,
+  N_ATOMS
 };
 
-static GdkAtom atoms[3] = { 0 };
+static GdkAtom atoms[N_ATOMS] = { 0 };
 
 struct _GdkWaylandSelection
 {
   /* Destination-side data */
-  DataOfferData *dnd_offer;
-  DataOfferData *clipboard_offer;
-  DataOfferData *primary_offer;
+  SelectionData selections[N_ATOMS];
   GHashTable *offers; /* Currently alive offers, Hashtable of wl_data_offer->DataOfferData */
-  GHashTable *selection_buffers; /* Hashtable of target_atom->SelectionBuffer */
 
   /* Source-side data */
   StoredSelection stored_selection;
@@ -307,6 +312,7 @@ GdkWaylandSelection *
 gdk_wayland_selection_new (void)
 {
   GdkWaylandSelection *selection;
+  gint i;
 
   /* init atoms */
   atoms[ATOM_PRIMARY] = gdk_atom_intern_static_string ("PRIMARY");
@@ -314,9 +320,13 @@ gdk_wayland_selection_new (void)
   atoms[ATOM_DND] = gdk_atom_intern_static_string ("GdkWaylandSelection");
 
   selection = g_new0 (GdkWaylandSelection, 1);
-  selection->selection_buffers =
-    g_hash_table_new_full (NULL, NULL, NULL,
-                           (GDestroyNotify) selection_buffer_cancel_and_unref);
+  for (i = 0; i < G_N_ELEMENTS (selection->selections); i++)
+    {
+      selection->selections[i].buffers =
+        g_hash_table_new_full (NULL, NULL, NULL,
+                               (GDestroyNotify) selection_buffer_cancel_and_unref);
+    }
+
   selection->offers =
     g_hash_table_new_full (NULL, NULL, NULL,
                            (GDestroyNotify) data_offer_data_free);
@@ -328,7 +338,11 @@ gdk_wayland_selection_new (void)
 void
 gdk_wayland_selection_free (GdkWaylandSelection *selection)
 {
-  g_hash_table_destroy (selection->selection_buffers);
+  gint i;
+
+  for (i = 0; i < G_N_ELEMENTS (selection->selections); i++)
+    g_hash_table_destroy (selection->selections[i].buffers);
+
   g_array_unref (selection->source_targets);
 
   g_hash_table_destroy (selection->offers);
@@ -456,16 +470,16 @@ static const struct gtk_primary_selection_offer_listener primary_offer_listener 
   primary_offer_offer,
 };
 
-DataOfferData *
+SelectionData *
 selection_lookup_offer_by_atom (GdkWaylandSelection *selection,
                                 GdkAtom              selection_atom)
 {
   if (selection_atom == atoms[ATOM_PRIMARY])
-    return selection->primary_offer;
+    return &selection->selections[ATOM_PRIMARY];
   else if (selection_atom == atoms[ATOM_CLIPBOARD])
-    return selection->clipboard_offer;
+    return &selection->selections[ATOM_CLIPBOARD];
   else if (selection_atom == atoms[ATOM_DND])
-    return selection->dnd_offer;
+    return &selection->selections[ATOM_DND];
   else
     return NULL;
 }
@@ -517,6 +531,7 @@ gdk_wayland_selection_set_offer (GdkDisplay *display,
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
   struct wl_data_offer *prev_offer;
+  SelectionData *selection_data;
   DataOfferData *info;
 
   info = g_hash_table_lookup (selection->offers, wl_offer);
@@ -526,15 +541,14 @@ gdk_wayland_selection_set_offer (GdkDisplay *display,
   if (prev_offer)
     g_hash_table_remove (selection->offers, prev_offer);
 
-  if (selection_atom == atoms[ATOM_PRIMARY])
-    selection->primary_offer = info;
-  else if (selection_atom == atoms[ATOM_CLIPBOARD])
-    selection->clipboard_offer = info;
-  else if (selection_atom == atoms[ATOM_DND])
-    selection->dnd_offer = info;
+  selection_data = selection_lookup_offer_by_atom (selection, selection_atom);
 
-  /* Clear all buffers */
-  g_hash_table_remove_all (selection->selection_buffers);
+  if (selection_data)
+    {
+      selection_data->offer = info;
+      /* Clear all buffers */
+      g_hash_table_remove_all (selection_data->buffers);
+    }
 }
 
 gpointer
@@ -542,12 +556,12 @@ gdk_wayland_selection_get_offer (GdkDisplay *display,
                                  GdkAtom     selection_atom)
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  const DataOfferData *info;
+  const SelectionData *data;
 
-  info = selection_lookup_offer_by_atom (selection, selection_atom);
+  data = selection_lookup_offer_by_atom (selection, selection_atom);
 
-  if (info)
-    return info->offer_data;
+  if (data && data->offer)
+    return data->offer->offer_data;
 
   return NULL;
 }
@@ -557,12 +571,12 @@ gdk_wayland_selection_get_targets (GdkDisplay *display,
                                    GdkAtom     selection_atom)
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
-  const DataOfferData *info;
+  const SelectionData *data;
 
-  info = selection_lookup_offer_by_atom (selection, selection_atom);
+  data = selection_lookup_offer_by_atom (selection, selection_atom);
 
-  if (info)
-    return info->targets;
+  if (data && data->offer)
+    return data->offer->targets;
 
   return NULL;
 }
@@ -749,13 +763,17 @@ gdk_wayland_selection_lookup_requestor_buffer (GdkWindow *requestor)
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
   SelectionBuffer *buffer_data;
   GHashTableIter iter;
+  gint i;
 
-  g_hash_table_iter_init (&iter, selection->selection_buffers);
-
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &buffer_data))
+  for (i = 0; i < G_N_ELEMENTS (selection->selections); i++)
     {
-      if (g_list_find (buffer_data->requestors, requestor))
-        return buffer_data;
+      g_hash_table_iter_init (&iter, selection->selections[i].buffers);
+
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &buffer_data))
+        {
+          if (g_list_find (buffer_data->requestors, requestor))
+            return buffer_data;
+        }
     }
 
   return NULL;
@@ -1255,10 +1273,15 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
                                         guint32     time)
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
+  const SelectionData *selection_data;
   SelectionBuffer *buffer_data;
   gpointer offer;
   gchar *mimetype;
   GList *target_list;
+
+  selection_data = selection_lookup_offer_by_atom (wayland_selection, selection);
+  if (!selection_data)
+    return;
 
   offer = gdk_wayland_selection_get_offer (display, selection);
   target_list = gdk_wayland_selection_get_targets (display, selection);
@@ -1285,8 +1308,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
                               mimetype);
     }
 
-  buffer_data = g_hash_table_lookup (wayland_selection->selection_buffers,
-                                     target);
+  buffer_data = g_hash_table_lookup (selection_data->buffers, target);
 
   if (buffer_data)
     selection_buffer_add_requestor (buffer_data, requestor);
@@ -1333,7 +1355,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
           g_free (targets);
         }
 
-      g_hash_table_insert (wayland_selection->selection_buffers,
+      g_hash_table_insert (selection_data->buffers,
                            GDK_ATOM_TO_POINTER (target),
                            buffer_data);
     }
