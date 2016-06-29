@@ -161,6 +161,9 @@ AC_PROG_MKDIR_P
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
+# Define _GNU_SOURCE etc. where appropriate, e.g. for strptime() on glibc
+AC_USE_SYSTEM_EXTENSIONS
+
 # i18n stuff
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.19.7])
@@ -207,9 +210,6 @@ case $host in
     os_darwin=yes
     ;;
 esac
-
-# Define _GNU_SOURCE etc. where appropriate, e.g. for strptime() on glibc
-AC_USE_SYSTEM_EXTENSIONS
 
 dnl
 dnl Check for a working C++ compiler, but do not bail out, if none is found.
