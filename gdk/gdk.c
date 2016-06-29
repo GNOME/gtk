@@ -233,7 +233,7 @@ static const GOptionEntry gdk_args[] = {
   { "name",         0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_name_cb,
     /* Description of --name=NAME in --help output */          N_("Program name as used by the window manager"),
     /* Placeholder in --name=NAME in --help output */          N_("NAME") },
-#ifdef G_OS_WIN32
+#ifndef G_OS_WIN32
   { "display",      0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,   &_gdk_display_name,
     /* Description of --display=DISPLAY in --help output */    N_("X display to use"),
     /* Placeholder in --display=DISPLAY in --help output */    N_("DISPLAY") },
