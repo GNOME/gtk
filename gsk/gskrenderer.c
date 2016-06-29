@@ -80,7 +80,6 @@ enum {
   PROP_USE_ALPHA,
   PROP_SCALE_FACTOR,
   PROP_WINDOW,
-  PROP_ROOT_NODE,
   PROP_DISPLAY,
   PROP_DRAWING_CONTEXT,
 
@@ -226,10 +225,6 @@ gsk_renderer_get_property (GObject    *gobject,
 
     case PROP_WINDOW:
       g_value_set_object (value, priv->window);
-      break;
-
-    case PROP_ROOT_NODE:
-      g_value_set_object (value, priv->root_node);
       break;
 
     case PROP_DRAWING_CONTEXT:
@@ -400,21 +395,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
                           G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GskRenderer:root-node:
-   *
-   * The root #GskRenderNode of the scene to be rendered.
-   *
-   * Since: 3.22
-   */
-  gsk_renderer_properties[PROP_ROOT_NODE] =
-    g_param_spec_object ("root-node",
-                         "Root Node",
-                         "The root render node to render",
-                         GSK_TYPE_RENDER_NODE,
-                         G_PARAM_READABLE |
-                         G_PARAM_STATIC_STRINGS);
 
   /**
    * GskRenderer:display:
@@ -930,16 +910,17 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_return_if_fail (priv->is_realized);
   g_return_if_fail (GSK_IS_RENDER_NODE (root));
   g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
+  g_return_if_fail (priv->drawing_context == NULL);
+  g_return_if_fail (priv->root_node == NULL);
 
-  g_set_object (&priv->root_node, root);
-  g_set_object (&priv->drawing_context, context);
-
-  gsk_render_node_make_immutable (root);
+  priv->drawing_context = g_object_ref (context);
+  priv->root_node = gsk_render_node_ref (root);
+  gsk_render_node_make_immutable (priv->root_node);
 
   GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, context);
 
-  g_clear_object (&priv->root_node);
   g_clear_object (&priv->drawing_context);
+  g_clear_pointer (&priv->root_node, gsk_render_node_unref);
 }
 
 /**
