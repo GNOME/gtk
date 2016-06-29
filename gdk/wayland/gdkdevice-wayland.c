@@ -1317,8 +1317,6 @@ pointer_handle_leave (void              *data,
   if (seat->cursor)
     gdk_wayland_pointer_stop_cursor_animation (&seat->pointer_info);
 
-  seat->pointer_info.focus = NULL;
-
   if (display_wayland->seat_version < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
