@@ -12,7 +12,9 @@ G_BEGIN_DECLS
 
 struct _GskRenderNode
 {
-  GObject parent_instance;
+  GTypeInstance parent_instance;
+
+  volatile int ref_count;
 
   /* The graph */
   GskRenderNode *parent;
@@ -58,7 +60,9 @@ struct _GskRenderNode
 
 struct _GskRenderNodeClass
 {
-  GObjectClass parent_class;
+  GTypeClass parent_class;
+
+  void (* finalize) (GskRenderNode *node);
 };
 
 void gsk_render_node_make_immutable (GskRenderNode *node);
