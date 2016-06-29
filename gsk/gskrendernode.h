@@ -40,6 +40,10 @@ GType gsk_render_node_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_22
 GskRenderNode *         gsk_render_node_new                     (void);
+GDK_AVAILABLE_IN_3_22
+GskRenderNode *         gsk_render_node_ref                     (GskRenderNode *node);
+GDK_AVAILABLE_IN_3_22
+void                    gsk_render_node_unref                   (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_3_22
 GskRenderNode *         gsk_render_node_get_parent              (GskRenderNode *node);
@@ -114,6 +118,19 @@ cairo_t *               gsk_render_node_get_draw_context        (GskRenderNode  
 GDK_AVAILABLE_IN_3_22
 void                    gsk_render_node_set_name                (GskRenderNode *node,
                                                                  const char    *name);
+
+#define GSK_VALUE_HOLDS_RENDER_NODE(value)	(G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE))
+
+GDK_AVAILABLE_IN_3_22
+void                    gsk_value_set_render_node               (GValue        *value,
+                                                                 GskRenderNode *node);
+GDK_AVAILABLE_IN_3_22
+void                    gsk_value_take_render_node              (GValue        *value,
+                                                                 GskRenderNode *node);
+GDK_AVAILABLE_IN_3_22
+GskRenderNode *         gsk_value_get_render_node               (const GValue  *value);
+GDK_AVAILABLE_IN_3_22
+GskRenderNode *         gsk_value_dup_render_node               (const GValue  *value);
 
 G_END_DECLS
 

@@ -33,32 +33,122 @@
 
 #include <graphene-gobject.h>
 
-G_DEFINE_TYPE (GskRenderNode, gsk_render_node, G_TYPE_OBJECT)
+#include <gobject/gvaluecollector.h>
 
 static void
-gsk_render_node_dispose (GObject *gobject)
+value_render_node_init (GValue *value)
 {
-  GskRenderNode *self = GSK_RENDER_NODE (gobject);
+  value->data[0].v_pointer = NULL;
+}
+
+static void
+value_render_node_free (GValue *value)
+{
+  if (value->data[0].v_pointer != NULL)
+    gsk_render_node_unref (value->data[0].v_pointer);
+}
+
+static void
+value_render_node_copy (const GValue *src,
+                        GValue       *dst)
+{
+  if (src->data[0].v_pointer != NULL)
+    dst->data[0].v_pointer = gsk_render_node_ref (src->data[0].v_pointer);
+  else
+    dst->data[0].v_pointer = NULL;
+}
+
+static gpointer
+value_render_node_peek_pointer (const GValue *value)
+{
+  return value->data[0].v_pointer;
+}
+
+static gchar *
+value_render_node_collect_value (GValue      *value,
+                                 guint        n_collect_values,
+                                 GTypeCValue *collect_values,
+                                 guint        collect_flags)
+{
+  GskRenderNode *node;
+
+  node = collect_values[0].v_pointer;
+
+  if (node == NULL)
+    {
+      value->data[0].v_pointer = NULL;
+      return NULL;
+    }
+
+  if (node->parent_instance.g_class == NULL)
+    return g_strconcat ("invalid unclassed GskRenderNode pointer for "
+                        "value type '",
+                        G_VALUE_TYPE_NAME (value),
+                        "'",
+                        NULL);
+
+  value->data[0].v_pointer = gsk_render_node_ref (node);
+
+  return NULL;
+}
+
+static gchar *
+value_render_node_lcopy_value (const GValue *value,
+                               guint         n_collect_values,
+                               GTypeCValue  *collect_values,
+                               guint         collect_flags)
+{
+  GskRenderNode **node_p = collect_values[0].v_pointer;
+
+  if (node_p == NULL)
+    return g_strconcat ("value location for '",
+                        G_VALUE_TYPE_NAME (value),
+                        "' passed as NULL",
+                        NULL);
+
+  if (value->data[0].v_pointer == NULL)
+    *node_p = NULL;
+  else if (collect_flags & G_VALUE_NOCOPY_CONTENTS)
+    *node_p = value->data[0].v_pointer;
+  else
+    *node_p = gsk_render_node_ref (value->data[0].v_pointer);
+
+  return NULL;
+}
+
+static void
+gsk_render_node_finalize (GskRenderNode *self)
+{
   GskRenderNodeIter iter;
 
   gsk_render_node_iter_init (&iter, self);
   while (gsk_render_node_iter_next (&iter, NULL))
     gsk_render_node_iter_remove (&iter);
 
-  G_OBJECT_CLASS (gsk_render_node_parent_class)->dispose (gobject);
+  g_type_free_instance ((GTypeInstance *) self);
+}
+
+static void
+gsk_render_node_class_base_init (GskRenderNodeClass *klass)
+{
+}
+
+static void
+gsk_render_node_class_base_finalize (GskRenderNodeClass *klass)
+{
 }
 
 static void
 gsk_render_node_class_init (GskRenderNodeClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->dispose = gsk_render_node_dispose;
+  klass->finalize = gsk_render_node_finalize;
 }
 
 static void
 gsk_render_node_init (GskRenderNode *self)
 {
+  self->ref_count = 1;
+
   graphene_rect_init_from_rect (&self->bounds, graphene_rect_zero ());
 
   graphene_matrix_init_identity (&self->transform);
@@ -67,6 +157,54 @@ gsk_render_node_init (GskRenderNode *self)
   self->opacity = 1.0;
 
   self->is_mutable = TRUE;
+}
+
+GType
+gsk_render_node_get_type (void)
+{
+  static volatile gsize gsk_render_node_type__volatile;
+
+  if (g_once_init_enter (&gsk_render_node_type__volatile))
+    {
+      static const GTypeFundamentalInfo finfo = {
+        (G_TYPE_FLAG_CLASSED |
+         G_TYPE_FLAG_INSTANTIATABLE |
+         G_TYPE_FLAG_DERIVABLE |
+         G_TYPE_FLAG_DEEP_DERIVABLE),
+      };
+      static const GTypeValueTable render_node_value_table = {
+        value_render_node_init,
+        value_render_node_free,
+        value_render_node_copy,
+        value_render_node_peek_pointer,
+        "p", value_render_node_collect_value,
+        "p", value_render_node_lcopy_value,
+      };
+      const GTypeInfo render_node_info = {
+        sizeof (GskRenderNodeClass),
+
+        (GBaseInitFunc) gsk_render_node_class_base_init,
+        (GBaseFinalizeFunc) gsk_render_node_class_base_finalize,
+        (GClassInitFunc) gsk_render_node_class_init,
+        (GClassFinalizeFunc) NULL,
+        NULL,
+
+        sizeof (GskRenderNode), 16,
+        (GInstanceInitFunc) gsk_render_node_init,
+
+        &render_node_value_table,
+      };
+      GType gsk_render_node_type =
+        g_type_register_fundamental (g_type_fundamental_next (),
+                                     g_intern_static_string ("GskRenderNode"),
+                                     &render_node_info,
+                                     &finfo,
+                                     0);
+
+      g_once_init_leave (&gsk_render_node_type__volatile, gsk_render_node_type);
+    }
+
+  return gsk_render_node_type__volatile;
 }
 
 /**
@@ -81,7 +219,47 @@ gsk_render_node_init (GskRenderNode *self)
 GskRenderNode *
 gsk_render_node_new (void)
 {
-  return g_object_new (GSK_TYPE_RENDER_NODE, NULL);
+  return (GskRenderNode *) g_type_create_instance (GSK_TYPE_RENDER_NODE);
+}
+
+/**
+ * gsk_render_node_ref:
+ * @node: a #GskRenderNode
+ *
+ * Acquires a reference on the given #GskRenderNode.
+ *
+ * Returns: (transfer none): the #GskRenderNode with an additional reference
+ *
+ * Since: 3.22
+ */
+GskRenderNode *
+gsk_render_node_ref (GskRenderNode *node)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+
+  g_atomic_int_inc (&node->ref_count);
+
+  return node;
+}
+
+/**
+ * gsk_render_node_unref:
+ * @node: a #GskRenderNode
+ *
+ * Releases a reference on the given #GskRenderNode.
+ *
+ * If the reference was the last, the resources associated to the @node are
+ * freed.
+ *
+ * Since: 3.22
+ */
+void
+gsk_render_node_unref (GskRenderNode *node)
+{
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+  if (g_atomic_int_dec_and_test (&node->ref_count))
+    GSK_RENDER_NODE_GET_CLASS (node)->finalize (node);
 }
 
 /**
@@ -206,7 +384,7 @@ gsk_render_node_insert_child_internal (GskRenderNode   *node,
 
   insert_func (node, child, insert_func_data);
 
-  g_object_ref (child);
+  gsk_render_node_ref (child);
 
   child->parent = node;
   child->age = 0;
@@ -606,7 +784,7 @@ gsk_render_node_remove_child (GskRenderNode *node,
   if (node->last_child == child)
     node->last_child = prev_sibling;
 
-  g_object_unref (child);
+  gsk_render_node_unref (child);
 
   return node;
 }
@@ -1097,4 +1275,70 @@ gsk_render_node_make_immutable (GskRenderNode *node)
   gsk_render_node_iter_init (&iter, node);
   while (gsk_render_node_iter_next (&iter, &child))
     gsk_render_node_make_immutable (child);
+}
+
+void
+gsk_value_set_render_node (GValue        *value,
+			   GskRenderNode *node)
+{
+  GskRenderNode *old_node;
+
+  g_return_if_fail (GSK_VALUE_HOLDS_RENDER_NODE (value));
+
+  old_node = value->data[0].v_pointer;
+
+  if (node != NULL)
+    {
+      g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+      value->data[0].v_pointer = gsk_render_node_ref (node);
+    }
+  else
+    value->data[0].v_pointer = NULL;
+
+  if (old_node != NULL)
+    gsk_render_node_unref (old_node);
+}
+
+void
+gsk_value_take_render_node (GValue        *value,
+			    GskRenderNode *node)
+{
+  GskRenderNode *old_node;
+
+  g_return_if_fail (GSK_VALUE_HOLDS_RENDER_NODE (value));
+
+  old_node = value->data[0].v_pointer;
+
+  if (node != NULL)
+    {
+      g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+      /* take over ownership */
+      value->data[0].v_pointer = node;
+    }
+  else
+    value->data[0].v_pointer = NULL;
+
+  if (old_node != NULL)
+    gsk_render_node_unref (old_node);
+}
+
+GskRenderNode *
+gsk_value_get_render_node (const GValue *value)
+{
+  g_return_val_if_fail (GSK_VALUE_HOLDS_RENDER_NODE (value), NULL);
+
+  return value->data[0].v_pointer;
+}
+
+GskRenderNode *
+gsk_value_dup_render_node (const GValue *value)
+{
+  g_return_val_if_fail (GSK_VALUE_HOLDS_RENDER_NODE (value), NULL);
+
+  if (value->data[0].v_pointer != NULL)
+    return gsk_render_node_ref (value->data[0].v_pointer);
+
+  return NULL;
 }
