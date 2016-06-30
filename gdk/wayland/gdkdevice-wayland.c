@@ -184,6 +184,7 @@ struct _GdkWaylandSeat
   gint64 repeat_deadline;
   GSettings *keyboard_settings;
   uint32_t keyboard_time;
+  uint32_t keyboard_key_serial;
 
   struct gtk_primary_selection_device *primary_data_device;
   struct wl_data_device *data_device;
@@ -1992,6 +1993,7 @@ keyboard_handle_key (void               *data,
     return;
 
   seat->keyboard_time = time;
+  seat->keyboard_key_serial = serial;
   seat->repeat_count = 0;
   _gdk_wayland_display_update_serial (display, serial);
   deliver_key_event (data, time, key + 8, state_w);
@@ -4336,13 +4338,15 @@ _gdk_wayland_seat_get_last_implicit_grab_serial (GdkSeat           *seat,
   GdkWaylandSeat *wayland_seat;
   GdkWaylandTouchData *touch;
   GHashTableIter iter;
-  uint32_t serial = 0;
+  uint32_t serial;
 
   wayland_seat = GDK_WAYLAND_SEAT (seat);
   g_hash_table_iter_init (&iter, wayland_seat->touches);
 
   if (sequence)
     *sequence = NULL;
+
+  serial = wayland_seat->keyboard_key_serial;
 
   if (wayland_seat->pointer_info.press_serial > serial)
     serial = wayland_seat->pointer_info.press_serial;
