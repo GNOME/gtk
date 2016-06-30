@@ -12,6 +12,12 @@
 
 #include <epoxy/gl.h>
 
+typedef enum {
+  GSK_BLEND_MODE_NONE,
+
+  GSK_BLEND_MODE_MULTIPLY
+} GskBlendMode;
+
 typedef struct {
   guint vao_id;
   guint buffer_id;
@@ -20,9 +26,11 @@ typedef struct {
 
   guint mvp_location;
   guint map_location;
+  guint parentMap_location;
   guint uv_location;
   guint position_location;
   guint alpha_location;
+  guint blendMode_location;
 } RenderData;
 
 typedef struct {
@@ -42,7 +50,10 @@ typedef struct {
 
   const char *name;
 
+  GskBlendMode blend_mode;
+
   RenderData render_data;
+  RenderData *parent_data;
 } RenderItem;
 
 struct _GskGLRenderer
@@ -62,9 +73,11 @@ struct _GskGLRenderer
   guint program_id;
   guint mvp_location;
   guint map_location;
+  guint parentMap_location;
   guint uv_location;
   guint position_location;
   guint alpha_location;
+  guint blendMode_location;
 
   guint vao_id;
 
@@ -366,9 +379,11 @@ gsk_gl_renderer_create_program (GskGLRenderer *self)
    */
   self->mvp_location = glGetUniformLocation (self->program_id, "mvp");
   self->map_location = glGetUniformLocation (self->program_id, "map");
+  self->parentMap_location = glGetUniformLocation (self->program_id, "parentMap");
   self->alpha_location = glGetUniformLocation (self->program_id, "alpha");
   self->position_location = glGetAttribLocation (self->program_id, "position");
   self->uv_location = glGetAttribLocation (self->program_id, "uv");
+  self->blendMode_location = glGetAttribLocation (self->program_id, "blendMode");
 
   GSK_NOTE (OPENGL, g_print ("Program [%d] { mvp:%u, map:%u, alpha:%u, position:%u, uv:%u }\n",
                              self->program_id,
@@ -482,9 +497,12 @@ gsk_gl_renderer_update_frustum (GskGLRenderer           *self,
 {
   GSK_NOTE (OPENGL, g_print ("Updating the modelview/projection\n"));
 
-  graphene_matrix_multiply (modelview, projection, &self->mvp);
+  graphene_matrix_multiply (projection, modelview, &self->mvp);
 
   graphene_frustum_init_from_matrix (&self->frustum, &self->mvp);
+
+  GSK_NOTE (OPENGL, g_print ("Renderer MVP:\n"));
+  GSK_NOTE (OPENGL, graphene_matrix_print (&self->mvp));
 }
 
 static void
@@ -567,6 +585,18 @@ render_item (RenderItem *item)
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, item->render_data.texture_id);
   glUniform1i (item->render_data.map_location, 0);
+
+  if (item->parent_data != NULL)
+    {
+      if (item->parent_data->texture_id != 0)
+        {
+          glActiveTexture (GL_TEXTURE1);
+          glBindTexture (GL_TEXTURE_2D, item->parent_data->texture_id);
+          glUniform1i (item->render_data.parentMap_location, 1);
+        }
+
+      glUniform1i (item->render_data.blendMode_location, item->blend_mode);
+    }
 
   /* Pass the opacity component */
   glUniform1f (item->render_data.alpha_location, item->opaque ? 1 : item->opacity);
@@ -692,7 +722,8 @@ project_item (const graphene_matrix_t *projection,
 
 static void
 gsk_gl_renderer_add_render_item (GskGLRenderer *self,
-                                 GskRenderNode *node)
+                                 GskRenderNode *node,
+                                 RenderItem    *parent)
 {
   graphene_rect_t viewport;
   int gl_min_filter, gl_mag_filter;
@@ -711,6 +742,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
       return;
     }
 
+  memset (&item, 0, sizeof (RenderItem));
+
   gsk_renderer_get_viewport (GSK_RENDERER (self), &viewport);
 
   gsk_render_node_get_bounds (node, &bounds);
@@ -724,30 +757,39 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   /* Each render item is an axis-aligned bounding box that we
    * transform using the given transformation matrix
    */
-  item.min.x = (bounds.origin.x * 2) / bounds.size.width - 1;
-  item.min.y = (bounds.origin.y * 2) / bounds.size.height - 1;
+  item.min.x = bounds.origin.x;
+  item.min.y = bounds.origin.y;
   item.min.z = 0.f;
 
-  item.max.x = (bounds.origin.x + bounds.size.width) * 2 / bounds.size.width - 1;
-  item.max.y = (bounds.origin.y + bounds.size.height) * 2 / bounds.size.height - 1;
+  item.max.x = bounds.origin.x + bounds.size.width;
+  item.max.y = bounds.origin.y + bounds.size.height;
   item.max.z = 0.f;
 
   /* The location of the item, in normalized world coordinates */
   gsk_render_node_get_world_matrix (node, &mv);
-  item.mvp = mv;
+  graphene_matrix_multiply (&mv, &self->mvp, &item.mvp);
 
   item.opaque = gsk_render_node_is_opaque (node);
   item.opacity = gsk_render_node_get_opacity (node);
+
+  item.blend_mode = parent != NULL ? GSK_BLEND_MODE_MULTIPLY : GSK_BLEND_MODE_NONE;
 
   /* GL objects */
   item.render_data.vao_id = self->vao_id;
   item.render_data.buffer_id = 0;
   item.render_data.program_id = self->program_id;
   item.render_data.map_location = self->map_location;
+  item.render_data.parentMap_location = self->parentMap_location;
   item.render_data.mvp_location = self->mvp_location;
   item.render_data.uv_location = self->uv_location;
   item.render_data.position_location = self->position_location;
   item.render_data.alpha_location = self->alpha_location;
+  item.render_data.blendMode_location = self->blendMode_location;
+
+  if (parent != NULL)
+    item.parent_data = &(parent->render_data);
+  else
+    item.parent_data = NULL;
 
   gsk_renderer_get_projection (GSK_RENDERER (self), &projection);
   item.z = project_item (&projection, &mv);
@@ -783,35 +825,37 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
 recurse_children:
   gsk_render_node_iter_init (&iter, node);
   while (gsk_render_node_iter_next (&iter, &child))
-    gsk_gl_renderer_add_render_item (self, child);
+    gsk_gl_renderer_add_render_item (self, child, &item);
 }
 
 static gboolean
 gsk_gl_renderer_validate_tree (GskGLRenderer *self,
                                GskRenderNode *root)
 {
-  int n_children;
+  int n_nodes;
 
   if (self->context == NULL)
-    return FALSE;
+    {
+      GSK_NOTE (OPENGL, g_print ("No valid GL context associated to the renderer"));
+      return FALSE;
+    }
 
-  n_children = gsk_render_node_get_n_children (root);
-  if (n_children == 0)
-    return FALSE;
+  n_nodes = gsk_render_node_get_size (root);
 
   gdk_gl_context_make_current (self->context);
 
-  self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_children);
-  self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_children);
+  self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
+  self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
 
   g_array_set_clear_func (self->opaque_render_items, render_item_clear);
   g_array_set_clear_func (self->transparent_render_items, render_item_clear);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
-  gsk_gl_renderer_add_render_item (self, root);
+  gsk_gl_renderer_add_render_item (self, root, NULL);
 
-  GSK_NOTE (OPENGL, g_print ("Total render items: %d (opaque:%d, transparent:%d)\n",
+  GSK_NOTE (OPENGL, g_print ("Total render items: %d of %d (opaque:%d, transparent:%d)\n",
                              self->opaque_render_items->len + self->transparent_render_items->len,
+                             n_nodes,
                              self->opaque_render_items->len,
                              self->transparent_render_items->len));
 
@@ -851,6 +895,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_matrix_t modelview, projection;
   graphene_rect_t viewport;
+  gboolean use_alpha;
   int status;
   guint i;
 
@@ -911,10 +956,12 @@ gsk_gl_renderer_render (GskRenderer *renderer,
                              self->texture_id != 0 ? "texture" : "renderbuffer"));
 
 out:
+  use_alpha = gsk_renderer_get_use_alpha (renderer);
+
   gdk_cairo_draw_from_gl (gdk_drawing_context_get_cairo_context (context),
                           gdk_drawing_context_get_window (context),
-                          self->texture_id != 0 ? self->texture_id : self->render_buffer,
-                          self->texture_id != 0 ? GL_TEXTURE : GL_RENDERBUFFER,
+                          use_alpha ? self->texture_id : self->render_buffer,
+                          use_alpha ? GL_TEXTURE : GL_RENDERBUFFER,
                           gsk_renderer_get_scale_factor (renderer),
                           0, 0, viewport.size.width, viewport.size.height);
 
