@@ -157,6 +157,7 @@ gsk_render_node_init (GskRenderNode *self)
   self->opacity = 1.0;
 
   self->is_mutable = TRUE;
+  self->needs_world_matrix_update = TRUE;
 }
 
 GType
@@ -1275,6 +1276,23 @@ gsk_render_node_make_immutable (GskRenderNode *node)
   gsk_render_node_iter_init (&iter, node);
   while (gsk_render_node_iter_next (&iter, &child))
     gsk_render_node_make_immutable (child);
+}
+
+int
+gsk_render_node_get_size (GskRenderNode *root)
+{
+  GskRenderNodeIter iter;
+  GskRenderNode *child;
+  int res;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (root), 0);
+
+  res = 1;
+  gsk_render_node_iter_init (&iter, root);
+  while (gsk_render_node_iter_next (&iter, &child))
+    res += gsk_render_node_get_size (child);
+
+  return res;
 }
 
 void
