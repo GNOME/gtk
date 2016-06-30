@@ -13,6 +13,19 @@
 #include <epoxy/gl.h>
 
 typedef struct {
+  guint vao_id;
+  guint buffer_id;
+  guint texture_id;
+  guint program_id;
+
+  guint mvp_location;
+  guint map_location;
+  guint uv_location;
+  guint position_location;
+  guint alpha_location;
+} RenderData;
+
+typedef struct {
   /* Back pointer to the node, only meant for comparison */
   GskRenderNode *node;
 
@@ -29,15 +42,7 @@ typedef struct {
 
   const char *name;
 
-  guint vao_id;
-  guint texture_id;
-  guint program_id;
-  guint mvp_location;
-  guint map_location;
-  guint uv_location;
-  guint position_location;
-  guint alpha_location;
-  guint buffer_id;
+  RenderData render_data;
 } RenderItem;
 
 struct _GskGLRenderer
@@ -489,15 +494,15 @@ render_item_clear (gpointer data_)
 
   GSK_NOTE (OPENGL, g_print ("Destroying render item [%p] buffer %u\n",
                              item,
-                             item->buffer_id));
-  glDeleteBuffers (1, &item->buffer_id);
-  item->buffer_id = 0;
+                             item->render_data.buffer_id));
+  glDeleteBuffers (1, &item->render_data.buffer_id);
+  item->render_data.buffer_id = 0;
 
   GSK_NOTE (OPENGL, g_print ("Destroying render item [%p] texture %u\n",
                              item,
-                             item->texture_id));
-  glDeleteTextures (1, &item->texture_id);
-  item->texture_id = 0;
+                             item->render_data.texture_id));
+  glDeleteTextures (1, &item->render_data.texture_id);
+  item->render_data.texture_id = 0;
 
   graphene_matrix_init_identity (&item->mvp);
 
@@ -515,10 +520,10 @@ render_item (RenderItem *item)
   };
   float mvp[16];
 
-  glBindVertexArray (item->vao_id);
+  glBindVertexArray (item->render_data.vao_id);
 
   /* Generate the vertex buffer for the texture quad */
-  if (item->buffer_id == 0)
+  if (item->render_data.buffer_id == 0)
     {
       struct vertex_info vertex_data[] = {
         { { item->min.x, item->min.y }, { 0, 0 }, },
@@ -532,44 +537,44 @@ render_item (RenderItem *item)
 
       GSK_NOTE (OPENGL, g_print ("Creating quad for render item [%p]\n", item));
 
-      glGenBuffers (1, &item->buffer_id);
-      glBindBuffer (GL_ARRAY_BUFFER, item->buffer_id);
+      glGenBuffers (1, &(item->render_data.buffer_id));
+      glBindBuffer (GL_ARRAY_BUFFER, item->render_data.buffer_id);
 
       /* The data won't change */
       glBufferData (GL_ARRAY_BUFFER, sizeof (vertex_data), vertex_data, GL_STATIC_DRAW);
   
       /* Set up the buffers with the computed position and texels */
-      glEnableVertexAttribArray (item->position_location);
-      glVertexAttribPointer (item->position_location, 2, GL_FLOAT, GL_FALSE,
+      glEnableVertexAttribArray (item->render_data.position_location);
+      glVertexAttribPointer (item->render_data.position_location, 2, GL_FLOAT, GL_FALSE,
                              sizeof (struct vertex_info),
                              (void *) G_STRUCT_OFFSET (struct vertex_info, position));
-      glEnableVertexAttribArray (item->uv_location);
-      glVertexAttribPointer (item->uv_location, 2, GL_FLOAT, GL_FALSE,
+      glEnableVertexAttribArray (item->render_data.uv_location);
+      glVertexAttribPointer (item->render_data.uv_location, 2, GL_FLOAT, GL_FALSE,
                              sizeof (struct vertex_info),
                              (void *) G_STRUCT_OFFSET (struct vertex_info, uv));
     }
   else
     {
       /* We already set up the vertex buffer, so we just need to reuse it */
-      glBindBuffer (GL_ARRAY_BUFFER, item->buffer_id);
-      glEnableVertexAttribArray (item->position_location);
-      glEnableVertexAttribArray (item->uv_location);
+      glBindBuffer (GL_ARRAY_BUFFER, item->render_data.buffer_id);
+      glEnableVertexAttribArray (item->render_data.position_location);
+      glEnableVertexAttribArray (item->render_data.uv_location);
     }
 
-  glUseProgram (item->program_id);
+  glUseProgram (item->render_data.program_id);
 
   /* Use texture unit 0 for the sampler */
   glActiveTexture (GL_TEXTURE0);
-  glBindTexture (GL_TEXTURE_2D, item->texture_id);
-  glUniform1i (item->map_location, 0);
+  glBindTexture (GL_TEXTURE_2D, item->render_data.texture_id);
+  glUniform1i (item->render_data.map_location, 0);
 
   /* Pass the opacity component */
-  glUniform1f (item->alpha_location, item->opaque ? 1 : item->opacity);
+  glUniform1f (item->render_data.alpha_location, item->opaque ? 1 : item->opacity);
 
   /* Pass the mvp to the vertex shader */
   GSK_NOTE (OPENGL, graphene_matrix_print (&item->mvp));
   graphene_matrix_to_float (&item->mvp, mvp);
-  glUniformMatrix4fv (item->mvp_location, 1, GL_FALSE, mvp);
+  glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
 
   /* Draw the quad */
   GSK_NOTE (OPENGL, g_print ("Drawing item <%s>[%p] with opacity: %g\n",
@@ -581,8 +586,8 @@ render_item (RenderItem *item)
 
   /* Reset the state */
   glBindTexture (GL_TEXTURE_2D, 0);
-  glDisableVertexAttribArray (item->position_location);
-  glDisableVertexAttribArray (item->uv_location);
+  glDisableVertexAttribArray (item->render_data.position_location);
+  glDisableVertexAttribArray (item->render_data.uv_location);
   glUseProgram (0);
 }
 
@@ -735,14 +740,14 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   item.opacity = gsk_render_node_get_opacity (node);
 
   /* GL objects */
-  item.vao_id = self->vao_id;
-  item.buffer_id = 0;
-  item.program_id = self->program_id;
-  item.map_location = self->map_location;
-  item.mvp_location = self->mvp_location;
-  item.uv_location = self->uv_location;
-  item.position_location = self->position_location;
-  item.alpha_location = self->alpha_location;
+  item.render_data.vao_id = self->vao_id;
+  item.render_data.buffer_id = 0;
+  item.render_data.program_id = self->program_id;
+  item.render_data.map_location = self->map_location;
+  item.render_data.mvp_location = self->mvp_location;
+  item.render_data.uv_location = self->uv_location;
+  item.render_data.position_location = self->position_location;
+  item.render_data.alpha_location = self->alpha_location;
 
   gsk_renderer_get_projection (GSK_RENDERER (self), &projection);
   item.z = project_item (&projection, &mv);
@@ -765,7 +770,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   if (surface == NULL)
     goto recurse_children;
 
-  surface_to_texture (surface, &bounds, gl_min_filter, gl_mag_filter, &item.texture_id);
+  surface_to_texture (surface, &bounds, gl_min_filter, gl_mag_filter, &(item.render_data.texture_id));
 
   GSK_NOTE (OPENGL, g_print ("Adding node <%s>[%p] to render items\n",
                              node->name != NULL ? node->name : "unnamed",
