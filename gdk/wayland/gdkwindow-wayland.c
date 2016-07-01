@@ -1056,20 +1056,34 @@ gdk_wayland_window_sync_title (GdkWindow *window)
 }
 
 static void
+gdk_wayland_window_get_window_geometry (GdkWindow    *window,
+                                        GdkRectangle *geometry)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  *geometry = (GdkRectangle) {
+    .x = impl->margin_left,
+    .y = impl->margin_top,
+    .width = window->width - (impl->margin_left + impl->margin_right),
+    .height = window->height - (impl->margin_top + impl->margin_bottom)
+  };
+}
+
+static void
 gdk_wayland_window_sync_margin (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  gint x, y, width, height;
+  GdkRectangle geometry;
 
   if (!impl->display_server.xdg_surface)
     return;
 
-  x = impl->margin_left;
-  y = impl->margin_top;
-  width = window->width - (impl->margin_left + impl->margin_right);
-  height = window->height - (impl->margin_top + impl->margin_bottom);
-
-  xdg_surface_set_window_geometry (impl->display_server.xdg_surface, x, y, width, height);
+  gdk_wayland_window_get_window_geometry (window, &geometry);
+  xdg_surface_set_window_geometry (impl->display_server.xdg_surface,
+                                   geometry.x,
+                                   geometry.y,
+                                   geometry.width,
+                                   geometry.height);
 }
 
 static struct wl_region *
