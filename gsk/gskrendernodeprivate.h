@@ -37,6 +37,9 @@ struct _GskRenderNode
   /* Paint opacity */
   double opacity;
 
+  /* Blend mode */
+  GskBlendMode blend_mode;
+
   /* Clip rectangle */
   graphene_rect_t bounds;
 
