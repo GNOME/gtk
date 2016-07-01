@@ -155,11 +155,16 @@ struct _GdkWindowImplWayland
   int margin_right;
   int margin_top;
   int margin_bottom;
+  gboolean margin_dirty;
 
   int initial_fullscreen_monitor;
 
   cairo_region_t *opaque_region;
+  gboolean opaque_region_dirty;
+
   cairo_region_t *input_region;
+  gboolean input_region_dirty;
+
   cairo_region_t *staged_updates_region;
 
   int saved_width;
@@ -195,6 +200,10 @@ static void maybe_set_gtk_surface_dbus_properties (GdkWindow *window);
 static void maybe_set_gtk_surface_modal (GdkWindow *window);
 
 static void gdk_window_request_transient_parent_commit (GdkWindow *window);
+
+static void gdk_wayland_window_sync_margin (GdkWindow *window);
+static void gdk_wayland_window_sync_input_region (GdkWindow *window);
+static void gdk_wayland_window_sync_opaque_region (GdkWindow *window);
 
 GType _gdk_window_impl_wayland_get_type (void);
 
@@ -547,6 +556,10 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
    */
   if (impl->pending_buffer_attached)
     read_back_cairo_surface (window);
+
+  gdk_wayland_window_sync_margin (window);
+  gdk_wayland_window_sync_opaque_region (window);
+  gdk_wayland_window_sync_input_region (window);
 
   /* From this commit forward, we can't write to the buffer,
    * it's "live".  In the future, if we need to stage more changes
@@ -1090,6 +1103,9 @@ gdk_wayland_window_sync_opaque_region (GdkWindow *window)
   if (!impl->display_server.wl_surface)
     return;
 
+  if (!impl->opaque_region_dirty)
+    return;
+
   if (impl->opaque_region != NULL)
     wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)),
                                              impl->opaque_region);
@@ -1098,6 +1114,8 @@ gdk_wayland_window_sync_opaque_region (GdkWindow *window)
 
   if (wl_region != NULL)
     wl_region_destroy (wl_region);
+
+  impl->opaque_region_dirty = FALSE;
 }
 
 static void
@@ -1109,6 +1127,9 @@ gdk_wayland_window_sync_input_region (GdkWindow *window)
   if (!impl->display_server.wl_surface)
     return;
 
+  if (!impl->input_region_dirty)
+    return;
+
   if (impl->input_region != NULL)
     wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)),
                                              impl->input_region);
@@ -1117,6 +1138,8 @@ gdk_wayland_window_sync_input_region (GdkWindow *window)
 
   if (wl_region != NULL)
     wl_region_destroy (wl_region);
+
+  impl->input_region_dirty = FALSE;
 }
 
 static void
@@ -1214,9 +1237,6 @@ gdk_wayland_window_create_surface (GdkWindow *window)
 
   impl->display_server.wl_surface = wl_compositor_create_surface (display_wayland->compositor);
   wl_surface_add_listener (impl->display_server.wl_surface, &surface_listener, window);
-
-  gdk_wayland_window_sync_opaque_region (window);
-  gdk_wayland_window_sync_input_region (window);
 }
 
 static void
@@ -1305,7 +1325,6 @@ xdg_surface_configure (void               *data,
                        (new_state & GDK_WINDOW_STATE_TILED) ? " tiled" : ""));
 
   _gdk_set_window_state (window, new_state);
-  gdk_wayland_window_sync_margin (window);
   xdg_surface_ack_configure (xdg_surface, serial);
   if (impl->hint != GDK_WINDOW_TYPE_HINT_DIALOG &&
       new_state & GDK_WINDOW_STATE_FOCUSED)
@@ -1353,7 +1372,6 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
 
   gdk_wayland_window_sync_parent (window, NULL);
   gdk_wayland_window_sync_title (window);
-  gdk_wayland_window_sync_margin (window);
 
   if (window->state & GDK_WINDOW_STATE_MAXIMIZED)
     xdg_surface_set_maximized (impl->display_server.xdg_surface);
@@ -2117,7 +2135,7 @@ gdk_window_wayland_input_shape_combine_region (GdkWindow            *window,
       cairo_region_translate (impl->input_region, offset_x, offset_y);
     }
 
-  gdk_wayland_window_sync_input_region (window);
+  impl->input_region_dirty = TRUE;
 }
 
 static void
@@ -2831,7 +2849,7 @@ gdk_wayland_window_set_opaque_region (GdkWindow      *window,
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
   impl->opaque_region = cairo_region_reference (region);
-  gdk_wayland_window_sync_opaque_region (window);
+  impl->opaque_region_dirty = TRUE;
 }
 
 static void
@@ -2858,7 +2876,6 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
   impl->margin_right = right;
   impl->margin_top = top;
   impl->margin_bottom = bottom;
-  gdk_wayland_window_sync_margin (window);
 }
 
 static gboolean
