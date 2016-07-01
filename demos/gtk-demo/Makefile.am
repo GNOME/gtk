@@ -14,6 +14,7 @@ demos_base =					\
 	combobox.c				\
 	css_accordion.c                         \
 	css_basics.c				\
+	css_blendmodes.c			\
 	css_multiplebgs.c			\
 	css_pixbufs.c				\
 	css_shadows.c				\

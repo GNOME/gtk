@@ -20,6 +20,13 @@
     <file>css_basics.css</file>
     <file>reset.css</file>
   </gresource>
+  <gresource prefix="/css_blendmodes">
+    <file>css_blendmodes.css</file>
+    <file>blendmodes.ui</file>
+    <file>blends.png</file>
+    <file>ducky.png</file>
+    <file>cmy.jpg</file>
+  </gresource>
   <gresource prefix="/css_multiplebgs">
     <file>css_multiplebgs.css</file>
     <file>brick.png</file>
@@ -130,6 +137,7 @@
     <file>combobox.c</file>
     <file>css_accordion.c</file>
     <file>css_basics.c</file>
+    <file>css_blendmodes.c</file>
     <file>css_multiplebgs.c</file>
     <file>css_pixbufs.c</file>
     <file>css_shadows.c</file>
