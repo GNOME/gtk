@@ -44,6 +44,7 @@
 #include "gdkwaylandmonitor.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
 #include "tablet-unstable-v2-client-protocol.h"
+#include "xdg-shell-unstable-v6-client-protocol.h"
 
 /**
  * SECTION:wayland_interaction
@@ -112,9 +113,9 @@ _gdk_wayland_display_async_roundtrip (GdkWaylandDisplay *display_wayland)
 }
 
 static void
-xdg_shell_ping (void             *data,
-                struct xdg_shell *xdg_shell,
-                uint32_t          serial)
+xdg_shell_ping (void                 *data,
+                struct zxdg_shell_v6 *xdg_shell,
+                uint32_t              serial)
 {
   GdkWaylandDisplay *display_wayland = data;
 
@@ -123,10 +124,10 @@ xdg_shell_ping (void             *data,
   GDK_NOTE (EVENTS,
             g_message ("ping, shell %p, serial %u\n", xdg_shell, serial));
 
-  xdg_shell_pong (xdg_shell, serial);
+  zxdg_shell_v6_pong (xdg_shell, serial);
 }
 
-static const struct xdg_shell_listener xdg_shell_listener = {
+static const struct zxdg_shell_v6_listener xdg_shell_listener = {
   xdg_shell_ping,
 };
 
@@ -353,12 +354,14 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id, &wl_shm_interface, 1);
       wl_shm_add_listener (display_wayland->shm, &wl_shm_listener, display_wayland);
     }
-  else if (strcmp (interface, "xdg_shell") == 0)
+  else if (strcmp (interface, "zxdg_shell_v6") == 0)
     {
       display_wayland->xdg_shell =
-        wl_registry_bind (display_wayland->wl_registry, id, &xdg_shell_interface, 1);
-      xdg_shell_use_unstable_version (display_wayland->xdg_shell, XDG_SHELL_VERSION_CURRENT);
-      xdg_shell_add_listener (display_wayland->xdg_shell, &xdg_shell_listener, display_wayland);
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &zxdg_shell_v6_interface, 1);
+      zxdg_shell_v6_add_listener (display_wayland->xdg_shell,
+                                  &xdg_shell_listener,
+                                  display_wayland);
     }
   else if (strcmp (interface, "gtk_shell1") == 0)
     {
