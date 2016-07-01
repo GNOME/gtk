@@ -472,6 +472,8 @@ struct _GdkPoint
  * @GDK_GL_ERROR_NOT_AVAILABLE: OpenGL support is not available
  * @GDK_GL_ERROR_UNSUPPORTED_FORMAT: The requested visual format is not supported
  * @GDK_GL_ERROR_UNSUPPORTED_PROFILE: The requested profile is not supported
+ * @GDK_GL_ERROR_COMPILATION_FAILED: The shader compilation failed (available since 3.22)
+ * @GDK_GL_ERROR_LINK_FAILED: The shader linking failed (available since 3.22)
  *
  * Error enumeration for #GdkGLContext.
  *
@@ -480,7 +482,9 @@ struct _GdkPoint
 typedef enum {
   GDK_GL_ERROR_NOT_AVAILABLE,
   GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-  GDK_GL_ERROR_UNSUPPORTED_PROFILE
+  GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+  GDK_GL_ERROR_COMPILATION_FAILED,
+  GDK_GL_ERROR_LINK_FAILED
 } GdkGLError;
 
 /**
