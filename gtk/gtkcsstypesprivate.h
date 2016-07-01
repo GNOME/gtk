@@ -198,6 +198,7 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_OUTLINE_COLOR,
   GTK_CSS_PROPERTY_BACKGROUND_REPEAT,
   GTK_CSS_PROPERTY_BACKGROUND_IMAGE,
+  GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE,
   GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE,
   GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT,
   GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE,
@@ -229,6 +230,25 @@ enum { /*< skip >*/
   /* add more */
   GTK_CSS_PROPERTY_N_PROPERTIES
 };
+
+typedef enum /*< skip >*/ {
+  GTK_CSS_BLEND_MODE_COLOR,
+  GTK_CSS_BLEND_MODE_COLOR_BURN,
+  GTK_CSS_BLEND_MODE_COLOR_DODGE,
+  GTK_CSS_BLEND_MODE_DARKEN,
+  GTK_CSS_BLEND_MODE_DIFFERENCE,
+  GTK_CSS_BLEND_MODE_EXCLUSION,
+  GTK_CSS_BLEND_MODE_HARD_LIGHT,
+  GTK_CSS_BLEND_MODE_HUE,
+  GTK_CSS_BLEND_MODE_LIGHTEN,
+  GTK_CSS_BLEND_MODE_LUMINOSITY,
+  GTK_CSS_BLEND_MODE_MULTIPLY,
+  GTK_CSS_BLEND_MODE_NORMAL,
+  GTK_CSS_BLEND_MODE_OVERLAY,
+  GTK_CSS_BLEND_MODE_SATURATE,
+  GTK_CSS_BLEND_MODE_SCREEN,
+  GTK_CSS_BLEND_MODE_SOFT_LIGHT
+} GtkCssBlendMode;
 
 typedef enum /*< skip >*/ {
   GTK_CSS_IMAGE_BUILTIN_NONE,
@@ -371,6 +391,8 @@ typedef enum /*< skip >*/ {
   GTK_CSS_S,
   GTK_CSS_MS,
 } GtkCssUnit;
+
+cairo_operator_t        _gtk_css_blend_mode_get_operator         (GtkCssBlendMode    mode);
 
 GtkCssChange            _gtk_css_change_for_sibling              (GtkCssChange       match);
 GtkCssChange            _gtk_css_change_for_child                (GtkCssChange       match);

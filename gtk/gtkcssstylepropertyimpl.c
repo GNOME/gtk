@@ -986,6 +986,24 @@ parse_border_width (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+blend_mode_value_parse_one (GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_blend_mode_value_try_parse (parser);
+
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
+blend_mode_value_parse (GtkCssStyleProperty *property,
+                        GtkCssParser        *parser)
+{
+  return _gtk_css_array_value_parse (parser, blend_mode_value_parse_one);
+}
+
+static GtkCssValue *
 background_repeat_value_parse_one (GtkCssParser *parser)
 {
   GtkCssValue *value = _gtk_css_background_repeat_value_try_parse (parser);
@@ -1564,6 +1582,16 @@ _gtk_css_style_property_init_properties (void)
                                           background_image_value_query,
                                           background_image_value_assign,
                                           _gtk_css_array_value_new (_gtk_css_image_value_new (NULL)));
+
+  gtk_css_style_property_register        ("background-blend-mode",
+                                          GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE,
+                                          G_TYPE_NONE,
+                                          0,
+                                          GTK_CSS_AFFECTS_BACKGROUND,
+                                          blend_mode_value_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_blend_mode_value_new (GTK_CSS_BLEND_MODE_NORMAL)));
 
   gtk_css_style_property_register        ("border-image-source",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE,

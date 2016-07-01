@@ -27,6 +27,10 @@
 
 G_BEGIN_DECLS
 
+GtkCssValue *   _gtk_css_blend_mode_value_new         (GtkCssBlendMode    blend_mode);
+GtkCssValue *   _gtk_css_blend_mode_value_try_parse   (GtkCssParser      *parser);
+GtkCssBlendMode _gtk_css_blend_mode_value_get         (const GtkCssValue *value);
+
 GtkCssValue *   _gtk_css_border_style_value_new       (GtkBorderStyle     border_style);
 GtkCssValue *   _gtk_css_border_style_value_try_parse (GtkCssParser      *parser);
 GtkBorderStyle  _gtk_css_border_style_value_get       (const GtkCssValue *value);

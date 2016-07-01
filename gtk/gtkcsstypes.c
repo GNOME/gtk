@@ -22,6 +22,46 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
 
+cairo_operator_t
+_gtk_css_blend_mode_get_operator (GtkCssBlendMode mode)
+{
+  switch (mode)
+    {
+    case GTK_CSS_BLEND_MODE_COLOR:
+      return CAIRO_OPERATOR_HSL_COLOR;
+    case GTK_CSS_BLEND_MODE_COLOR_BURN:
+      return CAIRO_OPERATOR_COLOR_BURN;
+    case GTK_CSS_BLEND_MODE_COLOR_DODGE:
+      return CAIRO_OPERATOR_COLOR_DODGE;
+    case GTK_CSS_BLEND_MODE_DARKEN:
+      return CAIRO_OPERATOR_DARKEN;
+    case GTK_CSS_BLEND_MODE_DIFFERENCE:
+      return CAIRO_OPERATOR_DIFFERENCE;
+    case GTK_CSS_BLEND_MODE_EXCLUSION:
+      return CAIRO_OPERATOR_EXCLUSION;
+    case GTK_CSS_BLEND_MODE_HARD_LIGHT:
+      return CAIRO_OPERATOR_HARD_LIGHT;
+    case GTK_CSS_BLEND_MODE_HUE:
+      return CAIRO_OPERATOR_HSL_HUE;
+    case GTK_CSS_BLEND_MODE_LIGHTEN:
+      return CAIRO_OPERATOR_LIGHTEN;
+    case GTK_CSS_BLEND_MODE_LUMINOSITY:
+      return CAIRO_OPERATOR_HSL_LUMINOSITY;
+    case GTK_CSS_BLEND_MODE_MULTIPLY:
+      return CAIRO_OPERATOR_MULTIPLY;
+    case GTK_CSS_BLEND_MODE_OVERLAY:
+      return CAIRO_OPERATOR_OVERLAY;
+    case GTK_CSS_BLEND_MODE_SATURATE:
+      return CAIRO_OPERATOR_SATURATE;
+    case GTK_CSS_BLEND_MODE_SCREEN:
+      return CAIRO_OPERATOR_SCREEN;
+
+    case GTK_CSS_BLEND_MODE_NORMAL:
+    default:
+      return CAIRO_OPERATOR_OVER;
+    }
+}
+
 GtkCssChange
 _gtk_css_change_for_sibling (GtkCssChange match)
 {
