@@ -1110,6 +1110,15 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>not supported: urls without quotes, CSS radial gradients, colors in crossfades</entry>
             </row>
             <row>
+              <entry>background-blend-mode</entry>
+              <entry><code>〈blend-mode〉 [ , 〈blend-mode〉 ]*</code></entry>
+              <entry><code>normal</code></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry></entry>
+              <entry>only affects multiple backgrounds</entry>
+            </row>
+            <row>
               <entry>box‑shadow</entry>
               <entry><code>none | 〈box shadow〉 [ , 〈box shadow〉 ]*</code></entry>
               <entry><code>none</code></entry>
@@ -1144,12 +1153,17 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <code>〈bg-image〉 = 〈image〉 | none</code>
 <code>〈bg-layer〉 = 〈bg-image〉 || 〈position〉 [ / 〈bg-size〉 ]? || 〈bg-repeat〉 || 〈box〉 || 〈box〉</code>
 <code>〈final-bg-layer〉 = 〈bg-image〉 || 〈position〉 [ / 〈bg-size〉 ]? || 〈bg-repeat〉 || 〈box〉 || 〈box〉|| 〈color〉</code>
+<code>〈blend-mode〉 = color || color-burn || color-dodge || darken || difference || exclusion || hard-light || hue || lighten || luminosity || multiply || normal || overlay || saturate || screen || soft-light</code>
 <code>〈box shadow〉 = inset? &amp;&amp; 〈length〉{2,4}? &amp;&amp; 〈color〉?</code>
 </literallayout>
 
       <para>
         As in CSS, the background color is rendered underneath all the background image layers, so it will only be visible if
         background images are absent or have transparency.
+      </para>
+
+      <para>
+        Alternatively, multiple backgrounds can be blended using the <code>background-blend-mode</code> property.
       </para>
 
       <table pgwide="1">
