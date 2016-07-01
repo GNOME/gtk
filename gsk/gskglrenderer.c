@@ -12,12 +12,6 @@
 
 #include <epoxy/gl.h>
 
-typedef enum {
-  GSK_BLEND_MODE_NONE,
-
-  GSK_BLEND_MODE_MULTIPLY
-} GskBlendMode;
-
 typedef struct {
   guint vao_id;
   guint buffer_id;
@@ -772,7 +766,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   item.opaque = gsk_render_node_is_opaque (node);
   item.opacity = gsk_render_node_get_opacity (node);
 
-  item.blend_mode = parent != NULL ? GSK_BLEND_MODE_MULTIPLY : GSK_BLEND_MODE_NONE;
+  item.blend_mode = parent != NULL ? GSK_BLEND_MODE_MULTIPLY : GSK_BLEND_MODE_DEFAULT;
 
   /* GL objects */
   item.render_data.vao_id = self->vao_id;
