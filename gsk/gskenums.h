@@ -43,4 +43,43 @@ typedef enum {
   GSK_SCALING_FILTER_TRILINEAR
 } GskScalingFilter;
 
+/**
+ * GskBlendMode:
+ * @GSK_BLEND_MODE_DEFAULT: The default blend mode, which specifies no blending
+ * @GSK_BLEND_MODE_MULTIPLY: The source color is multiplied by the destination
+ *   and replaces the destination
+ * @GSK_BLEND_MODE_SCREEN:
+ * @GSK_BLEND_MODE_OVERLAY: ...
+ * @GSK_BLEND_MODE_DARKEN: ...
+ * @GSK_BLEND_MODE_LIGHTEN: ...
+ * @GSK_BLEND_MODE_COLOR_DODGE: ...
+ * @GSK_BLEND_MODE_COLOR_BURN: ...
+ * @GSK_BLEND_MODE_HARD_LIGHT: ...
+ * @GSK_BLEND_MODE_SOFT_LIGHT: ...
+ * @GSK_BLEND_MODE_DIFFERENCE: ...
+ * @GSK_BLEND_MODE_EXCLUSION: ...
+ *
+ * The blend modes available for render nodes.
+ *
+ * The implementation of each blend mode is deferred to the
+ * rendering pipeline.
+ *
+ * Since: 3.22
+ */
+typedef enum {
+  GSK_BLEND_MODE_DEFAULT = 0,
+
+  GSK_BLEND_MODE_MULTIPLY,
+  GSK_BLEND_MODE_SCREEN,
+  GSK_BLEND_MODE_OVERLAY,
+  GSK_BLEND_MODE_DARKEN,
+  GSK_BLEND_MODE_LIGHTEN,
+  GSK_BLEND_MODE_COLOR_DODGE,
+  GSK_BLEND_MODE_COLOR_BURN,
+  GSK_BLEND_MODE_HARD_LIGHT,
+  GSK_BLEND_MODE_SOFT_LIGHT,
+  GSK_BLEND_MODE_DIFFERENCE,
+  GSK_BLEND_MODE_EXCLUSION
+} GskBlendMode;
+
 #endif /* __GSK_TYPES_H__ */
