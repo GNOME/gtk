@@ -766,7 +766,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   item.opaque = gsk_render_node_is_opaque (node);
   item.opacity = gsk_render_node_get_opacity (node);
 
-  item.blend_mode = parent != NULL ? GSK_BLEND_MODE_MULTIPLY : GSK_BLEND_MODE_DEFAULT;
+  item.blend_mode = gsk_render_node_get_blend_mode (node);
 
   /* GL objects */
   item.render_data.vao_id = self->vao_id;
