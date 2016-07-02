@@ -190,7 +190,6 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
       g_warning ("Failed to get the GNOME session proxy: %s", error->message);
       g_clear_error (&error);
       g_clear_object (&dbus->sm_proxy);
-      goto out;
     }
 
   if (!dbus->sm_proxy)
@@ -228,7 +227,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   if (error)
     {
       g_warning ("Failed to register client: %s", error->message);
-      g_error_free (error);
+      g_clear_error (&error);
       g_clear_object (&dbus->sm_proxy);
       goto out;
     }
@@ -238,7 +237,6 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   g_debug ("Registered client at '%s'", dbus->client_path);
 
-  /* Try the GNOME client interface */
   if (g_str_equal (g_dbus_proxy_get_name (dbus->sm_proxy), GNOME_DBUS_NAME))
     {
       bus_name = GNOME_DBUS_NAME;
@@ -259,8 +257,10 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
                                               &error);
   if (error)
     {
-      g_warning ("Failed to connect to the GNOME client proxy: %s", error->message);
+      g_warning ("Failed to get client proxy: %s", error->message);
       g_clear_error (&error);
+      g_free (dbus->client_path);
+      dbus->client_path = NULL;
       goto out;
     }
 
@@ -313,6 +313,23 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
                   "gtk-shell-shows-app-menu", FALSE,
                   "gtk-shell-shows-menubar", FALSE,
                   NULL);
+
+  if (dbus->sm_proxy == NULL)
+    {
+      dbus->inhibit_proxy = g_dbus_proxy_new_sync (dbus->session,
+                                                   G_DBUS_PROXY_FLAGS_NONE,
+                                                   NULL,
+                                                   "org.freedesktop.portal.Desktop",
+                                                   "/org/freedesktop/portal/desktop",
+                                                   "org.freedesktop.portal.Inhibit",
+                                                   NULL,
+                                                   &error);
+      if (error)
+        {
+          g_warning ("Failed to get an inhibit portal proxy: %s", error->message);
+          g_clear_error (&error);
+        }
+    }
 }
 
 static void
@@ -438,6 +455,22 @@ gtk_application_impl_dbus_get_window_system_id (GtkApplicationImplDBus *dbus,
   return GTK_APPLICATION_IMPL_DBUS_GET_CLASS (dbus)->get_window_system_id (dbus, window);
 }
 
+static int next_cookie;
+
+typedef struct {
+  char *handle;
+  int cookie;
+} InhibitHandle;
+
+static void
+inhibit_handle_free (gpointer data)
+{
+  InhibitHandle *handle = data;
+
+  g_free (handle->handle);
+  g_free (handle);
+}
+
 static guint
 gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
                                    GtkWindow                  *window,
@@ -450,37 +483,84 @@ gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
   guint cookie;
   static gboolean warned = FALSE;
 
-  if (dbus->sm_proxy == NULL)
-    return 0;
-
-  res = g_dbus_proxy_call_sync (dbus->sm_proxy,
-                                "Inhibit",
-                                g_variant_new ("(s@usu)",
-                                               dbus->application_id,
-                                               window ? gtk_application_impl_dbus_get_window_system_id (dbus, window) : g_variant_new_uint32 (0),
-                                               reason,
-                                               flags),
-                                G_DBUS_CALL_FLAGS_NONE,
-                                G_MAXINT,
-                                NULL,
-                                &error);
-
- if (error)
+  if (dbus->sm_proxy)
     {
-      if (!warned)
+      res = g_dbus_proxy_call_sync (dbus->sm_proxy,
+                                    "Inhibit",
+                                    g_variant_new ("(s@usu)",
+                                                   dbus->application_id,
+                                                   window ? gtk_application_impl_dbus_get_window_system_id (dbus, window) : g_variant_new_uint32 (0),
+                                                   reason,
+                                                   flags),
+                                    G_DBUS_CALL_FLAGS_NONE,
+                                    G_MAXINT,
+                                    NULL,
+                                    &error);
+
+      if (res)
         {
-          g_warning ("Calling Inhibit failed: %s", error->message);
-          warned = TRUE;
+          g_variant_get (res, "(u)", &cookie);
+          g_variant_unref (res);
+          return cookie;
         }
-      g_error_free (error);
-      return 0;
+
+      if (error)
+        {
+          if (!warned)
+            {
+              g_warning ("Calling %s.Inhibit failed: %s",
+                         g_dbus_proxy_get_interface_name (dbus->sm_proxy),
+                         error->message);
+              warned = TRUE;
+            }
+          g_clear_error (&error);
+        }
+    }
+  else if (dbus->inhibit_proxy)
+    {
+      GVariantBuilder options;
+
+      g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
+      g_variant_builder_add (&options, "{sv}", "reason", g_variant_new_string (reason));
+      res = g_dbus_proxy_call_sync (dbus->inhibit_proxy,
+                                    "Inhibit",
+                                    g_variant_new ("(su@a{sv})",
+                                                   "", /* window */
+                                                   flags,
+                                                   g_variant_builder_end (&options)),
+                                    G_DBUS_CALL_FLAGS_NONE,
+                                    G_MAXINT,
+                                    NULL,
+                                    &error);
+      if (res)
+        {
+          InhibitHandle *handle;
+
+          handle = g_new (InhibitHandle, 1);
+          handle->cookie = ++next_cookie;
+
+          g_variant_get (res, "(o)", &handle->handle);
+          g_variant_unref (res);
+
+          dbus->inhibit_handles = g_slist_prepend (dbus->inhibit_handles, handle);
+
+          return handle->cookie;
+        }
+
+      if (error)
+        {
+          if (!warned)
+            {
+              g_warning ("Calling %s.Inhibit failed: %s",
+                         g_dbus_proxy_get_interface_name (dbus->inhibit_proxy),
+                         error->message);
+              warned = TRUE;
+            }
+          g_clear_error (&error);
+        }
     }
 
-  g_variant_get (res, "(u)", &cookie);
-  g_variant_unref (res);
-
-  return cookie;
-
+  return 0;
 }
 
 static void
@@ -489,16 +569,40 @@ gtk_application_impl_dbus_uninhibit (GtkApplicationImpl *impl,
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
 
-  /* Application could only obtain a cookie through a session
-   * manager proxy, so it's valid to assert its presence here. */
-  g_return_if_fail (dbus->sm_proxy != NULL);
+  if (dbus->sm_proxy)
+    {
+      g_dbus_proxy_call (dbus->sm_proxy,
+                         "Uninhibit",
+                         g_variant_new ("(u)", cookie),
+                         G_DBUS_CALL_FLAGS_NONE,
+                         G_MAXINT,
+                         NULL, NULL, NULL);
+    }
+  else if (dbus->inhibit_proxy)
+    {
+      GSList *l;
 
-  g_dbus_proxy_call (dbus->sm_proxy,
-                     "Uninhibit",
-                     g_variant_new ("(u)", cookie),
-                     G_DBUS_CALL_FLAGS_NONE,
-                     G_MAXINT,
-                     NULL, NULL, NULL);
+      for (l = dbus->inhibit_handles; l; l = l->next)
+        {
+          InhibitHandle *handle = l->data;
+          if (handle->cookie == cookie)
+            {
+              g_dbus_connection_call (dbus->session,
+                                      "org.freedesktop.portal.Desktop",
+                                      handle->handle,
+                                      "org.freedesktop.portal.Request",
+                                      "Close",
+                                      g_variant_new ("()"),
+                                      G_VARIANT_TYPE_UNIT,
+                                      G_DBUS_CALL_FLAGS_NONE,
+                                      G_MAXINT,
+                                      NULL, NULL, NULL);
+              dbus->inhibit_handles = g_slist_remove (dbus->inhibit_handles, handle);
+              inhibit_handle_free (handle);
+              break;
+            }
+        }
+    }
 }
 
 static gboolean
@@ -525,7 +629,9 @@ gtk_application_impl_dbus_is_inhibited (GtkApplicationImpl         *impl,
     {
       if (!warned)
         {
-          g_warning ("Calling IsInhibited failed: %s", error->message);
+          g_warning ("Calling %s.IsInhibited failed: %s",
+                     g_dbus_proxy_get_interface_name (dbus->sm_proxy),
+                     error->message);
           warned = TRUE;
         }
       g_error_free (error);
@@ -580,6 +686,8 @@ gtk_application_impl_dbus_finalize (GObject *object)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) object;
 
+  g_clear_object (&dbus->inhibit_proxy);
+  g_slist_free_full (dbus->inhibit_handles, inhibit_handle_free);
   g_free (dbus->app_menu_path);
   g_free (dbus->menubar_path);
 

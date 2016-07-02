@@ -129,6 +129,10 @@ typedef struct
   GDBusProxy      *sm_proxy;
   GDBusProxy      *client_proxy;
   gchar           *client_path;
+
+  /* Portal support */
+  GDBusProxy      *inhibit_proxy;
+  GSList *inhibit_handles;
 } GtkApplicationImplDBus;
 
 typedef struct
