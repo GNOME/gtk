@@ -825,6 +825,8 @@ gtk_print_unix_dialog_constructed (GObject *object)
        gtk_header_bar_pack_end (GTK_HEADER_BAR (parent), button);
        g_object_unref (button);
     }
+
+  update_dialog_from_capabilities (GTK_PRINT_UNIX_DIALOG (object));
 }
 
 static void
