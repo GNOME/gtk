@@ -13,6 +13,10 @@
 
 #include <epoxy/gl.h>
 
+#define SHADER_VERSION_GLES             110
+#define SHADER_VERSION_GL_LEGACY        120
+#define SHADER_VERSION_GL3              150
+
 typedef struct {
   guint vao_id;
   guint buffer_id;
@@ -51,6 +55,21 @@ typedef struct {
   RenderData *parent_data;
 } RenderItem;
 
+enum {
+  MVP,
+  MAP,
+  PARENT_MAP,
+  ALPHA,
+  BLEND_MODE,
+  N_UNIFORMS
+};
+
+enum {
+  POSITION,
+  UV,
+  N_ATTRIBUTES
+};
+
 struct _GskGLRenderer
 {
   GskRenderer parent_instance;
@@ -65,14 +84,10 @@ struct _GskGLRenderer
   guint depth_stencil_buffer;
   guint texture_id;
 
-  guint program_id;
-  guint mvp_location;
-  guint map_location;
-  guint parentMap_location;
-  guint uv_location;
-  guint position_location;
-  guint alpha_location;
-  guint blendMode_location;
+  GQuark uniforms[N_UNIFORMS];
+  GQuark attributes[N_ATTRIBUTES];
+
+  GskShaderBuilder *blend_program;
 
   guint vao_id;
 
@@ -283,41 +298,21 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
   const char *vertex_preamble;
   const char *fragment_preamble;
   int vertex_id = -1, fragment_id = -1;
-  int program_id = -1;
   GError *error = NULL;
   gboolean res = FALSE;
-  enum {
-    MVP,
-    MAP,
-    PARENT_MAP,
-    ALPHA,
-    BLEND_MODE,
-    N_UNIFORMS
-  };
-  enum {
-    POSITION,
-    UV,
-    N_ATTRIBUTES
-  };
-  GQuark uniforms[N_UNIFORMS];
-  GQuark attributes[N_ATTRIBUTES];
-  
+
   builder = gsk_shader_builder_new ();
 
   gsk_shader_builder_set_resource_base_path (builder, "/org/gtk/libgsk/glsl");
 
-  uniforms[MVP] = gsk_shader_builder_add_uniform (builder, "mvp");
-  uniforms[MAP] = gsk_shader_builder_add_uniform (builder, "map");
-  uniforms[PARENT_MAP] = gsk_shader_builder_add_uniform (builder, "parentMap");
-  uniforms[ALPHA] = gsk_shader_builder_add_uniform (builder, "alpha");
-  uniforms[BLEND_MODE] = gsk_shader_builder_add_uniform (builder, "blendMode");
+  self->uniforms[MVP] = gsk_shader_builder_add_uniform (builder, "mvp");
+  self->uniforms[MAP] = gsk_shader_builder_add_uniform (builder, "map");
+  self->uniforms[PARENT_MAP] = gsk_shader_builder_add_uniform (builder, "parentMap");
+  self->uniforms[ALPHA] = gsk_shader_builder_add_uniform (builder, "alpha");
+  self->uniforms[BLEND_MODE] = gsk_shader_builder_add_uniform (builder, "blendMode");
   
-  attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "position");
-  attributes[UV] = gsk_shader_builder_add_attribute (builder, "uv");
-
-#define SHADER_VERSION_GLES             110
-#define SHADER_VERSION_GL_LEGACY        120
-#define SHADER_VERSION_GL3              150
+  self->attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "position");
+  self->attributes[UV] = gsk_shader_builder_add_attribute (builder, "uv");
 
   if (gdk_gl_context_get_use_es (self->context))
     {
@@ -371,9 +366,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
       goto out;
     }
 
-  program_id = gsk_shader_builder_create_program (builder,
-                                                  vertex_id, fragment_id,
-                                                  &error);
+  gsk_shader_builder_create_program (builder, vertex_id, fragment_id, &error);
   if (error != NULL)
     {
       g_critical ("Unable to create program: %s", error->message);
@@ -381,24 +374,17 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
       goto out;
     }
 
-  self->program_id = program_id;
-  self->mvp_location = gsk_shader_builder_get_uniform_location (builder, uniforms[MVP]);
-  self->map_location = gsk_shader_builder_get_uniform_location (builder, uniforms[MAP]);
-  self->parentMap_location = gsk_shader_builder_get_uniform_location (builder, uniforms[PARENT_MAP]);
-  self->alpha_location = gsk_shader_builder_get_uniform_location (builder, uniforms[ALPHA]);
-  self->blendMode_location = gsk_shader_builder_get_uniform_location (builder, uniforms[BLEND_MODE]);
-  self->position_location = gsk_shader_builder_get_attribute_location (builder, attributes[POSITION]);
-  self->uv_location = gsk_shader_builder_get_attribute_location (builder, attributes[UV]);
+  self->blend_program = g_object_ref (builder);
 
   res = TRUE;
 
 out:
+  g_object_unref (builder);
+
   if (vertex_id > 0)
     glDeleteShader (vertex_id);
   if (fragment_id > 0)
     glDeleteShader (fragment_id);
-
-  g_object_unref (builder);
 
   return res;
 }
@@ -406,10 +392,13 @@ out:
 static void
 gsk_gl_renderer_destroy_programs (GskGLRenderer *self)
 {
-  if (self->program_id != 0)
+  if (self->blend_program != NULL)
     {
-      glDeleteProgram (self->program_id);
-      self->program_id = 0;
+      int program_id = gsk_shader_builder_get_program (self->blend_program);
+
+      glDeleteProgram (program_id);
+
+      g_clear_object (&self->blend_program);
     }
 }
 
@@ -777,14 +766,24 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   /* GL objects */
   item.render_data.vao_id = self->vao_id;
   item.render_data.buffer_id = 0;
-  item.render_data.program_id = self->program_id;
-  item.render_data.map_location = self->map_location;
-  item.render_data.parentMap_location = self->parentMap_location;
-  item.render_data.mvp_location = self->mvp_location;
-  item.render_data.uv_location = self->uv_location;
-  item.render_data.position_location = self->position_location;
-  item.render_data.alpha_location = self->alpha_location;
-  item.render_data.blendMode_location = self->blendMode_location;
+
+  item.render_data.program_id = gsk_shader_builder_get_program (self->blend_program);
+
+  item.render_data.map_location =
+    gsk_shader_builder_get_uniform_location (self->blend_program, self->uniforms[MAP]);
+  item.render_data.parentMap_location =
+    gsk_shader_builder_get_uniform_location (self->blend_program, self->uniforms[PARENT_MAP]);
+  item.render_data.mvp_location =
+    gsk_shader_builder_get_uniform_location (self->blend_program, self->uniforms[MVP]);
+  item.render_data.alpha_location =
+    gsk_shader_builder_get_uniform_location (self->blend_program, self->uniforms[ALPHA]);
+  item.render_data.blendMode_location =
+    gsk_shader_builder_get_uniform_location (self->blend_program, self->uniforms[BLEND_MODE]);
+
+  item.render_data.position_location =
+    gsk_shader_builder_get_attribute_location (self->blend_program, self->attributes[POSITION]);
+  item.render_data.uv_location =
+    gsk_shader_builder_get_attribute_location (self->blend_program, self->attributes[UV]);
 
   if (parent != NULL)
     item.parent_data = &(parent->render_data);
