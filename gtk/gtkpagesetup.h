@@ -127,6 +127,11 @@ void		   gtk_page_setup_to_key_file	    (GtkPageSetup        *setup,
 						     GKeyFile            *key_file,
 						     const gchar         *group_name);
 
+GDK_AVAILABLE_IN_3_22
+GVariant          *gtk_page_setup_to_gvariant       (GtkPageSetup        *setup);
+GDK_AVAILABLE_IN_3_22
+GtkPageSetup      *gtk_page_setup_new_from_gvariant (GVariant            *variant);
+
 G_END_DECLS
 
 #endif /* __GTK_PAGE_SETUP_H__ */
