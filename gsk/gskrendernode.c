@@ -21,7 +21,22 @@
  * @title: GskRenderNode
  * @Short_desc: Simple scene graph element
  *
- * TODO
+ * #GskRenderNode is the basic block in a scene graph to be
+ * rendered using #GskRenderer.
+ *
+ * Each node has a parent, except the top-level node; each node may have
+ * children nodes.
+ *
+ * Each node has an associated drawing surface, which has the size of
+ * the rectangle set using gsk_render_node_set_bounds(). Nodes have an
+ * associated transformation matrix, which is used to position and
+ * transform the node on the scene graph; additionally, they also have
+ * a child transformation matrix, which will be applied to each child.
+ *
+ * Render nodes are meant to be transient; once they have been associated
+ * to a #GskRenderer it's safe to release any reference you have on them.
+ * Once a #GskRenderNode has been rendered, it is marked as immutable, and
+ * cannot be modified.
  */
 
 #include "config.h"
@@ -1305,6 +1320,12 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
   return res;
 }
 
+/*< private >
+ * gsk_render_node_make_immutable:
+ * @node: a #GskRenderNode
+ *
+ * Marks @node, and all its children, as immutable.
+ */
 void
 gsk_render_node_make_immutable (GskRenderNode *node)
 {
@@ -1321,6 +1342,14 @@ gsk_render_node_make_immutable (GskRenderNode *node)
     gsk_render_node_make_immutable (child);
 }
 
+/*< private >
+ * gsk_render_node_get_size:
+ * @root: a #GskRenderNode
+ *
+ * Computes the total number of children of @root.
+ *
+ * Returns: the size of the tree
+ */
 int
 gsk_render_node_get_size (GskRenderNode *root)
 {
@@ -1338,6 +1367,17 @@ gsk_render_node_get_size (GskRenderNode *root)
   return res;
 }
 
+/**
+ * gsk_value_set_render_node:
+ * @value: a #GValue
+ * @node: (nullable): a #GskRenderNode
+ *
+ * Sets the @node into the @value.
+ *
+ * This function acquires a reference on @node.
+ *
+ * Since: 3.22
+ */
 void
 gsk_value_set_render_node (GValue        *value,
 			   GskRenderNode *node)
@@ -1361,6 +1401,15 @@ gsk_value_set_render_node (GValue        *value,
     gsk_render_node_unref (old_node);
 }
 
+/**
+ * gsk_value_take_render_node:
+ * @value: a #GValue
+ * @node: (transfer full) (nullable): a #GskRenderNode
+ *
+ * Sets the @node into the @value, without taking a reference to it.
+ *
+ * Since: 3.22
+ */
 void
 gsk_value_take_render_node (GValue        *value,
 			    GskRenderNode *node)
@@ -1385,6 +1434,16 @@ gsk_value_take_render_node (GValue        *value,
     gsk_render_node_unref (old_node);
 }
 
+/**
+ * gsk_value_get_render_node:
+ * @value: a #GValue
+ *
+ * Retrieves the #GskRenderNode stored inside the @value.
+ *
+ * Returns: (transfer none) (nullable): a #GskRenderNode
+ *
+ * Since: 3.22
+ */
 GskRenderNode *
 gsk_value_get_render_node (const GValue *value)
 {
@@ -1393,6 +1452,17 @@ gsk_value_get_render_node (const GValue *value)
   return value->data[0].v_pointer;
 }
 
+/**
+ * gsk_value_dup_render_node:
+ * @value: a #GValue
+ *
+ * Retrieves the #GskRenderNode stored inside the @value, and
+ * acquires a reference to it.
+ *
+ * Returns: (transfer none) (nullable): a #GskRenderNode
+ *
+ * Since: 3.22
+ */
 GskRenderNode *
 gsk_value_dup_render_node (const GValue *value)
 {
