@@ -7371,10 +7371,13 @@ gtk_page_setup_get_page_height
 <SUBSECTION Serialization>
 gtk_page_setup_new_from_file
 gtk_page_setup_new_from_key_file
+gtk_page_setup_new_from_gvariant
 gtk_page_setup_load_file
 gtk_page_setup_load_key_file
 gtk_page_setup_to_file
 gtk_page_setup_to_key_file
+gtk_page_setup_to_gvariant
+
 <SUBSECTION Standard>
 GTK_TYPE_PAGE_SETUP
 GTK_PAGE_SETUP
