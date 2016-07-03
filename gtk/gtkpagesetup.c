@@ -837,3 +837,86 @@ gtk_page_setup_to_key_file (GtkPageSetup *setup,
 			 "Orientation", orientation);
   g_free (orientation);
 }
+
+/**
+ * gtk_page_setup_to_gvariant:
+ * @setup: a #GtkPageSetup
+ *
+ * Serialize page setup to an a{sv} variant.
+ *
+ * Return: (transfer none): a new, floating, #GVariant
+ *
+ * Since: 3.22
+ */
+GVariant *
+gtk_page_setup_to_gvariant (GtkPageSetup *setup)
+{
+  GtkPaperSize *paper_size;
+  GVariant *variant;
+  int i;
+  GVariantBuilder builder;
+  char *orientation;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+
+  paper_size = gtk_page_setup_get_paper_size (setup);
+
+  variant = g_variant_ref_sink (gtk_paper_size_to_gvariant (paper_size));
+  for (i = 0; i < g_variant_n_children (variant); i++)
+    g_variant_builder_add_value (&builder, g_variant_get_child_value (variant, i));
+  g_variant_unref (variant);
+
+  g_variant_builder_add (&builder, "{sv}", "MarginTop", g_variant_new_double (gtk_page_setup_get_top_margin (setup, GTK_UNIT_MM)));
+  g_variant_builder_add (&builder, "{sv}", "MarginBottom", g_variant_new_double (gtk_page_setup_get_bottom_margin (setup, GTK_UNIT_MM)));
+  g_variant_builder_add (&builder, "{sv}", "MarginLeft", g_variant_new_double (gtk_page_setup_get_left_margin (setup, GTK_UNIT_MM)));
+  g_variant_builder_add (&builder, "{sv}", "MarginRight", g_variant_new_double (gtk_page_setup_get_right_margin (setup, GTK_UNIT_MM)));
+
+  orientation = enum_to_string (GTK_TYPE_PAGE_ORIENTATION,
+                                gtk_page_setup_get_orientation (setup));
+  g_variant_builder_add (&builder, "{sv}", "Orientation", g_variant_new_take_string (orientation));
+
+  return g_variant_builder_end (&builder);
+}
+
+/**
+ * gtk_page_setup_new_from_gvariant:
+ * @variant: an a{sv} #GVariant
+ *
+ * Desrialize a page setup from an a{sv} variant in
+ * the format produced by gtk_page_setup_to_gvariant().
+ *
+ * Returns: (transfer full): a new #GtkPageSetup object
+ *
+ * Since: 3.22
+ */
+GtkPageSetup *
+gtk_page_setup_new_from_gvariant (GVariant *variant)
+{
+  GtkPageSetup *setup;
+  const char *orientation;
+  gdouble margin;
+  GtkPaperSize *paper_size;
+
+  g_return_val_if_fail (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT), NULL);
+
+  setup = gtk_page_setup_new ();
+
+  paper_size = gtk_paper_size_new_from_gvariant (variant);
+  gtk_page_setup_set_paper_size (setup, paper_size);
+  gtk_paper_size_free (paper_size);
+
+  if (g_variant_lookup (variant, "MarginTop", "d", &margin))
+    gtk_page_setup_set_top_margin (setup, margin, GTK_UNIT_MM);
+  if (g_variant_lookup (variant, "MarginBottom", "d", &margin))
+    gtk_page_setup_set_bottom_margin (setup, margin, GTK_UNIT_MM);
+  if (g_variant_lookup (variant, "MarginLeft", "d", &margin))
+    gtk_page_setup_set_left_margin (setup, margin, GTK_UNIT_MM);
+  if (g_variant_lookup (variant, "MarginRight", "d", &margin))
+    gtk_page_setup_set_right_margin (setup, margin, GTK_UNIT_MM);
+
+  if (g_variant_lookup (variant, "Orientation", "&s", &orientation))
+    gtk_page_setup_set_orientation (setup, string_to_enum (GTK_TYPE_PAGE_ORIENTATION,
+                                                           orientation));
+
+  return setup;
+}
