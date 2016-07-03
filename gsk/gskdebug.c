@@ -11,6 +11,7 @@ static const GDebugKey gsk_debug_keys[] = {
 
 static const GDebugKey gsk_rendering_keys[] = {
   { "geometry", GSK_RENDERING_MODE_GEOMETRY },
+  { "shaders", GSK_RENDERING_MODE_SHADERS },
 };
 
 gboolean
