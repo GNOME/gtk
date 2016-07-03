@@ -13,7 +13,7 @@ all: exampleapp
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
 exampleapp: $(OBJS)
-	$(CC) -o $(@F) $(LIBS) $(OBJS)
+	$(CC) -o $(@F) $(OBJS) $(LIBS)
 
 clean:
 	rm -f $(OBJS)
