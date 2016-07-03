@@ -7269,10 +7269,12 @@ GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION
 <SUBSECTION Serialization>
 gtk_print_settings_new_from_file
 gtk_print_settings_new_from_key_file
+gtk_print_settings_new_from_gvariant
 gtk_print_settings_load_file
 gtk_print_settings_load_key_file
 gtk_print_settings_to_file
 gtk_print_settings_to_key_file
+gtk_print_settings_to_gvariant
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_SETTINGS
