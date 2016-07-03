@@ -35,6 +35,7 @@ int                     gsk_shader_builder_create_program               (GskShad
                                                                          int               fragment_id,
                                                                          GError          **error);
 
+int                     gsk_shader_builder_get_program                  (GskShaderBuilder *builder);
 int                     gsk_shader_builder_get_uniform_location         (GskShaderBuilder *builder,
                                                                          GQuark            uniform_quark);
 int                     gsk_shader_builder_get_attribute_location       (GskShaderBuilder *builder,
