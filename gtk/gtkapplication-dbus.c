@@ -122,11 +122,6 @@ gtk_application_get_proxy_if_service_present (GDBusConnection *connection,
   GDBusProxy *proxy;
   gchar *owner;
 
-  g_return_val_if_fail (connection != NULL, NULL);
-  g_return_val_if_fail (bus_name != NULL, NULL);
-  g_return_val_if_fail (object_path != NULL, NULL);
-  g_return_val_if_fail (interface != NULL, NULL);
-
   proxy = g_dbus_proxy_new_sync (connection,
                                  flags,
                                  NULL,
@@ -134,18 +129,14 @@ gtk_application_get_proxy_if_service_present (GDBusConnection *connection,
                                  object_path,
                                  interface,
                                  NULL,
-                                 &error);
+                                 error);
 
   /* is there anyone actually providing the service? */
   owner = g_dbus_proxy_get_name_owner (proxy);
   if (owner == NULL)
-    {
-      g_clear_object (&proxy);
-    }
+    g_clear_object (&proxy);
   else
-    {
-      g_free (owner);
-    }
+    g_free (owner);
 
   return proxy;
 }
@@ -159,6 +150,8 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   GError *error = NULL;
   GVariant *res;
   gboolean same_bus;
+  const char *bus_name;
+  const char *client_interface;
 
   dbus->session = g_application_get_dbus_connection (G_APPLICATION (impl->application));
 
@@ -200,7 +193,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
       goto out;
     }
 
-  if(!dbus->sm_proxy)
+  if (!dbus->sm_proxy)
     {
       /* Fallback to trying the Xfce session manager */
       dbus->sm_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
@@ -246,34 +239,29 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   g_debug ("Registered client at '%s'", dbus->client_path);
 
   /* Try the GNOME client interface */
-  dbus->client_proxy = gtk_application_get_proxy_if_service_present (dbus->session, 0,
-                                                                     GNOME_DBUS_NAME,
-                                                                     dbus->client_path,
-                                                                     GNOME_DBUS_CLIENT_INTERFACE,
-                                                                     &error);
+  if (g_str_equal (g_dbus_proxy_get_name (dbus->sm_proxy), GNOME_DBUS_NAME))
+    {
+      bus_name = GNOME_DBUS_NAME;
+      client_interface = GNOME_DBUS_CLIENT_INTERFACE;
+    }
+  else
+    {
+      bus_name = XFCE_DBUS_NAME;
+      client_interface = XFCE_DBUS_CLIENT_INTERFACE;
+    }
+
+  dbus->client_proxy = g_dbus_proxy_new_sync (dbus->session, 0,
+                                              NULL,
+                                              bus_name,
+                                              dbus->client_path,
+                                              client_interface,
+                                              NULL,
+                                              &error);
   if (error)
     {
       g_warning ("Failed to connect to the GNOME client proxy: %s", error->message);
       g_clear_error (&error);
       goto out;
-    }
-
-  if(!dbus->client_proxy)
-    {
-      /* Fallback to trying the Xfce client interface */
-      dbus->client_proxy = gtk_application_get_proxy_if_service_present (dbus->session, 0,
-                                                                         XFCE_DBUS_NAME,
-                                                                         dbus->client_path,
-                                                                         XFCE_DBUS_CLIENT_INTERFACE,
-                                                                         &error);
-      if (error)
-      {
-        g_warning ("Failed to connect to the Xfce client proxy: %s", error->message);
-        g_clear_error (&error);
-        g_free (dbus->client_path);
-        dbus->client_path = NULL;
-        goto out;
-      }
     }
 
   g_signal_connect (dbus->client_proxy, "g-signal", G_CALLBACK (client_proxy_signal), dbus);
