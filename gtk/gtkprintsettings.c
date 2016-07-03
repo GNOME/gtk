@@ -1941,3 +1941,68 @@ gtk_print_settings_to_key_file (GtkPrintSettings  *settings,
 			      (GtkPrintSettingsFunc) add_value_to_key_file,
 			      &data);
 }
+
+static void
+add_to_variant (const gchar *key,
+                const gchar *value,
+                gpointer     data)
+{
+  GVariantBuilder *builder = data;
+  g_variant_builder_add (builder, "{sv}", key, g_variant_new_string (value));
+}
+
+/**
+ * gtk_print_settings_to_gvariant:
+ * @settings: a #GtkPrintSettings
+ *
+ * Serialize print settings to an a{sv} variant.
+ *
+ * Returns: (transfer none): a new, floating, #GVariant
+ *
+ * Since: 3.22
+ */
+GVariant *
+gtk_print_settings_to_gvariant (GtkPrintSettings *settings)
+{
+  GVariantBuilder builder;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+  gtk_print_settings_foreach (settings, add_to_variant, &builder);
+
+  return g_variant_builder_end (&builder);
+}
+
+/**
+ * gtk_print_settings_new_from_gvariant:
+ * @variant: an a{sv} #GVariant
+ *
+ * Deserialize print settings from an a{sv} variant in
+ * the format produced by gtk_print_settings_to_gvariant().
+ *
+ * Returns: (transfer full): a new #GtkPrintSettings object
+ *
+ * Since: 3.22
+ */
+GtkPrintSettings *
+gtk_print_settings_new_from_gvariant (GVariant *variant)
+{
+  GtkPrintSettings *settings;
+  int i;
+
+  g_return_val_if_fail (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT), NULL);
+
+  settings = gtk_print_settings_new ();
+
+  for (i = 0; i < g_variant_n_children (variant); i++)
+    {
+      const char *key;
+      GVariant *v;
+
+      g_variant_get_child (variant, i, "{&sv}", &key, &v);
+      if (g_variant_is_of_type (v, G_VARIANT_TYPE_STRING))
+        gtk_print_settings_set (settings, key, g_variant_get_string (v, NULL));
+      g_variant_unref (v);
+    }
+
+  return settings;
+}

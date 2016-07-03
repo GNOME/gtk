@@ -344,6 +344,12 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_print_settings_set_output_bin        (GtkPrintSettings   *settings,
 								const gchar        *output_bin);
 
+GDK_AVAILABLE_IN_3_22
+GVariant             *gtk_print_settings_to_gvariant           (GtkPrintSettings   *settings);
+GDK_AVAILABLE_IN_3_22
+GtkPrintSettings     *gtk_print_settings_new_from_gvariant     (GVariant           *variant);
+
+
 G_END_DECLS
 
 #endif /* __GTK_PRINT_SETTINGS_H__ */
