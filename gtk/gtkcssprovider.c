@@ -1484,11 +1484,11 @@ parse_declaration (GtkCssScanner *scanner,
           !_gtk_css_parser_begins_with (scanner->parser, '}') &&
           !_gtk_css_parser_is_eof (scanner->parser))
         {
-          gtk_css_provider_error_literal (scanner->provider,
-                                          scanner,
-                                          GTK_CSS_PROVIDER_ERROR,
-                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                          "Junk at end of value");
+          gtk_css_provider_error (scanner->provider,
+                                  scanner,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                  "Junk at end of value for %s", property->name);
           _gtk_css_parser_resync (scanner->parser, TRUE, '}');
           gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
           gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
