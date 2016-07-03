@@ -25,7 +25,7 @@ resources.c: exampleapp.gresource.xml window.ui app-menu.ui
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
 exampleapp: $(OBJS) gschemas.compiled
-	$(CC) -o $(@F) $(LIBS) $(OBJS)
+	$(CC) -o $(@F) $(OBJS) $(LIBS)
 
 clean:
 	rm -f org.gtk.exampleapp.gschema.valid

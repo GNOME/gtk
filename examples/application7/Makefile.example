@@ -25,7 +25,7 @@ resources.c: exampleapp.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --source
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
 exampleapp: $(OBJS) gschemas.compiled
-	$(CC) -o $(@F) $(LIBS) $(OBJS)
+	$(CC) -o $(@F) $(OBJS) $(LIBS)
 
 clean:
 	rm -f org.gtk.exampleapp.gschema.valid

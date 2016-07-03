@@ -18,7 +18,7 @@ resources.c: exampleapp.gresource.xml window.ui
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
 exampleapp: $(OBJS)
-	$(CC) -o $(@F) $(LIBS) $(OBJS)
+	$(CC) -o $(@F) $(OBJS) $(LIBS)
 
 clean:
 	rm -f $(BUILT_SRC)
