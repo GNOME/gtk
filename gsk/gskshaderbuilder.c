@@ -2,6 +2,8 @@
 
 #include "gskshaderbuilderprivate.h"
 
+#include "gskdebugprivate.h"
+
 #include <gdk/gdk.h>
 #include <epoxy/gl.h>
 
@@ -194,6 +196,8 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
       return -1;
     }
 
+  g_string_append_c (code, '\n');
+
   if (!lookup_shader_code (code, builder->resource_base_path, shader_source, error))
     {
       g_string_free (code, TRUE);
@@ -205,6 +209,16 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
   shader_id = glCreateShader (shader_type);
   glShaderSource (shader_id, 1, (const GLchar **) &source, NULL);
   glCompileShader (shader_id);
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK (OPENGL))
+    {
+      g_print ("*** Compiling %s shader ***\n"
+               "%s\n",
+               shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment",
+               source);
+    }
+#endif
 
   g_free (source);
 
@@ -310,6 +324,30 @@ gsk_shader_builder_create_program (GskShaderBuilder *builder,
   gsk_shader_builder_cache_attributes (builder, program_id);
 
   builder->program_id = program_id;
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK (OPENGL))
+    {
+      GHashTableIter iter;
+      gpointer name_p, location_p;
+
+      g_hash_table_iter_init (&iter, builder->uniform_locations);
+      while (g_hash_table_iter_next (&iter, &name_p, &location_p))
+        {
+          g_print ("Uniform '%s' - location: %d\n",
+                   g_quark_to_string (GPOINTER_TO_INT (name_p)),
+                   GPOINTER_TO_INT (location_p));
+        }
+
+      g_hash_table_iter_init (&iter, builder->attribute_locations);
+      while (g_hash_table_iter_next (&iter, &name_p, &location_p))
+        {
+          g_print ("Attribute '%s' - location: %d\n",
+                   g_quark_to_string (GPOINTER_TO_INT (name_p)),
+                   GPOINTER_TO_INT (location_p));
+        }
+    }
+#endif
 
 out:
   glDetachShader (program_id, vertex_id);
