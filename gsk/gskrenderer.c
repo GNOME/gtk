@@ -19,9 +19,18 @@
 /**
  * SECTION:GskRenderer
  * @title: GskRenderer
- * @Short_desc: Renders a scene with a simplified graph
+ * @Short_desc: Renders a scene
  *
- * TODO
+ * #GskRenderer is a class that renders a scene graph defined via a
+ * tree of #GskRenderNode instances.
+ *
+ * Typically you will use a #GskRenderer instance with a #GdkDrawingContext
+ * associated to a #GdkWindow, and call gsk_renderer_render() with the
+ * drawing context and the scene to be rendered.
+ *
+ * It is necessary to realize a #GskRenderer instance using gsk_renderer_realize()
+ * before calling gsk_renderer_render(), in order to create the appropriate
+ * windowing system resources needed to render the scene.
  */
 
 #include "config.h"
