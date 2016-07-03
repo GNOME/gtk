@@ -7,6 +7,7 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrendernodeiter.h"
+#include "gskshaderbuilderprivate.h"
 
 #include "gskprivate.h"
 
@@ -275,131 +276,135 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
   self->has_buffers = FALSE;
 }
 
-static guint
-create_shader (int         type,
-               const char *code)
+static gboolean
+gsk_gl_renderer_create_programs (GskGLRenderer *self)
 {
-  guint shader;
-  int status;
+  GskShaderBuilder *builder;
+  const char *vertex_preamble;
+  const char *fragment_preamble;
+  int vertex_id = -1, fragment_id = -1;
+  int program_id = -1;
+  GError *error = NULL;
+  gboolean res = FALSE;
+  enum {
+    MVP,
+    MAP,
+    PARENT_MAP,
+    ALPHA,
+    BLEND_MODE,
+    N_UNIFORMS
+  };
+  enum {
+    POSITION,
+    UV,
+    N_ATTRIBUTES
+  };
+  GQuark uniforms[N_UNIFORMS];
+  GQuark attributes[N_ATTRIBUTES];
+  
+  builder = gsk_shader_builder_new ();
 
-  shader = glCreateShader (type);
-  glShaderSource (shader, 1, &code, NULL);
-  glCompileShader (shader);
+  gsk_shader_builder_set_resource_base_path (builder, "/org/gtk/libgsk/glsl");
 
-  glGetShaderiv (shader, GL_COMPILE_STATUS, &status);
-  if (status == GL_FALSE)
-    {
-      int log_len;
-      char *buffer;
+  uniforms[MVP] = gsk_shader_builder_add_uniform (builder, "mvp");
+  uniforms[MAP] = gsk_shader_builder_add_uniform (builder, "map");
+  uniforms[PARENT_MAP] = gsk_shader_builder_add_uniform (builder, "parentMap");
+  uniforms[ALPHA] = gsk_shader_builder_add_uniform (builder, "alpha");
+  uniforms[BLEND_MODE] = gsk_shader_builder_add_uniform (builder, "blendMode");
+  
+  attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "position");
+  attributes[UV] = gsk_shader_builder_add_attribute (builder, "uv");
 
-      glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &log_len);
-
-      buffer = g_malloc0 (log_len + 1);
-      glGetShaderInfoLog (shader, log_len, NULL, buffer);
-
-      g_critical ("Compile failure in %s shader:\n%s",
-                  type == GL_VERTEX_SHADER ? "vertex" : "fragment",
-                  buffer);
-      g_free (buffer);
-
-      glDeleteShader (shader);
-
-      return 0;
-    }
-
-  return shader;
-}
-
-static void
-gsk_gl_renderer_create_program (GskGLRenderer *self)
-{
-  guint vertex_shader = 0, fragment_shader = 0;
-  const char *fs_path, *vs_path;
-  GBytes *source;
-  int status;
+#define SHADER_VERSION_GLES             110
+#define SHADER_VERSION_GL_LEGACY        120
+#define SHADER_VERSION_GL3              150
 
   if (gdk_gl_context_get_use_es (self->context))
     {
-      vs_path = "/org/gtk/libgsk/glsl/gles-base.vs.glsl";
-      fs_path = "/org/gtk/libgsk/glsl/gles-base.fs.glsl";
+      gsk_shader_builder_set_version (builder, SHADER_VERSION_GLES);
+      gsk_shader_builder_add_define (builder, "GSK_GLES", "1");
+
+      vertex_preamble = "gles_common.vs.glsl";
+      fragment_preamble = "gles_common.fs.glsl";
+    }
+  else if (gdk_gl_context_is_legacy (self->context))
+    {
+      gsk_shader_builder_set_version (builder, SHADER_VERSION_GL_LEGACY);
+      gsk_shader_builder_add_define (builder, "GSK_LEGACY", "1");
+
+      vertex_preamble = "gl_common.vs.glsl";
+      fragment_preamble = "gl_common.fs.glsl";
     }
   else
     {
-      vs_path = "/org/gtk/libgsk/glsl/gl3-base.vs.glsl";
-      fs_path = "/org/gtk/libgsk/glsl/gl3-base.fs.glsl";
+      gsk_shader_builder_set_version (builder, SHADER_VERSION_GL3);
+      gsk_shader_builder_add_define (builder, "GSK_GL3", "1");
+
+      vertex_preamble = "gl3_common.vs.glsl";
+      fragment_preamble = "gl3_common.fs.glsl";
     }
 
-  GSK_NOTE (OPENGL, g_print ("Compiling vertex shader\n"));
-  source = g_resources_lookup_data (vs_path, 0, NULL);
-  vertex_shader = create_shader (GL_VERTEX_SHADER, g_bytes_get_data (source, NULL));
-  g_bytes_unref (source);
-  if (vertex_shader == 0)
-    goto out;
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDER_MODE_CHECK (SHADERS))
+    gsk_shader_builder_add_define (builder, "GSK_DEBUG", "1");
+#endif
 
-  GSK_NOTE (OPENGL, g_print ("Compiling fragment shader\n"));
-  source = g_resources_lookup_data (fs_path, 0, NULL);
-  fragment_shader = create_shader (GL_FRAGMENT_SHADER, g_bytes_get_data (source, NULL));
-  g_bytes_unref (source);
-  if (fragment_shader == 0)
-    goto out;
-
-  self->program_id = glCreateProgram ();
-  glAttachShader (self->program_id, vertex_shader);
-  glAttachShader (self->program_id, fragment_shader);
-  glLinkProgram (self->program_id);
-
-  glGetProgramiv (self->program_id, GL_LINK_STATUS, &status);
-  if (status == GL_FALSE)
+  vertex_id = gsk_shader_builder_compile_shader (builder, GL_VERTEX_SHADER,
+                                                 vertex_preamble,
+                                                 "blend.vs.glsl",
+                                                 &error);
+  if (error != NULL)
     {
-      char *buffer = NULL;
-      int log_len = 0;
-
-      glGetProgramiv (self->program_id, GL_INFO_LOG_LENGTH, &log_len);
-
-      buffer = g_malloc0 (log_len + 1);
-      glGetProgramInfoLog (self->program_id, log_len, NULL, buffer);
-
-      g_critical ("Linking failure in shader:\n%s", buffer);
-      g_free (buffer);
-
-      glDeleteProgram (self->program_id);
-      self->program_id = 0;
-
+      g_critical ("Unable to compile vertex shader: %s", error->message);
+      g_error_free (error);
       goto out;
     }
 
-  /* Find the location of each uniform and attribute we use in our
-   * shaders
-   */
-  self->mvp_location = glGetUniformLocation (self->program_id, "mvp");
-  self->map_location = glGetUniformLocation (self->program_id, "map");
-  self->parentMap_location = glGetUniformLocation (self->program_id, "parentMap");
-  self->alpha_location = glGetUniformLocation (self->program_id, "alpha");
-  self->position_location = glGetAttribLocation (self->program_id, "position");
-  self->uv_location = glGetAttribLocation (self->program_id, "uv");
-  self->blendMode_location = glGetAttribLocation (self->program_id, "blendMode");
+  fragment_id = gsk_shader_builder_compile_shader (builder, GL_FRAGMENT_SHADER,
+                                                   fragment_preamble,
+                                                   "blend.fs.glsl",
+                                                   &error);
+  if (error != NULL)
+    {
+      g_critical ("Unable to compile fragment shader: %s", error->message);
+      g_error_free (error);
+      goto out;
+    }
 
-  GSK_NOTE (OPENGL, g_print ("Program [%d] { mvp:%u, map:%u, alpha:%u, position:%u, uv:%u }\n",
-                             self->program_id,
-                             self->mvp_location,
-                             self->map_location,
-                             self->alpha_location,
-                             self->position_location,
-                             self->uv_location));
+  program_id = gsk_shader_builder_create_program (builder,
+                                                  vertex_id, fragment_id,
+                                                  &error);
+  if (error != NULL)
+    {
+      g_critical ("Unable to create program: %s", error->message);
+      g_error_free (error);
+      goto out;
+    }
 
-  /* We can detach and destroy the shaders from the linked program */
-  glDetachShader (self->program_id, vertex_shader);
-  glDetachShader (self->program_id, fragment_shader);
+  self->program_id = program_id;
+  self->mvp_location = gsk_shader_builder_get_uniform_location (builder, uniforms[MVP]);
+  self->map_location = gsk_shader_builder_get_uniform_location (builder, uniforms[MAP]);
+  self->parentMap_location = gsk_shader_builder_get_uniform_location (builder, uniforms[PARENT_MAP]);
+  self->alpha_location = gsk_shader_builder_get_uniform_location (builder, uniforms[ALPHA]);
+  self->blendMode_location = gsk_shader_builder_get_uniform_location (builder, uniforms[BLEND_MODE]);
+  self->position_location = gsk_shader_builder_get_attribute_location (builder, attributes[POSITION]);
+  self->uv_location = gsk_shader_builder_get_attribute_location (builder, attributes[UV]);
+
+  res = TRUE;
 
 out:
-  if (vertex_shader != 0)
-    glDeleteShader (vertex_shader);
-  if (fragment_shader != 0)
-    glDeleteShader (fragment_shader);
+  if (vertex_id > 0)
+    glDeleteShader (vertex_id);
+  if (fragment_id > 0)
+    glDeleteShader (fragment_id);
+
+  g_object_unref (builder);
+
+  return res;
 }
 
 static void
-gsk_gl_renderer_destroy_program (GskGLRenderer *self)
+gsk_gl_renderer_destroy_programs (GskGLRenderer *self)
 {
   if (self->program_id != 0)
     {
@@ -447,7 +452,8 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
 
   GSK_NOTE (OPENGL, g_print ("Creating buffers and programs\n"));
   gsk_gl_renderer_create_buffers (self);
-  gsk_gl_renderer_create_program (self);
+  if (!gsk_gl_renderer_create_programs (self))
+    return FALSE;
 
   return TRUE;
 }
@@ -466,7 +472,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   g_clear_pointer (&self->transparent_render_items, g_array_unref);
 
   gsk_gl_renderer_destroy_buffers (self);
-  gsk_gl_renderer_destroy_program (self);
+  gsk_gl_renderer_destroy_programs (self);
 
   if (self->context == gdk_gl_context_get_current ())
     gdk_gl_context_clear_current ();
