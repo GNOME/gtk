@@ -395,3 +395,11 @@ gsk_shader_builder_get_attribute_location (GskShaderBuilder *builder,
 
   return -1;
 }
+
+int
+gsk_shader_builder_get_program (GskShaderBuilder *builder)
+{
+  g_return_val_if_fail (GSK_IS_SHADER_BUILDER (builder), -1);
+
+  return builder->program_id;
+}
