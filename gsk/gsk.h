@@ -20,13 +20,15 @@
 
 #define __GSK_H_INSIDE__
 
+#include <gsk/gsktypes.h>
 #include <gsk/gskenums.h>
+#include <gsk/gskenumtypes.h>
+
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskrendernodeiter.h>
 
-#include <gsk/gsktypes.h>
-#include <gsk/gskenumtypes.h>
+#include <gsk/gsklayer.h>
 
 #undef __GSK_H_INSIDE__
 

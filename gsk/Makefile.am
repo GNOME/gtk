@@ -29,6 +29,7 @@ lib_LTLIBRARIES =
 
 gsk_public_source_h = \
 	gskenums.h \
+	gsklayer.h \
 	gskrenderer.h \
 	gskrendernode.h \
 	gskrendernodeiter.h \
@@ -53,6 +54,7 @@ gsk_source_c = \
 	gskcairorenderer.c \
 	gskdebug.c \
 	gskglrenderer.c \
+	gsklayer.c \
 	gskrenderer.c \
 	gskrendernode.c \
 	gskrendernodeiter.c \
