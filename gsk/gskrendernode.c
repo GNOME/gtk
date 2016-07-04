@@ -50,6 +50,14 @@
 
 #include <gobject/gvaluecollector.h>
 
+/**
+ * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref) (set-value-func gsk_value_set_render_node) (get-value-func gsk_value_get_render_node)
+ *
+ * The `GskRenderNode` structure contains only private data.
+ *
+ * Since: 3.22
+ */
+
 static void
 value_render_node_init (GValue *value)
 {
