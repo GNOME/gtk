@@ -90,6 +90,7 @@ struct _GskGLRenderer
   GskShaderBuilder *shader_builder;
 
   int blend_program_id;
+  int blit_program_id;
 
   guint vao_id;
 
@@ -344,12 +345,25 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
     gsk_shader_builder_create_program (builder, "blend.vs.glsl", "blend.fs.glsl", &error);
   if (error != NULL)
     {
-      g_critical ("Unable to create program: %s", error->message);
+      g_critical ("Unable to create 'blend' program: %s", error->message);
       g_error_free (error);
       g_object_unref (builder);
       goto out;
     }
 
+  self->blit_program_id =
+    gsk_shader_builder_create_program (builder, "blit.vs.glsl", "blit.fs.glsl", &error);
+  if (error != NULL)
+    {
+      g_critical ("Unable to create 'blit' program: %s", error->message);
+      g_error_free (error);
+      g_object_unref (builder);
+      goto out;
+    }
+
+  /* Keep a pointer to query for the uniform and attribute locations
+   * when rendering the scene
+   */
   self->shader_builder = builder;
 
   res = TRUE;
@@ -731,8 +745,11 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   item.render_data.vao_id = self->vao_id;
   item.render_data.buffer_id = 0;
 
-  program_id = self->blend_program_id;
-  item.render_data.program_id = program_id;
+  /* Select the program to use */
+  if (parent != NULL)
+    program_id = self->blend_program_id;
+  else
+    program_id = self->blit_program_id;
 
   item.render_data.map_location =
     gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[MAP]);
@@ -749,6 +766,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
     gsk_shader_builder_get_attribute_location (self->shader_builder, program_id, self->attributes[POSITION]);
   item.render_data.uv_location =
     gsk_shader_builder_get_attribute_location (self->shader_builder, program_id, self->attributes[UV]);
+
+  item.render_data.program_id = program_id;
 
   if (parent != NULL)
     item.parent_data = &(parent->render_data);
