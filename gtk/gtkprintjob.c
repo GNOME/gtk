@@ -444,6 +444,41 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
 }
 
 /**
+ * gtk_print_job_set_source_fd:
+ * @job: a #GtkPrintJob
+ * @fd: a file descriptor
+ * @error: return location for errors
+ *
+ * Make the #GtkPrintJob send an existing document to the
+ * printing system. The file can be in any format understood
+ * by the platforms printing system (typically PostScript,
+ * but on many platforms PDF may work too). See
+ * gtk_printer_accepts_pdf() and gtk_printer_accepts_ps().
+ *
+ * This is similar to gtk_print_job_set_source_file(),
+ * but takes expects an open file descriptor for the file,
+ * instead of a filename.
+ *
+ * Returns: %FALSE if an error occurred
+ *
+ * Since: 3.22
+ */
+gboolean
+gtk_print_job_set_source_fd (GtkPrintJob  *job,
+                             int           fd,
+                             GError      **error)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
+  g_return_val_if_fail (fd >= 0, FALSE);
+
+  job->priv->spool_io = g_io_channel_unix_new (fd);
+  if (g_io_channel_set_encoding (job->priv->spool_io, NULL, error) != G_IO_STATUS_NORMAL)
+    return FALSE;
+
+  return TRUE;
+}
+
+/**
  * gtk_print_job_get_surface:
  * @job: a #GtkPrintJob
  * @error: (allow-none): return location for errors, or %NULL
