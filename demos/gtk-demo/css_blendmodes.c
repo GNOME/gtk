@@ -34,40 +34,6 @@ struct {
   { NULL }
 };
 
-/*
- * The CSS class to be applied in the blended image. Notice that the first %s
- * is replaced by the content of css_blendmodes.css and the second %s is
- * replaced by the blend mode.
- */
-static const gchar *CSS_TEMPLATE =
-"%s\n"
-"\n"
-"image.blend0 {\n"
-"  background-image: url('resource://css_blendmodes/ducky.png'),\n"
-"                    linear-gradient(to right, red 0%, green 50%, blue 100%);\n"
-"  background-size: cover;\n"
-"  background-blend-mode: %s;\n"
-"  min-width: 200px;\n"
-"  min-height: 200px;\n"
-"}\n"
-"\n"
-"image.blend1 {\n"
-"  background: url('resource://css_blendmodes/blends.png') top center,\n"
-"              url('resource://css_blendmodes/blends.png') bottom center;\n"
-"  background-blend-mode: %s;\n"
-"  min-width: 200px;\n"
-"  min-height: 200px;\n"
-"}\n"
-"\n"
-"image.blend2 {\n"
-"  background: url('resource://css_blendmodes/cmy.jpg') top center,\n"
-"              url('resource://css_blendmodes/cmy.jpg') center center,\n"
-"              url('resource://css_blendmodes/cmy.jpg') bottom center;\n"
-"  background-blend-mode: %s;\n"
-"  min-width: 200px;\n"
-"  min-height: 200px;\n"
-"}\n";
-
 static void
 update_css_for_blend_mode (GtkCssProvider *provider,
                            const gchar    *blend_mode)
@@ -77,8 +43,7 @@ update_css_for_blend_mode (GtkCssProvider *provider,
 
   bytes = g_resources_lookup_data ("/css_blendmodes/css_blendmodes.css", 0, NULL);
 
-  css = g_strdup_printf (CSS_TEMPLATE,
-                         (gchar*) g_bytes_get_data (bytes, NULL),
+  css = g_strdup_printf ((gchar*) g_bytes_get_data (bytes, NULL),
                          blend_mode,
                          blend_mode,
                          blend_mode);

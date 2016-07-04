@@ -9,7 +9,7 @@ image.duck {
 }
 
 image.gradient {
-    background-image: linear-gradient(to right, red 0%, green 50%, blue 100%);
+    background-image: linear-gradient(to right, red 0%%, green 50%%, blue 100%%);
     min-width: 200px;
     min-height: 200px;
 }
@@ -48,4 +48,30 @@ image.yellow {
     background: url('resource://css_blendmodes/cmy.jpg') bottom center;
     min-width: 200px;
     min-height: 200px;
+}
+
+image.blend0 {
+  background-image: url('resource://css_blendmodes/ducky.png'),
+                    linear-gradient(to right, red 0%%, green 50%%, blue 100%%);
+  background-size: cover;
+  background-blend-mode: %s;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+image.blend1 {
+  background: url('resource://css_blendmodes/blends.png') top center,
+              url('resource://css_blendmodes/blends.png') bottom center;
+  background-blend-mode: %s;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+image.blend2 {
+  background: url('resource://css_blendmodes/cmy.jpg') top center,
+              url('resource://css_blendmodes/cmy.jpg') center center,
+              url('resource://css_blendmodes/cmy.jpg') bottom center;
+  background-blend-mode: %s;
+  min-width: 200px;
+  min-height: 200px;
 }
