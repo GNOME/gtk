@@ -95,6 +95,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_print_job_set_source_file        (GtkPrintJob              *job,
 							       const gchar              *filename,
 							       GError                  **error);
+GDK_AVAILABLE_IN_3_22
+gboolean                 gtk_print_job_set_source_fd          (GtkPrintJob              *job,
+							       int                       fd,
+							       GError                  **error);
 GDK_AVAILABLE_IN_ALL
 cairo_surface_t         *gtk_print_job_get_surface            (GtkPrintJob              *job,
 							       GError                  **error);
