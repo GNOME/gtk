@@ -175,6 +175,8 @@ test_data = \
 	at-valid-21.css \
 	at-valid-21.errors \
 	at-valid-21.ref.css \
+        background-blend-mode.css \
+        background-blend-mode.ref.css \
         background-clip.css \
         background-clip.ref.css \
         background-image.css \
