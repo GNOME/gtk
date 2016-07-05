@@ -16070,19 +16070,23 @@ gtk_widget_get_render_node (GtkWidget   *widget,
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GskRenderNode *node;
+  graphene_matrix_t m;
+  graphene_point3d_t tmp;
+  graphene_rect_t bounds;
+  GtkAllocation clip;
+
+  gtk_widget_get_clip (widget, &clip);
+  graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
+  graphene_matrix_init_translate (&m, graphene_point3d_init (&tmp, clip.x, clip.y, 0.f));
 
   if (klass->get_render_node == NULL)
     {
       GskRenderNode *tmp;
-      graphene_rect_t bounds;
-      GtkAllocation clip;
       cairo_t *cr;
-
-      gtk_widget_get_clip (widget, &clip);
-      graphene_rect_init (&bounds, clip.x, clip.y, clip.width, clip.height);
 
       tmp = gsk_render_node_new ();
       gsk_render_node_set_bounds (tmp, &bounds);
+      gsk_render_node_set_transform (tmp, &m);
       cr = gsk_render_node_get_draw_context (tmp);
 
       gtk_widget_draw (widget, cr);
@@ -16099,16 +16103,12 @@ gtk_widget_get_render_node (GtkWidget   *widget,
           g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         {
           GskRenderNode *tmp;
-          graphene_rect_t bounds;
-          GtkAllocation clip;
           gboolean result;
           cairo_t *cr;
 
-          gtk_widget_get_clip (widget, &clip);
-          graphene_rect_init (&bounds, clip.x, clip.y, clip.width, clip.height);
-
           tmp = gsk_render_node_new ();
           gsk_render_node_set_bounds (tmp, &bounds);
+          gsk_render_node_set_transform (tmp, &m);
           cr = gsk_render_node_get_draw_context (tmp);
 
           if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
