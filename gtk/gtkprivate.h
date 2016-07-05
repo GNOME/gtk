@@ -95,6 +95,8 @@ gboolean        _gtk_propagate_captured_event  (GtkWidget       *widget,
 gdouble _gtk_get_slowdown ();
 void    _gtk_set_slowdown (gdouble slowdown_factor);
 
+gboolean gtk_should_use_portal (void);
+
 #ifdef G_OS_WIN32
 void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
 #endif
