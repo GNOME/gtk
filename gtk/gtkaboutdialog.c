@@ -982,12 +982,9 @@ static gboolean
 gtk_about_dialog_activate_link (GtkAboutDialog *about,
                                 const gchar    *uri)
 {
-  GdkScreen *screen;
   GError *error = NULL;
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (about));
-
-  if (!gtk_show_uri (screen, uri, gtk_get_current_event_time (), &error))
+  if (!gtk_show_uri_on_window (GTK_WINDOW (about), uri, gtk_get_current_event_time (), &error))
     {
       GtkWidget *dialog;
 
