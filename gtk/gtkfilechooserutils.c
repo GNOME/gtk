@@ -68,6 +68,19 @@ static void           delegate_file_activated         (GtkFileChooser    *choose
 
 static GtkFileChooserConfirmation delegate_confirm_overwrite (GtkFileChooser    *chooser,
 							      gpointer           data);
+static void           delegate_add_choice             (GtkFileChooser  *chooser,
+                                                       const char      *id,
+                                                       const char      *label,
+                                                       const char     **options,
+                                                       const char     **option_labels);
+static void           delegate_remove_choice          (GtkFileChooser  *chooser,
+                                                       const char      *id);
+static void           delegate_set_choice             (GtkFileChooser  *chooser,
+                                                       const char      *id,
+                                                       const char      *option);
+static const char *   delegate_get_choice             (GtkFileChooser  *chooser,
+                                                       const char      *id);
+
 
 /**
  * _gtk_file_chooser_install_properties:
@@ -149,6 +162,10 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->add_shortcut_folder = delegate_add_shortcut_folder;
   iface->remove_shortcut_folder = delegate_remove_shortcut_folder;
   iface->list_shortcut_folders = delegate_list_shortcut_folders;
+  iface->add_choice = delegate_add_choice;
+  iface->remove_choice = delegate_remove_choice;
+  iface->set_choice = delegate_set_choice;
+  iface->get_choice = delegate_get_choice;
 }
 
 /**
@@ -499,3 +516,35 @@ _gtk_file_chooser_label_for_file (GFile *file)
   return label;
 }
 
+static void
+delegate_add_choice (GtkFileChooser *chooser,
+                     const char      *id,
+                     const char      *label,
+                     const char     **options,
+                     const char     **option_labels)
+{
+  gtk_file_chooser_add_choice (get_delegate (chooser),
+                               id, label, options, option_labels);
+}
+static void
+delegate_remove_choice (GtkFileChooser  *chooser,
+                        const char      *id)
+{
+  gtk_file_chooser_remove_choice (get_delegate (chooser), id);
+}
+
+static void
+delegate_set_choice (GtkFileChooser  *chooser,
+                     const char      *id,
+                     const char      *option)
+{
+  gtk_file_chooser_set_choice (get_delegate (chooser), id, option);
+}
+
+
+static const char *
+delegate_get_choice (GtkFileChooser  *chooser,
+                     const char      *id)
+{
+  return gtk_file_chooser_get_choice (get_delegate (chooser), id);
+}
