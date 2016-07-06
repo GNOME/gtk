@@ -23,6 +23,14 @@
 
 G_BEGIN_DECLS
 
+typedef struct {
+  char *id;
+  char *label;
+  char **options;
+  char **option_labels;
+  char *selected;
+} GtkFileChooserNativeChoice;
+
 struct _GtkFileChooserNative
 {
   GtkNativeDialog parent_instance;
@@ -36,6 +44,7 @@ struct _GtkFileChooserNative
   GFile *current_folder;
   GFile *current_file;
   char *current_name;
+  GSList *choices;
 
   /* Fallback mode */
   GtkWidget *dialog;
