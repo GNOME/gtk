@@ -66,6 +66,7 @@
 #include "gtktreeprivate.h"
 #include "gtktreeselection.h"
 #include "gtkbox.h"
+#include "gtkcheckbutton.h"
 #include "gtkwindowgroup.h"
 #include "gtkintl.h"
 #include "gtkshow.h"
@@ -289,6 +290,9 @@ struct _GtkFileChooserWidgetPrivate {
 
   GtkWidget *external_entry;
 
+  GtkWidget *choice_box;
+  GHashTable *choices;
+
   /* Handles */
   GCancellable *file_list_drag_data_received_cancellable;
   GCancellable *update_current_folder_cancellable;
@@ -507,6 +511,20 @@ static void           gtk_file_chooser_widget_get_default_size       (GtkFileCho
 static gboolean       gtk_file_chooser_widget_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_widget_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
+static void        gtk_file_chooser_widget_add_choice    (GtkFileChooser  *chooser,
+                                                          const char      *id,
+                                                          const char      *label,
+                                                          const char     **options,
+                                                          const char     **option_labels);
+static void        gtk_file_chooser_widget_remove_choice (GtkFileChooser  *chooser,
+                                                          const char      *id);
+static void        gtk_file_chooser_widget_set_choice    (GtkFileChooser  *chooser,
+                                                          const char      *id,
+                                                          const char      *option);
+static const char *gtk_file_chooser_widget_get_choice    (GtkFileChooser  *chooser,
+                                                          const char      *id);
+
+
 static void add_selection_to_recent_list (GtkFileChooserWidget *impl);
 
 static void location_popup_handler  (GtkFileChooserWidget *impl,
@@ -625,6 +643,10 @@ gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
   iface->add_shortcut_folder = gtk_file_chooser_widget_add_shortcut_folder;
   iface->remove_shortcut_folder = gtk_file_chooser_widget_remove_shortcut_folder;
   iface->list_shortcut_folders = gtk_file_chooser_widget_list_shortcut_folders;
+  iface->add_choice = gtk_file_chooser_widget_add_choice;
+  iface->remove_choice = gtk_file_chooser_widget_remove_choice;
+  iface->set_choice = gtk_file_chooser_widget_set_choice;
+  iface->get_choice = gtk_file_chooser_widget_get_choice;
 }
 
 static void
@@ -8676,3 +8698,124 @@ gtk_file_chooser_widget_new (GtkFileChooserAction action)
                        "action", action,
                        NULL);
 }
+
+static void
+gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
+                                    const char      *id,
+                                    const char      *label,
+                                    const char     **options,
+                                    const char     **option_labels)
+{
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkWidget *widget;
+
+  if (priv->choices == NULL)
+    {
+      priv->choices = g_hash_table_new (g_str_hash, g_str_equal);
+      priv->choice_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+      set_extra_widget (impl, priv->choice_box);
+    }
+  else if (g_hash_table_lookup (priv->choices, id))
+    {
+      g_warning ("Duplicate choice %s", id);
+      return;
+    }
+
+  if (options)
+    {
+      GtkWidget *box;
+      GtkWidget *combo;
+      int i;
+
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+      gtk_container_add (GTK_CONTAINER (box), gtk_label_new (label));
+
+      combo = gtk_combo_box_text_new ();
+      g_hash_table_insert (priv->choices, g_strdup (id), combo);
+      gtk_container_add (GTK_CONTAINER (box), combo);
+
+      for (i = 0; options[i]; i++)
+        gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo),
+                                   options[i], option_labels[i]);
+
+      widget = box;
+    }
+  else
+    {
+      GtkWidget *check;
+
+      check = gtk_check_button_new_with_label (label);
+      g_hash_table_insert (priv->choices, g_strdup (id), check);
+
+      widget = check;
+    }
+
+  gtk_widget_show_all (widget);
+  gtk_container_add (GTK_CONTAINER (priv->choice_box), widget);
+}
+
+static void
+gtk_file_chooser_widget_remove_choice (GtkFileChooser  *chooser,
+                                       const char      *id)
+{
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkWidget *widget;
+
+  if (priv->choices == NULL)
+    return;
+
+  widget = (GtkWidget *)g_hash_table_lookup (priv->choices, id);
+  g_hash_table_remove (priv->choices, id);
+  gtk_container_remove (GTK_CONTAINER (priv->choice_box), widget);
+
+  if (g_hash_table_size (priv->choices) == 0)
+    {
+      set_extra_widget (impl, NULL);
+      g_hash_table_unref (priv->choices);
+      priv->choices = NULL;
+      priv->choice_box = NULL;
+    }
+}
+
+static void
+gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
+                                    const char      *id,
+                                    const char      *option)
+{
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkWidget *widget;
+
+  if (priv->choices == NULL)
+    return;
+
+  widget = (GtkWidget *)g_hash_table_lookup (priv->choices, id);
+
+  if (GTK_IS_COMBO_BOX (widget))
+    gtk_combo_box_set_active_id (GTK_COMBO_BOX (widget), option);
+  else if (GTK_IS_TOGGLE_BUTTON (widget))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), g_str_equal (option, "true"));
+}
+
+static const char *
+gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
+                                    const char      *id)
+{
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkWidget *widget;
+
+  if (priv->choices == NULL)
+    return NULL;
+
+  widget = (GtkWidget *)g_hash_table_lookup (priv->choices, id);
+  if (GTK_IS_COMBO_BOX (widget))
+    return gtk_combo_box_get_active_id (GTK_COMBO_BOX (widget));
+  else if (GTK_IS_TOGGLE_BUTTON (widget))
+    return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)) ? "true" : "false";
+
+  return NULL;
+}
+
