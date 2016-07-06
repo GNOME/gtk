@@ -55,7 +55,6 @@ typedef struct {
   GDBusConnection *connection;
   char *portal_handle;
   guint portal_response_signal_id;
-  GDBusSignalCallback signal_callback;
   gboolean modal;
 
   gboolean hidden;
@@ -88,73 +87,35 @@ filechooser_portal_data_free (FilechooserPortalData *data)
 }
 
 static void
-one_file_response (GDBusConnection  *connection,
-                   const gchar      *sender_name,
-                   const gchar      *object_path,
-                   const gchar      *interface_name,
-                   const gchar      *signal_name,
-                   GVariant         *parameters,
-                   gpointer          user_data)
+response_cb (GDBusConnection  *connection,
+             const gchar      *sender_name,
+             const gchar      *object_path,
+             const gchar      *interface_name,
+             const gchar      *signal_name,
+             GVariant         *parameters,
+             gpointer          user_data)
 {
   GtkFileChooserNative *self = user_data;
   FilechooserPortalData *data = self->mode_data;
   guint32 portal_response;
   int gtk_response;
-  char *uri, *handle;
-  GVariant *response_data;
-
-  g_variant_get (parameters, "(&ou&s@a{sv})", &handle, &portal_response, &uri, &response_data);
-
-  if (data->portal_handle == NULL ||
-      strcmp (handle, data->portal_handle) != 0)
-    return;
-
-  g_slist_free_full (self->custom_files, g_object_unref);
-  self->custom_files = g_slist_prepend (NULL, g_file_new_for_uri (uri));
-
-  switch (portal_response)
-    {
-    case 0:
-      gtk_response = GTK_RESPONSE_OK;
-      break;
-    case 1:
-      gtk_response = GTK_RESPONSE_CANCEL;
-      break;
-    case 2:
-    default:
-      gtk_response = GTK_RESPONSE_DELETE_EVENT;
-      break;
-    }
-
-  filechooser_portal_data_free (data);
-  self->mode_data = NULL;
-
-  _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (self), gtk_response);
-}
-
-static void
-multi_file_response (GDBusConnection  *connection,
-                     const gchar      *sender_name,
-                     const gchar      *object_path,
-                     const gchar      *interface_name,
-                     const gchar      *signal_name,
-                     GVariant         *parameters,
-                     gpointer          user_data)
-{
-  GtkFileChooserNative *self = user_data;
-  FilechooserPortalData *data = self->mode_data;
-  guint32 portal_response;
-  int gtk_response;
-  char *handle;
-  char **uris;
+  const char **uris;
   int i;
   GVariant *response_data;
+  g_autoptr (GVariant) choices = NULL;
 
-  g_variant_get (parameters, "(&ou^a&s@a{sv})", &handle, &portal_response, &uris, &response_data);
+  g_variant_get (parameters, "(u@a{sv})", &portal_response, &response_data);
+  g_variant_lookup (response_data, "uris", "^a&s", &uris);
 
-  if (data->portal_handle == NULL ||
-      strcmp (handle, data->portal_handle) != 0)
-    return;
+  choices = g_variant_lookup_value (response_data, "choices", G_VARIANT_TYPE ("a(ss)"));
+  if (choices)
+    for (i = 0; i < g_variant_n_children (choices); i++)
+      {
+        const char *id;
+        const char *selected;
+        g_variant_get_child (choices, i, "(&s&s)", &id, &selected);
+        gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (self), id, selected);
+      }
 
   g_slist_free_full (self->custom_files, g_object_unref);
   self->custom_files = NULL;
@@ -247,7 +208,7 @@ open_file_msg_cb (GObject *source_object,
                                             data->portal_handle,
                                             NULL,
                                             G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
-                                            data->signal_callback,
+                                            response_cb,
                                             self, NULL);
     }
 
@@ -268,6 +229,44 @@ get_filters (GtkFileChooser *self)
       g_variant_builder_add (&builder, "@(sa(us))", gtk_file_filter_to_gvariant (filter));
     }
   g_slist_free (list);
+
+  return g_variant_builder_end (&builder);
+}
+
+static GVariant *
+gtk_file_chooser_native_choice_to_variant (GtkFileChooserNativeChoice *choice)
+{
+  GVariantBuilder choices;
+  int i;
+
+  g_variant_builder_init (&choices, G_VARIANT_TYPE ("a(ss)"));
+  if (choice->options)
+    {
+      for (i = 0; choice->options[i]; i++)
+        g_variant_builder_add (&choices, "(&s&s)", choice->options[i], choice->option_labels[i]);
+    }
+
+  return g_variant_new ("(&s&s@a(ss)&s)",
+                        choice->id,
+                        choice->label,
+                        g_variant_builder_end (&choices),
+                        choice->selected ? choice->selected : "");
+}
+
+static GVariant *
+serialize_choices (GtkFileChooserNative *self)
+{
+  GVariantBuilder builder;
+  GSList *l;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ssa(ss)s)"));
+  for (l = self->choices; l; l = l->next)
+    {
+      GtkFileChooserNativeChoice *choice = l->data;
+
+      g_variant_builder_add (&builder, "@(ssa(ss)s)",
+                             gtk_file_chooser_native_choice_to_variant (choice));
+    }
 
   return g_variant_builder_end (&builder);
 }
@@ -308,11 +307,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   data = g_new0 (FilechooserPortalData, 1);
   data->self = g_object_ref (self);
   data->connection = connection;
-
-  if (strcmp (method_name, "OpenFiles") == 0)
-    data->signal_callback = multi_file_response;
-  else
-    data->signal_callback = one_file_response;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
                                             "/org/freedesktop/portal/desktop",
@@ -371,6 +365,10 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
                              g_variant_new_bytestring (path));
       g_free (path);
     }
+
+  if (GTK_FILE_CHOOSER_NATIVE (self)->choices)
+    g_variant_builder_add (&opt_builder, "{sv}", "choices",
+                           serialize_choices (GTK_FILE_CHOOSER_NATIVE (self)));
 
   g_dbus_message_set_body (message,
                            g_variant_new ("(ss@a{sv})",
