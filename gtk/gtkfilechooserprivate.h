@@ -87,7 +87,7 @@ struct _GtkFileChooserIface
 					    GFile             *file,
 					    GError           **error);
   GSList *       (*list_shortcut_folders)  (GtkFileChooser    *chooser);
-  
+
   /* Signals
    */
   void (*current_folder_changed) (GtkFileChooser *chooser);
@@ -95,6 +95,20 @@ struct _GtkFileChooserIface
   void (*update_preview)         (GtkFileChooser *chooser);
   void (*file_activated)         (GtkFileChooser *chooser);
   GtkFileChooserConfirmation (*confirm_overwrite) (GtkFileChooser *chooser);
+
+  /* 3.22 additions */
+  void           (*add_choice)    (GtkFileChooser *chooser,
+                                   const char      *id,
+                                   const char      *label,
+                                   const char     **options,
+                                   const char     **option_labels);
+  void           (*remove_choice) (GtkFileChooser  *chooser,
+                                   const char      *id);
+  void           (*set_choice)    (GtkFileChooser  *chooser,
+                                   const char      *id,
+                                   const char      *option);
+  const char *   (*get_choice)    (GtkFileChooser  *chooser,
+                                   const char      *id);
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);

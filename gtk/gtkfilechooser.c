@@ -2263,3 +2263,99 @@ gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser)
 
   return do_overwrite_confirmation;
 }
+
+/**
+ * gtk_file_chooser_add_choice:
+ * @chooser: a #GtkFileChooser
+ * @id: id for the added choice
+ * @label: user-visible label for the added choice
+ * @options: ids for the options of the choice, or %NULL for a boolean choice
+ * @option_labels: user-visible labels for the options, must be the same length as @options
+ *
+ * Adds a 'choice' to the file chooser. This is typically implemented
+ * as a combobox or, for boolean choices, as a checkbutton. You can select
+ * a value using gtk_file_chooser_set_choice() before the dialog is shown,
+ * and you can obtain the user-selected value in the ::response signal handler
+ * using gtk_file_chooser_get_choice().
+ *
+ * Compare gtk_file_chooser_set_extra_widget().
+ *
+ * Since: 3.22
+ */
+void
+gtk_file_chooser_add_choice (GtkFileChooser  *chooser,
+                             const char      *id,
+                             const char      *label,
+                             const char     **options,
+                             const char     **option_labels)
+{
+  GtkFileChooserIface *iface = GTK_FILE_CHOOSER_GET_IFACE (chooser);
+
+  if (iface->add_choice)
+    iface->add_choice (chooser, id, label, options, option_labels);
+}
+
+/**
+ * gtk_file_chooser_remove_choice:
+ * @chooser: a #GtkFileChooser
+ * @id: the ID of the choice to remove
+ *
+ * Removes a 'choice' that has been added with gtk_file_chooser_add_choice().
+ *
+ * Since: 3.22
+ */
+void
+gtk_file_chooser_remove_choice (GtkFileChooser  *chooser,
+                                const char      *id)
+{
+  GtkFileChooserIface *iface = GTK_FILE_CHOOSER_GET_IFACE (chooser);
+
+  if (iface->remove_choice)
+    iface->remove_choice (chooser, id);
+}
+
+/**
+ * gtk_file_chooser_set_choice:
+ * @chooser: a #GtkFileChooser
+ * @id: the ID of the choice to set
+ * @selected: the ID of the option to select
+ *
+ * Selects an option in a 'choice' that has been added with
+ * gtk_file_chooser_add_choice(). For a boolean choice, the
+ * possible options are "true" and "false".
+ *
+ * Since: 3.22
+ */
+void
+gtk_file_chooser_set_choice (GtkFileChooser  *chooser,
+                             const char      *id,
+                             const char      *option)
+{
+  GtkFileChooserIface *iface = GTK_FILE_CHOOSER_GET_IFACE (chooser);
+
+  if (iface->set_choice)
+    iface->set_choice (chooser, id, option);
+}
+
+/**
+ * gtk_file_chooser_get_choice:
+ * @chooser: a #GtkFileChooser
+ * @id: the ID of the choice to get
+ *
+ * Gets the currently selected option in the 'choice' with the given ID.
+ *
+ * Returns: the ID of the currenly selected option
+ * Since: 3.22
+ */
+const char *
+gtk_file_chooser_get_choice (GtkFileChooser  *chooser,
+                             const char      *id)
+{
+  GtkFileChooserIface *iface = GTK_FILE_CHOOSER_GET_IFACE (chooser);
+
+  if (iface->get_choice)
+    return iface->get_choice (chooser, id);
+
+  return NULL;
+}
+
