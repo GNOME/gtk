@@ -295,10 +295,8 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
   multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
 
-  if (action == GTK_FILE_CHOOSER_ACTION_OPEN && !multiple)
+  if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
     method_name = "OpenFile";
-  else if (action == GTK_FILE_CHOOSER_ACTION_OPEN && multiple)
-    method_name = "OpenFiles";
   else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
     method_name = "SaveFile";
   else
@@ -342,6 +340,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
     }
 
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&opt_builder, "{sv}", "multiple", multiple);
   if (self->accept_label)
     g_variant_builder_add (&opt_builder, "{sv}", "accept_label",
                            g_variant_new_string (self->accept_label));
