@@ -699,6 +699,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   graphene_rect_t bounds;
   GskRenderNode *child;
   RenderItem item;
+  RenderItem *ritem = NULL;
   int program_id;
 
   if (gsk_render_node_is_hidden (node))
@@ -801,14 +802,24 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
                              node->name != NULL ? node->name : "unnamed",
                              node));
   if (gsk_render_node_is_opaque (node) && gsk_render_node_get_opacity (node) == 1.f)
-    g_array_append_val (self->opaque_render_items, item);
+    {
+      g_array_append_val (self->opaque_render_items, item);
+      ritem = &g_array_index (self->opaque_render_items,
+                              RenderItem,
+                              self->opaque_render_items->len - 1);
+    }
   else
-    g_array_prepend_val (self->transparent_render_items, item);
+    {
+      g_array_append_val (self->transparent_render_items, item);
+      ritem = &g_array_index (self->transparent_render_items,
+                              RenderItem,
+                              self->transparent_render_items->len - 1);
+    }
 
 recurse_children:
   gsk_render_node_iter_init (&iter, node);
   while (gsk_render_node_iter_next (&iter, &child))
-    gsk_gl_renderer_add_render_item (self, child, &item);
+    gsk_gl_renderer_add_render_item (self, child, ritem);
 }
 
 static gboolean
