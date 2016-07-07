@@ -380,7 +380,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   g_dbus_connection_send_message_with_reply (data->connection,
                                              message,
                                              G_DBUS_SEND_MESSAGE_FLAGS_NONE,
-                                             -1,
+                                             G_MAXINT,
                                              NULL,
                                              NULL,
                                              open_file_msg_cb,
