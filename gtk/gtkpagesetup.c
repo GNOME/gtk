@@ -852,29 +852,19 @@ GVariant *
 gtk_page_setup_to_gvariant (GtkPageSetup *setup)
 {
   GtkPaperSize *paper_size;
+  GVariant *variant;
+  int i;
   GVariantBuilder builder;
-  const char *name;
-  const char *ppd_name;
-  const char *display_name;
   char *orientation;
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
 
   paper_size = gtk_page_setup_get_paper_size (setup);
-  name = gtk_paper_size_get_name (paper_size);
-  ppd_name = gtk_paper_size_get_ppd_name (paper_size);
-  display_name = gtk_paper_size_get_display_name (paper_size);
 
-  if (ppd_name != NULL)
-    g_variant_builder_add (&builder, "{sv}", "PPDName", g_variant_new_string (ppd_name));
-  else
-    g_variant_builder_add (&builder, "{sv}", "Name", g_variant_new_string (name));
-
-  if (display_name != NULL)
-    g_variant_builder_add (&builder, "{sv}", "DisplayName", g_variant_new_string (display_name));
-
-  g_variant_builder_add (&builder, "{sv}", "Width", g_variant_new_double (gtk_paper_size_get_width (paper_size, GTK_UNIT_MM)));
-  g_variant_builder_add (&builder, "{sv}", "Height", g_variant_new_double (gtk_paper_size_get_height (paper_size, GTK_UNIT_MM)));
+  variant = g_variant_ref_sink (gtk_paper_size_to_gvariant (paper_size));
+  for (i = 0; i < g_variant_n_children (variant); i++)
+    g_variant_builder_add_value (&builder, g_variant_get_child_value (variant, i));
+  g_variant_unref (variant);
 
   g_variant_builder_add (&builder, "{sv}", "MarginTop", g_variant_new_double (gtk_page_setup_get_top_margin (setup, GTK_UNIT_MM)));
   g_variant_builder_add (&builder, "{sv}", "MarginBottom", g_variant_new_double (gtk_page_setup_get_bottom_margin (setup, GTK_UNIT_MM)));
@@ -905,30 +895,15 @@ gtk_page_setup_new_from_gvariant (GVariant *variant)
   GtkPageSetup *setup;
   const char *orientation;
   gdouble margin;
-  gdouble size;
-  GKeyFile *key_file;
-  const char *name;
   GtkPaperSize *paper_size;
 
   g_return_val_if_fail (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT), NULL);
 
   setup = gtk_page_setup_new ();
 
-  key_file = g_key_file_new ();
-  if (g_variant_lookup (variant, "PPDName", "&s", &name))
-    g_key_file_set_string (key_file, "Page Setup", "PPDName", name);
-  else if (g_variant_lookup (variant, "Name", "&s", &name))
-    g_key_file_set_string (key_file, "Page Setup", "Name", name);
-  if (g_variant_lookup (variant, "DisplayName", "&s", &name))
-    g_key_file_set_string (key_file, "Page Setup", "DisplayName", name);
-  if (g_variant_lookup (variant, "Width", "d",  &size))
-    g_key_file_set_double (key_file, "Page Setup", "Width", size);
-  if (g_variant_lookup (variant, "Height", "d",  &size))
-    g_key_file_set_double (key_file, "Page Setup", "Height", size);
-  paper_size = gtk_paper_size_new_from_key_file (key_file, "Page Setup", NULL);
+  paper_size = gtk_paper_size_new_from_gvariant (variant);
   gtk_page_setup_set_paper_size (setup, paper_size);
   gtk_paper_size_free (paper_size);
-  g_key_file_unref (key_file);
 
   if (g_variant_lookup (variant, "MarginTop", "d", &margin))
     gtk_page_setup_set_top_margin (setup, margin, GTK_UNIT_MM);
