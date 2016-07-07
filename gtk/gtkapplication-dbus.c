@@ -259,7 +259,6 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
     {
       g_warning ("Failed to get client proxy: %s", error->message);
       g_clear_error (&error);
-      g_clear_object (&dbus->client_proxy);
       g_free (dbus->client_path);
       dbus->client_path = NULL;
       goto out;
