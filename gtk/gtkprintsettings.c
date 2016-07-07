@@ -2000,11 +2000,7 @@ gtk_print_settings_new_from_gvariant (GVariant *variant)
 
       g_variant_get_child (variant, i, "{&sv}", &key, &v);
       if (g_variant_is_of_type (v, G_VARIANT_TYPE_STRING))
-        {
-          const char *value;
-          g_variant_get (v, "&s", &value);
-          gtk_print_settings_set (settings, key, value);
-        }
+        gtk_print_settings_set (settings, key, g_variant_get_string (v, NULL));
       g_variant_unref (v);
     }
 
