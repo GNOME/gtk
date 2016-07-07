@@ -37,6 +37,10 @@
 #include "gtkshow.h"
 #include "gtkintl.h"
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+
 typedef struct {
   GtkPrintOperation *op;
   GDBusProxy *proxy;
@@ -517,6 +521,7 @@ call_prepare_print (GtkPrintOperation *op,
   GVariant *setup;
   GVariantBuilder opt_builder;
   GVariant *options;
+  char *parent_window_str = NULL;
 
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
   options = g_variant_builder_end (&opt_builder);
@@ -539,10 +544,19 @@ call_prepare_print (GtkPrintOperation *op,
       g_object_unref (page_setup);
     }
 
+  if (portal->parent != NULL && gtk_widget_is_visible (GTK_WIDGET (portal->parent)))
+    {
+      GdkWindow *window = gtk_widget_get_window (GTK_WIDGET (portal->parent));
+#ifdef GDK_WINDOWING_X11
+      if (GDK_IS_X11_WINDOW (window))
+        parent_window_str = g_strdup_printf ("x11:%x", (guint32)gdk_x11_window_get_xid (window));
+#endif
+    }
+
   g_dbus_proxy_call (portal->proxy,
                      "PreparePrint",
                      g_variant_new ("(ss@a{sv}@a{sv}@a{sv})",
-                                    "", /* window */
+                                    parent_window_str ? parent_window_str : "",
                                     _("Print"), /* title */
                                     settings,
                                     setup,
@@ -552,6 +566,8 @@ call_prepare_print (GtkPrintOperation *op,
                      NULL,
                      prepare_print_called,
                      portal);
+
+  g_free (parent_window_str);
 }
 
 GtkPrintOperationResult
