@@ -183,7 +183,7 @@ portal_job_complete (GtkPrintJob  *job,
   GtkPrintOperationPortal *op_portal = op->priv->platform_data;
   GtkPrintSettings *settings;
   const char *uri;
-  const char *filename;
+  char *filename;
   int fd, idx;
   GVariantBuilder opt_builder;
   GUnixFDList *fd_list;
@@ -198,13 +198,14 @@ portal_job_complete (GtkPrintJob  *job,
 
   settings = gtk_print_job_get_settings (job);
   uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
-  g_assert (g_str_has_prefix (uri, "file://"));
-  filename = uri + strlen ("file://");
+  filename = g_filename_from_uri (uri, NULL, NULL);
 
   fd = open (filename, O_RDONLY|O_CLOEXEC);
   fd_list = g_unix_fd_list_new ();
   idx = g_unix_fd_list_append (fd_list, fd, NULL);
   close (fd);
+
+  g_free (filename);
 
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&opt_builder, "{sv}",  "token", g_variant_new_uint32 (op_portal->token));
@@ -401,7 +402,7 @@ prepare_print_response (GDBusConnection *connection,
       printer = find_file_printer ();
 
       fd = g_file_open_tmp ("gtkprintXXXXXX", &filename, NULL);
-      uri = g_strconcat ("file://", filename, NULL);
+      uri = g_filename_to_uri (filename, NULL, NULL);
       gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_URI, uri);
       g_free (uri);
       close (fd);
@@ -611,7 +612,7 @@ gtk_print_operation_portal_launch_preview (GtkPrintOperation *op,
 {
   char *uri;
 
-  uri = g_strconcat ("file://", filename, NULL);
+  uri = g_filename_to_uri (filename, NULL, NULL);
   gtk_show_uri_on_window (parent, uri, GDK_CURRENT_TIME, NULL);
   g_free (uri);
 }
