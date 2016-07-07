@@ -184,7 +184,8 @@ open_file_msg_cb (GObject *source_object,
     {
       if (!data->hidden)
         _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (self), GTK_RESPONSE_DELETE_EVENT);
-      g_warning ("Can't open portal file chooser: %s\n", error->message);
+      g_warning ("Can't open portal file chooser: %s", error->message);
+      g_error_free (error);
       filechooser_portal_data_free (data);
       return;
     }
