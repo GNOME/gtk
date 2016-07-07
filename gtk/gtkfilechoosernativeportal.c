@@ -336,7 +336,8 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
     }
 
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
-  g_variant_builder_add (&opt_builder, "{sv}", "multiple", multiple);
+  g_variant_builder_add (&opt_builder, "{sv}", "multiple",
+                         g_variant_new_boolean (multiple));
   if (self->accept_label)
     g_variant_builder_add (&opt_builder, "{sv}", "accept_label",
                            g_variant_new_string (self->accept_label));
