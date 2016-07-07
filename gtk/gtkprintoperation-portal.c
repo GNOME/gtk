@@ -381,7 +381,6 @@ prepare_print_response (GDBusConnection *connection,
 
   if (portal->do_print)
     {
-      portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
       GVariant *v;
       GtkPrintSettings *settings;
       GtkPageSetup *page_setup;
@@ -389,6 +388,8 @@ prepare_print_response (GDBusConnection *connection,
       char *filename;
       char *uri;
       int fd;
+
+      portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
 
       v = g_variant_lookup_value (options, "settings", G_VARIANT_TYPE_VARDICT);
       settings = gtk_print_settings_new_from_gvariant (v);
