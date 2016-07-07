@@ -69,8 +69,7 @@ filechooser_portal_data_free (FilechooserPortalData *data)
     g_dbus_connection_signal_unsubscribe (data->connection,
                                           data->portal_response_signal_id);
 
-  //TODO: This causes a crash in other code. Do we double unref somewhere?
-  // g_object_unref (data->connection);
+  g_object_unref (data->connection);
 
   if (data->grab_widget)
     {
