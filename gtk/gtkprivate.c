@@ -271,19 +271,23 @@ _gtk_ensure_resources (void)
 gboolean
 gtk_should_use_portal (void)
 {
-  const char *use_portal;
-  char *path;
+  static const char *use_portal = NULL;
 
-  path = g_strdup_printf ("%s/flatpak-info", g_get_user_runtime_dir ());
-  if (g_file_test (path, G_FILE_TEST_EXISTS))
-    use_portal = "1";
-  else
+  if (G_UNLIKELY (use_portal == NULL))
     {
-      use_portal = g_getenv ("GTK_USE_PORTAL");
-      if (!use_portal)
-        use_portal = "";
-    }
-  g_free (path);
+      char *path;
 
-  return g_str_equal (use_portal, "1");
+      path = g_build_filename (g_get_user_runtime_dir (), "flatpak-info", NULL);
+      if (g_file_test (path, G_FILE_TEST_EXISTS))
+        use_portal = "1";
+      else
+        {
+          use_portal = g_getenv ("GTK_USE_PORTAL");
+          if (!use_portal)
+            use_portal = "";
+        }
+      g_free (path);
+    }
+
+  return use_portal[0] == '1';
 }
