@@ -1,7 +1,6 @@
 /* GTK - The GIMP Toolkit
- * gtkprintoperation-unix.c: Print Operation Details for Unix 
- *                           and Unix-like platforms
- * Copyright (C) 2006, Red Hat, Inc.
+ * gtkprintoperation-portal.c: Print Operation Details for sandboxed apps
+ * Copyright (C) 2016, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
