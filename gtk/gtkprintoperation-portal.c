@@ -193,6 +193,7 @@ portal_job_complete (GtkPrintJob  *job,
     {
       g_warning ("Print job failed: %s", error->message);
       op->priv->error = g_error_copy (error);
+      return;
     }
 
   op_portal->file_written = TRUE;
@@ -273,7 +274,6 @@ finish_print (PortalData        *portal,
   GtkPrintJob *job;
   GtkPrintOperationPortal *op_portal;
   cairo_t *cr;
-
 
   if (portal->do_print)
     {
