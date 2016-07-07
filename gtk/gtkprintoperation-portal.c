@@ -461,22 +461,34 @@ create_portal_data (GtkPrintOperation          *op,
                     GtkWindow                  *parent,
                     GtkPrintOperationPrintFunc  print_cb)
 {
+  GDBusProxy *proxy;
   PortalData *portal;
   guint signal_id;
+  GError *error = NULL;
 
   signal_id = g_signal_lookup ("create-custom-widget", GTK_TYPE_PRINT_OPERATION);
   if (g_signal_has_handler_pending (op, signal_id, 0, TRUE))
     g_warning ("GtkPrintOperation::create-custom-widget not supported with portal");
 
+  proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                         G_DBUS_PROXY_FLAGS_NONE,
+                                         NULL,
+                                         "org.freedesktop.portal.Desktop",
+                                         "/org/freedesktop/portal/desktop",
+                                         "org.freedesktop.portal.Print",
+                                         NULL,
+                                         &error);
+
+  if (proxy == NULL)
+    {
+      if (op->priv->error == NULL)
+        op->priv->error = g_error_copy (error);
+      g_error_free (error);
+      return NULL;
+    }
+
   portal = g_new0 (PortalData, 1);
-  portal->proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                                 G_DBUS_PROXY_FLAGS_NONE,
-                                                 NULL,
-                                                 "org.freedesktop.portal.Desktop",
-                                                 "/org/freedesktop/portal/desktop",
-                                                 "org.freedesktop.portal.Print",
-                                                 NULL,
-                                                 NULL);
+  portal->proxy = proxy;
   portal->op = g_object_ref (op);
   portal->parent = parent;
   portal->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
@@ -552,6 +564,9 @@ gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
   GtkPrintOperationResult result;
 
   portal = create_portal_data (op, parent, NULL);
+  if (portal == NULL)
+    return GTK_PRINT_OPERATION_RESULT_ERROR;
+
   call_prepare_print (op, portal);
 
   gdk_threads_leave ();
@@ -575,6 +590,9 @@ gtk_print_operation_portal_run_dialog_async (GtkPrintOperation          *op,
   PortalData *portal;
 
   portal = create_portal_data (op, parent, print_cb);
+  if (portal == NULL)
+    return;
+
   call_prepare_print (op, portal);
 }
 
