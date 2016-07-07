@@ -327,7 +327,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
     data->modal = TRUE;
 
-  if (data->modal && transient_for)
+  if (data->modal && transient_for != NULL)
     {
       data->grab_widget = gtk_invisible_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (transient_for)));
       gtk_grab_add (GTK_WIDGET (data->grab_widget));
