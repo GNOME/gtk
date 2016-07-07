@@ -138,5 +138,4 @@ gtk_show_uri_on_window (GtkWindow   *parent,
   g_object_unref (context);
 
   return ret;
-
 }
