@@ -747,6 +747,7 @@ gtk_file_chooser_native_hide (GtkNativeDialog *native)
 #ifdef GDK_WINDOWING_WIN32
       gtk_file_chooser_native_win32_hide (self);
 #endif
+      break;
     case MODE_PORTAL:
       gtk_file_chooser_native_portal_hide (self);
       break;
