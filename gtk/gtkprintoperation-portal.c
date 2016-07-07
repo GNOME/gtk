@@ -453,20 +453,17 @@ prepare_print_called (GObject      *source,
   g_variant_unref (ret);
 }
 
-GtkPrintOperationResult
-gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
-                                       gboolean           show_dialog,
-                                       GtkWindow         *parent,
-                                       gboolean          *do_print)
+PortalData *
+create_portal_data (GtkPrintOperation          *op,
+                    GtkWindow                  *parent,
+                    GtkPrintOperationPrintFunc  print_cb)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
-  GVariant *settings;
-  GVariant *setup;
-  GVariantBuilder opt_builder;
-  GVariant *options;
-  guint signal_id;
   PortalData *portal;
-  GtkPrintOperationResult result;
+  guint signal_id;
+
+  signal_id = g_signal_lookup ("create-custom-widget", GTK_TYPE_PRINT_OPERATION);
+  if (g_signal_has_handler_pending (op, signal_id, 0, TRUE))
+    g_warning ("GtkPrintOperation::create-custom-widget not supported with portal");
 
   portal = g_new0 (PortalData, 1);
   portal->proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
@@ -480,12 +477,31 @@ gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
   portal->op = g_object_ref (op);
   portal->parent = parent;
   portal->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
-  portal->print_cb = NULL;
-  portal->destroy = NULL;
+  portal->print_cb = print_cb;
 
-  signal_id = g_signal_lookup ("create-custom-widget", GTK_TYPE_PRINT_OPERATION);
-  if (g_signal_has_handler_pending (op, signal_id, 0, TRUE))
-    g_warning ("GtkPrintOperation::create-custom-widget not supported with portal");
+  if (print_cb) /* async case */
+    {
+      portal->loop = NULL;
+      portal->destroy = portal_data_free;
+    }
+  else
+    {
+      portal->loop = g_main_loop_new (NULL, FALSE);
+      portal->destroy = NULL;
+    }
+
+  return portal;
+}
+
+static void
+call_prepare_print (GtkPrintOperation *op,
+                    PortalData        *portal)
+{
+  GtkPrintOperationPrivate *priv = op->priv;
+  GVariant *settings;
+  GVariant *setup;
+  GVariantBuilder opt_builder;
+  GVariant *options;
 
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
   options = g_variant_builder_end (&opt_builder);
@@ -508,8 +524,6 @@ gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
       g_object_unref (page_setup);
     }
 
-  portal->loop = g_main_loop_new (NULL, FALSE);
-
   g_dbus_proxy_call (portal->proxy,
                      "PreparePrint",
                      g_variant_new ("(ss@a{sv}@a{sv}@a{sv})",
@@ -523,6 +537,19 @@ gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
                      NULL,
                      prepare_print_called,
                      portal);
+}
+
+GtkPrintOperationResult
+gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
+                                       gboolean           show_dialog,
+                                       GtkWindow         *parent,
+                                       gboolean          *do_print)
+{
+  PortalData *portal;
+  GtkPrintOperationResult result;
+
+  portal = create_portal_data (op, parent, NULL);
+  call_prepare_print (op, portal);
 
   gdk_threads_leave ();
   g_main_loop_run (portal->loop);
@@ -542,67 +569,10 @@ gtk_print_operation_portal_run_dialog_async (GtkPrintOperation          *op,
                                              GtkWindow                  *parent,
                                              GtkPrintOperationPrintFunc  print_cb)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
-  GVariant *settings;
-  GVariant *setup;
-  GVariantBuilder opt_builder;
-  GVariant *options;
-  guint signal_id;
   PortalData *portal;
 
-  portal = g_new0 (PortalData, 1);
-  portal->proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                                 G_DBUS_PROXY_FLAGS_NONE,
-                                                 NULL,
-                                                 "org.freedesktop.portal.Desktop",
-                                                 "/org/freedesktop/portal/desktop",
-                                                 "org.freedesktop.portal.Print",
-                                                 NULL,
-                                                 NULL);
-  portal->op = g_object_ref (op);
-  portal->parent = parent;
-  portal->result = GTK_PRINT_OPERATION_RESULT_CANCEL;
-  portal->print_cb = print_cb;
-  portal->destroy = portal_data_free;
-
-  signal_id = g_signal_lookup ("create-custom-widget", GTK_TYPE_PRINT_OPERATION);
-  if (g_signal_has_handler_pending (op, signal_id, 0, TRUE))
-    g_warning ("GtkPrintOperation::create-custom-widget not supported with portal");
-
-  g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
-  options = g_variant_builder_end (&opt_builder);
-
-  if (priv->print_settings)
-    settings = gtk_print_settings_to_gvariant (priv->print_settings);
-  else
-    {
-      GVariantBuilder builder;
-      g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-      settings = g_variant_builder_end (&builder);
-    }
-
-  if (priv->default_page_setup)
-    setup = gtk_page_setup_to_gvariant (priv->default_page_setup);
-  else
-    {
-      GtkPageSetup *page_setup = gtk_page_setup_new ();
-      setup = gtk_page_setup_to_gvariant (page_setup);
-      g_object_unref (page_setup);
-    }
-
-  g_dbus_proxy_call (portal->proxy,
-                     "PreparePrint",
-                     g_variant_new ("ss@a{sv}@a{sv}@a{sv})",
-                                    "", /* window */
-                                    _("Print"), /* title */
-                                    settings,
-                                    setup,
-                                    options),
-                     G_DBUS_CALL_FLAGS_NONE,
-                     -1,
-                     NULL,
-                     prepare_print_called,
-                     portal);
+  portal = create_portal_data (op, parent, print_cb);
+  call_prepare_print (op, portal);
 }
 
 void
