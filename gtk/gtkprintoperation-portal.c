@@ -433,7 +433,8 @@ prepare_print_called (GObject      *source,
     {
       g_warning ("Error: %s", error->message);
       g_error_free (error);
-      g_main_loop_quit (portal->loop);
+      if (portal->loop)
+        g_main_loop_quit (portal->loop);
       return;
     }
   else
