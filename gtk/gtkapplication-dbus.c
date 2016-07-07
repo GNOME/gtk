@@ -686,7 +686,7 @@ gtk_application_impl_dbus_finalize (GObject *object)
 {
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) object;
 
-  g_object_unref (dbus->inhibit_proxy);
+  g_clear_object (&dbus->inhibit_proxy);
   g_slist_free_full (dbus->inhibit_handles, inhibit_handle_free);
   g_free (dbus->app_menu_path);
   g_free (dbus->menubar_path);
