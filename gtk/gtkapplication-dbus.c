@@ -508,7 +508,9 @@ gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
         {
           if (!warned)
             {
-              g_warning ("Calling org.gnome.SessionManager.Inhibit failed: %s", error->message);
+              g_warning ("Calling %s.Inhibit failed: %s",
+                         g_dbus_proxy_get_interface_name (dbus->sm_proxy),
+                         error->message);
               warned = TRUE;
             }
           g_clear_error (&error);
@@ -549,7 +551,9 @@ gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
         {
           if (!warned)
             {
-              g_warning ("Calling org.freedesktop.portal.Inhibit.Inhibit failed: %s", error->message);
+              g_warning ("Calling %s.Inhibit failed: %s",
+                         g_dbus_proxy_get_interface_name (dbus->inhibit_proxy),
+                         error->message);
               warned = TRUE;
             }
           g_clear_error (&error);
@@ -625,7 +629,9 @@ gtk_application_impl_dbus_is_inhibited (GtkApplicationImpl         *impl,
     {
       if (!warned)
         {
-          g_warning ("Calling IsInhibited failed: %s", error->message);
+          g_warning ("Calling %s.IsInhibited failed: %s",
+                     g_dbus_proxy_get_interface_name (dbus->sm_proxy),
+                     error->message);
           warned = TRUE;
         }
       g_error_free (error);
