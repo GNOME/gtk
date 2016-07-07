@@ -433,7 +433,8 @@ prepare_print_called (GObject      *source,
   ret = g_dbus_proxy_call_finish (portal->proxy, result, &error);
   if (ret == NULL)
     {
-      g_warning ("Error: %s", error->message);
+      if (portal->op->priv->error == NULL)
+        portal->op->priv->error = g_error_copy (error);
       g_error_free (error);
       if (portal->loop)
         g_main_loop_quit (portal->loop);
