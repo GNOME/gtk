@@ -682,6 +682,9 @@ gtk_file_chooser_widget_finalize (GObject *object)
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (object);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
+  if (priv->choices)
+    g_hash_table_unref (priv->choices);
+
   if (priv->location_changed_id > 0)
     g_source_remove (priv->location_changed_id);
 
