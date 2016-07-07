@@ -82,7 +82,7 @@ gtk_show_uri (GdkScreen    *screen,
 
 /**
  * gtk_show_uri_on_window:
- * @parent: parent window
+ * @parent: (allow-none): parent window
  * @uri: the uri to show
  * @timestamp: a timestamp to prevent focus stealing
  * @error: a #GError that is returned in case of errors
