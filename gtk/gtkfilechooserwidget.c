@@ -8712,7 +8712,7 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
 
   if (priv->choices == NULL)
     {
-      priv->choices = g_hash_table_new (g_str_hash, g_str_equal);
+      priv->choices = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
       priv->choice_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
       set_extra_widget (impl, priv->choice_box);
     }
