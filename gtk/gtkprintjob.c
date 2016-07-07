@@ -469,6 +469,7 @@ gtk_print_job_set_source_fd (GtkPrintJob  *job,
                              GError      **error)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
+  g_return_val_if_fail (fd >= 0, FALSE);
 
   job->priv->spool_io = g_io_channel_unix_new (fd);
   if (g_io_channel_set_encoding (job->priv->spool_io, NULL, error) != G_IO_STATUS_NORMAL)
