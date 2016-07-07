@@ -883,8 +883,7 @@ gtk_page_setup_to_gvariant (GtkPageSetup *setup)
 
   orientation = enum_to_string (GTK_TYPE_PAGE_ORIENTATION,
                                 gtk_page_setup_get_orientation (setup));
-  g_variant_builder_add (&builder, "{sv}", "Orientation", g_variant_new_string (orientation));
-  g_free (orientation);
+  g_variant_builder_add (&builder, "{sv}", "Orientation", g_variant_new_take_string (orientation));
 
   return g_variant_builder_end (&builder);
 }
