@@ -187,6 +187,7 @@ open_file_msg_cb (GObject *source_object,
       g_warning ("Can't open portal file chooser: %s", error->message);
       g_error_free (error);
       filechooser_portal_data_free (data);
+      self->mode_data = NULL;
       return;
     }
 
@@ -198,6 +199,7 @@ open_file_msg_cb (GObject *source_object,
       /* The dialog was hidden before we got the handle, close it now */
       send_close (data);
       filechooser_portal_data_free (data);
+      self->mode_data = NULL;
     }
   else
     {
