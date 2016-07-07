@@ -1078,3 +1078,90 @@ gtk_paper_size_to_key_file (GtkPaperSize *size,
   g_key_file_set_double (key_file, group_name,
                          "Height", gtk_paper_size_get_height (size, GTK_UNIT_MM));
 }
+
+/**
+ * gtk_paper_size_to_gvariant:
+ * @paper_size: a #GtkPaperSize
+ *
+ * Serialize a paper size to an a{sv} variant.
+ *
+ * Returns: (transfer none): a new, floating, #GVariant
+ *
+ * Since: 3.22
+ */
+GVariant *
+gtk_paper_size_to_gvariant (GtkPaperSize *paper_size)
+{
+  const char *name;
+  const char *ppd_name;
+  const char *display_name;
+  GVariantBuilder builder;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+
+  name = gtk_paper_size_get_name (paper_size);
+  ppd_name = gtk_paper_size_get_ppd_name (paper_size);
+  display_name = gtk_paper_size_get_display_name (paper_size);
+
+  if (ppd_name != NULL)
+    g_variant_builder_add (&builder, "{sv}", "PPDName", g_variant_new_string (ppd_name));
+  else
+    g_variant_builder_add (&builder, "{sv}", "Name", g_variant_new_string (name));
+
+  if (display_name != NULL)
+    g_variant_builder_add (&builder, "{sv}", "DisplayName", g_variant_new_string (display_name));
+
+  g_variant_builder_add (&builder, "{sv}", "Width", g_variant_new_double (gtk_paper_size_get_width (paper_size, GTK_UNIT_MM)));
+  g_variant_builder_add (&builder, "{sv}", "Height", g_variant_new_double (gtk_paper_size_get_height (paper_size, GTK_UNIT_MM)));
+
+  return g_variant_builder_end (&builder);
+}
+
+/**
+ * gtk_paper_size_new_from_gvariant:
+ * @variant: an a{sv} #GVariant
+ *
+ * Deserialize a paper size from an a{sv} variant in
+ * the format produced by gtk_paper_size_to_gvariant().
+ *
+ * Returns: (transfer full): a new #GtkPaperSize object
+ *
+ * Since: 3.22
+ */
+GtkPaperSize *
+gtk_paper_size_new_from_gvariant (GVariant *variant)
+{
+  GtkPaperSize *paper_size;
+  const char *name;
+  const char *ppd_name;
+  const char *display_name;
+  gdouble width, height;
+
+  g_return_val_if_fail (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT), NULL);
+
+  if (!g_variant_lookup (variant, "Width", "d", &width) ||
+      !g_variant_lookup (variant, "Height", "d", &height))
+    return NULL;
+
+  if (!g_variant_lookup (variant, "Name", "&s", &name))
+    name = NULL;
+
+  if (!g_variant_lookup (variant, "PPDName", "&s", &ppd_name))
+    ppd_name = NULL;
+
+  if (!g_variant_lookup (variant, "DisplayName", "&s", &display_name))
+    display_name = name;
+
+  if (ppd_name != NULL)
+    paper_size = gtk_paper_size_new_from_ppd (ppd_name,
+                                              display_name,
+                                              _gtk_print_convert_from_mm (width, GTK_UNIT_POINTS),
+                                              _gtk_print_convert_from_mm (height, GTK_UNIT_POINTS));
+  else if (name != NULL)
+    paper_size = gtk_paper_size_new_custom (name, display_name,
+                                            width, height, GTK_UNIT_MM);
+  else
+    paper_size = NULL;
+
+  return paper_size;
+}
