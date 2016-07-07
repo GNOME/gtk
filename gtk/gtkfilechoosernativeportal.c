@@ -163,6 +163,8 @@ send_close (FilechooserPortalData *data)
       g_warning ("unable to send FileChooser Close message: %s", error->message);
       g_error_free (error);
     }
+
+  g_object_unref (message);
 }
 
 static void
@@ -386,6 +388,8 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
                                              NULL,
                                              open_file_msg_cb,
                                              data);
+
+  g_object_unref (message);
 
   self->mode_data = data;
   return TRUE;
