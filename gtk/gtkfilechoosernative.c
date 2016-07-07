@@ -355,7 +355,6 @@ gtk_file_chooser_native_add_choice (GtkFileChooser  *chooser,
   choice->label = g_strdup (label);
   choice->options = g_strdupv ((char **)options);
   choice->option_labels = g_strdupv ((char **)option_labels);
-  choice->selected = NULL;
 
   self->choices = g_slist_append (self->choices, choice);
 
