@@ -743,7 +743,7 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
       switch (rule->type)
         {
         case FILTER_RULE_PATTERN:
-          g_variant_builder_add (&builder, "(us)", 0, rule->u.mime_type);
+          g_variant_builder_add (&builder, "(us)", 0, rule->u.pattern);
           break;
         case FILTER_RULE_MIME_TYPE:
           g_variant_builder_add (&builder, "(us)", 1, rule->u.mime_type);
