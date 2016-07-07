@@ -36,6 +36,7 @@
 #include "gtkpagesetup.h"
 #include "gtkprintbackend.h"
 #include "gtkshow.h"
+#include "gtkintl.h"
 
 typedef struct {
   GtkPrintOperation *op;
@@ -214,7 +215,7 @@ portal_job_complete (GtkPrintJob  *job,
                                        "Print",
                                        g_variant_new ("(ssh@a{sv})",
                                                       "", /* window */
-                                                      "", /* title */
+                                                      _("Print"), /* title */
                                                       idx,
                                                       g_variant_builder_end (&opt_builder)),
                                        G_DBUS_CALL_FLAGS_NONE,
@@ -473,7 +474,7 @@ gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
                                                  NULL,
                                                  "org.freedesktop.portal.Desktop",
                                                  "/org/freedesktop/portal/desktop",
-                                                 "org.freedestkop.portal.Print",
+                                                 "org.freedesktop.portal.Print",
                                                  NULL,
                                                  NULL);
   portal->op = g_object_ref (op);
@@ -511,9 +512,9 @@ gtk_print_operation_portal_run_dialog (GtkPrintOperation *op,
 
   g_dbus_proxy_call (portal->proxy,
                      "PreparePrint",
-                     g_variant_new ("ss@a{sv}@a{sv}@a{sv})",
+                     g_variant_new ("(ss@a{sv}@a{sv}@a{sv})",
                                     "", /* window */
-                                    "Print Test",
+                                    _("Print"), /* title */
                                     settings,
                                     setup,
                                     options),
@@ -555,7 +556,7 @@ gtk_print_operation_portal_run_dialog_async (GtkPrintOperation          *op,
                                                  NULL,
                                                  "org.freedesktop.portal.Desktop",
                                                  "/org/freedesktop/portal/desktop",
-                                                 "org.freedestkop.portal.Print",
+                                                 "org.freedesktop.portal.Print",
                                                  NULL,
                                                  NULL);
   portal->op = g_object_ref (op);
@@ -593,7 +594,7 @@ gtk_print_operation_portal_run_dialog_async (GtkPrintOperation          *op,
                      "PreparePrint",
                      g_variant_new ("ss@a{sv}@a{sv}@a{sv})",
                                     "", /* window */
-                                    "Print Test",
+                                    _("Print"), /* title */
                                     settings,
                                     setup,
                                     options),
