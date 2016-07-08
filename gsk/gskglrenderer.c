@@ -845,6 +845,13 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   gsk_gl_renderer_clear (self);
 
   glDisable (GL_BLEND);
+  if (self->has_depth_buffer)
+    {
+      glEnable (GL_DEPTH_TEST);
+      glDepthFunc (GL_LESS);
+    }
+  else
+    glDisable (GL_DEPTH_TEST);
 
   /* Opaque pass: front-to-back */
   GSK_NOTE (OPENGL, g_print ("Rendering %u opaque items\n", self->opaque_render_items->len));
@@ -853,6 +860,12 @@ gsk_gl_renderer_render (GskRenderer *renderer,
       RenderItem *item = &g_array_index (self->opaque_render_items, RenderItem, i);
 
       render_item (self, item);
+    }
+
+  if (self->has_depth_buffer)
+    {
+      glEnable (GL_DEPTH_TEST);
+      glDepthFunc (GL_LEQUAL);
     }
 
   glEnable (GL_BLEND);
