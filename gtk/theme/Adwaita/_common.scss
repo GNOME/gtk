@@ -1994,9 +1994,6 @@ popover.background {
   separator { margin: 3px; }
 
   list separator { margin: 0px; }
-
-  checkbutton,
-  radiobutton { @extend modelbutton.flat; }
 }
 
 /*************
