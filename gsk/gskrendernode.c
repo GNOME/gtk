@@ -144,6 +144,8 @@ gsk_render_node_finalize (GskRenderNode *self)
 {
   GskRenderNodeIter iter;
 
+  self->is_mutable = TRUE;
+
   gsk_render_node_iter_init (&iter, self);
   while (gsk_render_node_iter_next (&iter, NULL))
     gsk_render_node_iter_remove (&iter);
