@@ -6,6 +6,7 @@ static const GDebugKey gsk_debug_keys[] = {
   { "renderer", GSK_DEBUG_RENDERER },
   { "cairo", GSK_DEBUG_CAIRO },
   { "opengl", GSK_DEBUG_OPENGL },
+  { "shaders", GSK_DEBUG_SHADERS },
 };
 #endif
 
