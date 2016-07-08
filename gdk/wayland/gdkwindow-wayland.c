@@ -93,6 +93,13 @@ gdk_wayland_window_init (GdkWaylandWindow *wayland_window)
 typedef struct _GdkWindowImplWayland GdkWindowImplWayland;
 typedef struct _GdkWindowImplWaylandClass GdkWindowImplWaylandClass;
 
+typedef enum _PositionMethod
+{
+  POSITION_METHOD_NONE,
+  POSITION_METHOD_MOVE_RESIZE,
+  POSITION_METHOD_MOVE_TO_RECT
+} PositionMethod;
+
 struct _GdkWindowImplWayland
 {
   GdkWindowImpl parent_instance;
@@ -122,10 +129,9 @@ struct _GdkWindowImplWayland
   unsigned int pending_buffer_attached : 1;
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
-  unsigned int position_set : 1;
-  unsigned int moved_to_rect : 1;
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
+  PositionMethod position_method;
 
   cairo_surface_t *staging_cairo_surface;
   cairo_surface_t *committed_cairo_surface;
@@ -1284,7 +1290,6 @@ xdg_surface_configure (void                   *data,
       impl->initial_configure_received = TRUE;
     }
 
-  /* xdg_popup configuration aren't handled yet so just pretend we listened. */
   if (impl->display_server.xdg_popup)
     {
       zxdg_surface_v6_ack_configure (xdg_surface, serial);
@@ -1463,6 +1468,171 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
 }
 
 static void
+calculate_popup_rect (GdkWindow    *window,
+                      GdkRectangle  anchor_rect,
+                      GdkGravity    rect_anchor,
+                      GdkGravity    window_anchor,
+                      int           rect_anchor_dx,
+                      int           rect_anchor_dy,
+                      GdkRectangle *out_rect)
+{
+  GdkRectangle geometry;
+  int x = 0, y = 0;
+
+  gdk_wayland_window_get_window_geometry (window, &geometry);
+
+  anchor_rect.x += rect_anchor_dx;
+  anchor_rect.y += rect_anchor_dy;
+
+  switch (rect_anchor)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+      x = anchor_rect.x;
+      y = anchor_rect.y;
+      break;
+    case GDK_GRAVITY_NORTH:
+      x = anchor_rect.x + (anchor_rect.width / 2);
+      y = anchor_rect.y;
+      break;
+    case GDK_GRAVITY_NORTH_EAST:
+      x = anchor_rect.x + anchor_rect.width;
+      y = anchor_rect.y;
+      break;
+    case GDK_GRAVITY_WEST:
+      x = anchor_rect.x;
+      y = anchor_rect.y + (anchor_rect.height / 2);
+      break;
+    case GDK_GRAVITY_CENTER:
+      x = anchor_rect.x + (anchor_rect.width / 2);
+      y = anchor_rect.y + (anchor_rect.height / 2);
+      break;
+    case GDK_GRAVITY_EAST:
+      x = anchor_rect.x + anchor_rect.width;
+      y = anchor_rect.y + (anchor_rect.height / 2);
+      break;
+    case GDK_GRAVITY_SOUTH_WEST:
+      x = anchor_rect.x;
+      y = anchor_rect.y + (anchor_rect.height / 2);
+      break;
+    case GDK_GRAVITY_SOUTH:
+      x = anchor_rect.x + (anchor_rect.width / 2);
+      y = anchor_rect.y + anchor_rect.height;
+      break;
+    case GDK_GRAVITY_SOUTH_EAST:
+      x = anchor_rect.x + anchor_rect.width;
+      y = anchor_rect.y + anchor_rect.height;
+      break;
+    }
+
+  switch (window_anchor)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+      x = x;
+      y = y;
+      break;
+    case GDK_GRAVITY_NORTH:
+      x -= geometry.width / 2;
+      y = y;
+      break;
+    case GDK_GRAVITY_NORTH_EAST:
+      x -= geometry.width;
+      y = y;
+      break;
+    case GDK_GRAVITY_WEST:
+      x = x;
+      y -= geometry.height / 2;
+      break;
+    case GDK_GRAVITY_CENTER:
+      x -= geometry.width / 2;
+      y -= geometry.height / 2;
+      break;
+    case GDK_GRAVITY_EAST:
+      x -= geometry.width;
+      y -= geometry.height / 2;
+      break;
+    case GDK_GRAVITY_SOUTH_WEST:
+      x = x;
+      y -= geometry.height;
+      break;
+    case GDK_GRAVITY_SOUTH:
+      x -= geometry.width / 2;
+      y -= geometry.height;
+      break;
+    case GDK_GRAVITY_SOUTH_EAST:
+      x -= geometry.width;
+      y -= geometry.height;
+      break;
+    }
+
+  *out_rect = (GdkRectangle) {
+    .x = x,
+    .y = y,
+    .width = geometry.width,
+    .height = geometry.height
+  };
+}
+
+static GdkGravity
+flip_anchor_horizontally (GdkGravity anchor)
+{
+  switch (anchor)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+      return GDK_GRAVITY_NORTH_EAST;
+    case GDK_GRAVITY_NORTH:
+      return GDK_GRAVITY_NORTH;
+    case GDK_GRAVITY_NORTH_EAST:
+      return GDK_GRAVITY_NORTH_WEST;
+    case GDK_GRAVITY_WEST:
+      return GDK_GRAVITY_EAST;
+    case GDK_GRAVITY_CENTER:
+      return GDK_GRAVITY_CENTER;
+    case GDK_GRAVITY_EAST:
+      return GDK_GRAVITY_WEST;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return GDK_GRAVITY_SOUTH_EAST;
+    case GDK_GRAVITY_SOUTH:
+      return GDK_GRAVITY_SOUTH;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return GDK_GRAVITY_SOUTH_WEST;
+    }
+
+  g_assert_not_reached ();
+}
+
+static GdkGravity
+flip_anchor_vertically (GdkGravity anchor)
+{
+  switch (anchor)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+      return GDK_GRAVITY_SOUTH_WEST;
+    case GDK_GRAVITY_NORTH:
+      return GDK_GRAVITY_SOUTH;
+    case GDK_GRAVITY_NORTH_EAST:
+      return GDK_GRAVITY_SOUTH_EAST;
+    case GDK_GRAVITY_WEST:
+      return GDK_GRAVITY_WEST;
+    case GDK_GRAVITY_CENTER:
+      return GDK_GRAVITY_CENTER;
+    case GDK_GRAVITY_EAST:
+      return GDK_GRAVITY_EAST;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return GDK_GRAVITY_NORTH_WEST;
+    case GDK_GRAVITY_SOUTH:
+      return GDK_GRAVITY_NORTH;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return GDK_GRAVITY_NORTH_EAST;
+    }
+
+  g_assert_not_reached ();
+}
+
+static void
 xdg_popup_configure (void                 *data,
                      struct zxdg_popup_v6 *xdg_popup,
                      int32_t               x,
@@ -1470,6 +1640,91 @@ xdg_popup_configure (void                 *data,
                      int32_t               width,
                      int32_t               height)
 {
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkRectangle best_rect;
+  GdkRectangle flipped_rect;
+  GdkRectangle geometry;
+  GdkRectangle final_rect;
+  gboolean flipped_x, flipped_y;
+
+  g_return_if_fail (impl->transient_for);
+
+  x += impl->transient_for->shadow_left;
+  y += impl->transient_for->shadow_top;
+
+  calculate_popup_rect (window,
+                        impl->pending_move_to_rect.rect,
+                        impl->pending_move_to_rect.rect_anchor,
+                        impl->pending_move_to_rect.window_anchor,
+                        impl->pending_move_to_rect.rect_anchor_dx,
+                        impl->pending_move_to_rect.rect_anchor_dy,
+                        &best_rect);
+
+  gdk_wayland_window_get_window_geometry (window, &geometry);
+  final_rect = (GdkRectangle) {
+    .x = x,
+    .y = y,
+    .width = geometry.width,
+    .height = geometry.height
+  };
+
+  flipped_rect = best_rect;
+
+  if (x != best_rect.x &&
+      impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_X)
+    {
+      GdkRectangle flipped_x_rect;
+      GdkGravity flipped_rect_anchor;
+      GdkGravity flipped_window_anchor;
+
+      flipped_rect_anchor =
+        flip_anchor_horizontally (impl->pending_move_to_rect.rect_anchor);
+      flipped_window_anchor =
+        flip_anchor_horizontally (impl->pending_move_to_rect.window_anchor),
+      calculate_popup_rect (window,
+                            impl->pending_move_to_rect.rect,
+                            flipped_rect_anchor,
+                            flipped_window_anchor,
+                            impl->pending_move_to_rect.rect_anchor_dx,
+                            impl->pending_move_to_rect.rect_anchor_dy,
+                            &flipped_x_rect);
+
+      if (flipped_x_rect.x == x)
+        flipped_rect.x = x;
+    }
+  if (y != best_rect.y &&
+      impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_Y)
+    {
+      GdkRectangle flipped_y_rect;
+      GdkGravity flipped_rect_anchor;
+      GdkGravity flipped_window_anchor;
+
+      flipped_rect_anchor =
+        flip_anchor_vertically (impl->pending_move_to_rect.rect_anchor);
+      flipped_window_anchor =
+        flip_anchor_vertically (impl->pending_move_to_rect.window_anchor),
+      calculate_popup_rect (window,
+                            impl->pending_move_to_rect.rect,
+                            flipped_rect_anchor,
+                            flipped_window_anchor,
+                            impl->pending_move_to_rect.rect_anchor_dx,
+                            impl->pending_move_to_rect.rect_anchor_dy,
+                            &flipped_y_rect);
+
+      if (flipped_y_rect.y == y)
+        flipped_rect.y = y;
+    }
+
+  flipped_x = flipped_rect.x != best_rect.x;
+  flipped_y = flipped_rect.y != best_rect.y;
+
+  g_signal_emit_by_name (window,
+                         "moved-to-rect",
+                         &flipped_rect,
+                         &final_rect,
+                         flipped_x,
+                         flipped_y);
 }
 
 static void
@@ -1489,34 +1744,164 @@ static const struct zxdg_popup_v6_listener xdg_popup_listener = {
   xdg_popup_done,
 };
 
-static void
-gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
-                                     GdkWindow      *parent,
-                                     struct wl_seat *seat)
+static enum zxdg_positioner_v6_anchor
+rect_anchor_to_anchor (GdkGravity rect_anchor)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  switch (rect_anchor)
+    {
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_STATIC:
+      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+    case GDK_GRAVITY_NORTH:
+      return ZXDG_POSITIONER_V6_ANCHOR_TOP;
+    case GDK_GRAVITY_NORTH_EAST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+    case GDK_GRAVITY_WEST:
+      return ZXDG_POSITIONER_V6_ANCHOR_LEFT;
+    case GDK_GRAVITY_CENTER:
+      return ZXDG_POSITIONER_V6_ANCHOR_NONE;
+    case GDK_GRAVITY_EAST:
+      return ZXDG_POSITIONER_V6_ANCHOR_RIGHT;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
+              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+    case GDK_GRAVITY_SOUTH:
+      return ZXDG_POSITIONER_V6_ANCHOR_BOTTOM;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
+              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static enum zxdg_positioner_v6_gravity
+window_anchor_to_gravity (GdkGravity rect_anchor)
+{
+  switch (rect_anchor)
+    {
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_STATIC:
+      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
+              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+    case GDK_GRAVITY_NORTH:
+      return ZXDG_POSITIONER_V6_ANCHOR_BOTTOM;
+    case GDK_GRAVITY_NORTH_EAST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
+              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+    case GDK_GRAVITY_WEST:
+      return ZXDG_POSITIONER_V6_ANCHOR_RIGHT;
+    case GDK_GRAVITY_CENTER:
+      return ZXDG_POSITIONER_V6_ANCHOR_NONE;
+    case GDK_GRAVITY_EAST:
+      return ZXDG_POSITIONER_V6_ANCHOR_LEFT;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+    case GDK_GRAVITY_SOUTH:
+      return ZXDG_POSITIONER_V6_ANCHOR_TOP;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static GdkWindow *
+get_real_parent_and_translate (GdkWindow  *child,
+                               GdkWindow  *parent,
+                               gint       *x,
+                               gint       *y)
+{
+  while (parent &&
+         !gdk_window_has_native (parent) &&
+         gdk_window_get_effective_parent (parent))
+    {
+      *x += parent->x;
+      *y += parent->y;
+      parent = gdk_window_get_effective_parent (parent);
+    }
+
+  return parent;
+}
+
+static struct zxdg_positioner_v6 *
+create_dynamic_positioner (GdkWindow *window,
+                           GdkWindow *parent)
+{
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowImplWayland *parent_impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
+  GdkWaylandDisplay *display =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  struct zxdg_positioner_v6 *positioner;
+  GdkRectangle geometry;
+  enum zxdg_positioner_v6_anchor anchor;
+  enum zxdg_positioner_v6_anchor gravity;
+  uint32_t constraint_adjustment = ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_NONE;
+  gint real_anchor_rect_x, real_anchor_rect_y;
+  gint anchor_rect_width, anchor_rect_height;
+
+  positioner = zxdg_shell_v6_create_positioner (display->xdg_shell);
+
+  gdk_wayland_window_get_window_geometry (window, &geometry);
+  zxdg_positioner_v6_set_size (positioner, geometry.width, geometry.height);
+
+  real_anchor_rect_x = impl->pending_move_to_rect.rect.x;
+  real_anchor_rect_y = impl->pending_move_to_rect.rect.y;
+  parent = get_real_parent_and_translate (window,
+                                          impl->transient_for,
+                                          &real_anchor_rect_x,
+                                          &real_anchor_rect_y);
+
+  anchor_rect_width = impl->pending_move_to_rect.rect.width;
+  anchor_rect_height = impl->pending_move_to_rect.rect.height;
+  zxdg_positioner_v6_set_anchor_rect (positioner,
+                                      real_anchor_rect_x - parent->shadow_left,
+                                      real_anchor_rect_y - parent->shadow_top,
+                                      anchor_rect_width,
+                                      anchor_rect_height);
+
+  zxdg_positioner_v6_set_offset (positioner,
+                                 impl->pending_move_to_rect.rect_anchor_dx,
+                                 impl->pending_move_to_rect.rect_anchor_dy);
+
+  anchor = rect_anchor_to_anchor (impl->pending_move_to_rect.rect_anchor);
+  zxdg_positioner_v6_set_anchor (positioner, anchor);
+
+  gravity = window_anchor_to_gravity (impl->pending_move_to_rect.window_anchor);
+  zxdg_positioner_v6_set_gravity (positioner, gravity);
+
+  if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_X)
+    constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_FLIP_X;
+  if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_Y)
+    constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_FLIP_Y;
+  if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_SLIDE_X)
+    constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_SLIDE_X;
+  if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_SLIDE_Y)
+    constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_SLIDE_Y;
+  if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_RESIZE_X)
+    constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_RESIZE_X;
+  if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_RESIZE_Y)
+    constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_RESIZE_Y;
+
+  zxdg_positioner_v6_set_constraint_adjustment (positioner,
+                                                constraint_adjustment);
+
+  return positioner;
+}
+
+static struct zxdg_positioner_v6 *
+create_simple_positioner (GdkWindow *window,
+                          GdkWindow *parent)
+{
+  GdkWaylandDisplay *display =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   struct zxdg_positioner_v6 *positioner;
   GdkRectangle geometry;
   GdkRectangle parent_geometry;
   int parent_x, parent_y;
-  GdkSeat *gdk_seat;
-  guint32 serial;
-
-  if (!impl->display_server.wl_surface)
-    return;
-
-  if (!parent_impl->display_server.xdg_surface)
-    return;
-
-  impl->display_server.xdg_surface =
-    zxdg_shell_v6_get_xdg_surface (display->xdg_shell,
-                                   impl->display_server.wl_surface);
-  zxdg_surface_v6_add_listener (impl->display_server.xdg_surface,
-                                &xdg_surface_listener,
-                                window);
-  gdk_window_freeze_updates (window);
 
   positioner = zxdg_shell_v6_create_positioner (display->xdg_shell);
 
@@ -1540,6 +1925,51 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
   zxdg_positioner_v6_set_gravity (positioner,
                                   (ZXDG_POSITIONER_V6_GRAVITY_BOTTOM |
                                    ZXDG_POSITIONER_V6_GRAVITY_RIGHT));
+
+  return positioner;
+}
+
+static void
+gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
+                                     GdkWindow      *parent,
+                                     struct wl_seat *seat)
+{
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowImplWayland *parent_impl = GDK_WINDOW_IMPL_WAYLAND (parent->impl);
+  struct zxdg_positioner_v6 *positioner;
+  GdkSeat *gdk_seat;
+  guint32 serial;
+
+  if (!impl->display_server.wl_surface)
+    return;
+
+  if (!parent_impl->display_server.xdg_surface)
+    return;
+
+  if (impl->display_server.xdg_toplevel)
+    {
+      g_warning ("Can't map popup, already mapped as toplevel");
+      return;
+    }
+  if (impl->display_server.xdg_popup)
+    {
+      g_warning ("Can't map popup, already mapped");
+      return;
+    }
+
+  impl->display_server.xdg_surface =
+    zxdg_shell_v6_get_xdg_surface (display->xdg_shell,
+                                   impl->display_server.wl_surface);
+  zxdg_surface_v6_add_listener (impl->display_server.xdg_surface,
+                                &xdg_surface_listener,
+                                window);
+  gdk_window_freeze_updates (window);
+
+  if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
+    positioner = create_dynamic_positioner (window, parent);
+  else
+    positioner = create_simple_positioner (window, parent);
 
   impl->display_server.xdg_popup =
     zxdg_surface_v6_get_popup (impl->display_server.xdg_surface,
@@ -1786,7 +2216,7 @@ gdk_wayland_window_map (GdkWindow *window)
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
            */
-          if (!impl->position_set && grab_device)
+          if (impl->position_method == POSITION_METHOD_NONE && grab_device)
             gdk_window_get_device_position (transient_for, grab_device,
                                             &window->x, &window->y, NULL);
         }
@@ -1842,20 +2272,6 @@ gdk_wayland_window_show (GdkWindow *window,
                          gboolean   already_mapped)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  if (impl->moved_to_rect)
-    {
-      GdkWindowImplClass *impl_class =
-        GDK_WINDOW_IMPL_CLASS (_gdk_window_impl_wayland_parent_class);
-
-      impl_class->move_to_rect (window,
-                                &impl->pending_move_to_rect.rect,
-                                impl->pending_move_to_rect.rect_anchor,
-                                impl->pending_move_to_rect.window_anchor,
-                                impl->pending_move_to_rect.anchor_hints,
-                                impl->pending_move_to_rect.rect_anchor_dx,
-                                impl->pending_move_to_rect.rect_anchor_dy);
-    }
 
   if (!impl->display_server.wl_surface)
     gdk_wayland_window_create_surface (window);
@@ -1935,7 +2351,10 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
         {
           zxdg_surface_v6_destroy (impl->display_server.xdg_surface);
           impl->display_server.xdg_surface = NULL;
-          impl->initial_configure_received = FALSE;
+          if (!impl->initial_configure_received)
+            gdk_window_thaw_updates (window);
+          else
+            impl->initial_configure_received = FALSE;
         }
 
       if (impl->display_server.wl_subsurface)
@@ -2076,8 +2495,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
         {
           window->x = x;
           window->y = y;
-          impl->position_set = 1;
-          impl->moved_to_rect = 0;
+          impl->position_method = POSITION_METHOD_MOVE_RESIZE;
 
           if (impl->display_server.wl_subsurface)
             {
@@ -2105,20 +2523,14 @@ gdk_window_wayland_move_to_rect (GdkWindow          *window,
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  /*
-   * Various state (such as the shadow margin) may be incorrect at this point,
-   * so wait until showing before actually trying to move according to the
-   * anchors and hints.
-   */
-
-  impl->moved_to_rect = 1;
-
   impl->pending_move_to_rect.rect = *rect;
   impl->pending_move_to_rect.rect_anchor = rect_anchor;
   impl->pending_move_to_rect.window_anchor = window_anchor;
   impl->pending_move_to_rect.anchor_hints = anchor_hints;
   impl->pending_move_to_rect.rect_anchor_dx = rect_anchor_dx;
   impl->pending_move_to_rect.rect_anchor_dy = rect_anchor_dy;
+
+  impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
 }
 
 static void
