@@ -260,11 +260,12 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
   glCompileShader (shader_id);
 
 #ifdef G_ENABLE_DEBUG
-  if (GSK_DEBUG_CHECK (OPENGL))
+  if (GSK_DEBUG_CHECK (SHADERS))
     {
-      g_print ("*** Compiling %s shader ***\n"
+      g_print ("*** Compiling %s shader from '%s' + '%s' ***\n"
                "%s\n",
                shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment",
+               shader_preamble, shader_source,
                source);
     }
 #endif
@@ -395,7 +396,7 @@ gsk_shader_builder_create_program (GskShaderBuilder *builder,
   g_hash_table_insert (builder->programs, GINT_TO_POINTER (program_id), program);
 
 #ifdef G_ENABLE_DEBUG
-  if (GSK_DEBUG_CHECK (OPENGL))
+  if (GSK_DEBUG_CHECK (SHADERS))
     {
       GHashTableIter iter;
       gpointer name_p, location_p;
