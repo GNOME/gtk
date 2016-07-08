@@ -1125,11 +1125,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   /**
    * GtkTextView::move-viewport:
    * @text_view: the object which received the signal
-   * @step: the granularity of the move, as a #GtkMovementStep
+   * @step: the granularity of the movement, as a #GtkScrollStep
    * @count: the number of @step units to move
    *
-   * The ::move-viewport signal is a 
-   * [keybinding signal][GtkBindingSignal] 
+   * The ::move-viewport signal is a
+   * [keybinding signal][GtkBindingSignal]
    * which can be bound to key combinations to allow the user
    * to move the viewport, i.e. change what part of the text view
    * is visible in a containing scrolled window.
