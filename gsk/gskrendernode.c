@@ -1268,7 +1268,7 @@ gsk_render_node_set_blend_mode (GskRenderNode *node,
                                 GskBlendMode   blend_mode)
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (!node->is_mutable);
+  g_return_if_fail (node->is_mutable);
 
   if (node->blend_mode == blend_mode)
     return;
