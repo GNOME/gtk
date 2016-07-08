@@ -226,6 +226,7 @@ gtk/gtkprinteroptionset.c
 gtk/gtkprinteroptionwidget.c
 gtk/gtkprintjob.c
 gtk/gtkprintoperation.c
+gtk/gtkprintoperation-portal.c
 gtk/gtkprintoperationpreview.c
 gtk/gtkprintoperation-unix.c
 gtk/gtkprintoperation-win32.c
