@@ -919,13 +919,6 @@ modelbutton.flat,
 
   &:backdrop,
   &:backdrop:hover { @extend %undecorated_button; }
-
-  // FIXME: remove the following when the checks/radios rewrite lands
-  check:last-child,
-  radio:last-child { margin-left: 8px; }
-
-  check:first-child,
-  radio:first-child { margin-right: 8px; }
 }
 
 modelbutton.flat arrow {
