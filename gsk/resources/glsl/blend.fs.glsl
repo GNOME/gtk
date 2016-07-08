@@ -28,35 +28,35 @@ vec3 BlendLighten(vec3 Cb, vec3 Cs) {
 }
 
 void main() {
-  vec4 mask = Texture(parentMap, vUv);
-  vec4 diffuse = Texture(map, vUv);
+  vec4 Cb = Texture(parentMap, vUv);
+  vec4 Cs = Texture(map, vUv);
   vec3 res;
 
   if (blendMode == 0) {
-    res = diffuse.xyz;
+    res = Cs.xyz;
   }
   else if (blendMode == 1) {
-    res = BlendMultiply(mask.xyz, diffuse.xyz);
+    res = BlendMultiply(Cb.xyz, Cs.xyz);
   }
   else if (blendMode == 2) {
-    res = BlendScreen(mask.xyz, diffuse.xyz);
+    res = BlendScreen(Cb.xyz, Cs.xyz);
   }
   else if (blendMode == 3) {
-    res = BlendOverlay(mask.xyz, diffuse.xyz);
+    res = BlendOverlay(Cb.xyz, Cs.xyz);
   }
   else if (blendMode == 4) {
-    res = BlendDarken(mask.xyz, diffuse.xyz);
+    res = BlendDarken(Cb.xyz, Cs.xyz);
   }
   else if (blendMode == 5) {
-    res = BlendLighten(mask.xyz, diffuse.xyz);
+    res = BlendLighten(Cb.xyz, Cs.xyz);
   }
   else if (blendMode == 8) {
-    res = BlendHardLight(mask.xyz, diffuse.xyz);
+    res = BlendHardLight(Cb.xyz, Cs.xyz);
   }
   else {
     // Use red for debugging missing blend modes
     res = vec3(1.0, 0.0, 0.0);
   }
 
-  setOutputColor(vec4(res, diffuse.a * alpha));
+  setOutputColor(vec4(res, Cs.a * alpha));
 }
