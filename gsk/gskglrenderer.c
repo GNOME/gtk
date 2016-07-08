@@ -4,6 +4,7 @@
 
 #include "gskdebugprivate.h"
 #include "gskenums.h"
+#include "gskgldriverprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrendernodeiter.h"
@@ -87,7 +88,12 @@ struct _GskGLRenderer
   GQuark uniforms[N_UNIFORMS];
   GQuark attributes[N_ATTRIBUTES];
 
+  GskGLDriver *gl_driver;
+
   GskShaderBuilder *shader_builder;
+
+  int gl_min_filter;
+  int gl_mag_filter;
 
   int blend_program_id;
   int blit_program_id;
@@ -107,8 +113,6 @@ struct _GskGLRendererClass
 {
   GskRendererClass parent_class;
 };
-
-static void render_item_clear (gpointer data_);
 
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
 
@@ -415,6 +419,9 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
 
   gdk_gl_context_make_current (self->context);
 
+  g_assert (self->gl_driver == NULL);
+  self->gl_driver = gsk_gl_driver_new (self->context);
+
   GSK_NOTE (OPENGL, g_print ("Creating buffers and programs\n"));
   if (!gsk_gl_renderer_create_programs (self))
     return FALSE;
@@ -439,6 +446,8 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 
   gsk_gl_renderer_destroy_buffers (self);
   gsk_gl_renderer_destroy_programs (self);
+
+  g_clear_object (&self->gl_driver);
 
   if (self->context == gdk_gl_context_get_current ())
     gdk_gl_context_clear_current ();
@@ -471,97 +480,29 @@ gsk_gl_renderer_update_frustum (GskGLRenderer           *self,
   GSK_NOTE (OPENGL, graphene_matrix_print (&self->mvp));
 }
 
-static void
-render_item_clear (gpointer data_)
-{
-  RenderItem *item = data_;
-
-  GSK_NOTE (OPENGL, g_print ("Destroying render item [%p] buffer %u\n",
-                             item,
-                             item->render_data.buffer_id));
-  glDeleteBuffers (1, &item->render_data.buffer_id);
-  item->render_data.buffer_id = 0;
-
-  GSK_NOTE (OPENGL, g_print ("Destroying render item [%p] texture %u\n",
-                             item,
-                             item->render_data.texture_id));
-  glDeleteTextures (1, &item->render_data.texture_id);
-  item->render_data.texture_id = 0;
-
-  graphene_matrix_init_identity (&item->mvp);
-
-  item->opacity = 1;
-}
-
 #define N_VERTICES      6
 
 static void
-render_item (RenderItem *item)
+render_item (GskGLRenderer *self,
+             RenderItem    *item)
 {
-  struct vertex_info {
-    float position[2];
-    float uv[2];
-  };
   float mvp[16];
 
-  glBindVertexArray (item->render_data.vao_id);
-
-  /* Generate the vertex buffer for the texture quad */
-  if (item->render_data.buffer_id == 0)
-    {
-      struct vertex_info vertex_data[] = {
-        { { item->min.x, item->min.y }, { 0, 0 }, },
-        { { item->min.x, item->max.y }, { 0, 1 }, },
-        { { item->max.x, item->min.y }, { 1, 0 }, },
-
-        { { item->max.x, item->max.y }, { 1, 1 }, },
-        { { item->min.x, item->max.y }, { 0, 1 }, },
-        { { item->max.x, item->min.y }, { 1, 0 }, },
-      };
-
-      GSK_NOTE (OPENGL, g_print ("Creating quad for render item [%p]\n", item));
-
-      glGenBuffers (1, &(item->render_data.buffer_id));
-      glBindBuffer (GL_ARRAY_BUFFER, item->render_data.buffer_id);
-
-      /* The data won't change */
-      glBufferData (GL_ARRAY_BUFFER, sizeof (vertex_data), vertex_data, GL_STATIC_DRAW);
-  
-      /* Set up the buffers with the computed position and texels */
-      glEnableVertexAttribArray (item->render_data.position_location);
-      glVertexAttribPointer (item->render_data.position_location, 2, GL_FLOAT, GL_FALSE,
-                             sizeof (struct vertex_info),
-                             (void *) G_STRUCT_OFFSET (struct vertex_info, position));
-      glEnableVertexAttribArray (item->render_data.uv_location);
-      glVertexAttribPointer (item->render_data.uv_location, 2, GL_FLOAT, GL_FALSE,
-                             sizeof (struct vertex_info),
-                             (void *) G_STRUCT_OFFSET (struct vertex_info, uv));
-    }
-  else
-    {
-      /* We already set up the vertex buffer, so we just need to reuse it */
-      glBindBuffer (GL_ARRAY_BUFFER, item->render_data.buffer_id);
-      glEnableVertexAttribArray (item->render_data.position_location);
-      glEnableVertexAttribArray (item->render_data.uv_location);
-    }
+  gsk_gl_driver_bind_vao (self->gl_driver, item->render_data.vao_id);
 
   glUseProgram (item->render_data.program_id);
 
-  /* Use texture unit 0 for the sampler */
-  glActiveTexture (GL_TEXTURE0);
-  glBindTexture (GL_TEXTURE_2D, item->render_data.texture_id);
+  /* Use texture unit 0 for the source */
   glUniform1i (item->render_data.map_location, 0);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.texture_id);
 
   if (item->parent_data != NULL)
     {
-      if (item->parent_data->texture_id != 0)
-        {
-          glActiveTexture (GL_TEXTURE1);
-          glBindTexture (GL_TEXTURE_2D, item->parent_data->texture_id);
-          glUniform1i (item->render_data.parentMap_location, 1);
-        }
-
       glUniform1i (item->render_data.blendMode_location, item->blend_mode);
+
+      /* Use texture unit 1 for the mask */
+      if (item->parent_data->texture_id != 0)
+        gsk_gl_driver_bind_mask_texture (self->gl_driver, item->parent_data->texture_id);
     }
 
   /* Pass the opacity component */
@@ -579,45 +520,6 @@ render_item (RenderItem *item)
                              item->opaque ? 1 : item->opacity));
 
   glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
-
-  /* Reset the state */
-  glBindTexture (GL_TEXTURE_2D, 0);
-  glDisableVertexAttribArray (item->render_data.position_location);
-  glDisableVertexAttribArray (item->render_data.uv_location);
-  glUseProgram (0);
-}
-
-static void
-surface_to_texture (cairo_surface_t *surface,
-                    graphene_rect_t *clip,
-                    int              min_filter,
-                    int              mag_filter,
-                    guint           *texture_out)
-{
-  guint texture_id;
-
-  glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_2D, texture_id);
-
-  GSK_NOTE (OPENGL, g_print ("Uploading surface[%p] { w:%g, h:%g } to texid:%d\n",
-                             surface,
-                             clip->size.width,
-                             clip->size.height,
-                             texture_id));
-
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
-
-  gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, clip->size.width, clip->size.height, NULL);
-
-  if (min_filter != GL_NEAREST)
-    glGenerateMipmap (GL_TEXTURE_2D);
-
-  GSK_NOTE (OPENGL, g_print ("New texture id %d from surface %p\n", texture_id, surface));
-
-  *texture_out = texture_id;
 }
 
 static void
@@ -692,7 +594,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
                                  RenderItem    *parent)
 {
   graphene_rect_t viewport;
-  int gl_min_filter, gl_mag_filter;
   cairo_surface_t *surface;
   GskRenderNodeIter iter;
   graphene_matrix_t mv, projection;
@@ -742,9 +643,11 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
 
   item.blend_mode = gsk_render_node_get_blend_mode (node);
 
-  /* GL objects */
-  item.render_data.vao_id = self->vao_id;
-  item.render_data.buffer_id = 0;
+  /* Back-pointer to the parent node */
+  if (parent != NULL)
+    item.parent_data = &(parent->render_data);
+  else
+    item.parent_data = NULL;
 
   /* Select the program to use */
   if (parent != NULL)
@@ -752,6 +655,9 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   else
     program_id = self->blit_program_id;
 
+  item.render_data.program_id = program_id;
+
+  /* Retrieve all the uniforms and attributes */
   item.render_data.map_location =
     gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[MAP]);
   item.render_data.parentMap_location =
@@ -768,12 +674,25 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   item.render_data.uv_location =
     gsk_shader_builder_get_attribute_location (self->shader_builder, program_id, self->attributes[UV]);
 
-  item.render_data.program_id = program_id;
+  /* Create the vertex buffers holding the geometry of the quad */
+  {
+    GskQuadVertex vertex_data[N_VERTICES] = {
+      { { item.min.x, item.min.y }, { 0, 0 }, },
+      { { item.min.x, item.max.y }, { 0, 1 }, },
+      { { item.max.x, item.min.y }, { 1, 0 }, },
 
-  if (parent != NULL)
-    item.parent_data = &(parent->render_data);
-  else
-    item.parent_data = NULL;
+      { { item.max.x, item.max.y }, { 1, 1 }, },
+      { { item.min.x, item.max.y }, { 0, 1 }, },
+      { { item.max.x, item.min.y }, { 1, 0 }, },
+    };
+
+    item.render_data.vao_id =
+      gsk_gl_driver_create_vao_for_quad (self->gl_driver,
+                                         item.render_data.position_location,
+                                         item.render_data.uv_location,
+                                         sizeof (GskQuadVertex) * N_VERTICES,
+                                         vertex_data);
+  }
 
   gsk_renderer_get_projection (GSK_RENDERER (self), &projection);
   item.z = project_item (&projection, &mv);
@@ -784,7 +703,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
    * do a single upload; alternatively, we could use a separate FBO and
    * render each texture into it
    */
-  get_gl_scaling_filters (GSK_RENDERER (self), &gl_min_filter, &gl_mag_filter);
   surface = gsk_render_node_get_surface (node);
 
   /* If the node does not have any surface we skip drawing it, but we still
@@ -796,7 +714,13 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   if (surface == NULL)
     goto recurse_children;
 
-  surface_to_texture (surface, &bounds, gl_min_filter, gl_mag_filter, &(item.render_data.texture_id));
+  /* Upload the Cairo surface to a GL texture */
+  item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                              bounds.size.width,
+                                                              bounds.size.height,
+                                                              self->gl_min_filter,
+                                                              self->gl_mag_filter,
+                                                              surface);
 
   GSK_NOTE (OPENGL, g_print ("Adding node <%s>[%p] to render items\n",
                              node->name != NULL ? node->name : "unnamed",
@@ -840,9 +764,6 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
 
   self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
   self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
-
-  g_array_set_clear_func (self->opaque_render_items, render_item_clear);
-  g_array_set_clear_func (self->transparent_render_items, render_item_clear);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
   gsk_gl_renderer_add_render_item (self, root, NULL);
@@ -904,10 +825,17 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   gsk_gl_renderer_allocate_buffers (self, viewport.size.width, viewport.size.height);
   gsk_gl_renderer_attach_buffers (self);
 
-  if (self->has_depth_buffer)
-    glEnable (GL_DEPTH_TEST);
-  else
-    glDisable (GL_DEPTH_TEST);
+  gsk_renderer_get_modelview (renderer, &modelview);
+  gsk_renderer_get_projection (renderer, &projection);
+  gsk_gl_renderer_update_frustum (self, &modelview, &projection);
+
+  get_gl_scaling_filters (GSK_RENDERER (self),
+                          &self->gl_min_filter,
+                          &self->gl_mag_filter);
+  if (!gsk_gl_renderer_validate_tree (self, root))
+    goto out;
+
+  gsk_gl_driver_begin_frame (self->gl_driver);
 
   /* Ensure that the viewport is up to date */
   status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
@@ -916,12 +844,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
 
   gsk_gl_renderer_clear (self);
 
-  gsk_renderer_get_modelview (renderer, &modelview);
-  gsk_renderer_get_projection (renderer, &projection);
-  gsk_gl_renderer_update_frustum (self, &modelview, &projection);
-
-  if (!gsk_gl_renderer_validate_tree (self, root))
-    goto out;
+  glDisable (GL_BLEND);
 
   /* Opaque pass: front-to-back */
   GSK_NOTE (OPENGL, g_print ("Rendering %u opaque items\n", self->opaque_render_items->len));
@@ -929,10 +852,12 @@ gsk_gl_renderer_render (GskRenderer *renderer,
     {
       RenderItem *item = &g_array_index (self->opaque_render_items, RenderItem, i);
 
-      render_item (item);
+      render_item (self, item);
     }
 
   glEnable (GL_BLEND);
+  glBlendFuncSeparate (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+  glBlendEquation (GL_FUNC_ADD);
 
   /* Transparent pass: back-to-front */
   GSK_NOTE (OPENGL, g_print ("Rendering %u transparent items\n", self->transparent_render_items->len));
@@ -940,10 +865,8 @@ gsk_gl_renderer_render (GskRenderer *renderer,
     {
       RenderItem *item = &g_array_index (self->transparent_render_items, RenderItem, i);
 
-      render_item (item);
+      render_item (self, item);
     }
-
-  glDisable (GL_BLEND);
 
   /* Draw the output of the GL rendering to the window */
   GSK_NOTE (OPENGL, g_print ("Drawing GL content on Cairo surface using a %s\n",
@@ -960,7 +883,7 @@ out:
                           0, 0, viewport.size.width, viewport.size.height);
 
   gdk_gl_context_make_current (self->context);
-
+  gsk_gl_driver_end_frame (self->gl_driver);
   gsk_gl_renderer_clear_tree (self);
 }
 
