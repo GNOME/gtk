@@ -788,23 +788,7 @@ static void             gtk_widget_real_adjust_size_allocation  (GtkWidget      
 static void             gtk_widget_real_adjust_baseline_allocation (GtkWidget         *widget,
 								    gint              *baseline);
 
-/* --- functions dealing with template data structures --- */
-static AutomaticChildClass  *template_child_class_new          (const gchar          *name,
-                                                                gboolean              internal_child,
-                                                                gssize                offset);
-static void                  template_child_class_free         (AutomaticChildClass  *child_class);
-static CallbackSymbol       *callback_symbol_new                (const gchar          *name,
-								 GCallback             callback);
-static void                  callback_symbol_free               (CallbackSymbol       *callback);
 static void                  template_data_free                 (GtkWidgetTemplate    *template_data);
-static GHashTable           *get_auto_child_hash                (GtkWidget            *widget,
-								 GType                 type,
-								 gboolean              create);
-static gboolean              setup_template_child              (GtkWidgetTemplate    *template_data,
-                                                                GType                 class_type,
-                                                                AutomaticChildClass  *child_class,
-                                                                GtkWidget            *widget,
-                                                                GtkBuilder           *builder);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
