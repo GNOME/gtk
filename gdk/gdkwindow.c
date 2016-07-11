@@ -9821,6 +9821,25 @@ gdk_window_create_similar_surface (GdkWindow *     window,
  * Initially the surface contents are all 0 (transparent if contents
  * have transparency, black otherwise.)
  *
+ * The @width and @height of the new surface are not affected by
+ * the scaling factor of the @window, or by the @scale argument; they
+ * are the size of the surface in device pixels. If you wish to create
+ * an image surface capable of holding the contents of @window you can
+ * use:
+ *
+ * |[<!-- language="C" -->
+ *   int scale = gdk_window_get_scale_factor (window);
+ *   int width = gdk_window_get_width (window) * scale;
+ *   int height = gdk_window_get_height (window) * scale;
+ *
+ *   // format is set elsewhere
+ *   cairo_surface_t *surface =
+ *     gdk_window_create_similar_image_surface (window,
+ *                                              format,
+ *                                              width, height,
+ *                                              scale);
+ * ]|
+ *
  * Returns: a pointer to the newly allocated surface. The caller
  * owns the surface and should call cairo_surface_destroy() when done
  * with it.
