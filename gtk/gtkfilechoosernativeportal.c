@@ -100,7 +100,7 @@ response_cb (GDBusConnection  *connection,
   const char **uris;
   int i;
   GVariant *response_data;
-  g_autoptr (GVariant) choices = NULL;
+  GVariant *choices = NULL;
 
   g_variant_get (parameters, "(u@a{sv})", &portal_response, &response_data);
   g_variant_lookup (response_data, "uris", "^a&s", &uris);
@@ -115,6 +115,7 @@ response_cb (GDBusConnection  *connection,
         gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (self), id, selected);
       }
 
+  g_variant_unref (choices);
   g_slist_free_full (self->custom_files, g_object_unref);
   self->custom_files = NULL;
   for (i = 0; uris[i]; i++)
