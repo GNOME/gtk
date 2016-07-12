@@ -28,7 +28,7 @@ struct _GskGLDriver
 
   GdkGLContext *gl_context;
 
-  GArray *textures;
+  GHashTable *textures;
   GArray *vaos;
 
   Texture *bound_source_texture;
@@ -49,12 +49,19 @@ static GParamSpec *gsk_gl_driver_properties[N_PROPS];
 
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
 
+static Texture *
+texture_new (void)
+{
+  return g_slice_new0 (Texture);
+}
+
 static void
-texture_clear (gpointer data)
+texture_free (gpointer data)
 {
   Texture *t = data;
 
   glDeleteTextures (1, &t->texture_id);
+  g_slice_free (Texture, t);
 }
 
 static void
@@ -71,7 +78,7 @@ gsk_gl_driver_finalize (GObject *gobject)
 {
   GskGLDriver *self = GSK_GL_DRIVER (gobject);
 
-  g_clear_pointer (&self->textures, g_array_unref);
+  g_clear_pointer (&self->textures, g_hash_table_unref);
   g_clear_pointer (&self->vaos, g_array_unref);
 
   g_clear_object (&self->gl_context);
@@ -137,8 +144,7 @@ gsk_gl_driver_class_init (GskGLDriverClass *klass)
 static void
 gsk_gl_driver_init (GskGLDriver *self)
 {
-  self->textures = g_array_new (FALSE, FALSE, sizeof (Texture));
-  g_array_set_clear_func (self->textures, texture_clear);
+  self->textures = g_hash_table_new_full (NULL, NULL, NULL, texture_free);
 
   self->vaos = g_array_new (FALSE, FALSE, sizeof (Vao));
   g_array_set_clear_func (self->vaos, vao_clear);
@@ -188,7 +194,7 @@ gsk_gl_driver_end_frame (GskGLDriver *driver)
   driver->bound_mask_texture = NULL;
   driver->bound_vao = NULL;
 
-  g_array_set_size (driver->textures, 0);
+  g_hash_table_remove_all (driver->textures);
   g_array_set_size (driver->vaos, 0);
 
   driver->in_frame = FALSE;
@@ -202,7 +208,7 @@ gsk_gl_driver_create_texture (GskGLDriver     *driver,
                               int              mag_filter)
 {
   guint texture_id;
-  Texture t;
+  Texture *t;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
 
@@ -214,12 +220,13 @@ gsk_gl_driver_create_texture (GskGLDriver     *driver,
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
 
-  t.texture_id = texture_id;
-  t.width = width;
-  t.height = height;
-  t.min_filter = min_filter;
-  t.mag_filter = mag_filter;
-  g_array_append_val (driver->textures, t);
+  t = texture_new ();
+  t->texture_id = texture_id;
+  t->width = width;
+  t->height = height;
+  t->min_filter = min_filter;
+  t->mag_filter = mag_filter;
+  g_hash_table_insert (driver->textures, GUINT_TO_POINTER (texture_id), t);
 
   return texture_id;
 }
@@ -270,16 +277,7 @@ static Texture *
 gsk_gl_driver_get_texture (GskGLDriver *driver,
                            int          texture_id)
 {
-  int i;
-
-  for (i = 0; i < driver->textures->len; i++)
-    {
-      Texture *t = &g_array_index (driver->textures, Texture, i);
-      if (t->texture_id == texture_id)
-        return t;
-    }
-
-  return NULL;
+  return g_hash_table_lookup (driver->textures, GINT_TO_POINTER (texture_id));
 }
 
 static Vao *
