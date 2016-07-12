@@ -38,6 +38,7 @@ gsk_private_source_h = \
 	gskcairorendererprivate.h \
 	gskdebugprivate.h \
 	gskgldriverprivate.h \
+	gskglprofilerprivate.h \
 	gskglrendererprivate.h \
 	gskprivate.h \
 	gskrendererprivate.h \
@@ -55,6 +56,7 @@ gsk_source_c = \
 	gskcairorenderer.c \
 	gskdebug.c \
 	gskgldriver.c \
+	gskglprofiler.c \
 	gskglrenderer.c \
 	gskrenderer.c \
 	gskrendernode.c \
