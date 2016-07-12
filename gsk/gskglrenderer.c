@@ -5,6 +5,7 @@
 #include "gskdebugprivate.h"
 #include "gskenums.h"
 #include "gskgldriverprivate.h"
+#include "gskglprofilerprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrendernodeiter.h"
@@ -89,7 +90,7 @@ struct _GskGLRenderer
   GQuark attributes[N_ATTRIBUTES];
 
   GskGLDriver *gl_driver;
-
+  GskGLProfiler *gl_profiler;
   GskShaderBuilder *shader_builder;
 
   int gl_min_filter;
@@ -421,6 +422,7 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
 
   g_assert (self->gl_driver == NULL);
   self->gl_driver = gsk_gl_driver_new (self->context);
+  self->gl_profiler = gsk_gl_profiler_new ();
 
   GSK_NOTE (OPENGL, g_print ("Creating buffers and programs\n"));
   if (!gsk_gl_renderer_create_programs (self))
@@ -447,6 +449,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   gsk_gl_renderer_destroy_buffers (self);
   gsk_gl_renderer_destroy_programs (self);
 
+  g_clear_object (&self->gl_profiler);
   g_clear_object (&self->gl_driver);
 
   if (self->context == gdk_gl_context_get_current ())
@@ -815,6 +818,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   gboolean use_alpha;
   int status;
   guint i;
+  guint64 gpu_time;
 
   if (self->context == NULL)
     return;
@@ -836,6 +840,8 @@ gsk_gl_renderer_render (GskRenderer *renderer,
                           &self->gl_mag_filter);
   if (!gsk_gl_renderer_validate_tree (self, root))
     goto out;
+
+  gsk_gl_profiler_begin_gpu_region (self->gl_profiler);
 
   gsk_gl_driver_begin_frame (self->gl_driver);
 
@@ -887,6 +893,10 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   GSK_NOTE (OPENGL, g_print ("Drawing GL content on Cairo surface using a %s\n",
                              self->texture_id != 0 ? "texture" : "renderbuffer"));
 
+  gsk_gl_driver_end_frame (self->gl_driver);
+  gpu_time = gsk_gl_profiler_end_gpu_region (self->gl_profiler);
+  GSK_NOTE (OPENGL, g_print ("GPU time: %" G_GUINT64_FORMAT " nsec\n", gpu_time));
+
 out:
   use_alpha = gsk_renderer_get_use_alpha (renderer);
 
@@ -898,7 +908,6 @@ out:
                           0, 0, viewport.size.width, viewport.size.height);
 
   gdk_gl_context_make_current (self->context);
-  gsk_gl_driver_end_frame (self->gl_driver);
   gsk_gl_renderer_clear_tree (self);
 }
 
