@@ -4711,7 +4711,7 @@ gtk_widget_unparent (GtkWidget *widget)
  * It's important to notice that gtk_widget_destroy() will only cause
  * the @widget to be finalized if no additional references, acquired
  * using g_object_ref(), are held on it. In case additional references
- * are in place, the @widget will be in an "inhert" state after calling
+ * are in place, the @widget will be in an "inert" state after calling
  * this function; @widget will still point to valid memory, allowing you
  * to release the references you hold, but you may not query the widget's
  * own state.
