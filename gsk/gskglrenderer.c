@@ -719,8 +719,10 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
                                                               bounds.size.width,
                                                               bounds.size.height,
                                                               self->gl_min_filter,
-                                                              self->gl_mag_filter,
-                                                              surface);
+                                                              self->gl_mag_filter);
+  gsk_gl_driver_render_surface_to_texture (self->gl_driver,
+                                           surface,
+                                           item.render_data.texture_id);
 
   GSK_NOTE (OPENGL, g_print ("Adding node <%s>[%p] to render items\n",
                              node->name != NULL ? node->name : "unnamed",
