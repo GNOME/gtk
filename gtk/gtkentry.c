@@ -9430,56 +9430,10 @@ popup_menu_detach (GtkWidget *attach_widget,
   priv_attach->popup_menu = NULL;
 }
 
-static void
-popup_position_func (GtkMenu   *menu,
-                     gint      *x,
-                     gint      *y,
-                     gboolean  *push_in,
-                     gpointer	user_data)
-{
-  GtkEntry *entry = GTK_ENTRY (user_data);
-  GtkEntryPrivate *priv = entry->priv;
-  GtkWidget *widget = GTK_WIDGET (entry);
-  GdkDisplay *display;
-  GtkRequisition menu_req;
-  GdkMonitor *monitor;
-  GdkRectangle area;
-  gint strong_x, height;
-
-  g_return_if_fail (gtk_widget_get_realized (widget));
-
-  gdk_window_get_origin (priv->text_area, x, y);
-
-  display = gtk_widget_get_display (widget);
-  monitor = gdk_display_get_monitor_at_window (display, priv->text_area);
-  gtk_menu_place_on_monitor (menu, monitor);
-  gdk_monitor_get_workarea (monitor, &area);
-  gtk_widget_get_preferred_size (priv->popup_menu, &menu_req, NULL);
-  height = gdk_window_get_height (priv->text_area);
-  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
-
-  *x += 0 + strong_x - priv->scroll_offset;
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    *x -= menu_req.width;
-
-  if ((*y + height + menu_req.height) <= area.y + area.height)
-    *y += height;
-  else if ((*y - menu_req.height) >= area.y)
-    *y -= menu_req.height;
-  else if (area.y + area.height - (*y + height) > *y)
-    *y += height;
-  else
-    *y -= menu_req.height;
-
-  *push_in = FALSE;
-}
-
 typedef struct
 {
   GtkEntry *entry;
-  guint button;
-  guint time;
-  GdkDevice *device;
+  GdkEvent *trigger_event;
 } PopupInfo;
 
 static void
@@ -9490,6 +9444,7 @@ popup_targets_received (GtkClipboard     *clipboard,
   PopupInfo *info = user_data;
   GtkEntry *entry = info->entry;
   GtkEntryPrivate *info_entry_priv = entry->priv;
+  GdkRectangle rect = { 0, 0, 1, 0 };
 
   if (gtk_widget_get_realized (GTK_WIDGET (entry)))
     {
@@ -9540,19 +9495,26 @@ popup_targets_received (GtkClipboard     *clipboard,
 
       g_signal_emit (entry, signals[POPULATE_POPUP], 0, menu);
 
-      if (info->device)
-	gtk_menu_popup_for_device (GTK_MENU (menu),
-                                   info->device, NULL, NULL, NULL, NULL, NULL,
-                                   info->button, info->time);
+      if (info->trigger_event && gdk_event_triggers_context_menu (info->trigger_event))
+        gtk_menu_popup_at_pointer (GTK_MENU (menu), info->trigger_event);
       else
-	{
-          gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                          popup_position_func, entry,
-                          0, gtk_get_current_event_time ());
+        {
+          gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &rect.x, NULL);
+          rect.x -= info_entry_priv->scroll_offset;
+          rect.height = gdk_window_get_height (info_entry_priv->text_area);
+
+          gtk_menu_popup_at_rect (GTK_MENU (menu),
+                                  info_entry_priv->text_area,
+                                  &rect,
+                                  GDK_GRAVITY_SOUTH_EAST,
+                                  GDK_GRAVITY_NORTH_WEST,
+                                  info->trigger_event);
+
           gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
-	}
+        }
     }
 
+  g_clear_pointer (&info->trigger_event, gdk_event_free);
   g_object_unref (entry);
   g_slice_free (PopupInfo, info);
 }
@@ -9568,19 +9530,7 @@ gtk_entry_do_popup (GtkEntry       *entry,
    * we get them, then we actually pop up the menu.
    */
   info->entry = g_object_ref (entry);
-  
-  if (event)
-    {
-      gdk_event_get_button (event, &info->button);
-      info->time = gdk_event_get_time (event);
-      info->device = gdk_event_get_device (event);
-    }
-  else
-    {
-      info->button = 0;
-      info->time = gtk_get_current_event_time ();
-      info->device = NULL;
-    }
+  info->trigger_event = event ? gdk_event_copy (event) : gtk_get_current_event ();
 
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
 				  gdk_atom_intern_static_string ("TARGETS"),

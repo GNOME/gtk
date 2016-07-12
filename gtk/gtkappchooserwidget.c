@@ -257,8 +257,7 @@ widget_button_press_event_cb (GtkWidget      *widget,
 
       if (n_children > 0)
         /* actually popup the menu */
-        gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-                        event->button, event->time);
+        gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) event);
 
       g_list_free (children);
     }

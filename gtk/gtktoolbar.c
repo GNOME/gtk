@@ -2618,79 +2618,52 @@ gtk_toolbar_real_style_changed (GtkToolbar     *toolbar,
 }
 
 static void
-menu_position_func (GtkMenu  *menu,
-		    gint     *x,
-		    gint     *y,
-		    gboolean *push_in,
-		    gpointer  user_data)
-{
-  GtkAllocation allocation;
-  GtkToolbar *toolbar = GTK_TOOLBAR (user_data);
-  GtkToolbarPrivate *priv = toolbar->priv;
-  GtkRequisition req;
-  GtkRequisition menu_req;
-  GdkRectangle workarea;
-  GdkMonitor *monitor;
-  GdkDisplay *display;
-
-  gtk_widget_get_preferred_size (priv->arrow_button,
-                                 &req, NULL);
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
-                                 &menu_req, NULL);
-
-  display = gtk_widget_get_display (GTK_WIDGET (menu));
-  monitor = gdk_display_get_monitor_at_window (display,
-                                               gtk_widget_get_window (priv->arrow_button));
-  gdk_monitor_get_workarea (monitor, &workarea);
-
-  gtk_widget_get_allocation (priv->arrow_button, &allocation);
-
-  gdk_window_get_origin (gtk_button_get_event_window (GTK_BUTTON (priv->arrow_button)), x, y);
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR)
-	*x += allocation.width - req.width;
-      else
-	*x += req.width - menu_req.width;
-
-      if ((*y + allocation.height + menu_req.height) <= workarea.y + workarea.height)
-	*y += allocation.height;
-      else if ((*y - menu_req.height) >= workarea.y)
-	*y -= menu_req.height;
-      else if (workarea.y + workarea.height - (*y + allocation.height) > *y)
-	*y += allocation.height;
-      else
-	*y -= menu_req.height;
-    }
-  else
-    {
-      if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR)
-	*x += allocation.width;
-      else
-	*x -= menu_req.width;
-
-      if (*y + menu_req.height > workarea.y + workarea.height &&
-	  *y + allocation.height - workarea.y > workarea.y + workarea.height - *y)
-	*y += allocation.height - menu_req.height;
-    }
-
-  *push_in = FALSE;
-}
-
-static void
 show_menu (GtkToolbar     *toolbar,
 	   GdkEventButton *event)
 {
   GtkToolbarPrivate *priv = toolbar->priv;
+  GtkRequisition minimum_size;
 
   rebuild_menu (toolbar);
 
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
 
-  gtk_menu_popup (priv->menu, NULL, NULL,
-		  menu_position_func, toolbar,
-		  event? event->button : 0,
-		  event? event->time : gtk_get_current_event_time());
+  switch (priv->orientation)
+    {
+    case GTK_ORIENTATION_HORIZONTAL:
+      gtk_widget_get_preferred_size (priv->arrow_button, &minimum_size, NULL);
+
+      g_object_set (priv->menu,
+                    "anchor-hints", (GDK_ANCHOR_FLIP_Y |
+                                     GDK_ANCHOR_SLIDE |
+                                     GDK_ANCHOR_RESIZE),
+                    "menu-type-hint", GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU,
+                    "rect-anchor-dx", -minimum_size.width,
+                    NULL);
+
+      gtk_menu_popup_at_widget (priv->menu,
+                                priv->arrow_button,
+                                GDK_GRAVITY_SOUTH_EAST,
+                                GDK_GRAVITY_NORTH_WEST,
+                                (GdkEvent *) event);
+
+      break;
+
+    case GTK_ORIENTATION_VERTICAL:
+      g_object_set (priv->menu,
+                    "anchor-hints", (GDK_ANCHOR_FLIP_X |
+                                     GDK_ANCHOR_SLIDE |
+                                     GDK_ANCHOR_RESIZE),
+                    NULL);
+
+      gtk_menu_popup_at_widget (priv->menu,
+                                priv->arrow_button,
+                                GDK_GRAVITY_NORTH_EAST,
+                                GDK_GRAVITY_NORTH_WEST,
+                                (GdkEvent *) event);
+
+      break;
+    }
 }
 
 static void

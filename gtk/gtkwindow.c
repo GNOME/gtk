@@ -8843,15 +8843,6 @@ popup_menu_detach (GtkWidget *widget,
   GTK_WINDOW (widget)->priv->popup_menu = NULL;
 }
 
-static void
-popup_position_func (GtkMenu   *menu,
-                     gint      *x,
-                     gint      *y,
-                     gboolean  *push_in,
-                     gpointer   user_data)
-{
-}
-
 static GdkWindowState
 gtk_window_get_state (GtkWindow *window)
 {
@@ -9064,17 +9055,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   g_signal_connect (G_OBJECT (menuitem), "activate",
                     G_CALLBACK (close_window_clicked), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-  if (event)
-    gtk_menu_popup (GTK_MENU (priv->popup_menu),
-                    NULL, NULL,
-                    NULL, NULL,
-                    event->button, event->time);
-  else
-    gtk_menu_popup (GTK_MENU (priv->popup_menu),
-                    NULL, NULL,
-                    popup_position_func, window,
-                    0, gtk_get_current_event_time ());
+  gtk_menu_popup_at_pointer (GTK_MENU (priv->popup_menu), (GdkEvent *) event);
 }
 
 static void

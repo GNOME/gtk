@@ -1727,62 +1727,23 @@ recent_view_menu_build (GtkRecentChooserDefault *impl)
   recent_view_menu_ensure_state (impl);
 }
 
-/* taken from gtkfilechooserdefault.c */
-static void
-popup_position_func (GtkMenu   *menu,
-                     gint      *x,
-                     gint      *y,
-                     gboolean  *push_in,
-                     gpointer	user_data)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget = GTK_WIDGET (user_data);
-  GtkRequisition req;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle workarea;
-
-  if (G_UNLIKELY (!gtk_widget_get_realized (widget)))
-    return;
-
-  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  *x += (allocation.width - req.width) / 2;
-  *y += (allocation.height - req.height) / 2;
-
-  display = gtk_widget_get_display (widget);
-  monitor = gdk_display_get_monitor_at_point (display, *x, *y);
-  gtk_menu_place_on_monitor (menu, monitor);
-  gdk_monitor_get_workarea (monitor, &workarea);
-
-  *x = CLAMP (*x, workarea.x, workarea.x + MAX (0, workarea.width - req.width));
-  *y = CLAMP (*y, workarea.y, workarea.y + MAX (0, workarea.height - req.height));
-
-  *push_in = FALSE;
-}
-
-
 static void
 recent_view_menu_popup (GtkRecentChooserDefault *impl,
 			GdkEventButton          *event)
 {
   recent_view_menu_build (impl);
   
-  if (event)
-    gtk_menu_popup (GTK_MENU (impl->priv->recent_popup_menu),
-    		    NULL, NULL, NULL, NULL,
-    		    event->button, event->time);
+  if (event && gdk_event_triggers_context_menu ((GdkEvent *) event))
+    gtk_menu_popup_at_pointer (GTK_MENU (impl->priv->recent_popup_menu), (GdkEvent *) event);
   else
     {
-      gtk_menu_popup (GTK_MENU (impl->priv->recent_popup_menu),
-      		      NULL, NULL,
-      		      popup_position_func, impl->priv->recent_view,
-      		      0, GDK_CURRENT_TIME);
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (impl->priv->recent_popup_menu),
-      				   FALSE);
+      gtk_menu_popup_at_widget (GTK_MENU (impl->priv->recent_popup_menu),
+                                impl->priv->recent_view,
+                                GDK_GRAVITY_CENTER,
+                                GDK_GRAVITY_CENTER,
+                                (GdkEvent *) event);
+
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (impl->priv->recent_popup_menu), FALSE);
     }
 }
 

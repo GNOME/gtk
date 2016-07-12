@@ -157,8 +157,7 @@ icon_press_cb (GtkEntry       *entry,
                gpointer        data)
 {
   if (position == GTK_ENTRY_ICON_PRIMARY)
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-                    event->button, event->time);
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) event);
 }
 
 static void

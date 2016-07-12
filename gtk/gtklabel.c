@@ -512,7 +512,7 @@ static void gtk_label_move_cursor        (GtkLabel        *label,
 static void gtk_label_copy_clipboard     (GtkLabel        *label);
 static void gtk_label_select_all         (GtkLabel        *label);
 static void gtk_label_do_popup           (GtkLabel        *label,
-					  GdkEventButton  *event);
+					  const GdkEvent  *event);
 static gint gtk_label_move_forward_word  (GtkLabel        *label,
 					  gint             start);
 static gint gtk_label_move_backward_word (GtkLabel        *label,
@@ -4954,7 +4954,7 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
         {
           info->link_clicked = 1;
           update_link_state (label);
-          gtk_label_do_popup (label, (GdkEventButton*) event);
+          gtk_label_do_popup (label, event);
           return;
         }
       else if (button == GDK_BUTTON_PRIMARY)
@@ -4977,7 +4977,7 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   info->select_words = FALSE;
 
   if (gdk_event_triggers_context_menu (event))
-    gtk_label_do_popup (label, (GdkEventButton*) event);
+    gtk_label_do_popup (label, event);
   else if (button == GDK_BUTTON_PRIMARY)
     {
       if (!gtk_widget_has_focus (widget))
@@ -6545,48 +6545,6 @@ popup_menu_detach (GtkWidget *attach_widget,
 }
 
 static void
-popup_position_func (GtkMenu   *menu,
-                     gint      *x,
-                     gint      *y,
-                     gboolean  *push_in,
-                     gpointer	user_data)
-{
-  GtkLabel *label;
-  GtkWidget *widget;
-  GtkAllocation allocation;
-  GtkRequisition req;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle workarea;
-
-  label = GTK_LABEL (user_data);
-  widget = GTK_WIDGET (label);
-
-  g_return_if_fail (gtk_widget_get_realized (widget));
-
-  display = gtk_widget_get_display (widget);
-  monitor = gdk_display_get_monitor_at_window (display,
-                                               gtk_widget_get_window (widget));
-  gdk_monitor_get_workarea (monitor, &workarea);
-
-  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
-  gtk_widget_get_allocation (widget, &allocation);
-
-  *x += allocation.x;
-  *y += allocation.y;
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  *x += allocation.width / 2;
-  *y += allocation.height;
-
-  *x = CLAMP (*x, 0, MAX (0, workarea.width - req.width));
-  *y = CLAMP (*y, 0, MAX (0, workarea.height - req.height));
-}
-
-static void
 open_link_activate_cb (GtkMenuItem *menuitem,
                        GtkLabel    *label)
 {
@@ -6618,7 +6576,7 @@ gtk_label_popup_menu (GtkWidget *widget)
 
 static void
 gtk_label_do_popup (GtkLabel       *label,
-                    GdkEventButton *event)
+                    const GdkEvent *event)
 {
   GtkLabelPrivate *priv = label->priv;
   GtkWidget *menuitem;
@@ -6695,15 +6653,16 @@ gtk_label_do_popup (GtkLabel       *label,
 
   g_signal_emit (label, signals[POPULATE_POPUP], 0, menu);
 
-  if (event)
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                    NULL, NULL,
-                    event->button, event->time);
+  if (event && gdk_event_triggers_context_menu ((GdkEvent *) event))
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) event);
   else
     {
-      gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                      popup_position_func, label,
-                      0, gtk_get_current_event_time ());
+      gtk_menu_popup_at_widget (GTK_MENU (menu),
+                                GTK_WIDGET (label),
+                                GDK_GRAVITY_SOUTH,
+                                GDK_GRAVITY_NORTH_WEST,
+                                event);
+
       gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
     }
 }

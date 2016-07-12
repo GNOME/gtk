@@ -193,7 +193,7 @@ button_press (GtkWidget      *widget,
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 3, button->time);
+  gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) button);
   return TRUE;
 }
 

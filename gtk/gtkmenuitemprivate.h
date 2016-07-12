@@ -47,7 +47,6 @@ struct _GtkMenuItemPrivate
   guint submenu_placement      : 1;
   guint submenu_direction      : 1;
   guint right_justify          : 1;
-  guint timer_from_keypress    : 1;
   guint from_menubar           : 1;
   guint use_action_appearance  : 1;
   guint reserve_indicator      : 1;

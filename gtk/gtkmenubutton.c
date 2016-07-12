@@ -241,149 +241,12 @@ gtk_menu_button_state_flags_changed (GtkWidget    *widget,
 }
 
 static void
-menu_position_up_down_func (GtkMenu       *menu,
-                            gint          *x,
-                            gint          *y,
-                            gboolean      *push_in,
-                            GtkMenuButton *menu_button)
-{
-  GtkMenuButtonPrivate *priv = menu_button->priv;
-  GtkWidget *widget = GTK_WIDGET (menu_button);
-  GtkWidget *toplevel;
-  GtkTextDirection direction;
-  GdkRectangle workarea;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkWindow *window;
-  GtkAllocation menu_allocation, allocation, arrow_allocation;
-  GtkAlign align;
-
-  /* In the common case the menu button is showing a dropdown menu, set the
-   * corresponding type hint on the toplevel, so the WM can omit the top side
-   * of the shadows.
-   */
-  if (priv->arrow_type == GTK_ARROW_DOWN)
-    {
-      toplevel = gtk_widget_get_toplevel (priv->menu);
-      gtk_window_set_type_hint (GTK_WINDOW (toplevel), GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU);
-    }
-
-  align = gtk_widget_get_halign (priv->menu);
-  direction = gtk_widget_get_direction (widget);
-  window = gtk_widget_get_window (priv->align_widget ? priv->align_widget : widget);
-
-  display = gtk_widget_get_display (GTK_WIDGET (menu));
-  monitor = gdk_display_get_monitor_at_window (display, window);
-  gdk_monitor_get_workarea (monitor, &workarea);
-
-  gtk_widget_get_allocation (priv->align_widget ? priv->align_widget : widget, &allocation);
-  gtk_widget_get_allocation (widget, &arrow_allocation);
-  gtk_widget_get_allocation (priv->menu, &menu_allocation);
-
-  gdk_window_get_origin (window, x, y);
-  *x += allocation.x;
-  *y += allocation.y;
-
-  /* treat the default align value like START */
-  if (align == GTK_ALIGN_FILL)
-    align = GTK_ALIGN_START;
-
-  if (align == GTK_ALIGN_CENTER)
-    *x -= (menu_allocation.width - allocation.width) / 2;
-  else if ((align == GTK_ALIGN_START && direction == GTK_TEXT_DIR_LTR) ||
-           (align == GTK_ALIGN_END && direction == GTK_TEXT_DIR_RTL))
-    *x += MAX (allocation.width - menu_allocation.width, 0);
-  else if (menu_allocation.width > allocation.width)
-    *x -= menu_allocation.width - allocation.width;
-
-  if (priv->arrow_type == GTK_ARROW_UP && *y - menu_allocation.height >= workarea.y)
-    {
-      *y -= menu_allocation.height;
-    }
-  else
-    {
-      if ((*y + arrow_allocation.height + menu_allocation.height) <= workarea.y + workarea.height)
-        *y += arrow_allocation.height;
-      else if ((*y - menu_allocation.height) >= workarea.y)
-        *y -= menu_allocation.height;
-      else if (workarea.y + workarea.height - (*y + arrow_allocation.height) > *y)
-        *y += arrow_allocation.height;
-      else
-        *y -= menu_allocation.height;
-    }
-
-  *push_in = FALSE;
-}
-
-static void
-menu_position_side_func (GtkMenu       *menu,
-                         gint          *x,
-                         gint          *y,
-                         gboolean      *push_in,
-                         GtkMenuButton *menu_button)
-{
-  GtkMenuButtonPrivate *priv = menu_button->priv;
-  GtkAllocation allocation;
-  GtkAllocation menu_allocation;
-  GtkWidget *widget = GTK_WIDGET (menu_button);
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle workarea;
-  GdkWindow *window;
-  GtkAlign align;
-  GtkTextDirection direction;
-
-  window = gtk_widget_get_window (widget);
-
-  direction = gtk_widget_get_direction (widget);
-  align = gtk_widget_get_valign (GTK_WIDGET (menu));
-  display = gtk_widget_get_display (GTK_WIDGET (menu));
-  monitor = gdk_display_get_monitor_at_window (display, window);
-  gdk_monitor_get_workarea (monitor, &workarea);
-
-  gdk_window_get_origin (gtk_button_get_event_window (GTK_BUTTON (menu_button)), x, y);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_widget_get_allocation (priv->menu, &menu_allocation);
-
-  if ((priv->arrow_type == GTK_ARROW_RIGHT && direction == GTK_TEXT_DIR_LTR) ||
-      (priv->arrow_type == GTK_ARROW_LEFT && direction == GTK_TEXT_DIR_RTL))
-
-    {
-      if (*x + allocation.width + menu_allocation.width <= workarea.x + workarea.width)
-        *x += allocation.width;
-      else
-        *x -= menu_allocation.width;
-    }
-  else
-    {
-      if (*x - menu_allocation.width >= workarea.x)
-        *x -= menu_allocation.width;
-      else
-        *x += allocation.width;
-    }
-
-  /* treat the default align value like START */
-  if (align == GTK_ALIGN_FILL)
-    align = GTK_ALIGN_START;
-
-  if (align == GTK_ALIGN_CENTER)
-    *y -= (menu_allocation.height - allocation.height) / 2;
-  else if (align == GTK_ALIGN_END)
-    *y -= menu_allocation.height - allocation.height;
-
-  *push_in = FALSE;
-}
-
-static void
 popup_menu (GtkMenuButton *menu_button,
             GdkEvent      *event)
 {
   GtkMenuButtonPrivate *priv = menu_button->priv;
-  GtkMenuPositionFunc func;
-  GdkDevice *device;
-  guint button;
-  guint32 time;
+  GdkGravity widget_anchor = GDK_GRAVITY_SOUTH_WEST;
+  GdkGravity menu_anchor = GDK_GRAVITY_NORTH_WEST;
 
   if (priv->func)
     priv->func (priv->user_data);
@@ -393,37 +256,142 @@ popup_menu (GtkMenuButton *menu_button,
 
   switch (priv->arrow_type)
     {
-      case GTK_ARROW_LEFT:
-      case GTK_ARROW_RIGHT:
-        func = (GtkMenuPositionFunc) menu_position_side_func;
-        break;
-      default:
-        func = (GtkMenuPositionFunc) menu_position_up_down_func;
-        break;
-  }
+    case GTK_ARROW_UP:
+      g_object_set (priv->menu,
+                    "anchor-hints", (GDK_ANCHOR_FLIP_Y |
+                                     GDK_ANCHOR_SLIDE |
+                                     GDK_ANCHOR_RESIZE),
+                    NULL);
 
-  if (event != NULL &&
-      gdk_event_get_screen (event) == gtk_widget_get_screen (GTK_WIDGET (menu_button)))
-    {
-      device = gdk_event_get_device (event);
-      gdk_event_get_button (event, &button);
-      time = gdk_event_get_time (event);
-    }
-  else
-    {
-      device = NULL;
-      button = 0;
-      time = gtk_get_current_event_time ();
+      switch (gtk_widget_get_halign (priv->menu))
+        {
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_START:
+        case GTK_ALIGN_BASELINE:
+          widget_anchor = GDK_GRAVITY_NORTH_WEST;
+          menu_anchor = GDK_GRAVITY_SOUTH_WEST;
+          break;
+
+        case GTK_ALIGN_END:
+          widget_anchor = GDK_GRAVITY_NORTH_EAST;
+          menu_anchor = GDK_GRAVITY_SOUTH_EAST;
+          break;
+
+        case GTK_ALIGN_CENTER:
+          widget_anchor = GDK_GRAVITY_NORTH;
+          menu_anchor = GDK_GRAVITY_SOUTH;
+          break;
+        }
+
+      break;
+
+    case GTK_ARROW_DOWN:
+      /* In the common case the menu button is showing a dropdown menu, set the
+       * corresponding type hint on the toplevel, so the WM can omit the top side
+       * of the shadows.
+       */
+      g_object_set (priv->menu,
+                    "anchor-hints", (GDK_ANCHOR_FLIP_Y |
+                                     GDK_ANCHOR_SLIDE |
+                                     GDK_ANCHOR_RESIZE),
+                    "menu-type-hint", GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU,
+                    NULL);
+
+      switch (gtk_widget_get_halign (priv->menu))
+        {
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_START:
+        case GTK_ALIGN_BASELINE:
+          widget_anchor = GDK_GRAVITY_SOUTH_WEST;
+          menu_anchor = GDK_GRAVITY_NORTH_WEST;
+          break;
+
+        case GTK_ALIGN_END:
+          widget_anchor = GDK_GRAVITY_SOUTH_EAST;
+          menu_anchor = GDK_GRAVITY_NORTH_EAST;
+          break;
+
+        case GTK_ALIGN_CENTER:
+          widget_anchor = GDK_GRAVITY_SOUTH;
+          menu_anchor = GDK_GRAVITY_NORTH;
+          break;
+        }
+
+      break;
+
+    case GTK_ARROW_LEFT:
+      g_object_set (priv->menu,
+                    "anchor-hints", (GDK_ANCHOR_FLIP_X |
+                                     GDK_ANCHOR_SLIDE |
+                                     GDK_ANCHOR_RESIZE),
+                    NULL);
+
+      switch (gtk_widget_get_valign (priv->menu))
+        {
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_START:
+        case GTK_ALIGN_BASELINE:
+          widget_anchor = GDK_GRAVITY_NORTH_WEST;
+          menu_anchor = GDK_GRAVITY_NORTH_EAST;
+          break;
+
+        case GTK_ALIGN_END:
+          widget_anchor = GDK_GRAVITY_SOUTH_WEST;
+          menu_anchor = GDK_GRAVITY_SOUTH_EAST;
+          break;
+
+        case GTK_ALIGN_CENTER:
+          widget_anchor = GDK_GRAVITY_WEST;
+          menu_anchor = GDK_GRAVITY_EAST;
+          break;
+        }
+
+      break;
+
+    case GTK_ARROW_RIGHT:
+      g_object_set (priv->menu,
+                    "anchor-hints", (GDK_ANCHOR_FLIP_X |
+                                     GDK_ANCHOR_SLIDE |
+                                     GDK_ANCHOR_RESIZE),
+                    NULL);
+
+      switch (gtk_widget_get_valign (priv->menu))
+        {
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_START:
+        case GTK_ALIGN_BASELINE:
+          widget_anchor = GDK_GRAVITY_NORTH_EAST;
+          menu_anchor = GDK_GRAVITY_NORTH_WEST;
+          break;
+
+        case GTK_ALIGN_END:
+          widget_anchor = GDK_GRAVITY_SOUTH_EAST;
+          menu_anchor = GDK_GRAVITY_SOUTH_WEST;
+          break;
+
+        case GTK_ALIGN_CENTER:
+          widget_anchor = GDK_GRAVITY_EAST;
+          menu_anchor = GDK_GRAVITY_WEST;
+          break;
+        }
+
+      break;
+
+    case GTK_ARROW_NONE:
+      g_object_set (priv->menu,
+                    "anchor-hints", (GDK_ANCHOR_FLIP_Y |
+                                     GDK_ANCHOR_SLIDE |
+                                     GDK_ANCHOR_RESIZE),
+                    NULL);
+
+      break;
     }
 
-  gtk_menu_popup_for_device (GTK_MENU (priv->menu),
-                             device,
-                             NULL, NULL,
-                             func,
-                             GTK_WIDGET (menu_button),
-                             NULL,
-                             button,
-                             time);
+  gtk_menu_popup_at_widget (GTK_MENU (priv->menu),
+                            GTK_WIDGET (menu_button),
+                            widget_anchor,
+                            menu_anchor,
+                            event);
 }
 
 static void

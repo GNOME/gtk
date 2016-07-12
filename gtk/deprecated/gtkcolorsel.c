@@ -1423,40 +1423,6 @@ palette_set_color (GtkWidget         *drawing_area,
 }
 
 static void
-popup_position_func (GtkMenu   *menu,
-                     gint      *x,
-                     gint      *y,
-                     gboolean  *push_in,
-                     gpointer   user_data)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  GtkRequisition req;
-  gint root_x, root_y;
-  GdkScreen *screen;
-
-  widget = GTK_WIDGET (user_data);
-
-  g_return_if_fail (gtk_widget_get_realized (widget));
-
-  gdk_window_get_origin (gtk_widget_get_window (widget),
-                         &root_x, &root_y);
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
-                                 &req, NULL);
-  gtk_widget_get_allocation (widget, &allocation);
-
-  /* Put corner of menu centered on color cell */
-  *x = root_x + allocation.width / 2;
-  *y = root_y + allocation.height / 2;
-
-  /* Ensure sanity */
-  screen = gtk_widget_get_screen (widget);
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (screen) - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (screen) - req.height));
-}
-
-static void
 save_color_selected (GtkWidget *menuitem,
                      gpointer   data)
 {
@@ -1477,7 +1443,7 @@ save_color_selected (GtkWidget *menuitem,
 static void
 do_popup (GtkColorSelection *colorsel,
           GtkWidget         *drawing_area,
-          guint32            timestamp)
+          const GdkEvent    *trigger_event)
 {
   GtkWidget *menu;
   GtkWidget *mi;
@@ -1499,9 +1465,14 @@ do_popup (GtkColorSelection *colorsel,
 
   gtk_widget_show_all (mi);
 
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                  popup_position_func, drawing_area,
-                  3, timestamp);
+  if (trigger_event && gdk_event_triggers_context_menu (trigger_event))
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), trigger_event);
+  else
+    gtk_menu_popup_at_widget (GTK_MENU (menu),
+                              drawing_area,
+                              GDK_GRAVITY_CENTER,
+                              GDK_GRAVITY_NORTH_WEST,
+                              trigger_event);
 }
 
 
@@ -1540,7 +1511,7 @@ palette_press (GtkWidget      *drawing_area,
 
   if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
-      do_popup (colorsel, drawing_area, event->time);
+      do_popup (colorsel, drawing_area, (GdkEvent *) event);
       return TRUE;
     }
 
@@ -1638,9 +1609,7 @@ static gboolean
 palette_popup (GtkWidget *widget,
                gpointer   data)
 {
-  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
-
-  do_popup (colorsel, widget, GDK_CURRENT_TIME);
+  do_popup (data, widget, NULL);
   return TRUE;
 }
 

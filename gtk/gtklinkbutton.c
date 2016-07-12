@@ -336,43 +336,6 @@ popup_menu_detach (GtkWidget *attach_widget,
 }
 
 static void
-popup_position_func (GtkMenu  *menu,
-		     gint     *x,
-		     gint     *y,
-		     gboolean *push_in,
-		     gpointer  user_data)
-{
-  GtkLinkButton *link_button = GTK_LINK_BUTTON (user_data);
-  GtkLinkButtonPrivate *priv = link_button->priv;
-  GtkAllocation allocation;
-  GtkWidget *widget = GTK_WIDGET (link_button);
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GtkRequisition req;
-  GdkRectangle area;
-
-  g_return_if_fail (gtk_widget_get_realized (widget));
-
-  gdk_window_get_origin (gtk_widget_get_window (widget), x, y);
-
-  gtk_widget_get_preferred_size (priv->popup_menu, &req, NULL);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  *x += allocation.width / 2;
-  *y += allocation.height;
-
-  display = gtk_widget_get_display (widget);
-  monitor = gdk_display_get_monitor_at_point (display, *x, *y);
-  gtk_menu_place_on_monitor (menu, monitor);
-  gdk_monitor_get_workarea (monitor, &area);
-
-  *x = CLAMP (*x, area.x, area.x + MAX (0, area.width - req.width));
-  *y = CLAMP (*y, area.y, area.y + MAX (0, area.height - req.height));
-
-  *push_in = FALSE;
-}
-
-static void
 copy_activate_cb (GtkWidget     *widget,
 		  GtkLinkButton *link_button)
 {
@@ -385,22 +348,9 @@ copy_activate_cb (GtkWidget     *widget,
 
 static void
 gtk_link_button_do_popup (GtkLinkButton  *link_button,
-			  GdkEventButton *event)
+                          const GdkEvent *event)
 {
   GtkLinkButtonPrivate *priv = link_button->priv;
-  gint button;
-  guint time;
-  
-  if (event)
-    {
-      button = event->button;
-      time = event->time;
-    }
-  else
-    {
-      button = 0;
-      time = gtk_get_current_event_time ();
-    }
 
   if (gtk_widget_get_realized (GTK_WIDGET (link_button)))
     {
@@ -423,17 +373,18 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
       gtk_widget_show (menu_item);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menu_item);
 
-      if (button)
-        gtk_menu_popup (GTK_MENU (priv->popup_menu), NULL, NULL,
-		        NULL, NULL,
-			button, time);
+      if (event && gdk_event_triggers_context_menu (event))
+        gtk_menu_popup_at_pointer (GTK_MENU (priv->popup_menu), event);
       else
         {
-          gtk_menu_popup (GTK_MENU (priv->popup_menu), NULL, NULL,
-			  popup_position_func, link_button,
-			  button, time);
-	  gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->popup_menu), FALSE);
-	}
+          gtk_menu_popup_at_widget (GTK_MENU (priv->popup_menu),
+                                    GTK_WIDGET (link_button),
+                                    GDK_GRAVITY_SOUTH,
+                                    GDK_GRAVITY_NORTH_WEST,
+                                    event);
+
+          gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->popup_menu), FALSE);
+        }
     }
 }
 
@@ -449,7 +400,7 @@ gtk_link_button_button_press (GtkWidget      *widget,
   if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
       GTK_LINK_BUTTON (widget)->priv->uri != NULL)
     {
-      gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), event);
+      gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), (GdkEvent *) event);
 
       return TRUE;
     }

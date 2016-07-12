@@ -1665,7 +1665,6 @@ popup_menu (GtkPlacesViewRow *row,
 {
   GtkPlacesViewPrivate *priv;
   GtkWidget *view;
-  gint button;
 
   view = gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_PLACES_VIEW);
   priv = gtk_places_view_get_instance_private (GTK_PLACES_VIEW (view));
@@ -1674,30 +1673,7 @@ popup_menu (GtkPlacesViewRow *row,
 
   build_popup_menu (GTK_PLACES_VIEW (view), row);
 
-  /* The event button needs to be 0 if we're popping up this menu from
-   * a button release, else a 2nd click outside the menu with any button
-   * other than the one that invoked the menu will be ignored (instead
-   * of dismissing the menu). This is a subtle fragility of the GTK menu code.
-   */
-  if (event)
-    {
-      if (event->type == GDK_BUTTON_PRESS)
-        button = 0;
-      else
-        button = event->button;
-    }
-  else
-    {
-      button = 0;
-    }
-
-  gtk_menu_popup (GTK_MENU (priv->popup_menu),
-                  NULL,
-                  NULL,
-                  NULL,
-                  NULL,
-                  button,
-                  event ? event->time : gtk_get_current_event_time ());
+  gtk_menu_popup_at_pointer (GTK_MENU (priv->popup_menu), (GdkEvent *) event);
 }
 
 static gboolean
