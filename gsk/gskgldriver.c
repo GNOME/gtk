@@ -13,6 +13,7 @@ typedef struct {
   int height;
   GLuint min_filter;
   GLuint mag_filter;
+  GArray *fbos;
 } Texture;
 
 typedef struct {
@@ -28,12 +29,15 @@ struct _GskGLDriver
 
   GdkGLContext *gl_context;
 
+  GLuint default_fbo;
+
   GHashTable *textures;
   GArray *vaos;
 
   Texture *bound_source_texture;
   Texture *bound_mask_texture;
   Vao *bound_vao;
+  GLuint bound_fbo;
 
   gboolean in_frame : 1;
 };
@@ -60,8 +64,17 @@ texture_free (gpointer data)
 {
   Texture *t = data;
 
+  g_clear_pointer (&t->fbos, g_array_unref);
   glDeleteTextures (1, &t->texture_id);
   g_slice_free (Texture, t);
+}
+
+static void
+fbo_clear (gpointer data)
+{
+  GLuint fbo_id = GPOINTER_TO_UINT (data);
+
+  glDeleteFramebuffers (1, &fbo_id);
 }
 
 static void
@@ -168,6 +181,9 @@ gsk_gl_driver_begin_frame (GskGLDriver *driver)
 
   driver->in_frame = TRUE;
 
+  glGetIntegerv (GL_FRAMEBUFFER_BINDING, (GLint *) &driver->default_fbo);
+  driver->bound_fbo = driver->default_fbo;
+
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, 0);
 
@@ -193,11 +209,35 @@ gsk_gl_driver_end_frame (GskGLDriver *driver)
   driver->bound_source_texture = NULL;
   driver->bound_mask_texture = NULL;
   driver->bound_vao = NULL;
+  driver->bound_fbo = driver->default_fbo;
 
   g_hash_table_remove_all (driver->textures);
   g_array_set_size (driver->vaos, 0);
 
   driver->in_frame = FALSE;
+}
+
+static Texture *
+gsk_gl_driver_get_texture (GskGLDriver *driver,
+                           int          texture_id)
+{
+  return g_hash_table_lookup (driver->textures, GINT_TO_POINTER (texture_id));
+}
+
+static Vao *
+gsk_gl_driver_get_vao (GskGLDriver *driver,
+                       int          vao_id)
+{
+  int i;
+
+  for (i = 0; i < driver->vaos->len; i++)
+    {
+      Vao *v = &g_array_index (driver->vaos, Vao, i);
+      if (v->vao_id == vao_id)
+        return v;
+    }
+
+  return NULL;
 }
 
 int
@@ -273,27 +313,34 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
   return vao_id;
 }
 
-static Texture *
-gsk_gl_driver_get_texture (GskGLDriver *driver,
-                           int          texture_id)
+int
+gsk_gl_driver_create_render_target (GskGLDriver *driver,
+                                    int          texture_id)
 {
-  return g_hash_table_lookup (driver->textures, GINT_TO_POINTER (texture_id));
-}
+  Texture *t;
+  GLuint fbo_id;
 
-static Vao *
-gsk_gl_driver_get_vao (GskGLDriver *driver,
-                       int          vao_id)
-{
-  int i;
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
 
-  for (i = 0; i < driver->vaos->len; i++)
+  t = gsk_gl_driver_get_texture (driver, texture_id);
+  if (t == NULL)
+    return -1;
+
+  if (t->fbos == NULL)
     {
-      Vao *v = &g_array_index (driver->vaos, Vao, i);
-      if (v->vao_id == vao_id)
-        return v;
+      t->fbos = g_array_new (FALSE, FALSE, sizeof (GLuint));
+      g_array_set_clear_func (t->fbos, fbo_clear);
     }
 
-  return NULL;
+  glGenFramebuffers (1, &fbo_id);
+  glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
+  glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t->texture_id, 0);
+
+  g_array_append_val (t->fbos, fbo_id);
+
+  glBindFramebuffer (GL_FRAMEBUFFER, driver->default_fbo);
+
+  return fbo_id;
 }
 
 void
@@ -363,6 +410,33 @@ gsk_gl_driver_bind_vao (GskGLDriver *driver,
       glEnableVertexAttribArray (v->uv_id);
 
       driver->bound_vao = v;
+    }
+}
+
+void
+gsk_gl_driver_bind_render_target (GskGLDriver *driver,
+                                  int          texture_id)
+{
+  GLuint fbo_id;
+  Texture *t;
+
+  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
+  g_return_if_fail (driver->in_frame);
+
+  t = gsk_gl_driver_get_texture (driver, texture_id);
+  if (t == NULL)
+    return;
+
+  if (t->fbos == NULL)
+    fbo_id = driver->default_fbo;
+  else
+    fbo_id = g_array_index (t->fbos, GLuint, 0);
+
+  if (fbo_id != driver->bound_fbo)
+    {
+      glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
+
+      driver->bound_fbo = fbo_id;
     }
 }
 
