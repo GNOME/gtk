@@ -31,6 +31,8 @@ int             gsk_gl_driver_create_vao_for_quad       (GskGLDriver     *driver
                                                          int              uv_id,
                                                          int              n_vertices,
                                                          GskQuadVertex   *vertices);
+int             gsk_gl_driver_create_render_target      (GskGLDriver     *driver,
+                                                         int              texture_id);
 
 void            gsk_gl_driver_bind_source_texture       (GskGLDriver     *driver,
                                                          int              texture_id);
