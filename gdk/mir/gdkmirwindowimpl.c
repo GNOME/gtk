@@ -106,6 +106,46 @@ static cairo_surface_t *gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window
 static void ensure_surface (GdkWindow *window);
 static void apply_geometry_hints (MirSurfaceSpec *spec, GdkMirWindowImpl *impl);
 
+static gboolean
+type_hint_differs (GdkWindowTypeHint lhs, GdkWindowTypeHint rhs)
+{
+    if (lhs == rhs)
+      return FALSE;
+
+    switch (lhs)
+      {
+      case GDK_WINDOW_TYPE_HINT_DIALOG:
+      case GDK_WINDOW_TYPE_HINT_DOCK:
+        return rhs != GDK_WINDOW_TYPE_HINT_DIALOG &&
+            rhs != GDK_WINDOW_TYPE_HINT_DOCK;
+      case GDK_WINDOW_TYPE_HINT_MENU:
+      case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
+      case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+      case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+      case GDK_WINDOW_TYPE_HINT_COMBO:
+        return rhs != GDK_WINDOW_TYPE_HINT_MENU &&
+            rhs != GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU &&
+            rhs != GDK_WINDOW_TYPE_HINT_POPUP_MENU &&
+            rhs != GDK_WINDOW_TYPE_HINT_TOOLBAR &&
+            rhs != GDK_WINDOW_TYPE_HINT_COMBO;
+      case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+      case GDK_WINDOW_TYPE_HINT_UTILITY:
+        return rhs != GDK_WINDOW_TYPE_HINT_SPLASHSCREEN &&
+            rhs != GDK_WINDOW_TYPE_HINT_UTILITY;
+      case GDK_WINDOW_TYPE_HINT_DND:
+      case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+        return rhs != GDK_WINDOW_TYPE_HINT_DND &&
+            rhs != GDK_WINDOW_TYPE_HINT_TOOLTIP &&
+            rhs != GDK_WINDOW_TYPE_HINT_NOTIFICATION;
+      case GDK_WINDOW_TYPE_HINT_NORMAL:
+      case GDK_WINDOW_TYPE_HINT_DESKTOP:
+      default:
+        return rhs != GDK_WINDOW_TYPE_HINT_NORMAL &&
+            rhs != GDK_WINDOW_TYPE_HINT_DESKTOP;
+      }
+}
+
 static void
 drop_cairo_surface (GdkWindow *window)
 {
@@ -1045,7 +1085,7 @@ gdk_mir_window_impl_set_type_hint (GdkWindow         *window,
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
-  if (hint != impl->type_hint)
+  if (type_hint_differs (hint, impl->type_hint))
     {
       impl->type_hint = hint;
       if (impl->surface && !impl->pending_spec_update)
