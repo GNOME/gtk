@@ -11,6 +11,8 @@ typedef struct {
   GLuint texture_id;
   int width;
   int height;
+  GLuint min_filter;
+  GLuint mag_filter;
 } Texture;
 
 typedef struct {
@@ -197,11 +199,12 @@ gsk_gl_driver_create_texture (GskGLDriver     *driver,
                               int              width,
                               int              height,
                               int              min_filter,
-                              int              mag_filter,
-                              cairo_surface_t *surface)
+                              int              mag_filter)
 {
   guint texture_id;
   Texture t;
+
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
 
   glGenTextures (1, &texture_id);
   glBindTexture (GL_TEXTURE_2D, texture_id);
@@ -211,14 +214,11 @@ gsk_gl_driver_create_texture (GskGLDriver     *driver,
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
 
-  gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, width, height, NULL);
-
-  if (min_filter != GL_NEAREST)
-    glGenerateMipmap (GL_TEXTURE_2D);
-
   t.texture_id = texture_id;
   t.width = width;
   t.height = height;
+  t.min_filter = min_filter;
+  t.mag_filter = mag_filter;
   g_array_append_val (driver->textures, t);
 
   return texture_id;
@@ -366,4 +366,25 @@ gsk_gl_driver_bind_vao (GskGLDriver *driver,
 
       driver->bound_vao = v;
     }
+}
+
+void
+gsk_gl_driver_render_surface_to_texture (GskGLDriver     *driver,
+                                         cairo_surface_t *surface,
+                                         int              texture_id)
+{
+  Texture *t;
+
+  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
+
+  t = gsk_gl_driver_get_texture (driver, texture_id);
+  if (t == NULL)
+    return;
+
+  glBindTexture (GL_TEXTURE_2D, t->texture_id);
+
+  gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, t->width, t->height, NULL);
+
+  if (t->min_filter != GL_NEAREST)
+    glGenerateMipmap (GL_TEXTURE_2D);
 }

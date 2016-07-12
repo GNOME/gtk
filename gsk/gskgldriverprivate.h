@@ -25,8 +25,7 @@ int             gsk_gl_driver_create_texture            (GskGLDriver     *driver
                                                          int              width,
                                                          int              height,
                                                          int              min_filter,
-                                                         int              mag_filter,
-                                                         cairo_surface_t *surface);
+                                                         int              mag_filter);
 int             gsk_gl_driver_create_vao_for_quad       (GskGLDriver     *driver,
                                                          int              position_id,
                                                          int              uv_id,
@@ -39,6 +38,10 @@ void            gsk_gl_driver_bind_mask_texture         (GskGLDriver     *driver
                                                          int              texture_id);
 void            gsk_gl_driver_bind_vao                  (GskGLDriver     *driver,
                                                          int              vao_id);
+
+void            gsk_gl_driver_render_surface_to_texture (GskGLDriver     *driver,
+                                                         cairo_surface_t *surface,
+                                                         int              texture_id);
 
 G_END_DECLS
 
