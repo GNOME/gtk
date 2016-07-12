@@ -1469,11 +1469,20 @@ get_view_and_file (GtkPlacesViewRow  *row,
       mount = gtk_places_view_row_get_mount (row);
 
       if (mount)
-        *file = g_mount_get_default_location (mount);
+        {
+          *file = g_mount_get_default_location (mount);
+        }
       else if (volume)
-        *file = g_volume_get_activation_root (volume);
+        {
+          *file = g_volume_get_activation_root (volume);
+        }
       else
-        *file = NULL;
+        {
+          *file = gtk_places_view_row_get_file (row);
+          if (*file) {
+            g_object_ref (*file);
+          }
+        }
     }
 }
 
