@@ -76,6 +76,9 @@ struct _GdkMirWindowImpl
 
   gchar *title;
 
+  GdkGeometry geometry_hints;
+  GdkWindowHints geometry_mask;
+
   /* Egl surface for the current mir surface */
   EGLSurface egl_surface;
 
@@ -101,6 +104,7 @@ G_DEFINE_TYPE (GdkMirWindowImpl, gdk_mir_window_impl, GDK_TYPE_WINDOW_IMPL)
 
 static cairo_surface_t *gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window);
 static void ensure_surface (GdkWindow *window);
+static void apply_geometry_hints (MirSurfaceSpec *spec, GdkMirWindowImpl *impl);
 
 static void
 drop_cairo_surface (GdkWindow *window)
@@ -325,6 +329,31 @@ create_window_type_spec (GdkDisplay *display,
     }
 }
 
+static void
+apply_geometry_hints (MirSurfaceSpec *spec, GdkMirWindowImpl *impl)
+{
+  if (impl->geometry_mask & GDK_HINT_RESIZE_INC)
+    {
+      mir_surface_spec_set_width_increment (spec, impl->geometry_hints.width_inc);
+      mir_surface_spec_set_height_increment (spec, impl->geometry_hints.height_inc);
+    }
+  if (impl->geometry_mask & GDK_HINT_MIN_SIZE)
+    {
+      mir_surface_spec_set_min_width (spec, impl->geometry_hints.min_width);
+      mir_surface_spec_set_min_height (spec, impl->geometry_hints.min_height);
+    }
+  if (impl->geometry_mask & GDK_HINT_MAX_SIZE)
+    {
+      mir_surface_spec_set_max_width (spec, impl->geometry_hints.max_width);
+      mir_surface_spec_set_max_height (spec, impl->geometry_hints.max_height);
+    }
+  if (impl->geometry_mask & GDK_HINT_ASPECT)
+    {
+      mir_surface_spec_set_min_aspect_ratio (spec, 1000, (unsigned)(1000.0/impl->geometry_hints.min_aspect));
+      mir_surface_spec_set_max_aspect_ratio (spec, 1000, (unsigned)(1000.0/impl->geometry_hints.max_aspect));
+    }
+}
+
 static MirSurfaceSpec*
 create_spec (GdkWindow *window, GdkMirWindowImpl *impl)
 {
@@ -342,6 +371,7 @@ create_spec (GdkWindow *window, GdkMirWindowImpl *impl)
   mir_surface_spec_set_name (spec, impl->title);
   mir_surface_spec_set_buffer_usage (spec, impl->buffer_usage);
 
+  apply_geometry_hints (spec, impl);
 
   return spec;
 }
@@ -1065,8 +1095,20 @@ gdk_mir_window_impl_set_geometry_hints (GdkWindow         *window,
                                         const GdkGeometry *geometry,
                                         GdkWindowHints     geom_mask)
 {
-  //g_printerr ("gdk_mir_window_impl_set_geometry_hints window=%p\n", window);
-  //FIXME: ?
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  MirConnection *connection = gdk_mir_display_get_mir_connection (impl->display);
+  //g_printerr ("gdk_mir_window_impl_set_geometry_hints window=%p impl=%p\n", window, impl);
+
+  impl->geometry_hints = *geometry;
+  impl->geometry_mask = geom_mask;
+
+  if (impl->surface && !impl->pending_spec_update)
+    {
+       MirSurfaceSpec* spec = mir_connection_create_spec_for_changes (connection);
+       apply_geometry_hints (spec, impl);
+       mir_surface_apply_spec (impl->surface, spec);
+       mir_surface_spec_release (spec);
+    }
 }
 
 static void
