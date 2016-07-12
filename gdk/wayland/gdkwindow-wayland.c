@@ -118,6 +118,7 @@ struct _GdkWindowImplWayland
     struct wl_subsurface *wl_subsurface;
     struct wl_egl_window *egl_window;
     struct wl_egl_window *dummy_egl_window;
+    struct zxdg_exported_v1 *xdg_exported;
   } display_server;
 
   EGLSurface egl_surface;
@@ -196,6 +197,12 @@ struct _GdkWindowImplWayland
     int height;
     GdkWindowState state;
   } pending;
+
+  struct {
+    GdkWaylandWindowExported callback;
+    gpointer user_data;
+    GDestroyNotify destroy_func;
+  } exported;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -3827,4 +3834,84 @@ _gdk_wayland_window_offset_next_wl_buffer (GdkWindow *window,
 
   impl->pending_buffer_offset_x = x;
   impl->pending_buffer_offset_y = y;
+}
+
+static void
+xdg_exported_handle (void                    *data,
+                     struct zxdg_exported_v1 *zxdg_exported_v1,
+                     const char              *handle)
+{
+  GdkWindow *window = data;
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->exported.callback (window, handle, impl->exported.user_data);
+  impl->exported.user_data = NULL;
+}
+
+static const struct zxdg_exported_v1_listener xdg_exported_listener = {
+  xdg_exported_handle
+};
+
+/**
+ * gdk_wayland_window_export_handle:
+ *
+ * Stability: unstable
+ */
+gboolean
+gdk_wayland_window_export_handle (GdkWindow               *window,
+                                  GdkWaylandWindowExported callback,
+                                  gpointer                 user_data,
+                                  GDestroyNotify           destroy_func)
+{
+  GdkWindowImplWayland *impl;
+  GdkWaylandDisplay *display_wayland;
+  GdkDisplay *display = gdk_window_get_display (window);
+  struct zxdg_exported_v1 *xdg_exported;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  g_return_val_if_fail (!impl->display_server.xdg_exported, FALSE);
+
+  if (!display_wayland->xdg_exporter)
+    {
+      g_warning ("Server is missing xdg_foreign support");
+      return FALSE;
+    }
+
+  xdg_exported = zxdg_exporter_v1_export (display_wayland->xdg_exporter,
+                                          impl->display_server.wl_surface);
+  zxdg_exported_v1_add_listener (xdg_exported,  &xdg_exported_listener, window);
+
+  impl->display_server.xdg_exported = xdg_exported;
+  impl->exported.callback = callback;
+  impl->exported.user_data = user_data;
+  impl->exported.destroy_func = destroy_func;
+
+  return TRUE;
+}
+
+/**
+ * gdk_wayland_window_unexport_handle:
+ *
+ * Stability: unstable
+ */
+void
+gdk_wayland_window_unexport_handle (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  g_return_if_fail (impl->display_server.xdg_exported);
+
+  g_clear_pointer (&impl->display_server.xdg_exported,
+                   zxdg_exported_v1_destroy);
+  g_clear_pointer (&impl->exported.user_data,
+                   impl->exported.destroy_func);
 }

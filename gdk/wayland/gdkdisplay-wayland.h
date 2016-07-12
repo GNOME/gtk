@@ -30,6 +30,7 @@
 #include <gdk/wayland/tablet-unstable-v2-client-protocol.h>
 #include <gdk/wayland/gtk-shell-client-protocol.h>
 #include <gdk/wayland/xdg-shell-unstable-v6-client-protocol.h>
+#include <gdk/wayland/xdg-foreign-unstable-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -74,6 +75,7 @@ struct _GdkWaylandDisplay
   struct zwp_pointer_gestures_v1 *pointer_gestures;
   struct gtk_primary_selection_device_manager *primary_selection_manager;
   struct zwp_tablet_manager_v2 *tablet_manager;
+  struct zxdg_exporter_v1 *xdg_exporter;
 
   GList *async_roundtrips;
 
