@@ -74,6 +74,8 @@ struct _GdkMirWindowImpl
   /* Cairo context for current frame */
   cairo_surface_t *cairo_surface;
 
+  gchar *title;
+
   /* Egl surface for the current mir surface */
   EGLSurface egl_surface;
 
@@ -108,12 +110,31 @@ drop_cairo_surface (GdkWindow *window)
   g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
 }
 
+static const gchar *
+get_default_title (void)
+{
+  const char *title;
+
+  title = g_get_application_name ();
+  if (!title)
+    title = g_get_prgname ();
+  if (!title)
+    title = "";
+
+  return title;
+}
+
 GdkWindowImpl *
 _gdk_mir_window_impl_new (GdkDisplay *display, GdkWindow *window, GdkWindowAttr *attributes, gint attributes_mask)
 {
   GdkMirWindowImpl *impl = g_object_new (GDK_TYPE_MIR_WINDOW_IMPL, NULL);
 
   impl->display = display;
+
+  if (attributes && attributes_mask & GDK_WA_TITLE)
+    impl->title = g_strdup (attributes->title);
+  else
+    impl->title = g_strdup (get_default_title ());
 
   if (attributes && attributes_mask & GDK_WA_TYPE_HINT)
     impl->type_hint = attributes->type_hint;
@@ -318,6 +339,7 @@ create_spec (GdkWindow *window, GdkMirWindowImpl *impl)
                                   impl->has_rect ? impl->edge : mir_edge_attachment_any,
                                   impl->buffer_usage);
 
+  mir_surface_spec_set_name (spec, impl->title);
   mir_surface_spec_set_buffer_usage (spec, impl->buffer_usage);
 
 
@@ -595,6 +617,7 @@ gdk_mir_window_impl_finalize (GObject *object)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (object);
 
+  g_free (impl->title);
   if (impl->background)
     cairo_pattern_destroy (impl->background);
   if (impl->surface)
@@ -1050,7 +1073,19 @@ static void
 gdk_mir_window_impl_set_title (GdkWindow   *window,
                                const gchar *title)
 {
-  // g_printerr ("gdk_mir_window_impl_set_title window=%p\n", window);
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  MirConnection *connection = gdk_mir_display_get_mir_connection (impl->display);
+  //g_printerr ("gdk_mir_window_impl_set_title window=%p\n", window);
+
+  g_free (impl->title);
+  impl->title = g_strdup (title);
+  if (impl->surface && !impl->pending_spec_update)
+    {
+       MirSurfaceSpec* spec = mir_connection_create_spec_for_changes (connection);
+       mir_surface_spec_set_name (spec, impl->title);
+       mir_surface_apply_spec (impl->surface, spec);
+       mir_surface_spec_release (spec);
+    }
 }
 
 static void
