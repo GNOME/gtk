@@ -4691,20 +4691,36 @@ gtk_widget_unparent (GtkWidget *widget)
  *
  * Destroys a widget.
  *
- * When a widget is
- * destroyed, it will break any references it holds to other objects.
- * If the widget is inside a container, the widget will be removed
- * from the container. If the widget is a toplevel (derived from
- * #GtkWindow), it will be removed from the list of toplevels, and the
- * reference GTK+ holds to it will be removed. Removing a
- * widget from its container or the list of toplevels results in the
- * widget being finalized, unless you’ve added additional references
- * to the widget with g_object_ref().
+ * When a widget is destroyed all references it holds on other objects
+ * will be released:
  *
- * In most cases, only toplevel widgets (windows) require explicit
- * destruction, because when you destroy a toplevel its children will
- * be destroyed as well.
- **/
+ *  - if the widget is inside a container, it will be removed from its
+ *  parent
+ *  - if the widget is a container, all its children will be destroyed,
+ *  recursively
+ *  - if the widget is a top level, it will be removed from the list
+ *  of top level widgets that GTK+ maintains internally
+ *
+ * It's expected that all references held on the widget will also
+ * be released; you should connect to the #GtkWidget::destroy signal
+ * if you hold a reference to @widget and you wish to remove it when
+ * this function is called. It is not necessary to do so if you are
+ * implementing a #GtkContainer, as you'll be able to use the
+ * #GtkContainerClass.remove() virtual function for that.
+ *
+ * It's important to notice that gtk_widget_destroy() will only cause
+ * the @widget to be finalized if no additional references, acquired
+ * using g_object_ref(), are held on it. In case additional references
+ * are in place, the @widget will be in an "inhert" state after calling
+ * this function; @widget will still point to valid memory, allowing you
+ * to release the references you hold, but you may not query the widget's
+ * own state.
+ *
+ * You should typically call this function on top level widgets, and
+ * rarely on child widgets.
+ *
+ * See also: gtk_container_remove()
+ */
 void
 gtk_widget_destroy (GtkWidget *widget)
 {
