@@ -12614,16 +12614,39 @@ gtk_window_set_hardcoded_window (GtkWindow *window,
   g_set_object (&priv->hardcoded_window, gdk_window);
 }
 
+#ifdef GDK_WINDOWING_WAYLAND
+typedef struct {
+  GtkWindow *window;
+  GtkWindowHandleExported callback;
+  gpointer user_data;
+} WaylandWindowHandleExportedData;
+
+static void
+wayland_window_handle_exported (GdkWindow  *window,
+                                const char *wayland_handle_str,
+                                gpointer    user_data)
+{
+  WaylandWindowHandleExportedData *data = user_data;
+  char *handle_str;
+
+  handle_str = g_strdup_printf ("wayland:%s", wayland_handle_str);
+  data->callback (data->window, handle_str, data->user_data);
+  g_free (handle_str);
+
+  g_free (data);
+}
+#endif
+
 gboolean
 gtk_window_export_handle (GtkWindow               *window,
                           GtkWindowHandleExported  callback,
                           gpointer                 user_data)
 {
-  GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
 
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
     {
+      GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
       char *handle_str;
       guint32 xid = (guint32) gdk_x11_window_get_xid (gdk_window);
 
@@ -12631,6 +12654,31 @@ gtk_window_export_handle (GtkWindow               *window,
       callback (window, handle_str, user_data);
 
       return TRUE;
+    }
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    {
+      GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+      WaylandWindowHandleExportedData *data;
+
+      data = g_new0 (WaylandWindowHandleExportedData, 1);
+      data->window = window;
+      data->callback = callback;
+      data->user_data = user_data;
+
+      if (!gdk_wayland_window_export_handle (gdk_window,
+                                             wayland_window_handle_exported,
+                                             data,
+                                             g_free))
+        {
+          g_free (data);
+          return FALSE;
+        }
+      else
+        {
+          return TRUE;
+        }
     }
 #endif
 
@@ -12642,4 +12690,12 @@ gtk_window_export_handle (GtkWindow               *window,
 void
 gtk_window_unexport_handle (GtkWindow *window)
 {
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    {
+      GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+
+      gdk_wayland_window_unexport_handle (gdk_window);
+    }
+#endif
 }
