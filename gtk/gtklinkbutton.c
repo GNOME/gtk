@@ -463,16 +463,13 @@ gtk_link_button_button_press (GtkWidget      *widget,
 static gboolean
 gtk_link_button_activate_link (GtkLinkButton *link_button)
 {
-  GdkScreen *screen;
+  GtkWidget *toplevel;
   GError *error;
 
-  if (gtk_widget_has_screen (GTK_WIDGET (link_button)))
-    screen = gtk_widget_get_screen (GTK_WIDGET (link_button));
-  else
-    screen = NULL;
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (link_button));
 
   error = NULL;
-  gtk_show_uri (screen, link_button->priv->uri, GDK_CURRENT_TIME, &error);
+  gtk_show_uri_on_window (GTK_WINDOW (toplevel), link_button->priv->uri, GDK_CURRENT_TIME, &error);
   if (error)
     {
       g_warning ("Unable to show '%s': %s",
