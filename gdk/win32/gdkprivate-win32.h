@@ -39,6 +39,7 @@
 #include <gdk/win32/gdkwindow-win32.h>
 #include <gdk/win32/gdkwin32display.h>
 #include <gdk/win32/gdkwin32screen.h>
+#include <gdk/win32/gdkwin32keys.h>
 
 #include "gdkinternals.h"
 
@@ -290,8 +291,6 @@ extern gboolean		 _gdk_input_locale_is_ime;
 extern UINT		 _gdk_input_codepage;
 
 extern guint		 _gdk_keymap_serial;
-extern gboolean		 _gdk_keyboard_has_altgr;
-extern guint		 _scancode_rshift;
 
 /* GdkAtoms: properties, targets and types */
 extern GdkAtom		 _gdk_selection;
@@ -474,6 +473,13 @@ gint      _gdk_win32_display_text_property_to_utf8_list (GdkDisplay    *display,
 							 gchar       ***list);
 gchar     *_gdk_win32_display_utf8_to_string_target (GdkDisplay *display, const gchar *str);
 
+gboolean   _gdk_win32_keymap_has_altgr           (GdkWin32Keymap *keymap);
+guint8     _gdk_win32_keymap_get_active_group    (GdkWin32Keymap *keymap);
+guint8     _gdk_win32_keymap_get_rshift_scancode (GdkWin32Keymap *keymap);
+void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
+                                                  HKL             hkl);
+
+
 GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 
 void       _gdk_win32_display_create_window_impl   (GdkDisplay    *display,
@@ -534,7 +540,7 @@ void _gdk_win32_append_event (GdkEvent *event);
 void _gdk_win32_emit_configure_event (GdkWindow *window);
 
 
-guint32 _gdk_win32_keymap_get_decimal_mark (void);
+guint32 _gdk_win32_keymap_get_decimal_mark (GdkWin32Keymap *keymap);
 
 void     _gdk_win32_window_handle_aerosnap      (GdkWindow            *window,
                                                  GdkWin32AeroSnapCombo combo);

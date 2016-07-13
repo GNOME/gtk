@@ -505,6 +505,8 @@ static void
 build_key_event_state (GdkEvent *event,
 		       BYTE     *key_state)
 {
+  GdkWin32Keymap *keymap;
+
   event->key.state = 0;
 
   if (key_state[VK_SHIFT] & 0x80)
@@ -524,11 +526,13 @@ build_key_event_state (GdkEvent *event,
   if (key_state[VK_XBUTTON2] & 0x80)
     event->key.state |= GDK_BUTTON5_MASK;
 
-  if (_gdk_keyboard_has_altgr &&
+  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
+  event->key.group = _gdk_win32_keymap_get_active_group (keymap);
+
+  if (_gdk_win32_keymap_has_altgr (keymap) &&
       (key_state[VK_LCONTROL] & 0x80) &&
       (key_state[VK_RMENU] & 0x80))
     {
-      event->key.group = 1;
       event->key.state |= GDK_MOD2_MASK;
       if (key_state[VK_RCONTROL] & 0x80)
 	event->key.state |= GDK_CONTROL_MASK;
@@ -537,7 +541,6 @@ build_key_event_state (GdkEvent *event,
     }
   else
     {
-      event->key.group = 0;
       if (key_state[VK_CONTROL] & 0x80)
 	event->key.state |= GDK_CONTROL_MASK;
       if (key_state[VK_MENU] & 0x80)
@@ -2224,6 +2227,7 @@ gdk_event_translate (MSG  *msg,
     {
     case WM_INPUTLANGCHANGE:
       _gdk_input_locale = (HKL) msg->lParam;
+      _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
       _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
       GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		     LOCALE_IDEFAULTANSICODEPAGE,
@@ -2391,7 +2395,7 @@ gdk_event_translate (MSG  *msg,
 	    }
 	}
       else if (msg->wParam == VK_SHIFT &&
-	       LOBYTE (HIWORD (msg->lParam)) == _scancode_rshift)
+	       LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display))))
 	event->key.hardware_keycode = VK_RSHIFT;
 
       /* g_print ("ctrl:%02x lctrl:%02x rctrl:%02x alt:%02x lalt:%02x ralt:%02x\n", key_state[VK_CONTROL], key_state[VK_LCONTROL], key_state[VK_RCONTROL], key_state[VK_MENU], key_state[VK_LMENU], key_state[VK_RMENU]); */

@@ -904,10 +904,12 @@ gdk_keyval_to_unicode (guint keyval)
     return keyval & 0x00ffffff;
 
 #if defined(GDK_WINDOWING_WIN32)
-  if (GDK_IS_WIN32_DISPLAY (gdk_display_get_default ()))
+  if (GDK_IS_WIN32_DISPLAY (gdk_display_get_default ()) &&
+      keyval == 0xffae)
     {
-      if (keyval == 0xffae)
-        return (guint32) _gdk_win32_keymap_get_decimal_mark ();
+      GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_default ());
+
+      return (guint32) _gdk_win32_keymap_get_decimal_mark (keymap);
     }
 #endif
 
