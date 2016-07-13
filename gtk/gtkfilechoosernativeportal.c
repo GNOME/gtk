@@ -124,7 +124,7 @@ response_cb (GDBusConnection  *connection,
   switch (portal_response)
     {
     case 0:
-      gtk_response = GTK_RESPONSE_OK;
+      gtk_response = GTK_RESPONSE_ACCEPT;
       break;
     case 1:
       gtk_response = GTK_RESPONSE_CANCEL;
