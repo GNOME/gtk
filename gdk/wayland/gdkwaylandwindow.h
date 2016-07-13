@@ -73,6 +73,10 @@ gboolean                 gdk_wayland_window_export_handle (GdkWindow            
 GDK_AVAILABLE_IN_3_22
 void                     gdk_wayland_window_unexport_handle (GdkWindow *window);
 
+GDK_AVAILABLE_IN_3_22
+gboolean                 gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
+                                                                        char      *parent_handle_str);
+
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_WINDOW_H__ */

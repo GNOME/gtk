@@ -203,6 +203,8 @@ struct _GdkWindowImplWayland
     gpointer user_data;
     GDestroyNotify destroy_func;
   } exported;
+
+  struct zxdg_imported_v1 *imported_transient_for;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -223,6 +225,8 @@ static void gdk_window_request_transient_parent_commit (GdkWindow *window);
 static void gdk_wayland_window_sync_margin (GdkWindow *window);
 static void gdk_wayland_window_sync_input_region (GdkWindow *window);
 static void gdk_wayland_window_sync_opaque_region (GdkWindow *window);
+
+static void unset_transient_for_exported (GdkWindow *window);
 
 GType _gdk_window_impl_wayland_get_type (void);
 
@@ -2321,6 +2325,8 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
+  unset_transient_for_exported (window);
+
   if (impl->display_server.wl_surface)
     {
       if (impl->dummy_egl_surface)
@@ -2982,6 +2988,8 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
       g_warning ("Setting %p transient for %p would create a loop", window, parent);
       return;
     }
+
+  unset_transient_for_exported (window);
 
   if (impl->display_server.wl_subsurface)
     unmap_subsurface (window);
@@ -3914,4 +3922,66 @@ gdk_wayland_window_unexport_handle (GdkWindow *window)
                    zxdg_exported_v1_destroy);
   g_clear_pointer (&impl->exported.user_data,
                    impl->exported.destroy_func);
+}
+
+static void
+unset_transient_for_exported (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  g_clear_pointer (&impl->imported_transient_for, zxdg_imported_v1_destroy);
+}
+
+static void
+xdg_imported_destroyed (void                    *data,
+                        struct zxdg_imported_v1 *zxdg_imported_v1)
+{
+  GdkWindow *window = data;
+
+  unset_transient_for_exported (window);
+}
+
+static const struct zxdg_imported_v1_listener xdg_imported_listener = {
+  xdg_imported_destroyed,
+};
+
+/**
+ * gdk_wayland_window_set_transient_for_exported:
+ *
+ * Stability: unstable
+ */
+gboolean
+gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
+                                               char      *parent_handle_str)
+{
+  GdkWindowImplWayland *impl;
+  GdkWaylandDisplay *display_wayland;
+  GdkDisplay *display = gdk_window_get_display (window);
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  g_return_val_if_fail (impl->display_server.xdg_surface, FALSE);
+
+  if (!display_wayland->xdg_importer)
+    {
+      g_warning ("Server is missing xdg_foreign support");
+      return FALSE;
+    }
+
+  gdk_window_set_transient_for (window, NULL);
+
+  impl->imported_transient_for =
+    zxdg_importer_v1_import (display_wayland->xdg_importer, parent_handle_str);
+  zxdg_imported_v1_add_listener (impl->imported_transient_for,
+                                 &xdg_imported_listener,
+                                 window);
+
+  zxdg_imported_v1_set_parent_of (impl->imported_transient_for,
+                                  impl->display_server.wl_surface);
+
+  return TRUE;
 }
