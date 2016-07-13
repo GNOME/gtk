@@ -292,7 +292,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 				   PROP_MESSAGE_AREA,
 				   g_param_spec_object ("message-area",
 							P_("Message area"),
-							P_("GtkVBox that holds the dialog's primary and secondary labels"),
+							P_("GtkBox that holds the dialog's primary and secondary labels"),
 							GTK_TYPE_WIDGET,
 							GTK_PARAM_READABLE));
 
@@ -914,7 +914,7 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  * See gtk_dialog_get_content_area() for the corresponding
  * function in the parent #GtkDialog.
  *
- * Returns: (transfer none): A #GtkVBox corresponding to the
+ * Returns: (transfer none): A #GtkBox corresponding to the
  *     “message area” in the @message_dialog.
  *
  * Since: 2.22
