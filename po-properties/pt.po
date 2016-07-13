@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-21 15:58+0000\n"
-"PO-Revision-Date: 2016-06-08 09:05+0100\n"
+"POT-Creation-Date: 2016-07-13 01:58+0000\n"
+"PO-Revision-Date: 2016-07-13 17:46+0100\n"
 "Last-Translator: Tiago Santos <tiagofsantos81@sapo.pt>\n"
 "Language-Team: Português <happyguy_pt@hotmail.com>\n"
 "Language: pt\n"
@@ -24,8 +24,9 @@ msgstr ""
 "X-Language: pt_PT\n"
 "X-Source-Language: C\n"
 
-#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
-#: gdk/gdkglcontext.c:315 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139
+#: gdk/gdkdevicemanager.c:185 gdk/gdkglcontext.c:315 gdk/gdkseat.c:202
+#: gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Ecrã"
 
@@ -900,7 +901,8 @@ msgstr "Se este ícone de área de notificação tem ou não uma dica"
 msgid "Tooltip Text"
 msgstr "Texto da dica"
 
-#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1315 gtk/gtkwidget.c:1339
+#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1315
+#: gtk/gtkwidget.c:1339
 msgid "The contents of the tooltip for this widget"
 msgstr "O conteúdo da dica deste widget"
 
@@ -914,7 +916,7 @@ msgstr "O conteúdo da dica deste ícone de área de notificação"
 
 #: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:183
 #: gtk/gtkfilechooserbutton.c:438 gtk/gtkfontbutton.c:476
-#: gtk/gtkheaderbar.c:1935 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
+#: gtk/gtkheaderbar.c:1999 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
 #: gtk/gtkshortcutssection.c:375 gtk/gtkshortcutsshortcut.c:575
 #: gtk/gtkstack.c:523 gtk/gtktreeviewcolumn.c:316
 msgid "Title"
@@ -1308,11 +1310,11 @@ msgstr "Valor alvo da ação"
 msgid "The parameter for action invocations"
 msgstr "O parâmtro para as invocações da ação"
 
-#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:1921
+#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:1985
 msgid "Pack type"
 msgstr "Tipo de arrumação"
 
-#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:1922
+#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:1986
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1320,13 +1322,13 @@ msgstr ""
 "Um GtkPackType indicando se o filho é arrumado com referência ao início ou "
 "fim do pai"
 
-#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1928
+#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1992
 #: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1687
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Posição"
 
-#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:1929
+#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:1993
 #: gtk/gtknotebook.c:839 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
 msgid "The index of the child in the parent"
 msgstr "O índice do filho no pai"
@@ -1683,11 +1685,11 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Se VERDADEIRO, o filho não será sujeito a dimensionamento homogéneo"
 
 #: gtk/gtkbox.c:282 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:337
-#: gtk/gtkheaderbar.c:1956 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
+#: gtk/gtkheaderbar.c:2020 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
 msgid "Spacing"
 msgstr "Espaçamento"
 
-#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:1957
+#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:2021
 msgid "The amount of space between children"
 msgstr "A quantidade de espaço entre filhos"
 
@@ -2300,8 +2302,9 @@ msgstr "Seguir o estado"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Se a imagem desenhada deverá ser colorida de acordo com o estado"
 
-#: gtk/gtkcellrendererpixbuf.c:265 gtk/gtkimage.c:358 gtk/gtkmodelbutton.c:1116
-#: gtk/gtkshortcutsshortcut.c:550 gtk/gtkwindow.c:835
+#: gtk/gtkcellrendererpixbuf.c:265 gtk/gtkimage.c:358
+#: gtk/gtkmodelbutton.c:1116 gtk/gtkshortcutsshortcut.c:550
+#: gtk/gtkwindow.c:835
 msgid "Icon"
 msgstr "Ícone"
 
@@ -3861,7 +3864,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "O filtro atual para selecionar que ficheiros são mostrados"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4483
-#: gtk/gtkplacesview.c:2191
+#: gtk/gtkplacesview.c:2200
 msgid "Local Only"
 msgstr "Só local"
 
@@ -3945,28 +3948,28 @@ msgstr ""
 "Se um seletor de ficheiros que não esteja em modo de abertura permitirá ao "
 "utilizador criar novas pastas."
 
-#: gtk/gtkfilechoosernative.c:627
+#: gtk/gtkfilechoosernative.c:779
 msgid "Accept label"
 msgstr "Rótulo Aceitar"
 
-#: gtk/gtkfilechoosernative.c:628
+#: gtk/gtkfilechoosernative.c:780
 msgid "The label on the accept button"
 msgstr "O rótulo no botão Aceitar"
 
-#: gtk/gtkfilechoosernative.c:640
+#: gtk/gtkfilechoosernative.c:792
 msgid "Cancel label"
 msgstr "Rótulo Cancelar"
 
-#: gtk/gtkfilechoosernative.c:641
+#: gtk/gtkfilechoosernative.c:793
 msgid "The label on the cancel button"
 msgstr "O rótulo no botão Cancelar"
 
-#: gtk/gtkfilechooserwidget.c:8429 gtk/gtkfilechooserwidget.c:8430
+#: gtk/gtkfilechooserwidget.c:8454 gtk/gtkfilechooserwidget.c:8455
 msgid "Search mode"
 msgstr "Modo de pesquisa ativo"
 
-#: gtk/gtkfilechooserwidget.c:8436 gtk/gtkfilechooserwidget.c:8437
-#: gtk/gtkheaderbar.c:1942 gtk/gtkshortcutsshortcut.c:591
+#: gtk/gtkfilechooserwidget.c:8461 gtk/gtkfilechooserwidget.c:8462
+#: gtk/gtkheaderbar.c:2006 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Subtítulo"
 
@@ -4265,51 +4268,51 @@ msgstr "Altura"
 msgid "The number of rows that a child spans"
 msgstr "O número de linhas que um filho ocupa"
 
-#: gtk/gtkheaderbar.c:1936
+#: gtk/gtkheaderbar.c:2000
 msgid "The title to display"
 msgstr "O título a mostrar"
 
-#: gtk/gtkheaderbar.c:1943
+#: gtk/gtkheaderbar.c:2007
 msgid "The subtitle to display"
 msgstr "O subtítulo a mostrar"
 
-#: gtk/gtkheaderbar.c:1949
+#: gtk/gtkheaderbar.c:2013
 msgid "Custom Title"
 msgstr "Título personalizado"
 
-#: gtk/gtkheaderbar.c:1950
+#: gtk/gtkheaderbar.c:2014
 msgid "Custom title widget to display"
 msgstr "Widget de títulos personalizados a mostrar"
 
-#: gtk/gtkheaderbar.c:1974
+#: gtk/gtkheaderbar.c:2038
 msgid "Show decorations"
 msgstr "Mostrar decorações"
 
-#: gtk/gtkheaderbar.c:1975
+#: gtk/gtkheaderbar.c:2039
 msgid "Whether to show window decorations"
 msgstr "Se mostrar ou não as decorações da janela"
 
-#: gtk/gtkheaderbar.c:1993 gtk/gtksettings.c:1610
+#: gtk/gtkheaderbar.c:2057 gtk/gtksettings.c:1610
 msgid "Decoration Layout"
 msgstr "Disposição da decoração"
 
-#: gtk/gtkheaderbar.c:1994 gtk/gtksettings.c:1611
+#: gtk/gtkheaderbar.c:2058 gtk/gtksettings.c:1611
 msgid "The layout for window decorations"
 msgstr "A disposição para as decorações da janela"
 
-#: gtk/gtkheaderbar.c:2007
+#: gtk/gtkheaderbar.c:2071
 msgid "Decoration Layout Set"
 msgstr "Conjunto de disposição das decorações"
 
-#: gtk/gtkheaderbar.c:2008
+#: gtk/gtkheaderbar.c:2072
 msgid "Whether the decoration-layout property has been set"
 msgstr "Se a propriedade de disposição da decoração foi ou não definida"
 
-#: gtk/gtkheaderbar.c:2022
+#: gtk/gtkheaderbar.c:2086
 msgid "Has Subtitle"
 msgstr "Tem subtítulo"
 
-#: gtk/gtkheaderbar.c:2023
+#: gtk/gtkheaderbar.c:2087
 msgid "Whether to reserve space for a subtitle"
 msgstr "Se reservar ou não espaço para um subtítulo"
 
@@ -5128,7 +5131,8 @@ msgid "Message area"
 msgstr "Área de mensagem"
 
 #: gtk/gtkmessagedialog.c:295
-msgid "GtkVBox that holds the dialog's primary and secondary labels"
+#| msgid "GtkVBox that holds the dialog's primary and secondary labels"
+msgid "GtkBox that holds the dialog's primary and secondary labels"
 msgstr "A GtkVBox que contém as etiquetas primária e secundária do diálogo"
 
 #: gtk/gtkmodelbutton.c:1100
@@ -5509,11 +5513,11 @@ msgstr "Localização a selecionar"
 msgid "The location to highlight in the sidebar"
 msgstr "A localização a realçar na barra lateral"
 
-#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2212
+#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2221
 msgid "Open Flags"
 msgstr "Parâmetros de abertura"
 
-#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2213
+#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2222
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5562,7 +5566,7 @@ msgstr ""
 "Se a barra lateral inclui um atalho incorporado para um diálogo \"Inserir "
 "localização\""
 
-#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2192
+#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2201
 msgid "Whether the sidebar only includes local files"
 msgstr "Se a barra lateral só inclui ficheiros locais"
 
@@ -5587,19 +5591,19 @@ msgstr "Se a barra lateral inclui um item para mostrar localizações externas"
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Se emitir ou não ::populate-popup para balões que não são menus"
 
-#: gtk/gtkplacesview.c:2198
+#: gtk/gtkplacesview.c:2207
 msgid "Loading"
 msgstr "A carregar"
 
-#: gtk/gtkplacesview.c:2199
+#: gtk/gtkplacesview.c:2208
 msgid "Whether the view is loading locations"
 msgstr "Se a vista está a carregar localizações"
 
-#: gtk/gtkplacesview.c:2205
+#: gtk/gtkplacesview.c:2214
 msgid "Fetching networks"
 msgstr "A obter redes"
 
-#: gtk/gtkplacesview.c:2206
+#: gtk/gtkplacesview.c:2215
 msgid "Whether the view is fetching networks"
 msgstr "Se a vista está a obter redes"
 
@@ -6628,7 +6632,8 @@ msgstr "Largura máxima do conteúdo"
 
 #: gtk/gtkscrolledwindow.c:724
 msgid "The maximum width that the scrolled window will allocate to its content"
-msgstr "A largura máxima que a janela com rolamento irá alocar para o seu conteúdo"
+msgstr ""
+"A largura máxima que a janela com rolamento irá alocar para o seu conteúdo"
 
 #: gtk/gtkscrolledwindow.c:737
 msgid "Maximum Content Height"
