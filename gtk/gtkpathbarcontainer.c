@@ -33,8 +33,8 @@
 //TODO remove
 #include "gtkbutton.h"
 
-#define REVEALER_ANIMATION_TIME 250 //ms
-#define INVERT_ANIMATION_SPEED 1.2 //px/ms
+#define REVEALER_ANIMATION_TIME 750 //ms
+#define INVERT_ANIMATION_SPEED 0.2 //px/ms
 #define INVERT_ANIMATION_MAX_TIME 10000 //ms
 
 struct _GtkPathBarContainerPrivate
@@ -59,6 +59,8 @@ struct _GtkPathBarContainerPrivate
   gboolean allocated;
 
   guint parent_available_width;
+
+  guint children_shown_idle_id;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPathBarContainer, gtk_path_bar_container, GTK_TYPE_BIN)
@@ -122,7 +124,8 @@ gtk_path_bar_container_get_property (GObject    *object,
 
 void
 gtk_path_bar_container_add (GtkPathBarContainer *self,
-                           GtkWidget           *widget)
+                            GtkWidget           *widget,
+                            gboolean             animate)
 {
   GtkPathBarContainer *children_box = GTK_PATH_BAR_CONTAINER (self);
   GtkWidget *revealer;
@@ -135,8 +138,16 @@ gtk_path_bar_container_add (GtkPathBarContainer *self,
                                     GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT);
   gtk_container_add (GTK_CONTAINER (revealer), widget);
   gtk_container_add (GTK_CONTAINER (priv->children_box), revealer);
-  gtk_revealer_set_transition_duration (GTK_REVEALER (revealer),
-                                        REVEALER_ANIMATION_TIME);
+  if (animate)
+    {
+      gtk_revealer_set_transition_duration (GTK_REVEALER (revealer),
+                                            REVEALER_ANIMATION_TIME);
+    }
+  else
+    {
+      gtk_revealer_set_transition_duration (GTK_REVEALER (revealer),
+                                            0);
+    }
   priv->children = g_list_append (priv->children, widget);
   gtk_widget_show_all (revealer);
 
@@ -155,7 +166,7 @@ really_remove_child (GtkPathBarContainer *self,
       GtkWidget *revealer;
 
       revealer = gtk_widget_get_parent (child->data);
-      if (child->data == widget && !gtk_revealer_get_child_revealed (GTK_REVEALER (revealer)))
+      if (child->data == widget)
         {
           gboolean was_visible = gtk_widget_get_visible (widget);
 
@@ -184,7 +195,8 @@ unrevealed_really_remove_child (GObject    *widget,
 
 void
 gtk_path_bar_container_remove (GtkPathBarContainer *self,
-                               GtkWidget    *widget)
+                               GtkWidget           *widget,
+                               gboolean             animate)
 {
   GtkPathBarContainerPrivate *priv = gtk_path_bar_container_get_instance_private (self);
   GtkWidget *to_remove;
@@ -196,6 +208,14 @@ gtk_path_bar_container_remove (GtkPathBarContainer *self,
 
   priv->children_to_remove = g_list_append (priv->children_to_remove, to_remove);
   priv->children = g_list_remove (priv->children, to_remove);
+
+  if (!animate)
+    {
+      really_remove_child (self, widget);
+      priv->children_to_show = g_list_remove (priv->children_to_show, to_remove);
+      priv->children_to_hide = g_list_remove (priv->children_to_hide, to_remove);
+
+    }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 }
@@ -303,6 +323,19 @@ get_children_preferred_size_for_requisition (GtkPathBarContainer *self,
   g_list_free (children);
 }
 
+static gboolean
+emit_children_shown_idle (gpointer user_data)
+{
+  GtkPathBarContainer *self = GTK_PATH_BAR_CONTAINER (user_data);
+  GtkPathBarContainerPrivate *priv = gtk_path_bar_container_get_instance_private (self);
+
+  g_object_notify (G_OBJECT (self), "children-shown");
+
+  priv->children_shown_idle_id = 0;
+
+  return FALSE;
+}
+
 static void
 update_children_visibility (GtkPathBarContainer *self)
 {
@@ -349,6 +382,7 @@ update_children_visibility (GtkPathBarContainer *self)
 
       if (!allocate_more_children || current_children_width > available_size.width)
         {
+          g_print ("€€€€ Not allocate more %d \n", available_size.width);
           allocate_more_children = FALSE;
           if (gtk_revealer_get_child_revealed (GTK_REVEALER (gtk_widget_get_parent (child_widget))))
             children_to_hide = g_list_prepend (children_to_hide, child_widget);
@@ -358,6 +392,7 @@ update_children_visibility (GtkPathBarContainer *self)
 
       if (!g_list_find (priv->children_to_remove, child_widget))
         children_to_show = g_list_prepend (children_to_show, child_widget);
+      g_print ("children to show %d %d\n", g_list_length (children_to_show), i);
     }
 
   for (child = children_to_show, child_to_compare = priv->children_to_show;
@@ -397,8 +432,11 @@ update_children_visibility (GtkPathBarContainer *self)
         {
           priv->children_to_show = g_list_reverse (priv->children_to_show);
           priv->children_to_hide = g_list_reverse (priv->children_to_hide);
-        }
-      g_object_notify (G_OBJECT (self), "children-shown");
+          g_print ("children to sho????%d", g_list_length (priv->children_to_show));
+        };
+
+      if (!priv->children_shown_idle_id)
+        priv->children_shown_idle_id = g_idle_add (emit_children_shown_idle, self);
     }
 
   g_list_free (children);
@@ -438,8 +476,6 @@ revealer_on_show_completed (GObject    *widget,
 
   remove_opacity_classes (GTK_WIDGET (widget));
   g_signal_handlers_disconnect_by_func (widget, revealer_on_show_completed, user_data);
-  priv->children_to_show = g_list_remove (priv->children_to_show,
-                                         gtk_bin_get_child (GTK_BIN (widget)));
 }
 
 static void
@@ -991,6 +1027,14 @@ gtk_path_bar_container_draw (GtkWidget *widget,
 }
 
 static void
+gtk_path_bar_container_finalize (GObject *object)
+{
+  GtkPathBarContainer *self = GTK_PATH_BAR_CONTAINER (object);
+
+  g_idle_remove_by_data (self);
+}
+
+static void
 real_get_preferred_size_for_requisition (GtkWidget      *widget,
                                          GtkRequisition *available_size,
                                          GtkRequisition *minimum_size,
@@ -1062,6 +1106,7 @@ gtk_path_bar_container_class_init (GtkPathBarContainerClass *class)
 
   object_class->set_property = gtk_path_bar_container_set_property;
   object_class->get_property = gtk_path_bar_container_get_property;
+  object_class->finalize = gtk_path_bar_container_finalize;
 
   widget_class->size_allocate = gtk_path_bar_container_size_allocate;
   widget_class->get_preferred_width = gtk_path_bar_container_get_preferred_width;
@@ -1204,6 +1249,14 @@ gtk_path_bar_container_get_inverted (GtkPathBarContainer *self)
   priv = gtk_path_bar_container_get_instance_private (self);
 
   return priv->inverted;
+}
+
+gboolean
+gtk_path_bar_container_get_invert_animation (GtkPathBarContainer *self)
+{
+  GtkPathBarContainerPrivate *priv = gtk_path_bar_container_get_instance_private (self);
+
+  return priv->invert_animation;
 }
 
 GList *

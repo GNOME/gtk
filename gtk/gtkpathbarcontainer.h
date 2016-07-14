@@ -91,11 +91,13 @@ GList             *gtk_path_bar_container_get_overflow_children  (GtkPathBarCont
 
 GDK_AVAILABLE_IN_3_20
 void              gtk_path_bar_container_add                     (GtkPathBarContainer      *self,
-                                                                  GtkWidget                *widget);
+                                                                  GtkWidget                *widget,
+                                                                  gboolean                  animate);
 
 GDK_AVAILABLE_IN_3_20
 void              gtk_path_bar_container_remove                  (GtkPathBarContainer      *self,
-                                                                  GtkWidget                *widget);
+                                                                  GtkWidget                *widget,
+                                                                  gboolean                  animate);
 
 GDK_AVAILABLE_IN_3_20
 void              gtk_path_bar_container_remove_all_children     (GtkPathBarContainer      *self);
@@ -117,6 +119,9 @@ void              gtk_path_bar_container_adapt_to_size                          
                                                                                      GtkRequisition           *available_size);
 GDK_AVAILABLE_IN_3_20
 GList *           gtk_path_bar_container_get_shown_children                         (GtkPathBarContainer      *self);
+
+GDK_AVAILABLE_IN_3_20
+gboolean          gtk_path_bar_container_get_invert_animation                       (GtkPathBarContainer      *self);
 
 G_END_DECLS
 

@@ -118,8 +118,12 @@ gtk_path_bar_box_size_allocate (GtkWidget     *widget,
   children = gtk_container_get_children (GTK_CONTAINER (self));
   sizes = g_newa (GtkRequestedSize, g_list_length (children));
 
+  if (children == NULL)
+    return;
+
   for (child = children, i = 0; child != NULL; child = g_list_next (child), i++)
     {
+      g_print ("minimum size bef %d\n", gtk_widget_get_visible (child->data));
       if (!gtk_widget_get_visible (child->data))
         continue;
 
@@ -127,6 +131,7 @@ gtk_path_bar_box_size_allocate (GtkWidget     *widget,
                                                  allocation->height,
                                                  &sizes[i].minimum_size,
                                                  &sizes[i].natural_size);
+      g_print ("minimum size %d %d\n", i, sizes[i].minimum_size);
       sizes[i].data = child->data;
       available_size -= sizes[i].minimum_size;
       n_visible_children++;
@@ -135,13 +140,16 @@ gtk_path_bar_box_size_allocate (GtkWidget     *widget,
   gtk_distribute_natural_allocation (MAX (0, available_size),
                                      n_visible_children, sizes);
 
+  g_print ("n visible children %d\n", n_visible_children);
   for (child = children, i = 0; child != NULL; child = g_list_next (child), i++)
     {
+      g_print ("allocate size bef %d\n", gtk_widget_get_visible (child->data));
       if (!gtk_widget_get_visible (child->data))
         continue;
 
       child_available_size.width = sizes[i].minimum_size;
       child_available_size.height = allocation->height;
+      g_print ("path bar box size allocate really? %d %d\n", child_available_size.width, child_available_size.height);
 
       if (GTK_IS_PATH_BAR_CONTAINER (child->data))
         {
@@ -153,6 +161,7 @@ gtk_path_bar_box_size_allocate (GtkWidget     *widget,
                                                                      &natural_size,
                                                                      &distributed_size);
 
+          g_print ("path bar box size allocate %d %d\n", child_available_size.width, distributed_size.width);
           sizes[i].minimum_size = MIN (child_available_size.width, distributed_size.width);
         }
 

@@ -33,7 +33,7 @@ on_button_clicked (GtkWidget *button,
                    gpointer   user_data)
 {
   g_print ("button clicked\n");
-  gtk_path_bar_container_remove (GTK_PATH_BAR_CONTAINER (user_data), button);
+  gtk_path_bar_container_remove (GTK_PATH_BAR_CONTAINER (user_data), button, TRUE);
 }
 
 static void
@@ -47,7 +47,7 @@ on_reset_button_clicked (GtkButton *reset_button)
     {
       button = gtk_button_new_with_label (get_lorem_ipsum ());
       g_signal_connect (button, "clicked", (GCallback) on_button_clicked, path_bar_container);
-      gtk_path_bar_container_add (GTK_PATH_BAR_CONTAINER (path_bar_container), button);
+      gtk_path_bar_container_add (GTK_PATH_BAR_CONTAINER (path_bar_container), button, FALSE);
     }
 
   gtk_widget_show_all (path_bar_container);
@@ -61,7 +61,7 @@ on_add_button (gint line)
   button = gtk_button_new_with_label (get_lorem_ipsum ());
   gtk_widget_show (button);
   g_signal_connect (button, "clicked", (GCallback) on_button_clicked, path_bar_container);
-  gtk_path_bar_container_add (GTK_PATH_BAR_CONTAINER (path_bar_container), button);
+  gtk_path_bar_container_add (GTK_PATH_BAR_CONTAINER (path_bar_container), button, TRUE);
   gtk_container_add (GTK_CONTAINER (path_bar_box), gtk_button_new_with_label ("eeeeoo"));
 }
 
@@ -75,7 +75,7 @@ on_remove_button (gint line)
   last = g_list_last (children);
   if (last)
     gtk_path_bar_container_remove (GTK_PATH_BAR_CONTAINER (path_bar_container),
-                                   last->data);
+                                   last->data, TRUE);
 
   g_list_free (children);
 }
