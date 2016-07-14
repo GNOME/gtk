@@ -263,7 +263,7 @@ static GtkCssValue *
 font_family_assign (GtkCssStyleProperty *property,
                     const GValue        *value)
 {
-  const char **names = g_value_get_boxed (value);
+  const char **names;
   GtkCssValue *result;
   GPtrArray *array;
 
