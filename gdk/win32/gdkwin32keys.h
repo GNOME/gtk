@@ -26,6 +26,24 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GdkWin32KeymapMatch:
+ * @GDK_WIN32_KEYMAP_MATCH_NONE: no matches found. Output is not valid.
+ * @GDK_WIN32_KEYMAP_MATCH_INCOMPLETE: the sequence matches so far, but is incomplete. Output is not valid.
+ * @GDK_WIN32_KEYMAP_MATCH_PARTIAL: the sequence matches up to the last key,
+ *     which does not match. Output is valid.
+ * @GDK_WIN32_KEYMAP_MATCH_EXACT: the sequence matches exactly. Output is valid.
+ *
+ * An enumeration describing the result of a deadkey combination matching.
+ */
+typedef enum
+{
+  GDK_WIN32_KEYMAP_MATCH_NONE,
+  GDK_WIN32_KEYMAP_MATCH_INCOMPLETE,
+  GDK_WIN32_KEYMAP_MATCH_PARTIAL,
+  GDK_WIN32_KEYMAP_MATCH_EXACT
+} GdkWin32KeymapMatch;
+
 #ifdef GDK_COMPILATION
 typedef struct _GdkWin32Keymap GdkWin32Keymap;
 #else
@@ -42,6 +60,13 @@ typedef struct _GdkWin32KeymapClass GdkWin32KeymapClass;
 
 GDK_AVAILABLE_IN_ALL
 GType gdk_win32_keymap_get_type (void);
+
+GDK_AVAILABLE_IN_3_20
+GdkWin32KeymapMatch gdk_win32_keymap_check_compose (GdkWin32Keymap *keymap,
+                                                    guint16        *compose_buffer,
+                                                    gsize           compose_buffer_len,
+                                                    guint16        *output,
+                                                    gsize          *output_len);
 
 G_END_DECLS
 
