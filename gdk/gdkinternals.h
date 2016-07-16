@@ -203,6 +203,7 @@ struct _GdkWindow
   GdkWindowImpl *impl; /* window-system-specific delegate object */
 
   GdkWindow *parent;
+  GdkWindow *transient_for;
   GdkVisual *visual;
 
   gpointer user_data;

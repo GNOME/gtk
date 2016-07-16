@@ -10370,6 +10370,8 @@ void
 gdk_window_set_transient_for (GdkWindow *window,
 			      GdkWindow *parent)
 {
+  window->transient_for = parent;
+
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_transient_for (window, parent);
 }
 
