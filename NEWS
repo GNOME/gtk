@@ -1,3 +1,59 @@
+Overview of Changes in GTK+ 3.21.4
+==================================
+
+* GtkHeaderBar supports expanding children
+
+* GtkPrintDialog respects initially set capabilities
+
+* GtkApplication supports registering with the Xfce session manager
+
+* Keep firefox working after the introduction of GdkDrawingContext
+
+* css:
+ - Support for background-blend-mode has been added
+
+* Wayland:
+ - Fix some interoperability issues in clipboard handling
+
+* Sandboxing
+ - GtkFileChooserNative gained portal support
+ - GtkPrintOperation gained portal support
+ - gtk_show_uri gained portal support
+ - GtkApplication gained portal support for inhibiting
+
+* New APIs:
+ - gtk_show_uri_on_window
+ - gtk_file_filter_to/from_gvariant
+ - gtk_file_chooser_add/remove/set/get_choice
+ - gtk_print_settings_to/from_gvariant
+ - gtk_paper_size_to/from_gvariant
+ - gtk_page_setup_to/from_gvariant
+
+* Bugs fixed:
+ 693203 GtkApplication does not support Xfce session manager
+ 724332 GtkHeaderBar need to support an expand property
+ 767849 crash in focus handling
+ 767851 Adwaita: popover arrows broken in some orientations
+ 767965 Improve heuristics to detect remote filesystem
+ 768016 [Wayland] Submenus often get closed after ~2 seconds
+ 768025 entry.warning & entry.error broken
+ 768082 wayland: copying from Wayland to NEdit (Xwayland/Motif) doesn't work
+ 768142 Incorrect order of $(LIBS) and $(OBJS) in Makefile.example caused...
+ 768184 headerbar: don't throw a warning if title widget is hidden
+ 768485 Change the priority of the window-close idle to G_PRIORITY_DEFAULT
+ 768499 portal support for gtk+
+ 768546 Wrong documentation for the "move-viewport" signal of GtkTextView
+ 768657 places-view: fix open action for locations without mount or volume
+ 768659 gtk/gtkfilechoosernativeportal.c: Don't use g_autoptr()
+ 768756 GtkFileChooserNativePortal uses incorrect response id
+
+* Translation updates:
+ Chinese (Taiwan)
+ Hebrew
+ Indonesian
+ Portuguese
+
+
 Overview of Changes in GTK+ 3.21.3
 ==================================
 
