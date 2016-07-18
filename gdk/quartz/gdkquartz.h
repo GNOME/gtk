@@ -52,6 +52,7 @@ typedef enum
   GDK_OSX_NEW = 99
 } GdkOSXVersion;
 
+gboolean  gdk_quartz_window_is_quartz                           (GdkWindow      *window);
 NSWindow *gdk_quartz_window_get_nswindow                        (GdkWindow      *window);
 NSView   *gdk_quartz_window_get_nsview                          (GdkWindow      *window);
 NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);

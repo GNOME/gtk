@@ -57,6 +57,12 @@ static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
 
 static void gdk_window_impl_iface_init (GdkWindowImplIface *iface);
 
+gboolean
+gdk_quartz_window_is_quartz (GdkWindow *window)
+{
+  return GDK_WINDOW_IS_QUARTZ (window);
+}
+
 NSView *
 gdk_quartz_window_get_nsview (GdkWindow *window)
 {
