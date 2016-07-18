@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-06 18:36+0000\n"
-"PO-Revision-Date: 2016-06-13 15:14+0200\n"
+"POT-Creation-Date: 2016-07-14 15:08+0000\n"
+"PO-Revision-Date: 2016-07-18 11:40+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -185,7 +185,7 @@ msgstr "Resolución de la tipografía"
 msgid "The resolution for fonts on the screen"
 msgstr "La resolución para las tipografías en la pantalla"
 
-#: gdk/gdkwindow.c:352 gdk/gdkwindow.c:353
+#: gdk/gdkwindow.c:353 gdk/gdkwindow.c:354
 msgid "Cursor"
 msgstr "Cursor"
 
@@ -937,7 +937,7 @@ msgstr "El contenido de las sugerencias para este icono de la bandeja"
 # components/music/nautilus-music-view.c:198
 #: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:183
 #: gtk/gtkfilechooserbutton.c:438 gtk/gtkfontbutton.c:476
-#: gtk/gtkheaderbar.c:1935 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
+#: gtk/gtkheaderbar.c:1999 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
 #: gtk/gtkshortcutssection.c:375 gtk/gtkshortcutsshortcut.c:575
 #: gtk/gtkstack.c:523 gtk/gtktreeviewcolumn.c:316
 msgid "Title"
@@ -1332,11 +1332,11 @@ msgstr "Acción del valor objetivo"
 msgid "The parameter for action invocations"
 msgstr "El parámetro para acciones de invocación"
 
-#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:1921
+#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:1985
 msgid "Pack type"
 msgstr "Tipo de empaquetado"
 
-#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:1922
+#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:1986
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1344,13 +1344,13 @@ msgstr ""
 "Un GtkPackType que indica si el hijo está empaquetado con referencia al "
 "inicio o el final del padre"
 
-#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1928
-#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1680
+#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1992
+#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1687
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Posición"
 
-#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:1929
+#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:1993
 #: gtk/gtknotebook.c:839 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
 msgid "The index of the child in the parent"
 msgstr "El índice del hijo en el padre"
@@ -1710,11 +1710,11 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Si es TRUE, el hijo no será objeto de tamaño homogéneo"
 
 #: gtk/gtkbox.c:282 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:337
-#: gtk/gtkheaderbar.c:1956 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
+#: gtk/gtkheaderbar.c:2020 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
 msgid "Spacing"
 msgstr "Espaciado"
 
-#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:1957
+#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:2021
 msgid "The amount of space between children"
 msgstr "La cantidad de espacio entre hijos"
 
@@ -2409,7 +2409,7 @@ msgstr "Tasa de subida"
 msgid "The acceleration rate when you hold down a button"
 msgstr "La tasa de aceleración cuando mantiene apretado un botón"
 
-#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:759 gtk/gtkspinbutton.c:392
+#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:764 gtk/gtkspinbutton.c:392
 msgid "Digits"
 msgstr "Dígitos"
 
@@ -2829,7 +2829,7 @@ msgstr "Estado inconsistente"
 msgid "The inconsistent state of the button"
 msgstr "El estado inconsistente del botón"
 
-#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3736
+#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3739
 msgid "Activatable"
 msgstr "Activable"
 
@@ -3001,7 +3001,7 @@ msgstr "Color RGBA"
 msgid "Color as RGBA"
 msgstr "Color como RGBA"
 
-#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3750
+#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3753
 msgid "Selectable"
 msgstr "Seleccionable"
 
@@ -3907,7 +3907,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "El filtro actual para seleccionar qué archivos se están mostrando"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4483
-#: gtk/gtkplacesview.c:2191
+#: gtk/gtkplacesview.c:2200
 msgid "Local Only"
 msgstr "Sólo local"
 
@@ -3994,29 +3994,29 @@ msgstr ""
 "Indica si un selector de archivos en modo distinto a abrir ofrece al usuario "
 "la posibilidad de crear carpetas nuevas."
 
-#: gtk/gtkfilechoosernative.c:627
+#: gtk/gtkfilechoosernative.c:779
 msgid "Accept label"
 msgstr "Etiqueta de aceptar"
 
-#: gtk/gtkfilechoosernative.c:628
+#: gtk/gtkfilechoosernative.c:780
 msgid "The label on the accept button"
 msgstr "La etiqueta del botón de aceptar"
 
-#: gtk/gtkfilechoosernative.c:640
+#: gtk/gtkfilechoosernative.c:792
 msgid "Cancel label"
 msgstr "Etiqueta de cancelar"
 
-#: gtk/gtkfilechoosernative.c:641
+#: gtk/gtkfilechoosernative.c:793
 msgid "The label on the cancel button"
 msgstr "La etiqueta del botón de cancelar"
 
-#: gtk/gtkfilechooserwidget.c:8429 gtk/gtkfilechooserwidget.c:8430
+#: gtk/gtkfilechooserwidget.c:8454 gtk/gtkfilechooserwidget.c:8455
 msgid "Search mode"
 msgstr "Modo de búsqueda"
 
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkfilechooserwidget.c:8436 gtk/gtkfilechooserwidget.c:8437
-#: gtk/gtkheaderbar.c:1942 gtk/gtkshortcutsshortcut.c:591
+#: gtk/gtkfilechooserwidget.c:8461 gtk/gtkfilechooserwidget.c:8462
+#: gtk/gtkheaderbar.c:2006 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Subtítulo"
 
@@ -4318,52 +4318,52 @@ msgstr "Altura"
 msgid "The number of rows that a child spans"
 msgstr "El número de filas que un hijo engendra"
 
-#: gtk/gtkheaderbar.c:1936
+#: gtk/gtkheaderbar.c:2000
 msgid "The title to display"
 msgstr "El título que mostrar"
 
-#: gtk/gtkheaderbar.c:1943
+#: gtk/gtkheaderbar.c:2007
 msgid "The subtitle to display"
 msgstr "El subtítulo que mostrar"
 
-#: gtk/gtkheaderbar.c:1949
+#: gtk/gtkheaderbar.c:2013
 msgid "Custom Title"
 msgstr "Título personalizado"
 
-#: gtk/gtkheaderbar.c:1950
+#: gtk/gtkheaderbar.c:2014
 msgid "Custom title widget to display"
 msgstr "Título personalizado del widget que mostrar"
 
-#: gtk/gtkheaderbar.c:1974
+#: gtk/gtkheaderbar.c:2038
 msgid "Show decorations"
 msgstr "Mostrar decoraciones"
 
-#: gtk/gtkheaderbar.c:1975
+#: gtk/gtkheaderbar.c:2039
 msgid "Whether to show window decorations"
 msgstr "Indica si se deben mostrar las decoraciones de la ventana"
 
-#: gtk/gtkheaderbar.c:1993 gtk/gtksettings.c:1610
+#: gtk/gtkheaderbar.c:2057 gtk/gtksettings.c:1610
 msgid "Decoration Layout"
 msgstr "Distribución la decoración"
 
-#: gtk/gtkheaderbar.c:1994 gtk/gtksettings.c:1611
+#: gtk/gtkheaderbar.c:2058 gtk/gtksettings.c:1611
 msgid "The layout for window decorations"
 msgstr "La distribución par ala decoración de las ventanas"
 
-#: gtk/gtkheaderbar.c:2007
+#: gtk/gtkheaderbar.c:2071
 msgid "Decoration Layout Set"
 msgstr "Distribución la decoración establecida"
 
-#: gtk/gtkheaderbar.c:2008
+#: gtk/gtkheaderbar.c:2072
 msgid "Whether the decoration-layout property has been set"
 msgstr "Indica si se ha establecido la decoración de la distribución"
 
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkheaderbar.c:2022
+#: gtk/gtkheaderbar.c:2086
 msgid "Has Subtitle"
 msgstr "Tiene subtítulo"
 
-#: gtk/gtkheaderbar.c:2023
+#: gtk/gtkheaderbar.c:2087
 msgid "Whether to reserve space for a subtitle"
 msgstr "Indica si se debe reservar espacio para un subtítulo"
 
@@ -4771,11 +4771,11 @@ msgstr "Visitado"
 msgid "Whether this link has been visited."
 msgstr "Indica si este enlace se ha visitado."
 
-#: gtk/gtklistbox.c:3737
+#: gtk/gtklistbox.c:3740
 msgid "Whether this row can be activated"
 msgstr "Indica si se puede activar esta fila"
 
-#: gtk/gtklistbox.c:3751
+#: gtk/gtklistbox.c:3754
 msgid "Whether this row can be selected"
 msgstr "Indica si se puede seleccionar esta fila"
 
@@ -5186,8 +5186,9 @@ msgid "Message area"
 msgstr "Área de mensajes"
 
 #: gtk/gtkmessagedialog.c:295
-msgid "GtkVBox that holds the dialog's primary and secondary labels"
-msgstr "GtkVBox que contiene las etiquetas primaria y secundaria del diálogo"
+#| msgid "GtkVBox that holds the dialog's primary and secondary labels"
+msgid "GtkBox that holds the dialog's primary and secondary labels"
+msgstr "GtkBox que contiene las etiquetas primaria y secundaria del diálogo"
 
 #: gtk/gtkmodelbutton.c:1100
 msgid "Role"
@@ -5261,7 +5262,7 @@ msgstr "Título del diálogo"
 msgid "The title of the file chooser dialog"
 msgstr "El título del diálogo de selección de archivos"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1695 gtk/gtkwindow.c:783
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1702 gtk/gtkwindow.c:783
 msgid "Modal"
 msgstr "Modal"
 
@@ -5563,11 +5564,11 @@ msgstr "Ubicación que seleccionar"
 msgid "The location to highlight in the sidebar"
 msgstr "La ubicación que resaltar en la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2212
+#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2221
 msgid "Open Flags"
 msgstr "Abrir opciones"
 
-#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2213
+#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2222
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5616,7 +5617,7 @@ msgstr ""
 "Indica si la barra lateral incluye un atajo integrado para introducir "
 "manualmente la ubicación"
 
-#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2192
+#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2201
 msgid "Whether the sidebar only includes local files"
 msgstr "Indica si la barra lateral sólo incluye archivos locales"
 
@@ -5646,19 +5647,19 @@ msgstr ""
 "Indica si se debe emitir ::populate-popup para elementos emergentes que no "
 "son menús"
 
-#: gtk/gtkplacesview.c:2198
+#: gtk/gtkplacesview.c:2207
 msgid "Loading"
 msgstr "Cargando"
 
-#: gtk/gtkplacesview.c:2199
+#: gtk/gtkplacesview.c:2208
 msgid "Whether the view is loading locations"
 msgstr "Indica si la vista está cargando las ubicaciones"
 
-#: gtk/gtkplacesview.c:2205
+#: gtk/gtkplacesview.c:2214
 msgid "Fetching networks"
 msgstr "Obteniendo redes"
 
-#: gtk/gtkplacesview.c:2206
+#: gtk/gtkplacesview.c:2215
 msgid "Whether the view is fetching networks"
 msgstr "Indica si la vista está obteniendo redes"
 
@@ -5726,43 +5727,43 @@ msgstr "Ventana del socket"
 msgid "The window of the socket the plug is embedded in"
 msgstr "La ventana del socket en la que el enchufe está empotrado"
 
-#: gtk/gtkpopover.c:1652
+#: gtk/gtkpopover.c:1659
 msgid "Relative to"
 msgstr "Relativo a"
 
-#: gtk/gtkpopover.c:1653
+#: gtk/gtkpopover.c:1660
 msgid "Widget the bubble window points to"
 msgstr "Widget al que apunta la ventana de burbuja"
 
-#: gtk/gtkpopover.c:1666
+#: gtk/gtkpopover.c:1673
 msgid "Pointing to"
 msgstr "Apuntando a"
 
-#: gtk/gtkpopover.c:1667
+#: gtk/gtkpopover.c:1674
 msgid "Rectangle the bubble window points to"
 msgstr "Rectángulo al que la ventana de burbuja apunta"
 
-#: gtk/gtkpopover.c:1681
+#: gtk/gtkpopover.c:1688
 msgid "Position to place the bubble window"
 msgstr "Posición en la que colocar la ventana de burbuja"
 
-#: gtk/gtkpopover.c:1696
+#: gtk/gtkpopover.c:1703
 msgid "Whether the popover is modal"
 msgstr "Indica si la ventana emergente es modal"
 
-#: gtk/gtkpopover.c:1709
+#: gtk/gtkpopover.c:1716
 msgid "Transitions enabled"
 msgstr "Transiciones activadas"
 
-#: gtk/gtkpopover.c:1710
+#: gtk/gtkpopover.c:1717
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Indica si mostrar/ocultar las transiciones está activada o no."
 
-#: gtk/gtkpopover.c:1723
+#: gtk/gtkpopover.c:1730
 msgid "Constraint"
 msgstr "Restricción"
 
-#: gtk/gtkpopover.c:1724
+#: gtk/gtkpopover.c:1731
 msgid "Constraint for the popover position"
 msgstr "Restricción para la posición de la ventana emergente"
 
@@ -6465,48 +6466,48 @@ msgstr "Iconos"
 msgid "List of icon names"
 msgstr "Lista de nombres de iconos"
 
-#: gtk/gtkscale.c:760
+#: gtk/gtkscale.c:765
 msgid "The number of decimal places that are displayed in the value"
 msgstr "El número de lugares decimales que se mostrarán en el valor"
 
-#: gtk/gtkscale.c:767
+#: gtk/gtkscale.c:772
 msgid "Draw Value"
 msgstr "Dibujar valor"
 
-#: gtk/gtkscale.c:768
+#: gtk/gtkscale.c:773
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Indica si el valor actual se muestra como una cadena contigua al deslizador"
 
-#: gtk/gtkscale.c:774
+#: gtk/gtkscale.c:779
 msgid "Has Origin"
 msgstr "Tiene origen"
 
-#: gtk/gtkscale.c:775
+#: gtk/gtkscale.c:780
 msgid "Whether the scale has an origin"
 msgstr "Indica si la escala tiene un origen"
 
-#: gtk/gtkscale.c:781
+#: gtk/gtkscale.c:786
 msgid "Value Position"
 msgstr "Posición del valor"
 
-#: gtk/gtkscale.c:782
+#: gtk/gtkscale.c:787
 msgid "The position in which the current value is displayed"
 msgstr "La posición en que se muestra el valor actual"
 
-#: gtk/gtkscale.c:799
+#: gtk/gtkscale.c:804
 msgid "Slider Length"
 msgstr "Longitud del deslizador"
 
-#: gtk/gtkscale.c:800
+#: gtk/gtkscale.c:805
 msgid "Length of scale's slider"
 msgstr "Longitud de la escala del deslizador"
 
-#: gtk/gtkscale.c:814
+#: gtk/gtkscale.c:819
 msgid "Value spacing"
 msgstr "Espaciado del valor"
 
-#: gtk/gtkscale.c:815
+#: gtk/gtkscale.c:820
 msgid "Space between value text and the slider/trough area"
 msgstr "Espacio entre el texto del valor y el área del deslizador/carril"
 
@@ -6575,52 +6576,52 @@ msgstr ""
 "Muestra un botón secundario con flecha de avance en el extremo opuesto de la "
 "barra de desplazamiento"
 
-#: gtk/gtkscrolledwindow.c:554
+#: gtk/gtkscrolledwindow.c:567
 msgid "Horizontal Adjustment"
 msgstr "Ajuste horizontal"
 
-#: gtk/gtkscrolledwindow.c:555
+#: gtk/gtkscrolledwindow.c:568
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "El ajuste GtkAdjustment para la posición horizontal"
 
-#: gtk/gtkscrolledwindow.c:561
+#: gtk/gtkscrolledwindow.c:574
 msgid "Vertical Adjustment"
 msgstr "Ajuste vertical"
 
-#: gtk/gtkscrolledwindow.c:562
+#: gtk/gtkscrolledwindow.c:575
 msgid "The GtkAdjustment for the vertical position"
 msgstr "El ajuste GtkAdjustment para la posición vertical"
 
-#: gtk/gtkscrolledwindow.c:568
+#: gtk/gtkscrolledwindow.c:581
 msgid "Horizontal Scrollbar Policy"
 msgstr "Directiva de la barra de desplazamiento horizontal"
 
-#: gtk/gtkscrolledwindow.c:569
+#: gtk/gtkscrolledwindow.c:582
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Cuando mostrar la barra de desplazamiento horizontal"
 
-#: gtk/gtkscrolledwindow.c:576
+#: gtk/gtkscrolledwindow.c:589
 msgid "Vertical Scrollbar Policy"
 msgstr "Directiva de la barra de desplazamiento vertical"
 
-#: gtk/gtkscrolledwindow.c:577
+#: gtk/gtkscrolledwindow.c:590
 msgid "When the vertical scrollbar is displayed"
 msgstr "Cuando mostrar la barra de desplazamiento vertical"
 
-#: gtk/gtkscrolledwindow.c:584
+#: gtk/gtkscrolledwindow.c:597
 msgid "Window Placement"
 msgstr "Colocación de la ventana"
 
-#: gtk/gtkscrolledwindow.c:585
+#: gtk/gtkscrolledwindow.c:598
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr ""
 "Indica si el contenido se coloca respecto a las barras de desplazamiento."
 
-#: gtk/gtkscrolledwindow.c:603
+#: gtk/gtkscrolledwindow.c:616
 msgid "Window Placement Set"
 msgstr "Establece la colocación de la ventana"
 
-#: gtk/gtkscrolledwindow.c:604
+#: gtk/gtkscrolledwindow.c:617
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -6628,86 +6629,80 @@ msgstr ""
 "Indica si debe usarse \"window-placement\" para determinar el lugar del "
 "contenido respecto a las barras de desplazamiento."
 
-#: gtk/gtkscrolledwindow.c:610 gtk/gtkspinbutton.c:452
+#: gtk/gtkscrolledwindow.c:623 gtk/gtkspinbutton.c:452
 msgid "Shadow Type"
 msgstr "Tipo de sombra"
 
-#: gtk/gtkscrolledwindow.c:611
+#: gtk/gtkscrolledwindow.c:624
 msgid "Style of bevel around the contents"
 msgstr "Estilo de bisel alrededor de los contenidos"
 
-#: gtk/gtkscrolledwindow.c:627
+#: gtk/gtkscrolledwindow.c:640
 msgid "Scrollbars within bevel"
 msgstr "Barras de desplazamiento entre biseles"
 
-#: gtk/gtkscrolledwindow.c:628
+#: gtk/gtkscrolledwindow.c:641
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr ""
 "Ubicar barras de desplazamiento entre el bisel de la ventana desplazada"
 
-#: gtk/gtkscrolledwindow.c:634
+#: gtk/gtkscrolledwindow.c:647
 msgid "Scrollbar spacing"
 msgstr "Espaciado de la barra de desplazamiento"
 
-#: gtk/gtkscrolledwindow.c:635
+#: gtk/gtkscrolledwindow.c:648
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Número de píxeles entre las barras de desplazamiento y la ventana enrollada"
 
-#: gtk/gtkscrolledwindow.c:650
+#: gtk/gtkscrolledwindow.c:663
 msgid "Minimum Content Width"
 msgstr "Anchura mínima del contenido"
 
-#: gtk/gtkscrolledwindow.c:651
+#: gtk/gtkscrolledwindow.c:664
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 "La anchura mínima que la ventana desplazada reservará para su contenido"
 
-#: gtk/gtkscrolledwindow.c:664
+#: gtk/gtkscrolledwindow.c:677
 msgid "Minimum Content Height"
 msgstr "Altura mínima del contenido"
 
-#: gtk/gtkscrolledwindow.c:665
+#: gtk/gtkscrolledwindow.c:678
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr "La altura mínima que la ventana desplazada reservará para su contenido"
 
-#: gtk/gtkscrolledwindow.c:679
+#: gtk/gtkscrolledwindow.c:692
 msgid "Kinetic Scrolling"
 msgstr "Desplazamiento de Kinetic"
 
-#: gtk/gtkscrolledwindow.c:680
+#: gtk/gtkscrolledwindow.c:693
 msgid "Kinetic scrolling mode."
 msgstr "Modo de desplazamiento de Kinetic"
 
-#: gtk/gtkscrolledwindow.c:696
+#: gtk/gtkscrolledwindow.c:709
 msgid "Overlay Scrolling"
 msgstr "Superposición del desplazamiento"
 
-#: gtk/gtkscrolledwindow.c:697
+#: gtk/gtkscrolledwindow.c:710
 msgid "Overlay scrolling mode"
 msgstr "Modo de superposición del desplazamiento"
 
-#: gtk/gtkscrolledwindow.c:710
-#| msgid "Minimum Content Width"
+#: gtk/gtkscrolledwindow.c:723
 msgid "Maximum Content Width"
 msgstr "Anchura máxima del contenido"
 
-#: gtk/gtkscrolledwindow.c:711
-#| msgid ""
-#| "The minimum width that the scrolled window will allocate to its content"
+#: gtk/gtkscrolledwindow.c:724
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "La anchura máxima que la ventana desplazada reservará para su contenido"
 
-#: gtk/gtkscrolledwindow.c:724
-#| msgid "Minimum Content Height"
+#: gtk/gtkscrolledwindow.c:737
 msgid "Maximum Content Height"
 msgstr "Altura máxima del contenido"
 
-#: gtk/gtkscrolledwindow.c:725
-#| msgid ""
-#| "The minimum height that the scrolled window will allocate to its content"
+#: gtk/gtkscrolledwindow.c:738
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr "La altura máxima que la ventana desplazada reservará para su contenido"
@@ -7501,7 +7496,7 @@ msgstr ""
 msgid "Whether to show cursor in text"
 msgstr "Indica si se debe mostrar el cursor en el texto"
 
-#: gtk/gtkshortcutlabel.c:427 gtk/gtkshortcutsshortcut.c:536
+#: gtk/gtkshortcutlabel.c:442 gtk/gtkshortcutsshortcut.c:536
 msgid "Accelerator"
 msgstr "Acelerador"
 
@@ -7519,11 +7514,11 @@ msgstr "Grupo de tamaño del acelerador"
 msgid "Title Size Group"
 msgstr "Grupo de tamaño del título"
 
-#: gtk/gtkshortcutssection.c:349 gtk/gtkshortcutswindow.c:778
+#: gtk/gtkshortcutssection.c:349 gtk/gtkshortcutswindow.c:787
 msgid "Section Name"
 msgstr "Nombre de la sección"
 
-#: gtk/gtkshortcutssection.c:363 gtk/gtkshortcutswindow.c:793
+#: gtk/gtkshortcutssection.c:363 gtk/gtkshortcutswindow.c:802
 msgid "View Name"
 msgstr "Nombre de la vista"
 
