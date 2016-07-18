@@ -721,6 +721,12 @@ wndproc (HWND   hwnd,
 	  GtkStatusIcon *status_icon = GTK_STATUS_ICON (rover->data);
 	  GtkStatusIconPrivate *priv = status_icon->priv;
 
+	  /* taskbar_created_msg is also fired when DPI changes. Try to delete existing icons if possible. */
+	  if (!Shell_NotifyIconW (NIM_DELETE, &priv->nid))
+	  {
+		g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_DELETE) on existing icon failed");
+	  }
+
 	  priv->nid.hWnd = hwnd;
 	  priv->nid.uID = status_icon_id++;
 	  priv->nid.uCallbackMessage = WM_GTK_TRAY_NOTIFICATION;
