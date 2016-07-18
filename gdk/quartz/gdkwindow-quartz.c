@@ -68,6 +68,8 @@ gdk_quartz_window_get_nsview (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
+  g_return_val_if_fail (GDK_WINDOW_IS_QUARTZ (window), NULL);
+
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 

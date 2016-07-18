@@ -194,6 +194,9 @@ quartz_filter_keypress (GtkIMContext *context,
   if (!qc->client_window)
     return FALSE;
 
+  if (!gdk_quartz_window_is_quartz (qc->client_window))
+    return gtk_im_context_filter_keypress (qc->slave, event);
+
   nsview = gdk_quartz_window_get_nsview (qc->client_window);
   win = (GdkWindow *)[ (GdkQuartzView *)nsview gdkWindow];
   GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
@@ -241,6 +244,9 @@ discard_preedit (GtkIMContext *context)
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
 
   if (!qc->client_window)
+    return;
+
+  if (!gdk_quartz_window_is_quartz (qc->client_window))
     return;
 
   NSView *nsview = gdk_quartz_window_get_nsview (qc->client_window);
@@ -311,6 +317,9 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   GTK_NOTE (MISC, g_print ("quartz_set_cursor_location\n"));
 
   if (!qc->client_window)
+    return;
+
+  if (!gdk_quartz_window_is_quartz (qc->client_window))
     return;
 
   if (!qc->focused)
