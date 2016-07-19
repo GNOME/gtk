@@ -725,8 +725,14 @@ _gdk_mir_event_source_new (GdkDisplay *display)
 {
   GdkMirEventSource *source;
   GSource *g_source;
+  char *name;
 
   g_source = g_source_new (&gdk_mir_event_source_funcs, sizeof (GdkMirEventSource));
+  name = g_strdup_printf ("GDK Mir Event source (%s)", gdk_display_get_name (display));
+  g_source_set_name (g_source, name);
+  g_free (name);
+  g_source_set_priority (g_source, GDK_PRIORITY_EVENTS);
+  g_source_set_can_recurse (g_source, TRUE);
   g_source_attach (g_source, NULL);
 
   source = (GdkMirEventSource *) g_source;
