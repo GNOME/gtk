@@ -98,14 +98,10 @@ struct _GskGLRenderer
   int blend_program_id;
   int blit_program_id;
 
-  guint vao_id;
-
   GArray *opaque_render_items;
   GArray *transparent_render_items;
 
   gboolean has_buffers : 1;
-  gboolean has_stencil_buffer : 1;
-  gboolean has_depth_buffer : 1;
 };
 
 struct _GskGLRendererClass
@@ -126,7 +122,9 @@ gsk_gl_renderer_dispose (GObject *gobject)
 }
 
 static void
-gsk_gl_renderer_create_buffers (GskGLRenderer *self)
+gsk_gl_renderer_create_buffers (GskGLRenderer *self,
+                                int            width,
+                                int            height)
 {
   if (self->has_buffers)
     return;
@@ -136,39 +134,9 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self)
   glGenFramebuffersEXT (1, &self->frame_buffer);
 
   if (self->texture_id == 0)
-    glGenTextures (1, &self->texture_id);
-
-  if (self->has_depth_buffer || self->has_stencil_buffer)
     {
-      if (self->depth_stencil_buffer == 0)
-        glGenRenderbuffersEXT (1, &self->depth_stencil_buffer);
-    }
-  else
-    {
-      if (self->depth_stencil_buffer != 0)
-        {
-          glDeleteRenderbuffersEXT (1, &self->depth_stencil_buffer);
-          self->depth_stencil_buffer = 0;
-        }
-    }
+      glGenTextures (1, &self->texture_id);
 
-  /* We only have one VAO at the moment */
-  glGenVertexArrays (1, &self->vao_id);
-  glBindVertexArray (self->vao_id);
-
-  self->has_buffers = TRUE;
-}
-
-static void
-gsk_gl_renderer_allocate_buffers (GskGLRenderer *self,
-                                  int            width,
-                                  int            height)
-{
-  if (self->context == NULL)
-    return;
-
-  if (self->texture_id != 0)
-    {
       glBindTexture (GL_TEXTURE_2D, self->texture_id);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -181,22 +149,18 @@ gsk_gl_renderer_allocate_buffers (GskGLRenderer *self,
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
     }
 
-  if (self->has_depth_buffer || self->has_stencil_buffer)
-    {
-      glBindRenderbuffer (GL_RENDERBUFFER, self->depth_stencil_buffer);
+  if (self->depth_stencil_buffer == 0)
+    glGenRenderbuffersEXT (1, &self->depth_stencil_buffer);
 
-      if (self->has_stencil_buffer)
-        glRenderbufferStorage (GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-      else
-        glRenderbufferStorage (GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-    }
+  glBindRenderbuffer (GL_RENDERBUFFER, self->depth_stencil_buffer);
+  glRenderbufferStorage (GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+
+  self->has_buffers = TRUE;
 }
 
 static void
 gsk_gl_renderer_attach_buffers (GskGLRenderer *self)
 {
-  gsk_gl_renderer_create_buffers (self);
-
   GSK_NOTE (OPENGL, g_print ("Attaching buffers\n"));
 
   glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, self->frame_buffer);
@@ -207,16 +171,11 @@ gsk_gl_renderer_attach_buffers (GskGLRenderer *self)
                               GL_TEXTURE_2D, self->texture_id, 0);
     }
 
-  if (self->depth_stencil_buffer != 0)
-    {
-      if (self->has_depth_buffer)
-        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                                      GL_RENDERBUFFER_EXT, self->depth_stencil_buffer);
+  glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                                GL_RENDERBUFFER_EXT, self->depth_stencil_buffer);
 
-      if (self->has_stencil_buffer)
-        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-                                      GL_RENDERBUFFER_EXT, self->depth_stencil_buffer);
-    }
+  glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
+                                GL_RENDERBUFFER_EXT, self->depth_stencil_buffer);
 }
 
 static void
@@ -231,12 +190,6 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
   GSK_NOTE (OPENGL, g_print ("Destroying buffers\n"));
 
   gdk_gl_context_make_current (self->context);
-
-  if (self->vao_id != 0)
-    {
-      glDeleteVertexArrays (1, &self->vao_id);
-      self->vao_id = 0;
-    }
 
   if (self->depth_stencil_buffer != 0)
     {
@@ -388,8 +341,6 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
   GSK_NOTE (OPENGL, g_print ("Creating buffers and programs\n"));
   if (!gsk_gl_renderer_create_programs (self))
     return FALSE;
-
-  gsk_gl_renderer_create_buffers (self);
 
   return TRUE;
 }
@@ -756,16 +707,9 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 static void
 gsk_gl_renderer_clear (GskGLRenderer *self)
 {
-  int clear_bits = GL_COLOR_BUFFER_BIT;
-
-  if (self->has_depth_buffer)
-    clear_bits |= GL_DEPTH_BUFFER_BIT;
-  if (self->has_stencil_buffer)
-    clear_bits |= GL_STENCIL_BUFFER_BIT;
-
   GSK_NOTE (OPENGL, g_print ("Clearing viewport\n"));
   glClearColor (0, 0, 0, 0);
-  glClear (clear_bits);
+  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 static void
@@ -787,8 +731,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
 
   gsk_renderer_get_viewport (renderer, &viewport);
 
-  gsk_gl_renderer_create_buffers (self);
-  gsk_gl_renderer_allocate_buffers (self, viewport.size.width, viewport.size.height);
+  gsk_gl_renderer_create_buffers (self, viewport.size.width, viewport.size.height);
   gsk_gl_renderer_attach_buffers (self);
 
   gsk_renderer_get_modelview (renderer, &modelview);
@@ -813,13 +756,9 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   gsk_gl_renderer_clear (self);
 
   glDisable (GL_BLEND);
-  if (self->has_depth_buffer)
-    {
-      glEnable (GL_DEPTH_TEST);
-      glDepthFunc (GL_LESS);
-    }
-  else
-    glDisable (GL_DEPTH_TEST);
+
+  glEnable (GL_DEPTH_TEST);
+  glDepthFunc (GL_LESS);
 
   /* Opaque pass: front-to-back */
   GSK_NOTE (OPENGL, g_print ("Rendering %u opaque items\n", self->opaque_render_items->len));
@@ -830,11 +769,8 @@ gsk_gl_renderer_render (GskRenderer *renderer,
       render_item (self, item);
     }
 
-  if (self->has_depth_buffer)
-    {
-      glEnable (GL_DEPTH_TEST);
-      glDepthFunc (GL_LEQUAL);
-    }
+  glEnable (GL_DEPTH_TEST);
+  glDepthFunc (GL_LEQUAL);
 
   glEnable (GL_BLEND);
   glBlendFuncSeparate (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
@@ -867,6 +803,7 @@ out:
 
   gdk_gl_context_make_current (self->context);
   gsk_gl_renderer_clear_tree (self);
+  gsk_gl_renderer_destroy_buffers (self);
 }
 
 static void
@@ -888,7 +825,4 @@ gsk_gl_renderer_init (GskGLRenderer *self)
   gsk_ensure_resources ();
 
   graphene_matrix_init_identity (&self->mvp);
-
-  self->has_depth_buffer = TRUE;
-  self->has_stencil_buffer = TRUE;
 }
