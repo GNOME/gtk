@@ -290,28 +290,17 @@ handle_key_event (GdkWindow *window, const MirInputEvent *event)
   if (!keyboard_event)
     return;
 
-  switch (mir_keyboard_event_action (keyboard_event))
-    {
-    case mir_keyboard_action_up:
-    case mir_keyboard_action_down:
-      // FIXME: Convert keycode
-      _gdk_mir_window_impl_get_cursor_state (impl, NULL, NULL, NULL, &button_state);
-      modifier_state = get_modifier_state (mir_keyboard_event_modifiers (keyboard_event), button_state);
-      keymap = gdk_keymap_get_for_display (gdk_window_get_display (window));
+  _gdk_mir_window_impl_get_cursor_state (impl, NULL, NULL, NULL, &button_state);
+  modifier_state = get_modifier_state (mir_keyboard_event_modifiers (keyboard_event), button_state);
+  keymap = gdk_keymap_get_for_display (gdk_window_get_display (window));
 
-      generate_key_event (window,
-                          mir_keyboard_event_action (keyboard_event) == mir_keyboard_action_down ? GDK_KEY_PRESS : GDK_KEY_RELEASE,
-                          modifier_state,
-                          mir_keyboard_event_key_code (keyboard_event),
-                          mir_keyboard_event_scan_code (keyboard_event),
-                          _gdk_mir_keymap_key_is_modifier (keymap, mir_keyboard_event_key_code (keyboard_event)),
-                          NANO_TO_MILLI (mir_input_event_get_event_time (event)));
-      break;
-    default:
-    //case mir_key_action_multiple:
-      // FIXME
-      break;
-    }
+  generate_key_event (window,
+                      mir_keyboard_event_action (keyboard_event) == mir_keyboard_action_up ? GDK_KEY_RELEASE : GDK_KEY_PRESS,
+                      modifier_state,
+                      mir_keyboard_event_key_code (keyboard_event),
+                      mir_keyboard_event_scan_code (keyboard_event),
+                      _gdk_mir_keymap_key_is_modifier (keymap, mir_keyboard_event_key_code (keyboard_event)),
+                      NANO_TO_MILLI (mir_input_event_get_event_time (event)));
 }
 
 static void
