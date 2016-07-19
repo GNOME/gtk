@@ -1,3 +1,5 @@
+# List of source files that should *not* be translated.
+# Please keep this file sorted alphabetically.
 demos/gtk-demo/application.ui
 demos/gtk-demo/appmenu.ui
 demos/gtk-demo/appwindow.c
@@ -69,6 +71,7 @@ examples/bp/gtk/menus.ui
 examples/plugman.c
 gtk/paper_names.c
 tests/dialog.ui
+tests/popupat.ui
 tests/testfilechooser.c
 testsuite/a11y/accessible-name.ui
 testsuite/a11y/assistant.ui
