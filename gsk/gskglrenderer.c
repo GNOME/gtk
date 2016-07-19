@@ -82,7 +82,6 @@ struct _GskGLRenderer
   graphene_frustum_t frustum;
 
   guint frame_buffer;
-  guint render_buffer;
   guint depth_stencil_buffer;
   guint texture_id;
 
@@ -105,7 +104,6 @@ struct _GskGLRenderer
   GArray *transparent_render_items;
 
   gboolean has_buffers : 1;
-  gboolean has_alpha : 1;
   gboolean has_stencil_buffer : 1;
   gboolean has_depth_buffer : 1;
 };
@@ -137,28 +135,8 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self)
 
   glGenFramebuffersEXT (1, &self->frame_buffer);
 
-  if (gsk_renderer_get_use_alpha (GSK_RENDERER (self)))
-    {
-      if (self->texture_id == 0)
-        glGenTextures (1, &self->texture_id);
-
-      if (self->render_buffer != 0)
-        {
-          glDeleteRenderbuffersEXT (1, &self->render_buffer);
-          self->render_buffer = 0;
-        }
-    }
-  else
-    {
-      if (self->render_buffer == 0)
-        glGenRenderbuffersEXT (1, &self->render_buffer);
-
-      if (self->texture_id != 0)
-        {
-          glDeleteTextures (1, &self->texture_id);
-          self->texture_id = 0;
-        }
-    }
+  if (self->texture_id == 0)
+    glGenTextures (1, &self->texture_id);
 
   if (self->has_depth_buffer || self->has_stencil_buffer)
     {
@@ -203,12 +181,6 @@ gsk_gl_renderer_allocate_buffers (GskGLRenderer *self,
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
     }
 
-  if (self->render_buffer != 0)
-    {
-      glBindRenderbuffer (GL_RENDERBUFFER, self->render_buffer);
-      glRenderbufferStorage (GL_RENDERBUFFER, GL_RGB8, width, height);
-    }
-
   if (self->has_depth_buffer || self->has_stencil_buffer)
     {
       glBindRenderbuffer (GL_RENDERBUFFER, self->depth_stencil_buffer);
@@ -233,11 +205,6 @@ gsk_gl_renderer_attach_buffers (GskGLRenderer *self)
     {
       glFramebufferTexture2D (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
                               GL_TEXTURE_2D, self->texture_id, 0);
-    }
-  else if (self->render_buffer != 0)
-    {
-      glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                    GL_RENDERBUFFER_EXT, self->render_buffer);
     }
 
   if (self->depth_stencil_buffer != 0)
@@ -275,12 +242,6 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
     {
       glDeleteRenderbuffersEXT (1, &self->depth_stencil_buffer);
       self->depth_stencil_buffer = 0;
-    }
-
-  if (self->render_buffer != 0)
-    {
-      glDeleteRenderbuffersEXT (1, &self->render_buffer);
-      self->render_buffer = 0;
     }
 
   if (self->texture_id != 0)
@@ -815,7 +776,6 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_matrix_t modelview, projection;
   graphene_rect_t viewport;
-  gboolean use_alpha;
   int status;
   guint i;
   guint64 gpu_time;
@@ -898,12 +858,10 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   GSK_NOTE (OPENGL, g_print ("GPU time: %" G_GUINT64_FORMAT " nsec\n", gpu_time));
 
 out:
-  use_alpha = gsk_renderer_get_use_alpha (renderer);
-
   gdk_cairo_draw_from_gl (gdk_drawing_context_get_cairo_context (context),
                           gdk_drawing_context_get_window (context),
-                          use_alpha ? self->texture_id : self->render_buffer,
-                          use_alpha ? GL_TEXTURE : GL_RENDERBUFFER,
+                          self->texture_id,
+                          GL_TEXTURE,
                           gsk_renderer_get_scale_factor (renderer),
                           0, 0, viewport.size.width, viewport.size.height);
 
