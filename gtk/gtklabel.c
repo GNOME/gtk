@@ -4578,7 +4578,15 @@ gtk_label_unmap (GtkWidget *widget)
   GtkLabelPrivate *priv = label->priv;
 
   if (priv->select_info)
-    gdk_window_hide (priv->select_info->window);
+    {
+      gdk_window_hide (priv->select_info->window);
+
+      if (priv->select_info->popup_menu)
+        {
+          gtk_widget_destroy (priv->select_info->popup_menu);
+          priv->select_info->popup_menu = NULL;
+        }
+    }
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap (widget);
 }
