@@ -64,9 +64,12 @@ struct _GdkMirWindowImpl
   gdouble y;
   guint button_state;
 
+  GdkDisplay *display;
+
   /* Surface being rendered to (only exists when window visible) */
   MirSurface *surface;
   MirBufferStream *buffer_stream;
+  MirBufferUsage buffer_usage;
 
   /* Cairo context for current frame */
   cairo_surface_t *cairo_surface;
@@ -94,6 +97,7 @@ struct _GdkMirWindowImplClass
 G_DEFINE_TYPE (GdkMirWindowImpl, gdk_mir_window_impl, GDK_TYPE_WINDOW_IMPL)
 
 static cairo_surface_t *gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window);
+static void ensure_surface (GdkWindow *window);
 
 static void
 drop_cairo_surface (GdkWindow *window)
@@ -104,9 +108,16 @@ drop_cairo_surface (GdkWindow *window)
 }
 
 GdkWindowImpl *
-_gdk_mir_window_impl_new (void)
+_gdk_mir_window_impl_new (GdkDisplay *display, GdkWindow *window, GdkWindowAttr *attributes, gint attributes_mask)
 {
-  return g_object_new (GDK_TYPE_MIR_WINDOW_IMPL, NULL);
+  GdkMirWindowImpl *impl = g_object_new (GDK_TYPE_MIR_WINDOW_IMPL, NULL);
+
+  impl->display = display;
+
+  if (attributes && attributes_mask & GDK_WA_TYPE_HINT)
+    impl->type_hint = attributes->type_hint;
+
+  return (GdkWindowImpl *) impl;
 }
 
 void
@@ -179,28 +190,23 @@ event_cb (MirSurface     *surface,
   _gdk_mir_event_source_queue (context, event);
 }
 
-static void ensure_surface (GdkWindow *window);
-
-static MirSurface *
-create_mir_surface (GdkDisplay *display,
-                    GdkWindow *parent,
-                    gint x,
-                    gint y,
-                    gint width,
-                    gint height,
-                    GdkWindowTypeHint type,
-                    const MirRectangle *rect,
-                    MirEdgeAttachment edge,
-                    MirBufferUsage buffer_usage)
+static MirSurfaceSpec *
+create_window_type_spec (GdkDisplay *display,
+                         GdkWindow *parent,
+                         gint x,
+                         gint y,
+                         gint width,
+                         gint height,
+                         GdkWindowTypeHint type,
+                         const MirRectangle *rect,
+                         MirEdgeAttachment edge,
+                         MirBufferUsage buffer_usage)
 {
-  MirSurface *parent_surface = NULL;
-  MirSurfaceSpec *spec;
-  MirConnection *connection;
   MirPixelFormat format;
-  MirSurface *surface;
+  MirSurface *parent_surface = NULL;
+  MirConnection *connection = gdk_mir_display_get_mir_connection (display);
   MirRectangle real_rect;
 
-  connection = gdk_mir_display_get_mir_connection (display);
   format = _gdk_mir_display_get_pixel_format (display, buffer_usage);
 
   if (parent && parent->impl)
@@ -245,17 +251,16 @@ create_mir_surface (GdkDisplay *display,
     {
       case GDK_WINDOW_TYPE_HINT_DIALOG:
       case GDK_WINDOW_TYPE_HINT_DOCK:
-        spec = mir_connection_create_spec_for_dialog (connection,
+        return mir_connection_create_spec_for_dialog (connection,
                                                       width,
                                                       height,
                                                       format);
-        break;
       case GDK_WINDOW_TYPE_HINT_MENU:
       case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
       case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
       case GDK_WINDOW_TYPE_HINT_TOOLBAR:
       case GDK_WINDOW_TYPE_HINT_COMBO:
-        spec = mir_connection_create_spec_for_menu (connection,
+        return mir_connection_create_spec_for_menu (connection,
                                                     width,
                                                     height,
                                                     format,
@@ -265,16 +270,15 @@ create_mir_surface (GdkDisplay *display,
         break;
       case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
       case GDK_WINDOW_TYPE_HINT_UTILITY:
-        spec = mir_connection_create_spec_for_modal_dialog (connection,
+        return mir_connection_create_spec_for_modal_dialog (connection,
                                                             width,
                                                             height,
                                                             format,
                                                             parent_surface);
-        break;
       case GDK_WINDOW_TYPE_HINT_DND:
       case GDK_WINDOW_TYPE_HINT_TOOLTIP:
       case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
-        spec = mir_connection_create_spec_for_tooltip (connection,
+        return mir_connection_create_spec_for_tooltip (connection,
                                                        width,
                                                        height,
                                                        format,
@@ -284,19 +288,47 @@ create_mir_surface (GdkDisplay *display,
       case GDK_WINDOW_TYPE_HINT_NORMAL:
       case GDK_WINDOW_TYPE_HINT_DESKTOP:
       default:
-        spec = mir_connection_create_spec_for_normal_surface (connection,
+        return mir_connection_create_spec_for_normal_surface (connection,
                                                               width,
                                                               height,
                                                               format);
-        break;
     }
+}
 
-  mir_surface_spec_set_name (spec, g_get_prgname ());
-  mir_surface_spec_set_buffer_usage (spec, buffer_usage);
-  surface = mir_surface_create_sync (spec);
+static MirSurfaceSpec*
+create_spec (GdkWindow *window, GdkMirWindowImpl *impl)
+{
+  MirSurfaceSpec *spec = NULL;
+
+  spec = create_window_type_spec (impl->display,
+                                  impl->transient_for,
+                                  impl->transient_x, impl->transient_y,
+                                  window->width, window->height,
+                                  impl->type_hint,
+                                  impl->has_rect ? &impl->rect : NULL,
+                                  impl->has_rect ? impl->edge : mir_edge_attachment_any,
+                                  impl->buffer_usage);
+
+  mir_surface_spec_set_buffer_usage (spec, impl->buffer_usage);
+
+
+  return spec;
+}
+
+static void
+update_surface_spec (GdkWindow *window)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  MirSurfaceSpec *spec;
+
+  if (!impl->surface)
+    return;
+
+  spec = create_spec (window, impl);
+
+  mir_surface_apply_spec (impl->surface, spec);
   mir_surface_spec_release (spec);
-
-  return surface;
+  impl->buffer_stream = mir_surface_get_buffer_stream (impl->surface);
 }
 
 static GdkDevice *
@@ -350,6 +382,7 @@ ensure_surface_full (GdkWindow *window,
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   GdkMirWindowReference *window_ref;
+  MirSurfaceSpec *spec;
 
   if (impl->surface)
     return;
@@ -358,17 +391,13 @@ ensure_surface_full (GdkWindow *window,
    * https://bugs.launchpad.net/mir/+bug/1324100
    */
   window_ref = _gdk_mir_event_source_get_window_reference (window);
+  impl->buffer_usage = buffer_usage;
 
-  impl->surface = create_mir_surface (gdk_window_get_display (window),
-                                      impl->transient_for,
-                                      impl->transient_x,
-                                      impl->transient_y,
-                                      window->width,
-                                      window->height,
-                                      impl->type_hint,
-                                      impl->has_rect ? &impl->rect : NULL,
-                                      impl->has_rect ? impl->edge : mir_edge_attachment_any,
-                                      buffer_usage);
+  spec = create_spec (window, impl);
+
+  impl->surface = mir_surface_create_sync (spec);
+
+  mir_surface_spec_release(spec);
   impl->buffer_stream = mir_surface_get_buffer_stream (impl->surface);
 
   /* FIXME: can't make an initial resize event */
@@ -393,9 +422,10 @@ ensure_surface_full (GdkWindow *window,
 static void
 ensure_surface (GdkWindow *window)
 {
-  ensure_surface_full (window, window->gl_paint_context ?
-                                 mir_buffer_usage_hardware :
-                                 mir_buffer_usage_software);
+  ensure_surface_full (window,
+                       window->gl_paint_context ?
+                         mir_buffer_usage_hardware :
+                         mir_buffer_usage_software);
 }
 
 static void
@@ -458,6 +488,8 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
       return impl->cairo_surface;
     }
 
+  ensure_surface (window);
+
   /* Transient windows get rendered into a buffer and copied onto their parent */
   if (window->gl_paint_context)
     {
@@ -466,8 +498,6 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
     }
   else if (impl->visible)
     {
-      ensure_surface (window);
-
       mir_buffer_stream_get_graphics_region (mir_surface_get_buffer_stream (impl->surface), &region);
 
       switch (region.pixel_format)
@@ -565,6 +595,7 @@ gdk_mir_window_impl_show (GdkWindow *window,
   //g_printerr ("gdk_mir_window_impl_show window=%p\n", window);
 
   impl->visible = TRUE;
+  set_surface_state (impl, mir_surface_state_restored);
 
   /* Make sure there's a surface to see */
   ensure_surface (window);
@@ -586,7 +617,8 @@ gdk_mir_window_impl_hide (GdkWindow *window)
 
   impl->cursor_inside = FALSE;
   impl->visible = FALSE;
-  ensure_no_surface (window);
+
+  set_surface_state (impl, mir_surface_state_hidden);
 }
 
 static void
@@ -597,7 +629,8 @@ gdk_mir_window_impl_withdraw (GdkWindow *window)
 
   impl->cursor_inside = FALSE;
   impl->visible = FALSE;
-  ensure_no_surface (window);
+
+  set_surface_state (impl, mir_surface_state_hidden);
 }
 
 static void
@@ -649,7 +682,14 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
   g_printerr ("\n");
   */
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-  gboolean recreate_surface = FALSE;
+
+  /* If resize requested then rebuild surface */
+  if (width >= 0 && (window->width != width || window->height != height))
+  {
+    /* We accept any resize */
+    window->width = width;
+    window->height = height;
+  }
 
   /* Transient windows can move wherever they want */
   if (with_move)
@@ -659,23 +699,8 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
           impl->has_rect = FALSE;
           impl->transient_x = x;
           impl->transient_y = y;
-          recreate_surface = TRUE;
+          update_surface_spec (window);
         }
-    }
-
-  /* If resize requested then rebuild surface */
-  if (width >= 0)
-  {
-    /* We accept any resize */
-    window->width = width;
-    window->height = height;
-    recreate_surface = TRUE;
-  }
-
-  if (recreate_surface && impl->surface)
-    {
-      ensure_no_surface (window);
-      ensure_surface (window);
     }
 }
 
@@ -948,7 +973,7 @@ gdk_mir_window_impl_set_type_hint (GdkWindow         *window,
   if (hint != impl->type_hint)
     {
       impl->type_hint = hint;
-      ensure_no_surface (window);
+      update_surface_spec (window);
     }
 }
 
@@ -1573,7 +1598,7 @@ _gdk_mir_window_get_egl_surface (GdkWindow *window,
       ensure_surface_full (window, mir_buffer_usage_hardware);
 
       egl_display = _gdk_mir_display_get_egl_display (gdk_window_get_display (window));
-      egl_window = (EGLNativeWindowType) mir_buffer_stream_get_egl_native_window (mir_surface_get_buffer_stream (impl->surface));
+      egl_window = (EGLNativeWindowType) mir_buffer_stream_get_egl_native_window (impl->buffer_stream);
 
       impl->egl_surface =
         eglCreateWindowSurface (egl_display, config, egl_window, NULL);
@@ -1598,7 +1623,7 @@ _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window,
 
       display = gdk_window_get_display (window);
       egl_display = _gdk_mir_display_get_egl_display (display);
-      egl_window = (EGLNativeWindowType) mir_buffer_stream_get_egl_native_window (mir_surface_get_buffer_stream (impl->surface));
+      egl_window = (EGLNativeWindowType) mir_buffer_stream_get_egl_native_window (impl->buffer_stream);
 
       impl->dummy_egl_surface =
         eglCreateWindowSurface (egl_display, config, egl_window, NULL);

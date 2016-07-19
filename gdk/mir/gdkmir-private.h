@@ -83,7 +83,7 @@ GdkCursor *_gdk_mir_cursor_new_for_name (GdkDisplay *display, const gchar *name)
 
 const gchar *_gdk_mir_cursor_get_name (GdkCursor *cursor);
 
-GdkWindowImpl *_gdk_mir_window_impl_new (void);
+GdkWindowImpl *_gdk_mir_window_impl_new (GdkDisplay *display, GdkWindow *window, GdkWindowAttr *attributes, gint attributes_mask);
 
 void _gdk_mir_window_impl_set_surface_state (GdkMirWindowImpl *impl, MirSurfaceState state);
 
