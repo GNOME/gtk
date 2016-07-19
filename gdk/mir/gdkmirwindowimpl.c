@@ -595,7 +595,6 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
 
   ensure_surface (window);
 
-  /* Transient windows get rendered into a buffer and copied onto their parent */
   if (window->gl_paint_context)
     {
       cairo_surface = cairo_image_surface_create (pixel_format, window->width, window->height);
