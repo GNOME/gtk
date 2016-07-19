@@ -243,9 +243,7 @@ gsk_gl_driver_get_vao (GskGLDriver *driver,
 int
 gsk_gl_driver_create_texture (GskGLDriver     *driver,
                               int              width,
-                              int              height,
-                              int              min_filter,
-                              int              mag_filter)
+                              int              height)
 {
   guint texture_id;
   Texture *t;
@@ -257,15 +255,15 @@ gsk_gl_driver_create_texture (GskGLDriver     *driver,
 
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
   t = texture_new ();
   t->texture_id = texture_id;
   t->width = width;
   t->height = height;
-  t->min_filter = min_filter;
-  t->mag_filter = mag_filter;
+  t->min_filter = GL_NEAREST;
+  t->mag_filter = GL_NEAREST;
   g_hash_table_insert (driver->textures, GUINT_TO_POINTER (texture_id), t);
 
   return texture_id;
@@ -441,9 +439,11 @@ gsk_gl_driver_bind_render_target (GskGLDriver *driver,
 }
 
 void
-gsk_gl_driver_render_surface_to_texture (GskGLDriver     *driver,
+gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
+                                         int              texture_id,
                                          cairo_surface_t *surface,
-                                         int              texture_id)
+                                         int              min_filter,
+                                         int              mag_filter)
 {
   Texture *t;
 
@@ -455,7 +455,16 @@ gsk_gl_driver_render_surface_to_texture (GskGLDriver     *driver,
 
   glBindTexture (GL_TEXTURE_2D, t->texture_id);
 
+  if (min_filter != t->min_filter)
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+
+  if (mag_filter != t->mag_filter)
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+
   gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, t->width, t->height, NULL);
+
+  t->min_filter = min_filter;
+  t->mag_filter = mag_filter;
 
   if (t->min_filter != GL_NEAREST)
     glGenerateMipmap (GL_TEXTURE_2D);

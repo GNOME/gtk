@@ -720,12 +720,12 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   /* Upload the Cairo surface to a GL texture */
   item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
                                                               bounds.size.width,
-                                                              bounds.size.height,
-                                                              self->gl_min_filter,
-                                                              self->gl_mag_filter);
-  gsk_gl_driver_render_surface_to_texture (self->gl_driver,
+                                                              bounds.size.height);
+  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                           item.render_data.texture_id,
                                            surface,
-                                           item.render_data.texture_id);
+                                           self->gl_min_filter,
+                                           self->gl_mag_filter);
 
   GSK_NOTE (OPENGL, g_print ("Adding node <%s>[%p] to render items\n",
                              node->name != NULL ? node->name : "unnamed",
