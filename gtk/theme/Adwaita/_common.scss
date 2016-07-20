@@ -3505,10 +3505,9 @@ calendar {
   }
 
   &.header {
-    border-bottom: 1px solid transparentize(black, 0.9);
-    border-radius: 0;
+    border-bottom-color: transparentize(black, 0.9);
 
-    &:backdrop { border-color: transparentize(black, 0.9); }
+    &:backdrop { border-bottom-color: transparentize(black, 0.9); }
   }
 
   &.button {
@@ -3516,39 +3515,25 @@ calendar {
 
     color: transparentize($fg_color, 0.55);
 
-    &:hover {
-      @extend %undecorated_button;
+    &:hover { color: $fg_color; }
 
-      color: $fg_color;
-    }
+    &:backdrop { color: transparentize($backdrop_fg_color,0.55); }
 
-    &:backdrop {
-      @extend %undecorated_button;
-
-      color: transparentize($backdrop_fg_color,0.55);
-    }
-
-    &:disabled {
-      @extend %undecorated_button;
-
-      color:  transparentize($insensitive_fg_color,0.55);
-    }
+    &:disabled { color:  transparentize($insensitive_fg_color,0.55); }
   }
 
-  &:indeterminate,
-  &:indeterminate:backdrop { color: gtkalpha(currentColor, 0.55); }
+  &.highlight {
+    color: $insensitive_fg_color;
 
-  &.highlight,
-  &.highlight:backdrop {
-    font-size: smaller;
-    color: $fg_color;
+    &:backdrop { color: $backdrop_insensitive_color; }
   }
-
 
   &:backdrop {
     color: $backdrop_text_color;
     border-color: $backdrop_borders_color;
   }
+
+  &:indeterminate { color: gtkalpha(currentColor, 0.3); }
 }
 
 
