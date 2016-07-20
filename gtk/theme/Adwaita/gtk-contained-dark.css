@@ -1343,7 +1343,7 @@ modelbutton.flat,
 button:visited, button:link:hover, button:link:active, button:link:checked,
 button:visited:hover,
 button:visited:active,
-button:visited:checked, calendar.button, calendar.button:hover, calendar.button:backdrop, calendar.button:disabled, .scale-popup button:hover, .scale-popup button:backdrop:hover, .scale-popup button:backdrop:disabled, .scale-popup button:backdrop {
+button:visited:checked, calendar.button, .scale-popup button:hover, .scale-popup button:backdrop:hover, .scale-popup button:backdrop:disabled, .scale-popup button:backdrop {
   background-color: transparent;
   background-image: none;
   border-color: transparent;
@@ -4013,10 +4013,9 @@ calendar {
   calendar:selected {
     border-radius: 3px; }
   calendar.header {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 0; }
+    border-bottom-color: rgba(0, 0, 0, 0.1); }
     calendar.header:backdrop {
-      border-color: rgba(0, 0, 0, 0.1); }
+      border-bottom-color: rgba(0, 0, 0, 0.1); }
   calendar.button {
     color: rgba(238, 238, 236, 0.45); }
     calendar.button:hover {
@@ -4025,14 +4024,15 @@ calendar {
       color: rgba(145, 148, 148, 0.45); }
     calendar.button:disabled {
       color: rgba(145, 148, 148, 0.45); }
-  calendar:indeterminate, calendar:indeterminate:backdrop {
-    color: alpha(currentColor,0.55); }
-  calendar.highlight, calendar.highlight:backdrop {
-    font-size: smaller;
-    color: #eeeeec; }
+  calendar.highlight {
+    color: #919494; }
+    calendar.highlight:backdrop {
+      color: #566164; }
   calendar:backdrop {
     color: #d3d4d5;
     border-color: #202425; }
+  calendar:indeterminate {
+    color: alpha(currentColor,0.3); }
 
 /***********
  * Dialogs *
