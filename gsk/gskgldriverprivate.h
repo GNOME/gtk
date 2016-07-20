@@ -30,7 +30,9 @@ int             gsk_gl_driver_create_vao_for_quad       (GskGLDriver     *driver
                                                          int              n_vertices,
                                                          GskQuadVertex   *vertices);
 int             gsk_gl_driver_create_render_target      (GskGLDriver     *driver,
-                                                         int              texture_id);
+                                                         int              texture_id,
+                                                         gboolean         add_depth_buffer,
+                                                         gboolean         add_stencil_buffer);
 
 void            gsk_gl_driver_bind_source_texture       (GskGLDriver     *driver,
                                                          int              texture_id);
@@ -38,12 +40,21 @@ void            gsk_gl_driver_bind_mask_texture         (GskGLDriver     *driver
                                                          int              texture_id);
 void            gsk_gl_driver_bind_vao                  (GskGLDriver     *driver,
                                                          int              vao_id);
+gboolean        gsk_gl_driver_bind_render_target        (GskGLDriver     *driver,
+                                                         int              texture_id);
 
+void            gsk_gl_driver_init_texture_empty        (GskGLDriver     *driver,
+                                                         int              texture_id);
 void            gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
                                                          int              texture_id,
                                                          cairo_surface_t *surface,
                                                          int              min_filter,
                                                          int              mag_filter);
+
+void            gsk_gl_driver_destroy_texture           (GskGLDriver     *driver,
+                                                         int              texture_id);
+void            gsk_gl_driver_destroy_vao               (GskGLDriver     *driver,
+                                                         int              vao_id);
 
 G_END_DECLS
 
