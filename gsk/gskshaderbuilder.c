@@ -449,8 +449,7 @@ gsk_shader_builder_get_uniform_location (GskShaderBuilder *builder,
   if (builder->uniforms->len == 0)
     return -1;
 
-  p = g_hash_table_lookup (builder->programs, GINT_TO_POINTER (program_id));
-  if (p == NULL)
+  if (!g_hash_table_lookup_extended (builder->programs, GINT_TO_POINTER (program_id), NULL, (gpointer *) &p))
     return -1;
 
   if (g_hash_table_lookup_extended (p->uniform_locations, GINT_TO_POINTER (uniform_quark), NULL, &loc_p))
@@ -473,8 +472,7 @@ gsk_shader_builder_get_attribute_location (GskShaderBuilder *builder,
   if (builder->attributes->len == 0)
     return -1;
 
-  p = g_hash_table_lookup (builder->programs, GINT_TO_POINTER (program_id));
-  if (p == NULL)
+  if (!g_hash_table_lookup_extended (builder->programs, GINT_TO_POINTER (program_id), NULL, (gpointer *) &p))
     return -1;
 
   if (g_hash_table_lookup_extended (p->attribute_locations, GINT_TO_POINTER (attribute_quark), NULL, &loc_p))

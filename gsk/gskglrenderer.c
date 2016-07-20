@@ -20,18 +20,18 @@
 #define SHADER_VERSION_GL3              150
 
 typedef struct {
-  guint vao_id;
-  guint buffer_id;
-  guint texture_id;
-  guint program_id;
+  int vao_id;
+  int buffer_id;
+  int texture_id;
+  int program_id;
 
-  guint mvp_location;
-  guint map_location;
-  guint parentMap_location;
-  guint uv_location;
-  guint position_location;
-  guint alpha_location;
-  guint blendMode_location;
+  int mvp_location;
+  int map_location;
+  int parentMap_location;
+  int uv_location;
+  int position_location;
+  int alpha_location;
+  int blendMode_location;
 } RenderData;
 
 typedef struct {
@@ -131,51 +131,16 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self,
 
   GSK_NOTE (OPENGL, g_print ("Creating buffers\n"));
 
-  glGenFramebuffersEXT (1, &self->frame_buffer);
-
   if (self->texture_id == 0)
     {
-      glGenTextures (1, &self->texture_id);
-
-      glBindTexture (GL_TEXTURE_2D, self->texture_id);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-      if (gdk_gl_context_get_use_es (self->context))
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-      else
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+      self->texture_id = gsk_gl_driver_create_texture (self->gl_driver, width, height);
+      gsk_gl_driver_bind_source_texture (self->gl_driver, self->texture_id);
+      gsk_gl_driver_init_texture_empty (self->gl_driver, self->texture_id);
     }
 
-  if (self->depth_stencil_buffer == 0)
-    glGenRenderbuffersEXT (1, &self->depth_stencil_buffer);
-
-  glBindRenderbuffer (GL_RENDERBUFFER, self->depth_stencil_buffer);
-  glRenderbufferStorage (GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+  gsk_gl_driver_create_render_target (self->gl_driver, self->texture_id, TRUE, TRUE);
 
   self->has_buffers = TRUE;
-}
-
-static void
-gsk_gl_renderer_attach_buffers (GskGLRenderer *self)
-{
-  GSK_NOTE (OPENGL, g_print ("Attaching buffers\n"));
-
-  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, self->frame_buffer);
-
-  if (self->texture_id != 0)
-    {
-      glFramebufferTexture2D (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                              GL_TEXTURE_2D, self->texture_id, 0);
-    }
-
-  glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                                GL_RENDERBUFFER_EXT, self->depth_stencil_buffer);
-
-  glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-                                GL_RENDERBUFFER_EXT, self->depth_stencil_buffer);
 }
 
 static void
@@ -191,23 +156,10 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
 
   gdk_gl_context_make_current (self->context);
 
-  if (self->depth_stencil_buffer != 0)
-    {
-      glDeleteRenderbuffersEXT (1, &self->depth_stencil_buffer);
-      self->depth_stencil_buffer = 0;
-    }
-
   if (self->texture_id != 0)
     {
-      glDeleteTextures (1, &self->texture_id);
+      gsk_gl_driver_destroy_texture (self->gl_driver, self->texture_id);
       self->texture_id = 0;
-    }
-
-  if (self->frame_buffer != 0)
-    {
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
-      glDeleteFramebuffersEXT (1, &self->frame_buffer);
-      self->frame_buffer = 0;
     }
 
   self->has_buffers = FALSE;
@@ -355,6 +307,9 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 
   gdk_gl_context_make_current (self->context);
 
+  /* We don't need to iterate to destroy the associated GL resources,
+   * as they will be dropped when we finalize the GskGLDriver
+   */
   g_clear_pointer (&self->opaque_render_items, g_array_unref);
   g_clear_pointer (&self->transparent_render_items, g_array_unref);
 
@@ -633,6 +588,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
                                                               bounds.size.width,
                                                               bounds.size.height);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
   gsk_gl_driver_init_texture_with_surface (self->gl_driver,
                                            item.render_data.texture_id,
                                            surface,
@@ -682,6 +638,8 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
   self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
   self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
 
+  gsk_gl_driver_begin_frame (self->gl_driver);
+
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
   gsk_gl_renderer_add_render_item (self, root, NULL);
 
@@ -691,14 +649,36 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
                              self->opaque_render_items->len,
                              self->transparent_render_items->len));
 
+  gsk_gl_driver_end_frame (self->gl_driver);
+
   return TRUE;
 }
 
 static void
 gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 {
+  int i;
+
   if (self->context == NULL)
     return;
+
+  gdk_gl_context_make_current (self->context);
+
+  for (i = 0; i < self->opaque_render_items->len; i++)
+    {
+      RenderItem *item = &g_array_index (self->opaque_render_items, RenderItem, i);
+
+      gsk_gl_driver_destroy_texture (self->gl_driver, item->render_data.texture_id);
+      gsk_gl_driver_destroy_vao (self->gl_driver, item->render_data.vao_id);
+    }
+
+  for (i = 0; i < self->transparent_render_items->len; i++)
+    {
+      RenderItem *item = &g_array_index (self->transparent_render_items, RenderItem, i);
+
+      gsk_gl_driver_destroy_texture (self->gl_driver, item->render_data.texture_id);
+      gsk_gl_driver_destroy_vao (self->gl_driver, item->render_data.vao_id);
+    }
 
   g_clear_pointer (&self->opaque_render_items, g_array_unref);
   g_clear_pointer (&self->transparent_render_items, g_array_unref);
@@ -720,7 +700,6 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_matrix_t modelview, projection;
   graphene_rect_t viewport;
-  int status;
   guint i;
   guint64 gpu_time;
 
@@ -731,8 +710,9 @@ gsk_gl_renderer_render (GskRenderer *renderer,
 
   gsk_renderer_get_viewport (renderer, &viewport);
 
+  gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_renderer_create_buffers (self, viewport.size.width, viewport.size.height);
-  gsk_gl_renderer_attach_buffers (self);
+  gsk_gl_driver_end_frame (self->gl_driver);
 
   gsk_renderer_get_modelview (renderer, &modelview);
   gsk_renderer_get_projection (renderer, &projection);
@@ -744,13 +724,11 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   if (!gsk_gl_renderer_validate_tree (self, root))
     goto out;
 
+  gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_profiler_begin_gpu_region (self->gl_profiler);
 
-  gsk_gl_driver_begin_frame (self->gl_driver);
-
   /* Ensure that the viewport is up to date */
-  status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
-  if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
+  if (gsk_gl_driver_bind_render_target (self->gl_driver, self->texture_id))
     gsk_gl_renderer_resize_viewport (self, &viewport);
 
   gsk_gl_renderer_clear (self);
