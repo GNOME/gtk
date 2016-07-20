@@ -23,21 +23,26 @@ typedef struct {
   GLuint uv_id;
 } Vao;
 
+typedef struct {
+  GLuint fbo_id;
+  GLuint depth_stencil_id;
+} Fbo;
+
 struct _GskGLDriver
 {
   GObject parent_instance;
 
   GdkGLContext *gl_context;
 
-  GLuint default_fbo;
+  Fbo default_fbo;
 
   GHashTable *textures;
-  GArray *vaos;
+  GHashTable *vaos;
 
   Texture *bound_source_texture;
   Texture *bound_mask_texture;
   Vao *bound_vao;
-  GLuint bound_fbo;
+  Fbo *bound_fbo;
 
   gboolean in_frame : 1;
 };
@@ -72,18 +77,28 @@ texture_free (gpointer data)
 static void
 fbo_clear (gpointer data)
 {
-  GLuint fbo_id = GPOINTER_TO_UINT (data);
+  Fbo *f = data;
 
-  glDeleteFramebuffers (1, &fbo_id);
+  if (f->depth_stencil_id != 0)
+    glDeleteRenderbuffers (1, &f->depth_stencil_id);
+
+  glDeleteFramebuffers (1, &f->fbo_id);
+}
+
+static Vao *
+vao_new (void)
+{
+  return g_slice_new0 (Vao);
 }
 
 static void
-vao_clear (gpointer data)
+vao_free (gpointer data)
 {
   Vao *v = data;
 
   glDeleteBuffers (1, &v->buffer_id);
   glDeleteVertexArrays (1, &v->vao_id);
+  g_slice_free (Vao, v);
 }
 
 static void
@@ -92,7 +107,7 @@ gsk_gl_driver_finalize (GObject *gobject)
   GskGLDriver *self = GSK_GL_DRIVER (gobject);
 
   g_clear_pointer (&self->textures, g_hash_table_unref);
-  g_clear_pointer (&self->vaos, g_array_unref);
+  g_clear_pointer (&self->vaos, g_hash_table_unref);
 
   g_clear_object (&self->gl_context);
 
@@ -158,9 +173,7 @@ static void
 gsk_gl_driver_init (GskGLDriver *self)
 {
   self->textures = g_hash_table_new_full (NULL, NULL, NULL, texture_free);
-
-  self->vaos = g_array_new (FALSE, FALSE, sizeof (Vao));
-  g_array_set_clear_func (self->vaos, vao_clear);
+  self->vaos = g_hash_table_new_full (NULL, NULL, NULL, vao_free);
 }
 
 GskGLDriver *
@@ -181,8 +194,8 @@ gsk_gl_driver_begin_frame (GskGLDriver *driver)
 
   driver->in_frame = TRUE;
 
-  glGetIntegerv (GL_FRAMEBUFFER_BINDING, (GLint *) &driver->default_fbo);
-  driver->bound_fbo = driver->default_fbo;
+  glGetIntegerv (GL_FRAMEBUFFER_BINDING, (GLint *) &(driver->default_fbo.fbo_id));
+  driver->bound_fbo = &driver->default_fbo;
 
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, 0);
@@ -209,10 +222,12 @@ gsk_gl_driver_end_frame (GskGLDriver *driver)
   driver->bound_source_texture = NULL;
   driver->bound_mask_texture = NULL;
   driver->bound_vao = NULL;
-  driver->bound_fbo = driver->default_fbo;
+  driver->bound_fbo = NULL;
 
-  g_hash_table_remove_all (driver->textures);
-  g_array_set_size (driver->vaos, 0);
+  GSK_NOTE (OPENGL,
+            g_print ("*** Frame end: textures=%d, vaos=%d\n",
+                     g_hash_table_size (driver->textures),
+                     g_hash_table_size (driver->vaos)));
 
   driver->in_frame = FALSE;
 }
@@ -221,29 +236,42 @@ static Texture *
 gsk_gl_driver_get_texture (GskGLDriver *driver,
                            int          texture_id)
 {
-  return g_hash_table_lookup (driver->textures, GINT_TO_POINTER (texture_id));
+  Texture *t;
+
+  if (g_hash_table_lookup_extended (driver->textures, GINT_TO_POINTER (texture_id), NULL, (gpointer *) &t))
+    return t;
+
+  return NULL;
 }
 
 static Vao *
 gsk_gl_driver_get_vao (GskGLDriver *driver,
                        int          vao_id)
 {
-  int i;
+  Vao *v;
 
-  for (i = 0; i < driver->vaos->len; i++)
-    {
-      Vao *v = &g_array_index (driver->vaos, Vao, i);
-      if (v->vao_id == vao_id)
-        return v;
-    }
+  if (g_hash_table_lookup_extended (driver->vaos, GINT_TO_POINTER (vao_id), NULL, (gpointer *) &v))
+    return v;
 
   return NULL;
 }
 
+static Fbo *
+gsk_gl_driver_get_fbo (GskGLDriver *driver,
+                       int          texture_id)
+{
+  Texture *t = gsk_gl_driver_get_texture (driver, texture_id);
+
+  if (t->fbos == NULL)
+    return &driver->default_fbo;
+
+  return &g_array_index (t->fbos, Fbo, 0);
+}
+
 int
-gsk_gl_driver_create_texture (GskGLDriver     *driver,
-                              int              width,
-                              int              height)
+gsk_gl_driver_create_texture (GskGLDriver *driver,
+                              int          width,
+                              int          height)
 {
   guint texture_id;
   Texture *t;
@@ -251,12 +279,6 @@ gsk_gl_driver_create_texture (GskGLDriver     *driver,
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
 
   glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_2D, texture_id);
-
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
   t = texture_new ();
   t->texture_id = texture_id;
@@ -264,9 +286,9 @@ gsk_gl_driver_create_texture (GskGLDriver     *driver,
   t->height = height;
   t->min_filter = GL_NEAREST;
   t->mag_filter = GL_NEAREST;
-  g_hash_table_insert (driver->textures, GUINT_TO_POINTER (texture_id), t);
+  g_hash_table_insert (driver->textures, GINT_TO_POINTER (texture_id), t);
 
-  return texture_id;
+  return t->texture_id;
 }
 
 int
@@ -278,9 +300,10 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
 
 {
   GLuint vao_id, buffer_id;
-  Vao v;
+  Vao *v;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
+  g_return_val_if_fail (driver->in_frame, -1);
 
   glGenVertexArrays (1, &vao_id);
   glBindVertexArray (vao_id);
@@ -302,23 +325,28 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
   glBindBuffer (GL_ARRAY_BUFFER, 0);
   glBindVertexArray (0);
 
-  v.vao_id = vao_id;
-  v.buffer_id =  buffer_id;
-  v.position_id = position_id;
-  v.uv_id = uv_id;
-  g_array_append_val (driver->vaos, v);
+  v = vao_new ();
+  v->vao_id = vao_id;
+  v->buffer_id =  buffer_id;
+  v->position_id = position_id;
+  v->uv_id = uv_id;
+  g_hash_table_insert (driver->vaos, GINT_TO_POINTER (vao_id), v);
 
   return vao_id;
 }
 
 int
 gsk_gl_driver_create_render_target (GskGLDriver *driver,
-                                    int          texture_id)
+                                    int          texture_id,
+                                    gboolean     add_depth_buffer,
+                                    gboolean     add_stencil_buffer)
 {
+  GLuint fbo_id, depth_stencil_buffer_id;
   Texture *t;
-  GLuint fbo_id;
+  Fbo f;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
+  g_return_val_if_fail (driver->in_frame, -1);
 
   t = gsk_gl_driver_get_texture (driver, texture_id);
   if (t == NULL)
@@ -326,7 +354,7 @@ gsk_gl_driver_create_render_target (GskGLDriver *driver,
 
   if (t->fbos == NULL)
     {
-      t->fbos = g_array_new (FALSE, FALSE, sizeof (GLuint));
+      t->fbos = g_array_new (FALSE, FALSE, sizeof (Fbo));
       g_array_set_clear_func (t->fbos, fbo_clear);
     }
 
@@ -334,9 +362,35 @@ gsk_gl_driver_create_render_target (GskGLDriver *driver,
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t->texture_id, 0);
 
-  g_array_append_val (t->fbos, fbo_id);
+  if (add_depth_buffer || add_stencil_buffer)
+    glGenRenderbuffersEXT (1, &depth_stencil_buffer_id);
+  else
+    depth_stencil_buffer_id = 0;
 
-  glBindFramebuffer (GL_FRAMEBUFFER, driver->default_fbo);
+  glBindRenderbuffer (GL_RENDERBUFFER, depth_stencil_buffer_id);
+
+  if (add_depth_buffer || add_stencil_buffer)
+    {
+      if (add_stencil_buffer)
+        glRenderbufferStorage (GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, t->width, t->height);
+      else
+        glRenderbufferStorage (GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, t->width, t->height);
+
+      if (add_depth_buffer)
+        glFramebufferRenderbuffer (GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                   GL_RENDERBUFFER, depth_stencil_buffer_id);
+
+      if (add_stencil_buffer)
+        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                      GL_RENDERBUFFER, depth_stencil_buffer_id);
+    }
+
+  f.fbo_id = fbo_id;
+  f.depth_stencil_id = depth_stencil_buffer_id;
+
+  g_array_append_val (t->fbos, f);
+
+  glBindFramebuffer (GL_FRAMEBUFFER, driver->default_fbo.fbo_id);
 
   return fbo_id;
 }
@@ -352,7 +406,10 @@ gsk_gl_driver_bind_source_texture (GskGLDriver *driver,
 
   t = gsk_gl_driver_get_texture (driver, texture_id);
   if (t == NULL)
-    return;
+    {
+      g_critical ("No texture %d found.", texture_id);
+      return;
+    }
 
   if (driver->bound_source_texture != t)
     {
@@ -374,7 +431,10 @@ gsk_gl_driver_bind_mask_texture (GskGLDriver *driver,
 
   t = gsk_gl_driver_get_texture (driver, texture_id);
   if (t == NULL)
-    return;
+    {
+      g_critical ("No texture %d found.", texture_id);
+      return;
+    }
 
   if (driver->bound_mask_texture != t)
     {
@@ -398,7 +458,10 @@ gsk_gl_driver_bind_vao (GskGLDriver *driver,
 
   v = gsk_gl_driver_get_vao (driver, vao_id);
   if (v == NULL)
-    return;
+    {
+      g_critical ("No VAO %d found.", vao_id);
+      return;
+    }
 
   if (driver->bound_vao != v)
     {
@@ -411,31 +474,94 @@ gsk_gl_driver_bind_vao (GskGLDriver *driver,
     }
 }
 
-void
+gboolean
 gsk_gl_driver_bind_render_target (GskGLDriver *driver,
                                   int          texture_id)
 {
-  GLuint fbo_id;
+  int status;
+  Fbo *f;
+
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), FALSE);
+  g_return_val_if_fail (driver->in_frame, FALSE);
+
+  f = gsk_gl_driver_get_fbo (driver, texture_id);
+  if (f == NULL)
+    {
+      g_critical ("No render target associated to texture %d found.", texture_id);
+      return FALSE;
+    }
+
+  if (f != driver->bound_fbo)
+    {
+      glBindFramebuffer (GL_FRAMEBUFFER, f->fbo_id);
+
+      driver->bound_fbo = f;
+    }
+
+  status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
+
+  return status == GL_FRAMEBUFFER_COMPLETE;
+}
+
+void
+gsk_gl_driver_destroy_texture (GskGLDriver *driver,
+                               int          texture_id)
+{
+  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
+
+  g_hash_table_remove (driver->textures, GINT_TO_POINTER (texture_id));
+}
+
+void
+gsk_gl_driver_destroy_vao (GskGLDriver *driver,
+                           int          vao_id)
+{
+  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
+
+  g_hash_table_remove (driver->vaos, GINT_TO_POINTER (vao_id));
+}
+
+static void
+gsk_gl_driver_set_texture_parameters (GskGLDriver *driver,
+                                      int          min_filter,
+                                      int          mag_filter)
+{
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
+
+void
+gsk_gl_driver_init_texture_empty (GskGLDriver *driver,
+                                  int          texture_id)
+{
   Texture *t;
 
   g_return_if_fail (GSK_IS_GL_DRIVER (driver));
-  g_return_if_fail (driver->in_frame);
 
   t = gsk_gl_driver_get_texture (driver, texture_id);
   if (t == NULL)
-    return;
-
-  if (t->fbos == NULL)
-    fbo_id = driver->default_fbo;
-  else
-    fbo_id = g_array_index (t->fbos, GLuint, 0);
-
-  if (fbo_id != driver->bound_fbo)
     {
-      glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
-
-      driver->bound_fbo = fbo_id;
+      g_critical ("No texture %d found.", texture_id);
+      return;
     }
+
+  if (!(driver->bound_source_texture == t || driver->bound_mask_texture == t))
+    {
+      g_critical ("You must bind the texture before initializing it.");
+      return;
+    }
+
+  gsk_gl_driver_set_texture_parameters (driver, t->min_filter, t->mag_filter);
+
+  if (gdk_gl_context_get_use_es (driver->gl_context))
+    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, t->width, t->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+  else
+    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, t->width, t->height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+  glBindTexture (GL_TEXTURE_2D, 0);
 }
 
 void
@@ -451,15 +577,18 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
 
   t = gsk_gl_driver_get_texture (driver, texture_id);
   if (t == NULL)
-    return;
+    {
+      g_critical ("No texture %d found.", texture_id);
+      return;
+    }
 
-  glBindTexture (GL_TEXTURE_2D, t->texture_id);
+  if (!(driver->bound_source_texture == t || driver->bound_mask_texture == t))
+    {
+      g_critical ("You must bind the texture before initializing it.");
+      return;
+    }
 
-  if (min_filter != t->min_filter)
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
-
-  if (mag_filter != t->mag_filter)
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+  gsk_gl_driver_set_texture_parameters (driver, min_filter, mag_filter);
 
   gdk_cairo_surface_upload_to_gl (surface, GL_TEXTURE_2D, t->width, t->height, NULL);
 
@@ -468,4 +597,6 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
 
   if (t->min_filter != GL_NEAREST)
     glGenerateMipmap (GL_TEXTURE_2D);
+
+  glBindTexture (GL_TEXTURE_2D, 0);
 }
