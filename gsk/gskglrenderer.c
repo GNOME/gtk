@@ -99,8 +99,7 @@ struct _GskGLRenderer
   int blend_program_id;
   int blit_program_id;
 
-  GArray *opaque_render_items;
-  GArray *transparent_render_items;
+  GArray *render_items;
 
   gboolean has_buffers : 1;
 };
@@ -311,8 +310,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   /* We don't need to iterate to destroy the associated GL resources,
    * as they will be dropped when we finalize the GskGLDriver
    */
-  g_clear_pointer (&self->opaque_render_items, g_array_unref);
-  g_clear_pointer (&self->transparent_render_items, g_array_unref);
+  g_clear_pointer (&self->render_items, g_array_unref);
 
   gsk_gl_renderer_destroy_buffers (self);
   gsk_gl_renderer_destroy_programs (self);
@@ -523,6 +521,12 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   else
     item.parent_data = NULL;
 
+  /* Select the render target */
+  if (parent != NULL)
+    item.render_data.render_target_id = parent->render_data.render_target_id;
+  else
+    item.render_data.render_target_id = self->texture_id;
+
   /* Select the program to use */
   if (parent != NULL)
     program_id = self->blend_program_id;
@@ -602,20 +606,10 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   GSK_NOTE (OPENGL, g_print ("Adding node <%s>[%p] to render items\n",
                              node->name != NULL ? node->name : "unnamed",
                              node));
-  if (gsk_render_node_is_opaque (node) && gsk_render_node_get_opacity (node) == 1.f)
-    {
-      g_array_append_val (self->opaque_render_items, item);
-      ritem = &g_array_index (self->opaque_render_items,
-                              RenderItem,
-                              self->opaque_render_items->len - 1);
-    }
-  else
-    {
-      g_array_append_val (self->transparent_render_items, item);
-      ritem = &g_array_index (self->transparent_render_items,
-                              RenderItem,
-                              self->transparent_render_items->len - 1);
-    }
+  g_array_append_val (self->render_items, item);
+  ritem = &g_array_index (self->render_items,
+                          RenderItem,
+                          self->render_items->len - 1);
 
 recurse_children:
   gsk_render_node_iter_init (&iter, node);
@@ -639,19 +633,16 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
 
   gdk_gl_context_make_current (self->context);
 
-  self->opaque_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
-  self->transparent_render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
+  self->render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
 
   gsk_gl_driver_begin_frame (self->gl_driver);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
   gsk_gl_renderer_add_render_item (self, root, NULL);
 
-  GSK_NOTE (OPENGL, g_print ("Total render items: %d of %d (opaque:%d, transparent:%d)\n",
-                             self->opaque_render_items->len + self->transparent_render_items->len,
-                             n_nodes,
-                             self->opaque_render_items->len,
-                             self->transparent_render_items->len));
+  GSK_NOTE (OPENGL, g_print ("Total render items: %d of max:%d\n",
+                             self->render_items->len,
+                             n_nodes));
 
   gsk_gl_driver_end_frame (self->gl_driver);
 
@@ -668,24 +659,15 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 
   gdk_gl_context_make_current (self->context);
 
-  for (i = 0; i < self->opaque_render_items->len; i++)
+  for (i = 0; i < self->render_items->len; i++)
     {
-      RenderItem *item = &g_array_index (self->opaque_render_items, RenderItem, i);
+      RenderItem *item = &g_array_index (self->render_items, RenderItem, i);
 
       gsk_gl_driver_destroy_texture (self->gl_driver, item->render_data.texture_id);
       gsk_gl_driver_destroy_vao (self->gl_driver, item->render_data.vao_id);
     }
 
-  for (i = 0; i < self->transparent_render_items->len; i++)
-    {
-      RenderItem *item = &g_array_index (self->transparent_render_items, RenderItem, i);
-
-      gsk_gl_driver_destroy_texture (self->gl_driver, item->render_data.texture_id);
-      gsk_gl_driver_destroy_vao (self->gl_driver, item->render_data.vao_id);
-    }
-
-  g_clear_pointer (&self->opaque_render_items, g_array_unref);
-  g_clear_pointer (&self->transparent_render_items, g_array_unref);
+  g_clear_pointer (&self->render_items, g_array_unref);
 }
 
 static void
@@ -737,20 +719,6 @@ gsk_gl_renderer_render (GskRenderer *renderer,
 
   gsk_gl_renderer_clear (self);
 
-  glDisable (GL_BLEND);
-
-  glEnable (GL_DEPTH_TEST);
-  glDepthFunc (GL_LESS);
-
-  /* Opaque pass: front-to-back */
-  GSK_NOTE (OPENGL, g_print ("Rendering %u opaque items\n", self->opaque_render_items->len));
-  for (i = 0; i < self->opaque_render_items->len; i++)
-    {
-      RenderItem *item = &g_array_index (self->opaque_render_items, RenderItem, i);
-
-      render_item (self, item);
-    }
-
   glEnable (GL_DEPTH_TEST);
   glDepthFunc (GL_LEQUAL);
 
@@ -759,10 +727,10 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   glBlendEquation (GL_FUNC_ADD);
 
   /* Transparent pass: back-to-front */
-  GSK_NOTE (OPENGL, g_print ("Rendering %u transparent items\n", self->transparent_render_items->len));
-  for (i = 0; i < self->transparent_render_items->len; i++)
+  GSK_NOTE (OPENGL, g_print ("Rendering %u items\n", self->render_items->len));
+  for (i = 0; i < self->render_items->len; i++)
     {
-      RenderItem *item = &g_array_index (self->transparent_render_items, RenderItem, i);
+      RenderItem *item = &g_array_index (self->render_items, RenderItem, i);
 
       render_item (self, item);
     }
