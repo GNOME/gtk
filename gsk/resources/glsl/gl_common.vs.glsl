@@ -1,7 +1,6 @@
-uniform mat4 mvp;
-uniform float alpha;
+uniform mat4 uMVP;
 
-attribute vec2 position;
-attribute vec2 uv;
+attribute vec2 aPosition;
+attribute vec2 aUv;
 
 varying vec2 vUv;

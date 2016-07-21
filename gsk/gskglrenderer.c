@@ -20,14 +20,15 @@
 #define SHADER_VERSION_GL3              150
 
 typedef struct {
+  int render_target_id;
   int vao_id;
   int buffer_id;
   int texture_id;
   int program_id;
 
   int mvp_location;
-  int map_location;
-  int parentMap_location;
+  int source_location;
+  int mask_location;
   int uv_location;
   int position_location;
   int alpha_location;
@@ -59,8 +60,8 @@ typedef struct {
 
 enum {
   MVP,
-  MAP,
-  PARENT_MAP,
+  SOURCE,
+  MASK,
   ALPHA,
   BLEND_MODE,
   N_UNIFORMS
@@ -176,14 +177,14 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
 
   gsk_shader_builder_set_resource_base_path (builder, "/org/gtk/libgsk/glsl");
 
-  self->uniforms[MVP] = gsk_shader_builder_add_uniform (builder, "mvp");
-  self->uniforms[MAP] = gsk_shader_builder_add_uniform (builder, "map");
-  self->uniforms[PARENT_MAP] = gsk_shader_builder_add_uniform (builder, "parentMap");
-  self->uniforms[ALPHA] = gsk_shader_builder_add_uniform (builder, "alpha");
-  self->uniforms[BLEND_MODE] = gsk_shader_builder_add_uniform (builder, "blendMode");
+  self->uniforms[MVP] = gsk_shader_builder_add_uniform (builder, "uMVP");
+  self->uniforms[SOURCE] = gsk_shader_builder_add_uniform (builder, "uSource");
+  self->uniforms[MASK] = gsk_shader_builder_add_uniform (builder, "uMask");
+  self->uniforms[ALPHA] = gsk_shader_builder_add_uniform (builder, "uAlpha");
+  self->uniforms[BLEND_MODE] = gsk_shader_builder_add_uniform (builder, "uBlendMode");
   
-  self->attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "position");
-  self->attributes[UV] = gsk_shader_builder_add_attribute (builder, "uv");
+  self->attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "aPosition");
+  self->attributes[UV] = gsk_shader_builder_add_attribute (builder, "aUv");
 
   if (gdk_gl_context_get_use_es (self->context))
     {
@@ -363,7 +364,7 @@ render_item (GskGLRenderer *self,
   glUseProgram (item->render_data.program_id);
 
   /* Use texture unit 0 for the source */
-  glUniform1i (item->render_data.map_location, 0);
+  glUniform1i (item->render_data.source_location, 0);
   gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.texture_id);
 
   if (item->parent_data != NULL)
@@ -372,7 +373,10 @@ render_item (GskGLRenderer *self,
 
       /* Use texture unit 1 for the mask */
       if (item->parent_data->texture_id != 0)
-        gsk_gl_driver_bind_mask_texture (self->gl_driver, item->parent_data->texture_id);
+        {
+          glUniform1i (item->render_data.mask_location, 1);
+          gsk_gl_driver_bind_mask_texture (self->gl_driver, item->parent_data->texture_id);
+        }
     }
 
   /* Pass the opacity component */
@@ -528,10 +532,10 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   item.render_data.program_id = program_id;
 
   /* Retrieve all the uniforms and attributes */
-  item.render_data.map_location =
-    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[MAP]);
-  item.render_data.parentMap_location =
-    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[PARENT_MAP]);
+  item.render_data.source_location =
+    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[SOURCE]);
+  item.render_data.mask_location =
+    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[MASK]);
   item.render_data.mvp_location =
     gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[MVP]);
   item.render_data.alpha_location =

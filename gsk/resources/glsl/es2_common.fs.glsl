@@ -1,9 +1,10 @@
 precision mediump float;
 
-uniform mat4 mvp;
-uniform sampler2D map;
-uniform sampler2D parentMap;
-uniform float alpha;
+uniform mat4 uMVP;
+uniform sampler2D uSource;
+uniform sampler2D uMask;
+uniform float uAlpha;
+uniform int uBlendMode;
 
 varying vec2 vUv;
 
