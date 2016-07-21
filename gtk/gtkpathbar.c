@@ -511,9 +511,9 @@ update_overflow (GtkPathBar *self)
   GtkWidget *overflow_button;
 
   get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &overflow_button, NULL, &path_bar_container, TRUE);
+  children = gtk_path_bar_container_get_children (path_bar_container);
   shown_children = gtk_path_bar_container_get_shown_children (path_bar_container);
   last_shown_child = g_list_last (shown_children);
-  children = gtk_path_bar_container_get_children (path_bar_container);
 
   for (child = children; child != NULL; child = child->next)
     {
@@ -534,7 +534,7 @@ update_overflow (GtkPathBar *self)
       hide_overflow_handling (self);
     }
   else if (g_list_length (shown_children) != g_list_length (children) &&
-           !gtk_widget_get_visible (overflow_button) && !priv->inverted)
+           !gtk_widget_get_visible (overflow_button) && !priv->inverted && !gtk_path_bar_container_get_invert_animation (path_bar_container))
     {
       g_print ("~~~~~~~~~~~changeeeeed different length %d %d\n", g_list_length (shown_children), g_list_length (children));
       start_overflow_handling (self);
@@ -1069,12 +1069,21 @@ gtk_path_bar_set_inverted (GtkPathBar *self,
       GtkWidget *overflow_button;
       GtkWidget *tail_button;
       GtkWidget *path_bar_container;
+  GList *children;
+  GList *shown_children;
 
       priv->inverted = inverted != FALSE;
 
       g_print ("###### set inverted\n");
 
       get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar_container, &overflow_button, &tail_button, NULL, TRUE);
+
+      get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &overflow_button, NULL, &path_bar_container, TRUE);
+      children = gtk_path_bar_container_get_children (path_bar_container);
+      shown_children = gtk_path_bar_container_get_shown_children (path_bar_container);
+
+      if (g_list_length (children) != g_list_length (shown_children))
+        hide_overflow_handling (self);
 
       gtk_path_bar_container_set_inverted (GTK_PATH_BAR_CONTAINER (priv->path_bar_container_1), inverted);
       gtk_path_bar_container_set_inverted (GTK_PATH_BAR_CONTAINER (priv->path_bar_container_2), inverted);

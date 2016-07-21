@@ -382,7 +382,6 @@ update_children_visibility (GtkPathBarContainer *self)
 
       if (!allocate_more_children || current_children_width > available_size.width)
         {
-          g_print ("€€€€ Not allocate more %d \n", available_size.width);
           allocate_more_children = FALSE;
           if (gtk_revealer_get_child_revealed (GTK_REVEALER (gtk_widget_get_parent (child_widget))))
             children_to_hide = g_list_prepend (children_to_hide, child_widget);
@@ -392,7 +391,6 @@ update_children_visibility (GtkPathBarContainer *self)
 
       if (!g_list_find (priv->children_to_remove, child_widget))
         children_to_show = g_list_prepend (children_to_show, child_widget);
-      g_print ("children to show %d %d\n", g_list_length (children_to_show), i);
     }
 
   for (child = children_to_show, child_to_compare = priv->children_to_show;
@@ -432,7 +430,6 @@ update_children_visibility (GtkPathBarContainer *self)
         {
           priv->children_to_show = g_list_reverse (priv->children_to_show);
           priv->children_to_hide = g_list_reverse (priv->children_to_hide);
-          g_print ("children to sho????%d", g_list_length (priv->children_to_show));
         };
 
       if (!priv->children_shown_idle_id)
@@ -595,12 +592,10 @@ get_max_scroll (GtkPathBarContainer *self)
     {
       if (priv->inverted)
         {
-          g_print ("max scroll %d %d %d\n", available_size.width, children_width, children_distributed_size.width);
           max_scroll = MAX (0, children_width - children_distributed_size.width);
         }
       else
         {
-          g_print ("max scroll non inverted %d %d %d\n", available_size.width, children_width, children_distributed_size.width);
           max_scroll = MAX (0, children_width - children_distributed_size.width);
         }
     }
@@ -774,7 +769,6 @@ invert_animation_on_tick (GtkWidget     *widget,
 
   if (!max_scroll)
     {
-      g_print ("no max scroll\n");
       finish_invert_animation (self);
       return FALSE;
     }
@@ -814,6 +808,7 @@ start_invert_animation (GtkPathBarContainer *self)
     finish_invert_animation (self);
 
   priv->invert_animation_initial_width = gtk_widget_get_allocated_width (GTK_WIDGET (self));
+  g_print ("INITIAL INVERT ANIMATION WIDTH %d\n", priv->invert_animation_initial_width);
   priv->invert_animation = TRUE;
   priv->invert_animation_progress = 0;
   priv->allocated = FALSE;
@@ -1057,6 +1052,7 @@ real_get_preferred_size_for_requisition (GtkWidget      *widget,
                               (priv->invert_animation_initial_width - natural_size->width);
       distributed_size->width += (1 - priv->invert_animation_progress) *
                                   (priv->invert_animation_initial_width - distributed_size->width);
+  g_print ("real get preferres size %d %d %d\n", minimum_size->width, natural_size->width, distributed_size->width);
     }
 }
 
@@ -1170,6 +1166,7 @@ gtk_path_bar_container_adapt_to_size (GtkPathBarContainer *self,
   GtkPathBarContainerPrivate *priv = gtk_path_bar_container_get_instance_private (self);
 
   priv->parent_available_width = available_size->width;
+  g_print ("adapt to size %d\n", priv->parent_available_width);
 
   update_children_visibility (self);
   idle_update_revealers (self);
