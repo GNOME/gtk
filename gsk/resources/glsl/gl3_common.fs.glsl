@@ -1,10 +1,10 @@
 precision highp float;
 
-uniform sampler2D map;
-uniform sampler2D parentMap;
-uniform mat4 mvp;
-uniform float alpha;
-uniform int blendMode;
+uniform sampler2D uSource;
+uniform sampler2D uMask;
+uniform mat4 uMVP;
+uniform float uAlpha;
+uniform int uBlendMode;
 
 in vec2 vUv;
 

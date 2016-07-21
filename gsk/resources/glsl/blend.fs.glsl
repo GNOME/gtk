@@ -28,29 +28,29 @@ vec3 BlendLighten(vec3 Cb, vec3 Cs) {
 }
 
 void main() {
-  vec4 Cb = Texture(parentMap, vUv);
-  vec4 Cs = Texture(map, vUv);
+  vec4 Cb = Texture(uSource, vUv);
+  vec4 Cs = Texture(uMask, vUv);
   vec3 res;
 
-  if (blendMode == 0) {
+  if (uBlendMode == 0) {
     res = Cs.xyz;
   }
-  else if (blendMode == 1) {
+  else if (uBlendMode == 1) {
     res = BlendMultiply(Cb.xyz, Cs.xyz);
   }
-  else if (blendMode == 2) {
+  else if (uBlendMode == 2) {
     res = BlendScreen(Cb.xyz, Cs.xyz);
   }
-  else if (blendMode == 3) {
+  else if (uBlendMode == 3) {
     res = BlendOverlay(Cb.xyz, Cs.xyz);
   }
-  else if (blendMode == 4) {
+  else if (uBlendMode == 4) {
     res = BlendDarken(Cb.xyz, Cs.xyz);
   }
-  else if (blendMode == 5) {
+  else if (uBlendMode == 5) {
     res = BlendLighten(Cb.xyz, Cs.xyz);
   }
-  else if (blendMode == 8) {
+  else if (uBlendMode == 8) {
     res = BlendHardLight(Cb.xyz, Cs.xyz);
   }
   else {
@@ -58,5 +58,5 @@ void main() {
     res = vec3(1.0, 0.0, 0.0);
   }
 
-  setOutputColor(vec4(res, Cs.a * alpha));
+  setOutputColor(vec4(res, Cs.a * uAlpha));
 }

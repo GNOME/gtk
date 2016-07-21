@@ -1,5 +1,5 @@
 void main() {
-  vec4 diffuse = Texture(map, vUv);
+  vec4 diffuse = Texture(uSource, vUv);
 
-  setOutputColor(vec4(diffuse.xyz, diffuse.a * alpha));
+  setOutputColor(vec4(diffuse.xyz, diffuse.a * uAlpha));
 }
