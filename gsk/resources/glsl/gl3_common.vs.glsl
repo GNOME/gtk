@@ -1,7 +1,6 @@
-uniform mat4 mvp;
-uniform float alpha;
+uniform mat4 uMVP;
 
-in vec2 position;
-in vec2 uv;
+in vec2 aPosition;
+in vec2 aUv;
 
 out vec2 vUv;
