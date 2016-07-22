@@ -27,7 +27,7 @@
 #include <wayland-client.h>
 #include <wayland-cursor.h>
 #include <wayland-egl.h>
-#include <gdk/wayland/tablet-unstable-v1-client-protocol.h>
+#include <gdk/wayland/tablet-unstable-v2-client-protocol.h>
 #include <gdk/wayland/gtk-shell-client-protocol.h>
 #include <gdk/wayland/xdg-shell-unstable-v5-client-protocol.h>
 
