@@ -3919,7 +3919,7 @@ calendar {
     color: #323232;
     border-color: #a5a5a1; }
   calendar:indeterminate {
-    color: alpha(currentColor,0.3); }
+    color: alpha(currentColor,0.1); }
 
 /***********
  * Dialogs *

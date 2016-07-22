@@ -3890,7 +3890,7 @@ calendar {
     color: #d5d5d5;
     border-color: #1f2222; }
   calendar:indeterminate {
-    color: alpha(currentColor,0.3); }
+    color: alpha(currentColor,0.1); }
 
 /***********
  * Dialogs *

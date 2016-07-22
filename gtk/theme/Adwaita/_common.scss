@@ -3533,7 +3533,7 @@ calendar {
     border-color: $backdrop_borders_color;
   }
 
-  &:indeterminate { color: gtkalpha(currentColor, 0.3); }
+  &:indeterminate { color: gtkalpha(currentColor, 0.1); }
 }
 
 
