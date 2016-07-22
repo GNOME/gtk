@@ -4063,7 +4063,7 @@ calendar {
     color: #323232;
     border-color: #c0c0bd; }
   calendar:indeterminate {
-    color: alpha(currentColor,0.3); }
+    color: alpha(currentColor,0.1); }
 
 /***********
  * Dialogs *

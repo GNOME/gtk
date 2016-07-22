@@ -4032,7 +4032,7 @@ calendar {
     color: #d3d4d5;
     border-color: #202425; }
   calendar:indeterminate {
-    color: alpha(currentColor,0.3); }
+    color: alpha(currentColor,0.1); }
 
 /***********
  * Dialogs *
