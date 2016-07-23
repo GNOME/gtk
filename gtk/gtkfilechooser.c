@@ -2318,7 +2318,7 @@ gtk_file_chooser_remove_choice (GtkFileChooser  *chooser,
  * gtk_file_chooser_set_choice:
  * @chooser: a #GtkFileChooser
  * @id: the ID of the choice to set
- * @selected: the ID of the option to select
+ * @option: the ID of the option to select
  *
  * Selects an option in a 'choice' that has been added with
  * gtk_file_chooser_add_choice(). For a boolean choice, the

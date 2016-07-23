@@ -721,7 +721,7 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 
 /**
  * gtk_file_filter_to_gvariant:
- * @settings: a #GtkFileFilter
+ * @filter: a #GtkFileFilter
  *
  * Serialize a file filter to an a{sv} variant.
  *
