@@ -6,6 +6,7 @@ libgdkwin32includedir = $(includedir)/gtk-3.0/gdk/win32
 
 AM_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"Gdk\"		\
+	-DG_LOG_USE_STRUCTURED=1	\
 	-DINSIDE_GDK_WIN32		\
 	-I$(top_srcdir)			\
 	-I$(top_srcdir)/gdk		\

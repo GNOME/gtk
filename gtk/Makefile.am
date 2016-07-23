@@ -4,6 +4,7 @@ include $(top_srcdir)/Makefile.decl
 
 GTK_BASE_CFLAGS_DEFINES =				\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
+	-DG_LOG_USE_STRUCTURED=1			\
 	-DGTK_VERSION=\"$(GTK_VERSION)\"		\
 	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
 	-DGTK_COMPILATION				\
