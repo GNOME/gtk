@@ -16571,7 +16571,8 @@ _gtk_widget_peek_style_context (GtkWidget *widget)
  * gtk_widget_get_style_context:
  * @widget: a #GtkWidget
  *
- * Returns the style context associated to @widget.
+ * Returns the style context associated to @widget. The returned object is
+ * guaranteed to be the same for the lifetime of @widget.
  *
  * Returns: (transfer none): a #GtkStyleContext. This memory is owned by @widget and
  *          must not be freed.
