@@ -12,6 +12,7 @@
 @define-color theme_unfocused_base_color #111;
 @define-color theme_unfocused_selected_bg_color #ddd;
 @define-color theme_unfocused_selected_fg_color #000;
+@define-color unfocused_insensitive_color gray;
 @define-color borders gray;
 @define-color unfocused_borders #737373;
 @define-color warning_color #f57900;
@@ -43,7 +44,7 @@
   -GtkDialog-action-area-border: 0;
   outline-color: currentColor;
   outline-style: dashed;
-  outline-offset: -3px;
+  outline-offset: -4px;
   outline-width: 2px;
   -gtk-outline-radius: 2px; }
 

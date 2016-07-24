@@ -61,6 +61,7 @@ $backdrop_scrollbar_slider_color: mix($backdrop_fg_color, $backdrop_bg_color, 40
 @define-color theme_unfocused_base_color #{"" + $backdrop_base_color};
 @define-color theme_unfocused_selected_bg_color #{"" + $selected_bg_color};
 @define-color theme_unfocused_selected_fg_color #{"" + $selected_fg_color};
+@define-color unfocused_insensitive_color #{"" + $insensitive_fg_color};
 @define-color borders #{"" + $borders_color};
 @define-color unfocused_borders #{"" + $backdrop_borders_color};
 
