@@ -201,6 +201,19 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
 
   klass->changed = gtk_style_context_real_changed;
 
+  /**
+   * GtkStyleContext::changed:
+   *
+   * The ::changed signal is emitted when there is a change in the
+   * #GtkStyleContext.
+   *
+   * For a #GtkStyleContext returned by gtk_widget_get_style_context(), the
+   * #GtkWidget::style-updated signal/vfunc might be more convenient to use.
+   *
+   * This signal is useful when using the theming layer standalone.
+   *
+   * Since: 3.0
+   */
   signals[CHANGED] =
     g_signal_new (I_("changed"),
                   G_TYPE_FROM_CLASS (object_class),
