@@ -4664,6 +4664,9 @@ base background color of selections on backdrop windows */
 text/foreground color of selections on backdrop windows */
 @define-color theme_unfocused_selected_fg_color #ffffff;
 /*
+insensitive color on backdrop windows*/
+@define-color unfocused_insensitive_color #566164;
+/*
 widgets main borders color */
 @define-color borders #1b1f20;
 /*
