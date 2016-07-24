@@ -254,8 +254,8 @@ entry {
     @include entry(normal);
 
     image { // icons inside the entry
-      &.left { padding-left: 0; padding-right: 6px; }
-      &.right { padding-left: 6px; padding-right: 0; }
+      &.left { margin-right: 6px; }
+      &.right { margin-left: 6px; }
     }
 
     undershoot {
