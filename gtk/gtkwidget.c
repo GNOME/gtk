@@ -12272,16 +12272,14 @@ gtk_widget_finalize (GObject *object)
 
   g_free (priv->name);
 
-  if (priv->accessible)
-    g_object_unref (priv->accessible);
+  g_clear_object (&priv->accessible);
 
   gtk_widget_clear_path (widget);
 
   gtk_css_widget_node_widget_destroyed (GTK_CSS_WIDGET_NODE (priv->cssnode));
   g_object_unref (priv->cssnode);
 
-  if (priv->context)
-    g_object_unref (priv->context);
+  g_clear_object (&priv->context);
 
   _gtk_size_request_cache_free (&priv->requests);
 
