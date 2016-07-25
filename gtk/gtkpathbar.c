@@ -81,6 +81,9 @@ struct _GtkPathBarPrivate
   gchar *path;
   gchar *selected_path;
   gint inverted :1;
+
+  gboolean request_allocation_for_invert;
+  guint request_allocation_for_invert_id;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPathBar, gtk_path_bar, GTK_TYPE_STACK)
@@ -120,12 +123,13 @@ emit_populate_popup (GtkPathBar  *self,
 }
 
 static void
-get_path_bar_widgets (GtkPathBar *self,
+get_path_bar_widgets (GtkPathBar  *self,
                       GtkWidget  **path_bar,
-                      GtkWidget  **overflow_button,
+                      GtkWidget  **root_overflow_button,
+                      GtkWidget  **tail_overflow_button,
                       GtkWidget  **tail_button,
                       GtkWidget  **path_bar_container,
-                      gboolean    current)
+                      gboolean     current)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (GTK_PATH_BAR (self));
   GtkWidget *current_path_bar;
@@ -137,8 +141,10 @@ get_path_bar_widgets (GtkPathBar *self,
     {
       if (path_bar)
         *path_bar = priv->path_bar_1;
-      if (overflow_button)
-        *overflow_button = priv->path_bar_overflow_tail_1;
+      if (root_overflow_button)
+        *root_overflow_button = priv->path_bar_overflow_root_1;
+      if (tail_overflow_button)
+        *tail_overflow_button = priv->path_bar_overflow_tail_1;
       if (path_bar_container)
         *path_bar_container = priv->path_bar_container_1;
 
@@ -149,8 +155,10 @@ get_path_bar_widgets (GtkPathBar *self,
     {
       if (path_bar)
         *path_bar = priv->path_bar_2;
-      if (overflow_button)
-        *overflow_button = priv->path_bar_overflow_tail_2;
+      if (root_overflow_button)
+        *root_overflow_button = priv->path_bar_overflow_root_2;
+      if (tail_overflow_button)
+        *tail_overflow_button = priv->path_bar_overflow_tail_2;
       if (path_bar_container)
         *path_bar_container = priv->path_bar_container_2;
 
@@ -439,18 +447,27 @@ hide_overflow_handling (GtkPathBar *self)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
   GtkWidget *path_chunk;
-  GtkWidget *overflow_button;
+  GtkWidget *tail_overflow_button;
+  GtkWidget *root_overflow_button;
   GtkWidget *tail_button;
   GtkWidget *path_bar_container;
   g_print ("###### hide overflow %d\n", priv->inverted);
 
-  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &overflow_button, &tail_button, &path_bar_container, TRUE);
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, &tail_button, &path_bar_container, TRUE);
 
-  gtk_widget_hide (overflow_button);
-  gtk_widget_hide (tail_button);
-  path_chunk = create_path_chunk (self, "/meeh", "The tail",
-                                  NULL, TRUE);
-  gtk_path_bar_container_add (path_bar_container, path_chunk, FALSE);
+  if (priv->inverted)
+    {
+      gtk_button_set_label (root_overflow_button, "/");
+      gtk_widget_set_sensitive (root_overflow_button, FALSE);
+    }
+  else
+    {
+      gtk_widget_hide (tail_overflow_button);
+      gtk_widget_hide (tail_button);
+      path_chunk = create_path_chunk (self, "/meeh", "The tail",
+                                      NULL, TRUE);
+      gtk_path_bar_container_add (path_bar_container, path_chunk, FALSE);
+    }
 }
 
 static void
@@ -461,10 +478,10 @@ on_invert_animation_done (GtkPathBarContainer *container,
   GtkWidget *path_chunk;
   GtkWidget *overflow_button;
   GtkWidget *tail_button;
+  GList *children;
+  GList *shown_children;
 
-  g_print ("###### animation done %d\n", priv->inverted);
-
-  if (priv->inverted)
+  if (priv->inverted && gtk_path_bar_container_is_overflowing (container))
     {
       hide_overflow_handling (self);
     }
@@ -475,18 +492,28 @@ start_overflow_handling (GtkPathBar *self)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
   GtkWidget *path_bar_container;
-  GtkWidget *overflow_button;
+  GtkWidget *tail_overflow_button;
+  GtkWidget *root_overflow_button;
   GtkWidget *tail_button;
   GList *children;
   GList *last;
 
-  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &overflow_button, &tail_button, &path_bar_container, TRUE);
-  gtk_widget_show (overflow_button);
-  gtk_widget_show (tail_button);
-  children = gtk_path_bar_container_get_children (path_bar_container);
-  last = g_list_last (children);
-  if (last)
-    gtk_path_bar_container_remove (path_bar_container, last->data, FALSE);
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, &tail_button, &path_bar_container, TRUE);
+
+  if (priv->inverted)
+    {
+      gtk_button_set_label (root_overflow_button, "//");
+      gtk_widget_set_sensitive (root_overflow_button, TRUE);
+    }
+  else
+    {
+      gtk_widget_show (tail_overflow_button);
+      gtk_widget_show (tail_button);
+      children = gtk_path_bar_container_get_children (path_bar_container);
+      last = g_list_last (children);
+      if (last)
+        gtk_path_bar_container_remove (path_bar_container, last->data, FALSE);
+    }
 }
 
 static void
@@ -508,9 +535,10 @@ update_overflow (GtkPathBar *self)
   GList *child;
   GList *last_shown_child;
   GList *button_children;
-  GtkWidget *overflow_button;
+  GtkWidget *tail_overflow_button;
+  GtkWidget *root_overflow_button;
 
-  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &overflow_button, NULL, &path_bar_container, TRUE);
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, NULL, &path_bar_container, TRUE);
   children = gtk_path_bar_container_get_children (path_bar_container);
   shown_children = gtk_path_bar_container_get_shown_children (path_bar_container);
   last_shown_child = g_list_last (shown_children);
@@ -526,21 +554,19 @@ update_overflow (GtkPathBar *self)
         gtk_widget_set_visible (button_children->next->data, visible);
     }
 
-  if ((g_list_length (shown_children) == g_list_length (children) ||
-       (priv->inverted && !gtk_path_bar_container_get_invert_animation (path_bar_container))) &&
-      gtk_widget_get_visible (overflow_button))
+  if (!gtk_widget_is_visible (tail_overflow_button))
+    return;
+
+  if (!gtk_path_bar_container_is_overflowing (path_bar_container) && !gtk_path_bar_container_get_invert_animation (path_bar_container))
     {
       g_print ("~~~~~~~~~~~changeeeeed equal lenght\n");
       hide_overflow_handling (self);
     }
-  else if (g_list_length (shown_children) != g_list_length (children) &&
-           !gtk_widget_get_visible (overflow_button) && !priv->inverted && !gtk_path_bar_container_get_invert_animation (path_bar_container))
+  else if (gtk_path_bar_container_is_overflowing (path_bar_container) && !gtk_path_bar_container_get_invert_animation (path_bar_container))
     {
       g_print ("~~~~~~~~~~~changeeeeed different length %d %d\n", g_list_length (shown_children), g_list_length (children));
       start_overflow_handling (self);
     }
-
-
 }
 
 static void
@@ -585,9 +611,9 @@ update_path_bar (GtkPathBar  *self,
   if (unprefixed_old_path &&
       (g_str_has_prefix (unprefixed_old_path, unprefixed_path) ||
       g_str_has_prefix (unprefixed_path, unprefixed_old_path)))
-    get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar, &overflow_button, NULL, &path_bar_container, TRUE);
+    get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar, NULL, NULL, NULL, &path_bar_container, TRUE);
   else
-    get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar, &overflow_button, NULL, &path_bar_container, FALSE);
+    get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar, NULL, NULL, NULL, &path_bar_container, FALSE);
 
   if (priv->root_path)
     {
@@ -663,7 +689,7 @@ update_selected_path (GtkPathBar  *self)
   GtkWidget *path_bar_container;
   GtkWidget *overflow_button;
 
-  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &overflow_button, NULL, &path_bar_container, TRUE);
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, NULL, NULL, NULL, &path_bar_container, TRUE);
   children = gtk_path_bar_container_get_children (GTK_PATH_BAR_CONTAINER (path_bar_container));
   for (l = children; l != NULL; l = l->next)
     {
@@ -691,6 +717,8 @@ gtk_path_bar_finalize (GObject *object)
     g_free (priv->path);
   if (priv->selected_path)
     g_free (priv->selected_path);
+
+  g_idle_remove_by_data (object);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
 }
@@ -750,6 +778,38 @@ get_request_mode (GtkWidget *self)
   return GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
 }
 
+static gboolean
+set_real_inverted (GtkPathBar *self)
+{
+  GtkPathBarPrivate *priv ;
+  priv = gtk_path_bar_get_instance_private (GTK_PATH_BAR (self));
+
+  gtk_path_bar_container_set_inverted (GTK_PATH_BAR_CONTAINER (priv->path_bar_container_1), priv->inverted);
+  gtk_path_bar_container_set_inverted (GTK_PATH_BAR_CONTAINER (priv->path_bar_container_2), priv->inverted);
+
+  priv->request_allocation_for_invert_id  = 0;
+
+  g_object_notify (G_OBJECT (self), "inverted");
+
+  return FALSE;
+}
+
+static void
+gtk_path_bar_size_allocate (GtkWidget    *widget,
+                            GtkAllocation *allocation)
+{
+  GtkPathBar *self = GTK_PATH_BAR (widget);
+  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (GTK_PATH_BAR (self));
+
+  if (priv->request_allocation_for_invert)
+    priv->request_allocation_for_invert_id = g_idle_add ((GSourceFunc) set_real_inverted,
+                                                         self);
+
+  priv->request_allocation_for_invert = FALSE;
+
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->size_allocate (widget, allocation);
+}
+
 static void
 gtk_path_bar_class_init (GtkPathBarClass *klass)
 {
@@ -761,6 +821,7 @@ gtk_path_bar_class_init (GtkPathBarClass *klass)
   object_class->set_property = gtk_path_bar_set_property;
 
   widget_class->get_request_mode = get_request_mode;
+  widget_class->size_allocate = gtk_path_bar_size_allocate;
 
   /**
    * GtkPathBar::populate-popup:
@@ -858,7 +919,12 @@ gtk_path_bar_init (GtkPathBar *self)
   g_signal_connect (priv->path_bar_container_2, "invert-animation-done",
                     G_CALLBACK (on_invert_animation_done), self);
 
+
+  priv->request_allocation_for_invert = FALSE;
+
   gtk_path_bar_set_inverted (self, TRUE);
+
+  gtk_widget_set_no_show_all (self, FALSE);
 }
 
 
@@ -1065,30 +1131,23 @@ gtk_path_bar_set_inverted (GtkPathBar *self,
 
   if (priv->inverted != inverted)
     {
-      GtkWidget *path_chunk;
       GtkWidget *overflow_button;
-      GtkWidget *tail_button;
       GtkWidget *path_bar_container;
-  GList *children;
-  GList *shown_children;
 
       priv->inverted = inverted != FALSE;
 
-      g_print ("###### set inverted\n");
+      get_path_bar_widgets (GTK_PATH_BAR (self), NULL, NULL, NULL, NULL, &path_bar_container, TRUE);
 
-      get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar_container, &overflow_button, &tail_button, NULL, TRUE);
-
-      get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &overflow_button, NULL, &path_bar_container, TRUE);
-      children = gtk_path_bar_container_get_children (path_bar_container);
-      shown_children = gtk_path_bar_container_get_shown_children (path_bar_container);
-
-      if (g_list_length (children) != g_list_length (shown_children))
-        hide_overflow_handling (self);
-
-      gtk_path_bar_container_set_inverted (GTK_PATH_BAR_CONTAINER (priv->path_bar_container_1), inverted);
-      gtk_path_bar_container_set_inverted (GTK_PATH_BAR_CONTAINER (priv->path_bar_container_2), inverted);
-
-      g_object_notify (G_OBJECT (self), "inverted");
+      if (gtk_path_bar_container_is_overflowing (GTK_PATH_BAR_CONTAINER (path_bar_container)) &&
+          !priv->inverted)
+        {
+          priv->request_allocation_for_invert = TRUE;
+          start_overflow_handling (self);
+        }
+      else
+        {
+          set_real_inverted (self);
+        }
     }
 }
 

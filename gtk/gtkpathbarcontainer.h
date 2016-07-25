@@ -123,6 +123,9 @@ GList *           gtk_path_bar_container_get_shown_children                     
 GDK_AVAILABLE_IN_3_20
 gboolean          gtk_path_bar_container_get_invert_animation                       (GtkPathBarContainer      *self);
 
+GDK_AVAILABLE_IN_3_20
+gboolean          gtk_path_bar_container_is_overflowing                             (GtkPathBarContainer      *self);
+
 G_END_DECLS
 
 #endif /* GTK_PATH_BAR_CONTAINER_H_ */

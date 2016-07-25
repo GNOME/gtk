@@ -473,6 +473,9 @@ revealer_on_show_completed (GObject    *widget,
 
   remove_opacity_classes (GTK_WIDGET (widget));
   g_signal_handlers_disconnect_by_func (widget, revealer_on_show_completed, user_data);
+
+  gtk_revealer_set_transition_duration (GTK_REVEALER (widget),
+                                        REVEALER_ANIMATION_TIME);
 }
 
 static void
@@ -487,6 +490,9 @@ revealer_on_hide_completed (GObject    *widget,
                                         user_data);
   priv->children_to_hide = g_list_remove (priv->children_to_hide,
                                          gtk_bin_get_child (GTK_BIN (widget)));
+
+  gtk_revealer_set_transition_duration (GTK_REVEALER (widget),
+                                        REVEALER_ANIMATION_TIME);
 }
 
 static void
@@ -568,40 +574,29 @@ static gint
 get_max_scroll (GtkPathBarContainer *self)
 {
   GtkPathBarContainerPrivate *priv = gtk_path_bar_container_get_instance_private (self);
-  GtkRequisition children_used_min_size;
-  GtkRequisition children_used_nat_size;
-  GtkRequisition children_distributed_size;
-  GtkAllocation allocation;
-  GtkRequisition available_size;
-  gint children_width;
-  gdouble max_scroll;
-
-
-  gtk_widget_get_allocation (GTK_WIDGET (self), &allocation);
-  available_size.width = priv->parent_available_width;
-  available_size.height = allocation.height;
-  get_children_preferred_size_for_requisition (self, &available_size,
-                                               priv->inverted,
-                                               &children_used_min_size,
-                                               &children_used_nat_size,
-                                               &children_distributed_size);
-
-  children_width = gtk_widget_get_allocated_width (priv->children_box);
+  gdouble max_scroll = 0;
 
   if (priv->invert_animation)
     {
-      if (priv->inverted)
-        {
-          max_scroll = MAX (0, children_width - children_distributed_size.width);
-        }
-      else
-        {
-          max_scroll = MAX (0, children_width - children_distributed_size.width);
-        }
-    }
-  else
-    {
-      max_scroll = 0;
+      GtkRequisition children_used_min_size;
+      GtkRequisition children_used_nat_size;
+      GtkRequisition children_distributed_size;
+      GtkAllocation allocation;
+      GtkRequisition available_size;
+      gint children_width;
+
+      gtk_widget_get_allocation (GTK_WIDGET (self), &allocation);
+      available_size.width = priv->parent_available_width;
+      available_size.height = allocation.height;
+      get_children_preferred_size_for_requisition (self, &available_size,
+                                                   TRUE,
+                                                   &children_used_min_size,
+                                                   &children_used_nat_size,
+                                                   &children_distributed_size);
+
+      children_width = gtk_widget_get_allocated_width (priv->children_box);
+
+      max_scroll = MAX (0, children_width - children_distributed_size.width);
     }
 
   return max_scroll;
@@ -1256,20 +1251,10 @@ gtk_path_bar_container_get_invert_animation (GtkPathBarContainer *self)
   return priv->invert_animation;
 }
 
-GList *
-gtk_path_bar_container_get_overflow_children (GtkPathBarContainer *self)
+gboolean
+gtk_path_bar_container_is_overflowing (GtkPathBarContainer *self)
 {
   GtkPathBarContainerPrivate *priv = gtk_path_bar_container_get_instance_private (self);
-  GList *result = NULL;
-  GList *l;
 
-  g_return_val_if_fail (GTK_IS_PATH_BAR_CONTAINER (self), 0);
-
-  priv = gtk_path_bar_container_get_instance_private (self);
-
-  for (l = priv->children; l != NULL; l = l->next)
-    if (gtk_widget_is_visible (l->data) && !gtk_widget_get_child_visible (l->data))
-      result = g_list_append (result, l->data);
-
-  return result;
+  return g_list_length (priv->children) != g_list_length (priv->children_to_show);
 }
