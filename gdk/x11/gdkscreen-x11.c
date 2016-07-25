@@ -474,7 +474,8 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
               XRRModeInfo *xmode = &resources->modes[j];
               if (xmode->id == crtc->mode)
                 {
-                  refresh_rate = (1000 * xmode->dotClock) / (xmode->hTotal *xmode->vTotal);
+                  if (xmode->hTotal != 0 && xmode->vTotal != 0)
+                    refresh_rate = (1000 * xmode->dotClock) / (xmode->hTotal * xmode->vTotal);
                   break;
                 }
             }
