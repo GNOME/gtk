@@ -56,6 +56,8 @@ typedef struct {
 
   RenderData render_data;
   RenderData *parent_data;
+
+  GArray *children;
 } RenderItem;
 
 enum {
@@ -356,6 +358,18 @@ render_item (GskGLRenderer *self,
              RenderItem    *item)
 {
   float mvp[16];
+  float opacity;
+
+  if (item->children != NULL)
+    {
+      if (gsk_gl_driver_bind_render_target (self->gl_driver, item->render_data.render_target_id))
+        {
+          glViewport (0, 0, item->size.width, item->size.height);
+
+          glClearColor (0.0, 0.0, 0.0, 0.0);
+          glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        }
+    }
 
   gsk_gl_driver_bind_vao (self->gl_driver, item->render_data.vao_id);
 
@@ -378,7 +392,12 @@ render_item (GskGLRenderer *self,
     }
 
   /* Pass the opacity component */
-  glUniform1f (item->render_data.alpha_location, item->opaque ? 1 : item->opacity);
+  if (item->children != NULL || item->opaque)
+    opacity = 1.0;
+  else
+    opacity = item->opacity;
+
+  glUniform1f (item->render_data.alpha_location, opacity);
 
   /* Pass the mvp to the vertex shader */
   GSK_NOTE (OPENGL, graphene_matrix_print (&item->mvp));
@@ -392,6 +411,55 @@ render_item (GskGLRenderer *self,
                              item->opaque ? 1 : item->opacity));
 
   glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
+
+  /* Render all children items, so we can take the result
+   * render target texture during the compositing
+   */
+  if (item->children != NULL)
+    {
+      int i;
+
+      for (i = 0; i < item->children->len; i++)
+        {
+          RenderItem *child = &g_array_index (item->children, RenderItem, i);
+
+          render_item (self, child);
+        }
+
+      /* Bind the parent render target */
+      if (item->parent_data != NULL)
+        gsk_gl_driver_bind_render_target (self->gl_driver, item->parent_data->render_target_id);
+
+      /* Bind the same VAO, as the render target is created with the same size
+       * and vertices as the texture target
+       */
+      gsk_gl_driver_bind_vao (self->gl_driver, item->render_data.vao_id);
+
+      /* Since we're rendering the target texture, we only need the blit program */
+      glUseProgram (self->blit_program_id);
+
+      /* Use texture unit 0 for the render target */
+      glUniform1i (item->render_data.source_location, 0);
+      gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.render_target_id);
+
+      /* Pass the opacity component; if we got here, we know that the original render
+       * target is neither fully opaque nor at full opacity
+       */
+      glUniform1f (item->render_data.alpha_location, item->opacity);
+
+      /* Pass the mvp to the vertex shader */
+      GSK_NOTE (OPENGL, graphene_matrix_print (&item->mvp));
+      graphene_matrix_to_float (&item->mvp, mvp);
+      glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
+
+      /* Draw the quad */
+      GSK_NOTE (OPENGL, g_print ("Drawing offscreen item <%s>[%p] with opacity: %g\n",
+                                 item->name,
+                                 item,
+                                 item->opacity));
+
+      glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
+    }
 }
 
 static void
@@ -460,8 +528,23 @@ project_item (const graphene_matrix_t *projection,
   return graphene_vec4_get_z (&vec) / graphene_vec4_get_w (&vec);
 }
 
+static gboolean
+render_node_needs_render_target (GskRenderNode *node)
+{
+  if (!gsk_render_node_is_opaque (node))
+    {
+      double opacity = gsk_render_node_get_opacity (node);
+
+      if (opacity < 1.0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gsk_gl_renderer_add_render_item (GskGLRenderer *self,
+                                 GArray        *render_items,
                                  GskRenderNode *node,
                                  RenderItem    *parent)
 {
@@ -521,11 +604,22 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   else
     item.parent_data = NULL;
 
-  /* Select the render target */
-  if (parent != NULL)
-    item.render_data.render_target_id = parent->render_data.render_target_id;
+  /* Select the render target; -1 is the default */
+  if (render_node_needs_render_target (node))
+    {
+      item.render_data.render_target_id =
+        gsk_gl_driver_create_texture (self->gl_driver, bounds.size.width, bounds.size.height);
+      gsk_gl_driver_init_texture_empty (self->gl_driver, item.render_data.render_target_id);
+      gsk_gl_driver_create_render_target (self->gl_driver, item.render_data.render_target_id, TRUE, TRUE);
+
+      item.children = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem),
+                                         gsk_render_node_get_n_children (node));
+    }
   else
-    item.render_data.render_target_id = self->texture_id;
+    {
+      item.render_data.render_target_id = self->texture_id;
+      item.children = NULL;
+    }
 
   /* Select the program to use */
   if (parent != NULL)
@@ -583,38 +677,34 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
    */
   surface = gsk_render_node_get_surface (node);
 
-  /* If the node does not have any surface we skip drawing it, but we still
-   * recurse.
-   *
-   * XXX: This needs to be re-done if the opacity is != 0, in which case we
-   * need to composite the opacity level of the children
-   */
-  if (surface == NULL)
-    goto recurse_children;
-
-  /* Upload the Cairo surface to a GL texture */
-  item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                              bounds.size.width,
-                                                              bounds.size.height);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
-  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                           item.render_data.texture_id,
-                                           surface,
-                                           self->gl_min_filter,
-                                           self->gl_mag_filter);
+  if (surface != NULL)
+    {
+      /* Upload the Cairo surface to a GL texture */
+      item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                                  bounds.size.width,
+                                                                  bounds.size.height);
+      gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
+      gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                               item.render_data.texture_id,
+                                               surface,
+                                               self->gl_min_filter,
+                                               self->gl_mag_filter);
+    }
 
   GSK_NOTE (OPENGL, g_print ("Adding node <%s>[%p] to render items\n",
                              node->name != NULL ? node->name : "unnamed",
                              node));
-  g_array_append_val (self->render_items, item);
-  ritem = &g_array_index (self->render_items,
+  g_array_append_val (render_items, item);
+  ritem = &g_array_index (render_items,
                           RenderItem,
-                          self->render_items->len - 1);
+                          render_items->len - 1);
 
-recurse_children:
+  if (item.children != NULL)
+    render_items = item.children;
+
   gsk_render_node_iter_init (&iter, node);
   while (gsk_render_node_iter_next (&iter, &child))
-    gsk_gl_renderer_add_render_item (self, child, ritem);
+    gsk_gl_renderer_add_render_item (self, render_items, child, ritem);
 }
 
 static gboolean
@@ -638,7 +728,7 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
   gsk_gl_driver_begin_frame (self->gl_driver);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
-  gsk_gl_renderer_add_render_item (self, root, NULL);
+  gsk_gl_renderer_add_render_item (self, self->render_items, root, NULL);
 
   GSK_NOTE (OPENGL, g_print ("Total render items: %d of max:%d\n",
                              self->render_items->len,
@@ -647,6 +737,14 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
   gsk_gl_driver_end_frame (self->gl_driver);
 
   return TRUE;
+}
+
+static void
+render_item_clear (RenderItem    *item,
+                   GskGLRenderer *self)
+{
+  gsk_gl_driver_destroy_texture (self->gl_driver, item->render_data.texture_id);
+  gsk_gl_driver_destroy_vao (self->gl_driver, item->render_data.vao_id);
 }
 
 static void
@@ -663,8 +761,7 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
     {
       RenderItem *item = &g_array_index (self->render_items, RenderItem, i);
 
-      gsk_gl_driver_destroy_texture (self->gl_driver, item->render_data.texture_id);
-      gsk_gl_driver_destroy_vao (self->gl_driver, item->render_data.vao_id);
+      render_item_clear (item, self);
     }
 
   g_clear_pointer (&self->render_items, g_array_unref);
