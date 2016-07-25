@@ -1069,8 +1069,8 @@ gsk_renderer_get_for_display (GdkDisplay *display)
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (display))
     renderer_type = GSK_TYPE_GL_RENDERER;
-#endif
   else
+#endif
     return NULL;
 
   GSK_NOTE (RENDERER, g_print ("Creating renderer of type '%s' for display '%s'\n",
