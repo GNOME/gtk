@@ -134,7 +134,11 @@ gtk_application_get_proxy_if_service_present (GDBusConnection *connection,
   /* is there anyone actually providing the service? */
   owner = g_dbus_proxy_get_name_owner (proxy);
   if (owner == NULL)
-    g_clear_object (&proxy);
+    {
+      g_clear_object (&proxy);
+      g_set_error (error, G_DBUS_ERROR, G_DBUS_ERROR_NAME_HAS_NO_OWNER,
+                   "The name %s is not owned", bus_name);
+    }
   else
     g_free (owner);
 
@@ -178,6 +182,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   /* Try the GNOME session manager first */
   dbus->sm_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
+                                                                 G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START |
                                                                  G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                                  G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
                                                                  GNOME_DBUS_NAME,
@@ -189,13 +194,13 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
     {
       g_warning ("Failed to get the GNOME session proxy: %s", error->message);
       g_clear_error (&error);
-      g_clear_object (&dbus->sm_proxy);
     }
 
   if (!dbus->sm_proxy)
     {
       /* Fallback to trying the Xfce session manager */
       dbus->sm_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
+                                                                     G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START |
                                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                                      G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
                                                                      XFCE_DBUS_NAME,
@@ -316,14 +321,12 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   if (dbus->sm_proxy == NULL)
     {
-      dbus->inhibit_proxy = g_dbus_proxy_new_sync (dbus->session,
-                                                   G_DBUS_PROXY_FLAGS_NONE,
-                                                   NULL,
-                                                   "org.freedesktop.portal.Desktop",
-                                                   "/org/freedesktop/portal/desktop",
-                                                   "org.freedesktop.portal.Inhibit",
-                                                   NULL,
-                                                   &error);
+      dbus->inhibit_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
+                                                                          G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                                                                          "org.freedesktop.portal.Desktop",
+                                                                          "/org/freedesktop/portal/desktop",
+                                                                          "org.freedesktop.portal.Inhibit",
+                                                                          &error);
       if (error)
         {
           g_warning ("Failed to get an inhibit portal proxy: %s", error->message);
@@ -690,6 +693,7 @@ gtk_application_impl_dbus_finalize (GObject *object)
   g_slist_free_full (dbus->inhibit_handles, inhibit_handle_free);
   g_free (dbus->app_menu_path);
   g_free (dbus->menubar_path);
+  g_clear_object (&dbus->sm_proxy);
 
   G_OBJECT_CLASS (gtk_application_impl_dbus_parent_class)->finalize (object);
 }
