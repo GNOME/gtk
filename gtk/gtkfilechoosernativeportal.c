@@ -42,10 +42,7 @@
 #include "gtkinvisible.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
-
-#ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"
-#endif
+#include "gtkwindowprivate.h"
 
 typedef struct {
   GtkFileChooserNative *self;
@@ -59,6 +56,9 @@ typedef struct {
 
   gboolean hidden;
 
+  const char *method_name;
+
+  GtkWindow *exported_window;
 } FilechooserPortalData;
 
 
@@ -78,6 +78,9 @@ filechooser_portal_data_free (FilechooserPortalData *data)
     }
 
   g_clear_object (&data->self);
+
+  if (data->exported_window)
+    gtk_window_unexport_handle (data->exported_window);
 
   g_free (data->portal_handle);
 
@@ -275,68 +278,21 @@ serialize_choices (GtkFileChooserNative *self)
   return g_variant_builder_end (&builder);
 }
 
-gboolean
-gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
+static void
+show_portal_file_chooser (GtkFileChooserNative *self,
+                          const char           *parent_window_str)
 {
-  FilechooserPortalData *data;
-  GtkWindow *transient_for;
-  GDBusConnection *connection;
-  char *parent_window_str;
+  FilechooserPortalData *data = self->mode_data;
   GDBusMessage *message;
   GVariantBuilder opt_builder;
-  GtkFileChooserAction action;
   gboolean multiple;
-  const char *method_name;
-
-  if (!gtk_should_use_portal ())
-    return FALSE;
-
-  connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-  if (connection == NULL)
-    return FALSE;
-
-  action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
-  multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
-
-  if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
-    method_name = "OpenFile";
-  else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    method_name = "SaveFile";
-  else
-    {
-      g_warning ("GTK_FILE_CHOOSER_ACTION_%s is not supported by GtkFileChooserNativePortal", action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ? "SELECT_FOLDER" : "CREATE_FOLDER");
-      return FALSE;
-    }
-
-  data = g_new0 (FilechooserPortalData, 1);
-  data->self = g_object_ref (self);
-  data->connection = connection;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
                                             "/org/freedesktop/portal/desktop",
                                             "org.freedesktop.portal.FileChooser",
-                                            method_name);
+                                            data->method_name);
 
-  parent_window_str = NULL;
-  transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
-  if (transient_for != NULL && gtk_widget_is_visible (GTK_WIDGET (transient_for)))
-    {
-      GdkWindow *window = gtk_widget_get_window (GTK_WIDGET (transient_for));
-#ifdef GDK_WINDOWING_X11
-      if (GDK_IS_X11_WINDOW(window))
-        parent_window_str = g_strdup_printf ("x11:%x", (guint32)gdk_x11_window_get_xid (window));
-#endif
-    }
-
-  if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
-    data->modal = TRUE;
-
-  if (data->modal && transient_for != NULL)
-    {
-      data->grab_widget = gtk_invisible_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (transient_for)));
-      gtk_grab_add (GTK_WIDGET (data->grab_widget));
-    }
-
+  multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&opt_builder, "{sv}", "multiple",
                          g_variant_new_boolean (multiple));
@@ -380,7 +336,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
                                           parent_window_str ? parent_window_str : "",
                                           gtk_native_dialog_get_title (GTK_NATIVE_DIALOG (self)),
                                           g_variant_builder_end (&opt_builder)));
-  g_free (parent_window_str);
 
   g_dbus_connection_send_message_with_reply (data->connection,
                                              message,
@@ -392,8 +347,86 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
                                              data);
 
   g_object_unref (message);
+}
+
+static void
+window_handle_exported (GtkWindow  *window,
+                        const char *handle_str,
+                        gpointer    user_data)
+{
+  GtkFileChooserNative *self = user_data;
+  FilechooserPortalData *data = self->mode_data;
+
+  if (data->modal)
+    {
+      GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (window));
+
+      data->grab_widget = gtk_invisible_new_for_screen (screen);
+      gtk_grab_add (GTK_WIDGET (data->grab_widget));
+    }
+
+  show_portal_file_chooser (self, handle_str);
+}
+
+gboolean
+gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
+{
+  FilechooserPortalData *data;
+  GtkWindow *transient_for;
+  GDBusConnection *connection;
+  GtkFileChooserAction action;
+  const char *method_name;
+
+  if (!gtk_should_use_portal ())
+    return FALSE;
+
+  connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  if (connection == NULL)
+    return FALSE;
+
+  action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
+
+  if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    method_name = "OpenFile";
+  else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    method_name = "SaveFile";
+  else
+    {
+      g_warning ("GTK_FILE_CHOOSER_ACTION_%s is not supported by GtkFileChooserNativePortal", action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ? "SELECT_FOLDER" : "CREATE_FOLDER");
+      return FALSE;
+    }
+
+  data = g_new0 (FilechooserPortalData, 1);
+  data->self = g_object_ref (self);
+  data->connection = connection;
+
+  data->method_name = method_name;
+
+  if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
+    data->modal = TRUE;
 
   self->mode_data = data;
+
+  transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
+  if (transient_for != NULL && gtk_widget_is_visible (GTK_WIDGET (transient_for)))
+    {
+      if (!gtk_window_export_handle (transient_for,
+                                     window_handle_exported,
+                                     self))
+        {
+          g_warning ("Failed to export handle, could not set transient for");
+          show_portal_file_chooser (self, NULL);
+        }
+      else
+        {
+          data->exported_window = transient_for;
+        }
+    }
+  else
+    {
+      show_portal_file_chooser (self, NULL);
+    }
+
   return TRUE;
 }
 
