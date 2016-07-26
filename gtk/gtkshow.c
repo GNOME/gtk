@@ -23,10 +23,7 @@
 #include <gdk/gdk.h>
 
 #include "gtkshow.h"
-
-#ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"
-#endif
+#include "gtkwindowprivate.h"
 
 /**
  * gtk_show_uri:
@@ -80,6 +77,36 @@ gtk_show_uri (GdkScreen    *screen,
   return ret;
 }
 
+static void
+launch_uri_done (GObject      *source,
+                 GAsyncResult *result,
+                 gpointer      data)
+{
+  GtkWindow *window = data;
+
+  g_app_info_launch_default_for_uri_finish (result, NULL);
+
+  if (window)
+    gtk_window_unexport_handle (window);
+}
+
+static void
+window_handle_exported (GtkWindow  *window,
+                        const char *handle_str,
+                        gpointer    user_data)
+{
+  GAppLaunchContext *context = user_data;
+  const char *uri;
+
+  uri = (const char *)g_object_get_data (G_OBJECT (context), "uri");
+
+  g_app_launch_context_setenv (context, "PARENT_WINDOW_ID", handle_str);
+
+  g_app_info_launch_default_for_uri_async (uri, G_APP_LAUNCH_CONTEXT (context), NULL, launch_uri_done, window);
+
+  g_object_unref (context);
+}
+
 /**
  * gtk_show_uri_on_window:
  * @parent: (allow-none): parent window
@@ -113,28 +140,14 @@ gtk_show_uri_on_window (GtkWindow   *parent,
     display = gdk_display_get_default ();
 
   context = gdk_display_get_app_launch_context (display);
-
-  if (parent)
-    {
-      GdkWindow *window = gtk_widget_get_window (GTK_WIDGET (parent));
-#ifdef GDK_WINDOWING_X11
-      if (GDK_IS_X11_WINDOW(window))
-        {
-          char *parent_window_str;
-
-          parent_window_str = g_strdup_printf ("x11:%x", (guint32)gdk_x11_window_get_xid (window));
-          g_app_launch_context_setenv (G_APP_LAUNCH_CONTEXT (context),
-                                       "PARENT_WINDOW_ID",
-                                       parent_window_str);
-          g_free (parent_window_str);
-        }
-#endif
-    }
-
   gdk_app_launch_context_set_timestamp (context, timestamp);
 
-  ret = g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), error);
+  g_object_set_data_full (G_OBJECT (context), "uri", g_strdup (uri), g_free);
 
+  if (parent && gtk_window_export_handle (parent, window_handle_exported, context))
+    return TRUE;
+
+  ret = g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), error);
   g_object_unref (context);
 
   return ret;
