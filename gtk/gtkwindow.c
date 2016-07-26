@@ -12612,3 +12612,33 @@ gtk_window_set_hardcoded_window (GtkWindow *window,
 
   g_set_object (&priv->hardcoded_window, gdk_window);
 }
+
+gboolean
+gtk_window_export_handle (GtkWindow               *window,
+                          GtkWindowHandleExported  callback,
+                          gpointer                 user_data)
+{
+  GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    {
+      char *handle_str;
+      guint32 xid = (guint32) gdk_x11_window_get_xid (gdk_window);
+
+      handle_str = g_strdup_printf ("x11:%x", xid);
+      callback (window, handle_str, user_data);
+
+      return TRUE;
+    }
+#endif
+
+  g_warning ("Couldn't export handle, unsupported windowing system");
+
+  return FALSE;
+}
+
+void
+gtk_window_unexport_handle (GtkWindow *window)
+{
+}

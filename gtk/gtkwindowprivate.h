@@ -135,6 +135,17 @@ void       gtk_window_set_hardcoded_window (GtkWindow *window,
 
 GdkScreen *_gtk_window_get_screen (GtkWindow *window);
 
+/* Exported handles */
+
+typedef void (*GtkWindowHandleExported)  (GtkWindow               *window,
+                                          const char              *handle,
+                                          gpointer                 user_data);
+
+gboolean      gtk_window_export_handle   (GtkWindow               *window,
+                                          GtkWindowHandleExported  callback,
+                                          gpointer                 user_data);
+void          gtk_window_unexport_handle (GtkWindow               *window);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */
