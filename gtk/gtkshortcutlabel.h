@@ -47,6 +47,13 @@ GDK_AVAILABLE_IN_3_22
 void         gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
                                                  const gchar      *accelerator);
 
+GDK_AVAILABLE_IN_3_22
+const gchar *gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self);
+
+GDK_AVAILABLE_IN_3_22
+void         gtk_shortcut_label_set_disabled_text (GtkShortcutLabel *self,
+                                                   const gchar      *unset_text);
+
 G_END_DECLS
 
 #endif /* __GTK_SHORTCUT_LABEL_H__ */
