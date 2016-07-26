@@ -36,10 +36,8 @@
 #include "gtkprintbackend.h"
 #include "gtkshow.h"
 #include "gtkintl.h"
+#include "gtkwindowprivate.h"
 
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
 
 typedef struct {
   GtkPrintOperation *op;
@@ -52,6 +50,9 @@ typedef struct {
   GMainLoop *loop;
   guint32 token;
   GDestroyNotify destroy;
+  GVariant *settings;
+  GVariant *setup;
+  GVariant *options;
 } PortalData;
 
 static void
@@ -63,6 +64,12 @@ portal_data_free (gpointer data)
   g_object_unref (portal->proxy);
   if (portal->loop)
     g_main_loop_unref (portal->loop);
+  if (portal->settings)
+    g_variant_unref (portal->settings);
+  if (portal->setup)
+    g_variant_unref (portal->setup);
+  if (portal->options)
+    g_variant_unref (portal->options);
 
   g_free (portal);
 }
@@ -513,61 +520,77 @@ create_portal_data (GtkPrintOperation          *op,
 }
 
 static void
-call_prepare_print (GtkPrintOperation *op,
-                    PortalData        *portal)
+window_handle_exported (GtkWindow  *window,
+                        const char *handle_str,
+                        gpointer    user_data)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
-  GVariant *settings;
-  GVariant *setup;
-  GVariantBuilder opt_builder;
-  GVariant *options;
-  char *parent_window_str = NULL;
-
-  g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
-  options = g_variant_builder_end (&opt_builder);
-
-  if (priv->print_settings)
-    settings = gtk_print_settings_to_gvariant (priv->print_settings);
-  else
-    {
-      GVariantBuilder builder;
-      g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-      settings = g_variant_builder_end (&builder);
-    }
-
-  if (priv->default_page_setup)
-    setup = gtk_page_setup_to_gvariant (priv->default_page_setup);
-  else
-    {
-      GtkPageSetup *page_setup = gtk_page_setup_new ();
-      setup = gtk_page_setup_to_gvariant (page_setup);
-      g_object_unref (page_setup);
-    }
-
-  if (portal->parent != NULL && gtk_widget_is_visible (GTK_WIDGET (portal->parent)))
-    {
-      GdkWindow *window = gtk_widget_get_window (GTK_WIDGET (portal->parent));
-#ifdef GDK_WINDOWING_X11
-      if (GDK_IS_X11_WINDOW (window))
-        parent_window_str = g_strdup_printf ("x11:%x", (guint32)gdk_x11_window_get_xid (window));
-#endif
-    }
+  PortalData *portal = user_data;
 
   g_dbus_proxy_call (portal->proxy,
                      "PreparePrint",
                      g_variant_new ("(ss@a{sv}@a{sv}@a{sv})",
-                                    parent_window_str ? parent_window_str : "",
+                                    handle_str,
                                     _("Print"), /* title */
-                                    settings,
-                                    setup,
-                                    options),
+                                    portal->settings,
+                                    portal->setup,
+                                    portal->options),
                      G_DBUS_CALL_FLAGS_NONE,
                      -1,
                      NULL,
                      prepare_print_called,
                      portal);
+}
 
-  g_free (parent_window_str);
+static void
+call_prepare_print (GtkPrintOperation *op,
+                    PortalData        *portal)
+{
+  GtkPrintOperationPrivate *priv = op->priv;
+  GVariantBuilder opt_builder;
+
+  g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
+  portal->options = g_variant_builder_end (&opt_builder);
+
+  if (priv->print_settings)
+    portal->settings = gtk_print_settings_to_gvariant (priv->print_settings);
+  else
+    {
+      GVariantBuilder builder;
+      g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+      portal->settings = g_variant_builder_end (&builder);
+    }
+
+  if (priv->default_page_setup)
+    portal->setup = gtk_page_setup_to_gvariant (priv->default_page_setup);
+  else
+    {
+      GtkPageSetup *page_setup = gtk_page_setup_new ();
+      portal->setup = gtk_page_setup_to_gvariant (page_setup);
+      g_object_unref (page_setup);
+    }
+
+  g_variant_ref_sink (portal->options);
+  g_variant_ref_sink (portal->settings);
+  g_variant_ref_sink (portal->setup);
+
+  if (portal->parent != NULL &&
+      gtk_widget_is_visible (GTK_WIDGET (portal->parent)) &&
+      gtk_window_export_handle (portal->parent, window_handle_exported, portal))
+    return;
+
+  g_dbus_proxy_call (portal->proxy,
+                     "PreparePrint",
+                     g_variant_new ("(ss@a{sv}@a{sv}@a{sv})",
+                                    "",
+                                    _("Print"), /* title */
+                                    portal->settings,
+                                    portal->setup,
+                                    portal->options),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     -1,
+                     NULL,
+                     prepare_print_called,
+                     portal);
 }
 
 GtkPrintOperationResult
