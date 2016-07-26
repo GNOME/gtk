@@ -2540,17 +2540,11 @@ gtk_box_set_child_packing (GtkBox      *box,
   gtk_widget_freeze_child_notify (child);
   if (list)
     {
-      gboolean expanded;
+      expand = expand != FALSE;
 
-      expanded = expand != FALSE;
-
-      /* avoid setting expand if unchanged, since queue_compute_expand
-       * can be expensive-ish
-       */
-      if (child_info->expand != expanded)
+      if (child_info->expand != expand)
         {
-          child_info->expand = expand != FALSE;
-          gtk_widget_queue_compute_expand (GTK_WIDGET (box));
+          child_info->expand = expand;
           gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_EXPAND]);
         }
 
