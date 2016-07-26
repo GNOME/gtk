@@ -18,12 +18,22 @@
 
 #include "config.h"
 
-#include "gtkshortcutlabelprivate.h"
+#include "gtkshortcutlabel.h"
 #include "gtklabel.h"
 #include "gtkframe.h"
 #include "gtkstylecontext.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+
+/**
+ * SECTION:gtkshortcutlabel
+ * @Title: GtkShortcutLabel
+ * @Short_description: Displays a keyboard shortcut
+ * @See_also: #GtkCellRendererAccel
+ *
+ * #GtkShortcutLabel is a widget that represents a single keyboard shortcut or gesture
+ * in the user interface.
+ */
 
 struct _GtkShortcutLabel
 {
@@ -438,6 +448,14 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
   object_class->get_property = gtk_shortcut_label_get_property;
   object_class->set_property = gtk_shortcut_label_set_property;
 
+  /**
+   * GtkShortcutLabel:accelerator:
+   *
+   * The accelerator that @self displays. See #GtkShortcutsShortcut:accelerator
+   * for the accepted syntax.
+   *
+   * Since: 3.22
+   */
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator", P_("Accelerator"), P_("Accelerator"),
                          NULL,
@@ -452,6 +470,16 @@ gtk_shortcut_label_init (GtkShortcutLabel *self)
   gtk_box_set_spacing (GTK_BOX (self), 6);
 }
 
+/**
+ * gtk_shortcut_label_new:
+ * @accelerator: the initial accelerator
+ *
+ * Creates a new #GtkShortcutLabel with @accelerator set.
+ *
+ * Returns: (transfer full): a newly-allocated #GtkShortcutLabel
+ *
+ * Since: 3.22
+ */
 GtkWidget *
 gtk_shortcut_label_new (const gchar *accelerator)
 {
@@ -460,6 +488,16 @@ gtk_shortcut_label_new (const gchar *accelerator)
                        NULL);
 }
 
+/**
+ * gtk_shortcut_label_get_accelerator:
+ * @self: a #GtkShortcutLabel
+ *
+ * Retrieves the current accelerator of @self.
+ *
+ * Returns: (transfer none)(nullable): the current accelerator.
+ *
+ * Since: 3.22
+ */
 const gchar *
 gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
 {
@@ -468,6 +506,15 @@ gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
   return self->accelerator;
 }
 
+/**
+ * gtk_shortcut_label_set_accelerator:
+ * @self: a #GtkShortcutLabel
+ * @accelerator: the new accelerator
+ *
+ * Sets the accelerator to be displayed by @self.
+ *
+ * Since: 3.22
+ */
 void
 gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
                                     const gchar      *accelerator)

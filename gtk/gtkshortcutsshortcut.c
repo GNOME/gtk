@@ -20,7 +20,7 @@
 
 #include "gtkshortcutsshortcut.h"
 
-#include "gtkshortcutlabelprivate.h"
+#include "gtkshortcutlabel.h"
 #include "gtkshortcutswindowprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
