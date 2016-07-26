@@ -1,29 +1,29 @@
 @import "reset-to-defaults.css";
 
 #button1 {
-    background-image: linear-gradient(alpha(red, 0.50)), linear-gradient(lime);
+    background-image: linear-gradient(alpha(red, 0.50),alpha(red,0.50)), linear-gradient(lime,lime);
 }
 
 #button2 {
     background-color: lime;
-    background-image: linear-gradient(alpha(red, 0.50)), linear-gradient(transparent);
+    background-image: linear-gradient(alpha(red, 0.50),alpha(red,0.50)), linear-gradient(transparent,transparent);
 }
 
 #button3 {
     padding: 12px;
-    background-image: linear-gradient(alpha(red, 0.50)), linear-gradient(lime);
+    background-image: linear-gradient(alpha(red, 0.50),alpha(red,0.50)), linear-gradient(lime,lime);
     background-clip: content-box;
 }
 
 #button4 {
     padding: 12px;
-    background-image: linear-gradient(red), linear-gradient(lime);
+    background-image: linear-gradient(red,red), linear-gradient(lime,lime);
     background-clip: content-box, padding-box;
 }
 
 #button5 {
     padding: 12px;
-    background-image: linear-gradient(red), linear-gradient(transparent);
+    background-image: linear-gradient(red,red), linear-gradient(transparent,transparent);
     background-clip: content-box, padding-box;
     background-color: lime;
 }

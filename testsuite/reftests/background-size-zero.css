@@ -1,7 +1,7 @@
 @import "reset-to-defaults.css";
 
 .background {
-  background-image: linear-gradient(to right, blue);
+  background-image: linear-gradient(to right, blue, blue);
   background-size: 0%;
 }
 
