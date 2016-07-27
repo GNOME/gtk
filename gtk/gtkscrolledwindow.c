@@ -3503,12 +3503,12 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           priv->scroll_events_overshoot_id = 0;
         }
 
+      if (start_deceleration)
+        uninstall_scroll_cursor (scrolled_window);
+
       if (start_deceleration &&
           scroll_history_finish (scrolled_window, &vel_x, &vel_y))
-        {
-          uninstall_scroll_cursor (scrolled_window);
-          gtk_scrolled_window_decelerate (scrolled_window, vel_x, vel_y);
-        }
+        gtk_scrolled_window_decelerate (scrolled_window, vel_x, vel_y);
       else if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
         {
           priv->scroll_events_overshoot_id =
