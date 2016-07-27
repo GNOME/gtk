@@ -24,7 +24,6 @@
 
 #include "config.h"
 
-#include "gtkcontainer.h"
 #include "gtkcontainerprivate.h"
 
 #include <stdarg.h>
@@ -53,6 +52,7 @@
 #include "a11y/gtkcontaineraccessibleprivate.h"
 #include "gtkpopovermenu.h"
 #include "gtkshortcutswindow.h"
+
 
 /* A handful of containers inside GTK+ are cheating and widgets
  * inside internal structure as direct children for the purpose
@@ -3396,4 +3396,39 @@ gtk_container_get_path_for_child (GtkContainer *container,
     }
 
   return path;
+}
+
+typedef struct {
+  GtkContainer *container;
+  GskRenderer *renderer;
+  GskRenderNode *parent;
+} RenderData;
+
+static void
+propagate_render_node (GtkWidget *widget,
+                       gpointer   data_)
+{
+  RenderData *data = data_;
+  GskRenderNode *node;
+
+  node = gtk_widget_get_render_node (widget, data->renderer);
+  if (node != NULL)
+    {
+      gsk_render_node_append_child (data->parent, node);
+      gsk_render_node_unref (node);
+    }
+}
+
+void
+gtk_container_propagate_render_node (GtkContainer  *container,
+                                     GskRenderer   *renderer,
+                                     GskRenderNode *parent_node)
+{
+  RenderData data = {
+    container,
+    renderer,
+    parent_node
+  };
+
+  gtk_container_forall (container, propagate_render_node, &data);
 }
