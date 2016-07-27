@@ -1347,7 +1347,10 @@ scroll_history_finish (GtkScrolledWindow *sw,
     }
 
   if (last == first)
-    return FALSE;
+    {
+      scroll_history_reset (sw);
+      return FALSE;
+    }
 
   xunit = get_scroll_unit (sw, GTK_ORIENTATION_HORIZONTAL);
   yunit = get_scroll_unit (sw, GTK_ORIENTATION_VERTICAL);
