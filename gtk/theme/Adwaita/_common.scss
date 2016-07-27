@@ -2626,7 +2626,6 @@ radio {
       -gtk-icon-shadow: none;
       color: inherit;
       border-color: currentColor;
-      animation: none;
     }
   }
 }
@@ -2653,34 +2652,28 @@ radio {
                                             -gtk-recolor(url("assets/dash-symbolic.symbolic.png"))); }
 }
 
-// let's animate things
-@keyframes check_check {
-  from { -gtk-icon-transform: translate(6px, -3px) rotate(-45deg) scaleY(0.2) rotate(45deg) scaleX(0); }
-  to { -gtk-icon-transform: unset; }
+// ANIMATION:
+// this is made with those pretty convoluted transitions, since checks and radios have to animate only on state changes,
+// the transformation is set on the active state and it get reset on the checked state.
+radio:not(:indeterminate):not(:checked):active:not(:backdrop) { -gtk-icon-transform: scale(0); }
+
+check:not(:indeterminate):not(:checked):active:not(:backdrop) { -gtk-icon-transform: translate(6px, -3px) rotate(-45deg) scaleY(0.2) rotate(45deg) scaleX(0); }
+
+radio,
+check {
+  &:active { -gtk-icon-transform: scale(0, 1); } // should tackle the indeterminate state, untested
+
+  &:checked:not(:backdrop), &:indeterminate:not(:backdrop) {
+    -gtk-icon-transform: unset;
+    transition: 400ms;
+  }
 }
 
-@keyframes check_radio {
-  from { -gtk-icon-transform: scale(0); }
-  to { -gtk-icon-transform: unset; }
-}
-
-@keyframes check_indeterminate {
-  from { -gtk-icon-transform: scale(0, 1); }
-  to { -gtk-icon-transform: unset; }
-}
-
-check:not(:indeterminate):checked { animation: check_check 400ms; }
-
-radio:not(:indeterminate):checked { animation: check_radio 400ms; }
-
-check:indeterminate:checked, radio:indeterminate:checked { animation: check_indeterminate 400ms; }
-
-// no animations in menus
 menu menuitem {
-  check:not(:indeterminate):checked,
-  radio:not(:indeterminate):checked,
-  check:indeterminate:checked:active,
-  radio:indeterminate:checked { animation: none; }
+  radio,
+  check {
+     &:checked:not(:backdrop), &:indeterminate:not(:backdrop) { transition: none; }
+  }
 }
 
 treeview.view check,
