@@ -1234,6 +1234,26 @@ gsk_render_node_get_world_matrix (GskRenderNode     *node,
 }
 
 /**
+ * gsk_render_node_get_scale_factor:
+ * @node: a #GskRenderNode
+ *
+ * Retrieves the scale factor used when rendering.
+ *
+ * See also: gsk_renderer_get_scale_factor()
+ *
+ * Returns: the scale factor
+ *
+ * Since: 3.22
+ */
+int
+gsk_render_node_get_scale_factor (GskRenderNode *node)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 1);
+
+  return gsk_renderer_get_scale_factor (node->renderer);
+}
+
+/**
  * gsk_render_node_set_name:
  * @node: a #GskRenderNode
  * @name: (nullable): a name for the node
@@ -1318,10 +1338,16 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
   g_return_val_if_fail (node->is_mutable, NULL);
 
   if (node->surface == NULL)
-    node->surface = cairo_image_surface_create (node->opaque ? CAIRO_FORMAT_RGB24
-                                                             : CAIRO_FORMAT_ARGB32,
-                                                node->bounds.size.width,
-                                                node->bounds.size.height);
+    {
+      int scale_factor = gsk_renderer_get_scale_factor (node->renderer);
+      int width = node->bounds.size.width * scale_factor;
+      int height = node->bounds.size.height * scale_factor;
+
+      node->surface = cairo_image_surface_create (node->opaque ? CAIRO_FORMAT_RGB24
+                                                               : CAIRO_FORMAT_ARGB32,
+                                                  width, height);
+      cairo_surface_set_device_scale (node->surface, scale_factor, scale_factor);
+    }
 
   res = cairo_create (node->surface);
 

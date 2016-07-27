@@ -125,16 +125,19 @@ gsk_gl_renderer_dispose (GObject *gobject)
 static void
 gsk_gl_renderer_create_buffers (GskGLRenderer *self,
                                 int            width,
-                                int            height)
+                                int            height,
+                                int            scale_factor)
 {
   if (self->has_buffers)
     return;
 
-  GSK_NOTE (OPENGL, g_print ("Creating buffers\n"));
+  GSK_NOTE (OPENGL, g_print ("Creating buffers (w:%d, h:%d, scale:%d)\n", width, height, scale_factor));
 
   if (self->texture_id == 0)
     {
-      self->texture_id = gsk_gl_driver_create_texture (self->gl_driver, width, height);
+      self->texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                       width * scale_factor,
+                                                       height * scale_factor);
       gsk_gl_driver_bind_source_texture (self->gl_driver, self->texture_id);
       gsk_gl_driver_init_texture_empty (self->gl_driver, self->texture_id);
     }
@@ -325,14 +328,18 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 
 static void
 gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
-                                 const graphene_rect_t *viewport)
+                                 const graphene_rect_t *viewport,
+                                 int                    scale_factor)
 {
-  GSK_NOTE (OPENGL, g_print ("glViewport(0, 0, %g, %g)\n",
-                             viewport->size.width,
-                             viewport->size.height));
+  int width = viewport->size.width * scale_factor;
+  int height = viewport->size.height * scale_factor;
 
-  glViewport (viewport->origin.x, viewport->origin.y,
-              viewport->size.width, viewport->size.height);
+  GSK_NOTE (OPENGL, g_print ("glViewport(0, 0, %d, %d) [scale:%d]\n",
+                             width,
+                             height,
+                             scale_factor));
+
+  glViewport (0, 0, width, height);
 }
 
 static void
@@ -556,6 +563,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   RenderItem item;
   RenderItem *ritem = NULL;
   int program_id;
+  int scale_factor;
 
   if (gsk_render_node_is_hidden (node))
     {
@@ -569,23 +577,28 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
 
   gsk_renderer_get_viewport (GSK_RENDERER (self), &viewport);
 
+  scale_factor = gsk_render_node_get_scale_factor (node);
+  if (scale_factor < 1)
+    scale_factor = 1;
+
   gsk_render_node_get_bounds (node, &bounds);
 
   item.node = node;
   item.name = node->name != NULL ? node->name : "unnamed";
 
   /* The texture size */
-  item.size = bounds.size;
+  item.size.width = bounds.size.width * scale_factor;
+  item.size.height = bounds.size.height * scale_factor;
 
   /* Each render item is an axis-aligned bounding box that we
    * transform using the given transformation matrix
    */
-  item.min.x = bounds.origin.x;
-  item.min.y = bounds.origin.y;
+  item.min.x = bounds.origin.x * scale_factor;
+  item.min.y = bounds.origin.y * scale_factor;
   item.min.z = 0.f;
 
-  item.max.x = bounds.origin.x + bounds.size.width;
-  item.max.y = bounds.origin.y + bounds.size.height;
+  item.max.x = item.min.x + item.size.width;
+  item.max.y = item.min.y + item.size.height;
   item.max.z = 0.f;
 
   /* The location of the item, in normalized world coordinates */
@@ -607,7 +620,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   if (render_node_needs_render_target (node))
     {
       item.render_data.render_target_id =
-        gsk_gl_driver_create_texture (self->gl_driver, bounds.size.width, bounds.size.height);
+        gsk_gl_driver_create_texture (self->gl_driver, item.size.width, item.size.height);
       gsk_gl_driver_init_texture_empty (self->gl_driver, item.render_data.render_target_id);
       gsk_gl_driver_create_render_target (self->gl_driver, item.render_data.render_target_id, TRUE, TRUE);
 
@@ -680,8 +693,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
     {
       /* Upload the Cairo surface to a GL texture */
       item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                                  bounds.size.width,
-                                                                  bounds.size.height);
+                                                                  item.size.width,
+                                                                  item.size.height);
       gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
       gsk_gl_driver_init_texture_with_surface (self->gl_driver,
                                                item.render_data.texture_id,
@@ -784,6 +797,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   graphene_rect_t viewport;
   guint i;
   guint64 gpu_time;
+  int scale_factor;
 
   if (self->gl_context == NULL)
     return;
@@ -791,9 +805,10 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   gdk_gl_context_make_current (self->gl_context);
 
   gsk_renderer_get_viewport (renderer, &viewport);
+  scale_factor = gsk_renderer_get_scale_factor (renderer);
 
   gsk_gl_driver_begin_frame (self->gl_driver);
-  gsk_gl_renderer_create_buffers (self, viewport.size.width, viewport.size.height);
+  gsk_gl_renderer_create_buffers (self, viewport.size.width, viewport.size.height, scale_factor);
   gsk_gl_driver_end_frame (self->gl_driver);
 
   gsk_renderer_get_modelview (renderer, &modelview);
@@ -811,7 +826,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
 
   /* Ensure that the viewport is up to date */
   if (gsk_gl_driver_bind_render_target (self->gl_driver, self->texture_id))
-    gsk_gl_renderer_resize_viewport (self, &viewport);
+    gsk_gl_renderer_resize_viewport (self, &viewport, scale_factor);
 
   gsk_gl_renderer_clear (self);
 
@@ -832,9 +847,6 @@ gsk_gl_renderer_render (GskRenderer *renderer,
     }
 
   /* Draw the output of the GL rendering to the window */
-  GSK_NOTE (OPENGL, g_print ("Drawing GL content on Cairo surface using a %s\n",
-                             self->texture_id != 0 ? "texture" : "renderbuffer"));
-
   gsk_gl_driver_end_frame (self->gl_driver);
   gpu_time = gsk_gl_profiler_end_gpu_region (self->gl_profiler);
   GSK_NOTE (OPENGL, g_print ("GPU time: %" G_GUINT64_FORMAT " nsec\n", gpu_time));
@@ -845,8 +857,10 @@ out:
                           gdk_drawing_context_get_window (context),
                           self->texture_id,
                           GL_TEXTURE,
-                          gsk_renderer_get_scale_factor (renderer),
-                          0, 0, viewport.size.width, viewport.size.height);
+                          scale_factor,
+                          0, 0,
+                          viewport.size.width * scale_factor,
+                          viewport.size.height * scale_factor);
 
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
