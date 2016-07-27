@@ -699,8 +699,13 @@ update_keymap (GdkKeymap *gdk_keymap)
           scancode = MapVirtualKeyEx (vk, 0, hkls[group]);
           keygroup = &keymap->keysym_tab[(vk * hkls_len + group) * GDK_WIN32_LEVEL_COUNT];
 
+          /* MapVirtualKeyEx() fails to produce a scancode for VK_DIVIDE and VK_PAUSE.
+           * Ignore that, handle_special() will figure out a Gdk keyval for these
+           * without needing a scancode.
+           */
           if (scancode == 0 &&
-              vk != VK_DIVIDE)
+              vk != VK_DIVIDE &&
+              vk != VK_PAUSE)
             {
               for (level = GDK_WIN32_LEVEL_NONE; level < GDK_WIN32_LEVEL_COUNT; level++)
                 keygroup[level] = GDK_KEY_VoidSymbol;
