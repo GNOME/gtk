@@ -15860,6 +15860,7 @@ gtk_widget_get_render_node (GtkWidget   *widget,
       cairo_t *cr;
 
       tmp = gsk_render_node_new ();
+      gsk_render_node_set_name (tmp, "Draw Fallback");
       gsk_render_node_set_bounds (tmp, &bounds);
       gsk_render_node_set_transform (tmp, &m);
       cr = gsk_render_node_get_draw_context (tmp);
@@ -15882,6 +15883,7 @@ gtk_widget_get_render_node (GtkWidget   *widget,
           cairo_t *cr;
 
           tmp = gsk_render_node_new ();
+          gsk_render_node_set_name (tmp, "Draw Signal Handler");
           gsk_render_node_set_bounds (tmp, &bounds);
           gsk_render_node_set_transform (tmp, &m);
           cr = gsk_render_node_get_draw_context (tmp);
