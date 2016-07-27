@@ -21,6 +21,7 @@
 #define __GTK_CONTAINER_PRIVATE_H__
 
 #include "gtkcontainer.h"
+#include <gsk/gsk.h>
 
 G_BEGIN_DECLS
 
@@ -41,6 +42,10 @@ void      _gtk_container_stop_idle_sizer        (GtkContainer *container);
 void      _gtk_container_maybe_start_idle_sizer (GtkContainer *container);
 void      gtk_container_get_children_clip       (GtkContainer  *container,
                                                  GtkAllocation *out_clip);
+
+void      gtk_container_propagate_render_node   (GtkContainer  *container,
+                                                 GskRenderer   *renderer,
+                                                 GskRenderNode *parent_node);
 
 G_END_DECLS
 
