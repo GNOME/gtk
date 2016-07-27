@@ -36,6 +36,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkbindings.h"
+#include "gtkcontainerprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
@@ -459,6 +460,8 @@ static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
 static gint gtk_window_draw                  (GtkWidget         *widget,
 					      cairo_t           *cr);
+static GskRenderNode *gtk_window_get_render_node (GtkWidget   *widget,
+                                                  GskRenderer *renderer);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
 static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);
@@ -716,7 +719,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
-  widget_class->draw = gtk_window_draw;
   widget_class->window_state_event = gtk_window_state_event;
   widget_class->get_preferred_width = gtk_window_get_preferred_width;
   widget_class->get_preferred_width_for_height = gtk_window_get_preferred_width_for_height;
@@ -724,6 +726,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->get_preferred_height_for_width = gtk_window_get_preferred_height_for_width;
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->style_updated = gtk_window_style_updated;
+  widget_class->get_render_node = gtk_window_get_render_node;
 
   container_class->remove = gtk_window_remove;
   container_class->check_resize = gtk_window_check_resize;
@@ -7162,12 +7165,8 @@ gtk_window_realize (GtkWidget *widget)
 
   if (priv->renderer == NULL)
     {
-      graphene_rect_t viewport;
-
       priv->renderer = gsk_renderer_get_for_display (gtk_widget_get_display (widget));
-
-      graphene_rect_init (&viewport, 0, 0, allocation.width, allocation.height);
-      gsk_renderer_set_viewport (priv->renderer, &viewport);
+      gsk_renderer_set_scale_factor (priv->renderer, gtk_widget_get_scale_factor (widget));
     }
 
   if (gtk_widget_get_parent_window (widget))
@@ -7599,13 +7598,17 @@ _gtk_window_set_allocation (GtkWindow           *window,
       graphene_matrix_t projection;
       graphene_matrix_t modelview;
       graphene_point3d_t tmp;
+      int scale;
+
+      scale = gtk_widget_get_scale_factor (widget);
+      gsk_renderer_set_scale_factor (priv->renderer, scale);
 
       graphene_rect_init (&viewport, 0, 0, allocation->width, allocation->height);
       gsk_renderer_set_viewport (priv->renderer, &viewport);
 
       graphene_matrix_init_ortho (&projection,
-                                  0, allocation->width,
-                                  0, allocation->height,
+                                  0, allocation->width * scale,
+                                  0, allocation->height * scale,
                                   -1, 1);
       gsk_renderer_set_projection (priv->renderer, &projection);
 
@@ -10135,98 +10138,107 @@ gtk_window_compute_hints (GtkWindow   *window,
  * Redrawing functions *
  ***********************/
 
-static gboolean
-gtk_window_draw (GtkWidget *widget,
-		 cairo_t   *cr)
+static GskRenderNode *
+gtk_window_get_render_node (GtkWidget   *widget,
+                            GskRenderer *renderer)
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkStyleContext *context;
-  gboolean ret = FALSE;
+  GskRenderNode *node;
   GtkAllocation allocation;
   GtkBorder window_border;
   gint title_height;
+  graphene_rect_t bounds;
+  graphene_matrix_t m;
+  graphene_point3d_t p;
+  cairo_t *cr;
 
   context = gtk_widget_get_style_context (widget);
 
   get_shadow_width (GTK_WINDOW (widget), &window_border);
   _gtk_widget_get_allocation (widget, &allocation);
 
-  if (gtk_cairo_should_draw_window (cr, _gtk_widget_get_window (widget)))
+  graphene_rect_init (&bounds, allocation.x, allocation.y, allocation.width, allocation.height);
+  graphene_matrix_init_translate (&m, graphene_point3d_init (&p, allocation.x, allocation.y, 0.));
+
+  node = gsk_render_node_new ();
+  gsk_render_node_set_name (node, "Window Decoration");
+  gsk_render_node_set_bounds (node, &bounds);
+  gsk_render_node_set_transform (node, &m);
+
+  cr = gsk_render_node_get_draw_context (node);
+
+  if (priv->client_decorated &&
+      priv->decorated &&
+      !priv->fullscreen &&
+      !priv->maximized)
     {
-      if (priv->client_decorated &&
-          priv->decorated &&
-          !priv->fullscreen &&
-          !priv->maximized)
+      gtk_style_context_save_to_node (context, priv->decoration_node);
+
+      if (priv->use_client_shadow)
         {
-          gtk_style_context_save_to_node (context, priv->decoration_node);
+          GtkBorder padding, border;
 
-          if (priv->use_client_shadow)
-            {
-              GtkBorder padding, border;
+          gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+          gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
+          sum_borders (&border, &padding);
 
-              gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-              gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
-              sum_borders (&border, &padding);
-
-              gtk_render_background (context, cr,
-                                     window_border.left - border.left, window_border.top - border.top,
-                                     allocation.width -
-                                     (window_border.left + window_border.right - border.left - border.right),
-                                     allocation.height -
-                                     (window_border.top + window_border.bottom - border.top - border.bottom));
-              gtk_render_frame (context, cr,
-                                window_border.left - border.left, window_border.top - border.top,
-                                allocation.width -
-                                (window_border.left + window_border.right - border.left - border.right),
-                                allocation.height -
-                                (window_border.top + window_border.bottom - border.top - border.bottom));
-            }
-          else
-            {
-              gtk_render_background (context, cr, 0, 0,
-                                     allocation.width,
-                                     allocation.height);
-
-              gtk_render_frame (context, cr, 0, 0,
-                                allocation.width,
-                                allocation.height);
-            }
-
-          gtk_style_context_restore (context);
+          gtk_render_background (context, cr,
+                                 window_border.left - border.left, window_border.top - border.top,
+                                 allocation.width -
+                                   (window_border.left + window_border.right - border.left - border.right),
+                                 allocation.height -
+                                   (window_border.top + window_border.bottom - border.top - border.bottom));
+          gtk_render_frame (context, cr,
+                            window_border.left - border.left, window_border.top - border.top,
+                            allocation.width -
+                              (window_border.left + window_border.right - border.left - border.right),
+                            allocation.height -
+                              (window_border.top + window_border.bottom - border.top - border.bottom));
         }
-
-      if (!gtk_widget_get_app_paintable (widget))
+      else
         {
-           if (priv->title_box &&
-               gtk_widget_get_visible (priv->title_box) &&
-               gtk_widget_get_child_visible (priv->title_box))
-             title_height = priv->title_height;
-           else
-             title_height = 0;
+          gtk_render_background (context, cr, 0, 0,
+                                 allocation.width,
+                                 allocation.height);
 
-           gtk_render_background (context, cr,
-                                  window_border.left,
-                                  window_border.top + title_height,
-                                  allocation.width -
-                                  (window_border.left + window_border.right),
-                                  allocation.height -
-                                  (window_border.top + window_border.bottom +
-                                   title_height));
-           gtk_render_frame (context, cr,
+          gtk_render_frame (context, cr, 0, 0,
+                            allocation.width,
+                            allocation.height);
+        }
+      gtk_style_context_restore (context);
+    }
+
+  if (!gtk_widget_get_app_paintable (widget))
+    {
+      if (priv->title_box &&
+          gtk_widget_get_visible (priv->title_box) &&
+          gtk_widget_get_child_visible (priv->title_box))
+        title_height = priv->title_height;
+      else
+        title_height = 0;
+
+      gtk_render_background (context, cr,
                              window_border.left,
                              window_border.top + title_height,
                              allocation.width -
-                             (window_border.left + window_border.right),
+                               (window_border.left + window_border.right),
                              allocation.height -
-                             (window_border.top + window_border.bottom +
-                              title_height));
-        }
+                               (window_border.top + window_border.bottom + title_height));
+      gtk_render_frame (context, cr,
+                        window_border.left,
+                        window_border.top + title_height,
+                        allocation.width -
+                          (window_border.left + window_border.right),
+                        allocation.height -
+                          (window_border.top + window_border.bottom + title_height));
     }
 
-  if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
-    ret = GTK_WIDGET_CLASS (gtk_window_parent_class)->draw (widget, cr);
+  cairo_destroy (cr);
 
-  return ret;
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, node);
+
+  return node;
 }
 
 /**
