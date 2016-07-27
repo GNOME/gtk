@@ -10,6 +10,8 @@ struct _GskGLProfiler
 {
   GObject parent_instance;
 
+  GdkGLContext *gl_context;
+
   /* Creating GL queries is kind of expensive, so we pay the
    * price upfront and create a circular buffer of queries
    */
@@ -20,6 +22,14 @@ struct _GskGLProfiler
   gboolean first_frame : 1;
 };
 
+enum {
+  PROP_GL_CONTEXT = 1,
+
+  N_PROPERTIES
+};
+
+static GParamSpec *gsk_gl_profiler_properties[N_PROPERTIES];
+
 G_DEFINE_TYPE (GskGLProfiler, gsk_gl_profiler, G_TYPE_OBJECT)
 
 static void
@@ -29,13 +39,68 @@ gsk_gl_profiler_finalize (GObject *gobject)
 
   glDeleteQueries (N_QUERIES, self->gl_queries);
 
+  g_clear_object (&self->gl_context);
+
   G_OBJECT_CLASS (gsk_gl_profiler_parent_class)->finalize (gobject);
+}
+
+static void
+gsk_gl_profiler_set_property (GObject      *gobject,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  GskGLProfiler *self = GSK_GL_PROFILER (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_GL_CONTEXT:
+      self->gl_context = g_value_dup_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+    }
+}
+
+static void
+gsk_gl_profiler_get_property (GObject    *gobject,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GskGLProfiler *self = GSK_GL_PROFILER (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_GL_CONTEXT:
+      g_value_set_object (value, self->gl_context);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+    }
 }
 
 static void
 gsk_gl_profiler_class_init (GskGLProfilerClass *klass)
 {
-  G_OBJECT_CLASS (klass)->finalize = gsk_gl_profiler_finalize;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->set_property = gsk_gl_profiler_set_property;
+  gobject_class->get_property = gsk_gl_profiler_get_property;
+  gobject_class->finalize = gsk_gl_profiler_finalize;
+
+  gsk_gl_profiler_properties[PROP_GL_CONTEXT] =
+    g_param_spec_object ("gl-context",
+                         "GL Context",
+                         "The GdkGLContext used by the GL profiler",
+                         GDK_TYPE_GL_CONTEXT,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, N_PROPERTIES, gsk_gl_profiler_properties);
 }
 
 static void
@@ -48,9 +113,11 @@ gsk_gl_profiler_init (GskGLProfiler *self)
 }
 
 GskGLProfiler *
-gsk_gl_profiler_new (void)
+gsk_gl_profiler_new (GdkGLContext *context)
 {
-  return g_object_new (GSK_TYPE_GL_PROFILER, NULL);
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
+
+  return g_object_new (GSK_TYPE_GL_PROFILER, "gl-context", context, NULL);
 }
 
 void

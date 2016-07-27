@@ -79,8 +79,6 @@ struct _GskGLRenderer
 {
   GskRenderer parent_instance;
 
-  GdkGLContext *context;
-
   graphene_matrix_t mvp;
   graphene_frustum_t frustum;
 
@@ -91,6 +89,7 @@ struct _GskGLRenderer
   GQuark uniforms[N_UNIFORMS];
   GQuark attributes[N_ATTRIBUTES];
 
+  GdkGLContext *gl_context;
   GskGLDriver *gl_driver;
   GskGLProfiler *gl_profiler;
   GskShaderBuilder *shader_builder;
@@ -118,7 +117,7 @@ gsk_gl_renderer_dispose (GObject *gobject)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (gobject);
 
-  g_clear_object (&self->context);
+  g_clear_object (&self->gl_context);
 
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
 }
@@ -148,7 +147,7 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self,
 static void
 gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
 {
-  if (self->context == NULL)
+  if (self->gl_context == NULL)
     return;
 
   if (!self->has_buffers)
@@ -156,7 +155,7 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
 
   GSK_NOTE (OPENGL, g_print ("Destroying buffers\n"));
 
-  gdk_gl_context_make_current (self->context);
+  gdk_gl_context_make_current (self->gl_context);
 
   if (self->texture_id != 0)
     {
@@ -187,14 +186,14 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
   self->attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "aPosition");
   self->attributes[UV] = gsk_shader_builder_add_attribute (builder, "aUv");
 
-  if (gdk_gl_context_get_use_es (self->context))
+  if (gdk_gl_context_get_use_es (self->gl_context))
     {
       gsk_shader_builder_set_version (builder, SHADER_VERSION_GLES);
       gsk_shader_builder_set_vertex_preamble (builder, "es2_common.vs.glsl");
       gsk_shader_builder_set_fragment_preamble (builder, "es2_common.fs.glsl");
       gsk_shader_builder_add_define (builder, "GSK_GLES", "1");
     }
-  else if (gdk_gl_context_is_legacy (self->context))
+  else if (gdk_gl_context_is_legacy (self->gl_context))
     {
       gsk_shader_builder_set_version (builder, SHADER_VERSION_GL_LEGACY);
       gsk_shader_builder_set_vertex_preamble (builder, "gl_common.vs.glsl");
@@ -260,14 +259,14 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
   /* If we didn't get a GdkGLContext before realization, try creating
    * one now, for our exclusive use.
    */
-  if (self->context == NULL)
+  if (self->gl_context == NULL)
     {
       GdkWindow *window = gsk_renderer_get_window (renderer);
 
       if (window == NULL)
         return FALSE;
 
-      self->context = gdk_window_create_gl_context (window, &error);
+      self->gl_context = gdk_window_create_gl_context (window, &error);
       if (error != NULL)
         {
           g_critical ("Unable to create GL context for renderer: %s",
@@ -278,7 +277,7 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
         }
     }
 
-  gdk_gl_context_realize (self->context, &error);
+  gdk_gl_context_realize (self->gl_context, &error);
   if (error != NULL)
     {
       g_critical ("Unable to realize GL renderer: %s", error->message);
@@ -286,11 +285,11 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
       return FALSE;
     }
 
-  gdk_gl_context_make_current (self->context);
+  gdk_gl_context_make_current (self->gl_context);
 
   g_assert (self->gl_driver == NULL);
-  self->gl_driver = gsk_gl_driver_new (self->context);
-  self->gl_profiler = gsk_gl_profiler_new ();
+  self->gl_driver = gsk_gl_driver_new (self->gl_context);
+  self->gl_profiler = gsk_gl_profiler_new (self->gl_context);
 
   GSK_NOTE (OPENGL, g_print ("Creating buffers and programs\n"));
   if (!gsk_gl_renderer_create_programs (self))
@@ -304,10 +303,10 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
 
-  if (self->context == NULL)
+  if (self->gl_context == NULL)
     return;
 
-  gdk_gl_context_make_current (self->context);
+  gdk_gl_context_make_current (self->gl_context);
 
   /* We don't need to iterate to destroy the associated GL resources,
    * as they will be dropped when we finalize the GskGLDriver
@@ -320,7 +319,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   g_clear_object (&self->gl_profiler);
   g_clear_object (&self->gl_driver);
 
-  if (self->context == gdk_gl_context_get_current ())
+  if (self->gl_context == gdk_gl_context_get_current ())
     gdk_gl_context_clear_current ();
 }
 
@@ -713,7 +712,7 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
 {
   int n_nodes;
 
-  if (self->context == NULL)
+  if (self->gl_context == NULL)
     {
       GSK_NOTE (OPENGL, g_print ("No valid GL context associated to the renderer"));
       return FALSE;
@@ -721,7 +720,7 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
 
   n_nodes = gsk_render_node_get_size (root);
 
-  gdk_gl_context_make_current (self->context);
+  gdk_gl_context_make_current (self->gl_context);
 
   self->render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
 
@@ -752,10 +751,10 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 {
   int i;
 
-  if (self->context == NULL)
+  if (self->gl_context == NULL)
     return;
 
-  gdk_gl_context_make_current (self->context);
+  gdk_gl_context_make_current (self->gl_context);
 
   for (i = 0; i < self->render_items->len; i++)
     {
@@ -786,10 +785,10 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   guint i;
   guint64 gpu_time;
 
-  if (self->context == NULL)
+  if (self->gl_context == NULL)
     return;
 
-  gdk_gl_context_make_current (self->context);
+  gdk_gl_context_make_current (self->gl_context);
 
   gsk_renderer_get_viewport (renderer, &viewport);
 
@@ -841,6 +840,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   GSK_NOTE (OPENGL, g_print ("GPU time: %" G_GUINT64_FORMAT " nsec\n", gpu_time));
 
 out:
+  /* XXX: Add GdkDrawingContext API */
   gdk_cairo_draw_from_gl (gdk_drawing_context_get_cairo_context (context),
                           gdk_drawing_context_get_window (context),
                           self->texture_id,
@@ -848,7 +848,7 @@ out:
                           gsk_renderer_get_scale_factor (renderer),
                           0, 0, viewport.size.width, viewport.size.height);
 
-  gdk_gl_context_make_current (self->context);
+  gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
   gsk_gl_renderer_destroy_buffers (self);
 }
