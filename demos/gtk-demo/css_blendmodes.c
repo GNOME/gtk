@@ -34,6 +34,8 @@ struct {
   { NULL }
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static void
 update_css_for_blend_mode (GtkCssProvider *provider,
                            const gchar    *blend_mode)
@@ -53,6 +55,7 @@ update_css_for_blend_mode (GtkCssProvider *provider,
   g_bytes_unref (bytes);
   g_free (css);
 }
+#pragma GCC diagnostic pop
 
 static void
 row_activated (GtkListBox     *listbox,
