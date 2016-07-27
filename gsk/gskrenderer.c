@@ -921,6 +921,7 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
   g_return_if_fail (priv->drawing_context == NULL);
   g_return_if_fail (priv->root_node == NULL);
+  g_return_if_fail (root->renderer == renderer);
 
   priv->drawing_context = g_object_ref (context);
   priv->root_node = gsk_render_node_ref (root);
@@ -1032,6 +1033,24 @@ gsk_renderer_get_use_alpha (GskRenderer *renderer)
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
 
   return priv->use_alpha;
+}
+
+/**
+ * gsk_renderer_create_render_node:
+ * @renderer: a #GskRenderer
+ *
+ * Creates a new #GskRenderNode instance tied to the given @renderer.
+ *
+ * Returns: (transfer full): the new #GskRenderNode
+ *
+ * Since: 3.22
+ */
+GskRenderNode *
+gsk_renderer_create_render_node (GskRenderer *renderer)
+{
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
+
+  return gsk_render_node_new (renderer);
 }
 
 /**

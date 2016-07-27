@@ -39,8 +39,6 @@ GDK_AVAILABLE_IN_3_22
 GType gsk_render_node_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_22
-GskRenderNode *         gsk_render_node_new                     (void);
-GDK_AVAILABLE_IN_3_22
 GskRenderNode *         gsk_render_node_ref                     (GskRenderNode *node);
 GDK_AVAILABLE_IN_3_22
 void                    gsk_render_node_unref                   (GskRenderNode *node);

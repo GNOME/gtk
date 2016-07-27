@@ -96,6 +96,10 @@ GDK_AVAILABLE_IN_3_22
 gboolean                gsk_renderer_realize                    (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
+
+GDK_AVAILABLE_IN_3_22
+GskRenderNode *         gsk_renderer_create_render_node         (GskRenderer             *renderer);
+
 GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_render                     (GskRenderer             *renderer,
                                                                  GskRenderNode           *root,

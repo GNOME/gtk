@@ -9673,7 +9673,7 @@ gtk_window_get_render_node (GtkWidget   *widget,
   graphene_rect_init (&bounds, allocation.x, allocation.y, allocation.width, allocation.height);
   graphene_matrix_init_translate (&m, graphene_point3d_init (&p, allocation.x, allocation.y, 0.));
 
-  node = gsk_render_node_new ();
+  node = gsk_renderer_create_render_node (renderer);
   gsk_render_node_set_name (node, "Window Decoration");
   gsk_render_node_set_bounds (node, &bounds);
   gsk_render_node_set_transform (node, &m);

@@ -233,19 +233,22 @@ gsk_render_node_get_type (void)
   return gsk_render_node_type__volatile;
 }
 
-/**
+/*< private >
  * gsk_render_node_new:
+ * @renderer: a #GskRenderer
  *
- * Creates a new #GskRenderNode, to be used with #GskRenderer.
+ * Creates a new #GskRenderNode, to be used with a #GskRenderer.
  *
  * Returns: (transfer full): the newly created #GskRenderNode
- *
- * Since: 3.22
  */
 GskRenderNode *
-gsk_render_node_new (void)
+gsk_render_node_new (GskRenderer *renderer)
 {
-  return (GskRenderNode *) g_type_create_instance (GSK_TYPE_RENDER_NODE);
+  GskRenderNode *res = (GskRenderNode *) g_type_create_instance (GSK_TYPE_RENDER_NODE);
+
+  res->renderer = renderer;
+
+  return res;
 }
 
 /**
