@@ -411,9 +411,10 @@ render_item (GskGLRenderer *self,
   glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
 
   /* Draw the quad */
-  GSK_NOTE (OPENGL, g_print ("Drawing item <%s>[%p] with opacity: %g\n",
+  GSK_NOTE (OPENGL, g_print ("Drawing item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
                              item->name,
                              item,
+                             item->size.width, item->size.height,
                              item->opaque ? 1 : item->opacity));
 
   glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
@@ -459,9 +460,10 @@ render_item (GskGLRenderer *self,
       glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
 
       /* Draw the quad */
-      GSK_NOTE (OPENGL, g_print ("Drawing offscreen item <%s>[%p] with opacity: %g\n",
+      GSK_NOTE (OPENGL, g_print ("Drawing offscreen item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
                                  item->name,
                                  item,
+                                 item->size.width, item->size.height,
                                  item->opacity));
 
       glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
