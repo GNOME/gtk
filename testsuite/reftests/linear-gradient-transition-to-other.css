@@ -3,11 +3,11 @@
 }
 
 @keyframes ref {
-  100% { background-image: linear-gradient(to bottom, lime); }
+  100% { background-image: linear-gradient(to bottom, lime, lime); }
 }
 
 * {
-  background: linear-gradient(to bottom, red);
+  background: linear-gradient(to bottom, red, red);
   animation: anim steps(5,end) 20s;
 }
 
