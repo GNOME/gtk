@@ -132,7 +132,7 @@ gtk_actionable_set_action_name (GtkActionable *actionable,
  * gtk_actionable_get_action_target_value:
  * @actionable: a #GtkActionable widget
  *
- * Gets the current target value of @actionabe.
+ * Gets the current target value of @actionable.
  *
  * See gtk_actionable_set_action_target_value() for more information.
  *
