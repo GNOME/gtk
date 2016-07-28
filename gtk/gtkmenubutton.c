@@ -137,7 +137,6 @@ struct _GtkMenuButtonPrivate
   GtkArrowType arrow_type;
   gboolean use_popover;
   guint press_handled : 1;
-  guint in_click : 1;
 };
 
 enum
@@ -431,21 +430,15 @@ popup_menu (GtkMenuButton *menu_button,
 }
 
 static void
-gtk_menu_button_clicked (GtkButton *button)
+gtk_menu_button_toggled (GtkToggleButton *button)
 {
   GtkMenuButton *menu_button = GTK_MENU_BUTTON (button);
   GtkMenuButtonPrivate *priv = menu_button->priv;
-  gboolean active;
-
-  if (priv->in_click)
-    return;
-
-  priv->in_click = TRUE;
+  gboolean active = gtk_toggle_button_get_active (button);
 
   if (priv->menu)
     {
-      active = !gtk_widget_get_visible (priv->menu);
-      if (active)
+      if (active && !gtk_widget_get_visible (priv->menu))
         {
           GdkEvent *event;
 
@@ -464,20 +457,14 @@ gtk_menu_button_clicked (GtkButton *button)
     }
   else if (priv->popover)
     {
-      active = !gtk_widget_get_visible (priv->popover);
       if (active)
         gtk_widget_show (priv->popover);
       else
         gtk_widget_hide (priv->popover);
     }
-  else
-    active = FALSE;
 
-  GTK_BUTTON_CLASS (gtk_menu_button_parent_class)->clicked (button);
-
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), active);
-  gtk_toggle_button_toggled (GTK_TOGGLE_BUTTON (button));
-  priv->in_click = FALSE;
+  if (GTK_TOGGLE_BUTTON_CLASS (gtk_menu_button_parent_class)->toggled)
+    GTK_TOGGLE_BUTTON_CLASS (gtk_menu_button_parent_class)->toggled (button);
 }
 
 static void
@@ -510,7 +497,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
-  GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
+  GtkToggleButtonClass *toggle_button_class = GTK_TOGGLE_BUTTON_CLASS (klass);
 
   gobject_class->set_property = gtk_menu_button_set_property;
   gobject_class->get_property = gtk_menu_button_get_property;
@@ -521,7 +508,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   container_class->add = gtk_menu_button_add;
   container_class->remove = gtk_menu_button_remove;
 
-  button_class->clicked = gtk_menu_button_clicked;
+  toggle_button_class->toggled = gtk_menu_button_toggled;
 
   /**
    * GtkMenuButton:popup:
