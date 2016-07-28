@@ -1113,9 +1113,13 @@ unpack_font_description (GtkCssShorthandProperty *shorthand,
 
   if (mask & PANGO_FONT_MASK_SIZE)
     {
-      g_value_init (&v, G_TYPE_DOUBLE);
-      g_value_set_double (&v, (double) pango_font_description_get_size (description) / PANGO_SCALE);
+      double size;
 
+      g_value_init (&v, G_TYPE_DOUBLE);
+      size = pango_font_description_get_size (description) / PANGO_SCALE;
+      if (!pango_font_description_get_size_is_absolute (description))
+        size = size * 96.0 / 72.0;
+      g_value_set_double (&v, size);
       prop = _gtk_style_property_lookup ("font-size");
       _gtk_style_property_assign (prop, props, state, &v);
       g_value_unset (&v);
