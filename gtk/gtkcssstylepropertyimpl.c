@@ -126,17 +126,17 @@ assign_length_from_int (GtkCssStyleProperty *property,
 }
 
 static void
-query_length_as_double (GtkCssStyleProperty *property,
-                        const GtkCssValue   *css_value,
-                        GValue              *value)
+query_font_size (GtkCssStyleProperty *property,
+                 const GtkCssValue   *css_value,
+                 GValue              *value)
 {
   g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value, _gtk_css_number_value_get (css_value, 100));
 }
 
 static GtkCssValue *
-assign_length_from_double (GtkCssStyleProperty *property,
-                           const GValue        *value)
+assign_font_size (GtkCssStyleProperty *property,
+                  const GValue        *value)
 {
   return _gtk_css_number_value_new (g_value_get_double (value), GTK_CSS_PX);
 }
@@ -1078,8 +1078,8 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SIZE,
                                           font_size_parse,
-                                          query_length_as_double,
-                                          assign_length_from_double,
+                                          query_font_size,
+                                          assign_font_size,
                                           _gtk_css_font_size_value_new (GTK_CSS_FONT_SIZE_MEDIUM));
   gtk_css_style_property_register        ("-gtk-icon-theme",
                                           GTK_CSS_PROPERTY_ICON_THEME,
