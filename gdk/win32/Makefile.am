@@ -55,6 +55,7 @@ libgdk_win32_la_SOURCES = \
 	gdktestutils-win32.c \
 	gdkvisual-win32.c \
 	gdkwin32.h \
+	gdkwin32keys.h \
 	gdkwin32id.c \
 	gdkwindow-win32.c \
 	gdkwindow-win32.h \

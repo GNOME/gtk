@@ -35,6 +35,12 @@
 #include <windows.h>
 #include <commctrl.h>
 
+#define __GDKWIN32_H_INSIDE__
+
+#include <gdk/win32/gdkwin32keys.h>
+
+#undef __GDKWIN32_H_INSIDE__
+
 G_BEGIN_DECLS
 
 #ifdef INSIDE_GDK_WIN32
