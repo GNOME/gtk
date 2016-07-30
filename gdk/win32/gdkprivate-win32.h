@@ -38,6 +38,7 @@
 #include <gdk/gdkprivate.h>
 #include <gdk/win32/gdkwindow-win32.h>
 #include <gdk/win32/gdkpixmap-win32.h>
+#include <gdk/win32/gdkwin32keys.h>
 
 #include "gdkinternals.h"
 
@@ -407,8 +408,6 @@ extern gboolean		 _gdk_input_locale_is_ime;
 extern UINT		 _gdk_input_codepage;
 
 extern guint		 _gdk_keymap_serial;
-extern gboolean		 _gdk_keyboard_has_altgr;
-extern guint		 _scancode_rshift;
 
 /* GdkAtoms: properties, targets and types */
 extern GdkAtom		 _gdk_selection;
@@ -500,7 +499,12 @@ void _gdk_win32_emit_configure_event (GdkWindow *window);
 GdkWindow *_gdk_win32_find_window_for_mouse_event (GdkWindow* reported_window,
 						   MSG*       msg);
 
-guint32 _gdk_win32_keymap_get_decimal_mark (void);
+guint32    _gdk_win32_keymap_get_decimal_mark    (GdkWin32Keymap *keymap);
+gboolean   _gdk_win32_keymap_has_altgr           (GdkWin32Keymap *keymap);
+guint8     _gdk_win32_keymap_get_active_group    (GdkWin32Keymap *keymap);
+guint8     _gdk_win32_keymap_get_rshift_scancode (GdkWin32Keymap *keymap);
+void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
+                                                  HKL             hkl);
 
 /* Initialization */
 void _gdk_windowing_window_init (GdkScreen *screen);

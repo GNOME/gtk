@@ -887,7 +887,11 @@ gdk_keyval_to_unicode (guint keyval)
 
 #if defined(GDK_WINDOWING_WIN32)
   if (keyval == 0xffae)
-    return (guint32) _gdk_win32_keymap_get_decimal_mark ();
+    {
+      GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap_get_default ());
+
+      return (guint32) _gdk_win32_keymap_get_decimal_mark (keymap);
+    }
 #endif
 
   /* binary search in table */

@@ -90,6 +90,7 @@ _gdk_windowing_init (void)
   _gdk_app_hmodule = GetModuleHandle (NULL);
   _gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   _gdk_input_locale = GetKeyboardLayout (0);
+  _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()), _gdk_input_locale);
   _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		 LOCALE_IDEFAULTANSICODEPAGE,
