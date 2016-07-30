@@ -18,6 +18,7 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -29,6 +30,10 @@
 #include "gtkwidget.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
+
+#ifdef GDK_WINDOWING_WIN32
+#include <win32/gdkwin32.h>
+#endif
 
 typedef struct _GtkComposeTable GtkComposeTable;
 typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
@@ -1058,6 +1063,33 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   else
     {
+#ifdef GDK_WINDOWING_WIN32
+      guint16  output[2];
+      gsize    output_size = 2;
+
+      switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()),
+                                              context_simple->compose_buffer,
+                                              n_compose,
+                                              output, &output_size))
+        {
+        case GDK_WIN32_KEYMAP_MATCH_NONE:
+          break;
+        case GDK_WIN32_KEYMAP_MATCH_EXACT:
+        case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
+          for (i = 0; i < output_size; i++)
+            {
+              guint32 output_char = gdk_keyval_to_unicode (output[i]);
+              gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                                 output_char);
+            }
+          context_simple->compose_buffer[0] = 0;
+          return TRUE;
+        case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
+          return TRUE;
+        }
+#endif
+
+
       tmp_list = context_simple->tables;
       while (tmp_list)
         {

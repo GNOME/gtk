@@ -1286,6 +1286,7 @@ gdk_win32_selection_add_targets
 #if IN_HEADER(__GDK_WIN32_H__)
 #if IN_FILE(__GDK_KEYS_WIN32_C__)
 gdk_win32_keymap_get_type G_GNUC_CONST
+gdk_win32_keymap_check_compose
 #endif
 #endif
 #endif
