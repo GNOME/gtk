@@ -433,5 +433,11 @@
       layout of those children to change, if they unintentionally had hexpand
       set before.
     </para>
+
+    <para>
+      The behavior of the expand flag in #GtkTables #GtkAttachOptions has been
+       changed to (again) match the behavior in #GtkBox and in GTK+ 2.x. These
+       options don't cause the table itself to expand.
+    </para>
   </section>
 </chapter>
