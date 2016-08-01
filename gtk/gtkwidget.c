@@ -17476,13 +17476,19 @@ gtk_widget_get_render_node (GtkWidget   *widget,
   graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
   graphene_matrix_init_translate (&m, graphene_point3d_init (&tmp, clip.x, clip.y, 0.f));
 
+  /* Compatibility mode: if the widget does not have a render node, we draw
+   * using gtk_widget_draw() on a temporary node
+   */
   if (klass->get_render_node == NULL)
     {
       GskRenderNode *tmp;
       cairo_t *cr;
+      char *str;
+
+      str = g_strconcat ("Fallback<", G_OBJECT_TYPE_NAME (widget), ">", NULL);
 
       tmp = gsk_renderer_create_render_node (renderer);
-      gsk_render_node_set_name (tmp, "Draw Fallback");
+      gsk_render_node_set_name (tmp, str);
       gsk_render_node_set_bounds (tmp, &bounds);
       gsk_render_node_set_transform (tmp, &m);
       cr = gsk_render_node_get_draw_context (tmp);
@@ -17491,35 +17497,37 @@ gtk_widget_get_render_node (GtkWidget   *widget,
 
       cairo_destroy (cr);
 
+      g_free (str);
+
       node = tmp;
     }
   else
     {
       node = klass->get_render_node (widget, renderer);
 
-      if (klass->draw != NULL ||
-          g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
+      /* Compatibility mode: if there's a ::draw signal handler, we add a
+       * child node with the contents of the handler
+       */
+      if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         {
           GskRenderNode *tmp;
           gboolean result;
           cairo_t *cr;
+          char *str;
+
+          str = g_strconcat ("DrawSignal<", G_OBJECT_TYPE_NAME (widget), ">", NULL);
 
           tmp = gsk_renderer_create_render_node (renderer);
-          gsk_render_node_set_name (tmp, "Draw Signal Handler");
+          gsk_render_node_set_name (tmp, str);
           gsk_render_node_set_bounds (tmp, &bounds);
           gsk_render_node_set_transform (tmp, &m);
           cr = gsk_render_node_get_draw_context (tmp);
 
-          if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
-            {
-              g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
-            }
-          else if (klass->draw != NULL)
-            {
-              klass->draw (widget, cr);
-            }
+          g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
 
           cairo_destroy (cr);
+
+          g_free (str);
 
           if (node != NULL)
             {
