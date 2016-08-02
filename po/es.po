@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-14 15:08+0000\n"
+"POT-Creation-Date: 2016-07-31 16:59+0000\n"
 "PO-Revision-Date: 2016-07-18 11:39+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
@@ -92,11 +92,11 @@ msgstr "OPCIONES"
 msgid "GDK debugging flags to unset"
 msgstr "Opciones de depuración GTK+ que quitar"
 
-#: gdk/gdkwindow.c:2767
+#: gdk/gdkwindow.c:2808
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Soporte de GL desactivado mediante GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2778
+#: gdk/gdkwindow.c:2819
 msgid "The current backend does not support OpenGL"
 msgstr "El «backend» actual no soporta OpenGL"
 
@@ -176,12 +176,12 @@ msgctxt "keyboard label"
 msgid "Down"
 msgstr "Abajo"
 
-#: gdk/keyname-table.h:6856 gtk/gtkshortcutlabel.c:210
+#: gdk/keyname-table.h:6856 gtk/gtkshortcutlabel.c:222
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Re Pág"
 
-#: gdk/keyname-table.h:6857 gtk/gtkshortcutlabel.c:213
+#: gdk/keyname-table.h:6857 gtk/gtkshortcutlabel.c:225
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Av Pág"
@@ -442,7 +442,7 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspender"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1358
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1455
 #: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:556
 #: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
@@ -454,14 +454,14 @@ msgstr "No hay ninguna implementación de GL disponible"
 msgid "Unable to create a GL context"
 msgstr "No se pudo crear un contexto GL"
 
-#: gdk/mir/gdkmirwindowimpl.c:1320 gdk/mir/gdkmirwindowimpl.c:1330
+#: gdk/mir/gdkmirwindowimpl.c:1417 gdk/mir/gdkmirwindowimpl.c:1427
 #: gdk/wayland/gdkglcontext-wayland.c:383
 #: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:482
 #: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr "No hay ninguna configuración disponible para el formato de píxel dado"
 
-#: gdk/mir/gdkmirwindowimpl.c:1366
+#: gdk/mir/gdkmirwindowimpl.c:1463
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr ""
 "El perfil 3.2 del núcleo de GL no está disponible en la implementación de EGL"
@@ -665,18 +665,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408
-#: gtk/gtkwindow.c:9024
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9015
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431
-#: gtk/gtkwindow.c:9033
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9024
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431
-#: gtk/gtkwindow.c:8990
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8981
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1204,17 +1201,17 @@ msgid ""
 "now."
 msgstr ""
 "El color anteriormente seleccionado, para compararlo con el color que está "
-"seleccionando ahora"
+"seleccionando ahora."
 
 #: gtk/deprecated/gtkcolorsel.c:1088
 msgid "The color you’ve chosen."
 msgstr "El color que ha elegido."
 
-#: gtk/deprecated/gtkcolorsel.c:1492
+#: gtk/deprecated/gtkcolorsel.c:1458
 msgid "_Save color here"
 msgstr "_Guardar color aquí"
 
-#: gtk/deprecated/gtkcolorsel.c:1695
+#: gtk/deprecated/gtkcolorsel.c:1664
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select “Save color here.”"
@@ -1230,7 +1227,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12501 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12482 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1281,7 +1278,7 @@ msgid "_Apply"
 msgstr "_Aplicar"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12502
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12483
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -1561,8 +1558,8 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:179 gtk/gtkshortcutlabel.c:90
-#: gtk/gtkshortcutlabel.c:126
+#: gtk/gtkaccellabel.c:179 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Mayús"
@@ -1572,8 +1569,8 @@ msgstr "Mayús"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:185 gtk/gtkshortcutlabel.c:93
-#: gtk/gtkshortcutlabel.c:128
+#: gtk/gtkaccellabel.c:185 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1583,8 +1580,8 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:191 gtk/gtkshortcutlabel.c:96
-#: gtk/gtkshortcutlabel.c:130
+#: gtk/gtkaccellabel.c:191 gtk/gtkshortcutlabel.c:108
+#: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1594,8 +1591,8 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:831 gtk/gtkshortcutlabel.c:102
-#: gtk/gtkshortcutlabel.c:140
+#: gtk/gtkaccellabel.c:831 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1605,8 +1602,8 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:844 gtk/gtkshortcutlabel.c:105
-#: gtk/gtkshortcutlabel.c:142
+#: gtk/gtkaccellabel.c:844 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1616,8 +1613,8 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:99
-#: gtk/gtkshortcutlabel.c:144
+#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
@@ -1627,7 +1624,7 @@ msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espacio"
 
-#: gtk/gtkaccellabel.c:878 gtk/gtkshortcutlabel.c:169
+#: gtk/gtkaccellabel.c:878 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Contrabarra"
@@ -1671,24 +1668,24 @@ msgstr "Olvidar asociación"
 msgid "Failed to start GNOME Software"
 msgstr "Falló al iniciar GNOME Software"
 
-#: gtk/gtkappchooserwidget.c:626
+#: gtk/gtkappchooserwidget.c:625
 msgid "Default Application"
 msgstr "Aplicación predeterminada"
 
-#: gtk/gtkappchooserwidget.c:676
+#: gtk/gtkappchooserwidget.c:675
 #, c-format
 msgid "No applications found for “%s”."
-msgstr "No hay aplicaciones para «%s»"
+msgstr "No hay aplicaciones para «%s»."
 
-#: gtk/gtkappchooserwidget.c:759
+#: gtk/gtkappchooserwidget.c:758
 msgid "Recommended Applications"
 msgstr "Aplicaciones recomendadas"
 
-#: gtk/gtkappchooserwidget.c:774
+#: gtk/gtkappchooserwidget.c:773
 msgid "Related Applications"
 msgstr "Aplicaciones relacionadas"
 
-#: gtk/gtkappchooserwidget.c:788
+#: gtk/gtkappchooserwidget.c:787
 msgid "Other Applications"
 msgstr "Otras aplicaciones"
 
@@ -2189,44 +2186,44 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: gtk/gtkentry.c:9512 gtk/gtklabel.c:6676 gtk/gtktextview.c:9501
+#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6634 gtk/gtktextview.c:9423
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtkentry.c:9516 gtk/gtklabel.c:6677 gtk/gtktextview.c:9505
+#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6635 gtk/gtktextview.c:9427
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:9520 gtk/gtklabel.c:6678 gtk/gtktextview.c:9507
+#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6636 gtk/gtktextview.c:9429
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtkentry.c:9523 gtk/gtkfilechooserwidget.c:1483
-#: gtk/gtkfilechooserwidget.c:2281 gtk/gtklabel.c:6680 gtk/gtktextview.c:9510
+#: gtk/gtkentry.c:9478 gtk/gtkfilechooserwidget.c:1483
+#: gtk/gtkfilechooserwidget.c:2281 gtk/gtklabel.c:6638 gtk/gtktextview.c:9432
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: gtk/gtkentry.c:9534 gtk/gtklabel.c:6689 gtk/gtktextview.c:9524
+#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6647 gtk/gtktextview.c:9446
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtkentry.c:9712 gtk/gtktextview.c:9734
+#: gtk/gtkentry.c:9662 gtk/gtktextview.c:9671
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: gtk/gtkentry.c:9715 gtk/gtktextview.c:9737
+#: gtk/gtkentry.c:9665 gtk/gtktextview.c:9674
 msgid "Cut"
 msgstr "Cortar"
 
-#: gtk/gtkentry.c:9718 gtk/gtktextview.c:9740
+#: gtk/gtkentry.c:9668 gtk/gtktextview.c:9677
 msgid "Copy"
 msgstr "Copiar"
 
-#: gtk/gtkentry.c:9721 gtk/gtktextview.c:9743
+#: gtk/gtkentry.c:9671 gtk/gtktextview.c:9680
 msgid "Paste"
 msgstr "Pegar"
 
-#: gtk/gtkentry.c:10788
+#: gtk/gtkentry.c:10738
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -2592,7 +2589,7 @@ msgstr "Falló al crear el contexto de OpenGL"
 msgid "Application menu"
 msgstr "Menú de la aplicación"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9060
+#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9051
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2644,12 +2641,12 @@ msgid "Error"
 msgstr "Error"
 
 #. Open Link
-#: gtk/gtklabel.c:6657
+#: gtk/gtklabel.c:6615
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6666
+#: gtk/gtklabel.c:6624
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -2703,11 +2700,11 @@ msgstr "%s:no existe la aplicación %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: error al lanzar la aplicación: %s\n"
 
-#: gtk/gtklinkbutton.c:420
+#: gtk/gtklinkbutton.c:370
 msgid "Copy URL"
 msgstr "Copiar URL"
 
-#: gtk/gtklinkbutton.c:580
+#: gtk/gtklinkbutton.c:531
 msgid "Invalid URI"
 msgstr "URI no válida"
 
@@ -2848,7 +2845,7 @@ msgstr "Aplicación desconocida (PID %d)"
 msgid "Unable to end process"
 msgstr "No se pudo finalizar el proceso"
 
-#: gtk/gtkmountoperation.c:1317
+#: gtk/gtkmountoperation.c:1312
 msgid "_End Process"
 msgstr "_Finalizar proceso"
 
@@ -2884,7 +2881,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "No se puede finalizar el proceso con PID %d: %s"
 
-#: gtk/gtknotebook.c:5122 gtk/gtknotebook.c:7388
+#: gtk/gtknotebook.c:5113 gtk/gtknotebook.c:7379
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -3159,15 +3156,15 @@ msgstr "_Desconectar"
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: gtk/gtkplacesview.c:1817
+#: gtk/gtkplacesview.c:1793
 msgid "Unable to get remote server location"
 msgstr "No se pudo obtener la ubicación del servidor remoto"
 
-#: gtk/gtkplacesview.c:1956 gtk/gtkplacesview.c:1965
+#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1956 gtk/gtkplacesview.c:1965
+#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
 msgid "On This Computer"
 msgstr "En este equipo"
 
@@ -3286,8 +3283,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "La razón más probable es que no se pudiera crear un archivo temporal."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:222 gtk/gtkprintoperation-portal.c:560
-#: gtk/gtkprintunixdialog.c:3391
+#: gtk/gtkprintoperation-portal.c:229 gtk/gtkprintoperation-portal.c:533
+#: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3391
 msgid "Print"
 msgstr "Imprimir"
 
@@ -3543,7 +3540,7 @@ msgstr "Buscar"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/gtkshortcutlabel.c:68
+#: gtk/gtkshortcutlabel.c:80
 msgctxt "keyboard side marker"
 msgid "L"
 msgstr "I"
@@ -3553,7 +3550,7 @@ msgstr "I"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/gtkshortcutlabel.c:81
+#: gtk/gtkshortcutlabel.c:93
 msgctxt "keyboard side marker"
 msgid "R"
 msgstr "D"
@@ -3805,24 +3802,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9008
+#: gtk/gtkwindow.c:8999
 msgid "Move"
 msgstr "Mover"
 
-#: gtk/gtkwindow.c:9016
+#: gtk/gtkwindow.c:9007
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: gtk/gtkwindow.c:9047
+#: gtk/gtkwindow.c:9038
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: gtk/gtkwindow.c:12489
+#: gtk/gtkwindow.c:12470
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "¿Quiere usar el inspector de GTK+?"
 
-#: gtk/gtkwindow.c:12491
+#: gtk/gtkwindow.c:12472
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3833,7 +3830,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK+. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: gtk/gtkwindow.c:12496
+#: gtk/gtkwindow.c:12477
 msgid "Don't show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -5665,7 +5662,6 @@ msgid "SSH File Transfer Protocol"
 msgstr "Protocolo de transferencia de archivos por SSH"
 
 #: gtk/ui/gtkplacesview.ui:147
-#| msgid "WebDav"
 msgid "WebDAV"
 msgstr "WebDAV"
 
