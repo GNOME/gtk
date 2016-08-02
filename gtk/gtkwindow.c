@@ -5687,23 +5687,21 @@ gtk_window_move (GtkWindow *window,
  * This means that the meaning of the returned value varies with
  * window gravity. See gtk_window_move() for more details.
  *
+ * The reliability of this function depends on the windowing system
+ * currently in use. Some windowing systems, such as Wayland, do not
+ * support a global coordinate system, and thus the position of the
+ * window will always be (0, 0). Others, like X11, do not have a reliable
+ * way to obtain the geometry of the decorations of a window if they are
+ * provided by the window manager. Additionally, on X11, window manager
+ * have been known to mismanage window gravity, which result in windows
+ * moving even if you use the coordinates of the current position as
+ * returned by this function.
+ *
  * If you haven’t changed the window gravity, its gravity will be
  * #GDK_GRAVITY_NORTH_WEST. This means that gtk_window_get_position()
  * gets the position of the top-left corner of the window manager
  * frame for the window. gtk_window_move() sets the position of this
  * same top-left corner.
- *
- * gtk_window_get_position() is not 100% reliable because the X Window System
- * does not specify a way to obtain the geometry of the
- * decorations placed on a window by the window manager.
- * Thus GTK+ is using a “best guess” that works with most
- * window managers.
- *
- * Moreover, nearly all window managers are historically broken with
- * respect to their handling of window gravity. So moving a window to
- * its current position as returned by gtk_window_get_position() tends
- * to result in moving the window slightly. Window managers are
- * slowly getting better over time.
  *
  * If a window has gravity #GDK_GRAVITY_STATIC the window manager
  * frame is not relevant, and thus gtk_window_get_position() will
@@ -5711,16 +5709,16 @@ gtk_window_move (GtkWindow *window,
  * gravity to do things like place a window in a corner of the screen,
  * because static gravity ignores the window manager decorations.
  *
- * If you are saving and restoring your application’s window
- * positions, you should know that it’s impossible for applications to
- * do this without getting it somewhat wrong because applications do
- * not have sufficient knowledge of window manager state. The Correct
- * Mechanism is to support the session management protocol (see the
- * “GnomeClient” object in the GNOME libraries for example) and allow
- * the window manager to save your window sizes and positions.
- * 
- **/
-
+ * Ideally, this function should return appropriate values if the
+ * window has client side decorations, assuming that the windowing
+ * system supports global coordinates.
+ *
+ * In practice, saving the window position should not be left to
+ * applications, as they lack enough knowledge of the windowing
+ * system and the window manager state to effectively do so. The
+ * appropriate way to implement saving the window position is to
+ * use a platform-specific protocol, wherever that is available.
+ */
 void
 gtk_window_get_position (GtkWindow *window,
                          gint      *root_x,
