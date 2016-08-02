@@ -618,7 +618,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   else
     item.parent_data = NULL;
 
-  /* Select the render target; -1 is the default */
   if (render_node_needs_render_target (node))
     {
       item.render_data.render_target_id =
@@ -839,7 +838,6 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   glBlendFuncSeparate (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
   glBlendEquation (GL_FUNC_ADD);
 
-  /* Transparent pass: back-to-front */
   GSK_NOTE (OPENGL, g_print ("Rendering %u items\n", self->render_items->len));
   for (i = 0; i < self->render_items->len; i++)
     {
@@ -851,7 +849,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   /* Draw the output of the GL rendering to the window */
   gsk_gl_driver_end_frame (self->gl_driver);
   gpu_time = gsk_gl_profiler_end_gpu_region (self->gl_profiler);
-  GSK_NOTE (OPENGL, g_print ("GPU time: %" G_GUINT64_FORMAT " nsec\n", gpu_time));
+  GSK_NOTE (OPENGL, g_print ("GPU time: %g usec\n", (double) gpu_time / 1000.0));
 
 out:
   /* XXX: Add GdkDrawingContext API */
