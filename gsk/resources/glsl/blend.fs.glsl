@@ -28,8 +28,8 @@ vec3 BlendLighten(vec3 Cb, vec3 Cs) {
 }
 
 void main() {
-  vec4 Cb = Texture(uSource, vUv);
-  vec4 Cs = Texture(uMask, vUv);
+  vec4 Cs = Texture(uSource, vUv);
+  vec4 Cb = Texture(uMask, vUv);
   vec3 res;
 
   if (uBlendMode == 0) {
