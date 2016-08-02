@@ -3886,18 +3886,62 @@ typedef struct {
 } RenderData;
 
 static void
-propagate_render_node (GtkWidget *widget,
+propagate_render_node (GtkWidget *child,
                        gpointer   data_)
 {
   RenderData *data = data_;
   GskRenderNode *node;
+  GdkWindow *window, *w;
+  GtkAllocation allocation;
+  int x, y;
+  graphene_matrix_t m;
+  graphene_point3d_t tmp;
 
-  node = gtk_widget_get_render_node (widget, data->renderer);
-  if (node != NULL)
+  node = gtk_widget_get_render_node (child, data->renderer);
+  if (node == NULL)
+    return;
+
+  /* translate coordinates. Ugly business, that. */
+  if (!_gtk_widget_get_has_window (GTK_WIDGET (data->container)))
     {
-      gsk_render_node_append_child (data->parent, node);
-      gsk_render_node_unref (node);
+      _gtk_widget_get_allocation (GTK_WIDGET (data->container), &allocation);
+      x = -allocation.x;
+      y = -allocation.y;
     }
+  else
+    {
+      x = 0;
+      y = 0;
+    }
+
+  window = _gtk_widget_get_window (GTK_WIDGET (data->container));
+
+  for (w = _gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
+    {
+      int wx, wy;
+      gdk_window_get_position (w, &wx, &wy);
+      x += wx;
+      y += wy;
+    }
+
+  if (w == NULL)
+    {
+      x = 0;
+      y = 0;
+    }
+
+  if (!_gtk_widget_get_has_window (child))
+    {
+      _gtk_widget_get_allocation (child, &allocation);
+      x += allocation.x;
+      y += allocation.y;
+    }
+
+  graphene_matrix_init_translate (&m, graphene_point3d_init (&tmp, x, y, 0));
+  gsk_render_node_set_transform (node, &m);
+
+  gsk_render_node_append_child (data->parent, node);
+  gsk_render_node_unref (node);
 }
 
 void
