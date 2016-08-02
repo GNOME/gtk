@@ -161,6 +161,9 @@
  * instead.
  */
 
+#define ORTHO_NEAR_PLANE        -10000
+#define ORTHO_FAR_PLANE          10000
+
 typedef struct _GtkWindowPopover GtkWindowPopover;
 
 struct _GtkWindowPopover
@@ -446,8 +449,6 @@ static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
-static gint gtk_window_draw                  (GtkWidget         *widget,
-					      cairo_t           *cr);
 static GskRenderNode *gtk_window_get_render_node (GtkWidget   *widget,
                                                   GskRenderer *renderer);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
@@ -7263,8 +7264,9 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
       graphene_matrix_init_ortho (&projection,
                                   0, allocation->width * scale,
-                                  0, allocation->height * scale,
-                                  -1, 1);
+                                  allocation->height * scale, 0,
+                                  ORTHO_NEAR_PLANE,
+                                  ORTHO_FAR_PLANE);
       gsk_renderer_set_projection (priv->renderer, &projection);
 
       graphene_matrix_init_translate (&modelview,
