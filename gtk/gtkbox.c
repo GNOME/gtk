@@ -161,8 +161,6 @@ struct _GtkBoxChild
 
 static void gtk_box_size_allocate         (GtkWidget              *widget,
                                            GtkAllocation          *allocation);
-static gboolean gtk_box_draw           (GtkWidget        *widget,
-                                        cairo_t          *cr);
 
 static void gtk_box_direction_changed  (GtkWidget        *widget,
                                         GtkTextDirection  previous_direction);
@@ -220,6 +218,9 @@ static void  gtk_box_get_preferred_height_and_baseline_for_width (GtkWidget     
 								  gint                *minimum_baseline,
 								  gint                *natural_baseline);
 
+static GskRenderNode *  gtk_box_get_render_node                 (GtkWidget            *widget,
+                                                                 GskRenderer          *renderer);
+
 static void               gtk_box_buildable_init                 (GtkBuildableIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
@@ -249,7 +250,7 @@ gtk_box_class_init (GtkBoxClass *class)
   object_class->get_property = gtk_box_get_property;
   object_class->dispose = gtk_box_dispose;
 
-  widget_class->draw                           = gtk_box_draw;
+  widget_class->get_render_node                = gtk_box_get_render_node;
   widget_class->size_allocate                  = gtk_box_size_allocate;
   widget_class->get_preferred_width            = gtk_box_get_preferred_width;
   widget_class->get_preferred_height           = gtk_box_get_preferred_height;
@@ -417,29 +418,21 @@ gtk_box_get_property (GObject    *object,
     }
 }
 
-static gboolean
-gtk_box_draw_contents (GtkCssGadget *gadget,
-                       cairo_t      *cr,
-                       int           x,
-                       int           y,
-                       int           width,
-                       int           height,
-                       gpointer      unused)
+static GskRenderNode *
+gtk_box_get_render_node (GtkWidget   *widget,
+                         GskRenderer *renderer)
 {
-  GTK_WIDGET_CLASS (gtk_box_parent_class)->draw (gtk_css_gadget_get_owner (gadget), cr);
+  GskRenderNode *res = gtk_css_gadget_get_render_node (GTK_BOX (widget)->priv->gadget,
+                                                       renderer,
+                                                       FALSE);
 
-  return FALSE;
+  if (res == NULL)
+    return NULL;
+
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
+
+  return res;
 }
-
-static gboolean
-gtk_box_draw (GtkWidget *widget,
-              cairo_t   *cr)
-{
-  gtk_css_gadget_draw (GTK_BOX (widget)->priv->gadget, cr);
-
-  return FALSE;
-}
-
 
 static void
 count_expand_children (GtkBox *box,
@@ -2061,7 +2054,7 @@ gtk_box_init (GtkBox *box)
                                                         GTK_WIDGET (box),
                                                         gtk_box_get_content_size,
                                                         gtk_box_allocate_contents,
-                                                        gtk_box_draw_contents,
+                                                        NULL,
                                                         NULL,
                                                         NULL);
 
