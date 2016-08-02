@@ -1704,27 +1704,20 @@ gtk_grid_allocate (GtkCssGadget        *gadget,
   gtk_container_get_children_clip (GTK_CONTAINER (grid), out_clip);
 }
 
-static gboolean
-gtk_grid_render (GtkCssGadget *gadget,
-                 cairo_t      *cr,
-                 int           x,
-                 int           y,
-                 int           width,
-                 int           height,
-                 gpointer      data)
+static GskRenderNode *
+gtk_grid_get_render_node (GtkWidget   *widget,
+                          GskRenderer *renderer)
 {
-  GTK_WIDGET_CLASS (gtk_grid_parent_class)->draw (gtk_css_gadget_get_owner (gadget), cr);
+  GskRenderNode *res = gtk_css_gadget_get_render_node (GTK_GRID (widget)->priv->gadget,
+                                                       renderer,
+                                                       FALSE);
 
-  return FALSE;
-}
+  if (res == NULL)
+    return NULL;
 
-static gboolean
-gtk_grid_draw (GtkWidget *widget,
-               cairo_t   *cr)
-{
-  gtk_css_gadget_draw (GTK_GRID (widget)->priv->gadget, cr);
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
 
-  return FALSE;
+  return res;
 }
 
 static void
@@ -1744,7 +1737,7 @@ gtk_grid_class_init (GtkGridClass *class)
   widget_class->get_preferred_width_for_height = gtk_grid_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_grid_get_preferred_height_for_width;
   widget_class->get_preferred_height_and_baseline_for_width = gtk_grid_get_preferred_height_and_baseline_for_width;
-  widget_class->draw = gtk_grid_draw;
+  widget_class->get_render_node = gtk_grid_get_render_node;
 
   container_class->add = gtk_grid_add;
   container_class->remove = gtk_grid_remove;
@@ -1852,7 +1845,7 @@ gtk_grid_init (GtkGrid *grid)
                                                      GTK_WIDGET (grid),
                                                      gtk_grid_measure,
                                                      gtk_grid_allocate,
-                                                     gtk_grid_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 
