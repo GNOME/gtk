@@ -6,6 +6,7 @@
 #include "gskenums.h"
 #include "gskgldriverprivate.h"
 #include "gskglprofilerprivate.h"
+#include "gskprofilerprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrendernodeiter.h"
@@ -75,6 +76,18 @@ enum {
   N_ATTRIBUTES
 };
 
+#ifdef G_ENABLE_DEBUG
+typedef struct {
+  GQuark frames;
+  GQuark draw_calls;
+} ProfileCounters;
+
+typedef struct {
+  GQuark cpu_time;
+  GQuark gpu_time;
+} ProfileTimers;
+#endif
+
 struct _GskGLRenderer
 {
   GskRenderer parent_instance;
@@ -101,6 +114,11 @@ struct _GskGLRenderer
   int blit_program_id;
 
   GArray *render_items;
+
+#ifdef G_ENABLE_DEBUG
+  ProfileCounters profile_counters;
+  ProfileTimers profile_timers;
+#endif
 
   gboolean has_buffers : 1;
 };
@@ -418,6 +436,11 @@ render_item (GskGLRenderer *self,
                              item->opaque ? 1 : item->opacity));
 
   glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
+
+#ifdef G_ENABLE_DEBUG
+  gsk_profiler_counter_inc (gsk_renderer_get_profiler (GSK_RENDERER (self)),
+                            self->profile_counters.draw_calls);
+#endif
 
   /* Render all children items, so we can take the result
    * render target texture during the compositing
@@ -797,11 +820,16 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   graphene_matrix_t modelview, projection;
   graphene_rect_t viewport;
   guint i;
-  guint64 gpu_time;
   int scale_factor;
+#ifdef G_ENABLE_DEBUG
+  GskProfiler *profiler;
+  gint64 gpu_time, cpu_time;
+#endif
 
   if (self->gl_context == NULL)
     return;
+
+  profiler = gsk_renderer_get_profiler (renderer);
 
   gdk_gl_context_make_current (self->gl_context);
 
@@ -823,7 +851,11 @@ gsk_gl_renderer_render (GskRenderer *renderer,
     goto out;
 
   gsk_gl_driver_begin_frame (self->gl_driver);
+
+#ifdef G_ENABLE_DEBUG
   gsk_gl_profiler_begin_gpu_region (self->gl_profiler);
+  gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
+#endif
 
   /* Ensure that the viewport is up to date */
   if (gsk_gl_driver_bind_render_target (self->gl_driver, self->texture_id))
@@ -848,8 +880,18 @@ gsk_gl_renderer_render (GskRenderer *renderer,
 
   /* Draw the output of the GL rendering to the window */
   gsk_gl_driver_end_frame (self->gl_driver);
+
+#ifdef G_ENABLE_DEBUG
+  gsk_profiler_counter_inc (profiler, self->profile_counters.frames);
+
+  cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
+  gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
+
   gpu_time = gsk_gl_profiler_end_gpu_region (self->gl_profiler);
-  GSK_NOTE (OPENGL, g_print ("GPU time: %g usec\n", (double) gpu_time / 1000.0));
+  gsk_profiler_timer_set (profiler, self->profile_timers.gpu_time, gpu_time);
+
+  gsk_profiler_push_samples (profiler);
+#endif
 
 out:
   /* XXX: Add GdkDrawingContext API */
@@ -886,4 +928,16 @@ gsk_gl_renderer_init (GskGLRenderer *self)
   gsk_ensure_resources ();
 
   graphene_matrix_init_identity (&self->mvp);
+
+#ifdef G_ENABLE_DEBUG
+  {
+    GskProfiler *profiler = gsk_renderer_get_profiler (GSK_RENDERER (self));
+
+    self->profile_counters.frames = gsk_profiler_add_counter (profiler, "frames", "Frames", FALSE);
+    self->profile_counters.draw_calls = gsk_profiler_add_counter (profiler, "draws", "glDrawArrays", TRUE);
+
+    self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
+    self->profile_timers.gpu_time = gsk_profiler_add_timer (profiler, "gpu-time", "GPU time", FALSE, TRUE);
+  }
+#endif
 }

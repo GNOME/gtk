@@ -20,6 +20,7 @@
 #define __GSK_RENDERER_PRIVATE_H__
 
 #include "gskrenderer.h"
+#include "gskprofilerprivate.h"
 
 G_BEGIN_DECLS
 
@@ -48,6 +49,8 @@ gboolean gsk_renderer_is_realized (GskRenderer *renderer);
 
 GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer *renderer);
 GdkDrawingContext *     gsk_renderer_get_drawing_context        (GskRenderer *renderer);
+
+GskProfiler *           gsk_renderer_get_profiler               (GskRenderer *renderer);
 
 G_END_DECLS
 
