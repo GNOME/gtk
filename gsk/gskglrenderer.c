@@ -377,6 +377,18 @@ gsk_gl_renderer_update_frustum (GskGLRenderer           *self,
 
 #define N_VERTICES      6
 
+static inline int
+node_depth (GskRenderNode *node)
+{
+  int ret = 0;
+  while (node->parent)
+    {
+      ret++;
+      node = node->parent;
+    }
+  return ret;
+}
+
 static void
 render_item (GskGLRenderer *self,
              RenderItem    *item)
@@ -429,7 +441,8 @@ render_item (GskGLRenderer *self,
   glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
 
   /* Draw the quad */
-  GSK_NOTE (OPENGL, g_print ("Drawing item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
+  GSK_NOTE (OPENGL, g_print ("%*sDrawing item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
+                             2 * node_depth (item->node), "",
                              item->name,
                              item,
                              item->size.width, item->size.height,
@@ -483,7 +496,8 @@ render_item (GskGLRenderer *self,
       glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
 
       /* Draw the quad */
-      GSK_NOTE (OPENGL, g_print ("Drawing offscreen item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
+      GSK_NOTE (OPENGL, g_print ("%*sDrawing offscreen item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
+                                 2 * node_depth (item->node), "",
                                  item->name,
                                  item,
                                  item->size.width, item->size.height,
@@ -727,7 +741,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
                                                self->gl_mag_filter);
     }
 
-  GSK_NOTE (OPENGL, g_print ("Adding node <%s>[%p] to render items\n",
+  GSK_NOTE (OPENGL, g_print ("%*sAdding node <%s>[%p] to render items\n",
+                             2 * node_depth (node), "",
                              node->name != NULL ? node->name : "unnamed",
                              node));
   g_array_append_val (render_items, item);
