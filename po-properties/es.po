@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-31 17:00+0000\n"
-"PO-Revision-Date: 2016-07-20 09:44+0200\n"
+"POT-Creation-Date: 2016-08-02 14:52+0000\n"
+"PO-Revision-Date: 2016-08-03 14:00+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -30,8 +30,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
-#: gdk/gdkglcontext.c:315 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139
+#: gdk/gdkdevicemanager.c:185 gdk/gdkglcontext.c:315 gdk/gdkseat.c:202
+#: gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Pantalla"
 
@@ -920,7 +921,8 @@ msgstr "Indica si el icono de la bandeja tiene un consejo"
 msgid "Tooltip Text"
 msgstr "Texto de la sugerencia"
 
-#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1315 gtk/gtkwidget.c:1339
+#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1315
+#: gtk/gtkwidget.c:1339
 msgid "The contents of the tooltip for this widget"
 msgstr "El contenido de las sugerencias para este widget"
 
@@ -953,102 +955,102 @@ msgstr "Estilo del contexto"
 msgid "GtkStyleContext to get style from"
 msgstr "GtkStyleContext del que obtener el estilo"
 
-#: gtk/deprecated/gtktable.c:189
+#: gtk/deprecated/gtktable.c:185
 msgid "Rows"
 msgstr "Filas"
 
-#: gtk/deprecated/gtktable.c:190
+#: gtk/deprecated/gtktable.c:186
 msgid "The number of rows in the table"
 msgstr "El número de filas en la tabla"
 
-#: gtk/deprecated/gtktable.c:198
+#: gtk/deprecated/gtktable.c:194
 msgid "Columns"
 msgstr "Columnas"
 
-#: gtk/deprecated/gtktable.c:199
+#: gtk/deprecated/gtktable.c:195
 msgid "The number of columns in the table"
 msgstr "El número de columnas en la tabla"
 
-#: gtk/deprecated/gtktable.c:207 gtk/gtkgrid.c:1761
+#: gtk/deprecated/gtktable.c:203 gtk/gtkgrid.c:1761
 msgid "Row spacing"
 msgstr "Espaciado entre filas"
 
-#: gtk/deprecated/gtktable.c:208 gtk/gtkgrid.c:1762
+#: gtk/deprecated/gtktable.c:204 gtk/gtkgrid.c:1762
 msgid "The amount of space between two consecutive rows"
 msgstr "La cantidad de espacio entre dos filas consecutivas"
 
-#: gtk/deprecated/gtktable.c:216 gtk/gtkgrid.c:1768
+#: gtk/deprecated/gtktable.c:212 gtk/gtkgrid.c:1768
 msgid "Column spacing"
 msgstr "Espaciado de la columna"
 
-#: gtk/deprecated/gtktable.c:217 gtk/gtkgrid.c:1769
+#: gtk/deprecated/gtktable.c:213 gtk/gtkgrid.c:1769
 msgid "The amount of space between two consecutive columns"
 msgstr "La cantidad de espacio entre dos columnas consecutivas"
 
-#: gtk/deprecated/gtktable.c:225 gtk/gtkbox.c:289 gtk/gtkflowbox.c:3848
+#: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:289 gtk/gtkflowbox.c:3848
 #: gtk/gtkstack.c:459 gtk/gtktoolbar.c:592 gtk/gtktoolitemgroup.c:1690
 msgid "Homogeneous"
 msgstr "Homogéneo"
 
-#: gtk/deprecated/gtktable.c:226
+#: gtk/deprecated/gtktable.c:222
 msgid "If TRUE, the table cells are all the same width/height"
 msgstr ""
 "Si es TRUE, las celdas de la tabla tienen todas de la misma anchura/altura"
 
-#: gtk/deprecated/gtktable.c:233 gtk/gtkgrid.c:1800
+#: gtk/deprecated/gtktable.c:229 gtk/gtkgrid.c:1800
 msgid "Left attachment"
 msgstr "Acoplado izquierdo"
 
-#: gtk/deprecated/gtktable.c:234 gtk/gtkgrid.c:1801 gtk/gtkmenu.c:958
+#: gtk/deprecated/gtktable.c:230 gtk/gtkgrid.c:1801 gtk/gtkmenu.c:958
 msgid "The column number to attach the left side of the child to"
 msgstr "El número de columnas que acoplar al lado izquierdo del hijo"
 
-#: gtk/deprecated/gtktable.c:240
+#: gtk/deprecated/gtktable.c:236
 msgid "Right attachment"
 msgstr "Acoplado derecho"
 
-#: gtk/deprecated/gtktable.c:241
+#: gtk/deprecated/gtktable.c:237
 msgid "The column number to attach the right side of a child widget to"
 msgstr ""
 "El número de columnas que acoplar hacia el lado derecho de un widget hijo"
 
-#: gtk/deprecated/gtktable.c:247 gtk/gtkgrid.c:1807
+#: gtk/deprecated/gtktable.c:243 gtk/gtkgrid.c:1807
 msgid "Top attachment"
 msgstr "Acoplado superior"
 
-#: gtk/deprecated/gtktable.c:248
+#: gtk/deprecated/gtktable.c:244
 msgid "The row number to attach the top of a child widget to"
 msgstr "El número de fila que acoplar a la parte superior de un widget hijo"
 
-#: gtk/deprecated/gtktable.c:254
+#: gtk/deprecated/gtktable.c:250
 msgid "Bottom attachment"
 msgstr "Acoplado inferior"
 
-#: gtk/deprecated/gtktable.c:255 gtk/gtkmenu.c:982
+#: gtk/deprecated/gtktable.c:251 gtk/gtkmenu.c:982
 msgid "The row number to attach the bottom of the child to"
 msgstr "El número de filas que acoplar por debajo del hijo"
 
-#: gtk/deprecated/gtktable.c:261
+#: gtk/deprecated/gtktable.c:257
 msgid "Horizontal options"
 msgstr "Opciones horizontales"
 
-#: gtk/deprecated/gtktable.c:262
+#: gtk/deprecated/gtktable.c:258
 msgid "Options specifying the horizontal behaviour of the child"
 msgstr "Opciones que indicar el comportamiento horizontal del hijo"
 
-#: gtk/deprecated/gtktable.c:268
+#: gtk/deprecated/gtktable.c:264
 msgid "Vertical options"
 msgstr "Opciones verticales"
 
-#: gtk/deprecated/gtktable.c:269
+#: gtk/deprecated/gtktable.c:265
 msgid "Options specifying the vertical behaviour of the child"
 msgstr "Opciones que especifican el comportamiento vertical del hijo"
 
-#: gtk/deprecated/gtktable.c:275
+#: gtk/deprecated/gtktable.c:271
 msgid "Horizontal padding"
 msgstr "Relleno horizontal"
 
-#: gtk/deprecated/gtktable.c:276
+#: gtk/deprecated/gtktable.c:272
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
@@ -1056,11 +1058,11 @@ msgstr ""
 "Espacio extra que poner entre el hijo y sus vecinos izquierdos y derechos, "
 "en píxeles"
 
-#: gtk/deprecated/gtktable.c:282
+#: gtk/deprecated/gtktable.c:278
 msgid "Vertical padding"
 msgstr "Relleno vertical"
 
-#: gtk/deprecated/gtktable.c:283
+#: gtk/deprecated/gtktable.c:279
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
@@ -2329,8 +2331,9 @@ msgstr "Seguir estado"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Indica si el pixbuf renderizado debe colorearse de acuerdo al estado"
 
-#: gtk/gtkcellrendererpixbuf.c:265 gtk/gtkimage.c:358 gtk/gtkmodelbutton.c:1116
-#: gtk/gtkshortcutsshortcut.c:550 gtk/gtkwindow.c:835
+#: gtk/gtkcellrendererpixbuf.c:265 gtk/gtkimage.c:358
+#: gtk/gtkmodelbutton.c:1116 gtk/gtkshortcutsshortcut.c:550
+#: gtk/gtkwindow.c:835
 msgid "Icon"
 msgstr "Icono"
 
@@ -7531,7 +7534,7 @@ msgstr "Acelerador"
 
 #: gtk/gtkshortcutlabel.c:491
 msgid "Disabled text"
-msgstr ""
+msgstr "Texto desactivado"
 
 #: gtk/gtkshortcutsgroup.c:303
 msgid "View"
