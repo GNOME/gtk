@@ -26,6 +26,7 @@ gboolean gsk_check_rendering_flags (GskRenderingMode flags);
 #ifdef G_ENABLE_DEBUG
 
 #define GSK_DEBUG_CHECK(type)           G_UNLIKELY (gsk_check_debug_flags (GSK_DEBUG_ ## type))
+#define GSK_DEBUG_CHECK2(type1,type2)   G_UNLIKELY (gsk_check_debug_flags (GSK_DEBUG_ ## type1 | GSK_DEBUG_ ## type2))
 #define GSK_RENDER_MODE_CHECK(type)     G_UNLIKELY (gsk_check_rendering_flags (GSK_RENDERING_MODE_ ## type))
 
 #define GSK_NOTE(type,action)   G_STMT_START {  \
@@ -33,11 +34,17 @@ gboolean gsk_check_rendering_flags (GskRenderingMode flags);
     action;                                     \
   }                             } G_STMT_END
 
+#define GSK_NOTE2(type1,type2,action)   G_STMT_START {  \
+  if (GSK_DEBUG_CHECK2 (type1, type2)) {                \
+    action;                                             \
+  }                             } G_STMT_END
 #else
 
 #define GSK_RENDER_MODE_CHECK(type)     0
 #define GSK_DEBUG_CHECK(type)           0
+#define GSK_DEBUG_CHECK2(type1,type2)   0
 #define GSK_NOTE(type,action)
+#define GSK_NOTE2(type1,type2,action)
 
 #endif
 
