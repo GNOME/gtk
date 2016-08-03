@@ -667,6 +667,10 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "accelerator"))
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_SHORTCUT_LABEL) &&
+	  g_str_equal (pspec->name, "accelerator"))
+	continue;
+
       if (g_type_is_a (type, GTK_TYPE_FONT_CHOOSER) &&
 	  g_str_equal (pspec->name, "font"))
 	continue;
