@@ -784,7 +784,8 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                        G_PARAM_CONSTRUCT |
                                                        G_PARAM_STATIC_NAME |
                                                        G_PARAM_STATIC_NICK |
-                                                       G_PARAM_STATIC_BLURB));
+                                                       G_PARAM_STATIC_BLURB |
+                                                       G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkMenu:rect-anchor-dx:
@@ -811,7 +812,8 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                      G_PARAM_CONSTRUCT |
                                                      G_PARAM_STATIC_NAME |
                                                      G_PARAM_STATIC_NICK |
-                                                     G_PARAM_STATIC_BLURB));
+                                                     G_PARAM_STATIC_BLURB |
+                                                     G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkMenu:rect-anchor-dy:
@@ -837,7 +839,8 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                      G_PARAM_CONSTRUCT |
                                                      G_PARAM_STATIC_NAME |
                                                      G_PARAM_STATIC_NICK |
-                                                     G_PARAM_STATIC_BLURB));
+                                                     G_PARAM_STATIC_BLURB |
+                                                     G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkMenu:menu-type-hint:
@@ -862,7 +865,8 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                       G_PARAM_CONSTRUCT |
                                                       G_PARAM_STATIC_NAME |
                                                       G_PARAM_STATIC_NICK |
-                                                      G_PARAM_STATIC_BLURB));
+                                                      G_PARAM_STATIC_BLURB |
+                                                      G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkMenu:horizontal-padding:
@@ -1136,16 +1140,32 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
       gtk_menu_set_reserve_toggle_size (menu, g_value_get_boolean (value));
       break;
     case PROP_ANCHOR_HINTS:
-      menu->priv->anchor_hints = g_value_get_flags (value);
+      if (menu->priv->anchor_hints != g_value_get_flags (value))
+        {
+          menu->priv->anchor_hints = g_value_get_flags (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_RECT_ANCHOR_DX:
-      menu->priv->rect_anchor_dx = g_value_get_int (value);
+      if (menu->priv->rect_anchor_dx != g_value_get_int (value))
+        {
+          menu->priv->rect_anchor_dx = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_RECT_ANCHOR_DY:
-      menu->priv->rect_anchor_dy = g_value_get_int (value);
+      if (menu->priv->rect_anchor_dy != g_value_get_int (value))
+        {
+          menu->priv->rect_anchor_dy = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     case PROP_MENU_TYPE_HINT:
-      menu->priv->menu_type_hint = g_value_get_enum (value);
+      if (menu->priv->menu_type_hint != g_value_get_enum (value))
+        {
+          menu->priv->menu_type_hint = g_value_get_enum (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1339,6 +1359,11 @@ gtk_menu_init (GtkMenu *menu)
 
   priv->monitor_num = -1;
   priv->drag_start_y = -1;
+
+  priv->anchor_hints = GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE | GDK_ANCHOR_RESIZE;
+  priv->rect_anchor_dx = 0;
+  priv->rect_anchor_dy = 0;
+  priv->menu_type_hint = GDK_WINDOW_TYPE_HINT_POPUP_MENU;
 
   _gtk_widget_set_captured_event_handler (GTK_WIDGET (menu), gtk_menu_captured_event);
 
