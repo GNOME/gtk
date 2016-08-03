@@ -41,6 +41,7 @@ gsk_private_source_h = \
 	gskglprofilerprivate.h \
 	gskglrendererprivate.h \
 	gskprivate.h \
+	gskprofilerprivate.h \
 	gskrendererprivate.h \
 	gskrendernodeprivate.h \
 	gskshaderbuilderprivate.h
@@ -58,6 +59,7 @@ gsk_source_c = \
 	gskgldriver.c \
 	gskglprofiler.c \
 	gskglrenderer.c \
+	gskprofiler.c \
 	gskrenderer.c \
 	gskrendernode.c \
 	gskrendernodeiter.c \
