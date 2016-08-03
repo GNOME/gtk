@@ -122,18 +122,35 @@ assert_icon_lookup_fails (const char         *icon_name,
 
 static GList *lookups = NULL;
 
-static void
-log_func (const gchar    *log_domain,
-          GLogLevelFlags  log_level,
-          const gchar    *string,
-          gpointer        user_data)
+static GLogWriterOutput
+log_writer (GLogLevelFlags   log_level,
+            const GLogField *fields,
+            gsize            n_fields,
+            gpointer         user_data)
 {
-  if (g_str_has_prefix (string, "\tlookup name: "))
+  const char *domain = NULL;
+  const char *msg = NULL;
+  int i;
+
+  for (i = 0; i < n_fields; i++)
+    {
+      if (strcmp (fields[i].key, "GLIB_DOMAIN") == 0)
+        domain = fields[i].value;
+      if (strcmp (fields[i].key, "MESSAGE") == 0)
+        msg = fields[i].value;
+    }
+
+  if (log_level != G_LOG_LEVEL_MESSAGE || g_strcmp0 (domain, "Gtk") != 0)
+    return g_log_writer_default (log_level, fields, n_fields, user_data);
+
+  if (g_str_has_prefix (msg, "\tlookup name: "))
     {
       gchar *s;
-      s = g_strchomp (g_strdup (string + strlen ("\tlookup name: ")));
+      s = g_strchomp (g_strdup (msg + strlen ("\tlookup name: ")));
       lookups = g_list_append (lookups, s);
     }
+
+  return G_LOG_WRITER_HANDLED;
 }
 
 static void
@@ -151,7 +168,7 @@ assert_lookup_order (const char         *icon_name,
 
   debug_flags = gtk_get_debug_flags ();
   gtk_set_debug_flags (debug_flags | GTK_DEBUG_ICONTHEME);
-  g_log_set_handler ("Gtk", G_LOG_LEVEL_MESSAGE, log_func, NULL);
+  g_log_set_writer_func (log_writer, NULL, NULL);
 
   g_assert (lookups == NULL);
 
@@ -175,7 +192,7 @@ assert_lookup_order (const char         *icon_name,
   g_list_free_full (lookups, g_free);
   lookups = NULL;
 
-  g_log_set_handler ("Gtk", G_LOG_LEVEL_MESSAGE, g_log_default_handler, NULL);
+  g_log_set_writer_func (g_log_writer_default, NULL, NULL);
   gtk_set_debug_flags (debug_flags);
 }
 
