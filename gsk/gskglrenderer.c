@@ -365,14 +365,16 @@ gsk_gl_renderer_update_frustum (GskGLRenderer           *self,
                                 const graphene_matrix_t *modelview,
                                 const graphene_matrix_t *projection)
 {
-  GSK_NOTE (OPENGL, g_print ("Updating the modelview/projection\n"));
+  GSK_NOTE (TRANSFORMS, g_print ("Updating the modelview/projection\n"));
 
   graphene_matrix_multiply (projection, modelview, &self->mvp);
 
   graphene_frustum_init_from_matrix (&self->frustum, &self->mvp);
 
-  GSK_NOTE (OPENGL, g_print ("Renderer MVP:\n"));
-  GSK_NOTE (OPENGL, graphene_matrix_print (&self->mvp));
+  GSK_NOTE (TRANSFORMS,
+            g_print ("Renderer MVP:\n");
+            graphene_matrix_print (&self->mvp);
+            g_print ("\n"));
 }
 
 #define N_VERTICES      6
@@ -436,17 +438,18 @@ render_item (GskGLRenderer *self,
   glUniform1f (item->render_data.alpha_location, opacity);
 
   /* Pass the mvp to the vertex shader */
-  GSK_NOTE (OPENGL, graphene_matrix_print (&item->mvp));
+  GSK_NOTE (TRANSFORMS, graphene_matrix_print (&item->mvp));
   graphene_matrix_to_float (&item->mvp, mvp);
   glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
 
   /* Draw the quad */
-  GSK_NOTE (OPENGL, g_print ("%*sDrawing item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
-                             2 * node_depth (item->node), "",
-                             item->name,
-                             item,
-                             item->size.width, item->size.height,
-                             item->opaque ? 1 : item->opacity));
+  GSK_NOTE2 (OPENGL, TRANSFORMS,
+             g_print ("%*sDrawing item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
+                      2 * node_depth (item->node), "",
+                      item->name,
+                      item,
+                      item->size.width, item->size.height,
+                      item->opaque ? 1 : item->opacity));
 
   glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
 
@@ -491,17 +494,18 @@ render_item (GskGLRenderer *self,
       glUniform1f (item->render_data.alpha_location, item->opacity);
 
       /* Pass the mvp to the vertex shader */
-      GSK_NOTE (OPENGL, graphene_matrix_print (&item->mvp));
+      GSK_NOTE (TRANSFORMS, graphene_matrix_print (&item->mvp));
       graphene_matrix_to_float (&item->mvp, mvp);
       glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
 
       /* Draw the quad */
-      GSK_NOTE (OPENGL, g_print ("%*sDrawing offscreen item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
-                                 2 * node_depth (item->node), "",
-                                 item->name,
-                                 item,
-                                 item->size.width, item->size.height,
-                                 item->opacity));
+      GSK_NOTE2 (OPENGL, TRANSFORMS,
+                 g_print ("%*sDrawing offscreen item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
+                          2 * node_depth (item->node), "",
+                          item->name,
+                          item,
+                          item->size.width, item->size.height,
+                          item->opacity));
 
       glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
     }
