@@ -39,6 +39,7 @@
 
 #include "gskdebugprivate.h"
 #include "gskglrendererprivate.h"
+#include "gskprofilerprivate.h"
 #include "gskrendernodeprivate.h"
 
 #include "gskenumtypes.h"
@@ -69,6 +70,8 @@ typedef struct
   GdkDrawingContext *drawing_context;
   GskRenderNode *root_node;
   GdkDisplay *display;
+
+  GskProfiler *profiler;
 
   int scale_factor;
 
@@ -488,6 +491,8 @@ gsk_renderer_init (GskRenderer *self)
 
   graphene_matrix_init_identity (&priv->modelview);
   graphene_matrix_init_identity (&priv->projection);
+
+  priv->profiler = gsk_profiler_new ();
 
   priv->auto_clear = TRUE;
   priv->scale_factor = 1;
@@ -927,7 +932,28 @@ gsk_renderer_render (GskRenderer       *renderer,
   priv->root_node = gsk_render_node_ref (root);
   gsk_render_node_make_immutable (priv->root_node);
 
+#ifdef G_ENABLE_DEBUG
+  gsk_profiler_reset (priv->profiler);
+#endif
+
   GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, context);
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK (RENDERER))
+    {
+      GString *buf = g_string_new ("*** Frame stats ***\n\n");
+
+      gsk_profiler_append_counters (priv->profiler, buf);
+      g_string_append_c (buf, '\n');
+
+      gsk_profiler_append_timers (priv->profiler, buf);
+      g_string_append_c (buf, '\n');
+
+      g_print ("%s\n***\n\n", buf->str);
+
+      g_string_free (buf, TRUE);
+    }
+#endif
 
   g_clear_object (&priv->drawing_context);
   g_clear_pointer (&priv->root_node, gsk_render_node_unref);
@@ -1051,6 +1077,24 @@ gsk_renderer_create_render_node (GskRenderer *renderer)
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
 
   return gsk_render_node_new (renderer);
+}
+
+/*< private >
+ * gsk_renderer_get_profiler:
+ * @renderer: a #GskRenderer
+ *
+ * Retrieves a pointer to the GskProfiler instance of the renderer.
+ *
+ * Returns: (transfer none): the profiler
+ */
+GskProfiler *
+gsk_renderer_get_profiler (GskRenderer *renderer)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
+
+  return priv->profiler;
 }
 
 /**
