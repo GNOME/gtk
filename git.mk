@@ -214,28 +214,34 @@ $(srcdir)/.gitignore: Makefile.am $(top_srcdir)/git.mk
 				$(appstream_XML:.xml=.valid) \
 			; do echo "/$$x"; done; \
 		fi; \
-		if test -f $(srcdir)/po/Makefile.in.in; then \
+		for tdir in po $(GITIGNORE_TRANSLATION_DIRS); do \
+			if test -f "$(srcdir)/$$tdir/Makefile.in.in"; then \
+				for x in \
+					$$tdir/Makefile.in.in \
+					$$tdir/Makefile.in.in~ \
+					$$tdir/Makefile.in \
+					$$tdir/Makefile \
+					$$tdir/Makevars.template \
+					$$tdir/POTFILES \
+					$$tdir/Rules-quot \
+					$$tdir/stamp-it \
+					$$tdir/stamp-po \
+					$$tdir/.intltool-merge-cache \
+					"$$tdir/*.gmo" \
+					"$$tdir/*.header" \
+					"$$tdir/*.mo" \
+					"$$tdir/*.sed" \
+					"$$tdir/*.sin" \
+					$$tdir/$(GETTEXT_PACKAGE).pot \
+				; do echo "/$$x"; done; \
+			fi; \
 			for x in \
-				po/Makefile.in.in \
-				po/Makefile.in.in~ \
-				po/Makefile.in \
-				po/Makefile \
-				po/Makevars.template \
-				po/POTFILES \
-				po/Rules-quot \
-				po/stamp-it \
-				po/.intltool-merge-cache \
-				"po/*.gmo" \
-				"po/*.header" \
-				"po/*.mo" \
-				"po/*.sed" \
-				"po/*.sin" \
-				po/$(GETTEXT_PACKAGE).pot \
+				ABOUT-NLS \
 				intltool-extract.in \
 				intltool-merge.in \
 				intltool-update.in \
 			; do echo "/$$x"; done; \
-		fi; \
+		done; \
 		if test -f $(srcdir)/configure; then \
 			for x in \
 				autom4te.cache \
