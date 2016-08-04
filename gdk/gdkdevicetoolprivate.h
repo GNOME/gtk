@@ -28,6 +28,7 @@ struct _GdkDeviceTool
 {
   GObject parent_instance;
   guint64 serial;
+  guint64 hw_id;
   GdkDeviceToolType type;
   GdkAxisFlags tool_axes;
 };
@@ -38,6 +39,7 @@ struct _GdkDeviceToolClass
 };
 
 GdkDeviceTool *gdk_device_tool_new    (guint64            serial,
+                                       guint64            hw_id,
                                        GdkDeviceToolType  type,
                                        GdkAxisFlags       tool_axes);
 

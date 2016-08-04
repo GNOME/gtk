@@ -3105,7 +3105,9 @@ tablet_tool_handle_done (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
 
-  tool->tool = gdk_device_tool_new (tool->hardware_serial, tool->type, tool->axes);
+  tool->tool = gdk_device_tool_new (tool->hardware_serial,
+                                    tool->hardware_id_wacom,
+                                    tool->type, tool->axes);
   gdk_seat_tool_added (tool->seat, tool->tool);
 }
 

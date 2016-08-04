@@ -137,11 +137,13 @@ gdk_device_tool_init (GdkDeviceTool *tool)
 
 GdkDeviceTool *
 gdk_device_tool_new (guint64           serial,
+                     guint64           hw_id,
                      GdkDeviceToolType type,
                      GdkAxisFlags      tool_axes)
 {
   return g_object_new (GDK_TYPE_DEVICE_TOOL,
                        "serial", serial,
+                       "hardware-id", hw_id,
                        "tool-type", type,
                        "axes", tool_axes,
                        NULL);
