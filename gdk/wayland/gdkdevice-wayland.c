@@ -50,6 +50,8 @@ typedef struct _GdkWaylandPointerFrameData GdkWaylandPointerFrameData;
 typedef struct _GdkWaylandPointerData GdkWaylandPointerData;
 typedef struct _GdkWaylandTabletData GdkWaylandTabletData;
 typedef struct _GdkWaylandTabletToolData GdkWaylandTabletToolData;
+typedef struct _GdkWaylandTabletPadGroupData GdkWaylandTabletPadGroupData;
+typedef struct _GdkWaylandTabletPadData GdkWaylandTabletPadData;
 
 struct _GdkWaylandTouchData
 {
@@ -112,6 +114,42 @@ struct _GdkWaylandTabletToolData
   GdkWaylandTabletData *current_tablet;
 };
 
+struct _GdkWaylandTabletPadGroupData
+{
+  GdkWaylandTabletPadData *pad;
+  struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group;
+  GList *rings;
+  GList *strips;
+  GList *buttons;
+
+  guint mode_switch_serial;
+  guint n_modes;
+  guint current_mode;
+
+  struct {
+    guint source;
+    gboolean is_stop;
+    gdouble value;
+  } axis_tmp_info;
+};
+
+struct _GdkWaylandTabletPadData
+{
+  GdkSeat *seat;
+  struct zwp_tablet_pad_v2 *wp_tablet_pad;
+  GdkDevice *device;
+
+  GdkWaylandTabletData *current_tablet;
+
+  guint enter_serial;
+  uint32_t n_buttons;
+  gchar *path;
+
+  GList *rings;
+  GList *strips;
+  GList *mode_groups;
+};
+
 struct _GdkWaylandTabletData
 {
   struct zwp_tablet_v2 *wp_tablet;
@@ -126,6 +164,8 @@ struct _GdkWaylandTabletData
   GdkDevice *current_device;
   GdkSeat *seat;
   GdkWaylandPointerData pointer_info;
+
+  GList *pads;
 
   GdkWaylandTabletToolData *current_tool;
 
@@ -164,6 +204,7 @@ struct _GdkWaylandSeat
   GHashTable *touches;
   GList *tablets;
   GList *tablet_tools;
+  GList *tablet_pads;
 
   GdkWaylandPointerData pointer_info;
   GdkWaylandPointerData touch_info;
@@ -2552,6 +2593,17 @@ _gdk_wayland_seat_remove_tablet (GdkWaylandSeat       *seat,
 }
 
 static void
+_gdk_wayland_seat_remove_tablet_pad (GdkWaylandSeat          *seat,
+                                     GdkWaylandTabletPadData *pad)
+{
+  GdkWaylandDeviceManager *device_manager =
+    GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
+
+  seat->tablet_pads = g_list_remove (seat->tablet_pads, pad);
+  g_free (pad);
+}
+
+static void
 tablet_handle_name (void                 *data,
                     struct zwp_tablet_v2 *wp_tablet,
                     const char           *name)
@@ -3620,6 +3672,337 @@ static const struct zwp_tablet_tool_v2_listener tablet_tool_listener = {
 };
 
 static void
+tablet_pad_ring_handle_source (void                          *data,
+                               struct zwp_tablet_pad_ring_v2 *wp_tablet_pad_ring,
+                               uint32_t                       source)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s ring = %p source = %d",
+           G_STRFUNC, wp_tablet_pad_ring, source);
+
+  group->axis_tmp_info.source = source;
+}
+
+static void
+tablet_pad_ring_handle_angle (void                          *data,
+                              struct zwp_tablet_pad_ring_v2 *wp_tablet_pad_ring,
+                              wl_fixed_t                     angle)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s ring = %p angle = %f",
+           G_STRFUNC, wp_tablet_pad_ring, wl_fixed_to_double (angle));
+
+  group->axis_tmp_info.value = wl_fixed_to_double (angle);
+}
+
+static void
+tablet_pad_ring_handle_stop (void                          *data,
+                             struct zwp_tablet_pad_ring_v2 *wp_tablet_pad_ring)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s ring = %p", G_STRFUNC, wp_tablet_pad_ring);
+
+  group->axis_tmp_info.is_stop = TRUE;
+}
+
+static void
+tablet_pad_ring_handle_frame (void                          *data,
+                              struct zwp_tablet_pad_ring_v2 *wp_tablet_pad_ring,
+                              uint32_t                       time)
+{
+  g_debug (G_STRLOC ": %s ring = %p", G_STRFUNC, wp_tablet_pad_ring);
+}
+
+static const struct zwp_tablet_pad_ring_v2_listener tablet_pad_ring_listener = {
+  tablet_pad_ring_handle_source,
+  tablet_pad_ring_handle_angle,
+  tablet_pad_ring_handle_stop,
+  tablet_pad_ring_handle_frame,
+};
+
+static void
+tablet_pad_strip_handle_source (void                           *data,
+                                struct zwp_tablet_pad_strip_v2 *wp_tablet_pad_strip,
+                                uint32_t                        source)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s strip = %p source = %d",
+           G_STRFUNC, wp_tablet_pad_strip, source);
+
+  group->axis_tmp_info.source = source;
+}
+
+static void
+tablet_pad_strip_handle_position (void                           *data,
+                                  struct zwp_tablet_pad_strip_v2 *wp_tablet_pad_strip,
+                                  uint32_t                        position)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s strip = %p position = %d",
+           G_STRFUNC, wp_tablet_pad_strip, position);
+
+  group->axis_tmp_info.value = position / 65535;
+}
+
+static void
+tablet_pad_strip_handle_stop (void                           *data,
+                              struct zwp_tablet_pad_strip_v2 *wp_tablet_pad_strip)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s strip = %p",
+           G_STRFUNC, wp_tablet_pad_strip);
+
+  group->axis_tmp_info.is_stop = TRUE;
+}
+
+static void
+tablet_pad_strip_handle_frame (void                           *data,
+                               struct zwp_tablet_pad_strip_v2 *wp_tablet_pad_strip,
+                               uint32_t                        time)
+{
+  g_debug (G_STRLOC ": %s strip = %p",
+           G_STRFUNC, wp_tablet_pad_strip);
+}
+
+static const struct zwp_tablet_pad_strip_v2_listener tablet_pad_strip_listener = {
+  tablet_pad_strip_handle_source,
+  tablet_pad_strip_handle_position,
+  tablet_pad_strip_handle_stop,
+  tablet_pad_strip_handle_frame,
+};
+
+static void
+tablet_pad_group_handle_buttons (void                           *data,
+                                 struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group,
+                                 struct wl_array                *buttons)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+  uint32_t *p;
+
+  g_debug (G_STRLOC ": %s pad group = %p, n_buttons = %ld",
+           G_STRFUNC, wp_tablet_pad_group, buttons->size);
+
+  wl_array_for_each (p, buttons)
+    {
+      group->buttons = g_list_prepend (group->buttons, GUINT_TO_POINTER (*p));
+    }
+
+  group->buttons = g_list_reverse (group->buttons);
+}
+
+static void
+tablet_pad_group_handle_ring (void                           *data,
+                              struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group,
+                              struct zwp_tablet_pad_ring_v2  *wp_tablet_pad_ring)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s pad group = %p, ring = %p",
+           G_STRFUNC, wp_tablet_pad_group, wp_tablet_pad_ring);
+
+  zwp_tablet_pad_ring_v2_add_listener (wp_tablet_pad_ring,
+                                       &tablet_pad_ring_listener, group);
+  zwp_tablet_pad_ring_v2_set_user_data (wp_tablet_pad_ring, group);
+
+  group->rings = g_list_append (group->rings, wp_tablet_pad_ring);
+  group->pad->rings = g_list_append (group->pad->rings, wp_tablet_pad_ring);
+}
+
+static void
+tablet_pad_group_handle_strip (void                           *data,
+                               struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group,
+                               struct zwp_tablet_pad_strip_v2 *wp_tablet_pad_strip)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s pad group = %p, strip = %p",
+           G_STRFUNC, wp_tablet_pad_group, wp_tablet_pad_strip);
+
+  zwp_tablet_pad_strip_v2_add_listener (wp_tablet_pad_strip,
+                                       &tablet_pad_strip_listener, group);
+  zwp_tablet_pad_strip_v2_set_user_data (wp_tablet_pad_strip, group);
+
+  group->strips = g_list_append (group->strips, wp_tablet_pad_strip);
+  group->pad->strips = g_list_append (group->pad->strips, wp_tablet_pad_strip);
+}
+
+static void
+tablet_pad_group_handle_modes (void                           *data,
+                               struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group,
+                               uint32_t                        modes)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  g_debug (G_STRLOC ": %s pad group = %p, n_modes = %d",
+           G_STRFUNC, wp_tablet_pad_group, modes);
+
+  group->n_modes = modes;
+}
+
+static void
+tablet_pad_group_handle_done (void                           *data,
+                              struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group)
+{
+  g_debug (G_STRLOC ": %s pad group = %p", G_STRFUNC, wp_tablet_pad_group);
+}
+
+static void
+tablet_pad_group_handle_mode (void                           *data,
+                              struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group,
+                              uint32_t                        time,
+                              uint32_t                        serial,
+                              uint32_t                        mode)
+{
+  g_debug (G_STRLOC ": %s pad group = %p, mode = %d",
+           G_STRFUNC, wp_tablet_pad_group, mode);
+}
+
+static const struct zwp_tablet_pad_group_v2_listener tablet_pad_group_listener = {
+  tablet_pad_group_handle_buttons,
+  tablet_pad_group_handle_ring,
+  tablet_pad_group_handle_strip,
+  tablet_pad_group_handle_modes,
+  tablet_pad_group_handle_done,
+  tablet_pad_group_handle_mode,
+};
+
+static void
+tablet_pad_handle_group (void                           *data,
+                         struct zwp_tablet_pad_v2       *wp_tablet_pad,
+                         struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group)
+{
+  GdkWaylandTabletPadData *pad = data;
+  GdkWaylandTabletPadGroupData *group;
+
+  g_debug (G_STRLOC ": %s pad group = %p, group = %p",
+           G_STRFUNC, wp_tablet_pad_group, wp_tablet_pad_group);
+
+  group = g_new0 (GdkWaylandTabletPadGroupData, 1);
+  group->wp_tablet_pad_group = wp_tablet_pad_group;
+  group->pad = pad;
+
+  zwp_tablet_pad_group_v2_add_listener (wp_tablet_pad_group,
+                                        &tablet_pad_group_listener, group);
+  zwp_tablet_pad_group_v2_set_user_data (wp_tablet_pad_group, group);
+  pad->mode_groups = g_list_append (pad->mode_groups, group);
+}
+
+static void
+tablet_pad_handle_path (void                     *data,
+                        struct zwp_tablet_pad_v2 *wp_tablet_pad,
+                        const char               *path)
+{
+  GdkWaylandTabletPadData *pad = data;
+
+  g_debug (G_STRLOC ": %s pad = %p, path = %s",
+           G_STRFUNC, wp_tablet_pad, path);
+
+  pad->path = g_strdup (path);
+}
+
+static void
+tablet_pad_handle_buttons (void                     *data,
+                           struct zwp_tablet_pad_v2 *wp_tablet_pad,
+                           uint32_t                  buttons)
+{
+  GdkWaylandTabletPadData *pad = data;
+
+  g_debug (G_STRLOC ": %s pad = %p, n_buttons = %d",
+           G_STRFUNC, wp_tablet_pad, buttons);
+
+  pad->n_buttons = buttons;
+}
+
+static void
+tablet_pad_handle_done (void                     *data,
+                        struct zwp_tablet_pad_v2 *wp_tablet_pad)
+{
+  g_debug (G_STRLOC ": %s pad = %p", G_STRFUNC, wp_tablet_pad);
+}
+
+static void
+tablet_pad_handle_button (void                     *data,
+                          struct zwp_tablet_pad_v2 *wp_tablet_pad,
+                          uint32_t                  time,
+                          uint32_t                  button,
+                          uint32_t                  state)
+{
+  g_debug (G_STRLOC ": %s pad = %p, button = %d, state = %d",
+           G_STRFUNC, wp_tablet_pad, button, state);
+}
+
+static void
+tablet_pad_handle_enter (void                     *data,
+                         struct zwp_tablet_pad_v2 *wp_tablet_pad,
+                         uint32_t                  serial,
+                         struct zwp_tablet_v2     *wp_tablet,
+                         struct wl_surface        *surface)
+{
+  GdkWaylandTabletPadData *pad = data;
+  GdkWaylandTabletData *tablet = zwp_tablet_v2_get_user_data (wp_tablet);
+
+  g_debug (G_STRLOC ": %s pad = %p, tablet = %p surface = %p",
+           G_STRFUNC, wp_tablet_pad, wp_tablet, surface);
+
+  /* Relate pad and tablet */
+  tablet->pads = g_list_prepend (tablet->pads, pad);
+  pad->current_tablet = tablet;
+}
+
+static void
+tablet_pad_handle_leave (void                     *data,
+                         struct zwp_tablet_pad_v2 *wp_tablet_pad,
+                         uint32_t                  serial,
+                         struct wl_surface        *surface)
+{
+  GdkWaylandTabletPadData *pad = data;
+
+  g_debug (G_STRLOC ": %s pad = %p, surface = %p",
+           G_STRFUNC, wp_tablet_pad, surface);
+
+  if (pad->current_tablet)
+    {
+      pad->current_tablet->pads = g_list_remove (pad->current_tablet->pads, pad);
+      pad->current_tablet = NULL;
+    }
+}
+
+static void
+tablet_pad_handle_removed (void                     *data,
+                           struct zwp_tablet_pad_v2 *wp_tablet_pad)
+{
+  GdkWaylandTabletPadData *pad = data;
+
+  g_debug (G_STRLOC ": %s pad = %p", G_STRFUNC, wp_tablet_pad);
+
+  /* Remove from the current tablet */
+  if (pad->current_tablet)
+    {
+      pad->current_tablet->pads = g_list_remove (pad->current_tablet->pads, pad);
+      pad->current_tablet = NULL;
+    }
+
+  _gdk_wayland_seat_remove_tablet_pad (GDK_WAYLAND_SEAT (pad->seat), pad);
+}
+
+static const struct zwp_tablet_pad_v2_listener tablet_pad_listener = {
+  tablet_pad_handle_group,
+  tablet_pad_handle_path,
+  tablet_pad_handle_buttons,
+  tablet_pad_handle_done,
+  tablet_pad_handle_button,
+  tablet_pad_handle_enter,
+  tablet_pad_handle_leave,
+  tablet_pad_handle_removed,
+};
+
+static void
 tablet_seat_handle_tablet_added (void                      *data,
                                  struct zwp_tablet_seat_v2 *wp_tablet_seat,
                                  struct zwp_tablet_v2      *wp_tablet)
@@ -3664,8 +4047,17 @@ tablet_seat_handle_pad_added (void                      *data,
                               struct zwp_tablet_seat_v2 *wp_tablet_seat,
                               struct zwp_tablet_pad_v2  *wp_tablet_pad)
 {
-  /* Unhandled at the moment */
-  zwp_tablet_pad_v2_destroy (wp_tablet_pad);
+  GdkWaylandSeat *seat = data;
+  GdkWaylandTabletPadData *pad;
+
+  pad = g_new0 (GdkWaylandTabletPadData, 1);
+  pad->wp_tablet_pad = wp_tablet_pad;
+  pad->seat = GDK_SEAT (seat);
+
+  zwp_tablet_pad_v2_add_listener (wp_tablet_pad, &tablet_pad_listener, pad);
+  zwp_tablet_pad_v2_set_user_data (wp_tablet_pad, pad);
+
+  seat->tablet_pads = g_list_prepend (seat->tablet_pads, pad);
 }
 
 static const struct zwp_tablet_seat_v2_listener tablet_seat_listener = {
@@ -3828,6 +4220,9 @@ gdk_wayland_seat_finalize (GObject *object)
 
   for (l = seat->tablet_tools; l != NULL; l = l->next)
     _gdk_wayland_seat_remove_tool (seat, l->data);
+
+  for (l = seat->tablet_pads; l != NULL; l = l->next)
+    _gdk_wayland_seat_remove_tablet_pad (seat, l->data);
 
   for (l = seat->tablets; l != NULL; l = l->next)
     _gdk_wayland_seat_remove_tablet (seat, l->data);
