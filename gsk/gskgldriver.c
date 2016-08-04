@@ -14,6 +14,7 @@ typedef struct {
   GLuint min_filter;
   GLuint mag_filter;
   GArray *fbos;
+  gboolean in_use : 1;
 } Texture;
 
 typedef struct {
@@ -106,8 +107,13 @@ gsk_gl_driver_finalize (GObject *gobject)
 {
   GskGLDriver *self = GSK_GL_DRIVER (gobject);
 
+  gdk_gl_context_make_current (self->gl_context);
+
   g_clear_pointer (&self->textures, g_hash_table_unref);
   g_clear_pointer (&self->vaos, g_hash_table_unref);
+
+  if (self->gl_context == gdk_gl_context_get_current ())
+    gdk_gl_context_clear_current ();
 
   g_clear_object (&self->gl_context);
 
@@ -232,6 +238,27 @@ gsk_gl_driver_end_frame (GskGLDriver *driver)
   driver->in_frame = FALSE;
 }
 
+void
+gsk_gl_driver_collect_textures (GskGLDriver *driver)
+{
+  GHashTableIter iter;
+  gpointer value_p = NULL;
+
+  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
+  g_return_if_fail (!driver->in_frame);
+
+  g_hash_table_iter_init (&iter, driver->textures);
+  while (g_hash_table_iter_next (&iter, NULL, &value_p))
+    {
+      Texture *t = value_p;
+
+      if (t->in_use)
+        t->in_use = FALSE;
+      else
+        g_hash_table_iter_remove (&iter);
+    }
+}
+
 static Texture *
 gsk_gl_driver_get_texture (GskGLDriver *driver,
                            int          texture_id)
@@ -268,6 +295,26 @@ gsk_gl_driver_get_fbo (GskGLDriver *driver,
   return &g_array_index (t->fbos, Fbo, 0);
 }
 
+static Texture *
+find_texture_by_size (GHashTable *textures,
+                      int         width,
+                      int         height)
+{
+  GHashTableIter iter;
+  gpointer value_p = NULL;
+
+  g_hash_table_iter_init (&iter, textures);
+  while (g_hash_table_iter_next (&iter, NULL, &value_p))
+    {
+      Texture *t = value_p;
+
+      if (t->width == width && t->height == height)
+        return t;
+    }
+
+  return NULL;
+}
+
 int
 gsk_gl_driver_create_texture (GskGLDriver *driver,
                               int          width,
@@ -278,6 +325,13 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
 
+  t = find_texture_by_size (driver->textures, width, height);
+  if (t != NULL && !t->in_use)
+    {
+      t->in_use = TRUE;
+      return t->texture_id;
+    }
+
   glGenTextures (1, &texture_id);
 
   t = texture_new ();
@@ -286,6 +340,7 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
   t->height = height;
   t->min_filter = GL_NEAREST;
   t->mag_filter = GL_NEAREST;
+  t->in_use = TRUE;
   g_hash_table_insert (driver->textures, GINT_TO_POINTER (texture_id), t);
 
   return t->texture_id;
