@@ -4478,3 +4478,35 @@ gdk_wayland_device_get_drop_context (GdkDevice *device)
 
   return GDK_WAYLAND_SEAT (seat)->drop_context;
 }
+
+/**
+ * gdk_wayland_device_get_node_path:
+ * @device: a #GdkDevice
+ *
+ * Returns the /dev/input/event* path of this device.
+ * For #GdkDevices that possibly coalesce multiple hardware
+ * devices (eg. mouse, keyboard, touch,...), this function
+ * will return %NULL.
+ *
+ * This is most notably implemented for devices of type
+ * %GDK_SOURCE_PEN and %GDK_SOURCE_ERASER.
+ *
+ * Returns: the /dev/input/event* path of this device
+ **/
+const gchar *
+gdk_wayland_device_get_node_path (GdkDevice *device)
+{
+  GdkWaylandTabletData *tablet;
+
+  GdkSeat *seat;
+
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+
+  seat = gdk_device_get_seat (device);
+  tablet = gdk_wayland_device_manager_find_tablet (GDK_WAYLAND_SEAT (seat),
+                                                   device);
+  if (tablet)
+    return tablet->path;
+
+  return NULL;
+}
