@@ -15840,6 +15840,32 @@ gtk_widget_get_renderer (GtkWidget *widget)
 }
 
 GskRenderNode *
+gtk_widget_create_render_node (GtkWidget   *widget,
+                               GskRenderer *renderer,
+                               const char  *name)
+{
+  GskRenderNode *res = gsk_renderer_create_render_node (renderer);
+  GtkAllocation allocation, clip;
+  graphene_point3d_t p;
+  graphene_rect_t bounds;
+  graphene_matrix_t m;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_clip (widget, &clip);
+
+  graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
+  graphene_matrix_init_translate (&m, graphene_point3d_init (&p, allocation.x, allocation.y, 0));
+  graphene_point3d_init (&p, clip.x - allocation.x, clip.y - allocation.y, 0);
+
+  gsk_render_node_set_name (res, name);
+  gsk_render_node_set_bounds (res, &bounds);
+  gsk_render_node_set_transform (res, &m);
+  gsk_render_node_set_anchor_point (res, &p);
+
+  return res;
+}
+
+GskRenderNode *
 gtk_widget_get_render_node (GtkWidget   *widget,
                             GskRenderer *renderer)
 {
