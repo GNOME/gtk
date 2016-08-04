@@ -1859,31 +1859,21 @@ gtk_header_bar_set_child_property (GtkContainer *container,
     }
 }
 
-static gint
-gtk_header_bar_draw (GtkWidget *widget,
-                     cairo_t   *cr)
+static GskRenderNode *
+gtk_header_bar_get_render_node (GtkWidget   *widget,
+                                GskRenderer *renderer)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
+  GskRenderNode *res = gtk_css_gadget_get_render_node (priv->gadget,
+                                                       renderer,
+                                                       FALSE);
 
-  gtk_css_gadget_draw (priv->gadget, cr);
+  if (res == NULL)
+    return NULL;
 
-  return FALSE;
-}
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
 
-static gboolean
-gtk_header_bar_render_contents (GtkCssGadget *gadget,
-                                cairo_t      *cr,
-                                int           x,
-                                int           y,
-                                int           width,
-                                int           height,
-                                gpointer      unused)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-
-  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->draw (widget, cr);
-
-  return FALSE;
+  return res;
 }
 
 static void
@@ -1972,11 +1962,11 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->get_preferred_height = gtk_header_bar_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_header_bar_get_preferred_height_for_width;
   widget_class->get_preferred_width_for_height = gtk_header_bar_get_preferred_width_for_height;
-  widget_class->draw = gtk_header_bar_draw;
   widget_class->realize = gtk_header_bar_realize;
   widget_class->unrealize = gtk_header_bar_unrealize;
   widget_class->hierarchy_changed = gtk_header_bar_hierarchy_changed;
   widget_class->direction_changed = gtk_header_bar_direction_changed;
+  widget_class->get_render_node = gtk_header_bar_get_render_node;
 
   container_class->add = gtk_header_bar_add;
   container_class->remove = gtk_header_bar_remove;
@@ -2128,7 +2118,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
                                                      GTK_WIDGET (bar),
                                                      gtk_header_bar_get_content_size,
                                                      gtk_header_bar_allocate_contents,
-                                                     gtk_header_bar_render_contents,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 
