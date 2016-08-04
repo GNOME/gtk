@@ -15850,17 +15850,15 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   graphene_rect_t bounds;
   graphene_matrix_t m;
 
-  gtk_widget_get_allocation (widget, &allocation);
+  _gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_get_clip (widget, &clip);
 
   graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
   graphene_matrix_init_translate (&m, graphene_point3d_init (&p, allocation.x, allocation.y, 0));
-  graphene_point3d_init (&p, clip.x - allocation.x, clip.y - allocation.y, 0);
 
   gsk_render_node_set_name (res, name);
   gsk_render_node_set_bounds (res, &bounds);
   gsk_render_node_set_transform (res, &m);
-  gsk_render_node_set_anchor_point (res, &p);
 
   return res;
 }
@@ -15872,15 +15870,19 @@ gtk_widget_get_render_node (GtkWidget   *widget,
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GskRenderNode *node;
   graphene_matrix_t m;
-  graphene_point3d_t tmp;
+  graphene_point3d_t p;
   graphene_rect_t bounds;
   GtkAllocation clip;
   GtkAllocation alloc;
 
+  if (_gtk_widget_get_alloc_needed (widget))
+    return NULL;
+
   gtk_widget_get_clip (widget, &clip);
-  gtk_widget_get_allocation (widget, &alloc);
+  _gtk_widget_get_allocation (widget, &alloc);
   graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
-  graphene_matrix_init_translate (&m, graphene_point3d_init (&tmp, alloc.x, alloc.y, 0.f));
+  graphene_matrix_init_translate (&m, graphene_point3d_init (&p, alloc.x, alloc.y, 0.f));
+  graphene_point3d_init (&p, clip.x - alloc.x, clip.y - alloc.y, 0.f);
 
   /* Compatibility mode: if the widget does not have a render node, we draw
    * using gtk_widget_draw() on a temporary node
@@ -15890,7 +15892,6 @@ gtk_widget_get_render_node (GtkWidget   *widget,
       GskRenderNode *tmp;
       cairo_t *cr;
       char *str;
-      graphene_point3d_t p;
 
       str = g_strconcat ("Fallback<", G_OBJECT_TYPE_NAME (widget), ">", NULL);
 
@@ -15898,14 +15899,11 @@ gtk_widget_get_render_node (GtkWidget   *widget,
       gsk_render_node_set_name (tmp, str);
       gsk_render_node_set_bounds (tmp, &bounds);
       gsk_render_node_set_transform (tmp, &m);
-      gsk_render_node_set_anchor_point (tmp,
-                                        graphene_point3d_init (&p, clip.x - alloc.x,
-                                                                   clip.y - alloc.y,
-                                                                   0.f));
+      gsk_render_node_set_anchor_point (tmp, &p);
 
       cr = gsk_render_node_get_draw_context (tmp);
       cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
-      gtk_widget_draw (widget, cr);
+      gtk_widget_draw_internal (widget, cr, TRUE);
       cairo_destroy (cr);
 
       g_free (str);
@@ -15932,10 +15930,10 @@ gtk_widget_get_render_node (GtkWidget   *widget,
           gsk_render_node_set_name (tmp, str);
           gsk_render_node_set_bounds (tmp, &bounds);
           gsk_render_node_set_transform (tmp, &m);
+          gsk_render_node_set_anchor_point (tmp, &p);
+
           cr = gsk_render_node_get_draw_context (tmp);
-
           g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
-
           cairo_destroy (cr);
 
           g_free (str);
