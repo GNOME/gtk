@@ -42,8 +42,8 @@ m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
 m4_define([glib_required_major], [2])
-m4_define([glib_required_minor], [49])
-m4_define([glib_required_micro], [1])
+m4_define([glib_required_minor], [45])
+m4_define([glib_required_micro], [8])
 m4_define([glib_required_version],
           [glib_required_major.glib_required_minor.glib_required_micro])
 m4_define([glib_min_required_minor],

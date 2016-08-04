@@ -876,7 +876,9 @@ is_external_volume (GVolume *volume)
   is_external |= !id;
 
   if (drive)
-    is_external |= g_drive_is_removable (drive);
+    is_external |= g_drive_can_eject (drive) ||
+                   g_drive_is_media_removable (drive) ||
+                   g_drive_can_stop (drive);
 
   g_clear_object (&drive);
   g_free (id);
