@@ -797,6 +797,25 @@ GDK_MAX_TIMECOORD_AXES
 </SECTION>
 
 <SECTION>
+<TITLE>GdkDevicePad</TITLE>
+<FILE>gdkdevicepad</FILE>
+GdkDevicePad
+GdkDevicePadFeature
+gdk_device_pad_get_n_groups
+gdk_device_pad_get_group_n_modes
+gdk_device_pad_get_n_features
+gdk_device_pad_get_feature_group
+
+<SUBSECTION Standard>
+GDK_TYPE_DEVICE_PAD
+GDK_DEVICE_PAD
+GDK_IS_DEVICE_PAD
+
+<SUBSECTION Private>
+gdk_device_pad_get_type
+</SECTION>
+
+<SECTION>
 <TITLE>GdkSeat</TITLE>
 <FILE>gdkseat</FILE>
 GdkSeat

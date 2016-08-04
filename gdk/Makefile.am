@@ -71,6 +71,7 @@ gdk_public_h_sources = 				\
 	gdkcairo.h				\
 	gdkcursor.h				\
 	gdkdevice.h				\
+	gdkdevicepad.h				\
 	gdkdevicetool.h				\
 	gdkdevicemanager.h			\
 	gdkdisplay.h				\
@@ -114,6 +115,7 @@ gdk_private_headers = 				\
 	gdkcursorprivate.h			\
 	gdkdevicemanagerprivate.h		\
 	gdkdeviceprivate.h			\
+	gdkdevicepadprivate.h			\
 	gdkdevicetoolprivate.h			\
 	gdkdisplaymanagerprivate.h		\
 	gdkdisplayprivate.h			\
@@ -144,6 +146,7 @@ gdk_c_sources = 				\
 	gdkcursor.c				\
 	gdkdeprecated.c				\
 	gdkdevice.c				\
+	gdkdevicepad.c				\
 	gdkdevicetool.c				\
 	gdkdevicemanager.c			\
 	gdkdisplay.c				\
