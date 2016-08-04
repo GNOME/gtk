@@ -1383,61 +1383,6 @@ static const struct xdg_popup_listener xdg_popup_listener = {
   xdg_popup_done,
 };
 
-/**
- * gdk_wayland_window_get_fake_root_coords:
- * @window: A #GdkWindow
- * @x_out: (out): The X offset of this window
- * @y_out: (out): The Y offset of this window
- *
- * Wayland does not have a global coordinate space shared between
- * surfaces. In fact, for regular toplevels, we have no idea where
- * our surfaces are positioned, relatively.
- *
- * However, there are some cases like popups and subsurfaces where
- * we do have some amount of control over the placement of our
- * window, and we can semi-accurately control the x/y position of
- * these windows, if they are relative to another surface.
- *
- * GTK+ loves to position "relative" popups like menus in root
- * window coordinates, since it was built for display servers that
- * have queryable absolute coordinate spaces. In these cases, GTK+
- * might ask for the root coordinates of a widget window, add a
- * few values, and then call gdk_window_move() with that absolute
- * value.
- *
- * In Wayland, we have to "reverse-engineer" this use, and figure
- * out the root coordinates from the relative position, and the
- * relative position from the root coordinates.
- *
- * We invent a coordinate space called the "fake root coordinate"
- * space in which a toplevel is always at 0,0, and all popups are
- * relative to that space.
- *
- * gdk_wayland_window_get_fake_root_coords() gives you the
- * position of a #GdkWindow in "fake root" coordinates.
- */
-static void
-gdk_wayland_window_get_fake_root_coords (GdkWindow *window,
-                                         gint      *x_out,
-                                         gint      *y_out)
-{
-  gint x_offset = 0, y_offset = 0;
-
-  while (window)
-    {
-      GdkWindowImplWayland *impl;
-
-      x_offset += window->x;
-      y_offset += window->y;
-
-      impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-      window = impl->transient_for;
-    }
-
-  *x_out = x_offset;
-  *y_out = y_offset;
-}
-
 static void
 gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
                                      GdkWindow      *parent,
@@ -1449,7 +1394,6 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
   GdkSeat *gdk_seat;
   guint32 serial;
   int x, y;
-  int parent_x, parent_y;
 
   if (!impl->display_server.wl_surface)
     return;
@@ -1458,10 +1402,10 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
     return;
 
   gdk_seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
-  gdk_wayland_window_get_fake_root_coords (parent, &parent_x, &parent_y);
 
-  x = window->x - parent_x;
-  y = window->y - parent_y;
+  x = window->x - parent->x;
+  y = window->y - parent->y;
+
   serial = _gdk_wayland_seat_get_last_implicit_grab_serial (gdk_seat, NULL);
 
   impl->display_server.xdg_popup = xdg_shell_get_xdg_popup (display->xdg_shell,
@@ -2042,15 +1986,33 @@ gdk_window_wayland_get_root_coords (GdkWindow *window,
                                     gint      *root_x,
                                     gint      *root_y)
 {
-  gint x_offset, y_offset;
-
-  gdk_wayland_window_get_fake_root_coords (window, &x_offset, &y_offset);
+  /*
+   * Wayland does not have a global coordinate space shared between surfaces. In
+   * fact, for regular toplevels, we have no idea where our surfaces are
+   * positioned, relatively.
+   *
+   * However, there are some cases like popups and subsurfaces where we do have
+   * some amount of control over the placement of our window, and we can
+   * semi-accurately control the x/y position of these windows, if they are
+   * relative to another surface.
+   *
+   * To pretend we have something called a root coordinate space, assume all
+   * parent-less windows are positioned in (0, 0), and all relative positioned
+   * popups and subsurfaces are placed within this fake root coordinate space.
+   *
+   * For example a 200x200 large toplevel window will have the position (0, 0).
+   * If a popup positioned in the middle of the toplevel will have the fake
+   * position (100,100). Furthermore, if a positioned is placed in the middle
+   * that popup, will have the fake position (150,150), even though it has the
+   * relative position (50,50). These three windows would make up one single
+   * fake root coordinate space.
+   */
 
   if (root_x)
-    *root_x = x_offset + x;
+    *root_x = window->x + x;
 
   if (root_y)
-    *root_y = y_offset + y;
+    *root_y = window->y + y;
 }
 
 static gboolean
@@ -2363,9 +2325,12 @@ static void
 gdk_wayland_window_get_frame_extents (GdkWindow    *window,
                                       GdkRectangle *rect)
 {
-  gdk_wayland_window_get_fake_root_coords (window, &rect->x, &rect->y);
-  rect->width = window->width;
-  rect->height = window->height;
+  *rect = (GdkRectangle) {
+    .x = window->x,
+    .y = window->y,
+    .width = window->width,
+    .height = window->height
+  };
 }
 
 static void
