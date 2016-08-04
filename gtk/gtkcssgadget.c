@@ -811,9 +811,12 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   cairo_t *cr;
   GskRenderNode *bg_node, *border_node;
   graphene_rect_t bounds;
+  graphene_point3d_t p;
+  graphene_matrix_t m;
   int x, y, width, height;
   int contents_x, contents_y, contents_width, contents_height;
   GtkAllocation margin_box;
+  char *str;
 
   if (!gtk_css_gadget_get_visible (gadget))
     return NULL;
@@ -837,49 +840,55 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
       height = gtk_widget_get_allocated_height (priv->owner);
     }
 
-  graphene_rect_init (&bounds, x, y, width, height);
+  graphene_rect_init (&bounds, 0, 0, width, height);
+  graphene_point3d_init (&p, x, y, 0);
 
   style = gtk_css_gadget_get_style (gadget);
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
+  str = g_strconcat ("Background<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
   bg_node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (bg_node, "Background");
+  gsk_render_node_set_name (bg_node, str);
   gsk_render_node_set_bounds (bg_node, &bounds);
+  gsk_render_node_set_anchor_point (bg_node, &p);
   cr = gsk_render_node_get_draw_context (bg_node);
 
   gtk_css_style_render_background (style,
                                    cr,
-                                   x + margin.left,
-                                   y + margin.top,
+                                   margin.left,
+                                   margin.top,
                                    width - margin.left - margin.right,
                                    height - margin.top - margin.bottom,
                                    gtk_css_node_get_junction_sides (priv->node));
 
   cairo_destroy (cr);
+  g_free (str);
 
+  str = g_strconcat ("Border<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
   border_node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (border_node, "Border");
+  gsk_render_node_set_name (border_node, str);
   gsk_render_node_set_bounds (border_node, &bounds);
   cr = gsk_render_node_get_draw_context (border_node);
 
   gtk_css_style_render_border (style,
                                cr,
-                               x + margin.left,
-                               y + margin.top,
+                               margin.left,
+                               margin.top,
                                width - margin.left - margin.right,
                                height - margin.top - margin.bottom,
                                0,
                                gtk_css_node_get_junction_sides (priv->node));
 
   cairo_destroy (cr);
+  g_free (str);
 
   gsk_render_node_append_child (bg_node, border_node);
   gsk_render_node_unref (border_node);
 
-  contents_x = x + margin.left + border.left + padding.left;
-  contents_y = y + margin.top + border.top + padding.top;
+  contents_x = margin.left + border.left + padding.left;
+  contents_y = margin.top + border.top + padding.top;
   contents_width = width - margin.left - margin.right - border.left - border.right - padding.left - padding.right;
   contents_height = height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom;
 
@@ -887,15 +896,23 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
     {
       GtkCssGadgetClass *gadget_class = GTK_CSS_GADGET_GET_CLASS (gadget);
       graphene_rect_t content_bounds =
-        GRAPHENE_RECT_INIT (contents_x, contents_y, contents_width, contents_height);
+        GRAPHENE_RECT_INIT (0, 0, contents_width, contents_height);
       GskRenderNode *content_node = NULL;
+      graphene_matrix_t content_transform;
+      graphene_point3d_t tmp;
 
-      if (gadget_class->draw != NULL)
+      graphene_matrix_init_translate (&content_transform,
+                                      graphene_point3d_init (&tmp, -contents_x, -contents_y, 0));
+
+      /* If there's an override in place, create a temporary node */
+      if (gadget_class->draw != gtk_css_gadget_real_draw)
         {
           content_node = gsk_renderer_create_render_node (renderer);
 
-          gsk_render_node_set_name (content_node, "Content[Fallback]");
+          gsk_render_node_set_name (content_node, "DrawGadgetContent");
           gsk_render_node_set_bounds (content_node, &content_bounds);
+          gsk_render_node_set_transform (content_node, &content_transform);
+
           cr = gsk_render_node_get_draw_context (content_node);
 
           /* Compatibility mode: draw_focus is left to the draw() implementation */
@@ -920,8 +937,8 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
       cr = gsk_render_node_get_draw_context (focus_node);
       gtk_css_style_render_outline (style,
                                     cr,
-                                    x + margin.left,
-                                    y + margin.top,
+                                    margin.left,
+                                    margin.top,
                                     width - margin.left - margin.right,
                                     height - margin.top - margin.bottom);
       cairo_destroy (cr);
