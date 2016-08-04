@@ -29,6 +29,7 @@
 #include "gdkwayland.h"
 #include "gdkkeysyms.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdevicepadprivate.h"
 #include "gdkdevicetoolprivate.h"
 #include "gdkdevicemanagerprivate.h"
 #include "gdkseatprivate.h"
@@ -44,6 +45,9 @@
 #include <linux/input.h>
 
 #define BUTTON_BASE (BTN_LEFT - 1) /* Used to translate to 1-indexed buttons */
+
+typedef struct _GdkWaylandDevicePad GdkWaylandDevicePad;
+typedef struct _GdkWaylandDevicePadClass GdkWaylandDevicePadClass;
 
 typedef struct _GdkWaylandTouchData GdkWaylandTouchData;
 typedef struct _GdkWaylandPointerFrameData GdkWaylandPointerFrameData;
@@ -257,6 +261,25 @@ struct _GdkWaylandDeviceClass
 
 G_DEFINE_TYPE (GdkWaylandDevice, gdk_wayland_device, GDK_TYPE_DEVICE)
 
+struct _GdkWaylandDevicePad
+{
+  GdkWaylandDevice parent_instance;
+};
+
+struct _GdkWaylandDevicePadClass
+{
+  GdkWaylandDeviceClass parent_class;
+};
+
+static void gdk_wayland_device_pad_iface_init (GdkDevicePadInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandDevicePad, gdk_wayland_device_pad,
+                         GDK_TYPE_WAYLAND_DEVICE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_DEVICE_PAD,
+                                                gdk_wayland_device_pad_iface_init))
+
+#define GDK_TYPE_WAYLAND_DEVICE_PAD (gdk_wayland_device_pad_get_type ())
+
 #define GDK_TYPE_WAYLAND_DEVICE_MANAGER        (gdk_wayland_device_manager_get_type ())
 #define GDK_WAYLAND_DEVICE_MANAGER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_WAYLAND_DEVICE_MANAGER, GdkWaylandDeviceManager))
 #define GDK_WAYLAND_DEVICE_MANAGER_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_WAYLAND_DEVICE_MANAGER, GdkWaylandDeviceManagerClass))
@@ -348,6 +371,24 @@ gdk_wayland_device_manager_find_tablet (GdkWaylandSeat *seat,
 
   return NULL;
 }
+
+static GdkWaylandTabletPadData *
+gdk_wayland_device_manager_find_pad (GdkWaylandSeat *seat,
+                                     GdkDevice      *device)
+{
+  GList *l;
+
+  for (l = seat->tablet_pads; l; l = l->next)
+    {
+      GdkWaylandTabletPadData *pad = l->data;
+
+      if (pad->device == device)
+        return pad;
+    }
+
+  return NULL;
+}
+
 
 static gboolean
 gdk_wayland_device_update_window_cursor (GdkDevice *device)
@@ -829,6 +870,131 @@ gdk_wayland_device_init (GdkWaylandDevice *device_core)
 
   _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_X, 0, 0, 1);
   _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_Y, 0, 0, 1);
+}
+
+static gint
+gdk_wayland_device_pad_get_n_groups (GdkDevicePad *pad)
+{
+  GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
+  GdkWaylandTabletPadData *data;
+
+  data = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
+                                              GDK_DEVICE (pad));
+  g_assert (data != NULL);
+
+  return g_list_length (data->mode_groups);
+}
+
+static gint
+gdk_wayland_device_pad_get_group_n_modes (GdkDevicePad *pad,
+                                          gint          n_group)
+{
+  GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
+  GdkWaylandTabletPadGroupData *group;
+  GdkWaylandTabletPadData *data;
+
+  data = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
+                                              GDK_DEVICE (pad));
+  g_assert (data != NULL);
+
+  group = g_list_nth_data (data->mode_groups, n_group);
+  if (!group)
+    return -1;
+
+  return group->n_modes;
+}
+
+static gint
+gdk_wayland_device_pad_get_n_features (GdkDevicePad        *pad,
+                                       GdkDevicePadFeature  feature)
+{
+  GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
+  GdkWaylandTabletPadData *data;
+
+  data = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
+                                              GDK_DEVICE (pad));
+  g_assert (data != NULL);
+
+  switch (feature)
+    {
+    case GDK_DEVICE_PAD_FEATURE_BUTTON:
+      return data->n_buttons;
+    case GDK_DEVICE_PAD_FEATURE_RING:
+      return g_list_length (data->rings);
+    case GDK_DEVICE_PAD_FEATURE_STRIP:
+      return g_list_length (data->strips);
+    default:
+      return -1;
+    }
+}
+
+static gint
+gdk_wayland_device_pad_get_feature_group (GdkDevicePad        *pad,
+                                          GdkDevicePadFeature  feature,
+                                          gint                 idx)
+{
+  GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (pad));
+  GdkWaylandTabletPadGroupData *group;
+  GdkWaylandTabletPadData *data;
+  GList *l;
+  gint i;
+
+  data = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
+                                              GDK_DEVICE (pad));
+  g_assert (data != NULL);
+
+  for (l = data->mode_groups, i = 0; l; l = l->next, i++)
+    {
+      group = l->data;
+
+      switch (feature)
+        {
+        case GDK_DEVICE_PAD_FEATURE_BUTTON:
+          if (g_list_find (group->buttons, GINT_TO_POINTER (idx)))
+            return i;
+          break;
+        case GDK_DEVICE_PAD_FEATURE_RING:
+          {
+            gpointer ring;
+
+            ring = g_list_nth_data (data->rings, idx);
+            if (ring && g_list_find (group->rings, ring))
+              return i;
+            break;
+          }
+        case GDK_DEVICE_PAD_FEATURE_STRIP:
+          {
+            gpointer strip;
+            strip = g_list_nth_data (data->strips, idx);
+            if (strip && g_list_find (group->strips, strip))
+              return i;
+            break;
+          }
+        default:
+          break;
+        }
+    }
+
+  return -1;
+}
+
+static void
+gdk_wayland_device_pad_iface_init (GdkDevicePadInterface *iface)
+{
+  iface->get_n_groups = gdk_wayland_device_pad_get_n_groups;
+  iface->get_group_n_modes = gdk_wayland_device_pad_get_group_n_modes;
+  iface->get_n_features = gdk_wayland_device_pad_get_n_features;
+  iface->get_feature_group = gdk_wayland_device_pad_get_feature_group;
+}
+
+static void
+gdk_wayland_device_pad_class_init (GdkWaylandDevicePadClass *klass)
+{
+}
+
+static void
+gdk_wayland_device_pad_init (GdkWaylandDevicePad *pad)
+{
 }
 
 /**
