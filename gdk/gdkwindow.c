@@ -9860,7 +9860,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
   if (device)
     {
-      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD &&
+          gdk_device_get_source (device) != GDK_SOURCE_TABLET_PAD)
         {
           pointer_info = _gdk_display_get_pointer_info (display, device);
 
