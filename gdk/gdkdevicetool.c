@@ -145,7 +145,7 @@ gdk_device_tool_new (guint64           serial,
  *
  * Since: 3.22
  **/
-guint
+guint64
 gdk_device_tool_get_serial (GdkDeviceTool *tool)
 {
   g_return_val_if_fail (tool != NULL, 0);

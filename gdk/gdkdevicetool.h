@@ -65,7 +65,7 @@ GDK_AVAILABLE_IN_3_22
 GType gdk_device_tool_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_22
-guint gdk_device_tool_get_serial (GdkDeviceTool *tool);
+guint64 gdk_device_tool_get_serial (GdkDeviceTool *tool);
 
 GDK_AVAILABLE_IN_3_22
 GdkDeviceToolType gdk_device_tool_get_tool_type (GdkDeviceTool *tool);
