@@ -160,6 +160,36 @@ gtk_pad_controller_handle_mode_switch (GtkPadController *controller,
                                        guint             group,
                                        guint             mode)
 {
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gdk_device_get_display (pad)))
+    {
+      const GtkPadActionEntry *entry;
+      gint elem, idx, n_features;
+
+      for (elem = GTK_PAD_ACTION_BUTTON; elem <= GTK_PAD_ACTION_STRIP; elem++)
+        {
+          n_features = gdk_device_pad_get_n_features (GDK_DEVICE_PAD (pad),
+                                                      elem);
+
+          for (idx = 0; idx < n_features; idx++)
+            {
+              if (gdk_device_pad_get_feature_group (GDK_DEVICE_PAD (pad),
+                                                    elem, idx) != group)
+                continue;
+
+              entry = gtk_pad_action_find_match (controller, elem, idx, mode);
+              if (!entry)
+                continue;
+              if (!g_action_group_has_action (controller->action_group,
+                                              entry->action_name))
+                continue;
+
+              gdk_wayland_device_pad_set_feedback (pad, elem, idx,
+                                                   g_dgettext (NULL, entry->label));
+            }
+        }
+    }
+#endif
 }
 
 static gboolean
