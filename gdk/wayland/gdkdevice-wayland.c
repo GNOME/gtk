@@ -2777,6 +2777,24 @@ _gdk_wayland_seat_remove_tablet_pad (GdkWaylandSeat          *seat,
   g_free (pad);
 }
 
+static GdkWaylandTabletPadGroupData *
+tablet_pad_lookup_button_group (GdkWaylandTabletPadData *pad,
+                                uint32_t                 button)
+{
+  GdkWaylandTabletPadGroupData *group;
+  GList *l;
+
+  for (l = pad->mode_groups; l; l = l->next)
+    {
+      group = l->data;
+
+      if (g_list_find (group->buttons, GUINT_TO_POINTER (button)))
+        return group;
+    }
+
+  return NULL;
+}
+
 static void
 tablet_handle_name (void                 *data,
                     struct zwp_tablet_v2 *wp_tablet,
@@ -3887,7 +3905,25 @@ tablet_pad_ring_handle_frame (void                          *data,
                               struct zwp_tablet_pad_ring_v2 *wp_tablet_pad_ring,
                               uint32_t                       time)
 {
+  GdkWaylandTabletPadGroupData *group = data;
+  GdkWaylandTabletPadData *pad = group->pad;
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
+  GdkEvent *event;
+
   g_debug (G_STRLOC ": %s ring = %p", G_STRFUNC, wp_tablet_pad_ring);
+
+  event = gdk_event_new (GDK_PAD_RING);
+  g_set_object (&event->pad_axis.window, seat->keyboard_focus);
+  event->pad_axis.time = time;
+  event->pad_axis.group = g_list_index (pad->mode_groups, group);
+  event->pad_axis.index = g_list_index (pad->rings, wp_tablet_pad_ring);
+  event->pad_axis.mode = group->current_mode;
+  event->pad_axis.value = group->axis_tmp_info.value;
+  gdk_event_set_device (event, pad->device);
+  gdk_event_set_source_device (event, pad->device);
+
+  _gdk_wayland_display_deliver_event (gdk_seat_get_display (pad->seat),
+                                      event);
 }
 
 static const struct zwp_tablet_pad_ring_v2_listener tablet_pad_ring_listener = {
@@ -3920,7 +3956,7 @@ tablet_pad_strip_handle_position (void                           *data,
   g_debug (G_STRLOC ": %s strip = %p position = %d",
            G_STRFUNC, wp_tablet_pad_strip, position);
 
-  group->axis_tmp_info.value = position / 65535;
+  group->axis_tmp_info.value = (gdouble) position / 65535;
 }
 
 static void
@@ -3940,8 +3976,27 @@ tablet_pad_strip_handle_frame (void                           *data,
                                struct zwp_tablet_pad_strip_v2 *wp_tablet_pad_strip,
                                uint32_t                        time)
 {
+  GdkWaylandTabletPadGroupData *group = data;
+  GdkWaylandTabletPadData *pad = group->pad;
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
+  GdkEvent *event;
+
   g_debug (G_STRLOC ": %s strip = %p",
            G_STRFUNC, wp_tablet_pad_strip);
+
+  event = gdk_event_new (GDK_PAD_STRIP);
+  g_set_object (&event->pad_axis.window, seat->keyboard_focus);
+  event->pad_axis.time = time;
+  event->pad_axis.group = g_list_index (pad->mode_groups, group);
+  event->pad_axis.index = g_list_index (pad->strips, wp_tablet_pad_strip);
+  event->pad_axis.mode = group->current_mode;
+  event->pad_axis.value = group->axis_tmp_info.value;
+
+  gdk_event_set_device (event, pad->device);
+  gdk_event_set_source_device (event, pad->device);
+
+  _gdk_wayland_display_deliver_event (gdk_seat_get_display (pad->seat),
+                                      event);
 }
 
 static const struct zwp_tablet_pad_strip_v2_listener tablet_pad_strip_listener = {
@@ -4033,8 +4088,29 @@ tablet_pad_group_handle_mode (void                           *data,
                               uint32_t                        serial,
                               uint32_t                        mode)
 {
+  GdkWaylandTabletPadGroupData *group = data;
+  GdkWaylandTabletPadData *pad = group->pad;
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
+  GdkEvent *event;
+  guint n_group;
+
   g_debug (G_STRLOC ": %s pad group = %p, mode = %d",
            G_STRFUNC, wp_tablet_pad_group, mode);
+
+  group->mode_switch_serial = serial;
+  group->current_mode = mode;
+  n_group = g_list_index (pad->mode_groups, group);
+
+  event = gdk_event_new (GDK_PAD_GROUP_MODE);
+  g_set_object (&event->pad_button.window, seat->keyboard_focus);
+  event->pad_group_mode.group = n_group;
+  event->pad_group_mode.mode = mode;
+  event->pad_group_mode.time = time;
+  gdk_event_set_device (event, pad->device);
+  gdk_event_set_source_device (event, pad->device);
+
+  _gdk_wayland_display_deliver_event (gdk_seat_get_display (pad->seat),
+                                      event);
 }
 
 static const struct zwp_tablet_pad_group_v2_listener tablet_pad_group_listener = {
@@ -4126,8 +4202,31 @@ tablet_pad_handle_button (void                     *data,
                           uint32_t                  button,
                           uint32_t                  state)
 {
+  GdkWaylandTabletPadData *pad = data;
+  GdkWaylandTabletPadGroupData *group;
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
+  GdkEvent *event;
+  gint n_group;
+
   g_debug (G_STRLOC ": %s pad = %p, button = %d, state = %d",
            G_STRFUNC, wp_tablet_pad, button, state);
+
+  group = tablet_pad_lookup_button_group (pad, button);
+  n_group = g_list_index (pad->mode_groups, group);
+
+  event = gdk_event_new (state == ZWP_TABLET_PAD_V2_BUTTON_STATE_PRESSED ?
+                         GDK_PAD_BUTTON_PRESS :
+                         GDK_PAD_BUTTON_RELEASE);
+  g_set_object (&event->pad_button.window, seat->keyboard_focus);
+  event->pad_button.button = button;
+  event->pad_button.group = n_group;
+  event->pad_button.mode = group->current_mode;
+  event->pad_button.time = time;
+  gdk_event_set_device (event, pad->device);
+  gdk_event_set_source_device (event, pad->device);
+
+  _gdk_wayland_display_deliver_event (gdk_seat_get_display (pad->seat),
+                                      event);
 }
 
 static void
