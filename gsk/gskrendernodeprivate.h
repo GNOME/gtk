@@ -53,7 +53,7 @@ struct _GskRenderNode
   /* Transformations applied to the node */
   graphene_matrix_t transform;
 
-  graphene_point3d_t offset;
+  graphene_point3d_t anchor_point;
 
   /* Transformations applied to the children of the node */
   graphene_matrix_t child_transform;
