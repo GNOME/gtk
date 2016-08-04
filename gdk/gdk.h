@@ -33,6 +33,7 @@
 #include <gdk/gdkcairo.h>
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkdevice.h>
+#include <gdk/gdkdevicepad.h>
 #include <gdk/gdkdevicetool.h>
 #include <gdk/gdkdevicemanager.h>
 #include <gdk/gdkdisplay.h>

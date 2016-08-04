@@ -4,6 +4,7 @@ gdk_app_launch_context_get_type
 gdk_cursor_get_type
 gdk_device_get_type
 gdk_device_manager_get_type
+gdk_device_pad_get_type
 gdk_display_get_type
 gdk_display_manager_get_type
 gdk_drag_context_get_type

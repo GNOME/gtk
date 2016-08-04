@@ -25,6 +25,7 @@
     <xi:include href="xml/gdkseat.xml" />
     <xi:include href="xml/gdkmonitor.xml" />
     <xi:include href="xml/gdkdevice.xml" />
+    <xi:include href="xml/gdkdevicepad.xml" />
     <xi:include href="xml/regions.xml" />
     <xi:include href="xml/pixbufs.xml" />
     <xi:include href="xml/rgba_colors.xml" />
