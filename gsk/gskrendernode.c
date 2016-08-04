@@ -178,6 +178,7 @@ gsk_render_node_init (GskRenderNode *self)
 
   graphene_matrix_init_identity (&self->transform);
   graphene_matrix_init_identity (&self->child_transform);
+  graphene_point3d_init (&self->offset, 0.f, 0.f, 0.f);
 
   self->opacity = 1.0;
 
@@ -933,6 +934,23 @@ gsk_render_node_set_transform (GskRenderNode           *node,
     graphene_matrix_init_identity (&node->transform);
   else
     graphene_matrix_init_from_matrix (&node->transform, transform);
+
+  graphene_matrix_translate (&node->transform, &node->offset);
+
+  node->transform_set = !graphene_matrix_is_identity (&node->transform);
+}
+
+void
+gsk_render_node_set_offset (GskRenderNode            *node,
+                            const graphene_point3d_t *offset)
+{
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (node->is_mutable);
+
+  graphene_point3d_scale (&node->offset, -1, &node->offset);
+  graphene_matrix_translate (&node->transform, &node->offset);
+  graphene_point3d_init_from_point (&node->offset, offset);
+  graphene_matrix_translate (&node->transform, &node->offset);
 
   node->transform_set = !graphene_matrix_is_identity (&node->transform);
 }
