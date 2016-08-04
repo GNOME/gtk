@@ -1,3 +1,8 @@
+Overview of Changes in GTK+ 3.20.8
+==================================
+
+* Revert an unintentional bump of the GLib requirement in 3.20.7
+
 Overview of Changes in GTK+ 3.20.7
 ==================================
 
