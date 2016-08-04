@@ -49,6 +49,9 @@ typedef struct _GdkTimeCoord GdkTimeCoord;
  *     as a touchpad. This device type has been added in 3.4.
  * @GDK_SOURCE_TRACKPOINT: the device is a trackpoint. This device type has been
  *     added in 3.22
+ * @GDK_SOURCE_TABLET_PAD: the device is a "pad", a collection of buttons,
+ *     rings and strips found in drawing tablets. This device type has been
+ *     added in 3.22.
  *
  * An enumeration describing the type of an input device in general terms.
  */
@@ -61,7 +64,8 @@ typedef enum
   GDK_SOURCE_KEYBOARD,
   GDK_SOURCE_TOUCHSCREEN,
   GDK_SOURCE_TOUCHPAD,
-  GDK_SOURCE_TRACKPOINT
+  GDK_SOURCE_TRACKPOINT,
+  GDK_SOURCE_TABLET_PAD
 } GdkInputSource;
 
 /**
