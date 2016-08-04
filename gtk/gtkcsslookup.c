@@ -119,7 +119,7 @@ _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
     {
       if (lookup->values[i].value ||
           _gtk_bitmask_get (lookup->missing, i))
-        gtk_css_static_style_compute_value (GTK_CSS_STATIC_STYLE (style),
+        gtk_css_static_style_compute_value (style,
                                             provider,
                                             parent_style,
                                             i,
