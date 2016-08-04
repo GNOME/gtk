@@ -394,6 +394,7 @@ typedef enum
  * @GDK_TOUCH_MASK: receive touch events. Since 3.4
  * @GDK_SMOOTH_SCROLL_MASK: receive smooth scrolling events. Since 3.4
    @GDK_TOUCHPAD_GESTURE_MASK: receive touchpad gesture events. Since 3.18
+ * @GDK_TABLET_PAD_MASK: receive tablet pad events. Since 3.22
  * @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
  *
  * A set of bit-flags to indicate which events a window is to receive.
@@ -449,6 +450,7 @@ typedef enum
   GDK_TOUCH_MASK                = 1 << 22,
   GDK_SMOOTH_SCROLL_MASK        = 1 << 23,
   GDK_TOUCHPAD_GESTURE_MASK     = 1 << 24,
+  GDK_TABLET_PAD_MASK           = 1 << 25,
   GDK_ALL_EVENTS_MASK           = 0xFFFFFE
 } GdkEventMask;
 

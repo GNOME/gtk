@@ -941,6 +941,9 @@ GdkEventOwnerChange
 GdkEventGrabBroken
 GdkEventTouchpadSwipe
 GdkEventTouchpadPinch
+GdkEventPadButton
+GdkEventPadAxis
+GdkEventPadGroupMode
 
 <SUBSECTION>
 GdkScrollDirection

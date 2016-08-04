@@ -920,6 +920,14 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_DROP_START:
       case GDK_DROP_FINISHED:
 	return event->dnd.time;
+      case GDK_PAD_BUTTON_PRESS:
+      case GDK_PAD_BUTTON_RELEASE:
+        return event->pad_button.time;
+      case GDK_PAD_RING:
+      case GDK_PAD_STRIP:
+        return event->pad_axis.time;
+      case GDK_PAD_GROUP_MODE:
+        return event->pad_group_mode.time;
       case GDK_CLIENT_EVENT:
       case GDK_VISIBILITY_NOTIFY:
       case GDK_CONFIGURE:
@@ -1023,6 +1031,11 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
+      case GDK_PAD_BUTTON_PRESS:
+      case GDK_PAD_BUTTON_RELEASE:
+      case GDK_PAD_RING:
+      case GDK_PAD_STRIP:
+      case GDK_PAD_GROUP_MODE:
       case GDK_EVENT_LAST:
         /* no state field */
         break;
@@ -1212,6 +1225,10 @@ gdk_event_get_button (const GdkEvent *event,
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       number = event->button.button;
+      break;
+    case GDK_PAD_BUTTON_PRESS:
+    case GDK_PAD_BUTTON_RELEASE:
+      number = event->pad_button.button;
       break;
     default:
       fetched = FALSE;
