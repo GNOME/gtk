@@ -52,7 +52,7 @@ const gchar *gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self);
 
 GDK_AVAILABLE_IN_3_22
 void         gtk_shortcut_label_set_disabled_text (GtkShortcutLabel *self,
-                                                   const gchar      *unset_text);
+                                                   const gchar      *disabled_text);
 
 G_END_DECLS
 
