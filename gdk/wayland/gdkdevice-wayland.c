@@ -5202,3 +5202,65 @@ gdk_wayland_device_get_node_path (GdkDevice *device)
 
   return NULL;
 }
+
+/**
+ * gdk_wayland_device_pad_set_feedback:
+ * @device: a %GDK_SOURCE_TABLET_PAD device
+ * @feature: Feature to set the feedback label for
+ * @feature_idx: 0-indexed index of the feature to set the feedback label for
+ * @label: Feedback label
+ *
+ * Sets the feedback label for the given feature/index. This may be used by the
+ * compositor to provide user feedback of the actions available/performed.
+ **/
+void
+gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
+                                     GdkDevicePadFeature  feature,
+                                     guint                feature_idx,
+                                     const gchar         *label)
+{
+  GdkWaylandTabletPadData *pad;
+  GdkWaylandTabletPadGroupData *group;
+  GdkSeat *seat;
+
+  seat = gdk_device_get_seat (device);
+  pad = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat),
+                                             device);
+  if (!pad)
+    return;
+
+  if (feature == GDK_DEVICE_PAD_FEATURE_BUTTON)
+    {
+      group = tablet_pad_lookup_button_group (pad, feature_idx);
+      if (!group)
+        return;
+
+      zwp_tablet_pad_v2_set_feedback (pad->wp_tablet_pad, feature_idx, label,
+                                      group->mode_switch_serial);
+    }
+  else if (feature == GDK_DEVICE_PAD_FEATURE_RING)
+    {
+      struct zwp_tablet_pad_ring_v2 *wp_pad_ring;
+
+      wp_pad_ring = g_list_nth_data (pad->rings, feature_idx);
+      if (!wp_pad_ring)
+        return;
+
+      group = zwp_tablet_pad_ring_v2_get_user_data (wp_pad_ring);
+      zwp_tablet_pad_ring_v2_set_feedback (wp_pad_ring, label,
+                                           group->mode_switch_serial);
+
+    }
+  else if (feature == GDK_DEVICE_PAD_FEATURE_STRIP)
+    {
+      struct zwp_tablet_pad_strip_v2 *wp_pad_strip;
+
+      wp_pad_strip = g_list_nth_data (pad->strips, feature_idx);
+      if (!wp_pad_strip)
+        return;
+
+      group = zwp_tablet_pad_strip_v2_get_user_data (wp_pad_strip);
+      zwp_tablet_pad_strip_v2_set_feedback (wp_pad_strip, label,
+                                            group->mode_switch_serial);
+    }
+}
