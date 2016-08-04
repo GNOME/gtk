@@ -5176,7 +5176,7 @@ gdk_wayland_device_get_drop_context (GdkDevice *device)
  * will return %NULL.
  *
  * This is most notably implemented for devices of type
- * %GDK_SOURCE_PEN and %GDK_SOURCE_ERASER.
+ * %GDK_SOURCE_PEN, %GDK_SOURCE_ERASER and %GDK_SOURCE_TABLET_PAD.
  *
  * Returns: the /dev/input/event* path of this device
  **/
@@ -5184,6 +5184,7 @@ const gchar *
 gdk_wayland_device_get_node_path (GdkDevice *device)
 {
   GdkWaylandTabletData *tablet;
+  GdkWaylandTabletPadData *pad;
 
   GdkSeat *seat;
 
@@ -5194,6 +5195,10 @@ gdk_wayland_device_get_node_path (GdkDevice *device)
                                                    device);
   if (tablet)
     return tablet->path;
+
+  pad = gdk_wayland_device_manager_find_pad (GDK_WAYLAND_SEAT (seat), device);
+  if (pad)
+    return pad->path;
 
   return NULL;
 }
