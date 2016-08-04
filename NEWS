@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 3.20.7
+==================================
+
+* Bugs fixed:
+ 118959 GtkScale value '-0'
+ 674215 regression with updating tooltips
+ 708148 gtk_tree_view_get_path_at_pos mistakenly identifies column of ini...
+ 745622 Selected text not highlighted in GtkInfoBar
+ 747206 gtktextview: note on how to get line spacing between two paragraphs
+ 764060 opening a second nautilus while a delete operation is in progress...
+ 764203 Default background color for the 'textview border' node
+ 765924 Improve external drives detection
+ 766120 Scale draw_value() align changed from centre/right (H/V) to lefti...
+ 766122 Re-used filechooser displays $pwd half of the time when shown
+ 766341 Do not rely on memfd as it requires a fairly recent kernel
+ 766643 Frozen windows when unmapped with pending configure event
+ 766782 OpenGL in broadway leads to segmentation fault
+ 767058 GtkInfoBar: right-click/context menu all white
+ 767468 Popover over a treeview cellrenderer is hidden immediately after ...
+ 767705 GtkActionHelper: Change a message to a warning
+ 767766 CUPS 2.X detected incorrectly by configure
+ 767795  Warning when the "accelerator" property of GtkShortcutsShortcut ...
+ 767848 crash in the window test
+ 767851 Adwaita: popover arrows broken in some orientations
+ 768016 [Wayland] Submenus often get closed after ~2 seconds
+ 768025 entry.warning & entry.error broken
+ 768082 wayland: copying from Wayland to NEdit (Xwayland/Motif) doesn't work
+ 768142 Incorrect order of $(LIBS) and $(OBJS) in Makefile.example caused...
+ 768177 CLIPBOARD target request after PRIMARY request times out. GDK_SEL...
+ 768485 Change the priority of the window-close idle to G_PRIORITY_DEFAULT
+ 768657 places-view: fix open action for locations without a mount or volume
+ 768930 reftests: override GSETTINGS_SCHEMA_DIR when running tests
+ 769003 Adwaita: GtkCalendar uses a confusing style for week of year
+ 769047 GtkWidget <-> GtkStyleContext API not clear
+
+* Translation updates:
+ Indonesian
+ Norwegian bokmål
+
+
 Overview of Changes in GTK+ 3.20.6
 ==================================
 
