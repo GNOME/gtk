@@ -58,6 +58,12 @@ struct wl_seat      *gdk_wayland_seat_get_wl_seat           (GdkSeat   *seat);
 GDK_AVAILABLE_IN_3_22
 const gchar         *gdk_wayland_device_get_node_path       (GdkDevice *device);
 
+GDK_AVAILABLE_IN_3_22
+void                 gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
+                                                          GdkDevicePadFeature  element,
+                                                          guint                idx,
+                                                          const gchar         *label);
+
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_DEVICE_H__ */
