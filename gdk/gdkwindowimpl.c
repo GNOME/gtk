@@ -173,6 +173,29 @@ maybe_flip_position (gint      bounds_pos,
   return primary;
 }
 
+static GdkWindow *
+traverse_to_toplevel (GdkWindow *window,
+                      gint       x,
+                      gint       y,
+                      gint      *toplevel_x,
+                      gint      *toplevel_y)
+{
+  GdkWindow *parent;
+  gdouble xf = x;
+  gdouble yf = y;
+
+  while ((parent = gdk_window_get_effective_parent (window)) != NULL &&
+         (gdk_window_get_window_type (parent) != GDK_WINDOW_ROOT))
+    {
+      gdk_window_coords_to_parent (window, xf, yf, &xf, &yf);
+      window = parent;
+    }
+
+  *toplevel_x = (gint) xf;
+  *toplevel_y = (gint) yf;
+  return window;
+}
+
 static void
 gdk_window_impl_move_to_rect (GdkWindow          *window,
                               const GdkRectangle *rect,
@@ -182,6 +205,7 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
                               gint                rect_anchor_dx,
                               gint                rect_anchor_dy)
 {
+  GdkWindow *transient_for_toplevel;
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle bounds;
@@ -191,7 +215,18 @@ gdk_window_impl_move_to_rect (GdkWindow          *window,
   gboolean flipped_x;
   gboolean flipped_y;
 
-  gdk_window_get_root_coords (window->transient_for,
+  /*
+   * First translate the anchor rect to toplevel coordinates. This is needed
+   * because not all backends will be able to get root coordinates for
+   * non-toplevel windows.
+   */
+  transient_for_toplevel = traverse_to_toplevel (window->transient_for,
+                                                 root_rect.x,
+                                                 root_rect.y,
+                                                 &root_rect.x,
+                                                 &root_rect.y);
+
+  gdk_window_get_root_coords (transient_for_toplevel,
                               root_rect.x,
                               root_rect.y,
                               &root_rect.x,
