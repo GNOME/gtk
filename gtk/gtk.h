@@ -152,6 +152,7 @@
 #include <gtk/gtkoffscreenwindow.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkoverlay.h>
+#include <gtk/gtkpadcontroller.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>
 #include <gtk/gtkpaned.h>

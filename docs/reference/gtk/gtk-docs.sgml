@@ -299,7 +299,7 @@
     </chapter>
 
     <chapter id="Gestures">
-      <title>Gestures</title>
+      <title>Gestures and event handling</title>
       <xi:include href="xml/gtkeventcontroller.xml" />
       <xi:include href="xml/gtkgesture.xml" />
       <xi:include href="xml/gtkgesturesingle.xml" />
@@ -310,6 +310,7 @@
       <xi:include href="xml/gtkgestureswipe.xml" />
       <xi:include href="xml/gtkgesturerotate.xml" />
       <xi:include href="xml/gtkgesturezoom.xml" />
+      <xi:include href="xml/gtkpadcontroller.xml" />
     </chapter>
 
     <chapter id="DeprecatedObjects">
