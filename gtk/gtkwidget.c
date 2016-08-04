@@ -17494,12 +17494,14 @@ gtk_widget_get_render_node (GtkWidget   *widget,
       gsk_render_node_set_name (tmp, str);
       gsk_render_node_set_bounds (tmp, &bounds);
       gsk_render_node_set_transform (tmp, &m);
+      gsk_render_node_set_anchor_point (tmp,
+                                        graphene_point3d_init (&p, clip.x - alloc.x,
+                                                                   clip.y - alloc.y,
+                                                                   0.f));
+
       cr = gsk_render_node_get_draw_context (tmp);
       cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
-      gsk_render_node_set_offset (tmp, graphene_point3d_init (&p, clip.x - alloc.x, clip.y - alloc.y, 0.f));
-
       gtk_widget_draw (widget, cr);
-
       cairo_destroy (cr);
 
       g_free (str);
