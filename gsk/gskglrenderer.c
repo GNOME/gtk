@@ -798,7 +798,6 @@ static void
 render_item_clear (RenderItem    *item,
                    GskGLRenderer *self)
 {
-  gsk_gl_driver_destroy_texture (self->gl_driver, item->render_data.texture_id);
   gsk_gl_driver_destroy_vao (self->gl_driver, item->render_data.vao_id);
 }
 
@@ -820,6 +819,8 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
     }
 
   g_clear_pointer (&self->render_items, g_array_unref);
+
+  gsk_gl_driver_collect_textures (self->gl_driver);
 }
 
 static void
