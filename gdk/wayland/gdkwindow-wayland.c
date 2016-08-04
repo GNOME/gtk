@@ -1706,7 +1706,10 @@ gdk_wayland_window_map (GdkWindow *window)
                                             &window->x, &window->y, NULL);
         }
       else
-        transient_for = get_popup_parent (impl->transient_for);
+        {
+          transient_for = gdk_window_get_effective_toplevel (impl->transient_for);
+          transient_for = get_popup_parent (transient_for);
+        }
 
       if (!transient_for)
         {
