@@ -716,7 +716,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
       gsk_gl_driver_create_vao_for_quad (self->gl_driver,
                                          item.render_data.position_location,
                                          item.render_data.uv_location,
-                                         sizeof (GskQuadVertex) * N_VERTICES,
+                                         N_VERTICES,
                                          vertex_data);
   }
 

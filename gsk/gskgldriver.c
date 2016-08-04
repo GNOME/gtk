@@ -365,7 +365,7 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
 
   glGenBuffers (1, &buffer_id);
   glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
-  glBufferData (GL_ARRAY_BUFFER, n_quads, quads, GL_STATIC_DRAW);
+  glBufferData (GL_ARRAY_BUFFER, sizeof (GskQuadVertex) * n_quads, quads, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray (position_id);
   glVertexAttribPointer (position_id, 2, GL_FLOAT, GL_FALSE,
@@ -386,6 +386,21 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
   v->position_id = position_id;
   v->uv_id = uv_id;
   g_hash_table_insert (driver->vaos, GINT_TO_POINTER (vao_id), v);
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK (OPENGL))
+    {
+      int i;
+      g_print ("New VAO(%d) for quad[%d] : {\n", v->vao_id, n_quads);
+      for (i = 0; i < n_quads; i++)
+        {
+          g_print ("  { x:%.2f, y:%.2f } { u:%.2f, v:%.2f }\n",
+                  quads[i].position[0], quads[i].position[1],
+                  quads[i].uv[0], quads[i].uv[1]);
+        }
+      g_print ("}\n");
+    }
+#endif
 
   return vao_id;
 }
