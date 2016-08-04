@@ -17471,10 +17471,12 @@ gtk_widget_get_render_node (GtkWidget   *widget,
   graphene_point3d_t tmp;
   graphene_rect_t bounds;
   GtkAllocation clip;
+  GtkAllocation alloc;
 
   gtk_widget_get_clip (widget, &clip);
+  gtk_widget_get_allocation (widget, &alloc);
   graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
-  graphene_matrix_init_translate (&m, graphene_point3d_init (&tmp, clip.x, clip.y, 0.f));
+  graphene_matrix_init_translate (&m, graphene_point3d_init (&tmp, alloc.x, alloc.y, 0.f));
 
   /* Compatibility mode: if the widget does not have a render node, we draw
    * using gtk_widget_draw() on a temporary node
@@ -17484,6 +17486,7 @@ gtk_widget_get_render_node (GtkWidget   *widget,
       GskRenderNode *tmp;
       cairo_t *cr;
       char *str;
+      graphene_point3d_t p;
 
       str = g_strconcat ("Fallback<", G_OBJECT_TYPE_NAME (widget), ">", NULL);
 
@@ -17492,6 +17495,8 @@ gtk_widget_get_render_node (GtkWidget   *widget,
       gsk_render_node_set_bounds (tmp, &bounds);
       gsk_render_node_set_transform (tmp, &m);
       cr = gsk_render_node_get_draw_context (tmp);
+      cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
+      gsk_render_node_set_offset (tmp, graphene_point3d_init (&p, clip.x - alloc.x, clip.y - alloc.y, 0.f));
 
       gtk_widget_draw (widget, cr);
 
