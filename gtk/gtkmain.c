@@ -1875,6 +1875,11 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
+    case GDK_PAD_BUTTON_PRESS:
+    case GDK_PAD_BUTTON_RELEASE:
+    case GDK_PAD_RING:
+    case GDK_PAD_STRIP:
+    case GDK_PAD_GROUP_MODE:
       if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
