@@ -1,11 +1,12 @@
-/* Event Axes
+/* Touch and Drawing Tablets
  *
  * Demonstrates advanced handling of event information from exotic
  * input devices.
  *
- * On one hand, this snippet demonstrates management of input axes,
+ * On one hand, this snippet demonstrates management of drawing tablets,
  * those contain additional information for the pointer other than
- * X/Y coordinates.
+ * X/Y coordinates. Tablet pads events are mapped to actions, which
+ * are both defined and interpreted by the application.
  *
  * Input axes are dependent on hardware devices, on linux/unix you
  * can see the device axes through xinput list <device>. Each time
@@ -20,6 +21,7 @@
  * touchpoints can be tracked.
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 typedef struct {
@@ -51,7 +53,30 @@ const gchar *colors[] = {
   "burlywood"
 };
 
+static GtkPadActionEntry pad_actions[] = {
+  { GTK_PAD_ACTION_BUTTON, 1, -1, N_("Nuclear strike"), "pad.nuke" },
+  { GTK_PAD_ACTION_BUTTON, 2, -1, N_("Release siberian methane reserves"), "pad.heat" },
+  { GTK_PAD_ACTION_BUTTON, 3, -1, N_("Release solar flare"), "pad.fry" },
+  { GTK_PAD_ACTION_BUTTON, 4, -1, N_("De-stabilize Oort cloud"), "pad.fall" },
+  { GTK_PAD_ACTION_BUTTON, 5, -1, N_("Ignite WR-104"), "pad.burst" },
+  { GTK_PAD_ACTION_BUTTON, 6, -1, N_("Lart whoever asks about this button"), "pad.lart" },
+  { GTK_PAD_ACTION_RING, -1, -1, N_("Earth axial tilt"), "pad.tilt" },
+  { GTK_PAD_ACTION_STRIP, -1, -1, N_("Extent of weak nuclear force"), "pad.dissolve" },
+};
+
+static const gchar *pad_action_results[] = {
+  "☢",
+  "♨",
+  "☼",
+  "☄",
+  "⚡",
+  "💫",
+  "◑",
+  "⚛"
+};
+
 static guint cur_color = 0;
+static guint pad_action_timeout_id = 0;
 
 static AxesInfo *
 axes_info_new (void)
@@ -488,12 +513,83 @@ draw_cb (GtkWidget *widget,
   return FALSE;
 }
 
+static void
+update_label_text (GtkWidget   *label,
+                   const gchar *text)
+{
+  gchar *markup = NULL;
+
+  if (text)
+    markup = g_strdup_printf ("<span font='48.0'>%s</span>", text);
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  g_free (markup);
+}
+
+static gboolean
+reset_label_text_timeout_cb (gpointer user_data)
+{
+  GtkWidget *label = user_data;
+
+  update_label_text (label, NULL);
+  pad_action_timeout_id = 0;
+  return G_SOURCE_REMOVE;
+}
+
+static void
+on_action_activate (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  GtkWidget *label = user_data;
+  const gchar *result;
+
+  if (pad_action_timeout_id)
+    g_source_remove (pad_action_timeout_id);
+
+  result = g_object_get_data (G_OBJECT (action), "action-result");
+  update_label_text (label, result);
+  pad_action_timeout_id = g_timeout_add (200, reset_label_text_timeout_cb, label);
+}
+
+static void
+init_pad_controller (GtkWidget *window,
+                     GtkWidget *label)
+{
+  GtkPadController *pad_controller;
+  GSimpleActionGroup *action_group;
+  GSimpleAction *action;
+  gint i;
+
+  action_group = g_simple_action_group_new ();
+  pad_controller = gtk_pad_controller_new (GTK_WINDOW (window),
+                                           G_ACTION_GROUP (action_group),
+                                           NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (pad_actions); i++)
+    {
+      action = g_simple_action_new (pad_actions[i].action_name, NULL);
+      g_signal_connect (action, "activate",
+                        G_CALLBACK (on_action_activate), label);
+      g_object_set_data (G_OBJECT (action), "action-result",
+                         (gpointer) pad_action_results[i]);
+      g_action_map_add_action (G_ACTION_MAP (action_group), G_ACTION (action));
+      g_object_unref (action);
+    }
+
+  gtk_pad_controller_set_action_entries (pad_controller, pad_actions,
+                                         G_N_ELEMENTS (pad_actions));
+  g_object_set_data_full (G_OBJECT (window), "pad-controller",
+                          pad_controller, g_object_unref);
+
+  g_object_unref (action_group);
+}
+
 GtkWidget *
 do_event_axes (GtkWidget *toplevel)
 {
   static GtkWidget *window = NULL;
   EventData *event_data;
-  GtkWidget *box;
+  GtkWidget *box, *label;
 
   if (!window)
     {
@@ -524,6 +620,12 @@ do_event_axes (GtkWidget *toplevel)
                         G_CALLBACK (event_cb), event_data);
       g_signal_connect (box, "draw",
                         G_CALLBACK (draw_cb), event_data);
+
+      label = gtk_label_new ("");
+      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      gtk_container_add (GTK_CONTAINER (box), label);
+
+      init_pad_controller (window, label);
     }
 
   if (!gtk_widget_get_visible (window))
