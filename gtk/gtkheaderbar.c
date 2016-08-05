@@ -1000,8 +1000,6 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   gint child_size;
   GtkTextDirection direction;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   direction = gtk_widget_get_direction (widget);
   nvis_children = count_visible_children (bar);
   sizes = g_newa (GtkRequestedSize, nvis_children);
