@@ -812,7 +812,6 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   GskRenderNode *bg_node, *border_node;
   graphene_rect_t bounds;
   graphene_point3d_t p;
-  graphene_matrix_t m;
   int x, y, width, height;
   int contents_x, contents_y, contents_width, contents_height;
   GtkAllocation margin_box;
