@@ -104,8 +104,9 @@ static void gtk_check_button_get_preferred_height_and_baseline_for_width (GtkWid
 									  gint               *natural_baseline);
 static void gtk_check_button_size_allocate       (GtkWidget           *widget,
 						  GtkAllocation       *allocation);
-static gboolean gtk_check_button_draw            (GtkWidget           *widget,
-						  cairo_t             *cr);
+static GskRenderNode *gtk_check_button_get_render_node (GtkWidget   *widget,
+                                                        GskRenderer *renderer);
+
 
 typedef struct {
   GtkCssGadget *gadget;
@@ -213,7 +214,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   widget_class->get_preferred_height_for_width = gtk_check_button_get_preferred_height_for_width;
   widget_class->get_preferred_height_and_baseline_for_width = gtk_check_button_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_check_button_size_allocate;
-  widget_class->draw = gtk_check_button_draw;
+  widget_class->get_render_node = gtk_check_button_get_render_node;
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->direction_changed = gtk_check_button_direction_changed;
 
@@ -490,21 +491,33 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
     }
 }
 
-static gint
-gtk_check_button_draw (GtkWidget *widget,
-                       cairo_t   *cr)
+static GskRenderNode *
+gtk_check_button_get_render_node (GtkWidget   *widget,
+                                  GskRenderer *renderer)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkCssGadget *gadget;
+  GskRenderNode *res;
+  GskRenderNode *node;
 
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
-    gadget = priv->gadget;
-  else
-    gadget = GTK_BUTTON (widget)->priv->gadget;
+  if (!gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
+    return GTK_WIDGET_CLASS (gtk_check_button_parent_class)->get_render_node (widget, renderer);
 
-  gtk_css_gadget_draw (gadget, cr);
+  res = gtk_css_gadget_get_render_node (priv->gadget,
+                                        renderer,
+                                        gtk_widget_has_visible_focus (widget));
 
-  return FALSE;
+  if (res == NULL)
+    return NULL;
+
+  node = gtk_css_gadget_get_render_node (priv->indicator_gadget,
+                                         renderer,
+                                         FALSE);
+  gsk_render_node_append_child (res, node);
+  gsk_render_node_unref (node);
+
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
+
+  return res;
 }
 
 GtkCssNode *
