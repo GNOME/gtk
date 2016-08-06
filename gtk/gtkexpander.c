@@ -181,8 +181,8 @@ static void     gtk_expander_size_allocate  (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
 static void     gtk_expander_map            (GtkWidget        *widget);
 static void     gtk_expander_unmap          (GtkWidget        *widget);
-static gboolean gtk_expander_draw           (GtkWidget        *widget,
-                                             cairo_t          *cr);
+static GskRenderNode *gtk_expander_get_render_node (GtkWidget   *widget,
+                                                    GskRenderer *renderer);
 
 static gboolean gtk_expander_enter_notify   (GtkWidget        *widget,
                                              GdkEventCrossing *event);
@@ -271,7 +271,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class->size_allocate        = gtk_expander_size_allocate;
   widget_class->map                  = gtk_expander_map;
   widget_class->unmap                = gtk_expander_unmap;
-  widget_class->draw                 = gtk_expander_draw;
+  widget_class->get_render_node      = gtk_expander_get_render_node;
   widget_class->enter_notify_event   = gtk_expander_enter_notify;
   widget_class->leave_notify_event   = gtk_expander_leave_notify;
   widget_class->focus                = gtk_expander_focus;
@@ -709,13 +709,35 @@ gtk_expander_unmap (GtkWidget *widget)
     gtk_widget_unmap (priv->label_widget);
 }
 
-static gboolean
-gtk_expander_draw (GtkWidget *widget,
-                   cairo_t   *cr)
+static GskRenderNode *
+gtk_expander_get_render_node (GtkWidget   *widget,
+                              GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (GTK_EXPANDER (widget)->priv->gadget, cr);
+  GskRenderNode *res;
+  GskRenderNode *node;
 
-  return FALSE;
+  res = gtk_css_gadget_get_render_node (GTK_EXPANDER (widget)->priv->gadget,
+                                        renderer,
+                                        FALSE);
+
+  if (res == NULL)
+    return NULL;
+
+  node = gtk_css_gadget_get_render_node (GTK_EXPANDER (widget)->priv->title_gadget,
+                                         renderer,
+                                         FALSE);
+  gsk_render_node_append_child (res, node);
+  gsk_render_node_unref (node);
+
+  node = gtk_css_gadget_get_render_node (GTK_EXPANDER (widget)->priv->arrow_gadget,
+                                         renderer,
+                                         FALSE);
+  gsk_render_node_append_child (res, node);
+  gsk_render_node_unref (node);
+
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
+
+  return res;
 }
 
 static void
