@@ -1370,6 +1370,17 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
                    node->bounds.size.width, node->bounds.size.height);
   cairo_clip (res);
 
+  if (GSK_DEBUG_CHECK (SURFACE))
+    {
+      cairo_save (res);
+      cairo_rectangle (res,
+                       node->bounds.origin.x + 1, node->bounds.origin.y + 1,
+                       node->bounds.size.width - 2, node->bounds.size.height - 2);
+      cairo_set_source_rgba (res, 1, 0, 0, 0.5);
+      cairo_stroke (res);
+      cairo_restore (res);
+    }
+
   return res;
 }
 
