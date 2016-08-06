@@ -908,7 +908,8 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
         {
           content_node = gsk_renderer_create_render_node (renderer);
 
-          gsk_render_node_set_name (content_node, "DrawGadgetContent");
+          str = g_strconcat ("DrawGadgetContent<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
+          gsk_render_node_set_name (content_node, str);
           gsk_render_node_set_bounds (content_node, &content_bounds);
           gsk_render_node_set_transform (content_node, &content_transform);
 
@@ -919,6 +920,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
                                            contents_x, contents_y,
                                            contents_width, contents_height);
 
+          g_free (str);
           cairo_destroy (cr);
 
           gsk_render_node_append_child (bg_node, content_node);
@@ -930,7 +932,8 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
     {
       GskRenderNode *focus_node = gsk_renderer_create_render_node (renderer);
 
-      gsk_render_node_set_name (focus_node, "Focus");
+      str = g_strconcat ("Focus<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
+      gsk_render_node_set_name (focus_node, str);
       gsk_render_node_set_bounds (focus_node, &bounds);
 
       cr = gsk_render_node_get_draw_context (focus_node);
@@ -940,6 +943,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
                                     margin.top,
                                     width - margin.left - margin.right,
                                     height - margin.top - margin.bottom);
+      g_free (str);
       cairo_destroy (cr);
 
       gsk_render_node_append_child (bg_node, focus_node);
