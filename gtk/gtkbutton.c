@@ -1305,7 +1305,7 @@ gtk_button_get_render_node (GtkWidget   *widget,
 {
   GskRenderNode *res = gtk_css_gadget_get_render_node (GTK_BUTTON (widget)->priv->gadget,
                                                        renderer,
-                                                       FALSE);
+                                                       gtk_widget_has_visible_focus (widget));
 
   if (res == NULL)
     return NULL;
