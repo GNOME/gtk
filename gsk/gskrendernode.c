@@ -1372,13 +1372,19 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
 
   if (GSK_DEBUG_CHECK (SURFACE))
     {
-      cairo_save (res);
-      cairo_rectangle (res,
-                       node->bounds.origin.x + 1, node->bounds.origin.y + 1,
-                       node->bounds.size.width - 2, node->bounds.size.height - 2);
-      cairo_set_source_rgba (res, 1, 0, 0, 0.5);
-      cairo_stroke (res);
-      cairo_restore (res);
+      const char *prefix;
+      prefix = g_getenv ("GSK_DEBUG_PREFIX");
+      if (!prefix || g_str_has_prefix (node->name, prefix))
+        {
+          cairo_save (res);
+          cairo_rectangle (res,
+                           node->bounds.origin.x + 1, node->bounds.origin.y + 1,
+                           node->bounds.size.width - 2, node->bounds.size.height - 2);
+          cairo_set_line_width (res, 2);
+          cairo_set_source_rgb (res, 1, 0, 0);
+          cairo_stroke (res);
+          cairo_restore (res);
+        }
     }
 
   return res;
