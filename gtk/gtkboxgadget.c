@@ -518,6 +518,12 @@ gtk_box_gadget_draw (GtkCssGadget *gadget,
   return FALSE;
 }
 
+static gboolean
+gtk_box_gadget_has_content (GtkCssGadget *gadget)
+{
+  return FALSE;
+}
+
 static void
 gtk_box_gadget_finalize (GObject *object)
 {
@@ -539,6 +545,7 @@ gtk_box_gadget_class_init (GtkBoxGadgetClass *klass)
   gadget_class->get_preferred_size = gtk_box_gadget_get_preferred_size;
   gadget_class->allocate = gtk_box_gadget_allocate;
   gadget_class->draw = gtk_box_gadget_draw;
+  gadget_class->has_content = gtk_box_gadget_has_content;
 }
 
 static void
