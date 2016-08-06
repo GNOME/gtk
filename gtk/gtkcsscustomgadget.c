@@ -161,6 +161,14 @@ gtk_css_custom_gadget_draw (GtkCssGadget *gadget,
     return GTK_CSS_GADGET_CLASS (gtk_css_custom_gadget_parent_class)->draw (gadget, cr, x, y, width, height);
 }
 
+static gboolean
+gtk_css_custom_gadget_has_content (GtkCssGadget *gadget)
+{
+  GtkCssCustomGadgetPrivate *priv = gtk_css_custom_gadget_get_instance_private (GTK_CSS_CUSTOM_GADGET (gadget));
+
+  return priv->draw_func != NULL;
+}
+
 static void
 gtk_css_custom_gadget_finalize (GObject *object)
 {
@@ -183,6 +191,7 @@ gtk_css_custom_gadget_class_init (GtkCssCustomGadgetClass *klass)
   gadget_class->get_preferred_size = gtk_css_custom_gadget_get_preferred_size;
   gadget_class->allocate = gtk_css_custom_gadget_allocate;
   gadget_class->draw = gtk_css_custom_gadget_draw;
+  gadget_class->has_content = gtk_css_custom_gadget_has_content;
 }
 
 static void

@@ -242,7 +242,6 @@ gtk_css_gadget_set_property (GObject      *object,
   }
 }
 
-
 static void
 gtk_css_gadget_finalize (GObject *object)
 {
@@ -251,6 +250,14 @@ gtk_css_gadget_finalize (GObject *object)
   gtk_css_gadget_unset_node (gadget);
 
   G_OBJECT_CLASS (gtk_css_gadget_parent_class)->finalize (object);
+}
+
+static gboolean
+gtk_css_gadget_has_content (GtkCssGadget *gadget)
+{
+  GtkCssGadgetClass *gadget_class = GTK_CSS_GADGET_GET_CLASS (gadget);
+
+  return gadget_class->draw != gtk_css_gadget_real_draw;
 }
 
 static void
@@ -266,6 +273,7 @@ gtk_css_gadget_class_init (GtkCssGadgetClass *klass)
   klass->allocate = gtk_css_gadget_real_allocate;
   klass->draw = gtk_css_gadget_real_draw;
   klass->style_changed = gtk_css_gadget_real_style_changed;
+  klass->has_content = gtk_css_gadget_has_content;
 
   properties[PROP_NODE] = g_param_spec_object ("node", "Node",
                                                "CSS node",
@@ -904,7 +912,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
                                       graphene_point3d_init (&tmp, -contents_x, -contents_y, 0));
 
       /* If there's an override in place, create a temporary node */
-      if (gadget_class->draw != gtk_css_gadget_real_draw)
+      if (gadget_class->has_content (gadget))
         {
           content_node = gsk_renderer_create_render_node (renderer);
 

@@ -70,6 +70,8 @@ struct _GtkCssGadgetClass
 
   void          (* style_changed)                       (GtkCssGadget           *gadget,
                                                          GtkCssStyleChange      *change);
+
+  gboolean      (* has_content)                         (GtkCssGadget           *gadget);
 };
 
 GType           gtk_css_gadget_get_type                 (void) G_GNUC_CONST;
@@ -142,6 +144,7 @@ void            gtk_css_gadget_get_border_allocation    (GtkCssGadget           
 void            gtk_css_gadget_get_content_allocation   (GtkCssGadget           *gadget,
                                                          GtkAllocation          *allocation,
                                                          int                    *baseline);
+
 
 G_END_DECLS
 
