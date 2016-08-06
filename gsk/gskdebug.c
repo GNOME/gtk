@@ -7,7 +7,8 @@ static const GDebugKey gsk_debug_keys[] = {
   { "cairo", GSK_DEBUG_CAIRO },
   { "opengl", GSK_DEBUG_OPENGL },
   { "shaders", GSK_DEBUG_SHADERS },
-  { "transforms", GSK_DEBUG_TRANSFORMS }
+  { "transforms", GSK_DEBUG_TRANSFORMS },
+  { "surface", GSK_DEBUG_SURFACE }
 };
 #endif
 

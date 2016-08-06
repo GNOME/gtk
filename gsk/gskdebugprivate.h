@@ -11,7 +11,8 @@ typedef enum {
   GSK_DEBUG_CAIRO       = 1 << 2,
   GSK_DEBUG_OPENGL      = 1 << 3,
   GSK_DEBUG_SHADERS     = 1 << 4,
-  GSK_DEBUG_TRANSFORMS  = 1 << 5
+  GSK_DEBUG_TRANSFORMS  = 1 << 5,
+  GSK_DEBUG_SURFACE     = 1 << 6
 } GskDebugFlags;
 
 typedef enum {
