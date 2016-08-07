@@ -31,6 +31,7 @@
 #include "gtkframe.h"
 #include "gtkiconprivate.h"
 #include "gtkbox.h"
+#include "gtkcontainerprivate.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkmenuprivate.h"
@@ -523,25 +524,6 @@ gtk_combo_box_allocate (GtkCssGadget        *gadget,
     }
 }
 
-static gboolean
-gtk_combo_box_render (GtkCssGadget *gadget,
-                      cairo_t      *cr,
-                      int           x,
-                      int           y,
-                      int           width,
-                      int           height,
-                      gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-  GtkComboBoxPrivate *priv = combo_box->priv;
-
-  gtk_container_propagate_draw (GTK_CONTAINER (widget),
-                                priv->box, cr);
-
-  return FALSE;
-}
-
 static void
 gtk_combo_box_get_preferred_width (GtkWidget *widget,
                                    gint      *minimum_size,
@@ -568,7 +550,8 @@ gtk_combo_box_get_preferred_height (GtkWidget *widget,
   gint min_width;
 
   /* Combo box is height-for-width only
-   * (so we always just reserve enough height for the minimum width) */
+   * (so we always just reserve enough height for the minimum width)
+   */
   gtk_css_gadget_get_preferred_size (GTK_COMBO_BOX (widget)->priv->gadget,
                                      GTK_ORIENTATION_HORIZONTAL,
                                      -1,
@@ -588,7 +571,8 @@ gtk_combo_box_get_preferred_width_for_height (GtkWidget *widget,
                                               gint      *natural_size)
 {
   /* Combo box is height-for-width only
-   * (so we assume we always reserved enough height for the minimum width) */
+   * (so we assume we always reserved enough height for the minimum width)
+   */
   gtk_css_gadget_get_preferred_size (GTK_COMBO_BOX (widget)->priv->gadget,
                                      GTK_ORIENTATION_HORIZONTAL,
                                      avail_size,
@@ -625,12 +609,20 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
   gtk_widget_set_clip (widget, &clip);
 }
 
-static gboolean
-gtk_combo_box_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+static GskRenderNode *
+gtk_combo_box_get_render_node (GtkWidget   *widget,
+                               GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (GTK_COMBO_BOX (widget)->priv->gadget, cr);
-  return FALSE;
+  GskRenderNode *res = gtk_css_gadget_get_render_node (GTK_COMBO_BOX (widget)->priv->gadget,
+                                                       renderer,
+                                                       FALSE);
+
+  if (res == NULL)
+    return NULL;
+
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
+
+  return res;
 }
 
 static void
@@ -670,7 +662,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
-  widget_class->draw = gtk_combo_box_draw;
+  widget_class->get_render_node = gtk_combo_box_get_render_node;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
@@ -1223,7 +1215,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                                                      GTK_WIDGET (combo_box),
                                                      gtk_combo_box_measure,
                                                      gtk_combo_box_allocate,
-                                                     gtk_combo_box_render,
+                                                     NULL,
                                                      NULL, NULL);
 }
 
