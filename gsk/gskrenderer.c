@@ -716,6 +716,15 @@ gsk_renderer_get_scaling_filters (GskRenderer      *renderer,
     *mag_filter = priv->mag_filter;
 }
 
+/**
+ * gsk_renderer_set_scale_factor:
+ * @renderer: a #GskRenderer
+ * @scale_factor: the new scale factor
+ *
+ * Sets the scale factor for the renderer.
+ *
+ * Since: 3.22
+ */
 void
 gsk_renderer_set_scale_factor (GskRenderer *renderer,
                                int          scale_factor)
@@ -732,6 +741,16 @@ gsk_renderer_set_scale_factor (GskRenderer *renderer,
     }
 }
 
+/**
+ * gsk_renderer_get_scale_factor:
+ * @renderer: a #GskRenderer
+ *
+ * Gets the scale factor for the @renderer.
+ *
+ * Returns: the scale factor
+ *
+ * Since: 3.22
+ */
 int
 gsk_renderer_get_scale_factor (GskRenderer *renderer)
 {
@@ -742,6 +761,15 @@ gsk_renderer_get_scale_factor (GskRenderer *renderer)
   return priv->scale_factor;
 }
 
+/**
+ * gsk_renderer_set_window:
+ * @renderer: a #GskRenderer
+ * @window: the window to set
+ *
+ * Sets the window on which the @renderer is rendering.
+ *
+ * Since: 3.22
+ */
 void
 gsk_renderer_set_window (GskRenderer *renderer,
                          GdkWindow   *window)
