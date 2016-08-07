@@ -92,8 +92,9 @@ static void gtk_button_box_get_property       (GObject           *object,
                                                guint              prop_id,
                                                GValue            *value,
                                                GParamSpec        *pspec);
-static gboolean gtk_button_box_draw           (GtkWidget         *widget,
-                                               cairo_t           *cr);
+static GskRenderNode *gtk_button_box_get_render_node (GtkWidget   *widget,
+                                                      GskRenderer *renderer);
+
 static void gtk_button_box_get_preferred_width            (GtkWidget *widget,
                                                            gint      *minimum,
                                                            gint      *natural);
@@ -143,13 +144,6 @@ static void     gtk_button_box_allocate        (GtkCssGadget        *gadget,
                                                 int                  baseline,
                                                 GtkAllocation       *out_clip,
                                                 gpointer             unused);
-static gboolean gtk_button_box_render          (GtkCssGadget        *gadget,
-                                                cairo_t             *cr,
-                                                int                  x,
-                                                int                  y,
-                                                int                  width,
-                                                int                  height,
-                                                gpointer             data);
 
 #define DEFAULT_CHILD_MIN_WIDTH 85
 #define DEFAULT_CHILD_MIN_HEIGHT 27
@@ -197,7 +191,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   widget_class->get_preferred_height_for_width = gtk_button_box_get_preferred_height_for_width;
   widget_class->get_preferred_height_and_baseline_for_width = gtk_button_box_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_button_box_size_allocate;
-  widget_class->draw = gtk_button_box_draw;
+  widget_class->get_render_node = gtk_button_box_get_render_node;
 
   container_class->remove = gtk_button_box_remove;
   container_class->add = gtk_button_box_add;
@@ -297,49 +291,24 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   gtk_widget_class_set_css_name (widget_class, "buttonbox");
 }
 
-static gboolean
-gtk_button_box_render (GtkCssGadget *gadget,
-                       cairo_t      *cr,
-                       int           x,
-                       int           y,
-                       int           width,
-                       int           height,
-                       gpointer      unused)
-{
-  GtkWidget *widget;
-  GList *children, *l;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  children = gtk_container_get_children (GTK_CONTAINER (widget));
-
-  for (l = children; l; l = l->next)
-    {
-      GtkWidget *child = l->data;
-
-      gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
-    }
-
-  g_list_free (children);
-
-  return FALSE;
-}
-
-
-static gboolean
-gtk_button_box_draw (GtkWidget *widget,
-                     cairo_t   *cr)
+static GskRenderNode *
+gtk_button_box_get_render_node (GtkWidget   *widget,
+                                GskRenderer *renderer)
 {
   GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (widget)->priv;
-  GtkCssGadget *gadget;
+  GskRenderNode *res;
 
   if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    gadget = gtk_box_get_gadget (GTK_BOX (widget));
-  else
-    gadget = priv->gadget;
+    return GTK_WIDGET_CLASS (gtk_button_box_parent_class)->get_render_node (widget, renderer);
 
-  gtk_css_gadget_draw (gadget, cr);
+  res = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
 
-  return FALSE;
+  if (res == NULL)
+    return NULL;
+
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
+
+  return res;
 }
 
 static void
@@ -354,7 +323,7 @@ gtk_button_box_init (GtkButtonBox *button_box)
                                                          GTK_WIDGET (button_box),
                                                          gtk_button_box_measure,
                                                          gtk_button_box_allocate,
-                                                         gtk_button_box_render,
+                                                         NULL,
                                                          NULL,
                                                          NULL);
 }
