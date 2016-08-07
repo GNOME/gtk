@@ -331,6 +331,7 @@ gsk_render_node_get_first_child (GskRenderNode *node)
 
 /**
  * gsk_render_node_get_last_child:
+ * @node: a #GskRenderNode
  *
  * Returns the last child of @node.
  *
@@ -348,6 +349,7 @@ gsk_render_node_get_last_child (GskRenderNode *node)
 
 /**
  * gsk_render_node_get_next_sibling:
+ * @node: a #GskRenderNode
  *
  * Returns the next sibling of @node.
  *
@@ -365,6 +367,7 @@ gsk_render_node_get_next_sibling (GskRenderNode *node)
 
 /**
  * gsk_render_node_get_previous_sibling:
+ * @node: a #GskRenderNode
  *
  * Returns the previous sibling of @node.
  *
@@ -939,6 +942,15 @@ gsk_render_node_set_transform (GskRenderNode           *node,
   node->transform_set = !graphene_matrix_is_identity (&node->transform);
 }
 
+/**
+ * gsk_render_node_set_anchor_point:
+ * @node: a #GskRenderNode
+ * @offset: the anchor point
+ *
+ * Set the anchor point used when rendering the @node.
+ *
+ * Since: 3.22
+ */
 void
 gsk_render_node_set_anchor_point (GskRenderNode            *node,
                                   const graphene_point3d_t *offset)
