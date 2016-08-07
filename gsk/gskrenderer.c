@@ -18,8 +18,8 @@
 
 /**
  * SECTION:GskRenderer
- * @title: GskRenderer
- * @Short_desc: Renders a scene
+ * @Title: GskRenderer
+ * @Short_description: Renders a scene
  *
  * #GskRenderer is a class that renders a scene graph defined via a
  * tree of #GskRenderNode instances.
