@@ -24,6 +24,8 @@
 #include "gtkbuildable.h"
 #include "gtkscrolledwindow.h"
 #include "gtkmarshalers.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -472,6 +474,20 @@ gtk_overlay_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_overlay_parent_class)->unmap (widget);
 }
 
+static GskRenderNode *
+gtk_overlay_get_render_node (GtkWidget   *widget,
+                             GskRenderer *renderer)
+{
+  GskRenderNode *res = gtk_widget_create_render_node (widget, renderer, G_OBJECT_TYPE_NAME (widget));
+
+  if (res == NULL)
+    return NULL;
+
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
+
+  return res;
+}
+
 static void
 gtk_overlay_remove (GtkContainer *container,
                     GtkWidget    *widget)
@@ -728,7 +744,6 @@ gtk_overlay_get_child_property (GtkContainer *container,
     }
 }
 
-
 static void
 gtk_overlay_class_init (GtkOverlayClass *klass)
 {
@@ -741,6 +756,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   widget_class->unrealize = gtk_overlay_unrealize;
   widget_class->map = gtk_overlay_map;
   widget_class->unmap = gtk_overlay_unmap;
+  widget_class->get_render_node = gtk_overlay_get_render_node;
 
   container_class->remove = gtk_overlay_remove;
   container_class->forall = gtk_overlay_forall;
