@@ -209,8 +209,9 @@ static GSequenceIter*       gtk_list_box_get_previous_visible         (GtkListBo
                                                                        GSequenceIter       *iter);
 static GtkListBoxRow       *gtk_list_box_get_first_focusable          (GtkListBox          *box);
 static GtkListBoxRow       *gtk_list_box_get_last_focusable           (GtkListBox          *box);
-static gboolean             gtk_list_box_draw                         (GtkWidget           *widget,
-                                                                       cairo_t             *cr);
+static GskRenderNode *      gtk_list_box_get_render_node              (GtkWidget   *widget,
+                                                                       GskRenderer *renderer);
+
 static void                 gtk_list_box_realize                      (GtkWidget           *widget);
 static void                 gtk_list_box_add                          (GtkContainer        *container,
                                                                        GtkWidget           *widget);
@@ -300,13 +301,6 @@ static void     gtk_list_box_allocate    (GtkCssGadget        *gadget,
                                           const GtkAllocation *allocation,
                                           int                  baseline,
                                           GtkAllocation       *out_clip,
-                                          gpointer             data);
-static gboolean gtk_list_box_render      (GtkCssGadget        *gadget,
-                                          cairo_t             *cr,
-                                          int                  x,
-                                          int                  y,
-                                          int                  width,
-                                          int                  height,
                                           gpointer             data);
 
 
@@ -426,7 +420,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->motion_notify_event = gtk_list_box_motion_notify_event;
   widget_class->show = gtk_list_box_show;
   widget_class->focus = gtk_list_box_focus;
-  widget_class->draw = gtk_list_box_draw;
+  widget_class->get_render_node = gtk_list_box_get_render_node;
   widget_class->realize = gtk_list_box_realize;
   widget_class->compute_expand = gtk_list_box_compute_expand;
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
@@ -663,7 +657,7 @@ gtk_list_box_init (GtkListBox *box)
                                                      GTK_WIDGET (box),
                                                      gtk_list_box_measure,
                                                      gtk_list_box_allocate,
-                                                     gtk_list_box_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 
@@ -2127,29 +2121,22 @@ gtk_list_box_focus (GtkWidget        *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_list_box_draw (GtkWidget *widget,
-                   cairo_t   *cr)
+static GskRenderNode *
+gtk_list_box_get_render_node (GtkWidget   *widget,
+                              GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (BOX_PRIV (widget)->gadget, cr);
+  GtkListBox *box = GTK_LIST_BOX (widget);
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GskRenderNode *res = gtk_css_gadget_get_render_node (priv->gadget,
+                                                       renderer,
+                                                       FALSE);
 
-  return FALSE;
-}
+  if (res == NULL)
+    return NULL;
 
-static gboolean
-gtk_list_box_render (GtkCssGadget *gadget,
-                     cairo_t      *cr,
-                     int           x,
-                     int           y,
-                     int           width,
-                     int           height,
-                     gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
 
-  GTK_WIDGET_CLASS (gtk_list_box_parent_class)->draw (widget, cr);
-
-  return FALSE;
+  return res;
 }
 
 static void
@@ -3257,31 +3244,21 @@ gtk_list_box_row_hide (GtkWidget *widget)
     gtk_list_box_row_visibility_changed (box, row);
 }
 
-static gboolean
-gtk_list_box_row_draw (GtkWidget *widget,
-                       cairo_t   *cr)
+static GskRenderNode *
+gtk_list_box_row_get_render_node (GtkWidget   *widget,
+                                  GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget, cr);
+  GtkListBoxRowPrivate *priv = ROW_PRIV (widget);
+  GskRenderNode *res = gtk_css_gadget_get_render_node (priv->gadget,
+                                                       renderer,
+                                                       gtk_widget_has_visible_focus (widget));
 
-  return GDK_EVENT_PROPAGATE;
-}
+  if (res == NULL)
+    return NULL;
 
-static gboolean
-gtk_list_box_row_render (GtkCssGadget *gadget,
-                         cairo_t      *cr,
-                         int           x,
-                         int           y,
-                         int           width,
-                         int           height,
-                         gpointer      data)
-{
-  GtkWidget *widget;
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
 
-  widget = gtk_css_gadget_get_owner (gadget);
-
-  GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->draw (widget, cr);
-
-  return gtk_widget_has_visible_focus (widget);
+  return res;
 }
 
 static void
@@ -3745,7 +3722,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   widget_class->show = gtk_list_box_row_show;
   widget_class->hide = gtk_list_box_row_hide;
-  widget_class->draw = gtk_list_box_row_draw;
+  widget_class->get_render_node = gtk_list_box_row_get_render_node;
   widget_class->get_preferred_height = gtk_list_box_row_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_list_box_row_get_preferred_height_for_width;
   widget_class->get_preferred_width = gtk_list_box_row_get_preferred_width;
@@ -3814,7 +3791,7 @@ gtk_list_box_row_init (GtkListBoxRow *row)
                                                      GTK_WIDGET (row),
                                                      gtk_list_box_row_measure,
                                                      gtk_list_box_row_allocate,
-                                                     gtk_list_box_row_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
   gtk_css_gadget_add_class (ROW_PRIV (row)->gadget, "activatable");
