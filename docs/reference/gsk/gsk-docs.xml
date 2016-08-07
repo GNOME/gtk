@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+<!ENTITY version SYSTEM "version.xml">
+]>
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>GSK 3 Reference Manual</title>
+    <releaseinfo>
+      This document is for the GSK 3 library, version &version;
+      The latest versions can be found online at
+      <ulink role="online-location" url="http://developer.gnome.org/gdk3/">http://developer.gnome.org/gsk3/</ulink>.
+    </releaseinfo>
+  </bookinfo>
+
+  <reference id="reference">
+    <title>API Reference</title>
+    <xi:include href="xml/GskRenderer.xml" />
+    <xi:include href="xml/GskRenderNode.xml" />
+    <xi:include href="xml/GskRenderNodeIter.xml" />
+  </reference>
+
+  <index id="api-index-full">
+    <title>Index of all symbols</title>
+    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
+  </index>
+
+</book>

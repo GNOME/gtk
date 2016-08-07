@@ -1955,6 +1955,8 @@ docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk/Makefile
 docs/reference/gdk/version.xml
+docs/reference/gsk/Makefile
+docs/reference/gsk/version.xml
 docs/reference/gtk/Makefile
 docs/reference/gtk/gtk3.types
 docs/reference/gtk/version.xml
