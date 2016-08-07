@@ -18,8 +18,8 @@
 
 /**
  * SECTION:GskRenderNodeIter
- * @title: GskRenderNodeIter
- * @Short_desc: Iterator helper for render nodes
+ * @Title: GskRenderNodeIter
+ * @Short_description: Iterator helper for render nodes
  *
  * TODO
  */

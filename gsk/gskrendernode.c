@@ -18,8 +18,8 @@
 
 /**
  * SECTION:GskRenderNode
- * @title: GskRenderNode
- * @Short_desc: Simple scene graph element
+ * @Title: GskRenderNode
+ * @Short_description: Simple scene graph element
  *
  * #GskRenderNode is the basic block in a scene graph to be
  * rendered using #GskRenderer.
