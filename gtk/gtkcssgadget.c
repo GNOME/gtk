@@ -909,7 +909,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
       graphene_point3d_t tmp;
 
       graphene_matrix_init_translate (&content_transform,
-                                      graphene_point3d_init (&tmp, -contents_x, -contents_y, 0));
+                                      graphene_point3d_init (&tmp, contents_x, contents_y, 0));
 
       /* If there's an override in place, create a temporary node */
       if (gadget_class->has_content (gadget))
@@ -925,7 +925,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
 
           /* Compatibility mode: draw_focus is left to the draw() implementation */
           draw_focus = gadget_class->draw (gadget, cr,
-                                           contents_x, contents_y,
+                                           0, 0,
                                            contents_width, contents_height);
 
           g_free (str);
