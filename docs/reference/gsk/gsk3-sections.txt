@@ -55,7 +55,6 @@ gsk_render_node_contains
 gsk_render_node_set_bounds
 gsk_render_node_set_transform
 gsk_render_node_set_anchor_point
-gsk_render_node_set_child_transform
 gsk_render_node_set_opacity
 gsk_render_node_set_hidden
 gsk_render_node_is_hidden
