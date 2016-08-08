@@ -126,6 +126,7 @@ struct _GdkWindowImplWayland
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
   unsigned int position_set : 1;
+  unsigned int moved_to_rect : 1;
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
 
@@ -172,6 +173,15 @@ struct _GdkWindowImplWayland
   int saved_height;
 
   gulong parent_surface_committed_handler;
+
+  struct {
+    GdkRectangle rect;
+    GdkGravity rect_anchor;
+    GdkGravity window_anchor;
+    GdkAnchorHints anchor_hints;
+    gint rect_anchor_dx;
+    gint rect_anchor_dy;
+  } pending_move_to_rect;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -1702,6 +1712,20 @@ gdk_wayland_window_show (GdkWindow *window,
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
+  if (impl->moved_to_rect)
+    {
+      GdkWindowImplClass *impl_class =
+        GDK_WINDOW_IMPL_CLASS (_gdk_window_impl_wayland_parent_class);
+
+      impl_class->move_to_rect (window,
+                                &impl->pending_move_to_rect.rect,
+                                impl->pending_move_to_rect.rect_anchor,
+                                impl->pending_move_to_rect.window_anchor,
+                                impl->pending_move_to_rect.anchor_hints,
+                                impl->pending_move_to_rect.rect_anchor_dx,
+                                impl->pending_move_to_rect.rect_anchor_dy);
+    }
+
   if (!impl->display_server.wl_surface)
     gdk_wayland_window_create_surface (window);
 
@@ -1916,6 +1940,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
           window->x = x;
           window->y = y;
           impl->position_set = 1;
+          impl->moved_to_rect = 0;
 
           if (impl->display_server.wl_subsurface)
             {
@@ -1930,6 +1955,33 @@ gdk_window_wayland_move_resize (GdkWindow *window,
    */
   if (width > 0 && height > 0)
     gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
+}
+
+static void
+gdk_window_wayland_move_to_rect (GdkWindow          *window,
+                                 const GdkRectangle *rect,
+                                 GdkGravity          rect_anchor,
+                                 GdkGravity          window_anchor,
+                                 GdkAnchorHints      anchor_hints,
+                                 gint                rect_anchor_dx,
+                                 gint                rect_anchor_dy)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  /*
+   * Various state (such as the shadow margin) may be incorrect at this point,
+   * so wait until showing before actually trying to move according to the
+   * anchors and hints.
+   */
+
+  impl->moved_to_rect = 1;
+
+  impl->pending_move_to_rect.rect = *rect;
+  impl->pending_move_to_rect.rect_anchor = rect_anchor;
+  impl->pending_move_to_rect.window_anchor = window_anchor;
+  impl->pending_move_to_rect.anchor_hints = anchor_hints;
+  impl->pending_move_to_rect.rect_anchor_dx = rect_anchor_dx;
+  impl->pending_move_to_rect.rect_anchor_dy = rect_anchor_dy;
 }
 
 static void
@@ -2832,6 +2884,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->restack_under = gdk_window_wayland_restack_under;
   impl_class->restack_toplevel = gdk_window_wayland_restack_toplevel;
   impl_class->move_resize = gdk_window_wayland_move_resize;
+  impl_class->move_to_rect = gdk_window_wayland_move_to_rect;
   impl_class->set_background = gdk_window_wayland_set_background;
   impl_class->reparent = gdk_window_wayland_reparent;
   impl_class->set_device_cursor = gdk_window_wayland_set_device_cursor;
