@@ -177,7 +177,6 @@ gsk_render_node_init (GskRenderNode *self)
   graphene_rect_init_from_rect (&self->bounds, graphene_rect_zero ());
 
   graphene_matrix_init_identity (&self->transform);
-  graphene_matrix_init_identity (&self->child_transform);
 
   graphene_point3d_init (&self->anchor_point, 0.f, 0.f, 0.f);
 
@@ -962,31 +961,6 @@ gsk_render_node_set_anchor_point (GskRenderNode            *node,
 }
 
 /**
- * gsk_render_node_set_child_transform:
- * @node: a #GskRenderNode
- * @transform: (nullable): a transformation matrix
- *
- * Sets the transformation matrix used when rendering the children
- * of @node.
- *
- * Since: 3.22
- */
-void
-gsk_render_node_set_child_transform (GskRenderNode           *node,
-                                     const graphene_matrix_t *transform)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (node->is_mutable);
-
-  if (transform == NULL)
-    graphene_matrix_init_identity (&node->child_transform);
-  else
-    graphene_matrix_init_from_matrix (&node->child_transform, transform);
-
-  node->child_transform_set = !graphene_matrix_is_identity (&node->child_transform);
-}
-
-/**
  * gsk_render_node_set_opacity:
  * @node: a #GskRenderNode
  * @opacity: the opacity of the node, between 0 (fully transparent) and
@@ -1177,11 +1151,10 @@ gsk_render_node_update_world_matrix (GskRenderNode *node,
 
   if (force || node->needs_world_matrix_update)
     {
-      GSK_NOTE (RENDER_NODE, g_print ("Updating cached world matrix on node %p [parent=%p, t_set=%s, ct_set=%s]\n",
+      GSK_NOTE (RENDER_NODE, g_print ("Updating cached world matrix on node %p [parent=%p, t_set=%s]\n",
                                       node,
                                       node->parent != NULL ? node->parent : 0,
-                                      node->transform_set ? "y" : "n",
-                                      node->parent != NULL && node->parent->child_transform_set ? "y" : "n"));
+                                      node->transform_set ? "y" : "n"));
 
       if (node->parent == NULL)
         {
@@ -1195,10 +1168,7 @@ gsk_render_node_update_world_matrix (GskRenderNode *node,
           GskRenderNode *parent = node->parent;
           graphene_matrix_t tmp;
 
-          if (parent->child_transform_set)
-            graphene_matrix_init_from_matrix (&tmp, &parent->child_transform);
-          else
-            graphene_matrix_init_identity (&tmp);
+          graphene_matrix_init_identity (&tmp);
 
           if (node->transform_set)
             graphene_matrix_multiply (&tmp, &node->transform, &tmp);
