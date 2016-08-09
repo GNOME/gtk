@@ -2188,7 +2188,7 @@ gboolean
 gtk_popover_get_pointing_to (GtkPopover   *popover,
                              GdkRectangle *rect)
 {
-  GtkPopoverPrivate *priv = popover->priv;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
 
@@ -2263,7 +2263,7 @@ void
 gtk_popover_set_modal (GtkPopover *popover,
                        gboolean    modal)
 {
-  GtkPopoverPrivate *priv = popover->priv;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
@@ -2312,7 +2312,7 @@ void
 gtk_popover_set_transitions_enabled (GtkPopover *popover,
                                      gboolean    transitions_enabled)
 {
-  GtkPopoverPrivate *priv = popover->priv;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
@@ -2478,7 +2478,7 @@ void
 gtk_popover_set_default_widget (GtkPopover *popover,
                                 GtkWidget  *widget)
 {
-  GtkPopoverPrivate *priv = popover->priv;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (widget == NULL || gtk_widget_get_can_default (widget));
@@ -2513,7 +2513,7 @@ gtk_popover_set_default_widget (GtkPopover *popover,
 GtkWidget *
 gtk_popover_get_default_widget (GtkPopover *popover)
 {
-  GtkPopoverPrivate *priv = popover->priv;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_val_if_fail (GTK_IS_POPOVER (popover), NULL);
 
@@ -2536,7 +2536,7 @@ void
 gtk_popover_set_constrain_to (GtkPopover           *popover,
                               GtkPopoverConstraint  constraint)
 {
-  GtkPopoverPrivate *priv = popover->priv;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
@@ -2563,7 +2563,7 @@ gtk_popover_set_constrain_to (GtkPopover           *popover,
 GtkPopoverConstraint
 gtk_popover_get_constrain_to (GtkPopover *popover)
 {
-  GtkPopoverPrivate *priv = popover->priv;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_val_if_fail (GTK_IS_POPOVER (popover), GTK_POPOVER_CONSTRAINT_WINDOW);
 
