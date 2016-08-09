@@ -56,7 +56,8 @@ void            gsk_gl_driver_destroy_texture           (GskGLDriver     *driver
 void            gsk_gl_driver_destroy_vao               (GskGLDriver     *driver,
                                                          int              vao_id);
 
-void            gsk_gl_driver_collect_textures          (GskGLDriver     *driver);
+int             gsk_gl_driver_collect_textures          (GskGLDriver     *driver);
+int             gsk_gl_driver_collect_vaos              (GskGLDriver     *driver);
 
 G_END_DECLS
 
