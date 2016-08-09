@@ -22,6 +22,9 @@ typedef struct {
   GLuint buffer_id;
   GLuint position_id;
   GLuint uv_id;
+  GskQuadVertex *quads;
+  int n_quads;
+  gboolean in_use : 1;
 } Vao;
 
 typedef struct {
@@ -97,6 +100,7 @@ vao_free (gpointer data)
 {
   Vao *v = data;
 
+  g_free (v->quads);
   glDeleteBuffers (1, &v->buffer_id);
   glDeleteVertexArrays (1, &v->vao_id);
   g_slice_free (Vao, v);
@@ -238,14 +242,17 @@ gsk_gl_driver_end_frame (GskGLDriver *driver)
   driver->in_frame = FALSE;
 }
 
-void
+int
 gsk_gl_driver_collect_textures (GskGLDriver *driver)
 {
   GHashTableIter iter;
   gpointer value_p = NULL;
+  int old_size;
 
-  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
-  g_return_if_fail (!driver->in_frame);
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), 0);
+  g_return_val_if_fail (!driver->in_frame, 0);
+
+  old_size = g_hash_table_size (driver->textures);
 
   g_hash_table_iter_init (&iter, driver->textures);
   while (g_hash_table_iter_next (&iter, NULL, &value_p))
@@ -253,10 +260,41 @@ gsk_gl_driver_collect_textures (GskGLDriver *driver)
       Texture *t = value_p;
 
       if (t->in_use)
-        t->in_use = FALSE;
+        {
+          t->in_use = FALSE;
+          g_clear_pointer (&t->fbos, g_array_unref);
+        }
       else
         g_hash_table_iter_remove (&iter);
     }
+
+  return old_size - g_hash_table_size (driver->textures);
+}
+
+int
+gsk_gl_driver_collect_vaos (GskGLDriver *driver)
+{
+  GHashTableIter iter;
+  gpointer value_p = NULL;
+  int old_size;
+
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), 0);
+  g_return_val_if_fail (!driver->in_frame, 0);
+
+  old_size = g_hash_table_size (driver->vaos);
+
+  g_hash_table_iter_init (&iter, driver->vaos);
+  while (g_hash_table_iter_next (&iter, NULL, &value_p))
+    {
+      Vao *v = value_p;
+
+      if (v->in_use)
+        v->in_use = FALSE;
+      else
+        g_hash_table_iter_remove (&iter);
+    }
+
+  return old_size - g_hash_table_size (driver->vaos);
 }
 
 static Texture *
@@ -328,6 +366,8 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
   t = find_texture_by_size (driver->textures, width, height);
   if (t != NULL && !t->in_use)
     {
+      GSK_NOTE (OPENGL, g_print ("Reusing Texture(%d) for size %dx%d\n",
+                                 t->texture_id, t->width, t->height));
       t->in_use = TRUE;
       return t->texture_id;
     }
@@ -346,6 +386,34 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
   return t->texture_id;
 }
 
+static Vao *
+find_vao (GHashTable    *vaos,
+          int            position_id,
+          int            uv_id,
+          int            n_quads,
+          GskQuadVertex *quads)
+{
+  GHashTableIter iter;
+  gpointer value_p = NULL;
+
+  g_hash_table_iter_init (&iter, vaos);
+  while (g_hash_table_iter_next (&iter, NULL, &value_p))
+    {
+      Vao *v = value_p;
+
+      if (v->position_id != position_id || v->uv_id != uv_id)
+        continue;
+
+      if (v->n_quads != n_quads)
+        continue;
+
+      if (memcmp (v->quads, quads, sizeof (GskQuadVertex) * n_quads) == 0)
+        return v;
+    }
+
+  return NULL;
+}
+
 int
 gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
                                    int            position_id,
@@ -359,6 +427,14 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
   g_return_val_if_fail (driver->in_frame, -1);
+
+  v = find_vao (driver->vaos, position_id, uv_id, n_quads, quads);
+  if (v != NULL && !v->in_use)
+    {
+      GSK_NOTE (OPENGL, g_print ("Reusing VAO(%d)\n", v->vao_id));
+      v->in_use = TRUE;
+      return v->vao_id;
+    }
 
   glGenVertexArrays (1, &vao_id);
   glBindVertexArray (vao_id);
@@ -385,6 +461,9 @@ gsk_gl_driver_create_vao_for_quad (GskGLDriver   *driver,
   v->buffer_id =  buffer_id;
   v->position_id = position_id;
   v->uv_id = uv_id;
+  v->n_quads = n_quads;
+  v->quads = g_memdup (quads, sizeof (GskQuadVertex) * n_quads);
+  v->in_use = TRUE;
   g_hash_table_insert (driver->vaos, GINT_TO_POINTER (vao_id), v);
 
 #ifdef G_ENABLE_DEBUG
