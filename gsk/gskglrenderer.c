@@ -878,8 +878,7 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   glDepthFunc (GL_LEQUAL);
 
   glEnable (GL_BLEND);
-  glBlendFuncSeparate (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
-  glBlendEquation (GL_FUNC_ADD);
+  glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
   GSK_NOTE (OPENGL, g_print ("Rendering %u items\n", self->render_items->len));
   for (i = 0; i < self->render_items->len; i++)
