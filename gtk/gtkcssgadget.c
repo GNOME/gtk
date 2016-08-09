@@ -817,9 +817,10 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   GtkBorder margin, border, padding;
   GtkCssStyle *style;
   cairo_t *cr;
-  GskRenderNode *bg_node, *border_node;
+  GskRenderNode *box_node, *bg_node, *border_node;
   graphene_rect_t bounds;
   graphene_point3d_t p;
+  graphene_matrix_t m;
   int x, y, width, height;
   int contents_x, contents_y, contents_width, contents_height;
   GtkAllocation margin_box;
@@ -849,6 +850,14 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
 
   graphene_rect_init (&bounds, 0, 0, width, height);
   graphene_point3d_init (&p, x, y, 0);
+  graphene_matrix_init_translate (&m, &p);
+
+  str = g_strconcat ("Box<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
+  box_node = gsk_renderer_create_render_node (renderer);
+  gsk_render_node_set_name (box_node, str);
+  gsk_render_node_set_bounds (box_node, &bounds);
+  gsk_render_node_set_transform (box_node, &m);
+  g_free (str);
 
   style = gtk_css_gadget_get_style (gadget);
   get_box_margin (style, &margin);
@@ -859,7 +868,6 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   bg_node = gsk_renderer_create_render_node (renderer);
   gsk_render_node_set_name (bg_node, str);
   gsk_render_node_set_bounds (bg_node, &bounds);
-  gsk_render_node_set_anchor_point (bg_node, &p);
   cr = gsk_render_node_get_draw_context (bg_node);
 
   gtk_css_style_render_background (style,
@@ -872,6 +880,9 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
 
   cairo_destroy (cr);
   g_free (str);
+
+  gsk_render_node_append_child (box_node, bg_node);
+  gsk_render_node_unref (bg_node);
 
   str = g_strconcat ("Border<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
   border_node = gsk_renderer_create_render_node (renderer);
@@ -891,7 +902,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   cairo_destroy (cr);
   g_free (str);
 
-  gsk_render_node_append_child (bg_node, border_node);
+  gsk_render_node_append_child (box_node, border_node);
   gsk_render_node_unref (border_node);
 
   contents_x = margin.left + border.left + padding.left;
@@ -931,7 +942,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
           g_free (str);
           cairo_destroy (cr);
 
-          gsk_render_node_append_child (bg_node, content_node);
+          gsk_render_node_append_child (box_node, content_node);
           gsk_render_node_unref (content_node);
         }
     }
@@ -954,11 +965,11 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
       g_free (str);
       cairo_destroy (cr);
 
-      gsk_render_node_append_child (bg_node, focus_node);
+      gsk_render_node_append_child (box_node, focus_node);
       gsk_render_node_unref (focus_node);
     }
 
-  return bg_node;
+  return box_node;
 }
 
 /**
