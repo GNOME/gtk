@@ -795,32 +795,23 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
 }
 
 static void
-render_item_clear (RenderItem    *item,
-                   GskGLRenderer *self)
-{
-  gsk_gl_driver_destroy_vao (self->gl_driver, item->render_data.vao_id);
-}
-
-static void
 gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 {
-  int i;
+  int removed_textures, removed_vaos;
 
   if (self->gl_context == NULL)
     return;
 
   gdk_gl_context_make_current (self->gl_context);
 
-  for (i = 0; i < self->render_items->len; i++)
-    {
-      RenderItem *item = &g_array_index (self->render_items, RenderItem, i);
-
-      render_item_clear (item, self);
-    }
-
   g_clear_pointer (&self->render_items, g_array_unref);
 
-  gsk_gl_driver_collect_textures (self->gl_driver);
+  removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
+  removed_vaos = gsk_gl_driver_collect_vaos (self->gl_driver);
+
+  GSK_NOTE (OPENGL, g_print ("Collected: %d textures, %d vaos\n",
+                             removed_textures,
+                             removed_vaos));
 }
 
 static void
