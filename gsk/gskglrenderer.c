@@ -413,19 +413,22 @@ render_item (GskGLRenderer *self,
 
   glUseProgram (item->render_data.program_id);
 
-  /* Use texture unit 0 for the source */
-  glUniform1i (item->render_data.source_location, 0);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.texture_id);
-
-  if (item->parent_data != NULL)
+  if (item->render_data.texture_id != 0)
     {
-      glUniform1i (item->render_data.blendMode_location, item->blend_mode);
+      /* Use texture unit 0 for the source */
+      glUniform1i (item->render_data.source_location, 0);
+      gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.texture_id);
 
-      /* Use texture unit 1 for the mask */
-      if (item->parent_data->texture_id != 0)
+      if (item->parent_data != NULL)
         {
-          glUniform1i (item->render_data.mask_location, 1);
-          gsk_gl_driver_bind_mask_texture (self->gl_driver, item->parent_data->texture_id);
+          glUniform1i (item->render_data.blendMode_location, item->blend_mode);
+
+          /* Use texture unit 1 for the mask */
+          if (item->parent_data->texture_id != 0)
+            {
+              glUniform1i (item->render_data.mask_location, 1);
+              gsk_gl_driver_bind_mask_texture (self->gl_driver, item->parent_data->texture_id);
+            }
         }
     }
 
@@ -659,22 +662,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   else
     item.parent_data = NULL;
 
-  if (render_node_needs_render_target (node))
-    {
-      item.render_data.render_target_id =
-        gsk_gl_driver_create_texture (self->gl_driver, item.size.width, item.size.height);
-      gsk_gl_driver_init_texture_empty (self->gl_driver, item.render_data.render_target_id);
-      gsk_gl_driver_create_render_target (self->gl_driver, item.render_data.render_target_id, TRUE, TRUE);
-
-      item.children = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem),
-                                         gsk_render_node_get_n_children (node));
-    }
-  else
-    {
-      item.render_data.render_target_id = self->texture_id;
-      item.children = NULL;
-    }
-
   /* Select the program to use */
   if (parent != NULL)
     program_id = self->blend_program_id;
@@ -700,6 +687,39 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   item.render_data.uv_location =
     gsk_shader_builder_get_attribute_location (self->shader_builder, program_id, self->attributes[UV]);
 
+  if (render_node_needs_render_target (node))
+    {
+      item.render_data.render_target_id =
+        gsk_gl_driver_create_texture (self->gl_driver, item.size.width, item.size.height);
+      gsk_gl_driver_init_texture_empty (self->gl_driver, item.render_data.render_target_id);
+      gsk_gl_driver_create_render_target (self->gl_driver, item.render_data.render_target_id, TRUE, TRUE);
+
+      item.children = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem),
+                                         gsk_render_node_get_n_children (node));
+    }
+  else
+    {
+      item.render_data.render_target_id = self->texture_id;
+      item.children = NULL;
+    }
+
+  surface = gsk_render_node_get_surface (node);
+
+  /* If the node does not draw anything, we skip it */
+  if (surface == NULL && item.render_data.render_target_id == self->texture_id)
+    goto out;
+
+  /* Upload the Cairo surface to a GL texture */
+  item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                              item.size.width,
+                                                              item.size.height);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
+  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                           item.render_data.texture_id,
+                                           surface,
+                                           self->gl_min_filter,
+                                           self->gl_mag_filter);
+
   /* Create the vertex buffers holding the geometry of the quad */
   {
     GskQuadVertex vertex_data[N_VERTICES] = {
@@ -723,40 +743,17 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   gsk_renderer_get_projection (GSK_RENDERER (self), &projection);
   item.z = project_item (&projection, &mv);
 
-  /* TODO: This should really be an asset atlas, to avoid uploading a ton
-   * of textures. Ideally we could use a single Cairo surface to get around
-   * the GL texture limits and reorder the texture data on the CPU side and
-   * do a single upload; alternatively, we could use a separate FBO and
-   * render each texture into it
-   */
-  surface = gsk_render_node_get_surface (node);
-
-  if (surface != NULL)
-    {
-      /* Upload the Cairo surface to a GL texture */
-      item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                                  item.size.width,
-                                                                  item.size.height);
-      gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
-      gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                               item.render_data.texture_id,
-                                               surface,
-                                               self->gl_min_filter,
-                                               self->gl_mag_filter);
-    }
-
   GSK_NOTE (OPENGL, g_print ("%*sAdding node <%s>[%p] to render items\n",
                              2 * node_depth (node), "",
                              node->name != NULL ? node->name : "unnamed",
                              node));
   g_array_append_val (render_items, item);
-  ritem = &g_array_index (render_items,
-                          RenderItem,
-                          render_items->len - 1);
+  ritem = &g_array_index (render_items, RenderItem, render_items->len - 1);
 
   if (item.children != NULL)
     render_items = item.children;
 
+out:
   gsk_render_node_iter_init (&iter, node);
   while (gsk_render_node_iter_next (&iter, &child))
     gsk_gl_renderer_add_render_item (self, render_items, child, ritem);
