@@ -3883,6 +3883,7 @@ typedef struct {
   GtkContainer *container;
   GskRenderer *renderer;
   GskRenderNode *parent;
+  GArray *child_infos;
 } RenderData;
 
 static void
@@ -3944,16 +3945,55 @@ propagate_render_node (GtkWidget *child,
   gsk_render_node_unref (node);
 }
 
+static void
+collect_child_infos (GtkWidget *widget,
+                     gpointer   data_)
+{
+  RenderData *data = data_;
+  ChildOrderInfo info;
+  GList *siblings;
+  GdkWindow *window;
+
+  info.child = widget;
+  info.window_depth = G_MAXINT;
+
+  window = _gtk_widget_get_window (widget);
+  if (window == NULL)
+    return;
+
+  if (window != gtk_widget_get_window (GTK_WIDGET (data->container)))
+    {
+      siblings = gdk_window_peek_children (gdk_window_get_parent (window));
+      info.window_depth = g_list_index (siblings, window);
+    }
+
+  g_array_append_val (data->child_infos, info);
+}
+
+
 void
 gtk_container_propagate_render_node (GtkContainer  *container,
                                      GskRenderer   *renderer,
                                      GskRenderNode *parent_node)
 {
-  RenderData data = {
-    container,
-    renderer,
-    parent_node
-  };
+  RenderData data;
+  int i;
 
-  gtk_container_forall (container, propagate_render_node, &data);
+  data.container = container;
+  data.renderer = renderer;
+  data.parent = parent_node;
+  data.child_infos = g_array_new (FALSE, TRUE, sizeof (ChildOrderInfo));
+
+  gtk_container_forall (container, collect_child_infos, &data);
+
+  g_array_sort (data.child_infos, compare_children_for_draw);
+
+  for (i = 0; i < data.child_infos->len; i++)
+    {
+      ChildOrderInfo *info = &g_array_index (data.child_infos, ChildOrderInfo, i);
+
+      propagate_render_node (info->child, &data);
+    }
+
+  g_array_free (data.child_infos, TRUE);
 }
