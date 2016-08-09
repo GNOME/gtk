@@ -1442,19 +1442,19 @@ msgstr "Vlastní licence"
 
 #: gtk/gtkaboutdialog.c:115
 msgid "GNU General Public License, version 2 or later"
-msgstr "GNU General Public License, verze 2 nebo pozdější"
+msgstr "GNU General Public License, verze 2 nebo novější"
 
 #: gtk/gtkaboutdialog.c:116
 msgid "GNU General Public License, version 3 or later"
-msgstr "GNU General Public License, verze 3 nebo pozdější"
+msgstr "GNU General Public License, verze 3 nebo novější"
 
 #: gtk/gtkaboutdialog.c:117
 msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr "GNU Lesser General Public License, verze 2.1 nebo pozdější"
+msgstr "GNU Lesser General Public License, verze 2.1 nebo novější"
 
 #: gtk/gtkaboutdialog.c:118
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr "GNU Lesser General Public License, verze 3 nebo pozdější"
+msgstr "GNU Lesser General Public License, verze 3 nebo novější"
 
 #: gtk/gtkaboutdialog.c:119
 msgid "BSD 2-Clause License"
