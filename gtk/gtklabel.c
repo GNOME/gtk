@@ -6661,8 +6661,8 @@ gtk_label_do_popup (GtkLabel       *label,
 
   g_signal_emit (label, signals[POPULATE_POPUP], 0, menu);
 
-  if (event && gdk_event_triggers_context_menu ((GdkEvent *) event))
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) event);
+  if (event && gdk_event_triggers_context_menu (event))
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
   else
     {
       gtk_menu_popup_at_widget (GTK_MENU (menu),
