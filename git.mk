@@ -85,6 +85,7 @@ GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL = \
 		compile \
 		config.guess \
 		config.sub \
+		config.rpath \
 		depcomp \
 		install-sh \
 		ltmain.sh \
