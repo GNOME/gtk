@@ -22,7 +22,6 @@ EXTRA_DIST +=			\
 	sanitize-la.sh		\
 	po/README.translators	\
 	po/po2tbl.sed.in	\
-	build-aux/config.rpath	\
 	make-pot
 
 MAINTAINERCLEANFILES = \
