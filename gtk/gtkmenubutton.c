@@ -422,9 +422,9 @@ gtk_menu_button_toggled (GtkToggleButton *button)
   else if (priv->popover)
     {
       if (active)
-        gtk_widget_show (priv->popover);
+        gtk_popover_popup (GTK_POPOVER (priv->popover));
       else
-        gtk_widget_hide (priv->popover);
+        gtk_popover_popdown (GTK_POPOVER (priv->popover));
     }
 
   if (GTK_TOGGLE_BUTTON_CLASS (gtk_menu_button_parent_class)->toggled)

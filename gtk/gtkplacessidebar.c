@@ -2475,7 +2475,7 @@ do_rename (GtkButton        *button,
   g_clear_pointer (&sidebar->rename_uri, g_free);
 
   if (sidebar->rename_popover)
-    gtk_widget_hide (sidebar->rename_popover);
+    gtk_popover_popdown (GTK_POPOVER (sidebar->rename_popover));
 }
 
 static void
@@ -2615,7 +2615,7 @@ show_rename_popover (GtkSidebarRow *row)
   gtk_popover_set_relative_to (GTK_POPOVER (sidebar->rename_popover), GTK_WIDGET (row));
   setup_popover_shadowing (sidebar->rename_popover);
 
-  gtk_widget_show (sidebar->rename_popover);
+  gtk_popover_popup (GTK_POPOVER (sidebar->rename_popover));
   gtk_widget_grab_focus (sidebar->rename_entry);
 
   g_free (name);
@@ -3478,7 +3478,7 @@ show_row_popover (GtkSidebarRow *row)
   gtk_popover_set_relative_to (GTK_POPOVER (sidebar->popover), GTK_WIDGET (row));
 
   sidebar->context_row = row;
-  gtk_widget_show (sidebar->popover);
+  gtk_popover_popup (GTK_POPOVER (sidebar->popover));
 
   g_object_unref (sidebar);
 }

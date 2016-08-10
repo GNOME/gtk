@@ -236,7 +236,7 @@ row_activated (GtkTreeView *tv,
 
   g_signal_connect (editor, "show-object", G_CALLBACK (show_object), pl);
 
-  gtk_widget_show (popover);
+  gtk_popover_popup (GTK_POPOVER (popover));
 
   g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
 

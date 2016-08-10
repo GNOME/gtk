@@ -511,7 +511,7 @@ gtk_shortcuts_window__list_box__row_activated (GtkShortcutsWindow *self,
 
   section = g_object_get_data (G_OBJECT (row), "gtk-shortcuts-section");
   gtk_stack_set_visible_child (priv->stack, section);
-  gtk_widget_hide (GTK_WIDGET (priv->popover));
+  gtk_popover_popdown (priv->popover);
 }
 
 static gboolean

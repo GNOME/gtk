@@ -824,7 +824,7 @@ gtk_scale_popup (GtkWidget *widget)
   gint w, h;
   gint size;
 
-  gtk_widget_show (priv->dock);
+  gtk_popover_popup (GTK_POPOVER (priv->dock));
 
   toplevel = gtk_widget_get_toplevel (widget);
   _gtk_window_get_shadow_width (GTK_WINDOW (toplevel), &border);
@@ -849,7 +849,7 @@ gtk_scale_button_popdown (GtkWidget *widget)
   GtkScaleButton *button = GTK_SCALE_BUTTON (widget);
   GtkScaleButtonPrivate *priv = button->priv;
 
-  gtk_widget_hide (priv->dock);
+  gtk_popover_popdown (GTK_POPOVER (priv->dock));
 }
 
 static void

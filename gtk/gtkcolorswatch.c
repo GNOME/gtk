@@ -365,7 +365,7 @@ do_popup (GtkColorSwatch *swatch)
       gtk_widget_show_all (box);
     }
 
-  gtk_widget_show (swatch->priv->popover);
+  gtk_popover_popup (GTK_POPOVER (swatch->priv->popover));
 }
 
 static gboolean

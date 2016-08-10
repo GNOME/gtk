@@ -263,7 +263,7 @@ row_activated (GtkTreeView         *tv,
 
   editor = gtk_inspector_action_editor_new (group, prefix, name);
   gtk_container_add (GTK_CONTAINER (popover), editor);
-  gtk_widget_show (popover);
+  gtk_popover_popup (GTK_POPOVER (popover));
 
   g_signal_connect (popover, "hide", G_CALLBACK (gtk_widget_destroy), NULL);
 

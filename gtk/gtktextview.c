@@ -5173,7 +5173,7 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
                                &rect);
 
-  gtk_widget_show (priv->magnifier_popover);
+  gtk_popover_popup (GTK_POPOVER (priv->magnifier_popover));
 
 #undef N_LINES
 }
@@ -5317,7 +5317,7 @@ gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
     }
 
   if (priv->magnifier_popover)
-    gtk_widget_hide (priv->magnifier_popover);
+    gtk_popover_popdown (GTK_POPOVER (priv->magnifier_popover));
 }
 
 static gboolean cursor_visible (GtkTextView *text_view);

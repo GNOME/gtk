@@ -1150,7 +1150,7 @@ new_folder_create_clicked (GtkButton            *button,
   name = gtk_entry_get_text (GTK_ENTRY (priv->new_folder_name_entry));
   file = g_file_get_child_for_display_name (priv->current_folder, name, &error);
 
-  gtk_widget_hide (priv->new_folder_popover);
+  gtk_popover_popdown (GTK_POPOVER (priv->new_folder_popover));
 
   if (file)
     {
@@ -1592,7 +1592,7 @@ rename_file_rename_clicked (GtkButton            *button,
   GFile *dest;
   const gchar* new_name;
 
-  gtk_widget_hide (priv->rename_file_popover);
+  gtk_popover_popdown (GTK_POPOVER (priv->rename_file_popover));
 
   new_name = gtk_entry_get_text (GTK_ENTRY (priv->rename_file_name_entry));
   dest = g_file_get_parent (priv->rename_file_source_file);
@@ -1642,7 +1642,7 @@ rename_selected_cb (GtkTreeModel *model,
   g_free (filename);
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->rename_file_popover), &rect);
-  gtk_widget_show (priv->rename_file_popover);
+  gtk_popover_popup (GTK_POPOVER (priv->rename_file_popover));
   gtk_widget_grab_focus (priv->rename_file_popover);
 }
 
@@ -2362,7 +2362,7 @@ file_list_show_popover (GtkFileChooserWidget *impl,
     }
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->browse_files_popover), &rect);
-  gtk_widget_show (priv->browse_files_popover);
+  gtk_popover_popup (GTK_POPOVER (priv->browse_files_popover));
 }
 
 /* Callback used for the GtkWidget::popup-menu signal of the file list */

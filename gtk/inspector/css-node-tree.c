@@ -102,7 +102,7 @@ show_node_prop_editor (NodePropEditor *npe)
   if (gtk_inspector_prop_editor_should_expand (GTK_INSPECTOR_PROP_EDITOR (editor)))
     gtk_widget_set_vexpand (popover, TRUE);
 
-  gtk_widget_show (popover);
+  gtk_popover_popup (GTK_POPOVER (popover));
 
   g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
 }

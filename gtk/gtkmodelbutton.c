@@ -1047,7 +1047,7 @@ gtk_model_button_clicked (GtkButton *button)
 
       popover = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_POPOVER);
       if (popover != NULL)
-        gtk_widget_hide (popover);
+        gtk_popover_popdown (GTK_POPOVER (popover));
     }
 }
 

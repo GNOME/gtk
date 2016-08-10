@@ -4582,7 +4582,7 @@ gtk_entry_show_magnifier (GtkEntry *entry,
                              rect.y + rect.height / 2);
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
                                &rect);
-  gtk_widget_show (priv->magnifier_popover);
+  gtk_popover_popup (GTK_POPOVER (priv->magnifier_popover));
 }
 
 static void
@@ -4736,7 +4736,7 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
   priv->in_drag = FALSE;
 
   if (priv->magnifier_popover)
-    gtk_widget_hide (priv->magnifier_popover);
+    gtk_popover_popdown (GTK_POPOVER (priv->magnifier_popover));
 
   /* Check whether the drag was cancelled rather than finished */
   if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
@@ -6627,7 +6627,7 @@ gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
     }
 
   if (priv->magnifier_popover)
-    gtk_widget_hide (priv->magnifier_popover);
+    gtk_popover_popdown (GTK_POPOVER (priv->magnifier_popover));
 }
 
 
