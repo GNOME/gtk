@@ -1934,7 +1934,8 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
 }
 
 static gchar *
-weed_out_neg_zero (gchar *str, gint digits)
+weed_out_neg_zero (gchar *str,
+                   gint   digits)
 {
   if (str[0] == '-')
     {

@@ -1116,7 +1116,8 @@ measure_string_width (PangoLayout *layout,
 }
 
 static gchar *
-weed_out_neg_zero (gchar *str, gint digits)
+weed_out_neg_zero (gchar *str,
+                   gint   digits)
 {
   if (str[0] == '-')
     {
