@@ -889,6 +889,68 @@ get_request_mode (GtkWidget *self)
   return GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
 }
 
+static void
+get_preferred_width (GtkWidget *widget,
+                     gint      *minimum_width,
+                     gint      *natural_width)
+{
+  GtkPathBar *self = GTK_PATH_BAR (widget);
+  GtkWidget *root_button;
+  GtkWidget *tail_button;
+  GtkWidget *tail_overflow_button;
+  GtkWidget *root_overflow_button;
+  GtkWidget *path_bar_container;
+  gint widget_minimum_width;
+  gint widget_natural_width;
+
+g_print ("#################WE ARE GOING HERE\n");
+  /* We want to reserve space for the root and tail too, so we don't enter in
+   * loops when the path has only root, tail and one item in the path bar container
+   */
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button,
+                        &tail_overflow_button, &root_button, &tail_button,
+                        &path_bar_container, TRUE);
+
+  gtk_widget_get_preferred_width (root_overflow_button,
+                                  &widget_minimum_width,
+                                  &widget_natural_width);
+  *minimum_width += widget_minimum_width;
+  *natural_width += widget_natural_width;
+
+  gtk_widget_get_preferred_width (root_button,
+                                  &widget_minimum_width,
+                                  &widget_natural_width);
+  *minimum_width += widget_minimum_width;
+  *natural_width += widget_natural_width;
+
+  gtk_widget_get_preferred_width (path_bar_container,
+                                  &widget_minimum_width,
+                                  &widget_natural_width);
+  *minimum_width += widget_minimum_width;
+  *natural_width += widget_natural_width;
+
+  gtk_widget_get_preferred_width (tail_overflow_button,
+                                  &widget_minimum_width,
+                                  &widget_natural_width);
+  *minimum_width += widget_minimum_width;
+  *natural_width += widget_natural_width;
+
+  gtk_widget_get_preferred_width (tail_button,
+                                  &widget_minimum_width,
+                                  &widget_natural_width);
+  *minimum_width += widget_minimum_width;
+  *natural_width += widget_natural_width;
+}
+
+static void
+get_preferred_width_for_height (GtkWidget *widget,
+                                gint       height,
+                                gint      *minimum_width_out,
+                                gint      *natural_width_out)
+{
+  get_preferred_width (widget, minimum_width_out, natural_width_out);
+}
+
 static gboolean
 set_real_inverted (GtkPathBar *self)
 {
@@ -932,6 +994,8 @@ gtk_path_bar_class_init (GtkPathBarClass *klass)
   object_class->set_property = gtk_path_bar_set_property;
 
   widget_class->get_request_mode = get_request_mode;
+  widget_class->get_preferred_width = get_preferred_width;
+  widget_class->get_preferred_width_for_height = get_preferred_width_for_height;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
 
   /**
