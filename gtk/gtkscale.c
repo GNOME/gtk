@@ -1850,12 +1850,13 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
 }
 
 static gchar *
-weed_out_neg_zero (gchar *str, gint digits)
+weed_out_neg_zero (gchar *str,
+                   gint   digits)
 {
   if (str[0] == '-')
     {
       gchar neg_zero[8];
-      snprintf (neg_zero, 8, "%0.*f", digits, -0.0);
+      g_snprintf (neg_zero, 8, "%0.*f", digits, -0.0);
       if (strcmp (neg_zero, str) == 0)
         memmove (str, str + 1, strlen (str) - 1);
     }
