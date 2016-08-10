@@ -157,7 +157,6 @@ gtk_path_bar_box_size_allocate (GtkWidget     *widget,
                                                                      &distributed_size);
 
           sizes[i].minimum_size = MIN (child_available_size.width, distributed_size.width);
-          g_print ("pathbar getting %d\n", sizes[i].minimum_size);
         }
 
       child_allocation.x = current_x;

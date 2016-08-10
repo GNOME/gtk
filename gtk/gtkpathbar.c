@@ -79,6 +79,7 @@ struct _GtkPathBarPrivate
   gchar *root_path;
 
   gchar *path;
+  gchar *old_path;
   gchar *selected_path;
   gint inverted :1;
 
@@ -127,6 +128,7 @@ get_path_bar_widgets (GtkPathBar  *self,
                       GtkWidget  **path_bar,
                       GtkWidget  **root_overflow_button,
                       GtkWidget  **tail_overflow_button,
+                      GtkWidget  **root_button,
                       GtkWidget  **tail_button,
                       GtkWidget  **path_bar_container,
                       gboolean     current)
@@ -150,6 +152,8 @@ get_path_bar_widgets (GtkPathBar  *self,
 
       if (tail_button)
         *tail_button = priv->path_bar_tail_1;
+      if (root_button)
+        *root_button = priv->path_bar_root_1;
     }
   else
     {
@@ -164,6 +168,8 @@ get_path_bar_widgets (GtkPathBar  *self,
 
       if (tail_button)
         *tail_button = priv->path_bar_tail_2;
+      if (root_button)
+        *root_button = priv->path_bar_root_2;
     }
 }
 
@@ -266,6 +272,69 @@ free_path_chunk_data (PathChunkData *data)
   g_slice_free (PathChunkData, data);
 }
 
+static void
+add_path_chunk_data (GtkPathBar  *self,
+                     GtkWidget   *widget,
+                     GtkWidget   *button,
+                     const gchar *path,
+                     const gchar *label,
+                     GIcon       *icon)
+{
+  PathChunkData *path_chunk_data;
+
+  path_chunk_data = g_slice_new (PathChunkData);
+  if (label)
+    path_chunk_data->label = g_strdup (label);
+  else
+    path_chunk_data->label = NULL;
+
+  if (icon)
+    path_chunk_data->icon = g_object_ref (icon);
+  else
+    path_chunk_data->icon = NULL;
+
+  path_chunk_data->path = g_strdup (path);
+  path_chunk_data->path_bar = self;
+  path_chunk_data->button = button;
+  g_object_set_data_full (G_OBJECT (widget), "data",
+                          path_chunk_data, (GDestroyNotify) free_path_chunk_data);
+}
+
+static void
+update_path_chunk (GtkPathBar  *self,
+                   GtkWidget   *widget,
+                   GtkWidget   *button,
+                   const gchar *path,
+                   const gchar *label,
+                   GIcon       *icon)
+{
+  GtkWidget *image;
+  GtkWidget *button_label;
+
+  gtk_container_foreach (GTK_CONTAINER (button), (GtkCallback) gtk_widget_destroy, NULL);
+
+  if (icon)
+    {
+      image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+      gtk_button_set_image (GTK_BUTTON (button), image);
+
+      gtk_widget_show (image);
+    }
+
+  if (label)
+    {
+      button_label = gtk_label_new (label);
+      gtk_label_set_ellipsize (GTK_LABEL (button_label), PANGO_ELLIPSIZE_MIDDLE);
+      gtk_label_set_width_chars (GTK_LABEL (button_label),
+                                 MIN (strlen (label), 10));
+      gtk_container_add (GTK_CONTAINER (button), button_label);
+
+      gtk_widget_show (button_label);
+    }
+
+  add_path_chunk_data (self, widget, button, path, label, icon);
+}
+
 static GtkWidget *
 create_path_chunk (GtkPathBar  *self,
                    const gchar *path,
@@ -276,33 +345,12 @@ create_path_chunk (GtkPathBar  *self,
   GtkWidget *button;
   GtkWidget *separator;
   GtkWidget *path_chunk;
-  GtkWidget *button_label;
-  GtkWidget *image;
   GtkStyleContext *style;
-  PathChunkData *path_chunk_data;
 
   path_chunk = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   button = gtk_toggle_button_new ();
 
-  if (icon)
-    {
-      image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
-      gtk_button_set_image (GTK_BUTTON (button), image);
-    }
-  else if (label)
-    {
-      button_label = gtk_label_new (label);
-      gtk_label_set_ellipsize (GTK_LABEL (button_label), PANGO_ELLIPSIZE_MIDDLE);
-      // FIXME: the GtkLabel requests more than the number of chars set here.
-      // For visual testing for now substract 2 chars.
-      gtk_label_set_width_chars (GTK_LABEL (button_label),
-                                 MIN (strlen (label), 10));
-      gtk_container_add (GTK_CONTAINER (button), button_label);
-    }
-  else
-    {
-      g_critical ("Path chunk doesn't provide either icon or label");
-    }
+  update_path_chunk (self, path_chunk, button, path, label, icon);
 
   style = gtk_widget_get_style_context (button);
   gtk_style_context_add_class (style, "flat");
@@ -324,33 +372,27 @@ create_path_chunk (GtkPathBar  *self,
       gtk_container_add (GTK_CONTAINER (path_chunk), separator);
     }
 
-  path_chunk_data = g_slice_new (PathChunkData);
-  if (label)
-    path_chunk_data->label = g_strdup (label);
-  else
-    path_chunk_data->label = NULL;
-
-  if (icon)
-    path_chunk_data->icon = g_object_ref (icon);
-  else
-    path_chunk_data->icon = NULL;
-
-  path_chunk_data->path = g_strdup (path);
-  path_chunk_data->path_bar = self;
-  path_chunk_data->button = button;
-  g_object_set_data_full (G_OBJECT (path_chunk), "data",
-                          path_chunk_data, (GDestroyNotify) free_path_chunk_data);
-
   gtk_widget_show_all (path_chunk);
 
   return path_chunk;
 }
 
+static gboolean
+is_absolute_root (const gchar *path)
+{
+  return g_strcmp0 (path, G_DIR_SEPARATOR_S) == 0;
+}
+
 static gchar**
-get_splitted_path (const gchar* path)
+get_splitted_path (GtkPathBar  *self,
+                   const gchar *path)
 {
   gchar *path_no_first_slash;
-  gchar **splitted_path;
+  gchar **splitted_path = NULL;
+
+g_print ("path get splitted path %s\n", path);
+  if (strlen (path) == 0)
+    return splitted_path;
 
   path_no_first_slash = g_utf8_substring (path, 1, strlen (path));
   splitted_path = g_strsplit (path_no_first_slash, G_DIR_SEPARATOR_S, -1);
@@ -360,10 +402,32 @@ get_splitted_path (const gchar* path)
   return splitted_path;
 }
 
-static gboolean
-is_absolute_root (const gchar *path)
+static gchar *
+get_unprefixed_path (GtkPathBar  *self,
+                     const gchar *path)
 {
-  return g_strcmp0 (path, G_DIR_SEPARATOR_S) == 0;
+  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
+  gchar *unprefixed_path = NULL;
+
+  if (priv->root_path && !is_absolute_root (priv->root_path))
+    {
+      unprefixed_path = g_utf8_substring (path,
+                                          priv->root_path ? strlen (priv->root_path) : 0,
+                                          strlen (path));
+    }
+  else
+    {
+      gchar **splitted_path = NULL;
+
+      splitted_path = get_splitted_path (self, path);
+
+      if (splitted_path[0])
+        unprefixed_path = g_utf8_substring (path,
+                                            strlen (splitted_path[0]) + 1,
+                                            strlen (path));
+    }
+
+  return unprefixed_path;
 }
 
 static gboolean
@@ -413,14 +477,28 @@ fill_path_bar (GtkPathBar  *self,
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
   GString *current_path ;
+  gchar** prefixed_splitted_path;
   GtkWidget *path_chunk;
   gboolean separator_after_button;
   gint length;
   gint i;
+  GString *root_path;
 
   current_path = g_string_new ("");
   if (priv->root_path)
-    g_string_append (current_path, priv->root_path);
+    {
+      g_string_append (current_path, priv->root_path);
+    }
+  else if (!is_absolute_root (priv->path))
+    {
+      prefixed_splitted_path = get_splitted_path (self, priv->path);
+      root_path = g_string_new ("");
+      g_string_append (root_path, G_DIR_SEPARATOR_S);
+      g_string_append (root_path, prefixed_splitted_path[0]);
+
+      g_string_append (current_path, root_path->str);
+    }
+
   i = splitted_old_path ? g_strv_length (splitted_old_path) : 0;
   length = g_strv_length (splitted_path);
   for (; i < length; i++)
@@ -443,7 +521,8 @@ fill_path_bar (GtkPathBar  *self,
 }
 
 static void
-hide_overflow_handling (GtkPathBar *self)
+hide_overflow_handling (GtkPathBar *self,
+                        gboolean    root)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
   GtkWidget *path_chunk;
@@ -451,11 +530,12 @@ hide_overflow_handling (GtkPathBar *self)
   GtkWidget *root_overflow_button;
   GtkWidget *tail_button;
   GtkWidget *path_bar_container;
-  g_print ("###### hide overflow %d\n", priv->inverted);
+  gchar** splitted_path;
 
-  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, &tail_button, &path_bar_container, TRUE);
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, NULL, &tail_button, &path_bar_container, TRUE);
 
-  if (priv->inverted)
+g_print ("hide overflow\n");
+  if (root)
     {
       gtk_button_set_label (root_overflow_button, "/");
       gtk_widget_set_sensitive (root_overflow_button, FALSE);
@@ -464,31 +544,18 @@ hide_overflow_handling (GtkPathBar *self)
     {
       gtk_widget_hide (tail_overflow_button);
       gtk_widget_hide (tail_button);
-      path_chunk = create_path_chunk (self, "/meeh", "The tail",
+      splitted_path = get_splitted_path (self, priv->path);
+      path_chunk = create_path_chunk (self, priv->path, splitted_path[g_strv_length (splitted_path) - 1],
                                       NULL, TRUE);
       gtk_path_bar_container_add (path_bar_container, path_chunk, FALSE);
+
+      g_strfreev (splitted_path);
     }
 }
 
 static void
-on_invert_animation_done (GtkPathBarContainer *container,
-                          GtkPathBar          *self)
-{
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
-  GtkWidget *path_chunk;
-  GtkWidget *overflow_button;
-  GtkWidget *tail_button;
-  GList *children;
-  GList *shown_children;
-
-  if (priv->inverted && gtk_path_bar_container_is_overflowing (container))
-    {
-      hide_overflow_handling (self);
-    }
-}
-
-static void
-start_overflow_handling (GtkPathBar *self)
+start_overflow_handling (GtkPathBar *self,
+                         gboolean    root)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
   GtkWidget *path_bar_container;
@@ -497,22 +564,42 @@ start_overflow_handling (GtkPathBar *self)
   GtkWidget *tail_button;
   GList *children;
   GList *last;
+  gchar** splitted_path;
 
-  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, &tail_button, &path_bar_container, TRUE);
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, NULL, &tail_button, &path_bar_container, TRUE);
 
-  if (priv->inverted)
+g_print ("start overflow\n");
+  if (root)
     {
       gtk_button_set_label (root_overflow_button, "//");
       gtk_widget_set_sensitive (root_overflow_button, TRUE);
     }
   else
     {
+      splitted_path = get_splitted_path (self, priv->path);
+      update_path_chunk (self, tail_button, tail_button, priv->path,
+                         splitted_path[g_strv_length (splitted_path) - 1], NULL);
+
       gtk_widget_show (tail_overflow_button);
       gtk_widget_show (tail_button);
       children = gtk_path_bar_container_get_children (path_bar_container);
       last = g_list_last (children);
       if (last)
         gtk_path_bar_container_remove (path_bar_container, last->data, FALSE);
+
+      g_strfreev (splitted_path);
+    }
+}
+
+static void
+on_invert_animation_done (GtkPathBarContainer *container,
+                          GtkPathBar          *self)
+{
+  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
+
+  if (gtk_path_bar_container_is_overflowing (container))
+    {
+      hide_overflow_handling (self, !priv->inverted);
     }
 }
 
@@ -538,7 +625,8 @@ update_overflow (GtkPathBar *self)
   GtkWidget *tail_overflow_button;
   GtkWidget *root_overflow_button;
 
-  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, NULL, &path_bar_container, TRUE);
+  g_print ("update overflow\n");
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, &root_overflow_button, &tail_overflow_button, NULL, NULL, &path_bar_container, TRUE);
   children = gtk_path_bar_container_get_children (path_bar_container);
   shown_children = gtk_path_bar_container_get_shown_children (path_bar_container);
   last_shown_child = g_list_last (shown_children);
@@ -554,18 +642,18 @@ update_overflow (GtkPathBar *self)
         gtk_widget_set_visible (button_children->next->data, visible);
     }
 
-  if (!gtk_widget_is_visible (tail_overflow_button))
+  if (gtk_path_bar_container_get_invert_animation (path_bar_container))
     return;
 
-  if (!gtk_path_bar_container_is_overflowing (path_bar_container) && !gtk_path_bar_container_get_invert_animation (path_bar_container))
+  if (!gtk_path_bar_container_is_overflowing (path_bar_container) &&
+      (gtk_widget_is_visible (tail_overflow_button) || g_strcmp0 (gtk_button_get_label (GTK_BUTTON (root_overflow_button)), "//") == 0))
     {
-      g_print ("~~~~~~~~~~~changeeeeed equal lenght\n");
-      hide_overflow_handling (self);
+      hide_overflow_handling (self, priv->inverted);
     }
-  else if (gtk_path_bar_container_is_overflowing (path_bar_container) && !gtk_path_bar_container_get_invert_animation (path_bar_container))
+  else if (gtk_path_bar_container_is_overflowing (path_bar_container) &&
+           !(gtk_widget_is_visible (tail_overflow_button) || g_strcmp0 (gtk_button_get_label (GTK_BUTTON (root_overflow_button)), "//") == 0))
     {
-      g_print ("~~~~~~~~~~~changeeeeed different length %d %d\n", g_list_length (shown_children), g_list_length (children));
-      start_overflow_handling (self);
+      start_overflow_handling (self, priv->inverted);
     }
 }
 
@@ -574,6 +662,7 @@ on_children_shown_changed (GtkPathBarContainer *container,
                            GParamSpec          *spec,
                            GtkPathBar          *self)
 {
+  g_print ("children shown changed\n");
   update_overflow (self);
 }
 
@@ -583,50 +672,71 @@ update_path_bar (GtkPathBar  *self,
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (self);
   GtkWidget *path_bar_container;
-  GtkWidget *overflow_button;
   GtkWidget *path_bar;
-  GtkWidget *root_chunk;
+  GtkWidget *root_button;
+  GtkWidget *tail_button;
+  GtkWidget *tail_overflow_button;
+  GtkWidget *root_overflow_button;
   gchar *unprefixed_path;
   gchar *unprefixed_old_path = NULL;
   gchar **splitted_path;
+  gchar **unprefixed_splitted_path;
   gchar **splitted_old_path = NULL;
+  gchar **unprefixed_splitted_old_path = NULL;
 
-  g_print ("update path\n");
-  if (priv->root_path && !is_absolute_root (priv->root_path))
-    {
-      unprefixed_path = g_utf8_substring (priv->path, strlen (priv->root_path),
-                                          strlen (priv->path));
-      if (old_path)
-        unprefixed_old_path = g_utf8_substring (old_path, strlen (priv->root_path),
-                                                strlen (old_path));
-    }
-  else
-    {
-      unprefixed_path = g_strdup (priv->path);
-      if (old_path)
-        unprefixed_old_path = g_utf8_substring (old_path, strlen (priv->root_path),
-                                                strlen (old_path));
-    }
+  g_print ("((((((((((((((((((((((((((( update path\n");
+
+  if (old_path)
+    unprefixed_old_path = get_unprefixed_path (self, old_path);
+
+  unprefixed_path = get_unprefixed_path (self, priv->path);
+  splitted_path = get_splitted_path (self, priv->path);
 
   if (unprefixed_old_path &&
       (g_str_has_prefix (unprefixed_old_path, unprefixed_path) ||
-      g_str_has_prefix (unprefixed_path, unprefixed_old_path)))
-    get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar, NULL, NULL, NULL, &path_bar_container, TRUE);
+       g_str_has_prefix (unprefixed_path, unprefixed_old_path)))
+    get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar, &root_overflow_button, &tail_overflow_button, &root_button, &tail_button, &path_bar_container, TRUE);
   else
-    get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar, NULL, NULL, NULL, &path_bar_container, FALSE);
+    get_path_bar_widgets (GTK_PATH_BAR (self), &path_bar, &root_overflow_button, &tail_overflow_button, &root_button, &tail_button, &path_bar_container, FALSE);
+
+  if (!is_absolute_root (priv->path))
+    gtk_widget_show (root_overflow_button);
+  else
+    gtk_widget_hide (root_overflow_button);
+
+  gtk_widget_hide (tail_button);
+  gtk_widget_hide (tail_overflow_button);
 
   if (priv->root_path)
     {
-      root_chunk = create_path_chunk (self, priv->root_path, priv->root_label,
-                                      priv->root_icon, TRUE);
+      update_path_chunk (self, root_button, root_button, priv->root_path,
+                         priv->root_label, priv->root_icon);
+    }
+  else
+    {
+      GString *root_path;
+      gchar *label;
+
+      root_path = g_string_new ("");
+      g_string_append (root_path, G_DIR_SEPARATOR_S);
+      if (!is_absolute_root (priv->path))
+        {
+          g_string_append (root_path, splitted_path[0]);
+          label = splitted_path[0];
+        }
+      else
+        {
+          label = G_DIR_SEPARATOR_S;
+        }
+
+      update_path_chunk (self, root_button, root_button, root_path->str, label, priv->root_icon);
+
+      g_string_free (root_path, TRUE);
     }
 
   if (g_strcmp0 (priv->root_path, priv->path) == 0)
     return;
 
-  splitted_path = get_splitted_path (unprefixed_path);
-  if (unprefixed_old_path)
-    splitted_old_path = get_splitted_path (unprefixed_old_path);
   /* We always expect a path in the format /path/path in UNIX or \path\path in Windows.
    * However, the OS separator alone is a valid path, so we need to handle it
    * ourselves if the client didn't set a root label or icon for it.
@@ -636,15 +746,20 @@ update_path_bar (GtkPathBar  *self,
       gint length;
       gint i;
 
+      unprefixed_splitted_path = get_splitted_path (self, unprefixed_path);
+      if (unprefixed_old_path)
+        unprefixed_splitted_old_path = get_splitted_path (self, unprefixed_old_path);
+
       length = g_strv_length (splitted_path);
 
+      //g_print ("a ver %s %s %d %d\n", unprefixed_path, unprefixed_old_path, g_str_has_prefix (unprefixed_path, unprefixed_old_path), g_str_has_prefix (unprefixed_old_path, unprefixed_path));
       /* Addition */
-      if (unprefixed_old_path && g_str_has_prefix (unprefixed_path, unprefixed_old_path))
+      if (unprefixed_old_path && g_str_has_prefix (priv->path, old_path))
         {
-          fill_path_bar (self, path_bar_container, splitted_path, splitted_old_path);
+          fill_path_bar (self, path_bar_container, unprefixed_splitted_path, splitted_old_path);
         }
       /* Removal */
-      else if (unprefixed_old_path &&  g_str_has_prefix (unprefixed_path, unprefixed_path))
+      else if (unprefixed_old_path && g_str_has_prefix (old_path, priv->path))
         {
           GList *children;
           GList *l;
@@ -654,16 +769,15 @@ update_path_bar (GtkPathBar  *self,
           children_length = g_list_length (children);
           for (i = 0, l = children; i < children_length; i++, l = l->next)
             {
-              if (i < g_strv_length (splitted_old_path))
+              if (unprefixed_splitted_path && i < g_strv_length (unprefixed_splitted_path))
                 continue;
-
               gtk_path_bar_container_remove (GTK_PATH_BAR_CONTAINER (path_bar_container), l->data, TRUE);
             }
         }
       /* Completely different path */
       else
         {
-          fill_path_bar (self, path_bar_container, splitted_path, splitted_old_path);
+          fill_path_bar (self, path_bar_container, unprefixed_splitted_path, unprefixed_splitted_old_path);
         }
 
       g_strfreev (splitted_path);
@@ -672,10 +786,8 @@ update_path_bar (GtkPathBar  *self,
   else
     {
       gtk_path_bar_container_remove_all_children (GTK_PATH_BAR_CONTAINER (path_bar_container));
-      fill_path_bar (self, path_bar_container, splitted_path, NULL);
     }
 
-  g_print ("update path finish %p\n",path_bar);
   gtk_stack_set_visible_child (GTK_STACK (self), path_bar);
 }
 
@@ -687,9 +799,8 @@ update_selected_path (GtkPathBar  *self)
   GList *children;
   GList *l;
   GtkWidget *path_bar_container;
-  GtkWidget *overflow_button;
 
-  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, NULL, NULL, NULL, &path_bar_container, TRUE);
+  get_path_bar_widgets (GTK_PATH_BAR (self), NULL, NULL, NULL, NULL, NULL, &path_bar_container, TRUE);
   children = gtk_path_bar_container_get_children (GTK_PATH_BAR_CONTAINER (path_bar_container));
   for (l = children; l != NULL; l = l->next)
     {
@@ -919,12 +1030,21 @@ gtk_path_bar_init (GtkPathBar *self)
   g_signal_connect (priv->path_bar_container_2, "invert-animation-done",
                     G_CALLBACK (on_invert_animation_done), self);
 
+  g_signal_connect (priv->path_bar_root_1, "button-release-event",
+                            G_CALLBACK (on_path_chunk_button_release_event), NULL);
+  g_signal_connect (priv->path_bar_root_2, "button-release-event",
+                            G_CALLBACK (on_path_chunk_button_release_event), NULL);
+  g_signal_connect (priv->path_bar_tail_1, "button-release-event",
+                            G_CALLBACK (on_path_chunk_button_release_event), NULL);
+  g_signal_connect (priv->path_bar_tail_2, "button-release-event",
+                            G_CALLBACK (on_path_chunk_button_release_event), NULL);
+
 
   priv->request_allocation_for_invert = FALSE;
 
-  gtk_path_bar_set_inverted (self, TRUE);
+  gtk_widget_set_no_show_all (self, TRUE);
 
-  gtk_widget_set_no_show_all (self, FALSE);
+  gtk_path_bar_set_inverted (self, TRUE);
 }
 
 
@@ -983,7 +1103,7 @@ gtk_path_bar_set_path_extended (GtkPathBar  *self,
 }
 
 /**
- * gtk_path_bar_get_selected_path:
+ * gtk_path_bar_get_path:
  * @path_bar: a #GtkPathBar
  *
  * Get the path represented by the path bar
@@ -1069,6 +1189,8 @@ gtk_path_bar_set_selected_path (GtkPathBar  *self,
   priv = gtk_path_bar_get_instance_private (GTK_PATH_BAR (self));
   new_path_as_file = g_file_new_for_path (path);
 
+  g_print ("select path %s %s\n", path, priv->path);
+
   g_return_if_fail (new_path_as_file);
   g_return_if_fail (g_str_has_prefix (priv->path, path) ||
                     g_strcmp0 (priv->path, path) == 0);
@@ -1131,18 +1253,16 @@ gtk_path_bar_set_inverted (GtkPathBar *self,
 
   if (priv->inverted != inverted)
     {
-      GtkWidget *overflow_button;
       GtkWidget *path_bar_container;
 
       priv->inverted = inverted != FALSE;
 
-      get_path_bar_widgets (GTK_PATH_BAR (self), NULL, NULL, NULL, NULL, &path_bar_container, TRUE);
+      get_path_bar_widgets (GTK_PATH_BAR (self), NULL, NULL, NULL, NULL, NULL, &path_bar_container, TRUE);
 
-      if (gtk_path_bar_container_is_overflowing (GTK_PATH_BAR_CONTAINER (path_bar_container)) &&
-          !priv->inverted)
+      if (gtk_path_bar_container_is_overflowing (GTK_PATH_BAR_CONTAINER (path_bar_container)))
         {
           priv->request_allocation_for_invert = TRUE;
-          start_overflow_handling (self);
+          start_overflow_handling (self, priv->inverted);
         }
       else
         {

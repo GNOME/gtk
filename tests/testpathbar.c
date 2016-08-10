@@ -12,9 +12,8 @@ static GtkWidget *files_path_bar_random;
 static GtkWidget *files_path_bar_recent;
 static const gchar* REAL_LOCATION_RANDOM = "file:///boot/efi/EFI/BOOT";
 static const gchar* REAL_LOCATION_RECENT = "recent:///";
-static const gchar* ORIGINAL_PATH = "/test/test 2/test 3/asda lkasdl/pppppppppppppppp/alskd/t/t/test3/tttttt/tast";
+static const gchar* ORIGINAL_PATH = "/test/test 2/test 3/asda lkasdl/test/alskd/t/t/test3/tttttt/tast";
 static const gchar* ROOT_PATH = "/test/test 2/test 3";
-static const gchar* DISPLAY_PATH = "/test/test 2/This Is A Root/asda lkasdl/pppppppppppppppp/ alskd";
 
 static void
 action_menu_1 (GSimpleAction *action,
@@ -97,7 +96,7 @@ get_display_path_from_selected (const gchar *selected_path)
   gchar *display_path_gchar;
 
   splitted_path = g_strsplit (selected_path, "/", -1);
-  display_splitted_path = g_strsplit (DISPLAY_PATH, "/", -1);
+  display_splitted_path = g_strsplit (ORIGINAL_PATH, "/", -1);
   display_path = g_string_new ("");
   /* Skip the first empty split part */
   for (i = 1; i < g_strv_length (splitted_path); i++)
@@ -129,7 +128,7 @@ on_path_selected_set_path (GtkPathBar *path_bar,
   if (path_bar == GTK_PATH_BAR (path_bar_custom_root_label))
     {
       gtk_path_bar_set_path_extended (GTK_PATH_BAR (path_bar_custom_root_label),
-                                      selected_path, ROOT_PATH, "This Is A Root", NULL);
+                                      selected_path, NULL, NULL, NULL);
     }
   else if (path_bar == GTK_PATH_BAR (path_bar_custom_root_icon))
     {
@@ -255,7 +254,6 @@ main (int argc, char *argv[])
   gtk_path_bar_set_path (GTK_PATH_BAR (path_bar), ORIGINAL_PATH);
   connect_path_bar (GTK_PATH_BAR (path_bar));
 
-#if 0
   /* ----------------------------------------------------------------------- */
   path_bar_inverted = gtk_path_bar_new ();
   gtk_path_bar_set_inverted (GTK_PATH_BAR (path_bar_inverted), TRUE);
@@ -280,10 +278,11 @@ main (int argc, char *argv[])
   path_bar_custom_root_label = gtk_path_bar_new ();
   gtk_path_bar_set_inverted (GTK_PATH_BAR (path_bar_custom_root_label), TRUE);
   gtk_path_bar_set_path_extended (GTK_PATH_BAR (path_bar_custom_root_label),
-                                  ORIGINAL_PATH, ROOT_PATH, "This Is A Root", NULL);
+                                  ORIGINAL_PATH, NULL, NULL, NULL);
   connect_path_bar_set_path (GTK_PATH_BAR (path_bar_custom_root_label));
   gtk_grid_attach (GTK_GRID (grid), path_bar_custom_root_label, 0, 6, 1, 1);
 
+#if 0
   /* ----------------------------------------------------------------------- */
   path_bar_custom_root_icon = gtk_path_bar_new ();
   gtk_path_bar_set_inverted (GTK_PATH_BAR (path_bar_custom_root_icon), TRUE);
