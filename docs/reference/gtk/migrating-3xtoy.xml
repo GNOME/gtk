@@ -438,6 +438,15 @@
       The behavior of the expand flag in #GtkTables #GtkAttachOptions has been
        changed to (again) match the behavior in #GtkBox and in GTK+ 2.x. These
        options don't cause the table itself to expand.
-    </para>
+     </para>
+
+     <para>
+       The way GtkPopover behaved during a call to gtk_widget_hide() violated
+       some of the internal assumptions GTK+ makes about widget visibility.
+       gtk_popover_popup() and gtk_popover_popdown() have been introduced to
+       show or hide the popover with a transition, while gtk_widget_show()
+       and gtk_widget_hide() on a GtkPopover now work the same way they do
+       on any other widget and immediately hide (or show) the popover.
+     </para>
   </section>
 </chapter>

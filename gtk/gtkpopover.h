@@ -97,10 +97,10 @@ void            gtk_popover_bind_model      (GtkPopover            *popover,
                                              GMenuModel            *model,
                                              const gchar           *action_namespace);
 
-GDK_AVAILABLE_IN_3_16
+GDK_DEPRECATED_IN_3_22
 void            gtk_popover_set_transitions_enabled (GtkPopover *popover,
                                                      gboolean    transitions_enabled);
-GDK_AVAILABLE_IN_3_16
+GDK_DEPRECATED_IN_3_22
 gboolean        gtk_popover_get_transitions_enabled (GtkPopover *popover);
 
 GDK_AVAILABLE_IN_3_18

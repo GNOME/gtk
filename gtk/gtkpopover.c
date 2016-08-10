@@ -243,8 +243,10 @@ gtk_popover_set_property (GObject      *object,
                              g_value_get_boolean (value));
       break;
     case PROP_TRANSITIONS_ENABLED:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_popover_set_transitions_enabled (GTK_POPOVER (object),
                                            g_value_get_boolean (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_CONSTRAIN_TO:
       gtk_popover_set_constrain_to (GTK_POPOVER (object),
@@ -1743,7 +1745,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             P_("Transitions enabled"),
                             P_("Whether show/hide transitions are enabled or not"),
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkPopover:constrain-to:
@@ -2334,6 +2336,9 @@ gtk_popover_get_modal (GtkPopover *popover)
  * Sets whether show/hide transitions are enabled on this popover
  *
  * Since: 3.16
+ *
+ * Deprecated: 3.22: You can show or hide the popover without transitions
+ *   using gtk_widget_show() and gtk_widget_hide().
  */
 void
 gtk_popover_set_transitions_enabled (GtkPopover *popover,
@@ -2362,6 +2367,9 @@ gtk_popover_set_transitions_enabled (GtkPopover *popover,
  *          popover are enabled, #FALSE otherwise.
  *
  * Since: 3.16
+ *
+ * Deprecated: 3.22: You can show or hide the popover without transitions
+ *   using gtk_widget_show() and gtk_widget_hide().
  */
 gboolean
 gtk_popover_get_transitions_enabled (GtkPopover *popover)
