@@ -60,8 +60,6 @@ typedef struct
   GObject parent_instance;
 
   graphene_rect_t viewport;
-  graphene_matrix_t modelview;
-  graphene_matrix_t projection;
 
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
@@ -84,8 +82,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
   PROP_VIEWPORT = 1,
-  PROP_MODELVIEW,
-  PROP_PROJECTION,
   PROP_MINIFICATION_FILTER,
   PROP_MAGNIFICATION_FILTER,
   PROP_AUTO_CLEAR,
@@ -153,14 +149,6 @@ gsk_renderer_set_property (GObject      *gobject,
       gsk_renderer_set_viewport (self, g_value_get_boxed (value));
       break;
 
-    case PROP_MODELVIEW:
-      gsk_renderer_set_modelview (self, g_value_get_boxed (value));
-      break;
-
-    case PROP_PROJECTION:
-      gsk_renderer_set_projection (self, g_value_get_boxed (value));
-      break;
-
     case PROP_MINIFICATION_FILTER:
       gsk_renderer_set_scaling_filters (self, g_value_get_enum (value), priv->mag_filter);
       break;
@@ -205,14 +193,6 @@ gsk_renderer_get_property (GObject    *gobject,
     {
     case PROP_VIEWPORT:
       g_value_set_boxed (value, &priv->viewport);
-      break;
-
-    case PROP_MODELVIEW:
-      g_value_set_boxed (value, &priv->modelview);
-      break;
-
-    case PROP_PROJECTION:
-      g_value_set_boxed (value, &priv->projection);
       break;
 
     case PROP_MINIFICATION_FILTER:
@@ -292,60 +272,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
 			"Viewport",
 			"The visible area used by the renderer",
 			GRAPHENE_TYPE_RECT,
-			G_PARAM_READWRITE |
-			G_PARAM_STATIC_STRINGS |
-			G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GskRenderer:modelview:
-   *
-   * The initial modelview matrix used by the #GskRenderer.
-   *
-   * If set to %NULL, the identity matrix:
-   *
-   * |[<!-- language="plain"
-   *   | 1.0, 0.0, 0.0, 0.0 |
-   *   | 0.0, 1.0, 0.0, 0.0 |
-   *   | 0.0, 0.0, 1.0, 0.0 |
-   *   | 0.0, 0.0, 0.0, 1.0 |
-   * ]|
-   *
-   * Is used instead.
-   *
-   * Since: 3.22
-   */
-  gsk_renderer_properties[PROP_MODELVIEW] =
-    g_param_spec_boxed ("modelview",
-			"Modelview",
-			"The modelview matrix used by the renderer",
-			GRAPHENE_TYPE_MATRIX,
-			G_PARAM_READWRITE |
-			G_PARAM_STATIC_STRINGS |
-			G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GskRenderer:projection:
-   *
-   * The projection matrix used by the #GskRenderer.
-   *
-   * If set to %NULL, the identity matrix:
-   *
-   * |[<!-- language="plain"
-   *   | 1.0, 0.0, 0.0, 0.0 |
-   *   | 0.0, 1.0, 0.0, 0.0 |
-   *   | 0.0, 0.0, 1.0, 0.0 |
-   *   | 0.0, 0.0, 0.0, 1.0 |
-   * ]|
-   *
-   * Is used instead.
-   *
-   * Since: 3.22
-   */
-  gsk_renderer_properties[PROP_PROJECTION] =
-    g_param_spec_boxed ("projection",
-			"Projection",
-			"The projection matrix used by the renderer",
-			GRAPHENE_TYPE_MATRIX,
 			G_PARAM_READWRITE |
 			G_PARAM_STATIC_STRINGS |
 			G_PARAM_EXPLICIT_NOTIFY);
@@ -489,9 +415,6 @@ gsk_renderer_init (GskRenderer *self)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
-  graphene_matrix_init_identity (&priv->modelview);
-  graphene_matrix_init_identity (&priv->projection);
-
   priv->profiler = gsk_profiler_new ();
 
   priv->auto_clear = TRUE;
@@ -553,101 +476,6 @@ gsk_renderer_get_viewport (GskRenderer     *renderer,
   g_return_if_fail (viewport != NULL);
 
   graphene_rect_init_from_rect (viewport, &priv->viewport);
-}
-
-/**
- * gsk_renderer_set_modelview:
- * @renderer: a #GskRenderer
- * @modelview: the modelview matrix used by the @renderer
- *
- * Sets the initial modelview matrix used by the #GskRenderer.
- *
- * A modelview matrix defines the initial transformation imposed
- * on the scene graph.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_set_modelview (GskRenderer             *renderer,
-                            const graphene_matrix_t *modelview)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-
-  if (modelview == NULL)
-    graphene_matrix_init_identity (&priv->modelview);
-  else
-    graphene_matrix_init_from_matrix (&priv->modelview, modelview);
-
-  g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_MODELVIEW]);
-}
-
-/**
- * gsk_renderer_get_modelview:
- * @renderer: a #GskRenderer
- * @modelview: (out caller-allocates): return location for the modelview matrix
- *
- * Retrieves the modelview matrix used by the #GskRenderer.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_get_modelview (GskRenderer       *renderer,
-                            graphene_matrix_t *modelview)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-  g_return_if_fail (modelview != NULL);
-
-  graphene_matrix_init_from_matrix (modelview, &priv->modelview);
-}
-
-/**
- * gsk_renderer_set_projection:
- * @renderer: a #GskRenderer
- * @projection: the projection matrix used by the @renderer
- *
- * Sets the projection matrix used by the #GskRenderer.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_set_projection (GskRenderer             *renderer,
-                             const graphene_matrix_t *projection)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-
-  if (projection == NULL)
-    graphene_matrix_init_identity (&priv->projection);
-  else
-    graphene_matrix_init_from_matrix (&priv->projection, projection);
-
-  g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_PROJECTION]);
-}
-
-/**
- * gsk_renderer_get_projection:
- * @renderer: a #GskRenderer
- * @projection: (out caller-allocates): return location for the projection matrix
- *
- * Retrieves the projection matrix used by the #GskRenderer.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_get_projection (GskRenderer       *renderer,
-                             graphene_matrix_t *projection)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-  g_return_if_fail (projection != NULL);
-
-  graphene_matrix_init_from_matrix (projection, &priv->projection);
 }
 
 /**

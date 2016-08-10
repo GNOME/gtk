@@ -49,18 +49,6 @@ GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_get_viewport               (GskRenderer             *renderer,
                                                                  graphene_rect_t         *viewport);
 GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_projection             (GskRenderer             *renderer,
-                                                                 const graphene_matrix_t *projection);
-GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_get_projection             (GskRenderer             *renderer,
-                                                                 graphene_matrix_t       *projection);
-GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_modelview              (GskRenderer             *renderer,
-                                                                 const graphene_matrix_t *modelview);
-GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_get_modelview              (GskRenderer             *renderer,
-                                                                 graphene_matrix_t       *modelview);
-GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_set_scaling_filters        (GskRenderer             *renderer,
                                                                  GskScalingFilter         min_filter,
                                                                  GskScalingFilter         mag_filter);
