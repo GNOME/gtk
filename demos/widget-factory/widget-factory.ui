@@ -4091,7 +4091,6 @@ bad things might happen.</property>
     </action-widgets>
   </object>
   <object class="GtkPopover" id="open_popover">
-    <property name="visible">1</property>
     <child>
       <object class="GtkGrid">
         <property name="visible">1</property>
