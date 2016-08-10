@@ -116,6 +116,13 @@ void                 gtk_popover_set_constrain_to (GtkPopover           *popover
 GDK_AVAILABLE_IN_3_20
 GtkPopoverConstraint gtk_popover_get_constrain_to (GtkPopover           *popover);
 
+GDK_AVAILABLE_IN_3_22
+void                 gtk_popover_popup            (GtkPopover *popover);
+
+GDK_AVAILABLE_IN_3_22
+void                 gtk_popover_popdown          (GtkPopover *popover);
+
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_H__ */
