@@ -595,15 +595,16 @@ render_node_needs_render_target (GskRenderNode *node)
 }
 
 static void
-gsk_gl_renderer_add_render_item (GskGLRenderer *self,
-                                 GArray        *render_items,
-                                 GskRenderNode *node,
-                                 RenderItem    *parent)
+gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
+                                 const graphene_matrix_t *projection,
+                                 GArray                  *render_items,
+                                 GskRenderNode           *node,
+                                 RenderItem              *parent)
 {
   graphene_rect_t viewport;
   cairo_surface_t *surface;
   GskRenderNodeIter iter;
-  graphene_matrix_t mv, projection;
+  graphene_matrix_t mv;
   graphene_rect_t bounds;
   GskRenderNode *child;
   RenderItem item;
@@ -650,6 +651,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
   /* The location of the item, in normalized world coordinates */
   gsk_render_node_get_world_matrix (node, &mv);
   graphene_matrix_multiply (&mv, &self->mvp, &item.mvp);
+  item.z = project_item (projection, &mv);
 
   item.opaque = gsk_render_node_is_opaque (node);
   item.opacity = gsk_render_node_get_opacity (node);
@@ -740,9 +742,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
                                          vertex_data);
   }
 
-  gsk_renderer_get_projection (GSK_RENDERER (self), &projection);
-  item.z = project_item (&projection, &mv);
-
   GSK_NOTE (OPENGL, g_print ("%*sAdding node <%s>[%p] to render items\n",
                              2 * node_depth (node), "",
                              node->name != NULL ? node->name : "unnamed",
@@ -756,12 +755,13 @@ gsk_gl_renderer_add_render_item (GskGLRenderer *self,
 out:
   gsk_render_node_iter_init (&iter, node);
   while (gsk_render_node_iter_next (&iter, &child))
-    gsk_gl_renderer_add_render_item (self, render_items, child, ritem);
+    gsk_gl_renderer_add_render_item (self, projection, render_items, child, ritem);
 }
 
 static gboolean
-gsk_gl_renderer_validate_tree (GskGLRenderer *self,
-                               GskRenderNode *root)
+gsk_gl_renderer_validate_tree (GskGLRenderer           *self,
+                               GskRenderNode           *root,
+                               const graphene_matrix_t *projection)
 {
   int n_nodes;
 
@@ -780,7 +780,7 @@ gsk_gl_renderer_validate_tree (GskGLRenderer *self,
   gsk_gl_driver_begin_frame (self->gl_driver);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
-  gsk_gl_renderer_add_render_item (self, self->render_items, root, NULL);
+  gsk_gl_renderer_add_render_item (self, projection, self->render_items, root, NULL);
 
   GSK_NOTE (OPENGL, g_print ("Total render items: %d of max:%d\n",
                              self->render_items->len,
@@ -819,9 +819,12 @@ gsk_gl_renderer_clear (GskGLRenderer *self)
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
+#define ORTHO_NEAR_PLANE        -10000
+#define ORTHO_FAR_PLANE          10000
+
 static void
-gsk_gl_renderer_render (GskRenderer *renderer,
-                        GskRenderNode *root,
+gsk_gl_renderer_render (GskRenderer       *renderer,
+                        GskRenderNode     *root,
                         GdkDrawingContext *context)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
@@ -848,14 +851,20 @@ gsk_gl_renderer_render (GskRenderer *renderer,
   gsk_gl_renderer_create_buffers (self, viewport.size.width, viewport.size.height, scale_factor);
   gsk_gl_driver_end_frame (self->gl_driver);
 
-  gsk_renderer_get_modelview (renderer, &modelview);
-  gsk_renderer_get_projection (renderer, &projection);
+  /* Set up the modelview and projection matrices to fit our viewport */
+  graphene_matrix_init_scale (&modelview, scale_factor, scale_factor, 1.0);
+  graphene_matrix_init_ortho (&projection,
+                              0, viewport.size.width * scale_factor,
+                              viewport.size.height * scale_factor, 0,
+                              ORTHO_NEAR_PLANE,
+                              ORTHO_FAR_PLANE);
+
   gsk_gl_renderer_update_frustum (self, &modelview, &projection);
 
   get_gl_scaling_filters (GSK_RENDERER (self),
                           &self->gl_min_filter,
                           &self->gl_mag_filter);
-  if (!gsk_gl_renderer_validate_tree (self, root))
+  if (!gsk_gl_renderer_validate_tree (self, root, &projection))
     goto out;
 
   gsk_gl_driver_begin_frame (self->gl_driver);
