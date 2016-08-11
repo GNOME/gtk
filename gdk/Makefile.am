@@ -187,7 +187,7 @@ common_sources = 		\
 
 libgdk_3_la_SOURCES = $(common_sources)
 libgdk_3_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
-libgdk_3_la_LIBADD = $(GDK_DEP_LIBS)
+libgdk_3_la_LIBADD = $(GDK_DEP_LIBS) $(SHM_LIBS)
 libgdk_3_la_LDFLAGS = $(LDADD)
 
 if USE_X11
