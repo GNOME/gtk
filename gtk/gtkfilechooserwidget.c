@@ -4770,22 +4770,31 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GDateTime *now, *time;
-  GTimeSpan time_diff;
+  GDateTime *now_date, *date;
   ClockFormat clock_format;
   const gchar *format;
   gchar *date_str;
   GSettings *settings;
+  gint days_ago;
 
   time = g_date_time_new_from_unix_local (secs);
+  date = g_date_time_new_local (g_date_time_get_year (time),
+                                g_date_time_get_month (time),
+                                g_date_time_get_day_of_month (time),
+                                0, 0, 0);
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
   clock_format = g_settings_get_enum (settings, "clock-format");
 
   now = g_date_time_new_now_local ();
-  time_diff = g_date_time_difference (now, time);
+  now_date = g_date_time_new_local (g_date_time_get_year (now),
+                                    g_date_time_get_month (now),
+                                    g_date_time_get_day_of_month (now),
+                                    0, 0, 0);
+  days_ago = g_date_time_difference (now_date, date) / G_TIME_SPAN_DAY;
 
   /* Translators: see g_date_time_format() for details on the format */
-  if (time_diff >= 0 && time_diff < G_TIME_SPAN_DAY)
+  if (days_ago < 1)
     {
       if (priv->show_time)
         format = "";
@@ -4794,11 +4803,11 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
       else
         format = _("%l:%M %p");
     }
-  else if (time_diff >= 0 && time_diff < 2 * G_TIME_SPAN_DAY)
+  else if (days_ago < 2)
     {
       format = _("Yesterday");
     }
-  else if (time_diff >= 0 && time_diff < 7 * G_TIME_SPAN_DAY)
+  else if (days_ago < 7)
     {
       format = "%a"; /* Days from last week */
     }
@@ -4815,7 +4824,9 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
   replace_ratio (&date_str);
 
   g_date_time_unref (now);
+  g_date_time_unref (now_date);
   g_date_time_unref (time);
+  g_date_time_unref (date);
 
   return date_str;
 }
