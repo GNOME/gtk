@@ -821,7 +821,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   GtkBorder clip, margin, border, padding;
   GtkCssStyle *style;
   cairo_t *cr;
-  GskRenderNode *box_node, *bg_node, *border_node;
+  GskRenderNode *box_node, *border_node;
   graphene_rect_t bounds;
   int width, height;
   int contents_x, contents_y, contents_width, contents_height;
@@ -867,24 +867,17 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   get_box_padding (style, &padding);
 
   str = g_strconcat ("Background<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
-  bg_node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (bg_node, str);
-  gsk_render_node_set_bounds (bg_node, &bounds);
-  cr = gsk_render_node_get_draw_context (bg_node);
-
-  gtk_css_style_render_background (style,
-                                   cr,
-                                   clip.left + margin.left,
-                                   clip.top + margin.top,
-                                   width - clip.left - clip.right - margin.left - margin.right,
-                                   height - clip.top - clip.bottom - margin.top - margin.bottom,
-                                   gtk_css_node_get_junction_sides (priv->node));
-
-  cairo_destroy (cr);
+  gtk_css_style_add_background_render_nodes (style,
+                                             renderer,
+                                             box_node,
+                                             &bounds,
+                                             str,
+                                             clip.left + margin.left,
+                                             clip.top + margin.top,
+                                             width - clip.left - clip.right - margin.left - margin.right,
+                                             height - clip.top - clip.bottom - margin.top - margin.bottom,
+                                             gtk_css_node_get_junction_sides (priv->node));
   g_free (str);
-
-  gsk_render_node_append_child (box_node, bg_node);
-  gsk_render_node_unref (bg_node);
 
   str = g_strconcat ("Border<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
   border_node = gsk_renderer_create_render_node (renderer);

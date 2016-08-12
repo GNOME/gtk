@@ -428,6 +428,32 @@ gtk_css_style_render_background (GtkCssStyle      *style,
   cairo_restore (cr);
 }
 
+void
+gtk_css_style_add_background_render_nodes (GtkCssStyle      *style,
+                                           GskRenderer      *renderer,
+                                           GskRenderNode    *parent_node,
+                                           graphene_rect_t  *bounds,
+                                           const char       *name,
+                                           gdouble           x,
+                                           gdouble           y,
+                                           gdouble           width,
+                                           gdouble           height,
+                                           GtkJunctionSides  junction)
+{
+  GskRenderNode *bg_node;
+  cairo_t *cr;
+
+  bg_node = gsk_renderer_create_render_node (renderer);
+  gsk_render_node_set_name (bg_node, name);
+  gsk_render_node_set_bounds (bg_node, bounds);
+  cr = gsk_render_node_get_draw_context (bg_node);
+  gtk_css_style_render_background (style, cr, x, y, width, height, junction);
+  cairo_destroy (cr);
+
+  gsk_render_node_append_child (parent_node, bg_node);
+  gsk_render_node_unref (bg_node);
+}
+
 static gboolean
 corner_value_is_right_angle (GtkCssValue *value)
 {
