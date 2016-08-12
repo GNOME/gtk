@@ -123,21 +123,21 @@ type_hint_differs (GdkWindowTypeHint lhs, GdkWindowTypeHint rhs)
       case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
       case GDK_WINDOW_TYPE_HINT_TOOLBAR:
       case GDK_WINDOW_TYPE_HINT_COMBO:
+      case GDK_WINDOW_TYPE_HINT_DND:
+      case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
         return rhs != GDK_WINDOW_TYPE_HINT_MENU &&
             rhs != GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU &&
             rhs != GDK_WINDOW_TYPE_HINT_POPUP_MENU &&
             rhs != GDK_WINDOW_TYPE_HINT_TOOLBAR &&
-            rhs != GDK_WINDOW_TYPE_HINT_COMBO;
+            rhs != GDK_WINDOW_TYPE_HINT_COMBO &&
+            rhs != GDK_WINDOW_TYPE_HINT_DND &&
+            rhs != GDK_WINDOW_TYPE_HINT_TOOLTIP &&
+            rhs != GDK_WINDOW_TYPE_HINT_NOTIFICATION;
       case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
       case GDK_WINDOW_TYPE_HINT_UTILITY:
         return rhs != GDK_WINDOW_TYPE_HINT_SPLASHSCREEN &&
             rhs != GDK_WINDOW_TYPE_HINT_UTILITY;
-      case GDK_WINDOW_TYPE_HINT_DND:
-      case GDK_WINDOW_TYPE_HINT_TOOLTIP:
-      case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
-        return rhs != GDK_WINDOW_TYPE_HINT_DND &&
-            rhs != GDK_WINDOW_TYPE_HINT_TOOLTIP &&
-            rhs != GDK_WINDOW_TYPE_HINT_NOTIFICATION;
       case GDK_WINDOW_TYPE_HINT_NORMAL:
       case GDK_WINDOW_TYPE_HINT_DESKTOP:
       default:
