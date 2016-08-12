@@ -602,7 +602,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                  RenderItem              *parent)
 {
   graphene_rect_t viewport;
-  cairo_surface_t *surface;
   GskRenderNodeIter iter;
   graphene_matrix_t mv;
   graphene_rect_t bounds;
@@ -705,22 +704,31 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       item.children = NULL;
     }
 
-  surface = gsk_render_node_get_surface (node);
+  if (gsk_render_node_has_texture (node))
+    {
+      item.render_data.texture_id = gsk_render_node_get_texture (node);
+    }
+  else if (gsk_render_node_has_surface (node))
+    {
+      cairo_surface_t *surface = gsk_render_node_get_surface (node);
 
-  /* If the node does not draw anything, we skip it */
-  if (surface == NULL && item.render_data.render_target_id == self->texture_id)
-    goto out;
-
-  /* Upload the Cairo surface to a GL texture */
-  item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                              item.size.width,
-                                                              item.size.height);
-  gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
-  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                           item.render_data.texture_id,
-                                           surface,
-                                           self->gl_min_filter,
-                                           self->gl_mag_filter);
+      /* Upload the Cairo surface to a GL texture */
+      item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                                  item.size.width,
+                                                                  item.size.height);
+      gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
+      gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                               item.render_data.texture_id,
+                                               surface,
+                                               self->gl_min_filter,
+                                               self->gl_mag_filter);
+    }
+  else
+    {
+      /* If the node does not draw anything, we skip it */
+      if (item.render_data.render_target_id == self->texture_id)
+        goto out;
+    }
 
   /* Create the vertex buffers holding the geometry of the quad */
   {
