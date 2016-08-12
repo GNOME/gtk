@@ -35,8 +35,11 @@ struct _GskRenderNode
   /* Tag updated when adding/removing children */
   gint64 age;
 
-  /* The contents of the node */
+  /* The contents of the node as a Cairo surface */
   cairo_surface_t *surface;
+
+  /* The contents of the node as a GL surface */
+  int texture_id;
 
   /* Paint opacity */
   double opacity;
@@ -81,6 +84,11 @@ void gsk_render_node_get_transform (GskRenderNode     *node,
 double gsk_render_node_get_opacity (GskRenderNode *node);
 
 cairo_surface_t *gsk_render_node_get_surface (GskRenderNode *node);
+
+int gsk_render_node_get_texture (GskRenderNode *node);
+
+gboolean gsk_render_node_has_surface (GskRenderNode *node);
+gboolean gsk_render_node_has_texture (GskRenderNode *node);
 
 GskRenderNode *gsk_render_node_get_toplevel (GskRenderNode *node);
 

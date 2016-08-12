@@ -1186,6 +1186,48 @@ gsk_render_node_update_world_matrix (GskRenderNode *node,
     gsk_render_node_update_world_matrix (child, TRUE);
 }
 
+gboolean
+gsk_render_node_has_surface (GskRenderNode *node)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), FALSE);
+
+  return node->surface != NULL;
+}
+
+gboolean
+gsk_render_node_has_texture (GskRenderNode *node)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), FALSE);
+
+  return node->texture_id != 0;
+}
+
+int
+gsk_render_node_get_texture (GskRenderNode *node)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 0);
+
+  return node->texture_id;
+}
+
+/**
+ * gsk_render_node_set_texture:
+ * @node: a #GskRenderNode
+ * @texture_id: the object id of a GL texture
+ *
+ * Associates a @texture_id to a #GskRenderNode.
+ *
+ * Since: 3.22
+ */
+void
+gsk_render_node_set_texture (GskRenderNode *node,
+                             int            texture_id)
+{
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+  node->texture_id = texture_id;
+}
+
 /*< private >
  * gsk_render_node_get_surface:
  * @node: a #GskRenderNode
