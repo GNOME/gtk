@@ -15845,20 +15845,15 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                                const char  *name)
 {
   GskRenderNode *res = gsk_renderer_create_render_node (renderer);
-  GtkAllocation allocation, clip;
-  graphene_point3d_t p;
+  GtkAllocation clip;
   graphene_rect_t bounds;
-  graphene_matrix_t m;
 
-  _gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_get_clip (widget, &clip);
 
   graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
-  graphene_matrix_init_translate (&m, graphene_point3d_init (&p, allocation.x, allocation.y, 0));
 
   gsk_render_node_set_name (res, name);
   gsk_render_node_set_bounds (res, &bounds);
-  gsk_render_node_set_transform (res, &m);
 
   return res;
 }
@@ -15881,8 +15876,7 @@ gtk_widget_get_render_node (GtkWidget   *widget,
   gtk_widget_get_clip (widget, &clip);
   _gtk_widget_get_allocation (widget, &alloc);
   graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
-  graphene_matrix_init_translate (&m, graphene_point3d_init (&p, alloc.x, alloc.y, 0.f));
-  graphene_point3d_init (&p, clip.x - alloc.x, clip.y - alloc.y, 0.f);
+  graphene_matrix_init_translate (&m, graphene_point3d_init (&p, clip.x, clip.y, 0.f));
 
   /* Compatibility mode: if the widget does not have a render node, we draw
    * using gtk_widget_draw() on a temporary node
@@ -15899,7 +15893,6 @@ gtk_widget_get_render_node (GtkWidget   *widget,
       gsk_render_node_set_name (tmp, str);
       gsk_render_node_set_bounds (tmp, &bounds);
       gsk_render_node_set_transform (tmp, &m);
-      gsk_render_node_set_anchor_point (tmp, &p);
 
       cr = gsk_render_node_get_draw_context (tmp);
       cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
@@ -15929,10 +15922,9 @@ gtk_widget_get_render_node (GtkWidget   *widget,
           tmp = gsk_renderer_create_render_node (renderer);
           gsk_render_node_set_name (tmp, str);
           gsk_render_node_set_bounds (tmp, &bounds);
-          gsk_render_node_set_transform (tmp, &m);
-          gsk_render_node_set_anchor_point (tmp, &p);
 
           cr = gsk_render_node_get_draw_context (tmp);
+          cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
           g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
           cairo_destroy (cr);
 

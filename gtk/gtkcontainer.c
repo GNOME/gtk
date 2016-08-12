@@ -3424,7 +3424,7 @@ propagate_render_node (GtkWidget *child,
   /* translate coordinates. Ugly business, that. */
   if (!_gtk_widget_get_has_window (GTK_WIDGET (data->container)))
     {
-      _gtk_widget_get_allocation (GTK_WIDGET (data->container), &allocation);
+      gtk_widget_get_clip (GTK_WIDGET (data->container), &allocation);
       x = -allocation.x;
       y = -allocation.y;
     }
@@ -3452,7 +3452,7 @@ propagate_render_node (GtkWidget *child,
 
   if (!_gtk_widget_get_has_window (child))
     {
-      _gtk_widget_get_allocation (child, &allocation);
+      gtk_widget_get_clip (child, &allocation);
       x += allocation.x;
       y += allocation.y;
     }
