@@ -25,6 +25,7 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtktypes.h"
+#include "gsk/gsk.h"
 
 G_BEGIN_DECLS
 
@@ -36,6 +37,17 @@ void            gtk_css_style_render_background                 (GtkCssStyle    
                                                                  gdouble               height,
                                                                  GtkJunctionSides      junction);
 gboolean        gtk_css_style_render_background_is_opaque       (GtkCssStyle          *style);
+void            gtk_css_style_add_background_render_nodes       (GtkCssStyle      *style,
+                                                                 GskRenderer      *renderer,
+                                                                 GskRenderNode    *parent_node,
+                                                                 graphene_rect_t  *bounds,
+                                                                 const char       *name,
+                                                                 gdouble           x,
+                                                                 gdouble           y,
+                                                                 gdouble           width,
+                                                                 gdouble           height,
+                                                                 GtkJunctionSides  junction);
+
 
 
 G_END_DECLS
