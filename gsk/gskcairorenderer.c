@@ -137,10 +137,7 @@ gsk_cairo_renderer_render (GskRenderer *renderer,
       cairo_save (cr);
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
 
-      if (gsk_renderer_get_use_alpha (renderer))
-        cairo_set_source_rgba (cr, 0, 0, 0, 0);
-      else
-        cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_set_source_rgba (cr, 0, 0, 0, 0);
 
       cairo_paint (cr);
       cairo_restore (cr);

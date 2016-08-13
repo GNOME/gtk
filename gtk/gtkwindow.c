@@ -7287,7 +7287,6 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_set_realized (widget, TRUE);
 
   gsk_renderer_set_window (priv->renderer, gdk_window);
-  gsk_renderer_set_use_alpha (priv->renderer, TRUE);
   gsk_renderer_realize (priv->renderer);
 
   attributes.x = allocation.x;
