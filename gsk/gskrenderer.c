@@ -75,7 +75,6 @@ typedef struct
 
   gboolean is_realized : 1;
   gboolean auto_clear : 1;
-  gboolean use_alpha : 1;
 } GskRendererPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
@@ -83,7 +82,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 enum {
   PROP_VIEWPORT = 1,
   PROP_AUTO_CLEAR,
-  PROP_USE_ALPHA,
   PROP_SCALE_FACTOR,
   PROP_WINDOW,
   PROP_DISPLAY,
@@ -151,10 +149,6 @@ gsk_renderer_set_property (GObject      *gobject,
       gsk_renderer_set_auto_clear (self, g_value_get_boolean (value));
       break;
 
-    case PROP_USE_ALPHA:
-      gsk_renderer_set_use_alpha (self, g_value_get_boolean (value));
-      break;
-
     case PROP_SCALE_FACTOR:
       gsk_renderer_set_scale_factor (self, g_value_get_int (value));
       break;
@@ -187,10 +181,6 @@ gsk_renderer_get_property (GObject    *gobject,
 
     case PROP_AUTO_CLEAR:
       g_value_set_boolean (value, priv->auto_clear);
-      break;
-
-    case PROP_USE_ALPHA:
-      g_value_set_boolean (value, priv->use_alpha);
       break;
 
     case PROP_SCALE_FACTOR:
@@ -334,22 +324,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
                          GDK_TYPE_DRAWING_CONTEXT,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GskRenderer:use-alpha:
-   *
-   * Whether the #GskRenderer should use the alpha channel when rendering.
-   *
-   * Since: 3.22
-   */
-  gsk_renderer_properties[PROP_USE_ALPHA] =
-    g_param_spec_boolean ("use-alpha",
-                          "Use Alpha",
-                          "Whether the renderer should use the alpha channel when rendering",
-                          FALSE,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS |
-                          G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, gsk_renderer_properties);
 }
@@ -741,55 +715,6 @@ gsk_renderer_get_auto_clear (GskRenderer *renderer)
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
 
   return priv->auto_clear;
-}
-
-/**
- * gsk_renderer_set_use_alpha:
- * @renderer: a #GskRenderer
- * @use_alpha: whether to use the alpha channel of the target surface or not
- *
- * Sets whether the @renderer should use the alpha channel of the target surface
- * or not.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_set_use_alpha (GskRenderer *renderer,
-                            gboolean     use_alpha)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-  g_return_if_fail (!priv->is_realized);
-
-  use_alpha = !!use_alpha;
-
-  if (use_alpha == priv->use_alpha)
-    return;
-
-  priv->use_alpha = use_alpha;
-
-  g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_USE_ALPHA]);
-}
-
-/**
- * gsk_renderer_get_use_alpha:
- * @renderer: a #GskRenderer
- *
- * Retrieves the value set using gsk_renderer_set_use_alpha().
- *
- * Returns: %TRUE if the target surface should use an alpha channel
- *
- * Since: 3.22
- */
-gboolean
-gsk_renderer_get_use_alpha (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
-
-  return priv->use_alpha;
 }
 
 /**

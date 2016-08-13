@@ -59,11 +59,6 @@ void                    gsk_renderer_set_auto_clear             (GskRenderer    
 GDK_AVAILABLE_IN_3_22
 gboolean                gsk_renderer_get_auto_clear             (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_use_alpha              (GskRenderer             *renderer,
-                                                                 gboolean                 use_alpha);
-GDK_AVAILABLE_IN_3_22
-gboolean                gsk_renderer_get_use_alpha              (GskRenderer             *renderer);
-GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_set_window                 (GskRenderer             *renderer,
                                                                  GdkWindow               *window);
 GDK_AVAILABLE_IN_3_22

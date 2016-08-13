@@ -7067,7 +7067,6 @@ gtk_window_realize (GtkWidget *widget)
 
   /* Renderer */
   gsk_renderer_set_window (priv->renderer, gdk_window);
-  gsk_renderer_set_use_alpha (priv->renderer, TRUE);
   gsk_renderer_realize (priv->renderer);
 }
 
