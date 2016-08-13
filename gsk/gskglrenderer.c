@@ -444,12 +444,13 @@ render_item (GskGLRenderer *self,
 
   /* Draw the quad */
   GSK_NOTE2 (OPENGL, TRANSFORMS,
-             g_print ("%*sDrawing item <%s>[%p] (w:%g, h:%g) with opacity: %g\n",
+             g_print ("%*sDrawing item <%s>[%p] (w:%g, h:%g) with opacity: %g blend mode: %d\n",
                       2 * node_depth (item->node), "",
                       item->name,
                       item,
                       item->size.width, item->size.height,
-                      item->opaque ? 1 : item->opacity));
+                      item->opaque ? 1 : item->opacity,
+                      item->blend_mode));
 
   glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
 
