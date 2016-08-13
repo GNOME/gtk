@@ -196,7 +196,7 @@ generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x,
   else
     {
       event->scroll.direction = GDK_SCROLL_SMOOTH;
-      event->scroll.delta_x = -delta_x;
+      event->scroll.delta_x = delta_x;
       event->scroll.delta_y = -delta_y;
     }
 
@@ -403,7 +403,7 @@ handle_motion_event (GdkWindow *window, const MirInputEvent *event)
           hscroll = mir_pointer_event_axis_value (pointer_event, mir_pointer_axis_hscroll);
           vscroll = mir_pointer_event_axis_value (pointer_event, mir_pointer_axis_vscroll);
 
-          if (ABS (hscroll) > 0.5 || ABS (vscroll) > 0.5)
+          if (hscroll != 0.0 || vscroll != 0.0)
             generate_scroll_event (window, x, y, hscroll, vscroll, modifier_state, event_time);
           if (ABS (new_x - x) > 0.5 || ABS (new_y - y) > 0.5)
             {
