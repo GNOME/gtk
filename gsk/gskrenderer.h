@@ -49,14 +49,6 @@ GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_get_viewport               (GskRenderer             *renderer,
                                                                  graphene_rect_t         *viewport);
 GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_scaling_filters        (GskRenderer             *renderer,
-                                                                 GskScalingFilter         min_filter,
-                                                                 GskScalingFilter         mag_filter);
-GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_get_scaling_filters        (GskRenderer             *renderer,
-                                                                 GskScalingFilter        *min_filter,
-                                                                 GskScalingFilter        *mag_filter);
-GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_set_scale_factor           (GskRenderer             *renderer,
                                                                  int                      scale_factor);
 GDK_AVAILABLE_IN_3_22
