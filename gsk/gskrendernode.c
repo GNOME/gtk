@@ -182,6 +182,9 @@ gsk_render_node_init (GskRenderNode *self)
 
   self->opacity = 1.0;
 
+  self->min_filter = GSK_SCALING_FILTER_NEAREST;
+  self->mag_filter = GSK_SCALING_FILTER_NEAREST;
+
   self->is_mutable = TRUE;
   self->needs_world_matrix_update = TRUE;
 }
@@ -1242,6 +1245,19 @@ gsk_render_node_get_surface (GskRenderNode *node)
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
 
   return node->surface;
+}
+
+void
+gsk_render_node_set_scaling_filters (GskRenderNode    *node,
+                                     GskScalingFilter  min_filter,
+                                     GskScalingFilter  mag_filter)
+{
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+  if (node->min_filter != min_filter)
+    node->min_filter = min_filter;
+  if (node->mag_filter != mag_filter)
+    node->mag_filter = mag_filter;
 }
 
 /*< private >

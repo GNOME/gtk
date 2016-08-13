@@ -82,8 +82,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
   PROP_VIEWPORT = 1,
-  PROP_MINIFICATION_FILTER,
-  PROP_MAGNIFICATION_FILTER,
   PROP_AUTO_CLEAR,
   PROP_USE_ALPHA,
   PROP_SCALE_FACTOR,
@@ -149,14 +147,6 @@ gsk_renderer_set_property (GObject      *gobject,
       gsk_renderer_set_viewport (self, g_value_get_boxed (value));
       break;
 
-    case PROP_MINIFICATION_FILTER:
-      gsk_renderer_set_scaling_filters (self, g_value_get_enum (value), priv->mag_filter);
-      break;
-
-    case PROP_MAGNIFICATION_FILTER:
-      gsk_renderer_set_scaling_filters (self, priv->min_filter, g_value_get_enum (value));
-      break;
-
     case PROP_AUTO_CLEAR:
       gsk_renderer_set_auto_clear (self, g_value_get_boolean (value));
       break;
@@ -193,14 +183,6 @@ gsk_renderer_get_property (GObject    *gobject,
     {
     case PROP_VIEWPORT:
       g_value_set_boxed (value, &priv->viewport);
-      break;
-
-    case PROP_MINIFICATION_FILTER:
-      g_value_set_enum (value, priv->min_filter);
-      break;
-
-    case PROP_MAGNIFICATION_FILTER:
-      g_value_set_enum (value, priv->mag_filter);
       break;
 
     case PROP_AUTO_CLEAR:
@@ -275,44 +257,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
 			G_PARAM_READWRITE |
 			G_PARAM_STATIC_STRINGS |
 			G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GskRenderer:minification-filter:
-   *
-   * The filter to be used when scaling textures down.
-   *
-   * See also: gsk_renderer_set_scaling_filters()
-   *
-   * Since: 3.22
-   */
-  gsk_renderer_properties[PROP_MINIFICATION_FILTER] =
-    g_param_spec_enum ("minification-filter",
-                       "Minification Filter",
-                       "The minification filter used by the renderer for texture targets",
-                       GSK_TYPE_SCALING_FILTER,
-                       GSK_SCALING_FILTER_LINEAR,
-                       G_PARAM_READWRITE |
-                       G_PARAM_STATIC_STRINGS |
-                       G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GskRenderer:magnification-filter:
-   *
-   * The filter to be used when scaling textures up.
-   *
-   * See also: gsk_renderer_set_scaling_filters()
-   *
-   * Since: 3.22
-   */
-  gsk_renderer_properties[PROP_MAGNIFICATION_FILTER] =
-    g_param_spec_enum ("magnification-filter",
-                       "Magnification Filter",
-                       "The magnification filter used by the renderer for texture targets",
-                       GSK_TYPE_SCALING_FILTER,
-                       GSK_SCALING_FILTER_LINEAR,
-                       G_PARAM_READWRITE |
-                       G_PARAM_STATIC_STRINGS |
-                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GskRenderer:auto-clear:
@@ -419,9 +363,6 @@ gsk_renderer_init (GskRenderer *self)
 
   priv->auto_clear = TRUE;
   priv->scale_factor = 1;
-
-  priv->min_filter = GSK_SCALING_FILTER_LINEAR;
-  priv->mag_filter = GSK_SCALING_FILTER_LINEAR;
 }
 
 /**
@@ -476,72 +417,6 @@ gsk_renderer_get_viewport (GskRenderer     *renderer,
   g_return_if_fail (viewport != NULL);
 
   graphene_rect_init_from_rect (viewport, &priv->viewport);
-}
-
-/**
- * gsk_renderer_set_scaling_filters:
- * @renderer: a #GskRenderer
- * @min_filter: the minification scaling filter
- * @mag_filter: the magnification scaling filter
- *
- * Sets the scaling filters to be applied when scaling textures
- * up and down.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_set_scaling_filters (GskRenderer      *renderer,
-                                  GskScalingFilter  min_filter,
-                                  GskScalingFilter  mag_filter)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-  GObject *gobject;
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-
-  gobject = G_OBJECT (renderer);
-
-  g_object_freeze_notify (gobject);
-
-  if (priv->min_filter != min_filter)
-    {
-      priv->min_filter = min_filter;
-      g_object_notify_by_pspec (gobject, gsk_renderer_properties[PROP_MINIFICATION_FILTER]);
-    }
-
-  if (priv->mag_filter != mag_filter)
-    {
-      priv->mag_filter = mag_filter;
-      g_object_notify_by_pspec (gobject, gsk_renderer_properties[PROP_MAGNIFICATION_FILTER]);
-    }
-
-  g_object_thaw_notify (gobject);
-}
-
-/**
- * gsk_renderer_get_scaling_filters:
- * @renderer: a #GskRenderer
- * @min_filter: (out) (nullable): return location for the minification filter
- * @mag_filter: (out) (nullable): return location for the magnification filter
- *
- * Retrieves the minification and magnification filters used by the #GskRenderer.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_get_scaling_filters (GskRenderer      *renderer,
-                                  GskScalingFilter *min_filter,
-                                  GskScalingFilter *mag_filter)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-
-  if (min_filter != NULL)
-    *min_filter = priv->min_filter;
-
-  if (mag_filter != NULL)
-    *mag_filter = priv->mag_filter;
 }
 
 /**

@@ -47,6 +47,10 @@ struct _GskRenderNode
   /* Blend mode */
   GskBlendMode blend_mode;
 
+  /* Scaling filters */
+  GskScalingFilter min_filter;
+  GskScalingFilter mag_filter;
+
   /* Clip rectangle */
   graphene_rect_t bounds;
 
