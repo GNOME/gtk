@@ -107,9 +107,6 @@ struct _GskGLRenderer
   GskGLProfiler *gl_profiler;
   GskShaderBuilder *shader_builder;
 
-  int gl_min_filter;
-  int gl_mag_filter;
-
   int blend_program_id;
   int blit_program_id;
 
@@ -515,15 +512,11 @@ render_item (GskGLRenderer *self,
 }
 
 static void
-get_gl_scaling_filters (GskRenderer *renderer,
-                        int         *min_filter_r,
-                        int         *mag_filter_r)
+get_gl_scaling_filters (GskRenderNode *node,
+                        int           *min_filter_r,
+                        int           *mag_filter_r)
 {
-  GskScalingFilter min_filter, mag_filter;
-
-  gsk_renderer_get_scaling_filters (renderer, &min_filter, &mag_filter);
-
-  switch (min_filter)
+  switch (node->min_filter)
     {
     case GSK_SCALING_FILTER_NEAREST:
       *min_filter_r = GL_NEAREST;
@@ -538,7 +531,7 @@ get_gl_scaling_filters (GskRenderer *renderer,
       break;
     }
 
-  switch (mag_filter)
+  switch (node->mag_filter)
     {
     case GSK_SCALING_FILTER_NEAREST:
       *mag_filter_r = GL_NEAREST;
@@ -711,6 +704,9 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   else if (gsk_render_node_has_surface (node))
     {
       cairo_surface_t *surface = gsk_render_node_get_surface (node);
+      int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
+
+      get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
 
       /* Upload the Cairo surface to a GL texture */
       item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
@@ -720,8 +716,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       gsk_gl_driver_init_texture_with_surface (self->gl_driver,
                                                item.render_data.texture_id,
                                                surface,
-                                               self->gl_min_filter,
-                                               self->gl_mag_filter);
+                                               gl_min_filter,
+                                               gl_mag_filter);
     }
   else
     {
@@ -869,9 +865,6 @@ gsk_gl_renderer_render (GskRenderer       *renderer,
 
   gsk_gl_renderer_update_frustum (self, &modelview, &projection);
 
-  get_gl_scaling_filters (GSK_RENDERER (self),
-                          &self->gl_min_filter,
-                          &self->gl_mag_filter);
   if (!gsk_gl_renderer_validate_tree (self, root, &projection))
     goto out;
 
