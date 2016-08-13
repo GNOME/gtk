@@ -428,6 +428,33 @@ gtk_css_style_render_background (GtkCssStyle      *style,
   cairo_restore (cr);
 }
 
+static GskBlendMode
+translate_blend_mode (GtkCssBlendMode blend_mode)
+{
+  switch (blend_mode)
+    {
+    case GTK_CSS_BLEND_MODE_COLOR_BURN: return GSK_BLEND_MODE_COLOR_BURN;
+    case GTK_CSS_BLEND_MODE_COLOR_DODGE: return GSK_BLEND_MODE_COLOR_BURN;
+    case GTK_CSS_BLEND_MODE_DARKEN: return GSK_BLEND_MODE_DARKEN;
+    case GTK_CSS_BLEND_MODE_LIGHTEN: return GSK_BLEND_MODE_LIGHTEN;
+    case GTK_CSS_BLEND_MODE_DIFFERENCE: return GSK_BLEND_MODE_DIFFERENCE;
+    case GTK_CSS_BLEND_MODE_EXCLUSION: return GSK_BLEND_MODE_EXCLUSION;
+    case GTK_CSS_BLEND_MODE_HARD_LIGHT: return GSK_BLEND_MODE_HARD_LIGHT;
+    case GTK_CSS_BLEND_MODE_SOFT_LIGHT: return GSK_BLEND_MODE_SOFT_LIGHT;
+    case GTK_CSS_BLEND_MODE_MULTIPLY: return GSK_BLEND_MODE_MULTIPLY;
+    case GTK_CSS_BLEND_MODE_NORMAL: return GSK_BLEND_MODE_DEFAULT;
+    case GTK_CSS_BLEND_MODE_OVERLAY: return GSK_BLEND_MODE_OVERLAY;
+    case GTK_CSS_BLEND_MODE_SCREEN: return GSK_BLEND_MODE_SCREEN;
+    case GTK_CSS_BLEND_MODE_SATURATE:
+    case GTK_CSS_BLEND_MODE_LUMINOSITY:
+    case GTK_CSS_BLEND_MODE_COLOR:
+    case GTK_CSS_BLEND_MODE_HUE:
+    default:
+      g_warning ("CSS blend mode %d not supported by GSK yet", blend_mode);
+      return GSK_BLEND_MODE_DEFAULT;
+    }
+}
+
 void
 gtk_css_style_add_background_render_nodes (GtkCssStyle      *style,
                                            GskRenderer      *renderer,
@@ -443,10 +470,16 @@ gtk_css_style_add_background_render_nodes (GtkCssStyle      *style,
   GskRenderNode *bg_node;
   cairo_t *cr;
   GtkCssValue *background_image;
+  GtkCssValue *blend_modes;
   GtkCssValue *box_shadow;
   const GdkRGBA *bg_color;
+  GtkThemingBackground bg;
+  gchar *str;
+  gint number_of_layers;
+  gint idx;
 
   background_image = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+  blend_modes = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
   bg_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   box_shadow = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW);
 
@@ -457,15 +490,87 @@ gtk_css_style_add_background_render_nodes (GtkCssStyle      *style,
       _gtk_css_shadows_value_is_none (box_shadow))
     return;
 
-  bg_node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (bg_node, name);
-  gsk_render_node_set_bounds (bg_node, bounds);
-  cr = gsk_render_node_get_draw_context (bg_node);
-  gtk_css_style_render_background (style, cr, x, y, width, height, junction);
-  cairo_destroy (cr);
+  bg.style = style;
+  _gtk_theming_background_init_style (&bg, width, height, junction);
 
-  gsk_render_node_append_child (parent_node, bg_node);
-  gsk_render_node_unref (bg_node);
+  if (!_gtk_css_shadows_value_is_none (box_shadow))
+    {
+      str = g_strconcat ("Outer Shadow<", name, ">", NULL);
+      bg_node = gsk_renderer_create_render_node (renderer);
+      gsk_render_node_set_name (bg_node, str);
+      gsk_render_node_set_bounds (bg_node, bounds);
+      cr = gsk_render_node_get_draw_context (bg_node);
+      cairo_translate (cr, x, y);
+      _gtk_css_shadows_value_paint_box (box_shadow,
+                                        cr,
+                                        &bg.boxes[GTK_CSS_AREA_BORDER_BOX],
+                                        FALSE);
+      cairo_destroy (cr);
+      g_free (str);
+
+      gsk_render_node_append_child (parent_node, bg_node);
+      gsk_render_node_unref (bg_node);
+    }
+
+  if (!gtk_rgba_is_clear (bg_color))
+    {
+      str = g_strconcat ("Background Color<", name, ">", NULL);
+      bg_node = gsk_renderer_create_render_node (renderer);
+      gsk_render_node_set_name (bg_node, str);
+      gsk_render_node_set_bounds (bg_node, bounds);
+      cr = gsk_render_node_get_draw_context (bg_node);
+      cairo_translate (cr, x, y);
+      _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
+      cairo_destroy (cr);
+      g_free (str);
+
+      gsk_render_node_append_child (parent_node, bg_node);
+      gsk_render_node_unref (bg_node);
+    }
+
+  number_of_layers = _gtk_css_array_value_get_n_values (background_image);
+
+  for (idx = number_of_layers - 1; idx >= 0; idx--)
+    {
+      GtkCssBlendMode blend_mode;
+
+      blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
+
+      str = g_strdup_printf ("Background%d<%s>", idx, name);
+      bg_node = gsk_renderer_create_render_node (renderer);
+
+      gsk_render_node_set_blend_mode (bg_node,
+                                      translate_blend_mode (blend_mode));
+      gsk_render_node_set_name (bg_node, str);
+      gsk_render_node_set_bounds (bg_node, bounds);
+      cr = gsk_render_node_get_draw_context (bg_node);
+      cairo_translate (cr, x, y);
+      _gtk_theming_background_paint_layer (&bg, idx, cr, GTK_CSS_BLEND_MODE_NORMAL);
+      cairo_destroy (cr);
+      g_free (str);
+
+      gsk_render_node_append_child (parent_node, bg_node);
+      gsk_render_node_unref (bg_node);
+    }
+
+  if (!_gtk_css_shadows_value_is_none (box_shadow))
+    {
+      str = g_strconcat ("Inner Shadow<", name, ">", NULL);
+      bg_node = gsk_renderer_create_render_node (renderer);
+      gsk_render_node_set_name (bg_node, str);
+      gsk_render_node_set_bounds (bg_node, bounds);
+      cr = gsk_render_node_get_draw_context (bg_node);
+      cairo_translate (cr, x, y);
+      _gtk_css_shadows_value_paint_box (box_shadow,
+                                        cr,
+                                        &bg.boxes[GTK_CSS_AREA_PADDING_BOX],
+                                        TRUE);
+      cairo_destroy (cr);
+      g_free (str);
+
+      gsk_render_node_append_child (parent_node, bg_node);
+      gsk_render_node_unref (bg_node);
+    }
 }
 
 static gboolean
