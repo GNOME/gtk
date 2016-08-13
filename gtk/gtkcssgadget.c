@@ -866,18 +866,16 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  str = g_strconcat ("Background<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
   gtk_css_style_add_background_render_nodes (style,
                                              renderer,
                                              box_node,
                                              &bounds,
-                                             str,
+                                             G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)),
                                              clip.left + margin.left,
                                              clip.top + margin.top,
                                              width - clip.left - clip.right - margin.left - margin.right,
                                              height - clip.top - clip.bottom - margin.top - margin.bottom,
                                              gtk_css_node_get_junction_sides (priv->node));
-  g_free (str);
 
   str = g_strconcat ("Border<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
   border_node = gsk_renderer_create_render_node (renderer);
