@@ -364,7 +364,7 @@ gsk_gl_renderer_update_frustum (GskGLRenderer           *self,
 {
   GSK_NOTE (TRANSFORMS, g_print ("Updating the modelview/projection\n"));
 
-  graphene_matrix_multiply (projection, modelview, &self->mvp);
+  graphene_matrix_multiply (modelview, projection, &self->mvp);
 
   graphene_frustum_init_from_matrix (&self->frustum, &self->mvp);
 
@@ -632,12 +632,12 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   /* Each render item is an axis-aligned bounding box that we
    * transform using the given transformation matrix
    */
-  item.min.x = bounds.origin.x * scale_factor;
-  item.min.y = bounds.origin.y * scale_factor;
+  item.min.x = bounds.origin.x;
+  item.min.y = bounds.origin.y;
   item.min.z = 0.f;
 
-  item.max.x = item.min.x + item.size.width;
-  item.max.y = item.min.y + item.size.height;
+  item.max.x = item.min.x + bounds.size.width;
+  item.max.y = item.min.y + bounds.size.height;
   item.max.z = 0.f;
 
   /* The location of the item, in normalized world coordinates */
