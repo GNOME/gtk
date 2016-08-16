@@ -3405,6 +3405,16 @@ typedef struct {
   GArray *child_infos;
 } RenderData;
 
+static gboolean
+should_propagate_node (GtkWidget  *child,
+                       RenderData *data)
+{
+  if (!_gtk_widget_is_drawable (child))
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 propagate_render_node (GtkWidget *child,
                        gpointer   data_)
@@ -3473,6 +3483,9 @@ collect_child_infos (GtkWidget *widget,
   GList *siblings;
   GdkWindow *window;
 
+  if (!should_propagate_node (widget, data))
+    return;
+
   info.child = widget;
   info.window_depth = G_MAXINT;
 
@@ -3489,7 +3502,6 @@ collect_child_infos (GtkWidget *widget,
   g_array_append_val (data->child_infos, info);
 }
 
-
 void
 gtk_container_propagate_render_node (GtkContainer  *container,
                                      GskRenderer   *renderer,
@@ -3501,6 +3513,7 @@ gtk_container_propagate_render_node (GtkContainer  *container,
   data.container = container;
   data.renderer = renderer;
   data.parent = parent_node;
+
   data.child_infos = g_array_new (FALSE, TRUE, sizeof (ChildOrderInfo));
 
   gtk_container_forall (container, collect_child_infos, &data);
