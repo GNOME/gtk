@@ -837,7 +837,6 @@ gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
 {
   cairo_rectangle_int_t rect;
   cairo_surface_t *tmp;
-  double sx, sy;
   double device_x_offset, device_y_offset;
 
   g_return_if_fail (surface != NULL);
@@ -848,14 +847,12 @@ gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
 
   cairo_surface_flush (surface);
 
-  sx = sy = 1;
-  cairo_surface_get_device_scale (surface, &sx, &sy);
   cairo_surface_get_device_offset (surface, &device_x_offset, &device_y_offset);
 
   rect.x = (int) device_x_offset;
   rect.y = (int) device_y_offset;
-  rect.width = width * sx;
-  rect.height = height * sx;
+  rect.width = width;
+  rect.height = height;
   tmp = cairo_surface_map_to_image (surface, &rect);
 
   gdk_gl_context_upload_texture (context, tmp, rect.width, rect.height, target);
