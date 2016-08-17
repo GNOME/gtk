@@ -1,3 +1,24 @@
+Overview of Changes in GTK+ 3.20.9
+==================================
+
+* Bug fixes:
+ 769287 GtkMenuToolButton:show-menu is emitted twice and breaks dynamic m...
+ 769603 gtk+-3.20.8: underlink issue with ld.gold - build fails: ./.libs/...
+        Fix headerbar size allocation
+        Use g_snprintf instead of snprintf
+
+* Translation updates
+ Brazilian Portuguese
+ Czech
+ German
+ Hungarian
+ Indonesian
+ Lithuanian
+ Polish
+ Portuguese
+ Swedish
+
+
 Overview of Changes in GTK+ 3.20.8
 ==================================
 
