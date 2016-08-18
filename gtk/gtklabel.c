@@ -414,10 +414,11 @@ static void gtk_label_size_allocate     (GtkWidget        *widget,
 static void gtk_label_state_flags_changed   (GtkWidget        *widget,
                                              GtkStateFlags     prev_state);
 static void gtk_label_style_updated     (GtkWidget        *widget);
-static gboolean gtk_label_draw          (GtkWidget        *widget,
-                                         cairo_t          *cr);
 static gboolean gtk_label_focus         (GtkWidget         *widget,
                                          GtkDirectionType   direction);
+
+static GskRenderNode *gtk_label_get_render_node (GtkWidget   *label,
+                                                 GskRenderer *renderer);
 
 static void gtk_label_realize           (GtkWidget        *widget);
 static void gtk_label_unrealize         (GtkWidget        *widget);
@@ -577,13 +578,6 @@ static void     gtk_label_measure (GtkCssGadget   *gadget,
                                    int            *minimum_baseline,
                                    int            *natural_baseline,
                                    gpointer        unused);
-static gboolean gtk_label_render  (GtkCssGadget   *gadget,
-                                   cairo_t        *cr,
-                                   int             x,
-                                   int             y,
-                                   int             width,
-                                   int             height,
-                                   gpointer        data);
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
@@ -631,7 +625,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->state_flags_changed = gtk_label_state_flags_changed;
   widget_class->style_updated = gtk_label_style_updated;
   widget_class->query_tooltip = gtk_label_query_tooltip;
-  widget_class->draw = gtk_label_draw;
+  widget_class->get_render_node = gtk_label_get_render_node;
   widget_class->realize = gtk_label_realize;
   widget_class->unrealize = gtk_label_unrealize;
   widget_class->map = gtk_label_map;
@@ -1393,7 +1387,7 @@ gtk_label_init (GtkLabel *label)
                                                      GTK_WIDGET (label),
                                                      gtk_label_measure,
                                                      NULL,
-                                                     gtk_label_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
@@ -4224,39 +4218,41 @@ gtk_label_get_focus_link (GtkLabel *label)
   return NULL;
 }
 
-static gboolean
-gtk_label_draw (GtkWidget *widget,
-                cairo_t   *cr)
-{
-  gtk_css_gadget_draw (GTK_LABEL (widget)->priv->gadget, cr);
-
-  return FALSE;
-}
-
 static void layout_to_window_coords (GtkLabel *label,
                                      gint     *x,
                                      gint     *y);
 
-static gboolean
-gtk_label_render (GtkCssGadget *gadget,
-                  cairo_t      *cr,
-                  int           x,
-                  int           y,
-                  int           width,
-                  int           height,
-                  gpointer      data)
+static GskRenderNode *
+gtk_label_get_render_node (GtkWidget   *widget,
+                           GskRenderer *renderer)
 {
-  GtkWidget *widget;
-  GtkLabel *label;
-  GtkLabelPrivate *priv;
-  GtkLabelSelectionInfo *info;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = label->priv;
+  GtkLabelSelectionInfo *info = priv->select_info;
   GtkStyleContext *context;
+  gint x, y, width, height;
   gint lx, ly;
+  cairo_t *cr;
+  GtkAllocation alloc, clip;
+  GskRenderNode *node;
+  GskRenderNode *res;
 
-  widget = gtk_css_gadget_get_owner (gadget);
-  label = GTK_LABEL (widget);
-  priv = label->priv;
-  info = priv->select_info;
+  res = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
+
+  if (res == NULL)
+    return NULL;
+
+  node = gtk_widget_create_render_node (widget, renderer, "Label Content");
+
+  gtk_widget_get_clip (widget, &clip);
+  _gtk_widget_get_allocation (widget, &alloc);
+
+  cr = gsk_render_node_get_draw_context (node);
+  cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
+  x = 0;
+  y = 0;
+  width = alloc.width;
+  height = alloc.height;
 
   gtk_label_ensure_layout (label);
 
@@ -4367,7 +4363,12 @@ gtk_label_render (GtkCssGadget *gadget,
         }
     }
 
-  return FALSE;
+  cairo_destroy (cr);
+
+  gsk_render_node_append_child (res, node);
+  gsk_render_node_unref (node);
+
+  return res;
 }
 
 static gboolean
