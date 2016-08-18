@@ -139,8 +139,8 @@ static void         gtk_accel_label_get_property (GObject            *object,
 						  GParamSpec         *pspec);
 static void         gtk_accel_label_destroy      (GtkWidget          *widget);
 static void         gtk_accel_label_finalize     (GObject            *object);
-static gboolean     gtk_accel_label_draw         (GtkWidget          *widget,
-                                                  cairo_t            *cr);
+static GskRenderNode *gtk_accel_label_get_render_node (GtkWidget   *widget,
+                                                       GskRenderer *renderer);
 static const gchar *gtk_accel_label_get_string   (GtkAccelLabel      *accel_label);
 
 
@@ -161,7 +161,7 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   gobject_class->set_property = gtk_accel_label_set_property;
   gobject_class->get_property = gtk_accel_label_get_property;
 
-  widget_class->draw = gtk_accel_label_draw;
+  widget_class->get_render_node = gtk_accel_label_get_render_node;
   widget_class->get_preferred_width = gtk_accel_label_get_preferred_width;
   widget_class->destroy = gtk_accel_label_destroy;
 
@@ -444,16 +444,17 @@ get_first_baseline (PangoLayout *layout)
   return PANGO_PIXELS (result);
 }
 
-static gboolean 
-gtk_accel_label_draw (GtkWidget *widget,
-                      cairo_t   *cr)
+static GskRenderNode *
+gtk_accel_label_get_render_node (GtkWidget   *widget,
+                                 GskRenderer *renderer)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   guint ac_width;
   GtkAllocation allocation;
   GtkRequisition requisition;
+  GskRenderNode *res;
 
-  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->draw (widget, cr);
+  res = GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->get_render_node (widget, renderer);
 
   ac_width = gtk_accel_label_get_accel_width (accel_label);
   gtk_widget_get_allocation (widget, &allocation);
@@ -466,6 +467,17 @@ gtk_accel_label_draw (GtkWidget *widget,
       PangoLayout *accel_layout;
       gint x;
       gint y;
+      GtkAllocation alloc, clip;
+      GskRenderNode *node;
+      cairo_t *cr;
+
+      node = gtk_widget_create_render_node (widget, renderer, "AccelLabel Content");
+
+      gtk_widget_get_clip (widget, &clip);
+      _gtk_widget_get_allocation (widget, &alloc);
+
+      cr = gsk_render_node_get_draw_context (node);
+      cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
 
       context = gtk_widget_get_style_context (widget);
 
@@ -486,9 +498,14 @@ gtk_accel_label_draw (GtkWidget *widget,
       gtk_style_context_restore (context);
 
       g_object_unref (accel_layout);
+
+      cairo_destroy (cr);
+
+      gsk_render_node_append_child (res, node);
+      gsk_render_node_unref (node);
     }
 
-  return FALSE;
+  return res;
 }
 
 static void
