@@ -123,13 +123,13 @@ gtk_spinner_size_allocate (GtkWidget     *widget,
   gtk_widget_set_clip (widget, &clip);
 }
 
-static gboolean
-gtk_spinner_draw (GtkWidget *widget,
-                  cairo_t   *cr)
+static GskRenderNode *
+gtk_spinner_get_render_node (GtkWidget   *widget,
+                             GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (GTK_SPINNER (widget)->priv->gadget, cr);
-
-  return FALSE;
+  return gtk_css_gadget_get_render_node (GTK_SPINNER (widget)->priv->gadget,
+                                         renderer,
+                                         FALSE);
 }
 
 static void
@@ -204,7 +204,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
 
   widget_class = GTK_WIDGET_CLASS(klass);
   widget_class->size_allocate = gtk_spinner_size_allocate;
-  widget_class->draw = gtk_spinner_draw;
+  widget_class->get_render_node = gtk_spinner_get_render_node;
   widget_class->get_preferred_width = gtk_spinner_get_preferred_width;
   widget_class->get_preferred_height = gtk_spinner_get_preferred_height;
 
