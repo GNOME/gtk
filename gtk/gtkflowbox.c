@@ -382,31 +382,21 @@ gtk_flow_box_child_activate (GtkFlowBoxChild *child)
     gtk_flow_box_select_and_activate (box, child);
 }
 
-static gboolean
-gtk_flow_box_child_draw (GtkWidget *widget,
-                         cairo_t   *cr)
+static GskRenderNode *
+gtk_flow_box_child_get_render_node (GtkWidget   *widget,
+                                    GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget, cr);
+  GtkFlowBoxChildPrivate *priv = CHILD_PRIV (widget);
+  GskRenderNode *res = gtk_css_gadget_get_render_node (priv->gadget,
+                                                       renderer,
+                                                       gtk_widget_has_visible_focus (widget));
 
-  return FALSE;
-}
+  if (res == NULL)
+    return NULL;
 
-static gboolean
-gtk_flow_box_child_render (GtkCssGadget *gadget,
-                           cairo_t      *cr,
-                           int           x,
-                           int           y,
-                           int           width,
-                           int           height,
-                           gpointer      data)
-{
-  GtkWidget *widget;
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
 
-  widget = gtk_css_gadget_get_owner (gadget);
-
-  GTK_WIDGET_CLASS (gtk_flow_box_child_parent_class)->draw (widget, cr);
-
-  return gtk_widget_has_visible_focus (widget);
+  return res;
 }
 
 /* Size allocation {{{3 */
@@ -595,7 +585,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 
   object_class->finalize = gtk_flow_box_child_finalize;
 
-  widget_class->draw = gtk_flow_box_child_draw;
+  widget_class->get_render_node = gtk_flow_box_child_get_render_node;
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
   widget_class->get_preferred_height = gtk_flow_box_child_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_flow_box_child_get_preferred_height_for_width;
@@ -642,7 +632,7 @@ gtk_flow_box_child_init (GtkFlowBoxChild *child)
                                                      GTK_WIDGET (child),
                                                      gtk_flow_box_child_measure,
                                                      gtk_flow_box_child_allocate,
-                                                     gtk_flow_box_child_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
@@ -2627,43 +2617,36 @@ gtk_flow_box_measure (GtkCssGadget   *gadget,
 
 /* Drawing {{{3 */
 
-static gboolean
-gtk_flow_box_draw (GtkWidget *widget,
-                   cairo_t   *cr)
+static GskRenderNode *
+gtk_flow_box_get_render_node (GtkWidget   *widget,
+                              GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (BOX_PRIV (widget)->gadget, cr);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_flow_box_render (GtkCssGadget *gadget,
-                     cairo_t      *cr,
-                     int           x,
-                     int           y,
-                     int           width,
-                     int           height,
-                     gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  GskRenderNode *res = gtk_css_gadget_get_render_node (priv->gadget,
+                                                       renderer,
+                                                       gtk_widget_has_visible_focus (widget));
 
-  GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->draw (widget, cr);
+  if (res == NULL)
+    return NULL;
+
+  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
 
   if (priv->rubberband_first && priv->rubberband_last)
     {
+      GskRenderNode *node;
+      cairo_t *cr;
       GtkStyleContext *context;
       GSequenceIter *iter, *iter1, *iter2;
       GdkRectangle line_rect, rect;
       GArray *lines;
       gboolean vertical;
 
-      context = gtk_widget_get_style_context (GTK_WIDGET (box));
+      node = gtk_widget_create_render_node (widget, renderer, "FlowBox RubberBand");
+
+      cr = gsk_render_node_get_draw_context (node);
 
       vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
-
-      cairo_save (cr);
 
       context = gtk_widget_get_style_context (widget);
       gtk_style_context_save_to_node (context, priv->rubberband_node);
@@ -2728,7 +2711,10 @@ gtk_flow_box_render (GtkCssGadget *gadget,
 
           cairo_save (cr);
           cairo_clip (cr);
-          gtk_render_background (context, cr, x, y, width, height);
+          gtk_render_background (context, cr,
+                                 0, 0,
+                                 gtk_widget_get_allocated_width (widget),
+                                 gtk_widget_get_allocated_height (widget));
           cairo_restore (cr);
 
           cairo_append_path (cr, path);
@@ -2746,10 +2732,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       g_array_free (lines, TRUE);
 
       gtk_style_context_restore (context);
-      cairo_restore (cr);
+
+      cairo_destroy (cr);
+
+      gsk_render_node_append_child (res, node);
+      gsk_render_node_unref (node);
     }
 
-  return gtk_widget_has_visible_focus (widget);
+  return res;
 }
 
 /* Autoscrolling {{{3 */
@@ -3778,7 +3768,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   widget_class->realize = gtk_flow_box_realize;
   widget_class->unmap = gtk_flow_box_unmap;
   widget_class->focus = gtk_flow_box_focus;
-  widget_class->draw = gtk_flow_box_draw;
+  widget_class->get_render_node = gtk_flow_box_get_render_node;
   widget_class->key_press_event = gtk_flow_box_key_press_event;
   widget_class->get_request_mode = gtk_flow_box_get_request_mode;
   widget_class->get_preferred_width = gtk_flow_box_get_preferred_width;
@@ -4140,7 +4130,7 @@ gtk_flow_box_init (GtkFlowBox *box)
                                                      GTK_WIDGET (box),
                                                      gtk_flow_box_measure,
                                                      gtk_flow_box_allocate,
-                                                     gtk_flow_box_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
