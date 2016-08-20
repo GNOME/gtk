@@ -2338,7 +2338,8 @@ gtk_popover_get_modal (GtkPopover *popover)
  * Since: 3.16
  *
  * Deprecated: 3.22: You can show or hide the popover without transitions
- *   using gtk_widget_show() and gtk_widget_hide().
+ *   using gtk_widget_show() and gtk_widget_hide() while gtk_popover_popup()
+ *   and gtk_popover_popdown() will use transitions.
  */
 void
 gtk_popover_set_transitions_enabled (GtkPopover *popover,
@@ -2369,7 +2370,8 @@ gtk_popover_set_transitions_enabled (GtkPopover *popover,
  * Since: 3.16
  *
  * Deprecated: 3.22: You can show or hide the popover without transitions
- *   using gtk_widget_show() and gtk_widget_hide().
+ *   using gtk_widget_show() and gtk_widget_hide() while gtk_popover_popup()
+ *   and gtk_popover_popdown() will use transitions.
  */
 gboolean
 gtk_popover_get_transitions_enabled (GtkPopover *popover)
