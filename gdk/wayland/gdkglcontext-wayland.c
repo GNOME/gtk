@@ -235,7 +235,6 @@ gdk_wayland_gl_context_end_frame (GdkGLContext   *context,
   egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
                                                     context_wayland->egl_config);
 
-  /* TODO: Use eglSwapBuffersWithDamageEXT if available */
   if (display_wayland->have_egl_swap_buffers_with_damage)
     {
       int i, j, n_rects = cairo_region_num_rectangles (damage);
