@@ -358,7 +358,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * @tool: The new current tool
    *
    * The ::tool-changed signal is emitted on pen/eraser
-   * #GdkDevice<!-- -->s whenever tools enter or leave proximity.
+   * #GdkDevices whenever tools enter or leave proximity.
    *
    * Since: 3.22
    */
