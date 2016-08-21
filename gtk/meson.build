@@ -1,7 +1,3 @@
-#  '$(a11y_c_sources)\
-#  '$(deprecated_c_sources)\
-#  '$(inspector_c_sources)\
-
 subdir('deprecated')
 subdir('a11y')
 subdir('inspector')
@@ -44,10 +40,15 @@ gtk_sources = [
   'gtkbox.c',
   'gtkbuildable.c',
   'gtkbuilder.c',
+  'gtkicon.c',
+  'gtkshortcutswindow.c',
+  'gtkshortcutssection.c',
   'gtkbuilderparser.c',
   'gtkbuilder-menus.c',
   'gtkbutton.c',
   'gtkcairoblur.c',
+  'gtkcssnode.c',
+  'gtkcsscalcvalue.c',
   'gtkcalendar.c',
   'gtkcellarea.c',
   'gtkcellareabox.c',
@@ -80,6 +81,17 @@ gtk_sources = [
   'gtkcomboboxtext.c',
   'gtkcontainer.c',
   'gtkcssanimation.c',
+  'gtkcssgadget.c',
+  'gtkcsscustomgadget.c',
+  'gtkboxgadget.c',
+  'gtkimagedefinition.c',
+  'gtkprogresstracker.c',
+  'gtkcssimageradial.c',
+  'gtkcssimagerecolor.c',
+  'gtkcssimagefallback.c',
+  'gtkbuiltinicon.c',
+  'gtkcssstylechange.c',
+  'gtkcsspalettevalue.c',
   'gtkcssanimatedstyle.c',
   'gtkcssarrayvalue.c',
   'gtkcssbgsizevalue.c',
@@ -123,6 +135,9 @@ gtk_sources = [
   'gtkcssshadowsvalue.c',
   'gtkcssshadowvalue.c',
   'gtkcssshorthandproperty.c',
+  'gtkshortcutlabel.c',
+  'gtkfilechoosernativeportal.c',
+  'gtkdragsource.c',
   'gtkcssshorthandpropertyimpl.c',
   'gtkcssstaticstyle.c',
   'gtkcssstylefuncs.c',
@@ -136,8 +151,17 @@ gtk_sources = [
   'gtkcsstypes.c',
   'gtkcssvalue.c',
   'gtkcsswidgetnode.c',
+  'gtkcssnodestylecache.c',
+  'gtkapplicationaccels.c',
+  'gtkcssdimensionvalue.c',
+  'gtkshortcutsgroup.c',
+  'gtkshortcutsshortcut.c',
+  'gtkfilechoosernative.c',
+  'gtknativedialog.c',
   'gtkdialog.c',
   'gtkdrawingarea.c',
+  'gtkutils.c',
+  'gtktooltipwindow.c',
   'gtkeditable.c',
   'gtkentry.c',
   'gtkentrybuffer.c',
@@ -160,9 +184,15 @@ gtk_sources = [
   'gtkfontbutton.c',
   'gtkfontchooser.c',
   'gtkfontchooserdialog.c',
+  'gtkcsswin32sizevalue.c',
   'gtkfontchooserutils.c',
+  'gtkwin32theme.c',
+  'gtkwin32draw.c',
+  'gtkcomposetable.c',
+  'gdkpixbufutils.c',
   'gtkfontchooserwidget.c',
   'gtkframe.c',
+  'gtkprintoperation-portal.c',
   'gtkgladecatalog.c',
   'gtkgesture.c',
   'gtkgesturedrag.c',
@@ -176,6 +206,7 @@ gtk_sources = [
   'gtkglarea.c',
   'gtkgrid.c',
   'gtkheaderbar.c',
+  'gtkdragdest.c',
   'gtkhsla.c',
   'gtkiconcache.c',
   'gtkiconcachevalidator.c',
@@ -334,7 +365,8 @@ gtk_sources = [
   'gtkwidgetpath.c',
   'gtkwindow.c',
   'gtkwindowgroup.c',
-  'gtkwin32theme.c'
+  'gtkwin32theme.c',
+  'fallback-c89.c'
 ]
 
 gtk_unix_sources = [
@@ -360,6 +392,9 @@ gtk_x11_sources = [
   'gtkmountoperation-x11.c',
 ]
 
+gtk_wayland_sources = [
+  'gtkapplication-wayland.c'
+]
 
 dnd_sources = [
   'gtkclipboard.c',
@@ -372,11 +407,39 @@ gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated', 'gtkdbusinterfaces.xml',
                                    interface_prefix: 'org.Gtk.',
                                    namespace: '_Gtk')
 
+libgtk_dep = declare_dependency(
+  link_with: libgdk,
+  sources: [
+    'gtk.h'
+  ],
+  dependencies: [
+    gmodule_dep,
+    giounix_dep,
+    glib_dep,
+    atkbridge_dep,
+    pangocairo_dep,
+    pangoft_dep,
+    pango_dep,
+    cairogobj_dep,
+    cairo_dep,
+    fontconfig_dep,
+    pixbuf_dep,
+    atk_dep,
+    epoxy_dep,
+    mlib,
+    xi_dep,
+    x11_dep,
+    libgdk_dep
+  ],
+  include_directories: confinc
+)
+
+
 libgtk = shared_library('gtk',
   gtk_sources, gtk_dbus_src, gtk_unix_sources,
   gtk_deprecated_c_sources, dnd_sources,
   inspector_sources, a11y_sources,
-  gtk_x11_sources,
+  gtk_x11_sources, gtk_wayland_sources,
   gtk_use_wayland_or_x11_c_sources,
   c_args: [
     '-DGTK_COMPILATION', '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
@@ -384,7 +447,7 @@ libgtk = shared_library('gtk',
     '-DGTK_LIBDIR="libdir"', '-DGTK_SYSCONFDIR="sysconfdir"',
     '-DGTK_LOCALEDIR="localedir"', '-DGTK_DATA_PREFIX="dataprefix"',
     '-DGTK_PRINT_BACKENDS="null"', '-DGTK_VERSION="3"',
-    '-DGDK_WINDOWING_X11'
+    '-DX11_DATA_PREFIX="/share/x11/locale"'
   ],
   include_directories: [ confinc, gdkinc ],
   dependencies: [
@@ -403,7 +466,8 @@ libgtk = shared_library('gtk',
     epoxy_dep,
     mlib,
     xi_dep,
-    x11_dep
+    x11_dep,
+    libgdk_dep
   ],
-  link_with : libgdk)
-
+  link_with: libgdk
+)

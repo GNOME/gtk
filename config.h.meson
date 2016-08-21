@@ -119,6 +119,12 @@
 /* Define to 1 if you have the `sincos' function. */
 #mesondefine HAVE_SINCOS
 
+/* Define to 1 if you have the `log2` function */
+#mesondefine HAVE_LOG2
+
+/* Define to 1 if you ahve the `exp2` function */
+#mesondefine HAVE_EXP2
+
 /* Have the sockaddr_un.sun_len member */
 #mesondefine HAVE_SOCKADDR_UN_SUN_LEN
 
@@ -300,3 +306,6 @@
 
 /* Define to `int' if <sys/types.h> doesn't define. */
 #mesondefine uid_t
+
+/* Define to 1 if linux/memfd.h exists */
+#mesondefine HAVE_LINUX_MEMFD_H

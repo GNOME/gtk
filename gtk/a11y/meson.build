@@ -53,4 +53,5 @@ a11y_sources = files(
   'gtktreeviewaccessible.c',
   'gtkwidgetaccessible.c',
   'gtkwindowaccessible.c',
+  'gtkstackaccessible.c'
   )
