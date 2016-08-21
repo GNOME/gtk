@@ -156,3 +156,4 @@ configure_file(input: 'config.h.meson', output: 'config.h', configuration: cdata
 subdir('gdk')
 subdir('gtk')
 subdir('demos')
+subdir('testsuite')
