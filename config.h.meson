@@ -309,3 +309,9 @@
 
 /* Define to 1 if linux/memfd.h exists */
 #mesondefine HAVE_LINUX_MEMFD_H
+
+#mesondefine GTK_LOCALEDIR
+
+#mesondefine GTK_DATADIR
+
+#mesondefine GTK_LIBDIR

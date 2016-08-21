@@ -19,9 +19,17 @@ gtk_micro_version = gtk_version[2]
 gtk_binary_age = 100 * gtk_minor_version.to_int() + gtk_micro_version.to_int()
 gtk_api_version = '@0@.0'.format(gtk_major_version)
 
+x11_enabled      = get_option('enable-x11-backend')
+wayland_enabled  = get_option('enable-wayland-backend')
+broadway_enabled = get_option('enable-broadway-backend')
+
+
 cc = meson.get_compiler('c')
 cdata = configuration_data()
 cdata.set('PACKAGE_VERSION', '"'+meson.project_version()+'"')
+cdata.set('GTK_LOCALEDIR', '"'+get_option('localedir')+'"')
+cdata.set('GTK_DATADIR', '"'+get_option('datadir')+'"')
+cdata.set('GTK_LIBDIR', '"'+get_option('libdir')+'"')
 check_headers = [
   ['HAVE_CRT_EXTERNS_H', 'crt/externs.h'],
   ['HAVE_DLFCN_H', 'dlfcn.h'],
