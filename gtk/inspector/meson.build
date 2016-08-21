@@ -2,7 +2,6 @@ inspector_sources = files(
   'action-editor.c',
   'actions.c',
   'cellrenderergraph.c',
-  'classes-list.c',
   'css-editor.c',
   'css-node-tree.c',
   'data-list.c',
@@ -24,8 +23,9 @@ inspector_sources = files(
   'signals-list.c',
   'size-groups.c',
   'statistics.c',
-  'style-prop-list.c',
   'treewalk.c',
   'visual.c',
   'window.c',
+  'strv-editor.c',
+  'gtkstackcombo.c'
 )

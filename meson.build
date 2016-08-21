@@ -7,16 +7,21 @@ project('gtk+-3.0', 'c',
         ],
         license: 'LGPLv2.1+')
 
+gnome = import('gnome')
+
+add_global_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
+
 gtk_version = meson.project_version().split('.')
 gtk_major_version = gtk_version[0]
 gtk_minor_version = gtk_version[1]
 gtk_micro_version = gtk_version[2]
 
 gtk_binary_age = 100 * gtk_minor_version.to_int() + gtk_micro_version.to_int()
-gtk_api_version = '@0@'.0'.format(gtk_major_version)
+gtk_api_version = '@0@.0'.format(gtk_major_version)
 
 cc = meson.get_compiler('c')
 cdata = configuration_data()
+cdata.set('PACKAGE_VERSION', '"'+meson.project_version()+'"')
 check_headers = [
   ['HAVE_CRT_EXTERNS_H', 'crt/externs.h'],
   ['HAVE_DLFCN_H', 'dlfcn.h'],
@@ -36,6 +41,7 @@ check_headers = [
   ['HAVE_SYS_TIME_H', 'sys/time.h'],
   ['HAVE_SYS_TYPES_H', 'sys/types.h'],
   ['HAVE_UNISTD_H', 'unistd.h'],
+  ['HAVE_LINUX_MEMFD_H', 'linux/memfd.h']
 ]
 
 foreach h : check_headers
@@ -73,6 +79,8 @@ check_functions = [
 # check token HAVE_RANDR15
   ['HAVE_ROUND', 'round', '#include<math.h>'],
   ['HAVE_RINT', 'rint', '#include<math.h>'],
+  ['HAVE_LOG2', 'log2', '#include<math.h>'],
+  ['HAVE_EXP2', 'exp2', '#include<math.h>'],
 # check token HAVE_SINCOS
 # check token HAVE_SOCKADDR_UN_SUN_LEN
 # check token HAVE_SOLARIS_XINERAMA
@@ -123,7 +131,13 @@ atk_dep = dependency('atk')
 atkbridge_dep = dependency('atk-bridge-2.0')
 gmodule_dep = dependency('gmodule-2.0')
 mlib = cc.find_library('m')
+shmlib = cc.find_library('rt')
 fontconfig_dep = dependency('fontconfig')
+xkbdep = dependency('xkbcommon')
+wlclientdep = dependency('wayland-client')
+wlprotocolsdep = dependency('wayland-protocols')
+wlcursordep = dependency('wayland-cursor')
+wlegldep = dependency('wayland-egl')
 
 if giounix_dep.found()
   cdata.set('HAVE_GIO_UNIX', 1)
@@ -131,8 +145,6 @@ endif
 
 configure_file(input: 'config.h.meson', output: 'config.h', configuration: cdata)
 
-gnome = import('gnome')
-
 subdir('gdk')
 subdir('gtk')
-subdir('examples')
+subdir('demos')
