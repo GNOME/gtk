@@ -249,9 +249,9 @@ gdkmarshal_c = custom_target('gdkmarshal_c',
 
 
 cdata = configuration_data()
-cdata.set('GDK_WINDOWING_X11', 1)
-cdata.set('GDK_WINDOWING_WAYLAND', 1)
-cdata.set('GDK_WINDOWING_BROADWAY', 1)
+if x11_enabled      cdata.set('GDK_WINDOWING_X11', 1)      endif
+if wayland_enabled  cdata.set('GDK_WINDOWING_WAYLAND', 1)  endif
+if broadway_enabled cdata.set('GDK_WINDOWING_BROADWAY', 1) endif
 gdkconfig = configure_file(input : 'gdkconfig.h.meson',
   output : 'gdkconfig.h',
   configuration : cdata
@@ -260,63 +260,68 @@ gdkconfig = configure_file(input : 'gdkconfig.h.meson',
 xinc = include_directories('x11')
 wlinc = include_directories('wayland')
 
+
+gdk_deps = [
+  mlib,
+  pixbuf_dep,
+  cairo_dep,
+  pango_dep,
+  cairogobj_dep,
+  glib_dep,
+  epoxy_dep,
+  fontconfig_dep,
+  giounix_dep,
+  pangocairo_dep
+]
+
+gdk_sources = [
+  gdkconfig,
+  gdk_sources,
+  deprecated_gdk_sources,
+  gdkenum_c, gdkenum_h,
+  gdkmarshal_c, gdkmarshal_h,
+  gdkresources
+]
+
+if x11_enabled
+  gdk_deps += [
+    xrender_dep,
+    xi_dep,
+    xext_dep,
+    x11_dep,
+  ]
+  gdk_sources += [
+    gdk_x_sources,
+    gdk_x_private_sources
+  ]
+endif
+
+if wayland_enabled
+  gdk_deps += [
+    shmlib,
+    xkbdep,
+    wlclientdep,
+    wlprotocolsdep,
+    wlcursordep,
+    wlegldep
+  ]
+  gdk_sources += [
+    gdk_wayland_sources,
+    gdk_wayland_private_sources
+  ]
+endif
+
+
+
 libgdk_dep = declare_dependency(
   sources: ['gdk.h'],
   include_directories: [confinc, xinc, wlinc],
-  dependencies: [
-    mlib,
-    shmlib,
-    xrender_dep,
-    xi_dep,
-    xext_dep,
-    x11_dep,
-    fontconfig_dep,
-    epoxy_dep,
-    giounix_dep,
-    glib_dep,
-    pangocairo_dep,
-    cairogobj_dep,
-    pango_dep,
-    cairo_dep,
-    pixbuf_dep,
-    xkbdep,
-    wlclientdep,
-    wlprotocolsdep,
-    wlcursordep,
-    wlegldep
-  ]
+  dependencies: gdk_deps,
 )
 
 libgdk = shared_library('gdk',
-  gdkconfig,
-  gdk_sources, deprecated_gdk_sources,
-  gdkenum_c, gdkenum_h,
-  gdkmarshal_h, gdkmarshal_c, gdkresources,
-  gdk_x_sources, gdk_x_private_sources,
-  gdk_wayland_sources, gdk_wayland_private_sources,
-  gdk_broadway_sources, gdk_broadway_private_sources,
+  gdk_sources,
   c_args: ['-DHAVE_CONFIG_H', '-DGDK_COMPILATION'],
   include_directories: [confinc, xinc, wlinc],
-  dependencies: [
-    mlib,
-    shmlib,
-    xrender_dep,
-    xi_dep,
-    xext_dep,
-    x11_dep,
-    fontconfig_dep,
-    epoxy_dep,
-    giounix_dep,
-    glib_dep,
-    pangocairo_dep,
-    cairogobj_dep,
-    pango_dep,
-    cairo_dep,
-    pixbuf_dep,
-    xkbdep,
-    wlclientdep,
-    wlprotocolsdep,
-    wlcursordep,
-    wlegldep
-  ]
+  dependencies: gdk_deps,
 )
