@@ -407,67 +407,75 @@ gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated', 'gtkdbusinterfaces.xml',
                                    interface_prefix: 'org.Gtk.',
                                    namespace: '_Gtk')
 
+
+gtk_sources = [
+  gtk_sources,
+  gtk_dbus_src,
+  gtk_unix_sources,
+  gtk_deprecated_c_sources,
+  dnd_sources,
+  inspector_sources,
+  a11y_sources,
+]
+
+gtk_deps = [
+    gmodule_dep,
+    giounix_dep,
+    glib_dep,
+    atkbridge_dep,
+    pangocairo_dep,
+    pangoft_dep,
+    pango_dep,
+    cairogobj_dep,
+    cairo_dep,
+    fontconfig_dep,
+    pixbuf_dep,
+    atk_dep,
+    epoxy_dep,
+    mlib,
+    libgdk_dep
+]
+
+if x11_enabled
+  gtk_sources += [
+    gtk_x11_sources,
+    gtk_use_wayland_or_x11_c_sources
+  ]
+  gtk_deps += [
+    xi_dep,
+    x11_dep,
+  ]
+endif
+
+if wayland_enabled
+  gtk_sources += [
+    gtk_wayland_sources,
+    gtk_use_wayland_or_x11_c_sources
+  ]
+endif
+
+
 libgtk_dep = declare_dependency(
   link_with: libgdk,
   sources: [
     'gtk.h'
   ],
-  dependencies: [
-    gmodule_dep,
-    giounix_dep,
-    glib_dep,
-    atkbridge_dep,
-    pangocairo_dep,
-    pangoft_dep,
-    pango_dep,
-    cairogobj_dep,
-    cairo_dep,
-    fontconfig_dep,
-    pixbuf_dep,
-    atk_dep,
-    epoxy_dep,
-    mlib,
-    xi_dep,
-    x11_dep,
-    libgdk_dep
-  ],
+  dependencies: gtk_deps,
   include_directories: confinc
 )
 
 
 libgtk = shared_library('gtk',
-  gtk_sources, gtk_dbus_src, gtk_unix_sources,
-  gtk_deprecated_c_sources, dnd_sources,
-  inspector_sources, a11y_sources,
-  gtk_x11_sources, gtk_wayland_sources,
-  gtk_use_wayland_or_x11_c_sources,
+  gtk_sources,
   c_args: [
     '-DGTK_COMPILATION', '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-    '-DGTK_BINARY_VERSION="3"', '-DGTK_HOST="bob"', '-DGTK_DATADIR="dir"',
-    '-DGTK_LIBDIR="libdir"', '-DGTK_SYSCONFDIR="sysconfdir"',
-    '-DGTK_LOCALEDIR="localedir"', '-DGTK_DATA_PREFIX="dataprefix"',
+    '-DGTK_BINARY_VERSION="3"', '-DGTK_HOST="bob"',
+    '-DGTK_SYSCONFDIR="sysconfdir"',
+    '-DGTK_DATA_PREFIX="dataprefix"',
     '-DGTK_PRINT_BACKENDS="null"', '-DGTK_VERSION="3"',
     '-DX11_DATA_PREFIX="/share/x11/locale"'
   ],
   include_directories: [ confinc, gdkinc ],
-  dependencies: [
-    gmodule_dep,
-    giounix_dep,
-    glib_dep,
-    atkbridge_dep,
-    pangocairo_dep,
-    pangoft_dep,
-    pango_dep,
-    cairogobj_dep,
-    cairo_dep,
-    fontconfig_dep,
-    pixbuf_dep,
-    atk_dep,
-    epoxy_dep,
-    mlib,
-    xi_dep,
-    x11_dep,
-    libgdk_dep
-  ],
+  dependencies: gtk_deps,
   link_with: libgdk
 )
