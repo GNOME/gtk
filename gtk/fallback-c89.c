@@ -18,7 +18,8 @@
  */
 
 #include <math.h>
- 
+#include "config.h"
+
 /* Workaround for round() for non-GCC/non-C99 compilers */
 #ifndef HAVE_ROUND
 static inline double
