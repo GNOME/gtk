@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-18 12:15+0000\n"
-"PO-Revision-Date: 2016-08-19 22:41+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2016-08-20 14:43+0000\n"
+"PO-Revision-Date: 2016-08-20 20:52+0200\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -136,10 +136,8 @@ msgid "Tool"
 msgstr "Werkzeug"
 
 #: gdk/gdkdevice.c:329
-#, fuzzy
-#| msgid "The cell which is currently being edited"
 msgid "The tool that is currently used with this device"
-msgstr "Die momentan bearbeitete Zelle"
+msgstr "Das Werkzeug, das derzeit mit diesem Gerät verwendet wird"
 
 #: gdk/gdkdevicemanager.c:186
 msgid "Display for the device manager"
@@ -4108,7 +4106,7 @@ msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
 msgstr ""
-"Die minimale Menge von Unterelementen, für die aufeinander folgend in der "
+"Die Höchstmenge von Unterelementen, für die aufeinander folgend in der "
 "angegebenen Ausrichtung Platz angefordert wird."
 
 #: gtk/gtkflowbox.c:3892
@@ -5033,7 +5031,6 @@ msgstr ""
 "Symbole reserviert"
 
 #: gtk/gtkmenu.c:777
-#, fuzzy
 msgid "Anchor hints"
 msgstr "Platzierungshinweise"
 
@@ -5066,10 +5063,8 @@ msgid "Rect anchor vertical offset"
 msgstr "Vertikaler Versatz"
 
 #: gtk/gtkmenu.c:860
-#, fuzzy
-#| msgid "Type hint"
 msgid "Menu type hint"
-msgstr "Typ-Hinweis"
+msgstr "Menütyp-Hinweis"
 
 #: gtk/gtkmenu.c:861
 msgid "Menu window type hint"
@@ -6483,7 +6478,7 @@ msgstr "Limit"
 
 #: gtk/gtkrecentchooser.c:237
 msgid "The maximum number of items to be displayed"
-msgstr "Die Anzahl der anzuzeigenden Einträge"
+msgstr "Die maximale Anzahl der anzuzeigenden Einträge"
 
 #: gtk/gtkrecentchooser.c:250
 msgid "Sort Type"
@@ -6784,26 +6779,20 @@ msgstr "Überlagerungs-Rollmodus"
 
 #: gtk/gtkscrolledwindow.c:723
 msgid "Maximum Content Width"
-msgstr "Minimale Breite des Inhalts"
+msgstr "Maximale Breite des Inhalts"
 
 #: gtk/gtkscrolledwindow.c:724
-#, fuzzy
-#| msgid ""
-#| "The minimum width that the scrolled window will allocate to its content"
 msgid "The maximum width that the scrolled window will allocate to its content"
-msgstr "Die minimale Breite, die das rollbare Fenster seinem Inhalt zuweist"
+msgstr "Die maximale Breite, die das rollbare Fenster seinem Inhalt zuweist"
 
 #: gtk/gtkscrolledwindow.c:737
 msgid "Maximum Content Height"
-msgstr "Minimale Höhe des Inhalts"
+msgstr "Maximale Höhe des Inhalts"
 
 #: gtk/gtkscrolledwindow.c:738
-#, fuzzy
-#| msgid ""
-#| "The minimum height that the scrolled window will allocate to its content"
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
-msgstr "Die minimale Höhe, die das rollbare Fenster seinem Inhalt zuweist"
+msgstr "Die maximale Höhe, die das rollbare Fenster seinem Inhalt zuweist"
 
 #: gtk/gtksearchbar.c:405
 msgid "Search Mode Enabled"
@@ -8697,24 +8686,22 @@ msgstr "Umbruchbreite zum Anordnen der Objekte in einem Gitter"
 
 #: gtk/gtktreemodelfilter.c:532
 #, fuzzy
-#| msgid "The selection mode"
 msgid "The child model"
-msgstr "Der Markierungsmodus"
+msgstr "Das Unterelement-Modell"
 
+# Hier sind Ideen gefragt …
 #: gtk/gtktreemodelfilter.c:533
 #, fuzzy
-#| msgid "The model for the tree view"
 msgid "The model for the filtermodel to filter"
-msgstr "Das Modell für die Baumansicht"
+msgstr "Das Modell für das zu filternde Filtermodell"
 
 #: gtk/gtktreemodelfilter.c:540
-#, fuzzy
 msgid "The virtual root"
-msgstr "Virtueller Wurzelordner der Dateiverwaltung"
+msgstr "Virtueller Wurzelordner"
 
 #: gtk/gtktreemodelfilter.c:541
 msgid "The virtual root (relative to the child model) for this filtermodel"
-msgstr ""
+msgstr "Virtueller Wurzelordner (relativ zum ?) für dieses Filtermodell"
 
 #: gtk/gtktreemodelsort.c:484
 msgid "TreeModelSort Model"
