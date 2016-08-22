@@ -353,7 +353,7 @@ dump_poll_result (GPollFD *ufds,
 	  if (ufds[i].revents & G_IO_IN)
             g_string_append (s, " in");
 	  if (ufds[i].revents & G_IO_OUT)
-	    g_string_appendi (s, " out");
+	    g_string_append (s, " out");
 	  if (ufds[i].revents & G_IO_PRI)
 	    g_string_append (s, " pri");
 	  g_string_append (s, "\n");
