@@ -993,6 +993,20 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
  * @binding_set. When the binding is activated, @signal_name will be
  * emitted on the target widget, with @n_args @Varargs used as
  * arguments.
+ *
+ * Each argument to the signal must be passed as a pair of varargs: the
+ * #GType of the argument, followed by the argument value (which must
+ * be of the given type). There must be @n_args pairs in total.
+ *
+ * ## Adding a Key Binding
+ *
+ * |[<!-- language="C" -->
+ * gtk_binding_entry_add_signal (binding_set, keyval, modmask,
+ *                               "move-cursor", 3,
+ *                               G_TYPE_ENUM, step,
+ *                               G_TYPE_INT, count,
+ *                               G_TYPE_BOOLEAN, FALSE);
+ * ]|
  */
 void
 gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
