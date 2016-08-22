@@ -24,6 +24,9 @@ wayland_enabled  = get_option('enable-wayland-backend')
 broadway_enabled = get_option('enable-broadway-backend')
 
 
+mkmarshal = find_program('build_marshal.py')
+glib_marshal = find_program('glib-genmarshal')
+
 cc = meson.get_compiler('c')
 cdata = configuration_data()
 cdata.set('PACKAGE_VERSION', '"'+meson.project_version()+'"')
@@ -156,4 +159,5 @@ configure_file(input: 'config.h.meson', output: 'config.h', configuration: cdata
 subdir('gdk')
 subdir('gtk')
 subdir('demos')
+subdir('tests')
 subdir('testsuite')
