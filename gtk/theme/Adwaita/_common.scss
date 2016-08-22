@@ -4243,8 +4243,8 @@ cursor-handle {
 .context-menu { font: initial; } // Decouple the font of context menus from their entry/textview
 
 button.circular { // FIXME: aggregate to buttons
-  border-radius: 20px;
-  -gtk-outline-radius: 20px;
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
 
   label { padding: 0; }
 }

@@ -4563,8 +4563,8 @@ cursor-handle {
   font: initial; }
 
 button.circular {
-  border-radius: 20px;
-  -gtk-outline-radius: 20px; }
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px; }
   button.circular label {
     padding: 0; }
 
