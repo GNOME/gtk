@@ -3,8 +3,6 @@ widgetfactory_sources = [
   'widget-factory.c'
 ]
 
-
-
 widgetfactory_resources = gnome.compile_resources(
   'widgetfactory_resources',
   'widget-factory.gresource.xml',
@@ -16,7 +14,6 @@ widget_factory = executable(
   widgetfactory_sources,
   widgetfactory_resources,
   dependencies: libgtk_dep,
-  link_with: libgtk,
   include_directories : confinc,
   gui_app: true
 )

@@ -9,7 +9,6 @@ test_style = executable(
   'test-css-style',
   'test-css-style.c',
   cssresources,
-  dependencies: libgtk_dep, 
-  link_with: libgtk
+  dependencies: libgtk_dep,
 )
 test('css/style/test-style', test_style)

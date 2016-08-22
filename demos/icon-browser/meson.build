@@ -16,7 +16,6 @@ iconbrowser = executable(
   iconbrowser_sources,
   iconbrowser_resources,
   dependencies: libgtk_dep,
-  link_with: libgtk,
   include_directories : confinc,
   gui_app: true
 )

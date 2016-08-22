@@ -231,7 +231,6 @@ gtk_sources = [
   'gtklockbutton.c',
   'gtkmain.c',
   'gtkmagnifier.c',
-  'gtkmarshalers.c',
   'gtkmenu.c',
   'gtkmenubar.c',
   'gtkmenubutton.c',
@@ -415,6 +414,17 @@ gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated', 'gtkdbusinterfaces.xml',
                                    interface_prefix: 'org.Gtk.',
                                    namespace: '_Gtk')
 
+gtkmarshal_h = custom_target('gtkmarshal_h',
+  output  : 'gtkmarshalers.h',
+  input   : 'gtkmarshalers.list',
+  command : [mkmarshal, glib_marshal, '_gtk_marshal', '@INPUT@', '@OUTPUT@']
+)
+
+gtkmarshal_c = custom_target('gtkmarshal_c',
+  output  : 'gtkmarshalers.c',
+  input   : 'gtkmarshalers.list',
+  command : [mkmarshal, glib_marshal, '_gtk_marshal', '@INPUT@', '@OUTPUT@']
+)
 
 gtk_sources = [
   gtk_sources,
@@ -424,7 +434,9 @@ gtk_sources = [
   dnd_sources,
   inspector_sources,
   a11y_sources,
-  gtkresources
+  gtkresources,
+  gtkmarshal_c,
+  gtkmarshal_h,
 ]
 
 gtk_deps = [
@@ -463,17 +475,6 @@ if wayland_enabled
   ]
 endif
 
-
-libgtk_dep = declare_dependency(
-  link_with: libgdk,
-  sources: [
-    'gtk.h'
-  ],
-  dependencies: gtk_deps,
-  include_directories: confinc
-)
-
-
 libgtk = shared_library('gtk',
   gtk_sources,
   c_args: [
@@ -485,6 +486,17 @@ libgtk = shared_library('gtk',
     '-DX11_DATA_PREFIX="/share/x11/locale"'
   ],
   include_directories: [ confinc, gdkinc ],
-  dependencies: gtk_deps,
+  dependencies: [gtk_deps, libgdk_dep],
   link_with: libgdk
 )
+
+libgtk_dep = declare_dependency(
+  sources: [
+    'gtk.h'
+  ],
+  dependencies: gtk_deps,
+  link_with: [libgdk, libgtk],
+  include_directories: confinc
+)
+
+

@@ -7,15 +7,19 @@
 
 import sys, os, shutil, subprocess
 
-# HORRIBLE, use current_source_dir() as an argument instead.
-h_array = ['--prefix=_gdk_marshal', '--header']
-
-c_array = ['--prefix=_gdk_marshal', '--body']
-
-# [genmarshal, infile, outfile]
+# [genmarshal, prefix, infile, outfile]
 cmd = [sys.argv[1]]
-ifilename = sys.argv[2]
-ofilename = sys.argv[3]
+prefix = sys.argv[2]
+ifilename = sys.argv[3]
+ofilename = sys.argv[4]
+
+# HORRIBLE, use current_source_dir() as an argument instead.
+h_array = ['--prefix=' + prefix, '--header', '--valist-marshallers']
+
+c_array = ['--prefix=' + prefix, '--body', '--valist-marshallers']
+
+
+
 
 if ofilename.endswith('.h'):
     arg_array = h_array
