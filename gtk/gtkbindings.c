@@ -47,6 +47,12 @@
  * with high key  binding configurability which requires no application
  * or toolkit side changes.
  *
+ * In order for bindings to work in a custom widget implementation, the
+ * widget’s #GtkWidget:can-focus and #GtkWidget:has-focus properties
+ * must both be true. For example, by calling gtk_widget_set_can_focus()
+ * in the widget’s initialisation function; and by calling
+ * gtk_widget_grab_focus() when the widget is clicked.
+ *
  * # Installing a key binding
  *
  * A CSS file binding consists of a “binding-set” definition and a match
