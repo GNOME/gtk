@@ -223,36 +223,36 @@ gdk_headers = gdk_public_h_sources + deprecated_h_sources
 mkenum = find_program('build_enum.py')
 perl = find_program('perl')
 glib_mkenums = find_program('glib-mkenums')
-mkmarshal = find_program('build_marshal.py')
-glib_marshal = find_program('glib-genmarshal')
+
 
 gdkenum_h = custom_target('gdkenum_h',
-  output : 'gdkenumtypes.h',
-  input : gdk_headers,
+  output  : 'gdkenumtypes.h',
+  input   : gdk_headers,
   command : [mkenum, perl, glib_mkenums, '@OUTPUT@', '@INPUT@'])
 
 gdkenum_c = custom_target('gdkenum_c',
-  output : 'gdkenumtypes.c',
-  input : gdk_headers,
+  output  : 'gdkenumtypes.c',
+  input   : gdk_headers,
   depends : [gdkenum_h],
   command : [mkenum, perl, glib_mkenums, '@OUTPUT@', '@INPUT@'])
 
 gdkmarshal_h = custom_target('gdkmarshal_h',
-  output : 'gdkmarshall.h',
-  input : 'gdkmarshalers.list',
-  command : [mkmarshal, glib_marshal, '@INPUT@', '@OUTPUT@'])
+  output  : 'gdkmarshall.h',
+  input   : 'gdkmarshalers.list',
+  command : [mkmarshal, glib_marshal, '_gdk_marshal', '@INPUT@', '@OUTPUT@'])
 
 gdkmarshal_c = custom_target('gdkmarshal_c',
-  output : 'gdkmarshall.c',
-  input : 'gdkmarshalers.list',
-  command : [mkmarshal, glib_marshal, '@INPUT@', '@OUTPUT@'])
+  output  : 'gdkmarshall.c',
+  input   : 'gdkmarshalers.list',
+  command : [mkmarshal, glib_marshal, '_gdk_marshal', '@INPUT@', '@OUTPUT@'])
 
 
 cdata = configuration_data()
 if x11_enabled      cdata.set('GDK_WINDOWING_X11', 1)      endif
 if wayland_enabled  cdata.set('GDK_WINDOWING_WAYLAND', 1)  endif
 if broadway_enabled cdata.set('GDK_WINDOWING_BROADWAY', 1) endif
-gdkconfig = configure_file(input : 'gdkconfig.h.meson',
+gdkconfig = configure_file(
+  input  : 'gdkconfig.h.meson',
   output : 'gdkconfig.h',
   configuration : cdata
 )
@@ -312,16 +312,18 @@ if wayland_enabled
 endif
 
 
-
-libgdk_dep = declare_dependency(
-  sources: ['gdk.h'],
-  include_directories: [confinc, xinc, wlinc],
-  dependencies: gdk_deps,
-)
-
 libgdk = shared_library('gdk',
   gdk_sources,
   c_args: ['-DHAVE_CONFIG_H', '-DGDK_COMPILATION'],
   include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps,
+)
+
+
+libgdk_dep = declare_dependency(
+  sources: ['gdk.h', gdkenum_h],
+  depends: gdk_sources,
+  include_directories: [confinc, xinc, wlinc],
+  dependencies: gdk_deps,
+  link_with: libgdk
 )
