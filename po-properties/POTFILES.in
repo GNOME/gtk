@@ -207,6 +207,7 @@ gtk/gtknativedialog.c
 gtk/gtknotebook.c
 gtk/gtkorientable.c
 gtk/gtkoverlay.c
+gtk/gtkpadcontroller.c
 gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
