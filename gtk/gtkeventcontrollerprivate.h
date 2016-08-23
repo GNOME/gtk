@@ -37,6 +37,9 @@ struct _GtkEventControllerClass
 
   /*<private>*/
 
+  /* Tells whether the event is filtered out, %TRUE makes
+   * the event unseen by the handle_event vfunc.
+   */
   gboolean (* filter_event) (GtkEventController *controller,
                              const GdkEvent     *event);
   gpointer padding[10];
