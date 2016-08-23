@@ -13,7 +13,6 @@ prefix = sys.argv[2]
 ifilename = sys.argv[3]
 ofilename = sys.argv[4]
 
-# HORRIBLE, use current_source_dir() as an argument instead.
 h_array = ['--prefix=' + prefix, '--header', '--valist-marshallers']
 
 c_array = ['--prefix=' + prefix, '--body', '--valist-marshallers']

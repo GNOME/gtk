@@ -1,0 +1,269 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gresources>
+  <gresource prefix='/org/gtk/libgtk'>
+    <file alias='theme/Raleigh/gtk.css'>theme/Raleigh/gtk-default.css</file>
+    <file>theme/Adwaita/gtk.css</file>
+    <file>theme/Adwaita/gtk-dark.css</file>
+    <file>theme/Adwaita/gtk-contained.css</file>
+    <file>theme/Adwaita/gtk-contained-dark.css</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/bullet-symbolic.symbolic.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-active-selectionmode@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-active-selectionmode.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-backdrop-selectionmode@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-backdrop-selectionmode.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-checked-active-selectionmode@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-checked-active-selectionmode.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-checked-backdrop-selectionmode@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-checked-backdrop-selectionmode.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-checked-hover-selectionmode@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-checked-hover-selectionmode.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-checked-selectionmode@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-checked-selectionmode.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-hover-selectionmode@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-hover-selectionmode.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-selectionmode@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/checkbox-selectionmode.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/check-symbolic.symbolic.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/dash-symbolic.symbolic.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-active@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-active-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-active-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-active.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-backdrop@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-backdrop-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-backdrop-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-backdrop-insensitive@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-backdrop-insensitive-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-backdrop-insensitive-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-backdrop-insensitive.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-backdrop.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-hover@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-hover-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-hover-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-hover.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-insensitive@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-insensitive-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-insensitive-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above-insensitive.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-above.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-active@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-active-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-active-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-active.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-backdrop@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-backdrop-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-backdrop-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-backdrop-insensitive@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-backdrop-insensitive-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-backdrop-insensitive-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-backdrop-insensitive.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-backdrop.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-hover@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-hover-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-hover-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-hover.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-insensitive@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-insensitive-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-insensitive-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below-insensitive.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-horz-scale-has-marks-below.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-active@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-active-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-active-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-active.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-backdrop@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-backdrop-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-backdrop-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-backdrop-insensitive@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-backdrop-insensitive-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-backdrop-insensitive-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-backdrop-insensitive.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-backdrop.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-hover@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-hover-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-hover-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-hover.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-insensitive@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-insensitive-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-insensitive-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above-insensitive.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-above.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-active@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-active-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-active-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-active.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-backdrop@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-backdrop-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-backdrop-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-backdrop-insensitive@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-backdrop-insensitive-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-backdrop-insensitive-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-backdrop-insensitive.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-backdrop.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-hover@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-hover-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-hover-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-hover.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-insensitive@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-insensitive-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-insensitive-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below-insensitive.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/slider-vert-scale-has-marks-below.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-active@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-active-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-active-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-active.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-hover@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-hover-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-hover-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end-hover.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-end.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-active@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-active-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-active-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-active.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-hover@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-hover-dark@2.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-hover-dark.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start-hover.png</file>
+    <file preprocess='to-pixdata'>theme/Adwaita/assets/text-select-start.png</file>
+    <file>theme/Adwaita/assets/bullet-symbolic.svg</file>
+    <file>theme/Adwaita/assets/check-symbolic.svg</file>
+    <file>theme/Adwaita/assets/dash-symbolic.svg</file>
+    <file>theme/HighContrast/gtk.css</file>
+    <file alias='theme/HighContrastInverse/gtk.css'>theme/HighContrast/gtk-inverse.css</file>
+    <file>theme/HighContrast/gtk-contained.css</file>
+    <file>theme/HighContrast/gtk-contained-inverse.css</file>
+    <file preprocess='to-pixdata'>theme/HighContrast/assets/bullet-symbolic.symbolic.png</file>
+    <file preprocess='to-pixdata'>theme/HighContrast/assets/check-symbolic.symbolic.png</file>
+    <file preprocess='to-pixdata'>theme/HighContrast/assets/dash-symbolic.symbolic.png</file>
+    <file>theme/HighContrast/assets/bullet-symbolic.svg</file>
+    <file>theme/HighContrast/assets/check-symbolic.svg</file>
+    <file>theme/HighContrast/assets/dash-symbolic.svg</file>
+    <file>theme/win32/gtk-win32-base.css</file>
+    <file>theme/win32/gtk.css</file>
+    <file>cursor/dnd-ask.png</file>
+    <file>cursor/dnd-copy.png</file>
+    <file>cursor/dnd-link.png</file>
+    <file>cursor/dnd-move.png</file>
+    <file>cursor/dnd-none.png</file>
+    <file alias='icons/64x64/actions/gesture-pinch-symbolic.symbolic.png'>gesture/gesture-pinch-symbolic.symbolic.png</file>
+    <file alias='icons/64x64/actions/gesture-rotate-anticlockwise-symbolic.symbolic.png'>gesture/gesture-rotate-anticlockwise-symbolic.symbolic.png</file>
+    <file alias='icons/64x64/actions/gesture-rotate-clockwise-symbolic.symbolic.png'>gesture/gesture-rotate-clockwise-symbolic.symbolic.png</file>
+    <file alias='icons/64x64/actions/gesture-stretch-symbolic.symbolic.png'>gesture/gesture-stretch-symbolic.symbolic.png</file>
+    <file alias='icons/64x64/actions/gesture-two-finger-swipe-left-symbolic.symbolic.png'>gesture/gesture-two-finger-swipe-left-symbolic.symbolic.png</file>
+    <file alias='icons/64x64/actions/gesture-two-finger-swipe-right-symbolic.symbolic.png'>gesture/gesture-two-finger-swipe-right-symbolic.symbolic.png</file>
+    <file compressed='true'>ui/gtkaboutdialog.ui</file>
+    <file compressed='true'>ui/gtkactionbar.ui</file>
+    <file compressed='true'>ui/gtkappchooserdialog.ui</file>
+    <file compressed='true'>ui/gtkappchooserwidget.ui</file>
+    <file compressed='true'>ui/gtkapplication-quartz.ui</file>
+    <file compressed='true'>ui/gtkassistant.ui</file>
+    <file compressed='true'>ui/gtkcolorchooserdialog.ui</file>
+    <file compressed='true'>ui/gtkcoloreditor.ui</file>
+    <file compressed='true'>ui/gtkcombobox.ui</file>
+    <file compressed='true'>ui/gtkdialog.ui</file>
+    <file compressed='true'>ui/gtkfilechooserbutton.ui</file>
+    <file compressed='true'>ui/gtkfilechooserdialog.ui</file>
+    <file compressed='true'>ui/gtkfilechooserwidget.ui</file>
+    <file compressed='true'>ui/gtkfontbutton.ui</file>
+    <file compressed='true'>ui/gtkfontchooserdialog.ui</file>
+    <file compressed='true'>ui/gtkfontchooserwidget.ui</file>
+    <file compressed='true'>ui/gtkinfobar.ui</file>
+    <file compressed='true'>ui/gtklockbutton.ui</file>
+    <file compressed='true'>ui/gtkmessagedialog.ui</file>
+    <file compressed='true'>ui/gtkpagesetupunixdialog.ui</file>
+    <file compressed='true'>ui/gtkpathbar.ui</file>
+    <file compressed='true'>ui/gtkplacesviewrow.ui</file>
+    <file compressed='true'>ui/gtkplacesview.ui</file>
+    <file compressed='true'>ui/gtkprintunixdialog.ui</file>
+    <file compressed='true'>ui/gtkrecentchooserdefault.ui</file>
+    <file compressed='true'>ui/gtkscalebutton.ui</file>
+    <file compressed='true'>ui/gtksearchbar.ui</file>
+    <file compressed='true'>ui/gtksidebarrow.ui</file>
+    <file compressed='true'>ui/gtkstatusbar.ui</file>
+    <file compressed='true'>ui/gtktooltipwindow.ui</file>
+    <file compressed='true'>ui/gtkvolumebutton.ui</file>
+    <file>icons/16x16/actions/gtk-caps-lock-warning.png</file>
+    <file>icons/16x16/actions/gtk-color-picker.png</file>
+    <file>icons/16x16/actions/gtk-connect.png</file>
+    <file>icons/16x16/actions/gtk-convert.png</file>
+    <file>icons/16x16/actions/gtk-disconnect.png</file>
+    <file>icons/16x16/actions/gtk-edit.png</file>
+    <file>icons/16x16/actions/gtk-index.png</file>
+    <file>icons/16x16/actions/gtk-orientation-landscape.png</file>
+    <file>icons/16x16/actions/gtk-orientation-portrait.png</file>
+    <file>icons/16x16/actions/gtk-orientation-reverse-landscape.png</file>
+    <file>icons/16x16/actions/gtk-orientation-reverse-portrait.png</file>
+    <file>icons/16x16/actions/gtk-page-setup.png</file>
+    <file>icons/16x16/actions/gtk-preferences.png</file>
+    <file>icons/16x16/actions/gtk-select-color.png</file>
+    <file>icons/16x16/actions/gtk-select-font.png</file>
+    <file>icons/16x16/actions/gtk-undelete.png</file>
+    <file>icons/16x16/actions/gtk-undelete-rtl.png</file>
+    <file>icons/16x16/status/image-missing.png</file>
+    <file>icons/22x22/actions/gtk-apply.png</file>
+    <file>icons/22x22/actions/gtk-cancel.png</file>
+    <file>icons/22x22/actions/gtk-no.png</file>
+    <file>icons/22x22/actions/gtk-ok.png</file>
+    <file>icons/22x22/actions/gtk-yes.png</file>
+    <file>icons/24x24/actions/gtk-caps-lock-warning.png</file>
+    <file>icons/24x24/actions/gtk-color-picker.png</file>
+    <file>icons/24x24/actions/gtk-connect.png</file>
+    <file>icons/24x24/actions/gtk-convert.png</file>
+    <file>icons/24x24/actions/gtk-disconnect.png</file>
+    <file>icons/24x24/actions/gtk-edit.png</file>
+    <file>icons/24x24/actions/gtk-index.png</file>
+    <file>icons/24x24/actions/gtk-orientation-landscape.png</file>
+    <file>icons/24x24/actions/gtk-orientation-portrait.png</file>
+    <file>icons/24x24/actions/gtk-orientation-reverse-landscape.png</file>
+    <file>icons/24x24/actions/gtk-orientation-reverse-portrait.png</file>
+    <file>icons/24x24/actions/gtk-page-setup.png</file>
+    <file>icons/24x24/actions/gtk-preferences.png</file>
+    <file>icons/24x24/actions/gtk-select-color.png</file>
+    <file>icons/24x24/actions/gtk-select-font.png</file>
+    <file>icons/24x24/actions/gtk-undelete.png</file>
+    <file>icons/24x24/actions/gtk-undelete-rtl.png</file>
+    <file>icons/24x24/status/image-missing.png</file>
+    <file>icons/32x32/actions/gtk-dnd-multiple.png</file>
+    <file>icons/32x32/actions/gtk-dnd.png</file>
+    <file>icons/32x32/status/image-missing.png</file>
+    <file>icons/48x48/status/image-missing.png</file>
+    <file compressed='true'>inspector/actions.ui</file>
+    <file compressed='true'>inspector/css-editor.ui</file>
+    <file compressed='true'>inspector/css-node-tree.ui</file>
+    <file compressed='true'>inspector/data-list.ui</file>
+    <file compressed='true'>inspector/general.ui</file>
+    <file compressed='true'>inspector/magnifier.ui</file>
+    <file compressed='true'>inspector/menu.ui</file>
+    <file compressed='true'>inspector/misc-info.ui</file>
+    <file compressed='true'>inspector/object-hierarchy.ui</file>
+    <file compressed='true'>inspector/object-tree.ui</file>
+    <file compressed='true'>inspector/prop-list.ui</file>
+    <file compressed='true'>inspector/resource-list.ui</file>
+    <file compressed='true'>inspector/selector.ui</file>
+    <file compressed='true'>inspector/signals-list.ui</file>
+    <file compressed='true'>inspector/statistics.ui</file>
+    <file compressed='true'>inspector/visual.ui</file>
+    <file compressed='true'>inspector/window.ui</file>
+    <file>inspector/logo.png</file>
+  </gresource>
+</gresources>

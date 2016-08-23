@@ -251,6 +251,7 @@ gtk_sources = [
   'gtkoffscreenwindow.c',
   'gtkorientable.c',
   'gtkoverlay.c',
+  'gtkpadcontroller.c',
   'gtkpagesetup.c',
   'gtkpaned.c',
   'gtkpango.c',
@@ -265,7 +266,6 @@ gtk_sources = [
   'gtkprintsettings.c',
   'gtkprintutils.c',
   'gtkprivate.c',
-  'gtkprivatetypebuiltins.c',
   'gtkprogressbar.c',
   'gtkpixelcache.c',
   'gtkpopover.c',
@@ -356,7 +356,6 @@ gtk_sources = [
   'gtktreestore.c',
   'gtktreeview.c',
   'gtktreeviewcolumn.c',
-  'gtktypebuiltins.c',
   'gtkvolumebutton.c',
   'gtkviewport.c',
   'gtkwidget.c',
@@ -366,6 +365,284 @@ gtk_sources = [
   'gtkwin32theme.c',
   'fallback-c89.c'
 ]
+
+gtk_private_type_headers = [
+  'gtkcsstypesprivate.h',
+  'gtktexthandleprivate.h',
+]
+
+gtk_private_h_sources = files([
+  gtk_private_type_headers,
+  'gtkrecentchooserutils.h',
+  'gtkrbtree.h',
+])
+
+gtk_public_h_sources = files([
+  'gtk.h',
+  'gtk-autocleanups.h',
+  'gtkx.h',
+  'gtkx-autocleanups.h',
+  'gtk-a11y.h',
+  'gtkaboutdialog.h',
+  'gtkaccelgroup.h',
+  'gtkaccellabel.h',
+  'gtkaccelmap.h',
+  'gtkaccessible.h',
+  'gtkactionable.h',
+  'gtkactionbar.h',
+  'gtkadjustment.h',
+  'gtkappchooser.h',
+  'gtkappchooserbutton.h',
+  'gtkappchooserdialog.h',
+  'gtkappchooserwidget.h',
+  'gtkapplication.h',
+  'gtkapplicationwindow.h',
+  'gtkaspectframe.h',
+  'gtkassistant.h',
+  'gtkbbox.h',
+  'gtkbin.h',
+  'gtkbindings.h',
+  'gtkborder.h',
+  'gtkbox.h',
+  'gtkbuilder.h',
+  'gtkbuildable.h',
+  'gtkbutton.h',
+  'gtkcalendar.h',
+  'gtkcellarea.h',
+  'gtkcellareacontext.h',
+  'gtkcellareabox.h',
+  'gtkcelleditable.h',
+  'gtkcelllayout.h',
+  'gtkcellrenderer.h',
+  'gtkcellrendereraccel.h',
+  'gtkcellrenderercombo.h',
+  'gtkcellrendererpixbuf.h',
+  'gtkcellrendererprogress.h',
+  'gtkcellrendererspin.h',
+  'gtkcellrendererspinner.h',
+  'gtkcellrenderertext.h',
+  'gtkcellrenderertoggle.h',
+  'gtkcellview.h',
+  'gtkcheckbutton.h',
+  'gtkcheckmenuitem.h',
+  'gtkclipboard.h',
+  'gtkcolorbutton.h',
+  'gtkcolorchooser.h',
+  'gtkcolorchooserwidget.h',
+  'gtkcolorchooserdialog.h',
+  'gtkcolorutils.h',
+  'gtkcombobox.h',
+  'gtkcomboboxtext.h',
+  'gtkcontainer.h',
+  'gtkcssprovider.h',
+  'gtkcsssection.h',
+  'gtkdebug.h',
+  'gtkdialog.h',
+  'gtkdnd.h',
+  'gtkdragdest.h',
+  'gtkdragsource.h',
+  'gtkdrawingarea.h',
+  'gtkeditable.h',
+  'gtkentry.h',
+  'gtkentrybuffer.h',
+  'gtkentrycompletion.h',
+  'gtkenums.h',
+  'gtkeventbox.h',
+  'gtkeventcontroller.h',
+  'gtkexpander.h',
+  'gtkfilechooser.h',
+  'gtkfilechooserbutton.h',
+  'gtkfilechooserdialog.h',
+  'gtkfilechoosernative.h',
+  'gtkfilechooserwidget.h',
+  'gtkfilefilter.h',
+  'gtkfixed.h',
+  'gtkflowbox.h',
+  'gtkfontbutton.h',
+  'gtkfontchooser.h',
+  'gtkfontchooserdialog.h',
+  'gtkfontchooserwidget.h',
+  'gtkframe.h',
+  'gtkgesture.h',
+  'gtkgesturedrag.h',
+  'gtkgesturelongpress.h',
+  'gtkgesturemultipress.h',
+  'gtkgesturepan.h',
+  'gtkgesturerotate.h',
+  'gtkgesturesingle.h',
+  'gtkgestureswipe.h',
+  'gtkgesturezoom.h',
+  'gtkglarea.h',
+  'gtkgrid.h',
+  'gtkheaderbar.h',
+  'gtkicontheme.h',
+  'gtkiconview.h',
+  'gtkimage.h',
+  'gtkimcontext.h',
+  'gtkimcontextinfo.h',
+  'gtkimcontextsimple.h',
+  'gtkimmodule.h',
+  'gtkimmulticontext.h',
+  'gtkinfobar.h',
+  'gtkinvisible.h',
+  'gtklabel.h',
+  'gtklayout.h',
+  'gtklevelbar.h',
+  'gtklinkbutton.h',
+  'gtklistbox.h',
+  'gtkliststore.h',
+  'gtklockbutton.h',
+  'gtkmain.h',
+  'gtkmenu.h',
+  'gtkmenubar.h',
+  'gtkmenubutton.h',
+  'gtkmenuitem.h',
+  'gtkmenushell.h',
+  'gtkmenutoolbutton.h',
+  'gtkmessagedialog.h',
+  'gtkmodelbutton.h',
+  'gtkmodules.h',
+  'gtkmountoperation.h',
+  'gtknativedialog.h',
+  'gtknotebook.h',
+  'gtkoffscreenwindow.h',
+  'gtkorientable.h',
+  'gtkoverlay.h',
+  'gtkpadcontroller.h',
+  'gtkpagesetup.h',
+  'gtkpaned.h',
+  'gtkpapersize.h',
+  'gtkplacessidebar.h',
+  'gtkplug.h',
+  'gtkpopover.h',
+  'gtkpopovermenu.h',
+  'gtkprintcontext.h',
+  'gtkprintoperation.h',
+  'gtkprintoperationpreview.h',
+  'gtkprintsettings.h',
+  'gtkprogressbar.h',
+  'gtkradiobutton.h',
+  'gtkradiomenuitem.h',
+  'gtkradiotoolbutton.h',
+  'gtkrange.h',
+  'gtkrecentchooser.h',
+  'gtkrecentchooserdialog.h',
+  'gtkrecentchoosermenu.h',
+  'gtkrecentchooserwidget.h',
+  'gtkrecentfilter.h',
+  'gtkrecentmanager.h',
+  'gtkrender.h',
+  'gtkrevealer.h',
+  'gtkscale.h',
+  'gtkscalebutton.h',
+  'gtkscrollable.h',
+  'gtkscrollbar.h',
+  'gtkscrolledwindow.h',
+  'gtksearchbar.h',
+  'gtksearchentry.h',
+  'gtkselection.h',
+  'gtkseparator.h',
+  'gtkseparatormenuitem.h',
+  'gtkseparatortoolitem.h',
+  'gtksettings.h',
+  'gtkshortcutlabel.h',
+  'gtkshortcutsgroup.h',
+  'gtkshortcutssection.h',
+  'gtkshortcutsshortcut.h',
+  'gtkshortcutswindow.h',
+  'gtkshow.h',
+  'gtkstacksidebar.h',
+  'gtksizegroup.h',
+  'gtksizerequest.h',
+  'gtksocket.h',
+  'gtkspinbutton.h',
+  'gtkspinner.h',
+  'gtkstack.h',
+  'gtkstackswitcher.h',
+  'gtkstatusbar.h',
+  'gtkstylecontext.h',
+  'gtkstyleprovider.h',
+  'gtkswitch.h',
+  'gtktestutils.h',
+  'gtktextattributes.h',
+  'gtktextbuffer.h',
+  'gtktextbufferrichtext.h',
+  'gtktextchild.h',
+  'gtktextdisplay.h',
+  'gtktextiter.h',
+  'gtktextmark.h',
+  'gtktexttag.h',
+  'gtktexttagtable.h',
+  'gtktextview.h',
+  'gtktogglebutton.h',
+  'gtktoggletoolbutton.h',
+  'gtktoolbar.h',
+  'gtktoolbutton.h',
+  'gtktoolitem.h',
+  'gtktoolitemgroup.h',
+  'gtktoolpalette.h',
+  'gtktoolshell.h',
+  'gtktooltip.h',
+  'gtktreednd.h',
+  'gtktreemodel.h',
+  'gtktreemodelfilter.h',
+  'gtktreemodelsort.h',
+  'gtktreeselection.h',
+  'gtktreesortable.h',
+  'gtktreestore.h',
+  'gtktreeview.h',
+  'gtktreeviewcolumn.h',
+  'gtktypes.h',
+  'gtkviewport.h',
+  'gtkvolumebutton.h',
+  'gtkwidget.h',
+  'gtkwidgetpath.h',
+  'gtkwindow.h',
+  'gtkwindowgroup.h',
+])
+
+gtk_deprecated_type_headers = ([
+  'deprecated/gtkactivatable.h',
+  'deprecated/gtkaction.h',
+  'deprecated/gtkactiongroup.h',
+  'deprecated/gtkalignment.h',
+  'deprecated/gtkarrow.h',
+  'deprecated/gtkcolorsel.h',
+  'deprecated/gtkcolorseldialog.h',
+  'deprecated/gtkfontsel.h',
+  'deprecated/gtkgradient.h',
+  'deprecated/gtkhandlebox.h',
+  'deprecated/gtkhbbox.h',
+  'deprecated/gtkhbox.h',
+  'deprecated/gtkhpaned.h',
+  'deprecated/gtkhscale.h',
+  'deprecated/gtkhscrollbar.h',
+  'deprecated/gtkhseparator.h',
+  'deprecated/gtkhsv.h',
+  'deprecated/gtkiconfactory.h',
+  'deprecated/gtkimagemenuitem.h',
+  'deprecated/gtkmisc.h',
+  'deprecated/gtknumerableicon.h',
+  'deprecated/gtkradioaction.h',
+  'deprecated/gtkrc.h',
+  'deprecated/gtkrecentaction.h',
+  'deprecated/gtkstatusicon.h',
+  'deprecated/gtkstock.h',
+  'deprecated/gtkstyle.h',
+  'deprecated/gtkstyleproperties.h',
+  'deprecated/gtksymboliccolor.h',
+  'deprecated/gtktable.h',
+  'deprecated/gtktearoffmenuitem.h',
+  'deprecated/gtkthemingengine.h',
+  'deprecated/gtktoggleaction.h',
+  'deprecated/gtkuimanager.h',
+  'deprecated/gtkvbbox.h',
+  'deprecated/gtkvbox.h',
+  'deprecated/gtkvscale.h',
+  'deprecated/gtkvscrollbar.h',
+  'deprecated/gtkvseparator.h',
+  'deprecated/gtkvpaned.h',
+])
 
 gtk_unix_sources = [
   'gtkcustompaperunixdialog.c',
@@ -388,7 +665,6 @@ gtkresources = gnome.compile_resources(
   c_name: '_gtk',
   extra_args: '--manual-register'
 )
-
 
 gtk_x11_sources = [
   'gtkplug.c',
@@ -414,16 +690,76 @@ gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated', 'gtkdbusinterfaces.xml',
                                    interface_prefix: 'org.Gtk.',
                                    namespace: '_Gtk')
 
-gtkmarshal_h = custom_target('gtkmarshal_h',
+gtkmarshal_h = custom_target(
+  'gtkmarshal_h',
   output  : 'gtkmarshalers.h',
   input   : 'gtkmarshalers.list',
   command : [mkmarshal, glib_marshal, '_gtk_marshal', '@INPUT@', '@OUTPUT@']
 )
 
-gtkmarshal_c = custom_target('gtkmarshal_c',
+gtkmarshal_c = custom_target(
+  'gtkmarshal_c',
   output  : 'gtkmarshalers.c',
   input   : 'gtkmarshalers.list',
   command : [mkmarshal, glib_marshal, '_gtk_marshal', '@INPUT@', '@OUTPUT@']
+)
+
+
+
+gtktypebuiltins_h = custom_target(
+  'gtkypebuiltins_h',
+  output  : 'gtktypebuiltins.h',
+  input   : gtk_public_h_sources + gtk_deprecated_type_headers,
+  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtktypebuiltins.h.template', '@OUTPUT@', '@INPUT@']
+)
+
+gtktypebuiltins_c = custom_target(
+  'gtkypebuiltins_c',
+  output  : 'gtktypebuiltins.c',
+  input   : gtk_public_h_sources +  gtk_deprecated_type_headers,
+  depends : gtktypebuiltins_h,
+  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtktypebuiltins.c.template', '@OUTPUT@', '@INPUT@']
+)
+
+gtkprivatetypebuiltins_h = custom_target(
+  'gtkprivateypebuiltins_h',
+  output  : 'gtkprivatetypebuiltins.h',
+  input   : gtk_private_type_headers,
+  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtkprivatetypebuiltins.h.template', '@OUTPUT@', '@INPUT@']
+)
+
+gtkprivatetypebuiltins_c = custom_target(
+  'gtkprivateypebuiltins_c',
+  output  : 'gtkprivatetypebuiltins.c',
+  input   : gtk_private_type_headers,
+  depends : [gtkprivatetypebuiltins_h, gtktypebuiltins_h],
+  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtkprivatetypebuiltins.c.template', '@OUTPUT@', '@INPUT@']
+)
+
+d_compiler = find_program('dmd')
+gentypefuncs_prog = find_program('gentypefuncs.d')
+# Generate gtktypefuncs.c
+typefuncs = custom_target(
+  'typefuncs',
+  depends: gdkenum_h,
+  output : 'gtktypefuncs.c',
+  input  : gdk_headers + gtk_public_h_sources + gtk_deprecated_type_headers + gtk_private_h_sources + [gtktypebuiltins_h] + [gdkenum_h],
+  command: [gentypefuncs_prog, '@OUTPUT@', '@INPUT@'],
+  install: true,
+  install_dir: '.'
+)
+
+cdata = configuration_data()
+cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
+cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
+cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
+cdata.set('GTK_BINARY_AGE', gtk_binary_age)
+cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
+
+gtkversion = configure_file(
+  input  : 'gtkversion.h.in',
+  output : 'gtkversion.h',
+  configuration: cdata
 )
 
 gtk_sources = [
@@ -437,6 +773,10 @@ gtk_sources = [
   gtkresources,
   gtkmarshal_c,
   gtkmarshal_h,
+  gtkprivatetypebuiltins_c,
+  gtkprivatetypebuiltins_h,
+  gtktypebuiltins_c,
+  gtktypebuiltins_h,
 ]
 
 gtk_deps = [
@@ -457,7 +797,7 @@ gtk_deps = [
     libgdk_dep
 ]
 
-if x11_enabled
+# if x11_enabled
   gtk_sources += [
     gtk_x11_sources,
     gtk_use_wayland_or_x11_c_sources
@@ -466,7 +806,7 @@ if x11_enabled
     xi_dep,
     x11_dep,
   ]
-endif
+# endif
 
 if wayland_enabled
   gtk_sources += [
@@ -483,20 +823,23 @@ libgtk = shared_library('gtk',
     '-DGTK_SYSCONFDIR="sysconfdir"',
     '-DGTK_DATA_PREFIX="dataprefix"',
     '-DGTK_PRINT_BACKENDS="null"', '-DGTK_VERSION="3"',
-    '-DX11_DATA_PREFIX="/share/x11/locale"'
+    '-DX11_DATA_PREFIX="/usr"'
   ],
-  include_directories: [ confinc, gdkinc ],
+  include_directories: [ confinc, gdkinc, gtkinc ],
   dependencies: [gtk_deps, libgdk_dep],
   link_with: libgdk
 )
 
 libgtk_dep = declare_dependency(
   sources: [
-    'gtk.h'
+    'gtk.h',
+    gtkversion,
+    gtktypebuiltins_c,
+    gtktypebuiltins_h,
   ],
   dependencies: gtk_deps,
-  link_with: [libgdk, libgtk],
-  include_directories: confinc
+  link_with: [libgtk, libgdk],
+  include_directories: [confinc, gtkinc]
 )
 
 
