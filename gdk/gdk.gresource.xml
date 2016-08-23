@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gresources>
+  <gresource prefix='/org/gtk/libgdk'>
+    <file alias='glsl/gl2-texture-2d.fs.glsl'>resources/glsl/gl2-texture-2d.fs.glsl</file>
+    <file alias='glsl/gl2-texture-2d.vs.glsl'>resources/glsl/gl2-texture-2d.vs.glsl</file>
+    <file alias='glsl/gl2-texture-rect.fs.glsl'>resources/glsl/gl2-texture-rect.fs.glsl</file>
+    <file alias='glsl/gl2-texture-rect.vs.glsl'>resources/glsl/gl2-texture-rect.vs.glsl</file>
+    <file alias='glsl/gl3-texture-2d.fs.glsl'>resources/glsl/gl3-texture-2d.fs.glsl</file>
+    <file alias='glsl/gl3-texture-2d.vs.glsl'>resources/glsl/gl3-texture-2d.vs.glsl</file>
+    <file alias='glsl/gl3-texture-rect.fs.glsl'>resources/glsl/gl3-texture-rect.fs.glsl</file>
+    <file alias='glsl/gl3-texture-rect.vs.glsl'>resources/glsl/gl3-texture-rect.vs.glsl</file>
+    <file alias='glsl/gles2-texture.fs.glsl'>resources/glsl/gles2-texture.fs.glsl</file>
+    <file alias='glsl/gles2-texture.vs.glsl'>resources/glsl/gles2-texture.vs.glsl</file>
+  </gresource>
+</gresources>
