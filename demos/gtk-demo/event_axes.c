@@ -536,19 +536,35 @@ reset_label_text_timeout_cb (gpointer user_data)
 }
 
 static void
+update_label_and_timeout (GtkWidget   *label,
+                          const gchar *text)
+{
+  if (pad_action_timeout_id)
+    g_source_remove (pad_action_timeout_id);
+
+  update_label_text (label, text);
+  pad_action_timeout_id = g_timeout_add (200, reset_label_text_timeout_cb, label);
+}
+
+static void
 on_action_activate (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
 {
   GtkWidget *label = user_data;
   const gchar *result;
-
-  if (pad_action_timeout_id)
-    g_source_remove (pad_action_timeout_id);
+  gchar *str;
 
   result = g_object_get_data (G_OBJECT (action), "action-result");
-  update_label_text (label, result);
-  pad_action_timeout_id = g_timeout_add (200, reset_label_text_timeout_cb, label);
+
+  if (!parameter)
+    update_label_and_timeout (label, result);
+  else
+    {
+      str = g_strdup_printf ("%s %.2f", result, g_variant_get_double (parameter));
+      update_label_and_timeout (label, str);
+      g_free (str);
+    }
 }
 
 static void
@@ -567,7 +583,16 @@ init_pad_controller (GtkWidget *window,
 
   for (i = 0; i < G_N_ELEMENTS (pad_actions); i++)
     {
-      action = g_simple_action_new (pad_actions[i].action_name, NULL);
+      if (pad_actions[i].type == GTK_PAD_ACTION_BUTTON)
+        {
+          action = g_simple_action_new (pad_actions[i].action_name, NULL);
+        }
+      else
+        {
+          action = g_simple_action_new_stateful (pad_actions[i].action_name,
+                                                 G_VARIANT_TYPE_DOUBLE, NULL);
+        }
+
       g_signal_connect (action, "activate",
                         G_CALLBACK (on_action_activate), label);
       g_object_set_data (G_OBJECT (action), "action-result",
