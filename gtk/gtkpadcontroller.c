@@ -61,6 +61,10 @@
  *   …
  *   pad_controller = gtk_pad_controller_new (window, action_group, NULL);
  * ]|
+ *
+ * The actions belonging to rings/strips will be activated with a parameter
+ * of type %G_VARIANT_TYPE_DOUBLE bearing the value of the given axis, it
+ * is required that those are made stateful and accepting this #GVariantType.
  */
 
 #include "config.h"
@@ -152,6 +156,16 @@ gtk_pad_controller_activate_action (GtkPadController        *controller,
   g_action_group_activate_action (controller->action_group,
                                   entry->action_name,
                                   NULL);
+}
+
+static void
+gtk_pad_controller_activate_action_with_axis (GtkPadController        *controller,
+                                              const GtkPadActionEntry *entry,
+                                              gdouble                  value)
+{
+  g_action_group_activate_action (controller->action_group,
+                                  entry->action_name,
+                                  g_variant_new_double (value));
 }
 
 static void
@@ -253,7 +267,16 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
   if (!entry)
     return GDK_EVENT_PROPAGATE;
 
-  gtk_pad_controller_activate_action (pad_controller, entry);
+  if (event->type == GDK_PAD_RING ||
+      event->type == GDK_PAD_STRIP)
+    {
+      gtk_pad_controller_activate_action_with_axis (pad_controller, entry,
+                                                    event->pad_axis.value);
+    }
+  else
+    {
+      gtk_pad_controller_activate_action (pad_controller, entry);
+    }
 
   return GDK_EVENT_STOP;
 }
