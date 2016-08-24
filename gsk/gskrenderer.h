@@ -54,11 +54,6 @@ void                    gsk_renderer_set_scale_factor           (GskRenderer    
 GDK_AVAILABLE_IN_3_22
 int                     gsk_renderer_get_scale_factor           (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_3_22
-void                    gsk_renderer_set_auto_clear             (GskRenderer             *renderer,
-                                                                 gboolean                 clear);
-GDK_AVAILABLE_IN_3_22
-gboolean                gsk_renderer_get_auto_clear             (GskRenderer             *renderer);
-GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_set_window                 (GskRenderer             *renderer,
                                                                  GdkWindow               *window);
 GDK_AVAILABLE_IN_3_22
