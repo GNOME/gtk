@@ -1287,7 +1287,7 @@ gsk_render_node_get_world_matrix (GskRenderNode     *node,
   *mv = node->world_matrix;
 }
 
-/**
+/*
  * gsk_render_node_get_scale_factor:
  * @node: a #GskRenderNode
  *
@@ -1296,8 +1296,6 @@ gsk_render_node_get_world_matrix (GskRenderNode     *node,
  * See also: gsk_renderer_get_scale_factor()
  *
  * Returns: the scale factor
- *
- * Since: 3.22
  */
 int
 gsk_render_node_get_scale_factor (GskRenderNode *node)
@@ -1353,15 +1351,13 @@ gsk_render_node_set_blend_mode (GskRenderNode *node,
   node->blend_mode = blend_mode;
 }
 
-/**
+/*
  * gsk_render_node_get_blend_mode:
  * @node: a #GskRenderNode
  *
  * Retrieves the blend mode set by gsk_render_node_set_blend_mode().
  *
  * Returns: the blend mode
- *
- * Since: 3.22
  */
 GskBlendMode
 gsk_render_node_get_blend_mode (GskRenderNode *node)
