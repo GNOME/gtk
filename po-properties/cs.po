@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 19:32+0000\n"
-"PO-Revision-Date: 2016-08-09 12:14+0200\n"
+"POT-Creation-Date: 2016-08-23 19:58+0000\n"
+"PO-Revision-Date: 2016-08-24 14:09+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1313,7 +1313,7 @@ msgstr ""
 "konci rodiče"
 
 #: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1990
-#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1687
+#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1716
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Pozice"
@@ -3932,11 +3932,11 @@ msgstr "Popisek pro zrušení"
 msgid "The label on the cancel button"
 msgstr "Popisek na tlačítku pro zrušení"
 
-#: gtk/gtkfilechooserwidget.c:8449 gtk/gtkfilechooserwidget.c:8450
+#: gtk/gtkfilechooserwidget.c:8460 gtk/gtkfilechooserwidget.c:8461
 msgid "Search mode"
 msgstr "Vyhledávací režim"
 
-#: gtk/gtkfilechooserwidget.c:8456 gtk/gtkfilechooserwidget.c:8457
+#: gtk/gtkfilechooserwidget.c:8467 gtk/gtkfilechooserwidget.c:8468
 #: gtk/gtkheaderbar.c:2004 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Podtitulek"
@@ -5200,7 +5200,7 @@ msgstr "Název dialogového okna"
 msgid "The title of the file chooser dialog"
 msgstr "Název dialogového okna pro výběr souboru"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1702 gtk/gtkwindow.c:783
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1731 gtk/gtkwindow.c:783
 msgid "Modal"
 msgstr "Modální"
 
@@ -5427,6 +5427,22 @@ msgstr "Index"
 #: gtk/gtkoverlay.c:770
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "Index vrstvy v rodiči, -1 pro hlavního potomka"
+
+#: gtk/gtkpadcontroller.c:373
+msgid "Action group"
+msgstr "Skupina akcí"
+
+#: gtk/gtkpadcontroller.c:374
+msgid "Action group to launch actions from"
+msgstr "Skupina akcí, ze které se akce spouští"
+
+#: gtk/gtkpadcontroller.c:379
+msgid "Pad device"
+msgstr "Dotekové zařízení"
+
+#: gtk/gtkpadcontroller.c:380
+msgid "Pad device to control"
+msgstr "Dotekové zařízení pro ovládání"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -5657,43 +5673,43 @@ msgstr "Okno socketu"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Okno socketu, do kterého je vložena zásuvka"
 
-#: gtk/gtkpopover.c:1659
+#: gtk/gtkpopover.c:1688
 msgid "Relative to"
 msgstr "Relativně vůči"
 
-#: gtk/gtkpopover.c:1660
+#: gtk/gtkpopover.c:1689
 msgid "Widget the bubble window points to"
 msgstr "Widget, na které bublinové okno ukazuje"
 
-#: gtk/gtkpopover.c:1673
+#: gtk/gtkpopover.c:1702
 msgid "Pointing to"
 msgstr "Ukazuje na"
 
-#: gtk/gtkpopover.c:1674
+#: gtk/gtkpopover.c:1703
 msgid "Rectangle the bubble window points to"
 msgstr "Obdélník na který bublinové okno ukazuje"
 
-#: gtk/gtkpopover.c:1688
+#: gtk/gtkpopover.c:1717
 msgid "Position to place the bubble window"
 msgstr "Pozice, do které se má umístit bublinové okno"
 
-#: gtk/gtkpopover.c:1703
+#: gtk/gtkpopover.c:1732
 msgid "Whether the popover is modal"
 msgstr "Jestli je rozbalovací dialogové okno modální"
 
-#: gtk/gtkpopover.c:1716
+#: gtk/gtkpopover.c:1745
 msgid "Transitions enabled"
 msgstr "Přechody povoleny"
 
-#: gtk/gtkpopover.c:1717
+#: gtk/gtkpopover.c:1746
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Jestli jsou přechody při zobrázení/skrytí povoleny či nikoliv"
 
-#: gtk/gtkpopover.c:1730
+#: gtk/gtkpopover.c:1759
 msgid "Constraint"
 msgstr "Omezení"
 
-#: gtk/gtkpopover.c:1731
+#: gtk/gtkpopover.c:1760
 msgid "Constraint for the popover position"
 msgstr "Omezení pro umístění rozbalovacího dialogu"
 
