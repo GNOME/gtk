@@ -1242,6 +1242,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="restrict_to_fill_level">0</property>
                                     <property name="fill_level">75</property>
                                     <property name="draw_value">1</property>
+                                    <property name="digits">-1</property>
+                                    <signal name="format-value" handler="scale_format_value"/>
                                   </object>
                                 </child>
                                 <child>
@@ -1255,7 +1257,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="restrict_to_fill_level">0</property>
                                     <property name="fill_level">75</property>
                                     <property name="draw_value">1</property>
-                                    <signal name="format-value" handler="scale_format_value"/>
+                                    <property name="digits">-1</property>
+                                    <signal name="format-value" handler="scale_format_value_blank"/>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
