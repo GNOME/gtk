@@ -4615,7 +4615,8 @@ gtk_window_unrealize_icon (GtkWindow *window)
  * Sets up the icon representing a #GtkWindow. The icon is used when
  * the window is minimized (also known as iconified).  Some window
  * managers or desktop environments may also place it in the window
- * frame, or display it in other contexts.
+ * frame, or display it in other contexts. On others, the icon is not
+ * used at all, so your mileage may vary.
  *
  * gtk_window_set_icon_list() allows you to pass in the same icon in
  * several hand-drawn sizes. The list should contain the natural sizes
@@ -4703,7 +4704,8 @@ gtk_window_get_icon_list (GtkWindow  *window)
  * Sets up the icon representing a #GtkWindow. This icon is used when
  * the window is minimized (also known as iconified).  Some window
  * managers or desktop environments may also place it in the window
- * frame, or display it in other contexts.
+ * frame, or display it in other contexts. On others, the icon is not
+ * used at all, so your mileage may vary.
  *
  * The icon should be provided in whatever size it was naturally
  * drawn; that is, don’t scale the image before passing it to
@@ -4754,8 +4756,9 @@ update_themed_icon (GtkWindow *window)
  * @window: a #GtkWindow
  * @name: (allow-none): the name of the themed icon
  *
- * Sets the icon for the window from a named themed icon. See
- * the docs for #GtkIconTheme for more details.
+ * Sets the icon for the window from a named themed icon.
+ * See the docs for #GtkIconTheme for more details.
+ * On some platforms, the window icon is not used at all.
  *
  * Note that this has nothing to do with the WM_ICON_NAME 
  * property which is mentioned in the ICCCM.
@@ -4868,7 +4871,7 @@ load_pixbuf_verbosely (const char *filename,
  * @filename: (type filename): location of icon file
  * @err: (allow-none): location to store error, or %NULL.
  *
- * Sets the icon for @window.  
+ * Sets the icon for @window.
  * Warns on failure if @err is %NULL.
  *
  * This function is equivalent to calling gtk_window_set_icon()

@@ -10314,7 +10314,8 @@ gdk_window_get_event_compression (GdkWindow *window)
  * image quality since the window manager may only need to scale the
  * icon by a small amount or not at all.
  *
- **/
+ * Note that some platforms don't support window icons.
+ */
 void
 gdk_window_set_icon_list (GdkWindow *window,
 			  GList     *pixbufs)
@@ -10337,6 +10338,8 @@ gdk_window_set_icon_list (GdkWindow *window,
  *
  * Using %NULL for @name unsets the icon title; further calls to
  * gdk_window_set_title() will again update the icon title as well.
+ *
+ * Note that some platforms don't support window icons.
  **/
 void
 gdk_window_set_icon_name (GdkWindow   *window,
