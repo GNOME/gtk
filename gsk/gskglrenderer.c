@@ -828,15 +828,15 @@ gsk_gl_renderer_clear (GskGLRenderer *self)
 #define ORTHO_FAR_PLANE          10000
 
 static void
-gsk_gl_renderer_render (GskRenderer       *renderer,
-                        GskRenderNode     *root,
-                        GdkDrawingContext *context)
+gsk_gl_renderer_render (GskRenderer   *renderer,
+                        GskRenderNode *root)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_matrix_t modelview, projection;
   graphene_rect_t viewport;
   guint i;
   int scale_factor;
+  GdkDrawingContext *context;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 gpu_time, cpu_time;
@@ -845,7 +845,11 @@ gsk_gl_renderer_render (GskRenderer       *renderer,
   if (self->gl_context == NULL)
     return;
 
+  context = gsk_renderer_get_drawing_context (renderer);
+
+#ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
+#endif
 
   gdk_gl_context_make_current (self->gl_context);
 
@@ -912,15 +916,22 @@ gsk_gl_renderer_render (GskRenderer       *renderer,
 #endif
 
 out:
-  /* XXX: Add GdkDrawingContext API */
-  gdk_cairo_draw_from_gl (gdk_drawing_context_get_cairo_context (context),
-                          gdk_drawing_context_get_window (context),
-                          self->texture_id,
-                          GL_TEXTURE,
-                          scale_factor,
-                          0, 0,
-                          viewport.size.width * scale_factor,
-                          viewport.size.height * scale_factor);
+  {
+    GdkWindow *window;
+    cairo_t *cr;
+
+    /* XXX: Add GdkDrawingContext API */
+    cr = gdk_drawing_context_get_cairo_context (context);
+    window = gdk_drawing_context_get_window (context);
+
+    gdk_cairo_draw_from_gl (cr, window,
+                            self->texture_id,
+                            GL_TEXTURE,
+                            scale_factor,
+                            0, 0,
+                            viewport.size.width * scale_factor,
+                            viewport.size.height * scale_factor);
+  }
 
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);

@@ -41,8 +41,7 @@ struct _GskRendererClass
   void (* unrealize) (GskRenderer *renderer);
 
   void (* render) (GskRenderer *renderer,
-                   GskRenderNode *root,
-                   GdkDrawingContext *context);
+                   GskRenderNode *root);
 };
 
 gboolean gsk_renderer_is_realized (GskRenderer *renderer);

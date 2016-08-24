@@ -123,11 +123,11 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
 }
 
 static void
-gsk_cairo_renderer_render (GskRenderer *renderer,
-                           GskRenderNode *root,
-                           GdkDrawingContext *context)
+gsk_cairo_renderer_render (GskRenderer   *renderer,
+                           GskRenderNode *root)
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
+  GdkDrawingContext *context = gsk_renderer_get_drawing_context (renderer);
   cairo_t *cr = gdk_drawing_context_get_cairo_context (context); 
 
   gsk_renderer_get_viewport (renderer, &self->viewport);
