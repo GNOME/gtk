@@ -322,7 +322,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   if (dbus->sm_proxy == NULL)
     {
       dbus->inhibit_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
-                                                                          G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                                                                          G_DBUS_PROXY_FLAGS_NONE,
                                                                           "org.freedesktop.portal.Desktop",
                                                                           "/org/freedesktop/portal/desktop",
                                                                           "org.freedesktop.portal.Inhibit",
