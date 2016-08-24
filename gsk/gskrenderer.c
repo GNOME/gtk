@@ -108,8 +108,7 @@ gsk_renderer_real_unrealize (GskRenderer *self)
 
 static void
 gsk_renderer_real_render (GskRenderer *self,
-                          GskRenderNode *root,
-                          GdkDrawingContext *context)
+                          GskRenderNode *root)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, render);
 }
@@ -597,12 +596,14 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_return_if_fail (GSK_IS_RENDERER (renderer));
   g_return_if_fail (priv->is_realized);
   g_return_if_fail (GSK_IS_RENDER_NODE (root));
-  g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
+  g_return_if_fail (context == NULL || GDK_IS_DRAWING_CONTEXT (context));
   g_return_if_fail (priv->drawing_context == NULL);
   g_return_if_fail (priv->root_node == NULL);
   g_return_if_fail (root->renderer == renderer);
 
-  priv->drawing_context = g_object_ref (context);
+  if (context != NULL)
+    priv->drawing_context = g_object_ref (context);
+
   priv->root_node = gsk_render_node_ref (root);
   gsk_render_node_make_immutable (priv->root_node);
 
@@ -610,7 +611,7 @@ gsk_renderer_render (GskRenderer       *renderer,
   gsk_profiler_reset (priv->profiler);
 #endif
 
-  GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, context);
+  GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root);
 
 #ifdef G_ENABLE_DEBUG
   if (GSK_DEBUG_CHECK (RENDERER))
