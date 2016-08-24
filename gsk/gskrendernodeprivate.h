@@ -94,7 +94,11 @@ int gsk_render_node_get_texture (GskRenderNode *node);
 gboolean gsk_render_node_has_surface (GskRenderNode *node);
 gboolean gsk_render_node_has_texture (GskRenderNode *node);
 
+GskBlendMode gsk_render_node_get_blend_mode (GskRenderNode *node);
+
 GskRenderNode *gsk_render_node_get_toplevel (GskRenderNode *node);
+
+int gsk_render_node_get_scale_factor (GskRenderNode *node);
 
 void gsk_render_node_update_world_matrix (GskRenderNode *node,
                                           gboolean       force);

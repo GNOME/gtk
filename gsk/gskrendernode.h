@@ -117,19 +117,12 @@ GDK_AVAILABLE_IN_3_22
 void                    gsk_render_node_set_blend_mode          (GskRenderNode *node,
                                                                  GskBlendMode   blend_mode);
 GDK_AVAILABLE_IN_3_22
-GskBlendMode            gsk_render_node_get_blend_mode          (GskRenderNode *node);
-
-GDK_AVAILABLE_IN_3_22
 void                    gsk_render_node_set_texture             (GskRenderNode *node,
                                                                  int            texture_id);
-
 GDK_AVAILABLE_IN_3_22
 void                    gsk_render_node_set_scaling_filter      (GskRenderNode *node,
                                                                  GskScalingFilter min_filter,
                                                                  GskScalingFilter mag_filter);
-
-GDK_AVAILABLE_IN_3_22
-int                     gsk_render_node_get_scale_factor        (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_3_22
 void                    gsk_render_node_set_name                (GskRenderNode *node,
