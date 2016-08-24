@@ -74,14 +74,12 @@ typedef struct
   int scale_factor;
 
   gboolean is_realized : 1;
-  gboolean auto_clear : 1;
 } GskRendererPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
   PROP_VIEWPORT = 1,
-  PROP_AUTO_CLEAR,
   PROP_SCALE_FACTOR,
   PROP_WINDOW,
   PROP_DISPLAY,
@@ -145,10 +143,6 @@ gsk_renderer_set_property (GObject      *gobject,
       gsk_renderer_set_viewport (self, g_value_get_boxed (value));
       break;
 
-    case PROP_AUTO_CLEAR:
-      gsk_renderer_set_auto_clear (self, g_value_get_boolean (value));
-      break;
-
     case PROP_SCALE_FACTOR:
       gsk_renderer_set_scale_factor (self, g_value_get_int (value));
       break;
@@ -177,10 +171,6 @@ gsk_renderer_get_property (GObject    *gobject,
     {
     case PROP_VIEWPORT:
       g_value_set_boxed (value, &priv->viewport);
-      break;
-
-    case PROP_AUTO_CLEAR:
-      g_value_set_boolean (value, priv->auto_clear);
       break;
 
     case PROP_SCALE_FACTOR:
@@ -249,26 +239,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
 			G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GskRenderer:auto-clear:
-   *
-   * Automatically clear the rendering surface when rendering.
-   *
-   * Setting this property to %FALSE assumes that the owner of the
-   * rendering surface will have cleared it prior to calling
-   * gsk_renderer_render().
-   *
-   * Since: 3.22
-   */
-  gsk_renderer_properties[PROP_AUTO_CLEAR] =
-    g_param_spec_boolean ("auto-clear",
-                          "Auto Clear",
-                          "Automatically clears the rendering target on render",
-                          TRUE,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_STRINGS |
-                          G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GskRenderer:display:
    *
    * The #GdkDisplay used by the #GskRenderer.
@@ -335,7 +305,6 @@ gsk_renderer_init (GskRenderer *self)
 
   priv->profiler = gsk_profiler_new ();
 
-  priv->auto_clear = TRUE;
   priv->scale_factor = 1;
 }
 
@@ -662,59 +631,6 @@ gsk_renderer_render (GskRenderer       *renderer,
 
   g_clear_object (&priv->drawing_context);
   g_clear_pointer (&priv->root_node, gsk_render_node_unref);
-}
-
-/**
- * gsk_renderer_set_auto_clear:
- * @renderer: a #GskRenderer
- * @clear: whether the target surface should be cleared prior
- *   to rendering to it
- *
- * Sets whether the target surface used by @renderer should be cleared
- * before rendering.
- *
- * If you pass a custom surface to gsk_renderer_set_surface(), you may
- * want to manage the clearing manually; this is possible by passing
- * %FALSE to this function.
- *
- * Since: 3.22
- */
-void
-gsk_renderer_set_auto_clear (GskRenderer *renderer,
-                             gboolean     clear)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-
-  clear = !!clear;
-
-  if (clear == priv->auto_clear)
-    return;
-
-  priv->auto_clear = clear;
-
-  g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_AUTO_CLEAR]);
-}
-
-/**
- * gsk_renderer_get_auto_clear:
- * @renderer: a #GskRenderer
- *
- * Retrieves the value set using gsk_renderer_set_auto_clear().
- *
- * Returns: %TRUE if the target surface should be cleared prior to rendering
- *
- * Since: 3.22
- */
-gboolean
-gsk_renderer_get_auto_clear (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
-
-  return priv->auto_clear;
 }
 
 /**
