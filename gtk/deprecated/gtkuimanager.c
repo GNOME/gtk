@@ -1267,16 +1267,16 @@ get_child_node (GtkUIManager *manager,
 			       NODE_INFO (child)->name,
 			       NODE_INFO (child)->type);
 
-                    if (node_is_dead (child))
-                      {
-                        /* This node was removed but is still dirty so
-                         * it is still in the tree. We want to treat this
-                         * as if it didn't exist, which means we move it
-                         * to the position it would have been created at.
-                         */
-                        g_node_unlink (child);
-                        goto insert_child;
-                      }
+                  if (node_is_dead (child))
+                    {
+                      /* This node was removed but is still dirty so
+                       * it is still in the tree. We want to treat this
+                       * as if it didn't exist, which means we move it
+                       * to the position it would have been created at.
+                       */
+                      g_node_unlink (child);
+                      goto insert_child;
+                    }
 
 		  return child;
 		}
