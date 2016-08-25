@@ -50,6 +50,9 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
 
   cairo_save (cr);
 
+  if (!gsk_render_node_has_surface (node))
+    goto out;
+
   gsk_render_node_get_world_matrix (node, &mvp);
   if (graphene_matrix_to_2d (&mvp, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
     {
@@ -81,8 +84,9 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
       pop_group = TRUE;
     }
 
-  GSK_NOTE (CAIRO, g_print ("Rendering surface %p for node %p at %g, %g\n",
+  GSK_NOTE (CAIRO, g_print ("Rendering surface %p for node %s[%p] at %g, %g\n",
                             gsk_render_node_get_surface (node),
+                            node->name,
                             node,
                             frame.origin.x, frame.origin.y));
   cairo_set_source_surface (cr, gsk_render_node_get_surface (node), frame.origin.x, frame.origin.y); 
@@ -102,6 +106,7 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
   cairo_matrix_invert (&ctm);
   cairo_transform (cr, &ctm);
 
+out:
   if (gsk_render_node_get_n_children (node) != 0)
     {
       GSK_NOTE (CAIRO, g_print ("Drawing %d children of node [%p]\n",
@@ -128,7 +133,11 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   GdkDrawingContext *context = gsk_renderer_get_drawing_context (renderer);
-  cairo_t *cr = gdk_drawing_context_get_cairo_context (context); 
+  cairo_t *cr;
+
+  cr = gdk_drawing_context_get_cairo_context (context);
+  if (cr == NULL)
+    return;
 
   gsk_renderer_get_viewport (renderer, &self->viewport);
 
