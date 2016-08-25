@@ -507,11 +507,17 @@ gtk_css_selector_ ## n ## _add_specificity (const GtkCssSelector *selector, \
                                             guint                *elements) \
 { \
   if (increase_id_specificity) \
-    (*ids)++; \
+    { \
+      (*ids)++; \
+    } \
   if (increase_class_specificity) \
-    (*classes)++; \
+    { \
+      (*classes)++; \
+    } \
   if (increase_element_specificity) \
-    (*elements)++; \
+    { \
+      (*elements)++; \
+    } \
 } \
 \
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_ ## c = { \

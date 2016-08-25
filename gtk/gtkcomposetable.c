@@ -573,7 +573,9 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
                  (long long) (p - contents), total_length);                   \
       g_free (contents);                                                      \
       if (count)                                                              \
-        *count = 0;                                                           \
+        {                                                                     \
+          *count = 0;                                                         \
+        }                                                                     \
       return NULL;                                                            \
     }
 
