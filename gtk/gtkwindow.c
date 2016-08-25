@@ -7183,6 +7183,15 @@ gtk_window_realize (GtkWidget *widget)
       gtk_widget_register_window (widget, gdk_window);
       gtk_widget_set_realized (widget, TRUE);
 
+      link = priv->popovers;
+
+      while (link)
+        {
+          GtkWindowPopover *popover = link->data;
+          link = link->next;
+          popover_realize (popover->widget, popover, window);
+        }
+
       return;
     }
 
