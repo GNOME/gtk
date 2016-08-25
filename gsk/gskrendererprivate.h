@@ -48,6 +48,7 @@ gboolean gsk_renderer_is_realized (GskRenderer *renderer);
 
 GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer *renderer);
 GdkDrawingContext *     gsk_renderer_get_drawing_context        (GskRenderer *renderer);
+cairo_t *               gsk_renderer_get_cairo_context          (GskRenderer *renderer);
 
 GskProfiler *           gsk_renderer_get_profiler               (GskRenderer *renderer);
 

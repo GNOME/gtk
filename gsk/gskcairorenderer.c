@@ -135,7 +135,11 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
   GdkDrawingContext *context = gsk_renderer_get_drawing_context (renderer);
   cairo_t *cr;
 
-  cr = gdk_drawing_context_get_cairo_context (context);
+  if (context != NULL)
+    cr = gdk_drawing_context_get_cairo_context (context);
+  else
+    cr = gsk_renderer_get_cairo_context (renderer);
+
   if (cr == NULL)
     return;
 

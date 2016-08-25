@@ -6369,6 +6369,18 @@ gtk_cairo_set_marked_for_draw (cairo_t  *cr,
     cairo_set_user_data (cr, &mark_for_draw_key, NULL, NULL);
 }
 
+static GskRenderer *
+gtk_widget_get_renderer (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = _gtk_widget_get_toplevel (widget);
+  if (_gtk_widget_is_toplevel (toplevel))
+    return gtk_window_get_renderer (GTK_WINDOW (toplevel));
+
+  return NULL;
+}
+
 /**
  * gtk_cairo_should_draw_window:
  * @cr: a cairo context
@@ -6436,6 +6448,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
 
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
+      GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
       GdkWindow *event_window = NULL;
       gboolean result;
       gboolean push_group;
@@ -6468,17 +6481,46 @@ gtk_widget_draw_internal (GtkWidget *widget,
         g_warning ("%s %p is drawn without a current allocation. This should not happen.", G_OBJECT_TYPE_NAME (widget), widget);
 #endif
 
-      if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
+      /* If the widget uses GSK render nodes then we need a fallback path to
+       * render on the Cairo context; otherwise we just go through the old
+       * GtkWidget::draw path
+       */
+      if (widget_class->get_render_node != NULL)
         {
-          g_signal_emit (widget, widget_signals[DRAW],
-                         0, cr,
-                         &result);
+          GskRenderer *renderer = gtk_widget_get_renderer (widget);
+          GskRenderer *fallback;
+          graphene_rect_t viewport;
+          GskRenderNode *node;
+
+          graphene_rect_init (&viewport,
+                              widget->priv->clip.x,
+                              widget->priv->clip.y,
+                              widget->priv->clip.width,
+                              widget->priv->clip.height);
+          fallback = gsk_renderer_create_fallback (renderer, &viewport, cr);
+          node = gtk_widget_get_render_node (widget, fallback);
+          if (node != NULL)
+            {
+              gsk_renderer_render (fallback, node, NULL);
+              gsk_render_node_unref (node);
+            }
+
+          g_object_unref (fallback);
         }
-      else if (GTK_WIDGET_GET_CLASS (widget)->draw)
+      else
         {
-          cairo_save (cr);
-          GTK_WIDGET_GET_CLASS (widget)->draw (widget, cr);
-          cairo_restore (cr);
+          if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
+            {
+              g_signal_emit (widget, widget_signals[DRAW],
+                             0, cr,
+                             &result);
+            }
+          else if (GTK_WIDGET_GET_CLASS (widget)->draw)
+            {
+              cairo_save (cr);
+              GTK_WIDGET_GET_CLASS (widget)->draw (widget, cr);
+              cairo_restore (cr);
+            }
         }
 
 #ifdef G_ENABLE_DEBUG
@@ -16050,18 +16092,6 @@ gtk_widget_reset_controllers (GtkWidget *widget)
       controller_data = l->data;
       gtk_event_controller_reset (controller_data->controller);
     }
-}
-
-GskRenderer *
-gtk_widget_get_renderer (GtkWidget *widget)
-{
-  GtkWidget *toplevel;
-
-  toplevel = _gtk_widget_get_toplevel (widget);
-  if (_gtk_widget_is_toplevel (toplevel))
-    return gtk_window_get_renderer (GTK_WINDOW (toplevel));
-
-  return NULL;
 }
 
 GskRenderNode *

@@ -71,6 +71,11 @@ GDK_AVAILABLE_IN_3_22
 GskRenderNode *         gsk_renderer_create_render_node         (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_3_22
+GskRenderer *           gsk_renderer_create_fallback            (GskRenderer             *renderer,
+                                                                 const graphene_rect_t   *viewport,
+                                                                 cairo_t                 *cr);
+
+GDK_AVAILABLE_IN_3_22
 void                    gsk_renderer_render                     (GskRenderer             *renderer,
                                                                  GskRenderNode           *root,
                                                                  GdkDrawingContext       *context);
