@@ -1179,8 +1179,9 @@ data_device_motion (void                  *data,
 {
   GdkWaylandSeat *seat = data;
 
-  g_debug (G_STRLOC ": %s data_device = %p, time = %d, x = %f, y = %f",
-           G_STRFUNC, data_device, time, wl_fixed_to_double (x), wl_fixed_to_double (y));
+  GDK_NOTE (EVENTS,
+            g_message ("data device motion, data_device = %p, time = %d, x = %f, y = %f",
+                       data_device, time, wl_fixed_to_double (x), wl_fixed_to_double (y)));
 
   if (!gdk_drag_context_get_dest_window (seat->drop_context))
     return;
@@ -3870,8 +3871,9 @@ tablet_pad_ring_handle_source (void                          *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s ring = %p source = %d",
-           G_STRFUNC, wp_tablet_pad_ring, source);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad ring handle source, ring = %p source = %d",
+                       wp_tablet_pad_ring, source));
 
   group->axis_tmp_info.source = source;
 }
@@ -3883,8 +3885,9 @@ tablet_pad_ring_handle_angle (void                          *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s ring = %p angle = %f",
-           G_STRFUNC, wp_tablet_pad_ring, wl_fixed_to_double (angle));
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad ring handle angle, %s ring = %p angle = %f",
+                       wp_tablet_pad_ring, wl_fixed_to_double (angle)));
 
   group->axis_tmp_info.value = wl_fixed_to_double (angle);
 }
@@ -3895,7 +3898,8 @@ tablet_pad_ring_handle_stop (void                          *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s ring = %p", G_STRFUNC, wp_tablet_pad_ring);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad ring handle stop, ring = %p", wp_tablet_pad_ring));
 
   group->axis_tmp_info.is_stop = TRUE;
 }
@@ -3910,7 +3914,8 @@ tablet_pad_ring_handle_frame (void                          *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
   GdkEvent *event;
 
-  g_debug (G_STRLOC ": %s ring = %p", G_STRFUNC, wp_tablet_pad_ring);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad ring handle frame, ring = %p", wp_tablet_pad_ring));
 
   event = gdk_event_new (GDK_PAD_RING);
   g_set_object (&event->pad_axis.window, seat->keyboard_focus);
@@ -3940,8 +3945,9 @@ tablet_pad_strip_handle_source (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s strip = %p source = %d",
-           G_STRFUNC, wp_tablet_pad_strip, source);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad strip handle source, strip = %p source = %d",
+                       wp_tablet_pad_strip, source));
 
   group->axis_tmp_info.source = source;
 }
@@ -3953,8 +3959,9 @@ tablet_pad_strip_handle_position (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s strip = %p position = %d",
-           G_STRFUNC, wp_tablet_pad_strip, position);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad strip handle position, strip = %p position = %d",
+                       wp_tablet_pad_strip, position));
 
   group->axis_tmp_info.value = (gdouble) position / 65535;
 }
@@ -3965,8 +3972,9 @@ tablet_pad_strip_handle_stop (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s strip = %p",
-           G_STRFUNC, wp_tablet_pad_strip);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad strip handle stop, strip = %p",
+                       wp_tablet_pad_strip));
 
   group->axis_tmp_info.is_stop = TRUE;
 }
@@ -3981,8 +3989,9 @@ tablet_pad_strip_handle_frame (void                           *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
   GdkEvent *event;
 
-  g_debug (G_STRLOC ": %s strip = %p",
-           G_STRFUNC, wp_tablet_pad_strip);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad strip handle frame, strip = %p",
+                       wp_tablet_pad_strip));
 
   event = gdk_event_new (GDK_PAD_STRIP);
   g_set_object (&event->pad_axis.window, seat->keyboard_focus);
@@ -4014,8 +4023,9 @@ tablet_pad_group_handle_buttons (void                           *data,
   GdkWaylandTabletPadGroupData *group = data;
   uint32_t *p;
 
-  g_debug (G_STRLOC ": %s pad group = %p, n_buttons = %ld",
-           G_STRFUNC, wp_tablet_pad_group, buttons->size);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad group handle buttons, pad group = %p, n_buttons = %ld",
+                       wp_tablet_pad_group, buttons->size));
 
   wl_array_for_each (p, buttons)
     {
@@ -4032,8 +4042,9 @@ tablet_pad_group_handle_ring (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s pad group = %p, ring = %p",
-           G_STRFUNC, wp_tablet_pad_group, wp_tablet_pad_ring);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad group handle ring, pad group = %p, ring = %p",
+                       wp_tablet_pad_group, wp_tablet_pad_ring));
 
   zwp_tablet_pad_ring_v2_add_listener (wp_tablet_pad_ring,
                                        &tablet_pad_ring_listener, group);
@@ -4050,8 +4061,9 @@ tablet_pad_group_handle_strip (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s pad group = %p, strip = %p",
-           G_STRFUNC, wp_tablet_pad_group, wp_tablet_pad_strip);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad group handle strip, pad group = %p, strip = %p",
+                       wp_tablet_pad_group, wp_tablet_pad_strip));
 
   zwp_tablet_pad_strip_v2_add_listener (wp_tablet_pad_strip,
                                        &tablet_pad_strip_listener, group);
@@ -4068,8 +4080,9 @@ tablet_pad_group_handle_modes (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  g_debug (G_STRLOC ": %s pad group = %p, n_modes = %d",
-           G_STRFUNC, wp_tablet_pad_group, modes);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad group handle modes, pad group = %p, n_modes = %d",
+                       wp_tablet_pad_group, modes));
 
   group->n_modes = modes;
 }
@@ -4078,7 +4091,9 @@ static void
 tablet_pad_group_handle_done (void                           *data,
                               struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group)
 {
-  g_debug (G_STRLOC ": %s pad group = %p", G_STRFUNC, wp_tablet_pad_group);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad group handle done, pad group = %p",
+                       wp_tablet_pad_group));
 }
 
 static void
@@ -4094,8 +4109,9 @@ tablet_pad_group_handle_mode (void                           *data,
   GdkEvent *event;
   guint n_group;
 
-  g_debug (G_STRLOC ": %s pad group = %p, mode = %d",
-           G_STRFUNC, wp_tablet_pad_group, mode);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad group handle mode, pad group = %p, mode = %d",
+                       wp_tablet_pad_group, mode));
 
   group->mode_switch_serial = serial;
   group->current_mode = mode;
@@ -4130,8 +4146,9 @@ tablet_pad_handle_group (void                           *data,
   GdkWaylandTabletPadData *pad = data;
   GdkWaylandTabletPadGroupData *group;
 
-  g_debug (G_STRLOC ": %s pad group = %p, group = %p",
-           G_STRFUNC, wp_tablet_pad_group, wp_tablet_pad_group);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad handle group, pad group = %p, group = %p",
+                       wp_tablet_pad_group, wp_tablet_pad_group));
 
   group = g_new0 (GdkWaylandTabletPadGroupData, 1);
   group->wp_tablet_pad_group = wp_tablet_pad_group;
@@ -4150,8 +4167,9 @@ tablet_pad_handle_path (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  g_debug (G_STRLOC ": %s pad = %p, path = %s",
-           G_STRFUNC, wp_tablet_pad, path);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad handle path, pad = %p, path = %s",
+                       wp_tablet_pad, path));
 
   pad->path = g_strdup (path);
 }
@@ -4163,8 +4181,9 @@ tablet_pad_handle_buttons (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  g_debug (G_STRLOC ": %s pad = %p, n_buttons = %d",
-           G_STRFUNC, wp_tablet_pad, buttons);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad handle buttons, pad = %p, n_buttons = %d",
+                       wp_tablet_pad, buttons));
 
   pad->n_buttons = buttons;
 }
@@ -4178,7 +4197,8 @@ tablet_pad_handle_done (void                     *data,
   GdkWaylandDeviceManager *device_manager =
     GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
 
-  g_debug (G_STRLOC ": %s pad = %p", G_STRFUNC, wp_tablet_pad);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad handle done, pad = %p", wp_tablet_pad));
 
   pad->device =
     g_object_new (GDK_TYPE_WAYLAND_DEVICE_PAD,
@@ -4208,8 +4228,9 @@ tablet_pad_handle_button (void                     *data,
   GdkEvent *event;
   gint n_group;
 
-  g_debug (G_STRLOC ": %s pad = %p, button = %d, state = %d",
-           G_STRFUNC, wp_tablet_pad, button, state);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad handle button, pad = %p, button = %d, state = %d",
+                       wp_tablet_pad, button, state));
 
   group = tablet_pad_lookup_button_group (pad, button);
   n_group = g_list_index (pad->mode_groups, group);
@@ -4239,8 +4260,9 @@ tablet_pad_handle_enter (void                     *data,
   GdkWaylandTabletPadData *pad = data;
   GdkWaylandTabletData *tablet = zwp_tablet_v2_get_user_data (wp_tablet);
 
-  g_debug (G_STRLOC ": %s pad = %p, tablet = %p surface = %p",
-           G_STRFUNC, wp_tablet_pad, wp_tablet, surface);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad handle enter, pad = %p, tablet = %p surface = %p",
+                       wp_tablet_pad, wp_tablet, surface));
 
   /* Relate pad and tablet */
   tablet->pads = g_list_prepend (tablet->pads, pad);
@@ -4255,8 +4277,9 @@ tablet_pad_handle_leave (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  g_debug (G_STRLOC ": %s pad = %p, surface = %p",
-           G_STRFUNC, wp_tablet_pad, surface);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad handle leave, pad = %p, surface = %p",
+                       wp_tablet_pad, surface));
 
   if (pad->current_tablet)
     {
@@ -4271,7 +4294,8 @@ tablet_pad_handle_removed (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  g_debug (G_STRLOC ": %s pad = %p", G_STRFUNC, wp_tablet_pad);
+  GDK_NOTE (EVENTS,
+            g_message ("tablet pad handle removed, pad = %p", wp_tablet_pad));
 
   /* Remove from the current tablet */
   if (pad->current_tablet)

@@ -841,8 +841,9 @@ data_source_target (void                  *data,
                     struct wl_data_source *source,
                     const char            *mime_type)
 {
-  g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
-           G_STRFUNC, source, mime_type);
+  GDK_NOTE (EVENTS,
+            g_message ("data source target, source = %p, mime_type = %s",
+                       source, mime_type));
 }
 
 static void
@@ -855,8 +856,9 @@ data_source_send (void                  *data,
   GdkWindow *window;
   GdkAtom selection;
 
-  g_debug (G_STRLOC ": %s source = %p, mime_type = %s, fd = %d",
-           G_STRFUNC, source, mime_type, fd);
+  GDK_NOTE (EVENTS,
+            g_message ("data source send, source = %p, mime_type = %s, fd = %d",
+                       source, mime_type, fd));
 
   if (!mime_type)
     {
@@ -899,8 +901,8 @@ data_source_cancelled (void                  *data,
   GdkDisplay *display;
   GdkAtom atom;
 
-  g_debug (G_STRLOC ": %s source = %p",
-           G_STRFUNC, source);
+  GDK_NOTE (EVENTS,
+            g_message ("data source cancelled, source = %p", source));
 
   display = gdk_display_get_default ();
 
@@ -965,8 +967,9 @@ data_source_action (void                  *data,
 {
   GdkDragContext *context;
 
-  g_debug (G_STRLOC ": %s source = %p action=%x",
-           G_STRFUNC, source, action);
+  GDK_NOTE (EVENTS,
+            g_message ("data source action, source = %p action=%x",
+                       source, action));
 
   context = gdk_wayland_drag_context_lookup_by_data_source (source);
 
@@ -994,8 +997,9 @@ primary_source_send (void                                *data,
 {
   GdkWaylandSelection *wayland_selection = data;
 
-  g_debug (G_STRLOC ": %s source = %p, mime_type = %s, fd = %d",
-           G_STRFUNC, source, mime_type, fd);
+  GDK_NOTE (EVENTS,
+            g_message ("primary source send, source = %p, mime_type = %s, fd = %d",
+                       source, mime_type, fd));
 
   if (!mime_type || !wayland_selection->primary_owner)
     {
@@ -1018,8 +1022,8 @@ primary_source_cancelled (void                                *data,
   GdkDisplay *display;
   GdkAtom atom;
 
-  g_debug (G_STRLOC ": %s source = %p",
-           G_STRFUNC, source);
+  GDK_NOTE (EVENTS,
+            g_message ("primary source cancelled, source = %p", source));
 
   display = gdk_display_get_default ();
 
