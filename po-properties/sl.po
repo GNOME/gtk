@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-05 22:08+0100\n"
-"PO-Revision-Date: 2016-03-05 22:09+0100\n"
+"PO-Revision-Date: 2016-08-25 22:08+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:181 gdk/gdkglcontext.c:264
 msgid "Display"
@@ -1482,11 +1482,11 @@ msgstr "Ali so bila vsa zahtevana polja na strani izpolnjena"
 
 #: gtk/gtkassistant.c:629
 msgid "Has padding"
-msgstr ""
+msgstr "Ima blazinjenje"
 
 #: gtk/gtkassistant.c:629
 msgid "Whether the assistant adds padding around the page"
-msgstr ""
+msgstr "Ali pomočnik dodaja blazinjanje okoli strani"
 
 #: gtk/gtkbbox.c:172
 msgid "Minimum child width"
@@ -5001,19 +5001,19 @@ msgstr "Usmeritev predmetov, ki jih je mogoče usmeriti"
 
 #: gtk/gtkoverlay.c:764
 msgid "Pass Through"
-msgstr ""
+msgstr "Prehod"
 
 #: gtk/gtkoverlay.c:764
 msgid "Pass through input, does not affect main child"
-msgstr ""
+msgstr "Vnos na prehodu ne vpliva na glavno podrejeno okno"
 
 #: gtk/gtkoverlay.c:769
 msgid "Index"
-msgstr ""
+msgstr "Kazalo"
 
 #: gtk/gtkoverlay.c:770
 msgid "The index of the overlay in the parent, -1 for the main child"
-msgstr ""
+msgstr "Kazalo prekivanja nadrejenega okna, -1 za glavni podrejeni predmet"
 
 #: gtk/gtkpaned.c:337
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
@@ -5093,11 +5093,11 @@ msgstr "Načini, v katerih lahko program za klic odpira mesta, ki so izbrana v b
 
 #: gtk/gtkplacessidebar.c:4394
 msgid "Show recent files"
-msgstr ""
+msgstr "Pokaži nedavne datoteke"
 
 #: gtk/gtkplacessidebar.c:4395
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
-msgstr ""
+msgstr "Ali bočno okno vključuje tudi vgrajeno bližnjico do nedavnih datotek"
 
 #: gtk/gtkplacessidebar.c:4400
 msgid "Show 'Desktop'"
@@ -5129,23 +5129,23 @@ msgstr "Ali naj bočno okno vključuje le krajevne datoteke"
 
 #: gtk/gtkplacessidebar.c:4424
 msgid "Show 'Trash'"
-msgstr ""
+msgstr "Pokaži 'Smeti'"
 
 #: gtk/gtkplacessidebar.c:4425
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
-msgstr ""
+msgstr "Ali bočno okno vključuje tudi vgrajeno bližnjico do Smeti"
 
 #: gtk/gtkplacessidebar.c:4430
 msgid "Show 'Other locations'"
-msgstr ""
+msgstr "Pokaži 'Druga mesta'"
 
 #: gtk/gtkplacessidebar.c:4431
 msgid "Whether the sidebar includes an item to show external locations"
-msgstr ""
+msgstr "Ali bočno okno vključuje tudi predmet, ki kaže zunanja omrežna mesta"
 
 #: gtk/gtkplacessidebar.c:4446
 msgid "Whether to emit ::populate-popup for popups that are not menus"
-msgstr ""
+msgstr "Ali naj se izpolnijo pojavna okna za okna ni niso meni"
 
 #: gtk/gtkplacesview.c:2209
 msgid "Loading"
@@ -5153,31 +5153,31 @@ msgstr "Poteka nalaganje"
 
 #: gtk/gtkplacesview.c:2210
 msgid "Whether the view is loading locations"
-msgstr ""
+msgstr "Ali pogled nalaga omrežna mesta"
 
 #: gtk/gtkplacesview.c:2216
 msgid "Fetching networks"
-msgstr ""
+msgstr "Pridobivanje omrežij"
 
 #: gtk/gtkplacesview.c:2217
 msgid "Whether the view is fetching networks"
-msgstr ""
+msgstr "Ali pogled pridobiva omrežja"
 
 #: gtk/gtkplacesviewrow.c:189
 msgid "Icon of the row"
-msgstr ""
+msgstr "Ikona vrstice"
 
 #: gtk/gtkplacesviewrow.c:190
 msgid "The icon representing the volume"
-msgstr ""
+msgstr "Ikona, ki določa pogon"
 
 #: gtk/gtkplacesviewrow.c:196
 msgid "Name of the volume"
-msgstr ""
+msgstr "Ime pogona"
 
 #: gtk/gtkplacesviewrow.c:197
 msgid "The name of the volume"
-msgstr ""
+msgstr "Ime pogona"
 
 #: gtk/gtkplacesviewrow.c:203
 msgid "Path of the volume"
@@ -5189,31 +5189,31 @@ msgstr "Pot nosilca"
 
 #: gtk/gtkplacesviewrow.c:210
 msgid "Volume represented by the row"
-msgstr ""
+msgstr "Pogon, ki ga določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:211
 msgid "The volume represented by the row"
-msgstr ""
+msgstr "Pogon, ki ga določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:217
 msgid "Mount represented by the row"
-msgstr ""
+msgstr "Priklop, ki ga določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:218
 msgid "The mount point represented by the row, if any"
-msgstr ""
+msgstr "Priklopna točka, ki jo določa vrstica, če je navedena"
 
 #: gtk/gtkplacesviewrow.c:224
 msgid "File represented by the row"
-msgstr ""
+msgstr "Datoteka, ki jo določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:225
 msgid "The file represented by the row, if any"
-msgstr ""
+msgstr "Datoteka, ki jo določa vrstica, če je navedena"
 
 #: gtk/gtkplacesviewrow.c:231 gtk/gtkplacesviewrow.c:232
 msgid "Whether the row represents a network location"
-msgstr ""
+msgstr "Ali vrstica predstavlja omrežno mesto"
 
 #: gtk/gtkplug.c:197
 msgid "Whether the plug is embedded"
@@ -6244,7 +6244,7 @@ msgstr "Ime pisave"
 
 #: gtk/gtksettings.c:518
 msgid "The default font family and size to use"
-msgstr ""
+msgstr "Privzeta družina pisave in velikost za uporabo"
 
 #: gtk/gtksettings.c:542
 msgid "Icon Sizes"
@@ -6903,11 +6903,11 @@ msgstr "Ali se prehod trenutno izvaja"
 
 #: gtk/gtkstack.c:471
 msgid "Interpolate size"
-msgstr ""
+msgstr "Interpoliraj velikost"
 
 #: gtk/gtkstack.c:471
 msgid "Whether or not the size should smoothly change when changing between differently sized children"
-msgstr ""
+msgstr "Ali naj se velikost gladko spremeni med spreminjanjem različno velikih podrejenih predmetov"
 
 #: gtk/gtkstack.c:481
 msgid "The name of the child page"
@@ -6999,11 +6999,11 @@ msgstr "Najmanjša širina ročnika"
 
 #: gtk/gtkswitch.c:964
 msgid "Slider Height"
-msgstr ""
+msgstr "Višina drsnika"
 
 #: gtk/gtkswitch.c:965
 msgid "The minimum height of the handle"
-msgstr ""
+msgstr "Najmanjša višina ročice"
 
 #: gtk/gtktextbuffer.c:200
 msgid "Tag Table"
@@ -7195,11 +7195,11 @@ msgstr "Barva podčrtave za to besedilo"
 
 #: gtk/gtktexttag.c:560
 msgid "Strikethrough RGBA"
-msgstr ""
+msgstr "Barva prečrtanja v RGBA"
 
 #: gtk/gtktexttag.c:561
 msgid "Color of strikethrough for this text"
-msgstr ""
+msgstr "Barva prečrtanja za to besedilo"
 
 #: gtk/gtktexttag.c:569 gtk/gtktextview.c:803
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
@@ -7399,11 +7399,11 @@ msgstr "Ali naj ta oznaka vpliva na razmik črk"
 
 #: gtk/gtktexttag.c:855
 msgid "Font features set"
-msgstr ""
+msgstr "Nabor značilnosti pisave"
 
 #: gtk/gtktexttag.c:856
 msgid "Whether this tag affects font features"
-msgstr ""
+msgstr "Ali ta oznaka vpliva na lastnosti pisave"
 
 #: gtk/gtktextview.c:770
 msgid "Pixels Above Lines"
@@ -7431,19 +7431,19 @@ msgstr "Desni rob"
 
 #: gtk/gtktextview.c:873
 msgid "Top Margin"
-msgstr ""
+msgstr "Zgornji rob"
 
 #: gtk/gtktextview.c:874
 msgid "Height of the top margin in pixels"
-msgstr ""
+msgstr "Višina zgornjega roba v točkah"
 
 #: gtk/gtktextview.c:894
 msgid "Bottom Margin"
-msgstr ""
+msgstr "Spodnji rob"
 
 #: gtk/gtktextview.c:895
 msgid "Height of the bottom margin in pixels"
-msgstr ""
+msgstr "Višina spodnjega roba v točkah"
 
 #: gtk/gtktextview.c:918
 msgid "Cursor Visible"
