@@ -381,6 +381,9 @@ data_offer_offer (void                 *data,
   if (!info || g_list_find (info->targets, atom))
     return;
 
+  GDK_NOTE (EVENTS,
+            g_message ("data offer offer, offer %p, type = %s", wl_data_offer, type));
+
   info->targets = g_list_prepend (info->targets, atom);
 }
 
@@ -415,6 +418,9 @@ data_offer_source_actions (void                 *data,
   drop_context = gdk_wayland_device_get_drop_context (device);
 
   drop_context->actions = _wl_to_gdk_actions (source_actions);
+
+  GDK_NOTE (EVENTS,
+            g_message ("data offer source actions, offer %p, actions %d", wl_data_offer, source_actions));
 
   if (gdk_drag_context_get_dest_window (drop_context))
     _gdk_wayland_drag_context_emit_event (drop_context, GDK_DRAG_MOTION,
@@ -462,6 +468,9 @@ primary_offer_offer (void                               *data,
 
   if (!info || g_list_find (info->targets, atom))
     return;
+
+  GDK_NOTE (EVENTS,
+            g_message ("primary offer offer, offer %p, type = %s", gtk_offer, type));
 
   info->targets = g_list_prepend (info->targets, atom);
 }
