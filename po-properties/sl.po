@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-05 22:08+0100\n"
-"PO-Revision-Date: 2016-03-05 22:09+0100\n"
+"PO-Revision-Date: 2016-08-18 23:15+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:181 gdk/gdkglcontext.c:264
 msgid "Display"
@@ -5009,7 +5009,7 @@ msgstr ""
 
 #: gtk/gtkoverlay.c:769
 msgid "Index"
-msgstr ""
+msgstr "Kazalo"
 
 #: gtk/gtkoverlay.c:770
 msgid "The index of the overlay in the parent, -1 for the main child"
@@ -5093,7 +5093,7 @@ msgstr "Načini, v katerih lahko program za klic odpira mesta, ki so izbrana v b
 
 #: gtk/gtkplacessidebar.c:4394
 msgid "Show recent files"
-msgstr ""
+msgstr "Pokaži nedavne datoteke"
 
 #: gtk/gtkplacessidebar.c:4395
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
@@ -5129,7 +5129,7 @@ msgstr "Ali naj bočno okno vključuje le krajevne datoteke"
 
 #: gtk/gtkplacessidebar.c:4424
 msgid "Show 'Trash'"
-msgstr ""
+msgstr "Pokaži 'Smeti'"
 
 #: gtk/gtkplacessidebar.c:4425
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
@@ -5137,7 +5137,7 @@ msgstr ""
 
 #: gtk/gtkplacessidebar.c:4430
 msgid "Show 'Other locations'"
-msgstr ""
+msgstr "Pokaži 'Druga mesta'"
 
 #: gtk/gtkplacessidebar.c:4431
 msgid "Whether the sidebar includes an item to show external locations"
@@ -5157,7 +5157,7 @@ msgstr ""
 
 #: gtk/gtkplacesview.c:2216
 msgid "Fetching networks"
-msgstr ""
+msgstr "Pridobivanje omrežij"
 
 #: gtk/gtkplacesview.c:2217
 msgid "Whether the view is fetching networks"
@@ -5165,19 +5165,19 @@ msgstr ""
 
 #: gtk/gtkplacesviewrow.c:189
 msgid "Icon of the row"
-msgstr ""
+msgstr "Ikona vrstice"
 
 #: gtk/gtkplacesviewrow.c:190
 msgid "The icon representing the volume"
-msgstr ""
+msgstr "Ikona, ki določa pogon"
 
 #: gtk/gtkplacesviewrow.c:196
 msgid "Name of the volume"
-msgstr ""
+msgstr "Ime pogona"
 
 #: gtk/gtkplacesviewrow.c:197
 msgid "The name of the volume"
-msgstr ""
+msgstr "Ime pogona"
 
 #: gtk/gtkplacesviewrow.c:203
 msgid "Path of the volume"
@@ -5197,7 +5197,7 @@ msgstr ""
 
 #: gtk/gtkplacesviewrow.c:217
 msgid "Mount represented by the row"
-msgstr ""
+msgstr "Priklop, ki ga določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:218
 msgid "The mount point represented by the row, if any"
@@ -5205,7 +5205,7 @@ msgstr ""
 
 #: gtk/gtkplacesviewrow.c:224
 msgid "File represented by the row"
-msgstr ""
+msgstr "Datoteka, ki jo določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:225
 msgid "The file represented by the row, if any"
@@ -6244,7 +6244,7 @@ msgstr "Ime pisave"
 
 #: gtk/gtksettings.c:518
 msgid "The default font family and size to use"
-msgstr ""
+msgstr "Privzeta družina pisave in velikost za uporabo"
 
 #: gtk/gtksettings.c:542
 msgid "Icon Sizes"
@@ -6999,7 +6999,7 @@ msgstr "Najmanjša širina ročnika"
 
 #: gtk/gtkswitch.c:964
 msgid "Slider Height"
-msgstr ""
+msgstr "Višina drsnika"
 
 #: gtk/gtkswitch.c:965
 msgid "The minimum height of the handle"
@@ -7195,11 +7195,11 @@ msgstr "Barva podčrtave za to besedilo"
 
 #: gtk/gtktexttag.c:560
 msgid "Strikethrough RGBA"
-msgstr ""
+msgstr "Barva prečrtanja v RGBA"
 
 #: gtk/gtktexttag.c:561
 msgid "Color of strikethrough for this text"
-msgstr ""
+msgstr "Barva prečrtanja za to besedilo"
 
 #: gtk/gtktexttag.c:569 gtk/gtktextview.c:803
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
@@ -7399,7 +7399,7 @@ msgstr "Ali naj ta oznaka vpliva na razmik črk"
 
 #: gtk/gtktexttag.c:855
 msgid "Font features set"
-msgstr ""
+msgstr "Nabor značilnosti pisave"
 
 #: gtk/gtktexttag.c:856
 msgid "Whether this tag affects font features"
@@ -7431,19 +7431,19 @@ msgstr "Desni rob"
 
 #: gtk/gtktextview.c:873
 msgid "Top Margin"
-msgstr ""
+msgstr "Zgornji rob"
 
 #: gtk/gtktextview.c:874
 msgid "Height of the top margin in pixels"
-msgstr ""
+msgstr "Višina zgornjega roba v točkah"
 
 #: gtk/gtktextview.c:894
 msgid "Bottom Margin"
-msgstr ""
+msgstr "Spodnji rob"
 
 #: gtk/gtktextview.c:895
 msgid "Height of the bottom margin in pixels"
-msgstr ""
+msgstr "Višina spodnjega roba v točkah"
 
 #: gtk/gtktextview.c:918
 msgid "Cursor Visible"
