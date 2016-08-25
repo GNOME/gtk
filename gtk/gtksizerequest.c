@@ -351,8 +351,10 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                     : "height for width",
                                     for_size, min_size, nat_size);
 	    if (min_baseline != -1 || nat_baseline != -1)
-	      g_string_append_printf (s, ", baseline %d/%d",
-		                      min_baseline, nat_baseline);
+              {
+                g_string_append_printf (s, ", baseline %d/%d",
+                                        min_baseline, nat_baseline);
+              }
 	    g_string_append_printf (s, " (hit cache: %s)\n",
 		                    found_in_cache ? "yes" : "no");
             g_message ("%s", s->str);
