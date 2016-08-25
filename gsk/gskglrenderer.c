@@ -920,9 +920,17 @@ out:
     GdkWindow *window;
     cairo_t *cr;
 
-    /* XXX: Add GdkDrawingContext API */
-    cr = gdk_drawing_context_get_cairo_context (context);
-    window = gdk_drawing_context_get_window (context);
+    if (context != NULL)
+      {
+        /* XXX: Add GdkDrawingContext API */
+        cr = gdk_drawing_context_get_cairo_context (context);
+        window = gdk_drawing_context_get_window (context);
+      }
+    else
+      {
+        cr = gsk_renderer_get_cairo_context (renderer);
+        window = gsk_renderer_get_window (renderer);
+      }
 
     gdk_cairo_draw_from_gl (cr, window,
                             self->texture_id,

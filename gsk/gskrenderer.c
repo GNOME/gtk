@@ -37,6 +37,7 @@
 
 #include "gskrendererprivate.h"
 
+#include "gskcairorendererprivate.h"
 #include "gskdebugprivate.h"
 #include "gskglrendererprivate.h"
 #include "gskprofilerprivate.h"
@@ -68,6 +69,7 @@ typedef struct
   GdkDrawingContext *drawing_context;
   GskRenderNode *root_node;
   GdkDisplay *display;
+  cairo_t *cairo_context;
 
   GskProfiler *profiler;
 
@@ -121,6 +123,7 @@ gsk_renderer_dispose (GObject *gobject)
 
   gsk_renderer_unrealize (self);
 
+  g_clear_pointer (&priv->cairo_context, cairo_destroy);
   g_clear_object (&priv->window);
   g_clear_object (&priv->display);
 
@@ -603,6 +606,16 @@ gsk_renderer_render (GskRenderer       *renderer,
 
   if (context != NULL)
     priv->drawing_context = g_object_ref (context);
+  else
+    {
+      if (priv->cairo_context == NULL)
+        {
+          g_critical ("The given GskRenderer instance was not created using "
+                      "gsk_renderer_create_fallback(), but you forgot to pass "
+                      "a GdkDrawingContext.");
+          return;
+        }
+    }
 
   priv->root_node = gsk_render_node_ref (root);
   gsk_render_node_make_immutable (priv->root_node);
@@ -695,7 +708,7 @@ gsk_renderer_get_for_display (GdkDisplay *display)
     }
 
   if (use_software[0] != '0')
-    return NULL;
+    return g_object_new (GSK_TYPE_CAIRO_RENDERER, "display", display, NULL);
 
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
@@ -707,7 +720,7 @@ gsk_renderer_get_for_display (GdkDisplay *display)
     renderer_type = GSK_TYPE_GL_RENDERER;
   else
 #endif
-    return NULL;
+    renderer_type = GSK_TYPE_CAIRO_RENDERER;
 
   GSK_NOTE (RENDERER, g_print ("Creating renderer of type '%s' for display '%s'\n",
                                g_type_name (renderer_type),
@@ -716,4 +729,66 @@ gsk_renderer_get_for_display (GdkDisplay *display)
   g_assert (renderer_type != G_TYPE_INVALID);
 
   return g_object_new (renderer_type, "display", display, NULL);
+}
+
+static void
+gsk_renderer_set_cairo_context (GskRenderer *renderer,
+                                cairo_t     *cr)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_clear_pointer (&priv->cairo_context, cairo_destroy);
+
+  if (cr != NULL)
+    priv->cairo_context = cairo_reference (cr);
+}
+
+cairo_t *
+gsk_renderer_get_cairo_context (GskRenderer *renderer)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  return priv->cairo_context;
+}
+
+/**
+ * gsk_renderer_create_fallback:
+ * @renderer: a #GskRenderer
+ * @viewport: the viewport for the fallback renderer
+ * @cr: a Cairo context
+ *
+ * Creates a fallback #GskRenderer using the same display and window of
+ * the given @renderer, and instructs it to render to a given Cairo
+ * context.
+ *
+ * Typically, you'll use this function to implement fallback rendering
+ * of #GskRenderNodes on an intermediate Cairo context, instead of using
+ * the drawing context associated to a #GdkWindow's rendering buffer.
+ *
+ * Returns: (transfer full): a newly created fallback #GskRenderer instance
+ *
+ * Since: 3.22
+ */
+GskRenderer *
+gsk_renderer_create_fallback (GskRenderer           *renderer,
+                              const graphene_rect_t *viewport,
+                              cairo_t               *cr)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+  GskRenderer *res;
+
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
+  g_return_val_if_fail (cr != NULL, NULL);
+
+  res = g_object_new (GSK_TYPE_CAIRO_RENDERER,
+                      "display", priv->display,
+                      "window", priv->window,
+                      "scale-factor", priv->scale_factor,
+                      "viewport", viewport,
+                      NULL);
+
+  gsk_renderer_set_cairo_context (res, cr);
+  gsk_renderer_realize (res);
+
+  return res;
 }
