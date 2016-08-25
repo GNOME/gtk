@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-05 22:08+0100\n"
-"PO-Revision-Date: 2016-08-18 23:15+0200\n"
+"PO-Revision-Date: 2016-08-25 22:08+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -1482,11 +1482,11 @@ msgstr "Ali so bila vsa zahtevana polja na strani izpolnjena"
 
 #: gtk/gtkassistant.c:629
 msgid "Has padding"
-msgstr ""
+msgstr "Ima blazinjenje"
 
 #: gtk/gtkassistant.c:629
 msgid "Whether the assistant adds padding around the page"
-msgstr ""
+msgstr "Ali pomočnik dodaja blazinjanje okoli strani"
 
 #: gtk/gtkbbox.c:172
 msgid "Minimum child width"
@@ -5001,11 +5001,11 @@ msgstr "Usmeritev predmetov, ki jih je mogoče usmeriti"
 
 #: gtk/gtkoverlay.c:764
 msgid "Pass Through"
-msgstr ""
+msgstr "Prehod"
 
 #: gtk/gtkoverlay.c:764
 msgid "Pass through input, does not affect main child"
-msgstr ""
+msgstr "Vnos na prehodu ne vpliva na glavno podrejeno okno"
 
 #: gtk/gtkoverlay.c:769
 msgid "Index"
@@ -5013,7 +5013,7 @@ msgstr "Kazalo"
 
 #: gtk/gtkoverlay.c:770
 msgid "The index of the overlay in the parent, -1 for the main child"
-msgstr ""
+msgstr "Kazalo prekivanja nadrejenega okna, -1 za glavni podrejeni predmet"
 
 #: gtk/gtkpaned.c:337
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
@@ -5097,7 +5097,7 @@ msgstr "Pokaži nedavne datoteke"
 
 #: gtk/gtkplacessidebar.c:4395
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
-msgstr ""
+msgstr "Ali bočno okno vključuje tudi vgrajeno bližnjico do nedavnih datotek"
 
 #: gtk/gtkplacessidebar.c:4400
 msgid "Show 'Desktop'"
@@ -5133,7 +5133,7 @@ msgstr "Pokaži 'Smeti'"
 
 #: gtk/gtkplacessidebar.c:4425
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
-msgstr ""
+msgstr "Ali bočno okno vključuje tudi vgrajeno bližnjico do Smeti"
 
 #: gtk/gtkplacessidebar.c:4430
 msgid "Show 'Other locations'"
@@ -5141,11 +5141,11 @@ msgstr "Pokaži 'Druga mesta'"
 
 #: gtk/gtkplacessidebar.c:4431
 msgid "Whether the sidebar includes an item to show external locations"
-msgstr ""
+msgstr "Ali bočno okno vključuje tudi predmet, ki kaže zunanja omrežna mesta"
 
 #: gtk/gtkplacessidebar.c:4446
 msgid "Whether to emit ::populate-popup for popups that are not menus"
-msgstr ""
+msgstr "Ali naj se izpolnijo pojavna okna za okna ni niso meni"
 
 #: gtk/gtkplacesview.c:2209
 msgid "Loading"
@@ -5153,7 +5153,7 @@ msgstr "Poteka nalaganje"
 
 #: gtk/gtkplacesview.c:2210
 msgid "Whether the view is loading locations"
-msgstr ""
+msgstr "Ali pogled nalaga omrežna mesta"
 
 #: gtk/gtkplacesview.c:2216
 msgid "Fetching networks"
@@ -5161,7 +5161,7 @@ msgstr "Pridobivanje omrežij"
 
 #: gtk/gtkplacesview.c:2217
 msgid "Whether the view is fetching networks"
-msgstr ""
+msgstr "Ali pogled pridobiva omrežja"
 
 #: gtk/gtkplacesviewrow.c:189
 msgid "Icon of the row"
@@ -5189,11 +5189,11 @@ msgstr "Pot nosilca"
 
 #: gtk/gtkplacesviewrow.c:210
 msgid "Volume represented by the row"
-msgstr ""
+msgstr "Pogon, ki ga določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:211
 msgid "The volume represented by the row"
-msgstr ""
+msgstr "Pogon, ki ga določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:217
 msgid "Mount represented by the row"
@@ -5201,7 +5201,7 @@ msgstr "Priklop, ki ga določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:218
 msgid "The mount point represented by the row, if any"
-msgstr ""
+msgstr "Priklopna točka, ki jo določa vrstica, če je navedena"
 
 #: gtk/gtkplacesviewrow.c:224
 msgid "File represented by the row"
@@ -5209,11 +5209,11 @@ msgstr "Datoteka, ki jo določa vrstica"
 
 #: gtk/gtkplacesviewrow.c:225
 msgid "The file represented by the row, if any"
-msgstr ""
+msgstr "Datoteka, ki jo določa vrstica, če je navedena"
 
 #: gtk/gtkplacesviewrow.c:231 gtk/gtkplacesviewrow.c:232
 msgid "Whether the row represents a network location"
-msgstr ""
+msgstr "Ali vrstica predstavlja omrežno mesto"
 
 #: gtk/gtkplug.c:197
 msgid "Whether the plug is embedded"
@@ -6903,11 +6903,11 @@ msgstr "Ali se prehod trenutno izvaja"
 
 #: gtk/gtkstack.c:471
 msgid "Interpolate size"
-msgstr ""
+msgstr "Interpoliraj velikost"
 
 #: gtk/gtkstack.c:471
 msgid "Whether or not the size should smoothly change when changing between differently sized children"
-msgstr ""
+msgstr "Ali naj se velikost gladko spremeni med spreminjanjem različno velikih podrejenih predmetov"
 
 #: gtk/gtkstack.c:481
 msgid "The name of the child page"
@@ -7003,7 +7003,7 @@ msgstr "Višina drsnika"
 
 #: gtk/gtkswitch.c:965
 msgid "The minimum height of the handle"
-msgstr ""
+msgstr "Najmanjša višina ročice"
 
 #: gtk/gtktextbuffer.c:200
 msgid "Tag Table"
@@ -7403,7 +7403,7 @@ msgstr "Nabor značilnosti pisave"
 
 #: gtk/gtktexttag.c:856
 msgid "Whether this tag affects font features"
-msgstr ""
+msgstr "Ali ta oznaka vpliva na lastnosti pisave"
 
 #: gtk/gtktextview.c:770
 msgid "Pixels Above Lines"
