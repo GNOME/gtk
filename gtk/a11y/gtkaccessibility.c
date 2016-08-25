@@ -329,7 +329,8 @@ gail_finish_select (GtkWidget *widget)
             g_signal_connect (submenu, "map",
                               G_CALLBACK (gail_map_submenu_cb),
                               NULL);
-            return;
+
+          return;
         }
       /*
        * If we are waiting to report focus on a menubar or a menu item
