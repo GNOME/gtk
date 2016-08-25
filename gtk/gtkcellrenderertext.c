@@ -2024,6 +2024,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 
   gtk_entry_set_has_frame (GTK_ENTRY (priv->entry), FALSE);
   gtk_entry_set_alignment (GTK_ENTRY (priv->entry), xalign);
+  gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), 5);
 
   if (priv->text)
     gtk_entry_set_text (GTK_ENTRY (priv->entry), priv->text);
