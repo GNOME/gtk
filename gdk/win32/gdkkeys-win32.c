@@ -1458,7 +1458,6 @@ gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), 0);
   g_return_val_if_fail (key != NULL, 0);
-  g_return_val_if_fail (key->group < 4, 0);
 
   /* Accept only the default keymap */
   if (gdk_keymap != NULL && gdk_keymap != gdk_keymap_get_default ())
@@ -1498,7 +1497,6 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   GdkModifierType modifiers = GDK_SHIFT_MASK | GDK_LOCK_MASK | GDK_MOD2_MASK;
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
-  g_return_val_if_fail (group < 4, FALSE);
 
 #if 0
   GDK_NOTE (EVENTS, g_print ("gdk_keymap_translate_keyboard_state: keycode=%#x state=%#x group=%d\n",
