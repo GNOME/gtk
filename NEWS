@@ -1,3 +1,73 @@
+Overview of Changes in GTK+ 3.21.5
+==================================
+
+* Make GtkShortcutLabel public
+
+* Add an API to obtain window IDs for sharing
+
+* Add explicit API to show/hide popovers with animation
+
+* Wayland:
+ - Switch to xdg-shell v6
+ - Use tablet pad protocol
+ - Improve menu positioning
+ - Improve handling of tiled window state
+
+* Add GtkPadController to bind GActions to tablet pad events
+
+* Bugs fixed:
+ 569581 Using the US-Intl keyboard layout causes unexpected character comb...
+ 712760 Clang static analysis fixes
+ 755947 wayland: gnome-terminal does not fill entire area when tiled
+ 756579 GTK should let GDK position menus
+ 762260 Check boxes and radio buttons animate when inside a popover that i...
+ 764413 Wayland: not fullscreenable gtk+ apps can be fullscreened
+ 768017 Wayland: menus opened from access keys (mnemonic menu items) hide ...
+ 768081 Enable HiDPI support for GDK-Win32
+ 768138 Update the GDK-Mir backend to fix a few problems
+ 768722 Keyboard shortcuts for russian characters doesn't work
+ 768902 Font too small when using gtk_widget_override_font()
+ 768930 reftests: override GSETTINGS_SCHEMA_DIR when running tests
+ 768999 Floating point exception (division by zero) when running under Xvfb
+ 769003 Adwaita: GtkCalendar uses a confusing style for week of year
+ 769004 ss test suite failures in 3.21.4
+ 769047 GtkWidget <-> GtkStyleContext API not clear
+ 769126 Can't type astral plane characters into a GtkEntry using the Windo...
+ 769162 GtkTable: compute_expand buggy
+ 769205 Expose GtkShortcutLabel as a public widget
+ 769236 demos: Fix build failure
+ 769287 GtkMenuToolButton:show-menu is emitted twice and breaks dynamic menus
+ 769402 regression in menu positioning on wayland
+ 769451 Build failure of 3.21 (master) in Debian Unstable since 7-26-2016
+ 769485 Eliminate use of g_test_expect_message()
+ 769568 Modification date display incorrectly wraps calendar days (and is ...
+ 769601 Dead link in faq on gtk-question-index.html
+ 769603 gtk+-3.20.8: underlink issue with ld.gold - build fails: ./.libs/l...
+ 769706 Add show/hide API to GtkPopover
+ 769937 wayland: Port backend to use xdg-shell unstable v6
+ 770026 review comments for wip/wayland-tablet-v2
+ 770166 Can GtkButtons of arbitrary size be circular? The style class only...
+ 770236 gtkbindings: Add an example for gtk_binding_entry_add_signal()
+ 770242 gtkbindings: Clarify that widgets need has-focus for bindings to work
+ 770332 Notebook arrow icon wrong color after creating new tab
+ 770374 Gtk Treeview Editable overshoots column width when column width is...
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan
+ Czech
+ French
+ German
+ Hebrew
+ Indonesian
+ Lithuanian
+ Polish
+ Portuguese
+ Slovak
+ Slovenian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.21.4
 ==================================
 
