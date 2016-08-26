@@ -1771,7 +1771,7 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
 /**
  * gtk_text_iter_get_attributes:
  * @iter: an iterator
- * @values: (out): a #GtkTextAttributes to be filled in
+ * @values: (in): a #GtkTextAttributes to be modified
  *
  * Computes the effect of any tags applied to this spot in the
  * text. The @values parameter should be initialized to the default
