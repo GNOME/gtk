@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 19:32+0000\n"
-"PO-Revision-Date: 2016-08-22 19:35+0200\n"
+"POT-Creation-Date: 2016-08-25 21:04+0000\n"
+"PO-Revision-Date: 2016-08-26 13:45+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1324,7 +1324,7 @@ msgstr ""
 "wraz z odwołaniem do początku lub końca kontrolki nadrzędnej"
 
 #: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1990
-#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1687
+#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1716
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Pozycja"
@@ -3991,11 +3991,11 @@ msgstr "Etykieta anulowania"
 msgid "The label on the cancel button"
 msgstr "Etykieta przycisku anulowania"
 
-#: gtk/gtkfilechooserwidget.c:8449 gtk/gtkfilechooserwidget.c:8450
+#: gtk/gtkfilechooserwidget.c:8460 gtk/gtkfilechooserwidget.c:8461
 msgid "Search mode"
 msgstr "Tryb wyszukiwania"
 
-#: gtk/gtkfilechooserwidget.c:8456 gtk/gtkfilechooserwidget.c:8457
+#: gtk/gtkfilechooserwidget.c:8467 gtk/gtkfilechooserwidget.c:8468
 #: gtk/gtkheaderbar.c:2004 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Podtytuł"
@@ -5265,7 +5265,7 @@ msgstr "Tytuł okna dialogowego"
 msgid "The title of the file chooser dialog"
 msgstr "Tytuł okna dialogowego wyboru plików"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1702 gtk/gtkwindow.c:783
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1731 gtk/gtkwindow.c:783
 msgid "Modal"
 msgstr "Modalne"
 
@@ -5498,6 +5498,22 @@ msgstr "Indeks"
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr ""
 "Indeks nakładki w elemencie nadrzędnym, -1 oznacza główny element potomny"
+
+#: gtk/gtkpadcontroller.c:373
+msgid "Action group"
+msgstr "Grupa czynności"
+
+#: gtk/gtkpadcontroller.c:374
+msgid "Action group to launch actions from"
+msgstr "Grupa czynności, z której uruchamiać czynności"
+
+#: gtk/gtkpadcontroller.c:379
+msgid "Pad device"
+msgstr "Urządzenie płytki"
+
+#: gtk/gtkpadcontroller.c:380
+msgid "Pad device to control"
+msgstr "Kontrolowane urządzenie płytki"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -5735,43 +5751,43 @@ msgstr "Okno gniazda"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Okno gniazda, w którym osadzona jest wtyczka"
 
-#: gtk/gtkpopover.c:1659
+#: gtk/gtkpopover.c:1688
 msgid "Relative to"
 msgstr "Względne do"
 
-#: gtk/gtkpopover.c:1660
+#: gtk/gtkpopover.c:1689
 msgid "Widget the bubble window points to"
 msgstr "Widżet, na który wskazuje okrągłe okno"
 
-#: gtk/gtkpopover.c:1673
+#: gtk/gtkpopover.c:1702
 msgid "Pointing to"
 msgstr "Wskazujące na"
 
-#: gtk/gtkpopover.c:1674
+#: gtk/gtkpopover.c:1703
 msgid "Rectangle the bubble window points to"
 msgstr "Prostokąt, na który wskazuje okrągłe okno"
 
-#: gtk/gtkpopover.c:1688
+#: gtk/gtkpopover.c:1717
 msgid "Position to place the bubble window"
 msgstr "Położenie do umieszczenia okrągłego okna"
 
-#: gtk/gtkpopover.c:1703
+#: gtk/gtkpopover.c:1732
 msgid "Whether the popover is modal"
 msgstr "Określa, czy widżet popover jest modalny"
 
-#: gtk/gtkpopover.c:1716
+#: gtk/gtkpopover.c:1745
 msgid "Transitions enabled"
 msgstr "Włączone przejścia"
 
-#: gtk/gtkpopover.c:1717
+#: gtk/gtkpopover.c:1746
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Określa, czy przejścia wyświetlenia/ukrycia są włączone"
 
-#: gtk/gtkpopover.c:1730
+#: gtk/gtkpopover.c:1759
 msgid "Constraint"
 msgstr "Ograniczenie"
 
-#: gtk/gtkpopover.c:1731
+#: gtk/gtkpopover.c:1760
 msgid "Constraint for the popover position"
 msgstr "Ograniczenie położenia widżetu popover"
 
