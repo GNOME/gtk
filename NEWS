@@ -9,7 +9,8 @@ Overview of Changes in GTK+ 3.21.5
 
 * Wayland:
  - Switch to xdg-shell v6
- - Use tablet pad protocol
+ - Use tablet pad protocol to support Wacom tablets fully
+ - Use the xdg_foreign protocol to export window handles
  - Improve menu positioning
  - Improve handling of tiled window state
 
@@ -51,6 +52,10 @@ Overview of Changes in GTK+ 3.21.5
  770242 gtkbindings: Clarify that widgets need has-focus for bindings to work
  770332 Notebook arrow icon wrong color after creating new tab
  770374 Gtk Treeview Editable overshoots column width when column width is...
+ 769788 Fix stacking order of flatpak portals on Wayland
+ 770458 GtkAboutDialog issue with long credit lists and GtkScrolledWindow
+ 770550 gtkplacessidebar: fix signal marshal
+ 770307 Crash when closing a glade project
 
 * Translation updates:
  Brazilian Portuguese
@@ -63,6 +68,7 @@ Overview of Changes in GTK+ 3.21.5
  Lithuanian
  Polish
  Portuguese
+ Serbian
  Slovak
  Slovenian
  Spanish
