@@ -1642,7 +1642,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                   G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
                   G_STRUCT_OFFSET (GtkWidgetClass, destroy),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -1658,7 +1658,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, show),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1674,7 +1674,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, hide),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1697,7 +1697,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, map),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1717,7 +1717,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, unmap),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1734,7 +1734,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, realize),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1752,7 +1752,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, unrealize),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1767,7 +1767,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__BOXED,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
@@ -1787,7 +1787,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, state_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__ENUM,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_STATE_TYPE);
 
@@ -1807,7 +1807,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkWidgetClass, state_flags_changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__FLAGS,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_STATE_FLAGS);
 
@@ -1826,7 +1826,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, parent_set),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
 
@@ -1848,7 +1848,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, hierarchy_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
 
@@ -1877,7 +1877,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, style_set),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_STYLE);
 
@@ -1919,7 +1919,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, direction_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__ENUM,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_TEXT_DIRECTION);
 
@@ -1944,7 +1944,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkWidgetClass, grab_notify),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__BOOLEAN,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_BOOLEAN);
 
@@ -2035,7 +2035,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkWidgetClass, grab_focus),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -2066,7 +2066,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkWidgetClass, move_focus),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
@@ -2140,11 +2140,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  0,
 		  0,
 		  NULL, NULL,
-		  _gtk_marshal_VOID__BOXED,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (widget_signals[EVENT_AFTER], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_VOID__BOXEDv);
 
   /**
    * GtkWidget::button-press-event:
@@ -2289,7 +2287,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkWidgetClass, composited_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -2825,7 +2823,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_begin),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_DRAG_CONTEXT);
 
@@ -2844,7 +2842,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_end),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_DRAG_CONTEXT);
 
@@ -2864,7 +2862,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_delete),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_DRAG_CONTEXT);
 
@@ -3358,7 +3356,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  0,
 		  0,
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -3376,7 +3374,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, screen_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_SCREEN);
 

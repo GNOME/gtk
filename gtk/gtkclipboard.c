@@ -245,7 +245,7 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkClipboardClass, owner_change),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__BOXED,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 }

@@ -254,7 +254,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                   G_SIGNAL_RUN_FIRST,
                                                   G_STRUCT_OFFSET (GtkColorButtonClass, color_set),
                                                   NULL, NULL,
-                                                  _gtk_marshal_VOID__VOID,
+                                                  NULL,
                                                   G_TYPE_NONE, 0);
 
   /**

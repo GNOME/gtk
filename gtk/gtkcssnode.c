@@ -616,12 +616,9 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 		  G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkCssNodeClass, style_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__POINTER,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_POINTER);
-  g_signal_set_va_marshaller (cssnode_signals[STYLE_CHANGED],
-                              G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_VOID__POINTERv);
 
   cssnode_properties[PROP_CLASSES] =
     g_param_spec_boxed ("classes", P_("Style Classes"), P_("List of classes"),

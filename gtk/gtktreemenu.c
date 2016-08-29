@@ -249,7 +249,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                   G_SIGNAL_RUN_FIRST,
                   0, /* No class closure here */
                   NULL, NULL,
-                  _gtk_marshal_VOID__STRING,
+                  NULL,
                   G_TYPE_NONE, 1, G_TYPE_STRING);
 
   /*

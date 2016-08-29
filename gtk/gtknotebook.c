@@ -1080,7 +1080,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, move_focus_out),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_DIRECTION_TYPE);
   notebook_signals[REORDER_TAB] =

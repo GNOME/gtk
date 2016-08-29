@@ -254,7 +254,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, toolbar_reconfigured),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, "toolitem");

@@ -175,7 +175,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   0,
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 }
 

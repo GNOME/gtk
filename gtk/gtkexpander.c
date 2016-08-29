@@ -412,7 +412,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkExpanderClass, activate),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_EXPANDER_ACCESSIBLE);

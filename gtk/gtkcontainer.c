@@ -557,7 +557,7 @@ gtk_container_class_init (GtkContainerClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkContainerClass, add),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
   container_signals[REMOVE] =
@@ -566,7 +566,7 @@ gtk_container_class_init (GtkContainerClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkContainerClass, remove),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
   container_signals[CHECK_RESIZE] =
@@ -575,7 +575,7 @@ gtk_container_class_init (GtkContainerClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkContainerClass, check_resize),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
   container_signals[SET_FOCUS_CHILD] =
     g_signal_new (I_("set-focus-child"),
@@ -583,7 +583,7 @@ gtk_container_class_init (GtkContainerClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkContainerClass, set_focus_child),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
 

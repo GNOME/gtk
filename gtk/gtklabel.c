@@ -711,7 +711,7 @@ gtk_label_class_init (GtkLabelClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkLabelClass, copy_clipboard),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   
   /**
@@ -732,7 +732,7 @@ gtk_label_class_init (GtkLabelClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkLabelClass, populate_popup),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_MENU);
 
@@ -756,7 +756,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                   G_CALLBACK (gtk_label_activate_current_link),
                                   NULL, NULL,
-                                  _gtk_marshal_VOID__VOID,
+                                  NULL,
                                   G_TYPE_NONE, 0);
 
     /**

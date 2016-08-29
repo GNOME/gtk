@@ -1003,7 +1003,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
                   G_STRUCT_OFFSET (GtkLevelBarClass, offset_changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__STRING,
+                  NULL,
                   G_TYPE_NONE,
                   1, G_TYPE_STRING);
 

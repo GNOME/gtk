@@ -444,7 +444,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 				       G_SIGNAL_RUN_FIRST,
 				       G_STRUCT_OFFSET (GtkRadioMenuItemClass, group_changed),
 				       NULL, NULL,
-				       _gtk_marshal_VOID__VOID,
+				       NULL,
 				       G_TYPE_NONE, 0);
 }
 

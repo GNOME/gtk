@@ -408,7 +408,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkFileChooserButtonClass, file_set),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**

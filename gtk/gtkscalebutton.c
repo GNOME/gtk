@@ -262,7 +262,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkScaleButtonClass, value_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__DOUBLE,
+		  NULL,
 		  G_TYPE_NONE, 1, G_TYPE_DOUBLE);
 
   /**

@@ -1165,7 +1165,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTextViewClass, set_anchor),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1186,7 +1186,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTextViewClass, insert_at_cursor),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__STRING,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
 
@@ -1237,7 +1237,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTextViewClass, backspace),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1257,7 +1257,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTextViewClass, cut_clipboard),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1277,7 +1277,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTextViewClass, copy_clipboard),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1298,7 +1298,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTextViewClass, paste_clipboard),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1317,7 +1317,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTextViewClass, toggle_overwrite),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1346,7 +1346,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTextViewClass, populate_popup),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
   
@@ -1369,7 +1369,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_text_view_select_all),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__BOOLEAN,
+                                NULL,
                                 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
   /**
@@ -1389,7 +1389,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_text_view_toggle_cursor_visible),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -1412,7 +1412,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 NULL,
                                 NULL, NULL,
-                                _gtk_marshal_VOID__STRING,
+                                NULL,
                                 G_TYPE_NONE, 1,
                                 G_TYPE_STRING);
 

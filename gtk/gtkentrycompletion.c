@@ -339,7 +339,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEntryCompletionClass, action_activated),
                   NULL, NULL,
-                  _gtk_marshal_VOID__INT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_INT);
 

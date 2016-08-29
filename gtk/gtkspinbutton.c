@@ -530,7 +530,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSpinButtonClass, value_changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -548,7 +548,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSpinButtonClass, wrapped),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /* Action signals */
@@ -572,7 +572,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkSpinButtonClass, change_value),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_SCROLL_TYPE);
 

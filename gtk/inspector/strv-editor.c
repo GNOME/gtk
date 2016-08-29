@@ -120,7 +120,7 @@ gtk_inspector_strv_editor_class_init (GtkInspectorStrvEditorClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkInspectorStrvEditorClass, changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 }
 

@@ -563,7 +563,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_menu_real_move_scroll),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__ENUM,
+                                NULL,
                                 G_TYPE_NONE, 1,
                                 GTK_TYPE_SCROLL_TYPE);
 

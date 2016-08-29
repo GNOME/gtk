@@ -128,7 +128,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_added),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_TAG);
@@ -144,7 +144,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_removed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_TAG);

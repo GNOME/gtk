@@ -1143,7 +1143,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkWindowClass, set_focus),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
 
@@ -1162,7 +1162,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkWindowClass, activate_focus),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -1181,7 +1181,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkWindowClass, activate_default),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -1198,7 +1198,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkWindowClass, keys_changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 

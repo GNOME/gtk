@@ -489,7 +489,7 @@ gtk_style_class_init (GtkStyleClass *klass)
 				 G_SIGNAL_RUN_FIRST,
 				 G_STRUCT_OFFSET (GtkStyleClass, realize),
 				 NULL, NULL,
-				 _gtk_marshal_VOID__VOID,
+				 NULL,
 				 G_TYPE_NONE, 0);
   /**
    * GtkStyle::unrealize:
@@ -507,7 +507,7 @@ gtk_style_class_init (GtkStyleClass *klass)
 				   G_SIGNAL_RUN_FIRST,
 				   G_STRUCT_OFFSET (GtkStyleClass, unrealize),
 				   NULL, NULL,
-				   _gtk_marshal_VOID__VOID,
+				   NULL,
 				   G_TYPE_NONE, 0);
 }
 

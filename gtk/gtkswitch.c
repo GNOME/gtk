@@ -982,7 +982,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkSwitchClass, activate),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
   widget_class->activate_signal = signals[ACTIVATE];
 

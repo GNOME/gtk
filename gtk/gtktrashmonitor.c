@@ -88,7 +88,7 @@ _gtk_trash_monitor_class_init (GtkTrashMonitorClass *class)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkTrashMonitorClass, trash_state_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 }
 

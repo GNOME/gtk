@@ -587,7 +587,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkCalendarClass, month_changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -602,7 +602,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkCalendarClass, day_selected),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -617,7 +617,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkCalendarClass, day_selected_double_click),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -632,7 +632,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkCalendarClass, prev_month),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -647,7 +647,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkCalendarClass, next_month),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -662,7 +662,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkCalendarClass, prev_year),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -677,7 +677,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkCalendarClass, next_year),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CALENDAR);

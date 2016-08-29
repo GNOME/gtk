@@ -1050,7 +1050,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkAppChooserWidgetClass, application_selected),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE,
                   1, G_TYPE_APP_INFO);
 
@@ -1071,7 +1071,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkAppChooserWidgetClass, application_activated),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE,
                   1, G_TYPE_APP_INFO);
 

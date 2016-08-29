@@ -178,7 +178,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEntryClass, search_changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -202,7 +202,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkSearchEntryClass, next_match),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -226,7 +226,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkSearchEntryClass, previous_match),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -249,7 +249,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkSearchEntryClass, stop_search),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   binding_set = gtk_binding_set_by_class (klass);

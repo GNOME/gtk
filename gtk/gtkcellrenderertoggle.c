@@ -193,7 +193,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkCellRendererToggleClass, toggled),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__STRING,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
 

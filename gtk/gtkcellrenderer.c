@@ -230,7 +230,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkCellRendererClass, editing_canceled),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**

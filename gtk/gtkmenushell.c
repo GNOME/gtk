@@ -227,7 +227,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkMenuShellClass, deactivate),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -243,7 +243,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkMenuShellClass, selection_done),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -260,7 +260,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkMenuShellClass, move_current),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_MENU_DIRECTION_TYPE);
 
@@ -278,7 +278,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkMenuShellClass, activate_current),
                   NULL, NULL,
-                  _gtk_marshal_VOID__BOOLEAN,
+                  NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_BOOLEAN);
 
@@ -295,7 +295,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkMenuShellClass, cancel),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -312,7 +312,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_real_menu_shell_cycle_focus),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__ENUM,
+                                NULL,
                                 G_TYPE_NONE, 1,
                                 GTK_TYPE_DIRECTION_TYPE);
 

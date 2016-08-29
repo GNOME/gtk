@@ -231,7 +231,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_start),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   /**
    * GtkIMContext::preedit-end:
@@ -246,7 +246,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_end),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   /**
    * GtkIMContext::preedit-changed:
@@ -263,7 +263,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIMContextClass, preedit_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   /**
    * GtkIMContext::commit:
@@ -280,7 +280,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIMContextClass, commit),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__STRING,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
   /**

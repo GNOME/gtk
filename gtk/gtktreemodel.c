@@ -446,7 +446,7 @@ gtk_tree_model_base_init (gpointer g_class)
                        G_SIGNAL_RUN_FIRST,
                        closure,
                        NULL, NULL,
-                       _gtk_marshal_VOID__BOXED,
+                       NULL,
                        G_TYPE_NONE, 1,
                        row_deleted_params);
 

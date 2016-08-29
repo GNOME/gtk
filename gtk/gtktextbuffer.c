@@ -427,7 +427,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -447,7 +447,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, modified_changed),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -496,7 +496,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_deleted),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_MARK);
@@ -591,7 +591,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, begin_user_action),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -617,7 +617,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, end_user_action),
                   NULL, NULL,
-                  _gtk_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -638,7 +638,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, paste_done),
                   NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_CLIPBOARD);

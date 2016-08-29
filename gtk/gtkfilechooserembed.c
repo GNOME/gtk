@@ -154,14 +154,14 @@ gtk_file_chooser_embed_class_init (gpointer g_iface)
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserEmbedIface, default_size_changed),
 		NULL, NULL,
-		_gtk_marshal_VOID__VOID,
+		NULL,
 		G_TYPE_NONE, 0);
   g_signal_new (I_("response-requested"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserEmbedIface, response_requested),
 		NULL, NULL,
-		_gtk_marshal_VOID__VOID,
+		NULL,
 		G_TYPE_NONE, 0);
 }
 

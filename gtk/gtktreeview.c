@@ -1439,7 +1439,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, columns_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1454,7 +1454,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, cursor_changed),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**

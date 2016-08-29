@@ -8150,7 +8150,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (location_popup_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__STRING,
+                                NULL,
                                 G_TYPE_NONE, 1, G_TYPE_STRING);
 
   /**
@@ -8171,7 +8171,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (location_popup_on_paste_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8192,7 +8192,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (location_toggle_popup_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8213,7 +8213,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (up_folder_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8237,7 +8237,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (down_folder_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8258,7 +8258,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (home_folder_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8279,7 +8279,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (desktop_folder_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8306,7 +8306,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (quick_bookmark_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__INT,
+                                NULL,
                                 G_TYPE_NONE, 1, G_TYPE_INT);
 
   /**
@@ -8326,7 +8326,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (show_hidden_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8346,7 +8346,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (search_shortcut_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8366,7 +8366,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (recent_shortcut_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   /**
@@ -8386,7 +8386,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (places_shortcut_handler),
                                 NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   binding_set = gtk_binding_set_by_class (class);

@@ -1594,7 +1594,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkEntryClass, populate_popup),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
   
@@ -1620,7 +1620,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, activate),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   widget_class->activate_signal = signals[ACTIVATE];
 
@@ -1679,7 +1679,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, insert_at_cursor),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__STRING,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
 
@@ -1729,7 +1729,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, backspace),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1749,7 +1749,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, cut_clipboard),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1769,7 +1769,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, copy_clipboard),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1790,7 +1790,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, paste_clipboard),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1809,7 +1809,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkEntryClass, toggle_overwrite),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1873,7 +1873,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 NULL,
                                 NULL, NULL,
-                                _gtk_marshal_VOID__STRING,
+                                NULL,
                                 G_TYPE_NONE, 1,
                                 G_TYPE_STRING);
 

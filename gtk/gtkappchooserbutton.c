@@ -666,7 +666,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
                   G_STRUCT_OFFSET (GtkAppChooserButtonClass, custom_item_activated),
                   NULL, NULL,
-                  _gtk_marshal_VOID__STRING,
+                  NULL,
                   G_TYPE_NONE,
                   1, G_TYPE_STRING);
 }
