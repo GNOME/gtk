@@ -4391,7 +4391,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_SIGNAL_RUN_FIRST,
                         G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_other_locations_with_flags),
                         NULL, NULL,
-                        _gtk_marshal_VOID__VOID,
+                        _gtk_marshal_VOID__FLAGS,
                         G_TYPE_NONE, 1,
                         GTK_TYPE_PLACES_OPEN_FLAGS);
 
