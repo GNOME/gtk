@@ -353,7 +353,10 @@ get_device_ids (GdkDisplay    *display,
   prop = XInternAtom (GDK_DISPLAY_XDISPLAY (display), "Device Product ID", True);
 
   if (prop == None)
-    return 0;
+    {
+      gdk_x11_display_error_trap_pop_ignored (display);
+      return 0;
+    }
 
   rc = XIGetProperty (GDK_DISPLAY_XDISPLAY (display),
                       info->deviceid, prop,
