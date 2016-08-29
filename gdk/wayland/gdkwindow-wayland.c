@@ -3861,15 +3861,53 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
 };
 
 /**
- * gdk_wayland_window_export_handle:
+ * GdkWaylandWindowExported:
+ * @window: the #GdkWindow that is exported
+ * @handle: the handle
+ * @user_data: user data that was passed to gdk_wayland_window_export_handle()
  *
- * Stability: unstable
+ * Callback that gets called when the handle for a window has been
+ * obtained from the Wayland compositor. The handle can be passed
+ * to other processes, for the purpose of marking windows as transient
+ * for out-of-process surfaces.
+ *
+ * Since: 3.22
+ */
+
+/**
+ * gdk_wayland_window_export_handle:
+ * @window: the #GdkWindow to obtain a handle for
+ * @callback: callback to call with the handle
+ * @user_data: user data for @callback
+ * @destroy_func: destroy notify for @user_data
+ *
+ * Asynchronously obtains a handle for a surface that can be passed
+ * to other processes. When the handle has been obtained, @callback
+ * will be called.
+ *
+ * It is an error to call this function on a window that is already
+ * exported.
+ *
+ * When the handle is no longer needed, gdk_wayland_window_unexport_handle()
+ * should be called to clean up resources.
+ *
+ * The main purpose for obtaining a handle is to mark a surface
+ * from another window as transient for this one, see
+ * gdk_wayland_window_set_transient_for_exported().
+ *
+ * Note that this API depends on an unstable Wayland protocol,
+ * and thus may require changes in the future.
+ *
+ * Return value: %TRUE if the handle has been requested, %FALSE if
+ *     an error occurred.
+ *
+ * Since: 3.22
  */
 gboolean
-gdk_wayland_window_export_handle (GdkWindow               *window,
-                                  GdkWaylandWindowExported callback,
-                                  gpointer                 user_data,
-                                  GDestroyNotify           destroy_func)
+gdk_wayland_window_export_handle (GdkWindow                *window,
+                                  GdkWaylandWindowExported  callback,
+                                  gpointer                  user_data,
+                                  GDestroyNotify            destroy_func)
 {
   GdkWindowImplWayland *impl;
   GdkWaylandDisplay *display_wayland;
@@ -3904,8 +3942,18 @@ gdk_wayland_window_export_handle (GdkWindow               *window,
 
 /**
  * gdk_wayland_window_unexport_handle:
+ * @window: the #GdkWindow to unexport
  *
- * Stability: unstable
+ * Destroys the handle that was obtained with
+ * gdk_wayland_window_export_handle().
+ *
+ * It is an error to call this function on a window that
+ * does not have a handle.
+ *
+ * Note that this API depends on an unstable Wayland protocol,
+ * and thus may require changes in the future.
+ *
+ * Since: 3.22
  */
 void
 gdk_wayland_window_unexport_handle (GdkWindow *window)
@@ -3947,8 +3995,20 @@ static const struct zxdg_imported_v1_listener xdg_imported_listener = {
 
 /**
  * gdk_wayland_window_set_transient_for_exported:
+ * @window: the #GdkWindow to make as transient
+ * @parent_handle_str: an exported handle for a surface
  *
- * Stability: unstable
+ * Marks @window as transient for the surface to which the given
+ * @parent_handle_str refers. Typically, the handle will originate
+ * from a gdk_wayland_window_export_handle() call in another process.
+ *
+ * Note that this API depends on an unstable Wayland protocol,
+ * and thus may require changes in the future.
+ *
+ * Return value: %TRUE if the window has been marked as transient,
+ *     %FALSE if an error occurred.
+ *
+ * Since: 3.22
  */
 gboolean
 gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
