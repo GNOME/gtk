@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-18 08:53+0000\n"
-"PO-Revision-Date: 2016-08-20 16:41+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
-"Language-Team: Hungarian <openscope at gmail dot com>\n"
+"POT-Creation-Date: 2016-08-29 14:03+0000\n"
+"PO-Revision-Date: 2016-08-30 09:38+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
+"Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
@@ -4928,7 +4928,6 @@ msgid "Rect anchor dx"
 msgstr "Téglalaphorgony dx"
 
 #: gtk/gtkmenu.c:807
-#| msgid "Horizontal Offset"
 msgid "Rect anchor horizontal offset"
 msgstr "Téglalaphorgony vízszintes eltolása"
 
@@ -4937,12 +4936,10 @@ msgid "Rect anchor dy"
 msgstr "Téglalaphorgony dy"
 
 #: gtk/gtkmenu.c:834
-#| msgid "Vertical Offset"
 msgid "Rect anchor vertical offset"
 msgstr "Téglalaphorgony függőleges eltolása"
 
 #: gtk/gtkmenu.c:860
-#| msgid "Type hint"
 msgid "Menu type hint"
 msgstr "Menütípus javaslat"
 
@@ -5148,7 +5145,6 @@ msgid "Message area"
 msgstr "Üzenetterület"
 
 #: gtk/gtkmessagedialog.c:295
-#| msgid "GtkVBox that holds the dialog's primary and secondary labels"
 msgid "GtkBox that holds the dialog's primary and secondary labels"
 msgstr "Az ablak elsődleges és másodlagos címkéit tartalmazó GtkBox"
 
@@ -5452,6 +5448,27 @@ msgstr "Index"
 #: gtk/gtkoverlay.c:770
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "Az átfedés indexe a szülőben, -1 a fő gyermeknél"
+
+#: gtk/gtkpadcontroller.c:373
+#| msgid "Action Group"
+msgid "Action group"
+msgstr "Műveletcsoport"
+
+#: gtk/gtkpadcontroller.c:374
+msgid "Action group to launch actions from"
+msgstr "Műveletek indítása ezen műveletcsoportból"
+
+# GtkPadController is an event controller for the pads found in drawing
+# tablets (The collection of buttons and tactile sensors often found around
+# the stylus-sensitive area).
+#: gtk/gtkpadcontroller.c:379
+#| msgid "Associated device"
+msgid "Pad device"
+msgstr "Táblaeszköz"
+
+#: gtk/gtkpadcontroller.c:380
+msgid "Pad device to control"
+msgstr "Vezérlendő táblaeszköz"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -6622,25 +6639,19 @@ msgid "Overlay scrolling mode"
 msgstr "Átfedő görgetés mód."
 
 #: gtk/gtkscrolledwindow.c:723
-#| msgid "Minimum Content Width"
 msgid "Maximum Content Width"
 msgstr "Legnagyobb tartalomszélesség"
 
 #: gtk/gtkscrolledwindow.c:724
-#| msgid ""
-#| "The minimum width that the scrolled window will allocate to its content"
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "A görgetett ablak által a tartalomnak lefoglalandó legnagyobb szélesség"
 
 #: gtk/gtkscrolledwindow.c:737
-#| msgid "Minimum Content Height"
 msgid "Maximum Content Height"
 msgstr "Legnagyobb tartalommagasság"
 
 #: gtk/gtkscrolledwindow.c:738
-#| msgid ""
-#| "The minimum height that the scrolled window will allocate to its content"
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr "A görgetett ablak által a tartalomnak lefoglalandó legnagyobb magasság"
@@ -9559,3 +9570,4 @@ msgstr "Színprofil neve"
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "A használandó színprofil neve"
+
