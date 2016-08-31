@@ -22,6 +22,8 @@ test_size (GtkOrientation orientation,
   gtk_widget_set_vexpand (box, TRUE);
 
   scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
+  gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
   gtk_container_add (GTK_CONTAINER (scrolledwindow), box);
   gtk_widget_show_all (scrolledwindow);
 
