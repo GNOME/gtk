@@ -9667,7 +9667,7 @@ gtk_tree_view_clamp_column_visible (GtkTreeView       *tree_view,
   if (width > gtk_adjustment_get_page_size (tree_view->priv->hadjustment))
     {
       /* The column is larger than the horizontal page size.  If the
-       * column has cells which can be focussed individually, then we make
+       * column has cells which can be focused individually, then we make
        * sure the cell which gets focus is fully visible (if even the
        * focus cell is bigger than the page size, we make sure the
        * left-hand side of the cell is visible).
