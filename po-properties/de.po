@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-20 14:43+0000\n"
-"PO-Revision-Date: 2016-08-20 20:52+0200\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2016-08-29 14:03+0000\n"
+"PO-Revision-Date: 2016-08-30 19:46+0200\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -5041,26 +5041,20 @@ msgstr ""
 "Menü über den Bildschirmrand hinausragt"
 
 #: gtk/gtkmenu.c:806
-#, fuzzy
 msgid "Rect anchor dx"
-msgstr "Anker X"
+msgstr "Rechteck-Anker dx"
 
 #: gtk/gtkmenu.c:807
-#, fuzzy
-#| msgid "Horizontal Offset"
 msgid "Rect anchor horizontal offset"
-msgstr "Horizontaler Versatz"
+msgstr "Horizontaler Versatz des Rechteck-Ankers"
 
 #: gtk/gtkmenu.c:833
-#, fuzzy
 msgid "Rect anchor dy"
-msgstr "Anker Y"
+msgstr "Rechteck-Anker dy"
 
 #: gtk/gtkmenu.c:834
-#, fuzzy
-#| msgid "Vertical Offset"
 msgid "Rect anchor vertical offset"
-msgstr "Vertikaler Versatz"
+msgstr "Vertikaler Versatz des Rechteck-Ankers"
 
 #: gtk/gtkmenu.c:860
 msgid "Menu type hint"
@@ -5580,6 +5574,22 @@ msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr ""
 "Der Index der Überlagerung im übergeordneten Element; -1 für das "
 "Hauptunterelement"
+
+#: gtk/gtkpadcontroller.c:373
+msgid "Action group"
+msgstr "Aktionsgruppe"
+
+#: gtk/gtkpadcontroller.c:374
+msgid "Action group to launch actions from"
+msgstr "Aktionsgruppe, von der Aktionen gestartet werden"
+
+#: gtk/gtkpadcontroller.c:379
+msgid "Pad device"
+msgstr "Tastfeld-Gerät"
+
+#: gtk/gtkpadcontroller.c:380
+msgid "Pad device to control"
+msgstr "Zu steuerndes Tastfeld-Gerät"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -8685,13 +8695,11 @@ msgid "Wrap width for laying out items in a grid"
 msgstr "Umbruchbreite zum Anordnen der Objekte in einem Gitter"
 
 #: gtk/gtktreemodelfilter.c:532
-#, fuzzy
 msgid "The child model"
 msgstr "Das Unterelement-Modell"
 
 # Hier sind Ideen gefragt …
 #: gtk/gtktreemodelfilter.c:533
-#, fuzzy
 msgid "The model for the filtermodel to filter"
 msgstr "Das Modell für das zu filternde Filtermodell"
 
