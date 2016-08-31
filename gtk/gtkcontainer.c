@@ -2506,7 +2506,7 @@ gtk_container_set_focus_child (GtkContainer *container,
  * gtk_window_get_focus().
  *
  * Returns: (nullable) (transfer none): The child widget which will receive the
- *          focus inside @container when the @conatiner is focussed,
+ *          focus inside @container when the @container is focused,
  *          or %NULL if none is set.
  *
  * Since: 2.14
