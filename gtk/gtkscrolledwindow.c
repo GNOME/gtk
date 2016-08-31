@@ -233,14 +233,16 @@ struct _GtkScrolledWindowPrivate
   GtkCornerType  window_placement;
   guint16  shadow_type;
 
-  guint    hscrollbar_policy      : 2;
-  guint    vscrollbar_policy      : 2;
-  guint    hscrollbar_visible     : 1;
-  guint    vscrollbar_visible     : 1;
-  guint    focus_out              : 1; /* used by ::move-focus-out implementation */
-  guint    overlay_scrolling      : 1;
-  guint    use_indicators         : 1;
-  guint    auto_added_viewport    : 1;
+  guint    hscrollbar_policy        : 2;
+  guint    vscrollbar_policy        : 2;
+  guint    hscrollbar_visible       : 1;
+  guint    vscrollbar_visible       : 1;
+  guint    focus_out                : 1; /* used by ::move-focus-out implementation */
+  guint    overlay_scrolling        : 1;
+  guint    use_indicators           : 1;
+  guint    auto_added_viewport      : 1;
+  guint    propagate_natural_width  : 1;
+  guint    propagate_natural_height : 1;
 
   gint     min_content_width;
   gint     min_content_height;
@@ -303,6 +305,8 @@ enum {
   PROP_OVERLAY_SCROLLING,
   PROP_MAX_CONTENT_WIDTH,
   PROP_MAX_CONTENT_HEIGHT,
+  PROP_PROPAGATE_NATURAL_WIDTH,
+  PROP_PROPAGATE_NATURAL_HEIGHT,
   NUM_PROPERTIES
 };
 
@@ -738,6 +742,42 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                         P_("The maximum height that the scrolled window will allocate to its content"),
                         -1, G_MAXINT, -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkScrolledWindow:propagate-natural-width:
+   *
+   * Whether the natural width of the child should be calculated and propagated
+   * through the scrolled windows requested natural width.
+   *
+   * This is useful in cases where an attempt should be made to allocate exactly
+   * enough space for the natural size of the child.
+   *
+   * Since: 3.22
+   */
+  properties[PROP_PROPAGATE_NATURAL_WIDTH] =
+      g_param_spec_boolean ("propagate-natural-width",
+                            P_("Propagate Natural Width"),
+                            P_("Propagate Natural Width"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkScrolledWindow:propagate-natural-height:
+   *
+   * Whether the natural height of the child should be calculated and propagated
+   * through the scrolled windows requested natural height.
+   *
+   * This is useful in cases where an attempt should be made to allocate exactly
+   * enough space for the natural size of the child.
+   *
+   * Since: 3.22
+   */
+  properties[PROP_PROPAGATE_NATURAL_HEIGHT] =
+      g_param_spec_boolean ("propagate-natural-height",
+                            P_("Propagate Natural Height"),
+                            P_("Propagate Natural Height"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
@@ -1798,7 +1838,8 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
                                           &min_child_size,
                                           &nat_child_size);
 
-	  natural_req.width += nat_child_size;
+	  if (priv->propagate_natural_width)
+	    natural_req.width += nat_child_size;
 
 	  if (priv->hscrollbar_policy == GTK_POLICY_NEVER)
 	    {
@@ -1819,7 +1860,8 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
                                            &min_child_size,
                                            &nat_child_size);
 
-	  natural_req.height += nat_child_size;
+	  if (priv->propagate_natural_height)
+	    natural_req.height += nat_child_size;
 
 	  if (priv->vscrollbar_policy == GTK_POLICY_NEVER)
 	    {
@@ -1835,6 +1877,10 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 	    }
 	}
     }
+
+  /* Ensure we make requests with natural size >= minimum size */
+  natural_req.height = MAX (minimum_req.height, natural_req.height);
+  natural_req.width  = MAX (minimum_req.width,  natural_req.width);
 
   /*
    * Now add to the requisition any additional space for surrounding scrollbars
@@ -2847,6 +2893,14 @@ gtk_scrolled_window_set_property (GObject      *object,
       gtk_scrolled_window_set_max_content_height (scrolled_window,
                                                   g_value_get_int (value));
       break;
+    case PROP_PROPAGATE_NATURAL_WIDTH:
+      gtk_scrolled_window_set_propagate_natural_width (scrolled_window,
+						       g_value_get_boolean (value));
+      break;
+    case PROP_PROPAGATE_NATURAL_HEIGHT:
+      gtk_scrolled_window_set_propagate_natural_height (scrolled_window,
+						       g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2904,6 +2958,12 @@ gtk_scrolled_window_get_property (GObject    *object,
       break;
     case PROP_MAX_CONTENT_HEIGHT:
       g_value_set_int (value, priv->max_content_height);
+      break;
+    case PROP_PROPAGATE_NATURAL_WIDTH:
+      g_value_set_boolean (value, priv->propagate_natural_width);
+      break;
+    case PROP_PROPAGATE_NATURAL_HEIGHT:
+      g_value_set_boolean (value, priv->propagate_natural_height);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -4730,4 +4790,102 @@ gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window)
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), -1);
 
   return scrolled_window->priv->max_content_height;
+}
+
+/**
+ * gtk_scrolled_window_set_propagate_natural_width:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @propagate: whether to propagate natural width
+ *
+ * Sets whether the natural width of the child should be calculated and propagated
+ * through the scrolled windows requested natural width.
+ *
+ * Since: 3.22
+ */
+void
+gtk_scrolled_window_set_propagate_natural_width (GtkScrolledWindow *scrolled_window,
+						 gboolean           propagate)
+{
+  GtkScrolledWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
+  priv = scrolled_window->priv;
+
+  propagate = !!propagate;
+
+  if (priv->propagate_natural_width != propagate)
+    {
+      priv->propagate_natural_width = propagate;
+      g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties [PROP_PROPAGATE_NATURAL_WIDTH]);
+      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+    }
+}
+
+/**
+ * gtk_scrolled_window_get_propagate_natural_width:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Reports whether the natural width of the child will be calculated and propagated
+ * through the scrolled windows requested natural width.
+ *
+ * Returns: whether natural width propagation is enabled.
+ *
+ * Since: 3.22
+ */
+gint
+gtk_scrolled_window_get_propagate_natural_width (GtkScrolledWindow *scrolled_window)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), -1);
+
+  return scrolled_window->priv->propagate_natural_width;
+}
+
+/**
+ * gtk_scrolled_window_set_propagate_natural_height:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @propagate: whether to propagate natural height
+ *
+ * Sets whether the natural height of the child should be calculated and propagated
+ * through the scrolled windows requested natural height.
+ *
+ * Since: 3.22
+ */
+void
+gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_window,
+						 gboolean           propagate)
+{
+  GtkScrolledWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
+  priv = scrolled_window->priv;
+
+  propagate = !!propagate;
+
+  if (priv->propagate_natural_height != propagate)
+    {
+      priv->propagate_natural_height = propagate;
+      g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties [PROP_PROPAGATE_NATURAL_HEIGHT]);
+      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+    }
+}
+
+/**
+ * gtk_scrolled_window_get_propagate_natural_height:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Reports whether the natural height of the child will be calculated and propagated
+ * through the scrolled windows requested natural height.
+ *
+ * Returns: whether natural height propagation is enabled.
+ *
+ * Since: 3.22
+ */
+gint
+gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_window)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), -1);
+
+  return scrolled_window->priv->propagate_natural_height;
 }

@@ -226,6 +226,18 @@ void           gtk_scrolled_window_set_max_content_height (GtkScrolledWindow *sc
 GDK_AVAILABLE_IN_3_22
 gint           gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window);
 
+GDK_AVAILABLE_IN_3_22
+void           gtk_scrolled_window_set_propagate_natural_width  (GtkScrolledWindow *scrolled_window,
+								 gboolean           propagate);
+GDK_AVAILABLE_IN_3_22
+gboolean       gtk_scrolled_window_get_propagate_natural_width  (GtkScrolledWindow *scrolled_window);
+
+GDK_AVAILABLE_IN_3_22
+void           gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_window,
+								 gboolean           propagate);
+GDK_AVAILABLE_IN_3_22
+gboolean       gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_window);
+
 G_END_DECLS
 
 
