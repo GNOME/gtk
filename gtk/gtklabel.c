@@ -304,7 +304,7 @@ struct _GtkLabelPrivate
  * Labels with links accept keyboard focus, and it is possible to move
  * the focus between the embedded links using Tab/Shift-Tab. The focus
  * is indicated by a focus rectangle that is drawn around the link text.
- * Pressing Enter activates the focussed link, and there is a suitable
+ * Pressing Enter activates the focused link, and there is a suitable
  * context menu for links that can be opened with the Menu key. Pressing
  * Control-C copies the link URI to the clipboard.
  *
