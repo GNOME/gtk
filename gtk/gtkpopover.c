@@ -846,44 +846,51 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 }
 
 static void
-gtk_popover_get_rect_coords (GtkPopover *popover,
-                             gint       *x1_out,
-                             gint       *y1_out,
-                             gint       *x2_out,
-                             gint       *y2_out)
+gtk_popover_get_rect_for_size (GtkPopover   *popover,
+                               int           popover_width,
+                               int           popover_height,
+                               GdkRectangle *rect)
 {
   GtkWidget *widget = GTK_WIDGET (popover);
-  GtkAllocation allocation;
-  gint x1, x2, y1, y2;
+  int x, y, w, h;
   GtkBorder margin;
 
-  gtk_widget_get_allocation (widget, &allocation);
   get_margin (widget, &margin);
 
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    x1 = gtk_widget_get_margin_start (widget);
-  else
-    x1 = gtk_widget_get_margin_end (widget);
+  x = 0;
+  y = 0;
+  w = popover_width;
+  h = popover_height;
 
-  y1 = gtk_widget_get_margin_top (widget);
-  x2 = allocation.width -
-    gtk_widget_get_margin_end (widget) + x1;
-  y2 = allocation.height -
-    gtk_widget_get_margin_bottom (widget) + y1;
+  x += MAX (TAIL_HEIGHT, margin.left);
+  y += MAX (TAIL_HEIGHT, margin.top);
+  w -= x + MAX (TAIL_HEIGHT, margin.right);
+  h -= y + MAX (TAIL_HEIGHT, margin.bottom);
 
-  x1 += MAX (TAIL_HEIGHT, margin.left);
-  y1 += MAX (TAIL_HEIGHT, margin.top);
-  x2 -= MAX (TAIL_HEIGHT, margin.right);
-  y2 -= MAX (TAIL_HEIGHT, margin.bottom);
+  rect->x = x;
+  rect->y = y;
+  rect->width = w;
+  rect->height = h;
+}
 
-  if (x1_out)
-    *x1_out = x1;
-  if (y1_out)
-    *y1_out = y1;
-  if (x2_out)
-    *x2_out = x2;
-  if (y2_out)
-    *y2_out = y2;
+static void
+gtk_popover_get_rect_coords (GtkPopover *popover,
+                             int        *x_out,
+                             int        *y_out,
+                             int        *w_out,
+                             int        *h_out)
+{
+  GtkWidget *widget = GTK_WIDGET (popover);
+  GdkRectangle rect;
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_popover_get_rect_for_size (popover, allocation.width, allocation.height, &rect);
+
+  *x_out = rect.x;
+  *y_out = rect.y;
+  *w_out = rect.width;
+  *h_out = rect.height;
 }
 
 static void
@@ -916,7 +923,7 @@ gtk_popover_fill_border_path (GtkPopover *popover,
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkAllocation allocation;
   GtkStyleContext *context;
-  gint x1, y1, x2, y2;
+  int x, y, w, h;
   GtkRoundedBox box;
 
   context = gtk_widget_get_style_context (widget);
@@ -928,9 +935,9 @@ gtk_popover_fill_border_path (GtkPopover *popover,
   cairo_close_path (cr);
   cairo_fill (cr);
 
-  gtk_popover_get_rect_coords (popover, &x1, &y1, &x2, &y2);
+  gtk_popover_get_rect_coords (popover, &x, &y, &w, &h);
 
-  _gtk_rounded_box_init_rect (&box, x1, y1, x2 - x1, y2 - y1);
+  _gtk_rounded_box_init_rect (&box, x, y, w, h);
   _gtk_rounded_box_apply_border_radius_for_style (&box,
                                                   gtk_style_context_lookup_style (context),
                                                   0);
@@ -1119,7 +1126,7 @@ gtk_popover_draw (GtkWidget *widget,
   GtkWidget *child;
   GtkBorder border;
   GdkRGBA border_color;
-  gint rect_x1, rect_x2, rect_y1, rect_y2;
+  int rect_x, rect_y, rect_w, rect_h;
   gint initial_x, initial_y, final_x, final_y;
   gint gap_start, gap_end;
   GtkPositionType gap_side;
@@ -1132,14 +1139,13 @@ gtk_popover_draw (GtkWidget *widget,
 
   gtk_style_context_get_border (context, state, &border);
   gtk_popover_get_rect_coords (popover,
-                               &rect_x1, &rect_y1,
-                               &rect_x2, &rect_y2);
+                               &rect_x, &rect_y,
+                               &rect_w, &rect_h);
 
   /* Render the rect background */
   gtk_render_background (context, cr,
-                         rect_x1, rect_y1,
-                         rect_x2 - rect_x1,
-                         rect_y2 - rect_y1);
+                         rect_x, rect_y,
+                         rect_w, rect_h);
 
   if (popover->priv->widget)
     {
@@ -1151,27 +1157,27 @@ gtk_popover_draw (GtkWidget *widget,
 
       if (POS_IS_VERTICAL (gap_side))
         {
-          gap_start = initial_x - rect_x1;
-          gap_end = final_x - rect_x1;
+          gap_start = initial_x - rect_x;
+          gap_end = final_x - rect_x;
         }
       else
         {
-          gap_start = initial_y - rect_y1;
-          gap_end = final_y - rect_y1;
+          gap_start = initial_y - rect_y;
+          gap_end = final_y - rect_y;
         }
 
       /* Now render the frame, without the gap for the arrow tip */
       gtk_render_frame_gap (context, cr,
-                            rect_x1, rect_y1,
-                            rect_x2 - rect_x1, rect_y2 - rect_y1,
+                            rect_x, rect_y,
+                            rect_w, rect_h,
                             gap_side,
                             gap_start, gap_end);
     }
   else
     {
       gtk_render_frame (context, cr,
-                        rect_x1, rect_y1,
-                        rect_x2 - rect_x1, rect_y2 - rect_y1);
+                        rect_x, rect_y,
+                        rect_w, rect_h);
     }
 
   /* Clip to the arrow shape */
@@ -1460,16 +1466,16 @@ gtk_popover_size_allocate (GtkWidget     *widget,
   if (child)
     {
       GtkAllocation child_alloc;
-      gint x1, y1, x2, y2;
+      int x, y, w, h;
       GtkBorder border;
 
-      gtk_popover_get_rect_coords (popover, &x1, &y1, &x2, &y2);
+      gtk_popover_get_rect_coords (popover, &x, &y, &w, &h);
       get_padding_and_border (widget, &border);
 
-      child_alloc.x = x1 + border.left;
-      child_alloc.y = y1 + border.top;
-      child_alloc.width = (x2 - x1) - border.left - border.right;
-      child_alloc.height = (y2 - y1) - border.top - border.bottom;
+      child_alloc.x = x + border.left;
+      child_alloc.y = y + border.top;
+      child_alloc.width = w - border.left - border.right;
+      child_alloc.height = h - border.top - border.bottom;
       gtk_widget_size_allocate (child, &child_alloc);
     }
 
