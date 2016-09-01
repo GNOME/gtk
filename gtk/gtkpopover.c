@@ -1213,7 +1213,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
 
-  return TRUE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
