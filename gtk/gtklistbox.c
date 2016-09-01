@@ -2323,6 +2323,27 @@ gtk_list_box_get_next_visible (GtkListBox    *box,
   return iter;
 }
 
+static GSequenceIter *
+gtk_list_box_get_last_visible (GtkListBox    *box,
+                               GSequenceIter *iter)
+{
+  GSequenceIter *next = NULL;
+
+  if (g_sequence_iter_is_end (iter))
+    return NULL;
+
+  do
+    {
+      next = gtk_list_box_get_next_visible (box, iter);
+
+      if (!g_sequence_iter_is_end (next))
+        iter = next;
+    }
+  while (!g_sequence_iter_is_end (next));
+
+  return iter;
+}
+
 static void
 gtk_list_box_update_header (GtkListBox    *box,
                             GSequenceIter *iter)
@@ -3042,7 +3063,26 @@ gtk_list_box_move_cursor (GtkListBox      *box,
           end_y = CLAMP (start_y + page_size * count, 0, height - 1);
           row = gtk_list_box_get_row_at_y (box, end_y);
 
-          if (row == priv->cursor_row)
+          if (!row)
+            {
+              GSequenceIter *cursor_iter;
+              GSequenceIter *next_iter;
+
+              /* A NULL row should only happen when the list box didn't
+               * have enough rows to fill its height and the user made
+               * a page movement down, so the count must be positive */
+              g_assert (count > 0);
+
+              cursor_iter = ROW_PRIV (priv->cursor_row)->iter;
+              next_iter = gtk_list_box_get_last_visible (box, cursor_iter);
+
+              if (next_iter)
+                {
+                  row = g_sequence_get (next_iter);
+                  end_y = ROW_PRIV (row)->y;
+                }
+            }
+          else if (row == priv->cursor_row)
             {
               iter = ROW_PRIV (row)->iter;
 
