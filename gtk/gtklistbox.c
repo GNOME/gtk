@@ -3041,10 +3041,11 @@ gtk_list_box_move_cursor (GtkListBox      *box,
           height = gtk_widget_get_allocated_height (GTK_WIDGET (box));
           end_y = CLAMP (start_y + page_size * count, 0, height - 1);
           row = gtk_list_box_get_row_at_y (box, end_y);
-          iter = ROW_PRIV (row)->iter;
 
           if (row == priv->cursor_row)
             {
+              iter = ROW_PRIV (row)->iter;
+
               /* Move at least one row. This is important when the cursor_row's height is
                * greater than page_size */
               if (count < 0)
