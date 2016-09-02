@@ -1971,6 +1971,14 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
       g_warning ("Can't map popup, already mapped");
       return;
     }
+  if ((display->current_popups &&
+       g_list_last (display->current_popups)->data != parent) ||
+      (!display->current_popups &&
+       !parent_impl->display_server.xdg_toplevel))
+    {
+      g_warning ("Tried to map a popup with a non-top most parent");
+      return;
+    }
 
   impl->display_server.xdg_surface =
     zxdg_shell_v6_get_xdg_surface (display->xdg_shell,
@@ -2000,6 +2008,8 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
   zxdg_popup_v6_grab (impl->display_server.xdg_popup, seat, serial);
 
   wl_surface_commit (impl->display_server.wl_surface);
+
+  display->current_popups = g_list_append (display->current_popups, window);
 }
 
 static struct wl_seat *
@@ -2362,6 +2372,8 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
         {
           zxdg_popup_v6_destroy (impl->display_server.xdg_popup);
           impl->display_server.xdg_popup = NULL;
+          display_wayland->current_popups =
+            g_list_remove (display_wayland->current_popups, window);
         }
       if (impl->display_server.xdg_surface)
         {
