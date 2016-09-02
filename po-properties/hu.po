@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-29 14:03+0000\n"
-"PO-Revision-Date: 2016-08-30 09:38+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
+"POT-Creation-Date: 2016-08-31 19:05+0000\n"
+"PO-Revision-Date: 2016-09-01 20:32+0200\n"
+"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.8.8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
@@ -219,7 +219,7 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Az akadálymentes elem által képviselt cellamegjelenítő"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:637
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:634
 #: gtk/gtkprinter.c:121 gtk/gtkstack.c:516 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Név"
@@ -350,7 +350,7 @@ msgid "Whether the action is enabled."
 msgstr "Engedélyezve van-e a művelet."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:648
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:645
 #: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1137
 msgid "Visible"
 msgstr "Látható"
@@ -3142,39 +3142,39 @@ msgstr "Gyermek"
 msgid "Can be used to add a new child to the container"
 msgstr "Új gyermek vehető fel a tárolóba"
 
-#: gtk/gtkcssnode.c:627
+#: gtk/gtkcssnode.c:624
 msgid "Style Classes"
 msgstr "Stílusosztályok"
 
-#: gtk/gtkcssnode.c:627
+#: gtk/gtkcssnode.c:624
 msgid "List of classes"
 msgstr "Osztályok listája"
 
-#: gtk/gtkcssnode.c:632 gtk/gtkcssstyleproperty.c:223
+#: gtk/gtkcssnode.c:629 gtk/gtkcssstyleproperty.c:223
 msgid "ID"
 msgstr "Azonosító"
 
-#: gtk/gtkcssnode.c:632
+#: gtk/gtkcssnode.c:629
 msgid "Unique ID"
 msgstr "Egyedi azonosító"
 
-#: gtk/gtkcssnode.c:642 gtk/gtkswitch.c:910
+#: gtk/gtkcssnode.c:639 gtk/gtkswitch.c:910
 msgid "State"
 msgstr "Állapot"
 
-#: gtk/gtkcssnode.c:642
+#: gtk/gtkcssnode.c:639
 msgid "State flags"
 msgstr "Állapotjelzők"
 
-#: gtk/gtkcssnode.c:648
+#: gtk/gtkcssnode.c:645
 msgid "If other nodes can see this node"
 msgstr "Láthatják-e más csomópontok ezt a csomópontot"
 
-#: gtk/gtkcssnode.c:653
+#: gtk/gtkcssnode.c:650
 msgid "Widget type"
 msgstr "Felületi elem típusa"
 
-#: gtk/gtkcssnode.c:653
+#: gtk/gtkcssnode.c:650
 msgid "GType of the widget"
 msgstr "A felületi elem GType típusa"
 
@@ -5450,7 +5450,6 @@ msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "Az átfedés indexe a szülőben, -1 a fő gyermeknél"
 
 #: gtk/gtkpadcontroller.c:373
-#| msgid "Action Group"
 msgid "Action group"
 msgstr "Műveletcsoport"
 
@@ -5462,7 +5461,6 @@ msgstr "Műveletek indítása ezen műveletcsoportból"
 # tablets (The collection of buttons and tactile sensors often found around
 # the stylus-sensitive area).
 #: gtk/gtkpadcontroller.c:379
-#| msgid "Associated device"
 msgid "Pad device"
 msgstr "Táblaeszköz"
 
@@ -6528,51 +6526,51 @@ msgid ""
 msgstr ""
 "Egy második előre léptető nyíl gomb megjelenítése a görgetősáv túlsó szélén"
 
-#: gtk/gtkscrolledwindow.c:567
+#: gtk/gtkscrolledwindow.c:571
 msgid "Horizontal Adjustment"
 msgstr "Vízszintes igazítás"
 
-#: gtk/gtkscrolledwindow.c:568
+#: gtk/gtkscrolledwindow.c:572
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "A vízszintes pozícióhoz tartozó GtkAdjustment"
 
-#: gtk/gtkscrolledwindow.c:574
+#: gtk/gtkscrolledwindow.c:578
 msgid "Vertical Adjustment"
 msgstr "Függőleges igazítás"
 
-#: gtk/gtkscrolledwindow.c:575
+#: gtk/gtkscrolledwindow.c:579
 msgid "The GtkAdjustment for the vertical position"
 msgstr "A függőleges pozícióhoz tartozó GtkAdjustment"
 
-#: gtk/gtkscrolledwindow.c:581
+#: gtk/gtkscrolledwindow.c:585
 msgid "Horizontal Scrollbar Policy"
 msgstr "Vízszintes görgetősáv irányelv"
 
-#: gtk/gtkscrolledwindow.c:582
+#: gtk/gtkscrolledwindow.c:586
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Mikor kerüljön megjelenítésre a vízszintes görgetősáv"
 
-#: gtk/gtkscrolledwindow.c:589
+#: gtk/gtkscrolledwindow.c:593
 msgid "Vertical Scrollbar Policy"
 msgstr "Függőleges görgetősáv irányelv"
 
-#: gtk/gtkscrolledwindow.c:590
+#: gtk/gtkscrolledwindow.c:594
 msgid "When the vertical scrollbar is displayed"
 msgstr "Mikor kerüljön megjelenítésre a függőleges görgetősáv"
 
-#: gtk/gtkscrolledwindow.c:597
+#: gtk/gtkscrolledwindow.c:601
 msgid "Window Placement"
 msgstr "Ablak elhelyezése"
 
-#: gtk/gtkscrolledwindow.c:598
+#: gtk/gtkscrolledwindow.c:602
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Hol legyen a tartalom a görgetősávokhoz képest."
 
-#: gtk/gtkscrolledwindow.c:616
+#: gtk/gtkscrolledwindow.c:620
 msgid "Window Placement Set"
 msgstr "Ablak elhelyezése beállítva"
 
-#: gtk/gtkscrolledwindow.c:617
+#: gtk/gtkscrolledwindow.c:621
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -6580,81 +6578,89 @@ msgstr ""
 "Az „Ablak elhelyezése” tulajdonság használandó-e a tartalom helyének "
 "meghatározására a görgetősávokhoz képest"
 
-#: gtk/gtkscrolledwindow.c:623 gtk/gtkspinbutton.c:452
+#: gtk/gtkscrolledwindow.c:627 gtk/gtkspinbutton.c:452
 msgid "Shadow Type"
 msgstr "Árnyéktípus"
 
-#: gtk/gtkscrolledwindow.c:624
+#: gtk/gtkscrolledwindow.c:628
 msgid "Style of bevel around the contents"
 msgstr "A tartalom körüli élkidolgozás stílusa"
 
-#: gtk/gtkscrolledwindow.c:640
+#: gtk/gtkscrolledwindow.c:644
 msgid "Scrollbars within bevel"
 msgstr "Görgetősávok az élen belül"
 
-#: gtk/gtkscrolledwindow.c:641
+#: gtk/gtkscrolledwindow.c:645
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "A görgetősávok elhelyezése a görgetett ablak élei közé"
 
-#: gtk/gtkscrolledwindow.c:647
+#: gtk/gtkscrolledwindow.c:651
 msgid "Scrollbar spacing"
 msgstr "Görgetősáv távolsága"
 
-#: gtk/gtkscrolledwindow.c:648
+#: gtk/gtkscrolledwindow.c:652
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "A görgetősáv és a görgetett ablak közötti távolság képpontokban megadva"
 
-#: gtk/gtkscrolledwindow.c:663
+#: gtk/gtkscrolledwindow.c:667
 msgid "Minimum Content Width"
 msgstr "Legkisebb tartalomszélesség"
 
-#: gtk/gtkscrolledwindow.c:664
+#: gtk/gtkscrolledwindow.c:668
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "A görgetett ablak által a tartalomnak lefoglalandó legkisebb szélesség"
 
-#: gtk/gtkscrolledwindow.c:677
+#: gtk/gtkscrolledwindow.c:681
 msgid "Minimum Content Height"
 msgstr "Legkisebb tartalommagasság"
 
-#: gtk/gtkscrolledwindow.c:678
+#: gtk/gtkscrolledwindow.c:682
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr "A görgetett ablak által a tartalomnak lefoglalandó legkisebb magasság"
 
-#: gtk/gtkscrolledwindow.c:692
+#: gtk/gtkscrolledwindow.c:696
 msgid "Kinetic Scrolling"
 msgstr "Kinetikus görgetés"
 
-#: gtk/gtkscrolledwindow.c:693
+#: gtk/gtkscrolledwindow.c:697
 msgid "Kinetic scrolling mode."
 msgstr "Kinetikus görgetés mód."
 
-#: gtk/gtkscrolledwindow.c:709
+#: gtk/gtkscrolledwindow.c:713
 msgid "Overlay Scrolling"
 msgstr "Átfedő görgetés"
 
-#: gtk/gtkscrolledwindow.c:710
+#: gtk/gtkscrolledwindow.c:714
 msgid "Overlay scrolling mode"
 msgstr "Átfedő görgetés mód."
 
-#: gtk/gtkscrolledwindow.c:723
+#: gtk/gtkscrolledwindow.c:727
 msgid "Maximum Content Width"
 msgstr "Legnagyobb tartalomszélesség"
 
-#: gtk/gtkscrolledwindow.c:724
+#: gtk/gtkscrolledwindow.c:728
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "A görgetett ablak által a tartalomnak lefoglalandó legnagyobb szélesség"
 
-#: gtk/gtkscrolledwindow.c:737
+#: gtk/gtkscrolledwindow.c:741
 msgid "Maximum Content Height"
 msgstr "Legnagyobb tartalommagasság"
 
-#: gtk/gtkscrolledwindow.c:738
+#: gtk/gtkscrolledwindow.c:742
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr "A görgetett ablak által a tartalomnak lefoglalandó legnagyobb magasság"
+
+#: gtk/gtkscrolledwindow.c:759 gtk/gtkscrolledwindow.c:760
+msgid "Propagate Natural Width"
+msgstr "Természetes szélesség propagálása"
+
+#: gtk/gtkscrolledwindow.c:777 gtk/gtkscrolledwindow.c:778
+msgid "Propagate Natural Height"
+msgstr "Természetes magasság propagálása"
 
 #: gtk/gtksearchbar.c:405
 msgid "Search Mode Enabled"
@@ -9147,27 +9153,27 @@ msgstr "Méretezési tényező"
 msgid "The scaling factor of the window"
 msgstr "Az ablak méretezési tényezője"
 
-#: gtk/gtkwidget.c:3438
+#: gtk/gtkwidget.c:3436
 msgid "Interior Focus"
 msgstr "Belső fókusz"
 
-#: gtk/gtkwidget.c:3439
+#: gtk/gtkwidget.c:3437
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Legyen-e megrajzolva a fókuszjelző a felületi elemeken belül"
 
-#: gtk/gtkwidget.c:3452
+#: gtk/gtkwidget.c:3450
 msgid "Focus linewidth"
 msgstr "Fókusz vonalvastagság"
 
-#: gtk/gtkwidget.c:3453
+#: gtk/gtkwidget.c:3451
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "A fókuszjelző vonal vastagsága, képpontokban megadva"
 
-#: gtk/gtkwidget.c:3467
+#: gtk/gtkwidget.c:3465
 msgid "Focus line dash pattern"
 msgstr "Fókuszvonal szaggatási minta"
 
-#: gtk/gtkwidget.c:3468
+#: gtk/gtkwidget.c:3466
 msgid ""
 "Dash pattern used to draw the focus indicator. The character values are "
 "interpreted as pixel widths of alternating on and off segments of the line."
@@ -9176,29 +9182,29 @@ msgstr ""
 "karakterértékek a vonal be és ki szakaszainak képpontokban megadott "
 "szélességeként lesznek értelmezve."
 
-#: gtk/gtkwidget.c:3481
+#: gtk/gtkwidget.c:3479
 msgid "Focus padding"
 msgstr "Fókusz térköz"
 
-#: gtk/gtkwidget.c:3482
+#: gtk/gtkwidget.c:3480
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "A fókuszjelző és a „mező” felületi elem közötti szélesség, képpontokban "
 "megadva"
 
-#: gtk/gtkwidget.c:3496
+#: gtk/gtkwidget.c:3494
 msgid "Cursor color"
 msgstr "Kurzor színe"
 
-#: gtk/gtkwidget.c:3497
+#: gtk/gtkwidget.c:3495
 msgid "Color with which to draw insertion cursor"
 msgstr "A beszúrási kurzor kirajzolásához használt szín"
 
-#: gtk/gtkwidget.c:3510
+#: gtk/gtkwidget.c:3508
 msgid "Secondary cursor color"
 msgstr "Másodlagos kurzor színe"
 
-#: gtk/gtkwidget.c:3511
+#: gtk/gtkwidget.c:3509
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -9206,45 +9212,45 @@ msgstr ""
 "A vegyes balról-jobbra és jobbról-balra szövegben használt másodlagos kurzor "
 "kirajzolásához használt szín."
 
-#: gtk/gtkwidget.c:3517
+#: gtk/gtkwidget.c:3515
 msgid "Cursor line aspect ratio"
 msgstr "Kurzorvonal képarány"
 
-#: gtk/gtkwidget.c:3518
+#: gtk/gtkwidget.c:3516
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "A beszúrási kurzor rajzolásakor használt képarány"
 
-#: gtk/gtkwidget.c:3524
+#: gtk/gtkwidget.c:3522
 msgid "Window dragging"
 msgstr "Ablakhúzás"
 
-#: gtk/gtkwidget.c:3525
+#: gtk/gtkwidget.c:3523
 msgid "Whether windows can be dragged and maximized by clicking on empty areas"
 msgstr ""
 "Az ablakok húzhatók és maximalizálhatók-e az üres területekre való "
 "kattintással"
 
-#: gtk/gtkwidget.c:3542
+#: gtk/gtkwidget.c:3540
 msgid "Unvisited Link Color"
 msgstr "Nem látogatott hivatkozás színe"
 
-#: gtk/gtkwidget.c:3543
+#: gtk/gtkwidget.c:3541
 msgid "Color of unvisited links"
 msgstr "Nem látogatott hivatkozások színe"
 
-#: gtk/gtkwidget.c:3559
+#: gtk/gtkwidget.c:3557
 msgid "Visited Link Color"
 msgstr "Látogatott hivatkozás színe"
 
-#: gtk/gtkwidget.c:3560
+#: gtk/gtkwidget.c:3558
 msgid "Color of visited links"
 msgstr "Látogatott hivatkozások színe"
 
-#: gtk/gtkwidget.c:3578
+#: gtk/gtkwidget.c:3576
 msgid "Wide Separators"
 msgstr "Széles elválasztók"
 
-#: gtk/gtkwidget.c:3579
+#: gtk/gtkwidget.c:3577
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -9252,43 +9258,43 @@ msgstr ""
 "Az elválasztók szélessége beállítható-e és vonal helyett téglalapként "
 "rajzolandók-e ki"
 
-#: gtk/gtkwidget.c:3596
+#: gtk/gtkwidget.c:3594
 msgid "Separator Width"
 msgstr "Elválasztó szélessége"
 
-#: gtk/gtkwidget.c:3597
+#: gtk/gtkwidget.c:3595
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Az elválasztók szélessége, ha a „Széles elválasztók” értéke TRUE"
 
-#: gtk/gtkwidget.c:3614
+#: gtk/gtkwidget.c:3612
 msgid "Separator Height"
 msgstr "Elválasztó magassága"
 
-#: gtk/gtkwidget.c:3615
+#: gtk/gtkwidget.c:3613
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Az elválasztók magassága, ha a „Széles elválasztók” értéke TRUE"
 
-#: gtk/gtkwidget.c:3629
+#: gtk/gtkwidget.c:3627
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Vízszintes görgetőnyíl hossza"
 
-#: gtk/gtkwidget.c:3630
+#: gtk/gtkwidget.c:3628
 msgid "The length of horizontal scroll arrows"
 msgstr "A vízszintes görgetőnyilak hossza"
 
-#: gtk/gtkwidget.c:3644
+#: gtk/gtkwidget.c:3642
 msgid "Vertical Scroll Arrow Length"
 msgstr "Függőleges görgetőnyíl hossza"
 
-#: gtk/gtkwidget.c:3645
+#: gtk/gtkwidget.c:3643
 msgid "The length of vertical scroll arrows"
 msgstr "A függőleges görgetőnyilak hossza"
 
-#: gtk/gtkwidget.c:3651 gtk/gtkwidget.c:3652
+#: gtk/gtkwidget.c:3649 gtk/gtkwidget.c:3650
 msgid "Width of text selection handles"
 msgstr "Szövegkijelölő fogantyúk szélessége"
 
-#: gtk/gtkwidget.c:3657 gtk/gtkwidget.c:3658
+#: gtk/gtkwidget.c:3655 gtk/gtkwidget.c:3656
 msgid "Height of text selection handles"
 msgstr "Szövegkijelölő fogantyúk magassága"
 
@@ -9570,4 +9576,3 @@ msgstr "Színprofil neve"
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "A használandó színprofil neve"
-
