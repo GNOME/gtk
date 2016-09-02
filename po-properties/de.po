@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-29 14:03+0000\n"
-"PO-Revision-Date: 2016-08-30 19:46+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2016-09-02 08:18+0000\n"
+"PO-Revision-Date: 2016-09-02 15:38+0200\n"
+"Last-Translator: Bernd Homuth <dev@hmt.im>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -233,7 +233,7 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Der von diesem Accessible repräsentierte Zellenrenderer"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:637
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:634
 #: gtk/gtkprinter.c:121 gtk/gtkstack.c:516 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Name"
@@ -368,7 +368,7 @@ msgid "Whether the action is enabled."
 msgstr "Soll das Widget aktiviert sein?"
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:648
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:645
 #: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1137
 msgid "Visible"
 msgstr "Sichtbar"
@@ -1348,7 +1348,7 @@ msgstr ""
 "des Eltern-Widgets gepackt werden soll"
 
 #: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1990
-#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1716
+#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1720
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Position"
@@ -3206,39 +3206,39 @@ msgstr "Kind"
 msgid "Can be used to add a new child to the container"
 msgstr "Kann verwendet werden, um ein neues Kind zum Container hinzuzufügen"
 
-#: gtk/gtkcssnode.c:627
+#: gtk/gtkcssnode.c:624
 msgid "Style Classes"
 msgstr "Stil-Klassen"
 
-#: gtk/gtkcssnode.c:627
+#: gtk/gtkcssnode.c:624
 msgid "List of classes"
 msgstr "Liste der Klassen"
 
-#: gtk/gtkcssnode.c:632 gtk/gtkcssstyleproperty.c:223
+#: gtk/gtkcssnode.c:629 gtk/gtkcssstyleproperty.c:223
 msgid "ID"
 msgstr "Kennung"
 
-#: gtk/gtkcssnode.c:632
+#: gtk/gtkcssnode.c:629
 msgid "Unique ID"
 msgstr "Eindeutige Kennung"
 
-#: gtk/gtkcssnode.c:642 gtk/gtkswitch.c:910
+#: gtk/gtkcssnode.c:639 gtk/gtkswitch.c:910
 msgid "State"
 msgstr "Zustand"
 
-#: gtk/gtkcssnode.c:642
+#: gtk/gtkcssnode.c:639
 msgid "State flags"
 msgstr "Statusmarkierungen"
 
-#: gtk/gtkcssnode.c:648
+#: gtk/gtkcssnode.c:645
 msgid "If other nodes can see this node"
 msgstr "Sollen andere Knoten diesen Knoten sehen können?"
 
-#: gtk/gtkcssnode.c:653
+#: gtk/gtkcssnode.c:650
 msgid "Widget type"
 msgstr "Widget-Typ"
 
-#: gtk/gtkcssnode.c:653
+#: gtk/gtkcssnode.c:650
 msgid "GType of the widget"
 msgstr "Der GType des Widgets"
 
@@ -5337,7 +5337,7 @@ msgstr "Dialogtitel"
 msgid "The title of the file chooser dialog"
 msgstr "Der Titel des Dateiauswahldialogs"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1731 gtk/gtkwindow.c:783
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1735 gtk/gtkwindow.c:783
 msgid "Modal"
 msgstr "Modal"
 
@@ -5827,44 +5827,44 @@ msgstr "Socket-Fenster"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Das Fenster des Sockets, in den der Plug eingebettet ist"
 
-#: gtk/gtkpopover.c:1688
+#: gtk/gtkpopover.c:1692
 msgid "Relative to"
 msgstr "Relativ zu"
 
-#: gtk/gtkpopover.c:1689
+#: gtk/gtkpopover.c:1693
 msgid "Widget the bubble window points to"
 msgstr "Widget, auf welches das Blasenfenster zeigt"
 
-#: gtk/gtkpopover.c:1702
+#: gtk/gtkpopover.c:1706
 msgid "Pointing to"
 msgstr "Zeigt auf"
 
-#: gtk/gtkpopover.c:1703
+#: gtk/gtkpopover.c:1707
 msgid "Rectangle the bubble window points to"
 msgstr "Rechteck, auf welches das Blasenfenster zeigt"
 
 # Hm, was soll das sein?
-#: gtk/gtkpopover.c:1717
+#: gtk/gtkpopover.c:1721
 msgid "Position to place the bubble window"
 msgstr "Zielposition zur Platzierung des Blasenfensters"
 
-#: gtk/gtkpopover.c:1732
+#: gtk/gtkpopover.c:1736
 msgid "Whether the popover is modal"
 msgstr "Legt fest, ob das Einblendfenster modal ist"
 
-#: gtk/gtkpopover.c:1745
+#: gtk/gtkpopover.c:1749
 msgid "Transitions enabled"
 msgstr "Übergang eingeschaltet"
 
-#: gtk/gtkpopover.c:1746
+#: gtk/gtkpopover.c:1750
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Legt fest, ob der Übergang beim Anzeigen/Verbergen eingeschaltet ist"
 
-#: gtk/gtkpopover.c:1759
+#: gtk/gtkpopover.c:1763
 msgid "Constraint"
 msgstr "Beschränkung"
 
-#: gtk/gtkpopover.c:1760
+#: gtk/gtkpopover.c:1764
 msgid "Constraint for the popover position"
 msgstr "Beschränkung für die Position des Einblenddialogs"
 
@@ -6676,51 +6676,51 @@ msgstr ""
 "Einen zweiten Vorwärtspfeil am gegenüber liegenden Ende der Bildlaufleiste "
 "anzeigen"
 
-#: gtk/gtkscrolledwindow.c:567
+#: gtk/gtkscrolledwindow.c:571
 msgid "Horizontal Adjustment"
 msgstr "Horizontale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:568
+#: gtk/gtkscrolledwindow.c:572
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Das GtkAdjustment für die horizontale Position"
 
-#: gtk/gtkscrolledwindow.c:574
+#: gtk/gtkscrolledwindow.c:578
 msgid "Vertical Adjustment"
 msgstr "Vertikale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:575
+#: gtk/gtkscrolledwindow.c:579
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Das GtkAdjustment für die vertikale Position"
 
-#: gtk/gtkscrolledwindow.c:581
+#: gtk/gtkscrolledwindow.c:585
 msgid "Horizontal Scrollbar Policy"
 msgstr "Horizontale Bildlaufleistenrichtlinie"
 
-#: gtk/gtkscrolledwindow.c:582
+#: gtk/gtkscrolledwindow.c:586
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Wann soll die horizontale Bildlaufleiste angezeigt werden?"
 
-#: gtk/gtkscrolledwindow.c:589
+#: gtk/gtkscrolledwindow.c:593
 msgid "Vertical Scrollbar Policy"
 msgstr "Vertikale Bildlaufleistenrichtlinie"
 
-#: gtk/gtkscrolledwindow.c:590
+#: gtk/gtkscrolledwindow.c:594
 msgid "When the vertical scrollbar is displayed"
 msgstr "Wann soll die vertikale Bildlaufleiste angezeigt werden?"
 
-#: gtk/gtkscrolledwindow.c:597
+#: gtk/gtkscrolledwindow.c:601
 msgid "Window Placement"
 msgstr "Fensterplatzierung"
 
-#: gtk/gtkscrolledwindow.c:598
+#: gtk/gtkscrolledwindow.c:602
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Wo soll der Inhalt im Verhältnis zu den Bildlaufleisten liegen."
 
-#: gtk/gtkscrolledwindow.c:616
+#: gtk/gtkscrolledwindow.c:620
 msgid "Window Placement Set"
 msgstr "Fensterplatzierung aktiviert"
 
-#: gtk/gtkscrolledwindow.c:617
+#: gtk/gtkscrolledwindow.c:621
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -6728,81 +6728,89 @@ msgstr ""
 "Legt fest, ob »window-placement« verwendet wird um die Position des Inhalts "
 "im Verhältnis zu den Bildlaufleisten zu bestimmen."
 
-#: gtk/gtkscrolledwindow.c:623 gtk/gtkspinbutton.c:452
+#: gtk/gtkscrolledwindow.c:627 gtk/gtkspinbutton.c:452
 msgid "Shadow Type"
 msgstr "Schattentyp"
 
-#: gtk/gtkscrolledwindow.c:624
+#: gtk/gtkscrolledwindow.c:628
 msgid "Style of bevel around the contents"
 msgstr "Der Stil der Fase um den Inhalt"
 
-#: gtk/gtkscrolledwindow.c:640
+#: gtk/gtkscrolledwindow.c:644
 msgid "Scrollbars within bevel"
 msgstr "Bildlaufleisten innerhalb der Fase"
 
-#: gtk/gtkscrolledwindow.c:641
+#: gtk/gtkscrolledwindow.c:645
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Bildlaufleisten innerhalb der Fase des Fensters platzieren"
 
-#: gtk/gtkscrolledwindow.c:647
+#: gtk/gtkscrolledwindow.c:651
 msgid "Scrollbar spacing"
 msgstr "Abstand der Bildlaufleisten"
 
-#: gtk/gtkscrolledwindow.c:648
+#: gtk/gtkscrolledwindow.c:652
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Die Anzahl der Pixel zwischen den Bildlaufleisten und dem verschobenen "
 "Fenster"
 
-#: gtk/gtkscrolledwindow.c:663
+#: gtk/gtkscrolledwindow.c:667
 msgid "Minimum Content Width"
 msgstr "Minimale Breite des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:664
+#: gtk/gtkscrolledwindow.c:668
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "Die minimale Breite, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:677
+#: gtk/gtkscrolledwindow.c:681
 msgid "Minimum Content Height"
 msgstr "Minimale Höhe des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:678
+#: gtk/gtkscrolledwindow.c:682
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr "Die minimale Höhe, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:692
+#: gtk/gtkscrolledwindow.c:696
 msgid "Kinetic Scrolling"
 msgstr "Kinetisches Rollen"
 
-#: gtk/gtkscrolledwindow.c:693
+#: gtk/gtkscrolledwindow.c:697
 msgid "Kinetic scrolling mode."
 msgstr "Kinetischer Rollmodus."
 
-#: gtk/gtkscrolledwindow.c:709
+#: gtk/gtkscrolledwindow.c:713
 msgid "Overlay Scrolling"
 msgstr "Überlagerungs-Rollen"
 
-#: gtk/gtkscrolledwindow.c:710
+#: gtk/gtkscrolledwindow.c:714
 msgid "Overlay scrolling mode"
 msgstr "Überlagerungs-Rollmodus"
 
-#: gtk/gtkscrolledwindow.c:723
+#: gtk/gtkscrolledwindow.c:727
 msgid "Maximum Content Width"
 msgstr "Maximale Breite des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:724
+#: gtk/gtkscrolledwindow.c:728
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr "Die maximale Breite, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:737
+#: gtk/gtkscrolledwindow.c:741
 msgid "Maximum Content Height"
 msgstr "Maximale Höhe des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:738
+#: gtk/gtkscrolledwindow.c:742
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr "Die maximale Höhe, die das rollbare Fenster seinem Inhalt zuweist"
+
+#: gtk/gtkscrolledwindow.c:759 gtk/gtkscrolledwindow.c:760
+msgid "Propagate Natural Width"
+msgstr "Übertragung der natürlichen Breite"
+
+#: gtk/gtkscrolledwindow.c:777 gtk/gtkscrolledwindow.c:778
+msgid "Propagate Natural Height"
+msgstr "Übertragung der natürlichen Höhe"
 
 #: gtk/gtksearchbar.c:405
 msgid "Search Mode Enabled"
@@ -9339,27 +9347,27 @@ msgstr "Skalierungsfaktor"
 msgid "The scaling factor of the window"
 msgstr "Der Skalierungsfaktor des Fensters"
 
-#: gtk/gtkwidget.c:3438
+#: gtk/gtkwidget.c:3436
 msgid "Interior Focus"
 msgstr "Interner Fokus"
 
-#: gtk/gtkwidget.c:3439
+#: gtk/gtkwidget.c:3437
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Soll der Fokusanzeiger in Widgets dargestellt werden?"
 
-#: gtk/gtkwidget.c:3452
+#: gtk/gtkwidget.c:3450
 msgid "Focus linewidth"
 msgstr "Länge der Fokuszeile"
 
-#: gtk/gtkwidget.c:3453
+#: gtk/gtkwidget.c:3451
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Die Breite der Fokusanzeiger-Linie in Pixel"
 
-#: gtk/gtkwidget.c:3467
+#: gtk/gtkwidget.c:3465
 msgid "Focus line dash pattern"
 msgstr "Strichelmuster der Fokuszeile"
 
-#: gtk/gtkwidget.c:3468
+#: gtk/gtkwidget.c:3466
 msgid ""
 "Dash pattern used to draw the focus indicator. The character values are "
 "interpreted as pixel widths of alternating on and off segments of the line."
@@ -9367,29 +9375,29 @@ msgstr ""
 "Das Strichmuster zum Zeichnen der Fokus-Anzeige. Die Zeichenwerte werden als "
 "Pixelbreite von abwechselnden an/aus-Segmenten der Linie interpretiert."
 
-#: gtk/gtkwidget.c:3481
+#: gtk/gtkwidget.c:3479
 msgid "Focus padding"
 msgstr "Fokus-Auffüllung"
 
-#: gtk/gtkwidget.c:3482
+#: gtk/gtkwidget.c:3480
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Der Abstand zwischen dem Fokusanzeiger und dem »Kasten« um das Widget in "
 "Pixel"
 
-#: gtk/gtkwidget.c:3496
+#: gtk/gtkwidget.c:3494
 msgid "Cursor color"
 msgstr "Zeigerfarbe"
 
-#: gtk/gtkwidget.c:3497
+#: gtk/gtkwidget.c:3495
 msgid "Color with which to draw insertion cursor"
 msgstr "Die Farbe, in der der Einfügezeiger gezeichnet werden soll"
 
-#: gtk/gtkwidget.c:3510
+#: gtk/gtkwidget.c:3508
 msgid "Secondary cursor color"
 msgstr "Zweite Zeigerfarbe"
 
-#: gtk/gtkwidget.c:3511
+#: gtk/gtkwidget.c:3509
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -9397,45 +9405,45 @@ msgstr ""
 "Die Farbe des zweiten Einfügezeigers, wenn rechts- und linksläufiger Text "
 "gemischt bearbeitet werden."
 
-#: gtk/gtkwidget.c:3517
+#: gtk/gtkwidget.c:3515
 msgid "Cursor line aspect ratio"
 msgstr "Seitenverhältnis der Zeigerzeile"
 
-#: gtk/gtkwidget.c:3518
+#: gtk/gtkwidget.c:3516
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Das Seitenverhältnis, in dem der Einfügezeiger gezeichnet werden soll"
 
-#: gtk/gtkwidget.c:3524
+#: gtk/gtkwidget.c:3522
 msgid "Window dragging"
 msgstr "Ziehen von Fenstern"
 
-#: gtk/gtkwidget.c:3525
+#: gtk/gtkwidget.c:3523
 msgid "Whether windows can be dragged and maximized by clicking on empty areas"
 msgstr ""
 "Legt fest, ob das Ziehen und Maximieren von Fenstern durch Klicken in leere "
 "Bereiche möglich sein soll"
 
-#: gtk/gtkwidget.c:3542
+#: gtk/gtkwidget.c:3540
 msgid "Unvisited Link Color"
 msgstr "Farbe für unbesuchte Links"
 
-#: gtk/gtkwidget.c:3543
+#: gtk/gtkwidget.c:3541
 msgid "Color of unvisited links"
 msgstr "Farbe für unbesuchte Verweise"
 
-#: gtk/gtkwidget.c:3559
+#: gtk/gtkwidget.c:3557
 msgid "Visited Link Color"
 msgstr "Farbe für besuchte Verweise"
 
-#: gtk/gtkwidget.c:3560
+#: gtk/gtkwidget.c:3558
 msgid "Color of visited links"
 msgstr "Farbe für besuchte Verweise"
 
-#: gtk/gtkwidget.c:3578
+#: gtk/gtkwidget.c:3576
 msgid "Wide Separators"
 msgstr "Breite Trennbalken"
 
-#: gtk/gtkwidget.c:3579
+#: gtk/gtkwidget.c:3577
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -9443,43 +9451,43 @@ msgstr ""
 "Sollen Trennbalken eine festlegbare Breite haben und als Fläche anstatt "
 "einer Linie dargestellt werden?"
 
-#: gtk/gtkwidget.c:3596
+#: gtk/gtkwidget.c:3594
 msgid "Separator Width"
 msgstr "Breite der Trennbalken"
 
-#: gtk/gtkwidget.c:3597
+#: gtk/gtkwidget.c:3595
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Die Breite der Trennbalken falls »wide-separators« WAHR ist"
 
-#: gtk/gtkwidget.c:3614
+#: gtk/gtkwidget.c:3612
 msgid "Separator Height"
 msgstr "Höhe der Trennbalken"
 
-#: gtk/gtkwidget.c:3615
+#: gtk/gtkwidget.c:3613
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Die Höhe der Trennbalken falls »wide-separators« WAHR ist"
 
-#: gtk/gtkwidget.c:3629
+#: gtk/gtkwidget.c:3627
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Länge horizontaler Rollpfeile"
 
-#: gtk/gtkwidget.c:3630
+#: gtk/gtkwidget.c:3628
 msgid "The length of horizontal scroll arrows"
 msgstr "Die Länge horizontaler Rollpfeile"
 
-#: gtk/gtkwidget.c:3644
+#: gtk/gtkwidget.c:3642
 msgid "Vertical Scroll Arrow Length"
 msgstr "Länge vertikaler Rollpfeile"
 
-#: gtk/gtkwidget.c:3645
+#: gtk/gtkwidget.c:3643
 msgid "The length of vertical scroll arrows"
 msgstr "Die Länge vertikaler Rollpfeile"
 
-#: gtk/gtkwidget.c:3651 gtk/gtkwidget.c:3652
+#: gtk/gtkwidget.c:3649 gtk/gtkwidget.c:3650
 msgid "Width of text selection handles"
 msgstr "Die Breite des Textauswahl-Anfassers"
 
-#: gtk/gtkwidget.c:3657 gtk/gtkwidget.c:3658
+#: gtk/gtkwidget.c:3655 gtk/gtkwidget.c:3656
 msgid "Height of text selection handles"
 msgstr "Die Höhe des Textauswahl-Anfassers"
 
