@@ -176,6 +176,7 @@ struct _GtkPopoverPrivate
   guint transitions_enabled : 1;
   guint state               : 2;
   guint visible             : 1;
+  guint first_frame_skipped : 1;
   gint transition_diff;
   guint tick_id;
 
@@ -551,8 +552,12 @@ show_animate_cb (GtkWidget     *widget,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   gdouble t;
 
-  gtk_progress_tracker_advance_frame (&priv->tracker,
-                                      gdk_frame_clock_get_frame_time (frame_clock));
+  if (priv->first_frame_skipped)
+    gtk_progress_tracker_advance_frame (&priv->tracker,
+                                        gdk_frame_clock_get_frame_time (frame_clock));
+  else
+    priv->first_frame_skipped = TRUE;
+
   t = gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE);
 
   if (priv->state == STATE_SHOWING)
@@ -609,6 +614,7 @@ gtk_popover_start_transition (GtkPopover *popover)
   if (priv->tick_id != 0)
     return;
 
+  priv->first_frame_skipped = FALSE;
   gtk_progress_tracker_start (&priv->tracker, TRANSITION_DURATION, 0, 1.0);
   priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (popover),
                                                 show_animate_cb,
