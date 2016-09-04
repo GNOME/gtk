@@ -3758,9 +3758,9 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
   PangoRectangle widest_rect;
   PangoRectangle smallest_rect;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-    gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
-  G_GNUC_END_IGNORE_DEPRECATIONS
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_label_get_preferred_layout_size (label, &smallest_rect, &widest_rect);
 
