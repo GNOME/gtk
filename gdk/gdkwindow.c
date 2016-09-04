@@ -10847,10 +10847,10 @@ void
 gdk_window_fullscreen_on_monitor (GdkWindow      *window,
                                   gint            monitor)
 {
-  GdkScreen *screen = gdk_window_get_screen (window);
+  GdkDisplay *display = gdk_window_get_display (window);
 
   g_return_if_fail (monitor >= 0);
-  g_return_if_fail (monitor < gdk_screen_get_n_monitors (screen));
+  g_return_if_fail (monitor < gdk_display_get_n_monitors (display));
 
   if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor != NULL)
     GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor (window, monitor);
