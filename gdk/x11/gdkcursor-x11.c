@@ -358,7 +358,7 @@ gdk_x11_cursor_get_surface (GdkCursor *cursor,
   /* Assume the currently set cursor was defined for the screen
      scale */
   scale =
-    gdk_screen_get_monitor_scale_factor (gdk_display_get_default_screen (display), 0);
+    gdk_monitor_get_scale_factor (gdk_display_get_primary_monitor (display));
 
   surface = gdk_window_create_similar_image_surface (NULL,
 						     CAIRO_FORMAT_ARGB32,
@@ -590,7 +590,7 @@ _gdk_x11_display_get_cursor_for_surface (GdkDisplay *display,
   else
     {
       target_scale =
-	gdk_screen_get_monitor_scale_factor (gdk_display_get_default_screen (display), 0);
+        gdk_monitor_get_scale_factor (gdk_display_get_primary_monitor (display));
       xcimage = create_cursor_image (surface, x, y, target_scale);
       xcursor = XcursorImageLoadCursor (GDK_DISPLAY_XDISPLAY (display), xcimage);
       XcursorImageDestroy (xcimage);
