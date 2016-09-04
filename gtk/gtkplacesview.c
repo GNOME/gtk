@@ -1173,12 +1173,9 @@ server_mount_ready_cb (GObject      *source_file,
           emit_show_error_message (view, _("Unable to access location"), error->message);
           should_show = FALSE;
         }
-      else
-        {
-          /* it was cancelled, so probably it was called during finalize, bail out. */
-          g_clear_error (&error);
-          return;
-        }
+
+      /* The operation got cancelled by the user and or the error
+         has been handled already. */
       g_clear_error (&error);
     }
 
@@ -1247,13 +1244,9 @@ volume_mount_ready_cb (GObject      *source_volume,
           emit_show_error_message (GTK_PLACES_VIEW (user_data), _("Unable to access location"), error->message);
           should_show = FALSE;
         }
-      else
-        {
-          /* it was cancelled, so probably it was called during finalize, bail out. */
-          g_clear_error (&error);
-          return;
-        }
 
+      /* The operation got cancelled by the user and or the error
+         has been handled already. */
       g_clear_error (&error);
     }
 
