@@ -1207,6 +1207,7 @@ server_mount_ready_cb (GObject      *source_file,
     }
 
   update_places (view);
+  g_object_unref (view);
 }
 
 static void
@@ -1277,6 +1278,7 @@ volume_mount_ready_cb (GObject      *source_volume,
     }
 
   update_places (view);
+  g_object_unref (view);
 }
 
 static void
@@ -1311,6 +1313,8 @@ unmount_ready_cb (GObject      *source_mount,
 
       g_clear_error (&error);
     }
+
+  g_object_unref (view);
 }
 
 static gboolean
@@ -1355,6 +1359,8 @@ unmount_mount (GtkPlacesView *view,
   priv->unmounting_mount = TRUE;
   update_loading (view);
 
+  g_object_ref (view);
+
   operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
   g_mount_unmount_with_operation (mount,
                                   0,
@@ -1398,6 +1404,9 @@ mount_server (GtkPlacesView *view,
 
   g_mount_operation_set_password_save (operation, G_PASSWORD_SAVE_FOR_SESSION);
 
+  /* make sure we keep the view around for as long as we are running */
+  g_object_ref (view);
+
   g_file_mount_enclosing_volume (location,
                                  0,
                                  operation,
@@ -1429,6 +1438,9 @@ mount_volume (GtkPlacesView *view,
   update_loading (view);
 
   g_mount_operation_set_password_save (operation, G_PASSWORD_SAVE_FOR_SESSION);
+
+  /* make sure we keep the view around for as long as we are running */
+  g_object_ref (view);
 
   g_volume_mount (volume,
                   0,
