@@ -571,14 +571,14 @@ static void
 init_scale (GtkInspectorVisual *vis)
 {
 #if defined (GDK_WINDOWING_X11)
-  GdkScreen *screen;
+  GdkDisplay *display;
 
-  screen = gdk_screen_get_default ();
-  if (GDK_IS_X11_SCREEN (screen))
+  display = gdk_display_get_default ();
+  if (GDK_IS_X11_DISPLAY (display))
     {
       gdouble scale;
 
-      scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+      scale = gdk_monitor_get_scale_factor (gdk_display_get_primary_monitor (display));
       gtk_adjustment_set_value (vis->priv->scale_adjustment, scale);
       g_signal_connect (vis->priv->scale_adjustment, "value-changed",
                         G_CALLBACK (scale_changed), vis);
