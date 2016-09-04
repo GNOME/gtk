@@ -353,8 +353,8 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
                                         int        width,
                                         int        height)
 {
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_screen_get_display (screen));
+  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWindow *window;
   GdkWindowImplWayland *impl;
 
@@ -367,8 +367,8 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
 
   impl->wrapper = GDK_WINDOW (window);
   if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
-      gdk_screen_get_n_monitors (screen) > 0)
-    impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+      gdk_display_get_n_monitors (display) > 0)
+    impl->scale = gdk_monitor_get_scale_factor (gdk_display_get_monitor (display, 0));
 
   /* logical 1x1 fake buffer */
   impl->staging_cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
@@ -688,8 +688,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 
   /* More likely to be right than just assuming 1 */
   if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
-      gdk_screen_get_n_monitors (screen) > 0)
-    impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+      gdk_display_get_n_monitors (display) > 0)
+    impl->scale = gdk_monitor_get_scale_factor (gdk_display_get_monitor (display, 0));
 
   impl->title = NULL;
 
@@ -1448,11 +1448,11 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   const gchar *app_id;
-  GdkScreen *screen = gdk_window_get_screen (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   struct wl_output *fullscreen_output = NULL;
   if (impl->initial_fullscreen_monitor >= 0 &&
-      impl->initial_fullscreen_monitor < gdk_screen_get_n_monitors (screen))
-      fullscreen_output = _gdk_wayland_screen_get_wl_output (screen, impl->initial_fullscreen_monitor);
+      impl->initial_fullscreen_monitor < gdk_display_get_n_monitors (display))
+      fullscreen_output = _gdk_wayland_screen_get_wl_output (gdk_window_get_screen (window), impl->initial_fullscreen_monitor);
 
   impl->display_server.xdg_surface =
     zxdg_shell_v6_get_xdg_surface (display_wayland->xdg_shell,
