@@ -168,7 +168,8 @@ int
 main(int argc, char **argv)
 {
   GError *error = NULL;
-  GdkScreen *screen;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
   GdkRectangle monitor_bounds;
 
   GOptionContext *context = g_option_context_new (NULL);
@@ -204,10 +205,9 @@ main(int argc, char **argv)
                     G_CALLBACK (on_map_event), NULL);
   on_frame (0.);
 
-  screen = gtk_widget_get_screen (window);
-  gdk_screen_get_monitor_geometry (screen,
-                                   gdk_screen_get_primary_monitor (screen),
-                                   &monitor_bounds);
+  display = gtk_widget_get_display (window);
+  monitor = gdk_display_get_primary_monitor (display);
+  gdk_monitor_get_geometry (monitor, &monitor_bounds);
 
   gtk_window_move (GTK_WINDOW (window),
                    monitor_bounds.x + (monitor_bounds.width - window_width) / 2,
