@@ -3884,18 +3884,41 @@ gtk_label_measure (GtkCssGadget   *gadget,
   GtkWidget *widget;
   GtkLabel *label;
   GtkLabelPrivate *priv;
+  gint xpad, ypad;
 
   widget = gtk_css_gadget_get_owner (gadget);
   label = GTK_LABEL (widget);
   priv = label->priv;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   if ((orientation == GTK_ORIENTATION_VERTICAL && for_size != -1 && priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360)) ||
       (orientation == GTK_ORIENTATION_HORIZONTAL && priv->wrap && (priv->angle == 90 || priv->angle == 270)))
     {
+      gint size;
+
       if (priv->wrap)
         gtk_label_clear_layout (label);
 
-      get_size_for_allocation (label, MAX (1, for_size), minimum, natural, minimum_baseline, natural_baseline);
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        size = MAX (1, for_size) - 2 * ypad;
+      else
+        size = MAX (1, for_size) - 2 * xpad;
+
+      get_size_for_allocation (label, size, minimum, natural, minimum_baseline, natural_baseline);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          *minimum += 2 * xpad;
+          *natural += 2 * xpad;
+        }
+      else
+        {
+          *minimum += 2 * ypad;
+          *natural += 2 * ypad;
+        }
     }
   else
     gtk_label_get_preferred_size (widget, orientation, minimum, natural, minimum_baseline, natural_baseline);
