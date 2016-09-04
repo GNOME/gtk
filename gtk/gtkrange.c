@@ -1997,33 +1997,43 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
   if (priv->has_origin)
     {
       GtkAllocation highlight_alloc, highlight_clip;
+      int min, nat;
+
+      gtk_css_gadget_get_preferred_size (priv->highlight_gadget,
+                                         priv->orientation, -1,
+                                         &min, &nat,
+                                         NULL, NULL);
 
       highlight_alloc = *allocation;
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
+          int x = slider_alloc.x + slider_alloc.width / 2;
+
           if (!should_invert (range))
             {
               highlight_alloc.x = allocation->x;
-              highlight_alloc.width = slider_alloc.x + slider_alloc.width / 2 - allocation->x;
+              highlight_alloc.width = MAX (x - allocation->x, min);
             }
           else
             {
-              highlight_alloc.x = slider_alloc.x + slider_alloc.width / 2;
-              highlight_alloc.width = allocation->x + allocation->width - highlight_alloc.x;
+              highlight_alloc.width = MAX (allocation->x + allocation->width - x, min);
+              highlight_alloc.x = allocation->x + allocation->width - highlight_alloc.width;
             }
         }
       else
         {
+          int y = slider_alloc.y + slider_alloc.height / 2;
+
           if (!should_invert (range))
             {
               highlight_alloc.y = allocation->y;
-              highlight_alloc.height = slider_alloc.y + slider_alloc.height / 2 - allocation->y;
+              highlight_alloc.height = MAX (y - allocation->y, min);
             }
           else
             {
-              highlight_alloc.y = slider_alloc.y + slider_alloc.height / 2;
-              highlight_alloc.height = allocation->y + allocation->height - highlight_alloc.y;
+              highlight_alloc.height = MAX (allocation->y + allocation->height - y, min);
+              highlight_alloc.y = allocation->y + allocation->height - highlight_alloc.height;
             }
         }
 
