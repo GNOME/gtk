@@ -425,9 +425,6 @@ test_type (gconstpointer data)
     return;
 #endif
 
-  if (g_type_is_a (type, GTK_TYPE_STATUS_ICON))
-    return;
-
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))

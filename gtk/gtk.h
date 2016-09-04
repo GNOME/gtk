@@ -268,7 +268,6 @@
 #include <gtk/deprecated/gtkradioaction.h>
 #include <gtk/deprecated/gtkrc.h>
 #include <gtk/deprecated/gtkrecentaction.h>
-#include <gtk/deprecated/gtkstatusicon.h>
 #include <gtk/deprecated/gtkstock.h>
 #include <gtk/deprecated/gtkstyle.h>
 #include <gtk/deprecated/gtkstyleproperties.h>

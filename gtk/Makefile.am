@@ -1023,7 +1023,6 @@ gtk_use_x11_c_sources = 	\
 	gtkplug.c		\
 	gtksocket.c		\
 	gtkxembed.c		\
-	deprecated/gtktrayicon-x11.c	\
 	gtkapplication-x11.c	\
 	gtkmountoperation-x11.c
 
@@ -1047,7 +1046,6 @@ gtk_use_stub_c_sources = 	\
 	gtkmountoperation-stub.c
 gtk_use_x11_private_h_sources = 	\
 	gtkxembed.h		\
-	deprecated/gtktrayicon.h	\
 	xembed.h
 if USE_X11
 gtk_c_sources += $(gtk_use_x11_c_sources)

@@ -23,7 +23,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrc.h		\
 	deprecated/gtkrecentaction.h	\
-	deprecated/gtkstatusicon.h	\
 	deprecated/gtkstock.h		\
 	deprecated/gtkstyle.h		\
 	deprecated/gtkstyleproperties.h	\
@@ -72,7 +71,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrc.c		\
 	deprecated/gtkrecentaction.c	\
-	deprecated/gtkstatusicon.c	\
 	deprecated/gtkstock.c		\
 	deprecated/gtkstyle.c		\
 	deprecated/gtkstyleproperties.c	\
