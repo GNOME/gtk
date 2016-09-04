@@ -71,39 +71,6 @@ GDK_AVAILABLE_IN_ALL
 gchar *      gdk_screen_make_display_name     (GdkScreen   *screen);
 
 GDK_AVAILABLE_IN_ALL
-gint         gdk_screen_get_n_monitors        (GdkScreen    *screen);
-GDK_AVAILABLE_IN_ALL
-gint         gdk_screen_get_primary_monitor   (GdkScreen    *screen);
-GDK_AVAILABLE_IN_ALL
-void         gdk_screen_get_monitor_geometry  (GdkScreen    *screen,
-                                               gint          monitor_num,
-                                               GdkRectangle *dest);
-GDK_AVAILABLE_IN_3_4
-void         gdk_screen_get_monitor_workarea  (GdkScreen    *screen,
-                                               gint          monitor_num,
-                                               GdkRectangle *dest);
-
-GDK_AVAILABLE_IN_ALL
-gint          gdk_screen_get_monitor_at_point  (GdkScreen *screen,
-                                                gint       x,
-                                                gint       y);
-GDK_AVAILABLE_IN_ALL
-gint          gdk_screen_get_monitor_at_window (GdkScreen *screen,
-                                                GdkWindow *window);
-GDK_AVAILABLE_IN_ALL
-gint          gdk_screen_get_monitor_width_mm  (GdkScreen *screen,
-                                                gint       monitor_num);
-GDK_AVAILABLE_IN_ALL
-gint          gdk_screen_get_monitor_height_mm (GdkScreen *screen,
-                                                gint       monitor_num);
-GDK_AVAILABLE_IN_ALL
-gchar *       gdk_screen_get_monitor_plug_name (GdkScreen *screen,
-                                                gint       monitor_num);
-GDK_AVAILABLE_IN_3_10
-gint          gdk_screen_get_monitor_scale_factor (GdkScreen *screen,
-                                                   gint       monitor_num);
-
-GDK_AVAILABLE_IN_ALL
 GdkScreen *gdk_screen_get_default (void);
 
 GDK_AVAILABLE_IN_ALL
