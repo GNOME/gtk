@@ -136,7 +136,7 @@ static GdkPixbuf *
 take_window_shot (Window         child,
                   DecorationType decor)
 {
-  GdkWindow *window;
+  GdkWindow *window, *root_window;
   Window xid;
   gint x_orig, y_orig;
   gint x = 0, y = 0;
@@ -151,6 +151,7 @@ take_window_shot (Window         child,
     xid = child;
 
   window = gdk_x11_window_foreign_new_for_display (gdk_display_get_default (), xid);
+  root_window = gdk_screen_get_root_window (gdk_window_get_screen (window));
 
   width = gdk_window_get_width (window);
   height = gdk_window_get_height (window);
@@ -170,11 +171,11 @@ take_window_shot (Window         child,
       y_orig = 0;
     }
 
-  if (x_orig + width > gdk_screen_width ())
-    width = gdk_screen_width () - x_orig;
+  if (x_orig + width > gdk_window_get_width (root_window))
+    width = gdk_window_get_width (root_window) - x_orig;
 
-  if (y_orig + height > gdk_screen_height ())
-    height = gdk_screen_height () - y_orig;
+  if (y_orig + height > gdk_window_get_height (root_window))
+    height = gdk_window_get_height (root_window) - y_orig;
 
   tmp = gdk_pixbuf_get_from_window (window,
 				    x, y, width, height);
