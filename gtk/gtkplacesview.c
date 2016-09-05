@@ -970,8 +970,11 @@ network_enumeration_next_files_finished (GObject      *source_object,
       g_list_free_full (detected_networks, g_object_unref);
     }
 
-  /* avoid to update widgets if the operation was cancelled in finalize */
-  if (priv->listbox != NULL)
+  g_object_unref (view);
+
+  /* avoid to update widgets if we are already destroyed
+     (and got cancelled s a result of that) */
+  if (!priv->destroyed)
     {
       update_network_state (view);
       update_loading (view);
@@ -997,6 +1000,7 @@ network_enumeration_finished (GObject      *source_object,
         g_warning ("Failed to fetch network locations: %s", error->message);
 
       g_clear_error (&error);
+      g_object_unref (GTK_PLACES_VIEW (user_data));
     }
   else
     {
@@ -1036,6 +1040,7 @@ fetch_networks (GtkPlacesView *view)
   gtk_places_view_set_fetching_networks (view, TRUE);
   update_network_state (view);
 
+  g_object_ref (view);
   g_file_enumerate_children_async (network_file,
                                    "standard::type,standard::target-uri,standard::name,standard::display-name,standard::icon",
                                    G_FILE_QUERY_INFO_NONE,
