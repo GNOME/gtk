@@ -264,13 +264,6 @@ void       gtk_window_set_gravity              (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 GdkGravity gtk_window_get_gravity              (GtkWindow           *window);
 
-
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_geometry_hints       (GtkWindow           *window,
-						GtkWidget           *geometry_widget,
-						GdkGeometry         *geometry,
-						GdkWindowHints       geom_mask);
-
 GDK_AVAILABLE_IN_ALL
 void	   gtk_window_set_screen	       (GtkWindow	    *window,
 						GdkScreen	    *screen);
@@ -439,18 +432,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_position     (GtkWindow   *window,
                                       gint        *root_x,
                                       gint        *root_y);
-GDK_DEPRECATED_IN_3_20
-gboolean gtk_window_parse_geometry   (GtkWindow   *window,
-                                      const gchar *geometry);
-
-GDK_DEPRECATED_IN_3_20_FOR(gtk_window_set_default_size)
-void gtk_window_set_default_geometry (GtkWindow *window,
-                                      gint       width,
-                                      gint       height);
-GDK_DEPRECATED_IN_3_20_FOR(gtk_window_resize)
-void gtk_window_resize_to_geometry   (GtkWindow *window,
-                                      gint       width,
-                                      gint       height);
 
 GDK_AVAILABLE_IN_ALL
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);

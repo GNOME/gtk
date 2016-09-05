@@ -7573,25 +7573,6 @@ move_to_position_callback (GtkWidget *widget,
 }
 
 static void
-set_geometry_callback (GtkWidget *entry,
-                       gpointer   data)
-{
-  gchar *text;
-  GtkWindow *target;
-
-  target = GTK_WINDOW (g_object_get_data (G_OBJECT (data), "target"));
-  
-  text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (!gtk_window_parse_geometry (target, text))
-    g_print ("Bad geometry string '%s'\n", text);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  g_free (text);
-}
-
-static void
 resizable_callback (GtkWidget *widget,
                      gpointer   data)
 {
@@ -7761,16 +7742,6 @@ make_gravity_window (GtkWidget   *destroy_with,
   gtk_container_add (GTK_CONTAINER (vbox), button);
   gtk_widget_show (button);
   
-  /* Pretend this is the result of --geometry.
-   * DO NOT COPY THIS CODE unless you are setting --geometry results,
-   * and in that case you probably should just use gtk_window_parse_geometry().
-   * AGAIN, DO NOT SET GDK_HINT_USER_POS! It violates the ICCCM unless
-   * you are parsing --geometry or equivalent.
-   */
-  gtk_window_set_geometry_hints (GTK_WINDOW (window),
-                                 NULL, NULL,
-                                 GDK_HINT_USER_POS);
-
   gtk_window_set_default_size (GTK_WINDOW (window),
                                200, 200);
 
@@ -7842,7 +7813,6 @@ window_controls (GtkWidget *window)
   GtkWidget *button;
   GtkWidget *spin;
   GtkAdjustment *adjustment;
-  GtkWidget *entry;
   GtkWidget *om;
   gint i;
   
@@ -7888,13 +7858,6 @@ window_controls (GtkWidget *window)
   gtk_box_pack_start (GTK_BOX (vbox), spin, FALSE, FALSE, 0);
 
   g_object_set_data (G_OBJECT (control_window), "spin2", spin);
-
-  entry = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
-
-  g_signal_connect (entry, "changed",
-		    G_CALLBACK (set_geometry_callback),
-		    control_window);
 
   button = gtk_button_new_with_label ("Show gravity test windows");
   g_signal_connect_swapped (button,
@@ -8939,8 +8902,6 @@ create_scroll_test (GtkWidget *widget)
   GtkWidget *drawing_area;
   GtkWidget *scrollbar;
   GtkAdjustment *adjustment;
-  GdkGeometry geometry;
-  GdkWindowHints geometry_mask;
 
   if (!window)
     {
@@ -8995,22 +8956,6 @@ create_scroll_test (GtkWidget *widget)
       g_signal_connect_swapped (window, "response",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
-
-      /* Set up gridded geometry */
-
-      geometry_mask = GDK_HINT_MIN_SIZE | 
-	               GDK_HINT_BASE_SIZE | 
-	               GDK_HINT_RESIZE_INC;
-
-      geometry.min_width = 20;
-      geometry.min_height = 20;
-      geometry.base_width = 0;
-      geometry.base_height = 0;
-      geometry.width_inc = 10;
-      geometry.height_inc = 10;
-      
-      gtk_window_set_geometry_hints (GTK_WINDOW (window),
-			       drawing_area, &geometry, geometry_mask);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -9759,21 +9704,12 @@ create_main_window (void)
   GtkWidget *label;
   gchar buffer[64];
   GtkWidget *separator;
-  GdkGeometry geometry;
   int i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "main_window");
   gtk_window_move (GTK_WINDOW (window), 50, 20);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
-
-  geometry.min_width = -1;
-  geometry.min_height = -1;
-  geometry.max_width = -1;
-  geometry.max_height = G_MAXSHORT;
-  gtk_window_set_geometry_hints (GTK_WINDOW (window), NULL,
-				 &geometry,
-				 GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
 
   g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit),

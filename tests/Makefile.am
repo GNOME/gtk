@@ -78,7 +78,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	$(fontconfig_programs)		\
 	testframe			\
 	testfullscreen			\
-	testgeometry			\
 	testgiconpixbuf			\
 	testglarea			\
 	testglblending			\
@@ -219,7 +218,6 @@ testfontchooser_DEPENDENCIES = $(TEST_DEPS)
 testfontchooserdialog_DEPENDENCIES = $(TEST_DEPS)
 testfontoptions_DEPENDENCIES = $(TEST_DEPS)
 testframe_DEPENDENCIES = $(TEST_DEPS)
-testgeometry_DEPENDENCIES = $(TEST_DEPS)
 testgiconpixbuf = $(TEST_DEPS)
 testgrid_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
@@ -423,9 +421,6 @@ testbuttons_SOURCES = 		\
 
 testframe_SOURCES = 		\
 	testframe.c
-
-testgeometry_SOURCES = 		\
-	testgeometry.c
 
 testgiconpixbuf_SOURCES =	\
 	testgiconpixbuf.c
