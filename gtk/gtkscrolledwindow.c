@@ -4804,7 +4804,7 @@ gtk_scrolled_window_get_max_content_height (GtkScrolledWindow *scrolled_window)
  */
 void
 gtk_scrolled_window_set_propagate_natural_width (GtkScrolledWindow *scrolled_window,
-						 gboolean           propagate)
+                                                 gboolean           propagate)
 {
   GtkScrolledWindowPrivate *priv;
 
@@ -4833,7 +4833,7 @@ gtk_scrolled_window_set_propagate_natural_width (GtkScrolledWindow *scrolled_win
  *
  * Since: 3.22
  */
-gint
+gboolean
 gtk_scrolled_window_get_propagate_natural_width (GtkScrolledWindow *scrolled_window)
 {
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), -1);
@@ -4853,7 +4853,7 @@ gtk_scrolled_window_get_propagate_natural_width (GtkScrolledWindow *scrolled_win
  */
 void
 gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_window,
-						 gboolean           propagate)
+                                                  gboolean           propagate)
 {
   GtkScrolledWindowPrivate *priv;
 
@@ -4882,7 +4882,7 @@ gtk_scrolled_window_set_propagate_natural_height (GtkScrolledWindow *scrolled_wi
  *
  * Since: 3.22
  */
-gint
+gboolean
 gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_window)
 {
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), -1);
