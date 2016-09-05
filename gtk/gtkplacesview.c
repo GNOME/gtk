@@ -91,6 +91,7 @@ struct _GtkPlacesViewPrivate
   guint                          unmounting_mount : 1;
   guint                          fetching_networks : 1;
   guint                          loading : 1;
+  guint                          destroyed : 1;
 };
 
 static void        mount_volume                                  (GtkPlacesView *view,
@@ -388,18 +389,29 @@ activate_row (GtkPlacesView      *view,
 static void update_places (GtkPlacesView *view);
 
 static void
+gtk_places_view_destroy (GtkWidget *widget)
+{
+  GtkPlacesView *self = GTK_PLACES_VIEW (widget);
+  GtkPlacesViewPrivate *priv = gtk_places_view_get_instance_private (self);
+
+  priv->destroyed = 1;
+
+  g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, widget);
+
+  g_cancellable_cancel (priv->cancellable);
+  g_cancellable_cancel (priv->networks_fetching_cancellable);
+
+  GTK_WIDGET_CLASS (gtk_places_view_parent_class)->destroy (widget);
+}
+
+static void
 gtk_places_view_finalize (GObject *object)
 {
   GtkPlacesView *self = (GtkPlacesView *)object;
   GtkPlacesViewPrivate *priv = gtk_places_view_get_instance_private (self);
 
-  g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, object);
-
   if (priv->entry_pulse_timeout_id > 0)
     g_source_remove (priv->entry_pulse_timeout_id);
-
-  g_cancellable_cancel (priv->cancellable);
-  g_cancellable_cancel (priv->networks_fetching_cancellable);
 
   g_clear_pointer (&priv->search_query, g_free);
   g_clear_object (&priv->server_list_file);
@@ -1151,6 +1163,8 @@ server_mount_ready_cb (GObject      *source_file,
   should_show = TRUE;
   error = NULL;
 
+  view = GTK_PLACES_VIEW (user_data);
+
   g_file_mount_enclosing_volume_finish (location, res, &error);
   if (error)
     {
@@ -1168,10 +1182,8 @@ server_mount_ready_cb (GObject      *source_file,
                (error->code != G_IO_ERROR_CANCELLED &&
                 error->code != G_IO_ERROR_FAILED_HANDLED))
         {
-          view = GTK_PLACES_VIEW (user_data);
           /* if it wasn't cancelled show a dialog */
           emit_show_error_message (view, _("Unable to access location"), error->message);
-          should_show = FALSE;
         }
 
       /* The operation got cancelled by the user and or the error
@@ -1179,8 +1191,13 @@ server_mount_ready_cb (GObject      *source_file,
       g_clear_error (&error);
     }
 
-  view = GTK_PLACES_VIEW (user_data);
   priv = gtk_places_view_get_instance_private (view);
+
+  if (priv->destroyed) {
+    g_object_unref (view);
+    return;
+  }
+
   priv->should_pulse_entry = FALSE;
 
   /* Restore from Cancel to Connect */
@@ -1252,6 +1269,13 @@ volume_mount_ready_cb (GObject      *source_volume,
 
   view = GTK_PLACES_VIEW (user_data);
   priv = gtk_places_view_get_instance_private (view);
+
+  if (priv->destroyed)
+    {
+      g_object_unref(view);
+      return;
+    }
+
   priv->mounting_volume = FALSE;
   update_loading (view);
 
@@ -1288,10 +1312,6 @@ unmount_ready_cb (GObject      *source_mount,
   mount = G_MOUNT (source_mount);
   error = NULL;
 
-  priv = gtk_places_view_get_instance_private (view);
-  priv->unmounting_mount = FALSE;
-  update_loading (view);
-
   g_mount_unmount_with_operation_finish (mount, res, &error);
 
   if (error)
@@ -1307,6 +1327,16 @@ unmount_ready_cb (GObject      *source_mount,
       g_clear_error (&error);
     }
 
+  priv = gtk_places_view_get_instance_private (view);
+
+  if (priv->destroyed) {
+    g_object_unref (view);
+    return;
+  }
+
+  priv->unmounting_mount = FALSE;
+  update_loading (view);
+
   g_object_unref (view);
 }
 
@@ -1317,7 +1347,13 @@ pulse_entry_cb (gpointer user_data)
 
   priv = gtk_places_view_get_instance_private (GTK_PLACES_VIEW (user_data));
 
-  if (priv->should_pulse_entry)
+  if (priv->destroyed)
+    {
+      priv->entry_pulse_timeout_id = 0;
+
+      return G_SOURCE_REMOVE;
+    }
+  else if (priv->should_pulse_entry)
     {
       gtk_entry_progress_pulse (GTK_ENTRY (priv->address_entry));
 
@@ -1327,7 +1363,6 @@ pulse_entry_cb (gpointer user_data)
     {
       gtk_entry_set_progress_pulse_step (GTK_ENTRY (priv->address_entry), 0.0);
       gtk_entry_set_progress_fraction (GTK_ENTRY (priv->address_entry), 0.0);
-      priv->entry_pulse_timeout_id = 0;
 
       return G_SOURCE_REMOVE;
     }
@@ -2126,6 +2161,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   object_class->get_property = gtk_places_view_get_property;
   object_class->set_property = gtk_places_view_set_property;
 
+  widget_class->destroy = gtk_places_view_destroy;
   widget_class->map = gtk_places_view_map;
 
   /**
