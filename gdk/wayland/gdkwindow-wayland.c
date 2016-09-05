@@ -132,6 +132,7 @@ struct _GdkWindowImplWayland
   unsigned int awaiting_frame : 1;
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
+  GdkWindow *popup_parent;
   PositionMethod position_method;
 
   cairo_surface_t *staging_cairo_surface;
@@ -2009,6 +2010,7 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
 
   wl_surface_commit (impl->display_server.wl_surface);
 
+  impl->popup_parent = parent;
   display->current_popups = g_list_append (display->current_popups, window);
 }
 
@@ -2330,12 +2332,36 @@ unmap_subsurface (GdkWindow *window)
 }
 
 static void
+unmap_popups_for_window (GdkWindow *window)
+{
+  GdkWaylandDisplay *display_wayland;
+  GList *l;
+
+  display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  for (l = display_wayland->current_popups; l; l = l->next)
+    {
+       GdkWindow *popup = l->data;
+       GdkWindowImplWayland *popup_impl = GDK_WINDOW_IMPL_WAYLAND (popup->impl);
+
+       if (popup_impl->popup_parent == window)
+         {
+           g_warning ("Tried to unmap the parent of a popup");
+           gdk_window_hide (popup);
+
+           return;
+         }
+    }
+}
+
+static void
 gdk_wayland_window_hide_surface (GdkWindow *window)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   unset_transient_for_exported (window);
+
+  unmap_popups_for_window (window);
 
   if (impl->display_server.wl_surface)
     {
