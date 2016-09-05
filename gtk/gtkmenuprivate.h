@@ -72,11 +72,6 @@ struct _GtkMenuPrivate
    */
   GtkWidget *toplevel;
 
-  GtkWidget     *tearoff_window;
-  GtkWidget     *tearoff_hbox;
-  GtkWidget     *tearoff_scrollbar;
-  GtkAdjustment *tearoff_adjustment;
-
   GdkWindow *view_window;
   GdkWindow *bin_window;
 
@@ -90,11 +85,6 @@ struct _GtkMenuPrivate
   guint scroll_timeout;
 
   guint needs_destruction_ref : 1;
-  guint torn_off              : 1;
-  /* The tearoff is active when it is torn off and the not-torn-off
-   * menu is not popped up.
-   */
-  guint tearoff_active        : 1;
   guint scroll_fast           : 1;
 
   guint upper_arrow_visible   : 1;
@@ -121,8 +111,6 @@ struct _GtkMenuPrivate
   /* Cached layout information */
   gint n_rows;
   gint n_columns;
-
-  gchar *title;
 
  /* Arrow states */
   GtkStateFlags lower_arrow_state;

@@ -28,7 +28,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkstyleproperties.h	\
 	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
-	deprecated/gtktearoffmenuitem.h	\
 	deprecated/gtkthemingengine.h	\
 	deprecated/gtktoggleaction.h	\
 	deprecated/gtkuimanager.h	\
@@ -76,7 +75,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkstyleproperties.c	\
 	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktable.c		\
-	deprecated/gtktearoffmenuitem.c	\
 	deprecated/gtkthemingengine.c	\
 	deprecated/gtktoggleaction.c	\
 	deprecated/gtkuimanager.c	\

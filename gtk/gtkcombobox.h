@@ -107,18 +107,6 @@ GDK_AVAILABLE_IN_ALL
 void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
                                                     gint         column_span);
 
-GDK_DEPRECATED_IN_3_10
-gboolean      gtk_combo_box_get_add_tearoffs       (GtkComboBox *combo_box);
-GDK_DEPRECATED_IN_3_10
-void          gtk_combo_box_set_add_tearoffs       (GtkComboBox *combo_box,
-                                                    gboolean     add_tearoffs);
-
-GDK_DEPRECATED_IN_3_10
-const gchar * gtk_combo_box_get_title              (GtkComboBox *combo_box);
-GDK_DEPRECATED_IN_3_10
-void          gtk_combo_box_set_title              (GtkComboBox *combo_box,
-                                                    const gchar *title);
-
 GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_get_focus_on_click)
 gboolean      gtk_combo_box_get_focus_on_click     (GtkComboBox *combo);
 GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_set_focus_on_click)

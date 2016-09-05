@@ -75,17 +75,6 @@ dump_toplevels (GtkWidget    *button,
   g_slist_free (toplevels);
 }
 
-static void
-toggle_tearoffs (GtkWidget    *button, 
-		 GtkUIManager *merge)
-{
-  gboolean add_tearoffs;
-
-  add_tearoffs = gtk_ui_manager_get_add_tearoffs (merge);
-  
-  gtk_ui_manager_set_add_tearoffs (merge, !add_tearoffs);
-}
-
 static gint
 delayed_toggle_dynamic (GtkUIManager *merge)
 {
@@ -676,10 +665,6 @@ main (int argc, char **argv)
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
     }
-
-  button = gtk_check_button_new_with_label ("Tearoffs");
-  g_signal_connect (button, "clicked", G_CALLBACK (toggle_tearoffs), merge);
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_check_button_new_with_label ("Dynamic");
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_dynamic), merge);

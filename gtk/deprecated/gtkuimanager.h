@@ -128,11 +128,6 @@ GDK_DEPRECATED_IN_3_10
 GType          gtk_ui_manager_get_type            (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_10
 GtkUIManager  *gtk_ui_manager_new                 (void);
-GDK_DEPRECATED_IN_3_4
-void           gtk_ui_manager_set_add_tearoffs    (GtkUIManager          *manager,
-                                                   gboolean               add_tearoffs);
-GDK_DEPRECATED_IN_3_4
-gboolean       gtk_ui_manager_get_add_tearoffs    (GtkUIManager          *manager);
 
 GDK_DEPRECATED_IN_3_10
 void           gtk_ui_manager_insert_action_group (GtkUIManager          *manager,

@@ -133,9 +133,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 
-#include "deprecated/gtktearoffmenuitem.h"
-
-
 #include "a11y/gtkmenuaccessible.h"
 #include "gdk/gdk-private.h"
 
@@ -272,15 +269,11 @@ static void     gtk_menu_select_item       (GtkMenuShell     *menu_shell,
 static void     gtk_menu_real_insert       (GtkMenuShell     *menu_shell,
                                             GtkWidget        *child,
                                             gint              position);
-static void     gtk_menu_scrollbar_changed (GtkAdjustment    *adjustment,
-                                            GtkMenu          *menu);
 static void     gtk_menu_handle_scrolling  (GtkMenu          *menu,
                                             gint              event_x,
                                             gint              event_y,
                                             gboolean          enter,
                                             gboolean          motion);
-static void     gtk_menu_set_tearoff_hints (GtkMenu          *menu,
-                                            gint             width);
 static gboolean gtk_menu_focus             (GtkWidget        *widget,
                                             GtkDirectionType direction);
 static gint     gtk_menu_get_popup_delay   (GtkMenuShell     *menu_shell);
@@ -302,13 +295,8 @@ static void gtk_menu_deactivate     (GtkMenuShell      *menu_shell);
 static void gtk_menu_show_all       (GtkWidget         *widget);
 static void gtk_menu_position       (GtkMenu           *menu,
                                      gboolean           set_scroll_offset);
-static void gtk_menu_reparent       (GtkMenu           *menu,
-                                     GtkWidget         *new_parent,
-                                     gboolean           unrealize);
 static void gtk_menu_remove         (GtkContainer      *menu,
                                      GtkWidget         *widget);
-
-static void gtk_menu_update_title   (GtkMenu           *menu);
 
 static void       menu_grab_transfer_window_destroy (GtkMenu *menu);
 static GdkWindow *menu_grab_transfer_window_get     (GtkMenu *menu);
@@ -680,39 +668,6 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                         P_("The widget the menu is attached to"),
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
-
-  /**
-   * GtkMenu:tearoff-title:
-   *
-   * A title that may be displayed by the window manager when this
-   * menu is torn-off.
-   *
-   * Deprecated: 3.10
-   **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_TEAROFF_TITLE,
-                                   g_param_spec_string ("tearoff-title",
-                                                        P_("Tearoff Title"),
-                                                        P_("A title that may be displayed by the window manager when this menu is torn-off"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
-
-  /**
-   * GtkMenu:tearoff-state:
-   *
-   * A boolean that indicates whether the menu is torn-off.
-   *
-   * Since: 2.6
-   *
-   * Deprecated: 3.10
-   **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_TEAROFF_STATE,
-                                   g_param_spec_boolean ("tearoff-state",
-                                                         P_("Tearoff State"),
-                                                         P_("A boolean that indicates whether the menu is torn-off"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkMenu:monitor:
@@ -1123,16 +1078,6 @@ gtk_menu_set_property (GObject      *object,
           gtk_menu_attach_to_widget (menu, widget, NULL);
       }
       break;
-    case PROP_TEAROFF_STATE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_menu_set_tearoff_state (menu, g_value_get_boolean (value));
-G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-    case PROP_TEAROFF_TITLE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_menu_set_title (menu, g_value_get_string (value));
-G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
     case PROP_MONITOR:
       gtk_menu_set_monitor (menu, g_value_get_int (value));
       break;
@@ -1194,16 +1139,6 @@ gtk_menu_get_property (GObject     *object,
       break;
     case PROP_ATTACH_WIDGET:
       g_value_set_object (value, gtk_menu_get_attach_widget (menu));
-      break;
-    case PROP_TEAROFF_STATE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      g_value_set_boolean (value, gtk_menu_get_tearoff_state (menu));
-G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-    case PROP_TEAROFF_TITLE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      g_value_set_string (value, gtk_menu_get_title (menu));
-G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_MONITOR:
       g_value_set_int (value, gtk_menu_get_monitor (menu));
@@ -1436,12 +1371,7 @@ gtk_menu_destroy (GtkWidget *widget)
       gtk_widget_destroy (priv->toplevel);
     }
 
-  if (priv->tearoff_window)
-    gtk_widget_destroy (priv->tearoff_window);
-
   g_clear_pointer (&priv->heights, g_free);
-
-  g_clear_pointer (&priv->title, g_free);
 
   if (priv->position_func_data_destroy)
     {
@@ -1475,12 +1405,6 @@ menu_change_screen (GtkMenu   *menu,
     {
       if (new_screen == gtk_widget_get_screen (GTK_WIDGET (menu)))
         return;
-    }
-
-  if (priv->torn_off)
-    {
-      gtk_window_set_screen (GTK_WINDOW (priv->tearoff_window), new_screen);
-      gtk_menu_position (menu, TRUE);
     }
 
   gtk_window_set_screen (GTK_WINDOW (priv->toplevel), new_screen);
@@ -1570,9 +1494,6 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
 
   _gtk_widget_update_parent_muxer (GTK_WIDGET (menu));
 
-  /* Fallback title for menu comes from attach widget */
-  gtk_menu_update_title (menu);
-
   g_object_notify (G_OBJECT (menu), "attach-widget");
 }
 
@@ -1652,9 +1573,6 @@ gtk_menu_detach (GtkMenu *menu)
 
   _gtk_widget_update_parent_muxer (GTK_WIDGET (menu));
 
-  /* Fallback title for menu comes from attach widget */
-  gtk_menu_update_title (menu);
-
   g_object_notify (G_OBJECT (menu), "attach-widget");
   g_object_unref (menu);
 }
@@ -1716,46 +1634,6 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->insert (menu_shell, child, position);
 
   menu_queue_resize (menu);
-}
-
-static void
-gtk_menu_tearoff_bg_copy (GtkMenu *menu)
-{
-  GtkMenuPrivate *priv = menu->priv;
-  gint width, height;
-
-  if (priv->torn_off)
-    {
-      GdkWindow *window;
-      cairo_surface_t *surface;
-      cairo_pattern_t *pattern;
-      cairo_t *cr;
-
-      priv->tearoff_active = FALSE;
-      priv->saved_scroll_offset = priv->scroll_offset;
-
-      window = gtk_widget_get_window (priv->tearoff_window);
-      width = gdk_window_get_width (window);
-      height = gdk_window_get_height (window);
-
-      surface = gdk_window_create_similar_surface (window,
-                                                   CAIRO_CONTENT_COLOR,
-                                                   width,
-                                                   height);
-
-      cr = cairo_create (surface);
-      gdk_cairo_set_source_window (cr, window, 0, 0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-
-      gtk_widget_set_size_request (priv->tearoff_window, width, height);
-
-      pattern = cairo_pattern_create_for_surface (surface);
-      gdk_window_set_background_pattern (window, pattern);
-
-      cairo_pattern_destroy (pattern);
-      cairo_surface_destroy (surface);
-    }
 }
 
 static gboolean
@@ -1935,13 +1813,6 @@ gtk_menu_popup_internal (GtkMenu             *menu,
     }
   else
     menu_shell->priv->ignore_enter = TRUE;
-
-  if (priv->torn_off)
-    {
-      gtk_menu_tearoff_bg_copy (menu);
-
-      gtk_menu_reparent (menu, priv->toplevel, FALSE);
-    }
 
   parent_toplevel = NULL;
   if (parent_menu_shell)
@@ -2475,7 +2346,6 @@ gtk_menu_popdown (GtkMenu *menu)
 {
   GtkMenuPrivate *priv;
   GtkMenuShell *menu_shell;
-  GdkDevice *pointer;
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
@@ -2510,35 +2380,7 @@ gtk_menu_popdown (GtkMenu *menu)
       gtk_window_set_transient_for (GTK_WINDOW (priv->toplevel), NULL);
     }
 
-  pointer = _gtk_menu_shell_get_grab_device (menu_shell);
-
-  if (priv->torn_off)
-    {
-      gtk_widget_set_size_request (priv->tearoff_window, -1, -1);
-
-      if (gtk_bin_get_child (GTK_BIN (priv->toplevel)))
-        {
-          gtk_menu_reparent (menu, priv->tearoff_hbox, TRUE);
-        }
-      else
-        {
-          /* We popped up the menu from the tearoff, so we need to
-           * release the grab - we aren't actually hiding the menu.
-           */
-          if (menu_shell->priv->have_xgrab && pointer)
-            gdk_seat_ungrab (gdk_device_get_seat (pointer));
-        }
-
-      /* gtk_menu_popdown is called each time a menu item is selected from
-       * a torn off menu. Only scroll back to the saved position if the
-       * non-tearoff menu was popped down.
-       */
-      if (!priv->tearoff_active)
-        gtk_menu_scroll_to (menu, priv->saved_scroll_offset);
-      priv->tearoff_active = TRUE;
-    }
-  else
-    gtk_widget_hide (GTK_WIDGET (menu));
+  gtk_widget_hide (GTK_WIDGET (menu));
 
   menu_shell->priv->have_xgrab = FALSE;
 
@@ -2804,297 +2646,8 @@ gtk_menu_reposition (GtkMenu *menu)
 {
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  if (!menu->priv->torn_off && gtk_widget_is_drawable (GTK_WIDGET (menu)))
+  if (gtk_widget_is_drawable (GTK_WIDGET (menu)))
     gtk_menu_position (menu, FALSE);
-}
-
-static void
-gtk_menu_scrollbar_changed (GtkAdjustment *adjustment,
-                            GtkMenu       *menu)
-{
-  double value;
-
-  value = gtk_adjustment_get_value (adjustment);
-  if (menu->priv->scroll_offset != value)
-    gtk_menu_scroll_to (menu, value);
-}
-
-static void
-gtk_menu_set_tearoff_hints (GtkMenu *menu,
-                            gint     width)
-{
-  GtkMenuPrivate *priv = menu->priv;
-  GdkGeometry geometry_hints;
-
-  if (!priv->tearoff_window)
-    return;
-
-  if (gtk_widget_get_visible (priv->tearoff_scrollbar))
-    {
-      GtkRequisition requisition;
-
-      gtk_widget_get_preferred_size (priv->tearoff_scrollbar,
-                                     &requisition, NULL);
-      width += requisition.width;
-    }
-
-  geometry_hints.min_width = width;
-  geometry_hints.max_width = width;
-
-  geometry_hints.min_height = 0;
-  geometry_hints.max_height = priv->requested_height;
-
-  gtk_window_set_geometry_hints (GTK_WINDOW (priv->tearoff_window),
-                                 NULL,
-                                 &geometry_hints,
-                                 GDK_HINT_MAX_SIZE|GDK_HINT_MIN_SIZE);
-}
-
-static void
-gtk_menu_update_title (GtkMenu *menu)
-{
-  GtkMenuPrivate *priv = menu->priv;
-
-  if (priv->tearoff_window)
-    {
-      const gchar *title;
-      GtkWidget *attach_widget;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      title = gtk_menu_get_title (menu);
-G_GNUC_END_IGNORE_DEPRECATIONS;
-      if (!title)
-        {
-          attach_widget = gtk_menu_get_attach_widget (menu);
-          if (GTK_IS_MENU_ITEM (attach_widget))
-            {
-              GtkWidget *child = gtk_bin_get_child (GTK_BIN (attach_widget));
-              if (GTK_IS_LABEL (child))
-                title = gtk_label_get_text (GTK_LABEL (child));
-            }
-        }
-
-      if (title)
-        gtk_window_set_title (GTK_WINDOW (priv->tearoff_window), title);
-    }
-}
-
-static GtkWidget*
-gtk_menu_get_toplevel (GtkWidget *menu)
-{
-  GtkWidget *attach, *toplevel;
-
-  attach = gtk_menu_get_attach_widget (GTK_MENU (menu));
-
-  if (GTK_IS_MENU_ITEM (attach))
-    attach = gtk_widget_get_parent (attach);
-
-  if (GTK_IS_MENU (attach))
-    return gtk_menu_get_toplevel (attach);
-  else if (GTK_IS_WIDGET (attach))
-    {
-      toplevel = gtk_widget_get_toplevel (attach);
-      if (gtk_widget_is_toplevel (toplevel))
-        return toplevel;
-    }
-
-  return NULL;
-}
-
-static void
-tearoff_window_destroyed (GtkWidget *widget,
-                          GtkMenu   *menu)
-{
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_menu_set_tearoff_state (menu, FALSE);
-G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-/**
- * gtk_menu_set_tearoff_state:
- * @menu: a #GtkMenu
- * @torn_off: If %TRUE, menu is displayed as a tearoff menu.
- *
- * Changes the tearoff state of the menu.  A menu is normally
- * displayed as drop down menu which persists as long as the menu is
- * active.  It can also be displayed as a tearoff menu which persists
- * until it is closed or reattached.
- *
- * Deprecated: 3.10
- */
-void
-gtk_menu_set_tearoff_state (GtkMenu  *menu,
-                            gboolean  torn_off)
-{
-  GtkMenuPrivate *priv = menu->priv;
-  gint height;
-
-  g_return_if_fail (GTK_IS_MENU (menu));
-
-  if (priv->torn_off != torn_off)
-    {
-      priv->torn_off = torn_off;
-      priv->tearoff_active = torn_off;
-
-      if (priv->torn_off)
-        {
-          if (gtk_widget_get_visible (GTK_WIDGET (menu)))
-            gtk_menu_popdown (menu);
-
-          if (!priv->tearoff_window)
-            {
-              GtkWidget *toplevel;
-
-              priv->tearoff_window = g_object_new (GTK_TYPE_WINDOW,
-                                                   "type", GTK_WINDOW_TOPLEVEL,
-                                                   "screen", gtk_widget_get_screen (priv->toplevel),
-                                                   "app-paintable", TRUE,
-                                                   NULL);
-
-              gtk_window_set_type_hint (GTK_WINDOW (priv->tearoff_window),
-                                        GDK_WINDOW_TYPE_HINT_MENU);
-              gtk_window_set_mnemonic_modifier (GTK_WINDOW (priv->tearoff_window), 0);
-              g_signal_connect (priv->tearoff_window, "destroy",
-                                G_CALLBACK (tearoff_window_destroyed), menu);
-              g_signal_connect (priv->tearoff_window, "event",
-                                G_CALLBACK (gtk_menu_window_event), menu);
-
-              gtk_menu_update_title (menu);
-
-              gtk_widget_realize (priv->tearoff_window);
-
-              toplevel = gtk_menu_get_toplevel (GTK_WIDGET (menu));
-              if (toplevel != NULL)
-                gtk_window_set_transient_for (GTK_WINDOW (priv->tearoff_window),
-                                              GTK_WINDOW (toplevel));
-
-              priv->tearoff_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-              gtk_container_add (GTK_CONTAINER (priv->tearoff_window),
-                                 priv->tearoff_hbox);
-
-              height = gdk_window_get_height (gtk_widget_get_window (GTK_WIDGET (menu)));
-              priv->tearoff_adjustment = gtk_adjustment_new (0,
-                                                             0, priv->requested_height,
-                                                             MENU_SCROLL_STEP2,
-                                                             height/2,
-                                                             height);
-              g_object_connect (priv->tearoff_adjustment,
-                                "signal::value-changed", gtk_menu_scrollbar_changed, menu,
-                                NULL);
-              priv->tearoff_scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, priv->tearoff_adjustment);
-
-              gtk_box_pack_end (GTK_BOX (priv->tearoff_hbox),
-                                priv->tearoff_scrollbar,
-                                FALSE, FALSE, 0);
-
-              if (gtk_adjustment_get_upper (priv->tearoff_adjustment) > height)
-                gtk_widget_show (priv->tearoff_scrollbar);
-
-              gtk_widget_show (priv->tearoff_hbox);
-            }
-
-          gtk_menu_reparent (menu, priv->tearoff_hbox, FALSE);
-
-          /* Update menu->requisition */
-          gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, NULL);
-
-          gtk_menu_set_tearoff_hints (menu, gdk_window_get_width (gtk_widget_get_window (GTK_WIDGET (menu))));
-
-          gtk_widget_realize (priv->tearoff_window);
-          gtk_menu_position (menu, TRUE);
-
-          gtk_widget_show (GTK_WIDGET (menu));
-          gtk_widget_show (priv->tearoff_window);
-
-          gtk_menu_scroll_to (menu, 0);
-
-        }
-      else
-        {
-          gtk_widget_hide (GTK_WIDGET (menu));
-          gtk_widget_hide (priv->tearoff_window);
-          if (GTK_IS_CONTAINER (priv->toplevel))
-            gtk_menu_reparent (menu, priv->toplevel, FALSE);
-          gtk_widget_destroy (priv->tearoff_window);
-
-          priv->tearoff_window = NULL;
-          priv->tearoff_hbox = NULL;
-          priv->tearoff_scrollbar = NULL;
-          priv->tearoff_adjustment = NULL;
-        }
-
-      g_object_notify (G_OBJECT (menu), "tearoff-state");
-    }
-}
-
-/**
- * gtk_menu_get_tearoff_state:
- * @menu: a #GtkMenu
- *
- * Returns whether the menu is torn off.
- * See gtk_menu_set_tearoff_state().
- *
- * Returns: %TRUE if the menu is currently torn off.
- *
- * Deprecated: 3.10
- */
-gboolean
-gtk_menu_get_tearoff_state (GtkMenu *menu)
-{
-  g_return_val_if_fail (GTK_IS_MENU (menu), FALSE);
-
-  return menu->priv->torn_off;
-}
-
-/**
- * gtk_menu_set_title:
- * @menu: a #GtkMenu
- * @title: a string containing the title for the menu
- *
- * Sets the title string for the menu.
- *
- * The title is displayed when the menu is shown as a tearoff
- * menu. If @title is %NULL, the menu will see if it is attached
- * to a parent menu item, and if so it will try to use the same
- * text as that menu item’s label.
- *
- * Deprecated: 3.10
- */
-void
-gtk_menu_set_title (GtkMenu     *menu,
-                    const gchar *title)
-{
-  GtkMenuPrivate *priv = menu->priv;
-  char *old_title;
-
-  g_return_if_fail (GTK_IS_MENU (menu));
-
-  old_title = priv->title;
-  priv->title = g_strdup (title);
-  g_free (old_title);
-
-  gtk_menu_update_title (menu);
-  g_object_notify (G_OBJECT (menu), "tearoff-title");
-}
-
-/**
- * gtk_menu_get_title:
- * @menu: a #GtkMenu
- *
- * Returns the title of the menu. See gtk_menu_set_title().
- *
- * Returns: the title of the menu, or %NULL if the menu
- *     has no title set on it. This string is owned by GTK+
- *     and should not be modified or freed.
- *
- * Deprecated: 3.10
- **/
-const gchar *
-gtk_menu_get_title (GtkMenu *menu)
-{
-  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
-
-  return menu->priv->title;
 }
 
 /**
@@ -3471,13 +3024,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
                              &arrow_allocation, -1,
                              &clip);
 
-  if (!priv->tearoff_active)
-    {
-      y += arrow_border.top;
-      height -= arrow_border.top;
-      height -= arrow_border.bottom;
-    }
-
   width = MAX (1, width);
   height = MAX (1, height);
 
@@ -3547,36 +3093,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
           w = gtk_menu_get_n_columns (menu) * base_width;
           gdk_window_resize (priv->bin_window, w, h);
         }
-
-      if (priv->tearoff_active)
-        {
-          if (height >= priv->requested_height)
-            {
-              if (gtk_widget_get_visible (priv->tearoff_scrollbar))
-                {
-                  gtk_widget_hide (priv->tearoff_scrollbar);
-                  gtk_menu_set_tearoff_hints (menu, allocation->width);
-
-                  gtk_menu_scroll_to (menu, 0);
-                }
-            }
-          else
-            {
-              gtk_adjustment_configure (priv->tearoff_adjustment,
-                                        gtk_adjustment_get_value (priv->tearoff_adjustment),
-                                        0,
-                                        priv->requested_height,
-                                        gtk_adjustment_get_step_increment (priv->tearoff_adjustment),
-                                        gtk_adjustment_get_page_increment (priv->tearoff_adjustment),
-                                        allocation->height);
-
-              if (!gtk_widget_get_visible (priv->tearoff_scrollbar))
-                {
-                  gtk_widget_show (priv->tearoff_scrollbar);
-                  gtk_menu_set_tearoff_hints (menu, allocation->width);
-                }
-            }
-        }
     }
 }
 
@@ -3603,10 +3119,10 @@ gtk_menu_draw (GtkWidget *widget,
       gtk_render_frame (context, cr, 0, 0,
                         width, height);
 
-      if (priv->upper_arrow_visible && !priv->tearoff_active)
+      if (priv->upper_arrow_visible)
         gtk_css_gadget_draw (priv->top_arrow_gadget, cr);
 
-      if (priv->lower_arrow_visible && !priv->tearoff_active)
+      if (priv->lower_arrow_visible)
         gtk_css_gadget_draw (priv->bottom_arrow_gadget, cr);
     }
 
@@ -3742,12 +3258,6 @@ gtk_menu_get_preferred_width (GtkWidget *widget,
 
   *minimum_size = min_width;
   *natural_size = nat_width;
-
-  /* Don't resize the tearoff if it is not active,
-   * because it won't redraw (it is only a background pixmap).
-   */
-  if (priv->tearoff_active)
-    gtk_menu_set_tearoff_hints (menu, min_width);
 }
 
 static void
@@ -4252,7 +3762,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
   get_arrows_sensitive_area (menu, &rect, NULL);
 
   in_arrow = FALSE;
-  if (priv->upper_arrow_visible && !priv->tearoff_active &&
+  if (priv->upper_arrow_visible &&
       (x >= rect.x) && (x < rect.x + rect.width) &&
       (y >= rect.y) && (y < rect.y + rect.height))
     {
@@ -4263,7 +3773,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
     {
       gboolean arrow_pressed = FALSE;
 
-      if (priv->upper_arrow_visible && !priv->tearoff_active)
+      if (priv->upper_arrow_visible)
         {
           scroll_fast = (y < rect.y + MENU_SCROLL_FAST_ZONE);
 
@@ -4326,7 +3836,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
   get_arrows_sensitive_area (menu, NULL, &rect);
 
   in_arrow = FALSE;
-  if (priv->lower_arrow_visible && !priv->tearoff_active &&
+  if (priv->lower_arrow_visible &&
       (x >= rect.x) && (x < rect.x + rect.width) &&
       (y >= rect.y) && (y < rect.y + rect.height))
     {
@@ -4337,7 +3847,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
     {
       gboolean arrow_pressed = FALSE;
 
-      if (priv->lower_arrow_visible && !priv->tearoff_active)
+      if (priv->lower_arrow_visible)
         {
           scroll_fast = (y > rect.y + rect.height - MENU_SCROLL_FAST_ZONE);
 
@@ -5094,14 +4604,7 @@ gtk_menu_position_legacy (GtkMenu  *menu,
       scroll_offset += arrow_border.top;
     }
 
-  gtk_window_move (GTK_WINDOW (GTK_MENU_SHELL (menu)->priv->active ? priv->toplevel : priv->tearoff_window),
-                   x, y);
-
-  if (!GTK_MENU_SHELL (menu)->priv->active)
-    {
-      gtk_window_resize (GTK_WINDOW (priv->tearoff_window),
-                         requisition.width, requisition.height);
-    }
+  gtk_window_move (GTK_WINDOW (priv->toplevel), x, y);
 
   if (set_scroll_offset)
     priv->scroll_offset = scroll_offset;
@@ -5243,17 +4746,13 @@ gtk_menu_scroll_to (GtkMenu *menu,
 {
   GtkMenuPrivate *priv = menu->priv;
   GtkCssNode *top_arrow_node, *bottom_arrow_node;
-  GtkBorder arrow_border, padding;
+  GtkBorder padding;
   GtkWidget *widget;
   gint x, y;
   gint view_width, view_height;
   gint border_width;
-  gint menu_height;
 
   widget = GTK_WIDGET (menu);
-
-  if (priv->tearoff_active && priv->tearoff_adjustment)
-    gtk_adjustment_set_value (priv->tearoff_adjustment, offset);
 
   /* Move/resize the viewport according to arrows: */
   view_width = gtk_widget_get_allocated_width (widget);
@@ -5265,91 +4764,9 @@ gtk_menu_scroll_to (GtkMenu *menu,
 
   view_width -= (2 * border_width) + padding.left + padding.right;
   view_height -= (2 * border_width) + padding.top + padding.bottom;
-  menu_height = priv->requested_height - (2 * border_width) - padding.top - padding.bottom;
 
   x = border_width + padding.left;
   y = border_width + padding.top;
-
-  if (!priv->tearoff_active)
-    {
-      if (view_height < menu_height               ||
-          (offset > 0 && priv->scroll_offset > 0) ||
-          (offset < 0 && priv->scroll_offset < 0))
-        {
-          GtkStateFlags upper_arrow_previous_state = priv->upper_arrow_state;
-          GtkStateFlags lower_arrow_previous_state = priv->lower_arrow_state;
-
-          if (!priv->upper_arrow_visible || !priv->lower_arrow_visible)
-            gtk_widget_queue_draw (GTK_WIDGET (menu));
-
-          priv->upper_arrow_visible = priv->lower_arrow_visible = TRUE;
-
-          get_arrows_border (menu, &arrow_border);
-          y += arrow_border.top;
-          view_height -= arrow_border.top;
-          view_height -= arrow_border.bottom;
-
-          if (offset <= 0)
-            priv->upper_arrow_state |= GTK_STATE_FLAG_INSENSITIVE;
-          else
-            {
-              priv->upper_arrow_state &= ~(GTK_STATE_FLAG_INSENSITIVE);
-
-              if (priv->upper_arrow_prelight)
-                priv->upper_arrow_state |= GTK_STATE_FLAG_PRELIGHT;
-              else
-                priv->upper_arrow_state &= ~(GTK_STATE_FLAG_PRELIGHT);
-            }
-
-          if (offset >= menu_height - view_height)
-            priv->lower_arrow_state |= GTK_STATE_FLAG_INSENSITIVE;
-          else
-            {
-              priv->lower_arrow_state &= ~(GTK_STATE_FLAG_INSENSITIVE);
-
-              if (priv->lower_arrow_prelight)
-                priv->lower_arrow_state |= GTK_STATE_FLAG_PRELIGHT;
-              else
-                priv->lower_arrow_state &= ~(GTK_STATE_FLAG_PRELIGHT);
-            }
-
-          if ((priv->upper_arrow_state != upper_arrow_previous_state) ||
-              (priv->lower_arrow_state != lower_arrow_previous_state))
-            gtk_widget_queue_draw (GTK_WIDGET (menu));
-
-          if ((upper_arrow_previous_state & GTK_STATE_FLAG_INSENSITIVE) == 0 &&
-              (priv->upper_arrow_state & GTK_STATE_FLAG_INSENSITIVE) != 0)
-            {
-              /* At the upper border, possibly remove timeout */
-              if (priv->scroll_step < 0)
-                {
-                  gtk_menu_stop_scrolling (menu);
-                  gtk_widget_queue_draw (GTK_WIDGET (menu));
-                }
-            }
-
-          if ((lower_arrow_previous_state & GTK_STATE_FLAG_INSENSITIVE) == 0 &&
-              (priv->lower_arrow_state & GTK_STATE_FLAG_INSENSITIVE) != 0)
-            {
-              /* At the lower border, possibly remove timeout */
-              if (priv->scroll_step > 0)
-                {
-                  gtk_menu_stop_scrolling (menu);
-                  gtk_widget_queue_draw (GTK_WIDGET (menu));
-                }
-            }
-        }
-      else if (priv->upper_arrow_visible || priv->lower_arrow_visible)
-        {
-          offset = 0;
-
-          priv->upper_arrow_visible = priv->lower_arrow_visible = FALSE;
-          priv->upper_arrow_prelight = priv->lower_arrow_prelight = FALSE;
-
-          gtk_menu_stop_scrolling (menu);
-          gtk_widget_queue_draw (GTK_WIDGET (menu));
-        }
-    }
 
   top_arrow_node = gtk_css_gadget_get_node (priv->top_arrow_gadget);
   gtk_css_node_set_visible (top_arrow_node, priv->upper_arrow_visible);
@@ -5452,8 +4869,7 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
           arrow_height = 0;
 
           get_arrows_border (menu, &arrow_border);
-          if (!priv->tearoff_active)
-            arrow_height = arrow_border.top + arrow_border.bottom;
+          arrow_height = arrow_border.top + arrow_border.bottom;
 
           if (child_offset + child_height > y + height - arrow_height)
             {
@@ -5482,67 +4898,6 @@ gtk_menu_select_item (GtkMenuShell *menu_shell,
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->select_item (menu_shell, menu_item);
 }
 
-
-/* Reparent the menu, taking care of the refcounting
- *
- * If unrealize is true we force a unrealize while reparenting the parent.
- * This can help eliminate flicker in some cases.
- *
- * What happens is that when the menu is unrealized and then re-realized,
- * the allocations are as follows:
- *
- *  parent - 1x1 at (0,0)
- *  child1 - 100x20 at (0,0)
- *  child2 - 100x20 at (0,20)
- *  child3 - 100x20 at (0,40)
- *
- * That is, the parent is small but the children are full sized. Then,
- * when the queued_resize gets processed, the parent gets resized to
- * full size.
- *
- * But in order to eliminate flicker when scrolling, gdkgeometry-x11.c
- * contains the following logic:
- *
- * - if a move or resize operation on a window would change the clip
- *   region on the children, then before the window is resized
- *   the background for children is temporarily set to None, the
- *   move/resize done, and the background for the children restored.
- *
- * So, at the point where the parent is resized to final size, the
- * background for the children is temporarily None, and thus they
- * are not cleared to the background color and the previous background
- * (the image of the menu) is left in place.
- */
-static void
-gtk_menu_reparent (GtkMenu   *menu,
-                   GtkWidget *new_parent,
-                   gboolean   unrealize)
-{
-  GObject *object = G_OBJECT (menu);
-  GtkWidget *widget = GTK_WIDGET (menu);
-  gboolean was_floating = g_object_is_floating (object);
-
-  g_object_ref_sink (object);
-
-  if (unrealize)
-    {
-      g_object_ref (object);
-      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (widget)), widget);
-      gtk_container_add (GTK_CONTAINER (new_parent), widget);
-      g_object_unref (object);
-    }
-  else
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_widget_reparent (widget, new_parent);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-
-  if (was_floating)
-    g_object_force_floating (object);
-  else
-    g_object_unref (object);
-}
 
 static void
 gtk_menu_show_all (GtkWidget *widget)
@@ -5804,11 +5159,10 @@ gtk_menu_move_current (GtkMenuShell         *menu_shell,
 static gint
 get_visible_size (GtkMenu *menu)
 {
-  GtkMenuPrivate *priv = menu->priv;
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (menu);
   GtkContainer *container = GTK_CONTAINER (menu);
-  GtkBorder padding;
+  GtkBorder padding, arrow_border;
   gint menu_height;
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -5818,14 +5172,9 @@ get_visible_size (GtkMenu *menu)
                  (2 * gtk_container_get_border_width (container)) -
                  padding.top - padding.bottom);
 
-  if (!priv->tearoff_active)
-    {
-      GtkBorder arrow_border;
-
-      get_arrows_border (menu, &arrow_border);
-      menu_height -= arrow_border.top;
-      menu_height -= arrow_border.bottom;
-    }
+  get_arrows_border (menu, &arrow_border);
+  menu_height -= arrow_border.top;
+  menu_height -= arrow_border.bottom;
 
   return menu_height;
 }
@@ -5864,14 +5213,8 @@ child_at (GtkMenu *menu,
             {
               child = children->data;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-              if (child_offset + child_requisition.height > y &&
-                  !GTK_IS_TEAROFF_MENU_ITEM (child))
+              if (child_offset + child_requisition.height > y)
                 return child;
-
-G_GNUC_END_IGNORE_DEPRECATIONS
-
             }
 
           child_offset += child_requisition.height;
@@ -5886,7 +5229,7 @@ get_menu_height (GtkMenu *menu)
 {
   GtkMenuPrivate *priv = menu->priv;
   GtkWidget *widget = GTK_WIDGET (menu);
-  GtkBorder padding;
+  GtkBorder padding, arrow_border;
   gint height;
 
   get_menu_padding (widget, &padding);
@@ -5895,14 +5238,9 @@ get_menu_height (GtkMenu *menu)
   height -= (gtk_container_get_border_width (GTK_CONTAINER (widget)) * 2) +
     padding.top + padding.bottom;
 
-  if (!priv->tearoff_active)
-    {
-      GtkBorder arrow_border;
-
-      get_arrows_border (menu, &arrow_border);
-      height -= arrow_border.top;
-      height -= arrow_border.bottom;
-    }
+  get_arrows_border (menu, &arrow_border);
+  height -= arrow_border.top;
+  height -= arrow_border.bottom;
 
   return height;
 }
@@ -5942,7 +5280,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
           }
 
         menu_shell->priv->ignore_enter = TRUE;
-        old_upper_arrow_visible = priv->upper_arrow_visible && !priv->tearoff_active;
+        old_upper_arrow_visible = priv->upper_arrow_visible;
         old_offset = priv->scroll_offset;
 
         new_offset = priv->scroll_offset + step;
@@ -5953,7 +5291,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
         if (menu_shell->priv->active_menu_item)
           {
             GtkWidget *new_child;
-            gboolean new_upper_arrow_visible = priv->upper_arrow_visible && !priv->tearoff_active;
+            gboolean new_upper_arrow_visible = priv->upper_arrow_visible;
             GtkBorder arrow_border;
 
             get_arrows_border (menu, &arrow_border);

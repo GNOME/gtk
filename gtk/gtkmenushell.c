@@ -77,8 +77,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtklabelprivate.h"
 
-#include "deprecated/gtktearoffmenuitem.h"
-
 #include "a11y/gtkmenushellaccessible.h"
 
 
@@ -1449,9 +1447,7 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
  *                    should be %FALSE if the menu is being
  *                    popped up initially.
  *
- * Select the first visible or selectable child of the menu shell;
- * don’t select tearoff items unless the only item is a tearoff
- * item.
+ * Select the first visible or selectable child of the menu shell.
  *
  * Since: 2.2
  */
@@ -1472,14 +1468,6 @@ gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
           _gtk_menu_item_is_selectable (child))
         {
           to_select = child;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-          if (!GTK_IS_TEAROFF_MENU_ITEM (child))
-            break;
-
-G_GNUC_END_IGNORE_DEPRECATIONS
-
         }
 
       tmp_list = tmp_list->next;
@@ -1506,13 +1494,6 @@ _gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
           _gtk_menu_item_is_selectable (child))
         {
           to_select = child;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-          if (!GTK_IS_TEAROFF_MENU_ITEM (child))
-            break;
-
-G_GNUC_END_IGNORE_DEPRECATIONS
         }
 
       tmp_list = tmp_list->prev;

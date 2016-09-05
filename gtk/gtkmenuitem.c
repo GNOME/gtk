@@ -46,7 +46,6 @@
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkmenuitemaccessible.h"
-#include "deprecated/gtktearoffmenuitem.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 
@@ -1257,8 +1256,8 @@ activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
  * @menu: (allow-none): a #GtkMenu or %NULL
  * 
  * Determines whether @menu is empty. A menu is considered empty if it
- * the only visible children are tearoff menu items or “filler” menu 
- * items which were inserted to mark the menu as empty.
+ * the only visible children are “filler” menu items which were
+ * inserted to mark the menu as empty.
  * 
  * This function is used by #GtkAction.
  *
@@ -1282,18 +1281,11 @@ gtk_menu_is_empty (GtkWidget *menu)
     {
       if (gtk_widget_get_visible (cur->data))
 	{
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-	  if (!GTK_IS_TEAROFF_MENU_ITEM (cur->data) &&
-	      !g_object_get_data (cur->data, "gtk-empty-menu-item"))
+	  if (!g_object_get_data (cur->data, "gtk-empty-menu-item"))
             {
 	      result = FALSE;
               break;
             }
-
-G_GNUC_END_IGNORE_DEPRECATIONS
-
 	}
       cur = cur->next;
     }
@@ -1757,8 +1749,7 @@ gtk_real_menu_item_select (GtkMenuItem *menu_item)
   if ((!source_device ||
        gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN) &&
       priv->submenu &&
-      (!gtk_widget_get_mapped (priv->submenu) ||
-       GTK_MENU (priv->submenu)->priv->tearoff_active))
+      !gtk_widget_get_mapped (priv->submenu))
     {
       _gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item), TRUE);
     }
@@ -2088,8 +2079,7 @@ gtk_menu_item_popup_timeout (gpointer data)
 
   parent = gtk_widget_get_parent (GTK_WIDGET (menu_item));
 
-  if ((GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->priv->active) ||
-      (GTK_IS_MENU (parent) && GTK_MENU (parent)->priv->torn_off))
+  if (GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->priv->active)
     {
       gtk_menu_item_real_popup_submenu (GTK_WIDGET (menu_item), info->trigger_event, TRUE);
       if (info->trigger_event &&

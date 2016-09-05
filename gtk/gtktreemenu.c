@@ -49,8 +49,6 @@
 #define GDK_DEPRECATED
 #define GDK_DEPRECATED_FOR(f)
 
-#include "deprecated/gtktearoffmenuitem.h"
-
 /* GObjectClass */
 static void      gtk_tree_menu_constructed                    (GObject            *object);
 static void      gtk_tree_menu_dispose                        (GObject            *object);
@@ -170,7 +168,6 @@ struct _GtkTreeMenuPrivate
 
   /* Flags */
   guint32              menu_with_header : 1;
-  guint32              tearoff     : 1;
 
   /* Row separators */
   GtkTreeViewRowSeparatorFunc row_separator_func;
@@ -183,7 +180,6 @@ enum {
   PROP_MODEL,
   PROP_ROOT,
   PROP_CELL_AREA,
-  PROP_TEAROFF,
   PROP_WRAP_WIDTH,
   PROP_ROW_SPAN_COL,
   PROP_COL_SPAN_COL
@@ -308,21 +304,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                                                         P_("The GtkCellArea used to layout cells"),
                                                         GTK_TYPE_CELL_AREA,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-  /*
-   * GtkTreeMenu:tearoff:
-   *
-   * Specifies whether this menu comes with a leading tearoff menu item
-   *
-   * Since: 3.0
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_TEAROFF,
-                                   g_param_spec_boolean ("tearoff",
-                                                         P_("Tearoff"),
-                                                         P_("Whether the menu has a tearoff item"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE));
 
   /*
    * GtkTreeMenu:wrap-width:
@@ -477,10 +458,6 @@ gtk_tree_menu_set_property (GObject            *object,
       gtk_tree_menu_set_area (menu, (GtkCellArea *)g_value_get_object (value));
       break;
 
-    case PROP_TEAROFF:
-      _gtk_tree_menu_set_tearoff (menu, g_value_get_boolean (value));
-      break;
-
     case PROP_WRAP_WIDTH:
       _gtk_tree_menu_set_wrap_width (menu, g_value_get_int (value));
       break;
@@ -520,10 +497,6 @@ gtk_tree_menu_get_property (GObject            *object,
 
     case PROP_CELL_AREA:
       g_value_set_object (value, priv->area);
-      break;
-
-    case PROP_TEAROFF:
-      g_value_set_boolean (value, priv->tearoff);
       break;
 
     default:
@@ -706,7 +679,7 @@ gtk_tree_menu_get_path_item (GtkTreeMenu          *menu,
                 item = child;
             }
         }
-      else if (!GTK_IS_TEAROFF_MENU_ITEM (child))
+      else
         {
           GtkWidget *view = gtk_bin_get_child (GTK_BIN (child));
 
@@ -845,7 +818,7 @@ find_empty_submenu (GtkTreeMenu  *menu)
 
       /* Separators dont get submenus, if it already has a submenu then let
        * the submenu handle inserted rows */
-      if (!GTK_IS_SEPARATOR_MENU_ITEM (child) && !GTK_IS_TEAROFF_MENU_ITEM (child))
+      if (!GTK_IS_SEPARATOR_MENU_ITEM (child))
         {
           GtkWidget *view = gtk_bin_get_child (GTK_BIN (child));
 
@@ -895,12 +868,6 @@ row_inserted_cb (GtkTreeModel     *model,
            * and a separator menu item */
           if (priv->menu_with_header)
             index += 2;
-
-          /* Index after the tearoff item for the root menu if
-           * there is a tearoff item
-           */
-          if (priv->root == NULL && priv->tearoff)
-            index += 1;
 
           item = gtk_tree_menu_create_item (menu, iter, FALSE);
           gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, index);
@@ -1386,20 +1353,6 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
     }
   else
     {
-      /* Tearoff menu items only go in the root menu */
-      if (priv->tearoff)
-        {
-          menu_item = gtk_tearoff_menu_item_new ();
-          gtk_widget_show (menu_item);
-
-          if (priv->wrap_width > 0)
-            gtk_menu_attach (GTK_MENU (menu), menu_item, 0, priv->wrap_width, 0, 1);
-          else
-            gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-
-          prev = menu_item;
-        }
-
       valid = gtk_tree_model_iter_children (priv->model, &iter, NULL);
     }
 
@@ -1662,57 +1615,6 @@ _gtk_tree_menu_get_root (GtkTreeMenu *menu)
     return gtk_tree_row_reference_get_path (priv->root);
 
   return NULL;
-}
-
-/*
- * _gtk_tree_menu_get_tearoff:
- * @menu: a #GtkTreeMenu
- *
- * Gets whether this menu is build with a leading tearoff menu item.
- *
- * Returns: %TRUE if the menu has a tearoff item.
- *
- * Since: 3.0
- */
-gboolean
-_gtk_tree_menu_get_tearoff (GtkTreeMenu *menu)
-{
-  GtkTreeMenuPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), FALSE);
-
-  priv = menu->priv;
-
-  return priv->tearoff;
-}
-
-/*
- * _gtk_tree_menu_set_tearoff:
- * @menu: a #GtkTreeMenu
- * @tearoff: whether the menu should have a leading tearoff menu item.
- *
- * Sets whether this menu has a leading tearoff menu item.
- *
- * Since: 3.0
- */
-void
-_gtk_tree_menu_set_tearoff (GtkTreeMenu *menu,
-                            gboolean     tearoff)
-{
-  GtkTreeMenuPrivate *priv;
-
-  g_return_if_fail (GTK_IS_TREE_MENU (menu));
-
-  priv = menu->priv;
-
-  if (priv->tearoff != tearoff)
-    {
-      priv->tearoff = tearoff;
-
-      rebuild_menu (menu);
-
-      g_object_notify (G_OBJECT (menu), "tearoff");
-    }
 }
 
 /*

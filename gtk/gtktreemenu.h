@@ -79,9 +79,6 @@ GtkTreeModel         *_gtk_tree_menu_get_model                      (GtkTreeMenu
 void                  _gtk_tree_menu_set_root                       (GtkTreeMenu         *menu,
                                                                      GtkTreePath         *path);
 GtkTreePath          *_gtk_tree_menu_get_root                       (GtkTreeMenu         *menu);
-gboolean              _gtk_tree_menu_get_tearoff                    (GtkTreeMenu         *menu);
-void                  _gtk_tree_menu_set_tearoff                    (GtkTreeMenu         *menu,
-                                                                     gboolean             tearoff);
 gint                  _gtk_tree_menu_get_wrap_width                 (GtkTreeMenu         *menu);
 void                  _gtk_tree_menu_set_wrap_width                 (GtkTreeMenu         *menu,
                                                                      gint                 width);

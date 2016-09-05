@@ -36,7 +36,6 @@
 #include "gtkmenuprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtkscrolledwindow.h"
-#include "deprecated/gtktearoffmenuitem.h"
 #include "gtktogglebutton.h"
 #include "gtktreeselection.h"
 #include "gtkwidgetpath.h"
@@ -170,7 +169,6 @@ struct _GtkComboBoxPrivate
 
   guint popup_in_progress : 1;
   guint popup_shown : 1;
-  guint add_tearoffs : 1;
   guint has_frame : 1;
   guint is_cell_renderer : 1;
   guint editing_canceled : 1;
@@ -184,8 +182,6 @@ struct _GtkComboBoxPrivate
   GDestroyNotify              row_separator_destroy;
 
   GdkDevice *grab_pointer;
-
-  gchar *tearoff_title;
 };
 
 /* While debugging this evil code, I have learned that
@@ -250,8 +246,6 @@ enum {
   PROP_ROW_SPAN_COLUMN,
   PROP_COLUMN_SPAN_COLUMN,
   PROP_ACTIVE,
-  PROP_ADD_TEAROFFS,
-  PROP_TEAROFF_TITLE,
   PROP_HAS_FRAME,
   PROP_POPUP_SHOWN,
   PROP_BUTTON_SENSITIVITY,
@@ -385,7 +379,6 @@ static void     gtk_combo_box_list_popup_resize    (GtkComboBox      *combo_box)
 
 /* menu */
 static void     gtk_combo_box_menu_setup           (GtkComboBox      *combo_box);
-static void     gtk_combo_box_update_title         (GtkComboBox      *combo_box);
 static void     gtk_combo_box_menu_destroy         (GtkComboBox      *combo_box);
 
 
@@ -997,26 +990,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkComboBox:add-tearoffs:
-   *
-   * The add-tearoffs property controls whether generated menus
-   * have tearoff menu items.
-   *
-   * Note that this only affects menu style combo boxes.
-   *
-   * Since: 2.6
-   *
-   * Deprecated: 3.10
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_ADD_TEAROFFS,
-                                   g_param_spec_boolean ("add-tearoffs",
-                                                         P_("Add tearoffs to menus"),
-                                                         P_("Whether dropdowns should have a tearoff menu item"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
-
-  /**
    * GtkComboBox:has-frame:
    *
    * The has-frame property controls whether a frame
@@ -1031,25 +1004,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          P_("Whether the combo box draws a frame around the child"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkComboBox:tearoff-title:
-   *
-   * A title that may be displayed by the window manager
-   * when the popup is torn-off.
-   *
-   * Since: 2.10
-   *
-   * Deprecated: 3.10
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_TEAROFF_TITLE,
-                                   g_param_spec_string ("tearoff-title",
-                                                        P_("Tearoff Title"),
-                                                        P_("A title that may be displayed by the window manager when the popup is torn-off"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
-
 
   /**
    * GtkComboBox:popup-shown:
@@ -1303,7 +1257,6 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->row_column = -1;
 
   priv->popup_shown = FALSE;
-  priv->add_tearoffs = FALSE;
   priv->has_frame = TRUE;
   priv->is_cell_renderer = FALSE;
   priv->editing_canceled = FALSE;
@@ -1366,12 +1319,6 @@ gtk_combo_box_set_property (GObject      *object,
       gtk_combo_box_set_active (combo_box, g_value_get_int (value));
       break;
 
-    case PROP_ADD_TEAROFFS:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_combo_box_set_add_tearoffs (combo_box, g_value_get_boolean (value));
-G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-
     case PROP_HAS_FRAME:
       if (priv->has_frame != g_value_get_boolean (value))
         {
@@ -1381,12 +1328,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
                                      priv->has_frame);
           g_object_notify (object, "has-frame");
         }
-      break;
-
-    case PROP_TEAROFF_TITLE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_combo_box_set_title (combo_box, g_value_get_string (value));
-G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_POPUP_SHOWN:
@@ -1483,20 +1424,8 @@ gtk_combo_box_get_property (GObject    *object,
         g_value_set_int (value, gtk_combo_box_get_active (combo_box));
         break;
 
-      case PROP_ADD_TEAROFFS:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-        g_value_set_boolean (value, gtk_combo_box_get_add_tearoffs (combo_box));
-G_GNUC_END_IGNORE_DEPRECATIONS;
-        break;
-
       case PROP_HAS_FRAME:
         g_value_set_boolean (value, priv->has_frame);
-        break;
-
-      case PROP_TEAROFF_TITLE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-        g_value_set_string (value, gtk_combo_box_get_title (combo_box));
-G_GNUC_END_IGNORE_DEPRECATIONS;
         break;
 
       case PROP_POPUP_SHOWN:
@@ -2126,9 +2055,6 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
       path = gtk_tree_row_reference_get_path (priv->active_row);
       active_item = gtk_tree_path_get_indices (path)[0];
       gtk_tree_path_free (path);
-
-      if (priv->add_tearoffs)
-        active_item++;
     }
 
   /* FIXME handle nested menus better */
@@ -2756,7 +2682,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box)
   _gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (menu), priv->wrap_width);
   _gtk_tree_menu_set_row_span_column (GTK_TREE_MENU (menu), priv->row_column);
   _gtk_tree_menu_set_column_span_column (GTK_TREE_MENU (menu), priv->col_column);
-  _gtk_tree_menu_set_tearoff (GTK_TREE_MENU (menu), priv->add_tearoffs);
 
   g_signal_connect (menu, "menu-activate",
                     G_CALLBACK (gtk_combo_box_menu_activate), combo_box);
@@ -2770,7 +2695,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box)
                     G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);
   gtk_combo_box_set_popup_widget (combo_box, menu);
 
-  gtk_combo_box_update_title (combo_box);
+  gtk_combo_box_check_appearance (combo_box);
 }
 
 static void
@@ -4338,7 +4263,6 @@ gtk_combo_box_finalize (GObject *object)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
 
-  g_free (combo_box->priv->tearoff_title);
   g_clear_object (&combo_box->priv->gadget);
 
   G_OBJECT_CLASS (gtk_combo_box_parent_class)->finalize (object);
@@ -4471,130 +4395,6 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
       g_source_set_name_by_id (priv->popup_idle_id, "[gtk+] popup_idle");
     }
 }
-
-
-/**
- * gtk_combo_box_get_add_tearoffs:
- * @combo_box: a #GtkComboBox
- *
- * Gets the current value of the :add-tearoffs property.
- *
- * Returns: the current value of the :add-tearoffs property.
- *
- * Deprecated: 3.10
- */
-gboolean
-gtk_combo_box_get_add_tearoffs (GtkComboBox *combo_box)
-{
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
-
-  return combo_box->priv->add_tearoffs;
-}
-
-/**
- * gtk_combo_box_set_add_tearoffs:
- * @combo_box: a #GtkComboBox
- * @add_tearoffs: %TRUE to add tearoff menu items
- *
- * Sets whether the popup menu should have a tearoff
- * menu item.
- *
- * Since: 2.6
- *
- * Deprecated: 3.10
- */
-void
-gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
-                                gboolean     add_tearoffs)
-{
-  GtkComboBoxPrivate *priv;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-
-  priv = combo_box->priv;
-  add_tearoffs = add_tearoffs != FALSE;
-
-  if (priv->add_tearoffs != add_tearoffs)
-    {
-      priv->add_tearoffs = add_tearoffs;
-      gtk_combo_box_check_appearance (combo_box);
-
-      if (GTK_IS_TREE_MENU (priv->popup_widget))
-        _gtk_tree_menu_set_tearoff (GTK_TREE_MENU (priv->popup_widget),
-                                    priv->add_tearoffs);
-
-      g_object_notify (G_OBJECT (combo_box), "add-tearoffs");
-    }
-}
-
-/**
- * gtk_combo_box_get_title:
- * @combo_box: a #GtkComboBox
- *
- * Gets the current title of the menu in tearoff mode. See
- * gtk_combo_box_set_add_tearoffs().
- *
- * Returns: the menu’s title in tearoff mode. This is an internal copy of the
- * string which must not be freed.
- *
- * Since: 2.10
- *
- * Deprecated: 3.10
- */
-const gchar*
-gtk_combo_box_get_title (GtkComboBox *combo_box)
-{
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
-
-  return combo_box->priv->tearoff_title;
-}
-
-static void
-gtk_combo_box_update_title (GtkComboBox *combo_box)
-{
-  GtkComboBoxPrivate *priv = combo_box->priv;
-
-  gtk_combo_box_check_appearance (combo_box);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (priv->popup_widget && GTK_IS_MENU (priv->popup_widget))
-    gtk_menu_set_title (GTK_MENU (priv->popup_widget), priv->tearoff_title);
-G_GNUC_END_IGNORE_DEPRECATIONS
-}
-
-/**
- * gtk_combo_box_set_title:
- * @combo_box: a #GtkComboBox
- * @title: a title for the menu in tearoff mode
- *
- * Sets the menu’s title in tearoff mode.
- *
- * Since: 2.10
- *
- * Deprecated: 3.10
- */
-void
-gtk_combo_box_set_title (GtkComboBox *combo_box,
-                         const gchar *title)
-{
-  GtkComboBoxPrivate *priv;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-
-  priv = combo_box->priv;
-
-  if (strcmp (title ? title : "",
-              priv->tearoff_title ? priv->tearoff_title : "") != 0)
-    {
-      g_free (priv->tearoff_title);
-      priv->tearoff_title = g_strdup (title);
-
-      gtk_combo_box_update_title (combo_box);
-
-      g_object_notify (G_OBJECT (combo_box), "tearoff-title");
-    }
-}
-
 
 /**
  * gtk_combo_box_set_popup_fixed_width:
