@@ -74,7 +74,7 @@ gtk_css_image_fallback_draw (GtkCssImage *image,
       if (fallback->color)
         gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (fallback->color));
       else
-        cairo_set_source_rgb (cr, 1, 0, 9);
+        cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
 
       cairo_rectangle (cr, 0, 0, width, height);
       cairo_fill (cr);
