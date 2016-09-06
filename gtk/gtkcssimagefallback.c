@@ -85,7 +85,7 @@ gtk_css_image_fallback_draw (GtkCssImage *image,
 
 static void
 gtk_css_image_fallback_print (GtkCssImage *image,
-                             GString     *string)
+                              GString     *string)
 {
   GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
   int i;
