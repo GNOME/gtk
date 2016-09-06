@@ -227,6 +227,27 @@ gtk_css_image_cross_fade_print (GtkCssImage *image,
   g_string_append (string, ")");
 }
 
+static GtkCssImage *
+gtk_css_image_cross_fade_compute (GtkCssImage             *image,
+                                  guint                    property_id,
+                                  GtkStyleProviderPrivate *provider,
+                                  GtkCssStyle             *style,
+                                  GtkCssStyle             *parent_style)
+{
+  GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
+  GtkCssImage *start, *end, *computed;
+
+  start = _gtk_css_image_compute (cross_fade->start, property_id, provider, style, parent_style);
+  end = _gtk_css_image_compute (cross_fade->end, property_id, provider, style, parent_style);
+
+  computed = _gtk_css_image_cross_fade_new (start, end, cross_fade->progress);
+
+  g_object_unref (start);
+  g_object_unref (end);
+
+  return computed;
+}
+
 static void
 gtk_css_image_cross_fade_dispose (GObject *object)
 {
@@ -250,6 +271,7 @@ _gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
   image_class->draw = gtk_css_image_cross_fade_draw;
   image_class->parse = gtk_css_image_cross_fade_parse;
   image_class->print = gtk_css_image_cross_fade_print;
+  image_class->compute = gtk_css_image_cross_fade_compute;
 
   object_class->dispose = gtk_css_image_cross_fade_dispose;
 }
