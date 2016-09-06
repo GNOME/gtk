@@ -1389,7 +1389,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="can_focus">1</property>
                             <property name="vscrollbar_policy">always</property>
                             <property name="shadow_type">in</property>
-                            <property name="max_content_width">100</property>
                             <child>
                               <object class="GtkTreeView" id="treeview1">
                                 <property name="visible">1</property>
@@ -1470,8 +1469,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="shadow_type">in</property>
-                            <property name="max_content_width">100</property>
-                            <property name="max_content_height">100</property>
                             <child>
                               <object class="GtkTextView" id="textview1">
                                 <property name="visible">1</property>
@@ -2772,7 +2769,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="can_focus">1</property>
                                     <property name="shadow_type">in</property>
                                     <property name="margin-top">6</property>
-                                    <property name="max-content-width">100</property>
+                                    <property name="height_request">226</property>
                                     <child>
                                       <object class="GtkIconView" id="iconview1">
                                         <property name="visible">1</property>
