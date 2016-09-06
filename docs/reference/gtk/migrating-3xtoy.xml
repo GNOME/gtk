@@ -419,15 +419,6 @@
     </para>
 
     <para>
-      GtkScrolledWindow now respects the natural size of its child and passes
-      it along. This may change the size distribution of layouts involving
-      scrolled windows (they may take up more space than before). In most
-      cases, setting suitable values for #GtkScrolledWindow:max-content-width
-      and #GtkScrolledWindow:max-content-height will allow control over the
-      size of the scrolled window.
-    </para>
-
-    <para>
       GtkHeaderBar now respects the hexpand property for its custom title
       widget and its packed children. This change may inadvertently cause the
       layout of those children to change, if they unintentionally had hexpand
