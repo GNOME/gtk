@@ -4,14 +4,9 @@
 #include "exampleappwin.h"
 #include "exampleappprefs.h"
 
-struct ExampleApp
+struct _ExampleApp
 {
   GtkApplication parent;
-};
-
-struct ExampleAppClass
-{
-  GtkApplicationClass parent_class;
 };
 
 G_DEFINE_TYPE(ExampleApp, example_app, GTK_TYPE_APPLICATION);

@@ -8,11 +8,6 @@ struct _ExampleAppWindow
   GtkApplicationWindow parent;
 };
 
-struct _ExampleAppWindowClass
-{
-  GtkApplicationWindowClass parent_class;
-};
-
 typedef struct _ExampleAppWindowPrivate ExampleAppWindowPrivate;
 
 struct _ExampleAppWindowPrivate

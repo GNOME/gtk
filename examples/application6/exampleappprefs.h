@@ -6,14 +6,9 @@
 
 
 #define EXAMPLE_APP_PREFS_TYPE (example_app_prefs_get_type ())
-#define EXAMPLE_APP_PREFS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), EXAMPLE_APP_PREFS_TYPE, ExampleAppPrefs))
+G_DECLARE_FINAL_TYPE (ExampleAppPrefs, example_app_prefs, EXAMPLE, APP_PREFS, GtkDialog)
 
 
-typedef struct _ExampleAppPrefs          ExampleAppPrefs;
-typedef struct _ExampleAppPrefsClass     ExampleAppPrefsClass;
-
-
-GType                   example_app_prefs_get_type     (void);
 ExampleAppPrefs        *example_app_prefs_new          (ExampleAppWindow *win);
 
 

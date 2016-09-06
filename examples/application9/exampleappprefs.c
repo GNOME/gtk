@@ -9,11 +9,6 @@ struct _ExampleAppPrefs
   GtkDialog parent;
 };
 
-struct _ExampleAppPrefsClass
-{
-  GtkDialogClass parent_class;
-};
-
 typedef struct _ExampleAppPrefsPrivate ExampleAppPrefsPrivate;
 
 struct _ExampleAppPrefsPrivate

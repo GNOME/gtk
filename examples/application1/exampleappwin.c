@@ -8,11 +8,6 @@ struct _ExampleAppWindow
   GtkApplicationWindow parent;
 };
 
-struct _ExampleAppWindowClass
-{
-  GtkApplicationWindowClass parent_class;
-};
-
 G_DEFINE_TYPE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static void

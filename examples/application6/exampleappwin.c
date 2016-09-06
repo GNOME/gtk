@@ -3,14 +3,9 @@
 #include "exampleapp.h"
 #include "exampleappwin.h"
 
-struct ExampleAppWindow
+struct _ExampleAppWindow
 {
   GtkApplicationWindow parent;
-};
-
-struct ExampleAppWindowClass
-{
-  GtkApplicationWindowClass parent_class;
 };
 
 typedef struct ExampleAppWindowPrivate ExampleAppWindowPrivate;

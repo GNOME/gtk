@@ -8,11 +8,6 @@ struct _ExampleApp
   GtkApplication parent;
 };
 
-struct _ExampleAppClass
-{
-  GtkApplicationClass parent_class;
-};
-
 G_DEFINE_TYPE(ExampleApp, example_app, GTK_TYPE_APPLICATION);
 
 static void
