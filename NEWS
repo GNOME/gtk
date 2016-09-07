@@ -1,3 +1,32 @@
+Overview of Changes from GTK+ 2.24.30 to 2.24.31
+================================================
+
+* File chooser:
+ - backport many file chooser entry fixes and cleanups
+ - don't crash if invisible files are deleted
+
+* Bug fixes:
+ 555087 Shouldn't the return type of gtk_entry_completion_get_model be Gtk...
+ 586367 In local_only mode, file chooser should return native paths for fi...
+ 635287 Specify packages when generating GIR
+ 640698 Incompatibility in 'matched-selected' signal invocation
+ 648419 crash in remove_capslock_feedback at gtkentry.c line 10127
+ 672271 File chooser seems over-enthusiastic about using subdirectories
+ 679333 unable to filter folders in folder select mode
+ 687196 filesystemmodel: invalidate nodes on file remove
+ 703220 (CVE-2013-7447) Memory allocation integer overflow in gdk_cairo_se...
+ 720330 Gtk-CRITICAL **: gtk_entry_completion_set_model: assertion 'GTK_IS...
+ 729927 impossible to create a directory if the contents of the current on...
+ 737777 Applications crash randomly while printing with a password-secured...
+ 752707 Location bar navigation to parent directories
+ 756450 GTK file chooser completion dropdown sets cursor in wrong position
+ 765120 Configure notify does not always reflect window size enforced by (...
+ 765193 Add introspection support for Visual Studio builds
+ 768163 improved fullscreen behaviour
+ 764996 GDK: Incorrect window size when creating window with position spec...
+ 769126 Can't type astral plane characters into a GtkEntry using the Windo...
+
+
 Overview of Changes from GTK+ 2.24.29 to 2.24.30
 ================================================
 
