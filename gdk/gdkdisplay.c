@@ -365,6 +365,7 @@ gdk_display_finalize (GObject *object)
   g_hash_table_destroy (display->multiple_click_info);
 
   g_list_free_full (display->input_devices, g_object_unref);
+  g_list_free_full (display->seats, g_object_unref);
 
   if (display->device_manager)
     g_object_unref (display->device_manager);
