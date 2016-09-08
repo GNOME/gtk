@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-20 12:24+0000\n"
-"PO-Revision-Date: 2016-03-20 21:14+0200\n"
+"POT-Creation-Date: 2016-09-08 07:57+0000\n"
+"PO-Revision-Date: 2016-09-08 21:17+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 :"
+" 2);\n"
 "X-Generator: Lokalize 2.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -28,48 +28,48 @@ msgstr ""
 msgid "Broadway display type not supported: %s"
 msgstr "Nav atbalstīts broadway displeja tips: %s"
 
-#: gdk/gdk.c:179
+#: gdk/gdk.c:182
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Kļūda, parsējot opciju --gdk-debug"
 
-#: gdk/gdk.c:199
+#: gdk/gdk.c:202
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Kļūda, parsējot opciju --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:228
+#: gdk/gdk.c:231
 msgid "Program class as used by the window manager"
 msgstr "Programmas klase, ko izmanto logu pārvaldnieks"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:229
+#: gdk/gdk.c:232
 msgid "CLASS"
 msgstr "KLASE"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:231
+#: gdk/gdk.c:234
 msgid "Program name as used by the window manager"
 msgstr "Programmas nosaukums, ko izmanto logu pārvaldnieks"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:232
+#: gdk/gdk.c:235
 msgid "NAME"
 msgstr "NOSAUKUMS"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:234
+#: gdk/gdk.c:238
 msgid "X display to use"
 msgstr "Izmantojamais X displejs"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:235
+#: gdk/gdk.c:239
 msgid "DISPLAY"
 msgstr "DISPLEJS"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:238
+#: gdk/gdk.c:243
 msgid "GDK debugging flags to set"
 msgstr "Iestatāmie GDK atkļūdošanas karodziņi"
 
@@ -77,18 +77,23 @@ msgstr "Iestatāmie GDK atkļūdošanas karodziņi"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:239 gdk/gdk.c:242 gtk/gtkmain.c:463 gtk/gtkmain.c:466
+#: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:470 gtk/gtkmain.c:473
 msgid "FLAGS"
 msgstr "KARODZIŅI"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:241
+#: gdk/gdk.c:246
 msgid "GDK debugging flags to unset"
 msgstr "Noņemamie GDK atkļūdošanas karodziņi"
 
-#: gdk/gdkwindow.c:2766
+#: gdk/gdkwindow.c:2808
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL atbalsts ir izslēgts no GDK_DEBUG"
+
+#: gdk/gdkwindow.c:2819
+#| msgid "Backend does not support window scaling"
+msgid "The current backend does not support OpenGL"
+msgstr "Pašreizējā aizmugure neatbalsta OpenGL"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -166,12 +171,12 @@ msgctxt "keyboard label"
 msgid "Down"
 msgstr "Uz leju"
 
-#: gdk/keyname-table.h:6856 gtk/gtkshortcutlabel.c:195
+#: gdk/keyname-table.h:6856 gtk/gtkshortcutlabel.c:222
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page Up"
 
-#: gdk/keyname-table.h:6857 gtk/gtkshortcutlabel.c:198
+#: gdk/keyname-table.h:6857 gtk/gtkshortcutlabel.c:225
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page Down"
@@ -432,26 +437,26 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Iesnaudināt"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1358
-#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:556
-#: gdk/x11/gdkglcontext-x11.c:1254
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1631
+#: gdk/wayland/gdkglcontext-wayland.c:421 gdk/win32/gdkglcontext-win32.c:556
+#: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
 msgstr "Nav pieejama GL implementācija"
 
-#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:180
-#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:707
-#: gdk/x11/gdkglcontext-x11.c:754
+#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
+#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:720
+#: gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr "Nevar izveidot GL kontekstu"
 
-#: gdk/mir/gdkmirwindowimpl.c:1320 gdk/mir/gdkmirwindowimpl.c:1330
-#: gdk/wayland/gdkglcontext-wayland.c:354
-#: gdk/wayland/gdkglcontext-wayland.c:364 gdk/win32/gdkglcontext-win32.c:482
-#: gdk/x11/gdkglcontext-x11.c:948
+#: gdk/mir/gdkmirwindowimpl.c:1593 gdk/mir/gdkmirwindowimpl.c:1603
+#: gdk/wayland/gdkglcontext-wayland.c:382
+#: gdk/wayland/gdkglcontext-wayland.c:392 gdk/win32/gdkglcontext-win32.c:482
+#: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr "Dotajam pikseļu formātam nav pieejamas konfigurācijas"
 
-#: gdk/mir/gdkmirwindowimpl.c:1366
+#: gdk/mir/gdkmirwindowimpl.c:1639
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 kodola GL profils nav pieejams EGL implementācijā"
 
@@ -459,7 +464,7 @@ msgstr "3.2 kodola GL profils nav pieejams EGL implementācijā"
 msgid "Not implemented on OS X"
 msgstr "Nav ieviests uz OS X"
 
-#: gdk/wayland/gdkglcontext-wayland.c:401
+#: gdk/wayland/gdkglcontext-wayland.c:429
 msgid "Core GL is not available on EGL implementation"
 msgstr "Kodola GL nav pieejams EGL implementācijā"
 
@@ -519,7 +524,7 @@ msgstr[0] "Atver %d vienību"
 msgstr[1] "Atver %d vienības"
 msgstr[2] "Atver %d vienību"
 
-#: gdk/x11/gdkglcontext-x11.c:976
+#: gdk/x11/gdkglcontext-x11.c:996
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Dotajam RGBA pikseļu formātam nav pieejamas konfigurācijas"
@@ -653,15 +658,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Aizvērt"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9025
 msgid "Minimize"
 msgstr "Minimizēt"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9034
 msgid "Maximize"
 msgstr "Maksimizēt"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8991
 msgid "Restore"
 msgstr "Atjaunot"
 
@@ -1070,7 +1075,7 @@ msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Pārslēdz slēdzi"
 
-#: gtk/deprecated/gtkcolorsel.c:424
+#: gtk/deprecated/gtkcolorsel.c:425
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1078,7 +1083,7 @@ msgstr ""
 "Izvēlieties vēlamo krāsu no ārējā apļa. Pielāgojiet tās tumšumu vai gaišumu, "
 "lietojot iekšējo trijstūri."
 
-#: gtk/deprecated/gtkcolorsel.c:450
+#: gtk/deprecated/gtkcolorsel.c:451
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1086,67 +1091,67 @@ msgstr ""
 "Klikšķiniet uz pipetes, tad uz jebkuras krāsas ekrānā, lai izvēlētos šo "
 "krāsu."
 
-#: gtk/deprecated/gtkcolorsel.c:460
+#: gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
 msgstr "_Nokrāsa:"
 
-#: gtk/deprecated/gtkcolorsel.c:461
+#: gtk/deprecated/gtkcolorsel.c:462
 msgid "Position on the color wheel."
 msgstr "Pozīcija uz krāsu joslas."
 
-#: gtk/deprecated/gtkcolorsel.c:463
+#: gtk/deprecated/gtkcolorsel.c:464
 msgid "S_aturation:"
 msgstr "Pi_esātinājums:"
 
-#: gtk/deprecated/gtkcolorsel.c:464
+#: gtk/deprecated/gtkcolorsel.c:465
 msgid "Intensity of the color."
 msgstr "Krāsas intensitāte."
 
-#: gtk/deprecated/gtkcolorsel.c:465
+#: gtk/deprecated/gtkcolorsel.c:466
 msgid "_Value:"
 msgstr "_Vērtība:"
 
-#: gtk/deprecated/gtkcolorsel.c:466
+#: gtk/deprecated/gtkcolorsel.c:467
 msgid "Brightness of the color."
 msgstr "Krāsas gaišums."
 
-#: gtk/deprecated/gtkcolorsel.c:467
+#: gtk/deprecated/gtkcolorsel.c:468
 msgid "_Red:"
 msgstr "_Sarkanā:"
 
-#: gtk/deprecated/gtkcolorsel.c:468
+#: gtk/deprecated/gtkcolorsel.c:469
 msgid "Amount of red light in the color."
 msgstr "Sarkanās gaismas daudzums krāsā."
 
-#: gtk/deprecated/gtkcolorsel.c:469
+#: gtk/deprecated/gtkcolorsel.c:470
 msgid "_Green:"
 msgstr "Z_aļā:"
 
-#: gtk/deprecated/gtkcolorsel.c:470
+#: gtk/deprecated/gtkcolorsel.c:471
 msgid "Amount of green light in the color."
 msgstr "Zaļās gaismas daudzums krāsā."
 
-#: gtk/deprecated/gtkcolorsel.c:471
+#: gtk/deprecated/gtkcolorsel.c:472
 msgid "_Blue:"
 msgstr "_Zilā:"
 
-#: gtk/deprecated/gtkcolorsel.c:472
+#: gtk/deprecated/gtkcolorsel.c:473
 msgid "Amount of blue light in the color."
 msgstr "Zilās gaismas daudzums krāsā."
 
-#: gtk/deprecated/gtkcolorsel.c:475
+#: gtk/deprecated/gtkcolorsel.c:476
 msgid "Op_acity:"
 msgstr "Nec_aurspīdība:"
 
-#: gtk/deprecated/gtkcolorsel.c:483 gtk/deprecated/gtkcolorsel.c:493
+#: gtk/deprecated/gtkcolorsel.c:484 gtk/deprecated/gtkcolorsel.c:494
 msgid "Transparency of the color."
 msgstr "Krāsas caurspīdīgums."
 
-#: gtk/deprecated/gtkcolorsel.c:500
+#: gtk/deprecated/gtkcolorsel.c:501
 msgid "Color _name:"
 msgstr "Krāsas no_saukums:"
 
-#: gtk/deprecated/gtkcolorsel.c:515
+#: gtk/deprecated/gtkcolorsel.c:516
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as “orange” in this entry."
@@ -1154,15 +1159,15 @@ msgstr ""
 "Šeit var ievadīt HTML formāta heksadecimālu krāsas vērtību vai nosaukumu "
 "(piemēram, “orange”)."
 
-#: gtk/deprecated/gtkcolorsel.c:547
+#: gtk/deprecated/gtkcolorsel.c:548
 msgid "_Palette:"
 msgstr "_Palete:"
 
-#: gtk/deprecated/gtkcolorsel.c:577
+#: gtk/deprecated/gtkcolorsel.c:578
 msgid "Color Wheel"
 msgstr "Krāsu aplis"
 
-#: gtk/deprecated/gtkcolorsel.c:1071
+#: gtk/deprecated/gtkcolorsel.c:1072
 msgid ""
 "The previously-selected color, for comparison to the color you’re selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1171,28 +1176,28 @@ msgstr ""
 "Iepriekš izvēlētā krāsa, salīdzināšanai ar pašreizējo. To var pievienot "
 "paletei ievelkot, vai izvēlēties to kā pašreizēju, ievelkot blakus lauciņā."
 
-#: gtk/deprecated/gtkcolorsel.c:1077
+#: gtk/deprecated/gtkcolorsel.c:1078
 msgid ""
 "The color you’ve chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
 "Izvēlētā krāsa. To var ievilkt krāsu paletē, lai saglabātu lietošanai vēlāk."
 
-#: gtk/deprecated/gtkcolorsel.c:1083
+#: gtk/deprecated/gtkcolorsel.c:1084
 msgid ""
 "The previously-selected color, for comparison to the color you’re selecting "
 "now."
 msgstr "Iepriekš izvēlētā krāsa, salīdzināšanai ar pašreizējo. "
 
-#: gtk/deprecated/gtkcolorsel.c:1087
+#: gtk/deprecated/gtkcolorsel.c:1088
 msgid "The color you’ve chosen."
 msgstr "Izvēlētā krāsa."
 
-#: gtk/deprecated/gtkcolorsel.c:1491
+#: gtk/deprecated/gtkcolorsel.c:1458
 msgid "_Save color here"
 msgstr "_Saglabāt krāsu šeit"
 
-#: gtk/deprecated/gtkcolorsel.c:1694
+#: gtk/deprecated/gtkcolorsel.c:1664
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select “Save color here.”"
@@ -1202,13 +1207,13 @@ msgstr ""
 "šeit”."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:370 gtk/gtkfilechoosernative.c:462
-#: gtk/gtkfilechooserwidget.c:1464 gtk/gtkfilechooserwidget.c:6353
+#: gtk/gtkfilechoosernative.c:514 gtk/gtkfilechoosernative.c:606
+#: gtk/gtkfilechooserwidget.c:1477 gtk/gtkfilechooserwidget.c:6380
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12320 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12492 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1257,7 +1262,7 @@ msgid "_Apply"
 msgstr "_Pielietot"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12321
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12493
 msgid "_OK"
 msgstr "_Labi"
 
@@ -1406,7 +1411,7 @@ msgstr "Izvadi sūtīt uz šo mapi, nevis uz cwd"
 msgid "Invalid size %s\n"
 msgstr "Nederīgs izmērs %s\n"
 
-#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:591
+#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:618
 #, c-format
 msgid "Can't load file: %s\n"
 msgstr "Neizdevās ielādēt datni — %s\n"
@@ -1421,10 +1426,110 @@ msgstr "Neizdevās saglabāt datni %s — %s\n"
 msgid "Can't close stream"
 msgstr "Nevar aizvērt straumi"
 
+#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:221
+msgid "License"
+msgstr "Licence"
+
+#: gtk/gtkaboutdialog.c:114
+msgid "Custom License"
+msgstr "Pielāgota licence"
+
+#: gtk/gtkaboutdialog.c:115
+msgid "GNU General Public License, version 2 or later"
+msgstr "GNU Vispārīgā Publiskā Licence 2. versija vai jaunāka"
+
+#: gtk/gtkaboutdialog.c:116
+msgid "GNU General Public License, version 3 or later"
+msgstr "GNU Vispārīgā Publiskā Licence 3. versija vai jaunāka"
+
+#: gtk/gtkaboutdialog.c:117
+msgid "GNU Lesser General Public License, version 2.1 or later"
+msgstr "GNU Mazākā Vispārīgā Publiskā Licence 2.1. versija vai jaunāka"
+
+#: gtk/gtkaboutdialog.c:118
+msgid "GNU Lesser General Public License, version 3 or later"
+msgstr "GNU Mazākā Vispārīgā Publiskā Licence 3. versija vai jaunāka"
+
+#: gtk/gtkaboutdialog.c:119
+msgid "BSD 2-Clause License"
+msgstr "BSD divu klauzulu licence"
+
+#: gtk/gtkaboutdialog.c:120
+msgid "The MIT License (MIT)"
+msgstr "MIT licence (MIT)"
+
+#: gtk/gtkaboutdialog.c:121
+msgid "Artistic License 2.0"
+msgstr "Mākslinieciskā licence 2.0"
+
+#: gtk/gtkaboutdialog.c:122
+msgid "GNU General Public License, version 2 only"
+msgstr "GNU Vispārīgā Publiskā Licence tikai 2. versija"
+
+#: gtk/gtkaboutdialog.c:123
+msgid "GNU General Public License, version 3 only"
+msgstr "GNU Vispārīgā Publiskā Licence tikai 3. versija"
+
+#: gtk/gtkaboutdialog.c:124
+msgid "GNU Lesser General Public License, version 2.1 only"
+msgstr "GNU Mazāk Vispārīgā Publiskā Licence tikai 2.1 versija"
+
+#: gtk/gtkaboutdialog.c:125
+msgid "GNU Lesser General Public License, version 3 only"
+msgstr "GNU Mazāk Vispārīgā Publiskā Licence tikai 3 versija"
+
+#: gtk/gtkaboutdialog.c:126
+#| msgid "GNU General Public License, version 3 or later"
+msgid "GNU Affero General Public License, version 3 or later"
+msgstr "GNU Affero Vispārīgā Publiskā Licence 3. versija vai jaunāka"
+
+#: gtk/gtkaboutdialog.c:695
+msgid "C_redits"
+msgstr "_Veidotāji"
+
+#: gtk/gtkaboutdialog.c:703
+msgid "_License"
+msgstr "_Licence"
+
+#: gtk/gtkaboutdialog.c:712 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
+msgid "_Close"
+msgstr "_Aizvērt"
+
+#: gtk/gtkaboutdialog.c:996
+msgid "Could not show link"
+msgstr "Neizdevās parādīt saiti"
+
+#: gtk/gtkaboutdialog.c:1033
+msgid "Website"
+msgstr "Tīmekļa vietne"
+
+#. used for the application menu on MacOS.  %s is replaced with the application name.
+#: gtk/gtkaboutdialog.c:1083 gtk/ui/gtkapplication-quartz.ui:7
+#, c-format
+msgid "About %s"
+msgstr "Par %s"
+
+#: gtk/gtkaboutdialog.c:2309
+msgid "Created by"
+msgstr "Veidotājs"
+
+#: gtk/gtkaboutdialog.c:2312
+msgid "Documented by"
+msgstr "Dokumentējuši"
+
+#: gtk/gtkaboutdialog.c:2322
+msgid "Translated by"
+msgstr "Tulkojuši"
+
+#: gtk/gtkaboutdialog.c:2327
+msgid "Artwork by"
+msgstr "Grafika"
+
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:114
+#: gtk/gtkaboutdialog.c:2487
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1433,107 +1538,13 @@ msgstr ""
 "Šī programma nāk bez jebkādas garantijas.\n"
 "Lai uzzinātu vairāk, apmeklējiet <a href=\"%s\">%s</a>."
 
-#: gtk/gtkaboutdialog.c:118 gtk/ui/gtkaboutdialog.ui:221
-msgid "License"
-msgstr "Licence"
-
-#: gtk/gtkaboutdialog.c:119
-msgid "Custom License"
-msgstr "Pielāgota licence"
-
-#: gtk/gtkaboutdialog.c:120
-msgid "GNU General Public License, version 2 or later"
-msgstr "GNU Vispārīgā Publiskā Licence 2. versija vai jaunāka"
-
-#: gtk/gtkaboutdialog.c:121
-msgid "GNU General Public License, version 3 or later"
-msgstr "GNU Vispārīgā Publiskā Licence 3. versija vai jaunāka"
-
-#: gtk/gtkaboutdialog.c:122
-msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr "GNU Mazākā Vispārīgā Publiskā Licence 2.1. versija vai jaunāka"
-
-#: gtk/gtkaboutdialog.c:123
-msgid "GNU Lesser General Public License, version 3 or later"
-msgstr "GNU Mazākā Vispārīgā Publiskā Licence 3. versija vai jaunāka"
-
-#: gtk/gtkaboutdialog.c:124
-msgid "BSD 2-Clause License"
-msgstr "BSD divu klauzulu licence"
-
-#: gtk/gtkaboutdialog.c:125
-msgid "The MIT License (MIT)"
-msgstr "MIT licence (MIT)"
-
-#: gtk/gtkaboutdialog.c:126
-msgid "Artistic License 2.0"
-msgstr "Mākslinieciskā licence 2.0"
-
-#: gtk/gtkaboutdialog.c:127
-msgid "GNU General Public License, version 2 only"
-msgstr "GNU Vispārīgā Publiskā Licence tikai 2. versija"
-
-#: gtk/gtkaboutdialog.c:128
-msgid "GNU General Public License, version 3 only"
-msgstr "GNU Vispārīgā Publiskā Licence tikai 3. versija"
-
-#: gtk/gtkaboutdialog.c:129
-msgid "GNU Lesser General Public License, version 2.1 only"
-msgstr "GNU Mazāk Vispārīgā Publiskā Licence tikai 2.1 versija"
-
-#: gtk/gtkaboutdialog.c:130
-msgid "GNU Lesser General Public License, version 3 only"
-msgstr "GNU Mazāk Vispārīgā Publiskā Licence tikai 3 versija"
-
-#: gtk/gtkaboutdialog.c:699
-msgid "C_redits"
-msgstr "_Veidotāji"
-
-#: gtk/gtkaboutdialog.c:707
-msgid "_License"
-msgstr "_Licence"
-
-#: gtk/gtkaboutdialog.c:716 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
-msgid "_Close"
-msgstr "_Aizvērt"
-
-#: gtk/gtkaboutdialog.c:1003
-msgid "Could not show link"
-msgstr "Neizdevās parādīt saiti"
-
-#: gtk/gtkaboutdialog.c:1040
-msgid "Website"
-msgstr "Tīmekļa vietne"
-
-#. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1090 gtk/ui/gtkapplication-quartz.ui:7
-#, c-format
-msgid "About %s"
-msgstr "Par %s"
-
-#: gtk/gtkaboutdialog.c:2316
-msgid "Created by"
-msgstr "Veidotājs"
-
-#: gtk/gtkaboutdialog.c:2319
-msgid "Documented by"
-msgstr "Dokumentējuši"
-
-#: gtk/gtkaboutdialog.c:2329
-msgid "Translated by"
-msgstr "Tulkojuši"
-
-#: gtk/gtkaboutdialog.c:2334
-msgid "Artwork by"
-msgstr "Grafika"
-
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:179 gtk/gtkshortcutlabel.c:90 gtk/gtkshortcutlabel.c:126
+#: gtk/gtkaccellabel.c:179 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1543,7 +1554,8 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:185 gtk/gtkshortcutlabel.c:93 gtk/gtkshortcutlabel.c:128
+#: gtk/gtkaccellabel.c:185 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1553,7 +1565,8 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:191 gtk/gtkshortcutlabel.c:96 gtk/gtkshortcutlabel.c:130
+#: gtk/gtkaccellabel.c:191 gtk/gtkshortcutlabel.c:108
+#: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1563,8 +1576,8 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:831 gtk/gtkshortcutlabel.c:102
-#: gtk/gtkshortcutlabel.c:140
+#: gtk/gtkaccellabel.c:831 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1574,8 +1587,8 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:844 gtk/gtkshortcutlabel.c:105
-#: gtk/gtkshortcutlabel.c:142
+#: gtk/gtkaccellabel.c:844 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1585,7 +1598,8 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:99 gtk/gtkshortcutlabel.c:144
+#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
@@ -1595,7 +1609,7 @@ msgctxt "keyboard label"
 msgid "Space"
 msgstr "Atstarpe"
 
-#: gtk/gtkaccellabel.c:878 gtk/gtkshortcutlabel.c:154
+#: gtk/gtkaccellabel.c:878 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Otrādā slīpsvītra"
@@ -1639,28 +1653,28 @@ msgstr "Aizmirst saistību"
 msgid "Failed to start GNOME Software"
 msgstr "Neizdevās palaist “GNOME programmatūru”"
 
-#: gtk/gtkappchooserwidget.c:626
+#: gtk/gtkappchooserwidget.c:625
 msgid "Default Application"
 msgstr "Noklusējuma lietotne"
 
-#: gtk/gtkappchooserwidget.c:676
+#: gtk/gtkappchooserwidget.c:675
 #, c-format
 msgid "No applications found for “%s”."
 msgstr "Nav atrastu “%s” lietotņu."
 
-#: gtk/gtkappchooserwidget.c:759
+#: gtk/gtkappchooserwidget.c:758
 msgid "Recommended Applications"
 msgstr "Ieteiktās lietotnes"
 
-#: gtk/gtkappchooserwidget.c:774
+#: gtk/gtkappchooserwidget.c:773
 msgid "Related Applications"
 msgstr "Saistītās lietotnes"
 
-#: gtk/gtkappchooserwidget.c:788
+#: gtk/gtkappchooserwidget.c:787
 msgid "Other Applications"
 msgstr "Citas lietotnes"
 
-#: gtk/gtkapplicationwindow.c:341 gtk/gtkprintoperation-unix.c:481
+#: gtk/gtkapplicationwindow.c:342 gtk/gtkprintoperation-unix.c:482
 #: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Lietotne"
@@ -1690,32 +1704,32 @@ msgstr "Elements <%s> nav atļauts virslīmenī"
 msgid "Text may not appear inside <%s>"
 msgstr "Teksts nedrīkst parādīties elementā <%s>"
 
-#: gtk/gtk-builder-tool.c:97
+#: gtk/gtk-builder-tool.c:119
 #, c-format
 msgid "Packing property %s::%s not found\n"
 msgstr "Pakošanas īpašība %s::%s nav atrasta\n"
 
-#: gtk/gtk-builder-tool.c:99
+#: gtk/gtk-builder-tool.c:121
 #, c-format
 msgid "Cell property %s::%s not found\n"
 msgstr "Šūnas īpašība %s::%s nav atrasta\n"
 
-#: gtk/gtk-builder-tool.c:101
+#: gtk/gtk-builder-tool.c:123
 #, c-format
 msgid "Property %s::%s not found\n"
 msgstr "Īpašība %s::%s nav atrasta\n"
 
-#: gtk/gtk-builder-tool.c:109
+#: gtk/gtk-builder-tool.c:131
 #, c-format
 msgid "Couldn't parse value for %s::%s: %s\n"
 msgstr "Neizdevās parsēt %s::%s vērtību — %s\n"
 
-#: gtk/gtk-builder-tool.c:612
+#: gtk/gtk-builder-tool.c:639
 #, c-format
 msgid "Can't parse file: %s\n"
 msgstr "Neizdevās parsēt datni: %s\n"
 
-#: gtk/gtk-builder-tool.c:955
+#: gtk/gtk-builder-tool.c:982
 #, c-format
 msgid ""
 "Usage:\n"
@@ -1758,7 +1772,7 @@ msgstr ""
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:799
+#: gtk/gtkcalendar.c:800
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1766,7 +1780,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:837
+#: gtk/gtkcalendar.c:838
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1775,7 +1789,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1862
+#: gtk/gtkcalendar.c:1863
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1790,7 +1804,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1893 gtk/gtkcalendar.c:2589
+#: gtk/gtkcalendar.c:1894 gtk/gtkcalendar.c:2590
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1806,7 +1820,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1925 gtk/gtkcalendar.c:2455
+#: gtk/gtkcalendar.c:1926 gtk/gtkcalendar.c:2456
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1822,7 +1836,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2222
+#: gtk/gtkcalendar.c:2223
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1857,7 +1871,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:191 gtk/gtkcolorbutton.c:411
+#: gtk/gtkcolorbutton.c:185 gtk/gtkcolorbutton.c:398
 msgid "Pick a Color"
 msgstr "Izvēlieties krāsu"
 
@@ -2103,7 +2117,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3313
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3315
 msgid "Manage Custom Sizes"
 msgstr "Pārvaldīt pielāgotos izmērus"
 
@@ -2156,74 +2170,74 @@ msgstr "_Labā:"
 msgid "Paper Margins"
 msgstr "Papīra apmales"
 
-#: gtk/gtkentry.c:9490 gtk/gtklabel.c:6688 gtk/gtktextview.c:9496
+#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
 msgid "Cu_t"
 msgstr "Izgriez_t"
 
-#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6689 gtk/gtktextview.c:9500
+#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
 msgid "_Copy"
 msgstr "_Kopēt"
 
-#: gtk/gtkentry.c:9498 gtk/gtklabel.c:6690 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
 msgid "_Paste"
 msgstr "_Ielīmēt"
 
-#: gtk/gtkentry.c:9501 gtk/gtkfilechooserwidget.c:1465
-#: gtk/gtkfilechooserwidget.c:2263 gtk/gtklabel.c:6692 gtk/gtktextview.c:9505
+#: gtk/gtkentry.c:9478 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6669 gtk/gtktextview.c:9432
 msgid "_Delete"
 msgstr "_Dzēst"
 
-#: gtk/gtkentry.c:9512 gtk/gtklabel.c:6701 gtk/gtktextview.c:9519
+#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
 msgid "Select _All"
 msgstr "Izvēlēties _visu"
 
-#: gtk/gtkentry.c:9690 gtk/gtktextview.c:9729
+#: gtk/gtkentry.c:9662 gtk/gtktextview.c:9671
 msgid "Select all"
 msgstr "Izvēlēties visu"
 
-#: gtk/gtkentry.c:9693 gtk/gtktextview.c:9732
+#: gtk/gtkentry.c:9665 gtk/gtktextview.c:9674
 msgid "Cut"
 msgstr "Izgriezt"
 
-#: gtk/gtkentry.c:9696 gtk/gtktextview.c:9735
+#: gtk/gtkentry.c:9668 gtk/gtktextview.c:9677
 msgid "Copy"
 msgstr "Kopēt"
 
-#: gtk/gtkentry.c:9699 gtk/gtktextview.c:9738
+#: gtk/gtkentry.c:9671 gtk/gtktextview.c:9680
 msgid "Paste"
 msgstr "Ielīmēt"
 
-#: gtk/gtkentry.c:10760
+#: gtk/gtkentry.c:10738
 msgid "Caps Lock is on"
 msgstr "Ieslēgts Caps Lock"
 
-#: gtk/gtkfilechooserbutton.c:106
+#: gtk/gtkfilechooserbutton.c:107
 msgid "Select a File"
 msgstr "Izvēlieties datni"
 
-#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:975
+#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:976
 msgid "Desktop"
 msgstr "Darbvirsma"
 
-#: gtk/gtkfilechooserbutton.c:108 gtk/ui/gtkfilechooserbutton.ui:33
+#: gtk/gtkfilechooserbutton.c:109 gtk/ui/gtkfilechooserbutton.ui:33
 msgid "(None)"
 msgstr "(Nekas)"
 
-#: gtk/gtkfilechooserbutton.c:2151
+#: gtk/gtkfilechooserbutton.c:2152
 msgid "Other…"
 msgstr "Cita vieta…"
 
-#: gtk/gtkfilechooserdialog.c:578
+#: gtk/gtkfilechooserdialog.c:542
 msgid "_Name"
 msgstr "_Nosaukums"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:371 gtk/gtkfilechoosernative.c:456
-#: gtk/gtkplacessidebar.c:3413 gtk/gtkplacesview.c:1577
+#: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1597
 msgid "_Open"
 msgstr "_Atvērt"
 
-#: gtk/gtkfilechoosernative.c:456 gtk/inspector/css-editor.c:209
+#: gtk/gtkfilechoosernative.c:600 gtk/inspector/css-editor.c:209
 msgid "_Save"
 msgstr "_Saglabāt"
 
@@ -2231,20 +2245,20 @@ msgstr "_Saglabāt"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserutils.c:488
+#: gtk/gtkfilechooserutils.c:505
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s uz %2$s"
 
-#: gtk/gtkfilechooserwidget.c:366
+#: gtk/gtkfilechooserwidget.c:371
 msgid "Type name of new folder"
 msgstr "Ievadiet jaunās mapes nosaukumu"
 
-#: gtk/gtkfilechooserwidget.c:778
+#: gtk/gtkfilechooserwidget.c:790
 msgid "The folder could not be created"
 msgstr "Neizdevās izveidot mapi"
 
-#: gtk/gtkfilechooserwidget.c:791
+#: gtk/gtkfilechooserwidget.c:803
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2252,263 +2266,263 @@ msgstr ""
 "Neizdevās izveidot mapi, jo jau eksistē datne ar šādu nosaukumu. Mēģiniet "
 "izmantot citu mapes nosaukumu, vai vispirms pārdēvējiet datni."
 
-#: gtk/gtkfilechooserwidget.c:805
+#: gtk/gtkfilechooserwidget.c:818
 msgid "You need to choose a valid filename."
 msgstr "Jāizvēlas derīgs datnes nosaukums."
 
-#: gtk/gtkfilechooserwidget.c:808
+#: gtk/gtkfilechooserwidget.c:821
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nevar izveidot datni zem %s, jo tā nav mape"
 
-#: gtk/gtkfilechooserwidget.c:816
+#: gtk/gtkfilechooserwidget.c:831
 msgid "Cannot create file as the filename is too long"
 msgstr "Nevar izveidot datni, jo tās nosaukums ir pārāk garš"
 
-#: gtk/gtkfilechooserwidget.c:817
+#: gtk/gtkfilechooserwidget.c:832
 msgid "Try using a shorter name."
 msgstr "Mēģiniet izmantot īsāku nosaukumu."
 
-#: gtk/gtkfilechooserwidget.c:827
+#: gtk/gtkfilechooserwidget.c:842
 msgid "You may only select folders"
 msgstr "Izvēlēties var tikai mapes"
 
-#: gtk/gtkfilechooserwidget.c:828
+#: gtk/gtkfilechooserwidget.c:843
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Izvēlētais vienums nav mape; mēģiniet izmantot citu vienumu."
 
-#: gtk/gtkfilechooserwidget.c:836
+#: gtk/gtkfilechooserwidget.c:851
 msgid "Invalid file name"
 msgstr "Nederīgs datnes nosaukums"
 
-#: gtk/gtkfilechooserwidget.c:846
+#: gtk/gtkfilechooserwidget.c:860
 msgid "The folder contents could not be displayed"
 msgstr "Neizdevās parādīt mapes saturu"
 
-#: gtk/gtkfilechooserwidget.c:855
+#: gtk/gtkfilechooserwidget.c:868
 msgid "The file could not be deleted"
 msgstr "Neizdevās izdzēst datni"
 
-#: gtk/gtkfilechooserwidget.c:863
+#: gtk/gtkfilechooserwidget.c:876
 msgid "The file could not be moved to the Trash"
 msgstr "Nevarēja pārvietot datni uz miskasti"
 
-#: gtk/gtkfilechooserwidget.c:1008
+#: gtk/gtkfilechooserwidget.c:1021
 msgid "A folder with that name already exists"
 msgstr "Tāda mape jau pastāv"
 
-#: gtk/gtkfilechooserwidget.c:1010
+#: gtk/gtkfilechooserwidget.c:1023
 msgid "A file with that name already exists"
 msgstr "Tāda datne jau pastāv"
 
-#: gtk/gtkfilechooserwidget.c:1045
+#: gtk/gtkfilechooserwidget.c:1058
 msgid "A folder cannot be called “.”"
 msgstr "Mapes nosaukums nevar būt “.”"
 
-#: gtk/gtkfilechooserwidget.c:1046
+#: gtk/gtkfilechooserwidget.c:1059
 msgid "A file cannot be called “.”"
 msgstr "Datnes nosaukums nevar būt “.”"
 
-#: gtk/gtkfilechooserwidget.c:1049
+#: gtk/gtkfilechooserwidget.c:1062
 msgid "A folder cannot be called “..”"
 msgstr "Mapes nosaukums nevar būt “..”"
 
-#: gtk/gtkfilechooserwidget.c:1050
+#: gtk/gtkfilechooserwidget.c:1063
 msgid "A file cannot be called “..”"
 msgstr "Datnes nosaukums nevar būt “..”"
 
-#: gtk/gtkfilechooserwidget.c:1053
+#: gtk/gtkfilechooserwidget.c:1066
 msgid "Folder names cannot contain “/”"
 msgstr "Mapju nosaukumi nevar saturēt “/”"
 
-#: gtk/gtkfilechooserwidget.c:1054
+#: gtk/gtkfilechooserwidget.c:1067
 msgid "File names cannot contain “/”"
 msgstr "Datņu nosaukums nevar saturēt “/”"
 
-#: gtk/gtkfilechooserwidget.c:1080
+#: gtk/gtkfilechooserwidget.c:1093
 msgid "Folder names should not begin with a space"
 msgstr "Mapju nosaukumiem nevajadzētu sākties ar atstarpi"
 
-#: gtk/gtkfilechooserwidget.c:1081
+#: gtk/gtkfilechooserwidget.c:1094
 msgid "File names should not begin with a space"
 msgstr "Datņu nosaukumiem nevajadzētu sākties ar atstarpi"
 
-#: gtk/gtkfilechooserwidget.c:1085
+#: gtk/gtkfilechooserwidget.c:1098
 msgid "Folder names should not end with a space"
 msgstr "Mapju nosaukumiem nevajadzētu beigties ar atstarpi"
 
-#: gtk/gtkfilechooserwidget.c:1086
+#: gtk/gtkfilechooserwidget.c:1099
 msgid "File names should not end with a space"
 msgstr "Datņu nosaukumiem nevajadzētu beigties ar atstarpi"
 
-#: gtk/gtkfilechooserwidget.c:1089
+#: gtk/gtkfilechooserwidget.c:1102
 msgid "Folder names starting with a “.” are hidden"
 msgstr "Mapes, kuru nosaukumi sākas ar “.”, ir paslēptas"
 
-#: gtk/gtkfilechooserwidget.c:1090
+#: gtk/gtkfilechooserwidget.c:1103
 msgid "File names starting with a “.” are hidden"
 msgstr "Datnes, kuru nosaukumi sākas ar “.”, ir paslēptas"
 
-#: gtk/gtkfilechooserwidget.c:1460
+#: gtk/gtkfilechooserwidget.c:1473
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Vai tiešām vēlaties neatgriezeniski dzēst “%s”?"
 
-#: gtk/gtkfilechooserwidget.c:1463
+#: gtk/gtkfilechooserwidget.c:1476
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Ja izdzēsīsiet vienumu, tas būs neatgriezeniski zudis."
 
-#: gtk/gtkfilechooserwidget.c:1597
+#: gtk/gtkfilechooserwidget.c:1610
 msgid "The file could not be renamed"
 msgstr "Neizdevās pārdēvēt datni"
 
-#: gtk/gtkfilechooserwidget.c:1909
+#: gtk/gtkfilechooserwidget.c:1922
 msgid "Could not select file"
 msgstr "Neizdevās izvēlēties datni"
 
-#: gtk/gtkfilechooserwidget.c:2258
+#: gtk/gtkfilechooserwidget.c:2271
 msgid "_Visit File"
 msgstr "_Apmeklēt datni"
 
-#: gtk/gtkfilechooserwidget.c:2259
+#: gtk/gtkfilechooserwidget.c:2272
 msgid "_Open With File Manager"
 msgstr "_Atvērt ar datņu pārvaldnieku"
 
-#: gtk/gtkfilechooserwidget.c:2260
+#: gtk/gtkfilechooserwidget.c:2273
 msgid "_Copy Location"
 msgstr "_Kopēt atrašanās vietu"
 
-#: gtk/gtkfilechooserwidget.c:2261
+#: gtk/gtkfilechooserwidget.c:2274
 msgid "_Add to Bookmarks"
 msgstr "_Pievienot grāmatzīmēm"
 
-#: gtk/gtkfilechooserwidget.c:2262 gtk/gtkplacessidebar.c:2528
+#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2529
 #: gtk/ui/gtkfilechooserwidget.ui:525
 msgid "_Rename"
 msgstr "Pā_rdēvēt"
 
-#: gtk/gtkfilechooserwidget.c:2264
+#: gtk/gtkfilechooserwidget.c:2277
 msgid "_Move to Trash"
 msgstr "Pārvietot uz _miskasti"
 
-#: gtk/gtkfilechooserwidget.c:2268
+#: gtk/gtkfilechooserwidget.c:2281
 msgid "Show _Hidden Files"
 msgstr "Rādīt s_lēptās datnes"
 
-#: gtk/gtkfilechooserwidget.c:2269
+#: gtk/gtkfilechooserwidget.c:2282
 msgid "Show _Size Column"
 msgstr "Rādīt _izmēra kolonnu"
 
-#: gtk/gtkfilechooserwidget.c:2270
+#: gtk/gtkfilechooserwidget.c:2283
 msgid "Show _Time"
 msgstr "Rādī_t laiku"
 
-#: gtk/gtkfilechooserwidget.c:2271
+#: gtk/gtkfilechooserwidget.c:2284
 msgid "Sort _Folders before Files"
 msgstr "Sakārtot _mapes pirms datnēm"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2595 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2608 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Vieta"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2686
+#: gtk/gtkfilechooserwidget.c:2699
 msgid "_Name:"
 msgstr "_Nosaukums:"
 
-#: gtk/gtkfilechooserwidget.c:3308
+#: gtk/gtkfilechooserwidget.c:3321
 msgid "Searching"
 msgstr "Meklē"
 
-#: gtk/gtkfilechooserwidget.c:3313 gtk/gtkfilechooserwidget.c:3327
+#: gtk/gtkfilechooserwidget.c:3326 gtk/gtkfilechooserwidget.c:3340
 #, c-format
 msgid "Searching in %s"
 msgstr "Meklē iekš %s"
 
-#: gtk/gtkfilechooserwidget.c:3337
+#: gtk/gtkfilechooserwidget.c:3350
 msgid "Enter location"
 msgstr "Ievadiet vietu"
 
-#: gtk/gtkfilechooserwidget.c:3339
+#: gtk/gtkfilechooserwidget.c:3352
 msgid "Enter location or URL"
 msgstr "Ievadiet vietu vai URL"
 
-#: gtk/gtkfilechooserwidget.c:4377 gtk/gtkfilechooserwidget.c:7280
+#: gtk/gtkfilechooserwidget.c:4390 gtk/gtkfilechooserwidget.c:7307
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
 msgstr "Mainīts"
 
-#: gtk/gtkfilechooserwidget.c:4655
+#: gtk/gtkfilechooserwidget.c:4668
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Neizdevās nolasīt %s saturu"
 
-#: gtk/gtkfilechooserwidget.c:4659
+#: gtk/gtkfilechooserwidget.c:4672
 msgid "Could not read the contents of the folder"
 msgstr "Neizdevās nolasīt mapes saturu"
 
-#: gtk/gtkfilechooserwidget.c:4780 gtk/gtkfilechooserwidget.c:4826
+#: gtk/gtkfilechooserwidget.c:4802 gtk/gtkfilechooserwidget.c:4850
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4782 gtk/gtkfilechooserwidget.c:4828
+#: gtk/gtkfilechooserwidget.c:4804 gtk/gtkfilechooserwidget.c:4852
 msgid "%l:%M %p"
 msgstr "%H.%M"
 
-#: gtk/gtkfilechooserwidget.c:4786
+#: gtk/gtkfilechooserwidget.c:4808
 msgid "Yesterday"
 msgstr "Vakar"
 
-#: gtk/gtkfilechooserwidget.c:4794
+#: gtk/gtkfilechooserwidget.c:4816
 msgid "%-e %b"
 msgstr "%-e. %b"
 
-#: gtk/gtkfilechooserwidget.c:4798
+#: gtk/gtkfilechooserwidget.c:4820
 msgid "%-e %b %Y"
 msgstr "%Y. gada %-e. %b"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5031 gtk/inspector/prop-editor.c:1689
+#: gtk/gtkfilechooserwidget.c:5055 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Nezināms"
 
-#: gtk/gtkfilechooserwidget.c:5070 gtk/gtkplacessidebar.c:960
+#: gtk/gtkfilechooserwidget.c:5094 gtk/gtkplacessidebar.c:961
 msgid "Home"
 msgstr "Mājas"
 
-#: gtk/gtkfilechooserwidget.c:5563
+#: gtk/gtkfilechooserwidget.c:5587
 msgid "Cannot change to folder because it is not local"
 msgstr "Nevar pārslēgties uz mapi, jo tā nav lokāla "
 
-#: gtk/gtkfilechooserwidget.c:6346 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6373 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Datne “%s” jau eksistē. Vai vēlaties to aizvietot?"
 
-#: gtk/gtkfilechooserwidget.c:6349 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:6376 gtk/gtkprintunixdialog.c:668
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Datne jau eksistē mapē “%s”. Aizvietojot tiks pārrakstīts tās saturs."
 
-#: gtk/gtkfilechooserwidget.c:6354 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:6381 gtk/gtkprintunixdialog.c:676
 msgid "_Replace"
 msgstr "_Aizvietot"
 
-#: gtk/gtkfilechooserwidget.c:6568
+#: gtk/gtkfilechooserwidget.c:6595
 msgid "You do not have access to the specified folder."
 msgstr "Jums nav pieejas norādītajai mapei."
 
-#: gtk/gtkfilechooserwidget.c:7191
+#: gtk/gtkfilechooserwidget.c:7218
 msgid "Could not start the search process"
 msgstr "Neizdevās sākt meklēšanas procesu"
 
-#: gtk/gtkfilechooserwidget.c:7192
+#: gtk/gtkfilechooserwidget.c:7219
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2516,11 +2530,11 @@ msgstr ""
 "Neizdevās savienoties ar indeksētājdēmonu. Lūdzu, pārliecinieties, ka tas "
 "darbojas."
 
-#: gtk/gtkfilechooserwidget.c:7204
+#: gtk/gtkfilechooserwidget.c:7231
 msgid "Could not send the search request"
 msgstr "Neizdevās nosūtīt meklēšanas pieprasījumu"
 
-#: gtk/gtkfilechooserwidget.c:7498
+#: gtk/gtkfilechooserwidget.c:7525
 msgid "Accessed"
 msgstr "Izmantots"
 
@@ -2533,7 +2547,7 @@ msgstr "Izmantots"
 msgid "File System"
 msgstr "Datņu sistēma"
 
-#: gtk/gtkfontbutton.c:365
+#: gtk/gtkfontbutton.c:365 gtk/gtkfontbutton.c:493
 msgid "Sans 12"
 msgstr "Sans 12"
 
@@ -2541,38 +2555,38 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Izvēlieties fontu"
 
-#: gtk/gtkfontbutton.c:1224
+#: gtk/gtkfontbutton.c:1341
 msgctxt "font"
 msgid "None"
 msgstr "Nekas"
 
-#: gtk/gtkglarea.c:303
+#: gtk/gtkglarea.c:313
 msgid "OpenGL context creation failed"
 msgstr "Neizdevās iegūt OpenGL kontekstu"
 
-#: gtk/gtkheaderbar.c:385
+#: gtk/gtkheaderbar.c:387
 msgid "Application menu"
 msgstr "Lietotnes izvēlne"
 
-#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8860
+#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9061
 msgid "Close"
 msgstr "Aizvērt"
 
-#: gtk/gtkicontheme.c:2326 gtk/gtkicontheme.c:2390
+#: gtk/gtkicontheme.c:2341 gtk/gtkicontheme.c:2405
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Motīvā %2$s nav ikonas “%1$s”"
 
-#: gtk/gtkicontheme.c:4039 gtk/gtkicontheme.c:4406
+#: gtk/gtkicontheme.c:4077 gtk/gtkicontheme.c:4444
 msgid "Failed to load icon"
 msgstr "Neizdevās ielādēt ikonu"
 
-#: gtk/gtkimmodule.c:684
+#: gtk/gtkimmodule.c:544
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Vienkāršs"
 
-#: gtk/gtkimmodule.c:700
+#: gtk/gtkimmodule.c:560
 msgctxt "input method menu"
 msgid "None"
 msgstr "Nekas"
@@ -2605,12 +2619,12 @@ msgid "Error"
 msgstr "Kļūda"
 
 #. Open Link
-#: gtk/gtklabel.c:6669
+#: gtk/gtklabel.c:6646
 msgid "_Open Link"
 msgstr "_Atvērt saiti"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6678
+#: gtk/gtklabel.c:6655
 msgid "Copy _Link Address"
 msgstr "Kopēt sai_tes adresi"
 
@@ -2664,11 +2678,11 @@ msgstr "%s — nav tādas lietotnes %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s — kļūda palaižot lietotni: %s\n"
 
-#: gtk/gtklinkbutton.c:419
+#: gtk/gtklinkbutton.c:370
 msgid "Copy URL"
 msgstr "Kopēt URL"
 
-#: gtk/gtklinkbutton.c:582
+#: gtk/gtklinkbutton.c:531
 msgid "Invalid URI"
 msgstr "Nederīgs URI"
 
@@ -2705,40 +2719,40 @@ msgstr ""
 "Sazinieties ar sistēmas administratoru"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:463
 msgid "Load additional GTK+ modules"
 msgstr "Ielādēt papildu GTK+ moduļus"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:457
+#: gtk/gtkmain.c:464
 msgid "MODULES"
 msgstr "MODUĻI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:459
+#: gtk/gtkmain.c:466
 msgid "Make all warnings fatal"
 msgstr "Padarīt visus brīdinājumus fatālus"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:462
+#: gtk/gtkmain.c:469
 msgid "GTK+ debugging flags to set"
 msgstr "Iestatāmie GTK+ atkļūdošanas karodziņi"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:465
+#: gtk/gtkmain.c:472
 msgid "GTK+ debugging flags to unset"
 msgstr "Noņemamie GTK+ atkļūdošanas karodziņi"
 
-#: gtk/gtkmain.c:790
+#: gtk/gtkmain.c:805
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nevar atvērt ekrānu — %s"
 
-#: gtk/gtkmain.c:885
+#: gtk/gtkmain.c:914
 msgid "GTK+ Options"
 msgstr "GTK+ opcijas"
 
-#: gtk/gtkmain.c:885
+#: gtk/gtkmain.c:914
 msgid "Show GTK+ Options"
 msgstr "Rādīt GTK+ opcijas"
 
@@ -2747,7 +2761,7 @@ msgstr "Rādīt GTK+ opcijas"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1213
+#: gtk/gtkmain.c:1242
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2809,7 +2823,7 @@ msgstr "Nezināma lietotne (PID %d)"
 msgid "Unable to end process"
 msgstr "Neizdevās beigt procesu"
 
-#: gtk/gtkmountoperation.c:1317
+#: gtk/gtkmountoperation.c:1312
 msgid "_End Process"
 msgstr "B_eigt procesu"
 
@@ -2844,7 +2858,7 @@ msgstr "Z čaula"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nevar beigt procesu ar PID %d — %s"
 
-#: gtk/gtknotebook.c:5111 gtk/gtknotebook.c:7377
+#: gtk/gtknotebook.c:5113 gtk/gtknotebook.c:7382
 #, c-format
 msgid "Page %u"
 msgstr "Lappuse %u"
@@ -2876,7 +2890,7 @@ msgstr ""
 " Augšējā: %s %s\n"
 " Apakšējā: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3367
+#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3369
 msgid "Manage Custom Sizes…"
 msgstr "Pārvaldīt pielāgotos izmērus…"
 
@@ -2889,197 +2903,197 @@ msgstr "Lappuses iestatīšana"
 msgid "File System Root"
 msgstr "Datņu sistēmas sakne"
 
-#: gtk/gtkplacessidebar.c:949
+#: gtk/gtkplacessidebar.c:950
 msgid "Recent"
 msgstr "Nesenās"
 
-#: gtk/gtkplacessidebar.c:951
+#: gtk/gtkplacessidebar.c:952
 msgid "Recent files"
 msgstr "Nesen lietotās datnes"
 
-#: gtk/gtkplacessidebar.c:962
+#: gtk/gtkplacessidebar.c:963
 msgid "Open your personal folder"
 msgstr "Atvērt personisko mapi"
 
-#: gtk/gtkplacessidebar.c:977
+#: gtk/gtkplacessidebar.c:978
 msgid "Open the contents of your desktop in a folder"
 msgstr "Atvērt darbvirsmas saturu mapē"
 
-#: gtk/gtkplacessidebar.c:991
+#: gtk/gtkplacessidebar.c:992
 msgid "Enter Location"
 msgstr "Ievadiet vietu"
 
-#: gtk/gtkplacessidebar.c:993
+#: gtk/gtkplacessidebar.c:994
 msgid "Manually enter a location"
 msgstr "Manuāli ievadiet atrašanās vietu"
 
-#: gtk/gtkplacessidebar.c:1004
+#: gtk/gtkplacessidebar.c:1005
 msgid "Trash"
 msgstr "Miskaste"
 
-#: gtk/gtkplacessidebar.c:1006
+#: gtk/gtkplacessidebar.c:1007
 msgid "Open the trash"
 msgstr "Atvērt miskasti"
 
-#: gtk/gtkplacessidebar.c:1077 gtk/gtkplacessidebar.c:1105
-#: gtk/gtkplacessidebar.c:1312
+#: gtk/gtkplacessidebar.c:1078 gtk/gtkplacessidebar.c:1106
+#: gtk/gtkplacessidebar.c:1313
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Montēt un atvērt “%s”"
 
-#: gtk/gtkplacessidebar.c:1192
+#: gtk/gtkplacessidebar.c:1193
 msgid "Open the contents of the file system"
 msgstr "Atvērt datņu sistēmas saturu"
 
-#: gtk/gtkplacessidebar.c:1276
+#: gtk/gtkplacessidebar.c:1277
 msgid "New bookmark"
 msgstr "Jauna grāmatzīme"
 
-#: gtk/gtkplacessidebar.c:1278
+#: gtk/gtkplacessidebar.c:1279
 msgid "Add a new bookmark"
 msgstr "Pievienot jaunu grāmatzīmi"
 
-#: gtk/gtkplacessidebar.c:1291
+#: gtk/gtkplacessidebar.c:1292
 msgid "Connect to Server"
 msgstr "Savienoties ar serveri"
 
-#: gtk/gtkplacessidebar.c:1293
+#: gtk/gtkplacessidebar.c:1294
 msgid "Connect to a network server address"
 msgstr "Savienoties ar tīkla servera adresi"
 
-#: gtk/gtkplacessidebar.c:1355
+#: gtk/gtkplacessidebar.c:1356
 msgid "Other Locations"
 msgstr "Citas vietas"
 
-#: gtk/gtkplacessidebar.c:1356
+#: gtk/gtkplacessidebar.c:1357
 msgid "Show other locations"
 msgstr "Rādīt citas vietas"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2146 gtk/gtkplacessidebar.c:3433
+#: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3432
 msgid "_Start"
 msgstr "_Startēt"
 
-#: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3434
+#: gtk/gtkplacessidebar.c:2148 gtk/gtkplacessidebar.c:3433
 msgid "_Stop"
 msgstr "_Apturēt"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2154
+#: gtk/gtkplacessidebar.c:2155
 msgid "_Power On"
 msgstr "_Ieslēgt"
 
-#: gtk/gtkplacessidebar.c:2155
+#: gtk/gtkplacessidebar.c:2156
 msgid "_Safely Remove Drive"
 msgstr "_Droši izņemt dzini"
 
-#: gtk/gtkplacessidebar.c:2159
+#: gtk/gtkplacessidebar.c:2160
 msgid "_Connect Drive"
 msgstr "_Savienoties ar dzini"
 
-#: gtk/gtkplacessidebar.c:2160
+#: gtk/gtkplacessidebar.c:2161
 msgid "_Disconnect Drive"
 msgstr "_Atvienot dzini"
 
-#: gtk/gtkplacessidebar.c:2164
+#: gtk/gtkplacessidebar.c:2165
 msgid "_Start Multi-disk Device"
 msgstr "_Startēt vairākdisku ierīci"
 
-#: gtk/gtkplacessidebar.c:2165
+#: gtk/gtkplacessidebar.c:2166
 msgid "_Stop Multi-disk Device"
 msgstr "_Apstādināt vairākdisku ierīci"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2170
+#: gtk/gtkplacessidebar.c:2171
 msgid "_Unlock Device"
 msgstr "_Atbloķēt ierīci"
 
-#: gtk/gtkplacessidebar.c:2171
+#: gtk/gtkplacessidebar.c:2172
 msgid "_Lock Device"
 msgstr "B_loķēt ierīci"
 
-#: gtk/gtkplacessidebar.c:2209 gtk/gtkplacessidebar.c:3181
+#: gtk/gtkplacessidebar.c:2210 gtk/gtkplacessidebar.c:3182
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Neizdevās startēt “%s”"
 
-#: gtk/gtkplacessidebar.c:2239
+#: gtk/gtkplacessidebar.c:2240
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Neizdevās piekļūt “%s”"
 
-#: gtk/gtkplacessidebar.c:2453
+#: gtk/gtkplacessidebar.c:2454
 msgid "This name is already taken"
 msgstr "Šis nosaukums jau ir aizņemts"
 
-#: gtk/gtkplacessidebar.c:2522 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2523 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
 msgid "Name"
 msgstr "Nosaukums"
 
-#: gtk/gtkplacessidebar.c:2722
+#: gtk/gtkplacessidebar.c:2723
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Neizdevās atmontēt “%s”"
 
-#: gtk/gtkplacessidebar.c:2898
+#: gtk/gtkplacessidebar.c:2899
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Neizdevās apstādināt “%s”"
 
-#: gtk/gtkplacessidebar.c:2927
+#: gtk/gtkplacessidebar.c:2928
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Neizdevās izgrūst “%s”"
 
-#: gtk/gtkplacessidebar.c:2956 gtk/gtkplacessidebar.c:2985
+#: gtk/gtkplacessidebar.c:2957 gtk/gtkplacessidebar.c:2986
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Neizdevās izgrūst %s"
 
-#: gtk/gtkplacessidebar.c:3133
+#: gtk/gtkplacessidebar.c:3134
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Neizdevās aptaujāt “%s” par datu nesēju izmaiņām"
 
-#: gtk/gtkplacessidebar.c:3416 gtk/gtkplacesview.c:1587
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1607
 msgid "Open in New _Tab"
 msgstr "Atvēr_t jaunā cilnē"
 
-#: gtk/gtkplacessidebar.c:3419 gtk/gtkplacesview.c:1598
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1618
 msgid "Open in New _Window"
 msgstr "Atvērt jaunā _logā"
 
-#: gtk/gtkplacessidebar.c:3423
+#: gtk/gtkplacessidebar.c:3422
 msgid "_Add Bookmark"
 msgstr "Pievienot grām_atzīmi"
 
-#: gtk/gtkplacessidebar.c:3424
+#: gtk/gtkplacessidebar.c:3423
 msgid "_Remove"
 msgstr "_Izņemt"
 
-#: gtk/gtkplacessidebar.c:3425
+#: gtk/gtkplacessidebar.c:3424
 msgid "Rename…"
 msgstr "Pārdēvēt…"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1632
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1652
 msgid "_Mount"
 msgstr "_Montēt"
 
-#: gtk/gtkplacessidebar.c:3430 gtk/gtkplacesview.c:1622
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1642
 msgid "_Unmount"
 msgstr "_Atmontēt"
 
-#: gtk/gtkplacessidebar.c:3431
+#: gtk/gtkplacessidebar.c:3430
 msgid "_Eject"
 msgstr "_Izgrūst"
 
-#: gtk/gtkplacessidebar.c:3432
+#: gtk/gtkplacessidebar.c:3431
 msgid "_Detect Media"
 msgstr "Noteikt _datu nesēju"
 
-#: gtk/gtkplacessidebar.c:3878 gtk/gtkplacesview.c:1052
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1063
 msgid "Computer"
 msgstr "Dators"
 
@@ -3092,42 +3106,42 @@ msgid "No network locations found"
 msgstr "Nav atrastu tīkla vietu"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1162 gtk/gtkplacesview.c:1235
+#: gtk/gtkplacesview.c:1173 gtk/gtkplacesview.c:1246
 msgid "Unable to access location"
 msgstr "Neizdevās piekļūt vietai"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1179 gtk/ui/gtkplacesview.ui:224
+#: gtk/gtkplacesview.c:1190 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "Savie_noties"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1298
+#: gtk/gtkplacesview.c:1309
 msgid "Unable to unmount volume"
 msgstr "Neizdevās atmontēt sējumu"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1380
+#: gtk/gtkplacesview.c:1391
 msgid "Cance_l"
 msgstr "Atce_lt"
 
-#: gtk/gtkplacesview.c:1622
+#: gtk/gtkplacesview.c:1642
 msgid "_Disconnect"
 msgstr "_Atvienoties"
 
-#: gtk/gtkplacesview.c:1632
+#: gtk/gtkplacesview.c:1652
 msgid "_Connect"
 msgstr "_Savienoties"
 
-#: gtk/gtkplacesview.c:1797
+#: gtk/gtkplacesview.c:1793
 msgid "Unable to get remote server location"
 msgstr "Neizdevās saņemt attālinātā servera vietu"
 
-#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
+#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
 msgid "Networks"
 msgstr "Tīkli"
 
-#: gtk/gtkplacesview.c:1934 gtk/gtkplacesview.c:1943
+#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
 msgid "On This Computer"
 msgstr "Šajā datorā"
 
@@ -3147,7 +3161,7 @@ msgstr[2] "Pieejami %s / %s"
 msgid "Disconnect"
 msgstr "Atvienot"
 
-#: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:68
+#: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:67
 msgid "Unmount"
 msgstr "Atmontēt"
 
@@ -3246,6 +3260,12 @@ msgstr "Kļūda, veidojot priekšskatījumu"
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Visticamāk tāpēc, ka neizdevās izveidot pagaidu datni."
 
+#. window
+#: gtk/gtkprintoperation-portal.c:229 gtk/gtkprintoperation-portal.c:533
+#: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3391
+msgid "Print"
+msgstr "Drukāt"
+
 #: gtk/gtkprintoperation-win32.c:617
 msgid "Printer offline"
 msgstr "Printeris nesaistē"
@@ -3256,7 +3276,7 @@ msgstr "Beidzies papīrs"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:621
-#: modules/printbackends/cups/gtkprintbackendcups.c:2524
+#: modules/printbackends/cups/gtkprintbackendcups.c:2572
 msgid "Paused"
 msgstr "Pauzēts"
 
@@ -3309,11 +3329,11 @@ msgstr "Priekš_skatījums"
 msgid "_Print"
 msgstr "_Drukāt"
 
-#: gtk/gtkprintunixdialog.c:858
+#: gtk/gtkprintunixdialog.c:860
 msgid "Getting printer information failed"
 msgstr "Neizdevās iegūt informāciju par printeri"
 
-#: gtk/gtkprintunixdialog.c:2068
+#: gtk/gtkprintunixdialog.c:2070
 msgid "Getting printer information…"
 msgstr "Saņem informāciju par printeri…"
 
@@ -3323,106 +3343,102 @@ msgstr "Saņem informāciju par printeri…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3096
-#: modules/printbackends/cups/gtkprintbackendcups.c:5279
+#: gtk/gtkprintunixdialog.c:3098
+#: modules/printbackends/cups/gtkprintbackendcups.c:5356
 msgid "Left to right, top to bottom"
 msgstr "No kreisās uz labo, no augšas uz leju"
 
-#: gtk/gtkprintunixdialog.c:3096
-#: modules/printbackends/cups/gtkprintbackendcups.c:5279
+#: gtk/gtkprintunixdialog.c:3098
+#: modules/printbackends/cups/gtkprintbackendcups.c:5356
 msgid "Left to right, bottom to top"
 msgstr "No kreisās uz labo, no lejas uz augšu"
 
-#: gtk/gtkprintunixdialog.c:3097
-#: modules/printbackends/cups/gtkprintbackendcups.c:5280
+#: gtk/gtkprintunixdialog.c:3099
+#: modules/printbackends/cups/gtkprintbackendcups.c:5357
 msgid "Right to left, top to bottom"
 msgstr "No labās uz kreiso, no augšas uz leju"
 
-#: gtk/gtkprintunixdialog.c:3097
-#: modules/printbackends/cups/gtkprintbackendcups.c:5280
+#: gtk/gtkprintunixdialog.c:3099
+#: modules/printbackends/cups/gtkprintbackendcups.c:5357
 msgid "Right to left, bottom to top"
 msgstr "No labās uz kreiso, no lejas uz augšu"
 
-#: gtk/gtkprintunixdialog.c:3098
-#: modules/printbackends/cups/gtkprintbackendcups.c:5281
+#: gtk/gtkprintunixdialog.c:3100
+#: modules/printbackends/cups/gtkprintbackendcups.c:5358
 msgid "Top to bottom, left to right"
 msgstr "No augšas uz leju, no kreisās uz labo"
 
-#: gtk/gtkprintunixdialog.c:3098
-#: modules/printbackends/cups/gtkprintbackendcups.c:5281
+#: gtk/gtkprintunixdialog.c:3100
+#: modules/printbackends/cups/gtkprintbackendcups.c:5358
 msgid "Top to bottom, right to left"
 msgstr "No augšas uz leju, no labās uz kreiso"
 
-#: gtk/gtkprintunixdialog.c:3099
-#: modules/printbackends/cups/gtkprintbackendcups.c:5282
+#: gtk/gtkprintunixdialog.c:3101
+#: modules/printbackends/cups/gtkprintbackendcups.c:5359
 msgid "Bottom to top, left to right"
 msgstr "No lejas uz augšu, no kreisās uz labo"
 
-#: gtk/gtkprintunixdialog.c:3099
-#: modules/printbackends/cups/gtkprintbackendcups.c:5282
+#: gtk/gtkprintunixdialog.c:3101
+#: modules/printbackends/cups/gtkprintbackendcups.c:5359
 msgid "Bottom to top, right to left"
 msgstr "No lejas uz augšu, no labās uz kreiso"
 
-#: gtk/gtkprintunixdialog.c:3103 gtk/gtkprintunixdialog.c:3116
+#: gtk/gtkprintunixdialog.c:3105 gtk/gtkprintunixdialog.c:3118
 msgid "Page Ordering"
 msgstr "Lappušu secība"
 
-#: gtk/gtkprintunixdialog.c:3132
+#: gtk/gtkprintunixdialog.c:3134
 msgid "Left to right"
 msgstr "No kreisās uz labo"
 
-#: gtk/gtkprintunixdialog.c:3133
+#: gtk/gtkprintunixdialog.c:3135
 msgid "Right to left"
 msgstr "No labās uz kreiso"
 
-#: gtk/gtkprintunixdialog.c:3145
+#: gtk/gtkprintunixdialog.c:3147
 msgid "Top to bottom"
 msgstr "No augšas uz leju"
 
-#: gtk/gtkprintunixdialog.c:3146
+#: gtk/gtkprintunixdialog.c:3148
 msgid "Bottom to top"
 msgstr "No lejas uz augšu"
 
-#: gtk/gtkprintunixdialog.c:3389
-msgid "Print"
-msgstr "Drukāt"
-
-#: gtk/gtkprogressbar.c:694
+#: gtk/gtkprogressbar.c:698
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%.0f %%"
 
-#: gtk/gtkrecentchooserdefault.c:1077 gtk/gtkrecentchooserdefault.c:1114
+#: gtk/gtkrecentchooserdefault.c:1075 gtk/gtkrecentchooserdefault.c:1112
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Nav atrasts URI “%s” atbilstošs vienums"
 
-#: gtk/gtkrecentchooserdefault.c:1241
+#: gtk/gtkrecentchooserdefault.c:1239
 msgid "Untitled filter"
 msgstr "Nenosaukts filtrs"
 
-#: gtk/gtkrecentchooserdefault.c:1563
+#: gtk/gtkrecentchooserdefault.c:1561
 msgid "Could not remove item"
 msgstr "Neizdevās izņemt vienumu"
 
-#: gtk/gtkrecentchooserdefault.c:1607
+#: gtk/gtkrecentchooserdefault.c:1605
 msgid "Could not clear list"
 msgstr "Neizdevās attīrīt sarakstu"
 
-#: gtk/gtkrecentchooserdefault.c:1691
+#: gtk/gtkrecentchooserdefault.c:1689
 msgid "Copy _Location"
 msgstr "Kopēt _vietu"
 
-#: gtk/gtkrecentchooserdefault.c:1702
+#: gtk/gtkrecentchooserdefault.c:1700
 msgid "_Remove From List"
 msgstr "Izņemt no sa_raksta"
 
-#: gtk/gtkrecentchooserdefault.c:1709
+#: gtk/gtkrecentchooserdefault.c:1707
 msgid "_Clear List"
 msgstr "_Attīrīt sarakstu"
 
-#: gtk/gtkrecentchooserdefault.c:1721
+#: gtk/gtkrecentchooserdefault.c:1719
 msgid "Show _Private Resources"
 msgstr "Rādīt _privātos resursus"
 
@@ -3474,15 +3490,20 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1042 gtk/gtkrecentmanager.c:1055
-#: gtk/gtkrecentmanager.c:1192 gtk/gtkrecentmanager.c:1202
-#: gtk/gtkrecentmanager.c:1254 gtk/gtkrecentmanager.c:1263
-#: gtk/gtkrecentmanager.c:1278
+#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1054
+#: gtk/gtkrecentmanager.c:1191 gtk/gtkrecentmanager.c:1201
+#: gtk/gtkrecentmanager.c:1253 gtk/gtkrecentmanager.c:1262
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nevar atrast vienumu ar URI “%s”"
 
-#: gtk/gtkrecentmanager.c:2468
+#: gtk/gtkrecentmanager.c:1277
+#, c-format
+#| msgid "Unable to find an item with URI '%s'"
+msgid "Unable to move the item with URI '%s' to '%s'"
+msgstr "Nevar pārvietot vienumu ar URI “%s” uz “%s”"
+
+#: gtk/gtkrecentmanager.c:2467
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
@@ -3497,7 +3518,7 @@ msgstr "Meklēt"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/gtkshortcutlabel.c:68
+#: gtk/gtkshortcutlabel.c:80
 msgctxt "keyboard side marker"
 msgid "L"
 msgstr "K"
@@ -3507,7 +3528,7 @@ msgstr "K"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/gtkshortcutlabel.c:81
+#: gtk/gtkshortcutlabel.c:93
 msgctxt "keyboard side marker"
 msgid "R"
 msgstr "L"
@@ -3516,48 +3537,48 @@ msgstr "L"
 msgid "_Show All"
 msgstr "Rādīt vi_su"
 
-#: gtk/gtkshortcutsshortcut.c:133
+#: gtk/gtkshortcutsshortcut.c:136
 msgid "Two finger pinch"
 msgstr "Divu pirkstu savilkšana"
 
-#: gtk/gtkshortcutsshortcut.c:137
+#: gtk/gtkshortcutsshortcut.c:140
 msgid "Two finger stretch"
 msgstr "Divu pirkstu izvēršana"
 
-#: gtk/gtkshortcutsshortcut.c:141
+#: gtk/gtkshortcutsshortcut.c:144
 msgid "Rotate clockwise"
 msgstr "Pagriezt pulksteņrādītāja virzienā"
 
-#: gtk/gtkshortcutsshortcut.c:145
+#: gtk/gtkshortcutsshortcut.c:148
 msgid "Rotate counterclockwise"
 msgstr "Pagriezt pretēji pulksteņrādītājam"
 
-#: gtk/gtkshortcutsshortcut.c:149
+#: gtk/gtkshortcutsshortcut.c:152
 msgid "Two finger swipe left"
 msgstr "Divu pirkstu vilkšana pa kreisi"
 
-#: gtk/gtkshortcutsshortcut.c:153
+#: gtk/gtkshortcutsshortcut.c:156
 msgid "Two finger swipe right"
 msgstr "Divu pirkstu vilkšana pa labi"
 
-#: gtk/gtkshortcutswindow.c:859
+#: gtk/gtkshortcutswindow.c:929
 msgid "Shortcuts"
 msgstr "Saīsnes"
 
-#: gtk/gtkshortcutswindow.c:864
+#: gtk/gtkshortcutswindow.c:934
 msgid "Search Results"
 msgstr "Meklēšanas rezultāti"
 
-#: gtk/gtkshortcutswindow.c:918
+#: gtk/gtkshortcutswindow.c:988
 msgid "Search Shortcuts"
 msgstr "Meklēšanas saīsnes"
 
-#: gtk/gtkshortcutswindow.c:983 gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Nav atrastu rezultātu"
 
-#: gtk/gtkshortcutswindow.c:990 gtk/ui/gtkfilechooserwidget.ui:324
-#: gtk/ui/gtkplacesview.ui:181
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkfilechooserwidget.ui:324
+#: gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Mēģiniet ar citu meklējamo vārdu"
 
@@ -3565,7 +3586,7 @@ msgstr "Mēģiniet ar citu meklējamo vārdu"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:417 gtk/gtkswitch.c:621
+#: gtk/gtkswitch.c:306
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3573,7 +3594,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:423 gtk/gtkswitch.c:635
+#: gtk/gtkswitch.c:313
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3757,12 +3778,25 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12308
+#: gtk/gtkwindow.c:9009
+msgid "Move"
+msgstr "Pārvietot"
+
+#: gtk/gtkwindow.c:9017
+msgid "Resize"
+msgstr "Mainīt izmēru"
+
+#: gtk/gtkwindow.c:9048
+#| msgid "Always"
+msgid "Always on Top"
+msgstr "Vienmēr virspusē"
+
+#: gtk/gtkwindow.c:12480
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vai vēlaties izmantot GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12310
+#: gtk/gtkwindow.c:12482
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3773,7 +3807,7 @@ msgstr ""
 "jebkuras GTK+ lietotnes iekšējās komponentes. To izmantojot, lietotne var "
 "salūzt vai avarēt."
 
-#: gtk/gtkwindow.c:12315
+#: gtk/gtkwindow.c:12487
 msgid "Don't show this message again"
 msgstr "Vairs nerādīt šo ziņojumu"
 
@@ -3787,6 +3821,7 @@ msgid "State"
 msgstr "Stāvoklis"
 
 #: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
+#: gtk/ui/gtkplacesview.ui:158
 msgid "Prefix"
 msgstr "Prefikss"
 
@@ -3847,12 +3882,12 @@ msgstr "Vērtība"
 msgid "Show data"
 msgstr "Rādīt datus"
 
-#: gtk/inspector/general.c:226
+#: gtk/inspector/general.c:275
 msgctxt "GL version"
 msgid "None"
 msgstr "Nekāda"
 
-#: gtk/inspector/general.c:227
+#: gtk/inspector/general.c:276
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Nekāds"
@@ -3973,7 +4008,6 @@ msgid "Clip area"
 msgstr "Klipa laukums"
 
 #: gtk/inspector/misc-info.ui:430
-#| msgid "Frame count"
 msgid "Frame Clock"
 msgstr "Kadru pulkstenis"
 
@@ -4001,19 +4035,19 @@ msgstr "Pieejamais vārds"
 msgid "Accessible description"
 msgstr "Pieejamais apraksts"
 
-#: gtk/inspector/misc-info.ui:683
+#: gtk/inspector/misc-info.ui:685
 msgid "Mapped"
 msgstr "Attēlots"
 
-#: gtk/inspector/misc-info.ui:719
+#: gtk/inspector/misc-info.ui:721
 msgid "Realized"
 msgstr "Realizēts"
 
-#: gtk/inspector/misc-info.ui:755
+#: gtk/inspector/misc-info.ui:757
 msgid "Is Toplevel"
 msgstr "Ir augšējā līmeņa"
 
-#: gtk/inspector/misc-info.ui:791
+#: gtk/inspector/misc-info.ui:793
 msgid "Child Visible"
 msgstr "Bērns redzams"
 
@@ -4157,7 +4191,6 @@ msgid "Yes"
 msgstr "Jā"
 
 #: gtk/inspector/signals-list.ui:36
-#| msgid "Signals"
 msgid "Signal"
 msgstr "Signāls"
 
@@ -4193,6 +4226,10 @@ msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Abi"
 
+#: gtk/inspector/statistics.c:377
+msgid "GLib must be configured with --enable-debug"
+msgstr "GLib ir jākonfigurē ar --enable-debug"
+
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
 msgstr "Pats 1"
@@ -4221,19 +4258,19 @@ msgstr "Kumulatīvs"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Ieslēgt statistiku ar GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:310 gtk/inspector/visual.c:325
+#: gtk/inspector/visual.c:371 gtk/inspector/visual.c:386
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Motīvs ir ierakstīts kodā ar GTK_THEME"
 
-#: gtk/inspector/visual.c:520
+#: gtk/inspector/visual.c:592
 msgid "Backend does not support window scaling"
 msgstr "Aizmugure neatbalsta logu izmēru maiņu"
 
-#: gtk/inspector/visual.c:559
+#: gtk/inspector/visual.c:687
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Iestatījums ir ierakstīts kodā ar GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:624
+#: gtk/inspector/visual.c:752
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4241,120 +4278,129 @@ msgstr ""
 "Nav iestatāms izpildīšanas laikā.\n"
 "Tā vietā izmantojiet GDK_GL=always vai GDK_GL=disable"
 
-#: gtk/inspector/visual.c:638 gtk/inspector/visual.c:639
-#: gtk/inspector/visual.c:640
+#: gtk/inspector/visual.c:766 gtk/inspector/visual.c:767
+#: gtk/inspector/visual.c:768
 msgid "GL rendering is disabled"
 msgstr "GL attēlošana ir izslēgta"
 
-#: gtk/inspector/visual.ui:49
+#: gtk/inspector/visual.ui:61
 msgid "GTK+ Theme"
 msgstr "GTK+ motīvs"
 
-#: gtk/inspector/visual.ui:82
+#: gtk/inspector/visual.ui:94
 msgid "Dark Variant"
 msgstr "Tumšais variants"
 
-#: gtk/inspector/visual.ui:115
+#: gtk/inspector/visual.ui:127
 msgid "Cursor Theme"
 msgstr "Kursora motīvs"
 
-#: gtk/inspector/visual.ui:148
+#: gtk/inspector/visual.ui:160
 msgid "Cursor Size"
 msgstr "Kursora izmērs"
 
-#: gtk/inspector/visual.ui:185
+#: gtk/inspector/visual.ui:197
 msgid "Icon Theme"
 msgstr "Ikonu motīvs"
 
-#: gtk/inspector/visual.ui:218 gtk/ui/gtkfontbutton.ui:13
+#: gtk/inspector/visual.ui:230 gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "Fonts"
 
-#: gtk/inspector/visual.ui:251
+#: gtk/inspector/visual.ui:263
+#| msgid "Font Selection"
+msgid "Font Scale"
+msgstr "Fonta mērogs"
+
+#: gtk/inspector/visual.ui:309
 msgid "Text Direction"
 msgstr "Teksta virziens"
 
-#: gtk/inspector/visual.ui:264
+#: gtk/inspector/visual.ui:322
 msgid "Left-to-Right"
 msgstr "No kreisās uz labo"
 
-#: gtk/inspector/visual.ui:265
+#: gtk/inspector/visual.ui:323
 msgid "Right-to-Left"
 msgstr "No labās uz kreiso"
 
-#: gtk/inspector/visual.ui:289
+#: gtk/inspector/visual.ui:347
 msgid "Window scaling"
 msgstr "Logu izmēru maiņa"
 
-#: gtk/inspector/visual.ui:324
+#: gtk/inspector/visual.ui:382
 msgid "Animations"
 msgstr "Animācijas"
 
-#: gtk/inspector/visual.ui:369
+#: gtk/inspector/visual.ui:415
+msgid "Slowdown"
+msgstr "Palēnināšana"
+
+#: gtk/inspector/visual.ui:474
 msgid "Rendering Mode"
 msgstr "Attēlošanas režīms"
 
-#: gtk/inspector/visual.ui:382
+#: gtk/inspector/visual.ui:487
 msgid "Similar"
 msgstr "Līdzīgs"
 
-#: gtk/inspector/visual.ui:383
+#: gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "Attēls"
 
-#: gtk/inspector/visual.ui:384
+#: gtk/inspector/visual.ui:489
 msgid "Recording"
 msgstr "Ierakstīšana"
 
-#: gtk/inspector/visual.ui:408
+#: gtk/inspector/visual.ui:513
 msgid "Show Graphic Updates"
 msgstr "Rādīt grafikas atjauninājumus"
 
-#: gtk/inspector/visual.ui:442
+#: gtk/inspector/visual.ui:547
 msgid "Show Baselines"
 msgstr "Rādīt bāzes līnijas"
 
-#: gtk/inspector/visual.ui:476
+#: gtk/inspector/visual.ui:581
 msgid "Show Layout Borders"
 msgstr "Rādīt izkārtojuma robežas"
 
-#: gtk/inspector/visual.ui:510
+#: gtk/inspector/visual.ui:615
 msgid "Show Pixel Cache"
 msgstr "Rādīt pikseļu kešu"
 
-#: gtk/inspector/visual.ui:544
+#: gtk/inspector/visual.ui:649
 msgid "Show Widget Resizes"
 msgstr "Rādīt logdaļu izmēru maiņu"
 
-#: gtk/inspector/visual.ui:578
+#: gtk/inspector/visual.ui:683
 msgid "Simulate touchscreen"
 msgstr "Imitēt skārienekrānu"
 
-#: gtk/inspector/visual.ui:623
+#: gtk/inspector/visual.ui:728
 msgid "GL Rendering"
 msgstr "GL attēlošana"
 
-#: gtk/inspector/visual.ui:635
+#: gtk/inspector/visual.ui:740
 msgid "When needed"
 msgstr "Kad vajadzīgs"
 
-#: gtk/inspector/visual.ui:636
+#: gtk/inspector/visual.ui:741
 msgid "Always"
 msgstr "Vienmēr"
 
-#: gtk/inspector/visual.ui:637
+#: gtk/inspector/visual.ui:742
 msgid "Disabled"
 msgstr "Izslēgts"
 
-#: gtk/inspector/visual.ui:661
+#: gtk/inspector/visual.ui:766
 msgid "Software GL"
 msgstr "Programmatūras GL"
 
-#: gtk/inspector/visual.ui:695
+#: gtk/inspector/visual.ui:800
 msgid "Software Surfaces"
 msgstr "Programmatūras virsmas"
 
-#: gtk/inspector/visual.ui:729
+#: gtk/inspector/visual.ui:834
 msgid "Texture Rectangle Extension"
 msgstr "Tekstūras taisnstūra paplašinājums"
 
@@ -4403,7 +4449,6 @@ msgid "Class Hierarchy"
 msgstr "Klašu hierarhija"
 
 #: gtk/inspector/window.ui:422
-#| msgid "Selector"
 msgid "CSS Selector"
 msgstr "CSS selektors"
 
@@ -5397,6 +5442,7 @@ msgstr "Servisi"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
+#, c-format
 msgid "Hide %s"
 msgstr "Slēpt %s"
 
@@ -5412,6 +5458,7 @@ msgstr "Rādīt visu"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
+#, c-format
 msgid "Quit %s"
 msgstr "Iziet no %s"
 
@@ -5547,24 +5594,81 @@ msgstr "Lejup"
 msgid "Up Path"
 msgstr "Augšup"
 
+#: gtk/ui/gtkplacesview.ui:30
+#| msgid "Enter server address…"
+msgid "Server Addresses"
+msgstr "Servera adreses"
+
+#: gtk/ui/gtkplacesview.ui:43
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:"
+msgstr "Servera adreses veido protokola prefikss un adrese, piemēram:"
+
+#: gtk/ui/gtkplacesview.ui:57
+msgid "smb://foo.example.com, ssh://192.168.0.1"
+msgstr "smb://foo.example.com, ssh://192.168.0.1"
+
+#: gtk/ui/gtkplacesview.ui:78
+msgid "Available Protocols"
+msgstr "Pieejamie protokoli"
+
+#: gtk/ui/gtkplacesview.ui:92
+msgid "AppleTalk"
+msgstr "AppleTalk"
+
+#: gtk/ui/gtkplacesview.ui:103
+msgid "File Transfer Protocol"
+msgstr "Datņu pārraides protokols (FTP)"
+
+#: gtk/ui/gtkplacesview.ui:114
+#| msgid "File System"
+msgid "Network File System"
+msgstr "Tīkla datņu sistēma (NFS)"
+
+#: gtk/ui/gtkplacesview.ui:125
+msgid "Samba"
+msgstr "Samba"
+
+#: gtk/ui/gtkplacesview.ui:136
+msgid "SSH File Transfer Protocol"
+msgstr "SSH datņu pārraides protokols"
+
+#: gtk/ui/gtkplacesview.ui:147
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#. Translators: do not translate ftp:// and ftps://
+#: gtk/ui/gtkplacesview.ui:183
+msgid "ftp:// or ftps://"
+msgstr "ftp:// vai ftps://"
+
+#: gtk/ui/gtkplacesview.ui:205
+msgid "smb://"
+msgstr "smb://"
+
+#. Translators: do not translate dav:// and davs://
+#: gtk/ui/gtkplacesview.ui:227
+msgid "dav:// or davs://"
+msgstr "dav:// vai davs://"
+
 #. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:42
+#: gtk/ui/gtkplacesview.ui:267
 msgid "No recent servers found"
 msgstr "Nav atrastu neseno serveru"
 
-#: gtk/ui/gtkplacesview.ui:65
+#: gtk/ui/gtkplacesview.ui:290
 msgid "Recent Servers"
 msgstr "Nesenie serveri"
 
-#: gtk/ui/gtkplacesview.ui:168
+#: gtk/ui/gtkplacesview.ui:393
 msgid "No results found"
 msgstr "Nav atrastu rezultātu"
 
-#: gtk/ui/gtkplacesview.ui:214
+#: gtk/ui/gtkplacesview.ui:439
 msgid "Connect to _Server"
 msgstr "_Savienoties ar serveri"
 
-#: gtk/ui/gtkplacesview.ui:247
+#: gtk/ui/gtkplacesview.ui:472
 msgid "Enter server address…"
 msgstr "Ievadiet servera adresi…"
 
@@ -6093,361 +6197,361 @@ msgstr "Lai drukātu šo dokumentu uz printera %s, jāautentificējas"
 msgid "Authentication is required to print this document"
 msgstr "Lai drukātu šo dokumentu, jāautentificējas"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1867
+#: modules/printbackends/cups/gtkprintbackendcups.c:2501
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "Printerim “%s” ir atlicis maz tonera."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1868
+#: modules/printbackends/cups/gtkprintbackendcups.c:2505
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "Printerim “%s” vairs nav tonera."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1870
+#: modules/printbackends/cups/gtkprintbackendcups.c:2510
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "Printerim “%s” ir atlicis maz attīstītāja."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1872
+#: modules/printbackends/cups/gtkprintbackendcups.c:2515
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "Printerim “%s” vairs nav attīstītāja."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1874
+#: modules/printbackends/cups/gtkprintbackendcups.c:2520
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Printerim “%s” ir atlicis maz vismaz vienas krāsas."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1876
+#: modules/printbackends/cups/gtkprintbackendcups.c:2525
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Printerim “%s” vairs nav vismaz vienas krāsas."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1877
+#: modules/printbackends/cups/gtkprintbackendcups.c:2529
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Printera “%s” vāks ir atvērts."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1878
+#: modules/printbackends/cups/gtkprintbackendcups.c:2533
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Printera “%s” durvis ir atvērtas."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1879
+#: modules/printbackends/cups/gtkprintbackendcups.c:2537
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Printerim “%s” ir maz papīra."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1880
+#: modules/printbackends/cups/gtkprintbackendcups.c:2541
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Printerim “%s” vairs nav papīra."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1881
+#: modules/printbackends/cups/gtkprintbackendcups.c:2545
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Printeris “%s” šobrīd ir nesaistē."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1882
+#: modules/printbackends/cups/gtkprintbackendcups.c:2549
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Ar printeri “%s” ir kāda problēma."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2521
+#: modules/printbackends/cups/gtkprintbackendcups.c:2569
 msgid "Paused; Rejecting Jobs"
 msgstr "Pauzēts ; nepieņem darbus"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2527
+#: modules/printbackends/cups/gtkprintbackendcups.c:2575
 msgid "Rejecting Jobs"
 msgstr "Nepieņem darbus"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2569
+#: modules/printbackends/cups/gtkprintbackendcups.c:2616
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4255
-#: modules/printbackends/cups/gtkprintbackendcups.c:4322
+#: modules/printbackends/cups/gtkprintbackendcups.c:4302
+#: modules/printbackends/cups/gtkprintbackendcups.c:4369
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Divpusējs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4256
+#: modules/printbackends/cups/gtkprintbackendcups.c:4303
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Papīra tips"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4257
+#: modules/printbackends/cups/gtkprintbackendcups.c:4304
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Papīra avots"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4258
-#: modules/printbackends/cups/gtkprintbackendcups.c:4323
+#: modules/printbackends/cups/gtkprintbackendcups.c:4305
+#: modules/printbackends/cups/gtkprintbackendcups.c:4370
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Izvades paplāte"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4259
+#: modules/printbackends/cups/gtkprintbackendcups.c:4306
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Izšķirtspēja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4260
+#: modules/printbackends/cups/gtkprintbackendcups.c:4307
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript prefiltrēšana"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4269
+#: modules/printbackends/cups/gtkprintbackendcups.c:4316
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Vienpusējs"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4271
+#: modules/printbackends/cups/gtkprintbackendcups.c:4318
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Garās malas iesējums"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4273
+#: modules/printbackends/cups/gtkprintbackendcups.c:4320
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Īsās malas iesējums"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4275
-#: modules/printbackends/cups/gtkprintbackendcups.c:4277
-#: modules/printbackends/cups/gtkprintbackendcups.c:4285
+#: modules/printbackends/cups/gtkprintbackendcups.c:4322
+#: modules/printbackends/cups/gtkprintbackendcups.c:4324
+#: modules/printbackends/cups/gtkprintbackendcups.c:4332
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Automātiska izvēle"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4279
-#: modules/printbackends/cups/gtkprintbackendcups.c:4281
-#: modules/printbackends/cups/gtkprintbackendcups.c:4283
-#: modules/printbackends/cups/gtkprintbackendcups.c:4287
+#: modules/printbackends/cups/gtkprintbackendcups.c:4326
+#: modules/printbackends/cups/gtkprintbackendcups.c:4328
+#: modules/printbackends/cups/gtkprintbackendcups.c:4330
+#: modules/printbackends/cups/gtkprintbackendcups.c:4334
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Printera noklusējuma"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4289
+#: modules/printbackends/cups/gtkprintbackendcups.c:4336
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Iegult tikai GhostScript fontus"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4291
+#: modules/printbackends/cups/gtkprintbackendcups.c:4338
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Pārveidot uz PS level 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4293
+#: modules/printbackends/cups/gtkprintbackendcups.c:4340
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Pārveidot uz PS level 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4295
+#: modules/printbackends/cups/gtkprintbackendcups.c:4342
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Bez prefiltrēšanas"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4304
+#: modules/printbackends/cups/gtkprintbackendcups.c:4351
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Dažādi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4331
+#: modules/printbackends/cups/gtkprintbackendcups.c:4378
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Vienpusējs"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4333
+#: modules/printbackends/cups/gtkprintbackendcups.c:4380
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Garās malas iesējums"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4335
+#: modules/printbackends/cups/gtkprintbackendcups.c:4382
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Īsās malas iesējums"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4338
+#: modules/printbackends/cups/gtkprintbackendcups.c:4385
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Augšējā kaste"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4340
+#: modules/printbackends/cups/gtkprintbackendcups.c:4387
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Vidējā kaste"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4342
+#: modules/printbackends/cups/gtkprintbackendcups.c:4389
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Apakšējā kaste"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4344
+#: modules/printbackends/cups/gtkprintbackendcups.c:4391
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Sānu kaste"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4346
+#: modules/printbackends/cups/gtkprintbackendcups.c:4393
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Kreisā kaste"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4348
+#: modules/printbackends/cups/gtkprintbackendcups.c:4395
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Labā kaste"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4350
+#: modules/printbackends/cups/gtkprintbackendcups.c:4397
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Vidējā kaste"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4352
+#: modules/printbackends/cups/gtkprintbackendcups.c:4399
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Aizmugures kaste"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4354
+#: modules/printbackends/cups/gtkprintbackendcups.c:4401
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Augšupvērstā kaste"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4356
+#: modules/printbackends/cups/gtkprintbackendcups.c:4403
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Uz apakšu vērstā kaste"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4358
+#: modules/printbackends/cups/gtkprintbackendcups.c:4405
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Lielas ietilpības kaste"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4360
+#: modules/printbackends/cups/gtkprintbackendcups.c:4427
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Kaudzē licējs %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4362
+#: modules/printbackends/cups/gtkprintbackendcups.c:4431
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Pasta kaste %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4364
+#: modules/printbackends/cups/gtkprintbackendcups.c:4435
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Mana pasta kaste"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4366
+#: modules/printbackends/cups/gtkprintbackendcups.c:4439
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Paplāte %d"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4830
+#: modules/printbackends/cups/gtkprintbackendcups.c:4910
 msgid "Printer Default"
 msgstr "Printera noklusējuma"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5274
+#: modules/printbackends/cups/gtkprintbackendcups.c:5351
 msgid "Urgent"
 msgstr "Steidzama"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5274
+#: modules/printbackends/cups/gtkprintbackendcups.c:5351
 msgid "High"
 msgstr "Augsta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5274
+#: modules/printbackends/cups/gtkprintbackendcups.c:5351
 msgid "Medium"
 msgstr "Vidēja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5274
+#: modules/printbackends/cups/gtkprintbackendcups.c:5351
 msgid "Low"
 msgstr "Zema"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5304
+#: modules/printbackends/cups/gtkprintbackendcups.c:5381
 msgid "Job Priority"
 msgstr "Darba prioritāte"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5315
+#: modules/printbackends/cups/gtkprintbackendcups.c:5392
 msgid "Billing Info"
 msgstr "Rēķina informācija"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5339
+#: modules/printbackends/cups/gtkprintbackendcups.c:5416
 msgctxt "cover page"
 msgid "None"
 msgstr "Nav"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5340
+#: modules/printbackends/cups/gtkprintbackendcups.c:5417
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Īpaša"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5341
+#: modules/printbackends/cups/gtkprintbackendcups.c:5418
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Konfidenciāla"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5342
+#: modules/printbackends/cups/gtkprintbackendcups.c:5419
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Slepena"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5343
+#: modules/printbackends/cups/gtkprintbackendcups.c:5420
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Standarta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5344
+#: modules/printbackends/cups/gtkprintbackendcups.c:5421
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Pilnīgi slepena"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5345
+#: modules/printbackends/cups/gtkprintbackendcups.c:5422
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Brīvi pieejama"
@@ -6455,7 +6559,7 @@ msgstr "Brīvi pieejama"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5357
+#: modules/printbackends/cups/gtkprintbackendcups.c:5434
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Lappuses uz loksnes"
@@ -6463,7 +6567,7 @@ msgstr "Lappuses uz loksnes"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5374
+#: modules/printbackends/cups/gtkprintbackendcups.c:5451
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Lappušu secība"
@@ -6471,7 +6575,7 @@ msgstr "Lappušu secība"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5416
+#: modules/printbackends/cups/gtkprintbackendcups.c:5493
 msgctxt "printer option"
 msgid "Before"
 msgstr "Pirms"
@@ -6479,7 +6583,7 @@ msgstr "Pirms"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5431
+#: modules/printbackends/cups/gtkprintbackendcups.c:5508
 msgctxt "printer option"
 msgid "After"
 msgstr "Pēc"
@@ -6488,7 +6592,7 @@ msgstr "Pēc"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5451
+#: modules/printbackends/cups/gtkprintbackendcups.c:5528
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Drukāt"
@@ -6496,7 +6600,7 @@ msgstr "Drukāt"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5462
+#: modules/printbackends/cups/gtkprintbackendcups.c:5539
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Drukāt laikā"
@@ -6506,18 +6610,18 @@ msgstr "Drukāt laikā"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5504
+#: modules/printbackends/cups/gtkprintbackendcups.c:5581
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Pielāgots %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5613
+#: modules/printbackends/cups/gtkprintbackendcups.c:5690
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Printera profils"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5620
+#: modules/printbackends/cups/gtkprintbackendcups.c:5697
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Nav pieejams"
@@ -6612,3 +6716,4 @@ msgstr "testa-izvade.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Drukāt testa printeri"
+
