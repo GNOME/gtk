@@ -612,12 +612,24 @@ static void
 gdk_wayland_display_finalize (GObject *object)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
+  guint i;
 
   _gdk_wayland_display_finalize_cursors (display_wayland);
 
   g_object_unref (display_wayland->screen);
 
   g_free (display_wayland->startup_notification_id);
+  g_free (display_wayland->cursor_theme_name);
+  xkb_context_unref (display_wayland->xkb_context);
+
+  for (i = 0; i < GDK_WAYLAND_THEME_SCALES_COUNT; i++)
+    {
+      if (display_wayland->scaled_cursor_themes[i])
+        {
+          wl_cursor_theme_destroy (display_wayland->scaled_cursor_themes[i]);
+          display_wayland->scaled_cursor_themes[i] = NULL;
+        }
+    }
 
   g_ptr_array_free (display_wayland->monitors, TRUE);
 
