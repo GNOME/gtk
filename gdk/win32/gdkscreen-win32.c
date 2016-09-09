@@ -386,14 +386,6 @@ gdk_win32_screen_get_root_window (GdkScreen *screen)
   return GDK_WIN32_SCREEN (screen)->root_window;
 }
 
-static gint
-gdk_win32_screen_get_number (GdkScreen *screen)
-{
-  g_return_val_if_fail (screen == gdk_display_get_default_screen (gdk_display_get_default ()), 0);
-
-  return 0;
-}
-
 static gchar *
 gdk_win32_screen_make_display_name (GdkScreen *screen)
 {
@@ -549,7 +541,6 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   object_class->finalize = gdk_win32_screen_finalize;
 
   screen_class->get_display = gdk_win32_screen_get_display;
-  screen_class->get_number = gdk_win32_screen_get_number;
   screen_class->get_root_window = gdk_win32_screen_get_root_window;
   screen_class->is_composited = gdk_win32_screen_is_composited;
   screen_class->make_display_name = gdk_win32_screen_make_display_name;

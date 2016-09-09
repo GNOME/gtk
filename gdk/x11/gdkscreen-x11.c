@@ -79,12 +79,6 @@ gdk_x11_screen_get_display (GdkScreen *screen)
   return GDK_X11_SCREEN (screen)->display;
 }
 
-static gint
-gdk_x11_screen_get_number (GdkScreen *screen)
-{
-  return GDK_X11_SCREEN (screen)->screen_num;
-}
-
 static GdkWindow *
 gdk_x11_screen_get_root_window (GdkScreen *screen)
 {
@@ -118,7 +112,6 @@ gdk_x11_screen_dispose (GObject *object)
 
   x11_screen->xdisplay = NULL;
   x11_screen->xscreen = NULL;
-  x11_screen->screen_num = -1;
   x11_screen->xroot_window = None;
   x11_screen->wmspec_check_window = None;
 }
@@ -1085,7 +1078,7 @@ gdk_x11_screen_make_display_name (GdkScreen *screen)
   old_display = gdk_display_get_name (gdk_screen_get_display (screen));
 
   return substitute_screen_number (old_display,
-                                   gdk_screen_get_number (screen));
+                                   gdk_x11_screen_get_screen_number (screen));
 }
 
 static GdkWindow *
@@ -1476,7 +1469,6 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
   object_class->finalize = gdk_x11_screen_finalize;
 
   screen_class->get_display = gdk_x11_screen_get_display;
-  screen_class->get_number = gdk_x11_screen_get_number;
   screen_class->get_root_window = gdk_x11_screen_get_root_window;
   screen_class->get_system_visual = _gdk_x11_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_x11_screen_get_rgba_visual;

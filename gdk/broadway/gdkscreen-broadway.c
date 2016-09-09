@@ -48,12 +48,6 @@ gdk_broadway_screen_get_display (GdkScreen *screen)
   return GDK_BROADWAY_SCREEN (screen)->display;
 }
 
-static gint
-gdk_broadway_screen_get_number (GdkScreen *screen)
-{
-  return 0;
-}
-
 static GdkWindow *
 gdk_broadway_screen_get_root_window (GdkScreen *screen)
 {
@@ -207,7 +201,6 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
   object_class->finalize = gdk_broadway_screen_finalize;
 
   screen_class->get_display = gdk_broadway_screen_get_display;
-  screen_class->get_number = gdk_broadway_screen_get_number;
   screen_class->get_root_window = gdk_broadway_screen_get_root_window;
   screen_class->is_composited = gdk_broadway_screen_is_composited;
   screen_class->make_display_name = gdk_broadway_screen_make_display_name;

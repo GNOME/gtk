@@ -44,7 +44,6 @@ struct _GdkScreenClass
   GObjectClass parent_class;
 
   GdkDisplay * (* get_display)           (GdkScreen *screen);
-  gint         (* get_number)            (GdkScreen *screen);
   GdkWindow *  (* get_root_window)       (GdkScreen *screen);
   gint         (* get_n_monitors)        (GdkScreen *screen);
   gint         (* get_primary_monitor)   (GdkScreen *screen);

@@ -111,12 +111,6 @@ gdk_wayland_screen_get_display (GdkScreen *screen)
   return GDK_WAYLAND_SCREEN (screen)->display;
 }
 
-static gint
-gdk_wayland_screen_get_number (GdkScreen *screen)
-{
-  return 0;
-}
-
 static GdkWindow *
 gdk_wayland_screen_get_root_window (GdkScreen *screen)
 {
@@ -820,7 +814,6 @@ _gdk_wayland_screen_class_init (GdkWaylandScreenClass *klass)
   object_class->finalize = gdk_wayland_screen_finalize;
 
   screen_class->get_display = gdk_wayland_screen_get_display;
-  screen_class->get_number = gdk_wayland_screen_get_number;
   screen_class->get_root_window = gdk_wayland_screen_get_root_window;
   screen_class->get_system_visual = gdk_wayland_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_wayland_screen_get_rgba_visual;

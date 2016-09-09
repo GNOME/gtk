@@ -236,14 +236,6 @@ gdk_mir_screen_get_height_mm (GdkScreen *screen)
   return height;
 }
 
-static gint
-gdk_mir_screen_get_number (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_number\n");
-  /* There is only one screen... */
-  return 0;
-}
-
 static GdkWindow *
 gdk_mir_screen_get_root_window (GdkScreen *screen)
 {
@@ -814,7 +806,6 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
   screen_class->get_height = gdk_mir_screen_get_height;
   screen_class->get_width_mm = gdk_mir_screen_get_width_mm;
   screen_class->get_height_mm = gdk_mir_screen_get_height_mm;
-  screen_class->get_number = gdk_mir_screen_get_number;
   screen_class->get_root_window = gdk_mir_screen_get_root_window;
   screen_class->get_n_monitors = gdk_mir_screen_get_n_monitors;
   screen_class->get_primary_monitor = gdk_mir_screen_get_primary_monitor;

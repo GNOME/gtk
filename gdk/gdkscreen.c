@@ -366,25 +366,6 @@ gdk_screen_get_display (GdkScreen *screen)
 }
 
 /**
- * gdk_screen_get_number:
- * @screen: a #GdkScreen
- *
- * Gets the index of @screen among the screens in the display
- * to which it belongs. (See gdk_screen_get_display())
- *
- * Returns: the index
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_number (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_number (screen);
-}
-
-/**
  * gdk_screen_get_root_window:
  * @screen: a #GdkScreen
  *

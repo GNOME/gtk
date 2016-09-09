@@ -434,7 +434,7 @@ gdk_x11_ungrab_server (void)
 gint
 gdk_x11_get_default_screen (void)
 {
-  return gdk_screen_get_number (gdk_screen_get_default ());
+  return gdk_x11_screen_get_screen_number (gdk_screen_get_default ());
 }
 
 /**
