@@ -40,38 +40,12 @@ G_DEFINE_TYPE (GdkBroadwayScreen, gdk_broadway_screen, GDK_TYPE_SCREEN)
 static void
 gdk_broadway_screen_init (GdkBroadwayScreen *screen)
 {
-  screen->width = 1024;
-  screen->height = 768;
 }
 
 static GdkDisplay *
 gdk_broadway_screen_get_display (GdkScreen *screen)
 {
   return GDK_BROADWAY_SCREEN (screen)->display;
-}
-
-static gint
-gdk_broadway_screen_get_width (GdkScreen *screen)
-{
-  return GDK_BROADWAY_SCREEN (screen)->width;
-}
-
-static gint
-gdk_broadway_screen_get_height (GdkScreen *screen)
-{
-  return GDK_BROADWAY_SCREEN (screen)->height;
-}
-
-static gint
-gdk_broadway_screen_get_width_mm (GdkScreen *screen)
-{
-  return gdk_screen_get_width (screen) * 25.4 / 96;
-}
-
-static gint
-gdk_broadway_screen_get_height_mm (GdkScreen *screen)
-{
-  return gdk_screen_get_height (screen) * 25.4 / 96;
 }
 
 static gint
@@ -92,25 +66,19 @@ _gdk_broadway_screen_size_changed (GdkScreen                       *screen,
 {
   GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (screen);
   GdkMonitor *monitor;
-  gint width, height;
+  GdkRectangle size;
   GList *toplevels, *l;
 
-  width = gdk_screen_get_width (screen);
-  height = gdk_screen_get_height (screen);
-
-  broadway_screen->width   = msg->width;
-  broadway_screen->height  = msg->height;
-
-  if (width == gdk_screen_get_width (screen) &&
-      height == gdk_screen_get_height (screen))
-    return;
-
   monitor = GDK_BROADWAY_DISPLAY (broadway_screen->display)->monitor;
+  gdk_monitor_get_geometry (monitor, &size);
+
+  if (msg->width == size.width &&
+      msg->height == size.height)
+    return;
 
   gdk_monitor_set_size (monitor, msg->width, msg->height);
   gdk_monitor_set_physical_size (monitor, msg->width * 25.4 / 96, msg->height * 25.4 / 96);
 
-  g_signal_emit_by_name (screen, "size-changed");
   toplevels = gdk_screen_get_toplevel_windows (screen);
   for (l = toplevels; l != NULL; l = l->next)
     {
@@ -118,9 +86,7 @@ _gdk_broadway_screen_size_changed (GdkScreen                       *screen,
       GdkWindowImplBroadway *toplevel_impl = GDK_WINDOW_IMPL_BROADWAY (toplevel->impl);
 
       if (toplevel_impl->maximized)
-	gdk_window_move_resize (toplevel, 0, 0,
-				gdk_screen_get_width (screen),
-				gdk_screen_get_height (screen));
+	gdk_window_move_resize (toplevel, 0, 0, msg->width, msg->height);
     }
 }
 
@@ -241,10 +207,6 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
   object_class->finalize = gdk_broadway_screen_finalize;
 
   screen_class->get_display = gdk_broadway_screen_get_display;
-  screen_class->get_width = gdk_broadway_screen_get_width;
-  screen_class->get_height = gdk_broadway_screen_get_height;
-  screen_class->get_width_mm = gdk_broadway_screen_get_width_mm;
-  screen_class->get_height_mm = gdk_broadway_screen_get_height_mm;
   screen_class->get_number = gdk_broadway_screen_get_number;
   screen_class->get_root_window = gdk_broadway_screen_get_root_window;
   screen_class->is_composited = gdk_broadway_screen_is_composited;

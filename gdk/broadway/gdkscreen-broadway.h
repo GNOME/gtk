@@ -47,9 +47,6 @@ struct _GdkBroadwayScreen
   GdkDisplay *display;
   GdkWindow *root_window;
 
-  int width;
-  int height;
-
   /* Visual Part */
   GdkVisual **visuals;
   gint nvisuals;

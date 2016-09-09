@@ -231,8 +231,8 @@ _gdk_broadway_screen_init_root_window (GdkScreen * screen)
   window->y = 0;
   window->abs_x = 0;
   window->abs_y = 0;
-  window->width = gdk_screen_get_width (screen);
-  window->height = gdk_screen_get_height (screen);
+  window->width = 1024;
+  window->height = 768;
   window->viewable = TRUE;
 
   _gdk_window_update_size (broadway_screen->root_window);
@@ -887,7 +887,9 @@ static void
 gdk_broadway_window_maximize (GdkWindow *window)
 {
   GdkWindowImplBroadway *impl;
-  GdkScreen *screen;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle geom;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -907,11 +909,13 @@ gdk_broadway_window_maximize (GdkWindow *window)
   impl->pre_maximize_width = window->width;
   impl->pre_maximize_height = window->height;
 
-  screen = gdk_window_get_screen (window);
+  display = gdk_window_get_display (window);
+  monitor = gdk_display_get_primary_monitor (display);
+  gdk_monitor_get_geometry (monitor, &geom);
 
-  gdk_window_move_resize (window, 0, 0,
-			  gdk_screen_get_width (screen),
-			  gdk_screen_get_height (screen));
+  gdk_window_move_resize (window,
+                          geom.x, geom.y,
+                          geom.width, geom.height);
 }
 
 static void

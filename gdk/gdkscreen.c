@@ -105,25 +105,6 @@ gdk_screen_class_init (GdkScreenClass *klass)
 							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
 
   /**
-   * GdkScreen::size-changed:
-   * @screen: the object on which the signal is emitted
-   * 
-   * The ::size-changed signal is emitted when the pixel width or 
-   * height of a screen changes.
-   *
-   * Since: 2.2
-   */
-  signals[SIZE_CHANGED] =
-    g_signal_new (g_intern_static_string ("size-changed"),
-                  G_OBJECT_CLASS_TYPE (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkScreenClass, size_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE,
-                  0);
-
-  /**
    * GdkScreen::composited-changed:
    * @screen: the object on which the signal is emitted
    *
@@ -192,66 +173,6 @@ _gdk_screen_close (GdkScreen *screen)
       screen->closed = TRUE;
       g_object_run_dispose (G_OBJECT (screen));
     }
-}
-
-/**
- * gdk_screen_width:
- *
- * Gets the width of the default screen in pixels. The returned
- * size is in ”application pixels”, not in ”device pixels” (see
- * gdk_screen_get_monitor_scale_factor()).
- *
- * Returns: the width of the default screen in pixels.
- **/
-gint
-gdk_screen_width (void)
-{
-  return gdk_screen_get_width (gdk_screen_get_default ());
-}
-
-/**
- * gdk_screen_height:
- *
- * Gets the height of the default screen in pixels. The returned
- * size is in ”application pixels”, not in ”device pixels” (see
- * gdk_screen_get_monitor_scale_factor()).
- *
- * Returns: the height of the default screen in pixels.
- **/
-gint
-gdk_screen_height (void)
-{
-  return gdk_screen_get_height (gdk_screen_get_default ());
-}
-
-/**
- * gdk_screen_width_mm:
- *
- * Returns the width of the default screen in millimeters.
- * Note that on many X servers this value will not be correct.
- *
- * Returns: the width of the default screen in millimeters,
- * though it is not always correct.
- **/
-gint
-gdk_screen_width_mm (void)
-{
-  return gdk_screen_get_width_mm (gdk_screen_get_default ());
-}
-
-/**
- * gdk_screen_height_mm:
- *
- * Returns the height of the default screen in millimeters.
- * Note that on many X servers this value will not be correct.
- *
- * Returns: the height of the default screen in millimeters,
- * though it is not always correct.
- **/
-gint
-gdk_screen_height_mm (void)
-{
-  return gdk_screen_get_height_mm (gdk_screen_get_default ());
 }
 
 /**
@@ -442,91 +363,6 @@ gdk_screen_get_display (GdkScreen *screen)
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   return GDK_SCREEN_GET_CLASS (screen)->get_display (screen);
-}
-
-
-/**
- * gdk_screen_get_width:
- * @screen: a #GdkScreen
- *
- * Gets the width of @screen in pixels. The returned size is in
- * ”application pixels”, not in ”device pixels” (see
- * gdk_screen_get_monitor_scale_factor()).
- *
- * Returns: the width of @screen in pixels.
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_width (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_width (screen);
-}
-
-/**
- * gdk_screen_get_height:
- * @screen: a #GdkScreen
- *
- * Gets the height of @screen in pixels. The returned size is in
- * ”application pixels”, not in ”device pixels” (see
- * gdk_screen_get_monitor_scale_factor()).
- *
- * Returns: the height of @screen in pixels.
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_height (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_height (screen);
-}
-
-/**
- * gdk_screen_get_width_mm:
- * @screen: a #GdkScreen
- *
- * Gets the width of @screen in millimeters.
- *
- * Note that this value is somewhat ill-defined when the screen
- * has multiple monitors of different resolution. It is recommended
- * to use the monitor dimensions instead.
- *
- * Returns: the width of @screen in millimeters.
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_width_mm (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_width_mm (screen);
-}
-
-/**
- * gdk_screen_get_height_mm:
- * @screen: a #GdkScreen
- *
- * Returns the height of @screen in millimeters.
- *
- * Note that this value is somewhat ill-defined when the screen
- * has multiple monitors of different resolution. It is recommended
- * to use the monitor dimensions instead.
- *
- * Returns: the heigth of @screen in millimeters.
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_height_mm (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_height_mm (screen);
 }
 
 /**

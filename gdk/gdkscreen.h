@@ -54,14 +54,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
 GDK_AVAILABLE_IN_ALL
 gint         gdk_screen_get_number            (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
-gint         gdk_screen_get_width             (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
-gint         gdk_screen_get_height            (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
-gint         gdk_screen_get_width_mm          (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
-gint         gdk_screen_get_height_mm         (GdkScreen   *screen);
 
 GDK_AVAILABLE_IN_ALL
 GList *      gdk_screen_list_visuals          (GdkScreen   *screen);

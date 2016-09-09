@@ -43,9 +43,6 @@ struct _GdkX11Screen
   GdkWindow *root_window;
   gint screen_num;
 
-  gint width;
-  gint height;
-
   gint window_scale;
   gboolean fixed_window_scale;
 

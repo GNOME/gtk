@@ -380,30 +380,6 @@ gdk_win32_screen_get_display (GdkScreen *screen)
   return _gdk_display;
 }
 
-static gint
-gdk_win32_screen_get_width (GdkScreen *screen)
-{
-  return GDK_WIN32_SCREEN (screen)->root_window->width;
-}
-
-static gint
-gdk_win32_screen_get_height (GdkScreen *screen)
-{
-  return GDK_WIN32_SCREEN (screen)->root_window->height;
-}
-
-static gint
-gdk_win32_screen_get_width_mm (GdkScreen *screen)
-{
-  return (double) gdk_screen_get_width (screen) / GetDeviceCaps (_gdk_display_hdc, LOGPIXELSX) * 25.4;
-}
-
-static gint
-gdk_win32_screen_get_height_mm (GdkScreen *screen)
-{
-  return (double) gdk_screen_get_height (screen) / GetDeviceCaps (_gdk_display_hdc, LOGPIXELSY) * 25.4;
-}
-
 static GdkWindow *
 gdk_win32_screen_get_root_window (GdkScreen *screen)
 {
@@ -573,10 +549,6 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   object_class->finalize = gdk_win32_screen_finalize;
 
   screen_class->get_display = gdk_win32_screen_get_display;
-  screen_class->get_width = gdk_win32_screen_get_width;
-  screen_class->get_height = gdk_win32_screen_get_height;
-  screen_class->get_width_mm = gdk_win32_screen_get_width_mm;
-  screen_class->get_height_mm = gdk_win32_screen_get_height_mm;
   screen_class->get_number = gdk_win32_screen_get_number;
   screen_class->get_root_window = gdk_win32_screen_get_root_window;
   screen_class->is_composited = gdk_win32_screen_is_composited;

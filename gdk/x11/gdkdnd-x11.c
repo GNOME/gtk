@@ -638,8 +638,8 @@ gdk_window_cache_new (GdkScreen *screen)
     {
       cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
       gdk_window_cache_add (result, cow, 0, 0, 
-			    gdk_screen_get_width (screen) * GDK_X11_SCREEN(screen)->window_scale, 
-			    gdk_screen_get_height (screen) * GDK_X11_SCREEN(screen)->window_scale, 
+			    gdk_window_get_width (root_window) * GDK_X11_SCREEN(screen)->window_scale, 
+			    gdk_window_get_height (root_window) * GDK_X11_SCREEN(screen)->window_scale, 
 			    TRUE);
       XCompositeReleaseOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
     }

@@ -105,16 +105,6 @@ gboolean      gdk_pointer_is_grabbed (void);
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 GDK_AVAILABLE_IN_ALL
-gint gdk_screen_width  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-gint gdk_screen_height (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
-gint gdk_screen_width_mm  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-gint gdk_screen_height_mm (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
 void gdk_set_double_click_time (guint msec);
 
 GDK_AVAILABLE_IN_ALL
