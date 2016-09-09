@@ -137,6 +137,7 @@ cdata.set('HAVE_XKB', 1)
 cdata.set('HAVE_XDAMAGE', 1)
 cdata.set('HAVE_XCURSOR', 1)
 cdata.set('HAVE_XGENERICEVENTS', 1)
+cdata.set('HAVE_RANDR', 1)
 
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
@@ -170,6 +171,7 @@ wlclientdep    = dependency('wayland-client')
 wlprotocolsdep = dependency('wayland-protocols', version: '>= 1.7')
 wlcursordep    = dependency('wayland-cursor')
 wlegldep       = dependency('wayland-egl')
+xrandr_dep     = dependency('xrandr')
 
 if giounix_dep.found()
   cdata.set('HAVE_GIO_UNIX', 1)
@@ -183,6 +185,6 @@ configure_file(
 
 subdir('gdk')
 subdir('gtk')
-subdir('demos')
+# subdir('demos')
 # subdir('tests')
 # subdir('testsuite')
