@@ -2,7 +2,7 @@ subdir('deprecated')
 subdir('a11y')
 subdir('inspector')
 
-gtk_sources = [
+gtk_sources = files([
   'gtkactionmuxer.c',
   'gtkactionobserver.c',
   'gtkactionobservable.c',
@@ -364,15 +364,14 @@ gtk_sources = [
   'gtkwindowgroup.c',
   'gtkwin32theme.c',
   'fallback-c89.c'
-]
+])
 
-gtk_private_type_headers = [
+gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
   'gtktexthandleprivate.h',
-]
+])
 
-gtk_private_h_sources = files([
-  gtk_private_type_headers,
+gtk_private_h_sources = gtk_private_type_headers + files([
   'gtkrecentchooserutils.h',
   'gtkrbtree.h',
 ])
@@ -601,7 +600,7 @@ gtk_public_h_sources = files([
   'gtkwindowgroup.h',
 ])
 
-gtk_deprecated_type_headers = ([
+gtk_deprecated_type_headers = files([
   'deprecated/gtkactivatable.h',
   'deprecated/gtkaction.h',
   'deprecated/gtkactiongroup.h',
@@ -644,7 +643,7 @@ gtk_deprecated_type_headers = ([
   'deprecated/gtkvpaned.h',
 ])
 
-gtk_unix_sources = [
+gtk_unix_sources = files([
   'gtkcustompaperunixdialog.c',
   'gtkpagesetupunixdialog.c',
   'gtkprinter.c',
@@ -656,7 +655,7 @@ gtk_unix_sources = [
   'gtkprintunixdialog.c',
   'gtkprintbackend.c',
   'gtksearchenginetracker.c',
-]
+])
 
 gtkresources = gnome.compile_resources(
   'gtkresources',
@@ -666,25 +665,27 @@ gtkresources = gnome.compile_resources(
   extra_args: '--manual-register'
 )
 
-gtk_x11_sources = [
+gtk_x11_sources = files([
   'gtkplug.c',
   'gtksocket.c',
   'gtkxembed.c',
   'deprecated/gtktrayicon-x11.c',
   'gtkapplication-x11.c',
   'gtkmountoperation-x11.c',
-]
+])
 
-gtk_wayland_sources = [
+gtk_wayland_sources = files([
   'gtkapplication-wayland.c'
-]
+])
 
-dnd_sources = [
+dnd_sources = files([
   'gtkclipboard.c',
   'gtkdnd.c'
-]
+])
 
-gtk_use_wayland_or_x11_c_sources = ['gtkapplication-dbus.c']
+gtk_use_wayland_or_x11_c_sources = files([
+  'gtkapplication-dbus.c'
+])
 
 gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated', 'gtkdbusinterfaces.xml',
                                    interface_prefix: 'org.Gtk.',
@@ -762,8 +763,7 @@ gtkversion = configure_file(
   configuration: cdata
 )
 
-gtk_sources = [
-  gtk_sources,
+gtk_sources += [
   gtk_dbus_src,
   gtk_unix_sources,
   gtk_deprecated_c_sources,
@@ -772,32 +772,28 @@ gtk_sources = [
   a11y_sources,
   gtkresources,
   gtkmarshal_c,
-  gtkmarshal_h,
   gtkprivatetypebuiltins_c,
-  gtkprivatetypebuiltins_h,
   gtktypebuiltins_c,
-  gtktypebuiltins_h,
 ]
 
 gtk_deps = [
-    gmodule_dep,
-    giounix_dep,
-    glib_dep,
-    atkbridge_dep,
-    pangocairo_dep,
-    pangoft_dep,
-    pango_dep,
-    cairogobj_dep,
-    cairo_dep,
-    fontconfig_dep,
-    pixbuf_dep,
-    atk_dep,
-    epoxy_dep,
-    mlib,
-    libgdk_dep
+  gmodule_dep,
+  giounix_dep,
+  glib_dep,
+  atkbridge_dep,
+  pangocairo_dep,
+  pangoft_dep,
+  pango_dep,
+  cairogobj_dep,
+  cairo_dep,
+  fontconfig_dep,
+  pixbuf_dep,
+  atk_dep,
+  epoxy_dep,
+  mlib,
 ]
 
-# if x11_enabled
+if x11_enabled
   gtk_sources += [
     gtk_x11_sources,
     gtk_use_wayland_or_x11_c_sources
@@ -806,7 +802,7 @@ gtk_deps = [
     xi_dep,
     x11_dep,
   ]
-# endif
+endif
 
 if wayland_enabled
   gtk_sources += [
@@ -841,5 +837,3 @@ libgtk_dep = declare_dependency(
   link_with: [libgtk, libgdk],
   include_directories: [confinc, gtkinc]
 )
-
-

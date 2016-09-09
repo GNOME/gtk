@@ -333,7 +333,8 @@ if x11_enabled
     xcursor_dep,
     xdamage_dep,
     xfixes_dep,
-    xcomposite_dep
+    xcomposite_dep,
+    xrandr_dep
   ]
   gdk_sources += [
     gdk_x_sources,
