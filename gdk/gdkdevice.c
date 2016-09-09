@@ -1784,6 +1784,8 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
                                     GdkWindow *window,
                                     gdouble    window_root_x,
                                     gdouble    window_root_y,
+                                    gdouble    screen_width,
+                                    gdouble    screen_height,
                                     guint      index_,
                                     gdouble    value,
                                     gdouble   *axis_value)
@@ -1808,7 +1810,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
   if (axis_info.use == GDK_AXIS_X)
     {
       if (axis_width > 0)
-        scale = gdk_screen_get_width (gdk_window_get_screen (window)) / axis_width;
+        scale = screen_width / axis_width;
       else
         scale = 1;
 
@@ -1817,7 +1819,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
   else
     {
       if (axis_width > 0)
-        scale = gdk_screen_get_height (gdk_window_get_screen (window)) / axis_width;
+        scale = screen_height / axis_width;
       else
         scale = 1;
 

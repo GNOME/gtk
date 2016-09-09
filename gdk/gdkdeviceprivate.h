@@ -152,6 +152,8 @@ gboolean   _gdk_device_translate_screen_coord (GdkDevice *device,
                                                GdkWindow *window,
                                                gdouble    window_root_x,
                                                gdouble    window_root_y,
+                                               gdouble    screen_width,
+                                               gdouble    screen_height,
                                                guint      index,
                                                gdouble    value,
                                                gdouble   *axis_value);

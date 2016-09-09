@@ -243,12 +243,16 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
                 _gdk_device_translate_window_coord (device, window, j, value, &axes[j]);
               else
                 {
+                  GdkWindow *root_window;
                   gint root_x, root_y;
 
+                  root_window = gdk_screen_get_root_window (gdk_window_get_screen (window));
                   /* FIXME: Maybe root coords chaching should happen here */
                   gdk_window_get_origin (window, &root_x, &root_y);
                   _gdk_device_translate_screen_coord (device, window,
                                                       root_x, root_y,
+                                                      gdk_window_get_width (root_window),
+                                                      gdk_window_get_height (root_window),
                                                       j, value,
                                                       &axes[j]);
                 }

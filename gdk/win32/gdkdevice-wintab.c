@@ -219,12 +219,13 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
                                    gdouble         *y)
 {
   GdkDevice *device;
-  GdkWindow *impl_window;
+  GdkWindow *impl_window, *root_window;
   gint root_x, root_y;
   gdouble temp_x, temp_y;
   gint i;
 
   device = GDK_DEVICE (device_wintab);
+  root_window = gdk_screen_get_root_window (gdk_window_get_screen (window));
   impl_window = _gdk_window_get_impl_window (window);
   temp_x = temp_y = 0;
 
@@ -246,7 +247,10 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
                                                 &axes[i]);
           else
             _gdk_device_translate_screen_coord (device, window,
-                                                root_x, root_y, i,
+                                                root_x, root_y,
+                                                gdk_window_get_width (root_window),
+                                                gdk_window_get_height (root_window),
+                                                i,
                                                 device_wintab->last_axis_data[i],
                                                 &axes[i]);
           if (use == GDK_AXIS_X)
