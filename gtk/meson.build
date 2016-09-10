@@ -737,8 +737,7 @@ gtkprivatetypebuiltins_c = custom_target(
   command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtkprivatetypebuiltins.c.template', '@OUTPUT@', '@INPUT@']
 )
 
-d_compiler = find_program('dmd')
-gentypefuncs_prog = find_program('gentypefuncs.d')
+gentypefuncs_prog = find_program('gentypefuncs.py')
 # Generate gtktypefuncs.c
 typefuncs = custom_target(
   'typefuncs',
