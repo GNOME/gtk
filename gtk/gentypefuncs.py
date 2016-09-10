@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys
@@ -13,12 +13,12 @@ in_files = sys.argv[2:]
 funcs = []
 
 
-if debug: print 'Output file: ', out_file
+if debug: print ('Output file: ', out_file)
 
-if debug: print len(in_files), 'input files'
+if debug: print (len(in_files), 'input files')
 
 for filename in in_files:
-  if debug: print 'Input file: ', filename
+  if debug: print ('Input file: ', filename)
   with open(filename, "r") as f:
     for line in f:
       line = line.rstrip('\n').rstrip('\r')
@@ -28,7 +28,7 @@ for filename in in_files:
         func = match.group(0)
         if not func in funcs:
           funcs.append(func)
-          if debug: print 'Found', func
+          if debug: print ('Found ', func)
 
 file_output = 'G_GNUC_BEGIN_IGNORE_DEPRECATIONS\n'
 
@@ -42,7 +42,7 @@ for f in funcs:
   else:
     file_output += '*tp++ = {0}();\n'.format(f)
 
-if debug: print len(funcs), 'functions'
+if debug: print (len(funcs), 'functions')
 
 ofile = open(out_file, "w")
 ofile.write(file_output)
