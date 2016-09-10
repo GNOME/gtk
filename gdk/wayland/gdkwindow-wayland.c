@@ -32,7 +32,7 @@
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkprivate-wayland.h"
-#include "xdg-shell-unstable-v6-client-protocol.h"
+#include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -3253,9 +3253,9 @@ gdk_wayland_window_fullscreen_on_monitor (GdkWindow *window, gint monitor)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkScreen *screen = gdk_window_get_screen (window);
-  struct wl_output *fullscreen_output = 
+  struct wl_output *fullscreen_output =
     _gdk_wayland_screen_get_wl_output (screen, monitor);
-  
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
@@ -3293,7 +3293,7 @@ static void
 gdk_wayland_window_unfullscreen (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
