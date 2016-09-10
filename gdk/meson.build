@@ -133,80 +133,75 @@ gdk_x_private_sources = [
   'x11/gdkdevicemanagerprivate-core.h',
 ]
 
-# gdk_wayland_sources = [
-  # 'wayland/gdkapplaunchcontext-wayland.c',
-  # 'wayland/gdkcursor-wayland.c',
-  # 'wayland/gdkdevice-wayland.c',
-  # 'wayland/gdkdisplay-wayland.c',
-  # 'wayland/gdkdisplay-wayland.h',
-  # 'wayland/gdkdnd-wayland.c',
-  # 'wayland/gdkeventsource.c',
-  # 'wayland/gdkglcontext-wayland.c',
-  # 'wayland/gdkglcontext-wayland.h',
-  # 'wayland/gdkkeys-wayland.c',
-  # 'wayland/gdkmonitor-wayland.c',
-  # 'wayland/gdkmonitor-wayland.h',
-  # 'wayland/gdkscreen-wayland.c',
-  # 'wayland/gdkseat-wayland.h',
-  # 'wayland/gdkselection-wayland.c',
-  # 'wayland/gdkwaylanddevice.h',
-  # 'wayland/gdkwaylanddisplay.h',
-  # 'wayland/gdkwaylandglcontext.h',
-  # 'wayland/gdkwayland.h',
-  # 'wayland/gdkwaylandmonitor.h',
-  # 'wayland/gdkwaylandselection.h',
-  # 'wayland/gdkwaylandwindow.h',
-  # 'wayland/gdkwindow-wayland.c',
-  # 'wayland/wm-button-layout-translation.c',
-  # 'wayland/gtk-primary-selection-protocol.c',
-  # 'wayland/gtk-shell-protocol.c',
-  # 'wayland/xdg-shell-unstable-v5-protocol.c',
-  # 'wayland/pointer-gestures-unstable-v1-protocol.c',
-  # 'wayland/tablet-unstable-v2-protocol.c',
-# ]
+gdk_wayland_sources = files([
+  'wayland/gdkapplaunchcontext-wayland.c',
+  'wayland/gdkcursor-wayland.c',
+  'wayland/gdkdevice-wayland.c',
+  'wayland/gdkdisplay-wayland.c',
+  'wayland/gdkdisplay-wayland.h',
+  'wayland/gdkdnd-wayland.c',
+  'wayland/gdkeventsource.c',
+  'wayland/gdkglcontext-wayland.c',
+  'wayland/gdkglcontext-wayland.h',
+  'wayland/gdkkeys-wayland.c',
+  'wayland/gdkmonitor-wayland.c',
+  'wayland/gdkmonitor-wayland.h',
+  'wayland/gdkscreen-wayland.c',
+  'wayland/gdkseat-wayland.h',
+  'wayland/gdkselection-wayland.c',
+  'wayland/gdkwaylanddevice.h',
+  'wayland/gdkwaylanddisplay.h',
+  'wayland/gdkwaylandglcontext.h',
+  'wayland/gdkwayland.h',
+  'wayland/gdkwaylandmonitor.h',
+  'wayland/gdkwaylandselection.h',
+  'wayland/gdkwaylandwindow.h',
+  'wayland/gdkwindow-wayland.c',
+  'wayland/wm-button-layout-translation.c',
+])
 
-# gdk_wayland_private_sources = [
-  # 'wayland/gdkprivate-wayland.h',
-# ]
+gdk_wayland_private_sources = files([
+  'wayland/gdkprivate-wayland.h',
+])
 
 
 
-# gdk_broadway_sources = [
-  # 'broadway/gdkdisplay-broadway.c',
-  # 'broadway/gdkdisplay-broadway.h',
-  # 'broadway/gdkscreen-broadway.c',
-  # 'broadway/gdkscreen-broadway.h',
-  # 'broadway/broadway-output.c',
-  # 'broadway/broadway-output.h',
-  # 'broadway/broadway-server.h',
-  # 'broadway/broadway-server.c',
-  # 'broadway/gdkbroadway-server.c',
-  # 'broadway/gdkcursor-broadway.c',
-  # 'broadway/gdkvisual-broadway.c',
-  # 'broadway/gdkselection-broadway.c',
-  # 'broadway/gdkwindow-broadway.c',
-  # 'broadway/gdkwindow-broadway.h',
-  # 'broadway/gdkmonitor-broadway.c',
-  # 'broadway/gdkmonitor-broadway.h',
-  # 'broadway/gdkkeys-broadway.c',
-  # 'broadway/gdkglobals-broadway.c',
-  # 'broadway/gdkeventsource.c',
-  # 'broadway/gdkeventsource.h',
-  # 'broadway/gdkdnd-broadway.c',
-  # 'broadway/broadwayd.c',
-  # 'broadway/gdkdevicemanager-broadway.c',
-  # 'broadway/gdkdevicemanager-broadway.h',
-  # 'broadway/gdkdevice-broadway.c',
-  # 'broadway/gdkdevice-broadway.h',
-  # 'broadway/broadway-buffer.c',
-  # 'broadway/broadway-buffer.h',
-  # 'broadway/gdktestutils-broadway.c',
-  # 'broadway/gdkproperty-broadway.c'
-# ]
+gdk_broadway_sources = files([
+  'broadway/gdkdisplay-broadway.c',
+  'broadway/gdkdisplay-broadway.h',
+  'broadway/gdkscreen-broadway.c',
+  'broadway/gdkscreen-broadway.h',
+  'broadway/broadway-output.c',
+  'broadway/broadway-output.h',
+  'broadway/broadway-server.h',
+  'broadway/broadway-server.c',
+  'broadway/gdkbroadway-server.c',
+  'broadway/gdkcursor-broadway.c',
+  'broadway/gdkvisual-broadway.c',
+  'broadway/gdkselection-broadway.c',
+  'broadway/gdkwindow-broadway.c',
+  'broadway/gdkwindow-broadway.h',
+  'broadway/gdkmonitor-broadway.c',
+  'broadway/gdkmonitor-broadway.h',
+  'broadway/gdkkeys-broadway.c',
+  'broadway/gdkglobals-broadway.c',
+  'broadway/gdkeventsource.c',
+  'broadway/gdkeventsource.h',
+  'broadway/gdkdnd-broadway.c',
+  'broadway/broadwayd.c',
+  'broadway/gdkdevicemanager-broadway.c',
+  'broadway/gdkdevicemanager-broadway.h',
+  'broadway/gdkdevice-broadway.c',
+  'broadway/gdkdevice-broadway.h',
+  'broadway/broadway-buffer.c',
+  'broadway/broadway-buffer.h',
+  'broadway/gdktestutils-broadway.c',
+  'broadway/gdkproperty-broadway.c'
+])
 
-# gdk_broadway_private_sources = [
-  # 'broadway/gdkprivate-broadway.h'
-# ]
+gdk_broadway_private_sources = files([
+  'broadway/gdkprivate-broadway.h'
+])
 
 # glsl_sources = [
   # 'gl3-texture-2d.fs.glsl',
@@ -297,7 +292,7 @@ gdkversionmacros = configure_file(
 )
 
 xinc = include_directories('x11')
-wlinc = include_directories('wayland')
+wlinc = include_directories('.')
 
 
 gdk_deps = [
@@ -343,6 +338,7 @@ if x11_enabled
 endif
 
 if wayland_enabled
+  subdir('wayland')
   gdk_deps += [
     shmlib,
     xkbdep,
@@ -371,7 +367,7 @@ endif
 libgdk = shared_library('gdk',
   gdk_sources,
   c_args: ['-DHAVE_CONFIG_H', '-DGDK_COMPILATION'],
-  include_directories: [confinc, xinc],
+  include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps,
 )
 
@@ -379,7 +375,7 @@ libgdk = shared_library('gdk',
 libgdk_dep = declare_dependency(
   sources: ['gdk.h', gdkconfig, gdkenum_h],
   depends: gdk_sources,
-  include_directories: [confinc, xinc],
+  include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps,
   link_with: libgdk
 )
