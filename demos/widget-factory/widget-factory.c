@@ -1915,6 +1915,33 @@ activate (GApplication *app)
   g_object_unref (builder);
 }
 
+static void
+print_version (void)
+{
+  g_print ("gtk3-widget-factory %d.%d.%d\n",
+           gtk_get_major_version (),
+           gtk_get_minor_version (),
+           gtk_get_micro_version ());
+}
+
+static int
+local_options (GApplication *app,
+               GVariantDict *options,
+               gpointer      data)
+{
+  gboolean version = FALSE;
+
+  g_variant_dict_lookup (options, "version", "b", &version);
+
+  if (version)
+    {
+      print_version ();
+      return 0;
+    }
+
+  return -1;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1942,6 +1969,9 @@ main (int argc, char *argv[])
 
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
+  g_application_add_main_option (G_APPLICATION (app), "version", 0, 0, G_OPTION_ARG_NONE, "Show program version", NULL);
+
+  g_signal_connect (app, "handle-local-options", G_CALLBACK (local_options), NULL);
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 
