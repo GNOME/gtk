@@ -37,7 +37,7 @@ static gboolean show_version;
 static gchar **args = NULL;
 
 static GOptionEntry entries[] = {
-  { "version", 0, 0, G_OPTION_ARG_NONE, &show_version, NULL, NULL },
+  { "version", 0, 0, G_OPTION_ARG_NONE, &show_version, N_("Show program version"), NULL },
   { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &args, NULL, NULL },
   { NULL}
 };
