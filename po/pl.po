@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-05 14:17+0000\n"
-"PO-Revision-Date: 2016-09-06 01:39+0200\n"
+"POT-Creation-Date: 2016-09-11 15:26+0000\n"
+"PO-Revision-Date: 2016-09-11 18:55+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1431,7 +1431,7 @@ msgstr "Nie można zapisać pliku %s: %s\n"
 msgid "Can't close stream"
 msgstr "Nie można zamknąć potoku"
 
-#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:222
+#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:221
 msgid "License"
 msgstr "Licencja"
 
@@ -2238,7 +2238,7 @@ msgstr "_Nazwa"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1597
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1642
 msgid "_Open"
 msgstr "_Otwórz"
 
@@ -2635,6 +2635,10 @@ msgstr "_Otwórz odnośnik"
 #: gtk/gtklabel.c:6655
 msgid "Copy _Link Address"
 msgstr "S_kopiuj adres odnośnika"
+
+#: gtk/gtk-launch.c:40
+msgid "Show program version"
+msgstr "Wyświetla wersję programu"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
@@ -3068,11 +3072,11 @@ msgstr "Nie można wysunąć %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nie można odpytać „%s” o zmiany nośnika"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1607
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "O_twórz w nowej karcie"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1618
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1663
 msgid "Open in New _Window"
 msgstr "Otwórz w nowy_m oknie"
 
@@ -3088,11 +3092,11 @@ msgstr "_Usuń"
 msgid "Rename…"
 msgstr "Zmień nazwę…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1697
 msgid "_Mount"
 msgstr "Za_montuj"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1642
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1687
 msgid "_Unmount"
 msgstr "O_dmontuj"
 
@@ -3104,55 +3108,55 @@ msgstr "Wy_suń"
 msgid "_Detect Media"
 msgstr "Wy_kryj nośnik"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1063
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1080
 msgid "Computer"
 msgstr "Komputer"
 
-#: gtk/gtkplacesview.c:880
+#: gtk/gtkplacesview.c:892
 msgid "Searching for network locations"
 msgstr "Wyszukiwanie położeń sieciowych"
 
-#: gtk/gtkplacesview.c:887
+#: gtk/gtkplacesview.c:899
 msgid "No network locations found"
 msgstr "Brak położeń sieciowych"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1173 gtk/gtkplacesview.c:1246
+#: gtk/gtkplacesview.c:1191 gtk/gtkplacesview.c:1266
 msgid "Unable to access location"
 msgstr "Nie można uzyskać dostępu do położenia"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1190 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1209 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "P_ołącz"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1309
+#: gtk/gtkplacesview.c:1329
 msgid "Unable to unmount volume"
 msgstr "Nie można odmontować woluminu"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1391
+#: gtk/gtkplacesview.c:1430
 msgid "Cance_l"
 msgstr "_Anuluj"
 
-#: gtk/gtkplacesview.c:1642
+#: gtk/gtkplacesview.c:1687
 msgid "_Disconnect"
 msgstr "_Rozłącz"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1697
 msgid "_Connect"
 msgstr "P_ołącz"
 
-#: gtk/gtkplacesview.c:1793
+#: gtk/gtkplacesview.c:1838
 msgid "Unable to get remote server location"
 msgstr "Nie można uzyskać położenia zdalnego serwera"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "Networks"
 msgstr "Sieci"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "On This Computer"
 msgstr "Na tym komputerze"
 
@@ -5428,7 +5432,7 @@ msgstr "ROC 8k"
 msgid "About"
 msgstr "O programie"
 
-#: gtk/ui/gtkaboutdialog.ui:189
+#: gtk/ui/gtkaboutdialog.ui:188
 msgid "Credits"
 msgstr "Zasługi"
 
@@ -5456,8 +5460,9 @@ msgstr "Usługi"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
+#, c-format
 msgid "Hide %s"
-msgstr "Ukryj %s"
+msgstr "Ukryj program %s"
 
 #. used for the application menu on MacOS
 #: gtk/ui/gtkapplication-quartz.ui:35
@@ -5471,8 +5476,9 @@ msgstr "Wyświetl wszystkie"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
+#, c-format
 msgid "Quit %s"
-msgstr "Zakończ program „%s”"
+msgstr "Zakończ program %s"
 
 #: gtk/ui/gtkassistant.ui:68
 msgid "_Next"
