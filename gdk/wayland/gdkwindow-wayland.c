@@ -1675,7 +1675,7 @@ calculate_popup_rect (GdkWindow    *window,
       break;
     case GDK_GRAVITY_SOUTH_WEST:
       x = anchor_rect.x;
-      y = anchor_rect.y + (anchor_rect.height / 2);
+      y = anchor_rect.y + anchor_rect.height;
       break;
     case GDK_GRAVITY_SOUTH:
       x = anchor_rect.x + (anchor_rect.width / 2);
