@@ -229,6 +229,16 @@ static void gdk_wayland_window_sync_opaque_region (GdkWindow *window);
 
 static void unset_transient_for_exported (GdkWindow *window);
 
+static void calculate_moved_to_rect_result (GdkWindow    *window,
+                                            int           x,
+                                            int           y,
+                                            int           width,
+                                            int           height,
+                                            GdkRectangle *flipped_rect,
+                                            GdkRectangle *final_rect,
+                                            gboolean     *flipped_x,
+                                            gboolean     *flipped_y);
+
 GType _gdk_window_impl_wayland_get_type (void);
 
 G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_IMPL)
@@ -1483,6 +1493,138 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
 }
 
 static void
+xdg_popup_configure (void                 *data,
+                     struct zxdg_popup_v6 *xdg_popup,
+                     int32_t               x,
+                     int32_t               y,
+                     int32_t               width,
+                     int32_t               height)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkRectangle flipped_rect;
+  GdkRectangle final_rect;
+  gboolean flipped_x;
+  gboolean flipped_y;
+
+  g_return_if_fail (impl->transient_for);
+
+  calculate_moved_to_rect_result (window, x, y, width, height,
+                                  &flipped_rect,
+                                  &final_rect,
+                                  &flipped_x,
+                                  &flipped_y);
+
+  g_signal_emit_by_name (window,
+                         "moved-to-rect",
+                         &flipped_rect,
+                         &final_rect,
+                         flipped_x,
+                         flipped_y);
+}
+
+static void
+xdg_popup_done (void                 *data,
+                struct zxdg_popup_v6 *xdg_popup)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+
+  GDK_NOTE (EVENTS,
+            g_message ("done %p", window));
+
+  gdk_window_hide (window);
+}
+
+static const struct zxdg_popup_v6_listener xdg_popup_listener = {
+  xdg_popup_configure,
+  xdg_popup_done,
+};
+
+static enum zxdg_positioner_v6_anchor
+rect_anchor_to_anchor (GdkGravity rect_anchor)
+{
+  switch (rect_anchor)
+    {
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_STATIC:
+      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+    case GDK_GRAVITY_NORTH:
+      return ZXDG_POSITIONER_V6_ANCHOR_TOP;
+    case GDK_GRAVITY_NORTH_EAST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+    case GDK_GRAVITY_WEST:
+      return ZXDG_POSITIONER_V6_ANCHOR_LEFT;
+    case GDK_GRAVITY_CENTER:
+      return ZXDG_POSITIONER_V6_ANCHOR_NONE;
+    case GDK_GRAVITY_EAST:
+      return ZXDG_POSITIONER_V6_ANCHOR_RIGHT;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
+              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+    case GDK_GRAVITY_SOUTH:
+      return ZXDG_POSITIONER_V6_ANCHOR_BOTTOM;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
+              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static enum zxdg_positioner_v6_gravity
+window_anchor_to_gravity (GdkGravity rect_anchor)
+{
+  switch (rect_anchor)
+    {
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_STATIC:
+      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
+              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+    case GDK_GRAVITY_NORTH:
+      return ZXDG_POSITIONER_V6_ANCHOR_BOTTOM;
+    case GDK_GRAVITY_NORTH_EAST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
+              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+    case GDK_GRAVITY_WEST:
+      return ZXDG_POSITIONER_V6_ANCHOR_RIGHT;
+    case GDK_GRAVITY_CENTER:
+      return ZXDG_POSITIONER_V6_ANCHOR_NONE;
+    case GDK_GRAVITY_EAST:
+      return ZXDG_POSITIONER_V6_ANCHOR_LEFT;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+    case GDK_GRAVITY_SOUTH:
+      return ZXDG_POSITIONER_V6_ANCHOR_TOP;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static GdkWindow *
+get_real_parent_and_translate (GdkWindow  *child,
+                               GdkWindow  *parent,
+                               gint       *x,
+                               gint       *y)
+{
+  while (parent &&
+         !gdk_window_has_native (parent) &&
+         gdk_window_get_effective_parent (parent))
+    {
+      *x += parent->x;
+      *y += parent->y;
+      parent = gdk_window_get_effective_parent (parent);
+    }
+
+  return parent;
+}
+
+static void
 calculate_popup_rect (GdkWindow    *window,
                       GdkRectangle  anchor_rect,
                       GdkGravity    rect_anchor,
@@ -1648,22 +1790,19 @@ flip_anchor_vertically (GdkGravity anchor)
 }
 
 static void
-xdg_popup_configure (void                 *data,
-                     struct zxdg_popup_v6 *xdg_popup,
-                     int32_t               x,
-                     int32_t               y,
-                     int32_t               width,
-                     int32_t               height)
+calculate_moved_to_rect_result (GdkWindow    *window,
+                                int           x,
+                                int           y,
+                                int           width,
+                                int           height,
+                                GdkRectangle *flipped_rect,
+                                GdkRectangle *final_rect,
+                                gboolean     *flipped_x,
+                                gboolean     *flipped_y)
 {
-  GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkRectangle best_rect;
-  GdkRectangle flipped_rect;
   GdkRectangle geometry;
-  GdkRectangle final_rect;
-  gboolean flipped_x, flipped_y;
-
-  g_return_if_fail (impl->transient_for);
 
   x += impl->transient_for->shadow_left;
   y += impl->transient_for->shadow_top;
@@ -1677,14 +1816,14 @@ xdg_popup_configure (void                 *data,
                         &best_rect);
 
   gdk_wayland_window_get_window_geometry (window, &geometry);
-  final_rect = (GdkRectangle) {
+  *final_rect = (GdkRectangle) {
     .x = x,
     .y = y,
     .width = geometry.width,
     .height = geometry.height
   };
 
-  flipped_rect = best_rect;
+  *flipped_rect = best_rect;
 
   if (x != best_rect.x &&
       impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_X)
@@ -1706,7 +1845,7 @@ xdg_popup_configure (void                 *data,
                             &flipped_x_rect);
 
       if (flipped_x_rect.x == x)
-        flipped_rect.x = x;
+        flipped_rect->x = x;
     }
   if (y != best_rect.y &&
       impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_Y)
@@ -1728,119 +1867,11 @@ xdg_popup_configure (void                 *data,
                             &flipped_y_rect);
 
       if (flipped_y_rect.y == y)
-        flipped_rect.y = y;
+        flipped_rect->y = y;
     }
 
-  flipped_x = flipped_rect.x != best_rect.x;
-  flipped_y = flipped_rect.y != best_rect.y;
-
-  g_signal_emit_by_name (window,
-                         "moved-to-rect",
-                         &flipped_rect,
-                         &final_rect,
-                         flipped_x,
-                         flipped_y);
-}
-
-static void
-xdg_popup_done (void                 *data,
-                struct zxdg_popup_v6 *xdg_popup)
-{
-  GdkWindow *window = GDK_WINDOW (data);
-
-  GDK_NOTE (EVENTS,
-            g_message ("done %p", window));
-
-  gdk_window_hide (window);
-}
-
-static const struct zxdg_popup_v6_listener xdg_popup_listener = {
-  xdg_popup_configure,
-  xdg_popup_done,
-};
-
-static enum zxdg_positioner_v6_anchor
-rect_anchor_to_anchor (GdkGravity rect_anchor)
-{
-  switch (rect_anchor)
-    {
-    case GDK_GRAVITY_NORTH_WEST:
-    case GDK_GRAVITY_STATIC:
-      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
-              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
-    case GDK_GRAVITY_NORTH:
-      return ZXDG_POSITIONER_V6_ANCHOR_TOP;
-    case GDK_GRAVITY_NORTH_EAST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
-              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
-    case GDK_GRAVITY_WEST:
-      return ZXDG_POSITIONER_V6_ANCHOR_LEFT;
-    case GDK_GRAVITY_CENTER:
-      return ZXDG_POSITIONER_V6_ANCHOR_NONE;
-    case GDK_GRAVITY_EAST:
-      return ZXDG_POSITIONER_V6_ANCHOR_RIGHT;
-    case GDK_GRAVITY_SOUTH_WEST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
-              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
-    case GDK_GRAVITY_SOUTH:
-      return ZXDG_POSITIONER_V6_ANCHOR_BOTTOM;
-    case GDK_GRAVITY_SOUTH_EAST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
-              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static enum zxdg_positioner_v6_gravity
-window_anchor_to_gravity (GdkGravity rect_anchor)
-{
-  switch (rect_anchor)
-    {
-    case GDK_GRAVITY_NORTH_WEST:
-    case GDK_GRAVITY_STATIC:
-      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
-              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
-    case GDK_GRAVITY_NORTH:
-      return ZXDG_POSITIONER_V6_ANCHOR_BOTTOM;
-    case GDK_GRAVITY_NORTH_EAST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
-              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
-    case GDK_GRAVITY_WEST:
-      return ZXDG_POSITIONER_V6_ANCHOR_RIGHT;
-    case GDK_GRAVITY_CENTER:
-      return ZXDG_POSITIONER_V6_ANCHOR_NONE;
-    case GDK_GRAVITY_EAST:
-      return ZXDG_POSITIONER_V6_ANCHOR_LEFT;
-    case GDK_GRAVITY_SOUTH_WEST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
-              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
-    case GDK_GRAVITY_SOUTH:
-      return ZXDG_POSITIONER_V6_ANCHOR_TOP;
-    case GDK_GRAVITY_SOUTH_EAST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
-              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static GdkWindow *
-get_real_parent_and_translate (GdkWindow  *child,
-                               GdkWindow  *parent,
-                               gint       *x,
-                               gint       *y)
-{
-  while (parent &&
-         !gdk_window_has_native (parent) &&
-         gdk_window_get_effective_parent (parent))
-    {
-      *x += parent->x;
-      *y += parent->y;
-      parent = gdk_window_get_effective_parent (parent);
-    }
-
-  return parent;
+  *flipped_x = flipped_rect->x != best_rect.x;
+  *flipped_y = flipped_rect->y != best_rect.y;
 }
 
 static struct zxdg_positioner_v6 *
