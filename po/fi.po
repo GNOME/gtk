@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-02 08:16+0000\n"
-"PO-Revision-Date: 2016-09-03 12:14+0300\n"
+"POT-Creation-Date: 2016-09-11 15:26+0000\n"
+"PO-Revision-Date: 2016-09-12 20:25+0300\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -1163,9 +1163,6 @@ msgid "Color _name:"
 msgstr "Värin _nimi:"
 
 #: gtk/deprecated/gtkcolorsel.c:516
-#| msgid ""
-#| "You can enter an HTML-style hexadecimal color value, or simply a color "
-#| "name such as 'orange' in this entry."
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as “orange” in this entry."
@@ -1182,10 +1179,6 @@ msgid "Color Wheel"
 msgstr "Väriympyrä"
 
 #: gtk/deprecated/gtkcolorsel.c:1072
-#| msgid ""
-#| "The previously-selected color, for comparison to the color you're "
-#| "selecting now. You can drag this color to a palette entry, or select this "
-#| "color as current by dragging it to the other color swatch alongside."
 msgid ""
 "The previously-selected color, for comparison to the color you’re selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1196,9 +1189,6 @@ msgstr ""
 "olevaan värilaikkuun."
 
 #: gtk/deprecated/gtkcolorsel.c:1078
-#| msgid ""
-#| "The color you've chosen. You can drag this color to a palette entry to "
-#| "save it for use in the future."
 msgid ""
 "The color you’ve chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1207,9 +1197,6 @@ msgstr ""
 "myöhempää käyttöä varten."
 
 #: gtk/deprecated/gtkcolorsel.c:1084
-#| msgid ""
-#| "The previously-selected color, for comparison to the color you're "
-#| "selecting now."
 msgid ""
 "The previously-selected color, for comparison to the color you’re selecting "
 "now."
@@ -1224,10 +1211,6 @@ msgid "_Save color here"
 msgstr "_Tallenna väri tähän"
 
 #: gtk/deprecated/gtkcolorsel.c:1664
-#| msgid ""
-#| "Click this palette entry to make it the current color. To change this "
-#| "entry, drag a color swatch here or right-click it and select \"Save color "
-#| "here.\""
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select “Save color here.”"
@@ -1457,7 +1440,7 @@ msgstr "Tiedostoa ”%s” ei voitu tallentaa: %s\n"
 msgid "Can't close stream"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:222
+#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:221
 msgid "License"
 msgstr "Lisenssi"
 
@@ -1510,7 +1493,6 @@ msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public -lisenssi (LGPL), vain versio 3"
 
 #: gtk/gtkaboutdialog.c:126
-#| msgid "GNU General Public License, version 3 or later"
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public -lisenssi, versio 3 tai myöhempi"
 
@@ -2192,24 +2174,24 @@ msgstr "_Oikea:"
 msgid "Paper Margins"
 msgstr "Paperin marginaalit"
 
-#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6642 gtk/gtktextview.c:9423
+#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
 msgid "Cu_t"
 msgstr "_Leikkaa"
 
-#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6643 gtk/gtktextview.c:9427
+#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
 msgid "_Copy"
 msgstr "_Kopioi"
 
-#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6644 gtk/gtktextview.c:9429
+#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
 msgid "_Paste"
 msgstr "L_iitä"
 
 #: gtk/gtkentry.c:9478 gtk/gtkfilechooserwidget.c:1478
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6646 gtk/gtktextview.c:9432
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6669 gtk/gtktextview.c:9432
 msgid "_Delete"
 msgstr "_Poista"
 
-#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6655 gtk/gtktextview.c:9446
+#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
 msgid "Select _All"
 msgstr "Valitse k_aikki"
 
@@ -2255,7 +2237,7 @@ msgstr "_Nimi"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1597
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1642
 msgid "_Open"
 msgstr "_Avaa"
 
@@ -2654,14 +2636,18 @@ msgid "Error"
 msgstr "Virhe"
 
 #. Open Link
-#: gtk/gtklabel.c:6623
+#: gtk/gtklabel.c:6646
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6632
+#: gtk/gtklabel.c:6655
 msgid "Copy _Link Address"
 msgstr "Kopioi _linkin osoite"
+
+#: gtk/gtk-launch.c:40
+msgid "Show program version"
+msgstr "Näytä ohjelman versio"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
@@ -3096,11 +3082,11 @@ msgstr "Ei voitu päättää prosessia"
 msgid "Unable to poll “%s” for media changes"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1607
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "Avaa _uudessa välilehdessä"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1618
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1663
 msgid "Open in New _Window"
 msgstr "Avaa uudessa _ikkunassa"
 
@@ -3116,11 +3102,11 @@ msgstr "_Poista"
 msgid "Rename…"
 msgstr "Nimeä uudelleen…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1697
 msgid "_Mount"
 msgstr "_Liitä"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1642
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1687
 msgid "_Unmount"
 msgstr "_Poista liitos"
 
@@ -3132,57 +3118,55 @@ msgstr "_Irrota"
 msgid "_Detect Media"
 msgstr "_Havaitse media"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1063
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1080
 msgid "Computer"
 msgstr "Tietokone"
 
-#: gtk/gtkplacesview.c:880
+#: gtk/gtkplacesview.c:892
 msgid "Searching for network locations"
 msgstr "Etsitään verkkosijainteja"
 
-#: gtk/gtkplacesview.c:887
+#: gtk/gtkplacesview.c:899
 msgid "No network locations found"
 msgstr "Verkkosijainteja ei löytynyt."
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1173 gtk/gtkplacesview.c:1246
-#| msgid "Unable to access “%s”"
+#: gtk/gtkplacesview.c:1191 gtk/gtkplacesview.c:1266
 msgid "Unable to access location"
 msgstr "Sijainnin käyttö epäonnistui"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1190 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1209 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "_Yhdistä"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1309
-#| msgid "Unable to unmount %s"
+#: gtk/gtkplacesview.c:1329
 msgid "Unable to unmount volume"
 msgstr "Liitoksen irrottaminen ei onnistunut"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1391
+#: gtk/gtkplacesview.c:1430
 msgid "Cance_l"
 msgstr "_Peru"
 
-#: gtk/gtkplacesview.c:1642
+#: gtk/gtkplacesview.c:1687
 msgid "_Disconnect"
 msgstr "_Katkaise yhteys"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1697
 msgid "_Connect"
 msgstr "_Yhdistä"
 
-#: gtk/gtkplacesview.c:1793
+#: gtk/gtkplacesview.c:1838
 msgid "Unable to get remote server location"
 msgstr ""
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "Networks"
 msgstr "Verkot"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "On This Computer"
 msgstr "Tällä tietokoneella"
 
@@ -4205,7 +4189,6 @@ msgid "Theme"
 msgstr "Teema"
 
 #: gtk/inspector/prop-editor.c:1682
-#| msgid "Setting:"
 msgid "XSettings"
 msgstr "XSettings"
 
@@ -4387,7 +4370,6 @@ msgid "Font"
 msgstr "Fontti"
 
 #: gtk/inspector/visual.ui:263
-#| msgid "Font Selection"
 msgid "Font Scale"
 msgstr "Fontin skaalaus"
 
@@ -4482,8 +4464,6 @@ msgid "Always"
 msgstr "Aina"
 
 #: gtk/inspector/visual.ui:742
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgid "Disabled"
 msgstr "Pois käytöstä"
 
@@ -5038,8 +5018,6 @@ msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 -kirjekuori"
 
 #: gtk/paper_names_offsets.c:91
-#| msgctxt "paper size"
-#| msgid "Choukei 4 Envelope"
 msgctxt "paper size"
 msgid "Choukei 40 Envelope"
 msgstr "Choukei 40 -kirjekuori"
@@ -5060,36 +5038,26 @@ msgid "kaku2 Envelope"
 msgstr "kaku2-kirjekuori"
 
 #: gtk/paper_names_offsets.c:95
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku3 Envelope"
 msgstr "kaku3-kirjekuori"
 
 #: gtk/paper_names_offsets.c:96
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku4 Envelope"
 msgstr "kaku4-kirjekuori"
 
 #: gtk/paper_names_offsets.c:97
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku5 Envelope"
 msgstr "kaku5-kirjekuori"
 
 #: gtk/paper_names_offsets.c:98
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku7 Envelope"
 msgstr "kaku7-kirjekuori"
 
 #: gtk/paper_names_offsets.c:99
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku8 Envelope"
 msgstr "kaku8-kirjekuori"
@@ -5105,8 +5073,6 @@ msgid "you4 Envelope"
 msgstr "you4-kirjekuori"
 
 #: gtk/paper_names_offsets.c:102
-#| msgctxt "paper size"
-#| msgid "you4 Envelope"
 msgctxt "paper size"
 msgid "you6 Envelope"
 msgstr "you6-kirjekuori"
@@ -5152,36 +5118,26 @@ msgid "5×7"
 msgstr "5×7"
 
 #: gtk/paper_names_offsets.c:111
-#| msgctxt "paper size"
-#| msgid "6x9 Envelope"
 msgctxt "paper size"
 msgid "6×9 Envelope"
 msgstr "6x9-kirjekuori"
 
 #: gtk/paper_names_offsets.c:112
-#| msgctxt "paper size"
-#| msgid "7x9 Envelope"
 msgctxt "paper size"
 msgid "7×9 Envelope"
 msgstr "7x9-kirjekuori"
 
 #: gtk/paper_names_offsets.c:113
-#| msgctxt "paper size"
-#| msgid "#10 Envelope"
 msgctxt "paper size"
 msgid "8×10 Envelope"
 msgstr "8×10-kirjekuori"
 
 #: gtk/paper_names_offsets.c:114
-#| msgctxt "paper size"
-#| msgid "9x11 Envelope"
 msgctxt "paper size"
 msgid "9×11 Envelope"
 msgstr "9×11-kirjekuori"
 
 #: gtk/paper_names_offsets.c:115
-#| msgctxt "paper size"
-#| msgid "#12 Envelope"
 msgctxt "paper size"
 msgid "9×12 Envelope"
 msgstr "9×12-kirjekuori"
@@ -5561,7 +5517,7 @@ msgstr "ROC 8k"
 msgid "About"
 msgstr "Tietoja"
 
-#: gtk/ui/gtkaboutdialog.ui:189
+#: gtk/ui/gtkaboutdialog.ui:188
 msgid "Credits"
 msgstr "Tekijät"
 
@@ -5589,6 +5545,7 @@ msgstr "Palvelut"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
+#, c-format
 msgid "Hide %s"
 msgstr "Piilota %s"
 
@@ -5604,6 +5561,7 @@ msgstr "Näytä kaikki"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
+#, c-format
 msgid "Quit %s"
 msgstr "Lopeta %s"
 
@@ -5705,7 +5663,6 @@ msgid "Font Family"
 msgstr "Fonttiperhe"
 
 #: gtk/ui/gtkfontchooserwidget.ui:119
-#| msgid "Pre_view"
 msgid "Preview text"
 msgstr "Esikatseluteksti"
 
@@ -5750,7 +5707,6 @@ msgid "Up Path"
 msgstr "Polkua ylös"
 
 #: gtk/ui/gtkplacesview.ui:30
-#| msgid "Enter server address…"
 msgid "Server Addresses"
 msgstr "Palvelimien osoitteet"
 
@@ -5777,7 +5733,6 @@ msgid "File Transfer Protocol"
 msgstr "File Transfer Protocol (FTP)"
 
 #: gtk/ui/gtkplacesview.ui:114
-#| msgid "File System"
 msgid "Network File System"
 msgstr "Network File System (NFS)"
 
@@ -6478,13 +6433,11 @@ msgid "Output Tray"
 msgstr "Tulostuskaukalo"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4306
-#| msgid "Resolution"
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Tarkkuus"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4307
-#| msgid "GhostScript pre-filtering"
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript-esisuodatus"
@@ -6526,28 +6479,24 @@ msgstr "Tulostimen oletus"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4336
-#| msgid "Embed GhostScript fonts only"
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Upota vain GhostScript-fontit"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4338
-#| msgid "Convert to PS level 1"
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Muunna PS-tasoksi 1"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4340
-#| msgid "Convert to PS level 2"
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Muunna PS-tasoksi 2"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4342
-#| msgid "No pre-filtering"
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Ei esisuodatusta"
@@ -6721,13 +6670,11 @@ msgid "Billing Info"
 msgstr "Laskutustiedot"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5416
-#| msgid "None"
 msgctxt "cover page"
 msgid "None"
 msgstr "Ei mitään"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5417
-#| msgid "Classified"
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Luokiteltu"
@@ -6743,7 +6690,6 @@ msgid "Secret"
 msgstr "Salainen"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5420
-#| msgid "Standard"
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Normaali"
@@ -6754,7 +6700,6 @@ msgid "Top Secret"
 msgstr "Erittäin salainen"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5422
-#| msgid "Unclassified"
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Luokittelematon"
@@ -6779,7 +6724,6 @@ msgstr "Sivun järjestys"
 #. * dialog that controls the front cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5493
-#| msgid "Before"
 msgctxt "printer option"
 msgid "Before"
 msgstr "Ennen"
@@ -6788,7 +6732,6 @@ msgstr "Ennen"
 #. * dialog that controls the back cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5508
-#| msgid "After"
 msgctxt "printer option"
 msgid "After"
 msgstr "Jälkeen"
