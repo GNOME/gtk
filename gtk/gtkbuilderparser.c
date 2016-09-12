@@ -1219,7 +1219,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                   GError      **error)
 {
   const gchar* domain;
-  ParserData *data;
+  ParserData data;
   GSList *l;
 
   /* Store the original domain so that interface domain attribute can be
@@ -1229,36 +1229,35 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
    */
   domain = gtk_builder_get_translation_domain (builder);
 
-  data = g_new0 (ParserData, 1);
-  data->builder = builder;
-  data->filename = filename;
-  data->domain = g_strdup (domain);
-  data->object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                            (GDestroyNotify)g_free, NULL);
+  memset (&data, 0, sizeof (ParserData));
+  data.builder = builder;
+  data.filename = filename;
+  data.domain = g_strdup (domain);
+  data.object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                           (GDestroyNotify)g_free, NULL);
 
-  data->requested_objects = NULL;
   if (requested_objs)
     {
       gint i;
 
-      data->inside_requested_object = FALSE;
+      data.inside_requested_object = FALSE;
       for (i = 0; requested_objs[i]; ++i)
         {
-          data->requested_objects = g_slist_prepend (data->requested_objects,
-                                                     g_strdup (requested_objs[i]));
+          data.requested_objects = g_slist_prepend (data.requested_objects,
+                                                    g_strdup (requested_objs[i]));
         }
     }
   else
     {
       /* get all the objects */
-      data->inside_requested_object = TRUE;
+      data.inside_requested_object = TRUE;
     }
 
-  data->ctx = g_markup_parse_context_new (&parser,
+  data.ctx = g_markup_parse_context_new (&parser,
                                           G_MARKUP_TREAT_CDATA_AS_TEXT,
-                                          data, NULL);
+                                          &data, NULL);
 
-  if (!g_markup_parse_context_parse (data->ctx, buffer, length, error))
+  if (!g_markup_parse_context_parse (data.ctx, buffer, length, error))
     goto out;
 
   _gtk_builder_finish (builder);
@@ -1266,8 +1265,8 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
     goto out;
 
   /* Custom parser_finished */
-  data->custom_finalizers = g_slist_reverse (data->custom_finalizers);
-  for (l = data->custom_finalizers; l; l = l->next)
+  data.custom_finalizers = g_slist_reverse (data.custom_finalizers);
+  for (l = data.custom_finalizers; l; l = l->next)
     {
       SubParser *sub = (SubParser*)l->data;
 
@@ -1281,8 +1280,8 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
     }
 
   /* Common parser_finished, for all created objects */
-  data->finalizers = g_slist_reverse (data->finalizers);
-  for (l = data->finalizers; l; l = l->next)
+  data.finalizers = g_slist_reverse (data.finalizers);
+  for (l = data.finalizers; l; l = l->next)
     {
       GtkBuildable *buildable = (GtkBuildable*)l->data;
 
@@ -1293,14 +1292,13 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
 
  out:
 
-  g_slist_free_full (data->stack, (GDestroyNotify)free_info);
-  g_slist_free_full (data->custom_finalizers, (GDestroyNotify)free_subparser);
-  g_slist_free (data->finalizers);
-  g_slist_free_full (data->requested_objects, g_free);
-  g_free (data->domain);
-  g_hash_table_destroy (data->object_ids);
-  g_markup_parse_context_free (data->ctx);
-  g_free (data);
+  g_slist_free_full (data.stack, (GDestroyNotify)free_info);
+  g_slist_free_full (data.custom_finalizers, (GDestroyNotify)free_subparser);
+  g_slist_free (data.finalizers);
+  g_slist_free_full (data.requested_objects, g_free);
+  g_free (data.domain);
+  g_hash_table_destroy (data.object_ids);
+  g_markup_parse_context_free (data.ctx);
 
   /* restore the original domain */
   gtk_builder_set_translation_domain (builder, domain);
