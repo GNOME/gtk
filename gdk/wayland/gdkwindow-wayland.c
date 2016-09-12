@@ -1640,6 +1640,21 @@ translate_to_real_parent_window_geometry (GdkWindow  *window,
 }
 
 static void
+translate_from_real_parent_window_geometry (GdkWindow *window,
+                                            gint      *x,
+                                            gint      *y)
+{
+  GdkWindow *parent;
+  gint dx = 0;
+  gint dy = 0;
+
+  parent = get_real_parent_and_translate (window, &dx, &dy);
+
+  *x -= dx - parent->shadow_left;
+  *y -= dy - parent->shadow_top;
+}
+
+static void
 calculate_popup_rect (GdkWindow    *window,
                       GdkGravity    rect_anchor,
                       GdkGravity    window_anchor,
@@ -1822,23 +1837,19 @@ calculate_moved_to_rect_result (GdkWindow    *window,
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkRectangle best_rect;
-  GdkRectangle geometry;
 
-  x += impl->transient_for->shadow_left;
-  y += impl->transient_for->shadow_top;
+  translate_from_real_parent_window_geometry (window, &x, &y);
+  *final_rect = (GdkRectangle) {
+    .x = x,
+    .y = y,
+    .width = width,
+    .height = height,
+  };
 
   calculate_popup_rect (window,
                         impl->pending_move_to_rect.rect_anchor,
                         impl->pending_move_to_rect.window_anchor,
                         &best_rect);
-
-  gdk_wayland_window_get_window_geometry (window, &geometry);
-  *final_rect = (GdkRectangle) {
-    .x = x,
-    .y = y,
-    .width = geometry.width,
-    .height = geometry.height
-  };
 
   *flipped_rect = best_rect;
 
