@@ -1873,13 +1873,13 @@ calculate_moved_to_rect_result (GdkWindow    *window,
 }
 
 static struct zxdg_positioner_v6 *
-create_dynamic_positioner (GdkWindow *window,
-                           GdkWindow *parent)
+create_dynamic_positioner (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   struct zxdg_positioner_v6 *positioner;
+  GdkWindow *parent;
   GdkRectangle geometry;
   enum zxdg_positioner_v6_anchor anchor;
   enum zxdg_positioner_v6_anchor gravity;
@@ -2018,7 +2018,7 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
   gdk_window_freeze_updates (window);
 
   if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
-    positioner = create_dynamic_positioner (window, parent);
+    positioner = create_dynamic_positioner (window);
   else
     positioner = create_simple_positioner (window, parent);
 
