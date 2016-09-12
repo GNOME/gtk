@@ -1626,20 +1626,25 @@ get_real_parent_and_translate (GdkWindow  *child,
 
 static void
 calculate_popup_rect (GdkWindow    *window,
-                      GdkRectangle  anchor_rect,
                       GdkGravity    rect_anchor,
                       GdkGravity    window_anchor,
-                      int           rect_anchor_dx,
-                      int           rect_anchor_dy,
                       GdkRectangle *out_rect)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkRectangle geometry;
+  GdkRectangle anchor_rect;
   int x = 0, y = 0;
 
   gdk_wayland_window_get_window_geometry (window, &geometry);
 
-  anchor_rect.x += rect_anchor_dx;
-  anchor_rect.y += rect_anchor_dy;
+  anchor_rect = (GdkRectangle) {
+    .x = (impl->pending_move_to_rect.rect.x +
+          impl->pending_move_to_rect.rect_anchor_dx),
+    .y = (impl->pending_move_to_rect.rect.y +
+          impl->pending_move_to_rect.rect_anchor_dy),
+    .width = impl->pending_move_to_rect.rect.width,
+    .height = impl->pending_move_to_rect.rect.height
+  };
 
   switch (rect_anchor)
     {
@@ -1808,11 +1813,8 @@ calculate_moved_to_rect_result (GdkWindow    *window,
   y += impl->transient_for->shadow_top;
 
   calculate_popup_rect (window,
-                        impl->pending_move_to_rect.rect,
                         impl->pending_move_to_rect.rect_anchor,
                         impl->pending_move_to_rect.window_anchor,
-                        impl->pending_move_to_rect.rect_anchor_dx,
-                        impl->pending_move_to_rect.rect_anchor_dy,
                         &best_rect);
 
   gdk_wayland_window_get_window_geometry (window, &geometry);
@@ -1837,11 +1839,8 @@ calculate_moved_to_rect_result (GdkWindow    *window,
       flipped_window_anchor =
         flip_anchor_horizontally (impl->pending_move_to_rect.window_anchor),
       calculate_popup_rect (window,
-                            impl->pending_move_to_rect.rect,
                             flipped_rect_anchor,
                             flipped_window_anchor,
-                            impl->pending_move_to_rect.rect_anchor_dx,
-                            impl->pending_move_to_rect.rect_anchor_dy,
                             &flipped_x_rect);
 
       if (flipped_x_rect.x == x)
@@ -1859,11 +1858,8 @@ calculate_moved_to_rect_result (GdkWindow    *window,
       flipped_window_anchor =
         flip_anchor_vertically (impl->pending_move_to_rect.window_anchor),
       calculate_popup_rect (window,
-                            impl->pending_move_to_rect.rect,
                             flipped_rect_anchor,
                             flipped_window_anchor,
-                            impl->pending_move_to_rect.rect_anchor_dx,
-                            impl->pending_move_to_rect.rect_anchor_dy,
                             &flipped_y_rect);
 
       if (flipped_y_rect.y == y)
