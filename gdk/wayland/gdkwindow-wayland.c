@@ -1607,11 +1607,13 @@ window_anchor_to_gravity (GdkGravity rect_anchor)
 }
 
 static GdkWindow *
-get_real_parent_and_translate (GdkWindow  *child,
-                               GdkWindow  *parent,
-                               gint       *x,
-                               gint       *y)
+get_real_parent_and_translate (GdkWindow *window,
+                               gint      *x,
+                               gint      *y)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindow *parent = impl->transient_for;
+
   while (parent &&
          !gdk_window_has_native (parent) &&
          gdk_window_get_effective_parent (parent))
@@ -1893,7 +1895,6 @@ create_dynamic_positioner (GdkWindow *window,
   real_anchor_rect_x = impl->pending_move_to_rect.rect.x;
   real_anchor_rect_y = impl->pending_move_to_rect.rect.y;
   parent = get_real_parent_and_translate (window,
-                                          impl->transient_for,
                                           &real_anchor_rect_x,
                                           &real_anchor_rect_y);
 
