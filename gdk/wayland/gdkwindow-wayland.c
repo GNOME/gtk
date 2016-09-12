@@ -1627,6 +1627,19 @@ get_real_parent_and_translate (GdkWindow *window,
 }
 
 static void
+translate_to_real_parent_window_geometry (GdkWindow  *window,
+                                          gint       *x,
+                                          gint       *y)
+{
+  GdkWindow *parent;
+
+  parent = get_real_parent_and_translate (window, x, y);
+
+  *x -= parent->shadow_left;
+  *y -= parent->shadow_top;
+}
+
+static void
 calculate_popup_rect (GdkWindow    *window,
                       GdkGravity    rect_anchor,
                       GdkGravity    window_anchor,
@@ -1879,7 +1892,6 @@ create_dynamic_positioner (GdkWindow *window)
   GdkWaylandDisplay *display =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   struct zxdg_positioner_v6 *positioner;
-  GdkWindow *parent;
   GdkRectangle geometry;
   enum zxdg_positioner_v6_anchor anchor;
   enum zxdg_positioner_v6_anchor gravity;
@@ -1894,15 +1906,15 @@ create_dynamic_positioner (GdkWindow *window)
 
   real_anchor_rect_x = impl->pending_move_to_rect.rect.x;
   real_anchor_rect_y = impl->pending_move_to_rect.rect.y;
-  parent = get_real_parent_and_translate (window,
-                                          &real_anchor_rect_x,
-                                          &real_anchor_rect_y);
+  translate_to_real_parent_window_geometry (window,
+                                            &real_anchor_rect_x,
+                                            &real_anchor_rect_y);
 
   anchor_rect_width = impl->pending_move_to_rect.rect.width;
   anchor_rect_height = impl->pending_move_to_rect.rect.height;
   zxdg_positioner_v6_set_anchor_rect (positioner,
-                                      real_anchor_rect_x - parent->shadow_left,
-                                      real_anchor_rect_y - parent->shadow_top,
+                                      real_anchor_rect_x,
+                                      real_anchor_rect_y,
                                       anchor_rect_width,
                                       anchor_rect_height);
 
