@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-18 08:52+0000\n"
-"PO-Revision-Date: 2016-08-19 23:58+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"POT-Creation-Date: 2016-09-11 15:26+0000\n"
+"PO-Revision-Date: 2016-09-12 09:27+0200\n"
+"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -90,7 +90,6 @@ msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL támogatás letiltva a GDK_DEBUG beállításon keresztül"
 
 #: gdk/gdkwindow.c:2819
-#| msgid "Backend does not support window scaling"
 msgid "The current backend does not support OpenGL"
 msgstr "A jelenlegi háttérprogram nem támogatja az OpenGL-t"
 
@@ -437,7 +436,7 @@ msgid "Suspend"
 msgstr "Felfüggesztés"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1631
-#: gdk/wayland/gdkglcontext-wayland.c:422 gdk/win32/gdkglcontext-win32.c:556
+#: gdk/wayland/gdkglcontext-wayland.c:421 gdk/win32/gdkglcontext-win32.c:556
 #: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
 msgstr "Nem érhető el GL megvalósítás"
@@ -449,8 +448,8 @@ msgid "Unable to create a GL context"
 msgstr "Nem lehet létrehozni GL környezetet"
 
 #: gdk/mir/gdkmirwindowimpl.c:1593 gdk/mir/gdkmirwindowimpl.c:1603
-#: gdk/wayland/gdkglcontext-wayland.c:383
-#: gdk/wayland/gdkglcontext-wayland.c:393 gdk/win32/gdkglcontext-win32.c:482
+#: gdk/wayland/gdkglcontext-wayland.c:382
+#: gdk/wayland/gdkglcontext-wayland.c:392 gdk/win32/gdkglcontext-win32.c:482
 #: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr "Nincs elérhető beállítás a megadott képpontformátumhoz"
@@ -463,7 +462,7 @@ msgstr "A 3.2-es alap GL profil nem érhető el az EGL megvalósításban"
 msgid "Not implemented on OS X"
 msgstr "Nincs megvalósítva OS X rendszeren"
 
-#: gdk/wayland/gdkglcontext-wayland.c:430
+#: gdk/wayland/gdkglcontext-wayland.c:429
 msgid "Core GL is not available on EGL implementation"
 msgstr "Az alap GL nem érhető el az EGL megvalósításban"
 
@@ -656,15 +655,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Bezárás"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9013
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9025
 msgid "Minimize"
 msgstr "Minimalizálás"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9022
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9034
 msgid "Maximize"
 msgstr "Maximalizálás"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8979
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8991
 msgid "Restore"
 msgstr "Visszaállítás"
 
@@ -1216,7 +1215,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12480 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12492 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1265,7 +1264,7 @@ msgid "_Apply"
 msgstr "_Alkalmaz"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12481
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12493
 msgid "_OK"
 msgstr "_OK"
 
@@ -2173,24 +2172,24 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6642 gtk/gtktextview.c:9423
+#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6643 gtk/gtktextview.c:9427
+#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6644 gtk/gtktextview.c:9429
+#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
 msgid "_Paste"
 msgstr "_Beillesztés"
 
 #: gtk/gtkentry.c:9478 gtk/gtkfilechooserwidget.c:1478
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6646 gtk/gtktextview.c:9432
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6669 gtk/gtktextview.c:9432
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6655 gtk/gtktextview.c:9446
+#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
@@ -2236,7 +2235,7 @@ msgstr "_Név"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1597
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1642
 msgid "_Open"
 msgstr "_Megnyitás"
 
@@ -2573,7 +2572,7 @@ msgstr "Az OpenGL környezet létrehozása meghiúsult"
 msgid "Application menu"
 msgstr "Alkalmazásmenü"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9049
+#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9061
 msgid "Close"
 msgstr "Bezárás"
 
@@ -2624,14 +2623,18 @@ msgid "Error"
 msgstr "Hiba"
 
 #. Open Link
-#: gtk/gtklabel.c:6623
+#: gtk/gtklabel.c:6646
 msgid "_Open Link"
 msgstr "Hi_vatkozás megnyitása"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6632
+#: gtk/gtklabel.c:6655
 msgid "Copy _Link Address"
 msgstr "_Hivatkozás címének másolása"
+
+#: gtk/gtk-launch.c:40
+msgid "Show program version"
+msgstr "A programverzió megjelenítése"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
@@ -2866,7 +2869,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nem fejeztethető be a(z) %d azonosítójú folyamat: %s"
 
-#: gtk/gtknotebook.c:5113 gtk/gtknotebook.c:7379
+#: gtk/gtknotebook.c:5113 gtk/gtknotebook.c:7382
 #, c-format
 msgid "Page %u"
 msgstr "%u. oldal"
@@ -3065,11 +3068,11 @@ msgstr "%s nem adható ki"
 msgid "Unable to poll “%s” for media changes"
 msgstr "A(z) „%s” adathordozó-változásai nem kérdezhetők le"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1607
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "Megnyi_tás új lapon"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1618
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1663
 msgid "Open in New _Window"
 msgstr "Megnyitás új _ablakban"
 
@@ -3085,11 +3088,11 @@ msgstr "_Eltávolítás"
 msgid "Rename…"
 msgstr "Átnevezés…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1697
 msgid "_Mount"
 msgstr "_Csatolás"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1642
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1687
 msgid "_Unmount"
 msgstr "_Leválasztás"
 
@@ -3101,55 +3104,55 @@ msgstr "_Kiadás"
 msgid "_Detect Media"
 msgstr "A_dathordozó felismerése"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1063
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1080
 msgid "Computer"
 msgstr "Számítógép"
 
-#: gtk/gtkplacesview.c:880
+#: gtk/gtkplacesview.c:892
 msgid "Searching for network locations"
 msgstr "Hálózati helyek keresése"
 
-#: gtk/gtkplacesview.c:887
+#: gtk/gtkplacesview.c:899
 msgid "No network locations found"
 msgstr "Nincsenek hálózati helyek"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1173 gtk/gtkplacesview.c:1246
+#: gtk/gtkplacesview.c:1191 gtk/gtkplacesview.c:1266
 msgid "Unable to access location"
 msgstr "A hely nem érhető el"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1190 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1209 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "Kap_csolódás"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1309
+#: gtk/gtkplacesview.c:1329
 msgid "Unable to unmount volume"
 msgstr "Nem lehet leválasztani a kötetet"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1391
+#: gtk/gtkplacesview.c:1430
 msgid "Cance_l"
 msgstr "Még_se"
 
-#: gtk/gtkplacesview.c:1642
+#: gtk/gtkplacesview.c:1687
 msgid "_Disconnect"
 msgstr "_Bontás"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1697
 msgid "_Connect"
 msgstr "Kap_csolódás"
 
-#: gtk/gtkplacesview.c:1793
+#: gtk/gtkplacesview.c:1838
 msgid "Unable to get remote server location"
 msgstr "Nem kérhető le a távoli kiszolgáló helye"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "Networks"
 msgstr "Hálózatok"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "On This Computer"
 msgstr "Ezen a számítógépen"
 
@@ -3788,24 +3791,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:8997
+#: gtk/gtkwindow.c:9009
 msgid "Move"
 msgstr "Mozgatás"
 
-#: gtk/gtkwindow.c:9005
+#: gtk/gtkwindow.c:9017
 msgid "Resize"
 msgstr "Átméretezés"
 
-#: gtk/gtkwindow.c:9036
+#: gtk/gtkwindow.c:9048
 msgid "Always on Top"
 msgstr "Mindig felül"
 
-#: gtk/gtkwindow.c:12468
+#: gtk/gtkwindow.c:12480
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Szeretné használni a GTK+ vizsgálót?"
 
-#: gtk/gtkwindow.c:12470
+#: gtk/gtkwindow.c:12482
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3816,7 +3819,7 @@ msgstr ""
 "alkalmazás belső működésének felfedezését és módosítását. A használata miatt "
 "az alkalmazás hibásan működhet vagy összeomolhat."
 
-#: gtk/gtkwindow.c:12475
+#: gtk/gtkwindow.c:12487
 msgid "Don't show this message again"
 msgstr "Ne jelenjen meg többé ez az üzenet"
 
@@ -5452,6 +5455,7 @@ msgstr "Szolgáltatások"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
+#, c-format
 msgid "Hide %s"
 msgstr "%s elrejtése"
 
@@ -5467,6 +5471,7 @@ msgstr "Összes megjelenítése"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
+#, c-format
 msgid "Quit %s"
 msgstr "%s bezárása"
 
@@ -5607,11 +5612,6 @@ msgid "Server Addresses"
 msgstr "Kiszolgálócímek"
 
 #: gtk/ui/gtkplacesview.ui:43
-#| msgid ""
-#| "Server addresses are made up of a protocol prefix and an address. "
-#| "Examples:\n"
-#| "\n"
-#| "smb://foo.example.com, ssh://192.168.0.1"
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
@@ -5634,7 +5634,6 @@ msgid "File Transfer Protocol"
 msgstr "Fájlátviteli protokoll (FTP)"
 
 #: gtk/ui/gtkplacesview.ui:114
-#| msgid "File System"
 msgid "Network File System"
 msgstr "Hálózat fájlrendszer"
 
@@ -5643,18 +5642,15 @@ msgid "Samba"
 msgstr "Samba"
 
 #: gtk/ui/gtkplacesview.ui:136
-#| msgid "File Transfer Protocol"
 msgid "SSH File Transfer Protocol"
 msgstr "SSH fájlátviteli protokoll"
 
 #: gtk/ui/gtkplacesview.ui:147
-#| msgid "WebDav"
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/ui/gtkplacesview.ui:183
-#| msgid "http:// or https://"
 msgid "ftp:// or ftps://"
 msgstr "ftp:// vagy ftps://"
 
@@ -5664,7 +5660,6 @@ msgstr "smb://"
 
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:227
-#| msgid "http:// or https://"
 msgid "dav:// or davs://"
 msgstr "dav:// vagy davs://"
 
