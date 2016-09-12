@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-12 03:11+0200\n"
-"PO-Revision-Date: 2016-09-12 03:02+0200\n"
+"PO-Revision-Date: 2016-09-12 03:15+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -2665,7 +2665,7 @@ msgstr "Kopiér _linkadresse"
 
 #: ../gtk/gtk-launch.c:40
 msgid "Show program version"
-msgstr ""
+msgstr "Vis programversion"
 
 #: ../gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
