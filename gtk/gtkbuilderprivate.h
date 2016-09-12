@@ -118,7 +118,7 @@ typedef struct {
   GSList *finalizers;
   GSList *custom_finalizers;
 
-  GSList *requested_objects; /* NULL if all the objects are requested */
+  char **requested_objects; /* NULL if all the objects are requested */
   gboolean inside_requested_object;
   gint requested_object_level;
   gint cur_object_level;

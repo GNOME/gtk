@@ -221,11 +221,11 @@ static gboolean
 is_requested_object (const gchar *object,
                      ParserData  *data)
 {
-  GSList *l;
+  int i;
 
-  for (l = data->requested_objects; l; l = l->next)
+  for (i = 0; data->requested_objects[i]; ++i)
     {
-      if (g_strcmp0 (l->data, object) == 0)
+      if (g_strcmp0 (data->requested_objects[i], object) == 0)
         return TRUE;
     }
 
@@ -1238,14 +1238,8 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
 
   if (requested_objs)
     {
-      gint i;
-
       data.inside_requested_object = FALSE;
-      for (i = 0; requested_objs[i]; ++i)
-        {
-          data.requested_objects = g_slist_prepend (data.requested_objects,
-                                                    g_strdup (requested_objs[i]));
-        }
+      data.requested_objects = requested_objs;
     }
   else
     {
@@ -1295,7 +1289,6 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   g_slist_free_full (data.stack, (GDestroyNotify)free_info);
   g_slist_free_full (data.custom_finalizers, (GDestroyNotify)free_subparser);
   g_slist_free (data.finalizers);
-  g_slist_free_full (data.requested_objects, g_free);
   g_free (data.domain);
   g_hash_table_destroy (data.object_ids);
   g_markup_parse_context_free (data.ctx);
