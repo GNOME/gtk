@@ -1,3 +1,54 @@
+Overview of Changes in GTK+ 3.21.6
+==================================
+
+* GtkScrolledWindow sizing behavior has been changed back to the
+  previous behavior, with new API to change it
+
+* Some GtkPopover size allocation problems have been fixed
+
+* Wayland:
+ - We require xdg-shell version 6 now
+
+* Bugs fixed:
+ 764979 Connect to server is unusable after cancelling a password dialog
+ 766569 Better size requisition for GTK_SCROLL_NATURAL children
+ 767391 cross-fade() not cross-fading
+ 769498 Scrollbars are broken
+ 770278 modernize example applications
+ 770508 Recent change in GtkTreeView::grab_focus_and_unset_draw_keyfocus()...
+ 770614 GtkScale in HighContrast theme with value = 0: WARNING: allocates ...
+ 770624 Fix typos
+ 770703 Fix crash when using page-down on GtkListBox
+ 770745 wayland: Warn when an application tries to map popup incorrectly
+ 770849 GtkLabel with padding brokenness
+ 770906 Wayland: Unmapping a toplevel from a menu/popup can lead to a prot...
+ 771033 GtkStatusIcon cannot show activate menu in VirtualBox since 3.21.2
+
+* Translation updates:
+ Brazilian Portuguese
+ British English
+ Czech
+ Danish
+ Finnish
+ French
+ Galician
+ German
+ Hebrew
+ Hungarian
+ Kazakh
+ Korean
+ Latvian
+ Lithuanian
+ Persian
+ Polish
+ Portuguese
+ Russian
+ Scottish Gaelic
+ Serbian
+ Slovak
+ Swedish
+
+
 Overview of Changes in GTK+ 3.21.5
 ==================================
 
