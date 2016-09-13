@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-09 20:42+0000\n"
+"POT-Creation-Date: 2016-09-11 15:26+0000\n"
 "PO-Revision-Date: 2016-09-10 01:10+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
@@ -2244,7 +2244,7 @@ msgstr "_Nome"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1597
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1642
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2642,6 +2642,10 @@ msgstr "_Abrir ligazón"
 #: gtk/gtklabel.c:6655
 msgid "Copy _Link Address"
 msgstr "Copiar enderezo da _ligazón"
+
+#: gtk/gtk-launch.c:40
+msgid "Show program version"
+msgstr ""
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
@@ -3075,11 +3079,11 @@ msgstr "Non é posíbel extraer %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Non é posíbel analizar «%s» para saber os cambios no soporte"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1607
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "Abrir unha nova _lapela"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1618
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1663
 msgid "Open in New _Window"
 msgstr "Abrir nunha nova _xanela"
 
@@ -3095,11 +3099,11 @@ msgstr "_Eliminar"
 msgid "Rename…"
 msgstr "Renomear…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1697
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1642
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1687
 msgid "_Unmount"
 msgstr "_Desmontar"
 
@@ -3111,55 +3115,55 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar soporte"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1063
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1080
 msgid "Computer"
 msgstr "Computador"
 
-#: gtk/gtkplacesview.c:880
+#: gtk/gtkplacesview.c:892
 msgid "Searching for network locations"
 msgstr "Buscar localizacóns de rede"
 
-#: gtk/gtkplacesview.c:887
+#: gtk/gtkplacesview.c:899
 msgid "No network locations found"
 msgstr "Non se atoparon localizacións de rede"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1173 gtk/gtkplacesview.c:1246
+#: gtk/gtkplacesview.c:1191 gtk/gtkplacesview.c:1266
 msgid "Unable to access location"
 msgstr "Non foi posíbel acceder á localización"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1190 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1209 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1309
+#: gtk/gtkplacesview.c:1329
 msgid "Unable to unmount volume"
 msgstr "Non foi posíbel desmontar o volume"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1391
+#: gtk/gtkplacesview.c:1430
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: gtk/gtkplacesview.c:1642
+#: gtk/gtkplacesview.c:1687
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1697
 msgid "_Connect"
 msgstr "Co_nectar"
 
-#: gtk/gtkplacesview.c:1793
+#: gtk/gtkplacesview.c:1838
 msgid "Unable to get remote server location"
 msgstr "Non foi posíbel obter a localización remota do servidor"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "On This Computer"
 msgstr "Neste computador"
 
@@ -4329,7 +4333,6 @@ msgid "Font"
 msgstr "Tipo de letra"
 
 #: gtk/inspector/visual.ui:263
-#| msgid "Font Selection"
 msgid "Font Scale"
 msgstr "Escala do tipo de letra"
 
@@ -5616,7 +5619,6 @@ msgid "Up Path"
 msgstr "Ruta superior"
 
 #: gtk/ui/gtkplacesview.ui:30
-#| msgid "Enter server address…"
 msgid "Server Addresses"
 msgstr "Enderezos de servidor"
 
@@ -5644,7 +5646,6 @@ msgid "File Transfer Protocol"
 msgstr "Protocolo de transferencia de ficheiros"
 
 #: gtk/ui/gtkplacesview.ui:114
-#| msgid "File System"
 msgid "Network File System"
 msgstr "Sistema de ficheiros de rede"
 
