@@ -1095,16 +1095,15 @@ gint
 gdk_screen_get_monitor_scale_factor (GdkScreen *screen,
                                      gint       monitor_num)
 {
-  GdkScreenClass *screen_class;
+  GdkMonitor *monitor;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 1);
   g_return_val_if_fail (monitor_num >= 0, 1);
   g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), 1);
 
-  screen_class = GDK_SCREEN_GET_CLASS (screen);
+  monitor = get_monitor (screen, monitor_num);
 
-  if (screen_class->get_monitor_scale_factor)
-    return screen_class->get_monitor_scale_factor (screen, monitor_num);
+  g_return_val_if_fail (monitor != NULL, 1);
 
-  return 1;
+  return gdk_monitor_get_scale_factor (monitor);
 }
