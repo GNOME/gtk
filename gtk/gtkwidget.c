@@ -6998,8 +6998,10 @@ gtk_widget_draw_internal (GtkWidget *widget,
       if (push_group)
         cairo_push_group (cr);
 
+#ifdef G_ENABLE_DEBUG
       if (_gtk_widget_get_alloc_needed (widget))
         g_warning ("%s %p is drawn without a current allocation. This should not happen.", G_OBJECT_TYPE_NAME (widget), widget);
+#endif
 
       if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         {
