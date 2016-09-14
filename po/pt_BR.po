@@ -25,8 +25,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-20 18:54+0000\n"
-"PO-Revision-Date: 2016-08-22 01:10-0200\n"
+"POT-Creation-Date: 2016-09-11 15:26+0000\n"
+"PO-Revision-Date: 2016-09-14 02:07-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -673,15 +673,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Fechar"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9013
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9025
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9022
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9034
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8979
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8991
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1240,7 +1240,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12480 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12492 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1289,7 +1289,7 @@ msgid "_Apply"
 msgstr "_Aplicar"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12481
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12493
 msgid "_OK"
 msgstr "_OK"
 
@@ -2199,24 +2199,24 @@ msgstr "_Direita:"
 msgid "Paper Margins"
 msgstr "Margens do papel"
 
-#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6642 gtk/gtktextview.c:9423
+#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
 msgid "Cu_t"
 msgstr "Recor_tar"
 
-#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6643 gtk/gtktextview.c:9427
+#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6644 gtk/gtktextview.c:9429
+#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
 msgid "_Paste"
 msgstr "C_olar"
 
 #: gtk/gtkentry.c:9478 gtk/gtkfilechooserwidget.c:1478
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6646 gtk/gtktextview.c:9432
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6669 gtk/gtktextview.c:9432
 msgid "_Delete"
 msgstr "E_xcluir"
 
-#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6655 gtk/gtktextview.c:9446
+#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
 msgid "Select _All"
 msgstr "Selecion_ar tudo"
 
@@ -2264,7 +2264,7 @@ msgstr "_Nome"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1597
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1642
 msgid "_Open"
 msgstr "A_brir"
 
@@ -2602,7 +2602,7 @@ msgstr "Criação de contexto OpenGL falhou"
 msgid "Application menu"
 msgstr "Menu aplicativo"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9049
+#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9061
 msgid "Close"
 msgstr "Fechar"
 
@@ -2654,14 +2654,18 @@ msgid "Error"
 msgstr "Erro"
 
 #. Open Link
-#: gtk/gtklabel.c:6623
+#: gtk/gtklabel.c:6646
 msgid "_Open Link"
 msgstr "_Abrir o link"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6632
+#: gtk/gtklabel.c:6655
 msgid "Copy _Link Address"
 msgstr "Copiar endereço do _link"
+
+#: gtk/gtk-launch.c:40
+msgid "Show program version"
+msgstr "Mostra a versão do programa"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
@@ -2899,7 +2903,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Não foi possível finalizar o processo com PID %d: %s"
 
-#: gtk/gtknotebook.c:5113 gtk/gtknotebook.c:7379
+#: gtk/gtknotebook.c:5113 gtk/gtknotebook.c:7382
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -3100,13 +3104,13 @@ msgstr "Não foi possível verificar \"%s\" por alterações de mídia"
 
 #  Concorre com "A_brir", "Abrir em nova _janela", "_Propriedades", "_Remover",
 #  "Digitar _local" e "_Marcar este local".
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1607
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "Abrir em _nova aba"
 
 #  Concorre com "A_brir", "Abrir em _nova aba", "_Propriedades", "_Remover",
 #  "Digitar _local" e "_Marcar este local".
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1618
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1663
 msgid "Open in New _Window"
 msgstr "Abrir em nova _janela"
 
@@ -3122,11 +3126,11 @@ msgstr "_Remover"
 msgid "Rename…"
 msgstr "Renomear…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1697
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1642
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1687
 msgid "_Unmount"
 msgstr "Desmo_ntar"
 
@@ -3138,55 +3142,55 @@ msgstr "_Ejetar"
 msgid "_Detect Media"
 msgstr "_Detectar mídia"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1063
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1080
 msgid "Computer"
 msgstr "Computador"
 
-#: gtk/gtkplacesview.c:880
+#: gtk/gtkplacesview.c:892
 msgid "Searching for network locations"
 msgstr "Pesquisando por locais de rede"
 
-#: gtk/gtkplacesview.c:887
+#: gtk/gtkplacesview.c:899
 msgid "No network locations found"
 msgstr "Nenhum local de rede encontrado"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1173 gtk/gtkplacesview.c:1246
+#: gtk/gtkplacesview.c:1191 gtk/gtkplacesview.c:1266
 msgid "Unable to access location"
 msgstr "Não foi possível acessar a localização"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1190 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1209 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1309
+#: gtk/gtkplacesview.c:1329
 msgid "Unable to unmount volume"
 msgstr "Não foi possível desmontar o volume"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1391
+#: gtk/gtkplacesview.c:1430
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: gtk/gtkplacesview.c:1642
+#: gtk/gtkplacesview.c:1687
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1697
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: gtk/gtkplacesview.c:1793
+#: gtk/gtkplacesview.c:1838
 msgid "Unable to get remote server location"
 msgstr "Não foi possível obter a localização do servidor remoto"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1932 gtk/gtkplacesview.c:1941
+#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
 msgid "On This Computer"
 msgstr "Neste computador"
 
@@ -3846,24 +3850,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:8997
+#: gtk/gtkwindow.c:9009
 msgid "Move"
 msgstr "Mover"
 
-#: gtk/gtkwindow.c:9005
+#: gtk/gtkwindow.c:9017
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: gtk/gtkwindow.c:9036
+#: gtk/gtkwindow.c:9048
 msgid "Always on Top"
 msgstr "Sempre no topo"
 
-#: gtk/gtkwindow.c:12468
+#: gtk/gtkwindow.c:12480
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Você deseja usar Inspetor GTK+?"
 
-#: gtk/gtkwindow.c:12470
+#: gtk/gtkwindow.c:12482
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3874,7 +3878,7 @@ msgstr ""
 "modifique o estado interno de qualquer aplicativo GTK+. Usá-lo pode fazer "
 "que o aplicativo se encerre ou falhe."
 
-#: gtk/gtkwindow.c:12475
+#: gtk/gtkwindow.c:12487
 msgid "Don't show this message again"
 msgstr "Não mostre essa mensagem novamente"
 
@@ -5527,6 +5531,7 @@ msgstr "Serviços"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
+#, c-format
 msgid "Hide %s"
 msgstr "Ocultar %s"
 
@@ -5542,6 +5547,7 @@ msgstr "Mostrar todos"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
+#, c-format
 msgid "Quit %s"
 msgstr "Sair do %s"
 
@@ -5721,7 +5727,6 @@ msgid "SSH File Transfer Protocol"
 msgstr "Protocolo de transferência de arquivos via SSH"
 
 #: gtk/ui/gtkplacesview.ui:147
-#| msgid "WebDav"
 msgid "WebDAV"
 msgstr "WebDAV"
 
