@@ -17464,8 +17464,14 @@ gtk_widget_render (GtkWidget            *widget,
   gboolean do_clip;
   cairo_t *cr;
   int x, y;
+  gboolean is_double_buffered;
 
-  if (priv->double_buffered)
+  /* We take the value here, in case somebody manages to changes
+   * the double_buffered value inside a ::draw call, and ends up
+   * breaking everything.
+   */
+  is_double_buffered = priv->double_buffered;
+  if (is_double_buffered)
     {
       /* We only render double buffered on native windows */
       if (!gdk_window_has_native (window))
@@ -17492,7 +17498,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_draw_internal (widget, cr, do_clip);
 
-  if (priv->double_buffered)
+  if (is_double_buffered)
     gdk_window_end_draw_frame (window, context);
   else
     cairo_destroy (cr);
