@@ -22,16 +22,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-09 20:56+0000\n"
-"PO-Revision-Date: 2016-03-18 22:33+0100\n"
-"Last-Translator: Erwan Georget <egeorget@opmbx.org>\n"
+"POT-Creation-Date: 2016-09-13 08:59+0000\n"
+"PO-Revision-Date: 2016-09-15 11:18+0200\n"
+"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
-"X-Generator: Poedit 1.8.7.1\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:315 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -137,10 +136,8 @@ msgid "Tool"
 msgstr "Outil"
 
 #: gdk/gdkdevice.c:329
-#, fuzzy
-#| msgid "The cell which is currently being edited"
 msgid "The tool that is currently used with this device"
-msgstr "La cellule en cours de modification"
+msgstr "L'outil actuellement utilisé avec ce périphérique"
 
 #: gdk/gdkdevicemanager.c:186
 msgid "Display for the device manager"
@@ -4334,11 +4331,11 @@ msgstr "Indique si un tampon stencil est alloué"
 
 #: gtk/gtkglarea.c:880
 msgid "Use OpenGL ES"
-msgstr ""
+msgstr "Utiliser OpenGL ES"
 
 #: gtk/gtkglarea.c:881
 msgid "Whether the context uses OpenGL or OpenGL ES"
-msgstr ""
+msgstr "Indique si le contexte utilise OpenGL ou OpenGL ES"
 
 #: gtk/gtkgrid.c:1775
 msgid "Row Homogeneous"
@@ -5062,41 +5059,35 @@ msgstr ""
 
 #: gtk/gtkmenu.c:777
 msgid "Anchor hints"
-msgstr ""
+msgstr "Indications d'ancrage"
 
 #: gtk/gtkmenu.c:778
 msgid "Positioning hints for when the menu might fall off-screen"
-msgstr ""
+msgstr "Indications de position dans les cas où le menu sort de l'écran"
 
 #: gtk/gtkmenu.c:806
 msgid "Rect anchor dx"
-msgstr ""
+msgstr "Décal. X ancre de rect."
 
 #: gtk/gtkmenu.c:807
-#, fuzzy
-#| msgid "Horizontal Offset"
 msgid "Rect anchor horizontal offset"
-msgstr "Décalage horizontal"
+msgstr "Décalage horizontal d'ancre de rectangle"
 
 #: gtk/gtkmenu.c:833
 msgid "Rect anchor dy"
-msgstr ""
+msgstr "Décal. Y ancre de rect."
 
 #: gtk/gtkmenu.c:834
-#, fuzzy
-#| msgid "Vertical Offset"
 msgid "Rect anchor vertical offset"
-msgstr "Décalage vertical"
+msgstr "Décalage vertical d'ancre de rectangle"
 
 #: gtk/gtkmenu.c:860
-#, fuzzy
-#| msgid "Type hint"
 msgid "Menu type hint"
-msgstr "Indication de type"
+msgstr "Indication de type de menu"
 
 #: gtk/gtkmenu.c:861
 msgid "Menu window type hint"
-msgstr ""
+msgstr "Indication de type de fenêtre de menu"
 
 #: gtk/gtkmenu.c:882
 msgid "Horizontal Padding"
@@ -5300,11 +5291,9 @@ msgid "Message area"
 msgstr "Zone de message"
 
 #: gtk/gtkmessagedialog.c:295
-#, fuzzy
-#| msgid "GtkVBox that holds the dialog's primary and secondary labels"
 msgid "GtkBox that holds the dialog's primary and secondary labels"
 msgstr ""
-"Objet « GtkVBox » contenant les étiquettes principale et secondaire de la "
+"Objet GtkBox contenant les étiquettes principale et secondaire de la "
 "boîte de dialogue"
 
 #: gtk/gtkmodelbutton.c:1100
@@ -5615,24 +5604,20 @@ msgstr ""
 "L'indice de l'élément recouvrant dans le parent, -1 pour l'enfant principal"
 
 #: gtk/gtkpadcontroller.c:373
-#, fuzzy
-#| msgid "Action Group"
 msgid "Action group"
 msgstr "Groupe d'actions"
 
 #: gtk/gtkpadcontroller.c:374
 msgid "Action group to launch actions from"
-msgstr ""
+msgstr "Groupe d'actions à partir duquel lancer les actions"
 
 #: gtk/gtkpadcontroller.c:379
-#, fuzzy
-#| msgid "Associated device"
 msgid "Pad device"
-msgstr "Périphérique associé"
+msgstr "Périphérique tablette"
 
 #: gtk/gtkpadcontroller.c:380
 msgid "Pad device to control"
-msgstr ""
+msgstr "Périphérique tablette à contrôler"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -6854,41 +6839,29 @@ msgid "Overlay scrolling mode"
 msgstr "Mode de défilement en surimpression"
 
 #: gtk/gtkscrolledwindow.c:727
-#, fuzzy
-#| msgid "Minimum Content Width"
 msgid "Maximum Content Width"
-msgstr "Largeur minimale du contenu"
+msgstr "Largeur maximale du contenu"
 
 #: gtk/gtkscrolledwindow.c:728
-#, fuzzy
-#| msgid ""
-#| "The minimum width that the scrolled window will allocate to its content"
 msgid "The maximum width that the scrolled window will allocate to its content"
-msgstr "La largeur minimale que la fenêtre défilante alloue à son contenu"
+msgstr "La largeur maximale que la fenêtre défilante alloue à son contenu"
 
 #: gtk/gtkscrolledwindow.c:741
-#, fuzzy
-#| msgid "Minimum Content Height"
 msgid "Maximum Content Height"
-msgstr "Hauteur minimale du contenu"
+msgstr "Hauteur maximale du contenu"
 
 #: gtk/gtkscrolledwindow.c:742
-#, fuzzy
-#| msgid ""
-#| "The minimum height that the scrolled window will allocate to its content"
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
-msgstr "La hauteur minimale que la fenêtre défilante alloue à son contenu"
+msgstr "La hauteur maximale que la fenêtre défilante alloue à son contenu"
 
 #: gtk/gtkscrolledwindow.c:759 gtk/gtkscrolledwindow.c:760
 msgid "Propagate Natural Width"
-msgstr ""
+msgstr "Propager la largeur naturelle"
 
 #: gtk/gtkscrolledwindow.c:777 gtk/gtkscrolledwindow.c:778
-#, fuzzy
-#| msgid "Separator Height"
 msgid "Propagate Natural Height"
-msgstr "Hauteur des séparateurs"
+msgstr "Propager la hauteur naturelle"
 
 #: gtk/gtksearchbar.c:405
 msgid "Search Mode Enabled"
@@ -7678,7 +7651,7 @@ msgstr "Accélérateur"
 
 #: gtk/gtkshortcutlabel.c:491
 msgid "Disabled text"
-msgstr ""
+msgstr "Texte désactivé"
 
 #: gtk/gtkshortcutsgroup.c:303
 msgid "View"
@@ -7756,10 +7729,8 @@ msgid "Action Name"
 msgstr "Nom de l'action"
 
 #: gtk/gtkshortcutsshortcut.c:678
-#, fuzzy
-#| msgid "The name of the selected font"
 msgid "The name of the action"
-msgstr "Le nom de la police sélectionnée"
+msgstr "Le nom de l'action"
 
 #: gtk/gtksizegroup.c:228 gtk/gtktreeselection.c:130
 msgid "Mode"
@@ -8790,24 +8761,20 @@ msgid "Wrap width for laying out items in a grid"
 msgstr "Largeur de coupure pour l'agencement des éléments dans une grille"
 
 #: gtk/gtktreemodelfilter.c:532
-#, fuzzy
-#| msgid "The selection mode"
 msgid "The child model"
-msgstr "Le mode de sélection"
+msgstr "Le modèle enfant"
 
 #: gtk/gtktreemodelfilter.c:533
-#, fuzzy
-#| msgid "The model for the tree view"
 msgid "The model for the filtermodel to filter"
-msgstr "Modèle de la vue arborescente"
+msgstr "Le modèle que ce modèle de filtrage utilise pour filtrer"
 
 #: gtk/gtktreemodelfilter.c:540
 msgid "The virtual root"
-msgstr ""
+msgstr "La racine virtuelle"
 
 #: gtk/gtktreemodelfilter.c:541
 msgid "The virtual root (relative to the child model) for this filtermodel"
-msgstr ""
+msgstr "La racine virtuelle (relative au modèle enfant) de ce modèle de filtrage"
 
 #: gtk/gtktreemodelsort.c:484
 msgid "TreeModelSort Model"
@@ -9899,9 +9866,6 @@ msgstr "Titre du profil de couleurs"
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Le titre du profil de couleurs à utiliser"
-
-#~ msgid "Sans 12"
-#~ msgstr "Sans 12"
 
 #~ msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 #~ msgstr ""
