@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 15:26+0000\n"
-"PO-Revision-Date: 2016-09-10 01:10+0200\n"
+"POT-Creation-Date: 2016-09-13 09:09+0000\n"
+"PO-Revision-Date: 2016-09-16 10:34+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2645,7 +2645,7 @@ msgstr "Copiar enderezo da _ligazón"
 
 #: gtk/gtk-launch.c:40
 msgid "Show program version"
-msgstr ""
+msgstr "Mostrar versión do programa"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
