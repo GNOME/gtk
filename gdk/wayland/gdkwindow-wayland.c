@@ -1509,6 +1509,9 @@ xdg_popup_configure (void                 *data,
 
   g_return_if_fail (impl->transient_for);
 
+  if (impl->position_method != POSITION_METHOD_MOVE_TO_RECT)
+    return;
+
   calculate_moved_to_rect_result (window, x, y, width, height,
                                   &flipped_rect,
                                   &final_rect,
