@@ -2281,6 +2281,14 @@ gdk_event_translate (MSG  *msg,
 	  in_ime_composition)
 	break;
 
+      /* Ignore autorepeats on modifiers */
+      if (msg->message == WM_KEYDOWN &&
+          (msg->wParam == VK_MENU ||
+           msg->wParam == VK_CONTROL ||
+           msg->wParam == VK_SHIFT) &&
+           ((HIWORD(msg->lParam) & KF_REPEAT) >= 1))
+        break;
+
       if (keyboard_grab &&
           !propagate (&window, msg,
 		      keyboard_grab->window,
