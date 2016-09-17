@@ -3700,8 +3700,7 @@ _gdk_win32_display_queue_events (GdkDisplay *display)
   if (modal_win32_dialog != NULL)
     return;
 
-  while (!_gdk_event_queue_find_first (display) &&
-	 PeekMessageW (&msg, NULL, 0, 0, PM_REMOVE))
+  while (PeekMessageW (&msg, NULL, 0, 0, PM_REMOVE))
     {
       TranslateMessage (&msg);
       DispatchMessageW (&msg);
