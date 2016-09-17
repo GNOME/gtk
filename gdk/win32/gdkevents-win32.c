@@ -2398,6 +2398,9 @@ gdk_event_translate (MSG  *msg,
 	       LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display))))
 	event->key.hardware_keycode = VK_RSHIFT;
 
+      event->key.is_modifier = (msg->wParam == VK_CONTROL ||
+                                msg->wParam == VK_SHIFT ||
+                                msg->wParam == VK_MENU);
       /* g_print ("ctrl:%02x lctrl:%02x rctrl:%02x alt:%02x lalt:%02x ralt:%02x\n", key_state[VK_CONTROL], key_state[VK_LCONTROL], key_state[VK_RCONTROL], key_state[VK_MENU], key_state[VK_LMENU], key_state[VK_RMENU]); */
 
       build_key_event_state (event, key_state);
