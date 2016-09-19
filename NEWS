@@ -1,3 +1,35 @@
+Overview of Changes in GTK+ 3.22.0
+==================================
+
+* Reduce some noisy warnings
+
+* Improve positioning and sizing of popups on Wayland
+
+* Update Adwaita assets
+
+* Bugs fixed:
+ 602773 GdkEventKey.is_modifier is 0 for Shift, Ctrl, Alt keys
+ 771117 gtk3 3.21.5 broke displaying drop-down lists, need to scrol...
+ 771349 gdk_screen_get_monitor_scale_factor on X11 always returns 1...
+ 771568 Holding down a modifier key results in 100% cpu usage
+ 771561 Epiphany application mode on Wayland broken with WebKit...
+
+* Translation updates:
+ Brazilian Portuguese
+ British English
+ Catalan
+ Danish
+ French
+ Galician
+ Greek
+ Kazakh
+ Persian
+ Slovak
+ Spanish
+ Swedish
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.21.6
 ==================================
 
