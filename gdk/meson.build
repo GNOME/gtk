@@ -377,5 +377,6 @@ libgdk_dep = declare_dependency(
   depends: gdk_sources,
   include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps,
-  link_with: libgdk
+  link_with: libgdk,
+  link_args: ['-Bsymbolic'],
 )
