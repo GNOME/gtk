@@ -365,8 +365,7 @@ endif
 
 
 libgdk = shared_library('gdk',
-  gdk_sources,
-  gdkenum_h,
+  sources: [gdk_sources, gdkconfig, gdkenum_h],
   c_args: ['-DHAVE_CONFIG_H', '-DGDK_COMPILATION'],
   include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps,
