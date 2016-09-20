@@ -33,6 +33,25 @@ mkenum = find_program('build_enum.py')
 perl = find_program('perl')
 glib_mkenums = find_program('glib-mkenums')
 
+os_unix   = false
+os_linux  = false
+os_win32  = false
+os_darwin = false
+
+if host_machine.system().contains('darwin')
+  os_darwin = true
+elif host_machine.system().contains('mingw')
+  os_win32 = true
+elif host_machine.system().contains('linux')
+  os_linux = true
+endif
+
+os_unix = not os_win32
+
+build_font_demo = false
+
+
+
 
 cc = meson.get_compiler('c')
 cdata = configuration_data()
@@ -154,7 +173,7 @@ xcomposite_dep = dependency('xcomposite')
 glib_dep       = dependency('glib-2.0', version: '>= 2.49.4')
 giounix_dep    = dependency('gio-unix-2.0', required : false)
 pango_dep      = dependency('pango', version: '>=1.37.3')
-pangoft_dep    = dependency('pangoft2')
+pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled)
 cairo_dep      = dependency('cairo')
 pangocairo_dep = dependency('pangocairo')
 cairogobj_dep  = dependency('cairo-gobject')
@@ -172,7 +191,10 @@ wlprotocolsdep = dependency('wayland-protocols', version: '>= 1.7')
 wlcursordep    = dependency('wayland-cursor')
 wlegldep       = dependency('wayland-egl')
 xrandr_dep     = dependency('xrandr')
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9')
+
+
+harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
+build_font_demo = harfbuzz_dep.found() and pangoft_dep.found()
 
 if giounix_dep.found()
   cdata.set('HAVE_GIO_UNIX', 1)

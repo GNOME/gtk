@@ -1,4 +1,7 @@
-demos_base = files([
+
+## These should be in the order you want them to appear in the
+## demo app, which means alphabetized by demo title, not filename
+demos = files([
   'application_demo.c',
   'assistant.c',
   'builder.c',
@@ -65,15 +68,32 @@ demos_base = files([
   'toolpalette.c',
   'transparent.c',
   'tree_store.c',
-
-      'font_features.c', #TODO: IF BUILD_FONT_DEMO
-  'pagesetup.c' #TODO: IF OS_UNIX
 ])
 
-gtkdemo_sources = demos_base + files([
+
+gtkdemo_deps = [libgtk_dep]
+
+if build_font_demo
+  demos += files('font_features.c')
+  gtkdemo_deps += harfbuzz_dep
+endif
+
+if os_unix
+  demos += files('pagesetup.c')
+endif
+
+gtkdemo_sources = demos + files([
   'main.c',
 ])
 
+
+geninclude = find_program('geninclude.py')
+demos_h = custom_target(
+  'gtk3 demo header',
+  output  : 'demos.h',
+  input   : demos,
+  command : [geninclude, '@OUTPUT@', '@INPUT@'],
+)
 
 gtkdemo_resources = gnome.compile_resources(
   'gtkdemo_resources',
@@ -84,8 +104,9 @@ gtkdemo_resources = gnome.compile_resources(
 gtkdemo = executable(
   'gtk3-demo',
   gtkdemo_sources,
+  demos_h,
   gtkdemo_resources,
-  dependencies: [libgtk_dep, harfbuzz_dep],
+  dependencies: gtkdemo_deps,
   include_directories : confinc,
   gui_app: true
 )
