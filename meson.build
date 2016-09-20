@@ -172,6 +172,7 @@ wlprotocolsdep = dependency('wayland-protocols', version: '>= 1.7')
 wlcursordep    = dependency('wayland-cursor')
 wlegldep       = dependency('wayland-egl')
 xrandr_dep     = dependency('xrandr')
+harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9')
 
 if giounix_dep.found()
   cdata.set('HAVE_GIO_UNIX', 1)
