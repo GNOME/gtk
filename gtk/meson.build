@@ -785,7 +785,6 @@ gtk_deps = [
   glib_dep,
   atkbridge_dep,
   pangocairo_dep,
-  pangoft_dep,
   pango_dep,
   cairogobj_dep,
   cairo_dep,
@@ -804,6 +803,7 @@ if x11_enabled
   gtk_deps += [
     xi_dep,
     x11_dep,
+    pangoft_dep
   ]
 endif
 
@@ -811,6 +811,9 @@ if wayland_enabled
   gtk_sources += [
     gtk_wayland_sources,
     gtk_use_wayland_or_x11_c_sources
+  ]
+  gtk_deps += [
+    pangoft_dep
   ]
 endif
 
