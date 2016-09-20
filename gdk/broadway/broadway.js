@@ -528,6 +528,20 @@ function cmdPutBuffer(id, w, h, compressed)
     surface.imageData = imageData;
 }
 
+function cmdPutUncompressedBuffer(id, w, h, data)
+{
+    var surface = surfaces[id];
+    var context = surface.canvas.getContext("2d");
+
+    var imageData = decodeBuffer (context, surface.imageData, w, h, data, debugDecoding);
+    context.putImageData(imageData, 0, 0);
+
+    if (debugDecoding)
+        imageData = decodeBuffer (context, surface.imageData, w, h, data, false);
+
+    surface.imageData = imageData;
+}
+
 function cmdGrabPointer(id, ownerEvents)
 {
     doGrab(id, ownerEvents, false);
@@ -622,6 +636,14 @@ function handleCommands(cmd)
 	    h = cmd.get_16();
             var data = cmd.get_data();
             cmdPutBuffer(id, w, h, data);
+            break;
+
+	case 'B': // Put uncompressed image buffer
+	    id = cmd.get_16();
+	    w = cmd.get_16();
+	    h = cmd.get_16();
+            var data = cmd.get_data();
+            cmdPutUncompressedBuffer(id, w, h, data);
             break;
 
 	case 'g': // Grab

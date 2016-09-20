@@ -319,7 +319,8 @@ broadway_output_put_buffer (BroadwayOutput *output,
   gpointer data;
   int w, h;
 
-  write_header (output, BROADWAY_OP_PUT_BUFFER);
+  write_header (output, (output->compression == 0) 
+      ? BROADWAY_OP_PUT_UNCOMPRESSED_BUFFER : BROADWAY_OP_PUT_BUFFER);
 
   w = broadway_buffer_get_width (buffer);
   h = broadway_buffer_get_height (buffer);
@@ -333,23 +334,28 @@ broadway_output_put_buffer (BroadwayOutput *output,
   len = 0xdeadbeef;
   g_output_stream_write_all (output->buf, &len, sizeof(len), NULL, NULL, NULL);
 
-  //TODO: define no-compression in protocol and don't use compressor if output->compression==0
-  compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_RAW, output->compression);
-  if (!compressor)
-      return;
+  if (output->compression == 0)
+    {
+      broadway_buffer_encode (buffer, prev_buffer, output->buf);
+    }
+  else
+    {
+      compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_RAW, output->compression);
+      if (!compressor)
+          return;
 
-  out = g_converter_output_stream_new (output->buf, G_CONVERTER (compressor));
-  g_object_unref (compressor);
-  if (!out)
-      return;
+      out = g_converter_output_stream_new (output->buf, G_CONVERTER (compressor));
+      g_object_unref (compressor);
+      if (!out)
+          return;
 
-  broadway_buffer_encode (buffer, prev_buffer, out);
-  g_filter_output_stream_set_close_base_stream(G_FILTER_OUTPUT_STREAM(out), FALSE);
-  if (!g_output_stream_close (out, NULL, &error))
-      g_warning ("compression failed");
+      broadway_buffer_encode (buffer, prev_buffer, out);
+      g_filter_output_stream_set_close_base_stream(G_FILTER_OUTPUT_STREAM(out), FALSE);
+      if (!g_output_stream_close (out, NULL, &error))
+          g_warning ("compression failed");
 
-  g_object_unref (out);
-
+      g_object_unref (out);
+    }
   len = (guint32) (g_seekable_tell(G_SEEKABLE (output->buf)) - (where_is_len + sizeof(len)));
 
   //now we know actual len value, put it where it should be
