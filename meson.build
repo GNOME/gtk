@@ -184,7 +184,7 @@ configure_file(
 )
 
 subdir('gdk')
-# subdir('gtk')
-# subdir('demos')
+subdir('gtk')
+subdir('demos')
 # subdir('tests')
 # subdir('testsuite')
