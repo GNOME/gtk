@@ -837,5 +837,6 @@ libgtk_dep = declare_dependency(
   ],
   dependencies: gtk_deps,
   link_with: [libgtk, libgdk],
+  link_args: ['-Bsymbolic'],
   include_directories: [confinc, gtkinc]
 )
