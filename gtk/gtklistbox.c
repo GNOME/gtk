@@ -65,8 +65,13 @@
  *
  * # CSS nodes
  *
- * GtkListBox uses a single CSS node with name list. GtkListBoxRow uses
- * a single CSS node with name row. The row nodes get the .activatable
+ * |[<!-- language="plain" -->
+ * list
+ * ╰── row[.activatable]
+ * ]|
+ *
+ * GtkListBox uses a single CSS node named list. Each GtkListBoxRow uses
+ * a single CSS node named row. The row nodes get the .activatable
  * style class added when appropriate.
  */
 
