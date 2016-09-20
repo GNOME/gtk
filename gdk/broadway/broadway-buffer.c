@@ -3,6 +3,9 @@
 #include "broadway-buffer.h"
 
 #include <string.h>
+#include <stdio.h>
+#include <glib.h>
+#include <gio/gio.h>
 
 /* This code is based on some code from weston with this license:
  *
@@ -123,7 +126,7 @@ insert_block (BroadwayBuffer *buffer, guint32 h, int x, int y)
   buffer->stats[collision]++;
 }
 
-static struct entry *
+static inline struct entry *
 lookup_block (BroadwayBuffer *prev, guint32 h)
 {
   guint32 i;
@@ -146,7 +149,7 @@ struct encoder {
   guint32 color_run;
   guint32 delta;
   guint32 delta_run;
-  GString *dest;
+  GOutputStream  *dest;
   int bytes;
 };
 
@@ -167,10 +170,11 @@ struct encoder {
  *
  */
 
-static void
+static inline void
 emit (struct encoder *encoder, guint32 symbol)
 {
-  g_string_append_len (encoder->dest, (char *)&symbol, sizeof (guint32));
+  g_output_stream_write_all (encoder->dest, &symbol, sizeof (guint32),
+                                  NULL, NULL, NULL);
   encoder->bytes += sizeof (guint32);
 }
 
@@ -202,7 +206,7 @@ encode_run (struct encoder *encoder)
     }
 }
 
-static void
+static inline void
 encode_pixel (struct encoder *encoder, guint32 color, guint32 prev_color)
 {
   guint32 delta = 0;
@@ -258,7 +262,7 @@ encode_pixel (struct encoder *encoder, guint32 color, guint32 prev_color)
     }
 }
 
-static void
+static inline void
 encoder_flush (struct encoder *encoder)
 {
   encode_run (encoder);
@@ -328,7 +332,7 @@ unpremultiply_line (void *destp, void *srcp, int width)
 }
 
 BroadwayBuffer *
-broadway_buffer_create (int width, int height, guint8 *data, int stride)
+broadway_buffer_create (int width, int height, guint8 *data, int stride, gboolean no_blocks)
 {
   BroadwayBuffer *buffer;
   int y, bits_required;
@@ -345,7 +349,7 @@ broadway_buffer_create (int width, int height, guint8 *data, int stride)
   buffer->shift = 32 - bits_required;
   buffer->length = 1 << bits_required;
 
-  buffer->table = g_malloc0 (buffer->length * sizeof buffer->table[0]);
+  buffer->table = no_blocks ? NULL : g_malloc0 (buffer->length * sizeof buffer->table[0]);
 
   memset (buffer->stats, 0, sizeof buffer->stats);
   buffer->clashes = 0;
@@ -358,8 +362,8 @@ broadway_buffer_create (int width, int height, guint8 *data, int stride)
   return buffer;
 }
 
-void
-broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GString *dest)
+static void
+broadway_buffer_encode_with_blocks (BroadwayBuffer *buffer, BroadwayBuffer *prev, struct encoder *encoder)
 {
   struct entry *entry;
   int i, j, k;
@@ -367,12 +371,11 @@ broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GString *d
   guint32 *block_hashes;
   guint32 hash, bottom_hash, h, *line, *bottom, *prev_line;
   int width, height;
-  struct encoder encoder = { 0 };
   int *skyline, skyline_pixels;
   int matches;
-
   width = buffer->width;
   height = buffer->height;
+
   x0 = 0;
   x1 = width;
   y0 = 0;
@@ -383,7 +386,6 @@ broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GString *d
   block_hashes = g_malloc0 (width * sizeof block_hashes[0]);
 
   matches = 0;
-  encoder.dest = dest;
 
   // Calculate the block hashes for the first row
   for (i = y0; i < MIN(y1, y0 + block_size); i++)
@@ -444,38 +446,37 @@ broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GString *d
       for (j = x0; j < x1; j++)
         {
           if (i < skyline[j])
-            encode_pixel (&encoder, line[j], line[j]);
+            encode_pixel (encoder, line[j], line[j]);
           else if (prev)
             {
               /* FIXME: Add back overlap exception
                * for consecutive blocks */
 
               h = block_hashes[j];
-              entry = lookup_block (prev, h);
-              if (entry && entry->count < 2 &&
-                  skyline_pixels >= block_size &&
-                  verify_block_match (buffer, j, i, prev, entry) &&
-                  (entry->x != j || entry->y != i))
+              if ( skyline_pixels >= block_size && prev->table != NULL &&
+                  (entry = lookup_block (prev, h)) != NULL &&
+                  entry->count < 2 && (entry->x != j || entry->y != i) &&
+                  verify_block_match (buffer, j, i, prev, entry))
                 {
                   matches++;
-                  encode_block (&encoder, entry, j, i);
+                  encode_block (encoder, entry, j, i);
 
                   for (k = 0; k < block_size; k++)
                     skyline[j + k] = i + block_size;
 
-                  encode_pixel (&encoder, line[j], line[j]);
+                  encode_pixel (encoder, line[j], line[j]);
                 }
               else
                 {
                   if (prev_line && j < prev->width)
-                    encode_pixel (&encoder, line[j],
+                    encode_pixel (encoder, line[j],
                                   prev_line[j]);
                   else
-                    encode_pixel (&encoder, line[j], 0);
+                    encode_pixel (encoder, line[j], 0);
                 }
             }
           else
-            encode_pixel (&encoder, line[j], 0);
+            encode_pixel (encoder, line[j], 0);
 
           if (i < skyline[j + block_size])
             skyline_pixels = 0;
@@ -504,9 +505,13 @@ broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GString *d
         }
     }
 
-  encoder_flush (&encoder);
+
+  g_free (skyline);
+  g_free (block_hashes);
 
 #if 0
+  encoder_flush (encoder);
+
   fprintf(stderr, "collision stats:");
   for (i = 0; i < (int) G_N_ELEMENTS(buffer->stats); i++)
     fprintf(stderr, "%c%d", i == 0 ? ' ' : '/', buffer->stats[i]);
@@ -520,9 +525,52 @@ broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GString *d
           encoder.bytes, height * buffer->stride,
           100 * encoder.bytes / (height * buffer->stride));
 #endif
+}
 
-  g_free (skyline);
-  g_free (block_hashes);
+static void
+broadway_buffer_encode_no_blocks (BroadwayBuffer *buffer, BroadwayBuffer *prev, struct encoder *encoder)
+{
+  int prev_width, i, j;
+  guint32 *line, *prev_line;
+  const int height = buffer->height;
+  const int width = buffer->width;
 
+  for (i = 0; i < height; ++i)
+    {
+      line = (guint32 *)(buffer->data + i * buffer->stride);
+      if (prev && i < prev->height)
+        {
+        prev_line = (guint32 *)(prev->data + i * prev->stride);
+        prev_width = prev->width;
+        if (prev_width > width)
+          prev_width = width;
+
+        for (j = 0; j < prev_width; ++j)
+          encode_pixel (encoder, line[j],  prev_line[j]);
+        }
+      else
+        {
+          j = 0;
+        }
+
+      for (; j < width; ++j)
+        {
+          encode_pixel (encoder, line[j],  0);
+        }
+    }
+}
+
+void
+broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GOutputStream  *dest)
+{
+  struct encoder encoder = { 0 };
+  encoder.dest = dest;
+
+  if (buffer->table)
+      broadway_buffer_encode_with_blocks (buffer, prev, &encoder);
+  else
+      broadway_buffer_encode_no_blocks (buffer, prev, &encoder);
+
+  encoder_flush (&encoder);
   buffer->encoded = TRUE;
 }

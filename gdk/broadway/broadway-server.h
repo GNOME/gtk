@@ -23,8 +23,12 @@ BroadwayServer     *broadway_server_new                      (char             *
 							      int               port,
                                                               const char       *ssl_cert,
                                                               const char       *ssl_key,
+                                                              gboolean          no_blocks, 
+                                                              int               compression,
 							      GError          **error);
 BroadwayServer     *broadway_server_on_unix_socket_new       (char             *address,
+                                                              gboolean          no_blocks, 
+                                                              int               compression,
 							      GError          **error);
 gboolean            broadway_server_has_client               (BroadwayServer   *server);
 void                broadway_server_flush                    (BroadwayServer   *server);
