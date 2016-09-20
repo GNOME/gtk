@@ -1,8 +1,13 @@
 
 
 if wayland_enabled
-  #TODO: This should come from pkg-config --variable=pkgdatadir wayland-protocols
-  wayland_protocols_datadir = '/home/baedert/Source/gnome-configure/share/wayland-protocols/'
+  runcmd = run_command('pkg-config', '--variable=pkgdatadir', 'wayland-protocols')
+  if runcmd.returncode() == 0
+    wayland_protocols_datadir = runcmd.stdout().strip() + '/'
+  else
+    error('Could not get wayland-protocols pkgdatadir via pkg-config.')
+  endif
+
   wayland_scanner = find_program('wayland-scanner')
   genprotocols = find_program('genprotocolfiles.py')
 
