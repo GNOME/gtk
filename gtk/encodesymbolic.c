@@ -88,7 +88,7 @@ load_symbolic_svg (char *file_data, gsize file_len,
                       "     width=\"", svg_width, "\"\n"
                       "     height=\"", svg_height, "\">\n"
                       "  <style type=\"text/css\">\n"
-                      "    rect,path {\n"
+                      "    rect,circle,path {\n"
                       "      fill: ", css_fg," !important;\n"
                       "    }\n"
                       "    .warning {\n"
