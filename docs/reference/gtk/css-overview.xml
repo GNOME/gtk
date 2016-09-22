@@ -949,7 +949,7 @@ arrow {
     <example>
       <title>A CSS animation</title>
       <programlisting><![CDATA[
-@keyrframes spin {
+@keyframes spin {
   to { -gtk-icon-transform: rotate(1turn); }
 }
 
