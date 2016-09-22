@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-22 15:03+0000\n"
-"PO-Revision-Date: 2016-09-23 00:24+0900\n"
+"PO-Revision-Date: 2016-09-23 00:26+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -5679,7 +5679,7 @@ msgstr "smb://"
 #. Translators: do not translate sftp:// and ssh://
 #: gtk/ui/gtkplacesview.ui:216
 msgid "sftp:// or ssh://"
-msgstr "ftp:// 또는 ssh://"
+msgstr "sftp:// 또는 ssh://"
 
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:227
