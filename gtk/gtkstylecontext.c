@@ -939,7 +939,7 @@ gtk_style_context_set_id (GtkStyleContext *context,
  *
  * Returns the CSS ID used when obtaining style information.
  *
- * Returns: the ID or %NULL if no ID is set.
+ * Returns: (nullable): the ID or %NULL if no ID is set.
  **/
 const char *
 gtk_style_context_get_id (GtkStyleContext *context)
@@ -1930,7 +1930,7 @@ gtk_style_context_get_style (GtkStyleContext *context,
  * the default icon factory, returning an icon set if found, otherwise
  * %NULL.
  *
- * Returns: (transfer none): The looked  up %GtkIconSet, or %NULL
+ * Returns: (nullable) (transfer none): The looked up %GtkIconSet, or %NULL
  *
  * Deprecated: 3.10: Use gtk_icon_theme_lookup_icon() instead.
  **/

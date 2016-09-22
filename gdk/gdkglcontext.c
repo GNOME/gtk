@@ -873,7 +873,7 @@ gdk_gl_context_make_current (GdkGLContext *context)
  *
  * Retrieves the #GdkDisplay the @context is created for
  *
- * Returns: (transfer none): a #GdkDisplay or %NULL
+ * Returns: (nullable) (transfer none): a #GdkDisplay or %NULL
  *
  * Since: 3.16
  */
@@ -893,7 +893,7 @@ gdk_gl_context_get_display (GdkGLContext *context)
  *
  * Retrieves the #GdkWindow used by the @context.
  *
- * Returns: (transfer none): a #GdkWindow or %NULL
+ * Returns: (nullable) (transfer none): a #GdkWindow or %NULL
  *
  * Since: 3.16
  */
@@ -913,7 +913,7 @@ gdk_gl_context_get_window (GdkGLContext *context)
  *
  * Retrieves the #GdkGLContext that this @context share data with.
  *
- * Returns: (transfer none): a #GdkGLContext or %NULL
+ * Returns: (nullable) (transfer none): a #GdkGLContext or %NULL
  *
  * Since: 3.16
  */
@@ -985,7 +985,7 @@ gdk_gl_context_clear_current (void)
  *
  * Retrieves the current #GdkGLContext.
  *
- * Returns: (transfer none): the current #GdkGLContext, or %NULL
+ * Returns: (nullable) (transfer none): the current #GdkGLContext, or %NULL
  *
  * Since: 3.16
  */

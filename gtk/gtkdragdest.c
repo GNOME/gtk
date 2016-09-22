@@ -250,7 +250,7 @@ gtk_drag_dest_unset (GtkWidget *widget)
  * Returns the list of targets this widget can accept from
  * drag-and-drop.
  *
- * Returns: (transfer none): the #GtkTargetList, or %NULL if none
+ * Returns: (nullable) (transfer none): the #GtkTargetList, or %NULL if none
  */
 GtkTargetList *
 gtk_drag_dest_get_target_list (GtkWidget *widget)

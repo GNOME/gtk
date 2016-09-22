@@ -592,7 +592,7 @@ gdk_drag_get_selection (GdkDragContext *context)
  * The window is owned by @context and will be destroyed when
  * the drag operation is over.
  *
- * Returns: (transfer none): the drag window, or %NULL
+ * Returns: (nullable) (transfer none): the drag window, or %NULL
  *
  * Since: 3.20
  */

@@ -102,7 +102,7 @@ gtk_actionable_get_action_name (GtkActionable *actionable)
 /**
  * gtk_actionable_set_action_name:
  * @actionable: a #GtkActionable widget
- * @action_name: an action name, or %NULL
+ * @action_name: (nullable): an action name, or %NULL
  *
  * Specifies the name of the action with which this widget should be
  * associated.  If @action_name is %NULL then the widget will be

@@ -3662,7 +3662,7 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
  * built in icon images, you must pass the %GTK_ICON_LOOKUP_USE_BUILTIN
  * to gtk_icon_theme_lookup_icon().
  *
- * Returns: (transfer none): the built-in image pixbuf, or %NULL.
+ * Returns: (nullable) (transfer none): the built-in image pixbuf, or %NULL.
  *     No extra reference is added to the returned pixbuf, so if
  *     you want to keep it around, you must use g_object_ref().
  *     The returned image must not be modified.

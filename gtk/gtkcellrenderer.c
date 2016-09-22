@@ -883,7 +883,7 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 /**
  * gtk_cell_renderer_start_editing:
  * @cell: a #GtkCellRenderer
- * @event: a #GdkEvent
+ * @event: (nullable): a #GdkEvent
  * @widget: widget that received the event
  * @path: widget-dependent string representation of the event location;
  *    e.g. for #GtkTreeView, a string representation of #GtkTreePath
@@ -1792,8 +1792,8 @@ gtk_cell_renderer_get_aligned_area (GtkCellRenderer      *cell,
 
 /**
  * gtk_cell_renderer_get_state:
- * @cell: a #GtkCellRenderer, or %NULL
- * @widget: a #GtkWidget, or %NULL
+ * @cell: (nullable): a #GtkCellRenderer, or %NULL
+ * @widget: (nullable): a #GtkWidget, or %NULL
  * @cell_state: cell renderer state
  *
  * Translates the cell renderer state to #GtkStateFlags,

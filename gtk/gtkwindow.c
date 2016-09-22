@@ -12368,7 +12368,7 @@ _gtk_window_get_popover_position (GtkWindow             *window,
  * Returns the conceptual parent of this popover, the real
  * parent will always be @window.
  *
- * Returns: The conceptual parent widget, or %NULL.
+ * Returns: (nullable): The conceptual parent widget, or %NULL.
  **/
 GtkWidget *
 _gtk_window_get_popover_parent (GtkWindow *window,

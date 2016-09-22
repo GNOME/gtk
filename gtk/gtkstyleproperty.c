@@ -260,7 +260,7 @@ _gtk_style_property_add_alias (const gchar *name,
  * Looks up the CSS property with the given @name. If no such
  * property exists, %NULL is returned.
  *
- * Returns: (transfer none): The property or %NULL if no
+ * Returns: (nullable) (transfer none): The property or %NULL if no
  *     property with the given name exists.
  **/
 GtkStyleProperty *

@@ -951,7 +951,7 @@ gtk_theming_module_init (GtkThemingModule *module)
  * Loads and initializes a theming engine module from the
  * standard directories.
  *
- * Returns: (transfer none): A theming engine, or %NULL if
+ * Returns: (nullable) (transfer none): A theming engine, or %NULL if
  * the engine @name doesn’t exist.
  *
  * Deprecated: 3.14
@@ -1004,7 +1004,7 @@ gtk_theming_engine_load (const gchar *name)
  *
  * Returns the #GdkScreen to which @engine currently rendering to.
  *
- * Returns: (transfer none): a #GdkScreen, or %NULL.
+ * Returns: (nullable) (transfer none): a #GdkScreen, or %NULL.
  *
  * Deprecated: 3.14
  **/

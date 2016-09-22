@@ -523,7 +523,7 @@ gtk_widget_path_iter_get_sibling_index (const GtkWidgetPath *path,
  * Returns the object name that is at position @pos in the widget
  * hierarchy defined in @path.
  *
- * Returns: the name or %NULL
+ * Returns: (nullable): the name or %NULL
  *
  * Since: 3.20
  **/
@@ -713,7 +713,7 @@ gtk_widget_path_iter_set_state (GtkWidgetPath *path,
  * the position @pos in the widget hierarchy defined by
  * @path
  *
- * Returns: The widget name, or %NULL if none was set.
+ * Returns: (nullable): The widget name, or %NULL if none was set.
  **/
 const gchar *
 gtk_widget_path_iter_get_name (const GtkWidgetPath *path,

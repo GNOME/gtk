@@ -437,9 +437,9 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
  * gdk_keymap_get_entries_for_keycode:
  * @keymap: a #GdkKeymap
  * @hardware_keycode: a keycode
- * @keys: (out) (array length=n_entries) (transfer full): return
+ * @keys: (out) (array length=n_entries) (transfer full) (optional): return
  *     location for array of #GdkKeymapKey, or %NULL
- * @keyvals: (out) (array length=n_entries) (transfer full): return
+ * @keyvals: (out) (array length=n_entries) (transfer full) (optional): return
  *     location for array of keyvals, or %NULL
  * @n_entries: length of @keys and @keyvals
  *

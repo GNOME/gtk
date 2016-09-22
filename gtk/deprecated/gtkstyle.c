@@ -4752,7 +4752,7 @@ gtk_widget_class_path (GtkWidget *widget,
  * the application and should not be modified. The pixbuf should be
  * freed after use with g_object_unref().
  *
- * Returns: (transfer full): a new pixbuf, or %NULL if the
+ * Returns: (nullable) (transfer full): a new pixbuf, or %NULL if the
  *     stock ID wasn’t known
  *
  * Deprecated: 3.0: Use gtk_widget_render_icon_pixbuf() instead.

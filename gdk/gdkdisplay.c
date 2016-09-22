@@ -1792,7 +1792,7 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
  * @display:          a #GdkDisplay
  * @clipboard_window: a #GdkWindow belonging to the clipboard owner
  * @time_:            a timestamp
- * @targets:          (array length=n_targets): an array of targets
+ * @targets:          (array length=n_targets) (nullable): an array of targets
  *                    that should be saved, or %NULL
  *                    if all available targets should be saved.
  * @n_targets:        length of the @targets array
@@ -2570,7 +2570,7 @@ get_fallback_monitor (GdkDisplay *display)
  *
  * Gets a monitor associated with this display.
  *
- * Returns: (transfer none): the #GdkMonitor, or %NULL if
+ * Returns: (nullable) (transfer none): the #GdkMonitor, or %NULL if
  *    @monitor_num is not a valid monitor number
  * Since: 3.22
  */
@@ -2597,7 +2597,7 @@ gdk_display_get_monitor (GdkDisplay *display,
  * manager to place the windows, specialized desktop applications
  * such as panels should place themselves on the primary monitor.
  *
- * Returns: (transfer none): the primary monitor, or %NULL if no primary
+ * Returns: (nullable) (transfer none): the primary monitor, or %NULL if no primary
  *     monitor is configured by the user
  * Since: 3.22
  */

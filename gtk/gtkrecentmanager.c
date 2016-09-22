@@ -1968,7 +1968,7 @@ get_icon_fallback (const gchar *icon_name,
  *
  * Retrieves the icon of size @size associated to the resource MIME type.
  *
- * Returns: (transfer full): a #GdkPixbuf containing the icon,
+ * Returns: (nullable) (transfer full): a #GdkPixbuf containing the icon,
  *     or %NULL. Use g_object_unref() when finished using the icon.
  *
  * Since: 2.10
@@ -2003,7 +2003,7 @@ gtk_recent_info_get_icon (GtkRecentInfo *info,
  *
  * Retrieves the icon associated to the resource MIME type.
  *
- * Returns: (transfer full): a #GIcon containing the icon, or %NULL.
+ * Returns: (nullable) (transfer full): a #GIcon containing the icon, or %NULL.
  *   Use g_object_unref() when finished using the icon
  *
  * Since: 2.22
@@ -2266,7 +2266,7 @@ gtk_recent_info_get_short_name (GtkRecentInfo *info)
  * is local, it returns a local path; if the resource is not local,
  * it returns the UTF-8 encoded content of gtk_recent_info_get_uri().
  *
- * Returns: a newly allocated UTF-8 string containing the
+ * Returns: (nullable): a newly allocated UTF-8 string containing the
  *   resource’s URI or %NULL. Use g_free() when done using it.
  *
  * Since: 2.10
@@ -2427,7 +2427,7 @@ gtk_recent_info_has_group (GtkRecentInfo *info,
  *
  * Creates a #GAppInfo for the specified #GtkRecentInfo
  *
- * Returns: (transfer full): the newly created #GAppInfo, or %NULL.
+ * Returns: (nullable) (transfer full): the newly created #GAppInfo, or %NULL.
  *   In case of error, @error will be set either with a
  *   %GTK_RECENT_MANAGER_ERROR or a %G_IO_ERROR
  */

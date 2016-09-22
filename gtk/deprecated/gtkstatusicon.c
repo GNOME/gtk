@@ -1919,7 +1919,7 @@ gtk_status_icon_get_storage_type (GtkStatusIcon *status_icon)
  * The caller of this function does not own a reference to the
  * returned pixbuf.
  * 
- * Returns: (transfer none): the displayed pixbuf,
+ * Returns: (nullable) (transfer none): the displayed pixbuf,
  *     or %NULL if the image is empty.
  *
  * Since: 2.10
@@ -1948,7 +1948,7 @@ gtk_status_icon_get_pixbuf (GtkStatusIcon *status_icon)
  * The returned string is owned by the #GtkStatusIcon and should not
  * be freed or modified.
  * 
- * Returns: stock id of the displayed stock icon,
+ * Returns: (nullable): stock id of the displayed stock icon,
  *   or %NULL if the image is empty.
  *
  * Since: 2.10
@@ -1977,7 +1977,7 @@ gtk_status_icon_get_stock (GtkStatusIcon *status_icon)
  * The returned string is owned by the #GtkStatusIcon and should not
  * be freed or modified.
  * 
- * Returns: name of the displayed icon, or %NULL if the image is empty.
+ * Returns: (nullable): name of the displayed icon, or %NULL if the image is empty.
  *
  * Since: 2.10
  *
@@ -2007,7 +2007,7 @@ gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
  *
  * If this function fails, @icon is left unchanged;
  *
- * Returns: (transfer none): the displayed icon, or %NULL if the image is empty
+ * Returns: (nullable) (transfer none): the displayed icon, or %NULL if the image is empty
  *
  * Since: 2.14
  *
@@ -2582,7 +2582,7 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
  *
  * Gets the contents of the tooltip for @status_icon.
  *
- * Returns: the tooltip text, or %NULL. You should free the
+ * Returns: (nullable): the tooltip text, or %NULL. You should free the
  *   returned string with g_free() when done.
  *
  * Since: 2.16
@@ -2672,7 +2672,7 @@ gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
  *
  * Gets the contents of the tooltip for @status_icon.
  *
- * Returns: the tooltip text, or %NULL. You should free the
+ * Returns: (nullable): the tooltip text, or %NULL. You should free the
  *   returned string with g_free() when done.
  *
  * Since: 2.16
