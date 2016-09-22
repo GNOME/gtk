@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2B\n"
-"POT-Creation-Date: 2016-09-10 22:50+0300\n"
-"PO-Revision-Date: 2016-09-10 23:43+0300\n"
+"POT-Creation-Date: 2016-09-22 22:57+0300\n"
+"PO-Revision-Date: 2016-09-22 23:06+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -38,38 +38,50 @@ msgstr "Error parsing option --gdk-debug"
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Error parsing option --gdk-no-debug"
 
+#. Description of --class=CLASS in --help output
 #: gdk/gdk.c:231
 msgid "Program class as used by the window manager"
 msgstr "Program class as used by the window manager"
 
+#. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:232
 msgid "CLASS"
 msgstr "CLASS"
 
+#. Description of --name=NAME in --help output
 #: gdk/gdk.c:234
 msgid "Program name as used by the window manager"
 msgstr "Program name as used by the window manager"
 
+#. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:235
 msgid "NAME"
 msgstr "NAME"
 
+#. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:238
 msgid "X display to use"
 msgstr "X display to use"
 
+#. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:239
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
+#. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:243
 msgid "GDK debugging flags to set"
 msgstr "GDK debugging flags to set"
 
+#. Placeholder in --gdk-debug=FLAGS in --help output
+#. Placeholder in --gdk-no-debug=FLAGS in --help output
+#. Placeholder in --gtk-debug=FLAGS in --help output
+#. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:470 gtk/gtkmain.c:473
 msgid "FLAGS"
 msgstr "FLAGS"
 
+#. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:246
 msgid "GDK debugging flags to unset"
 msgstr "GDK debugging flags to unset"
@@ -82,6 +94,17 @@ msgstr "GL support disabled via GDK_DEBUG"
 msgid "The current backend does not support OpenGL"
 msgstr "הממשק הנוכחי אינו תומך ב־‏OpenGL"
 
+#.
+#. * Translators, the strings in the “keyboard label” context are
+#. * display names for keyboard keys. Some of them have prefixes like
+#. * XF86 or ISO_ - these should be removed in the translation. Similarly,
+#. * underscores should be replaced by spaces. The prefix “KP_” stands
+#. * for “key pad” and you may want to include that in your translation.
+#. * Here are some examples of English translations:
+#. * XF86AudioMute - Audio mute
+#. * Scroll_lock   - Scroll lock
+#. * KP_Space      - Space (keypad)
+#.
 #: gdk/keyname-table.h:6843
 msgctxt "keyboard label"
 msgid "BackSpace"
@@ -184,6 +207,7 @@ msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Num_Lock"
 
+#. Translators: KP_ means 'key pad' here
 #: gdk/keyname-table.h:6864
 msgctxt "keyboard label"
 msgid "KP_Space"
@@ -453,26 +477,32 @@ msgstr ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
 
+#. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
 msgstr "Don't batch GDI requests"
 
+#. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:55
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Don't use the Wintab API for tablet support"
 
+#. Description of --ignore-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:57
 msgid "Same as --no-wintab"
 msgstr "Same as --no-wintab"
 
+#. Description of --use-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:59
 msgid "Do use the Wintab API [default]"
 msgstr "Do use the Wintab API [default]"
 
+#. Description of --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:61
 msgid "Size of the palette in 8 bit mode"
 msgstr "Size of the palette in 8 bit mode"
 
+#. Placeholder in --max-colors=COLORS in --help output
 #: gdk/win32/gdkmain-win32.c:62
 msgid "COLORS"
 msgstr "COLORS"
@@ -594,6 +624,9 @@ msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "מפעיל את המרחיב"
 
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
 #: gtk/a11y/gtkimageaccessible.c:53 gtk/deprecated/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_About"
@@ -624,15 +657,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_סגירה"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9025
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9058
 msgid "Minimize"
 msgstr "מזעור"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9034
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9067
 msgid "Maximize"
 msgstr "הגדלה"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8991
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9024
 msgid "Restore"
 msgstr "שחזור"
 
@@ -656,6 +689,7 @@ msgctxt "Stock label"
 msgid "Error"
 msgstr "שגיאה"
 
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/a11y/gtkimageaccessible.c:66 gtk/deprecated/gtkstock.c:333
 msgctxt "Stock label"
 msgid "Information"
@@ -703,41 +737,49 @@ msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "מסך _מלא"
 
+#. This is a navigation label as in "go to the bottom of the page"
 #: gtk/a11y/gtkimageaccessible.c:75 gtk/deprecated/gtkstock.c:365
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_תחתון"
 
+#. This is a navigation label as in "go to the first page"
 #: gtk/a11y/gtkimageaccessible.c:76 gtk/deprecated/gtkstock.c:367
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_ראשון"
 
+#. This is a navigation label as in "go to the last page"
 #: gtk/a11y/gtkimageaccessible.c:77 gtk/deprecated/gtkstock.c:369
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_אחרון"
 
+#. This is a navigation label as in "go to the top of the page"
 #: gtk/a11y/gtkimageaccessible.c:78 gtk/deprecated/gtkstock.c:371
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_עליון"
 
+#. This is a navigation label as in "go back"
 #: gtk/a11y/gtkimageaccessible.c:79 gtk/deprecated/gtkstock.c:373
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_חזרה"
 
+#. This is a navigation label as in "go down"
 #: gtk/a11y/gtkimageaccessible.c:80 gtk/deprecated/gtkstock.c:375
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_מטה"
 
+#. This is a navigation label as in "go forward"
 #: gtk/a11y/gtkimageaccessible.c:81 gtk/deprecated/gtkstock.c:377
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_קדימה"
 
+#. This is a navigation label as in "go up"
 #: gtk/a11y/gtkimageaccessible.c:82 gtk/deprecated/gtkstock.c:379
 msgctxt "Stock label, navigation"
 msgid "_Up"
@@ -773,6 +815,7 @@ msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_קפיצה אל"
 
+#. This is about text justification, "centered text"
 #: gtk/a11y/gtkimageaccessible.c:89 gtk/deprecated/gtkstock.c:390
 msgctxt "Stock label"
 msgid "_Center"
@@ -780,16 +823,19 @@ msgstr "מ_רכז"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
+#. This is about text justification
 #: gtk/a11y/gtkimageaccessible.c:90 gtk/deprecated/gtkstock.c:392
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_מילוי"
 
+#. This is about text justification, "left-justified text"
 #: gtk/a11y/gtkimageaccessible.c:91 gtk/deprecated/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_שמאל"
 
+#. This is about text justification, "right-justified text"
 #: gtk/a11y/gtkimageaccessible.c:92 gtk/deprecated/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_Right"
@@ -800,41 +846,49 @@ msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "י_ציאה ממסך מלא"
 
+#. Media label, as in "fast forward"
 #: gtk/a11y/gtkimageaccessible.c:94 gtk/deprecated/gtkstock.c:399
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_קדימה"
 
+#. Media label, as in "next song"
 #: gtk/a11y/gtkimageaccessible.c:95 gtk/deprecated/gtkstock.c:401
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_הבא"
 
+#. Media label, as in "pause music"
 #: gtk/a11y/gtkimageaccessible.c:96 gtk/deprecated/gtkstock.c:403
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "ה_שהיה"
 
+#. Media label, as in "play music"
 #: gtk/a11y/gtkimageaccessible.c:97 gtk/deprecated/gtkstock.c:405
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_ניגון"
 
+#. Media label, as in  "previous song"
 #: gtk/a11y/gtkimageaccessible.c:98 gtk/deprecated/gtkstock.c:407
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "ה_קודם"
 
+#. Media label
 #: gtk/a11y/gtkimageaccessible.c:99 gtk/deprecated/gtkstock.c:409
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "הק_לטה"
 
+#. Media label
 #: gtk/a11y/gtkimageaccessible.c:100 gtk/deprecated/gtkstock.c:411
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "הרצה _לאחור"
 
+#. Media label
 #: gtk/a11y/gtkimageaccessible.c:101 gtk/deprecated/gtkstock.c:413
 msgctxt "Stock label, media"
 msgid "_Stop"
@@ -916,11 +970,13 @@ msgctxt "Stock label"
 msgid "Select _All"
 msgstr "בחירת ה_כול"
 
+#. Sorting direction
 #: gtk/a11y/gtkimageaccessible.c:117 gtk/deprecated/gtkstock.c:444
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "סדר _עולה"
 
+#. Sorting direction
 #: gtk/a11y/gtkimageaccessible.c:118 gtk/deprecated/gtkstock.c:446
 msgctxt "Stock label"
 msgid "_Descending"
@@ -936,11 +992,13 @@ msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_עצירה"
 
+#. Font variant
 #: gtk/a11y/gtkimageaccessible.c:121 gtk/deprecated/gtkstock.c:450
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_קו חוצה"
 
+#. Font variant
 #: gtk/a11y/gtkimageaccessible.c:122 gtk/deprecated/gtkstock.c:453
 msgctxt "Stock label"
 msgid "_Underline"
@@ -956,11 +1014,13 @@ msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "הקטנת זיח"
 
+#. Zoom
 #: gtk/a11y/gtkimageaccessible.c:125 gtk/deprecated/gtkstock.c:457
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "גודל _רגיל"
 
+#. Zoom
 #: gtk/a11y/gtkimageaccessible.c:126 gtk/deprecated/gtkstock.c:459
 msgctxt "Stock label"
 msgid "Best _Fit"
@@ -1153,7 +1213,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12492 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12525 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1173,6 +1233,8 @@ msgstr "ע_זרה"
 msgid "Color Selection"
 msgstr "בחירת צבע"
 
+#. This is the default text shown in the preview entry, though the user
+#. can set it. Remember that some fonts only have capital letters.
 #: gtk/deprecated/gtkfontsel.c:121
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdef ABCDEF אבגדהו"
@@ -1189,6 +1251,7 @@ msgstr "_סגנון:"
 msgid "Si_ze:"
 msgstr "_גודל:"
 
+#. create the text entry widget
 #: gtk/deprecated/gtkfontsel.c:577
 msgid "_Preview:"
 msgstr "_תצוגה מקדימה:"
@@ -1199,7 +1262,7 @@ msgid "_Apply"
 msgstr "ה_חלה"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12493
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12526
 msgid "_OK"
 msgstr "_אישור"
 
@@ -1207,6 +1270,9 @@ msgstr "_אישור"
 msgid "Font Selection"
 msgstr "בחירת גופן"
 
+#. Translators: the format here is used to build the string that will be rendered
+#. * in the number emblem.
+#.
 #: gtk/deprecated/gtknumerableicon.c:473
 #, c-format
 msgctxt "Number format"
@@ -1268,21 +1334,25 @@ msgctxt "Stock label"
 msgid "_OK"
 msgstr "_אישור"
 
+#. Page orientation
 #: gtk/deprecated/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "לרוחב"
 
+#. Page orientation
 #: gtk/deprecated/gtkstock.c:422
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "לאורך"
 
+#. Page orientation
 #: gtk/deprecated/gtkstock.c:424
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "לרוחב מהופך"
 
+#. Page orientation
 #: gtk/deprecated/gtkstock.c:426
 msgctxt "Stock label"
 msgid "Reverse portrait"
@@ -1409,7 +1479,8 @@ msgstr "הרישיון הציבורי הכללי המוקטן של גנו, גר�
 
 #: gtk/gtkaboutdialog.c:126
 msgid "GNU Affero General Public License, version 3 or later"
-msgstr "הרישיון הציבורי הכללי של גנו במהדורת Affero, גרסה 3 או כל גרסה מאוחרת יותר"
+msgstr ""
+"הרישיון הציבורי הכללי של גנו במהדורת Affero, גרסה 3 או כל גרסה מאוחרת יותר"
 
 #: gtk/gtkaboutdialog.c:695
 msgid "C_redits"
@@ -1506,6 +1577,9 @@ msgstr "אומנות על ידי"
 #
 # נתיבים:
 # ../gtk/gtkaboutdialog.c:99
+#. Translators: this is the license preamble; the string at the end
+#. * contains the name of the license as link text.
+#.
 #: gtk/gtkaboutdialog.c:2487
 #, c-format
 msgid ""
@@ -1515,36 +1589,66 @@ msgstr ""
 "תכנית זו מופצת ללא שום אחריות.\n"
 "ניתן לבקר בכתובת <a href=\"%s\">%s</a> לפרטים."
 
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
 #: gtk/gtkaccellabel.c:179 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
 
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
 #: gtk/gtkaccellabel.c:185 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
 
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
 #: gtk/gtkaccellabel.c:191 gtk/gtkshortcutlabel.c:108
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
 
+#. This is the text that should appear next to menu accelerators
+#. * that use the super key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
 #: gtk/gtkaccellabel.c:831 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
 
+#. This is the text that should appear next to menu accelerators
+#. * that use the hyper key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
 #: gtk/gtkaccellabel.c:844 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
 
+#. This is the text that should appear next to menu accelerators
+#. * that use the meta key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#.
 #: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
@@ -1570,6 +1674,7 @@ msgstr "יישום אחר…"
 msgid "Select Application"
 msgstr "בחירת יישום"
 
+#. Translators: %s is a filename
 #: gtk/gtkappchooserdialog.c:208
 #, c-format
 msgid "Opening “%s”."
@@ -1580,6 +1685,7 @@ msgstr "פתיחת %s."
 msgid "No applications found for “%s”"
 msgstr "לא נמצאו יישומים עבור „%s“"
 
+#. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "Opening “%s” files."
@@ -1706,46 +1812,105 @@ msgstr ""
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
 
+#. Translate to calendar:YM if you want years to be displayed
+#. * before months; otherwise translate to calendar:MY.
+#. * Do *not* translate it to anything else, if it
+#. * it isn't calendar:YM or calendar:MY it will not work.
+#. *
+#. * Note that the ordering described here is logical order, which is
+#. * further influenced by BIDI ordering. Thus, if you have a default
+#. * text direction of RTL and specify "calendar:YM", then the year
+#. * will appear to the right of the month.
+#.
 #: gtk/gtkcalendar.c:800
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
+#.
 #: gtk/gtkcalendar.c:838
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
+#. Translators:  This is a text measurement template.
+#. * Translate it to the widest year text
+#. *
+#. * If you don't understand this, leave it as "2000"
+#.
 #: gtk/gtkcalendar.c:1863
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
 
+#. Translators: this defines whether the day numbers should use
+#. * localized digits or the ones used in English (0123...).
+#. *
+#. * Translate to "%Id" if you want to use localized digits, or
+#. * translate to "%d" otherwise.
+#. *
+#. * Note that translating this doesn't guarantee that you get localized
+#. * digits. That needs support from your system and locale definition
+#. * too.
+#.
 #: gtk/gtkcalendar.c:1894 gtk/gtkcalendar.c:2590
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
 msgstr "%d"
 
+#. Translators: this defines whether the week numbers should use
+#. * localized digits or the ones used in English (0123...).
+#. *
+#. * Translate to "%Id" if you want to use localized digits, or
+#. * translate to "%d" otherwise.
+#. *
+#. * Note that translating this doesn't guarantee that you get localized
+#. * digits. That needs support from your system and locale definition
+#. * too.
+#.
 #: gtk/gtkcalendar.c:1926 gtk/gtkcalendar.c:2456
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
 msgstr "%d"
 
+#. Translators: This dictates how the year is displayed in
+#. * gtkcalendar widget.  See strftime() manual for the format.
+#. * Use only ASCII in the translation.
+#. *
+#. * Also look for the msgid "2000".
+#. * Translate that entry to a year with the widest output of this
+#. * msgid.
+#. *
+#. * "%Y" is appropriate for most locales.
+#.
 #: gtk/gtkcalendar.c:2223
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
 
+#. This label is displayed in a treeview cell displaying
+#. * a disabled accelerator key combination.
+#.
 #: gtk/gtkcellrendereraccel.c:273
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "כבוי"
 
+#. This label is displayed in a treeview cell displaying
+#. * an accelerator key combination that is not valid according
+#. * to gtk_accelerator_valid().
+#.
 #: gtk/gtkcellrendereraccel.c:283
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "בלתי תקני"
 
+#. This label is displayed in a treeview cell displaying an accelerator
+#. * when the cell is clicked to change the acelerator.
+#.
 #: gtk/gtkcellrendereraccel.c:414 gtk/gtkcellrendereraccel.c:488
 msgid "New accelerator…"
 msgstr "מאיץ חדש…"
@@ -1955,6 +2120,7 @@ msgctxt "Color name"
 msgid "White"
 msgstr "לבן"
 
+#. translators: label for the custom section in the color chooser
 #: gtk/gtkcolorchooserwidget.c:543
 msgid "Custom"
 msgstr "התאמה אישית"
@@ -1990,10 +2156,17 @@ msgstr "שקיפות"
 msgid "C_ustomize"
 msgstr "התאמה _אישית"
 
+#. Translate to the default units to use for presenting
+#. * lengths to the user. Translate to default:inch if you
+#. * want inches, otherwise translate to default:mm.
+#. * Do *not* translate it to "predefinito:mm", if it
+#. * it isn't default:mm or default:inch it will not work
+#.
 #: gtk/gtkcustompaperunixdialog.c:117
 msgid "default:mm"
 msgstr "default:mm"
 
+#. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3315
 msgid "Manage Custom Sizes"
 msgstr "ניהול גדלים מותאמים"
@@ -2108,6 +2281,7 @@ msgstr "אחר…"
 msgid "_Name"
 msgstr "_שם"
 
+#. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
 #: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1642
 msgid "_Open"
@@ -2117,6 +2291,10 @@ msgstr "_פתיחה"
 msgid "_Save"
 msgstr "_שמירה"
 
+#. Translators: the first string is a path and the second string
+#. * is a hostname. Nautilus and the panel contain the same string
+#. * to translate.
+#.
 #: gtk/gtkfilechooserutils.c:505
 #, c-format
 msgid "%1$s on %2$s"
@@ -2299,6 +2477,7 @@ msgstr "סידור _תיקיות לפני קבצים"
 msgid "Location"
 msgstr "מיקום"
 
+#. Label
 #: gtk/gtkfilechooserwidget.c:2699
 msgid "_Name:"
 msgstr "_שם:"
@@ -2354,6 +2533,8 @@ msgstr "%-e ב%b"
 msgid "%-e %b %Y"
 msgstr "%-e ב%b %Y"
 
+#. Translators: We don't know whether this printer is
+#. * available to print to.
 #: gtk/gtkfilechooserwidget.c:5055 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
@@ -2406,6 +2587,11 @@ msgstr "נצפה לאחרונה"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
+#. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
+#. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
+#. * token for the fake “File System” volume.  So, we’ll return a pointer to
+#. * this particular string.
+#.
 #: gtk/gtkfilesystem.c:49
 msgid "File System"
 msgstr "מערכת קבצים"
@@ -2431,7 +2617,7 @@ msgstr "OpenGL context creation failed"
 msgid "Application menu"
 msgstr "תפריט יישום"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9061
+#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9094
 msgid "Close"
 msgstr "סגירה"
 
@@ -2483,18 +2669,26 @@ msgstr "אזהרה"
 msgid "Error"
 msgstr "שגיאה"
 
+#. Open Link
 #: gtk/gtklabel.c:6646
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
+#. Copy Link Address
 #: gtk/gtklabel.c:6655
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
+
+#: gtk/gtk-launch.c:40
+msgid "Show program version"
+msgstr "Show program version"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgstr "APPLICATION [URI...] — launch an APPLICATION"
 
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
 #: gtk/gtk-launch.c:78
 msgid ""
 "Launch an application (specified by its desktop file name),\n"
@@ -2513,6 +2707,8 @@ msgstr "Error parsing commandline options: %s\n"
 msgid "Try \"%s --help\" for more information."
 msgstr "Try \"%s --help\" for more information."
 
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
 #: gtk/gtk-launch.c:111
 #, c-format
 msgid "%s: missing application name"
@@ -2522,11 +2718,15 @@ msgstr "%s: missing application name"
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr "Creating AppInfo from id not supported on non unix operating systems"
 
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
 #: gtk/gtk-launch.c:148
 #, c-format
 msgid "%s: no such application %s"
 msgstr "%s: no such application %s"
 
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
 #: gtk/gtk-launch.c:166
 #, c-format
 msgid "%s: error launching application: %s\n"
@@ -2572,22 +2772,27 @@ msgstr ""
 "מדיניות המערכת מונעת ביצוע שינויים.\n"
 "נא ליצור קשר עם מנהל המערכת."
 
+#. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:463
 msgid "Load additional GTK+ modules"
 msgstr "Load additional GTK+ modules"
 
+#. Placeholder in --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:464
 msgid "MODULES"
 msgstr "MODULES"
 
+#. Description of --g-fatal-warnings in --help output
 #: gtk/gtkmain.c:466
 msgid "Make all warnings fatal"
 msgstr "Make all warnings fatal"
 
+#. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:469
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ debugging flags to set"
 
+#. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:472
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ debugging flags to unset"
@@ -2605,6 +2810,11 @@ msgstr "GTK+ Options"
 msgid "Show GTK+ Options"
 msgstr "Show GTK+ Options"
 
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
+#.
 #: gtk/gtkmain.c:1242
 msgid "default:LTR"
 msgstr "default:RTL"
@@ -2675,6 +2885,7 @@ msgstr "_סיום התהליך"
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d. הפעולה אינה מוטמעת עדיין."
 
+#. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:955
 msgid "Terminal Pager"
 msgstr "מציג טקסט במסוף"
@@ -2813,6 +3024,7 @@ msgstr "מיקומים אחרים"
 msgid "Show other locations"
 msgstr "הצגת מיקומים אחרים"
 
+#. Adjust start/stop items to reflect the type of the drive
 #: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3432
 msgid "_Start"
 msgstr "ה_תחלה"
@@ -2821,6 +3033,7 @@ msgstr "ה_תחלה"
 msgid "_Stop"
 msgstr "_עצירה"
 
+#. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
 #: gtk/gtkplacessidebar.c:2155
 msgid "_Power On"
 msgstr "לה_פעיל"
@@ -2845,6 +3058,7 @@ msgstr "הפעל התקן מ_רובה כוננים"
 msgid "_Stop Multi-disk Device"
 msgstr "ע_צירת התקן מרובה כוננים"
 
+#. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: gtk/gtkplacessidebar.c:2171
 msgid "_Unlock Device"
 msgstr "_שחרור ההתקן"
@@ -2946,18 +3160,22 @@ msgstr "מחפש מיקומי רשת"
 msgid "No network locations found"
 msgstr "לא נמצאות מיקומי רשת"
 
+#. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1191 gtk/gtkplacesview.c:1266
 msgid "Unable to access location"
 msgstr "לא ניתן לגשת למיקום"
 
+#. Restore from Cancel to Connect
 #: gtk/gtkplacesview.c:1209 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "ה_תחברות"
 
+#. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1329
 msgid "Unable to unmount volume"
 msgstr "לא ניתן לנתק את הכרך"
 
+#. Allow to cancel the operation
 #: gtk/gtkplacesview.c:1430
 msgid "Cance_l"
 msgstr "_ביטול"
@@ -2982,6 +3200,10 @@ msgstr "רשתות"
 msgid "On This Computer"
 msgstr "על מחשב זה"
 
+#. Translators: respectively, free and total space of the drive. The plural form
+#. * should be based on the free space available.
+#. * i.e. 1 GB / 24 GB available.
+#.
 #: gtk/gtkplacesviewrow.c:132
 #, c-format
 msgid "%s / %s available"
@@ -3013,6 +3235,10 @@ msgstr "נא לבחור בקובץ"
 msgid "Not available"
 msgstr "לא זמין"
 
+#. translators: this string is the default job title for print
+#. * jobs. %s gets replaced by the application name, %d gets replaced
+#. * by the job number.
+#.
 #: gtk/gtkprintoperation.c:259
 #, c-format
 msgid "%s job #%d"
@@ -3085,6 +3311,7 @@ msgstr "שגיאה ביצירת תצוגה מקדימה"
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "הסיבה ההגיונית ביותר שבגללה לא ניתן היה ליצור קובץ זמני."
 
+#. window
 #: gtk/gtkprintoperation-portal.c:229 gtk/gtkprintoperation-portal.c:533
 #: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3391
 msgid "Print"
@@ -3098,6 +3325,7 @@ msgstr "מדפסת לא זמינה"
 msgid "Out of paper"
 msgstr "חסר נייר"
 
+#. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:621
 #: modules/printbackends/cups/gtkprintbackendcups.c:2572
 msgid "Paused"
@@ -3160,6 +3388,12 @@ msgstr "קבלת נתוני המדפסת נכשלה"
 msgid "Getting printer information…"
 msgstr "נתוני המדפסת מתקבלים…"
 
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
 #: gtk/gtkprintunixdialog.c:3098
 #: modules/printbackends/cups/gtkprintbackendcups.c:5356
 msgid "Left to right, top to bottom"
@@ -3259,6 +3493,16 @@ msgstr "_פינוי הרשימה"
 msgid "Show _Private Resources"
 msgstr "הצגת _משאבים פרטיים"
 
+#. we create a placeholder menuitem, to be used in case
+#. * the menu is empty. this placeholder will stay around
+#. * for the entire lifetime of the menu, and we just hide it
+#. * when it's not used. we have to do this, and do it here,
+#. * because we need a marker for the beginning of the recent
+#. * items list, so that we can insert the new items at the
+#. * right place when idly populating the menu in case the
+#. * user appended or prepended custom menu items to the
+#. * recent chooser menu widget.
+#.
 #: gtk/gtkrecentchoosermenu.c:343
 msgid "No items found"
 msgstr "לא נמצאו פריטים"
@@ -3277,12 +3521,20 @@ msgstr "פתיחת '%s'"
 msgid "Unknown item"
 msgstr "פריט לא ידוע"
 
+#. This is the label format that is used for the first 10 items
+#. * in a recent files menu. The %d is the number of the item,
+#. * the %s is the name of the item. Please keep the _ in front
+#. * of the number to give these menu items a mnemonic.
+#.
 #: gtk/gtkrecentchoosermenu.c:830
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
+#. This is the format that is used for items in a recent files menu.
+#. * The %d is the number of the item, the %s is the name of the item.
+#.
 #: gtk/gtkrecentchoosermenu.c:835
 #, c-format
 msgctxt "recent menu label"
@@ -3310,11 +3562,21 @@ msgstr "לא נמצא יישום הרשום בשם '%s' עבור הפריט בע
 msgid "Search"
 msgstr "חיפוש"
 
+#. Translators: This string is used to mark left/right variants of modifier
+#. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
+#. * this string very short, ideally just a single character, since it will
+#. * be rendered as part of the key.
+#.
 #: gtk/gtkshortcutlabel.c:80
 msgctxt "keyboard side marker"
 msgid "L"
 msgstr "L"
 
+#. Translators: This string is used to mark left/right variants of modifier
+#. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
+#. * this string very short, ideally just a single character, since it will
+#. * be rendered as part of the key.
+#.
 #: gtk/gtkshortcutlabel.c:93
 msgctxt "keyboard side marker"
 msgid "R"
@@ -3369,11 +3631,18 @@ msgstr "לא נמצאו תוצאות"
 msgid "Try a different search"
 msgstr "יש לנסות חיפוש שונה"
 
+#. Translators: if the "on" state label requires more than three
+#. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
+#. * the state
+#.
 #: gtk/gtkswitch.c:306
 msgctxt "switch"
 msgid "ON"
 msgstr "גע"
 
+#. Translators: if the "off" state label requires more than three
+#. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
+#.
 #: gtk/gtkswitch.c:313
 msgctxt "switch"
 msgid "OFF"
@@ -3547,29 +3816,34 @@ msgstr "מושתק"
 msgid "Full Volume"
 msgstr "עצמה מלאה"
 
+#. Translators: this is the percentage of the current volume,
+#. * as used in the tooltip, eg. "49 %".
+#. * Translate the "%d" to "%Id" if you want to use localised digits,
+#. * or otherwise translate the "%d" to "%d".
+#.
 #: gtk/gtkvolumebutton.c:249
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9009
+#: gtk/gtkwindow.c:9042
 msgid "Move"
 msgstr "הזזה"
 
-#: gtk/gtkwindow.c:9017
+#: gtk/gtkwindow.c:9050
 msgid "Resize"
 msgstr "שינוי גודל"
 
-#: gtk/gtkwindow.c:9048
+#: gtk/gtkwindow.c:9081
 msgid "Always on Top"
 msgstr "תמיד למעלה"
 
-#: gtk/gtkwindow.c:12480
+#: gtk/gtkwindow.c:12513
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "האם ברצונך להשתמש במפקח GTK+‎?"
 
-#: gtk/gtkwindow.c:12482
+#: gtk/gtkwindow.c:12515
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3578,7 +3852,7 @@ msgstr ""
 "מפקח GTK+‎ הוא מנפה שגיאות הידודי המאפשר לך לחקור ולשנות את הפנים של כל יישום "
 "GTK+‎. שימוש בו יכול לגרום ליישום להישבר או לקרוס."
 
-#: gtk/gtkwindow.c:12487
+#: gtk/gtkwindow.c:12520
 msgid "Don't show this message again"
 msgstr "לא להציג הודעה זו שוב"
 
@@ -5416,6 +5690,11 @@ msgstr "ftp:// או ftps://"
 msgid "smb://"
 msgstr "smb://"
 
+#. Translators: do not translate sftp:// and ssh://
+#: gtk/ui/gtkplacesview.ui:216
+msgid "sftp:// or ssh://"
+msgstr "sftp:// או ssh://"
+
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:227
 msgid "dav:// or davs://"
@@ -5775,21 +6054,25 @@ msgstr ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 
+#. ID
 #: modules/input/imam-et.c:452
 msgctxt "input method menu"
 msgid "Amharic (EZ+)"
 msgstr "אמהרית (EZ+‎)"
 
+#. ID
 #: modules/input/imbroadway.c:51
 msgctxt "input method menu"
 msgid "Broadway"
 msgstr "Broadway"
 
+#. ID
 #: modules/input/imcedilla.c:90
 msgctxt "input method menu"
 msgid "Cedilla"
 msgstr "סדיליה"
 
+#. ID
 #: modules/input/imcyrillic-translit.c:215
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
@@ -5800,16 +6083,19 @@ msgctxt "input method menu"
 msgid "Windows IME"
 msgstr "Windows IME"
 
+#. ID
 #: modules/input/iminuktitut.c:125
 msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
 msgstr "אינוקטיטוט (מתועתקת)"
 
+#. ID
 #: modules/input/imipa.c:143
 msgctxt "input method menu"
 msgid "IPA"
 msgstr "האלפבית הפונטי הלאומי (IPA)"
 
+#. ID
 #: modules/input/immultipress.c:30
 msgctxt "input method menu"
 msgid "Multipress"
@@ -5820,43 +6106,55 @@ msgctxt "input method menu"
 msgid "Mac OS X Quartz"
 msgstr "Mac OS X Quartz"
 
+#. ID
 #: modules/input/imthai.c:33
 msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "לאו-תאית"
 
+#. ID
 #: modules/input/imti-er.c:451
 msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "תיגרינית אריתראית (EZ+‎)"
 
+#. ID
 #: modules/input/imti-et.c:451
 msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "תיגרינית אתיופית (EZ+‎)"
 
+#. ID
 #: modules/input/imviqr.c:242
 msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "וייטנאמית (VIQR)"
 
+#. ID
 #: modules/input/imxim.c:26
 msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "שיטת הקלט של X"
 
+#. Translators: The printer status is online, i.e. it is
+#. * ready to print.
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
 msgid "Online"
 msgstr "מחובר"
 
+#. Translators: The printer is offline.
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:751
 msgid "Offline"
 msgstr "מנותק"
 
+#. We shouldn't get here because the query omits dormant
+#. * printers by default.
+#. Translators: Printer has been offline for a long time.
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:757
 msgid "Dormant"
 msgstr "לא פעיל"
 
+#. How many document pages to go onto one side of paper.
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:939
 #: modules/printbackends/file/gtkprintbackendfile.c:676
 #: modules/printbackends/test/gtkprintbackendtest.c:501
@@ -5950,21 +6248,25 @@ msgstr "במדפסת „%s” חסר דיו."
 msgid "Printer “%s” has no toner left."
 msgstr "במדפסת „%s” לא נשאר דיו."
 
+#. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2510
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "המדפסת „%s” דלה בחומרי פיתוח."
 
+#. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2515
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "למדפסת „%s” אזלו חומרי הפיתוח."
 
+#. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2520
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "למדפסת „%s” כמעט אזל לפחות אחד מחומרי ההדפסה."
 
+#. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2525
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
@@ -6000,14 +6302,17 @@ msgstr "המדפסת „%s” אינה מקוונת נכון לעכשיו."
 msgid "There is a problem on printer “%s”."
 msgstr "קיימת בעיה במדפסת „%s”."
 
+#. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2569
 msgid "Paused; Rejecting Jobs"
 msgstr "מופסק; דוחה עבודות"
 
+#. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2575
 msgid "Rejecting Jobs"
 msgstr "דוחה עבודות"
 
+#. Translators: this string connects multiple printer states together.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2616
 msgid "; "
 msgstr "; "
@@ -6049,16 +6354,19 @@ msgctxt "printing option value"
 msgid "One Sided"
 msgstr "צד אחד"
 
+#. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4318
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "הצד הארוך (תקני)"
 
+#. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4320
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "הצד הקצר (היפוך)"
 
+#. Translators: this is an option of "Paper Source"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4322
 #: modules/printbackends/cups/gtkprintbackendcups.c:4324
 #: modules/printbackends/cups/gtkprintbackendcups.c:4332
@@ -6066,6 +6374,8 @@ msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "בחירה אוטומטית"
 
+#. Translators: this is an option of "Paper Source"
+#. Translators: this is an option of "Resolution"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4326
 #: modules/printbackends/cups/gtkprintbackendcups.c:4328
 #: modules/printbackends/cups/gtkprintbackendcups.c:4330
@@ -6074,26 +6384,32 @@ msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "בררת מחדל עבור המדפסת"
 
+#. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4336
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "הטמעת גופני PostScript בלבד"
 
+#. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4338
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "המרה ל־PS רמה 1"
 
+#. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4340
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "המרה ל־PS רמה 2"
 
+#. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4342
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "אין סינון קדם"
 
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
 #: modules/printbackends/cups/gtkprintbackendcups.c:4351
 msgctxt "printing option group"
 msgid "Miscellaneous"
@@ -6104,88 +6420,105 @@ msgctxt "sides"
 msgid "One Sided"
 msgstr "חד צדדי"
 
+#. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4380
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "צד ארוך (תקני)"
 
+#. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4382
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "צד קצר (היפוך)"
 
+#. Translators: Top output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4385
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "מגש עליון"
 
+#. Translators: Middle output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4387
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "מגש אמצעי"
 
+#. Translators: Bottom output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4389
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "מגש תחתון"
 
+#. Translators: Side output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4391
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "מגש צדי"
 
+#. Translators: Left output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4393
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "מגש שמאלי"
 
+#. Translators: Right output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4395
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "מגש ימני"
 
+#. Translators: Center output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4397
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "מגש מרכזי"
 
+#. Translators: Rear output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4399
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "מגש אחורי"
 
+#. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4401
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "מגש עם הפנים כלפי מעלה"
 
+#. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4403
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "מגש עם הפנים כלפי מטה"
 
+#. Translators: Large capacity output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4405
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "מגש בעל קיבולת מוגדלת"
 
+#. Translators: Output stacker number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4427
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "מערם פלט נייר %d"
 
+#. Translators: Output mailbox number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4431
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "התקן למיון פלט הדפסה %d"
 
+#. Translators: Private mailbox
 #: modules/printbackends/cups/gtkprintbackendcups.c:4435
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "התקן למיון פלט ההדפסה שלי"
 
+#. Translators: Output tray number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4439
 #, c-format
 msgctxt "output-bin"
@@ -6196,6 +6529,9 @@ msgstr "מגירת הזנת נייר %d"
 msgid "Printer Default"
 msgstr "בררת מחדל עבור המדפסת"
 
+#. Translators: These strings name the possible values of the
+#. * job priority option in the print dialog
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5351
 msgid "Urgent"
 msgstr "דחוף"
@@ -6212,10 +6548,16 @@ msgstr "בינוני"
 msgid "Low"
 msgstr "נמוך"
 
+#. Translators, this string is used to label the job priority option
+#. * in the print dialog
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5381
 msgid "Job Priority"
 msgstr "עדיפות המשימה"
 
+#. Translators, this string is used to label the billing info entry
+#. * in the print dialog
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5392
 msgid "Billing Info"
 msgstr "נתוני חיוב"
@@ -6255,36 +6597,60 @@ msgctxt "cover page"
 msgid "Unclassified"
 msgstr "לא מסווג"
 
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5434
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "מספר העמודים בדף"
 
+#. Translators, this string is used to label the option in the print
+#. * dialog that controls in what order multiple pages are arranged
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5451
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "סדר דפים"
 
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5493
 msgctxt "printer option"
 msgid "Before"
 msgstr "לפני"
 
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5508
 msgctxt "printer option"
 msgid "After"
 msgstr "אחרי"
 
+#. Translators: this is the name of the option that controls when
+#. * a print job is printed. Possible values are 'now', a specified time,
+#. * or 'on hold'
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5528
 msgctxt "printer option"
 msgid "Print at"
 msgstr "הדפסה"
 
+#. Translators: this is the name of the option that allows the user
+#. * to specify a time when a print job will be printed.
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5539
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "הדפסה"
 
+#. Translators: this format is used to display a custom
+#. * paper size. The two placeholders are replaced with
+#. * the width and height in points. E.g: "Custom
+#. * 230.4x142.9"
+#.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5581
 #, c-format
 msgid "Custom %s×%s"
@@ -6359,26 +6725,32 @@ msgstr "מספר העמודים בדף"
 msgid "Command Line"
 msgstr "שורת פקודה"
 
+#. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:786
 msgid "printer offline"
 msgstr "מדפסת לא זמינה"
 
+#. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:804
 msgid "ready to print"
 msgstr "מוכן להדפסה"
 
+#. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:807
 msgid "processing job"
 msgstr "המשימה מתבצעת"
 
+#. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "paused"
 msgstr "מופסק"
 
+#. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:814
 msgid "unknown"
 msgstr "לא ידוע"
 
+#. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:232
 #, c-format
 msgid "test-output.%s"
