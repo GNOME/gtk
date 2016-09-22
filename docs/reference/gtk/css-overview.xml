@@ -942,7 +942,7 @@ arrow {
     <para>
       To enable an animation, the name of the keyframes must be set as the value
       of the animation-name property. The details of the animation can modified
-      with the animation-time, animation-timing-function, animation-iteration-count
+      with the animation-duration, animation-timing-function, animation-iteration-count
       and other animation properties.
     </para>
 
@@ -955,7 +955,7 @@ arrow {
 
 spinner {
   animation-name: spin;
-  animation-time: 1s;
+  animation-duration: 1s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
