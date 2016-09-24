@@ -131,6 +131,7 @@ check_functions = [
   ['HAVE_RINT', 'rint', '#include<math.h>'],
   ['HAVE_LOG2', 'log2', '#include<math.h>'],
   ['HAVE_EXP2', 'exp2', '#include<math.h>'],
+  ['HAVE_SINCOS', 'sincos', '#include<math.h>'],
 # check token HAVE_SINCOS
 # check token HAVE_SOCKADDR_UN_SUN_LEN
 # check token HAVE_SOLARIS_XINERAMA
