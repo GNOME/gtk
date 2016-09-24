@@ -1,5 +1,5 @@
 project('gtk+-3.0', 'c',
-        version: '3.21.4',
+        version: '3.22.0',
         default_options: [
           'buildtype=debugoptimized',
           'c_std=gnu89',
@@ -18,6 +18,14 @@ gtk_major_version = gtk_version[0]
 gtk_minor_version = gtk_version[1]
 gtk_micro_version = gtk_version[2]
 gtk_interface_age = 0
+add_global_arguments('-DGTK_VERSION="' + meson.project_version() + '"', language: 'c')
+
+# Define a string for the earliest version that this release has
+# backwards binary compatibility with for all interfaces a module
+# might. Unless we add module-only API with lower stability
+# guarantees, this should be unchanged until we break binary compat
+# for GTK+.
+gtk_binary_version = '3.0.0'
 
 gtk_binary_age = 100 * gtk_minor_version.to_int() + gtk_micro_version.to_int()
 gtk_api_version = '@0@.0'.format(gtk_major_version)
@@ -174,21 +182,21 @@ glib_dep       = dependency('glib-2.0', version: '>= 2.49.4')
 giounix_dep    = dependency('gio-unix-2.0', required : false)
 pango_dep      = dependency('pango', version: '>=1.37.3')
 pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled)
-cairo_dep      = dependency('cairo')
+cairo_dep      = dependency('cairo', version: '>= 1.14.0')
 pangocairo_dep = dependency('pangocairo')
 cairogobj_dep  = dependency('cairo-gobject')
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: '>= 2.30.0')
-epoxy_dep      = dependency('epoxy')
+epoxy_dep      = dependency('epoxy', version: '>= 1.0')
 atk_dep        = dependency('atk', version: '>= 2.15.1')
 atkbridge_dep  = dependency('atk-bridge-2.0')
 gmodule_dep    = dependency('gmodule-2.0')
 mlib           = cc.find_library('m')
 shmlib         = cc.find_library('rt')
 fontconfig_dep = dependency('fontconfig')
-xkbdep         = dependency('xkbcommon')
-wlclientdep    = dependency('wayland-client')
+xkbdep         = dependency('xkbcommon', version: '>= 0.2.0')
+wlclientdep    = dependency('wayland-client', version:  '>= 1.9.91')
 wlprotocolsdep = dependency('wayland-protocols', version: '>= 1.7')
-wlcursordep    = dependency('wayland-cursor')
+wlcursordep    = dependency('wayland-cursor', version: '>= 1.9.91')
 wlegldep       = dependency('wayland-egl')
 xrandr_dep     = dependency('xrandr')
 
@@ -209,5 +217,5 @@ configure_file(
 subdir('gdk')
 subdir('gtk')
 subdir('demos')
-# subdir('tests')
-# subdir('testsuite')
+subdir('tests')
+subdir('testsuite')
