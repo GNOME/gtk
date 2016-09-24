@@ -108,5 +108,6 @@ gtkdemo = executable(
   gtkdemo_resources,
   dependencies: gtkdemo_deps,
   include_directories : confinc,
-  gui_app: true
+  gui_app: true,
+  install: true
 )
