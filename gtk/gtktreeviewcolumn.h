@@ -71,7 +71,7 @@ typedef enum
  * straight mapping between the cell and the model.  This is useful for
  * customizing the cell renderer.  For example, a function might get an
  * integer from the @tree_model, and render it to the “text” attribute of
- * “cell” by converting it to its written equivilent.  This is set by
+ * “cell” by converting it to its written equivalent.  This is set by
  * calling gtk_tree_view_column_set_cell_data_func()
  */
 typedef void (* GtkTreeCellDataFunc) (GtkTreeViewColumn *tree_column,
