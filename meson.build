@@ -91,7 +91,7 @@ check_headers = [
   ['HAVE_SYS_TIME_H', 'sys/time.h'],
   ['HAVE_SYS_TYPES_H', 'sys/types.h'],
   ['HAVE_UNISTD_H', 'unistd.h'],
-  ['HAVE_LINUX_MEMFD_H', 'linux/memfd.h']
+  ['HAVE_LINUX_MEMFD_H', 'linux/memfd.h'],
 ]
 
 foreach h : check_headers
@@ -125,25 +125,18 @@ check_functions = [
   ['HAVE_NEARBYINT', 'nearbyint', '#include<math.h>'],
 # check token HAVE_PAPI
 # check token HAVE_POSIX_FALLOCATE
-# check token HAVE_RANDR
-# check token HAVE_RANDR15
   ['HAVE_ROUND', 'round', '#include<math.h>'],
   ['HAVE_RINT', 'rint', '#include<math.h>'],
   ['HAVE_LOG2', 'log2', '#include<math.h>'],
   ['HAVE_EXP2', 'exp2', '#include<math.h>'],
   ['HAVE_SINCOS', 'sincos', '#include<math.h>'],
-# check token HAVE_SINCOS
+  ['HAVE_XGENERICEVENTS', 'XGetEventData', '#include<X11/Xlib.h>'],
+  ['HAVE_XKB', 'XkbQueryExtension', '#include<X11/XKBlib.h>'],
+  ['HAVE_XSYNC', 'XSyncQueryExtension', '#include<X11/Xlib.h>\n#include</usr/include/X11/extensions/sync.h>'],
 # check token HAVE_SOCKADDR_UN_SUN_LEN
 # check token HAVE_SOLARIS_XINERAMA
-# check token HAVE_XCOMPOSITE
-# check token HAVE_XCURSOR
-# check token HAVE_XDAMAGE
-# check token HAVE_XFIXES
 # check token HAVE_XFREE_XINERAMA
-# check token HAVE_XGENERICEVENTS
 # check token HAVE_XINERAMA
-# check token HAVE_XKB
-# check token HAVE_XSYNC
 # check token HAVE__NL_MEASUREMENT_MEASUREMENT
 # check token HAVE__NL_PAPER_HEIGHT
 # check token HAVE__NL_PAPER_WIDTH
@@ -158,14 +151,6 @@ foreach f : check_functions
 endforeach
 
 cdata.set('GETTEXT_PACKAGE', '"gtk-3.0"')
-cdata.set('HAVE_XSYNC', 1)
-cdata.set('XINPUT_2', 1)
-cdata.set('XINPUT_2_2', 1)
-cdata.set('HAVE_XKB', 1)
-cdata.set('HAVE_XDAMAGE', 1)
-cdata.set('HAVE_XCURSOR', 1)
-cdata.set('HAVE_XGENERICEVENTS', 1)
-cdata.set('HAVE_RANDR', 1)
 
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
@@ -175,10 +160,10 @@ x11_dep        = dependency('x11')
 xrender_dep    = dependency('xrender')
 xi_dep         = dependency('xi')
 xext_dep       = dependency('xext')
-xcursor_dep    = dependency('xcursor')
-xdamage_dep    = dependency('xdamage')
-xfixes_dep     = dependency('xfixes')
-xcomposite_dep = dependency('xcomposite')
+xcursor_dep    = dependency('xcursor', required: false)
+xdamage_dep    = dependency('xdamage', required: false)
+xfixes_dep     = dependency('xfixes', required: false)
+xcomposite_dep = dependency('xcomposite', required: false)
 glib_dep       = dependency('glib-2.0', version: '>= 2.49.4')
 giounix_dep    = dependency('gio-unix-2.0', required : false)
 pango_dep      = dependency('pango', version: '>=1.37.3')
@@ -191,23 +176,61 @@ epoxy_dep      = dependency('epoxy', version: '>= 1.0')
 atk_dep        = dependency('atk', version: '>= 2.15.1')
 atkbridge_dep  = dependency('atk-bridge-2.0')
 gmodule_dep    = dependency('gmodule-2.0')
-mlib           = cc.find_library('m')
-shmlib         = cc.find_library('rt')
+
 fontconfig_dep = dependency('fontconfig')
 xkbdep         = dependency('xkbcommon', version: '>= 0.2.0')
 wlclientdep    = dependency('wayland-client', version:  '>= 1.9.91')
 wlprotocolsdep = dependency('wayland-protocols', version: '>= 1.7')
 wlcursordep    = dependency('wayland-cursor', version: '>= 1.9.91')
 wlegldep       = dependency('wayland-egl')
-xrandr_dep     = dependency('xrandr')
-
-
+xrandr_dep     = dependency('xrandr', version: '>= 1.2.99')
+xrandr15_dep   = dependency('xrandr', version: '>= 1.5', required: false)
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
+mlib           = cc.find_library('m', required: false)
+shmlib         = cc.find_library('rt')
+
 build_font_demo = harfbuzz_dep.found() and pangoft_dep.found()
 
 if giounix_dep.found()
   cdata.set('HAVE_GIO_UNIX', 1)
 endif
+
+if xdamage_dep.found()
+  cdata.set('HAVE_XDAMAGE', 1)
+endif
+
+if xcursor_dep.found()
+  cdata.set('HAVE_XCURSOR', 1)
+endif
+
+if mlib.found()
+  cdata.set('HAVE_LIBM', 1)
+endif
+
+if xcomposite_dep.found()
+  cdata.set('HAVE_XCOMPOSITE', 1)
+endif
+
+if xfixes_dep.found()
+  cdata.set('HAVE_XFIXES', 1)
+endif
+
+if xi_dep.found() and cc.has_header('X11/extensions/XInput2.h')
+  cdata.set('XINPUT_2', 1)
+  prefix = '#include<X11/Xlib.h>\n#include<X11/extensions/XInput2.h>'
+  if cc.has_function('XIAllowTouchEvents', prefix: prefix) and cc.has_member('XIScrollClassInfo', 'number', prefix: prefix)
+    cdata.set('XINPUT_2_2', 1)
+  endif
+endif
+
+if xrandr_dep.found()
+  cdata.set('HAVE_RANDR', 1)
+
+  if xrandr15_dep.found()
+    cdata.set('HAVE_RANDR15', 1)
+  endif
+endif
+
 
 configure_file(
   input : 'config.h.meson',
