@@ -138,3 +138,5 @@ test_revealer2 = executable('testrevealer2', 'testrevealer2.c', dependencies: li
 test_titlebar = executable('testtitlebar', 'testtitlebar.c', dependencies: libgtk_dep)
 test_windowsize = executable('testwindowsize', 'testwindowsize.c', dependencies: libgtk_dep)
 test_listmodel = executable('listmodel', 'listmodel.c', dependencies: libgtk_dep)
+
+subdir('visuals')
