@@ -194,6 +194,12 @@
 /* Have the SYNC extension library */
 #mesondefine HAVE_XSYNC
 
+/* Define to 1 if you have the `_lock_file' function */
+#mesondefine HAVE__LOCK_FILE
+
+/* Define to 1 if you have the `flockfile' function */
+#mesondefine HAVE_FLOCKFILE
+
 /* Define if _NL_MEASUREMENT_MEASUREMENT is available */
 #mesondefine HAVE__NL_MEASUREMENT_MEASUREMENT
 

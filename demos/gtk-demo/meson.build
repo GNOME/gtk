@@ -73,7 +73,7 @@ demos = files([
 
 gtkdemo_deps = [libgtk_dep]
 
-if build_font_demo
+if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')
   gtkdemo_deps += harfbuzz_dep
 endif
