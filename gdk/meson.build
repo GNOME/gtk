@@ -369,6 +369,7 @@ libgdk = shared_library('gdk',
   c_args: ['-DHAVE_CONFIG_H', '-DGDK_COMPILATION'],
   include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps,
+  install: true
 )
 
 

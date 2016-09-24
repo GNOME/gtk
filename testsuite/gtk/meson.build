@@ -17,7 +17,6 @@ test('gtk/bitmask test', test_bitmask)
 test_builder = executable('builder', 'builder.c', dependencies: libgtk_dep)
 test('gtk/builder test', test_builder)
 
-install_subdir('ui', install_dir: '.')
 test_builderparser = executable(
   'builderparser',
   'builderparser.c',
