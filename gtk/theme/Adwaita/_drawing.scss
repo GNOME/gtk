@@ -275,8 +275,7 @@
     color: $tc;
     outline-color: transparentize($tc, 0.7);
     border-color: if($c != $bg_color, _border_color($c), $borders_color);
-    background-image: none;
-    background-color: darken($c, 6%);
+    background-image: image(darken($c, 6%));
     @include _shadows(inset 0 1px transparentize($_hilight_color, 1), $_button_edge);
 
     text-shadow: none;
@@ -291,8 +290,7 @@
     label, & { color: if($tc != $fg_color, mix($tc, $_bg, 50%), $insensitive_fg_color); }
 
     border-color: if($c != $bg_color, _border_color($c), $insensitive_borders_color);
-    background-color: $_bg;
-    background-image: none;
+    background-image: image($_bg);
     text-shadow: none;
     -gtk-icon-shadow: none;
     // white with 0 alpha to avoid an ugly transition, since no color means
@@ -309,8 +307,7 @@
     label, & { color: if($c != $bg_color, mix($tc, $_bg, 60%), $insensitive_fg_color); }
 
     border-color: $_bc;
-    background-color: $_bg;
-    background-image: none;
+    background-image: image($_bg);
     // white with 0 alpha to avoid an ugly transition, since no color means
     // black with 0 alpha
     @include _shadows(inset 0 1px transparentize(white, 1), $_button_edge);
@@ -326,7 +323,6 @@
     label, & { color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color); }
 
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
-    background-color: transparent;
     background-image: image($_bg);
     text-shadow: none;
     -gtk-icon-shadow: none;
@@ -343,8 +339,7 @@
     label, & { color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color); }
 
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
-    background-color: $_bg;
-    background-image: none;
+    background-image: image($_bg);
     @include _shadows(inset 0 1px transparentize(white, 1), $_blank_edge);
   }
 
@@ -359,8 +354,7 @@
     label, & { color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
 
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
-    background-color: $_bg;
-    background-image: none;
+    background-image: image($_bg);
     text-shadow: none;
     -gtk-icon-shadow: none;
     // white with 0 alpha to avoid an ugly transition, since no color means
@@ -379,8 +373,7 @@
     label { color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
 
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
-    background-color: $_bg;
-    background-image: none;
+    background-image: image($_bg);
     @include _shadows(inset 0 1px transparentize(white, 1), $_blank_edge);
   }
 
