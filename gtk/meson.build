@@ -749,8 +749,7 @@ typefuncs = custom_target(
   output : 'gtktypefuncs.c',
   input  : gdk_headers + gtk_public_h_sources + gtk_deprecated_type_headers + gtk_private_h_sources + [gtktypebuiltins_h] + [gdkenum_h],
   command: [gentypefuncs_prog, '@OUTPUT@', '@INPUT@'],
-  install: true,
-  install_dir: '.'
+  install: false,
 )
 
 cdata = configuration_data()
@@ -841,6 +840,7 @@ libgtk = shared_library('gtk',
   c_args: gtk_cargs,
   include_directories: [ confinc, gdkinc, gtkinc ],
   dependencies: [gtk_deps, libgdk_dep],
+  install: true
 )
 
 libgtk_dep = declare_dependency(
