@@ -766,6 +766,17 @@ gtkversion = configure_file(
   configuration: cdata
 )
 
+gtk_cargs = [
+  '-DGTK_COMPILATION',
+  '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
+  '-DGTK_BINARY_VERSION="' + gtk_binary_version + '"',
+  '-DGTK_HOST="' + host_machine.system() + '"',
+  '-DGTK_SYSCONFDIR="' + get_option('prefix') + '/etc"',
+  '-DGTK_DATADIR="' + get_option('datadir') + '"',
+  '-DGTK_DATA_PREFIX="'+ get_option('prefix') + '"',
+  '-DGTK_PRINT_BACKENDS="null"',
+]
+
 gtk_sources += [
   gtk_dbus_src,
   gtk_unix_sources,
@@ -796,6 +807,13 @@ gtk_deps = [
 ]
 
 if x11_enabled
+  runcmd = run_command('pkg-config', '--variable=pkgdatadir', 'wayland-protocols')
+  if runcmd.returncode() == 0
+      gtk_cargs += '-DX11_DATA_PREFIX="' + runcmd.stdout().strip() + '"'
+  else
+    error('Could not get wayland-protocols pkgdatadir via pkg-config.')
+  endif
+
   gtk_sources += [
     gtk_x11_sources,
     gtk_use_wayland_or_x11_c_sources
@@ -820,16 +838,7 @@ endif
 libgtk = shared_library('gtk',
   gtk_sources,
   gtkmarshal_h,
-  c_args: [
-    '-DGTK_COMPILATION',
-    '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-    '-DGTK_BINARY_VERSION="' + gtk_binary_version + '"',
-    '-DGTK_HOST="' + host_machine.system() + '"',
-    '-DGTK_SYSCONFDIR="sysconfdir"',
-    '-DGTK_DATA_PREFIX="dataprefix"',
-    '-DGTK_PRINT_BACKENDS="null"',
-    '-DX11_DATA_PREFIX="/usr"'
-  ],
+  c_args: gtk_cargs,
   include_directories: [ confinc, gdkinc, gtkinc ],
   dependencies: [gtk_deps, libgdk_dep],
 )
