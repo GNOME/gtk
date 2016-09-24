@@ -806,11 +806,11 @@ gtk_deps = [
 ]
 
 if x11_enabled
-  runcmd = run_command('pkg-config', '--variable=pkgdatadir', 'wayland-protocols')
+  runcmd = run_command('pkg-config', '--variable=prefix', 'x11')
   if runcmd.returncode() == 0
       gtk_cargs += '-DX11_DATA_PREFIX="' + runcmd.stdout().strip() + '"'
   else
-    error('Could not get wayland-protocols pkgdatadir via pkg-config.')
+    error('Could not get x11 data prefix via pkg-config.')
   endif
 
   gtk_sources += [
@@ -834,11 +834,13 @@ if wayland_enabled
   ]
 endif
 
+gnome.compile_schemas()
+
 libgtk = shared_library('gtk',
   gtk_sources,
   gtkmarshal_h,
   c_args: gtk_cargs,
-  include_directories: [ confinc, gdkinc, gtkinc ],
+  include_directories: [confinc, gdkinc, gtkinc],
   dependencies: [gtk_deps, libgdk_dep],
   install: true
 )
@@ -854,4 +856,50 @@ libgtk_dep = declare_dependency(
   link_with: [libgtk, libgdk],
   link_args: ['-Bsymbolic'],
   include_directories: [confinc, gtkinc]
+)
+
+
+
+####### Utils ######
+gtk_query_settings = executable(
+  'gtk-query-settings',
+  'gtk-query-settings.c',
+  dependencies: libgtk_dep,
+  install: true
+)
+
+gtk_builder_tool = executable(
+  'gtk-builder-tool',
+  'gtk-builder-tool.c',
+  dependencies: libgtk_dep,
+  install: true
+)
+
+gtk_update_icon_cache = executable(
+  'gtk-update-icon-cache',
+  'updateiconcache.c',
+  dependencies: libgtk_dep,
+  install: true
+)
+
+# gtk_query_immodules = executable(
+  # 'gtk-query-immodules-3.0',
+  # 'queryimmodules.c',
+  # 'gtkutils.c',
+  # dependencies: libgtk_dep,
+  # install: true
+# )
+
+gtk_encode_symbolic_svg = executable(
+  'gtk-encode-symbolic-svg',
+  'encodesymbolic.c',
+  dependencies: libgtk_dep,
+  install: true
+)
+
+gtk_launch = executable(
+  'gtk-launch',
+  'gtk-launch.c',
+  dependencies: libgtk_dep,
+  install: true
 )
