@@ -125,8 +125,6 @@ close_window (void)
 {
   if (surface)
     cairo_surface_destroy (surface);
-
-  gtk_main_quit ();
 }
 
 static void
