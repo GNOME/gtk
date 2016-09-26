@@ -597,10 +597,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   if (impl->pending_buffer_attached)
     read_back_cairo_surface (window);
 
-  gdk_wayland_window_sync_margin (window);
-  gdk_wayland_window_sync_opaque_region (window);
-  gdk_wayland_window_sync_input_region (window);
-
   /* From this commit forward, we can't write to the buffer,
    * it's "live".  In the future, if we need to stage more changes
    * we have to allocate a new staging buffer and draw to it instead.
@@ -936,6 +932,10 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
 
       impl->pending_commit = TRUE;
     }
+
+  gdk_wayland_window_sync_margin (window);
+  gdk_wayland_window_sync_opaque_region (window);
+  gdk_wayland_window_sync_input_region (window);
 }
 
 static gboolean
