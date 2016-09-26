@@ -1,5 +1,3 @@
-
-
 if wayland_enabled
   runcmd = run_command('pkg-config', '--variable=pkgdatadir', 'wayland-protocols')
   if runcmd.returncode() == 0
@@ -94,8 +92,6 @@ if wayland_enabled
     output : 'tablet-unstable-v2-protocol.c',
     command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'code']
   )
-
-
 
   gdk_sources += [
     gtk_shell_c,
