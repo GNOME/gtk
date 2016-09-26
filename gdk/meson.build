@@ -1,4 +1,3 @@
-deprecated_gdk_sources = ['deprecated/gdkcolor.c']
 gdk_sources = files([
   'gdk-private.c',
   'gdk.c',
@@ -9,60 +8,60 @@ gdk_sources = files([
   'gdkdevice.c',
   'gdkdevicemanager.c',
   'gdkdevicepad.c',
+  'gdkdevicetool.c',
   'gdkdisplay.c',
   'gdkdisplaymanager.c',
   'gdkdnd.c',
+  'gdkdrawingcontext.c',
   'gdkevents.c',
+  'gdkframeclock.c',
+  'gdkframeclockidle.c',
   'gdkframetimings.c',
   'gdkgl.c',
   'gdkglcontext.c',
   'gdkglobals.c',
   'gdkkeys.c',
   'gdkkeyuni.c',
+  'gdkmonitor.c',
   'gdkoffscreenwindow.c',
-  'gdkframeclock.c',
-  'gdkframeclockidle.c',
   'gdkpango.c',
   'gdkpixbuf-drawable.c',
   'gdkproperty.c',
   'gdkrectangle.c',
   'gdkrgba.c',
   'gdkscreen.c',
+  'gdkseat.c',
+  'gdkseatdefault.c',
   'gdkselection.c',
   'gdkvisual.c',
   'gdkwindow.c',
   'gdkwindowimpl.c',
-  'gdkseat.c',
-  'gdkseatdefault.c',
-  'gdkdevicetool.c',
-  'gdkdrawingcontext.c',
-  'gdkmonitor.c'
 ])
 
 gdk_public_h_sources = files([
-  'gdk.h',
   'gdk-autocleanup.h',
+  'gdk.h',
   'gdkapplaunchcontext.h',
   'gdkcairo.h',
   'gdkcursor.h',
   'gdkdevice.h',
-  'gdkdevicetool.h',
   'gdkdevicemanager.h',
   'gdkdevicepad.h',
+  'gdkdevicetool.h',
   'gdkdisplay.h',
   'gdkdisplaymanager.h',
   'gdkdnd.h',
   'gdkdrawingcontext.h',
   'gdkevents.h',
+  'gdkframeclock.h',
   'gdkframetimings.h',
   'gdkglcontext.h',
   'gdkkeys.h',
-  'gdkkeysyms.h',
   'gdkkeysyms-compat.h',
+  'gdkkeysyms.h',
   'gdkmain.h',
   'gdkmonitor.h',
   'gdkpango.h',
-  'gdkframeclock.h',
   'gdkpixbuf.h',
   'gdkprivate.h',
   'gdkproperty.h',
@@ -79,14 +78,14 @@ gdk_public_h_sources = files([
 ])
 
 gdk_private_h_sources = files([
-  'gdkseatdefaultprivate.h',
   'gdkdevicetoolprivate.h',
   'gdkdrawingcontextprivate.h',
   'gdkmonitorprivate.h',
   'gdkprivate.h',
+  'gdkseatdefaultprivate.h',
 ])
 
-gdk_x_sources = [
+gdk_x_sources = files([
   'x11/MwmUtil.h',
   'x11/gdkapplaunchcontext-x11.c',
   'x11/gdkasync.c',
@@ -97,9 +96,9 @@ gdk_x_sources = [
   'x11/gdkdevicemanager-core-x11.c',
   'x11/gdkdevicemanager-x11.c',
   'x11/gdkdevicemanager-xi2.c',
-  'x11/gdkdisplaymanager-x11.c',
   'x11/gdkdisplay-x11.c',
   'x11/gdkdisplay-x11.h',
+  'x11/gdkdisplaymanager-x11.c',
   'x11/gdkdnd-x11.c',
   'x11/gdkeventsource.c',
   'x11/gdkeventsource.h',
@@ -110,6 +109,8 @@ gdk_x_sources = [
   'x11/gdkglcontext-x11.h',
   'x11/gdkkeys-x11.c',
   'x11/gdkmain-x11.c',
+  'x11/gdkmonitor-x11.c',
+  'x11/gdkmonitor-x11.h',
   'x11/gdkproperty-x11.c',
   'x11/gdkscreen-x11.c',
   'x11/gdkscreen-x11.h',
@@ -118,20 +119,42 @@ gdk_x_sources = [
   'x11/gdkvisual-x11.c',
   'x11/gdkwindow-x11.c',
   'x11/gdkwindow-x11.h',
+  'x11/gdkx.h',
+  'x11/gdkx11monitor.h',
   'x11/gdkxftdefaults.c',
   'x11/gdkxid.c',
-  'x11/gdkx.h',
-  'x11/xsettings-client.h',
   'x11/xsettings-client.c',
-  'x11/gdkmonitor-x11.c',
-  'x11/gdkmonitor-x11.h',
-  'x11/gdkx11monitor.h'
-]
+  'x11/xsettings-client.h',
+])
 
-gdk_x_private_sources = [
-  'x11/gdkprivate-x11.h',
+gdk_x_private_sources = files([
   'x11/gdkdevicemanagerprivate-core.h',
-]
+  'x11/gdkprivate-x11.h',
+])
+
+gdk_x_public_headers = files([
+  'x11/gdkx-autocleanups.h',
+  'x11/gdkx11applaunchcontext.h',
+  'x11/gdkx11cursor.h',
+  'x11/gdkx11device-core.h',
+  'x11/gdkx11device-xi2.h',
+  'x11/gdkx11device.h',
+  'x11/gdkx11devicemanager-core.h',
+  'x11/gdkx11devicemanager-xi2.h',
+  'x11/gdkx11devicemanager.h',
+  'x11/gdkx11display.h',
+  'x11/gdkx11displaymanager.h',
+  'x11/gdkx11dnd.h',
+  'x11/gdkx11glcontext.h',
+  'x11/gdkx11keys.h',
+  'x11/gdkx11monitor.h',
+  'x11/gdkx11property.h',
+  'x11/gdkx11screen.h',
+  'x11/gdkx11selection.h',
+  'x11/gdkx11utils.h',
+  'x11/gdkx11visual.h',
+  'x11/gdkx11window.h',
+])
 
 gdk_wayland_sources = files([
   'wayland/gdkapplaunchcontext-wayland.c',
@@ -149,15 +172,23 @@ gdk_wayland_sources = files([
   'wayland/gdkscreen-wayland.c',
   'wayland/gdkseat-wayland.h',
   'wayland/gdkselection-wayland.c',
+  'wayland/gdkwayland.h',
   'wayland/gdkwaylanddevice.h',
   'wayland/gdkwaylanddisplay.h',
   'wayland/gdkwaylandglcontext.h',
-  'wayland/gdkwayland.h',
   'wayland/gdkwaylandmonitor.h',
   'wayland/gdkwaylandselection.h',
   'wayland/gdkwaylandwindow.h',
   'wayland/gdkwindow-wayland.c',
   'wayland/wm-button-layout-translation.c',
+])
+
+gdk_wayland_public_headers = files([
+  'wayland/gdkwaylanddevice.h',
+  'wayland/gdkwaylanddisplay.h',
+  'wayland/gdkwaylandglcontext.h',
+  'wayland/gdkwaylandselection.h',
+  'wayland/gdkwaylandwindow.h'
 ])
 
 gdk_wayland_private_sources = files([
@@ -167,36 +198,36 @@ gdk_wayland_private_sources = files([
 
 
 gdk_broadway_sources = files([
-  'broadway/gdkdisplay-broadway.c',
-  'broadway/gdkdisplay-broadway.h',
-  'broadway/gdkscreen-broadway.c',
-  'broadway/gdkscreen-broadway.h',
-  'broadway/broadway-output.c',
-  'broadway/broadway-output.h',
-  'broadway/broadway-server.h',
-  'broadway/broadway-server.c',
-  'broadway/gdkbroadway-server.c',
-  'broadway/gdkcursor-broadway.c',
-  'broadway/gdkvisual-broadway.c',
-  'broadway/gdkselection-broadway.c',
-  'broadway/gdkwindow-broadway.c',
-  'broadway/gdkwindow-broadway.h',
-  'broadway/gdkmonitor-broadway.c',
-  'broadway/gdkmonitor-broadway.h',
-  'broadway/gdkkeys-broadway.c',
-  'broadway/gdkglobals-broadway.c',
-  'broadway/gdkeventsource.c',
-  'broadway/gdkeventsource.h',
-  'broadway/gdkdnd-broadway.c',
-  'broadway/broadwayd.c',
-  'broadway/gdkdevicemanager-broadway.c',
-  'broadway/gdkdevicemanager-broadway.h',
-  'broadway/gdkdevice-broadway.c',
-  'broadway/gdkdevice-broadway.h',
   'broadway/broadway-buffer.c',
   'broadway/broadway-buffer.h',
+  'broadway/broadway-output.c',
+  'broadway/broadway-output.h',
+  'broadway/broadway-server.c',
+  'broadway/broadway-server.h',
+  'broadway/broadwayd.c',
+  'broadway/gdkbroadway-server.c',
+  'broadway/gdkcursor-broadway.c',
+  'broadway/gdkdevice-broadway.c',
+  'broadway/gdkdevice-broadway.h',
+  'broadway/gdkdevicemanager-broadway.c',
+  'broadway/gdkdevicemanager-broadway.h',
+  'broadway/gdkdisplay-broadway.c',
+  'broadway/gdkdisplay-broadway.h',
+  'broadway/gdkdnd-broadway.c',
+  'broadway/gdkeventsource.c',
+  'broadway/gdkeventsource.h',
+  'broadway/gdkglobals-broadway.c',
+  'broadway/gdkkeys-broadway.c',
+  'broadway/gdkmonitor-broadway.c',
+  'broadway/gdkmonitor-broadway.h',
+  'broadway/gdkproperty-broadway.c',
+  'broadway/gdkscreen-broadway.c',
+  'broadway/gdkscreen-broadway.h',
+  'broadway/gdkselection-broadway.c',
   'broadway/gdktestutils-broadway.c',
-  'broadway/gdkproperty-broadway.c'
+  'broadway/gdkvisual-broadway.c',
+  'broadway/gdkwindow-broadway.c',
+  'broadway/gdkwindow-broadway.h',
 ])
 
 gdk_broadway_private_sources = files([
@@ -238,6 +269,7 @@ gdkresources = gnome.compile_resources(
 )
 
 
+deprecated_gdk_sources = ['deprecated/gdkcolor.c']
 deprecated_h_sources = files(['deprecated/gdkcolor.h'])
 
 gdk_headers = gdk_public_h_sources + deprecated_h_sources + gdk_private_h_sources
@@ -282,13 +314,15 @@ if broadway_enabled cdata.set('GDK_WINDOWING_BROADWAY', '') endif
 gdkconfig = configure_file(
   input  : 'gdkconfig.h.meson',
   output : 'gdkconfig.h',
-  configuration : cdata
+  configuration : cdata,
+  install_dir: 'include/gtk-3.0/gdk/' # XXX ???
 )
 
 gdkversionmacros = configure_file(
   input  : 'gdkversionmacros.h.in',
   output : 'gdkversionmacros.h',
-  configuration: cdata
+  configuration: cdata,
+  install_dir: 'include/gtk-3.0/gdk/' # XXX ???
 )
 
 xinc = include_directories('x11')
@@ -335,6 +369,8 @@ if x11_enabled
     gdk_x_sources,
     gdk_x_private_sources
   ]
+
+  install_headers(gdk_x_public_headers, subdir: 'gtk-3.0/gdk/x11/')
 endif
 
 if wayland_enabled
@@ -351,6 +387,8 @@ if wayland_enabled
     gdk_wayland_sources,
     gdk_wayland_private_sources
   ]
+
+  install_headers(gdk_wayland_public_headers, subdir: 'gtk-3.0/gdk/wayland/')
 endif
 
 if broadway_enabled
@@ -363,6 +401,9 @@ if broadway_enabled
   ]
 endif
 
+
+install_headers(gdk_public_h_sources, subdir: 'gtk-3.0/gdk/')
+install_headers(deprecated_h_sources, subdir: 'gtk-3.0/gdk/deprecated/')
 
 libgdk = shared_library('gdk',
   sources: [gdk_sources, gdkconfig, gdkenum_h],
