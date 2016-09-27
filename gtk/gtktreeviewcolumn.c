@@ -1349,7 +1349,7 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 
   gtk_tree_view_column_update_button (column);
 
-  g_object_unref (attr.cursor);
+  g_clear_object (&attr.cursor);
 }
 
 void
