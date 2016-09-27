@@ -3364,7 +3364,7 @@ gtk_entry_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, priv->text_area);
 
   if (attributes_mask & GDK_WA_CURSOR)
-    g_object_unref (attributes.cursor);
+    g_clear_object (&attributes.cursor);
 
   gtk_im_context_set_client_window (priv->im_context, priv->text_area);
 
