@@ -963,14 +963,14 @@ gtk_init_with_args (gint                 *argc,
   gboolean retval;
 
   if (gtk_initialized)
-    return GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL;
+    goto done;
 
   gettext_initialization ();
 
   if (!check_setugid ())
     return FALSE;
 
-  gtk_group = gtk_get_option_group (TRUE);
+  gtk_group = gtk_get_option_group (FALSE);
 
   context = g_option_context_new (parameter_string);
   g_option_context_add_group (context, gtk_group);
@@ -982,7 +982,11 @@ gtk_init_with_args (gint                 *argc,
 
   g_option_context_free (context);
 
-  return retval;
+  if (!retval)
+    return FALSE;
+
+done:
+  return GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL;
 }
 
 
