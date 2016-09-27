@@ -3099,7 +3099,7 @@ update_cursors (GtkWidget *widget)
               display = gtk_widget_get_display (widget);
               cursor = gdk_cursor_new_from_name (display, "text");
               gdk_window_set_cursor (icon_info->window, cursor);
-              g_object_unref (cursor);
+              g_clear_object (&cursor);
             }
           else
             {
