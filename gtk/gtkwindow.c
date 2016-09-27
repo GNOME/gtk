@@ -7529,19 +7529,6 @@ update_window_style_classes (GtkWindow *window)
 }
 
 static void
-update_window_borders (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = window->priv;
-  GtkBorder window_border = { 0 };
-
-  if (priv->client_decorated && priv->use_client_shadow)
-    {
-      get_shadow_width (window, &window_border);
-      update_shadow_width (window, &window_border);
-    }
-}
-
-static void
 popover_size_allocate (GtkWidget        *widget,
                        GtkWindowPopover *popover,
                        GtkWindow        *window)
@@ -7811,7 +7798,6 @@ gtk_window_state_event (GtkWidget           *widget,
     {
       update_window_style_classes (window);
       update_window_buttons (window);
-      update_window_borders (window);
       gtk_widget_queue_resize (widget);
     }
 

@@ -2992,8 +2992,8 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
 
   if (geom_mask & GDK_HINT_MIN_SIZE)
     {
-      width = geometry->min_width - (impl->margin_left + impl->margin_right);
-      height = geometry->min_height - (impl->margin_top + impl->margin_bottom);
+      width = MAX (0, geometry->min_width - (impl->margin_left + impl->margin_right));
+      height = MAX (0, geometry->min_height - (impl->margin_top + impl->margin_bottom));
     }
   else
     {
@@ -3005,8 +3005,8 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
 
   if (geom_mask & GDK_HINT_MAX_SIZE)
     {
-      width = geometry->max_width - (impl->margin_left + impl->margin_right);
-      height = geometry->max_height - (impl->margin_top + impl->margin_bottom);
+      width = MAX (0, geometry->max_width - (impl->margin_left + impl->margin_right));
+      height = MAX (0, geometry->max_height - (impl->margin_top + impl->margin_bottom));
     }
   else
     {
