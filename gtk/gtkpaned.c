@@ -1689,6 +1689,7 @@ gtk_paned_realize (GtkWidget *widget)
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_POINTER_MOTION_MASK);
+  attributes.cursor = NULL;
   attributes_mask = GDK_WA_X | GDK_WA_Y;
   if (gtk_widget_is_sensitive (widget))
     {
@@ -1701,8 +1702,7 @@ gtk_paned_realize (GtkWidget *widget)
   priv->handle = gdk_window_new (window,
                                  &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->handle);
-  if (attributes_mask & GDK_WA_CURSOR)
-    g_object_unref (attributes.cursor);
+  g_clear_object (&attributes.cursor);
 
   priv->child1_window = gtk_paned_create_child_window (paned, priv->child1);
   priv->child2_window = gtk_paned_create_child_window (paned, priv->child2);
