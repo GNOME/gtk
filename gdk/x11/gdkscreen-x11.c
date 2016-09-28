@@ -1052,35 +1052,6 @@ _gdk_x11_screen_process_owner_change (GdkScreen *screen,
 #endif
 }
 
-static gchar *
-substitute_screen_number (const gchar *display_name,
-                          gint         screen_number)
-{
-  GString *str;
-  gchar   *p;
-
-  str = g_string_new (display_name);
-
-  p = strrchr (str->str, '.');
-  if (p && p >	strchr (str->str, ':'))
-    g_string_truncate (str, p - str->str);
-
-  g_string_append_printf (str, ".%d", screen_number);
-
-  return g_string_free (str, FALSE);
-}
-
-static gchar *
-gdk_x11_screen_make_display_name (GdkScreen *screen)
-{
-  const gchar *old_display;
-
-  old_display = gdk_display_get_name (gdk_screen_get_display (screen));
-
-  return substitute_screen_number (old_display,
-                                   gdk_x11_screen_get_screen_number (screen));
-}
-
 static gboolean
 gdk_x11_screen_get_setting (GdkScreen   *screen,
 			    const gchar *name,
@@ -1385,7 +1356,6 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
   screen_class->get_system_visual = _gdk_x11_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_x11_screen_get_rgba_visual;
   screen_class->is_composited = gdk_x11_screen_is_composited;
-  screen_class->make_display_name = gdk_x11_screen_make_display_name;
   screen_class->get_setting = gdk_x11_screen_get_setting;
   screen_class->visual_get_best_depth = _gdk_x11_screen_visual_get_best_depth;
   screen_class->visual_get_best_type = _gdk_x11_screen_visual_get_best_type;

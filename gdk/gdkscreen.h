@@ -57,8 +57,6 @@ GDK_AVAILABLE_IN_ALL
 GList *      gdk_screen_list_visuals          (GdkScreen   *screen);
 GDK_AVAILABLE_IN_ALL
 GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
-gchar *      gdk_screen_make_display_name     (GdkScreen   *screen);
 
 GDK_AVAILABLE_IN_ALL
 GdkScreen *gdk_screen_get_default (void);

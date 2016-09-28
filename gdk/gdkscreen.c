@@ -484,25 +484,6 @@ gdk_screen_is_composited (GdkScreen *screen)
 }
 
 /**
- * gdk_screen_make_display_name:
- * @screen: a #GdkScreen
- *
- * Determines the name to pass to gdk_display_open() to get
- * a #GdkDisplay with this screen as the default screen.
- *
- * Returns: a newly allocated string, free with g_free()
- *
- * Since: 2.2
- **/
-gchar *
-gdk_screen_make_display_name (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return GDK_SCREEN_GET_CLASS (screen)->make_display_name (screen);
-}
-
-/**
  * gdk_screen_get_setting:
  * @screen: the #GdkScreen where the setting is located
  * @name: the name of the setting
