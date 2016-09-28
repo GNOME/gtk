@@ -10912,33 +10912,6 @@ gtk_widget_get_display (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_get_root_window:
- * @widget: a #GtkWidget
- *
- * Get the root window where this widget is located. This function can
- * only be called after the widget has been added to a widget
- * hierarchy with #GtkWindow at the top.
- *
- * The root window is useful for such purposes as creating a popup
- * #GdkWindow associated with the window. In general, you should only
- * create display specific resources when a widget has been realized,
- * and you should free those resources when the widget is unrealized.
- *
- * Returns: (transfer none): the #GdkWindow root window for the toplevel for this widget.
- *
- * Since: 2.2
- *
- * Deprecated: 3.12: Use gdk_screen_get_root_window() instead
- */
-GdkWindow*
-gtk_widget_get_root_window (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  return gdk_screen_get_root_window (gtk_widget_get_screen (widget));
-}
-
-/**
  * gtk_widget_child_focus:
  * @widget: a #GtkWidget
  * @direction: direction of focus movement

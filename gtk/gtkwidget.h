@@ -1012,8 +1012,6 @@ GDK_AVAILABLE_IN_3_10
 gint          gtk_widget_get_scale_factor (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gtk_widget_get_display     (GtkWidget *widget);
-GDK_DEPRECATED_IN_3_12
-GdkWindow *   gtk_widget_get_root_window (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GtkSettings*  gtk_widget_get_settings    (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
