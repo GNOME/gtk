@@ -156,8 +156,7 @@ struct _GtkComboBoxPrivate
   gulong reordered_id;
   gulong changed_id;
   guint popup_idle_id;
-  guint activate_button;
-  guint32 activate_time;
+  GdkEvent *trigger_event;
   guint scroll_timer;
   guint resize_idle_id;
 
@@ -401,8 +400,7 @@ static gboolean gtk_combo_box_menu_key_press       (GtkWidget        *widget,
                                                     GdkEventKey      *event,
                                                     gpointer          data);
 static void     gtk_combo_box_menu_popup           (GtkComboBox      *combo_box,
-                                                    guint             button,
-                                                    guint32           activate_time);
+                                                    const GdkEvent   *trigger_event);
 
 /* cell layout */
 static GtkCellArea *gtk_combo_box_cell_layout_get_area       (GtkCellLayout    *cell_layout);
@@ -2105,9 +2103,8 @@ update_menu_sensitivity (GtkComboBox *combo_box,
 }
 
 static void
-gtk_combo_box_menu_popup (GtkComboBox *combo_box,
-                          guint        button,
-                          guint32      activate_time)
+gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
+                          const GdkEvent *trigger_event)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreePath *path;
@@ -2174,7 +2171,7 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
                                 gtk_bin_get_child (GTK_BIN (combo_box)),
                                 GDK_GRAVITY_SOUTH_WEST,
                                 GDK_GRAVITY_NORTH_WEST,
-                                NULL);
+                                trigger_event);
     }
   else
     {
@@ -2226,7 +2223,7 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
                                 GTK_WIDGET (combo_box),
                                 GDK_GRAVITY_WEST,
                                 GDK_GRAVITY_NORTH_WEST,
-                                NULL);
+                                trigger_event);
     }
 }
 
@@ -2317,9 +2314,7 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
 
   if (GTK_IS_MENU (priv->popup_widget))
     {
-      gtk_combo_box_menu_popup (combo_box,
-                                priv->activate_button,
-                                priv->activate_time);
+      gtk_combo_box_menu_popup (combo_box, priv->trigger_event);
       return;
     }
 
@@ -2815,7 +2810,7 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
           !gtk_widget_has_focus (priv->button))
         gtk_widget_grab_focus (priv->button);
 
-      gtk_combo_box_menu_popup (combo_box, event->button, event->time);
+      gtk_combo_box_menu_popup (combo_box, (const GdkEvent *) event);
 
       return TRUE;
     }
@@ -4167,6 +4162,8 @@ gtk_combo_box_destroy (GtkWidget *widget)
       priv->popup_idle_id = 0;
     }
 
+  g_clear_pointer (&priv->trigger_event, gdk_event_free);
+
   if (priv->box)
     {
       /* destroy things (unparent will kill the latest ref from us)
@@ -4419,9 +4416,9 @@ popup_idle (gpointer data)
                 NULL);
   gtk_combo_box_popup (combo_box);
 
+  g_clear_pointer (&priv->trigger_event, gdk_event_free);
+
   priv->popup_idle_id = 0;
-  priv->activate_button = 0;
-  priv->activate_time = 0;
 
   return FALSE;
 }
@@ -4462,13 +4459,12 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
   if (priv->is_cell_renderer &&
       priv->cell_view && !priv->tree_view)
     {
-      if (event && event->type == GDK_BUTTON_PRESS)
-        {
-          GdkEventButton *event_button = (GdkEventButton *)event;
+      g_clear_pointer (&priv->trigger_event, gdk_event_free);
 
-          priv->activate_button = event_button->button;
-          priv->activate_time = event_button->time;
-        }
+      if (event)
+        priv->trigger_event = gdk_event_copy (event);
+      else
+        priv->trigger_event = gtk_get_current_event ();
 
       priv->popup_idle_id =
           gdk_threads_add_idle (popup_idle, combo_box);
