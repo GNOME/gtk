@@ -1821,11 +1821,15 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
   if (priv->window)
     _gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
 
+  if (priv->parent_scrollable)
+    gtk_popover_set_scrollable_full (popover, NULL);
+
   priv->window = new_window;
 
   if (new_window)
     {
       _gtk_window_add_popover (new_window, GTK_WIDGET (popover), priv->widget, TRUE);
+      gtk_popover_update_scrollable (popover);
       gtk_popover_update_position (popover);
     }
 
