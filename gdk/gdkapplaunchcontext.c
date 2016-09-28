@@ -162,9 +162,6 @@ gdk_app_launch_context_get_display (GAppLaunchContext *context,
   GdkAppLaunchContext *ctx = GDK_APP_LAUNCH_CONTEXT (context);
   GdkDisplay *display;
 
-  if (ctx->screen)
-    return gdk_screen_make_display_name (ctx->screen);
-
   if (ctx->display)
     display = ctx->display;
   else
