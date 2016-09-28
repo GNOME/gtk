@@ -3396,7 +3396,7 @@ install_scroll_cursor (GtkScrolledWindow *scrolled_window,
   display = gdk_window_get_display (priv->scroll_window);
   cursor = gdk_cursor_new_from_name (display, "all-scroll");
   gdk_window_set_cursor (priv->scroll_window, cursor);
-  g_object_unref (cursor);
+  g_clear_object (&cursor);
 }
 
 static void
