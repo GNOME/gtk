@@ -196,6 +196,9 @@ static void gtk_popover_invalidate_borders (GtkPopover *popover);
 static void gtk_popover_apply_modality     (GtkPopover *popover,
                                             gboolean    modal);
 
+static void gtk_popover_set_scrollable_full (GtkPopover    *popover,
+                                             GtkScrollable *scrollable);
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPopover, gtk_popover, GTK_TYPE_BIN)
 
 static void
@@ -1787,6 +1790,17 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 }
 
 static void
+gtk_popover_update_scrollable (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = popover->priv;
+  GtkScrollable *scrollable;
+
+  scrollable = GTK_SCROLLABLE (gtk_widget_get_ancestor (priv->widget,
+                                                        GTK_TYPE_SCROLLABLE));
+  gtk_popover_set_scrollable_full (popover, scrollable);
+}
+
+static void
 _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
                                        GtkWidget  *previous_toplevel,
                                        GtkPopover *popover)
@@ -2001,11 +2015,33 @@ scrollable_notify_cb (GObject    *object,
 }
 
 static void
+gtk_popover_set_scrollable_full (GtkPopover    *popover,
+                                 GtkScrollable *scrollable)
+{
+  GtkPopoverPrivate *priv = popover->priv;
+
+  if (priv->scrollable_notify_id != 0 &&
+      g_signal_handler_is_connected (priv->parent_scrollable, priv->scrollable_notify_id))
+    {
+      g_signal_handler_disconnect (priv->parent_scrollable, priv->scrollable_notify_id);
+      priv->scrollable_notify_id = 0;
+    }
+
+  _gtk_popover_set_scrollable (popover, scrollable);
+
+  if (scrollable)
+    {
+      priv->scrollable_notify_id =
+        g_signal_connect (priv->parent_scrollable, "notify",
+                          G_CALLBACK (scrollable_notify_cb), popover);
+    }
+}
+
+static void
 gtk_popover_update_relative_to (GtkPopover *popover,
                                 GtkWidget  *relative_to)
 {
   GtkPopoverPrivate *priv = popover->priv;
-  GtkScrollable *scrollable = NULL;
 
   if (priv->widget == relative_to)
     return;
@@ -2037,11 +2073,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
     }
 
   if (priv->parent_scrollable)
-    {
-      if (g_signal_handler_is_connected (priv->parent_scrollable, priv->scrollable_notify_id))
-        g_signal_handler_disconnect (priv->parent_scrollable, priv->scrollable_notify_id);
-      _gtk_popover_set_scrollable (popover, NULL);
-    }
+    gtk_popover_set_scrollable_full (popover, NULL);
 
   priv->widget = relative_to;
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_RELATIVE_TO]);
@@ -2079,17 +2111,8 @@ gtk_popover_update_relative_to (GtkPopover *popover,
   if (priv->window)
     _gtk_window_add_popover (priv->window, GTK_WIDGET (popover), priv->widget, TRUE);
 
-  if (relative_to)
-    scrollable = GTK_SCROLLABLE (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_SCROLLABLE));
-
-  if (scrollable)
-    {
-      _gtk_popover_set_scrollable (popover, scrollable);
-
-      priv->scrollable_notify_id =
-        g_signal_connect (priv->parent_scrollable, "notify",
-                          G_CALLBACK (scrollable_notify_cb), popover);
-    }
+  if (priv->widget)
+    gtk_popover_update_scrollable (popover);
 
   _gtk_widget_update_parent_muxer (GTK_WIDGET (popover));
   g_object_unref (popover);
