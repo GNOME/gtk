@@ -160,18 +160,6 @@ gdk_broadway_screen_make_display_name (GdkScreen *screen)
   return g_strdup ("browser");
 }
 
-static GdkWindow *
-gdk_broadway_screen_get_active_window (GdkScreen *screen)
-{
-  return NULL;
-}
-
-static GList *
-gdk_broadway_screen_get_window_stack (GdkScreen *screen)
-{
-  return NULL;
-}
-
 static void
 gdk_broadway_screen_broadcast_client_message (GdkScreen *screen,
 					      GdkEvent  *event)
@@ -204,8 +192,6 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
   screen_class->get_root_window = gdk_broadway_screen_get_root_window;
   screen_class->is_composited = gdk_broadway_screen_is_composited;
   screen_class->make_display_name = gdk_broadway_screen_make_display_name;
-  screen_class->get_active_window = gdk_broadway_screen_get_active_window;
-  screen_class->get_window_stack = gdk_broadway_screen_get_window_stack;
   screen_class->broadcast_client_message = gdk_broadway_screen_broadcast_client_message;
   screen_class->get_setting = gdk_broadway_screen_get_setting;
   screen_class->get_rgba_visual = gdk_broadway_screen_get_rgba_visual;

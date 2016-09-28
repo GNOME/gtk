@@ -1081,94 +1081,6 @@ gdk_x11_screen_make_display_name (GdkScreen *screen)
                                    gdk_x11_screen_get_screen_number (screen));
 }
 
-static GdkWindow *
-gdk_x11_screen_get_active_window (GdkScreen *screen)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  GdkWindow *ret = NULL;
-  Atom type_return;
-  gint format_return;
-  gulong nitems_return;
-  gulong bytes_after_return;
-  guchar *data = NULL;
-
-  if (!gdk_x11_screen_supports_net_wm_hint (screen,
-                                            gdk_atom_intern_static_string ("_NET_ACTIVE_WINDOW")))
-    return NULL;
-
-  if (XGetWindowProperty (x11_screen->xdisplay, x11_screen->xroot_window,
-	                  gdk_x11_get_xatom_by_name_for_display (x11_screen->display,
-			                                         "_NET_ACTIVE_WINDOW"),
-		          0, 1, False, XA_WINDOW, &type_return,
-		          &format_return, &nitems_return,
-                          &bytes_after_return, &data)
-      == Success)
-    {
-      if ((type_return == XA_WINDOW) && (format_return == 32) && (data))
-        {
-          Window window = *(Window *) data;
-
-          if (window != None)
-            {
-              ret = gdk_x11_window_foreign_new_for_display (x11_screen->display,
-                                                            window);
-            }
-        }
-    }
-
-  if (data)
-    XFree (data);
-
-  return ret;
-}
-
-static GList *
-gdk_x11_screen_get_window_stack (GdkScreen *screen)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  GList *ret = NULL;
-  Atom type_return;
-  gint format_return;
-  gulong nitems_return;
-  gulong bytes_after_return;
-  guchar *data = NULL;
-
-  if (!gdk_x11_screen_supports_net_wm_hint (screen,
-                                            gdk_atom_intern_static_string ("_NET_CLIENT_LIST_STACKING")))
-    return NULL;
-
-  if (XGetWindowProperty (x11_screen->xdisplay, x11_screen->xroot_window,
-	                  gdk_x11_get_xatom_by_name_for_display (x11_screen->display,
-			                                         "_NET_CLIENT_LIST_STACKING"),
-		          0, G_MAXLONG, False, XA_WINDOW, &type_return,
-		          &format_return, &nitems_return,
-                          &bytes_after_return, &data)
-      == Success)
-    {
-      if ((type_return == XA_WINDOW) && (format_return == 32) &&
-          (data) && (nitems_return > 0))
-        {
-          gulong *stack = (gulong *) data;
-          GdkWindow *win;
-          int i;
-
-          for (i = 0; i < nitems_return; i++)
-            {
-              win = gdk_x11_window_foreign_new_for_display (x11_screen->display,
-                                                            (Window)stack[i]);
-
-              if (win != NULL)
-                ret = g_list_append (ret, win);
-            }
-        }
-    }
-
-  if (data)
-    XFree (data);
-
-  return ret;
-}
-
 static gboolean
 gdk_x11_screen_get_setting (GdkScreen   *screen,
 			    const gchar *name,
@@ -1474,8 +1386,6 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
   screen_class->get_rgba_visual = gdk_x11_screen_get_rgba_visual;
   screen_class->is_composited = gdk_x11_screen_is_composited;
   screen_class->make_display_name = gdk_x11_screen_make_display_name;
-  screen_class->get_active_window = gdk_x11_screen_get_active_window;
-  screen_class->get_window_stack = gdk_x11_screen_get_window_stack;
   screen_class->get_setting = gdk_x11_screen_get_setting;
   screen_class->visual_get_best_depth = _gdk_x11_screen_visual_get_best_depth;
   screen_class->visual_get_best_type = _gdk_x11_screen_visual_get_best_type;

@@ -80,11 +80,6 @@ void    gdk_screen_set_resolution (GdkScreen *screen,
 GDK_AVAILABLE_IN_ALL
 gdouble gdk_screen_get_resolution (GdkScreen *screen);
 
-GDK_AVAILABLE_IN_ALL
-GdkWindow *gdk_screen_get_active_window (GdkScreen *screen);
-GDK_AVAILABLE_IN_ALL
-GList     *gdk_screen_get_window_stack  (GdkScreen *screen);
-
 G_END_DECLS
 
 #endif  /* __GDK_SCREEN_H__ */

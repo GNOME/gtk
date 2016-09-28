@@ -223,8 +223,6 @@ gdk_screen_get_font_options
 gdk_screen_set_font_options
 gdk_screen_get_resolution
 gdk_screen_set_resolution
-gdk_screen_get_active_window
-gdk_screen_get_window_stack
 
 <SUBSECTION Standard>
 GDK_SCREEN

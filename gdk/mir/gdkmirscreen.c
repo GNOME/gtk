@@ -426,20 +426,6 @@ gdk_mir_screen_make_display_name (GdkScreen *screen)
   return NULL; // FIXME
 }
 
-static GdkWindow *
-gdk_mir_screen_get_active_window (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_active_window\n");
-  return NULL; // FIXME
-}
-
-static GList *
-gdk_mir_screen_get_window_stack (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_window_stack\n");
-  return NULL; // FIXME
-}
-
 static void
 gdk_mir_screen_broadcast_client_message (GdkScreen *screen,
                                          GdkEvent  *event)
@@ -819,8 +805,6 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
   screen_class->get_rgba_visual = gdk_mir_screen_get_rgba_visual;
   screen_class->is_composited = gdk_mir_screen_is_composited;
   screen_class->make_display_name = gdk_mir_screen_make_display_name;
-  screen_class->get_active_window = gdk_mir_screen_get_active_window;
-  screen_class->get_window_stack = gdk_mir_screen_get_window_stack;
   screen_class->broadcast_client_message = gdk_mir_screen_broadcast_client_message;
   screen_class->get_setting = gdk_mir_screen_get_setting;
   screen_class->visual_get_best_depth = gdk_mir_screen_visual_get_best_depth;

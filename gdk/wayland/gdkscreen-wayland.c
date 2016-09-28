@@ -141,18 +141,6 @@ gdk_wayland_screen_make_display_name (GdkScreen *screen)
   return g_strdup (gdk_display_get_name (GDK_WAYLAND_SCREEN (screen)->display));
 }
 
-static GdkWindow *
-gdk_wayland_screen_get_active_window (GdkScreen *screen)
-{
-  return NULL;
-}
-
-static GList *
-gdk_wayland_screen_get_window_stack (GdkScreen *screen)
-{
-  return NULL;
-}
-
 static void
 gdk_wayland_screen_broadcast_client_message (GdkScreen *screen,
 					     GdkEvent  *event)
@@ -819,8 +807,6 @@ _gdk_wayland_screen_class_init (GdkWaylandScreenClass *klass)
   screen_class->get_rgba_visual = gdk_wayland_screen_get_rgba_visual;
   screen_class->is_composited = gdk_wayland_screen_is_composited;
   screen_class->make_display_name = gdk_wayland_screen_make_display_name;
-  screen_class->get_active_window = gdk_wayland_screen_get_active_window;
-  screen_class->get_window_stack = gdk_wayland_screen_get_window_stack;
   screen_class->broadcast_client_message = gdk_wayland_screen_broadcast_client_message;
   screen_class->get_setting = gdk_wayland_screen_get_setting;
   screen_class->visual_get_best_depth = gdk_wayland_screen_visual_get_best_depth;
