@@ -100,7 +100,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testmountoperation		\
 	testmultidisplay		\
 	testnotebookdnd			\
-	testnumerableicon		\
 	testnouiprint			\
 	testoffscreen			\
 	testoffscreenwindow		\
@@ -234,7 +233,6 @@ testmountoperation_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
-testnumerableicon_DEPENDENCIES = $(TEST_DEPS)
 testoffscreen_DEPENDENCIES = $(TEST_DEPS)
 testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
 testappchooser_DEPENDENCIES = $(TEST_DEPS)
@@ -430,9 +428,6 @@ testiconview_SOURCES = 		\
 
 testiconview_keynav_SOURCES = 	\
 	testiconview-keynav.c
-
-testnumerableicon_SOURCES =	\
-	testnumerableicon.c
 
 testrecentchooser_SOURCES = 	\
 	testrecentchooser.c

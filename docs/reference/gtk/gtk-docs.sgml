@@ -349,7 +349,6 @@
       <xi:include href="xml/gtkmisc.xml" />
       <xi:include href="xml/gtkstock.xml" />
       <xi:include href="xml/gtkiconfactory.xml" />
-      <xi:include href="xml/gtknumerableicon.xml" />
       <xi:include href="xml/gtkarrow.xml" />
       <xi:include href="xml/gtkstatusicon.xml" />
       <xi:include href="xml/gtkthemingengine.xml" />

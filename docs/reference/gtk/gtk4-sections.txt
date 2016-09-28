@@ -2606,35 +2606,6 @@ GtkNotebookPrivate
 </SECTION>
 
 <SECTION>
-<FILE>gtknumerableicon</FILE>
-<TITLE>GtkNumerableIcon</TITLE>
-GtkNumerableIcon
-gtk_numerable_icon_new
-gtk_numerable_icon_new_with_style_context
-gtk_numerable_icon_get_background_gicon
-gtk_numerable_icon_set_background_gicon
-gtk_numerable_icon_get_background_icon_name
-gtk_numerable_icon_set_background_icon_name
-gtk_numerable_icon_get_count
-gtk_numerable_icon_set_count
-gtk_numerable_icon_get_label
-gtk_numerable_icon_set_label
-gtk_numerable_icon_get_style_context
-gtk_numerable_icon_set_style_context
-<SUBSECTION Standard>
-GTK_NUMERABLE_ICON
-GTK_IS_NUMERABLE_ICON
-GTK_TYPE_NUMERABLE_ICON
-GTK_NUMERABLE_ICON_CLASS
-GTK_IS_NUMERABLE_ICON_CLASS
-GTK_NUMERABLE_ICON_GET_CLASS
-
-<SUBSECTION Private>
-GtkNumerableIconPrivate
-gtk_numerable_icon_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkoffscreenwindow</FILE>
 <TITLE>GtkOffscreenWindow</TITLE>
 GtkOffscreenWindow

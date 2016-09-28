@@ -264,7 +264,6 @@
 #include <gtk/deprecated/gtkiconfactory.h>
 #include <gtk/deprecated/gtkimagemenuitem.h>
 #include <gtk/deprecated/gtkmisc.h>
-#include <gtk/deprecated/gtknumerableicon.h>
 #include <gtk/deprecated/gtkradioaction.h>
 #include <gtk/deprecated/gtkrc.h>
 #include <gtk/deprecated/gtkrecentaction.h>

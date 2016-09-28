@@ -450,8 +450,6 @@ HTML_IMAGES = \
 	$(srcdir)/images/focus.png					\
 	$(srcdir)/images/handles.png					\
 	$(srcdir)/images/extensions.png					\
-	$(srcdir)/images/numerableicon.png				\
-	$(srcdir)/images/numerableicon2.png				\
 	$(srcdir)/images/bloatpad-osx.png				\
 	$(srcdir)/images/bloatpad-gnome.png				\
 	$(srcdir)/images/bloatpad-xfce.png				\

@@ -251,7 +251,6 @@ gtk_OBJECTS = \
 	gtkmountoperation.obj \
 	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
-	gtknumerableicon.obj \
 	gtkoffscreenwindow.obj \
 	gtkorientable.obj \
 	gtkpagesetup.obj \

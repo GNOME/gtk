@@ -45,7 +45,6 @@
 #include "gtkiconcache.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
-#include "deprecated/gtknumerableiconprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
@@ -5559,11 +5558,6 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
       GIcon *base, *emblem;
       GList *list, *l;
       GtkIconInfo *base_info, *emblem_info;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      if (GTK_IS_NUMERABLE_ICON (icon))
-        _gtk_numerable_icon_set_background_icon_size (GTK_NUMERABLE_ICON (icon), size / 2);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
       base = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (icon));
       base_info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme, base, size, scale, flags);

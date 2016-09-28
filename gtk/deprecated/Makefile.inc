@@ -19,7 +19,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkiconfactory.h	\
 	deprecated/gtkimagemenuitem.h	\
 	deprecated/gtkmisc.h		\
-	deprecated/gtknumerableicon.h	\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrc.h		\
 	deprecated/gtkrecentaction.h	\
@@ -41,7 +40,6 @@ deprecated_h_sources = 			\
 deprecated_private_h_sources =			\
 	deprecated/gtkgradientprivate.h		\
 	deprecated/gtkiconfactoryprivate.h	\
-	deprecated/gtknumerableiconprivate.h	\
 	deprecated/gtkstylepropertiesprivate.h	\
 	deprecated/gtksymboliccolorprivate.h
 
@@ -66,7 +64,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkiconfactory.c	\
 	deprecated/gtkimagemenuitem.c	\
 	deprecated/gtkmisc.c		\
-	deprecated/gtknumerableicon.c	\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrc.c		\
 	deprecated/gtkrecentaction.c	\
