@@ -1009,7 +1009,6 @@ gtk_plug_realize (GtkWidget *widget)
   GdkWindow *gdk_window;
   GdkWindowAttr attributes;
   const gchar *title;
-  gchar *wmclass_name, *wmclass_class;
   gint attributes_mask;
   GdkScreen *screen;
 
@@ -1020,13 +1019,10 @@ gtk_plug_realize (GtkWidget *widget)
     g_warning ("GtkPlug only works under X11");
 
   title = gtk_window_get_title (window);
-  _gtk_window_get_wmclass (window, &wmclass_name, &wmclass_class);
   gtk_widget_get_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;	/* XXX GDK_WINDOW_PLUG ? */
   attributes.title = (gchar *) title;
-  attributes.wmclass_name = wmclass_name;
-  attributes.wmclass_class = wmclass_class;
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
@@ -1044,7 +1040,6 @@ gtk_plug_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_VISUAL;
   attributes_mask |= (title ? GDK_WA_TITLE : 0);
-  attributes_mask |= (wmclass_name ? GDK_WA_WMCLASS : 0);
 
   if (gtk_widget_is_toplevel (widget))
     {

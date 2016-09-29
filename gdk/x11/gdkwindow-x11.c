@@ -1127,14 +1127,11 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
       gdk_window_set_title (window, title);
 
-      if (attributes_mask & GDK_WA_WMCLASS)
-        {
-          class_hint = XAllocClassHint ();
-          class_hint->res_name = attributes->wmclass_name;
-          class_hint->res_class = attributes->wmclass_class;
-          XSetClassHint (xdisplay, impl->xid, class_hint);
-          XFree (class_hint);
-        }
+      class_hint = XAllocClassHint ();
+      class_hint->res_name = (char *) g_get_prgname ();
+      class_hint->res_class = (char *) gdk_get_program_class ();
+      XSetClassHint (xdisplay, impl->xid, class_hint);
+      XFree (class_hint);
 
       setup_toplevel_window (window, window->parent);
       break;

@@ -93,7 +93,6 @@ typedef enum
  * @GDK_WA_Y: Honor the Y coordinate field
  * @GDK_WA_CURSOR: Honor the cursor field
  * @GDK_WA_VISUAL: Honor the visual field
- * @GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
  * @GDK_WA_NOREDIR: Honor the override_redirect field
  * @GDK_WA_TYPE_HINT: Honor the type_hint field
  *
@@ -111,9 +110,8 @@ typedef enum
   GDK_WA_Y	   = 1 << 3,
   GDK_WA_CURSOR	   = 1 << 4,
   GDK_WA_VISUAL	   = 1 << 5,
-  GDK_WA_WMCLASS   = 1 << 6,
-  GDK_WA_NOREDIR   = 1 << 7,
-  GDK_WA_TYPE_HINT = 1 << 8
+  GDK_WA_NOREDIR   = 1 << 6,
+  GDK_WA_TYPE_HINT = 1 << 7
 } GdkWindowAttributesType;
 
 /* Size restriction enumeration.
@@ -343,8 +341,6 @@ typedef enum
  * @visual: #GdkVisual for window
  * @window_type: type of window
  * @cursor: cursor for the window (see gdk_window_set_cursor())
- * @wmclass_name: don’t use (see gtk_window_set_wmclass())
- * @wmclass_class: don’t use (see gtk_window_set_wmclass())
  * @override_redirect: %TRUE to bypass the window manager
  * @type_hint: a hint of the function of the window
  *
@@ -361,8 +357,6 @@ struct _GdkWindowAttr
   GdkVisual *visual;
   GdkWindowType window_type;
   GdkCursor *cursor;
-  gchar *wmclass_name;
-  gchar *wmclass_class;
   gboolean override_redirect;
   GdkWindowTypeHint type_hint;
 };

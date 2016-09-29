@@ -203,7 +203,6 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.title = (gchar *) gtk_window_get_title (window);
-  _gtk_window_get_wmclass (window, &attributes.wmclass_name, &attributes.wmclass_class);
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
@@ -222,7 +221,6 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_VISUAL;
   attributes_mask |= (attributes.title ? GDK_WA_TITLE : 0);
-  attributes_mask |= (attributes.wmclass_name ? GDK_WA_WMCLASS : 0);
 
   gdk_window = gdk_window_new (embed_widget->parent_window,
                                &attributes, attributes_mask);

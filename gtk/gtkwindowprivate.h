@@ -57,10 +57,6 @@ void            _gtk_window_set_is_active          (GtkWindow *window,
 void            _gtk_window_set_is_toplevel        (GtkWindow *window,
                                                     gboolean   is_toplevel);
 
-void            _gtk_window_get_wmclass            (GtkWindow  *window,
-                                                    gchar     **wmclass_name,
-                                                    gchar     **wmclass_class);
-
 void            _gtk_window_set_allocation         (GtkWindow           *window,
                                                     const GtkAllocation *allocation,
                                                     GtkAllocation       *allocation_out);

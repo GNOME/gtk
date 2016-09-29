@@ -734,9 +734,9 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       remaining_mask &= ~GDK_WA_NOREDIR;
     }
 
-  if ((remaining_mask & ~(GDK_WA_WMCLASS|GDK_WA_VISUAL|GDK_WA_CURSOR|GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
+  if ((remaining_mask & ~(GDK_WA_VISUAL|GDK_WA_CURSOR|GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
     g_warning ("_gdk_window_impl_new: uexpected attribute 0x%X",
-               remaining_mask & ~(GDK_WA_WMCLASS|GDK_WA_VISUAL|GDK_WA_CURSOR|GDK_WA_TITLE|GDK_WA_TYPE_HINT));
+               remaining_mask & ~(GDK_WA_VISUAL|GDK_WA_CURSOR|GDK_WA_TITLE|GDK_WA_TYPE_HINT));
 
   hparent = GDK_WINDOW_HWND (real_parent);
 
@@ -751,10 +751,6 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   impl->override_redirect = override_redirect;
   impl->layered = FALSE;
   impl->layered_opacity = 1.0;
-
-  /* wclass is not any longer set always, but if is ... */
-  if ((attributes_mask & GDK_WA_WMCLASS) == GDK_WA_WMCLASS)
-    g_assert ((attributes->wclass == GDK_INPUT_OUTPUT) == !window->input_only);
 
   if (!window->input_only)
     {

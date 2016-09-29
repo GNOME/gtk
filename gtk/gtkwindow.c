@@ -192,8 +192,6 @@ struct _GtkWindowPrivate
 
   gchar   *startup_id;
   gchar   *title;
-  gchar   *wmclass_class;
-  gchar   *wmclass_name;
   gchar   *wm_role;
 
   guint    keys_changed_handler;
@@ -1649,8 +1647,6 @@ gtk_window_init (GtkWindow *window)
   gtk_container_set_default_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
   priv->title = NULL;
-  priv->wmclass_name = g_strdup (g_get_prgname ());
-  priv->wmclass_class = g_strdup (gdk_get_program_class ());
   priv->wm_role = NULL;
   priv->geometry_info = NULL;
   priv->type = GTK_WINDOW_TOPLEVEL;
@@ -2379,43 +2375,6 @@ gtk_window_get_title (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return window->priv->title;
-}
-
-/**
- * gtk_window_set_wmclass:
- * @window: a #GtkWindow
- * @wmclass_name: window name hint
- * @wmclass_class: window class hint
- *
- * Don’t use this function. It sets the X Window System “class” and
- * “name” hints for a window.  According to the ICCCM, you should
- * always set these to the same value for all windows in an
- * application, and GTK+ sets them to that value by default, so calling
- * this function is sort of pointless. However, you may want to call
- * gtk_window_set_role() on each window in your application, for the
- * benefit of the session manager. Setting the role allows the window
- * manager to restore window positions when loading a saved session.
- * 
- **/
-void
-gtk_window_set_wmclass (GtkWindow *window,
-			const gchar *wmclass_name,
-			const gchar *wmclass_class)
-{
-  GtkWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = window->priv;
-
-  g_free (priv->wmclass_name);
-  priv->wmclass_name = g_strdup (wmclass_name);
-
-  g_free (priv->wmclass_class);
-  priv->wmclass_class = g_strdup (wmclass_class);
-
-  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-    g_warning ("gtk_window_set_wmclass: shouldn't set wmclass after window is realized!");
 }
 
 /**
@@ -5820,8 +5779,6 @@ gtk_window_finalize (GObject *object)
   GtkMnemonicHash *mnemonic_hash;
 
   g_free (priv->title);
-  g_free (priv->wmclass_name);
-  g_free (priv->wmclass_class);
   g_free (priv->wm_role);
   gtk_window_release_application (window);
 
@@ -7139,8 +7096,6 @@ gtk_window_realize (GtkWidget *widget)
 #endif
 
       attributes.title = priv->title;
-      attributes.wmclass_name = priv->wmclass_name;
-      attributes.wmclass_class = priv->wmclass_class;
       attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.visual = gtk_widget_get_visual (widget);
 
@@ -7169,7 +7124,6 @@ gtk_window_realize (GtkWidget *widget)
 
       attributes_mask |= GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
       attributes_mask |= (priv->title ? GDK_WA_TITLE : 0);
-      attributes_mask |= (priv->wmclass_name ? GDK_WA_WMCLASS : 0);
 
       gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
     }
@@ -11551,17 +11505,6 @@ gtk_window_set_focus_visible (GtkWindow *window,
       priv->focus_visible = setting;
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FOCUS_VISIBLE]);
     }
-}
-
-void
-_gtk_window_get_wmclass (GtkWindow  *window,
-                         gchar     **wmclass_name,
-                         gchar     **wmclass_class)
-{
-  GtkWindowPrivate *priv = window->priv;
-
-  *wmclass_name = priv->wmclass_name;
-  *wmclass_class = priv->wmclass_class;
 }
 
 /**
