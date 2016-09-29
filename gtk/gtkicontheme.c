@@ -4505,6 +4505,11 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
     {
       g_propagate_error (error, icon_info->load_error);
       icon_info->load_error = NULL;
+      g_free (css_fg);
+      g_free (css_warning);
+      g_free (css_error);
+      g_free (css_success);
+      g_free (file_data);
       return NULL;
     }
 
@@ -4517,7 +4522,14 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
       g_object_unref (stream);
 
       if (!pixbuf)
-        return NULL;
+        {
+          g_free (css_fg);
+          g_free (css_warning);
+          g_free (css_error);
+          g_free (css_success);
+          g_free (file_data);
+          return NULL;
+        }
 
       icon_info->symbolic_width = gdk_pixbuf_get_width (pixbuf);
       icon_info->symbolic_height = gdk_pixbuf_get_height (pixbuf);
