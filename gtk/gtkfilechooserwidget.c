@@ -30,6 +30,7 @@
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
 #include "gtkcomboboxtext.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkdragsource.h"
 #include "gtkdragdest.h"
 #include "gtkentry.h"
@@ -72,6 +73,7 @@
 #include "gtkshow.h"
 #include "gtkmain.h"
 #include "gtkscrollable.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkpopover.h"
 #include "gtkrevealer.h"
 #include "gtkspinner.h"
@@ -6182,20 +6184,13 @@ find_good_size_from_style (GtkWidget *widget,
 {
   GtkStyleContext *context;
   double font_size;
-  GdkScreen *screen;
   double resolution;
 
   context = gtk_widget_get_style_context (widget);
 
-  screen = gtk_widget_get_screen (widget);
-  if (screen)
-    {
-      resolution = gdk_screen_get_resolution (screen);
-      if (resolution < 0.0) /* will be -1 if the resolution is not defined in the GdkScreen */
-        resolution = 96.0;
-    }
-  else
-    resolution = 96.0; /* wheeee */
+  resolution = _gtk_css_number_value_get (_gtk_style_context_peek_property (context,
+                                                                            GTK_CSS_PROPERTY_DPI),
+                                          100);
 
   gtk_style_context_get (context,
                          gtk_style_context_get_state (context),
