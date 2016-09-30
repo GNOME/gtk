@@ -185,8 +185,6 @@ void          _gdk_quartz_screen_init_visuals               (GdkScreen      *scr
 GList *       _gdk_quartz_screen_list_visuals               (GdkScreen      *screen);
 
 /* Screen methods - events */
-void        _gdk_quartz_screen_broadcast_client_message (GdkScreen   *screen,
-                                                         GdkEvent    *event);
 gboolean    _gdk_quartz_screen_get_setting              (GdkScreen   *screen,
                                                          const gchar *name,
                                                          GValue      *value);

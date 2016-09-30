@@ -419,14 +419,6 @@ gdk_mir_screen_is_composited (GdkScreen *screen)
   return TRUE;
 }
 
-static void
-gdk_mir_screen_broadcast_client_message (GdkScreen *screen,
-                                         GdkEvent  *event)
-{
-  //g_printerr ("gdk_mir_screen_broadcast_client_message\n");
-  // FIXME
-}
-
 static gboolean
 gdk_mir_screen_get_setting (GdkScreen   *screen,
                             const gchar *name,
@@ -797,7 +789,6 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
   screen_class->get_system_visual = gdk_mir_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_mir_screen_get_rgba_visual;
   screen_class->is_composited = gdk_mir_screen_is_composited;
-  screen_class->broadcast_client_message = gdk_mir_screen_broadcast_client_message;
   screen_class->get_setting = gdk_mir_screen_get_setting;
   screen_class->visual_get_best_depth = gdk_mir_screen_visual_get_best_depth;
   screen_class->visual_get_best_type = gdk_mir_screen_visual_get_best_type;

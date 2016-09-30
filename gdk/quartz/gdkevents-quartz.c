@@ -1747,13 +1747,6 @@ _gdk_quartz_display_queue_events (GdkDisplay *display)
     }
 }
 
-void
-_gdk_quartz_screen_broadcast_client_message (GdkScreen *screen,
-                                             GdkEvent  *event)
-{
-  /* Not supported. */
-}
-
 gboolean
 _gdk_quartz_screen_get_setting (GdkScreen   *screen,
                                 const gchar *name,

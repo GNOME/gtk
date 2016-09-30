@@ -154,12 +154,6 @@ gdk_broadway_screen_is_composited (GdkScreen *screen)
 }
 
 
-static void
-gdk_broadway_screen_broadcast_client_message (GdkScreen *screen,
-					      GdkEvent  *event)
-{
-}
-
 static gboolean
 gdk_broadway_screen_get_setting (GdkScreen   *screen,
 				 const gchar *name,
@@ -185,7 +179,6 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
   screen_class->get_display = gdk_broadway_screen_get_display;
   screen_class->get_root_window = gdk_broadway_screen_get_root_window;
   screen_class->is_composited = gdk_broadway_screen_is_composited;
-  screen_class->broadcast_client_message = gdk_broadway_screen_broadcast_client_message;
   screen_class->get_setting = gdk_broadway_screen_get_setting;
   screen_class->get_rgba_visual = gdk_broadway_screen_get_rgba_visual;
   screen_class->get_system_visual = _gdk_broadway_screen_get_system_visual;
