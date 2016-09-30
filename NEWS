@@ -1,3 +1,41 @@
+Overview of Changes in GTK+ 3.22.1
+==================================
+
+* Reduce runtime warnings
+
+* Bug fixes:
+ 765649 icons missing in file chooser (errors on console)
+ 769500 adwaita: GtkWidget:sensitive animation should not cause "On" ...
+ 769554 [Mir] Touchpad scrolling not as smooth as it should be
+ 770388 GtkTreeView: attempt to underallocate GtkTreeView's child Gtk...
+ 771516 wayland: Only 'moved-to-rect' if move_to_rect() was used
+ 771553 Shrinking window generates a black patch when gl is used
+ 771666 sftp:// property not set for translation in 3.21.92
+ 771812 Crash when reparenting a popover with a non-null parent_scrol...
+ 771826 Some missing nullable annotation
+ 771915 [Wayland]: Totem window misplaced after a state change
+ 771959 gtk_init_with_args fails when no display is found / does not ...
+ 771963 GtkPaned warning in gtk_paned_realize
+ 772057 Fix wrong URL copy/paste (patch)
+ 772215 icon-theme: Fix leaks on error
+
+* Translation updates:
+ Arabic
+ Basque
+ Brazilian Portuguese
+ Croatian
+ Czech
+ French
+ German
+ Hebrew
+ Hungarian
+ Kazakh
+ Korean
+ Polish
+ Slovak
+ Swedish
+
+
 Overview of Changes in GTK+ 3.22.0
 ==================================
 
