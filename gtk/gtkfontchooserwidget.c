@@ -29,6 +29,7 @@
 #include "gtkbuildable.h"
 #include "gtkbox.h"
 #include "gtkcellrenderertext.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkentry.h"
 #include "gtksearchentry.h"
 #include "gtkgrid.h"
@@ -42,6 +43,7 @@
 #include "gtkscale.h"
 #include "gtkscrolledwindow.h"
 #include "gtkspinbutton.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktextview.h"
 #include "gtktreeselection.h"
 #include "gtktreeview.h"
@@ -842,10 +844,14 @@ static int
 gtk_font_chooser_widget_get_preview_text_height (GtkFontChooserWidget *fontchooser)
 {
   GtkWidget *treeview = fontchooser->priv->family_face_list;
+  GtkStyleContext *context;
   double dpi, font_size;
 
-  dpi = gdk_screen_get_resolution (gtk_widget_get_screen (treeview));
-  gtk_style_context_get (gtk_widget_get_style_context (treeview),
+  context = gtk_widget_get_style_context (treeview);
+  dpi = _gtk_css_number_value_get (_gtk_style_context_peek_property (context,
+                                                                     GTK_CSS_PROPERTY_DPI),
+                                   100);
+  gtk_style_context_get (context,
                          gtk_widget_get_state_flags (treeview),
                          "font-size", &font_size,
                          NULL);
