@@ -1315,6 +1315,7 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   guint attributes_mask;
   gboolean rtl;
   GdkDisplay *display;
+  GdkCursor *cursor;
 
   tree_view = (GtkTreeView *)priv->tree_view;
   rtl       = (gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_RTL);
@@ -1334,9 +1335,8 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 		     GDK_BUTTON_RELEASE_MASK |
 		     GDK_POINTER_MOTION_MASK |
 		     GDK_KEY_PRESS_MASK);
-  attributes_mask = GDK_WA_CURSOR | GDK_WA_X | GDK_WA_Y;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
   display = gdk_window_get_display (_gtk_tree_view_get_header_window (tree_view));
-  attr.cursor = gdk_cursor_new_from_name (display, "col-resize");
   attr.y = 0;
   attr.width = TREE_VIEW_DRAG_WIDTH;
   attr.height = _gtk_tree_view_get_header_height (tree_view);
@@ -1345,11 +1345,13 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   attr.x       = (allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2;
   priv->window = gdk_window_new (_gtk_tree_view_get_header_window (tree_view),
 				 &attr, attributes_mask);
+  cursor = gdk_cursor_new_from_name (display, "col-resize");
+  gdk_window_set_cursor (priv->window, cursor);
+  g_object_unref (cursor);
+
   gtk_widget_register_window (GTK_WIDGET (tree_view), priv->window);
 
   gtk_tree_view_column_update_button (column);
-
-  g_clear_object (&attr.cursor);
 }
 
 void

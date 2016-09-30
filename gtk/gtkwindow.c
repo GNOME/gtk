@@ -7147,7 +7147,7 @@ gtk_window_realize (GtkWidget *widget)
 
   if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
     {
-      const gchar *cursor[8] = {
+      const gchar *cursor_names[8] = {
         "nw-resize", "n-resize", "ne-resize",
         "w-resize",               "e-resize",
         "sw-resize", "s-resize", "se-resize"
@@ -7157,13 +7157,17 @@ gtk_window_realize (GtkWidget *widget)
       attributes.width = 1;
       attributes.height = 1;
       attributes.event_mask = GDK_BUTTON_PRESS_MASK;
-      attributes_mask = GDK_WA_CURSOR;
+      attributes_mask = 0;
 
       for (i = 0; i < 8; i++)
         {
-          attributes.cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), cursor[i]);
+          GdkCursor *cursor;
+
           priv->border_window[i] = gdk_window_new (gdk_window, &attributes, attributes_mask);
-          g_clear_object (&attributes.cursor);
+
+          cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), cursor_names[i]);
+          gdk_window_set_cursor (priv->border_window[i], cursor);
+          g_object_unref (cursor);
 
           gdk_window_show (priv->border_window[i]);
           gtk_widget_register_window (widget, priv->border_window[i]);

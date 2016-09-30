@@ -734,9 +734,9 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       remaining_mask &= ~GDK_WA_NOREDIR;
     }
 
-  if ((remaining_mask & ~(GDK_WA_VISUAL|GDK_WA_CURSOR|GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
+  if ((remaining_mask & ~(GDK_WA_VISUAL|GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
     g_warning ("_gdk_window_impl_new: uexpected attribute 0x%X",
-               remaining_mask & ~(GDK_WA_VISUAL|GDK_WA_CURSOR|GDK_WA_TITLE|GDK_WA_TYPE_HINT));
+               remaining_mask & ~(GDK_WA_VISUAL|GDK_WA_TITLE|GDK_WA_TYPE_HINT));
 
   hparent = GDK_WINDOW_HWND (real_parent);
 
@@ -940,9 +940,6 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
 //  if (!from_set_skip_taskbar_hint && window->window_type == GDK_WINDOW_TEMP)
 //    gdk_window_set_skip_taskbar_hint (window, TRUE);
-
-  if (attributes_mask & GDK_WA_CURSOR)
-    gdk_window_set_cursor (window, attributes->cursor);
 
   _gdk_win32_window_enable_transparency (window);
 }

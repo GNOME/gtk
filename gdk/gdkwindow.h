@@ -91,14 +91,13 @@ typedef enum
  * @GDK_WA_TITLE: Honor the title field
  * @GDK_WA_X: Honor the X coordinate field
  * @GDK_WA_Y: Honor the Y coordinate field
- * @GDK_WA_CURSOR: Honor the cursor field
  * @GDK_WA_VISUAL: Honor the visual field
  * @GDK_WA_NOREDIR: Honor the override_redirect field
  * @GDK_WA_TYPE_HINT: Honor the type_hint field
  *
  * Used to indicate which fields in the #GdkWindowAttr struct should be honored.
- * For example, if you filled in the “cursor” and “x” fields of #GdkWindowAttr,
- * pass “@GDK_WA_X | @GDK_WA_CURSOR” to gdk_window_new(). Fields in
+ * For example, if you filled in the “title” and “x” fields of #GdkWindowAttr,
+ * pass “@GDK_WA_X | @GDK_WA_TITLE” to gdk_window_new(). Fields in
  * #GdkWindowAttr not covered by a bit in this enum are required; for example,
  * the @width/@height, @wclass, and @window_type fields are required, they have
  * no corresponding flag in #GdkWindowAttributesType.
@@ -108,10 +107,9 @@ typedef enum
   GDK_WA_TITLE	   = 1 << 1,
   GDK_WA_X	   = 1 << 2,
   GDK_WA_Y	   = 1 << 3,
-  GDK_WA_CURSOR	   = 1 << 4,
-  GDK_WA_VISUAL	   = 1 << 5,
-  GDK_WA_NOREDIR   = 1 << 6,
-  GDK_WA_TYPE_HINT = 1 << 7
+  GDK_WA_VISUAL	   = 1 << 4,
+  GDK_WA_NOREDIR   = 1 << 5,
+  GDK_WA_TYPE_HINT = 1 << 6
 } GdkWindowAttributesType;
 
 /* Size restriction enumeration.
@@ -356,7 +354,6 @@ struct _GdkWindowAttr
   GdkWindowWindowClass wclass;
   GdkVisual *visual;
   GdkWindowType window_type;
-  GdkCursor *cursor;
   gboolean override_redirect;
   GdkWindowTypeHint type_hint;
 };

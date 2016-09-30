@@ -1689,20 +1689,23 @@ gtk_paned_realize (GtkWidget *widget)
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_POINTER_MOTION_MASK);
-  attributes.cursor = NULL;
   attributes_mask = GDK_WA_X | GDK_WA_Y;
-  if (gtk_widget_is_sensitive (widget))
-    {
-      attributes.cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget),
-						    priv->orientation == GTK_ORIENTATION_HORIZONTAL
-                                                    ? "col-resize" : "row-resize");
-      attributes_mask |= GDK_WA_CURSOR;
-    }
 
   priv->handle = gdk_window_new (window,
                                  &attributes, attributes_mask);
+
+  if (gtk_widget_is_sensitive (widget))
+    {
+      GdkCursor *cursor;
+
+      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget),
+                                         priv->orientation == GTK_ORIENTATION_HORIZONTAL
+                                         ? "col-resize" : "row-resize");
+      gdk_window_set_cursor (priv->handle, cursor);
+      g_object_unref (cursor);
+    }
+
   gtk_widget_register_window (widget, priv->handle);
-  g_clear_object (&attributes.cursor);
 
   priv->child1_window = gtk_paned_create_child_window (paned, priv->child1);
   priv->child2_window = gtk_paned_create_child_window (paned, priv->child2);

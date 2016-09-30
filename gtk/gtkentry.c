@@ -3351,20 +3351,20 @@ gtk_entry_realize (GtkWidget *widget)
   attributes.width = priv->text_allocation.width;
   attributes.height = priv->text_allocation.height;
 
-  if (gtk_widget_is_sensitive (widget))
-    {
-      attributes.cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
-      attributes_mask |= GDK_WA_CURSOR;
-    }
-
   priv->text_area = gdk_window_new (gtk_widget_get_window (widget),
                                     &attributes,
                                     attributes_mask);
 
-  gtk_widget_register_window (widget, priv->text_area);
+  if (gtk_widget_is_sensitive (widget))
+    {
+      GdkCursor *cursor;
 
-  if (attributes_mask & GDK_WA_CURSOR)
-    g_clear_object (&attributes.cursor);
+      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
+      gdk_window_set_cursor (priv->text_area, cursor);
+      g_object_unref (cursor);
+    }
+
+  gtk_widget_register_window (widget, priv->text_area);
 
   gtk_im_context_set_client_window (priv->im_context, priv->text_area);
 

@@ -824,10 +824,6 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
   else
     clear_toplevel_order ();
 
-  gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
-				  (attributes->cursor) :
-				  NULL));
-
   impl->view = NULL;
 
   switch (window->window_type)

@@ -1489,10 +1489,6 @@ gdk_window_new (GdkWindow     *parent,
 
   recompute_visible_regions (window, FALSE);
 
-  gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
-				  (attributes->cursor) :
-				  NULL));
-
   g_signal_connect (gdk_window_get_display (parent), "seat-removed",
                     G_CALLBACK (seat_removed_cb), window);
 
