@@ -67,12 +67,6 @@ gboolean   gdk_screen_get_setting (GdkScreen   *screen,
                                    GValue      *value);
 
 GDK_AVAILABLE_IN_ALL
-void                        gdk_screen_set_font_options (GdkScreen                  *screen,
-                                                         const cairo_font_options_t *options);
-GDK_AVAILABLE_IN_ALL
-const cairo_font_options_t *gdk_screen_get_font_options (GdkScreen                  *screen);
-
-GDK_AVAILABLE_IN_ALL
 void    gdk_screen_set_resolution (GdkScreen *screen,
                                    gdouble    dpi);
 GDK_AVAILABLE_IN_ALL

@@ -47,7 +47,6 @@
  */
 
 
-static void gdk_screen_finalize     (GObject        *object);
 static void gdk_screen_set_property (GObject        *object,
 				     guint           prop_id,
 				     const GValue   *value,
@@ -60,7 +59,6 @@ static void gdk_screen_get_property (GObject        *object,
 enum
 {
   PROP_0,
-  PROP_FONT_OPTIONS,
   PROP_RESOLUTION
 };
 
@@ -81,17 +79,8 @@ gdk_screen_class_init (GdkScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gdk_screen_finalize;
   object_class->set_property = gdk_screen_set_property;
   object_class->get_property = gdk_screen_get_property;
-
-  g_object_class_install_property (object_class,
-				   PROP_FONT_OPTIONS,
-				   g_param_spec_pointer ("font-options",
-							 P_("Font options"),
-							 P_("The default font options for the screen"),
-							 G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
-							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property (object_class,
 				   PROP_RESOLUTION,
@@ -152,17 +141,6 @@ gdk_screen_init (GdkScreen *screen)
   screen->resolution = -1.;
 }
 
-static void
-gdk_screen_finalize (GObject *object)
-{
-  GdkScreen *screen = GDK_SCREEN (object);
-
-  if (screen->font_options)
-      cairo_font_options_destroy (screen->font_options);
-
-  G_OBJECT_CLASS (gdk_screen_parent_class)->finalize (object);
-}
-
 void 
 _gdk_screen_close (GdkScreen *screen)
 {
@@ -173,59 +151,6 @@ _gdk_screen_close (GdkScreen *screen)
       screen->closed = TRUE;
       g_object_run_dispose (G_OBJECT (screen));
     }
-}
-
-/**
- * gdk_screen_set_font_options:
- * @screen: a #GdkScreen
- * @options: (allow-none): a #cairo_font_options_t, or %NULL to unset any
- *   previously set default font options.
- *
- * Sets the default font options for the screen. These
- * options will be set on any #PangoContext’s newly created
- * with gdk_pango_context_get_for_screen(). Changing the
- * default set of font options does not affect contexts that
- * have already been created.
- *
- * Since: 2.10
- **/
-void
-gdk_screen_set_font_options (GdkScreen                  *screen,
-			     const cairo_font_options_t *options)
-{
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-
-  if (screen->font_options != options)
-    {
-      if (screen->font_options)
-        cairo_font_options_destroy (screen->font_options);
-
-      if (options)
-        screen->font_options = cairo_font_options_copy (options);
-      else
-        screen->font_options = NULL;
-
-      g_object_notify (G_OBJECT (screen), "font-options");
-    }
-}
-
-/**
- * gdk_screen_get_font_options:
- * @screen: a #GdkScreen
- * 
- * Gets any options previously set with gdk_screen_set_font_options().
- * 
- * Returns: (nullable): the current font options, or %NULL if no
- *  default font options have been set.
- *
- * Since: 2.10
- **/
-const cairo_font_options_t *
-gdk_screen_get_font_options (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return screen->font_options;
 }
 
 /**
@@ -313,9 +238,6 @@ gdk_screen_get_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_FONT_OPTIONS:
-      g_value_set_pointer (value, (gpointer) gdk_screen_get_font_options (screen));
-      break;
     case PROP_RESOLUTION:
       g_value_set_double (value, gdk_screen_get_resolution (screen));
       break;
@@ -335,9 +257,6 @@ gdk_screen_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_FONT_OPTIONS:
-      gdk_screen_set_font_options (screen, g_value_get_pointer (value));
-      break;
     case PROP_RESOLUTION:
       gdk_screen_set_resolution (screen, g_value_get_double (value));
       break;

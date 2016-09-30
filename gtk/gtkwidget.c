@@ -10317,7 +10317,7 @@ update_pango_context (GtkWidget    *widget,
 {
   PangoFontDescription *font_desc;
   GtkStyleContext *style_context;
-  GdkScreen *screen;
+  GtkSettings *settings;
   cairo_font_options_t *font_options;
 
   style_context = _gtk_widget_get_style_context (widget);
@@ -10340,21 +10340,21 @@ update_pango_context (GtkWidget    *widget,
                                                                             GTK_CSS_PROPERTY_DPI),
                                           100));
 
-  screen = gtk_widget_get_screen_unchecked (widget);
+  settings = gtk_widget_get_settings (widget);
   font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
-  if (screen && font_options)
+  if (settings && font_options)
     {
       cairo_font_options_t *options;
 
-      options = cairo_font_options_copy (gdk_screen_get_font_options (screen));
+      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
       cairo_font_options_merge (options, font_options);
       pango_cairo_context_set_font_options (context, options);
       cairo_font_options_destroy (options);
     }
-  else if (screen)
+  else if (settings)
     {
       pango_cairo_context_set_font_options (context,
-                                            gdk_screen_get_font_options (screen));
+                                            gtk_settings_get_font_options (settings));
     }
 
   pango_context_set_font_map (context, gtk_widget_get_effective_font_map (widget));

@@ -126,6 +126,7 @@ struct _GtkSettingsPrivate
   gint font_size;
   gboolean font_size_absolute;
   gchar *font_family;
+  cairo_font_options_t *font_options;
 };
 
 struct _GtkSettingsValuePrivate
@@ -1799,6 +1800,9 @@ gtk_settings_finalize (GObject *object)
   settings_update_provider (priv->screen, &priv->key_theme_provider, NULL);
   g_slist_free_full (priv->style_cascades, g_object_unref);
 
+  if (priv->font_options)
+    cairo_font_options_destroy (priv->font_options);
+
   g_free (priv->font_family);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
@@ -2996,7 +3000,9 @@ settings_update_font_options (GtkSettings *settings)
   cairo_antialias_t antialias_mode;
   gchar *rgba_str;
   cairo_subpixel_order_t subpixel_order;
-  cairo_font_options_t *options;
+
+  if (priv->font_options)
+    cairo_font_options_destroy (priv->font_options);
 
   g_object_get (settings,
                 "gtk-xft-antialias", &antialias,
@@ -3005,9 +3011,9 @@ settings_update_font_options (GtkSettings *settings)
                 "gtk-xft-rgba", &rgba_str,
                 NULL);
 
-  options = cairo_font_options_create ();
+  priv->font_options = cairo_font_options_create ();
 
-  cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_ON);
+  cairo_font_options_set_hint_metrics (priv->font_options, CAIRO_HINT_METRICS_ON);
 
   hint_style = CAIRO_HINT_STYLE_DEFAULT;
   if (hinting == 0)
@@ -3031,7 +3037,7 @@ settings_update_font_options (GtkSettings *settings)
 
   g_free (hint_style_str);
 
-  cairo_font_options_set_hint_style (options, hint_style);
+  cairo_font_options_set_hint_style (priv->font_options, hint_style);
 
   subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
   if (rgba_str)
@@ -3048,7 +3054,7 @@ settings_update_font_options (GtkSettings *settings)
 
   g_free (rgba_str);
 
-  cairo_font_options_set_subpixel_order (options, subpixel_order);
+  cairo_font_options_set_subpixel_order (priv->font_options, subpixel_order);
 
   antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
   if (antialias == 0)
@@ -3063,11 +3069,7 @@ settings_update_font_options (GtkSettings *settings)
         antialias_mode = CAIRO_ANTIALIAS_GRAY;
     }
 
-  cairo_font_options_set_antialias (options, antialias_mode);
-
-  gdk_screen_set_font_options (priv->screen, options);
-
-  cairo_font_options_destroy (options);
+  cairo_font_options_set_antialias (priv->font_options, antialias_mode);
 }
 
 static gboolean
@@ -3260,6 +3262,11 @@ settings_update_key_theme (GtkSettings *settings)
   g_free (key_theme_name);
 }
 
+const cairo_font_options_t *
+gtk_settings_get_font_options (GtkSettings *settings)
+{
+  return settings->priv->font_options;
+}
 
 GdkScreen *
 _gtk_settings_get_screen (GtkSettings *settings)

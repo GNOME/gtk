@@ -37,6 +37,8 @@ gboolean            _gtk_settings_parse_convert              (GtkRcPropertyParse
                                                               const GValue           *src_value,
                                                               GParamSpec             *pspec,
                                                               GValue                 *dest_value);
+const cairo_font_options_t *
+                    gtk_settings_get_font_options            (GtkSettings            *settings);
 GdkScreen          *_gtk_settings_get_screen                 (GtkSettings            *settings);
 GtkStyleCascade    *_gtk_settings_get_style_cascade          (GtkSettings            *settings,
                                                               gint                    scale);
