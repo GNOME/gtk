@@ -555,7 +555,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
   else
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (button), 1);
 
-  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE);
   gtk_widget_show (button);
 
   data->spin_button = button;
@@ -569,7 +569,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
     label = gtk_label_new (_("mm"));
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE);
   gtk_widget_show (label);
   gtk_label_set_mnemonic_widget (GTK_LABEL (mnemonic_label), button);
 
@@ -979,13 +979,13 @@ wrap_in_frame (const gchar *label,
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE, FALSE);
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_box_pack_start (GTK_BOX (frame), child, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (frame), child, FALSE, FALSE);
 
   gtk_widget_show (frame);
 
@@ -1043,11 +1043,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 18);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE);
   gtk_widget_show (hbox);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE);
   gtk_widget_show (vbox);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -1055,7 +1055,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
                                        GTK_SHADOW_IN);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE);
   gtk_widget_show (scrolled);
 
   context = gtk_widget_get_style_context (scrolled);
@@ -1090,7 +1090,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
-  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE);
   gtk_widget_show (toolbar);
 
   icon = g_themed_icon_new_with_default_fallbacks ("list-add-symbolic");
@@ -1109,7 +1109,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   priv->values_box = vbox;
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE);
   gtk_widget_show (vbox);
 
   grid = gtk_grid_new ();
@@ -1141,7 +1141,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   frame = wrap_in_frame (_("Paper Size"), grid);
   gtk_widget_show (grid);
-  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
   gtk_widget_show (frame);
 
   grid = gtk_grid_new ();
@@ -1214,7 +1214,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 				      NULL, NULL);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
-  gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE, FALSE);
   gtk_widget_show (combo);
 
   g_signal_connect_swapped (combo, "changed",
@@ -1222,7 +1222,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   frame = wrap_in_frame (_("Paper Margins"), grid);
   gtk_widget_show (grid);
-  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
   gtk_widget_show (frame);
 
   update_custom_widgets_from_list (dialog);

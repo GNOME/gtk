@@ -51,7 +51,7 @@ gtk_stack_combo_init (GtkStackCombo *self)
   self->stack = NULL;
   self->combo = GTK_COMBO_BOX (gtk_combo_box_text_new ());
   gtk_widget_show (GTK_WIDGET (self->combo));
-  gtk_box_pack_start (GTK_BOX (self), GTK_WIDGET (self->combo), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (self), GTK_WIDGET (self->combo), FALSE, FALSE);
 }
 
 static void gtk_stack_combo_set_stack (GtkStackCombo *self,

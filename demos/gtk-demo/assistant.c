@@ -97,12 +97,12 @@ create_page1 (GtkWidget *assistant)
   gtk_container_set_border_width (GTK_CONTAINER (box), 12);
 
   label = gtk_label_new ("You must fill out this entry to continue:");
-  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE);
 
   entry = gtk_entry_new ();
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gtk_widget_set_valign (entry, GTK_ALIGN_CENTER);
-  gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE);
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (on_entry_changed), assistant);
 
@@ -122,7 +122,7 @@ create_page2 (GtkWidget *assistant)
 
   checkbutton = gtk_check_button_new_with_label ("This is optional data, you may continue "
                                                  "even if you do not check this");
-  gtk_box_pack_start (GTK_BOX (box), checkbutton, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), checkbutton, FALSE, FALSE);
 
   gtk_widget_show_all (box);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), box);

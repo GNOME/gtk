@@ -347,13 +347,13 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   gtk_box_set_spacing (GTK_BOX (fontsel), 12);
   priv->size = 12 * PANGO_SCALE;
-  
+
   /* Create the table of font, style & size. */
   table = gtk_table_new (3, 3, FALSE);
   gtk_widget_show (table);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-  gtk_box_pack_start (GTK_BOX (fontsel), table, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (fontsel), table, TRUE, TRUE);
 
 #ifdef INCLUDE_FONT_ENTRIES
   priv->font_entry = gtk_entry_new ();
@@ -571,30 +571,30 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show (vbox);
-  gtk_box_pack_start (GTK_BOX (fontsel), vbox, FALSE, TRUE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (fontsel), vbox, FALSE, TRUE);
+
   /* create the text entry widget */
   label = gtk_label_new_with_mnemonic (_("_Preview:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE);
 
   text_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_show (text_box);
-  gtk_box_pack_start (GTK_BOX (vbox), text_box, FALSE, TRUE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), text_box, FALSE, TRUE);
+
   priv->preview_entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->preview_entry);
   gtk_entry_set_text (GTK_ENTRY (priv->preview_entry), _(PREVIEW_TEXT));
-  
+
   gtk_widget_show (priv->preview_entry);
   g_signal_connect (priv->preview_entry, "changed",
 		    G_CALLBACK (gtk_font_selection_preview_changed), fontsel);
   gtk_widget_set_size_request (priv->preview_entry,
 			       -1, INITIAL_PREVIEW_HEIGHT);
   gtk_box_pack_start (GTK_BOX (text_box), priv->preview_entry,
-		      TRUE, TRUE, 0);
+		      TRUE, TRUE);
   gtk_widget_pop_composite_child();
 }
 
@@ -1682,7 +1682,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   gtk_container_set_border_width (GTK_CONTAINER (priv->fontsel), 5);
   gtk_widget_show (priv->fontsel);
   gtk_box_pack_start (GTK_BOX (content_area),
-		      priv->fontsel, TRUE, TRUE, 0);
+		      priv->fontsel, TRUE, TRUE);
 
   /* Create the action area */
   priv->cancel_button = gtk_dialog_add_button (dialog,

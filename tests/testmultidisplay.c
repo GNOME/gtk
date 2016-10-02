@@ -79,9 +79,9 @@ make_selection_dialog (GdkScreen * screen,
 			 "border_width", 5,
                          "orientation", GTK_ORIENTATION_VERTICAL,
 			 NULL);
-  gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, FALSE);
 
-  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE);
   gtk_widget_grab_focus (entry);
 
   gtk_dialog_add_buttons (GTK_DIALOG (window),

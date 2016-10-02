@@ -412,29 +412,29 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->default_alpha_set = FALSE;
 
   top_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_box_pack_start (GTK_BOX (colorsel), top_hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (colorsel), top_hbox, FALSE, FALSE);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   priv->triangle_colorsel = gtk_hsv_new ();
   g_signal_connect (priv->triangle_colorsel, "changed",
                     G_CALLBACK (hsv_changed), colorsel);
   gtk_hsv_set_metrics (GTK_HSV (priv->triangle_colorsel), 174, 15);
-  gtk_box_pack_start (GTK_BOX (top_hbox), vbox, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->triangle_colorsel, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (top_hbox), vbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), priv->triangle_colorsel, FALSE, FALSE);
   gtk_widget_set_tooltip_text (priv->triangle_colorsel,
                         _("Select the color you want from the outer ring. "
                           "Select the darkness or lightness of that color "
                           "using the inner triangle."));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
   frame = gtk_frame_new (NULL);
   gtk_widget_set_size_request (frame, -1, 30);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   color_sample_new (colorsel);
   gtk_container_add (GTK_CONTAINER (frame), priv->sample_area);
-  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE);
 
   button = gtk_button_new ();
 
@@ -445,16 +445,16 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   picker_image = gtk_image_new_from_stock (GTK_STOCK_COLOR_PICKER, GTK_ICON_SIZE_BUTTON);
   gtk_container_add (GTK_CONTAINER (button), picker_image);
   gtk_widget_show (GTK_WIDGET (picker_image));
-  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE);
 
   gtk_widget_set_tooltip_text (button,
                         _("Click the eyedropper, then click a color "
                           "anywhere on your screen to select that color."));
 
   top_right_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (top_hbox), top_right_vbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (top_hbox), top_right_vbox, FALSE, FALSE);
   table = gtk_grid_new ();
-  gtk_box_pack_start (GTK_BOX (top_right_vbox), table, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (top_right_vbox), table, FALSE, FALSE);
   gtk_grid_set_row_spacing (GTK_GRID (table), 6);
   gtk_grid_set_column_spacing (GTK_GRID (table), 12);
 
@@ -548,13 +548,13 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   label = gtk_label_new_with_mnemonic (_("_Palette:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_box_pack_start (GTK_BOX (priv->palette_frame), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (priv->palette_frame), label, FALSE, FALSE);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label),
                                  priv->custom_palette[0][0]);
 
-  gtk_box_pack_end (GTK_BOX (top_right_vbox), priv->palette_frame, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (priv->palette_frame), table, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (top_right_vbox), priv->palette_frame, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (priv->palette_frame), table, FALSE, FALSE);
 
   gtk_widget_show_all (top_hbox);
 
@@ -1101,9 +1101,9 @@ color_sample_new (GtkColorSelection *colorsel)
   priv->cur_sample = gtk_drawing_area_new ();
 
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->old_sample,
-                      TRUE, TRUE, 0);
+                      TRUE, TRUE);
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->cur_sample,
-                      TRUE, TRUE, 0);
+                      TRUE, TRUE);
 
   g_signal_connect (priv->old_sample, "draw",
                     G_CALLBACK (color_old_sample_draw),

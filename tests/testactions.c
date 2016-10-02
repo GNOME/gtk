@@ -254,10 +254,10 @@ add_widget (GtkUIManager *merge,
 	    GtkContainer *container)
 {
 
-  gtk_box_pack_start (GTK_BOX (container), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (container), widget, FALSE, FALSE);
   gtk_widget_show (widget);
 
-  if (GTK_IS_TOOLBAR (widget)) 
+  if (GTK_IS_TOOLBAR (widget))
     {
       toolbar = GTK_TOOLBAR (widget);
       gtk_toolbar_set_show_arrow (toolbar, TRUE);
@@ -376,26 +376,26 @@ create_window (GtkActionGroup *action_group)
     }
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_end (GTK_BOX (box), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (box), hbox, FALSE, FALSE);
   gtk_widget_show (hbox);
-  
+
   spinbutton = gtk_spin_button_new_with_range (100, 10000, 100);
-  gtk_box_pack_start (GTK_BOX (hbox), spinbutton, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), spinbutton, FALSE, FALSE);
   gtk_widget_show (spinbutton);
-  
+
   button = gtk_button_new_with_label ("Add");
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
   gtk_widget_show (button);
-  
+
   g_object_set_data (G_OBJECT (button), "spinbutton", spinbutton);
   g_signal_connect (button, "clicked", G_CALLBACK (add_cb), merge);
-  
+
   button = gtk_button_new_with_label ("Remove");
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
   gtk_widget_show (button);
-  
+
   g_signal_connect (button, "clicked", G_CALLBACK (remove_cb), merge);
-  
+
   gtk_widget_show (window);
 }
 

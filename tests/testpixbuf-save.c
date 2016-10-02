@@ -377,12 +377,12 @@ main (int argc, char **argv)
 
         g_signal_connect (drawing_area, "configure_event",
 			  G_CALLBACK (configure_cb), NULL);
-        g_signal_connect (window, "key_press_event", 
-			  G_CALLBACK (keypress_check), drawing_area);    
+        g_signal_connect (window, "key_press_event",
+			  G_CALLBACK (keypress_check), drawing_area);
         g_object_set_data_full (G_OBJECT (drawing_area), "pixbuf", pixbuf,
                                 (GDestroyNotify) g_object_unref);
-        gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
-   
+        gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE);
+
         gtk_widget_show_all (window);
         gtk_main ();
         return 0;

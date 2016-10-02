@@ -353,13 +353,13 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan's Holiday Card Planning Sheet"), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan's Holiday Card Planning Sheet"), FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE);
 
   model = make_model ();
   tree_view = gtk_tree_view_new_with_model (model);
@@ -468,13 +468,13 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("The model revealed"), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("The model revealed"), FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE);
 
 
   tree_view = gtk_tree_view_new_with_model (model);

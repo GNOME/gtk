@@ -762,14 +762,14 @@ main (int argc, char *argv[])
 
   /* Set up the main window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL); 
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 300);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE);
 
   /* Left Pane */
   cell = gtk_cell_renderer_text_new ();
@@ -786,52 +786,52 @@ main (int argc, char *argv[])
   gtk_tree_view_append_column (GTK_TREE_VIEW (left_tree_view), column);
 
   gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
-  gtk_box_pack_start (GTK_BOX (hbox), swindow, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), swindow, TRUE, TRUE);
 
   /* Middle Pane */
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE);
+
   bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
-  gtk_box_pack_start (GTK_BOX (vbox2), bbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), bbox, TRUE, TRUE);
 
   button = gtk_button_new_with_mnemonic ("<< (_Q)");
   gtk_widget_set_sensitive (button, FALSE);
   g_signal_connect (button, "clicked", G_CALLBACK (add_left_clicked), top_right_tree_view);
   g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (top_right_tree_view)),
                     "changed", G_CALLBACK (selection_changed), button);
-  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE);
 
   button = gtk_button_new_with_mnemonic (">> (_W)");
   gtk_widget_set_sensitive (button, FALSE);
   g_signal_connect (button, "clicked", G_CALLBACK (add_right_clicked), top_right_tree_view);
   g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view)),
                     "changed", G_CALLBACK (selection_changed), button);
-  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE);
 
   bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
-  gtk_box_pack_start (GTK_BOX (vbox2), bbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), bbox, TRUE, TRUE);
 
   button = gtk_button_new_with_mnemonic ("<< (_E)");
   gtk_widget_set_sensitive (button, FALSE);
   g_signal_connect (button, "clicked", G_CALLBACK (add_left_clicked), bottom_right_tree_view);
   g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (bottom_right_tree_view)),
                     "changed", G_CALLBACK (selection_changed), button);
-  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE);
 
   button = gtk_button_new_with_mnemonic (">> (_R)");
   gtk_widget_set_sensitive (button, FALSE);
   g_signal_connect (button, "clicked", G_CALLBACK (add_right_clicked), bottom_right_tree_view);
   g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view)),
                     "changed", G_CALLBACK (selection_changed), button);
-  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE);
 
-  
+
   /* Right Pane */
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE);
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -846,7 +846,7 @@ main (int argc, char *argv[])
   gtk_tree_view_append_column (GTK_TREE_VIEW (top_right_tree_view), column);
 
   gtk_container_add (GTK_CONTAINER (swindow), top_right_tree_view);
-  gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE);
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -860,9 +860,9 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_cell_data_func (column, cell, get_visible, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (bottom_right_tree_view), column);
   gtk_container_add (GTK_CONTAINER (swindow), bottom_right_tree_view);
-  gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE);
 
-  
+
   /* Drag and Drop */
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (left_tree_view),
 					  GDK_BUTTON1_MASK,
@@ -896,13 +896,13 @@ main (int argc, char *argv[])
 
 
   gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
-                      FALSE, FALSE, 0);
+                      FALSE, FALSE);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
   button = gtk_button_new_with_mnemonic ("_Add new Column");
   g_signal_connect (button, "clicked", G_CALLBACK (add_clicked), left_tree_model);
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
 
   gtk_widget_show_all (window);
   gtk_main ();

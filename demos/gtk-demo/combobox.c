@@ -327,7 +327,7 @@ do_combobox (GtkWidget *do_widget)
      *  insensitive rows
      */
     frame = gtk_frame_new ("Items with icons");
-    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
@@ -368,7 +368,7 @@ do_combobox (GtkWidget *do_widget)
     /* A combobox demonstrating trees.
      */
     frame = gtk_frame_new ("Where are we ?");
-    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
@@ -396,7 +396,7 @@ do_combobox (GtkWidget *do_widget)
 
     /* A GtkComboBoxEntry with validation */
     frame = gtk_frame_new ("Editable");
-    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
@@ -414,7 +414,7 @@ do_combobox (GtkWidget *do_widget)
 
     /* A combobox with string IDs */
     frame = gtk_frame_new ("String IDs");
-    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);

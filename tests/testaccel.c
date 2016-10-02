@@ -74,16 +74,16 @@ key_test (void)
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
         gtk_widget_show (box);
 	gtk_container_add (GTK_CONTAINER (window), box);
-        gtk_box_pack_start (GTK_BOX (box), sw, TRUE, TRUE, 0);
+        gtk_box_pack_start (GTK_BOX (box), sw, TRUE, TRUE);
 
 	store = gtk_list_store_new (3, G_TYPE_INT, G_TYPE_UINT, G_TYPE_UINT);
 	tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 	gtk_container_add (GTK_CONTAINER (sw), tv);
 	column = gtk_tree_view_column_new ();
 	rend = gtk_cell_renderer_accel_new ();
-	g_object_set (G_OBJECT (rend), 
-		      "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK, 
-                      "editable", TRUE, 
+	g_object_set (G_OBJECT (rend),
+		      "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
+                      "editable", TRUE,
 		      NULL);
 	g_signal_connect (G_OBJECT (rend),
 			  "accel-edited",

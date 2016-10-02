@@ -161,13 +161,13 @@ main (int argc, char *argv[])
 
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-  
+
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_widget_show (box);
 
   menubar = gtk_menu_bar_new ();
-  gtk_box_pack_start (GTK_BOX (box), menubar, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), menubar, FALSE, TRUE);
   gtk_widget_show (menubar);
 
   menu = create_file_menu (accel_group);
@@ -183,14 +183,14 @@ main (int argc, char *argv[])
   gtk_widget_show (menuitem);
 
   label = gtk_label_new ("No recent item selected");
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE);
   gtk_widget_show (label);
 
   button = gtk_button_new_with_label ("Close");
   g_signal_connect_swapped (button, "clicked",
                             G_CALLBACK (gtk_widget_destroy),
                             window);
-  gtk_box_pack_end (GTK_BOX (box), button, TRUE, TRUE, 0);
+  gtk_box_pack_end (GTK_BOX (box), button, TRUE, TRUE);
   gtk_widget_set_can_default (button, TRUE);
   gtk_widget_grab_default (button);
   gtk_widget_show (button);

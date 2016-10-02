@@ -925,7 +925,7 @@ update_preview_widget_visibility (GtkFileChooserWidget *impl)
       if (!priv->preview_label)
         {
           priv->preview_label = gtk_label_new (priv->preview_display_name);
-          gtk_box_pack_start (GTK_BOX (priv->preview_box), priv->preview_label, FALSE, FALSE, 0);
+          gtk_box_pack_start (GTK_BOX (priv->preview_box), priv->preview_label, FALSE, FALSE);
           gtk_box_reorder_child (GTK_BOX (priv->preview_box), priv->preview_label, 0);
           gtk_label_set_ellipsize (GTK_LABEL (priv->preview_label), PANGO_ELLIPSIZE_MIDDLE);
           gtk_widget_show (priv->preview_label);
@@ -966,7 +966,7 @@ set_preview_widget (GtkFileChooserWidget *impl,
   if (priv->preview_widget)
     {
       gtk_widget_show (priv->preview_widget);
-      gtk_box_pack_start (GTK_BOX (priv->preview_box), priv->preview_widget, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->preview_box), priv->preview_widget, TRUE, TRUE);
       gtk_box_reorder_child (GTK_BOX (priv->preview_box),
                              priv->preview_widget,
                              (priv->use_preview_label && priv->preview_label) ? 1 : 0);
@@ -2691,7 +2691,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
 
   priv->save_widgets_table = gtk_grid_new ();
   gtk_container_set_border_width (GTK_CONTAINER (priv->save_widgets_table), 10);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->save_widgets_table, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), priv->save_widgets_table, FALSE, FALSE);
   gtk_widget_show (priv->save_widgets_table);
   gtk_grid_set_row_spacing (GTK_GRID (priv->save_widgets_table), 12);
   gtk_grid_set_column_spacing (GTK_GRID (priv->save_widgets_table), 12);
@@ -2713,7 +2713,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
   gtk_label_set_mnemonic_widget (GTK_LABEL (widget), priv->location_entry);
 
   priv->save_widgets = vbox;
-  gtk_box_pack_start (GTK_BOX (impl), priv->save_widgets, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (impl), priv->save_widgets, FALSE, FALSE);
   gtk_box_reorder_child (GTK_BOX (impl), priv->save_widgets, 0);
   gtk_widget_show (priv->save_widgets);
 }
@@ -2779,7 +2779,7 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
   if (!priv->location_entry)
     {
       location_entry_create (impl);
-      gtk_box_pack_start (GTK_BOX (priv->location_entry_box), priv->location_entry, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (priv->location_entry_box), priv->location_entry, TRUE, TRUE);
     }
 
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->current_folder);

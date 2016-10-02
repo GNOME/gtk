@@ -117,57 +117,57 @@ main (int    argc,
   GtkWidget *window, *buttons[N_BUTTONS];
   GtkWidget *vbox, *hbox, *combo_styles, *combo_types, *option;
   int i;
-  
+
   gtk_init (&argc, &argv);
-  
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (G_OBJECT (window), "delete-event", G_CALLBACK (gtk_main_quit), NULL);
-  
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
-  
+
   /* GtkHButtonBox */
-  
+
   hbbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_pack_start (GTK_BOX (vbox), hbbox, TRUE, TRUE, 5);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), hbbox, TRUE, TRUE);
+
   for (i = 0; i < N_BUTTONS; i++) {
     buttons[i] = gtk_button_new_with_label (strings[i]);
     gtk_container_add (GTK_CONTAINER (hbbox), buttons[i]);
   }
-  
+
   bbox = hbbox;
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (hbbox), GTK_BUTTONBOX_SPREAD);
-  
+
   /* GtkVButtonBox */
   vbbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-  gtk_box_pack_start (GTK_BOX (vbox), vbbox, TRUE, TRUE, 5);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), vbbox, TRUE, TRUE);
+
   /* Options */
-  
+
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
+
   combo_types = gtk_combo_box_text_new ();
   populate_combo_with (GTK_COMBO_BOX_TEXT (combo_types), types);
   g_signal_connect (G_OBJECT (combo_types), "changed", G_CALLBACK (combo_types_changed_cb), buttons);
-  gtk_box_pack_start (GTK_BOX (hbox), combo_types, TRUE, TRUE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (hbox), combo_types, TRUE, TRUE);
+
   combo_styles = gtk_combo_box_text_new ();
   populate_combo_with (GTK_COMBO_BOX_TEXT (combo_styles), styles);
   g_signal_connect (G_OBJECT (combo_styles), "changed", G_CALLBACK (combo_changed_cb), NULL);
-  gtk_box_pack_start (GTK_BOX (hbox), combo_styles, TRUE, TRUE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (hbox), combo_styles, TRUE, TRUE);
+
   option = gtk_check_button_new_with_label ("Help is secondary");
   g_signal_connect (G_OBJECT (option), "toggled", G_CALLBACK (option_cb), buttons[N_BUTTONS - 1]);
-  
-  gtk_box_pack_start (GTK_BOX (hbox), option, FALSE, FALSE, 0);
-  
+
+  gtk_box_pack_start (GTK_BOX (hbox), option, FALSE, FALSE);
+
   gtk_widget_show_all (window);
   gtk_widget_hide (vbbox);
-  
+
   gtk_main ();
-  
+
   return 0;
 }

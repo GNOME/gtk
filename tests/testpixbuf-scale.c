@@ -108,23 +108,23 @@ main(int argc, char **argv)
         g_signal_connect (combo_box, "changed",
                           G_CALLBACK (set_interp_type),
                           NULL);
-	
+
         gtk_widget_set_halign (combo_box, GTK_ALIGN_START);
-	gtk_box_pack_start (GTK_BOX (vbox), combo_box, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), combo_box, FALSE, FALSE);
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
 	label = gtk_label_new ("Overall Alpha:");
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE);
 
 	adjustment = gtk_adjustment_new (overall_alpha, 0, 255, 1, 10, 0);
 	g_signal_connect (adjustment, "value_changed",
 			  G_CALLBACK (overall_changed_cb), NULL);
-	
+
 	hscale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
 	gtk_scale_set_digits (GTK_SCALE (hscale), 0);
-	gtk_box_pack_start (GTK_BOX (hbox), hscale, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), hscale, TRUE, TRUE);
 
 	gtk_widget_show_all (vbox);
 
@@ -133,7 +133,7 @@ main(int argc, char **argv)
                                    &scratch_requisition, NULL);
 
 	darea = gtk_drawing_area_new ();
-	gtk_box_pack_start (GTK_BOX (vbox), darea, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), darea, TRUE, TRUE);
 
 	g_signal_connect (darea, "draw",
 			  G_CALLBACK (draw_cb), NULL);

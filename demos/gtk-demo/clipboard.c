@@ -225,45 +225,45 @@ do_clipboard (GtkWidget *do_widget)
 
       label = gtk_label_new ("\"Copy\" will copy the text\nin the entry to the clipboard");
 
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
       /* Create the first entry */
       entry = gtk_entry_new ();
-      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE);
 
       /* Create the button */
       button = gtk_button_new_with_mnemonic (_("_Copy"));
-      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
       g_signal_connect (button, "clicked",
                         G_CALLBACK (copy_button_clicked), entry);
 
       label = gtk_label_new ("\"Paste\" will paste the text from the clipboard to the entry");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
       /* Create the second entry */
       entry = gtk_entry_new ();
-      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE);
 
       /* Create the button */
       button = gtk_button_new_with_mnemonic (_("_Paste"));
-      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
       g_signal_connect (button, "clicked",
                         G_CALLBACK (paste_button_clicked), entry);
 
       label = gtk_label_new ("Images can be transferred via the clipboard, too");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
       /* Create the first image */
       image = gtk_image_new_from_icon_name ("dialog-warning",

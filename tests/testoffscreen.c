@@ -87,7 +87,7 @@ create_layout (GtkWidget *vbox)
   gtk_scrolled_window_set_placement (GTK_SCROLLED_WINDOW (scrolledwindow),
 				     GTK_CORNER_TOP_RIGHT);
 
-  gtk_box_pack_start (GTK_BOX (vbox), scrolledwindow, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolledwindow, TRUE, TRUE);
 
   layout_widget = gtk_layout_new (NULL, NULL);
   layout = GTK_LAYOUT (layout_widget);
@@ -152,7 +152,7 @@ create_treeview (GtkWidget *vbox)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow),
 				       GTK_SHADOW_IN);
 
-  gtk_box_pack_start (GTK_BOX (vbox), scrolledwindow, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolledwindow, TRUE, TRUE);
 
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
@@ -198,16 +198,16 @@ create_widgets (void)
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   main_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (main_vbox), main_hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (main_vbox), main_hbox, TRUE, TRUE);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_pack_start (GTK_BOX (main_hbox), vbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (main_hbox), vbox, TRUE, TRUE);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
   label = gtk_label_new ("This label may be ellipsized\nto make it fit.");
-  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE);
 
   combo = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "NONE");
@@ -215,7 +215,7 @@ create_widgets (void)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "MIDDLE");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "END");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
-  gtk_box_pack_start (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), combo, TRUE, TRUE);
 
   g_signal_connect (combo, "changed",
                     G_CALLBACK (combo_changed_cb),
@@ -223,17 +223,17 @@ create_widgets (void)
 
   entry = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (entry), "an entry - lots of text.... lots of text.... lots of text.... lots of text.... ");
-  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE);
 
   label = gtk_label_new ("Label after entry.");
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE);
 
   button = gtk_button_new_with_label ("Button");
-  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE);
 
   button = gtk_check_button_new_with_mnemonic ("_Check button");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
 
   cb = gtk_combo_box_text_new ();
   entry = gtk_entry_new ();
@@ -248,14 +248,14 @@ create_widgets (void)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (cb), "item2");
   gtk_entry_set_text (GTK_ENTRY (entry), "hello world ♥ foo");
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-  gtk_box_pack_start (GTK_BOX (vbox), cb, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), cb, TRUE, TRUE);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);
   text_view = gtk_text_view_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE);
   gtk_container_add (GTK_CONTAINER (sw), text_view);
 
   create_layout (vbox);
@@ -310,10 +310,10 @@ main (int   argc,
 
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
                                     0, G_PI * 2, 0.01);
-  gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, FALSE);
 
   button = gtk_button_new_with_label ("Remove child 2");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
 
   if (use_offscreen)
     {
@@ -328,7 +328,7 @@ main (int   argc,
       offscreen = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
     }
 
-  gtk_box_pack_start (GTK_BOX (vbox), offscreen, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), offscreen, TRUE, TRUE);
 
   widget = create_widgets ();
   if (use_offscreen)
@@ -343,7 +343,7 @@ main (int   argc,
       GtkWidget *widget2, *box2, *offscreen2;
 
       offscreen2 = gtk_offscreen_box_new ();
-      gtk_box_pack_start (GTK_BOX (widget), offscreen2, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (widget), offscreen2, FALSE, FALSE);
 
       g_signal_connect (scale, "value_changed",
                         G_CALLBACK (scale_changed),
@@ -353,11 +353,11 @@ main (int   argc,
       gtk_offscreen_box_add2 (GTK_OFFSCREEN_BOX (offscreen2), box2);
 
       widget2 = gtk_button_new_with_label ("Offscreen in offscreen");
-      gtk_box_pack_start (GTK_BOX (box2), widget2, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (box2), widget2, FALSE, FALSE);
 
       widget2 = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY (widget2), "Offscreen in offscreen");
-      gtk_box_pack_start (GTK_BOX (box2), widget2, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (box2), widget2, FALSE, FALSE);
     }
 
   if (use_offscreen)

@@ -1614,8 +1614,8 @@ gtk_combo_box_add (GtkContainer *container,
       gtk_widget_queue_resize (GTK_WIDGET (container));
       priv->cell_view = NULL;
     }
-  
-  gtk_box_pack_start (GTK_BOX (priv->box), widget, TRUE, TRUE, 0);
+
+  gtk_box_pack_start (GTK_BOX (priv->box), widget, TRUE, TRUE);
   _gtk_bin_set_child (GTK_BIN (container), widget);
 
   if (priv->has_entry)

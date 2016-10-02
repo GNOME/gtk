@@ -84,14 +84,12 @@ GDK_AVAILABLE_IN_ALL
 void        gtk_box_pack_start          (GtkBox         *box,
                                          GtkWidget      *child,
                                          gboolean        expand,
-                                         gboolean        fill,
-                                         guint           padding);
+                                         gboolean        fill);
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_pack_end            (GtkBox         *box,
                                          GtkWidget      *child,
                                          gboolean        expand,
-                                         gboolean        fill,
-                                         guint           padding);
+                                         gboolean        fill);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_homogeneous     (GtkBox         *box,
@@ -119,14 +117,12 @@ void        gtk_box_query_child_packing (GtkBox         *box,
                                          GtkWidget      *child,
                                          gboolean       *expand,
                                          gboolean       *fill,
-                                         guint          *padding,
                                          GtkPackType    *pack_type);
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_child_packing   (GtkBox         *box,
                                          GtkWidget      *child,
                                          gboolean        expand,
                                          gboolean        fill,
-                                         guint           padding,
                                          GtkPackType     pack_type);
 
 GDK_AVAILABLE_IN_3_12

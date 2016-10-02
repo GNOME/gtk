@@ -92,10 +92,10 @@ change_header (GtkButton *button, gpointer data)
       g_object_set (box, "margin", 10, NULL);
       gtk_container_add (GTK_CONTAINER (header), box);
       label = gtk_label_new ("Label");
-      gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE);
       widget = gtk_level_bar_new ();
       gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), 0.4);
-      gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE);
       gtk_widget_show_all (header);
     }
   else
@@ -161,12 +161,12 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Fullscreen");
   gtk_action_bar_pack_end (GTK_ACTION_BAR (footer), button);
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_fullscreen), window);
-  gtk_box_pack_end (GTK_BOX (box), footer, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (box), footer, FALSE, FALSE);
 
   content = gtk_image_new_from_icon_name ("start-here-symbolic", GTK_ICON_SIZE_DIALOG);
   gtk_image_set_pixel_size (GTK_IMAGE (content), 512);
 
-  gtk_box_pack_start (GTK_BOX (box), content, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), content, FALSE, TRUE);
 
   gtk_widget_show_all (window);
 

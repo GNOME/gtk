@@ -90,7 +90,7 @@ int main (int argc, char **argv)
         gtk_widget_add_accelerator (item, "activate", accel_group,
                                     GDK_KEY_x, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), item);
-	gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
+	gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
 	/* GtkAction-backed menuitem */

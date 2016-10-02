@@ -501,11 +501,11 @@ do_offscreen_window2 (GtkWidget *do_widget)
       gtk_size_group_add_widget (group, applybutton);
 
       gtk_container_add (GTK_CONTAINER (window), vbox);
-      gtk_box_pack_start (GTK_BOX (vbox), bin, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), bin, TRUE, TRUE);
       gtk_container_add (GTK_CONTAINER (bin), hbox);
-      gtk_box_pack_start (GTK_BOX (hbox), backbutton, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), applybutton, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), backbutton, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (hbox), applybutton, FALSE, FALSE);
     }
 
   if (!gtk_widget_get_visible (window))

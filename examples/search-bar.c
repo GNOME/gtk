@@ -30,11 +30,11 @@ activate_cb (GtkApplication *app,
   gtk_widget_show (box);
 
   entry = gtk_search_entry_new ();
-  gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE);
   gtk_widget_show (entry);
 
   menu_button = gtk_menu_button_new ();
-  gtk_box_pack_start (GTK_BOX (box), menu_button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), menu_button, FALSE, FALSE);
   gtk_widget_show (menu_button);
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (search_bar), GTK_ENTRY (entry));

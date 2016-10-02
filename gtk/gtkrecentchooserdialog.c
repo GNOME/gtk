@@ -215,9 +215,9 @@ gtk_recent_chooser_dialog_constructed (GObject *object)
 
   gtk_container_set_border_width (GTK_CONTAINER (priv->chooser), 5);
   gtk_box_pack_start (GTK_BOX (content_area),
-                      priv->chooser, TRUE, TRUE, 0);
+                      priv->chooser, TRUE, TRUE);
   gtk_widget_show (priv->chooser);
-  
+
   _gtk_recent_chooser_set_delegate (GTK_RECENT_CHOOSER (object),
   				    GTK_RECENT_CHOOSER (priv->chooser));
 }

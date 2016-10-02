@@ -458,7 +458,7 @@ tree_menu (void)
 
   g_signal_connect (menu, "menu-activate", G_CALLBACK (menu_activated_cb), NULL);
 
-  gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE);
 #endif
 
   /* Add a combo box with the same menu ! */
@@ -466,7 +466,7 @@ tree_menu (void)
   gtk_combo_box_set_model (GTK_COMBO_BOX (widget), store);
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
   gtk_widget_show (widget);
-  gtk_box_pack_end (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), widget, FALSE, FALSE);
 
   /* Now add some controls */
   widget = gtk_combo_box_text_new ();
@@ -474,7 +474,7 @@ tree_menu (void)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
   gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE);
 
   g_signal_connect (G_OBJECT (widget), "changed",
                     G_CALLBACK (orientation_changed), area);
@@ -482,40 +482,40 @@ tree_menu (void)
   widget = gtk_check_button_new_with_label ("Align 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
   gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE);
+
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (align_cell_2_toggled), area);
 
   widget = gtk_check_button_new_with_label ("Align 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
   gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE);
+
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (align_cell_3_toggled), area);
 
   widget = gtk_check_button_new_with_label ("Expand 1st Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
   gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE);
+
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_1_toggled), area);
 
   widget = gtk_check_button_new_with_label ("Expand 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
   gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE);
+
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_2_toggled), area);
 
   widget = gtk_check_button_new_with_label ("Expand 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
   gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE);
+
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_3_toggled), area);
 
@@ -523,16 +523,16 @@ tree_menu (void)
   widget = gtk_check_button_new_with_label ("Submenu Headers");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
   gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE);
+
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (submenu_headers_toggled), menu);
 
   widget = gtk_check_button_new_with_label ("Tearoff menu");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
   gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE);
+
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (tearoff_toggled), menu);
 #endif

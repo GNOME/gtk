@@ -590,8 +590,8 @@ do_offscreen_window (GtkWidget *do_widget)
       g_signal_connect (scale, "value-changed", G_CALLBACK (scale_changed), bin);
 
       gtk_container_add (GTK_CONTAINER (window), vbox);
-      gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), bin, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), bin, TRUE, TRUE);
       gtk_container_add (GTK_CONTAINER (bin), button);
     }
 

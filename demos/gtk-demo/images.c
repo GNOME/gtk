@@ -356,13 +356,13 @@ do_images (GtkWidget *do_widget)
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Image loaded from a file</u>");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
       image = gtk_image_new_from_icon_name ("gtk3-demo", GTK_ICON_SIZE_DIALOG);
 
@@ -374,13 +374,13 @@ do_images (GtkWidget *do_widget)
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Animation loaded from a file</u>");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
       image = gtk_image_new_from_resource ("/images/floppybuddy.gif");
 
@@ -391,13 +391,13 @@ do_images (GtkWidget *do_widget)
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Symbolic themed icon</u>");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
       gicon = g_themed_icon_new_with_default_fallbacks ("battery-caution-charging-symbolic");
       image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_DIALOG);
@@ -410,13 +410,13 @@ do_images (GtkWidget *do_widget)
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Progressive image loading</u>");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
       /* Create an empty image for now; the progressive loader
        * will create the pixbuf and fill it in.
@@ -428,7 +428,7 @@ do_images (GtkWidget *do_widget)
 
       /* Sensitivity control */
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
 
       g_signal_connect (button, "toggled",
                         G_CALLBACK (toggle_sensitivity_callback),

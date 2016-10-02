@@ -57,15 +57,15 @@ interactive_dialog_clicked (GtkButton *button,
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
-  gtk_box_pack_start (GTK_BOX (content_area), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), hbox, FALSE, FALSE);
 
   image = gtk_image_new_from_icon_name ("dialog-question", GTK_ICON_SIZE_DIALOG);
-  gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE);
 
   table = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (table), 4);
   gtk_grid_set_column_spacing (GTK_GRID (table), 4);
-  gtk_box_pack_start (GTK_BOX (hbox), table, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), table, TRUE, TRUE);
   label = gtk_label_new_with_mnemonic ("_Entry 1");
   gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
   local_entry1 = gtk_entry_new ();
@@ -125,30 +125,30 @@ do_dialog (GtkWidget *do_widget)
 
       /* Standard message dialog */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
       button = gtk_button_new_with_mnemonic ("_Message Dialog");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (message_dialog_clicked), NULL);
-      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
 
       gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
-                          FALSE, FALSE, 0);
+                          FALSE, FALSE);
 
       /* Interactive dialog*/
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       button = gtk_button_new_with_mnemonic ("_Interactive Dialog");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (interactive_dialog_clicked), NULL);
-      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE);
 
       table = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (table), 4);
       gtk_grid_set_column_spacing (GTK_GRID (table), 4);
-      gtk_box_pack_start (GTK_BOX (hbox), table, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), table, FALSE, FALSE);
 
       label = gtk_label_new_with_mnemonic ("_Entry 1");
       gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);

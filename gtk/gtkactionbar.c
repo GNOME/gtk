@@ -431,7 +431,7 @@ gtk_action_bar_pack_start (GtkActionBar *action_bar,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
-  gtk_box_pack_start (GTK_BOX (priv->box), child, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (priv->box), child, FALSE, TRUE);
 }
 
 /**
@@ -450,7 +450,7 @@ gtk_action_bar_pack_end (GtkActionBar *action_bar,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
 
-  gtk_box_pack_end (GTK_BOX (priv->box), child, FALSE, TRUE, 0);
+  gtk_box_pack_end (GTK_BOX (priv->box), child, FALSE, TRUE);
 }
 
 /**

@@ -213,7 +213,7 @@ add_widget (GtkUIManager *merge,
 	    GtkWidget    *widget, 
 	    GtkBox       *box)
 {
-  gtk_box_pack_start (box, widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (box, widget, FALSE, FALSE);
   gtk_widget_show (widget);
 }
 
@@ -602,35 +602,35 @@ main (int argc, char **argv)
 
   frame = gtk_frame_new ("Menus and Toolbars");
   gtk_grid_attach (GTK_GRID (grid), frame, 0, 1, 2, 1);
-  
+
   menu_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_set_border_width (GTK_CONTAINER (menu_box), 2);
   gtk_container_add (GTK_CONTAINER (frame), menu_box);
 
   statusbar = gtk_statusbar_new ();
-  gtk_box_pack_end (GTK_BOX (menu_box), statusbar, FALSE, FALSE, 0);
-    
+  gtk_box_pack_end (GTK_BOX (menu_box), statusbar, FALSE, FALSE);
+
   area = gtk_drawing_area_new ();
   gtk_widget_set_events (area, GDK_BUTTON_PRESS_MASK);
   gtk_widget_set_size_request (area, -1, 40);
-  gtk_box_pack_end (GTK_BOX (menu_box), area, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (menu_box), area, FALSE, FALSE);
   gtk_widget_show (area);
 
   button = gtk_button_new ();
-  gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE);
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
 			    gtk_action_group_get_action (action_group, "AboutAction"));
 
   gtk_widget_show (button);
 
   button = gtk_check_button_new ();
-  gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE);
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
 			    gtk_action_group_get_action (action_group, "BoldAction"));
   gtk_widget_show (button);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_box_pack_end (GTK_BOX (menu_box), box, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (menu_box), box, FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Bold:"));
   button = gtk_switch_new ();
   gtk_container_add (GTK_CONTAINER (box), button);
@@ -662,29 +662,29 @@ main (int argc, char **argv)
       button = gtk_check_button_new_with_label (merge_ids[i].filename);
       g_object_set_data (G_OBJECT (button), "mergenum", GINT_TO_POINTER (i));
       g_signal_connect (button, "toggled", G_CALLBACK (toggle_merge), merge);
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
     }
 
   button = gtk_check_button_new_with_label ("Dynamic");
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_dynamic), merge);
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE);
 
   button = gtk_button_new_with_label ("Activate path");
   g_signal_connect (button, "clicked", G_CALLBACK (activate_path), merge);
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE);
 
   button = gtk_button_new_with_label ("Dump Tree");
   g_signal_connect (button, "clicked", G_CALLBACK (dump_tree), merge);
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE);
 
   button = gtk_button_new_with_label ("Dump Toplevels");
   g_signal_connect (button, "clicked", G_CALLBACK (dump_toplevels), merge);
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE);
 
   button = gtk_button_new_with_label ("Dump Accels");
   g_signal_connect (button, "clicked", G_CALLBACK (dump_accels), NULL);
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE);
 
   view = create_tree_view (merge);
   gtk_widget_set_hexpand (view, TRUE);

@@ -58,15 +58,13 @@
  *
  * Use gtk_box_set_spacing() to determine how much space will be
  * minimally placed between all children in the GtkBox. Note that
- * spacing is added between the children, while
- * padding added by gtk_box_pack_start() or gtk_box_pack_end() is added
- * on either side of the widget it belongs to.
+ * spacing is added between the children.
  *
  * Use gtk_box_reorder_child() to move a GtkBox child to a different
  * place in the box.
  *
- * Use gtk_box_set_child_packing() to reset the expand,
- * fill and padding child properties.
+ * Use gtk_box_set_child_packing() to reset the expand and
+ * fill child properties.
  * Use gtk_box_query_child_packing() to query these fields.
  *
  * Note that a single-row or single-column #GtkGrid provides exactly
@@ -114,7 +112,6 @@ enum {
   CHILD_PROP_0,
   CHILD_PROP_EXPAND,
   CHILD_PROP_FILL,
-  CHILD_PROP_PADDING,
   CHILD_PROP_PACK_TYPE,
   CHILD_PROP_POSITION,
   LAST_CHILD_PROP
@@ -143,7 +140,6 @@ static GParamSpec *child_props[LAST_CHILD_PROP] = { NULL, };
 /*
  * GtkBoxChild:
  * @widget: the child widget, packed into the GtkBox.
- * @padding: the number of extra pixels to put between this child and its
  *  neighbors, set when packed, zero by default.
  * @expand: flag indicates whether extra space should be given to this child.
  *  Any extra space given to the parent GtkBox is divided up among all children
@@ -157,8 +153,6 @@ static GParamSpec *child_props[LAST_CHILD_PROP] = { NULL, };
 struct _GtkBoxChild
 {
   GtkWidget *widget;
-
-  guint16    padding;
 
   guint      expand : 1;
   guint      fill   : 1;
@@ -335,14 +329,6 @@ gtk_box_class_init (GtkBoxClass *class)
                             P_("Whether extra space given to the child should be allocated to the child or used as padding"),
                             TRUE,
                             GTK_PARAM_READWRITE);
-
-  child_props[CHILD_PROP_PADDING] =
-      g_param_spec_uint ("padding",
-                         P_("Padding"),
-                         P_("Extra space to put between the child and its neighbors, in pixels"),
-                         0, G_MAXINT,
-                         0,
-                         GTK_PARAM_READWRITE);
 
   child_props[CHILD_PROP_PACK_TYPE] =
       g_param_spec_enum ("pack-type",
@@ -566,7 +552,6 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
 
       size -= sizes[i].minimum_size;
-      size -= child->padding * 2;
 
       sizes[i].data = child;
 
@@ -638,7 +623,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	    }
 	  else
 	    {
-	      child_size = sizes[i].minimum_size + child->padding * 2;
+              child_size = sizes[i].minimum_size;
 
 	      if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
 		{
@@ -661,7 +646,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	      int child_minimum_height, child_natural_height;
 
 	      if (child->fill)
-		child_allocation_width = MAX (1, child_size - child->padding * 2);
+		child_allocation_width = MAX (1, child_size);
 	      else
 		child_allocation_width = sizes[i].minimum_size;
 
@@ -756,8 +741,8 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	    {
 	      if (child->fill)
 		{
-		  child_allocation.width = MAX (1, child_size - child->padding * 2);
-		  child_allocation.x = x + child->padding;
+		  child_allocation.width = MAX (1, child_size);
+		  child_allocation.x = x;
 		}
 	      else
 		{
@@ -784,8 +769,8 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	    {
 	      if (child->fill)
 		{
-		  child_allocation.height = MAX (1, child_size - child->padding * 2);
-		  child_allocation.y = y + child->padding;
+		  child_allocation.height = MAX (1, child_size);
+		  child_allocation.y = y;
 		}
 	      else
 		{
@@ -906,8 +891,8 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
 
       if (child != priv->center)
         {
-          min_size[child->pack] += req->minimum_size + 2 * child->padding;
-          nat_size[child->pack] += req->natural_size + 2 * child->padding;
+          min_size[child->pack] += req->minimum_size;
+          nat_size[child->pack] += req->natural_size;
 
           idx[child->pack] += 1;
         }
@@ -982,7 +967,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
             }
           else
             {
-              child_size = sizes[packing][i].minimum_size + child->padding * 2;
+              child_size = sizes[packing][i].minimum_size;
 
               if (child->expand || gtk_widget_compute_expand (child->widget, priv->orientation))
                 {
@@ -1005,7 +990,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
 	      gint child_minimum_height, child_natural_height;
 
               if (child->fill)
-                child_allocation_width = MAX (1, child_size - child->padding * 2);
+                child_allocation_width = MAX (1, child_size);
               else
                 child_allocation_width = sizes[packing][i].minimum_size;
 
@@ -1098,8 +1083,8 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
             {
               if (child->fill)
                 {
-                  child_allocation.width = MAX (1, child_size - child->padding * 2);
-                  child_allocation.x = x + child->padding;
+                  child_allocation.width = MAX (1, child_size);
+                  child_allocation.x = x;
                 }
               else
                 {
@@ -1122,8 +1107,8 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
             {
               if (child->fill)
                 {
-                  child_allocation.height = MAX (1, child_size - child->padding * 2);
-                  child_allocation.y = y + child->padding;
+                  child_allocation.height = MAX (1, child_size);
+                  child_allocation.y = y;
                 }
               else
                 {
@@ -1235,7 +1220,6 @@ gtk_box_set_child_property (GtkContainer *container,
 {
   gboolean expand = 0;
   gboolean fill = 0;
-  guint padding = 0;
   GtkPackType pack_type = 0;
 
   if (property_id != CHILD_PROP_POSITION)
@@ -1243,7 +1227,6 @@ gtk_box_set_child_property (GtkContainer *container,
 				 child,
 				 &expand,
 				 &fill,
-				 &padding,
 				 &pack_type);
   switch (property_id)
     {
@@ -1252,7 +1235,6 @@ gtk_box_set_child_property (GtkContainer *container,
 				 child,
 				 g_value_get_boolean (value),
 				 fill,
-				 padding,
 				 pack_type);
       break;
     case CHILD_PROP_FILL:
@@ -1260,15 +1242,6 @@ gtk_box_set_child_property (GtkContainer *container,
 				 child,
 				 expand,
 				 g_value_get_boolean (value),
-				 padding,
-				 pack_type);
-      break;
-    case CHILD_PROP_PADDING:
-      gtk_box_set_child_packing (GTK_BOX (container),
-				 child,
-				 expand,
-				 fill,
-				 g_value_get_uint (value),
 				 pack_type);
       break;
     case CHILD_PROP_PACK_TYPE:
@@ -1276,7 +1249,6 @@ gtk_box_set_child_property (GtkContainer *container,
 				 child,
 				 expand,
 				 fill,
-				 padding,
 				 g_value_get_enum (value));
       break;
     case CHILD_PROP_POSITION:
@@ -1299,7 +1271,6 @@ gtk_box_get_child_property (GtkContainer *container,
 {
   gboolean expand = FALSE;
   gboolean fill = FALSE;
-  guint padding = 0;
   GtkPackType pack_type = 0;
   GList *list;
 
@@ -1308,7 +1279,6 @@ gtk_box_get_child_property (GtkContainer *container,
 				 child,
 				 &expand,
 				 &fill,
-				 &padding,
 				 &pack_type);
   switch (property_id)
     {
@@ -1318,9 +1288,6 @@ gtk_box_get_child_property (GtkContainer *container,
       break;
     case CHILD_PROP_FILL:
       g_value_set_boolean (value, fill);
-      break;
-    case CHILD_PROP_PADDING:
-      g_value_set_uint (value, padding);
       break;
     case CHILD_PROP_PACK_TYPE:
       g_value_set_enum (value, pack_type);
@@ -1513,7 +1480,6 @@ gtk_box_pack (GtkBox      *box,
               GtkWidget   *child,
               gboolean     expand,
               gboolean     fill,
-              guint        padding,
               GtkPackType  pack_type)
 {
   GtkContainer *container = GTK_CONTAINER (box);
@@ -1526,7 +1492,6 @@ gtk_box_pack (GtkBox      *box,
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
-  child_info->padding = padding;
   child_info->expand = expand ? TRUE : FALSE;
   child_info->fill = fill ? TRUE : FALSE;
   child_info->pack = pack_type;
@@ -1542,8 +1507,6 @@ gtk_box_pack (GtkBox      *box,
     gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_EXPAND]);
   if (!fill)
     gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_FILL]);
-  if (padding != 0)
-    gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_PADDING]);
   if (pack_type != GTK_PACK_START)
     gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_PACK_TYPE]);
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_POSITION]);
@@ -1608,24 +1571,24 @@ gtk_box_get_size (GtkWidget      *widget,
                 {
                   if (child == private->center)
                     {
-                      center_min = child_minimum + child->padding * 2;
-                      center_nat = child_natural + child->padding * 2;
+                      center_min = child_minimum;
+                      center_nat = child_natural;
                     }
                   else
                     {
                       gint largest;
 
-                      largest = child_minimum + child->padding * 2;
+                      largest = child_minimum;
                       minimum = MAX (minimum, largest);
 
-                      largest = child_natural + child->padding * 2;
+                      largest = child_natural;
                       natural = MAX (natural, largest);
                     }
                 }
               else
                 {
-                  minimum += child_minimum + child->padding * 2;
-                  natural += child_natural + child->padding * 2;
+                  minimum += child_minimum;
+                  natural += child_natural;
                 }
 	    }
 	  else
@@ -1792,7 +1755,6 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 		     sizes[i].minimum_size);
 
 	  size -= sizes[i].minimum_size;
-	  size -= child->padding * 2;
 
 	  sizes[i].data = child;
 
@@ -1864,7 +1826,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 		}
 	      else
 		{
-		  child_size = sizes[i].minimum_size + child->padding * 2;
+		  child_size = sizes[i].minimum_size;
 
 		  if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
 		    {
@@ -1880,7 +1842,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
 	      if (child->fill)
 		{
-		  child_size = MAX (1, child_size - child->padding * 2);
+		  child_size = MAX (1, child_size);
 		}
 	      else
 		{
@@ -1975,9 +1937,6 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
 	    gtk_widget_get_preferred_height_for_width (child->widget,
 						       avail_size, &child_size, &child_natural);
 
-
-	  child_size    += child->padding * 2;
-	  child_natural += child->padding * 2;
 
 	  if (child_size > largest_child)
 	    largest_child = child_size;
@@ -2149,11 +2108,6 @@ gtk_box_new (GtkOrientation orientation,
  *     parameter has no effect if @expand is set to %FALSE.  A child is
  *     always allocated the full height of a horizontal #GtkBox and the full width
  *     of a vertical #GtkBox. This option affects the other dimension
- * @padding: extra space in pixels to put between this child and its
- *   neighbors, over and above the global amount specified by
- *   #GtkBox:spacing property.  If @child is a widget at one of the
- *   reference ends of @box, then @padding pixels are also put between
- *   @child and the reference edge of @box
  *
  * Adds @child to @box, packed with reference to the start of @box.
  * The @child is packed after any other child packed with reference
@@ -2163,10 +2117,9 @@ void
 gtk_box_pack_start (GtkBox    *box,
 		    GtkWidget *child,
 		    gboolean   expand,
-		    gboolean   fill,
-		    guint      padding)
+		    gboolean   fill)
 {
-  gtk_box_pack (box, child, expand, fill, padding, GTK_PACK_START);
+  gtk_box_pack (box, child, expand, fill, GTK_PACK_START);
 }
 
 /**
@@ -2181,11 +2134,6 @@ gtk_box_pack_start (GtkBox    *box,
  *   parameter has no effect if @expand is set to %FALSE.  A child is
  *   always allocated the full height of a horizontal #GtkBox and the full width
  *   of a vertical #GtkBox.  This option affects the other dimension
- * @padding: extra space in pixels to put between this child and its
- *   neighbors, over and above the global amount specified by
- *   #GtkBox:spacing property.  If @child is a widget at one of the
- *   reference ends of @box, then @padding pixels are also put between
- *   @child and the reference edge of @box
  *
  * Adds @child to @box, packed with reference to the end of @box.
  * The @child is packed after (away from end of) any other child
@@ -2195,10 +2143,9 @@ void
 gtk_box_pack_end (GtkBox    *box,
 		  GtkWidget *child,
 		  gboolean   expand,
-		  gboolean   fill,
-		  guint      padding)
+		  gboolean   fill)
 {
-  gtk_box_pack (box, child, expand, fill, padding, GTK_PACK_END);
+  gtk_box_pack (box, child, expand, fill, GTK_PACK_END);
 }
 
 /**
@@ -2448,8 +2395,6 @@ gtk_box_reorder_child (GtkBox    *box,
  *     property
  * @fill: (out): pointer to return location for fill child
  *     property
- * @padding: (out): pointer to return location for padding
- *     child property
  * @pack_type: (out): pointer to return location for pack-type
  *     child property
  *
@@ -2460,7 +2405,6 @@ gtk_box_query_child_packing (GtkBox      *box,
 			     GtkWidget   *child,
 			     gboolean    *expand,
 			     gboolean    *fill,
-			     guint       *padding,
 			     GtkPackType *pack_type)
 {
   GtkBoxPrivate *private;
@@ -2488,8 +2432,6 @@ gtk_box_query_child_packing (GtkBox      *box,
 	*expand = child_info->expand;
       if (fill)
 	*fill = child_info->fill;
-      if (padding)
-	*padding = child_info->padding;
       if (pack_type)
 	*pack_type = child_info->pack;
     }
@@ -2501,7 +2443,6 @@ gtk_box_query_child_packing (GtkBox      *box,
  * @child: the #GtkWidget of the child to set
  * @expand: the new value of the expand child property
  * @fill: the new value of the fill child property
- * @padding: the new value of the padding child property
  * @pack_type: the new value of the pack-type child property
  *
  * Sets the way @child is packed into @box.
@@ -2511,7 +2452,6 @@ gtk_box_set_child_packing (GtkBox      *box,
 			   GtkWidget   *child,
 			   gboolean     expand,
 			   gboolean     fill,
-			   guint        padding,
 			   GtkPackType  pack_type)
 {
   GtkBoxPrivate *private;
@@ -2552,12 +2492,6 @@ gtk_box_set_child_packing (GtkBox      *box,
           gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_FILL]);
         }
 
-      if (child_info->padding != padding)
-        {
-          child_info->padding = padding;
-          gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_PADDING]);
-        }
-
       if (pack_type != GTK_PACK_END)
         pack_type = GTK_PACK_START;
       if (child_info->pack != pack_type)
@@ -2594,8 +2528,7 @@ gtk_box_add (GtkContainer *container,
 
   gtk_box_pack_start (GTK_BOX (container), widget,
                       priv->default_expand,
-                      TRUE,
-                      0);
+                      TRUE);
 }
 
 static void
@@ -2735,7 +2668,7 @@ gtk_box_set_center_widget (GtkBox    *box,
     }
 
   if (widget)
-    priv->center = gtk_box_pack (box, widget, FALSE, TRUE, 0, GTK_PACK_START);
+    priv->center = gtk_box_pack (box, widget, FALSE, TRUE, GTK_PACK_START);
 
   if (old_center)
     g_object_unref (old_center);

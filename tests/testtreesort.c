@@ -123,19 +123,19 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words. (And Anders' cool list of numbers) \n\nThis is just a GtkTreeStore"), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words. (And Anders' cool list of numbers) \n\nThis is just a GtkTreeStore"), FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   entry = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE);
 
   button = gtk_button_new_with_label ("Switch search method");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE);
 
   model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 
@@ -253,7 +253,7 @@ main (int argc, char *argv[])
       gtk_container_set_border_width (GTK_CONTAINER (vbox2), 8);
       gtk_box_pack_start (GTK_BOX (vbox2), 
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeStore of window 1"),
-			  FALSE, FALSE, 0);
+			  FALSE, FALSE);
       gtk_container_add (GTK_CONTAINER (window2), vbox2);
       
       scrolled_window2 = gtk_scrolled_window_new (NULL, NULL);
@@ -262,9 +262,9 @@ main (int argc, char *argv[])
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window2),
 				      GTK_POLICY_AUTOMATIC,
 				      GTK_POLICY_AUTOMATIC);
-      gtk_box_pack_start (GTK_BOX (vbox2), scrolled_window2, TRUE, TRUE, 0);
-      
-      
+      gtk_box_pack_start (GTK_BOX (vbox2), scrolled_window2, TRUE, TRUE);
+
+
       tree_view2 = gtk_tree_view_new_with_model (smodel);
       
       renderer = gtk_cell_renderer_text_new ();
@@ -323,7 +323,7 @@ main (int argc, char *argv[])
       gtk_container_set_border_width (GTK_CONTAINER (vbox3), 8);
       gtk_box_pack_start (GTK_BOX (vbox3), 
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeModelSort of window 2"),
-			  FALSE, FALSE, 0);
+			  FALSE, FALSE);
       gtk_container_add (GTK_CONTAINER (window3), vbox3);
       
       scrolled_window3 = gtk_scrolled_window_new (NULL, NULL);
@@ -332,9 +332,9 @@ main (int argc, char *argv[])
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window3),
 				      GTK_POLICY_AUTOMATIC,
 				      GTK_POLICY_AUTOMATIC);
-      gtk_box_pack_start (GTK_BOX (vbox3), scrolled_window3, TRUE, TRUE, 0);
-      
-      
+      gtk_box_pack_start (GTK_BOX (vbox3), scrolled_window3, TRUE, TRUE);
+
+
       tree_view3 = gtk_tree_view_new_with_model (ssmodel);
       
       renderer = gtk_cell_renderer_text_new ();

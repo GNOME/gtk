@@ -1303,13 +1303,13 @@ wrap_in_frame (const gchar *label,
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE, FALSE);
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_box_pack_start (GTK_BOX (frame), child, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (frame), child, FALSE, FALSE);
 
   gtk_widget_show (frame);
 
@@ -1354,14 +1354,14 @@ add_option_to_extension_point (GtkPrinterOption *option,
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
       gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
-      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE);
       gtk_widget_show (hbox);
 
-      gtk_box_pack_start (GTK_BOX (extension_point), hbox, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (extension_point), hbox, TRUE, TRUE);
     }
   else
-    gtk_box_pack_start (GTK_BOX (extension_point), widget, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (extension_point), widget, TRUE, TRUE);
 }
 
 static gint
@@ -1640,7 +1640,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
           gtk_widget_show (frame);
 
           gtk_box_pack_start (GTK_BOX (priv->advanced_vbox),
-                              frame, FALSE, FALSE, 0);
+                              frame, FALSE, FALSE);
         }
     }
 

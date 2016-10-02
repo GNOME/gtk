@@ -148,13 +148,13 @@ int main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   frame = gtk_frame_new ("Testing");
-  gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE);
 
   button = gtk_button_new_with_label ("Hello!");
   gtk_container_add (GTK_CONTAINER (frame), button);
 
   grid = gtk_grid_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE);
 
   context = gtk_widget_get_style_context (frame);
   gtk_style_context_save (context);

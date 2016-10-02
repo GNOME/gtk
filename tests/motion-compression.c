@@ -52,11 +52,11 @@ main (int argc, char **argv)
 
   adjustment = gtk_adjustment_new (20, 0, 200, 1, 10, 0);
   scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
-  gtk_box_pack_end (GTK_BOX (vbox), scale, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), scale, FALSE, FALSE);
 
   label = gtk_label_new ("Event processing time (ms):");
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-  gtk_box_pack_end (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), label, FALSE, FALSE);
 
   g_signal_connect (window, "motion-notify-event",
                     G_CALLBACK (on_motion_notify), NULL);

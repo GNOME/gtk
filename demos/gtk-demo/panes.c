@@ -148,7 +148,7 @@ do_panes (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-      gtk_box_pack_start (GTK_BOX (vbox), vpaned, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), vpaned, TRUE, TRUE);
       gtk_container_set_border_width (GTK_CONTAINER(vpaned), 5);
 
       hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
@@ -179,14 +179,14 @@ do_panes (GtkWidget *do_widget)
                                                "Horizontal",
                                                "Left",
                                                "Right"),
-                          FALSE, FALSE, 0);
+                          FALSE, FALSE);
 
       gtk_box_pack_start (GTK_BOX (vbox),
                           create_pane_options (GTK_PANED (vpaned),
                                                "Vertical",
                                                "Top",
                                                "Bottom"),
-                          FALSE, FALSE, 0);
+                          FALSE, FALSE);
 
       gtk_widget_show_all (vbox);
     }

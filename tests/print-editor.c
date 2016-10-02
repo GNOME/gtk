@@ -322,15 +322,15 @@ create_custom_widget (GtkPrintOperation *operation,
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("Font:");
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE);
   gtk_widget_show (label);
-  
+
   font = gtk_font_button_new_with_font  (data->font);
-  gtk_box_pack_start (GTK_BOX (hbox), font, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), font, FALSE, FALSE);
   gtk_widget_show (font);
   data->font_button = font;
 
@@ -483,22 +483,22 @@ preview_cb (GtkPrintOperation        *op,
   width = 200;
   height = 300;
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_transient_for (GTK_WINDOW (window), 
+  gtk_window_set_transient_for (GTK_WINDOW (window),
 				GTK_WINDOW (main_window));
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox,
-		      FALSE, FALSE, 0);
+		      FALSE, FALSE);
   page = gtk_spin_button_new_with_range (1, 100, 1);
-  gtk_box_pack_start (GTK_BOX (hbox), page, FALSE, FALSE, 0);
-  
+  gtk_box_pack_start (GTK_BOX (hbox), page, FALSE, FALSE);
+
   close = gtk_button_new_with_label ("Close");
-  gtk_box_pack_start (GTK_BOX (hbox), close, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), close, FALSE, FALSE);
 
   da = gtk_drawing_area_new ();
   gtk_widget_set_size_request (GTK_WIDGET (da), width, height);
-  gtk_box_pack_start (GTK_BOX (vbox), da, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), da, TRUE, TRUE);
 
   gtk_widget_realize (da);
 

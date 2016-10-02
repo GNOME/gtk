@@ -21,8 +21,8 @@ create_tab_label (GtkWidget *toplevel)
   GtkWidget *image = gtk_image_new_from_icon_name ("window-close", GTK_ICON_SIZE_MENU);
 
   gtk_container_add (GTK_CONTAINER (button), image);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (box), button, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, TRUE);
 
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (remove_notebook_page), toplevel);

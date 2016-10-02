@@ -153,9 +153,9 @@ main (int argc, char *argv[])
   gtk_widget_set_app_paintable (ebox, TRUE);
   gtk_container_add (GTK_CONTAINER (ebox), label);
 
-  gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), ebox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), ebox, TRUE, TRUE);
 
   g_object_set_data (G_OBJECT (label), "combo", combo);
 

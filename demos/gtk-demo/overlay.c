@@ -63,10 +63,14 @@ do_overlay (GtkWidget *do_widget)
 
       label = gtk_label_new ("<span foreground='blue' weight='ultrabold' font='40'>Numbers</span>");
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 8);
+      gtk_widget_set_margin_top (label, 8);
+      gtk_widget_set_margin_bottom (label, 8);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       gtk_entry_set_placeholder_text (GTK_ENTRY (entry), "Your Lucky Number");
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 8);
+      gtk_widget_set_margin_top (entry, 8);
+      gtk_widget_set_margin_bottom (entry, 8);
+      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE);
 
       gtk_container_add (GTK_CONTAINER (window), overlay);
 

@@ -14,7 +14,6 @@
           </object>
           <packing>
             <property name="expand">1</property>
-            <property name="padding">5</property>
           </packing>
         </child>
         <child>
@@ -37,7 +36,6 @@
               </object>
               <packing>
                 <property name="fill">0</property>
-                <property name="padding">5</property>
                 <property name="position">1</property>
               </packing>
             </child>

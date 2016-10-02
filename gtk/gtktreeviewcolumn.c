@@ -852,13 +852,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (priv->xalign <= 0.5)
     {
-      gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE);
     }
   else
     {
-      gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE);
     }
 
   gtk_container_add (GTK_CONTAINER (priv->alignment), child);

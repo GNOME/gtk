@@ -1344,9 +1344,9 @@ gtk_button_construct_child (GtkButton *button)
 
       if (priv->image_position == GTK_POS_LEFT ||
 	  priv->image_position == GTK_POS_TOP)
-	gtk_box_pack_start (GTK_BOX (box), priv->image, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (box), priv->image, FALSE, FALSE);
       else
-	gtk_box_pack_end (GTK_BOX (box), priv->image, FALSE, FALSE, 0);
+        gtk_box_pack_end (GTK_BOX (box), priv->image, FALSE, FALSE);
 
       if (label_text)
 	{
@@ -1363,9 +1363,9 @@ gtk_button_construct_child (GtkButton *button)
 
 	  if (priv->image_position == GTK_POS_RIGHT ||
 	      priv->image_position == GTK_POS_BOTTOM)
-	    gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+            gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE);
 	  else
-	    gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
+            gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE);
 	}
       else
         {

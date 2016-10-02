@@ -1087,7 +1087,7 @@ main (int argc, char **argv)
 
         /* GtkCellView */
         tmp = gtk_frame_new ("GtkCellView");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1109,7 +1109,7 @@ main (int argc, char **argv)
 
         /* GtkComboBox list */
         tmp = gtk_frame_new ("GtkComboBox (list)");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1143,14 +1143,14 @@ main (int argc, char **argv)
 					    renderer,
 					    set_sensitive,
 					    NULL, NULL);
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox), 
+	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox),
 					      is_separator, NULL, NULL);
-						
+
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 
         /* GtkComboBox dynamic list */
         tmp = gtk_frame_new ("GtkComboBox (dynamic list)");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1187,14 +1187,14 @@ main (int argc, char **argv)
 					    renderer,
 					    set_sensitive,
 					    NULL, NULL);
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox), 
+	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox),
 					      is_separator, NULL, NULL);
-						
+
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 
         /* GtkComboBox custom entry */
         tmp = gtk_frame_new ("GtkComboBox (custom)");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1248,13 +1248,13 @@ main (int argc, char **argv)
         color.alpha = 1.0;
         gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (tmp), &color);
         displayed_row_changed (GTK_COMBO_BOX (combobox), GTK_CELL_VIEW (tmp));
-        g_signal_connect (combobox, "changed", G_CALLBACK (displayed_row_changed), tmp); 
-           
+        g_signal_connect (combobox, "changed", G_CALLBACK (displayed_row_changed), tmp);
+
         gtk_container_add (GTK_CONTAINER (combobox), tmp);
 
         /* GtkComboBox tree */
         tmp = gtk_frame_new ("GtkComboBox (tree)");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1298,19 +1298,19 @@ main (int argc, char **argv)
 
         /* GtkComboBox (grid mode) */
         tmp = gtk_frame_new ("GtkComboBox (grid mode)");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         comboboxgrid = create_combo_box_grid_demo ();
-        gtk_box_pack_start (GTK_BOX (boom), comboboxgrid, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (boom), comboboxgrid, FALSE, FALSE);
 
 
         /* GtkComboBoxEntry */
         tmp = gtk_frame_new ("GtkComboBox with entry");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1323,7 +1323,7 @@ main (int argc, char **argv)
 
         /* Phylogenetic tree */
         tmp = gtk_frame_new ("What are you ?");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1341,12 +1341,12 @@ main (int argc, char **argv)
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
                                         "text", 0,
                                         NULL);
-	
+
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 
         /* Capitals */
         tmp = gtk_frame_new ("Where are you ?");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1378,7 +1378,7 @@ main (int argc, char **argv)
 
         /* Aligned Food */
         tmp = gtk_frame_new ("Hungry ?");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1413,7 +1413,7 @@ main (int argc, char **argv)
 
 	/* Ellipsizing growing combos */
         tmp = gtk_frame_new ("Unconstrained Menu");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
@@ -1433,7 +1433,7 @@ main (int argc, char **argv)
 	gtk_combo_box_set_popup_fixed_width (GTK_COMBO_BOX (combobox), FALSE);
 
         tmp = gtk_frame_new ("Looong");
-        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
         combobox = gtk_combo_box_text_new ();
         for (i = 0; i < 200; i++)
           {
