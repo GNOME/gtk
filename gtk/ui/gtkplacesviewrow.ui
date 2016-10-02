@@ -60,33 +60,40 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="eject_button">
+              <object class="GtkStack" id="mount_stack">
                 <property name="visible">1</property>
-                <property name="halign">end</property>
-                <property name="valign">center</property>
-                <property name="tooltip-text" translatable="yes">Unmount</property>
+                <property name="hhomogeneous">1</property>
+                <property name="vhomogeneous">1</property>
                 <child>
-                  <object class="GtkImage" id="eject_icon">
+                  <object class="GtkButton" id="eject_button">
                     <property name="visible">1</property>
-                    <property name="icon-name">media-eject-symbolic</property>
-                    <property name="icon-size">1</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="tooltip-text" translatable="yes">Unmount</property>
+                    <child>
+                      <object class="GtkImage" id="eject_icon">
+                        <property name="visible">1</property>
+                        <property name="icon-name">media-eject-symbolic</property>
+                        <property name="icon-size">1</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="image-button"/>
+                      <class name="sidebar-button"/>
+                    </style>
                   </object>
                 </child>
-                <style>
-                  <class name="image-button"/>
-                  <class name="sidebar-button"/>
-                </style>
+                <child>
+                  <object class="GtkSpinner" id="busy_spinner">
+                    <property name="visible">1</property>
+                    <property name="active">1</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinner" id="busy_spinner">
-                <property name="active">1</property>
-              </object>
-              <packing>
-                <property name="position">5</property>
               </packing>
             </child>
           </object>
