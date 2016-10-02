@@ -31,7 +31,7 @@
 #endif
 
 #include <gio/gio.h>
-#include <gtk/deprecated/gtkmisc.h>
+#include <gtk/gtkwidget.h>
 
 
 G_BEGIN_DECLS
@@ -90,7 +90,7 @@ typedef enum
  */
 struct _GtkImage
 {
-  GtkMisc misc;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkImagePrivate *priv;
@@ -98,7 +98,7 @@ struct _GtkImage
 
 struct _GtkImageClass
 {
-  GtkMiscClass parent_class;
+  GtkWidgetClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

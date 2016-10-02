@@ -29,9 +29,9 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/deprecated/gtkmisc.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -51,7 +51,7 @@ typedef struct _GtkLabelSelectionInfo GtkLabelSelectionInfo;
 
 struct _GtkLabel
 {
-  GtkMisc misc;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkLabelPrivate *priv;
@@ -59,7 +59,7 @@ struct _GtkLabel
 
 struct _GtkLabelClass
 {
-  GtkMiscClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* move_cursor)     (GtkLabel       *label,
 			    GtkMovementStep step,

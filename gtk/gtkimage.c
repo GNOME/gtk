@@ -71,10 +71,6 @@
  * The image file may contain an animation, if so the #GtkImage will
  * display an animation (#GdkPixbufAnimation) instead of a static image.
  *
- * #GtkImage is a subclass of #GtkMisc, which implies that you can
- * align it (center, left, right) and add padding to it, using
- * #GtkMisc methods.
- *
  * #GtkImage is a “no window” widget (has no #GdkWindow of its own),
  * so by default does not receive events. If you want to receive events
  * on the image, such as button clicks, place the image inside a
@@ -117,13 +113,6 @@
  *     return image;
  *   }
  * ]|
- *
- * When handling events on the event box, keep in mind that coordinates
- * in the image may be different from event box coordinates due to
- * the alignment and padding settings on the image (see #GtkMisc).
- * The simplest way to solve this is to set the alignment to 0.0
- * (left/top), and set the padding to zero. Then the origin of
- * the image will be the same as the origin of the event box.
  *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. GTK+ comes with a program to avoid this,
@@ -224,9 +213,7 @@ enum
 
 static GParamSpec *image_props[NUM_PROPERTIES] = { NULL, };
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-G_DEFINE_TYPE_WITH_PRIVATE (GtkImage, gtk_image, GTK_TYPE_MISC)
-G_GNUC_END_IGNORE_DEPRECATIONS
+G_DEFINE_TYPE_WITH_PRIVATE (GtkImage, gtk_image, GTK_TYPE_WIDGET)
 
 static void
 gtk_image_class_init (GtkImageClass *class)
@@ -1675,18 +1662,11 @@ gtk_image_get_content_size (GtkCssGadget   *gadget,
   GtkWidget *widget;
   gint width, height;
   float baseline_align;
-  gint xpad, ypad;
 
   widget = gtk_css_gadget_get_owner (gadget);
 
   _gtk_icon_helper_get_size (GTK_IMAGE (widget)->priv->icon_helper,
                              &width, &height);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_misc_get_padding (GTK_MISC (widget), &xpad, &ypad);
-  width += 2 * xpad;
-  height += 2 * ypad;
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -1727,8 +1707,6 @@ gtk_image_render_contents (GtkCssGadget *gadget,
   GtkImage *image;
   GtkImagePrivate *priv;
   gint w, h, baseline;
-  gfloat xalign, yalign;
-  gint xpad, ypad;
 
   widget = gtk_css_gadget_get_owner (gadget);
   image = GTK_IMAGE (widget);
@@ -1736,21 +1714,14 @@ gtk_image_render_contents (GtkCssGadget *gadget,
 
   _gtk_icon_helper_get_size (priv->icon_helper, &w, &h);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_misc_get_alignment (GTK_MISC (image), &xalign, &yalign);
-  gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
-    xalign = 1.0 - xalign;
-
   baseline = gtk_widget_get_allocated_baseline (widget);
 
-  x += floor ((width - 2 * xpad - w) * xalign + xpad);
   if (baseline == -1)
-    y += floor ((height - 2 * ypad - h) * yalign + ypad);
+    y += floor(height - h) / 2;
   else
-    y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), ypad, height - 2 * ypad - h);
+    y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
+
+  x += (width - w) / 2;
 
   if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
     {

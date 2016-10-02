@@ -588,7 +588,7 @@ static gboolean gtk_label_render  (GtkCssGadget   *gadget,
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_MISC,
+G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkLabel)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_label_buildable_interface_init))
@@ -3392,17 +3392,13 @@ gtk_label_update_layout_width (GtkLabel *label)
   if (priv->ellipsize || priv->wrap)
     {
       GtkAllocation allocation;
-      int xpad, ypad;
       PangoRectangle logical;
       gint width, height;
 
       gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
-      width = allocation.width - 2 * xpad;
-      height = allocation.height - 2 * ypad;
+      width = allocation.width;
+      height = allocation.height;
 
       if (priv->have_transform)
         {
@@ -3754,13 +3750,8 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
 {
   GtkLabel      *label = GTK_LABEL (widget);
   GtkLabelPrivate  *priv = label->priv;
-  gint xpad, ypad;
   PangoRectangle widest_rect;
   PangoRectangle smallest_rect;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_label_get_preferred_layout_size (label, &smallest_rect, &widest_rect);
 
@@ -3824,9 +3815,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           *natural_size = widest_rect.width;
         }
 
-      *minimum_size += xpad * 2;
-      *natural_size += xpad * 2;
-
       if (minimum_baseline)
         *minimum_baseline = -1;
 
@@ -3865,9 +3853,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           *minimum_size = MIN (smallest_rect.height, widest_rect.height);
           *natural_size = MAX (smallest_rect.height, widest_rect.height);
         }
-
-      *minimum_size += ypad * 2;
-      *natural_size += ypad * 2;
     }
 }
 
@@ -3884,41 +3869,18 @@ gtk_label_measure (GtkCssGadget   *gadget,
   GtkWidget *widget;
   GtkLabel *label;
   GtkLabelPrivate *priv;
-  gint xpad, ypad;
 
   widget = gtk_css_gadget_get_owner (gadget);
   label = GTK_LABEL (widget);
   priv = label->priv;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
   if ((orientation == GTK_ORIENTATION_VERTICAL && for_size != -1 && priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360)) ||
       (orientation == GTK_ORIENTATION_HORIZONTAL && priv->wrap && (priv->angle == 90 || priv->angle == 270)))
     {
-      gint size;
-
       if (priv->wrap)
         gtk_label_clear_layout (label);
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        size = MAX (1, for_size) - 2 * ypad;
-      else
-        size = MAX (1, for_size) - 2 * xpad;
-
-      get_size_for_allocation (label, size, minimum, natural, minimum_baseline, natural_baseline);
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          *minimum += 2 * xpad;
-          *natural += 2 * xpad;
-        }
-      else
-        {
-          *minimum += 2 * ypad;
-          *natural += 2 * ypad;
-        }
+      get_size_for_allocation (label, for_size, minimum, natural, minimum_baseline, natural_baseline);
     }
   else
     gtk_label_get_preferred_size (widget, orientation, minimum, natural, minimum_baseline, natural_baseline);
@@ -3997,7 +3959,6 @@ get_layout_location (GtkLabel  *label,
   GtkAllocation allocation;
   GtkWidget *widget;
   GtkLabelPrivate *priv;
-  gint xpad, ypad;
   gint req_width, x, y;
   gint req_height;
   gfloat xalign, yalign;
@@ -4009,10 +3970,6 @@ get_layout_location (GtkLabel  *label,
 
   xalign = priv->xalign;
   yalign = priv->yalign;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
@@ -4031,14 +3988,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   req_width  = logical.width;
   req_height = logical.height;
 
-  req_width  += 2 * xpad;
-  req_height += 2 * ypad;
-
   gtk_css_gadget_get_content_allocation (priv->gadget,
                                          &allocation,
                                          &baseline);
 
-  x = floor (allocation.x + xpad + xalign * (allocation.width - req_width) - logical.x);
+  x = floor (allocation.x + xalign * (allocation.width - req_width) - logical.x);
 
   baseline_offset = 0;
   if (baseline != -1 && !priv->have_transform)
@@ -4062,9 +4016,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor (allocation.y + ypad + (allocation.height - req_height) * yalign) - logical.y + baseline_offset;
+    y = floor (allocation.y + (allocation.height - req_height) * yalign) - logical.y + baseline_offset;
   else
-    y = floor (allocation.y + ypad + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y + baseline_offset;
+    y = floor (allocation.y + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y + baseline_offset;
 
   if (xp)
     *xp = x;
