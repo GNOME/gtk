@@ -62,7 +62,6 @@
 #include "gtkmarshalers.h"
 #include "gtkimage.h"
 #include "gtkbox.h"
-#include "deprecated/gtkstock.h"
 #include "deprecated/gtkactivatable.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
@@ -97,7 +96,6 @@ enum {
   PROP_IMAGE,
   PROP_RELIEF,
   PROP_USE_UNDERLINE,
-  PROP_USE_STOCK,
   PROP_IMAGE_POSITION,
   PROP_ALWAYS_SHOW_IMAGE,
 
@@ -272,26 +270,14 @@ gtk_button_class_init (GtkButtonClass *klass)
                          P_("Text of the label widget inside the button, if the button contains a label widget"),
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
-  
+
   props[PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline",
                           P_("Use underline"),
                           P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
-  
-  /**
-   * GtkButton:use-stock:
-   *
-   * Deprecated: 3.10
-   */
-  props[PROP_USE_STOCK] =
-    g_param_spec_boolean ("use-stock",
-                          P_("Use stock"),
-                          P_("If set, the label is used to pick a stock item instead of being displayed"),
-                          FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-  
+
   props[PROP_RELIEF] =
     g_param_spec_enum ("relief",
                        P_("Border relief"),
@@ -676,10 +662,8 @@ gtk_button_init (GtkButton *button)
   priv->constructed = FALSE;
   priv->in_button = FALSE;
   priv->button_down = FALSE;
-  priv->use_stock = FALSE;
   priv->use_underline = FALSE;
 
-  priv->image_is_stock = TRUE;
   priv->image_position = GTK_POS_LEFT;
   priv->use_action_appearance = TRUE;
 
@@ -803,11 +787,6 @@ gtk_button_set_property (GObject         *object,
     case PROP_USE_UNDERLINE:
       gtk_button_set_use_underline (button, g_value_get_boolean (value));
       break;
-    case PROP_USE_STOCK:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_button_set_use_stock (button, g_value_get_boolean (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
     case PROP_IMAGE_POSITION:
       gtk_button_set_image_position (button, g_value_get_enum (value));
       break;
@@ -854,9 +833,6 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_USE_UNDERLINE:
       g_value_set_boolean (value, priv->use_underline);
-      break;
-    case PROP_USE_STOCK:
-      g_value_set_boolean (value, priv->use_stock);
       break;
     case PROP_IMAGE_POSITION:
       g_value_set_enum (value, priv->image_position);
@@ -912,37 +888,11 @@ gtk_button_activatable_interface_init (GtkActivatableIface  *iface)
 }
 
 static void
-activatable_update_stock_id (GtkButton *button,
-			     GtkAction *action)
-{
-  gboolean use_stock;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  use_stock = gtk_button_get_use_stock (button);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (!use_stock)
-    return;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_button_set_label (button, gtk_action_get_stock_id (action));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-static void
 activatable_update_short_label (GtkButton *button,
 				GtkAction *action)
 {
   GtkWidget *child;
   GtkWidget *image;
-  gboolean use_stock;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  use_stock = gtk_button_get_use_stock (button);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (use_stock)
-    return;
 
   image = gtk_button_get_image (button);
 
@@ -964,14 +914,6 @@ activatable_update_icon_name (GtkButton *button,
 			      GtkAction *action)
 {
   GtkWidget *image;
-  gboolean use_stock;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  use_stock = gtk_button_get_use_stock (button);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (use_stock)
-    return;
 
   image = gtk_button_get_image (button);
 
@@ -1030,9 +972,7 @@ gtk_button_update (GtkActivatable *activatable,
   if (!priv->use_action_appearance)
     return;
 
-  if (strcmp (property_name, "stock-id") == 0)
-    activatable_update_stock_id (GTK_BUTTON (activatable), action);
-  else if (strcmp (property_name, "gicon") == 0)
+  if (strcmp (property_name, "gicon") == 0)
     activatable_update_gicon (GTK_BUTTON (activatable), action);
   else if (strcmp (property_name, "short-label") == 0)
     activatable_update_short_label (GTK_BUTTON (activatable), action);
@@ -1057,14 +997,13 @@ gtk_button_sync_action_properties (GtkActivatable *activatable,
     gtk_widget_show (GTK_WIDGET (activatable));
   else
     gtk_widget_hide (GTK_WIDGET (activatable));
-  
+
   gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
   always_show_image = gtk_action_get_always_show_image (action);
   G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (priv->use_action_appearance)
     {
-      activatable_update_stock_id (GTK_BUTTON (activatable), action);
       activatable_update_short_label (GTK_BUTTON (activatable), action);
       activatable_update_gicon (GTK_BUTTON (activatable), action);
       activatable_update_icon_name (GTK_BUTTON (activatable), action);
@@ -1156,12 +1095,10 @@ gtk_button_construct_child (GtkButton *button)
 {
   GtkButtonPrivate *priv = button->priv;
   GtkStyleContext *context;
-  GtkStockItem item;
   GtkWidget *child;
   GtkWidget *label;
   GtkWidget *box;
   GtkWidget *image = NULL;
-  gchar *label_text = NULL;
   gint image_spacing;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
@@ -1178,7 +1115,7 @@ gtk_button_construct_child (GtkButton *button)
                                "image-spacing", &image_spacing,
                                NULL);
 
-  if (priv->image && !priv->image_is_stock)
+  if (priv->image)
     {
       GtkWidget *parent;
 
@@ -1194,22 +1131,6 @@ gtk_button_construct_child (GtkButton *button)
   child = gtk_bin_get_child (GTK_BIN (button));
   if (child)
     gtk_container_remove (GTK_CONTAINER (button), child);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (priv->use_stock &&
-      priv->label_text &&
-      gtk_stock_lookup (priv->label_text, &item))
-    {
-      if (!image)
-	image = g_object_ref (gtk_image_new_from_stock (priv->label_text, GTK_ICON_SIZE_BUTTON));
-
-      label_text = item.label;
-    }
-  else
-    label_text = priv->label_text;
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (image)
     {
@@ -1234,16 +1155,16 @@ gtk_button_construct_child (GtkButton *button)
       else
         gtk_box_pack_end (GTK_BOX (box), priv->image, FALSE, FALSE);
 
-      if (label_text)
+      if (priv->label_text)
 	{
-          if (priv->use_underline || priv->use_stock)
+          if (priv->use_underline)
             {
-	      label = gtk_label_new_with_mnemonic (label_text);
+	      label = gtk_label_new_with_mnemonic (priv->label_text);
 	      gtk_label_set_mnemonic_widget (GTK_LABEL (label),
                                              GTK_WIDGET (button));
             }
           else
-            label = gtk_label_new (label_text);
+            label = gtk_label_new (priv->label_text);
 
 	  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
@@ -1266,7 +1187,7 @@ gtk_button_construct_child (GtkButton *button)
       return;
     }
 
-  if (priv->use_underline || priv->use_stock)
+  if (priv->use_underline)
     {
       label = gtk_label_new_with_mnemonic (priv->label_text);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
@@ -1329,31 +1250,6 @@ gtk_button_new_from_icon_name (const gchar *icon_name,
 			  NULL);
 
   return button;
-}
-
-/**
- * gtk_button_new_from_stock:
- * @stock_id: the name of the stock item 
- *
- * Creates a new #GtkButton containing the image and text from a stock item.
- * Some stock ids have preprocessor macros like #GTK_STOCK_OK and
- * #GTK_STOCK_APPLY.
- *
- * If @stock_id is unknown, then it will be treated as a mnemonic
- * label (as for gtk_button_new_with_mnemonic()).
- *
- * Returns: a new #GtkButton
- *
- * Deprecated: 3.10: Use gtk_button_new_with_label() instead.
- */
-GtkWidget*
-gtk_button_new_from_stock (const gchar *stock_id)
-{
-  return g_object_new (GTK_TYPE_BUTTON,
-                       "label", stock_id,
-                       "use-stock", TRUE,
-                       "use-underline", TRUE,
-                       NULL);
 }
 
 /**
@@ -1997,9 +1893,7 @@ gtk_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
  * @button: a #GtkButton
  * @label: a string
  *
- * Sets the text of the label of the button to @str. This text is
- * also used to select the stock item if gtk_button_set_use_stock()
- * is used.
+ * Sets the text of the label of the button to @str.
  *
  * This will also clear any previously set labels.
  */
@@ -2090,58 +1984,6 @@ gtk_button_get_use_underline (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
 
   return button->priv->use_underline;
-}
-
-/**
- * gtk_button_set_use_stock:
- * @button: a #GtkButton
- * @use_stock: %TRUE if the button should use a stock item
- *
- * If %TRUE, the label set on the button is used as a
- * stock id to select the stock item for the button.
- *
- * Deprecated: 3.10
- */
-void
-gtk_button_set_use_stock (GtkButton *button,
-			  gboolean   use_stock)
-{
-  GtkButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  priv = button->priv;
-
-  use_stock = use_stock != FALSE;
-
-  if (use_stock != priv->use_stock)
-    {
-      priv->use_stock = use_stock;
-
-      gtk_button_construct_child (button);
-      
-      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_USE_STOCK]);
-    }
-}
-
-/**
- * gtk_button_get_use_stock:
- * @button: a #GtkButton
- *
- * Returns whether the button label is a stock item.
- *
- * Returns: %TRUE if the button label is used to
- *               select a stock item instead of being
- *               used directly as the label text.
- *
- * Deprecated: 3.10
- */
-gboolean
-gtk_button_get_use_stock (GtkButton *button)
-{
-  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
-
-  return button->priv->use_stock;
 }
 
 /**
@@ -2353,7 +2195,6 @@ gtk_button_set_image (GtkButton *button,
     }
 
   priv->image = image;
-  priv->image_is_stock = (image == NULL);
 
   gtk_button_construct_child (button);
 
@@ -2365,8 +2206,6 @@ gtk_button_set_image (GtkButton *button,
  * @button: a #GtkButton
  *
  * Gets the widget that is currenty set as the image of @button.
- * This may have been explicitly set by gtk_button_set_image()
- * or constructed by gtk_button_new_from_stock().
  *
  * Returns: (nullable) (transfer none): a #GtkWidget or %NULL in case
  *     there is no image

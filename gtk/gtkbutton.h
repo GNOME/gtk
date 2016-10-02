@@ -99,8 +99,6 @@ GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
 GDK_AVAILABLE_IN_3_10
 GtkWidget*     gtk_button_new_from_icon_name (const gchar    *icon_name,
 					      GtkIconSize     size);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_button_new_with_label)
-GtkWidget*     gtk_button_new_from_stock    (const gchar    *stock_id);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
 GDK_AVAILABLE_IN_ALL
@@ -129,11 +127,6 @@ void                  gtk_button_set_use_underline  (GtkButton      *button,
 						     gboolean        use_underline);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_button_get_use_underline  (GtkButton      *button);
-GDK_DEPRECATED_IN_3_10
-void                  gtk_button_set_use_stock      (GtkButton      *button,
-						     gboolean        use_stock);
-GDK_DEPRECATED_IN_3_10
-gboolean              gtk_button_get_use_stock      (GtkButton      *button);
 GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_set_focus_on_click)
 void                  gtk_button_set_focus_on_click (GtkButton      *button,
 						     gboolean        focus_on_click);

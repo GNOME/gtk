@@ -339,18 +339,16 @@ create_buttons (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (grid), 10);
       gtk_box_pack_start (GTK_BOX (box1), grid, TRUE, TRUE);
 
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       button[0] = gtk_button_new_with_label ("button1");
       button[1] = gtk_button_new_with_mnemonic ("_button2");
       button[2] = gtk_button_new_with_mnemonic ("_button3");
-      button[3] = gtk_button_new_from_stock (GTK_STOCK_OK);
+      button[3] = gtk_button_new_with_mnemonic ("_button4");
       button[4] = gtk_button_new_with_label ("button5");
       button[5] = gtk_button_new_with_label ("button6");
       button[6] = gtk_button_new_with_label ("button7");
-      button[7] = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+      button[7] = gtk_button_new_with_label ("button8");
       button[8] = gtk_button_new_with_label ("button9");
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      
+
       for (i = 0; i < 9; i++)
         {
           g_signal_connect (button[i], "clicked",

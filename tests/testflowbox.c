@@ -21,7 +21,6 @@ enum {
   SIMPLE_ITEMS = 0,
   FOCUS_ITEMS,
   WRAPPY_ITEMS,
-  STOCK_ITEMS,
   IMAGE_ITEMS,
   BUTTON_ITEMS
 };
@@ -166,36 +165,6 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
 }
 
 static void
-populate_flowbox_stock (GtkFlowBox *flowbox)
-{
-  GtkWidget *widget;
-  static GSList *stock_ids = NULL;
-  GSList *l;
-  gint i;
-
-  if (!stock_ids)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      stock_ids = gtk_stock_list_ids ();
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-
-  for (i = 0, l = stock_ids; i < 30 && l != NULL; i++, l = l->next)
-    {
-      gchar *stock_id = l->data;
-      gchar *text = g_strdup_printf ("Item %02d", i);
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      widget = gtk_button_new_from_stock (stock_id);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      gtk_widget_show (widget);
-
-      g_object_set_data_full (G_OBJECT (widget), "id", (gpointer)g_strdup (text), g_free);
-      gtk_container_add (GTK_CONTAINER (flowbox), widget);
-    }
-}
-
-static void
 populate_flowbox_images (GtkFlowBox *flowbox)
 {
   GtkWidget *widget, *image, *label;
@@ -249,8 +218,6 @@ populate_items (GtkFlowBox *flowbox)
     populate_flowbox_focus (flowbox);
   else if (items_type == WRAPPY_ITEMS)
     populate_flowbox_wrappy (flowbox);
-  else if (items_type == STOCK_ITEMS)
-    populate_flowbox_stock (flowbox);
   else if (items_type == IMAGE_ITEMS)
     populate_flowbox_images (flowbox);
   else if (items_type == BUTTON_ITEMS)
@@ -660,7 +627,6 @@ create_window (void)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Simple");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Focus");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Wrappy");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Stock");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Images");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Buttons");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
@@ -680,7 +646,7 @@ create_window (void)
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
   gtk_widget_show (widget);
 
-  gtk_widget_set_tooltip_text (widget, "Set the item's text orientation (cant be done for stock buttons)");
+  gtk_widget_set_tooltip_text (widget, "Set the item's text orientation");
   gtk_box_pack_start (GTK_BOX (items_cntl), widget, FALSE, FALSE);
 
   g_signal_connect (G_OBJECT (widget), "changed",

@@ -36,24 +36,6 @@ int main (int argc, char *argv[])
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
-        G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-	button = gtk_button_new_from_stock (GTK_STOCK_SAVE);
-        G_GNUC_END_IGNORE_DEPRECATIONS;
-	gtk_container_add (GTK_CONTAINER (hbox), button);
-
-	g_object_get (button,
-                      "label", &text,
-                      "use-stock", &use_stock,
-                      "use-underline", &use_underline,
-		      "image", &image,
-                      NULL);
-	text = g_strdup_printf ("label: \"%s\" image: %p use-stock: %s use-underline: %s\n", text, image, use_stock ? "TRUE" : "FALSE", use_underline ? "TRUE" : "FALSE");
-	label = gtk_label_new (text);
-	g_free (text);
-	gtk_container_add (GTK_CONTAINER (hbox), label);
-
-	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-	gtk_container_add (GTK_CONTAINER (box), hbox);
 	button = g_object_new (GTK_TYPE_BUTTON,
                                "label", "document-save",
 			       "use-stock", TRUE,
