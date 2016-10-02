@@ -69,11 +69,6 @@
             <property name="pack-type">start</property>
           </packing>
         </child>
-        <child type="center">
-          <object class="GtkLabel" id="object_title">
-            <property name="visible">True</property>
-          </object>
-        </child>
       </object>
     </child>
     <child>
