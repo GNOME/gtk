@@ -452,8 +452,10 @@ gtk_message_dialog_constructed (GObject *object)
       gtk_widget_set_no_show_all (label, TRUE);
       gtk_widget_set_margin_top (label, 6);
       gtk_widget_set_margin_bottom (label, 6);
+      gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+      gtk_widget_set_hexpand (label, TRUE);
       gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
-      gtk_box_set_center_widget (GTK_BOX (box), label);
+      gtk_container_add (GTK_CONTAINER (box), label);
       g_signal_connect_object (dialog, "notify::title", G_CALLBACK (update_title), label, 0);
 
       gtk_window_set_titlebar (GTK_WINDOW (dialog), box);
