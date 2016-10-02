@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 15:26+0000\n"
-"PO-Revision-Date: 2016-09-12 20:25+0300\n"
+"POT-Creation-Date: 2016-09-22 15:03+0000\n"
+"PO-Revision-Date: 2016-10-02 20:56+0300\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -669,15 +669,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Sulje"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9025
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9058
 msgid "Minimize"
 msgstr "Pienennä"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9034
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9067
 msgid "Maximize"
 msgstr "Suurenna"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8991
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9024
 msgid "Restore"
 msgstr "Palauta"
 
@@ -1226,7 +1226,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12492 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12525 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1275,7 +1275,7 @@ msgid "_Apply"
 msgstr "_Toteuta"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12493
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12526
 msgid "_OK"
 msgstr "_OK"
 
@@ -2583,7 +2583,7 @@ msgstr "Tulostimen tietojen nouto epäonnistui"
 msgid "Application menu"
 msgstr "Sovellusvalikko"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9061
+#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9094
 msgid "Close"
 msgstr "Sulje"
 
@@ -3803,24 +3803,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9009
+#: gtk/gtkwindow.c:9042
 msgid "Move"
 msgstr "Siirrä"
 
-#: gtk/gtkwindow.c:9017
+#: gtk/gtkwindow.c:9050
 msgid "Resize"
 msgstr "Muuta kokoa"
 
-#: gtk/gtkwindow.c:9048
+#: gtk/gtkwindow.c:9081
 msgid "Always on Top"
 msgstr "Aina päällimmäisenä"
 
-#: gtk/gtkwindow.c:12480
+#: gtk/gtkwindow.c:12513
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Haluatko käyttää GTK+ Inspectoria?"
 
-#: gtk/gtkwindow.c:12482
+#: gtk/gtkwindow.c:12515
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3828,7 +3828,7 @@ msgid ""
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:12487
+#: gtk/gtkwindow.c:12520
 msgid "Don't show this message again"
 msgstr "Älä näytä tätä viestiä uudestaan"
 
@@ -5756,6 +5756,12 @@ msgstr "ftp:// tai ftps://"
 #: gtk/ui/gtkplacesview.ui:205
 msgid "smb://"
 msgstr "smb://"
+
+#. Translators: do not translate sftp:// and ssh://
+#: gtk/ui/gtkplacesview.ui:216
+#| msgid "ftp:// or ftps://"
+msgid "sftp:// or ssh://"
+msgstr "sftp:// tai ssh://"
 
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:227
