@@ -3446,12 +3446,6 @@ gdk_wayland_window_set_opacity (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_set_composited (GdkWindow *window,
-                                   gboolean   composited)
-{
-}
-
-static void
 gdk_wayland_window_destroy_notify (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
@@ -3685,7 +3679,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->begin_resize_drag = gdk_wayland_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_wayland_window_begin_move_drag;
   impl_class->set_opacity = gdk_wayland_window_set_opacity;
-  impl_class->set_composited = gdk_wayland_window_set_composited;
   impl_class->destroy_notify = gdk_wayland_window_destroy_notify;
   impl_class->get_drag_protocol = _gdk_wayland_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_wayland_window_register_dnd;

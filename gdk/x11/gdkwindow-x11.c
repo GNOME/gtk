@@ -5422,36 +5422,6 @@ gdk_x11_window_set_opacity (GdkWindow *window,
 		     (guchar *) &cardinal, 1);
 }
 
-static void
-gdk_x11_window_set_composited (GdkWindow *window,
-                               gboolean   composited)
-{
-#if defined(HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
-  GdkWindowImplX11 *impl;
-  GdkDisplay *display;
-  Display *dpy;
-  Window xid;
-
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-  display = gdk_window_get_display (window);
-  dpy = GDK_DISPLAY_XDISPLAY (display);
-  xid = GDK_WINDOW_XID (window);
-
-  if (composited)
-    {
-      XCompositeRedirectWindow (dpy, xid, CompositeRedirectManual);
-      impl->damage = XDamageCreate (dpy, xid, XDamageReportBoundingBox);
-    }
-  else
-    {
-      XCompositeUnredirectWindow (dpy, xid, CompositeRedirectManual);
-      XDamageDestroy (dpy, impl->damage);
-      impl->damage = None;
-    }
-#endif
-}
-
 void
 _gdk_x11_display_before_process_all_updates (GdkDisplay *display)
 {
@@ -5763,7 +5733,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->begin_resize_drag = gdk_x11_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_x11_window_begin_move_drag;
   impl_class->set_opacity = gdk_x11_window_set_opacity;
-  impl_class->set_composited = gdk_x11_window_set_composited;
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;
   impl_class->get_drag_protocol = gdk_x11_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_x11_window_register_dnd;

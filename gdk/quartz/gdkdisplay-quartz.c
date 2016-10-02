@@ -175,14 +175,6 @@ gdk_quartz_display_store_clipboard (GdkDisplay    *display,
   /* FIXME: Implement */
 }
 
-
-static gboolean
-gdk_quartz_display_supports_composite (GdkDisplay *display)
-{
-  /* FIXME: Implement */
-  return FALSE;
-}
-
 static gulong
 gdk_quartz_display_get_next_serial (GdkDisplay *display)
 {
@@ -245,7 +237,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->store_clipboard = gdk_quartz_display_store_clipboard;
   display_class->supports_shapes = gdk_quartz_display_supports_shapes;
   display_class->supports_input_shapes = gdk_quartz_display_supports_input_shapes;
-  display_class->supports_composite = gdk_quartz_display_supports_composite;
   display_class->get_cursor_for_type = _gdk_quartz_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
   display_class->get_cursor_for_surface = _gdk_quartz_display_get_cursor_for_surface;

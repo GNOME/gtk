@@ -259,12 +259,6 @@ gdk_broadway_display_supports_input_shapes (GdkDisplay *display)
   return FALSE;
 }
 
-static gboolean
-gdk_broadway_display_supports_composite (GdkDisplay *display)
-{
-  return FALSE;
-}
-
 static gulong
 gdk_broadway_display_get_next_serial (GdkDisplay *display)
 {
@@ -341,7 +335,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->store_clipboard = gdk_broadway_display_store_clipboard;
   display_class->supports_shapes = gdk_broadway_display_supports_shapes;
   display_class->supports_input_shapes = gdk_broadway_display_supports_input_shapes;
-  display_class->supports_composite = gdk_broadway_display_supports_composite;
   display_class->get_cursor_for_type = _gdk_broadway_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_broadway_display_get_cursor_for_name;
   display_class->get_cursor_for_surface = _gdk_broadway_display_get_cursor_for_surface;

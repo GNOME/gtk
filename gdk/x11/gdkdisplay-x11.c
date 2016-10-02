@@ -1014,39 +1014,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	}
       else
 #endif
-#if defined(HAVE_XCOMPOSITE) && defined (HAVE_XDAMAGE) && defined (HAVE_XFIXES)
-      if (display_x11->have_xdamage && window && window->composited &&
-	  xevent->type == display_x11->xdamage_event_base + XDamageNotify &&
-	  ((XDamageNotifyEvent *) xevent)->damage == window_impl->damage)
-	{
-	  XDamageNotifyEvent *damage_event = (XDamageNotifyEvent *) xevent;
-	  XserverRegion repair;
-	  GdkRectangle rect;
-          int x2, y2;
-
-	  rect.x = window->x + damage_event->area.x / window_impl->window_scale;
-	  rect.y = window->y + damage_event->area.y / window_impl->window_scale;
-
-          x2 = (rect.x * window_impl->window_scale + damage_event->area.width + window_impl->window_scale -1) / window_impl->window_scale;
-          y2 = (rect.y * window_impl->window_scale + damage_event->area.height + window_impl->window_scale -1) / window_impl->window_scale;
-	  rect.width = x2 - rect.x;
-	  rect.height = y2 - rect.y;
-
-	  repair = XFixesCreateRegion (display_x11->xdisplay,
-				       &damage_event->area, 1);
-	  XDamageSubtract (display_x11->xdisplay,
-			   window_impl->damage,
-			   repair, None);
-	  XFixesDestroyRegion (display_x11->xdisplay, repair);
-
-          if (window->parent != NULL)
-           _gdk_x11_window_process_expose (window->parent,
-                                           damage_event->serial, &rect);
-
-	  return_val = TRUE;
-	}
-      else
-#endif
 #ifdef HAVE_XKB
       if (xevent->type == display_x11->xkb_event_type)
 	{
@@ -2447,16 +2414,6 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
     }
 }
 
-static gboolean
-gdk_x11_display_supports_composite (GdkDisplay *display)
-{
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
-
-  return x11_display->have_xcomposite &&
-	 x11_display->have_xdamage &&
-	 x11_display->have_xfixes;
-}
-
 /**
  * gdk_x11_register_standard_event_type:
  * @display: (type GdkX11Display): a #GdkDisplay
@@ -2968,7 +2925,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->store_clipboard = gdk_x11_display_store_clipboard;
   display_class->supports_shapes = gdk_x11_display_supports_shapes;
   display_class->supports_input_shapes = gdk_x11_display_supports_input_shapes;
-  display_class->supports_composite = gdk_x11_display_supports_composite;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
   display_class->get_cursor_for_type = _gdk_x11_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_x11_display_get_cursor_for_name;

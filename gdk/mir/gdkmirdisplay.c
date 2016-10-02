@@ -267,13 +267,6 @@ gdk_mir_display_supports_input_shapes (GdkDisplay *display)
 }
 
 static gboolean
-gdk_mir_display_supports_composite (GdkDisplay *display)
-{
-  //g_printerr ("gdk_mir_display_supports_composite\n");
-  return FALSE;
-}
-
-static gboolean
 gdk_mir_display_supports_clipboard_persistence (GdkDisplay *display)
 {
   //g_printerr ("gdk_mir_display_supports_clipboard_persistence\n");
@@ -733,7 +726,6 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->get_default_group = gdk_mir_display_get_default_group;
   display_class->supports_shapes = gdk_mir_display_supports_shapes;
   display_class->supports_input_shapes = gdk_mir_display_supports_input_shapes;
-  display_class->supports_composite = gdk_mir_display_supports_composite;
   display_class->supports_clipboard_persistence = gdk_mir_display_supports_clipboard_persistence;
   display_class->supports_cursor_alpha = gdk_mir_display_supports_cursor_alpha;
   display_class->supports_cursor_color = gdk_mir_display_supports_cursor_color;

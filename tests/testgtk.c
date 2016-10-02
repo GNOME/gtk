@@ -315,126 +315,6 @@ create_alpha_window (GtkWidget *widget)
 }
 
 /*
- * Composited non-toplevel window
- */
-
-/* The draw event handler for the event box.
- *
- * This function simply draws a transparency onto a widget on the area
- * for which it receives expose events.  This is intended to give the
- * event box a "transparent" background.
- *
- * In order for this to work properly, the widget must have an RGBA
- * colourmap.  The widget should also be set as app-paintable since it
- * doesn't make sense for GTK to draw a background if we are drawing it
- * (and because GTK might actually replace our transparency with its
- * default background colour).
- */
-static gboolean
-transparent_draw (GtkWidget *widget,
-                  cairo_t   *cr)
-{
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  cairo_paint (cr);
-
-  return FALSE;
-}
-
-/* The expose event handler for the window.
- *
- * This function performs the actual compositing of the event box onto
- * the already-existing background of the window at 50% normal opacity.
- *
- * In this case we do not want app-paintable to be set on the widget
- * since we want it to draw its own (red) background.  Because of this,
- * however, we must ensure that we use g_signal_register_after so that
- * this handler is called after the red has been drawn.  If it was
- * called before then GTK would just blindly paint over our work.
- */
-static gboolean
-window_draw (GtkWidget *widget,
-             cairo_t   *cr)
-{
-  GtkAllocation allocation;
-  GtkWidget *child;
-
-  /* put a red background on the window */
-  cairo_set_source_rgb (cr, 1, 0, 0);
-  cairo_paint (cr);
-
-  /* get our child (in this case, the event box) */ 
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  gtk_widget_get_allocation (child, &allocation);
-
-  /* the source data is the (composited) event box */
-  gdk_cairo_set_source_window (cr, gtk_widget_get_window (child),
-                               allocation.x,
-                               allocation.y);
-
-  /* composite, with a 50% opacity */
-  cairo_paint_with_alpha (cr, 0.5);
-
-  return FALSE;
-}
-
-void
-create_composited_window (GtkWidget *widget)
-{
-  static GtkWidget *window;
-
-  if (!window)
-    {
-      GtkWidget *event, *button;
-
-      /* make the widgets */
-      button = gtk_button_new_with_label ("A Button");
-      event = gtk_event_box_new ();
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &window);
-
-      /* set our event box to have a fully-transparent background
-       * drawn on it.  currently there is no way to simply tell gtk
-       * that "transparency" is the background colour for a widget.
-       */
-      gtk_widget_set_app_paintable (GTK_WIDGET (event), TRUE);
-      g_signal_connect (event, "draw",
-                        G_CALLBACK (transparent_draw), NULL);
-
-      /* put them inside one another */
-      gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-      gtk_container_add (GTK_CONTAINER (window), event);
-      gtk_container_add (GTK_CONTAINER (event), button);
-
-      /* realise and show everything */
-      gtk_widget_realize (button);
-
-      /* set the event box GdkWindow to be composited.
-       * obviously must be performed after event box is realised.
-       */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gdk_window_set_composited (gtk_widget_get_window (event),
-                                 TRUE);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-      /* set up the compositing handler.
-       * note that we do _after so that the normal (red) background is drawn
-       * by gtk before our compositing occurs.
-       */
-      g_signal_connect_after (window, "draw",
-                              G_CALLBACK (window_draw), NULL);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
-  else
-    gtk_widget_destroy (window);
-}
-
-/*
  * Big windows and guffaw scrolling
  */
 
@@ -9428,7 +9308,6 @@ struct {
   { "buttons", create_buttons },
   { "check buttons", create_check_buttons },
   { "color selection", create_color_selection },
-  { "composited window", create_composited_window },
   { "cursors", create_cursors },
   { "dialog", create_dialog },
   { "display", create_display_screen, TRUE },

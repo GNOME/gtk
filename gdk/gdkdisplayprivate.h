@@ -151,7 +151,6 @@ struct _GdkDisplayClass
                                                                  GdkAtom     selection);
   gboolean                   (*supports_shapes)       (GdkDisplay *display);
   gboolean                   (*supports_input_shapes) (GdkDisplay *display);
-  gboolean                   (*supports_composite)    (GdkDisplay *display);
   gboolean                   (*supports_cursor_alpha) (GdkDisplay *display);
   gboolean                   (*supports_cursor_color) (GdkDisplay *display);
 

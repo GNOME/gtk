@@ -772,12 +772,6 @@ gdk_wayland_display_supports_input_shapes (GdkDisplay *display)
   return TRUE;
 }
 
-static gboolean
-gdk_wayland_display_supports_composite (GdkDisplay *display)
-{
-  return FALSE;
-}
-
 static void
 gdk_wayland_display_before_process_all_updates (GdkDisplay *display)
 {
@@ -923,7 +917,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->store_clipboard = gdk_wayland_display_store_clipboard;
   display_class->supports_shapes = gdk_wayland_display_supports_shapes;
   display_class->supports_input_shapes = gdk_wayland_display_supports_input_shapes;
-  display_class->supports_composite = gdk_wayland_display_supports_composite;
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
   display_class->get_default_cursor_size = _gdk_wayland_display_get_default_cursor_size;
   display_class->get_maximal_cursor_size = _gdk_wayland_display_get_maximal_cursor_size;

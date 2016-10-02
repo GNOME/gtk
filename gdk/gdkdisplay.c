@@ -1863,31 +1863,6 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
 }
 
 /**
- * gdk_display_supports_composite:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if gdk_window_set_composited() can be used
- * to redirect drawing on the window using compositing.
- *
- * Currently this only works on X11 with XComposite and
- * XDamage extensions available.
- *
- * Returns: %TRUE if windows may be composited.
- *
- * Since: 2.12
- *
- * Deprecated: 3.16: Compositing is an outdated technology that
- *   only ever worked on X11.
- */
-gboolean
-gdk_display_supports_composite (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return GDK_DISPLAY_GET_CLASS (display)->supports_composite (display);
-}
-
-/**
  * gdk_display_list_devices:
  * @display: a #GdkDisplay
  *

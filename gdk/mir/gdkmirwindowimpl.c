@@ -1396,13 +1396,6 @@ gdk_mir_window_impl_set_opacity (GdkWindow *window,
 }
 
 static void
-gdk_mir_window_impl_set_composited (GdkWindow *window,
-                                    gboolean   composited)
-{
-  //g_printerr ("gdk_mir_window_impl_set_composited window=%p\n", window);
-}
-
-static void
 gdk_mir_window_impl_destroy_notify (GdkWindow *window)
 {
   //g_printerr ("gdk_mir_window_impl_destroy_notify window=%p\n", window);
@@ -1877,7 +1870,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->enable_synchronized_configure = gdk_mir_window_impl_enable_synchronized_configure;
   impl_class->configure_finished = gdk_mir_window_impl_configure_finished;
   impl_class->set_opacity = gdk_mir_window_impl_set_opacity;
-  impl_class->set_composited = gdk_mir_window_impl_set_composited;
   impl_class->destroy_notify = gdk_mir_window_impl_destroy_notify;
   impl_class->get_drag_protocol = gdk_mir_window_impl_get_drag_protocol;
   impl_class->register_dnd = gdk_mir_window_impl_register_dnd;

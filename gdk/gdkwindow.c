@@ -69,15 +69,6 @@
  * and so on; a #GtkWindow may contain many #GdkWindows. For example,
  * each #GtkButton has a #GdkWindow associated with it.
  *
- * # Composited Windows # {#COMPOSITED-WINDOWS}
- *
- * Normally, the windowing system takes care of rendering the contents
- * of a child window onto its parent window. This mechanism can be
- * intercepted by calling gdk_window_set_composited() on the child
- * window. For a “composited” window it is the
- * responsibility of the application to render the window contents at
- * the right spot.
- *
  * # Offscreen Windows # {#OFFSCREEN-WINDOWS}
  *
  * Offscreen windows are more general than composited windows, since
@@ -701,7 +692,7 @@ remove_sibling_overlapped_area (GdkWindow *window,
       if (sibling == window)
 	break;
 
-      if (!GDK_WINDOW_IS_MAPPED (sibling) || sibling->input_only || sibling->composited)
+      if (!GDK_WINDOW_IS_MAPPED (sibling) || sibling->input_only)
 	continue;
 
       /* Ignore offscreen children, as they don't draw in their parent and
@@ -763,7 +754,7 @@ remove_child_area (GdkWindow *window,
       if (cairo_region_is_empty (region))
 	break;
 
-      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
+      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only)
 	continue;
 
       /* Ignore offscreen children, as they don't draw in their parent and
@@ -2975,9 +2966,7 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
 static void
 gdk_window_end_paint_internal (GdkWindow *window)
 {
-  GdkWindow *composited;
   GdkWindowImplClass *impl_class;
-  GdkRectangle clip_box = { 0, };
   cairo_t *cr;
 
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -2998,8 +2987,6 @@ gdk_window_end_paint_internal (GdkWindow *window)
   if (window->current_paint.surface_needs_composite)
     {
       cairo_surface_t *surface;
-
-      cairo_region_get_extents (window->current_paint.region, &clip_box);
 
       if (window->current_paint.use_gl)
         {
@@ -3046,29 +3033,6 @@ gdk_window_end_paint_internal (GdkWindow *window)
     }
 
   gdk_window_free_current_paint (window);
-
-  /* find a composited window in our hierarchy to signal its
-   * parent to redraw, calculating the clip box as we go...
-   *
-   * stop if parent becomes NULL since then we'd have nowhere
-   * to draw (ie: 'composited' will always be non-NULL here).
-   */
-  for (composited = window;
-       composited->parent;
-       composited = composited->parent)
-    {
-      clip_box.x += composited->x;
-      clip_box.y += composited->y;
-      clip_box.width = MIN (clip_box.width, composited->parent->width - clip_box.x);
-      clip_box.height = MIN (clip_box.height, composited->parent->height - clip_box.y);
-
-      if (composited->composited)
-	{
-	  gdk_window_invalidate_rect (GDK_WINDOW (composited->parent),
-				      &clip_box, FALSE);
-	  break;
-	}
-    }
 }
 
 /**
@@ -3844,7 +3808,7 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
     {
       child = l->data;
 
-      if (child->destroyed || !GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
+      if (child->destroyed || !GDK_WINDOW_IS_MAPPED (child) || child->input_only)
         continue;
 
       /* Ignore offscreen children, as they don't draw in their parent and
@@ -7305,102 +7269,6 @@ gdk_window_set_static_gravities (GdkWindow *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   return FALSE;
-}
-
-/**
- * gdk_window_get_composited:
- * @window: a #GdkWindow
- *
- * Determines whether @window is composited.
- *
- * See gdk_window_set_composited().
- *
- * Returns: %TRUE if the window is composited.
- *
- * Since: 2.22
- *
- * Deprecated: 3.16: Compositing is an outdated technology that
- *   only ever worked on X11.
- **/
-gboolean
-gdk_window_get_composited (GdkWindow *window)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-
-  return window->composited;
-}
-
-/**
- * gdk_window_set_composited:
- * @window: a #GdkWindow
- * @composited: %TRUE to set the window as composited
- *
- * Sets a #GdkWindow as composited, or unsets it. Composited
- * windows do not automatically have their contents drawn to
- * the screen. Drawing is redirected to an offscreen buffer
- * and an expose event is emitted on the parent of the composited
- * window. It is the responsibility of the parent’s expose handler
- * to manually merge the off-screen content onto the screen in
- * whatever way it sees fit.
- *
- * It only makes sense for child windows to be composited; see
- * gdk_window_set_opacity() if you need translucent toplevel
- * windows.
- *
- * An additional effect of this call is that the area of this
- * window is no longer clipped from regions marked for
- * invalidation on its parent. Draws done on the parent
- * window are also no longer clipped by the child.
- *
- * This call is only supported on some systems (currently,
- * only X11 with new enough Xcomposite and Xdamage extensions).
- * You must call gdk_display_supports_composite() to check if
- * setting a window as composited is supported before
- * attempting to do so.
- *
- * Since: 2.12
- *
- * Deprecated: 3.16: Compositing is an outdated technology that
- *   only ever worked on X11.
- */
-void
-gdk_window_set_composited (GdkWindow *window,
-			   gboolean   composited)
-{
-  GdkDisplay *display;
-  GdkWindowImplClass *impl_class;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  composited = composited != FALSE;
-
-  if (window->composited == composited)
-    return;
-
-  if (composited)
-    gdk_window_ensure_native (window);
-
-  display = gdk_window_get_display (window);
-
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (composited && (!gdk_display_supports_composite (display) || !impl_class->set_composited))
-    {
-      g_warning ("gdk_window_set_composited called but "
-                 "compositing is not supported");
-      return;
-    }
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  impl_class->set_composited (window, composited);
-
-  recompute_visible_regions (window, FALSE);
-
-  if (GDK_WINDOW_IS_MAPPED (window))
-    gdk_window_invalidate_in_parent (window);
-
-  window->composited = composited;
 }
 
 /**
@@ -11265,8 +11133,7 @@ gdk_window_configure_finished (GdkWindow *window)
  *
  * For child windows this function only works for non-native windows.
  *
- * For setting up per-pixel alpha topelevels, see gdk_screen_get_rgba_visual(),
- * and for non-toplevels, see gdk_window_set_composited().
+ * For setting up per-pixel alpha topelevels, see gdk_screen_get_rgba_visual().
  *
  * Support for non-toplevel windows was added in 3.8.
  *

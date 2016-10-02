@@ -5992,7 +5992,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->begin_resize_drag = gdk_win32_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_win32_window_begin_move_drag;
   impl_class->set_opacity = gdk_win32_window_set_opacity;
-  //impl_class->set_composited = gdk_win32_window_set_composited;
   impl_class->destroy_notify = gdk_win32_window_destroy_notify;
   impl_class->get_drag_protocol = _gdk_win32_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_win32_window_register_dnd;

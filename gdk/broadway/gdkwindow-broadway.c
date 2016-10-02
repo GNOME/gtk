@@ -1523,12 +1523,6 @@ gdk_broadway_window_set_opacity (GdkWindow *window,
     opacity = 1;
 }
 
-static void
-gdk_broadway_window_set_composited (GdkWindow *window,
-				    gboolean   composited)
-{
-}
-
 void
 _gdk_broadway_display_before_process_all_updates (GdkDisplay *display)
 {
@@ -1618,7 +1612,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->begin_resize_drag = gdk_broadway_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_broadway_window_begin_move_drag;
   impl_class->set_opacity = gdk_broadway_window_set_opacity;
-  impl_class->set_composited = gdk_broadway_window_set_composited;
   impl_class->destroy_notify = gdk_broadway_window_destroy_notify;
   impl_class->register_dnd = _gdk_broadway_window_register_dnd;
   impl_class->drag_begin = _gdk_broadway_window_drag_begin;

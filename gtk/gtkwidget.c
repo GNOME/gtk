@@ -9975,10 +9975,6 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
  * drawn correctly. On X11 this function returns whether a
  * compositing manager is running for @widget’s screen.
  *
- * Please note that the semantics of this call will change
- * in the future if used on a widget that has a composited
- * window in its hierarchy (as set by gdk_window_set_composited()).
- *
  * Returns: %TRUE if the widget can rely on its alpha
  * channel being drawn correctly.
  *
