@@ -57,7 +57,6 @@
 #include "gtkbuttonprivate.h"
 
 #include <string.h>
-#include "deprecated/gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -99,8 +98,6 @@ enum {
   PROP_RELIEF,
   PROP_USE_UNDERLINE,
   PROP_USE_STOCK,
-  PROP_XALIGN,
-  PROP_YALIGN,
   PROP_IMAGE_POSITION,
   PROP_ALWAYS_SHOW_IMAGE,
 
@@ -131,7 +128,6 @@ static void gtk_button_realize (GtkWidget * widget);
 static void gtk_button_unrealize (GtkWidget * widget);
 static void gtk_button_map (GtkWidget * widget);
 static void gtk_button_unmap (GtkWidget * widget);
-static void gtk_button_style_updated (GtkWidget * widget);
 static void gtk_button_size_allocate (GtkWidget * widget,
 				      GtkAllocation * allocation);
 static gint gtk_button_draw (GtkWidget * widget, cairo_t *cr);
@@ -148,9 +144,6 @@ static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_update_state   (GtkButton          *button);
 static void gtk_button_enter_leave    (GtkButton          *button);
-static void gtk_button_add            (GtkContainer       *container,
-			               GtkWidget          *widget);
-static GType gtk_button_child_type    (GtkContainer       *container);
 static void gtk_button_finish_activate (GtkButton         *button,
 					gboolean           do_it);
 
@@ -255,7 +248,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->map = gtk_button_map;
   widget_class->unmap = gtk_button_unmap;
-  widget_class->style_updated = gtk_button_style_updated;
   widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->draw = gtk_button_draw;
   widget_class->grab_broken_event = gtk_button_grab_broken;
@@ -265,8 +257,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->state_changed = gtk_button_state_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
 
-  container_class->child_type = gtk_button_child_type;
-  container_class->add = gtk_button_add;
   gtk_container_class_handle_border_width (container_class);
 
   klass->pressed = gtk_real_button_pressed;
@@ -309,44 +299,6 @@ gtk_button_class_init (GtkButtonClass *klass)
                        GTK_TYPE_RELIEF_STYLE,
                        GTK_RELIEF_NORMAL,
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-  
-  /**
-   * GtkButton:xalign:
-   *
-   * If the child of the button is a #GtkMisc or #GtkAlignment, this property 
-   * can be used to control its horizontal alignment. 0.0 is left aligned, 
-   * 1.0 is right aligned.
-   *
-   * Since: 2.4
-   *
-   * Deprecated: 3.14: Access the child widget directly if you need to control
-   * its alignment.
-   */
-  props[PROP_XALIGN] =
-    g_param_spec_float ("xalign",
-                        P_("Horizontal alignment for child"),
-                        P_("Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"),
-                        0.0, 1.0, 0.5,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-
-  /**
-   * GtkButton:yalign:
-   *
-   * If the child of the button is a #GtkMisc or #GtkAlignment, this property 
-   * can be used to control its vertical alignment. 0.0 is top aligned, 
-   * 1.0 is bottom aligned.
-   *
-   * Since: 2.4
-   *
-   * Deprecated: 3.14: Access the child widget directly if you need to control
-   * its alignment.
-   */
-  props[PROP_YALIGN] =
-    g_param_spec_float ("yalign",
-                        P_("Vertical alignment for child"),
-                        P_("Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"),
-                        0.0, 1.0, 0.5,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkButton:image:
@@ -727,9 +679,6 @@ gtk_button_init (GtkButton *button)
   priv->use_stock = FALSE;
   priv->use_underline = FALSE;
 
-  priv->xalign = 0.5;
-  priv->yalign = 0.5;
-  priv->align_set = 0;
   priv->image_is_stock = TRUE;
   priv->image_position = GTK_POS_LEFT;
   priv->use_action_appearance = TRUE;
@@ -779,44 +728,6 @@ gtk_button_constructed (GObject *object)
 
   if (priv->label_text != NULL || priv->image != NULL)
     gtk_button_construct_child (button);
-}
-
-
-static GType
-gtk_button_child_type  (GtkContainer     *container)
-{
-  if (!gtk_bin_get_child (GTK_BIN (container)))
-    return GTK_TYPE_WIDGET;
-  else
-    return G_TYPE_NONE;
-}
-
-static void
-maybe_set_alignment (GtkButton *button,
-		     GtkWidget *widget)
-{
-  GtkButtonPrivate *priv = button->priv;
-
-  if (!priv->align_set)
-    return;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (GTK_IS_LABEL (widget))
-    g_object_set (widget, "xalign", priv->xalign, "yalign", priv->yalign, NULL);
-  else if (GTK_IS_MISC (widget))
-    gtk_misc_set_alignment (GTK_MISC (widget), priv->xalign, priv->yalign);
-  else if (GTK_IS_ALIGNMENT (widget))
-    g_object_set (widget, "xalign", priv->xalign, "yalign", priv->yalign, NULL);
-G_GNUC_END_IGNORE_DEPRECATIONS
-}
-
-static void
-gtk_button_add (GtkContainer *container,
-		GtkWidget    *widget)
-{
-  maybe_set_alignment (GTK_BUTTON (container), widget);
-
-  GTK_CONTAINER_CLASS (gtk_button_parent_class)->add (container, widget);
 }
 
 static void
@@ -874,7 +785,6 @@ gtk_button_set_property (GObject         *object,
                          GParamSpec      *pspec)
 {
   GtkButton *button = GTK_BUTTON (object);
-  GtkButtonPrivate *priv = button->priv;
 
   switch (prop_id)
     {
@@ -897,16 +807,6 @@ gtk_button_set_property (GObject         *object,
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_button_set_use_stock (button, g_value_get_boolean (value));
       G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-    case PROP_XALIGN:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_button_set_alignment (button, g_value_get_float (value), priv->yalign);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
-    case PROP_YALIGN:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_button_set_alignment (button, priv->xalign, g_value_get_float (value));
-G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_IMAGE_POSITION:
       gtk_button_set_image_position (button, g_value_get_enum (value));
@@ -957,12 +857,6 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_USE_STOCK:
       g_value_set_boolean (value, priv->use_stock);
-      break;
-    case PROP_XALIGN:
-      g_value_set_float (value, priv->xalign);
-      break;
-    case PROP_YALIGN:
-      g_value_set_float (value, priv->yalign);
       break;
     case PROP_IMAGE_POSITION:
       g_value_set_enum (value, priv->image_position);
@@ -1266,7 +1160,6 @@ gtk_button_construct_child (GtkButton *button)
   GtkWidget *child;
   GtkWidget *label;
   GtkWidget *box;
-  GtkWidget *align;
   GtkWidget *image = NULL;
   gchar *label_text = NULL;
   gint image_spacing;
@@ -1335,13 +1228,6 @@ gtk_button_construct_child (GtkButton *button)
       gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
       gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
 
-      if (priv->align_set)
-	align = gtk_alignment_new (priv->xalign, priv->yalign, 0.0, 0.0);
-      else
-	align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-
-      gtk_widget_set_valign (align, GTK_ALIGN_BASELINE);
-
       if (priv->image_position == GTK_POS_LEFT ||
 	  priv->image_position == GTK_POS_TOP)
         gtk_box_pack_start (GTK_BOX (box), priv->image, FALSE, FALSE);
@@ -1372,9 +1258,8 @@ gtk_button_construct_child (GtkButton *button)
           gtk_style_context_add_class (context, "image-button");
         }
 
-      gtk_container_add (GTK_CONTAINER (button), align);
-      gtk_container_add (GTK_CONTAINER (align), box);
-      gtk_widget_show_all (align);
+      gtk_container_add (GTK_CONTAINER (button), box);
+      gtk_widget_show_all (box);
 
       g_object_unref (image);
 
@@ -1390,8 +1275,6 @@ gtk_button_construct_child (GtkButton *button)
     label = gtk_label_new (priv->label_text);
 
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-
-  maybe_set_alignment (button, label);
 
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (button), label);
@@ -1708,48 +1591,6 @@ gtk_button_unmap (GtkWidget *widget)
     }
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->unmap (widget);
-}
-
-static void
-gtk_button_update_image_spacing (GtkButton       *button,
-                                 GtkStyleContext *context)
-{
-  GtkButtonPrivate *priv = button->priv;
-  GtkWidget *child; 
-  gint spacing;
-
-  /* Keep in sync with gtk_button_construct_child,
-   * we only want to update the spacing if the box 
-   * was constructed there.
-   */
-  if (!priv->constructed || !priv->image)
-    return;
-
-  child = gtk_bin_get_child (GTK_BIN (button));
-  if (GTK_IS_ALIGNMENT (child))
-    {
-      child = gtk_bin_get_child (GTK_BIN (child));
-      if (GTK_IS_BOX (child))
-        {
-          gtk_style_context_get_style (context,
-                                       "image-spacing", &spacing,
-                                       NULL);
-
-          gtk_box_set_spacing (GTK_BOX (child), spacing);
-        }
-    }
-}
-
-static void
-gtk_button_style_updated (GtkWidget *widget)
-{
-  GtkStyleContext *context;
-
-  GTK_WIDGET_CLASS (gtk_button_parent_class)->style_updated (widget);
-
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_button_update_image_spacing (GTK_BUTTON (widget), context);
 }
 
 static void
@@ -2344,78 +2185,8 @@ gboolean
 gtk_button_get_focus_on_click (GtkButton *button)
 {
   g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
-  
+
   return gtk_widget_get_focus_on_click (GTK_WIDGET (button));
-}
-
-/**
- * gtk_button_set_alignment:
- * @button: a #GtkButton
- * @xalign: the horizontal position of the child, 0.0 is left aligned, 
- *   1.0 is right aligned
- * @yalign: the vertical position of the child, 0.0 is top aligned, 
- *   1.0 is bottom aligned
- *
- * Sets the alignment of the child. This property has no effect unless 
- * the child is a #GtkMisc or a #GtkAlignment.
- *
- * Since: 2.4
- *
- * Deprecated: 3.14: Access the child widget directly if you need to control
- * its alignment.
- */
-void
-gtk_button_set_alignment (GtkButton *button,
-			  gfloat     xalign,
-			  gfloat     yalign)
-{
-  GtkButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-  
-  priv = button->priv;
-
-  priv->xalign = xalign;
-  priv->yalign = yalign;
-  priv->align_set = 1;
-
-  maybe_set_alignment (button, gtk_bin_get_child (GTK_BIN (button)));
-
-  g_object_freeze_notify (G_OBJECT (button));
-  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_XALIGN]);
-  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_YALIGN]);
-  g_object_thaw_notify (G_OBJECT (button));
-}
-
-/**
- * gtk_button_get_alignment:
- * @button: a #GtkButton
- * @xalign: (out): return location for horizontal alignment
- * @yalign: (out): return location for vertical alignment
- *
- * Gets the alignment of the child in the button.
- *
- * Since: 2.4
- *
- * Deprecated: 3.14: Access the child widget directly if you need to control
- * its alignment.
- */
-void
-gtk_button_get_alignment (GtkButton *button,
-			  gfloat    *xalign,
-			  gfloat    *yalign)
-{
-  GtkButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-  
-  priv = button->priv;
- 
-  if (xalign) 
-    *xalign = priv->xalign;
-
-  if (yalign)
-    *yalign = priv->yalign;
 }
 
 static void

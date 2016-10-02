@@ -270,10 +270,8 @@ draw_indicator_changed (GObject    *object,
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (button));
   indicator_node = gtk_css_gadget_get_node (priv->indicator_gadget);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (button)))
     {
-      gtk_button_set_alignment (button, 0.0, 0.5);
       gtk_css_node_set_visible (indicator_node, TRUE);
       if (GTK_IS_RADIO_BUTTON (button))
         {
@@ -288,7 +286,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     }
   else
     {
-      gtk_button_set_alignment (button, 0.5, 0.5);
       gtk_css_node_set_visible (indicator_node, FALSE);
       if (GTK_IS_RADIO_BUTTON (button))
         {
@@ -301,7 +298,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_css_node_set_name (widget_node, I_("button"));
         }
     }
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
