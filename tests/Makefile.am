@@ -110,7 +110,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testselection			\
 	testselectionmode		\
 	testspinbutton			\
-	teststockbuttonmenu		\
 	testtoolbar			\
 	testtoolbar2			\
 	stresstest-toolbar		\
@@ -241,7 +240,6 @@ testrichtext_DEPENDENCIES = $(TEST_DEPS)
 testscale_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
-teststockbuttonmenu_DEPENDENCIES = $(TEST_DEPS)
 testtreechanging_DEPENDENCIES =	$(DEPS)
 testtreednd_DEPENDENCIES = $(DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
