@@ -58,11 +58,7 @@ struct _GtkButton
 /**
  * GtkButtonClass:
  * @parent_class: The parent class.
- * @pressed: Signal emitted when the button is pressed. Deprecated: 2.8.
- * @released: Signal emitted when the button is released. Deprecated: 2.8.
  * @clicked: Signal emitted when the button has been activated (pressed and released).
- * @enter: Signal emitted when the pointer enters the button. Deprecated: 2.8.
- * @leave: Signal emitted when the pointer leaves the button. Deprecated: 2.8.
  * @activate: Signal that causes the button to animate press then
  *    release. Applications should never connect to this signal, but use
  *    the @clicked signal.
@@ -73,11 +69,7 @@ struct _GtkButtonClass
 
   /*< public >*/
 
-  void (* pressed)  (GtkButton *button);
-  void (* released) (GtkButton *button);
   void (* clicked)  (GtkButton *button);
-  void (* enter)    (GtkButton *button);
-  void (* leave)    (GtkButton *button);
   void (* activate) (GtkButton *button);
 
   /*< private >*/
@@ -103,14 +95,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
 GDK_AVAILABLE_IN_ALL
 void           gtk_button_clicked           (GtkButton      *button);
-GDK_DEPRECATED
-void           gtk_button_pressed           (GtkButton      *button);
-GDK_DEPRECATED
-void           gtk_button_released          (GtkButton      *button);
-GDK_DEPRECATED
-void           gtk_button_enter             (GtkButton      *button);
-GDK_DEPRECATED
-void           gtk_button_leave             (GtkButton      *button);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_relief         (GtkButton      *button,

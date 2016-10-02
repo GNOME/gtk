@@ -368,129 +368,6 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  G_TYPE_NONE, 0);
   widget_class->activate_signal = button_signals[ACTIVATE];
 
-  /**
-   * GtkButton:default-border:
-   *
-   * The "default-border" style property defines the extra space to add
-   * around a button that can become the default widget of its window.
-   * For more information about default widgets, see gtk_widget_grab_default().
-   *
-   * Deprecated: 3.14: Use CSS margins and padding instead;
-   *     the value of this style property is ignored.
-   */
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("default-border",
-							       P_("Default Spacing"),
-							       P_("Extra space to add for GTK_CAN_DEFAULT buttons"),
-							       GTK_TYPE_BORDER,
-							       GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButton:default-outside-border:
-   *
-   * The "default-outside-border" style property defines the extra outside
-   * space to add around a button that can become the default widget of its
-   * window. Extra outside space is always drawn outside the button border.
-   * For more information about default widgets, see gtk_widget_grab_default().
-   *
-   * Deprecated: 3.14: Use CSS margins and padding instead;
-   *     the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("default-outside-border",
-							       P_("Default Outside Spacing"),
-							       P_("Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside the border"),
-							       GTK_TYPE_BORDER,
-							       GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButton:child-displacement-x:
-   *
-   * How far in the x direction to move the child when the button is depressed.
-   *
-   * Deprecated: 3.20: Use CSS margins and padding instead;
-   *     the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child-displacement-x",
-							     P_("Child X Displacement"),
-							     P_("How far in the x direction to move the child when the button is depressed"),
-							     G_MININT,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButton:child-displacement-y:
-   *
-   * How far in the y direction to move the child when the button is depressed.
-   *
-   * Deprecated: 3.20: Use CSS margins and padding instead;
-   *     the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child-displacement-y",
-							     P_("Child Y Displacement"),
-							     P_("How far in the y direction to move the child when the button is depressed"),
-							     G_MININT,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButton:displace-focus:
-   *
-   * Whether the child_displacement_x/child_displacement_y properties
-   * should also affect the focus rectangle.
-   *
-   * Since: 2.6
-   *
-   * Deprecated: 3.20: Use CSS margins and padding instead;
-   *     the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("displace-focus",
-								 P_("Displace focus"),
-								 P_("Whether the child_displacement_x/_y properties should also affect the focus rectangle"),
-								 FALSE,
-								 GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButton:inner-border:
-   *
-   * Sets the border between the button edges and child.
-   *
-   * Since: 2.10
-   *
-   * Deprecated: 3.4: Use the standard border and padding CSS properties;
-   *   the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("inner-border",
-                                                               P_("Inner Border"),
-                                                               P_("Border between button edges and child."),
-                                                               GTK_TYPE_BORDER,
-                                                               GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButton::image-spacing:
-   *
-   * Spacing in pixels between the image and label.
-   *
-   * Since: 2.10
-   *
-   * Deprecated: 3.20: Use CSS margins and padding instead.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("image-spacing",
-							     P_("Image spacing"),
-							     P_("Spacing in pixels between the image and label"),
-							     0,
-							     G_MAXINT,
-							     2,
-							     GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "button");
 }
@@ -1064,7 +941,6 @@ gtk_button_construct_child (GtkButton *button)
   GtkWidget *label;
   GtkWidget *box;
   GtkWidget *image = NULL;
-  gint image_spacing;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
   gtk_style_context_remove_class (context, "image-button");
@@ -1075,10 +951,6 @@ gtk_button_construct_child (GtkButton *button)
 
   if (!priv->label_text && !priv->image)
     return;
-
-  gtk_style_context_get_style (context,
-                               "image-spacing", &image_spacing,
-                               NULL);
 
   if (priv->image)
     {
@@ -1107,9 +979,9 @@ gtk_button_construct_child (GtkButton *button)
 
       if (priv->image_position == GTK_POS_LEFT ||
 	  priv->image_position == GTK_POS_RIGHT)
-	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, image_spacing);
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       else
-	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, image_spacing);
+	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
       gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
