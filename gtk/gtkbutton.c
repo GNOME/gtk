@@ -1704,51 +1704,6 @@ gtk_button_get_use_underline (GtkButton *button)
   return button->priv->use_underline;
 }
 
-/**
- * gtk_button_set_focus_on_click:
- * @button: a #GtkButton
- * @focus_on_click: whether the button grabs focus when clicked with the mouse
- *
- * Sets whether the button will grab focus when it is clicked with the mouse.
- * Making mouse clicks not grab focus is useful in places like toolbars where
- * you don’t want the keyboard focus removed from the main area of the
- * application.
- *
- * Since: 2.4
- *
- * Deprecated: 3.20: Use gtk_widget_set_focus_on_click() instead
- */
-void
-gtk_button_set_focus_on_click (GtkButton *button,
-			       gboolean   focus_on_click)
-{
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  gtk_widget_set_focus_on_click (GTK_WIDGET (button), focus_on_click);
-}
-
-/**
- * gtk_button_get_focus_on_click:
- * @button: a #GtkButton
- *
- * Returns whether the button grabs focus when it is clicked with the mouse.
- * See gtk_button_set_focus_on_click().
- *
- * Returns: %TRUE if the button grabs focus when it is clicked with
- *               the mouse.
- *
- * Since: 2.4
- *
- * Deprecated: 3.20: Use gtk_widget_get_focus_on_click() instead
- */
-gboolean
-gtk_button_get_focus_on_click (GtkButton *button)
-{
-  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
-
-  return gtk_widget_get_focus_on_click (GTK_WIDGET (button));
-}
-
 static void
 gtk_button_update_state (GtkButton *button)
 {
