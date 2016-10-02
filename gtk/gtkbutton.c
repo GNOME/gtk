@@ -81,8 +81,6 @@
 
 
 enum {
-  PRESSED,
-  RELEASED,
   CLICKED,
   ENTER,
   LEAVE,
@@ -136,12 +134,9 @@ static gint gtk_button_enter_notify (GtkWidget * widget,
 				     GdkEventCrossing * event);
 static gint gtk_button_leave_notify (GtkWidget * widget,
 				     GdkEventCrossing * event);
-static void gtk_real_button_pressed (GtkButton * button);
-static void gtk_real_button_released (GtkButton * button);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_update_state   (GtkButton          *button);
-static void gtk_button_enter_leave    (GtkButton          *button);
 static void gtk_button_finish_activate (GtkButton         *button,
 					gboolean           do_it);
 
@@ -257,11 +252,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   gtk_container_class_handle_border_width (container_class);
 
-  klass->pressed = gtk_real_button_pressed;
-  klass->released = gtk_real_button_released;
   klass->clicked = NULL;
-  klass->enter = gtk_button_enter_leave;
-  klass->leave = gtk_button_enter_leave;
   klass->activate = gtk_real_button_activate;
 
   props[PROP_LABEL] =
@@ -344,45 +335,11 @@ gtk_button_class_init (GtkButtonClass *klass)
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /**
-   * GtkButton::pressed:
-   * @button: the object that received the signal
-   *
-   * Emitted when the button is pressed.
-   *
-   * Deprecated: 2.8: Use the #GtkWidget::button-press-event signal.
-   */ 
-  button_signals[PRESSED] =
-    g_signal_new (I_("pressed"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkButtonClass, pressed),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkButton::released:
-   * @button: the object that received the signal
-   *
-   * Emitted when the button is released.
-   *
-   * Deprecated: 2.8: Use the #GtkWidget::button-release-event signal.
-   */ 
-  button_signals[RELEASED] =
-    g_signal_new (I_("released"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkButtonClass, released),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
-
-  /**
    * GtkButton::clicked:
    * @button: the object that received the signal
    *
    * Emitted when the button has been activated (pressed and released).
-   */ 
+   */
   button_signals[CLICKED] =
     g_signal_new (I_("clicked"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -393,45 +350,11 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  G_TYPE_NONE, 0);
 
   /**
-   * GtkButton::enter:
-   * @button: the object that received the signal
-   *
-   * Emitted when the pointer enters the button.
-   *
-   * Deprecated: 2.8: Use the #GtkWidget::enter-notify-event signal.
-   */ 
-  button_signals[ENTER] =
-    g_signal_new (I_("enter"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkButtonClass, enter),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkButton::leave:
-   * @button: the object that received the signal
-   *
-   * Emitted when the pointer leaves the button.
-   *
-   * Deprecated: 2.8: Use the #GtkWidget::leave-notify-event signal.
-   */ 
-  button_signals[LEAVE] =
-    g_signal_new (I_("leave"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkButtonClass, leave),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
-
-  /**
    * GtkButton::activate:
    * @widget: the object which received the signal.
    *
    * The ::activate signal on GtkButton is an action signal and
-   * emitting it causes the button to animate press then release. 
+   * emitting it causes the button to animate press then release.
    * Applications should never connect to this signal, but use the
    * #GtkButton::clicked signal.
    */
@@ -586,8 +509,47 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
     gtk_widget_grab_focus (widget);
 
   priv->in_button = TRUE;
-  g_signal_emit (button, button_signals[PRESSED], 0);
+
+  if (!priv->activate_timeout)
+    {
+      priv->button_down = TRUE;
+      gtk_button_update_state (button);
+    }
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static gboolean
+touch_release_in_button (GtkButton *button)
+{
+  GtkButtonPrivate *priv;
+  gint width, height;
+  GdkEvent *event;
+  gdouble x, y;
+
+  priv = button->priv;
+  event = gtk_get_current_event ();
+
+  if (!event)
+    return FALSE;
+
+  if (event->type != GDK_TOUCH_END ||
+      event->touch.window != priv->event_window)
+    {
+      gdk_event_free (event);
+      return FALSE;
+    }
+
+  gdk_event_get_coords (event, &x, &y);
+  width = gdk_window_get_width (priv->event_window);
+  height = gdk_window_get_height (priv->event_window);
+
+  gdk_event_free (event);
+
+  if (x >= 0 && x <= width &&
+      y >= 0 && y <= height)
+    return TRUE;
+
+  return FALSE;
 }
 
 static void
@@ -601,7 +563,10 @@ multipress_released_cb (GtkGestureMultiPress *gesture,
   GtkButtonPrivate *priv = button->priv;
   GdkEventSequence *sequence;
 
-  g_signal_emit (button, button_signals[RELEASED], 0);
+  gtk_button_do_release (button,
+                         gtk_widget_is_sensitive (GTK_WIDGET (button)) &&
+                         (button->priv->in_button ||
+                          touch_release_in_button (button)));
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
@@ -1273,38 +1238,6 @@ gtk_button_new_with_mnemonic (const gchar *label)
 }
 
 /**
- * gtk_button_pressed:
- * @button: The #GtkButton you want to send the signal to.
- *
- * Emits a #GtkButton::pressed signal to the given #GtkButton.
- *
- * Deprecated: 2.20: Use the #GtkWidget::button-press-event signal.
- */
-void
-gtk_button_pressed (GtkButton *button)
-{
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  g_signal_emit (button, button_signals[PRESSED], 0);
-}
-
-/**
- * gtk_button_released:
- * @button: The #GtkButton you want to send the signal to.
- *
- * Emits a #GtkButton::released signal to the given #GtkButton.
- *
- * Deprecated: 2.20: Use the #GtkWidget::button-release-event signal.
- */
-void
-gtk_button_released (GtkButton *button)
-{
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  g_signal_emit (button, button_signals[RELEASED], 0);
-}
-
-/**
  * gtk_button_clicked:
  * @button: The #GtkButton you want to send the signal to.
  *
@@ -1316,38 +1249,6 @@ gtk_button_clicked (GtkButton *button)
   g_return_if_fail (GTK_IS_BUTTON (button));
 
   g_signal_emit (button, button_signals[CLICKED], 0);
-}
-
-/**
- * gtk_button_enter:
- * @button: The #GtkButton you want to send the signal to.
- *
- * Emits a #GtkButton::enter signal to the given #GtkButton.
- *
- * Deprecated: 2.20: Use the #GtkWidget::enter-notify-event signal.
- */
-void
-gtk_button_enter (GtkButton *button)
-{
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  g_signal_emit (button, button_signals[ENTER], 0);
-}
-
-/**
- * gtk_button_leave:
- * @button: The #GtkButton you want to send the signal to.
- *
- * Emits a #GtkButton::leave signal to the given #GtkButton.
- *
- * Deprecated: 2.20: Use the #GtkWidget::leave-notify-event signal.
- */
-void
-gtk_button_leave (GtkButton *button)
-{
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  g_signal_emit (button, button_signals[LEAVE], 0);
 }
 
 /**
@@ -1623,7 +1524,7 @@ gtk_button_enter_notify (GtkWidget        *widget,
       (event->detail != GDK_NOTIFY_INFERIOR))
     {
       priv->in_button = TRUE;
-      g_signal_emit (button, button_signals[ENTER], 0);
+      gtk_button_update_state (button);
     }
 
   return FALSE;
@@ -1640,68 +1541,13 @@ gtk_button_leave_notify (GtkWidget        *widget,
       (event->detail != GDK_NOTIFY_INFERIOR))
     {
       priv->in_button = FALSE;
-      g_signal_emit (button, button_signals[LEAVE], 0);
+      gtk_button_update_state (button);
     }
 
   return FALSE;
 }
 
 static void
-gtk_real_button_pressed (GtkButton *button)
-{
-  GtkButtonPrivate *priv = button->priv;
-
-  if (priv->activate_timeout)
-    return;
-
-  priv->button_down = TRUE;
-  gtk_button_update_state (button);
-}
-
-static gboolean
-touch_release_in_button (GtkButton *button)
-{
-  GtkButtonPrivate *priv;
-  gint width, height;
-  GdkEvent *event;
-  gdouble x, y;
-
-  priv = button->priv;
-  event = gtk_get_current_event ();
-
-  if (!event)
-    return FALSE;
-
-  if (event->type != GDK_TOUCH_END ||
-      event->touch.window != priv->event_window)
-    {
-      gdk_event_free (event);
-      return FALSE;
-    }
-
-  gdk_event_get_coords (event, &x, &y);
-  width = gdk_window_get_width (priv->event_window);
-  height = gdk_window_get_height (priv->event_window);
-
-  gdk_event_free (event);
-
-  if (x >= 0 && x <= width &&
-      y >= 0 && y <= height)
-    return TRUE;
-
-  return FALSE;
-}
-
-static void
-gtk_real_button_released (GtkButton *button)
-{
-  gtk_button_do_release (button,
-                         gtk_widget_is_sensitive (GTK_WIDGET (button)) &&
-                         (button->priv->in_button ||
-                          touch_release_in_button (button)));
-}
-
-static void 
 gtk_real_button_clicked (GtkButton *button)
 {
   GtkButtonPrivate *priv = button->priv;
@@ -2029,12 +1875,6 @@ gtk_button_get_focus_on_click (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
 
   return gtk_widget_get_focus_on_click (GTK_WIDGET (button));
-}
-
-static void
-gtk_button_enter_leave (GtkButton *button)
-{
-  gtk_button_update_state (button);
 }
 
 static void
