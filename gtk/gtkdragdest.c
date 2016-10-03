@@ -56,9 +56,6 @@ gtk_drag_dest_site_destroy (gpointer data)
 {
   GtkDragDestSite *site = data;
 
-  if (site->proxy_window)
-    g_object_unref (site->proxy_window);
-
   if (site->target_list)
     gtk_target_list_unref (site->target_list);
 
@@ -167,48 +164,6 @@ gtk_drag_dest_set (GtkWidget            *widget,
   else
     site->target_list = NULL;
   site->actions = actions;
-  site->do_proxy = FALSE;
-  site->proxy_window = NULL;
-  site->track_motion = FALSE;
-
-  gtk_drag_dest_set_internal (widget, site);
-}
-
-/**
- * gtk_drag_dest_set_proxy: (method)
- * @widget: a #GtkWidget
- * @proxy_window: the window to which to forward drag events
- * @protocol: the drag protocol which the @proxy_window accepts
- *   (You can use gdk_drag_get_protocol() to determine this)
- * @use_coordinates: If %TRUE, send the same coordinates to the
- *   destination, because it is an embedded
- *   subwindow.
- *
- * Sets this widget as a proxy for drops to another window.
- */
-void
-gtk_drag_dest_set_proxy (GtkWidget       *widget,
-                         GdkWindow       *proxy_window,
-                         GdkDragProtocol  protocol,
-                         gboolean         use_coordinates)
-{
-  GtkDragDestSite *site;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!proxy_window || GDK_IS_WINDOW (proxy_window));
-
-  site = g_slice_new (GtkDragDestSite);
-
-  site->flags = 0;
-  site->have_drag = FALSE;
-  site->target_list = NULL;
-  site->actions = 0;
-  site->proxy_window = proxy_window;
-  if (proxy_window)
-    g_object_ref (proxy_window);
-  site->do_proxy = TRUE;
-  site->proxy_protocol = protocol;
-  site->proxy_coords = use_coordinates;
   site->track_motion = FALSE;
 
   gtk_drag_dest_set_internal (widget, site);

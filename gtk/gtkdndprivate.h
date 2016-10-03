@@ -32,8 +32,6 @@ struct _GtkDragDestSite
   GtkDestDefaults    flags;
   GtkTargetList     *target_list;
   GdkDragAction      actions;
-  GdkWindow         *proxy_window;
-  GdkDragProtocol    proxy_protocol;
   guint              do_proxy     : 1;
   guint              proxy_coords : 1;
   guint              have_drag    : 1;

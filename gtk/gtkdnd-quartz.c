@@ -468,25 +468,6 @@ gtk_drag_dest_set (GtkWidget            *widget,
 }
 
 /**
- * gtk_drag_dest_set_proxy: (method)
- * @widget: a #GtkWidget
- * @proxy_window: the window to which to forward drag events
- * @protocol: the drag protocol which the @proxy_window accepts
- *   (You can use gdk_drag_get_protocol() to determine this)
- * @use_coordinates: If %TRUE, send the same coordinates to the
- *   destination, because it is an embedded
- *   subwindow.
- */
-void 
-gtk_drag_dest_set_proxy (GtkWidget      *widget,
-			 GdkWindow      *proxy_window,
-			 GdkDragProtocol protocol,
-			 gboolean        use_coordinates)
-{
-  g_warning ("gtk_drag_dest_set_proxy is not supported on Mac OS X.");
-}
-
-/**
  * gtk_drag_dest_unset: (method)
  * @widget: a #GtkWidget
  */

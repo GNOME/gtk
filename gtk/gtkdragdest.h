@@ -74,12 +74,6 @@ void gtk_drag_dest_set   (GtkWidget            *widget,
                           GdkDragAction         actions);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_drag_dest_set_proxy (GtkWidget      *widget,
-                              GdkWindow      *proxy_window,
-                              GdkDragProtocol protocol,
-                              gboolean        use_coordinates);
-
-GDK_AVAILABLE_IN_ALL
 void gtk_drag_dest_unset (GtkWidget          *widget);
 
 GDK_AVAILABLE_IN_ALL

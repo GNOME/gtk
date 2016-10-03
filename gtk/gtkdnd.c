@@ -113,8 +113,6 @@ struct _GtkDragSourceInfo
   guint32            grab_time;   /* timestamp for initial grab */
   GList             *selections;  /* selections we've claimed */
 
-  GtkDragDestInfo   *proxy_dest;  /* Set if this is a proxy drag */
-
   guint              update_idle;      /* Idle function to update the drag */
   guint              drop_timeout;     /* Timeout for aborting drop */
   guint              destroy_icon : 1; /* If true, destroy icon_widget */
@@ -125,13 +123,6 @@ struct _GtkDragDestInfo
 {
   GtkWidget         *widget;              /* Widget in which drag is in */
   GdkDragContext    *context;             /* Drag context */
-  GtkDragSourceInfo *proxy_source;        /* Set if this is a proxy drag */
-  GtkSelectionData  *proxy_data;          /* Set while retrieving proxied data */
-  guint32            proxy_drop_time;     /* Timestamp for proxied drop */
-  guint              proxy_drop_wait : 1; /* Set if we are waiting for a
-                                           * status reply before sending
-                                           * a proxied drop on.
-                                           */
   guint              dropped : 1;         /* Set after we receive a drop */
   gint               drop_x, drop_y;      /* Position of drop */
 };
@@ -176,9 +167,6 @@ static gboolean gtk_drag_find_widget            (GtkWidget        *widget,
                                                  gint              y,
                                                  guint32           time,
                                                  GtkDragDestCallback callback);
-static void     gtk_drag_proxy_begin            (GtkWidget        *widget,
-                                                 GtkDragDestInfo  *dest_info,
-                                                 guint32           time);
 static void     gtk_drag_dest_leave             (GtkWidget        *widget,
                                                  GdkDragContext   *context,
                                                  guint             time);
@@ -229,9 +217,6 @@ static void gtk_drag_context_drop_performed_cb (GdkDragContext    *context,
 static void gtk_drag_context_cancel_cb         (GdkDragContext      *context,
                                                 GdkDragCancelReason  reason,
                                                 GtkDragSourceInfo   *info);
-static void gtk_drag_context_action_cb         (GdkDragContext    *context,
-                                                GdkDragAction      action,
-                                                GtkDragSourceInfo *info);
 static void gtk_drag_context_dnd_finished_cb   (GdkDragContext    *context,
                                                 GtkDragSourceInfo *info);
 static void gtk_drag_add_update_idle           (GtkDragSourceInfo *info);
@@ -1091,7 +1076,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
             if (!found)
               gdk_drag_status (context, 0, event->dnd.time);
           }
-        else if (event->type == GDK_DROP_START && !info->proxy_source)
+        else if (event->type == GDK_DROP_START)
           {
             gdk_drop_reply (context, found, event->dnd.time);
           }
@@ -1118,18 +1103,6 @@ gtk_drag_selection_received (GtkWidget        *widget,
 
   context = g_object_get_data (G_OBJECT (widget), "drag-context");
   info = gtk_drag_get_dest_info (context, FALSE);
-
-  if (info->proxy_data && 
-      gtk_selection_data_get_target (info->proxy_data) == gtk_selection_data_get_target (selection_data))
-    {
-      gtk_selection_data_set (info->proxy_data,
-                              gtk_selection_data_get_data_type (selection_data),
-                              gtk_selection_data_get_format (selection_data),
-                              gtk_selection_data_get_data (selection_data),
-                              gtk_selection_data_get_length (selection_data));
-      gtk_main_quit ();
-      return;
-    }
 
   target = gtk_selection_data_get_target (selection_data);
   if (target == gdk_atom_intern_static_string ("DELETE"))
@@ -1293,51 +1266,6 @@ gtk_drag_find_widget (GtkWidget           *widget,
 }
 
 static void
-gtk_drag_proxy_begin (GtkWidget       *widget,
-                      GtkDragDestInfo *dest_info,
-                      guint32          time)
-{
-  GtkDragSourceInfo *source_info;
-  GList *tmp_list;
-  GdkDragContext *context;
-  GtkWidget *ipc_widget;
-
-  if (dest_info->proxy_source)
-    {
-      gdk_drag_abort (dest_info->proxy_source->context, time);
-      gtk_drag_source_info_destroy (dest_info->proxy_source);
-      dest_info->proxy_source = NULL;
-    }
-  
-  ipc_widget = gtk_drag_get_ipc_widget (widget);
-  context = gdk_drag_begin (gtk_widget_get_window (ipc_widget),
-                            gdk_drag_context_list_targets (dest_info->context));
-
-  source_info = gtk_drag_get_source_info (context, TRUE);
-
-  source_info->ipc_widget = ipc_widget;
-  source_info->widget = g_object_ref (widget);
-
-  source_info->target_list = gtk_target_list_new (NULL, 0);
-  tmp_list = gdk_drag_context_list_targets (dest_info->context);
-  while (tmp_list)
-    {
-      gtk_target_list_add (source_info->target_list,
-                           GDK_POINTER_TO_ATOM (tmp_list->data), 0, 0);
-      tmp_list = tmp_list->next;
-    }
-
-  source_info->proxy_dest = dest_info;
-  
-  g_signal_connect (ipc_widget,
-                    "selection-get",
-                    G_CALLBACK (gtk_drag_selection_get),
-                    source_info);
-  
-  dest_info->proxy_source = source_info;
-}
-
-static void
 gtk_drag_dest_set_widget (GtkDragDestInfo *info,
                           GtkWidget       *widget)
 {
@@ -1421,30 +1349,14 @@ gtk_drag_dest_leave (GtkWidget      *widget,
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_if_fail (site != NULL);
 
-  if (site->do_proxy)
-    {
-      GtkDragDestInfo *info = gtk_drag_get_dest_info (context, FALSE);
+  if ((site->flags & GTK_DEST_DEFAULT_HIGHLIGHT) && site->have_drag)
+    gtk_drag_unhighlight (widget);
 
-      if (info->proxy_source && info->proxy_source->widget == widget && !info->dropped)
-        {
-          gdk_drag_abort (info->proxy_source->context, time);
-          gtk_drag_source_info_destroy (info->proxy_source);
-          info->proxy_source = NULL;
-        }
-      
-      return;
-    }
-  else
-    {
-      if ((site->flags & GTK_DEST_DEFAULT_HIGHLIGHT) && site->have_drag)
-        gtk_drag_unhighlight (widget);
-
-      if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag ||
-          site->track_motion)
-        g_signal_emit_by_name (widget, "drag-leave", context, time);
-      
-      site->have_drag = FALSE;
-    }
+  if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag ||
+      site->track_motion)
+    g_signal_emit_by_name (widget, "drag-leave", context, time);
+  
+  site->have_drag = FALSE;
 }
 
 static gboolean
@@ -1460,56 +1372,6 @@ gtk_drag_dest_motion (GtkWidget      *widget,
 
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
-
-  if (site->do_proxy)
-    {
-      GdkAtom selection;
-      GdkEvent *current_event;
-      GdkWindow *dest_window;
-      GdkDragProtocol proto;
-        
-      GtkDragDestInfo *info = gtk_drag_get_dest_info (context, FALSE);
-
-      if (!info->proxy_source || info->proxy_source->widget != widget)
-        gtk_drag_proxy_begin (widget, info, time);
-
-      current_event = gtk_get_current_event ();
-
-      if (site->proxy_window)
-        {
-          dest_window = site->proxy_window;
-          proto = site->proxy_protocol;
-        }
-      else
-        {
-          gdk_drag_find_window_for_screen (info->proxy_source->context,
-                                           NULL,
-                                           gdk_window_get_screen (current_event->dnd.window),
-                                           current_event->dnd.x_root, 
-                                           current_event->dnd.y_root,
-                                           &dest_window, &proto);
-        }
-      
-      gdk_drag_motion (info->proxy_source->context, 
-                       dest_window, proto,
-                       current_event->dnd.x_root, 
-                       current_event->dnd.y_root, 
-                       gdk_drag_context_get_suggested_action (context),
-                       gdk_drag_context_get_actions (context),
-                       time);
-
-      if (!site->proxy_window && dest_window)
-        g_object_unref (dest_window);
-
-      selection = gdk_drag_get_selection (info->proxy_source->context);
-      if (selection && 
-          selection != gdk_drag_get_selection (info->context))
-        gtk_drag_source_check_selection (info->proxy_source, selection, time);
-
-      gdk_event_free (current_event);
-      
-      return TRUE;
-    }
 
   if (site->track_motion || site->flags & GTK_DEST_DEFAULT_MOTION)
     {
@@ -1564,6 +1426,7 @@ gtk_drag_dest_drop (GtkWidget      *widget,
 {
   GtkDragDestSite *site;
   GtkDragDestInfo *info;
+  gboolean retval;
 
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
@@ -1574,88 +1437,23 @@ gtk_drag_dest_drop (GtkWidget      *widget,
   info->drop_x = x;
   info->drop_y = y;
 
-  if (site->do_proxy)
+  if (site->flags & GTK_DEST_DEFAULT_DROP)
     {
-      if (info->proxy_source || 
-          (gdk_drag_context_get_protocol (info->context) == GDK_DRAG_PROTO_ROOTWIN))
+      GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
+
+      if (target == GDK_NONE)
         {
-          gtk_drag_drop (info->proxy_source, time);
+          gtk_drag_finish (context, FALSE, FALSE, time);
+          return TRUE;
         }
-      else
-        {
-          /* We need to synthesize a motion event, wait for a status,
-           * and, if we get a good one, do a drop.
-           */
-          
-          GdkEvent *current_event;
-          GdkAtom selection;
-          GdkWindow *dest_window;
-          GdkDragProtocol proto;
-          
-          gtk_drag_proxy_begin (widget, info, time);
-          info->proxy_drop_wait = TRUE;
-          info->proxy_drop_time = time;
-          
-          current_event = gtk_get_current_event ();
-
-          if (site->proxy_window)
-            {
-              dest_window = site->proxy_window;
-              proto = site->proxy_protocol;
-            }
-          else
-            {
-              gdk_drag_find_window_for_screen (info->proxy_source->context,
-                                               NULL,
-                                               gdk_window_get_screen (current_event->dnd.window),
-                                               current_event->dnd.x_root, 
-                                               current_event->dnd.y_root,
-                                               &dest_window, &proto);
-            }
-
-          gdk_drag_motion (info->proxy_source->context, 
-                           dest_window, proto,
-                           current_event->dnd.x_root, 
-                           current_event->dnd.y_root, 
-                           gdk_drag_context_get_suggested_action (context),
-                           gdk_drag_context_get_actions (context),
-                           time);
-
-          if (!site->proxy_window && dest_window)
-            g_object_unref (dest_window);
-
-          selection = gdk_drag_get_selection (info->proxy_source->context);
-          if (selection && 
-              selection != gdk_drag_get_selection (info->context))
-            gtk_drag_source_check_selection (info->proxy_source, selection, time);
-
-          gdk_event_free (current_event);
-        }
-
-      return TRUE;
+      else 
+        gtk_drag_get_data (widget, context, target, time);
     }
-  else
-    {
-      gboolean retval;
 
-      if (site->flags & GTK_DEST_DEFAULT_DROP)
-        {
-          GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
+  g_signal_emit_by_name (widget, "drag-drop",
+                         context, x, y, time, &retval);
 
-          if (target == GDK_NONE)
-            {
-              gtk_drag_finish (context, FALSE, FALSE, time);
-              return TRUE;
-            }
-          else 
-            gtk_drag_get_data (widget, context, target, time);
-        }
-
-      g_signal_emit_by_name (widget, "drag-drop",
-                             context, x, y, time, &retval);
-
-      return (site->flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
-    }
+  return (site->flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
 }
 
 /***************
@@ -1865,8 +1663,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                         G_CALLBACK (gtk_drag_context_dnd_finished_cb), info);
       g_signal_connect (context, "cancel",
                         G_CALLBACK (gtk_drag_context_cancel_cb), info);
-      g_signal_connect (context, "action-changed",
-                        G_CALLBACK (gtk_drag_context_action_cb), info);
 
       selection = gdk_drag_get_selection (context);
       if (selection)
@@ -2432,30 +2228,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
     case GDK_DRAG_STATUS:
       {
         GdkCursor *cursor;
-        if (info->proxy_dest)
-          {
-            if (!event->dnd.send_event)
-              {
-                if (info->proxy_dest->proxy_drop_wait)
-                  {
-                    gboolean result = gdk_drag_context_get_selected_action (context) != 0;
-                    
-                    /* Aha - we can finally pass the DROP on... */
-                    gdk_drop_reply (info->proxy_dest->context, result, info->proxy_dest->proxy_drop_time);
-                    if (result)
-                      gdk_drag_drop (info->context, info->proxy_dest->proxy_drop_time);
-                    else
-                      gtk_drag_finish (info->proxy_dest->context, FALSE, FALSE, info->proxy_dest->proxy_drop_time);
-                  }
-                else
-                  {
-                    gdk_drag_status (info->proxy_dest->context,
-                                     gdk_drag_context_get_selected_action (event->dnd.context),
-                                     event->dnd.time);
-                  }
-              }
-          }
-        else if (info->have_grab)
+        if (info->have_grab)
           {
             cursor = gtk_drag_get_cursor (widget, 
                                           gtk_widget_get_display (widget),
@@ -2540,22 +2313,12 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
   success = (result == GTK_DRAG_RESULT_SUCCESS);
   gtk_drag_source_release_selections (info, time); 
 
-  if (info->proxy_dest)
-    {
-      /* The time from the event isn't reliable for Xdnd drags */
-      gtk_drag_finish (info->proxy_dest->context, success, FALSE, 
-                       info->proxy_dest->proxy_drop_time);
-      gtk_drag_source_info_destroy (info);
-    }
-  else
-    {
-      if (!success)
-        g_signal_emit_by_name (info->widget, "drag-failed",
-                               info->context, result, &success);
+  if (!success)
+    g_signal_emit_by_name (info->widget, "drag-failed",
+                           info->context, result, &success);
 
-      gdk_drag_drop_done (info->context, success);
-      gtk_drag_source_info_destroy (info);
-    }
+  gdk_drag_drop_done (info->context, success);
+  gtk_drag_source_info_destroy (info);
 }
 
 static void
@@ -2656,31 +2419,15 @@ gtk_drag_selection_get (GtkWidget        *widget,
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
       break;
     default:
-      if (info->proxy_dest)
+      if (gtk_target_list_find (info->target_list, 
+                                gtk_selection_data_get_target (selection_data),
+                                &target_info))
         {
-          /* This is sort of dangerous and needs to be thought
-           * through better
-           */
-          info->proxy_dest->proxy_data = selection_data;
-          gtk_drag_get_data (info->widget,
-                             info->proxy_dest->context,
-                             gtk_selection_data_get_target (selection_data),
-                             time);
-          gtk_main ();
-          info->proxy_dest->proxy_data = NULL;
-        }
-      else
-        {
-          if (gtk_target_list_find (info->target_list, 
-                                    gtk_selection_data_get_target (selection_data),
-                                    &target_info))
-            {
-              g_signal_emit_by_name (info->widget, "drag-data-get",
-                                     info->context,
-                                     selection_data,
-                                     target_info,
-                                     time);
-            }
+          g_signal_emit_by_name (info->widget, "drag-data-get",
+                                 info->context,
+                                 selection_data,
+                                 target_info,
+                                 time);
         }
       break;
     }
@@ -2730,9 +2477,6 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   g_signal_handlers_disconnect_by_func (info->context,
                                         gtk_drag_context_cancel_cb,
                                         info);
-  g_signal_handlers_disconnect_by_func (info->context,
-                                        gtk_drag_context_action_cb,
-                                        info);
 
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
                                         gtk_drag_grab_broken_event_cb,
@@ -2753,8 +2497,7 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
                                         gtk_drag_selection_get,
                                         info);
 
-  if (!info->proxy_dest)
-    g_signal_emit_by_name (info->widget, "drag-end", info->context);
+  g_signal_emit_by_name (info->widget, "drag-end", info->context);
 
   g_clear_object (&info->widget);
 
@@ -2977,46 +2720,10 @@ gtk_drag_context_cancel_cb (GdkDragContext      *context,
 }
 
 static void
-gtk_drag_context_action_cb (GdkDragContext    *context,
-                            GdkDragAction      action,
-                            GtkDragSourceInfo *info)
-{
-  if (info->proxy_dest)
-    {
-      if (info->proxy_dest->proxy_drop_wait)
-        {
-          gboolean result = gdk_drag_context_get_selected_action (context) != 0;
-
-          /* Aha - we can finally pass the DROP on... */
-          gdk_drop_reply (info->proxy_dest->context, result, info->proxy_dest->proxy_drop_time);
-          if (result)
-            gdk_drag_drop (info->context, info->proxy_dest->proxy_drop_time);
-          else
-            gtk_drag_finish (info->proxy_dest->context, FALSE, FALSE, info->proxy_dest->proxy_drop_time);
-        }
-      else
-        {
-          gdk_drag_status (info->proxy_dest->context,
-                           gdk_drag_context_get_selected_action (context),
-                           GDK_CURRENT_TIME);
-        }
-
-      g_signal_stop_emission_by_name (context, "action");
-    }
-}
-
-static void
 gtk_drag_context_dnd_finished_cb (GdkDragContext    *context,
                                   GtkDragSourceInfo *info)
 {
   gtk_drag_source_release_selections (info, GDK_CURRENT_TIME);
-
-  if (info->proxy_dest)
-    {
-      /* The time from the event isn't reliable for Xdnd drags */
-      gtk_drag_finish (info->proxy_dest->context, TRUE, FALSE,
-                       info->proxy_dest->proxy_drop_time);
-    }
 
   if (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
     {
@@ -3216,9 +2923,6 @@ gtk_drag_abort_timeout (gpointer data)
 {
   GtkDragSourceInfo *info = data;
   guint32 time = GDK_CURRENT_TIME;
-
-  if (info->proxy_dest)
-    time = info->proxy_dest->proxy_drop_time;
 
   info->drop_timeout = 0;
   gtk_drag_drop_finished (info, GTK_DRAG_RESULT_TIMEOUT_EXPIRED, time);
