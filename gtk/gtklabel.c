@@ -898,7 +898,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_MNEMONIC_WIDGET] =
       g_param_spec_object ("mnemonic-widget",
                            P_("Mnemonic widget"),
-                           P_("The widget to be activated when the label's mnemonic key is pressed"),
+                           P_("The widget to be activated when the label’s mnemonic key is pressed"),
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 

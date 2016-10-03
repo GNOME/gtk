@@ -291,7 +291,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                    PROP_LABEL,
                                    g_param_spec_string ("label",
                                                         P_("Label"),
-                                                        P_("Text of the expander's label"),
+                                                        P_("Text of the expander’s label"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 

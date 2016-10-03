@@ -4373,13 +4373,13 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 G_PARAM_READWRITE);
   properties[PROP_SHOW_DESKTOP] =
           g_param_spec_boolean ("show-desktop",
-                                P_("Show 'Desktop'"),
+                                P_("Show “Desktop”"),
                                 P_("Whether the sidebar includes a builtin shortcut to the Desktop folder"),
                                 TRUE,
                                 G_PARAM_READWRITE);
   properties[PROP_SHOW_ENTER_LOCATION] =
           g_param_spec_boolean ("show-enter-location",
-                                P_("Show 'Enter Location'"),
+                                P_("Show “Enter Location”"),
                                 P_("Whether the sidebar includes a builtin shortcut to manually enter a location"),
                                 FALSE,
                                 G_PARAM_READWRITE);
@@ -4391,13 +4391,13 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 G_PARAM_READWRITE);
   properties[PROP_SHOW_TRASH] =
           g_param_spec_boolean ("show-trash",
-                                P_("Show 'Trash'"),
+                                P_("Show “Trash”"),
                                 P_("Whether the sidebar includes a builtin shortcut to the Trash location"),
                                 TRUE,
                                 G_PARAM_READWRITE);
   properties[PROP_SHOW_OTHER_LOCATIONS] =
           g_param_spec_boolean ("show-other-locations",
-                                P_("Show 'Other locations'"),
+                                P_("Show “Other locations”"),
                                 P_("Whether the sidebar includes an item to show external locations"),
                                 FALSE,
                                 G_PARAM_READWRITE);

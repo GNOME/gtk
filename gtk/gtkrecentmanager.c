@@ -1050,7 +1050,7 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
 
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
                    GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-                   _("Unable to find an item with URI '%s'"),
+                   _("Unable to find an item with URI “%s”"),
                    uri);
 
       return FALSE;
@@ -1063,7 +1063,7 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
 
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
                    GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-                   _("Unable to find an item with URI '%s'"),
+                   _("Unable to find an item with URI “%s”"),
                    uri);
 
       return FALSE;
@@ -1200,7 +1200,7 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
 
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
                    GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-                   _("Unable to find an item with URI '%s'"),
+                   _("Unable to find an item with URI “%s”"),
                    uri);
 
       return NULL;
@@ -1210,7 +1210,7 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
     {
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
                    GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-                   _("Unable to find an item with URI '%s'"),
+                   _("Unable to find an item with URI “%s”"),
                    uri);
       return NULL;
     }
@@ -1262,7 +1262,7 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
     {
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
                    GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-                   _("Unable to find an item with URI '%s'"),
+                   _("Unable to find an item with URI “%s”"),
                    uri);
       return FALSE;
     }
@@ -1271,7 +1271,7 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
     {
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
                    GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-                   _("Unable to find an item with URI '%s'"),
+                   _("Unable to find an item with URI “%s”"),
                    uri);
       return FALSE;
     }
@@ -1286,7 +1286,7 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
 
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
                    GTK_RECENT_MANAGER_ERROR_UNKNOWN,
-                   _("Unable to move the item with URI '%s' to '%s'"),
+                   _("Unable to move the item with URI “%s” to “%s”"),
                    uri, new_uri);
       return FALSE;
     }
@@ -2504,7 +2504,7 @@ gtk_recent_info_create_app_info (GtkRecentInfo  *info,
     {
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
                    GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED,
-                   _("No registered application with name '%s' for item with URI '%s' found"),
+                   _("No registered application with name “%s” for item with URI “%s” found"),
                    app_name,
                    info->uri);
       return NULL;

@@ -376,7 +376,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                                    PROP_MIN_POSITION,
                                    g_param_spec_int ("min-position",
                                                      P_("Minimal Position"),
-                                                     P_("Smallest possible value for the \"position\" property"),
+                                                     P_("Smallest possible value for the “position” property"),
                                                      0, G_MAXINT, 0,
                                                      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -393,7 +393,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                                    PROP_MAX_POSITION,
                                    g_param_spec_int ("max-position",
                                                      P_("Maximal Position"),
-                                                     P_("Largest possible value for the \"position\" property"),
+                                                     P_("Largest possible value for the “position” property"),
                                                      0, G_MAXINT, G_MAXINT,
                                                      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 

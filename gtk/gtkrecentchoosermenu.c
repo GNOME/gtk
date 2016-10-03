@@ -492,7 +492,7 @@ gtk_recent_chooser_menu_set_current_uri (GtkRecentChooser  *chooser,
     {
       g_set_error (error, GTK_RECENT_CHOOSER_ERROR,
       		   GTK_RECENT_CHOOSER_ERROR_NOT_FOUND,
-                   _("No recently used resource found with URI '%s'"),
+                   _("No recently used resource found with URI “%s”"),
       		   uri);
     }
   
@@ -548,7 +548,7 @@ gtk_recent_chooser_menu_select_uri (GtkRecentChooser  *chooser,
     {
       g_set_error (error, GTK_RECENT_CHOOSER_ERROR,
       		   GTK_RECENT_CHOOSER_ERROR_NOT_FOUND,
-                   _("No recently used resource found with URI '%s'"),
+                   _("No recently used resource found with URI “%s”"),
       		   uri);
       return FALSE;
     }
@@ -747,7 +747,7 @@ gtk_recent_chooser_menu_add_tip (GtkRecentChooserMenu *menu,
   path = gtk_recent_info_get_uri_display (info);
   if (path)
     {
-      gchar *tip_text = g_strdup_printf (_("Open '%s'"), path);
+      gchar *tip_text = g_strdup_printf (_("Open “%s”"), path);
 
       gtk_widget_set_tooltip_text (item, tip_text);
       gtk_widget_set_has_tooltip (item, priv->show_tips);

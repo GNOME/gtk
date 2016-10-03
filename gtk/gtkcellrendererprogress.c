@@ -178,7 +178,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                    PROP_PULSE,
                                    g_param_spec_int ("pulse",
                                                      P_("Pulse"),
-                                                     P_("Set this to positive values to indicate that some progress is made, but you don't know how much."),
+                                                     P_("Set this to positive values to indicate that some progress is made, but you don’t know how much."),
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

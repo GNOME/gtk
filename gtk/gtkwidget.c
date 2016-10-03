@@ -1258,7 +1258,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_WINDOW] =
       g_param_spec_object ("window",
                            P_("Window"),
-                           P_("The widget's window if it is realized"),
+                           P_("The widget’s window if it is realized"),
                            GDK_TYPE_WINDOW,
                            GTK_PARAM_READABLE);
 

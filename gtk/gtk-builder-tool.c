@@ -133,7 +133,7 @@ value_is_default (MyParserData *data,
 
   if (!gtk_builder_value_from_string (data->builder, pspec, value_string, &value, &error))
     {
-      g_printerr (_("Couldn't parse value for %s::%s: %s\n"), class_name, property_name, error->message);
+      g_printerr (_("Couldn’t parse value for %s::%s: %s\n"), class_name, property_name, error->message);
       g_error_free (error);
       ret = FALSE;
     }
@@ -665,7 +665,7 @@ do_simplify (int          *argc,
 
   if (!g_file_get_contents (filenames[0], &buffer, NULL, &error))
     {
-      g_printerr (_("Can't load file: %s\n"), error->message);
+      g_printerr (_("Can’t load file: %s\n"), error->message);
       exit (1);
     }
 
@@ -686,7 +686,7 @@ do_simplify (int          *argc,
   context = g_markup_parse_context_new (&parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
     {
-      g_printerr (_("Can't parse file: %s\n"), error->message);
+      g_printerr (_("Can’t parse file: %s\n"), error->message);
       exit (1);
     }
 

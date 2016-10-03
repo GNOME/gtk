@@ -534,7 +534,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 				   PROP_SHOW_ARROW,
 				   g_param_spec_boolean ("show-arrow",
 							 P_("Show Arrow"),
-							 P_("If an arrow should be shown if the toolbar doesn't fit"),
+							 P_("If an arrow should be shown if the toolbar doesn’t fit"),
 							 TRUE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

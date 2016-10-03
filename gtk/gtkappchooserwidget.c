@@ -1031,7 +1031,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * See also gtk_app_chooser_widget_set_default_text().
    */
   pspec = g_param_spec_string ("default-text",
-                               P_("Widget's default text"),
+                               P_("Widget’s default text"),
                                P_("The default text appearing when there are no applications"),
                                NULL,
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);

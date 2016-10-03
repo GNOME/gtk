@@ -550,7 +550,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator",
                          P_("Accelerator"),
-                         P_("The accelerator keys for shortcuts of type 'Accelerator'"),
+                         P_("The accelerator keys for shortcuts of type “Accelerator”"),
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -564,7 +564,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_ICON] =
     g_param_spec_object ("icon",
                          P_("Icon"),
-                         P_("The icon to show for shortcuts of type 'Other Gesture'"),
+                         P_("The icon to show for shortcuts of type “Other Gesture”"),
                          G_TYPE_ICON,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

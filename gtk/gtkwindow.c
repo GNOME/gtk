@@ -883,7 +883,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED] =
       g_param_spec_boolean ("hide-titlebar-when-maximized",
                             P_("Hide the titlebar during maximization"),
-                            P_("If this window's titlebar should be hidden when the window is maximized"),
+                            P_("If this window’s titlebar should be hidden when the window is maximized"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -989,7 +989,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_URGENCY_HINT] =
       g_param_spec_boolean ("urgency-hint",
                             P_("Urgent"),
-                            P_("TRUE if the window should be brought to the user's attention."),
+                            P_("TRUE if the window should be brought to the user’s attention."),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -11351,7 +11351,7 @@ gtk_window_set_debugging (gboolean enable,
                 "application to break or crash."));
 
           area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
-          check = gtk_check_button_new_with_label (_("Don't show this message again"));
+          check = gtk_check_button_new_with_label (_("Don’t show this message again"));
           gtk_widget_set_margin_start (check, 10);
           gtk_widget_show (check);
           gtk_container_add (GTK_CONTAINER (area), check);

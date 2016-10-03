@@ -62,7 +62,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
      (iface,
       g_param_spec_string ("font",
                           P_("Font"),
-                           P_("Font description as a string, e.g. \"Sans Italic 12\""),
+                           P_("Font description as a string, e.g. “Sans Italic 12”"),
                            GTK_FONT_CHOOSER_DEFAULT_FONT_NAME,
                            GTK_PARAM_READWRITE));
 

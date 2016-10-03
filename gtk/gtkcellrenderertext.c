@@ -328,7 +328,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_FONT] =
       g_param_spec_string ("font",
                            P_("Font"),
-                           P_("Font description as a string, e.g. \"Sans Italic 12\""),
+                           P_("Font description as a string, e.g. “Sans Italic 12”"),
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -431,7 +431,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                            P_("Language"),
                            P_("The language this text is in, as an ISO code. "
                               "Pango can use this as a hint when rendering the text. "
-                              "If you don't understand this parameter, you probably don't need it"),
+                              "If you don’t understand this parameter, you probably don’t need it"),
                            NULL,
                            GTK_PARAM_READWRITE);
 

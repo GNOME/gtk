@@ -1023,7 +1023,7 @@ gtk_recent_chooser_default_set_current_uri (GtkRecentChooser  *chooser,
       
       g_set_error (error, GTK_RECENT_CHOOSER_ERROR,
       		   GTK_RECENT_CHOOSER_ERROR_NOT_FOUND,
-      		   _("No item for URI '%s' found"),
+      		   _("No item for URI “%s” found"),
       		   uri);
       return FALSE;
     }
@@ -1060,7 +1060,7 @@ gtk_recent_chooser_default_select_uri (GtkRecentChooser  *chooser,
       
       g_set_error (error, GTK_RECENT_CHOOSER_ERROR,
       		   GTK_RECENT_CHOOSER_ERROR_NOT_FOUND,
-      		   _("No item for URI '%s' found"),
+      		   _("No item for URI “%s” found"),
       		   uri);
       return FALSE;
     }

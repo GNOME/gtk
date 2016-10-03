@@ -706,7 +706,7 @@ check_id_or_name (GMarkupParseContext  *context,
 	      set_error (error, context,
 			 G_MARKUP_ERROR,
 			 G_MARKUP_ERROR_PARSE,
-			 _("Both \"id\" and \"name\" were found on the <%s> element"),
+			 _("Both “id” and “name” were found on the <%s> element"),
 			 element_name);
 	      return FALSE;
 	    }
@@ -716,7 +716,7 @@ check_id_or_name (GMarkupParseContext  *context,
 	      set_error (error, context,
 			 G_MARKUP_ERROR,
 			 G_MARKUP_ERROR_PARSE,
-			 _("The attribute \"%s\" was found twice on the <%s> element"),
+			 _("The attribute “%s” was found twice on the <%s> element"),
 			 "name", element_name);
 	      return FALSE;
 	    }
@@ -732,7 +732,7 @@ check_id_or_name (GMarkupParseContext  *context,
 	      set_error (error, context,
 			 G_MARKUP_ERROR,
 			 G_MARKUP_ERROR_PARSE,
-			 _("Both \"id\" and \"name\" were found on the <%s> element"),
+			 _("Both “id” and “name” were found on the <%s> element"),
 			 element_name);
 	      return FALSE;
 	    }
@@ -742,7 +742,7 @@ check_id_or_name (GMarkupParseContext  *context,
 	      set_error (error, context,
 			 G_MARKUP_ERROR,
 			 G_MARKUP_ERROR_PARSE,
-			 _("The attribute \"%s\" was found twice on the <%s> element"),
+			 _("The attribute “%s” was found twice on the <%s> element"),
 			 "id", element_name);
 	      return FALSE;
 	    }
@@ -758,7 +758,7 @@ check_id_or_name (GMarkupParseContext  *context,
 	    {
 	      set_error (error, context,
 			 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-			 _("<%s> element has invalid ID \"%s\""), element_name, attribute_values[i]);
+			 _("<%s> element has invalid ID “%s”"), element_name, attribute_values[i]);
 	      return FALSE;
 	    }
 	}
@@ -768,7 +768,7 @@ check_id_or_name (GMarkupParseContext  *context,
     {
       set_error (error, context,
 		 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		 _("<%s> element has neither a \"name\" nor an \"id\" attribute"), element_name);
+		 _("<%s> element has neither a “name” nor an “id” attribute"), element_name);
       return FALSE;
     }
 
@@ -855,7 +855,7 @@ locate_attributes (GMarkupParseContext  *context,
                   set_error (error, context,
                              G_MARKUP_ERROR,
                              G_MARKUP_ERROR_PARSE,
-                             _("Attribute \"%s\" repeated twice on the same <%s> element"),
+                             _("Attribute “%s” repeated twice on the same <%s> element"),
                              attrs[j].name, element_name);
                   retval = FALSE;
                   goto out;
@@ -873,7 +873,7 @@ locate_attributes (GMarkupParseContext  *context,
           set_error (error, context,
                      G_MARKUP_ERROR,
                      G_MARKUP_ERROR_PARSE,
-                     _("Attribute \"%s\" is invalid on <%s> element in this context"),
+                     _("Attribute “%s” is invalid on <%s> element in this context"),
                      attribute_names[i], element_name);
           retval = FALSE;
           goto out;
@@ -898,7 +898,7 @@ check_no_attributes (GMarkupParseContext  *context,
       set_error (error, context,
                  G_MARKUP_ERROR,
                  G_MARKUP_ERROR_PARSE,
-                 _("Attribute \"%s\" is invalid on <%s> element in this context"),
+                 _("Attribute “%s” is invalid on <%s> element in this context"),
                  attribute_names[0], element_name);
       return FALSE;
     }
@@ -937,7 +937,7 @@ tag_exists (GMarkupParseContext *context,
 
       set_error (error, context,
 		 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		 _("Tag \"%s\" has not been defined."), name);
+		 _("Tag “%s” has not been defined."), name);
 
       return NULL;
     }
@@ -960,7 +960,7 @@ tag_exists (GMarkupParseContext *context,
 
       set_error (error, context,
 		 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		 _("Tag \"%s\" does not exist in buffer and tags can not be created."), name);
+		 _("Tag “%s” does not exist in buffer and tags can not be created."), name);
 
       return NULL;
     }
@@ -1092,7 +1092,7 @@ parse_attr_element (GMarkupParseContext  *context,
 	{
 	  set_error (error, context,
 		     G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		     _("\"%s\" is not a valid attribute type"), type);
+		     _("“%s” is not a valid attribute type"), type);
 	  return;
 	}
 
@@ -1100,7 +1100,7 @@ parse_attr_element (GMarkupParseContext  *context,
 	{
 	  set_error (error, context,
 		     G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		     _("\"%s\" is not a valid attribute name"), name);
+		     _("“%s” is not a valid attribute name"), name);
 	  return;
 	}
 
@@ -1110,7 +1110,7 @@ parse_attr_element (GMarkupParseContext  *context,
 	{
 	  set_error (error, context,
 		     G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		     _("\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""),
+		     _("“%s” could not be converted to a value of type “%s” for attribute “%s”"),
 		     value, type, name);
 	  return;
 	}
@@ -1119,7 +1119,7 @@ parse_attr_element (GMarkupParseContext  *context,
 	{
 	  set_error (error, context,
 		     G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		     _("\"%s\" is not a valid value for attribute \"%s\""),
+		     _("“%s” is not a valid value for attribute “%s”"),
 		     value, name);
 	  g_value_unset (&gvalue);
 	  return;
@@ -1204,7 +1204,7 @@ parse_tag_element (GMarkupParseContext  *context,
 	    {
 	      set_error (error, context,
 			 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-			 _("Tag \"%s\" already defined"), name);
+			 _("Tag “%s” already defined"), name);
 	      return;
 	    }
 	}
@@ -1217,7 +1217,7 @@ parse_tag_element (GMarkupParseContext  *context,
 	{
 	  set_error (error, context,
 		     G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-		     _("Tag \"%s\" has invalid priority \"%s\""), name, priority);
+		     _("Tag “%s” has invalid priority “%s”"), name, priority);
 	  return;
 	}
 
@@ -1301,7 +1301,7 @@ start_element_handler (GMarkupParseContext  *context,
 	  else if (!info->parsed_tags)
 	    {
 	      set_error (error, context, G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-			 _("A <text> element can't occur before a <tags> element"));
+			 _("A <text> element can’t occur before a <tags> element"));
 	      return;
 	    }
 
@@ -1786,7 +1786,7 @@ _gtk_text_buffer_deserialize_rich_text (GtkTextBuffer *register_buffer,
       g_set_error_literal (error,
                            G_MARKUP_ERROR,
                            G_MARKUP_ERROR_PARSE,
-                           _("Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"));
+                           _("Serialized data is malformed. First section isn’t GTKTEXTBUFFERCONTENTS-0001"));
 
       retval = FALSE;
       goto out;

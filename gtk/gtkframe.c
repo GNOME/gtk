@@ -194,7 +194,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   frame_props[PROP_LABEL] =
       g_param_spec_string ("label",
                            P_("Label"),
-                           P_("Text of the frame's label"),
+                           P_("Text of the frame’s label"),
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

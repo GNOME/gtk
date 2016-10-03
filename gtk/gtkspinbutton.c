@@ -389,7 +389,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                    PROP_SNAP_TO_TICKS,
                                    g_param_spec_boolean ("snap-to-ticks",
                                                          P_("Snap to Ticks"),
-                                                         P_("Whether erroneous values are automatically changed to a spin button's nearest step increment"),
+                                                         P_("Whether erroneous values are automatically changed to a spin button’s nearest step increment"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

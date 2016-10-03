@@ -836,7 +836,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_VISIBILITY] =
       g_param_spec_boolean ("visibility",
                             P_("Visibility"),
-                            P_("FALSE displays the \"invisible char\" instead of the actual text (password mode)"),
+                            P_("FALSE displays the “invisible char” instead of the actual text (password mode)"),
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -850,7 +850,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_INVISIBLE_CHAR] =
       g_param_spec_unichar ("invisible-char",
                             P_("Invisible character"),
-                            P_("The character to use when masking entry contents (in \"password mode\")"),
+                            P_("The character to use when masking entry contents (in “password mode”)"),
                             '*',
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1002,7 +1002,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_PROGRESS_FRACTION] =
       g_param_spec_double ("progress-fraction",
                            P_("Progress Fraction"),
-                           P_("The current fraction of the task that's been completed"),
+                           P_("The current fraction of the task that’s been completed"),
                            0.0, 1.0,
                            0.0,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -1034,7 +1034,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",
                            P_("Placeholder text"),
-                           P_("Show text in the entry when it's empty and unfocused"),
+                           P_("Show text in the entry when it’s empty and unfocused"),
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

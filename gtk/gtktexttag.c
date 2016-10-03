@@ -288,7 +288,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FONT,
                                    g_param_spec_string ("font",
                                                         P_("Font"),
-                                                        P_("Font description as a string, e.g. \"Sans Italic 12\""),
+                                                        P_("Font description as a string, e.g. “Sans Italic 12”"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 

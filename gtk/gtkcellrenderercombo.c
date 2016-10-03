@@ -165,7 +165,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
                                    PROP_HAS_ENTRY,
                                    g_param_spec_boolean ("has-entry",
 							 P_("Has Entry"),
-							 P_("If FALSE, don't allow to enter strings other than the chosen ones"),
+							 P_("If FALSE, don’t allow to enter strings other than the chosen ones"),
 							 TRUE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

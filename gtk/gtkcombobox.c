@@ -906,7 +906,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    PROP_POPUP_SHOWN,
                                    g_param_spec_boolean ("popup-shown",
                                                          P_("Popup shown"),
-                                                         P_("Whether the combo's dropdown is shown"),
+                                                         P_("Whether the combo’s dropdown is shown"),
                                                          FALSE,
                                                          GTK_PARAM_READABLE));
 
@@ -955,7 +955,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_ENTRY_TEXT_COLUMN,
                                     g_param_spec_int ("entry-text-column",
                                                       P_("Entry Text Column"),
-                                                      P_("The column in the combo box's model to associate "
+                                                      P_("The column in the combo box’s model to associate "
                                                          "with strings from the entry if the combo was "
                                                          "created with #GtkComboBox:has-entry = %TRUE"),
                                                       -1, G_MAXINT, -1,
@@ -973,7 +973,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_ID_COLUMN,
                                     g_param_spec_int ("id-column",
                                                       P_("ID Column"),
-                                                      P_("The column in the combo box's model that provides "
+                                                      P_("The column in the combo box’s model that provides "
                                                       "string IDs for the values in the model"),
                                                       -1, G_MAXINT, -1,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
@@ -1006,7 +1006,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_POPUP_FIXED_WIDTH,
                                     g_param_spec_boolean ("popup-fixed-width",
                                                           P_("Popup Fixed Width"),
-                                                          P_("Whether the popup's width should be a "
+                                                          P_("Whether the popup’s width should be a "
                                                              "fixed width matching the allocated width "
                                                              "of the combo box"),
                                                           TRUE,

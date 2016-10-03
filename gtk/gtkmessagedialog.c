@@ -263,7 +263,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 				   PROP_MESSAGE_AREA,
 				   g_param_spec_object ("message-area",
 							P_("Message area"),
-							P_("GtkBox that holds the dialog's primary and secondary labels"),
+							P_("GtkBox that holds the dialog’s primary and secondary labels"),
 							GTK_TYPE_WIDGET,
 							GTK_PARAM_READABLE));
 

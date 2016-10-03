@@ -171,7 +171,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   toggle_button_props[PROP_INCONSISTENT] =
       g_param_spec_boolean ("inconsistent",
                             P_("Inconsistent"),
-                            P_("If the toggle button is in an \"in between\" state"),
+                            P_("If the toggle button is in an “in between” state"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

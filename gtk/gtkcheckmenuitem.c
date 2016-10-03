@@ -201,7 +201,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                    PROP_INCONSISTENT,
                                    g_param_spec_boolean ("inconsistent",
                                                          P_("Inconsistent"),
-                                                         P_("Whether to display an \"inconsistent\" state"),
+                                                         P_("Whether to display an “inconsistent” state"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   

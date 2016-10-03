@@ -69,7 +69,7 @@ gtk_actionable_default_init (GtkActionableInterface *iface)
 {
   g_object_interface_install_property (iface,
     g_param_spec_string ("action-name", P_("Action name"),
-                         P_("The name of the associated action, like 'app.quit'"),
+                         P_("The name of the associated action, like “app.quit”"),
                          NULL, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_interface_install_property (iface,

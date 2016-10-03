@@ -70,8 +70,8 @@ main (int argc, char *argv[])
 
   context =
   /* Translators: this message will appear immediately after the */
-  /* usage string - Usage: COMMAND [OPTION...] <THIS_MESSAGE>    */
-    g_option_context_new (_("APPLICATION [URI...] — launch an APPLICATION"));
+  /* usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>    */
+    g_option_context_new (_("APPLICATION [URI…] — launch an APPLICATION"));
 
   /* Translators: this message will appear after the usage string */
   /* and before the list of options.                              */
@@ -89,7 +89,7 @@ main (int argc, char *argv[])
     {
       g_printerr (_("Error parsing commandline options: %s\n"), error->message);
       g_printerr ("\n");
-      g_printerr (_("Try \"%s --help\" for more information."), g_get_prgname ());
+      g_printerr (_("Try “%s --help” for more information."), g_get_prgname ());
       g_printerr ("\n");
       g_error_free (error);
       return 1;
@@ -110,7 +110,7 @@ main (int argc, char *argv[])
       /* means the user is calling gtk-launch without any argument.  */
       g_printerr (_("%s: missing application name"), g_get_prgname ());
       g_printerr ("\n");
-      g_printerr (_("Try \"%s --help\" for more information."), g_get_prgname ());
+      g_printerr (_("Try “%s --help” for more information."), g_get_prgname ());
       g_printerr ("\n");
       return 1;
     }
