@@ -37,6 +37,7 @@
 #include "gtkmenu.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
+#include "gtkbox.h"
 #include "gtktooltip.h"
 #include "deprecated/gtkactivatable.h"
 #include "gtktypebuiltins.h"
@@ -805,6 +806,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   gchar *text;
   GtkWidget *item, *image, *label;
   GIcon *icon;
+  GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
   g_assert (info != NULL);
 
@@ -834,9 +836,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
          */
         text = g_strdup_printf (C_("recent menu label", "%d. %s"), count, escaped);
 
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      item = gtk_image_menu_item_new_with_mnemonic (text);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+      label = gtk_label_new_with_mnemonic (text);
 
       g_free (escaped);
       g_free (name);
@@ -844,40 +844,32 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   else
     {
       text = g_strdup (gtk_recent_info_get_display_name (info));
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      item = gtk_image_menu_item_new_with_label (text);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+      label = gtk_label_new (text);
     }
 
   g_free (text);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item),
-                                             TRUE);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   /* ellipsize the menu item label, in case the recent document
    * display name is huge.
    */
-  label = gtk_bin_get_child (GTK_BIN (item));
-  if (GTK_IS_LABEL (label))
-    {
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_label_set_max_width_chars (GTK_LABEL (label), priv->label_width);
-    }
-  
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), priv->label_width);
+
   if (priv->show_icons)
     {
       icon = gtk_recent_info_get_gicon (info);
 
       image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-      gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
       if (icon)
         g_object_unref (icon);
+
+      gtk_container_add (GTK_CONTAINER (box), image);
     }
+
+  item = gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_widget_show_all (box);
+  gtk_container_add (GTK_CONTAINER (item), box);
 
   g_signal_connect (item, "activate",
   		    G_CALLBACK (item_activate_cb),
