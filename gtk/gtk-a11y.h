@@ -28,7 +28,6 @@
 #define __GTK_A11Y_H_INSIDE__
 
 #include <gtk/gtk.h>
-#include <gtk/a11y/gtkarrowaccessible.h>
 #include <gtk/a11y/gtkbooleancellaccessible.h>
 #include <gtk/a11y/gtkbuttonaccessible.h>
 #include <gtk/a11y/gtkcellaccessible.h>

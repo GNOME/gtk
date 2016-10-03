@@ -715,7 +715,6 @@ test_types (void)
     "  <object class=\"GtkAction\" id=\"action\"/>"
     "  <object class=\"GtkActionGroup\" id=\"actiongroup\"/>"
     "  <object class=\"GtkAlignment\" id=\"alignment\"/>"
-    "  <object class=\"GtkArrow\" id=\"arrow\"/>"
     "  <object class=\"GtkButton\" id=\"button\"/>"
     "  <object class=\"GtkCheckButton\" id=\"checkbutton\"/>"
     "  <object class=\"GtkDialog\" id=\"dialog\"/>"

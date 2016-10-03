@@ -1,6 +1,5 @@
 a11y_h_sources =				\
 	a11y/gtk-a11y-autocleanups.h		\
-	a11y/gtkarrowaccessible.h		\
 	a11y/gtkbooleancellaccessible.h		\
 	a11y/gtkbuttonaccessible.h		\
 	a11y/gtkcellaccessible.h		\
@@ -73,7 +72,6 @@ a11y_c_sources =				\
 	a11y/gtkaccessibility.c			\
 	a11y/gtkaccessibilitymisc.c 		\
 	a11y/gtkaccessibilityutil.c		\
-	a11y/gtkarrowaccessible.c		\
 	a11y/gtkbooleancellaccessible.c		\
 	a11y/gtkbuttonaccessible.c		\
 	a11y/gtkcellaccessible.c		\

@@ -21,7 +21,6 @@
 
 #ifndef __GI_SCANNER__
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkArrowAccessible, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkBooleanCellAccessible, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkButtonAccessible, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellAccessible, g_object_unref)

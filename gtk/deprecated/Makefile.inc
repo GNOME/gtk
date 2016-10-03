@@ -3,7 +3,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkaction.h		\
 	deprecated/gtkactiongroup.h	\
 	deprecated/gtkalignment.h	\
-	deprecated/gtkarrow.h		\
 	deprecated/gtkcolorsel.h	\
 	deprecated/gtkcolorseldialog.h	\
 	deprecated/gtkfontsel.h		\
@@ -44,7 +43,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkaction.c		\
 	deprecated/gtkactiongroup.c	\
 	deprecated/gtkalignment.c	\
-	deprecated/gtkarrow.c		\
 	deprecated/gtkcolorsel.c	\
 	deprecated/gtkcolorseldialog.c	\
 	deprecated/gtkfontsel.c		\

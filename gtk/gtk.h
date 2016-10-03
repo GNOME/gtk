@@ -244,7 +244,6 @@
 #include <gtk/gtkwindowgroup.h>
 
 #ifndef GTK_DISABLE_DEPRECATED
-#include <gtk/deprecated/gtkarrow.h>
 #include <gtk/deprecated/gtkactivatable.h>
 #include <gtk/deprecated/gtkaction.h>
 #include <gtk/deprecated/gtkactiongroup.h>
