@@ -32,7 +32,7 @@
  * since it provides common code needed for handling a single child widget.
  *
  * Many GTK+ widgets are subclasses of #GtkBin, including #GtkWindow,
- * #GtkButton, #GtkFrame, #GtkHandleBox or #GtkScrolledWindow.
+ * #GtkButton, #GtkFrame or #GtkScrolledWindow.
  */
 
 #include "config.h"

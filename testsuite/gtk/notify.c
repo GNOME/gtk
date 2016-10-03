@@ -362,7 +362,6 @@ test_type (gconstpointer data)
 
   /* Deprecated, not getting fixed */
   if (g_str_equal (g_type_name (type), "GtkColorSelection") ||
-      g_str_equal (g_type_name (type), "GtkHandleBox") ||
       g_str_equal (g_type_name (type), "GtkHPaned") ||
       g_str_equal (g_type_name (type), "GtkVPaned") ||
       g_str_equal (g_type_name (type), "GtkHScale") ||

@@ -1747,31 +1747,6 @@ gtk_frame_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkhandlebox</FILE>
-<TITLE>GtkHandleBox</TITLE>
-GtkHandleBox
-GtkHandleBoxClass
-gtk_handle_box_new
-gtk_handle_box_set_shadow_type
-gtk_handle_box_set_handle_position
-gtk_handle_box_set_snap_edge
-gtk_handle_box_get_handle_position
-gtk_handle_box_get_shadow_type
-gtk_handle_box_get_snap_edge
-gtk_handle_box_get_child_detached
-<SUBSECTION Standard>
-GTK_HANDLE_BOX
-GTK_IS_HANDLE_BOX
-GTK_TYPE_HANDLE_BOX
-GTK_HANDLE_BOX_CLASS
-GTK_IS_HANDLE_BOX_CLASS
-GTK_HANDLE_BOX_GET_CLASS
-<SUBSECTION Private>
-GtkHandleBoxPrivate
-gtk_handle_box_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkhbbox</FILE>
 <TITLE>GtkHButtonBox</TITLE>
 GtkHButtonBox
