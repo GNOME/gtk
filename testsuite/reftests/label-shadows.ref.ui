@@ -33,8 +33,6 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">1</property>
-                <property name="ypad">1</property>
                 <property name="label" translatable="yes">ABC</property>
                 <style>
                   <class name="no-shadow" />
@@ -75,8 +73,6 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">1</property>
-                <property name="ypad">1</property>
                 <property name="label" translatable="yes">ABC</property>
                 <property name="angle">90</property>
                 <style>
@@ -118,8 +114,6 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">1</property>
-                <property name="ypad">1</property>
                 <property name="label" translatable="yes">ABC</property>
                 <property name="angle">180</property>
                 <style>
@@ -161,8 +155,6 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">1</property>
-                <property name="ypad">1</property>
                 <property name="label" translatable="yes">ABC</property>
                 <property name="angle">270</property>
                 <style>
