@@ -10074,7 +10074,8 @@ main (int argc, char *argv[])
   gtk_css_provider_load_from_data (memory_provider,
                                    "#testgtk-version-label {\n"
                                    "  color: #f00;\n"
-                                   "  font: Sans 18;\n"
+                                   "  font-family: Sans;\n"
+                                   "  font-size: 18px;\n"
                                    "}",
                                    -1, NULL);
   gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (memory_provider),
