@@ -2486,26 +2486,6 @@ gtk_info_bar_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkmisc</FILE>
-<TITLE>GtkMisc</TITLE>
-GtkMisc
-gtk_misc_set_alignment
-gtk_misc_set_padding
-gtk_misc_get_alignment
-gtk_misc_get_padding
-<SUBSECTION Standard>
-GTK_MISC
-GTK_IS_MISC
-GTK_TYPE_MISC
-GTK_MISC_CLASS
-GTK_IS_MISC_CLASS
-GTK_MISC_GET_CLASS
-<SUBSECTION Private>
-GtkMiscPrivate
-gtk_misc_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtknativedialog</FILE>
 <TITLE>GtkNativeDialog</TITLE>
 GTK_TYPE_NATIVE_DIALOG

@@ -19,7 +19,6 @@
 
 #include "gtkaccessibility.h"
 #include "gtkaccessibilityutil.h"
-#include "gtkaccessibilitymisc.h"
 
 #include "gtkwindowaccessible.h"
 
@@ -980,5 +979,4 @@ _gtk_accessibility_init (void)
   atk_bridge_adaptor_init (NULL, NULL);
 #endif
 
-  atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
 }

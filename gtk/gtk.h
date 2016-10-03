@@ -260,7 +260,6 @@
 #include <gtk/deprecated/gtkhseparator.h>
 #include <gtk/deprecated/gtkiconfactory.h>
 #include <gtk/deprecated/gtkimagemenuitem.h>
-#include <gtk/deprecated/gtkmisc.h>
 #include <gtk/deprecated/gtkradioaction.h>
 #include <gtk/deprecated/gtkrecentaction.h>
 #include <gtk/deprecated/gtkstock.h>

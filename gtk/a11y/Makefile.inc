@@ -53,7 +53,6 @@ a11y_h_sources =				\
 
 a11y_private_h_sources =			\
 	a11y/gtkaccessibility.h			\
-	a11y/gtkaccessibilitymisc.h		\
 	a11y/gtkaccessibilityutil.h		\
 	a11y/gtkcellaccessibleprivate.h		\
 	a11y/gtkcolorswatchaccessibleprivate.h	\
@@ -70,7 +69,6 @@ a11y_private_h_sources =			\
 
 a11y_c_sources =				\
 	a11y/gtkaccessibility.c			\
-	a11y/gtkaccessibilitymisc.c 		\
 	a11y/gtkaccessibilityutil.c		\
 	a11y/gtkbooleancellaccessible.c		\
 	a11y/gtkbuttonaccessible.c		\
