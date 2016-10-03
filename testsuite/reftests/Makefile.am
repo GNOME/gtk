@@ -188,9 +188,6 @@ testdata = \
 	box-shadow-changes-modify-clip.ui \
 	button-wrapping.ui \
 	button-wrapping.ref.ui \
-	cellrenderer-pixbuf-stock-rtl.css \
-	cellrenderer-pixbuf-stock-rtl.ui \
-	cellrenderer-pixbuf-stock-rtl.ref.ui \
 	color-transition.css \
 	color-transition.ref.ui \
 	color-transition.ui \
