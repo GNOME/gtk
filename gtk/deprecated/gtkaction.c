@@ -91,7 +91,6 @@
 #include "gtkbutton.h"
 #include "gtkiconfactory.h"
 #include "gtkimage.h"
-#include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
@@ -222,9 +221,7 @@ gtk_action_class_init (GtkActionClass *klass)
   klass->create_menu_item  = create_menu_item;
   klass->create_tool_item  = create_tool_item;
   klass->create_menu       = NULL;
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  klass->menu_item_type    = GTK_TYPE_IMAGE_MENU_ITEM;
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  klass->menu_item_type    = GTK_TYPE_MENU_ITEM;
   klass->toolbar_item_type = GTK_TYPE_TOOL_BUTTON;
   klass->connect_proxy    = connect_proxy;
   klass->disconnect_proxy = disconnect_proxy;

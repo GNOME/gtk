@@ -32,7 +32,6 @@
 #include "gtksettings.h"
 #include "gtkmenushell.h"
 #include "gtkmenuitem.h"
-#include "deprecated/gtkimagemenuitem.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkmenu.h"
 #include "gtkimage.h"

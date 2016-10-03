@@ -14,7 +14,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkhseparator.h	\
 	deprecated/gtkhsv.h		\
 	deprecated/gtkiconfactory.h	\
-	deprecated/gtkimagemenuitem.h	\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrecentaction.h	\
 	deprecated/gtkstock.h		\
@@ -53,7 +52,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkhseparator.c	\
 	deprecated/gtkhsv.c		\
 	deprecated/gtkiconfactory.c	\
-	deprecated/gtkimagemenuitem.c	\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrecentaction.c	\
 	deprecated/gtkstock.c		\

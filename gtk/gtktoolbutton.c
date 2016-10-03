@@ -22,7 +22,6 @@
 #include "gtktoolbutton.h"
 #include "gtkbutton.h"
 #include "gtkimage.h"
-#include "deprecated/gtkimagemenuitem.h"
 #include "gtklabel.h"
 #include "deprecated/gtkstock.h"
 #include "gtkbox.h"

@@ -2264,10 +2264,9 @@ test_menus (void)
     "                  <object class=\"GtkMenu\" id=\"menu1\">"
     "                    <property name=\"visible\">True</property>"
     "                    <child>"
-    "                      <object class=\"GtkImageMenuItem\" id=\"imagemenuitem1\">"
+    "                      <object class=\"GtkMenuItem\" id=\"imagemenuitem1\">"
     "                        <property name=\"label\">gtk-new</property>"
     "                        <property name=\"visible\">True</property>"
-    "                        <property name=\"accel_group\">accelgroup1</property>"
     "                      </object>"
     "                    </child>"
     "                  </object>"
@@ -2296,7 +2295,7 @@ test_menus (void)
     "          <object class=\"GtkMenuBar\" id=\"menubar1\">"
     "            <property name=\"visible\">True</property>"
     "            <child>"
-    "              <object class=\"GtkImageMenuItem\" id=\"imagemenuitem1\">"
+    "              <object class=\"GtkMenuItem\" id=\"imagemenuitem1\">"
     "                <property name=\"visible\">True</property>"
     "                <child>"
     "                  <object class=\"GtkLabel\" id=\"custom1\">"
@@ -2314,49 +2313,21 @@ test_menus (void)
     "<object class=\"GtkAccelGroup\" id=\"accelgroup1\"/>"
     "</interface>";
   GtkBuilder *builder;
-  GtkWidget *child;
   GtkWidget *window, *item;
-  GtkAccelGroup *accel_group;
-  GtkWidget *item_accel_label, *sample_accel_label, *sample_menu_item, *custom;
+  GtkWidget *custom;
 
   /* Check that the item has the correct accel label string set
    */
   builder = builder_new_from_string (buffer, -1, NULL);
   window = (GtkWidget *)gtk_builder_get_object (builder, "window1");
   item = (GtkWidget *)gtk_builder_get_object (builder, "imagemenuitem1");
-  accel_group = (GtkAccelGroup *)gtk_builder_get_object (builder, "accelgroup1");
 
   gtk_widget_show_all (window);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  sample_menu_item = gtk_image_menu_item_new ();//_with_label ("Some Label");
-  gtk_image_menu_item_set_accel_group (GTK_IMAGE_MENU_ITEM (sample_menu_item), accel_group);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  child = gtk_bin_get_child (GTK_BIN (sample_menu_item));
-  g_assert (child);
-  g_assert (GTK_IS_ACCEL_LABEL (child));
-  sample_accel_label = child;
-  gtk_widget_show (sample_accel_label);
-
-  child = gtk_bin_get_child (GTK_BIN (item));
-  g_assert (child);
-  g_assert (GTK_IS_ACCEL_LABEL (child));
-  item_accel_label = child;
-
-  gtk_accel_label_refetch (GTK_ACCEL_LABEL (sample_accel_label));
-  gtk_accel_label_refetch (GTK_ACCEL_LABEL (item_accel_label));
-
-  g_assert (gtk_label_get_text (GTK_LABEL (sample_accel_label)) != NULL);
-  g_assert (gtk_label_get_text (GTK_LABEL (item_accel_label)) != NULL);
-  g_assert (strcmp (gtk_label_get_text (GTK_LABEL (item_accel_label)),
-		    gtk_label_get_text (GTK_LABEL (sample_accel_label))) == 0);
 
   /* Check the menu hierarchy worked here  */
   g_assert (get_parent_menubar (item));
 
   gtk_widget_destroy (GTK_WIDGET (window));
-  gtk_widget_destroy (sample_menu_item);
   g_object_unref (builder);
 
 

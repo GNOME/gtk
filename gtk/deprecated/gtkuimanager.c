@@ -34,7 +34,6 @@
 #include "gtkaccellabel.h"
 #include "gtkactivatable.h"
 #include "gtkbuildable.h"
-#include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
@@ -2730,16 +2729,6 @@ update_node (GtkUIManager *manager,
 	      info->proxy = gtk_action_create_menu_item (action);
 	      g_object_ref_sink (info->proxy);
 	      gtk_widget_set_name (info->proxy, info->name);
-
-              G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-              if (info->always_show_image_set &&
-                  GTK_IS_IMAGE_MENU_ITEM (info->proxy))
-                gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (info->proxy),
-                                                           info->always_show_image);
-
-              G_GNUC_END_IGNORE_DEPRECATIONS;
-
 	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
 				     info->proxy, pos);
            }
