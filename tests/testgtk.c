@@ -2650,6 +2650,8 @@ create_menu (GdkScreen *screen, gint depth, gint length)
   GtkWidget *menu;
   GtkWidget *menuitem;
   GtkWidget *image;
+  GtkWidget *box;
+  GtkWidget *label;
   GSList *group;
   char buf[32];
   int i, j;
@@ -2665,14 +2667,15 @@ create_menu (GdkScreen *screen, gint depth, gint length)
   image = gtk_image_new_from_icon_name ("document-open",
                                         GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  menuitem = gtk_image_menu_item_new_with_label ("Image item");
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (menuitem), TRUE);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  menuitem = gtk_menu_item_new ();
+  label = gtk_label_new ("Image Item");
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_container_add (GTK_CONTAINER (menuitem), box);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
-  
+
   for (i = 0, j = 1; i < length; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
@@ -2704,6 +2707,8 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
   GtkWidget *menuitem;
   GtkWidget *submenu;
   GtkWidget *image;
+  GtkWidget *label;
+  GtkWidget *box;
   char buf[32];
   int i, j;
 
@@ -2726,10 +2731,12 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
                                         GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  menuitem = gtk_image_menu_item_new_with_label ("Image");
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (menuitem), TRUE);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  menuitem = gtk_menu_item_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  label = gtk_label_new ("Image");
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_container_add (GTK_CONTAINER (menuitem), box);
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 0, 1);
   gtk_widget_show (menuitem);
 
@@ -2740,15 +2747,16 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
   menuitem = gtk_menu_item_new_with_label ("x");
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 1, 2);
   gtk_widget_show (menuitem);
-  
+
   image = gtk_image_new_from_icon_name ("help-browser",
                                         GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  menuitem = gtk_image_menu_item_new_with_label ("Image");
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (menuitem), TRUE);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  menuitem = gtk_menu_item_new ();
+  label = gtk_label_new ("Image");
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_container_add (GTK_CONTAINER (menuitem), box);
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 1, 2);
   gtk_widget_show (menuitem);
 
@@ -2894,7 +2902,9 @@ create_menus (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *optionmenu;
   GtkWidget *separator;
-  
+  GtkWidget *box;
+  GtkWidget *label;
+
   if (!window)
     {
       GtkWidget *menubar;
@@ -2952,11 +2962,12 @@ create_menus (GtkWidget *widget)
       image = gtk_image_new_from_icon_name ("help-browser",
                                             GTK_ICON_SIZE_MENU);
       gtk_widget_show (image);
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      menuitem = gtk_image_menu_item_new_with_label ("Help");
-      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-      gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (menuitem), TRUE);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+      menuitem = gtk_menu_item_new ();
+      label = gtk_label_new ("Help");
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_container_add (GTK_CONTAINER (box), image);
+      gtk_container_add (GTK_CONTAINER (menuitem), box);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (screen, 4, 5));
       gtk_widget_set_hexpand (menuitem, TRUE);
       gtk_widget_set_halign (menuitem, GTK_ALIGN_END);
