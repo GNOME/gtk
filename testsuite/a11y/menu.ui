@@ -19,81 +19,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkMenuItem" id="imagemenuitem1">
-                    <property name="label" translatable="yes">_New</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkMenuItem" id="imagemenuitem2">
-                    <property name="label" translatable="yes">_Open</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                    <child type="submenu">
-                      <object class="GtkMenu" id="menu4">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkRadioMenuItem" id="radiomenuitem1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="label" translatable="yes">One</property>
-                            <property name="use_underline">True</property>
-                            <property name="active">True</property>
-                            <property name="draw_as_radio">True</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkRadioMenuItem" id="radiomenuitem2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="label" translatable="yes">Two</property>
-                            <property name="use_underline">True</property>
-                            <property name="draw_as_radio">True</property>
-                            <property name="group">radiomenuitem1</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkRadioMenuItem" id="radiomenuitem3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="label" translatable="yes">Three</property>
-                            <property name="use_underline">True</property>
-                            <property name="draw_as_radio">True</property>
-                            <property name="group">radiomenuitem1</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkMenuItem" id="imagemenuitem3">
-                    <property name="label" translatable="yes">_Save</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImageMenuItem" id="imagemenuitem4">
-                    <property name="label" translatable="yes">Save _As</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                </child>
-                <child>
                   <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -151,7 +76,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkImageMenuItem" id="imagemenuitem7">
+                  <object class="GtkMenuItem" id="imagemenuitem7">
                     <property name="label" translatable="yes">_Copy</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -160,7 +85,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkImageMenuItem" id="imagemenuitem8">
+                  <object class="GtkMenuItem" id="imagemenuitem8">
                     <property name="label" translatable="yes">_Paste</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -169,7 +94,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkImageMenuItem" id="imagemenuitem9">
+                  <object class="GtkMenuItem" id="imagemenuitem9">
                     <property name="label" translatable="yes">_Delete</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>

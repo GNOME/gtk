@@ -57,8 +57,8 @@
           <object class="GtkEntry" id="entry3">
             <property name="text" translatable="yes">icons</property>
             <property name="visible">True</property>
-            <property name="primary-icon-stock">stock1</property>
-            <property name="secondary-icon-stock">stock2</property>
+            <property name="primary-icon-name">edit-undo</property>
+            <property name="secondary-icon-name">edit-redo</property>
           </object>
         </child>
         <child>

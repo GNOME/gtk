@@ -40,121 +40,10 @@ window1
       action 0 description: Clicks the menuitem
       action 0 keybinding: <Alt>f;<Alt>f;
       <AtkSelection>
-      imagemenuitem1
-        "menu item"
-        parent: menuitem1
-        index: 0
-        name: New
-        state: enabled selectable sensitive visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: popup
-        alpha: 1
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the menuitem
-        action 0 keybinding: n;<Alt>f:n;
-        <AtkSelection>
-      imagemenuitem2
-        "menu"
-        parent: menuitem1
-        index: 1
-        name: Open
-        state: enabled selectable sensitive visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: popup
-        alpha: 1
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the menuitem
-        action 0 keybinding: o;<Alt>f:o;
-        <AtkSelection>
-        radiomenuitem1
-          "radio menu item"
-          parent: imagemenuitem2
-          index: 0
-          name: One
-          member-of: radiomenuitem3
-                     radiomenuitem2
-                     radiomenuitem1
-          state: checked enabled selectable sensitive visible
-          toolkit: gtk
-          <AtkComponent>
-          layer: popup
-          alpha: 1
-          <AtkAction>
-          action 0 name: click
-          action 0 description: Clicks the menuitem
-          <AtkSelection>
-        radiomenuitem2
-          "radio menu item"
-          parent: imagemenuitem2
-          index: 1
-          name: Two
-          member-of: radiomenuitem3
-                     radiomenuitem2
-                     radiomenuitem1
-          state: enabled selectable sensitive visible
-          toolkit: gtk
-          <AtkComponent>
-          layer: popup
-          alpha: 1
-          <AtkAction>
-          action 0 name: click
-          action 0 description: Clicks the menuitem
-          <AtkSelection>
-        radiomenuitem3
-          "radio menu item"
-          parent: imagemenuitem2
-          index: 2
-          name: Three
-          member-of: radiomenuitem3
-                     radiomenuitem2
-                     radiomenuitem1
-          state: enabled selectable sensitive visible
-          toolkit: gtk
-          <AtkComponent>
-          layer: popup
-          alpha: 1
-          <AtkAction>
-          action 0 name: click
-          action 0 description: Clicks the menuitem
-          <AtkSelection>
-      imagemenuitem3
-        "menu item"
-        parent: menuitem1
-        index: 2
-        name: Save
-        state: enabled selectable sensitive visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: popup
-        alpha: 1
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the menuitem
-        action 0 keybinding: s;<Alt>f:s;
-        <AtkSelection>
-      imagemenuitem4
-        "menu item"
-        parent: menuitem1
-        index: 3
-        name: Save As
-        state: enabled selectable sensitive visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: popup
-        alpha: 1
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the menuitem
-        action 0 keybinding: a;<Alt>f:a;
-        <AtkSelection>
       separatormenuitem1
         "separator"
         parent: menuitem1
-        index: 4
+        index: 0
         state: enabled selectable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -165,7 +54,7 @@ window1
       checkmenuitem1
         "check menu item"
         parent: menuitem1
-        index: 5
+        index: 1
         name: awesome
         state: selectable sensitive visible indeterminate
         toolkit: gtk
@@ -179,7 +68,7 @@ window1
       separatormenuitem2
         "separator"
         parent: menuitem1
-        index: 6
+        index: 2
         state: enabled selectable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -190,7 +79,7 @@ window1
       imagemenuitem5
         "menu item"
         parent: menuitem1
-        index: 7
+        index: 3
         name: Quit
         state: enabled selectable sensitive visible
         toolkit: gtk
