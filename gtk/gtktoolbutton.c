@@ -873,59 +873,54 @@ clone_image_menu_size (GtkImage *image)
 
   return NULL;
 }
-      
+
 static gboolean
 gtk_tool_button_create_menu_proxy (GtkToolItem *item)
 {
   GtkToolButton *button = GTK_TOOL_BUTTON (item);
   GtkWidget *menu_item;
   GtkWidget *menu_image = NULL;
-  GtkStockItem stock_item;
   gboolean use_mnemonic = TRUE;
-  const char *label;
+  const char *label_text;
+  GtkWidget *box;
+  GtkWidget *label;
 
   if (_gtk_tool_item_create_menu_proxy (item))
     return TRUE;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
   if (GTK_IS_LABEL (button->priv->label_widget))
     {
-      label = gtk_label_get_label (GTK_LABEL (button->priv->label_widget));
+      label_text = gtk_label_get_label (GTK_LABEL (button->priv->label_widget));
       use_mnemonic = gtk_label_get_use_underline (GTK_LABEL (button->priv->label_widget));
     }
   else if (button->priv->label_text)
     {
-      label = button->priv->label_text;
+      label_text = button->priv->label_text;
       use_mnemonic = button->priv->use_underline;
     }
-  else if (button->priv->stock_id && gtk_stock_lookup (button->priv->stock_id, &stock_item))
-    {
-      label = stock_item.label;
-    }
   else
     {
-      label = "";
+      label_text = "";
     }
-
-  if (use_mnemonic)
-    menu_item = gtk_image_menu_item_new_with_mnemonic (label);
-  else
-    menu_item = gtk_image_menu_item_new_with_label (label);
 
   if (GTK_IS_IMAGE (button->priv->icon_widget))
     {
       menu_image = clone_image_menu_size (GTK_IMAGE (button->priv->icon_widget));
     }
-  else if (button->priv->stock_id)
-    {
-      menu_image = gtk_image_new_from_stock (button->priv->stock_id, GTK_ICON_SIZE_MENU);
-    }
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  if (use_mnemonic)
+     label = gtk_label_new_with_mnemonic (label_text);
+  else
+     label = gtk_label_new (label_text);
 
   if (menu_image)
-    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), menu_image);
+      gtk_container_add (GTK_CONTAINER (box), menu_image);
 
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  menu_item = gtk_menu_item_new ();
+  gtk_container_add (GTK_CONTAINER (menu_item), box);
 
   g_signal_connect_closure_by_id (menu_item,
 				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
