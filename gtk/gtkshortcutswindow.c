@@ -865,7 +865,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkToggleButton *search_button;
   GtkBox *menu_box;
   GtkBox *box;
-  GtkArrow *arrow;
+  GtkWidget *arrow;
   GtkWidget *scroller;
   GtkWidget *label;
   GtkWidget *empty;
@@ -956,10 +956,9 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (priv->menu_label));
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  arrow = g_object_new (GTK_TYPE_ARROW,
-                        "arrow-type", GTK_ARROW_DOWN,
-                        "visible", TRUE,
-                        NULL);
+  arrow = gtk_image_new_from_icon_name ("pan-down-symbolic",
+                                        GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (arrow);
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (arrow));
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
