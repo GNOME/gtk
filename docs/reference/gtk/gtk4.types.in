@@ -1,4 +1,3 @@
-#include <gtk/gtkx.h>
 #include <gtk/gtkunixprint.h>
 
 gtk_about_dialog_get_type
@@ -138,7 +137,6 @@ gtk_page_setup_get_type
 gtk_paned_get_type
 gtk_paper_size_get_type
 gtk_places_sidebar_get_type
-@ENABLE_ON_X11@gtk_plug_get_type
 gtk_popover_get_type
 gtk_popover_menu_get_type
 @DISABLE_ON_W32@gtk_printer_get_type
@@ -179,7 +177,6 @@ gtk_shortcuts_section_get_type
 gtk_shortcuts_group_get_type
 gtk_shortcuts_shortcut_get_type
 gtk_size_group_get_type
-@ENABLE_ON_X11@gtk_socket_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type
 gtk_stack_get_type

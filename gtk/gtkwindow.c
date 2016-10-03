@@ -46,7 +46,6 @@
 #include "gtkmenushellprivate.h"
 #include "gtkicontheme.h"
 #include "gtkmarshalers.h"
-#include "gtkplug.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkwidgetprivate.h"
@@ -1712,17 +1711,10 @@ gtk_window_constructed (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = window->priv;
-  gboolean is_plug;
 
   G_OBJECT_CLASS (gtk_window_parent_class)->constructed (object);
 
-#ifdef GDK_WINDOWING_X11
-  is_plug = GTK_IS_PLUG (window);
-#else
-  is_plug = FALSE;
-#endif
-
-  if (priv->type == GTK_WINDOW_TOPLEVEL && !is_plug)
+  if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
       priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
@@ -5977,7 +5969,6 @@ gtk_window_show (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GtkContainer *container = GTK_CONTAINER (window);
-  gboolean is_plug;
 
   if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
     {
@@ -5995,15 +5986,7 @@ gtk_window_show (GtkWidget *widget)
 
   gtk_widget_map (widget);
 
-  /* Try to make sure that we have some focused widget
-   */
-#ifdef GDK_WINDOWING_X11
-  is_plug = GDK_IS_X11_WINDOW (_gtk_widget_get_window (widget)) &&
-    GTK_IS_PLUG (window);
-#else
-  is_plug = FALSE;
-#endif
-  if (!priv->focus_widget && !is_plug)
+  if (!priv->focus_widget)
     {
       if (priv->initial_focus)
         gtk_window_set_focus (window, priv->initial_focus);
@@ -10768,8 +10751,7 @@ _gtk_window_get_screen (GtkWindow *window)
  * 
  * Returns whether the window is part of the current active toplevel.
  * (That is, the toplevel window receiving keystrokes.)
- * The return value is %TRUE if the window is active toplevel
- * itself, but also if it is, say, a #GtkPlug embedded in the active toplevel.
+ * The return value is %TRUE if the window is active toplevel itself.
  * You might use this function if you wanted to draw a widget
  * differently in an active window from a widget in an inactive window.
  * See gtk_window_has_toplevel_focus()

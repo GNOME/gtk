@@ -157,7 +157,6 @@ IGNORE_HFILES = \
 	gtksidebarrowprivate.h		\
 	gtksizegroup-private.h		\
 	gtksizerequestcacheprivate.h	\
-	gtksocketprivate.h		\
 	gtkstyleanimationprivate.h	\
 	gtkstylecascadeprivate.h	\
 	gtkstylecontextprivate.h	\
@@ -233,7 +232,6 @@ IGNORE_HFILES = \
 	gtksearchenginesimple.h		\
 	gtksearchenginequartz.h		\
 	gtksequence.h			\
-	gtksocketprivate.h		\
 	gtktextbtree.h			\
 	gtktextbufferserialize.h	\
 	gtktextdisplay.h		\
@@ -248,9 +246,6 @@ IGNORE_HFILES = \
 	gtktreedatalist.h		\
 	gtktreemenu.h			\
 	gtktypebuiltins.h		\
-	gtkxembed.h			\
-	gtkwin32embed.h			\
-	gtkwin32embedwidget.h		\
 	gtkwindow-decorate.h		\
 	xdgmime				\
 	xembed.h

@@ -33,7 +33,6 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
-#include <gtk/gtksocket.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkaccessible.h>
 
@@ -253,17 +252,6 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
           return TRUE;
         }
     }
-
-#ifdef GDK_WINDOWING_X11
-  /*
-   * If the focus widget is a GtkSocket without a plug
-   * then ignore the focus notification as the embedded
-   * plug will report a focus notification.
-   */
-  if (GTK_IS_SOCKET (widget) &&
-      gtk_socket_get_plug_window (GTK_SOCKET (widget)) != NULL)
-    return TRUE;
-#endif
 
   /*
    * The widget may not yet be visible on the screen so we wait until it is.

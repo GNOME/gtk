@@ -22,10 +22,6 @@ LDADD = \
 	-lm
 
 
-if USE_X11
-testsocket_programs = testsocket testsocket_child
-endif
-
 if OS_LINUX
 fontconfig_programs = testfontchooserdialog
 endif
@@ -113,7 +109,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testscale			\
 	testselection			\
 	testselectionmode		\
-	$(testsocket_programs)		\
 	testspinbutton			\
 	teststockbuttonmenu		\
 	testtoolbar			\
@@ -246,8 +241,6 @@ testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
 testrichtext_DEPENDENCIES = $(TEST_DEPS)
 testscale_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
-testsocket_DEPENDENCIES = $(DEPS)
-testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststockbuttonmenu_DEPENDENCIES = $(TEST_DEPS)
 testtreechanging_DEPENDENCIES =	$(DEPS)
@@ -390,14 +383,6 @@ testprint_SOURCES =    	\
 	testprint.c		\
 	testprintfileoperation.h \
 	testprintfileoperation.c
-
-testsocket_SOURCES =    	\
-	testsocket.c		\
-	testsocket_common.c
-
-testsocket_child_SOURCES =    	\
-	testsocket_child.c	\
-	testsocket_common.c
 
 testspinbutton_SOURCES =    	\
 	testspinbutton.c

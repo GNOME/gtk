@@ -445,7 +445,6 @@ gtk_public_h_sources = 		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
-	gtkplug.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
 	gtkprintoperationpreview.h \
@@ -478,7 +477,6 @@ gtk_public_h_sources = 		\
 	gtkstacksidebar.h	\
 	gtksizegroup.h		\
 	gtksizerequest.h	\
-	gtksocket.h		\
 	gtkspinbutton.h		\
 	gtkspinner.h		\
 	gtkstatusbar.h		\

@@ -274,12 +274,6 @@
       <xi:include href="xml/gtknativedialog.xml" />
     </chapter>
 
-    <chapter id="PlugSocket">
-      <title>Cross-process Embedding</title>
-      <xi:include href="xml/gtkplug.xml" />
-      <xi:include href="xml/gtksocket.xml" />
-    </chapter>
-
     <chapter id="RecentDocuments">
       <title>Recently Used Documents</title>
       <xi:include href="xml/gtkrecentmanager.xml" />

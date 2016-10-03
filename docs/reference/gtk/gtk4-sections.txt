@@ -2678,29 +2678,6 @@ gtk_places_sidebar_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkplug</FILE>
-<TITLE>GtkPlug</TITLE>
-GtkPlug
-gtk_plug_construct
-gtk_plug_construct_for_display
-gtk_plug_new
-gtk_plug_new_for_display
-gtk_plug_get_id
-gtk_plug_get_embedded
-gtk_plug_get_socket_window
-<SUBSECTION Standard>
-GTK_PLUG
-GTK_IS_PLUG
-GTK_TYPE_PLUG
-GTK_PLUG_CLASS
-GTK_IS_PLUG_CLASS
-GTK_PLUG_GET_CLASS
-<SUBSECTION Private>
-GtkPlugPrivate
-gtk_plug_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkprogressbar</FILE>
 <TITLE>GtkProgressBar</TITLE>
 GtkProgressBar
@@ -3343,26 +3320,6 @@ GTK_SIZE_GROUP_GET_CLASS
 <SUBSECTION Private>
 GtkSizeGroupPrivate
 gtk_size_group_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtksocket</FILE>
-<TITLE>GtkSocket</TITLE>
-GtkSocket
-gtk_socket_new
-gtk_socket_add_id
-gtk_socket_get_id
-gtk_socket_get_plug_window
-<SUBSECTION Standard>
-GTK_SOCKET
-GTK_IS_SOCKET
-GTK_TYPE_SOCKET
-GTK_SOCKET_CLASS
-GTK_IS_SOCKET_CLASS
-GTK_SOCKET_GET_CLASS
-<SUBSECTION Private>
-GtkSocketPrivate
-gtk_socket_get_type
 </SECTION>
 
 <SECTION>

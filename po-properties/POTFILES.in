@@ -216,7 +216,6 @@ gtk/gtkpathbar.c
 gtk/gtkplacessidebar.c
 gtk/gtkplacesview.c
 gtk/gtkplacesviewrow.c
-gtk/gtkplug.c
 gtk/gtkpopover.c
 gtk/gtkpopovermenu.c
 gtk/gtkprintbackend.c
@@ -259,7 +258,6 @@ gtk/gtkshortcutssection.c
 gtk/gtkshortcutsshortcut.c
 gtk/gtkshortcutswindow.c
 gtk/gtksizegroup.c
-gtk/gtksocket.c
 gtk/gtkspinbutton.c
 gtk/gtkspinner.c
 gtk/gtkstack.c

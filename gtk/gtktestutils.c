@@ -37,7 +37,7 @@
  * So....
  */
 #undef GTK_COMPILATION
-#include <gtk/gtkx.h>
+#include <gtk/gtk.h>
 #define GTK_COMPILATION
 
 /**

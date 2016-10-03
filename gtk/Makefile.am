@@ -122,8 +122,6 @@ include $(srcdir)/inspector/Makefile.inc
 gtk_public_h_sources = 		\
 	gtk.h			\
 	gtk-autocleanups.h	\
-	gtkx.h			\
-	gtkx-autocleanups.h	\
 	gtk-a11y.h		\
 	gtkaboutdialog.h	\
 	gtkaccelgroup.h		\
@@ -255,7 +253,6 @@ gtk_public_h_sources = 		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
 	gtkplacessidebar.h	\
-	gtkplug.h		\
 	gtkpopover.h		\
 	gtkpopovermenu.h	\
 	gtkprintcontext.h	\
@@ -296,7 +293,6 @@ gtk_public_h_sources = 		\
 	gtkstacksidebar.h	\
 	gtksizegroup.h		\
 	gtksizerequest.h	\
-	gtksocket.h		\
 	gtkspinbutton.h		\
 	gtkspinner.h		\
 	gtkstack.h		\
@@ -555,7 +551,6 @@ gtk_private_h_sources =		\
 	gtksidebarrowprivate.h	\
 	gtksizegroup-private.h	\
 	gtksizerequestcacheprivate.h	\
-	gtksocketprivate.h	\
 	gtkstyleanimationprivate.h \
 	gtkstylecascadeprivate.h \
 	gtkstylecontextprivate.h \
@@ -1020,9 +1015,6 @@ gtk_c_sources += $(gtk_os_win32_c_sources)
 endif
 
 gtk_use_x11_c_sources = 	\
-	gtkplug.c		\
-	gtksocket.c		\
-	gtkxembed.c		\
 	gtkapplication-x11.c	\
 	gtkmountoperation-x11.c
 
@@ -1033,8 +1025,6 @@ gtk_use_wayland_or_x11_c_sources = \
 	gtkapplication-dbus.c
 
 gtk_use_win32_c_sources = 	\
-	gtkwin32embed.c		\
-	gtkwin32embedwidget.c	\
 	gtkmountoperation-stub.c
 gtk_use_quartz_c_sources = 	\
 	gtksearchenginequartz.c	\
@@ -1044,12 +1034,8 @@ gtk_use_quartz_c_sources = 	\
 	gtkquartz.c
 gtk_use_stub_c_sources = 	\
 	gtkmountoperation-stub.c
-gtk_use_x11_private_h_sources = 	\
-	gtkxembed.h		\
-	xembed.h
 if USE_X11
 gtk_c_sources += $(gtk_use_x11_c_sources)
-gtk_private_h_sources += $(gtk_use_x11_private_h_sources)
 endif
 
 if USE_WAYLAND
@@ -1066,12 +1052,8 @@ else
 endif
 endif
 
-gtk_use_win32_private_h_sources = 	\
-	gtkwin32embed.h		\
-	gtkwin32embedwidget.h
 if USE_WIN32
 gtk_c_sources += $(gtk_use_win32_c_sources)
-gtk_private_h_sources += $(gtk_use_win32_private_h_sources)
 endif
 
 gtk_use_quartz_private_h_sources = 	\
@@ -1087,8 +1069,6 @@ gtk_all_private_h_sources = \
 	$(a11y_private_h_sources) \
 	$(deprecated_private_h_sources) \
 	$(gtk_private_h_sources) \
-	$(gtk_use_x11_private_h_sources) \
-	$(gtk_use_win32_private_h_sources) \
 	$(gtk_use_quartz_private_h_sources)
 
 if !USE_X11
@@ -1380,12 +1360,12 @@ gtkprivatetypebuiltins.c: $(gtk_private_type_h_sources)  gtkprivatetypebuiltins.
 
 
 gtktypefuncs.c: stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gtk/a11y/*.h $(top_srcdir)/gtk/deprecated/*.h $(top_srcdir)/gdk/*.h Makefile
-	$(AM_V_GEN) (echo '#undef GTK_COMPILATION' && echo '#include <gtk/gtkx.h>') > xgen-gtfsrc.c && \
+	$(AM_V_GEN) (echo '#undef GTK_COMPILATION' && echo '#include <gtk/gtk.h>') > xgen-gtfsrc.c && \
 	  echo 'G_GNUC_BEGIN_IGNORE_DEPRECATIONS' > xgen-gtf && \
 	  ${CPP} $(DEFS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
 	  $(GREP) -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
 	  sort | uniq | \
-	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; s/^.*\(gdk_x11\|gtk_plug_\|gtk_socket_\).*$$/#ifdef GDK_WINDOWING_X11\n&\n#endif/; }' >> xgen-gtf \
+	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; s/^.*\(gdk_x11\).*$$/#ifdef GDK_WINDOWING_X11\n&\n#endif/; }' >> xgen-gtf \
 	&& cp xgen-gtf $@ && rm -f xgen-gtf
 gtktestutils.c: gtktypefuncs.c
 
@@ -1527,7 +1507,7 @@ distclean-local:
 	fi
 
 if HAVE_INTROSPECTION
-introspected_pub_headers = $(filter-out %private.h gtktextdisplay.h gtktextlayout.h gtkx.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS))
+introspected_pub_headers = $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS))
 
 introspection_files = \
     $(introspected_pub_headers) \
@@ -1535,12 +1515,6 @@ introspection_files = \
     gtkprintoperation-unix.c \
     gtktypebuiltins.h \
     gtktypebuiltins.c
-
-if USE_X11
-introspection_files += \
-    gtksocket.c \
-    gtkplug.c
-endif
 
 include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_SCANNER_ENV = CC="$(CC)"
@@ -1686,9 +1660,6 @@ EXTRA_DIST +=                   \
 	libgtk3.manifest.in	\
 	gtk-win32.rc.body.in	\
 	gtk-win32.rc.body	\
-	gtkwin32embed.h		\
-	gtkwin32embedwidget.h	\
-	gtkwin32embedwidget.c	\
 	gtkprint-win32.h	\
 	gtkprint-win32.c	\
 	gtksearchenginequartz.h \

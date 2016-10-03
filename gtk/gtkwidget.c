@@ -63,7 +63,6 @@
 #include "gtkmodifierstyle.h"
 #include "gtkversion.h"
 #include "gtkdebug.h"
-#include "gtkplug.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkwidgetaccessible.h"
 #include "gtkapplicationprivate.h"
@@ -9120,9 +9119,8 @@ gtk_widget_get_has_window (GtkWidget *widget)
  *
  * Determines whether @widget is a toplevel widget.
  *
- * Currently only #GtkWindow and #GtkInvisible (and out-of-process
- * #GtkPlugs) are toplevel widgets. Toplevel widgets have no parent
- * widget.
+ * Currently only #GtkWindow and #GtkInvisible are toplevel widgets.
+ * Toplevel widgets have no parent widget.
  *
  * Returns: %TRUE if @widget is a toplevel, %FALSE otherwise
  *
@@ -10617,8 +10615,6 @@ gtk_widget_set_parent_window (GtkWidget *widget,
 
   if (parent_window != old_parent_window)
     {
-      gboolean is_plug;
-
       g_object_set_qdata (G_OBJECT (widget), quark_parent_window,
 			  parent_window);
       if (old_parent_window)
@@ -10630,12 +10626,7 @@ gtk_widget_set_parent_window (GtkWidget *widget,
        * this is the primary entry point to allow toplevels to be
        * embeddable.
        */
-#ifdef GDK_WINDOWING_X11
-      is_plug = GTK_IS_PLUG (widget);
-#else
-      is_plug = FALSE;
-#endif
-      if (GTK_IS_WINDOW (widget) && !is_plug)
+      if (GTK_IS_WINDOW (widget))
 	_gtk_window_set_is_toplevel (GTK_WINDOW (widget), parent_window == NULL);
     }
 }
@@ -11462,9 +11453,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  * would return
  * %NULL if @widget wasn’t inside a toplevel window, and if the
  * window was inside a #GtkWindow-derived widget which was in turn
- * inside the toplevel #GtkWindow. While the second case may
- * seem unlikely, it actually happens when a #GtkPlug is embedded
- * inside a #GtkSocket within the same application.
+ * inside the toplevel #GtkWindow.
  *
  * To reliably find the toplevel #GtkWindow, use
  * gtk_widget_get_toplevel() and call gtk_widget_is_toplevel()
