@@ -166,7 +166,7 @@ gdk_drag_context_get_source_window (GdkDragContext *context)
  * gdk_drag_context_get_dest_window:
  * @context: a #GdkDragContext
  *
- * Returns the destination windw for the DND operation.
+ * Returns the destination window for the DND operation.
  *
  * Returns: (transfer none): a #GdkWindow
  *
