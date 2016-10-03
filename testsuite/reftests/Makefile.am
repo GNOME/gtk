@@ -339,9 +339,6 @@ testdata = \
 	marble.xpm \
 	messagedialog-secondarytext.ui \
 	messagedialog-secondarytext.ref.ui \
-	misc-alignment.css \
-	misc-alignment.ref.ui \
-	misc-alignment.ui \
 	named-colors.css \
 	named-colors.ref.ui \
 	named-colors.ui \
