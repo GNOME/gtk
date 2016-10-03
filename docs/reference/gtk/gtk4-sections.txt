@@ -1788,22 +1788,6 @@ gtk_hbutton_box_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkhbox</FILE>
-<TITLE>GtkHBox</TITLE>
-GtkHBox
-gtk_hbox_new
-<SUBSECTION Standard>
-GTK_HBOX
-GTK_IS_HBOX
-GTK_TYPE_HBOX
-GTK_HBOX_CLASS
-GTK_IS_HBOX_CLASS
-GTK_HBOX_GET_CLASS
-<SUBSECTION Private>
-gtk_hbox_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkhpaned</FILE>
 <TITLE>GtkHPaned</TITLE>
 GtkHPaned

@@ -255,7 +255,6 @@
 #include <gtk/deprecated/gtkgradient.h>
 #include <gtk/deprecated/gtkhandlebox.h>
 #include <gtk/deprecated/gtkhbbox.h>
-#include <gtk/deprecated/gtkhbox.h>
 #include <gtk/deprecated/gtkhpaned.h>
 #include <gtk/deprecated/gtkhsv.h>
 #include <gtk/deprecated/gtkhscale.h>

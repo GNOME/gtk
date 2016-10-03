@@ -36,7 +36,7 @@
  * SECTION:gtkgrid
  * @Short_description: Pack widgets in a rows and columns
  * @Title: GtkGrid
- * @See_also: #GtkTable, #GtkHBox, #GtkVBox
+ * @See_also: #GtkTable, #GtkVBox
  *
  * GtkGrid is a container which arranges its child widgets in
  * rows and columns. It is a very similar to #GtkTable and #GtkBox,

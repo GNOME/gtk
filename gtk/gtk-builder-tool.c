@@ -195,7 +195,6 @@ needs_explicit_setting (MyParserData *data,
     { "GtkWidget", "vexpand", 0 },
     { "GtkContainer", "border-width", 0 },
     { "GtkVBox", "expand", 1 },
-    { "GtkHBox", "expand", 1 },
     { NULL, NULL, 0 }
   };
   gchar *canonical_name;

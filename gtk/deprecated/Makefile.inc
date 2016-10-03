@@ -10,7 +10,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkgradient.h	\
 	deprecated/gtkhandlebox.h	\
 	deprecated/gtkhbbox.h		\
-	deprecated/gtkhbox.h		\
 	deprecated/gtkhpaned.h		\
 	deprecated/gtkhscale.h		\
 	deprecated/gtkhscrollbar.h	\
@@ -55,7 +54,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkgradient.c	\
 	deprecated/gtkhandlebox.c	\
 	deprecated/gtkhbbox.c		\
-	deprecated/gtkhbox.c		\
 	deprecated/gtkhpaned.c		\
 	deprecated/gtkhscale.c		\
 	deprecated/gtkhscrollbar.c	\

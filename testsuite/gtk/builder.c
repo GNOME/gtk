@@ -91,7 +91,7 @@ test_parser (void)
   g_error_free (error);
 
   error = NULL;
-  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkVBox\" id=\"a\"><object class=\"GtkHBox\" id=\"b\"/></object></interface>", -1, &error);
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkVBox\" id=\"a\"><object class=\"GtkBox\" id=\"b\"/></object></interface>", -1, &error);
   g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_TAG);
   g_error_free (error);
 
@@ -724,7 +724,6 @@ test_types (void)
     "  <object class=\"GtkEntry\" id=\"entry\"/>"
     "  <object class=\"GtkFontButton\" id=\"fontbutton\"/>"
     "  <object class=\"GtkHButtonBox\" id=\"hbuttonbox\"/>"
-    "  <object class=\"GtkHBox\" id=\"hbox\"/>"
     "  <object class=\"GtkHPaned\" id=\"hpaned\"/>"
     "  <object class=\"GtkHScale\" id=\"hscale\"/>"
     "  <object class=\"GtkHScrollbar\" id=\"hscrollbar\"/>"
@@ -2428,7 +2427,8 @@ test_message_area (void)
     "<interface>"
     "  <object class=\"GtkInfoBar\" id=\"infobar1\">"
     "    <child internal-child=\"content_area\">"
-    "      <object class=\"GtkHBox\" id=\"contentarea1\">"
+    "      <object class=\"GtkBox\" id=\"contentarea1\">"
+    "        <property name=\"orientation\">horizontal</property>"
     "        <child>"
     "          <object class=\"GtkLabel\" id=\"content\">"
     "            <property name=\"label\" translatable=\"yes\">Message</property>"
@@ -2670,7 +2670,8 @@ test_no_ids (void)
     "<interface>"
     "  <object class=\"GtkInfoBar\">"
     "    <child internal-child=\"content_area\">"
-    "      <object class=\"GtkHBox\">"
+    "      <object class=\"GtkBox\">"
+    "        <property name=\"orientation\">horizontal</property>"
     "        <child>"
     "          <object class=\"GtkLabel\">"
     "            <property name=\"label\" translatable=\"yes\">Message</property>"

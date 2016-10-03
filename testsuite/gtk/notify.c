@@ -374,7 +374,6 @@ test_type (gconstpointer data)
       g_str_equal (g_type_name (type), "GtkVScrollbar") ||
       g_str_equal (g_type_name (type), "GtkHSeparator") ||
       g_str_equal (g_type_name (type), "GtkVSeparator") ||
-      g_str_equal (g_type_name (type), "GtkHBox") ||
       g_str_equal (g_type_name (type), "GtkVBox") ||
       g_str_equal (g_type_name (type), "GtkArrow") ||
       g_str_equal (g_type_name (type), "GtkNumerableIcon") ||

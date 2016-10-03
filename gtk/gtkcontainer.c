@@ -87,7 +87,7 @@
  *
  * The second type of container can have more than one child; its purpose is to
  * manage layout. This means that these containers assign
- * sizes and positions to their children. For example, a #GtkHBox arranges its
+ * sizes and positions to their children. For example, a horizontal #GtkBox arranges its
  * children in a horizontal row, and a #GtkGrid arranges the widgets it contains
  * in a two-dimensional grid.
  *
