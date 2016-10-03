@@ -146,15 +146,10 @@ main (int argc, char **argv)
                      GTK_DEST_DEFAULT_DROP,
                      NULL, 0, GDK_ACTION_COPY);
   gtk_drag_dest_add_image_targets (box);
-  g_signal_connect (box, "drag_data_received", 
+  g_signal_connect (box, "drag_data_received",
 		    G_CALLBACK (drag_data_received), image);
 
-  label = gtk_label_new ("GTK_IMAGE_STOCK");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
-
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  image = gtk_image_new_from_stock (GTK_STOCK_REDO, GTK_ICON_SIZE_DIALOG);
-  gtk_grid_attach (GTK_GRID (grid), image, 1, 2, 1, 1);
 
   label = gtk_label_new ("GTK_IMAGE_ICON_SET");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);

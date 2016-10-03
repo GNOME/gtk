@@ -138,25 +138,6 @@ gtk_tooltip_window_set_image_icon (GtkTooltipWindow *window,
 }
 
 void
-gtk_tooltip_window_set_image_icon_from_stock (GtkTooltipWindow *window,
-                                              const char       *stock_id,
-                                              GtkIconSize       icon_size)
-{
-  if (stock_id != NULL)
-    {
- G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_image_set_from_stock (GTK_IMAGE (window->image), stock_id, icon_size);
- G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      gtk_widget_show (window->image);
-    }
-  else
-    {
-      gtk_widget_hide (window->image);
-    }
-}
-
-void
 gtk_tooltip_window_set_image_icon_from_name (GtkTooltipWindow *window,
                                              const char       *icon_name,
                                              GtkIconSize       icon_size)

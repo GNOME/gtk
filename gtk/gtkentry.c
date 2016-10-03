@@ -351,8 +351,6 @@ enum {
   PROP_PROGRESS_PULSE_STEP,
   PROP_PIXBUF_PRIMARY,
   PROP_PIXBUF_SECONDARY,
-  PROP_STOCK_PRIMARY,
-  PROP_STOCK_SECONDARY,
   PROP_ICON_NAME_PRIMARY,
   PROP_ICON_NAME_SECONDARY,
   PROP_GICON_PRIMARY,
@@ -1128,38 +1126,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                            P_("Secondary pixbuf for the entry"),
                            GDK_TYPE_PIXBUF,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkEntry:primary-icon-stock:
-   *
-   * The stock id to use for the primary icon for the entry.
-   *
-   * Since: 2.16
-   *
-   * Deprecated: 3.10: Use #GtkEntry:primary-icon-name instead.
-   */
-  entry_props[PROP_STOCK_PRIMARY] =
-    g_param_spec_string ("primary-icon-stock",
-                         P_("Primary stock ID"),
-                         P_("Stock ID for primary icon"),
-                         NULL,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-
-  /**
-   * GtkEntry:secondary-icon-stock:
-   *
-   * The stock id to use for the secondary icon for the entry.
-   *
-   * Since: 2.16
-   *
-   * Deprecated: 3.10: Use #GtkEntry:secondary-icon-name instead.
-   */
-  entry_props[PROP_STOCK_SECONDARY] =
-      g_param_spec_string ("secondary-icon-stock",
-                           P_("Secondary stock ID"),
-                           P_("Stock ID for secondary icon"),
-                           NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkEntry:primary-icon-name:
@@ -2259,22 +2225,6 @@ gtk_entry_set_property (GObject         *object,
                                       g_value_get_object (value));
       break;
 
-    case PROP_STOCK_PRIMARY:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_entry_set_icon_from_stock (entry,
-                                     GTK_ENTRY_ICON_PRIMARY,
-                                     g_value_get_string (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-
-    case PROP_STOCK_SECONDARY:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_entry_set_icon_from_stock (entry,
-                                     GTK_ENTRY_ICON_SECONDARY,
-                                     g_value_get_string (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-
     case PROP_ICON_NAME_PRIMARY:
       gtk_entry_set_icon_from_icon_name (entry,
                                          GTK_ENTRY_ICON_PRIMARY,
@@ -2520,22 +2470,6 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_object (value,
                           gtk_entry_get_icon_pixbuf (entry,
                                                      GTK_ENTRY_ICON_SECONDARY));
-      break;
-
-    case PROP_STOCK_PRIMARY:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      g_value_set_string (value,
-                          gtk_entry_get_icon_stock (entry,
-                                                    GTK_ENTRY_ICON_PRIMARY));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-
-    case PROP_STOCK_SECONDARY:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      g_value_set_string (value,
-                          gtk_entry_get_icon_stock (entry,
-                                                    GTK_ENTRY_ICON_SECONDARY));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_ICON_NAME_PRIMARY:
@@ -7365,13 +7299,6 @@ gtk_entry_clear (GtkEntry             *entry,
                                             : PROP_PIXBUF_SECONDARY]);
       break;
 
-    case GTK_IMAGE_STOCK:
-      g_object_notify_by_pspec (G_OBJECT (entry),
-                                entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
-                                            ? PROP_STOCK_PRIMARY
-                                            : PROP_STOCK_SECONDARY]);
-      break;
-
     case GTK_IMAGE_ICON_NAME:
       g_object_notify_by_pspec (G_OBJECT (entry),
                                 entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
@@ -8422,66 +8349,6 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 }
 
 /**
- * gtk_entry_set_icon_from_stock:
- * @entry: A #GtkEntry
- * @icon_pos: Icon position
- * @stock_id: (allow-none): The name of the stock item, or %NULL
- *
- * Sets the icon shown in the entry at the specified position from
- * a stock image.
- *
- * If @stock_id is %NULL, no icon will be shown in the specified position.
- *
- * Since: 2.16
- *
- * Deprecated: 3.10: Use gtk_entry_set_icon_from_icon_name() instead.
- */
-void
-gtk_entry_set_icon_from_stock (GtkEntry             *entry,
-                               GtkEntryIconPosition  icon_pos,
-                               const gchar          *stock_id)
-{
-  GtkEntryPrivate *priv;
-  EntryIconInfo *icon_info;
-
-  g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (IS_VALID_ICON_POSITION (icon_pos));
-
-  priv = entry->priv;
-
-  if ((icon_info = priv->icons[icon_pos]) == NULL)
-    icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
-
-  g_object_freeze_notify (G_OBJECT (entry));
-
-  if (stock_id != NULL)
-    {
-      _gtk_icon_helper_set_stock_id (GTK_ICON_HELPER (icon_info->gadget), stock_id, GTK_ICON_SIZE_MENU);
-
-      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        {
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STOCK_PRIMARY]);
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STORAGE_TYPE_PRIMARY]);
-        }
-      else
-        {
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STOCK_SECONDARY]);
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STORAGE_TYPE_SECONDARY]);
-        }
-
-      if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
-          gdk_window_show_unraised (icon_info->window);
-    }
-  else
-    gtk_entry_clear (entry, icon_pos);
-
-  if (gtk_widget_get_visible (GTK_WIDGET (entry)))
-    gtk_widget_queue_resize (GTK_WIDGET (entry));
-
-  g_object_thaw_notify (G_OBJECT (entry));
-}
-
-/**
  * gtk_entry_set_icon_from_icon_name:
  * @entry: A #GtkEntry
  * @icon_pos: The position at which to set the icon
@@ -8681,7 +8548,7 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
  *
  * Unlike the other methods of setting and getting icon data, this
  * method will work regardless of whether the icon was set using a
- * #GdkPixbuf, a #GIcon, a stock item, or an icon name.
+ * #GdkPixbuf, a #GIcon or an icon name.
  *
  * Returns: (transfer none) (nullable): A #GdkPixbuf, or %NULL if no icon is
  *     set for this position.
@@ -8760,41 +8627,6 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
     return NULL;
 
   return _gtk_icon_helper_peek_gicon (GTK_ICON_HELPER (icon_info->gadget));
-}
-
-/**
- * gtk_entry_get_icon_stock:
- * @entry: A #GtkEntry
- * @icon_pos: Icon position
- *
- * Retrieves the stock id used for the icon, or %NULL if there is
- * no icon or if the icon was set by some other method (e.g., by
- * pixbuf, icon name or gicon).
- *
- * Returns: A stock id, or %NULL if no icon is set or if the icon
- *          wasn’t set from a stock id
- *
- * Since: 2.16
- *
- * Deprecated: 3.10: Use gtk_entry_get_icon_name() instead.
- */
-const gchar *
-gtk_entry_get_icon_stock (GtkEntry             *entry,
-                          GtkEntryIconPosition  icon_pos)
-{
-  GtkEntryPrivate *priv;
-  EntryIconInfo *icon_info;
-
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
-  g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
-
-  priv = entry->priv;
-  icon_info = priv->icons[icon_pos];
-
-  if (!icon_info)
-    return NULL;
-
-  return _gtk_icon_helper_get_stock_id (GTK_ICON_HELPER (icon_info->gadget));
 }
 
 /**

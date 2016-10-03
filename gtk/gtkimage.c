@@ -33,7 +33,6 @@
 #include "gtkiconhelperprivate.h"
 #include "gtkimageprivate.h"
 #include "deprecated/gtkiconfactory.h"
-#include "deprecated/gtkstock.h"
 #include "gtkicontheme.h"
 #include "gtksizerequest.h"
 #include "gtkintl.h"
@@ -198,7 +197,6 @@ enum
   PROP_PIXBUF,
   PROP_SURFACE,
   PROP_FILE,
-  PROP_STOCK,
   PROP_ICON_SET,
   PROP_ICON_SIZE,
   PROP_PIXEL_SIZE,
@@ -259,18 +257,6 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkImage:stock:
-   *
-   * Deprecated: 3.10: Use #GtkImage:icon-name instead.
-   */
-  image_props[PROP_STOCK] =
-      g_param_spec_string ("stock",
-                           P_("Stock ID"),
-                           P_("Stock ID for a stock image to display"),
-                           NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_DEPRECATED);
-
-  /**
    * GtkImage:icon-set:
    *
    * Deprecated: 3.10: Use #GtkImage:icon-name instead.
@@ -287,7 +273,7 @@ gtk_image_class_init (GtkImageClass *class)
   image_props[PROP_ICON_SIZE] =
       g_param_spec_int ("icon-size",
                         P_("Icon size"),
-                        P_("Symbolic size to use for stock icon, icon set or named icon"),
+                        P_("Symbolic size to use for icon set or named icon"),
                         0, G_MAXINT,
                         DEFAULT_ICON_SIZE,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -454,11 +440,6 @@ gtk_image_set_property (GObject      *object,
     case PROP_FILE:
       gtk_image_set_from_file (image, g_value_get_string (value));
       break;
-    case PROP_STOCK:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_image_set_from_stock (image, g_value_get_string (value), icon_size);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
     case PROP_ICON_SET:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_image_set_from_icon_set (image, g_value_get_boxed (value), icon_size);
@@ -517,9 +498,6 @@ gtk_image_get_property (GObject     *object,
       break;
     case PROP_FILE:
       g_value_set_string (value, priv->filename);
-      break;
-    case PROP_STOCK:
-      g_value_set_string (value, _gtk_icon_helper_get_stock_id (priv->icon_helper));
       break;
     case PROP_ICON_SET:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
@@ -677,37 +655,6 @@ gtk_image_new_from_surface (cairo_surface_t *surface)
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_surface (image, surface);
-
-  return GTK_WIDGET (image);  
-}
-
-/**
- * gtk_image_new_from_stock:
- * @stock_id: a stock icon name
- * @size: (type int): a stock icon size (#GtkIconSize)
- * 
- * Creates a #GtkImage displaying a stock icon. Sample stock icon
- * names are #GTK_STOCK_OPEN, #GTK_STOCK_QUIT. Sample stock sizes
- * are #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_SMALL_TOOLBAR. If the stock
- * icon name isn’t known, the image will be empty.
- * You can register your own stock icon names, see
- * gtk_icon_factory_add_default() and gtk_icon_factory_add().
- * 
- * Returns: a new #GtkImage displaying the stock icon
- *
- * Deprecated: 3.10: Use gtk_image_new_from_icon_name() instead.
- **/
-GtkWidget*
-gtk_image_new_from_stock (const gchar    *stock_id,
-                          GtkIconSize     size)
-{
-  GtkImage *image;
-
-  image = g_object_new (GTK_TYPE_IMAGE, NULL);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_image_set_from_stock (image, stock_id, size);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   return GTK_WIDGET (image);
 }
@@ -1062,52 +1009,13 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
   priv = image->priv;
 
   g_object_freeze_notify (G_OBJECT (image));
-  
+
   gtk_image_clear (image);
 
   if (pixbuf != NULL)
     _gtk_icon_helper_set_pixbuf (priv->icon_helper, pixbuf);
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF]);
-  
-  g_object_thaw_notify (G_OBJECT (image));
-}
-
-/**
- * gtk_image_set_from_stock:
- * @image: a #GtkImage
- * @stock_id: a stock icon name
- * @size: (type int): a stock icon size (#GtkIconSize)
- *
- * See gtk_image_new_from_stock() for details.
- *
- * Deprecated: 3.10: Use gtk_image_set_from_icon_name() instead.
- **/
-void
-gtk_image_set_from_stock  (GtkImage       *image,
-                           const gchar    *stock_id,
-                           GtkIconSize     size)
-{
-  GtkImagePrivate *priv;
-  gchar *new_id;
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-
-  priv = image->priv;
-
-  g_object_freeze_notify (G_OBJECT (image));
-
-  new_id = g_strdup (stock_id);
-  gtk_image_clear (image);
-
-  if (new_id)
-    {
-      _gtk_icon_helper_set_stock_id (priv->icon_helper, new_id, size);
-      g_free (new_id);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STOCK]);
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1342,40 +1250,6 @@ gtk_image_get_pixbuf (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
 
   return _gtk_icon_helper_peek_pixbuf (image->priv->icon_helper);
-}
-
-/**
- * gtk_image_get_stock:
- * @image: a #GtkImage
- * @stock_id: (out) (transfer none) (allow-none): place to store a
- *     stock icon name, or %NULL
- * @size: (out) (allow-none) (type int): place to store a stock icon
- *     size (#GtkIconSize), or %NULL
- *
- * Gets the stock icon name and size being displayed by the #GtkImage.
- * The storage type of the image must be %GTK_IMAGE_EMPTY or
- * %GTK_IMAGE_STOCK (see gtk_image_get_storage_type()).
- * The returned string is owned by the #GtkImage and should not
- * be freed.
- *
- * Deprecated: 3.10: Use gtk_image_get_icon_name() instead.
- **/
-void
-gtk_image_get_stock  (GtkImage        *image,
-                      gchar          **stock_id,
-                      GtkIconSize     *size)
-{
-  GtkImagePrivate *priv;
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-
-  priv = image->priv;
-
-  if (stock_id)
-    *stock_id = (gchar *) _gtk_icon_helper_get_stock_id (priv->icon_helper);
-
-  if (size)
-    *size = _gtk_icon_helper_get_icon_size (priv->icon_helper);
 }
 
 /**
@@ -1747,9 +1621,6 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
     {
     case GTK_IMAGE_PIXBUF:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF]);
-      break;
-    case GTK_IMAGE_STOCK:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STOCK]);
       break;
     case GTK_IMAGE_ICON_SET:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SET]);

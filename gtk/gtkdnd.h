@@ -89,11 +89,6 @@ void gtk_drag_set_icon_pixbuf (GdkDragContext *context,
 			       GdkPixbuf      *pixbuf,
 			       gint            hot_x,
 			       gint            hot_y);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_drag_set_icon_name)
-void gtk_drag_set_icon_stock  (GdkDragContext *context,
-			       const gchar    *stock_id,
-			       gint            hot_x,
-			       gint            hot_y);
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_set_icon_surface(GdkDragContext *context,
 			       cairo_surface_t *surface);

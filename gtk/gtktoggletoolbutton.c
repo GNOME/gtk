@@ -22,7 +22,6 @@
 #include "gtkcheckmenuitem.h"
 #include "gtklabel.h"
 #include "gtktogglebutton.h"
-#include "deprecated/gtkstock.h"
 #include "gtkintl.h"
 #include "gtkradiotoolbutton.h"
 #include "deprecated/gtktoggleaction.h"
@@ -212,12 +211,10 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
   GtkToolButton *tool_button = GTK_TOOL_BUTTON (item);
   GtkToggleToolButton *toggle_tool_button = GTK_TOGGLE_TOOL_BUTTON (item);
   GtkWidget *menu_item = NULL;
-  GtkStockItem stock_item;
   gboolean use_mnemonic = TRUE;
   const char *label;
   GtkWidget *label_widget;
   const gchar *label_text;
-  const gchar *stock_id;
 
   if (_gtk_tool_item_create_menu_proxy (item))
     return TRUE;
@@ -225,7 +222,6 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
   label_widget = gtk_tool_button_get_label_widget (tool_button);
   label_text = gtk_tool_button_get_label (tool_button);
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  stock_id = gtk_tool_button_get_stock_id (tool_button);
 
   if (GTK_IS_LABEL (label_widget))
     {
@@ -236,10 +232,6 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
     {
       label = label_text;
       use_mnemonic = gtk_tool_button_get_use_underline (tool_button);
-    }
-  else if (stock_id && gtk_stock_lookup (stock_id, &stock_item))
-    {
-      label = stock_item.label;
     }
   else
     {
@@ -401,37 +393,7 @@ gtk_toggle_tool_button_new (void)
 
   button = g_object_new (GTK_TYPE_TOGGLE_TOOL_BUTTON,
 			 NULL);
-  
-  return GTK_TOOL_ITEM (button);
-}
 
-/**
- * gtk_toggle_tool_button_new_from_stock:
- * @stock_id: the name of the stock item 
- *
- * Creates a new #GtkToggleToolButton containing the image and text from a
- * stock item. Some stock ids have preprocessor macros like #GTK_STOCK_OK
- * and #GTK_STOCK_APPLY.
- *
- * It is an error if @stock_id is not a name of a stock item.
- * 
- * Returns: A new #GtkToggleToolButton
- * 
- * Since: 2.4
- *
- * Deprecated: 3.10: Use gtk_toggle_tool_button_new() instead.
- **/
-GtkToolItem *
-gtk_toggle_tool_button_new_from_stock (const gchar *stock_id)
-{
-  GtkToolButton *button;
-
-  g_return_val_if_fail (stock_id != NULL, NULL);
-  
-  button = g_object_new (GTK_TYPE_TOGGLE_TOOL_BUTTON,
-			 "stock-id", stock_id,
-			 NULL);
-  
   return GTK_TOOL_ITEM (button);
 }
 

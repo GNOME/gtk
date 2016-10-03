@@ -32,7 +32,6 @@
 #include "gtkiconthemeprivate.h"
 #include "gtkrendericonprivate.h"
 #include "deprecated/gtkiconfactoryprivate.h"
-#include "deprecated/gtkstock.h"
 
 struct _GtkIconHelperPrivate {
   GtkImageDefinition *def;
@@ -535,19 +534,6 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
                                             gtk_image_definition_get_scale (self->priv->def));
       break;
 
-    case GTK_IMAGE_STOCK:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      icon_set = gtk_icon_factory_lookup_default (gtk_image_definition_get_stock (self->priv->def));
-G_GNUC_END_IGNORE_DEPRECATIONS;
-      if (icon_set != NULL)
-	surface = ensure_surface_for_icon_set (self,
-                                               gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
-                                               gtk_widget_get_direction (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))), 
-                                               scale, icon_set);
-      else
-	surface = NULL;
-      break;
-
     case GTK_IMAGE_ICON_SET:
       icon_set = gtk_image_definition_get_icon_set (self->priv->def);
       surface = ensure_surface_for_icon_set (self,
@@ -647,7 +633,6 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
 
       break;
 
-    case GTK_IMAGE_STOCK:
     case GTK_IMAGE_ICON_SET:
     case GTK_IMAGE_EMPTY:
     default:
@@ -712,34 +697,25 @@ _gtk_icon_helper_set_icon_set (GtkIconHelper *self,
   _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
-void 
+void
 _gtk_icon_helper_set_pixbuf (GtkIconHelper *self,
                              GdkPixbuf *pixbuf)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_pixbuf (pixbuf, 1));
 }
 
-void 
+void
 _gtk_icon_helper_set_animation (GtkIconHelper *self,
                                 GdkPixbufAnimation *animation)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_animation (animation, 1));
 }
 
-void 
+void
 _gtk_icon_helper_set_surface (GtkIconHelper *self,
 			      cairo_surface_t *surface)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_surface (surface));
-}
-
-void 
-_gtk_icon_helper_set_stock_id (GtkIconHelper *self,
-                               const gchar *stock_id,
-                               GtkIconSize icon_size)
-{
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_stock (stock_id));
-  _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
 gboolean
@@ -839,12 +815,6 @@ cairo_surface_t *
 _gtk_icon_helper_peek_surface (GtkIconHelper *self)
 {
   return gtk_image_definition_get_surface (self->priv->def);
-}
-
-const gchar *
-_gtk_icon_helper_get_stock_id (GtkIconHelper *self)
-{
-  return gtk_image_definition_get_stock (self->priv->def);
 }
 
 const gchar *

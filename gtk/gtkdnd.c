@@ -1981,35 +1981,6 @@ gtk_drag_set_icon_pixbuf (GdkDragContext *context,
   gtk_image_definition_unref (def);
 }
 
-/**
- * gtk_drag_set_icon_stock: (method)
- * @context: the context for a drag (This must be called 
- *            with a  context for the source side of a drag)
- * @stock_id: the ID of the stock icon to use for the drag
- * @hot_x: the X offset within the icon of the hotspot
- * @hot_y: the Y offset within the icon of the hotspot
- * 
- * Sets the icon for a given drag from a stock ID.
- *
- * Deprecated: 3.10: Use gtk_drag_set_icon_name() instead.
- */
-void 
-gtk_drag_set_icon_stock (GdkDragContext *context,
-                         const gchar    *stock_id,
-                         gint            hot_x,
-                         gint            hot_y)
-{
-  GtkImageDefinition *def;
-
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (stock_id != NULL);
-
-  def = gtk_image_definition_new_stock (stock_id);
-  set_icon_helper (context, def, hot_x, hot_y);
-
-  gtk_image_definition_unref (def);
-}
-
 /* XXX: This function is in gdk, too. Should it be in Cairo? */
 static gboolean
 _gtk_cairo_surface_extents (cairo_surface_t *surface,

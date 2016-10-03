@@ -953,12 +953,6 @@ create_toolbar (GtkWidget *widget)
               entry = gtk_entry_new ();
               gtk_container_add (GTK_CONTAINER (toolitem), entry);
             }
-          else if (create_toolbar_items[i].stock_id)
-            {
-              G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-              toolitem = gtk_tool_button_new_from_stock (create_toolbar_items[i].stock_id);
-              G_GNUC_END_IGNORE_DEPRECATIONS;
-            }
           else
             {
               GtkWidget *icon;

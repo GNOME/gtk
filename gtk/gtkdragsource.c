@@ -378,42 +378,16 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget *widget,
 }
 
 /**
- * gtk_drag_source_set_icon_stock: (method)
- * @widget: a #GtkWidget
- * @stock_id: the ID of the stock icon to use
- *
- * Sets the icon that will be used for drags from a particular source
- * to a stock icon.
- *
- * Deprecated: 3.10: Use gtk_drag_source_set_icon_name() instead.
- */
-void
-gtk_drag_source_set_icon_stock (GtkWidget   *widget,
-                                const gchar *stock_id)
-{
-  GtkDragSourceSite *site;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (stock_id != NULL);
-
-  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
-  g_return_if_fail (site != NULL);
-
-  gtk_image_definition_unref (site->image_def);
-  site->image_def = gtk_image_definition_new_stock (stock_id);
-}
-
-/**
  * gtk_drag_source_set_icon_name: (method)
  * @widget: a #GtkWidget
  * @icon_name: name of icon to use
- * 
+ *
  * Sets the icon that will be used for drags from a particular source
  * to a themed icon. See the docs for #GtkIconTheme for more details.
  *
  * Since: 2.8
  */
-void 
+void
 gtk_drag_source_set_icon_name (GtkWidget   *widget,
                                const gchar *icon_name)
 {

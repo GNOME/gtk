@@ -44,10 +44,6 @@ void gtk_tooltip_set_text                (GtkTooltip         *tooltip,
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon                (GtkTooltip         *tooltip,
                                           GdkPixbuf          *pixbuf);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_tooltip_set_icon_from_icon_name)
-void gtk_tooltip_set_icon_from_stock     (GtkTooltip         *tooltip,
-                                          const gchar        *stock_id,
-                                          GtkIconSize         size);
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_icon_from_icon_name (GtkTooltip         *tooltip,
 				          const gchar        *icon_name,

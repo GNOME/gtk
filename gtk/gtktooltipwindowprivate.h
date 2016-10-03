@@ -43,9 +43,6 @@ void            gtk_tooltip_window_set_label_text               (GtkTooltipWindo
                                                                  const char       *text);
 void            gtk_tooltip_window_set_image_icon               (GtkTooltipWindow *window,
                                                                  GdkPixbuf        *pixbuf);
-void            gtk_tooltip_window_set_image_icon_from_stock    (GtkTooltipWindow *window,
-                                                                 const char       *stock_id,
-                                                                 GtkIconSize       icon_size);
 void            gtk_tooltip_window_set_image_icon_from_name     (GtkTooltipWindow *window,
                                                                  const char       *icon_name,
                                                                  GtkIconSize       icon_size);

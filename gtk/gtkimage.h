@@ -52,7 +52,6 @@ typedef struct _GtkImageClass         GtkImageClass;
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
  * @GTK_IMAGE_PIXBUF: the widget contains a #GdkPixbuf
- * @GTK_IMAGE_STOCK: the widget contains a [stock item name][gtkstock]
  * @GTK_IMAGE_ICON_SET: the widget contains a #GtkIconSet
  * @GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
  * @GTK_IMAGE_ICON_NAME: the widget contains a named icon.
@@ -74,7 +73,6 @@ typedef enum
 {
   GTK_IMAGE_EMPTY,
   GTK_IMAGE_PIXBUF,
-  GTK_IMAGE_STOCK,
   GTK_IMAGE_ICON_SET,
   GTK_IMAGE_ANIMATION,
   GTK_IMAGE_ICON_NAME,
@@ -119,9 +117,6 @@ GtkWidget* gtk_image_new_from_resource  (const gchar     *resource_path);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_image_new_from_icon_name)
-GtkWidget* gtk_image_new_from_stock     (const gchar     *stock_id,
-                                         GtkIconSize      size);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_image_new_from_icon_name)
 GtkWidget* gtk_image_new_from_icon_set  (GtkIconSet      *icon_set,
                                          GtkIconSize      size);
 GDK_AVAILABLE_IN_ALL
@@ -146,10 +141,6 @@ void gtk_image_set_from_resource  (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_image_set_from_icon_name)
-void gtk_image_set_from_stock     (GtkImage        *image,
-                                   const gchar     *stock_id,
-                                   GtkIconSize      size);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_image_set_from_icon_name)
 void gtk_image_set_from_icon_set  (GtkImage        *image,
                                    GtkIconSet      *icon_set,
@@ -177,10 +168,6 @@ GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf* gtk_image_get_pixbuf   (GtkImage         *image);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_image_get_icon_name)
-void       gtk_image_get_stock    (GtkImage         *image,
-                                   gchar           **stock_id,
-                                   GtkIconSize      *size);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_image_get_icon_name)
 void       gtk_image_get_icon_set (GtkImage         *image,
                                    GtkIconSet      **icon_set,

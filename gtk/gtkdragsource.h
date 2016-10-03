@@ -62,9 +62,6 @@ void           gtk_drag_source_add_uri_targets   (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set_icon_pixbuf  (GtkWidget       *widget,
 				       GdkPixbuf       *pixbuf);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_drag_source_set_icon_name)
-void gtk_drag_source_set_icon_stock   (GtkWidget       *widget,
-				       const gchar     *stock_id);
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set_icon_name    (GtkWidget       *widget,
 				       const gchar     *icon_name);

@@ -77,7 +77,6 @@ enum {
   PROP_PIXBUF_EXPANDER_OPEN,
   PROP_PIXBUF_EXPANDER_CLOSED,
   PROP_SURFACE,
-  PROP_STOCK_ID,
   PROP_STOCK_SIZE,
   PROP_STOCK_DETAIL,
   PROP_FOLLOW_STATE,
@@ -182,19 +181,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 						       CAIRO_GOBJECT_TYPE_SURFACE,
 						       GTK_PARAM_READWRITE));
 
-  /**
-   * GtkCellRendererPixbuf:stock-id:
-   *
-   * Deprecated: 3.10: Use #GtkCellRendererPixbuf:icon-name instead.
-   */
-  g_object_class_install_property (object_class,
-				   PROP_STOCK_ID,
-				   g_param_spec_string ("stock-id",
-							P_("Stock ID"),
-							P_("The stock ID of the stock icon to render"),
-							NULL,
-							GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
-
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,
 				   g_param_spec_uint ("stock-size",
@@ -295,9 +281,6 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
     case PROP_SURFACE:
       g_value_set_boxed (value, gtk_image_definition_get_surface (priv->image_def));
       break;
-    case PROP_STOCK_ID:
-      g_value_set_string (value, gtk_image_definition_get_stock (priv->image_def));
-      break;
     case PROP_STOCK_SIZE:
       g_value_set_uint (value, priv->icon_size);
       break;
@@ -330,9 +313,6 @@ notify_storage_type (GtkCellRendererPixbuf *cellpixbuf,
       break;
     case GTK_IMAGE_PIXBUF:
       g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
-      break;
-    case GTK_IMAGE_STOCK:
-      g_object_notify (G_OBJECT (cellpixbuf), "stock-id");
       break;
     case GTK_IMAGE_ICON_NAME:
       g_object_notify (G_OBJECT (cellpixbuf), "icon-name");
@@ -395,9 +375,6 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       break;
     case PROP_SURFACE:
       take_image_definition (cellpixbuf, gtk_image_definition_new_surface (g_value_get_boxed (value)));
-      break;
-    case PROP_STOCK_ID:
-      take_image_definition (cellpixbuf, gtk_image_definition_new_stock (g_value_get_string (value)));
       break;
     case PROP_STOCK_SIZE:
       priv->icon_size = g_value_get_uint (value);

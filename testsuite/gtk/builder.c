@@ -1897,9 +1897,7 @@ test_icon_factory (void)
   icon_set = gtk_icon_factory_lookup (GTK_ICON_FACTORY (factory), "apple-red");
   g_assert (icon_set != NULL);
   gtk_icon_factory_add_default (GTK_ICON_FACTORY (factory));
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  image = gtk_image_new_from_stock ("apple-red", GTK_ICON_SIZE_BUTTON);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  image = gtk_image_new_from_icon_name ("audio-volume-high", GTK_ICON_SIZE_BUTTON);
   g_assert (image != NULL);
   g_object_ref_sink (image);
   g_object_unref (image);
@@ -2270,7 +2268,6 @@ test_menus (void)
     "                      <object class=\"GtkImageMenuItem\" id=\"imagemenuitem1\">"
     "                        <property name=\"label\">gtk-new</property>"
     "                        <property name=\"visible\">True</property>"
-    "                        <property name=\"use_stock\">True</property>"
     "                        <property name=\"accel_group\">accelgroup1</property>"
     "                      </object>"
     "                    </child>"
@@ -2333,7 +2330,8 @@ test_menus (void)
   gtk_widget_show_all (window);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  sample_menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accel_group);
+  sample_menu_item = gtk_image_menu_item_new ();//_with_label ("Some Label");
+  gtk_image_menu_item_set_accel_group (GTK_IMAGE_MENU_ITEM (sample_menu_item), accel_group);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   child = gtk_bin_get_child (GTK_BIN (sample_menu_item));
@@ -2444,7 +2442,6 @@ test_message_area (void)
     "        <child>"
     "          <object class=\"GtkButton\" id=\"button_ok\">"
     "            <property name=\"label\">gtk-ok</property>"
-    "            <property name=\"use-stock\">yes</property>"
     "          </object>"
     "        </child>"
     "      </object>"
@@ -2687,7 +2684,6 @@ test_no_ids (void)
     "        <child>"
     "          <object class=\"GtkButton\" id=\"button_ok\">"
     "            <property name=\"label\">gtk-ok</property>"
-    "            <property name=\"use-stock\">yes</property>"
     "          </object>"
     "        </child>"
     "      </object>"

@@ -171,8 +171,6 @@ gtk_image_accessible_get_name (AtkObject *accessible)
   GtkWidget* widget;
   GtkImage *image;
   GtkImageAccessible *image_accessible;
-  GtkStockItem stock_item;
-  gchar *stock_id;
   const gchar *name;
   GtkImageType storage_type;
 
@@ -190,23 +188,9 @@ gtk_image_accessible_get_name (AtkObject *accessible)
   g_free (image_accessible->priv->stock_name);
   image_accessible->priv->stock_name = NULL;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
   storage_type = gtk_image_get_storage_type (image);
-  if (storage_type == GTK_IMAGE_STOCK)
-    {
-      gtk_image_get_stock (image, &stock_id, NULL);
-      if (stock_id == NULL)
-        return NULL;
 
-      if (!gtk_stock_lookup (stock_id, &stock_item))
-        return NULL;
-
-G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      image_accessible->priv->stock_name = _gtk_toolbar_elide_underscores (stock_item.label);
-    }
-  else if (storage_type == GTK_IMAGE_ICON_NAME)
+  if (storage_type == GTK_IMAGE_ICON_NAME)
     {
       const gchar *icon_name;
 
@@ -295,7 +279,6 @@ gtk_image_accessible_get_image_size (AtkImage *image,
         *width = gdk_pixbuf_get_width (pixbuf);
         break;
       }
-    case GTK_IMAGE_STOCK:
     case GTK_IMAGE_ICON_SET:
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:

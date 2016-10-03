@@ -1007,17 +1007,10 @@ gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
 
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (action->private_data->stock_id &&
-      gtk_icon_factory_lookup_default (action->private_data->stock_id))
-    widget = gtk_image_new_from_stock (action->private_data->stock_id, icon_size);
-  else if (action->private_data->gicon)
+  if (action->private_data->gicon)
     widget = gtk_image_new_from_gicon (action->private_data->gicon, icon_size);
   else if (action->private_data->icon_name)
     widget = gtk_image_new_from_icon_name (action->private_data->icon_name, icon_size);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   return widget;
 }

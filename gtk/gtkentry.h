@@ -316,10 +316,6 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_icon_from_pixbuf            (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
 							  GdkPixbuf            *pixbuf);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_entry_set_icon_from_icon_name)
-void           gtk_entry_set_icon_from_stock             (GtkEntry             *entry,
-							  GtkEntryIconPosition  icon_pos,
-							  const gchar          *stock_id);
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_icon_from_icon_name         (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
@@ -333,9 +329,6 @@ GtkImageType gtk_entry_get_icon_storage_type             (GtkEntry             *
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf*   gtk_entry_get_icon_pixbuf                   (GtkEntry             *entry,
-							  GtkEntryIconPosition  icon_pos);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_entry_get_icon_name)
-const gchar* gtk_entry_get_icon_stock                    (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos);
 GDK_AVAILABLE_IN_ALL
 const gchar* gtk_entry_get_icon_name                     (GtkEntry             *entry,

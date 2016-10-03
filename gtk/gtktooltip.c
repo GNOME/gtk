@@ -293,32 +293,6 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
 }
 
 /**
- * gtk_tooltip_set_icon_from_stock:
- * @tooltip: a #GtkTooltip
- * @stock_id: (allow-none): a stock id, or %NULL
- * @size: (type int): a stock icon size (#GtkIconSize)
- *
- * Sets the icon of the tooltip (which is in front of the text) to be
- * the stock item indicated by @stock_id with the size indicated
- * by @size.  If @stock_id is %NULL, the image will be hidden.
- *
- * Since: 2.12
- *
- * Deprecated: 3.10: Use gtk_tooltip_set_icon_from_icon_name() instead.
- */
-void
-gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
-				 const gchar *stock_id,
-				 GtkIconSize  size)
-{
-  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
-
-  gtk_tooltip_window_set_image_icon_from_stock (GTK_TOOLTIP_WINDOW (tooltip->window),
-                                                stock_id,
-                                                size);
-}
-
-/**
  * gtk_tooltip_set_icon_from_icon_name:
  * @tooltip: a #GtkTooltip
  * @icon_name: (allow-none): an icon name, or %NULL
