@@ -68,9 +68,9 @@ main (int argc, char *argv[])
 #endif
 #endif
 
+  context =
   /* Translators: this message will appear immediately after the */
   /* usage string - Usage: COMMAND [OPTION...] <THIS_MESSAGE>    */
-  context =
     g_option_context_new (_("APPLICATION [URI...] — launch an APPLICATION"));
 
   /* Translators: this message will appear after the usage string */
