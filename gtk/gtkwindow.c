@@ -314,8 +314,6 @@ enum {
   PROP_GRAVITY,
   PROP_TRANSIENT_FOR,
   PROP_ATTACHED_TO,
-  PROP_HAS_RESIZE_GRIP,
-  PROP_RESIZE_GRIP_VISIBLE,
   PROP_APPLICATION,
   /* Readonly properties */
   PROP_IS_ACTIVE,
@@ -978,43 +976,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                             P_("Whether the window frame should have a close button"),
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkWindow:has-resize-grip:
-   *
-   * Whether the window has a corner resize grip.
-   *
-   * Note that the resize grip is only shown if the window is
-   * actually resizable and not maximized. Use
-   * #GtkWindow:resize-grip-visible to find out if the resize
-   * grip is currently shown.
-   *
-   * Deprecated: 3.14: Resize grips have been removed.
-   *
-   * Since: 3.0
-   */
-  window_props[PROP_HAS_RESIZE_GRIP] =
-      g_param_spec_boolean ("has-resize-grip",
-                            P_("Resize grip"),
-                            P_("Specifies whether the window should have a resize grip"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-
-  /**
-   * GtkWindow:resize-grip-visible:
-   *
-   * Whether a corner resize grip is currently shown.
-   *
-   * Deprecated: 3.14: Resize grips have been removed.
-   *
-   * Since: 3.0
-   */
-  window_props[PROP_RESIZE_GRIP_VISIBLE] =
-      g_param_spec_boolean ("resize-grip-visible",
-                            P_("Resize grip is visible"),
-                            P_("Specifies whether the window's resize grip is visible."),
-                            FALSE,
-                            GTK_PARAM_READABLE|G_PARAM_DEPRECATED);
 
   /**
    * GtkWindow:gravity:
@@ -1830,9 +1791,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_ATTACHED_TO:
       gtk_window_set_attached_to (window, g_value_get_object (value));
       break;
-    case PROP_HAS_RESIZE_GRIP:
-      /* Do nothing. */
-      break;
     case PROP_APPLICATION:
       gtk_window_set_application (window, g_value_get_object (value));
       break;
@@ -1950,12 +1908,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_ATTACHED_TO:
       g_value_set_object (value, gtk_window_get_attached_to (window));
-      break;
-    case PROP_HAS_RESIZE_GRIP:
-      g_value_set_boolean (value, FALSE);
-      break;
-    case PROP_RESIZE_GRIP_VISIBLE:
-      g_value_set_boolean (value, FALSE);
       break;
     case PROP_APPLICATION:
       g_value_set_object (value, gtk_window_get_application (window));
@@ -7610,93 +7562,6 @@ gtk_window_state_event (GtkWidget           *widget,
   return FALSE;
 }
 
-/**
- * gtk_window_set_has_resize_grip:
- * @window: a #GtkWindow
- * @value: %TRUE to allow a resize grip
- *
- * Sets whether @window has a corner resize grip.
- *
- * Note that the resize grip is only shown if the window
- * is actually resizable and not maximized. Use
- * gtk_window_resize_grip_is_visible() to find out if the
- * resize grip is currently shown.
- *
- * Since: 3.0
- *
- * Deprecated: 3.14: Resize grips have been removed.
- */
-void
-gtk_window_set_has_resize_grip (GtkWindow *window,
-                                gboolean   value)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-}
-
-/**
- * gtk_window_resize_grip_is_visible:
- * @window: a #GtkWindow
- *
- * Determines whether a resize grip is visible for the specified window.
- *
- * Returns: %TRUE if a resize grip exists and is visible
- *
- * Since: 3.0
- *
- * Deprecated: 3.14: Resize grips have been removed.
- */
-gboolean
-gtk_window_resize_grip_is_visible (GtkWindow *window)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return FALSE;
-}
-
-/**
- * gtk_window_get_has_resize_grip:
- * @window: a #GtkWindow
- *
- * Determines whether the window may have a resize grip.
- *
- * Returns: %TRUE if the window has a resize grip
- *
- * Since: 3.0
- *
- * Deprecated: 3.14: Resize grips have been removed.
- */
-gboolean
-gtk_window_get_has_resize_grip (GtkWindow *window)
-
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return FALSE;
-}
-
-/**
- * gtk_window_get_resize_grip_area:
- * @window: a #GtkWindow
- * @rect: (out): a pointer to a #GdkRectangle which we should store
- *     the resize grip area
- *
- * If a window has a resize grip, this will retrieve the grip
- * position, width and height into the specified #GdkRectangle.
- *
- * Returns: %TRUE if the resize grip’s area was retrieved
- *
- * Since: 3.0
- *
- * Deprecated: 3.14: Resize grips have been removed.
- */
-gboolean
-gtk_window_get_resize_grip_area (GtkWindow    *window,
-                                 GdkRectangle *rect)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return FALSE;
-}
 
 /* the accel_key and accel_mods fields of the key have to be setup
  * upon calling this function. it’ll then return whether that key

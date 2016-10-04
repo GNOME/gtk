@@ -448,20 +448,6 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_window_set_application      (GtkWindow          *window,
                                                  GtkApplication     *application);
 
-
-/* Window grips
- */
-GDK_DEPRECATED_IN_3_14
-void     gtk_window_set_has_resize_grip    (GtkWindow    *window,
-                                            gboolean      value);
-GDK_DEPRECATED_IN_3_14
-gboolean gtk_window_get_has_resize_grip    (GtkWindow    *window);
-GDK_DEPRECATED_IN_3_14
-gboolean gtk_window_resize_grip_is_visible (GtkWindow    *window);
-GDK_DEPRECATED_IN_3_14
-gboolean gtk_window_get_resize_grip_area   (GtkWindow    *window,
-                                            GdkRectangle *rect);
-
 GDK_AVAILABLE_IN_3_10
 void     gtk_window_set_titlebar           (GtkWindow    *window,
                                             GtkWidget    *titlebar);
