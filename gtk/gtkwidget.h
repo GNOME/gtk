@@ -1148,10 +1148,6 @@ GDK_DEPRECATED_IN_3_16
 void         gtk_widget_override_symbolic_color   (GtkWidget     *widget,
                                                    const gchar   *name,
                                                    const GdkRGBA *color);
-GDK_DEPRECATED_IN_3_16
-void         gtk_widget_override_cursor           (GtkWidget       *widget,
-                                                   const GdkRGBA   *cursor,
-                                                   const GdkRGBA   *secondary_cursor);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_reset_style       (GtkWidget      *widget);

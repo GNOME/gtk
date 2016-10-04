@@ -33,10 +33,10 @@ test_section_in_style_property (void)
   provider = gtk_css_provider_new ();
   g_signal_connect (provider, "parsing-error",
                     G_CALLBACK (assert_section_is_not_null), NULL);
-  gtk_css_provider_load_from_data (provider, "* { -GtkWidget-interior-focus: random garbage goes here; }", -1, NULL);
+  gtk_css_provider_load_from_data (provider, "* { -GtkWidget-window-dragging: random garbage goes here; }", -1, NULL);
 
   widget_class = g_type_class_ref (GTK_TYPE_WIDGET);
-  pspec = gtk_widget_class_find_style_property (widget_class, "interior-focus");
+  pspec = gtk_widget_class_find_style_property (widget_class, "window-dragging");
   g_assert (pspec);
   path = gtk_widget_path_new ();
   gtk_widget_path_append_type (path, GTK_TYPE_WIDGET);

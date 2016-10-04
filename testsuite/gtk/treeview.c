@@ -177,8 +177,7 @@ test_row_separator_height_func (GtkTreeModel *model,
 static void
 test_row_separator_height (void)
 {
-  int focus_pad, separator_height, height;
-  gboolean wide_separators;
+  int height;
   GtkTreeIter iter;
   GtkTreePath *path;
   GtkListStore *store;
@@ -220,16 +219,7 @@ test_row_separator_height (void)
                                path, NULL, &cell_rect);
   gtk_tree_path_free (path);
 
-  gtk_widget_style_get (tree_view,
-                        "focus-padding", &focus_pad,
-                        "wide-separators", &wide_separators,
-                        "separator-height", &separator_height,
-                        NULL);
-
-  if (wide_separators)
-    height = separator_height;
-  else
-    height = 2;
+  height = 2;
 
   g_assert_cmpint (rect.height, ==, height);
   g_assert_cmpint (cell_rect.height, ==, height);

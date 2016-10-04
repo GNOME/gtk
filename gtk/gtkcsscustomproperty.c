@@ -110,7 +110,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gdk_rgba_parse (&color, "pink");
       g_value_set_boxed (&value, &color);
     }
-  else if (pspec->value_type == g_type_from_name ("GdkColor"))
+  else if (pspec->value_type == GDK_TYPE_COLOR)
     {
       GdkColor color;
       gdk_color_parse ("pink", &color);
