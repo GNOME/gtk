@@ -536,7 +536,6 @@ enum {
   SELECTION_RECEIVED,
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
-  VISIBILITY_NOTIFY_EVENT,
   WINDOW_STATE_EVENT,
   DAMAGE_EVENT,
   GRAB_BROKEN_EVENT,
@@ -3028,36 +3027,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
 		  G_TYPE_UINT,
 		  G_TYPE_UINT);
-
-  /**
-   * GtkWidget::visibility-notify-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventVisibility): the #GdkEventVisibility which
-   *   triggered this signal.
-   *
-   * The ::visibility-notify-event will be emitted when the @widget's
-   * window is obscured or unobscured.
-   *
-   * To receive this signal the #GdkWindow associated to the widget needs
-   * to enable the #GDK_VISIBILITY_NOTIFY_MASK mask.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   *
-   * Deprecated: 3.12: Modern composited windowing systems with pervasive
-   *     transparency make it impossible to track the visibility of a window
-   *     reliably, so this signal can not be guaranteed to provide useful
-   *     information.
-   */
-  widget_signals[VISIBILITY_NOTIFY_EVENT] =
-    g_signal_new (I_("visibility-notify-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, visibility_notify_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
    * GtkWidget::window-state-event:
@@ -7181,6 +7150,7 @@ gtk_widget_event_internal (GtkWidget *widget,
         case GDK_PAD_RING:
         case GDK_PAD_STRIP:
         case GDK_PAD_GROUP_MODE:
+        case GDK_VISIBILITY_NOTIFY:
 	case GDK_EXPOSE:
 	case GDK_NOTHING:
 	  signal_num = -1;
@@ -7260,9 +7230,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_PROXIMITY_OUT:
 	  signal_num = PROXIMITY_OUT_EVENT;
-	  break;
-	case GDK_VISIBILITY_NOTIFY:
-	  signal_num = VISIBILITY_NOTIFY_EVENT;
 	  break;
 	case GDK_GRAB_BROKEN:
 	  signal_num = GRAB_BROKEN_EVENT;
