@@ -98,8 +98,6 @@ main (int argc, char **argv)
   GtkWidget *label, *image, *box;
   GtkIconTheme *theme;
   GdkPixbuf *pixbuf;
-  GtkIconSet *iconset;
-  GtkIconSource *iconsource;
   gchar *icon_name = "gnome-terminal";
   gchar *anim_filename = NULL;
   GIcon *icon;
@@ -148,19 +146,6 @@ main (int argc, char **argv)
   gtk_drag_dest_add_image_targets (box);
   g_signal_connect (box, "drag_data_received",
 		    G_CALLBACK (drag_data_received), image);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  label = gtk_label_new ("GTK_IMAGE_ICON_SET");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
-
-  iconsource = gtk_icon_source_new ();
-  gtk_icon_source_set_icon_name (iconsource, icon_name);
-  iconset = gtk_icon_set_new ();
-  gtk_icon_set_add_source (iconset, iconsource);
-  image = gtk_image_new_from_icon_set (iconset, GTK_ICON_SIZE_DIALOG);
-  gtk_grid_attach (GTK_GRID (grid), image, 1, 3, 1, 1);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   label = gtk_label_new ("GTK_IMAGE_ICON_NAME");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);

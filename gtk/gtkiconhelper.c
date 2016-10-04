@@ -404,29 +404,6 @@ ensure_surface_from_pixbuf (GtkIconHelper *self,
 }
 
 static cairo_surface_t *
-ensure_surface_for_icon_set (GtkIconHelper    *self,
-                             GtkCssStyle      *style,
-                             GtkTextDirection  direction,
-                             gint              scale,
-			     GtkIconSet       *icon_set)
-{
-  cairo_surface_t *surface;
-  GdkPixbuf *pixbuf;
-
-  pixbuf = gtk_icon_set_render_icon_pixbuf_for_scale (icon_set,
-                                                      style,
-                                                      direction,
-                                                      self->priv->icon_size,
-                                                      scale);
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf,
-                                                  scale,
-                                                  gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
-  g_object_unref (pixbuf);
-
-  return surface;
-}
-
-static cairo_surface_t *
 ensure_surface_for_gicon (GtkIconHelper    *self,
                           GtkCssStyle      *style,
                           GtkTextDirection  dir,
@@ -517,7 +494,6 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
                               int              scale)
 {
   cairo_surface_t *surface;
-  GtkIconSet *icon_set;
   GIcon *gicon;
 
   switch (gtk_image_definition_get_storage_type (self->priv->def))
@@ -532,14 +508,6 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
                                             scale,
                                             gtk_image_definition_get_pixbuf (self->priv->def),
                                             gtk_image_definition_get_scale (self->priv->def));
-      break;
-
-    case GTK_IMAGE_ICON_SET:
-      icon_set = gtk_image_definition_get_icon_set (self->priv->def);
-      surface = ensure_surface_for_icon_set (self,
-                                             gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self))),
-                                             gtk_widget_get_direction (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))), 
-                                             scale, icon_set);
       break;
 
     case GTK_IMAGE_ICON_NAME:
@@ -633,7 +601,6 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
 
       break;
 
-    case GTK_IMAGE_ICON_SET:
     case GTK_IMAGE_EMPTY:
     default:
       break;
@@ -685,15 +652,6 @@ _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
                                 GtkIconSize icon_size)
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name));
-  _gtk_icon_helper_set_icon_size (self, icon_size);
-}
-
-void 
-_gtk_icon_helper_set_icon_set (GtkIconHelper *self,
-                               GtkIconSet *icon_set,
-                               GtkIconSize icon_size)
-{
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_set (icon_set));
   _gtk_icon_helper_set_icon_size (self, icon_size);
 }
 
@@ -803,12 +761,6 @@ GdkPixbufAnimation *
 _gtk_icon_helper_peek_animation (GtkIconHelper *self)
 {
   return gtk_image_definition_get_animation (self->priv->def);
-}
-
-GtkIconSet *
-_gtk_icon_helper_peek_icon_set (GtkIconHelper *self)
-{
-  return gtk_image_definition_get_icon_set (self->priv->def);
 }
 
 cairo_surface_t *

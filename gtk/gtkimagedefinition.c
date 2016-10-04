@@ -19,12 +19,9 @@
 
 #include "gtkimagedefinitionprivate.h"
 
-#include "deprecated/gtkiconfactory.h"
-
 typedef struct _GtkImageDefinitionEmpty GtkImageDefinitionEmpty;
 typedef struct _GtkImageDefinitionPixbuf GtkImageDefinitionPixbuf;
 typedef struct _GtkImageDefinitionStock GtkImageDefinitionStock;
-typedef struct _GtkImageDefinitionIconSet GtkImageDefinitionIconSet;
 typedef struct _GtkImageDefinitionAnimation GtkImageDefinitionAnimation;
 typedef struct _GtkImageDefinitionIconName GtkImageDefinitionIconName;
 typedef struct _GtkImageDefinitionGIcon GtkImageDefinitionGIcon;
@@ -48,13 +45,6 @@ struct _GtkImageDefinitionStock {
   gint ref_count;
 
   char *id;
-};
-
-struct _GtkImageDefinitionIconSet {
-  GtkImageType type;
-  gint ref_count;
-
-  GtkIconSet *icon_set;
 };
 
 struct _GtkImageDefinitionAnimation {
@@ -92,7 +82,6 @@ union _GtkImageDefinition
   GtkImageDefinitionEmpty empty;
   GtkImageDefinitionPixbuf pixbuf;
   GtkImageDefinitionStock stock;
-  GtkImageDefinitionIconSet icon_set;
   GtkImageDefinitionAnimation animation;
   GtkImageDefinitionIconName icon_name;
   GtkImageDefinitionGIcon gicon;
@@ -114,7 +103,6 @@ gtk_image_definition_alloc (GtkImageType type)
     sizeof (GtkImageDefinitionEmpty),
     sizeof (GtkImageDefinitionPixbuf),
     sizeof (GtkImageDefinitionStock),
-    sizeof (GtkImageDefinitionIconSet),
     sizeof (GtkImageDefinitionAnimation),
     sizeof (GtkImageDefinitionIconName),
     sizeof (GtkImageDefinitionGIcon),
@@ -143,22 +131,6 @@ gtk_image_definition_new_pixbuf (GdkPixbuf *pixbuf,
   def = gtk_image_definition_alloc (GTK_IMAGE_PIXBUF);
   def->pixbuf.pixbuf = g_object_ref (pixbuf);
   def->pixbuf.scale = scale;
-
-  return def;
-}
-
-GtkImageDefinition *
-gtk_image_definition_new_icon_set (GtkIconSet *icon_set)
-{
-  GtkImageDefinition *def;
-
-  if (icon_set == NULL)
-    return NULL;
-
-  def = gtk_image_definition_alloc (GTK_IMAGE_ICON_SET);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  def->icon_set.icon_set = gtk_icon_set_ref (icon_set);
-G_GNUC_END_IGNORE_DEPRECATIONS;
 
   return def;
 }
@@ -252,11 +224,6 @@ gtk_image_definition_unref (GtkImageDefinition *def)
     case GTK_IMAGE_SURFACE:
       cairo_surface_destroy (def->surface.surface);
       break;
-    case GTK_IMAGE_ICON_SET:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_icon_set_unref (def->icon_set.icon_set);
-G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
     case GTK_IMAGE_ICON_NAME:
       g_free (def->icon_name.icon_name);
       break;
@@ -283,7 +250,6 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
       g_assert_not_reached ();
     case GTK_IMAGE_EMPTY:
     case GTK_IMAGE_SURFACE:
-    case GTK_IMAGE_ICON_SET:
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       return 1;
@@ -301,15 +267,6 @@ gtk_image_definition_get_pixbuf (const GtkImageDefinition *def)
     return NULL;
 
   return def->pixbuf.pixbuf;
-}
-
-GtkIconSet *
-gtk_image_definition_get_icon_set (const GtkImageDefinition *def)
-{
-  if (def->type != GTK_IMAGE_ICON_SET)
-    return NULL;
-
-  return def->icon_set.icon_set;
 }
 
 GdkPixbufAnimation *

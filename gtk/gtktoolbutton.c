@@ -773,16 +773,6 @@ clone_image_menu_size (GtkImage *image)
       gtk_image_get_icon_name (image, &icon_name, NULL);
       return gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
     }
-  else if (storage_type == GTK_IMAGE_ICON_SET)
-    {
-      GtkWidget *widget;
-      GtkIconSet *icon_set;
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_image_get_icon_set (image, &icon_set, NULL);
-      widget = gtk_image_new_from_icon_set (icon_set, GTK_ICON_SIZE_MENU);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      return widget;
-    }
   else if (storage_type == GTK_IMAGE_GICON)
     {
       GIcon *icon;
@@ -953,29 +943,14 @@ gtk_tool_button_update (GtkActivatable *activatable,
     gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
   else if (strcmp (property_name, "gicon") == 0)
     {
-      const gchar *stock_id = gtk_action_get_stock_id (action);
       GIcon *icon = gtk_action_get_gicon (action);
       GtkIconSize icon_size = GTK_ICON_SIZE_BUTTON;
-      GtkIconSet *icon_set = NULL;
 
-      if (stock_id)
-        {
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-          icon_set = gtk_icon_factory_lookup_default (stock_id);
-          G_GNUC_END_IGNORE_DEPRECATIONS;
-        }
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      image = gtk_tool_button_get_icon_widget (button);
+      icon_size = gtk_tool_item_get_icon_size (GTK_TOOL_ITEM (button));
 
-      if (icon_set != NULL || !icon)
-	image = NULL;
-      else 
-	{   
-	  image = gtk_tool_button_get_icon_widget (button);
-	  icon_size = gtk_tool_item_get_icon_size (GTK_TOOL_ITEM (button));
-
-	  if (!image)
-	    image = gtk_image_new ();
-	}
+      if (!image)
+        image = gtk_image_new ();
 
       gtk_tool_button_set_icon_widget (button, image);
       gtk_image_set_from_gicon (GTK_IMAGE (image), icon, icon_size);
@@ -993,36 +968,23 @@ gtk_tool_button_sync_action_properties (GtkActivatable *activatable,
 {
   GtkToolButton *button;
   GIcon         *icon;
-  const gchar   *stock_id;
-  GtkIconSet    *icon_set = NULL;
 
   parent_activatable_iface->sync_action_properties (activatable, action);
 
   if (!action)
     return;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (!gtk_activatable_get_use_action_appearance (activatable))
     return;
 
   button = GTK_TOOL_BUTTON (activatable);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  stock_id = gtk_action_get_stock_id (action);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
   gtk_tool_button_set_use_underline (button, TRUE);
   gtk_tool_button_set_icon_name (button, gtk_action_get_icon_name (action));
 
-  if (stock_id)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      icon_set = gtk_icon_factory_lookup_default (stock_id);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-
-  if (icon_set != NULL)
-      gtk_tool_button_set_icon_widget (button, NULL);
-  else if ((icon = gtk_action_get_gicon (action)) != NULL)
+  if ((icon = gtk_action_get_gicon (action)) != NULL)
     {
       GtkIconSize icon_size = gtk_tool_item_get_icon_size (GTK_TOOL_ITEM (button));
       GtkWidget  *image = gtk_tool_button_get_icon_widget (button);
@@ -1040,6 +1002,9 @@ gtk_tool_button_sync_action_properties (GtkActivatable *activatable,
     gtk_tool_button_set_icon_name (button, gtk_action_get_icon_name (action));
   else
     gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
+
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 

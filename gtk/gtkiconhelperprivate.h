@@ -88,9 +88,6 @@ void _gtk_icon_helper_set_pixbuf_scale (GtkIconHelper *self,
 					int scale);
 void _gtk_icon_helper_set_animation (GtkIconHelper *self,
                                      GdkPixbufAnimation *animation);
-void _gtk_icon_helper_set_icon_set (GtkIconHelper *self,
-                                    GtkIconSet *icon_set,
-                                    GtkIconSize icon_size);
 
 void _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
                                      const gchar *icon_name,
@@ -112,7 +109,6 @@ gboolean _gtk_icon_helper_get_use_fallback (GtkIconHelper *self);
 
 GdkPixbuf *_gtk_icon_helper_peek_pixbuf (GtkIconHelper *self);
 GIcon *_gtk_icon_helper_peek_gicon (GtkIconHelper *self);
-GtkIconSet *_gtk_icon_helper_peek_icon_set (GtkIconHelper *self);
 GdkPixbufAnimation *_gtk_icon_helper_peek_animation (GtkIconHelper *self);
 cairo_surface_t *_gtk_icon_helper_peek_surface (GtkIconHelper *self);
 
