@@ -249,12 +249,7 @@
 #include <gtk/deprecated/gtkactiongroup.h>
 #include <gtk/deprecated/gtkalignment.h>
 #include <gtk/deprecated/gtkgradient.h>
-#include <gtk/deprecated/gtkhbbox.h>
-#include <gtk/deprecated/gtkhpaned.h>
 #include <gtk/deprecated/gtkhsv.h>
-#include <gtk/deprecated/gtkhscale.h>
-#include <gtk/deprecated/gtkhscrollbar.h>
-#include <gtk/deprecated/gtkhseparator.h>
 #include <gtk/deprecated/gtkiconfactory.h>
 #include <gtk/deprecated/gtkradioaction.h>
 #include <gtk/deprecated/gtkrecentaction.h>
@@ -265,12 +260,6 @@
 #include <gtk/deprecated/gtkthemingengine.h>
 #include <gtk/deprecated/gtktoggleaction.h>
 #include <gtk/deprecated/gtkuimanager.h>
-#include <gtk/deprecated/gtkvbbox.h>
-#include <gtk/deprecated/gtkvbox.h>
-#include <gtk/deprecated/gtkvpaned.h>
-#include <gtk/deprecated/gtkvscale.h>
-#include <gtk/deprecated/gtkvscrollbar.h>
-#include <gtk/deprecated/gtkvseparator.h>
 #endif /* GTK_DISABLE_DEPRECATED */
 
 #include <gtk/gtk-autocleanups.h>

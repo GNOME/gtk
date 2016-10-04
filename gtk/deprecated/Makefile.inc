@@ -4,11 +4,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkactiongroup.h	\
 	deprecated/gtkalignment.h	\
 	deprecated/gtkgradient.h	\
-	deprecated/gtkhbbox.h		\
-	deprecated/gtkhpaned.h		\
-	deprecated/gtkhscale.h		\
-	deprecated/gtkhscrollbar.h	\
-	deprecated/gtkhseparator.h	\
 	deprecated/gtkhsv.h		\
 	deprecated/gtkiconfactory.h	\
 	deprecated/gtkradioaction.h	\
@@ -19,13 +14,7 @@ deprecated_h_sources = 			\
 	deprecated/gtktable.h		\
 	deprecated/gtkthemingengine.h	\
 	deprecated/gtktoggleaction.h	\
-	deprecated/gtkuimanager.h	\
-	deprecated/gtkvbbox.h		\
-	deprecated/gtkvbox.h		\
-	deprecated/gtkvscale.h		\
-	deprecated/gtkvscrollbar.h	\
-	deprecated/gtkvseparator.h	\
-	deprecated/gtkvpaned.h
+	deprecated/gtkuimanager.h
 
 deprecated_private_h_sources =			\
 	deprecated/gtkgradientprivate.h		\
@@ -39,11 +28,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkactiongroup.c	\
 	deprecated/gtkalignment.c	\
 	deprecated/gtkgradient.c	\
-	deprecated/gtkhbbox.c		\
-	deprecated/gtkhpaned.c		\
-	deprecated/gtkhscale.c		\
-	deprecated/gtkhscrollbar.c	\
-	deprecated/gtkhseparator.c	\
 	deprecated/gtkhsv.c		\
 	deprecated/gtkiconfactory.c	\
 	deprecated/gtkradioaction.c	\
@@ -54,10 +38,4 @@ deprecated_c_sources = 			\
 	deprecated/gtktable.c		\
 	deprecated/gtkthemingengine.c	\
 	deprecated/gtktoggleaction.c	\
-	deprecated/gtkuimanager.c	\
-	deprecated/gtkvbbox.c		\
-	deprecated/gtkvbox.c		\
-	deprecated/gtkvscale.c		\
-	deprecated/gtkvscrollbar.c	\
-	deprecated/gtkvseparator.c	\
-	deprecated/gtkvpaned.c
+	deprecated/gtkuimanager.c

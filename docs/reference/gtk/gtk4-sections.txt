@@ -1690,87 +1690,6 @@ gtk_frame_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkhbbox</FILE>
-<TITLE>GtkHButtonBox</TITLE>
-GtkHButtonBox
-gtk_hbutton_box_new
-<SUBSECTION Standard>
-GTK_HBUTTON_BOX
-GTK_IS_HBUTTON_BOX
-GTK_TYPE_HBUTTON_BOX
-GTK_HBUTTON_BOX_CLASS
-GTK_IS_HBUTTON_BOX_CLASS
-GTK_HBUTTON_BOX_GET_CLASS
-<SUBSECTION Private>
-gtk_hbutton_box_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkhpaned</FILE>
-<TITLE>GtkHPaned</TITLE>
-GtkHPaned
-gtk_hpaned_new
-<SUBSECTION Standard>
-GTK_HPANED
-GTK_IS_HPANED
-GTK_TYPE_HPANED
-GTK_HPANED_CLASS
-GTK_IS_HPANED_CLASS
-GTK_HPANED_GET_CLASS
-<SUBSECTION Private>
-gtk_hpaned_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkhscale</FILE>
-<TITLE>GtkHScale</TITLE>
-GtkHScale
-gtk_hscale_new
-gtk_hscale_new_with_range
-<SUBSECTION Standard>
-GTK_HSCALE
-GTK_IS_HSCALE
-GTK_TYPE_HSCALE
-GTK_HSCALE_CLASS
-GTK_IS_HSCALE_CLASS
-GTK_HSCALE_GET_CLASS
-<SUBSECTION Private>
-gtk_hscale_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkhscrollbar</FILE>
-<TITLE>GtkHScrollbar</TITLE>
-GtkHScrollbar
-gtk_hscrollbar_new
-<SUBSECTION Standard>
-GTK_HSCROLLBAR
-GTK_IS_HSCROLLBAR
-GTK_TYPE_HSCROLLBAR
-GTK_HSCROLLBAR_CLASS
-GTK_IS_HSCROLLBAR_CLASS
-GTK_HSCROLLBAR_GET_CLASS
-<SUBSECTION Private>
-gtk_hscrollbar_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkhseparator</FILE>
-<TITLE>GtkHSeparator</TITLE>
-GtkHSeparator
-gtk_hseparator_new
-<SUBSECTION Standard>
-GTK_HSEPARATOR
-GTK_IS_HSEPARATOR
-GTK_TYPE_HSEPARATOR
-GTK_HSEPARATOR_CLASS
-GTK_IS_HSEPARATOR_CLASS
-GTK_HSEPARATOR_GET_CLASS
-<SUBSECTION Private>
-gtk_hseparator_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkiconview</FILE>
 <TITLE>GtkIconView</TITLE>
 GtkIconView
@@ -5109,38 +5028,6 @@ gtk_list_store_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkvbbox</FILE>
-<TITLE>GtkVButtonBox</TITLE>
-GtkVButtonBox
-gtk_vbutton_box_new
-<SUBSECTION Standard>
-GTK_VBUTTON_BOX
-GTK_IS_VBUTTON_BOX
-GTK_TYPE_VBUTTON_BOX
-GTK_VBUTTON_BOX_CLASS
-GTK_IS_VBUTTON_BOX_CLASS
-GTK_VBUTTON_BOX_GET_CLASS
-<SUBSECTION Private>
-gtk_vbutton_box_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkvbox</FILE>
-<TITLE>GtkVBox</TITLE>
-GtkVBox
-gtk_vbox_new
-<SUBSECTION Standard>
-GTK_VBOX
-GTK_IS_VBOX
-GTK_TYPE_VBOX
-GTK_VBOX_CLASS
-GTK_IS_VBOX_CLASS
-GTK_VBOX_GET_CLASS
-<SUBSECTION Private>
-gtk_vbox_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkviewport</FILE>
 <TITLE>GtkViewport</TITLE>
 GtkViewport
@@ -5180,72 +5067,6 @@ GTK_IS_VOLUME_BUTTON_CLASS
 GTK_VOLUME_BUTTON_GET_CLASS
 <SUBSECTION Private>
 gtk_volume_button_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkvpaned</FILE>
-<TITLE>GtkVPaned</TITLE>
-GtkVPaned
-gtk_vpaned_new
-<SUBSECTION Standard>
-GTK_VPANED
-GTK_IS_VPANED
-GTK_TYPE_VPANED
-GTK_VPANED_CLASS
-GTK_IS_VPANED_CLASS
-GTK_VPANED_GET_CLASS
-<SUBSECTION Private>
-gtk_vpaned_get_type
-GtkPanedPrivate
-</SECTION>
-
-<SECTION>
-<FILE>gtkvscale</FILE>
-<TITLE>GtkVScale</TITLE>
-GtkVScale
-gtk_vscale_new
-gtk_vscale_new_with_range
-<SUBSECTION Standard>
-GTK_VSCALE
-GTK_IS_VSCALE
-GTK_TYPE_VSCALE
-GTK_VSCALE_CLASS
-GTK_IS_VSCALE_CLASS
-GTK_VSCALE_GET_CLASS
-<SUBSECTION Private>
-gtk_vscale_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkvscrollbar</FILE>
-<TITLE>GtkVScrollbar</TITLE>
-GtkVScrollbar
-gtk_vscrollbar_new
-<SUBSECTION Standard>
-GTK_VSCROLLBAR
-GTK_IS_VSCROLLBAR
-GTK_TYPE_VSCROLLBAR
-GTK_VSCROLLBAR_CLASS
-GTK_IS_VSCROLLBAR_CLASS
-GTK_VSCROLLBAR_GET_CLASS
-<SUBSECTION Private>
-gtk_vscrollbar_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkvseparator</FILE>
-<TITLE>GtkVSeparator</TITLE>
-GtkVSeparator
-gtk_vseparator_new
-<SUBSECTION Standard>
-GTK_VSEPARATOR
-GTK_IS_VSEPARATOR
-GTK_TYPE_VSEPARATOR
-GTK_VSEPARATOR_CLASS
-GTK_IS_VSEPARATOR_CLASS
-GTK_VSEPARATOR_GET_CLASS
-<SUBSECTION Private>
-gtk_vseparator_get_type
 </SECTION>
 
 <SECTION>
