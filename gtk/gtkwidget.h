@@ -170,8 +170,6 @@ struct _GtkWidget
  *   been called or the widget has been unmapped (that is, it is going
  *   to be hidden).
  * @size_allocate: Signal emitted to get the widget allocation.
- * @state_changed: Signal emitted when the widget state
- *   changes. Deprecated: 3.0
  * @state_flags_changed: Signal emitted when the widget state changes,
  *   see gtk_widget_get_state_flags().
  * @parent_set: Signal emitted when a new parent has been set on a

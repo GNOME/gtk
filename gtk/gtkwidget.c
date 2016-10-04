@@ -500,7 +500,6 @@ enum {
   UNREALIZE,
   SIZE_ALLOCATE,
   STATE_FLAGS_CHANGED,
-  STATE_CHANGED,
   PARENT_SET,
   HIERARCHY_CHANGED,
   DIRECTION_CHANGED,
@@ -1031,7 +1030,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_preferred_width_for_height = gtk_widget_real_get_width_for_height;
   klass->get_preferred_height_for_width = gtk_widget_real_get_height_for_width;
   klass->get_preferred_height_and_baseline_for_width = NULL;
-  klass->state_changed = NULL;
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->parent_set = NULL;
   klass->hierarchy_changed = NULL;
@@ -1744,26 +1742,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-  /**
-   * GtkWidget::state-changed:
-   * @widget: the object which received the signal.
-   * @state: the previous state
-   *
-   * The ::state-changed signal is emitted when the widget state changes.
-   * See gtk_widget_get_state().
-   *
-   * Deprecated: 3.0: Use #GtkWidget::state-flags-changed instead.
-   */
-  widget_signals[STATE_CHANGED] =
-    g_signal_new (I_("state-changed"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, state_changed),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_STATE_TYPE);
 
   /**
    * GtkWidget::state-flags-changed:
@@ -12348,11 +12326,6 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 {
   GtkWidgetPrivate *priv = widget->priv;
   GtkStateFlags new_flags, old_flags = priv->state_flags;
-  GtkStateType old_state;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  old_state = gtk_widget_get_state (widget);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   priv->state_flags |= data->flags_to_set;
   priv->state_flags &= ~(data->flags_to_unset);
@@ -12382,7 +12355,6 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
       gtk_style_context_set_state (_gtk_widget_get_style_context (widget), new_flags);
 
-      g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
 
       if (!priv->shadowed &&
