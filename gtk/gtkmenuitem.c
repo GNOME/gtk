@@ -881,39 +881,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                              10,
                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
-  /**
-   * GtkMenuItem:arrow-scaling:
-   *
-   * Amount of space used up by the arrow, relative to the menu item's font
-   * size.
-   *
-   * Deprecated: 3.20: use the standard min-width/min-height CSS properties on
-   *   the arrow node; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_float ("arrow-scaling",
-                                                               P_("Arrow Scaling"),
-                                                               P_("Amount of space used up by arrow, relative to the menu item's font size"),
-                                                               0.0, 2.0, 0.8,
-                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkMenuItem:width-chars:
-   *
-   * The minimum desired width of the menu item in characters.
-   *
-   * Since: 2.14
-   *
-   * Deprecated: 3.20: Use the standard CSS property min-width; the value of
-   *     this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("width-chars",
-                                                             P_("Width in Characters"),
-                                                             P_("The minimum desired width of the menu item in characters"),
-                                                             0, G_MAXINT, 12,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ITEM_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "menuitem");
 

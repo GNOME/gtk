@@ -942,23 +942,6 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                                 -1, INT_MAX, -1,
                                                                GTK_PARAM_READWRITE));
 
- /**
-  * GtkMenu:arrow-scaling:
-  *
-  * Arbitrary constant to scale down the size of the scroll arrow.
-  *
-  * Since: 2.16
-  *
-  * Deprecated: 3.20: use the standard min-width/min-height CSS properties on
-  *   the arrow node; the value of this style property is ignored.
-  */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_float ("arrow-scaling",
-                                                               P_("Arrow Scaling"),
-                                                               P_("Arbitrary constant to scale down the size of the scroll arrow"),
-                                                               0.0, 1.0, 0.7,
-                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_Up, 0,

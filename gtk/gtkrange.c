@@ -527,22 +527,6 @@ gtk_range_class_init (GtkRangeClass *class)
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
   /**
-   * GtkRange:slider-width:
-   *
-   * Width of scrollbar or scale thumb.
-   *
-   * Deprecated: 3.20: Use the min-height/min-width CSS properties on the
-   *   slider element. The value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("slider-width",
-							     P_("Slider Width"),
-							     P_("Width of scrollbar or scale thumb"),
-							     0,
-							     G_MAXINT,
-							     14,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-  /**
    * GtkRange:trough-border:
    *
    * Spacing between thumb/steppers and outer trough bevel.
@@ -558,22 +542,6 @@ gtk_range_class_init (GtkRangeClass *class)
                                                              G_MAXINT,
                                                              1,
                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-  /**
-   * GtkRange:stepper-size:
-   *
-   * Length of step buttons at ends.
-   *
-   * Deprecated: 3.20: Use the min-height/min-width CSS properties on the
-   *   stepper elements. The value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("stepper-size",
-							     P_("Stepper Size"),
-							     P_("Length of step buttons at ends"),
-							     0,
-							     G_MAXINT,
-							     14,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
   /**
    * GtkRange:stepper-spacing:
    *
@@ -641,23 +609,6 @@ gtk_range_class_init (GtkRangeClass *class)
                                                                  P_("Whether to draw trough for full length of range or exclude the steppers and spacing"),
                                                                  TRUE,
                                                                  GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkRange:arrow-scaling:
-   *
-   * The arrow size proportion relative to the scroll button size.
-   *
-   * Since: 2.14
-   *
-   * Deprecated: 3.20: Use min-width/min-height on the "button" node instead.
-   *   The value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_float ("arrow-scaling",
-							       P_("Arrow scaling"),
-							       P_("Arrow scaling with regard to scroll button size"),
-							       0.0, 1.0, 0.5,
-							       GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RANGE_ACCESSIBLE);
 }

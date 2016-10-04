@@ -3483,7 +3483,6 @@ update_arrow_nodes (GtkNotebook *notebook)
   GtkNotebookPrivate *priv = notebook->priv;
   gboolean arrow[4];
   GtkCssImageBuiltinType up_image_type, down_image_type;
-  const char *style_property_name;
   GtkCssNode *tabs_node;
   gint i;
  
@@ -3494,13 +3493,11 @@ update_arrow_nodes (GtkNotebook *notebook)
     {
       up_image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_UP;
       down_image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN;
-      style_property_name = "scroll-arrow-vlength";
     }
   else
     {
       up_image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
       down_image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
-      style_property_name = "scroll-arrow-hlength";
     }
 
   gtk_widget_style_get (GTK_WIDGET (notebook),
@@ -3573,7 +3570,6 @@ update_arrow_nodes (GtkNotebook *notebook)
           else
             gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (priv->arrow_gadget[i]), up_image_type);
           
-          gtk_builtin_icon_set_default_size_property (GTK_BUILTIN_ICON (priv->arrow_gadget[i]), style_property_name);
         }
       else
         {

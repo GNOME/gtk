@@ -374,22 +374,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkExpander:expander-size:
-   *
-   * The size of the expander arrow.
-   *
-   * Deprecated: 3.20: Use CSS min-width and min-height instead.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("expander-size",
-                                                             P_("Expander Size"),
-                                                             P_("Size of the expander arrow"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             DEFAULT_EXPANDER_SIZE,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
    * GtkExpander:expander-spacing:
    *
    * Spaing around the expander arrow.
@@ -458,7 +442,6 @@ gtk_expander_init (GtkExpander *expander)
                                              priv->title_gadget,
                                              NULL);
   gtk_css_gadget_add_class (priv->arrow_gadget, GTK_STYLE_CLASS_HORIZONTAL);
-  gtk_builtin_icon_set_default_size_property (GTK_BUILTIN_ICON (priv->arrow_gadget), "expander-size");
 
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->title_gadget), -1, priv->arrow_gadget, FALSE, GTK_ALIGN_CENTER);
 

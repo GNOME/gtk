@@ -35,8 +35,7 @@
  * is rendered.
  *
  * Use gtk_builtin_icon_set_default_size to set a non-zero default
- * size for the icon. If you need to support a legacy size style property,
- * use gtk_builtin_icon_set_default_size_property.
+ * size for the icon.
  *
  * Themes can override the acutal image that is used with the
  * -gtk-icon-source property. If it is not specified, a builtin
@@ -291,47 +290,4 @@ gtk_builtin_icon_get_default_size (GtkBuiltinIcon *icon)
   priv = gtk_builtin_icon_get_instance_private (icon);
 
   return priv->default_size;
-}
-
-/**
- * gtk_builtin_icon_set_default_size_property:
- * @icon: icon to set the property for
- * @property_name: Name of the style property
- *
- * Sets the name of a widget style property to use to compute the default size
- * of the icon. If it is set to no %NULL, it will be used instead of the value
- * set via gtk_builtin_icon_set_default_size() to set the default size of the
- * icon.
- *
- * @property_name must refer to a style property that is of integer type.
- *
- * This function is intended strictly for backwards compatibility reasons.
- */
-void
-gtk_builtin_icon_set_default_size_property (GtkBuiltinIcon *icon,
-                                            const char     *property_name)
-{
-  GtkBuiltinIconPrivate *priv;
-  
-  g_return_if_fail (GTK_IS_BUILTIN_ICON (icon));
-
-  priv = gtk_builtin_icon_get_instance_private (icon);
-
-  if (g_strcmp0 (priv->default_size_property, property_name))
-    {
-      priv->default_size_property = g_strdup (property_name);
-      gtk_widget_queue_resize (gtk_css_gadget_get_owner (GTK_CSS_GADGET (icon)));
-    }
-}
-
-const char *
-gtk_builtin_icon_get_default_size_property (GtkBuiltinIcon *icon)
-{
-  GtkBuiltinIconPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_BUILTIN_ICON (icon), NULL);
-
-  priv = gtk_builtin_icon_get_instance_private (icon);
-
-  return priv->default_size_property;
 }

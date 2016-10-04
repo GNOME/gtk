@@ -1089,41 +1089,6 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                           FALSE,
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
-  /**
-   * GtkLevelBar:min-block-height:
-   *
-   * The min-block-height style property determines the minimum
-   * height for blocks filling the #GtkLevelBar widget.
-   *
-   * Since: 3.6
-   *
-   * Deprecated: 3.20: Use the standard min-width/min-height CSS properties on
-   *   the block elements; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property
-    (wclass, g_param_spec_int ("min-block-height",
-                               P_("Minimum height for filling blocks"),
-                               P_("Minimum height for blocks that fill the bar"),
-                               1, G_MAXINT, DEFAULT_BLOCK_SIZE,
-                               G_PARAM_READWRITE|G_PARAM_DEPRECATED));
-  /**
-   * GtkLevelBar:min-block-width:
-   *
-   * The min-block-width style property determines the minimum
-   * width for blocks filling the #GtkLevelBar widget.
-   *
-   * Since: 3.6
-   *
-   * Deprecated: 3.20: Use the standard min-width/min-height CSS properties on
-   *   the block elements; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property
-    (wclass, g_param_spec_int ("min-block-width",
-                               P_("Minimum width for filling blocks"),
-                               P_("Minimum width for blocks that fill the bar"),
-                               1, G_MAXINT, DEFAULT_BLOCK_SIZE,
-                               G_PARAM_READWRITE|G_PARAM_DEPRECATED));
-
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_type (wclass, GTK_TYPE_LEVEL_BAR_ACCESSIBLE);

@@ -440,22 +440,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                     "orientation");
 
   /**
-   * GtkSpinButton:shadow-type:
-   *
-   * Style of bevel around the sping button.
-   *
-   * Deprecated: 3.20: Use CSS to determine the style of the border;
-   *     the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_enum ("shadow-type",
-                                                              P_("Shadow Type"),
-                                                              P_("Style of bevel around the spin button"),
-                                                              GTK_TYPE_SHADOW_TYPE,
-                                                              GTK_SHADOW_IN,
-                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
    * GtkSpinButton::input:
    * @spin_button: the object on which the signal was emitted
    * @new_value: (out) (type double): return location for the new value

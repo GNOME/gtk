@@ -59,9 +59,6 @@ GtkCssImageBuiltinType  gtk_builtin_icon_get_image              (GtkBuiltinIcon 
 void                    gtk_builtin_icon_set_default_size       (GtkBuiltinIcon         *icon,
                                                                  int                     default_size);
 int                     gtk_builtin_icon_get_default_size       (GtkBuiltinIcon         *icon);
-void                    gtk_builtin_icon_set_default_size_property (GtkBuiltinIcon      *icon,
-                                                                 const char             *property_name);
-const char *            gtk_builtin_icon_get_default_size_property (GtkBuiltinIcon      *icon);
 
 G_END_DECLS
 

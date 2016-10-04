@@ -221,22 +221,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   container_class->remove = gtk_check_button_remove;
 
   /**
-   * GtkCheckButton:indicator-size:
-   *
-   * The size of the indicator.
-   *
-   * Deprecated: 3.20: Use CSS min-width and min-height on the indicator node.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("indicator-size",
-							     P_("Indicator Size"),
-							     P_("Size of check or radio indicator"),
-							     0,
-							     G_MAXINT,
-							     INDICATOR_SIZE,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
    * GtkCheckButton:indicator-spacing:
    *
    * The spacing around the indicator.
@@ -320,7 +304,6 @@ gtk_check_button_init (GtkCheckButton *check_button)
                                                  GTK_WIDGET (check_button),
                                                  priv->gadget,
                                                  NULL);
-  gtk_builtin_icon_set_default_size_property (GTK_BUILTIN_ICON (priv->indicator_gadget), "indicator-size");
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->indicator_gadget, FALSE, GTK_ALIGN_BASELINE);
 
   gtk_check_button_update_node_state (GTK_WIDGET (check_button));
