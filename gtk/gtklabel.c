@@ -587,12 +587,10 @@ static gboolean gtk_label_render  (GtkCssGadget   *gadget,
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkLabel)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_label_buildable_interface_init))
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
