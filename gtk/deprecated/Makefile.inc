@@ -4,7 +4,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkactiongroup.h	\
 	deprecated/gtkalignment.h	\
 	deprecated/gtkgradient.h	\
-	deprecated/gtkhsv.h		\
 	deprecated/gtkiconfactory.h	\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrecentaction.h	\
@@ -28,7 +27,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkactiongroup.c	\
 	deprecated/gtkalignment.c	\
 	deprecated/gtkgradient.c	\
-	deprecated/gtkhsv.c		\
 	deprecated/gtkiconfactory.c	\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrecentaction.c	\

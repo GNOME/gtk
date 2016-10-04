@@ -249,7 +249,6 @@
 #include <gtk/deprecated/gtkactiongroup.h>
 #include <gtk/deprecated/gtkalignment.h>
 #include <gtk/deprecated/gtkgradient.h>
-#include <gtk/deprecated/gtkhsv.h>
 #include <gtk/deprecated/gtkiconfactory.h>
 #include <gtk/deprecated/gtkradioaction.h>
 #include <gtk/deprecated/gtkrecentaction.h>
