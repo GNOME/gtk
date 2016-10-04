@@ -806,12 +806,6 @@ void                  gtk_widget_set_name               (GtkWidget    *widget,
 GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_widget_get_name               (GtkWidget    *widget);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_set_state_flags)
-void                  gtk_widget_set_state              (GtkWidget    *widget,
-							 GtkStateType  state);
-
-GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_state_flags)
-GtkStateType          gtk_widget_get_state              (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_state_flags        (GtkWidget     *widget,

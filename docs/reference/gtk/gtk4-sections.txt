@@ -5089,7 +5089,6 @@ gtk_widget_grab_focus
 gtk_widget_grab_default
 gtk_widget_set_name
 gtk_widget_get_name
-gtk_widget_set_state
 gtk_widget_set_sensitive
 gtk_widget_set_parent
 gtk_widget_set_parent_window
@@ -5227,7 +5226,6 @@ gtk_widget_set_has_window
 gtk_widget_get_sensitive
 gtk_widget_is_sensitive
 GtkStateType
-gtk_widget_get_state
 gtk_widget_get_visible
 gtk_widget_is_visible
 gtk_widget_set_visible
