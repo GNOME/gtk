@@ -921,11 +921,6 @@ GDK_AVAILABLE_IN_3_14
 void                  gtk_widget_get_clip               (GtkWidget     *widget,
                                                          GtkAllocation *clip);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_width & gtk_widget_get_preferred_height)
-
-void                  gtk_widget_get_requisition        (GtkWidget     *widget,
-                                                         GtkRequisition *requisition);
-
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);
