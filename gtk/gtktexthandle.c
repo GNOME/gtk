@@ -76,24 +76,27 @@ static void _gtk_text_handle_update (GtkTextHandle         *handle,
                                      GtkTextHandlePosition  pos);
 
 static void
-_gtk_text_handle_get_size (GtkTextHandle *handle,
-                           gint          *width,
-                           gint          *height)
+_gtk_text_handle_get_size (GtkTextHandle         *handle,
+                           GtkTextHandlePosition  pos,
+                           gint                  *width,
+                           gint                  *height)
 {
-  GtkTextHandlePrivate *priv;
-  gint w, h;
+  GtkTextHandlePrivate *priv = handle->priv;
+  GtkWidget *widget = priv->windows[pos].widget;
+  GtkStyleContext *context;
 
-  priv = handle->priv;
+  context = gtk_widget_get_style_context (widget);
 
-  gtk_widget_style_get (priv->parent,
-                        "text-handle-width", &w,
-                        "text-handle-height", &h,
-                        NULL);
-  if (width)
-    *width = w;
+  gtk_style_context_get (context,
+                         gtk_style_context_get_state (context),
+                         "min-width",
+                         width, NULL);
 
-  if (height)
-    *height = h;
+
+  gtk_style_context_get (context,
+                         gtk_style_context_get_state (context),
+                         "min-height",
+                         height, NULL);
 }
 
 static void
@@ -110,7 +113,7 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
   handle_window = &priv->windows[pos];
 
   context = gtk_widget_get_style_context (handle_window->widget);
-  _gtk_text_handle_get_size (handle, &width, &height);
+  _gtk_text_handle_get_size (handle, pos, &width, &height);
 
   cairo_save (cr);
   cairo_translate (cr, handle_window->border.left, handle_window->border.top);
@@ -232,7 +235,7 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
 
       window = gtk_widget_get_parent (priv->windows[pos].widget);
       gtk_widget_get_allocation (priv->windows[pos].widget, &allocation);
-      _gtk_text_handle_get_size (handle, &handle_width, &handle_height);
+      _gtk_text_handle_get_size (handle, pos, &handle_width, &handle_height);
 
       _gtk_window_get_popover_position (GTK_WINDOW (window),
                                         priv->windows[pos].widget,
@@ -383,7 +386,7 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       gint w, h;
 
       _gtk_text_handle_ensure_widget (handle, pos);
-      _gtk_text_handle_get_size (handle, &width, &height);
+      _gtk_text_handle_get_size (handle, pos, &width, &height);
 
       border->top = height;
       border->bottom = height;
