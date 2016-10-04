@@ -340,7 +340,6 @@ enum {
   PROP_TEXT,
   PROP_XALIGN,
   PROP_TRUNCATE_MULTILINE,
-  PROP_SHADOW_TYPE,
   PROP_OVERWRITE_MODE,
   PROP_TEXT_LENGTH,
   PROP_INVISIBLE_CHAR_SET,
@@ -955,25 +954,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:shadow-type:
-   *
-   * Which kind of shadow to draw around the entry when
-   * #GtkEntry:has-frame is set to %TRUE.
-   *
-   * Deprecated: 3.20: Use CSS to determine the style of the border;
-   *     the value of this style property is ignored.
-   *
-   * Since: 2.12
-   */
-  entry_props[PROP_SHADOW_TYPE] =
-      g_param_spec_enum ("shadow-type",
-                         P_("Shadow type"),
-                         P_("Which kind of shadow to draw around the entry when has-frame is set"),
-                         GTK_TYPE_SHADOW_TYPE,
-                         GTK_SHADOW_IN,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-
-  /**
    * GtkEntry:overwrite-mode:
    *
    * If text is overwritten when typing in the #GtkEntry.
@@ -1459,42 +1439,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_props);
-
-  /**
-   * GtkEntry:icon-prelight:
-   *
-   * The prelight style property determines whether activatable
-   * icons prelight on mouseover.
-   *
-   * Since: 2.16
-   *
-   * Deprecated: 3.20: Use CSS to control the appearance of prelighted icons;
-   *     the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("icon-prelight",
-                                                                 P_("Icon Prelight"),
-                                                                 P_("Whether activatable icons should prelight when hovered"),
-                                                                 TRUE,
-                                                                 GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkEntry:progress-border:
-   *
-   * The border around the progress bar in the entry.
-   *
-   * Since: 2.16
-   *
-   * Deprecated: 3.4: Use the standard margin CSS property (through objects
-   *   like #GtkStyleContext and #GtkCssProvider); the value of this style
-   *   property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("progress-border",
-                                                               P_("Progress Border"),
-                                                               P_("Border around the progress bar"),
-                                                               GTK_TYPE_BORDER,
-                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   /**
    * GtkEntry:invisible-char:
@@ -2111,14 +2055,6 @@ gtk_entry_set_property (GObject         *object,
         }
       break;
 
-    case PROP_SHADOW_TYPE:
-      if (priv->shadow_type != g_value_get_enum (value))
-        {
-          priv->shadow_type = g_value_get_enum (value);
-          g_object_notify_by_pspec (object, pspec);
-        }
-      break;
-
     case PROP_OVERWRITE_MODE:
       gtk_entry_set_overwrite_mode (entry, g_value_get_boolean (value));
       break;
@@ -2357,10 +2293,6 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_boolean (value, priv->truncate_multiline);
       break;
 
-    case PROP_SHADOW_TYPE:
-      g_value_set_enum (value, priv->shadow_type);
-      break;
-
     case PROP_OVERWRITE_MODE:
       g_value_set_boolean (value, priv->overwrite_mode);
       break;
@@ -2584,7 +2516,6 @@ gtk_entry_init (GtkEntry *entry)
   priv->max_width_chars = -1;
   priv->editing_canceled = FALSE;
   priv->truncate_multiline = FALSE;
-  priv->shadow_type = GTK_SHADOW_IN;
   priv->xalign = 0.0;
   priv->caps_lock_warning = TRUE;
   priv->caps_lock_warning_shown = FALSE;
