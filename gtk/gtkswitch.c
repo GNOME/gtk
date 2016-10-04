@@ -72,9 +72,6 @@
 
 #include "fallback-c89.c"
 
-#define DEFAULT_SLIDER_WIDTH    (36)
-#define DEFAULT_SLIDER_HEIGHT   (22)
-
 struct _GtkSwitchPrivate
 {
   GdkWindow *event_window;
@@ -372,41 +369,6 @@ static void
 gtk_switch_activate (GtkSwitch *sw)
 {
   gtk_switch_begin_toggle_animation (sw);
-}
-
-static void
-gtk_switch_get_slider_size (GtkCssGadget   *gadget,
-                            GtkOrientation  orientation,
-                            gint            for_size,
-                            gint           *minimum,
-                            gint           *natural,
-                            gint           *minimum_baseline,
-                            gint           *natural_baseline,
-                            gpointer        unused)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  gdouble min_size;
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      min_size = _gtk_css_number_value_get (gtk_css_style_get_value (gtk_css_gadget_get_style (gadget), GTK_CSS_PROPERTY_MIN_WIDTH), 100);
-
-      if (min_size > 0.0)
-        *minimum = 0;
-      else
-        gtk_widget_style_get (widget, "slider-width", minimum, NULL);
-    }
-  else
-    {
-      min_size = _gtk_css_number_value_get (gtk_css_style_get_value (gtk_css_gadget_get_style (gadget), GTK_CSS_PROPERTY_MIN_HEIGHT), 100);
-
-      if (min_size > 0.0)
-        *minimum = 0;
-      else
-        gtk_widget_style_get (widget, "slider-height", minimum, NULL);
-    }
-
-  *natural = *minimum;
 }
 
 static void
@@ -936,38 +898,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   klass->state_set = state_set;
 
   /**
-   * GtkSwitch:slider-width:
-   *
-   * The minimum width of the #GtkSwitch handle, in pixels.
-   *
-   * Deprecated: 3.20: Use the CSS min-width property instead.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("slider-width",
-                                                             P_("Slider Width"),
-                                                             P_("The minimum width of the handle"),
-                                                             DEFAULT_SLIDER_WIDTH, G_MAXINT,
-                                                             DEFAULT_SLIDER_WIDTH,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkSwitch:slider-height:
-   *
-   * The minimum height of the #GtkSwitch handle, in pixels.
-   *
-   * Since: 3.18
-   *
-   * Deprecated: 3.20: Use the CSS min-height property instead.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("slider-height",
-                                                             P_("Slider Height"),
-                                                             P_("The minimum height of the handle"),
-                                                             DEFAULT_SLIDER_HEIGHT, G_MAXINT,
-                                                             DEFAULT_SLIDER_HEIGHT,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
    * GtkSwitch::activate:
    * @widget: the object which received the signal.
    *
@@ -1054,7 +984,7 @@ gtk_switch_init (GtkSwitch *self)
                                                    GTK_WIDGET (self),
                                                    priv->gadget,
                                                    NULL,
-                                                   gtk_switch_get_slider_size,
+                                                   NULL,
                                                    NULL,
                                                    gtk_switch_render_slider,
                                                    NULL,
