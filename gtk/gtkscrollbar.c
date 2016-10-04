@@ -157,7 +157,6 @@ static void
 gtk_scrollbar_init (GtkScrollbar *scrollbar)
 {
   gtk_scrollbar_update_style (scrollbar);
-  gtk_range_set_slider_use_min_size (GTK_RANGE (scrollbar), TRUE);
 }
 
 static void

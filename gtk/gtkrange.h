@@ -117,12 +117,6 @@ void               gtk_range_set_slider_size_fixed         (GtkRange      *range
 GDK_AVAILABLE_IN_ALL
 gboolean           gtk_range_get_slider_size_fixed         (GtkRange      *range);
 
-GDK_DEPRECATED_IN_3_20
-void               gtk_range_set_min_slider_size           (GtkRange      *range,
-                                                            gint           min_size);
-GDK_DEPRECATED_IN_3_20
-gint               gtk_range_get_min_slider_size           (GtkRange      *range);
-
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_get_range_rect                (GtkRange      *range,
                                                             GdkRectangle  *range_rect);

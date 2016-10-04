@@ -960,7 +960,6 @@ gtk_scale_init (GtkScale *scale)
   gtk_widget_set_can_focus (GTK_WIDGET (scale), TRUE);
 
   gtk_range_set_slider_size_fixed (range, TRUE);
-  gtk_range_set_slider_use_min_size (range, TRUE);
 
   _gtk_range_set_has_origin (range, TRUE);
 

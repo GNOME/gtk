@@ -109,7 +109,6 @@ struct _GtkRangePrivate
   gdouble *marks;
 
   gint *mark_pos;
-  gint  min_slider_size;
   gint  n_marks;
   gint  round_digits;                /* Round off value to this many digits, -1 for no rounding */
   gint  slide_initial_slider_position;
@@ -118,7 +117,6 @@ struct _GtkRangePrivate
   guint flippable              : 1;
   guint inverted               : 1;
   guint slider_size_fixed      : 1;
-  guint slider_use_min_size    : 1;
   guint trough_click_forward   : 1;  /* trough click was on the forward side of slider */
 
   /* Stepper sensitivity */
@@ -784,7 +782,6 @@ gtk_range_init (GtkRange *range)
   priv->adjustment = NULL;
   priv->inverted = FALSE;
   priv->flippable = FALSE;
-  priv->min_slider_size = 1;
   priv->round_digits = -1;
   priv->mouse_x = G_MININT;
   priv->mouse_y = G_MININT;
@@ -1146,19 +1143,6 @@ gtk_range_get_flippable (GtkRange *range)
   return range->priv->flippable;
 }
 
-void
-gtk_range_set_slider_use_min_size (GtkRange *range,
-                                   gboolean  use_min_size)
-{
-  GtkRangePrivate *priv = range->priv;
-
-  if (use_min_size != priv->slider_use_min_size)
-    {
-      priv->slider_use_min_size = use_min_size;
-      gtk_css_gadget_queue_resize (priv->slider_gadget);
-    }
-}
-
 /**
  * gtk_range_set_slider_size_fixed:
  * @range: a #GtkRange
@@ -1208,62 +1192,6 @@ gtk_range_get_slider_size_fixed (GtkRange *range)
   g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
 
   return range->priv->slider_size_fixed;
-}
-
-/**
- * gtk_range_set_min_slider_size:
- * @range: a #GtkRange
- * @min_size: The slider’s minimum size
- *
- * Sets the minimum size of the range’s slider.
- *
- * This function is useful mainly for #GtkRange subclasses.
- *
- * Since: 2.20
- *
- * Deprecated: 3.20: Use the min-height/min-width CSS properties on the slider
- *   node.
- **/
-void
-gtk_range_set_min_slider_size (GtkRange *range,
-                               gint      min_size)
-{
-  GtkRangePrivate *priv;
-
-  g_return_if_fail (GTK_IS_RANGE (range));
-  g_return_if_fail (min_size > 0);
-
-  priv = range->priv;
-
-  if (min_size != priv->min_slider_size)
-    {
-      priv->min_slider_size = min_size;
-
-      gtk_widget_queue_resize (GTK_WIDGET (range));
-    }
-}
-
-/**
- * gtk_range_get_min_slider_size:
- * @range: a #GtkRange
- *
- * This function is useful mainly for #GtkRange subclasses.
- *
- * See gtk_range_set_min_slider_size().
- *
- * Returns: The minimum size of the range’s slider.
- *
- * Since: 2.20
- *
- * Deprecated: 3.20: Use the min-height/min-width CSS properties on the slider
- *   node.
- **/
-gint
-gtk_range_get_min_slider_size (GtkRange *range)
-{
-  g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
-
-  return range->priv->min_slider_size;
 }
 
 static void
@@ -3522,8 +3450,6 @@ gtk_range_compute_slider_position (GtkRange     *range,
   measure_one_gadget (priv->slider_gadget, &slider_width, &slider_height);
   gtk_css_gadget_get_content_box (priv->trough_gadget, &trough_content_alloc);
 
-  min_slider_size = priv->min_slider_size;
-
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
       gint y, bottom, top, height;
@@ -3534,8 +3460,7 @@ gtk_range_compute_slider_position (GtkRange     *range,
       slider_rect->x = trough_content_alloc.x + (int) floor ((trough_content_alloc.width - slider_width) / 2);
       slider_rect->width = slider_width;
 
-      if (priv->slider_use_min_size)
-        min_slider_size = slider_height;
+      min_slider_size = slider_height;
 
       /* Compute slider position/length */
       top = trough_content_alloc.y;
@@ -3588,8 +3513,7 @@ gtk_range_compute_slider_position (GtkRange     *range,
       slider_rect->y = trough_content_alloc.y + (int) floor ((trough_content_alloc.height - slider_height) / 2);
       slider_rect->height = slider_height;
 
-      if (priv->slider_use_min_size)
-        min_slider_size = slider_width;
+      min_slider_size = slider_width;
 
       /* Compute slider position/length */
       left = trough_content_alloc.x;
