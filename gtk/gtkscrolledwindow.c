@@ -296,7 +296,6 @@ enum {
   PROP_HSCROLLBAR_POLICY,
   PROP_VSCROLLBAR_POLICY,
   PROP_WINDOW_PLACEMENT,
-  PROP_WINDOW_PLACEMENT_SET,
   PROP_SHADOW_TYPE,
   PROP_MIN_CONTENT_WIDTH,
   PROP_MIN_CONTENT_HEIGHT,
@@ -599,24 +598,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 			GTK_TYPE_CORNER_TYPE,
 			GTK_CORNER_TOP_LEFT,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkScrolledWindow:window-placement-set:
-   *
-   * Whether "window-placement" should be used to determine the location
-   * of the contents with respect to the scrollbars.
-   *
-   * Since: 2.10
-   *
-   * Deprecated: 3.10: This value is ignored and
-   * #GtkScrolledWindow:window-placement value is always honored.
-   */
-  properties[PROP_WINDOW_PLACEMENT_SET] =
-      g_param_spec_boolean ("window-placement-set",
-                            P_("Window Placement Set"),
-                            P_("Whether \"window-placement\" should be used to determine the location of the contents with respect to the scrollbars."),
-                            TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_SHADOW_TYPE] =
       g_param_spec_enum ("shadow-type",
@@ -2797,9 +2778,6 @@ gtk_scrolled_window_set_property (GObject      *object,
       gtk_scrolled_window_set_placement_internal (scrolled_window,
 		      				  g_value_get_enum (value));
       break;
-    case PROP_WINDOW_PLACEMENT_SET:
-      /* noop */
-      break;
     case PROP_SHADOW_TYPE:
       gtk_scrolled_window_set_shadow_type (scrolled_window,
 					   g_value_get_enum (value));
@@ -2863,9 +2841,6 @@ gtk_scrolled_window_get_property (GObject    *object,
       break;
     case PROP_WINDOW_PLACEMENT:
       g_value_set_enum (value, priv->window_placement);
-      break;
-    case PROP_WINDOW_PLACEMENT_SET:
-      g_value_set_boolean (value, TRUE);
       break;
     case PROP_SHADOW_TYPE:
       g_value_set_enum (value, priv->shadow_type);
