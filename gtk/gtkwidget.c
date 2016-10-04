@@ -7169,44 +7169,6 @@ gtk_cairo_transform_to_window (cairo_t   *cr,
     cairo_translate (cr, x, y);
 }
 
-/**
- * gtk_widget_send_expose:
- * @widget: a #GtkWidget
- * @event: a expose #GdkEvent
- *
- * Very rarely-used function. This function is used to emit
- * an expose event on a widget. This function is not normally used
- * directly. The only time it is used is when propagating an expose
- * event to a windowless child widget (gtk_widget_get_has_window() is %FALSE),
- * and that is normally done using gtk_container_propagate_draw().
- *
- * If you want to force an area of a window to be redrawn,
- * use gdk_window_invalidate_rect() or gdk_window_invalidate_region().
- * To cause the redraw to be done immediately, follow that call
- * with a call to gdk_window_process_updates().
- *
- * Returns: return from the event signal emission (%TRUE if
- *   the event was handled)
- *
- * Deprecated: 3.22: Application and widget code should not handle
- *   expose events directly; invalidation should use the #GtkWidget
- *   API, and drawing should only happen inside #GtkWidget::draw
- *   implementations
- */
-gint
-gtk_widget_send_expose (GtkWidget *widget,
-			GdkEvent  *event)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
-  g_return_val_if_fail (gtk_widget_get_realized (widget), TRUE);
-  g_return_val_if_fail (event != NULL, TRUE);
-  g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
-
-  gtk_widget_render (widget, event->any.window, event->expose.region);
-
-  return FALSE;
-}
-
 static gboolean
 event_window_is_still_viewable (GdkEvent *event)
 {
