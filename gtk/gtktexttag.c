@@ -1301,8 +1301,6 @@ gtk_text_tag_set_property (GObject      *object,
           set_bg_rgba (text_tag, &rgba);
         else
           g_warning ("Don't know color '%s'", g_value_get_string (value));
-
-        g_object_notify (object, "background-gdk");
       }
       break;
 
@@ -1316,8 +1314,6 @@ gtk_text_tag_set_property (GObject      *object,
           set_fg_rgba (text_tag, &rgba);
         else
           g_warning ("Don't know color '%s'", g_value_get_string (value));
-
-        g_object_notify (object, "foreground-gdk");
       }
       break;
 

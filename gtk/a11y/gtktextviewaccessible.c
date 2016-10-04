@@ -1460,11 +1460,11 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_FG_COLOR)))
         {
           RGB_vals = g_strsplit (value, ",", 3);
-          color = g_malloc (sizeof (GdkColor));
-          color->red = atoi (RGB_vals[0]);
-          color->green = atoi (RGB_vals[1]);
-          color->blue = atoi (RGB_vals[2]);
-          g_object_set (G_OBJECT (tag), "foreground-gdk", color, NULL);
+          color = g_malloc (sizeof (GdkRGBA));
+          color->red = atoi (RGB_vals[0]) / 65535.0;
+          color->green = atoi (RGB_vals[1]) / 65535.0;
+          color->blue = atoi (RGB_vals[2]) / 65535.0;
+          g_object_set (G_OBJECT (tag), "foreground-rgba", color, NULL);
         }
 
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_STRETCH)))

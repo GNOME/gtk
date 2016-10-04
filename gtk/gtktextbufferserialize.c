@@ -205,78 +205,40 @@ is_param_set (GObject    *object,
               GParamSpec *pspec,
               GValue     *value)
 {
-  /* We need to special case some attributes here */
-  if (strcmp (pspec->name, "background-gdk") == 0)
+  gboolean is_set;
+  gchar *is_set_name;
+
+  is_set_name = g_strdup_printf ("%s-set", pspec->name);
+
+  if (g_object_class_find_property (G_OBJECT_GET_CLASS (object), is_set_name) == NULL)
     {
-      gboolean is_set;
-
-      g_object_get (object, "background-set", &is_set, NULL);
-
-      if (is_set)
-	{
-	  g_value_init (value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-
-	  g_object_get_property (object, pspec->name, value);
-
-	  return TRUE;
-	}
-
-      return FALSE;
-    }
-  else if (strcmp (pspec->name, "foreground-gdk") == 0)
-    {
-      gboolean is_set;
-
-      g_object_get (object, "foreground-set", &is_set, NULL);
-
-      if (is_set)
-	{
-	  g_value_init (value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-
-	  g_object_get_property (object, pspec->name, value);
-
-	  return TRUE;
-	}
-
+      g_free (is_set_name);
       return FALSE;
     }
   else
     {
-      gboolean is_set;
-      gchar *is_set_name;
+      g_object_get (object, is_set_name, &is_set, NULL);
 
-      is_set_name = g_strdup_printf ("%s-set", pspec->name);
+      if (!is_set)
+        {
+          g_free (is_set_name);
+          return FALSE;
+        }
 
-      if (g_object_class_find_property (G_OBJECT_GET_CLASS (object), is_set_name) == NULL)
-	{
-	  g_free (is_set_name);
-	  return FALSE;
-	}
-      else
-	{
-	  g_object_get (object, is_set_name, &is_set, NULL);
+      g_free (is_set_name);
 
-	  if (!is_set)
-	    {
-	      g_free (is_set_name);
-	      return FALSE;
-	    }
+      g_value_init (value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 
-	  g_free (is_set_name);
+      g_object_get_property (object, pspec->name, value);
 
-	  g_value_init (value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      if (g_param_value_defaults (pspec, value))
+        {
+          g_value_unset (value);
 
-	  g_object_get_property (object, pspec->name, value);
-
-	  if (g_param_value_defaults (pspec, value))
-	    {
-	      g_value_unset (value);
-
-	      return FALSE;
-	    }
-	}
-      return TRUE;
+          return FALSE;
+        }
     }
+    return TRUE;
 }
 
 static void
