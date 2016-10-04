@@ -1145,15 +1145,6 @@ GdkPixbuf    *gtk_widget_render_icon_pixbuf   (GtkWidget   *widget,
                                                const gchar *stock_id,
                                                GtkIconSize  size);
 
-/* handle composite names for GTK_COMPOSITE_CHILD widgets,
- * the returned name is newly allocated.
- */
-GDK_DEPRECATED_IN_3_10_FOR(gtk_widget_class_set_template)
-void   gtk_widget_set_composite_name	(GtkWidget	*widget,
-					 const gchar   	*name);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_widget_class_set_template)
-gchar* gtk_widget_get_composite_name	(GtkWidget	*widget);
-     
 /* Push/pop pairs, to change default values upon a widget's creation.
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.

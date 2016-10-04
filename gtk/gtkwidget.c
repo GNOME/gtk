@@ -11094,63 +11094,6 @@ gtk_widget_is_ancestor (GtkWidget *widget,
   return FALSE;
 }
 
-static GQuark quark_composite_name = 0;
-
-/**
- * gtk_widget_set_composite_name:
- * @widget: a #GtkWidget.
- * @name: the name to set
- *
- * Sets a widgets composite name. The widget must be
- * a composite child of its parent; see gtk_widget_push_composite_child().
- *
- * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don’t use this API at all.
- **/
-void
-gtk_widget_set_composite_name (GtkWidget   *widget,
-			       const gchar *name)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (widget->priv->composite_child);
-  g_return_if_fail (name != NULL);
-
-  if (!quark_composite_name)
-    quark_composite_name = g_quark_from_static_string ("gtk-composite-name");
-
-  g_object_set_qdata_full (G_OBJECT (widget),
-			   quark_composite_name,
-			   g_strdup (name),
-			   g_free);
-}
-
-/**
- * gtk_widget_get_composite_name:
- * @widget: a #GtkWidget
- *
- * Obtains the composite name of a widget.
- *
- * Returns: the composite name of @widget, or %NULL if @widget is not
- *   a composite child. The string should be freed when it is no
- *   longer needed.
- *
- * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don’t use this API at all.
- **/
-gchar*
-gtk_widget_get_composite_name (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  priv = widget->priv;
-
-  if (widget->priv->composite_child && priv->parent)
-    return _gtk_container_child_composite_name (GTK_CONTAINER (priv->parent),
-					       widget);
-  else
-    return NULL;
-}
-
 /**
  * gtk_widget_push_composite_child:
  *
