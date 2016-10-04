@@ -94,23 +94,6 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 
   widget_class->style_updated = gtk_scrollbar_style_updated;
 
-  /**
-   * GtkScrollbar:min-slider-length:
-   *
-   * Minimum length of scrollbar slider.
-   *
-   * Deprecated: 3.20: Use min-height/min-width CSS properties on the slider
-   *   element instead. The value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("min-slider-length",
-							     P_("Minimum Slider Length"),
-							     P_("Minimum length of scrollbar slider"),
-							     0,
-							     G_MAXINT,
-							     21,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("fixed-slider-length",
                                                                  P_("Fixed slider size"),
