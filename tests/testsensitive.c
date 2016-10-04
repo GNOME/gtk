@@ -7,7 +7,7 @@ set_insensitive (GtkButton *b, GtkWidget *w)
 }
 
 static void
-state_changed (GtkWidget *widget)
+state_flags_changed (GtkWidget *widget)
 {
   GtkStateFlags flags;
   const gchar *sep;
@@ -75,7 +75,7 @@ int main (int argc, char *argv[])
   gtk_widget_set_valign (c, GTK_ALIGN_CENTER);
   gtk_box_pack_start (GTK_BOX (box), c, TRUE, TRUE);
   g_signal_connect (bu, "clicked", G_CALLBACK (set_insensitive), w);
-  g_signal_connect (bu, "state-changed", G_CALLBACK (state_changed), NULL);
+  g_signal_connect (bu, "state-flags-changed", G_CALLBACK (state_flags_changed), NULL);
 
   g_object_bind_property (c, "active", w, "sensitive", G_BINDING_BIDIRECTIONAL);
 
