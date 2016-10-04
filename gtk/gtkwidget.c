@@ -7591,43 +7591,6 @@ gtk_widget_intersect (GtkWidget	         *widget,
 }
 
 /**
- * gtk_widget_region_intersect:
- * @widget: a #GtkWidget
- * @region: a #cairo_region_t, in the same coordinate system as
- *          @widget->allocation. That is, relative to @widget->window
- *          for widgets which return %FALSE from gtk_widget_get_has_window();
- *          relative to the parent window of @widget->window otherwise.
- *
- * Computes the intersection of a @widget’s area and @region, returning
- * the intersection. The result may be empty, use cairo_region_is_empty() to
- * check.
- *
- * Returns: A newly allocated region holding the intersection of @widget
- *     and @region.
- *
- * Deprecated: 3.14: Use gtk_widget_get_allocation() and
- *     cairo_region_intersect_rectangle() to get the same behavior.
- */
-cairo_region_t *
-gtk_widget_region_intersect (GtkWidget            *widget,
-			     const cairo_region_t *region)
-{
-  GdkRectangle rect;
-  cairo_region_t *dest;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (region != NULL, NULL);
-
-  _gtk_widget_get_allocation (widget, &rect);
-
-  dest = cairo_region_create_rectangle (&rect);
-
-  cairo_region_intersect (dest, region);
-
-  return dest;
-}
-
-/**
  * _gtk_widget_grab_notify:
  * @widget: a #GtkWidget
  * @was_grabbed: whether a grab is now in effect
