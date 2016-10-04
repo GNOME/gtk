@@ -2944,7 +2944,6 @@ gtk_scrolled_window_get_hscrollbar
 gtk_scrolled_window_get_vscrollbar
 GtkPolicyType
 gtk_scrolled_window_set_policy
-gtk_scrolled_window_add_with_viewport
 GtkCornerType
 gtk_scrolled_window_set_placement
 gtk_scrolled_window_unset_placement

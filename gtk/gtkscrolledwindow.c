@@ -3993,69 +3993,6 @@ gtk_scrolled_window_remove (GtkContainer *container,
   priv->auto_added_viewport = FALSE;
 }
 
-/**
- * gtk_scrolled_window_add_with_viewport:
- * @scrolled_window: a #GtkScrolledWindow
- * @child: the widget you want to scroll
- *
- * Used to add children without native scrolling capabilities. This
- * is simply a convenience function; it is equivalent to adding the
- * unscrollable child to a viewport, then adding the viewport to the
- * scrolled window. If a child has native scrolling, use
- * gtk_container_add() instead of this function.
- *
- * The viewport scrolls the child by moving its #GdkWindow, and takes
- * the size of the child to be the size of its toplevel #GdkWindow. 
- * This will be very wrong for most widgets that support native scrolling;
- * for example, if you add a widget such as #GtkTreeView with a viewport,
- * the whole widget will scroll, including the column headings. Thus, 
- * widgets with native scrolling support should not be used with the 
- * #GtkViewport proxy.
- *
- * A widget supports scrolling natively if it implements the
- * #GtkScrollable interface.
- *
- * Deprecated: 3.8: gtk_container_add() will automatically add
- * a #GtkViewport if the child doesn’t implement #GtkScrollable.
- */
-void
-gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
-				       GtkWidget         *child)
-{
-  GtkBin *bin;
-  GtkWidget *viewport;
-  GtkWidget *child_widget;
-
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (gtk_widget_get_parent (child) == NULL);
-
-  bin = GTK_BIN (scrolled_window);
-  child_widget = gtk_bin_get_child (bin);
-
-  if (child_widget)
-    {
-      g_return_if_fail (GTK_IS_VIEWPORT (child_widget));
-      g_return_if_fail (gtk_bin_get_child (GTK_BIN (child_widget)) == NULL);
-
-      viewport = child_widget;
-    }
-  else
-    {
-      viewport =
-        gtk_viewport_new (gtk_scrolled_window_get_hadjustment (scrolled_window),
-                          gtk_scrolled_window_get_vadjustment (scrolled_window));
-      gtk_container_set_focus_hadjustment (GTK_CONTAINER (viewport),
-                                           gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
-      gtk_container_set_focus_vadjustment (GTK_CONTAINER (viewport),
-                                           gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
-      gtk_container_add (GTK_CONTAINER (scrolled_window), viewport);
-    }
-
-  gtk_widget_show (viewport);
-  gtk_container_add (GTK_CONTAINER (viewport), child);
-}
-
 static void
 gtk_scrolled_window_get_preferred_width (GtkWidget *widget,
                                          gint      *minimum_size,

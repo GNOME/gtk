@@ -182,9 +182,6 @@ void           gtk_scrolled_window_set_shadow_type   (GtkScrolledWindow *scrolle
 						      GtkShadowType      type);
 GDK_AVAILABLE_IN_ALL
 GtkShadowType  gtk_scrolled_window_get_shadow_type   (GtkScrolledWindow *scrolled_window);
-GDK_DEPRECATED_IN_3_8_FOR(gtk_container_add)
-void	       gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
-						      GtkWidget		*child);
 
 GDK_AVAILABLE_IN_ALL
 gint           gtk_scrolled_window_get_min_content_width  (GtkScrolledWindow *scrolled_window);
