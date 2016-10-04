@@ -588,8 +588,6 @@ enum {
   PROP_DOUBLE_BUFFERED,
   PROP_HALIGN,
   PROP_VALIGN,
-  PROP_MARGIN_LEFT,
-  PROP_MARGIN_RIGHT,
   PROP_MARGIN_START,
   PROP_MARGIN_END,
   PROP_MARGIN_TOP,
@@ -1355,48 +1353,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                          GTK_TYPE_ALIGN,
                          GTK_ALIGN_FILL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkWidget:margin-left:
-   *
-   * Margin on left side of widget.
-   *
-   * This property adds margin outside of the widget's normal size
-   * request, the margin will be added in addition to the size from
-   * gtk_widget_set_size_request() for example.
-   *
-   * Deprecated: 3.12: Use #GtkWidget:margin-start instead.
-   *
-   * Since: 3.0
-   */
-  widget_props[PROP_MARGIN_LEFT] =
-      g_param_spec_int ("margin-left",
-                        P_("Margin on Left"),
-                        P_("Pixels of extra space on the left side"),
-                        0, G_MAXINT16,
-                        0,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-
-  /**
-   * GtkWidget:margin-right:
-   *
-   * Margin on right side of widget.
-   *
-   * This property adds margin outside of the widget's normal size
-   * request, the margin will be added in addition to the size from
-   * gtk_widget_set_size_request() for example.
-   *
-   * Deprecated: 3.12: Use #GtkWidget:margin-end instead.
-   *
-   * Since: 3.0
-   */
-  widget_props[PROP_MARGIN_RIGHT] =
-      g_param_spec_int ("margin-right",
-                        P_("Margin on Right"),
-                        P_("Pixels of extra space on the right side"),
-                        0, G_MAXINT16,
-                        0,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkWidget:margin-start:
@@ -3548,16 +3504,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_VALIGN:
       gtk_widget_set_valign (widget, g_value_get_enum (value));
       break;
-    case PROP_MARGIN_LEFT:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_widget_set_margin_left (widget, g_value_get_int (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-    case PROP_MARGIN_RIGHT:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_widget_set_margin_right (widget, g_value_get_int (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
     case PROP_MARGIN_START:
       gtk_widget_set_margin_start (widget, g_value_get_int (value));
       break;
@@ -3711,16 +3657,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_VALIGN:
       g_value_set_enum (value, gtk_widget_get_valign_with_baseline (widget));
-      break;
-    case PROP_MARGIN_LEFT:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      g_value_set_int (value, gtk_widget_get_margin_left (widget));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
-    case PROP_MARGIN_RIGHT:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      g_value_set_int (value, gtk_widget_get_margin_right (widget));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_MARGIN_START:
       g_value_set_int (value, gtk_widget_get_margin_start (widget));
@@ -13949,110 +13885,6 @@ gtk_widget_set_valign (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_margin_left:
- * @widget: a #GtkWidget
- *
- * Gets the value of the #GtkWidget:margin-left property.
- *
- * Returns: The left margin of @widget
- *
- * Deprecated: 3.12: Use gtk_widget_get_margin_start() instead.
- *
- * Since: 3.0
- */
-gint
-gtk_widget_get_margin_left (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-
-  return widget->priv->margin.left;
-}
-
-/**
- * gtk_widget_set_margin_left:
- * @widget: a #GtkWidget
- * @margin: the left margin
- *
- * Sets the left margin of @widget.
- * See the #GtkWidget:margin-left property.
- *
- * Deprecated: 3.12: Use gtk_widget_set_margin_start() instead.
- *
- * Since: 3.0
- */
-void
-gtk_widget_set_margin_left (GtkWidget *widget,
-                            gint       margin)
-{
-  gboolean rtl;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (margin <= G_MAXINT16);
-
-  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-
-  if (widget->priv->margin.left == margin)
-    return;
-
-  widget->priv->margin.left = margin;
-  gtk_widget_queue_resize (widget);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_LEFT]);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_END : PROP_MARGIN_START]);
-}
-
-/**
- * gtk_widget_get_margin_right:
- * @widget: a #GtkWidget
- *
- * Gets the value of the #GtkWidget:margin-right property.
- *
- * Returns: The right margin of @widget
- *
- * Deprecated: 3.12: Use gtk_widget_get_margin_end() instead.
- *
- * Since: 3.0
- */
-gint
-gtk_widget_get_margin_right (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-
-  return widget->priv->margin.right;
-}
-
-/**
- * gtk_widget_set_margin_right:
- * @widget: a #GtkWidget
- * @margin: the right margin
- *
- * Sets the right margin of @widget.
- * See the #GtkWidget:margin-right property.
- *
- * Deprecated: 3.12: Use gtk_widget_set_margin_end() instead.
- *
- * Since: 3.0
- */
-void
-gtk_widget_set_margin_right (GtkWidget *widget,
-                             gint       margin)
-{
-  gboolean rtl;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (margin <= G_MAXINT16);
-
-  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-
-  if (widget->priv->margin.right == margin)
-    return;
-
-  widget->priv->margin.right = margin;
-  gtk_widget_queue_resize (widget);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_RIGHT]);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_START : PROP_MARGIN_END]);
-}
-
-/**
  * gtk_widget_get_margin_start:
  * @widget: a #GtkWidget
  *
@@ -14106,7 +13938,6 @@ gtk_widget_set_margin_start (GtkWidget *widget,
   *start = margin;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_START]);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_RIGHT : PROP_MARGIN_LEFT]);
 }
 
 /**
@@ -14163,7 +13994,6 @@ gtk_widget_set_margin_end (GtkWidget *widget,
   *end = margin;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_END]);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_LEFT : PROP_MARGIN_RIGHT]);
 }
 
 /**

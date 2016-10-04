@@ -1046,16 +1046,6 @@ GtkAlign gtk_widget_get_valign_with_baseline (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_valign        (GtkWidget *widget,
                                        GtkAlign   align);
-GDK_DEPRECATED_IN_3_12_FOR(gtk_widget_get_margin_start)
-gint     gtk_widget_get_margin_left   (GtkWidget *widget);
-GDK_DEPRECATED_IN_3_12_FOR(gtk_widget_set_margin_start)
-void     gtk_widget_set_margin_left   (GtkWidget *widget,
-                                       gint       margin);
-GDK_DEPRECATED_IN_3_12_FOR(gtk_widget_get_margin_end)
-gint     gtk_widget_get_margin_right  (GtkWidget *widget);
-GDK_DEPRECATED_IN_3_12_FOR(gtk_widget_set_margin_end)
-void     gtk_widget_set_margin_right  (GtkWidget *widget,
-                                       gint       margin);
 GDK_AVAILABLE_IN_3_12
 gint     gtk_widget_get_margin_start  (GtkWidget *widget);
 GDK_AVAILABLE_IN_3_12
