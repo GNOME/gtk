@@ -250,7 +250,6 @@
 #include <gtk/deprecated/gtkalignment.h>
 #include <gtk/deprecated/gtkcolorsel.h>
 #include <gtk/deprecated/gtkcolorseldialog.h>
-#include <gtk/deprecated/gtkfontsel.h>
 #include <gtk/deprecated/gtkgradient.h>
 #include <gtk/deprecated/gtkhbbox.h>
 #include <gtk/deprecated/gtkhpaned.h>

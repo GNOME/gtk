@@ -65,7 +65,6 @@ list_ignore_properties (gboolean buglist)
     { "GtkInputDialog",         "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkInvisible",           "screen",               (void*) MATCH_ANY_VALUE },      /* cannot create GdkScreen */
     { "GtkMessageDialog",       "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
-    { "GtkFontSelectionDialog", "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkColorSelectionDialog","has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkColorSelection",      "child",                NULL, },
     { "GtkColorSelection",      "current-color",        (void*) NULL, },                /* not a valid boxed color */

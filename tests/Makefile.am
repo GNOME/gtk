@@ -67,8 +67,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testfilechooser			\
 	testfilechooserbutton		\
 	testflowbox			\
-	testfontselection		\
-	testfontselectiondialog		\
 	testfontchooser			\
 	testfontoptions			\
 	$(fontconfig_programs)		\
@@ -204,8 +202,6 @@ testerrors_DEPENDENCIES = $(TEST_DEPS)
 testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testflowbox_DEPENDENCIES = $(TEST_DEPS)
-testfontselection_DEPENDENCIES = $(TEST_DEPS)
-testfontselectiondialog_DEPENDENCIES = $(TEST_DEPS)
 testfontchooser_DEPENDENCIES = $(TEST_DEPS)
 testfontchooserdialog_DEPENDENCIES = $(TEST_DEPS)
 testfontoptions_DEPENDENCIES = $(TEST_DEPS)
@@ -332,12 +328,6 @@ testfilechooserbutton_SOURCES =	\
 
 testflowbox_SOURCES = \
 	testflowbox.c
-
-testfontselection_SOURCES = \
-	testfontselection.c
-
-testfontselectiondialog_SOURCES = \
-	testfontselectiondialog.c
 
 testfontchooser_SOURCES = \
 	testfontchooser.c

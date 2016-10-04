@@ -1590,61 +1590,6 @@ gtk_font_button_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkfontsel</FILE>
-<TITLE>GtkFontSelection</TITLE>
-GtkFontSelection
-gtk_font_selection_new
-gtk_font_selection_get_font_name
-gtk_font_selection_set_font_name
-gtk_font_selection_get_preview_text
-gtk_font_selection_set_preview_text
-gtk_font_selection_get_face
-gtk_font_selection_get_face_list
-gtk_font_selection_get_family
-gtk_font_selection_get_size
-gtk_font_selection_get_family_list
-gtk_font_selection_get_preview_entry
-gtk_font_selection_get_size_entry
-gtk_font_selection_get_size_list
-
-<SUBSECTION Standard>
-GTK_FONT_SELECTION
-GTK_IS_FONT_SELECTION
-GTK_TYPE_FONT_SELECTION
-GTK_FONT_SELECTION_CLASS
-GTK_IS_FONT_SELECTION_CLASS
-GTK_FONT_SELECTION_GET_CLASS
-<SUBSECTION Private>
-GtkFontSelectionPrivate
-gtk_font_selection_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkfontseldlg</FILE>
-<TITLE>GtkFontSelectionDialog</TITLE>
-GtkFontSelectionDialog
-gtk_font_selection_dialog_new
-gtk_font_selection_dialog_get_font_name
-gtk_font_selection_dialog_set_font_name
-gtk_font_selection_dialog_get_preview_text
-gtk_font_selection_dialog_set_preview_text
-gtk_font_selection_dialog_get_cancel_button
-gtk_font_selection_dialog_get_ok_button
-gtk_font_selection_dialog_get_font_selection
-
-<SUBSECTION Standard>
-GTK_FONT_SELECTION_DIALOG
-GTK_IS_FONT_SELECTION_DIALOG
-GTK_TYPE_FONT_SELECTION_DIALOG
-GTK_FONT_SELECTION_DIALOG_CLASS
-GTK_IS_FONT_SELECTION_DIALOG_CLASS
-GTK_FONT_SELECTION_DIALOG_GET_CLASS
-<SUBSECTION Private>
-GtkFontSelectionDialogPrivate
-gtk_font_selection_dialog_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkfontchooser</FILE>
 <TITLE>GtkFontChooser</TITLE>
 GtkFontChooser

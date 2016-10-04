@@ -232,10 +232,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
            strcmp (pspec->name, "cell-area-context") == 0))
 	continue;
 
-      if (g_type_is_a (type, GTK_TYPE_FONT_SELECTION) &&
-	  strcmp (pspec->name, "font") == 0)
-	continue;
-
       if (g_type_is_a (type, GTK_TYPE_ICON_VIEW) &&
 	  (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
