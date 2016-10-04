@@ -200,18 +200,6 @@ test_type (gconstpointer data)
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
-      if (g_type_is_a (type, GTK_TYPE_COLOR_SELECTION) &&
-	  (strcmp (pspec->name, "current-color") == 0 ||
-	   strcmp (pspec->name, "current-rgba") == 0))
-	continue;
-
-      if (g_type_is_a (type, GTK_TYPE_COLOR_SELECTION_DIALOG) &&
-	  (strcmp (pspec->name, "color-selection") == 0 ||
-	   strcmp (pspec->name, "ok-button") == 0 ||
-	   strcmp (pspec->name, "help-button") == 0 ||
-	   strcmp (pspec->name, "cancel-button") == 0))
-	continue;
-
       if (g_type_is_a (type, GTK_TYPE_COMBO_BOX) &&
 	  (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))

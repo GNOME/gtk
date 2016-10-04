@@ -3,8 +3,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkaction.h		\
 	deprecated/gtkactiongroup.h	\
 	deprecated/gtkalignment.h	\
-	deprecated/gtkcolorsel.h	\
-	deprecated/gtkcolorseldialog.h	\
 	deprecated/gtkgradient.h	\
 	deprecated/gtkhbbox.h		\
 	deprecated/gtkhpaned.h		\
@@ -40,8 +38,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkaction.c		\
 	deprecated/gtkactiongroup.c	\
 	deprecated/gtkalignment.c	\
-	deprecated/gtkcolorsel.c	\
-	deprecated/gtkcolorseldialog.c	\
 	deprecated/gtkgradient.c	\
 	deprecated/gtkhbbox.c		\
 	deprecated/gtkhpaned.c		\
