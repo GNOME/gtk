@@ -529,38 +529,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
   /**
-   * GtkAssistant:header-padding:
-   *
-   * Number of pixels around the header.
-   *
-   * Deprecated:3.20: This style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("header-padding",
-                                                             P_("Header Padding"),
-                                                             P_("Number of pixels around the header."),
-                                                             0,
-                                                             G_MAXINT,
-                                                             6,
-                                                             GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
-
-  /**
-   * GtkAssistant:content-padding:
-   *
-   * Number of pixels around the content.
-   *
-   * Deprecated:3.20: This style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("content-padding",
-                                                             P_("Content Padding"),
-                                                             P_("Number of pixels around the content pages."),
-                                                             0,
-                                                             G_MAXINT,
-                                                             1,
-                                                             GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
-
-  /**
    * GtkAssistant:page-type:
    *
    * The type of the assistant page.

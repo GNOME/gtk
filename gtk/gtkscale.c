@@ -791,38 +791,6 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
-  /**
-   * GtkScale:slider-length:
-   *
-   * Length of scale's slider.
-   *
-   * Deprecated: 3.20: Use min-height/min-width CSS properties on the slider
-   *   element instead. The value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("slider-length",
-                                                             P_("Slider Length"),
-                                                             P_("Length of scale's slider"),
-                                                             0, G_MAXINT, 31,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkScale:value-spacing:
-   *
-   * Space between value text and the slider/trough area.
-   *
-   * Deprecated: 3.20: Use min-height/min-width CSS properties on the value
-   *   element instead. The value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("value-spacing",
-							     P_("Value spacing"),
-							     P_("Space between value text and the slider/trough area"),
-							     0,
-							     G_MAXINT,
-							     2,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-  
   /* All bindings (even arrow keys) are on both h/v scale, because
    * blind users etc. don't care about scale orientation.
    */

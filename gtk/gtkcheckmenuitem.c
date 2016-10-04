@@ -227,23 +227,6 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  /**
-   * GtkCheckMenuItem:indicator-size:
-   *
-   * The size of the check or radio indicator.
-   *
-   * Deprecated: 3.20: Use the standard CSS property min-width on the check or
-   *   radio nodes; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("indicator-size",
-                                                             P_("Indicator Size"),
-                                                             P_("Size of check or radio indicator"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             INDICATOR_SIZE,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   widget_class->draw = gtk_check_menu_item_draw;
 
   menu_item_class->activate = gtk_check_menu_item_activate;

@@ -3284,36 +3284,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                                  GTK_PARAM_READABLE));
 
 
-  /**
-   * GtkWidget:scroll-arrow-hlength:
-   *
-   * The "scroll-arrow-hlength" style property defines the length of
-   * horizontal scroll arrows.
-   *
-   * Since: 2.10
-   */
-  gtk_widget_class_install_style_property (klass,
-                                           g_param_spec_int ("scroll-arrow-hlength",
-                                                             P_("Horizontal Scroll Arrow Length"),
-                                                             P_("The length of horizontal scroll arrows"),
-                                                             1, G_MAXINT, 16,
-                                                             GTK_PARAM_READABLE));
-
-  /**
-   * GtkWidget:scroll-arrow-vlength:
-   *
-   * The "scroll-arrow-vlength" style property defines the length of
-   * vertical scroll arrows.
-   *
-   * Since: 2.10
-   */
-  gtk_widget_class_install_style_property (klass,
-                                           g_param_spec_int ("scroll-arrow-vlength",
-                                                             P_("Vertical Scroll Arrow Length"),
-                                                             P_("The length of vertical scroll arrows"),
-                                                             1, G_MAXINT, 16,
-                                                             GTK_PARAM_READABLE));
-
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_int ("text-handle-width",
                                                              P_("Width of text selection handles"),

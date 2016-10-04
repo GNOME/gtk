@@ -1149,64 +1149,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                                  FALSE,
                                                                  GTK_PARAM_READABLE));
 
-  /**
-   * GtkComboBox:arrow-size:
-   *
-   * Sets the minimum size of the arrow in the combo box.  Note
-   * that the arrow size is coupled to the font size, so in case
-   * a larger font is used, the arrow will be larger than set
-   * by arrow size.
-   *
-   * Since: 2.12
-   *
-   * Deprecated: 3.20: use the standard min-width/min-height CSS properties on
-   *   the arrow node; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("arrow-size",
-                                                             P_("Arrow Size"),
-                                                             P_("The minimum size of the arrow in the combo box"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             15,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkComboBox:arrow-scaling:
-   *
-   * Sets the amount of space used up by the combobox arrow,
-   * proportional to the font size.
-   *
-   * Deprecated: 3.20: use the standard min-width/min-height CSS properties on
-   *   the arrow node; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_float ("arrow-scaling",
-                                                               P_("Arrow Scaling"),
-                                                               P_("The amount of space used by the arrow"),
-                                                             0,
-                                                             2.0,
-                                                             1.0,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkComboBox:shadow-type:
-   *
-   * Which kind of shadow to draw around the combo box.
-   *
-   * Since: 2.12
-   *
-   * Deprecated: 3.20: use CSS styling to change the appearance of the combobox
-   *   frame; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_enum ("shadow-type",
-                                                              P_("Shadow type"),
-                                                              P_("Which kind of shadow to draw around the combo box"),
-                                                              GTK_TYPE_SHADOW_TYPE,
-                                                              GTK_SHADOW_NONE,
-                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombobox.ui");
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, box);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, button);

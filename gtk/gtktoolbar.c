@@ -593,41 +593,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 								    P_("Whether the item should be the same size as other homogeneous items"),
 								    FALSE,
 								    GTK_PARAM_READWRITE));
-  
-  /**
-   * GtkToolbar:space-size:
-   *
-   * Size of toolbar spacers.
-   *
-   * Deprecated: 3.20: Use the standard margin/padding CSS properties on the
-   *   separator elements; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("space-size",
-							     P_("Spacer size"),
-							     P_("Size of spacers"),
-							     0,
-							     G_MAXINT,
-                                                             DEFAULT_SPACE_SIZE,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-  
-  /**
-   * GtkToolbar:internal-padding:
-   *
-   * Amount of border space between the toolbar shadow and the buttons.
-   *
-   * Deprecated: 3.6: Use the standard padding CSS property
-   *   (through objects like #GtkStyleContext and #GtkCssProvider); the value
-   *   of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("internal-padding",
-							     P_("Internal padding"),
-							     P_("Amount of border space between the toolbar shadow and the buttons"),
-							     0,
-							     G_MAXINT,
-                                                             0,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("max-child-expand",
@@ -638,22 +603,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                              G_MAXINT,
                                                              GTK_PARAM_READABLE));
 
-  /**
-   * GtkToolbar:space-style:
-   *
-   * Style of toolbar spacers.
-   *
-   * Deprecated: 3.20: Use CSS properties on the separator elements to style
-   *   toolbar spacers; the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_enum ("space-style",
-							      P_("Space style"),
-							      P_("Whether spacers are vertical lines or just blank"),
-                                                              GTK_TYPE_TOOLBAR_SPACE_STYLE,
-                                                              DEFAULT_SPACE_STYLE,
-                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("button-relief",
 							      P_("Button relief"),
@@ -661,22 +610,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                               GTK_TYPE_RELIEF_STYLE,
                                                               GTK_RELIEF_NONE,
                                                               GTK_PARAM_READABLE));
-  /**
-   * GtkToolbar:shadow-type:
-   *
-   * Style of bevel around the toolbar.
-   *
-   * Deprecated: 3.6: Use the standard border CSS property
-   *   (through objects like #GtkStyleContext and #GtkCssProvider); the value
-   *   of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_enum ("shadow-type",
-                                                              P_("Shadow type"),
-                                                              P_("Style of bevel around the toolbar"),
-                                                              GTK_TYPE_SHADOW_TYPE,
-                                                              GTK_SHADOW_OUT,
-                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   binding_set = gtk_binding_set_by_class (klass);
   

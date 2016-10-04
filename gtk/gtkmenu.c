@@ -823,44 +823,6 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                       G_PARAM_STATIC_BLURB |
                                                       G_PARAM_EXPLICIT_NOTIFY));
 
-  /**
-   * GtkMenu:horizontal-padding:
-   *
-   * Extra space at the left and right edges of the menu.
-   *
-   * Deprecated: 3.8: use the standard padding CSS property (through objects
-   *   like #GtkStyleContext and #GtkCssProvider); the value of this style
-   *   property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("horizontal-padding",
-                                                             P_("Horizontal Padding"),
-                                                             P_("Extra space at the left and right edges of the menu"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             0,
-                                                             GTK_PARAM_READABLE |
-                                                             G_PARAM_DEPRECATED));
-
-  /**
-   * GtkMenu:vertical-padding:
-   *
-   * Extra space at the top and bottom of the menu.
-   *
-   * Deprecated: 3.8: use the standard padding CSS property (through objects
-   *   like #GtkStyleContext and #GtkCssProvider); the value of this style
-   *   property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("vertical-padding",
-                                                             P_("Vertical Padding"),
-                                                             P_("Extra space at the top and bottom of the menu"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             1,
-                                                             GTK_PARAM_READABLE |
-                                                             G_PARAM_DEPRECATED));
-
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("vertical-offset",
                                                              P_("Vertical Offset"),
@@ -878,37 +840,6 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                              G_MAXINT,
                                                              -2,
                                                              GTK_PARAM_READABLE));
-
-  /**
-   * GtkMenu:double-arrows:
-   *
-   * When %TRUE, both arrows are shown when scrolling.
-   *
-   * Deprecated: 3.20: the value of this style property is ignored.
-   **/
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("double-arrows",
-                                                                 P_("Double Arrows"),
-                                                                 P_("When scrolling, always show both arrows."),
-                                                                 TRUE,
-                                                                 GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkMenu:arrow-placement:
-   *
-   * Indicates where scroll arrows should be placed.
-   *
-   * Since: 2.16
-   *
-   * Deprecated: 3.20: the value of this style property is ignored.
-   **/
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_enum ("arrow-placement",
-                                                              P_("Arrow Placement"),
-                                                              P_("Indicates where scroll arrows should be placed"),
-                                                              GTK_TYPE_ARROW_PLACEMENT,
-                                                              GTK_ARROWS_BOTH,
-                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_LEFT_ATTACH,

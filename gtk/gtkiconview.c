@@ -673,22 +673,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
   g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
-  /**
-   * GtkIconView:selection-box-alpha:
-   *
-   * The opacity of the selection box.
-   *
-   * Deprecated: 3.20: The opacity of the selection box is determined by CSS;
-   *     the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_uchar ("selection-box-alpha",
-                                                               P_("Selection Box Alpha"),
-                                                               P_("Opacity of the selection box"),
-                                                               0, 0xff,
-                                                               0x40,
-                                                               GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   /* Signals */
   /**
    * GtkIconView::item-activated:

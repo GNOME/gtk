@@ -238,41 +238,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                       GTK_TYPE_PACK_DIRECTION,
                                                       GTK_PACK_DIRECTION_LTR,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-
-  /**
-   * GtkMenuBar:shadow-type:
-   *
-   * The style of the shadow around the menubar.
-   *
-   * Deprecated: 3.20: Use CSS to determine the shadow; the value of
-   *     this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_enum ("shadow-type",
-                                                              P_("Shadow type"),
-                                                              P_("Style of bevel around the menubar"),
-                                                              GTK_TYPE_SHADOW_TYPE,
-                                                              GTK_SHADOW_OUT,
-                                                              GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkMenuBar:internal-padding:
-   *
-   * Amount of border space between the menubar shadow and the menu items
-   *
-   * Deprecated: 3.8: use the standard padding CSS property (through objects
-   *   like #GtkStyleContext and #GtkCssProvider); the value of this style
-   *   property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("internal-padding",
-							     P_("Internal padding"),
-							     P_("Amount of border space between the menubar shadow and the menu items"),
-							     0,
-							     G_MAXINT,
-                                                             0,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   gtk_container_class_handle_border_width (container_class);
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);

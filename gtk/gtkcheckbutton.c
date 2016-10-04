@@ -220,23 +220,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   container_class->add = gtk_check_button_add;
   container_class->remove = gtk_check_button_remove;
 
-  /**
-   * GtkCheckButton:indicator-spacing:
-   *
-   * The spacing around the indicator.
-   *
-   * Deprecated: 3.20: Use CSS margins of the indicator node,
-   *    the value of this style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("indicator-spacing",
-							     P_("Indicator Spacing"),
-							     P_("Spacing around check or radio indicator"),
-							     0,
-							     G_MAXINT,
-							     INDICATOR_SPACING,
-							     GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
   gtk_widget_class_set_css_name (widget_class, "checkbutton");
 }

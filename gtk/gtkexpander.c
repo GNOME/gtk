@@ -373,23 +373,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  /**
-   * GtkExpander:expander-spacing:
-   *
-   * Spaing around the expander arrow.
-   *
-   * Deprecated: 3.20: Use CSS margins instead, the value of this
-   *    style property is ignored.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("expander-spacing",
-                                                             P_("Indicator Spacing"),
-                                                             P_("Spacing around expander arrow"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             DEFAULT_EXPANDER_SPACING,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   widget_class->activate_signal =
     g_signal_new (I_("activate"),
                   G_TYPE_FROM_CLASS (gobject_class),
