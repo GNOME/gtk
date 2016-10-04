@@ -3323,51 +3323,6 @@ gtk_window_get_attached_to (GtkWindow *window)
 }
 
 /**
- * gtk_window_set_opacity:
- * @window: a #GtkWindow
- * @opacity: desired opacity, between 0 and 1
- *
- * Request the windowing system to make @window partially transparent,
- * with opacity 0 being fully transparent and 1 fully opaque. (Values
- * of the opacity parameter are clamped to the [0,1] range.) On X11
- * this has any effect only on X screens with a compositing manager
- * running. See gtk_widget_is_composited(). On Windows it should work
- * always.
- * 
- * Note that setting a window’s opacity after the window has been
- * shown causes it to flicker once on Windows.
- *
- * Since: 2.12
- * Deprecated: 3.8: Use gtk_widget_set_opacity instead.
- **/
-void       
-gtk_window_set_opacity  (GtkWindow *window, 
-			 gdouble    opacity)
-{
-  gtk_widget_set_opacity (GTK_WIDGET (window), opacity);
-}
-
-/**
- * gtk_window_get_opacity:
- * @window: a #GtkWindow
- *
- * Fetches the requested opacity for this window. See
- * gtk_window_set_opacity().
- *
- * Returns: the requested opacity for this window.
- *
- * Since: 2.12
- * Deprecated: 3.8: Use gtk_widget_get_opacity instead.
- **/
-gdouble
-gtk_window_get_opacity (GtkWindow *window)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), 0.0);
-
-  return gtk_widget_get_opacity (GTK_WIDGET (window));
-}
-
-/**
  * gtk_window_get_application:
  * @window: a #GtkWindow
  *

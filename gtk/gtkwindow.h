@@ -192,11 +192,6 @@ void       gtk_window_set_attached_to          (GtkWindow           *window,
                                                 GtkWidget           *attach_widget);
 GDK_AVAILABLE_IN_3_4
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
-GDK_DEPRECATED_IN_3_8_FOR(gtk_widget_set_opacity)
-void       gtk_window_set_opacity              (GtkWindow           *window, 
-						gdouble              opacity);
-GDK_DEPRECATED_IN_3_8_FOR(gtk_widget_get_opacity)
-gdouble    gtk_window_get_opacity              (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_type_hint            (GtkWindow           *window, 
 						GdkWindowTypeHint    hint);
