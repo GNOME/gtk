@@ -935,7 +935,6 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
 {
   GtkDialog* dialog = GTK_DIALOG (message_dialog);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   switch (buttons)
     {
     case GTK_BUTTONS_NONE:
@@ -957,26 +956,17 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     case GTK_BUTTONS_YES_NO:
       gtk_dialog_add_button (dialog, _("_No"), GTK_RESPONSE_NO);
       gtk_dialog_add_button (dialog, _("_Yes"), GTK_RESPONSE_YES);
-      gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-					       GTK_RESPONSE_YES,
-					       GTK_RESPONSE_NO,
-					       -1);
       break;
 
     case GTK_BUTTONS_OK_CANCEL:
       gtk_dialog_add_button (dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
       gtk_dialog_add_button (dialog, _("_OK"), GTK_RESPONSE_OK);
-      gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-					       GTK_RESPONSE_OK,
-					       GTK_RESPONSE_CANCEL,
-					       -1);
       break;
       
     default:
       g_warning ("Unknown GtkButtonsType");
       break;
     } 
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_object_notify (G_OBJECT (message_dialog), "buttons");
 }

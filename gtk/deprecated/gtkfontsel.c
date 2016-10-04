@@ -1699,12 +1699,6 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
                                            GTK_RESPONSE_OK);
   gtk_widget_grab_default (priv->ok_button);
 
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontseldiag),
-					   GTK_RESPONSE_OK,
-					   GTK_RESPONSE_APPLY,
-					   GTK_RESPONSE_CANCEL,
-					   -1);
-
   gtk_window_set_title (GTK_WINDOW (fontseldiag),
                         _("Font Selection"));
 

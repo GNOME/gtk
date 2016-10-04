@@ -107,13 +107,6 @@ gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
   gtk_widget_init_template (GTK_WIDGET (cc));
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (cc));
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (cc),
-                                           GTK_RESPONSE_OK,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
   g_signal_connect (cc, "response",
                     G_CALLBACK (gtk_color_chooser_dialog_response), NULL);
 }

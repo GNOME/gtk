@@ -547,12 +547,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                           NULL);
   gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_dialog_set_alternative_button_order (dialog,
-                                           GTK_RESPONSE_OK,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Build contents */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);

@@ -516,13 +516,6 @@ gtk_file_chooser_native_init (GtkFileChooserNative *self)
 
   gtk_dialog_set_default_response (GTK_DIALOG (self->dialog),
                                    GTK_RESPONSE_ACCEPT);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (self->dialog),
-                                           GTK_RESPONSE_ACCEPT,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
   /* We don't want to destroy on delete event, instead we hide in the response cb */
   g_signal_connect (self->dialog,
                     "delete-event",

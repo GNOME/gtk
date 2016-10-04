@@ -713,13 +713,6 @@ gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
   gtk_widget_init_template (GTK_WIDGET (self));
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (self));
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (self),
-                                           GTK_RESPONSE_OK,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
   /* we can't override the class signal handler here, as it's a RUN_LAST;
    * we want our signal handler instead to be executed before any user code.
    */

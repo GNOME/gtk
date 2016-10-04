@@ -152,13 +152,6 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
   gtk_widget_init_template (GTK_WIDGET (fontchooserdiag));
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (fontchooserdiag));
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontchooserdiag),
-                                           GTK_RESPONSE_OK,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
   priv->select_button = gtk_dialog_get_widget_for_response (GTK_DIALOG (fontchooserdiag), GTK_RESPONSE_OK);
   priv->cancel_button = gtk_dialog_get_widget_for_response (GTK_DIALOG (fontchooserdiag), GTK_RESPONSE_CANCEL);
 
