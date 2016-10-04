@@ -704,9 +704,6 @@ void                gtk_widget_get_preferred_size             (GtkWidget      *w
                                                                GtkRequisition *minimum_size,
                                                                GtkRequisition *natural_size);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
-void       gtk_widget_get_child_requisition (GtkWidget         *widget,
-                                             GtkRequisition    *requisition);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
 					   const gchar         *accel_signal,

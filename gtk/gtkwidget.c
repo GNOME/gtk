@@ -5539,40 +5539,6 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
     }
 }
 
-/**
- * gtk_widget_get_child_requisition:
- * @widget: a #GtkWidget
- * @requisition: (out): a #GtkRequisition to be filled in
- *
- * This function is only for use in widget implementations. Obtains
- * @widget->requisition, unless someone has forced a particular
- * geometry on the widget (e.g. with gtk_widget_set_size_request()),
- * in which case it returns that geometry instead of the widget's
- * requisition.
- *
- * This function differs from gtk_widget_size_request() in that
- * it retrieves the last size request value from @widget->requisition,
- * while gtk_widget_size_request() actually calls the "size_request" method
- * on @widget to compute the size request and fill in @widget->requisition,
- * and only then returns @widget->requisition.
- *
- * Because this function does not call the “size_request” method, it
- * can only be used when you know that @widget->requisition is
- * up-to-date, that is, gtk_widget_size_request() has been called
- * since the last time a resize was queued. In general, only container
- * implementations have this information; applications should use
- * gtk_widget_size_request().
- *
- *
- * Deprecated: 3.0: Use gtk_widget_get_preferred_size() instead.
- **/
-void
-gtk_widget_get_child_requisition (GtkWidget	 *widget,
-				  GtkRequisition *requisition)
-{
-  gtk_widget_get_preferred_size (widget, requisition, NULL);
-}
-
 static gboolean
 invalidate_predicate (GdkWindow *window,
 		      gpointer   data)
