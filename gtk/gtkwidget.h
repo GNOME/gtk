@@ -664,9 +664,6 @@ void       gtk_widget_queue_allocate      (GtkWidget           *widget);
 GDK_AVAILABLE_IN_3_8
 GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
-void       gtk_widget_size_request        (GtkWidget           *widget,
-                                           GtkRequisition      *requisition);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);

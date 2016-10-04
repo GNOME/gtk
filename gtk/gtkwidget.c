@@ -5540,35 +5540,6 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_size_request:
- * @widget: a #GtkWidget
- * @requisition: (out): a #GtkRequisition to be filled in
- *
- * This function is typically used when implementing a #GtkContainer
- * subclass.  Obtains the preferred size of a widget. The container
- * uses this information to arrange its child widgets and decide what
- * size allocations to give them with gtk_widget_size_allocate().
- *
- * You can also call this function from an application, with some
- * caveats. Most notably, getting a size request requires the widget
- * to be associated with a screen, because font information may be
- * needed. Multihead-aware applications should keep this in mind.
- *
- * Also remember that the size request is not necessarily the size
- * a widget will actually be allocated.
- *
- * Deprecated: 3.0: Use gtk_widget_get_preferred_size() instead.
- **/
-void
-gtk_widget_size_request (GtkWidget	*widget,
-			 GtkRequisition *requisition)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_widget_get_preferred_size (widget, requisition, NULL);
-}
-
-/**
  * gtk_widget_get_child_requisition:
  * @widget: a #GtkWidget
  * @requisition: (out): a #GtkRequisition to be filled in
