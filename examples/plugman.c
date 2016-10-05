@@ -1,5 +1,17 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
+#include <string.h>
+
+
+static const char *red_css =
+"textview>text {"
+"  color: red;"
+"}";
+
+static const char *black_css =
+"textview>text {"
+"  color: black;"
+"}";
 
 static void
 activate_toggle (GSimpleAction *action,
@@ -195,22 +207,28 @@ plugin_action (GAction  *action,
                GVariant *parameter,
                gpointer  data)
 {
-  GApplication *app;
-  GList *list;
-  GtkWindow *window;
-  GtkWidget *text;
-  GdkRGBA color;
+  const char *action_name;
+  const char *css_to_load;
+  GtkCssProvider *css_provider;
 
-  app = g_application_get_default ();
-  list = gtk_application_get_windows (GTK_APPLICATION (app));
-  window = GTK_WINDOW (list->data);
-  text = g_object_get_data ((GObject*)window, "plugman-text");
+  action_name = g_action_get_name (action);
+  if (strcmp (action_name, "red") == 0)
+    css_to_load = red_css;
+  else if (strcmp (action_name, "black") == 0)
+    css_to_load = black_css;
+  else
+    {
+      g_critical ("Unknown action name: %s", action_name);
+      return;
+    }
 
-  gdk_rgba_parse (&color, g_action_get_name (action));
+  g_message ("Color: %s", g_action_get_name (action));
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_widget_override_color (text, 0, &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  css_provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (css_provider, css_to_load, -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 static void
