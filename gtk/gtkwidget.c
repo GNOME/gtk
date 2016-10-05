@@ -3269,13 +3269,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                 GTK_WIDGET_HELP_WHATS_THIS);
 
   gtk_widget_class_install_style_property (klass,
-					   g_param_spec_float ("cursor-aspect-ratio",
-							       P_("Cursor line aspect ratio"),
-							       P_("Aspect ratio with which to draw insertion cursor"),
-							       0.0, 1.0, 0.04,
-							       GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (klass,
                                            g_param_spec_boolean ("window-dragging",
                                                                  P_("Window dragging"),
                                                                  P_("Whether windows can be dragged and maximized by clicking on empty areas"),

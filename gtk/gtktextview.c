@@ -145,6 +145,7 @@
 #define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->priv->text_window)
 
 #define SPACE_FOR_CURSOR 1
+#define CURSOR_ASPECT_RATIO (0.04)
 
 #define GTK_TEXT_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TEXT_VIEW, GtkTextViewPrivate))
 
@@ -10125,7 +10126,6 @@ text_window_invalidate_cursors (GtkTextWindow *win)
   GdkRectangle strong;
   GdkRectangle weak;
   gboolean     draw_arrow;
-  gfloat       cursor_aspect_ratio;
   gint         stem_width;
   gint         arrow_width;
 
@@ -10150,11 +10150,7 @@ text_window_invalidate_cursors (GtkTextWindow *win)
 
   draw_arrow = (strong.x != weak.x || strong.y != weak.y);
 
-  gtk_widget_style_get (win->widget,
-                        "cursor-aspect-ratio", &cursor_aspect_ratio,
-                        NULL);
-  
-  stem_width = strong.height * cursor_aspect_ratio + 1;
+  stem_width = strong.height * CURSOR_ASPECT_RATIO + 1;
   arrow_width = stem_width + 1;
 
   strong.width = stem_width;
@@ -10176,7 +10172,7 @@ text_window_invalidate_cursors (GtkTextWindow *win)
 
   if (draw_arrow) /* == have weak */
     {
-      stem_width = weak.height * cursor_aspect_ratio + 1;
+      stem_width = weak.height * CURSOR_ASPECT_RATIO + 1;
       arrow_width = stem_width + 1;
 
       weak.width = stem_width;
