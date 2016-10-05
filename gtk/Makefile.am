@@ -512,7 +512,6 @@ gtk_private_h_sources =		\
 	gtkmenutrackeritem.h	\
 	gtkmnemonichash.h	\
 	gtkmodelmenuitem.h	\
-	gtkmodifierstyle.h	\
 	gtkmodulesprivate.h	\
 	gtkmountoperationprivate.h \
 	gtknativedialogprivate.h \
@@ -817,7 +816,6 @@ gtk_base_c_sources = 		\
 	gtkmnemonichash.c	\
 	gtkmodelmenuitem.c	\
 	gtkmodelbutton.c	\
-	gtkmodifierstyle.c	\
 	gtkmodules.c		\
 	gtkmountoperation.c	\
 	gtknativedialog.c	\

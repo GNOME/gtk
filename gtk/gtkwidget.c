@@ -60,7 +60,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcssprovider.h"
 #include "gtkcsswidgetnodeprivate.h"
-#include "gtkmodifierstyle.h"
 #include "gtkversion.h"
 #include "gtkdebug.h"
 #include "gtktypebuiltins.h"
