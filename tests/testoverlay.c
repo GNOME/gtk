@@ -1,6 +1,34 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+static const char *css =
+".overlay-green {"
+"  background-image: none;"
+"  background-color: green;"
+"}\n"
+".overlay-white {"
+"  background-image: none;"
+"  background-color: white;"
+"}\n"
+".transparent-red {"
+"  background-image: none;"
+"  background-color: rgba(255, 0, 0, 0.8);"
+"}\n"
+".transparent-green {"
+"  background-image: none;"
+"  background-color: rgba(0, 255, 0, 0.8);"
+"}\n"
+".transparent-blue {"
+"  background-image: none;"
+"  background-color: rgba(0, 0, 255, 0.8);"
+"}\n"
+".transparent-purple {"
+"  background-image: none;"
+"  background-color: rgba(255, 0, 255, 0.8);"
+"}\n"
+;
+
+
 /* test that margins and non-zero allocation x/y
  * of the main widget are handled correctly
  */
@@ -12,7 +40,6 @@ test_nonzerox (void)
   GtkWidget *overlay;
   GtkWidget *text;
   GtkWidget *child;
-  GdkRGBA color;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (win), "Non-zero X");
@@ -26,10 +53,6 @@ test_nonzerox (void)
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Right"), 2, 1, 1, 1);
 
   overlay = gtk_overlay_new ();
-  gdk_rgba_parse (&color, "red");
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_widget_override_background_color (overlay, 0, &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_grid_attach (GTK_GRID (grid), overlay, 1, 1, 1, 1);
 
   text = gtk_text_view_new ();
@@ -96,16 +119,11 @@ test_relative (void)
   GtkWidget *overlay;
   GtkWidget *text;
   GtkWidget *child;
-  GdkRGBA color;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (win), "Custom positioning");
 
   overlay = gtk_overlay_new ();
-  gdk_rgba_parse (&color, "yellow");
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_widget_override_background_color (overlay, 0, &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_container_add (GTK_CONTAINER (win), overlay);
 
   grid = gtk_grid_new ();
@@ -371,7 +389,6 @@ test_stacking (void)
   GtkWidget *grid;
   GtkWidget *check1;
   GtkWidget *check2;
-  GdkRGBA color;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (win), "Stacking");
@@ -379,10 +396,7 @@ test_stacking (void)
   grid = gtk_grid_new ();
   overlay = gtk_overlay_new ();
   main_child = gtk_event_box_new ();
-  gdk_rgba_parse (&color, "green");
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_widget_override_background_color (main_child, 0, &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_style_context_add_class (gtk_widget_get_style_context (main_child), "overlay-green");
   gtk_widget_set_hexpand (main_child, TRUE);
   gtk_widget_set_vexpand (main_child, TRUE);
   label = gtk_label_new ("Main child");
@@ -477,7 +491,6 @@ test_child_order (void)
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *ebox;
-  GdkRGBA color;
   int i;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -488,8 +501,8 @@ test_child_order (void)
 
   for (i = 0; i < 4; i++)
     {
-      char *colors[] = {
-	"rgba(255,0,0,0.8)", "rgba(0,255,0,0.8)", "rgba(0,0,255,0.8)", "rgba(255,0,255,0.8)"
+      char *style_classes[] = {
+        "transparent-red", "transparent-green", "transparent-blue", "transparent-purple"
       };
       ebox = gtk_event_box_new ();
       button = gtk_button_new_with_label (g_strdup_printf ("Child %d", i));
@@ -501,20 +514,15 @@ test_child_order (void)
 
       gtk_container_add (GTK_CONTAINER (ebox), button);
 
-      gdk_rgba_parse (&color, colors[i]);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_widget_override_background_color (ebox, 0, &color);
- G_GNUC_END_IGNORE_DEPRECATIONS
+      gtk_style_context_add_class (gtk_widget_get_style_context (ebox), style_classes[i]);
+
       gtk_widget_set_halign (ebox, (i == 0 || i == 3) ? GTK_ALIGN_START : GTK_ALIGN_END);
       gtk_widget_set_valign (ebox, i < 2 ? GTK_ALIGN_START : GTK_ALIGN_END);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), ebox);
     }
 
   ebox = gtk_event_box_new ();
-  gdk_rgba_parse (&color, "white");
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_widget_override_background_color (ebox, 0, &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_style_context_add_class (gtk_widget_get_style_context (ebox), "overlay-white");
 
   label = gtk_label_new ("Main\n"
 			 "Main\n"
@@ -539,11 +547,18 @@ main (int argc, char *argv[])
   GtkWidget *win7;
   GtkWidget *win8;
   GtkWidget *win9;
+  GtkCssProvider *css_provider;
 
   gtk_init (&argc, &argv);
 
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+
+  css_provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (css_provider, css, -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   win1 = test_nonzerox ();
   gtk_widget_show_all (win1);
