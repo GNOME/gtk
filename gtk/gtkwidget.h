@@ -1131,10 +1131,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_widget_class_install_style_property        (GtkWidgetClass     *klass,
 						     GParamSpec         *pspec);
 GDK_AVAILABLE_IN_ALL
-void gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
-						     GParamSpec         *pspec,
-						     GtkRcPropertyParser parser);
-GDK_AVAILABLE_IN_ALL
 GParamSpec*  gtk_widget_class_find_style_property   (GtkWidgetClass     *klass,
 						     const gchar        *property_name);
 GDK_AVAILABLE_IN_ALL
