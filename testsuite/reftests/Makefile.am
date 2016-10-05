@@ -24,8 +24,8 @@ gtk_reftest_CFLAGS = \
 
 gtk_reftest_LDADD = \
 	libgtkreftestprivate.la		\
-	$(top_builddir)/gdk/libgdk-3.la \
-	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-4.la \
+	$(top_builddir)/gtk/libgtk-4.la \
 	$(GTK_DEP_LIBS)			\
 	$(GMODULE_LIBS)			\
 	$(NULL)
@@ -44,8 +44,8 @@ endif
 libgtkreftestprivate_la_CFLAGS = $(gtk_reftest_CFLAGS)
 libgtkreftestprivate_la_LDFLAGS = $(no_undefined)
 libgtkreftestprivate_la_LIBADD =	\
-	$(top_builddir)/gdk/libgdk-3.la \
-	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-4.la \
+	$(top_builddir)/gtk/libgtk-4.la \
 	$(GTK_DEP_LIBS)			\
 	$(GMODULE_LIBS)			\
 	$(NULL)

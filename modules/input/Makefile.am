@@ -13,13 +13,13 @@ AM_CPPFLAGS = \
 	$(INCLUDED_IMMODULE_DEFINE)
 
 DEPS = \
-	$(top_builddir)/gtk/libgtk-3.la
+	$(top_builddir)/gtk/libgtk-4.la
 
 LDADDS = \
-	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gtk/libgtk-4.la	\
 	$(GTK_DEP_LIBS)
 
-moduledir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/immodules
+moduledir = $(libdir)/gtk-4.0/$(GTK_BINARY_VERSION)/immodules
 
 im_xim_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_xim_la_SOURCES = 		\
@@ -190,7 +190,7 @@ else
 MULTIPRESS_MODULE = im-multipress.la
 endif
 
-imconffiledir = $(sysconfdir)/gtk-3.0
+imconffiledir = $(sysconfdir)/gtk-4.0
 dist_imconffile_DATA = im-multipress.conf
 
 if CROSS_COMPILING
@@ -207,21 +207,21 @@ endif
 # after the libraries are installed in their final locations.
 install-data-hook:
 	$(AM_V_GEN) if $(RUN_QUERY_IMMODULES_TEST) ; then \
-	  echo $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-3.0/3.0.0 ; \
-	  $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-3.0/3.0.0 ; \
-	  echo "$(top_builddir)/gtk/gtk-query-immodules-3.0$(EXEEXT) > $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/immodules.cache" ; \
-	  $(top_builddir)/gtk/gtk-query-immodules-3.0$(EXEEXT) > $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/immodules.cache ; \
+	  echo $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-4.0/4.0.0 ; \
+	  $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-4.0/4.0.0 ; \
+	  echo "$(top_builddir)/gtk/gtk-query-immodules-4.0$(EXEEXT) > $(DESTDIR)$(libdir)/gtk-4.0/4.0.0/immodules.cache" ; \
+	  $(top_builddir)/gtk/gtk-query-immodules-4.0$(EXEEXT) > $(DESTDIR)$(libdir)/gtk-4.0/4.0.0/immodules.cache ; \
 	else \
 	  echo "***" ; \
 	  echo "*** Warning: immodules.cache not built" ; \
 	  echo "***" ; \
 	  echo "*** Generate this file manually on host" ; \
-	  echo "*** system using gtk-query-immodules-3.0" ; \
+	  echo "*** system using gtk-query-immodules-4.0" ; \
 	  echo "***" ; \
         fi
 
 uninstall-local:
-	rm -f $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/immodules.cache
+	rm -f $(DESTDIR)$(libdir)/gtk-4.0/4.0.0/immodules.cache
 
 if BUILD_DYNAMIC_MODULES
 
@@ -262,7 +262,7 @@ noinst_LTLIBRARIES =				\
 included-modules: $(noinst_LTLIBRARIES)
 
 immodules.cache: Makefile.am $(module_LTLIBRARIES)
-	$(AM_V_GEN) $(top_builddir)/gtk/gtk-query-immodules-3.0$(EXEEXT) $(module_LTLIBRARIES) > immodules.cache
+	$(AM_V_GEN) $(top_builddir)/gtk/gtk-query-immodules-4.0$(EXEEXT) $(module_LTLIBRARIES) > immodules.cache
 
 EXTRA_DIST += README.multipress
 

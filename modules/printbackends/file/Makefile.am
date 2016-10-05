@@ -1,6 +1,6 @@
 include $(top_srcdir)/Makefile.decl
 
-backenddir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/printbackends
+backenddir = $(libdir)/gtk-4.0/$(GTK_BINARY_VERSION)/printbackends
 
 backend_LTLIBRARIES = libprintbackend-file.la
 
@@ -25,7 +25,7 @@ libprintbackend_file_la_LDFLAGS =  \
 	-avoid-version -module $(no_undefined)
 
 libprintbackend_file_la_LIBADD = \
-	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gtk/libgtk-4.la	\
 	$(GTK_DEP_LIBS)
 
 noinst_HEADERS =			\

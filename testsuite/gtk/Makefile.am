@@ -17,11 +17,11 @@ AM_CPPFLAGS += -DHAVE_UNIX_PRINT_WIDGETS
 endif
 
 DEPS = \
-	$(top_builddir)/gtk/libgtk-3.la
+	$(top_builddir)/gtk/libgtk-4.la
 
 LDADD = \
-	$(top_builddir)/gtk/libgtk-3.la	\
-	$(top_builddir)/gdk/libgdk-3.la	\
+	$(top_builddir)/gtk/libgtk-4.la	\
+	$(top_builddir)/gdk/libgdk-4.la	\
 	$(GTK_DEP_LIBS)
 
 noinst_PROGRAMS = $(TEST_PROGS)

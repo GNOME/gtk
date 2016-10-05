@@ -1,7 +1,7 @@
 include $(top_srcdir)/Makefile.decl
 
-libgdkincludedir = $(includedir)/gtk-3.0/gdk
-libgdkquartzincludedir = $(includedir)/gtk-3.0/gdk/quartz
+libgdkincludedir = $(includedir)/gtk-4.0/gdk
+libgdkquartzincludedir = $(includedir)/gtk-4.0/gdk/quartz
 
 AM_CPPFLAGS = 				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
