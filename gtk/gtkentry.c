@@ -6021,6 +6021,7 @@ gtk_entry_enter_text (GtkEntry       *entry,
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint tmp_pos;
   gboolean old_need_im_reset;
+  guint text_length;
 
   old_need_im_reset = priv->need_im_reset;
   priv->need_im_reset = FALSE;
@@ -6030,7 +6031,11 @@ gtk_entry_enter_text (GtkEntry       *entry,
   else
     {
       if (priv->overwrite_mode)
-        gtk_entry_delete_from_cursor (entry, GTK_DELETE_CHARS, 1);
+        {
+          text_length = gtk_entry_buffer_get_length (get_buffer (entry));
+          if (priv->current_pos < text_length)
+            gtk_entry_delete_from_cursor (entry, GTK_DELETE_CHARS, 1);
+        }
     }
 
   tmp_pos = priv->current_pos;
