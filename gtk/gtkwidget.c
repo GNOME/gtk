@@ -3268,13 +3268,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_WHATS_THIS);
 
-  gtk_widget_class_install_style_property (klass,
-                                           g_param_spec_boolean ("window-dragging",
-                                                                 P_("Window dragging"),
-                                                                 P_("Whether windows can be dragged and maximized by clicking on empty areas"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
-
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
   gtk_widget_class_set_css_name (klass, "widget");
 }

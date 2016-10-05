@@ -1237,13 +1237,6 @@ void        gtk_render_insertion_cursor
                                     PangoLayout         *layout,
                                     int                  index,
                                     PangoDirection       direction);
-GDK_DEPRECATED_IN_3_4
-void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
-                                     cairo_t            *cr,
-                                     const GdkRectangle *location,
-                                     gboolean            is_primary,
-                                     GtkTextDirection    direction,
-                                     gboolean            draw_arrow);
 
 typedef enum {
   GTK_STYLE_CONTEXT_PRINT_NONE         = 0,

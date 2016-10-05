@@ -123,6 +123,7 @@
  * %GTK_STYLE_PROVIDER_PRIORITY_USER priority.
  */
 
+#define CURSOR_ASPECT_RATIO (0.04)
 typedef struct PropertyValue PropertyValue;
 
 struct PropertyValue
@@ -2766,7 +2767,6 @@ draw_insertion_cursor (GtkStyleContext *context,
 {
   GdkRGBA primary_color;
   GdkRGBA secondary_color;
-  gfloat cursor_aspect_ratio;
   gint stem_width;
   gint offset;
 
@@ -2780,11 +2780,7 @@ draw_insertion_cursor (GtkStyleContext *context,
    * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
    */
 
-  gtk_style_context_get_style (context,
-                               "cursor-aspect-ratio", &cursor_aspect_ratio,
-                               NULL);
-
-  stem_width = height * cursor_aspect_ratio + 1;
+  stem_width = height * CURSOR_ASPECT_RATIO + 1;
 
   /* put (stem_width % 2) on the proper side of the cursor */
   if (direction == PANGO_DIRECTION_LTR)
@@ -2914,47 +2910,6 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                              direction2,
                              TRUE);
     }
-}
-
-/**
- * gtk_draw_insertion_cursor:
- * @widget:  a #GtkWidget
- * @cr: cairo context to draw to
- * @location: location where to draw the cursor (@location->width is ignored)
- * @is_primary: if the cursor should be the primary cursor color.
- * @direction: whether the cursor is left-to-right or
- *             right-to-left. Should never be #GTK_TEXT_DIR_NONE
- * @draw_arrow: %TRUE to draw a directional arrow on the
- *        cursor. Should be %FALSE unless the cursor is split.
- *
- * Draws a text caret on @cr at @location. This is not a style function
- * but merely a convenience function for drawing the standard cursor shape.
- *
- * Since: 3.0
- * Deprecated: 3.4: Use gtk_render_insertion_cursor() instead.
- */
-void
-gtk_draw_insertion_cursor (GtkWidget          *widget,
-                           cairo_t            *cr,
-                           const GdkRectangle *location,
-                           gboolean            is_primary,
-                           GtkTextDirection    direction,
-                           gboolean            draw_arrow)
-{
-  GtkStyleContext *context;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (location != NULL);
-  g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
-
-  context = gtk_widget_get_style_context (widget);
-
-  draw_insertion_cursor (context, cr,
-                         location->x, location->y, location->height,
-                         is_primary,
-                         (direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR,
-                         draw_arrow);
 }
 
 /**

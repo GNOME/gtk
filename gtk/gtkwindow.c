@@ -1435,7 +1435,9 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
     {
     case GTK_WINDOW_REGION_CONTENT:
       if (event_widget != widget)
-        gtk_widget_style_get (event_widget, "window-dragging", &window_drag, NULL);
+        {
+          /* TODO: Have some way of enabling/disabling window-dragging on random widgets */
+        }
 
       if (!window_drag)
         {
@@ -1484,8 +1486,7 @@ drag_gesture_begin_cb (GtkGestureDrag *gesture,
 {
   GdkEventSequence *sequence;
   GtkWindowRegion region;
-  GtkWidget *event_widget;
-  gboolean widget_drag;
+  gboolean widget_drag = FALSE;
   const GdkEvent *event;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -1502,9 +1503,7 @@ drag_gesture_begin_cb (GtkGestureDrag *gesture,
         /* Claim it */
         break;
       case GTK_WINDOW_REGION_CONTENT:
-        event_widget = gtk_get_event_widget ((GdkEvent *) event);
-
-        gtk_widget_style_get (event_widget, "window-dragging", &widget_drag, NULL);
+          /* TODO: Have some way of enabling/disabling window-dragging on random widgets */
 
         if (!widget_drag)
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
