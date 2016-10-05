@@ -1095,25 +1095,6 @@ gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
-/* Functions to override widget styling */
-GDK_DEPRECATED_IN_3_16
-void         gtk_widget_override_color            (GtkWidget     *widget,
-                                                   GtkStateFlags  state,
-                                                   const GdkRGBA *color);
-GDK_DEPRECATED_IN_3_16
-void         gtk_widget_override_background_color (GtkWidget     *widget,
-                                                   GtkStateFlags  state,
-                                                   const GdkRGBA *color);
-
-GDK_DEPRECATED_IN_3_16
-void         gtk_widget_override_font             (GtkWidget                  *widget,
-                                                   const PangoFontDescription *font_desc);
-
-GDK_DEPRECATED_IN_3_16
-void         gtk_widget_override_symbolic_color   (GtkWidget     *widget,
-                                                   const gchar   *name,
-                                                   const GdkRGBA *color);
-
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_reset_style       (GtkWidget      *widget);
 
