@@ -1111,11 +1111,6 @@ GDK_AVAILABLE_IN_ALL
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
 					       const gchar *text);
 
-GDK_DEPRECATED_IN_3_10_FOR(gtk_icon_theme_load_icon)
-GdkPixbuf    *gtk_widget_render_icon_pixbuf   (GtkWidget   *widget,
-                                               const gchar *stock_id,
-                                               GtkIconSize  size);
-
 /* Push/pop pairs, to change default values upon a widget's creation.
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.

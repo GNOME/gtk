@@ -1921,38 +1921,6 @@ gtk_style_context_get_style (GtkStyleContext *context,
   va_end (args);
 }
 
-
-/**
- * gtk_style_context_lookup_icon_set:
- * @context: a #GtkStyleContext
- * @stock_id: an icon name
- *
- * Looks up @stock_id in the icon factories associated to @context and
- * the default icon factory, returning an icon set if found, otherwise
- * %NULL.
- *
- * Returns: (nullable) (transfer none): The looked up %GtkIconSet, or %NULL
- *
- * Deprecated: 3.10: Use gtk_icon_theme_lookup_icon() instead.
- **/
-GtkIconSet *
-gtk_style_context_lookup_icon_set (GtkStyleContext *context,
-                                   const gchar     *stock_id)
-{
-  GtkIconSet *icon_set;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-  g_return_val_if_fail (stock_id != NULL, NULL);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  icon_set = gtk_icon_factory_lookup_default (stock_id);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  return icon_set;
-}
-
 /**
  * gtk_style_context_set_screen:
  * @context: a #GtkStyleContext

@@ -142,10 +142,6 @@ void        gtk_render_activity    (GtkStyleContext     *context,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_icon_theme_load_icon)
-GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
-                                    const GtkIconSource *source,
-                                    GtkIconSize          size);
 GDK_AVAILABLE_IN_3_2
 void        gtk_render_icon        (GtkStyleContext     *context,
                                     cairo_t             *cr,

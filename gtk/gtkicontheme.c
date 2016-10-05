@@ -41,7 +41,6 @@
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkdebug.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkiconcache.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -5553,4 +5552,151 @@ gtk_icon_info_new_for_file (GFile *file,
  info->forced_size = FALSE;
 
  return info;
+}
+
+typedef struct _IconSize IconSize;
+
+struct _IconSize
+{
+  gint size;
+  gchar *name;
+
+  gint width;
+  gint height;
+};
+
+typedef struct _IconAlias IconAlias;
+
+struct _IconAlias
+{
+  gchar *name;
+  gint   target;
+};
+
+static GHashTable *icon_aliases = NULL;
+static IconSize *icon_sizes = NULL;
+static gint      icon_sizes_allocated = 0;
+static gint      icon_sizes_used = 0;
+
+static void
+init_icon_sizes (void)
+{
+  if (icon_sizes == NULL)
+    {
+#define NUM_BUILTIN_SIZES 7
+      /*gint i;*/
+
+      icon_aliases = g_hash_table_new (g_str_hash, g_str_equal);
+
+      icon_sizes = g_new (IconSize, NUM_BUILTIN_SIZES);
+      icon_sizes_allocated = NUM_BUILTIN_SIZES;
+      icon_sizes_used = NUM_BUILTIN_SIZES;
+
+      icon_sizes[GTK_ICON_SIZE_INVALID].size = 0;
+      icon_sizes[GTK_ICON_SIZE_INVALID].name = NULL;
+      icon_sizes[GTK_ICON_SIZE_INVALID].width = 0;
+      icon_sizes[GTK_ICON_SIZE_INVALID].height = 0;
+
+      /* the name strings aren't copied since we don't ever remove
+       * icon sizes, so we don't need to know whether they're static.
+       * Even if we did I suppose removing the builtin sizes would be
+       * disallowed.
+       */
+
+      icon_sizes[GTK_ICON_SIZE_MENU].size = GTK_ICON_SIZE_MENU;
+      icon_sizes[GTK_ICON_SIZE_MENU].name = "gtk-menu";
+      icon_sizes[GTK_ICON_SIZE_MENU].width = 16;
+      icon_sizes[GTK_ICON_SIZE_MENU].height = 16;
+
+      icon_sizes[GTK_ICON_SIZE_BUTTON].size = GTK_ICON_SIZE_BUTTON;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].name = "gtk-button";
+      icon_sizes[GTK_ICON_SIZE_BUTTON].width = 16;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].height = 16;
+
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].size = GTK_ICON_SIZE_SMALL_TOOLBAR;
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].name = "gtk-small-toolbar";
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].width = 16;
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].height = 16;
+
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].size = GTK_ICON_SIZE_LARGE_TOOLBAR;
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].name = "gtk-large-toolbar";
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].width = 24;
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].height = 24;
+
+      icon_sizes[GTK_ICON_SIZE_DND].size = GTK_ICON_SIZE_DND;
+      icon_sizes[GTK_ICON_SIZE_DND].name = "gtk-dnd";
+      icon_sizes[GTK_ICON_SIZE_DND].width = 32;
+      icon_sizes[GTK_ICON_SIZE_DND].height = 32;
+
+      icon_sizes[GTK_ICON_SIZE_DIALOG].size = GTK_ICON_SIZE_DIALOG;
+      icon_sizes[GTK_ICON_SIZE_DIALOG].name = "gtk-dialog";
+      icon_sizes[GTK_ICON_SIZE_DIALOG].width = 48;
+      icon_sizes[GTK_ICON_SIZE_DIALOG].height = 48;
+
+      g_assert ((GTK_ICON_SIZE_DIALOG + 1) == NUM_BUILTIN_SIZES);
+
+      /* Alias everything to itself. */
+      /*i = 1; [> skip invalid size <]*/
+      /*while (i < NUM_BUILTIN_SIZES)*/
+        /*{*/
+          /*gtk_icon_size_register_alias (icon_sizes[i].name, icon_sizes[i].size);*/
+
+          /*++i;*/
+        /*}*/
+
+#undef NUM_BUILTIN_SIZES
+    }
+}
+
+static gboolean
+icon_size_lookup_intern (GtkIconSize  size,
+                         gint        *widthp,
+                         gint        *heightp)
+{
+  init_icon_sizes ();
+
+  if (size == (GtkIconSize)-1)
+    return FALSE;
+
+  if (size >= icon_sizes_used)
+    return FALSE;
+
+  if (size == GTK_ICON_SIZE_INVALID)
+    return FALSE;
+
+  if (widthp)
+    *widthp = icon_sizes[size].width;
+
+  if (heightp)
+    *heightp = icon_sizes[size].height;
+
+  return TRUE;
+}
+
+/**
+ * gtk_icon_size_lookup:
+ * @size: (type int): an icon size (#GtkIconSize)
+ * @width: (out) (optional): location to store icon width
+ * @height: (out) (optional): location to store icon height
+ *
+ * Obtains the pixel size of a semantic icon size @size:
+ * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
+ * isn’t normally needed, gtk_icon_theme_load_icon() is the usual
+ * way to get an icon for rendering, then just look at the size of
+ * the rendered pixbuf. The rendered pixbuf may not even correspond to
+ * the width/height returned by gtk_icon_size_lookup(), because themes
+ * are free to render the pixbuf however they like, including changing
+ * the usual size.
+ *
+ * Returns: %TRUE if @size was a valid size
+ */
+gboolean
+gtk_icon_size_lookup (GtkIconSize  size,
+                      gint        *widthp,
+                      gint        *heightp)
+{
+  GTK_NOTE (MULTIHEAD,
+            g_warning ("gtk_icon_size_lookup ()) is not multihead safe"));
+
+  return icon_size_lookup_intern (size, widthp, heightp);
 }

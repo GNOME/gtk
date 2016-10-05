@@ -4,7 +4,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkactiongroup.h	\
 	deprecated/gtkalignment.h	\
 	deprecated/gtkgradient.h	\
-	deprecated/gtkiconfactory.h	\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrecentaction.h	\
 	deprecated/gtkstock.h		\
@@ -17,7 +16,6 @@ deprecated_h_sources = 			\
 
 deprecated_private_h_sources =			\
 	deprecated/gtkgradientprivate.h		\
-	deprecated/gtkiconfactoryprivate.h	\
 	deprecated/gtkstylepropertiesprivate.h	\
 	deprecated/gtksymboliccolorprivate.h
 
@@ -27,7 +25,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkactiongroup.c	\
 	deprecated/gtkalignment.c	\
 	deprecated/gtkgradient.c	\
-	deprecated/gtkiconfactory.c	\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrecentaction.c	\
 	deprecated/gtkstock.c		\

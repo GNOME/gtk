@@ -24,7 +24,6 @@
 
 #include <glib-object.h>
 #include <gtk/gtkenums.h>
-#include <gtk/deprecated/gtkiconfactory.h>
 #include <gtk/deprecated/gtkstyleproperties.h>
 #include <gtk/gtktypes.h>
 
@@ -110,9 +109,6 @@ struct _GtkStyleProviderIface
                                    GtkStateFlags     state,
                                    GParamSpec       *pspec,
                                    GValue           *value);
-
-  GtkIconFactory * (* get_icon_factory) (GtkStyleProvider *provider,
-					 GtkWidgetPath    *path);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -128,10 +124,6 @@ gboolean gtk_style_provider_get_style_property (GtkStyleProvider *provider,
                                                 GtkStateFlags     state,
                                                 GParamSpec       *pspec,
                                                 GValue           *value);
-
-GDK_DEPRECATED_IN_3_8_FOR(NULL)
-GtkIconFactory * gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,
-						      GtkWidgetPath    *path);
 
 G_END_DECLS
 

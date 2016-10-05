@@ -89,7 +89,6 @@
 #include "gtkactiongroup.h"
 #include "gtkaccellabel.h"
 #include "gtkbutton.h"
-#include "gtkiconfactory.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"

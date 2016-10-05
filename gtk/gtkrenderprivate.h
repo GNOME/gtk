@@ -31,8 +31,4 @@ void        gtk_render_content_path             (GtkStyleContext        *context
                                                  double                  width,
                                                  double                  height);
 
-GdkPixbuf * gtk_render_icon_pixbuf_unpacked     (GdkPixbuf              *base_pixbuf,
-                                                 GtkIconSize             size,
-                                                 GtkCssIconEffect        icon_effect);
-
 #endif /* __GTK_RENDER_PRIVATE_H__ */

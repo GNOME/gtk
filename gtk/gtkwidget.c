@@ -9645,54 +9645,6 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
 }
 
 /**
- * gtk_widget_render_icon_pixbuf:
- * @widget: a #GtkWidget
- * @stock_id: a stock ID
- * @size: (type int): a stock size (#GtkIconSize). A size of `(GtkIconSize)-1`
- *     means render at the size of the source and don’t scale (if there are
- *     multiple source sizes, GTK+ picks one of the available sizes).
- *
- * A convenience function that uses the theme engine and style
- * settings for @widget to look up @stock_id and render it to
- * a pixbuf. @stock_id should be a stock icon ID such as
- * #GTK_STOCK_OPEN or #GTK_STOCK_OK. @size should be a size
- * such as #GTK_ICON_SIZE_MENU.
- *
- * The pixels in the returned #GdkPixbuf are shared with the rest of
- * the application and should not be modified. The pixbuf should be freed
- * after use with g_object_unref().
- *
- * Returns: (transfer full) (nullable): a new pixbuf, or %NULL if the
- *     stock ID wasn’t known
- *
- * Since: 3.0
- *
- * Deprecated: 3.10: Use gtk_icon_theme_load_icon() instead.
- **/
-GdkPixbuf*
-gtk_widget_render_icon_pixbuf (GtkWidget   *widget,
-                               const gchar *stock_id,
-                               GtkIconSize  size)
-{
-  GtkStyleContext *context;
-  GtkIconSet *icon_set;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (stock_id != NULL, NULL);
-  g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == -1, NULL);
-
-  context = _gtk_widget_get_style_context (widget);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  icon_set = gtk_style_context_lookup_icon_set (context, stock_id);
-
-  if (icon_set == NULL)
-    return NULL;
-
-  return gtk_icon_set_render_icon_pixbuf (icon_set, context, size);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-/**
  * gtk_widget_set_parent_window:
  * @widget: a #GtkWidget.
  * @parent_window: the new parent window.

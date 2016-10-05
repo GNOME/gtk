@@ -31,7 +31,6 @@
 #include "gtkcsstransientnodeprivate.h"
 #include "gtkiconthemeprivate.h"
 #include "gtkrendericonprivate.h"
-#include "deprecated/gtkiconfactoryprivate.h"
 
 struct _GtkIconHelperPrivate {
   GtkImageDefinition *def;

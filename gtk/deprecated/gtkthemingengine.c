@@ -1183,7 +1183,7 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
                                        const GtkIconSource *source,
                                        GtkIconSize          size)
 {
-  return gtk_render_icon_pixbuf (engine->priv->context, source, size);
+  return NULL;
 }
 
 static void

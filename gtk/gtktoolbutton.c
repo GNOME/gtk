@@ -28,6 +28,7 @@
 #include "gtkintl.h"
 #include "gtktoolbarprivate.h"
 #include "deprecated/gtkactivatable.h"
+#include "gtkicontheme.h"
 #include "gtkactionable.h"
 #include "gtkprivate.h"
 

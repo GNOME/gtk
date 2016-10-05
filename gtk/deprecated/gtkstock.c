@@ -30,8 +30,6 @@
 
 #include "gtkprivate.h"
 #include "gtkstock.h"
-#include "gtkiconfactory.h"
-#include "deprecated/gtkiconfactoryprivate.h"
 #include "gtkintl.h"
 
 /**
@@ -245,7 +243,7 @@ gtk_stock_list_ids (void)
   init_stock_hash ();
 
   ids = g_hash_table_get_keys (stock_hash);
-  icon_ids = _gtk_icon_factory_list_ids ();
+  icon_ids = NULL;
   ids = g_list_concat (ids, icon_ids);
 
   ids = g_list_sort (ids, (GCompareFunc)strcmp);

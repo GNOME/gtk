@@ -90,7 +90,6 @@
 
 #include "gtkactiongroup.h"
 #include "gtkbuildable.h"
-#include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkstock.h"
 #include "gtktoggleaction.h"
@@ -1314,14 +1313,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
 
       if (entries[i].stock_id) 
 	{
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-	  if (gtk_icon_factory_lookup_default (entries[i].stock_id))
-	    g_object_set (action, "stock-id", entries[i].stock_id, NULL);
-	  else
-	    g_object_set (action, "icon-name", entries[i].stock_id, NULL);
-
-          G_GNUC_END_IGNORE_DEPRECATIONS;
+          g_object_set (action, "icon-name", entries[i].stock_id, NULL);
 	}
 
       gtk_toggle_action_set_active (action, entries[i].is_active);
@@ -1438,14 +1430,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
 
       if (entries[i].stock_id) 
 	{
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-	  if (gtk_icon_factory_lookup_default (entries[i].stock_id))
-	    g_object_set (action, "stock-id", entries[i].stock_id, NULL);
-	  else
-	    g_object_set (action, "icon-name", entries[i].stock_id, NULL);
-
-          G_GNUC_END_IGNORE_DEPRECATIONS;
+          g_object_set (action, "icon-name", entries[i].stock_id, NULL);
 	}
 
       if (i == 0) 

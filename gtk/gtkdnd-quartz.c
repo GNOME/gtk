@@ -31,7 +31,6 @@
 
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkimageprivate.h"
 #include "gtkinvisible.h"

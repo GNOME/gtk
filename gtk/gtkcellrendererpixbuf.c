@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <cairo-gobject.h>
 #include "gtkcellrendererpixbuf.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"

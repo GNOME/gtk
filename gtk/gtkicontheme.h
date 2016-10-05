@@ -365,6 +365,14 @@ gboolean              gtk_icon_info_get_attach_points (GtkIconInfo    *icon_info
 GDK_DEPRECATED_IN_3_14
 const gchar *         gtk_icon_info_get_display_name  (GtkIconInfo    *icon_info);
 
+#ifndef GDK_MULTIHEAD_SAFE
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_icon_size_lookup (GtkIconSize  size,
+                               gint        *width,
+                               gint        *height);
+#endif /* GDK_MULTIHEAD_SAFE */
+
+
 G_END_DECLS
 
 #endif /* __GTK_ICON_THEME_H__ */

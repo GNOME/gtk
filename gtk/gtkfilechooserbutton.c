@@ -38,7 +38,6 @@
 #include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkicontheme.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"

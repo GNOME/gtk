@@ -123,34 +123,3 @@ gtk_style_provider_get_style_property (GtkStyleProvider *provider,
 
   return iface->get_style_property (provider, path, state, pspec, value);
 }
-
-/**
- * gtk_style_provider_get_icon_factory:
- * @provider: a #GtkStyleProvider
- * @path: #GtkWidgetPath to query
- *
- * Returns the #GtkIconFactory defined to be in use for @path, or %NULL if none
- * is defined.
- *
- * Returns: (nullable) (transfer none): The icon factory to use for @path, or %NULL
- *
- * Since: 3.0
- *
- * Deprecated: 3.8: Will always return %NULL for all GTK-provided style providers.
- **/
-GtkIconFactory *
-gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,
-				     GtkWidgetPath    *path)
-{
-  GtkStyleProviderIface *iface;
-
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
-  g_return_val_if_fail (path != NULL, NULL);
-
-  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
-
-  if (!iface->get_icon_factory)
-    return NULL;
-
-  return iface->get_icon_factory (provider, path);
-}

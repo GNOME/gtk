@@ -1858,75 +1858,7 @@ test_reference_counting (void)
   g_object_unref (builder);
 }
 
-static void
-test_icon_factory (void)
-{
-  GtkBuilder *builder;
-  const gchar buffer1[] =
-    "<interface>"
-    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
-    "    <sources>"
-    "      <source stock-id=\"apple-red\" filename=\"apple-red.png\"/>"
-    "    </sources>"
-    "  </object>"
-    "</interface>";
-  const gchar buffer2[] =
-    "<interface>"
-    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
-    "    <sources>"
-    "      <source stock-id=\"sliff\" direction=\"rtl\" state=\"active\""
-    "              size=\"menu\" filename=\"sloff.png\"/>"
-    "      <source stock-id=\"sliff\" direction=\"ltr\" state=\"selected\""
-    "              size=\"dnd\" filename=\"slurf.png\"/>"
-    "    </sources>"
-    "  </object>"
-    "</interface>";
-  GObject *factory;
-  GtkIconSet *icon_set;
-  GtkIconSource *icon_source;
-  GtkWidget *image;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  builder = builder_new_from_string (buffer1, -1, NULL);
-  factory = gtk_builder_get_object (builder, "iconfactory1");
-  g_assert (factory != NULL);
-
-  icon_set = gtk_icon_factory_lookup (GTK_ICON_FACTORY (factory), "apple-red");
-  g_assert (icon_set != NULL);
-  gtk_icon_factory_add_default (GTK_ICON_FACTORY (factory));
-  image = gtk_image_new_from_icon_name ("audio-volume-high", GTK_ICON_SIZE_BUTTON);
-  g_assert (image != NULL);
-  g_object_ref_sink (image);
-  g_object_unref (image);
-
-  g_object_unref (builder);
-
-  builder = builder_new_from_string (buffer2, -1, NULL);
-  factory = gtk_builder_get_object (builder, "iconfactory1");
-  g_assert (factory != NULL);
-
-  icon_set = gtk_icon_factory_lookup (GTK_ICON_FACTORY (factory), "sliff");
-  g_assert (icon_set != NULL);
-  g_assert (g_slist_length (icon_set->sources) == 2);
-
-  icon_source = icon_set->sources->data;
-  g_assert (gtk_icon_source_get_direction (icon_source) == GTK_TEXT_DIR_RTL);
-  g_assert (gtk_icon_source_get_state (icon_source) == GTK_STATE_ACTIVE);
-  g_assert (gtk_icon_source_get_size (icon_source) == GTK_ICON_SIZE_MENU);
-  g_assert (g_str_has_suffix (gtk_icon_source_get_filename (icon_source), "sloff.png"));
-  
-  icon_source = icon_set->sources->next->data;
-  g_assert (gtk_icon_source_get_direction (icon_source) == GTK_TEXT_DIR_LTR);
-  g_assert (gtk_icon_source_get_state (icon_source) == GTK_STATE_SELECTED);
-  g_assert (gtk_icon_source_get_size (icon_source) == GTK_ICON_SIZE_DND);
-  g_assert (g_str_has_suffix (gtk_icon_source_get_filename (icon_source), "slurf.png"));
-
-  g_object_unref (builder);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-}
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct {
   gboolean weight;
@@ -2938,7 +2870,6 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Value From String", test_value_from_string);
   g_test_add_func ("/Builder/Reference Counting", test_reference_counting);
   g_test_add_func ("/Builder/Window", test_window);
-  g_test_add_func ("/Builder/IconFactory", test_icon_factory);
   g_test_add_func ("/Builder/PangoAttributes", test_pango_attributes);
   g_test_add_func ("/Builder/Requires", test_requires);
   g_test_add_func ("/Builder/AddObjects", test_add_objects);
