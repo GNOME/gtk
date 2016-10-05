@@ -285,7 +285,6 @@ gtk_css_value_array_transition (GtkCssValue *start,
     case GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT:
     case GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE:
     case GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH:
-    case GTK_CSS_PROPERTY_ENGINE:
     default:
       /* keep all values that are not arrays here, so we get a warning if we ever turn them
        * into arrays and start animating them. */

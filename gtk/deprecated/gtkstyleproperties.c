@@ -33,7 +33,6 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
 
-#include "deprecated/gtkthemingengine.h"
 #include "deprecated/gtkgradient.h"
 #include "deprecated/gtksymboliccolorprivate.h"
 

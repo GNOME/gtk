@@ -255,7 +255,6 @@
 #include <gtk/deprecated/gtkstyleproperties.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
 #include <gtk/deprecated/gtktable.h>
-#include <gtk/deprecated/gtkthemingengine.h>
 #include <gtk/deprecated/gtktoggleaction.h>
 #include <gtk/deprecated/gtkuimanager.h>
 #endif /* GTK_DISABLE_DEPRECATED */

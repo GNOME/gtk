@@ -44,7 +44,6 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
-#include "gtkcssenginevalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
@@ -61,8 +60,6 @@
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtktypebuiltins.h"
-
-#include "deprecated/gtkthemingengine.h"
 
 /*** REGISTRATION ***/
 
@@ -929,31 +926,6 @@ iteration_count_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, iteration_count_parse_one);
-}
-
-static GtkCssValue *
-engine_parse (GtkCssStyleProperty *property,
-              GtkCssParser        *parser)
-{
-  return _gtk_css_engine_value_parse (parser);
-}
-
-static void
-engine_query (GtkCssStyleProperty *property,
-              const GtkCssValue   *css_value,
-              GValue              *value)
-{
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  g_value_init (value, GTK_TYPE_THEMING_ENGINE);
-  g_value_set_object (value, _gtk_css_engine_value_get_engine (css_value));
-G_GNUC_END_IGNORE_DEPRECATIONS
-}
-
-static GtkCssValue *
-engine_assign (GtkCssStyleProperty *property,
-               const GValue        *value)
-{
-  return _gtk_css_engine_value_new (g_value_get_object (value));
 }
 
 static GtkCssValue *
@@ -1826,18 +1798,6 @@ _gtk_css_style_property_init_properties (void)
 					  NULL,
 					  _gtk_css_icon_effect_value_new (GTK_CSS_ICON_EFFECT_NONE));
   _gtk_style_property_add_alias ("-gtk-icon-effect", "-gtk-image-effect");
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_css_style_property_register        ("engine",
-                                          GTK_CSS_PROPERTY_ENGINE,
-                                          GTK_TYPE_THEMING_ENGINE,
-                                          0,
-                                          0,
-                                          engine_parse,
-                                          engine_query,
-                                          engine_assign,
-                                          _gtk_css_engine_value_new (gtk_theming_engine_load (NULL)));
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Private property holding the binding sets */
   gtk_css_style_property_register        ("-gtk-key-bindings",

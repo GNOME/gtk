@@ -18,7 +18,7 @@ value-none.css:24: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:25: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:27: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:29: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
-value-none.css:30: error: GTK_CSS_PROVIDER_ERROR_DEPRECATED
+value-none.css:31: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:32: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:33: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:34: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
@@ -30,4 +30,3 @@ value-none.css:39: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:40: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:41: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
 value-none.css:42: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
-value-none.css:43: error: GTK_CSS_PROVIDER_ERROR_SYNTAX

@@ -38,7 +38,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkcsswin32sizevalueprivate.h"
 
-#include "deprecated/gtkthemingengine.h"
 #include "deprecated/gtkgradientprivate.h"
 #include "deprecated/gtksymboliccolorprivate.h"
 
@@ -552,63 +551,6 @@ string_value_print (const GValue *value,
 }
 
 static gboolean 
-theming_engine_value_parse (GtkCssParser *parser,
-                            GValue       *value)
-{
-  GtkThemingEngine *engine;
-  char *str;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-  if (_gtk_css_parser_try (parser, "none", TRUE))
-    {
-      g_value_set_object (value, gtk_theming_engine_load (NULL));
-      return TRUE;
-    }
-
-  str = _gtk_css_parser_try_ident (parser, TRUE);
-  if (str == NULL)
-    {
-      _gtk_css_parser_error (parser, "Expected a valid theme name");
-      return FALSE;
-    }
-
-  engine = gtk_theming_engine_load (str);
-
-  if (engine == NULL)
-    {
-      _gtk_css_parser_error (parser, "Theming engine '%s' not found", str);
-      g_free (str);
-      return FALSE;
-    }
-
-  g_value_set_object (value, engine);
-  g_free (str);
-  return TRUE;
-
-G_GNUC_END_IGNORE_DEPRECATIONS
-}
-
-static void
-theming_engine_value_print (const GValue *value,
-                            GString      *string)
-{
-  GtkThemingEngine *engine;
-  char *name;
-
-  engine = g_value_get_object (value);
-  if (engine == NULL)
-    g_string_append (string, "none");
-  else
-    {
-      /* XXX: gtk_theming_engine_get_name()? */
-      g_object_get (engine, "name", &name, NULL);
-      g_string_append (string, name ? name : "none");
-      g_free (name);
-    }
-}
-
-static gboolean 
 border_value_parse (GtkCssParser *parser,
                     GValue       *value)
 {
@@ -1021,16 +963,6 @@ gtk_css_style_funcs_init (void)
                                 string_value_parse,
                                 string_value_print,
                                 NULL);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-  register_conversion_function (GTK_TYPE_THEMING_ENGINE,
-                                theming_engine_value_parse,
-                                theming_engine_value_print,
-                                NULL);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS
-
   register_conversion_function (GTK_TYPE_BORDER,
                                 border_value_parse,
                                 border_value_print,

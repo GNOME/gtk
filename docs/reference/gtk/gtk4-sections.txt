@@ -5920,47 +5920,6 @@ gtk_css_section_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkthemingengine</FILE>
-<TITLE>GtkThemingEngine</TITLE>
-GtkThemingEngineClass
-GtkThemingEngine
-gtk_theming_engine_get
-gtk_theming_engine_get_direction
-gtk_theming_engine_get_junction_sides
-gtk_theming_engine_get_path
-gtk_theming_engine_get_property
-gtk_theming_engine_get_screen
-gtk_theming_engine_get_state
-gtk_theming_engine_get_style
-gtk_theming_engine_get_style_property
-gtk_theming_engine_get_style_valist
-gtk_theming_engine_get_valist
-gtk_theming_engine_get_color
-gtk_theming_engine_get_background_color
-gtk_theming_engine_get_border_color
-gtk_theming_engine_get_border
-gtk_theming_engine_get_padding
-gtk_theming_engine_get_margin
-gtk_theming_engine_get_font
-gtk_theming_engine_has_class
-gtk_theming_engine_has_region
-gtk_theming_engine_lookup_color
-gtk_theming_engine_state_is_running
-gtk_theming_engine_load
-gtk_theming_engine_register_property
-<SUBSECTION Standard>
-GTK_THEMING_ENGINE
-GTK_THEMING_ENGINE_CLASS
-GTK_THEMING_ENGINE_GET_CLASS
-GTK_IS_THEMING_ENGINE
-GTK_IS_THEMING_ENGINE_CLASS
-<SUBSECTION Private>
-GtkThemingEnginePrivate
-GTK_TYPE_THEMING_ENGINE
-gtk_theming_engine_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtksymboliccolor</FILE>
 <TITLE>GtkSymbolicColor</TITLE>
 GtkSymbolicColor

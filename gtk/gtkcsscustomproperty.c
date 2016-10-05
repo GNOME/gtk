@@ -27,8 +27,6 @@
 #include "gtkcsstypedvalueprivate.h"
 #include "deprecated/gtkstylepropertiesprivate.h"
 
-#include "deprecated/gtkthemingengine.h"
-
 #include "deprecated/gtksymboliccolor.h"
 
 G_DEFINE_TYPE (GtkCssCustomProperty, _gtk_css_custom_property, GTK_TYPE_CSS_STYLE_PROPERTY)
@@ -100,9 +98,7 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
 
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (pspec->value_type == GTK_TYPE_THEMING_ENGINE)
-    g_value_set_object (&value, gtk_theming_engine_load (NULL));
-  else if (pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
+  if (pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
     g_value_take_boxed (&value, pango_font_description_from_string ("Sans 10"));
   else if (pspec->value_type == GDK_TYPE_RGBA)
     {
