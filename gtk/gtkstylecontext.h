@@ -979,42 +979,6 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_WIDE "wide"
 
-/**
- * GTK_STYLE_REGION_ROW:
- *
- * A widget region name to define a treeview row.
- *
- * Deprecated: 3.20: Don't use regions.
- */
-#define GTK_STYLE_REGION_ROW "row"
-
-/**
- * GTK_STYLE_REGION_COLUMN:
- *
- * A widget region name to define a treeview column.
- *
- * Deprecated: 3.20: Don't use regions.
- */
-#define GTK_STYLE_REGION_COLUMN "column"
-
-/**
- * GTK_STYLE_REGION_COLUMN_HEADER:
- *
- * A widget region name to define a treeview column header.
- *
- * Deprecated: 3.20: Don't use regions.
- */
-#define GTK_STYLE_REGION_COLUMN_HEADER "column-header"
-
-/**
- * GTK_STYLE_REGION_TAB:
- *
- * A widget region name to define a notebook tab.
- *
- * Deprecated: 3.20: Don't use regions.
- */
-#define GTK_STYLE_REGION_TAB "tab"
-
 GDK_AVAILABLE_IN_ALL
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 

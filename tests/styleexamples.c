@@ -218,7 +218,7 @@ draw_cb_extension (GtkWidget *widget, cairo_t *cr)
 
   gtk_style_context_add_class (context, "notebook");
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, 0);
+  gtk_style_context_add_region (context, "tab", 0);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_style_context_set_state (context, 0);
