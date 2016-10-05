@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 include $(top_srcdir)/Makefile.decl
 
-libgdkincludedir = $(includedir)/gtk-3.0/gdk
-libgdkwin32includedir = $(includedir)/gtk-3.0/gdk/win32
+libgdkincludedir = $(includedir)/gtk-4.0/gdk
+libgdkwin32includedir = $(includedir)/gtk-4.0/gdk/win32
 
 AM_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"Gdk\"		\

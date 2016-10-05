@@ -2,8 +2,8 @@
 include $(top_srcdir)/Makefile.decl
 NULL =
 
-libgdkincludedir = $(includedir)/gtk-3.0/gdk
-libgdkbroadwayincludedir = $(includedir)/gtk-3.0/gdk/broadway
+libgdkincludedir = $(includedir)/gtk-4.0/gdk
+libgdkbroadwayincludedir = $(includedir)/gtk-4.0/gdk/broadway
 
 AM_CPPFLAGS =				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\

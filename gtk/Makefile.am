@@ -1081,7 +1081,7 @@ gtk_use_quartz_private_h_sources = 	\
 	gtkquartz.h
 if USE_QUARTZ
 gtk_c_sources += $(gtk_use_quartz_c_sources)
-libgtk_3_la_CFLAGS = "-xobjective-c"
+libgtk_4_la_CFLAGS = "-xobjective-c"
 gtk_private_h_sources += $(gtk_use_quartz_private_h_sources)
 endif
 
@@ -1392,41 +1392,41 @@ gtktestutils.c: gtktypefuncs.c
 # target platform:
 lib_LTLIBRARIES = libgtk-3.la
 
-gtkincludedir = $(includedir)/gtk-3.0/gtk
+gtkincludedir = $(includedir)/gtk-4.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
 
-a11yincludedir = $(includedir)/gtk-3.0/gtk/a11y
+a11yincludedir = $(includedir)/gtk-4.0/gtk/a11y
 a11yinclude_HEADERS= $(a11y_h_sources)
 
-deprecatedincludedir = $(includedir)/gtk-3.0/gtk/deprecated
+deprecatedincludedir = $(includedir)/gtk-4.0/gtk/deprecated
 deprecatedinclude_HEADERS= $(deprecated_h_sources)
 
-gtkunixprintincludedir = $(includedir)/gtk-3.0/unix-print/gtk
+gtkunixprintincludedir = $(includedir)/gtk-4.0/unix-print/gtk
 gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
 
-nodist_libgtk_3_la_SOURCES = $(nodist_gtk_c_sources)
-libgtk_3_la_SOURCES = $(gtk_c_sources)
-libgtk_3_la_LDFLAGS = $(libtool_opts)
-libgtk_3_la_LIBADD = $(libadd)
-libgtk_3_la_DEPENDENCIES = $(deps)
+nodist_libgtk_4_la_SOURCES = $(nodist_gtk_c_sources)
+libgtk_4_la_SOURCES = $(gtk_c_sources)
+libgtk_4_la_LDFLAGS = $(libtool_opts)
+libgtk_4_la_LIBADD = $(libadd)
+libgtk_4_la_DEPENDENCIES = $(deps)
 
 if USE_WIN32
-libgtk_3_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
-libgtk_3_la_LDFLAGS += -Wl,-luuid $(gtk_win32_res_ldflag)
-libgtk_3_la_DEPENDENCIES += $(gtk_win32_res)
+libgtk_4_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
+libgtk_4_la_LDFLAGS += -Wl,-luuid $(gtk_win32_res_ldflag)
+libgtk_4_la_DEPENDENCIES += $(gtk_win32_res)
 endif
 
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
-	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgtk-3.la
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgtk-4.la
 endif
 
 if USE_QUARTZ
 install-mac-key-theme:
-	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0
-	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0/gtk-keys.css
+	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Mac/gtk-4.0
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-4.0/gtk-keys.css
 uninstall-mac-key-theme:
-	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0/gtk-keys.css
+	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-4.0/gtk-keys.css
 else
 install-mac-key-theme:
 uninstall-mac-key-theme:
@@ -1510,14 +1510,14 @@ dist-hook: \
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
-	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0
-	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
-	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0
-	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
+	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Default/gtk-4.0
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.default $(DESTDIR)$(datadir)/themes/Default/gtk-4.0/gtk-keys.css
+	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Emacs/gtk-4.0
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-4.0/gtk-keys.css
 
 uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
-	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
-	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
+	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-4.0/gtk-keys.css
+	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-4.0/gtk-keys.css
 
 # if srcdir!=builddir, clean out maintainer-clean files from builddir
 # this allows dist to pass.
