@@ -9,15 +9,15 @@
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
 m4_define([gtk_major_version], [3])
-m4_define([gtk_minor_version], [22])
-m4_define([gtk_micro_version], [1])
-m4_define([gtk_interface_age], [1])
+m4_define([gtk_minor_version], [89])
+m4_define([gtk_micro_version], [0])
+m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
 m4_define([gtk_version],
           [gtk_major_version.gtk_minor_version.gtk_micro_version])
-# This is the X.Y used in -lgtk-FOO-X.Y
-m4_define([gtk_api_version], [3.0])
+# This is the X.Y used in -lgtk-X.Y
+m4_define([gtk_api_version], [4.0])
 
 AC_PREREQ([2.62])
 AC_INIT([gtk+], [gtk_version],
@@ -38,7 +38,7 @@ AC_CANONICAL_HOST
 # for GTK+.
 #
 #GTK_BINARY_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$LT_CURRENT
-m4_define([gtk_binary_version], [3.0.0])
+m4_define([gtk_binary_version], [4.0.0])
 
 # required versions of other packages
 m4_define([glib_required_major], [2])
