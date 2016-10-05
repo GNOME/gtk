@@ -2778,7 +2778,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="model">iconsmodel</property>
                                         <child>
                                           <object class="GtkCellRendererPixbuf" id="iconviewcell">
-                                            <property name="stock-size">5</property>
+                                            <property name="stock-size">2</property>
                                           </object>
                                           <attributes>
                                             <attribute name="icon-name">0</attribute>

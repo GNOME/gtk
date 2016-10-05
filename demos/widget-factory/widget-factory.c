@@ -1507,45 +1507,7 @@ g_test_permission_class_init (GTestPermissionClass *class)
   permission_class->release_finish = release_finish;
 }
 
-static int icon_sizes[5];
-
-static void
-register_icon_sizes (void)
-{
-  static gboolean registered;
-
-  if (registered)
-    return;
-
-  registered = TRUE;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  icon_sizes[0] = gtk_icon_size_register ("a", 16, 16);
-  icon_sizes[1] = gtk_icon_size_register ("b", 24, 24);
-  icon_sizes[2] = gtk_icon_size_register ("c", 32, 32);
-  icon_sizes[3] = gtk_icon_size_register ("d", 48, 48);
-  icon_sizes[4] = gtk_icon_size_register ("e", 64, 64);
-G_GNUC_END_IGNORE_DEPRECATIONS
-}
-
-static int
-find_icon_size (GtkIconSize size)
-{
-  gint w, h, w2, h2;
-  gint i;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_icon_size_lookup (size, &w, &h);
-  for (i = 0; i < G_N_ELEMENTS (icon_sizes); i++)
-    {
-      gtk_icon_size_lookup (icon_sizes[i], &w2, &h2);
-      if (w == w2)
-        return i;
-    }
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  return 2;
-}
+static int icon_sizes[] = {0, 1, 2, 3, 4, 5, 6};
 
 static void
 update_buttons (GtkWidget *iv, int pos)
@@ -1564,21 +1526,16 @@ increase_icon_size (GtkWidget *iv)
   GList *cells;
   GtkCellRendererPixbuf *cell;
   GtkIconSize size;
-  int i;
 
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
   cell = cells->data;
   g_list_free (cells);
 
   g_object_get (cell, "stock-size", &size, NULL);
-
-  i = find_icon_size (size);
-  i = CLAMP (i + 1, 0, G_N_ELEMENTS (icon_sizes) - 1);
-  size = icon_sizes[i];
-
+  size = MIN (size + 1, G_N_ELEMENTS (icon_sizes) - 1);
   g_object_set (cell, "stock-size", size, NULL);
 
-  update_buttons (iv, i);
+  update_buttons (iv, size);
 
   gtk_widget_queue_resize (iv);
 }
@@ -1589,21 +1546,16 @@ decrease_icon_size (GtkWidget *iv)
   GList *cells;
   GtkCellRendererPixbuf *cell;
   GtkIconSize size;
-  int i;
 
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (iv));
   cell = cells->data;
   g_list_free (cells);
 
   g_object_get (cell, "stock-size", &size, NULL);
-
-  i = find_icon_size (size);
-  i = CLAMP (i - 1, 0, G_N_ELEMENTS (icon_sizes) - 1);
-  size = icon_sizes[i];
-
+  size  = MAX (size - 1, 1);
   g_object_set (cell, "stock-size", size, NULL);
 
-  update_buttons (iv, i);
+  update_buttons (iv, size);
 
   gtk_widget_queue_resize (iv);
 }
@@ -1618,7 +1570,7 @@ reset_icon_size (GtkWidget *iv)
   cell = cells->data;
   g_list_free (cells);
 
-  g_object_set (cell, "stock-size", icon_sizes[2], NULL);
+  g_object_set (cell, "stock-size", 2, NULL);
 
   update_buttons (iv, 2);
 
@@ -1680,7 +1632,6 @@ activate (GApplication *app)
   GAction *action;
 
   g_type_ensure (my_text_view_get_type ());
-  register_icon_sizes ();
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory/widget-factory.css");
