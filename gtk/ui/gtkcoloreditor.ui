@@ -58,7 +58,6 @@
               <object class="GtkEntry" id="entry">
                 <property name="visible">1</property>
                 <property name="can-focus">1</property>
-                <property name="invisible-char">•</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">Color Name</property>

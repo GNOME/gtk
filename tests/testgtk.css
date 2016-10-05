@@ -12,8 +12,6 @@
     -GtkToolbar-button-relief: none;
     -GtkButtonBox-child-min-width: 0;
     -GtkButtonBox-child-min-height: 0;
-    -GtkArrow-arrow-scaling: 1.0;
-    -GtkEntry-invisible-char: 10046;
 
     font-family: Sans;
     font-size: 12px;

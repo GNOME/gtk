@@ -33,13 +33,13 @@ test_section_in_style_property (void)
   provider = gtk_css_provider_new ();
   g_signal_connect (provider, "parsing-error",
                     G_CALLBACK (assert_section_is_not_null), NULL);
-  gtk_css_provider_load_from_data (provider, "* { -GtkEntry-invisible-char: random garbage goes here; }", -1, NULL);
+  gtk_css_provider_load_from_data (provider, "* { -GtkWindow-decoration-button-layout: random garbage goes here; }", -1, NULL);
 
-  widget_class = g_type_class_ref (GTK_TYPE_ENTRY);
-  pspec = gtk_widget_class_find_style_property (widget_class, "invisible-char");
+  widget_class = g_type_class_ref (GTK_TYPE_WINDOW);
+  pspec = gtk_widget_class_find_style_property (widget_class, "decoration-button-layout");
   g_assert (pspec);
   path = gtk_widget_path_new ();
-  gtk_widget_path_append_type (path, GTK_TYPE_ENTRY);
+  gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (provider), path, 0, pspec, &value);

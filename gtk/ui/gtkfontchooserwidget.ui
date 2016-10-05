@@ -115,7 +115,6 @@
                   <object class="GtkEntry" id="preview">
                     <property name="visible">1</property>
                     <property name="can-focus">1</property>
-                    <property name="invisible-char">•</property>
                     <property name="placeholder-text" translatable="yes">Preview text</property>
                     <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
                   </object>
@@ -144,7 +143,6 @@
                   <object class="GtkSpinButton" id="size_spin">
                     <property name="visible">1</property>
                     <property name="can-focus">1</property>
-                    <property name="invisible-char">•</property>
                     <property name="adjustment">spin_adjustment</property>
                     <signal name="output" handler="output_cb"/>
                   </object>

@@ -269,7 +269,6 @@
                                     <property name="can-focus">1</property>
                                     <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
-                                    <property name="invisible-char">•</property>
                                     <property name="activates-default">1</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="page_range_entry-atkobject">
@@ -345,7 +344,6 @@
                                     <property name="visible">1</property>
                                     <property name="can-focus">1</property>
                                     <property name="valign">baseline</property>
-                                    <property name="invisible-char">•</property>
                                     <property name="activates-default">1</property>
                                     <property name="adjustment">copies_spin_adjustment</property>
                                     <signal name="changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
@@ -601,7 +599,6 @@
                                         <property name="visible">1</property>
                                         <property name="valign">baseline</property>
                                         <property name="can-focus">1</property>
-                                        <property name="invisible-char">•</property>
                                         <property name="adjustment">scale_spin_adjustment</property>
                                         <property name="digits">1</property>
                                       </object>
@@ -1028,8 +1025,6 @@
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                 <property name="tooltip-text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                <property name="invisible-char">•</property>
-                                <property name="invisible-char-set">1</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="print_at_entry-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes">Time of print</property>
