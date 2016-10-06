@@ -1455,7 +1455,7 @@ include $(top_srcdir)/build/Makefile.msvcproj
 
 if HAVE_INTROSPECTION
 # Introspection Items for MSVC
-MSVC_INTROSPECT_GIRS = Gtk-3.0.gir
+MSVC_INTROSPECT_GIRS = Gtk-4.0.gir
 
 GTK_MSVC_GIR_CFLAGS =						\
 	$(GTK_BASE_CFLAGS_DEFINES)				\

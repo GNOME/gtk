@@ -206,36 +206,36 @@ common_sources = 		\
 	gdkresources.h		\
 	gdkresources.c
 
-libgdk_3_la_SOURCES = $(common_sources)
-libgdk_3_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
-libgdk_3_la_LIBADD = $(GDK_DEP_LIBS) $(SHM_LIBS)
-libgdk_3_la_LDFLAGS = $(LDADD)
+libgdk_4_la_SOURCES = $(common_sources)
+libgdk_4_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
+libgdk_4_la_LIBADD = $(GDK_DEP_LIBS) $(SHM_LIBS)
+libgdk_4_la_LDFLAGS = $(LDADD)
 
 if USE_X11
-libgdk_3_la_LIBADD += x11/libgdk-x11.la
+libgdk_4_la_LIBADD += x11/libgdk-x11.la
 endif # USE_X11
 
 if USE_QUARTZ
-libgdk_3_la_CFLAGS += -xobjective-c
-libgdk_3_la_LIBADD += quartz/libgdk-quartz.la
+libgdk_4_la_CFLAGS += -xobjective-c
+libgdk_4_la_LIBADD += quartz/libgdk-quartz.la
 endif # USE_QUARTZ
 
 if USE_WIN32
-libgdk_3_la_LIBADD += win32/libgdk-win32.la
-libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o
-libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o
+libgdk_4_la_LIBADD += win32/libgdk-win32.la
+libgdk_4_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o
+libgdk_4_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o
 endif # USE_WIN32
 
 if USE_BROADWAY
-libgdk_3_la_LIBADD += broadway/libgdk-broadway.la
+libgdk_4_la_LIBADD += broadway/libgdk-broadway.la
 endif # USE_BROADWAY
 
 if USE_WAYLAND
-libgdk_3_la_LIBADD += wayland/libgdk-wayland.la
+libgdk_4_la_LIBADD += wayland/libgdk-wayland.la
 endif
 
 if USE_MIR
-libgdk_3_la_LIBADD += mir/libgdk-mir.la
+libgdk_4_la_LIBADD += mir/libgdk-mir.la
 endif
 
 if HAVE_INTROSPECTION
@@ -246,11 +246,11 @@ introspection_files = 		\
         gdkenumtypes.c		\
         gdkenumtypes.h
 
-Gdk-4.0.gir: libgdk-3.la Makefile
+Gdk-4.0.gir: libgdk-4.la Makefile
 Gdk_4_0_gir_SCANNERFLAGS = 	\
 	--c-include="gdk/gdk.h"
 Gdk_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
-Gdk_4_0_gir_LIBS = libgdk-3.la
+Gdk_4_0_gir_LIBS = libgdk-4.la
 Gdk_4_0_gir_FILES = $(introspection_files)
 Gdk_4_0_gir_CFLAGS = $(AM_CPPFLAGS)
 Gdk_4_0_gir_EXPORT_PACKAGES = gdk-4.0
@@ -306,13 +306,13 @@ x11_introspection_files = 		\
 	x11/gdkx11visual.h		\
 	x11/gdkx11window.h
 
-GdkX11-4.0.gir: libgdk-3.la Gdk-4.0.gir Makefile
+GdkX11-4.0.gir: libgdk-4.la Gdk-4.0.gir Makefile
 GdkX11_4_0_gir_SCANNERFLAGS = 		\
 	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkx.h"	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-4.0.gir
 GdkX11_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
-GdkX11_4_0_gir_LIBS = libgdk-3.la
+GdkX11_4_0_gir_LIBS = libgdk-4.la
 GdkX11_4_0_gir_FILES = $(x11_introspection_files)
 GdkX11_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -L$(top_builddir)/gdk
 GdkX11_4_0_gir_EXPORT_PACKAGES = gdk-x11-4.0
@@ -357,7 +357,7 @@ GdkWin32_4_0_gir_SCANNERFLAGS = \
 	--c-include="gdk/gdkwin32.h"	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-4.0.gir
 GdkWin32_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
-GdkWin32_4_0_gir_LIBS = libgdk-3.la
+GdkWin32_4_0_gir_LIBS = libgdk-4.la
 GdkWin32_4_0_gir_FILES = $(w32_introspection_files)
 GdkWin32_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -L$(top_builddir)/gdk -I$(srcdir)/win32 -I$(srcdir)
 INTROSPECTION_GIRS += GdkWin32-4.0.gir
@@ -375,7 +375,7 @@ CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 endif # HAVE_INTROSPECTION
 
 if OS_WIN32
-gdk.def: libgdk-3.la
+gdk.def: libgdk-4.la
 	echo "LIBRARY libgdk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@" >$@
 	echo "EXPORTS" >>$@
 	objdump -p .libs/libgdk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@.dll | sed -n -e 's/\t\[\s\+\([0-9]\+\)\]\s\([A-Za-z_][A-Za-z0-9_]\)/\2/p' >>$@
@@ -392,7 +392,7 @@ endif
 if MS_LIB_AVAILABLE
 noinst_DATA = gdk-win32-$(GTK_API_VERSION).lib
 
-gdk-win32-$(GTK_API_VERSION).lib: libgdk-3.la gdk.def
+gdk-win32-$(GTK_API_VERSION).lib: libgdk-4.la gdk.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
 
 install-ms-lib:
@@ -406,7 +406,7 @@ install-ms-lib:
 uninstall-ms-lib:
 endif
 
-lib_LTLIBRARIES = libgdk-3.la
+lib_LTLIBRARIES = libgdk-4.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += \
@@ -415,7 +415,7 @@ EXTRA_DIST += \
 
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
-	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgdk-3.la
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgdk-4.la
 endif
 
 BUILT_SOURCES = \
@@ -495,18 +495,18 @@ gdkresources.c: gdk.gresource.xml $(resource_files)
 		--sourcedir=$(srcdir) --c-name _gdk --generate-source --manual-register
 
 # ------------------- MSVC Build Items ----------------
-MSVCPROJS = gdk-3
+MSVCPROJS = gdk-4
 
-gdk_3_FILES = $(libgdk_3_la_SOURCES)
-gdk_3_EXCLUDES = dummy
-gdk_3_HEADERS_DIR = $(gdkincludedir)
+gdk_4_FILES = $(libgdk_4_la_SOURCES)
+gdk_4_EXCLUDES = dummy
+gdk_4_HEADERS_DIR = $(gdkincludedir)
 
-gdk_3_HEADERS_INST = \
+gdk_4_HEADERS_INST = \
 	$(gdkinclude_HEADERS)		\
 	$(deprecatedinclude_HEADERS)	\
 	$(nodist_gdkinclude_HEADERS)
 
-gdk_3_HEADERS_EXCLUDES = dummy
+gdk_4_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
