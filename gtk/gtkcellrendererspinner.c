@@ -34,13 +34,12 @@
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
 
+#include <math.h>
+
 #undef GDK_DEPRECATED
 #undef GDK_DEPRECATED_FOR
 #define GDK_DEPRECATED
 #define GDK_DEPRECATED_FOR(f)
-
-#include "deprecated/gtkstyle.h"
-
 
 /**
  * SECTION:gtkcellrendererspinner
@@ -326,6 +325,75 @@ gtk_cell_renderer_spinner_get_size (GtkCellRenderer    *cellr,
 }
 
 static void
+gtk_paint_spinner (GtkStyleContext *context,
+                   cairo_t         *cr,
+                   GtkStateType     state_type,
+                   GtkWidget       *widget,
+                   const gchar     *detail,
+                   guint            step,
+                   gint             x,
+                   gint             y,
+                   gint             width,
+                   gint             height)
+{
+  GdkRGBA color;
+  guint num_steps;
+  gdouble dx, dy;
+  gdouble radius;
+  gdouble half;
+  gint i;
+  guint real_step;
+
+  num_steps = 12;
+  real_step = step % num_steps;
+
+  /* set a clip region for the expose event */
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_clip (cr);
+
+  cairo_translate (cr, x, y);
+
+  /* draw clip region */
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+  gtk_style_context_get_color (context, 
+                               gtk_style_context_get_state (context),
+                               &color);
+  dx = width / 2;
+  dy = height / 2;
+  radius = MIN (width / 2, height / 2);
+  half = num_steps / 2;
+
+  for (i = 0; i < num_steps; i++)
+    {
+      gint inset = 0.7 * radius;
+
+      /* transparency is a function of time and intial value */
+      gdouble t = (gdouble) ((i + num_steps - real_step)
+                             % num_steps) / num_steps;
+
+      cairo_save (cr);
+
+      cairo_set_source_rgba (cr,
+                             color.red / 65535.,
+                             color.green / 65535.,
+                             color.blue / 65535.,
+                             color.alpha * t);
+
+      cairo_set_line_width (cr, 2.0);
+      cairo_move_to (cr,
+                     dx + (radius - inset) * cos (i * G_PI / half),
+                     dy + (radius - inset) * sin (i * G_PI / half));
+      cairo_line_to (cr,
+                     dx + radius * cos (i * G_PI / half),
+                     dy + radius * sin (i * G_PI / half));
+      cairo_stroke (cr);
+
+      cairo_restore (cr);
+    }
+}
+
+static void
 gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
                                   cairo_t              *cr,
                                   GtkWidget            *widget,
@@ -383,14 +451,14 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
   gdk_cairo_rectangle (cr, cell_area);
   cairo_clip (cr);
 
-  gtk_paint_spinner (gtk_widget_get_style (widget),
-                           cr,
-                           state,
-                           widget,
-                           "cell",
-                           priv->pulse,
-                           draw_rect.x, draw_rect.y,
-                           draw_rect.width, draw_rect.height);
+  gtk_paint_spinner (gtk_widget_get_style_context (widget),
+                     cr,
+                     state,
+                     widget,
+                     "cell",
+                     priv->pulse,
+                     draw_rect.x, draw_rect.y,
+                     draw_rect.width, draw_rect.height);
 
   cairo_restore (cr);
 }
