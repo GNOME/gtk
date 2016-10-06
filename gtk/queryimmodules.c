@@ -35,10 +35,9 @@
 #endif
 
 #include "gtk/gtkimcontextinfo.h"
+#include "gtk/gtkimmoduleprivate.h"
 #include "gtk/gtkversion.h"
 #include "gtk/gtkutilsprivate.h"
-
-#include "gtk/deprecated/gtkrc.h"
 
 static void
 escape_string (GString *contents, const char *str)
@@ -164,9 +163,7 @@ int main (int argc, char **argv)
 
   if (argc > 1 && strcmp (argv[1], "--update-cache") == 0)
     {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      cache_file = gtk_rc_get_im_module_file ();
-G_GNUC_END_IGNORE_DEPRECATIONS
+      cache_file = gtk_get_im_module_file ();
       first_file = 2;
     }
 
@@ -184,9 +181,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       char **dirs;
       GHashTable *dirs_done;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      path = gtk_rc_get_im_module_path ();
-G_GNUC_END_IGNORE_DEPRECATIONS
+      path = gtk_get_im_module_path ();
 
       g_string_append_printf (contents, "# ModulesPath = %s\n#\n", path);
 

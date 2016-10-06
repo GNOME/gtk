@@ -33,6 +33,7 @@
 #include <gmodule.h>
 #include "gtkimmoduleprivate.h"
 #include "gtkimcontextsimple.h"
+#include "gtkmodulesprivate.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
 #include "gtkutilsprivate.h"
@@ -62,8 +63,6 @@
 #undef GDK_DEPRECATED_FOR
 #define GDK_DEPRECATED
 #define GDK_DEPRECATED_FOR(f)
-
-#include "deprecated/gtkrc.h"
 
 /* We need to call getc() a lot in a loop. This is suboptimal,
  * as getc() does thread locking on the FILE it is given.
@@ -332,12 +331,71 @@ add_builtin_module (const gchar             *module_name,
   return module;
 }
 
+/*
+ * gtk_get_im_module_path:
+ *
+ * Obtains the path in which to look for IM modules. See the documentation
+ * of the `GTK_PATH`
+ * environment variable for more details about looking up modules. This
+ * function is useful solely for utilities supplied with GTK+ and should
+ * not be used by applications under normal circumstances.
+ *
+ * Returns: (type filename): a newly-allocated string containing the
+ *    path in which to look for IM modules.
+ */
+gchar *
+gtk_get_im_module_path (void)
+{
+  gchar **paths = _gtk_get_module_path ("immodules");
+  gchar *result = g_strjoinv (G_SEARCHPATH_SEPARATOR_S, paths);
+  g_strfreev (paths);
+
+  return result;
+}
+
+/*
+ * gtk_get_im_module_file:
+ *
+ * Obtains the path to the IM modules file. See the documentation
+ * of the `GTK_IM_MODULE_FILE`
+ * environment variable for more details.
+ *
+ * Returns: (type filename): a newly-allocated string containing the
+ *    name of the file listing the IM modules available for loading
+ */
+gchar *
+gtk_get_im_module_file (void)
+{
+  const gchar *var = g_getenv ("GTK_IM_MODULE_FILE");
+  gchar *result = NULL;
+
+  if (var)
+    result = g_strdup (var);
+
+  if (!result)
+    {
+      const gchar *var;
+      gchar *path;
+
+      var = g_getenv ("GTK_EXE_PREFIX");
+
+      if (var)
+        path = g_build_filename (var, "lib", "gtk-3.0", GTK_BINARY_VERSION, "immodules.cache", NULL);
+      else
+        path = g_build_filename (_gtk_get_libdir (), "gtk-3.0", GTK_BINARY_VERSION, "immodules.cache", NULL);
+
+      return path;
+    }
+
+  return result;
+}
+
 static void
 gtk_im_module_initialize (void)
 {
   GString *line_buf = g_string_new (NULL);
   GString *tmp_buf = g_string_new (NULL);
-  gchar *filename = gtk_rc_get_im_module_file();
+  gchar *filename = gtk_get_im_module_file();
   FILE *file;
   gboolean have_error = FALSE;
 

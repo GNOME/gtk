@@ -19,8 +19,8 @@
 #define __GTK_IM_MODULE_PRIVATE_H__
 
 #include <gdk/gdk.h>
-#include <gtk/gtkimcontext.h>
-#include <gtk/gtkimcontextinfo.h>
+#include "gtkimcontext.h"
+#include "gtkimcontextinfo.h"
 
 G_BEGIN_DECLS
 
@@ -28,6 +28,12 @@ void           _gtk_im_module_list                   (const GtkIMContextInfo ***
 						      guint                    *n_contexts);
 GtkIMContext * _gtk_im_module_create                 (const gchar              *context_id);
 const gchar  * _gtk_im_module_get_default_context_id (void);
+
+/* Needs to be exported API for gtk-queryimmodules */
+GDK_AVAILABLE_IN_ALL
+gchar *        gtk_get_im_module_path                (void);
+GDK_AVAILABLE_IN_ALL
+gchar *        gtk_get_im_module_file                (void);
 
 G_END_DECLS
 
