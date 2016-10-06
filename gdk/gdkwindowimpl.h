@@ -82,8 +82,6 @@ struct _GdkWindowImplClass
                                          GdkAnchorHints   anchor_hints,
                                          gint             rect_anchor_dx,
                                          gint             rect_anchor_dy);
-  void         (* set_background)       (GdkWindow       *window,
-                                         cairo_pattern_t *pattern);
 
   GdkEventMask (* get_events)           (GdkWindow       *window);
   void         (* set_events)           (GdkWindow       *window,

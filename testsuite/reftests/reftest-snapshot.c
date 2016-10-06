@@ -96,7 +96,6 @@ static cairo_surface_t *
 snapshot_widget (GtkWidget *widget, SnapshotMode mode)
 {
   cairo_surface_t *surface;
-  cairo_pattern_t *bg;
   cairo_t *cr;
 
   g_assert (gtk_widget_get_realized (widget));
@@ -144,12 +143,6 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
       }
       break;
     case SNAPSHOT_DRAW:
-      bg = gdk_window_get_background_pattern (gtk_widget_get_window (widget));
-      if (bg)
-        {
-          cairo_set_source (cr, bg);
-          cairo_paint (cr);
-        }
       gtk_widget_draw (widget, cr);
       break;
     default:

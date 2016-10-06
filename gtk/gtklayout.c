@@ -155,7 +155,6 @@ static void gtk_layout_allocate_child     (GtkLayout      *layout,
                                            GtkLayoutChild *child);
 static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
                                            GtkLayout      *layout);
-static void gtk_layout_style_updated      (GtkWidget      *widget);
 
 static void gtk_layout_set_hadjustment_values (GtkLayout      *layout);
 static void gtk_layout_set_vadjustment_values (GtkLayout      *layout);
@@ -692,7 +691,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->get_preferred_height = gtk_layout_get_preferred_height;
   widget_class->size_allocate = gtk_layout_size_allocate;
   widget_class->draw = gtk_layout_draw;
-  widget_class->style_updated = gtk_layout_style_updated;
 
   container_class->add = gtk_layout_add;
   container_class->remove = gtk_layout_remove;
@@ -858,26 +856,6 @@ gtk_layout_init (GtkLayout *layout)
 
 /* Widget methods
  */
-static void
-set_background (GtkWidget *widget)
-{
-  GtkLayoutPrivate *priv;
-
-  if (gtk_widget_get_realized (widget))
-    {
-      priv = GTK_LAYOUT (widget)->priv;
-
-      /* We still need to call gtk_style_context_set_background() here for
-       * GtkLayout, since subclasses like EelCanvas depend on a background to
-       * be set since the beginning of the draw() implementation.
-       * This should be revisited next time we have a major API break.
-       */
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->bin_window);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-}
-
 static void 
 gtk_layout_realize (GtkWidget *widget)
 {
@@ -921,7 +899,6 @@ gtk_layout_realize (GtkWidget *widget)
   priv->bin_window = gdk_window_new (window,
                                      &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->bin_window);
-  set_background (widget);
 
   tmp_list = priv->children;
   while (tmp_list)
@@ -931,14 +908,6 @@ gtk_layout_realize (GtkWidget *widget)
 
       gtk_widget_set_parent_window (child->widget, priv->bin_window);
     }
-}
-
-static void
-gtk_layout_style_updated (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_updated (widget);
-
-  set_background (widget);
 }
 
 static void

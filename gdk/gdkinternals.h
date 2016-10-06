@@ -224,9 +224,6 @@ struct _GdkWindow
   GList children_list_node;
   GList *native_children;
 
-
-  cairo_pattern_t *background;
-
   /* The paint logic here is a bit complex because of our intermingling of
    * cairo and GL. Let's first go over the cairo-alone case:
    *

@@ -2611,7 +2611,6 @@ gdk_x11_drag_context_drop_done (GdkDragContext *context,
   GdkDragAnim *anim;
   cairo_surface_t *win_surface;
   cairo_surface_t *surface;
-  cairo_pattern_t *pattern;
   cairo_t *cr;
 
   if (success)
@@ -2631,11 +2630,13 @@ gdk_x11_drag_context_drop_done (GdkDragContext *context,
   cairo_destroy (cr);
   cairo_surface_destroy (win_surface);
 
+/*
   pattern = cairo_pattern_create_for_surface (surface);
 
   gdk_window_set_background_pattern (x11_context->drag_window, pattern);
 
   cairo_pattern_destroy (pattern);
+*/
   cairo_surface_destroy (surface);
 
   anim = g_slice_new0 (GdkDragAnim);

@@ -106,8 +106,6 @@ static void     set_wm_name                       (GdkDisplay  *display,
 						   Window       xwindow,
 						   const gchar *name);
 static void     move_to_current_desktop           (GdkWindow *window);
-static void     gdk_window_x11_set_background     (GdkWindow      *window,
-                                                   cairo_pattern_t *pattern);
 
 static void        gdk_window_impl_x11_finalize   (GObject            *object);
 
@@ -641,7 +639,8 @@ tmp_reset_bg (GdkWindow *window)
 
   impl->no_bg = FALSE;
 
-  gdk_window_x11_set_background (window, window->background);
+  XSetWindowBackground (GDK_WINDOW_XDISPLAY (window),
+                        GDK_WINDOW_XID (window), 0);
 }
 
 /* Unsetting and resetting window backgrounds.
@@ -2892,145 +2891,6 @@ gdk_x11_window_set_transient_for (GdkWindow *window,
     XSetTransientForHint (GDK_WINDOW_XDISPLAY (window), 
 			  GDK_WINDOW_XID (window),
 			  GDK_WINDOW_XID (parent));
-}
-
-static gboolean
-gdk_window_x11_set_back_color (GdkWindow *window,
-                               double     red,
-                               double     green,
-                               double     blue,
-                               double     alpha)
-{
-  GdkVisual *visual = gdk_window_get_visual (window);
-
-  /* I suppose we could handle these, but that'd require fiddling with 
-   * xrender formats... */
-  if (alpha != 1.0)
-    return FALSE;
-
-  switch (visual->type)
-    {
-    case GDK_VISUAL_DIRECT_COLOR:
-    case GDK_VISUAL_TRUE_COLOR:
-	{
-	  /* If bits not used for color are used for something other than padding,
-	   * it's likely alpha, so we set them to 1s.
-	   */
-	  guint padding, pixel;
-	  gint red_prec, red_shift, green_prec, green_shift, blue_prec, blue_shift;
-
-	  /* Shifting by >= width-of-type isn't defined in C */
-	  if (visual->depth >= 32)
-	    padding = 0;
-	  else
-	    padding = ((~(guint32)0)) << visual->depth;
-	  
-	  pixel = ~ (visual->red_mask | visual->green_mask | visual->blue_mask | padding);
-
-          gdk_visual_get_red_pixel_details (visual, NULL, &red_shift, &red_prec);
-          gdk_visual_get_green_pixel_details (visual, NULL, &green_shift, &green_prec);
-          gdk_visual_get_blue_pixel_details (visual, NULL, &blue_shift, &blue_prec);
-
-          pixel += (((int) (red   * ((1 << red_prec  ) - 1))) << red_shift  ) +
-                   (((int) (green * ((1 << green_prec) - 1))) << green_shift) +
-                   (((int) (blue  * ((1 << blue_prec ) - 1))) << blue_shift );
-
-          XSetWindowBackground (GDK_WINDOW_XDISPLAY (window),
-                                GDK_WINDOW_XID (window), pixel);
-	}
-      return TRUE;
-
-    /* These require fiddling with the colormap, and as they're essentially unused
-     * we're just gonna skip them for now.
-     */
-    case GDK_VISUAL_PSEUDO_COLOR:
-    case GDK_VISUAL_GRAYSCALE:
-    case GDK_VISUAL_STATIC_GRAY:
-    case GDK_VISUAL_STATIC_COLOR:
-    default:
-      break;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-matrix_is_identity (cairo_matrix_t *matrix)
-{
-  return matrix->xx == 1.0 && matrix->yy == 1.0 &&
-    matrix->yx == 0.0 && matrix->xy == 0.0 &&
-    matrix->x0 == 0.0 && matrix->y0 == 0.0;
-}
-
-static void
-gdk_window_x11_set_background (GdkWindow      *window,
-                               cairo_pattern_t *pattern)
-{
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
-  double r, g, b, a;
-  cairo_surface_t *surface;
-  cairo_matrix_t matrix;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  if (pattern == NULL)
-    {
-      GdkWindow *parent;
-
-      /* X throws BadMatch if the parent has a different depth when
-       * using ParentRelative */
-      parent = gdk_window_get_parent (window);
-      if (parent && window->depth != parent->depth)
-        XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
-                                    GDK_WINDOW_XID (window), None);
-      else
-        XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
-                                    GDK_WINDOW_XID (window), ParentRelative);
-      return;
-    }
-
-  switch (cairo_pattern_get_type (pattern))
-    {
-    case CAIRO_PATTERN_TYPE_SOLID:
-      cairo_pattern_get_rgba (pattern, &r, &g, &b, &a);
-      if (gdk_window_x11_set_back_color (window, r, g, b, a))
-        return;
-      break;
-    case CAIRO_PATTERN_TYPE_SURFACE:
-      cairo_pattern_get_matrix (pattern, &matrix);
-      if (cairo_pattern_get_surface (pattern, &surface) == CAIRO_STATUS_SUCCESS &&
-          matrix_is_identity (&matrix) &&
-          cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_XLIB &&
-          cairo_xlib_surface_get_visual (surface) == GDK_VISUAL_XVISUAL (gdk_window_get_visual ((window))) &&
-          cairo_xlib_surface_get_display (surface) == GDK_WINDOW_XDISPLAY (window))
-        {
-          double x, y, sx, sy;
-
-          cairo_surface_get_device_offset (surface, &x, &y);
-          sx = sy = 1.;
-          cairo_surface_get_device_scale (surface, &sx, &sy);
-          /* XXX: This still bombs for non-pixmaps, but there's no way to
-           * detect we're not a pixmap in Cairo... */
-          if (x == 0.0 && y == 0.0 &&
-              sx == impl->window_scale && sy == impl->window_scale)
-            {
-              XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
-                                          GDK_WINDOW_XID (window),
-                                          cairo_xlib_surface_get_drawable (surface));
-              return;
-            }
-        }
-      /* fall through */
-    case CAIRO_PATTERN_TYPE_LINEAR:
-    case CAIRO_PATTERN_TYPE_RADIAL:
-    default:
-      /* fallback: just use black */
-      break;
-    }
-
-  XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
-                              GDK_WINDOW_XID (window), None);
 }
 
 static void
@@ -5681,7 +5541,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->restack_under = gdk_window_x11_restack_under;
   impl_class->restack_toplevel = gdk_window_x11_restack_toplevel;
   impl_class->move_resize = gdk_window_x11_move_resize;
-  impl_class->set_background = gdk_window_x11_set_background;
   impl_class->reparent = gdk_window_x11_reparent;
   impl_class->set_device_cursor = gdk_window_x11_set_device_cursor;
   impl_class->get_geometry = gdk_window_x11_get_geometry;

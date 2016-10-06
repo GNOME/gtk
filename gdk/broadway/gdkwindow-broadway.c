@@ -43,9 +43,6 @@
 #include <string.h>
 
 /* Forward declarations */
-static void     gdk_window_broadway_set_background     (GdkWindow      *window,
-                                                   cairo_pattern_t *pattern);
-
 static void        gdk_window_impl_broadway_finalize   (GObject            *object);
 
 static const cairo_user_data_key_t gdk_broadway_cairo_key;
@@ -653,13 +650,6 @@ gdk_broadway_window_set_transient_for (GdkWindow *window,
 
   display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (impl->wrapper));
   _gdk_broadway_server_window_set_transient_for (display->server, impl->id, impl->transient_for);
-}
-
-static void
-gdk_window_broadway_set_background (GdkWindow      *window,
-				    cairo_pattern_t *pattern)
-{
-  return;
 }
 
 static void
@@ -1561,7 +1551,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->restack_under = gdk_window_broadway_restack_under;
   impl_class->restack_toplevel = gdk_window_broadway_restack_toplevel;
   impl_class->move_resize = gdk_window_broadway_move_resize;
-  impl_class->set_background = gdk_window_broadway_set_background;
   impl_class->reparent = gdk_window_broadway_reparent;
   impl_class->set_device_cursor = gdk_window_broadway_set_device_cursor;
   impl_class->get_geometry = gdk_window_broadway_get_geometry;

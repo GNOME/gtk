@@ -2655,12 +2655,6 @@ gdk_window_wayland_move_to_rect (GdkWindow          *window,
   impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
 }
 
-static void
-gdk_window_wayland_set_background (GdkWindow       *window,
-                                   cairo_pattern_t *pattern)
-{
-}
-
 static gboolean
 gdk_window_wayland_reparent (GdkWindow *window,
                              GdkWindow *new_parent,
@@ -3626,7 +3620,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->restack_toplevel = gdk_window_wayland_restack_toplevel;
   impl_class->move_resize = gdk_window_wayland_move_resize;
   impl_class->move_to_rect = gdk_window_wayland_move_to_rect;
-  impl_class->set_background = gdk_window_wayland_set_background;
   impl_class->reparent = gdk_window_wayland_reparent;
   impl_class->set_device_cursor = gdk_window_wayland_set_device_cursor;
   impl_class->get_geometry = gdk_window_wayland_get_geometry;

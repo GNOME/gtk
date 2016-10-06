@@ -1423,9 +1423,6 @@ gdk_window_new (GdkWindow     *parent,
     {
       window->input_only = FALSE;
       window->depth = window->visual->depth;
-
-      /* XXX: Cache this somehow? */
-      window->background = cairo_pattern_create_rgba (0, 0, 0, 0);
     }
   else
     {
@@ -1839,9 +1836,6 @@ gdk_window_ensure_native (GdkWindow *window)
 
   reparent_to_impl (window);
 
-  if (!window->input_only)
-    impl_class->set_background (window, window->background);
-
   impl_class->input_shape_combine_region (window,
                                           window->input_shape,
                                           0, 0);
@@ -2060,12 +2054,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
             }
 
           gdk_window_free_current_paint (window);
-
-          if (window->background)
-            {
-              cairo_pattern_destroy (window->background);
-              window->background = NULL;
-            }
 
 	  if (window->window_type == GDK_WINDOW_FOREIGN)
 	    g_assert (window->children == NULL);
@@ -3433,9 +3421,6 @@ gdk_window_get_visible_region (GdkWindow *window)
 static void
 gdk_window_clear_backing_region (GdkWindow *window)
 {
-  GdkWindow *bg_window;
-  cairo_pattern_t *pattern = NULL;
-  int x_offset = 0, y_offset = 0;
   cairo_t *cr;
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -3443,26 +3428,7 @@ gdk_window_clear_backing_region (GdkWindow *window)
 
   cr = cairo_create (window->current_paint.surface);
 
-  for (bg_window = window; bg_window; bg_window = bg_window->parent)
-    {
-      pattern = gdk_window_get_background_pattern (bg_window);
-      if (pattern)
-        break;
-
-      x_offset += bg_window->x;
-      y_offset += bg_window->y;
-    }
-
-  if (pattern)
-    {
-      cairo_translate (cr, -x_offset, -y_offset);
-      cairo_set_source (cr, pattern);
-      cairo_translate (cr, x_offset, y_offset);
-    }
-  else
-    cairo_set_source_rgb (cr, 0, 0, 0);
-
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   gdk_cairo_region (cr, window->current_paint.region);
   cairo_fill (cr);
 
@@ -6296,139 +6262,6 @@ gdk_window_move_region (GdkWindow            *window,
 
   gdk_window_invalidate_region_full (window, expose_area, FALSE);
   cairo_region_destroy (expose_area);
-}
-
-/**
- * gdk_window_set_background:
- * @window: a #GdkWindow
- * @color: a #GdkColor
- *
- * Sets the background color of @window.
- *
- * However, when using GTK+, influence the background of a widget
- * using a style class or CSS — if you’re an application — or with
- * gtk_style_context_set_background() — if you're implementing a
- * custom widget.
- *
- * See also gdk_window_set_background_pattern().
- *
- * Deprecated: 3.4: Use gdk_window_set_background_rgba() instead.
- */
-void
-gdk_window_set_background (GdkWindow      *window,
-			   const GdkColor *color)
-{
-  cairo_pattern_t *pattern;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  pattern = cairo_pattern_create_rgb (color->red   / 65535.,
-                                      color->green / 65535.,
-                                      color->blue  / 65535.);
-
-  gdk_window_set_background_pattern (window, pattern);
-
-  cairo_pattern_destroy (pattern);
-}
-
-/**
- * gdk_window_set_background_rgba:
- * @window: a #GdkWindow
- * @rgba: a #GdkRGBA color
- *
- * Sets the background color of @window.
- *
- * See also gdk_window_set_background_pattern().
- **/
-void
-gdk_window_set_background_rgba (GdkWindow     *window,
-                                const GdkRGBA *rgba)
-{
-  cairo_pattern_t *pattern;
-  GdkRGBA prev_rgba;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (rgba != NULL);
-
-  /*
-   * If the new RGBA matches the previous pattern, ignore the change so that
-   * we do not invalidate the window contents.
-   */
-  if ((window->background != NULL) &&
-      (cairo_pattern_get_type (window->background) == CAIRO_PATTERN_TYPE_SOLID) &&
-      (cairo_pattern_get_rgba (window->background,
-                               &prev_rgba.red,
-                               &prev_rgba.green,
-                               &prev_rgba.blue,
-                               &prev_rgba.alpha) == CAIRO_STATUS_SUCCESS) &&
-      gdk_rgba_equal (&prev_rgba, rgba))
-    return;
-
-  pattern = cairo_pattern_create_rgba (rgba->red, rgba->green,
-                                       rgba->blue, rgba->alpha);
-
-  gdk_window_set_background_pattern (window, pattern);
-
-  cairo_pattern_destroy (pattern);
-}
-
-
-/**
- * gdk_window_set_background_pattern:
- * @window: a #GdkWindow
- * @pattern: (allow-none): a pattern to use, or %NULL
- *
- * Sets the background of @window.
- *
- * A background of %NULL means that the window will inherit its
- * background from its parent window.
- *
- * The windowing system will normally fill a window with its background
- * when the window is obscured then exposed.
- */
-void
-gdk_window_set_background_pattern (GdkWindow       *window,
-                                   cairo_pattern_t *pattern)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (window->input_only)
-    return;
-
-  if (pattern)
-    cairo_pattern_reference (pattern);
-  if (window->background)
-    cairo_pattern_destroy (window->background);
-  window->background = pattern;
-
-  if (gdk_window_has_impl (window))
-    {
-      GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-      impl_class->set_background (window, pattern);
-    }
-  else
-    gdk_window_invalidate_rect_full (window, NULL, TRUE);
-}
-
-/**
- * gdk_window_get_background_pattern:
- * @window: a window
- *
- * Gets the pattern used to clear the background on @window. If @window
- * does not have its own background and reuses the parent's, %NULL is
- * returned and you’ll have to query it yourself.
- *
- * Returns: (nullable) (transfer none): The pattern to use for the
- * background or %NULL to use the parent’s background.
- *
- * Since: 2.22
- **/
-cairo_pattern_t *
-gdk_window_get_background_pattern (GdkWindow *window)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  return window->background;
 }
 
 static void

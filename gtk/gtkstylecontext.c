@@ -2449,50 +2449,6 @@ gtk_style_context_invalidate (GtkStyleContext *context)
 }
 
 /**
- * gtk_style_context_set_background:
- * @context: a #GtkStyleContext
- * @window: a #GdkWindow
- *
- * Sets the background of @window to the background pattern or
- * color specified in @context for its current state.
- *
- * Since: 3.0
- *
- * Deprecated: 3.18: Use gtk_render_background() instead.
- *   Note that clients still using this function are now responsible
- *   for calling this function again whenever @context is invalidated.
- **/
-void
-gtk_style_context_set_background (GtkStyleContext *context,
-                                  GdkWindow       *window)
-{
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  /* This is a sophisticated optimization.
-   * If we know the GDK window's background will be opaque, we mark
-   * it as opaque. This is so GDK can do all the optimizations it does
-   * for opaque windows and be fast.
-   * This is mainly used when scrolling.
-   *
-   * We could indeed just set black instead of the color we have.
-   */
-  if (gtk_css_style_render_background_is_opaque (gtk_style_context_lookup_style (context)))
-    {
-      const GdkRGBA *color;
-
-      color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-
-      gdk_window_set_background_rgba (window, color);
-    }
-  else
-    {
-      GdkRGBA transparent = { 0.0, 0.0, 0.0, 0.0 };
-      gdk_window_set_background_rgba (window, &transparent);
-    }
-}
-
-/**
  * gtk_style_context_get_color:
  * @context: a #GtkStyleContext
  * @state: state to retrieve the color for

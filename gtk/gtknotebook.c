@@ -2943,7 +2943,6 @@ show_drag_window (GtkNotebook        *notebook,
       GdkWindowAttr attributes;
       GtkAllocation allocation;
       guint attributes_mask;
-      GdkRGBA transparent = {0, 0, 0, 0};
 
       gtk_css_gadget_get_margin_allocation (page->gadget, &allocation, NULL);
       attributes.x = priv->drag_window_x;
@@ -2959,7 +2958,6 @@ show_drag_window (GtkNotebook        *notebook,
                                           &attributes,
                                           attributes_mask);
       gtk_widget_register_window (widget, priv->drag_window);
-      gdk_window_set_background_rgba (priv->drag_window, &transparent);
     }
 
   gtk_widget_set_child_visible (page->tab_label, FALSE);

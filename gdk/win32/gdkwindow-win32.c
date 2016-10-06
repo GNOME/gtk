@@ -2161,12 +2161,6 @@ _gdk_modal_current (void)
 }
 
 static void
-gdk_win32_window_set_background (GdkWindow       *window,
-				 cairo_pattern_t *pattern)
-{
-}
-
-static void
 gdk_win32_window_set_device_cursor (GdkWindow *window,
                                     GdkDevice *device,
                                     GdkCursor *cursor)
@@ -5929,7 +5923,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->restack_under = gdk_win32_window_restack_under;
   impl_class->restack_toplevel = gdk_win32_window_restack_toplevel;
   impl_class->move_resize = gdk_win32_window_move_resize;
-  impl_class->set_background = gdk_win32_window_set_background;
   impl_class->reparent = gdk_win32_window_reparent;
   impl_class->set_device_cursor = gdk_win32_window_set_device_cursor;
   impl_class->get_geometry = gdk_win32_window_get_geometry;

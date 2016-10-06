@@ -56,9 +56,6 @@ struct _GdkMirWindowImpl
   GdkWindowTypeHint type_hint;
   MirSurfaceState surface_state;
 
-  /* Pattern for background */
-  cairo_pattern_t *background;
-
   /* Current button state for checking which buttons are being pressed / released */
   gdouble x;
   gdouble y;
@@ -652,15 +649,6 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
 
   impl->cairo_surface = cairo_surface_reference (cairo_surface);
 
-  /* Draw background */
-  if (impl->background)
-    {
-      c = cairo_create (impl->cairo_surface);
-      cairo_set_source (c, impl->background);
-      cairo_paint (c);
-      cairo_destroy (c);
-    }
-
   return cairo_surface;
 }
 
@@ -680,8 +668,6 @@ gdk_mir_window_impl_finalize (GObject *object)
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (object);
 
   g_free (impl->title);
-  if (impl->background)
-    cairo_pattern_destroy (impl->background);
   if (impl->surface)
     mir_surface_release_sync (impl->surface);
   if (impl->cairo_surface)
@@ -882,18 +868,6 @@ gdk_mir_window_impl_move_to_rect (GdkWindow          *window,
                          NULL,
                          FALSE,
                          FALSE);
-}
-
-static void
-gdk_mir_window_impl_set_background (GdkWindow       *window,
-                                    cairo_pattern_t *pattern)
-{
-  //g_printerr ("gdk_mir_window_impl_set_background window=%p\n", window);
-  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-
-  if (impl->background)
-    cairo_pattern_destroy (impl->background);
-  impl->background = cairo_pattern_reference (pattern);
 }
 
 static GdkEventMask

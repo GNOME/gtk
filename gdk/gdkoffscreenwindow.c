@@ -500,12 +500,6 @@ gdk_offscreen_window_set_events (GdkWindow       *window,
 }
 
 static void
-gdk_offscreen_window_set_background (GdkWindow      *window,
-				     cairo_pattern_t *pattern)
-{
-}
-
-static void
 gdk_offscreen_window_shape_combine_region (GdkWindow       *window,
 					   const cairo_region_t *shape_region,
 					   gint             offset_x,
@@ -705,7 +699,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->restack_under = NULL;
   impl_class->restack_toplevel = NULL;
   impl_class->move_resize = gdk_offscreen_window_move_resize;
-  impl_class->set_background = gdk_offscreen_window_set_background;
   impl_class->reparent = gdk_offscreen_window_reparent;
   impl_class->set_device_cursor = gdk_offscreen_window_set_device_cursor;
   impl_class->get_geometry = gdk_offscreen_window_get_geometry;
