@@ -48,7 +48,7 @@ gtk-win32.rc: gtk-win32.rc.body
 	cat $< >>$@
 	echo "ISOLATIONAWARE_MANIFEST_RESOURCE_ID RT_MANIFEST libgtk3.manifest" >>$@
 
-gtk.def: libgtk-3.la
+gtk.def: libgtk-4.la
 	echo "LIBRARY libgtk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@" >$@
 	echo "EXPORTS" >>$@
 	objdump -p .libs/libgtk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@.dll | sed -n -e 's/\t\[\s\+\([0-9]\+\)\]\s\([A-Za-z_][A-Za-z0-9_]\)/\2/p' >>$@
@@ -1390,7 +1390,7 @@ gtktypefuncs.c: stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_src
 gtktestutils.c: gtktypefuncs.c
 
 # target platform:
-lib_LTLIBRARIES = libgtk-3.la
+lib_LTLIBRARIES = libgtk-4.la
 
 gtkincludedir = $(includedir)/gtk-4.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
@@ -1435,21 +1435,21 @@ endif
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gtk-3
 
-gtk_3_FILES = \
+gtk_4_FILES = \
 	$(gtk_base_c_sources)		\
 	$(gtk_os_win32_c_sources)	\
 	$(gtk_use_win32_c_sources)	\
 	$(gtk_dbus_built_sources)
 
-gtk_3_EXCLUDES = dummy
-gtk_3_HEADERS_DIR = $(gtkincludedir)
+gtk_4_EXCLUDES = dummy
+gtk_4_HEADERS_DIR = $(gtkincludedir)
 
-gtk_3_HEADERS_INST = \
+gtk_4_HEADERS_INST = \
 	$(gtkinclude_HEADERS)	\
 	$(a11y_h_sources)	\
 	$(deprecated_h_sources)
 
-gtk_3_HEADERS_EXCLUDES = dummy
+gtk_4_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
@@ -1480,21 +1480,21 @@ GTK_MSVC_GIR_CFLAGS =						\
 	-I../.. -I../../gtk -I../../gdk
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
-	$(top_builddir)/build/win32/Gtk-3.0.gir.msvc.introspect		\
-	$(top_builddir)/build/win32/Gtk_3_0_gir_list
+	$(top_builddir)/build/win32/Gtk-4.0.gir.msvc.introspect		\
+	$(top_builddir)/build/win32/Gtk-4_0_gir_list
 
-Gtk_3_0_gir_MSVC_FILES =		\
+Gtk_4_0_gir_MSVC_FILES =		\
 	$(introspected_pub_headers)	\
 	$(gtk_base_c_sources)		\
 	$(gtk_os_win32_c_sources)	\
 	gtktypebuiltins.h		\
 	gtktypebuiltins.c
 
-Gtk_3_0_gir_MSVC_EXPORT_PACKAGES = $(Gtk_3_0_gir_EXPORT_PACKAGES)
-Gtk_3_0_gir_MSVC_INCLUDE_GIRS = Atk-1.0
-Gtk_3_0_gir_MSVC_LIBS = gtk-3.0 gdk-3.0
-Gtk_3_0_gir_MSVC_CFLAGS = $(GTK_MSVC_GIR_CFLAGS)
-Gtk_3_0_gir_MSVC_SCANNERFLAGS = --warn-all --add-include-path=. --include-uninstalled=./Gdk-3.0.gir
+Gtk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gtk_4_0_gir_EXPORT_PACKAGES)
+Gtk_4_0_gir_MSVC_INCLUDE_GIRS = Atk-1.0
+Gtk_4_0_gir_MSVC_LIBS = gtk-4.0 gdk-4.0
+Gtk_4_0_gir_MSVC_CFLAGS = $(GTK_MSVC_GIR_CFLAGS)
+Gtk_4_0_gir_MSVC_SCANNERFLAGS = --warn-all --add-include-path=. --include-uninstalled=./Gdk-4.0.gir
 
 include $(top_srcdir)/build/Makefile.msvc-introspection
 
@@ -1549,23 +1549,23 @@ INTROSPECTION_COMPILER_ARGS = \
 	--includedir=. \
 	--includedir=../gdk
 
-Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
-Gtk_3_0_gir_SCANNERFLAGS = 			\
+Gtk-4.0.gir: $(INTROSPECTION_SCANNER) libgtk-4.la $(top_builddir)/gdk/Gdk-4.0.gir Makefile
+Gtk_4_0_gir_SCANNERFLAGS = 			\
 	--warn-all				\
 	--add-include-path=$(top_builddir)/gdk	\
-	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
-Gtk_3_0_gir_INCLUDES = Atk-1.0
+	--include-uninstalled=$(top_builddir)/gdk/Gdk-4.0.gir
+Gtk_4_0_gir_INCLUDES = Atk-1.0
 if USE_X11
-Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
-Gtk_3_0_gir_INCLUDES += xlib-2.0
+Gtk_4_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
+Gtk_4_0_gir_INCLUDES += xlib-2.0
 endif
-Gtk_3_0_gir_CFLAGS = \
+Gtk_4_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-Gtk_3_0_gir_FILES = $(introspection_files)
-Gtk_3_0_gir_LIBS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
-Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
-INTROSPECTION_GIRS = Gtk-3.0.gir
+Gtk_4_0_gir_FILES = $(introspection_files)
+Gtk_4_0_gir_LIBS = libgtk-4.la $(top_builddir)/gdk/libgdk-4.la
+Gtk_4_0_gir_EXPORT_PACKAGES = gtk+-4.0
+INTROSPECTION_GIRS = Gtk-4.0.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
@@ -1580,17 +1580,17 @@ endif
 # Installed tools
 #
 bin_PROGRAMS = \
-	gtk-query-immodules-3.0	\
+	gtk-query-immodules-4.0	\
 	gtk-update-icon-cache \
 	gtk-encode-symbolic-svg \
 	gtk-builder-tool \
 	gtk-query-settings \
 	gtk-launch
 
-gtk_query_immodules_3_0_SOURCES = queryimmodules.c gtkutils.c
-gtk_query_immodules_3_0_LDADD = 		\
-	libgtk-3.la				\
-	$(top_builddir)/gdk/libgdk-3.la		\
+gtk_query_immodules_4_0_SOURCES = queryimmodules.c gtkutils.c
+gtk_query_immodules_4_0_LDADD = 		\
+	libgtk-4.la				\
+	$(top_builddir)/gdk/libgdk-4.la		\
 	$(GMODULE_LIBS)				\
 	$(GTK_DEP_LIBS)
 
@@ -1600,25 +1600,25 @@ gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
 gtk_encode_symbolic_svg_SOURCES = encodesymbolic.c
 gtk_encode_symbolic_svg_LDADD =			\
 	$(GDK_PIXBUF_LIBS)			\
-	$(top_builddir)/gdk/libgdk-3.la		\
+	$(top_builddir)/gdk/libgdk-4.la		\
 	$(GTK_DEP_LIBS)
 
 gtk_builder_tool_SOURCES = gtk-builder-tool.c
 gtk_builder_tool_LDADD =			\
-	libgtk-3.la				\
-	$(top_builddir)/gdk/libgdk-3.la		\
+	libgtk-4.la				\
+	$(top_builddir)/gdk/libgdk-4.la		\
 	$(GTK_DEP_LIBS)
 
 gtk_query_settings_SOURCES = gtk-query-settings.c
 gtk_query_settings_LDADD= 			\
-	libgtk-3.la				\
-	$(top_builddir)/gdk/libgdk-3.la		\
+	libgtk-4.la				\
+	$(top_builddir)/gdk/libgdk-4.la		\
 	$(GTK_DEP_LIBS)
 
 gtk_launch_SOURCES = gtk-launch.c
 gtk_launch_LDADD =				\
-	libgtk-3.la				\
-	$(top_builddir)/gdk/libgdk-3.la		\
+	libgtk-4.la				\
+	$(top_builddir)/gdk/libgdk-4.la		\
 	$(GTK_DEP_LIBS)
 
 if OS_WIN32
