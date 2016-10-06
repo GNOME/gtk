@@ -4170,8 +4170,7 @@ create_indicator_window (GtkScrolledWindow *scrolled_window,
   attributes.height = allocation.height;
   attributes.x = allocation.x;
   attributes.y = allocation.y;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
   attributes.event_mask = gtk_widget_get_events (widget);
 
   window = gdk_window_new (gtk_widget_get_window (widget),
@@ -4443,8 +4442,7 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   attributes.height = allocation.height;
   attributes.x = allocation.x;
   attributes.y = allocation.y;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
   attributes.event_mask = gtk_widget_get_events (widget) |
     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_POINTER_MOTION_MASK;
 

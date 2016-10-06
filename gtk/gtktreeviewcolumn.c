@@ -1329,7 +1329,6 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 
   attr.window_type = GDK_WINDOW_CHILD;
   attr.wclass = GDK_INPUT_ONLY;
-  attr.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
   attr.event_mask = gtk_widget_get_events (GTK_WIDGET (tree_view)) |
                     (GDK_BUTTON_PRESS_MASK |
 		     GDK_BUTTON_RELEASE_MASK |

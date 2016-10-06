@@ -4686,10 +4686,9 @@ gtk_text_view_realize (GtkWidget *widget)
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
@@ -9944,10 +9943,9 @@ text_window_realize (GtkTextWindow *win,
   attributes.width = win->allocation.width;
   attributes.height = win->allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (win->widget);
   attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   window = gtk_widget_get_window (widget);
 

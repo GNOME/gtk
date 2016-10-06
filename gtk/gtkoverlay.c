@@ -149,8 +149,7 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
   attributes.height = allocation.height;
   attributes.x = allocation.x;
   attributes.y = allocation.y;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
   attributes.event_mask = gtk_widget_get_events (widget);
 
   window = gdk_window_new (gtk_widget_get_window (widget),

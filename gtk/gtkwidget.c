@@ -828,7 +828,6 @@ static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
 static GQuark		quark_tooltip_window = 0;
-static GQuark		quark_visual = 0;
 static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
 static GQuark           quark_size_groups = 0;
@@ -997,7 +996,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
   quark_tooltip_window = g_quark_from_static_string ("gtk-tooltip-window");
-  quark_visual = g_quark_from_static_string ("gtk-widget-visual");
   quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
@@ -6990,9 +6988,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
         }
 
       push_group =
-        widget->priv->alpha != 255 &&
-        (!_gtk_widget_is_toplevel (widget) ||
-         gtk_widget_get_visual (widget) == gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)));
+        widget->priv->alpha != 255 && !_gtk_widget_is_toplevel (widget);
 
       if (push_group)
         cairo_push_group (cr);
@@ -11513,74 +11509,6 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_set_visual:
- * @widget: a #GtkWidget
- * @visual: (allow-none): visual to be used or %NULL to unset a previous one
- *
- * Sets the visual that should be used for by widget and its children for
- * creating #GdkWindows. The visual must be on the same #GdkScreen as
- * returned by gtk_widget_get_screen(), so handling the
- * #GtkWidget::screen-changed signal is necessary.
- *
- * Setting a new @visual will not cause @widget to recreate its windows,
- * so you should call this function before @widget is realized.
- **/
-void
-gtk_widget_set_visual (GtkWidget *widget,
-                       GdkVisual *visual)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (visual == NULL || GDK_IS_VISUAL (visual));
-
-  if (visual)
-    g_return_if_fail (gtk_widget_get_screen (widget) == gdk_visual_get_screen (visual));
-
-  g_object_set_qdata_full (G_OBJECT (widget),
-                           quark_visual,
-                           visual ? g_object_ref (visual) : NULL,
-                           g_object_unref);
-}
-
-/**
- * gtk_widget_get_visual:
- * @widget: a #GtkWidget
- *
- * Gets the visual that will be used to render @widget.
- *
- * Returns: (transfer none): the visual for @widget
- **/
-GdkVisual*
-gtk_widget_get_visual (GtkWidget *widget)
-{
-  GtkWidget *w;
-  GdkVisual *visual;
-  GdkScreen *screen;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  if (!_gtk_widget_get_has_window (widget) &&
-      widget->priv->window)
-    return gdk_window_get_visual (widget->priv->window);
-
-  screen = gtk_widget_get_screen (widget);
-
-  for (w = widget; w != NULL; w = w->priv->parent)
-    {
-      visual = g_object_get_qdata (G_OBJECT (w), quark_visual);
-      if (visual)
-        {
-          if (gdk_visual_get_screen (visual) == screen)
-            return visual;
-
-          g_warning ("Ignoring visual set on widget '%s' that is not on the correct screen.",
-                     gtk_widget_get_name (widget));
-        }
-    }
-
-  return gdk_screen_get_system_visual (screen);
-}
-
-/**
  * gtk_widget_get_settings:
  * @widget: a #GtkWidget
  *
@@ -15959,8 +15887,7 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
   if (_gtk_widget_get_realized (widget))
     {
-      if (_gtk_widget_is_toplevel (widget) &&
-          gtk_widget_get_visual (widget) != gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)))
+      if (_gtk_widget_is_toplevel (widget))
 	gdk_window_set_opacity (priv->window, priv->alpha / 255.0);
 
       gtk_widget_queue_draw (widget);

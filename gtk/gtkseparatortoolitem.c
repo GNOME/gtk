@@ -295,7 +295,6 @@ gtk_separator_tool_item_realize (GtkWidget *widget)
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_ONLY;
-  attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = gtk_widget_get_events (widget) |
                           GDK_BUTTON_PRESS_MASK |
                           GDK_BUTTON_RELEASE_MASK |

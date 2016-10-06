@@ -253,7 +253,6 @@
 #include <gtk/deprecated/gtkcolorseldialog.h>
 #include <gtk/deprecated/gtkfontsel.h>
 #include <gtk/deprecated/gtkgradient.h>
-#include <gtk/deprecated/gtkhandlebox.h>
 #include <gtk/deprecated/gtkhbbox.h>
 #include <gtk/deprecated/gtkhpaned.h>
 #include <gtk/deprecated/gtkhsv.h>

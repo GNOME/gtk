@@ -4512,9 +4512,8 @@ create_foreign_dnd_window (GdkDisplay *display)
   attrs.width = attrs.height = 1;
   attrs.wclass = GDK_INPUT_OUTPUT;
   attrs.window_type = GDK_WINDOW_TEMP;
-  attrs.visual = gdk_screen_get_system_visual (screen);
 
-  mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  mask = GDK_WA_X | GDK_WA_Y;
 
   return gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
 }

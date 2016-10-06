@@ -8,7 +8,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkcolorseldialog.h	\
 	deprecated/gtkfontsel.h		\
 	deprecated/gtkgradient.h	\
-	deprecated/gtkhandlebox.h	\
 	deprecated/gtkhbbox.h		\
 	deprecated/gtkhpaned.h		\
 	deprecated/gtkhscale.h		\
@@ -52,7 +51,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkcolorseldialog.c	\
 	deprecated/gtkfontsel.c		\
 	deprecated/gtkgradient.c	\
-	deprecated/gtkhandlebox.c	\
 	deprecated/gtkhbbox.c		\
 	deprecated/gtkhpaned.c		\
 	deprecated/gtkhscale.c		\

@@ -4017,15 +4017,10 @@ gtk_window_enable_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *widget = GTK_WIDGET (window);
-  GdkVisual *visual;
 
   /* We need a visual with alpha for client shadows */
   if (priv->use_client_shadow)
     {
-      visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
-      if (visual != NULL)
-        gtk_widget_set_visual (widget, visual);
-
       gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
     }
   else
@@ -6483,10 +6478,9 @@ popover_realize (GtkWidget        *widget,
   attributes.y = rect.y;
   attributes.width = rect.width;
   attributes.height = rect.height;
-  attributes.visual = gtk_widget_get_visual (GTK_WIDGET (window));
   attributes.event_mask = gtk_widget_get_events (popover->widget) |
     GDK_EXPOSURE_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   popover->window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_register_window (GTK_WIDGET (window), popover->window);
@@ -7005,10 +6999,9 @@ gtk_window_realize (GtkWidget *widget)
 
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK | GDK_STRUCTURE_MASK;
 
-      attributes.visual = gtk_widget_get_visual (widget);
       attributes.wclass = GDK_INPUT_OUTPUT;
 
-      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+      attributes_mask = GDK_WA_X | GDK_WA_Y;
 
       gdk_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				   &attributes, attributes_mask);
@@ -7080,7 +7073,6 @@ gtk_window_realize (GtkWidget *widget)
 
       attributes.title = priv->title;
       attributes.wclass = GDK_INPUT_OUTPUT;
-      attributes.visual = gtk_widget_get_visual (widget);
 
       attributes_mask = 0;
       parent_window = gdk_screen_get_root_window (_gtk_window_get_screen (window));
@@ -7105,7 +7097,7 @@ gtk_window_realize (GtkWidget *widget)
 
       attributes.type_hint = priv->type_hint;
 
-      attributes_mask |= GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
+      attributes_mask |= GDK_WA_TYPE_HINT;
       attributes_mask |= (priv->title ? GDK_WA_TITLE : 0);
 
       gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
@@ -7123,10 +7115,9 @@ gtk_window_realize (GtkWidget *widget)
 
   attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK | GDK_STRUCTURE_MASK;
 
-  attributes.visual = gtk_widget_get_visual (widget);
   attributes.wclass = GDK_INPUT_OUTPUT;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
     {
@@ -10595,7 +10586,6 @@ gtk_window_set_screen (GtkWindow *window,
   GtkWindowPrivate *priv;
   GtkWidget *widget;
   GdkScreen *previous_screen;
-  gboolean was_rgba;
   gboolean was_mapped;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -10612,11 +10602,6 @@ gtk_window_set_screen (GtkWindow *window,
   widget = GTK_WIDGET (window);
 
   previous_screen = priv->screen;
-
-  if (gdk_screen_get_rgba_visual (previous_screen) == gtk_widget_get_visual (widget))
-    was_rgba = TRUE;
-  else
-    was_rgba = FALSE;
 
   was_mapped = _gtk_widget_get_mapped (widget);
 
@@ -10650,15 +10635,6 @@ gtk_window_set_screen (GtkWindow *window,
       _gtk_widget_propagate_composited_changed (widget);
     }
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SCREEN]);
-
-  if (was_rgba && priv->use_client_shadow)
-    {
-      GdkVisual *visual;
-
-      visual = gdk_screen_get_rgba_visual (screen);
-      if (visual)
-        gtk_widget_set_visual (widget, visual);
-    }
 
   if (was_mapped)
     gtk_widget_map (widget);

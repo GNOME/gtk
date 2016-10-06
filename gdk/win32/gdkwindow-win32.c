@@ -672,7 +672,6 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
  * except for toplevel window where OS/Window Manager placement
  * is used.
  *
- * The visual parameter, is based on GDK_WA_VISUAL if set already.
  * From attributes the only things used is: colormap, title,
  * wmclass and type_hint. [1]. We are checking redundant information
  * and complain if that changes, which would break this implementation
@@ -734,19 +733,15 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       remaining_mask &= ~GDK_WA_NOREDIR;
     }
 
-  if ((remaining_mask & ~(GDK_WA_VISUAL|GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
+  if ((remaining_mask & ~(GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
     g_warning ("_gdk_window_impl_new: uexpected attribute 0x%X",
-               remaining_mask & ~(GDK_WA_VISUAL|GDK_WA_TITLE|GDK_WA_TYPE_HINT));
+               remaining_mask & ~(GDK_WA_TITLE|GDK_WA_TYPE_HINT));
 
   hparent = GDK_WINDOW_HWND (real_parent);
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   impl->wrapper = GDK_WINDOW (window);
   window->impl = GDK_WINDOW_IMPL (impl);
-
-  if (attributes_mask & GDK_WA_VISUAL)
-    g_assert ((gdk_screen_get_system_visual (screen) == attributes->visual) ||
-              (gdk_screen_get_rgba_visual (screen) == attributes->visual));
 
   impl->override_redirect = override_redirect;
   impl->layered = FALSE;

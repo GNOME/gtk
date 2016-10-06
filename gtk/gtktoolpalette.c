@@ -730,14 +730,13 @@ gtk_tool_palette_realize (GtkWidget *widget)
   attributes.width = allocation.width - border_width * 2;
   attributes.height = allocation.height - border_width * 2;
   attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = gtk_widget_get_events (widget)
                          | GDK_VISIBILITY_NOTIFY_MASK
                          | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
                          | GDK_BUTTON_MOTION_MASK
                          | GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK
                          | GDK_TOUCH_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);

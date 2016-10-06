@@ -399,7 +399,6 @@ gtk_popover_realize (GtkWidget *widget)
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.visual = gtk_widget_get_visual (widget);
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.event_mask =
     gtk_widget_get_events (widget) |
@@ -410,7 +409,7 @@ gtk_popover_realize (GtkWidget *widget)
     GDK_ENTER_NOTIFY_MASK |
     GDK_LEAVE_NOTIFY_MASK;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);

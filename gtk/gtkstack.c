@@ -351,10 +351,9 @@ gtk_stack_realize (GtkWidget *widget)
   attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask =
     gtk_widget_get_events (widget);
-  attributes_mask = (GDK_WA_X | GDK_WA_Y) | GDK_WA_VISUAL;
+  attributes_mask = (GDK_WA_X | GDK_WA_Y);
 
   priv->view_window =
     gdk_window_new (gtk_widget_get_window (GTK_WIDGET (stack)),

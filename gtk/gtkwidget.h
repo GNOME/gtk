@@ -998,11 +998,6 @@ GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GType		 widget_type);
-GDK_AVAILABLE_IN_ALL
-GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
-GDK_AVAILABLE_IN_ALL
-void         gtk_widget_set_visual	(GtkWidget	*widget,
-                                         GdkVisual      *visual);
 
 GDK_AVAILABLE_IN_ALL
 GdkScreen *   gtk_widget_get_screen      (GtkWidget *widget);

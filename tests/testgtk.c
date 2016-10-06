@@ -227,27 +227,6 @@ build_alpha_widgets (void)
 }
 
 static void
-on_alpha_screen_changed (GtkWindow *window,
-			 GdkScreen *old_screen,
-			 GtkWidget *label)
-{
-  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (window));
-  GdkVisual *visual = gdk_screen_get_rgba_visual (screen);
-
-  if (!visual)
-    {
-      visual = gdk_screen_get_system_visual (screen);
-      gtk_label_set_markup (GTK_LABEL (label), "<b>Screen doesn't support alpha</b>");
-    }
-  else
-    {
-      gtk_label_set_markup (GTK_LABEL (label), "<b>Screen supports alpha</b>");
-    }
-
-  gtk_widget_set_visual (GTK_WIDGET (window), visual);
-}
-
-static void
 on_composited_changed (GtkWidget *window,
 		      GtkLabel *label)
 {
@@ -288,9 +267,6 @@ create_alpha_window (GtkWidget *widget)
 
       label = gtk_label_new (NULL);
       gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
-      on_alpha_screen_changed (GTK_WINDOW (window), NULL, label);
-      g_signal_connect (window, "screen-changed",
-			G_CALLBACK (on_alpha_screen_changed), label);
       
       label = gtk_label_new (NULL);
       gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
@@ -366,10 +342,9 @@ create_pattern (GtkWidget   *widget,
 	      attributes.height = h;
 	      attributes.wclass = GDK_INPUT_OUTPUT;
 	      attributes.event_mask = GDK_EXPOSURE_MASK;
-	      attributes.visual = gtk_widget_get_visual (widget);
 	      
 	      child = gdk_window_new (parent, &attributes,
-				      GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL);
+				      GDK_WA_X | GDK_WA_Y);
 
 	      pattern_set_bg (widget, child, level);
 

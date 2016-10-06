@@ -278,8 +278,7 @@ deemphasize_window (GtkWidget *window)
   GdkScreen *screen;
 
   screen = gtk_widget_get_screen (window);
-  if (gdk_screen_is_composited (screen) &&
-      gtk_widget_get_visual (window) == gdk_screen_get_rgba_visual (screen))
+  if (gdk_screen_is_composited (screen))
     {
       cairo_rectangle_int_t rect;
       cairo_region_t *region;
@@ -300,8 +299,7 @@ reemphasize_window (GtkWidget *window)
   GdkScreen *screen;
 
   screen = gtk_widget_get_screen (window);
-  if (gdk_screen_is_composited (screen) &&
-      gtk_widget_get_visual (window) == gdk_screen_get_rgba_visual (screen))
+  if (gdk_screen_is_composited (screen))
     {
       gtk_widget_set_opacity (window, 1.0);
       gtk_widget_input_shape_combine_region (window, NULL);

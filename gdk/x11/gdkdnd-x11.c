@@ -2001,11 +2001,8 @@ create_drag_window (GdkScreen *screen)
   attrs.wclass = GDK_INPUT_OUTPUT;
   attrs.window_type = GDK_WINDOW_TEMP;
   attrs.type_hint = GDK_WINDOW_TYPE_HINT_DND;
-  attrs.visual = gdk_screen_get_rgba_visual (screen);
-  if (!attrs.visual)
-    attrs.visual = gdk_screen_get_system_visual (screen);
 
-  mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
+  mask = GDK_WA_X | GDK_WA_Y | GDK_WA_TYPE_HINT;
 
   return gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
 }

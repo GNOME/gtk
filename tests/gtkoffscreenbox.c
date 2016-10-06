@@ -279,10 +279,9 @@ gtk_offscreen_box_realize (GtkWidget *widget)
 			| GDK_ENTER_NOTIFY_MASK
 			| GDK_LEAVE_NOTIFY_MASK;
 
-  attributes.visual = gtk_widget_get_visual (widget);
   attributes.wclass = GDK_INPUT_OUTPUT;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);

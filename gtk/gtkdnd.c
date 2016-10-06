@@ -1840,22 +1840,16 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
   if (!info->icon_window)
     {
       GdkScreen *screen;
-      GdkVisual *visual;
-      gboolean has_rgba;
 
       screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
-      visual = gdk_screen_get_rgba_visual (screen);
-      has_rgba = visual != NULL && gdk_screen_is_composited (screen);
 
       info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
       gtk_window_set_screen (GTK_WINDOW (info->icon_window), screen);
       gtk_widget_set_size_request (info->icon_window, 24, 24);
-      if (visual)
-        gtk_widget_set_visual (info->icon_window, visual);
       gtk_widget_set_events (info->icon_window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
-      if (has_rgba)
+      if (gdk_screen_is_composited (screen))
         gtk_widget_set_app_paintable (info->icon_window, TRUE);
 
       gtk_window_set_hardcoded_window (GTK_WINDOW (info->icon_window),
@@ -2077,8 +2071,6 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   GdkScreen *screen;
   GdkRectangle extents;
   cairo_pattern_t *pattern;
-  GdkVisual *rgba_visual;
-  gboolean has_rgba;
   cairo_matrix_t matrix;
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
@@ -2087,15 +2079,10 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   _gtk_cairo_surface_extents (surface, &extents);
 
   screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
-  rgba_visual = gdk_screen_get_rgba_visual (screen);
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
-  has_rgba = rgba_visual != NULL && gdk_screen_is_composited (screen);
 
   gtk_window_set_screen (GTK_WINDOW (window), screen);
-
-  if (has_rgba)
-    gtk_widget_set_visual (GTK_WIDGET (window), rgba_visual);
 
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
 
@@ -2111,8 +2098,8 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
 
   g_signal_connect_data (window,
                          "draw",
-                         has_rgba ? G_CALLBACK (gtk_drag_draw_icon_pattern)
-                                  : G_CALLBACK (gtk_drag_draw_icon_pattern_and_background),
+                         gdk_screen_is_composited (screen) ? G_CALLBACK (gtk_drag_draw_icon_pattern)
+                                                           : G_CALLBACK (gtk_drag_draw_icon_pattern_and_background),
                          pattern,
                          (GClosureNotify) cairo_pattern_destroy,
                          G_CONNECT_AFTER);
