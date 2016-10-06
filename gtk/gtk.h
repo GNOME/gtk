@@ -263,10 +263,8 @@
 #include <gtk/deprecated/gtkimagemenuitem.h>
 #include <gtk/deprecated/gtkmisc.h>
 #include <gtk/deprecated/gtkradioaction.h>
-#include <gtk/deprecated/gtkrc.h>
 #include <gtk/deprecated/gtkrecentaction.h>
 #include <gtk/deprecated/gtkstock.h>
-#include <gtk/deprecated/gtkstyle.h>
 #include <gtk/deprecated/gtkstyleproperties.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
 #include <gtk/deprecated/gtktable.h>

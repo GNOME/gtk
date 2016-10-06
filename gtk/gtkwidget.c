@@ -503,7 +503,6 @@ enum {
   STATE_CHANGED,
   PARENT_SET,
   HIERARCHY_CHANGED,
-  STYLE_SET,
   DIRECTION_CHANGED,
   GRAB_NOTIFY,
   CHILD_NOTIFY,
@@ -580,7 +579,6 @@ enum {
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
   PROP_COMPOSITE_CHILD,
-  PROP_STYLE,
   PROP_EVENTS,
   PROP_NO_SHOW_ALL,
   PROP_HAS_TOOLTIP,
@@ -643,8 +641,6 @@ static void	gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unrealize	 (GtkWidget	    *widget);
 static void	gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
                                                   GtkAllocation	    *allocation);
-static void	gtk_widget_real_style_set        (GtkWidget         *widget,
-                                                  GtkStyle          *previous_style);
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
@@ -1039,7 +1035,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->parent_set = NULL;
   klass->hierarchy_changed = NULL;
-  klass->style_set = gtk_widget_real_style_set;
   klass->direction_changed = gtk_widget_real_direction_changed;
   klass->grab_notify = NULL;
   klass->child_notify = NULL;
@@ -1217,24 +1212,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("Whether the widget is part of a composite widget"),
                             FALSE,
                             GTK_PARAM_READABLE);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-  /**
-   * GtkWidget:style:
-   *
-   * The style of the widget, which contains information about how it will look (colors, etc).
-   *
-   * Deprecated: Use #GtkStyleContext instead
-   */
-  widget_props[PROP_STYLE] =
-      g_param_spec_object ("style",
-                           P_("Style"),
-                           P_("The style of the widget, which contains information about how it will look (colors etc)"),
-                           GTK_TYPE_STYLE,
-                           GTK_PARAM_READWRITE|G_PARAM_DEPRECATED);
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   widget_props[PROP_EVENTS] =
       g_param_spec_flags ("events",
@@ -1848,37 +1825,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
-
-  /**
-   * GtkWidget::style-set:
-   * @widget: the object on which the signal is emitted
-   * @previous_style: (allow-none): the previous style, or %NULL if the widget
-   *   just got its initial style
-   *
-   * The ::style-set signal is emitted when a new style has been set
-   * on a widget. Note that style-modifying functions like
-   * gtk_widget_modify_base() also cause this signal to be emitted.
-   *
-   * Note that this signal is emitted for changes to the deprecated
-   * #GtkStyle. To track changes to the #GtkStyleContext associated
-   * with a widget, use the #GtkWidget::style-updated signal.
-   *
-   * Deprecated:3.0: Use the #GtkWidget::style-updated signal
-   */
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-  widget_signals[STYLE_SET] =
-    g_signal_new (I_("style-set"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST | G_SIGNAL_DEPRECATED,
-		  G_STRUCT_OFFSET (GtkWidgetClass, style_set),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_STYLE);
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   /**
    * GtkWidget::style-updated:
@@ -3736,11 +3682,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_RECEIVES_DEFAULT:
       gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
       break;
-    case PROP_STYLE:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_widget_set_style (widget, g_value_get_object (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
     case PROP_EVENTS:
       if (!_gtk_widget_get_realized (widget) && _gtk_widget_get_has_window (widget))
 	gtk_widget_set_events (widget, g_value_get_flags (value));
@@ -3930,11 +3871,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_COMPOSITE_CHILD:
       g_value_set_boolean (value, widget->priv->composite_child);
-      break;
-    case PROP_STYLE:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      g_value_set_object (value, gtk_widget_get_style (widget));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_EVENTS:
       eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
@@ -4406,11 +4342,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
   gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  priv->style = gtk_widget_get_default_style ();
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-  g_object_ref (priv->style);
 }
 
 
@@ -5443,10 +5374,6 @@ gtk_widget_realize (GtkWidget *widget)
 
       if (priv->parent && !_gtk_widget_get_realized (priv->parent))
 	gtk_widget_realize (priv->parent);
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_widget_ensure_style (widget);
-      G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_signal_emit (widget, widget_signals[REALIZE], 0);
 
@@ -8144,8 +8071,6 @@ gtk_widget_real_state_flags_changed (GtkWidget     *widget,
 static void
 gtk_widget_real_style_updated (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = widget->priv;
-
   gtk_widget_update_alpha (widget);
 
   if (widget->priv->context)
@@ -8176,21 +8101,6 @@ gtk_widget_real_style_updated (GtkWidget *widget)
       if (widget->priv->anchored)
         gtk_widget_queue_resize (widget);
     }
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  if (priv->style != NULL &&
-      priv->style != gtk_widget_get_default_style ())
-    {
-      /* Trigger ::style-set for old
-       * widgets not listening to this
-       */
-      g_signal_emit (widget,
-                     widget_signals[STYLE_SET],
-                     0,
-                     widget->priv->style);
-    }
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
 }
 
 static gboolean
@@ -9828,12 +9738,6 @@ gtk_widget_real_direction_changed (GtkWidget        *widget,
                                    GtkTextDirection  previous_direction)
 {
   gtk_widget_queue_resize (widget);
-}
-
-static void
-gtk_widget_real_style_set (GtkWidget *widget,
-                           GtkStyle  *previous_style)
-{
 }
 
 typedef struct {
@@ -12128,13 +12032,6 @@ gtk_widget_real_destroy (GtkWidget *object)
   gtk_grab_remove (widget);
 
   destroy_tick_callbacks (widget);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  if (priv->style)
-    g_object_unref (priv->style);
-  priv->style = gtk_widget_get_default_style ();
-  g_object_ref (priv->style);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -12145,8 +12042,6 @@ gtk_widget_finalize (GObject *object)
   GList *l;
 
   gtk_grab_remove (widget);
-
-  g_clear_object (&priv->style);
 
   g_free (priv->name);
 
@@ -16494,20 +16389,6 @@ gtk_widget_get_modifier_mask (GtkWidget         *widget,
 
   return gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
                                        intent);
-}
-
-GtkStyle *
-_gtk_widget_get_style (GtkWidget *widget)
-{
-  return widget->priv->style;
-}
-
-void
-_gtk_widget_set_style (GtkWidget *widget,
-                       GtkStyle  *style)
-{
-  g_signal_emit (widget, widget_signals[STYLE_SET], 0, widget->priv->style);
-  widget->priv->style = style;
 }
 
 GtkActionMuxer *

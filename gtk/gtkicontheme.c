@@ -50,13 +50,6 @@
 #include "gtkprivate.h"
 #include "gdkpixbufutilsprivate.h"
 
-#undef GDK_DEPRECATED
-#undef GDK_DEPRECATED_FOR
-#define GDK_DEPRECATED
-#define GDK_DEPRECATED_FOR(f)
-
-#include "deprecated/gtkstyle.h"
-
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
  */
@@ -5109,90 +5102,6 @@ gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo   *icon_info,
                                                 GError       **error)
 {
   return gtk_icon_info_load_symbolic_finish (icon_info, result, was_symbolic, error);
-}
-
-static GdkRGBA *
-color_to_rgba (GdkColor *color,
-               GdkRGBA  *rgba)
-{
-  rgba->red = color->red / 65535.0;
-  rgba->green = color->green / 65535.0;
-  rgba->blue = color->blue / 65535.0;
-  rgba->alpha = 1.0;
-  return rgba;
-}
-
-/**
- * gtk_icon_info_load_symbolic_for_style:
- * @icon_info: a #GtkIconInfo
- * @style: a #GtkStyle to take the colors from
- * @state: the widget state to use for colors
- * @was_symbolic: (out) (allow-none): a #gboolean, returns whether the
- *     loaded icon was a symbolic one and whether the @fg color was
- *     applied to it.
- * @error: (allow-none): location to store error information on failure,
- *     or %NULL.
- *
- * Loads an icon, modifying it to match the system colours for the foreground,
- * success, warning and error colors provided. If the icon is not a symbolic
- * one, the function will return the result from gtk_icon_info_load_icon().
- *
- * This allows loading symbolic icons that will match the system theme.
- *
- * See gtk_icon_info_load_symbolic() for more details.
- *
- * Returns: (transfer full): a #GdkPixbuf representing the loaded icon
- *
- * Since: 3.0
- *
- * Deprecated: 3.0: Use gtk_icon_info_load_symbolic_for_context() instead
- */
-GdkPixbuf *
-gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
-                                       GtkStyle      *style,
-                                       GtkStateType   state,
-                                       gboolean      *was_symbolic,
-                                       GError       **error)
-{
-  GdkColor color;
-  GdkRGBA fg;
-  GdkRGBA success_color;
-  GdkRGBA *success_colorp;
-  GdkRGBA warning_color;
-  GdkRGBA *warning_colorp;
-  GdkRGBA error_color;
-  GdkRGBA *error_colorp;
-  gboolean is_symbolic;
-
-  g_return_val_if_fail (icon_info != NULL, NULL);
-  g_return_val_if_fail (style != NULL, NULL);
-
-  is_symbolic = gtk_icon_info_is_symbolic (icon_info);
-
-  if (was_symbolic)
-    *was_symbolic = is_symbolic;
-
-  if (!is_symbolic)
-    return gtk_icon_info_load_icon (icon_info, error);
-
-  color_to_rgba (&style->fg[state], &fg);
-
-  success_colorp = warning_colorp = error_colorp = NULL;
-
-  if (gtk_style_lookup_color (style, "success_color", &color))
-    success_colorp = color_to_rgba (&color, &success_color);
-
-  if (gtk_style_lookup_color (style, "warning_color", &color))
-    warning_colorp = color_to_rgba (&color, &warning_color);
-
-  if (gtk_style_lookup_color (style, "error_color", &color))
-    error_colorp = color_to_rgba (&color, &error_color);
-
-  return gtk_icon_info_load_symbolic_internal (icon_info,
-                                               &fg, success_colorp,
-                                               warning_colorp, error_colorp,
-                                               TRUE,
-                                               error);
 }
 
 /**

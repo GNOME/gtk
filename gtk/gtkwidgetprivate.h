@@ -132,7 +132,6 @@ struct _GtkWidgetPrivate
    * along with graphics contexts used to draw with and
    * the font to use for text.
    */
-  GtkStyle *style;
   GtkCssNode *cssnode;
   GtkStyleContext *context;
 
@@ -248,9 +247,6 @@ void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
                                                             GtkWidget *toplevel,
                                                             gpointer   user_data);
 GtkStyleContext * _gtk_widget_peek_style_context           (GtkWidget *widget);
-GtkStyle *        _gtk_widget_get_style                    (GtkWidget *widget);
-void              _gtk_widget_set_style                    (GtkWidget *widget,
-                                                            GtkStyle  *style);
 gboolean          _gtk_widget_supports_clip                (GtkWidget *widget);
 void              _gtk_widget_set_simple_clip              (GtkWidget *widget,
                                                             GtkAllocation *content_clip);

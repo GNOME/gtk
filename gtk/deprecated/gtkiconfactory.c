@@ -43,7 +43,6 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkstyle.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkrender.h"
 #include "gtkrenderprivate.h"
@@ -1554,92 +1553,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_unref (pixbuf);
 
   return surface;
-}
-
-/**
- * gtk_icon_set_render_icon:
- * @icon_set: a #GtkIconSet
- * @style: (allow-none): a #GtkStyle associated with @widget, or %NULL
- * @direction: text direction
- * @state: widget state
- * @size: (type int): icon size (#GtkIconSize). A size of `(GtkIconSize)-1`
- *        means render at the size of the source and don’t scale.
- * @widget: (allow-none): widget that will display the icon, or %NULL.
- *          The only use that is typically made of this
- *          is to determine the appropriate #GdkScreen.
- * @detail: (allow-none): detail to pass to the theme engine, or %NULL.
- *          Note that passing a detail of anything but %NULL
- *          will disable caching.
- *
- * Renders an icon using gtk_style_render_icon(). In most cases,
- * gtk_widget_render_icon() is better, since it automatically provides
- * most of the arguments from the current widget settings.  This
- * function never returns %NULL; if the icon can’t be rendered
- * (perhaps because an image file fails to load), a default "missing
- * image" icon will be returned instead.
- *
- * Returns: (transfer full): a #GdkPixbuf to be displayed
- *
- * Deprecated: 3.0: Use gtk_icon_set_render_icon_pixbuf() instead
- */
-GdkPixbuf*
-gtk_icon_set_render_icon (GtkIconSet        *icon_set,
-                          GtkStyle          *style,
-                          GtkTextDirection   direction,
-                          GtkStateType       state,
-                          GtkIconSize        size,
-                          GtkWidget         *widget,
-                          const char        *detail)
-{
-  GdkPixbuf *icon;
-  GtkStyleContext *context = NULL;
-  GtkStateFlags flags = 0;
-
-  g_return_val_if_fail (icon_set != NULL, NULL);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  g_return_val_if_fail (style == NULL || GTK_IS_STYLE (style), NULL);
-
-  if (style && gtk_style_has_context (style))
-    {
-      g_object_get (style, "context", &context, NULL);
-      /* g_object_get returns a refed object */
-      if (context)
-        g_object_unref (context);
-    }
-  else if (widget)
-    {
-      context = gtk_widget_get_style_context (widget);
-    }
-
-  if (!context)
-    return render_fallback_image (gtk_style_context_lookup_style (context), direction, state, size);
-
-  gtk_style_context_save (context);
-
-  switch (state)
-    {
-    case GTK_STATE_PRELIGHT:
-      flags |= GTK_STATE_FLAG_PRELIGHT;
-      break;
-    case GTK_STATE_INSENSITIVE:
-      flags |= GTK_STATE_FLAG_INSENSITIVE;
-      break;
-    default:
-      break;
-    }
-
-  gtk_style_context_set_state (context, flags);
-  gtk_style_context_set_direction (context, direction);
-
-G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  icon = gtk_icon_set_render_icon_pixbuf (icon_set, context, size);
-
-  gtk_style_context_restore (context);
-
-  return icon;
 }
 
 /* Order sources by their "wildness", so that "wilder" sources are

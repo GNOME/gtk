@@ -351,12 +351,6 @@ GdkPixbuf *           gtk_icon_info_load_symbolic_for_context_finish (GtkIconInf
 								      GAsyncResult     *res,
 								      gboolean         *was_symbolic,
 								      GError          **error);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_icon_info_load_symbol_for_context)
-GdkPixbuf *           gtk_icon_info_load_symbolic_for_style  (GtkIconInfo   *icon_info,
-                                                              GtkStyle      *style,
-                                                              GtkStateType   state,
-                                                              gboolean      *was_symbolic,
-                                                              GError       **error);
 GDK_DEPRECATED_IN_3_14
 void                  gtk_icon_info_set_raw_coordinates (GtkIconInfo  *icon_info,
 							 gboolean      raw_coordinates);

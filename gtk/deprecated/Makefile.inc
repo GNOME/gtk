@@ -18,10 +18,8 @@ deprecated_h_sources = 			\
 	deprecated/gtkimagemenuitem.h	\
 	deprecated/gtkmisc.h		\
 	deprecated/gtkradioaction.h	\
-	deprecated/gtkrc.h		\
 	deprecated/gtkrecentaction.h	\
 	deprecated/gtkstock.h		\
-	deprecated/gtkstyle.h		\
 	deprecated/gtkstyleproperties.h	\
 	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
@@ -61,10 +59,8 @@ deprecated_c_sources = 			\
 	deprecated/gtkimagemenuitem.c	\
 	deprecated/gtkmisc.c		\
 	deprecated/gtkradioaction.c	\
-	deprecated/gtkrc.c		\
 	deprecated/gtkrecentaction.c	\
 	deprecated/gtkstock.c		\
-	deprecated/gtkstyle.c		\
 	deprecated/gtkstyleproperties.c	\
 	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktable.c		\

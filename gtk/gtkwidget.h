@@ -391,8 +391,6 @@ struct _GtkWidgetClass
 				GtkWidget        *previous_parent);
   void (* hierarchy_changed)   (GtkWidget        *widget,
 				GtkWidget        *previous_toplevel);
-  void (* style_set)	       (GtkWidget        *widget,
-				GtkStyle         *previous_style);
   void (* direction_changed)   (GtkWidget        *widget,
 				GtkTextDirection  previous_direction);
   void (* grab_notify)         (GtkWidget        *widget,

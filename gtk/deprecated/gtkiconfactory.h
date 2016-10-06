@@ -146,15 +146,6 @@ void        gtk_icon_set_unref           (GtkIconSet      *icon_set);
 GDK_DEPRECATED_IN_3_10
 GtkIconSet* gtk_icon_set_copy            (GtkIconSet      *icon_set);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_icon_set_render_icon_pixbuf)
-GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
-                                          GtkStyle        *style,
-                                          GtkTextDirection direction,
-                                          GtkStateType     state,
-                                          GtkIconSize      size,
-                                          GtkWidget       *widget,
-                                          const gchar     *detail);
-
 GDK_DEPRECATED_IN_3_10
 void           gtk_icon_set_add_source   (GtkIconSet          *icon_set,
                                           const GtkIconSource *source);
