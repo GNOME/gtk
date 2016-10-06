@@ -29,6 +29,7 @@
 #include "gtkwidget.h"
 #include "gtkprivate.h"
 #include "gtkcssproviderprivate.h"
+#include "gtkhslaprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
@@ -55,8 +56,6 @@
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
 #endif
-
-#include "deprecated/gtkrc.h"
 
 #ifdef GDK_WINDOWING_QUARTZ
 #define PRINT_PREVIEW_COMMAND "open -a /Applications/Preview.app %f"
@@ -2512,8 +2511,275 @@ gtk_settings_set_double_property (GtkSettings *settings,
   g_value_unset (&svalue.value);
 }
 
+static const GScannerConfig gtk_rc_scanner_config =
+{
+  (
+   " \t\r\n"
+   )			/* cset_skip_characters */,
+  (
+   "_"
+   G_CSET_a_2_z
+   G_CSET_A_2_Z
+   )			/* cset_identifier_first */,
+  (
+   G_CSET_DIGITS
+   "-_"
+   G_CSET_a_2_z
+   G_CSET_A_2_Z
+   )			/* cset_identifier_nth */,
+  ( "#\n" )		/* cpair_comment_single */,
+  
+  TRUE			/* case_sensitive */,
+  
+  TRUE			/* skip_comment_multi */,
+  TRUE			/* skip_comment_single */,
+  TRUE			/* scan_comment_multi */,
+  TRUE			/* scan_identifier */,
+  FALSE			/* scan_identifier_1char */,
+  FALSE			/* scan_identifier_NULL */,
+  TRUE			/* scan_symbols */,
+  TRUE			/* scan_binary */,
+  TRUE			/* scan_octal */,
+  TRUE			/* scan_float */,
+  TRUE			/* scan_hex */,
+  TRUE			/* scan_hex_dollar */,
+  TRUE			/* scan_string_sq */,
+  TRUE			/* scan_string_dq */,
+  TRUE			/* numbers_2_int */,
+  FALSE			/* int_2_float */,
+  FALSE			/* identifier_2_string */,
+  TRUE			/* char_2_token */,
+  TRUE			/* symbol_2_token */,
+  FALSE			/* scope_0_fallback */,
+};
+
+static GScanner*
+gtk_rc_scanner_new (void)
+{
+  return g_scanner_new (&gtk_rc_scanner_config);
+}
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
+static void
+color_shade (const GdkColor *color,
+             GdkColor       *color_return,
+             gdouble         factor)
+{
+  GdkRGBA rgba;
+  GtkHSLA hsla;
+
+  rgba.red = color->red / 65535.;
+  rgba.green = color->green / 65535.;
+  rgba.blue = color->blue / 65535.;
+  rgba.alpha = 1.0;
+
+  _gtk_hsla_init_from_rgba (&hsla, &rgba);
+  _gtk_hsla_shade (&hsla, &hsla, factor);
+  _gdk_rgba_init_from_hsla (&rgba, &hsla);
+
+  color_return->red = 65535. * rgba.red;
+  color_return->green = 65535. * rgba.green;
+  color_return->blue = 65535. * rgba.blue;
+}
+
+/*
+ * gtk_parse_color:
+ * @scanner: a #GScanner
+ * @color: (out): a pointer to a #GdkColor in which to store
+ *     the result
+ *
+ * Parses a color in the format expected
+ * in a RC file. If @style is not %NULL, it will be consulted to resolve
+ * references to symbolic colors.
+ *
+ * Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
+ *     that was expected but not found
+ */
+static guint
+gtk_parse_color (GScanner   *scanner,
+                 GdkColor   *color)
+{
+  guint token;
+
+  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
+
+  /* we don't need to set our own scope here, because
+   * we don't need own symbols
+   */
+  
+  token = g_scanner_get_next_token (scanner);
+  switch (token)
+    {
+      gint token_int;
+      GdkColor c1, c2;
+      gboolean negate;
+      gdouble l;
+
+    case G_TOKEN_LEFT_CURLY:
+      token = g_scanner_get_next_token (scanner);
+      if (token == G_TOKEN_INT)
+	token_int = scanner->value.v_int;
+      else if (token == G_TOKEN_FLOAT)
+	token_int = scanner->value.v_float * 65535.0;
+      else
+	return G_TOKEN_FLOAT;
+      color->red = CLAMP (token_int, 0, 65535);
+      
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_COMMA)
+	return G_TOKEN_COMMA;
+      
+      token = g_scanner_get_next_token (scanner);
+      if (token == G_TOKEN_INT)
+	token_int = scanner->value.v_int;
+      else if (token == G_TOKEN_FLOAT)
+	token_int = scanner->value.v_float * 65535.0;
+      else
+	return G_TOKEN_FLOAT;
+      color->green = CLAMP (token_int, 0, 65535);
+      
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_COMMA)
+	return G_TOKEN_COMMA;
+      
+      token = g_scanner_get_next_token (scanner);
+      if (token == G_TOKEN_INT)
+	token_int = scanner->value.v_int;
+      else if (token == G_TOKEN_FLOAT)
+	token_int = scanner->value.v_float * 65535.0;
+      else
+	return G_TOKEN_FLOAT;
+      color->blue = CLAMP (token_int, 0, 65535);
+      
+      token = g_scanner_get_next_token (scanner);
+      if (token != G_TOKEN_RIGHT_CURLY)
+	return G_TOKEN_RIGHT_CURLY;
+      return G_TOKEN_NONE;
+      
+    case G_TOKEN_STRING:
+      if (!gdk_color_parse (scanner->value.v_string, color))
+	{
+          g_scanner_warn (scanner, "Invalid color constant '%s'",
+                          scanner->value.v_string);
+          return G_TOKEN_STRING;
+	}
+      return G_TOKEN_NONE;
+
+    case G_TOKEN_IDENTIFIER:
+      if (strcmp (scanner->value.v_identifier, "mix") == 0)
+        {
+          token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_LEFT_PAREN)
+            return G_TOKEN_LEFT_PAREN;
+
+          negate = FALSE;
+          if (g_scanner_peek_next_token (scanner) == '-')
+            {
+              g_scanner_get_next_token (scanner); /* eat sign */
+              negate = TRUE;
+            }
+
+          token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_FLOAT)
+            return G_TOKEN_FLOAT;
+
+          l = negate ? -scanner->value.v_float : scanner->value.v_float;
+
+          token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_COMMA)
+            return G_TOKEN_COMMA;
+
+          token = gtk_parse_color (scanner, &c1);
+          if (token != G_TOKEN_NONE)
+            return token;
+
+	  token = g_scanner_get_next_token (scanner);
+	  if (token != G_TOKEN_COMMA)
+            return G_TOKEN_COMMA;
+
+	  token = gtk_parse_color (scanner, &c2);
+	  if (token != G_TOKEN_NONE)
+            return token;
+
+	  token = g_scanner_get_next_token (scanner);
+	  if (token != G_TOKEN_RIGHT_PAREN)
+            return G_TOKEN_RIGHT_PAREN;
+
+	  color->red   = l * c1.red   + (1.0 - l) * c2.red;
+	  color->green = l * c1.green + (1.0 - l) * c2.green;
+	  color->blue  = l * c1.blue  + (1.0 - l) * c2.blue;
+
+	  return G_TOKEN_NONE;
+	}
+      else if (strcmp (scanner->value.v_identifier, "shade") == 0)
+        {
+	  token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_LEFT_PAREN)
+            return G_TOKEN_LEFT_PAREN;
+
+          negate = FALSE;
+          if (g_scanner_peek_next_token (scanner) == '-')
+            {
+              g_scanner_get_next_token (scanner); /* eat sign */
+              negate = TRUE;
+            }
+
+          token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_FLOAT)
+            return G_TOKEN_FLOAT;
+
+          l = negate ? -scanner->value.v_float : scanner->value.v_float;
+
+          token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_COMMA)
+            return G_TOKEN_COMMA;
+
+          token = gtk_parse_color (scanner, &c1);
+          if (token != G_TOKEN_NONE)
+            return token;
+
+          token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_RIGHT_PAREN)
+            return G_TOKEN_RIGHT_PAREN;
+
+          color_shade (&c1, color, l);
+
+          return G_TOKEN_NONE;
+        }
+      else if (strcmp (scanner->value.v_identifier, "lighter") == 0 ||
+               strcmp (scanner->value.v_identifier, "darker") == 0)
+        {
+          if (scanner->value.v_identifier[0] == 'l')
+            l = 1.3;
+          else
+	    l = 0.7;
+
+	  token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_LEFT_PAREN)
+            return G_TOKEN_LEFT_PAREN;
+
+          token = gtk_parse_color (scanner, &c1);
+          if (token != G_TOKEN_NONE)
+            return token;
+
+          token = g_scanner_get_next_token (scanner);
+          if (token != G_TOKEN_RIGHT_PAREN)
+            return G_TOKEN_RIGHT_PAREN;
+
+          color_shade (&c1, color, l);
+
+          return G_TOKEN_NONE;
+        }
+      else
+        return G_TOKEN_IDENTIFIER;
+
+    default:
+      return G_TOKEN_STRING;
+    }
+}
+
+  
 /**
  * gtk_rc_property_parse_color:
  * @pspec: a #GParamSpec
@@ -2544,7 +2810,7 @@ gtk_rc_property_parse_color (const GParamSpec *pspec,
 
   scanner = gtk_rc_scanner_new ();
   g_scanner_input_text (scanner, gstring->str, gstring->len);
-  if (gtk_rc_parse_color (scanner, &color) == G_TOKEN_NONE &&
+  if (gtk_parse_color (scanner, &color) == G_TOKEN_NONE &&
       g_scanner_get_next_token (scanner) == G_TOKEN_EOF)
     {
       g_value_set_boxed (property_value, &color);
