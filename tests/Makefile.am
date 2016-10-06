@@ -127,7 +127,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testverticalcells		\
 	treestoretest			\
 	testxinerama			\
-	testwindows			\
 	testmerge			\
 	testactions			\
 	testgrouping			\
@@ -265,7 +264,6 @@ testscrolledwindow_DEPENDENCIES = $(TEST_DEPS)
 testscrolledge_DEPENDENCIES = $(TEST_DEPS)
 testcellarea_DEPENDENCIES = $(TEST_DEPS)
 testtreemenu_DEPENDENCIES = $(TEST_DEPS)
-testwindows_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
@@ -457,9 +455,6 @@ testappchooser_SOURCES = \
 
 testappchooserbutton_SOURCES = \
 	testappchooserbutton.c
-
-testwindows_SOURCES = 	\
-	testwindows.c
 
 testexpand_SOURCES = testexpand.c
 
