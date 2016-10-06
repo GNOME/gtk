@@ -1891,10 +1891,10 @@ INSTALL
 config.h.win32
 gtk-zip.sh
 Makefile
-gdk-3.0.pc
-gtk+-3.0.pc
-gtk+-unix-print-3.0.pc
-gail-3.0.pc
+gdk-4.0.pc
+gtk+-4.0.pc
+gtk+-unix-print-4.0.pc
+gail-4.0.pc
 m4macros/Makefile
 po/Makefile.in
 po-properties/Makefile.in
