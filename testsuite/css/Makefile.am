@@ -18,8 +18,8 @@ AM_CPPFLAGS =				\
 	$(GTK_DEP_CFLAGS)
 
 LDADD = \
-	$(top_builddir)/gdk/libgdk-3.la \
-	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-4.la \
+	$(top_builddir)/gtk/libgtk-4.la \
 	$(GTK_DEP_LIBS)
 
 TEST_PROGS += api
