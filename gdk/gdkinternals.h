@@ -109,36 +109,6 @@ extern gboolean _gdk_debug_updates;
 
 #endif /* G_ENABLE_DEBUG */
 
-/* Arg parsing */
-
-typedef enum 
-{
-  GDK_ARG_STRING,
-  GDK_ARG_INT,
-  GDK_ARG_BOOL,
-  GDK_ARG_NOBOOL,
-  GDK_ARG_CALLBACK
-} GdkArgType;
-
-typedef struct _GdkArgContext GdkArgContext;
-typedef struct _GdkArgDesc GdkArgDesc;
-
-typedef void (*GdkArgFunc) (const char *name, const char *arg, gpointer data);
-
-struct _GdkArgContext
-{
-  GPtrArray *tables;
-  gpointer cb_data;
-};
-
-struct _GdkArgDesc
-{
-  const char *name;
-  GdkArgType type;
-  gpointer location;
-  GdkArgFunc callback;
-};
-
 /* Event handling */
 
 typedef struct _GdkEventPrivate GdkEventPrivate;
