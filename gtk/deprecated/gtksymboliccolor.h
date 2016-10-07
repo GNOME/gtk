@@ -23,9 +23,10 @@
 #endif
 
 #include <gdk/gdk.h>
-#include <gtk/deprecated/gtkstyleproperties.h>
 
 G_BEGIN_DECLS
+
+typedef struct _GtkSymbolicColor GtkSymbolicColor;
 
 #define GTK_TYPE_SYMBOLIC_COLOR (gtk_symbolic_color_get_type ())
 
@@ -60,7 +61,6 @@ char *             gtk_symbolic_color_to_string   (GtkSymbolicColor   *color);
 
 GDK_DEPRECATED_IN_3_8
 gboolean           gtk_symbolic_color_resolve     (GtkSymbolicColor   *color,
-                                                   GtkStyleProperties *props,
                                                    GdkRGBA            *resolved_color);
 
 G_END_DECLS

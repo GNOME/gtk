@@ -23,11 +23,11 @@
 #endif
 
 #include <gdk/gdk.h>
-#include <gtk/gtkstylecontext.h>
-#include <gtk/deprecated/gtkstyleproperties.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
 
 G_BEGIN_DECLS
+
+typedef struct _GtkGradient GtkGradient;
 
 #define GTK_TYPE_GRADIENT (gtk_gradient_get_type ())
 
@@ -56,16 +56,6 @@ GDK_DEPRECATED_IN_3_8
 GtkGradient * gtk_gradient_ref            (GtkGradient         *gradient);
 GDK_DEPRECATED_IN_3_8
 void          gtk_gradient_unref          (GtkGradient         *gradient);
-
-GDK_DEPRECATED_IN_3_8
-gboolean      gtk_gradient_resolve        (GtkGradient         *gradient,
-                                           GtkStyleProperties  *props,
-                                           cairo_pattern_t    **resolved_gradient);
-GDK_DEPRECATED_IN_3_8
-cairo_pattern_t *
-              gtk_gradient_resolve_for_context
-                                          (GtkGradient         *gradient,
-                                           GtkStyleContext     *context);
 
 GDK_DEPRECATED_IN_3_8
 char *        gtk_gradient_to_string      (GtkGradient         *gradient);

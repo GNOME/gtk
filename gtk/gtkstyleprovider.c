@@ -55,38 +55,6 @@ gtk_style_provider_iface_init (gpointer g_iface)
 }
 
 /**
- * gtk_style_provider_get_style:
- * @provider: a #GtkStyleProvider
- * @path: #GtkWidgetPath to query
- *
- * Returns the style settings affecting a widget defined by @path, or %NULL if
- * @provider doesn’t contemplate styling @path.
- *
- * Returns: (nullable) (transfer full): a #GtkStyleProperties containing the
- * style settings affecting @path
- *
- * Since: 3.0
- *
- * Deprecated: 3.8: Will always return %NULL for all GTK-provided style providers
- *     as the interface cannot correctly work the way CSS is specified.
- **/
-GtkStyleProperties *
-gtk_style_provider_get_style (GtkStyleProvider *provider,
-                              GtkWidgetPath    *path)
-{
-  GtkStyleProviderIface *iface;
-
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
-
-  iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
-
-  if (!iface->get_style)
-    return NULL;
-
-  return iface->get_style (provider, path);
-}
-
-/**
  * gtk_style_provider_get_style_property:
  * @provider: a #GtkStyleProvider
  * @path: #GtkWidgetPath to query

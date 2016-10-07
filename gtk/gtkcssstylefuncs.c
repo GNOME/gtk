@@ -146,7 +146,7 @@ rgba_value_parse (GtkCssParser *parser,
   if (symbolic == NULL)
     return FALSE;
 
-  if (gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
+  if (gtk_symbolic_color_resolve (symbolic, &rgba))
     {
       g_value_set_boxed (value, &rgba);
       gtk_symbolic_color_unref (symbolic);
@@ -234,7 +234,7 @@ color_value_parse (GtkCssParser *parser,
   if (symbolic == NULL)
     return FALSE;
 
-  if (gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
+  if (gtk_symbolic_color_resolve (symbolic, &rgba))
     {
       GdkColor color;
 

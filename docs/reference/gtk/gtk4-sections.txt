@@ -5645,34 +5645,6 @@ gtk_style_provider_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkstyleproperties</FILE>
-<TITLE>GtkStyleProperties</TITLE>
-GtkStyleProperties
-gtk_style_properties_clear
-gtk_style_properties_get
-gtk_style_properties_get_property
-gtk_style_properties_get_valist
-gtk_style_properties_lookup_color
-gtk_style_properties_lookup_property
-gtk_style_properties_map_color
-gtk_style_properties_merge
-gtk_style_properties_new
-GtkStylePropertyParser
-gtk_style_properties_register_property
-gtk_style_properties_unset_property
-<SUBSECTION Standard>
-GTK_TYPE_STYLE_PROPERTIES
-GTK_IS_STYLE_PROPERTIES
-GTK_IS_STYLE_PROPERTIES_CLASS
-GTK_STYLE_PROPERTIES
-GTK_STYLE_PROPERTIES_CLASS
-GTK_STYLE_PROPERTIES_GET_CLASS
-<SUBSECTION Private>
-GtkStylePropertiesPrivate
-gtk_style_properties_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkstylecontext</FILE>
 <TITLE>GtkStyleContext</TITLE>
 <SUBSECTION>

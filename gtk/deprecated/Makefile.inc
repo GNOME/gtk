@@ -7,7 +7,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrecentaction.h	\
 	deprecated/gtkstock.h		\
-	deprecated/gtkstyleproperties.h	\
 	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
 	deprecated/gtktoggleaction.h	\
@@ -26,7 +25,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrecentaction.c	\
 	deprecated/gtkstock.c		\
-	deprecated/gtkstyleproperties.c	\
 	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktable.c		\
 	deprecated/gtktoggleaction.c	\

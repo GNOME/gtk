@@ -25,7 +25,6 @@
 #include "gtkhslaprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtksymboliccolorprivate.h"
-#include "gtkstyleproperties.h"
 #include "gtkintl.h"
 #include "gtkwin32themeprivate.h"
 
@@ -292,7 +291,6 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
  **/
 gboolean
 gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
-			    GtkStyleProperties *props,
 			    GdkRGBA            *resolved_color)
 {
   GdkRGBA pink = { 1.0, 0.5, 0.5, 1.0 };
@@ -300,11 +298,10 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
 
   g_return_val_if_fail (color != NULL, FALSE);
   g_return_val_if_fail (resolved_color != NULL, FALSE);
-  g_return_val_if_fail (props == NULL || GTK_IS_STYLE_PROPERTIES (props), FALSE);
 
   current = _gtk_css_rgba_value_new_from_rgba (&pink);
   v = _gtk_css_color_value_resolve (color->value,
-                                    GTK_STYLE_PROVIDER_PRIVATE (props),
+                                    NULL,
                                     current,
                                     NULL);
   _gtk_css_value_unref (current);

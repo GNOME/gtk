@@ -34,6 +34,10 @@ G_BEGIN_DECLS
 typedef struct _GtkCssCustomProperty           GtkCssCustomProperty;
 typedef struct _GtkCssCustomPropertyClass      GtkCssCustomPropertyClass;
 
+typedef gboolean (* GtkStylePropertyParser) (const gchar  *string,
+                                             GValue       *value,
+                                             GError      **error);
+
 struct _GtkCssCustomProperty
 {
   GtkCssStyleProperty parent;
