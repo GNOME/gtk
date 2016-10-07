@@ -40,19 +40,8 @@ G_BEGIN_DECLS
 
 /* Debugging support */
 
-typedef struct _GdkColorInfo           GdkColorInfo;
 typedef struct _GdkEventFilter         GdkEventFilter;
 typedef struct _GdkClientFilter        GdkClientFilter;
-
-typedef enum {
-  GDK_COLOR_WRITEABLE = 1 << 0
-} GdkColorInfoFlags;
-
-struct _GdkColorInfo
-{
-  GdkColorInfoFlags flags;
-  guint ref_count;
-};
 
 typedef enum {
   GDK_EVENT_FILTER_REMOVED = 1 << 0

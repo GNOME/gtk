@@ -123,7 +123,6 @@ GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
 
 #define GDK_WINDOW_IS_WIN32(win)        (GDK_IS_WINDOW_IMPL_WIN32 (win->impl))
 
-typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
 
 struct _GdkWin32Cursor
@@ -147,17 +146,6 @@ typedef enum {
   GDK_WIN32_PE_AVAILABLE,
   GDK_WIN32_PE_INUSE
 } GdkWin32PalEntryState;
-
-struct _GdkColormapPrivateWin32
-{
-  HPALETTE hpal;
-  gint current_size;		/* Current size of hpal */
-  GdkWin32PalEntryState *use;
-  gint private_val;
-
-  GHashTable *hash;
-  GdkColorInfo *info;
-};
 
 GType _gdk_gc_win32_get_type (void);
 
@@ -346,8 +334,6 @@ void  _gdk_win32_end_modal_call (void);
 /* Options */
 extern gboolean		 _gdk_input_ignore_wintab;
 extern gint		 _gdk_max_colors;
-
-#define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
 
 /* TRUE while a modal sizing, moving, or dnd operation is in progress */
 extern gboolean		_modal_operation_in_progress;
