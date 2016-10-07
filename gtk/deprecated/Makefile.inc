@@ -15,7 +15,6 @@ deprecated_h_sources = 			\
 
 deprecated_private_h_sources =			\
 	deprecated/gtkgradientprivate.h		\
-	deprecated/gtkstylepropertiesprivate.h	\
 	deprecated/gtksymboliccolorprivate.h
 
 deprecated_c_sources = 			\

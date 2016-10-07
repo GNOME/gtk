@@ -29,7 +29,6 @@
 #include "gtkcssunsetvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
-#include "deprecated/gtkstylepropertiesprivate.h"
 #include "gtkprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
@@ -120,25 +119,6 @@ gtk_css_style_property_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-_gtk_css_style_property_assign (GtkStyleProperty   *property,
-                                GtkStyleProperties *props,
-                                GtkStateFlags       state,
-                                const GValue       *value)
-{
-  GtkCssStyleProperty *style;
-  GtkCssValue *css_value;
-  
-  style = GTK_CSS_STYLE_PROPERTY (property);
-  css_value = style->assign_value (style, value);
-
-  _gtk_style_properties_set_property_by_property (props,
-                                                  style,
-                                                  state,
-                                                  css_value);
-  _gtk_css_value_unref (css_value);
 }
 
 static void
@@ -239,7 +219,6 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                                        GTK_TYPE_CSS_VALUE,
                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-  property_class->assign = _gtk_css_style_property_assign;
   property_class->query = _gtk_css_style_property_query;
   property_class->parse_value = gtk_css_style_property_parse_value;
 

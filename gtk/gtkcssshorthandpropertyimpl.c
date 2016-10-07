@@ -39,7 +39,6 @@
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcssvalueprivate.h"
-#include "deprecated/gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
 
 /* this is in case round() is not provided by the compiler, 
@@ -936,29 +935,6 @@ parse_all (GtkCssShorthandProperty  *shorthand,
 /*** PACKING ***/
 
 static void
-unpack_border (GtkCssShorthandProperty *shorthand,
-               GtkStyleProperties      *props,
-               GtkStateFlags            state,
-               const GValue            *value)
-{
-  GValue v = G_VALUE_INIT;
-  GtkBorder *border = g_value_get_boxed (value);
-
-  g_value_init (&v, G_TYPE_INT);
-
-  g_value_set_int (&v, border->top);
-  _gtk_style_property_assign (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, 0)), props, state, &v);
-  g_value_set_int (&v, border->right);
-  _gtk_style_property_assign (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, 1)), props, state, &v);
-  g_value_set_int (&v, border->bottom);
-  _gtk_style_property_assign (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, 2)), props, state, &v);
-  g_value_set_int (&v, border->left);
-  _gtk_style_property_assign (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, 3)), props, state, &v);
-
-  g_value_unset (&v);
-}
-
-static void
 pack_border (GtkCssShorthandProperty *shorthand,
              GValue                  *value,
              GtkStyleQueryFunc        query_func,
@@ -993,27 +969,6 @@ pack_border (GtkCssShorthandProperty *shorthand,
 }
 
 static void
-unpack_border_radius (GtkCssShorthandProperty *shorthand,
-                      GtkStyleProperties      *props,
-                      GtkStateFlags            state,
-                      const GValue            *value)
-{
-  GtkCssValue *css_value;
-  guint i;
-  
-  css_value = _gtk_css_corner_value_new (_gtk_css_number_value_new (g_value_get_int (value), GTK_CSS_PX),
-                                         _gtk_css_number_value_new (g_value_get_int (value), GTK_CSS_PX));
-
-  for (i = 0; i < 4; i++)
-    _gtk_style_properties_set_property_by_property (props,
-                                                    _gtk_css_shorthand_property_get_subproperty (shorthand, i),
-                                                    state,
-                                                    css_value);
-
-  _gtk_css_value_unref (css_value);
-}
-
-static void
 pack_border_radius (GtkCssShorthandProperty *shorthand,
                     GValue                  *value,
                     GtkStyleQueryFunc        query_func,
@@ -1030,100 +985,6 @@ pack_border_radius (GtkCssShorthandProperty *shorthand,
 
   g_value_init (value, G_TYPE_INT);
   g_value_set_int (value, i);
-}
-
-static void
-unpack_font_description (GtkCssShorthandProperty *shorthand,
-                         GtkStyleProperties      *props,
-                         GtkStateFlags            state,
-                         const GValue            *value)
-{
-  GtkStyleProperty *prop;
-  PangoFontDescription *description;
-  PangoFontMask mask;
-  GValue v = G_VALUE_INIT;
-  
-  /* For backwards compat, we only unpack values that are indeed set.
-   * For strict CSS conformance we need to unpack all of them.
-   * Note that we do set all of them in the parse function, so it
-   * will not have effects when parsing CSS files. It will though
-   * for custom style providers.
-   */
-
-  description = g_value_get_boxed (value);
-
-  if (description)
-    mask = pango_font_description_get_set_fields (description);
-  else
-    mask = 0;
-
-  if (mask & PANGO_FONT_MASK_FAMILY)
-    {
-      GPtrArray *strv = g_ptr_array_new ();
-
-      g_ptr_array_add (strv, g_strdup (pango_font_description_get_family (description)));
-      g_ptr_array_add (strv, NULL);
-      g_value_init (&v, G_TYPE_STRV);
-      g_value_take_boxed (&v, g_ptr_array_free (strv, FALSE));
-
-      prop = _gtk_style_property_lookup ("font-family");
-      _gtk_style_property_assign (prop, props, state, &v);
-      g_value_unset (&v);
-    }
-
-  if (mask & PANGO_FONT_MASK_STYLE)
-    {
-      g_value_init (&v, PANGO_TYPE_STYLE);
-      g_value_set_enum (&v, pango_font_description_get_style (description));
-
-      prop = _gtk_style_property_lookup ("font-style");
-      _gtk_style_property_assign (prop, props, state, &v);
-      g_value_unset (&v);
-    }
-
-  if (mask & PANGO_FONT_MASK_VARIANT)
-    {
-      g_value_init (&v, PANGO_TYPE_VARIANT);
-      g_value_set_enum (&v, pango_font_description_get_variant (description));
-
-      prop = _gtk_style_property_lookup ("font-variant");
-      _gtk_style_property_assign (prop, props, state, &v);
-      g_value_unset (&v);
-    }
-
-  if (mask & PANGO_FONT_MASK_WEIGHT)
-    {
-      g_value_init (&v, PANGO_TYPE_WEIGHT);
-      g_value_set_enum (&v, pango_font_description_get_weight (description));
-
-      prop = _gtk_style_property_lookup ("font-weight");
-      _gtk_style_property_assign (prop, props, state, &v);
-      g_value_unset (&v);
-    }
-
-  if (mask & PANGO_FONT_MASK_STRETCH)
-    {
-      g_value_init (&v, PANGO_TYPE_STRETCH);
-      g_value_set_enum (&v, pango_font_description_get_stretch (description));
-
-      prop = _gtk_style_property_lookup ("font-stretch");
-      _gtk_style_property_assign (prop, props, state, &v);
-      g_value_unset (&v);
-    }
-
-  if (mask & PANGO_FONT_MASK_SIZE)
-    {
-      double size;
-
-      g_value_init (&v, G_TYPE_DOUBLE);
-      size = pango_font_description_get_size (description) / PANGO_SCALE;
-      if (!pango_font_description_get_size_is_absolute (description))
-        size = size * 96.0 / 72.0;
-      g_value_set_double (&v, size);
-      prop = _gtk_style_property_lookup ("font-size");
-      _gtk_style_property_assign (prop, props, state, &v);
-      g_value_unset (&v);
-    }
 }
 
 static void
@@ -1172,24 +1033,6 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 }
 
 static void
-unpack_to_everything (GtkCssShorthandProperty *shorthand,
-                      GtkStyleProperties      *props,
-                      GtkStateFlags            state,
-                      const GValue            *value)
-{
-  GtkCssStyleProperty *prop;
-  guint i, n;
-  
-  n = _gtk_css_shorthand_property_get_n_subproperties (shorthand);
-
-  for (i = 0; i < n; i++)
-    {
-      prop = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
-      _gtk_style_property_assign (GTK_STYLE_PROPERTY (prop), props, state, value);
-    }
-}
-
-static void
 pack_first_element (GtkCssShorthandProperty *shorthand,
                     GValue                  *value,
                     GtkStyleQueryFunc        query_func,
@@ -1214,7 +1057,6 @@ _gtk_css_shorthand_property_register (const char                        *name,
                                       GType                              value_type,
                                       const char                       **subproperties,
                                       GtkCssShorthandPropertyParseFunc   parse_func,
-                                      GtkCssShorthandPropertyAssignFunc  assign_func,
                                       GtkCssShorthandPropertyQueryFunc   query_func)
 {
   GtkCssShorthandProperty *node;
@@ -1226,7 +1068,6 @@ _gtk_css_shorthand_property_register (const char                        *name,
                        NULL);
 
   node->parse = parse_func;
-  node->assign = assign_func;
   node->query = query_func;
 }
 
@@ -1286,116 +1127,97 @@ _gtk_css_shorthand_property_init_properties (void)
                                           PANGO_TYPE_FONT_DESCRIPTION,
                                           font_subproperties,
                                           parse_font,
-                                          unpack_font_description,
                                           pack_font_description);
   _gtk_css_shorthand_property_register   ("margin",
                                           GTK_TYPE_BORDER,
                                           margin_subproperties,
                                           parse_margin,
-                                          unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("padding",
                                           GTK_TYPE_BORDER,
                                           padding_subproperties,
                                           parse_padding,
-                                          unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("border-width",
                                           GTK_TYPE_BORDER,
                                           border_width_subproperties,
                                           parse_border_width,
-                                          unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("border-radius",
                                           G_TYPE_INT,
                                           border_radius_subproperties,
                                           parse_border_radius,
-                                          unpack_border_radius,
                                           pack_border_radius);
   _gtk_css_shorthand_property_register   ("border-color",
                                           GDK_TYPE_RGBA,
                                           border_color_subproperties,
                                           parse_border_color,
-                                          unpack_to_everything,
                                           pack_first_element);
   _gtk_css_shorthand_property_register   ("border-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           border_style_subproperties,
                                           parse_border_style,
-                                          unpack_to_everything,
                                           pack_first_element);
   _gtk_css_shorthand_property_register   ("border-image",
                                           G_TYPE_NONE,
                                           border_image_subproperties,
                                           parse_border_image,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("border-top",
                                           G_TYPE_NONE,
                                           border_top_subproperties,
                                           parse_border_side,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("border-right",
                                           G_TYPE_NONE,
                                           border_right_subproperties,
                                           parse_border_side,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("border-bottom",
                                           G_TYPE_NONE,
                                           border_bottom_subproperties,
                                           parse_border_side,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("border-left",
                                           G_TYPE_NONE,
                                           border_left_subproperties,
                                           parse_border_side,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("border",
                                           G_TYPE_NONE,
                                           border_subproperties,
                                           parse_border,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("-gtk-outline-radius",
                                           G_TYPE_INT,
                                           outline_radius_subproperties,
                                           parse_border_radius,
-                                          unpack_border_radius,
                                           pack_border_radius);
   _gtk_style_property_add_alias ("-gtk-outline-radius", "outline-radius");
   _gtk_css_shorthand_property_register   ("outline",
                                           G_TYPE_NONE,
                                           outline_subproperties,
                                           parse_border_side,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("background",
                                           G_TYPE_NONE,
                                           background_subproperties,
                                           parse_background,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("transition",
                                           G_TYPE_NONE,
                                           transition_subproperties,
                                           parse_transition,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("animation",
                                           G_TYPE_NONE,
                                           animation_subproperties,
                                           parse_animation,
-                                          NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("text-decoration",
                                           G_TYPE_NONE,
                                           text_decoration_subproperties,
                                           parse_text_decoration,
-                                          NULL,
                                           NULL);
 
   all_subproperties = get_all_subproperties ();
@@ -1403,7 +1225,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           all_subproperties,
                                           parse_all,
-                                          NULL,
                                           NULL);
   g_free (all_subproperties);
 }

@@ -5659,9 +5659,6 @@ gtk_style_properties_merge
 gtk_style_properties_new
 GtkStylePropertyParser
 gtk_style_properties_register_property
-gtk_style_properties_set
-gtk_style_properties_set_property
-gtk_style_properties_set_valist
 gtk_style_properties_unset_property
 <SUBSECTION Standard>
 GTK_TYPE_STYLE_PROPERTIES

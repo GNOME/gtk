@@ -25,7 +25,6 @@
 
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypedvalueprivate.h"
-#include "deprecated/gtkstylepropertiesprivate.h"
 
 #include "deprecated/gtksymboliccolor.h"
 
@@ -60,27 +59,12 @@ gtk_css_custom_property_query (GtkStyleProperty   *property,
 }
 
 static void
-gtk_css_custom_property_assign (GtkStyleProperty   *property,
-                                GtkStyleProperties *props,
-                                GtkStateFlags       state,
-                                const GValue       *value)
-{
-  GtkCssValue *css_value = _gtk_css_typed_value_new (value);
-  _gtk_style_properties_set_property_by_property (props,
-                                                  GTK_CSS_STYLE_PROPERTY (property),
-                                                  state,
-                                                  css_value);
-  _gtk_css_value_unref (css_value);
-}
-
-static void
 _gtk_css_custom_property_class_init (GtkCssCustomPropertyClass *klass)
 {
   GtkStylePropertyClass *property_class = GTK_STYLE_PROPERTY_CLASS (klass);
 
   property_class->parse_value = gtk_css_custom_property_parse_value;
   property_class->query = gtk_css_custom_property_query;
-  property_class->assign = gtk_css_custom_property_assign;
 }
 
 static void

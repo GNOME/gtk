@@ -89,20 +89,6 @@ GtkSymbolicColor * gtk_style_properties_lookup_color (GtkStyleProperties *props,
                                                       const gchar        *name);
 
 GDK_DEPRECATED_IN_3_16
-void     gtk_style_properties_set_property (GtkStyleProperties *props,
-                                            const gchar        *property,
-                                            GtkStateFlags       state,
-                                            const GValue       *value);
-GDK_DEPRECATED_IN_3_16
-void     gtk_style_properties_set_valist   (GtkStyleProperties *props,
-                                            GtkStateFlags       state,
-                                            va_list             args);
-GDK_DEPRECATED_IN_3_16
-void     gtk_style_properties_set          (GtkStyleProperties *props,
-                                            GtkStateFlags       state,
-                                            ...) G_GNUC_NULL_TERMINATED;
-
-GDK_DEPRECATED_IN_3_16
 gboolean gtk_style_properties_get_property (GtkStyleProperties *props,
                                             const gchar        *property,
                                             GtkStateFlags       state,

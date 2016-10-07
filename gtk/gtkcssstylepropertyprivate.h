@@ -39,8 +39,6 @@ typedef GtkCssValue *    (* GtkCssStylePropertyParseFunc)  (GtkCssStyleProperty 
 typedef void             (* GtkCssStylePropertyQueryFunc)  (GtkCssStyleProperty    *property,
                                                             const GtkCssValue      *cssvalue,
                                                             GValue                 *value);
-typedef GtkCssValue *    (* GtkCssStylePropertyAssignFunc) (GtkCssStyleProperty    *property,
-                                                            const GValue           *value);
 struct _GtkCssStyleProperty
 {
   GtkStyleProperty parent;
@@ -53,7 +51,6 @@ struct _GtkCssStyleProperty
 
   GtkCssStylePropertyParseFunc parse_value;
   GtkCssStylePropertyQueryFunc query_value;
-  GtkCssStylePropertyAssignFunc assign_value;
 };
 
 struct _GtkCssStylePropertyClass

@@ -159,37 +159,6 @@ _gtk_style_property_parse_value (GtkStyleProperty *property,
 }
 
 /**
- * _gtk_style_property_assign:
- * @property: the property
- * @props: The properties to assign to
- * @state: The state to assign
- * @value: (out): the #GValue with the value to be
- *     assigned
- *
- * This function is called by gtk_style_properties_set() and in
- * turn gtk_style_context_set() and similar functions to set the
- * value from code using old APIs.
- **/
-void
-_gtk_style_property_assign (GtkStyleProperty   *property,
-                            GtkStyleProperties *props,
-                            GtkStateFlags       state,
-                            const GValue       *value)
-{
-  GtkStylePropertyClass *klass;
-
-  g_return_if_fail (GTK_IS_STYLE_PROPERTY (property));
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
-G_GNUC_END_IGNORE_DEPRECATIONS;
-  g_return_if_fail (value != NULL);
-
-  klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
-
-  klass->assign (property, props, state, value);
-}
-
-/**
  * _gtk_style_property_query:
  * @property: the property
  * @value: (out): an uninitialized #GValue to be filled with the
@@ -298,9 +267,8 @@ _gtk_style_property_get_name (GtkStyleProperty *property)
  * @property: the property to query
  *
  * Gets the value type of the @property, if the property is usable
- * in public API via _gtk_style_property_assign() and
- * _gtk_style_property_query(). If the @property is not usable in that
- * way, %G_TYPE_NONE is returned.
+ * in public API via _gtk_style_property_query(). If the @property is not
+ * usable in that way, %G_TYPE_NONE is returned.
  *
  * Returns: the value type in use or %G_TYPE_NONE if none.
  **/

@@ -64,17 +64,6 @@ gtk_css_shorthand_property_set_property (GObject      *object,
 }
 
 static void
-_gtk_css_shorthand_property_assign (GtkStyleProperty   *property,
-                                    GtkStyleProperties *props,
-                                    GtkStateFlags       state,
-                                    const GValue       *value)
-{
-  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
-
-  shorthand->assign (shorthand, props, state, value);
-}
-
-static void
 _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
                                    GValue             *value,
                                    GtkStyleQueryFunc   query_func,
@@ -172,7 +161,6 @@ _gtk_css_shorthand_property_class_init (GtkCssShorthandPropertyClass *klass)
                                                        G_TYPE_STRV,
                                                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
-  property_class->assign = _gtk_css_shorthand_property_assign;
   property_class->query = _gtk_css_shorthand_property_query;
   property_class->parse_value = gtk_css_shorthand_property_parse_value;
 }

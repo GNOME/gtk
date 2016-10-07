@@ -49,10 +49,6 @@ struct _GtkStylePropertyClass
 {
   GObjectClass  parent_class;
   
-  void              (* assign)                             (GtkStyleProperty       *property,
-                                                            GtkStyleProperties     *props,
-                                                            GtkStateFlags           state,
-                                                            const GValue           *value);
   void              (* query)                              (GtkStyleProperty       *property,
                                                             GValue                 *value,
                                                             GtkStyleQueryFunc       query_func,
@@ -82,10 +78,6 @@ void                     _gtk_style_property_query         (GtkStyleProperty *  
                                                             GValue                 *value,
                                                             GtkStyleQueryFunc       query_func,
                                                             gpointer                query_data);
-void                     _gtk_style_property_assign        (GtkStyleProperty       *property,
-                                                            GtkStyleProperties     *props,
-                                                            GtkStateFlags           state,
-                                                            const GValue           *value);
 
 G_END_DECLS
 
