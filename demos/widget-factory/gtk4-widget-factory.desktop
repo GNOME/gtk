@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Widget Factory
+Comment=A showcase for GTK+ widgets, designed for testing themes.
+Exec=gtk4-widget-factory
+Icon=gtk4-widget-factory
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Development;GTK;
+NoDisplay=true
