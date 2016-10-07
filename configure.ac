@@ -1895,7 +1895,6 @@ gdk-4.0.pc
 gtk+-4.0.pc
 gtk+-unix-print-4.0.pc
 gail-4.0.pc
-m4macros/Makefile
 po/Makefile.in
 po-properties/Makefile.in
 demos/Makefile
