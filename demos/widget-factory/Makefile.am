@@ -1,29 +1,29 @@
 include $(top_srcdir)/Makefile.decl
 
-bin_PROGRAMS = gtk3-widget-factory
+bin_PROGRAMS = gtk4-widget-factory
 
 desktopdir = $(datadir)/applications
-dist_desktop_DATA = gtk3-widget-factory.desktop
+dist_desktop_DATA = gtk4-widget-factory.desktop
 
-gtk3_widget_factory_SOURCES = 		\
+gtk4_widget_factory_SOURCES = 		\
 	widget-factory.c		\
 	widget_factory_resources.c
 
 BUILT_SOURCES = 			\
 	widget_factory_resources.c
 
-gtk3_widget_factory_DEPENDENCIES = 	\
-	$(top_builddir)/gtk/libgtk-3.la
+gtk4_widget_factory_DEPENDENCIES = 	\
+	$(top_builddir)/gtk/libgtk-4.la
 
-gtk3_widget_factory_CPPFLAGS = 		\
+gtk4_widget_factory_CPPFLAGS = 		\
 	-I$(top_srcdir)			\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)		\
 	$(NULL)
 
-gtk3_widget_factory_LDADD = 		\
-	$(top_builddir)/gdk/libgdk-3.la \
-	$(top_builddir)/gtk/libgtk-3.la \
+gtk4_widget_factory_LDADD = 		\
+	$(top_builddir)/gdk/libgdk-4.la \
+	$(top_builddir)/gtk/libgtk-4.la \
 	$(GTK_DEP_LIBS)			\
 	$(NULL)
 
@@ -40,12 +40,12 @@ appsicon32dir = $(iconthemedir)/32x32/apps
 appsicon48dir = $(iconthemedir)/48x48/apps
 appsicon256dir = $(iconthemedir)/256x256/apps
 
-dist_appsicon16_DATA = data/16x16/gtk3-widget-factory.png data/16x16/gtk3-widget-factory-symbolic.symbolic.png
-dist_appsicon22_DATA = data/22x22/gtk3-widget-factory.png data/22x22/gtk3-widget-factory-symbolic.symbolic.png
-dist_appsicon24_DATA = data/24x24/gtk3-widget-factory.png data/24x24/gtk3-widget-factory-symbolic.symbolic.png
-dist_appsicon32_DATA = data/32x32/gtk3-widget-factory.png data/32x32/gtk3-widget-factory-symbolic.symbolic.png
-dist_appsicon48_DATA = data/48x48/gtk3-widget-factory.png data/48x48/gtk3-widget-factory-symbolic.symbolic.png
-dist_appsicon256_DATA = data/256x256/gtk3-widget-factory.png data/256x256/gtk3-widget-factory-symbolic.symbolic.png
+dist_appsicon16_DATA = data/16x16/gtk4-widget-factory.png data/16x16/gtk4-widget-factory-symbolic.symbolic.png
+dist_appsicon22_DATA = data/22x22/gtk4-widget-factory.png data/22x22/gtk4-widget-factory-symbolic.symbolic.png
+dist_appsicon24_DATA = data/24x24/gtk4-widget-factory.png data/24x24/gtk4-widget-factory-symbolic.symbolic.png
+dist_appsicon32_DATA = data/32x32/gtk4-widget-factory.png data/32x32/gtk4-widget-factory-symbolic.symbolic.png
+dist_appsicon48_DATA = data/48x48/gtk4-widget-factory.png data/48x48/gtk4-widget-factory-symbolic.symbolic.png
+dist_appsicon256_DATA = data/256x256/gtk4-widget-factory.png data/256x256/gtk4-widget-factory-symbolic.symbolic.png
 
 update_icon_cache = $(top_builddir)/gtk/gtk-update-icon-cache$(EXEEXT) --ignore-theme-index --force
 

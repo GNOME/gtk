@@ -6,17 +6,17 @@ AM_CPPFLAGS = \
 	$(GTK_DEP_CFLAGS)
 
 LDADD = \
-        $(top_builddir)/gtk/libgtk-3.la \
-        $(top_builddir)/gdk/libgdk-3.la \
+        $(top_builddir)/gtk/libgtk-4.la \
+        $(top_builddir)/gdk/libgdk-4.la \
         $(GTK_DEP_LIBS)
 
 
-bin_PROGRAMS = gtk3-icon-browser
+bin_PROGRAMS = gtk4-icon-browser
 
 desktopdir = $(datadir)/applications
-dist_desktop_DATA = gtk3-icon-browser.desktop
+dist_desktop_DATA = gtk4-icon-browser.desktop
 
-gtk3_icon_browser_SOURCES = \
+gtk4_icon_browser_SOURCES = \
 	main.c \
 	iconbrowserapp.c iconbrowserapp.h \
 	iconbrowserwin.c iconbrowserwin.h \
@@ -36,13 +36,13 @@ EXTRA_DIST = \
 	window.ui
 
 # ------------------- MSVC Build Items ----------------
-MSVCPROJS = gtk3-icon-browser
+MSVCPROJS = gtk4-icon-browser
 
-gtk3_icon_browser_FILES = $(gtk3_icon_browser_SOURCES)
-gtk3_icon_browser_EXCLUDES = dummy
+gtk4_icon_browser_FILES = $(gtk4_icon_browser_SOURCES)
+gtk4_icon_browser_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
-dist-hook: $(top_builddir)/build/win32/vs9/gtk3-icon-browser.vcproj
+dist-hook: $(top_builddir)/build/win32/vs9/gtk4-icon-browser.vcproj
 
 -include $(top_srcdir)/git.mk
