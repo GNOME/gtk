@@ -3,7 +3,7 @@
 AUTOMAKE_OPTIONS = 1.7
 
 # The name of the module.
-DOC_MODULE=gail-libgail-util3
+DOC_MODULE=gail-libgail-util4
 
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gail-libgail-util-docs.sgml
@@ -22,7 +22,7 @@ AM_CPPFLAGS =                   \
         -I$(top_builddir)       \
         $(DEP_CFLAGS)
 
-GTKDOC_LIBS = $(top_builddir)/libgail-util/libgailutil-3.la
+GTKDOC_LIBS = $(top_builddir)/libgail-util/libgailutil-4.la
 
 # gtkdoc-mkdb related varaibles
 MKDB_OPTIONS =

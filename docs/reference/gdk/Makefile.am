@@ -3,7 +3,7 @@
 AUTOMAKE_OPTIONS = 1.6
 
 # The name of the module.
-DOC_MODULE=gdk3
+DOC_MODULE=gdk4
 
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gdk-docs.sgml
@@ -61,7 +61,7 @@ AM_CPPFLAGS = 			\
 	$(GTK_DEBUG_FLAGS)	\
 	$(GDK_DEP_CFLAGS)
 
-GTKDOC_LIBS = $(top_builddir)/gdk/libgdk-3.la $(GDK_DEP_LIBS)
+GTKDOC_LIBS = $(top_builddir)/gdk/libgdk-4.la $(GDK_DEP_LIBS)
 
 # Extra options to supply to gtkdoc-mkdb
 MKDB_OPTIONS=--output-format=xml --name-space=gdk
