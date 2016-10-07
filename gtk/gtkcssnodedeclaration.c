@@ -22,14 +22,6 @@
 
 #include <string.h>
 
-typedef struct _GtkRegion GtkRegion;
-
-struct _GtkRegion
-{
-  GQuark class_quark;
-  GtkRegionFlags flags;
-};
-
 struct _GtkCssNodeDeclaration {
   guint refcount;
   GtkJunctionSides junction_sides;
@@ -38,9 +30,7 @@ struct _GtkCssNodeDeclaration {
   const /* interned */ char *id;
   GtkStateFlags state;
   guint n_classes;
-  guint n_regions;
   /* GQuark classes[n_classes]; */
-  /* GtkRegion region[n_regions]; */
 };
 
 static inline GQuark *
@@ -49,25 +39,17 @@ get_classes (const GtkCssNodeDeclaration *decl)
   return (GQuark *) (decl + 1);
 }
 
-static inline GtkRegion *
-get_regions (const GtkCssNodeDeclaration *decl)
-{
-  return (GtkRegion *) (get_classes (decl) + decl->n_classes);
-}
-
 static inline gsize
-sizeof_node (guint n_classes,
-             guint n_regions)
+sizeof_node (guint n_classes)
 {
   return sizeof (GtkCssNodeDeclaration)
-       + sizeof (GQuark) * n_classes
-       + sizeof (GtkRegion) * n_regions;
+       + sizeof (GQuark) * n_classes;
 }
 
 static inline gsize
 sizeof_this_node (GtkCssNodeDeclaration *decl)
 {
-  return sizeof_node (decl->n_classes, decl->n_regions);
+  return sizeof_node (decl->n_classes);
 }
 
 static void
@@ -122,7 +104,6 @@ gtk_css_node_declaration_new (void)
     0,
     NULL,
     NULL,
-    0,
     0,
     0
   };
@@ -382,155 +363,11 @@ gtk_css_node_declaration_get_classes (const GtkCssNodeDeclaration *decl,
   return get_classes (decl);
 }
 
-static gboolean
-find_region (const GtkCssNodeDeclaration *decl,
-             GQuark                       region_quark,
-             guint                       *position)
-{
-  gint min, max, mid;
-  gboolean found = FALSE;
-  GtkRegion *regions;
-  guint pos;
-
-  if (position)
-    *position = 0;
-
-  if (decl->n_regions == 0)
-    return FALSE;
-
-  min = 0;
-  max = decl->n_regions - 1;
-  regions = get_regions (decl);
-
-  do
-    {
-      GQuark item;
-
-      mid = (min + max) / 2;
-      item = regions[mid].class_quark;
-
-      if (region_quark == item)
-        {
-          found = TRUE;
-          pos = mid;
-          break;
-        }
-      else if (region_quark > item)
-        min = pos = mid + 1;
-      else
-        {
-          max = mid - 1;
-          pos = mid;
-        }
-    }
-  while (min <= max);
-
-  if (position)
-    *position = pos;
-
-  return found;
-}
-
-gboolean
-gtk_css_node_declaration_add_region (GtkCssNodeDeclaration **decl,
-                                     GQuark                  region_quark,
-                                     GtkRegionFlags          flags)
-{
-  GtkRegion *regions;
-  guint pos;
-
-  if (find_region (*decl, region_quark, &pos))
-    return FALSE;
-
-  gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) &get_regions (*decl)[pos] - (char *) *decl,
-                                                 sizeof (GtkRegion),
-                                                 0);
-  (*decl)->n_regions++;
-  regions = get_regions(*decl);
-  regions[pos].class_quark = region_quark;
-  regions[pos].flags = flags;
-
-  return TRUE;
-}
-
-gboolean
-gtk_css_node_declaration_remove_region (GtkCssNodeDeclaration **decl,
-                                        GQuark                  region_quark)
-{
-  guint pos;
-
-  if (!find_region (*decl, region_quark, &pos))
-    return FALSE;
-
-  gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) &get_regions (*decl)[pos] - (char *) *decl,
-                                                 0,
-                                                 sizeof (GtkRegion));
-  (*decl)->n_regions--;
-
-  return TRUE;
-}
-
-gboolean
-gtk_css_node_declaration_clear_regions (GtkCssNodeDeclaration **decl)
-{
-  if ((*decl)->n_regions == 0)
-    return FALSE;
-
-  gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) get_regions (*decl) - (char *) *decl,
-                                                 0,
-                                                 sizeof (GtkRegion) * (*decl)->n_regions);
-  (*decl)->n_regions = 0;
-
-  return TRUE;
-}
-
-gboolean
-gtk_css_node_declaration_has_region (const GtkCssNodeDeclaration  *decl,
-                                     GQuark                        region_quark,
-                                     GtkRegionFlags               *flags_return)
-{
-  guint pos;
-
-  if (!find_region (decl, region_quark, &pos))
-    {
-      if (flags_return)
-        *flags_return = 0;
-      return FALSE;
-    }
-
-  if (flags_return)
-    *flags_return = get_regions (decl)[pos].flags;
-
-  return TRUE;
-}
-
-GList *
-gtk_css_node_declaration_list_regions (const GtkCssNodeDeclaration *decl)
-{
-  GtkRegion *regions;
-  GList *result;
-  guint i;
-
-  regions = get_regions (decl);
-  result = NULL;
-
-  for (i = 0; i < decl->n_regions; i++)
-    {
-      result = g_list_prepend (result, GUINT_TO_POINTER (regions[i].class_quark));
-    }
-
-  return result;
-}
-
 guint
 gtk_css_node_declaration_hash (gconstpointer elem)
 {
   const GtkCssNodeDeclaration *decl = elem;
   GQuark *classes;
-  GtkRegion *regions;
   guint hash, i;
   
   hash = (guint) decl->type;
@@ -543,14 +380,6 @@ gtk_css_node_declaration_hash (gconstpointer elem)
     {
       hash <<= 5;
       hash += classes[i];
-    }
-
-  regions = get_regions (decl);
-  for (i = 0; i < decl->n_regions; i++)
-    {
-      hash <<= 5;
-      hash += regions[i].class_quark;
-      hash += regions[i].flags;
     }
 
   hash ^= ((guint) decl->junction_sides) << (sizeof (guint) * 8 - 5);
@@ -566,7 +395,6 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
   const GtkCssNodeDeclaration *decl1 = elem1;
   const GtkCssNodeDeclaration *decl2 = elem2;
   GQuark *classes1, *classes2;
-  GtkRegion *regions1, *regions2;
   guint i;
 
   if (decl1 == decl2)
@@ -595,18 +423,6 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
         return FALSE;
     }
 
-  if (decl1->n_regions != decl2->n_regions)
-    return FALSE;
-
-  regions1 = get_regions (decl1);
-  regions2 = get_regions (decl2);
-  for (i = 0; i < decl1->n_regions; i++)
-    {
-      if (regions1[i].class_quark != regions2[i].class_quark ||
-          regions1[i].flags != regions2[i].flags)
-        return FALSE;
-    }
-
   if (decl1->junction_sides != decl2->junction_sides)
     return FALSE;
 
@@ -619,24 +435,12 @@ gtk_css_node_declaration_add_to_widget_path (const GtkCssNodeDeclaration *decl,
                                              guint                        pos)
 {
   GQuark *classes;
-  GtkRegion *regions;
   guint i;
 
   /* Set name and id */
   gtk_widget_path_iter_set_object_name (path, pos, decl->name);
   if (decl->id)
     gtk_widget_path_iter_set_name (path, pos, decl->id);
-
-  /* Set widget regions */
-  regions = get_regions (decl);
-  for (i = 0; i < decl->n_regions; i++)
-    {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_widget_path_iter_add_region (path, pos,
-                                       g_quark_to_string (regions[i].class_quark),
-                                       regions[i].flags);
-G_GNUC_END_IGNORE_DEPRECATIONS
-    }
 
   /* Set widget classes */
   classes = get_classes (decl);

@@ -1266,36 +1266,6 @@ gtk_css_node_list_classes (GtkCssNode *cssnode,
   return gtk_css_node_declaration_get_classes (cssnode->decl, n_classes);
 }
 
-void
-gtk_css_node_add_region (GtkCssNode     *cssnode,
-                         GQuark          region,
-                         GtkRegionFlags  flags)
-{
-  gtk_css_node_declaration_add_region (&cssnode->decl, region, flags);
-}
-
-void
-gtk_css_node_remove_region (GtkCssNode *cssnode,
-                            GQuark      region)
-{
-  gtk_css_node_declaration_remove_region (&cssnode->decl, region);
-}
-
-gboolean
-gtk_css_node_has_region (GtkCssNode     *cssnode,
-                         GQuark          region,
-                         GtkRegionFlags *out_flags)
-{
-  return gtk_css_node_declaration_has_region (cssnode->decl, region, out_flags);
-}
-
-GList *
-gtk_css_node_list_regions (GtkCssNode *cssnode)
-{
-  return gtk_css_node_declaration_list_regions (cssnode->decl);
-}
-
-
 const GtkCssNodeDeclaration *
 gtk_css_node_get_declaration (GtkCssNode *cssnode)
 {

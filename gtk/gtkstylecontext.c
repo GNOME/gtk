@@ -97,14 +97,6 @@
  *
  * GTK+ defines macros for a number of style classes.
  *
- * # Style Regions
- *
- * Widgets can also add regions with flags to their context. This feature is
- * deprecated and will be removed in a future GTK+ update. Please use style
- * classes instead.
- *
- * GTK+ defines macros for a number of style regions.
- *
  * # Custom styling in UI libraries and applications
  *
  * If you are developing a library with custom #GtkWidgets that
@@ -453,7 +445,7 @@ gtk_style_context_impl_get_property (GObject    *object,
 /* returns TRUE if someone called gtk_style_context_save() but hasn’t
  * called gtk_style_context_restore() yet.
  * In those situations we don’t invalidate the context when somebody
- * changes state/regions/classes.
+ * changes state/classes.
  */
 static gboolean
 gtk_style_context_is_saved (GtkStyleContext *context)
@@ -1401,167 +1393,6 @@ gtk_style_context_list_classes (GtkStyleContext *context)
     classes_list = g_list_prepend (classes_list, (gchar *)g_quark_to_string (classes[i - 1]));
 
   return classes_list;
-}
-
-/**
- * gtk_style_context_list_regions:
- * @context: a #GtkStyleContext
- *
- * Returns the list of regions currently defined in @context.
- *
- * Returns: (transfer container) (element-type utf8): a #GList of
- *          strings with the currently defined regions. The contents
- *          of the list are owned by GTK+, but you must free the list
- *          itself with g_list_free() when you are done with it.
- *
- * Since: 3.0
- *
- * Deprecated: 3.14
- **/
-GList *
-gtk_style_context_list_regions (GtkStyleContext *context)
-{
-  GList *regions, *l;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  regions = gtk_css_node_list_regions (context->priv->cssnode);
-  for (l = regions; l; l = l->next)
-    l->data = (char *) g_quark_to_string (GPOINTER_TO_UINT (l->data));
-
-  return regions;
-}
-
-gboolean
-_gtk_style_context_check_region_name (const gchar *str)
-{
-  g_return_val_if_fail (str != NULL, FALSE);
-
-  if (!g_ascii_islower (str[0]))
-    return FALSE;
-
-  while (*str)
-    {
-      if (*str != '-' &&
-          !g_ascii_islower (*str))
-        return FALSE;
-
-      str++;
-    }
-
-  return TRUE;
-}
-
-/**
- * gtk_style_context_add_region:
- * @context: a #GtkStyleContext
- * @region_name: region name to use in styling
- * @flags: flags that apply to the region
- *
- * Adds a region to @context, so posterior calls to
- * gtk_style_context_get() or any of the gtk_render_*()
- * functions will make use of this new region for styling.
- *
- * In the CSS file format, a #GtkTreeView defining a “row”
- * region, would be matched by:
- *
- * |[
- * GtkTreeView row { ... }
- * ]|
- *
- * Pseudo-classes are used for matching @flags, so the two
- * following rules:
- * |[
- * GtkTreeView row:nth-child(even) { ... }
- * GtkTreeView row:nth-child(odd) { ... }
- * ]|
- *
- * would apply to even and odd rows, respectively.
- *
- * Region names must only contain lowercase letters
- * and “-”, starting always with a lowercase letter.
- *
- * Since: 3.0
- *
- * Deprecated: 3.14
- **/
-void
-gtk_style_context_add_region (GtkStyleContext *context,
-                              const gchar     *region_name,
-                              GtkRegionFlags   flags)
-{
-  GQuark region_quark;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (region_name != NULL);
-  g_return_if_fail (_gtk_style_context_check_region_name (region_name));
-
-  region_quark = g_quark_from_string (region_name);
-
-  gtk_css_node_add_region (context->priv->cssnode, region_quark, flags);
-}
-
-/**
- * gtk_style_context_remove_region:
- * @context: a #GtkStyleContext
- * @region_name: region name to unset
- *
- * Removes a region from @context.
- *
- * Since: 3.0
- *
- * Deprecated: 3.14
- **/
-void
-gtk_style_context_remove_region (GtkStyleContext *context,
-                                 const gchar     *region_name)
-{
-  GQuark region_quark;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (region_name != NULL);
-
-  region_quark = g_quark_try_string (region_name);
-  if (!region_quark)
-    return;
-
-  gtk_css_node_remove_region (context->priv->cssnode, region_quark);
-}
-
-/**
- * gtk_style_context_has_region:
- * @context: a #GtkStyleContext
- * @region_name: a region name
- * @flags_return: (out) (allow-none): return location for region flags
- *
- * Returns %TRUE if @context has the region defined.
- * If @flags_return is not %NULL, it is set to the flags
- * affecting the region.
- *
- * Returns: %TRUE if region is defined
- *
- * Since: 3.0
- *
- * Deprecated: 3.14
- **/
-gboolean
-gtk_style_context_has_region (GtkStyleContext *context,
-                              const gchar     *region_name,
-                              GtkRegionFlags  *flags_return)
-{
-  GQuark region_quark;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
-  g_return_val_if_fail (region_name != NULL, FALSE);
-
-  if (flags_return)
-    *flags_return = 0;
-
-  region_quark = g_quark_try_string (region_name);
-  if (!region_quark)
-    return FALSE;
-
-  return gtk_css_node_has_region (context->priv->cssnode, region_quark, flags_return);
 }
 
 static gint

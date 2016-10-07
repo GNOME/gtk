@@ -54,17 +54,6 @@ gboolean                gtk_css_node_declaration_has_class              (const G
 const GQuark *          gtk_css_node_declaration_get_classes            (const GtkCssNodeDeclaration   *decl,
                                                                          guint                         *n_classes);
 
-gboolean                gtk_css_node_declaration_add_region             (GtkCssNodeDeclaration        **decl,
-                                                                         GQuark                         region_quark,
-                                                                         GtkRegionFlags                 flags);
-gboolean                gtk_css_node_declaration_remove_region          (GtkCssNodeDeclaration        **decl,
-                                                                         GQuark                         region_quark);
-gboolean                gtk_css_node_declaration_clear_regions          (GtkCssNodeDeclaration        **decl);
-gboolean                gtk_css_node_declaration_has_region             (const GtkCssNodeDeclaration   *decl,
-                                                                         GQuark                         region_quark,
-                                                                         GtkRegionFlags                *flags_return);
-GList *                 gtk_css_node_declaration_list_regions           (const GtkCssNodeDeclaration   *decl);
-
 guint                   gtk_css_node_declaration_hash                   (gconstpointer                  elem);
 gboolean                gtk_css_node_declaration_equal                  (gconstpointer                  elem1,
                                                                          gconstpointer                  elem2);

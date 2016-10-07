@@ -882,26 +882,6 @@ typedef enum
 } GtkStateFlags;
 
 /**
- * GtkRegionFlags:
- * @GTK_REGION_EVEN: Region has an even number within a set.
- * @GTK_REGION_ODD: Region has an odd number within a set.
- * @GTK_REGION_FIRST: Region is the first one within a set.
- * @GTK_REGION_LAST: Region is the last one within a set.
- * @GTK_REGION_ONLY: Region is the only one within a set.
- * @GTK_REGION_SORTED: Region is part of a sorted area.
- *
- * Describes a region within a widget.
- */
-typedef enum {
-  GTK_REGION_EVEN    = 1 << 0,
-  GTK_REGION_ODD     = 1 << 1,
-  GTK_REGION_FIRST   = 1 << 2,
-  GTK_REGION_LAST    = 1 << 3,
-  GTK_REGION_ONLY    = 1 << 4,
-  GTK_REGION_SORTED  = 1 << 5
-} GtkRegionFlags;
-
-/**
  * GtkJunctionSides:
  * @GTK_JUNCTION_NONE: No junctions.
  * @GTK_JUNCTION_CORNER_TOPLEFT: Element connects on the top-left corner.

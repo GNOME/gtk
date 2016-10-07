@@ -143,15 +143,6 @@ gboolean                gtk_css_node_has_class          (GtkCssNode            *
                                                          GQuark                 style_class);
 const GQuark *          gtk_css_node_list_classes       (GtkCssNode            *cssnode,
                                                          guint                 *n_classes);
-void                    gtk_css_node_add_region         (GtkCssNode            *cssnode,
-                                                         GQuark                 region,
-                                                         GtkRegionFlags         flags);
-void                    gtk_css_node_remove_region      (GtkCssNode            *cssnode,
-                                                         GQuark                 region);
-gboolean                gtk_css_node_has_region         (GtkCssNode            *cssnode,
-                                                         GQuark                 region,
-                                                         GtkRegionFlags        *out_flags);
-GList *                 gtk_css_node_list_regions       (GtkCssNode            *cssnode);
 
 const GtkCssNodeDeclaration *
                         gtk_css_node_get_declaration    (GtkCssNode            *cssnode);

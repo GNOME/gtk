@@ -78,7 +78,6 @@ test_path (void)
   GtkWidgetPath *path;
   GtkWidgetPath *path2;
   gint pos;
-  GtkRegionFlags flags;
 
   path = gtk_widget_path_new ();
   g_assert_cmpint (gtk_widget_path_length (path), ==, 0);
@@ -120,24 +119,6 @@ test_path (void)
   g_assert (!gtk_widget_path_iter_has_class (path, 1, "class2"));
   gtk_widget_path_iter_clear_classes (path, 1);
   g_assert (!gtk_widget_path_iter_has_class (path, 1, "class1"));
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_widget_path_iter_add_region (path, 1, "tab", 0);
-  gtk_widget_path_iter_add_region (path, 1, "title", GTK_REGION_EVEN | GTK_REGION_FIRST);
-
-  g_assert (gtk_widget_path_iter_has_region (path, 1, "tab", &flags) &&
-            flags == 0);
-  g_assert (gtk_widget_path_iter_has_region (path, 1, "title", &flags) &&
-            flags == (GTK_REGION_EVEN | GTK_REGION_FIRST));
-  g_assert (!gtk_widget_path_iter_has_region (path, 1, "extension", NULL));
-
-  path2 = gtk_widget_path_copy (path);
-  g_assert (gtk_widget_path_iter_has_region (path2, 1, "tab", &flags) &&
-            flags == 0);
-  g_assert (gtk_widget_path_iter_has_region (path2, 1, "title", &flags) &&
-            flags == (GTK_REGION_EVEN | GTK_REGION_FIRST));
-  g_assert (!gtk_widget_path_iter_has_region (path2, 1, "extension", NULL));
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_path_free (path2);
 

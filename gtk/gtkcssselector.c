@@ -82,11 +82,6 @@ union _GtkCssSelector
   }                              id;
   struct {
     const GtkCssSelectorClass   *class;
-    const char                  *name;          /* interned */
-    GtkRegionFlags               flags;
-  }                              region;
-  struct {
-    const GtkCssSelectorClass   *class;
     GQuark                       style_class;
   }                              style_class;
   struct {
