@@ -404,7 +404,6 @@ gtk_private_h_sources =		\
 	gtkcsscolorvalueprivate.h	\
 	gtkcsscornervalueprivate.h	\
 	gtkcsscustomgadgetprivate.h	\
-	gtkcsscustompropertyprivate.h 	\
 	gtkcssdimensionvalueprivate.h	\
 	gtkcsseasevalueprivate.h	\
 	gtkcssenumvalueprivate.h	\
@@ -454,7 +453,6 @@ gtk_private_h_sources =		\
 	gtkcsstransformvalueprivate.h	\
 	gtkcsstransientnodeprivate.h	\
 	gtkcsstransitionprivate.h	\
-	gtkcsstypedvalueprivate.h	\
 	gtkcssunsetvalueprivate.h	\
 	gtkcssvalueprivate.h	\
 	gtkcsswin32sizevalueprivate.h   \
@@ -673,7 +671,6 @@ gtk_base_c_sources = 		\
 	gtkcsscolorvalue.c	\
 	gtkcsscornervalue.c	\
 	gtkcsscustomgadget.c	\
-	gtkcsscustomproperty.c	\
 	gtkcssdimensionvalue.c	\
 	gtkcsseasevalue.c	\
 	gtkcssenumvalue.c	\
@@ -725,7 +722,6 @@ gtk_base_c_sources = 		\
 	gtkcsstransformvalue.c	\
 	gtkcsstransientnode.c	\
 	gtkcsstransition.c	\
-	gtkcsstypedvalue.c	\
 	gtkcssunsetvalue.c	\
 	gtkcsstypes.c		\
 	gtkcssvalue.c		\

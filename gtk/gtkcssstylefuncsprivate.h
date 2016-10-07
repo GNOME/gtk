@@ -28,11 +28,6 @@ gboolean            _gtk_css_style_funcs_parse_value       (GValue              
                                                             GtkCssParser            *parser);
 void                _gtk_css_style_funcs_print_value       (const GValue            *value,
                                                             GString                 *string);
-GtkCssValue *       _gtk_css_style_funcs_compute_value     (GtkStyleProviderPrivate *provider,
-                                                            GtkCssStyle             *style,
-                                                            GtkCssStyle             *parent_style,
-							    GType                    target_type,
-                                                            GtkCssValue             *specified);
 
 G_END_DECLS
 
