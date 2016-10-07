@@ -3,7 +3,7 @@
 AUTOMAKE_OPTIONS = 1.6
 
 # The name of the module.
-DOC_MODULE=gtk3
+DOC_MODULE=gtk4
 
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gtk-docs.sgml
@@ -270,8 +270,8 @@ CPPFLAGS += \
 	-UGTK_DISABLE_SINGLE_INCLUDES
 
 GTKDOC_LIBS = \
-	$(top_builddir)/gdk/libgdk-3.la \
-	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gdk/libgdk-4.la \
+	$(top_builddir)/gtk/libgtk-4.la	\
 	$(GTK_DEP_LIBS)
 
 
@@ -291,14 +291,14 @@ content_files =					\
 	drawing-model.xml			\
 	getting_started.xml			\
 	glossary.xml				\
-	gtk3-demo-application.xml		\
-	gtk3-demo.xml				\
-	gtk3-icon-browser.xml			\
-	gtk3-widget-factory.xml			\
+	gtk4-demo-application.xml		\
+	gtk4-demo.xml				\
+	gtk4-icon-browser.xml			\
+	gtk4-widget-factory.xml			\
 	gtk-builder-tool.xml			\
 	gtk-encode-symbolic-svg.xml		\
 	gtk-launch.xml				\
-	gtk-query-immodules-3.0.xml		\
+	gtk-query-immodules-4.0.xml		\
 	gtk-query-settings.xml			\
 	gtk-update-icon-cache.xml		\
 	input-handling.xml			\
@@ -498,19 +498,19 @@ endif
 include $(top_srcdir)/gtk-doc.make
 
 # Other files to distribute
-EXTRA_DIST += version.xml.in gtk3.types.in
+EXTRA_DIST += version.xml.in gtk4.types.in
 
 ########################################################################
 
 man_MANS = 				\
-	gtk-query-immodules-3.0.1	\
+	gtk-query-immodules-4.0.1	\
 	gtk-update-icon-cache.1		\
 	gtk-encode-symbolic-svg.1	\
 	gtk-launch.1			\
-	gtk3-demo.1			\
-	gtk3-demo-application.1		\
-	gtk3-widget-factory.1		\
-	gtk3-icon-browser.1		\
+	gtk4-demo.1			\
+	gtk4-demo-application.1		\
+	gtk4-widget-factory.1		\
+	gtk4-icon-browser.1		\
 	broadwayd.1			\
 	gtk-builder-tool.1 		\
 	gtk-query-settings.1

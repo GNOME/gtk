@@ -6,7 +6,7 @@
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
-    <title>GDK 3 Reference Manual</title>
+    <title>GDK 4 Reference Manual</title>
     <releaseinfo>
       This document is for the GDK 3 library, version &version;
       The latest versions can be found online at

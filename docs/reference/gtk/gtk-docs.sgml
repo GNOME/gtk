@@ -8,13 +8,13 @@
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
-    <title>GTK+ 3 Reference Manual</title>
+    <title>GTK+ 4 Reference Manual</title>
     <releaseinfo>
-      This document is for the GTK+ 3 library, version &version;.
+      This document is for the GTK+ 4 library, version &version;.
       The latest versions can be found online at
-      <ulink role="online-location" url="http://developer.gnome.org/gtk3/">http://developer.gnome.org/gtk3/</ulink>.
-      If you are looking for the older GTK+ 2 series of libraries,
-      see <ulink role="online-location" url="http://developer.gnome.org/gtk2/">http://developer.gnome.org/gtk2/</ulink>.
+      <ulink role="online-location" url="http://developer.gnome.org/gtk4/">http://developer.gnome.org/gtk4/</ulink>.
+      If you are looking for the older GTK+ 3 series of libraries,
+      see <ulink role="online-location" url="http://developer.gnome.org/gtk3/">http://developer.gnome.org/gtk3/</ulink>.
     </releaseinfo>
   </bookinfo>
 
@@ -410,11 +410,11 @@
 
   <part>
     <title>GTK+ Tools</title>
-    <xi:include href="gtk3-demo.xml" />
-    <xi:include href="gtk3-demo-application.xml" />
-    <xi:include href="gtk3-widget-factory.xml" />
-    <xi:include href="gtk3-icon-browser.xml" />
-    <xi:include href="gtk-query-immodules-3.0.xml" />
+    <xi:include href="gtk4-demo.xml" />
+    <xi:include href="gtk4-demo-application.xml" />
+    <xi:include href="gtk4-widget-factory.xml" />
+    <xi:include href="gtk4-icon-browser.xml" />
+    <xi:include href="gtk-query-immodules-4.0.xml" />
     <xi:include href="gtk-update-icon-cache.xml" />
     <xi:include href="gtk-encode-symbolic-svg.xml" />
     <xi:include href="gtk-builder-tool.xml" />
