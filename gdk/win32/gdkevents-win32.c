@@ -103,7 +103,6 @@ static gboolean gdk_event_dispatch (GSource     *source,
 /* Private variable declarations
  */
 
-static GList *client_filters;	/* Filters for client messages */
 extern gint       _gdk_input_ignore_core;
 
 GdkCursor *_gdk_win32_grab_cursor;
@@ -2181,24 +2180,6 @@ gdk_event_translate (MSG  *msg,
       ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
 
       node = _gdk_event_queue_append (display, event);
-
-      tmp_list = client_filters;
-      while (tmp_list)
-	{
-	  GdkClientFilter *filter = tmp_list->data;
-
-	  tmp_list = tmp_list->next;
-
-	  if (filter->type == GDK_POINTER_TO_ATOM (msg->wParam))
-	    {
-	      GDK_NOTE (EVENTS, g_print (" (match)"));
-
-	      result = (*filter->function) (msg, event, filter->data);
-
-	      if (result != GDK_FILTER_CONTINUE)
-		break;
-	    }
-	}
 
       switch (result)
 	{
