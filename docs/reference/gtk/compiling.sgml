@@ -29,10 +29,10 @@ The following interactive shell session demonstrates how
 <literal>pkg-config</literal> is used (the actual output on
 your system may be different):
 <programlisting>
-$ pkg-config --cflags gtk+-3.0
- -pthread -I/usr/include/gtk-3.0 -I/usr/lib64/gtk-3.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12
-$ pkg-config --libs gtk+-3.0
- -pthread -lgtk-3 -lgdk-3 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lgdk_pixbuf-2.0 -lpangocairo-1.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0
+$ pkg-config --cflags gtk+-4.0
+ -pthread -I/usr/include/gtk-4.0 -I/usr/lib64/gtk-4.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12
+$ pkg-config --libs gtk+-4.0
+ -pthread -lgtk-4 -lgdk-4 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lgdk_pixbuf-2.0 -lpangocairo-1.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0
 </programlisting>
 </para>
 <para>
@@ -42,7 +42,7 @@ feature of the shell. If you enclose a command in backticks
 substituted into the command line before execution. So to compile
 a GTK+ Hello, World, you would type the following:
 <programlisting>
-$ cc `pkg-config --cflags gtk+-3.0` hello.c -o hello `pkg-config --libs gtk+-3.0`
+$ cc `pkg-config --cflags gtk+-4.0` hello.c -o hello `pkg-config --libs gtk+-4.0`
 </programlisting>
 </para>
 
@@ -67,7 +67,7 @@ this range will trigger compiler warnings.
 Here is how you would compile hello.c if you want to allow it
 to use symbols that were not deprecated in 3.2:
 <programlisting>
-$ cc `pkg-config --cflags gtk+-3.0` -DGDK_VERSION_MIN_REQIRED=GDK_VERSION_3_2 hello.c -o hello `pkg-config --libs gtk+-3.0`
+$ cc `pkg-config --cflags gtk+-4.0` -DGDK_VERSION_MIN_REQIRED=GDK_VERSION_3_2 hello.c -o hello `pkg-config --libs gtk+-4.0`
 </programlisting>
 </para>
 
@@ -75,7 +75,7 @@ $ cc `pkg-config --cflags gtk+-3.0` -DGDK_VERSION_MIN_REQIRED=GDK_VERSION_3_2 he
 And here is how you would compile hello.c if you don't want
 it to use any symbols that were introduced after 3.4:
 <programlisting>
-$ cc `pkg-config --cflags gtk+-3.0` -DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_4 hello.c -o hello `pkg-config --libs gtk+-3.0`
+$ cc `pkg-config --cflags gtk+-4.0` -DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_4 hello.c -o hello `pkg-config --libs gtk+-4.0`
 </programlisting>
 </para>
 
@@ -96,35 +96,6 @@ functions which may be problematic in a multidevice setting, you can
 define the preprocessor symbol GDK_MULTIDEVICE_SAFE by using the command
 line option <literal>-DGTK_MULTIDEVICE_SAFE=1</literal>.
 </para>
-
-  <refsect2>
-    <title>Useful autotools macros</title>
-
-    <para>
-      GTK+ provides various macros for easily checking version and backends
-      supported. The macros are
-      <variablelist>
-        <varlistentry>
-          <term>AM_PATH_GTK_3_0([minimum-version], [if-found], [if-not-found], [modules])</term>
-          <listitem>This macro should be used to check that GTK+ is installed
-          and available for compilation. The four arguments are optional, and
-          they are: <emphasis>minimum-version</emphasis>, the minimum version
-          of GTK+ required for compilation; <emphasis>if-found</emphasis>, the
-          action to perform if a valid version of GTK+ has been found;
-          <emphasis>if-not-found</emphasis>, the action to perform if a valid
-          version of GTK+ has not been found; <emphasis>modules</emphasis>, a
-          list of modules to be checked along with GTK+.</listitem>
-        </varlistentry>
-        <varlistentry>
-          <term>GTK_CHECK_BACKEND([backend-name], [minimum-version], [if-found], [if-not-found])</term>
-          <listitem>This macro should be used to check if a specific backend
-          is supported by GTK+. The <emphasis>minimum-version</emphasis>,
-          <emphasis>if-found</emphasis> and <emphasis>if-not-found</emphasis>
-          arguments are optional.</listitem>
-        </varlistentry>
-      </variablelist>
-    </para>
-  </refsect2>
 
 </refsect1>
 </refentry>
