@@ -1934,8 +1934,6 @@ docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
 docs/reference/gtk/gtk4.types
 docs/reference/gtk/version.xml
-docs/reference/libgail-util/Makefile
-docs/reference/libgail-util/version.xml
 docs/tools/Makefile
 build/Makefile
 build/win32/Makefile
@@ -1961,7 +1959,6 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc.body
 gtk/libgtk3.manifest
-libgail-util/Makefile
 modules/Makefile
 modules/input/Makefile
 modules/printbackends/Makefile
