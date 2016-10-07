@@ -104,6 +104,6 @@ AM_DISTCHECK_CONFIGURE_FLAGS =		\
 	--enable-installed-tests
 
 GITIGNORE_TRANSLATION_DIRS = po-properties
-GITIGNOREFILES = po-properties/gtk30-properties.pot
+GITIGNOREFILES = po-properties/gtk40-properties.pot
 
 -include $(top_srcdir)/git.mk

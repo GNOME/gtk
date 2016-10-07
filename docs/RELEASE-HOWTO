@@ -28,8 +28,8 @@ Make sure that gtk-doc is the latest released version.
 
  3) Update the pot files and commit the changes:
 
-    make -C po gtk30.pot
-    make -C po-properties gtk30-properties.pot
+    make -C po gtk40.pot
+    make -C po-properties gtk40-properties.pot
 
  4) In particular, if this is a major, stable, release, verify that
     README.in contains the relevant release notes and that the
