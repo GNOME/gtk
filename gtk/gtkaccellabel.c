@@ -400,7 +400,6 @@ gtk_accel_label_get_accel_layout (GtkAccelLabel *accel_label)
   if (!attrs)
     attrs = pango_attr_list_new ();
   gtk_style_context_get (context,
-                         gtk_style_context_get_state (context),
                          "font", &font_desc,
                          NULL);
   pango_attr_list_change (attrs, pango_attr_font_desc_new (font_desc));

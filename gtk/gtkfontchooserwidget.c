@@ -852,7 +852,6 @@ gtk_font_chooser_widget_get_preview_text_height (GtkFontChooserWidget *fontchoos
                                                                      GTK_CSS_PROPERTY_DPI),
                                    100);
   gtk_style_context_get (context,
-                         gtk_widget_get_state_flags (treeview),
                          "font-size", &font_size,
                          NULL);
 

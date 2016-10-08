@@ -180,11 +180,11 @@ draw_style_common (GtkStyleContext *context,
   GtkBorder margin, border, padding;
   int min_width, min_height;
 
-  gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
-  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+  gtk_style_context_get_margin (context, &margin);
+  gtk_style_context_get_border (context, &border);
+  gtk_style_context_get_padding (context, &padding);
 
-  gtk_style_context_get (context, gtk_style_context_get_state (context),
+  gtk_style_context_get (context,
                          "min-width", &min_width,
                          "min-height", &min_height,
                          NULL);
@@ -217,11 +217,11 @@ query_size (GtkStyleContext *context,
   GtkBorder margin, border, padding;
   int min_width, min_height;
 
-  gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &margin);
-  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+  gtk_style_context_get_margin (context, &margin);
+  gtk_style_context_get_border (context, &border);
+  gtk_style_context_get_padding (context, &padding);
 
-  gtk_style_context_get (context, gtk_style_context_get_state (context),
+  gtk_style_context_get (context,
                          "min-width", &min_width,
                          "min-height", &min_height,
                          NULL);
@@ -308,7 +308,7 @@ draw_menu (GtkWidget *widget,
                      &menu_x, &menu_y, &menu_width, &menu_height);
 
   /* Hovered with right arrow */
-  gtk_style_context_get (hoveredarrowmenuitem_context, gtk_style_context_get_state (hoveredarrowmenuitem_context),
+  gtk_style_context_get (hoveredarrowmenuitem_context,
                          "min-width", &arrow_width, "min-height", &arrow_height, NULL);
   arrow_size = MIN (arrow_width, arrow_height);
   draw_style_common (hovermenuitem_context, cr, menu_x, menu_y, menu_width, menuitem1_height,
@@ -320,13 +320,13 @@ draw_menu (GtkWidget *widget,
   /* Left arrow sensitive, and right arrow insensitive */
   draw_style_common (menuitem_context, cr, menu_x, menu_y + menuitem1_height, menu_width, menuitem2_height,
                      &contents_x, &contents_y, &contents_width, &contents_height);
-  gtk_style_context_get (arrowmenuitem_context, gtk_style_context_get_state (arrowmenuitem_context),
+  gtk_style_context_get (arrowmenuitem_context,
                          "min-width", &arrow_width, "min-height", &arrow_height, NULL);
   arrow_size = MIN (arrow_width, arrow_height);
   gtk_render_arrow (arrowmenuitem_context, cr, G_PI / 2,
                     contents_x,
                     contents_y + (contents_height - arrow_size) / 2, arrow_size);
-  gtk_style_context_get (disabledarrowmenuitem_context, gtk_style_context_get_state (disabledarrowmenuitem_context),
+  gtk_style_context_get (disabledarrowmenuitem_context,
                          "min-width", &arrow_width, "min-height", &arrow_height, NULL);
   arrow_size = MIN (arrow_width, arrow_height);
   gtk_render_arrow (disabledarrowmenuitem_context, cr, G_PI / 2,
@@ -337,7 +337,7 @@ draw_menu (GtkWidget *widget,
   /* Left check enabled, sensitive, and right check unchecked, insensitive */
   draw_style_common (menuitem_context, cr, menu_x, menu_y + menuitem1_height + menuitem2_height, menu_width, menuitem3_height,
                      &contents_x, &contents_y, &contents_width, &contents_height);
-  gtk_style_context_get (checkmenuitem_context, gtk_style_context_get_state (checkmenuitem_context),
+  gtk_style_context_get (checkmenuitem_context,
                          "min-width", &toggle_width, "min-height", &toggle_height, NULL);
   draw_style_common (checkmenuitem_context, cr,
                      contents_x,
@@ -345,7 +345,7 @@ draw_menu (GtkWidget *widget,
                      toggle_width, toggle_height,
                      &toggle_x, &toggle_y, &toggle_width, &toggle_height);
   gtk_render_check (checkmenuitem_context, cr, toggle_x, toggle_y, toggle_width, toggle_height);
-  gtk_style_context_get (disabledcheckmenuitem_context, gtk_style_context_get_state (disabledcheckmenuitem_context),
+  gtk_style_context_get (disabledcheckmenuitem_context,
                          "min-width", &toggle_width, "min-height", &toggle_height, NULL);
   draw_style_common (disabledcheckmenuitem_context, cr,
                      contents_x + contents_width - toggle_width,
@@ -363,7 +363,7 @@ draw_menu (GtkWidget *widget,
   draw_style_common (menuitem_context, cr, menu_x, menu_y + menuitem1_height + menuitem2_height + menuitem3_height + menuitem4_height,
                      menu_width, menuitem5_height,
                      &contents_x, &contents_y, &contents_width, &contents_height);
-  gtk_style_context_get (radiomenuitem_context, gtk_style_context_get_state (radiomenuitem_context),
+  gtk_style_context_get (radiomenuitem_context,
                          "min-width", &toggle_width, "min-height", &toggle_height, NULL);
   draw_style_common (radiomenuitem_context, cr,
                      contents_x,
@@ -371,7 +371,7 @@ draw_menu (GtkWidget *widget,
                      toggle_width, toggle_height,
                      &toggle_x, &toggle_y, &toggle_width, &toggle_height);
   gtk_render_check (radiomenuitem_context, cr, toggle_x, toggle_y, toggle_width, toggle_height);
-  gtk_style_context_get (disabledradiomenuitem_context, gtk_style_context_get_state (disabledradiomenuitem_context),
+  gtk_style_context_get (disabledradiomenuitem_context,
                          "min-width", &toggle_width, "min-height", &toggle_height, NULL);
   draw_style_common (disabledradiomenuitem_context, cr,
                      contents_x + contents_width - toggle_width,
@@ -527,7 +527,7 @@ draw_horizontal_scrollbar (GtkWidget     *widget,
   query_size (trough_context, NULL, height);
   query_size (slider_context, NULL, height);
 
-  gtk_style_context_get (slider_context, gtk_style_context_get_state (slider_context),
+  gtk_style_context_get (slider_context,
                          "min-width", &slider_width, NULL);
 
   draw_style_common (scrollbar_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
@@ -780,7 +780,7 @@ draw_combobox (GtkWidget *widget,
   query_size (button_box_context, NULL, height);
   query_size (arrow_context, NULL, height);
 
-  gtk_style_context_get (arrow_context, gtk_style_context_get_state (arrow_context),
+  gtk_style_context_get (arrow_context,
                          "min-width", &arrow_width, "min-height", &arrow_height, NULL);
   arrow_size = MIN (arrow_width, arrow_height);
 
@@ -852,7 +852,7 @@ draw_spinbutton (GtkWidget *widget,
 
   icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
 
-  gtk_style_context_get (up_context, gtk_style_context_get_state (up_context),
+  gtk_style_context_get (up_context,
                          "min-width", &icon_width, "min-height", &icon_height, NULL);
   icon_size = MIN (icon_width, icon_height);
   icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-add-symbolic", icon_size, 0);
@@ -864,7 +864,7 @@ draw_spinbutton (GtkWidget *widget,
   g_object_unref (pixbuf);
 
 
-  gtk_style_context_get (down_context, gtk_style_context_get_state (down_context),
+  gtk_style_context_get (down_context,
                          "min-width", &icon_width, "min-height", &icon_height, NULL);
   icon_size = MIN (icon_width, icon_height);
   icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-remove-symbolic", icon_size, 0);

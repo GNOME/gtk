@@ -192,7 +192,7 @@ gtk_cell_renderer_graph_render (GtkCellRenderer      *cell,
   diff = maximum - minimum;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
+  gtk_style_context_get_color (context, &color);
 
   cairo_set_line_width (cr, 1.0);
 

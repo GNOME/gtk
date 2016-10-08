@@ -200,7 +200,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
       selection_node = gtk_text_view_get_selection_node ((GtkTextView *)text_renderer->widget);
       gtk_style_context_save_to_node (context, selection_node);
 
-      gtk_style_context_get (context, gtk_style_context_get_state (context),
+      gtk_style_context_get (context,
                              "color", &fg_rgba,
                              NULL);
 
@@ -208,7 +208,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
     }
   else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
     {
-      gtk_style_context_get (context, gtk_style_context_get_state (context),
+      gtk_style_context_get (context,
                              "background-color", &fg_rgba,
                               NULL);
     }
@@ -520,7 +520,6 @@ text_renderer_begin (GtkTextRenderer *text_renderer,
                      cairo_t         *cr)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
   GdkRGBA color;
   GtkCssNode *text_node;
 
@@ -532,8 +531,7 @@ text_renderer_begin (GtkTextRenderer *text_renderer,
   text_node = gtk_text_view_get_text_node ((GtkTextView *)widget);
   gtk_style_context_save_to_node (context, text_node);
 
-  state = gtk_style_context_get_state (context);
-  gtk_style_context_get_color (context, state, &color);
+  gtk_style_context_get_color (context, &color);
 
   cairo_save (cr);
 
@@ -632,7 +630,7 @@ render_para (GtkTextRenderer    *text_renderer,
   gtk_style_context_save_to_node (context, selection_node);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &selection);
+  gtk_style_context_get_background_color (context, &selection);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
  gtk_style_context_restore (context);
@@ -827,7 +825,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                   GdkRGBA color;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-                  gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &color);
+                  gtk_style_context_get_background_color (context, &color);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
                   gdk_cairo_set_source_rgba (cr, &color);

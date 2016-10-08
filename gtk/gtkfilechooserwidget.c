@@ -6187,7 +6187,6 @@ find_good_size_from_style (GtkWidget *widget,
                                           100);
 
   gtk_style_context_get (context,
-                         gtk_style_context_get_state (context),
                          "font-size", &font_size,
                          NULL);
   font_size = font_size * resolution / 72.0 + 0.5;

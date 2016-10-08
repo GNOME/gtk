@@ -1013,15 +1013,12 @@ GtkCssSection * gtk_style_context_get_section (GtkStyleContext *context,
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_property (GtkStyleContext *context,
                                      const gchar     *property,
-                                     GtkStateFlags    state,
                                      GValue          *value);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_valist   (GtkStyleContext *context,
-                                     GtkStateFlags    state,
                                      va_list          args);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get          (GtkStyleContext *context,
-                                     GtkStateFlags    state,
                                      ...) G_GNUC_NULL_TERMINATED;
 
 GDK_AVAILABLE_IN_ALL
@@ -1103,32 +1100,22 @@ gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
 /* Some helper functions to retrieve most common properties */
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_color            (GtkStyleContext *context,
-                                             GtkStateFlags    state,
                                              GdkRGBA         *color);
 GDK_DEPRECATED_IN_3_16_FOR(gtk_render_background)
 void gtk_style_context_get_background_color (GtkStyleContext *context,
-                                             GtkStateFlags    state,
                                              GdkRGBA         *color);
 GDK_DEPRECATED_IN_3_16_FOR(gtk_render_frame)
 void gtk_style_context_get_border_color     (GtkStyleContext *context,
-                                             GtkStateFlags    state,
                                              GdkRGBA         *color);
 
-GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_get)
-const PangoFontDescription *
-     gtk_style_context_get_font             (GtkStyleContext *context,
-                                             GtkStateFlags    state);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_border           (GtkStyleContext *context,
-                                             GtkStateFlags    state,
                                              GtkBorder       *border);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_padding          (GtkStyleContext *context,
-                                             GtkStateFlags    state,
                                              GtkBorder       *padding);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_margin           (GtkStyleContext *context,
-                                             GtkStateFlags    state,
                                              GtkBorder       *margin);
 
 GDK_DEPRECATED_IN_3_12

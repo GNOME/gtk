@@ -6281,7 +6281,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_style_context_get_background_color (context,
-                                                  gtk_style_context_get_state (context),
                                                   &color);
 G_GNUC_END_IGNORE_DEPRECATIONS
 

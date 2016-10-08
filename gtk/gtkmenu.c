@@ -2604,7 +2604,6 @@ get_menu_padding (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_get_padding (context,
-                                 gtk_style_context_get_state (context),
                                  padding);
 }
 
@@ -2617,7 +2616,6 @@ get_menu_margin (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_get_margin (context,
-                                gtk_style_context_get_state (context),
                                 margin);
 }
 

@@ -1731,16 +1731,14 @@ get_size (GtkCellRenderer    *cell,
   if (priv->calc_fixed_height)
     {
       GtkStyleContext *style_context;
-      GtkStateFlags state;
       PangoContext *context;
       PangoFontMetrics *metrics;
       PangoFontDescription *font_desc;
       gint row_height;
 
       style_context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
 
-      gtk_style_context_get (style_context, state, "font", &font_desc, NULL);
+      gtk_style_context_get (style_context, "font", &font_desc, NULL);
       pango_font_description_merge_static (font_desc, priv->font, TRUE);
 
       if (priv->scale_set)

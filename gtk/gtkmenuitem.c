@@ -1908,9 +1908,9 @@ gtk_menu_item_real_popup_submenu (GtkWidget      *widget,
                                     NULL);
 
               context = gtk_widget_get_style_context (parent);
-              gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &parent_padding);
+              gtk_style_context_get_padding (context, &parent_padding);
               context = gtk_widget_get_style_context (priv->submenu);
-              gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &menu_padding);
+              gtk_style_context_get_padding (context, &menu_padding);
 
               g_object_set (priv->submenu,
                             "anchor-hints", (GDK_ANCHOR_FLIP_X |

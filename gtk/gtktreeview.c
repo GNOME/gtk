@@ -4937,7 +4937,7 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
         GdkRGBA color;
 
         cairo_set_line_width (cr, 1.0);
-        gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
+        gtk_style_context_get_color (context, &color);
         gdk_cairo_set_source_rgba (cr, &color);
       }
       break;
@@ -5653,7 +5653,7 @@ gtk_tree_view_draw (GtkWidget *widget,
     {
       GdkRGBA color;
 
-      gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
+      gtk_style_context_get_color (context, &color);
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
       if (tree_view->priv->drag_column_window_state == DRAG_COLUMN_WINDOW_STATE_ORIGINAL)

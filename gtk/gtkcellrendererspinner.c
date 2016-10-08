@@ -355,9 +355,7 @@ gtk_paint_spinner (GtkStyleContext *context,
   /* draw clip region */
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
 
-  gtk_style_context_get_color (context, 
-                               gtk_style_context_get_state (context),
-                               &color);
+  gtk_style_context_get_color (context, &color);
   dx = width / 2;
   dy = height / 2;
   radius = MIN (width / 2, height / 2);

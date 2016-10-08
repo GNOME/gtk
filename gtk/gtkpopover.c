@@ -705,7 +705,6 @@ get_margin (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_margin (context,
-                                gtk_style_context_get_state (context),
                                 border);
 }
 
@@ -731,7 +730,6 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   gint border_radius;
   GtkStyleContext *context;
   GtkBorder margin, border, widget_margin;
-  GtkStateFlags state;
 
   gtk_popover_get_pointing_to (popover, &rect);
   gtk_widget_get_allocation (widget, &allocation);
@@ -770,11 +768,9 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   widget_margin.bottom = gtk_widget_get_margin_bottom (widget);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
 
-  gtk_style_context_get_border (context, state, &border);
+  gtk_style_context_get_border (context, &border);
   gtk_style_context_get (context,
-                         state,
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);
   pos = get_effective_position (popover, priv->final_position);
@@ -1138,14 +1134,12 @@ gtk_popover_draw (GtkWidget *widget,
   gint initial_x, initial_y, final_x, final_y;
   gint gap_start, gap_end;
   GtkPositionType gap_side;
-  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
 
-  state = gtk_style_context_get_state (context);
   gtk_widget_get_allocation (widget, &allocation);
 
-  gtk_style_context_get_border (context, state, &border);
+  gtk_style_context_get_border (context, &border);
   gtk_popover_get_rect_coords (popover,
                                &rect_x, &rect_y,
                                &rect_w, &rect_h);
@@ -1203,7 +1197,7 @@ gtk_popover_draw (GtkWidget *widget,
   if (border.bottom > 0)
     {
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_style_context_get_border_color (context, state, &border_color);
+      gtk_style_context_get_border_color (context, &border_color);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
       gtk_popover_apply_tail_path (popover, cr);
@@ -1229,17 +1223,15 @@ get_padding_and_border (GtkWidget *widget,
                         GtkBorder *border)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
   gint border_width;
   GtkBorder tmp;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  gtk_style_context_get_padding (context, state, border);
-  gtk_style_context_get_border (context, state, &tmp);
+  gtk_style_context_get_padding (context, border);
+  gtk_style_context_get_border (context, &tmp);
   border->top += tmp.top + border_width;
   border->right += tmp.right + border_width;
   border->bottom += tmp.bottom + border_width;
@@ -1250,12 +1242,10 @@ static gint
 get_border_radius (GtkWidget *widget)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
   gint border_radius;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
-  gtk_style_context_get (context, state,
+  gtk_style_context_get (context,
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);
   return border_radius;

@@ -883,7 +883,7 @@ set_default_size (GtkRecentChooserDefault *impl)
   context = gtk_widget_get_style_context (widget);
 
   /* Size based on characters and the icon size */
-  gtk_style_context_get (context, gtk_style_context_get_state (context), "font-size", &font_size, NULL);
+  gtk_style_context_get (context, "font-size", &font_size, NULL);
 
   width = impl->priv->icon_size + font_size * NUM_CHARS + 0.5;
   height = (impl->priv->icon_size + font_size) * NUM_LINES + 0.5;

@@ -125,12 +125,10 @@ gtk_revealer_get_padding (GtkRevealer *revealer,
 {
   GtkWidget *widget = GTK_WIDGET (revealer);
   GtkStyleContext *context;
-  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
 
-  gtk_style_context_get_padding (context, state, padding);
+  gtk_style_context_get_padding (context, padding);
 }
 
 static void

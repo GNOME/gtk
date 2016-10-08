@@ -9420,7 +9420,6 @@ update_pango_context (GtkWidget    *widget,
 
   style_context = _gtk_widget_get_style_context (widget);
   gtk_style_context_get (style_context,
-                         gtk_style_context_get_state (style_context),
                          "font", &font_desc,
                          NULL);
 

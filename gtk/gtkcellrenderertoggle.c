@@ -334,7 +334,7 @@ calc_indicator_size (GtkStyleContext *context,
       return;
     }
 
-  gtk_style_context_get (context, gtk_style_context_get_state (context),
+  gtk_style_context_get (context, 
                          "min-width", width,
                          "min-height", height,
                          NULL);
@@ -366,8 +366,8 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
   context = gtk_cell_renderer_toggle_save_context (cell, widget);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
+  gtk_style_context_get_padding (context, &padding);
+  gtk_style_context_get_border (context, &border);
 
   calc_indicator_size (context, priv->indicator_size, &calc_width, &calc_height);
   calc_width += xpad * 2 + padding.left + padding.right + border.left + border.right;
@@ -464,8 +464,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
                     cell_area->y + y_offset + ypad,
                     width, height);
 
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
+  gtk_style_context_get_padding (context, &padding);
+  gtk_style_context_get_border (context, &border);
 
   if (priv->radio)
     {

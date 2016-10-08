@@ -26,7 +26,7 @@ test_init_of_theme (void)
 
   /* Get the color. This should be initialized by the theme and not be
    * the default. */
-  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &before);
+  gtk_style_context_get_color (context, &before);
 
   /* Add a style that sets a different color for this widget.
    * This style has a higher priority than fallback, but a lower 
@@ -41,7 +41,7 @@ test_init_of_theme (void)
   g_object_unref (provider);
 
   /* Get the color again. */
-  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &after);
+  gtk_style_context_get_color (context, &after);
 
   /* Because the style we added does not influence the color,
    * the before and after colors should be identical. */

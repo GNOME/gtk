@@ -343,8 +343,7 @@ gtk_text_cell_accessible_get_default_attributes (AtkText *text)
   attrib_set = _gtk_pango_get_default_attributes (NULL, text_cell->priv->layout);
 
   attrib_set = _gtk_style_context_get_attributes (attrib_set,
-                                                  gtk_widget_get_style_context (widget),
-                                                  gtk_widget_get_state_flags (widget));
+                                                  gtk_widget_get_style_context (widget));
 
   return attrib_set;
 }

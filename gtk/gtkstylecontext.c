@@ -492,49 +492,6 @@ gtk_style_context_get_node (GtkStyleContext *context)
   return context->priv->cssnode;
 }
 
-static GtkStateFlags
-gtk_style_context_push_state (GtkStyleContext *context,
-                              GtkStateFlags    state)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-  GtkStateFlags current_state;
-  GtkCssNode *root;
-
-  current_state = gtk_css_node_get_state (priv->cssnode);
-
-  if (current_state == state)
-    return state;
-
-  root = gtk_style_context_get_root (context);
-
-  if (GTK_IS_CSS_TRANSIENT_NODE (priv->cssnode))
-    {
-      /* don't emit a warning, changing state here is fine */
-    }
-  else if (GTK_IS_CSS_WIDGET_NODE (root))
-    {
-      GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (root));
-      g_debug ("State %u for %s %p doesn't match state %u set via gtk_style_context_set_state ()",
-               state, gtk_widget_get_name (widget), widget, gtk_css_node_get_state (priv->cssnode));
-    }
-  else
-    {
-      g_debug ("State %u for context %p doesn't match state %u set via gtk_style_context_set_state ()",
-               state, context, gtk_css_node_get_state (priv->cssnode));
-    }
-
-  gtk_css_node_set_state (priv->cssnode, state);
-
-  return current_state;
-}
-
-static void
-gtk_style_context_pop_state (GtkStyleContext *context,
-                             GtkStateFlags    saved_state)
-{
-  gtk_css_node_set_state (context->priv->cssnode, saved_state);
-}
-
 /**
  * gtk_style_context_new:
  *
@@ -806,10 +763,8 @@ gtk_style_context_query_func (guint    id,
 void
 gtk_style_context_get_property (GtkStyleContext *context,
                                 const gchar     *property,
-                                GtkStateFlags    state,
                                 GValue          *value)
 {
-  GtkStateFlags saved_state;
   GtkStyleProperty *prop;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -828,18 +783,15 @@ gtk_style_context_get_property (GtkStyleContext *context,
       return;
     }
 
-  saved_state = gtk_style_context_push_state (context, state);
   _gtk_style_property_query (prop,
                              value,
                              gtk_style_context_query_func,
                              gtk_css_node_get_style (context->priv->cssnode));
-  gtk_style_context_pop_state (context, saved_state);
 }
 
 /**
  * gtk_style_context_get_valist:
  * @context: a #GtkStyleContext
- * @state: state to retrieve the property values for
  * @args: va_list of property name/return location pairs, followed by %NULL
  *
  * Retrieves several style property values from @context for a given state.
@@ -850,7 +802,6 @@ gtk_style_context_get_property (GtkStyleContext *context,
  */
 void
 gtk_style_context_get_valist (GtkStyleContext *context,
-                              GtkStateFlags    state,
                               va_list          args)
 {
   const gchar *property_name;
@@ -866,7 +817,6 @@ gtk_style_context_get_valist (GtkStyleContext *context,
 
       gtk_style_context_get_property (context,
                                       property_name,
-                                      state,
                                       &value);
 
       G_VALUE_LCOPY (&value, args, 0, &error);
@@ -886,7 +836,6 @@ gtk_style_context_get_valist (GtkStyleContext *context,
 /**
  * gtk_style_context_get:
  * @context: a #GtkStyleContext
- * @state: state to retrieve the property values for
  * @...: property name /return value pairs, followed by %NULL
  *
  * Retrieves several style property values from @context for a
@@ -898,15 +847,14 @@ gtk_style_context_get_valist (GtkStyleContext *context,
  */
 void
 gtk_style_context_get (GtkStyleContext *context,
-                       GtkStateFlags    state,
                        ...)
 {
   va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  va_start (args, state);
-  gtk_style_context_get_valist (context, state, args);
+  va_start (args, context);
+  gtk_style_context_get_valist (context, args);
   va_end (args);
 }
 
@@ -2025,8 +1973,6 @@ gtk_style_context_validate (GtkStyleContext  *context,
 
   g_signal_emit (context, signals[CHANGED], 0);
 
-  g_object_set_data (G_OBJECT (context), "font-cache-for-get_font", NULL);
-
   priv->invalidating_context = NULL;
 }
 
@@ -2055,7 +2001,6 @@ gtk_style_context_invalidate (GtkStyleContext *context)
 /**
  * gtk_style_context_get_color:
  * @context: a #GtkStyleContext
- * @state: state to retrieve the color for
  * @color: (out): return value for the foreground color
  *
  * Gets the foreground color for a given state.
@@ -2067,7 +2012,6 @@ gtk_style_context_invalidate (GtkStyleContext *context)
  **/
 void
 gtk_style_context_get_color (GtkStyleContext *context,
-                             GtkStateFlags    state,
                              GdkRGBA         *color)
 {
   GdkRGBA *c;
@@ -2076,7 +2020,6 @@ gtk_style_context_get_color (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_get (context,
-                         state,
                          "color", &c,
                          NULL);
 
@@ -2087,7 +2030,6 @@ gtk_style_context_get_color (GtkStyleContext *context,
 /**
  * gtk_style_context_get_background_color:
  * @context: a #GtkStyleContext
- * @state: state to retrieve the color for
  * @color: (out): return value for the background color
  *
  * Gets the background color for a given state.
@@ -2107,7 +2049,6 @@ gtk_style_context_get_color (GtkStyleContext *context,
  **/
 void
 gtk_style_context_get_background_color (GtkStyleContext *context,
-                                        GtkStateFlags    state,
                                         GdkRGBA         *color)
 {
   GdkRGBA *c;
@@ -2116,7 +2057,6 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_get (context,
-                         state,
                          "background-color", &c,
                          NULL);
 
@@ -2127,7 +2067,6 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
 /**
  * gtk_style_context_get_border_color:
  * @context: a #GtkStyleContext
- * @state: state to retrieve the color for
  * @color: (out): return value for the border color
  *
  * Gets the border color for a given state.
@@ -2138,7 +2077,6 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
  **/
 void
 gtk_style_context_get_border_color (GtkStyleContext *context,
-                                    GtkStateFlags    state,
                                     GdkRGBA         *color)
 {
   GdkRGBA *c;
@@ -2147,7 +2085,6 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_get (context,
-                         state,
                          "border-color", &c,
                          NULL);
 
@@ -2158,7 +2095,6 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
 /**
  * gtk_style_context_get_border:
  * @context: a #GtkStyleContext
- * @state: state to retrieve the border for
  * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a #GtkBorder.
@@ -2170,17 +2106,14 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
  **/
 void
 gtk_style_context_get_border (GtkStyleContext *context,
-                              GtkStateFlags    state,
                               GtkBorder       *border)
 {
   GtkCssStyle *style;
-  GtkStateFlags saved_state;
   double top, left, bottom, right;
 
   g_return_if_fail (border != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  saved_state = gtk_style_context_push_state (context, state);
   style = gtk_style_context_lookup_style (context);
 
   top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100));
@@ -2192,14 +2125,11 @@ gtk_style_context_get_border (GtkStyleContext *context,
   border->left = left;
   border->bottom = bottom;
   border->right = right;
-
-  gtk_style_context_pop_state (context, saved_state);
 }
 
 /**
  * gtk_style_context_get_padding:
  * @context: a #GtkStyleContext
- * @state: state to retrieve the padding for
  * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a #GtkBorder.
@@ -2210,17 +2140,14 @@ gtk_style_context_get_border (GtkStyleContext *context,
  **/
 void
 gtk_style_context_get_padding (GtkStyleContext *context,
-                               GtkStateFlags    state,
                                GtkBorder       *padding)
 {
   GtkCssStyle *style;
-  GtkStateFlags saved_state;
   double top, left, bottom, right;
 
   g_return_if_fail (padding != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  saved_state = gtk_style_context_push_state (context, state);
   style = gtk_style_context_lookup_style (context);
 
   top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100));
@@ -2232,14 +2159,11 @@ gtk_style_context_get_padding (GtkStyleContext *context,
   padding->left = left;
   padding->bottom = bottom;
   padding->right = right;
-
-  gtk_style_context_pop_state (context, saved_state);
 }
 
 /**
  * gtk_style_context_get_margin:
  * @context: a #GtkStyleContext
- * @state: state to retrieve the border for
  * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a #GtkBorder.
@@ -2250,17 +2174,14 @@ gtk_style_context_get_padding (GtkStyleContext *context,
  **/
 void
 gtk_style_context_get_margin (GtkStyleContext *context,
-                              GtkStateFlags    state,
                               GtkBorder       *margin)
 {
   GtkCssStyle *style;
-  GtkStateFlags saved_state;
   double top, left, bottom, right;
 
   g_return_if_fail (margin != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  saved_state = gtk_style_context_push_state (context, state);
   style = gtk_style_context_lookup_style (context);
 
   top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100));
@@ -2272,67 +2193,6 @@ gtk_style_context_get_margin (GtkStyleContext *context,
   margin->left = left;
   margin->bottom = bottom;
   margin->right = right;
-
-  gtk_style_context_pop_state (context, saved_state);
-}
-
-/**
- * gtk_style_context_get_font:
- * @context: a #GtkStyleContext
- * @state: state to retrieve the font for
- *
- * Returns the font description for a given state. The returned
- * object is const and will remain valid until the
- * #GtkStyleContext::changed signal happens.
- *
- * Returns: (transfer none): the #PangoFontDescription for the given
- *          state.  This object is owned by GTK+ and should not be
- *          freed.
- *
- * Since: 3.0
- *
- * Deprecated: 3.8: Use gtk_style_context_get() for "font" or
- *     subproperties instead.
- **/
-const PangoFontDescription *
-gtk_style_context_get_font (GtkStyleContext *context,
-                            GtkStateFlags    state)
-{
-  GHashTable *hash;
-  PangoFontDescription *description, *previous;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  /* Yuck, fonts are created on-demand but we don't return a ref.
-   * Do bad things to achieve this requirement */
-  gtk_style_context_get (context, state, "font", &description, NULL);
-  
-  hash = g_object_get_data (G_OBJECT (context), "font-cache-for-get_font");
-
-  if (hash == NULL)
-    {
-      hash = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-                                    NULL,
-                                    (GDestroyNotify) pango_font_description_free);
-      g_object_set_data_full (G_OBJECT (context),
-                              "font-cache-for-get_font",
-                              hash,
-                              (GDestroyNotify) g_hash_table_unref);
-    }
-
-  previous = g_hash_table_lookup (hash, GUINT_TO_POINTER (state));
-  if (previous)
-    {
-      pango_font_description_merge (previous, description, TRUE);
-      pango_font_description_free (description);
-      description = previous;
-    }
-  else
-    {
-      g_hash_table_insert (hash, GUINT_TO_POINTER (state), description);
-    }
-
-  return description;
 }
 
 void
@@ -2343,7 +2203,6 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
   GdkRGBA *pc, *sc;
 
   gtk_style_context_get (context,
-                         gtk_style_context_get_state (context),
                          "caret-color", &pc,
                          "-gtk-secondary-caret-color", &sc,
                          NULL);
@@ -2597,14 +2456,13 @@ add_attribute (AtkAttributeSet  *attributes,
  */
 AtkAttributeSet *
 _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
-                                   GtkStyleContext *context,
-                                   GtkStateFlags    flags)
+                                   GtkStyleContext *context)
 {
   GdkRGBA color;
   gchar *value;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, flags, &color);
+  gtk_style_context_get_background_color (context, &color);
 G_GNUC_END_IGNORE_DEPRECATIONS
   value = g_strdup_printf ("%u,%u,%u",
                            (guint) ceil (color.red * 65536 - color.red),
@@ -2613,7 +2471,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   attributes = add_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
   g_free (value);
 
-  gtk_style_context_get_color (context, flags, &color);
+  gtk_style_context_get_color (context, &color);
   value = g_strdup_printf ("%u,%u,%u",
                            (guint) ceil (color.red * 65536 - color.red),
                            (guint) ceil (color.green * 65536 - color.green),

@@ -2763,7 +2763,7 @@ draw_page_cb (GtkWidget          *widget,
     }
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &color);
+  gtk_style_context_get_color (context, &color);
 
   pos_x = (width - w) / 2;
   pos_y = (height - h) / 2 - 10;

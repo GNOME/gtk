@@ -3499,7 +3499,7 @@ gtk_label_update_layout_attributes (GtkLabel *label)
           pango_attr_list_insert (attrs, attribute);
 
           gtk_style_context_save_to_node (context, link->cssnode);
-          gtk_style_context_get_color (context, gtk_style_context_get_state (context), &link_color);
+          gtk_style_context_get_color (context, &link_color);
           gtk_style_context_restore (context);
 
           attribute = pango_attr_foreground_new (link_color.red * 65535,

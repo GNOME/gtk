@@ -88,15 +88,9 @@ _gtk_text_handle_get_size (GtkTextHandle         *handle,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_get (context,
-                         gtk_style_context_get_state (context),
-                         "min-width",
-                         width, NULL);
-
-
-  gtk_style_context_get (context,
-                         gtk_style_context_get_state (context),
-                         "min-height",
-                         height, NULL);
+                         "min-width", width,
+                         "min-height", height,
+                         NULL);
 }
 
 static void

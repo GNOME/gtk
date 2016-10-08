@@ -74,8 +74,7 @@ PangoAttrList *_gtk_style_context_get_pango_attributes       (GtkStyleContext *c
 
 /* Accessibility support */
 AtkAttributeSet *_gtk_style_context_get_attributes           (AtkAttributeSet    *attributes,
-                                                              GtkStyleContext    *context,
-                                                              GtkStateFlags       flags);
+                                                              GtkStyleContext    *context);
 
 G_END_DECLS
 

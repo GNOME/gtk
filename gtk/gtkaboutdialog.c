@@ -1912,12 +1912,10 @@ follow_if_link (GtkAboutDialog *about,
       if (uri && !g_slist_find_custom (priv->visited_links, uri, (GCompareFunc)strcmp))
         {
           GdkRGBA visited_link_color;
-          GtkStateFlags state;
           GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (about));
           gtk_style_context_save (context);
-          state = gtk_style_context_get_state (context) | GTK_STATE_FLAG_VISITED;
-          gtk_style_context_set_state (context, state);
-          gtk_style_context_get_color (context, state, &visited_link_color);
+          gtk_style_context_set_state (context, gtk_style_context_get_state (context) | GTK_STATE_FLAG_VISITED);
+          gtk_style_context_get_color (context, &visited_link_color);
           gtk_style_context_restore (context);
 
           g_object_set (G_OBJECT (tag), "foreground-rgba", &visited_link_color, NULL);
@@ -2065,8 +2063,12 @@ text_buffer_new (GtkAboutDialog  *about,
   GtkStateFlags state = gtk_widget_get_state_flags (GTK_WIDGET (about));
   GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (about));
 
-  gtk_style_context_get_color (context, state | GTK_STATE_FLAG_LINK, &link_color);
-  gtk_style_context_get_color (context, state | GTK_STATE_FLAG_VISITED, &visited_link_color);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state | GTK_STATE_FLAG_LINK);
+  gtk_style_context_get_color (context, &link_color);
+  gtk_style_context_set_state (context, state | GTK_STATE_FLAG_VISITED);
+  gtk_style_context_get_color (context, &visited_link_color);
+  gtk_style_context_restore (context);
   buffer = gtk_text_buffer_new (NULL);
 
   for (p = strings; *p; p++)

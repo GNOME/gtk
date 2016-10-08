@@ -6452,7 +6452,6 @@ get_shadow_width (GtkWindow *window,
   GtkBorder d = { 0 };
   GtkBorder margin;
   GtkStyleContext *context;
-  GtkStateFlags s;
   GtkCssValue *shadows;
 
   *shadow_width = border;
@@ -6475,11 +6474,10 @@ get_shadow_width (GtkWindow *window,
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
 
   gtk_style_context_save_to_node (context, priv->decoration_node);
-  s = gtk_style_context_get_state (context);
 
   /* Always sum border + padding */
-  gtk_style_context_get_border (context, s, &border);
-  gtk_style_context_get_padding (context, s, &d);
+  gtk_style_context_get_border (context, &border);
+  gtk_style_context_get_padding (context, &d);
   sum_borders (&d, &border);
 
   /* Calculate the size of the drop shadows ... */
@@ -6489,7 +6487,7 @@ get_shadow_width (GtkWindow *window,
   if (priv->type != GTK_WINDOW_POPUP)
     {
       /* ... and compare it to the margin size, which we use for resize grips */
-      gtk_style_context_get_margin (context, s, &margin);
+      gtk_style_context_get_margin (context, &margin);
       max_borders (&border, &margin);
     }
 
@@ -6551,10 +6549,10 @@ update_border_windows (GtkWindow *window)
   context = _gtk_widget_get_style_context (widget);
 
   gtk_style_context_save_to_node (context, priv->decoration_node);
-  gtk_style_context_get_margin (context, gtk_style_context_get_state (context), &border);
-  gtk_style_context_get_border (context, gtk_style_context_get_state (context), &tmp);
+  gtk_style_context_get_margin (context, &border);
+  gtk_style_context_get_border (context, &tmp);
   sum_borders (&border, &tmp);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &tmp);
+  gtk_style_context_get_padding (context, &tmp);
   sum_borders (&border, &tmp);
   gtk_widget_style_get (widget,
                         "decoration-resize-handle", &handle,
@@ -9674,8 +9672,8 @@ gtk_window_draw (GtkWidget *widget,
             {
               GtkBorder padding, border;
 
-              gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
-              gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
+              gtk_style_context_get_padding (context, &padding);
+              gtk_style_context_get_border (context, &border);
               sum_borders (&border, &padding);
 
               gtk_render_background (context, cr,

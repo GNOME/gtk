@@ -1142,8 +1142,7 @@ gtk_label_accessible_get_default_attributes (AtkText *text)
   attributes = _gtk_pango_get_default_attributes (attributes,
                                                   gtk_label_get_layout (GTK_LABEL (widget)));
   attributes = _gtk_style_context_get_attributes (attributes,
-                                                  gtk_widget_get_style_context (widget),
-                                                  gtk_widget_get_state_flags (widget));
+                                                  gtk_widget_get_style_context (widget));
 
   return attributes;
 }

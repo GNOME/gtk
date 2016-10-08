@@ -1082,21 +1082,19 @@ get_component_paddings (GtkCalendar *calendar,
                         GtkBorder   *week_padding)
 {
   GtkStyleContext * context;
-  GtkStateFlags state;
   GtkWidget *widget;
 
   widget = GTK_WIDGET (calendar);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
 
   if (padding)
-    gtk_style_context_get_padding (context, state, padding);
+    gtk_style_context_get_padding (context, padding);
 
   if (day_padding)
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "day-number");
-      gtk_style_context_get_padding (context, state, day_padding);
+      gtk_style_context_get_padding (context, day_padding);
       gtk_style_context_restore (context);
     }
 
@@ -1104,7 +1102,7 @@ get_component_paddings (GtkCalendar *calendar,
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "day-name");
-      gtk_style_context_get_padding (context, state, day_name_padding);
+      gtk_style_context_get_padding (context, day_name_padding);
       gtk_style_context_restore (context);
     }
 
@@ -1112,7 +1110,7 @@ get_component_paddings (GtkCalendar *calendar,
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "week-number");
-      gtk_style_context_get_padding (context, state, week_padding);
+      gtk_style_context_get_padding (context, week_padding);
       gtk_style_context_restore (context);
     }
 }
@@ -2614,7 +2612,7 @@ calendar_paint_day (GtkCalendar *calendar,
 
       cairo_save (cr);
 
-      gtk_style_context_get_color (context, state, &color);
+      gtk_style_context_get_color (context, &color);
       gdk_cairo_set_source_rgba (cr, &color);
 
       cairo_set_line_width (cr, 1);

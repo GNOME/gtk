@@ -2712,7 +2712,6 @@ gtk_flow_box_render (GtkCssGadget *gadget,
 
       if (lines->len > 0)
         {
-          GtkStateFlags state;
           cairo_path_t *path;
           GtkBorder border;
           GdkRGBA border_color;
@@ -2735,11 +2734,10 @@ gtk_flow_box_render (GtkCssGadget *gadget,
           cairo_append_path (cr, path);
           cairo_path_destroy (path);
 
-          state = gtk_style_context_get_state (context);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_style_context_get_border_color (context, state, &border_color);
+          gtk_style_context_get_border_color (context, &border_color);
 G_GNUC_END_IGNORE_DEPRECATIONS
-          gtk_style_context_get_border (context, state, &border);
+          gtk_style_context_get_border (context, &border);
 
           cairo_set_line_width (cr, border.left);
           gdk_cairo_set_source_rgba (cr, &border_color);

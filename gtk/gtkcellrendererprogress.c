@@ -577,7 +577,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
   gtk_render_background (context, cr, x, y, w, h);
   gtk_render_frame (context, cr, x, y, w, h);
 
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+  gtk_style_context_get_padding (context, &padding);
 
   x += padding.left;
   y += padding.top;
