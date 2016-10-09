@@ -765,7 +765,6 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 300);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);

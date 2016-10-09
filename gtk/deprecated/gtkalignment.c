@@ -556,7 +556,6 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkWidget *child;
   gint width, height;
-  gint border_width;
   gint baseline;
 
   gtk_widget_set_allocation (widget, allocation);
@@ -571,17 +570,15 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       gint child_width, child_height;
       double yalign, yscale;
 
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (alignment));
-
       padding_horizontal = priv->padding_left + priv->padding_right;
       padding_vertical = priv->padding_top + priv->padding_bottom;
 
-      width  = MAX (1, allocation->width - padding_horizontal - 2 * border_width);
-      height = MAX (1, allocation->height - padding_vertical - 2 * border_width);
+      width  = MAX (1, allocation->width - padding_horizontal);
+      height = MAX (1, allocation->height - padding_vertical);
 
       baseline = gtk_widget_get_allocated_baseline (widget);
       if (baseline != -1)
-	baseline -= border_width + priv->padding_top;
+	baseline -= priv->padding_top;
 
       /* If we get a baseline set that means we're baseline aligned, and the parent
 	 honored that. In that case we have to ignore yalign/yscale as we need
@@ -634,11 +631,11 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
 	child_allocation.height = height;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	child_allocation.x = (1.0 - priv->xalign) * (width - child_allocation.width) + allocation->x + border_width + priv->padding_right;
+	child_allocation.x = (1.0 - priv->xalign) * (width - child_allocation.width) + allocation->x + priv->padding_right;
       else 
-	child_allocation.x = priv->xalign * (width - child_allocation.width) + allocation->x + border_width + priv->padding_left;
+	child_allocation.x = priv->xalign * (width - child_allocation.width) + allocation->x + priv->padding_left;
 
-      child_allocation.y = yalign * (height - child_allocation.height) + allocation->y + border_width + priv->padding_top;
+      child_allocation.y = yalign * (height - child_allocation.height) + allocation->y + priv->padding_top;
 
       gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
     }
@@ -659,16 +656,14 @@ gtk_alignment_get_preferred_size (GtkWidget      *widget,
   GtkWidget *child;
   guint minimum, natural;
   guint top_offset;
-  guint border;
 
   if (minimum_baseline)
     *minimum_baseline = -1;
   if (natural_baseline)
     *natural_baseline = -1;
 
-  border = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  natural = minimum = border * 2;
-  top_offset = border;
+  natural = minimum = 0;
+  top_offset = 0;
 
   if ((child = gtk_bin_get_child (GTK_BIN (widget))) && gtk_widget_get_visible (child))
     {

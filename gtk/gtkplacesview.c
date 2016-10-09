@@ -569,7 +569,6 @@ populate_servers (GtkPlacesView *view)
 
       grid = g_object_new (GTK_TYPE_GRID,
                            "orientation", GTK_ORIENTATION_VERTICAL,
-                           "border-width", 3,
                            NULL);
 
       /* name of the connected uri, if any */

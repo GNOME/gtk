@@ -265,7 +265,6 @@ gtk_box_class_init (GtkBoxClass *class)
   container_class->set_child_property = gtk_box_set_child_property;
   container_class->get_child_property = gtk_box_get_child_property;
   container_class->get_path_for_child = gtk_box_get_path_for_child;
-  gtk_container_class_handle_border_width (container_class);
 
   g_object_class_override_property (object_class,
                                     PROP_ORIENTATION,

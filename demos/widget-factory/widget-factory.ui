@@ -441,7 +441,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
               <object class="GtkBox" id="page1">
                 <property name="visible">1</property>
                 <property name="orientation">vertical</property>
-                <property name="border-width">10</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkBox" id="box2">
@@ -1830,7 +1829,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                   <object class="GtkBox">
                     <property name="visible">1</property>
                     <property name="spacing">10</property>
-                    <property name="border-width">16</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">1</property>
@@ -2873,7 +2871,6 @@ microphone-sensitivity-medium-symbolic</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">1</property>
-                <property name="border-width">16</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkBox">

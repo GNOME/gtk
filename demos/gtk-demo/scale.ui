@@ -21,7 +21,6 @@
   </object>
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Scales</property>
-    <property name="border-width" translatable="yes">20</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">1</property>

@@ -56,7 +56,6 @@ interactive_dialog_clicked (GtkButton *button,
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, FALSE, FALSE);
 
   image = gtk_image_new_from_icon_name ("dialog-question", GTK_ICON_SIZE_DIALOG);
@@ -114,13 +113,10 @@ do_dialog (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      gtk_container_set_border_width (GTK_CONTAINER (window), 8);
-
       frame = gtk_frame_new ("Dialogs");
       gtk_container_add (GTK_CONTAINER (window), frame);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
       gtk_container_add (GTK_CONTAINER (frame), vbox);
 
       /* Standard message dialog */

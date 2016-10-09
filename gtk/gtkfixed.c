@@ -140,7 +140,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
   container_class->child_type = gtk_fixed_child_type;
   container_class->set_child_property = gtk_fixed_set_child_property;
   container_class->get_child_property = gtk_fixed_get_child_property;
-  gtk_container_class_handle_border_width (container_class);
 
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_X,

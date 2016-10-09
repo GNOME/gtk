@@ -349,7 +349,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->set_focus_child = gtk_paned_set_focus_child;
   container_class->set_child_property = gtk_paned_set_child_property;
   container_class->get_child_property = gtk_paned_get_child_property;
-  gtk_container_class_handle_border_width (container_class);
 
   paned_class->cycle_child_focus = gtk_paned_cycle_child_focus;
   paned_class->toggle_handle_focus = gtk_paned_toggle_handle_focus;

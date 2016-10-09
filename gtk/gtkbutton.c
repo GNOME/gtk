@@ -219,11 +219,9 @@ gtk_button_class_init (GtkButtonClass *klass)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = (GtkWidgetClass*) klass;
-  container_class = (GtkContainerClass*) klass;
   
   gobject_class->constructed  = gtk_button_constructed;
   gobject_class->dispose      = gtk_button_dispose;
@@ -249,8 +247,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->leave_notify_event = gtk_button_leave_notify;
   widget_class->state_changed = gtk_button_state_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
-
-  gtk_container_class_handle_border_width (container_class);
 
   klass->clicked = NULL;
   klass->activate = gtk_real_button_activate;

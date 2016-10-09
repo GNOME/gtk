@@ -7294,7 +7294,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
   GtkWidget *widget = (GtkWidget *)window;
   GtkWindowPrivate *priv = window->priv;
   GtkAllocation child_allocation;
-  gint border_width;
   GtkBorder window_border = { 0 };
   GList *link;
 
@@ -7355,12 +7354,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
                               allocation->x, allocation->y,
                               allocation->width, allocation->height);
     }
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-  child_allocation.x += border_width;
-  child_allocation.y += border_width;
-  child_allocation.width = MAX (1, child_allocation.width - border_width * 2);
-  child_allocation.height = MAX (1, child_allocation.height - border_width * 2);
 
   *allocation_out = child_allocation;
 
@@ -8174,7 +8167,6 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   GtkWindow *window;
   GtkWidget *child;
   GtkWindowPrivate *priv;
-  guint border_width;
   gint title_min = 0, title_nat = 0;
   gint child_min = 0, child_nat = 0;
   GtkBorder window_border = { 0 };
@@ -8184,8 +8176,6 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   priv = window->priv;
   child  = gtk_bin_get_child (GTK_BIN (window));
   has_size_request = gtk_widget_has_size_request (widget);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
   if (priv->decorated &&
       !priv->fullscreen)
@@ -8208,10 +8198,8 @@ gtk_window_get_preferred_width (GtkWidget *widget,
 
       if (child_nat == 0 && !has_size_request)
         child_nat = NO_CONTENT_CHILD_NAT;
-      child_min += border_width * 2 +
-                   window_border.left + window_border.right;
-      child_nat += border_width * 2 +
-                   window_border.left + window_border.right;
+      child_min += window_border.left + window_border.right;
+      child_nat += window_border.left + window_border.right;
     }
   else if (!has_size_request)
     {
@@ -8232,7 +8220,6 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
   GtkWindow *window;
   GtkWidget *child;
   GtkWindowPrivate *priv;
-  guint border_width;
   gint title_min = 0, title_nat = 0;
   gint child_min = 0, child_nat = 0;
   gint title_height = 0;
@@ -8243,10 +8230,6 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
   priv = window->priv;
   child  = gtk_bin_get_child (GTK_BIN (window));
   has_size_request = gtk_widget_has_size_request (widget);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-
-  height -= 2 * border_width;
 
   if (priv->decorated &&
       !priv->fullscreen)
@@ -8279,10 +8262,8 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
 
       if (child_nat == 0 && height == 0 && !has_size_request)
         child_nat = NO_CONTENT_CHILD_NAT;
-      child_min += border_width * 2 +
-                   window_border.left + window_border.right;
-      child_nat += border_width * 2 +
-                   window_border.left + window_border.right;
+      child_min += window_border.left + window_border.right;
+      child_nat += window_border.left + window_border.right;
     }
   else if (!has_size_request)
     {
@@ -8301,7 +8282,6 @@ gtk_window_get_preferred_height (GtkWidget *widget,
   GtkWindow *window;
   GtkWindowPrivate *priv;
   GtkWidget *child;
-  guint border_width;
   int title_min = 0;
   int title_height = 0;
   GtkBorder window_border = { 0 };
@@ -8314,8 +8294,6 @@ gtk_window_get_preferred_height (GtkWidget *widget,
 
   *minimum_size = 0;
   *natural_size = 0;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
   if (priv->decorated &&
       !priv->fullscreen)
@@ -8343,8 +8321,8 @@ gtk_window_get_preferred_height (GtkWidget *widget,
 
       if (child_nat == 0 && !has_size_request)
         child_nat = NO_CONTENT_CHILD_NAT;
-      *minimum_size += child_min + 2 * border_width;
-      *natural_size += child_nat + 2 * border_width;
+      *minimum_size += child_min;
+      *natural_size += child_nat;
     }
   else if (!has_size_request)
     {
@@ -8362,7 +8340,6 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
   GtkWindow *window;
   GtkWindowPrivate *priv;
   GtkWidget *child;
-  guint border_width;
   int title_min = 0;
   int title_height = 0;
   GtkBorder window_border = { 0 };
@@ -8375,10 +8352,6 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
 
   *minimum_size = 0;
   *natural_size = 0;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-
-  width -= 2 * border_width;
 
   if (priv->decorated &&
       !priv->fullscreen)
@@ -8410,8 +8383,8 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
 
       if (child_nat == 0 && width == 0 && !has_size_request)
         child_nat = NO_CONTENT_CHILD_NAT;
-      *minimum_size += child_min + 2 * border_width;
-      *natural_size += child_nat + 2 * border_width;
+      *minimum_size += child_min;
+      *natural_size += child_nat;
     }
   else if (!has_size_request)
     {

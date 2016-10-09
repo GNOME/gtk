@@ -127,7 +127,7 @@ static void
 gtk_recent_chooser_dialog_init (GtkRecentChooserDialog *dialog)
 {
   GtkRecentChooserDialogPrivate *priv;
-  GtkWidget *content_area, *action_area;
+  GtkWidget *content_area;
   GtkDialog *rc_dialog = GTK_DIALOG (dialog);
 
   priv = gtk_recent_chooser_dialog_get_instance_private (dialog);
@@ -135,13 +135,8 @@ gtk_recent_chooser_dialog_init (GtkRecentChooserDialog *dialog)
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
 
   content_area = gtk_dialog_get_content_area (rc_dialog);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  action_area = gtk_dialog_get_action_area (rc_dialog);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
-  gtk_container_set_border_width (GTK_CONTAINER (rc_dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
 }
 
 /* we intercept the GtkRecentChooser::item_activated signal and try to
@@ -213,7 +208,6 @@ gtk_recent_chooser_dialog_constructed (GObject *object)
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (object));
 
-  gtk_container_set_border_width (GTK_CONTAINER (priv->chooser), 5);
   gtk_box_pack_start (GTK_BOX (content_area),
                       priv->chooser, TRUE, TRUE);
   gtk_widget_show (priv->chooser);

@@ -1079,7 +1079,6 @@ main (int argc, char **argv)
 	  }
 
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        gtk_container_set_border_width (GTK_CONTAINER (window), 5);
         g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
         mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
@@ -1090,7 +1089,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         cellview = gtk_cell_view_new ();
@@ -1112,7 +1110,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         model = create_list_blaat ();
@@ -1153,7 +1150,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         model = create_empty_list_blaat ();
@@ -1197,7 +1193,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         model = create_list_blaat ();
@@ -1257,7 +1252,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         model = create_tree_blaat ();
@@ -1301,7 +1295,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         comboboxgrid = create_combo_box_grid_demo ();
@@ -1313,7 +1306,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         comboboxtext = gtk_combo_box_text_new_with_entry ();
@@ -1326,7 +1318,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         model = create_phylogenetic_tree ();
@@ -1349,7 +1340,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         model = create_capital_tree ();
@@ -1381,7 +1371,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         model = create_food_list ();
@@ -1416,7 +1405,6 @@ main (int argc, char **argv)
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE);
 
         boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
 	model = create_list_long ();

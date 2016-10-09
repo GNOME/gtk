@@ -403,8 +403,6 @@ create_window (void)
   hbox   = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
-  gtk_container_set_border_width (GTK_CONTAINER (window), 8);
-
   gtk_widget_show (vbox);
   gtk_widget_show (hbox);
   gtk_container_add (GTK_CONTAINER (window), hbox);

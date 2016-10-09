@@ -305,7 +305,6 @@ create_frame (ChangeDisplayInfo *info,
   *frame = gtk_frame_new (title);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
   gtk_container_add (GTK_CONTAINER (*frame), hbox);
 
   scrollwin = gtk_scrolled_window_new (NULL, NULL);
@@ -539,7 +538,6 @@ do_changedisplay (GtkWidget *do_widget)
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (info->window));
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
       gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE);
 
       frame = create_display_frame (info);

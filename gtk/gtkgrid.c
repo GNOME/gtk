@@ -1752,7 +1752,6 @@ gtk_grid_class_init (GtkGridClass *class)
   container_class->child_type = gtk_grid_child_type;
   container_class->set_child_property = gtk_grid_set_child_property;
   container_class->get_child_property = gtk_grid_get_child_property;
-  gtk_container_class_handle_border_width (container_class);
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 

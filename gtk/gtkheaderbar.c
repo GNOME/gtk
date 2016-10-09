@@ -1984,7 +1984,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   container_class->child_type = gtk_header_bar_child_type;
   container_class->set_child_property = gtk_header_bar_set_child_property;
   container_class->get_child_property = gtk_header_bar_get_child_property;
-  gtk_container_class_handle_border_width (container_class);
 
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_PACK_TYPE,

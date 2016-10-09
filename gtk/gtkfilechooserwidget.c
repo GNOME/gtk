@@ -2681,10 +2681,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_style_context_add_class (gtk_widget_get_style_context (vbox), "search-bar");
 
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 0);
-
   priv->save_widgets_table = gtk_grid_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (priv->save_widgets_table), 10);
   gtk_box_pack_start (GTK_BOX (vbox), priv->save_widgets_table, FALSE, FALSE);
   gtk_widget_show (priv->save_widgets_table);
   gtk_grid_set_row_spacing (GTK_GRID (priv->save_widgets_table), 12);

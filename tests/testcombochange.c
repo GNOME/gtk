@@ -247,7 +247,6 @@ main (int argc, char **argv)
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 12);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE);
 
   combo_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);

@@ -36,7 +36,6 @@ main (int argc, char *argv[])
                                            "type", GTK_WINDOW_TOPLEVEL,
                                            "title", "hello world",
                                            "resizable", FALSE,
-                                           "border_width", 10,
                                            NULL),
                              "signal::destroy", gtk_main_quit, NULL,
                              NULL);

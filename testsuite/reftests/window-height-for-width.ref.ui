@@ -2,7 +2,6 @@
 <interface>
   <object class="GtkDialog" id="window1">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
     <property name="title" translatable="yes">Dubstep</property>
     <property name="type_hint">dialog</property>
     <property name="resizable">False</property>

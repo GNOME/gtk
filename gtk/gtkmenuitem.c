@@ -814,8 +814,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ITEM_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "menuitem");
-
-  gtk_container_class_handle_border_width (container_class);
 }
 
 static void

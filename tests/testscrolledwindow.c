@@ -69,7 +69,7 @@ add_row (GtkButton  *button,
 {
   GtkWidget *row;
 
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW, "border-width", 12, NULL);
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW, NULL);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("test"));
   gtk_container_add (GTK_CONTAINER (listbox), row);
 
@@ -100,8 +100,6 @@ scrollable_policy (void)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox   = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-
-  gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
   gtk_widget_show (vbox);
   gtk_widget_show (hbox);

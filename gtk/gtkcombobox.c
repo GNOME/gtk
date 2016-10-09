@@ -668,8 +668,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   container_class->add = gtk_combo_box_add;
   container_class->remove = gtk_combo_box_remove;
 
-  gtk_container_class_handle_border_width (container_class);
-
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
   widget_class->draw = gtk_combo_box_draw;

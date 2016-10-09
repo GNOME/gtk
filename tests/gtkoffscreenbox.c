@@ -255,20 +255,17 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  guint border_width;
   GtkRequisition child_requisition;
   int start_y = 0;
 
   gtk_widget_set_realized (widget, TRUE);
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.x = allocation.x + border_width;
-  attributes.y = allocation.y + border_width;
-  attributes.width = allocation.width - 2 * border_width;
-  attributes.height = allocation.height - 2 * border_width;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask = gtk_widget_get_events (widget)
 			| GDK_EXPOSURE_MASK
@@ -482,7 +479,6 @@ gtk_offscreen_box_size_request (GtkWidget      *widget,
 {
   GtkOffscreenBox *offscreen_box = GTK_OFFSCREEN_BOX (widget);
   int w, h;
-  guint border_width;
 
   w = 0;
   h = 0;
@@ -509,9 +505,8 @@ gtk_offscreen_box_size_request (GtkWidget      *widget,
       h += CHILD2_SIZE_SCALE * child_requisition.height;
     }
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  requisition->width = border_width * 2 + w;
-  requisition->height = border_width * 2 + h;
+  requisition->width = w;
+  requisition->height = h;
 }
 
 static void
@@ -544,20 +539,17 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
 {
   GtkOffscreenBox *offscreen_box;
   gint start_y;
-  guint border_width;
 
   offscreen_box = GTK_OFFSCREEN_BOX (widget);
 
   gtk_widget_set_allocation (widget, allocation);
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
   if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (gtk_widget_get_window (widget),
-                            allocation->x + border_width,
-                            allocation->y + border_width,
-                            allocation->width - border_width * 2,
-                            allocation->height - border_width * 2);
+                            allocation->x,
+                            allocation->y,
+                            allocation->width,
+                            allocation->height);
 
   start_y = 0;
 
@@ -570,7 +562,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
                                      &child_requisition, NULL);
       child_allocation.x = child_requisition.width * (CHILD1_SIZE_SCALE - 1.0) / 2;
       child_allocation.y = start_y + child_requisition.height * (CHILD1_SIZE_SCALE - 1.0) / 2;
-      child_allocation.width = MAX (1, (gint) allocation->width - 2 * border_width);
+      child_allocation.width = allocation->width;
       child_allocation.height = child_requisition.height;
 
       start_y += CHILD1_SIZE_SCALE * child_requisition.height;
@@ -595,7 +587,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
                                      &child_requisition, NULL);
       child_allocation.x = child_requisition.width * (CHILD2_SIZE_SCALE - 1.0) / 2;
       child_allocation.y = start_y + child_requisition.height * (CHILD2_SIZE_SCALE - 1.0) / 2;
-      child_allocation.width = MAX (1, (gint) allocation->width - 2 * border_width);
+      child_allocation.width = allocation->width;
       child_allocation.height = child_requisition.height;
 
       start_y += CHILD2_SIZE_SCALE * child_requisition.height;

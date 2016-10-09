@@ -128,25 +128,6 @@ open_test_window (void)
 }
 
 static void
-on_toggle_border_widths (GtkToggleButton *button,
-                         void            *data)
-{
-  gboolean has_border;
-  int i;
-
-  has_border = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
-
-  for (i = 0; i < TEST_WIDGET_LAST; ++i)
-    {
-      if (GTK_IS_CONTAINER (test_widgets[i]))
-        {
-          gtk_container_set_border_width (GTK_CONTAINER (test_widgets[i]),
-                                          has_border ? 50 : 0);
-        }
-    }
-}
-
-static void
 on_set_small_size_requests (GtkToggleButton *button,
                             void            *data)
 {
@@ -197,13 +178,6 @@ open_control_window (void)
   gtk_container_add (GTK_CONTAINER (window), box);
 
   toggle =
-    gtk_toggle_button_new_with_label ("Containers have borders");
-  g_signal_connect (G_OBJECT (toggle),
-                    "toggled", G_CALLBACK (on_toggle_border_widths),
-                    NULL);
-  gtk_container_add (GTK_CONTAINER (box), toggle);
-
-  toggle =
     gtk_toggle_button_new_with_label ("Set small size requests");
   g_signal_connect (G_OBJECT (toggle),
                     "toggled", G_CALLBACK (on_set_small_size_requests),
@@ -235,7 +209,6 @@ create_widget_visible_border (const char *text)
   gtk_style_context_add_class (gtk_widget_get_style_context (outer_box), "black-bg");
 
   inner_box = gtk_event_box_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (inner_box), 5);
   gtk_style_context_add_class (gtk_widget_get_style_context (inner_box), "blue-bg");
 
   gtk_container_add (GTK_CONTAINER (outer_box), inner_box);

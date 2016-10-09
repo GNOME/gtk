@@ -272,8 +272,6 @@ gtk_frame_class_init (GtkFrameClass *class)
   container_class->remove = gtk_frame_remove;
   container_class->forall = gtk_frame_forall;
 
-  gtk_container_class_handle_border_width (container_class);
-
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FRAME_ACCESSIBLE);

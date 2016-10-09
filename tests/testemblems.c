@@ -13,7 +13,6 @@ int main (int argc, char **argv)
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
 	grid = gtk_grid_new ();
-	gtk_container_set_border_width (GTK_CONTAINER (grid), 12);
 	gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
 	gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 	gtk_container_add (GTK_CONTAINER (window), grid);

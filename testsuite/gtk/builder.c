@@ -922,7 +922,6 @@ test_object_properties (void)
     "    <child>"
     "      <object class=\"GtkBox\" id=\"vbox\">"
     "        <property name=\"orientation\">vertical</property>"
-    "        <property name=\"border-width\">10</property>"
     "        <child>"
     "          <object class=\"GtkLabel\" id=\"label1\">"
     "            <property name=\"mnemonic-widget\">spinbutton1</property>"
@@ -979,10 +978,8 @@ test_children (void)
     "    <child internal-child=\"vbox\">"
     "      <object class=\"GtkBox\" id=\"dialog1-vbox\">"
     "        <property name=\"orientation\">vertical</property>"
-    "        <property name=\"border-width\">10</property>"
     "          <child internal-child=\"action_area\">"
     "            <object class=\"GtkButtonBox\" id=\"dialog1-action_area\">"
-    "              <property name=\"border-width\">20</property>"
     "              <property name=\"orientation\">horizontal</property>"
     "            </object>"
     "          </child>"
@@ -1022,7 +1019,6 @@ test_children (void)
   g_assert (GTK_IS_BOX (vbox));
   g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (vbox)) == GTK_ORIENTATION_VERTICAL);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (gtk_widget_get_parent (GTK_WIDGET (vbox)))), "dialog1") == 0);
-  g_assert (gtk_container_get_border_width (GTK_CONTAINER (vbox)) == 10);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (content_area)), "dialog1-vbox") == 0);
 
   action_area = gtk_builder_get_object (builder, "dialog1-action_area");
@@ -1033,7 +1029,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_assert (GTK_IS_BUTTON_BOX (action_area));
   g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (action_area)) == GTK_ORIENTATION_HORIZONTAL);
   g_assert (gtk_widget_get_parent (GTK_WIDGET (action_area)) != NULL);
-  g_assert (gtk_container_get_border_width (GTK_CONTAINER (action_area)) == 20);
   g_assert (dialog_action_area != NULL);
   g_assert (gtk_buildable_get_name (GTK_BUILDABLE (action_area)) != NULL);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (dialog_action_area)), "dialog1-action_area") == 0);

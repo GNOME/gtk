@@ -56,7 +56,6 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
-        <property name="border-width">0</property>
         <style>
           <class name="view"/>
         </style>
@@ -72,7 +71,6 @@
                 <child>
                   <object class="GtkBox" id="general_main_box">
                     <property name="visible">1</property>
-                    <property name="border-width">12</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">18</property>
                     <child>
@@ -430,7 +428,6 @@
                 <child>
                   <object class="GtkBox" id="page_setup_main_box">
                     <property name="visible">1</property>
-                    <property name="border-width">12</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">18</property>
                     <child>
@@ -856,7 +853,6 @@
                 </child>
                 <child>
                   <object class="GtkGrid" id="job_page">
-                    <property name="border-width">12</property>
                     <property name="row-spacing">18</property>
                     <property name="column-spacing">18</property>
                     <child>
@@ -1190,7 +1186,6 @@
                         <child>
                           <object class="GtkGrid" id="image_quality_table">
                             <property name="visible">1</property>
-                            <property name="border-width">12</property>
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
                           </object>
@@ -1223,7 +1218,6 @@
                         <child>
                           <object class="GtkGrid" id="color_table">
                             <property name="visible">1</property>
-                            <property name="border-width">12</property>
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
                           </object>
@@ -1256,7 +1250,6 @@
                         <child>
                           <object class="GtkGrid" id="finishing_table">
                             <property name="visible">1</property>
-                            <property name="border-width">12</property>
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
                           </object>
@@ -1289,7 +1282,6 @@
                         <child>
                           <object class="GtkBox" id="advanced_vbox">
                             <property name="visible">1</property>
-                            <property name="border-width">12</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">18</property>
                           </object>

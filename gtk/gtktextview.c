@@ -1802,7 +1802,6 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
   gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
-  gtk_container_set_border_width (GTK_CONTAINER (priv->magnifier_popover), 4);
   gtk_widget_show (priv->magnifier);
 }
 
@@ -3976,7 +3975,6 @@ gtk_text_view_size_request (GtkWidget      *widget,
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GSList *tmp_list;
-  guint border_width;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4006,10 +4004,6 @@ gtk_text_view_size_request (GtkWidget      *widget,
 
   if (priv->bottom_window)
     requisition->height += priv->bottom_window->requisition.height;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (text_view));
-  requisition->width += border_width * 2;
-  requisition->height += border_width * 2;
 
   requisition->height += priv->top_border + priv->bottom_border;
   requisition->width += priv->left_border + priv->right_border;
@@ -4231,7 +4225,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
-  guint border_width;
   gboolean size_changed;
   
   text_view = GTK_TEXT_VIEW (widget);
@@ -4247,8 +4240,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
     widget_allocation.width != allocation->width ||
     widget_allocation.height != allocation->height;
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (text_view));
-
   gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
@@ -4262,7 +4253,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * windows get at least a 1x1 allocation.
    */
 
-  width = allocation->width - border_width * 2;
+  width = allocation->width;
 
   if (priv->left_window)
     left_rect.width = priv->left_window->requisition.width;
@@ -4283,7 +4274,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   top_rect.width = text_rect.width;
   bottom_rect.width = text_rect.width;
 
-  height = allocation->height - border_width * 2;
+  height = allocation->height;
 
   if (priv->top_window)
     top_rect.height = priv->top_window->requisition.height;
@@ -4305,8 +4296,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   right_rect.height = text_rect.height;
 
   /* Origins */
-  left_rect.x = border_width;
-  top_rect.y = border_width;
+  left_rect.x = 0;
+  top_rect.y = 0;
 
   text_rect.x = left_rect.x + left_rect.width;
   text_rect.y = top_rect.y + top_rect.height;

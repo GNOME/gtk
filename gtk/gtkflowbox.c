@@ -3798,7 +3798,6 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   container_class->remove = gtk_flow_box_remove;
   container_class->forall = gtk_flow_box_forall;
   container_class->child_type = gtk_flow_box_child_type;
-  gtk_container_class_handle_border_width (container_class);
 
   class->activate_cursor_child = gtk_flow_box_activate_cursor_child;
   class->toggle_cursor_child = gtk_flow_box_toggle_cursor_child;

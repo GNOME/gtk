@@ -318,8 +318,6 @@ do_combobox (GtkWidget *do_widget)
     g_signal_connect (window, "destroy",
                       G_CALLBACK (gtk_widget_destroyed), &window);
 
-    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
     gtk_container_add (GTK_CONTAINER (window), vbox);
 
@@ -330,7 +328,6 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     model = create_icon_store ();
@@ -371,7 +368,6 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     model = create_capital_store ();
@@ -399,7 +395,6 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     combo = gtk_combo_box_text_new_with_entry ();
@@ -417,7 +412,6 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     combo = gtk_combo_box_text_new ();

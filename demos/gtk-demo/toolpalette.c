@@ -443,7 +443,6 @@ do_toolpalette (GtkWidget *do_widget)
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
-      gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
       /* Add widgets to control the ToolPalette appearance: */
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
@@ -529,7 +528,6 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (palette_scroller),
                                       GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
-      gtk_container_set_border_width (GTK_CONTAINER (palette_scroller), 6);
       gtk_widget_set_hexpand (palette_scroller, TRUE);
 
       gtk_container_add (GTK_CONTAINER (palette_scroller), palette);
@@ -549,7 +547,6 @@ do_toolpalette (GtkWidget *do_widget)
       /* ===== notebook ===== */
 
       notebook = gtk_notebook_new ();
-      gtk_container_set_border_width (GTK_CONTAINER (notebook), 6);
       gtk_box_pack_end (GTK_BOX(hbox), notebook, FALSE, FALSE);
 
       /* ===== DnD for tool items ===== */
@@ -585,7 +582,6 @@ do_toolpalette (GtkWidget *do_widget)
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_ALWAYS);
       gtk_container_add (GTK_CONTAINER (contents_scroller), contents);
-      gtk_container_set_border_width (GTK_CONTAINER (contents_scroller), 6);
 
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
                                 contents_scroller,
@@ -615,7 +611,6 @@ do_toolpalette (GtkWidget *do_widget)
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_ALWAYS);
       gtk_container_add (GTK_CONTAINER (contents_scroller), contents);
-      gtk_container_set_border_width (GTK_CONTAINER (contents_scroller), 6);
 
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), contents_scroller,
                                 gtk_label_new ("Interactive DnD Mode"));

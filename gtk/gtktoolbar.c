@@ -433,8 +433,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   container_class->get_child_property = gtk_toolbar_get_child_property;
   container_class->set_child_property = gtk_toolbar_set_child_property;
 
-  gtk_container_class_handle_border_width (container_class);
-
   klass->orientation_changed = gtk_toolbar_orientation_changed;
   klass->style_changed = gtk_toolbar_real_style_changed;
   

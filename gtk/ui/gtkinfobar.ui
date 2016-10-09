@@ -11,7 +11,6 @@
             <child>
               <object class="GtkBox" id="content_area">
                 <property name="visible">1</property>
-                <property name="border-width">8</property>
                 <property name="spacing">16</property>
                 <property name="hexpand">1</property>
               </object>
@@ -22,7 +21,6 @@
             <child>
               <object class="GtkButtonBox" id="action_area">
                 <property name="visible">1</property>
-                <property name="border-width">6</property>
                 <property name="spacing">6</property>
                 <property name="layout-style">end</property>
               </object>
@@ -33,7 +31,6 @@
             <child>
               <object class="GtkButton" id="close_button">
                 <property name="can-focus">1</property>
-                <property name="border-width">6</property>
                 <property name="relief">none</property>
                 <property name="valign">center</property>
                 <style>

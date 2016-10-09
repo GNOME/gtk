@@ -237,7 +237,6 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   container_class->add = gtk_path_bar_add;
   container_class->forall = gtk_path_bar_forall;
   container_class->remove = gtk_path_bar_remove;
-  gtk_container_class_handle_border_width (container_class);
   /* FIXME: */
   /*  container_class->child_type = gtk_path_bar_child_type;*/
 

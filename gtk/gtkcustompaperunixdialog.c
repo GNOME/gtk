@@ -1021,7 +1021,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 {
   GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkDialog *cpu_dialog = GTK_DIALOG (dialog);
-  GtkWidget *action_area, *content_area;
+  GtkWidget *content_area;
   GtkWidget *grid, *label, *widget, *frame, *combo;
   GtkWidget *hbox, *vbox, *treeview, *scrolled, *toolbar, *button;
   GtkCellRenderer *cell;
@@ -1033,16 +1033,9 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkStyleContext *context;
 
   content_area = gtk_dialog_get_content_area (cpu_dialog);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS 
-  action_area = gtk_dialog_get_action_area (cpu_dialog);
-G_GNUC_END_IGNORE_DEPRECATIONS 
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 18);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE);
   gtk_widget_show (hbox);
 

@@ -117,7 +117,6 @@ main (int argc, char *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_titlebar (GTK_WINDOW (window), g_object_new (GTK_TYPE_HEADER_BAR, "visible", TRUE, "title", "GdkGears", NULL));
   gtk_window_set_default_size (GTK_WINDOW (window), 640, 640);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 12);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   overlay = gtk_overlay_new ();
@@ -203,7 +202,6 @@ main (int argc, char *argv[])
   button = gtk_menu_button_new ();
   gtk_menu_button_set_direction (GTK_MENU_BUTTON (button), GTK_ARROW_UP);
   popover = gtk_popover_new (NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (popover), 10);
   label = gtk_label_new ("Popovers work too!");
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (popover), label);

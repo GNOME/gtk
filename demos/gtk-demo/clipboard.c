@@ -219,7 +219,6 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
 
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
@@ -228,7 +227,6 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
       /* Create the first entry */
@@ -245,7 +243,6 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
       /* Create the second entry */
@@ -262,7 +259,6 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
       /* Create the first image */

@@ -54,7 +54,6 @@
                               <object class="GtkBox">
                                 <property name="visible">1</property>
                                 <property name="spacing">6</property>
-                                <property name="border-width">6</property>
                                 <child>
                                   <object class="GtkPathBar" id="browse_path_bar">
                                     <property name="visible">True</property>
@@ -94,7 +93,6 @@
                                 <property name="visible">1</property>
                                 <property name="no-show-all">1</property>
                                 <property name="spacing">6</property>
-                                <property name="border-width">6</property>
                               </object>
                               <packing>
                                 <property name="name">location</property>
@@ -105,7 +103,6 @@
                                 <property name="visible">1</property>
                                 <property name="no-show-all">1</property>
                                 <property name="spacing">6</property>
-                                <property name="border-width">6</property>
                                 <child type="center">
                                   <object class="GtkSearchEntry" id="search_entry">
                                     <property name="visible">1</property>

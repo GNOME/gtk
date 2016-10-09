@@ -160,7 +160,6 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_container_set_border_width (GTK_CONTAINER (toplevel), 12);
   grid = gtk_grid_new ();
 
   w1 = gtk_label_new ("File:");

@@ -91,7 +91,6 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   gobject_class->set_property = gtk_event_box_set_property;
   gobject_class->get_property = gtk_event_box_get_property;
@@ -105,8 +104,6 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   widget_class->get_preferred_height_and_baseline_for_width = gtk_event_box_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_event_box_size_allocate;
   widget_class->draw = gtk_event_box_draw;
-
-  gtk_container_class_handle_border_width (container_class);
 
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBLE_WINDOW,

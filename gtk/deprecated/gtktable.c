@@ -177,7 +177,6 @@ gtk_table_class_init (GtkTableClass *class)
   container_class->child_type = gtk_table_child_type;
   container_class->set_child_property = gtk_table_set_child_property;
   container_class->get_child_property = gtk_table_get_child_property;
-  gtk_container_class_handle_border_width (container_class);
 
   g_object_class_install_property (gobject_class,
                                    PROP_N_ROWS,

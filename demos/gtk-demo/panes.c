@@ -85,7 +85,6 @@ create_pane_options (GtkPaned    *paned,
   child2 = gtk_paned_get_child2 (paned);
 
   frame = gtk_frame_new (frame_label);
-  gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
 
   table = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (frame), table);
@@ -142,14 +141,12 @@ do_panes (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Paned Widgets");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       gtk_box_pack_start (GTK_BOX (vbox), vpaned, TRUE, TRUE);
-      gtk_container_set_border_width (GTK_CONTAINER(vpaned), 5);
 
       hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_paned_add1 (GTK_PANED (vpaned), hpaned);

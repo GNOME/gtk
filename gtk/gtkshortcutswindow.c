@@ -963,7 +963,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   priv->popover = g_object_new (GTK_TYPE_POPOVER,
-                                "border-width", 6,
                                 "relative-to", priv->menu_button,
                                 "position", GTK_POS_BOTTOM,
                                 NULL);
@@ -1002,7 +1001,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            "visible", TRUE,
                            NULL);
   box = g_object_new (GTK_TYPE_BOX,
-                      "border-width", 24,
                       "halign", GTK_ALIGN_CENTER,
                       "spacing", 24,
                       "orientation", GTK_ORIENTATION_VERTICAL,

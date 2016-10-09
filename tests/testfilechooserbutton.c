@@ -124,7 +124,6 @@ tests_button_clicked_cb (GtkButton *real_button,
       tests = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (tests),
 			    "Tests - TestFileChooserButton");
-      gtk_container_set_border_width (GTK_CONTAINER (tests), 12);
       gtk_window_set_transient_for (GTK_WINDOW (tests),
 				    GTK_WINDOW (gtk_widget_get_toplevel (user_data)));
 

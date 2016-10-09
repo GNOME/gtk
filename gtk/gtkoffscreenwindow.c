@@ -56,13 +56,10 @@ gtk_offscreen_window_get_preferred_width (GtkWidget *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
-  gint border_width;
   gint default_width;
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-  *minimum = border_width * 2;
-  *natural = border_width * 2;
+  *minimum = 0;
+  *natural = 0;
 
   child = gtk_bin_get_child (bin);
 
@@ -90,13 +87,10 @@ gtk_offscreen_window_get_preferred_height (GtkWidget *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
-  gint border_width;
   gint default_height;
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-  *minimum = border_width * 2;
-  *natural = border_width * 2;
+  *minimum = 0;
+  *natural = 0;
 
   child = gtk_bin_get_child (bin);
 
@@ -123,11 +117,8 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
-  gint border_width;
 
   gtk_widget_set_allocation (widget, allocation);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (gtk_widget_get_window (widget),
@@ -142,10 +133,10 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
     {
       GtkAllocation  child_alloc;
 
-      child_alloc.x = border_width;
-      child_alloc.y = border_width;
-      child_alloc.width = allocation->width - 2 * border_width;
-      child_alloc.height = allocation->height - 2 * border_width;
+      child_alloc.x = 0;
+      child_alloc.y = 0;
+      child_alloc.width = allocation->width;
+      child_alloc.height = allocation->height;
 
       gtk_widget_size_allocate (child, &child_alloc);
     }

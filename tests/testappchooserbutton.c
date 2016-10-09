@@ -71,7 +71,6 @@ main (int argc,
   gtk_init (&argc, &argv);
 
   toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_container_set_border_width (GTK_CONTAINER (toplevel), 12);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (toplevel), box);

@@ -428,7 +428,6 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
   gtk_box_set_homogeneous (GTK_BOX (self), FALSE);
   gtk_box_set_spacing (GTK_BOX (self), 22);
-  gtk_container_set_border_width (GTK_CONTAINER (self), 24);
 
   self->stack = g_object_new (GTK_TYPE_STACK,
                               "homogeneous", TRUE,

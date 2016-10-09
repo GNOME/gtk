@@ -36,7 +36,6 @@ new_widget_info (const char *name,
   else
     {
       info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_container_set_border_width (GTK_CONTAINER (info->window), 12);
       info->include_decorations = FALSE;
       gtk_widget_show_all (widget);
       gtk_container_add (GTK_CONTAINER (info->window), widget);
@@ -391,7 +390,6 @@ create_info_bar (void)
   gtk_container_add (GTK_CONTAINER (align), widget);
 
   info = new_widget_info ("info-bar", align, SMALL);
-  gtk_container_set_border_width (GTK_CONTAINER (info->window), 0);
 
   return info;
 }
@@ -423,7 +421,6 @@ create_search_bar (void)
   gtk_box_pack_start (GTK_BOX (box), view, TRUE, TRUE);
 
   info = new_widget_info ("search-bar", box, SMALL);
-  gtk_container_set_border_width (GTK_CONTAINER (info->window), 0);
 
   return info;
 }
@@ -457,7 +454,6 @@ create_action_bar (void)
   gtk_container_add (GTK_CONTAINER (box), widget);
 
   info = new_widget_info ("action-bar", box, SMALL);
-  gtk_container_set_border_width (GTK_CONTAINER (info->window), 0);
 
   return info;
 }
@@ -1086,7 +1082,6 @@ create_statusbar (void)
   gtk_box_pack_end (GTK_BOX (vbox), align, FALSE, FALSE);
 
   info = new_widget_info ("statusbar", vbox, SMALL);
-  gtk_container_set_border_width (GTK_CONTAINER (info->window), 0);
 
   return info;
 }
@@ -1280,7 +1275,6 @@ create_headerbar (void)
   GtkWidget *button;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 0);
   view = gtk_text_view_new ();
   gtk_widget_show (view);
   gtk_widget_set_size_request (window, 220, 150);

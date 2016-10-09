@@ -102,7 +102,6 @@ TestInterface interfaces[] = {
     "  <requires lib=\"gtk+\" version=\"2.18\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
-    "    <property name=\"border_width\">12</property>"
     "    <property name=\"default_width\">300</property>"
     "    <child>"
     "      <object class=\"GtkHPaned\" id=\"hpaned1\">"
@@ -633,7 +632,6 @@ TestInterface interfaces[] = {
     "    <child>"
     "      <object class=\"GtkFrame\" id=\"frame1\">"
     "        <property name=\"visible\">True</property>"
-    "        <property name=\"border_width\">8</property>"
     "        <property name=\"label_xalign\">0</property>"
     "        <child>"
     "          <object class=\"GtkAlignment\" id=\"alignment1\">"
@@ -670,7 +668,6 @@ TestInterface interfaces[] = {
     "  <requires lib=\"gtk+\" version=\"2.20\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
-    "    <property name=\"border_width\">8</property>"
     "    <property name=\"default_width\">600</property>"
     "    <child>"
     "      <object class=\"GtkHPaned\" id=\"hpaned1\">"
@@ -948,8 +945,6 @@ create_window (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-
-  gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
   gtk_widget_show (vbox);
   gtk_container_add (GTK_CONTAINER (window), vbox);

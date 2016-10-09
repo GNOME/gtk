@@ -224,7 +224,6 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 12);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (window), box);

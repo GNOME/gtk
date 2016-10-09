@@ -338,7 +338,6 @@ configure_plugins (GSimpleAction *action,
   gtk_builder_add_from_string (builder,
                                "<interface>"
                                "  <object class='GtkDialog' id='plugin-dialog'>"
-                               "    <property name='border-width'>12</property>"
                                "    <property name='title'>Plugins</property>"
                                "    <child internal-child='vbox'>"
                                "      <object class='GtkBox' id='content-area'>"

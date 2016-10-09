@@ -999,8 +999,6 @@ gtk_container_child_set_valist
 gtk_container_child_notify
 gtk_container_child_notify_by_pspec
 gtk_container_forall
-gtk_container_get_border_width
-gtk_container_set_border_width
 gtk_container_propagate_draw
 gtk_container_get_focus_chain
 gtk_container_set_focus_chain
@@ -1009,7 +1007,6 @@ gtk_container_class_find_child_property
 gtk_container_class_install_child_property
 gtk_container_class_install_child_properties
 gtk_container_class_list_child_properties
-gtk_container_class_handle_border_width
 
 <SUBSECTION Standard>
 GTK_CONTAINER

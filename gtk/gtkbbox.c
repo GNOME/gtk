@@ -203,7 +203,6 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   container_class->add = gtk_button_box_add;
   container_class->set_child_property = gtk_button_box_set_child_property;
   container_class->get_child_property = gtk_button_box_get_child_property;
-  gtk_container_class_handle_border_width (container_class);
 
   /**
    * GtkButtonBox:child-min-width:

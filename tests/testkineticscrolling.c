@@ -29,7 +29,6 @@ kinetic_scrolling (void)
   gint i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
   g_signal_connect (window, "delete_event",
                     G_CALLBACK (gtk_main_quit), NULL);

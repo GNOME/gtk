@@ -597,14 +597,12 @@ main (int argc, char **argv)
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 2);
-  gtk_container_set_border_width (GTK_CONTAINER (grid), 2);
   gtk_container_add (GTK_CONTAINER (window), grid);
 
   frame = gtk_frame_new ("Menus and Toolbars");
   gtk_grid_attach (GTK_GRID (grid), frame, 0, 1, 2, 1);
 
   menu_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (menu_box), 2);
   gtk_container_add (GTK_CONTAINER (frame), menu_box);
 
   statusbar = gtk_statusbar_new ();
@@ -654,7 +652,6 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), frame, 0, 0, 1, 1);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 2);
   gtk_container_add (GTK_CONTAINER (frame), vbox);
 
   for (i = 0; i < G_N_ELEMENTS (merge_ids); i++)

@@ -39,9 +39,6 @@ gboolean _gtk_container_get_reallocate_redraws (GtkContainer *container);
 
 void      _gtk_container_stop_idle_sizer        (GtkContainer *container);
 void      _gtk_container_maybe_start_idle_sizer (GtkContainer *container);
-gboolean  _gtk_container_get_border_width_set   (GtkContainer *container);
-void      _gtk_container_set_border_width_set   (GtkContainer *container,
-                                                 gboolean      border_width_set);
 void      gtk_container_get_children_clip       (GtkContainer  *container,
                                                  GtkAllocation *out_clip);
 void      gtk_container_set_default_resize_mode (GtkContainer *container,

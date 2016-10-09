@@ -110,8 +110,6 @@ struct _GtkMessageDialogPrivate
   guint          message_type       : 3;
 };
 
-static void gtk_message_dialog_style_updated (GtkWidget       *widget);
-
 static void gtk_message_dialog_constructed  (GObject          *object);
 static void gtk_message_dialog_set_property (GObject          *object,
 					     guint             prop_id,
@@ -161,23 +159,12 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
   gobject_class = G_OBJECT_CLASS (class);
   
-  widget_class->style_updated = gtk_message_dialog_style_updated;
-
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ALERT);
 
   gobject_class->constructed = gtk_message_dialog_constructed;
   gobject_class->set_property = gtk_message_dialog_set_property;
   gobject_class->get_property = gtk_message_dialog_get_property;
   
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("message-border",
-                                                             P_("label border"),
-                                                             P_("Width of border around the label in the message dialog"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             12,
-                                                             GTK_PARAM_READABLE));
-
   /**
    * GtkMessageDialog:message-type:
    *
@@ -323,7 +310,6 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   priv->message_type = GTK_MESSAGE_OTHER;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
-  gtk_message_dialog_style_updated (GTK_WIDGET (dialog));
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -971,23 +957,3 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
   g_object_notify (G_OBJECT (message_dialog), "buttons");
 }
 
-static void
-gtk_message_dialog_style_updated (GtkWidget *widget)
-{
-  GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG (widget);
-  GtkWidget *parent;
-  gint border_width;
-
-  parent = gtk_widget_get_parent (dialog->priv->message_area);
-
-  if (parent)
-    {
-      gtk_widget_style_get (widget, "message-border",
-                            &border_width, NULL);
-
-      gtk_container_set_border_width (GTK_CONTAINER (parent),
-                                      MAX (0, border_width - 7));
-    }
-
-  GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_updated (widget);
-}

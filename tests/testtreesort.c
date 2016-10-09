@@ -122,7 +122,6 @@ main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (window), "Words, words, words - Window 1");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words. (And Anders' cool list of numbers) \n\nThis is just a GtkTreeStore"), FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
@@ -250,7 +249,6 @@ main (int argc, char *argv[])
 			    "Words, words, words - window 2");
       g_signal_connect (window2, "destroy", gtk_main_quit, NULL);
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox2), 8);
       gtk_box_pack_start (GTK_BOX (vbox2), 
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeStore of window 1"),
 			  FALSE, FALSE);
@@ -320,7 +318,6 @@ main (int argc, char *argv[])
 			    "Words, words, words - Window 3");
       g_signal_connect (window3, "destroy", gtk_main_quit, NULL);
       vbox3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox3), 8);
       gtk_box_pack_start (GTK_BOX (vbox3), 
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeModelSort of window 2"),
 			  FALSE, FALSE);

@@ -155,7 +155,6 @@ main (gint   argc,
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
                                        GTK_SHADOW_IN);
-  gtk_container_set_border_width (GTK_CONTAINER (sw), 12);
   gtk_container_add (GTK_CONTAINER (window), sw);
 
   g_signal_connect (window, "delete-event",

@@ -503,11 +503,9 @@ main (gint argc, gchar **argv)
   gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 2, 1);
 
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox1), 5);
   gtk_grid_attach (GTK_GRID (grid), hbox1, 1, 1, 1, 1);
 
   hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox2), 5);
   gtk_grid_attach (GTK_GRID (grid), hbox2, 1, 2, 1, 1);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Vertical");
@@ -693,7 +691,6 @@ main (gint argc, gchar **argv)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_widget_set_hexpand (hbox, TRUE);
   gtk_grid_attach (GTK_GRID (grid), hbox, 1, 4, 1, 1);
 

@@ -169,8 +169,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   widget_class->size_allocate = gtk_tool_item_size_allocate;
   widget_class->parent_set    = gtk_tool_item_parent_set;
 
-  gtk_container_class_handle_border_width (GTK_CONTAINER_CLASS (klass));
-
   klass->create_menu_proxy = _gtk_tool_item_create_menu_proxy;
   
   g_object_class_install_property (object_class,

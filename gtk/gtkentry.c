@@ -2567,7 +2567,6 @@ gtk_entry_ensure_magnifier (GtkEntry *entry)
   gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
-  gtk_container_set_border_width (GTK_CONTAINER (priv->magnifier_popover), 4);
   gtk_widget_show (priv->magnifier);
 }
 

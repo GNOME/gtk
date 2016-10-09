@@ -18,7 +18,6 @@ activate (GtkApplication *app,
   /* create a new window, and set its title */
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "Window");
-  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
   /* Here we construct the container that is going pack our buttons */
   grid = gtk_grid_new ();

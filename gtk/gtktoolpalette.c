@@ -420,10 +420,7 @@ gtk_tool_palette_size_request (GtkWidget      *widget,
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
   GtkRequisition child_requisition;
-  guint border_width;
   guint i;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   requisition->width = 0;
   requisition->height = 0;
@@ -449,9 +446,6 @@ gtk_tool_palette_size_request (GtkWidget      *widget,
           requisition->height = MAX (requisition->height, child_requisition.height);
         }
     }
-
-  requisition->width += border_width * 2;
-  requisition->height += border_width * 2;
 }
 
 static void
@@ -494,7 +488,6 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   gint total_size, page_size;
   gint offset = 0;
   guint i;
-  guint border_width;
 
   gint min_offset = -1, max_offset = -1;
 
@@ -503,7 +496,6 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   gint *group_sizes = g_newa (gint, palette->priv->groups->len);
   GtkTextDirection direction;
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   direction = gtk_widget_get_direction (widget);
 
   GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->size_allocate (widget, allocation);
@@ -526,9 +518,9 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
     offset = -offset;
 
   if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
-    child_allocation.width = allocation->width - border_width * 2;
+    child_allocation.width = allocation->width;
   else
-    child_allocation.height = allocation->height - border_width * 2;
+    child_allocation.height = allocation->height;
 
   if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
     remaining_space = allocation->height;
@@ -613,8 +605,8 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   if (remaining_space > 0)
     offset = 0;
 
-  x = border_width;
-  child_allocation.y = border_width;
+  x = 0;
+  child_allocation.y = 0;
 
   if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
     child_allocation.y -= offset;
@@ -664,14 +656,12 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
 
   if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
     {
-      child_allocation.y += border_width;
       child_allocation.y += offset;
 
       total_size = child_allocation.y;
     }
   else
     {
-      x += border_width;
       x += offset;
 
       total_size = x;
@@ -716,19 +706,16 @@ gtk_tool_palette_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  guint border_width;
 
   gtk_widget_set_realized (widget, TRUE);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   gtk_widget_get_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x + border_width;
-  attributes.y = allocation.y + border_width;
-  attributes.width = allocation.width - border_width * 2;
-  attributes.height = allocation.height - border_width * 2;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.event_mask = gtk_widget_get_events (widget)
                          | GDK_VISIBILITY_NOTIFY_MASK

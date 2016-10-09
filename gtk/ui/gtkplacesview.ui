@@ -20,7 +20,6 @@
     <child>
       <object class="GtkBox">
         <property name="visible">1</property>
-        <property name="border-width">18</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
@@ -281,7 +280,6 @@
         <child>
           <object class="GtkBox">
             <property name="visible">1</property>
-            <property name="border-width">12</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>

@@ -23,7 +23,6 @@ create_bbox (gint  horizontal,
   else
     bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
 
-  gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
   gtk_container_add (GTK_CONTAINER (frame), bbox);
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
@@ -62,8 +61,6 @@ do_button_box (GtkWidget *do_widget)
                       G_CALLBACK (gtk_widget_destroyed),
                       &window);
 
-    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
@@ -73,7 +70,6 @@ do_button_box (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (main_vbox), frame_horz, TRUE, TRUE);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-    gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
     gtk_container_add (GTK_CONTAINER (frame_horz), vbox);
 
     gtk_box_pack_start (GTK_BOX (vbox),
@@ -104,7 +100,6 @@ do_button_box (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (main_vbox), frame_vert, TRUE, TRUE);
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
     gtk_container_add (GTK_CONTAINER (frame_vert), hbox);
 
     gtk_box_pack_start (GTK_BOX (hbox),

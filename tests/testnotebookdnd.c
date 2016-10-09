@@ -188,7 +188,6 @@ create_notebook (gchar           **labels,
 
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), pos);
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
-  gtk_container_set_border_width (GTK_CONTAINER (notebook), 6);
   gtk_notebook_set_group_name (GTK_NOTEBOOK (notebook), group);
 
   while (*labels)
@@ -233,7 +232,6 @@ create_notebook_non_dragable_content (gchar           **labels,
 
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), pos);
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
-  gtk_container_set_border_width (GTK_CONTAINER (notebook), 6);
   gtk_notebook_set_group_name (GTK_NOTEBOOK (notebook), group);
 
   while (*labels)
@@ -275,7 +273,6 @@ create_notebook_with_notebooks (gchar           **labels,
 
   gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), pos);
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
-  gtk_container_set_border_width (GTK_CONTAINER (notebook), 6);
   gtk_notebook_set_group_name (GTK_NOTEBOOK (notebook), group);
 
   while (*labels)

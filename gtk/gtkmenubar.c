@@ -138,14 +138,12 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkMenuShellClass *menu_shell_class;
-  GtkContainerClass *container_class;
 
   GtkBindingSet *binding_set;
 
   gobject_class = (GObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
-  container_class = (GtkContainerClass*) class;
 
   gobject_class->get_property = gtk_menu_bar_get_property;
   gobject_class->set_property = gtk_menu_bar_set_property;
@@ -239,7 +237,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                       GTK_PACK_DIRECTION_LTR,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  gtk_container_class_handle_border_width (container_class);
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
   gtk_widget_class_set_css_name (widget_class, "menubar");
 }

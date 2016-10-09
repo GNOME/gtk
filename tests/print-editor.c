@@ -319,7 +319,6 @@ create_custom_widget (GtkPrintOperation *operation,
 
   gtk_print_operation_set_custom_tab_label (operation, "Other");
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);

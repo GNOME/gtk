@@ -142,8 +142,6 @@ activate (GtkApplication *app,
 
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
-  gtk_container_set_border_width (GTK_CONTAINER (window), 8);
-
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   gtk_container_add (GTK_CONTAINER (window), frame);

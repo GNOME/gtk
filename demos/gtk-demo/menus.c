@@ -105,8 +105,6 @@ do_menus (GtkWidget *do_widget)
       accel_group = gtk_accel_group_new ();
       gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box);
       gtk_widget_show (box);
@@ -138,7 +136,6 @@ do_menus (GtkWidget *do_widget)
       gtk_widget_show (menuitem);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE);
       gtk_widget_show (box2);
 

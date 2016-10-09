@@ -481,10 +481,8 @@ do_textview (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Multiple Views");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
-      gtk_container_set_border_width (GTK_CONTAINER(vpaned), 5);
       gtk_container_add (GTK_CONTAINER (window), vpaned);
 
       /* For convenience, we just use the autocreated buffer from

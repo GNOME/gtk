@@ -582,7 +582,6 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
   GtkOrientation orientation;
   GtkRequisition item_size;
   gint requested_rows;
-  guint border_width;
 
   if (priv->children && gtk_tool_item_group_get_label_widget (group))
     {
@@ -604,10 +603,6 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
     requisition->width = MAX (requisition->width, item_size.width);
   else
     requisition->height = MAX (requisition->height, item_size.height * requested_rows);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  requisition->width += border_width * 2;
-  requisition->height += border_width * 2;
 }
 
 static void
@@ -679,9 +674,7 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
   GtkOrientation orientation;
 
   gint min_rows;
-  guint border_width;
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
 
   /* figure out the size of homogeneous items */
@@ -713,7 +706,7 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
           gint row = -1;
           guint col = 0;
 
-          item_area.width = allocation->width - 2 * border_width;
+          item_area.width = allocation->width;
           n_columns = MAX (item_area.width / item_size.width, 1);
 
           /* calculate required rows for n_columns columns */
@@ -770,7 +763,7 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
           guint col = 0, min_col, max_col = 0, all_items = 0;
           gint i;
 
-          item_area.height = allocation->height - 2 * border_width;
+          item_area.height = allocation->height;
           n_rows = MAX (item_area.height / item_size.height, min_rows);
 
           row_min_width = g_new0 (guint, n_rows);
@@ -907,8 +900,8 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
     }
 
   /* report effective widget size */
-  inquery->width += item_area.width + 2 * border_width;
-  inquery->height += item_area.height + 2 * border_width;
+  inquery->width += item_area.width;
+  inquery->height += item_area.height;
 }
 
 static void
@@ -929,10 +922,7 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
 
   gint n_columns, n_rows = 1;
   gint min_rows;
-  guint border_width;
   GtkTextDirection direction;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   direction = gtk_widget_get_direction (widget);
 
@@ -941,8 +931,8 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
   /* chain up */
   GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->size_allocate (widget, allocation);
 
-  child_allocation.x = border_width;
-  child_allocation.y = border_width;
+  child_allocation.x = 0;
+  child_allocation.y = 0;
 
   /* place the header widget */
   if (gtk_widget_get_visible (priv->header))
@@ -961,7 +951,7 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
           child_allocation.height = allocation->height;
 
           if (GTK_TEXT_DIR_RTL == direction)
-            child_allocation.x = allocation->width - border_width - child_allocation.width;
+            child_allocation.x = allocation->width - child_allocation.width;
         }
 
       gtk_widget_size_allocate (priv->header, &child_allocation);
@@ -971,7 +961,7 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
       else if (GTK_TEXT_DIR_RTL != direction)
         child_allocation.x += child_allocation.width;
       else
-        child_allocation.x = border_width;
+        child_allocation.x = 0;
     }
   else
     child_requisition.width = child_requisition.height = 0;
@@ -987,8 +977,8 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
     {
       item_size.width = MIN (item_size.width, allocation->width);
 
-      item_area.width = allocation->width - 2 * border_width;
-      item_area.height = allocation->height - 2 * border_width - child_requisition.height;
+      item_area.width = allocation->width;
+      item_area.height = allocation->height - child_requisition.height;
 
       n_columns = MAX (item_area.width / item_size.width, 1);
 
@@ -998,8 +988,8 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
     {
       item_size.height = MIN (item_size.height, allocation->height);
 
-      item_area.width = allocation->width - 2 * border_width - child_requisition.width;
-      item_area.height = allocation->height - 2 * border_width;
+      item_area.width = allocation->width - child_requisition.width;
+      item_area.height = allocation->height;
 
       n_columns = MAX (item_area.width / item_size.width, 1);
       n_rows = MAX (item_area.height / item_size.height, min_rows);
@@ -1242,18 +1232,16 @@ gtk_tool_item_group_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  guint border_width;
 
   gtk_widget_set_realized (widget, TRUE);
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   gtk_widget_get_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x + border_width;
-  attributes.y = allocation.y + border_width;
-  attributes.width = allocation.width - border_width * 2;
-  attributes.height = allocation.height - border_width * 2;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.event_mask = gtk_widget_get_events (widget)
                          | GDK_VISIBILITY_NOTIFY_MASK

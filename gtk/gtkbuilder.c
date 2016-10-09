@@ -174,10 +174,8 @@
  *   <object class="GtkDialog" id="dialog1">
  *     <child internal-child="vbox">
  *       <object class="GtkBox" id="vbox1">
- *         <property name="border-width">10</property>
  *         <child internal-child="action_area">
  *           <object class="GtkButtonBox" id="hbuttonbox1">
- *             <property name="border-width">20</property>
  *             <child>
  *               <object class="GtkButton" id="ok_button">
  *                 <property name="label">gtk-ok</property>

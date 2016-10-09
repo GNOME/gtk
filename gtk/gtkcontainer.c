@@ -280,9 +280,6 @@ struct _GtkContainerPrivate
   GdkFrameClock *resize_clock;
   guint resize_handler;
 
-  guint border_width : 16;
-  guint border_width_set   : 1;
-
   guint has_focus_chain    : 1;
   guint reallocate_redraws : 1;
   guint restyle_pending    : 1;
@@ -301,7 +298,6 @@ enum {
 
 enum {
   PROP_0,
-  PROP_BORDER_WIDTH,
   PROP_RESIZE_MODE,
   PROP_CHILD,
   LAST_PROP
@@ -350,21 +346,6 @@ static gint     gtk_container_draw                 (GtkWidget         *widget,
                                                     cairo_t           *cr);
 static void     gtk_container_map                  (GtkWidget         *widget);
 static void     gtk_container_unmap                (GtkWidget         *widget);
-static void     gtk_container_adjust_size_request  (GtkWidget         *widget,
-                                                    GtkOrientation     orientation,
-                                                    gint              *minimum_size,
-                                                    gint              *natural_size);
-static void     gtk_container_adjust_baseline_request (GtkWidget      *widget,
-						       gint           *minimum_baseline,
-						       gint           *natural_baseline);
-static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
-                                                      GtkOrientation   orientation,
-                                                      gint            *minimum_size,
-                                                      gint            *natural_size,
-                                                      gint            *allocated_pos,
-                                                      gint            *allocated_size);
-static void     gtk_container_adjust_baseline_allocation (GtkWidget      *widget,
-							  gint           *baseline);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
@@ -510,11 +491,6 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->map = gtk_container_map;
   widget_class->unmap = gtk_container_unmap;
   widget_class->focus = gtk_container_focus;
-
-  widget_class->adjust_size_request = gtk_container_adjust_size_request;
-  widget_class->adjust_baseline_request = gtk_container_adjust_baseline_request;
-  widget_class->adjust_size_allocation = gtk_container_adjust_size_allocation;
-  widget_class->adjust_baseline_allocation = gtk_container_adjust_baseline_allocation;
   widget_class->get_request_mode = gtk_container_get_request_mode;
 
   class->add = gtk_container_add_unimplemented;
@@ -533,14 +509,6 @@ gtk_container_class_init (GtkContainerClass *class)
                          GTK_TYPE_RESIZE_MODE,
                          GTK_RESIZE_PARENT,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-
-  container_props[PROP_BORDER_WIDTH] =
-      g_param_spec_uint ("border-width",
-                         P_("Border width"),
-                         P_("The width of the empty border outside the containers children"),
-                         0, 65535,
-                         0,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   container_props[PROP_CHILD] =
       g_param_spec_object ("child",
@@ -1674,10 +1642,8 @@ gtk_container_init (GtkContainer *container)
   priv = container->priv;
 
   priv->focus_child = NULL;
-  priv->border_width = 0;
   priv->resize_mode = GTK_RESIZE_PARENT;
   priv->reallocate_redraws = FALSE;
-  priv->border_width_set = FALSE;
 }
 
 static void
@@ -1712,9 +1678,6 @@ gtk_container_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_BORDER_WIDTH:
-      gtk_container_set_border_width (container, g_value_get_uint (value));
-      break;
     case PROP_RESIZE_MODE:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_container_set_resize_mode (container, g_value_get_enum (value));
@@ -1740,9 +1703,6 @@ gtk_container_get_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_BORDER_WIDTH:
-      g_value_set_uint (value, priv->border_width);
-      break;
     case PROP_RESIZE_MODE:
       g_value_set_enum (value, priv->resize_mode);
       break;
@@ -1750,86 +1710,6 @@ gtk_container_get_property (GObject         *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-gboolean
-_gtk_container_get_border_width_set (GtkContainer *container)
-{
-  GtkContainerPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
-
-  priv = container->priv;
-
-  return priv->border_width_set;
-}
-
-void
-_gtk_container_set_border_width_set (GtkContainer *container,
-                                     gboolean      border_width_set)
-{
-  GtkContainerPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  priv = container->priv;
-
-  priv->border_width_set = border_width_set ? TRUE : FALSE;
-}
-
-/**
- * gtk_container_set_border_width:
- * @container: a #GtkContainer
- * @border_width: amount of blank space to leave outside
- *   the container. Valid values are in the range 0-65535 pixels.
- *
- * Sets the border width of the container.
- *
- * The border width of a container is the amount of space to leave
- * around the outside of the container. The only exception to this is
- * #GtkWindow; because toplevel windows can’t leave space outside,
- * they leave the space inside. The border is added on all sides of
- * the container. To add space to only one side, use a specific
- * #GtkWidget:margin property on the child widget, for example
- * #GtkWidget:margin-top.
- **/
-void
-gtk_container_set_border_width (GtkContainer *container,
-                                guint         border_width)
-{
-  GtkContainerPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  priv = container->priv;
-
-  if (priv->border_width != border_width)
-    {
-      priv->border_width = border_width;
-      _gtk_container_set_border_width_set (container, TRUE);
-
-      g_object_notify_by_pspec (G_OBJECT (container), container_props[PROP_BORDER_WIDTH]);
-
-      if (_gtk_widget_get_realized (GTK_WIDGET (container)))
-        gtk_widget_queue_resize (GTK_WIDGET (container));
-    }
-}
-
-/**
- * gtk_container_get_border_width:
- * @container: a #GtkContainer
- *
- * Retrieves the border width of the container. See
- * gtk_container_set_border_width().
- *
- * Returns: the current border width
- **/
-guint
-gtk_container_get_border_width (GtkContainer *container)
-{
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
-
-  return container->priv->border_width;
 }
 
 /**
@@ -2240,111 +2120,6 @@ gtk_container_resize_children (GtkContainer *container)
   gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
 }
 
-static void
-gtk_container_adjust_size_request (GtkWidget         *widget,
-                                   GtkOrientation     orientation,
-                                   gint              *minimum_size,
-                                   gint              *natural_size)
-{
-  GtkContainer *container;
-
-  container = GTK_CONTAINER (widget);
-
-  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
-    {
-      int border_width;
-
-      border_width = container->priv->border_width;
-
-      *minimum_size += border_width * 2;
-      *natural_size += border_width * 2;
-    }
-
-  /* chain up last so gtk_widget_set_size_request() values
-   * will have a chance to overwrite our border width.
-   */
-  parent_class->adjust_size_request (widget, orientation,
-                                     minimum_size, natural_size);
-}
-
-static void
-gtk_container_adjust_baseline_request (GtkWidget         *widget,
-				       gint              *minimum_baseline,
-				       gint              *natural_baseline)
-{
-  GtkContainer *container;
-
-  container = GTK_CONTAINER (widget);
-
-  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
-    {
-      int border_width;
-
-      border_width = container->priv->border_width;
-
-      *minimum_baseline += border_width;
-      *natural_baseline += border_width;
-    }
-
-  parent_class->adjust_baseline_request (widget, minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_container_adjust_size_allocation (GtkWidget         *widget,
-                                      GtkOrientation     orientation,
-                                      gint              *minimum_size,
-                                      gint              *natural_size,
-                                      gint              *allocated_pos,
-                                      gint              *allocated_size)
-{
-  GtkContainer *container;
-  int border_width;
-
-  container = GTK_CONTAINER (widget);
-
-  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
-    {
-      border_width = container->priv->border_width;
-
-      *allocated_size -= border_width * 2;
-      *allocated_pos += border_width;
-      *minimum_size -= border_width * 2;
-      *natural_size -= border_width * 2;
-    }
-
-  /* Chain up to GtkWidgetClass *after* removing our border width from
-   * the proposed allocation size. This is because it's possible that the
-   * widget was allocated more space than it needs in a said orientation,
-   * if GtkWidgetClass does any alignments and thus limits the size to the
-   * natural size... then we need that to be done *after* removing any margins
-   * and padding values.
-   */
-  parent_class->adjust_size_allocation (widget, orientation,
-                                        minimum_size, natural_size, allocated_pos,
-                                        allocated_size);
-}
-
-static void
-gtk_container_adjust_baseline_allocation (GtkWidget         *widget,
-					  gint              *baseline)
-{
-  GtkContainer *container;
-  int border_width;
-
-  container = GTK_CONTAINER (widget);
-
-  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
-    {
-      border_width = container->priv->border_width;
-
-      if (*baseline >= 0)
-	*baseline -= border_width;
-    }
-
-  parent_class->adjust_baseline_allocation (widget, baseline);
-}
-
-
 typedef struct {
   gint hfw;
   gint wfh;
@@ -2384,29 +2159,6 @@ gtk_container_get_request_mode (GtkWidget *widget)
     return count.wfh > count.hfw ? 
         GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
 	GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
-/**
- * gtk_container_class_handle_border_width:
- * @klass: the class struct of a #GtkContainer subclass
- *
- * Modifies a subclass of #GtkContainerClass to automatically add and
- * remove the border-width setting on GtkContainer.  This allows the
- * subclass to ignore the border width in its size request and
- * allocate methods. The intent is for a subclass to invoke this
- * in its class_init function.
- *
- * gtk_container_class_handle_border_width() is necessary because it
- * would break API too badly to make this behavior the default. So
- * subclasses must “opt in” to the parent class handling border_width
- * for them.
- */
-void
-gtk_container_class_handle_border_width (GtkContainerClass *klass)
-{
-  g_return_if_fail (GTK_IS_CONTAINER_CLASS (klass));
-
-  klass->_handle_border_width = TRUE;
 }
 
 /**

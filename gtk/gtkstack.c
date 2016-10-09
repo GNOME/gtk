@@ -452,7 +452,6 @@ gtk_stack_class_init (GtkStackClass *klass)
   container_class->forall = gtk_stack_forall;
   container_class->set_child_property = gtk_stack_set_child_property;
   container_class->get_child_property = gtk_stack_get_child_property;
-  gtk_container_class_handle_border_width (container_class);
 
   stack_props[PROP_HOMOGENEOUS] =
       g_param_spec_boolean ("homogeneous", P_("Homogeneous"), P_("Homogeneous sizing"),

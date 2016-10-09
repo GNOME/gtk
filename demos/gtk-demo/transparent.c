@@ -202,7 +202,6 @@ do_transparent (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Transparency");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       view = gtk_text_view_new ();
 

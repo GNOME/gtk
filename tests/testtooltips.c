@@ -282,7 +282,6 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Tooltips test");
-  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
   g_signal_connect (window, "delete_event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 

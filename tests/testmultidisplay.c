@@ -69,14 +69,13 @@ make_selection_dialog (GdkScreen * screen,
 			   "user_data", NULL,
 			   "type", GTK_WINDOW_TOPLEVEL,
 			   "title", "MultiDisplay Cut & Paste",
-			   "border_width", 10, NULL);
+			   NULL);
   g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
   vbox = g_object_new (GTK_TYPE_BOX,
-			 "border_width", 5,
                          "orientation", GTK_ORIENTATION_VERTICAL,
 			 NULL);
   gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, FALSE);

@@ -11203,7 +11203,6 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_show (vbox);
   gtk_container_add (GTK_CONTAINER (frame), vbox);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
 
   /* add entry */
   tree_view->priv->search_entry = gtk_entry_new ();

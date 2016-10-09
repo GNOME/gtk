@@ -114,7 +114,6 @@ activate (GApplication *app,
   gtk_widget_set_halign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_START);
   gtk_container_add (GTK_CONTAINER (win), button);
-  gtk_container_set_border_width (GTK_CONTAINER (win), 12);
   gtk_widget_show_all (win);
 
   g_object_unref (button_menu);

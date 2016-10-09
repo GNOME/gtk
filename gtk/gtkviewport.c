@@ -394,7 +394,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
 
   container_class->remove = gtk_viewport_remove;
   container_class->add = gtk_viewport_add;
-  gtk_container_class_handle_border_width (container_class);
 
   /* GtkScrollable implementation */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");

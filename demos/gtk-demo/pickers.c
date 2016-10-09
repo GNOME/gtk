@@ -22,14 +22,10 @@ do_pickers (GtkWidget *do_widget)
     g_signal_connect (window, "destroy",
                       G_CALLBACK (gtk_widget_destroyed), &window);
 
-    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-
     table = gtk_grid_new ();
     gtk_grid_set_row_spacing (GTK_GRID (table), 3);
     gtk_grid_set_column_spacing (GTK_GRID (table), 10);
     gtk_container_add (GTK_CONTAINER (window), table);
-
-    gtk_container_set_border_width (GTK_CONTAINER (table), 10);
 
     label = gtk_label_new ("Color:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);

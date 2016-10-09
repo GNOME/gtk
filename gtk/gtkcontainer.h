@@ -107,8 +107,6 @@ struct _GtkContainerClass
 
   /*< private >*/
 
-  unsigned int _handle_border_width : 1;
-
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -139,11 +137,7 @@ typedef enum
 
 GDK_AVAILABLE_IN_ALL
 GType   gtk_container_get_type		 (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-void    gtk_container_set_border_width	 (GtkContainer	   *container,
-					  guint		    border_width);
-GDK_AVAILABLE_IN_ALL
-guint   gtk_container_get_border_width   (GtkContainer     *container);
+
 GDK_AVAILABLE_IN_ALL
 void    gtk_container_add		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
@@ -291,9 +285,6 @@ GDK_AVAILABLE_IN_ALL
 void    gtk_container_forall		     (GtkContainer *container,
 					      GtkCallback   callback,
 					      gpointer	    callback_data);
-
-GDK_AVAILABLE_IN_ALL
-void    gtk_container_class_handle_border_width (GtkContainerClass *klass);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,

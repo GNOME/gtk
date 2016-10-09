@@ -318,10 +318,7 @@ do_image (const char *filename)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Image Loading");
 
-  gtk_container_set_border_width (GTK_CONTAINER (window), 8);
-
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   label = gtk_label_new (NULL);
@@ -375,10 +372,7 @@ do_nonprogressive (const gchar *filename)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Animation");
 
-  gtk_container_set_border_width (GTK_CONTAINER (window), 8);
-
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   label = gtk_label_new (NULL);

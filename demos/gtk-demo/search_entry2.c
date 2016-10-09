@@ -87,7 +87,6 @@ do_search_entry2 (GtkWidget *do_widget)
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), vbox);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 0);
 
       entry = gtk_search_entry_new ();
       container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
@@ -117,7 +116,6 @@ do_search_entry2 (GtkWidget *do_widget)
       /* Result */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE);
-      gtk_container_set_border_width (GTK_CONTAINER (hbox), 0);
 
       label = gtk_label_new ("Result:");
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
@@ -134,7 +132,6 @@ do_search_entry2 (GtkWidget *do_widget)
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE);
-      gtk_container_set_border_width (GTK_CONTAINER (hbox), 0);
 
       label = gtk_label_new ("Signal:");
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);

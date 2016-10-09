@@ -84,7 +84,6 @@ create_window (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Window size");
-  gtk_container_set_border_width (GTK_CONTAINER (window), 12);
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
   grid = gtk_grid_new ();

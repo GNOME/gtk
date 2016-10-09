@@ -556,7 +556,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
   container_class->forall = gtk_scrolled_window_forall;
-  gtk_container_class_handle_border_width (container_class);
 
   class->scroll_child = gtk_scrolled_window_scroll_child;
   class->move_focus_out = gtk_scrolled_window_move_focus_out;

@@ -522,45 +522,6 @@ gtk_app_chooser_dialog_constructed (GObject *object)
   setup_search (self);
 }
 
-/* This is necessary do deal with the fact that GtkDialog
- * exposes bits of its internal spacing as style properties,
- * and puts the action area inside the content area.
- * To achieve a flush-top search bar, we need the content
- * area border to be 0, and distribute the spacing to other
- * containers to compensate.
- */
-static void
-update_spacings (GtkAppChooserDialog *self)
-{
-  GtkWidget *widget;
-  gint content_area_border;
-  gint action_area_border;
-
-  gtk_widget_style_get (GTK_WIDGET (self),
-                        "content-area-border", &content_area_border,
-                        "action-area-border", &action_area_border,
-                        NULL);
-
-  widget = gtk_dialog_get_content_area (GTK_DIALOG (self));
-  gtk_container_set_border_width (GTK_CONTAINER (widget), 0);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  widget = gtk_dialog_get_action_area (GTK_DIALOG (self));
-G_GNUC_END_IGNORE_DEPRECATIONS
-  gtk_container_set_border_width (GTK_CONTAINER (widget), 5 + content_area_border + action_area_border);
-
-  widget = self->priv->inner_box;
-  gtk_container_set_border_width (GTK_CONTAINER (widget), 10 + content_area_border);
-}
-
-static void
-gtk_app_chooser_dialog_style_updated (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_app_chooser_dialog_parent_class)->style_updated (widget);
-
-  update_spacings (GTK_APP_CHOOSER_DIALOG (widget));
-}
-
 static void
 gtk_app_chooser_dialog_dispose (GObject *object)
 {
@@ -646,19 +607,18 @@ gtk_app_chooser_dialog_iface_init (GtkAppChooserIface *iface)
 static void
 gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
 {
-  GtkWidgetClass *widget_class;
   GObjectClass *gobject_class;
+  GtkWidgetClass *widget_class;
   GParamSpec *pspec;
 
   gobject_class = G_OBJECT_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
+
   gobject_class->dispose = gtk_app_chooser_dialog_dispose;
   gobject_class->finalize = gtk_app_chooser_dialog_finalize;
   gobject_class->set_property = gtk_app_chooser_dialog_set_property;
   gobject_class->get_property = gtk_app_chooser_dialog_get_property;
   gobject_class->constructed = gtk_app_chooser_dialog_constructed;
-
-  widget_class = GTK_WIDGET_CLASS (klass);
-  widget_class->style_updated = gtk_app_chooser_dialog_style_updated;
 
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
 
@@ -718,8 +678,6 @@ gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
    */
   g_signal_connect (self, "response",
                     G_CALLBACK (gtk_app_chooser_dialog_response), NULL);
-
-  update_spacings (self);
 }
 
 static void

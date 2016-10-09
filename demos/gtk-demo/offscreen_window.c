@@ -233,18 +233,16 @@ gtk_rotated_bin_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  guint border_width;
   GtkRequisition child_requisition;
 
   gtk_widget_set_realized (widget, TRUE);
 
   gtk_widget_get_allocation (widget, &allocation);
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  attributes.x = allocation.x + border_width;
-  attributes.y = allocation.y + border_width;
-  attributes.width = allocation.width - 2 * border_width;
-  attributes.height = allocation.height - 2 * border_width;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask = gtk_widget_get_events (widget)
                         | GDK_EXPOSURE_MASK
@@ -383,8 +381,6 @@ gtk_rotated_bin_size_request (GtkWidget      *widget,
   GtkRotatedBin *bin = GTK_ROTATED_BIN (widget);
   GtkRequisition child_requisition;
   double s, c;
-  double w, h;
-  guint border_width;
 
   child_requisition.width = 0;
   child_requisition.height = 0;
@@ -395,12 +391,8 @@ gtk_rotated_bin_size_request (GtkWidget      *widget,
 
   s = sin (bin->angle);
   c = cos (bin->angle);
-  w = c * child_requisition.width + s * child_requisition.height;
-  h = s * child_requisition.width + c * child_requisition.height;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  requisition->width = border_width * 2 + w;
-  requisition->height = border_width * 2 + h;
+  requisition->width = c * child_requisition.width + s * child_requisition.height;
+  requisition->height = s * child_requisition.width + c * child_requisition.height;
 }
 
 static void
@@ -432,21 +424,18 @@ gtk_rotated_bin_size_allocate (GtkWidget     *widget,
                                GtkAllocation *allocation)
 {
   GtkRotatedBin *bin = GTK_ROTATED_BIN (widget);
-  guint border_width;
   gint w, h;
   gdouble s, c;
 
   gtk_widget_set_allocation (widget, allocation);
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-  w = allocation->width - border_width * 2;
-  h = allocation->height - border_width * 2;
+  w = allocation->width;
+  h = allocation->height;
 
   if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (gtk_widget_get_window (widget),
-                            allocation->x + border_width,
-                            allocation->y + border_width,
+                            allocation->x,
+                            allocation->y,
                             w, h);
 
   if (bin->child && gtk_widget_get_visible (bin->child))
@@ -576,8 +565,6 @@ do_offscreen_window (GtkWidget *do_widget)
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
-
-      gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,

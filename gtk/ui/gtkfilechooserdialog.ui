@@ -9,10 +9,8 @@
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
-        <property name="border-width">0</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="border-width">6</property>
             <property name="layout-style">end</property>
           </object>
           <packing>

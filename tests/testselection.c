@@ -410,7 +410,6 @@ main (int argc, char *argv[])
 
   dialog = gtk_dialog_new ();
   gtk_widget_set_name (dialog, "Test Input");
-  gtk_container_set_border_width (GTK_CONTAINER(dialog), 0);
 
   g_signal_connect (dialog, "destroy",
 		    G_CALLBACK (quit), NULL);
@@ -418,7 +417,6 @@ main (int argc, char *argv[])
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
 
   gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE);
   gtk_widget_show (vbox);
