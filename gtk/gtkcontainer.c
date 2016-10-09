@@ -294,14 +294,6 @@ enum {
   LAST_SIGNAL
 };
 
-enum {
-  PROP_0,
-  PROP_CHILD,
-  LAST_PROP
-};
-
-static GParamSpec *container_props[LAST_PROP];
-
 #define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
 #define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
 
@@ -312,14 +304,6 @@ static void     gtk_container_base_class_finalize  (GtkContainerClass *klass);
 static void     gtk_container_class_init           (GtkContainerClass *klass);
 static void     gtk_container_init                 (GtkContainer      *container);
 static void     gtk_container_destroy              (GtkWidget         *widget);
-static void     gtk_container_set_property         (GObject         *object,
-                                                    guint            prop_id,
-                                                    const GValue    *value,
-                                                    GParamSpec      *pspec);
-static void     gtk_container_get_property         (GObject         *object,
-                                                    guint            prop_id,
-                                                    GValue          *value,
-                                                    GParamSpec      *pspec);
 static void     gtk_container_add_unimplemented    (GtkContainer      *container,
                                                     GtkWidget         *widget);
 static void     gtk_container_remove_unimplemented (GtkContainer      *container,
@@ -478,9 +462,6 @@ gtk_container_class_init (GtkContainerClass *class)
   hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
   quark_focus_chain = g_quark_from_static_string ("gtk-container-focus-chain");
 
-  gobject_class->set_property = gtk_container_set_property;
-  gobject_class->get_property = gtk_container_get_property;
-
   widget_class->destroy = gtk_container_destroy;
   widget_class->compute_expand = gtk_container_compute_expand;
   widget_class->show_all = gtk_container_show_all;
@@ -498,15 +479,6 @@ gtk_container_class_init (GtkContainerClass *class)
   class->child_type = NULL;
   class->composite_name = gtk_container_child_default_composite_name;
   class->get_path_for_child = gtk_container_real_get_path_for_child;
-
-  container_props[PROP_CHILD] =
-      g_param_spec_object ("child",
-                           P_("Child"),
-                           P_("Can be used to add a new child to the container"),
-                           GTK_TYPE_WIDGET,
-                           GTK_PARAM_WRITABLE);
-
-  g_object_class_install_properties (gobject_class, LAST_PROP, container_props);
 
   container_signals[ADD] =
     g_signal_new (I_("add"),
@@ -1654,42 +1626,6 @@ gtk_container_destroy (GtkWidget *widget)
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
   GTK_WIDGET_CLASS (parent_class)->destroy (widget);
-}
-
-static void
-gtk_container_set_property (GObject         *object,
-                            guint            prop_id,
-                            const GValue    *value,
-                            GParamSpec      *pspec)
-{
-  GtkContainer *container = GTK_CONTAINER (object);
-
-  switch (prop_id)
-    {
-    case PROP_CHILD:
-      gtk_container_add (container, GTK_WIDGET (g_value_get_object (value)));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_container_get_property (GObject         *object,
-                            guint            prop_id,
-                            GValue          *value,
-                            GParamSpec      *pspec)
-{
-  //GtkContainer *container = GTK_CONTAINER (object);
-  //GtkContainerPrivate *priv = container->priv;
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
 }
 
 /**

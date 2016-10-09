@@ -2108,6 +2108,13 @@ create_saved_position (GtkWidget *widget)
       main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
+      button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                             "label", "Stop Events",
+                             "active", FALSE,
+                             "visible", TRUE,
+                             NULL);
+      g_signal_connect (button, "clicked", G_CALLBACK (uposition_stop_configure), window);
+
       vbox =
 	g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_VERTICAL,
@@ -2115,14 +2122,8 @@ create_saved_position (GtkWidget *widget)
 			"GtkBox::spacing", 5,
 			"GtkWidget::parent", main_vbox,
 			"GtkWidget::visible", TRUE,
-			"child", g_object_connect (g_object_new (GTK_TYPE_TOGGLE_BUTTON,
-								   "label", "Stop Events",
-								   "active", FALSE,
-								   "visible", TRUE,
-								   NULL),
-						   "signal::clicked", uposition_stop_configure, window,
-						   NULL),
 			NULL);
+      gtk_container_add (GTK_CONTAINER (vbox), button);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE);
@@ -2325,8 +2326,8 @@ create_tooltips (GtkWidget *widget)
 			      "label_xalign", (double) 0.5,
 			      "visible", TRUE,
 			      "parent", box2,
-			      "child", box3,
 			      NULL);
+      gtk_container_add (GTK_CONTAINER (frame), box3);
       gtk_box_set_child_packing (GTK_BOX (box2), frame, TRUE, TRUE, GTK_PACK_START);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);

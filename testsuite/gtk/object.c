@@ -53,7 +53,6 @@ list_ignore_properties (gboolean buglist)
 {
   /* currently untestable properties */
   static const IgnoreProperty ignore_properties[] = {
-    { "GtkContainer",           "child",                NULL, },                        /* needs working child widget */
     { "GtkRadioMenuItem",       "group",                NULL, },                        /* needs working sibling */
     { "GtkWidget",              "parent",               NULL, },                        /* needs working parent widget */
     { "GtkCList",               "selection-mode",       (void*) GTK_SELECTION_NONE, },
