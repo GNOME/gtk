@@ -51,7 +51,6 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">both</property>
-    <property name="ignore-hidden">True</property>
     <widgets>
       <widget name="label1" />
       <widget name="label2" />

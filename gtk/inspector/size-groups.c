@@ -208,7 +208,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
                 GtkSizeGroup           *group)
 {
   GtkWidget *frame, *box, *box2;
-  GtkWidget *label, *sw, *combo;
+  GtkWidget *label, *combo;
   GSList *widgets, *l;
   GtkWidget *listbox;
 
@@ -217,24 +217,6 @@ add_size_group (GtkInspectorSizeGroups *sl,
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_VIEW);
   gtk_container_add (GTK_CONTAINER (frame), box);
-
-  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (box), box2);
-
-  label = gtk_label_new (_("Ignore hidden"));
-  g_object_set (label, "margin", 10, NULL);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_box_pack_start (GTK_BOX (box2), label, TRUE, TRUE);
-
-  sw = gtk_switch_new ();
-  g_object_set (sw, "margin", 10, NULL);
-  gtk_widget_set_halign (sw, GTK_ALIGN_END);
-  gtk_widget_set_valign (sw, GTK_ALIGN_BASELINE);
-  g_object_bind_property (group, "ignore-hidden",
-                          sw, "active",
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_box_pack_start (GTK_BOX (box2), sw, FALSE, FALSE);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (box), box2);

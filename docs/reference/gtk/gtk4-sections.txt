@@ -3086,8 +3086,6 @@ GtkSizeGroupMode
 gtk_size_group_new
 gtk_size_group_set_mode
 gtk_size_group_get_mode
-gtk_size_group_set_ignore_hidden
-gtk_size_group_get_ignore_hidden
 gtk_size_group_add_widget
 gtk_size_group_remove_widget
 gtk_size_group_get_widgets

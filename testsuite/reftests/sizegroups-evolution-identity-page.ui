@@ -281,7 +281,6 @@ For example, "Work" or "Personal".</property>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">horizontal</property>
-    <property name="ignore-hidden">True</property>
     <widgets>
       <widget name="label4" />
       <widget name="label6" />

@@ -108,14 +108,11 @@ struct _GtkSizeGroupPrivate
   GSList         *widgets;
 
   guint8          mode;
-
-  guint           ignore_hidden : 1;
 };
 
 enum {
   PROP_0,
-  PROP_MODE,
-  PROP_IGNORE_HIDDEN
+  PROP_MODE
 };
 
 static void gtk_size_group_set_property (GObject      *object,
@@ -157,13 +154,11 @@ add_widget_to_closure (GHashTable *widgets,
 		       gint        orientation)
 {
   GSList *tmp_groups, *tmp_widgets;
-  gboolean hidden;
 
   if (g_hash_table_lookup (widgets, widget))
     return;
 
   g_hash_table_add (widgets, widget);
-  hidden = !gtk_widget_is_visible (widget);
 
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
     {
@@ -171,9 +166,6 @@ add_widget_to_closure (GHashTable *widgets,
       GtkSizeGroupPrivate *tmp_priv  = tmp_group->priv;
 
       if (g_hash_table_lookup (groups, tmp_group))
-        continue;
-
-      if (tmp_priv->ignore_hidden && hidden)
         continue;
 
       if (orientation >= 0 && !(tmp_priv->mode & (1 << orientation)))
@@ -231,30 +223,6 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
                                                       GTK_TYPE_SIZE_GROUP_MODE,
                                                       GTK_SIZE_GROUP_HORIZONTAL,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkSizeGroup:ignore-hidden:
-   *
-   * If %TRUE, unmapped widgets are ignored when determining
-   * the size of the group.
-   *
-   * Since: 2.8
-   *
-   * Deprecated: 3.22: Measuring the size of hidden widgets has not worked
-   *     reliably for a long time. In most cases, they will report a size
-   *     of 0 nowadays, and thus, their size will not affect the other
-   *     size group members. In effect, size groups will always operate
-   *     as if this property was %TRUE. Use a #GtkStack instead to hide
-   *     widgets while still having their size taken into account.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_IGNORE_HIDDEN,
-                                   g_param_spec_boolean ("ignore-hidden",
-                                                         P_("Ignore hidden"),
-                                                         P_("If TRUE, unmapped widgets are ignored "
-                                                            "when determining the size of the group"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 }
 
 static void
@@ -267,7 +235,6 @@ gtk_size_group_init (GtkSizeGroup *size_group)
 
   priv->widgets = NULL;
   priv->mode = GTK_SIZE_GROUP_HORIZONTAL;
-  priv->ignore_hidden = FALSE;
 }
 
 static void
@@ -290,11 +257,6 @@ gtk_size_group_set_property (GObject      *object,
     case PROP_MODE:
       gtk_size_group_set_mode (size_group, g_value_get_enum (value));
       break;
-    case PROP_IGNORE_HIDDEN:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_size_group_set_ignore_hidden (size_group, g_value_get_boolean (value));
-G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -314,9 +276,6 @@ gtk_size_group_get_property (GObject      *object,
     {
     case PROP_MODE:
       g_value_set_enum (value, priv->mode);
-      break;
-    case PROP_IGNORE_HIDDEN:
-      g_value_set_boolean (value, priv->ignore_hidden);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -391,69 +350,6 @@ gtk_size_group_get_mode (GtkSizeGroup *size_group)
   g_return_val_if_fail (GTK_IS_SIZE_GROUP (size_group), GTK_SIZE_GROUP_BOTH);
 
   return size_group->priv->mode;
-}
-
-/**
- * gtk_size_group_set_ignore_hidden:
- * @size_group: a #GtkSizeGroup
- * @ignore_hidden: whether unmapped widgets should be ignored
- *   when calculating the size
- *
- * Sets whether unmapped widgets should be ignored when
- * calculating the size.
- *
- * Since: 2.8
- *
- * Deprecated: 3.22: Measuring the size of hidden widgets has not worked
- *     reliably for a long time. In most cases, they will report a size
- *     of 0 nowadays, and thus, their size will not affect the other
- *     size group members. In effect, size groups will always operate
- *     as if this property was %TRUE. Use a #GtkStack instead to hide
- *     widgets while still having their size taken into account.
- */
-void
-gtk_size_group_set_ignore_hidden (GtkSizeGroup *size_group,
-				  gboolean      ignore_hidden)
-{
-  GtkSizeGroupPrivate *priv;
-
-  g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
-
-  priv = size_group->priv;
-
-  ignore_hidden = ignore_hidden != FALSE;
-
-  if (priv->ignore_hidden != ignore_hidden)
-    {
-      priv->ignore_hidden = ignore_hidden;
-
-      g_object_notify (G_OBJECT (size_group), "ignore-hidden");
-    }
-}
-
-/**
- * gtk_size_group_get_ignore_hidden:
- * @size_group: a #GtkSizeGroup
- *
- * Returns if invisible widgets are ignored when calculating the size.
- *
- * Returns: %TRUE if invisible widgets are ignored.
- *
- * Since: 2.8
- *
- * Deprecated: 3.22: Measuring the size of hidden widgets has not worked
- *     reliably for a long time. In most cases, they will report a size
- *     of 0 nowadays, and thus, their size will not affect the other
- *     size group members. In effect, size groups will always operate
- *     as if this property was %TRUE. Use a #GtkStack instead to hide
- *     widgets while still having their size taken into account.
- */
-gboolean
-gtk_size_group_get_ignore_hidden (GtkSizeGroup *size_group)
-{
-  g_return_val_if_fail (GTK_IS_SIZE_GROUP (size_group), FALSE);
-
-  return size_group->priv->ignore_hidden;
 }
 
 /**

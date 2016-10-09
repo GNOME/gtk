@@ -5260,12 +5260,6 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
 
   for (l = groups; l; l = l->next)
   {
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-    if (gtk_size_group_get_ignore_hidden (l->data) && !gtk_widget_is_visible (widget))
-      continue;
-G_GNUC_END_IGNORE_DEPRECATIONS
-
     for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
       {
         gtk_widget_queue_resize_internal (widgets->data);

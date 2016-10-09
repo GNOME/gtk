@@ -68,11 +68,6 @@ void             gtk_size_group_set_mode      (GtkSizeGroup     *size_group,
 					       GtkSizeGroupMode  mode);
 GDK_AVAILABLE_IN_ALL
 GtkSizeGroupMode gtk_size_group_get_mode      (GtkSizeGroup     *size_group);
-GDK_DEPRECATED_IN_3_22
-void             gtk_size_group_set_ignore_hidden (GtkSizeGroup *size_group,
-						   gboolean      ignore_hidden);
-GDK_DEPRECATED_IN_3_22
-gboolean         gtk_size_group_get_ignore_hidden (GtkSizeGroup *size_group);
 GDK_AVAILABLE_IN_ALL
 void             gtk_size_group_add_widget    (GtkSizeGroup     *size_group,
 					       GtkWidget        *widget);

@@ -650,15 +650,9 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
           gtk_widget_show (column);
 
           group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_size_group_set_ignore_hidden (group, TRUE);
-G_GNUC_END_IGNORE_DEPRECATIONS
           g_object_set_data_full (G_OBJECT (column), "accel-size-group", group, g_object_unref);
 
           group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_size_group_set_ignore_hidden (group, TRUE);
-G_GNUC_END_IGNORE_DEPRECATIONS
           g_object_set_data_full (G_OBJECT (column), "title-size-group", group, g_object_unref);
 
           if (n_columns % 2 == 0)
@@ -703,14 +697,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_widget_show (column);
 
       group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_size_group_set_ignore_hidden (group, TRUE);
-G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_set_data_full (G_OBJECT (column), "accel-size-group", group, g_object_unref);
       group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_size_group_set_ignore_hidden (group, TRUE);
-G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_set_data_full (G_OBJECT (column), "title-size-group", group, g_object_unref);
 
       gtk_container_add (GTK_CONTAINER (current_page), column);
