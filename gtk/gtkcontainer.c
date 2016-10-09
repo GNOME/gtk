@@ -283,8 +283,6 @@ struct _GtkContainerPrivate
   guint has_focus_chain    : 1;
   guint reallocate_redraws : 1;
   guint restyle_pending    : 1;
-  guint resize_mode        : 2;
-  guint resize_mode_set    : 1;
   guint request_mode       : 2;
 };
 
@@ -298,7 +296,6 @@ enum {
 
 enum {
   PROP_0,
-  PROP_RESIZE_MODE,
   PROP_CHILD,
   LAST_PROP
 };
@@ -501,14 +498,6 @@ gtk_container_class_init (GtkContainerClass *class)
   class->child_type = NULL;
   class->composite_name = gtk_container_child_default_composite_name;
   class->get_path_for_child = gtk_container_real_get_path_for_child;
-
-  container_props[PROP_RESIZE_MODE] =
-      g_param_spec_enum ("resize-mode",
-                         P_("Resize mode"),
-                         P_("Specify how resize events are handled"),
-                         GTK_TYPE_RESIZE_MODE,
-                         GTK_RESIZE_PARENT,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   container_props[PROP_CHILD] =
       g_param_spec_object ("child",
@@ -1642,7 +1631,6 @@ gtk_container_init (GtkContainer *container)
   priv = container->priv;
 
   priv->focus_child = NULL;
-  priv->resize_mode = GTK_RESIZE_PARENT;
   priv->reallocate_redraws = FALSE;
 }
 
@@ -1678,11 +1666,6 @@ gtk_container_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_RESIZE_MODE:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_container_set_resize_mode (container, g_value_get_enum (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
     case PROP_CHILD:
       gtk_container_add (container, GTK_WIDGET (g_value_get_object (value)));
       break;
@@ -1698,14 +1681,11 @@ gtk_container_get_property (GObject         *object,
                             GValue          *value,
                             GParamSpec      *pspec)
 {
-  GtkContainer *container = GTK_CONTAINER (object);
-  GtkContainerPrivate *priv = container->priv;
+  //GtkContainer *container = GTK_CONTAINER (object);
+  //GtkContainerPrivate *priv = container->priv;
 
   switch (prop_id)
     {
-    case PROP_RESIZE_MODE:
-      g_value_set_enum (value, priv->resize_mode);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1790,91 +1770,6 @@ gtk_container_remove (GtkContainer *container,
   g_object_unref (container);
 }
 
-static void
-gtk_container_real_set_resize_mode (GtkContainer  *container,
-                                    GtkResizeMode  resize_mode)
-{
-  GtkWidget *widget = GTK_WIDGET (container);
-  GtkContainerPrivate *priv = container->priv;
-
-  if (_gtk_widget_is_toplevel (widget) &&
-      resize_mode == GTK_RESIZE_PARENT)
-    {
-      resize_mode = GTK_RESIZE_QUEUE;
-    }
-
-  if (priv->resize_mode != resize_mode)
-    {
-      priv->resize_mode = resize_mode;
-
-      gtk_widget_queue_resize (widget);
-      g_object_notify_by_pspec (G_OBJECT (container), container_props[PROP_RESIZE_MODE]);
-    }
-}
-
-/**
- * gtk_container_set_resize_mode:
- * @container: a #GtkContainer
- * @resize_mode: the new resize mode
- *
- * Sets the resize mode for the container.
- *
- * The resize mode of a container determines whether a resize request
- * will be passed to the container’s parent, queued for later execution
- * or executed immediately.
- *
- * Deprecated: 3.12: Resize modes are deprecated. They aren’t necessary
- *     anymore since frame clocks and might introduce obscure bugs if
- *     used.
- **/
-void
-gtk_container_set_resize_mode (GtkContainer  *container,
-                               GtkResizeMode  resize_mode)
-{
-  GtkContainerPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (resize_mode <= GTK_RESIZE_IMMEDIATE);
-
-  priv = container->priv;
-  priv->resize_mode_set = TRUE;
-
-  gtk_container_real_set_resize_mode (container, resize_mode);
-}
-
-void
-gtk_container_set_default_resize_mode (GtkContainer *container,
-                                       GtkResizeMode resize_mode)
-{
-  GtkContainerPrivate *priv = container->priv;
-
-  if (priv->resize_mode_set)
-    return;
-
-  gtk_container_real_set_resize_mode (container, resize_mode);
-}
-
-/**
- * gtk_container_get_resize_mode:
- * @container: a #GtkContainer
- *
- * Returns the resize mode for the container. See
- * gtk_container_set_resize_mode ().
- *
- * Returns: the current resize mode
- *
- * Deprecated: 3.12: Resize modes are deprecated. They aren’t necessary
- *     anymore since frame clocks and might introduce obscure bugs if
- *     used.
- **/
-GtkResizeMode
-gtk_container_get_resize_mode (GtkContainer *container)
-{
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), GTK_RESIZE_PARENT);
-
-  return container->priv->resize_mode;
-}
-
 /**
  * gtk_container_set_reallocate_redraws:
  * @container: a #GtkContainer
@@ -1901,14 +1796,8 @@ gtk_container_needs_idle_sizer (GtkContainer *container)
 {
   GtkContainerPrivate *priv = container->priv;
 
-  if (priv->resize_mode == GTK_RESIZE_PARENT)
-    return FALSE;
-
-  if (container->priv->restyle_pending)
+  if (priv->restyle_pending)
     return TRUE;
-
-  if (priv->resize_mode == GTK_RESIZE_IMMEDIATE)
-    return FALSE;
 
   return gtk_widget_needs_allocate (GTK_WIDGET (container));
 }
@@ -1991,32 +1880,13 @@ gtk_container_queue_resize_handler (GtkContainer *container)
 {
   GtkWidget *widget;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  g_return_if_fail (GTK_IS_RESIZE_CONTAINER (container));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   widget = GTK_WIDGET (container);
 
   if (_gtk_widget_get_visible (widget) &&
-      (_gtk_widget_is_toplevel (widget) ||
-       _gtk_widget_get_realized (widget)))
+      gtk_widget_needs_allocate (widget) &&
+      _gtk_widget_is_toplevel (widget))
     {
-      switch (container->priv->resize_mode)
-        {
-        case GTK_RESIZE_QUEUE:
-          if (gtk_widget_needs_allocate (widget))
-            gtk_container_start_idle_sizer (container);
-          break;
-
-        case GTK_RESIZE_IMMEDIATE:
-          gtk_container_check_resize (container);
-          break;
-
-        case GTK_RESIZE_PARENT:
-        default:
-          g_assert_not_reached ();
-          break;
-        }
+      gtk_container_start_idle_sizer (container);
     }
 }
 
@@ -2061,63 +1931,24 @@ gtk_container_real_check_resize (GtkContainer *container)
 
   if (_gtk_widget_get_alloc_needed (widget))
     {
-      gtk_widget_get_preferred_size (widget, &requisition, NULL);
-      gtk_widget_get_allocated_size (widget, &allocation, &baseline);
+      if (_gtk_widget_is_toplevel (widget))
+        {
+          gtk_widget_get_preferred_size (widget, &requisition, NULL);
+          gtk_widget_get_allocated_size (widget, &allocation, &baseline);
 
-      if (requisition.width > allocation.width ||
-          requisition.height > allocation.height)
-        {
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-          if (GTK_IS_RESIZE_CONTAINER (container))
-            {
-              gtk_widget_size_allocate (widget, &allocation);
-            }
-          else
-            gtk_widget_queue_resize (widget);
-          G_GNUC_END_IGNORE_DEPRECATIONS;
-        }
-      else
-        {
+          if (allocation.width < requisition.width)
+            allocation.width = requisition.width;
+          if (allocation.height < requisition.height)
+            allocation.height = requisition.height;
           gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
         }
+      else
+        gtk_widget_queue_resize (widget);
     }
   else
     {
       gtk_widget_ensure_allocate (widget);
     }
-}
-
-/* The container hasn't changed size but one of its children
- *  queued a resize request. Which means that the allocation
- *  is not sufficient for the requisition of some child.
- *  We’ve already performed a size request at this point,
- *  so we simply need to reallocate and let the allocation
- *  trickle down via GTK_WIDGET_ALLOC_NEEDED flags.
- */
-/**
- * gtk_container_resize_children:
- * @container: a #GtkContainer
- *
- * Deprecated: 3.10
- **/
-void
-gtk_container_resize_children (GtkContainer *container)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  gint baseline;
-
-  /* resizing invariants:
-   * toplevels have *always* resize_mode != GTK_RESIZE_PARENT set.
-   * containers that have an idle sizer pending must be flagged with
-   * RESIZE_PENDING.
-   */
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  widget = GTK_WIDGET (container);
-  gtk_widget_get_allocated_size (widget, &allocation, &baseline);
-
-  gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
 }
 
 typedef struct {

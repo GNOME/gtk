@@ -41,8 +41,6 @@ void      _gtk_container_stop_idle_sizer        (GtkContainer *container);
 void      _gtk_container_maybe_start_idle_sizer (GtkContainer *container);
 void      gtk_container_get_children_clip       (GtkContainer  *container,
                                                  GtkAllocation *out_clip);
-void      gtk_container_set_default_resize_mode (GtkContainer *container,
-                                                 GtkResizeMode resize_mode);
 
 G_END_DECLS
 

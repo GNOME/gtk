@@ -974,9 +974,6 @@ GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID
 gtk_container_add
 gtk_container_remove
 gtk_container_add_with_properties
-GtkResizeMode
-gtk_container_get_resize_mode
-gtk_container_set_resize_mode
 gtk_container_check_resize
 gtk_container_foreach
 gtk_container_get_children

@@ -5272,11 +5272,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       }
   }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  if (GTK_IS_RESIZE_CONTAINER (widget))
+  if (_gtk_widget_is_toplevel (widget))
     {
       gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
-G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   else if (_gtk_widget_get_visible (widget))
     {
@@ -14948,13 +14946,11 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (widget))
+      if (_gtk_widget_is_toplevel (widget))
         {
           gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
           break;
         }
-G_GNUC_END_IGNORE_DEPRECATIONS;
 
       widget = priv->parent;
       if (widget == NULL)

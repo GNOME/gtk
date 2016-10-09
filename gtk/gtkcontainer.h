@@ -119,20 +119,6 @@ struct _GtkContainerClass
 };
 
 
-/**
- * GtkResizeMode:
- * @GTK_RESIZE_PARENT: Pass resize request to the parent
- * @GTK_RESIZE_QUEUE: Queue resizes on this widget
- * @GTK_RESIZE_IMMEDIATE: Resize immediately. Deprecated.
- */
-typedef enum
-{
-  GTK_RESIZE_PARENT,
-  GTK_RESIZE_QUEUE,
-  GTK_RESIZE_IMMEDIATE
-} GtkResizeMode;
-
-
 /* Application-level methods */
 
 GDK_AVAILABLE_IN_ALL
@@ -144,12 +130,6 @@ void    gtk_container_add		 (GtkContainer	   *container,
 GDK_AVAILABLE_IN_ALL
 void    gtk_container_remove		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
-
-GDK_DEPRECATED_IN_3_12
-void    gtk_container_set_resize_mode    (GtkContainer     *container,
-					  GtkResizeMode     resize_mode);
-GDK_DEPRECATED_IN_3_12
-GtkResizeMode gtk_container_get_resize_mode (GtkContainer     *container);
 
 GDK_AVAILABLE_IN_ALL
 void    gtk_container_check_resize       (GtkContainer     *container);
@@ -175,9 +155,6 @@ gboolean gtk_container_get_focus_chain  (GtkContainer   *container,
 GDK_AVAILABLE_IN_ALL
 void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
-#define GTK_IS_RESIZE_CONTAINER(widget) (GTK_IS_CONTAINER (widget) && \
-                                        (gtk_container_get_resize_mode (GTK_CONTAINER (widget)) != GTK_RESIZE_PARENT))
-
 /* Widget-level methods */
 
 GDK_DEPRECATED_IN_3_14
@@ -199,9 +176,6 @@ void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 GDK_AVAILABLE_IN_ALL
 GtkAdjustment *gtk_container_get_focus_hadjustment (GtkContainer *container);
-
-GDK_DEPRECATED_IN_3_10
-void    gtk_container_resize_children      (GtkContainer     *container);
 
 GDK_AVAILABLE_IN_ALL
 GType   gtk_container_child_type	   (GtkContainer     *container);

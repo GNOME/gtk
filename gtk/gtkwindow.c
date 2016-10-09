@@ -1603,8 +1603,6 @@ gtk_window_init (GtkWindow *window)
   _gtk_widget_set_is_toplevel (widget, TRUE);
   _gtk_widget_set_anchored (widget, TRUE);
 
-  gtk_container_set_default_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
-
   priv->title = NULL;
   priv->wm_role = NULL;
   priv->geometry_info = NULL;
@@ -6893,8 +6891,6 @@ gtk_window_realize (GtkWidget *widget)
 
   if (gtk_widget_get_parent_window (widget))
     {
-      gtk_container_set_default_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
-
       attributes.x = allocation.x;
       attributes.y = allocation.y;
       attributes.width = allocation.width;
@@ -6924,8 +6920,6 @@ gtk_window_realize (GtkWidget *widget)
 
       return;
     }
-
-  gtk_container_set_default_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
   /* ensure widget tree is properly size allocated */
   if (allocation.x == -1 &&
@@ -9080,7 +9074,6 @@ gtk_window_move_resize (GtkWindow *window)
    */
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *widget;
-  GtkContainer *container;
   GtkWindowGeometryInfo *info;
   GdkGeometry new_geometry;
   GdkWindow *gdk_window;
@@ -9095,7 +9088,6 @@ gtk_window_move_resize (GtkWindow *window)
   widget = GTK_WIDGET (window);
 
   gdk_window = _gtk_widget_get_window (widget);
-  container = GTK_CONTAINER (widget);
   info = gtk_window_get_geometry_info (window, TRUE);
   
   configure_request_size_changed = FALSE;
@@ -9378,11 +9370,6 @@ gtk_window_move_resize (GtkWindow *window)
 	  allocation.height = new_request.height;
 
 	  gtk_widget_size_allocate (widget, &allocation);
-
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
-	    gtk_widget_queue_draw (widget);
-          G_GNUC_END_IGNORE_DEPRECATIONS;
 	}
       else
         {
