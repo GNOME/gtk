@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-12 01:16+0000\n"
-"PO-Revision-Date: 2016-09-12 03:15+0200\n"
+"POT-Creation-Date: 2016-10-06 11:53+0000\n"
+"PO-Revision-Date: 2016-10-08 00:22+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -681,15 +681,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Luk"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9025
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9044
 msgid "Minimize"
 msgstr "Minimér"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9034
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9053
 msgid "Maximize"
 msgstr "Maksimér"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8991
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9010
 msgid "Restore"
 msgstr "Gendan"
 
@@ -1243,7 +1243,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12492 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12511 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1293,7 +1293,7 @@ msgid "_Apply"
 msgstr "_Anvend"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12493
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12512
 msgid "_OK"
 msgstr "_OK"
 
@@ -2202,44 +2202,44 @@ msgstr "_Højre:"
 msgid "Paper Margins"
 msgstr "Papirmargener"
 
-#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
+#: gtk/gtkentry.c:9472 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
 msgid "Cu_t"
 msgstr "K_lip"
 
-#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
+#: gtk/gtkentry.c:9476 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
 msgid "_Copy"
 msgstr "_Kopiér"
 
-#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
+#: gtk/gtkentry.c:9480 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
 msgid "_Paste"
 msgstr "_Indsæt"
 
-#: gtk/gtkentry.c:9478 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkentry.c:9483 gtk/gtkfilechooserwidget.c:1478
 #: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6669 gtk/gtktextview.c:9432
 msgid "_Delete"
 msgstr "_Slet"
 
-#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
+#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: gtk/gtkentry.c:9662 gtk/gtktextview.c:9671
+#: gtk/gtkentry.c:9667 gtk/gtktextview.c:9671
 msgid "Select all"
 msgstr "Markér alt"
 
-#: gtk/gtkentry.c:9665 gtk/gtktextview.c:9674
+#: gtk/gtkentry.c:9670 gtk/gtktextview.c:9674
 msgid "Cut"
 msgstr "Klip"
 
-#: gtk/gtkentry.c:9668 gtk/gtktextview.c:9677
+#: gtk/gtkentry.c:9673 gtk/gtktextview.c:9677
 msgid "Copy"
 msgstr "Kopiér"
 
-#: gtk/gtkentry.c:9671 gtk/gtktextview.c:9680
+#: gtk/gtkentry.c:9676 gtk/gtktextview.c:9680
 msgid "Paste"
 msgstr "Indsæt"
 
-#: gtk/gtkentry.c:10738
+#: gtk/gtkentry.c:10743
 msgid "Caps Lock is on"
 msgstr "Caps Lock er slået til"
 
@@ -2603,7 +2603,7 @@ msgstr "Kunne ikke oprette OpenGL-kontekst"
 msgid "Application menu"
 msgstr "Programmenu"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9061
+#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9080
 msgid "Close"
 msgstr "Luk"
 
@@ -2801,7 +2801,7 @@ msgstr "Vis GTK+-tilvalg"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1242
+#: gtk/gtkmain.c:1246
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3837,24 +3837,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9009
+#: gtk/gtkwindow.c:9028
 msgid "Move"
 msgstr "Flyt"
 
-#: gtk/gtkwindow.c:9017
+#: gtk/gtkwindow.c:9036
 msgid "Resize"
 msgstr "Ændr størrelse"
 
-#: gtk/gtkwindow.c:9048
+#: gtk/gtkwindow.c:9067
 msgid "Always on Top"
 msgstr "Altid øverst"
 
-#: gtk/gtkwindow.c:12480
+#: gtk/gtkwindow.c:12499
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vil du bruge GTK+-inspektøren?"
 
-#: gtk/gtkwindow.c:12482
+#: gtk/gtkwindow.c:12501
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3865,7 +3865,7 @@ msgstr ""
 "bestanddelene af ethvert GTK+-program. Dens brug kan forårsage fejl eller "
 "nedbrud af programmet."
 
-#: gtk/gtkwindow.c:12487
+#: gtk/gtkwindow.c:12506
 msgid "Don't show this message again"
 msgstr "Vis ikke denne meddelelse igen"
 
@@ -5729,6 +5729,11 @@ msgstr "ftp:// eller ftps://"
 #: gtk/ui/gtkplacesview.ui:205
 msgid "smb://"
 msgstr "smb://"
+
+#. Translators: do not translate sftp:// and ssh://
+#: gtk/ui/gtkplacesview.ui:216
+msgid "sftp:// or ssh://"
+msgstr "sftp:// eller ssh://"
 
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:227
