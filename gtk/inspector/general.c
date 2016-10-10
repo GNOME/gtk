@@ -216,7 +216,7 @@ append_egl_extension_row (GtkInspectorGeneral *gen,
 }
 
 static EGLDisplay
-wayland_get_display (GdkWaylandDisplay *display_wayland)
+wayland_get_display (struct wl_display *wl_display)
 {
   EGLDisplay dpy = NULL;
 
@@ -227,7 +227,7 @@ wayland_get_display (GdkWaylandDisplay *display_wayland)
 
       if (getPlatformDisplay)
         dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
-                                  display_wayland->wl_display,
+                                  wl_display,
                                   NULL);
       if (dpy)
         return dpy;
@@ -240,13 +240,13 @@ wayland_get_display (GdkWaylandDisplay *display_wayland)
 
       if (getPlatformDisplay)
         dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
-                                  display_wayland->wl_display,
+                                  wl_display,
                                   NULL);
       if (dpy)
         return dpy;
     }
 
-  return eglGetDisplay ((EGLNativeDisplayType) display_wayland->wl_display);
+  return eglGetDisplay ((EGLNativeDisplayType)wl_display);
 }
 #endif
 
