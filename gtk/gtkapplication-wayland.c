@@ -61,6 +61,17 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
 }
 
 static void
+gtk_application_impl_wayland_before_emit (GtkApplicationImpl *impl,
+                                          GVariant           *platform_data)
+{
+  const char *startup_notification_id = NULL;
+
+  g_variant_lookup (platform_data, "desktop-startup-id", "&s", &startup_notification_id);
+
+  gdk_wayland_display_set_startup_notification_id (gdk_display_get_default (), startup_notification_id);
+}
+
+static void
 gtk_application_impl_wayland_init (GtkApplicationImplWayland *wayland)
 {
 }
@@ -72,4 +83,6 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
 
   impl_class->handle_window_realize =
     gtk_application_impl_wayland_handle_window_realize;
+  impl_class->before_emit =
+    gtk_application_impl_wayland_before_emit;
 }
