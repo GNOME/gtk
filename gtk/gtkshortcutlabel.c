@@ -499,6 +499,9 @@ static void
 gtk_shortcut_label_init (GtkShortcutLabel *self)
 {
   gtk_box_set_spacing (GTK_BOX (self), 6);
+
+  /* Always use LTR so that modifiers are always left to the keyval */
+  gtk_widget_set_direction (GTK_WIDGET (self), GTK_TEXT_DIR_LTR);
 }
 
 /**
