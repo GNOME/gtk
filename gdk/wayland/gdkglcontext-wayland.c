@@ -274,6 +274,40 @@ gdk_wayland_gl_context_init (GdkWaylandGLContext *self)
 {
 }
 
+static EGLDisplay
+gdk_wayland_get_display (GdkWaylandDisplay *display_wayland)
+{
+  EGLDisplay dpy = NULL;
+
+  if (epoxy_has_egl_extension (NULL, "EGL_KHR_platform_base"))
+    {
+      PFNEGLGETPLATFORMDISPLAYPROC getPlatformDisplay =
+	(void *) eglGetProcAddress ("eglGetPlatformDisplay");
+
+      if (getPlatformDisplay)
+	dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
+				  display_wayland->wl_display,
+				  NULL);
+      if (dpy)
+	return dpy;
+    }
+
+  if (epoxy_has_egl_extension (NULL, "EGL_EXT_platform_base"))
+    {
+      PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay =
+	(void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
+
+      if (getPlatformDisplay)
+	dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
+				  display_wayland->wl_display,
+				  NULL);
+      if (dpy)
+	return dpy;
+    }
+
+  return eglGetDisplay ((EGLNativeDisplayType) display_wayland->wl_display);
+}
+
 gboolean
 gdk_wayland_display_init_gl (GdkDisplay *display)
 {
@@ -284,7 +318,8 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
   if (display_wayland->have_egl)
     return TRUE;
 
-  dpy = eglGetDisplay ((EGLNativeDisplayType)display_wayland->wl_display);
+  dpy = gdk_wayland_get_display (display_wayland);
+
   if (dpy == NULL)
     return FALSE;
 
