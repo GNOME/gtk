@@ -214,6 +214,40 @@ append_egl_extension_row (GtkInspectorGeneral *gen,
 {
   add_check_row (gen, GTK_LIST_BOX (gen->priv->gl_box), ext, epoxy_has_egl_extension (dpy, ext), 0);
 }
+
+static EGLDisplay
+wayland_get_display (GdkWaylandDisplay *display_wayland)
+{
+  EGLDisplay dpy = NULL;
+
+  if (epoxy_has_egl_extension (NULL, "EGL_KHR_platform_base"))
+    {
+      PFNEGLGETPLATFORMDISPLAYPROC getPlatformDisplay =
+        (void *) eglGetProcAddress ("eglGetPlatformDisplay");
+
+      if (getPlatformDisplay)
+        dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
+                                  display_wayland->wl_display,
+                                  NULL);
+      if (dpy)
+        return dpy;
+    }
+
+  if (epoxy_has_egl_extension (NULL, "EGL_EXT_platform_base"))
+    {
+      PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay =
+        (void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
+
+      if (getPlatformDisplay)
+        dpy = getPlatformDisplay (EGL_PLATFORM_WAYLAND_EXT,
+                                  display_wayland->wl_display,
+                                  NULL);
+      if (dpy)
+        return dpy;
+    }
+
+  return eglGetDisplay ((EGLNativeDisplayType) display_wayland->wl_display);
+}
 #endif
 
 
@@ -254,7 +288,7 @@ init_gl (GtkInspectorGeneral *gen)
       EGLint major, minor;
       gchar *version;
 
-      dpy = eglGetDisplay ((EGLNativeDisplayType)gdk_wayland_display_get_wl_display (display));
+      dpy = wayland_get_display (gdk_wayland_display_get_wl_display (display));
 
       if (!eglInitialize (dpy, &major, &minor))
         return;
