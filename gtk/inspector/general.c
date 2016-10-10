@@ -209,7 +209,7 @@ append_glx_extension_row (GtkInspectorGeneral *gen,
 #ifdef GDK_WINDOWING_WAYLAND
 static void
 append_egl_extension_row (GtkInspectorGeneral *gen,
-                          EGLDisplay          *dpy,
+                          EGLDisplay          dpy,
                           const gchar         *ext)
 {
   add_check_row (gen, GTK_LIST_BOX (gen->priv->gl_box), ext, epoxy_has_egl_extension (dpy, ext), 0);
@@ -250,7 +250,7 @@ init_gl (GtkInspectorGeneral *gen)
   if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
     {
       GdkDisplay *display = gdk_display_get_default ();
-      EGLDisplay *dpy;
+      EGLDisplay dpy;
       EGLint major, minor;
       gchar *version;
 

@@ -279,7 +279,7 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLint major, minor;
-  EGLDisplay *dpy;
+  EGLDisplay dpy;
 
   if (display_wayland->have_egl)
     return TRUE;
