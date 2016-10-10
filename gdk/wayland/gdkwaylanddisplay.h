@@ -53,6 +53,9 @@ GDK_AVAILABLE_IN_3_10
 void                    gdk_wayland_display_set_cursor_theme    (GdkDisplay  *display,
                                                                  const gchar *theme,
                                                                  gint         size);
+GDK_AVAILABLE_IN_3_22
+void                    gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
+                                                                         const char *startup_id);
 
 G_END_DECLS
 
