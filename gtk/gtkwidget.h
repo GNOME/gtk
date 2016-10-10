@@ -857,12 +857,6 @@ void                  gtk_widget_set_app_paintable      (GtkWidget    *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_app_paintable      (GtkWidget    *widget);
 
-GDK_DEPRECATED_IN_3_14
-void                  gtk_widget_set_double_buffered    (GtkWidget    *widget,
-							 gboolean      double_buffered);
-GDK_DEPRECATED_IN_3_14
-gboolean              gtk_widget_get_double_buffered    (GtkWidget    *widget);
-
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_redraw_on_allocate (GtkWidget    *widget,
 							 gboolean      redraw_on_allocate);

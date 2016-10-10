@@ -67,7 +67,6 @@ struct _GtkWidgetPrivate
   guint has_grab              : 1;
   guint shadowed              : 1;
   guint app_paintable         : 1;
-  guint double_buffered       : 1;
   guint redraw_on_alloc       : 1;
   guint no_show_all           : 1;
   guint child_visible         : 1;

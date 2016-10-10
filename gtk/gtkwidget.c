@@ -583,7 +583,6 @@ enum {
   PROP_TOOLTIP_TEXT,
   PROP_WINDOW,
   PROP_OPACITY,
-  PROP_DOUBLE_BUFFERED,
   PROP_HALIGN,
   PROP_VALIGN,
   PROP_MARGIN_START,
@@ -1305,22 +1304,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            P_("The widget's window if it is realized"),
                            GDK_TYPE_WINDOW,
                            GTK_PARAM_READABLE);
-
-  /**
-   * GtkWidget:double-buffered:
-   *
-   * Whether the widget is double buffered.
-   *
-   * Since: 2.18
-   *
-   * Deprecated: 3.14: Widgets should not use this property.
-   */
-  widget_props[PROP_DOUBLE_BUFFERED] =
-      g_param_spec_boolean ("double-buffered",
-                            P_("Double Buffered"),
-                            P_("Whether the widget is double buffered"),
-                            TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkWidget:halign:
@@ -3403,11 +3386,6 @@ gtk_widget_set_property (GObject         *object,
       if (_gtk_widget_get_visible (widget))
         gtk_widget_queue_tooltip_query (widget);
       break;
-    case PROP_DOUBLE_BUFFERED:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_widget_set_double_buffered (widget, g_value_get_boolean (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
     case PROP_HALIGN:
       gtk_widget_set_halign (widget, g_value_get_enum (value));
       break;
@@ -3556,11 +3534,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_WINDOW:
       g_value_set_object (value, _gtk_widget_get_window (widget));
-      break;
-    case PROP_DOUBLE_BUFFERED:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      g_value_set_boolean (value, gtk_widget_get_double_buffered (widget));
-      G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_HALIGN:
       g_value_set_enum (value, gtk_widget_get_halign (widget));
@@ -3943,7 +3916,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 
   priv->sensitive = TRUE;
   priv->composite_child = composite_child_stack != 0;
-  priv->double_buffered = TRUE;
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
   priv->alloc_needed_on_child = TRUE;
@@ -8615,77 +8587,6 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return widget->priv->app_paintable;
-}
-
-/**
- * gtk_widget_set_double_buffered:
- * @widget: a #GtkWidget
- * @double_buffered: %TRUE to double-buffer a widget
- *
- * Widgets are double buffered by default; you can use this function
- * to turn off the buffering. “Double buffered” simply means that
- * gdk_window_begin_draw_frame() and gdk_window_end_draw_frame() are called
- * automatically around expose events sent to the
- * widget. gdk_window_begin_draw_frame() diverts all drawing to a widget's
- * window to an offscreen buffer, and gdk_window_end_draw_frame() draws the
- * buffer to the screen. The result is that users see the window
- * update in one smooth step, and don’t see individual graphics
- * primitives being rendered.
- *
- * In very simple terms, double buffered widgets don’t flicker,
- * so you would only use this function to turn off double buffering
- * if you had special needs and really knew what you were doing.
- *
- * Note: if you turn off double-buffering, you have to handle
- * expose events, since even the clearing to the background color or
- * pixmap will not happen automatically (as it is done in
- * gdk_window_begin_draw_frame()).
- *
- * In 3.10 GTK and GDK have been restructured for translucent drawing. Since
- * then expose events for double-buffered widgets are culled into a single
- * event to the toplevel GDK window. If you now unset double buffering, you
- * will cause a separate rendering pass for every widget. This will likely
- * cause rendering problems - in particular related to stacking - and usually
- * increases rendering times significantly.
- *
- * Deprecated: 3.14: This function does not work under non-X11 backends or with
- * non-native windows.
- * It should not be used in newly written code.
- **/
-void
-gtk_widget_set_double_buffered (GtkWidget *widget,
-				gboolean   double_buffered)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  double_buffered = (double_buffered != FALSE);
-
-  if (widget->priv->double_buffered != double_buffered)
-    {
-      widget->priv->double_buffered = double_buffered;
-
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_DOUBLE_BUFFERED]);
-    }
-}
-
-/**
- * gtk_widget_get_double_buffered:
- * @widget: a #GtkWidget
- *
- * Determines whether the widget is double buffered.
- *
- * See gtk_widget_set_double_buffered()
- *
- * Returns: %TRUE if the widget is double buffered
- *
- * Since: 2.18
- **/
-gboolean
-gtk_widget_get_double_buffered (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return widget->priv->double_buffered;
 }
 
 /**
@@ -16162,47 +16063,22 @@ gtk_widget_render (GtkWidget            *widget,
                    GdkWindow            *window,
                    const cairo_region_t *region)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkDrawingContext *context;
   gboolean do_clip;
   cairo_t *cr;
   int x, y;
-  gboolean is_double_buffered;
 
-  /* We take the value here, in case somebody manages to changes
-   * the double_buffered value inside a ::draw call, and ends up
-   * breaking everything.
-   */
-  is_double_buffered = priv->double_buffered;
-  if (is_double_buffered)
-    {
-      /* We only render double buffered on native windows */
-      if (!gdk_window_has_native (window))
-        return;
+  /* We only render double buffered on native windows */
+  if (!gdk_window_has_native (window))
+    return;
 
-      context = gdk_window_begin_draw_frame (window, region);
-      cr = gdk_drawing_context_get_cairo_context (context);
-    }
-  else
-    {
-      /* This is annoying, but it has to stay because Firefox
-       * disables double buffering on a top-level GdkWindow,
-       * which breaks the drawing context.
-       *
-       * Candidate for deletion in the next major API bump.
-       */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      cr = gdk_cairo_create (window);
-G_GNUC_END_IGNORE_DEPRECATIONS
-    }
+  context = gdk_window_begin_draw_frame (window, region);
+  cr = gdk_drawing_context_get_cairo_context (context);
 
   do_clip = _gtk_widget_get_translation_to_window (widget, window, &x, &y);
   cairo_translate (cr, -x, -y);
 
   gtk_widget_draw_internal (widget, cr, do_clip);
 
-  if (is_double_buffered)
-    gdk_window_end_draw_frame (window, context);
-  else
-    cairo_destroy (cr);
+  gdk_window_end_draw_frame (window, context);
 }
