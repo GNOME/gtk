@@ -796,6 +796,33 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
   return ++serial;
 }
 
+/**
+ * gdk_wayland_display_set_startup_notification_id:
+ * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ * @startup_id: the startup notification ID (must be valid utf8)
+ *
+ * Sets the startup notification ID for a display.
+ *
+ * This is usually taken from the value of the DESKTOP_STARTUP_ID
+ * environment variable, but in some cases (such as the application not
+ * being launched using exec()) it can come from other sources.
+ *
+ * The startup ID is also what is used to signal that the startup is
+ * complete (for example, when opening a window or when calling
+ * gdk_notify_startup_complete()).
+ *
+ * Since: 3.22
+ **/
+void
+gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
+                                                 const char *startup_id)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  g_free (display_wayland->startup_notification_id);
+  display_wayland->startup_notification_id = g_strdup (startup_id);
+}
+
 static void
 gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 					     const gchar *startup_id)
