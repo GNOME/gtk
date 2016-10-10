@@ -49,6 +49,7 @@
 static void         gdk_x11_screen_dispose     (GObject		  *object);
 static void         gdk_x11_screen_finalize    (GObject		  *object);
 static void	    init_randr_support	       (GdkScreen	  *screen);
+static void         process_monitors_change    (GdkScreen         *screen);
 
 enum
 {
@@ -82,13 +83,13 @@ gdk_x11_screen_get_display (GdkScreen *screen)
 gint
 gdk_x11_screen_get_width (GdkScreen *screen)
 {
-  return GDK_X11_SCREEN (screen)->width / GDK_X11_SCREEN (screen)->window_scale;
+  return GDK_X11_SCREEN (screen)->width;
 }
 
 gint
 gdk_x11_screen_get_height (GdkScreen *screen)
 {
-  return GDK_X11_SCREEN (screen)->height / GDK_X11_SCREEN (screen)->window_scale;
+  return GDK_X11_SCREEN (screen)->height;
 }
 
 static gint
@@ -906,10 +907,8 @@ void
 _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
 				  gint          scale)
 {
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GList *toplevels, *l;
   GdkWindow *root;
-  int i;
 
   if (x11_screen->window_scale == scale)
     return;
@@ -928,14 +927,7 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
       _gdk_x11_window_set_window_scale (window, scale);
     }
 
-  for (i = 0; i < x11_display->monitors->len; i++)
-    {
-      GdkMonitor *monitor = GDK_MONITOR (x11_display->monitors->pdata[i]);
-
-      gdk_monitor_set_scale_factor (monitor, scale);
-    }
-
-  g_signal_emit_by_name (GDK_SCREEN (x11_screen), "monitors-changed");
+  process_monitors_change (GDK_SCREEN (x11_screen));
 }
 
 /*
