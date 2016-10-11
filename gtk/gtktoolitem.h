@@ -133,8 +133,6 @@ GtkOrientation  gtk_tool_item_get_orientation          (GtkToolItem *tool_item);
 GDK_AVAILABLE_IN_ALL
 GtkToolbarStyle gtk_tool_item_get_toolbar_style        (GtkToolItem *tool_item);
 GDK_AVAILABLE_IN_ALL
-GtkReliefStyle  gtk_tool_item_get_relief_style         (GtkToolItem *tool_item);
-GDK_AVAILABLE_IN_ALL
 gfloat          gtk_tool_item_get_text_alignment       (GtkToolItem *tool_item);
 GDK_AVAILABLE_IN_ALL
 GtkOrientation  gtk_tool_item_get_text_orientation     (GtkToolItem *tool_item);

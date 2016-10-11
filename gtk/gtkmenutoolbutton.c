@@ -169,9 +169,6 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
   gtk_container_add (GTK_CONTAINER (button), priv->box);
   gtk_widget_show_all (priv->box);
 
-  gtk_button_set_relief (GTK_BUTTON (priv->arrow_button),
-			 gtk_tool_item_get_relief_style (GTK_TOOL_ITEM (button)));
-  
   gtk_widget_queue_resize (GTK_WIDGET (button));
 }
 

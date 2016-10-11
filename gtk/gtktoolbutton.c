@@ -584,9 +584,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   if (box)
     gtk_widget_show (box);
 
-  gtk_button_set_relief (GTK_BUTTON (button->priv->button),
-			 gtk_tool_item_get_relief_style (GTK_TOOL_ITEM (button)));
-
   gtk_tool_item_rebuild_menu (tool_item);
   
   gtk_widget_queue_resize (GTK_WIDGET (button));

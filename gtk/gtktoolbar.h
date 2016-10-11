@@ -137,8 +137,6 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_unset_icon_size         (GtkToolbar      *toolbar);
 
 GDK_AVAILABLE_IN_ALL
-GtkReliefStyle  gtk_toolbar_get_relief_style        (GtkToolbar      *toolbar);
-GDK_AVAILABLE_IN_ALL
 gint            gtk_toolbar_get_drop_index          (GtkToolbar      *toolbar,
 						     gint             x,
 						     gint             y);

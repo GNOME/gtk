@@ -242,7 +242,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * - gtk_tool_shell_get_orientation()
  * - gtk_tool_shell_get_style()
  * - gtk_tool_shell_get_icon_size()
- * - gtk_tool_shell_get_relief_style()
  * to find out what the toolbar should look like and change
  * themselves accordingly.
  **/
@@ -790,34 +789,6 @@ gtk_tool_item_get_toolbar_style (GtkToolItem *tool_item)
     return GTK_TOOLBAR_ICONS;
 
   return gtk_tool_shell_get_style (GTK_TOOL_SHELL (parent));
-}
-
-/**
- * gtk_tool_item_get_relief_style:
- * @tool_item: a #GtkToolItem 
- * 
- * Returns the relief style of @tool_item. See gtk_button_set_relief().
- * Custom subclasses of #GtkToolItem should call this function in the handler
- * of the #GtkToolItem::toolbar_reconfigured signal to find out the
- * relief style of buttons.
- * 
- * Returns: a #GtkReliefStyle indicating the relief style used
- * for @tool_item.
- * 
- * Since: 2.4
- **/
-GtkReliefStyle 
-gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
-{
-  GtkWidget *parent;
-  
-  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_RELIEF_NONE);
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
-  if (!parent || !GTK_IS_TOOL_SHELL (parent))
-    return GTK_RELIEF_NONE;
-
-  return gtk_tool_shell_get_relief_style (GTK_TOOL_SHELL (parent));
 }
 
 /**

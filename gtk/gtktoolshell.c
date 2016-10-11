@@ -44,7 +44,6 @@
 typedef GtkToolShellIface GtkToolShellInterface;
 G_DEFINE_INTERFACE (GtkToolShell, gtk_tool_shell, GTK_TYPE_WIDGET);
 
-static GtkReliefStyle gtk_tool_shell_real_get_relief_style (GtkToolShell *shell);
 static GtkOrientation gtk_tool_shell_real_get_text_orientation (GtkToolShell *shell);
 static gfloat gtk_tool_shell_real_get_text_alignment (GtkToolShell *shell);
 static PangoEllipsizeMode gtk_tool_shell_real_get_ellipsize_mode (GtkToolShell *shell);
@@ -52,16 +51,9 @@ static PangoEllipsizeMode gtk_tool_shell_real_get_ellipsize_mode (GtkToolShell *
 static void
 gtk_tool_shell_default_init (GtkToolShellInterface *iface)
 {
-  iface->get_relief_style = gtk_tool_shell_real_get_relief_style;
   iface->get_text_orientation = gtk_tool_shell_real_get_text_orientation;
   iface->get_text_alignment = gtk_tool_shell_real_get_text_alignment;
   iface->get_ellipsize_mode = gtk_tool_shell_real_get_ellipsize_mode;
-}
-
-static GtkReliefStyle
-gtk_tool_shell_real_get_relief_style (GtkToolShell *shell)
-{
-  return GTK_RELIEF_NONE;
 }
 
 static GtkOrientation
@@ -134,25 +126,6 @@ GtkToolbarStyle
 gtk_tool_shell_get_style (GtkToolShell *shell)
 {
   return GTK_TOOL_SHELL_GET_IFACE (shell)->get_style (shell);
-}
-
-/**
- * gtk_tool_shell_get_relief_style:
- * @shell: a #GtkToolShell
- *
- * Returns the relief style of buttons on @shell. Tool items must not call this
- * function directly, but rely on gtk_tool_item_get_relief_style() instead.
- *
- * Returns: The relief style of buttons on @shell.
- *
- * Since: 2.14
- **/
-GtkReliefStyle
-gtk_tool_shell_get_relief_style (GtkToolShell *shell)
-{
-  GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
-
-  return iface->get_relief_style (shell);
 }
 
 /**

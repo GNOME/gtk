@@ -46,7 +46,6 @@ typedef struct _GtkToolShellIface      GtkToolShellIface;
  * @get_icon_size:        mandatory implementation of gtk_tool_shell_get_icon_size().
  * @get_orientation:      mandatory implementation of gtk_tool_shell_get_orientation().
  * @get_style:            mandatory implementation of gtk_tool_shell_get_style().
- * @get_relief_style:     optional implementation of gtk_tool_shell_get_relief_style().
  * @rebuild_menu:         optional implementation of gtk_tool_shell_rebuild_menu().
  * @get_text_orientation: optional implementation of gtk_tool_shell_get_text_orientation().
  * @get_text_alignment:   optional implementation of gtk_tool_shell_get_text_alignment().
@@ -64,7 +63,6 @@ struct _GtkToolShellIface
   GtkIconSize        (*get_icon_size)        (GtkToolShell *shell);
   GtkOrientation     (*get_orientation)      (GtkToolShell *shell);
   GtkToolbarStyle    (*get_style)            (GtkToolShell *shell);
-  GtkReliefStyle     (*get_relief_style)     (GtkToolShell *shell);
   void               (*rebuild_menu)         (GtkToolShell *shell);
   GtkOrientation     (*get_text_orientation) (GtkToolShell *shell);
   gfloat             (*get_text_alignment)   (GtkToolShell *shell);
@@ -81,8 +79,6 @@ GDK_AVAILABLE_IN_ALL
 GtkOrientation     gtk_tool_shell_get_orientation      (GtkToolShell *shell);
 GDK_AVAILABLE_IN_ALL
 GtkToolbarStyle    gtk_tool_shell_get_style            (GtkToolShell *shell);
-GDK_AVAILABLE_IN_ALL
-GtkReliefStyle     gtk_tool_shell_get_relief_style     (GtkToolShell *shell);
 GDK_AVAILABLE_IN_ALL
 void               gtk_tool_shell_rebuild_menu         (GtkToolShell *shell);
 GDK_AVAILABLE_IN_ALL

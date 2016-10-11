@@ -252,7 +252,6 @@ static gboolean   gtk_toolbar_arrow_button_press   (GtkWidget           *button,
 						    GtkToolbar          *toolbar);
 static void       gtk_toolbar_arrow_button_clicked (GtkWidget           *button,
 						    GtkToolbar          *toolbar);
-static void       gtk_toolbar_update_button_relief (GtkToolbar          *toolbar);
 static gboolean   gtk_toolbar_popup_menu           (GtkWidget           *toolbar);
 static void       gtk_toolbar_reconfigured         (GtkToolbar          *toolbar);
 
@@ -277,7 +276,6 @@ static gboolean   gtk_toolbar_render               (GtkCssGadget *gadget,
                                                     int           height,
                                                     gpointer      data);
 
-static GtkReliefStyle       get_button_relief    (GtkToolbar *toolbar);
 static gint                 get_max_child_expand (GtkToolbar *toolbar);
 
 /* methods on ToolbarContent 'class' */
@@ -339,7 +337,6 @@ static void            toolbar_tool_shell_iface_init        (GtkToolShellIface  
 static GtkIconSize     toolbar_get_icon_size                (GtkToolShell        *shell);
 static GtkOrientation  toolbar_get_orientation              (GtkToolShell        *shell);
 static GtkToolbarStyle toolbar_get_style                    (GtkToolShell        *shell);
-static GtkReliefStyle  toolbar_get_relief_style             (GtkToolShell        *shell);
 static void            toolbar_rebuild_menu                 (GtkToolShell        *shell);
 
 
@@ -601,14 +598,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                              G_MAXINT,
                                                              GTK_PARAM_READABLE));
 
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_enum ("button-relief",
-							      P_("Button relief"),
-							      P_("Type of bevel around toolbar buttons"),
-                                                              GTK_TYPE_RELIEF_STYLE,
-                                                              GTK_RELIEF_NONE,
-                                                              GTK_PARAM_READABLE));
-
   binding_set = gtk_binding_set_by_class (klass);
   
   add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
@@ -641,7 +630,6 @@ toolbar_tool_shell_iface_init (GtkToolShellIface *iface)
   iface->get_icon_size    = toolbar_get_icon_size;
   iface->get_orientation  = toolbar_get_orientation;
   iface->get_style        = toolbar_get_style;
-  iface->get_relief_style = toolbar_get_relief_style;
   iface->rebuild_menu     = toolbar_rebuild_menu;
 }
 
@@ -679,8 +667,6 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 		    G_CALLBACK (gtk_toolbar_arrow_button_press), toolbar);
   g_signal_connect (priv->arrow_button, "clicked",
 		    G_CALLBACK (gtk_toolbar_arrow_button_clicked), toolbar);
-  gtk_button_set_relief (GTK_BUTTON (priv->arrow_button),
-			 get_button_relief (toolbar));
 
   gtk_widget_set_focus_on_click (priv->arrow_button, FALSE);
 
@@ -1802,22 +1788,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_toolbar_update_button_relief (GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = toolbar->priv;
-  GtkReliefStyle relief;
-
-  relief = get_button_relief (toolbar);
-
-  if (relief != gtk_button_get_relief (GTK_BUTTON (priv->arrow_button)))
-    {
-      gtk_toolbar_reconfigured (toolbar);
-  
-      gtk_button_set_relief (GTK_BUTTON (priv->arrow_button), relief);
-    }
-}
-
-static void
 gtk_toolbar_style_updated (GtkWidget *widget)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
@@ -1826,7 +1796,6 @@ gtk_toolbar_style_updated (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->style_updated (widget);
 
   priv->max_homogeneous_pixels = -1;
-  gtk_toolbar_update_button_relief (GTK_TOOLBAR (widget));
 }
 
 static GList *
@@ -2877,25 +2846,6 @@ gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
 }
 
 /**
- * gtk_toolbar_get_relief_style:
- * @toolbar: a #GtkToolbar
- * 
- * Returns the relief style of buttons on @toolbar. See
- * gtk_button_set_relief().
- * 
- * Returns: The relief style of buttons on @toolbar.
- * 
- * Since: 2.4
- **/
-GtkReliefStyle
-gtk_toolbar_get_relief_style (GtkToolbar *toolbar)
-{
-  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_RELIEF_NONE);
-  
-  return get_button_relief (toolbar);
-}
-
-/**
  * gtk_toolbar_set_show_arrow:
  * @toolbar: a #GtkToolbar
  * @show_arrow: Whether to show an overflow menu
@@ -3473,21 +3423,6 @@ toolbar_content_show_all (ToolbarContent  *content)
     gtk_widget_show_all (widget);
 }
 
-/*
- * Getters
- */
-static GtkReliefStyle
-get_button_relief (GtkToolbar *toolbar)
-{
-  GtkReliefStyle button_relief = GTK_RELIEF_NORMAL;
-
-  gtk_widget_style_get (GTK_WIDGET (toolbar),
-                        "button-relief", &button_relief,
-                        NULL);
-  
-  return button_relief;
-}
-
 static gint
 get_max_child_expand (GtkToolbar *toolbar)
 {
@@ -3568,12 +3503,6 @@ toolbar_get_style (GtkToolShell *shell)
   GtkToolbarPrivate *priv = toolbar->priv;
 
   return priv->style;
-}
-
-static GtkReliefStyle
-toolbar_get_relief_style (GtkToolShell *shell)
-{
-  return get_button_relief (GTK_TOOLBAR (shell));
 }
 
 static void
