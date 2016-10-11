@@ -464,7 +464,7 @@ else
   AM_CONDITIONAL(USE_WAYLAND, false)
 fi
 
-MIR_DEPENDENCIES="mirclient >= mirclient_required_version mircookie >= mircookie_required_version"
+MIR_DEPENDENCIES="mirclient >= mirclient_required_version mircookie >= mircookie_required_version libcontent-hub-glib"
 if test "$enable_mir_backend" = "maybe" ; then
   PKG_CHECK_EXISTS($MIR_DEPENDENCIES, [have_mir_deps=yes], [have_mir_deps=no])
   AC_MSG_CHECKING([for MIR_DEPENDENCIES])

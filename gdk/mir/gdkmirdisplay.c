@@ -23,6 +23,8 @@
 #include "gdkmir.h"
 #include "gdkmir-private.h"
 
+#include <com/ubuntu/content/glib/content-hub-glib.h>
+
 #define GDK_TYPE_DISPLAY_MIR              (gdk_mir_display_get_type ())
 #define GDK_MIR_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_MIR, GdkMirDisplay))
 #define GDK_MIR_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_MIR, GdkMirDisplayClass))
@@ -57,6 +59,9 @@ typedef struct GdkMirDisplay
   guint have_egl_buffer_age : 1;
   guint have_egl_swap_buffers_with_damage : 1;
   guint have_egl_surfaceless_context : 1;
+
+  ContentHubService *content_service;
+  ContentHubHandler *content_handler;
 } GdkMirDisplay;
 
 typedef struct GdkMirDisplayClass
@@ -108,6 +113,7 @@ _gdk_mir_display_open (const gchar *display_name)
   MirConnection *connection;
   MirPixelFormat sw_pixel_format, hw_pixel_format;
   GdkMirDisplay *display;
+  GDBusConnection *session;
 
   //g_printerr ("gdk_mir_display_open\n");
 
@@ -139,6 +145,39 @@ _gdk_mir_display_open (const gchar *display_name)
   display->screen = _gdk_mir_screen_new (GDK_DISPLAY (display));
   display->sw_pixel_format = sw_pixel_format;
   display->hw_pixel_format = hw_pixel_format;
+
+  session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+
+  display->content_service = content_hub_service_proxy_new_sync (
+    session,
+    G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
+    "com.ubuntu.content.dbus.Service",
+    "/",
+    NULL,
+    NULL);
+
+  display->content_handler = content_hub_handler_skeleton_new ();
+
+  g_dbus_interface_skeleton_export (
+    G_DBUS_INTERFACE_SKELETON (display->content_handler),
+    session,
+    "/org/gnome/gtk/content/handler",
+    NULL);
+
+  g_object_unref (session);
+
+  content_hub_service_call_register_import_export_handler_sync (
+    display->content_service,
+    g_application_get_application_id (g_application_get_default ()),
+    "/org/gnome/gtk/content/handler",
+    NULL,
+    NULL);
+
+  content_hub_service_call_handler_active_sync (
+    display->content_service,
+    g_application_get_application_id (g_application_get_default ()),
+    NULL,
+    NULL);
 
   g_signal_emit_by_name (display, "opened");
 
@@ -175,6 +214,9 @@ gdk_mir_display_dispose (GObject *object)
 {
   GdkMirDisplay *display = GDK_MIR_DISPLAY (object);
 
+  g_dbus_interface_skeleton_unexport (G_DBUS_INTERFACE_SKELETON (display->content_handler));
+  g_clear_object (&display->content_handler);
+  g_clear_object (&display->content_service);
   g_clear_object (&display->screen);
   g_clear_object (&display->keymap);
   g_clear_pointer (&display->event_source, g_source_unref);
