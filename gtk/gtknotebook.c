@@ -6744,8 +6744,6 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
  * gtk_notebook_get_tab_pos
  * gtk_notebook_set_scrollable
  * gtk_notebook_get_scrollable
- * gtk_notebook_get_tab_hborder
- * gtk_notebook_get_tab_vborder
  */
 /**
  * gtk_notebook_set_show_border:
@@ -7043,46 +7041,6 @@ gtk_notebook_get_scrollable (GtkNotebook *notebook)
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
 
   return notebook->priv->scrollable;
-}
-
-/**
- * gtk_notebook_get_tab_hborder:
- * @notebook: a #GtkNotebook
- *
- * Returns the horizontal width of a tab border.
- *
- * Returns: horizontal width of a tab border
- *
- * Since: 2.22
- *
- * Deprecated: 3.4: this function returns zero
- */
-guint16
-gtk_notebook_get_tab_hborder (GtkNotebook *notebook)
-{
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
-
-  return 0;
-}
-
-/**
- * gtk_notebook_get_tab_vborder:
- * @notebook: a #GtkNotebook
- *
- * Returns the vertical width of a tab border.
- *
- * Returns: vertical width of a tab border
- *
- * Since: 2.22
- *
- * Deprecated: 3.4: this function returns zero
- */
-guint16
-gtk_notebook_get_tab_vborder (GtkNotebook *notebook)
-{
-  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
-
-  return 0;
 }
 
 
