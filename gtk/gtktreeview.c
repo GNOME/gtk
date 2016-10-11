@@ -1271,21 +1271,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 								 P_("Make the expanders indented"),
 								 TRUE,
 								 GTK_PARAM_READABLE));
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boxed ("even-row-color",
-                                                               P_("Even Row Color"),
-                                                               P_("Color to use for even rows"),
-							       GDK_TYPE_COLOR,
-							       GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boxed ("odd-row-color",
-                                                               P_("Odd Row Color"),
-                                                               P_("Color to use for odd rows"),
-							       GDK_TYPE_COLOR,
-							       GTK_PARAM_READABLE));
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("grid-line-width",
