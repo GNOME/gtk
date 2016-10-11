@@ -116,7 +116,6 @@ enum {
 
 enum {
   PROP_0,
-  PROP_RIGHT_JUSTIFIED,
   PROP_SUBMENU,
   PROP_ACCEL_PATH,
   PROP_LABEL,
@@ -730,21 +729,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                   G_TYPE_NONE, 0);
 
   /**
-   * GtkMenuItem:right-justified:
-   *
-   * Sets whether the menu item appears justified
-   * at the right side of a menu bar.
-   *
-   * Since: 2.14
-   */
-  menu_item_props[PROP_RIGHT_JUSTIFIED] =
-      g_param_spec_boolean ("right-justified",
-                            P_("Right Justified"),
-                            P_("Sets whether the menu item appears justified at the right side of a menu bar"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
-
-  /**
    * GtkMenuItem:submenu:
    *
    * The submenu attached to the menu item, or %NULL if it has none.
@@ -838,7 +822,6 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   else
     priv->submenu_direction = GTK_DIRECTION_RIGHT;
   priv->submenu_placement = GTK_TOP_BOTTOM;
-  priv->right_justify = FALSE;
   priv->use_action_appearance = TRUE;
   priv->timer = 0;
   priv->action = NULL;
@@ -933,22 +916,6 @@ gtk_menu_item_dispose (GObject *object)
 }
 
 static void
-gtk_menu_item_do_set_right_justified (GtkMenuItem *menu_item,
-                                      gboolean     right_justified)
-{
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
-  right_justified = right_justified != FALSE;
-
-  if (priv->right_justify != right_justified)
-    {
-      priv->right_justify = right_justified;
-      gtk_widget_queue_resize (GTK_WIDGET (menu_item));
-      g_object_notify_by_pspec (G_OBJECT (menu_item), menu_item_props[PROP_RIGHT_JUSTIFIED]);
-    }
-}
-
-static void
 gtk_menu_item_set_property (GObject      *object,
                             guint         prop_id,
                             const GValue *value,
@@ -958,9 +925,6 @@ gtk_menu_item_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_RIGHT_JUSTIFIED:
-      gtk_menu_item_do_set_right_justified (menu_item, g_value_get_boolean (value));
-      break;
     case PROP_SUBMENU:
       gtk_menu_item_set_submenu (menu_item, g_value_get_object (value));
       break;
@@ -1002,9 +966,6 @@ gtk_menu_item_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_RIGHT_JUSTIFIED:
-      g_value_set_boolean (value, priv->right_justify);
-      break;
     case PROP_SUBMENU:
       g_value_set_object (value, gtk_menu_item_get_submenu (menu_item));
       break;
@@ -2053,51 +2014,6 @@ _gtk_menu_item_popdown_submenu (GtkWidget *widget)
       gtk_widget_queue_draw (widget);
     }
 }
-
-/**
- * gtk_menu_item_set_right_justified:
- * @menu_item: a #GtkMenuItem.
- * @right_justified: if %TRUE the menu item will appear at the
- *   far right if added to a menu bar
- *
- * Sets whether the menu item appears justified at the right
- * side of a menu bar. This was traditionally done for “Help”
- * menu items, but is now considered a bad idea. (If the widget
- * layout is reversed for a right-to-left language like Hebrew
- * or Arabic, right-justified-menu-items appear at the left.)
- *
- * Deprecated: 3.2: If you insist on using it, use
- *   gtk_widget_set_hexpand() and gtk_widget_set_halign().
- **/
-void
-gtk_menu_item_set_right_justified (GtkMenuItem *menu_item,
-                                   gboolean     right_justified)
-{
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  gtk_menu_item_do_set_right_justified (menu_item, right_justified);
-}
-
-/**
- * gtk_menu_item_get_right_justified:
- * @menu_item: a #GtkMenuItem
- *
- * Gets whether the menu item appears justified at the right
- * side of the menu bar.
- *
- * Returns: %TRUE if the menu item will appear at the
- *   far right if added to a menu bar.
- *
- * Deprecated: 3.2: See gtk_menu_item_set_right_justified()
- **/
-gboolean
-gtk_menu_item_get_right_justified (GtkMenuItem *menu_item)
-{
-  g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), FALSE);
-
-  return menu_item->priv->right_justify;
-}
-
 
 static void
 gtk_menu_item_show_all (GtkWidget *widget)
