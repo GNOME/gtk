@@ -95,13 +95,6 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   widget_class->style_updated = gtk_scrollbar_style_updated;
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("fixed-slider-length",
-                                                                 P_("Fixed slider size"),
-                                                                 P_("Don't change slider size, just lock it to the minimum length"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("has-backward-stepper",
                                                                  P_("Backward stepper"),
                                                                  P_("Display the standard backward arrow button"),
@@ -136,20 +129,16 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 static void
 gtk_scrollbar_update_style (GtkScrollbar *scrollbar)
 {
-  gboolean fixed_size;
   gboolean has_a, has_b, has_c, has_d;
   GtkRange *range = GTK_RANGE (scrollbar);
   GtkWidget *widget = GTK_WIDGET (scrollbar);
 
   gtk_widget_style_get (widget,
-                        "fixed-slider-length", &fixed_size,
                         "has-backward-stepper", &has_a,
                         "has-secondary-forward-stepper", &has_b,
                         "has-secondary-backward-stepper", &has_c,
                         "has-forward-stepper", &has_d,
                         NULL);
-
-  gtk_range_set_slider_size_fixed (range, fixed_size);
   _gtk_range_set_steppers (range, has_a, has_b, has_c, has_d);
 }
 
