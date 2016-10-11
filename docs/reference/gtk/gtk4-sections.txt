@@ -5507,11 +5507,6 @@ gtk_device_grab_remove
 GTK_PRIORITY_RESIZE
 
 <SUBSECTION>
-gtk_key_snooper_install
-GtkKeySnoopFunc
-gtk_key_snooper_remove
-
-<SUBSECTION>
 gtk_get_current_event
 gtk_get_current_event_time
 gtk_get_current_event_state

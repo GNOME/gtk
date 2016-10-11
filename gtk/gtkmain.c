@@ -132,20 +132,6 @@
 
 #include "a11y/gtkaccessibility.h"
 
-/* Private type definitions
- */
-typedef struct _GtkKeySnooperData        GtkKeySnooperData;
-
-struct _GtkKeySnooperData
-{
-  GtkKeySnoopFunc func;
-  gpointer func_data;
-  guint id;
-};
-
-static gint  gtk_invoke_key_snoopers     (GtkWidget          *grab_widget,
-                                          GdkEvent           *event);
-
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 
 static guint gtk_main_loop_level = 0;
@@ -154,8 +140,6 @@ static gint gtk_initialized = FALSE;
 static GList *current_events = NULL;
 
 static GSList *main_loops = NULL;      /* stack of currently executing main loops */
-
-static GSList *key_snoopers = NULL;
 
 typedef struct {
   GdkDisplay *display;
@@ -1640,9 +1624,6 @@ check_event_in_child_popover (GtkWidget *event_widget,
  *      event delivered to it before without the paired leave event.
  *    - Drag events are not redirected because it is unclear what the semantics
  *      of that would be.
- *    Another point of interest might be that all key events are first passed
- *    through the key snooper functions if there are any. Read the description
- *    of gtk_key_snooper_install() if you need this feature.
  * 
  * 5. After finishing the delivery the event is popped from the event stack.
  */
@@ -1822,9 +1803,6 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      if (gtk_invoke_key_snoopers (grab_widget, event))
-        break;
-
       /* make focus visible in a window that receives a key event */
       {
         GtkWidget *window;
@@ -2321,92 +2299,6 @@ gtk_device_grab_remove (GtkWidget *widget,
   new_grab_widget = gtk_window_group_get_current_device_grab (group, device);
 
   gtk_grab_notify (group, device, widget, new_grab_widget, FALSE);
-}
-
-/**
- * gtk_key_snooper_install: (skip)
- * @snooper: a #GtkKeySnoopFunc
- * @func_data: (closure): data to pass to @snooper
- *
- * Installs a key snooper function, which will get called on all
- * key events before delivering them normally.
- *
- * Returns: a unique id for this key snooper for use with
- *    gtk_key_snooper_remove().
- *
- * Deprecated: 3.4: Key snooping should not be done. Events should
- *     be handled by widgets.
- */
-guint
-gtk_key_snooper_install (GtkKeySnoopFunc snooper,
-                         gpointer        func_data)
-{
-  GtkKeySnooperData *data;
-  static guint snooper_id = 1;
-
-  g_return_val_if_fail (snooper != NULL, 0);
-
-  data = g_new (GtkKeySnooperData, 1);
-  data->func = snooper;
-  data->func_data = func_data;
-  data->id = snooper_id++;
-  key_snoopers = g_slist_prepend (key_snoopers, data);
-
-  return data->id;
-}
-
-/**
- * gtk_key_snooper_remove:
- * @snooper_handler_id: Identifies the key snooper to remove
- *
- * Removes the key snooper function with the given id.
- *
- * Deprecated: 3.4: Key snooping should not be done. Events should
- *     be handled by widgets.
- */
-void
-gtk_key_snooper_remove (guint snooper_id)
-{
-  GtkKeySnooperData *data = NULL;
-  GSList *slist;
-
-  slist = key_snoopers;
-  while (slist)
-    {
-      data = slist->data;
-      if (data->id == snooper_id)
-        break;
-
-      slist = slist->next;
-      data = NULL;
-    }
-  if (data)
-    {
-      key_snoopers = g_slist_remove (key_snoopers, data);
-      g_free (data);
-    }
-}
-
-static gint
-gtk_invoke_key_snoopers (GtkWidget *grab_widget,
-                         GdkEvent  *event)
-{
-  GSList *slist;
-  gint return_val = FALSE;
-
-  return_val = _gtk_accessibility_key_snooper (grab_widget, (GdkEventKey *) event);
-
-  slist = key_snoopers;
-  while (slist && !return_val)
-    {
-      GtkKeySnooperData *data;
-
-      data = slist->data;
-      slist = slist->next;
-      return_val = (*data->func) (grab_widget, (GdkEventKey*) event, data->func_data);
-    }
-
-  return return_val;
 }
 
 /**

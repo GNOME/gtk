@@ -50,21 +50,6 @@ G_BEGIN_DECLS
  */
 #define GTK_PRIORITY_RESIZE (G_PRIORITY_HIGH_IDLE + 10)
 
-/**
- * GtkKeySnoopFunc:
- * @grab_widget: the widget to which the event will be delivered
- * @event: the key event
- * @func_data: (closure): data supplied to gtk_key_snooper_install()
- *
- * Key snooper functions are called before normal event delivery.
- * They can be used to implement custom key event handling.
- *
- * Returns: %TRUE to stop further processing of @event, %FALSE to continue.
- */
-typedef gint (*GtkKeySnoopFunc) (GtkWidget   *grab_widget,
-                                 GdkEventKey *event,
-                                 gpointer     func_data);
-
 /* GTK+ version
  */
 GDK_AVAILABLE_IN_ALL
@@ -180,12 +165,6 @@ void       gtk_device_grab_add     (GtkWidget          *widget,
 GDK_AVAILABLE_IN_ALL
 void       gtk_device_grab_remove  (GtkWidget          *widget,
                                     GdkDevice          *device);
-
-GDK_DEPRECATED_IN_3_4
-guint      gtk_key_snooper_install (GtkKeySnoopFunc snooper,
-                                    gpointer        func_data);
-GDK_DEPRECATED_IN_3_4
-void       gtk_key_snooper_remove  (guint           snooper_handler_id);
 
 GDK_AVAILABLE_IN_ALL
 GdkEvent * gtk_get_current_event        (void);
