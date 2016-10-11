@@ -1424,7 +1424,7 @@ attribute_from_text (GtkBuilder   *builder,
   PangoAttrType   type;
   PangoLanguage  *language;
   PangoFontDescription *font_desc;
-  GdkColor       *color;
+  GdkRGBA        *color;
   GValue          val = G_VALUE_INIT;
 
   if (!gtk_builder_value_from_string_type (builder, PANGO_TYPE_ATTR_TYPE, name, &val, error))
@@ -1509,41 +1509,43 @@ attribute_from_text (GtkBuilder   *builder,
 	  g_value_init (&val, G_TYPE_INT);
 	}
       break;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
       /* PangoAttrColor */
     case PANGO_ATTR_FOREGROUND:
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
 	{
 	  color = g_value_get_boxed (&val);
-	  attribute = pango_attr_foreground_new (color->red, color->green, color->blue);
+          attribute = pango_attr_foreground_new (color->red * 65535,
+                                                 color->green * 65535,
+                                                 color->blue * 65535);
 	}
       break;
     case PANGO_ATTR_BACKGROUND:
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
 	{
 	  color = g_value_get_boxed (&val);
-	  attribute = pango_attr_background_new (color->red, color->green, color->blue);
+          attribute = pango_attr_background_new (color->red * 65535,
+                                                 color->green * 65535,
+                                                 color->blue * 65535);
 	}
       break;
     case PANGO_ATTR_UNDERLINE_COLOR:
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
 	{
 	  color = g_value_get_boxed (&val);
-	  attribute = pango_attr_underline_color_new (color->red, color->green, color->blue);
+          attribute = pango_attr_underline_color_new (color->red * 65535,
+                                                      color->green * 65535,
+                                                      color->blue * 65535);
 	}
       break;
     case PANGO_ATTR_STRIKETHROUGH_COLOR:
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
 	{
-	  color = g_value_get_boxed (&val);
-	  attribute = pango_attr_strikethrough_color_new (color->red, color->green, color->blue);
+          color = g_value_get_boxed (&val);
+          attribute = pango_attr_strikethrough_color_new (color->red * 65535,
+                                                          color->green * 65535,
+                                                          color->blue * 65535);
 	}
       break;
-
-G_GNUC_END_IGNORE_DEPRECATIONS
-
       /* PangoAttrShape */
     case PANGO_ATTR_SHAPE:
       /* Unsupported for now */
