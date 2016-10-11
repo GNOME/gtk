@@ -79,8 +79,6 @@ enum
   PROP_0,
   PROP_USE_ALPHA,
   PROP_TITLE,
-  PROP_COLOR,
-  PROP_ALPHA,
   PROP_RGBA,
   PROP_SHOW_EDITOR
 };
@@ -184,40 +182,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                         P_("The title of the color selection dialog"),
                                                         _("Pick a Color"),
                                                         GTK_PARAM_READWRITE));
-
-  /**
-   * GtkColorButton:color:
-   *
-   * The selected color.
-   *
-   * Since: 2.4
-   *
-   * Deprecated: 3.4: Use #GtkColorButton:rgba instead.
-   */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  g_object_class_install_property (gobject_class,
-                                   PROP_COLOR,
-                                   g_param_spec_boxed ("color",
-                                                       P_("Current Color"),
-                                                       P_("The selected color"),
-                                                       GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  /**
-   * GtkColorButton:alpha:
-   *
-   * The selected opacity value (0 fully transparent, 65535 fully opaque).
-   *
-   * Since: 2.4
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ALPHA,
-                                   g_param_spec_uint ("alpha",
-                                                      P_("Current Alpha"),
-                                                      P_("The selected opacity value (0 fully transparent, 65535 fully opaque)"),
-                                                      0, 65535, 65535,
-                                                      GTK_PARAM_READWRITE));
 
   /**
    * GtkColorButton:rgba:
@@ -461,24 +425,6 @@ gtk_color_button_new (void)
 }
 
 /**
- * gtk_color_button_new_with_color:
- * @color: A #GdkColor to set the current color with
- *
- * Creates a new color button.
- *
- * Returns: a new color button
- *
- * Since: 2.4
- *
- * Deprecated: 3.4: Use gtk_color_button_new_with_rgba() instead.
- */
-GtkWidget *
-gtk_color_button_new_with_color (const GdkColor *color)
-{
-  return g_object_new (GTK_TYPE_COLOR_BUTTON, "color", color, NULL);
-}
-
-/**
  * gtk_color_button_new_with_rgba:
  * @rgba: A #GdkRGBA to set the current color with
  *
@@ -582,155 +528,31 @@ gtk_color_button_clicked (GtkButton *b)
   gtk_window_present (GTK_WINDOW (priv->cs_dialog));
 }
 
-/**
- * gtk_color_button_set_color:
- * @button: a #GtkColorButton
- * @color: A #GdkColor to set the current color with
- *
- * Sets the current color to be @color.
- *
- * Since: 2.4
- *
- * Deprecated: Use gtk_color_chooser_set_rgba() instead.
- */
-void
-gtk_color_button_set_color (GtkColorButton *button,
-                            const GdkColor *color)
+static void
+gtk_color_button_set_rgba (GtkColorChooser *chooser,
+                           const GdkRGBA   *rgba)
 {
-  GtkColorButtonPrivate *priv = button->priv;
+  GtkColorButtonPrivate *priv;
 
-  g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
-  g_return_if_fail (color != NULL);
-
-  priv->rgba.red = color->red / 65535.;
-  priv->rgba.green = color->green / 65535.;
-  priv->rgba.blue = color->blue / 65535.;
-
-  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (priv->swatch), &priv->rgba);
-
-  g_object_notify (G_OBJECT (button), "color");
-  g_object_notify (G_OBJECT (button), "rgba");
-}
-
-
-/**
- * gtk_color_button_set_alpha:
- * @button: a #GtkColorButton
- * @alpha: an integer between 0 and 65535
- *
- * Sets the current opacity to be @alpha.
- *
- * Since: 2.4
- *
- * Deprecated: 3.4: Use gtk_color_chooser_set_rgba() instead.
- */
-void
-gtk_color_button_set_alpha (GtkColorButton *button,
-                            guint16         alpha)
-{
-  GtkColorButtonPrivate *priv = button->priv;
-
-  g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
-
-  priv->rgba.alpha = alpha / 65535.;
-
-  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (priv->swatch), &priv->rgba);
-
-  g_object_notify (G_OBJECT (button), "alpha");
-  g_object_notify (G_OBJECT (button), "rgba");
-}
-
-/**
- * gtk_color_button_get_color:
- * @button: a #GtkColorButton
- * @color: (out): a #GdkColor to fill in with the current color
- *
- * Sets @color to be the current color in the #GtkColorButton widget.
- *
- * Since: 2.4
- *
- * Deprecated: 3.4: Use gtk_color_chooser_get_rgba() instead.
- */
-void
-gtk_color_button_get_color (GtkColorButton *button,
-                            GdkColor       *color)
-{
-  GtkColorButtonPrivate *priv = button->priv;
-
-  g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
-
-  color->red = (guint16) (priv->rgba.red * 65535);
-  color->green = (guint16) (priv->rgba.green * 65535);
-  color->blue = (guint16) (priv->rgba.blue * 65535);
-}
-
-/**
- * gtk_color_button_get_alpha:
- * @button: a #GtkColorButton
- *
- * Returns the current alpha value.
- *
- * Returns: an integer between 0 and 65535
- *
- * Since: 2.4
- *
- * Deprecated: 3.4: Use gtk_color_chooser_get_rgba() instead.
- */
-guint16
-gtk_color_button_get_alpha (GtkColorButton *button)
-{
-  g_return_val_if_fail (GTK_IS_COLOR_BUTTON (button), 0);
-
-  return (guint16) (button->priv->rgba.alpha * 65535);
-}
-
-/**
- * gtk_color_button_set_rgba: (skip)
- * @button: a #GtkColorButton
- * @rgba: a #GdkRGBA to set the current color with
- *
- * Sets the current color to be @rgba.
- *
- * Since: 3.0
- *
- * Deprecated: 3.4: Use gtk_color_chooser_set_rgba() instead.
- */
-void
-gtk_color_button_set_rgba (GtkColorButton *button,
-                           const GdkRGBA  *rgba)
-{
-  GtkColorButtonPrivate *priv = button->priv;
-
-  g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
+  g_return_if_fail (GTK_IS_COLOR_BUTTON (chooser));
   g_return_if_fail (rgba != NULL);
+
+  priv = GTK_COLOR_BUTTON (chooser)->priv;
 
   priv->rgba = *rgba;
   gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (priv->swatch), &priv->rgba);
 
-  g_object_notify (G_OBJECT (button), "color");
-  g_object_notify (G_OBJECT (button), "alpha");
-  g_object_notify (G_OBJECT (button), "rgba");
+  g_object_notify (G_OBJECT (chooser), "rgba");
 }
 
-/**
- * gtk_color_button_get_rgba: (skip)
- * @button: a #GtkColorButton
- * @rgba: (out): a #GdkRGBA to fill in with the current color
- *
- * Sets @rgba to be the current color in the #GtkColorButton widget.
- *
- * Since: 3.0
- *
- * Deprecated: 3.4: Use gtk_color_chooser_get_rgba() instead.
- */
-void
-gtk_color_button_get_rgba (GtkColorButton *button,
+static void
+gtk_color_button_get_rgba (GtkColorChooser *chooser,
                            GdkRGBA        *rgba)
 {
-  g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
+  g_return_if_fail (GTK_IS_COLOR_BUTTON (chooser));
   g_return_if_fail (rgba != NULL);
 
-  *rgba = button->priv->rgba;
+  *rgba = GTK_COLOR_BUTTON (chooser)->priv->rgba;
 }
 
 static void
@@ -750,46 +572,6 @@ set_use_alpha (GtkColorButton *button,
       g_object_notify (G_OBJECT (button), "use-alpha");
     }
 }
-
-/**
- * gtk_color_button_set_use_alpha:
- * @button: a #GtkColorButton
- * @use_alpha: %TRUE if color button should use alpha channel, %FALSE if not
- *
- * Sets whether or not the color button should use the alpha channel.
- *
- * Since: 2.4
- *
- * Deprecated: 3.4: Use gtk_color_chooser_set_use_alpha() instead.
- */
-void
-gtk_color_button_set_use_alpha (GtkColorButton *button,
-                                gboolean        use_alpha)
-{
-  g_return_if_fail (GTK_IS_COLOR_BUTTON (button));
-  set_use_alpha (button, use_alpha);
-}
-
-/**
- * gtk_color_button_get_use_alpha:
- * @button: a #GtkColorButton
- *
- * Does the color selection dialog use the alpha channel ?
- *
- * Returns: %TRUE if the color sample uses alpha channel, %FALSE if not
- *
- * Since: 2.4
- *
- * Deprecated: 3.4: Use gtk_color_chooser_get_use_alpha() instead.
- */
-gboolean
-gtk_color_button_get_use_alpha (GtkColorButton *button)
-{
-  g_return_val_if_fail (GTK_IS_COLOR_BUTTON (button), FALSE);
-
-  return button->priv->use_alpha;
-}
-
 
 /**
  * gtk_color_button_set_title:
@@ -853,26 +635,6 @@ gtk_color_button_set_property (GObject      *object,
     case PROP_TITLE:
       gtk_color_button_set_title (button, g_value_get_string (value));
       break;
-    case PROP_COLOR:
-      {
-        GdkColor *color;
-        GdkRGBA rgba;
-
-        color = g_value_get_boxed (value);
-
-        rgba.red = color->red / 65535.0;
-        rgba.green = color->green / 65535.0;
-        rgba.blue = color->blue / 65535.0;
-        rgba.alpha = 1.0;
-
-        gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button), &rgba);
-      }
-      break;
-    case PROP_ALPHA:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_color_button_set_alpha (button, g_value_get_uint (value));
-G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
     case PROP_RGBA:
       gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button), g_value_get_boxed (value));
       break;
@@ -908,29 +670,6 @@ gtk_color_button_get_property (GObject    *object,
     case PROP_TITLE:
       g_value_set_string (value, gtk_color_button_get_title (button));
       break;
-    case PROP_COLOR:
-      {
-        GdkColor color;
-        GdkRGBA rgba;
-
-        gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (button), &rgba);
-
-        color.red = (guint16) (rgba.red * 65535 + 0.5);
-        color.green = (guint16) (rgba.green * 65535 + 0.5);
-        color.blue = (guint16) (rgba.blue * 65535 + 0.5);
-
-        g_value_set_boxed (value, &color);
-      }
-      break;
-    case PROP_ALPHA:
-      {
-        guint16 alpha;
-
-        alpha = (guint16) (button->priv->rgba.alpha * 65535 + 0.5);
-
-        g_value_set_uint (value, alpha);
-      }
-      break;
     case PROP_RGBA:
       {
         GdkRGBA rgba;
@@ -963,16 +702,11 @@ gtk_color_button_add_palette (GtkColorChooser *chooser,
                                  orientation, colors_per_line, n_colors, colors);
 }
 
-typedef void (* get_rgba) (GtkColorChooser *, GdkRGBA *);
-typedef void (* set_rgba) (GtkColorChooser *, const GdkRGBA *);
-
 static void
 gtk_color_button_iface_init (GtkColorChooserInterface *iface)
 {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  iface->get_rgba = (get_rgba)gtk_color_button_get_rgba;
-  iface->set_rgba = (set_rgba)gtk_color_button_set_rgba;
-G_GNUC_END_IGNORE_DEPRECATIONS
+  iface->get_rgba = gtk_color_button_get_rgba;
+  iface->set_rgba = gtk_color_button_set_rgba;
   iface->add_palette = gtk_color_button_add_palette;
 }
 

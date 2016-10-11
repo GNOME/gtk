@@ -795,16 +795,9 @@ gtk_check_menu_item_get_type
 <TITLE>GtkColorButton</TITLE>
 GtkColorButton
 gtk_color_button_new
-gtk_color_button_new_with_color
 gtk_color_button_new_with_rgba
-gtk_color_button_set_color
-gtk_color_button_get_color
-gtk_color_button_set_alpha
-gtk_color_button_get_alpha
 gtk_color_button_set_rgba
 gtk_color_button_get_rgba
-gtk_color_button_set_use_alpha
-gtk_color_button_get_use_alpha
 gtk_color_button_set_title
 gtk_color_button_get_title
 <SUBSECTION Standard>
