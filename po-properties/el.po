@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 15:17+0000\n"
-"PO-Revision-Date: 2016-03-14 23:02+0200\n"
+"POT-Creation-Date: 2016-10-11 13:27+0300\n"
+"PO-Revision-Date: 2016-10-11 14:04+0300\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
@@ -38,11 +38,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.9\n"
 "X-Project-Style: gnome\n"
 
-#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:181
-#: gdk/gdkglcontext.c:265 gdk/gdkseat.c:158 gdk/gdkseat.c:159
+#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
+#: gdk/gdkglcontext.c:315 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Εμφάνιση"
 
@@ -58,83 +58,95 @@ msgstr "Τυπικός τύπος δρομέα"
 msgid "Display of this cursor"
 msgstr "Εμφάνιση αυτού του δρομέα"
 
-#: gdk/gdkdevice.c:119
+#: gdk/gdkdevice.c:123
 msgid "Device Display"
 msgstr "Εμφάνιση συσκευής"
 
-#: gdk/gdkdevice.c:120
+#: gdk/gdkdevice.c:124
 msgid "Display which the device belongs to"
 msgstr "Εμφάνιση στην οποία ανήκει η συσκευή"
 
-#: gdk/gdkdevice.c:134
+#: gdk/gdkdevice.c:138
 msgid "Device manager"
 msgstr "Διαχειριστής συσκευών"
 
-#: gdk/gdkdevice.c:135
+#: gdk/gdkdevice.c:139
 msgid "Device manager which the device belongs to"
 msgstr "Διαχείριση συσκευών στην οποία ανήκει η συσκευή"
 
-#: gdk/gdkdevice.c:148 gdk/gdkdevice.c:149
+#: gdk/gdkdevice.c:152 gdk/gdkdevice.c:153
 msgid "Device name"
 msgstr "Όνομα συσκευής"
 
-#: gdk/gdkdevice.c:162
+#: gdk/gdkdevice.c:166
 msgid "Device type"
 msgstr "Είδος συσκευής"
 
-#: gdk/gdkdevice.c:163
+#: gdk/gdkdevice.c:167
 msgid "Device role in the device manager"
 msgstr "Ρόλος συσκευής στη διαχείριση συσκευών"
 
-#: gdk/gdkdevice.c:179
+#: gdk/gdkdevice.c:183
 msgid "Associated device"
 msgstr "Σχετιζόμενη συσκευή"
 
-#: gdk/gdkdevice.c:180
+#: gdk/gdkdevice.c:184
 msgid "Associated pointer or keyboard with this device"
 msgstr "Δρομέας ή πληκτρολόγιο συσχετισμένο με αυτή τη συσκευή"
 
-#: gdk/gdkdevice.c:193
+#: gdk/gdkdevice.c:197
 msgid "Input source"
 msgstr "Πηγή εισόδου"
 
-#: gdk/gdkdevice.c:194
+#: gdk/gdkdevice.c:198
 msgid "Source type for the device"
 msgstr "Τύπος πηγής για τη συσκευή"
 
-#: gdk/gdkdevice.c:209 gdk/gdkdevice.c:210
+#: gdk/gdkdevice.c:213 gdk/gdkdevice.c:214
 msgid "Input mode for the device"
 msgstr "Λειτουργία εισόδου για τη συσκευή"
 
-#: gdk/gdkdevice.c:225
+#: gdk/gdkdevice.c:229
 msgid "Whether the device has a cursor"
 msgstr "Αν η συσκευή έχει δρομέα"
 
-#: gdk/gdkdevice.c:226
+#: gdk/gdkdevice.c:230
 msgid "Whether there is a visible cursor following device motion"
 msgstr "Αν υπάρχει ορατός δρομέας που ακολουθεί την κίνηση της συσκευής"
 
-#: gdk/gdkdevice.c:240 gdk/gdkdevice.c:241
+#: gdk/gdkdevice.c:244 gdk/gdkdevice.c:245
 msgid "Number of axes in the device"
 msgstr "Ο αριθμός των αξόνων στη συσκευή"
 
-#: gdk/gdkdevice.c:255 gdk/gdkdevice.c:256
+#: gdk/gdkdevice.c:259 gdk/gdkdevice.c:260
 msgid "Vendor ID"
 msgstr "Αναγνωριστικό κατασκευαστή"
 
-#: gdk/gdkdevice.c:270 gdk/gdkdevice.c:271
+#: gdk/gdkdevice.c:274 gdk/gdkdevice.c:275
 msgid "Product ID"
 msgstr "Αναγνωριστικό προϊόντος"
 
-#: gdk/gdkdevice.c:285 gdk/gdkdevice.c:286
+#: gdk/gdkdevice.c:289 gdk/gdkdevice.c:290
 msgid "Seat"
 msgstr "Θέση"
 
-#: gdk/gdkdevice.c:302 gdk/gdkdevice.c:303
+#: gdk/gdkdevice.c:306 gdk/gdkdevice.c:307
 msgid "Number of concurrent touches"
 msgstr "Αριθμός ταυτόχρονων αγγιγμάτων"
 
-#: gdk/gdkdevicemanager.c:182
+#: gdk/gdkdevice.c:321 gdk/gdkdevice.c:322
+msgid "Axes"
+msgstr "Άξονες"
+
+#: gdk/gdkdevice.c:328
+msgid "Tool"
+msgstr "Εργαλείο"
+
+#: gdk/gdkdevice.c:329
+msgid "The tool that is currently used with this device"
+msgstr "Το εργαλείο που χρησιμοποιείτε από τη συσκευή"
+
+#: gdk/gdkdevicemanager.c:186
 msgid "Display for the device manager"
 msgstr "Εμφάνιση για τη διαχείριση συσκευών"
 
@@ -146,23 +158,23 @@ msgstr "Προεπιλεγμένη εμφάνιση"
 msgid "The default display for GDK"
 msgstr "Η προεπιλεγμένη εμφάνιση για GDK"
 
-#: gdk/gdkglcontext.c:266
+#: gdk/gdkglcontext.c:316
 msgid "The GDK display used to create the GL context"
 msgstr "Η προβολή GDK χρησιμοποιήθηκε για τη δημιουργία του περιεχομένου GL"
 
-#: gdk/gdkglcontext.c:281 gtk/gtkwidget.c:1349
+#: gdk/gdkglcontext.c:331 gtk/gtkwidget.c:1336
 msgid "Window"
 msgstr "Παράθυρο"
 
-#: gdk/gdkglcontext.c:282
+#: gdk/gdkglcontext.c:332
 msgid "The GDK window bound to the GL context"
 msgstr "Το παράθυρο GDK περιορίστηκε στο περιβάλλον GL"
 
-#: gdk/gdkglcontext.c:297
+#: gdk/gdkglcontext.c:347
 msgid "Shared context"
 msgstr "Κοινόχρηστο περιβάλλον"
 
-#: gdk/gdkglcontext.c:298
+#: gdk/gdkglcontext.c:348
 msgid "The GL context this context shares data with"
 msgstr "Το περιβάλλον GL με το οποίο αυτό το περιβάλλον μοιράζεται δεδομένα"
 
@@ -182,31 +194,31 @@ msgstr "Ανάλυση γραμματοσειράς"
 msgid "The resolution for fonts on the screen"
 msgstr "Η ανάλυση για τις γραμματοσειρές στην οθόνη"
 
-#: gdk/gdkwindow.c:352 gdk/gdkwindow.c:353
+#: gdk/gdkwindow.c:354 gdk/gdkwindow.c:355
 msgid "Cursor"
 msgstr "Δρομέας"
 
-#: gdk/x11/gdkdevicemanager-xi2.c:114
+#: gdk/x11/gdkdevicemanager-xi2.c:115
 msgid "Opcode"
 msgstr "Opcode"
 
-#: gdk/x11/gdkdevicemanager-xi2.c:115
+#: gdk/x11/gdkdevicemanager-xi2.c:116
 msgid "Opcode for XInput2 requests"
 msgstr "Opcode για αιτήματα XInput2"
 
-#: gdk/x11/gdkdevicemanager-xi2.c:121
+#: gdk/x11/gdkdevicemanager-xi2.c:122
 msgid "Major"
 msgstr "Πρωτεύων"
 
-#: gdk/x11/gdkdevicemanager-xi2.c:122
+#: gdk/x11/gdkdevicemanager-xi2.c:123
 msgid "Major version number"
 msgstr "Πρωτεύων αριθμός έκδοσης"
 
-#: gdk/x11/gdkdevicemanager-xi2.c:128
+#: gdk/x11/gdkdevicemanager-xi2.c:129
 msgid "Minor"
 msgstr "Δευτερεύων"
 
-#: gdk/x11/gdkdevicemanager-xi2.c:129
+#: gdk/x11/gdkdevicemanager-xi2.c:130
 msgid "Minor version number"
 msgstr "Δευτερεύων αριθμός έκδοσης"
 
@@ -227,8 +239,8 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Ο απεικονιστής κελιών εκπροσωπούμενος από αυτό το προσβάσιμο"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:200
-#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:626
-#: gtk/gtkprinter.c:121 gtk/gtkstack.c:513 gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:634
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:516 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Όνομα"
 
@@ -237,7 +249,7 @@ msgid "A unique name for the action."
 msgstr "Ένα μοναδικό όνομα για αυτή την ενέργεια."
 
 #: gtk/deprecated/gtkaction.c:264 gtk/gtkbutton.c:281 gtk/gtkexpander.c:304
-#: gtk/gtkframe.c:226 gtk/gtklabel.c:801 gtk/gtkmenuitem.c:792
+#: gtk/gtkframe.c:226 gtk/gtklabel.c:801 gtk/gtkmenuitem.c:787
 #: gtk/gtktoolbutton.c:243 gtk/gtktoolitemgroup.c:1641
 msgid "Label"
 msgstr "Ετικέτα"
@@ -287,7 +299,7 @@ msgstr "Το GIcon που εμφανίζεται"
 
 #: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:256
 #: gtk/gtkcellrendererpixbuf.c:229 gtk/gtkimage.c:342 gtk/gtkprinter.c:170
-#: gtk/gtkwindow.c:883
+#: gtk/gtkwindow.c:884
 msgid "Icon Name"
 msgstr "Όνομα εικονιδίου"
 
@@ -356,7 +368,7 @@ msgstr ""
 "αποκρύπτονται."
 
 #: gtk/deprecated/gtkaction.c:466 gtk/deprecated/gtkactiongroup.c:214
-#: gtk/gtkcellrenderer.c:301 gtk/gtkwidget.c:1164
+#: gtk/gtkcellrenderer.c:301 gtk/gtkwidget.c:1144
 msgid "Sensitive"
 msgstr "Ευαίσθητο"
 
@@ -365,8 +377,8 @@ msgid "Whether the action is enabled."
 msgstr "Αν αυτή η ενέργεια θα είναι ενεργοποιημένη."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
-#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:637
-#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1157
+#: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:645
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1137
 msgid "Visible"
 msgstr "Ορατό"
 
@@ -532,8 +544,8 @@ msgstr "Σκιά βέλους"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Εμφάνιση της σκιάς που περιβάλλει το βέλος"
 
-#: gtk/deprecated/gtkarrow.c:138 gtk/gtkcombobox.c:1248 gtk/gtkmenu.c:825
-#: gtk/gtkmenuitem.c:901
+#: gtk/deprecated/gtkarrow.c:138 gtk/gtkcombobox.c:1233 gtk/gtkmenu.c:1002
+#: gtk/gtkmenuitem.c:896
 msgid "Arrow Scaling"
 msgstr "Να επιτρέπεται κλιμάκωση"
 
@@ -541,44 +553,44 @@ msgstr "Να επιτρέπεται κλιμάκωση"
 msgid "Amount of space used up by arrow"
 msgstr "Χώρος που καλύπτει το βέλος"
 
-#: gtk/deprecated/gtkcolorsel.c:324
+#: gtk/deprecated/gtkcolorsel.c:325
 msgid "Has Opacity Control"
 msgstr "Έχει έλεγχο αδιαφάνειας"
 
-#: gtk/deprecated/gtkcolorsel.c:325
+#: gtk/deprecated/gtkcolorsel.c:326
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Αν ο επιλογέας χρώματος θα μπορεί να επιλέγει διαφάνεια"
 
-#: gtk/deprecated/gtkcolorsel.c:331
+#: gtk/deprecated/gtkcolorsel.c:332
 msgid "Has palette"
 msgstr "Έχει παλέτα"
 
-#: gtk/deprecated/gtkcolorsel.c:332
+#: gtk/deprecated/gtkcolorsel.c:333
 msgid "Whether a palette should be used"
 msgstr "Αν θα χρησιμοποιηθεί παλέτα"
 
-#: gtk/deprecated/gtkcolorsel.c:346 gtk/gtkcolorbutton.c:207
+#: gtk/deprecated/gtkcolorsel.c:347 gtk/gtkcolorbutton.c:201
 msgid "Current Color"
 msgstr "Τρέχον χρώμα"
 
-#: gtk/deprecated/gtkcolorsel.c:347
+#: gtk/deprecated/gtkcolorsel.c:348
 msgid "The current color"
 msgstr "Το τρέχον χρώμα"
 
-#: gtk/deprecated/gtkcolorsel.c:353 gtk/gtkcolorbutton.c:223
+#: gtk/deprecated/gtkcolorsel.c:354 gtk/gtkcolorbutton.c:217
 msgid "Current Alpha"
 msgstr "Τρέχον Άλφα"
 
-#: gtk/deprecated/gtkcolorsel.c:354
+#: gtk/deprecated/gtkcolorsel.c:355
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Η τρέχουσα τιμή αδιαφάνειας (0 πλήρη διαφάνεια, 65535 πλήρη αδιαφάνεια)"
 
-#: gtk/deprecated/gtkcolorsel.c:368
+#: gtk/deprecated/gtkcolorsel.c:369
 msgid "Current RGBA"
 msgstr "Τρέχον RGBA"
 
-#: gtk/deprecated/gtkcolorsel.c:369
+#: gtk/deprecated/gtkcolorsel.c:370
 msgid "The current RGBA color"
 msgstr "Το τρέχον χρώμα RGBA"
 
@@ -631,9 +643,9 @@ msgid "The text to display in order to demonstrate the selected font"
 msgstr ""
 "Το κείμενο που εμφανίζεται για την παρουσίαση της επιλεγμένης γραμματοσειράς"
 
-#: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1267 gtk/gtkentry.c:989
+#: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1252 gtk/gtkentry.c:991
 #: gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177 gtk/gtktoolbar.c:675
-#: gtk/gtkviewport.c:406
+#: gtk/gtkviewport.c:408
 msgid "Shadow type"
 msgstr "Είδος σκίασης"
 
@@ -704,7 +716,7 @@ msgstr ""
 "Aν το κείμενο της ετικέτας θα χρησιμοποιηθεί για τη δημιουργία στοιχείου "
 "μενού αποθέματος"
 
-#: gtk/deprecated/gtkimagemenuitem.c:281 gtk/gtkmenu.c:588
+#: gtk/deprecated/gtkimagemenuitem.c:281 gtk/gtkmenu.c:647
 msgid "Accel Group"
 msgstr "Ομάδα Accel"
 
@@ -712,11 +724,11 @@ msgstr "Ομάδα Accel"
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "Η ομάδα Accel που χρησιμοποιείται για τα έτοιμα πλήκτρα συντομεύσεων"
 
-#: gtk/deprecated/gtkmisc.c:114 gtk/gtkentry.c:956 gtk/gtklabel.c:847
+#: gtk/deprecated/gtkmisc.c:114 gtk/gtkentry.c:958 gtk/gtklabel.c:847
 msgid "X align"
 msgstr "Στοίχιση Χ"
 
-#: gtk/deprecated/gtkmisc.c:115 gtk/gtkentry.c:957 gtk/gtklabel.c:848
+#: gtk/deprecated/gtkmisc.c:115 gtk/gtkentry.c:959 gtk/gtklabel.c:848
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -844,7 +856,7 @@ msgid "A GdkPixbuf to display"
 msgstr "Ένα GdkPixbuf προς εμφάνιση"
 
 #: gtk/deprecated/gtkstatusicon.c:235 gtk/gtkimage.c:269
-#: gtk/gtkrecentmanager.c:293
+#: gtk/gtkrecentmanager.c:283
 msgid "Filename"
 msgstr "Όνομα αρχείου"
 
@@ -870,7 +882,7 @@ msgid "The representation being used for image data"
 msgstr "Η αναπαράσταση που χρησιμοποιείται για δεδομένα εικόνας"
 
 #: gtk/deprecated/gtkstatusicon.c:289 gtk/gtkcellrendererpixbuf.c:201
-#: gtk/gtkcellrendererspinner.c:159 gtk/gtkrecentmanager.c:308
+#: gtk/gtkcellrendererspinner.c:159 gtk/gtkrecentmanager.c:298
 msgid "Size"
 msgstr "Μέγεθος"
 
@@ -879,7 +891,7 @@ msgid "The size of the icon"
 msgstr "Το μέγεθος του εικονιδίου"
 
 #: gtk/deprecated/gtkstatusicon.c:299 gtk/gtkinvisible.c:98
-#: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:215 gtk/gtkwindow.c:890
+#: gtk/gtkmountoperation.c:179 gtk/gtkstylecontext.c:228 gtk/gtkwindow.c:891
 msgid "Screen"
 msgstr "Οθόνη"
 
@@ -908,7 +920,7 @@ msgstr "Προσανατολισμός"
 msgid "The orientation of the tray"
 msgstr "Ο προσανατολισμός του συρταριού"
 
-#: gtk/deprecated/gtkstatusicon.c:367 gtk/gtkwidget.c:1287
+#: gtk/deprecated/gtkstatusicon.c:367 gtk/gtkwidget.c:1274
 msgid "Has tooltip"
 msgstr "Έχει συμβουλή οθόνης"
 
@@ -916,15 +928,15 @@ msgstr "Έχει συμβουλή οθόνης"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Αν το εικονίδιο της περιοχής ειδοποιήσεων θα έχει συμβουλή οθόνης"
 
-#: gtk/deprecated/gtkstatusicon.c:394 gtk/gtkwidget.c:1311
+#: gtk/deprecated/gtkstatusicon.c:394 gtk/gtkwidget.c:1298
 msgid "Tooltip Text"
 msgstr "Κείμενο συμβουλής οθόνης"
 
-#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1312 gtk/gtkwidget.c:1336
+#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1299 gtk/gtkwidget.c:1323
 msgid "The contents of the tooltip for this widget"
 msgstr "Τα περιεχόμενα της συμβουλής οθόνης για αυτό το γραφικό στοιχείο"
 
-#: gtk/deprecated/gtkstatusicon.c:418 gtk/gtkwidget.c:1335
+#: gtk/deprecated/gtkstatusicon.c:418 gtk/gtkwidget.c:1322
 msgid "Tooltip markup"
 msgstr "Επισήμανση συμβουλής οθόνης"
 
@@ -934,11 +946,11 @@ msgstr ""
 "Τα περιεχόμενα της συμβουλής οθόνης για αυτό το εικονίδιο της περιοχής "
 "ειδοποιήσεων"
 
-#: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:189
-#: gtk/gtkfilechooserbutton.c:437 gtk/gtkfontbutton.c:476
-#: gtk/gtkheaderbar.c:1928 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
-#: gtk/gtkshortcutssection.c:375 gtk/gtkshortcutsshortcut.c:529
-#: gtk/gtkstack.c:520 gtk/gtktreeviewcolumn.c:316
+#: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:183
+#: gtk/gtkfilechooserbutton.c:438 gtk/gtkfontbutton.c:476
+#: gtk/gtkheaderbar.c:1997 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
+#: gtk/gtkshortcutssection.c:375 gtk/gtkshortcutsshortcut.c:575
+#: gtk/gtkstack.c:523 gtk/gtktreeviewcolumn.c:316
 msgid "Title"
 msgstr "Τίτλος"
 
@@ -954,105 +966,105 @@ msgstr "Στυλ περιεχομένου"
 msgid "GtkStyleContext to get style from"
 msgstr "GtkStyleContext από το οποίο θα ληφθεί το στυλ"
 
-#: gtk/deprecated/gtktable.c:189
+#: gtk/deprecated/gtktable.c:185
 msgid "Rows"
 msgstr "Γραμμές"
 
-#: gtk/deprecated/gtktable.c:190
+#: gtk/deprecated/gtktable.c:186
 msgid "The number of rows in the table"
 msgstr "Ο αριθμός των κελιών στον πίνακα"
 
-#: gtk/deprecated/gtktable.c:198
+#: gtk/deprecated/gtktable.c:194
 msgid "Columns"
 msgstr "Στήλες"
 
-#: gtk/deprecated/gtktable.c:199
+#: gtk/deprecated/gtktable.c:195
 msgid "The number of columns in the table"
 msgstr "Ο αριθμός των στηλών στον πίνακα"
 
-#: gtk/deprecated/gtktable.c:207 gtk/gtkgrid.c:1761
+#: gtk/deprecated/gtktable.c:203 gtk/gtkgrid.c:1761
 msgid "Row spacing"
 msgstr "Διάκενο γραμμών"
 
-#: gtk/deprecated/gtktable.c:208 gtk/gtkgrid.c:1762
+#: gtk/deprecated/gtktable.c:204 gtk/gtkgrid.c:1762
 msgid "The amount of space between two consecutive rows"
 msgstr "Το μέγεθος του διαστήματος μεταξύ δυο συνεχόμενων γραμμών"
 
-#: gtk/deprecated/gtktable.c:216 gtk/gtkgrid.c:1768
+#: gtk/deprecated/gtktable.c:212 gtk/gtkgrid.c:1768
 msgid "Column spacing"
 msgstr "Διάκενο στηλών"
 
-#: gtk/deprecated/gtktable.c:217 gtk/gtkgrid.c:1769
+#: gtk/deprecated/gtktable.c:213 gtk/gtkgrid.c:1769
 msgid "The amount of space between two consecutive columns"
 msgstr "Το μέγεθος του διαστήματος μεταξύ δυο συνεχόμενων στηλών"
 
-#: gtk/deprecated/gtktable.c:225 gtk/gtkbox.c:289 gtk/gtkflowbox.c:3848
-#: gtk/gtkstack.c:456 gtk/gtktoolbar.c:592 gtk/gtktoolitemgroup.c:1690
+#: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:289 gtk/gtkflowbox.c:3848
+#: gtk/gtkstack.c:459 gtk/gtktoolbar.c:592 gtk/gtktoolitemgroup.c:1690
 msgid "Homogeneous"
 msgstr "Ομογενοποίηση"
 
-#: gtk/deprecated/gtktable.c:226
+#: gtk/deprecated/gtktable.c:222
 msgid "If TRUE, the table cells are all the same width/height"
 msgstr ""
 "Αν ΑΛΗΘΕΣ αυτό σημαίνει ότι όλα τα κελιά πίνακα είναι του ίδιου ύψους/πλάτους"
 
-#: gtk/deprecated/gtktable.c:233 gtk/gtkgrid.c:1800
+#: gtk/deprecated/gtktable.c:229 gtk/gtkgrid.c:1800
 msgid "Left attachment"
 msgstr "Αριστερό συνημμένο"
 
-#: gtk/deprecated/gtktable.c:234 gtk/gtkgrid.c:1801 gtk/gtkmenu.c:785
+#: gtk/deprecated/gtktable.c:230 gtk/gtkgrid.c:1801 gtk/gtkmenu.c:962
 msgid "The column number to attach the left side of the child to"
 msgstr "Ο αριθμός στήλης όπου προσδένεται η αριστερή πλευρά του θυγατρικού"
 
-#: gtk/deprecated/gtktable.c:240
+#: gtk/deprecated/gtktable.c:236
 msgid "Right attachment"
 msgstr "Δεξί συνημμένο"
 
-#: gtk/deprecated/gtktable.c:241
+#: gtk/deprecated/gtktable.c:237
 msgid "The column number to attach the right side of a child widget to"
 msgstr ""
 "Ο αριθμός στήλης που επισυνάπτεται στη δεξιά πλευρά του θυγατρικού γραφικού "
 "στοιχείου"
 
-#: gtk/deprecated/gtktable.c:247 gtk/gtkgrid.c:1807
+#: gtk/deprecated/gtktable.c:243 gtk/gtkgrid.c:1807
 msgid "Top attachment"
 msgstr "Προς τα πάνω συνημμένο"
 
-#: gtk/deprecated/gtktable.c:248
+#: gtk/deprecated/gtktable.c:244
 msgid "The row number to attach the top of a child widget to"
 msgstr ""
 "Ο αριθμός γραμμής που επισυνάπτεται στο πάνω μέρος ενός θυγατρικού γραφικού "
 "στοιχείου"
 
-#: gtk/deprecated/gtktable.c:254
+#: gtk/deprecated/gtktable.c:250
 msgid "Bottom attachment"
 msgstr "Προς τα κάτω συνημμένο"
 
-#: gtk/deprecated/gtktable.c:255 gtk/gtkmenu.c:809
+#: gtk/deprecated/gtktable.c:251 gtk/gtkmenu.c:986
 msgid "The row number to attach the bottom of the child to"
 msgstr "Ο αριθμός γραμμής όπου προσδένεται το κάτω μέρος ενός θυγατρικού"
 
-#: gtk/deprecated/gtktable.c:261
+#: gtk/deprecated/gtktable.c:257
 msgid "Horizontal options"
 msgstr "Οριζόντιες επιλογές"
 
-#: gtk/deprecated/gtktable.c:262
+#: gtk/deprecated/gtktable.c:258
 msgid "Options specifying the horizontal behaviour of the child"
 msgstr "Επιλογές που καθορίζουν την οριζόντια συμπεριφορά του θυγατρικού"
 
-#: gtk/deprecated/gtktable.c:268
+#: gtk/deprecated/gtktable.c:264
 msgid "Vertical options"
 msgstr "Κάθετες επιλογές"
 
-#: gtk/deprecated/gtktable.c:269
+#: gtk/deprecated/gtktable.c:265
 msgid "Options specifying the vertical behaviour of the child"
 msgstr "Επιλογές που καθορίζουν την κάθετη συμπεριφορά του θυγατρικού"
 
-#: gtk/deprecated/gtktable.c:275
+#: gtk/deprecated/gtktable.c:271
 msgid "Horizontal padding"
 msgstr "Οριζόντιο γέμισμα"
 
-#: gtk/deprecated/gtktable.c:276
+#: gtk/deprecated/gtktable.c:272
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
@@ -1060,11 +1072,11 @@ msgstr ""
 "Το πρόσθετο διάστημα για προσθήκη ανάμεσα στο θυγατρικό και στα αριστερά και "
 "τα δεξιά του, σε εικονοστοιχεία"
 
-#: gtk/deprecated/gtktable.c:282
+#: gtk/deprecated/gtktable.c:278
 msgid "Vertical padding"
 msgstr "Κάθετο γέμισμα"
 
-#: gtk/deprecated/gtktable.c:283
+#: gtk/deprecated/gtktable.c:279
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
@@ -1087,8 +1099,8 @@ msgstr ""
 "ενέργειας ραδιοπλήκτρου"
 
 #: gtk/deprecated/gtktoggleaction.c:135 gtk/gtkcellrendererspinner.c:125
-#: gtk/gtkcheckmenuitem.c:209 gtk/gtkmenu.c:573 gtk/gtkmodelbutton.c:1147
-#: gtk/gtkmodelbutton.c:1148 gtk/gtkspinner.c:220 gtk/gtkswitch.c:895
+#: gtk/gtkcheckmenuitem.c:209 gtk/gtkmenu.c:632 gtk/gtkmodelbutton.c:1145
+#: gtk/gtkmodelbutton.c:1146 gtk/gtkspinner.c:220 gtk/gtkswitch.c:895
 #: gtk/gtktogglebutton.c:185 gtk/gtktoggletoolbutton.c:130
 msgid "Active"
 msgstr "Ενεργό"
@@ -1138,7 +1150,7 @@ msgstr "Γέμισμα"
 msgid "Padding that should be put around icons in the tray"
 msgstr "Περιθώριο που θα πρέπει να τοποθετηθεί γύρω από τα εικονίδια στο tray"
 
-#: gtk/deprecated/gtktrayicon-x11.c:178 gtk/gtkstackswitcher.c:683
+#: gtk/deprecated/gtktrayicon-x11.c:178 gtk/gtkstackswitcher.c:684
 msgid "Icon Size"
 msgstr "Μέγεθος εικονιδίου"
 
@@ -1146,7 +1158,7 @@ msgstr "Μέγεθος εικονιδίου"
 msgid "The pixel size that icons should be forced to, or zero"
 msgstr "Το μέγεθος σε pixels για τα εικονίδια, ή μηδενικό"
 
-#: gtk/deprecated/gtkuimanager.c:457 gtk/gtkcombobox.c:1031
+#: gtk/deprecated/gtkuimanager.c:457 gtk/gtkcombobox.c:1016
 msgid "Add tearoffs to menus"
 msgstr "Προσθήκη αποσπώμενων στα μενού"
 
@@ -1162,11 +1174,11 @@ msgstr "Ορισμός συγχωνευμένου UI"
 msgid "An XML string describing the merged UI"
 msgstr "Μία συμβολοσειρά XML που περιγράφει το συγχωνευμένο UI"
 
-#: gtk/gtkaboutdialog.c:345
+#: gtk/gtkaboutdialog.c:341
 msgid "Program name"
 msgstr "Όνομα προγράμματος"
 
-#: gtk/gtkaboutdialog.c:346
+#: gtk/gtkaboutdialog.c:342
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -1174,102 +1186,102 @@ msgstr ""
 "Το όνομα προγράμματος. Αν δεν έχει οριστεί, τότε προεπιλέγεται το "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:359
+#: gtk/gtkaboutdialog.c:355
 msgid "Program version"
 msgstr "Έκδοση προγράμματος"
 
-#: gtk/gtkaboutdialog.c:360
+#: gtk/gtkaboutdialog.c:356
 msgid "The version of the program"
 msgstr "Η έκδοση του προγράμματος"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:369
 msgid "Copyright string"
 msgstr "Συμβολοσειρά πνευματικών δικαιωμάτων"
 
-#: gtk/gtkaboutdialog.c:374
+#: gtk/gtkaboutdialog.c:370
 msgid "Copyright information for the program"
 msgstr "Πληροφορίες για τα πνευματικά δικαιώματα του προγράμματος"
 
-#: gtk/gtkaboutdialog.c:389
+#: gtk/gtkaboutdialog.c:385
 msgid "Comments string"
 msgstr "Συμβολοσειρά σχολίων"
 
-#: gtk/gtkaboutdialog.c:390
+#: gtk/gtkaboutdialog.c:386
 msgid "Comments about the program"
 msgstr "Σχόλια σχετικά με το πρόγραμμα"
 
-#: gtk/gtkaboutdialog.c:410
+#: gtk/gtkaboutdialog.c:406
 msgid "License"
 msgstr "Άδεια"
 
-#: gtk/gtkaboutdialog.c:411
+#: gtk/gtkaboutdialog.c:407
 msgid "The license of the program"
 msgstr "Η άδεια του προγράμματος"
 
-#: gtk/gtkaboutdialog.c:438
+#: gtk/gtkaboutdialog.c:434
 msgid "License Type"
 msgstr "Τύπος άδειας"
 
-#: gtk/gtkaboutdialog.c:439
+#: gtk/gtkaboutdialog.c:435
 msgid "The license type of the program"
 msgstr "Ο τύπος άδειας του προγράμματος"
 
-#: gtk/gtkaboutdialog.c:454
+#: gtk/gtkaboutdialog.c:450
 msgid "Website URL"
 msgstr "Διεύθυνση ιστότοπου"
 
-#: gtk/gtkaboutdialog.c:455
+#: gtk/gtkaboutdialog.c:451
 msgid "The URL for the link to the website of the program"
 msgstr "H διεύθυνση για τον σύνδεσμο στοv ιστότοπο του προγράμματος"
 
-#: gtk/gtkaboutdialog.c:468
+#: gtk/gtkaboutdialog.c:464
 msgid "Website label"
 msgstr "Ετικέτα ιστότοπου"
 
-#: gtk/gtkaboutdialog.c:469
+#: gtk/gtkaboutdialog.c:465
 msgid "The label for the link to the website of the program"
 msgstr "Η ετικέτα για τον σύνδεσμο στον ιστότοπο του προγράμματος"
 
-#: gtk/gtkaboutdialog.c:484
+#: gtk/gtkaboutdialog.c:480
 msgid "Authors"
 msgstr "Συγγραφείς"
 
-#: gtk/gtkaboutdialog.c:485
+#: gtk/gtkaboutdialog.c:481
 msgid "List of authors of the program"
 msgstr "Λίστα των συγγραφέων του προγράμματος"
 
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:496
 msgid "Documenters"
 msgstr "Τεκμηριωτές"
 
-#: gtk/gtkaboutdialog.c:501
+#: gtk/gtkaboutdialog.c:497
 msgid "List of people documenting the program"
 msgstr "Μια λίστα ανθρώπων που τεκμηριώνουν το πρόγραμμα"
 
-#: gtk/gtkaboutdialog.c:516
+#: gtk/gtkaboutdialog.c:512
 msgid "Artists"
 msgstr "Καλλιτέχνες"
 
-#: gtk/gtkaboutdialog.c:517
+#: gtk/gtkaboutdialog.c:513
 msgid "List of people who have contributed artwork to the program"
 msgstr "Μια λίστα ανθρώπων που έχουν συμβάλλει με γραφικά για το πρόγραμμα"
 
-#: gtk/gtkaboutdialog.c:532
+#: gtk/gtkaboutdialog.c:528
 msgid "Translator credits"
 msgstr "Μνεία μεταφραστών"
 
-#: gtk/gtkaboutdialog.c:533
+#: gtk/gtkaboutdialog.c:529
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Μνεία για τους μεταφραστές. Αυτή η συμβολοσειρά πρέπει να σημειωθεί ως "
 "μεταφράσιμη"
 
-#: gtk/gtkaboutdialog.c:547
+#: gtk/gtkaboutdialog.c:543
 msgid "Logo"
 msgstr "Λογότυπο"
 
-#: gtk/gtkaboutdialog.c:548
+#: gtk/gtkaboutdialog.c:544
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -1277,19 +1289,19 @@ msgstr ""
 "Το λογότυπο για το διάλογο Περί. Αν δεν έχει τεθεί, η προεπιλογή είναι το "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:562
+#: gtk/gtkaboutdialog.c:558
 msgid "Logo Icon Name"
 msgstr "Όνομα εικονιδίου λογοτύπου"
 
-#: gtk/gtkaboutdialog.c:563
+#: gtk/gtkaboutdialog.c:559
 msgid "A named icon to use as the logo for the about box."
 msgstr "Ένα πρότυπο εικονίδιο για χρήση ως λογότυπο στο διάλογο Περί."
 
-#: gtk/gtkaboutdialog.c:576
+#: gtk/gtkaboutdialog.c:572
 msgid "Wrap license"
 msgstr "Αναδίπλωση άδειας"
 
-#: gtk/gtkaboutdialog.c:577
+#: gtk/gtkaboutdialog.c:573
 msgid "Whether to wrap the license text."
 msgstr "Αν θα γίνεται αναδίπλωση του κειμένου της άδειας."
 
@@ -1334,11 +1346,11 @@ msgstr "Τιμή προορισμού ενέργειας"
 msgid "The parameter for action invocations"
 msgstr "Η παράμετρος για επικλήσεις ενέργειας"
 
-#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:1914
+#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:1983
 msgid "Pack type"
 msgstr "Τύπος συσκευασίας"
 
-#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:1915
+#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:1984
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1346,14 +1358,14 @@ msgstr ""
 "Ο τύπος GtkPack που ορίζει αν το θυγατρικό θα συσκευάζεται με αναφορά στην "
 "αρχή ή το τέλος του γονικού"
 
-#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1921
-#: gtk/gtknotebook.c:836 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1693
-#: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:534 gtk/gtktoolitemgroup.c:1718
+#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1990
+#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1729
+#: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Θέση"
 
-#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:1922
-#: gtk/gtknotebook.c:837 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:535
+#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:1991
+#: gtk/gtknotebook.c:839 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
 msgid "The index of the child in the parent"
 msgstr "Ο δείκτης του θυγατρικού στο γονικό"
 
@@ -1449,95 +1461,95 @@ msgstr "GFile"
 msgid "The GFile used by the app chooser dialog"
 msgstr "Το GFile που χρησιμοποιείται για το διάλογο επιλογής εφαρμογής"
 
-#: gtk/gtkappchooserwidget.c:963
+#: gtk/gtkappchooserwidget.c:962
 msgid "Show default app"
 msgstr "Εμφάνιση προεπιλεγμένης εφαρμογής"
 
-#: gtk/gtkappchooserwidget.c:964
+#: gtk/gtkappchooserwidget.c:963
 msgid "Whether the widget should show the default application"
 msgstr "Αν το γραφικό στοιχείο θα εμφανίζει την προεπιλεγμένη εφαρμογή"
 
-#: gtk/gtkappchooserwidget.c:978
+#: gtk/gtkappchooserwidget.c:977
 msgid "Show recommended apps"
 msgstr "Εμφάνιση συνιστώμενων εφαρμογών"
 
-#: gtk/gtkappchooserwidget.c:979
+#: gtk/gtkappchooserwidget.c:978
 msgid "Whether the widget should show recommended applications"
 msgstr "Αν το γραφικό στοιχείο θα εμφανίζει τις συνιστώμενες εφαρμογές"
 
-#: gtk/gtkappchooserwidget.c:993
+#: gtk/gtkappchooserwidget.c:992
 msgid "Show fallback apps"
 msgstr "Εμφάνιση εφεδρικών εφαρμογών"
 
-#: gtk/gtkappchooserwidget.c:994
+#: gtk/gtkappchooserwidget.c:993
 msgid "Whether the widget should show fallback applications"
 msgstr "Αν το γραφικό στοιχείο θα εμφανίζει τις εφεδρικές εφαρμογές"
 
-#: gtk/gtkappchooserwidget.c:1006
+#: gtk/gtkappchooserwidget.c:1005
 msgid "Show other apps"
 msgstr "Εμφάνιση άλλων εφαρμογών"
 
-#: gtk/gtkappchooserwidget.c:1007
+#: gtk/gtkappchooserwidget.c:1006
 msgid "Whether the widget should show other applications"
 msgstr "Αν το γραφικό στοιχείο θα εμφανίζει άλλες εφαρμογές"
 
-#: gtk/gtkappchooserwidget.c:1020
+#: gtk/gtkappchooserwidget.c:1019
 msgid "Show all apps"
 msgstr "Εμφάνιση όλων των εφαρμογών"
 
-#: gtk/gtkappchooserwidget.c:1021
+#: gtk/gtkappchooserwidget.c:1020
 msgid "Whether the widget should show all applications"
 msgstr "Αν το γραφικό στοιχείο θα εμφανίζει όλες τις εφαρμογές"
 
-#: gtk/gtkappchooserwidget.c:1035
+#: gtk/gtkappchooserwidget.c:1034
 msgid "Widget's default text"
 msgstr "Προεπιλεγμένο κείμενο του γραφικού στοιχείου"
 
-#: gtk/gtkappchooserwidget.c:1036
+#: gtk/gtkappchooserwidget.c:1035
 msgid "The default text appearing when there are no applications"
 msgstr "Το προεπιλεγμένο κείμενο που εμφανίζεται όταν δεν υπάρχουν εφαρμογές"
 
-#: gtk/gtkapplication.c:984
+#: gtk/gtkapplication.c:650
 msgid "Register session"
 msgstr "Καταχώρηση συνεδρίας"
 
-#: gtk/gtkapplication.c:985
+#: gtk/gtkapplication.c:651
 msgid "Register with the session manager"
 msgstr "Καταχώριση στο διαχειριστή συνεδρίας"
 
-#: gtk/gtkapplication.c:991
+#: gtk/gtkapplication.c:657
 msgid "Application menu"
 msgstr "Μενού εφαρμογών"
 
-#: gtk/gtkapplication.c:992
+#: gtk/gtkapplication.c:658
 msgid "The GMenuModel for the application menu"
 msgstr "Το μενού GMenuModel των εφαρμογών"
 
-#: gtk/gtkapplication.c:998
+#: gtk/gtkapplication.c:664
 msgid "Menubar"
 msgstr "Μπάρα μενού"
 
-#: gtk/gtkapplication.c:999
+#: gtk/gtkapplication.c:665
 msgid "The GMenuModel for the menubar"
 msgstr "Το μενού GMenuModel για τη μπάρα μενού"
 
-#: gtk/gtkapplication.c:1005
+#: gtk/gtkapplication.c:671
 msgid "Active window"
 msgstr "Ενεργό παράθυρο"
 
-#: gtk/gtkapplication.c:1006
+#: gtk/gtkapplication.c:672
 msgid "The window which most recently had focus"
 msgstr "Το παράθυρο που πρόσφατα είχε εστιασθεί"
 
-#: gtk/gtkapplicationwindow.c:865
+#: gtk/gtkapplicationwindow.c:866
 msgid "Show a menubar"
 msgstr "Προβολή μιας μπάρας μενού"
 
-#: gtk/gtkapplicationwindow.c:866
+#: gtk/gtkapplicationwindow.c:867
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "ΑΛΗΘΕΣ αν το παράθυρο θα έχει τη μπάρα μενού στην κορυφή του παραθύρου"
 
-#: gtk/gtkaspectframe.c:111 gtk/gtkwidget.c:1379
+#: gtk/gtkaspectframe.c:111 gtk/gtkwidget.c:1366
 msgid "Horizontal Alignment"
 msgstr "Οριζόντια στοίχιση"
 
@@ -1545,7 +1557,7 @@ msgstr "Οριζόντια στοίχιση"
 msgid "X alignment of the child"
 msgstr "Στοίχιση Χ του θυγατρικού"
 
-#: gtk/gtkaspectframe.c:118 gtk/gtkwidget.c:1394
+#: gtk/gtkaspectframe.c:118 gtk/gtkwidget.c:1381
 msgid "Vertical Alignment"
 msgstr "Κάθετη στοίχιση"
 
@@ -1710,11 +1722,11 @@ msgstr ""
 "Αν ΑΛΗΘΕΣ, το θυγατρικό δεν θα είναι αντικείμενο ομογενοποίησης μεγέθους"
 
 #: gtk/gtkbox.c:282 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:337
-#: gtk/gtkheaderbar.c:1949 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
+#: gtk/gtkheaderbar.c:2018 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
 msgid "Spacing"
 msgstr "Διάκενο"
 
-#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:1950
+#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:2019
 msgid "The amount of space between children"
 msgstr "Το μέγεθος του διαστήματος μεταξύ θυγατρικών"
 
@@ -1761,11 +1773,11 @@ msgstr ""
 "Επιπλέον διάστημα σε εικονοστοιχεία για προσθήκη ανάμεσα στο θυγατρικό και "
 "τα γειτονικά του"
 
-#: gtk/gtkbuilder.c:291
+#: gtk/gtkbuilder.c:292
 msgid "Translation Domain"
 msgstr "Τομέας μετάφρασης"
 
-#: gtk/gtkbuilder.c:292
+#: gtk/gtkbuilder.c:293
 msgid "The translation domain used by gettext"
 msgstr "Ο τομέας μετάφρασης που χρησιμοποιεί το gettext"
 
@@ -1778,12 +1790,12 @@ msgstr ""
 "περιέχει ετικέτα γραφικού στοιχείου."
 
 #: gtk/gtkbutton.c:288 gtk/gtkexpander.c:312 gtk/gtklabel.c:822
-#: gtk/gtkmenuitem.c:806 gtk/gtktoolbutton.c:250
+#: gtk/gtkmenuitem.c:801 gtk/gtktoolbutton.c:250
 msgid "Use underline"
 msgstr "Χρήση υπογράμμισης"
 
 #: gtk/gtkbutton.c:289 gtk/gtkexpander.c:313 gtk/gtklabel.c:823
-#: gtk/gtkmenuitem.c:807
+#: gtk/gtkmenuitem.c:802
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1882,7 +1894,7 @@ msgstr ""
 "Αν οι ιδιότητες child_displacement_x/_y θα επηρεάζουν και το ορθογώνιο "
 "εστίασης"
 
-#: gtk/gtkbutton.c:610 gtk/gtkentry.c:887 gtk/gtkentry.c:2059
+#: gtk/gtkbutton.c:610 gtk/gtkentry.c:889 gtk/gtkentry.c:2061
 msgid "Inner Border"
 msgstr "Εσωτερικό περίγραμμα"
 
@@ -1898,27 +1910,27 @@ msgstr "Διάκενο εικόνας"
 msgid "Spacing in pixels between the image and label"
 msgstr "Διάκενο σε εικονοστοιχεία ανάμεσα στην εικόνα και την ετικέτα"
 
-#: gtk/gtkcalendar.c:397
+#: gtk/gtkcalendar.c:398
 msgid "Year"
 msgstr "Έτος"
 
-#: gtk/gtkcalendar.c:398
+#: gtk/gtkcalendar.c:399
 msgid "The selected year"
 msgstr "Το επιλεγμένο έτος"
 
-#: gtk/gtkcalendar.c:411
+#: gtk/gtkcalendar.c:412
 msgid "Month"
 msgstr "Μήνας"
 
-#: gtk/gtkcalendar.c:412
+#: gtk/gtkcalendar.c:413
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Ο επιλεγμένος μήνας (ως αριθμός μεταξύ 0 και 11)"
 
-#: gtk/gtkcalendar.c:426
+#: gtk/gtkcalendar.c:427
 msgid "Day"
 msgstr "Ημέρα"
 
-#: gtk/gtkcalendar.c:427
+#: gtk/gtkcalendar.c:428
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -1926,83 +1938,83 @@ msgstr ""
 "Η επιλεγμένη ημέρα (ως αριθμός μεταξύ 1 και 31, ή 0 για αποεπιλογή της "
 "επιλεγμένης ημέρας)"
 
-#: gtk/gtkcalendar.c:441
+#: gtk/gtkcalendar.c:442
 msgid "Show Heading"
 msgstr "Προβολή κεφαλίδας"
 
-#: gtk/gtkcalendar.c:442
+#: gtk/gtkcalendar.c:443
 msgid "If TRUE, a heading is displayed"
 msgstr "Αν ΑΛΗΘΕΣ, εμφανίζεται η κεφαλίδα"
 
-#: gtk/gtkcalendar.c:456
+#: gtk/gtkcalendar.c:457
 msgid "Show Day Names"
 msgstr "Προβολή ονομάτων ημερών"
 
-#: gtk/gtkcalendar.c:457
+#: gtk/gtkcalendar.c:458
 msgid "If TRUE, day names are displayed"
 msgstr "Αν ΑΛΗΘΕΣ, θα εμφανίζονται τα ονόματα των ημερών"
 
-#: gtk/gtkcalendar.c:470
+#: gtk/gtkcalendar.c:471
 msgid "No Month Change"
 msgstr "Όχι αλλαγή μήνα"
 
-#: gtk/gtkcalendar.c:471
+#: gtk/gtkcalendar.c:472
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Αν ΑΛΗΘΕΣ, ο επιλεγμένος μήνας δεν μπορεί να αλλάξει"
 
-#: gtk/gtkcalendar.c:485
+#: gtk/gtkcalendar.c:486
 msgid "Show Week Numbers"
 msgstr "Εμφάνιση αριθμού εβδομάδων"
 
-#: gtk/gtkcalendar.c:486
+#: gtk/gtkcalendar.c:487
 msgid "If TRUE, week numbers are displayed"
 msgstr "Αν ΑΛΗΘΕΣ, θα εμφανίζονται οι αριθμοί εβδομάδων"
 
-#: gtk/gtkcalendar.c:501
+#: gtk/gtkcalendar.c:502
 msgid "Details Width"
 msgstr "Πλάτος λεπτομερειών"
 
-#: gtk/gtkcalendar.c:502
+#: gtk/gtkcalendar.c:503
 msgid "Details width in characters"
 msgstr "Πλάτος λεπτομερειών σε χαρακτήρες"
 
-#: gtk/gtkcalendar.c:517
+#: gtk/gtkcalendar.c:518
 msgid "Details Height"
 msgstr "Ύψος λεπτομερειών"
 
-#: gtk/gtkcalendar.c:518
+#: gtk/gtkcalendar.c:519
 msgid "Details height in rows"
 msgstr "Ύψος λεπτομερειών σε γραμμές"
 
-#: gtk/gtkcalendar.c:534
+#: gtk/gtkcalendar.c:535
 msgid "Show Details"
 msgstr "Εμφάνιση λεπτομερειών"
 
-#: gtk/gtkcalendar.c:535
+#: gtk/gtkcalendar.c:536
 msgid "If TRUE, details are shown"
 msgstr "Αν είναι ΑΛΗΘΕΣ, προβάλλονται οι λεπτομέρειες"
 
-#: gtk/gtkcalendar.c:547
+#: gtk/gtkcalendar.c:548
 msgid "Inner border"
 msgstr "Εσωτερικό περίγραμμα"
 
-#: gtk/gtkcalendar.c:548
+#: gtk/gtkcalendar.c:549
 msgid "Inner border space"
 msgstr "Χώρος εσωτερικού περιγράμματος"
 
-#: gtk/gtkcalendar.c:559
+#: gtk/gtkcalendar.c:560
 msgid "Vertical separation"
 msgstr "Κατακόρυφος διαχωρισμός"
 
-#: gtk/gtkcalendar.c:560
+#: gtk/gtkcalendar.c:561
 msgid "Space between day headers and main area"
 msgstr "Διάστημα μεταξύ των επικεφαλίδων για την ημέρα και της κύριας περιοχής"
 
-#: gtk/gtkcalendar.c:571
+#: gtk/gtkcalendar.c:572
 msgid "Horizontal separation"
 msgstr "Οριζόντιος διαχωρισμός"
 
-#: gtk/gtkcalendar.c:572
+#: gtk/gtkcalendar.c:573
 msgid "Space between week headers and main area"
 msgstr ""
 "Διάστημα μεταξύ των επικεφαλίδων για τις εβδομάδες και της κύριας περιοχής"
@@ -2272,7 +2284,7 @@ msgstr "Στήλη κειμένου"
 msgid "A column in the data source model to get the strings from"
 msgstr "Μια στήλη στο μοντέλο πηγής δεδομένων για τη λήψη συμβολοσειρών"
 
-#: gtk/gtkcellrenderercombo.c:169 gtk/gtkcombobox.c:1116
+#: gtk/gtkcellrenderercombo.c:169 gtk/gtkcombobox.c:1101
 msgid "Has Entry"
 msgstr "Έχει καταχώριση"
 
@@ -2337,8 +2349,8 @@ msgstr "Ακολούθηση κατάστασης"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Αν το εμφανιζόμενο pixbuf θα χρωματίζεται σύμφωνα με την κατάσταση"
 
-#: gtk/gtkcellrendererpixbuf.c:265 gtk/gtkimage.c:358 gtk/gtkmodelbutton.c:1118
-#: gtk/gtkshortcutsshortcut.c:504 gtk/gtkwindow.c:834
+#: gtk/gtkcellrendererpixbuf.c:265 gtk/gtkimage.c:358 gtk/gtkmodelbutton.c:1116
+#: gtk/gtkshortcutsshortcut.c:550 gtk/gtkwindow.c:835
 msgid "Icon"
 msgstr "Εικονίδιο"
 
@@ -2347,8 +2359,8 @@ msgid "Value of the progress bar"
 msgstr "Τιμή που θα εμφανίζεται στη μπάρα προόδου"
 
 #: gtk/gtkcellrendererprogress.c:156 gtk/gtkcellrenderertext.c:255
-#: gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:941 gtk/gtkmessagedialog.c:214
-#: gtk/gtkmodelbutton.c:1132 gtk/gtkprogressbar.c:283 gtk/gtktextbuffer.c:218
+#: gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:943 gtk/gtkmessagedialog.c:214
+#: gtk/gtkmodelbutton.c:1130 gtk/gtkprogressbar.c:287 gtk/gtktextbuffer.c:218
 msgid "Text"
 msgstr "Κείμενο"
 
@@ -2389,15 +2401,15 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Η κάθετη στοίχιση κειμένου, από 0 (πάνω) μέχρι 1 (κάτω)."
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1087
-#: gtk/gtkmodelbutton.c:1178 gtk/gtkprogressbar.c:260 gtk/gtkrange.c:462
+#: gtk/gtkmodelbutton.c:1176 gtk/gtkprogressbar.c:264 gtk/gtkrange.c:444
 msgid "Inverted"
 msgstr "Αντεστραμμένη"
 
-#: gtk/gtkcellrendererprogress.c:227 gtk/gtkprogressbar.c:261
+#: gtk/gtkcellrendererprogress.c:227 gtk/gtkprogressbar.c:265
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Αναστροφή της κατεύθυνσης ανάπτυξης της μπάρας προόδου"
 
-#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:455 gtk/gtkscalebutton.c:215
+#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:437 gtk/gtkscalebutton.c:215
 #: gtk/gtkspinbutton.c:376
 msgid "Adjustment"
 msgstr "Ρύθμιση"
@@ -2414,7 +2426,7 @@ msgstr "Ρυθμός αναρρίχησης"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Ο ρυθμός συντόμευσης όταν πατιέται κάτω ένα κουμπί"
 
-#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:743 gtk/gtkspinbutton.c:392
+#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:764 gtk/gtkspinbutton.c:392
 msgid "Digits"
 msgstr "Ψηφία"
 
@@ -2446,7 +2458,7 @@ msgstr "Επισήμανση"
 msgid "Marked up text to render"
 msgstr "Επισημασμένο κείμενο προς εμφάνιση"
 
-#: gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:1478 gtk/gtklabel.c:808
+#: gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:1480 gtk/gtklabel.c:808
 msgid "Attributes"
 msgstr "Γνωρίσματα"
 
@@ -2507,7 +2519,7 @@ msgstr "Χρώμα προσκηνίου ως RGBA"
 msgid "Foreground color as a GdkRGBA"
 msgstr "Χρώμα προσκηνίου ως GdkRGBA"
 
-#: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:849 gtk/gtktexttag.c:308
+#: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:851 gtk/gtktexttag.c:308
 #: gtk/gtktextview.c:820
 msgid "Editable"
 msgstr "Επεξεργάσιμο"
@@ -2621,7 +2633,7 @@ msgstr ""
 "χρησιμοποιήσει αυτό ως υπόδειξη όταν θα εμφανίζει το κείμενο. Αν δεν "
 "καταλαβαίνετε αυτήν την παράμετρο πιθανόν και να μην τη χρειάζεστε."
 
-#: gtk/gtkcellrenderertext.c:484 gtk/gtklabel.c:959 gtk/gtkprogressbar.c:326
+#: gtk/gtkcellrenderertext.c:484 gtk/gtklabel.c:959 gtk/gtkprogressbar.c:330
 msgid "Ellipsize"
 msgstr "Χρήση αποσιωπητικών"
 
@@ -2633,7 +2645,7 @@ msgstr ""
 "Η προτιμώμενη θέση για τη χρήση αποσιωπητικών στην συμβολοσειρά, αν η "
 "εργασία απόδοσης κελιού δεν έχει αρκετό χώρο για να την εμφανίσει ολόκληρη"
 
-#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:451
+#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:452
 #: gtk/gtklabel.c:979
 msgid "Width In Characters"
 msgstr "Πλάτος σε χαρακτήρες"
@@ -2662,7 +2674,7 @@ msgstr ""
 "Πως θα διασπάται η συμβολοσειρά σε πολλαπλές γραμμές, αν δεν υπάρχει αρκετός "
 "χώρος για να εμφανιστεί ολόκληρη η συμβολοσειρά."
 
-#: gtk/gtkcellrenderertext.c:561 gtk/gtkcombobox.c:942
+#: gtk/gtkcellrenderertext.c:561 gtk/gtkcombobox.c:927
 msgid "Wrap width"
 msgstr "Πλάτος αναδίπλωσης"
 
@@ -2678,7 +2690,7 @@ msgstr "Στοίχιση"
 msgid "How to align the lines"
 msgstr "Τρόπος στοίχισης γραμμών"
 
-#: gtk/gtkcellrenderertext.c:596 gtk/gtkentry.c:1097
+#: gtk/gtkcellrenderertext.c:596 gtk/gtkentry.c:1099
 msgid "Placeholder text"
 msgstr "Κείμενο δεσμευτικού θέσης"
 
@@ -2830,7 +2842,7 @@ msgstr "Ασυνεπής κατάσταση"
 msgid "The inconsistent state of the button"
 msgstr "Η ασυνεπής κατάσταση του κουμπιού"
 
-#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3754
+#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3785
 msgid "Activatable"
 msgstr "Ενεργοποιήσιμο"
 
@@ -2850,7 +2862,7 @@ msgstr "Σχεδιασμός πλήκτρου εναλλαγής ως κουμπ
 msgid "Indicator size"
 msgstr "Μέγεθος σήμανσης"
 
-#: gtk/gtkcellrenderertoggle.c:171 gtk/gtkcheckbutton.c:230
+#: gtk/gtkcellrenderertoggle.c:171 gtk/gtkcheckbutton.c:233
 #: gtk/gtkcheckmenuitem.c:241
 msgid "Size of check or radio indicator"
 msgstr "Μέγεθος της επιλογής ή της επισήμανσης επιλογής"
@@ -2867,12 +2879,12 @@ msgstr "Μοντέλο CellView"
 msgid "The model for cell view"
 msgstr "Το μοντέλο για προβολή κελιού"
 
-#: gtk/gtkcellview.c:282 gtk/gtkcombobox.c:1203 gtk/gtkentrycompletion.c:467
+#: gtk/gtkcellview.c:282 gtk/gtkcombobox.c:1188 gtk/gtkentrycompletion.c:467
 #: gtk/gtkiconview.c:649 gtk/gtktreemenu.c:307 gtk/gtktreeviewcolumn.c:399
 msgid "Cell Area"
 msgstr "Περιοχή κελιών"
 
-#: gtk/gtkcellview.c:283 gtk/gtkcombobox.c:1204 gtk/gtkentrycompletion.c:468
+#: gtk/gtkcellview.c:283 gtk/gtkcombobox.c:1189 gtk/gtkentrycompletion.c:468
 #: gtk/gtkiconview.c:650 gtk/gtktreemenu.c:308 gtk/gtktreeviewcolumn.c:400
 msgid "The GtkCellArea used to layout cells"
 msgstr "Η GtkCellArea που χρησιμοποιείται για τη διαρρύθμιση των κελιών"
@@ -2903,15 +2915,15 @@ msgstr "Ταίριασμα στο μοντέλο"
 msgid "Whether to request enough space for every row in the model"
 msgstr "Αν θα ζητηθεί επαρκής χώρος για κάθε γραμμή στο μοντέλο"
 
-#: gtk/gtkcheckbutton.c:229 gtk/gtkcheckmenuitem.c:240
+#: gtk/gtkcheckbutton.c:232 gtk/gtkcheckmenuitem.c:240
 msgid "Indicator Size"
 msgstr "Μέγεθος σήμανσης"
 
-#: gtk/gtkcheckbutton.c:246 gtk/gtkexpander.c:402
+#: gtk/gtkcheckbutton.c:249 gtk/gtkexpander.c:402
 msgid "Indicator Spacing"
 msgstr "Διάκενο σήμανσης"
 
-#: gtk/gtkcheckbutton.c:247
+#: gtk/gtkcheckbutton.c:250
 msgid "Spacing around check or radio indicator"
 msgstr "Διάκενο γύρω από την επιλογή ή την επισήμανση επιλογής"
 
@@ -2935,40 +2947,40 @@ msgstr "Σχεδιασμός ως αντικείμενο μενού radio"
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Αν το αντικείμενο στο μενού θα μοιάζει σαν αντικείμενο μενού radio"
 
-#: gtk/gtkcolorbutton.c:174 gtk/gtkcolorchooser.c:87
+#: gtk/gtkcolorbutton.c:168 gtk/gtkcolorchooser.c:87
 msgid "Use alpha"
 msgstr "Χρήση άλφα"
 
-#: gtk/gtkcolorbutton.c:175
+#: gtk/gtkcolorbutton.c:169
 msgid "Whether to give the color an alpha value"
 msgstr "Αν θα δοθεί στο χρώμα μια τιμή άλφα"
 
-#: gtk/gtkcolorbutton.c:190
+#: gtk/gtkcolorbutton.c:184
 msgid "The title of the color selection dialog"
 msgstr "Ο τίτλος του διαλόγου επιλογής χρώματος"
 
-#: gtk/gtkcolorbutton.c:208
+#: gtk/gtkcolorbutton.c:202
 msgid "The selected color"
 msgstr "Το επιλεγμένο χρώμα"
 
-#: gtk/gtkcolorbutton.c:224
+#: gtk/gtkcolorbutton.c:218
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Η τρέχουσα τιμή αδιαφάνειας (0 πλήρη διαφάνεια, 65535 πλήρη αδιαφάνεια)"
 
-#: gtk/gtkcolorbutton.c:238
+#: gtk/gtkcolorbutton.c:232
 msgid "Current RGBA Color"
 msgstr "Τρέχον χρώμα RGBA"
 
-#: gtk/gtkcolorbutton.c:239
+#: gtk/gtkcolorbutton.c:233
 msgid "The selected RGBA color"
 msgstr "Το επιλεγμένο χρώμα RGBA"
 
-#: gtk/gtkcolorbutton.c:280
+#: gtk/gtkcolorbutton.c:274
 msgid "Show Editor"
 msgstr "Εμφάνιση επεξεργαστή"
 
-#: gtk/gtkcolorbutton.c:281
+#: gtk/gtkcolorbutton.c:275
 msgid "Whether to show the color editor right away"
 msgstr "Αν θα εμφανίζεται άμεσα ο επεξεργαστής χρωμάτων"
 
@@ -3000,7 +3012,7 @@ msgstr "Χρώμα RGBA"
 msgid "Color as RGBA"
 msgstr "Χρώμα ως RGBA"
 
-#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3768
+#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3799
 msgid "Selectable"
 msgstr "Δυνατότητα επιλογής"
 
@@ -3016,59 +3028,59 @@ msgstr "Αν έχει μενού"
 msgid "Whether the swatch should offer customization"
 msgstr "Αν το δείγμα πρέπει να προσφέρει προσαρμογή"
 
-#: gtk/gtkcombobox.c:925
+#: gtk/gtkcombobox.c:910
 msgid "ComboBox model"
 msgstr "Μοντέλο ComboBox"
 
-#: gtk/gtkcombobox.c:926
+#: gtk/gtkcombobox.c:911
 msgid "The model for the combo box"
 msgstr "Το μοντέλο για πλαίσιο επιλογών"
 
-#: gtk/gtkcombobox.c:943
+#: gtk/gtkcombobox.c:928
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Πλάτος αναδίπλωσης για τη διάταξη των αντικειμένων σε πλέγμα"
 
-#: gtk/gtkcombobox.c:965 gtk/gtktreemenu.c:361
+#: gtk/gtkcombobox.c:950 gtk/gtktreemenu.c:361
 msgid "Row span column"
 msgstr "Διάστημα γραμμής στήλης"
 
-#: gtk/gtkcombobox.c:966 gtk/gtktreemenu.c:362
+#: gtk/gtkcombobox.c:951 gtk/gtktreemenu.c:362
 msgid "TreeModel column containing the row span values"
 msgstr "Στήλη δενδροειδούς μοντέλου που περιέχει τις τιμές διαστήματος γραμμής"
 
-#: gtk/gtkcombobox.c:987 gtk/gtktreemenu.c:382
+#: gtk/gtkcombobox.c:972 gtk/gtktreemenu.c:382
 msgid "Column span column"
 msgstr "Διάστημα στηλών στήλης"
 
-#: gtk/gtkcombobox.c:988 gtk/gtktreemenu.c:383
+#: gtk/gtkcombobox.c:973 gtk/gtktreemenu.c:383
 msgid "TreeModel column containing the column span values"
 msgstr "Στήλη δενδροειδούς μοντέλου που περιέχει τις τιμές διαστήματος στήλης"
 
-#: gtk/gtkcombobox.c:1009
+#: gtk/gtkcombobox.c:994
 msgid "Active item"
 msgstr "Ενεργό αντικείμενο"
 
-#: gtk/gtkcombobox.c:1010
+#: gtk/gtkcombobox.c:995
 msgid "The item which is currently active"
 msgstr "Το αντικείμενο που είναι αυτή τη στιγμή ενεργό"
 
-#: gtk/gtkcombobox.c:1032
+#: gtk/gtkcombobox.c:1017
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Αν τα αναπτυσσόμενα θα πρέπει να έχουν αντικείμενο αποσπώμενου μενού"
 
-#: gtk/gtkcombobox.c:1047 gtk/gtkentry.c:871
+#: gtk/gtkcombobox.c:1032 gtk/gtkentry.c:873
 msgid "Has Frame"
 msgstr "Έχει πλαίσιο"
 
-#: gtk/gtkcombobox.c:1048
+#: gtk/gtkcombobox.c:1033
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Αν το πλαίσιο επιλογών θα σχεδιάζει ένα πλαίσιο γύρω από το θυγατρικό"
 
-#: gtk/gtkcombobox.c:1065 gtk/gtkmenu.c:636
+#: gtk/gtkcombobox.c:1050 gtk/gtkmenu.c:695
 msgid "Tearoff Title"
 msgstr "Αποσπώμενος τίτλος"
 
-#: gtk/gtkcombobox.c:1066
+#: gtk/gtkcombobox.c:1051
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -3076,32 +3088,32 @@ msgstr ""
 "Ένας τίτλος που μπορεί να εμφανίζεται από το διαχειριστή παραθύρων όταν αυτό "
 "το αναδυόμενο αποκόπτεται"
 
-#: gtk/gtkcombobox.c:1083
+#: gtk/gtkcombobox.c:1068
 msgid "Popup shown"
 msgstr "Προβολή αναδυόμενου"
 
-#: gtk/gtkcombobox.c:1084
+#: gtk/gtkcombobox.c:1069
 msgid "Whether the combo's dropdown is shown"
 msgstr "Αν θα εμφανίζεται ή όχι η λίστα του κουμπιού πολλαπλών επιλογών"
 
-#: gtk/gtkcombobox.c:1100
+#: gtk/gtkcombobox.c:1085
 msgid "Button Sensitivity"
 msgstr "Ευαισθησία κουμπιών"
 
-#: gtk/gtkcombobox.c:1101
+#: gtk/gtkcombobox.c:1086
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr ""
 "Αν το αναπτυσσόμενο κουμπί θα είναι ευαίσθητο, όταν δεν περιέχει επιλογές"
 
-#: gtk/gtkcombobox.c:1117
+#: gtk/gtkcombobox.c:1102
 msgid "Whether combo box has an entry"
 msgstr "Αν το πλαίσιο επιλογών έχει καταχώρηση"
 
-#: gtk/gtkcombobox.c:1132
+#: gtk/gtkcombobox.c:1117
 msgid "Entry Text Column"
 msgstr "Στήλη κειμένου εισαγωγής"
 
-#: gtk/gtkcombobox.c:1133
+#: gtk/gtkcombobox.c:1118
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -3110,11 +3122,11 @@ msgstr ""
 "από την εισαγωγή αν το πεδίο δημιουργήθηκε με with #GtkComboBox:has-entry = "
 "%TRUE"
 
-#: gtk/gtkcombobox.c:1150
+#: gtk/gtkcombobox.c:1135
 msgid "ID Column"
 msgstr "Στήλη αναγνωριστικού"
 
-#: gtk/gtkcombobox.c:1151
+#: gtk/gtkcombobox.c:1136
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
@@ -3122,19 +3134,19 @@ msgstr ""
 "Η στήλη στο μοντέλο του πλαισίου επιλογών που παρέχει αναγνωριστικά "
 "συμβολοσειρών για τις τιμές στο μοντέλο"
 
-#: gtk/gtkcombobox.c:1166
+#: gtk/gtkcombobox.c:1151
 msgid "Active id"
 msgstr "Ενεργό αναγνωριστικό"
 
-#: gtk/gtkcombobox.c:1167
+#: gtk/gtkcombobox.c:1152
 msgid "The value of the id column for the active row"
 msgstr "Η τιμή της στήλης αναγνωριστικού για την ενεργή γραμμή"
 
-#: gtk/gtkcombobox.c:1183
+#: gtk/gtkcombobox.c:1168
 msgid "Popup Fixed Width"
 msgstr "Αναδυόμενο σταθερού πλάτος"
 
-#: gtk/gtkcombobox.c:1184
+#: gtk/gtkcombobox.c:1169
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -3142,88 +3154,88 @@ msgstr ""
 "Αν το πλάτος του αναδυόμενου θα είναι σταθερό πλάτος ίσο με το καθορισθέν "
 "πλάτος του πλαισίου επιλογών"
 
-#: gtk/gtkcombobox.c:1210
+#: gtk/gtkcombobox.c:1195
 msgid "Appears as list"
 msgstr "Εμφανίζεται ως λίστα"
 
-#: gtk/gtkcombobox.c:1211
+#: gtk/gtkcombobox.c:1196
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Αν τα αναπτυσσόμενα θα εμφανίζονται ως λίστες αντί για μενού"
 
-#: gtk/gtkcombobox.c:1230
+#: gtk/gtkcombobox.c:1215
 msgid "Arrow Size"
 msgstr "Μέγεθος βέλους"
 
-#: gtk/gtkcombobox.c:1231
+#: gtk/gtkcombobox.c:1216
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Το ελάχιστο μέγεθος του βέλους στο πλαίσιο επιλογών"
 
-#: gtk/gtkcombobox.c:1249
+#: gtk/gtkcombobox.c:1234
 msgid "The amount of space used by the arrow"
 msgstr "Χώρος που καλύπτει το βέλος"
 
-#: gtk/gtkcombobox.c:1268
+#: gtk/gtkcombobox.c:1253
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Το είδος σκίασης που θα περιβάλλει το πλαίσιο επιλογών"
 
-#: gtk/gtkcontainer.c:530
+#: gtk/gtkcontainer.c:531
 msgid "Resize mode"
 msgstr "Λειτουργία αλλαγής μεγέθους"
 
-#: gtk/gtkcontainer.c:531
+#: gtk/gtkcontainer.c:532
 msgid "Specify how resize events are handled"
 msgstr "Ορισμός του τρόπου χειρισμού των αλλαγών μεγέθους"
 
-#: gtk/gtkcontainer.c:538
+#: gtk/gtkcontainer.c:539
 msgid "Border width"
 msgstr "Πλάτος πλαισίου"
 
-#: gtk/gtkcontainer.c:539
+#: gtk/gtkcontainer.c:540
 msgid "The width of the empty border outside the containers children"
 msgstr "Το πλάτος του κενού πλαισίου έξω από τους θυγατρικούς περιέκτες"
 
-#: gtk/gtkcontainer.c:546
+#: gtk/gtkcontainer.c:547
 msgid "Child"
 msgstr "Θυγατρικό"
 
-#: gtk/gtkcontainer.c:547
+#: gtk/gtkcontainer.c:548
 msgid "Can be used to add a new child to the container"
 msgstr ""
 "Μπορεί να χρησιμοποιηθεί για να προσθέσει ένα νέο θυγατρικό στον περιέκτη"
 
-#: gtk/gtkcssnode.c:616
+#: gtk/gtkcssnode.c:624
 msgid "Style Classes"
 msgstr "Στυλ κλάσεων"
 
-#: gtk/gtkcssnode.c:616
+#: gtk/gtkcssnode.c:624
 msgid "List of classes"
 msgstr "Λίστα κλάσεων"
 
-#: gtk/gtkcssnode.c:621 gtk/gtkcssstyleproperty.c:223
+#: gtk/gtkcssnode.c:629 gtk/gtkcssstyleproperty.c:223
 msgid "ID"
 msgstr "Αναγνωριστικό"
 
-#: gtk/gtkcssnode.c:621
+#: gtk/gtkcssnode.c:629
 msgid "Unique ID"
 msgstr "Μοναδικό αναγνωριστικό"
 
-#: gtk/gtkcssnode.c:631 gtk/gtkswitch.c:910
+#: gtk/gtkcssnode.c:639 gtk/gtkswitch.c:910
 msgid "State"
 msgstr "Κατάσταση"
 
-#: gtk/gtkcssnode.c:631
+#: gtk/gtkcssnode.c:639
 msgid "State flags"
 msgstr "Σημαίες κατάστασης"
 
-#: gtk/gtkcssnode.c:637
+#: gtk/gtkcssnode.c:645
 msgid "If other nodes can see this node"
 msgstr "Αν άλλοι κόμβοι μπορούν να δουν αυτόν τον κόμβο"
 
-#: gtk/gtkcssnode.c:642
+#: gtk/gtkcssnode.c:650
 msgid "Widget type"
 msgstr "Τύπος γραφικού στοιχείου"
 
-#: gtk/gtkcssnode.c:642
+#: gtk/gtkcssnode.c:650
 msgid "GType of the widget"
 msgstr "Το GType του γραφικού στοιχείου"
 
@@ -3308,7 +3320,7 @@ msgstr ""
 msgid "The contents of the buffer"
 msgstr "Τα περιεχόμενα της ενδιάμεσης μνήμης"
 
-#: gtk/gtkentrybuffer.c:364 gtk/gtkentry.c:1018
+#: gtk/gtkentrybuffer.c:364 gtk/gtkentry.c:1020
 msgid "Text length"
 msgstr "Μήκος κειμένου"
 
@@ -3316,52 +3328,52 @@ msgstr "Μήκος κειμένου"
 msgid "Length of the text currently in the buffer"
 msgstr "Μήκος του κειμένου που περιέχεται στην ενδιάμεση μνήμη αυτή τη στιγμή"
 
-#: gtk/gtkentrybuffer.c:378 gtk/gtkentry.c:856
+#: gtk/gtkentrybuffer.c:378 gtk/gtkentry.c:858
 msgid "Maximum length"
 msgstr "Μέγιστο μήκος"
 
-#: gtk/gtkentrybuffer.c:379 gtk/gtkentry.c:857
+#: gtk/gtkentrybuffer.c:379 gtk/gtkentry.c:859
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Μέγιστος αριθμός χαρακτήρων για αυτή την καταχώριση. Μηδέν αν δεν υπάρχει "
 "μέγιστος"
 
-#: gtk/gtkentry.c:826
+#: gtk/gtkentry.c:828
 msgid "Text Buffer"
 msgstr "Ενδιάμεση μνήμη κειμένου"
 
-#: gtk/gtkentry.c:827
+#: gtk/gtkentry.c:829
 msgid "Text buffer object which actually stores entry text"
 msgstr ""
 "Αντικείμενο κειμένου ενδιάμεσης μνήμης, που αποθηκεύει το κείμενο που "
 "εισάγεται"
 
-#: gtk/gtkentry.c:833 gtk/gtklabel.c:926
+#: gtk/gtkentry.c:835 gtk/gtklabel.c:926
 msgid "Cursor Position"
 msgstr "Θέση δρομέα"
 
-#: gtk/gtkentry.c:834 gtk/gtklabel.c:927
+#: gtk/gtkentry.c:836 gtk/gtklabel.c:927
 msgid "The current position of the insertion cursor in chars"
 msgstr "Η τρέχουσα θέση του δρομέα εισαγωγής σε χαρακτήρες"
 
-#: gtk/gtkentry.c:841 gtk/gtklabel.c:934
+#: gtk/gtkentry.c:843 gtk/gtklabel.c:934
 msgid "Selection Bound"
 msgstr "Όριο επιλογής"
 
-#: gtk/gtkentry.c:842 gtk/gtklabel.c:935
+#: gtk/gtkentry.c:844 gtk/gtklabel.c:935
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Η θέση του αντίθετου άκρου της επιλογής από το δρομέα σε χαρακτήρες"
 
-#: gtk/gtkentry.c:850
+#: gtk/gtkentry.c:852
 msgid "Whether the entry contents can be edited"
 msgstr "Αν τα περιεχόμενα της καταχώρισης μπορούν να τροποποιηθούν"
 
-#: gtk/gtkentry.c:864
+#: gtk/gtkentry.c:866
 msgid "Visibility"
 msgstr "Ορατότητα"
 
-#: gtk/gtkentry.c:865
+#: gtk/gtkentry.c:867
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -3369,32 +3381,32 @@ msgstr ""
 "ΨΕΥΔΕΣ εμφανίζει τον \"αόρατο χαρακτήρα\" αντί για το πραγματικό κείμενο "
 "(λειτουργία κωδικού πρόσβασης)"
 
-#: gtk/gtkentry.c:872
+#: gtk/gtkentry.c:874
 msgid "FALSE removes outside bevel from entry"
 msgstr "ΨΕΥΔΕΣ απομακρύνει την εξωτερική γωνία από την καταχώρηση"
 
-#: gtk/gtkentry.c:888
+#: gtk/gtkentry.c:890
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "Περίγραμμα μεταξύ κειμένου και πλαισίου. Αντικαθιστά την ιδιότητα στυλ του "
 "εσωτερικού περιγράμματος"
 
-#: gtk/gtkentry.c:894 gtk/gtkentry.c:1566
+#: gtk/gtkentry.c:896 gtk/gtkentry.c:1568
 msgid "Invisible character"
 msgstr "Αόρατος χαρακτήρας"
 
-#: gtk/gtkentry.c:895 gtk/gtkentry.c:1567
+#: gtk/gtkentry.c:897 gtk/gtkentry.c:1569
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Ο χαρακτήρας που θα χρησιμοποιείται για την απόκρυψη περιεχομένου "
 "καταχώρισης (σε \"λειτουργία κωδικού πρόσβασης\")"
 
-#: gtk/gtkentry.c:901
+#: gtk/gtkentry.c:903
 msgid "Activates default"
 msgstr "Ενεργοποίηση προεπιλεγμένου"
 
-#: gtk/gtkentry.c:902
+#: gtk/gtkentry.c:904
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -3402,91 +3414,91 @@ msgstr ""
 "Αν θα ενεργοποιείται το προεπιλεγμένο γραφικό στοιχείο (όπως ένα "
 "προεπιλεγμένο κουμπί σε ένα διάλογο) όταν πατιέται το Enter."
 
-#: gtk/gtkentry.c:908
+#: gtk/gtkentry.c:910
 msgid "Width in chars"
 msgstr "Πλάτος σε χαρακτήρες"
 
-#: gtk/gtkentry.c:909
+#: gtk/gtkentry.c:911
 msgid "Number of characters to leave space for in the entry"
 msgstr "Αριθμός χαρακτήρων για την παροχή διαστήματος στην καταχώριση"
 
-#: gtk/gtkentry.c:925
+#: gtk/gtkentry.c:927
 msgid "Maximum width in characters"
 msgstr "Μέγιστο πλάτος σε χαρακτήρες"
 
-#: gtk/gtkentry.c:926
+#: gtk/gtkentry.c:928
 msgid "The desired maximum width of the entry, in characters"
 msgstr "Το επιθυμητό μέγιστο πλάτος της καταχώρησης, σε χαρακτήρες"
 
-#: gtk/gtkentry.c:933
+#: gtk/gtkentry.c:935
 msgid "Scroll offset"
 msgstr "Μετατόπιση κύλισης"
 
-#: gtk/gtkentry.c:934
+#: gtk/gtkentry.c:936
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Αριθμός εικονοστοιχείων της καταχώρησης από αριστερά"
 
-#: gtk/gtkentry.c:942
+#: gtk/gtkentry.c:944
 msgid "The contents of the entry"
 msgstr "Τα περιεχόμενα της καταχώρισης"
 
-#: gtk/gtkentry.c:971
+#: gtk/gtkentry.c:973
 msgid "Truncate multiline"
 msgstr "Σύμπτυξη πολλαπλών γραμμών"
 
-#: gtk/gtkentry.c:972
+#: gtk/gtkentry.c:974
 msgid "Whether to truncate multiline pastes to one line."
 msgstr ""
 "Αν θα επιτρέπεται η σύμπτυξη πολλαπλών γραμμών σε μία κατά την επικόλληση."
 
-#: gtk/gtkentry.c:990
+#: gtk/gtkentry.c:992
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Το είδος της σκίασης γύρω από την καταχώρηση, όταν έχει οριστεί το has-frame"
 
-#: gtk/gtkentry.c:1004 gtk/gtktextview.c:960
+#: gtk/gtkentry.c:1006 gtk/gtktextview.c:960
 msgid "Overwrite mode"
 msgstr "Λειτουργία επικάλυψης"
 
-#: gtk/gtkentry.c:1005
+#: gtk/gtkentry.c:1007
 msgid "Whether new text overwrites existing text"
 msgstr "Αν το νέο κείμενο θα αντικαθιστά το υπάρχον"
 
-#: gtk/gtkentry.c:1019
+#: gtk/gtkentry.c:1021
 msgid "Length of the text currently in the entry"
 msgstr "Μήκος του κειμένου που περιέχεται στο πεδίο αυτή τη στιγμή"
 
-#: gtk/gtkentry.c:1033
+#: gtk/gtkentry.c:1035
 msgid "Invisible character set"
 msgstr "Αόρατοι χαρακτήρες"
 
-#: gtk/gtkentry.c:1034
+#: gtk/gtkentry.c:1036
 msgid "Whether the invisible character has been set"
 msgstr "Αν έχει οριστεί ο αόρατος χαρακτήρας"
 
-#: gtk/gtkentry.c:1051
+#: gtk/gtkentry.c:1053
 msgid "Caps Lock warning"
 msgstr "Προειδοποίηση Caps Lock"
 
-#: gtk/gtkentry.c:1052
+#: gtk/gtkentry.c:1054
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 "Αν θα εμφανίζεται προειδοποίηση, όταν είναι πατημένο το Caps Lock στα πεδία "
 "εισαγωγής κωδικών πρόσβασης"
 
-#: gtk/gtkentry.c:1065
+#: gtk/gtkentry.c:1067
 msgid "Progress Fraction"
 msgstr "Κλάσμα προόδου"
 
-#: gtk/gtkentry.c:1066
+#: gtk/gtkentry.c:1068
 msgid "The current fraction of the task that's been completed"
 msgstr "Το κλάσμα της εργασίας που έχει ολοκληρωθεί"
 
-#: gtk/gtkentry.c:1081
+#: gtk/gtkentry.c:1083
 msgid "Progress Pulse Step"
 msgstr "Παλμικό βήμα προόδου"
 
-#: gtk/gtkentry.c:1082
+#: gtk/gtkentry.c:1084
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
@@ -3494,219 +3506,219 @@ msgstr ""
 "Το κλάσμα του πλάτους της εγγραφής κατά το οποίο θα μετακινείται η γραμμή "
 "προόδου με κάθε κλήση στο gtk_entry_progress_pulse()"
 
-#: gtk/gtkentry.c:1098
+#: gtk/gtkentry.c:1100
 msgid "Show text in the entry when it's empty and unfocused"
 msgstr "Εμφάνιση κειμένου στο πεδίο όταν είναι άδειο και μη επιλεγμένο"
 
-#: gtk/gtkentry.c:1111
+#: gtk/gtkentry.c:1113
 msgid "Primary pixbuf"
 msgstr "Πρωτεύον pixbuf"
 
-#: gtk/gtkentry.c:1112
+#: gtk/gtkentry.c:1114
 msgid "Primary pixbuf for the entry"
 msgstr "Πρωτεύον pixbuf της καταχώρησης"
 
-#: gtk/gtkentry.c:1125
+#: gtk/gtkentry.c:1127
 msgid "Secondary pixbuf"
 msgstr "Δευτερεύον pixbuf"
 
-#: gtk/gtkentry.c:1126
+#: gtk/gtkentry.c:1128
 msgid "Secondary pixbuf for the entry"
 msgstr "Δευτερεύον pixbuf της καταχώρησης"
 
-#: gtk/gtkentry.c:1141
+#: gtk/gtkentry.c:1143
 msgid "Primary stock ID"
 msgstr "Αναγνωριστικό αποθέματος πρωτεύοντος"
 
-#: gtk/gtkentry.c:1142
+#: gtk/gtkentry.c:1144
 msgid "Stock ID for primary icon"
 msgstr "Αναγνωριστικό αποθέματος πρωτεύοντος εικονιδίου"
 
-#: gtk/gtkentry.c:1157
+#: gtk/gtkentry.c:1159
 msgid "Secondary stock ID"
 msgstr "Αναγνωριστικό αποθέματος δευτερεύοντος"
 
-#: gtk/gtkentry.c:1158
+#: gtk/gtkentry.c:1160
 msgid "Stock ID for secondary icon"
 msgstr "Αναγνωριστικό αποθέματος δευτερεύοντος εικονιδίου"
 
-#: gtk/gtkentry.c:1171
+#: gtk/gtkentry.c:1173
 msgid "Primary icon name"
 msgstr "Όνομα πρωτεύοντος εικονιδίου"
 
-#: gtk/gtkentry.c:1172
+#: gtk/gtkentry.c:1174
 msgid "Icon name for primary icon"
 msgstr "Όνομα εικονιδίου για το πρωτεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1185
+#: gtk/gtkentry.c:1187
 msgid "Secondary icon name"
 msgstr "Όνομα δευτερεύοντος εικονιδίου"
 
-#: gtk/gtkentry.c:1186
+#: gtk/gtkentry.c:1188
 msgid "Icon name for secondary icon"
 msgstr "Όνομα εικονιδίου για το δευτερεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1199
+#: gtk/gtkentry.c:1201
 msgid "Primary GIcon"
 msgstr "Πρωτεύον GIcon"
 
-#: gtk/gtkentry.c:1200
+#: gtk/gtkentry.c:1202
 msgid "GIcon for primary icon"
 msgstr "GIcon για το πρωτεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1213
+#: gtk/gtkentry.c:1215
 msgid "Secondary GIcon"
 msgstr "Δευτερεύον GIcon"
 
-#: gtk/gtkentry.c:1214
+#: gtk/gtkentry.c:1216
 msgid "GIcon for secondary icon"
 msgstr "GIcon για το δευτερεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1227
+#: gtk/gtkentry.c:1229
 msgid "Primary storage type"
 msgstr "Πρωτεύων τύπος αποθήκευσης"
 
-#: gtk/gtkentry.c:1228
+#: gtk/gtkentry.c:1230
 msgid "The representation being used for primary icon"
 msgstr "Η αναπαράσταση που χρησιμοποιείται για το πρωτεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1242
+#: gtk/gtkentry.c:1244
 msgid "Secondary storage type"
 msgstr "Δευτερεύων τύπος αποθήκευσης"
 
-#: gtk/gtkentry.c:1243
+#: gtk/gtkentry.c:1245
 msgid "The representation being used for secondary icon"
 msgstr "Η αναπαράσταση που χρησιμοποιείται για το δευτερεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1263
+#: gtk/gtkentry.c:1265
 msgid "Primary icon activatable"
 msgstr "Ενεργοποιήσιμο πρωτεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1264
+#: gtk/gtkentry.c:1266
 msgid "Whether the primary icon is activatable"
 msgstr "Αν το πρωτεύον εικονίδιο θα είναι ενεργοποιήσιμο"
 
-#: gtk/gtkentry.c:1283
+#: gtk/gtkentry.c:1285
 msgid "Secondary icon activatable"
 msgstr "Ενεργοποιήσιμο δευτερεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1284
+#: gtk/gtkentry.c:1286
 msgid "Whether the secondary icon is activatable"
 msgstr "Αν το δευτερεύον εικονίδιο θα είναι ενεργοποιήσιμο"
 
-#: gtk/gtkentry.c:1304
+#: gtk/gtkentry.c:1306
 msgid "Primary icon sensitive"
 msgstr "Ευαίσθητο πρωτεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1305
+#: gtk/gtkentry.c:1307
 msgid "Whether the primary icon is sensitive"
 msgstr "Αν το πρωτεύον εικονίδιο θα είναι ευαίσθητο"
 
-#: gtk/gtkentry.c:1325
+#: gtk/gtkentry.c:1327
 msgid "Secondary icon sensitive"
 msgstr "Ευαίσθητο δευτερεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1326
+#: gtk/gtkentry.c:1328
 msgid "Whether the secondary icon is sensitive"
 msgstr "Αν το δευτερεύον εικονίδιο θα είναι ευαίσθητο"
 
-#: gtk/gtkentry.c:1341
+#: gtk/gtkentry.c:1343
 msgid "Primary icon tooltip text"
 msgstr "Κείμενο συμβουλής οθόνης πρωτεύοντος εικονιδίου "
 
-#: gtk/gtkentry.c:1342 gtk/gtkentry.c:1375
+#: gtk/gtkentry.c:1344 gtk/gtkentry.c:1377
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Τα περιεχόμενα της συμβουλής οθόνης για το πρωτεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1357
+#: gtk/gtkentry.c:1359
 msgid "Secondary icon tooltip text"
 msgstr "Κείμενο συμβουλής οθόνης δευτερεύοντος εικονιδίου"
 
-#: gtk/gtkentry.c:1358 gtk/gtkentry.c:1392
+#: gtk/gtkentry.c:1360 gtk/gtkentry.c:1394
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Τα περιεχόμενα της συμβουλής οθόνης για το δευτερεύον εικονίδιο"
 
-#: gtk/gtkentry.c:1374
+#: gtk/gtkentry.c:1376
 msgid "Primary icon tooltip markup"
 msgstr "Επισήμανση συμβουλής οθόνης πρωτεύοντος εικονιδίου"
 
-#: gtk/gtkentry.c:1391
+#: gtk/gtkentry.c:1393
 msgid "Secondary icon tooltip markup"
 msgstr "Επισήμανση συμβουλής οθόνης δευτερεύοντος εικονιδίου"
 
-#: gtk/gtkentry.c:1410 gtk/gtktextview.c:988
+#: gtk/gtkentry.c:1412 gtk/gtktextview.c:988
 msgid "IM module"
 msgstr "Άρθρωμα IM"
 
-#: gtk/gtkentry.c:1411 gtk/gtktextview.c:989
+#: gtk/gtkentry.c:1413 gtk/gtktextview.c:989
 msgid "Which IM module should be used"
 msgstr "Ποιο άρθρωμα IM θα χρησιμοποιείται"
 
-#: gtk/gtkentry.c:1424
+#: gtk/gtkentry.c:1426
 msgid "Completion"
 msgstr "Ολοκλήρωση"
 
-#: gtk/gtkentry.c:1425
+#: gtk/gtkentry.c:1427
 msgid "The auxiliary completion object"
 msgstr "Το εναλλακτικό αντικείμενο ολοκλήρωσης"
 
-#: gtk/gtkentry.c:1445 gtk/gtkimcontext.c:331 gtk/gtktextview.c:1006
+#: gtk/gtkentry.c:1447 gtk/gtkimcontext.c:331 gtk/gtktextview.c:1006
 msgid "Purpose"
 msgstr "Σκοπός"
 
-#: gtk/gtkentry.c:1446 gtk/gtkimcontext.c:332 gtk/gtktextview.c:1007
+#: gtk/gtkentry.c:1448 gtk/gtkimcontext.c:332 gtk/gtktextview.c:1007
 msgid "Purpose of the text field"
 msgstr "Σκοπός του πεδίου κειμένου"
 
-#: gtk/gtkentry.c:1461 gtk/gtkimcontext.c:339 gtk/gtktextview.c:1024
+#: gtk/gtkentry.c:1463 gtk/gtkimcontext.c:339 gtk/gtktextview.c:1024
 msgid "hints"
 msgstr "υποδείξεις"
 
-#: gtk/gtkentry.c:1462 gtk/gtkimcontext.c:340 gtk/gtktextview.c:1025
+#: gtk/gtkentry.c:1464 gtk/gtkimcontext.c:340 gtk/gtktextview.c:1025
 msgid "Hints for the text field behaviour"
 msgstr "Υποδείξεις για τη συμπεριφορά του πεδίου κειμένου"
 
-#: gtk/gtkentry.c:1479 gtk/gtklabel.c:809
+#: gtk/gtkentry.c:1481 gtk/gtklabel.c:809
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Μια λίστα γνωρισμάτων στυλ για εφαρμογή στο κείμενο της ετικέτας"
 
-#: gtk/gtkentry.c:1493 gtk/gtkplacessidebar.c:4511 gtk/gtktextview.c:1041
+#: gtk/gtkentry.c:1495 gtk/gtkplacessidebar.c:4510 gtk/gtktextview.c:1041
 msgid "Populate all"
 msgstr "Συμπλήρωση όλων"
 
-#: gtk/gtkentry.c:1494 gtk/gtktextview.c:1042
+#: gtk/gtkentry.c:1496 gtk/gtktextview.c:1042
 msgid "Whether to emit ::populate-popup for touch popups"
 msgstr "Aν θα εκπεμφθεί ::populate-popup για αναδυόμενες επαφές"
 
-#: gtk/gtkentry.c:1507 gtk/gtktexttag.c:578 gtk/gtktextview.c:936
+#: gtk/gtkentry.c:1509 gtk/gtktexttag.c:578 gtk/gtktextview.c:936
 msgid "Tabs"
 msgstr "Στηλοθέτες"
 
-#: gtk/gtkentry.c:1508
+#: gtk/gtkentry.c:1510
 msgid "A list of tabstop locations to apply to the text of the entry"
 msgstr ""
 "Μια λίστα θέσεων ορίων στηλοθέτη για να εφαρμοστούν στο κείμενο της "
 "καταχώρισης"
 
-#: gtk/gtkentry.c:1527
+#: gtk/gtkentry.c:1529
 msgid "Icon Prelight"
 msgstr "Φωτισμός εκ των προτέρων του εικονιδίου"
 
-#: gtk/gtkentry.c:1528
+#: gtk/gtkentry.c:1530
 msgid "Whether activatable icons should prelight when hovered"
 msgstr ""
 "Aν θα φωτίζονται εκ των προτέρων τα ενεργοποιήσιμα εικονίδια όταν αιωρείται "
 "πάνω τους ο δρομέας"
 
-#: gtk/gtkentry.c:1545
+#: gtk/gtkentry.c:1547
 msgid "Progress Border"
 msgstr "Περίγραμμα προόδου"
 
-#: gtk/gtkentry.c:1546
+#: gtk/gtkentry.c:1548
 msgid "Border around the progress bar"
 msgstr "Περίγραμμα που θα εμφανίζεται στη μπάρα προόδου"
 
-#: gtk/gtkentry.c:2060
+#: gtk/gtkentry.c:2062
 msgid "Border between text and frame."
 msgstr "Περίγραμμα μεταξύ κειμένου και πλαισίου."
 
@@ -3886,19 +3898,19 @@ msgstr "Μέγεθος του βέλους επέκτασης"
 msgid "Spacing around expander arrow"
 msgstr "Διάκενο γύρω από το βέλος επέκτασης"
 
-#: gtk/gtkfilechooserbutton.c:422
+#: gtk/gtkfilechooserbutton.c:423
 msgid "Dialog"
 msgstr "Διάλογος"
 
-#: gtk/gtkfilechooserbutton.c:423
+#: gtk/gtkfilechooserbutton.c:424
 msgid "The file chooser dialog to use."
 msgstr "Ο διάλογος που θα χρησιμοποιείται στον επιλογέα αρχείων."
 
-#: gtk/gtkfilechooserbutton.c:438
+#: gtk/gtkfilechooserbutton.c:439
 msgid "The title of the file chooser dialog."
 msgstr "Ο τίτλος του διαλόγου επιλογής αρχείου."
 
-#: gtk/gtkfilechooserbutton.c:452
+#: gtk/gtkfilechooserbutton.c:453
 msgid "The desired width of the button widget, in characters."
 msgstr "Το επιθυμητό πλάτος σε·χαρακτήρες. του γραφικού στοιχείου."
 
@@ -3918,8 +3930,8 @@ msgstr "Φίλτρο"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Το τρέχον φίλτρο για την επιλογή των αρχείων που θα εμφανίζονται"
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4484
-#: gtk/gtkplacesview.c:2179
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4483
+#: gtk/gtkplacesview.c:2222
 msgid "Local Only"
 msgstr "Μόνο τοπικά"
 
@@ -4009,28 +4021,28 @@ msgstr ""
 "Αν θα προτείνουν δημιουργία νέων φακέλων οι επιλογείς αρχείων που δεν "
 "βρίσκονται σε ανοιχτή λειτουργία."
 
-#: gtk/gtkfilechoosernative.c:627
+#: gtk/gtkfilechoosernative.c:779
 msgid "Accept label"
 msgstr "Ετικέτα αποδοχής"
 
-#: gtk/gtkfilechoosernative.c:628
+#: gtk/gtkfilechoosernative.c:780
 msgid "The label on the accept button"
 msgstr "Η ετικέτα στο κουμπί αποδοχής"
 
-#: gtk/gtkfilechoosernative.c:640
+#: gtk/gtkfilechoosernative.c:792
 msgid "Cancel label"
 msgstr "Ετικέτα ακύρωσης"
 
-#: gtk/gtkfilechoosernative.c:641
+#: gtk/gtkfilechoosernative.c:793
 msgid "The label on the cancel button"
 msgstr "Η ετικέτα στο κουμπί ακύρωσης"
 
-#: gtk/gtkfilechooserwidget.c:8433 gtk/gtkfilechooserwidget.c:8434
+#: gtk/gtkfilechooserwidget.c:8460 gtk/gtkfilechooserwidget.c:8461
 msgid "Search mode"
 msgstr "Λειτουργία αναζήτησης"
 
-#: gtk/gtkfilechooserwidget.c:8440 gtk/gtkfilechooserwidget.c:8441
-#: gtk/gtkheaderbar.c:1935 gtk/gtkshortcutsshortcut.c:545
+#: gtk/gtkfilechooserwidget.c:8467 gtk/gtkfilechooserwidget.c:8468
+#: gtk/gtkheaderbar.c:2004 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Υπότιτλος"
 
@@ -4050,21 +4062,21 @@ msgstr "Θέση y"
 msgid "Y position of child widget"
 msgstr "Θέση y του θυγατρικού γραφικού στοιχείου"
 
-#: gtk/gtkflowbox.c:3821 gtk/gtkiconview.c:408 gtk/gtklistbox.c:448
+#: gtk/gtkflowbox.c:3821 gtk/gtkiconview.c:408 gtk/gtklistbox.c:453
 #: gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Λειτουργία επιλογής"
 
-#: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:409 gtk/gtklistbox.c:449
+#: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:409 gtk/gtklistbox.c:454
 msgid "The selection mode"
 msgstr "Η λειτουργία επιλογής"
 
-#: gtk/gtkflowbox.c:3835 gtk/gtkiconview.c:665 gtk/gtklistbox.c:456
+#: gtk/gtkflowbox.c:3835 gtk/gtkiconview.c:665 gtk/gtklistbox.c:461
 #: gtk/gtktreeview.c:1222
 msgid "Activate on Single Click"
 msgstr "Ενεργοποίηση με μονό κλικ"
 
-#: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:666 gtk/gtklistbox.c:457
+#: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:666 gtk/gtklistbox.c:462
 #: gtk/gtktreeview.c:1223
 msgid "Activate row on a single click"
 msgstr "Ενεργοποίηση γραμμής με μονό κλικ"
@@ -4116,10 +4128,6 @@ msgstr "Ο τίτλος του διαλόγου επιλογής γραμματ�
 #: gtk/gtkfontbutton.c:492
 msgid "The name of the selected font"
 msgstr "Το όνομα της επιλεγμένης γραμματοσειράς"
-
-#: gtk/gtkfontbutton.c:493
-msgid "Sans 12"
-msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:507
 msgid "Use font in label"
@@ -4242,45 +4250,53 @@ msgstr "Αριθμητικό πλήκτρο"
 msgid "Button number to listen to"
 msgstr "Αριθμητικό πλήκτρο για να ακούσετε"
 
-#: gtk/gtkglarea.c:768
+#: gtk/gtkglarea.c:783
 msgid "Context"
 msgstr "Περιβάλλον"
 
-#: gtk/gtkglarea.c:769
+#: gtk/gtkglarea.c:784
 msgid "The GL context"
 msgstr "Το περιβάλλον GL"
 
-#: gtk/gtkglarea.c:791
+#: gtk/gtkglarea.c:806
 msgid "Auto render"
 msgstr "Αυτόματη απόδοση"
 
-#: gtk/gtkglarea.c:792
+#: gtk/gtkglarea.c:807
 msgid "Whether the GtkGLArea renders on each redraw"
 msgstr "Αν η περιοχή GtkGL αποδίδει σε κάθε επανασχεδίαση"
 
-#: gtk/gtkglarea.c:812
+#: gtk/gtkglarea.c:827
 msgid "Has alpha"
 msgstr "Έχει άλφα"
 
-#: gtk/gtkglarea.c:813
+#: gtk/gtkglarea.c:828
 msgid "Whether the color buffer has an alpha component"
 msgstr "Aν η ενδιάμεση μνήμη του χρώματος έχει στοιχείο άλφα"
 
-#: gtk/gtkglarea.c:829
+#: gtk/gtkglarea.c:844
 msgid "Has depth buffer"
 msgstr "Έχει ενδιάμεση μνήμη βάθους"
 
-#: gtk/gtkglarea.c:830
+#: gtk/gtkglarea.c:845
 msgid "Whether a depth buffer is allocated"
 msgstr "Αν μια ενδιάμεση μνήμη βάθους κατανέμεται"
 
-#: gtk/gtkglarea.c:846
+#: gtk/gtkglarea.c:861
 msgid "Has stencil buffer"
 msgstr "Έχει ενδιάμεση μνήμη ίχνους"
 
-#: gtk/gtkglarea.c:847
+#: gtk/gtkglarea.c:862
 msgid "Whether a stencil buffer is allocated"
 msgstr "Αν κατανέμεται η ενδιάμεση μνήμη ίχνους"
+
+#: gtk/gtkglarea.c:880
+msgid "Use OpenGL ES"
+msgstr "Χρήση OpenGL ES"
+
+#: gtk/gtkglarea.c:881
+msgid "Whether the context uses OpenGL or OpenGL ES"
+msgstr "Αν το περιεχόμενο χρησιμοποιεί OpenGL ή OpenGL ES"
 
 #: gtk/gtkgrid.c:1775
 msgid "Row Homogeneous"
@@ -4330,51 +4346,51 @@ msgstr "Ύψος"
 msgid "The number of rows that a child spans"
 msgstr "Ο αριθμός των γραμμών που παράγει ένα θυγατρικό"
 
-#: gtk/gtkheaderbar.c:1929
+#: gtk/gtkheaderbar.c:1998
 msgid "The title to display"
 msgstr "Ο τίτλος που θα εμφανιστεί"
 
-#: gtk/gtkheaderbar.c:1936
+#: gtk/gtkheaderbar.c:2005
 msgid "The subtitle to display"
 msgstr "Ο υπότιτλος που θα εμφανιστεί"
 
-#: gtk/gtkheaderbar.c:1942
+#: gtk/gtkheaderbar.c:2011
 msgid "Custom Title"
 msgstr "Προσαρμοσμένος τίτλος"
 
-#: gtk/gtkheaderbar.c:1943
+#: gtk/gtkheaderbar.c:2012
 msgid "Custom title widget to display"
 msgstr "Προσαρμοσμένο γραφικό στοιχείο τίτλου που θα εμφανιστεί"
 
-#: gtk/gtkheaderbar.c:1967
+#: gtk/gtkheaderbar.c:2036
 msgid "Show decorations"
 msgstr "Εμφάνιση διακοσμήσεων"
 
-#: gtk/gtkheaderbar.c:1968
+#: gtk/gtkheaderbar.c:2037
 msgid "Whether to show window decorations"
 msgstr "Αν θα εμφανίζονται διακοσμήσεις παραθύρου"
 
-#: gtk/gtkheaderbar.c:1986 gtk/gtksettings.c:1591
+#: gtk/gtkheaderbar.c:2055 gtk/gtksettings.c:1610
 msgid "Decoration Layout"
 msgstr "Διάταξη διακόσμησης"
 
-#: gtk/gtkheaderbar.c:1987 gtk/gtksettings.c:1592
+#: gtk/gtkheaderbar.c:2056 gtk/gtksettings.c:1611
 msgid "The layout for window decorations"
 msgstr "Η διάταξη για διακοσμήσεις παραθύρου"
 
-#: gtk/gtkheaderbar.c:2000
+#: gtk/gtkheaderbar.c:2069
 msgid "Decoration Layout Set"
 msgstr "Διάταξη διακόσμησης"
 
-#: gtk/gtkheaderbar.c:2001
+#: gtk/gtkheaderbar.c:2070
 msgid "Whether the decoration-layout property has been set"
 msgstr "Αν έχει οριστεί η ιδιότητα διάταξη διακόσμησης"
 
-#: gtk/gtkheaderbar.c:2015
+#: gtk/gtkheaderbar.c:2084
 msgid "Has Subtitle"
 msgstr "Έχει υπότιτλο"
 
-#: gtk/gtkheaderbar.c:2016
+#: gtk/gtkheaderbar.c:2085
 msgid "Whether to reserve space for a subtitle"
 msgstr "Αν θα κρατηθεί χώρος για υπότιτλο"
 
@@ -4589,7 +4605,7 @@ msgstr "Διάκενο μεταξύ των στοιχείων της περιο�
 msgid "Width of border around the action area"
 msgstr "Πλάτος πλαισίου γύρω από την περιοχή ενεργειών"
 
-#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:891
+#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:892
 msgid "The screen where this window will be displayed"
 msgstr "Η οθόνη όπου θα εμφανίζεται αυτό το παράθυρο"
 
@@ -4784,11 +4800,11 @@ msgstr "Έγινε επίσκεψη"
 msgid "Whether this link has been visited."
 msgstr "Αν έχει ήδη γίνει επίσκεψη σε αυτό το σύνδεσμο."
 
-#: gtk/gtklistbox.c:3755
+#: gtk/gtklistbox.c:3786
 msgid "Whether this row can be activated"
 msgstr "Αν αυτή η σειρά μπορεί να ενεργοποιηθεί"
 
-#: gtk/gtklistbox.c:3769
+#: gtk/gtklistbox.c:3800
 msgid "Whether this row can be selected"
 msgstr "Αν αυτή η σειρά μπορεί να επιλεχθεί"
 
@@ -4843,19 +4859,19 @@ msgstr ""
 "Η συμβουλή οθόνης που εμφανίζεται κατά την προτροπή ότι ο χρήστης δεν μπορεί "
 "να λάβει έγκριση."
 
-#: gtk/gtkmagnifier.c:274
+#: gtk/gtkmagnifier.c:295
 msgid "Inspected"
 msgstr "Ελέγχθηκε"
 
-#: gtk/gtkmagnifier.c:275
+#: gtk/gtkmagnifier.c:296
 msgid "Inspected widget"
 msgstr "Ελεγμένο γραφικό στοιχείο"
 
-#: gtk/gtkmagnifier.c:281 gtk/gtkmagnifier.c:282
+#: gtk/gtkmagnifier.c:302 gtk/gtkmagnifier.c:303
 msgid "magnification"
 msgstr "μεγέθυνση"
 
-#: gtk/gtkmagnifier.c:288 gtk/gtkmagnifier.c:289
+#: gtk/gtkmagnifier.c:309 gtk/gtkmagnifier.c:310
 msgid "resize"
 msgstr "αλλαγή μεγέθους"
 
@@ -4889,83 +4905,83 @@ msgstr ""
 "Μέγεθος διαστήματος περιγράμματος μεταξύ της εργαλειοθήκης μενού και τα "
 "αντικείμενα του μενού"
 
-#: gtk/gtkmenubutton.c:535
+#: gtk/gtkmenubutton.c:486
 msgid "Popup"
 msgstr "Αναδυόμενο"
 
-#: gtk/gtkmenubutton.c:536
+#: gtk/gtkmenubutton.c:487
 msgid "The dropdown menu."
 msgstr "Το αναπτυσσόμενο μενού."
 
-#: gtk/gtkmenubutton.c:554
+#: gtk/gtkmenubutton.c:505
 msgid "Menu model"
 msgstr "Μοντέλο μενού"
 
-#: gtk/gtkmenubutton.c:555
+#: gtk/gtkmenubutton.c:506
 msgid "The model from which the popup is made."
 msgstr "Το μοντέλο από το οποίο γίνεται η ανάδυση."
 
-#: gtk/gtkmenubutton.c:568
+#: gtk/gtkmenubutton.c:519
 msgid "Align with"
 msgstr "Στοίχιση με"
 
-#: gtk/gtkmenubutton.c:569
+#: gtk/gtkmenubutton.c:520
 msgid "The parent widget which the menu should align with."
 msgstr ""
 "Το γονικό γραφικό στοιχείο στο οποίο το μενού πρέπει να ευθυγραμμιστεί."
 
-#: gtk/gtkmenubutton.c:583 gtk/gtkshortcutsshortcut.c:599
-#: gtk/gtkstylecontext.c:229
+#: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:645
+#: gtk/gtkstylecontext.c:242
 msgid "Direction"
 msgstr "Κατεύθυνση"
 
-#: gtk/gtkmenubutton.c:584
+#: gtk/gtkmenubutton.c:535
 msgid "The direction the arrow should point."
 msgstr "Η διεύθυνση στην οποία πρέπει να δείχνει το βέλος."
 
-#: gtk/gtkmenubutton.c:599
+#: gtk/gtkmenubutton.c:550
 msgid "Use a popover"
 msgstr "Χρήση ενός αναδυόμενου"
 
-#: gtk/gtkmenubutton.c:600
+#: gtk/gtkmenubutton.c:551
 msgid "Use a popover instead of a menu"
 msgstr "Χρησιμοποιήστε ένα αναδυόμενο αντί για ένα μενού"
 
-#: gtk/gtkmenubutton.c:613
+#: gtk/gtkmenubutton.c:564
 msgid "Popover"
 msgstr "Αναδυόμενο"
 
-#: gtk/gtkmenubutton.c:614
+#: gtk/gtkmenubutton.c:565
 msgid "The popover"
 msgstr "Το αναδυόμενο"
 
-#: gtk/gtkmenu.c:574
+#: gtk/gtkmenu.c:633
 msgid "The currently selected menu item"
 msgstr "Το τρέχον επιλεγμένο αντικείμενο μενού"
 
-#: gtk/gtkmenu.c:589
+#: gtk/gtkmenu.c:648
 msgid "The accel group holding accelerators for the menu"
 msgstr "Η ομάδα Accel που περιέχει τις συντομεύσεις του μενού"
 
-#: gtk/gtkmenu.c:603 gtk/gtkmenuitem.c:778
+#: gtk/gtkmenu.c:662 gtk/gtkmenuitem.c:773
 msgid "Accel Path"
 msgstr "Διαδρομή Accel"
 
-#: gtk/gtkmenu.c:604
+#: gtk/gtkmenu.c:663
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 "Διαδρομή accel που χρησιμοποιείται για εύκολη δημιουργία των διαδρομών accel "
 "των θυγατρικών αντικειμένων"
 
-#: gtk/gtkmenu.c:620
+#: gtk/gtkmenu.c:679
 msgid "Attach Widget"
 msgstr "Πρόσδεση γραφικού στοιχείου"
 
-#: gtk/gtkmenu.c:621
+#: gtk/gtkmenu.c:680
 msgid "The widget the menu is attached to"
 msgstr "Το γραφικό στοιχείο στο οποίο θα είναι προσδεμένο το μενού"
 
-#: gtk/gtkmenu.c:637
+#: gtk/gtkmenu.c:696
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -4973,27 +4989,27 @@ msgstr ""
 "Ένας τίτλος που μπορεί να εμφανίζεται από το διαχειριστή παραθύρων όταν αυτό "
 "το μενού αποκόπτεται"
 
-#: gtk/gtkmenu.c:653
+#: gtk/gtkmenu.c:712
 msgid "Tearoff State"
 msgstr "Αποσπώμενος κατάσταση"
 
-#: gtk/gtkmenu.c:654
+#: gtk/gtkmenu.c:713
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Μια τιμή Μπουλ που δείχνει εάν το μενού αποκόπτεται"
 
-#: gtk/gtkmenu.c:668
+#: gtk/gtkmenu.c:727
 msgid "Monitor"
 msgstr "Οθόνη"
 
-#: gtk/gtkmenu.c:669
+#: gtk/gtkmenu.c:728
 msgid "The monitor the menu will be popped up on"
 msgstr "Η οθόνη στην οποία θα εμφανιστεί το μενού"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:748
 msgid "Reserve Toggle Size"
 msgstr "Κράτηση χώρου κουμπιού εναλλαγής"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:749
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
@@ -5001,27 +5017,59 @@ msgstr ""
 "Λογική τιμή που δείχνει αν το μενού θα δεσμεύει κενό χώρο για κουμπιά "
 "εναλλαγής και εικονίδια"
 
-#: gtk/gtkmenu.c:705
+#: gtk/gtkmenu.c:777
+msgid "Anchor hints"
+msgstr "Υποδείξεις"
+
+#: gtk/gtkmenu.c:778
+msgid "Positioning hints for when the menu might fall off-screen"
+msgstr "Τοποθέτηση των υποδείξεων για όταν το μενού είναι εκτός οθόνης"
+
+#: gtk/gtkmenu.c:806
+msgid "Rect anchor dx"
+msgstr "Πλάτος πλαισίου της υπόδειξης"
+
+#: gtk/gtkmenu.c:807
+msgid "Rect anchor horizontal offset"
+msgstr "Οριζόντια μετατόπιση του πλαισίου υπόδειξης"
+
+#: gtk/gtkmenu.c:833
+msgid "Rect anchor dy"
+msgstr "Ύψος πλαισίου της υπόδειξης"
+
+#: gtk/gtkmenu.c:834
+msgid "Rect anchor vertical offset"
+msgstr "Κάθετη μετατόπιση του πλαισίου υπόδειξης"
+
+#: gtk/gtkmenu.c:860
+msgid "Menu type hint"
+msgstr "Είδος υπόδειξης του μενού"
+
+#: gtk/gtkmenu.c:861
+msgid "Menu window type hint"
+msgstr "Είδος υπόδειξης του μενού παραθύρου"
+
+#: gtk/gtkmenu.c:882
 msgid "Horizontal Padding"
 msgstr "Οριζόντιο γέμισμα"
 
-#: gtk/gtkmenu.c:706
+#: gtk/gtkmenu.c:883
 msgid "Extra space at the left and right edges of the menu"
 msgstr "Επιπλέον διάστημα αριστερά και δεξιά από τις γωνίες του μενού"
 
-#: gtk/gtkmenu.c:724
+#: gtk/gtkmenu.c:901
 msgid "Vertical Padding"
 msgstr "Κάθετο γέμισμα"
 
-#: gtk/gtkmenu.c:725
+#: gtk/gtkmenu.c:902
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Επιπλέον διάστημα πάνω και κάτω από το μενού"
 
-#: gtk/gtkmenu.c:734
+#: gtk/gtkmenu.c:911
 msgid "Vertical Offset"
 msgstr "Κάθετη κλίμακα"
 
-#: gtk/gtkmenu.c:735
+#: gtk/gtkmenu.c:912
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -5029,11 +5077,11 @@ msgstr ""
 "Αν το μενού είναι ένα υπομενού, η θέση του σε εικονοστοιχεία σε κάθετη "
 "κλίμακα"
 
-#: gtk/gtkmenu.c:743
+#: gtk/gtkmenu.c:920
 msgid "Horizontal Offset"
 msgstr "Οριζόντια κλίμακα"
 
-#: gtk/gtkmenu.c:744
+#: gtk/gtkmenu.c:921
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -5041,98 +5089,98 @@ msgstr ""
 "Αν το μενού είναι ένα υπομενού, η θέση του σε εικονοστοιχεία σε οριζόντια "
 "κλίμακα"
 
-#: gtk/gtkmenu.c:759
+#: gtk/gtkmenu.c:936
 msgid "Double Arrows"
 msgstr "Διπλά βέλη"
 
-#: gtk/gtkmenu.c:760
+#: gtk/gtkmenu.c:937
 msgid "When scrolling, always show both arrows."
 msgstr "Κατά την κύλιση, να εμφανίζονται πάντα και τα δύο βέλη."
 
-#: gtk/gtkmenu.c:775
+#: gtk/gtkmenu.c:952
 msgid "Arrow Placement"
 msgstr "Θέση βέλων"
 
-#: gtk/gtkmenu.c:776
+#: gtk/gtkmenu.c:953
 msgid "Indicates where scroll arrows should be placed"
 msgstr "Που θα τοποθετηθούν τα βέλη κύλισης"
 
-#: gtk/gtkmenu.c:784
+#: gtk/gtkmenu.c:961
 msgid "Left Attach"
 msgstr "Επισύναψη αριστερά"
 
-#: gtk/gtkmenu.c:792
+#: gtk/gtkmenu.c:969
 msgid "Right Attach"
 msgstr "Επισύναψη δεξιά"
 
-#: gtk/gtkmenu.c:793
+#: gtk/gtkmenu.c:970
 msgid "The column number to attach the right side of the child to"
 msgstr "Ο αριθμός στήλης όπου επισυνάπτεται η δεξιά πλευρά του θυγατρικού"
 
-#: gtk/gtkmenu.c:800
+#: gtk/gtkmenu.c:977
 msgid "Top Attach"
 msgstr "Επισύναψη πάνω"
 
-#: gtk/gtkmenu.c:801
+#: gtk/gtkmenu.c:978
 msgid "The row number to attach the top of the child to"
 msgstr "Ο αριθμός γραμμής όπου επισυνάπτεται το πάνω μέρος ενός θυγατρικού"
 
-#: gtk/gtkmenu.c:808
+#: gtk/gtkmenu.c:985
 msgid "Bottom Attach"
 msgstr "Επισύναψη κάτω"
 
-#: gtk/gtkmenu.c:826
+#: gtk/gtkmenu.c:1003
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "Αυθαίρετη σταθερά για τη μείωση του μεγέθους του βέλους κύλισης"
 
-#: gtk/gtkmenuitem.c:748
+#: gtk/gtkmenuitem.c:743
 msgid "Right Justified"
 msgstr "Δεξιά στοίχιση"
 
-#: gtk/gtkmenuitem.c:749
+#: gtk/gtkmenuitem.c:744
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 "Ορίζει αν το στοιχείο του μενού θα είναι στοιχισμένο στη δεξιά πλευρά της "
 "γραμμής μενού"
 
-#: gtk/gtkmenuitem.c:762 gtk/gtkpopovermenu.c:376
+#: gtk/gtkmenuitem.c:757 gtk/gtkpopovermenu.c:376
 msgid "Submenu"
 msgstr "Υπομενού"
 
-#: gtk/gtkmenuitem.c:763
+#: gtk/gtkmenuitem.c:758
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 "Το υπομενού που είναι προσδεμένο σε αυτό το στοιχείο του μενού, ή NULL αν "
 "δεν υπάρχει υπομενού"
 
-#: gtk/gtkmenuitem.c:779
+#: gtk/gtkmenuitem.c:774
 msgid "Sets the accelerator path of the menu item"
 msgstr "Ορίζει τη διαδρομή συντόμευσης του στοιχείου του μενού"
 
-#: gtk/gtkmenuitem.c:793
+#: gtk/gtkmenuitem.c:788
 msgid "The text for the child label"
 msgstr "Το κείμενο της ετικέτας του θυγατρικού"
 
-#: gtk/gtkmenuitem.c:902
+#: gtk/gtkmenuitem.c:897
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 "Χώρος που καλύπτει το βέλος, σε σχέση με το μέγεθος της γραμματοσειράς του "
 "στοιχείου του μενού"
 
-#: gtk/gtkmenuitem.c:918
+#: gtk/gtkmenuitem.c:913
 msgid "Width in Characters"
 msgstr "Πλάτος σε χαρακτήρες"
 
-#: gtk/gtkmenuitem.c:919
+#: gtk/gtkmenuitem.c:914
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Το ελάχιστο επιθυμητό πλάτος του στοιχείου του μενού, σε χαρακτήρες"
 
-#: gtk/gtkmenushell.c:416
+#: gtk/gtkmenushell.c:419
 msgid "Take Focus"
 msgstr "Λήψη εστίασης"
 
-#: gtk/gtkmenushell.c:417
+#: gtk/gtkmenushell.c:420
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 "Λογική τιμή που καθορίζει αν το μενού θα παίρνει εστίαση από το πληκτρολόγιο"
@@ -5202,56 +5250,56 @@ msgid "Message area"
 msgstr "Περιοχή μηνυμάτων"
 
 #: gtk/gtkmessagedialog.c:295
-msgid "GtkVBox that holds the dialog's primary and secondary labels"
+msgid "GtkBox that holds the dialog's primary and secondary labels"
 msgstr ""
-"Το GtkVBox που διατηρεί τις πρωτεύουσες και δευτερεύουσες ετικέτες του "
+"Το GtkBox που διατηρεί τις πρωτεύουσες και δευτερεύουσες ετικέτες του "
 "διαλόγου"
 
-#: gtk/gtkmodelbutton.c:1102
+#: gtk/gtkmodelbutton.c:1100
 msgid "Role"
 msgstr "Ρόλος"
 
-#: gtk/gtkmodelbutton.c:1103
+#: gtk/gtkmodelbutton.c:1101
 msgid "The role of this button"
 msgstr "Ο ρόλος αυτού του κουμπιού"
 
-#: gtk/gtkmodelbutton.c:1119
+#: gtk/gtkmodelbutton.c:1117
 msgid "The icon"
 msgstr "Το εικονίδιο"
 
-#: gtk/gtkmodelbutton.c:1133
+#: gtk/gtkmodelbutton.c:1131
 msgid "The text"
 msgstr "Το κείμενο"
 
-#: gtk/gtkmodelbutton.c:1162
+#: gtk/gtkmodelbutton.c:1160
 msgid "Menu name"
 msgstr "Όνομα μενού"
 
-#: gtk/gtkmodelbutton.c:1163
+#: gtk/gtkmodelbutton.c:1161
 msgid "The name of the menu to open"
 msgstr "Το όνομα του μενού για άνοιγμα"
 
-#: gtk/gtkmodelbutton.c:1179
+#: gtk/gtkmodelbutton.c:1177
 msgid "Whether the menu is a parent"
 msgstr "Αν το μενού είναι γονικό"
 
-#: gtk/gtkmodelbutton.c:1193
+#: gtk/gtkmodelbutton.c:1191
 msgid "Centered"
 msgstr "Κεντραρισμένο"
 
-#: gtk/gtkmodelbutton.c:1194
+#: gtk/gtkmodelbutton.c:1192
 msgid "Whether to center the contents"
 msgstr "Αν θα κεντράρονται τα περιεχόμενα"
 
-#: gtk/gtkmodelbutton.c:1209
+#: gtk/gtkmodelbutton.c:1207
 msgid "Iconic"
 msgstr "Εικονικό"
 
-#: gtk/gtkmodelbutton.c:1210
+#: gtk/gtkmodelbutton.c:1208
 msgid "Whether to prefer the icon over text"
 msgstr "Αν θα προτιμάται το εικονίδιο αντί για κείμενο"
 
-#: gtk/gtkmountoperation.c:163 gtk/gtkstylecontext.c:245
+#: gtk/gtkmountoperation.c:163 gtk/gtkstylecontext.c:258
 msgid "Parent"
 msgstr "Γονικό"
 
@@ -5279,7 +5327,7 @@ msgstr "Τίτλος διαλόγου"
 msgid "The title of the file chooser dialog"
 msgstr "Ο τίτλος του διαλόγου επιλογής αρχείου"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1708 gtk/gtkwindow.c:782
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1744 gtk/gtkwindow.c:783
 msgid "Modal"
 msgstr "Σχηματικό"
 
@@ -5295,59 +5343,59 @@ msgstr ""
 msgid "Whether the dialog is currently visible"
 msgstr "Αν το γραφικό στοιχείο θα είναι ορατό"
 
-#: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1057
+#: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1058
 msgid "Transient for Window"
 msgstr "Προσωρινό παραθύρου"
 
-#: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1058
+#: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1059
 msgid "The transient parent of the dialog"
 msgstr "Το προσωρινό γονικό του διαλόγου"
 
-#: gtk/gtknotebook.c:761
+#: gtk/gtknotebook.c:763
 msgid "Page"
 msgstr "Σελίδα"
 
-#: gtk/gtknotebook.c:762
+#: gtk/gtknotebook.c:764
 msgid "The index of the current page"
 msgstr "Ο δείκτης της τρέχουσας σελίδας"
 
-#: gtk/gtknotebook.c:769
+#: gtk/gtknotebook.c:771
 msgid "Tab Position"
 msgstr "Θέση στηλοθέτη"
 
-#: gtk/gtknotebook.c:770
+#: gtk/gtknotebook.c:772
 msgid "Which side of the notebook holds the tabs"
 msgstr "Ποιό μέρος του σημειωματάριου ελέγχει τους στηλοθέτες"
 
-#: gtk/gtknotebook.c:777
+#: gtk/gtknotebook.c:779
 msgid "Show Tabs"
 msgstr "Προβολή στηλοθετών"
 
-#: gtk/gtknotebook.c:778
+#: gtk/gtknotebook.c:780
 msgid "Whether tabs should be shown"
 msgstr "Αν θα εμφανίζονται στηλοθέτες"
 
-#: gtk/gtknotebook.c:784
+#: gtk/gtknotebook.c:786
 msgid "Show Border"
 msgstr "Προβολή περιγράμματος"
 
-#: gtk/gtknotebook.c:785
+#: gtk/gtknotebook.c:787
 msgid "Whether the border should be shown"
 msgstr "Αν θα εμφανίζεται ή όχι το περίγραμμα"
 
-#: gtk/gtknotebook.c:791
+#: gtk/gtknotebook.c:793
 msgid "Scrollable"
 msgstr "Με δυνατότητα κύλισης"
 
-#: gtk/gtknotebook.c:792
+#: gtk/gtknotebook.c:794
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Αν ΑΛΗΘΕΣ, προστίθενται βέλη κύλισης αν υπάρχουν πολλοί στηλοθέτες"
 
-#: gtk/gtknotebook.c:798
+#: gtk/gtknotebook.c:800
 msgid "Enable Popup"
 msgstr "Ενεργοποίηση αναδυόμενων"
 
-#: gtk/gtknotebook.c:799
+#: gtk/gtknotebook.c:801
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -5355,137 +5403,137 @@ msgstr ""
 "Αν ΑΛΗΘΕΣ, ή πίεση του δεξιού ποντικιού στο σημειωματάριο, αναδύει ένα μενού "
 "που μπορεί να χρησιμοποιηθεί για τη μετάβαση σε μια σελίδα"
 
-#: gtk/gtknotebook.c:812
+#: gtk/gtknotebook.c:814
 msgid "Group Name"
 msgstr "Όνομα ομάδας"
 
-#: gtk/gtknotebook.c:813
+#: gtk/gtknotebook.c:815
 msgid "Group name for tab drag and drop"
 msgstr "Όνομα ομάδας για το σύρσιμο και την απόθεση καρτελών"
 
-#: gtk/gtknotebook.c:822
+#: gtk/gtknotebook.c:824
 msgid "Tab label"
 msgstr "Ετικέτα στήλης"
 
-#: gtk/gtknotebook.c:823
+#: gtk/gtknotebook.c:825
 msgid "The string displayed on the child's tab label"
 msgstr "Η συμβολοσειρά που θα εμφανίζεται στην ετικέτα στήλης θυγατρικού"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:831
 msgid "Menu label"
 msgstr "Ετικέτα μενού"
 
-#: gtk/gtknotebook.c:830
+#: gtk/gtknotebook.c:832
 msgid "The string displayed in the child's menu entry"
 msgstr "Η συμβολοσειρά που θα εμφανίζεται στην καταχώριση μενού θυγατρικού"
 
-#: gtk/gtknotebook.c:843
+#: gtk/gtknotebook.c:845
 msgid "Tab expand"
 msgstr "Επέκταση στήλης"
 
-#: gtk/gtknotebook.c:844
+#: gtk/gtknotebook.c:846
 msgid "Whether to expand the child's tab"
 msgstr "Αν θα αναπτύσσεται η καρτέλα του θυγατρικού"
 
-#: gtk/gtknotebook.c:850
+#: gtk/gtknotebook.c:852
 msgid "Tab fill"
 msgstr "Γέμισμα στήλης"
 
-#: gtk/gtknotebook.c:851
+#: gtk/gtknotebook.c:853
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "Αν η καρτέλα του θυγατρικού θα γεμίζει ή όχι τη δοθείσα περιοχή"
 
-#: gtk/gtknotebook.c:858
+#: gtk/gtknotebook.c:860
 msgid "Tab reorderable"
 msgstr "Δυνατότητα διαταξινόμησης καρτέλας"
 
-#: gtk/gtknotebook.c:859
+#: gtk/gtknotebook.c:861
 msgid "Whether the tab is reorderable by user action"
 msgstr "Αν η θέση της καρτέλας μπορεί να αλλαχθεί από το χρήστη"
 
-#: gtk/gtknotebook.c:865
+#: gtk/gtknotebook.c:867
 msgid "Tab detachable"
 msgstr "Δυνατότητα απόσπασης καρτέλας"
 
-#: gtk/gtknotebook.c:866
+#: gtk/gtknotebook.c:868
 msgid "Whether the tab is detachable"
 msgstr "Αν η καρτέλα θα είναι αποσπώμενη"
 
-#: gtk/gtknotebook.c:881 gtk/gtkscrollbar.c:137
+#: gtk/gtknotebook.c:883 gtk/gtkscrollbar.c:137
 msgid "Secondary backward stepper"
 msgstr "Δευτερεύον προς τα πίσω stepper"
 
-#: gtk/gtknotebook.c:882
+#: gtk/gtknotebook.c:884
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Εμφάνιση ενός δεύτερου κουμπιού βέλους προς τα πίσω στην αντίθετη άκρη της "
 "περιοχής στήλης"
 
-#: gtk/gtknotebook.c:897 gtk/gtkscrollbar.c:144
+#: gtk/gtknotebook.c:899 gtk/gtkscrollbar.c:144
 msgid "Secondary forward stepper"
 msgstr "Δευτερεύον προς τα μπροστά stepper"
 
-#: gtk/gtknotebook.c:898
+#: gtk/gtknotebook.c:900
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Εμφάνιση ενός δεύτερου κουμπιού βέλους προς τα μπροστά στην αντίθετη άκρη "
 "της περιοχής στήλης"
 
-#: gtk/gtknotebook.c:912 gtk/gtkscrollbar.c:123
+#: gtk/gtknotebook.c:914 gtk/gtkscrollbar.c:123
 msgid "Backward stepper"
 msgstr "Προς τα πίσω stepper"
 
-#: gtk/gtknotebook.c:913 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:915 gtk/gtkscrollbar.c:124
 msgid "Display the standard backward arrow button"
 msgstr "Να εμφανίζεται το κλασσικό προς τα πίσω κουμπί βέλους"
 
-#: gtk/gtknotebook.c:927 gtk/gtkscrollbar.c:130
+#: gtk/gtknotebook.c:929 gtk/gtkscrollbar.c:130
 msgid "Forward stepper"
 msgstr "Προς τα μπροστά stepper"
 
-#: gtk/gtknotebook.c:928 gtk/gtkscrollbar.c:131
+#: gtk/gtknotebook.c:930 gtk/gtkscrollbar.c:131
 msgid "Display the standard forward arrow button"
 msgstr "Να εμφανίζεται το κλασσικό προς τα μπροστά κουμπί βέλους"
 
-#: gtk/gtknotebook.c:945
+#: gtk/gtknotebook.c:947
 msgid "Tab overlap"
 msgstr "Επικάλυψη καρτέλας"
 
-#: gtk/gtknotebook.c:946
+#: gtk/gtknotebook.c:948
 msgid "Size of tab overlap area"
 msgstr "Μέγεθος της περιοχής επικάλυψης καρτέλας"
 
-#: gtk/gtknotebook.c:964
+#: gtk/gtknotebook.c:966
 msgid "Tab curvature"
 msgstr "Καμπύλη καρτέλας"
 
-#: gtk/gtknotebook.c:965
+#: gtk/gtknotebook.c:967
 msgid "Size of tab curvature"
 msgstr "Μέγεθος της καμπύλης της καρτέλας"
 
-#: gtk/gtknotebook.c:984
+#: gtk/gtknotebook.c:986
 msgid "Arrow spacing"
 msgstr "Διάκενο βελών"
 
-#: gtk/gtknotebook.c:985
+#: gtk/gtknotebook.c:987
 msgid "Scroll arrow spacing"
 msgstr "Διάκενο βελών κύλισης"
 
-#: gtk/gtknotebook.c:1004
+#: gtk/gtknotebook.c:1006
 msgid "Initial gap"
 msgstr "Αρχικό διάκενο"
 
-#: gtk/gtknotebook.c:1005
+#: gtk/gtknotebook.c:1007
 msgid "Initial gap before the first tab"
 msgstr "Αρχικό διάκενο πριν από την πρώτη καρτέλα"
 
-#: gtk/gtknotebook.c:1025
+#: gtk/gtknotebook.c:1027
 msgid "Tab gap"
 msgstr "Κενό στηλοθέτη"
 
-#: gtk/gtknotebook.c:1026
+#: gtk/gtknotebook.c:1028
 msgid "Active tab is drawn with a gap at the bottom"
 msgstr "Ο ενεργός στηλοθέτης σχεδιάζεται με κενό στο τέλος"
 
@@ -5508,6 +5556,22 @@ msgstr "Δείκτης"
 #: gtk/gtkoverlay.c:770
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "Ο δείκτης της επικάλυψης στο γονικό, -1 για το κύριο θυγατρικό"
+
+#: gtk/gtkpadcontroller.c:373
+msgid "Action group"
+msgstr "Ομάδα ενεργειών"
+
+#: gtk/gtkpadcontroller.c:374
+msgid "Action group to launch actions from"
+msgstr "Ομάδα ενεργειών για την εκκίνηση ενεργειών"
+
+#: gtk/gtkpadcontroller.c:379
+msgid "Pad device"
+msgstr "Συσκευή pad"
+
+#: gtk/gtkpadcontroller.c:380
+msgid "Pad device to control"
+msgstr "Συσκευή pad που θα ελεχθεί"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -5574,19 +5638,19 @@ msgstr "Σμίκρυνση"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Αν ΑΛΗΘΕΣ, το θυγατρικό μπορεί να γίνει μικρότερο από το απαιτούμενο"
 
-#: gtk/gtkplacessidebar.c:4447
+#: gtk/gtkplacessidebar.c:4446
 msgid "Location to Select"
 msgstr "Τοποθεσία που θα επιλεγεί"
 
-#: gtk/gtkplacessidebar.c:4448
+#: gtk/gtkplacessidebar.c:4447
 msgid "The location to highlight in the sidebar"
 msgstr "Η τοποθεσία που τονίζεται στην πλευρική στήλη"
 
-#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2200
+#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2243
 msgid "Open Flags"
 msgstr "Άνοιγμα σημαιών"
 
-#: gtk/gtkplacessidebar.c:4454 gtk/gtkplacesview.c:2201
+#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2244
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5594,31 +5658,31 @@ msgstr ""
 "Οι λειτουργίες στις οποίες η καλούσα εφαρμογή μπορεί να ανοίξει επιλεγμένες "
 "τοποθεσίες στην πλευρική στήλη."
 
-#: gtk/gtkplacessidebar.c:4460
+#: gtk/gtkplacessidebar.c:4459
 msgid "Show recent files"
 msgstr "Εμφάνιση των πρόσφατων αρχείων"
 
-#: gtk/gtkplacessidebar.c:4461
+#: gtk/gtkplacessidebar.c:4460
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Αν η πλευρική στήλη περιλαμβάνει μια ενσωματωμένη συντόμευση για τα πρόσφατα "
 "αρχεία"
 
-#: gtk/gtkplacessidebar.c:4466
+#: gtk/gtkplacessidebar.c:4465
 msgid "Show 'Desktop'"
 msgstr "Εμφάνιση 'επιφάνειας εργασίας'"
 
-#: gtk/gtkplacessidebar.c:4467
+#: gtk/gtkplacessidebar.c:4466
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Αν η πλευρική στήλη περιλαμβάνει μια ενσωματωμένη συντόμευση στον φάκελο "
 "επιφάνειας εργασίας"
 
-#: gtk/gtkplacessidebar.c:4472
+#: gtk/gtkplacessidebar.c:4471
 msgid "Show 'Connect to Server'"
 msgstr "Εμφάνιση 'Σύνδεση με τον διακομιστή'"
 
-#: gtk/gtkplacessidebar.c:4473
+#: gtk/gtkplacessidebar.c:4472
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5626,110 +5690,110 @@ msgstr ""
 "Αν η πλευρική στήλη περιλαμβάνει μια ενσωματωμένη συντόμευση στον διάλογο "
 "'Σύνδεση με τον διακομιστή'"
 
-#: gtk/gtkplacessidebar.c:4478
+#: gtk/gtkplacessidebar.c:4477
 msgid "Show 'Enter Location'"
 msgstr "Εμφάνιση 'Εισαγωγή τοποθεσίας'"
 
-#: gtk/gtkplacessidebar.c:4479
+#: gtk/gtkplacessidebar.c:4478
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Αν η πλευρική στήλη περιλαμβάνει μια ενσωματωμένη συντόμευση για τη "
 "χειροκίνηση εισαγωγή τοποθεσίας"
 
-#: gtk/gtkplacessidebar.c:4485 gtk/gtkplacesview.c:2180
+#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2223
 msgid "Whether the sidebar only includes local files"
 msgstr "Αν η πλευρική στήλη περιλαμβάνει μόνο τοπικά αρχεία"
 
-#: gtk/gtkplacessidebar.c:4490
+#: gtk/gtkplacessidebar.c:4489
 msgid "Show 'Trash'"
 msgstr "Εμφάνιση 'Απορρίμματα'"
 
-#: gtk/gtkplacessidebar.c:4491
+#: gtk/gtkplacessidebar.c:4490
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr ""
 "Αν η πλευρική στήλη περιλαμβάνει μια ενσωματωμένη συντόμευση για τη θέση των "
 "απορριμμάτων"
 
-#: gtk/gtkplacessidebar.c:4496
+#: gtk/gtkplacessidebar.c:4495
 msgid "Show 'Other locations'"
 msgstr "Εμφάνιση 'Άλλες τοποθεσίες'"
 
-#: gtk/gtkplacessidebar.c:4497
+#: gtk/gtkplacessidebar.c:4496
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr ""
 "Αν η πλευρική στήλη περιλαμβάνει ένα στοιχείο για την εμφάνιση εξωτερικών "
 "τοποθεσιών"
 
-#: gtk/gtkplacessidebar.c:4512
+#: gtk/gtkplacessidebar.c:4511
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Αν θα εκπεμφθεί ::populate-popup για αναδυόμενα που δεν είναι μενού"
 
-#: gtk/gtkplacesview.c:2186
+#: gtk/gtkplacesview.c:2229
 msgid "Loading"
 msgstr "Γίνεται φόρτωση"
 
-#: gtk/gtkplacesview.c:2187
+#: gtk/gtkplacesview.c:2230
 msgid "Whether the view is loading locations"
 msgstr "Αν η προβολή φορτώνει τοποθεσίες"
 
-#: gtk/gtkplacesview.c:2193
+#: gtk/gtkplacesview.c:2236
 msgid "Fetching networks"
 msgstr "Ανάκτηση δικτύων"
 
-#: gtk/gtkplacesview.c:2194
+#: gtk/gtkplacesview.c:2237
 msgid "Whether the view is fetching networks"
 msgstr "Αν η προβολή ανακτά δίκτυα"
 
-#: gtk/gtkplacesviewrow.c:327
+#: gtk/gtkplacesviewrow.c:329
 msgid "Icon of the row"
 msgstr "Εικονίδιο για αυτήν τη γραμμή"
 
-#: gtk/gtkplacesviewrow.c:328
+#: gtk/gtkplacesviewrow.c:330
 msgid "The icon representing the volume"
 msgstr "Το εικονίδιο που αντιστοιχεί στον τόμο"
 
-#: gtk/gtkplacesviewrow.c:334
+#: gtk/gtkplacesviewrow.c:336
 msgid "Name of the volume"
 msgstr "Όνομα του τόμου"
 
-#: gtk/gtkplacesviewrow.c:335
+#: gtk/gtkplacesviewrow.c:337
 msgid "The name of the volume"
 msgstr "Το όνομα του τόμου"
 
-#: gtk/gtkplacesviewrow.c:341
+#: gtk/gtkplacesviewrow.c:343
 msgid "Path of the volume"
 msgstr "Διαδρομή του τόμου"
 
-#: gtk/gtkplacesviewrow.c:342
+#: gtk/gtkplacesviewrow.c:344
 msgid "The path of the volume"
 msgstr "Η διαδρομή του τόμου"
 
-#: gtk/gtkplacesviewrow.c:348
+#: gtk/gtkplacesviewrow.c:350
 msgid "Volume represented by the row"
 msgstr "Τόμος που αντιπροσωπεύεται από τη γραμμή"
 
-#: gtk/gtkplacesviewrow.c:349
+#: gtk/gtkplacesviewrow.c:351
 msgid "The volume represented by the row"
 msgstr "Ο τόμος που αντιπροσωπεύεται από τη γραμμή"
 
-#: gtk/gtkplacesviewrow.c:355
+#: gtk/gtkplacesviewrow.c:357
 msgid "Mount represented by the row"
 msgstr "Προσάρτηση που αντιπροσωπεύεται από τη γραμμή"
 
-#: gtk/gtkplacesviewrow.c:356
+#: gtk/gtkplacesviewrow.c:358
 msgid "The mount point represented by the row, if any"
 msgstr "Το σημείο προσάρτησης που αντιπροσωπεύεται από τη γραμμή, αν υπάρχει"
 
-#: gtk/gtkplacesviewrow.c:362
+#: gtk/gtkplacesviewrow.c:364
 msgid "File represented by the row"
 msgstr "Αρχείο που αντιπροσωπεύεται από τη γραμμή"
 
-#: gtk/gtkplacesviewrow.c:363
+#: gtk/gtkplacesviewrow.c:365
 msgid "The file represented by the row, if any"
 msgstr "Το αρχείο που αντιπροσωπεύεται από τη γραμμή, αν υπάρχει"
 
-#: gtk/gtkplacesviewrow.c:369 gtk/gtkplacesviewrow.c:370
+#: gtk/gtkplacesviewrow.c:371 gtk/gtkplacesviewrow.c:372
 msgid "Whether the row represents a network location"
 msgstr "Αν η γραμμή αντιπροσωπεύει μια τοποθεσία δικτύου"
 
@@ -5745,43 +5809,43 @@ msgstr "Παράθυρο υποδοχής"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Το παράθυρο της υποδοχής όπου είναι ενσωματωμένο το βύσμα"
 
-#: gtk/gtkpopover.c:1665
+#: gtk/gtkpopover.c:1701
 msgid "Relative to"
 msgstr "Σχετικά με"
 
-#: gtk/gtkpopover.c:1666
+#: gtk/gtkpopover.c:1702
 msgid "Widget the bubble window points to"
 msgstr "Το γραφικό στοιχείο στο οποίο δείχνει το παράθυρο φυσαλίδας"
 
-#: gtk/gtkpopover.c:1679
+#: gtk/gtkpopover.c:1715
 msgid "Pointing to"
 msgstr "Δείχνει σε"
 
-#: gtk/gtkpopover.c:1680
+#: gtk/gtkpopover.c:1716
 msgid "Rectangle the bubble window points to"
 msgstr "Το ορθογώνιο στο οποίο δείχνει το παράθυρο φυσαλίδας"
 
-#: gtk/gtkpopover.c:1694
+#: gtk/gtkpopover.c:1730
 msgid "Position to place the bubble window"
 msgstr "Θέση για τοποθέτηση του παραθύρου φυσαλίδας"
 
-#: gtk/gtkpopover.c:1709
+#: gtk/gtkpopover.c:1745
 msgid "Whether the popover is modal"
 msgstr "Αν θα είναι σχηματικό το αναδυόμενο"
 
-#: gtk/gtkpopover.c:1722
+#: gtk/gtkpopover.c:1758
 msgid "Transitions enabled"
 msgstr "Ενεργοποιημένες μεταβάσεις"
 
-#: gtk/gtkpopover.c:1723
+#: gtk/gtkpopover.c:1759
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Aν η εμφάνιση/απόκρυψη των μεταβάσεων είναι ενεργοποιημένη ή όχι."
 
-#: gtk/gtkpopover.c:1736
+#: gtk/gtkpopover.c:1772
 msgid "Constraint"
 msgstr "Περιορισμός"
 
-#: gtk/gtkpopover.c:1737
+#: gtk/gtkpopover.c:1773
 msgid "Constraint for the popover position"
 msgstr "Περιορισμός για την θέση του αναδυόμενου"
 
@@ -6111,36 +6175,36 @@ msgstr "Αν ο διάλογος θα υποστηρίζει επιλογές"
 msgid "Whether the application has a selection"
 msgstr "Αν η εφαρμογή διαθέτει επιλογή"
 
-#: gtk/gtkprogressbar.c:267
+#: gtk/gtkprogressbar.c:271
 msgid "Fraction"
 msgstr "Κομμάτι"
 
-#: gtk/gtkprogressbar.c:268
+#: gtk/gtkprogressbar.c:272
 msgid "The fraction of total work that has been completed"
 msgstr "Το κομμάτι της συνολικής εργασίας που έχει συμπληρωθεί"
 
-#: gtk/gtkprogressbar.c:275
+#: gtk/gtkprogressbar.c:279
 msgid "Pulse Step"
 msgstr "Παλμικό βήμα"
 
-#: gtk/gtkprogressbar.c:276
+#: gtk/gtkprogressbar.c:280
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 "Το κομμάτι της συνολικής προόδου που θα κινείται όταν θα πάλλεται το μπλόκ."
 
-#: gtk/gtkprogressbar.c:284
+#: gtk/gtkprogressbar.c:288
 msgid "Text to be displayed in the progress bar"
 msgstr "Κείμενο που θα εμφανίζεται στη μπάρα προόδου"
 
-#: gtk/gtkprogressbar.c:305
+#: gtk/gtkprogressbar.c:309
 msgid "Show text"
 msgstr "Προβολή κειμένου"
 
-#: gtk/gtkprogressbar.c:306
+#: gtk/gtkprogressbar.c:310
 msgid "Whether the progress is shown as text."
 msgstr "Αν η πρόοδος θα εμφανίζεται ως κείμενο."
 
-#: gtk/gtkprogressbar.c:327
+#: gtk/gtkprogressbar.c:331
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
@@ -6148,51 +6212,51 @@ msgstr ""
 "Η προτιμώμενη θέση για την αποσιώπηση συμβολοσειράς, αν η μπάρα προόδου δεν "
 "έχει αρκετό χώρο για την εμφάνιση ολόκληρης ή και μέρους της συμβολοσειράς."
 
-#: gtk/gtkprogressbar.c:345
+#: gtk/gtkprogressbar.c:349
 msgid "X spacing"
 msgstr "Διάκενο x"
 
-#: gtk/gtkprogressbar.c:346
+#: gtk/gtkprogressbar.c:350
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "Επιπλέον διάκενο που προστίθεται στο πλάτος της γραμμής προόδου."
 
-#: gtk/gtkprogressbar.c:360
+#: gtk/gtkprogressbar.c:364
 msgid "Y spacing"
 msgstr "Διάκενο y"
 
-#: gtk/gtkprogressbar.c:361
+#: gtk/gtkprogressbar.c:365
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Επιπλέον διάκενο που προστίθεται στο ύψος της γραμμής προόδου."
 
-#: gtk/gtkprogressbar.c:376
+#: gtk/gtkprogressbar.c:380
 msgid "Minimum horizontal bar width"
 msgstr "Ελάχιστο πλάτος οριζόντιας γραμμής"
 
-#: gtk/gtkprogressbar.c:377
+#: gtk/gtkprogressbar.c:381
 msgid "The minimum horizontal width of the progress bar"
 msgstr "Το ελάχιστο οριζόντιο πλάτος της γραμμής προόδου"
 
-#: gtk/gtkprogressbar.c:391
+#: gtk/gtkprogressbar.c:395
 msgid "Minimum horizontal bar height"
 msgstr "Ελάχιστο ύψος οριζόντιας γραμμής"
 
-#: gtk/gtkprogressbar.c:392
+#: gtk/gtkprogressbar.c:396
 msgid "Minimum horizontal height of the progress bar"
 msgstr "Το ελάχιστο οριζόντιο ύψος της γραμμής προόδου"
 
-#: gtk/gtkprogressbar.c:406
+#: gtk/gtkprogressbar.c:410
 msgid "Minimum vertical bar width"
 msgstr "Ελάχιστο πλάτος κάθετης γραμμής"
 
-#: gtk/gtkprogressbar.c:407
+#: gtk/gtkprogressbar.c:411
 msgid "The minimum vertical width of the progress bar"
 msgstr "Το ελάχιστο κατακόρυφο πλάτος της γραμμής προόδου"
 
-#: gtk/gtkprogressbar.c:421
+#: gtk/gtkprogressbar.c:425
 msgid "Minimum vertical bar height"
 msgstr "Ελάχιστο ύψος κάθετης γραμμής"
 
-#: gtk/gtkprogressbar.c:422
+#: gtk/gtkprogressbar.c:426
 msgid "The minimum vertical height of the progress bar"
 msgstr "Το ελάχιστο κατακόρυφο ύψος της γραμμής προόδου"
 
@@ -6213,127 +6277,127 @@ msgstr ""
 "Το κουμπί επιλογής radio tool στου οποίου την ομάδα ανήκει αυτό το γραφικό "
 "στοιχείο."
 
-#: gtk/gtkrange.c:456
+#: gtk/gtkrange.c:438
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "Η GtkAdjustment που περιέχει την τρέχουσα τιμή αυτού του αντικειμένου "
 "κλίμακας"
 
-#: gtk/gtkrange.c:463
+#: gtk/gtkrange.c:445
 msgid "Invert direction slider moves to increase range value"
 msgstr "Αντιστροφή κινήσεων κύλισης για την αύξηση τιμής εύρους"
 
-#: gtk/gtkrange.c:469
+#: gtk/gtkrange.c:451
 msgid "Lower stepper sensitivity"
 msgstr "Ευαισθησία χαμηλότερου stepper"
 
-#: gtk/gtkrange.c:470
+#: gtk/gtkrange.c:452
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Πολιτική ευαισθησίας για το προς τα κάτω stepper"
 
-#: gtk/gtkrange.c:477
+#: gtk/gtkrange.c:459
 msgid "Upper stepper sensitivity"
 msgstr "Ευαισθησία ανώτερου stepper"
 
-#: gtk/gtkrange.c:478
+#: gtk/gtkrange.c:460
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Πολιτική ευαισθησίας για το προς τα πάνω stepper"
 
-#: gtk/gtkrange.c:494
+#: gtk/gtkrange.c:476
 msgid "Show Fill Level"
 msgstr "Εμφάνιση επιπέδου γεμίσματος"
 
-#: gtk/gtkrange.c:495
+#: gtk/gtkrange.c:477
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Αν θα εμφανίζεται δείκτης επιπέδου γεμίσματος στο κοίλο."
 
-#: gtk/gtkrange.c:510
+#: gtk/gtkrange.c:492
 msgid "Restrict to Fill Level"
 msgstr "Περιορισμός στο επίπεδο γεμίσματος"
 
-#: gtk/gtkrange.c:511
+#: gtk/gtkrange.c:493
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Αν θα περιορίζεται το ανώτατο όριο στο επίπεδο γεμίσματος."
 
-#: gtk/gtkrange.c:525
+#: gtk/gtkrange.c:507
 msgid "Fill Level"
 msgstr "Επίπεδο γεμίσματος"
 
-#: gtk/gtkrange.c:526
+#: gtk/gtkrange.c:508
 msgid "The fill level."
 msgstr "Το επίπεδο γεμίσματος."
 
-#: gtk/gtkrange.c:541
+#: gtk/gtkrange.c:523
 msgid "Round Digits"
 msgstr "Στρογγυλοποίηση ψηφίων"
 
-#: gtk/gtkrange.c:542
+#: gtk/gtkrange.c:524
 msgid "The number of digits to round the value to."
 msgstr "Ο αριθμός των ψηφίων στον οποίο θα γίνεται στρογγυλοποίηση."
 
-#: gtk/gtkrange.c:559 gtk/gtkswitch.c:945
+#: gtk/gtkrange.c:541 gtk/gtkswitch.c:947
 msgid "Slider Width"
 msgstr "Πλάτος κύλισης"
 
-#: gtk/gtkrange.c:560
+#: gtk/gtkrange.c:542
 msgid "Width of scrollbar or scale thumb"
 msgstr "Πλάτος της μπάρας κύλισης ή κλίμακας thumb"
 
-#: gtk/gtkrange.c:575
+#: gtk/gtkrange.c:557
 msgid "Trough Border"
 msgstr "Περίγραμμα κοίλου"
 
-#: gtk/gtkrange.c:576
+#: gtk/gtkrange.c:558
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Διάκενο μεταξύ thumb/steppers και εξωτερικού κοίλου γωνίας"
 
-#: gtk/gtkrange.c:591
+#: gtk/gtkrange.c:573
 msgid "Stepper Size"
 msgstr "Μέγεθος stepper"
 
-#: gtk/gtkrange.c:592
+#: gtk/gtkrange.c:574
 msgid "Length of step buttons at ends"
 msgstr "Μάκρος κουμπιών βήματος στις άκρες"
 
-#: gtk/gtkrange.c:608
+#: gtk/gtkrange.c:590
 msgid "Stepper Spacing"
 msgstr "Διάστιχο stepper"
 
-#: gtk/gtkrange.c:609
+#: gtk/gtkrange.c:591
 msgid "Spacing between step buttons and thumb"
 msgstr "Διάκενο μεταξύ κουμπιών βήματος και μικρογραφίας"
 
-#: gtk/gtkrange.c:624
+#: gtk/gtkrange.c:606
 msgid "Arrow X Displacement"
 msgstr "Μετακίνηση βέλους x"
 
-#: gtk/gtkrange.c:625
+#: gtk/gtkrange.c:607
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Απόσταση προς την κατεύθυνση x που θα κινείται το βέλος όταν απελευθερώνεται "
 "το κουμπί"
 
-#: gtk/gtkrange.c:640
+#: gtk/gtkrange.c:622
 msgid "Arrow Y Displacement"
 msgstr "Μετακίνηση βέλους y"
 
-#: gtk/gtkrange.c:641
+#: gtk/gtkrange.c:623
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Απόσταση προς την κατεύθυνση y που θα κινείται το βέλος όταν απελευθερώνεται "
 "το κουμπί"
 
-#: gtk/gtkrange.c:660
+#: gtk/gtkrange.c:642
 msgid "Trough Under Steppers"
 msgstr "Κοίλο κάτω από τα stepper"
 
-#: gtk/gtkrange.c:661
+#: gtk/gtkrange.c:643
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -6341,11 +6405,11 @@ msgstr ""
 "Αν το κοίλο θα σχεδιάζεται για όλο το μήκος της μπάρας, ή αν θα εξαιρούνται "
 "τα stepper και το διάστιχο"
 
-#: gtk/gtkrange.c:677
+#: gtk/gtkrange.c:659
 msgid "Arrow scaling"
 msgstr "Να επιτρέπεται κλιμάκωση"
 
-#: gtk/gtkrange.c:678
+#: gtk/gtkrange.c:660
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 "Να επιτρέπεται η κλιμάκωση του μεγέθους του βέλους ανάλογα με το μέγεθος του "
@@ -6424,45 +6488,45 @@ msgstr "Η σειρά ταξινόμησης των αντικειμένων π�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Το τρέχον φίλτρο για την επιλογή των πόρων που θα εμφανίζονται"
 
-#: gtk/gtkrecentmanager.c:294
+#: gtk/gtkrecentmanager.c:284
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 "Η πλήρης διαδρομή προς το αρχείο που χρησιμοποιείται για την αποθήκευση και "
 "ανάγνωση της λίστας"
 
-#: gtk/gtkrecentmanager.c:309
+#: gtk/gtkrecentmanager.c:299
 msgid "The size of the recently used resources list"
 msgstr "Το μέγεθος της λίστας των πρόσφατα χρησιμοποιημένων πόρων"
 
-#: gtk/gtkrevealer.c:241 gtk/gtkstack.c:496
+#: gtk/gtkrevealer.c:242 gtk/gtkstack.c:499
 msgid "Transition type"
 msgstr "Τύπος μετάβασης"
 
-#: gtk/gtkrevealer.c:242 gtk/gtkstack.c:496
+#: gtk/gtkrevealer.c:243 gtk/gtkstack.c:499
 msgid "The type of animation used to transition"
 msgstr "Ο τύπος της χρησιμοποιούμενης κίνησης για μετάβαση"
 
-#: gtk/gtkrevealer.c:249 gtk/gtkstack.c:492
+#: gtk/gtkrevealer.c:250 gtk/gtkstack.c:495
 msgid "Transition duration"
 msgstr "Διάρκεια μετάβασης"
 
-#: gtk/gtkrevealer.c:250 gtk/gtkstack.c:492
+#: gtk/gtkrevealer.c:251 gtk/gtkstack.c:495
 msgid "The animation duration, in milliseconds"
 msgstr "Η διάρκεια της κίνησης σε χιλιοστά του δευτερολέπτου"
 
-#: gtk/gtkrevealer.c:256
+#: gtk/gtkrevealer.c:257
 msgid "Reveal Child"
 msgstr "Αποκάλυψη θυγατρικού"
 
-#: gtk/gtkrevealer.c:257
+#: gtk/gtkrevealer.c:258
 msgid "Whether the container should reveal the child"
 msgstr "Αν ο περιέκτης πρέπει να αποκαλύψει το θυγατρικό"
 
-#: gtk/gtkrevealer.c:263
+#: gtk/gtkrevealer.c:264
 msgid "Child Revealed"
 msgstr "Αποκαλυφθέν θυγατρικό"
 
-#: gtk/gtkrevealer.c:264
+#: gtk/gtkrevealer.c:265
 msgid "Whether the child is revealed and the animation target reached"
 msgstr "Αν το θυγατρικό αποκαλύπτεται και ο προορισμός της κίνησης έφτασε"
 
@@ -6488,48 +6552,48 @@ msgstr "Εικονίδια"
 msgid "List of icon names"
 msgstr "Λίστα ονομάτων εικονιδίων"
 
-#: gtk/gtkscale.c:744
+#: gtk/gtkscale.c:765
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Ο αριθμός των δεκαδικών σημείων που εμφανίζονται στην τιμή"
 
-#: gtk/gtkscale.c:751
+#: gtk/gtkscale.c:772
 msgid "Draw Value"
 msgstr "Τιμή σχεδίασης"
 
-#: gtk/gtkscale.c:752
+#: gtk/gtkscale.c:773
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Αν η τρέχουσα τιμή θα εμφανίζεται ως συμβολοσειρά δίπλα στη μπάρα κύλισης"
 
-#: gtk/gtkscale.c:758
+#: gtk/gtkscale.c:779
 msgid "Has Origin"
 msgstr "Έχει προέλευση"
 
-#: gtk/gtkscale.c:759
+#: gtk/gtkscale.c:780
 msgid "Whether the scale has an origin"
 msgstr "Aν η κλίμακα έχει μια προέλευση"
 
-#: gtk/gtkscale.c:765
+#: gtk/gtkscale.c:786
 msgid "Value Position"
 msgstr "Θέση τιμής"
 
-#: gtk/gtkscale.c:766
+#: gtk/gtkscale.c:787
 msgid "The position in which the current value is displayed"
 msgstr "Η θέση στην οποία θα εμφανίζεται η τρέχουσα τιμή"
 
-#: gtk/gtkscale.c:783
+#: gtk/gtkscale.c:804
 msgid "Slider Length"
 msgstr "Μήκος μπάρας κύλισης"
 
-#: gtk/gtkscale.c:784
+#: gtk/gtkscale.c:805
 msgid "Length of scale's slider"
 msgstr "Μάκρος κύλισης σκάλας"
 
-#: gtk/gtkscale.c:798
+#: gtk/gtkscale.c:819
 msgid "Value spacing"
 msgstr "Διάκενο τιμής"
 
-#: gtk/gtkscale.c:799
+#: gtk/gtkscale.c:820
 msgid "Space between value text and the slider/trough area"
 msgstr "Διάστημα μεταξύ τιμής κειμένου και ζώνης κύλισης"
 
@@ -6599,51 +6663,51 @@ msgstr ""
 "Εμφάνιση ενός δεύτερου κουμπιού βέλους προς τα μπροστά στην αντίθετη άκρη "
 "της γραμμής κύλισης"
 
-#: gtk/gtkscrolledwindow.c:545
+#: gtk/gtkscrolledwindow.c:571
 msgid "Horizontal Adjustment"
 msgstr "Οριζόντια ρύθμιση"
 
-#: gtk/gtkscrolledwindow.c:546
+#: gtk/gtkscrolledwindow.c:572
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Η GtkAdjustment για την οριζόντια θέση"
 
-#: gtk/gtkscrolledwindow.c:552
+#: gtk/gtkscrolledwindow.c:578
 msgid "Vertical Adjustment"
 msgstr "Κάθετη ρύθμιση"
 
-#: gtk/gtkscrolledwindow.c:553
+#: gtk/gtkscrolledwindow.c:579
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Η GtkAdjustment για την κάθετη θέση"
 
-#: gtk/gtkscrolledwindow.c:559
+#: gtk/gtkscrolledwindow.c:585
 msgid "Horizontal Scrollbar Policy"
 msgstr "Πολιτική οριζόντιας γραμμής κύλισης"
 
-#: gtk/gtkscrolledwindow.c:560
+#: gtk/gtkscrolledwindow.c:586
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Αν θα εμφανίζεται η οριζόντια γραμμή κύλισης"
 
-#: gtk/gtkscrolledwindow.c:567
+#: gtk/gtkscrolledwindow.c:593
 msgid "Vertical Scrollbar Policy"
 msgstr "Πολιτική κάθετης γραμμής κύλισης"
 
-#: gtk/gtkscrolledwindow.c:568
+#: gtk/gtkscrolledwindow.c:594
 msgid "When the vertical scrollbar is displayed"
 msgstr "Αν θα εμφανίζεται η κάθετη γραμμή κύλισης"
 
-#: gtk/gtkscrolledwindow.c:575
+#: gtk/gtkscrolledwindow.c:601
 msgid "Window Placement"
 msgstr "Τοποθέτηση παραθύρου"
 
-#: gtk/gtkscrolledwindow.c:576
+#: gtk/gtkscrolledwindow.c:602
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Που βρίσκονται τα περιεχόμενα ως προς τις γραμμές κύλισης."
 
-#: gtk/gtkscrolledwindow.c:594
+#: gtk/gtkscrolledwindow.c:620
 msgid "Window Placement Set"
 msgstr "Τοποθέτηση παραθύρου"
 
-#: gtk/gtkscrolledwindow.c:595
+#: gtk/gtkscrolledwindow.c:621
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -6651,65 +6715,92 @@ msgstr ""
 "Αν θα χρησιμοποιείται το \"window-placement\" για να διαπιστωθεί η θέση των "
 "περιεχομένων σε σχέση με τις γραμμές κύλισης."
 
-#: gtk/gtkscrolledwindow.c:601 gtk/gtkspinbutton.c:452
+#: gtk/gtkscrolledwindow.c:627 gtk/gtkspinbutton.c:452
 msgid "Shadow Type"
 msgstr "Είδος σκίασης"
 
-#: gtk/gtkscrolledwindow.c:602
+#: gtk/gtkscrolledwindow.c:628
 msgid "Style of bevel around the contents"
 msgstr "Στυλ γωνίας γύρω από τα περιεχόμενα"
 
-#: gtk/gtkscrolledwindow.c:618
+#: gtk/gtkscrolledwindow.c:644
 msgid "Scrollbars within bevel"
 msgstr "Γραμμές κύλισης εντός γωνίας"
 
-#: gtk/gtkscrolledwindow.c:619
+#: gtk/gtkscrolledwindow.c:645
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Τοποθέτηση γραμμών κύλισης εντός της γωνίας του κυλιόμενου παραθύρου"
 
-#: gtk/gtkscrolledwindow.c:625
+#: gtk/gtkscrolledwindow.c:651
 msgid "Scrollbar spacing"
 msgstr "Διάκενο μπάρας κύλισης"
 
-#: gtk/gtkscrolledwindow.c:626
+#: gtk/gtkscrolledwindow.c:652
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Αριθμός εικονοστοιχείων ανάμεσα στη μπάρα κύλισης και το κυλιόμενο παράθυρο"
 
-#: gtk/gtkscrolledwindow.c:641
+#: gtk/gtkscrolledwindow.c:667
 msgid "Minimum Content Width"
 msgstr "Ελάχιστο πλάτος περιεχομένου"
 
-#: gtk/gtkscrolledwindow.c:642
+#: gtk/gtkscrolledwindow.c:668
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 "Το ελάχιστο πλάτος που το κυλιόμενο παράθυρο θα εκχωρήσει στο περιεχόμενό του"
 
-#: gtk/gtkscrolledwindow.c:655
+#: gtk/gtkscrolledwindow.c:681
 msgid "Minimum Content Height"
 msgstr "Ελάχιστο ύψος περιεχομένου"
 
-#: gtk/gtkscrolledwindow.c:656
+#: gtk/gtkscrolledwindow.c:682
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr ""
 "Το ελάχιστο ύψος που το κυλιόμενο παράθυρο θα εκχωρήσει στο περιεχόμενό του"
 
-#: gtk/gtkscrolledwindow.c:670
+#: gtk/gtkscrolledwindow.c:696
 msgid "Kinetic Scrolling"
 msgstr "Κινητική κύλιση"
 
-#: gtk/gtkscrolledwindow.c:671
+#: gtk/gtkscrolledwindow.c:697
 msgid "Kinetic scrolling mode."
 msgstr "Λειτουργία κινητικής κύλισης."
 
-#: gtk/gtkscrolledwindow.c:687
+#: gtk/gtkscrolledwindow.c:713
 msgid "Overlay Scrolling"
 msgstr "Επικάλυψη κύλισης"
 
-#: gtk/gtkscrolledwindow.c:688
+#: gtk/gtkscrolledwindow.c:714
 msgid "Overlay scrolling mode"
 msgstr "Επικάλυψη κατάστασης κύλισης"
+
+#: gtk/gtkscrolledwindow.c:727
+msgid "Maximum Content Width"
+msgstr "Μεγιστο πλάτος περιεχομένου"
+
+#: gtk/gtkscrolledwindow.c:728
+msgid "The maximum width that the scrolled window will allocate to its content"
+msgstr ""
+"Το μέγιστο πλάτος που το κυλιόμενο παράθυρο θα εκχωρήσει στο περιεχόμενό του"
+
+#: gtk/gtkscrolledwindow.c:741
+msgid "Maximum Content Height"
+msgstr "Μέγιστο ύψος περιεχομένου"
+
+#: gtk/gtkscrolledwindow.c:742
+msgid ""
+"The maximum height that the scrolled window will allocate to its content"
+msgstr ""
+"Το μέγιστο ύψος που το κυλιόμενο παράθυρο θα εκχωρήσει στο περιεχόμενό του"
+
+#: gtk/gtkscrolledwindow.c:759 gtk/gtkscrolledwindow.c:760
+msgid "Propagate Natural Width"
+msgstr "Πολλαπλασιασμός φυσικού πλάτους"
+
+#: gtk/gtkscrolledwindow.c:777 gtk/gtkscrolledwindow.c:778
+msgid "Propagate Natural Height"
+msgstr "Πολλαπλασιασμός φυσικού ύψους"
 
 #: gtk/gtksearchbar.c:405
 msgid "Search Mode Enabled"
@@ -6732,11 +6823,11 @@ msgstr "Σχεδίαση"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Αν το διαχωριστικό θα σχεδιάζεται ή θα είναι απλώς κενό"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:390
 msgid "Double Click Time"
 msgstr "Χρόνος διπλού κλικ"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:391
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -6744,11 +6835,11 @@ msgstr ""
 "Μέγιστος χρόνος που επιτρέπεται μεταξύ δύο κλικ ώστε να θεωρούνται διπλό "
 "κλικ (σε milliseconds)"
 
-#: gtk/gtksettings.c:379
+#: gtk/gtksettings.c:398
 msgid "Double Click Distance"
 msgstr "Απόσταση διπλού κλικ"
 
-#: gtk/gtksettings.c:380
+#: gtk/gtksettings.c:399
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -6756,35 +6847,35 @@ msgstr ""
 "Μέγιστη απόσταση που επιτρέπεται μεταξύ δύο κλικ ώστε να θεωρούνται διπλό "
 "κλικ (σε εικονοστοιχεία)"
 
-#: gtk/gtksettings.c:396
+#: gtk/gtksettings.c:415
 msgid "Cursor Blink"
 msgstr "Παλλόμενος δρομέας"
 
-#: gtk/gtksettings.c:397
+#: gtk/gtksettings.c:416
 msgid "Whether the cursor should blink"
 msgstr "Αν θα πάλλεται ο δρομέας"
 
-#: gtk/gtksettings.c:404
+#: gtk/gtksettings.c:423
 msgid "Cursor Blink Time"
 msgstr "Χρόνος παλμών δρομέα"
 
-#: gtk/gtksettings.c:405
+#: gtk/gtksettings.c:424
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Διάρκεια του κύκλου εναλλαγής παλμού δρομέα σε χιλιοστά δευτερολέπτου"
 
-#: gtk/gtksettings.c:424
+#: gtk/gtksettings.c:443
 msgid "Cursor Blink Timeout"
 msgstr "Όριο χρόνου παλμών δρομέα"
 
-#: gtk/gtksettings.c:425
+#: gtk/gtksettings.c:444
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Χρόνος μέχρι να σταματήσει ο παλμός δρομέα σε χιλιοστά δευτερολέπτου"
 
-#: gtk/gtksettings.c:432
+#: gtk/gtksettings.c:451
 msgid "Split Cursor"
 msgstr "Διαχωρισμός δρομέα"
 
-#: gtk/gtksettings.c:433
+#: gtk/gtksettings.c:452
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -6792,159 +6883,159 @@ msgstr ""
 "Αν οι δύο δρομείς θα πρέπει να εμφανίζονται για ανακατωμένο κείμενο από "
 "δεξιά στα αριστερά και αντίστροφα"
 
-#: gtk/gtksettings.c:440
+#: gtk/gtksettings.c:459
 msgid "Theme Name"
 msgstr "Όνομα θέματος"
 
-#: gtk/gtksettings.c:441
+#: gtk/gtksettings.c:460
 msgid "Name of theme to load"
 msgstr "Όνομα αρχείου θέματος για φόρτωση"
 
-#: gtk/gtksettings.c:449
+#: gtk/gtksettings.c:468
 msgid "Icon Theme Name"
 msgstr "Όνομα θέματος εικονιδίου"
 
-#: gtk/gtksettings.c:450
+#: gtk/gtksettings.c:469
 msgid "Name of icon theme to use"
 msgstr "Όνομα του θέματος εικονιδίου για χρήση"
 
-#: gtk/gtksettings.c:465
+#: gtk/gtksettings.c:484
 msgid "Fallback Icon Theme Name"
 msgstr "Εφεδρικό όνομα θέματος εικονιδίων"
 
-#: gtk/gtksettings.c:466
+#: gtk/gtksettings.c:485
 msgid "Name of a icon theme to fall back to"
 msgstr "Όνομα ενός θέματος εικονιδίων που θα χρησιμοποιηθεί εφεδρικά"
 
-#: gtk/gtksettings.c:474
+#: gtk/gtksettings.c:493
 msgid "Key Theme Name"
 msgstr "Όνομα αρχείου θέματος κλειδιού"
 
-#: gtk/gtksettings.c:475
+#: gtk/gtksettings.c:494
 msgid "Name of key theme to load"
 msgstr "Όνομα αρχείου θέματος κλειδιού για φόρτωση"
 
-#: gtk/gtksettings.c:491
+#: gtk/gtksettings.c:510
 msgid "Menu bar accelerator"
 msgstr "Συντόμευση εργαλειοθήκης μενού"
 
-#: gtk/gtksettings.c:492
+#: gtk/gtksettings.c:511
 msgid "Keybinding to activate the menu bar"
 msgstr "Συνδυασμός πλήκτρων για την εργαλειοθήκη μενού"
 
-#: gtk/gtksettings.c:500
+#: gtk/gtksettings.c:519
 msgid "Drag threshold"
 msgstr "Κατώφλι συρσίματος"
 
-#: gtk/gtksettings.c:501
+#: gtk/gtksettings.c:520
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Αριθμός εικονοστοιχείων που μπορεί να μετακινηθεί ο δρομέας πρίν να σύρει"
 
-#: gtk/gtksettings.c:514
+#: gtk/gtksettings.c:533
 msgid "Font Name"
 msgstr "Όνομα γραμματοσειράς"
 
-#: gtk/gtksettings.c:515
+#: gtk/gtksettings.c:534
 msgid "The default font family and size to use"
 msgstr ""
 "Η προεπιλεγμένη οικογένεια και μέγεθος γραμματοσειράς που θα χρησιμοποιηθεί"
 
-#: gtk/gtksettings.c:539
+#: gtk/gtksettings.c:558
 msgid "Icon Sizes"
 msgstr "Μεγέθη εικονιδίου"
 
-#: gtk/gtksettings.c:540
+#: gtk/gtksettings.c:559
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Λίστα μεγεθών εικονιδίου (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:548
+#: gtk/gtksettings.c:567
 msgid "GTK Modules"
 msgstr "Αρθρώματα GTK"
 
-#: gtk/gtksettings.c:549
+#: gtk/gtksettings.c:568
 msgid "List of currently active GTK modules"
 msgstr "Λίστα των τρεχόντων ενεργών αρθρωμάτων GTK"
 
-#: gtk/gtksettings.c:557
+#: gtk/gtksettings.c:576
 msgid "Xft Antialias"
 msgstr "Εξομάλυνση Xft"
 
-#: gtk/gtksettings.c:558
+#: gtk/gtksettings.c:577
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Αν θα γίνεται εξομάλυνση στις γραμματοσειρές Xft; 0=όχι, 1=ναι, -1=προεπιλογή"
 
-#: gtk/gtksettings.c:567
+#: gtk/gtksettings.c:586
 msgid "Xft Hinting"
 msgstr "Υπόδειξη Xft"
 
-#: gtk/gtksettings.c:568
+#: gtk/gtksettings.c:587
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Αν θα γίνεται υπόδειξη στις γραμματοσειρές Xft; 0=όχι, 1=ναι, -1=προεπιλογή"
 
-#: gtk/gtksettings.c:577
+#: gtk/gtksettings.c:596
 msgid "Xft Hint Style"
 msgstr "Στυλ υπόδειξης Xft"
 
-#: gtk/gtksettings.c:578
+#: gtk/gtksettings.c:597
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Ο βαθμός υπόδειξης που θα χρησιμοποιείται· καμία, ελαφρύα, μέτρια, ή πλήρης"
 
-#: gtk/gtksettings.c:587
+#: gtk/gtksettings.c:606
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:588
+#: gtk/gtksettings.c:607
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Τύπος υποεικονοστοιχείου εξομάλυνσης· κανένα, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:597
+#: gtk/gtksettings.c:616
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:598
+#: gtk/gtksettings.c:617
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Ανάλυση Xft, σε 1024 * κουκίδες/ίντσα. -1 για χρήση προεπιλεγμένης τιμής"
 
-#: gtk/gtksettings.c:607
+#: gtk/gtksettings.c:626
 msgid "Cursor theme name"
 msgstr "Όνομα θέματος δρομέα"
 
-#: gtk/gtksettings.c:608
+#: gtk/gtksettings.c:627
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr ""
 "Όνομα του θέματος δρομέα για χρήση, ή NULL για χρήση του προεπιλεγμένου "
 "θέματος"
 
-#: gtk/gtksettings.c:616
+#: gtk/gtksettings.c:635
 msgid "Cursor theme size"
 msgstr "Μέγεθος θέματος δρομέα"
 
-#: gtk/gtksettings.c:617
+#: gtk/gtksettings.c:636
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr ""
 "Μέγεθος που θα χρησιμοποιηθεί για τους δρομείς, ή 0 για το προεπιλεγμένο "
 "μέγεθος"
 
-#: gtk/gtksettings.c:626
+#: gtk/gtksettings.c:645
 msgid "Alternative button order"
 msgstr "Εναλλακτική χωροθέτηση κουμπιών"
 
-#: gtk/gtksettings.c:627
+#: gtk/gtksettings.c:646
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 "Αν τα κουμπιά στους διαλόγους θα χρησιμοποιούν εναλλακτική σειρά κουμπιών"
 
-#: gtk/gtksettings.c:644
+#: gtk/gtksettings.c:663
 msgid "Alternative sort indicator direction"
 msgstr "Εναλλακτική κατεύθυνση ενδείξεων ταξινόμησης"
 
-#: gtk/gtksettings.c:645
+#: gtk/gtksettings.c:664
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -6953,11 +7044,11 @@ msgstr ""
 "είναι αντεστραμμένος σε σχέση με την προεπιλεγμένη κατεύθυνση (όπου το κάτω "
 "σημαίνει αύξουσα σειρά)"
 
-#: gtk/gtksettings.c:658
+#: gtk/gtksettings.c:677
 msgid "Show the 'Input Methods' menu"
 msgstr "Εμφάνιση του μενού 'Μέθοδοι εισαγωγής'"
 
-#: gtk/gtksettings.c:659
+#: gtk/gtksettings.c:678
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -6965,11 +7056,11 @@ msgstr ""
 "Αν τα σχετικά μενού των πεδίων και των προβολών κειμένου θα εμφανίζουν τη "
 "δυνατότητα αλλαγής της μεθόδου εισαγωγής"
 
-#: gtk/gtksettings.c:672
+#: gtk/gtksettings.c:691
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Εμφάνιση του μενού 'Εισαγωγή χαρακτήρα ελέγχου Unicode'"
 
-#: gtk/gtksettings.c:673
+#: gtk/gtksettings.c:692
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -6977,253 +7068,253 @@ msgstr ""
 "Αν τα σχετικά μενού των πεδίων και των προβολών κειμένου θα εμφανίζουν τη "
 "δυνατότητα εισαγωγής χαρακτήρων ελέγχου"
 
-#: gtk/gtksettings.c:686
+#: gtk/gtksettings.c:705
 msgid "Start timeout"
 msgstr "Έναρξη ορίου χρόνου"
 
-#: gtk/gtksettings.c:687
+#: gtk/gtksettings.c:706
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Τιμή έναρξης ορίου χρόνου, όταν πιέζεται ένα κουμπί"
 
-#: gtk/gtksettings.c:701
+#: gtk/gtksettings.c:720
 msgid "Repeat timeout"
 msgstr "Επανάληψη ορίου χρόνου"
 
-#: gtk/gtksettings.c:702
+#: gtk/gtksettings.c:721
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Τιμή επανάληψης ορίου χρόνου, όταν πιέζεται ένα κουμπί"
 
-#: gtk/gtksettings.c:716
+#: gtk/gtksettings.c:735
 msgid "Expand timeout"
 msgstr "Επέκταση ορίου χρόνου"
 
-#: gtk/gtksettings.c:717
+#: gtk/gtksettings.c:736
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 "Τιμή επέκτασης ορίου χρόνου, όταν ένα γραφικό στοιχείο επεκτείνει νέα περιοχή"
 
-#: gtk/gtksettings.c:755
+#: gtk/gtksettings.c:774
 msgid "Color scheme"
 msgstr "Σχήμα χρωμάτων"
 
-#: gtk/gtksettings.c:756
+#: gtk/gtksettings.c:775
 msgid "A palette of named colors for use in themes"
 msgstr "Παλέτα δοσμένων χρωμάτων που θα χρησιμοποιείται στα θέματα"
 
-#: gtk/gtksettings.c:765
+#: gtk/gtksettings.c:784
 msgid "Enable Animations"
 msgstr "Ενεργοποίηση κινούμενων εικόνων"
 
-#: gtk/gtksettings.c:766
+#: gtk/gtksettings.c:785
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Αν θα είναι ενεργοποιημένες οι κινούμενες εικόνες σε όλο το toolkit."
 
-#: gtk/gtksettings.c:787
+#: gtk/gtksettings.c:806
 msgid "Enable Touchscreen Mode"
 msgstr "Ενεργοποίηση λειτουργίας οθόνης αφής"
 
-#: gtk/gtksettings.c:788
+#: gtk/gtksettings.c:807
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 "Αν είναι ΑΛΗΘΕΣ, δεν θα εμφανίζονται ειδοποιήσεις κίνησης σε αυτή την οθόνη"
 
-#: gtk/gtksettings.c:807
+#: gtk/gtksettings.c:826
 msgid "Tooltip timeout"
 msgstr "Όριο χρόνου συμβουλής οθόνης"
 
-#: gtk/gtksettings.c:808
+#: gtk/gtksettings.c:827
 msgid "Timeout before tooltip is shown"
 msgstr "Χρονικό διάστημα πριν την εμφάνιση της συμβουλής οθόνης"
 
-#: gtk/gtksettings.c:835
+#: gtk/gtksettings.c:854
 msgid "Tooltip browse timeout"
 msgstr "Όριο χρόνου συμβουλής οθόνης περιήγησης"
 
-#: gtk/gtksettings.c:836
+#: gtk/gtksettings.c:855
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 "Χρονικό διάστημα πριν την εμφάνιση της συμβουλής οθόνης όταν είναι "
 "ενεργοποιημένη η λειτουργία περιήγησης"
 
-#: gtk/gtksettings.c:859
+#: gtk/gtksettings.c:878
 msgid "Tooltip browse mode timeout"
 msgstr "Όριο χρόνου συμβουλής οθόνης λειτουργίας περιήγησης "
 
-#: gtk/gtksettings.c:860
+#: gtk/gtksettings.c:879
 msgid "Timeout after which browse mode is disabled"
 msgstr "Όριο χρόνου μετά το οποίο απενεργοποιείται η λειτουργία περιήγησης"
 
-#: gtk/gtksettings.c:882
+#: gtk/gtksettings.c:901
 msgid "Keynav Cursor Only"
 msgstr "Μόνο δρομέας Keynav"
 
-#: gtk/gtksettings.c:883
+#: gtk/gtksettings.c:902
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 "Αν είναι ΑΛΗΘΕΣ, τα μόνα διαθέσιμα πλήκτρα του δρομέα αφορούν την πλοήγηση "
 "σε γραφικά στοιχεία"
 
-#: gtk/gtksettings.c:902
+#: gtk/gtksettings.c:921
 msgid "Keynav Wrap Around"
 msgstr "Αναδίπλωση Keynav"
 
-#: gtk/gtksettings.c:903
+#: gtk/gtksettings.c:922
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr ""
 "Αν θα γίνεται αναδίπλωση όταν γίνεται πλοήγηση μέσω πληκτρολογίου στα "
 "γραφικά στοιχεία"
 
-#: gtk/gtksettings.c:923
+#: gtk/gtksettings.c:942
 msgid "Error Bell"
 msgstr "Κουδούνι σφάλματος"
 
-#: gtk/gtksettings.c:924
+#: gtk/gtksettings.c:943
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Αν είναι ΑΛΗΘΕΣ, θα ακούγεται το κουδούνι όταν γίνονται λάθη στην πλοήγηση "
 "μέσω πληκτρολογίου ή άλλα λάθη"
 
-#: gtk/gtksettings.c:943
+#: gtk/gtksettings.c:962
 msgid "Color Hash"
 msgstr "Color Hash"
 
-#: gtk/gtksettings.c:944
+#: gtk/gtksettings.c:963
 msgid "A hash table representation of the color scheme."
 msgstr "Αναπαράσταση του σχήματος χρωμάτων σε πίνακα hash."
 
-#: gtk/gtksettings.c:959
+#: gtk/gtksettings.c:978
 msgid "Default file chooser backend"
 msgstr "Προεπιλεγμένο σύστημα υποστήριξης του επιλογέα αρχείων"
 
-#: gtk/gtksettings.c:960
+#: gtk/gtksettings.c:979
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 "Όνομα του συστήματος υποστήριξης GtkFileChooser για προεπιλεγμένη χρήση"
 
-#: gtk/gtksettings.c:977
+#: gtk/gtksettings.c:996
 msgid "Default print backend"
 msgstr "Προεπιλεγμένο σύστημα υποστήριξης εκτύπωσης"
 
-#: gtk/gtksettings.c:978
+#: gtk/gtksettings.c:997
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Λίστα των συστημάτων υποστήριξης GtkPrintBackend για προεπιλογή"
 
-#: gtk/gtksettings.c:1001
+#: gtk/gtksettings.c:1020
 msgid "Default command to run when displaying a print preview"
 msgstr ""
 "Προεπιλεγμένη εντολή που εκτελείται όταν εμφανίζεται η προεπισκόπηση "
 "εκτύπωσης"
 
-#: gtk/gtksettings.c:1002
+#: gtk/gtksettings.c:1021
 msgid "Command to run when displaying a print preview"
 msgstr "Εντολή που εκτελείται όταν εμφανίζεται προεπισκόπηση εκτύπωσης"
 
-#: gtk/gtksettings.c:1021
+#: gtk/gtksettings.c:1040
 msgid "Enable Mnemonics"
 msgstr "Ενεργοποίηση μνημονικών"
 
-#: gtk/gtksettings.c:1022
+#: gtk/gtksettings.c:1041
 msgid "Whether labels should have mnemonics"
 msgstr "Αν οι ετικέτες θα έχουν μνημονικά"
 
-#: gtk/gtksettings.c:1038
+#: gtk/gtksettings.c:1057
 msgid "Enable Accelerators"
 msgstr "Ενεργοποίηση συντομεύσεων"
 
-#: gtk/gtksettings.c:1039
+#: gtk/gtksettings.c:1058
 msgid "Whether menu items should have accelerators"
 msgstr "Αν τα αντικείμενα στα μενού θα έχουν συντομεύσεις"
 
-#: gtk/gtksettings.c:1058
+#: gtk/gtksettings.c:1077
 msgid "Recent Files Limit"
 msgstr "Όριο πρόσφατων αρχείων"
 
-#: gtk/gtksettings.c:1059
+#: gtk/gtksettings.c:1078
 msgid "Number of recently used files"
 msgstr "Αριθμός πρόσφατα χρησιμοποιημένων αρχείων"
 
-#: gtk/gtksettings.c:1079
+#: gtk/gtksettings.c:1098
 msgid "Default IM module"
 msgstr "Προεπιλεγμένο άρθρωμα IM"
 
-#: gtk/gtksettings.c:1080
+#: gtk/gtksettings.c:1099
 msgid "Which IM module should be used by default"
 msgstr "Ποιο άρθρωμα IM θα είναι προεπιλεγμένο"
 
-#: gtk/gtksettings.c:1098
+#: gtk/gtksettings.c:1117
 msgid "Recent Files Max Age"
 msgstr "Μέγιστη ηλικία πρόσφατων αρχείων"
 
-#: gtk/gtksettings.c:1099
+#: gtk/gtksettings.c:1118
 msgid "Maximum age of recently used files, in days"
 msgstr "Μέγιστη ηλικία πρόσφατα χρησιμοποιημένων αρχείων, σε ημέρες"
 
-#: gtk/gtksettings.c:1108
+#: gtk/gtksettings.c:1127
 msgid "Fontconfig configuration timestamp"
 msgstr "Timestamp ρυθμίσεων fontconfig"
 
-#: gtk/gtksettings.c:1109
+#: gtk/gtksettings.c:1128
 msgid "Timestamp of current fontconfig configuration"
 msgstr "Χρονική σήμανση των τρεχουσών ρυθμίσεων του fontconfig"
 
-#: gtk/gtksettings.c:1131
+#: gtk/gtksettings.c:1150
 msgid "Sound Theme Name"
 msgstr "Όνομα θέματος ήχων"
 
-#: gtk/gtksettings.c:1132
+#: gtk/gtksettings.c:1151
 msgid "XDG sound theme name"
 msgstr "Όνομα θέματος ήχων XDG"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: gtk/gtksettings.c:1154
+#: gtk/gtksettings.c:1173
 msgid "Audible Input Feedback"
 msgstr "Ηχητική ανάδραση εισαγωγής"
 
-#: gtk/gtksettings.c:1155
+#: gtk/gtksettings.c:1174
 msgid "Whether to play event sounds as feedback to user input"
 msgstr ""
 "Αν θα ακούγονται ήχοι ως ανάδραση στην εισαγωγή δεδομένων από τον χρήστη"
 
-#: gtk/gtksettings.c:1176
+#: gtk/gtksettings.c:1195
 msgid "Enable Event Sounds"
 msgstr "Ενεργοποίηση ήχων ενεργειών"
 
-#: gtk/gtksettings.c:1177
+#: gtk/gtksettings.c:1196
 msgid "Whether to play any event sounds at all"
 msgstr "Αν θα ακούγονται οι όχι ήχοι ενεργειών"
 
-#: gtk/gtksettings.c:1194
+#: gtk/gtksettings.c:1213
 msgid "Enable Tooltips"
 msgstr "Ενεργοποίηση συμβουλών οθόνης"
 
-#: gtk/gtksettings.c:1195
+#: gtk/gtksettings.c:1214
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Αν θα εμφανίζονται ή όχι συμβουλές οθόνης στα γραφικά στοιχεία"
 
-#: gtk/gtksettings.c:1210
+#: gtk/gtksettings.c:1229
 msgid "Toolbar style"
 msgstr "Στυλ εργαλειοθήκης"
 
-#: gtk/gtksettings.c:1211
+#: gtk/gtksettings.c:1230
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Αν οι προεπιλεγμένες εργαλειοθήκες θα έχουν μόνο κείμενο, κείμενο και "
 "εικόνες, μόνο εικόνες κτλ."
 
-#: gtk/gtksettings.c:1227
+#: gtk/gtksettings.c:1246
 msgid "Toolbar Icon Size"
 msgstr "Μέγεθος εικονιδίων εργαλειοθηκών"
 
-#: gtk/gtksettings.c:1228
+#: gtk/gtksettings.c:1247
 msgid "The size of icons in default toolbars."
 msgstr "Μέγεθος εικονιδίων στις προεπιλεγμένες εργαλειοθήκες."
 
-#: gtk/gtksettings.c:1247
+#: gtk/gtksettings.c:1266
 msgid "Auto Mnemonics"
 msgstr "Αυτόματα μνημονικά"
 
-#: gtk/gtksettings.c:1248
+#: gtk/gtksettings.c:1267
 msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
 "presses the mnemonic activator."
@@ -7231,21 +7322,21 @@ msgstr ""
 "Αν θα εμφανίζονται και θα κρύβονται αυτόματα τα μνημονικά όταν ο χρήστης "
 "πατάει το πλήκτρο ενεργοποίησής τους."
 
-#: gtk/gtksettings.c:1264
+#: gtk/gtksettings.c:1283
 msgid "Primary button warps slider"
 msgstr "Το πρωτεύον κουμπί στρεβλώνει την κύλιση"
 
-#: gtk/gtksettings.c:1265
+#: gtk/gtksettings.c:1284
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
 msgstr ""
 "Αν ένα πρωτεύον κλικ στο κοίλο πρέπει να στρεβλώσει την κύλιση στη θέση"
 
-#: gtk/gtksettings.c:1283
+#: gtk/gtksettings.c:1302
 msgid "Visible Focus"
 msgstr "Ορατά επιλεγμένο"
 
-#: gtk/gtksettings.c:1284
+#: gtk/gtksettings.c:1303
 msgid ""
 "Whether 'focus rectangles' should be hidden until the user starts to use the "
 "keyboard."
@@ -7253,61 +7344,61 @@ msgstr ""
 "Aν «τα ορθογώνια εστίασης» πρέπει να είναι κρυμμένα μέχρι ο χρήστης να "
 "αρχίσει να χρησιμοποιεί το πληκτρολόγιο."
 
-#: gtk/gtksettings.c:1310
+#: gtk/gtksettings.c:1329
 msgid "Application prefers a dark theme"
 msgstr "Η εφαρμογή προτιμά ένα σκοτεινό θέμα"
 
-#: gtk/gtksettings.c:1311
+#: gtk/gtksettings.c:1330
 msgid "Whether the application prefers to have a dark theme."
 msgstr "Αν η εφαρμογή προτιμά ένα σκοτεινό θέμα."
 
-#: gtk/gtksettings.c:1332
+#: gtk/gtksettings.c:1351
 msgid "Show button images"
 msgstr "Εμφάνιση εικόνων κουμπιών"
 
-#: gtk/gtksettings.c:1333
+#: gtk/gtksettings.c:1352
 msgid "Whether images should be shown on buttons"
 msgstr "Αν θα εμφανίζονται ή όχι εικόνες στα κουμπιά"
 
-#: gtk/gtksettings.c:1341 gtk/gtksettings.c:1476
+#: gtk/gtksettings.c:1360 gtk/gtksettings.c:1495
 msgid "Select on focus"
 msgstr "Επιλογή στην εστίαση"
 
-#: gtk/gtksettings.c:1342
+#: gtk/gtksettings.c:1361
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Αν θα επιλέγονται τα περιεχόμενα μιας καταχώρισης όταν γίνεται εστίαση"
 
-#: gtk/gtksettings.c:1359
+#: gtk/gtksettings.c:1378
 msgid "Password Hint Timeout"
 msgstr "Λήξη υπόδειξης συνθηματικού"
 
-#: gtk/gtksettings.c:1360
+#: gtk/gtksettings.c:1379
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Για πόσο χρόνο θα εμφανίζεται ο τελευταίος χαρακτήρας που εισήχθηκε σε ένα "
 "κρυφό πεδίο"
 
-#: gtk/gtksettings.c:1380
+#: gtk/gtksettings.c:1399
 msgid "Show menu images"
 msgstr "Εμφάνιση εικόνων μενού"
 
-#: gtk/gtksettings.c:1381
+#: gtk/gtksettings.c:1400
 msgid "Whether images should be shown in menus"
 msgstr "Αν θα εμφανίζονται ή όχι οι εικόνες στα μενού"
 
-#: gtk/gtksettings.c:1396
+#: gtk/gtksettings.c:1415
 msgid "Delay before drop down menus appear"
 msgstr "Καθυστέρηση μέχρι την εμφάνιση αναπτυσσόμενων μενού"
 
-#: gtk/gtksettings.c:1397
+#: gtk/gtksettings.c:1416
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Καθυστέρηση μέχρι να εμφανιστούν τα υπομενού σε εργαλειοθήκη μενού"
 
-#: gtk/gtksettings.c:1416
+#: gtk/gtksettings.c:1435
 msgid "Scrolled Window Placement"
 msgstr "Τοποθέτηση κυλιόμενου παραθύρου"
 
-#: gtk/gtksettings.c:1417
+#: gtk/gtksettings.c:1436
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
@@ -7316,33 +7407,33 @@ msgstr ""
 "γραμμές κύλισης, αν δεν υπερισχύουν οι κανόνες τοποθέτησης του ίδιου του "
 "κυλιόμενου παραθύρου."
 
-#: gtk/gtksettings.c:1433
+#: gtk/gtksettings.c:1452
 msgid "Can change accelerators"
 msgstr "Δυνατότητα αλλαγής συντομεύσεων"
 
-#: gtk/gtksettings.c:1434
+#: gtk/gtksettings.c:1453
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Αν θα είναι δυνατή η αλλαγή συντομεύσεων μενού με την πίεση ενός κλειδιού "
 "πάνω στο αντικείμενο μενού"
 
-#: gtk/gtksettings.c:1449
+#: gtk/gtksettings.c:1468
 msgid "Delay before submenus appear"
 msgstr "Καθυστέρηση πριν την εμφάνιση των υπομενού"
 
-#: gtk/gtksettings.c:1450
+#: gtk/gtksettings.c:1469
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Ελάχιστος χρόνος που θα στέκεται ο δρομέας πάνω σε ένα μενού μέχρι να "
 "εμφανιστεί το υπομενού"
 
-#: gtk/gtksettings.c:1466
+#: gtk/gtksettings.c:1485
 msgid "Delay before hiding a submenu"
 msgstr "Καθυστέρηση πριν την απόκρυψη ενός υπομενού"
 
-#: gtk/gtksettings.c:1467
+#: gtk/gtksettings.c:1486
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -7350,41 +7441,41 @@ msgstr ""
 "Ο χρόνος πριν την απόκρυψη ενός υπομενού όταν ο δρομέας κινείται προς ένα "
 "υπομενού"
 
-#: gtk/gtksettings.c:1477
+#: gtk/gtksettings.c:1496
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
 "Αν θα επιλέγονται τα περιεχόμενα μιας επιλέξιμης ετικέτας όταν γίνεται "
 "εστίαση"
 
-#: gtk/gtksettings.c:1492
+#: gtk/gtksettings.c:1511
 msgid "Custom palette"
 msgstr "Προσαρμοσμένη παλέτα"
 
-#: gtk/gtksettings.c:1493
+#: gtk/gtksettings.c:1512
 msgid "Palette to use in the color selector"
 msgstr "Παλέτα που θα χρησιμοποιείται στην επιλογή χρώματος"
 
-#: gtk/gtksettings.c:1508
+#: gtk/gtksettings.c:1527
 msgid "IM Preedit style"
 msgstr "Στυλ προεπεξεργασίας IM"
 
-#: gtk/gtksettings.c:1509
+#: gtk/gtksettings.c:1528
 msgid "How to draw the input method preedit string"
 msgstr "Πως θα σχεδιάζεται η μέθοδος εισαγωγής συμβολοσειράς preedit"
 
-#: gtk/gtksettings.c:1525
+#: gtk/gtksettings.c:1544
 msgid "IM Status style"
 msgstr "Στυλ κατάστασης IM"
 
-#: gtk/gtksettings.c:1526
+#: gtk/gtksettings.c:1545
 msgid "How to draw the input method statusbar"
 msgstr "Πως θα σχεδιάζεται η μέθοδος εισαγωγής της γραμμής κατάστασης"
 
-#: gtk/gtksettings.c:1535
+#: gtk/gtksettings.c:1554
 msgid "Desktop shell shows app menu"
 msgstr "Το κέλυφος δείχνει το μενού εφαρμογών"
 
-#: gtk/gtksettings.c:1536
+#: gtk/gtksettings.c:1555
 msgid ""
 "Set to TRUE if the desktop environment is displaying the app menu, FALSE if "
 "the app should display it itself."
@@ -7392,11 +7483,11 @@ msgstr ""
 "Ορίστε την τιμή ΑΛΗΘΕΣ αν το περιβάλλον εργασίας εμφανίζει το μενού της "
 "εφαρμογής, ΨΕΥΔΕΣ αν η εφαρμογή θα το εμφανίζει η ίδια."
 
-#: gtk/gtksettings.c:1545
+#: gtk/gtksettings.c:1564
 msgid "Desktop shell shows the menubar"
 msgstr "Το κέλυφος δείχνει το μενού εφαρμογής"
 
-#: gtk/gtksettings.c:1546
+#: gtk/gtksettings.c:1565
 msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
@@ -7404,12 +7495,12 @@ msgstr ""
 "Ορίστε την τιμή ΑΛΗΘΕΣ αν το περιβάλλον εργασίας εμφανίζει το μενού της "
 "εφαρμογής, ΨΕΥΔΕΣ αν η εφαρμογή θα το εμφανίζει η ίδια."
 
-#: gtk/gtksettings.c:1555
+#: gtk/gtksettings.c:1574
 msgid "Desktop environment shows the desktop folder"
 msgstr ""
 "Το περιβάλλον επιφάνειας εργασίας εμφανίζει τον φάκελο επιφάνειας εργασίας"
 
-#: gtk/gtksettings.c:1556
+#: gtk/gtksettings.c:1575
 msgid ""
 "Set to TRUE if the desktop environment is displaying the desktop folder, "
 "FALSE if not."
@@ -7417,35 +7508,35 @@ msgstr ""
 "Ορίστε σε ΑΛΗΘΕΣ αν το περιβάλλον επιφάνειας εργασίας εμφανίζει τον φάκελο "
 "επιφάνειας εργασίας, αλλιώς ΨΕΥΔΕΣ."
 
-#: gtk/gtksettings.c:1610
+#: gtk/gtksettings.c:1629
 msgid "Titlebar double-click action"
 msgstr "Ενέργεια διπλού κλικ στη γραμμή τίτλου"
 
-#: gtk/gtksettings.c:1611
+#: gtk/gtksettings.c:1630
 msgid "The action to take on titlebar double-click"
 msgstr "Ενέργεια κατά το διπλό κλικ στη γραμμή τίτλου"
 
-#: gtk/gtksettings.c:1629
+#: gtk/gtksettings.c:1648
 msgid "Titlebar middle-click action"
 msgstr "Ενέργεια μεσαίου κλικ στη γραμμή τίτλου"
 
-#: gtk/gtksettings.c:1630
+#: gtk/gtksettings.c:1649
 msgid "The action to take on titlebar middle-click"
 msgstr "Ενέργεια στο μεσαίο κλικ στη γραμμή τίτλου"
 
-#: gtk/gtksettings.c:1648
+#: gtk/gtksettings.c:1667
 msgid "Titlebar right-click action"
 msgstr "Ενέργεια δεξιού κλικ στη γραμμή τίτλου"
 
-#: gtk/gtksettings.c:1649
+#: gtk/gtksettings.c:1668
 msgid "The action to take on titlebar right-click"
 msgstr "Ενέργεια κατά το δεξί κλικ στη γραμμή τίτλου"
 
-#: gtk/gtksettings.c:1671
+#: gtk/gtksettings.c:1690
 msgid "Dialogs use header bar"
 msgstr "Οι διάλογοι χρησιμοποιούν γραμμή κεφαλίδας"
 
-#: gtk/gtksettings.c:1672
+#: gtk/gtksettings.c:1691
 msgid ""
 "Whether builtin GTK+ dialogs should use a header bar instead of an action "
 "area."
@@ -7453,11 +7544,11 @@ msgstr ""
 "Αν οι ενσωματωμένοι διάλογοι GTK+ πρέπει να χρησιμοποιούν γραμμή κεφαλίδας "
 "αντί για περιοχή ενέργειας."
 
-#: gtk/gtksettings.c:1688
+#: gtk/gtksettings.c:1707
 msgid "Enable primary paste"
 msgstr "Ενεργοποιήση πρωτεύουσας επικόλλησης"
 
-#: gtk/gtksettings.c:1689
+#: gtk/gtksettings.c:1708
 msgid ""
 "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard "
 "content at the cursor location."
@@ -7465,52 +7556,56 @@ msgstr ""
 "Αν το μεσαίο κλικ στο ποντίκι πρέπει να επικολλήσει το 'ΠΡΩΤΕΥΩΝ' "
 "περιεχόμενο προχείρου στη τοποθεσία του δρομέα."
 
-#: gtk/gtksettings.c:1705
+#: gtk/gtksettings.c:1724
 msgid "Recent Files Enabled"
 msgstr "Ενεργοποιημένα πρόσφατα αρχεία"
 
-#: gtk/gtksettings.c:1706
+#: gtk/gtksettings.c:1725
 msgid "Whether GTK+ remembers recent files"
 msgstr "Αν το GTK+ θα θυμάται τα πρόσφατα αρχεία"
 
-#: gtk/gtksettings.c:1721
+#: gtk/gtksettings.c:1740
 msgid "Long press time"
 msgstr "Χρόνος παρατεταμένου πατήματος"
 
-#: gtk/gtksettings.c:1722
+#: gtk/gtksettings.c:1741
 msgid ""
 "Time for a button/touch press to be considered a long press (in milliseconds)"
 msgstr ""
 "Ο χρόνος για το πάτημα ενός κουμπιού/αφής να θεωρείται ένα παρατεταμένο "
 "πάτημα (σε χιλιοστά του δευτερολέπτου)"
 
-#: gtk/gtksettings.c:1739 gtk/gtksettings.c:1740
+#: gtk/gtksettings.c:1758 gtk/gtksettings.c:1759
 msgid "Whether to show cursor in text"
 msgstr "Αν θα εμφανίζεται ο δρομέας στο κείμενο"
 
-#: gtk/gtkshortcutlabel.c:427 gtk/gtkshortcutsshortcut.c:490
+#: gtk/gtkshortcutlabel.c:479 gtk/gtkshortcutsshortcut.c:536
 msgid "Accelerator"
 msgstr "Συντόμευση"
+
+#: gtk/gtkshortcutlabel.c:491
+msgid "Disabled text"
+msgstr "Απενεργοποιημένο κείμενο"
 
 #: gtk/gtkshortcutsgroup.c:303
 msgid "View"
 msgstr "Προβολή"
 
 #: gtk/gtkshortcutsgroup.c:316 gtk/gtkshortcutsgroup.c:317
-#: gtk/gtkshortcutsshortcut.c:571 gtk/gtkshortcutsshortcut.c:572
+#: gtk/gtkshortcutsshortcut.c:617 gtk/gtkshortcutsshortcut.c:618
 msgid "Accelerator Size Group"
 msgstr "Ομάδα μεγέθους συντόμευσης"
 
 #: gtk/gtkshortcutsgroup.c:330 gtk/gtkshortcutsgroup.c:331
-#: gtk/gtkshortcutsshortcut.c:585 gtk/gtkshortcutsshortcut.c:586
+#: gtk/gtkshortcutsshortcut.c:631 gtk/gtkshortcutsshortcut.c:632
 msgid "Title Size Group"
 msgstr "Ομάδα μεγέθους τίτλου"
 
-#: gtk/gtkshortcutssection.c:349 gtk/gtkshortcutswindow.c:718
+#: gtk/gtkshortcutssection.c:349 gtk/gtkshortcutswindow.c:787
 msgid "Section Name"
 msgstr "Όνομα τμήματος"
 
-#: gtk/gtkshortcutssection.c:363 gtk/gtkshortcutswindow.c:733
+#: gtk/gtkshortcutssection.c:363 gtk/gtkshortcutswindow.c:802
 msgid "View Name"
 msgstr "Όνομα προβολής"
 
@@ -7518,49 +7613,57 @@ msgstr "Όνομα προβολής"
 msgid "Maximum Height"
 msgstr "Μέγιστο ύψος"
 
-#: gtk/gtkshortcutsshortcut.c:491
+#: gtk/gtkshortcutsshortcut.c:537
 msgid "The accelerator keys for shortcuts of type 'Accelerator'"
 msgstr "Τα πλήκτρα συντόμευσης για συντομεύσεις τύπου 'Συντόμευση'"
 
-#: gtk/gtkshortcutsshortcut.c:505
+#: gtk/gtkshortcutsshortcut.c:551
 msgid "The icon to show for shortcuts of type 'Other Gesture'"
 msgstr "Το εικονίδια που θα εμφανιστεί για συντομεύσεις τύπου 'Άλλη κίνηση'"
 
-#: gtk/gtkshortcutsshortcut.c:516
+#: gtk/gtkshortcutsshortcut.c:562
 msgid "Icon Set"
 msgstr "Ομάδα εικονιδίων"
 
-#: gtk/gtkshortcutsshortcut.c:517
+#: gtk/gtkshortcutsshortcut.c:563
 msgid "Whether an icon has been set"
 msgstr "Αν θα έχει οριστεί ένα εικονίδιο"
 
-#: gtk/gtkshortcutsshortcut.c:530
+#: gtk/gtkshortcutsshortcut.c:576
 msgid "A short description for the shortcut"
 msgstr "Σύντομη περιγραφή για τη συντόμευση"
 
-#: gtk/gtkshortcutsshortcut.c:546
+#: gtk/gtkshortcutsshortcut.c:592
 msgid "A short description for the gesture"
 msgstr "Σύντομη περιγραφή για την κίνηση"
 
-#: gtk/gtkshortcutsshortcut.c:557
+#: gtk/gtkshortcutsshortcut.c:603
 msgid "Subtitle Set"
 msgstr "Ορισμός υπότιτλου"
 
-#: gtk/gtkshortcutsshortcut.c:558
+#: gtk/gtkshortcutsshortcut.c:604
 msgid "Whether a subtitle has been set"
 msgstr "Αν έχει οριστεί υπότιτλος"
 
-#: gtk/gtkshortcutsshortcut.c:600
+#: gtk/gtkshortcutsshortcut.c:646
 msgid "Text direction for which this shortcut is active"
 msgstr "Κατεύθυνση κειμένου για το οποίο αυτή η συντόμευση είναι ενεργή"
 
-#: gtk/gtkshortcutsshortcut.c:612
+#: gtk/gtkshortcutsshortcut.c:658
 msgid "Shortcut Type"
 msgstr "Τύπος συντόμευσης"
 
-#: gtk/gtkshortcutsshortcut.c:613
+#: gtk/gtkshortcutsshortcut.c:659
 msgid "The type of shortcut that is represented"
 msgstr "Ο τύπος της συντόμευσης που παρουσιάζεται"
+
+#: gtk/gtkshortcutsshortcut.c:677
+msgid "Action Name"
+msgstr "Όνομα ενέργειας"
+
+#: gtk/gtkshortcutsshortcut.c:678
+msgid "The name of the action"
+msgstr "Το όνομα της ενέργειας"
 
 #: gtk/gtksizegroup.c:228 gtk/gtktreeselection.c:130
 msgid "Mode"
@@ -7574,11 +7677,11 @@ msgstr ""
 "Οι κατευθύνσεις στις οποίες η ομάδα μεγέθους επηρεάζει τα ζητούμενα μεγέθη "
 "από τα γραφικά στοιχεία του συστατικού."
 
-#: gtk/gtksizegroup.c:246
+#: gtk/gtksizegroup.c:253
 msgid "Ignore hidden"
 msgstr "Αγνόηση κρυφών"
 
-#: gtk/gtksizegroup.c:247
+#: gtk/gtksizegroup.c:254
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
@@ -7639,55 +7742,55 @@ msgstr "Στυλ γωνίας γύρω από το κουμπί spin"
 msgid "Whether the spinner is active"
 msgstr "Αν θα είναι ενεργοποιημένο το spinner"
 
-#: gtk/gtkstack.c:456
+#: gtk/gtkstack.c:459
 msgid "Homogeneous sizing"
 msgstr "Ομογενές μέγεθος"
 
-#: gtk/gtkstack.c:468
+#: gtk/gtkstack.c:471
 msgid "Horizontally homogeneous"
 msgstr "Οριζόντια ομογενές"
 
-#: gtk/gtkstack.c:468
+#: gtk/gtkstack.c:471
 msgid "Horizontally homogeneous sizing"
 msgstr "Οριζόντια ομογενές μέγεθος"
 
-#: gtk/gtkstack.c:480
+#: gtk/gtkstack.c:483
 msgid "Vertically homogeneous"
 msgstr "Κάθετα ομογενές"
 
-#: gtk/gtkstack.c:480
+#: gtk/gtkstack.c:483
 msgid "Vertically homogeneous sizing"
 msgstr "Κάθετα ομογενές μέγεθος"
 
-#: gtk/gtkstack.c:484
+#: gtk/gtkstack.c:487
 msgid "Visible child"
 msgstr "Ορατό θυγατρικό"
 
-#: gtk/gtkstack.c:484
+#: gtk/gtkstack.c:487
 msgid "The widget currently visible in the stack"
 msgstr "Το ορατό τρέχον γραφικό στοιχείο στη στοίβα"
 
-#: gtk/gtkstack.c:488
+#: gtk/gtkstack.c:491
 msgid "Name of visible child"
 msgstr "Όνομα του ορατού θυγατρικού"
 
-#: gtk/gtkstack.c:488
+#: gtk/gtkstack.c:491
 msgid "The name of the widget currently visible in the stack"
 msgstr "Το όνομα του ορατού ενεργού γραφικού στοιχείου στη στοίβα"
 
-#: gtk/gtkstack.c:500
+#: gtk/gtkstack.c:503
 msgid "Transition running"
 msgstr "Εκτέλεση μετάβασης"
 
-#: gtk/gtkstack.c:500
+#: gtk/gtkstack.c:503
 msgid "Whether or not the transition is currently running"
 msgstr "Αν η μετάβαση εκτελείται προς το παρόν ή όχι"
 
-#: gtk/gtkstack.c:504
+#: gtk/gtkstack.c:507
 msgid "Interpolate size"
 msgstr "Μέγεθος παρεμβολής"
 
-#: gtk/gtkstack.c:504
+#: gtk/gtkstack.c:507
 msgid ""
 "Whether or not the size should smoothly change when changing between "
 "differently sized children"
@@ -7695,32 +7798,32 @@ msgstr ""
 "Αν το μέγεθος πρέπει να αλλάξει ομαλά ή όχι κατά την αλλαγή μεταξύ "
 "θυγατρικών διαφορετικών μεγεθών"
 
-#: gtk/gtkstack.c:514
+#: gtk/gtkstack.c:517
 msgid "The name of the child page"
 msgstr "Το όνομα της θυγατρικής σελίδας"
 
-#: gtk/gtkstack.c:521
+#: gtk/gtkstack.c:524
 msgid "The title of the child page"
 msgstr "Ο τίτλος της θυγατρικής σελίδας"
 
-#: gtk/gtkstack.c:527 gtk/gtktoolbutton.c:287
+#: gtk/gtkstack.c:530 gtk/gtktoolbutton.c:287
 msgid "Icon name"
 msgstr "Όνομα εικονιδίου"
 
-#: gtk/gtkstack.c:528
+#: gtk/gtkstack.c:531
 msgid "The icon name of the child page"
 msgstr "Το όνομα εικονιδίου της θυγατρικής σελίδας"
 
-#: gtk/gtkstack.c:552
+#: gtk/gtkstack.c:555
 msgid "Needs Attention"
 msgstr "Χρειάζεται προσοχή"
 
-#: gtk/gtkstack.c:553
+#: gtk/gtkstack.c:556
 msgid "Whether this page needs attention"
 msgstr "Αν αυτή η σελίδα χρειάζεται προσοχή"
 
-#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:692
-#: gtk/gtkstackswitcher.c:693 gtk/inspector/gtkstackcombo.c:232
+#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:693
+#: gtk/gtkstackswitcher.c:694 gtk/inspector/gtkstackcombo.c:232
 #: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
 msgstr "Στοίβα"
@@ -7729,7 +7832,7 @@ msgstr "Στοίβα"
 msgid "Associated stack for this GtkStackSidebar"
 msgstr "Συσχετισμένη στοίβα για αυτό το GtkStackSidebar"
 
-#: gtk/gtkstackswitcher.c:684
+#: gtk/gtkstackswitcher.c:685
 msgid "Symbolic size to use for named icon"
 msgstr "Συμβολικό μέγεθος για χρήση σε ένα πρότυπο εικονίδιο"
 
@@ -7737,23 +7840,23 @@ msgstr "Συμβολικό μέγεθος για χρήση σε ένα πρότ
 msgid "Style of bevel around the statusbar text"
 msgstr "Στυλ γωνίας γύρω από το κείμενο της μπάρας κατάστασης"
 
-#: gtk/gtkstylecontext.c:216
+#: gtk/gtkstylecontext.c:229
 msgid "The associated GdkScreen"
 msgstr "Η σχετιζόμενη GdkScreen"
 
-#: gtk/gtkstylecontext.c:222
+#: gtk/gtkstylecontext.c:235
 msgid "FrameClock"
 msgstr "FrameClock"
 
-#: gtk/gtkstylecontext.c:223
+#: gtk/gtkstylecontext.c:236
 msgid "The associated GdkFrameClock"
 msgstr "Το σχετιζόμενο GdkFrameClock"
 
-#: gtk/gtkstylecontext.c:230 gtk/gtktexttag.c:299
+#: gtk/gtkstylecontext.c:243 gtk/gtktexttag.c:299
 msgid "Text direction"
 msgstr "Κατεύθυνση κειμένου"
 
-#: gtk/gtkstylecontext.c:246
+#: gtk/gtkstylecontext.c:259
 msgid "The parent style context"
 msgstr "Το γονικό στυλ περιεχομένου"
 
@@ -7781,15 +7884,15 @@ msgstr "Αν ο διακόπτης είναι ανοικτός ή κλειστό
 msgid "The backend state"
 msgstr "Κατάσταση συστήματος υποστήριξης"
 
-#: gtk/gtkswitch.c:946
+#: gtk/gtkswitch.c:948
 msgid "The minimum width of the handle"
 msgstr "Το ελάχιστο πλάτος της λαβής"
 
-#: gtk/gtkswitch.c:962
+#: gtk/gtkswitch.c:964
 msgid "Slider Height"
 msgstr "Ύψος ρυθμιστικού"
 
-#: gtk/gtkswitch.c:963
+#: gtk/gtkswitch.c:965
 msgid "The minimum height of the handle"
 msgstr "Το ελάχιστο ύψος της λαβής"
 
@@ -7846,7 +7949,7 @@ msgstr ""
 "Η λίστα προορισμών που υποστηρίζει αυτή η ενδιάμεση μνήμη για την επικόλληση "
 "από το πρόχειρο και για προορισμούς λήψεων"
 
-#: gtk/gtktexthandle.c:725 gtk/gtktexthandle.c:726 gtk/gtkwidget.c:1134
+#: gtk/gtktexthandle.c:725 gtk/gtktexthandle.c:726 gtk/gtkwidget.c:1114
 msgid "Parent widget"
 msgstr "Γονικό γραφικό στοιχείο"
 
@@ -8581,6 +8684,22 @@ msgstr "Πλάτος αναδίπλωσης"
 msgid "Wrap width for laying out items in a grid"
 msgstr "Πλάτος αναδίπλωσης για τη διάταξη των αντικειμένων σε πλέγμα"
 
+#: gtk/gtktreemodelfilter.c:532
+msgid "The child model"
+msgstr "Το μοντέλο θυγατρικού"
+
+#: gtk/gtktreemodelfilter.c:533
+msgid "The model for the filtermodel to filter"
+msgstr "Το μοντέλο του filtermodel που θα φιλτραριστεί"
+
+#: gtk/gtktreemodelfilter.c:540
+msgid "The virtual root"
+msgstr "Η εικονική ρίζα"
+
+#: gtk/gtktreemodelfilter.c:541
+msgid "The virtual root (relative to the child model) for this filtermodel"
+msgstr "Η εικονική ρίζα (σχετική με το θυγατρικό του μοντέλου) του filtermodel"
+
 #: gtk/gtktreemodelsort.c:484
 msgid "TreeModelSort Model"
 msgstr "Μοντέλο δενδροειδούς ταξινόμησης"
@@ -8815,7 +8934,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr "Αν θα εμφανίζεται η στήλη"
 
-#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:775
+#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:776
 msgid "Resizable"
 msgstr "Δυνατότητα αλλαγής μεγέθους"
 
@@ -8914,7 +9033,7 @@ msgstr ""
 "Αναγνωριστικό στήλης λογικής ταξινόμησης για την ταξινόμηση της στήλης όταν "
 "ζητηθεί"
 
-#: gtk/gtkviewport.c:407
+#: gtk/gtkviewport.c:409
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "Καθορίζει τον τρόπο με τον οποίο σχεδιάζεται το σκιασμένο κουτί γύρω από τη "
@@ -8928,25 +9047,25 @@ msgstr "Χρήση συμβολικών εικονιδίων"
 msgid "Whether to use symbolic icons"
 msgstr "Αν θα χρησιμοποιηθούν συμβολικά εικονίδια"
 
-#: gtk/gtkwidget.c:1127
+#: gtk/gtkwidget.c:1107
 msgid "Widget name"
 msgstr "Όνομα γραφικού στοιχείου"
 
-#: gtk/gtkwidget.c:1128
+#: gtk/gtkwidget.c:1108
 msgid "The name of the widget"
 msgstr "Το όνομα του γραφικού στοιχείου"
 
-#: gtk/gtkwidget.c:1135
+#: gtk/gtkwidget.c:1115
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 "Το γονικό γραφικό στοιχείο του γραφικού στοιχείου. Πρέπει να είναι περιέκτης "
 "γραφικού στοιχείου."
 
-#: gtk/gtkwidget.c:1141
+#: gtk/gtkwidget.c:1121
 msgid "Width request"
 msgstr "Αίτηση πλάτους"
 
-#: gtk/gtkwidget.c:1142
+#: gtk/gtkwidget.c:1122
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -8954,11 +9073,11 @@ msgstr ""
 "Παράκαμψη για αίτηση πλάτους του γραφικού στοιχείου, ή -1 αν θα πρέπει να "
 "χρησιμοποιηθεί κανονική αίτηση"
 
-#: gtk/gtkwidget.c:1149
+#: gtk/gtkwidget.c:1129
 msgid "Height request"
 msgstr "Αίτηση ύψους"
 
-#: gtk/gtkwidget.c:1150
+#: gtk/gtkwidget.c:1130
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -8966,95 +9085,95 @@ msgstr ""
 "Παράκαμψη για αίτηση ύψους του γραφικού στοιχείου, ή -1 αν θα πρέπει να "
 "χρησιμοποιηθεί κανονική αίτηση"
 
-#: gtk/gtkwidget.c:1158
+#: gtk/gtkwidget.c:1138
 msgid "Whether the widget is visible"
 msgstr "Αν το γραφικό στοιχείο θα είναι ορατό"
 
-#: gtk/gtkwidget.c:1165
+#: gtk/gtkwidget.c:1145
 msgid "Whether the widget responds to input"
 msgstr "Αν το γραφικό στοιχείο αποκρίνεται σε εισαγωγή δεδομένων"
 
-#: gtk/gtkwidget.c:1171
+#: gtk/gtkwidget.c:1151
 msgid "Application paintable"
 msgstr "Δυνατότητα σχεδίασης"
 
-#: gtk/gtkwidget.c:1172
+#: gtk/gtkwidget.c:1152
 msgid "Whether the application will paint directly on the widget"
 msgstr "Αν η εφαρμογή μπορεί να σχεδιάζει απευθείας στο γραφικό στοιχείο"
 
-#: gtk/gtkwidget.c:1178
+#: gtk/gtkwidget.c:1158
 msgid "Can focus"
 msgstr "Δυνατότητα εστίασης"
 
-#: gtk/gtkwidget.c:1179
+#: gtk/gtkwidget.c:1159
 msgid "Whether the widget can accept the input focus"
 msgstr "Αν γραφικό στοιχείο μπορεί να δεχτεί εστίαση εισόδου"
 
-#: gtk/gtkwidget.c:1185
+#: gtk/gtkwidget.c:1165
 msgid "Has focus"
 msgstr "Έχει εστίαση"
 
-#: gtk/gtkwidget.c:1186
+#: gtk/gtkwidget.c:1166
 msgid "Whether the widget has the input focus"
 msgstr "Αν το γραφικό στοιχείο θα έχει εστίαση εισόδου"
 
-#: gtk/gtkwidget.c:1192
+#: gtk/gtkwidget.c:1172
 msgid "Is focus"
 msgstr "Έχει εστίαση"
 
-#: gtk/gtkwidget.c:1193
+#: gtk/gtkwidget.c:1173
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 "Αν το γραφικό στοιχείο θα είναι το γραφικό στοιχείο εστίασης μέσα στο "
 "ανώτατο επίπεδο"
 
-#: gtk/gtkwidget.c:1211
+#: gtk/gtkwidget.c:1191
 msgid "Focus on click"
 msgstr "Εστίαση στο κλικ"
 
-#: gtk/gtkwidget.c:1212
+#: gtk/gtkwidget.c:1192
 msgid "Whether the widget should grab focus when it is clicked with the mouse"
 msgstr "Αν το γραφικό στοιχείο θα εστιάζεται όταν πατιέται με το ποντίκι"
 
-#: gtk/gtkwidget.c:1218
+#: gtk/gtkwidget.c:1198
 msgid "Can default"
 msgstr "Δυνατότητα προεπιλογής"
 
-#: gtk/gtkwidget.c:1219
+#: gtk/gtkwidget.c:1199
 msgid "Whether the widget can be the default widget"
 msgstr "Αν γραφικό στοιχείο έχει τη δυνατότητα να γίνει το προεπιλεγμένο"
 
-#: gtk/gtkwidget.c:1225
+#: gtk/gtkwidget.c:1205
 msgid "Has default"
 msgstr "Έχει προεπιλογή"
 
-#: gtk/gtkwidget.c:1226
+#: gtk/gtkwidget.c:1206
 msgid "Whether the widget is the default widget"
 msgstr "Αν το γραφικό στοιχείο θα είναι το προεπιλεγμένο"
 
-#: gtk/gtkwidget.c:1232
+#: gtk/gtkwidget.c:1212
 msgid "Receives default"
 msgstr "Λήψη προεπιλεγμένης"
 
-#: gtk/gtkwidget.c:1233
+#: gtk/gtkwidget.c:1213
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Αν ΑΛΗΘΕΣ, το γραφικό στοιχείο θα λαμβάνει την προεπιλεγμένη ενέργεια όταν "
 "εστιάζεται"
 
-#: gtk/gtkwidget.c:1239
+#: gtk/gtkwidget.c:1219
 msgid "Composite child"
 msgstr "Σύνθετο θυγατρικό"
 
-#: gtk/gtkwidget.c:1240
+#: gtk/gtkwidget.c:1220
 msgid "Whether the widget is part of a composite widget"
 msgstr "Αν το γραφικό στοιχείο θα είναι μέρος ενός σύνθετου γραφικού στοιχείου"
 
-#: gtk/gtkwidget.c:1248
+#: gtk/gtkwidget.c:1235
 msgid "Style"
 msgstr "Στυλ "
 
-#: gtk/gtkwidget.c:1249
+#: gtk/gtkwidget.c:1236
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -9062,181 +9181,181 @@ msgstr ""
 "Το στυλ του γραφικού στοιχείου που περιέχει πληροφορίες για την εμφάνιση του "
 "(χρώματα κτλ)."
 
-#: gtk/gtkwidget.c:1257
+#: gtk/gtkwidget.c:1244
 msgid "Events"
 msgstr "Γεγονότα"
 
-#: gtk/gtkwidget.c:1258
+#: gtk/gtkwidget.c:1245
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Η μάσκα γεγονότων που αποφασίζει ποιο είδος GdkEvents λαμβάνει το γραφικό "
 "στοιχείο."
 
-#: gtk/gtkwidget.c:1265
+#: gtk/gtkwidget.c:1252
 msgid "No show all"
 msgstr "Να μην εμφανίζονται όλα"
 
-#: gtk/gtkwidget.c:1266
+#: gtk/gtkwidget.c:1253
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Αν η gtk_widget_show_all() θα επηρεάζει το γραφικό στοιχείο"
 
-#: gtk/gtkwidget.c:1288
+#: gtk/gtkwidget.c:1275
 msgid "Whether this widget has a tooltip"
 msgstr "Αν το γραφικό στοιχείο θα έχει συμβουλή οθόνης"
 
-#: gtk/gtkwidget.c:1350
+#: gtk/gtkwidget.c:1337
 msgid "The widget's window if it is realized"
 msgstr "Το παράθυρο του γραφικού στοιχείου, αν υπάρχει"
 
-#: gtk/gtkwidget.c:1365
+#: gtk/gtkwidget.c:1352
 msgid "Double Buffered"
 msgstr "Διπλή ενδιάμεση μνήμη"
 
-#: gtk/gtkwidget.c:1366
+#: gtk/gtkwidget.c:1353
 msgid "Whether the widget is double buffered"
 msgstr "Αν θα εφαρμόζεται διπλή ενδιάμεση μνήμη στο γραφικό στοιχείο"
 
-#: gtk/gtkwidget.c:1380
+#: gtk/gtkwidget.c:1367
 msgid "How to position in extra horizontal space"
 msgstr "Πως γίνεται τοποθέτηση σε επιπλέον οριζόντιο χώρο"
 
-#: gtk/gtkwidget.c:1395
+#: gtk/gtkwidget.c:1382
 msgid "How to position in extra vertical space"
 msgstr "Πως γίνεται τοποθέτηση σε επιπλέον κάθετο χώρο"
 
-#: gtk/gtkwidget.c:1415
+#: gtk/gtkwidget.c:1402
 msgid "Margin on Left"
 msgstr "Περιθώριο αριστερά"
 
-#: gtk/gtkwidget.c:1416
+#: gtk/gtkwidget.c:1403
 msgid "Pixels of extra space on the left side"
 msgstr "Εικονοστοιχεία επιπλέον χώρου στην αριστερή πλευρά"
 
-#: gtk/gtkwidget.c:1436
+#: gtk/gtkwidget.c:1423
 msgid "Margin on Right"
 msgstr "Περιθώριο δεξιά"
 
-#: gtk/gtkwidget.c:1437
+#: gtk/gtkwidget.c:1424
 msgid "Pixels of extra space on the right side"
 msgstr "Εικονοστοιχεία επιπλέον χώρου στη δεξιά πλευρά"
 
-#: gtk/gtkwidget.c:1456
+#: gtk/gtkwidget.c:1443
 msgid "Margin on Start"
 msgstr "Περιθώριο στην αρχή"
 
-#: gtk/gtkwidget.c:1457
+#: gtk/gtkwidget.c:1444
 msgid "Pixels of extra space on the start"
 msgstr "Εικονοστοιχεία του πρόσθετου χώρου στην αρχή"
 
-#: gtk/gtkwidget.c:1476
+#: gtk/gtkwidget.c:1463
 msgid "Margin on End"
 msgstr "Περιθώριο στο τέλος"
 
-#: gtk/gtkwidget.c:1477
+#: gtk/gtkwidget.c:1464
 msgid "Pixels of extra space on the end"
 msgstr "Εικονοστοιχεία του πρόσθετου χώρου στο τέλος"
 
-#: gtk/gtkwidget.c:1495
+#: gtk/gtkwidget.c:1482
 msgid "Margin on Top"
 msgstr "Περιθώριο κορυφής"
 
-#: gtk/gtkwidget.c:1496
+#: gtk/gtkwidget.c:1483
 msgid "Pixels of extra space on the top side"
 msgstr "Εικονοστοιχεία επιπλέον χώρου στην επάνω πλευρά"
 
-#: gtk/gtkwidget.c:1514
+#: gtk/gtkwidget.c:1501
 msgid "Margin on Bottom"
 msgstr "Περιθώριο κάτω"
 
-#: gtk/gtkwidget.c:1515
+#: gtk/gtkwidget.c:1502
 msgid "Pixels of extra space on the bottom side"
 msgstr "Εικονοστοιχεία επιπλέον χώρου στην κάτω πλευρά"
 
-#: gtk/gtkwidget.c:1530
+#: gtk/gtkwidget.c:1517
 msgid "All Margins"
 msgstr "Όλα τα περιθώρια"
 
-#: gtk/gtkwidget.c:1531
+#: gtk/gtkwidget.c:1518
 msgid "Pixels of extra space on all four sides"
 msgstr "Εικονοστοιχεία επιπλέον χώρου σε όλες τις πλευρές"
 
-#: gtk/gtkwidget.c:1545
+#: gtk/gtkwidget.c:1532
 msgid "Horizontal Expand"
 msgstr "Οριζόντια επέκταση"
 
-#: gtk/gtkwidget.c:1546
+#: gtk/gtkwidget.c:1533
 msgid "Whether widget wants more horizontal space"
 msgstr "Αν το γραφικό στοιχείο απαιτεί περισσότερο οριζόντιο χώρο"
 
-#: gtk/gtkwidget.c:1559
+#: gtk/gtkwidget.c:1546
 msgid "Horizontal Expand Set"
 msgstr "Καθορισμός οριζόντιας επέκτασης"
 
-#: gtk/gtkwidget.c:1560
+#: gtk/gtkwidget.c:1547
 msgid "Whether to use the hexpand property"
 msgstr "Αν θα χρησιμοποιείται η ιδιότητα hexpand"
 
-#: gtk/gtkwidget.c:1573
+#: gtk/gtkwidget.c:1560
 msgid "Vertical Expand"
 msgstr "Κάθετη επέκταση"
 
-#: gtk/gtkwidget.c:1574
+#: gtk/gtkwidget.c:1561
 msgid "Whether widget wants more vertical space"
 msgstr "Αν το γραφικό στοιχείο απαιτεί περισσότερο κάθετο χώρο"
 
-#: gtk/gtkwidget.c:1587
+#: gtk/gtkwidget.c:1574
 msgid "Vertical Expand Set"
 msgstr "Καθορισμός κάθετης στοίχισης"
 
-#: gtk/gtkwidget.c:1588
+#: gtk/gtkwidget.c:1575
 msgid "Whether to use the vexpand property"
 msgstr "Αν θα χρησιμοποιείται η ιδιότητα vexpand"
 
-#: gtk/gtkwidget.c:1601
+#: gtk/gtkwidget.c:1588
 msgid "Expand Both"
 msgstr "Επέκταση και στις δύο"
 
-#: gtk/gtkwidget.c:1602
+#: gtk/gtkwidget.c:1589
 msgid "Whether widget wants to expand in both directions"
 msgstr "Αν το γραφικό στοιχείο θα επεκτείνεται και στις δύο διαστάσεις"
 
-#: gtk/gtkwidget.c:1618
+#: gtk/gtkwidget.c:1605
 msgid "Opacity for Widget"
 msgstr "Αδιαφάνεια για γραφικό στοιχείο"
 
-#: gtk/gtkwidget.c:1619
+#: gtk/gtkwidget.c:1606
 msgid "The opacity of the widget, from 0 to 1"
 msgstr "Η αδιαφάνεια του γραφικού στοιχείου, από 0 ως 1"
 
-#: gtk/gtkwidget.c:1634
+#: gtk/gtkwidget.c:1621
 msgid "Scale factor"
 msgstr "Συντελεστής κλίμακας"
 
-#: gtk/gtkwidget.c:1635
+#: gtk/gtkwidget.c:1622
 msgid "The scaling factor of the window"
 msgstr "Ο συντελεστής κλιμάκωσης του παραθύρου"
 
-#: gtk/gtkwidget.c:3448
+#: gtk/gtkwidget.c:3436
 msgid "Interior Focus"
 msgstr "Εσωτερική Εστίαση"
 
-#: gtk/gtkwidget.c:3449
+#: gtk/gtkwidget.c:3437
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Αν θα σχεδιάζεται επισήμανση εστίασης μέσα σε γραφικά στοιχεία"
 
-#: gtk/gtkwidget.c:3462
+#: gtk/gtkwidget.c:3450
 msgid "Focus linewidth"
 msgstr "Πλάτος γραμμής εστίασης"
 
-#: gtk/gtkwidget.c:3463
+#: gtk/gtkwidget.c:3451
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Πλάτος, σε εικονοστοιχεία της γραμμής επισήμανσης εστίασης"
 
-#: gtk/gtkwidget.c:3477
+#: gtk/gtkwidget.c:3465
 msgid "Focus line dash pattern"
 msgstr "Μοτίβο γραμμής εστίασης"
 
-#: gtk/gtkwidget.c:3478
+#: gtk/gtkwidget.c:3466
 msgid ""
 "Dash pattern used to draw the focus indicator. The character values are "
 "interpreted as pixel widths of alternating on and off segments of the line."
@@ -9245,29 +9364,29 @@ msgstr ""
 "τιμές χαρακτήρα ερμηνεύονται ως πλάτη εικονοστοιχείου που ενεργοποιούν και "
 "απενεργοποιούν τμήματα της γραμμής."
 
-#: gtk/gtkwidget.c:3491
+#: gtk/gtkwidget.c:3479
 msgid "Focus padding"
 msgstr "Γέμισμα εστίασης"
 
-#: gtk/gtkwidget.c:3492
+#: gtk/gtkwidget.c:3480
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Πλάτος σε εικονοστοιχεία μεταξύ της σήμανσης εστίασης και του 'κουτιού' "
 "γραφικού στοιχείου"
 
-#: gtk/gtkwidget.c:3506
+#: gtk/gtkwidget.c:3494
 msgid "Cursor color"
 msgstr "Χρώμα δρομέα"
 
-#: gtk/gtkwidget.c:3507
+#: gtk/gtkwidget.c:3495
 msgid "Color with which to draw insertion cursor"
 msgstr "Χρώμα με το οποίο ζωγραφίζεται η εισαγωγή δρομέα"
 
-#: gtk/gtkwidget.c:3520
+#: gtk/gtkwidget.c:3508
 msgid "Secondary cursor color"
 msgstr "Χρώμα δευτερεύοντος δρομέα"
 
-#: gtk/gtkwidget.c:3521
+#: gtk/gtkwidget.c:3509
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -9275,45 +9394,45 @@ msgstr ""
 "Χρώμα με το οποίο θα σχεδιαστεί ο δευτερεύων δρομέας εισαγωγής κατά την "
 "επεξεργασία μικτού αριστερόστροφου και δεξιόστροφου κειμένου."
 
-#: gtk/gtkwidget.c:3527
+#: gtk/gtkwidget.c:3515
 msgid "Cursor line aspect ratio"
 msgstr "Αναλογία διαστάσεων γραμμής δρομέα"
 
-#: gtk/gtkwidget.c:3528
+#: gtk/gtkwidget.c:3516
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Αναλογία διαστάσεων με την οποία θα σχεδιαστεί ο δρομέας εισαγωγής"
 
-#: gtk/gtkwidget.c:3534
+#: gtk/gtkwidget.c:3522
 msgid "Window dragging"
 msgstr "Σύρσιμο παραθύρου"
 
-#: gtk/gtkwidget.c:3535
+#: gtk/gtkwidget.c:3523
 msgid "Whether windows can be dragged and maximized by clicking on empty areas"
 msgstr ""
 "Αν τα παράθυρα μπορούν να μετακινηθούν και να μεγιστοποιηθούν σε κενές "
 "περιοχές"
 
-#: gtk/gtkwidget.c:3552
+#: gtk/gtkwidget.c:3540
 msgid "Unvisited Link Color"
 msgstr "Χρώμα μη αναγνωσμένου δεσμού"
 
-#: gtk/gtkwidget.c:3553
+#: gtk/gtkwidget.c:3541
 msgid "Color of unvisited links"
 msgstr "Χρώμα μη αναγνωσμένων δεσμών"
 
-#: gtk/gtkwidget.c:3569
+#: gtk/gtkwidget.c:3557
 msgid "Visited Link Color"
 msgstr "Χρώμα ναγνωσμένου δεσμού"
 
-#: gtk/gtkwidget.c:3570
+#: gtk/gtkwidget.c:3558
 msgid "Color of visited links"
 msgstr "Χρώμα αναγνωσμένων δεσμών"
 
-#: gtk/gtkwidget.c:3588
+#: gtk/gtkwidget.c:3576
 msgid "Wide Separators"
 msgstr "Πλατιά διαχωριστικά"
 
-#: gtk/gtkwidget.c:3589
+#: gtk/gtkwidget.c:3577
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -9321,88 +9440,88 @@ msgstr ""
 "Αν τα διαχωριστικά θα έχουν μεταβλητό μέγεθος και θα σχεδιάζονται ως πλαίσια "
 "αντί για γραμμές"
 
-#: gtk/gtkwidget.c:3606
+#: gtk/gtkwidget.c:3594
 msgid "Separator Width"
 msgstr "Πλάτος διαχωριστικού"
 
-#: gtk/gtkwidget.c:3607
+#: gtk/gtkwidget.c:3595
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Το πλάτος των διαχωριστικών αν είναι αληθές το πλατιά διαχωριστικά"
 
-#: gtk/gtkwidget.c:3624
+#: gtk/gtkwidget.c:3612
 msgid "Separator Height"
 msgstr "Ύψος διαχωριστικού"
 
-#: gtk/gtkwidget.c:3625
+#: gtk/gtkwidget.c:3613
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Το ύψος των διαχωριστικών αν είναι αληθές το \"πλατιά διαχωριστικά\""
 
-#: gtk/gtkwidget.c:3639
+#: gtk/gtkwidget.c:3627
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Μήκος οριζόντιου βέλους κύλισης"
 
-#: gtk/gtkwidget.c:3640
+#: gtk/gtkwidget.c:3628
 msgid "The length of horizontal scroll arrows"
 msgstr "Το μήκος του οριζόντιου βέλους κύλισης"
 
-#: gtk/gtkwidget.c:3654
+#: gtk/gtkwidget.c:3642
 msgid "Vertical Scroll Arrow Length"
 msgstr "Μήκος κάθετου βέλους κύλισης"
 
-#: gtk/gtkwidget.c:3655
+#: gtk/gtkwidget.c:3643
 msgid "The length of vertical scroll arrows"
 msgstr "Το μήκος του κάθετου βέλους κύλισης"
 
-#: gtk/gtkwidget.c:3661 gtk/gtkwidget.c:3662
+#: gtk/gtkwidget.c:3649 gtk/gtkwidget.c:3650
 msgid "Width of text selection handles"
 msgstr "Το πλάτος που χειρίζεται η επιλογή του κειμένου"
 
-#: gtk/gtkwidget.c:3667 gtk/gtkwidget.c:3668
+#: gtk/gtkwidget.c:3655 gtk/gtkwidget.c:3656
 msgid "Height of text selection handles"
 msgstr "Το ύψος που χειρίζεται η επιλογή του κειμένου"
 
-#: gtk/gtkwindow.c:737
+#: gtk/gtkwindow.c:738
 msgid "Window Type"
 msgstr "Τύπος παραθύρου"
 
-#: gtk/gtkwindow.c:738
+#: gtk/gtkwindow.c:739
 msgid "The type of the window"
 msgstr "Ο τύπος του παραθύρου"
 
-#: gtk/gtkwindow.c:745
+#: gtk/gtkwindow.c:746
 msgid "Window Title"
 msgstr "Τίτλος παραθύρου"
 
-#: gtk/gtkwindow.c:746
+#: gtk/gtkwindow.c:747
 msgid "The title of the window"
 msgstr "Ο τίτλος του παραθύρου"
 
-#: gtk/gtkwindow.c:752
+#: gtk/gtkwindow.c:753
 msgid "Window Role"
 msgstr "Ρόλος παραθύρου"
 
-#: gtk/gtkwindow.c:753
+#: gtk/gtkwindow.c:754
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 "Μοναδικό αναγνωριστικό για το παράθυρο που θα χρησιμοποείται για την "
 "επαναφορά μιας συνεδρίας"
 
-#: gtk/gtkwindow.c:768
+#: gtk/gtkwindow.c:769
 msgid "Startup ID"
 msgstr "Αναγνωριστικό εκκίνησης"
 
-#: gtk/gtkwindow.c:769
+#: gtk/gtkwindow.c:770
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "Μοναδικό αναγνωριστικό εκκίνησης για το παράθυρο που θα χρησιμοποείται για "
 "την ειδοποίηση εκκίνησης"
 
-#: gtk/gtkwindow.c:776
+#: gtk/gtkwindow.c:777
 msgid "If TRUE, users can resize the window"
 msgstr ""
 "Αν είναι ΑΛΗΘΕΣ, οι χρήστες μπορούν να αλλάζουν το μέγεθος του παραθύρου"
 
-#: gtk/gtkwindow.c:783
+#: gtk/gtkwindow.c:784
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -9410,99 +9529,99 @@ msgstr ""
 "Αν ΑΛΗΘΕΣ, το παράθυρο είναι σχηματικό (τα άλλα παράθυρα δε μπορούν να "
 "χρησιμοποιηθούν όταν αυτό είναι ενεργό)."
 
-#: gtk/gtkwindow.c:789
+#: gtk/gtkwindow.c:790
 msgid "Window Position"
 msgstr "Θέση παραθύρου"
 
-#: gtk/gtkwindow.c:790
+#: gtk/gtkwindow.c:791
 msgid "The initial position of the window"
 msgstr "Η αρχική θέση του παραθύρου"
 
-#: gtk/gtkwindow.c:797
+#: gtk/gtkwindow.c:798
 msgid "Default Width"
 msgstr "Προεπιλεγμένο πλάτος"
 
-#: gtk/gtkwindow.c:798
+#: gtk/gtkwindow.c:799
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Το προεπιλεγμένο πλάτος του παραθύρου που χρησιμοποιείται κατα την αρχική "
 "εμφάνιση του παραθύρου"
 
-#: gtk/gtkwindow.c:805
+#: gtk/gtkwindow.c:806
 msgid "Default Height"
 msgstr "Προεπιλεγμένο ύψος"
 
-#: gtk/gtkwindow.c:806
+#: gtk/gtkwindow.c:807
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Το προεπιλεγμένο ύψος του παραθύρου που χρησιμοποιείται κατά την αρχική "
 "εμφάνιση του παραθύρου"
 
-#: gtk/gtkwindow.c:813
+#: gtk/gtkwindow.c:814
 msgid "Destroy with Parent"
 msgstr "Καταστροφή με το γονικό"
 
-#: gtk/gtkwindow.c:814
+#: gtk/gtkwindow.c:815
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 "Αν θα πρέπει να καταστραφεί αυτό το παράθυρο όταν καταστρέφεται το γονικό"
 
-#: gtk/gtkwindow.c:827
+#: gtk/gtkwindow.c:828
 msgid "Hide the titlebar during maximization"
 msgstr "Απόκρυψη της μπάρας τίτλου κατα τη διάρκεια μεγιστοποίησης"
 
-#: gtk/gtkwindow.c:828
+#: gtk/gtkwindow.c:829
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr ""
 "Αν θα πρέπει να είναι κρυμμένη η μπάρα του τίτλου της εφαρμογής όταν το "
 "παράθυρο μεγιστοποιείται"
 
-#: gtk/gtkwindow.c:835
+#: gtk/gtkwindow.c:836
 msgid "Icon for this window"
 msgstr "Εικονίδιο για αυτό το παράθυρο"
 
-#: gtk/gtkwindow.c:851
+#: gtk/gtkwindow.c:852
 msgid "Mnemonics Visible"
 msgstr "Προβολή μνημονικών"
 
-#: gtk/gtkwindow.c:852
+#: gtk/gtkwindow.c:853
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Αν το μνημονικά θα είναι ορατά σε αυτό το παράθυρο"
 
-#: gtk/gtkwindow.c:868
+#: gtk/gtkwindow.c:869
 msgid "Focus Visible"
 msgstr "Ορατή εστίαση"
 
-#: gtk/gtkwindow.c:869
+#: gtk/gtkwindow.c:870
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Αν τα ορθογώνια εστίασης θα είναι ορατά σε αυτό το παράθυρο"
 
-#: gtk/gtkwindow.c:884
+#: gtk/gtkwindow.c:885
 msgid "Name of the themed icon for this window"
 msgstr "Όνομα του εικονιδίου με θέμα για αυτό το παράθυρο"
 
-#: gtk/gtkwindow.c:897
+#: gtk/gtkwindow.c:898
 msgid "Is Active"
 msgstr "Είναι ενεργό"
 
-#: gtk/gtkwindow.c:898
+#: gtk/gtkwindow.c:899
 msgid "Whether the toplevel is the current active window"
 msgstr "Αν το κορυφαίο επίπεδο θα είναι το τρέχον ενεργό παράθυρο"
 
-#: gtk/gtkwindow.c:904
+#: gtk/gtkwindow.c:905
 msgid "Focus in Toplevel"
 msgstr "Εστίαση στο κορυφαίο επίπεδο"
 
-#: gtk/gtkwindow.c:905
+#: gtk/gtkwindow.c:906
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Αν η εστίαση είναι μέσα σε αυτό το GtkWindow"
 
-#: gtk/gtkwindow.c:911
+#: gtk/gtkwindow.c:912
 msgid "Type hint"
 msgstr "Είδος υπόδειξης"
 
-#: gtk/gtkwindow.c:912
+#: gtk/gtkwindow.c:913
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -9510,116 +9629,116 @@ msgstr ""
 "Υπόδειξη για να βοηθηθεί το περιβάλλον εργασίας να καταλάβει το είδος του "
 "παραθύρου και πώς να το χειριστεί."
 
-#: gtk/gtkwindow.c:919
+#: gtk/gtkwindow.c:920
 msgid "Skip taskbar"
 msgstr "Παράκαμψη γραμμής εργασιών"
 
-#: gtk/gtkwindow.c:920
+#: gtk/gtkwindow.c:921
 msgid "TRUE if the window should not be in the task bar."
 msgstr "ΑΛΗΘΕΣ αν το παράθυρο δε θα είναι στη γραμμή εργασιών."
 
-#: gtk/gtkwindow.c:926
+#: gtk/gtkwindow.c:927
 msgid "Skip pager"
 msgstr "Παράκαμψη pager"
 
-#: gtk/gtkwindow.c:927
+#: gtk/gtkwindow.c:928
 msgid "TRUE if the window should not be in the pager."
 msgstr "ΑΛΗΘΕΣ εάν το παράθυρο δε θα είναι στο πρόγραμμα σελίδας."
 
-#: gtk/gtkwindow.c:933
+#: gtk/gtkwindow.c:934
 msgid "Urgent"
 msgstr "Επείγον"
 
-#: gtk/gtkwindow.c:934
+#: gtk/gtkwindow.c:935
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr ""
 "ΑΛΗΘΕΣ αν το παράθυρο θα πρέπει να προσελκύει το ενδιαφέρον του χρήστη."
 
-#: gtk/gtkwindow.c:947
+#: gtk/gtkwindow.c:948
 msgid "Accept focus"
 msgstr "Δέχεται εστίαση"
 
-#: gtk/gtkwindow.c:948
+#: gtk/gtkwindow.c:949
 msgid "TRUE if the window should receive the input focus."
 msgstr "ΑΛΗΘΕΣ αν το παράθυρο θα δέχεται εστίαση εισόδου."
 
-#: gtk/gtkwindow.c:961
+#: gtk/gtkwindow.c:962
 msgid "Focus on map"
 msgstr "Εστίαση στο χάρτη"
 
-#: gtk/gtkwindow.c:962
+#: gtk/gtkwindow.c:963
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "ΑΛΗΘΕΣ αν το παράθυρο θα δέχεται εστίαση εισόδου."
 
-#: gtk/gtkwindow.c:975
+#: gtk/gtkwindow.c:976
 msgid "Decorated"
 msgstr "Διακοσμημένο"
 
-#: gtk/gtkwindow.c:976
+#: gtk/gtkwindow.c:977
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Αν το παράθυρο θα διακοσμείται από το διαχειριστή παραθύρων"
 
-#: gtk/gtkwindow.c:989
+#: gtk/gtkwindow.c:990
 msgid "Deletable"
 msgstr "Δυνατότητα διαγραφής"
 
-#: gtk/gtkwindow.c:990
+#: gtk/gtkwindow.c:991
 msgid "Whether the window frame should have a close button"
 msgstr "Αν το πλάισιο του παραθύρου θα διαθέτει κουμπί κλεισίματος"
 
-#: gtk/gtkwindow.c:1010
+#: gtk/gtkwindow.c:1011
 msgid "Resize grip"
 msgstr "Λαβή αλλαγής μεγέθους"
 
-#: gtk/gtkwindow.c:1011
+#: gtk/gtkwindow.c:1012
 msgid "Specifies whether the window should have a resize grip"
 msgstr "Καθορίζει αν το παράθυρο θα διαθέτει λαβή αλλαγής μεγέθους"
 
-#: gtk/gtkwindow.c:1026
+#: gtk/gtkwindow.c:1027
 msgid "Resize grip is visible"
 msgstr "Ορατή λαβή αλλαγής μεγέθους"
 
-#: gtk/gtkwindow.c:1027
+#: gtk/gtkwindow.c:1028
 msgid "Specifies whether the window's resize grip is visible."
 msgstr "Καθορίζει αν η λαβή αλλαγής μεγέθους του παραθύρου θα είναι ορατή."
 
-#: gtk/gtkwindow.c:1041
+#: gtk/gtkwindow.c:1042
 msgid "Gravity"
 msgstr "Βαρύτητα"
 
-#: gtk/gtkwindow.c:1042
+#: gtk/gtkwindow.c:1043
 msgid "The window gravity of the window"
 msgstr "Η βαρύτητα παραθύρου του παραθύρου"
 
-#: gtk/gtkwindow.c:1077
+#: gtk/gtkwindow.c:1078
 msgid "Attached to Widget"
 msgstr "Προσδεμένο στο γραφικό στοιχείο"
 
-#: gtk/gtkwindow.c:1078
+#: gtk/gtkwindow.c:1079
 msgid "The widget where the window is attached"
 msgstr "Το γραφικό στοιχείο στο οποίο θα είναι προσδεμένο το παράθυρο"
 
-#: gtk/gtkwindow.c:1084
+#: gtk/gtkwindow.c:1085
 msgid "Is maximized"
 msgstr "Είναι μεγιστοποιημένο"
 
-#: gtk/gtkwindow.c:1085
+#: gtk/gtkwindow.c:1086
 msgid "Whether the window is maximized"
 msgstr "Αν το παράθυρο είναι μεγιστοποιημένο"
 
-#: gtk/gtkwindow.c:1106
+#: gtk/gtkwindow.c:1107
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:1107
+#: gtk/gtkwindow.c:1108
 msgid "The GtkApplication for the window"
 msgstr "Η GtkApplication για το παράθυρο"
 
-#: gtk/gtkwindow.c:1117 gtk/gtkwindow.c:1118
+#: gtk/gtkwindow.c:1118 gtk/gtkwindow.c:1119
 msgid "Decorated button layout"
 msgstr "Διακοσμημένη διάταξη κουμπιού"
 
-#: gtk/gtkwindow.c:1124 gtk/gtkwindow.c:1125
+#: gtk/gtkwindow.c:1125 gtk/gtkwindow.c:1126
 msgid "Decoration resize handle size"
 msgstr "Μέγεθος χειριστή αυξομείωσης διακόσμησης"
 
@@ -9646,6 +9765,9 @@ msgstr "Τίτλος χρωματικού προφίλ"
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Ο τίτλος προς χρήση για το χρωματικό προφίλ"
+
+#~ msgid "Sans 12"
+#~ msgstr "Sans 12"
 
 #~ msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 #~ msgstr "Αν το πλαίσιο επιλογών θα εστιάζεται όταν πατιέται με το ποντίκι"
@@ -9941,9 +10063,6 @@ msgstr "Ο τίτλος προς χρήση για το χρωματικό πρ�
 
 #~ msgid "Whether buttons for creating/manipulating files should be displayed"
 #~ msgstr "Αν θα εμφανίζονται κουμπιά για τη δημιουργία/χειραγώγηση αρχείων"
-
-#~ msgid "The GdkFont that is currently selected"
-#~ msgstr "Το GdkFont που είναι αυτή τη στιγμή επιλεγμένο"
 
 #~ msgid "Deprecated property, use shadow_type instead"
 #~ msgstr "Η ιδιότητα δεν ισχύει, χρησιμοποιείστε στη θέση της shadow_type"
