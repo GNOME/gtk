@@ -587,14 +587,14 @@ create_color_button (void)
   GtkWidget *vbox;
   GtkWidget *picker;
   GtkWidget *align;
-  GdkColor color;
+  GdkRGBA color;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   color.red = 0x1e<<8;  /* Go Gagne! */
   color.green = 0x90<<8;
   color.blue = 0xff<<8;
-  picker = gtk_color_button_new_with_color (&color);
+  picker = gtk_color_button_new_with_rgba (&color);
   gtk_container_add (GTK_CONTAINER (align), picker);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox),

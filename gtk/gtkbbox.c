@@ -151,10 +151,6 @@ static gboolean gtk_button_box_render          (GtkCssGadget        *gadget,
                                                 int                  height,
                                                 gpointer             data);
 
-#define DEFAULT_CHILD_MIN_WIDTH 85
-#define DEFAULT_CHILD_MIN_HEIGHT 27
-#define DEFAULT_CHILD_IPAD_X 4
-#define DEFAULT_CHILD_IPAD_Y 0
 #define DEFAULT_LAYOUT_STYLE GTK_BUTTONBOX_EDGE
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
@@ -203,70 +199,6 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   container_class->add = gtk_button_box_add;
   container_class->set_child_property = gtk_button_box_set_child_property;
   container_class->get_child_property = gtk_button_box_get_child_property;
-
-  /**
-   * GtkButtonBox:child-min-width:
-   *
-   * The minimum width of buttons inside the box.
-   *
-   * Deprecated: 3.20: Use CSS min-width instead.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("child-min-width",
-                                                             P_("Minimum child width"),
-                                                             P_("Minimum width of buttons inside the box"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             DEFAULT_CHILD_MIN_WIDTH,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButtonBox:child-min-height:
-   *
-   * The minimum height of buttons inside the box.
-   *
-   * Deprecated: 3.20: Use CSS min-height instead.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("child-min-height",
-                                                             P_("Minimum child height"),
-                                                             P_("Minimum height of buttons inside the box"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             DEFAULT_CHILD_MIN_HEIGHT,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButtonBox:child-internal-pad-x:
-   *
-   * The amount to increase a child's size on either side.
-   *
-   * Deprecated: 3.20: Use CSS padding instead.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("child-internal-pad-x",
-                                                             P_("Child internal width padding"),
-                                                             P_("Amount to increase child's size on either side"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             DEFAULT_CHILD_IPAD_X,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  /**
-   * GtkButtonBox:child-internal-pad-y:
-   *
-   * The amount to increase a child's size on the top and bottom.
-   *
-   * Deprecated: 3.20: Use CSS padding instead.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("child-internal-pad-y",
-                                                             P_("Child internal height padding"),
-                                                             P_("Amount to increase child's size on the top and bottom"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             DEFAULT_CHILD_IPAD_Y,
-                                                             GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_LAYOUT_STYLE,
@@ -604,10 +536,6 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
   GtkRequisition child_requisition;
   gint ipad_w;
   gint ipad_h;
-  gint child_min_width;
-  gint child_min_height;
-  gint ipad_x;
-  gint ipad_y;
   gboolean homogeneous;
   gint i;
   gint max_above, max_below, child_baseline;
@@ -621,22 +549,16 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   homogeneous = gtk_box_get_homogeneous (GTK_BOX (widget));
 
-  gtk_widget_style_get (widget,
-                        "child-min-width", &child_min_width,
-                        "child-min-height", &child_min_height,
-                        "child-internal-pad-x", &ipad_x,
-                        "child-internal-pad-y", &ipad_y,
-                        NULL);
 
   nchildren = 0;
   nsecondaries = 0;
   list = children = _gtk_box_get_children (GTK_BOX (bbox));
-  needed_width = child_min_width;
-  needed_height = child_min_height;
+  needed_width = 0;
+  needed_height = 0;
   needed_above = 0;
   needed_below = 0;
-  ipad_w = ipad_x * 2;
-  ipad_h = ipad_y * 2;
+  ipad_w = 0;
+  ipad_h = 0;
 
   have_baseline = FALSE;
   max_above = max_below = 0;
@@ -657,8 +579,8 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
 	      child_baseline != -1)
 	    {
 	      have_baseline = TRUE;
-	      max_above = MAX (max_above, child_baseline + ipad_y);
-	      max_below = MAX (max_below , child_requisition.height + ipad_h - (child_baseline + ipad_y));
+	      max_above = MAX (max_above, child_baseline);
+	      max_below = MAX (max_below , child_requisition.height + ipad_h - (child_baseline));
 	    }
           avg_w += child_requisition.width + ipad_w;
           avg_h += child_requisition.height + ipad_h;
@@ -721,12 +643,12 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
 		  gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
 		  child_baseline != -1)
 		{
-		  (*baselines)[i] = child_baseline + ipad_y;
+		  (*baselines)[i] = child_baseline;
 
-		  if (child_baseline + ipad_y > needed_above)
-		    needed_above = child_baseline + ipad_y;
-		  if (child_requisition.height - child_baseline + ipad_y > needed_below)
-		    needed_below = child_requisition.height - child_baseline + ipad_y;
+		  if (child_baseline > needed_above)
+		    needed_above = child_baseline;
+		  if (child_requisition.height - child_baseline > needed_below)
+		    needed_below = child_requisition.height - child_baseline;
 		}
 	      else
 		{
@@ -741,7 +663,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
 	      if (orientation == GTK_ORIENTATION_HORIZONTAL &&
 		  gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
 		  child_baseline != -1)
-		(*baselines)[i] = child_baseline + ipad_y;
+		(*baselines)[i] = child_baseline;
             }
 
           i++;
@@ -1068,7 +990,6 @@ gtk_button_box_allocate (GtkCssGadget        *gadget,
   gint childspacing = 0;
   gint spacing;
   GtkOrientation orientation;
-  gint ipad_x, ipad_y;
   gint *widths;
   gint *heights;
   gint *baselines;
@@ -1087,10 +1008,6 @@ gtk_button_box_allocate (GtkCssGadget        *gadget,
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   spacing = gtk_box_get_spacing (GTK_BOX (widget));
 
-  gtk_widget_style_get (widget,
-                        "child-internal-pad-x", &ipad_x,
-                        "child-internal-pad-y", &ipad_y,
-                        NULL);
   gtk_button_box_child_requisition (widget,
                                     &nvis_children,
                                     &n_secondaries,
