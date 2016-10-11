@@ -48,7 +48,6 @@ struct _GtkBuiltinIconPrivate {
   int                           default_size;
   int                           strikethrough;
   gboolean                      strikethrough_valid;
-  char *                        default_size_property;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkBuiltinIcon, gtk_builtin_icon, GTK_TYPE_CSS_GADGET,
@@ -75,20 +74,6 @@ gtk_builtin_icon_get_preferred_size (GtkCssGadget   *gadget,
   if (min_size > 0.0)
     {
       *minimum = *natural = min_size;
-    }
-  else if (priv->default_size_property)
-    {
-      GValue value = G_VALUE_INIT;
-
-      /* Do it a bit more complicated here so we get warnings when
-       * somebody sets a non-int proerty.
-       */
-      g_value_init (&value, G_TYPE_INT);
-      gtk_widget_style_get_property (gtk_css_gadget_get_owner (gadget),
-                                     priv->default_size_property,
-                                     &value);
-      *minimum = *natural = g_value_get_int (&value);
-      g_value_unset (&value);
     }
   else
     {
@@ -173,22 +158,9 @@ gtk_builtin_icon_style_changed (GtkCssGadget      *gadget,
 }
 
 static void
-gtk_builtin_icon_finalize (GObject *object)
-{
-  GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (object));
-
-  g_free (priv->default_size_property);
-
-  G_OBJECT_CLASS (gtk_builtin_icon_parent_class)->finalize (object);
-}
-
-static void
 gtk_builtin_icon_class_init (GtkBuiltinIconClass *klass)
 {
   GtkCssGadgetClass *gadget_class = GTK_CSS_GADGET_CLASS (klass);
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gtk_builtin_icon_finalize;
 
   gadget_class->get_preferred_size = gtk_builtin_icon_get_preferred_size;
   gadget_class->allocate = gtk_builtin_icon_allocate;
