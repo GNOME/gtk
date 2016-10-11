@@ -199,7 +199,6 @@ static void      gtk_dialog_add_buttons_valist   (GtkDialog    *dialog,
 static gboolean  gtk_dialog_delete_event_handler (GtkWidget    *widget,
                                                   GdkEventAny  *event,
                                                   gpointer      user_data);
-static void      gtk_dialog_style_updated        (GtkWidget    *widget);
 static void      gtk_dialog_map                  (GtkWidget    *widget);
 
 static void      gtk_dialog_close                (GtkDialog    *dialog);
@@ -530,7 +529,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gobject_class->finalize = gtk_dialog_finalize;
 
   widget_class->map = gtk_dialog_map;
-  widget_class->style_updated = gtk_dialog_style_updated;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DIALOG);
 
@@ -576,33 +574,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
 		  G_TYPE_NONE, 0);
 
   /**
-   * GtkDialog:content-area-spacing:
-   *
-   * The default spacing used between elements of the
-   * content area of the dialog, as returned by
-   * gtk_dialog_get_content_area(), unless gtk_box_set_spacing()
-   * was called on that widget directly.
-   *
-   * Since: 2.16
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("content-area-spacing",
-                                                             P_("Content area spacing"),
-                                                             P_("Spacing between elements of the main dialog area"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             0,
-                                                             GTK_PARAM_READABLE));
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("button-spacing",
-                                                             P_("Button spacing"),
-                                                             P_("Spacing between buttons"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             6,
-                                                             GTK_PARAM_READABLE));
-
-  /**
    * GtkDialog:use-header-bar:
    *
    * %TRUE if the dialog uses a #GtkHeaderBar for action buttons
@@ -637,29 +608,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
 }
 
 static void
-update_spacings (GtkDialog *dialog)
-{
-  GtkDialogPrivate *priv = dialog->priv;
-  gint content_area_spacing;
-  gint button_spacing;
-
-  gtk_widget_style_get (GTK_WIDGET (dialog),
-                        "content-area-spacing", &content_area_spacing,
-                        "button-spacing", &button_spacing,
-                        NULL);
-
-  if (!_gtk_box_get_spacing_set (GTK_BOX (priv->vbox)))
-    {
-      gtk_box_set_spacing (GTK_BOX (priv->vbox), content_area_spacing);
-      _gtk_box_set_spacing_set (GTK_BOX (priv->vbox), FALSE);
-    }
-
-  /* don't set spacing when buttons are linked */
-  if (gtk_button_box_get_layout (GTK_BUTTON_BOX (priv->action_area)) != GTK_BUTTONBOX_EXPAND)
-    gtk_box_set_spacing (GTK_BOX (priv->action_area), button_spacing);
-}
-
-static void
 gtk_dialog_init (GtkDialog *dialog)
 {
   dialog->priv = gtk_dialog_get_instance_private (dialog);
@@ -668,8 +616,6 @@ gtk_dialog_init (GtkDialog *dialog)
   dialog->priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
-
-  update_spacings (dialog);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -775,14 +721,6 @@ gtk_dialog_map (GtkWidget *widget)
 
       g_list_free (children);
     }
-}
-
-static void
-gtk_dialog_style_updated (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_dialog_parent_class)->style_updated (widget);
-
-  update_spacings (GTK_DIALOG (widget));
 }
 
 static void
