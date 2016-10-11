@@ -7217,16 +7217,6 @@ window_controls (GtkWidget *window)
 
   g_object_set_data (G_OBJECT (control_window), "spin2", spin);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  button = gtk_button_new_with_label ("Reshow with initial size");
-  g_signal_connect_object (button,
-			   "clicked",
-			   G_CALLBACK (gtk_window_reshow_with_initial_size),
-			   window,
-			   G_CONNECT_SWAPPED);
-  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   button = gtk_button_new_with_label ("Queue resize");
   g_signal_connect_object (button,
 			   "clicked",

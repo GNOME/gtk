@@ -429,10 +429,6 @@ GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_has_group        (GtkWindow   *window);
 
-/* Ignore this unless you are writing a GUI builder */
-GDK_DEPRECATED_IN_3_10
-void     gtk_window_reshow_with_initial_size (GtkWindow *window);
-
 GDK_AVAILABLE_IN_ALL
 GtkWindowType gtk_window_get_window_type     (GtkWindow     *window);
 

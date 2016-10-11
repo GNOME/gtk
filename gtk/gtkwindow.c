@@ -5600,32 +5600,6 @@ gtk_window_get_position (GtkWindow *window,
     }
 }
 
-/**
- * gtk_window_reshow_with_initial_size:
- * @window: a #GtkWindow
- * 
- * Hides @window, then reshows it, resetting the
- * default size and position of the window. Used
- * by GUI builders only.
- * 
- * Deprecated: 3.10: GUI builders can call gtk_widget_hide(),
- *   gtk_widget_unrealize() and then gtk_widget_show() on @window
- *   themselves, if they still need this functionality.
- **/
-void
-gtk_window_reshow_with_initial_size (GtkWindow *window)
-{
-  GtkWidget *widget;
-  
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  widget = GTK_WIDGET (window);
-  
-  gtk_widget_hide (widget);
-  gtk_widget_unrealize (widget);
-  gtk_widget_show (widget);
-}
-
 static void
 gtk_window_destroy (GtkWidget *widget)
 {
