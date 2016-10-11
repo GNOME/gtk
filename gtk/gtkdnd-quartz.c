@@ -1264,31 +1264,6 @@ gtk_drag_begin_with_coordinates (GtkWidget         *widget,
   return gtk_drag_begin_internal (widget, NULL, targets,
 				  actions, button, event, x, y);
 }
-/**
- * gtk_drag_begin: (method)
- * @widget: the source widget.
- * @targets: The targets (data formats) in which the
- *    source can provide the data.
- * @actions: A bitmask of the allowed drag actions for this drag.
- * @button: The button the user clicked to start the drag.
- * @event: The event that triggered the start of the drag.
- *
- * Returns: (transfer none):
- */
-GdkDragContext *
-gtk_drag_begin (GtkWidget         *widget,
-		GtkTargetList     *targets,
-		GdkDragAction      actions,
-		gint               button,
-		GdkEvent          *event)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
-  g_return_val_if_fail (targets != NULL, NULL);
-
-  return gtk_drag_begin_internal (widget, NULL, targets,
-				  actions, button, event, -1, -1);
-}
 
 
 /**

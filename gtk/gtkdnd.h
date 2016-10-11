@@ -69,13 +69,6 @@ GdkDragContext *gtk_drag_begin_with_coordinates (GtkWidget         *widget,
                                                  gint               x,
                                                  gint               y);
 
-GDK_DEPRECATED_IN_3_10_FOR(gtk_drag_begin_with_coordinates)
-GdkDragContext *gtk_drag_begin (GtkWidget         *widget,
-				GtkTargetList     *targets,
-				GdkDragAction      actions,
-				gint               button,
-				GdkEvent          *event);
-
 GDK_AVAILABLE_IN_3_16
 void gtk_drag_cancel           (GdkDragContext *context);
 
