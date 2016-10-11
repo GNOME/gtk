@@ -80,17 +80,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_viewport_new             (GtkAdjustment *hadjustment,
 					     GtkAdjustment *vadjustment);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_hadjustment)
-GtkAdjustment* gtk_viewport_get_hadjustment (GtkViewport   *viewport);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_vadjustment)
-GtkAdjustment* gtk_viewport_get_vadjustment (GtkViewport   *viewport);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_set_hadjustment)
-void           gtk_viewport_set_hadjustment (GtkViewport   *viewport,
-                                             GtkAdjustment *adjustment);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_set_vadjustment)
-void           gtk_viewport_set_vadjustment (GtkViewport   *viewport,
-                                             GtkAdjustment *adjustment);
-
 GDK_AVAILABLE_IN_ALL
 void           gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 					     GtkShadowType  type);

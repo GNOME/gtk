@@ -592,42 +592,6 @@ gtk_viewport_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_viewport_parent_class)->finalize (object);
 }
 
-/**
- * gtk_viewport_get_hadjustment:
- * @viewport: a #GtkViewport.
- *
- * Returns the horizontal adjustment of the viewport.
- *
- * Returns: (transfer none): the horizontal adjustment of @viewport.
- *
- * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
- **/
-GtkAdjustment*
-gtk_viewport_get_hadjustment (GtkViewport *viewport)
-{
-  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
-
-  return viewport->priv->hadjustment;
-}
-
-/**
- * gtk_viewport_get_vadjustment:
- * @viewport: a #GtkViewport.
- * 
- * Returns the vertical adjustment of the viewport.
- *
- * Returns: (transfer none): the vertical adjustment of @viewport.
- *
- * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
- **/
-GtkAdjustment*
-gtk_viewport_get_vadjustment (GtkViewport *viewport)
-{
-  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
-
-  return viewport->priv->vadjustment;
-}
-
 static void
 viewport_set_adjustment (GtkViewport    *viewport,
 			 GtkOrientation  orientation,
@@ -654,50 +618,6 @@ viewport_set_adjustment (GtkViewport    *viewport,
 		    viewport);
 
   gtk_viewport_adjustment_value_changed (adjustment, viewport);
-}
-
-/**
- * gtk_viewport_set_hadjustment:
- * @viewport: a #GtkViewport.
- * @adjustment: (allow-none): a #GtkAdjustment.
- *
- * Sets the horizontal adjustment of the viewport.
- *
- * Deprecated: 3.0: Use gtk_scrollable_set_hadjustment()
- **/
-void
-gtk_viewport_set_hadjustment (GtkViewport   *viewport,
-			      GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_VIEWPORT (viewport));
-  if (adjustment)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, adjustment);
-
-  g_object_notify (G_OBJECT (viewport), "hadjustment");
-}
-
-/**
- * gtk_viewport_set_vadjustment:
- * @viewport: a #GtkViewport.
- * @adjustment: (allow-none): a #GtkAdjustment.
- *
- * Sets the vertical adjustment of the viewport.
- *
- * Deprecated: 3.0: Use gtk_scrollable_set_vadjustment()
- **/
-void
-gtk_viewport_set_vadjustment (GtkViewport   *viewport,
-			      GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_VIEWPORT (viewport));
-  if (adjustment)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, adjustment);
-
-  g_object_notify (G_OBJECT (viewport), "vadjustment");
 }
 
 /** 

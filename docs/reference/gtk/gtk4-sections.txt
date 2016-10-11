@@ -4983,10 +4983,6 @@ gtk_list_store_get_type
 GtkViewport
 GtkViewportClass
 gtk_viewport_new
-gtk_viewport_get_hadjustment
-gtk_viewport_get_vadjustment
-gtk_viewport_set_hadjustment
-gtk_viewport_set_vadjustment
 gtk_viewport_set_shadow_type
 gtk_viewport_get_shadow_type
 gtk_viewport_get_bin_window
