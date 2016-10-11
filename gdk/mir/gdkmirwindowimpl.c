@@ -36,11 +36,44 @@
 
 #define MAX_EGL_ATTRS 30
 
+typedef struct
+{
+  GdkAtom type;
+  GArray *array;
+} GdkMirProperty;
+
+static GdkMirProperty *
+gdk_mir_property_new (GdkAtom type,
+                      guint   format,
+                      guint   capacity)
+{
+  GdkMirProperty *property = g_slice_new (GdkMirProperty);
+
+  property->type = type;
+  property->array = g_array_sized_new (TRUE, FALSE, format, capacity);
+
+  return property;
+}
+
+static void
+gdk_mir_property_free (gpointer data)
+{
+  GdkMirProperty *property = data;
+
+  if (!property)
+    return;
+
+  g_array_unref (property->array);
+  g_slice_free (GdkMirProperty, property);
+}
+
 typedef struct _GdkMirWindowImplClass GdkMirWindowImplClass;
 
 struct _GdkMirWindowImpl
 {
   GdkWindowImpl parent_instance;
+
+  GHashTable *properties;
 
   /* Window we are temporary for */
   GdkWindow *transient_for;
@@ -233,6 +266,7 @@ _gdk_mir_window_impl_get_cursor_state (GdkMirWindowImpl *impl,
 static void
 gdk_mir_window_impl_init (GdkMirWindowImpl *impl)
 {
+  impl->properties = g_hash_table_new_full (NULL, NULL, NULL, gdk_mir_property_free);
   impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   impl->surface_state = mir_surface_state_unknown;
   impl->output_scale = 1;
@@ -686,6 +720,8 @@ gdk_mir_window_impl_finalize (GObject *object)
     mir_surface_release_sync (impl->surface);
   if (impl->cairo_surface)
     cairo_surface_destroy (impl->cairo_surface);
+
+  g_clear_pointer (&impl->properties, g_hash_table_unref);
 
   G_OBJECT_CLASS (gdk_mir_window_impl_parent_class)->finalize (object);
 }
@@ -1482,19 +1518,79 @@ gdk_mir_window_impl_simulate_button (GdkWindow       *window,
 }
 
 static gboolean
-gdk_mir_window_impl_get_property (GdkWindow   *window,
-                                  GdkAtom      property,
-                                  GdkAtom      type,
-                                  gulong       offset,
-                                  gulong       length,
-                                  gint         pdelete,
-                                  GdkAtom     *actual_property_type,
-                                  gint        *actual_format_type,
-                                  gint        *actual_length,
-                                  guchar     **data)
+gdk_mir_window_impl_get_property (GdkWindow  *window,
+                                  GdkAtom     property,
+                                  GdkAtom     type,
+                                  gulong      offset,
+                                  gulong      length,
+                                  gint        pdelete,
+                                  GdkAtom    *actual_type,
+                                  gint       *actual_format,
+                                  gint       *actual_length,
+                                  guchar    **data)
 {
-  //g_printerr ("gdk_mir_window_impl_get_property window=%p\n", window);
-  return FALSE;
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  GdkMirProperty *mir_property;
+  GdkAtom dummy_actual_type;
+  gint dummy_actual_format;
+  gint dummy_actual_length;
+  guint width;
+
+  if (!actual_type)
+    actual_type = &dummy_actual_type;
+  if (!actual_format)
+    actual_format = &dummy_actual_format;
+  if (!actual_length)
+    actual_length = &dummy_actual_length;
+
+  *actual_type = GDK_NONE;
+  *actual_format = 0;
+  *actual_length = 0;
+
+  if (data)
+    *data = NULL;
+
+  mir_property = g_hash_table_lookup (impl->properties, property);
+
+  if (!mir_property)
+    return FALSE;
+
+  width = g_array_get_element_size (mir_property->array);
+  *actual_type = mir_property->type;
+  *actual_format = 8 * width;
+
+  /* ICCCM 2.7: GdkAtoms can be 64-bit, but ATOMs and ATOM_PAIRs have format 32  */
+  if (*actual_type == GDK_SELECTION_TYPE_ATOM || *actual_type == gdk_atom_intern_static_string ("ATOM_PAIR"))
+    *actual_format = 32;
+
+  if (type != GDK_NONE && type != mir_property->type)
+    return FALSE;
+
+  offset *= 4;
+
+  /* round up to next nearest multiple of width */
+  if (length < G_MAXULONG - width + 1)
+    length = (length - 1 + width) / width * width;
+  else
+    length = G_MAXULONG / width * width;
+
+  /* we're skipping the first offset bytes */
+  if (length > mir_property->array->len * width - offset)
+    length = mir_property->array->len * width - offset;
+
+  /* leave room for null terminator */
+  if (length > G_MAXULONG - width)
+    length -= width;
+
+  *actual_length = length;
+
+  if (data)
+    {
+      *data = g_memdup (mir_property->array->data + offset, length + width);
+      memset (*data + length, 0, width);
+    }
+
+  return TRUE;
 }
 
 static void
@@ -1504,16 +1600,67 @@ gdk_mir_window_impl_change_property (GdkWindow    *window,
                                      gint          format,
                                      GdkPropMode   mode,
                                      const guchar *data,
-                                     gint          nelements)
+                                     gint          n_elements)
 {
-  //g_printerr ("gdk_mir_window_impl_change_property window=%p\n", window);
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  GdkMirProperty *mir_property;
+  GdkEvent *event;
+
+  /* ICCCM 2.7: ATOMs and ATOM_PAIRs have format 32, but GdkAtoms can be 64-bit */
+  if (type == GDK_SELECTION_TYPE_ATOM || type == gdk_atom_intern_static_string ("ATOM_PAIR"))
+    format = 8 * sizeof (GdkAtom);
+
+  if (mode != GDK_PROP_MODE_REPLACE)
+    mir_property = g_hash_table_lookup (impl->properties, property);
+  else
+    mir_property = NULL;
+
+  if (!mir_property)
+    {
+      /* format is measured in bits, but we need to know this in bytes */
+      mir_property = gdk_mir_property_new (type, format / 8, n_elements);
+      g_hash_table_insert (impl->properties, property, mir_property);
+    }
+
+  /* format is measured in bits, but we need to know this in bytes */
+  if (type != mir_property->type || format / 8 != g_array_get_element_size (mir_property->array))
+    return;
+
+  if (mode == GDK_PROP_MODE_PREPEND)
+    g_array_prepend_vals (mir_property->array, data, n_elements);
+  else
+    g_array_append_vals (mir_property->array, data, n_elements);
+
+  event = gdk_event_new (GDK_PROPERTY_NOTIFY);
+  event->property.window = g_object_ref (window);
+  event->property.send_event = FALSE;
+  event->property.atom = property;
+  event->property.time = GDK_CURRENT_TIME;
+  event->property.state = GDK_PROPERTY_NEW_VALUE;
+
+  gdk_event_put (event);
+  gdk_event_free (event);
 }
 
 static void
 gdk_mir_window_impl_delete_property (GdkWindow *window,
                                      GdkAtom    property)
 {
-  //g_printerr ("gdk_mir_window_impl_delete_property window=%p\n", window);
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  GdkEvent *event;
+
+  if (g_hash_table_remove (impl->properties, property))
+    {
+      event = gdk_event_new (GDK_PROPERTY_NOTIFY);
+      event->property.window = g_object_ref (window);
+      event->property.send_event = FALSE;
+      event->property.atom = property;
+      event->property.time = GDK_CURRENT_TIME;
+      event->property.state = GDK_PROPERTY_DELETE;
+
+      gdk_event_put (event);
+      gdk_event_free (event);
+    }
 }
 
 static gint
