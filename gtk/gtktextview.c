@@ -1070,18 +1070,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   /*
-   * Style properties
-   */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("error-underline-color",
-							       P_("Error underline color"),
-							       P_("Color with which to draw error-indication underlines"),
-							       GDK_TYPE_COLOR,
-							       GTK_PARAM_READABLE));
-G_GNUC_END_IGNORE_DEPRECATIONS
-  
-  /*
    * Signals
    */
 
