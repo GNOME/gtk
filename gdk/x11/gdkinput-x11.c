@@ -386,16 +386,18 @@ _gdk_input_common_init (GdkDisplay *display,
 					    event_base, 15 /* Number of events */);
 
       devices = XListInputDevices(display_x11->xdisplay, &num_devices);
-
-      for(loop=0; loop<num_devices; loop++)
+      if (devices)
 	{
-	  GdkDevicePrivate *gdkdev = gdk_input_device_new(display,
-							  &devices[loop],
-							  include_core);
-	  if (gdkdev)
-	    display_x11->input_devices = g_list_append(display_x11->input_devices, gdkdev);
+	  for(loop=0; loop<num_devices; loop++)
+	    {
+	      GdkDevicePrivate *gdkdev = gdk_input_device_new(display,
+							      &devices[loop],
+							      include_core);
+	      if (gdkdev)
+		display_x11->input_devices = g_list_append(display_x11->input_devices, gdkdev);
+	    }
+	  XFreeDeviceList(devices);
 	}
-      XFreeDeviceList(devices);
     }
 
   display_x11->input_devices = g_list_append (display_x11->input_devices, display->core_pointer);
