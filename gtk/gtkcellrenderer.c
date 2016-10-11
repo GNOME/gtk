@@ -151,7 +151,6 @@ enum {
   PROP_IS_EXPANDER,
   PROP_IS_EXPANDED,
   PROP_CELL_BACKGROUND,
-  PROP_CELL_BACKGROUND_GDK,
   PROP_CELL_BACKGROUND_RGBA,
   PROP_CELL_BACKGROUND_SET,
   PROP_EDITING
@@ -389,22 +388,6 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							GTK_PARAM_WRITABLE));
 
   /**
-   * GtkCellRenderer:cell-background-gdk:
-   *
-   * Cell background as a #GdkColor
-   *
-   * Deprecated: 3.4: Use #GtkCellRenderer:cell-background-rgba instead.
-   */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  g_object_class_install_property (object_class,
-				   PROP_CELL_BACKGROUND_GDK,
-				   g_param_spec_boxed ("cell-background-gdk",
-						       P_("Cell background color"),
-						       P_("Cell background color as a GdkColor"),
-						       GDK_TYPE_COLOR,
-						       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
-G_GNUC_END_IGNORE_DEPRECATIONS
-  /**
    * GtkCellRenderer:cell-background-rgba:
    *
    * Cell background as a #GdkRGBA
@@ -526,17 +509,6 @@ gtk_cell_renderer_get_property (GObject     *object,
     case PROP_IS_EXPANDED:
       g_value_set_boolean (value, priv->is_expanded);
       break;
-    case PROP_CELL_BACKGROUND_GDK:
-      {
-	GdkColor color;
-
-	color.red = (guint16) (priv->cell_background.red * 65535);
-	color.green = (guint16) (priv->cell_background.green * 65535);
-	color.blue = (guint16) (priv->cell_background.blue * 65535);
-
-	g_value_set_boxed (value, &color);
-      }
-      break;
     case PROP_CELL_BACKGROUND_RGBA:
       g_value_set_boxed (value, &priv->cell_background);
       break;
@@ -651,29 +623,6 @@ gtk_cell_renderer_set_property (GObject      *object,
           g_warning ("Don't know color '%s'", g_value_get_string (value));
 
         g_object_notify (object, "cell-background");
-      }
-      break;
-    case PROP_CELL_BACKGROUND_GDK:
-      {
-        GdkColor *color;
-
-        color = g_value_get_boxed (value);
-        if (color)
-          {
-            GdkRGBA rgba;
-
-            rgba.red = color->red / 65535.;
-            rgba.green = color->green / 65535.;
-            rgba.blue = color->blue / 65535.;
-            rgba.alpha = 1;
-
-            set_cell_bg_color (cell, &rgba);
-          }
-        else
-          {
-            set_cell_bg_color (cell, NULL);
-          }
-        g_object_notify (object, "cell-background-gdk");
       }
       break;
     case PROP_CELL_BACKGROUND_RGBA:
