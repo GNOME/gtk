@@ -1037,10 +1037,6 @@ GDK_AVAILABLE_IN_ALL
 void       gdk_window_process_updates     (GdkWindow    *window,
 					   gboolean      update_children);
 
-/* Enable/disable flicker, so you can tell if your code is inefficient. */
-GDK_AVAILABLE_IN_ALL
-void       gdk_window_set_debug_updates   (gboolean      setting);
-
 GDK_AVAILABLE_IN_ALL
 void       gdk_window_constrain_size      (GdkGeometry    *geometry,
                                            GdkWindowHints  flags,

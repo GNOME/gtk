@@ -27,10 +27,6 @@ GdkRenderingMode gdk_display_get_rendering_mode (GdkDisplay       *display);
 void             gdk_display_set_rendering_mode (GdkDisplay       *display,
                                                  GdkRenderingMode  mode);
 
-gboolean         gdk_display_get_debug_updates (GdkDisplay *display);
-void             gdk_display_set_debug_updates (GdkDisplay *display,
-                                                gboolean    debug_updates);
-
 void            gdk_window_move_to_rect         (GdkWindow          *window,
                                                  const GdkRectangle *rect,
                                                  GdkGravity          rect_anchor,
@@ -60,10 +56,6 @@ typedef struct {
   GdkRenderingMode (* gdk_display_get_rendering_mode) (GdkDisplay       *display);
   void             (* gdk_display_set_rendering_mode) (GdkDisplay       *display,
                                                        GdkRenderingMode  mode);
-
-  gboolean         (* gdk_display_get_debug_updates) (GdkDisplay *display);
-  void             (* gdk_display_set_debug_updates) (GdkDisplay *display,
-                                                      gboolean    debug_updates);
 
   void (* gdk_window_move_to_rect) (GdkWindow          *window,
                                     const GdkRectangle *rect,

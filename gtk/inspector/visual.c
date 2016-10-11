@@ -185,19 +185,21 @@ font_scale_entry_activated (GtkEntry           *entry,
 static void
 updates_activate (GtkSwitch *sw)
 {
+#if 0
   gboolean updates;
 
   updates = gtk_switch_get_active (sw);
-  GDK_PRIVATE_CALL (gdk_display_set_debug_updates) (gdk_display_get_default (), updates);
+  /* FIXME: Do something */
   redraw_everything ();
+#endif
 }
 
 static void
 init_updates (GtkInspectorVisual *vis)
 {
-  gboolean updates;
+  gboolean updates = FALSE;
 
-  updates = GDK_PRIVATE_CALL (gdk_display_get_debug_updates) (gdk_display_get_default ());
+  /* FIXME: Do something */
   gtk_switch_set_active (GTK_SWITCH (vis->priv->updates_switch), updates);
 }
 

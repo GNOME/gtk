@@ -736,9 +736,6 @@ do_post_parse_initialization (int    *argc,
       g_log_set_always_fatal (fatal_mask);
     }
 
-  if (debug_flags[0].flags & GTK_DEBUG_UPDATES)
-    gdk_window_set_debug_updates (TRUE);
-
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
   _gtk_ensure_resources ();

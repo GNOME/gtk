@@ -183,10 +183,6 @@ static cairo_surface_t *gdk_window_ref_impl_surface (GdkWindow *window);
 static void gdk_window_set_frame_clock (GdkWindow      *window,
                                         GdkFrameClock  *clock);
 
-static void draw_ugly_color (GdkWindow       *window,
-                             const cairo_region_t *region,
-                             int color);
-
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
@@ -3533,7 +3529,6 @@ gdk_cairo_create (GdkWindow *window)
 /* Code for dirty-region queueing
  */
 static GSList *update_windows = NULL;
-gboolean _gdk_debug_updates = FALSE;
 
 static inline gboolean
 gdk_window_is_ancestor (GdkWindow *window,
@@ -3832,9 +3827,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 {
   GdkWindowImplClass *impl_class;
   GdkWindow *toplevel;
-  GdkDisplay *display;
 
-  display = gdk_window_get_display (window);
   toplevel = gdk_window_get_toplevel (window);
   if (toplevel->geometry_dirty)
     {
@@ -3876,18 +3869,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	  /* Clip to part visible in impl window */
 	  cairo_region_intersect (expose_region, window->clip_region);
-
-	  if (gdk_display_get_debug_updates (display))
-	    {
-              cairo_region_t *swap_region = cairo_region_copy (expose_region);
-              cairo_region_subtract (swap_region, window->active_update_area);
-              draw_ugly_color (window, swap_region, 1);
-              cairo_region_destroy (swap_region);
-
-	      /* Make sure we see the red invalid area before redrawing. */
-	      gdk_display_sync (gdk_window_get_display (window));
-	      g_usleep (70000);
-	    }
 
           if (impl_class->queue_antiexpose)
             impl_class->queue_antiexpose (window, expose_region);
@@ -4198,29 +4179,6 @@ gdk_window_set_invalidate_handler (GdkWindow                      *window,
 }
 
 static void
-draw_ugly_color (GdkWindow       *window,
-		 const cairo_region_t *region,
-                 int color)
-{
-  cairo_t *cr;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  cr = gdk_cairo_create (window);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  /* Draw ugly color all over the newly-invalid region */
-  if (color == 0)
-    cairo_set_source_rgb (cr, 50000/65535., 10000/65535., 10000/65535.);
-  else
-    cairo_set_source_rgb (cr, 10000/65535., 50000/65535., 10000/65535.);
-
-  gdk_cairo_region (cr, region);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
-}
-
-static void
 impl_window_add_update_area (GdkWindow *impl_window,
 			     cairo_region_t *region)
 {
@@ -4322,7 +4280,6 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 {
   cairo_region_t *visible_region;
   cairo_rectangle_int_t r;
-  GdkDisplay *display;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -4342,10 +4299,6 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 
   if (child_func)
     invalidate_impl_subwindows (window, region, child_func, user_data);
-
-  display = gdk_window_get_display (window);
-  if (gdk_display_get_debug_updates (display))
-    draw_ugly_color (window, visible_region, 0);
 
   while (window != NULL && 
 	 !cairo_region_is_empty (visible_region))
@@ -4686,37 +4639,6 @@ gdk_window_thaw_toplevel_updates (GdkWindow *window)
   _gdk_frame_clock_thaw (gdk_window_get_frame_clock (window));
 
   gdk_window_schedule_update (window);
-}
-
-/**
- * gdk_window_set_debug_updates:
- * @setting: %TRUE to turn on update debugging
- *
- * With update debugging enabled, calls to
- * gdk_window_invalidate_region() clear the invalidated region of the
- * screen to a noticeable color, and GDK pauses for a short time
- * before sending exposes to windows during
- * gdk_window_process_updates().  The net effect is that you can see
- * the invalid region for each window and watch redraws as they
- * occur. This allows you to diagnose inefficiencies in your application.
- *
- * In essence, because the GDK rendering model prevents all flicker,
- * if you are redrawing the same region 400 times you may never
- * notice, aside from noticing a speed problem. Enabling update
- * debugging causes GTK to flicker slowly and noticeably, so you can
- * see exactly what’s being redrawn when, in what order.
- *
- * The --gtk-debug=updates command line option passed to GTK+ programs
- * enables this debug option at application startup time. That's
- * usually more useful than calling gdk_window_set_debug_updates()
- * yourself, though you might want to use this function to enable
- * updates sometime after application startup time.
- *
- **/
-void
-gdk_window_set_debug_updates (gboolean setting)
-{
-  _gdk_debug_updates = setting;
 }
 
 /**

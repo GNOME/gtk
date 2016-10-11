@@ -123,9 +123,6 @@ struct _GdkDisplay
   guint has_gl_extension_texture_non_power_of_two : 1;
   guint has_gl_extension_texture_rectangle : 1;
 
-  guint debug_updates     : 1;
-  guint debug_updates_set : 1;
-
   GdkRenderingMode rendering_mode;
 
   GList *seats;
