@@ -176,8 +176,6 @@ struct _GtkWidget
  *   widget.
  * @hierarchy_changed: Signal emitted when the anchored state of a
  *   widget changes.
- * @style_set: Signal emitted when a new style has been set on a
- * widget. Deprecated: 3.0
  * @direction_changed: Signal emitted when the text direction of a
  *   widget changes.
  * @grab_notify: Signal emitted when a widget becomes shadowed by a
