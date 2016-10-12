@@ -340,11 +340,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           gtk_widget_set_no_show_all (separator, TRUE);
           gtk_style_context_add_class (gtk_widget_get_style_context (separator), "titlebutton");
 
-          if (i == 0)
-            priv->titlebar_start_separator = separator;
-          else
-            priv->titlebar_end_separator = separator;
-
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, priv->spacing);
 
           for (j = 0; t[j]; j++)
@@ -460,6 +455,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           if (n_children == 0)
             {
               gtk_widget_destroy (box);
+              gtk_widget_destroy (separator);
               continue;
             }
 
@@ -487,9 +483,15 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           gtk_widget_set_parent (box, GTK_WIDGET (bar));
 
           if (i == 0)
-            priv->titlebar_start_box = box;
+            {
+              priv->titlebar_start_box = box;
+              priv->titlebar_start_separator = separator;
+            }
           else
-            priv->titlebar_end_box = box;
+            {
+              priv->titlebar_end_box = box;
+              priv->titlebar_end_separator = separator;
+            }
         }
       g_strfreev (tokens);
     }
