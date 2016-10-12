@@ -738,9 +738,6 @@ gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
      
-GDK_DEPRECATED_IN_3_14
-void	   gtk_widget_reparent		  (GtkWidget	       *widget,
-					   GtkWidget	       *new_parent);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   const GdkRectangle  *area,

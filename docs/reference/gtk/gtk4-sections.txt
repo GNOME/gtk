@@ -5050,7 +5050,6 @@ gtk_widget_list_accel_closures
 gtk_widget_can_activate_accel
 gtk_widget_event
 gtk_widget_activate
-gtk_widget_reparent
 gtk_widget_intersect
 gtk_widget_is_focus
 gtk_widget_grab_focus
