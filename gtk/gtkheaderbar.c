@@ -282,13 +282,13 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
   if (priv->titlebar_start_box)
     {
-      gtk_widget_destroy (priv->titlebar_start_box);
+      gtk_widget_unparent (priv->titlebar_start_box);
       priv->titlebar_start_box = NULL;
       priv->titlebar_start_separator = NULL;
     }
   if (priv->titlebar_end_box)
     {
-      gtk_widget_destroy (priv->titlebar_end_box);
+      gtk_widget_unparent (priv->titlebar_end_box);
       priv->titlebar_end_box = NULL;
       priv->titlebar_end_separator = NULL;
     }
