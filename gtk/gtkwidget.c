@@ -10401,55 +10401,6 @@ gtk_widget_get_device_events (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_pointer:
- * @widget: a #GtkWidget
- * @x: (out) (allow-none): return location for the X coordinate, or %NULL
- * @y: (out) (allow-none): return location for the Y coordinate, or %NULL
- *
- * Obtains the location of the mouse pointer in widget coordinates.
- * Widget coordinates are a bit odd; for historical reasons, they are
- * defined as @widget->window coordinates for widgets that return %TRUE for
- * gtk_widget_get_has_window(); and are relative to @widget->allocation.x,
- * @widget->allocation.y otherwise.
- *
- * Deprecated: 3.4: Use gdk_window_get_device_position() instead.
- **/
-void
-gtk_widget_get_pointer (GtkWidget *widget,
-			gint	  *x,
-			gint	  *y)
-{
-  GtkWidgetPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
-
-  if (x)
-    *x = -1;
-  if (y)
-    *y = -1;
-
-  if (_gtk_widget_get_realized (widget))
-    {
-      GdkSeat *seat;
-
-      seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-      gdk_window_get_device_position (priv->window,
-                                      gdk_seat_get_pointer (seat),
-                                      x, y, NULL);
-
-      if (!_gtk_widget_get_has_window (widget))
-	{
-	  if (x)
-	    *x -= priv->allocation.x;
-	  if (y)
-	    *y -= priv->allocation.y;
-	}
-    }
-}
-
-/**
  * gtk_widget_is_ancestor:
  * @widget: a #GtkWidget
  * @ancestor: another #GtkWidget

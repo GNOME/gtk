@@ -1062,11 +1062,6 @@ gint	     gtk_widget_get_events	(GtkWidget	*widget);
 GDK_AVAILABLE_IN_ALL
 GdkEventMask gtk_widget_get_device_events (GtkWidget	*widget,
                                            GdkDevice    *device);
-GDK_DEPRECATED_IN_3_4_FOR(gdk_window_get_device_position)
-void	     gtk_widget_get_pointer	(GtkWidget	*widget,
-					 gint		*x,
-					 gint		*y);
-
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_is_ancestor	(GtkWidget	*widget,
 					 GtkWidget	*ancestor);
