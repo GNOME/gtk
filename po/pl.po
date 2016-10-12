@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-22 15:03+0000\n"
-"PO-Revision-Date: 2016-09-22 18:15+0200\n"
+"POT-Creation-Date: 2016-10-06 11:53+0000\n"
+"PO-Revision-Date: 2016-10-12 19:48+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -30,7 +30,7 @@ msgstr ""
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
-msgstr "Nieobsługiwany typ ekranu Broadway „%s”"
+msgstr "Nieobsługiwany typ ekranu Broadway: „%s”"
 
 #: gdk/gdk.c:182
 #, c-format
@@ -487,7 +487,7 @@ msgstr "Bez grupowania żądań biblioteki GDI"
 #. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:55
 msgid "Don't use the Wintab API for tablet support"
-msgstr "Bez używania API Wintab dla obsługi tabletów"
+msgstr "Bez używania API Wintab do obsługi tabletów"
 
 #. Description of --ignore-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:57
@@ -661,15 +661,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_mknij"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9058
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9044
 msgid "Minimize"
 msgstr "Zminimalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9067
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9053
 msgid "Maximize"
 msgstr "Zmaksymalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9024
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9010
 msgid "Restore"
 msgstr "Przywróć"
 
@@ -1218,7 +1218,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12525 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12511 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1267,7 +1267,7 @@ msgid "_Apply"
 msgstr "_Zastosuj"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12526
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12512
 msgid "_OK"
 msgstr "_OK"
 
@@ -1307,7 +1307,7 @@ msgstr "Prze_konwertuj"
 #: gtk/deprecated/gtkstock.c:354
 msgctxt "Stock label"
 msgid "_Discard"
-msgstr "_Porzuć"
+msgstr "_Odrzuć"
 
 #: gtk/deprecated/gtkstock.c:355
 msgctxt "Stock label"
@@ -1437,7 +1437,7 @@ msgstr "Licencja"
 
 #: gtk/gtkaboutdialog.c:114
 msgid "Custom License"
-msgstr "Własna licencja"
+msgstr "Niestandardowa licencja"
 
 #: gtk/gtkaboutdialog.c:115
 msgid "GNU General Public License, version 2 or later"
@@ -2078,20 +2078,20 @@ msgstr "Biały"
 #. translators: label for the custom section in the color chooser
 #: gtk/gtkcolorchooserwidget.c:543
 msgid "Custom"
-msgstr "Własny"
+msgstr "Niestandardowy"
 
 #: gtk/gtkcolorchooserwidget.c:550
 msgid "Custom color"
-msgstr "Własny kolor"
+msgstr "Niestandardowy kolor"
 
 #: gtk/gtkcolorchooserwidget.c:551
 msgid "Create a custom color"
-msgstr "Tworzy własny kolor"
+msgstr "Tworzy niestandardowy kolor"
 
 #: gtk/gtkcolorchooserwidget.c:570
 #, c-format
 msgid "Custom color %d: %s"
-msgstr "Własny kolor %d: %s"
+msgstr "Niestandardowy kolor %d: %s"
 
 #: gtk/gtkcolorplane.c:401
 msgid "Color Plane"
@@ -2124,7 +2124,7 @@ msgstr "default:mm"
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3315
 msgid "Manage Custom Sizes"
-msgstr "Zarządzanie własnymi rozmiarami"
+msgstr "Zarządzanie niestandardowymi rozmiarami"
 
 #: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:811
 msgid "inch"
@@ -2141,7 +2141,7 @@ msgstr "Marginesy z drukarki…"
 #: gtk/gtkcustompaperunixdialog.c:781
 #, c-format
 msgid "Custom Size %d"
-msgstr "Własny rozmiar %d"
+msgstr "Niestandardowy rozmiar %d"
 
 #: gtk/gtkcustompaperunixdialog.c:1120
 msgid "_Width:"
@@ -2175,44 +2175,44 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
+#: gtk/gtkentry.c:9472 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
+#: gtk/gtkentry.c:9476 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
+#: gtk/gtkentry.c:9480 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtkentry.c:9478 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkentry.c:9483 gtk/gtkfilechooserwidget.c:1478
 #: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6669 gtk/gtktextview.c:9432
 msgid "_Delete"
 msgstr "_Usuń"
 
-#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
+#: gtk/gtkentry.c:9494 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: gtk/gtkentry.c:9662 gtk/gtktextview.c:9671
+#: gtk/gtkentry.c:9667 gtk/gtktextview.c:9671
 msgid "Select all"
 msgstr "Zaznacz wszystko"
 
-#: gtk/gtkentry.c:9665 gtk/gtktextview.c:9674
+#: gtk/gtkentry.c:9670 gtk/gtktextview.c:9674
 msgid "Cut"
 msgstr "Wytnij"
 
-#: gtk/gtkentry.c:9668 gtk/gtktextview.c:9677
+#: gtk/gtkentry.c:9673 gtk/gtktextview.c:9677
 msgid "Copy"
 msgstr "Skopiuj"
 
-#: gtk/gtkentry.c:9671 gtk/gtktextview.c:9680
+#: gtk/gtkentry.c:9676 gtk/gtktextview.c:9680
 msgid "Paste"
 msgstr "Wklej"
 
-#: gtk/gtkentry.c:10738
+#: gtk/gtkentry.c:10743
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
@@ -2257,7 +2257,7 @@ msgstr "%1$s na %2$s"
 
 #: gtk/gtkfilechooserwidget.c:371
 msgid "Type name of new folder"
-msgstr "Proszę wprowadzić nazwę nowego katalogu"
+msgstr "Nazwa nowego katalogu"
 
 #: gtk/gtkfilechooserwidget.c:790
 msgid "The folder could not be created"
@@ -2535,8 +2535,8 @@ msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
 msgstr ""
-"Nie można było utworzyć połączenia z usługą indeksowania. Proszę się "
-"upewnić, że usługa jest uruchomiona."
+"Nie można utworzyć połączenia z usługą indeksowania. Proszę się upewnić, że "
+"usługa jest uruchomiona."
 
 #: gtk/gtkfilechooserwidget.c:7231
 msgid "Could not send the search request"
@@ -2576,7 +2576,7 @@ msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 msgid "Application menu"
 msgstr "Menu programu"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9094
+#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9080
 msgid "Close"
 msgstr "Zamknij"
 
@@ -2730,7 +2730,7 @@ msgid ""
 "Contact your system administrator"
 msgstr ""
 "Polityka systemu uniemożliwia wprowadzanie zmian.\n"
-"Proszę się skontaktować z administratorem systemu"
+"Proszę skontaktować się z administratorem systemu"
 
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:463
@@ -2745,7 +2745,7 @@ msgstr "MODUŁY"
 #. Description of --g-fatal-warnings in --help output
 #: gtk/gtkmain.c:466
 msgid "Make all warnings fatal"
-msgstr "Traktowanie wszystkich ostrzeżeń jako błędy"
+msgstr "Traktuje wszystkie ostrzeżenia jako błędy"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:469
@@ -2775,7 +2775,7 @@ msgstr "Wyświetla opcje biblioteki GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1242
+#: gtk/gtkmain.c:1246
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2907,7 +2907,7 @@ msgstr ""
 
 #: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3369
 msgid "Manage Custom Sizes…"
-msgstr "Zarządzaj własnymi rozmiarami…"
+msgstr "Zarządzaj niestandardowymi rozmiarami…"
 
 #: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31
 #: gtk/ui/gtkprintunixdialog.ui:854
@@ -3248,7 +3248,7 @@ msgstr "Ukończono"
 #: gtk/gtkprintoperation.c:1826
 msgctxt "print operation status"
 msgid "Finished with error"
-msgstr "Zakończono z błędem"
+msgstr "Ukończono z błędem"
 
 #: gtk/gtkprintoperation.c:2390
 #, c-format
@@ -3301,7 +3301,7 @@ msgstr "Wymagana jest interwencja użytkownika"
 
 #: gtk/gtkprintoperation-win32.c:723
 msgid "Custom size"
-msgstr "Własny rozmiar"
+msgstr "Niestandardowy rozmiar"
 
 #: gtk/gtkprintoperation-win32.c:1545
 msgid "No printer found"
@@ -3346,7 +3346,7 @@ msgstr "Wy_drukuj"
 
 #: gtk/gtkprintunixdialog.c:860
 msgid "Getting printer information failed"
-msgstr "Pobieranie informacji o drukarce się nie powiodło"
+msgstr "Pobranie informacji o drukarce się nie powiodło"
 
 #: gtk/gtkprintunixdialog.c:2070
 msgid "Getting printer information…"
@@ -3439,7 +3439,7 @@ msgstr "Nie można usunąć elementu"
 
 #: gtk/gtkrecentchooserdefault.c:1605
 msgid "Could not clear list"
-msgstr "Nie można wyczyścić elementu"
+msgstr "Nie można wyczyścić listy"
 
 #: gtk/gtkrecentchooserdefault.c:1689
 msgid "Copy _Location"
@@ -3474,7 +3474,7 @@ msgstr "Nie odnaleziono elementów"
 #: gtk/gtkrecentchoosermenu.c:534 gtk/gtkrecentchoosermenu.c:590
 #, c-format
 msgid "No recently used resource found with URI '%s'"
-msgstr "Nie odnaleziono ostatnio używanego zasobu z URI „%s”"
+msgstr "Nie odnaleziono ostatnio używanego zasobu z adresem URI „%s”"
 
 #: gtk/gtkrecentchoosermenu.c:789
 #, c-format
@@ -3796,24 +3796,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:9042
+#: gtk/gtkwindow.c:9028
 msgid "Move"
 msgstr "Przenieś"
 
-#: gtk/gtkwindow.c:9050
+#: gtk/gtkwindow.c:9036
 msgid "Resize"
 msgstr "Zmień rozmiar"
 
-#: gtk/gtkwindow.c:9081
+#: gtk/gtkwindow.c:9067
 msgid "Always on Top"
 msgstr "Zawsze na wierzchu"
 
-#: gtk/gtkwindow.c:12513
+#: gtk/gtkwindow.c:12499
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Użyć Inspektora biblioteki GTK+?"
 
-#: gtk/gtkwindow.c:12515
+#: gtk/gtkwindow.c:12501
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3824,7 +3824,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK+. Jego użycie może spowodować awarię "
 "lub uszkodzenie programu."
 
-#: gtk/gtkwindow.c:12520
+#: gtk/gtkwindow.c:12506
 msgid "Don't show this message again"
 msgstr "Bez wyświetlania ponownie"
 
@@ -3860,8 +3860,8 @@ msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
-"Można tymczasowo wyłączyć własne reguły CSS klikając przycisk „Wstrzymaj” "
-"powyżej."
+"Można tymczasowo wyłączyć niestandardowe reguły CSS klikając przycisk "
+"„Wstrzymaj” powyżej."
 
 #: gtk/inspector/css-editor.c:120
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3874,7 +3874,7 @@ msgstr "Zapisanie reguł CSS się nie powiodło"
 
 #: gtk/inspector/css-editor.ui:34
 msgid "Disable this custom CSS"
-msgstr "Wyłącza te własne reguły CSS"
+msgstr "Wyłącza te niestandardowe reguły CSS"
 
 #: gtk/inspector/css-editor.ui:55
 msgid "Save the current CSS"
@@ -5729,7 +5729,7 @@ msgid ""
 " e.g. 1–3, 7, 11"
 msgstr ""
 "Określ jeden lub więcej zakresów stron,\n"
-" przykładowo: 1–3, 7, 11"
+" przykładowo: 1-3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:276
 msgid "Pages"
@@ -5949,7 +5949,7 @@ msgstr "Przepisanie nagłówka się nie powiodło\n"
 #: gtk/updateiconcache.c:1504
 #, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "Otworzenie pliku %s się nie powiodło: %s\n"
+msgstr "Otwarcie pliku „%s” się nie powiodło: %s\n"
 
 #: gtk/updateiconcache.c:1512 gtk/updateiconcache.c:1542
 #, c-format
@@ -6636,7 +6636,7 @@ msgstr "Wydruk o czasie"
 #: modules/printbackends/cups/gtkprintbackendcups.c:5581
 #, c-format
 msgid "Custom %s×%s"
-msgstr "Własny %s×%s"
+msgstr "Niestandardowy %s×%s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5690
 msgctxt "printer option"

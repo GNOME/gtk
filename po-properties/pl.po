@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-05 14:18+0000\n"
-"PO-Revision-Date: 2016-09-06 01:39+0200\n"
+"POT-Creation-Date: 2016-10-06 11:55+0000\n"
+"PO-Revision-Date: 2016-10-12 19:48+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1324,7 +1324,7 @@ msgstr ""
 "wraz z odwołaniem do początku lub końca kontrolki nadrzędnej"
 
 #: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1990
-#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1726
+#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1729
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Pozycja"
@@ -2811,7 +2811,7 @@ msgstr "Niespójny stan"
 msgid "The inconsistent state of the button"
 msgstr "Niespójny stan przycisku"
 
-#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3780
+#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3785
 msgid "Activatable"
 msgstr "Można aktywować"
 
@@ -2985,7 +2985,7 @@ msgstr "Kolor RGBA"
 msgid "Color as RGBA"
 msgstr "Kolor jako RGBA"
 
-#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3794
+#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3799
 msgid "Selectable"
 msgstr "Można zaznaczać"
 
@@ -3892,7 +3892,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "Bieżący filtr służący do zaznaczania wyświetlanych plików"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4483
-#: gtk/gtkplacesview.c:2176
+#: gtk/gtkplacesview.c:2222
 msgid "Local Only"
 msgstr "Tylko lokalne"
 
@@ -4016,21 +4016,21 @@ msgstr "Położenie Y"
 msgid "Y position of child widget"
 msgstr "Pionowe położenie widżetu potomnego"
 
-#: gtk/gtkflowbox.c:3821 gtk/gtkiconview.c:408 gtk/gtklistbox.c:448
+#: gtk/gtkflowbox.c:3821 gtk/gtkiconview.c:408 gtk/gtklistbox.c:453
 #: gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Tryb zaznaczania"
 
-#: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:409 gtk/gtklistbox.c:449
+#: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:409 gtk/gtklistbox.c:454
 msgid "The selection mode"
 msgstr "Tryb zaznaczania"
 
-#: gtk/gtkflowbox.c:3835 gtk/gtkiconview.c:665 gtk/gtklistbox.c:456
+#: gtk/gtkflowbox.c:3835 gtk/gtkiconview.c:665 gtk/gtklistbox.c:461
 #: gtk/gtktreeview.c:1222
 msgid "Activate on Single Click"
 msgstr "Aktywowanie po pojedynczym kliknięciu"
 
-#: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:666 gtk/gtklistbox.c:457
+#: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:666 gtk/gtklistbox.c:462
 #: gtk/gtktreeview.c:1223
 msgid "Activate row on a single click"
 msgstr "Aktywowanie rzędu po pojedynczym kliknięciu"
@@ -4308,11 +4308,11 @@ msgstr "Podtytuł do wyświetlenia"
 
 #: gtk/gtkheaderbar.c:2011
 msgid "Custom Title"
-msgstr "Własny tytuł"
+msgstr "Niestandardowy tytuł"
 
 #: gtk/gtkheaderbar.c:2012
 msgid "Custom title widget to display"
-msgstr "Własny widżet tytułu do wyświetlenia"
+msgstr "Niestandardowy widżet tytułu do wyświetlenia"
 
 #: gtk/gtkheaderbar.c:2036
 msgid "Show decorations"
@@ -4749,11 +4749,11 @@ msgstr "Odwiedzone"
 msgid "Whether this link has been visited."
 msgstr "Określa, czy ten odnośnik był odwiedzony."
 
-#: gtk/gtklistbox.c:3781
+#: gtk/gtklistbox.c:3786
 msgid "Whether this row can be activated"
 msgstr "Określa, czy można aktywować ten rząd"
 
-#: gtk/gtklistbox.c:3795
+#: gtk/gtklistbox.c:3800
 msgid "Whether this row can be selected"
 msgstr "Określa, czy można wybierać ten rząd"
 
@@ -5265,7 +5265,7 @@ msgstr "Tytuł okna dialogowego"
 msgid "The title of the file chooser dialog"
 msgstr "Tytuł okna dialogowego wyboru plików"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1741 gtk/gtkwindow.c:783
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1744 gtk/gtkwindow.c:783
 msgid "Modal"
 msgstr "Modalne"
 
@@ -5590,11 +5590,11 @@ msgstr "Położenie do wybrania"
 msgid "The location to highlight in the sidebar"
 msgstr "Położenie do wyróżnienia na panelu bocznym"
 
-#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2197
+#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2243
 msgid "Open Flags"
 msgstr "Flagi otwarcia"
 
-#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2198
+#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2244
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5643,7 +5643,7 @@ msgstr ""
 "Określa, czy panel boczny zawiera wbudowany skrót do ręcznego wprowadzania "
 "położenia"
 
-#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2177
+#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2223
 msgid "Whether the sidebar only includes local files"
 msgstr "Określa, czy panel boczny zawiera tylko lokalne pliki"
 
@@ -5671,19 +5671,19 @@ msgstr ""
 "Określa, czy wysyłać sygnał ::populate-popup dla wyskakujących okien, które "
 "nie są menu"
 
-#: gtk/gtkplacesview.c:2183
+#: gtk/gtkplacesview.c:2229
 msgid "Loading"
 msgstr "Wczytywanie"
 
-#: gtk/gtkplacesview.c:2184
+#: gtk/gtkplacesview.c:2230
 msgid "Whether the view is loading locations"
 msgstr "Określa, czy widok wczytuje położenia"
 
-#: gtk/gtkplacesview.c:2190
+#: gtk/gtkplacesview.c:2236
 msgid "Fetching networks"
 msgstr "Pobieranie sieci"
 
-#: gtk/gtkplacesview.c:2191
+#: gtk/gtkplacesview.c:2237
 msgid "Whether the view is fetching networks"
 msgstr "Określa, czy widok pobiera sieci"
 
@@ -5751,43 +5751,43 @@ msgstr "Okno gniazda"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Okno gniazda, w którym osadzona jest wtyczka"
 
-#: gtk/gtkpopover.c:1698
+#: gtk/gtkpopover.c:1701
 msgid "Relative to"
 msgstr "Względne do"
 
-#: gtk/gtkpopover.c:1699
+#: gtk/gtkpopover.c:1702
 msgid "Widget the bubble window points to"
 msgstr "Widżet, na który wskazuje okrągłe okno"
 
-#: gtk/gtkpopover.c:1712
+#: gtk/gtkpopover.c:1715
 msgid "Pointing to"
 msgstr "Wskazujące na"
 
-#: gtk/gtkpopover.c:1713
+#: gtk/gtkpopover.c:1716
 msgid "Rectangle the bubble window points to"
 msgstr "Prostokąt, na który wskazuje okrągłe okno"
 
-#: gtk/gtkpopover.c:1727
+#: gtk/gtkpopover.c:1730
 msgid "Position to place the bubble window"
 msgstr "Położenie do umieszczenia okrągłego okna"
 
-#: gtk/gtkpopover.c:1742
+#: gtk/gtkpopover.c:1745
 msgid "Whether the popover is modal"
 msgstr "Określa, czy widżet popover jest modalny"
 
-#: gtk/gtkpopover.c:1755
+#: gtk/gtkpopover.c:1758
 msgid "Transitions enabled"
 msgstr "Włączone przejścia"
 
-#: gtk/gtkpopover.c:1756
+#: gtk/gtkpopover.c:1759
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Określa, czy przejścia wyświetlenia/ukrycia są włączone"
 
-#: gtk/gtkpopover.c:1769
+#: gtk/gtkpopover.c:1772
 msgid "Constraint"
 msgstr "Ograniczenie"
 
-#: gtk/gtkpopover.c:1770
+#: gtk/gtkpopover.c:1773
 msgid "Constraint for the popover position"
 msgstr "Ograniczenie położenia widżetu popover"
 
@@ -6042,11 +6042,11 @@ msgstr "Czytelny dla człowieka opis stanu"
 
 #: gtk/gtkprintoperation.c:1375
 msgid "Custom tab label"
-msgstr "Etykieta własnej karty"
+msgstr "Etykieta niestandardowej karty"
 
 #: gtk/gtkprintoperation.c:1376
 msgid "Label for the tab containing custom widgets."
-msgstr "Etykieta karty zawierającej własne widżety."
+msgstr "Etykieta karty zawierającej niestandardowe widżety."
 
 #: gtk/gtkprintoperation.c:1391 gtk/gtkprintunixdialog.c:455
 msgid "Support Selection"
@@ -7368,7 +7368,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:1511
 msgid "Custom palette"
-msgstr "Paleta użytkownika"
+msgstr "Niestandardowa paleta"
 
 #: gtk/gtksettings.c:1512
 msgid "Palette to use in the color selector"
@@ -7440,8 +7440,7 @@ msgstr "Działanie kliknięcia środkowym przyciskiem paska tytułowego"
 
 #: gtk/gtksettings.c:1649
 msgid "The action to take on titlebar middle-click"
-msgstr ""
-"Działanie podjęte po kliknięciu środkowym przyciskiem paska tytułowego"
+msgstr "Działanie podjęte po kliknięciu środkowym przyciskiem paska tytułowego"
 
 #: gtk/gtksettings.c:1667
 msgid "Titlebar right-click action"
@@ -8050,7 +8049,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:579 gtk/gtktextview.c:937
 msgid "Custom tabs for this text"
-msgstr "Dowolne tabulatory powiązane z tekstem"
+msgstr "Niestandardowe tabulatory powiązane z tekstem"
 
 #: gtk/gtktexttag.c:597
 msgid "Invisible"
