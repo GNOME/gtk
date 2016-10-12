@@ -483,6 +483,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   GtkMenuSectionBox *box;
   const gchar *label;
   const gchar *hint;
+  const gchar *text_direction;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->toplevel = parent->toplevel;
@@ -490,12 +491,25 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
   label = gtk_menu_tracker_item_get_label (item);
   hint = gtk_menu_tracker_item_get_display_hint (item);
+  text_direction = gtk_menu_tracker_item_get_text_direction (item);
 
   if (hint && g_str_equal (hint, "horizontal-buttons"))
     {
       gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), GTK_STYLE_CLASS_LINKED);
       box->iconic = TRUE;
+
+      if (text_direction)
+        {
+          GtkTextDirection dir = GTK_TEXT_DIR_NONE;
+
+          if (g_str_equal (text_direction, "rtl"))
+            dir = GTK_TEXT_DIR_RTL;
+          else if (g_str_equal (text_direction, "ltr"))
+            dir = GTK_TEXT_DIR_LTR;
+
+          gtk_widget_set_direction (GTK_WIDGET (box->item_box), dir);
+        }
     }
 
   if (label != NULL)
