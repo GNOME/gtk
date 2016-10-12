@@ -940,7 +940,6 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuShellPrivate *priv = menu_shell->priv;
-  gboolean enable_mnemonics;
 
   priv->keyboard_mode = TRUE;
 
@@ -951,14 +950,7 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
   if (gtk_bindings_activate_event (G_OBJECT (widget), event))
     return TRUE;
 
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-enable-mnemonics", &enable_mnemonics,
-                NULL);
-
-  if (enable_mnemonics)
-    return gtk_menu_shell_activate_mnemonic (menu_shell, event);
-
-  return FALSE;
+  return gtk_menu_shell_activate_mnemonic (menu_shell, event);
 }
 
 static gint
