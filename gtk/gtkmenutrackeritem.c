@@ -726,6 +726,16 @@ gtk_menu_tracker_item_get_display_hint (GtkMenuTrackerItem *self)
   return display_hint;
 }
 
+const gchar *
+gtk_menu_tracker_item_get_text_direction (GtkMenuTrackerItem *self)
+{
+  const gchar *text_direction = NULL;
+
+  g_menu_item_get_attribute (self->item, "text-direction", "&s", &text_direction);
+
+  return text_direction;
+}
+
 GMenuModel *
 _gtk_menu_tracker_item_get_link (GtkMenuTrackerItem *self,
                                  const gchar        *link_name)

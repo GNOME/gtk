@@ -53,6 +53,8 @@ const gchar *           gtk_menu_tracker_item_get_special               (GtkMenu
 
 const gchar *           gtk_menu_tracker_item_get_display_hint          (GtkMenuTrackerItem *self);
 
+const gchar *           gtk_menu_tracker_item_get_text_direction        (GtkMenuTrackerItem *self);
+
 GtkActionObservable *  _gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
 
 gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);

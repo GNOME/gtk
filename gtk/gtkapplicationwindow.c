@@ -135,6 +135,9 @@
  * - "label": a user-visible string to use as section heading
  * - "display-hint": a string used to determine special formatting for the section.
  *     Possible values include "horizontal-buttons".
+ * - "text-direction": a string used to determine the #GtkTextDirection to use
+ *     when "display-hint" is set to "horizontal-buttons". Possible values
+ *     include "rtl", "ltr", and "none".
  *
  * The following attributes are used when constructing submenus:
  * - "label": a user-visible string to display
