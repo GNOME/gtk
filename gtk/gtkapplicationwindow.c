@@ -794,7 +794,12 @@ gtk_application_window_dispose (GObject *object)
 
   g_clear_object (&window->priv->app_menu_section);
   g_clear_object (&window->priv->menubar_section);
-  g_clear_object (&window->priv->help_overlay);
+
+  if (window->priv->help_overlay)
+    {
+      gtk_widget_destroy (GTK_WIDGET (window->priv->help_overlay));
+      g_clear_object (&window->priv->help_overlay);
+    }
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)->dispose (object);
 
@@ -986,6 +991,8 @@ show_help_overlay (GSimpleAction *action,
  * sets up an action with the name win.show-help-overlay to present
  * it.
  *
+ * @window takes resposibility for destroying @help_overlay.
+ *
  * Since: 3.20
  */
 void
@@ -996,8 +1003,7 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
   g_return_if_fail (help_overlay == NULL || GTK_IS_SHORTCUTS_WINDOW (help_overlay));
 
   if (window->priv->help_overlay)
-    g_signal_handlers_disconnect_by_func (window->priv->help_overlay,
-                                          G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+    gtk_widget_destroy (GTK_WIDGET (window->priv->help_overlay));
   g_set_object (&window->priv->help_overlay, help_overlay);
 
   if (!window->priv->help_overlay)
