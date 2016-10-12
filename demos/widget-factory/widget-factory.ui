@@ -892,7 +892,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
-                            <property name="use_action_appearance">0</property>
                           </object>
                           <packing>
                             <property name="fill">0</property>
@@ -905,7 +904,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="sensitive">0</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
-                            <property name="use_action_appearance">0</property>
                           </object>
                           <packing>
                             <property name="fill">0</property>
@@ -918,7 +916,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
-                            <property name="use_action_appearance">0</property>
                             <property name="active">1</property>
                           </object>
                           <packing>
@@ -933,7 +930,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="sensitive">0</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
-                            <property name="use_action_appearance">0</property>
                             <property name="active">1</property>
                           </object>
                           <packing>
@@ -980,7 +976,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
-                            <property name="use_action_appearance">0</property>
                           </object>
                           <packing>
                             <property name="fill">0</property>
@@ -992,7 +987,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
-                            <property name="use_action_appearance">0</property>
                             <property name="rgba">#31316867a09f</property>
                             <property name="use_alpha">1</property>
                           </object>
@@ -1016,7 +1010,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
                             <property name="has_tooltip">1</property>
-                            <property name="use_action_appearance">0</property>
                             <property name="relief">none</property>
                             <property name="uri">http://www.gtk.org</property>
                           </object>
