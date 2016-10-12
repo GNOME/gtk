@@ -2,10 +2,10 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="gtk-query-immodules-3.0">
+<refentry id="gtk-query-immodules-4.0">
 
 <refentryinfo>
-  <title>gtk-query-immodules-3.0</title>
+  <title>gtk-query-immodules-4.0</title>
   <productname>GTK+</productname>
   <authorgroup>
     <author>
@@ -17,19 +17,19 @@
 </refentryinfo>
 
 <refmeta>
-  <refentrytitle>gtk-query-immodules-3.0</refentrytitle>
+  <refentrytitle>gtk-query-immodules-4.0</refentrytitle>
   <manvolnum>1</manvolnum>
   <refmiscinfo class="manual">User Commands</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-  <refname>gtk-query-immodules-3.0</refname>
+  <refname>gtk-query-immodules-4.0</refname>
   <refpurpose>Input method module registration utility</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtk-query-immodules-3.0</command>
+<command>gtk-query-immodules-4.0</command>
 <arg choice="opt">--update-cache</arg>
 <arg choice="opt" rep="repeat">MODULE</arg>
 </cmdsynopsis>
@@ -37,7 +37,7 @@
 
 <refsect1><title>Description</title>
 <para>
-<command>gtk-query-immodules-3.0</command> collects information about loadable
+<command>gtk-query-immodules-4.0</command> collects information about loadable
 input method modules for GTK+ and writes it to the default cache file
 location, or to <filename>stdout</filename>.
 </para>
@@ -51,7 +51,7 @@ may be absolute or relative paths.
 </para>
 
 <para>
-Normally, the output of <command>gtk-query-immodules-3.0</command> is written
+Normally, the output of <command>gtk-query-immodules-4.0</command> is written
 to <filename><replaceable>libdir</replaceable>/gtk-3.0/3.0.0/immodules.cache</filename>,
 where GTK+ looks for it by default. If it is written to some other location,
 the <envar>GTK_IM_MODULE_FILE</envar> environment variable can be set to point
