@@ -908,26 +908,6 @@ gtk_button_new (void)
   return g_object_new (GTK_TYPE_BUTTON, NULL);
 }
 
-static gboolean
-show_image (GtkButton *button)
-{
-  GtkButtonPrivate *priv = button->priv;
-  gboolean show;
-
-  if (priv->label_text && !priv->always_show_image)
-    {
-      GtkSettings *settings;
-
-      settings = gtk_widget_get_settings (GTK_WIDGET (button));        
-      g_object_get (settings, "gtk-button-images", &show, NULL);
-    }
-  else
-    show = TRUE;
-
-  return show;
-}
-
-
 static void
 gtk_button_construct_child (GtkButton *button)
 {
@@ -969,7 +949,7 @@ gtk_button_construct_child (GtkButton *button)
     {
       priv->image = image;
       g_object_set (priv->image,
-		    "visible", show_image (button),
+		    "visible", TRUE,
 		    "no-show-all", TRUE,
 		    NULL);
 
@@ -1720,35 +1700,8 @@ show_image_change_notify (GtkButton *button)
 
   if (priv->image) 
     {
-      if (show_image (button))
-	gtk_widget_show (priv->image);
-      else
-	gtk_widget_hide (priv->image);
+      gtk_widget_show (priv->image);
     }
-}
-
-static void
-traverse_container (GtkWidget *widget,
-		    gpointer   data)
-{
-  if (GTK_IS_BUTTON (widget))
-    show_image_change_notify (GTK_BUTTON (widget));
-  else if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), traverse_container, NULL);
-}
-
-static void
-gtk_button_setting_changed (GtkSettings *settings)
-{
-  GList *list, *l;
-
-  list = gtk_window_list_toplevels ();
-
-  for (l = list; l; l = l->next)
-    gtk_container_forall (GTK_CONTAINER (l->data), 
-			  traverse_container, NULL);
-
-  g_list_free (list);
 }
 
 static void
@@ -1757,8 +1710,6 @@ gtk_button_screen_changed (GtkWidget *widget,
 {
   GtkButton *button;
   GtkButtonPrivate *priv;
-  GtkSettings *settings;
-  gulong show_image_connection;
 
   if (!gtk_widget_has_screen (widget))
     return;
@@ -1773,18 +1724,6 @@ gtk_button_screen_changed (GtkWidget *widget,
       priv->button_down = FALSE;
       gtk_button_update_state (button);
     }
-
-  settings = gtk_widget_get_settings (widget);
-
-  show_image_connection = 
-    g_signal_handler_find (settings, G_SIGNAL_MATCH_FUNC, 0, 0,
-                           NULL, gtk_button_setting_changed, NULL);
-  
-  if (show_image_connection)
-    return;
-
-  g_signal_connect (settings, "notify::gtk-button-images",
-                    G_CALLBACK (gtk_button_setting_changed), NULL);
 
   show_image_change_notify (button);
 }
@@ -1951,10 +1890,7 @@ gtk_button_set_always_show_image (GtkButton *button,
 
       if (priv->image)
         {
-          if (show_image (button))
-            gtk_widget_show (priv->image);
-          else
-            gtk_widget_hide (priv->image);
+          gtk_widget_show (priv->image);
         }
 
       g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ALWAYS_SHOW_IMAGE]);
