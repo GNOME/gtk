@@ -575,7 +575,6 @@ enum {
   PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
-  PROP_COMPOSITE_CHILD,
   PROP_EVENTS,
   PROP_NO_SHOW_ALL,
   PROP_HAS_TOOLTIP,
@@ -796,7 +795,6 @@ static void gtk_widget_update_input_shape (GtkWidget *widget);
 static gint             GtkWidget_private_offset = 0;
 static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
-static guint            composite_child_stack = 0;
 GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
 
@@ -1192,13 +1190,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("If TRUE, the widget will receive the default action when it is focused"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  widget_props[PROP_COMPOSITE_CHILD] =
-      g_param_spec_boolean ("composite-child",
-                            P_("Composite child"),
-                            P_("Whether the widget is part of a composite widget"),
-                            FALSE,
-                            GTK_PARAM_READABLE);
 
   widget_props[PROP_EVENTS] =
       g_param_spec_flags ("events",
@@ -3499,9 +3490,6 @@ gtk_widget_get_property (GObject         *object,
     case PROP_RECEIVES_DEFAULT:
       g_value_set_boolean (value, gtk_widget_get_receives_default (widget));
       break;
-    case PROP_COMPOSITE_CHILD:
-      g_value_set_boolean (value, widget->priv->composite_child);
-      break;
     case PROP_EVENTS:
       eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
       g_value_set_flags (value, GPOINTER_TO_INT (eventp));
@@ -3909,7 +3897,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->parent = NULL;
 
   priv->sensitive = TRUE;
-  priv->composite_child = composite_child_stack != 0;
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
   priv->alloc_needed_on_child = TRUE;
@@ -10426,41 +10413,6 @@ gtk_widget_is_ancestor (GtkWidget *widget,
     }
 
   return FALSE;
-}
-
-/**
- * gtk_widget_push_composite_child:
- *
- * Makes all newly-created widgets as composite children until
- * the corresponding gtk_widget_pop_composite_child() call.
- *
- * A composite child is a child that’s an implementation detail of the
- * container it’s inside and should not be visible to people using the
- * container. Composite children aren’t treated differently by GTK+ (but
- * see gtk_container_foreach() vs. gtk_container_forall()), but e.g. GUI
- * builders might want to treat them in a different way.
- *
- * Deprecated: 3.10: This API never really worked well and was mostly unused, now
- * we have a more complete mechanism for composite children, see gtk_widget_class_set_template().
- **/
-void
-gtk_widget_push_composite_child (void)
-{
-  composite_child_stack++;
-}
-
-/**
- * gtk_widget_pop_composite_child:
- *
- * Cancels the effect of a previous call to gtk_widget_push_composite_child().
- *
- * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don’t use this API at all.
- **/
-void
-gtk_widget_pop_composite_child (void)
-{
-  if (composite_child_stack)
-    composite_child_stack--;
 }
 
 static void

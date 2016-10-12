@@ -52,7 +52,6 @@ struct _GtkWidgetPrivate
   guint in_destruction        : 1;
   guint toplevel              : 1;
   guint anchored              : 1;
-  guint composite_child       : 1;
   guint no_window             : 1;
   guint realized              : 1;
   guint mapped                : 1;

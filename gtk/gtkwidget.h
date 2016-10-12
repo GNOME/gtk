@@ -1095,15 +1095,6 @@ GDK_AVAILABLE_IN_ALL
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
 					       const gchar *text);
 
-/* Push/pop pairs, to change default values upon a widget's creation.
- * This will override the values that got set by the
- * gtk_widget_set_default_* () functions.
- */
-GDK_DEPRECATED_IN_3_10_FOR(gtk_widget_class_set_template)
-void	     gtk_widget_push_composite_child (void);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_widget_class_set_template)
-void	     gtk_widget_pop_composite_child  (void);
-
 /* widget style properties
  */
 GDK_AVAILABLE_IN_ALL
