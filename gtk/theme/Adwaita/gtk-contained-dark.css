@@ -4533,8 +4533,8 @@ button.circular {
     color: #919494;
     transition: 200ms ease-out; }
 
-*:drop(active):focus,
-*:drop(active) {
+:not(decoration):not(window):drop(active):focus,
+:not(decoration):not(window):drop(active) {
   border-color: #4e9a06;
   box-shadow: inset 0 0 0 1px #4e9a06;
   caret-color: #4e9a06; }
