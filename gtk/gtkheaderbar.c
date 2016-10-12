@@ -133,8 +133,9 @@ init_sizing_box (GtkHeaderBar *bar)
    * the real label box with its actual size, to keep it center-aligned
    * in case we have only the title.
    */
-  priv->label_sizing_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_show (priv->label_sizing_box);
+  w = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_show (w);
+  priv->label_sizing_box = g_object_ref_sink (w);
 
   w = gtk_label_new (NULL);
   gtk_widget_show (w);
@@ -1465,6 +1466,12 @@ static void
 gtk_header_bar_destroy (GtkWidget *widget)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
+
+  if (priv->label_sizing_box)
+    {
+      gtk_widget_destroy (priv->label_sizing_box);
+      g_clear_object (&priv->label_sizing_box);
+    }
 
   if (priv->custom_title)
     {
