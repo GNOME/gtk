@@ -266,6 +266,24 @@ gtk_shortcuts_group_finalize (GObject *object)
 }
 
 static void
+gtk_shortcuts_group_dispose (GObject *object)
+{
+  GtkShortcutsGroup *self = GTK_SHORTCUTS_GROUP (object);
+
+  /*
+   * Since we overload forall(), the inherited destroy() won't work as normal.
+   * Remove internal widgets ourself.
+   */
+  if (self->title)
+    {
+      gtk_widget_destroy (GTK_WIDGET (self->title));
+      self->title = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_shortcuts_group_parent_class)->dispose (object);
+}
+
+static void
 gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -275,6 +293,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
   object_class->finalize = gtk_shortcuts_group_finalize;
   object_class->get_property = gtk_shortcuts_group_get_property;
   object_class->set_property = gtk_shortcuts_group_set_property;
+  object_class->dispose = gtk_shortcuts_group_dispose;
 
   widget_class->direction_changed = gtk_shortcuts_group_direction_changed;
   container_class->add = gtk_shortcuts_group_add;
