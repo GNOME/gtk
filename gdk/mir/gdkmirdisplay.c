@@ -544,7 +544,28 @@ gdk_mir_display_set_selection_owner (GdkDisplay *display,
                                      guint32     time,
                                      gboolean    send_event)
 {
-  //g_printerr ("gdk_mir_display_set_selection_owner\n");
+  GdkEvent *event;
+
+  if (selection == GDK_SELECTION_CLIPBOARD)
+    {
+      if (owner)
+        {
+          event = gdk_event_new (GDK_SELECTION_REQUEST);
+          event->selection.window = g_object_ref (owner);
+          event->selection.send_event = FALSE;
+          event->selection.selection = selection;
+          event->selection.target = gdk_atom_intern_static_string ("TARGETS");
+          event->selection.property = gdk_atom_intern_static_string ("AVAILABLE_TARGETS");
+          event->selection.time = GDK_CURRENT_TIME;
+          event->selection.requestor = g_object_ref (owner);
+
+          gdk_event_put (event);
+          gdk_event_free (event);
+
+          return TRUE;
+        }
+    }
+
   return FALSE;
 }
 
@@ -683,6 +704,43 @@ _gdk_mir_display_unfocus_window (GdkDisplay *display,
 
   if (window == mir_display->focused_window)
     g_clear_object (&mir_display->focused_window);
+}
+
+void
+_gdk_mir_display_create_paste (GdkDisplay          *display,
+                               const gchar * const *paste_formats,
+                               gconstpointer        paste_data,
+                               gsize                paste_size)
+{
+  GdkMirDisplay *mir_display = GDK_MIR_DISPLAY (display);
+  MirSurface *surface;
+  MirPersistentId *persistent_id;
+
+  if (!mir_display->focused_window)
+    return;
+
+  surface = gdk_mir_window_get_mir_surface (mir_display->focused_window);
+
+  if (!surface)
+    return;
+
+  persistent_id = mir_surface_request_persistent_id_sync (surface);
+
+  if (!persistent_id)
+    return;
+
+  if (mir_persistent_id_is_valid (persistent_id))
+    content_hub_service_call_create_paste_sync (
+      mir_display->content_service,
+      g_application_get_application_id (g_application_get_default ()),
+      mir_persistent_id_as_string (persistent_id),
+      g_variant_new_fixed_array (G_VARIANT_TYPE_BYTE, paste_data, paste_size, sizeof (guchar)),
+      paste_formats,
+      NULL,
+      NULL,
+      NULL);
+
+  mir_persistent_id_release (persistent_id);
 }
 
 gboolean

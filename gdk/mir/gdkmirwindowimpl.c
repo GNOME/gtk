@@ -1508,6 +1508,140 @@ gdk_mir_window_impl_get_property (GdkWindow  *window,
 }
 
 static void
+request_targets (GdkWindow     *window,
+                 const GdkAtom *available_targets,
+                 gint           n_available_targets)
+{
+  GArray *requested_targets;
+  GdkAtom target_pair[2];
+  gchar *target_location;
+  GdkEvent *event;
+  gint i;
+
+  requested_targets = g_array_sized_new (TRUE, FALSE, sizeof (GdkAtom), 2 * n_available_targets);
+
+  for (i = 0; i < n_available_targets; i++)
+    {
+      target_pair[0] = available_targets[i];
+
+      if (target_pair[0] == gdk_atom_intern_static_string ("TIMESTAMP") ||
+          target_pair[0] == gdk_atom_intern_static_string ("TARGETS") ||
+          target_pair[0] == gdk_atom_intern_static_string ("MULTIPLE") ||
+          target_pair[0] == gdk_atom_intern_static_string ("SAVE_TARGETS"))
+        continue;
+
+      target_location = g_strdup_printf ("REQUESTED_TARGET_U%u", requested_targets->len / 2);
+      target_pair[1] = gdk_atom_intern (target_location, FALSE);
+      g_free (target_location);
+
+      g_array_append_vals (requested_targets, target_pair, 2);
+    }
+
+  gdk_property_delete (window, gdk_atom_intern_static_string ("AVAILABLE_TARGETS"));
+  gdk_property_delete (window, gdk_atom_intern_static_string ("REQUESTED_TARGETS"));
+
+  gdk_property_change (window,
+                       gdk_atom_intern_static_string ("REQUESTED_TARGETS"),
+                       GDK_SELECTION_TYPE_ATOM,
+                       8 * sizeof (GdkAtom),
+                       GDK_PROP_MODE_REPLACE,
+                       (const guchar *) requested_targets->data,
+                       requested_targets->len);
+
+  g_array_unref (requested_targets);
+
+  event = gdk_event_new (GDK_SELECTION_REQUEST);
+  event->selection.window = g_object_ref (window);
+  event->selection.send_event = FALSE;
+  event->selection.selection = GDK_SELECTION_CLIPBOARD;
+  event->selection.target = gdk_atom_intern_static_string ("MULTIPLE");
+  event->selection.property = gdk_atom_intern_static_string ("REQUESTED_TARGETS");
+  event->selection.time = GDK_CURRENT_TIME;
+  event->selection.requestor = g_object_ref (window);
+
+  gdk_event_put (event);
+  gdk_event_free (event);
+}
+
+static void
+create_paste (GdkWindow     *window,
+              const GdkAtom *requested_targets,
+              gint           n_requested_targets)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  GPtrArray *paste_formats;
+  GArray *paste_header;
+  GByteArray *paste_data;
+  gint sizes[4];
+  GdkMirProperty *mir_property;
+  const gchar *paste_format;
+  gint i;
+
+  paste_formats = g_ptr_array_new_full (n_requested_targets, g_free);
+  paste_header = g_array_sized_new (FALSE, FALSE, sizeof (gint), 1 + 4 * n_requested_targets);
+  paste_data = g_byte_array_new ();
+
+  g_array_append_val (paste_header, sizes[0]);
+
+  for (i = 0; i < n_requested_targets; i++)
+    {
+      if (requested_targets[i] == GDK_NONE)
+        continue;
+
+      mir_property = g_hash_table_lookup (impl->properties, requested_targets[i]);
+
+      if (!mir_property)
+        continue;
+
+      paste_format = _gdk_atom_name_const (mir_property->type);
+
+      /* skip non-MIME targets */
+      if (!strchr (paste_format, '/'))
+        {
+          g_hash_table_remove (impl->properties, requested_targets[i]);
+          continue;
+        }
+
+      sizes[0] = paste_data->len;
+      sizes[1] = strlen (paste_format);
+      sizes[2] = sizes[0] + sizes[1];
+      sizes[3] = mir_property->array->len * g_array_get_element_size (mir_property->array);
+
+      g_ptr_array_add (paste_formats, g_strdup (paste_format));
+      g_array_append_vals (paste_header, sizes, 4);
+      g_byte_array_append (paste_data, (const guint8 *) paste_format, sizes[1]);
+      g_byte_array_append (paste_data, (const guint8 *) mir_property->array->data, sizes[3]);
+
+      g_hash_table_remove (impl->properties, requested_targets[i]);
+    }
+
+  gdk_property_delete (window, gdk_atom_intern_static_string ("REQUESTED_TARGETS"));
+
+  g_array_index (paste_header, gint, 0) = paste_formats->len;
+
+  for (i = 0; i < paste_formats->len; i++)
+    {
+      g_array_index (paste_header, gint, 1 + 4 * i) += paste_header->len * sizeof (gint);
+      g_array_index (paste_header, gint, 3 + 4 * i) += paste_header->len * sizeof (gint);
+    }
+
+  g_byte_array_prepend (paste_data,
+                        (const guint8 *) paste_header->data,
+                        paste_header->len * g_array_get_element_size (paste_header));
+
+  g_ptr_array_add (paste_formats, NULL);
+
+  _gdk_mir_display_create_paste (gdk_window_get_display (window),
+                                 (const gchar * const *) paste_formats->pdata,
+                                 paste_data->data,
+                                 paste_data->len);
+
+  g_byte_array_unref (paste_data);
+  g_array_unref (paste_header);
+  g_ptr_array_unref (paste_formats);
+}
+
+static void
 gdk_mir_window_impl_change_property (GdkWindow    *window,
                                      GdkAtom       property,
                                      GdkAtom       type,
@@ -1518,6 +1652,7 @@ gdk_mir_window_impl_change_property (GdkWindow    *window,
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   GdkMirProperty *mir_property;
+  gboolean existed;
   GdkEvent *event;
 
   /* ICCCM 2.7: ATOMs and ATOM_PAIRs have format 32, but GdkAtoms can be 64-bit */
@@ -1525,9 +1660,15 @@ gdk_mir_window_impl_change_property (GdkWindow    *window,
     format = 8 * sizeof (GdkAtom);
 
   if (mode != GDK_PROP_MODE_REPLACE)
-    mir_property = g_hash_table_lookup (impl->properties, property);
+    {
+      mir_property = g_hash_table_lookup (impl->properties, property);
+      existed = mir_property != NULL;
+    }
   else
-    mir_property = NULL;
+    {
+      mir_property = NULL;
+      existed = g_hash_table_contains (impl->properties, property);
+    }
 
   if (!mir_property)
     {
@@ -1554,6 +1695,11 @@ gdk_mir_window_impl_change_property (GdkWindow    *window,
 
   gdk_event_put (event);
   gdk_event_free (event);
+
+  if (property == gdk_atom_intern_static_string ("AVAILABLE_TARGETS"))
+    request_targets (window, (const GdkAtom *) data, n_elements);
+  else if (property == gdk_atom_intern_static_string ("REQUESTED_TARGETS") && existed)
+    create_paste (window, (const GdkAtom *) data, n_elements);
 }
 
 static void

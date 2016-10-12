@@ -111,6 +111,11 @@ void _gdk_mir_display_focus_window (GdkDisplay *display, GdkWindow *window);
 
 void _gdk_mir_display_unfocus_window (GdkDisplay *display, GdkWindow *window);
 
+void _gdk_mir_display_create_paste (GdkDisplay          *display,
+                                    const gchar * const *paste_formats,
+                                    gconstpointer        paste_data,
+                                    gsize                paste_size);
+
 gboolean _gdk_mir_display_init_egl_display (GdkDisplay *display);
 
 EGLDisplay _gdk_mir_display_get_egl_display (GdkDisplay *display);
