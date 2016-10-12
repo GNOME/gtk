@@ -2039,7 +2039,15 @@ gtk_menu_popup_internal (GtkMenu             *menu,
  * Only if no such event is available, gtk_get_current_event_time() can
  * be used instead.
  *
+ * Note that this function does not work very well on GDK backends that
+ * do not have global coordinates, such as Wayland or Mir. You should
+ * probably use one of the gtk_menu_popup_at_ variants, which do not
+ * have this problem.
+ *
  * Since: 3.0
+ *
+ * Deprecated: 3.22: Please use gtk_menu_popup_at_widget(),
+ *     gtk_menu_popup_at_pointer(). or gtk_menu_popup_at_rect() instead
  */
 void
 gtk_menu_popup_for_device (GtkMenu             *menu,
@@ -2103,6 +2111,14 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
  * a mouse click or key press) that caused the initiation of the popup.
  * Only if no such event is available, gtk_get_current_event_time() can
  * be used instead.
+ *
+ * Note that this function does not work very well on GDK backends that
+ * do not have global coordinates, such as Wayland or Mir. You should
+ * probably use one of the gtk_menu_popup_at_ variants, which do not
+ * have this problem.
+ *
+ * Deprecated: 3.22: Please use gtk_menu_popup_at_widget(),
+ *     gtk_menu_popup_at_pointer(). or gtk_menu_popup_at_rect() instead
  */
 void
 gtk_menu_popup (GtkMenu             *menu,
@@ -2119,6 +2135,7 @@ gtk_menu_popup (GtkMenu             *menu,
                              NULL,
                              parent_menu_shell,
                              parent_menu_item,
+
                              func, data, NULL,
                              button, activate_time);
 }

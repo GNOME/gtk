@@ -134,7 +134,7 @@ GDK_AVAILABLE_IN_3_4
 GtkWidget* gtk_menu_new_from_model        (GMenuModel *model);
 
 /* Display the menu onscreen */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR((gtk_menu_popup_at_widget, gtk_menu_popup_at_pointer, gtk_menu_popup_at_rect))
 void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   GtkWidget	       *parent_menu_shell,
 					   GtkWidget	       *parent_menu_item,
@@ -142,7 +142,7 @@ void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   gpointer		data,
 					   guint		button,
 					   guint32		activate_time);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR((gtk_menu_popup_at_widget, gtk_menu_popup_at_pointer, gtk_menu_popup_at_rect))
 void       gtk_menu_popup_for_device      (GtkMenu             *menu,
                                            GdkDevice           *device,
                                            GtkWidget           *parent_menu_shell,
