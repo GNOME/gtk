@@ -882,164 +882,121 @@ spinbutton button:disabled:first-child:dir(rtl) {
 
 /* Ranges */
 
-/* TODO: The trough is not quite right, it covers everything,
-   but in win32 the slider 'sticks out' on the sides of the
-   trough */
-
-scale {
-    background-color: transparent;
-    -GtkScale-value-spacing: 0;
-    -GtkScale-slider-length: 12;
-    -GtkRange-slider-width: 20;
-}
-
-scale trough {
-    margin: 8px 0;
-    border-style: none;
-    border-width: 0;
+scale.horizontal trough {
+    margin: calc( -gtk-win32-part-height(trackbar, 4, 1) / 2 + 1px ) 0;
+    padding: 0 calc( -gtk-win32-part-width(trackbar, 4, 1) / 2);
     background-image: -gtk-win32-theme-part(trackbar, 1, 1);
+    min-height: -gtk-win32-part-height(trackbar, 1, 1);
 }
-
 scale.vertical trough {
-    margin: 0 8px;
-    background-image: -gtk-win32-theme-part(trackbar, 1, 1);
+    margin: 0 calc( -gtk-win32-part-width(trackbar, 8, 1) / 2 + 1px );
+    padding: calc( -gtk-win32-part-height(trackbar, 8, 1) / 2 ) 0;
+    background-image: -gtk-win32-theme-part(trackbar, 2, 1);
+    min-width: -gtk-win32-part-width(trackbar, 2, 1);
 }
 
-scale.mark.separator {
-    /* defines the color of the actuall marks on the scale */
+scale.horizontal indicator {
+    min-height: -gtk-win32-part-height(trackbar, 9, 1);
+    min-width: -gtk-win32-part-width(trackbar, 9, 1);
     color: shade(@bg_color, 0.6);
+    margin-top: -2px;
+    margin-bottom: 2px;
+}
+scale.vertical indicator {
+    min-height: -gtk-win32-part-height(trackbar, 10, 1) ;
+    min-width: -gtk-win32-part-width(trackbar, 10, 1);
+    color: shade(@bg_color, 0.6);
+    margin-left: -2px;
+    margin-right: 2px;
 }
 
-scale slider {
-    background-color: transparent;
-    border-width: 0;
-    color: rgba(0,0,0,0);
-    background-image: -gtk-win32-theme-part(trackbar, 3, 1);
-}
-
-scale slider:hover {
-    background-image: -gtk-win32-theme-part(trackbar, 3, 2);
-}
-
-scale slider:active,
-scale slider:hover:active {
-    background-image: -gtk-win32-theme-part(trackbar, 3, 3);
-}
-
-scale slider:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 3, 4);
-}
-
-scale slider:disabled {
-    background-image: -gtk-win32-theme-part(trackbar, 3, 5);
+scale.horizontal slider {
+    min-height: -gtk-win32-part-height(trackbar, 4, 1);
+    min-width: -gtk-win32-part-width(trackbar, 4, 1);
+    margin: calc( (-gtk-win32-part-height(trackbar, 4, 1) - -gtk-win32-part-height(trackbar, 1, 1)) / -2) 0;
 }
 
 scale.vertical slider {
-    background-image: -gtk-win32-theme-part(trackbar, 6, 1);
+    min-height: -gtk-win32-part-height(trackbar, 8, 1);
+    min-width: -gtk-win32-part-width(trackbar, 8, 1);
+    margin: 0 calc( (-gtk-win32-part-width(trackbar, 8, 1) - -gtk-win32-part-width(trackbar, 2, 1)) / -2);
 }
 
+scale.horizontal slider {
+    background-image: -gtk-win32-theme-part(trackbar, 3,1)
+}
+scale.horizontal.marks-after slider {
+    background-image: -gtk-win32-theme-part(trackbar, 4,1)
+}
+scale.horizontal slider:hover {
+    background-image: -gtk-win32-theme-part(trackbar, 3,2)
+}
+scale.horizontal.marks-after slider:hover {
+    background-image: -gtk-win32-theme-part(trackbar, 4,2)
+}
+scale.horizontal slider:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 3,4)
+}
+scale.horizontal.marks-after slider:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 4,4)
+}
+scale.horizontal slider:active {
+    background-image: -gtk-win32-theme-part(trackbar, 3,3)
+}
+scale.horizontal.marks-after slider:active {
+    background-image: -gtk-win32-theme-part(trackbar, 4,3)
+}
+scale.horizontal slider:disabled {
+    background-image: -gtk-win32-theme-part(trackbar, 3,5)
+}
+scale.horizontal.marks-after slider:disabled {
+    background-image: -gtk-win32-theme-part(trackbar, 4,5)
+}
+
+scale.vertical slider {
+    background-image: -gtk-win32-theme-part(trackbar, 6, 1)
+}
+scale.vertical.marks-after slider {
+    background-image: -gtk-win32-theme-part(trackbar, 8, 1)
+}
 scale.vertical slider:hover {
-    background-image: -gtk-win32-theme-part(trackbar, 6, 2);
+    background-image: -gtk-win32-theme-part(trackbar, 6, 2)
 }
-
-scale.vertical slider:active,
-scale.vertical slider:hover:active {
-    background-image: -gtk-win32-theme-part(trackbar, 6, 3);
+scale.vertical.marks-after slider:hover {
+    background-image: -gtk-win32-theme-part(trackbar, 8, 2)
 }
-
 scale.vertical slider:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 6, 4);
+    background-image: -gtk-win32-theme-part(trackbar, 6, 4)
 }
-
+scale.vertical.marks-after slider:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 8, 4)
+}
+scale.vertical slider:active {
+    background-image: -gtk-win32-theme-part(trackbar, 6, 3)
+}
+scale.vertical.marks-after slider:active {
+    background-image: -gtk-win32-theme-part(trackbar, 8, 3)
+}
 scale.vertical slider:disabled {
-    background-image: -gtk-win32-theme-part(trackbar, 6, 5);
+    background-image: -gtk-win32-theme-part(trackbar, 6, 5)
+}
+scale.vertical.marks-after slider:disabled {
+    background-image: -gtk-win32-theme-part(trackbar, 8, 5)
 }
 
-scale marks.bottom {
-    background-image: -gtk-win32-theme-part(trackbar, 4, 1, margins(0 -2 0 0));
+scale.horizontal highlight {
+    background-image: -gtk-win32-theme-part(progress, 5,1);
+    margin: 0 calc( -gtk-win32-part-width(trackbar, 4, 1) / -2);
+}
+scale.vertical highlight {
+    background-image: -gtk-win32-theme-part(progress, 6,1);
+    margin: calc( -gtk-win32-part-height(trackbar, 6, 1) / -2) 0;
 }
 
-scale marks.bottom:hover {
-    background-image: -gtk-win32-theme-part(trackbar, 4, 2, margins(0 -2 0 0));
+scale value {
+    margin-bottom: 5px;
 }
 
-scale marks.bottom:active,
-scale marks.bottom:hover:active {
-    background-image: -gtk-win32-theme-part(trackbar, 4, 3, margins(0 -2 0 0));
-}
-
-scale marks.bottom:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 4, 4, margins(0 -2 0 0));
-}
-
-scale marks.bottom:disabled {
-    background-image: -gtk-win32-theme-part(trackbar, 4, 5, margins(0 -2 0 0));
-}
-
-scale.vertical marks.bottom {
-    background-image: -gtk-win32-theme-part(trackbar, 8, 1, margins(0 0 -2 0));
-}
-
-scale.vertical marks.bottom:hover {
-    background-image: -gtk-win32-theme-part(trackbar, 8, 2, margins(0 0 -2 0));
-}
-
-scale.vertical marks.bottom:active,
-scale.vertical marks.bottom:hover:active {
-    background-image: -gtk-win32-theme-part(trackbar, 8, 3, margins(0 0 -2 0));
-}
-
-scale.vertical marks.bottom:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 8, 4, margins(0 0 -2 0));
-}
-
-scale.vertical marks.bottom:disabled {
-    background-image: -gtk-win32-theme-part(trackbar, 8, 5, margins(0 0 -2 0));
-}
-
-
-
-scale marks.top {
-    background-image: -gtk-win32-theme-part(trackbar, 5, 1, margins(0 -2 0 0));
-}
-
-scale marks.top:hover {
-    background-image: -gtk-win32-theme-part(trackbar, 5, 2, margins(0 -2 0 0));
-}
-
-scale marks.top:active,
-scale marks.top:hover:active {
-    background-image: -gtk-win32-theme-part(trackbar, 5, 3, margins(0 -2 0 0));
-}
-
-scale marks.top:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 5, 4, margins(0 -2 0 0));
-}
-
-scale marks.top:disabled {
-    background-image: -gtk-win32-theme-part(trackbar, 5, 5, margins(0 -2 0 0));
-}
-
-scale.vertical marks.top {
-    background-image: -gtk-win32-theme-part(trackbar, 7, 1, margins(0 0 -2 0));
-}
-
-scale.vertical marks.top:hover {
-    background-image: -gtk-win32-theme-part(trackbar, 7, 2, margins(0 0 -2 0));
-}
-
-scale.vertical marks.top:active,
-scale.vertical marks.top:hover:active {
-    background-image: -gtk-win32-theme-part(trackbar, 7, 3, margins(0 0 -2 0));
-}
-
-scale.vertical marks.top:focus {
-    background-image: -gtk-win32-theme-part(trackbar, 7, 4, margins(0 0 -2 0));
-}
-
-scale.vertical marks.top:disabled {
-    background-image: -gtk-win32-theme-part(trackbar, 7, 5, margins(0 0 -2 0));
-}
 
 /* Progress bars */
 
