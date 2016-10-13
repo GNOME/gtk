@@ -161,6 +161,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	listmodel			\
 	testpopup			\
 	testpopupat			\
+	testgaction 		\
 	$(NULL)
 
 if USE_X11
