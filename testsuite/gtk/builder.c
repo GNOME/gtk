@@ -741,7 +741,6 @@ test_types (void)
     "  <object class=\"GtkToolbar\" id=\"toolbar\"/>"
     "  <object class=\"GtkTreeStore\" id=\"treestore\"/>"
     "  <object class=\"GtkTreeView\" id=\"treeview\"/>"
-    "  <object class=\"GtkTable\" id=\"table\"/>"
     "  <object class=\"GtkViewport\" id=\"viewport\"/>"
     "  <object class=\"GtkWindow\" id=\"window\"/>"
     "  <object class=\"GtkUIManager\" id=\"uimanager\"/>"

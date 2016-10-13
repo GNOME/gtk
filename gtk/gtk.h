@@ -253,7 +253,6 @@
 #include <gtk/deprecated/gtkrecentaction.h>
 #include <gtk/deprecated/gtkstock.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
-#include <gtk/deprecated/gtktable.h>
 #include <gtk/deprecated/gtktoggleaction.h>
 #include <gtk/deprecated/gtkuimanager.h>
 #endif /* GTK_DISABLE_DEPRECATED */

@@ -253,7 +253,6 @@ main (int argc, char *argv[])
   add_child_tests (gtk_assistant_new ());
   add_child_tests (gtk_frame_new ("frame"));
   add_child_tests (gtk_expander_new ("expander"));
-  add_child_tests (gtk_table_new (2, 2, FALSE));
   add_child_tests (gtk_text_view_new ());
   add_child_tests (gtk_tree_view_new ());
 #if 0

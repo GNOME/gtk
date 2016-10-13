@@ -293,7 +293,6 @@ static gchar *types[] =
   "PangoMatrix ",
   "PangoContext ",
   "PangoLayout ",
-  "GtkTable ",
   "GtkToggleButton ",
   "GString ",
   "GtkIconSize ",

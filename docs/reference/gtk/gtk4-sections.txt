@@ -3260,40 +3260,6 @@ gtk_level_bar_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtktable</FILE>
-<TITLE>GtkTable</TITLE>
-GtkTable
-gtk_table_new
-gtk_table_resize
-gtk_table_get_size
-GtkAttachOptions
-gtk_table_attach
-gtk_table_attach_defaults
-gtk_table_set_row_spacing
-gtk_table_set_col_spacing
-gtk_table_set_row_spacings
-gtk_table_set_col_spacings
-gtk_table_set_homogeneous
-gtk_table_get_default_row_spacing
-gtk_table_get_homogeneous
-gtk_table_get_row_spacing
-gtk_table_get_col_spacing
-gtk_table_get_default_col_spacing
-<SUBSECTION Standard>
-GTK_TABLE
-GTK_IS_TABLE
-GTK_TYPE_TABLE
-GTK_TABLE_CLASS
-GTK_IS_TABLE_CLASS
-GTK_TABLE_GET_CLASS
-<SUBSECTION Private>
-GtkTablePrivate
-GtkTableChild
-GtkTableRowCol
-gtk_table_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtktearoffmenuitem</FILE>
 <TITLE>GtkTearoffMenuItem</TITLE>
 GtkTearoffMenuItem

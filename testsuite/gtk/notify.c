@@ -375,7 +375,6 @@ test_type (gconstpointer data)
       g_str_equal (g_type_name (type), "GtkNumerableIcon") ||
       g_str_equal (g_type_name (type), "GtkRadioAction") ||
       g_str_equal (g_type_name (type), "GtkToggleAction") ||
-      g_str_equal (g_type_name (type), "GtkTable") ||
       g_str_equal (g_type_name (type), "GtkUIManager") ||
       g_str_equal (g_type_name (type), "GtkImageMenuItem"))
     return;

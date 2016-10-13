@@ -8,7 +8,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkrecentaction.h	\
 	deprecated/gtkstock.h		\
 	deprecated/gtksymboliccolor.h	\
-	deprecated/gtktable.h		\
 	deprecated/gtktoggleaction.h	\
 	deprecated/gtkuimanager.h
 
@@ -26,6 +25,5 @@ deprecated_c_sources = 			\
 	deprecated/gtkrecentaction.c	\
 	deprecated/gtkstock.c		\
 	deprecated/gtksymboliccolor.c	\
-	deprecated/gtktable.c		\
 	deprecated/gtktoggleaction.c	\
 	deprecated/gtkuimanager.c
