@@ -725,17 +725,9 @@ GDK_AVAILABLE_IN_ALL
 cairo_region_t *gdk_window_get_visible_region(GdkWindow         *window);
 
 
-GDK_DEPRECATED_IN_3_22_FOR(gdk_window_begin_draw_frame)
-void	      gdk_window_begin_paint_rect   (GdkWindow          *window,
-					     const GdkRectangle *rectangle);
 GDK_AVAILABLE_IN_3_16
 void	      gdk_window_mark_paint_from_clip (GdkWindow          *window,
 					       cairo_t            *cr);
-GDK_DEPRECATED_IN_3_22_FOR(gdk_window_begin_draw_frame)
-void	      gdk_window_begin_paint_region (GdkWindow          *window,
-					     const cairo_region_t    *region);
-GDK_DEPRECATED_IN_3_22_FOR(gdk_window_end_draw_frame)
-void	      gdk_window_end_paint          (GdkWindow          *window);
 
 GDK_AVAILABLE_IN_3_22
 GdkDrawingContext *gdk_window_begin_draw_frame  (GdkWindow            *window,

@@ -31,9 +31,6 @@
 
 G_BEGIN_DECLS
 
-GDK_DEPRECATED_IN_3_22_FOR(gdk_window_begin_draw_frame() and gdk_drawing_context_get_cairo_context())
-cairo_t  * gdk_cairo_create             (GdkWindow          *window);
-
 GDK_AVAILABLE_IN_ALL
 gboolean   gdk_cairo_get_clip_rectangle (cairo_t            *cr,
                                          GdkRectangle       *rect);

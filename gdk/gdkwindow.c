@@ -3014,85 +3014,6 @@ gdk_window_end_paint_internal (GdkWindow *window)
 }
 
 /**
- * gdk_window_begin_paint_rect:
- * @window: a #GdkWindow
- * @rectangle: rectangle you intend to draw to
- *
- * A convenience wrapper around gdk_window_begin_paint_region() which
- * creates a rectangular region for you. See
- * gdk_window_begin_paint_region() for details.
- *
- * Deprecated: 3.22: Use gdk_window_begin_draw_frame() instead
- */
-void
-gdk_window_begin_paint_rect (GdkWindow          *window,
-			     const GdkRectangle *rectangle)
-{
-  cairo_region_t *region;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  region = cairo_region_create_rectangle (rectangle);
-  gdk_window_begin_paint_internal (window, region);
-  cairo_region_destroy (region);
-}
-
-/**
- * gdk_window_begin_paint_region:
- * @window: a #GdkWindow
- * @region: region you intend to draw to
- *
- * Indicates that you are beginning the process of redrawing @region.
- * A backing store (offscreen buffer) large enough to contain @region
- * will be created. The backing store will be initialized with the
- * background color or background surface for @window. Then, all
- * drawing operations performed on @window will be diverted to the
- * backing store.  When you call gdk_window_end_paint(), the backing
- * store will be copied to @window, making it visible onscreen. Only
- * the part of @window contained in @region will be modified; that is,
- * drawing operations are clipped to @region.
- *
- * The net result of all this is to remove flicker, because the user
- * sees the finished product appear all at once when you call
- * gdk_window_end_paint(). If you draw to @window directly without
- * calling gdk_window_begin_paint_region(), the user may see flicker
- * as individual drawing operations are performed in sequence.  The
- * clipping and background-initializing features of
- * gdk_window_begin_paint_region() are conveniences for the
- * programmer, so you can avoid doing that work yourself.
- *
- * When using GTK+, the widget system automatically places calls to
- * gdk_window_begin_paint_region() and gdk_window_end_paint() around
- * emissions of the expose_event signal. That is, if you’re writing an
- * expose event handler, you can assume that the exposed area in
- * #GdkEventExpose has already been cleared to the window background,
- * is already set as the clip region, and already has a backing store.
- * Therefore in most cases, application code need not call
- * gdk_window_begin_paint_region(). (You can disable the automatic
- * calls around expose events on a widget-by-widget basis by calling
- * gtk_widget_set_double_buffered().)
- *
- * If you call this function multiple times before calling the
- * matching gdk_window_end_paint(), the backing stores are pushed onto
- * a stack. gdk_window_end_paint() copies the topmost backing store
- * onscreen, subtracts the topmost region from all other regions in
- * the stack, and pops the stack. All drawing operations affect only
- * the topmost backing store in the stack. One matching call to
- * gdk_window_end_paint() is required for each call to
- * gdk_window_begin_paint_region().
- *
- * Deprecated: 3.22: Use gdk_window_begin_draw_frame() instead
- */
-void
-gdk_window_begin_paint_region (GdkWindow            *window,
-			       const cairo_region_t *region)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  gdk_window_begin_paint_internal (window, region);
-}
-
-/**
  * gdk_window_begin_draw_frame:
  * @window: a #GdkWindow
  * @region: a Cairo region
@@ -3328,27 +3249,6 @@ gdk_window_mark_paint_from_clip (GdkWindow *window,
   cairo_paint (cr);
 
   cairo_restore (cr);
-}
-
-/**
- * gdk_window_end_paint:
- * @window: a #GdkWindow
- *
- * Indicates that the backing store created by the most recent call
- * to gdk_window_begin_paint_region() should be copied onscreen and
- * deleted, leaving the next-most-recent backing store or no backing
- * store at all as the active paint region. See
- * gdk_window_begin_paint_region() for full details.
- *
- * It is an error to call this function without a matching
- * gdk_window_begin_paint_region() first.
- **/
-void
-gdk_window_end_paint (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  gdk_window_end_paint_internal (window);
 }
 
 /**
