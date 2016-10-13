@@ -114,7 +114,7 @@ tooltip, tooltip.background {
 }
 
 assistant .sidebar .highlight {
-    font: bold;
+    font-weight: bold;
     color:  -gtk-win32-color(button, captiontext);
 }
 
@@ -1260,7 +1260,7 @@ menu * {
 
 GtkAssistant .sidebar .highlight {
     background-color: gray;
-    font: bold;
+    font-weight: bold;
 }
 
 GtkAssistant .sidebar {
