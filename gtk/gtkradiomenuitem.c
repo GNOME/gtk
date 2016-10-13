@@ -27,7 +27,6 @@
 #include "gtkcheckmenuitemprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"
-#include "deprecated/gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtkradiomenuitemaccessible.h"
@@ -504,18 +503,9 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
   GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
   GtkCheckMenuItem *tmp_menu_item;
-  GtkAction        *action;
   GSList *tmp_list;
   gboolean active;
   gint toggled;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (menu_item));
-  if (action && gtk_menu_item_get_submenu (menu_item) == NULL)
-    gtk_action_activate (action);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   toggled = FALSE;
 
