@@ -40,7 +40,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
-#include "deprecated/gtkactivatable.h"
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
@@ -123,10 +122,6 @@ enum {
 
   LAST_PROP,
 
-  /* activatable properties */
-  PROP_ACTIVATABLE_RELATED_ACTION = LAST_PROP,
-  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE,
-
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET
 };
@@ -195,32 +190,18 @@ static void gtk_menu_item_buildable_custom_finished(GtkBuildable        *buildab
                                                     gpointer             user_data);
 
 static void gtk_menu_item_actionable_interface_init  (GtkActionableInterface *iface);
-static void gtk_menu_item_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_menu_item_update                     (GtkActivatable       *activatable,
-                                                      GtkAction            *action,
-                                                      const gchar          *property_name);
-static void gtk_menu_item_sync_action_properties     (GtkActivatable       *activatable,
-                                                      GtkAction            *action);
-static void gtk_menu_item_set_related_action         (GtkMenuItem          *menu_item, 
-                                                      GtkAction            *action);
-static void gtk_menu_item_set_use_action_appearance  (GtkMenuItem          *menu_item, 
-                                                      gboolean              use_appearance);
 
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *menu_item_props[LAST_PROP];
 
 static GtkBuildableIface *parent_buildable_iface;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkMenuItem)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_menu_item_buildable_interface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
-                                                gtk_menu_item_activatable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE,
                                                 gtk_menu_item_actionable_interface_init))
-G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static void
 gtk_menu_item_set_action_name (GtkActionable *actionable,
@@ -790,9 +771,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_item_props);
 
-  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
-  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
-
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
@@ -811,9 +789,6 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
 
   gtk_widget_set_has_window (GTK_WIDGET (menu_item), FALSE);
 
-  priv->action = NULL;
-  priv->use_action_appearance = TRUE;
-  
   priv->submenu = NULL;
   priv->toggle_size = 0;
   priv->accelerator_width = 0;
@@ -822,9 +797,7 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   else
     priv->submenu_direction = GTK_DIRECTION_RIGHT;
   priv->submenu_placement = GTK_TOP_BOTTOM;
-  priv->use_action_appearance = TRUE;
   priv->timer = 0;
-  priv->action = NULL;
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu_item));
   priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
@@ -900,15 +873,6 @@ gtk_menu_item_dispose (GObject *object)
 
   g_clear_object (&priv->action_helper);
 
-  if (priv->action)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_action_disconnect_accelerator (priv->action);
-      gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (menu_item), NULL);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      priv->action = NULL;
-    }
-
   g_clear_object (&priv->arrow_gadget);
   g_clear_object (&priv->gadget);
 
@@ -936,12 +900,6 @@ gtk_menu_item_set_property (GObject      *object,
       break;
     case PROP_USE_UNDERLINE:
       gtk_menu_item_set_use_underline (menu_item, g_value_get_boolean (value));
-      break;
-    case PROP_ACTIVATABLE_RELATED_ACTION:
-      gtk_menu_item_set_related_action (menu_item, g_value_get_object (value));
-      break;
-    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE:
-      gtk_menu_item_set_use_action_appearance (menu_item, g_value_get_boolean (value));
       break;
     case PROP_ACTION_NAME:
       gtk_menu_item_set_action_name (GTK_ACTIONABLE (menu_item), g_value_get_string (value));
@@ -977,12 +935,6 @@ gtk_menu_item_get_property (GObject    *object,
       break;
     case PROP_USE_UNDERLINE:
       g_value_set_boolean (value, gtk_menu_item_get_use_underline (menu_item));
-      break;
-    case PROP_ACTIVATABLE_RELATED_ACTION:
-      g_value_set_object (value, priv->action);
-      break;
-    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE:
-      g_value_set_boolean (value, priv->use_action_appearance);
       break;
     case PROP_ACTION_NAME:
       g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
@@ -1080,211 +1032,6 @@ gtk_menu_item_buildable_custom_finished (GtkBuildable *buildable,
     }
   else
     parent_buildable_iface->custom_finished (buildable, builder, child, tagname, user_data);
-}
-
-
-static void
-gtk_menu_item_activatable_interface_init (GtkActivatableIface *iface)
-{
-  iface->update = gtk_menu_item_update;
-  iface->sync_action_properties = gtk_menu_item_sync_action_properties;
-}
-
-static void
-activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (menu_item));
-
-  if (GTK_IS_LABEL (child))
-    {
-      const gchar *label;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      label = gtk_action_get_label (action);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      gtk_menu_item_set_label (menu_item, label);
-    }
-}
-
-/*
- * gtk_menu_is_empty:
- * @menu: (allow-none): a #GtkMenu or %NULL
- * 
- * Determines whether @menu is empty. A menu is considered empty if it
- * the only visible children are “filler” menu items which were
- * inserted to mark the menu as empty.
- * 
- * This function is used by #GtkAction.
- *
- * Returns: whether @menu is empty.
- **/
-static gboolean
-gtk_menu_is_empty (GtkWidget *menu)
-{
-  GList *children, *cur;
-  gboolean result = TRUE;
-
-  g_return_val_if_fail (menu == NULL || GTK_IS_MENU (menu), TRUE);
-
-  if (!menu)
-    return FALSE;
-
-  children = gtk_container_get_children (GTK_CONTAINER (menu));
-
-  cur = children;
-  while (cur) 
-    {
-      if (gtk_widget_get_visible (cur->data))
-	{
-	  if (!g_object_get_data (cur->data, "gtk-empty-menu-item"))
-            {
-	      result = FALSE;
-              break;
-            }
-	}
-      cur = cur->next;
-    }
-  g_list_free (children);
-
-  return result;
-}
-
-
-static void
-gtk_menu_item_update (GtkActivatable *activatable,
-                      GtkAction      *action,
-                      const gchar    *property_name)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (activatable);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
-  if (strcmp (property_name, "visible") == 0)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item),
-                                     gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-  else if (strcmp (property_name, "sensitive") == 0)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_widget_set_sensitive (GTK_WIDGET (menu_item), gtk_action_is_sensitive (action));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-  else if (priv->use_action_appearance)
-    {
-      if (strcmp (property_name, "label") == 0)
-        activatable_update_label (menu_item, action);
-    }
-}
-
-static void
-gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
-                                      GtkAction      *action)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (activatable);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkWidget *label;
-
-  if (!priv->use_action_appearance || !action)
-    {
-      label = gtk_bin_get_child (GTK_BIN (menu_item));
-
-      if (GTK_IS_ACCEL_LABEL (label))
-        gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), GTK_WIDGET (menu_item));
-    }
-
-  if (!action)
-    return;
-
-  _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item),
-                                 gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_widget_set_sensitive (GTK_WIDGET (menu_item), gtk_action_is_sensitive (action));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (priv->use_action_appearance)
-    {
-      label = gtk_bin_get_child (GTK_BIN (menu_item));
-
-      /* make sure label is a label, deleting it otherwise */
-      if (label && !GTK_IS_LABEL (label))
-        {
-          gtk_container_remove (GTK_CONTAINER (menu_item), label);
-          label = NULL;
-        }
-      /* Make sure that menu_item has a label and that any
-       * accelerators are set */
-      gtk_menu_item_ensure_label (menu_item);
-      gtk_menu_item_set_use_underline (menu_item, TRUE);
-      /* Make label point to the menu_item's label */
-      label = gtk_bin_get_child (GTK_BIN (menu_item));
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_ACCEL_LABEL (label) && gtk_action_get_accel_path (action))
-        {
-          gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), NULL);
-          gtk_accel_label_set_accel_closure (GTK_ACCEL_LABEL (label),
-                                             gtk_action_get_accel_closure (action));
-        }
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      activatable_update_label (menu_item, action);
-    }
-}
-
-static void
-gtk_menu_item_set_related_action (GtkMenuItem *menu_item,
-                                  GtkAction   *action)
-{
-    GtkMenuItemPrivate *priv = menu_item->priv;
-
-    if (priv->action == action)
-      return;
-
-    G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-    if (priv->action)
-      {
-        gtk_action_disconnect_accelerator (priv->action);
-      }
-
-    if (action)
-      {
-        const gchar *accel_path;
-
-        accel_path = gtk_action_get_accel_path (action);
-        if (accel_path)
-          {
-            gtk_action_connect_accelerator (action);
-            gtk_menu_item_set_accel_path (menu_item, accel_path);
-          }
-      }
-
-    gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (menu_item), action);
-
-    G_GNUC_END_IGNORE_DEPRECATIONS;
-
-    priv->action = action;
-}
-
-static void
-gtk_menu_item_set_use_action_appearance (GtkMenuItem *menu_item,
-                                         gboolean     use_appearance)
-{
-    GtkMenuItemPrivate *priv = menu_item->priv;
-
-    if (priv->use_action_appearance != use_appearance)
-      {
-        priv->use_action_appearance = use_appearance;
-
-        G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-        gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (menu_item), priv->action);
-        G_GNUC_END_IGNORE_DEPRECATIONS;
-      }
 }
 
 static void
@@ -1647,15 +1394,8 @@ gtk_real_menu_item_activate (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv = menu_item->priv;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
   if (priv->action_helper)
     gtk_action_helper_activate (priv->action_helper);
-
-  if (priv->action)
-    gtk_action_activate (priv->action);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 

@@ -2243,7 +2243,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkMenuItem" id="menuitem1">
                                         <property name="visible">1</property>
-                                        <property name="use_action_appearance">0</property>
                                         <property name="label" translatable="yes">_File</property>
                                         <property name="use_underline">1</property>
                                         <child type="submenu">
@@ -2253,7 +2252,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="menuitem101">
                                                 <property name="label" translatable="yes">_New</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
@@ -2261,7 +2259,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="menuitem102">
                                                 <property name="label" translatable="yes">_Open</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
@@ -2269,7 +2266,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="menuitem103">
                                                 <property name="label" translatable="yes">_Save</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
@@ -2277,21 +2273,18 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="menuitem104">
                                                 <property name="label" translatable="yes">Save _As</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkMenuItem" id="quitmenuitem">
                                                 <property name="label" translatable="yes">_Quit</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">app.quit</property>
                                               </object>
@@ -2303,7 +2296,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkMenuItem" id="menuitem2">
                                         <property name="visible">1</property>
-                                        <property name="use_action_appearance">0</property>
                                         <property name="label" translatable="yes">_Edit</property>
                                         <property name="use_underline">1</property>
                                         <child type="submenu">
@@ -2314,7 +2306,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label" translatable="yes">Cu_t</property>
                                                 <property name="visible">1</property>
                                                 <property name="can_focus">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
@@ -2322,7 +2313,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="menuitem107">
                                                 <property name="label" translatable="yes">_Copy</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
@@ -2330,7 +2320,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="menuitem108">
                                                 <property name="label" translatable="yes">_Paste</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
@@ -2338,7 +2327,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="deletemenuitem">
                                                 <property name="label" translatable="yes">_Delete</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.delete</property>
                                               </object>
@@ -2364,7 +2352,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="label">_Check</property>
                                                         <property name="active">1</property>
                                                         <property name="visible">1</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2374,7 +2361,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="active">1</property>
                                                         <property name="visible">1</property>
                                                         <property name="sensitive">0</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2383,7 +2369,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="label">_Check</property>
                                                         <property name="visible">1</property>
                                                         <property name="inconsistent">1</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2391,7 +2376,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                       <object class="GtkCheckMenuItem" id="checkmenuitem4">
                                                         <property name="label">_Check</property>
                                                         <property name="visible">1</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2400,7 +2384,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="label">_Check</property>
                                                         <property name="visible">1</property>
                                                         <property name="sensitive">0</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2410,7 +2393,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="visible">1</property>
                                                         <property name="inconsistent">1</property>
                                                         <property name="sensitive">0</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2424,7 +2406,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="label">_Radio</property>
                                                         <property name="active">1</property>
                                                         <property name="visible">1</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2434,7 +2415,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="active">1</property>
                                                         <property name="visible">1</property>
                                                         <property name="sensitive">0</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2443,7 +2423,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="label">_Radio</property>
                                                         <property name="visible">1</property>
                                                         <property name="inconsistent">1</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2451,7 +2430,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                       <object class="GtkRadioMenuItem" id="radiomenuitem4">
                                                         <property name="label">_Radio</property>
                                                         <property name="visible">1</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2460,7 +2438,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="label">_Radio</property>
                                                         <property name="visible">1</property>
                                                         <property name="sensitive">0</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2470,7 +2447,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                         <property name="visible">1</property>
                                                         <property name="inconsistent">1</property>
                                                         <property name="sensitive">0</property>
-                                                        <property name="use_action_appearance">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2485,7 +2461,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkMenuItem" id="menuitem3">
                                         <property name="visible">1</property>
-                                        <property name="use_action_appearance">0</property>
                                         <property name="label" translatable="yes">_View</property>
                                         <property name="use_underline">1</property>
                                         <child type="submenu">
@@ -2495,7 +2470,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkCheckMenuItem" id="darkmenuitem">
                                                 <property name="label">_Dark theme</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.dark</property>
                                               </object>
@@ -2505,7 +2479,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label">_Toolbar</property>
                                                 <property name="visible">1</property>
                                                 <property name="active">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.toolbar</property>
                                               </object>
@@ -2515,7 +2488,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="label">_Statusbar</property>
                                                 <property name="visible">1</property>
                                                 <property name="active">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.statusbar</property>
                                               </object>
@@ -2524,7 +2496,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="bgmenuitem">
                                                 <property name="label">_Select Background</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.background</property>
                                               </object>
@@ -2536,7 +2507,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkMenuItem" id="menuitem4">
                                         <property name="visible">1</property>
-                                        <property name="use_action_appearance">0</property>
                                         <property name="label" translatable="yes">_Help</property>
                                         <property name="use_underline">1</property>
                                         <child type="submenu">
@@ -2546,7 +2516,6 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkMenuItem" id="aboutmenuitem">
                                                 <property name="label" translatable="yes">_About</property>
                                                 <property name="visible">1</property>
-                                                <property name="use_action_appearance">0</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">app.about</property>
                                               </object>

@@ -38,7 +38,6 @@ struct _GtkMenuItemPrivate
 
   gchar  *accel_path;
 
-  GtkAction *action;
   GtkActionHelper *action_helper;
 
   GtkCssGadget *gadget;
@@ -48,7 +47,6 @@ struct _GtkMenuItemPrivate
   guint submenu_direction      : 1;
   guint right_justify          : 1;
   guint from_menubar           : 1;
-  guint use_action_appearance  : 1;
   guint reserve_indicator      : 1;
 };
 
