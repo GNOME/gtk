@@ -375,6 +375,7 @@
     <child>
       <object class="GtkShortcutsSection">
         <property name="visible">1</property>
+        <property name="max-height">16</property>
         <property name="section-name">terminal</property>
         <property name="title" translatable="yes">Terminal Shortcuts</property>
         <child>
@@ -455,6 +456,43 @@
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">1</property>
+            <property name="title" translatable="yes">'Special' combinations</property>
+
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">t+t</property>
+                <property name="title" translatable="yes">You want tea ?</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;shift&gt;&lt;ctrl&gt;</property>
+                <property name="title" translatable="yes">Shift Control</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;&amp;&lt;ctrl&gt;</property>
+                <property name="title" translatable="yes">Control Control</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">Control_L&amp;Control_R</property>
+                <property name="title" translatable="yes">Left and right control</property>
+              </object>
+            </child>
+
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">1</property>
             <property name="title" translatable="yes">All gestures</property>
 
             <child>
@@ -499,41 +537,18 @@
                 <property name="title" translatable="yes">A stock swipe gesture</property>
               </object>
             </child>
-
-          </object>
-        </child>
-
-        <child>
-          <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">'Special' combinations</property>
-
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">t+t</property>
-                <property name="title" translatable="yes">You want tea ?</property>
+                <property name="shortcut-type">gesture-swipe-left</property>
+                <property name="title" translatable="yes">A stock swipe gesture</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;shift&gt;&lt;ctrl&gt;</property>
-                <property name="title" translatable="yes">Shift Control</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;ctrl&gt;&amp;&lt;ctrl&gt;</property>
-                <property name="title" translatable="yes">Control Control</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">Control_L&amp;Control_R</property>
-                <property name="title" translatable="yes">Left and right control</property>
+                <property name="shortcut-type">gesture-swipe-right</property>
+                <property name="title" translatable="yes">A stock swipe gesture</property>
               </object>
             </child>
 
