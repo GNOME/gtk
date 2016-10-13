@@ -2823,6 +2823,7 @@ gtk_scrolled_window_finalize (GObject *object)
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->swipe_gesture);
   g_clear_object (&priv->long_press_gesture);
+  g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->gadget);
   g_clear_pointer (&priv->scroll_history, (GDestroyNotify) g_array_unref);
 
