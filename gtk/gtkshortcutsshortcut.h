@@ -54,6 +54,10 @@ typedef struct _GtkShortcutsShortcutClass GtkShortcutsShortcutClass;
  * @GTK_SHORTCUT_GESTURE:
  *   The shortcut is a gesture. The #GtkShortcutsShortcut:icon property will be
  *   used.
+ * @GTK_SHORTCUT_GESTURE_SWIPE_LEFT:
+ *   The shortcut is a swipe gesture. GTK+ provides and icon and subtitle. Since 3.90
+ * @GTK_SHORTCUT_GESTURE_SWIPE_RIGHT:
+ *   The shortcut is a swipe gesture. GTK+ provides and icon and subtitle. Since 3.90
  *
  * GtkShortcutType specifies the kind of shortcut that is being described.
  * More values may be added to this enumeration over time.
@@ -68,7 +72,9 @@ typedef enum {
   GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE,
   GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT,
   GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT,
-  GTK_SHORTCUT_GESTURE
+  GTK_SHORTCUT_GESTURE,
+  GTK_SHORTCUT_GESTURE_SWIPE_LEFT,
+  GTK_SHORTCUT_GESTURE_SWIPE_RIGHT
 } GtkShortcutType;
 
 GDK_AVAILABLE_IN_3_20

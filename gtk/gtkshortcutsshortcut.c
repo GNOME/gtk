@@ -156,6 +156,14 @@ update_subtitle_from_type (GtkShortcutsShortcut *self)
       subtitle = _("Two finger swipe right");
       break;
 
+    case GTK_SHORTCUT_GESTURE_SWIPE_LEFT:
+      subtitle = _("Swipe left");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_SWIPE_RIGHT:
+      subtitle = _("Swipe right");
+      break;
+
     default:
       subtitle = NULL;
       break;
@@ -221,6 +229,14 @@ update_icon_from_type (GtkShortcutsShortcut *self)
 
     case GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
       icon = g_themed_icon_new ("gesture-two-finger-swipe-right-symbolic");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_SWIPE_LEFT:
+      icon = g_themed_icon_new ("gesture-swipe-left-symbolic");
+      break;
+
+    case GTK_SHORTCUT_GESTURE_SWIPE_RIGHT:
+      icon = g_themed_icon_new ("gesture-swipe-right-symbolic");
       break;
 
     default: ;

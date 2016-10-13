@@ -1320,6 +1320,8 @@ gesture_sources = 				\
 	gesture/gesture-stretch-symbolic.svg			\
 	gesture/gesture-rotate-clockwise-symbolic.svg		\
 	gesture/gesture-rotate-anticlockwise-symbolic.svg	\
+	gesture/gesture-swipe-left-symbolic.svg			\
+	gesture/gesture-swipe-right-symbolic.svg		\
 	gesture/gesture-two-finger-swipe-left-symbolic.svg	\
 	gesture/gesture-two-finger-swipe-right-symbolic.svg
 
