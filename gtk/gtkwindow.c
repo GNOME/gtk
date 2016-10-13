@@ -149,6 +149,7 @@
  * widget that is added as a titlebar child.
  */
 
+#define MENU_BAR_ACCEL "F10"
 #define MNEMONICS_DELAY 300 /* ms */
 #define NO_CONTENT_CHILD_NAT 200
 /* In case the content (excluding header bar and shadows) of the window
@@ -10545,27 +10546,16 @@ gtk_window_activate_menubar (GtkWindow   *window,
                              GdkEventKey *event)
 {
   GtkWindowPrivate *priv = window->priv;
-  gchar *accel = NULL;
   guint keyval = 0;
   GdkModifierType mods = 0;
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                "gtk-menu-bar-accel", &accel,
-                NULL);
-
-  if (accel == NULL || *accel == 0)
-    return FALSE;
-
-  gtk_accelerator_parse (accel, &keyval, &mods);
+  gtk_accelerator_parse (MENU_BAR_ACCEL, &keyval, &mods);
 
   if (keyval == 0)
     {
-      g_warning ("Failed to parse menu bar accelerator '%s'", accel);
-      g_free (accel);
+      g_warning ("Failed to parse menu bar accelerator '%s'", MENU_BAR_ACCEL);
       return FALSE;
     }
-
-  g_free (accel);
 
   /* FIXME this is wrong, needs to be in the global accel resolution
    * thing, to properly consider i18n etc., but that probably requires
