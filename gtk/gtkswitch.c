@@ -51,8 +51,6 @@
 
 #include "gtkswitch.h"
 
-#include "deprecated/gtkactivatable.h"
-#include "deprecated/gtktoggleaction.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkwidget.h"
@@ -75,7 +73,6 @@
 struct _GtkSwitchPrivate
 {
   GdkWindow *event_window;
-  GtkAction *action;
   GtkActionHelper *action_helper;
 
   GtkGesture *pan_gesture;
@@ -93,7 +90,6 @@ struct _GtkSwitchPrivate
   guint state                 : 1;
   guint is_active             : 1;
   guint in_switch             : 1;
-  guint use_action_appearance : 1;
 };
 
 enum
@@ -101,8 +97,6 @@ enum
   PROP_0,
   PROP_ACTIVE,
   PROP_STATE,
-  PROP_RELATED_ACTION,
-  PROP_USE_ACTION_APPEARANCE,
   LAST_PROP,
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET
@@ -120,16 +114,11 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *switch_props[LAST_PROP] = { NULL, };
 
 static void gtk_switch_actionable_iface_init (GtkActionableInterface *iface);
-static void gtk_switch_activatable_interface_init (GtkActivatableIface *iface);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkSwitch, gtk_switch, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkSwitch)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE,
-                                                gtk_switch_actionable_iface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
-                                                gtk_switch_activatable_interface_init));
-G_GNUC_END_IGNORE_DEPRECATIONS;
+                                                gtk_switch_actionable_iface_init))
 
 static void
 gtk_switch_end_toggle_animation (GtkSwitch *sw)
@@ -606,38 +595,6 @@ gtk_switch_draw (GtkWidget *widget,
 }
 
 static void
-gtk_switch_set_related_action (GtkSwitch *sw,
-                               GtkAction *action)
-{
-  GtkSwitchPrivate *priv = sw->priv;
-
-  if (priv->action == action)
-    return;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (sw), action);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  priv->action = action;
-}
-
-static void
-gtk_switch_set_use_action_appearance (GtkSwitch *sw,
-                                      gboolean   use_appearance)
-{
-  GtkSwitchPrivate *priv = sw->priv;
-
-  if (priv->use_action_appearance != use_appearance)
-    {
-      priv->use_action_appearance = use_appearance;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (sw), priv->action);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-}
-
-static void
 gtk_switch_set_action_name (GtkActionable *actionable,
                             const gchar   *action_name)
 {
@@ -704,14 +661,6 @@ gtk_switch_set_property (GObject      *gobject,
       gtk_switch_set_state (sw, g_value_get_boolean (value));
       break;
 
-    case PROP_RELATED_ACTION:
-      gtk_switch_set_related_action (sw, g_value_get_object (value));
-      break;
-
-    case PROP_USE_ACTION_APPEARANCE:
-      gtk_switch_set_use_action_appearance (sw, g_value_get_boolean (value));
-      break;
-
     case PROP_ACTION_NAME:
       gtk_switch_set_action_name (GTK_ACTIONABLE (sw), g_value_get_string (value));
       break;
@@ -743,14 +692,6 @@ gtk_switch_get_property (GObject    *gobject,
       g_value_set_boolean (value, priv->state);
       break;
 
-    case PROP_RELATED_ACTION:
-      g_value_set_object (value, priv->action);
-      break;
-
-    case PROP_USE_ACTION_APPEARANCE:
-      g_value_set_boolean (value, priv->use_action_appearance);
-      break;
-
     case PROP_ACTION_NAME:
       g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
       break;
@@ -770,15 +711,6 @@ gtk_switch_dispose (GObject *object)
   GtkSwitchPrivate *priv = GTK_SWITCH (object)->priv;
 
   g_clear_object (&priv->action_helper);
-
-  if (priv->action)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (object), NULL);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      priv->action = NULL;
-    }
-
   g_clear_object (&priv->gadget);
   g_clear_object (&priv->slider_gadget);
 
@@ -805,11 +737,6 @@ state_set (GtkSwitch *sw, gboolean state)
   if (sw->priv->action_helper)
     gtk_action_helper_activate (sw->priv->action_helper);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  if (sw->priv->action)
-    gtk_action_activate (sw->priv->action);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   gtk_switch_set_state (sw, state);
 
   return TRUE;
@@ -820,21 +747,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  gpointer activatable_iface;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  activatable_iface = g_type_default_interface_peek (GTK_TYPE_ACTIVATABLE);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  switch_props[PROP_RELATED_ACTION] =
-    g_param_spec_override ("related-action",
-                           g_object_interface_find_property (activatable_iface,
-                                                             "related-action"));
-
-  switch_props[PROP_USE_ACTION_APPEARANCE] =
-    g_param_spec_override ("use-action-appearance",
-                           g_object_interface_find_property (activatable_iface,
-                                                             "use-action-appearance"));
 
   /**
    * GtkSwitch:active:
@@ -956,7 +868,6 @@ gtk_switch_init (GtkSwitch *self)
 
   priv = self->priv = gtk_switch_get_instance_private (self);
 
-  priv->use_action_appearance = TRUE;
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
@@ -1142,62 +1053,4 @@ gtk_switch_get_state (GtkSwitch *sw)
   g_return_val_if_fail (GTK_IS_SWITCH (sw), FALSE);
 
   return sw->priv->state;
-}
-
-static void
-gtk_switch_update (GtkActivatable *activatable,
-                   GtkAction      *action,
-                   const gchar    *property_name)
-{
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (strcmp (property_name, "visible") == 0)
-    {
-      if (gtk_action_is_visible (action))
-        gtk_widget_show (GTK_WIDGET (activatable));
-      else
-        gtk_widget_hide (GTK_WIDGET (activatable));
-    }
-  else if (strcmp (property_name, "sensitive") == 0)
-    {
-      gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
-    }
-  else if (strcmp (property_name, "active") == 0)
-    {
-      gtk_action_block_activate (action);
-      gtk_switch_set_active (GTK_SWITCH (activatable), gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
-      gtk_action_unblock_activate (action);
-    }
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-static void
-gtk_switch_sync_action_properties (GtkActivatable *activatable,
-                                   GtkAction      *action)
-{
-  if (!action)
-    return;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (gtk_action_is_visible (action))
-    gtk_widget_show (GTK_WIDGET (activatable));
-  else
-    gtk_widget_hide (GTK_WIDGET (activatable));
-
-  gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
-
-  gtk_action_block_activate (action);
-  gtk_switch_set_active (GTK_SWITCH (activatable), gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
-  gtk_action_unblock_activate (action);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-static void
-gtk_switch_activatable_interface_init (GtkActivatableIface *iface)
-{
-  iface->update = gtk_switch_update;
-  iface->sync_action_properties = gtk_switch_sync_action_properties;
 }
