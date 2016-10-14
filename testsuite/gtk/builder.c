@@ -2520,20 +2520,20 @@ test_expose_object (void)
 {
   GtkBuilder *builder;
   GError *error = NULL;
-  GtkWidget *image;
+  GtkWidget *menu;
   GObject *obj;
   const gchar buffer[] =
     "<interface>"
-    "  <object class=\"GtkButton\" id=\"button\">"
-    "    <property name=\"image\">external_image</property>"
+    "  <object class=\"GtkMenuButton\" id=\"button\">"
+    "    <property name=\"popup\">external_menu</property>"
     "    <signal name=\"clicked\" handler=\"on_button_clicked\" object=\"builder\" swapped=\"no\"/>"
     "    <signal name=\"clicked\" handler=\"on_button_clicked_swapped\" object=\"builder\"/>"
     "  </object>"
     "</interface>";
 
-  image = gtk_image_new ();
+  menu = gtk_menu_new ();
   builder = gtk_builder_new ();
-  gtk_builder_expose_object (builder, "external_image", G_OBJECT (image));
+  gtk_builder_expose_object (builder, "external_menu", G_OBJECT (menu));
   gtk_builder_expose_object (builder, "builder", G_OBJECT (builder));
   gtk_builder_add_from_string (builder, buffer, -1, &error);
   g_assert (error == NULL);
@@ -2541,7 +2541,7 @@ test_expose_object (void)
   obj = gtk_builder_get_object (builder, "button");
   g_assert (GTK_IS_BUTTON (obj));
 
-  g_assert (gtk_button_get_image (GTK_BUTTON (obj)) == image);
+  g_assert (gtk_menu_button_get_popup (GTK_MENU_BUTTON (obj)) == GTK_MENU (menu));
 
   /* Connect signals and fake clicked event */
   gtk_builder_connect_signals (builder, NULL);
@@ -2551,7 +2551,7 @@ test_expose_object (void)
   g_assert (external_object_swapped == G_OBJECT (builder));
 
   g_object_unref (builder);
-  g_object_unref (image);
+  g_object_unref (menu);
 }
 
 static void
