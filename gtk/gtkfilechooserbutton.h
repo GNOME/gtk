@@ -87,11 +87,6 @@ gint                  gtk_file_chooser_button_get_width_chars  (GtkFileChooserBu
 GDK_AVAILABLE_IN_ALL
 void                  gtk_file_chooser_button_set_width_chars  (GtkFileChooserButton *button,
 								gint                  n_chars);
-GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_get_focus_on_click)
-gboolean              gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button);
-GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_set_focus_on_click)
-void                  gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
-                                                                  gboolean              focus_on_click);
 
 G_END_DECLS
 

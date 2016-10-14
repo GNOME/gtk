@@ -41,7 +41,6 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"
-#include "deprecated/gtkstock.h"
 #include "gtktreemodelfilter.h"
 #include "gtkseparator.h"
 #include "gtkfilechooserdialog.h"
@@ -3116,49 +3115,4 @@ gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,
 
   gtk_label_set_width_chars (GTK_LABEL (button->priv->label), n_chars);
   g_object_notify (G_OBJECT (button), "width-chars");
-}
-
-/**
- * gtk_file_chooser_button_set_focus_on_click:
- * @button: a #GtkFileChooserButton
- * @focus_on_click: whether the button grabs focus when clicked with the mouse
- *
- * Sets whether the button will grab focus when it is clicked with the mouse.
- * Making mouse clicks not grab focus is useful in places like toolbars where
- * you don’t want the keyboard focus removed from the main area of the
- * application.
- *
- * Since: 2.10
- *
- * Deprecated: 3.20: Use gtk_widget_set_focus_on_click() instead
- */
-void
-gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
-					    gboolean              focus_on_click)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button));
-
-  gtk_widget_set_focus_on_click (GTK_WIDGET (button), focus_on_click);
-}
-
-/**
- * gtk_file_chooser_button_get_focus_on_click:
- * @button: a #GtkFileChooserButton
- *
- * Returns whether the button grabs focus when it is clicked with the mouse.
- * See gtk_file_chooser_button_set_focus_on_click().
- *
- * Returns: %TRUE if the button grabs focus when it is clicked with
- *               the mouse.
- *
- * Since: 2.10
- *
- * Deprecated: 3.20: Use gtk_widget_get_focus_on_click() instead
- */
-gboolean
-gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button)
-{
-  g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), FALSE);
-
-  return gtk_widget_get_focus_on_click (GTK_WIDGET (button));
 }
