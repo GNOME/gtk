@@ -121,7 +121,6 @@ enum {
   LAST_SIGNAL
 };
 
-static void gdk_display_manager_class_init   (GdkDisplayManagerClass *klass);
 static void gdk_display_manager_set_property (GObject                *object,
                                               guint                   prop_id,
                                               const GValue           *value,
