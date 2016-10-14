@@ -123,6 +123,12 @@ decoration {
   background-position: top, bottom, left, right;
   background-repeat: no-repeat;
 }
+
+/* Unset above settings when the window is a popup menu */
+* window decoration {
+    all: unset;
+}
+
 .titlebar { 
   margin: calc(0px - -gtk-win32-size(window, cyframe) - -gtk-win32-size(window, cxpaddedborder))
           calc(0px - -gtk-win32-size(window, cxframe) - -gtk-win32-size(window, cxpaddedborder));
