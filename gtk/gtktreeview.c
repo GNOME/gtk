@@ -887,10 +887,8 @@ static void     gtk_tree_view_buildable_init               (GtkBuildableIface *i
 /* GtkScrollable */
 static void     gtk_tree_view_scrollable_init              (GtkScrollableInterface *iface);
 
-static GtkAdjustment *gtk_tree_view_do_get_hadjustment (GtkTreeView   *tree_view);
 static void           gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
                                                         GtkAdjustment *adjustment);
-static GtkAdjustment *gtk_tree_view_do_get_vadjustment (GtkTreeView   *tree_view);
 static void           gtk_tree_view_do_set_vadjustment (GtkTreeView   *tree_view,
                                                         GtkAdjustment *adjustment);
 
@@ -11547,50 +11545,6 @@ gtk_tree_view_get_selection (GtkTreeView *tree_view)
   return tree_view->priv->selection;
 }
 
-/**
- * gtk_tree_view_get_hadjustment:
- * @tree_view: A #GtkTreeView
- *
- * Gets the #GtkAdjustment currently being used for the horizontal aspect.
- *
- * Returns: (transfer none): A #GtkAdjustment object, or %NULL
- *     if none is currently being used.
- *
- * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
- **/
-GtkAdjustment *
-gtk_tree_view_get_hadjustment (GtkTreeView *tree_view)
-{
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
-
-  return gtk_tree_view_do_get_hadjustment (tree_view);
-}
-
-static GtkAdjustment *
-gtk_tree_view_do_get_hadjustment (GtkTreeView *tree_view)
-{
-  return tree_view->priv->hadjustment;
-}
-
-/**
- * gtk_tree_view_set_hadjustment:
- * @tree_view: A #GtkTreeView
- * @adjustment: (allow-none): The #GtkAdjustment to set, or %NULL
- *
- * Sets the #GtkAdjustment for the current horizontal aspect.
- *
- * Deprecated: 3.0: Use gtk_scrollable_set_hadjustment()
- **/
-void
-gtk_tree_view_set_hadjustment (GtkTreeView   *tree_view,
-                               GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
-
-  gtk_tree_view_do_set_hadjustment (tree_view, adjustment);
-}
-
 static void
 gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
                                   GtkAdjustment *adjustment)
@@ -11621,50 +11575,6 @@ gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
   gtk_tree_view_adjustment_changed (NULL, tree_view);
 
   g_object_notify (G_OBJECT (tree_view), "hadjustment");
-}
-
-/**
- * gtk_tree_view_get_vadjustment:
- * @tree_view: A #GtkTreeView
- *
- * Gets the #GtkAdjustment currently being used for the vertical aspect.
- *
- * Returns: (transfer none): A #GtkAdjustment object, or %NULL
- *     if none is currently being used.
- *
- * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
- **/
-GtkAdjustment *
-gtk_tree_view_get_vadjustment (GtkTreeView *tree_view)
-{
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
-
-  return gtk_tree_view_do_get_vadjustment (tree_view);
-}
-
-static GtkAdjustment *
-gtk_tree_view_do_get_vadjustment (GtkTreeView *tree_view)
-{
-  return tree_view->priv->vadjustment;
-}
-
-/**
- * gtk_tree_view_set_vadjustment:
- * @tree_view: A #GtkTreeView
- * @adjustment: (allow-none): The #GtkAdjustment to set, or %NULL
- *
- * Sets the #GtkAdjustment for the current vertical aspect.
- *
- * Deprecated: 3.0: Use gtk_scrollable_set_vadjustment()
- **/
-void
-gtk_tree_view_set_vadjustment (GtkTreeView   *tree_view,
-                               GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
-
-  gtk_tree_view_do_set_vadjustment (tree_view, adjustment);
 }
 
 static void
