@@ -459,7 +459,7 @@ gtk_win32_theme_get_part_size (GtkWin32Theme  *theme,
   if (use_xp_theme && GetThemePartSize != NULL && htheme != NULL)
     {
       hdc = GetDC (NULL);
-      res = GetThemePartSize (htheme, hdc, part, state, NULL, 2 /*TS_DRAW*/, &size);
+      res = GetThemePartSize (htheme, hdc, part, state, NULL, 1 /* TS_TRUE */, &size);
       ReleaseDC (NULL, hdc);
 
       if (SUCCEEDED (res))
@@ -472,7 +472,6 @@ gtk_win32_theme_get_part_size (GtkWin32Theme  *theme,
         }
     }
 #endif
-
   gtk_win32_get_theme_part_size (theme->class_name, part, state, width, height);
 }
 
