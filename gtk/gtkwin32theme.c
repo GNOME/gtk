@@ -439,17 +439,6 @@ gtk_win32_theme_get_part_size (GtkWin32Theme  *theme,
                                int            *width,
                                int            *height)
 {
-#if 0
-  /* Known fallback sizes copied from Wine */
-  struct {
-    int part;
-    int width;
-    int height;
-  } fallback_sizes[] = {
-    { BP_RADIOBUTTON, 13, 13 },
-    { BP_CHECKBOX, 13, 13 },
-  };
-#endif
 #ifdef G_OS_WIN32
   HTHEME htheme = gtk_win32_theme_get_htheme (theme);
   SIZE size;
