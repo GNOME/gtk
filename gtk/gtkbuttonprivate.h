@@ -28,7 +28,6 @@ G_BEGIN_DECLS
 
 struct _GtkButtonPrivate
 {
-  GtkWidget             *image;
   GtkActionHelper       *action_helper;
   GtkCssGadget          *gadget;
 
@@ -45,15 +44,11 @@ struct _GtkButtonPrivate
   guint                  activate_timeout;
   guint32                grab_time;
 
-  GtkPositionType        image_position;
-
   guint          align_set             : 1;
   guint          button_down           : 1;
   guint          constructed           : 1;
   guint          in_button             : 1;
-  guint          use_action_appearance : 1;
   guint          use_underline         : 1;
-  guint          always_show_image     : 1;
 };
 
 

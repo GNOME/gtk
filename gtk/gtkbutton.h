@@ -111,24 +111,15 @@ void                  gtk_button_set_use_underline  (GtkButton      *button,
 						     gboolean        use_underline);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_button_get_use_underline  (GtkButton      *button);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_button_set_image          (GtkButton      *button,
-					             GtkWidget      *image);
-GDK_AVAILABLE_IN_ALL
-GtkWidget*            gtk_button_get_image          (GtkButton      *button);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_button_set_image_position (GtkButton      *button,
-						     GtkPositionType position);
-GDK_AVAILABLE_IN_ALL
-GtkPositionType       gtk_button_get_image_position (GtkButton      *button);
-GDK_AVAILABLE_IN_3_6
-void                  gtk_button_set_always_show_image (GtkButton   *button,
-                                                        gboolean     always_show);
-GDK_AVAILABLE_IN_3_6
-gboolean              gtk_button_get_always_show_image (GtkButton   *button);
 
 GDK_AVAILABLE_IN_ALL
 GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
+
+GDK_AVAILABLE_IN_ALL
+void                  gtk_button_set_icon_name      (GtkButton      *button,
+                                                     const char     *icon_name);
+GDK_AVAILABLE_IN_ALL
+const char *          gtk_button_get_icon_name      (GtkButton      *button);
 
 
 G_END_DECLS

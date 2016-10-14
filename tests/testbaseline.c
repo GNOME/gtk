@@ -173,11 +173,13 @@ main (int    argc,
 
       for (i = 0; i < 3; i++)
 	{
-	  button = gtk_button_new_with_label ("│Xyj,Ö");
+          GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,  6);
+          button = gtk_button_new ();
 
-	  gtk_button_set_image (GTK_BUTTON (button),
-				gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
-	  gtk_button_set_always_show_image (GTK_BUTTON (button), TRUE);
+          gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
+          gtk_container_add (GTK_CONTAINER (box),
+                             gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
+          gtk_container_add (GTK_CONTAINER (button), box);
 
           set_font_size (button, i);
 
@@ -270,11 +272,13 @@ main (int    argc,
 
       for (i = 0; i < 3; i++)
 	{
-	  button = gtk_button_new_with_label ("│Xyj,Ö");
+          GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,  6);
+          button = gtk_button_new ();
 
-	  gtk_button_set_image (GTK_BUTTON (button),
-				gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
-	  gtk_button_set_always_show_image (GTK_BUTTON (button), TRUE);
+          gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
+          gtk_container_add (GTK_CONTAINER (box),
+                             gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
+          gtk_container_add (GTK_CONTAINER (button), box);
 
           set_font_size (button, i);
 
@@ -358,14 +362,17 @@ main (int    argc,
 
       for (i = 0; i < 3; i++)
 	{
-	  button = gtk_button_new_with_label ("│Xyj,Ö");
+          GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,  6);
+          button = gtk_button_new ();
 
-	  image = gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON);
-	  gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
-	  gtk_button_set_image (GTK_BUTTON (button), image);
+          gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
+          image = gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON);
+          gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
+          gtk_container_add (GTK_CONTAINER (box), image);
+          gtk_container_add (GTK_CONTAINER (button), box);
+
 	  if (i == 0)
 	    g_signal_connect (spin2, "value-changed", (GCallback)image_size_value_changed, image);
-	  gtk_button_set_always_show_image (GTK_BUTTON (button), TRUE);
 
           set_font_size (button, i);
 

@@ -90,11 +90,9 @@ enum {
 enum {
   PROP_0,
   PROP_LABEL,
-  PROP_IMAGE,
   PROP_RELIEF,
   PROP_USE_UNDERLINE,
-  PROP_IMAGE_POSITION,
-  PROP_ALWAYS_SHOW_IMAGE,
+  PROP_ICON_NAME,
 
   /* actionable properties */
   PROP_ACTION_NAME,
@@ -135,8 +133,6 @@ static void gtk_button_update_state   (GtkButton          *button);
 static void gtk_button_finish_activate (GtkButton         *button,
 					gboolean           do_it);
 
-static void gtk_button_constructed (GObject *object);
-static void gtk_button_construct_child (GtkButton             *button);
 static void gtk_button_state_changed   (GtkWidget             *widget,
 					GtkStateType           previous_state);
 static void gtk_button_grab_notify     (GtkWidget             *widget,
@@ -204,7 +200,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = (GtkWidgetClass*) klass;
   
-  gobject_class->constructed  = gtk_button_constructed;
   gobject_class->dispose      = gtk_button_dispose;
   gobject_class->finalize     = gtk_button_finalize;
   gobject_class->set_property = gtk_button_set_property;
@@ -237,14 +232,14 @@ gtk_button_class_init (GtkButtonClass *klass)
                          P_("Label"),
                          P_("Text of the label widget inside the button, if the button contains a label widget"),
                          NULL,
-                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline",
                           P_("Use underline"),
                           P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   props[PROP_RELIEF] =
     g_param_spec_enum ("relief",
@@ -254,52 +249,13 @@ gtk_button_class_init (GtkButtonClass *klass)
                        GTK_RELIEF_NORMAL,
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  /**
-   * GtkButton:image:
-   *
-   * The child widget to appear next to the button text.
-   *
-   * Since: 2.6
-   */
-  props[PROP_IMAGE] =
-    g_param_spec_object ("image",
-                         P_("Image widget"),
-                         P_("Child widget to appear next to the button text"),
-                         GTK_TYPE_WIDGET,
+  props[PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name",
+                         P_("Icon Name"),
+                         P_("The name of the icon used to automatically populate the button"),
+                         NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  /**
-   * GtkButton:image-position:
-   *
-   * The position of the image relative to the text inside the button.
-   *
-   * Since: 2.10
-   */
-  props[PROP_IMAGE_POSITION] =
-    g_param_spec_enum ("image-position",
-                       P_("Image position"),
-                       P_("The position of the image relative to the text"),
-                       GTK_TYPE_POSITION_TYPE,
-                       GTK_POS_LEFT,
-                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkButton:always-show-image:
-   *
-   * If %TRUE, the button will ignore the #GtkSettings:gtk-button-images
-   * setting and always show the image, if available.
-   *
-   * Use this property if the button would be useless or hard to use
-   * without the image.
-   *
-   * Since: 3.6
-   */
-  props[PROP_ALWAYS_SHOW_IMAGE] =
-     g_param_spec_boolean ("always-show-image",
-                           P_("Always show image"),
-                           P_("Whether the image will always be shown"),
-                           FALSE,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
@@ -478,9 +434,6 @@ gtk_button_init (GtkButton *button)
   priv->button_down = FALSE;
   priv->use_underline = FALSE;
 
-  priv->image_position = GTK_POS_LEFT;
-  priv->use_action_appearance = TRUE;
-
   priv->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (button));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->gesture), TRUE);
@@ -512,20 +465,6 @@ gtk_button_finalize (GObject *object)
   g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_button_parent_class)->finalize (object);
-}
-
-static void
-gtk_button_constructed (GObject *object)
-{
-  GtkButton *button = GTK_BUTTON (object);
-  GtkButtonPrivate *priv = button->priv;
-
-  G_OBJECT_CLASS (gtk_button_parent_class)->constructed (object);
-
-  priv->constructed = TRUE;
-
-  if (priv->label_text != NULL || priv->image != NULL)
-    gtk_button_construct_child (button);
 }
 
 static void
@@ -580,20 +519,14 @@ gtk_button_set_property (GObject         *object,
     case PROP_LABEL:
       gtk_button_set_label (button, g_value_get_string (value));
       break;
-    case PROP_IMAGE:
-      gtk_button_set_image (button, (GtkWidget *) g_value_get_object (value));
-      break;
-    case PROP_ALWAYS_SHOW_IMAGE:
-      gtk_button_set_always_show_image (button, g_value_get_boolean (value));
-      break;
     case PROP_RELIEF:
       gtk_button_set_relief (button, g_value_get_enum (value));
       break;
     case PROP_USE_UNDERLINE:
       gtk_button_set_use_underline (button, g_value_get_boolean (value));
       break;
-    case PROP_IMAGE_POSITION:
-      gtk_button_set_image_position (button, g_value_get_enum (value));
+    case PROP_ICON_NAME:
+      gtk_button_set_icon_name (button, g_value_get_string (value));
       break;
     case PROP_ACTION_NAME:
       gtk_button_set_action_name (GTK_ACTIONABLE (button), g_value_get_string (value));
@@ -621,20 +554,14 @@ gtk_button_get_property (GObject         *object,
     case PROP_LABEL:
       g_value_set_string (value, priv->label_text);
       break;
-    case PROP_IMAGE:
-      g_value_set_object (value, (GObject *)priv->image);
-      break;
-    case PROP_ALWAYS_SHOW_IMAGE:
-      g_value_set_boolean (value, gtk_button_get_always_show_image (button));
-      break;
     case PROP_RELIEF:
       g_value_set_enum (value, gtk_button_get_relief (button));
       break;
     case PROP_USE_UNDERLINE:
       g_value_set_boolean (value, priv->use_underline);
       break;
-    case PROP_IMAGE_POSITION:
-      g_value_set_enum (value, priv->image_position);
+    case PROP_ICON_NAME:
+      g_value_set_string (value, gtk_button_get_icon_name (button));
       break;
     case PROP_ACTION_NAME:
       g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
@@ -687,115 +614,6 @@ gtk_button_new (void)
   return g_object_new (GTK_TYPE_BUTTON, NULL);
 }
 
-static void
-gtk_button_construct_child (GtkButton *button)
-{
-  GtkButtonPrivate *priv = button->priv;
-  GtkStyleContext *context;
-  GtkWidget *child;
-  GtkWidget *label;
-  GtkWidget *box;
-  GtkWidget *image = NULL;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
-  gtk_style_context_remove_class (context, "image-button");
-  gtk_style_context_remove_class (context, "text-button");
-
-  if (!priv->constructed)
-    return;
-
-  if (!priv->label_text && !priv->image)
-    return;
-
-  if (priv->image)
-    {
-      GtkWidget *parent;
-
-      image = g_object_ref (priv->image);
-
-      parent = gtk_widget_get_parent (image);
-      if (parent)
-	gtk_container_remove (GTK_CONTAINER (parent), image);
-    }
-
-  priv->image = NULL;
-
-  child = gtk_bin_get_child (GTK_BIN (button));
-  if (child)
-    gtk_container_remove (GTK_CONTAINER (button), child);
-
-  if (image)
-    {
-      priv->image = image;
-      g_object_set (priv->image,
-		    "visible", TRUE,
-		    "no-show-all", TRUE,
-		    NULL);
-
-      if (priv->image_position == GTK_POS_LEFT ||
-	  priv->image_position == GTK_POS_RIGHT)
-	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      else
-	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-
-      gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
-      gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
-
-      if (priv->image_position == GTK_POS_LEFT ||
-	  priv->image_position == GTK_POS_TOP)
-        gtk_box_pack_start (GTK_BOX (box), priv->image, FALSE, FALSE);
-      else
-        gtk_box_pack_end (GTK_BOX (box), priv->image, FALSE, FALSE);
-
-      if (priv->label_text)
-	{
-          if (priv->use_underline)
-            {
-	      label = gtk_label_new_with_mnemonic (priv->label_text);
-	      gtk_label_set_mnemonic_widget (GTK_LABEL (label),
-                                             GTK_WIDGET (button));
-            }
-          else
-            label = gtk_label_new (priv->label_text);
-
-	  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-
-	  if (priv->image_position == GTK_POS_RIGHT ||
-	      priv->image_position == GTK_POS_BOTTOM)
-            gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE);
-	  else
-            gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE);
-	}
-      else
-        {
-          gtk_style_context_add_class (context, "image-button");
-        }
-
-      gtk_container_add (GTK_CONTAINER (button), box);
-      gtk_widget_show_all (box);
-
-      g_object_unref (image);
-
-      return;
-    }
-
-  if (priv->use_underline)
-    {
-      label = gtk_label_new_with_mnemonic (priv->label_text);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
-    }
-  else
-    label = gtk_label_new (priv->label_text);
-
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (button), label);
-
-  gtk_style_context_add_class (context, "text-button");
-}
-
-
 /**
  * gtk_button_new_with_label:
  * @label: The text you want the #GtkLabel to hold.
@@ -831,15 +649,14 @@ gtk_button_new_with_label (const gchar *label)
  */
 GtkWidget*
 gtk_button_new_from_icon_name (const gchar *icon_name,
-			       GtkIconSize  size)
+                               GtkIconSize  size)
 {
   GtkWidget *button;
   GtkWidget *image;
 
   image = gtk_image_new_from_icon_name (icon_name, size);
-  button =  g_object_new (GTK_TYPE_BUTTON,
-			  "image", image,
-			  NULL);
+  button =  g_object_new (GTK_TYPE_BUTTON, NULL);
+  gtk_container_add (GTK_CONTAINER (button), image);
 
   return button;
 }
@@ -1352,27 +1169,52 @@ gtk_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
  * @button: a #GtkButton
  * @label: a string
  *
- * Sets the text of the label of the button to @str.
+ * Sets the text of the label of the button to @label.
  *
  * This will also clear any previously set labels.
  */
 void
 gtk_button_set_label (GtkButton   *button,
-		      const gchar *label)
+                      const gchar *label)
 {
-  GtkButtonPrivate *priv;
-  gchar *new_label;
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+  GtkWidget *child;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  priv = button->priv;
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
 
-  new_label = g_strdup (label);
   g_free (priv->label_text);
-  priv->label_text = new_label;
+  priv->label_text = g_strdup (label);
 
-  gtk_button_construct_child (button);
-  
+  child = gtk_bin_get_child (GTK_BIN (button));
+
+  if (child != NULL)
+    {
+      if (!priv->constructed || !GTK_IS_LABEL (child))
+        {
+          gtk_container_remove (GTK_CONTAINER (button), child);
+        }
+      else
+        {
+          gtk_label_set_label (GTK_LABEL (child), label);
+          return;
+        }
+    }
+
+  gtk_style_context_remove_class (context, "image-button");
+  gtk_style_context_add_class (context, "text-button");
+
+  if (label != NULL)
+    {
+      child = gtk_label_new (label);
+      gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
+      gtk_widget_show (child);
+      gtk_container_add (GTK_CONTAINER (button), child);
+      priv->constructed = TRUE;
+    }
+
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_LABEL]);
 }
 
@@ -1386,7 +1228,7 @@ gtk_button_set_label (GtkButton   *button,
  * case if you create an empty button with gtk_button_new() to 
  * use as a container.
  *
- * Returns: The text of the label widget. This string is owned
+ * Returns: (nullable): The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
  */
 const gchar *
@@ -1421,9 +1263,19 @@ gtk_button_set_use_underline (GtkButton *button,
     {
       priv->use_underline = use_underline;
 
-      gtk_button_construct_child (button);
-      
-      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_USE_UNDERLINE]);
+        g_object_notify_by_pspec (G_OBJECT (button), props[PROP_USE_UNDERLINE]);
+    }
+
+  if (priv->constructed)
+    {
+      GtkWidget *child;
+      child = gtk_bin_get_child (GTK_BIN (button));
+
+      if (child != NULL && GTK_IS_LABEL (child))
+        {
+          gtk_label_set_use_underline (GTK_LABEL (child), use_underline);
+          gtk_label_set_mnemonic_widget (GTK_LABEL (child), GTK_WIDGET (button));
+        }
     }
 }
 
@@ -1469,17 +1321,6 @@ gtk_button_update_state (GtkButton *button)
   gtk_widget_set_state_flags (GTK_WIDGET (button), new_state, TRUE);
 }
 
-static void 
-show_image_change_notify (GtkButton *button)
-{
-  GtkButtonPrivate *priv = button->priv;
-
-  if (priv->image) 
-    {
-      gtk_widget_show (priv->image);
-    }
-}
-
 static void
 gtk_button_screen_changed (GtkWidget *widget,
 			   GdkScreen *previous_screen)
@@ -1500,8 +1341,6 @@ gtk_button_screen_changed (GtkWidget *widget,
       priv->button_down = FALSE;
       gtk_button_update_state (button);
     }
-
-  show_image_change_notify (button);
 }
 
 static void
@@ -1531,168 +1370,6 @@ gtk_button_grab_notify (GtkWidget *widget,
 }
 
 /**
- * gtk_button_set_image:
- * @button: a #GtkButton
- * @image: a widget to set as the image for the button
- *
- * Set the image of @button to the given widget. The image will be
- * displayed if the label text is %NULL or if
- * #GtkButton:always-show-image is %TRUE. You don’t have to call
- * gtk_widget_show() on @image yourself.
- *
- * Since: 2.6
- */
-void
-gtk_button_set_image (GtkButton *button,
-		      GtkWidget *image)
-{
-  GtkButtonPrivate *priv;
-  GtkWidget *parent;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-  g_return_if_fail (image == NULL || GTK_IS_WIDGET (image));
-
-  priv = button->priv;
-
-  if (priv->image)
-    {
-      parent = gtk_widget_get_parent (priv->image);
-      if (parent)
-        gtk_container_remove (GTK_CONTAINER (parent), priv->image);
-    }
-
-  priv->image = image;
-
-  gtk_button_construct_child (button);
-
-  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_IMAGE]);
-}
-
-/**
- * gtk_button_get_image:
- * @button: a #GtkButton
- *
- * Gets the widget that is currenty set as the image of @button.
- *
- * Returns: (nullable) (transfer none): a #GtkWidget or %NULL in case
- *     there is no image
- *
- * Since: 2.6
- */
-GtkWidget *
-gtk_button_get_image (GtkButton *button)
-{
-  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
-  
-  return button->priv->image;
-}
-
-/**
- * gtk_button_set_image_position:
- * @button: a #GtkButton
- * @position: the position
- *
- * Sets the position of the image relative to the text 
- * inside the button.
- *
- * Since: 2.10
- */ 
-void
-gtk_button_set_image_position (GtkButton       *button,
-			       GtkPositionType  position)
-{
-  GtkButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-  g_return_if_fail (position >= GTK_POS_LEFT && position <= GTK_POS_BOTTOM);
-  
-  priv = button->priv;
-
-  if (priv->image_position != position)
-    {
-      priv->image_position = position;
-
-      gtk_button_construct_child (button);
-
-      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_IMAGE_POSITION]);
-    }
-}
-
-/**
- * gtk_button_get_image_position:
- * @button: a #GtkButton
- *
- * Gets the position of the image relative to the text 
- * inside the button.
- *
- * Returns: the position
- *
- * Since: 2.10
- */
-GtkPositionType
-gtk_button_get_image_position (GtkButton *button)
-{
-  g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_POS_LEFT);
-  
-  return button->priv->image_position;
-}
-
-/**
- * gtk_button_set_always_show_image:
- * @button: a #GtkButton
- * @always_show: %TRUE if the menuitem should always show the image
- *
- * If %TRUE, the button will ignore the #GtkSettings:gtk-button-images
- * setting and always show the image, if available.
- *
- * Use this property if the button  would be useless or hard to use
- * without the image.
- *
- * Since: 3.6
- */
-void
-gtk_button_set_always_show_image (GtkButton *button,
-                                  gboolean    always_show)
-{
-  GtkButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  priv = button->priv;
-
-  if (priv->always_show_image != always_show)
-    {
-      priv->always_show_image = always_show;
-
-      if (priv->image)
-        {
-          gtk_widget_show (priv->image);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ALWAYS_SHOW_IMAGE]);
-    }
-}
-
-/**
- * gtk_button_get_always_show_image:
- * @button: a #GtkButton
- *
- * Returns whether the button will ignore the #GtkSettings:gtk-button-images
- * setting and always show the image, if available.
- *
- * Returns: %TRUE if the button will always show the image
- *
- * Since: 3.6
- */
-gboolean
-gtk_button_get_always_show_image (GtkButton *button)
-{
-  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
-
-  return button->priv->always_show_image;
-}
-
-/**
  * gtk_button_get_event_window:
  * @button: a #GtkButton
  *
@@ -1709,4 +1386,70 @@ gtk_button_get_event_window (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
 
   return button->priv->event_window;
+}
+
+/**
+ * gtk_button_set_icon_name:
+ *
+ */
+void
+gtk_button_set_icon_name (GtkButton  *button,
+                          const char *icon_name)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+  GtkWidget *child;
+  GtkStyleContext *context;
+
+  g_return_if_fail (GTK_IS_BUTTON (button));
+  g_return_if_fail (icon_name != NULL);
+
+  child = gtk_bin_get_child (GTK_BIN (button));
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+
+  if (child != NULL)
+    {
+      if (!priv->constructed || !GTK_IS_IMAGE (child))
+        {
+          gtk_container_remove (GTK_CONTAINER (button), child);
+        }
+      else
+        {
+          gtk_image_set_from_icon_name (GTK_IMAGE (child), icon_name, GTK_ICON_SIZE_BUTTON);
+          return;
+        }
+    }
+
+  gtk_style_context_remove_class (context, "text-button");
+  gtk_style_context_add_class (context, "image-button");
+
+  child = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (child);
+  gtk_container_add (GTK_CONTAINER (button), child);
+  priv->constructed = TRUE;
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ICON_NAME]);
+}
+
+/**
+ * gtk_button_get_icon_name:
+ * @button: A #GtkButton
+ *
+ * Returns: (nullable): The icon name set via gtk_button_set_icon_name
+ */
+const char *
+gtk_button_get_icon_name (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
+
+  if (button->priv->constructed)
+    {
+      GtkWidget *child = gtk_bin_get_child (GTK_BIN (button));
+
+      if (GTK_IS_IMAGE (child))
+        {
+          const char *icon_name;
+          gtk_image_get_icon_name (GTK_IMAGE (child), &icon_name, NULL);
+          return icon_name;
+        }
+    }
+  return NULL;
 }

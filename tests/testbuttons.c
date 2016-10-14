@@ -23,8 +23,9 @@ int main (int argc, char *argv[])
 {
 	GtkWidget *window, *box, *button, *hbox;
         gchar *text;
+        const char *icon_name;
 	gboolean use_underline;
-	GtkWidget *image, *label;
+	GtkWidget *label;
 
 	gtk_init (&argc, &argv);
 
@@ -44,9 +45,9 @@ int main (int argc, char *argv[])
 	g_object_get (button,
                       "label", &text,
                       "use-underline", &use_underline,
-		      "image", &image,
+                      "icon-name", &icon_name,
                       NULL);
-	text = g_strdup_printf ("label: \"%s\" image: %p use-underline: %s\n", text, image, use_underline ? "TRUE" : "FALSE");
+	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
 	gtk_container_add (GTK_CONTAINER (hbox), label);
@@ -59,9 +60,9 @@ int main (int argc, char *argv[])
 	g_object_get (button,
                       "label", &text,
                       "use-underline", &use_underline,
-		      "image", &image,
+                      "icon-name", &icon_name,
                       NULL);
-	text = g_strdup_printf ("label: \"%s\" image: %p use-underline: %s\n", text, image, use_underline ? "TRUE" : "FALSE");
+	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
 	gtk_container_add (GTK_CONTAINER (hbox), label);
@@ -74,41 +75,40 @@ int main (int argc, char *argv[])
 	g_object_get (button,
                       "label", &text,
                       "use-underline", &use_underline,
-		      "image", &image,
+                      "icon-name", &icon_name,
                       NULL);
-	text = g_strdup_printf ("label: \"%s\" image: %p use-underline: %s\n", text, image, use_underline ? "TRUE" : "FALSE");
+	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
 	gtk_container_add (GTK_CONTAINER (hbox), label);
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
-	button = gtk_button_new_with_label ("_Save");
-	gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_BUTTON));
-        gtk_button_set_always_show_image (GTK_BUTTON (button), TRUE);
+	button = gtk_button_new_from_icon_name ("help-about", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 
 	g_object_get (button,
                       "label", &text,
                       "use-underline", &use_underline,
-		      "image", &image,
+                      "icon-name", &icon_name,
                       NULL);
-	text = g_strdup_printf ("label: \"%s\" image: %p use-underline: %s\n", text, image, use_underline ? "TRUE" : "FALSE");
+	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
 	gtk_container_add (GTK_CONTAINER (hbox), label);
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
-	button = gtk_button_new_with_mnemonic ("_Save");
-	gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_BUTTON));
+        button = gtk_button_new ();
+        gtk_button_set_icon_name (GTK_BUTTON (button), "help-about");
+        gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 	g_object_get (button,
                       "label", &text,
                       "use-underline", &use_underline,
-		      "image", &image,
+                      "icon-name", &icon_name,
                       NULL);
-	text = g_strdup_printf ("label: \"%s\" image: %p use-underline: %s\n", text, image, use_underline ? "TRUE" : "FALSE");
+	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
 	gtk_container_add (GTK_CONTAINER (hbox), label);
