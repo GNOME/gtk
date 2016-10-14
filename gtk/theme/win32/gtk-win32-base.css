@@ -1139,22 +1139,22 @@ toolbar button:disabled {
 
 /* Column headers */
 
-column-header button,
-column-header button:focus {
+header button,
+header button:focus {
     background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(header, 1, 1);
 }
 
-column-header button:hover,
-column-header button:hover:focus {
+header button:hover,
+header button:hover:focus {
     background-image: -gtk-win32-theme-part(header, 1, 2);
 }
 
-column-header button:active,
-column-header button:active:hover,
-column-header button:active:focus,
-column-header button:active:hover:focus {
+header button:active,
+header button:active:hover,
+header button:active:focus,
+header button:active:hover:focus {
     background-image: -gtk-win32-theme-part(header, 1, 3);
 }
 
