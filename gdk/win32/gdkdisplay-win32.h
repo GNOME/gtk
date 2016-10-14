@@ -47,6 +47,8 @@ struct _GdkWin32Display
   guint hasWglARBCreateContext : 1;
   guint hasWglEXTSwapControl : 1;
   guint hasWglOMLSyncControl : 1;
+  guint hasWglARBPixelFormat : 1;
+  guint hasWglARBmultisample : 1;
 };
 
 struct _GdkWin32DisplayClass
