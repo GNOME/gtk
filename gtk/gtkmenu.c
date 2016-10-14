@@ -4506,7 +4506,16 @@ gtk_menu_position (GtkMenu  *menu,
   GtkTextDirection text_direction = GTK_TEXT_DIR_NONE;
   GdkGravity rect_anchor;
   GdkGravity menu_anchor;
+  GdkAnchorHints anchor_hints;
+  gint rect_anchor_dx, rect_anchor_dy;
   GdkWindow *toplevel;
+  gboolean emulated_move_to_rect = FALSE;
+
+  rect_anchor = priv->rect_anchor;
+  menu_anchor = priv->menu_anchor;
+  anchor_hints = priv->anchor_hints;
+  rect_anchor_dx = priv->rect_anchor_dx;
+  rect_anchor_dy = priv->rect_anchor_dy;
 
   if (priv->rect_window)
     {
@@ -4518,6 +4527,36 @@ gtk_menu_position (GtkMenu  *menu,
       rect_window = gtk_widget_get_window (priv->widget);
       gtk_widget_get_allocation (priv->widget, &rect);
       text_direction = gtk_widget_get_direction (priv->widget);
+    }
+  else if (!priv->position_func)
+    {
+      GtkWidget *attach_widget;
+      GdkDevice *grab_device;
+
+      /*
+       * One of the legacy gtk_menu_popup*() functions were used to popup but
+       * without a custom positioning function, so make an attempt to let the
+       * backend do the position constraining when required conditions are met.
+       */
+
+      grab_device = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
+      attach_widget = gtk_menu_get_attach_widget (menu);
+
+      if (grab_device && attach_widget)
+        {
+          rect = (GdkRectangle) { 0, 0, 1, 1 };
+
+          rect_window = gtk_widget_get_window (attach_widget);
+          gdk_window_get_device_position (rect_window, grab_device,
+                                          &rect.x, &rect.y, NULL);
+          text_direction = gtk_widget_get_direction (attach_widget);
+          rect_anchor = GDK_GRAVITY_SOUTH_EAST;
+          menu_anchor = GDK_GRAVITY_NORTH_WEST;
+          anchor_hints = GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE | GDK_ANCHOR_RESIZE;
+          rect_anchor_dx = 0;
+          rect_anchor_dy = 0;
+          emulated_move_to_rect = TRUE;
+        }
     }
 
   if (!rect_window)
@@ -4539,13 +4578,8 @@ gtk_menu_position (GtkMenu  *menu,
 
   if (text_direction == GTK_TEXT_DIR_RTL)
     {
-      rect_anchor = get_horizontally_flipped_anchor (priv->rect_anchor);
-      menu_anchor = get_horizontally_flipped_anchor (priv->menu_anchor);
-    }
-  else
-    {
-      rect_anchor = priv->rect_anchor;
-      menu_anchor = priv->menu_anchor;
+      rect_anchor = get_horizontally_flipped_anchor (rect_anchor);
+      menu_anchor = get_horizontally_flipped_anchor (menu_anchor);
     }
 
   toplevel = gtk_widget_get_window (priv->toplevel);
@@ -4553,15 +4587,18 @@ gtk_menu_position (GtkMenu  *menu,
   gdk_window_set_transient_for (toplevel, rect_window);
 
   g_signal_handlers_disconnect_by_func (toplevel, moved_to_rect_cb, menu);
-  g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb), menu);
+
+  if (!emulated_move_to_rect)
+    g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb),
+                      menu);
 
   GDK_PRIVATE_CALL (gdk_window_move_to_rect) (toplevel,
                                               &rect,
                                               rect_anchor,
                                               menu_anchor,
-                                              priv->anchor_hints,
-                                              priv->rect_anchor_dx,
-                                              priv->rect_anchor_dy);
+                                              anchor_hints,
+                                              rect_anchor_dx,
+                                              rect_anchor_dy);
 }
 
 static void
