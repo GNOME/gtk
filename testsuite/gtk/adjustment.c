@@ -75,18 +75,6 @@ test_signals (void)
   g_signal_connect (a, "changed", G_CALLBACK (changed_cb), NULL);
   g_signal_connect (a, "value-changed", G_CALLBACK (value_changed_cb), NULL);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  changed_count = value_changed_count = 0;
-  gtk_adjustment_changed (a);
-  g_assert_cmpint (changed_count, ==, 1);  
-  g_assert_cmpint (value_changed_count, ==, 0);  
-
-  changed_count = value_changed_count = 0;
-  gtk_adjustment_value_changed (a);
-  g_assert_cmpint (changed_count, ==, 0);  
-  g_assert_cmpint (value_changed_count, ==, 1);  
-G_GNUC_END_IGNORE_DEPRECATIONS
-
   changed_count = value_changed_count = 0;
   gtk_adjustment_configure (a, 0.0, 0.0, 100.0, 1.0, 5.0, 0.0);
   g_assert_cmpint (changed_count, ==, 1);  

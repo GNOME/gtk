@@ -863,42 +863,6 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_changed:
- * @adjustment: a #GtkAdjustment
- *
- * Emits a #GtkAdjustment::changed signal from the #GtkAdjustment.
- * This is typically called by the owner of the #GtkAdjustment after it has
- * changed any of the #GtkAdjustment properties other than the value.
- *
- * Deprecated: 3.18: GTK+ emits #GtkAdjustment::changed itself whenever any
- *    of the properties (other than value) change
- */
-void
-gtk_adjustment_changed (GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-  emit_changed (adjustment);
-}
-
-/**
- * gtk_adjustment_value_changed:
- * @adjustment: a #GtkAdjustment
- *
- * Emits a #GtkAdjustment::value-changed signal from the #GtkAdjustment.
- * This is typically called by the owner of the #GtkAdjustment after it has
- * changed the #GtkAdjustment:value property.
- *
- * Deprecated: 3.18: GTK+ emits #GtkAdjustment::value-changed itself whenever
- *    the value changes
- */
-void
-gtk_adjustment_value_changed (GtkAdjustment *adjustment)
-{
-  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-  emit_value_changed (adjustment);
-}
-
-/**
  * gtk_adjustment_clamp_page:
  * @adjustment: a #GtkAdjustment
  * @lower: the lower value
