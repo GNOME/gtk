@@ -58,10 +58,6 @@ struct _GtkRangeClass
 {
   GtkWidgetClass parent_class;
 
-  /* what detail to pass to GTK drawing functions */
-  G_GNUC_DEPRECATED gchar *slider_detail;
-  G_GNUC_DEPRECATED gchar *stepper_detail;
-
   void (* value_changed)    (GtkRange     *range);
   void (* adjust_bounds)    (GtkRange     *range,
                              gdouble	   new_value);
