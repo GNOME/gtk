@@ -45,7 +45,7 @@ _gtk_set_slowdown (gdouble factor)
 }
 
 gdouble
-_gtk_get_slowdown (gdouble factor)
+_gtk_get_slowdown (void)
 {
   return gtk_slowdown;
 }
