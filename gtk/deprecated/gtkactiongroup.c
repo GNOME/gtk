@@ -132,8 +132,6 @@ enum
   PROP_ACCEL_GROUP
 };
 
-static void       gtk_action_group_init            (GtkActionGroup      *self);
-static void       gtk_action_group_class_init      (GtkActionGroupClass *class);
 static void       gtk_action_group_finalize        (GObject             *object);
 static void       gtk_action_group_set_property    (GObject             *object,
 						    guint                prop_id,
