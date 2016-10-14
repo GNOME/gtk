@@ -444,7 +444,7 @@ gtk_shortcuts_window_set_section_name (GtkShortcutsWindow *self,
   g_free (priv->initial_section);
   priv->initial_section = g_strdup (section_name);
 
-  if (!section_name)
+  if (section_name)
     section = gtk_stack_get_child_by_name (priv->stack, section_name);
   if (section)
     gtk_stack_set_visible_child (priv->stack, section);
