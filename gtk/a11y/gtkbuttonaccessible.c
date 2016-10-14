@@ -60,7 +60,7 @@ get_image_from_button (GtkWidget *button)
 {
   GtkWidget *image;
 
-  image = gtk_button_get_image (GTK_BUTTON (button));
+  image = gtk_bin_get_child (GTK_BIN (button));
   if (GTK_IS_IMAGE (image))
     return image;
 
