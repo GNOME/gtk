@@ -100,7 +100,6 @@
 
 struct _GtkMessageDialogPrivate
 {
-  GtkWidget     *image;
   GtkWidget     *label;
   GtkWidget     *message_area; /* vbox for the primary and secondary labels, and any extra content from the caller */
   GtkWidget     *secondary_label;
@@ -249,22 +248,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 							 P_("The secondary text includes Pango markup."),
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkMessageDialog:image:
-   *
-   * The image for this dialog.
-   *
-   * Since: 2.10
-   * Deprecated: 3.12: Use #GtkDialog to create dialogs with images
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_IMAGE,
-                                   g_param_spec_object ("image",
-                                                        P_("Image"),
-                                                        P_("The image"),
-                                                        GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   /**
    * GtkMessageDialog:message-area:
@@ -511,11 +494,6 @@ gtk_message_dialog_set_property (GObject      *object,
           g_object_notify_by_pspec (object, pspec);
         }
       break;
-    case PROP_IMAGE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_message_dialog_set_image (dialog, g_value_get_object (value));
-G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -556,9 +534,6 @@ gtk_message_dialog_get_property (GObject     *object,
 			     gtk_label_get_use_markup (GTK_LABEL (priv->secondary_label)));
       else
 	g_value_set_boolean (value, FALSE);
-      break;
-    case PROP_IMAGE:
-      g_value_set_object (value, priv->image);
       break;
     case PROP_MESSAGE_AREA:
       g_value_set_object (value, priv->message_area);
@@ -697,67 +672,6 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
     }
 
   return widget;
-}
-
-/**
- * gtk_message_dialog_set_image:
- * @dialog: a #GtkMessageDialog
- * @image: the image
- * 
- * Sets the dialog’s image to @image.
- *
- * Since: 2.10
- * Deprecated: 3.12: Use #GtkDialog to create dialogs with images
- **/
-void
-gtk_message_dialog_set_image (GtkMessageDialog *dialog,
-			      GtkWidget        *image)
-{
-  GtkMessageDialogPrivate *priv;
-  GtkWidget *parent;
-
-  g_return_if_fail (GTK_IS_MESSAGE_DIALOG (dialog));
-  g_return_if_fail (image == NULL || GTK_IS_WIDGET (image));
-
-  priv = dialog->priv;
-  
-  if (priv->image)
-    gtk_widget_destroy (priv->image);
-
-  priv->image = image;
- 
-  if (priv->image)
-    { 
-      gtk_widget_set_halign (priv->image, GTK_ALIGN_CENTER);
-      gtk_widget_set_valign (priv->image, GTK_ALIGN_START);
-      parent = gtk_widget_get_parent (priv->message_area);
-      gtk_container_add (GTK_CONTAINER (parent), priv->image);
-      gtk_box_reorder_child (GTK_BOX (parent), priv->image, 0);
-    }
-
-  priv->message_type = GTK_MESSAGE_OTHER;
-
-  g_object_notify (G_OBJECT (dialog), "image");
-  g_object_notify (G_OBJECT (dialog), "message-type");
-}
-
-/**
- * gtk_message_dialog_get_image:
- * @dialog: a #GtkMessageDialog
- *
- * Gets the dialog’s image.
- *
- * Returns: (transfer none): the dialog’s image
- *
- * Since: 2.14
- * Deprecated: 3.12: Use #GtkDialog for dialogs with images
- **/
-GtkWidget *
-gtk_message_dialog_get_image (GtkMessageDialog *dialog)
-{
-  g_return_val_if_fail (GTK_IS_MESSAGE_DIALOG (dialog), NULL);
-
-  return dialog->priv->image;
 }
 
 /**

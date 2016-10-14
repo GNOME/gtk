@@ -111,13 +111,6 @@ GtkWidget* gtk_message_dialog_new_with_markup   (GtkWindow      *parent,
                                                  const gchar    *message_format,
                                                  ...) G_GNUC_PRINTF (5, 6);
 
-GDK_DEPRECATED_IN_3_12
-void       gtk_message_dialog_set_image    (GtkMessageDialog *dialog,
-					    GtkWidget        *image);
-
-GDK_DEPRECATED_IN_3_12
-GtkWidget * gtk_message_dialog_get_image   (GtkMessageDialog *dialog);
-
 GDK_AVAILABLE_IN_ALL
 void       gtk_message_dialog_set_markup  (GtkMessageDialog *message_dialog,
                                            const gchar      *str);

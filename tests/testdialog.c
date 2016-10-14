@@ -35,10 +35,6 @@ show_message_dialog1a (GtkWindow *parent)
 
   image = gtk_image_new_from_icon_name ("computer-fail", GTK_ICON_SIZE_DIALOG);
   gtk_widget_show (image);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_message_dialog_set_image (GTK_MESSAGE_DIALOG (dialog), image);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
 
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
