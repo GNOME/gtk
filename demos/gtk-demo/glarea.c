@@ -333,7 +333,7 @@ create_axis_slider (int axis)
   GtkAdjustment *adj;
   const char *text;
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   switch (axis)
     {
