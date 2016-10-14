@@ -150,7 +150,7 @@ create_menu_button (void)
   widget = gtk_menu_button_new ();
   image = gtk_image_new ();
   gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic", GTK_ICON_SIZE_MENU);
-  gtk_button_set_image (GTK_BUTTON (widget), image);
+  gtk_container_add (GTK_CONTAINER (widget), image);
   menu = gtk_menu_new ();
   gtk_menu_button_set_popup (GTK_MENU_BUTTON (widget), menu);
 
