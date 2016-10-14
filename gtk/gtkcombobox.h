@@ -107,12 +107,6 @@ GDK_AVAILABLE_IN_ALL
 void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
                                                     gint         column_span);
 
-GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_get_focus_on_click)
-gboolean      gtk_combo_box_get_focus_on_click     (GtkComboBox *combo);
-GDK_DEPRECATED_IN_3_20_FOR(gtk_widget_set_focus_on_click)
-void          gtk_combo_box_set_focus_on_click     (GtkComboBox *combo,
-                                                    gboolean     focus_on_click);
-
 /* get/set active item */
 GDK_AVAILABLE_IN_ALL
 gint          gtk_combo_box_get_active       (GtkComboBox     *combo_box);
