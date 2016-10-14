@@ -53,12 +53,8 @@ struct _GtkEntryIconAccessibleClass
   AtkObjectClass parent_class;
 };
 
-static void atk_action_interface_init (AtkActionIface *iface);
-
 static void icon_atk_action_interface_init (AtkActionIface *iface);
 static void icon_atk_component_interface_init (AtkComponentIface *iface);
-
-GType gtk_entry_icon_accessible_get_type (void);
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntryIconAccessible, gtk_entry_icon_accessible, ATK_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, icon_atk_action_interface_init)
