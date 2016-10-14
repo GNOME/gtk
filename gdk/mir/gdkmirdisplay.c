@@ -47,6 +47,8 @@ typedef struct GdkMirDisplay
 
   GdkKeymap *keymap;
 
+  GdkWindow *focused_window;
+
   MirPixelFormat sw_pixel_format;
   MirPixelFormat hw_pixel_format;
 
@@ -580,6 +582,25 @@ _gdk_mir_display_get_pixel_format (GdkDisplay *display,
     return mir_dpy->hw_pixel_format;
 
   return mir_dpy->sw_pixel_format;
+}
+
+void
+_gdk_mir_display_focus_window (GdkDisplay *display,
+                               GdkWindow  *window)
+{
+  GdkMirDisplay *mir_display = GDK_MIR_DISPLAY (display);
+
+  g_set_object (&mir_display->focused_window, window);
+}
+
+void
+_gdk_mir_display_unfocus_window (GdkDisplay *display,
+                                 GdkWindow  *window)
+{
+  GdkMirDisplay *mir_display = GDK_MIR_DISPLAY (display);
+
+  if (window == mir_display->focused_window)
+    g_clear_object (&mir_display->focused_window);
 }
 
 gboolean

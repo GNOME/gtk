@@ -240,9 +240,15 @@ generate_focus_event (GdkWindow *window, gboolean focused)
   GdkEvent *event;
 
   if (focused)
-    gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
+    {
+      gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
+      _gdk_mir_display_focus_window (gdk_window_get_display (window), window);
+    }
   else
-    gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
+    {
+      gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
+      _gdk_mir_display_unfocus_window (gdk_window_get_display (window), window);
+    }
 
   event = gdk_event_new (GDK_FOCUS_CHANGE);
   event->focus_change.send_event = FALSE;

@@ -107,6 +107,10 @@ void _gdk_mir_event_source_queue (GdkMirWindowReference *window_ref, const MirEv
 
 MirPixelFormat _gdk_mir_display_get_pixel_format (GdkDisplay *display, MirBufferUsage usage);
 
+void _gdk_mir_display_focus_window (GdkDisplay *display, GdkWindow *window);
+
+void _gdk_mir_display_unfocus_window (GdkDisplay *display, GdkWindow *window);
+
 gboolean _gdk_mir_display_init_egl_display (GdkDisplay *display);
 
 EGLDisplay _gdk_mir_display_get_egl_display (GdkDisplay *display);
