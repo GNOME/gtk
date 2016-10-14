@@ -6820,9 +6820,6 @@ gtk_application_get_menubar
 gtk_application_set_menubar
 gtk_application_get_menu_by_id
 
-gtk_application_add_accelerator
-gtk_application_remove_accelerator
-
 gtk_application_list_action_descriptions
 gtk_application_get_accels_for_action
 gtk_application_set_accels_for_action

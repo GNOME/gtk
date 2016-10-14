@@ -101,17 +101,6 @@ GDK_AVAILABLE_IN_3_4
 void             gtk_application_set_menubar   (GtkApplication    *application,
                                                 GMenuModel        *menubar);
 
-GDK_DEPRECATED_IN_3_14_FOR(gtk_application_set_accels_for_action)
-void             gtk_application_add_accelerator    (GtkApplication  *application,
-                                                     const gchar     *accelerator,
-                                                     const gchar     *action_name,
-                                                     GVariant        *parameter);
-
-GDK_DEPRECATED_IN_3_14_FOR(gtk_application_set_accels_for_action)
-void             gtk_application_remove_accelerator (GtkApplication *application,
-                                                     const gchar    *action_name,
-                                                     GVariant       *parameter);
-
 typedef enum
 {
   GTK_APPLICATION_INHIBIT_LOGOUT  = (1 << 0),
