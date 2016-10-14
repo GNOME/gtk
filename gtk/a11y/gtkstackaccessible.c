@@ -19,7 +19,7 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
-#include "gtkstackaccessible.h"
+#include "gtkstackaccessibleprivate.h"
 #include "gtkwidgetprivate.h"
 
 

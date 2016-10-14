@@ -18,7 +18,7 @@
 #ifndef __GTK_STACK_ACCESSIBLE_PRIVATE_H__
 #define __GTK_STACK_ACCESSIBLE_PRIVATE_H__
 
-#include <gtk/a11y/gtkcontaineraccessible.h>
+#include "gtkstackaccessible.h"
 
 G_BEGIN_DECLS
 
