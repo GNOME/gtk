@@ -1038,72 +1038,68 @@ progressbar.vertical progress.pulse {
 
 /* Combobox */
 
-combobox-entry button {
-    background-color: transparent;
-    border-width: 0;
-    background-image: -gtk-win32-theme-part(combobox, 1, 1);
-    color: rgba(0, 0, 0, 0);
-/* Remove padding from comboboxbutton (GtkArrow inside of it is hardcoded to be
-   16x16, but we draw even smaller arrow instead, so padding is completely unnecessary,
-   it only makes thebutton bigger for not good reason).
-   Only do this for combobox-entry, because non-entry combobox IS thebutton,
-   and it does need to be as thick as the items of the list it pops up (and it's
-   still slimmer than padded combobox-entry!). */
-    padding: 0px;
+combobox entry {
+    margin-right: calc( -2ex - -gtk-win32-part-width(combobox, 6, 1));
+    background-image: -gtk-win32-theme-part(combobox, 4, 1));
+}
+combobox entry:hover {
+    background-image: -gtk-win32-theme-part(combobox, 4, 2);
+}
+combobox entry:focus {
+    background-image: -gtk-win32-theme-part(combobox, 4, 3);
+}
+combobox:disabled entry {
+    background-image: -gtk-win32-theme-part(combobox, 5, 4);
 }
 
-combobox-entry button:hover,
-combobox-entry button:focus,
-combobox-entry button:hover:focus {
-    background-image: -gtk-win32-theme-part(combobox, 1, 2);
-}
-combobox-entry button:active,
-combobox-entry button:active:focus,
-combobox-entry button:active:hover,
-combobox-entry button:active:focus:hover {
-    background-image: -gtk-win32-theme-part(combobox, 1, 3);
-}
-combobox-entry button:disabled {
-    background-image: -gtk-win32-theme-part(combobox, 1, 4);
+combobox entry, combobox entry:disabled, combobox entry:focus {
+    padding-left: 1ex;
 }
 
-/* Dropdown list should have "window" color, as listbox contents do (usually it's "white") */
-combobox cellview * {
-    background-color: -gtk-win32-color(listview, window);
+combobox button {
+    padding: 2px;
 }
 
-/* Draw "arrow" for non-entry comboboxes. Select the box, since selecting
-   the arrow itself does not seem to work as intended. */
-combobox box {
-    color: rgba(255, 0, 0, 0);
+combobox entry + button {
+    padding: 0;
+    background-image: none;
+}
+
+combobox button arrow {
     background-image: -gtk-win32-theme-part(combobox, 6, 1);
+    min-height: -gtk-win32-part-height(combobox, 6, 1);
+    /* this width is too small, so better put some padding */
+    min-width: -gtk-win32-part-width(combobox, 6, 1);
+    padding: 0 1ex;
 }
-combobox box:disabled {
-    color: rgba(255, 0, 0, 0);
+combobox entry + button:hover arrow {
+    background-image: -gtk-win32-theme-part(combobox, 6, 2);
+}
+
+combobox entry + button:disabled {
+    background-image: none;
+}
+
+combobox entry + button:disabled arrow {
     background-image: -gtk-win32-theme-part(combobox, 6, 4);
 }
-/* Make sure the style above does not touch comboboxes with entries by
-   disabling background image for the box again */
-combobox-entry box {
-    color: rgba(255, 0, 0, 0);
-    background-image: none;
+combobox entry + button:checked arrow {
+    background-image: -gtk-win32-theme-part(combobox, 6, 3);
 }
-combobox-entry box:disabled {
-    color: rgba(255, 0, 0, 0);
-    background-image: none;
+
+combobox menu {
+    /* Dropdown list should have "window" color, as listbox
+       contents do (usually it's "white") */
+    background-color: -gtk-win32-color(listview, window);
+    padding: 2px;
 }
-/* The arrow is part of the background image drawn by the theme, don't draw GTK's own arrow */
-combobox-entry GtkArrow {
-    color: rgba(255, 0, 0, 0);
+
+combobox menuitem {
+    padding: 0 2px;
 }
-combobox-entry GtkArrow:disabled {
-    color: rgba(255, 0, 0, 0);
-}
-combobox arrow {
-    color: rgba(255, 0, 0, 0);
-}
-combobox arrow:disabled {
-    color: rgba(255, 0, 0, 0);
+
+combobox menuitem > cellview {
+    padding: 0px;
 }
 
 /* Toolbar */
