@@ -75,8 +75,6 @@ GType         gtk_menu_tool_button_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkToolItem  *gtk_menu_tool_button_new            (GtkWidget   *icon_widget,
                                                    const gchar *label);
-GDK_DEPRECATED_IN_3_10_FOR(gtk_menu_tool_button_new)
-GtkToolItem  *gtk_menu_tool_button_new_from_stock (const gchar *stock_id);
 
 GDK_AVAILABLE_IN_ALL
 void          gtk_menu_tool_button_set_menu       (GtkMenuToolButton *button,

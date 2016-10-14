@@ -352,34 +352,6 @@ gtk_menu_tool_button_new (GtkWidget   *icon_widget,
   return GTK_TOOL_ITEM (button);
 }
 
-/**
- * gtk_menu_tool_button_new_from_stock:
- * @stock_id: the name of a stock item
- *
- * Creates a new #GtkMenuToolButton.
- * The new #GtkMenuToolButton will contain an icon and label from
- * the stock item indicated by @stock_id.
- *
- * Returns: the new #GtkMenuToolButton
- *
- * Since: 2.6
- *
- * Deprecated: 3.10: Use gtk_menu_tool_button_new() instead.
- **/
-GtkToolItem *
-gtk_menu_tool_button_new_from_stock (const gchar *stock_id)
-{
-  GtkMenuToolButton *button;
-
-  g_return_val_if_fail (stock_id != NULL, NULL);
-
-  button = g_object_new (GTK_TYPE_MENU_TOOL_BUTTON,
-			 "stock-id", stock_id,
-			 NULL);
-
-  return GTK_TOOL_ITEM (button);
-}
-
 static void
 _show_menu_emit (gpointer user_data)
 {
