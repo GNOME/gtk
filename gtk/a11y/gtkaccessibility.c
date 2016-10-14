@@ -801,7 +801,7 @@ state_event_watcher (GSignalInvocationHint *hint,
   AtkObject *atk_obj;
   AtkObject *parent;
   GdkEventWindowState *event;
-  gchar *signal_name;
+  const char *signal_name;
 
   object = g_value_get_object (param_values + 0);
   if (!GTK_IS_WINDOW (object))
@@ -846,7 +846,7 @@ configure_event_watcher (GSignalInvocationHint *hint,
   AtkObject *atk_obj;
   AtkObject *parent;
   GdkEvent *event;
-  gchar *signal_name;
+  const char *signal_name;
 
   object = g_value_get_object (param_values + 0);
   if (!GTK_IS_WINDOW (object))
