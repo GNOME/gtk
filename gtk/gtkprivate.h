@@ -92,7 +92,7 @@ gboolean        _gtk_propagate_captured_event  (GtkWidget       *widget,
                                                 GtkWidget       *topmost);
 
 
-gdouble _gtk_get_slowdown ();
+gdouble _gtk_get_slowdown (void);
 void    _gtk_set_slowdown (gdouble slowdown_factor);
 
 gboolean gtk_should_use_portal (void);
