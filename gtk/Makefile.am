@@ -29,6 +29,7 @@ AM_CPPFLAGS =						\
 	-I$(top_srcdir)/gdk				\
 	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
+	$(GTK_WARN_CFLAGS)				\
 	$(GDK_HIDDEN_VISIBILITY_CFLAGS)			\
 	$(GTK_DEP_CFLAGS)				\
 	$(INCLUDED_IMMODULE_DEFINE)

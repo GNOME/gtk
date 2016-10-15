@@ -1862,6 +1862,37 @@ _______EOF
 gdk_windowing='$GDK_WINDOWING'
 ])
 
+dnl Compiler flags; macro originates from systemd
+dnl See https://bugzilla.gnome.org/show_bug.cgi?id=608953
+AC_ARG_ENABLE(compile-warnings,
+              [AS_HELP_STRING([--disable-compile-warnings], [Do not use builtin compiler warnings])],
+              [],
+              [enable_compile_warnings=yes])
+AS_IF([test "x$enable_compile_warnings" = xyes], [
+  AX_APPEND_COMPILE_FLAGS([ dnl
+    -Wall dnl
+    -Wundef dnl
+    -Wnested-externs dnl
+    -Wpointer-arith dnl
+    -Wstrict-prototypes dnl
+    -Wcast-align dnl
+    -Wuninitialized dnl
+    -Wmissing-include-dirs dnl
+    -Wshadow dnl
+    -Wformat=2 dnl
+    -Wformat-non-literal dnl
+    -Wformat-security dnl
+    -Wimplicit-function-declaration dnl
+    -Werror=redundant-decls dnl
+    -Werror=write-strings dnl
+    -Werror=missing-declarations dnl
+    -Werror=missing-prototypes dnl
+    -Werror=empty-body dnl
+    -Werror=init-self dnl
+  ], [GTK_WARN_CFLAGS])
+])
+AC_SUBST(GTK_WARN_CFLAGS)
+
 dnl
 dnl Check for -Bsymbolic-functions linker flag used to avoid
 dnl intra-library PLT jumps, if available.
