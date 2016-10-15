@@ -3587,8 +3587,8 @@ gdk_x11_window_set_frame_extents (GdkWindow *window,
  * Since: 3.2
  */
 void
-gdk_x11_window_set_theme_variant (GdkWindow *window,
-                                  char      *variant)
+gdk_x11_window_set_theme_variant (GdkWindow  *window,
+                                  const char *variant)
 {
   gdk_x11_window_set_utf8_property (window, "_GTK_THEME_VARIANT",
                                     variant ? variant : "");
