@@ -24,7 +24,7 @@
 
 #include "config.h"
 #include "gtkbuiltiniconprivate.h"
-#include "gtkcheckmenuitem.h"
+#include "gtkcheckmenuitemprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkaccellabel.h"
 #include "deprecated/gtkactivatable.h"

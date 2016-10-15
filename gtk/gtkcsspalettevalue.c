@@ -17,8 +17,9 @@
 
 #include "config.h"
 
-#include "gtkcssiconthemevalueprivate.h"
+#include "gtkcsspalettevalueprivate.h"
 
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 

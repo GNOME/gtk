@@ -27,7 +27,7 @@
 
 #include "config.h"
 
-#include "gtksearchentry.h"
+#include "gtksearchentryprivate.h"
 
 #include "gtkaccessible.h"
 #include "gtkbindings.h"

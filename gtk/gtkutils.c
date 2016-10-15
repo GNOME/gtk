@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include "gtkutilsprivate.h"
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>

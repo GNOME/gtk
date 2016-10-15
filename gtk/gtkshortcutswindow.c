@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkshortcutswindow.h"
+#include "gtkshortcutswindowprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkshortcutssection.h"
 #include "gtkshortcutsgroup.h"

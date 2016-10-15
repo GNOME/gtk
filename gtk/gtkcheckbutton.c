@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "gtkcheckbutton.h"
+#include "gtkcheckbuttonprivate.h"
 
 #include "gtkbuttonprivate.h"
 #include "gtklabel.h"

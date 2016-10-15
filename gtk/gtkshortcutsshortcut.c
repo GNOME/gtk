@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkshortcutsshortcut.h"
+#include "gtkshortcutsshortcutprivate.h"
 
 #include "gtkshortcutlabel.h"
 #include "gtkshortcutswindowprivate.h"
