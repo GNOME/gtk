@@ -157,8 +157,8 @@ gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
   const gchar *locale;
   gchar **langs = NULL;
   gchar **lang = NULL;
-  gchar * const sys_langs[] = { "el_gr", "fi_fi", "pt_br", NULL };
-  gchar * const *sys_lang = NULL;
+  const char * const sys_langs[] = { "el_gr", "fi_fi", "pt_br", NULL };
+  const char * const *sys_lang = NULL;
   gchar *x11_compose_file_dir = get_x11_compose_file_dir ();
 
   path = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "Compose", NULL);

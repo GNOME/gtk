@@ -173,7 +173,7 @@ gtk_popover_menu_add (GtkContainer *container,
     }
   else
     {
-      gchar *name;
+      const char *name;
 
       if (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"))
         name = "submenu";

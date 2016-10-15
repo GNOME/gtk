@@ -2216,12 +2216,12 @@ update_collate_icon (GtkToggleButton    *toggle_button,
 }
 
 static void
-paint_page (GtkWidget *widget,
-            cairo_t   *cr,
-            gint       x,
-            gint       y,
-            gchar     *text,
-            gint       text_x)
+paint_page (GtkWidget  *widget,
+            cairo_t    *cr,
+            gint        x,
+            gint        y,
+            const char *text,
+            gint        text_x)
 {
   GtkStyleContext *context;
   gint width, height;
@@ -3085,14 +3085,14 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
           priv->number_up_layout_n_option = gtk_printer_option_set_lookup (set, "gtk-n-up-layout");
           if (priv->number_up_layout_n_option == NULL)
             {
-              char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
+              const char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
                /* Translators: These strings name the possible arrangements of
                 * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
                 */
-              char *n_up_layout_display[] = { N_("Left to right, top to bottom"), N_("Left to right, bottom to top"),
-                                              N_("Right to left, top to bottom"), N_("Right to left, bottom to top"),
-                                              N_("Top to bottom, left to right"), N_("Top to bottom, right to left"),
-                                              N_("Bottom to top, left to right"), N_("Bottom to top, right to left") };
+              const char *n_up_layout_display[] = { N_("Left to right, top to bottom"), N_("Left to right, bottom to top"),
+                                                    N_("Right to left, top to bottom"), N_("Right to left, bottom to top"),
+                                                    N_("Top to bottom, left to right"), N_("Top to bottom, right to left"),
+                                                    N_("Bottom to top, left to right"), N_("Bottom to top, right to left") };
               int i;
 
               priv->number_up_layout_n_option = gtk_printer_option_new ("gtk-n-up-layout",

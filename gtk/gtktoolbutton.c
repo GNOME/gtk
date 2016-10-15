@@ -437,23 +437,24 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       else
 	{
 	  gboolean elide;
+          const char *orig_label;
 	  gchar *label_text;
 
 	  if (button->priv->label_text)
 	    {
-	      label_text = button->priv->label_text;
+	      orig_label = button->priv->label_text;
 	      elide = button->priv->use_underline;
 	    }
 	  else
 	    {
-	      label_text = "";
+	      orig_label = "";
 	      elide = FALSE;
 	    }
 
 	  if (elide)
-	    label_text = _gtk_toolbar_elide_underscores (label_text);
+	    label_text = _gtk_toolbar_elide_underscores (orig_label);
 	  else
-	    label_text = g_strdup (label_text);
+	    label_text = g_strdup (orig_label);
 
 	  label = gtk_label_new (label_text);
 

@@ -1531,7 +1531,7 @@ gtk_accelerator_name (guint           accelerator_key,
   static const gchar text_hyper[] = "<Hyper>";
   GdkModifierType saved_mods;
   guint l;
-  gchar *keyval_name;
+  const char *keyval_name;
   gchar *accelerator;
 
   accelerator_mods &= GDK_MODIFIER_MASK;

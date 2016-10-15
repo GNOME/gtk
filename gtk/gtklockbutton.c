@@ -224,7 +224,7 @@ static void
 gtk_lock_button_init (GtkLockButton *button)
 {
   GtkLockButtonPrivate *priv;
-  gchar *names[3];
+  const char *names[3];
   GtkStyleContext *context;
 
   button->priv = priv = gtk_lock_button_get_instance_private (button);
@@ -234,12 +234,12 @@ gtk_lock_button_init (GtkLockButton *button)
   names[0] = "changes-allow-symbolic";
   names[1] = "changes-allow";
   names[2] = NULL;
-  priv->icon_unlock = g_themed_icon_new_from_names (names, -1);
+  priv->icon_unlock = g_themed_icon_new_from_names ((char **) names, -1);
 
   names[0] = "changes-prevent-symbolic";
   names[1] = "changes-prevent";
   names[2] = NULL;
-  priv->icon_lock = g_themed_icon_new_from_names (names, -1);
+  priv->icon_lock = g_themed_icon_new_from_names ((char **) names, -1);
 
   update_state (button);
 

@@ -2264,14 +2264,11 @@ gtk_window_set_title_internal (GtkWindow   *window,
   g_free (priv->title);
   priv->title = new_title;
 
-  if (new_title == NULL)
-    new_title = "";
-
   if (_gtk_widget_get_realized (widget))
-    gdk_window_set_title (_gtk_widget_get_window (widget), new_title);
+    gdk_window_set_title (_gtk_widget_get_window (widget), new_title != NULL ? new_title : "");
 
   if (update_titlebar && GTK_IS_HEADER_BAR (priv->title_box))
-    gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), new_title);
+    gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), new_title != NULL ? new_title : "");
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TITLE]);
 }

@@ -130,23 +130,28 @@ GdkAtom
 gtk_text_buffer_register_serialize_tagset (GtkTextBuffer *buffer,
                                            const gchar   *tagset_name)
 {
-  gchar   *mime_type = "application/x-gtk-text-buffer-rich-text";
-  GdkAtom  format;
+  gchar *mime_type;
+  GdkAtom format;
 
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), GDK_NONE);
   g_return_val_if_fail (tagset_name == NULL || *tagset_name != '\0', GDK_NONE);
 
   if (tagset_name)
-    mime_type =
-      g_strdup_printf ("application/x-gtk-text-buffer-rich-text;format=%s",
-                       tagset_name);
+    {
+      mime_type = g_strconcat ("application/x-gtk-text-buffer-rich-text;format=",
+                               tagset_name,
+                               NULL);
+    }
+  else
+    {
+      mime_type = g_strdup ("application/x-gtk-text-buffer-rich-text");
+    }
 
   format = gtk_text_buffer_register_serialize_format (buffer, mime_type,
                                                       _gtk_text_buffer_serialize_rich_text,
                                                       NULL, NULL);
 
-  if (tagset_name)
-    g_free (mime_type);
+  g_free (mime_type);
 
   return format;
 }
@@ -214,23 +219,28 @@ GdkAtom
 gtk_text_buffer_register_deserialize_tagset (GtkTextBuffer *buffer,
                                              const gchar   *tagset_name)
 {
-  gchar   *mime_type = "application/x-gtk-text-buffer-rich-text";
+  gchar *mime_type;
   GdkAtom  format;
 
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), GDK_NONE);
   g_return_val_if_fail (tagset_name == NULL || *tagset_name != '\0', GDK_NONE);
 
   if (tagset_name)
-    mime_type =
-      g_strdup_printf ("application/x-gtk-text-buffer-rich-text;format=%s",
-                       tagset_name);
+    {
+      mime_type = g_strconcat ("application/x-gtk-text-buffer-rich-text;format=",
+                               tagset_name,
+                               NULL);
+    }
+  else
+    {
+      mime_type = g_strdup ("application/x-gtk-text-buffer-rich-text");
+    }
 
   format = gtk_text_buffer_register_deserialize_format (buffer, mime_type,
                                                         _gtk_text_buffer_deserialize_rich_text,
                                                         NULL, NULL);
 
-  if (tagset_name)
-    g_free (mime_type);
+  g_free (mime_type);
 
   return format;
 }
