@@ -94,7 +94,7 @@ typedef void                (*GtkTextSegCheckFunc)      (GtkTextLineSegment *seg
                                                          GtkTextLine        *line);
 
 struct _GtkTextLineSegmentClass {
-  char *name;                           /* Name of this kind of segment. */
+  const char *name;                     /* Name of this kind of segment. */
   gboolean leftGravity;                 /* If a segment has zero size (e.g. a
                                          * mark or tag toggle), does it
                                          * attach to character to its left
