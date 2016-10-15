@@ -89,18 +89,18 @@ gtk_color_scale_draw_trough (GtkColorScale  *scale,
       gdouble h;
       gdouble r, g, b;
       gdouble f;
-      gint x, y;
+      int hue_x, hue_y;
 
       stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
 
       data = g_malloc (height * stride);
 
       f = 1.0 / (height - 1);
-      for (y = 0; y < height; y++)
+      for (hue_y = 0; hue_y < height; y++)
         {
-          h = CLAMP (y * f, 0.0, 1.0);
-          p = data + y * (stride / 4);
-          for (x = 0; x < width; x++)
+          h = CLAMP (hue_y * f, 0.0, 1.0);
+          p = data + hue_y * (stride / 4);
+          for (hue_x = 0; hue_x < width; x++)
             {
               gtk_hsv_to_rgb (h, 1, 1, &r, &g, &b);
               red = CLAMP (r * 255, 0, 255);
