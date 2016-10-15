@@ -1061,15 +1061,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
 
-  /* Style properties.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_string ("decoration-button-layout",
-                                                                P_("Decorated button layout"),
-                                                                P_("Decorated button layout"),
-                                                                "menu:close",
-                                                                GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
   /**
    * GtkWindow:set-focus:
    * @window: the window which received the signal

@@ -84,6 +84,7 @@ struct _GtkHeaderBarPrivate
   GtkWidget *titlebar_icon;
 
   GtkCssGadget *gadget;
+  guint shows_app_menu : 1;
 };
 
 typedef struct _Child Child;
@@ -295,6 +296,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
     }
 
   priv->titlebar_icon = NULL;
+  priv->shows_app_menu = FALSE;
 
   if (!priv->shows_wm_decorations)
     return;
@@ -384,6 +386,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   priv->titlebar_icon = image;
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "process-stop-symbolic", GTK_ICON_SIZE_MENU);
+                  priv->shows_app_menu = TRUE;
                 }
               else if (strcmp (t[j], "minimize") == 0 &&
                        is_sovereign_window)
@@ -505,21 +508,9 @@ gboolean
 _gtk_header_bar_shows_app_menu (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GtkWindow *window;
-  gchar *layout_desc;
-  gboolean ret;
 
-  window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (bar)));
-  gtk_widget_style_get (GTK_WIDGET (window),
-                        "decoration-button-layout", &layout_desc,
-                        NULL);
-
-  ret = priv->shows_wm_decorations &&
-        (layout_desc && strstr (layout_desc, "menu"));
-
-  g_free (layout_desc);
-
-  return ret;
+  return priv->shows_wm_decorations &&
+         priv->shows_app_menu;
 }
 
 /* As an intended side effect, this function allows @child
@@ -2119,6 +2110,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->has_subtitle = TRUE;
   priv->decoration_layout = NULL;
   priv->decoration_layout_set = FALSE;
+  priv->shows_app_menu = FALSE;
 
   init_sizing_box (bar);
   construct_label_box (bar);
