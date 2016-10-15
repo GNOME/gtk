@@ -6567,13 +6567,13 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
     }
   else if (parent_is_folder)
     {
-      GError *error;
+      GError *internal_error;
 
-      error = NULL;
-      g_set_error_literal (&error, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED,
+      internal_error = NULL;
+      g_set_error_literal (&internal_error, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED,
                            _("You do not have access to the specified folder."));
 
-      error_changing_folder_dialog (impl, data->parent_file, error);
+      error_changing_folder_dialog (impl, data->parent_file, internal_error);
     }
   else if (info)
     {
@@ -8533,7 +8533,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   GFile            *file;
 
   /* Some qdata, qdata can't be set with GtkBuilder */
-  g_object_set_data (G_OBJECT (impl->priv->browse_files_tree_view), "fmq-name", "file_list");
   g_object_set_data (G_OBJECT (impl->priv->browse_files_tree_view), I_("GtkFileChooserWidget"), impl);
 
   /* Setup file list treeview */
