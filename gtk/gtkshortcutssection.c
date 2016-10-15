@@ -643,17 +643,16 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
 
       if (current_column == NULL || n_rows + height > self->max_height)
         {
-          GtkWidget *column;
-          GtkSizeGroup *group;
+          GtkWidget *column_box;
+          GtkSizeGroup *size_group;
 
-          column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
-          gtk_widget_show (column);
+          column_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
+          gtk_widget_show (column_box);
 
-          group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-          g_object_set_data_full (G_OBJECT (column), "accel-size-group", group, g_object_unref);
-
-          group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-          g_object_set_data_full (G_OBJECT (column), "title-size-group", group, g_object_unref);
+          size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+          g_object_set_data_full (G_OBJECT (column_box), "accel-size-group", size_group, g_object_unref);
+          size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+          g_object_set_data_full (G_OBJECT (column_box), "title-size-group", size_group, g_object_unref);
 
           if (n_columns % 2 == 0)
             {
@@ -666,8 +665,8 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
               current_page = page;
             }
 
-          gtk_container_add (GTK_CONTAINER (current_page), column);
-          current_column = column;
+          gtk_container_add (GTK_CONTAINER (current_page), column_box);
+          current_column = column_box;
           n_columns += 1;
           n_rows = 0;
         }
@@ -688,20 +687,20 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
   /* balance the last page */
   if (n_columns % 2 == 1)
     {
-      GtkWidget *column;
-      GtkSizeGroup *group;
+      GtkWidget *column_box;
+      GtkSizeGroup *size_group;
       GList *content;
       guint n;
 
-      column = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
-      gtk_widget_show (column);
+      column_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
+      gtk_widget_show (column_box);
 
-      group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      g_object_set_data_full (G_OBJECT (column), "accel-size-group", group, g_object_unref);
-      group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      g_object_set_data_full (G_OBJECT (column), "title-size-group", group, g_object_unref);
+      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      g_object_set_data_full (G_OBJECT (column_box), "accel-size-group", size_group, g_object_unref);
+      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      g_object_set_data_full (G_OBJECT (column_box), "title-size-group", size_group, g_object_unref);
 
-      gtk_container_add (GTK_CONTAINER (current_page), column);
+      gtk_container_add (GTK_CONTAINER (current_page), column_box);
 
       content = gtk_container_get_children (GTK_CONTAINER (current_column));
       n = 0;
@@ -733,13 +732,13 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
           GtkShortcutsGroup *group = g->data;
 
           g_object_set (group,
-                        "accel-size-group", g_object_get_data (G_OBJECT (column), "accel-size-group"),
-                        "title-size-group", g_object_get_data (G_OBJECT (column), "title-size-group"),
+                        "accel-size-group", g_object_get_data (G_OBJECT (column_box), "accel-size-group"),
+                        "title-size-group", g_object_get_data (G_OBJECT (column_box), "title-size-group"),
                         NULL);
 
           g_object_ref (group);
           gtk_container_remove (GTK_CONTAINER (current_column), GTK_WIDGET (group));
-          gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group));
+          gtk_container_add (GTK_CONTAINER (column_box), GTK_WIDGET (group));
           g_object_unref (group);
         }
 
