@@ -276,8 +276,6 @@ static gboolean   gtk_toolbar_render               (GtkCssGadget *gadget,
                                                     int           height,
                                                     gpointer      data);
 
-static gint                 get_max_child_expand (GtkToolbar *toolbar);
-
 /* methods on ToolbarContent 'class' */
 static ToolbarContent *toolbar_content_new_tool_item        (GtkToolbar          *toolbar,
 							     GtkToolItem         *item,
@@ -588,15 +586,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 								    P_("Whether the item should be the same size as other homogeneous items"),
 								    FALSE,
 								    GTK_PARAM_READWRITE));
-
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("max-child-expand",
-                                                             P_("Maximum child expand"),
-                                                             P_("Maximum amount of space an expandable item will be given"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             G_MAXINT,
-                                                             GTK_PARAM_READABLE));
 
   binding_set = gtk_binding_set_by_class (klass);
   
@@ -1562,7 +1551,6 @@ gtk_toolbar_allocate (GtkCssGadget        *gadget,
    */
   if (!overflowing)
     {
-      gint max_child_expand;
       n_expand_items = 0;
 
       for (i = 0, list = priv->content; list != NULL; list = list->next, ++i)
@@ -1573,7 +1561,6 @@ gtk_toolbar_allocate (GtkCssGadget        *gadget,
             n_expand_items++;
         }
 
-      max_child_expand = get_max_child_expand (toolbar);
       for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
         {
           ToolbarContent *content = list->data;
@@ -1583,9 +1570,6 @@ gtk_toolbar_allocate (GtkCssGadget        *gadget,
               gint extra = size / n_expand_items;
               if (size % n_expand_items != 0)
                 extra++;
-
-              if (extra > max_child_expand)
-                extra = max_child_expand;
 
               allocations[i].width += extra;
               size -= extra;
@@ -3421,17 +3405,6 @@ toolbar_content_show_all (ToolbarContent  *content)
   widget = toolbar_content_get_widget (content);
   if (widget)
     gtk_widget_show_all (widget);
-}
-
-static gint
-get_max_child_expand (GtkToolbar *toolbar)
-{
-  gint mexpand = G_MAXINT;
-
-  gtk_widget_style_get (GTK_WIDGET (toolbar),
-                        "max-child-expand", &mexpand,
-                        NULL);
-  return mexpand;
 }
 
 /* GTK+ internal methods */
