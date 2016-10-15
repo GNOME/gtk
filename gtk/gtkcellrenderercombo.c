@@ -63,8 +63,6 @@ struct _GtkCellRendererComboPrivate
 };
 
 
-static void gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass);
-static void gtk_cell_renderer_combo_init       (GtkCellRendererCombo      *self);
 static void gtk_cell_renderer_combo_finalize     (GObject      *object);
 static void gtk_cell_renderer_combo_get_property (GObject      *object,
 						  guint         prop_id,

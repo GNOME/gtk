@@ -3415,8 +3415,6 @@ theme_subdir_load (GtkIconTheme *icon_theme,
  * GtkIconInfo
  */
 
-static void gtk_icon_info_class_init (GtkIconInfoClass *klass);
-
 G_DEFINE_TYPE (GtkIconInfo, gtk_icon_info, G_TYPE_OBJECT)
 
 static void

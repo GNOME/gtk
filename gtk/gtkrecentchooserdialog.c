@@ -88,8 +88,6 @@ struct _GtkRecentChooserDialogPrivate
 
 #define GTK_RECENT_CHOOSER_DIALOG_GET_PRIVATE(obj)	(GTK_RECENT_CHOOSER_DIALOG (obj)->priv)
 
-static void gtk_recent_chooser_dialog_class_init (GtkRecentChooserDialogClass *klass);
-static void gtk_recent_chooser_dialog_init       (GtkRecentChooserDialog      *dialog);
 static void gtk_recent_chooser_dialog_finalize   (GObject                     *object);
 
 static void gtk_recent_chooser_dialog_constructed (GObject *object);

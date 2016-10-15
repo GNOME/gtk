@@ -159,7 +159,6 @@ struct _RequestTargetsInfo
   gpointer user_data;
 };
 
-static void gtk_clipboard_class_init   (GtkClipboardClass   *class);
 static void gtk_clipboard_finalize     (GObject             *object);
 static void gtk_clipboard_owner_change (GtkClipboard        *clipboard,
 					GdkEventOwnerChange *event);

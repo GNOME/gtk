@@ -174,8 +174,6 @@ enum {
 
 
 /* GObject */
-static void     _gtk_recent_chooser_default_class_init  (GtkRecentChooserDefaultClass *klass);
-static void     _gtk_recent_chooser_default_init        (GtkRecentChooserDefault      *impl);
 static void     gtk_recent_chooser_default_finalize     (GObject                      *object);
 static void     gtk_recent_chooser_default_dispose      (GObject                      *object);
 static void     gtk_recent_chooser_default_set_property (GObject                      *object,

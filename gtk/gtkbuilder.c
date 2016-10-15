@@ -224,8 +224,6 @@
 #include "deprecated/gtkstock.h"
 
 
-static void gtk_builder_class_init     (GtkBuilderClass *klass);
-static void gtk_builder_init           (GtkBuilder      *builder);
 static void gtk_builder_finalize       (GObject         *object);
 static void gtk_builder_set_property   (GObject         *object,
                                         guint            prop_id,

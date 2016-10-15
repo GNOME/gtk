@@ -136,9 +136,6 @@ struct _GtkTooltipClass
 
 #define GTK_TOOLTIP_VISIBLE(tooltip) ((tooltip)->current_window && gtk_widget_get_visible (GTK_WIDGET((tooltip)->current_window)))
 
-
-static void       gtk_tooltip_class_init           (GtkTooltipClass *klass);
-static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
 static void       gtk_tooltip_dispose              (GObject         *object);
 
 static void       gtk_tooltip_window_hide          (GtkWidget       *widget,

@@ -132,8 +132,6 @@ struct _GtkAssistantPrivate
   guint committed : 1;
 };
 
-static void     gtk_assistant_class_init         (GtkAssistantClass *class);
-static void     gtk_assistant_init               (GtkAssistant      *assistant);
 static void     gtk_assistant_destroy            (GtkWidget         *widget);
 static void     gtk_assistant_map                (GtkWidget         *widget);
 static void     gtk_assistant_unmap              (GtkWidget         *widget);
@@ -221,7 +219,6 @@ enum {
 };
 
 static guint signals [LAST_SIGNAL] = { 0 };
-
 
 G_DEFINE_TYPE_WITH_CODE (GtkAssistant, gtk_assistant, GTK_TYPE_WINDOW,
                          G_ADD_PRIVATE (GtkAssistant)

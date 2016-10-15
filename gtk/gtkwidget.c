@@ -751,12 +751,6 @@ static void             gtk_widget_buildable_parser_finished    (GtkBuildable   
                                                                  GtkBuilder       *builder);
 
 static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget         *widget);
-static void             gtk_widget_real_get_width               (GtkWidget         *widget,
-                                                                 gint              *minimum_size,
-                                                                 gint              *natural_size);
-static void             gtk_widget_real_get_height              (GtkWidget         *widget,
-                                                                 gint              *minimum_size,
-                                                                 gint              *natural_size);
 
 static void             gtk_widget_queue_tooltip_query          (GtkWidget *widget);
 

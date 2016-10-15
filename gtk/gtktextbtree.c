@@ -304,8 +304,6 @@ static void                  gtk_text_btree_node_free_empty          (GtkTextBTr
                                                                       GtkTextBTreeNode *node);
 static NodeData         *    gtk_text_btree_node_ensure_data         (GtkTextBTreeNode *node,
                                                                       gpointer          view_id);
-static void                  gtk_text_btree_node_remove_data         (GtkTextBTreeNode *node,
-                                                                      gpointer          view_id);
 static void                  gtk_text_btree_node_get_size            (GtkTextBTreeNode *node,
                                                                       gpointer          view_id,
                                                                       gint             *width,
