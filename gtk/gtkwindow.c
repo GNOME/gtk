@@ -150,6 +150,7 @@
  */
 
 #define MENU_BAR_ACCEL "F10"
+#define RESIZE_HANDLE_SIZE 20
 #define MNEMONICS_DELAY 300 /* ms */
 #define NO_CONTENT_CHILD_NAT 200
 /* In case the content (excluding header bar and shadows) of the window
@@ -1068,13 +1069,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                                 P_("Decorated button layout"),
                                                                 "menu:close",
                                                                 GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-resize-handle",
-                                                             P_("Decoration resize handle size"),
-                                                             P_("Decoration resize handle size"),
-                                                             0, G_MAXINT,
-                                                             20, GTK_PARAM_READWRITE));
 
   /**
    * GtkWindow:set-focus:
@@ -6501,7 +6495,7 @@ update_border_windows (GtkWindow *window)
   GtkWidget *widget = (GtkWidget *)window;
   GtkWindowPrivate *priv = window->priv;
   gboolean resize_h, resize_v;
-  gint handle, handle_h, handle_v;
+  gint handle_h, handle_v;
   cairo_region_t *region;
   cairo_rectangle_int_t rect;
   gint width, height;
@@ -6520,9 +6514,6 @@ update_border_windows (GtkWindow *window)
   sum_borders (&border, &tmp);
   gtk_style_context_get_padding (context, &tmp);
   sum_borders (&border, &tmp);
-  gtk_widget_style_get (widget,
-                        "decoration-resize-handle", &handle,
-                        NULL);
   gtk_style_context_restore (context);
   get_shadow_width (window, &window_border);
 
@@ -6544,8 +6535,8 @@ update_border_windows (GtkWindow *window)
   width = gtk_widget_get_allocated_width (widget) - (window_border.left + window_border.right);
   height = gtk_widget_get_allocated_height (widget) - (window_border.top + window_border.bottom);
 
-  handle_h = MIN (handle, width / 2);
-  handle_v = MIN (handle, height / 2);
+  handle_h = MIN (RESIZE_HANDLE_SIZE, width / 2);
+  handle_v = MIN (RESIZE_HANDLE_SIZE, height / 2);
 
   if (resize_h && resize_v)
     {
