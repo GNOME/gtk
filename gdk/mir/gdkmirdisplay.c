@@ -23,6 +23,8 @@
 #include "gdkmir.h"
 #include "gdkmir-private.h"
 
+#include <string.h>
+
 #include <com/ubuntu/content/glib/content-hub-glib.h>
 
 #define GDK_TYPE_DISPLAY_MIR              (gdk_mir_display_get_type ())
@@ -62,6 +64,7 @@ typedef struct GdkMirDisplay
 
   ContentHubService *content_service;
   ContentHubHandler *content_handler;
+  GVariant *paste_data;
 } GdkMirDisplay;
 
 typedef struct GdkMirDisplayClass
@@ -106,6 +109,13 @@ static void get_pixel_formats (MirConnection *, MirPixelFormat *sw, MirPixelForm
  */
 
 G_DEFINE_TYPE (GdkMirDisplay, gdk_mir_display, GDK_TYPE_DISPLAY)
+
+static void
+pasteboard_changed_cb (GdkMirDisplay *display,
+                       gpointer       user_data)
+{
+  g_clear_pointer (&display->paste_data, g_variant_unref);
+}
 
 GdkDisplay *
 _gdk_mir_display_open (const gchar *display_name)
@@ -155,6 +165,12 @@ _gdk_mir_display_open (const gchar *display_name)
     "/",
     NULL,
     NULL);
+
+  g_signal_connect_swapped (
+    display->content_service,
+    "pasteboard-changed",
+    G_CALLBACK (pasteboard_changed_cb),
+    display);
 
   display->content_handler = content_hub_handler_skeleton_new ();
 
@@ -214,6 +230,7 @@ gdk_mir_display_dispose (GObject *object)
 {
   GdkMirDisplay *display = GDK_MIR_DISPLAY (object);
 
+  g_clear_pointer (&display->paste_data, g_variant_unref);
   g_dbus_interface_skeleton_unexport (G_DBUS_INTERFACE_SKELETON (display->content_handler));
   g_clear_object (&display->content_handler);
   g_clear_object (&display->content_service);
@@ -547,8 +564,253 @@ gdk_mir_display_get_selection_property (GdkDisplay  *display,
                                         GdkAtom     *ret_type,
                                         gint        *ret_format)
 {
-  //g_printerr ("gdk_mir_display_get_selection_property\n");
+  gint length;
+
+  gdk_property_get (requestor,
+                    gdk_atom_intern_static_string ("GDK_SELECTION"),
+                    GDK_NONE,
+                    0,
+                    G_MAXULONG,
+                    FALSE,
+                    ret_type,
+                    ret_format,
+                    &length,
+                    data);
+
+  return length;
+}
+
+static gint
+get_format_score (const gchar *format,
+                  GdkAtom      target,
+                  GdkAtom     *out_type,
+                  gint        *out_size)
+{
+  const gchar *target_string;
+  GdkAtom dummy_type;
+  gint dummy_size;
+
+  target_string = _gdk_atom_name_const (target);
+
+  if (!out_type)
+    out_type = &dummy_type;
+
+  if (!out_size)
+    out_size = &dummy_size;
+
+  if (!g_ascii_strcasecmp (format, target_string))
+    {
+      *out_type = GDK_SELECTION_TYPE_STRING;
+      *out_size = sizeof (guchar);
+
+      return G_MAXINT;
+    }
+
+  if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
+    return get_format_score (format, gdk_atom_intern_static_string ("text/plain;charset=utf-8"), out_type, out_size);
+
+  /* TODO: use best media type for COMPOUND_TEXT target */
+  if (target == gdk_atom_intern_static_string ("COMPOUND_TEXT"))
+    return get_format_score (format, gdk_atom_intern_static_string ("text/plain;charset=utf-8"), out_type, out_size);
+
+  if (target == GDK_TARGET_STRING)
+    return get_format_score (format, gdk_atom_intern_static_string ("text/plain;charset=iso-8859-1"), out_type, out_size);
+
+  if (target == gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+    return get_format_score (format, gdk_atom_intern_static_string ("text/plain;charset=utf-8"), out_type, out_size);
+
+  if (g_content_type_is_a (format, target_string))
+    {
+      *out_type = GDK_SELECTION_TYPE_STRING;
+      *out_size = sizeof (guchar);
+
+      return 2;
+    }
+
+  if (g_content_type_is_a (target_string, format))
+    {
+      *out_type = GDK_SELECTION_TYPE_STRING;
+      *out_size = sizeof (guchar);
+
+      return 1;
+    }
+
   return 0;
+}
+
+static gint
+get_best_format_index (const gchar * const *formats,
+                       guint                n_formats,
+                       GdkAtom              target,
+                       GdkAtom             *out_type,
+                       gint                *out_size)
+{
+  gint best_i = -1;
+  gint best_score = 0;
+  GdkAtom best_type;
+  gint best_size;
+  gint score;
+  GdkAtom type;
+  gint size;
+  gint i;
+
+  if (!out_type)
+    out_type = &best_type;
+
+  if (!out_size)
+    out_size = &best_size;
+
+  *out_type = GDK_NONE;
+  *out_size = 0;
+
+  for (i = 0; i < n_formats; i++)
+    {
+      score = get_format_score (formats[i], target, &type, &size);
+
+      if (score > best_score)
+        {
+          best_i = i;
+          best_score = score;
+          *out_type = type;
+          *out_size = size;
+        }
+    }
+
+  return best_i;
+}
+
+static void
+gdk_mir_display_real_convert_selection (GdkDisplay *display,
+                                        GdkWindow  *requestor,
+                                        GdkAtom     selection,
+                                        GdkAtom     target,
+                                        guint32     time)
+{
+  GdkMirDisplay *mir_display = GDK_MIR_DISPLAY (display);
+  const gchar *paste_data;
+  gsize paste_size;
+  const gint *paste_header;
+  GPtrArray *paste_formats;
+  GArray *paste_targets;
+  GdkAtom paste_target;
+  GdkEvent *event;
+  gint best_i;
+  GdkAtom best_type;
+  gint best_size;
+  gint i;
+
+  g_return_if_fail (mir_display->paste_data);
+
+  paste_data = g_variant_get_fixed_array (mir_display->paste_data, &paste_size, sizeof (guchar));
+  paste_header = (const gint *) paste_data;
+  paste_formats = g_ptr_array_new_full (paste_header[0], g_free);
+
+  for (i = 0; i < paste_header[0]; i++)
+    g_ptr_array_add (paste_formats, g_strndup (paste_data + paste_header[1 + 4 * i], paste_header[2 + 4 * i]));
+
+  if (target == gdk_atom_intern_static_string ("TARGETS"))
+    {
+      paste_targets = g_array_sized_new (TRUE, FALSE, sizeof (GdkAtom), paste_formats->len);
+
+      for (i = 0; i < paste_formats->len; i++)
+        {
+          paste_target = gdk_atom_intern (g_ptr_array_index (paste_formats, i), FALSE);
+          g_array_append_val (paste_targets, paste_target);
+        }
+
+      gdk_property_change (requestor,
+                           gdk_atom_intern_static_string ("GDK_SELECTION"),
+                           GDK_SELECTION_TYPE_ATOM,
+                           8 * sizeof (GdkAtom),
+                           GDK_PROP_MODE_REPLACE,
+                           (const guchar *) paste_targets->data,
+                           paste_targets->len);
+
+      g_array_unref (paste_targets);
+
+      event = gdk_event_new (GDK_SELECTION_NOTIFY);
+      event->selection.window = g_object_ref (requestor);
+      event->selection.send_event = FALSE;
+      event->selection.selection = selection;
+      event->selection.target = target;
+      event->selection.property = gdk_atom_intern_static_string ("GDK_SELECTION");
+      event->selection.time = time;
+      event->selection.requestor = g_object_ref (requestor);
+
+      gdk_event_put (event);
+      gdk_event_free (event);
+    }
+  else
+    {
+      best_i = get_best_format_index ((const gchar * const *) paste_formats->pdata,
+                                      paste_formats->len,
+                                      target,
+                                      &best_type,
+                                      &best_size);
+
+      if (best_i >= 0)
+        {
+          gdk_property_change (requestor,
+                               gdk_atom_intern_static_string ("GDK_SELECTION"),
+                               best_type,
+                               8 * best_size,
+                               GDK_PROP_MODE_REPLACE,
+                               (const guchar *) paste_data + paste_header[3 + 4 * best_i],
+                               paste_header[4 + 4 * best_i] / best_size);
+
+          event = gdk_event_new (GDK_SELECTION_NOTIFY);
+          event->selection.window = g_object_ref (requestor);
+          event->selection.send_event = FALSE;
+          event->selection.selection = selection;
+          event->selection.target = target;
+          event->selection.property = gdk_atom_intern_static_string ("GDK_SELECTION");
+          event->selection.time = time;
+          event->selection.requestor = g_object_ref (requestor);
+
+          gdk_event_put (event);
+          gdk_event_free (event);
+        }
+    }
+
+  g_ptr_array_unref (paste_formats);
+}
+
+typedef struct
+{
+  GdkDisplay *display;
+  GdkWindow  *requestor;
+  GdkAtom     selection;
+  GdkAtom     target;
+  guint32     time;
+} ConvertInfo;
+
+static void
+paste_data_ready_cb (GObject      *source_object,
+                     GAsyncResult *res,
+                     gpointer      user_data)
+{
+  ContentHubService *content_service = CONTENT_HUB_SERVICE (source_object);
+  ConvertInfo *info = user_data;
+  GdkMirDisplay *mir_display = GDK_MIR_DISPLAY (info->display);
+  gboolean result;
+
+  g_clear_pointer (&mir_display->paste_data, g_variant_unref);
+
+  result = content_hub_service_call_get_latest_paste_data_finish (content_service,
+                                                                  &mir_display->paste_data,
+                                                                  res,
+                                                                  NULL);
+
+  if (result)
+    gdk_mir_display_real_convert_selection (info->display,
+                                            info->requestor,
+                                            info->selection,
+                                            info->target,
+                                            info->time);
+
+  g_object_unref (info->requestor);
+  g_object_unref (info->display);
+  g_free (info);
 }
 
 static void
@@ -558,7 +820,46 @@ gdk_mir_display_convert_selection (GdkDisplay *display,
                                    GdkAtom     target,
                                    guint32     time)
 {
-  //g_printerr ("gdk_mir_display_convert_selection\n");
+  GdkMirDisplay *mir_display = GDK_MIR_DISPLAY (display);
+  MirSurface *surface;
+  MirPersistentId *persistent_id;
+  ConvertInfo *info;
+
+  if (selection != GDK_SELECTION_CLIPBOARD)
+    return;
+  else if (mir_display->paste_data)
+    gdk_mir_display_real_convert_selection (display, requestor, selection, target, time);
+  else if (mir_display->focused_window)
+    {
+      surface = gdk_mir_window_get_mir_surface (mir_display->focused_window);
+
+      if (!surface)
+        return;
+
+      persistent_id = mir_surface_request_persistent_id_sync (surface);
+
+      if (!persistent_id)
+        return;
+
+      if (mir_persistent_id_is_valid (persistent_id))
+        {
+          info = g_new (ConvertInfo, 1);
+          info->display = g_object_ref (display);
+          info->requestor = g_object_ref (requestor);
+          info->selection = selection;
+          info->target = target;
+          info->time = time;
+
+          content_hub_service_call_get_latest_paste_data (
+            mir_display->content_service,
+            mir_persistent_id_as_string (persistent_id),
+            NULL,
+            paste_data_ready_cb,
+            info);
+        }
+
+      mir_persistent_id_release (persistent_id);
+    }
 }
 
 static gint
@@ -569,8 +870,38 @@ gdk_mir_display_text_property_to_utf8_list (GdkDisplay    *display,
                                             gint           length,
                                             gchar       ***list)
 {
-  //g_printerr ("gdk_mir_display_text_property_to_utf8_list\n");
-  return 0;
+  GPtrArray *array;
+  const gchar *ptr;
+  gsize chunk_len;
+  gchar *copy;
+  guint nitems;
+
+  ptr = (const gchar *) text;
+  array = g_ptr_array_new ();
+
+  /* split text into utf-8 strings */
+  while (ptr < (const gchar *) &text[length])
+    {
+      chunk_len = strlen (ptr);
+
+      if (g_utf8_validate (ptr, chunk_len, NULL))
+        {
+          copy = g_strndup (ptr, chunk_len);
+          g_ptr_array_add (array, copy);
+        }
+
+      ptr = &ptr[chunk_len + 1];
+    }
+
+  nitems = array->len;
+  g_ptr_array_add (array, NULL);
+
+  if (list)
+    *list = (gchar **) g_ptr_array_free (array, FALSE);
+  else
+    g_ptr_array_free (array, TRUE);
+
+  return nitems;
 }
 
 static gchar *
