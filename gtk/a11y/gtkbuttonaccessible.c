@@ -100,10 +100,6 @@ get_label_from_button (GtkWidget *button)
   GtkWidget *child;
 
   child = gtk_bin_get_child (GTK_BIN (button));
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (GTK_IS_ALIGNMENT (child))
-    child = gtk_bin_get_child (GTK_BIN (child));
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (GTK_IS_CONTAINER (child))
     child = find_label_child (GTK_CONTAINER (child));

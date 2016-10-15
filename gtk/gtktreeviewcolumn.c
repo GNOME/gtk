@@ -25,7 +25,6 @@
 #include "gtktreeprivate.h"
 #include "gtkcelllayout.h"
 #include "gtkbutton.h"
-#include "deprecated/gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtkmarshalers.h"
@@ -130,7 +129,7 @@ struct _GtkTreeViewColumnPrivate
   GtkWidget *button;
   GtkWidget *child;
   GtkWidget *arrow;
-  GtkWidget *alignment;
+  GtkWidget *frame;
   GdkWindow *window;
   gulong property_changed_signal;
   gfloat xalign;
@@ -831,9 +830,9 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 		    G_CALLBACK (gtk_tree_view_column_button_clicked),
 		    tree_column);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  priv->alignment = gtk_alignment_new (priv->xalign, 0.5, 0.0, 0.0);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  priv->frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), GTK_SHADOW_NONE);
+  gtk_widget_set_halign (priv->frame, GTK_ALIGN_START);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
@@ -852,20 +851,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (priv->xalign <= 0.5)
     {
-      gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->frame, TRUE, TRUE);
       gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE);
     }
   else
     {
       gtk_box_pack_start (GTK_BOX (hbox), priv->arrow, FALSE, FALSE);
-      gtk_box_pack_start (GTK_BOX (hbox), priv->alignment, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->frame, TRUE, TRUE);
     }
 
-  gtk_container_add (GTK_CONTAINER (priv->alignment), child);
+  gtk_container_add (GTK_CONTAINER (priv->frame), child);
   gtk_container_add (GTK_CONTAINER (priv->button), hbox);
 
   gtk_widget_show (hbox);
-  gtk_widget_show (priv->alignment);
+  gtk_widget_show (priv->frame);
 }
 
 static void 
@@ -874,7 +873,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   GtkTreeViewColumnPrivate *priv = tree_column->priv;
   gint sort_column_id = -1;
   GtkWidget *hbox;
-  GtkWidget *alignment;
+  GtkWidget *frame;
   GtkWidget *arrow;
   GtkWidget *current_child;
   const gchar *icon_name = "missing-image";
@@ -886,22 +885,18 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     model = NULL;
 
   hbox = gtk_bin_get_child (GTK_BIN (priv->button));
-  alignment = priv->alignment;
+  frame = priv->frame;
   arrow = priv->arrow;
-  current_child = gtk_bin_get_child (GTK_BIN (alignment));
+  current_child = gtk_bin_get_child (GTK_BIN (frame));
 
   /* Set up the actual button */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_alignment_set (GTK_ALIGNMENT (alignment), priv->xalign, 0.5, 0.0, 0.0);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      
   if (priv->child)
     {
       if (current_child != priv->child)
 	{
-	  gtk_container_remove (GTK_CONTAINER (alignment),
+          gtk_container_remove (GTK_CONTAINER (frame),
 				current_child);
-	  gtk_container_add (GTK_CONTAINER (alignment),
+          gtk_container_add (GTK_CONTAINER (frame),
 			     priv->child);
 	}
     }
@@ -911,7 +906,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	{
 	  current_child = gtk_label_new (NULL);
 	  gtk_widget_show (current_child);
-	  gtk_container_add (GTK_CONTAINER (alignment),
+          gtk_container_add (GTK_CONTAINER (frame),
 			     current_child);
 	}
 

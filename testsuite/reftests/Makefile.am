@@ -77,9 +77,6 @@ testdata = \
 	actionbar.css \
 	actionbar.ref.ui \
 	actionbar.ui \
-	alignment-props.css \
-	alignment-props.ref.ui \
-	alignment-props.ui \
 	animation-direction.css \
 	animation-direction.ref.ui \
 	animation-direction.ui \

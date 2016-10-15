@@ -332,27 +332,6 @@ gtk_adjustment_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkalignment</FILE>
-<TITLE>GtkAlignment</TITLE>
-GtkAlignment
-GtkAlignmentClass
-gtk_alignment_new
-gtk_alignment_set
-gtk_alignment_get_padding
-gtk_alignment_set_padding
-<SUBSECTION Standard>
-GTK_ALIGNMENT
-GTK_IS_ALIGNMENT
-GTK_TYPE_ALIGNMENT
-GTK_ALIGNMENT_CLASS
-GTK_IS_ALIGNMENT_CLASS
-GTK_ALIGNMENT_GET_CLASS
-<SUBSECTION Private>
-gtk_alignment_get_type
-GtkAlignmentPrivate
-</SECTION>
-
-<SECTION>
 <FILE>gtkassistant</FILE>
 <TITLE>GtkAssistant</TITLE>
 GtkAssistant

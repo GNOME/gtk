@@ -1380,10 +1380,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment1">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1411,10 +1411,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">out</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment2">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1441,10 +1441,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="can_focus">False</property>
                     <property name="label_xalign">0</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment3">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1472,10 +1472,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">etched-out</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment4">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <placeholder/>
                         </child>

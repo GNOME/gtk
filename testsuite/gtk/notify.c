@@ -556,11 +556,6 @@ test_type (gconstpointer data)
            g_str_equal (pspec->name, "stock-detail")))
         continue;
 
-       if (g_str_equal (g_type_name (pspec->owner_type), "GtkArrow") ||
-          g_str_equal (g_type_name (pspec->owner_type), "GtkAlignment") ||
-          g_str_equal (g_type_name (pspec->owner_type), "GtkMisc"))
-        continue;
-
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_MENU) &&
 	  g_str_equal (pspec->name, "tearoff-state"))
         continue;

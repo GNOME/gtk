@@ -26,7 +26,6 @@ enum {
   TEST_WIDGET_LABEL,
   TEST_WIDGET_VERTICAL_LABEL,
   TEST_WIDGET_WRAP_LABEL,
-  TEST_WIDGET_ALIGNMENT,
   TEST_WIDGET_IMAGE,
   TEST_WIDGET_BUTTON,
   TEST_WIDGET_LAST
@@ -64,36 +63,6 @@ create_button (void)
   return gtk_button_new_with_label ("BUTTON!");
 }
 
-static gboolean
-on_draw_alignment (GtkWidget      *widget,
-                   cairo_t        *cr,
-                   void           *data)
-{
-  cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
-  cairo_paint (cr);
-
-  return FALSE;
-}
-
-static GtkWidget*
-create_alignment (void)
-{
-  GtkWidget *alignment;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  /* make the alignment visible */
-  gtk_widget_set_redraw_on_allocate (alignment, TRUE);
-  g_signal_connect (G_OBJECT (alignment),
-                    "draw",
-                    G_CALLBACK (on_draw_alignment),
-                    NULL);
-
-  return alignment;
-}
-
 static void
 open_test_window (void)
 {
@@ -113,7 +82,6 @@ open_test_window (void)
   test_widgets[TEST_WIDGET_VERTICAL_LABEL] = create_label (TRUE, FALSE);
   test_widgets[TEST_WIDGET_WRAP_LABEL] = create_label (FALSE, TRUE);
   test_widgets[TEST_WIDGET_BUTTON] = create_button ();
-  test_widgets[TEST_WIDGET_ALIGNMENT] = create_alignment ();
 
   grid = gtk_grid_new ();
 

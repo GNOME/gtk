@@ -125,7 +125,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkToolItemGroup, gtk_tool_item_group, GTK_TYPE_CONTAIN
                                                 gtk_tool_item_group_tool_shell_init));
 
 static GtkWidget*
-gtk_tool_item_group_get_alignment (GtkToolItemGroup *group)
+gtk_tool_item_group_get_frame (GtkToolItemGroup *group)
 {
   return gtk_bin_get_child (GTK_BIN (group->priv->header));
 }
@@ -335,8 +335,8 @@ gtk_tool_item_group_header_clicked_cb (GtkButton *button,
 static void
 gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
 {
-  GtkWidget *alignment = gtk_tool_item_group_get_alignment (group);
-  GtkWidget *label_widget = gtk_bin_get_child (GTK_BIN (alignment));
+  GtkWidget *frame = gtk_bin_get_child (GTK_BIN (group->priv->header));
+  GtkWidget *label_widget = gtk_bin_get_child (GTK_BIN (frame));
   GtkWidget *widget = GTK_WIDGET (group);
   GtkToolItemGroupPrivate* priv = group->priv;
   gint dx = 0, dy = 0;
@@ -346,8 +346,6 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
                         "header-spacing", &(priv->header_spacing),
                         "expander-size", &(priv->expander_size),
                         NULL);
-  
-  gtk_widget_set_size_request (alignment, -1, priv->expander_size);
 
   switch (gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group)))
     {
@@ -375,9 +373,8 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
         break;
     }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), dy, 0, dx, 0);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_widget_set_margin_start (frame, dx);
+  gtk_widget_set_margin_top (frame, dy);
 }
 
 static void
@@ -398,7 +395,7 @@ update_arrow_state (GtkToolItemGroup *group)
 static void
 gtk_tool_item_group_init (GtkToolItemGroup *group)
 {
-  GtkWidget *alignment;
+  GtkWidget *frame;
   GtkToolItemGroupPrivate* priv;
   GtkCssNode *widget_node;
 
@@ -414,21 +411,20 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   priv->label_widget = gtk_label_new (NULL);
   gtk_widget_set_halign (priv->label_widget, GTK_ALIGN_START);
   gtk_widget_set_valign (priv->label_widget, GTK_ALIGN_CENTER);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-G_GNUC_END_IGNORE_DEPRECATIONS
-  gtk_container_add (GTK_CONTAINER (alignment), priv->label_widget);
-  gtk_widget_show_all (alignment);
+  frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
+  gtk_container_add (GTK_CONTAINER (frame), priv->label_widget);
+  gtk_widget_show_all (frame);
 
   priv->header = gtk_button_new ();
   g_object_ref_sink (priv->header);
   gtk_widget_set_focus_on_click (priv->header, FALSE);
-  gtk_container_add (GTK_CONTAINER (priv->header), alignment);
+  gtk_container_add (GTK_CONTAINER (priv->header), frame);
   gtk_widget_set_parent (priv->header, GTK_WIDGET (group));
 
   gtk_tool_item_group_header_adjust_style (group);
 
-  g_signal_connect_after (alignment, "draw",
+  g_signal_connect_after (frame, "draw",
                           G_CALLBACK (gtk_tool_item_group_header_draw_cb),
                           group);
 
@@ -1763,7 +1759,7 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
                                       GtkWidget        *label_widget)
 {
   GtkToolItemGroupPrivate* priv;
-  GtkWidget *alignment;
+  GtkWidget *frame;
 
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
@@ -1774,17 +1770,17 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
   if (priv->label_widget == label_widget)
     return;
 
-  alignment = gtk_tool_item_group_get_alignment (group);
+  frame = gtk_tool_item_group_get_frame (group);
 
   if (priv->label_widget)
     {
       gtk_widget_set_state_flags (priv->label_widget, 0, TRUE);
-      gtk_container_remove (GTK_CONTAINER (alignment), priv->label_widget);
+      gtk_container_remove (GTK_CONTAINER (frame), priv->label_widget);
     }
 
 
   if (label_widget)
-      gtk_container_add (GTK_CONTAINER (alignment), label_widget);
+      gtk_container_add (GTK_CONTAINER (frame), label_widget);
 
   priv->label_widget = label_widget;
 
@@ -1841,14 +1837,14 @@ gtk_tool_item_group_force_expose (GtkToolItemGroup *group)
 
   if (gtk_widget_get_realized (priv->header))
     {
-      GtkAllocation alignment_allocation;
-      GtkWidget *alignment = gtk_tool_item_group_get_alignment (group);
+      GtkAllocation frame_allocation;
+      GtkWidget *frame = gtk_tool_item_group_get_frame (group);
       GdkRectangle area;
 
       /* Find the header button's arrow area... */
-      gtk_widget_get_allocation (alignment, &alignment_allocation);
-      area.x = alignment_allocation.x;
-      area.y = alignment_allocation.y + (alignment_allocation.height - priv->expander_size) / 2;
+      gtk_widget_get_allocation (frame, &frame_allocation);
+      area.x = frame_allocation.x;
+      area.y = frame_allocation.y + (frame_allocation.height - priv->expander_size) / 2;
       area.height = priv->expander_size;
       area.width = priv->expander_size;
 
@@ -2022,9 +2018,9 @@ gtk_tool_item_group_get_label (GtkToolItemGroup *group)
 GtkWidget*
 gtk_tool_item_group_get_label_widget (GtkToolItemGroup *group)
 {
-  GtkWidget *alignment = gtk_tool_item_group_get_alignment (group);
+  GtkWidget *frame = gtk_tool_item_group_get_frame (group);
 
-  return gtk_bin_get_child (GTK_BIN (alignment));
+  return gtk_bin_get_child (GTK_BIN (frame));
 }
 
 /**
