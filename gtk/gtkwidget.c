@@ -5206,13 +5206,13 @@ gtk_widget_queue_allocate (GtkWidget *widget)
   gtk_widget_set_alloc_needed (widget);
 }
 
-/**
+/*
  * gtk_widget_queue_resize_internal:
  * @widget: a #GtkWidget
  * 
  * Queue a resize on a widget, and on all other widgets grouped with this widget.
- **/
-void
+ */
+static void
 gtk_widget_queue_resize_internal (GtkWidget *widget)
 {
   GSList *groups, *l, *widgets;
@@ -15223,8 +15223,8 @@ gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                        intent);
 }
 
-GtkActionMuxer *
-_gtk_widget_get_parent_muxer (GtkWidget *widget,
+static GtkActionMuxer *
+gtk_widget_get_parent_muxer (GtkWidget *widget,
                               gboolean   create)
 {
   GtkWidget *parent;
@@ -15255,7 +15255,7 @@ _gtk_widget_update_parent_muxer (GtkWidget *widget)
     return;
 
   gtk_action_muxer_set_parent (muxer,
-                               _gtk_widget_get_parent_muxer (widget, TRUE));
+                               gtk_widget_get_parent_muxer (widget, TRUE));
 }
 
 GtkActionMuxer *
@@ -15280,7 +15280,7 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
       return muxer;
     }
   else
-    return _gtk_widget_get_parent_muxer (widget, FALSE);
+    return gtk_widget_get_parent_muxer (widget, FALSE);
 }
 
 /**
