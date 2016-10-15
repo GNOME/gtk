@@ -73,7 +73,7 @@ static gboolean    gtk_cell_view_draw                     (GtkWidget        *wid
                                                            cairo_t          *cr);
 static void        gtk_cell_view_set_value                (GtkCellView     *cell_view,
                                                            GtkCellRenderer *renderer,
-                                                           gchar           *property,
+                                                           const char      *property,
                                                            GValue          *value);
 static void        gtk_cell_view_set_cell_data            (GtkCellView      *cell_view);
 
@@ -1211,7 +1211,7 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
 static void
 gtk_cell_view_set_value (GtkCellView     *cell_view,
                          GtkCellRenderer *renderer,
-                         gchar           *property,
+                         const char      *property,
                          GValue          *value)
 {
   g_object_set_property (G_OBJECT (renderer), property, value);
