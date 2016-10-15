@@ -240,6 +240,8 @@ gtk_delayed_font_description_get (GtkDelayedFontDescription *desc)
 }
 
 #define GTK_TYPE_DELAYED_FONT_DESCRIPTION (gtk_delayed_font_description_get_type ())
+GType gtk_delayed_font_description_get_type (void);
+
 G_DEFINE_BOXED_TYPE (GtkDelayedFontDescription, gtk_delayed_font_description,
                      gtk_delayed_font_description_ref,
                      gtk_delayed_font_description_unref)
