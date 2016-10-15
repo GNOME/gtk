@@ -31,56 +31,6 @@
 
 static cairo_surface_t *surface = NULL;
 
-/* Information about cursor */
-
-static gint cursor_proximity = TRUE;
-static gdouble cursor_x;
-static gdouble cursor_y;
-
-/* Unique ID of current device */
-static GdkDevice *current_device;
-
-/* Erase the old cursor, and/or draw a new one, if necessary */
-static void
-update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
-{
-  static gint cursor_present = 0;
-  gint state = !gdk_device_get_has_cursor (current_device) && cursor_proximity;
-
-  x = floor (x);
-  y = floor (y);
-
-  if (surface != NULL)
-    {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (widget));
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-      if (cursor_present && (cursor_present != state ||
-			     x != cursor_x || y != cursor_y))
-	{
-          cairo_set_source_surface (cr, surface, 0, 0);
-          cairo_rectangle (cr, cursor_x - 5, cursor_y - 5, 10, 10);
-          cairo_fill (cr);
-	}
-
-      cursor_present = state;
-      cursor_x = x;
-      cursor_y = y;
-
-      if (cursor_present)
-	{
-          cairo_set_source_rgb (cr, 0, 0, 0);
-          cairo_rectangle (cr, 
-                           cursor_x - 5, cursor_y -5,
-			   10, 10);
-          cairo_fill (cr);
-	}
-
-      cairo_destroy (cr);
-    }
-}
-
 /* Create a new backing surface of the appropriate size */
 static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
@@ -184,9 +134,6 @@ print_axes (GdkDevice *device, gdouble *axes)
 static gint
 button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
-  current_device = event->device;
-  cursor_proximity = TRUE;
-
   if (event->button == GDK_BUTTON_PRIMARY &&
       surface != NULL)
     {
@@ -199,8 +146,6 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
 
       motion_time = event->time;
     }
-
-  update_cursor (widget, event->x, event->y);
 
   return TRUE;
 }
@@ -222,9 +167,6 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
   GdkTimeCoord **events;
   gint n_events;
   int i;
-
-  current_device = event->device;
-  cursor_proximity = TRUE;
 
   if (event->state & GDK_BUTTON1_MASK && surface != NULL)
     {
@@ -260,7 +202,6 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 
 
   print_axes (event->device, event->axes);
-  update_cursor (widget, event->x, event->y);
 
   return TRUE;
 }
@@ -271,16 +212,12 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 static gint
 proximity_out_event (GtkWidget *widget, GdkEventProximity *event)
 {
-  cursor_proximity = FALSE;
-  update_cursor (widget, cursor_x, cursor_y);
   return TRUE;
 }
 
 static gint
 leave_notify_event (GtkWidget *widget, GdkEventCrossing *event)
 {
-  cursor_proximity = FALSE;
-  update_cursor (widget, cursor_x, cursor_y);
   return TRUE;
 }
 
@@ -305,7 +242,6 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   seat = gdk_display_get_default_seat (gdk_display_get_default ());
-  current_device = gdk_seat_get_pointer (seat);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "Test Input");
