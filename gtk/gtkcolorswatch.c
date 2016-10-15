@@ -778,7 +778,7 @@ gtk_color_swatch_new (void)
 }
 
 static const GtkTargetEntry dnd_targets[] = {
-  { "application/x-color", 0 }
+  { (char *) "application/x-color", 0 }
 };
 
 void

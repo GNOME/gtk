@@ -302,12 +302,12 @@ enum {
 
 /* Target types for dragging from the shortcuts list */
 static const GtkTargetEntry dnd_source_targets[] = {
-  { "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET, DND_GTK_SIDEBAR_ROW }
+  { (char *) "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET, DND_GTK_SIDEBAR_ROW }
 };
 
 /* Target types for dropping into the shortcuts list */
 static const GtkTargetEntry dnd_drop_targets [] = {
-  { "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET, DND_GTK_SIDEBAR_ROW }
+  { (char *) "DND_GTK_SIDEBAR_ROW", GTK_TARGET_SAME_WIDGET, DND_GTK_SIDEBAR_ROW }
 };
 
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
@@ -909,7 +909,7 @@ update_places (GtkPlacesSidebar *sidebar)
   GVolume *volume;
   GSList *bookmarks, *sl;
   gint index;
-  gchar *original_uri, *mount_uri, *name, *identifier;
+  gchar *original_uri, *name, *identifier;
   GtkListBoxRow *selected;
   gchar *home_uri;
   GIcon *icon;
@@ -943,11 +943,10 @@ update_places (GtkPlacesSidebar *sidebar)
   /* add built-in places */
   if (should_show_recent (sidebar))
     {
-      mount_uri = "recent:///";
       icon = g_themed_icon_new_with_default_fallbacks ("document-open-recent-symbolic");
       add_place (sidebar, PLACES_BUILT_IN,
                  SECTION_COMPUTER,
-                 _("Recent"), icon, mount_uri,
+                 _("Recent"), icon, "recent:///",
                  NULL, NULL, NULL, 0,
                  _("Recent files"));
       g_object_unref (icon);
@@ -967,7 +966,7 @@ update_places (GtkPlacesSidebar *sidebar)
   /* desktop */
   if (sidebar->show_desktop)
     {
-      mount_uri = get_desktop_directory_uri ();
+      char *mount_uri = get_desktop_directory_uri ();
       if (mount_uri)
         {
           icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_DESKTOP);
@@ -998,11 +997,10 @@ update_places (GtkPlacesSidebar *sidebar)
   /* Trash */
   if (!sidebar->local_only && sidebar->show_trash)
     {
-      mount_uri = "trash:///"; /* No need to strdup */
       icon = _gtk_trash_monitor_get_icon (sidebar->trash_monitor);
       sidebar->trash_row = add_place (sidebar, PLACES_BUILT_IN,
                                       SECTION_COMPUTER,
-                                      _("Trash"), icon, mount_uri,
+                                      _("Trash"), icon, "trash:///",
                                       NULL, NULL, NULL, 0,
                                       _("Open the trash"));
       g_object_add_weak_pointer (G_OBJECT (sidebar->trash_row),
@@ -1045,6 +1043,8 @@ update_places (GtkPlacesSidebar *sidebar)
               mount = g_volume_get_mount (volume);
               if (mount != NULL)
                 {
+                  char *mount_uri;
+
                   /* Show mounted volume in the sidebar */
                   icon = g_mount_get_symbolic_icon (mount);
                   root = g_mount_get_default_location (mount);
@@ -1149,6 +1149,8 @@ update_places (GtkPlacesSidebar *sidebar)
       mount = g_volume_get_mount (volume);
       if (mount != NULL)
         {
+          char *mount_uri;
+
           icon = g_mount_get_symbolic_icon (mount);
           root = g_mount_get_default_location (mount);
           mount_uri = g_file_get_uri (root);
@@ -1184,11 +1186,10 @@ update_places (GtkPlacesSidebar *sidebar)
   /* file system root */
   if (!sidebar->show_other_locations)
     {
-      mount_uri = "file:///"; /* No need to strdup */
       icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_FILESYSTEM);
       add_place (sidebar, PLACES_BUILT_IN,
                  SECTION_MOUNTS,
-                 sidebar->hostname, icon, mount_uri,
+                 sidebar->hostname, icon, "file:///",
                  NULL, NULL, NULL, 0,
                  _("Open the contents of the file system"));
       g_object_unref (icon);
@@ -1199,6 +1200,8 @@ update_places (GtkPlacesSidebar *sidebar)
 
   for (l = mounts; l != NULL; l = l->next)
     {
+      char *mount_uri;
+
       mount = l->data;
       if (g_mount_is_shadowed (mount))
         {
@@ -1325,6 +1328,8 @@ update_places (GtkPlacesSidebar *sidebar)
       network_mounts = g_list_reverse (network_mounts);
       for (l = network_mounts; l != NULL; l = l->next)
         {
+          char *mount_uri;
+
           mount = l->data;
           root = g_mount_get_default_location (mount);
           icon = g_mount_get_symbolic_icon (mount);

@@ -7125,7 +7125,7 @@ gtk_icon_view_get_reorderable (GtkIconView *icon_view)
 }
 
 static const GtkTargetEntry item_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
+  { (char *) "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 }
 };
 
 

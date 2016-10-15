@@ -271,7 +271,7 @@ struct _GtkWindowPrivate
 };
 
 static const GtkTargetEntry dnd_dest_targets [] = {
-  { "application/x-rootwindow-drop", 0, 0 },
+  { (char *) "application/x-rootwindow-drop", 0, 0 },
 };
 
 enum {

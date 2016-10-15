@@ -609,7 +609,7 @@ gtk_accel_map_load_scanner (GScanner *scanner)
   skip_comment_single = scanner->config->skip_comment_single;
   scanner->config->skip_comment_single = TRUE;
   cpair_comment_single = scanner->config->cpair_comment_single;
-  scanner->config->cpair_comment_single = ";\n";
+  scanner->config->cpair_comment_single = (char *) ";\n";
   symbol_2_token = scanner->config->symbol_2_token;
   scanner->config->symbol_2_token = FALSE;
   saved_symbol = g_scanner_lookup_symbol (scanner, "gtk_accel_path");

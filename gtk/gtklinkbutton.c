@@ -128,8 +128,8 @@ static gboolean gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
 static gboolean gtk_link_button_activate_link (GtkLinkButton *link_button);
 
 static const GtkTargetEntry link_drop_types[] = {
-  { "text/uri-list", 0, 0 },
-  { "_NETSCAPE_URL", 0, 0 }
+  { (char *) "text/uri-list", 0, 0 },
+  { (char *) "_NETSCAPE_URL", 0, 0 }
 };
 
 static guint link_signals[LAST_SIGNAL] = { 0, };

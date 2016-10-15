@@ -2070,7 +2070,7 @@ gtk_clipboard_real_set_can_store (GtkClipboard         *clipboard,
   GtkWidget *clipboard_widget;
   int i;
   static const GtkTargetEntry save_targets[] = {
-    { "SAVE_TARGETS", 0, TARGET_SAVE_TARGETS }
+    { (char *) "SAVE_TARGETS", 0, TARGET_SAVE_TARGETS }
   };
   
   if (clipboard->selection != GDK_SELECTION_CLIPBOARD)

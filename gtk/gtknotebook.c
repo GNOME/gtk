@@ -313,12 +313,12 @@ struct _GtkNotebookPage
 };
 
 static const GtkTargetEntry src_notebook_targets [] = {
-  { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
-  { "application/x-rootwindow-drop", 0, 0 },
+  { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
+  { (char *) "application/x-rootwindow-drop", 0, 0 },
 };
 
 static const GtkTargetEntry dst_notebook_targets [] = {
-  { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
+  { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
 };
 
 /*** GtkNotebook Methods ***/

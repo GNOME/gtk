@@ -2513,21 +2513,21 @@ gtk_settings_set_double_property (GtkSettings *settings,
 
 static const GScannerConfig gtk_rc_scanner_config =
 {
-  (
+  (char *) (
    " \t\r\n"
    )			/* cset_skip_characters */,
-  (
+  (char *) (
    "_"
    G_CSET_a_2_z
    G_CSET_A_2_Z
    )			/* cset_identifier_first */,
-  (
+  (char *) (
    G_CSET_DIGITS
    "-_"
    G_CSET_a_2_z
    G_CSET_A_2_Z
    )			/* cset_identifier_nth */,
-  ( "#\n" )		/* cpair_comment_single */,
+  (char *) ( "#\n" )	/* cpair_comment_single */,
   
   TRUE			/* case_sensitive */,
   

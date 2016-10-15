@@ -185,8 +185,8 @@ static GdkAtom dnd_target_atom_group = GDK_NONE;
 
 static const GtkTargetEntry dnd_targets[] =
 {
-  { "application/x-gtk-tool-palette-item", GTK_TARGET_SAME_APP, 0 },
-  { "application/x-gtk-tool-palette-group", GTK_TARGET_SAME_APP, 0 },
+  { (char *) "application/x-gtk-tool-palette-item", GTK_TARGET_SAME_APP, 0 },
+  { (char *) "application/x-gtk-tool-palette-group", GTK_TARGET_SAME_APP, 0 },
 };
 
 static void gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,

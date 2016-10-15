@@ -130,7 +130,7 @@ static void gtk_color_button_drag_data_received (GtkWidget        *widget,
 
 static guint color_button_signals[LAST_SIGNAL] = { 0 };
 
-static const GtkTargetEntry drop_types[] = { { "application/x-color", 0, 0 } };
+static const GtkTargetEntry drop_types[] = { { (char *) "application/x-color", 0, 0 } };
 
 static void gtk_color_button_iface_init (GtkColorChooserInterface *iface);
 

@@ -1345,7 +1345,7 @@ create_signal_scanner (void)
   GScanner *scanner;
 
   scanner = g_scanner_new (NULL);
-  scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_";
+  scanner->config->cset_identifier_nth = (char *) G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_";
 
   g_scanner_scope_add_symbol (scanner, 0, "bind", GUINT_TO_POINTER (GTK_BINDING_TOKEN_BIND));
   g_scanner_scope_add_symbol (scanner, 0, "unbind", GUINT_TO_POINTER (GTK_BINDING_TOKEN_UNBIND));
