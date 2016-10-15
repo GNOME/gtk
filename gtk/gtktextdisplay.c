@@ -77,6 +77,7 @@
 #include "config.h"
 #include "gtktextattributesprivate.h"
 #include "gtktextdisplay.h"
+#include "gtktextviewprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkintl.h"
@@ -165,9 +166,6 @@ get_item_appearance (PangoItem *item)
 
   return NULL;
 }
-
-extern GtkCssNode *gtk_text_view_get_text_node      (GtkTextView *text_view);
-extern GtkCssNode *gtk_text_view_get_selection_node (GtkTextView *text_view);
 
 static void
 gtk_text_renderer_prepare_run (PangoRenderer  *renderer,

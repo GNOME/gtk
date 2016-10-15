@@ -564,6 +564,7 @@ gtk_private_h_sources =		\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
 	gtktextutil.h		\
+	gtktextviewprivate.h	\
 	gtktrashmonitor.h	\
 	gtktogglebuttonprivate.h \
 	gtktoolbarprivate.h	\

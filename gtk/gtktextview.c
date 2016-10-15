@@ -25,6 +25,8 @@
 
 #include "config.h"
 
+#include "gtktextviewprivate.h"
+
 #include <string.h>
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
@@ -43,7 +45,6 @@
 #include "gtkselectionprivate.h"
 #include "gtktextbufferrichtext.h"
 #include "gtktextdisplay.h"
-#include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gtkprivate.h"
 #include "gtktextutil.h"
