@@ -1155,7 +1155,7 @@ unblock_selection_changed (GtkInspectorObjectTree *wt)
   g_signal_handlers_unblock_by_func (selection, on_selection_changed, wt);
 }
 
-gboolean
+static gboolean
 select_object_internal (GtkInspectorObjectTree *wt,
                         GObject                *object,
                         gboolean                activate)
