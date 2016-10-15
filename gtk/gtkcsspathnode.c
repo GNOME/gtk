@@ -44,7 +44,7 @@ gtk_css_path_node_invalidate (GtkCssNode *node)
     gtk_style_context_validate (path_node->context, NULL);
 }
 
-gboolean
+static gboolean
 gtk_css_path_node_real_init_matcher (GtkCssNode     *node,
                                      GtkCssMatcher  *matcher)
 {

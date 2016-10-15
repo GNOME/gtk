@@ -373,18 +373,18 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   return blur_cr;
 }
 
-void
+static void
 mask_surface_repeat (cairo_t         *cr,
                      cairo_surface_t *surface)
 {
-    cairo_pattern_t *pattern;
+  cairo_pattern_t *pattern;
 
-    pattern = cairo_pattern_create_for_surface (surface);
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+  pattern = cairo_pattern_create_for_surface (surface);
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
-    cairo_mask (cr, pattern);
+  cairo_mask (cr, pattern);
 
-    cairo_pattern_destroy (pattern);
+  cairo_pattern_destroy (pattern);
 }
 
 static cairo_t *
@@ -421,6 +421,8 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
 
 static const cairo_user_data_key_t radius_key;
 static const cairo_user_data_key_t layout_serial_key;
+
+GQuark pango_cached_blurred_surface_quark (void);
 
 G_DEFINE_QUARK (GtkCssShadowValue pango_cached_blurred_surface, pango_cached_blurred_surface)
 

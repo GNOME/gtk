@@ -178,7 +178,7 @@ widget_needs_widget_path (GtkWidget *widget)
   return TRUE;
 }
 
-gboolean
+static gboolean
 gtk_css_widget_node_init_matcher (GtkCssNode     *node,
                                   GtkCssMatcher  *matcher)
 {

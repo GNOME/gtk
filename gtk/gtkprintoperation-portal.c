@@ -467,7 +467,7 @@ prepare_print_called (GObject      *source,
   g_variant_unref (ret);
 }
 
-PortalData *
+static PortalData *
 create_portal_data (GtkPrintOperation          *op,
                     GtkWindow                  *parent,
                     GtkPrintOperationPrintFunc  print_cb)

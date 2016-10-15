@@ -243,7 +243,7 @@ init_compose_table_thread_cb (GTask            *task,
   gtk_im_context_simple_init_compose_table (GTK_IM_CONTEXT_SIMPLE (task_data));
 }
 
-void
+static void
 init_compose_table_async (GtkIMContextSimple   *im_context_simple,
                           GCancellable         *cancellable,
                           GAsyncReadyCallback   callback,

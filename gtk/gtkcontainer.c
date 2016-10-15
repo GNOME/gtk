@@ -2252,7 +2252,7 @@ get_focus_chain (GtkContainer *container)
 
 /* same as gtk_container_get_children, except it includes internals
  */
-GList *
+static GList *
 gtk_container_get_all_children (GtkContainer *container)
 {
   GList *children = NULL;

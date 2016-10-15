@@ -81,7 +81,7 @@ gtk_css_style_render_icon (GtkCssStyle            *style,
   cairo_set_matrix (cr, &saved_matrix);
 }
 
-gboolean
+static gboolean
 get_surface_extents (cairo_surface_t *surface,
                      GdkRectangle    *out_extents)
 {

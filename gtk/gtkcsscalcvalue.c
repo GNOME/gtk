@@ -310,7 +310,7 @@ gtk_css_calc_value_new_sum (GtkCssValue *value1,
 GtkCssValue *   gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
                                               GtkCssNumberParseFlags  flags);
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_calc_value_parse_value (GtkCssParser           *parser,
                                 GtkCssNumberParseFlags  flags)
 {
@@ -346,7 +346,7 @@ is_number (GtkCssValue *value)
       && !gtk_css_number_value_has_percent (value);
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_calc_value_parse_product (GtkCssParser           *parser,
                                   GtkCssNumberParseFlags  flags)
 {

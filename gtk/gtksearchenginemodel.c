@@ -59,7 +59,7 @@ gtk_search_engine_model_dispose (GObject *object)
   G_OBJECT_CLASS (_gtk_search_engine_model_parent_class)->dispose (object);
 }
 
-gboolean
+static gboolean
 info_matches_query (GtkQuery  *query,
                     GFileInfo *info)
 {

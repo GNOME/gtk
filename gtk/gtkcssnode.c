@@ -474,7 +474,7 @@ gtk_css_node_real_validate (GtkCssNode *node)
 {
 }
 
-gboolean
+static gboolean
 gtk_css_node_real_init_matcher (GtkCssNode     *cssnode,
                                 GtkCssMatcher  *matcher)
 {
@@ -1338,7 +1338,7 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
   gtk_css_node_invalidate_style (cssnode);
 }
 
-void
+static void
 gtk_css_node_validate_internal (GtkCssNode *cssnode,
                                 gint64      timestamp)
 {

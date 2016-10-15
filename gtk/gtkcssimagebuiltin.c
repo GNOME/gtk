@@ -376,7 +376,7 @@ add_path_line (cairo_t        *cr,
   cairo_line_to (cr, x2, y2);
 }
 
-void
+static void
 gtk_css_image_builtin_draw_grip (GtkCssImage            *image,
                                  cairo_t                *cr,
                                  double                  width,
@@ -627,7 +627,7 @@ gtk_css_image_builtin_draw_grip (GtkCssImage            *image,
     }
 }
 
-void
+static void
 gtk_css_image_builtin_draw_pane_separator (GtkCssImage *image,
                                            cairo_t     *cr,
                                            double       width,
@@ -650,7 +650,7 @@ gtk_css_image_builtin_draw_pane_separator (GtkCssImage *image,
       render_dot (cr, &lighter, &darker, width / 2 - 1, yy, 3);
 }
 
-void
+static void
 gtk_css_image_builtin_draw_handle (GtkCssImage *image,
                                    cairo_t     *cr,
                                    double       width,

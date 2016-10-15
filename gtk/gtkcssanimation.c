@@ -76,7 +76,7 @@ gtk_css_animation_get_progress (GtkCssAnimation *animation)
   return gtk_progress_tracker_get_progress (&animation->tracker, reverse);
 }
 
-GtkStyleAnimation *
+static GtkStyleAnimation *
 gtk_css_animation_advance (GtkStyleAnimation    *style_animation,
                            gint64                timestamp)
 {
