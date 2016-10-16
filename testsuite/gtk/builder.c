@@ -1921,13 +1921,8 @@ test_add_objects (void)
   GError *error;
   gint ret;
   GObject *obj;
-  GtkWidget *menubar;
-  GObject *menu, *label;
-  GList *children;
   gchar *objects[2] = {"mainbox", NULL};
   gchar *objects2[3] = {"mainbox", "window2", NULL};
-  gchar *objects3[3] = {"uimgr1", "menubar1"};
-  gchar *objects4[2] = {"uimgr1", NULL};
   const gchar buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window\">"

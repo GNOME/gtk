@@ -34,7 +34,6 @@ TESTS_ENVIRONMENT = \
 TEST_PROGS += 			\
 	accel			\
 	accessible		\
-	action			\
 	adjustment		\
 	bitmask			\
 	builder			\

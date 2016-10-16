@@ -244,7 +244,6 @@
 #include <gtk/gtkwindowgroup.h>
 
 #ifndef GTK_DISABLE_DEPRECATED
-#include <gtk/deprecated/gtkaction.h>
 #include <gtk/deprecated/gtkgradient.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
 #endif /* GTK_DISABLE_DEPRECATED */
