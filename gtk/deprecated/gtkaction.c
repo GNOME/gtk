@@ -129,8 +129,6 @@ struct _GtkActionPrivate
   GClosure      *accel_closure;
   GQuark         accel_quark;
 
-  GtkActionGroup *action_group;
-
   /* list of proxy widgets */
   GSList *proxies;
 };
@@ -158,7 +156,6 @@ enum
   PROP_HIDE_IF_EMPTY,
   PROP_SENSITIVE,
   PROP_VISIBLE,
-  PROP_ACTION_GROUP,
   PROP_ALWAYS_SHOW_IMAGE
 };
 
@@ -182,8 +179,6 @@ static void gtk_action_get_property (GObject         *object,
 				     guint            prop_id,
 				     GValue          *value,
 				     GParamSpec      *pspec);
-static void gtk_action_set_action_group (GtkAction	*action,
-					 GtkActionGroup *action_group);
 
 static GtkWidget *create_menu_item    (GtkAction *action);
 static GtkWidget *create_tool_item    (GtkAction *action);
@@ -475,22 +470,6 @@ gtk_action_class_init (GtkActionClass *klass)
 							 P_("Whether the action is visible."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
-  /**
-   * GtkAction:action-group:
-   *
-   * The GtkActionGroup this GtkAction is associated with, or NULL
-   * (for internal use).
-   *
-   * Deprecated: 3.10: Lookup the #GAction using g_action_map_lookup_action()
-   * instead
-   */
-  g_object_class_install_property (gobject_class,
-				   PROP_ACTION_GROUP,
-				   g_param_spec_object ("action-group",
-							 P_("Action Group"),
-							 P_("The GtkActionGroup this GtkAction is associated with, or NULL (for internal use)."),
-							 GTK_TYPE_ACTION_GROUP,
-							 GTK_PARAM_READWRITE));
 
   /**
    * GtkAction:always-show-image:
@@ -568,8 +547,6 @@ gtk_action_init (GtkAction *action)
 			 closure_accel_activate);
   g_closure_ref (action->private_data->accel_closure);
   g_closure_sink (action->private_data->accel_closure);
-
-  action->private_data->action_group = NULL;
 
   action->private_data->proxies = NULL;
   action->private_data->gicon = NULL;  
@@ -713,9 +690,6 @@ gtk_action_set_property (GObject         *object,
     case PROP_VISIBLE:
       gtk_action_set_visible (action, g_value_get_boolean (value));
       break;
-    case PROP_ACTION_GROUP:
-      gtk_action_set_action_group (action, g_value_get_object (value));
-      break;
     case PROP_ALWAYS_SHOW_IMAGE:
       gtk_action_set_always_show_image (action, g_value_get_boolean (value));
       break;
@@ -779,9 +753,6 @@ gtk_action_get_property (GObject    *object,
     case PROP_VISIBLE:
       g_value_set_boolean (value, action->private_data->visible);
       break;
-    case PROP_ACTION_GROUP:
-      g_value_set_object (value, action->private_data->action_group);
-      break;
     case PROP_ALWAYS_SHOW_IMAGE:
       g_value_set_boolean (value, action->private_data->always_show_image);
       break;
@@ -827,9 +798,6 @@ connect_proxy (GtkAction *action,
 
   g_object_ref_sink (proxy);
 
-  if (action->private_data->action_group)
-    _gtk_action_group_emit_connect_proxy (action->private_data->action_group, action, proxy);
-
 }
 
 static void
@@ -837,10 +805,8 @@ disconnect_proxy (GtkAction *action,
 		  GtkWidget *proxy)
 {
   remove_proxy (action, proxy);
-
-  if (action->private_data->action_group)
-    _gtk_action_group_emit_disconnect_proxy (action->private_data->action_group, action, proxy);
 }
+
 
 /**
  * _gtk_action_sync_menu_visible:
@@ -887,23 +853,6 @@ _gtk_action_sync_menu_visible (GtkAction *action,
 void
 _gtk_action_emit_activate (GtkAction *action)
 {
-  GtkActionGroup *group = action->private_data->action_group;
-
-  if (group != NULL)
-    {
-      g_object_ref (action);
-      g_object_ref (group);
-      _gtk_action_group_emit_pre_activate (group, action);
-    }
-
-  g_signal_emit (action, action_signals[ACTIVATE], 0);
-
-  if (group != NULL)
-    {
-      _gtk_action_group_emit_post_activate (group, action);
-      g_object_unref (group);
-      g_object_unref (action);
-    }
 }
 
 /**
@@ -1140,9 +1089,7 @@ gtk_action_is_sensitive (GtkAction *action)
   g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
 
   priv = action->private_data;
-  return priv->sensitive &&
-    (priv->action_group == NULL ||
-     gtk_action_group_get_sensitive (priv->action_group));
+  return priv->sensitive;
 }
 
 /**
@@ -1220,9 +1167,7 @@ gtk_action_is_visible (GtkAction *action)
   g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
 
   priv = action->private_data;
-  return priv->visible &&
-    (priv->action_group == NULL ||
-     gtk_action_group_get_visible (priv->action_group));
+  return priv->visible;
 }
 
 /**
@@ -1837,17 +1782,6 @@ closure_accel_activate (GClosure     *closure,
     }
 }
 
-static void
-gtk_action_set_action_group (GtkAction	    *action,
-			     GtkActionGroup *action_group)
-{
-  if (action->private_data->action_group == NULL)
-    g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
-  else
-    g_return_if_fail (action_group == NULL);
-
-  action->private_data->action_group = action_group;
-}
 
 /**
  * gtk_action_set_accel_path:

@@ -1,6 +1,5 @@
 deprecated_h_sources = 			\
 	deprecated/gtkaction.h		\
-	deprecated/gtkactiongroup.h	\
 	deprecated/gtkgradient.h	\
 	deprecated/gtksymboliccolor.h
 
@@ -10,6 +9,5 @@ deprecated_private_h_sources =			\
 
 deprecated_c_sources = 			\
 	deprecated/gtkaction.c		\
-	deprecated/gtkactiongroup.c	\
 	deprecated/gtkgradient.c	\
 	deprecated/gtksymboliccolor.c

@@ -124,7 +124,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testverticalcells		\
 	treestoretest			\
 	testxinerama			\
-	testactions			\
 	testgrouping			\
 	testtooltips			\
 	testexpand			\
@@ -249,7 +248,6 @@ testtreesort_DEPENDENCIES = $(DEPS)
 testverticalcells_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(TEST_DEPS)
 testxinerama_DEPENDENCIES = $(TEST_DEPS)
-testactions_DEPENDENCIES = $(TEST_DEPS)
 testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
@@ -371,9 +369,6 @@ testprint_SOURCES =    	\
 
 testspinbutton_SOURCES =    	\
 	testspinbutton.c
-
-testactions_SOURCES = 		\
-	testactions.c
 
 testbaseline_SOURCES = 		\
 	testbaseline.c

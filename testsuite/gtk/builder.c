@@ -1961,32 +1961,6 @@ test_add_objects (void)
     "    </child>"
     "  </object>"
     "<interface/>";
-  const gchar buffer2[] =
-    "<interface>"
-    "  <object class=\"GtkLabel\" id=\"uimgr1\">"
-    "    <child>"
-    "      <object class=\"GtkActionGroup\" id=\"ag1\">"
-    "        <child>"
-    "          <object class=\"GtkAction\" id=\"file\">"
-    "            <property name=\"label\">_File</property>"
-    "          </object>"
-    "          <accelerator key=\"n\" modifiers=\"GDK_CONTROL_MASK\"/>"
-    "        </child>"
-    "      </object>"
-    "    </child>"
-    "    <ui>"
-    "      <menubar name=\"menubar1\">"
-    "        <menu action=\"file\">"
-    "        </menu>"
-    "      </menubar>"
-    "    </ui>"
-    "  </object>"
-    "  <object class=\"GtkWindow\" id=\"window1\">"
-    "    <child>"
-    "      <object class=\"GtkMenuBar\" id=\"menubar1\" constructor=\"uimgr1\"/>"
-    "    </child>"
-    "  </object>"
-    "</interface>";
 
   error = NULL;
   builder = gtk_builder_new ();
