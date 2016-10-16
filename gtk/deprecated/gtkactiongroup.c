@@ -91,7 +91,6 @@
 #include "gtkactiongroup.h"
 #include "gtkbuildable.h"
 #include "gtkicontheme.h"
-#include "gtktoggleaction.h"
 #include "gtkaccelmap.h"
 #include "gtkmarshalers.h"
 #include "gtkbuilderprivate.h"
@@ -1283,7 +1282,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
 
   for (i = 0; i < n_entries; i++)
     {
-      GtkToggleAction *action;
+      GtkAction *action;
       const gchar *label;
       const gchar *tooltip;
 
@@ -1293,17 +1292,10 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
       label = gtk_action_group_translate_string (action_group, entries[i].label);
       tooltip = gtk_action_group_translate_string (action_group, entries[i].tooltip);
 
-      action = gtk_toggle_action_new (entries[i].name,
-				      label,
-				      tooltip,
-				      NULL);
-
       if (entries[i].stock_id) 
 	{
           g_object_set (action, "icon-name", entries[i].stock_id, NULL);
 	}
-
-      gtk_toggle_action_set_active (action, entries[i].is_active);
 
       if (entries[i].callback)
 	{
@@ -1416,9 +1408,6 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
 
       if (i == 0) 
 	first_action = action;
-
-      if (value == entries[i].value)
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 
       gtk_action_group_add_action_with_accel (action_group, 
 					      GTK_ACTION (action),

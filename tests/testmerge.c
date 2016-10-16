@@ -142,17 +142,6 @@ activate_action (GtkAction *action)
   g_message ("Action %s (type=%s) activated", name, typename);
 }
 
-static void
-toggle_action (GtkAction *action)
-{
-  const gchar *name = gtk_action_get_name (action);
-  const gchar *typename = G_OBJECT_TYPE_NAME (action);
-
-  g_message ("ToggleAction %s (type=%s) toggled (active=%d)", name, typename,
-	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
-}
-
-
 static GtkActionEntry entries[] = {
   { "FileMenuAction", NULL, "_File" },
   { "EditMenuAction", NULL, "_Edit" },
@@ -172,12 +161,6 @@ static GtkActionEntry entries[] = {
   { "AboutAction", NULL,            "_About", NULL,         "About", G_CALLBACK (activate_action) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
-
-static GtkToggleActionEntry toggle_entries[] = {
-  { "BoldAction",  NULL,  "_Bold",  "<control>b", "Make it bold", G_CALLBACK (toggle_action),
-    TRUE },
-};
-static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
 enum {
   JUSTIFY_LEFT,
@@ -560,10 +543,6 @@ main (int argc, char **argv)
   g_object_set (action, "hide_if_empty", FALSE, NULL);
   action = gtk_action_group_get_action (action_group, "EmptyMenu2Action");
   g_object_set (action, "hide_if_empty", TRUE, NULL);
-  gtk_action_group_add_toggle_actions (action_group, 
-				       toggle_entries, n_toggle_entries, 
-				       NULL);
-
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);

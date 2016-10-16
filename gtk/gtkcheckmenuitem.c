@@ -27,7 +27,6 @@
 #include "gtkcheckmenuitemprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkaccellabel.h"
-#include "deprecated/gtktoggleaction.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

@@ -32,17 +32,6 @@ activate_action (GtkAction *action)
 }
 
 static void
-toggle_action (GtkAction *action)
-{
-  const gchar *name = gtk_action_get_name (action);
-  const gchar *typename = G_OBJECT_TYPE_NAME (action);
-
-  g_message ("Action %s (type=%s) activated (active=%d)", name, typename,
-	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
-}
-
-
-static void
 recent_action (GtkAction *action)
 {
   const gchar *name = gtk_action_get_name (action);
@@ -58,9 +47,8 @@ recent_action (GtkAction *action)
 static void
 toggle_cnp_actions (GtkAction *action)
 {
-  gboolean sensitive;
+  gboolean sensitive = FALSE;
 
-  sensitive = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
   action = gtk_action_group_get_action (action_group, "cut");
   g_object_set (action, "sensitive", sensitive, NULL);
   action = gtk_action_group_get_action (action_group, "copy");
@@ -121,16 +109,6 @@ static GtkActionEntry entries[] = {
     NULL, G_CALLBACK (toolbar_size_large) }
 };
 static guint n_entries = G_N_ELEMENTS (entries);
-
-static GtkToggleActionEntry toggle_entries[] = {
-  { "bold", NULL, "_Bold", "<control>B",
-    "Change to bold face", 
-    G_CALLBACK (toggle_action), FALSE },
-  { "toggle-cnp", NULL, "Enable Cut/Copy/Paste", NULL,
-    "Change the sensitivity of the cut, copy and paste actions",
-    G_CALLBACK (toggle_cnp_actions), TRUE },
-};
-static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
 enum {
   JUSTIFY_LEFT,
@@ -378,9 +356,6 @@ main (int argc, char **argv)
   gtk_action_group_add_actions (action_group, 
 				entries, n_entries, 
 				NULL);
-  gtk_action_group_add_toggle_actions (action_group, 
-				       toggle_entries, n_toggle_entries, 
-				       NULL);
   gtk_action_group_add_action_with_accel (action_group, action, NULL);
 
   create_window (action_group);

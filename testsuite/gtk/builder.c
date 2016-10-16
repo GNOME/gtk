@@ -735,7 +735,6 @@ test_types (void)
     "  <object class=\"GtkSpinButton\" id=\"spinbutton\"/>"
     "  <object class=\"GtkStatusbar\" id=\"statusbar\"/>"
     "  <object class=\"GtkTextView\" id=\"textview\"/>"
-    "  <object class=\"GtkToggleAction\" id=\"toggleaction\"/>"
     "  <object class=\"GtkToggleButton\" id=\"togglebutton\"/>"
     "  <object class=\"GtkToolbar\" id=\"toolbar\"/>"
     "  <object class=\"GtkTreeStore\" id=\"treestore\"/>"

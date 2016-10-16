@@ -31,7 +31,6 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "deprecated/gtktoggleaction.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtktogglebuttonaccessible.h"
