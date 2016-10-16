@@ -38,7 +38,6 @@
 #include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtktooltip.h"
-#include "deprecated/gtkactivatable.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 
@@ -107,10 +106,6 @@ struct _GtkRecentChooserMenuPrivate
 enum {
   PROP_0,
   PROP_SHOW_NUMBERS,
-
-  /* activatable properties */
-  PROP_ACTIVATABLE_RELATED_ACTION,
-  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
 };
 
 
@@ -170,23 +165,12 @@ static void     item_activate_cb   (GtkWidget        *widget,
 static void     manager_changed_cb (GtkRecentManager *manager,
 				    gpointer          user_data);
 
-static void gtk_recent_chooser_activatable_iface_init (GtkActivatableIface  *iface);
-static void gtk_recent_chooser_update                 (GtkActivatable       *activatable,
-						       GtkAction            *action,
-						       const gchar          *property_name);
-static void gtk_recent_chooser_sync_action_properties (GtkActivatable       *activatable,
-						       GtkAction            *action);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserMenu,
 			 gtk_recent_chooser_menu,
 			 GTK_TYPE_MENU,
                          G_ADD_PRIVATE (GtkRecentChooserMenu)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
-				 		gtk_recent_chooser_iface_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
-				 		gtk_recent_chooser_activatable_iface_init))
-G_GNUC_END_IGNORE_DEPRECATIONS;
+				 		gtk_recent_chooser_iface_init))
 
 static void
 gtk_recent_chooser_iface_init (GtkRecentChooserIface *iface)
@@ -203,13 +187,6 @@ gtk_recent_chooser_iface_init (GtkRecentChooserIface *iface)
   iface->add_filter = gtk_recent_chooser_menu_add_filter;
   iface->remove_filter = gtk_recent_chooser_menu_remove_filter;
   iface->list_filters = gtk_recent_chooser_menu_list_filters;
-}
-
-static void
-gtk_recent_chooser_activatable_iface_init (GtkActivatableIface *iface)
-{
-  iface->update = gtk_recent_chooser_update;
-  iface->sync_action_properties = gtk_recent_chooser_sync_action_properties;
 }
 
 static void
@@ -240,10 +217,6 @@ gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
 							 P_("Whether the items should be displayed with a number"),
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-
-  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
-  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
 }
 
 static void
@@ -428,12 +401,6 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       gtk_recent_chooser_menu_set_current_filter (menu, g_value_get_object (value));
       break;
-    case PROP_ACTIVATABLE_RELATED_ACTION:
-      _gtk_recent_chooser_set_related_action (GTK_RECENT_CHOOSER (menu), g_value_get_object (value));
-      break;
-    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE: 
-      _gtk_recent_chooser_set_use_action_appearance (GTK_RECENT_CHOOSER (menu), g_value_get_boolean (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -480,12 +447,6 @@ gtk_recent_chooser_menu_get_property (GObject    *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       g_value_set_object (value, priv->current_filter);
-      break;
-    case PROP_ACTIVATABLE_RELATED_ACTION:
-      g_value_set_object (value, _gtk_recent_chooser_get_related_action (GTK_RECENT_CHOOSER (menu)));
-      break;
-    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE: 
-      g_value_set_boolean (value, _gtk_recent_chooser_get_use_action_appearance (GTK_RECENT_CHOOSER (menu)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1186,38 +1147,6 @@ gtk_recent_chooser_menu_set_show_tips (GtkRecentChooserMenu *menu,
   gtk_container_foreach (GTK_CONTAINER (menu), foreach_set_shot_tips, menu);
   g_object_notify (G_OBJECT (menu), "show-tips");
 }
-
-static void
-gtk_recent_chooser_update (GtkActivatable *activatable,
-			   GtkAction      *action,
-			   const gchar    *property_name)
-{
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (strcmp (property_name, "sensitive") == 0)
-    gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  _gtk_recent_chooser_update (activatable, action, property_name);
-}
-
-static void
-gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
-				           GtkAction      *action)
-{
-  if (!action)
-    return;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  _gtk_recent_chooser_sync_action_properties (activatable, action);
-}
-
 
 /*
  * Public API
