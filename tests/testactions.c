@@ -181,156 +181,13 @@ static const gchar *ui_info =
 "    <menuitem name=\"poppaste\" action=\"paste\" />\n"
 "  </popup>\n";
 
-static void
-add_widget (GtkUIManager *merge,
-	    GtkWidget   *widget,
-	    GtkContainer *container)
-{
-
-  gtk_box_pack_start (GTK_BOX (container), widget, FALSE, FALSE);
-  gtk_widget_show (widget);
-
-  if (GTK_IS_TOOLBAR (widget))
-    {
-      toolbar = GTK_TOOLBAR (widget);
-      gtk_toolbar_set_show_arrow (toolbar, TRUE);
-    }
-}
-
 static guint ui_id = 0;
 static GtkActionGroup *dag = NULL;
 
 static void
-ensure_update (GtkUIManager *manager)
-{
-  GTimer *timer;
-  double seconds;
-  gulong microsecs;
-  
-  timer = g_timer_new ();
-  g_timer_start (timer);
-  
-  gtk_ui_manager_ensure_update (manager);
-  
-  g_timer_stop (timer);
-  seconds = g_timer_elapsed (timer, &microsecs);
-  g_timer_destroy (timer);
-  
-  g_print ("Time: %fs\n", seconds);
-}
-
-static void
-add_cb (GtkWidget *button,
-	GtkUIManager *manager)
-{
-  GtkWidget *spinbutton;
-  GtkAction *action;
-  int i, num;
-  char *name, *label;
-  
-  if (ui_id != 0 || dag != NULL)
-    return;
-  
-  spinbutton = g_object_get_data (G_OBJECT (button), "spinbutton");
-  num = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spinbutton));
-  
-  dag = gtk_action_group_new ("DynamicActions");
-  gtk_ui_manager_insert_action_group (manager, dag, 0);
-  
-  ui_id = gtk_ui_manager_new_merge_id (manager);
-  
-  for (i = 0; i < num; i++)
-    {
-      name = g_strdup_printf ("DynAction%u", i);
-      label = g_strdup_printf ("Dynamic Item %d", i);
-      
-      action = g_object_new (GTK_TYPE_ACTION,
-			     "name", name,
-			     "label", label,
-			     NULL);
-      gtk_action_group_add_action (dag, action);
-      g_object_unref (action);
-      
-      gtk_ui_manager_add_ui (manager, ui_id, "/menubar/DynamicMenu",
-			     name, name,
-			     GTK_UI_MANAGER_MENUITEM, FALSE);
-    }
-  
-  ensure_update (manager);
-}
-
-static void
-remove_cb (GtkWidget *button,
-	   GtkUIManager *manager)
-{
-  if (ui_id == 0 || dag == NULL)
-    return;
-  
-  gtk_ui_manager_remove_ui (manager, ui_id);
-  ensure_update (manager);
-  ui_id = 0;
-  
-  gtk_ui_manager_remove_action_group (manager, dag);
-  g_object_unref (dag);
-  dag = NULL;
-}
-
-static void
 create_window (GtkActionGroup *action_group)
 {
-  GtkUIManager *merge;
-  GtkWidget *window;
-  GtkWidget *box;
-  GtkWidget *hbox, *spinbutton, *button;
-  GError *error = NULL;
-
-  merge = gtk_ui_manager_new ();
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size (GTK_WINDOW (window), -1, -1);
-  gtk_window_set_title (GTK_WINDOW (window), "Action Test");
-  g_signal_connect_swapped (window, "destroy", G_CALLBACK (g_object_unref), merge);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
-  gtk_widget_show (box);
-
-  gtk_ui_manager_insert_action_group (merge, action_group, 0);
-  g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), box);
-
-  gtk_window_add_accel_group (GTK_WINDOW (window), 
-			      gtk_ui_manager_get_accel_group (merge));
-
-  if (!gtk_ui_manager_add_ui_from_string (merge, ui_info, -1, &error))
-    {
-      g_message ("building menus failed: %s", error->message);
-      g_error_free (error);
-    }
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_end (GTK_BOX (box), hbox, FALSE, FALSE);
-  gtk_widget_show (hbox);
-
-  spinbutton = gtk_spin_button_new_with_range (100, 10000, 100);
-  gtk_box_pack_start (GTK_BOX (hbox), spinbutton, FALSE, FALSE);
-  gtk_widget_show (spinbutton);
-
-  button = gtk_button_new_with_label ("Add");
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
-  gtk_widget_show (button);
-
-  g_object_set_data (G_OBJECT (button), "spinbutton", spinbutton);
-  g_signal_connect (button, "clicked", G_CALLBACK (add_cb), merge);
-
-  button = gtk_button_new_with_label ("Remove");
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
-  gtk_widget_show (button);
-
-  g_signal_connect (button, "clicked", G_CALLBACK (remove_cb), merge);
-
-  gtk_widget_show (window);
-}
+ }
 
 int
 main (int argc, char **argv)
@@ -362,21 +219,6 @@ main (int argc, char **argv)
 
   gtk_main ();
 
-#ifdef DEBUG_UI_MANAGER
-  {
-    GList *action;
-
-    for (action = gtk_action_group_list_actions (action_group);
-	 action; 
-	 action = action->next)
-      {
-	GtkAction *a = action->data;
-	g_print ("action %s ref count %d\n", 
-		 gtk_action_get_name (a), G_OBJECT (a)->ref_count);
-      }
-  }
-#endif
-  
   g_object_unref (action);
   g_object_unref (action_group);
 

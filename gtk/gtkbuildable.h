@@ -57,8 +57,8 @@ typedef struct _GtkBuildableIface GtkBuildableIface;
  *  (i.e. setting the #GtkWidget:visible property) until the whole interface
  *  is created.
  * @construct_child: Constructs a child of a buildable that has been
- *  specified as “constructor” in the UI definition. #GtkUIManager implements
- *  this to reference to a widget created in a <ui> tag which is outside
+ *  specified as “constructor” in the UI definition. This can be used to
+ *  reference a widget created in a <ui> tag which is outside
  *  of the normal GtkBuilder UI definition hierarchy.  A reference to the
  *  constructed object is returned and becomes owned by the caller.
  * @custom_tag_start: Implement this if the buildable needs to parse

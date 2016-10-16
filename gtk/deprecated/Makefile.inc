@@ -3,8 +3,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkactiongroup.h	\
 	deprecated/gtkgradient.h	\
 	deprecated/gtkrecentaction.h	\
-	deprecated/gtksymboliccolor.h	\
-	deprecated/gtkuimanager.h
+	deprecated/gtksymboliccolor.h
 
 deprecated_private_h_sources =			\
 	deprecated/gtkgradientprivate.h		\
@@ -15,5 +14,4 @@ deprecated_c_sources = 			\
 	deprecated/gtkactiongroup.c	\
 	deprecated/gtkgradient.c	\
 	deprecated/gtkrecentaction.c	\
-	deprecated/gtksymboliccolor.c	\
-	deprecated/gtkuimanager.c
+	deprecated/gtksymboliccolor.c

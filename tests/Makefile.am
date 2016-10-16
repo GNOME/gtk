@@ -124,7 +124,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testverticalcells		\
 	treestoretest			\
 	testxinerama			\
-	testmerge			\
 	testactions			\
 	testgrouping			\
 	testtooltips			\
@@ -250,7 +249,6 @@ testtreesort_DEPENDENCIES = $(DEPS)
 testverticalcells_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(TEST_DEPS)
 testxinerama_DEPENDENCIES = $(TEST_DEPS)
-testmerge_DEPENDENCIES = $(TEST_DEPS)
 testactions_DEPENDENCIES = $(TEST_DEPS)
 testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
@@ -373,9 +371,6 @@ testprint_SOURCES =    	\
 
 testspinbutton_SOURCES =    	\
 	testspinbutton.c
-
-testmerge_SOURCES = 		\
-	testmerge.c
 
 testactions_SOURCES = 		\
 	testactions.c
@@ -510,9 +505,6 @@ EXTRA_DIST += 			\
 	check-y.xpm		\
 	check-n.xpm		\
 	test.xpm		\
-	merge-1.ui		\
-	merge-2.ui		\
-	merge-3.ui		\
 	gnome-textfile.png	\
 	testsplitheaders.ui	\
 	makefile.msc		\

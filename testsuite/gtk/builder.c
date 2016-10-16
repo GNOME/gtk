@@ -302,73 +302,6 @@ test_connect_signals (void)
 }
 
 static void
-test_uimanager_simple (void)
-{
-  GtkBuilder *builder;
-  GObject *window, *uimgr, *menubar;
-  GObject *menu, *label;
-  GList *children;
-  const gchar buffer[] =
-    "<interface>"
-    "  <object class=\"GtkUIManager\" id=\"uimgr1\"/>"
-    "</interface>";
-    
-  const gchar buffer2[] =
-    "<interface>"
-    "  <object class=\"GtkUIManager\" id=\"uimgr1\">"
-    "    <child>"
-    "      <object class=\"GtkActionGroup\" id=\"ag1\">"
-    "        <child>"
-    "          <object class=\"GtkAction\" id=\"file\">"
-    "            <property name=\"label\">_File</property>"
-    "          </object>"
-    "          <accelerator key=\"n\" modifiers=\"GDK_CONTROL_MASK\"/>"
-    "        </child>"
-    "      </object>"
-    "    </child>"
-    "    <ui>"
-    "      <menubar name=\"menubar1\">"
-    "        <menu action=\"file\">"
-    "        </menu>"
-    "      </menubar>"
-    "    </ui>"
-    "  </object>"
-    "  <object class=\"GtkWindow\" id=\"window1\">"
-    "    <child>"
-    "      <object class=\"GtkMenuBar\" id=\"menubar1\" constructor=\"uimgr1\"/>"
-    "    </child>"
-    "  </object>"
-    "</interface>";
-
-  builder = builder_new_from_string (buffer, -1, NULL);
-
-  uimgr = gtk_builder_get_object (builder, "uimgr1");
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  g_assert (GTK_IS_UI_MANAGER (uimgr));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-  g_object_unref (builder);
-  
-  builder = builder_new_from_string (buffer2, -1, NULL);
-
-  menubar = gtk_builder_get_object (builder, "menubar1");
-  g_assert (GTK_IS_MENU_BAR (menubar));
-
-  children = gtk_container_get_children (GTK_CONTAINER (menubar));
-  menu = children->data;
-  g_assert (GTK_IS_MENU_ITEM (menu));
-  g_assert (strcmp (gtk_widget_get_name (GTK_WIDGET (menu)), "file") == 0);
-  g_list_free (children);
-  
-  label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
-  g_assert (GTK_IS_LABEL (label));
-  g_assert (strcmp (gtk_label_get_text (GTK_LABEL (label)), "File") == 0);
-
-  window = gtk_builder_get_object (builder, "window1");
-  gtk_widget_destroy (GTK_WIDGET (window));
-  g_object_unref (builder);
-}
-
-static void
 test_domain (void)
 {
   GtkBuilder *builder;
@@ -741,7 +674,6 @@ test_types (void)
     "  <object class=\"GtkTreeView\" id=\"treeview\"/>"
     "  <object class=\"GtkViewport\" id=\"viewport\"/>"
     "  <object class=\"GtkWindow\" id=\"window\"/>"
-    "  <object class=\"GtkUIManager\" id=\"uimanager\"/>"
     "</interface>";
   const gchar buffer2[] = 
     "<interface>"
@@ -1991,7 +1923,6 @@ test_add_objects (void)
   GError *error;
   gint ret;
   GObject *obj;
-  GtkUIManager *manager;
   GtkWidget *menubar;
   GObject *menu, *label;
   GList *children;
@@ -2034,7 +1965,7 @@ test_add_objects (void)
     "<interface/>";
   const gchar buffer2[] =
     "<interface>"
-    "  <object class=\"GtkUIManager\" id=\"uimgr1\">"
+    "  <object class=\"GtkLabel\" id=\"uimgr1\">"
     "    <child>"
     "      <object class=\"GtkActionGroup\" id=\"ag1\">"
     "        <child>"
@@ -2092,7 +2023,7 @@ test_add_objects (void)
   ret = gtk_builder_add_objects_from_string (builder, buffer2, -1, objects3, &error);
   g_assert (ret);
   obj = gtk_builder_get_object (builder, "uimgr1");
-  g_assert (GTK_IS_UI_MANAGER (obj));
+  g_assert (GTK_IS_LABEL (obj));
   obj = gtk_builder_get_object (builder, "file");
   g_assert (GTK_IS_ACTION (obj));
   obj = gtk_builder_get_object (builder, "menubar1");
@@ -2119,12 +2050,6 @@ test_add_objects (void)
   ret = gtk_builder_add_objects_from_string (builder, buffer2, -1, objects4, &error);
   g_assert (ret);
   obj = gtk_builder_get_object (builder, "uimgr1");
-  g_assert (GTK_IS_UI_MANAGER (obj));
-  manager = GTK_UI_MANAGER (obj);
-  obj = gtk_builder_get_object (builder, "file");
-  g_assert (GTK_IS_ACTION (obj));
-  menubar = gtk_ui_manager_get_widget (manager, "/menubar1");
-  g_assert (GTK_IS_MENU_BAR (menubar));
 
   children = gtk_container_get_children (GTK_CONTAINER (menubar));
   menu = children->data;
@@ -2844,7 +2769,6 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Notebook", test_notebook);
   g_test_add_func ("/Builder/Domain", test_domain);
   g_test_add_func ("/Builder/Signal Autoconnect", test_connect_signals);
-  g_test_add_func ("/Builder/UIManager Simple", test_uimanager_simple);
   g_test_add_func ("/Builder/Spin Button", test_spin_button);
   g_test_add_func ("/Builder/SizeGroup", test_sizegroup);
   g_test_add_func ("/Builder/ListStore", test_list_store);

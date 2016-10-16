@@ -6229,11 +6229,9 @@ destroy_accel_path (gpointer data)
  * to be saved for future use. (See gtk_accel_map_save().)
  *
  * This function is a low level function that would most likely
- * be used by a menu creation system like #GtkUIManager. If you
- * use #GtkUIManager, setting up accelerator paths will be done
- * automatically.
+ * be used by a menu creation system.
  *
- * Even when you you aren’t using #GtkUIManager, if you only want to
+ * If you only want to
  * set up accelerators on menu items gtk_menu_item_set_accel_path()
  * provides a somewhat more convenient interface.
  *
@@ -13578,7 +13576,7 @@ gtk_widget_get_no_show_all (GtkWidget *widget)
  * calls to gtk_widget_show_all() will affect this widget.
  *
  * This is mostly for use in constructing widget hierarchies with externally
- * controlled visibility, see #GtkUIManager.
+ * controlled visibility.
  *
  * Since: 2.4
  **/

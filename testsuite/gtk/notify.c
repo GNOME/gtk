@@ -362,8 +362,7 @@ test_type (gconstpointer data)
 
   /* Deprecated, not getting fixed */
   if (g_str_equal (g_type_name (type), "GtkColorSelection") ||
-      g_str_equal (g_type_name (type), "GtkNumerableIcon") ||
-      g_str_equal (g_type_name (type), "GtkUIManager"))
+      g_str_equal (g_type_name (type), "GtkNumerableIcon"))
     return;
 
   /* These can't be freely constructed/destroyed */
