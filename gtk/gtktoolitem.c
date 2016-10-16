@@ -28,7 +28,6 @@
 #include "gtktoolshell.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksizerequest.h"
-#include "deprecated/gtkactivatable.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
@@ -69,10 +68,6 @@ enum {
   PROP_VISIBLE_HORIZONTAL,
   PROP_VISIBLE_VERTICAL,
   PROP_IS_IMPORTANT,
-
-  /* activatable properties */
-  PROP_ACTIVATABLE_RELATED_ACTION,
-  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
 };
 
 
@@ -87,17 +82,13 @@ struct _GtkToolItemPrivate
   guint expand                : 1;
   guint use_drag_window       : 1;
   guint is_important          : 1;
-  guint use_action_appearance : 1;
 
   GdkWindow *drag_window;
   gchar *menu_item_id;
   GtkWidget *menu_item;
-
-  GtkAction *action;
 };
 
 static void gtk_tool_item_finalize     (GObject         *object);
-static void gtk_tool_item_dispose      (GObject         *object);
 static void gtk_tool_item_parent_set   (GtkWidget       *toolitem,
 				        GtkWidget       *parent);
 static void gtk_tool_item_set_property (GObject         *object,
@@ -125,25 +116,10 @@ static void gtk_tool_item_get_preferred_height
 static void gtk_tool_item_size_allocate (GtkWidget      *widget,
 					 GtkAllocation  *allocation);
 
-static void gtk_tool_item_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_tool_item_update                     (GtkActivatable       *activatable,
-						      GtkAction            *action,
-						      const gchar          *property_name);
-static void gtk_tool_item_sync_action_properties     (GtkActivatable       *activatable,
-						      GtkAction            *action);
-static void gtk_tool_item_set_related_action         (GtkToolItem          *item, 
-						      GtkAction            *action);
-static void gtk_tool_item_set_use_action_appearance  (GtkToolItem          *item, 
-						      gboolean              use_appearance);
-
 static guint toolitem_signals[LAST_SIGNAL] = { 0 };
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkToolItem, gtk_tool_item, GTK_TYPE_BIN,
-                         G_ADD_PRIVATE (GtkToolItem)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
-						gtk_tool_item_activatable_interface_init))
-G_GNUC_END_IGNORE_DEPRECATIONS;
+                         G_ADD_PRIVATE (GtkToolItem));
 
 static void
 gtk_tool_item_class_init (GtkToolItemClass *klass)
@@ -157,7 +133,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   object_class->set_property = gtk_tool_item_set_property;
   object_class->get_property = gtk_tool_item_get_property;
   object_class->finalize     = gtk_tool_item_finalize;
-  object_class->dispose      = gtk_tool_item_dispose;
   object_class->notify       = gtk_tool_item_property_notify;
 
   widget_class->realize       = gtk_tool_item_realize;
@@ -192,10 +167,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  							 P_("Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
  							 FALSE,
  							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  g_object_class_override_property (object_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
-  g_object_class_override_property (object_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
-
 
 /**
  * GtkToolItem::create-menu-proxy:
@@ -267,7 +238,6 @@ gtk_tool_item_init (GtkToolItem *toolitem)
   toolitem->priv->visible_vertical = TRUE;
   toolitem->priv->homogeneous = FALSE;
   toolitem->priv->expand = FALSE;
-  toolitem->priv->use_action_appearance = TRUE;
 }
 
 static void
@@ -282,22 +252,6 @@ gtk_tool_item_finalize (GObject *object)
 
   G_OBJECT_CLASS (gtk_tool_item_parent_class)->finalize (object);
 }
-
-static void
-gtk_tool_item_dispose (GObject *object)
-{
-  GtkToolItem *item = GTK_TOOL_ITEM (object);
-
-  if (item->priv->action)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (item), NULL);      
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      item->priv->action = NULL;
-    }
-  G_OBJECT_CLASS (gtk_tool_item_parent_class)->dispose (object);
-}
-
 
 static void
 gtk_tool_item_parent_set (GtkWidget   *toolitem,
@@ -326,12 +280,6 @@ gtk_tool_item_set_property (GObject      *object,
     case PROP_IS_IMPORTANT:
       gtk_tool_item_set_is_important (toolitem, g_value_get_boolean (value));
       break;
-    case PROP_ACTIVATABLE_RELATED_ACTION:
-      gtk_tool_item_set_related_action (toolitem, g_value_get_object (value));
-      break;
-    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE:
-      gtk_tool_item_set_use_action_appearance (toolitem, g_value_get_boolean (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -356,12 +304,6 @@ gtk_tool_item_get_property (GObject    *object,
       break;
     case PROP_IS_IMPORTANT:
       g_value_set_boolean (value, toolitem->priv->is_important);
-      break;
-    case PROP_ACTIVATABLE_RELATED_ACTION:
-      g_value_set_object (value, toolitem->priv->action);
-      break;
-    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE:
-      g_value_set_boolean (value, toolitem->priv->use_action_appearance);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -525,135 +467,8 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
 gboolean
 _gtk_tool_item_create_menu_proxy (GtkToolItem *item)
 {
-  GtkWidget *menu_item;
-  gboolean visible_overflown;
-  gboolean ret = FALSE;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (item->priv->action)
-    {
-      g_object_get (item->priv->action, "visible-overflown", &visible_overflown, NULL);
-    
-      if (visible_overflown)
-	{
-	  menu_item = gtk_action_create_menu_item (item->priv->action);
-
-	  g_object_ref_sink (menu_item);
-      	  gtk_tool_item_set_proxy_menu_item (item, "gtk-action-menu-item", menu_item);
-	  g_object_unref (menu_item);
-	}
-      else
-	gtk_tool_item_set_proxy_menu_item (item, "gtk-action-menu-item", NULL);
-
-      ret = TRUE;
-    }
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  return ret;
+  return FALSE;
 }
-
-static void
-gtk_tool_item_activatable_interface_init (GtkActivatableIface *iface)
-{
-  iface->update = gtk_tool_item_update;
-  iface->sync_action_properties = gtk_tool_item_sync_action_properties;
-}
-
-static void
-gtk_tool_item_update (GtkActivatable *activatable,
-		      GtkAction      *action,
-	     	      const gchar    *property_name)
-{
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (strcmp (property_name, "visible") == 0)
-    {
-      if (gtk_action_is_visible (action))
-	gtk_widget_show (GTK_WIDGET (activatable));
-      else
-	gtk_widget_hide (GTK_WIDGET (activatable));
-    }
-  else if (strcmp (property_name, "sensitive") == 0)
-    gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
-  else if (strcmp (property_name, "tooltip") == 0)
-    gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (activatable),
-				    gtk_action_get_tooltip (action));
-  else if (strcmp (property_name, "visible-horizontal") == 0)
-    gtk_tool_item_set_visible_horizontal (GTK_TOOL_ITEM (activatable),
-					  gtk_action_get_visible_horizontal (action));
-  else if (strcmp (property_name, "visible-vertical") == 0)
-    gtk_tool_item_set_visible_vertical (GTK_TOOL_ITEM (activatable),
-					gtk_action_get_visible_vertical (action));
-  else if (strcmp (property_name, "is-important") == 0)
-    gtk_tool_item_set_is_important (GTK_TOOL_ITEM (activatable),
-				    gtk_action_get_is_important (action));
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-static void
-gtk_tool_item_sync_action_properties (GtkActivatable *activatable,
-				      GtkAction      *action)
-{
-  if (!action)
-    return;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (gtk_action_is_visible (action))
-    gtk_widget_show (GTK_WIDGET (activatable));
-  else
-    gtk_widget_hide (GTK_WIDGET (activatable));
-  
-  gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
-  
-  gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (activatable),
-				  gtk_action_get_tooltip (action));
-  gtk_tool_item_set_visible_horizontal (GTK_TOOL_ITEM (activatable),
-					gtk_action_get_visible_horizontal (action));
-  gtk_tool_item_set_visible_vertical (GTK_TOOL_ITEM (activatable),
-				      gtk_action_get_visible_vertical (action));
-  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (activatable),
-				  gtk_action_get_is_important (action));
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-static void
-gtk_tool_item_set_related_action (GtkToolItem *item, 
-				  GtkAction   *action)
-{
-  if (item->priv->action == action)
-    return;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (item), action);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  item->priv->action = action;
-
-  if (action)
-    {
-      gtk_tool_item_rebuild_menu (item);
-    }
-}
-
-static void
-gtk_tool_item_set_use_action_appearance (GtkToolItem *item,
-					 gboolean     use_appearance)
-{
-  if (item->priv->use_action_appearance != use_appearance)
-    {
-      item->priv->use_action_appearance = use_appearance;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (item), item->priv->action);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-}
-
 
 /**
  * gtk_tool_item_new:
