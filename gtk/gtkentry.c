@@ -8422,6 +8422,70 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 }
 
 /**
+ * gtk_entry_set_icon_from_pixbuf_at_size:
+ * @entry: a #GtkEntry
+ * @icon_pos: Icon position
+ * @pixbuf: (allow-none): A #GdkPixbuf, or %NULL
+ * @GtkIconSize: icon size passed by the user 
+ *
+ * Sets the icon shown in the specified position using a pixbuf and also sets its size equal to the 'icon_size' parameter provided by user.
+ * If @pixbuf is %NULL, no icon will be shown in the specified position.
+ *
+ */
+void
+gtk_entry_set_icon_from_pixbuf_at_size (GtkEntry             *entry,
+                                	    GtkEntryIconPosition icon_pos,
+                                	    GdkPixbuf            *pixbuf, 
+								        GtkIconSize          icon_size )
+
+{
+  GtkEntryPrivate *priv;
+  EntryIconInfo *icon_info;
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (IS_VALID_ICON_POSITION (icon_pos));
+
+  priv = entry->priv;
+
+  if ((icon_info = priv->icons[icon_pos]) == NULL)
+    icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
+
+  g_object_freeze_notify (G_OBJECT (entry));
+
+  if (pixbuf)
+    g_object_ref (pixbuf);
+
+  gtk_entry_clear (entry, icon_pos);
+ 
+  if (pixbuf)
+    {
+  
+        _gtk_icon_helper_set_pixbuf (icon_info->icon_helper, pixbuf);
+        _gtk_icon_helper_set_icon_size (icon_info->icon_helper,
+                                        icon_size );
+
+      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+        {
+          g_object_notify (G_OBJECT (entry), "primary-icon-pixbuf");
+          g_object_notify (G_OBJECT (entry), "primary-icon-storage-type");
+        }
+      else
+        {
+          g_object_notify (G_OBJECT (entry), "secondary-icon-pixbuf");
+          g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
+        }
+
+      if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
+          gdk_window_show_unraised (icon_info->window);
+
+      g_object_unref (pixbuf);
+    }
+  
+  if (gtk_widget_get_visible (GTK_WIDGET (entry)))
+    gtk_widget_queue_resize (GTK_WIDGET (entry));
+
+  g_object_thaw_notify (G_OBJECT (entry));
+}
+/**
  * gtk_entry_set_icon_from_stock:
  * @entry: A #GtkEntry
  * @icon_pos: Icon position
