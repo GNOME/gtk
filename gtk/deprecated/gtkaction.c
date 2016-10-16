@@ -98,7 +98,6 @@
 #include "gtktoolbar.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
-#include "gtkactivatable.h"
 
 
 struct _GtkActionPrivate 
@@ -872,9 +871,6 @@ _gtk_action_sync_menu_visible (GtkAction *action,
   g_return_if_fail (GTK_IS_MENU_ITEM (proxy));
   g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
 
-  if (action == NULL)
-    action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (proxy));
-
   if (action)
     {
       /* a GtkMenu for a <popup/> doesn't have to have an action */
@@ -1032,9 +1028,6 @@ gtk_action_create_menu_item (GtkAction *action)
 
   menu_item = GTK_ACTION_GET_CLASS (action)->create_menu_item (action);
 
-  gtk_activatable_set_use_action_appearance (GTK_ACTIVATABLE (menu_item), TRUE);
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (menu_item), action);
-
   return menu_item;
 }
 
@@ -1059,9 +1052,6 @@ gtk_action_create_tool_item (GtkAction *action)
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
 
   button = GTK_ACTION_GET_CLASS (action)->create_tool_item (action);
-
-  gtk_activatable_set_use_action_appearance (GTK_ACTIVATABLE (button), TRUE);
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button), action);
 
   return button;
 }

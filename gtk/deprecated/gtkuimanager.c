@@ -32,7 +32,6 @@
 
 #include <string.h>
 #include "gtkaccellabel.h"
-#include "gtkactivatable.h"
 #include "gtkbuildable.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -2517,7 +2516,6 @@ update_node (GtkUIManager *manager,
 		}
 	      }
 
-            gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
 	    gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				  info->proxy);
 	    g_object_unref (info->proxy);
@@ -2578,8 +2576,6 @@ update_node (GtkUIManager *manager,
                  }
 	      }
 	  }
-	else
-          gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), action);
 
 	if (prev_submenu)
 	  {
@@ -2712,7 +2708,6 @@ update_node (GtkUIManager *manager,
 	  g_signal_handlers_disconnect_by_func (info->proxy,
 						G_CALLBACK (update_smart_separators),
 						NULL);  
-          gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
 	  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				info->proxy);
 	  g_object_unref (info->proxy);
@@ -2739,7 +2734,6 @@ update_node (GtkUIManager *manager,
 						G_CALLBACK (update_smart_separators),
 						NULL);
 	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
-          gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), action);
 	}
 
       if (info->proxy)
@@ -2764,7 +2758,6 @@ update_node (GtkUIManager *manager,
 	  g_signal_handlers_disconnect_by_func (info->proxy,
 						G_CALLBACK (update_smart_separators),
 						NULL);
-          gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
 	  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (info->proxy)),
 				info->proxy);
 	  g_object_unref (info->proxy);
@@ -2791,7 +2784,6 @@ update_node (GtkUIManager *manager,
 	  g_signal_handlers_disconnect_by_func (info->proxy,
 						G_CALLBACK (update_smart_separators),
 						NULL);
-	  gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), action);
 	}
 
       if (info->proxy)

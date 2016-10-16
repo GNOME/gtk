@@ -569,15 +569,11 @@ main (int argc, char **argv)
 
   button = gtk_button_new ();
   gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE);
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-			    gtk_action_group_get_action (action_group, "AboutAction"));
 
   gtk_widget_show (button);
 
   button = gtk_check_button_new ();
   gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE);
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-			    gtk_action_group_get_action (action_group, "BoldAction"));
   gtk_widget_show (button);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -585,8 +581,6 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Bold:"));
   button = gtk_switch_new ();
   gtk_container_add (GTK_CONTAINER (box), button);
-  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
-                            gtk_action_group_get_action (action_group, "BoldAction"));
   gtk_widget_show_all (box);
 
   merge = gtk_ui_manager_new ();

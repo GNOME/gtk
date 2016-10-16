@@ -523,8 +523,7 @@ test_type (gconstpointer data)
         continue;
 
       /* Deprecated, not getting fixed */
-      if (g_str_equal (g_type_name (pspec->owner_type), "GtkActivatable") ||
-          g_str_equal (g_type_name (pspec->owner_type), "GtkActionGroup") ||
+      if (g_str_equal (g_type_name (pspec->owner_type), "GtkActionGroup") ||
           g_str_equal (g_type_name (pspec->owner_type), "GtkAction"))
         continue;
 

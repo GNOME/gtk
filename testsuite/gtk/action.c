@@ -60,9 +60,6 @@ menu_item_label_notify_count (ActionTest    *fixture,
   g_signal_connect (item, "notify::label",
 		    G_CALLBACK (notify_count_emmisions), &emmisions);
 
-  gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (item),
-					 fixture->action);
-
   g_assert_cmpuint (emmisions, ==, 1);
 
   gtk_action_set_label (fixture->action, "new label");
