@@ -362,21 +362,9 @@ test_type (gconstpointer data)
 
   /* Deprecated, not getting fixed */
   if (g_str_equal (g_type_name (type), "GtkColorSelection") ||
-      g_str_equal (g_type_name (type), "GtkHPaned") ||
-      g_str_equal (g_type_name (type), "GtkVPaned") ||
-      g_str_equal (g_type_name (type), "GtkHScale") ||
-      g_str_equal (g_type_name (type), "GtkVScale") ||
-      g_str_equal (g_type_name (type), "GtkHScrollbar") ||
-      g_str_equal (g_type_name (type), "GtkVScrollbar") ||
-      g_str_equal (g_type_name (type), "GtkHSeparator") ||
-      g_str_equal (g_type_name (type), "GtkVSeparator") ||
-      g_str_equal (g_type_name (type), "GtkVBox") ||
-      g_str_equal (g_type_name (type), "GtkArrow") ||
       g_str_equal (g_type_name (type), "GtkNumerableIcon") ||
-      g_str_equal (g_type_name (type), "GtkRadioAction") ||
       g_str_equal (g_type_name (type), "GtkToggleAction") ||
-      g_str_equal (g_type_name (type), "GtkUIManager") ||
-      g_str_equal (g_type_name (type), "GtkImageMenuItem"))
+      g_str_equal (g_type_name (type), "GtkUIManager"))
     return;
 
   /* These can't be freely constructed/destroyed */

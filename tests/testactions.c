@@ -43,17 +43,6 @@ toggle_action (GtkAction *action)
 
 
 static void
-radio_action (GtkAction *action)
-{
-  const gchar *name = gtk_action_get_name (action);
-  const gchar *typename = G_OBJECT_TYPE_NAME (action);
-
-  g_message ("Action %s (type=%s) activated (active=%d) (value %d)", name, typename,
-	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)),
-	     gtk_radio_action_get_current_value (GTK_RADIO_ACTION (action)));
-}
-
-static void
 recent_action (GtkAction *action)
 {
   const gchar *name = gtk_action_get_name (action);
@@ -90,20 +79,6 @@ static void
 show_accel_dialog (GtkAction *action)
 {
   g_message ("Sorry, accel dialog not available");
-}
-
-static void
-toolbar_style (GtkAction *action)
-{
-  GtkToolbarStyle style;
-
-  g_return_if_fail (toolbar != NULL);
-
-  radio_action (action);
-
-  style = gtk_radio_action_get_current_value (GTK_RADIO_ACTION (action));
-
-  gtk_toolbar_set_style (toolbar, style);
 }
 
 static void
@@ -163,26 +138,6 @@ enum {
   JUSTIFY_RIGHT,
   JUSTIFY_FILL
 };
-
-static GtkRadioActionEntry justify_entries[] = {
-  { "justify-left", GTK_STOCK_JUSTIFY_LEFT, "_Left", "<control>L",
-    "Left justify the text", JUSTIFY_LEFT },
-  { "justify-center", GTK_STOCK_JUSTIFY_CENTER, "C_enter", "<control>E",
-    "Center justify the text", JUSTIFY_CENTER },
-  { "justify-right", GTK_STOCK_JUSTIFY_RIGHT, "_Right", "<control>R",
-    "Right justify the text", JUSTIFY_RIGHT },
-  { "justify-fill", GTK_STOCK_JUSTIFY_FILL, "_Fill", "<control>J",
-    "Fill justify the text", JUSTIFY_FILL }
-};
-static guint n_justify_entries = G_N_ELEMENTS (justify_entries);
-
-static GtkRadioActionEntry toolbar_entries[] = {
-  { "toolbar-icons", NULL, "Icons", NULL, NULL, GTK_TOOLBAR_ICONS },
-  { "toolbar-text", NULL, "Text", NULL, NULL, GTK_TOOLBAR_TEXT },
-  { "toolbar-both", NULL, "Both", NULL, NULL, GTK_TOOLBAR_BOTH },
-  { "toolbar-both-horiz", NULL, "Both Horizontal", NULL, NULL, GTK_TOOLBAR_BOTH_HORIZ }
-};
-static guint n_toolbar_entries = G_N_ELEMENTS (toolbar_entries);
 
 /* XML description of the menus for the test app.  The parser understands
  * a subset of the Bonobo UI XML format, and uses GMarkup for parsing */
@@ -426,14 +381,6 @@ main (int argc, char **argv)
   gtk_action_group_add_toggle_actions (action_group, 
 				       toggle_entries, n_toggle_entries, 
 				       NULL);
-  gtk_action_group_add_radio_actions (action_group, 
-				      justify_entries, n_justify_entries, 
-				      JUSTIFY_LEFT,
-				      G_CALLBACK (radio_action), NULL);
-  gtk_action_group_add_radio_actions (action_group, 
-				      toolbar_entries, n_toolbar_entries, 
-				      GTK_TOOLBAR_BOTH,
-				      G_CALLBACK (toolbar_style), NULL);
   gtk_action_group_add_action_with_accel (action_group, action, NULL);
 
   create_window (action_group);

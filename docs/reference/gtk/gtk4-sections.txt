@@ -2415,28 +2415,6 @@ gtk_progress_bar_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkradioaction</FILE>
-<TITLE>GtkRadioAction</TITLE>
-GtkRadioAction
-gtk_radio_action_new
-gtk_radio_action_get_group
-gtk_radio_action_set_group
-gtk_radio_action_join_group
-gtk_radio_action_get_current_value
-gtk_radio_action_set_current_value
-<SUBSECTION Standard>
-GTK_TYPE_RADIO_ACTION
-GTK_RADIO_ACTION
-GTK_RADIO_ACTION_CLASS
-GTK_IS_RADIO_ACTION
-GTK_IS_RADIO_ACTION_CLASS
-GTK_RADIO_ACTION_GET_CLASS
-<SUBSECTION Private>
-gtk_radio_action_get_type
-GtkRadioActionPrivate
-</SECTION>
-
-<SECTION>
 <FILE>gtkradiobutton</FILE>
 <TITLE>GtkRadioButton</TITLE>
 GtkRadioButton

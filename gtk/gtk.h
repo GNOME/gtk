@@ -248,7 +248,6 @@
 #include <gtk/deprecated/gtkaction.h>
 #include <gtk/deprecated/gtkactiongroup.h>
 #include <gtk/deprecated/gtkgradient.h>
-#include <gtk/deprecated/gtkradioaction.h>
 #include <gtk/deprecated/gtkrecentaction.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
 #include <gtk/deprecated/gtktoggleaction.h>

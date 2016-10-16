@@ -153,16 +153,6 @@ toggle_action (GtkAction *action)
 }
 
 
-static void
-radio_action_changed (GtkAction *action, GtkRadioAction *current)
-{
-  g_message ("RadioAction %s (type=%s) activated (active=%d) (value %d)", 
-	     gtk_action_get_name (GTK_ACTION (current)), 
-	     G_OBJECT_TYPE_NAME (GTK_ACTION (current)),
-	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (current)),
-	     gtk_radio_action_get_current_value (current));
-}
-
 static GtkActionEntry entries[] = {
   { "FileMenuAction", NULL, "_File" },
   { "EditMenuAction", NULL, "_Edit" },
@@ -195,18 +185,6 @@ enum {
   JUSTIFY_RIGHT,
   JUSTIFY_FILL
 };
-
-static GtkRadioActionEntry radio_entries[] = {
-  { "justify-left", GTK_STOCK_JUSTIFY_LEFT, NULL, "<control>L", 
-    "Left justify the text", JUSTIFY_LEFT },
-  { "justify-center", GTK_STOCK_JUSTIFY_CENTER, NULL, "<super>E",
-    "Center justify the text", JUSTIFY_CENTER },
-  { "justify-right", GTK_STOCK_JUSTIFY_RIGHT, NULL, "<hyper>R",
-    "Right justify the text", JUSTIFY_RIGHT },
-  { "justify-fill", GTK_STOCK_JUSTIFY_FILL, NULL, "<super><hyper>J",
-    "Fill justify the text", JUSTIFY_FILL },
-};
-static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
 
 static void
 add_widget (GtkUIManager *merge, 
@@ -585,10 +563,6 @@ main (int argc, char **argv)
   gtk_action_group_add_toggle_actions (action_group, 
 				       toggle_entries, n_toggle_entries, 
 				       NULL);
-  gtk_action_group_add_radio_actions (action_group, 
-				      radio_entries, n_radio_entries, 
-				      JUSTIFY_RIGHT,
-				      G_CALLBACK (radio_action_changed), NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
