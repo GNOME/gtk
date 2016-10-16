@@ -113,7 +113,6 @@ test_path (void)
   gtk_widget_path_iter_clear_classes (path, 1);
   g_assert (!gtk_widget_path_iter_has_class (path, 1, "class1"));
 
-  gtk_widget_path_free (path2);
 
   gtk_widget_path_free (path);
 }
