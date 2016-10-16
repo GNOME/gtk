@@ -250,7 +250,6 @@
 #include <gtk/deprecated/gtkgradient.h>
 #include <gtk/deprecated/gtkradioaction.h>
 #include <gtk/deprecated/gtkrecentaction.h>
-#include <gtk/deprecated/gtkstock.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
 #include <gtk/deprecated/gtktoggleaction.h>
 #include <gtk/deprecated/gtkuimanager.h>

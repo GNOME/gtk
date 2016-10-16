@@ -5,7 +5,6 @@ deprecated_h_sources = 			\
 	deprecated/gtkgradient.h	\
 	deprecated/gtkradioaction.h	\
 	deprecated/gtkrecentaction.h	\
-	deprecated/gtkstock.h		\
 	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktoggleaction.h	\
 	deprecated/gtkuimanager.h
@@ -21,7 +20,6 @@ deprecated_c_sources = 			\
 	deprecated/gtkgradient.c	\
 	deprecated/gtkradioaction.c	\
 	deprecated/gtkrecentaction.c	\
-	deprecated/gtkstock.c		\
 	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktoggleaction.c	\
 	deprecated/gtkuimanager.c

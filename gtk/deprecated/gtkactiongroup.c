@@ -91,7 +91,6 @@
 #include "gtkactiongroup.h"
 #include "gtkbuildable.h"
 #include "gtkicontheme.h"
-#include "gtkstock.h"
 #include "gtktoggleaction.h"
 #include "gtkradioaction.h"
 #include "gtkaccelmap.h"
@@ -109,7 +108,6 @@ struct _GtkActionGroupPrivate
   GHashTable      *actions;
   GtkAccelGroup   *accel_group;
 
-  GtkTranslateFunc translate_func;
   gpointer         translate_data;
   GDestroyNotify   translate_notify;
 };
@@ -361,7 +359,6 @@ gtk_action_group_init (GtkActionGroup *action_group)
   action_group->priv->actions = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                        NULL,
                                                        (GDestroyNotify) remove_action);
-  action_group->priv->translate_func = NULL;
   action_group->priv->translate_data = NULL;
   action_group->priv->translate_notify = NULL;
 }
@@ -1001,17 +998,10 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
   else 
     {
       gchar *stock_id;
-      GtkStockItem stock_item;
 
       g_object_get (action, "stock-id", &stock_id, NULL);
 
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-      if (stock_id && gtk_stock_lookup (stock_id, &stock_item))
-        {
-          accel_key = stock_item.keyval;
-          accel_mods = stock_item.modifier;
-	}
 
       G_GNUC_END_IGNORE_DEPRECATIONS;
 
@@ -1472,7 +1462,6 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
  **/
 void
 gtk_action_group_set_translate_func (GtkActionGroup   *action_group,
-				     GtkTranslateFunc  func,
 				     gpointer          data,
 				     GDestroyNotify    notify)
 {
@@ -1485,7 +1474,6 @@ gtk_action_group_set_translate_func (GtkActionGroup   *action_group,
   if (private->translate_notify)
     private->translate_notify (private->translate_data);
       
-  private->translate_func = func;
   private->translate_data = data;
   private->translate_notify = notify;
 }
@@ -1525,7 +1513,6 @@ gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
   gtk_action_group_set_translate_func (action_group, 
-				       (GtkTranslateFunc)dgettext_swapped,
 				       g_strdup (domain),
 				       g_free);
 } 
@@ -1551,7 +1538,6 @@ gtk_action_group_translate_string (GtkActionGroup *action_group,
 				   const gchar    *string)
 {
   GtkActionGroupPrivate *private;
-  GtkTranslateFunc translate_func;
   gpointer translate_data;
   
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), string);
@@ -1561,12 +1547,8 @@ gtk_action_group_translate_string (GtkActionGroup *action_group,
 
   private = action_group->priv;
 
-  translate_func = private->translate_func;
   translate_data = private->translate_data;
   
-  if (translate_func)
-    return translate_func (string, translate_data);
-  else
     return string;
 }
 

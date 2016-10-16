@@ -179,7 +179,6 @@
  *             <child>
  *               <object class="GtkButton" id="ok_button">
  *                 <property name="label">gtk-ok</property>
- *                 <property name="use-stock">TRUE</property>
  *                 <signal name="clicked" handler="ok_button_clicked"/>
  *               </object>
  *             </child>
@@ -221,7 +220,6 @@
 #include "gtkwindow.h"
 #include "gtkicontheme.h"
 #include "gtktestutils.h"
-#include "deprecated/gtkstock.h"
 
 
 static void gtk_builder_finalize       (GObject         *object);

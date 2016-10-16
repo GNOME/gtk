@@ -49,7 +49,6 @@
 #include "gtkrender.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "deprecated/gtkstock.h"
 
 /**
  * SECTION:gtkinfobar
@@ -655,7 +654,7 @@ add_buttons_valist (GtkInfoBar  *info_bar,
 /**
  * gtk_info_bar_add_buttons:
  * @info_bar: a #GtkInfoBar
- * @first_button_text: button text or stock ID
+ * @first_button_text: button text
  * @...: response ID for first button, then more text-response_id pairs,
  *     ending with %NULL
  *
@@ -695,14 +694,13 @@ gtk_info_bar_new (void)
 
 /**
  * gtk_info_bar_new_with_buttons:
- * @first_button_text: (allow-none): stock ID or text to go in first button, or %NULL
+ * @first_button_text: (allow-none): ext to go in first button, or %NULL
  * @...: response ID for first button, then additional buttons, ending
  *    with %NULL
  *
  * Creates a new #GtkInfoBar with buttons. Button text/response ID
  * pairs should be listed, with a %NULL pointer ending the list.
- * Button text can be either a stock ID such as %GTK_STOCK_OK, or
- * some arbitrary text. A response ID can be any positive number,
+ * A response ID can be any positive number,
  * or one of the values in the #GtkResponseType enumeration. If the
  * user clicks one of these dialog buttons, GtkInfoBar will emit
  * the “response” signal with the corresponding response ID.

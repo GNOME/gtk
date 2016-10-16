@@ -34,7 +34,6 @@
 #endif
 
 #include <gtk/deprecated/gtkaction.h>
-#include <gtk/deprecated/gtkstock.h>
 
 G_BEGIN_DECLS
 
@@ -245,7 +244,6 @@ void            gtk_action_group_add_radio_actions_full  (GtkActionGroup        
 							  GDestroyNotify              destroy);
 GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_set_translate_func      (GtkActionGroup             *action_group,
-							  GtkTranslateFunc            func,
 							  gpointer                    data,
 							  GDestroyNotify              notify);
 GDK_DEPRECATED_IN_3_10

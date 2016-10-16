@@ -857,11 +857,10 @@ set_toolbar_both_horiz (GtkWidget *widget,
   gtk_toolbar_set_style (GTK_TOOLBAR (data), GTK_TOOLBAR_BOTH_HORIZ);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 static GtkActionEntry create_toolbar_items[] = {
-    { NULL, GTK_STOCK_NEW, NULL, NULL, "Stock icon: New",
+    { NULL, NULL, NULL, NULL, "Stock icon: New",
       G_CALLBACK (set_toolbar_small_stock) },
-    { NULL, GTK_STOCK_OPEN, NULL, NULL, "Stock icon: Open",
+    { NULL, NULL, NULL, NULL, "Stock icon: Open",
       G_CALLBACK (set_toolbar_large_stock) },
     { NULL, NULL, "Horizontal", NULL, "Horizontal toolbar layout",
       G_CALLBACK (set_toolbar_horizontal) },
@@ -891,7 +890,6 @@ static GtkActionEntry create_toolbar_items[] = {
     { NULL, NULL, "Bar", NULL, "Bar tooltip",
       NULL },
 };
-G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static void
 create_toolbar (GtkWidget *widget)

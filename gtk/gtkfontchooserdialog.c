@@ -28,7 +28,6 @@
 #include "gtkfontchooserwidget.h"
 #include "gtkfontchooserutils.h"
 #include "gtkbox.h"
-#include "deprecated/gtkstock.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"

@@ -89,13 +89,13 @@ delayed_toggle_dynamic (GtkUIManager *merge)
       dyn = g_object_new (GTK_TYPE_ACTION,
 			  "name", "dyn1",
 			  "label", "Dynamic action 1",
-			  "stock_id", GTK_STOCK_COPY,
+			  "stock_id", NULL,
 			  NULL);
       gtk_action_group_add_action (dynamic, dyn);
       dyn = g_object_new (GTK_TYPE_ACTION,
 			  "name", "dyn2",
 			  "label", "Dynamic action 2",
-			  "stock_id", GTK_STOCK_EXECUTE,
+			  "stock_id", NULL,
 			  NULL);
       gtk_action_group_add_action (dynamic, dyn);
     }
@@ -172,19 +172,19 @@ static GtkActionEntry entries[] = {
   { "EmptyMenu2Action", NULL, "Empty 2" },
   { "Test", NULL, "Test" },
 
-  { "QuitAction",  GTK_STOCK_QUIT,  NULL,     "<control>q", "Quit", G_CALLBACK (gtk_main_quit) },
-  { "NewAction",   GTK_STOCK_NEW,   NULL,     "<control>n", "Create something", G_CALLBACK (activate_action) },
-  { "New2Action",  GTK_STOCK_NEW,   NULL,     "<control>m", "Create something else", G_CALLBACK (activate_action) },
-  { "OpenAction",  GTK_STOCK_OPEN,  NULL,     NULL,         "Open it", G_CALLBACK (activate_action) },
-  { "CutAction",   GTK_STOCK_CUT,   NULL,     "<control>x", "Knive", G_CALLBACK (activate_action) },
-  { "CopyAction",  GTK_STOCK_COPY,  NULL,     "<control>c", "Copy", G_CALLBACK (activate_action) },
-  { "PasteAction", GTK_STOCK_PASTE, NULL,     "<control>v", "Paste", G_CALLBACK (activate_action) },
+  { "QuitAction",  NULL,  NULL,     "<control>q", "Quit", G_CALLBACK (gtk_main_quit) },
+  { "NewAction",   NULL,   NULL,     "<control>n", "Create something", G_CALLBACK (activate_action) },
+  { "New2Action",  NULL,   NULL,     "<control>m", "Create something else", G_CALLBACK (activate_action) },
+  { "OpenAction",  NULL,  NULL,     NULL,         "Open it", G_CALLBACK (activate_action) },
+  { "CutAction",   NULL,   NULL,     "<control>x", "Knive", G_CALLBACK (activate_action) },
+  { "CopyAction",  NULL,  NULL,     "<control>c", "Copy", G_CALLBACK (activate_action) },
+  { "PasteAction", NULL, NULL,     "<control>v", "Paste", G_CALLBACK (activate_action) },
   { "AboutAction", NULL,            "_About", NULL,         "About", G_CALLBACK (activate_action) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
 static GtkToggleActionEntry toggle_entries[] = {
-  { "BoldAction",  GTK_STOCK_BOLD,  "_Bold",  "<control>b", "Make it bold", G_CALLBACK (toggle_action), 
+  { "BoldAction",  NULL,  "_Bold",  "<control>b", "Make it bold", G_CALLBACK (toggle_action),
     TRUE },
 };
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);

@@ -45,7 +45,6 @@
 #include "gtkbuilderprivate.h"
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
-#include "deprecated/gtkstock.h"
 #include "gtksizegroup.h"
 
 /**

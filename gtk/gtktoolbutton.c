@@ -23,7 +23,6 @@
 #include "gtkbutton.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "deprecated/gtkstock.h"
 #include "gtkbox.h"
 #include "gtkintl.h"
 #include "gtktoolbarprivate.h"
@@ -46,19 +45,15 @@
  * Use gtk_tool_button_new() to create a new #GtkToolButton.
  *
  * The label of a #GtkToolButton is determined by the properties
- * #GtkToolButton:label-widget, #GtkToolButton:label, and
- * #GtkToolButton:stock-id. If #GtkToolButton:label-widget is
+ * #GtkToolButton:label-widget and #GtkToolButton:label.
+ * If #GtkToolButton:label-widget is
  * non-%NULL, then that widget is used as the label. Otherwise, if
  * #GtkToolButton:label is non-%NULL, that string is used as the label.
- * Otherwise, if #GtkToolButton:stock-id is non-%NULL, the label is
- * determined by the stock item. Otherwise, the button does not have a label.
  *
- * The icon of a #GtkToolButton is determined by the properties
- * #GtkToolButton:icon-widget and #GtkToolButton:stock-id. If
+ * The icon of a #GtkToolButton is determined by the
+ * #GtkToolButton:icon-widget property. If
  * #GtkToolButton:icon-widget is non-%NULL, then
- * that widget is used as the icon. Otherwise, if #GtkToolButton:stock-id is
- * non-%NULL, the icon is determined by the stock item. Otherwise,
- * the button does not have a icon.
+ * that widget is used as the icon. Otherwise it does not have an icon.
  *
  * # CSS nodes
  *
@@ -867,9 +862,7 @@ gtk_tool_button_new (GtkWidget	 *icon_widget,
  * Sets @label as the label used for the tool button. The #GtkToolButton:label
  * property only has an effect if not overridden by a non-%NULL 
  * #GtkToolButton:label-widget property. If both the #GtkToolButton:label-widget
- * and #GtkToolButton:label properties are %NULL, the label is determined by the
- * #GtkToolButton:stock-id property. If the #GtkToolButton:stock-id property is
- * also %NULL, @button will not have a label.
+ * and #GtkToolButton:label properties are %NULL, @button will not have a label.
  * 
  * Since: 2.4
  **/
@@ -904,13 +897,13 @@ gtk_tool_button_set_label (GtkToolButton *button,
 /**
  * gtk_tool_button_get_label:
  * @button: a #GtkToolButton
- * 
+ *
  * Returns the label used by the tool button, or %NULL if the tool button
- * doesn’t have a label. or uses a the label from a stock item. The returned
+ * doesn’t have a label. The returned
  * string is owned by GTK+, and must not be modified or freed.
- * 
- * Returns: (nullable): The label, or %NULL
- * 
+ *
+ * Returns: (nullable) (transfer none): The label, or %NULL
+ *
  * Since: 2.4
  **/
 const gchar *
@@ -982,8 +975,8 @@ gtk_tool_button_get_use_underline (GtkToolButton *button)
  * Sets the icon for the tool button from a named themed icon.
  * See the docs for #GtkIconTheme for more details.
  * The #GtkToolButton:icon-name property only has an effect if not
- * overridden by non-%NULL #GtkToolButton:label-widget, 
- * #GtkToolButton:icon-widget and #GtkToolButton:stock-id properties.
+ * overridden by non-%NULL #GtkToolButton:label-widget or
+ * #GtkToolButton:icon-widget properties.
  * 
  * Since: 2.8
  **/
@@ -1030,10 +1023,8 @@ gtk_tool_button_get_icon_name (GtkToolButton *button)
  * @button: a #GtkToolButton
  * @icon_widget: (allow-none): the widget used as icon, or %NULL
  *
- * Sets @icon as the widget used as icon on @button. If @icon_widget is
- * %NULL the icon is determined by the #GtkToolButton:stock-id property. If the
- * #GtkToolButton:stock-id property is also %NULL, @button will not have an icon.
- * 
+ * Sets @icon as the widget used as icon on @button.
+ *
  * Since: 2.4
  **/
 void
@@ -1074,10 +1065,8 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
  *
  * Sets @label_widget as the widget that will be used as the label
  * for @button. If @label_widget is %NULL the #GtkToolButton:label property is used
- * as label. If #GtkToolButton:label is also %NULL, the label in the stock item
- * determined by the #GtkToolButton:stock-id property is used as label. If
- * #GtkToolButton:stock-id is also %NULL, @button does not have a label.
- * 
+ * as label. If #GtkToolButton:label is also %NULL, @button does not have a label.
+ *
  * Since: 2.4
  **/
 void

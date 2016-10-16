@@ -130,13 +130,13 @@ static GtkActionEntry entries[] = {
 
   { "attach", "mail-attachment", "_Attachment...", "<Control>m",
     "Attach a file", G_CALLBACK (activate_action) },
-  { "cut", GTK_STOCK_CUT, "C_ut", "<control>X",
+  { "cut", NULL, "C_ut", "<control>X",
     "Cut the selected text to the clipboard", G_CALLBACK (activate_action) },
-  { "copy", GTK_STOCK_COPY, "_Copy", "<control>C",
+  { "copy", NULL, "_Copy", "<control>C",
     "Copy the selected text to the clipboard", G_CALLBACK (activate_action) },
-  { "paste", GTK_STOCK_PASTE, "_Paste", "<control>V",
+  { "paste", NULL, "_Paste", "<control>V",
     "Paste the text from the clipboard", G_CALLBACK (activate_action) },
-  { "quit", GTK_STOCK_QUIT,  NULL, "<control>Q",
+  { "quit", NULL,  NULL, "<control>Q",
     "Quit the application", G_CALLBACK (gtk_main_quit) },
   { "customise-accels", NULL, "Customise _Accels", NULL,
     "Customise keyboard shortcuts", G_CALLBACK (show_accel_dialog) },
@@ -148,7 +148,7 @@ static GtkActionEntry entries[] = {
 static guint n_entries = G_N_ELEMENTS (entries);
 
 static GtkToggleActionEntry toggle_entries[] = {
-  { "bold", GTK_STOCK_BOLD, "_Bold", "<control>B",
+  { "bold", NULL, "_Bold", "<control>B",
     "Change to bold face", 
     G_CALLBACK (toggle_action), FALSE },
   { "toggle-cnp", NULL, "Enable Cut/Copy/Paste", NULL,
