@@ -247,7 +247,6 @@
 #include <gtk/deprecated/gtkaction.h>
 #include <gtk/deprecated/gtkactiongroup.h>
 #include <gtk/deprecated/gtkgradient.h>
-#include <gtk/deprecated/gtkrecentaction.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
 #endif /* GTK_DISABLE_DEPRECATED */
 

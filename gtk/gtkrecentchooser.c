@@ -22,7 +22,6 @@
 #include "gtkrecentchooser.h"
 #include "gtkrecentchooserprivate.h"
 #include "gtkrecentmanager.h"
-#include "deprecated/gtkrecentaction.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"

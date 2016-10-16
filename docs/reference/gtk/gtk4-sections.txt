@@ -2672,26 +2672,6 @@ gtk_recent_manager_error_quark
 </SECTION>
 
 <SECTION>
-<FILE>gtkrecentaction</FILE>
-<TITLE>GtkRecentAction</TITLE>
-GtkRecentAction
-gtk_recent_action_new
-gtk_recent_action_new_for_manager
-gtk_recent_action_get_show_numbers
-gtk_recent_action_set_show_numbers
-<SUBSECTION Standard>
-GTK_TYPE_RECENT_ACTION
-GTK_RECENT_ACTION
-GTK_IS_RECENT_ACTION
-GTK_RECENT_ACTION_CLASS
-GTK_IS_RECENT_ACTION_CLASS
-GTK_RECENT_ACTION_GET_CLASS
-<SUBSECTION Private>
-GtkRecentActionPrivate
-gtk_recent_action_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkscale</FILE>
 <TITLE>GtkScale</TITLE>
 GtkScale

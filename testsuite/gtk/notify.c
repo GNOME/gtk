@@ -492,11 +492,6 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "draw-indicator"))
         continue;
 
-      /* Not supported in subclass */
-      if (g_str_equal (g_type_name (type), "GtkRecentAction") &&
-	  g_str_equal (pspec->name, "select-multiple"))
-        continue;
-
       if (g_str_equal (g_type_name (type), "GtkRecentChooserMenu") &&
 	  g_str_equal (pspec->name, "select-multiple"))
         continue;

@@ -199,21 +199,10 @@ main (int argc, char **argv)
   if (g_file_test ("accels", G_FILE_TEST_IS_REGULAR))
     gtk_accel_map_load ("accels");
 
-  action = gtk_recent_action_new ("recent",
-                                  "Open Recent", "Open recent files",
-                                  NULL);
-  g_signal_connect (action, "item-activated",
-                    G_CALLBACK (recent_action),
-                    NULL);
-  g_signal_connect (action, "activate",
-                    G_CALLBACK (recent_action),
-                    NULL);
-
   action_group = gtk_action_group_new ("TestActions");
   gtk_action_group_add_actions (action_group, 
 				entries, n_entries, 
 				NULL);
-  gtk_action_group_add_action_with_accel (action_group, action, NULL);
 
   create_window (action_group);
 
