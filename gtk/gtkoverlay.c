@@ -541,6 +541,8 @@ gtk_overlay_remove (GtkContainer *container,
  * A widget’s index in the @overlay children list determines which order
  * the children are drawn if they overlap. The first child is drawn at
  * the bottom. It also affects the default focus chain order.
+ *
+ * Since: 3.18
  */
 void
 gtk_overlay_reorder_overlay (GtkOverlay *overlay,
@@ -765,10 +767,25 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 
   klass->get_child_position = gtk_overlay_get_child_position;
 
+  /**
+   * GtkOverlay:pass-through:
+   *
+   * Pass through input, does not affect main child.
+   *
+   * Since: 3.18
+   */
   gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
       g_param_spec_boolean ("pass-through", P_("Pass Through"), P_("Pass through input, does not affect main child"),
                             FALSE,
                             GTK_PARAM_READWRITE));
+
+  /**
+   * GtkOverlay:index:
+   *
+   * The index of the overlay in the parent, -1 for the main child.
+   *
+   * Since: 3.18
+   */
   gtk_container_class_install_child_property (container_class, CHILD_PROP_INDEX,
 					      g_param_spec_int ("index",
 								P_("Index"),
