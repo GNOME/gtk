@@ -2623,8 +2623,6 @@ gtk_menu_realize (GtkWidget *widget)
   GtkMenuPrivate *priv = menu->priv;
   GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   GtkWidget *child;
   GList *children;
   GtkBorder arrow_border, padding;
@@ -2635,56 +2633,41 @@ gtk_menu_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_KEY_PRESS_MASK |
-                            GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK );
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                 gtk_widget_get_events (widget)
+                                 | GDK_KEY_PRESS_MASK
+                                 | GDK_ENTER_NOTIFY_MASK
+                                 | GDK_LEAVE_NOTIFY_MASK,
+                                 &allocation);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 
   get_menu_padding (widget, &padding);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  attributes.x = padding.left;
-  attributes.y = padding.top;
-  attributes.width = allocation.width - padding.left - padding.right;
-  attributes.height = allocation.height - padding.top - padding.bottom;
-
   get_arrows_border (menu, &arrow_border);
-  attributes.y += arrow_border.top;
-  attributes.height -= arrow_border.top;
-  attributes.height -= arrow_border.bottom;
 
-  attributes.width = MAX (1, attributes.width);
-  attributes.height = MAX (1, attributes.height);
-
-  priv->view_window = gdk_window_new (window,
-                                      &attributes, attributes_mask);
+  priv->view_window = gdk_window_new_child (window,
+                                            gtk_widget_get_events (widget)
+                                            | GDK_KEY_PRESS_MASK
+                                            | GDK_ENTER_NOTIFY_MASK
+                                            | GDK_LEAVE_NOTIFY_MASK,
+                                            &(GdkRectangle) {
+                                              padding.left,
+                                              padding.top + arrow_border.top,
+                                              MAX (1, allocation.width - padding.left - padding.right),
+                                              MAX (1, allocation.height - padding.top - padding.bottom
+                                                      - arrow_border.top - arrow_border.bottom)});
   gtk_widget_register_window (widget, priv->view_window);
 
-  gtk_widget_get_allocation (widget, &allocation);
-
-  attributes.x = 0;
-  attributes.y = - priv->scroll_offset;
-  attributes.width = allocation.width + padding.left + padding.right;
-  attributes.height = priv->requested_height + padding.top + padding.bottom;
-
-  attributes.width = MAX (1, attributes.width);
-  attributes.height = MAX (1, attributes.height);
-
-  priv->bin_window = gdk_window_new (priv->view_window,
-                                     &attributes, attributes_mask);
+  priv->bin_window = gdk_window_new_child (priv->view_window,
+                                           gtk_widget_get_events (widget)
+                                           | GDK_KEY_PRESS_MASK
+                                           | GDK_ENTER_NOTIFY_MASK
+                                           | GDK_LEAVE_NOTIFY_MASK,
+                                           &(GdkRectangle) {
+                                             0,
+                                             - priv->scroll_offset,
+                                             MAX (1, allocation.width + padding.left + padding.right),
+                                             MAX (1, priv->requested_height + padding.top + padding.bottom)});
   gtk_widget_register_window (widget, priv->bin_window);
 
   children = GTK_MENU_SHELL (menu)->priv->children;
