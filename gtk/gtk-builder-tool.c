@@ -837,11 +837,7 @@ preview_file (const char *filename,
       GtkCssProvider *provider;
 
       provider = gtk_css_provider_new ();
-      if (!gtk_css_provider_load_from_path (provider, cssfile, &error))
-        {
-          g_printerr ("%s\n", error->message);
-          exit (1);
-        }
+      gtk_css_provider_load_from_path (provider, cssfile);
 
       gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                                  GTK_STYLE_PROVIDER (provider),

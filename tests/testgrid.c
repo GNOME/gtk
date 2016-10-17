@@ -13,7 +13,7 @@ oriented_test_widget (const gchar *label, const gchar *color, gdouble angle)
   box = gtk_event_box_new ();
   provider = gtk_css_provider_new ();
   data = g_strdup_printf ("GtkEventBox { background-color: %s; }", color);
-  gtk_css_provider_load_from_data (provider, data, -1, NULL);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_add_provider (gtk_widget_get_style_context (box),
                                   GTK_STYLE_PROVIDER (provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

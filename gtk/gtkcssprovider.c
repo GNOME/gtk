@@ -154,8 +154,7 @@ static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 GtkCssScanner  *scanner,
                                 GFile          *file,
-                                const char     *data,
-                                GError        **error);
+                                const char     *data);
 
 GQuark
 gtk_css_provider_error_quark (void)
@@ -1052,7 +1051,6 @@ parse_import (GtkCssScanner *scanner)
       gtk_css_provider_load_internal (scanner->provider,
                                       scanner,
                                       file,
-                                      NULL,
                                       NULL);
     }
 
@@ -1719,20 +1717,10 @@ static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 GtkCssScanner  *parent,
                                 GFile          *file,
-                                const char     *text,
-                                GError        **error)
+                                const char     *text)
 {
   GtkCssScanner *scanner;
-  gulong error_handler;
   char *free_data = NULL;
-
-  if (error)
-    error_handler = g_signal_connect (css_provider,
-                                      "parsing-error",
-                                      G_CALLBACK (gtk_css_provider_propagate_error),
-                                      error);
-  else
-    error_handler = 0; /* silence gcc */
 
   if (text == NULL)
     {
@@ -1793,18 +1781,6 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 
   g_free (free_data);
 
-  if (error)
-    {
-      g_signal_handler_disconnect (css_provider, error_handler);
-
-      if (*error)
-        {
-          /* We clear all contents from the provider for backwards compat reasons */
-          gtk_css_provider_reset (css_provider);
-          return FALSE;
-        }
-    }
-
   return TRUE;
 }
 
@@ -1815,7 +1791,6 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
  * @length: the length of @data in bytes, or -1 for NUL terminated strings. If
  *   @length is not -1, the code will assume it is not NUL terminated and will
  *   potentially do a copy.
- * @error: (out) (allow-none): return location for a #GError, or %NULL
  *
  * Loads @data into @css_provider, and by doing so clears any previously loaded
  * information.
@@ -1828,8 +1803,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 gboolean
 gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                  const gchar     *data,
-                                 gssize           length,
-                                 GError         **error)
+                                 gssize           length)
 {
   char *free_data;
   gboolean ret;
@@ -1850,7 +1824,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  ret = gtk_css_provider_load_internal (css_provider, NULL, NULL, data, error);
+  ret = gtk_css_provider_load_internal (css_provider, NULL, NULL, data);
 
   g_free (free_data);
 
@@ -1863,7 +1837,6 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
  * gtk_css_provider_load_from_file:
  * @css_provider: a #GtkCssProvider
  * @file: #GFile pointing to a file to load
- * @error: (out) (allow-none): return location for a #GError, or %NULL
  *
  * Loads the data contained in @file into @css_provider, making it
  * clear any previously loaded information.
@@ -1875,8 +1848,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
  **/
 gboolean
 gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
-                                 GFile           *file,
-                                 GError         **error)
+                                 GFile           *file)
 {
   gboolean success;
 
@@ -1885,7 +1857,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  success = gtk_css_provider_load_internal (css_provider, NULL, file, NULL, error);
+  success = gtk_css_provider_load_internal (css_provider, NULL, file, NULL);
 
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (css_provider));
 
@@ -1908,8 +1880,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
  **/
 gboolean
 gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
-                                 const gchar     *path,
-                                 GError         **error)
+                                 const gchar     *path)
 {
   GFile *file;
   gboolean result;
@@ -1919,7 +1890,7 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
 
   file = g_file_new_for_path (path);
   
-  result = gtk_css_provider_load_from_file (css_provider, file, error);
+  result = gtk_css_provider_load_from_file (css_provider, file);
 
   g_object_unref (file);
 
@@ -1957,7 +1928,7 @@ gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
   file = g_file_new_for_uri (uri);
   g_free (uri);
 
-  gtk_css_provider_load_from_file (css_provider, file, NULL);
+  gtk_css_provider_load_from_file (css_provider, file);
 
   g_object_unref (file);
 }
@@ -2159,7 +2130,7 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
       if (resource != NULL)
         g_resources_register (resource);
 
-      gtk_css_provider_load_from_path (provider, path, NULL);
+      gtk_css_provider_load_from_path (provider, path);
 
       /* Only set this after load, as load_from_path will clear it */
       provider->priv->resource = resource;

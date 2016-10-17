@@ -403,7 +403,7 @@ main (int argc, char *argv[])
   gtk_css_provider_load_from_data (provider,
     ".black-bg { background-color: black; }"
     ".red-bg { background-color: red; }"
-    ".blue-bg { background-color: blue; }", -1, NULL);
+    ".blue-bg { background-color: blue; }", -1);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

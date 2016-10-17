@@ -34,7 +34,7 @@ test_init_of_theme (void)
   css = g_strdup_printf (".background { color: %s; }",
                          before.alpha < 0.5 ? "black" : "transparent");
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1, NULL);
+  gtk_css_provider_load_from_data (provider, css, -1);
   gtk_style_context_add_provider (context,
                                   GTK_STYLE_PROVIDER (provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_FALLBACK + 1);

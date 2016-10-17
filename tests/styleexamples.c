@@ -353,7 +353,7 @@ int main (int argc, char *argv[])
                                    "   border-style: solid;\n"
                                    "   border-width: 1;\n"
                                    "   border-radius: 0;\n"
-                                   "}\n", -1, NULL);
+                                   "}\n", -1);
   gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   g_signal_connect_after (ebox, "draw", G_CALLBACK (draw_cb), NULL);

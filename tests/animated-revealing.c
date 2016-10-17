@@ -54,7 +54,7 @@ main(int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (revealer), grid);
 
   cssprovider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (cssprovider, "* { padding: 2px; text-shadow: 5px 5px 2px grey; }", -1, NULL);
+  gtk_css_provider_load_from_data (cssprovider, "* { padding: 2px; text-shadow: 5px 5px 2px grey; }", -1);
 
   for (x = 0; x < 10; x++)
     {

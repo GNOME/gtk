@@ -93,7 +93,7 @@ create_combo (const char *name,
   provider = gtk_css_provider_new ();
   css_data = g_strdup_printf ("#%s { -GtkComboBox-appears-as-list: %s }",
                               name, is_list ? "true" : "false");
-  gtk_css_provider_load_from_data (provider, css_data, -1, NULL);
+  gtk_css_provider_load_from_data (provider, css_data, -1);
   g_free (css_data);
 
   gtk_style_context_add_provider (context,

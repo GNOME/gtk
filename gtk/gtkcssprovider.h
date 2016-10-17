@@ -97,16 +97,13 @@ char *           gtk_css_provider_to_string      (GtkCssProvider  *provider);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                                   const gchar     *data,
-                                                  gssize           length,
-                                                  GError         **error);
+                                                  gssize           length);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
-                                                  GFile           *file,
-                                                  GError         **error);
+                                                  GFile           *file);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
-                                                  const gchar     *path,
-                                                  GError         **error);
+                                                  const gchar     *path);
 
 GDK_AVAILABLE_IN_3_16
 void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,

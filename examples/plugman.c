@@ -225,7 +225,7 @@ plugin_action (GAction  *action,
   g_message ("Color: %s", g_action_get_name (action));
 
   css_provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (css_provider, css_to_load, -1, NULL);
+  gtk_css_provider_load_from_data (css_provider, css_to_load, -1);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (css_provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

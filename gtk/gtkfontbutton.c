@@ -1320,7 +1320,7 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
         pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
 
       data = pango_font_description_to_css (desc);
-      gtk_css_provider_load_from_data (priv->provider, data, -1, NULL);
+      gtk_css_provider_load_from_data (priv->provider, data, -1);
 
       g_free (data);
       pango_font_description_free (desc);

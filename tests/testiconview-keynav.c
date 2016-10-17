@@ -220,7 +220,7 @@ set_styles (void)
 
   provider = gtk_css_provider_new ();
 
-  if (!gtk_css_provider_load_from_data (provider, CSS, -1, NULL))
+  if (!gtk_css_provider_load_from_data (provider, CSS, -1))
     {
       g_assert_not_reached ();
     }

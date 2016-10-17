@@ -11,7 +11,6 @@ static void
 test_parse_selectors (void)
 {
   GtkCssProvider *provider;
-  GError *error;
   gboolean res;
   gint i;
   const gchar *valid[] = {
@@ -58,14 +57,10 @@ test_parse_selectors (void)
      NULL
   };
 
-  error = NULL;
   for (i = 0; valid[i]; i++)
     {
       provider = gtk_css_provider_new ();
-      res = gtk_css_provider_load_from_data (provider, valid[i], -1, &error);
-      if (error)
-        g_print ("parsing '%s': got unexpected error: %s\n", valid[i], error->message);
-      g_assert_no_error (error);
+      res = gtk_css_provider_load_from_data (provider, valid[i], -1);
       g_assert (res);
 
       g_object_unref (provider);
@@ -131,12 +126,10 @@ test_match (void)
   GtkStyleContext *context;
   GtkWidgetPath *path;
   GtkCssProvider *provider;
-  GError *error;
   const gchar *data;
   GdkRGBA color;
   GdkRGBA expected;
 
-  error = NULL;
   provider = gtk_css_provider_new ();
 
   gdk_rgba_parse (&expected, "#fff");
@@ -160,78 +153,68 @@ test_match (void)
                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
 
   data = "* { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "button { color: #fff }\n"
          "window > button { color: #000 }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          ".button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "button { color: #000 }\n"
          ".button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "button { color: #000 }\n"
          "window button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          ".button { color: #000 }\n"
          "window .button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "* .button { color: #000 }\n"
          "#mywindow .button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "window .button { color: #000 }\n"
          "window#mywindow .button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "window .button { color: #000 }\n"
          "window button.button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
@@ -239,8 +222,7 @@ test_match (void)
          "window:backdrop .button { color: #000 }\n"
          "window .button { color: #111 }\n"
          "window:active .button { color: #fff }";
-  gtk_css_provider_load_from_data (provider, data, -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
@@ -354,19 +336,15 @@ static void
 test_style_priorities_setup (PrioritiesFixture *f,
                              gconstpointer      unused)
 {
-  GError *error = NULL;
   f->blue_provider = gtk_css_provider_new ();
   f->red_provider = gtk_css_provider_new ();
   f->green_provider = gtk_css_provider_new ();
   f->context = gtk_style_context_new ();
   GtkWidgetPath *path = gtk_widget_path_new ();
 
-  gtk_css_provider_load_from_data (f->blue_provider, "* { color: blue; }", -1, &error);
-  g_assert_no_error (error);
-  gtk_css_provider_load_from_data (f->red_provider, "* { color: red; }", -1, &error);
-  g_assert_no_error (error);
-  gtk_css_provider_load_from_data (f->green_provider, "* { color: green; }", -1, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_data (f->blue_provider, "* { color: blue; }", -1);
+  gtk_css_provider_load_from_data (f->red_provider, "* { color: red; }", -1);
+  gtk_css_provider_load_from_data (f->green_provider, "* { color: green; }", -1);
 
   gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
   gtk_style_context_set_path (f->context, path);

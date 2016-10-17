@@ -219,7 +219,7 @@ do_transparent (GtkWidget *do_widget)
       provider = gtk_css_provider_new ();
       css = g_strdup_printf ("* { border-width: 0px %dpx %dpx 0px; }",
                              SHADOW_OFFSET_X, SHADOW_OFFSET_Y);
-      gtk_css_provider_load_from_data (provider, css, -1, NULL);
+      gtk_css_provider_load_from_data (provider, css, -1);
       g_free (css);
       gtk_style_context_add_provider (gtk_widget_get_style_context (entry),
                                       GTK_STYLE_PROVIDER (provider),

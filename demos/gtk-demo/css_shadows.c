@@ -43,7 +43,7 @@ css_text_changed (GtkTextBuffer  *buffer,
   gtk_text_buffer_remove_all_tags (buffer, &start, &end);
 
   text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-  gtk_css_provider_load_from_data (provider, text, -1, NULL);
+  gtk_css_provider_load_from_data (provider, text, -1);
   g_free (text);
 
   gtk_style_context_reset_widgets (gdk_screen_get_default ());

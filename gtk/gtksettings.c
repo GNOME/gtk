@@ -1856,7 +1856,7 @@ settings_init_style (GtkSettings *settings)
 
       if (g_file_test (css_path,
                        G_FILE_TEST_IS_REGULAR))
-        gtk_css_provider_load_from_path (css_provider, css_path, NULL);
+        gtk_css_provider_load_from_path (css_provider, css_path);
 
       g_free (css_path);
     }

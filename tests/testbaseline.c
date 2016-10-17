@@ -82,7 +82,7 @@ main (int    argc,
   gtk_css_provider_load_from_data (provider,
     ".small-font { font-size: 5px; }"
     ".medium-font { font-size: 10px; }"
-    ".large-font { font-size: 15px; }", -1, NULL);
+    ".large-font { font-size: 15px; }", -1);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

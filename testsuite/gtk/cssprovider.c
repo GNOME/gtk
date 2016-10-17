@@ -17,7 +17,7 @@ test_section_in_load_from_data (void)
   provider = gtk_css_provider_new ();
   g_signal_connect (provider, "parsing-error",
                     G_CALLBACK (assert_section_is_not_null), NULL);
-  gtk_css_provider_load_from_data (provider, "random garbage goes here", -1, NULL);
+  gtk_css_provider_load_from_data (provider, "random garbage goes here", -1);
   g_object_unref (provider);
 }
 
@@ -33,7 +33,7 @@ test_section_in_style_property (void)
   provider = gtk_css_provider_new ();
   g_signal_connect (provider, "parsing-error",
                     G_CALLBACK (assert_section_is_not_null), NULL);
-  gtk_css_provider_load_from_data (provider, "* { -GtkWindow-decoration-button-layout: random garbage goes here; }", -1, NULL);
+  gtk_css_provider_load_from_data (provider, "* { -GtkWindow-decoration-button-layout: random garbage goes here; }", -1);
 
   widget_class = g_type_class_ref (GTK_TYPE_WINDOW);
   pspec = gtk_widget_class_find_style_property (widget_class, "decoration-button-layout");
@@ -58,7 +58,7 @@ test_section_load_nonexisting_file (void)
   provider = gtk_css_provider_new ();
   g_signal_connect (provider, "parsing-error",
                     G_CALLBACK (assert_section_is_not_null), NULL);
-  gtk_css_provider_load_from_path (provider, "this/path/does/absolutely/not/exist.css", NULL);
+  gtk_css_provider_load_from_path (provider, "this/path/does/absolutely/not/exist.css");
   g_object_unref (provider);
 }
 

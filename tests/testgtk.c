@@ -9258,9 +9258,9 @@ main (int argc, char *argv[])
    * directory.
    */
   if (file_exists ("testgtk.css"))
-    gtk_css_provider_load_from_path (provider, "testgtk.css", NULL);
+    gtk_css_provider_load_from_path (provider, "testgtk.css");
   else if (file_exists ("tests/testgtk.css"))
-    gtk_css_provider_load_from_path (provider, "tests/testgtk.css", NULL);
+    gtk_css_provider_load_from_path (provider, "tests/testgtk.css");
   else
     g_warning ("Couldn't find file \"testgtk.css\".");
 
@@ -9337,7 +9337,7 @@ main (int argc, char *argv[])
                                    "  font-family: Sans;\n"
                                    "  font-size: 18px;\n"
                                    "}",
-                                   -1, NULL);
+                                   -1);
   gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (memory_provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
 

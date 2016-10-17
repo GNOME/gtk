@@ -54,7 +54,7 @@ main (int argc, char *argv[])
                                    ".bottom { border-bottom-style: none; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; }"
                                    ".left { border-left-style: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }"
                                    ".right { border-right-style: none; border-top-right-radius: 0px; border-bottom-right-radius: 0px; }",
-                                   -1, NULL);
+                                   -1);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

@@ -1070,7 +1070,7 @@ main (int argc, char **argv)
 
 	    gtk_css_provider_load_from_data (provider,
 					     "* { -GtkComboBox-appears-as-list: true; }", 
-					     -1, NULL);
+					     -1);
 
 	    gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
 						       GTK_STYLE_PROVIDER (provider),

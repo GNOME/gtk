@@ -225,7 +225,7 @@ update_style (GtkInspectorCssEditor *ce)
   ce->priv->errors = NULL;
 
   text = get_current_text (ce->priv->text);
-  gtk_css_provider_load_from_data (ce->priv->provider, text, -1, NULL);
+  gtk_css_provider_load_from_data (ce->priv->provider, text, -1);
   g_free (text);
 }
 
