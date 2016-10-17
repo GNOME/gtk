@@ -81,7 +81,8 @@ on_response (GtkDialog *dialog,
         GtkIconTheme *theme;
         GdkPixbuf *pixbuf;
         theme = gtk_icon_theme_get_default ();
-        pixbuf = gtk_icon_theme_load_icon (theme, "terminal", 1600, 0, NULL);
+        pixbuf = gtk_icon_theme_load_icon (theme, "utilities-terminal", 1600, 0, NULL);
+        g_assert_nonnull (pixbuf);
         gtk_clipboard_set_image (clipboard, pixbuf);
       }
       break;
@@ -91,7 +92,8 @@ on_response (GtkDialog *dialog,
         GtkIconTheme *theme;
         GdkPixbuf *pixbuf;
         theme = gtk_icon_theme_get_default ();
-        pixbuf = gtk_icon_theme_load_icon (theme, "terminal", 48, 0, NULL);
+        pixbuf = gtk_icon_theme_load_icon (theme, "utilities-terminal", 48, 0, NULL);
+        g_assert_nonnull (pixbuf);
         gtk_clipboard_set_image (clipboard, pixbuf);
       }
       break;
