@@ -835,53 +835,35 @@ gtk_viewport_realize (GtkWidget *widget)
   GtkAllocation view_allocation;
   GtkWidget *child;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   gint event_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-
   event_mask = gtk_widget_get_events (widget);
 
-  attributes.event_mask = event_mask | GDK_SCROLL_MASK | GDK_TOUCH_MASK | GDK_SMOOTH_SCROLL_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                 event_mask | GDK_SCROLL_MASK | GDK_TOUCH_MASK | GDK_SMOOTH_SCROLL_MASK,
+                                 &allocation);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 
   gtk_css_gadget_get_content_allocation (priv->gadget,
                                          &view_allocation, NULL);
 
-  attributes.x = view_allocation.x;
-  attributes.y = view_allocation.y;
-  attributes.width = view_allocation.width;
-  attributes.height = view_allocation.height;
-  attributes.event_mask = 0;
-
-  priv->view_window = gdk_window_new (window,
-                                      &attributes, attributes_mask);
+  priv->view_window = gdk_window_new_child (window,
+                                            0,
+                                            &view_allocation);
   gtk_widget_register_window (widget, priv->view_window);
 
-  attributes.x = - gtk_adjustment_get_value (hadjustment);
-  attributes.y = - gtk_adjustment_get_value (vadjustment);
-  attributes.width = gtk_adjustment_get_upper (hadjustment);
-  attributes.height = gtk_adjustment_get_upper (vadjustment);
-  
-  attributes.event_mask = event_mask;
-
-  priv->bin_window = gdk_window_new (priv->view_window, &attributes, attributes_mask);
+  priv->bin_window = gdk_window_new_child (priv->view_window,
+                                           event_mask,
+                                           &(GdkRectangle) {
+                                             - gtk_adjustment_get_value (hadjustment),
+                                             - gtk_adjustment_get_value (vadjustment),
+                                             gtk_adjustment_get_upper (hadjustment),
+                                             gtk_adjustment_get_upper (vadjustment)});
   gtk_widget_register_window (widget, priv->bin_window);
   gdk_window_set_invalidate_handler (priv->bin_window,
 				     gtk_viewport_bin_window_invalidate_handler);
