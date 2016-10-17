@@ -1590,17 +1590,14 @@ gtk_paned_create_child_window (GtkPaned  *paned,
 {
   GtkWidget *widget = GTK_WIDGET (paned);
   GtkPanedPrivate *priv = paned->priv;
+  GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = gtk_widget_get_events (widget);
   if (child)
     {
-      GtkAllocation allocation;
       int handle_size;
+
+      gtk_widget_get_allocation (child, &allocation);
 
       gtk_css_gadget_get_preferred_size (priv->handle_gadget,
                                          priv->orientation,
@@ -1612,30 +1609,20 @@ gtk_paned_create_child_window (GtkPaned  *paned,
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
           child == priv->child2 && priv->child1 &&
           gtk_widget_get_visible (priv->child1))
-        attributes.x = priv->handle_pos.x + handle_size;
-      else
-        attributes.x = allocation.x;
+        allocation.x = priv->handle_pos.x + handle_size;
       if (priv->orientation == GTK_ORIENTATION_VERTICAL &&
           child == priv->child2 && priv->child1 &&
           gtk_widget_get_visible (priv->child1))
-        attributes.y = priv->handle_pos.y + handle_size;
-      else
-        attributes.y = allocation.y;
-
-      gtk_widget_get_allocation (child, &allocation);
-      attributes.width = allocation.width;
-      attributes.height = allocation.height;
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
+        allocation.y = priv->handle_pos.y + handle_size;
     }
   else
     {
-      attributes.width = 1;
-      attributes.height = 1;
-      attributes_mask = 0;
+      allocation = (GdkRectangle) { 0, 0, 1, 1 };
     }
 
-  window = gdk_window_new (gtk_widget_get_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_window (widget),
+                                 gtk_widget_get_events (widget),
+                                 &allocation);
   gtk_widget_register_window (widget, window);
 
   if (child)
@@ -1650,8 +1637,6 @@ gtk_paned_realize (GtkWidget *widget)
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
@@ -1659,22 +1644,14 @@ gtk_paned_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   g_object_ref (window);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.x = priv->handle_pos.x;
-  attributes.y = priv->handle_pos.y;
-  attributes.width = priv->handle_pos.width;
-  attributes.height = priv->handle_pos.height;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-			    GDK_BUTTON_RELEASE_MASK |
-			    GDK_ENTER_NOTIFY_MASK |
-			    GDK_LEAVE_NOTIFY_MASK |
-			    GDK_POINTER_MOTION_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  priv->handle = gdk_window_new (window,
-                                 &attributes, attributes_mask);
+  priv->handle = gdk_window_new_input (window,
+                                       gtk_widget_get_events (widget)
+                                       | GDK_BUTTON_PRESS_MASK
+                                       | GDK_BUTTON_RELEASE_MASK
+                                       | GDK_ENTER_NOTIFY_MASK
+                                       | GDK_LEAVE_NOTIFY_MASK
+                                       | GDK_POINTER_MOTION_MASK,
+                                       &priv->handle_pos);
 
   if (gtk_widget_is_sensitive (widget))
     {
