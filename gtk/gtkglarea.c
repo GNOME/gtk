@@ -281,25 +281,14 @@ gtk_gl_area_realize (GtkWidget *widget)
   GtkGLArea *area = GTK_GL_AREA (widget);
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   GtkAllocation allocation;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget);
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                       &attributes, attributes_mask);
+  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
+                                             gtk_widget_get_events (widget),
+                                             &allocation);
   gtk_widget_register_window (widget, priv->event_window);
 
   g_clear_error (&priv->error);
