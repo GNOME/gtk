@@ -1526,8 +1526,6 @@ calendar_realize_arrows (GtkCalendar *calendar)
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = calendar->priv;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   gint i;
   GtkAllocation allocation;
 
@@ -1536,25 +1534,19 @@ calendar_realize_arrows (GtkCalendar *calendar)
     {
       gtk_widget_get_allocation (widget, &allocation);
 
-      attributes.wclass = GDK_INPUT_ONLY;
-      attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.event_mask = (gtk_widget_get_events (widget)
-                               | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
-                               | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
       for (i = 0; i < 4; i++)
         {
           GdkRectangle rect;
           calendar_arrow_rectangle (calendar, i, &rect);
 
-          attributes.x = allocation.x + rect.x;
-          attributes.y = allocation.y + rect.y;
-          attributes.width = rect.width;
-          attributes.height = rect.height;
-          priv->arrow_win[i] = gdk_window_new (gtk_widget_get_window (widget),
-                                               &attributes,
-                                               attributes_mask);
+          rect.x += allocation.x;
+          rect.y += allocation.y;
 
+          priv->arrow_win[i] = gdk_window_new_input (gtk_widget_get_window (widget),
+                                                     gtk_widget_get_events (widget)
+                                                     | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
+                                                     | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK,
+                                                     &rect);
           gtk_widget_register_window (widget, priv->arrow_win[i]);
         }
       priv->arrow_prelight = 0x0;
@@ -1624,10 +1616,8 @@ static void
 gtk_calendar_realize (GtkWidget *widget)
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR (widget)->priv;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   gint inner_border = calendar_get_inner_border (GTK_CALENDAR (widget));
-  GtkAllocation allocation;
+  GtkAllocation allocation, rect;
   GtkBorder padding;
 
   get_component_paddings (GTK_CALENDAR (widget), &padding, NULL, NULL, NULL);
@@ -1635,34 +1625,26 @@ gtk_calendar_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_calendar_parent_class)->realize (widget);
 
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.event_mask = (gtk_widget_get_events (widget)
-                           | GDK_SCROLL_MASK
-                           | GDK_BUTTON_PRESS_MASK
-                           | GDK_BUTTON_RELEASE_MASK
-                           | GDK_POINTER_MOTION_MASK
-                           | GDK_LEAVE_NOTIFY_MASK);
-
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    attributes.x = priv->week_width + padding.left + inner_border;
+    rect.x = priv->week_width + padding.left + inner_border;
   else
-    attributes.x = padding.left + inner_border;
+    rect.x = padding.left + inner_border;
+  rect.y = priv->header_h + priv->day_name_h + padding.top + inner_border;
 
-  attributes.y = priv->header_h + priv->day_name_h + padding.top + inner_border;
-  attributes.width = allocation.width - attributes.x - (padding.right + inner_border);
-
+  rect.width = allocation.width - rect.x - (padding.right + inner_border);
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    attributes.width -= priv->week_width;
+    rect.width -= priv->week_width;
+  rect.height = priv->main_h;
 
-  attributes.height = priv->main_h;
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
+  priv->main_win = gdk_window_new_input (gtk_widget_get_window (widget),
+                                         gtk_widget_get_events (widget)
+                                         | GDK_SCROLL_MASK
+                                         | GDK_BUTTON_PRESS_MASK
+                                         | GDK_BUTTON_RELEASE_MASK
+                                         | GDK_POINTER_MOTION_MASK
+                                         | GDK_LEAVE_NOTIFY_MASK,
+                                         &rect);
 
-  attributes.x += allocation.x;
-  attributes.y += allocation.y;
-
-  priv->main_win = gdk_window_new (gtk_widget_get_window (widget),
-                                   &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->main_win);
 
   calendar_realize_arrows (GTK_CALENDAR (widget));
