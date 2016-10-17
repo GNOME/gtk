@@ -585,31 +585,20 @@ gtk_menu_shell_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-                            GDK_BUTTON_RELEASE_MASK |
-                            GDK_POINTER_MOTION_MASK |
-                            GDK_KEY_PRESS_MASK |
-                            GDK_ENTER_NOTIFY_MASK |
-                            GDK_LEAVE_NOTIFY_MASK);
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                 gtk_widget_get_events (widget)
+                                 | GDK_BUTTON_PRESS_MASK
+                                 | GDK_BUTTON_RELEASE_MASK
+                                 | GDK_POINTER_MOTION_MASK
+                                 | GDK_KEY_PRESS_MASK
+                                 | GDK_ENTER_NOTIFY_MASK
+                                 | GDK_LEAVE_NOTIFY_MASK,
+                                 &allocation);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 }
