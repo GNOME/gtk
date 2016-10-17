@@ -334,6 +334,8 @@ GdkWindowTypeHint
 GdkWindowAttr
 GdkWindowAttributesType
 gdk_window_new
+gdk_window_new_child
+gdk_window_new_input
 gdk_window_destroy
 gdk_window_get_window_type
 gdk_window_get_display

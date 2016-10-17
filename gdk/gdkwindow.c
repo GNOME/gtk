@@ -1484,6 +1484,66 @@ gdk_window_new (GdkWindow     *parent,
   return window;
 }
 
+/**
+ * gdk_window_new_child: (constructor)
+ * @parent: the parent window
+ * @event_mask: event mask (see gdk_window_set_events())
+ * @position: placement of the window inside @parent
+ *
+ * Creates a new client-side child window.
+ *
+ * Returns: (transfer full): the new #GdkWindow
+ **/
+GdkWindow *
+gdk_window_new_child (GdkWindow          *parent,
+                      gint                event_mask,
+                      const GdkRectangle *position)
+{
+  GdkWindowAttr attr;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
+
+  attr.event_mask = event_mask;
+  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.x = position->x;
+  attr.y = position->y;
+  attr.width = position->width;
+  attr.height = position->height;
+  attr.window_type = GDK_WINDOW_CHILD;
+
+  return gdk_window_new (parent, &attr, GDK_WA_X | GDK_WA_Y);
+}
+
+/**
+ * gdk_window_new_input: (constructor)
+ * @parent: the parent window
+ * @event_mask: event mask (see gdk_window_set_events())
+ * @position: placement of the window inside @parent
+ *
+ * Creates a new client-side input-only window.
+ *
+ * Returns: (transfer full): the new #GdkWindow
+ **/
+GdkWindow *
+gdk_window_new_input (GdkWindow          *parent,
+                      gint                event_mask,
+                      const GdkRectangle *position)
+{
+  GdkWindowAttr attr;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
+
+  attr.event_mask = event_mask;
+  attr.wclass = GDK_INPUT_ONLY;
+  attr.x = position->x;
+  attr.y = position->y;
+  attr.width = position->width;
+  attr.height = position->height;
+  attr.window_type = GDK_WINDOW_CHILD;
+
+  return gdk_window_new (parent, &attr, GDK_WA_X | GDK_WA_Y);
+}
+
 static gboolean
 is_parent_of (GdkWindow *parent,
 	      GdkWindow *child)
