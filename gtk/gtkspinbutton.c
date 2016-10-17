@@ -949,44 +949,33 @@ gtk_spin_button_realize (GtkWidget *widget)
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkAllocation down_allocation, up_allocation;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   gboolean return_val;
 
   gtk_widget_set_events (widget, gtk_widget_get_events (widget) |
                          GDK_KEY_RELEASE_MASK);
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->realize (widget);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= GDK_BUTTON_PRESS_MASK
-    | GDK_BUTTON_RELEASE_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_ENTER_NOTIFY_MASK
-    | GDK_POINTER_MOTION_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
   gtk_css_gadget_get_border_allocation (priv->up_button, &up_allocation, NULL);
   gtk_css_gadget_get_border_allocation (priv->down_button, &down_allocation, NULL);
 
-  /* create the left panel window */
-  attributes.x = down_allocation.x;
-  attributes.y = down_allocation.y;
-  attributes.width = down_allocation.width;
-  attributes.height = down_allocation.height;
-
-  priv->down_panel = gdk_window_new (gtk_widget_get_window (widget),
-                                     &attributes, attributes_mask);
+  priv->down_panel = gdk_window_new_input (gtk_widget_get_window (widget),
+                                           gtk_widget_get_events (widget)
+                                           | GDK_BUTTON_PRESS_MASK
+                                           | GDK_BUTTON_RELEASE_MASK
+                                           | GDK_LEAVE_NOTIFY_MASK
+                                           | GDK_ENTER_NOTIFY_MASK
+                                           | GDK_POINTER_MOTION_MASK,
+                                           &down_allocation);
   gtk_widget_register_window (widget, priv->down_panel);
 
-  /* create the right panel window */
-  attributes.x = up_allocation.x;
-  attributes.y = up_allocation.y;
-  attributes.width = up_allocation.width;
-  attributes.height = up_allocation.height;
-
-  priv->up_panel = gdk_window_new (gtk_widget_get_window (widget),
-                                      &attributes, attributes_mask);
+  priv->up_panel = gdk_window_new_input (gtk_widget_get_window (widget),
+                                           gtk_widget_get_events (widget)
+                                           | GDK_BUTTON_PRESS_MASK
+                                           | GDK_BUTTON_RELEASE_MASK
+                                           | GDK_LEAVE_NOTIFY_MASK
+                                           | GDK_ENTER_NOTIFY_MASK
+                                           | GDK_POINTER_MOTION_MASK,
+                                           &up_allocation);
   gtk_widget_register_window (widget, priv->up_panel);
 
   return_val = FALSE;
