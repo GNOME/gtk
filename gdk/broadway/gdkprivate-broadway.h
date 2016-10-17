@@ -93,7 +93,6 @@ void _gdk_broadway_screen_events_init   (GdkScreen *screen);
 GdkVisual *_gdk_broadway_screen_get_system_visual (GdkScreen * screen);
 gint _gdk_broadway_screen_visual_get_best_depth (GdkScreen * screen);
 GdkVisualType _gdk_broadway_screen_visual_get_best_type (GdkScreen * screen);
-GdkVisual *_gdk_broadway_screen_get_system_visual (GdkScreen * screen);
 GdkVisual*_gdk_broadway_screen_visual_get_best (GdkScreen * screen);
 GdkVisual*_gdk_broadway_screen_visual_get_best_with_depth (GdkScreen * screen,
 							   gint depth);
