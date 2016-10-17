@@ -138,22 +138,12 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
   GtkWidget *widget = GTK_WIDGET (overlay);
   GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   gtk_overlay_compute_child_allocation (overlay, child, &allocation, NULL);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-  attributes.event_mask = gtk_widget_get_events (widget);
-
-  window = gdk_window_new (gtk_widget_get_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_window (widget),
+                                 gtk_widget_get_events (widget),
+                                 &allocation);
   gtk_widget_register_window (widget, window);
 
   gdk_window_set_pass_through (window, child->pass_through);
