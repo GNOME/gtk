@@ -1831,8 +1831,6 @@ gtk_notebook_realize (GtkWidget *widget)
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   GdkRectangle event_window_pos;
 
   gtk_widget_set_realized (widget, TRUE);
@@ -1843,20 +1841,15 @@ gtk_notebook_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   g_object_ref (window);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = event_window_pos.x;
-  attributes.y = event_window_pos.y;
-  attributes.width = event_window_pos.width;
-  attributes.height = event_window_pos.height;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-                            GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK |
-                            GDK_POINTER_MOTION_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                           &attributes, attributes_mask);
+  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
+                                             gtk_widget_get_events (widget)
+                                             | GDK_BUTTON_PRESS_MASK
+                                             | GDK_BUTTON_RELEASE_MASK
+                                             | GDK_KEY_PRESS_MASK
+                                             | GDK_POINTER_MOTION_MASK
+                                             | GDK_ENTER_NOTIFY_MASK
+                                             | GDK_LEAVE_NOTIFY_MASK,
+                                             &event_window_pos);
   gtk_widget_register_window (widget, priv->event_window);
 }
 
@@ -2840,23 +2833,15 @@ show_drag_window (GtkNotebook        *notebook,
 
   if (!priv->drag_window)
     {
-      GdkWindowAttr attributes;
       GtkAllocation allocation;
-      guint attributes_mask;
 
       gtk_css_gadget_get_margin_allocation (page->gadget, &allocation, NULL);
-      attributes.x = priv->drag_window_x;
-      attributes.y = priv->drag_window_y;
-      attributes.width = allocation.width;
-      attributes.height = allocation.height;
-      attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.wclass = GDK_INPUT_OUTPUT;
-      attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK;
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
+      allocation.x = priv->drag_window_x;
+      allocation.y = priv->drag_window_y;
 
-      priv->drag_window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                          &attributes,
-                                          attributes_mask);
+      priv->drag_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                                GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK,
+                                                &allocation);
       gtk_widget_register_window (widget, priv->drag_window);
     }
 
