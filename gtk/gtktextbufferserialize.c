@@ -671,6 +671,14 @@ set_error (GError              **err,
            int                   error_domain,
            int                   error_code,
            const char           *format,
+           ...) G_GNUC_PRINTF (5, 6);
+
+static void
+set_error (GError              **err,
+           GMarkupParseContext  *context,
+           int                   error_domain,
+           int                   error_code,
+           const char           *format,
            ...)
 {
   int line, ch;
@@ -795,7 +803,7 @@ check_id_or_name (GMarkupParseContext  *context,
 	    {
 	      set_error (error, context,
 			 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-			 _("<%s> element has invalid ID \"%s\""), attribute_values[i]);
+			 _("<%s> element has invalid ID \"%s\""), element_name, attribute_values[i]);
 	      return FALSE;
 	    }
 	}
