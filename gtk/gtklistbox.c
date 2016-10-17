@@ -2156,24 +2156,19 @@ static void
 gtk_list_box_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
-  GdkWindowAttr attributes = { 0, };
   GdkWindow *window;
 
   gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_set_realized (widget, TRUE);
 
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.event_mask = gtk_widget_get_events (widget) |
-    GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_POINTER_MOTION_MASK |
-    GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, GDK_WA_X | GDK_WA_Y);
+  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                 gtk_widget_get_events (widget)
+                                 | GDK_ENTER_NOTIFY_MASK
+                                 | GDK_LEAVE_NOTIFY_MASK
+                                 | GDK_POINTER_MOTION_MASK
+                                 | GDK_BUTTON_PRESS_MASK
+                                 | GDK_BUTTON_RELEASE_MASK,
+                                 &allocation);
   gdk_window_set_user_data (window, (GObject*) widget);
   gtk_widget_set_window (widget, window); /* Passes ownership */
 }
