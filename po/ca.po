@@ -5814,11 +5814,11 @@ msgstr "Tots els fulls"
 
 #: gtk/ui/gtkprintunixdialog.ui:571
 msgid "Even sheets"
-msgstr "Fulls regulars"
+msgstr "Fulls parells"
 
 #: gtk/ui/gtkprintunixdialog.ui:572
 msgid "Odd sheets"
-msgstr "Fulls antics"
+msgstr "Fulls senars"
 
 #: gtk/ui/gtkprintunixdialog.ui:585
 msgid "Sc_ale:"
