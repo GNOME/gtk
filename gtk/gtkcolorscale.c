@@ -106,7 +106,7 @@ gtk_color_scale_draw_trough (GtkColorScale  *scale,
               red = CLAMP (r * 255, 0, 255);
               green = CLAMP (g * 255, 0, 255);
               blue = CLAMP (b * 255, 0, 255);
-              p[x] = (red << 16) | (green << 8) | blue;
+              p[hue_x] = (red << 16) | (green << 8) | blue;
             }
         }
 
