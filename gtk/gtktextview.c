@@ -4662,8 +4662,6 @@ gtk_text_view_realize (GtkWidget *widget)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   GSList *tmp_list;
 
   text_view = GTK_TEXT_VIEW (widget);
@@ -4673,18 +4671,9 @@ gtk_text_view_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                 GDK_VISIBILITY_NOTIFY_MASK,
+                                 &allocation);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 
@@ -9923,45 +9912,30 @@ text_window_realize (GtkTextWindow *win,
                      GtkWidget     *widget)
 {
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   GdkDisplay *display;
   GdkCursor *cursor;
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = win->allocation.x;
-  attributes.y = win->allocation.y;
-  attributes.width = win->allocation.width;
-  attributes.height = win->allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
   window = gtk_widget_get_window (widget);
 
-  win->window = gdk_window_new (window,
-                                &attributes, attributes_mask);
+  win->window = gdk_window_new_child (window,
+                                      GDK_VISIBILITY_NOTIFY_MASK,
+                                      &win->allocation);
 
   gdk_window_show (win->window);
   gtk_widget_register_window (win->widget, win->window);
   gdk_window_lower (win->window);
 
-  attributes.x = 0;
-  attributes.y = 0;
-  attributes.width = win->allocation.width;
-  attributes.height = win->allocation.height;
-  attributes.event_mask = gtk_widget_get_events (win->widget)
-                          | GDK_SCROLL_MASK
-                          | GDK_SMOOTH_SCROLL_MASK
-                          | GDK_KEY_PRESS_MASK
-                          | GDK_BUTTON_PRESS_MASK
-                          | GDK_BUTTON_RELEASE_MASK
-                          | GDK_POINTER_MOTION_MASK;
-
-  win->bin_window = gdk_window_new (win->window,
-                                    &attributes,
-                                    attributes_mask);
+  win->bin_window = gdk_window_new_child (win->window,
+                                          gtk_widget_get_events (win->widget)
+                                          | GDK_SCROLL_MASK
+                                          | GDK_SMOOTH_SCROLL_MASK
+                                          | GDK_KEY_PRESS_MASK
+                                          | GDK_BUTTON_PRESS_MASK
+                                          | GDK_BUTTON_RELEASE_MASK
+                                          | GDK_POINTER_MOTION_MASK,
+                                          &(GdkRectangle) {
+                                            0, 0,
+                                            win->allocation.width, win->allocation.height});
 
   gtk_widget_register_window (win->widget, win->bin_window);
 
