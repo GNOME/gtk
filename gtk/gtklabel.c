@@ -5356,8 +5356,6 @@ gtk_label_create_window (GtkLabel *label)
   GtkLabelPrivate *priv = label->priv;
   GtkAllocation allocation;
   GtkWidget *widget;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   g_assert (priv->select_info);
   widget = GTK_WIDGET (label);
@@ -5368,23 +5366,14 @@ gtk_label_create_window (GtkLabel *label)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.override_redirect = TRUE;
-  attributes.event_mask = gtk_widget_get_events (widget) |
-    GDK_BUTTON_PRESS_MASK        |
-    GDK_BUTTON_RELEASE_MASK      |
-    GDK_LEAVE_NOTIFY_MASK        |
-    GDK_BUTTON_MOTION_MASK       |
-    GDK_POINTER_MOTION_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
-
-  priv->select_info->window = gdk_window_new (gtk_widget_get_window (widget),
-                                               &attributes, attributes_mask);
+  priv->select_info->window = gdk_window_new_input (gtk_widget_get_window (widget),
+                                                    gtk_widget_get_events (widget)
+                                                    | GDK_BUTTON_PRESS_MASK
+                                                    | GDK_BUTTON_RELEASE_MASK
+                                                    | GDK_LEAVE_NOTIFY_MASK
+                                                    | GDK_BUTTON_MOTION_MASK
+                                                    | GDK_POINTER_MOTION_MASK,
+                                                    &allocation);
 
   if (gtk_widget_is_sensitive (widget) && priv->select_info->selectable)
     {
