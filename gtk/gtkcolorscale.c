@@ -96,11 +96,11 @@ gtk_color_scale_draw_trough (GtkColorScale  *scale,
       data = g_malloc (height * stride);
 
       f = 1.0 / (height - 1);
-      for (hue_y = 0; hue_y < height; y++)
+      for (hue_y = 0; hue_y < height; hue_y++)
         {
           h = CLAMP (hue_y * f, 0.0, 1.0);
           p = data + hue_y * (stride / 4);
-          for (hue_x = 0; hue_x < width; x++)
+          for (hue_x = 0; hue_x < width; hue_x++)
             {
               gtk_hsv_to_rgb (h, 1, 1, &r, &g, &b);
               red = CLAMP (r * 255, 0, 255);
