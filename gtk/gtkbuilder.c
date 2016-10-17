@@ -1759,7 +1759,7 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * initialised beforehand.
  *
  * This function can handle char, uchar, boolean, int, uint, long,
- * ulong, enum, flags, float, double, string, #GdkColor, #GdkRGBA and
+ * ulong, enum, flags, float, double, string, #GdkRGBA and
  * #GtkAdjustment type values. Support for #GtkWidget type values is
  * still to come.
  *
@@ -1995,25 +1995,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       }
       break;
     case G_TYPE_BOXED:
-      if (G_VALUE_HOLDS (value, g_type_from_name ("GdkColor")))
-        {
-          GdkColor color = { 0, };
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          if (gdk_color_parse (string, &color))
-            g_value_set_boxed (value, &color);
-          else
-            {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_VALUE,
-                           "Could not parse color '%s'",
-                           string);
-              ret = FALSE;
-            }
-G_GNUC_END_IGNORE_DEPRECATIONS
-        }
-      else if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
+      if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
         {
           GdkRGBA rgba = { 0 };
 
