@@ -3372,6 +3372,7 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
     }
 }
 
+#if 0
 /**
  * gdk_cairo_create:
  * @window: a #GdkWindow
@@ -3425,6 +3426,7 @@ gdk_cairo_create (GdkWindow *window)
 
   return cr;
 }
+#endif
 
 /* Code for dirty-region queueing
  */
