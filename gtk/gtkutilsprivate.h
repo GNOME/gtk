@@ -1,6 +1,7 @@
 #ifndef __GTKUTILS_H__
 #define __GTKUTILS_H__
 
+#include <stdio.h>
 #include <glib.h>
 
 G_BEGIN_DECLS
