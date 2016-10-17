@@ -1880,7 +1880,7 @@ AS_IF([test "x$enable_compile_warnings" = xyes], [
     -Wmissing-include-dirs dnl
     -Wshadow dnl
     -Wformat=2 dnl
-    -Wformat-non-literal dnl
+    -Wformat-nonliteral dnl
     -Wformat-security dnl
     -Wimplicit-function-declaration dnl
     -Werror=redundant-decls dnl
