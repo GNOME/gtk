@@ -124,8 +124,8 @@ decoration {
   background-repeat: no-repeat;
 }
 
-/* Unset above settings when the window is a popup menu */
-* window decoration {
+/* Unset above settings when the window is a popup menu or tooltip */
+* window decoration, tooltip decoration {
     all: unset;
 }
 
