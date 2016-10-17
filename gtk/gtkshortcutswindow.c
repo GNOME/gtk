@@ -955,12 +955,10 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                    NULL);
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (priv->menu_label));
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   arrow = gtk_image_new_from_icon_name ("pan-down-symbolic",
                                         GTK_ICON_SIZE_BUTTON);
   gtk_widget_show (arrow);
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (arrow));
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   priv->popover = g_object_new (GTK_TYPE_POPOVER,
                                 "relative-to", priv->menu_button,
