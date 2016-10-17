@@ -11,7 +11,6 @@ static void
 test_parse_selectors (void)
 {
   GtkCssProvider *provider;
-  gboolean res;
   gint i;
   const gchar *valid[] = {
     "* {}",
@@ -60,8 +59,7 @@ test_parse_selectors (void)
   for (i = 0; valid[i]; i++)
     {
       provider = gtk_css_provider_new ();
-      res = gtk_css_provider_load_from_data (provider, valid[i], -1);
-      g_assert (res);
+      gtk_css_provider_load_from_data (provider, valid[i], -1);
 
       g_object_unref (provider);
    }

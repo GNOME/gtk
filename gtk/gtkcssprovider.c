@@ -150,7 +150,7 @@ static void gtk_css_style_provider_emit_error (GtkStyleProviderPrivate *provider
                                                GtkCssSection           *section,
                                                const GError            *error);
 
-static gboolean
+static void
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 GtkCssScanner  *scanner,
                                 GFile          *file,
@@ -966,37 +966,6 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 
 }
 
-static void
-gtk_css_provider_propagate_error (GtkCssProvider  *provider,
-                                  GtkCssSection   *section,
-                                  const GError    *error,
-                                  GError         **propagate_to)
-{
-
-  char *s;
-
-  /* don't fail for deprecations */
-  if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
-    {
-      s = _gtk_css_section_to_string (section);
-      g_warning ("Theme parsing error: %s: %s", s, error->message);
-      g_free (s);
-      return;
-    }
-
-  /* we already set an error. And we'd like to keep the first one */
-  if (*propagate_to)
-    return;
-
-  *propagate_to = g_error_copy (error);
-  if (section)
-    {
-      s = _gtk_css_section_to_string (section);
-      g_prefix_error (propagate_to, "%s", s);
-      g_free (s);
-    }
-}
-
 static gboolean
 parse_import (GtkCssScanner *scanner)
 {
@@ -1713,7 +1682,7 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 #endif
 }
 
-static gboolean
+static void
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 GtkCssScanner  *parent,
                                 GFile          *file,
@@ -1780,8 +1749,6 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
     }
 
   g_free (free_data);
-
-  return TRUE;
 }
 
 /**
@@ -1794,22 +1761,16 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
  *
  * Loads @data into @css_provider, and by doing so clears any previously loaded
  * information.
- *
- * Returns: %TRUE. The return value is deprecated and %FALSE will only be
- *     returned for backwards compatibility reasons if an @error is not 
- *     %NULL and a loading error occurred. To track errors while loading
- *     CSS, connect to the #GtkCssProvider::parsing-error signal.
  **/
-gboolean
+void
 gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                  const gchar     *data,
                                  gssize           length)
 {
   char *free_data;
-  gboolean ret;
 
-  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
-  g_return_val_if_fail (data != NULL, FALSE);
+  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (data != NULL);
 
   if (length < 0)
     {
@@ -1824,13 +1785,11 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  ret = gtk_css_provider_load_internal (css_provider, NULL, NULL, data);
+  gtk_css_provider_load_internal (css_provider, NULL, NULL, data);
 
   g_free (free_data);
 
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (css_provider));
-
-  return ret;
 }
 
 /**
@@ -1840,61 +1799,43 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
  *
  * Loads the data contained in @file into @css_provider, making it
  * clear any previously loaded information.
- *
- * Returns: %TRUE. The return value is deprecated and %FALSE will only be
- *     returned for backwards compatibility reasons if an @error is not 
- *     %NULL and a loading error occurred. To track errors while loading
- *     CSS, connect to the #GtkCssProvider::parsing-error signal.
  **/
-gboolean
+void
 gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                  GFile           *file)
 {
-  gboolean success;
-
-  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
-  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (G_IS_FILE (file));
 
   gtk_css_provider_reset (css_provider);
 
-  success = gtk_css_provider_load_internal (css_provider, NULL, file, NULL);
+  gtk_css_provider_load_internal (css_provider, NULL, file, NULL);
 
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (css_provider));
-
-  return success;
 }
 
 /**
  * gtk_css_provider_load_from_path:
  * @css_provider: a #GtkCssProvider
  * @path: the path of a filename to load, in the GLib filename encoding
- * @error: (out) (allow-none): return location for a #GError, or %NULL
  *
  * Loads the data contained in @path into @css_provider, making it clear
  * any previously loaded information.
- *
- * Returns: %TRUE. The return value is deprecated and %FALSE will only be
- *     returned for backwards compatibility reasons if an @error is not 
- *     %NULL and a loading error occurred. To track errors while loading
- *     CSS, connect to the #GtkCssProvider::parsing-error signal.
  **/
-gboolean
+void
 gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                  const gchar     *path)
 {
   GFile *file;
-  gboolean result;
 
-  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (path != NULL);
 
   file = g_file_new_for_path (path);
   
-  result = gtk_css_provider_load_from_file (css_provider, file);
+  gtk_css_provider_load_from_file (css_provider, file);
 
   g_object_unref (file);
-
-  return result;
 }
 
 /**

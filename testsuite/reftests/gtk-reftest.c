@@ -219,8 +219,7 @@ add_extra_css (const char *testname,
 
   provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
   gtk_css_provider_load_from_path (GTK_CSS_PROVIDER (provider),
-                                   css_file,
-                                   NULL);
+                                   css_file);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              provider,
                                              GTK_STYLE_PROVIDER_PRIORITY_FORCE);

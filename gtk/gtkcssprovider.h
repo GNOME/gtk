@@ -95,14 +95,14 @@ GDK_AVAILABLE_IN_3_2
 char *           gtk_css_provider_to_string      (GtkCssProvider  *provider);
 
 GDK_AVAILABLE_IN_ALL
-gboolean         gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
+void             gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                                   const gchar     *data,
                                                   gssize           length);
 GDK_AVAILABLE_IN_ALL
-gboolean         gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
+void             gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                                   GFile           *file);
 GDK_AVAILABLE_IN_ALL
-gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
+void             gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                                   const gchar     *path);
 
 GDK_AVAILABLE_IN_3_16

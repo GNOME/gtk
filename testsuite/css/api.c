@@ -28,7 +28,7 @@ gtk_css_provider_load_data_not_null_terminated (void)
 
   p = gtk_css_provider_new();
 
-  gtk_css_provider_load_from_data(p, data, sizeof (data), NULL);
+  gtk_css_provider_load_from_data(p, data, sizeof (data));
 
   g_object_unref (p);
 }

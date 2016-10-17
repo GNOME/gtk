@@ -174,7 +174,7 @@ parse_css_file (GFile *file, gboolean generate)
                     "parsing-error",
                     G_CALLBACK (parsing_error_cb),
                     errors);
-  gtk_css_provider_load_from_path (provider, css_file, NULL);
+  gtk_css_provider_load_from_path (provider, css_file);
 
   css = gtk_css_provider_to_string (provider);
 

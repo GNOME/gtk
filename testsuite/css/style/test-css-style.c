@@ -111,8 +111,7 @@ load_ui_file (GFile *file, gboolean generate)
   g_assert (css_file != NULL);
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_path (provider, css_file, &error);
-  g_assert_no_error (error);
+  gtk_css_provider_load_from_path (provider, css_file);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_FORCE);

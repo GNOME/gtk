@@ -220,10 +220,7 @@ set_styles (void)
 
   provider = gtk_css_provider_new ();
 
-  if (!gtk_css_provider_load_from_data (provider, CSS, -1))
-    {
-      g_assert_not_reached ();
-    }
+  gtk_css_provider_load_from_data (provider, CSS, -1);
 
   screen = gdk_display_get_default_screen (gdk_display_get_default ());
 
