@@ -2887,30 +2887,19 @@ realize_icon_info (GtkWidget            *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   g_return_if_fail (icon_info != NULL);
 
-  attributes.x = 0;
-  attributes.y = 0;
-  attributes.width = 1;
-  attributes.height = 1;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-                                GDK_BUTTON_RELEASE_MASK |
-                                GDK_BUTTON1_MOTION_MASK |
-                                GDK_BUTTON3_MOTION_MASK |
-                                GDK_POINTER_MOTION_MASK |
-                                GDK_ENTER_NOTIFY_MASK |
-                            GDK_LEAVE_NOTIFY_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  icon_info->window = gdk_window_new (gtk_widget_get_window (widget),
-                                      &attributes,
-                                      attributes_mask);
+  icon_info->window = gdk_window_new_input (gtk_widget_get_window (widget),
+                                            gtk_widget_get_events (widget)
+                                            | GDK_BUTTON_PRESS_MASK
+                                            | GDK_BUTTON_RELEASE_MASK
+                                            | GDK_BUTTON1_MOTION_MASK
+                                            | GDK_BUTTON3_MOTION_MASK
+                                            | GDK_POINTER_MOTION_MASK
+                                            | GDK_ENTER_NOTIFY_MASK
+                                            | GDK_LEAVE_NOTIFY_MASK,
+                                            &(GdkRectangle) { 0, 0, 1, 1});
   gtk_widget_register_window (widget, icon_info->window);
 
   gtk_widget_queue_resize (widget);
@@ -3096,8 +3085,6 @@ gtk_entry_realize (GtkWidget *widget)
   GtkEntry *entry;
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   int i;
 
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->realize (widget);
@@ -3105,26 +3092,16 @@ gtk_entry_realize (GtkWidget *widget)
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-			    GDK_BUTTON_RELEASE_MASK |
-			    GDK_BUTTON1_MOTION_MASK |
-			    GDK_BUTTON3_MOTION_MASK |
-			    GDK_POINTER_MOTION_MASK |
-                            GDK_ENTER_NOTIFY_MASK |
-			    GDK_LEAVE_NOTIFY_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  attributes.x = priv->text_allocation.x;
-  attributes.y = priv->text_allocation.y;
-  attributes.width = priv->text_allocation.width;
-  attributes.height = priv->text_allocation.height;
-
-  priv->text_area = gdk_window_new (gtk_widget_get_window (widget),
-                                    &attributes,
-                                    attributes_mask);
+  priv->text_area = gdk_window_new_input (gtk_widget_get_window (widget),
+                                          gtk_widget_get_events (widget)
+                                          | GDK_BUTTON_PRESS_MASK
+                                          | GDK_BUTTON_RELEASE_MASK
+                                          | GDK_BUTTON1_MOTION_MASK
+                                          | GDK_BUTTON3_MOTION_MASK
+                                          | GDK_POINTER_MOTION_MASK
+                                          | GDK_ENTER_NOTIFY_MASK
+                                          | GDK_LEAVE_NOTIFY_MASK,
+                                          &priv->text_allocation);
 
   if (gtk_widget_is_sensitive (widget))
     {
