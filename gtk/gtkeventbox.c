@@ -389,38 +389,27 @@ gtk_event_box_realize (GtkWidget *widget)
   GtkEventBoxPrivate *priv;
   GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   gboolean visible_window;
+
+  priv = GTK_EVENT_BOX (widget)->priv;
 
   gtk_widget_get_allocation (widget, &allocation);
 
   gtk_widget_set_realized (widget, TRUE);
 
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.event_mask = gtk_widget_get_events (widget)
-                        | GDK_BUTTON_MOTION_MASK
-                        | GDK_BUTTON_PRESS_MASK
-                        | GDK_BUTTON_RELEASE_MASK
-                        | GDK_EXPOSURE_MASK
-                        | GDK_ENTER_NOTIFY_MASK
-                        | GDK_LEAVE_NOTIFY_MASK;
-
-  priv = GTK_EVENT_BOX (widget)->priv;
-
   visible_window = gtk_widget_get_has_window (widget);
   if (visible_window)
     {
-      attributes.wclass = GDK_INPUT_OUTPUT;
+      window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                     gtk_widget_get_events (widget)
+                                     | GDK_BUTTON_MOTION_MASK
+                                     | GDK_BUTTON_PRESS_MASK
+                                     | GDK_BUTTON_RELEASE_MASK
+                                     | GDK_EXPOSURE_MASK
+                                     | GDK_ENTER_NOTIFY_MASK
+                                     | GDK_LEAVE_NOTIFY_MASK,
+                                     &allocation);
 
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-      window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                               &attributes, attributes_mask);
       gtk_widget_set_window (widget, window);
       gtk_widget_register_window (widget, window);
     }
@@ -433,14 +422,20 @@ gtk_event_box_realize (GtkWidget *widget)
 
   if (!visible_window || priv->above_child)
     {
-      attributes.wclass = GDK_INPUT_ONLY;
-      if (!visible_window)
-        attributes_mask = GDK_WA_X | GDK_WA_Y;
-      else
-        attributes_mask = 0;
-
-      priv->event_window = gdk_window_new (window,
-                                           &attributes, attributes_mask);
+      if (visible_window)
+        {
+          allocation.x = 0;
+          allocation.y = 0;
+        }
+      priv->event_window = gdk_window_new_input (window,
+                                                 gtk_widget_get_events (widget)
+                                                 | GDK_BUTTON_MOTION_MASK
+                                                 | GDK_BUTTON_PRESS_MASK
+                                                 | GDK_BUTTON_RELEASE_MASK
+                                                 | GDK_EXPOSURE_MASK
+                                                 | GDK_ENTER_NOTIFY_MASK
+                                                 | GDK_LEAVE_NOTIFY_MASK,
+                                                 &allocation);
       gtk_widget_register_window (widget, priv->event_window);
     }
 }
