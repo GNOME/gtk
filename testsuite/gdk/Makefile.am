@@ -19,6 +19,7 @@ LDADD = 				\
 
 TEST_PROGS += 				\
 	cairo				\
+	cursor				\
 	display				\
 	encoding			\
 	keysyms				\
