@@ -3999,23 +3999,12 @@ create_indicator_window (GtkScrolledWindow *scrolled_window,
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
   GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   gtk_scrolled_window_allocate_scrollbar (scrolled_window, child, &allocation);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-  attributes.event_mask = gtk_widget_get_events (widget);
-
-  window = gdk_window_new (gtk_widget_get_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_window (widget),
+                                 gtk_widget_get_events (widget),
+                                 &allocation);
   gtk_widget_register_window (widget, window);
 
   if (scrolled_window->priv->use_indicators)
@@ -4269,24 +4258,15 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GdkWindow *window;
   GtkAllocation allocation;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-  attributes.event_mask = gtk_widget_get_events (widget) |
-    GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_POINTER_MOTION_MASK;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                 gtk_widget_get_events (widget)
+                                 | GDK_ENTER_NOTIFY_MASK
+                                 | GDK_LEAVE_NOTIFY_MASK
+                                 | GDK_POINTER_MOTION_MASK,
+                                 &allocation);
 
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
