@@ -3179,7 +3179,8 @@ theme_list_contexts (IconTheme  *theme,
       dir = l->data;
 
       context = g_quark_to_string (dir->context);
-      g_hash_table_replace (contexts, (gpointer) context, NULL);
+      if (context != NULL)
+        g_hash_table_replace (contexts, (gpointer) context, NULL);
 
       l = l->next;
     }
