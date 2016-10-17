@@ -13,13 +13,11 @@
             <property name="height_request">120</property>
         <child>
           <object class="GtkButton" id="button1">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>
@@ -29,13 +27,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button2">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>
@@ -45,13 +41,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button3">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>
@@ -61,13 +55,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button4">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>
@@ -77,13 +69,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button5">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>
@@ -93,13 +83,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button6">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>
@@ -109,13 +97,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button7">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>
@@ -125,13 +111,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button8">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">10</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>
@@ -141,13 +125,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button9">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">ref</property>
           </object>
           <packing>

@@ -11,7 +11,6 @@
           <object class="GtkMenuItem" id="menuitem1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="use_action_appearance">False</property>
             <property name="label" translatable="yes">_File</property>
             <property name="use_underline">True</property>
             <child type="submenu">
@@ -22,14 +21,12 @@
                   <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkCheckMenuItem" id="checkmenuitem1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="label" translatable="yes">awesome</property>
                     <property name="use_underline">True</property>
                     <property name="inconsistent">True</property>
@@ -39,7 +36,6 @@
                   <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                 </child>
                 <child>
@@ -47,7 +43,6 @@
                     <property name="label" translatable="yes">_Quit</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                 </child>
@@ -59,7 +54,6 @@
           <object class="GtkMenuItem" id="menuitem2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="use_action_appearance">False</property>
             <property name="label" translatable="yes">_Edit</property>
             <property name="use_underline">True</property>
             <child type="submenu">
@@ -71,7 +65,6 @@
                     <property name="label" translatable="yes">Cu_t</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                 </child>
@@ -80,7 +73,6 @@
                     <property name="label" translatable="yes">_Copy</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                 </child>
@@ -89,7 +81,6 @@
                     <property name="label" translatable="yes">_Paste</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                 </child>
@@ -98,7 +89,6 @@
                     <property name="label" translatable="yes">_Delete</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                 </child>
@@ -110,7 +100,6 @@
           <object class="GtkMenuItem" id="menuitem3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="use_action_appearance">False</property>
             <property name="label" translatable="yes">_View</property>
             <property name="use_underline">True</property>
           </object>
@@ -119,7 +108,6 @@
           <object class="GtkMenuItem" id="menuitem4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="use_action_appearance">False</property>
             <property name="label" translatable="yes">_Help</property>
             <property name="use_underline">True</property>
             <child type="submenu">
@@ -131,7 +119,6 @@
                     <property name="label" translatable="yes">_About</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                 </child>

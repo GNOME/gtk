@@ -20,14 +20,13 @@ window1
       "push button"
       parent: grid1
       index: 0
-      name: Close
       state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
       <AtkImage>
-      image size: 16 x 16
+      image size: -1 x -1
       image description: (null)
       <AtkAction>
       action 0 name: click
@@ -36,14 +35,13 @@ window1
       "push button"
       parent: grid1
       index: 1
-      name: Find and Replace
       state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
       <AtkImage>
-      image size: 16 x 16
+      image size: -1 x -1
       image description: (null)
       <AtkAction>
       action 0 name: click

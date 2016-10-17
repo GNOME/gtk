@@ -12,13 +12,11 @@
         <property name="name">reference</property>
         <child>
           <object class="GtkButton" id="button1">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">40</property>
             <property name="height_request">30</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">a</property>
           </object>
           <packing>
@@ -29,13 +27,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button2">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">40</property>
             <property name="height_request">30</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">b</property>
           </object>
           <packing>
@@ -46,13 +42,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button3">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">40</property>
             <property name="height_request">30</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">c</property>
           </object>
           <packing>
@@ -63,13 +57,11 @@
         </child>
         <child>
           <object class="GtkButton" id="button4">
-            <property name="use_action_appearance">False</property>
             <property name="width_request">40</property>
             <property name="height_request">30</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
             <property name="name">d</property>
           </object>
           <packing>

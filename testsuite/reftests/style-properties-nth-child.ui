@@ -38,7 +38,6 @@
             <child>
               <object class="GtkToolButton" id="add_button">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="icon_name">list-add-symbolic</property>
               </object>
               <packing>
@@ -49,7 +48,6 @@
             <child>
               <object class="GtkToolButton" id="add_button2">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="icon_name">list-add-symbolic</property>
               </object>
               <packing>

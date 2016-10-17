@@ -647,8 +647,6 @@ test_types (void)
 {
   const gchar buffer[] = 
     "<interface>"
-    "  <object class=\"GtkAction\" id=\"action\"/>"
-    "  <object class=\"GtkActionGroup\" id=\"actiongroup\"/>"
     "  <object class=\"GtkButton\" id=\"button\"/>"
     "  <object class=\"GtkCheckButton\" id=\"checkbutton\"/>"
     "  <object class=\"GtkDialog\" id=\"dialog\"/>"
@@ -2016,54 +2014,6 @@ test_add_objects (void)
   obj = gtk_builder_get_object (builder, "mainbox");  
   g_assert (GTK_IS_WIDGET (obj));
   g_object_unref (builder);
-
-  /* test cherry picking a ui manager and menubar that depends on it */
-  error = NULL;
-  builder = gtk_builder_new ();
-  ret = gtk_builder_add_objects_from_string (builder, buffer2, -1, objects3, &error);
-  g_assert (ret);
-  obj = gtk_builder_get_object (builder, "uimgr1");
-  g_assert (GTK_IS_LABEL (obj));
-  obj = gtk_builder_get_object (builder, "file");
-  g_assert (GTK_IS_ACTION (obj));
-  obj = gtk_builder_get_object (builder, "menubar1");
-  g_assert (GTK_IS_MENU_BAR (obj));
-  menubar = GTK_WIDGET (obj);
-
-  children = gtk_container_get_children (GTK_CONTAINER (menubar));
-  menu = children->data;
-  g_assert (menu != NULL);
-  g_assert (GTK_IS_MENU_ITEM (menu));
-  g_assert (strcmp (gtk_widget_get_name (GTK_WIDGET (menu)), "file") == 0);
-  g_list_free (children);
- 
-  label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
-  g_assert (label != NULL);
-  g_assert (GTK_IS_LABEL (label));
-  g_assert (strcmp (gtk_label_get_text (GTK_LABEL (label)), "File") == 0);
-
-  g_object_unref (builder);
-
-  /* test cherry picking just the ui manager */
-  error = NULL;
-  builder = gtk_builder_new ();
-  ret = gtk_builder_add_objects_from_string (builder, buffer2, -1, objects4, &error);
-  g_assert (ret);
-  obj = gtk_builder_get_object (builder, "uimgr1");
-
-  children = gtk_container_get_children (GTK_CONTAINER (menubar));
-  menu = children->data;
-  g_assert (menu != NULL);
-  g_assert (GTK_IS_MENU_ITEM (menu));
-  g_assert (strcmp (gtk_widget_get_name (GTK_WIDGET (menu)), "file") == 0);
-  g_list_free (children);
- 
-  label = G_OBJECT (gtk_bin_get_child (GTK_BIN (menu)));
-  g_assert (label != NULL);
-  g_assert (GTK_IS_LABEL (label));
-  g_assert (strcmp (gtk_label_get_text (GTK_LABEL (label)), "File") == 0);
-
-  g_object_unref (builder);
 }
 
 static GtkWidget *
@@ -2448,13 +2398,14 @@ test_expose_object (void)
   const gchar buffer[] =
     "<interface>"
     "  <object class=\"GtkMenuButton\" id=\"button\">"
-    "    <property name=\"popup\">external_menu</property>"
+    "    <property name=\"popover\">external_menu</property>"
     "    <signal name=\"clicked\" handler=\"on_button_clicked\" object=\"builder\" swapped=\"no\"/>"
     "    <signal name=\"clicked\" handler=\"on_button_clicked_swapped\" object=\"builder\"/>"
     "  </object>"
     "</interface>";
 
-  menu = gtk_menu_new ();
+  /*menu = gtk_menu_new ();*/
+  menu = gtk_popover_new (NULL);
   builder = gtk_builder_new ();
   gtk_builder_expose_object (builder, "external_menu", G_OBJECT (menu));
   gtk_builder_expose_object (builder, "builder", G_OBJECT (builder));
@@ -2464,7 +2415,7 @@ test_expose_object (void)
   obj = gtk_builder_get_object (builder, "button");
   g_assert (GTK_IS_BUTTON (obj));
 
-  g_assert (gtk_menu_button_get_popup (GTK_MENU_BUTTON (obj)) == GTK_MENU (menu));
+  g_assert (gtk_menu_button_get_popover (GTK_MENU_BUTTON (obj)) == GTK_POPOVER (menu));
 
   /* Connect signals and fake clicked event */
   gtk_builder_connect_signals (builder, NULL);

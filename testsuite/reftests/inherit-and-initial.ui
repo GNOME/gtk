@@ -68,7 +68,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_File</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -80,7 +79,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">_New</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -89,7 +87,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">_Open</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -98,7 +95,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">_Save</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -107,7 +103,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">Save _As</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -115,7 +110,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                     </child>
                     <child>
@@ -123,7 +117,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">_Quit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -135,7 +128,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkMenuItem" id="menuitem2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_Edit</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -147,7 +139,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">Cu_t</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -156,7 +147,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">_Copy</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -165,7 +155,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">_Paste</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -174,7 +163,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">_Delete</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -183,7 +171,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label">Checks &amp; Radios</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <child type="submenu">
                           <object class="GtkMenu" id="togglessubmenu">
@@ -196,7 +183,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -207,7 +193,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -219,7 +204,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="inconsistent">True</property>
                                 <property name="sensitive">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -230,7 +214,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -241,7 +224,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -253,7 +235,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="inconsistent">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -269,7 +250,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -280,7 +260,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -292,7 +271,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="inconsistent">True</property>
                                 <property name="sensitive">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -303,7 +281,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -314,7 +291,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -326,7 +302,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="inconsistent">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                               </object>
                             </child>
@@ -342,7 +317,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkMenuItem" id="menuitem3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_View</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -354,7 +328,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label">_Dark theme</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -366,7 +339,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkMenuItem" id="menuitem4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
@@ -378,7 +350,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">_About</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -404,7 +375,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkToolButton" id="toolbutton2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">Save</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">document-save</property>
@@ -418,7 +388,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkToolButton" id="toolbutton1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">Open</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">document-open</property>
@@ -432,7 +401,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkSeparatorToolItem" id="toolbutton3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -443,7 +411,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkToolButton" id="toolbutton4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">Find</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">edit-find</property>
@@ -457,7 +424,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkToolItem" id="toolbutton5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -471,7 +437,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkToolItem" id="toolbutton6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="use_action_appearance">False</property>
                 <child>
                   <object class="GtkEntry" id="entry3">
                     <property name="visible">True</property>
@@ -641,7 +606,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -658,7 +622,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -675,7 +638,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="inconsistent">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -692,7 +654,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -710,7 +671,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -728,7 +688,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="inconsistent">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -744,7 +703,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -761,7 +719,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radiobutton1</property>
@@ -780,7 +737,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="inconsistent">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radiobutton1</property>
@@ -799,7 +755,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -817,7 +772,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radiobutton3</property>
@@ -837,7 +791,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="inconsistent">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radiobutton3</property>
@@ -912,7 +865,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -927,7 +879,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -941,7 +892,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="active">True</property>
                   </object>
                   <packing>
@@ -957,7 +907,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="active">True</property>
                   </object>
                   <packing>
@@ -1010,7 +959,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1023,8 +971,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="color">#31316867a09f</property>
+                    <property name="rgba">#31316867a09f</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1269,7 +1216,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkHandleBox" id="handlebox1">
+                      <object class="GtkBox" id="handlebox1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -1279,7 +1226,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="uri">http://www.gtk.org</property>
                           </object>

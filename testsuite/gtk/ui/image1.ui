@@ -1,6 +1,6 @@
 
 <interface>
-  <object class="GtkButton">
-    <property name="image">xyzzy</property>
+  <object class="GtkMenuButton">
+    <property name="popover">xyzzy</property>
   </object>
 </interface>

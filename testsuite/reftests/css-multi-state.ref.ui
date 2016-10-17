@@ -6,11 +6,9 @@
     <property name="type">popup</property>
     <child>
       <object class="GtkToggleButton" id="togglebutton1">
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="use_action_appearance">False</property>
         <property name="active">True</property>
         <property name="name">reference</property>
         <property name="sensitive">False</property>

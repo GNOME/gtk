@@ -97,13 +97,14 @@ window1
           "push button"
           parent: content
           index: 2
+          name: Close
           state: enabled focusable sensitive
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
           <AtkImage>
-          image size: -1 x -1
+          image size: 16 x 16
           image description: (null)
           <AtkAction>
           action 0 name: click

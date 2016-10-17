@@ -7,13 +7,11 @@
     <child>
       <object class="GtkButton" id="button1">
         <property name="name">button1</property>
-        <property name="use_action_appearance">False</property>
         <property name="width_request">40</property>
         <property name="height_request">41</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="use_action_appearance">False</property>
       </object>
     </child>
   </object>
