@@ -1311,8 +1311,6 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   GtkTreeViewColumnPrivate *priv = column->priv;
   GtkAllocation allocation;
   GtkTreeView *tree_view;
-  GdkWindowAttr attr;
-  guint attributes_mask;
   gboolean rtl;
   GdkDisplay *display;
   GdkCursor *cursor;
@@ -1327,23 +1325,17 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   g_return_if_fail (_gtk_tree_view_get_header_window (tree_view) != NULL);
   gtk_widget_set_parent_window (priv->button, _gtk_tree_view_get_header_window (tree_view));
 
-  attr.window_type = GDK_WINDOW_CHILD;
-  attr.wclass = GDK_INPUT_ONLY;
-  attr.event_mask = gtk_widget_get_events (GTK_WIDGET (tree_view)) |
-                    (GDK_BUTTON_PRESS_MASK |
-		     GDK_BUTTON_RELEASE_MASK |
-		     GDK_POINTER_MOTION_MASK |
-		     GDK_KEY_PRESS_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
   display = gdk_window_get_display (_gtk_tree_view_get_header_window (tree_view));
-  attr.y = 0;
-  attr.width = TREE_VIEW_DRAG_WIDTH;
-  attr.height = _gtk_tree_view_get_header_height (tree_view);
-
   gtk_widget_get_allocation (priv->button, &allocation);
-  attr.x       = (allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2;
-  priv->window = gdk_window_new (_gtk_tree_view_get_header_window (tree_view),
-				 &attr, attributes_mask);
+
+  priv->window = gdk_window_new_input (_gtk_tree_view_get_header_window (tree_view),
+                                       gtk_widget_get_events (GTK_WIDGET (tree_view)) |
+                                       GDK_BUTTON_PRESS_MASK |
+                                       GDK_BUTTON_RELEASE_MASK |
+                                       GDK_POINTER_MOTION_MASK |
+                                       GDK_KEY_PRESS_MASK,
+                                       &(GdkRectangle) {(allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2, 0,
+                                                        TREE_VIEW_DRAG_WIDTH, _gtk_tree_view_get_header_height (tree_view)});
   cursor = gdk_cursor_new_from_name (display, "col-resize");
   gdk_window_set_cursor (priv->window, cursor);
   g_object_unref (cursor);
