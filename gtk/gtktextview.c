@@ -10094,16 +10094,6 @@ text_window_invalidate_rect (GtkTextWindow *win,
     }
           
   gdk_window_invalidate_rect (win->bin_window, &window_rect, FALSE);
-
-#if 0
-  {
-    cairo_t *cr = gdk_cairo_create (win->bin_window);
-    gdk_cairo_rectangle (cr, &window_rect);
-    cairo_set_source_rgb  (cr, 1.0, 0.0, 0.0);	/* red */
-    cairo_fill (cr);
-    cairo_destroy (cr);
-  }
-#endif
 }
 
 static void
