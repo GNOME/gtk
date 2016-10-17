@@ -2419,70 +2419,55 @@ gtk_tree_view_realize (GtkWidget *widget)
   GtkAllocation allocation;
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GdkWindow *window;
-  GdkWindowAttr attributes;
   GList *tmp_list;
-  gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
   gtk_widget_get_allocation (widget, &allocation);
 
   /* Make the main, clipping window */
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                 GDK_VISIBILITY_NOTIFY_MASK,
+                                 &allocation);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 
   gtk_widget_get_allocation (widget, &allocation);
 
   /* Make the window for the tree */
-  attributes.x = 0;
-  attributes.y = gtk_tree_view_get_effective_header_height (tree_view);
-  attributes.width = MAX (tree_view->priv->width, allocation.width);
-  attributes.height = allocation.height;
-  attributes.event_mask = (GDK_SCROLL_MASK |
-                           GDK_SMOOTH_SCROLL_MASK |
-                           GDK_POINTER_MOTION_MASK |
-                           GDK_ENTER_NOTIFY_MASK |
-                           GDK_LEAVE_NOTIFY_MASK |
-                           GDK_BUTTON_PRESS_MASK |
-                           GDK_BUTTON_RELEASE_MASK |
-                           gtk_widget_get_events (widget));
-
-  tree_view->priv->bin_window = gdk_window_new (window,
-						&attributes, attributes_mask);
+  tree_view->priv->bin_window = gdk_window_new_child (window,
+                                                      gtk_widget_get_events (widget)
+                                                      | GDK_SCROLL_MASK
+                                                      | GDK_SMOOTH_SCROLL_MASK
+                                                      | GDK_POINTER_MOTION_MASK
+                                                      | GDK_ENTER_NOTIFY_MASK
+                                                      | GDK_LEAVE_NOTIFY_MASK
+                                                      | GDK_BUTTON_PRESS_MASK
+                                                      | GDK_BUTTON_RELEASE_MASK,
+                                                      &(GdkRectangle) {
+                                                        0,
+                                                        gtk_tree_view_get_effective_header_height (tree_view),
+                                                        MAX (tree_view->priv->width, allocation.width),
+                                                        allocation.height});
   gtk_widget_register_window (widget, tree_view->priv->bin_window);
   gdk_window_set_invalidate_handler (tree_view->priv->bin_window,
 				     gtk_tree_view_bin_window_invalidate_handler);
 
-  gtk_widget_get_allocation (widget, &allocation);
-
   /* Make the column header window */
-  attributes.x = 0;
-  attributes.y = 0;
-  attributes.width = MAX (tree_view->priv->width, allocation.width);
-  attributes.height = tree_view->priv->header_height;
-  attributes.event_mask = (GDK_SCROLL_MASK |
-                           GDK_ENTER_NOTIFY_MASK |
-                           GDK_LEAVE_NOTIFY_MASK |
-                           GDK_BUTTON_PRESS_MASK |
-                           GDK_BUTTON_RELEASE_MASK |
-                           GDK_KEY_PRESS_MASK |
-                           GDK_KEY_RELEASE_MASK |
-                           gtk_widget_get_events (widget));
-
-  tree_view->priv->header_window = gdk_window_new (window,
-						   &attributes, attributes_mask);
+  tree_view->priv->header_window = gdk_window_new_child (window,
+                                                         gtk_widget_get_events (widget)
+                                                         | GDK_SCROLL_MASK
+                                                         | GDK_ENTER_NOTIFY_MASK
+                                                         | GDK_LEAVE_NOTIFY_MASK
+                                                         | GDK_BUTTON_PRESS_MASK
+                                                         | GDK_BUTTON_RELEASE_MASK
+                                                         | GDK_KEY_PRESS_MASK
+                                                         | GDK_KEY_RELEASE_MASK,
+                                                         &(GdkRectangle) {
+                                                           0,
+                                                           0,
+                                                           MAX (tree_view->priv->width, allocation.width),
+                                                           tree_view->priv->header_height});
   gtk_widget_register_window (widget, tree_view->priv->header_window);
 
   tmp_list = tree_view->priv->children;
@@ -3987,8 +3972,6 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
   gint width;
   gint height;
   gint arrow_type = DRAG_COLUMN_WINDOW_STATE_UNSET;
-  GdkWindowAttr attributes;
-  guint attributes_mask;
   cairo_t *cr;
 
   if (!reorder ||
@@ -4038,16 +4021,16 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	    }
 
 	  button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
-	  attributes.window_type = GDK_WINDOW_CHILD;
-	  attributes.wclass = GDK_INPUT_OUTPUT;
-          attributes.x = tree_view->priv->drag_column_x;
-          attributes.y = 0;
           gtk_widget_get_allocation (button, &drag_allocation);
-	  width = attributes.width = drag_allocation.width;
-	  height = attributes.height = drag_allocation.height;
-	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK;
-	  attributes_mask = GDK_WA_X | GDK_WA_Y;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (tree_view->priv->header_window, &attributes, attributes_mask);
+	  width = drag_allocation.width;
+	  height = drag_allocation.height;
+	  tree_view->priv->drag_highlight_window = gdk_window_new_child (tree_view->priv->header_window,
+                                                                         GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK,
+                                                                         &(GdkRectangle){
+                                                                           tree_view->priv->drag_column_x,
+                                                                           0,
+                                                                           drag_allocation.width,
+                                                                           drag_allocation.height});
 	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
 	  tree_view->priv->drag_column_window_state = DRAG_COLUMN_WINDOW_STATE_ORIGINAL;
@@ -4082,6 +4065,9 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
       /* Create the new window */
       if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW)
 	{
+          GdkWindowAttr attributes;
+          gint attributes_mask;
+
 	  if (tree_view->priv->drag_highlight_window)
 	    {
 	      gtk_widget_unregister_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
@@ -4162,6 +4148,9 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
       if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT &&
 	  tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
 	{
+          GdkWindowAttr attributes;
+          gint attributes_mask;
+
 	  if (tree_view->priv->drag_highlight_window)
 	    {
 	      gtk_widget_unregister_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
@@ -10038,8 +10027,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GtkAllocation allocation;
   GtkAllocation button_allocation;
   GtkWidget *button;
-  GdkWindowAttr attributes;
-  guint attributes_mask;
   GtkStyleContext *context;
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
@@ -10057,19 +10044,11 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
 
   gtk_widget_get_allocation (button, &button_allocation);
+  button_allocation.y = 0;
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.x = button_allocation.x;
-  attributes.y = 0;
-  attributes.width = button_allocation.width;
-  attributes.height = button_allocation.height;
-  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  tree_view->priv->drag_window = gdk_window_new (tree_view->priv->header_window,
-                                                 &attributes,
-                                                 attributes_mask);
+  tree_view->priv->drag_window = gdk_window_new_child (tree_view->priv->header_window,
+                                                       GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK,
+                                                       &button_allocation);
   gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_window);
 
   /* Kids, don't try this at home */
