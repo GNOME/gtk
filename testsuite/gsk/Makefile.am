@@ -13,7 +13,7 @@ AM_CPPFLAGS = \
 	$(GTK_DEBUG_FLAGS) \
 	$(GTK_DEP_CFLAGS)
 
-LDADD = $(GTK_DEP_LIBS) $(top_builddir)/gsk/libgsk-4.la
+LDADD = $(GTK_DEP_LIBS)
 
 TEST_PROGS += \
 	$(NULL)

@@ -22,7 +22,6 @@ gtk4_widget_factory_CPPFLAGS = 		\
 	$(NULL)
 
 gtk4_widget_factory_LDADD = 		\
-	$(top_builddir)/gdk/libgdk-4.la \
 	$(top_builddir)/gtk/libgtk-4.la \
 	$(GTK_DEP_LIBS)			\
 	$(NULL)

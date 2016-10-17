@@ -31,7 +31,7 @@ AM_CPPFLAGS = 			\
 	$(GTK_DEBUG_FLAGS)	\
 	$(GDK_DEP_CFLAGS)
 
-GTKDOC_LIBS = $(top_builddir)/gsk/libgsk-4.la $(GDK_DEP_LIBS)
+GTKDOC_LIBS = $(top_builddir)/gtk/libgtk-4.la $(GDK_DEP_LIBS)
 
 MKDB_OPTIONS=--output-format=xml --name-space=gsk
 

@@ -82,12 +82,10 @@ uninstall-ms-lib:
 endif
 
 libadd = 				\
-	$(top_builddir)/gdk/libgdk-4.la	\
 	$(top_builddir)/gsk/libgsk-4.la	\
 	$(GMODULE_LIBS) 		\
 	$(GTK_DEP_LIBS)
 deps = 					\
-	$(top_builddir)/gdk/libgdk-4.la \
 	$(top_builddir)/gsk/libgsk-4.la
 
 # libtool stuff: set version and export symbols for resolving
@@ -1469,7 +1467,7 @@ Gtk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gtk_4_0_gir_EXPORT_PACKAGES)
 Gtk_4_0_gir_MSVC_INCLUDE_GIRS = Atk-1.0
 Gtk_4_0_gir_MSVC_LIBS = gtk-4.0 gdk-4.0
 Gtk_4_0_gir_MSVC_CFLAGS = $(GTK_MSVC_GIR_CFLAGS)
-Gtk_4_0_gir_MSVC_SCANNERFLAGS = --warn-all --add-include-path=. --include-uninstalled=./Gdk-4.0.gir
+Gtk_4_0_gir_MSVC_SCANNERFLAGS = --warn-all --add-include-path=. --include-uninstalled=./Gdk-4.0.gir --include-uninstalled=./Gsk-4.0.gir
 
 include $(top_srcdir)/build/Makefile.msvc-introspection
 
@@ -1518,11 +1516,34 @@ INTROSPECTION_COMPILER_ARGS = \
 	--includedir=. \
 	--includedir=../gdk
 
-Gtk-4.0.gir: $(INTROSPECTION_SCANNER) libgtk-4.la $(top_builddir)/gdk/Gdk-4.0.gir Makefile
+Gdk-4.0.gir: $(top_builddir)/gdk/Gdk-noinst-4.0.gir
+	sed -e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" -e "s/noinst-4.0/4.0/" < $(top_builddir)/gdk/Gdk-noinst-4.0.gir > $@
+EXTRA_GIRS = Gdk-4.0.gir
+
+if USE_X11
+GdkX11-4.0.gir: $(top_builddir)/gdk/GdkX11-noinst-4.0.gir
+	sed -e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" -e "s/noinst-4.0/4.0/" < $(top_builddir)/gdk/GdkX11-noinst-4.0.gir > $@
+EXTRA_GIRS += GdkX11-4.0.gir
+endif
+
+if OS_WIN32
+
+GdkWin32-4.0.gir: $(top_builddir)/gdk/GdkX11-noinst-4.0.gir
+	sed "-e s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" -e "s/noinst-4.0/4.0/" < $(top_builddir)/gdk/GdkX11-noinst-4.0.gir > $@
+EXTRA_GIRS += GdkWin32-4.0.gir
+
+endif
+
+Gsk-4.0.gir: $(top_builddir)/gsk/Gsk-noinst-4.0.gir
+	sed -e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" -e "s/noinst-4.0/4.0/" < $(top_builddir)/gsk/Gsk-noinst-4.0.gir > $@
+EXTRA_GIRS += Gsk-4.0.gir
+
+Gtk-4.0.gir: $(INTROSPECTION_SCANNER) libgtk-4.la Gdk-4.0.gir Gsk-4.0.gir Makefile
 Gtk_4_0_gir_SCANNERFLAGS = 			\
 	--warn-all				\
-	--add-include-path=$(top_builddir)/gdk	\
-	--include-uninstalled=$(top_builddir)/gdk/Gdk-4.0.gir
+	--add-include-path=./			\
+	--include-uninstalled=Gdk-4.0.gir \
+	--include-uninstalled=Gsk-4.0.gir
 Gtk_4_0_gir_INCLUDES = Atk-1.0
 if USE_X11
 Gtk_4_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
@@ -1532,15 +1553,15 @@ Gtk_4_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 Gtk_4_0_gir_FILES = $(introspection_files)
-Gtk_4_0_gir_LIBS = libgtk-4.la $(top_builddir)/gsk/libgsk-4.la $(top_builddir)/gdk/libgdk-4.la
+Gtk_4_0_gir_LIBS = libgtk-4.la $(top_builddir)/gsk/libgsk-4.la
 Gtk_4_0_gir_EXPORT_PACKAGES = gtk+-4.0
 INTROSPECTION_GIRS = Gtk-4.0.gir
 
 girdir = $(datadir)/gir-1.0
-gir_DATA = $(INTROSPECTION_GIRS)
+gir_DATA = $(INTROSPECTION_GIRS) $(EXTRA_GIRS)
 
 typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib) $(EXTRA_GIRS:.gir=.typelib)
 
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 endif

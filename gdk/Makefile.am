@@ -47,16 +47,6 @@ AM_CPPFLAGS =				\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GDK_DEP_CFLAGS)
 
-# libtool stuff: set version and export symbols for resolving
-# since automake doesn't support conditionalized libsomething_la_LDFLAGS
-# we use the general approach here
-LDADD = 					\
-	$(GTK_LINK_FLAGS)			\
-	-version-info $(LT_VERSION_INFO)	\
-	-export-dynamic 			\
-	-rpath $(libdir) 			\
-	$(no_undefined)
-
 #
 # setup source file variables
 #
@@ -245,17 +235,17 @@ introspection_files = 		\
         gdkenumtypes.c		\
         gdkenumtypes.h
 
-Gdk-4.0.gir: libgdk-4.la Makefile
-Gdk_4_0_gir_SCANNERFLAGS = 	\
+Gdk-noinst-4.0.gir: libgdk-4.la Makefile
+Gdk_noinst_4_0_gir_SCANNERFLAGS = 	\
 	--c-include="gdk/gdk.h"
-Gdk_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
-Gdk_4_0_gir_LIBS = libgdk-4.la
-Gdk_4_0_gir_FILES = $(introspection_files)
-Gdk_4_0_gir_CFLAGS = $(AM_CPPFLAGS)
-Gdk_4_0_gir_EXPORT_PACKAGES = gdk-4.0
-INTROSPECTION_GIRS += Gdk-4.0.gir
+Gdk_noinst_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
+Gdk_noinst_4_0_gir_LIBS = libgdk-4.la
+Gdk_noinst_4_0_gir_FILES = $(introspection_files)
+Gdk_noinst_4_0_gir_CFLAGS = $(AM_CPPFLAGS)
+Gdk_noinst_4_0_gir_EXPORT_PACKAGES = gdk-4.0
+INTROSPECTION_GIRS += Gdk-noinst-4.0.gir
 if OS_WIN32
-Gdk_4_0_gir_CFLAGS += -I$(srcdir)/win32 -I$(srcdir)
+Gdk_noinst_4_0_gir_CFLAGS += -I$(srcdir)/win32 -I$(srcdir)
 endif
 if USE_X11
 x11_introspection_files = 		\
@@ -305,17 +295,17 @@ x11_introspection_files = 		\
 	x11/gdkx11visual.h		\
 	x11/gdkx11window.h
 
-GdkX11-4.0.gir: libgdk-4.la Gdk-4.0.gir Makefile
-GdkX11_4_0_gir_SCANNERFLAGS = 		\
+GdkX11-noinst-4.0.gir: libgdk-4.la Gdk-noinst-4.0.gir Makefile
+GdkX11_noinst_4_0_gir_SCANNERFLAGS = 		\
 	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkx.h"	\
-	--include-uninstalled=$(top_builddir)/gdk/Gdk-4.0.gir
-GdkX11_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
-GdkX11_4_0_gir_LIBS = libgdk-4.la
-GdkX11_4_0_gir_FILES = $(x11_introspection_files)
-GdkX11_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -L$(top_builddir)/gdk
-GdkX11_4_0_gir_EXPORT_PACKAGES = gdk-x11-4.0
-INTROSPECTION_GIRS += GdkX11-4.0.gir
+	--include-uninstalled=$(top_builddir)/gdk/Gdk-noinst-4.0.gir
+GdkX11_noinst_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
+GdkX11_noinst_4_0_gir_LIBS = libgdk-4.la
+GdkX11_noinst_4_0_gir_FILES = $(x11_introspection_files)
+GdkX11_noinst_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -L$(top_builddir)/gdk
+GdkX11_noinst_4_0_gir_EXPORT_PACKAGES = gdk-x11-4.0
+INTROSPECTION_GIRS += GdkX11-noinst-4.0.gir
 
 endif # USE_X11
 
@@ -350,26 +340,22 @@ w32_introspection_files =		\
 	win32/gdkwindow-win32.c
 
 if OS_WIN32
-GdkWin32-4.0.gir: libgdk-3.la Gdk-4.0.gir Makefile
-GdkWin32_4_0_gir_SCANNERFLAGS = \
+GdkWin32-noinst-4.0.gir: libgdk-3.la Gdk-noinst-4.0.gir Makefile
+GdkWin32_noinst_4_0_gir_SCANNERFLAGS = \
 	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkwin32.h"	\
-	--include-uninstalled=$(top_builddir)/gdk/Gdk-4.0.gir
-GdkWin32_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
-GdkWin32_4_0_gir_LIBS = libgdk-4.la
-GdkWin32_4_0_gir_FILES = $(w32_introspection_files)
-GdkWin32_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -L$(top_builddir)/gdk -I$(srcdir)/win32 -I$(srcdir)
-INTROSPECTION_GIRS += GdkWin32-4.0.gir
+	--include-uninstalled=$(top_builddir)/gdk/Gdk-noinst-4.0.gir
+GdkWin32_noinst_4_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
+GdkWin32_noinst_4_0_gir_LIBS = libgdk-4.la
+GdkWin32_noinst_4_0_gir_FILES = $(w32_introspection_files)
+GdkWin32_noinst_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -L$(top_builddir)/gdk -I$(srcdir)/win32 -I$(srcdir)
+INTROSPECTION_GIRS += GdkWin32-noinst-4.0.gir
 
 endif # OS_WIN32
 
-girdir = $(datadir)/gir-1.0
-gir_DATA = $(INTROSPECTION_GIRS)
+noinst_DATA = $(INTROSPECTION_GIRS)
 
-typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
-
-CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+CLEANFILES += $(gir_DATA)
 
 endif # HAVE_INTROSPECTION
 
@@ -405,7 +391,7 @@ install-ms-lib:
 uninstall-ms-lib:
 endif
 
-lib_LTLIBRARIES = libgdk-4.la
+noinst_LTLIBRARIES = libgdk-4.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += \
@@ -537,7 +523,7 @@ GdkWin32_4_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
 GdkWin32_4_0_gir_MSVC_SCANNERFLAGS =	\
 	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkwin32.h"	\
-	--include-uninstalled=./Gdk-4.0.gir
+	--include-uninstalled=./Gdk-noinst-4.0.gir
 
 include $(top_srcdir)/build/Makefile.msvc-introspection
 

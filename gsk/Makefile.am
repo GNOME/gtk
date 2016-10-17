@@ -20,7 +20,7 @@ BUILT_SOURCES =
 CLEANFILES =
 DISTCLEANFILES =
 
-lib_LTLIBRARIES =
+noinst_LTLIBRARIES =
 
 gsk_public_source_h = \
 	gskenums.h \
@@ -109,14 +109,8 @@ libgsk_4_la_SOURCES = $(all_sources)
 nodist_libgsk_4_la_SOURCES = $(gsk_built_source_h) $(gsk_built_source_c)
 libgsk_4_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
 libgsk_4_la_LIBADD = $(GSK_DEP_LIBS) $(top_builddir)/gdk/libgdk-4.la
-libgsk_4_la_LDFLAGS = \
-	$(GTK_LINK_FLAGS) \
-	-version-info $(LT_VERSION_INFO) \
-	-export-dynamic	\
-	-rpath $(libdir) \
-	$(no_undefined)
 
-lib_LTLIBRARIES += libgsk-4.la
+noinst_LTLIBRARIES += libgsk-4.la
 
 gskincludedir = $(includedir)/gtk-4.0/gsk
 gskinclude_HEADERS = $(gsk_public_source_h) gskenumtypes.h gsk.h
@@ -137,25 +131,21 @@ if HAVE_INTROSPECTION
 
 introspection_files = $(gsk_public_source_h) $(gsk_public_source_c)
 
-Gsk-4.0.gir: libgsk-4.la Makefile
-Gsk_4_0_gir_SCANNERFLAGS = \
+Gsk-4.0_noinst.gir: libgsk-4.la Makefile
+Gsk_noinst_4_0_gir_SCANNERFLAGS = \
 	--add-include-path=$(top_builddir)/gdk \
-	--include-uninstalled=$(top_builddir)/gdk/Gdk-4.0.gir \
+	--include-uninstalled=$(top_builddir)/gdk/Gdk-noinst-4.0.gir \
 	--c-include="gsk/gsk.h"
-Gsk_4_0_gir_LIBS = libgsk-4.la $(top_builddir)/gdk/libgdk-4.la
-Gsk_4_0_gir_FILES = $(introspection_files)
-Gsk_4_0_gir_CFLAGS = $(AM_CPPFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
-Gsk_4_0_gir_EXPORT_PACKAGES = gsk-4.0
-Gsk_4_0_gir_INCLUDES = GObject-2.0 cairo-1.0 Graphene-1.0
-INTROSPECTION_GIRS += Gsk-4.0.gir
+Gsk_noinst_4_0_gir_LIBS = libgsk-4.la
+Gsk_noinst_4_0_gir_FILES = $(introspection_files)
+Gsk_noinst_4_0_gir_CFLAGS = $(AM_CPPFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
+Gsk_noinst_4_0_gir_EXPORT_PACKAGES = gsk-4.0
+Gsk_noinst_4_0_gir_INCLUDES = GObject-2.0 cairo-1.0 Graphene-1.0
+INTROSPECTION_GIRS += Gsk-noinst-4.0.gir
 
-girdir = $(datadir)/gir-1.0
-gir_DATA = $(INTROSPECTION_GIRS)
+noinst_DATA = $(INTROSPECTION_GIRS)
 
-typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
-
-CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+CLEANFILES += $(gir_DATA)
 
 endif
 
@@ -196,11 +186,11 @@ INTROSPECTION_INTERMEDIATE_ITEMS = \
 Gsk_4_0_gir_MSVC_FILES = $(introspection_files)
 Gsk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gsk_4_0_gir_EXPORT_PACKAGES)
 Gsk_4_0_gir_MSVC_INCLUDE_GIRS = $(Gsk_4_0_gir_INCLUDES)
-Gsk_4_0_gir_MSVC_LIBS = gdk-4.0
+Gsk_4_0_gir_MSVC_LIBS = gsk-4.0
 Gsk_4_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
 Gsk_4_0_gir_MSVC_SCANNERFLAGS =			\
 	--add-include-path=.			\
-	--include-uninstalled=./Gdk-4.0.gir
+	--include-uninstalled=../gdk/Gdk-noinst-4.0.gir
 
 include $(top_srcdir)/build/Makefile.msvc-introspection
 

@@ -13,8 +13,7 @@ AM_CPPFLAGS =				\
 	$(GTK_DEP_CFLAGS)		\
 	$(GDK_DEP_CFLAGS)
 
-DEPS = \
-	$(top_builddir)/gtk/libgtk-4.la
+DEPS =
 
 LDADD = \
 	$(top_builddir)/gtk/libgtk-4.la	\
