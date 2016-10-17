@@ -741,19 +741,14 @@ gtk_style_context_query_func (guint    id,
  * gtk_style_context_get_property:
  * @context: a #GtkStyleContext
  * @property: style property name
- * @state: state to retrieve the property value for
  * @value: (out) (transfer full):  return location for the style property value
  *
- * Gets a style property from @context for the given state.
+ * Gets a style property from @context for the current state.
  *
  * Note that not all CSS properties that are supported by GTK+ can be
  * retrieved in this way, since they may not be representable as #GValue.
  * GTK+ defines macros for a number of properties that can be used
  * with this function.
- *
- * Note that passing a state other than the current state of @context
- * is not recommended unless the style context has been saved with
- * gtk_style_context_save().
  *
  * When @value is no longer needed, g_value_unset() must be called
  * to free any allocated memory.
