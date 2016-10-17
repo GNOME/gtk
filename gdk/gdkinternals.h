@@ -183,7 +183,7 @@ struct _GdkWindow
    *     sized the same as the update region and set `surface_needs_composite`
    *     to TRUE. Otherwise, we paint directly onto the real server-side window.
    *
-   *  2) Things paint with cairo using gdk_cairo_create().
+   *  2) Things paint with cairo using GdkDrawingContext
    *
    *  3) When everything is painted, the user calls gdk_window_end_paint().
    *     If there was a temporary surface, this is composited back onto the
@@ -199,7 +199,7 @@ struct _GdkWindow
    *     before. We always redirect cairo drawing to a temporary surface when
    *     GL is enabled.
    *
-   *  2) Things paint with cairo using gdk_cairo_create(). Whenever
+   *  2) Things paint with cairo using GdkDrawingContext. Whenever
    *     something paints, it calls gdk_window_mark_paint_from_clip() to mark
    *     which regions it has painted in software. We'll learn what this does
    *     soon.
