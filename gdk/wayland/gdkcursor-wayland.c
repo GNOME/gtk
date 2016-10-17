@@ -167,7 +167,7 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *display_wayland,
 
   if (!c)
     {
-      g_warning (G_STRLOC ": Unable to load %s from the cursor theme", cursor->name);
+      g_message ("Unable to load %s from the cursor theme", cursor->name);
       return FALSE;
     }
 
@@ -353,7 +353,10 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
     return GDK_CURSOR (private);
 
   if (!_gdk_wayland_cursor_update (display_wayland, private))
-    return GDK_CURSOR (private);
+    {
+      g_object_unref (private);
+      return NULL;
+    }
 
   /* Insert into cache. */
   g_hash_table_insert (display_wayland->cursor_cache,
