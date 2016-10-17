@@ -863,41 +863,28 @@ gtk_layout_realize (GtkWidget *widget)
   GtkLayoutPrivate *priv = layout->priv;
   GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
   GList *tmp_list;
-  gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
+  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                 GDK_VISIBILITY_NOTIFY_MASK,
+                                 &allocation);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 
-  gtk_widget_get_allocation (widget, &allocation);
-
-  attributes.x = - gtk_adjustment_get_value (priv->hadjustment),
-  attributes.y = - gtk_adjustment_get_value (priv->vadjustment);
-  attributes.width = MAX (priv->width, allocation.width);
-  attributes.height = MAX (priv->height, allocation.height);
-  attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK |
-                          GDK_SMOOTH_SCROLL_MASK | 
-                          gtk_widget_get_events (widget);
-
-  priv->bin_window = gdk_window_new (window,
-                                     &attributes, attributes_mask);
+  priv->bin_window = gdk_window_new_child (window,
+                                           gtk_widget_get_events (widget)
+                                           | GDK_EXPOSURE_MASK
+                                           | GDK_SCROLL_MASK
+                                           | GDK_SMOOTH_SCROLL_MASK,
+                                           &(GdkRectangle) {
+                                             - gtk_adjustment_get_value (priv->hadjustment),
+                                             - gtk_adjustment_get_value (priv->vadjustment),
+                                             MAX (priv->width, allocation.width),
+                                             MAX (priv->height, allocation.height)});
   gtk_widget_register_window (widget, priv->bin_window);
 
   tmp_list = priv->children;
