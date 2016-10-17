@@ -3579,8 +3579,6 @@ gtk_notebook_drag_end (GtkWidget      *widget,
 
   if (priv->rootwindow_drop)
     {
-      GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-      GtkNotebookPrivate *priv = notebook->priv;
       GtkNotebook *dest_notebook = NULL;
       gint x, y;
 
