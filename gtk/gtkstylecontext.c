@@ -2482,21 +2482,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   return attributes;
 }
 
-cairo_pattern_t *
-gtk_gradient_resolve_for_context (GtkGradient     *gradient,
-                                  GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-
-  g_return_val_if_fail (gradient != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  return _gtk_gradient_resolve_full (gradient,
-                                     GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                     gtk_style_context_lookup_style (context),
-                                     priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL);
-}
-
 /**
  * GtkStyleContextPrintFlags:
  * @GTK_STYLE_CONTEXT_PRINT_RECURSE: Print the entire tree of
