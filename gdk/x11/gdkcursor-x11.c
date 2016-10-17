@@ -704,7 +704,10 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
             }
         }
       if (xcursor == None)
-        return NULL;
+        {
+          g_message ("Unable to load %s from the cursor theme", name);
+          return NULL;
+        }
     }
 
   private = g_object_new (GDK_TYPE_X11_CURSOR,
