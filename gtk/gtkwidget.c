@@ -5219,7 +5219,7 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
       }
   }
 
-  if (_gtk_widget_is_toplevel (widget))
+  if (_gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
     {
       gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
     }
