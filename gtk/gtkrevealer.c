@@ -346,8 +346,6 @@ gtk_revealer_real_realize (GtkWidget *widget)
   GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkAllocation allocation;
-  GdkWindowAttr attributes = { 0 };
-  GdkWindowAttributesType attributes_mask;
   GtkAllocation child_allocation;
   GtkWidget *child;
   GtkRevealerTransitionType transition;
@@ -357,50 +355,39 @@ gtk_revealer_real_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask =
-    gtk_widget_get_events (widget);
-  attributes_mask = (GDK_WA_X | GDK_WA_Y);
-
   priv->view_window =
-    gdk_window_new (gtk_widget_get_parent_window ((GtkWidget*) revealer),
-                    &attributes, attributes_mask);
+    gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                          gtk_widget_get_events (widget),
+                          &allocation);
   gtk_widget_set_window (widget, priv->view_window);
   gtk_widget_register_window (widget, priv->view_window);
 
   gtk_revealer_get_child_allocation (revealer, &allocation, &child_allocation);
 
   gtk_revealer_get_padding (revealer, &padding);
-  attributes.x = 0;
-  attributes.y = 0;
-  attributes.width = child_allocation.width;
-  attributes.height = child_allocation.height;
 
   /* See explanation on gtk_revealer_real_size_allocate */
   transition = effective_transition (revealer);
   if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
     {
-      attributes.y = allocation.height - child_allocation.height - padding.bottom;
-      attributes.x = padding.left;
+      child_allocation.y = allocation.height - child_allocation.height - padding.bottom;
+      child_allocation.x = padding.left;
     }
   else if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
     {
-      attributes.y = padding.top;
-      attributes.x = allocation.width - child_allocation.width - padding.right;
+      child_allocation.y = padding.top;
+      child_allocation.x = allocation.width - child_allocation.width - padding.right;
     }
  else
    {
-     attributes.y = padding.top;
-     attributes.x = padding.left;
+     child_allocation.y = padding.top;
+     child_allocation.x = padding.left;
    }
 
   priv->bin_window =
-    gdk_window_new (priv->view_window, &attributes, attributes_mask);
+    gdk_window_new_child (priv->view_window,
+                          gtk_widget_get_events (widget),
+                          &child_allocation);
   gtk_widget_register_window (widget, priv->bin_window);
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
