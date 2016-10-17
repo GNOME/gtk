@@ -374,7 +374,6 @@ gtk_get_im_module_file (void)
 
   if (!result)
     {
-      const gchar *var;
       gchar *path;
 
       var = g_getenv ("GTK_EXE_PREFIX");
