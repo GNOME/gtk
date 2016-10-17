@@ -468,8 +468,6 @@ gtk_path_bar_realize (GtkWidget *widget)
   GtkPathBar *path_bar;
   GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
@@ -480,18 +478,10 @@ gtk_path_bar_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= GDK_SCROLL_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  path_bar->priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                                           &attributes, attributes_mask);
+  path_bar->priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
+                                                       gtk_widget_get_events (widget)
+                                                       | GDK_SCROLL_MASK,
+                                                       &allocation);
   gtk_widget_register_window (widget, path_bar->priv->event_window);
 }
 
