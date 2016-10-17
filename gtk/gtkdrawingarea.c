@@ -160,8 +160,6 @@ gtk_drawing_area_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   if (!gtk_widget_get_has_window (widget))
     {
@@ -173,18 +171,9 @@ gtk_drawing_area_realize (GtkWidget *widget)
 
       gtk_widget_get_allocation (widget, &allocation);
 
-      attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.x = allocation.x;
-      attributes.y = allocation.y;
-      attributes.width = allocation.width;
-      attributes.height = allocation.height;
-      attributes.wclass = GDK_INPUT_OUTPUT;
-      attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
-
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-      window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                               &attributes, attributes_mask);
+      window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                     gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK,
+                                     &allocation);
       gtk_widget_register_window (widget, window);
       gtk_widget_set_window (widget, window);
     }
