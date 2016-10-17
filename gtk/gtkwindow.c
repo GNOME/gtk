@@ -6352,9 +6352,6 @@ popover_realize (GtkWidget        *widget,
                  GtkWindow        *window)
 {
   cairo_rectangle_int_t rect;
-  GdkWindow *parent_window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   if (popover->window)
     return;
@@ -6364,34 +6361,33 @@ popover_realize (GtkWidget        *widget,
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
     {
+      GdkWindowAttr attributes;
+      gint attributes_mask;
+
       attributes.window_type = GDK_WINDOW_SUBSURFACE;
-      parent_window = gdk_screen_get_root_window (_gtk_window_get_screen (window));
+      attributes.wclass = GDK_INPUT_OUTPUT;
+      attributes.x = rect.x;
+      attributes.y = rect.y;
+      attributes.width = rect.width;
+      attributes.height = rect.height;
+      attributes.event_mask = gtk_widget_get_events (popover->widget) |
+        GDK_EXPOSURE_MASK;
+      attributes_mask = GDK_WA_X | GDK_WA_Y;
+
+      popover->window = gdk_window_new (gdk_screen_get_root_window (_gtk_window_get_screen (window)),
+                                        &attributes, attributes_mask);
+      gdk_window_set_transient_for (popover->window,
+                                    _gtk_widget_get_window (GTK_WIDGET (window)));
     }
   else
 #endif
     {
-      attributes.window_type = GDK_WINDOW_CHILD;
-      parent_window = _gtk_widget_get_window (GTK_WIDGET (window));
+      popover->window = gdk_window_new_child (_gtk_widget_get_window (GTK_WIDGET (window)),
+                                              gtk_widget_get_events (popover->widget) | GDK_EXPOSURE_MASK,
+                                              &rect);
     }
 
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.x = rect.x;
-  attributes.y = rect.y;
-  attributes.width = rect.width;
-  attributes.height = rect.height;
-  attributes.event_mask = gtk_widget_get_events (popover->widget) |
-    GDK_EXPOSURE_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  popover->window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_register_window (GTK_WIDGET (window), popover->window);
-
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    gdk_window_set_transient_for (popover->window,
-                                  _gtk_widget_get_window (GTK_WIDGET (window)));
-#endif
-
   gtk_widget_set_parent_window (popover->widget, popover->window);
 }
 
@@ -6888,20 +6884,9 @@ gtk_window_realize (GtkWidget *widget)
 
   if (gtk_widget_get_parent_window (widget))
     {
-      attributes.x = allocation.x;
-      attributes.y = allocation.y;
-      attributes.width = allocation.width;
-      attributes.height = allocation.height;
-      attributes.window_type = GDK_WINDOW_CHILD;
-
-      attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK | GDK_STRUCTURE_MASK;
-
-      attributes.wclass = GDK_INPUT_OUTPUT;
-
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-      gdk_window = gdk_window_new (gtk_widget_get_parent_window (widget),
-				   &attributes, attributes_mask);
+      gdk_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                         gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK | GDK_STRUCTURE_MASK,
+                                         &allocation);
       gtk_widget_set_window (widget, gdk_window);
       gtk_widget_register_window (widget, gdk_window);
       gtk_widget_set_realized (widget, TRUE);
@@ -7002,18 +6987,6 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, gdk_window);
   gtk_widget_set_realized (widget, TRUE);
 
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.window_type = GDK_WINDOW_CHILD;
-
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK | GDK_STRUCTURE_MASK;
-
-  attributes.wclass = GDK_INPUT_OUTPUT;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
   if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
     {
       const gchar *cursor_names[8] = {
@@ -7022,17 +6995,13 @@ gtk_window_realize (GtkWidget *widget)
         "sw-resize", "s-resize", "se-resize"
       };
 
-      attributes.wclass = GDK_INPUT_ONLY;
-      attributes.width = 1;
-      attributes.height = 1;
-      attributes.event_mask = GDK_BUTTON_PRESS_MASK;
-      attributes_mask = 0;
-
       for (i = 0; i < 8; i++)
         {
           GdkCursor *cursor;
 
-          priv->border_window[i] = gdk_window_new (gdk_window, &attributes, attributes_mask);
+          priv->border_window[i] = gdk_window_new_input (gdk_window,
+                                                         GDK_BUTTON_PRESS_MASK,
+                                                         &(GdkRectangle) { 0, 0, 1, 1 });
 
           cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), cursor_names[i]);
           gdk_window_set_cursor (priv->border_window[i], cursor);
