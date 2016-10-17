@@ -335,44 +335,36 @@ gtk_stack_realize (GtkWidget *widget)
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkAllocation allocation;
-  GdkWindowAttr attributes = { 0 };
-  GdkWindowAttributesType attributes_mask;
   GtkStackChildInfo *info;
   GList *l;
+  gint event_mask;
 
   gtk_widget_set_realized (widget, TRUE);
   gtk_widget_set_window (widget, g_object_ref (gtk_widget_get_parent_window (widget)));
 
   gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
 
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask =
-    gtk_widget_get_events (widget);
-  attributes_mask = (GDK_WA_X | GDK_WA_Y);
-
   priv->view_window =
-    gdk_window_new (gtk_widget_get_window (GTK_WIDGET (stack)),
-                    &attributes, attributes_mask);
+    gdk_window_new_child (gtk_widget_get_window (GTK_WIDGET (stack)),
+                          gtk_widget_get_events (widget),
+                          &allocation);
   gtk_widget_register_window (widget, priv->view_window);
 
-  attributes.x = get_bin_window_x (stack, &allocation);
-  attributes.y = get_bin_window_y (stack, &allocation);
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-
+  event_mask = gtk_widget_get_events (widget);
   for (l = priv->children; l != NULL; l = l->next)
     {
       info = l->data;
-      attributes.event_mask |= gtk_widget_get_events (info->widget);
+      event_mask |= gtk_widget_get_events (info->widget);
     }
 
   priv->bin_window =
-    gdk_window_new (priv->view_window, &attributes, attributes_mask);
+    gdk_window_new_child (priv->view_window,
+                          event_mask,
+                          &(GdkRectangle) {
+                            get_bin_window_x (stack, &allocation),
+                            get_bin_window_y (stack, &allocation),
+                            allocation.width,
+                            allocation.height});
   gtk_widget_register_window (widget, priv->bin_window);
 
   for (l = priv->children; l != NULL; l = l->next)
