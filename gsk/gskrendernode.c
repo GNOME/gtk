@@ -55,7 +55,7 @@
  *
  * The `GskRenderNode` structure contains only private data.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 
 static void
@@ -263,7 +263,7 @@ gsk_render_node_new (GskRenderer *renderer)
  *
  * Returns: (transfer none): the #GskRenderNode with an additional reference
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_ref (GskRenderNode *node)
@@ -284,7 +284,7 @@ gsk_render_node_ref (GskRenderNode *node)
  * If the reference was the last, the resources associated to the @node are
  * freed.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_unref (GskRenderNode *node)
@@ -303,7 +303,7 @@ gsk_render_node_unref (GskRenderNode *node)
  *
  * Returns: (transfer none): the parent of the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_get_parent (GskRenderNode *node)
@@ -321,7 +321,7 @@ gsk_render_node_get_parent (GskRenderNode *node)
  *
  * Returns: (transfer none): the first child of the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_get_first_child (GskRenderNode *node)
@@ -339,7 +339,7 @@ gsk_render_node_get_first_child (GskRenderNode *node)
  *
  * Returns: (transfer none): the last child of the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_get_last_child (GskRenderNode *node)
@@ -357,7 +357,7 @@ gsk_render_node_get_last_child (GskRenderNode *node)
  *
  * Returns: (transfer none): the next sibling of the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_get_next_sibling (GskRenderNode *node)
@@ -375,7 +375,7 @@ gsk_render_node_get_next_sibling (GskRenderNode *node)
  *
  * Returns: (transfer none): the previous sibling of the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_get_previous_sibling (GskRenderNode *node)
@@ -506,7 +506,7 @@ insert_child_at_pos (GskRenderNode *node,
  *
  * Returns: (transfer none): the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_append_child (GskRenderNode *node,
@@ -534,7 +534,7 @@ gsk_render_node_append_child (GskRenderNode *node,
  *
  * Returns: (transfer none): the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_prepend_child (GskRenderNode *node,
@@ -568,7 +568,7 @@ gsk_render_node_prepend_child (GskRenderNode *node,
  *
  * Returns: (transfer none): the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_insert_child_at_pos (GskRenderNode *node,
@@ -628,7 +628,7 @@ insert_child_before (GskRenderNode *node,
  *
  * Returns: (transfer none): the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_insert_child_before (GskRenderNode *node,
@@ -687,7 +687,7 @@ insert_child_after (GskRenderNode *node,
  *
  * Returns: (transfer none): the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_insert_child_after (GskRenderNode *node,
@@ -742,7 +742,7 @@ insert_child_between (GskRenderNode *node,
  *
  * Returns: (transfer none): the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_replace_child (GskRenderNode *node,
@@ -835,7 +835,7 @@ gsk_render_node_remove_child (GskRenderNode *node,
  *
  * Returns: (transfer none): the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_render_node_remove_all_children (GskRenderNode *node)
@@ -867,7 +867,7 @@ gsk_render_node_remove_all_children (GskRenderNode *node)
  *
  * Returns: the number of children of the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 guint
 gsk_render_node_get_n_children (GskRenderNode *node)
@@ -886,7 +886,7 @@ gsk_render_node_get_n_children (GskRenderNode *node)
  * render node, and are used to clip the surface associated to it
  * when rendering.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_bounds (GskRenderNode         *node,
@@ -908,7 +908,7 @@ gsk_render_node_set_bounds (GskRenderNode         *node,
  *
  * Retrieves the boundaries set using gsk_render_node_set_bounds().
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_get_bounds (GskRenderNode   *node,
@@ -927,7 +927,7 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
  *
  * Sets the transformation matrix used when rendering the @node.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_transform (GskRenderNode           *node,
@@ -951,7 +951,7 @@ gsk_render_node_set_transform (GskRenderNode           *node,
  *
  * Set the anchor point used when rendering the @node.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_anchor_point (GskRenderNode            *node,
@@ -971,7 +971,7 @@ gsk_render_node_set_anchor_point (GskRenderNode            *node,
  *
  * Sets the opacity of the @node.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_opacity (GskRenderNode *node,
@@ -991,7 +991,7 @@ gsk_render_node_set_opacity (GskRenderNode *node,
  *
  * Returns: the opacity of the #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 double
 gsk_render_node_get_opacity (GskRenderNode *node)
@@ -1010,7 +1010,7 @@ gsk_render_node_get_opacity (GskRenderNode *node)
  *
  * Hidden nodes, and their descendants, are not rendered.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_hidden (GskRenderNode *node,
@@ -1030,7 +1030,7 @@ gsk_render_node_set_hidden (GskRenderNode *node,
  *
  * Returns: %TRUE if the #GskRenderNode is hidden
  *
- * Since: 3.22
+ * Since: 3.90
  */
 gboolean
 gsk_render_node_is_hidden (GskRenderNode *node)
@@ -1052,7 +1052,7 @@ gsk_render_node_is_hidden (GskRenderNode *node)
  *
  * Renderers may use this information to optimize the rendering pipeline.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_opaque (GskRenderNode *node,
@@ -1072,7 +1072,7 @@ gsk_render_node_set_opaque (GskRenderNode *node,
  *
  * Returns: %TRUE if the #GskRenderNode is fully opaque
  *
- * Since: 3.22
+ * Since: 3.90
  */
 gboolean
 gsk_render_node_is_opaque (GskRenderNode *node)
@@ -1092,7 +1092,7 @@ gsk_render_node_is_opaque (GskRenderNode *node)
  * Returns: %TRUE if the #GskRenderNode contains the given
  *   descendant
  *
- * Since: 3.22
+ * Since: 3.90
  */
 gboolean
 gsk_render_node_contains (GskRenderNode *node,
@@ -1220,7 +1220,7 @@ gsk_render_node_get_texture (GskRenderNode *node)
  *
  * Associates a @texture_id to a #GskRenderNode.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_texture (GskRenderNode *node,
@@ -1314,7 +1314,7 @@ gsk_render_node_get_scale_factor (GskRenderNode *node)
  *
  * A name is generally useful for debugging purposes.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_name (GskRenderNode *node,
@@ -1336,7 +1336,7 @@ gsk_render_node_set_name (GskRenderNode *node,
  *
  * The default value is %GSK_BLEND_MODE_DEFAULT.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_set_blend_mode (GskRenderNode *node,
@@ -1377,7 +1377,7 @@ gsk_render_node_get_blend_mode (GskRenderNode *node)
  * Returns: (transfer full): a Cairo context used for drawing; use
  *   cairo_destroy() when done drawing
  *
- * Since: 3.22
+ * Since: 3.90
  */
 cairo_t *
 gsk_render_node_get_draw_context (GskRenderNode *node)
@@ -1482,7 +1482,7 @@ gsk_render_node_get_size (GskRenderNode *root)
  *
  * This function acquires a reference on @node.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_value_set_render_node (GValue        *value,
@@ -1514,7 +1514,7 @@ gsk_value_set_render_node (GValue        *value,
  *
  * Sets the @node into the @value, without taking a reference to it.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_value_take_render_node (GValue        *value,
@@ -1548,7 +1548,7 @@ gsk_value_take_render_node (GValue        *value,
  *
  * Returns: (transfer none) (nullable): a #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_value_get_render_node (const GValue *value)
@@ -1567,7 +1567,7 @@ gsk_value_get_render_node (const GValue *value)
  *
  * Returns: (transfer none) (nullable): a #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_value_dup_render_node (const GValue *value)

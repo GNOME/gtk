@@ -19,25 +19,25 @@ struct _GskRenderNodeIter
   gpointer dummy5;
 };
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GType gsk_render_node_iter_get_type (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNodeIter *     gsk_render_node_iter_new        (void);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_iter_free       (GskRenderNodeIter *iter);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_iter_init       (GskRenderNodeIter *iter,
                                                          GskRenderNode     *node);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 gboolean                gsk_render_node_iter_is_valid   (GskRenderNodeIter *iter);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 gboolean                gsk_render_node_iter_prev       (GskRenderNodeIter  *iter,
                                                          GskRenderNode     **child);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 gboolean                gsk_render_node_iter_next       (GskRenderNodeIter  *iter,
                                                          GskRenderNode     **child);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_iter_remove     (GskRenderNodeIter *iter);
 
 G_END_DECLS

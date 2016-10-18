@@ -36,46 +36,46 @@ G_BEGIN_DECLS
 typedef struct _GskRenderer             GskRenderer;
 typedef struct _GskRendererClass        GskRendererClass;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GType gsk_renderer_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderer *           gsk_renderer_get_for_display            (GdkDisplay              *display);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_set_viewport               (GskRenderer             *renderer,
                                                                  const graphene_rect_t   *viewport);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_get_viewport               (GskRenderer             *renderer,
                                                                  graphene_rect_t         *viewport);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_set_scale_factor           (GskRenderer             *renderer,
                                                                  int                      scale_factor);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 int                     gsk_renderer_get_scale_factor           (GskRenderer             *renderer);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_set_window                 (GskRenderer             *renderer,
                                                                  GdkWindow               *window);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GdkWindow *             gsk_renderer_get_window                 (GskRenderer             *renderer);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GdkDisplay *            gsk_renderer_get_display                (GskRenderer             *renderer);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 gboolean                gsk_renderer_realize                    (GskRenderer             *renderer);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_renderer_create_render_node         (GskRenderer             *renderer);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderer *           gsk_renderer_create_fallback            (GskRenderer             *renderer,
                                                                  const graphene_rect_t   *viewport,
                                                                  cairo_t                 *cr);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_render                     (GskRenderer             *renderer,
                                                                  GskRenderNode           *root,
                                                                  GdkDrawingContext       *context);

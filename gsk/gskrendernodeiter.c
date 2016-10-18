@@ -46,7 +46,7 @@ typedef struct {
  *
  * Returns: (transfer full): the newly allocated #GskRenderNodeIter
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNodeIter *
 gsk_render_node_iter_new (void)
@@ -74,7 +74,7 @@ gsk_render_node_iter_copy (GskRenderNodeIter *src)
  *
  * Frees the resources allocated by gsk_render_node_iter_new().
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_iter_free (GskRenderNodeIter *iter)
@@ -97,7 +97,7 @@ G_DEFINE_BOXED_TYPE (GskRenderNodeIter, gsk_render_node_iter,
  * It's safe to call this function multiple times on the same
  * #GskRenderNodeIter instance.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_iter_init (GskRenderNodeIter *iter,
@@ -122,7 +122,7 @@ gsk_render_node_iter_init (GskRenderNodeIter *iter,
  *
  * Returns: %TRUE if the iterator is still valid.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 gboolean
 gsk_render_node_iter_is_valid (GskRenderNodeIter *iter)
@@ -153,7 +153,7 @@ gsk_render_node_iter_is_valid (GskRenderNodeIter *iter)
  *
  * Returns: %TRUE if the iterator could advance, and %FALSE otherwise
  *
- * Since: 3.22
+ * Since: 3.90
  */
 gboolean
 gsk_render_node_iter_next (GskRenderNodeIter  *iter,
@@ -192,7 +192,7 @@ gsk_render_node_iter_next (GskRenderNodeIter  *iter,
  *
  * Returns: %TRUE if the iterator could advance, and %FALSE otherwise
  *
- * Since: 3.22
+ * Since: 3.90
  */
 gboolean
 gsk_render_node_iter_prev (GskRenderNodeIter  *iter,
@@ -225,7 +225,7 @@ gsk_render_node_iter_prev (GskRenderNodeIter  *iter,
  * Calling this function on an invalid #GskRenderNodeIter results
  * in undefined behavior.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_render_node_iter_remove (GskRenderNodeIter *iter)

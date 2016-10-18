@@ -35,7 +35,7 @@
  * The actual implementation of each filter is deferred to the
  * rendering pipeline.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 typedef enum {
   GSK_SCALING_FILTER_LINEAR,
@@ -64,7 +64,7 @@ typedef enum {
  * The implementation of each blend mode is deferred to the
  * rendering pipeline.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 typedef enum {
   GSK_BLEND_MODE_DEFAULT = 0,

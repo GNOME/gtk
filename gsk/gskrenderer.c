@@ -229,7 +229,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
    *
    * The visible area used by the #GskRenderer to render its contents.
    *
-   * Since: 3.22
+   * Since: 3.90
    */
   gsk_renderer_properties[PROP_VIEWPORT] =
     g_param_spec_boxed ("viewport",
@@ -245,7 +245,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
    *
    * The #GdkDisplay used by the #GskRenderer.
    *
-   * Since: 3.22
+   * Since: 3.90
    */
   gsk_renderer_properties[PROP_DISPLAY] =
     g_param_spec_object ("display",
@@ -270,7 +270,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
    *
    * The scale factor used when rendering.
    *
-   * Since: 3.22
+   * Since: 3.90
    */
   gsk_renderer_properties[PROP_SCALE_FACTOR] =
     g_param_spec_int ("scale-factor",
@@ -287,7 +287,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
    *
    * The drawing context used when rendering.
    *
-   * Since: 3.22
+   * Since: 3.90
    */
   gsk_renderer_properties[PROP_DRAWING_CONTEXT] =
     g_param_spec_object ("drawing-context",
@@ -318,7 +318,7 @@ gsk_renderer_init (GskRenderer *self)
  * Sets the visible rectangle to be used as the viewport for
  * the rendering.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_renderer_set_viewport (GskRenderer           *renderer,
@@ -350,7 +350,7 @@ gsk_renderer_set_viewport (GskRenderer           *renderer,
  *
  * Retrieves the viewport of the #GskRenderer.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_renderer_get_viewport (GskRenderer     *renderer,
@@ -371,7 +371,7 @@ gsk_renderer_get_viewport (GskRenderer     *renderer,
  *
  * Sets the scale factor for the renderer.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_renderer_set_scale_factor (GskRenderer *renderer,
@@ -397,7 +397,7 @@ gsk_renderer_set_scale_factor (GskRenderer *renderer,
  *
  * Returns: the scale factor
  *
- * Since: 3.22
+ * Since: 3.90
  */
 int
 gsk_renderer_get_scale_factor (GskRenderer *renderer)
@@ -416,7 +416,7 @@ gsk_renderer_get_scale_factor (GskRenderer *renderer)
  *
  * Sets the window on which the @renderer is rendering.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_renderer_set_window (GskRenderer *renderer,
@@ -440,7 +440,7 @@ gsk_renderer_set_window (GskRenderer *renderer,
  *
  * Returns: (transfer none) (nullable): a #GdkWindow
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GdkWindow *
 gsk_renderer_get_window (GskRenderer *renderer)
@@ -496,7 +496,7 @@ gsk_renderer_get_drawing_context (GskRenderer *renderer)
  *
  * Returns: (transfer none): a #GdkDisplay
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GdkDisplay *
 gsk_renderer_get_display (GskRenderer *renderer)
@@ -516,7 +516,7 @@ gsk_renderer_get_display (GskRenderer *renderer)
  *
  * Returns: %TRUE if the #GskRenderer was realized, and %FALSE otherwise
  *
- * Since: 3.22
+ * Since: 3.90
  */
 gboolean
 gsk_renderer_is_realized (GskRenderer *renderer)
@@ -535,7 +535,7 @@ gsk_renderer_is_realized (GskRenderer *renderer)
  * Creates the resources needed by the @renderer to render the scene
  * graph.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 gboolean
 gsk_renderer_realize (GskRenderer *renderer)
@@ -558,7 +558,7 @@ gsk_renderer_realize (GskRenderer *renderer)
  *
  * Releases all the resources created by gsk_renderer_realize().
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_renderer_unrealize (GskRenderer *renderer)
@@ -587,7 +587,7 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * The @renderer will acquire a reference on the #GskRenderNode tree while
  * the rendering is in progress, and will make the tree immutable.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gsk_renderer_render (GskRenderer       *renderer,
@@ -655,7 +655,7 @@ gsk_renderer_render (GskRenderer       *renderer,
  *
  * Returns: (transfer full): the new #GskRenderNode
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderNode *
 gsk_renderer_create_render_node (GskRenderer *renderer)
@@ -691,7 +691,7 @@ gsk_renderer_get_profiler (GskRenderer *renderer)
  *
  * Returns: (transfer full) (nullable): a #GskRenderer
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderer *
 gsk_renderer_get_for_display (GdkDisplay *display)
@@ -767,7 +767,7 @@ gsk_renderer_get_cairo_context (GskRenderer *renderer)
  *
  * Returns: (transfer full): a newly created fallback #GskRenderer instance
  *
- * Since: 3.22
+ * Since: 3.90
  */
 GskRenderer *
 gsk_renderer_create_fallback (GskRenderer           *renderer,

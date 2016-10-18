@@ -35,110 +35,110 @@ G_BEGIN_DECLS
 typedef struct _GskRenderNode           GskRenderNode;
 typedef struct _GskRenderNodeClass      GskRenderNodeClass;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GType gsk_render_node_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_ref                     (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_unref                   (GskRenderNode *node);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_parent              (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_first_child         (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_last_child          (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_next_sibling        (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_previous_sibling    (GskRenderNode *node);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_append_child            (GskRenderNode *node,
                                                                  GskRenderNode *child);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_prepend_child           (GskRenderNode *node,
                                                                  GskRenderNode *child);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_insert_child_at_pos     (GskRenderNode *node,
                                                                  GskRenderNode *child,
                                                                  int            index_);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_insert_child_before     (GskRenderNode *node,
                                                                  GskRenderNode *child,
                                                                  GskRenderNode *sibling);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_insert_child_after      (GskRenderNode *node,
                                                                  GskRenderNode *child,
                                                                  GskRenderNode *sibling);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_remove_child            (GskRenderNode *node,
                                                                  GskRenderNode *child);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_replace_child           (GskRenderNode *node,
                                                                  GskRenderNode *new_child,
                                                                  GskRenderNode *old_child);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_remove_all_children     (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 guint                   gsk_render_node_get_n_children          (GskRenderNode *node);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 gboolean                gsk_render_node_contains                (GskRenderNode *node,
 								 GskRenderNode *descendant);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_bounds              (GskRenderNode            *node,
                                                                  const graphene_rect_t    *bounds);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_transform           (GskRenderNode            *node,
                                                                  const graphene_matrix_t  *transform);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_anchor_point        (GskRenderNode            *node,
                                                                  const graphene_point3d_t *offset);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_opacity             (GskRenderNode *node,
                                                                  double         opacity);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_hidden              (GskRenderNode *node,
                                                                  gboolean       hidden);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 gboolean                gsk_render_node_is_hidden               (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_opaque              (GskRenderNode *node,
                                                                  gboolean       opaque);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 gboolean                gsk_render_node_is_opaque               (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 cairo_t *               gsk_render_node_get_draw_context        (GskRenderNode   *node);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_blend_mode          (GskRenderNode *node,
                                                                  GskBlendMode   blend_mode);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_texture             (GskRenderNode *node,
                                                                  int            texture_id);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_scaling_filter      (GskRenderNode *node,
                                                                  GskScalingFilter min_filter,
                                                                  GskScalingFilter mag_filter);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_name                (GskRenderNode *node,
                                                                  const char    *name);
 
 #define GSK_VALUE_HOLDS_RENDER_NODE(value)	(G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE))
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_value_set_render_node               (GValue        *value,
                                                                  GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 void                    gsk_value_take_render_node              (GValue        *value,
                                                                  GskRenderNode *node);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_value_get_render_node               (const GValue  *value);
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_value_dup_render_node               (const GValue  *value);
 
 G_END_DECLS
