@@ -11,16 +11,6 @@ AM_CPPFLAGS = \
 	$(GTK_WARN_FLAGS)			\
 	$(GSK_DEP_CFLAGS)
 
-# libtool stuff: set version and export symbols for resolving
-# since automake doesn't support conditionalized libsomething_la_LDFLAGS
-# we use the general approach here
-LDADD = \
-	$(GTK_LINK_FLAGS) \
-	-version-info $(LT_VERSION_INFO) \
-	-export-dynamic	\
-	-rpath $(libdir) \
-	$(no_undefined)
-
 BUILT_SOURCES =
 
 CLEANFILES =
@@ -116,7 +106,12 @@ libgsk_4_la_SOURCES = $(all_sources)
 nodist_libgsk_4_la_SOURCES = $(gsk_built_source_h) $(gsk_built_source_c)
 libgsk_4_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
 libgsk_4_la_LIBADD = $(GSK_DEP_LIBS) $(top_builddir)/gdk/libgdk-4.la
-libgsk_4_la_LDFLAGS = $(LDADD)
+libgsk_4_la_LDFLAGS = \
+	$(GTK_LINK_FLAGS) \
+	-version-info $(LT_VERSION_INFO) \
+	-export-dynamic	\
+	-rpath $(libdir) \
+	$(no_undefined)
 
 lib_LTLIBRARIES += libgsk-4.la
 
