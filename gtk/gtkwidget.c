@@ -5067,7 +5067,7 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!_gtk_widget_get_realized (widget))
+  if (cairo_region_is_empty (region))
     return;
 
   /* Just return if the widget or one of its ancestors isn't mapped */
