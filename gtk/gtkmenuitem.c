@@ -1590,10 +1590,8 @@ gtk_menu_item_real_popup_submenu (GtkWidget      *widget,
               g_signal_handlers_disconnect_by_func (priv->submenu, popped_up_cb, menu_item);
               g_signal_connect (priv->submenu, "popped-up", G_CALLBACK (popped_up_cb), menu_item);
 
-              gtk_widget_style_get (priv->submenu,
-                                    "horizontal-offset", &horizontal_offset,
-                                    "vertical-offset", &vertical_offset,
-                                    NULL);
+              horizontal_offset = 0;
+              vertical_offset = 0;
 
               context = gtk_widget_get_style_context (parent);
               gtk_style_context_get_padding (context, &parent_padding);
