@@ -2,6 +2,7 @@ include $(top_srcdir)/Makefile.decl
 
 AM_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"Gsk\"			\
+	-DG_LOG_USE_STRUCTURED=1		\
 	-DGSK_COMPILATION			\
 	-I$(top_srcdir)				\
 	-I$(top_srcdir)/gdk			\
@@ -35,32 +36,31 @@ gsk_private_source_h = \
 	gskrendererprivate.h \
 	gskrendernodeprivate.h \
 	gskshaderbuilderprivate.h
+gsk_public_source_c = \
+	gskrenderer.c \
+	gskrendernode.c \
+	gskrendernodeiter.c
 gsk_private_source_c = \
-	gskprivate.c
+	gskcairorenderer.c \
+	gskdebug.c \
+	gskgldriver.c \
+	gskglprofiler.c \
+	gskglrenderer.c \
+	gskprivate.c \
+	gskprofiler.c \
+	gskshaderbuilder.c
 gsk_built_source_h = \
 	gskenumtypes.h \
 	gskresources.h
 gsk_built_source_c = \
 	gskenumtypes.c \
 	gskresources.c
-gsk_source_c = \
-	gskcairorenderer.c \
-	gskdebug.c \
-	gskgldriver.c \
-	gskglprofiler.c \
-	gskglrenderer.c \
-	gskprofiler.c \
-	gskrenderer.c \
-	gskrendernode.c \
-	gskrendernodeiter.c \
-	gskshaderbuilder.c
 
 all_sources = \
 	$(gsk_public_source_h) \
+	$(gsk_public_source_c) \
 	$(gsk_private_source_h) \
-	$(gsk_built_source_h) \
-	$(gsk_private_source_c) \
-	$(gsk_source_c)
+	$(gsk_private_source_c)
 
 BUILT_SOURCES += $(gsk_built_source_h) $(gsk_built_source_c) gsk.resources.xml
 
@@ -120,10 +120,10 @@ gskinclude_HEADERS = $(gsk_public_source_h) gskenumtypes.h gsk.h
 
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ENV = \
-	CC="$(CC)"
+INTROSPECTION_SCANNER_ENV = CC="$(CC)"
 INTROSPECTION_SCANNER_ARGS = \
 	--add-include-path=../gdk \
+	--add-include-path=../gsk \
 	--warn-all
 INTROSPECTION_COMPILER_ARGS = \
 	--includedir=$(srcdir) \
@@ -132,7 +132,7 @@ INTROSPECTION_COMPILER_ARGS = \
 
 if HAVE_INTROSPECTION
 
-introspection_files = $(filter-out $(wildcard *private.h),$(all_sources))
+introspection_files = $(gsk_public_source_h) $(gsk_public_source_c)
 
 Gsk-4.0.gir: libgsk-4.la Makefile
 Gsk_4_0_gir_SCANNERFLAGS = \
@@ -141,7 +141,7 @@ Gsk_4_0_gir_SCANNERFLAGS = \
 	--c-include="gsk/gsk.h"
 Gsk_4_0_gir_LIBS = libgsk-4.la $(top_builddir)/gdk/libgdk-4.la
 Gsk_4_0_gir_FILES = $(introspection_files)
-Gsk_4_0_gir_CFLAGS = $(AM_CPPFLAGS)
+Gsk_4_0_gir_CFLAGS = $(AM_CPPFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
 Gsk_4_0_gir_EXPORT_PACKAGES = gsk-4.0
 Gsk_4_0_gir_INCLUDES = GObject-2.0 cairo-1.0 Graphene-1.0
 INTROSPECTION_GIRS += Gsk-4.0.gir
