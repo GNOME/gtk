@@ -740,6 +740,15 @@ gdk_wayland_device_grab (GdkDevice    *device,
   GdkWindow *prev_focus = gdk_wayland_device_get_focus (device);
   GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
 
+  if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP &&
+      gdk_window_is_visible (window))
+    {
+      g_warning ("Window %p is already mapped at the time of grabbing. "
+                 "gdk_seat_grab() should be used to simultanously grab input "
+                 "and show this popup. You may find oddities ahead.",
+                 window);
+    }
+
   if (prev_focus != window)
     device_emit_grab_crossing (device, prev_focus, window, GDK_CROSSING_GRAB, time_);
 

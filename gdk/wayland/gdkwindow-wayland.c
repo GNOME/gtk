@@ -2072,9 +2072,12 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
 
   zxdg_positioner_v6_destroy (positioner);
 
-  gdk_seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
-  serial = _gdk_wayland_seat_get_last_implicit_grab_serial (gdk_seat, NULL);
-  zxdg_popup_v6_grab (impl->display_server.xdg_popup, seat, serial);
+  if (seat)
+    {
+      gdk_seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+      serial = _gdk_wayland_seat_get_last_implicit_grab_serial (gdk_seat, NULL);
+      zxdg_popup_v6_grab (impl->display_server.xdg_popup, seat, serial);
+    }
 
   wl_surface_commit (impl->display_server.wl_surface);
 
@@ -2121,18 +2124,6 @@ find_grab_input_seat (GdkWindow *window, GdkWindow *transient_for)
     }
 
   return NULL;
-}
-
-static struct wl_seat *
-find_default_input_seat (GdkWindow *window)
-{
-  GdkDisplay *display;
-  GdkSeat *seat;
-
-  display = gdk_window_get_display (window);
-  seat = gdk_display_get_default_seat (display);
-
-  return gdk_wayland_seat_get_wl_seat (seat);
 }
 
 static gboolean
@@ -2330,16 +2321,6 @@ gdk_wayland_window_map (GdkWindow *window)
       else
         {
           grab_input_seat = find_grab_input_seat (window, transient_for);
-
-          if (!grab_input_seat)
-            {
-              g_warning ("No grabbed seat found, using the default one in "
-                         "order to map popup window %p. You may find oddities "
-                         "ahead, gdk_seat_grab() should be used to "
-                         "simultaneously grab input and show this popup",
-                         window);
-              grab_input_seat = find_default_input_seat (window);
-            }
         }
 
       if (!create_fallback)
