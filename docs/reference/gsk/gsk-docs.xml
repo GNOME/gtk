@@ -6,11 +6,11 @@
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
-    <title>GSK 3 Reference Manual</title>
+    <title>GSK 4 Reference Manual</title>
     <releaseinfo>
-      This document is for the GSK 3 library, version &version;
+      This document is for the GSK 4 library, version &version;
       The latest versions can be found online at
-      <ulink role="online-location" url="http://developer.gnome.org/gdk3/">http://developer.gnome.org/gsk3/</ulink>.
+      <ulink role="online-location" url="http://developer.gnome.org/gdk3/">http://developer.gnome.org/gsk4/</ulink>.
     </releaseinfo>
   </bookinfo>
 
