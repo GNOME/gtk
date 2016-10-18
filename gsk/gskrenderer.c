@@ -124,6 +124,8 @@ gsk_renderer_dispose (GObject *gobject)
   gsk_renderer_unrealize (self);
 
   g_clear_pointer (&priv->cairo_context, cairo_destroy);
+
+  g_clear_object (&priv->profiler);
   g_clear_object (&priv->window);
   g_clear_object (&priv->display);
 
