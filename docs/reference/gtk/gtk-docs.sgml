@@ -254,7 +254,6 @@
       <xi:include href="xml/gtkdrawingarea.xml" />
       <xi:include href="xml/gtkglarea.xml" />
       <xi:include href="xml/gtkeventbox.xml" />
-      <xi:include href="xml/gtkhandlebox.xml" />
       <xi:include href="xml/gtkimcontextsimple.xml" />
       <xi:include href="xml/gtkimmulticontext.xml" />
       <xi:include href="xml/gtksizegroup.xml" />
@@ -307,48 +306,6 @@
       <xi:include href="xml/gtkpadcontroller.xml" />
     </chapter>
 
-    <chapter id="DeprecatedObjects">
-      <title>Deprecated</title>
-      <xi:include href="xml/gtksymboliccolor.xml" />
-      <xi:include href="xml/gtkgradient.xml" />
-      <xi:include href="xml/gtkrc.xml" />
-      <xi:include href="xml/gtkstyle.xml" />
-      <xi:include href="xml/gtkhscale.xml" />
-      <xi:include href="xml/gtkvscale.xml" />
-      <xi:include href="xml/gtktearoffmenuitem.xml" />
-      <xi:include href="xml/gtkcolorsel.xml" />
-      <xi:include href="xml/gtkcolorseldlg.xml" />
-      <xi:include href="xml/gtkhsv.xml" />
-      <xi:include href="xml/gtkfontsel.xml" />
-      <xi:include href="xml/gtkfontseldlg.xml" />
-      <xi:include href="xml/gtkhbox.xml" />
-      <xi:include href="xml/gtkvbox.xml" />
-      <xi:include href="xml/gtkhbbox.xml" />
-      <xi:include href="xml/gtkvbbox.xml" />
-      <xi:include href="xml/gtkhpaned.xml" />
-      <xi:include href="xml/gtkvpaned.xml" />
-      <xi:include href="xml/gtktable.xml" />
-      <xi:include href="xml/gtkhseparator.xml" />
-      <xi:include href="xml/gtkvseparator.xml" />
-      <xi:include href="xml/gtkhscrollbar.xml" />
-      <xi:include href="xml/gtkvscrollbar.xml" />
-      <xi:include href="xml/gtkuimanager.xml" />
-      <xi:include href="xml/gtkactiongroup.xml" />
-      <xi:include href="xml/gtkaction.xml" />
-      <xi:include href="xml/gtktoggleaction.xml" />
-      <xi:include href="xml/gtkradioaction.xml" />
-      <xi:include href="xml/gtkrecentaction.xml" />
-      <xi:include href="xml/gtkactivatable.xml" />
-      <xi:include href="xml/gtkimagemenuitem.xml" />
-      <xi:include href="xml/gtkmisc.xml" />
-      <xi:include href="xml/gtkstock.xml" />
-      <xi:include href="xml/gtkiconfactory.xml" />
-      <xi:include href="xml/gtkarrow.xml" />
-      <xi:include href="xml/gtkstatusicon.xml" />
-      <xi:include href="xml/gtkthemingengine.xml" />
-      <xi:include href="xml/gtkalignment.xml" />
-    </chapter>
-
   </part>
 
   <part  id="gtkbase">
@@ -374,7 +331,6 @@
     <xi:include href="xml/gtkstylecontext.xml" />
     <xi:include href="xml/gtkcssprovider.xml" />
     <xi:include href="xml/gtkstyleprovider.xml" />
-    <xi:include href="xml/gtkstyleproperties.xml" />
     <xi:include href="xml/gtkwidgetpath.xml" />
     <xi:include href="xml/gtkicontheme.xml" />
   </part>

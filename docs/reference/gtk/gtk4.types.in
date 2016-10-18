@@ -7,11 +7,7 @@ gtk_accel_map_get_type
 gtk_accessible_get_type
 gtk_actionable_get_type
 gtk_action_bar_get_type
-gtk_action_get_type
-gtk_action_group_get_type
-gtk_activatable_get_type
 gtk_adjustment_get_type
-gtk_alignment_get_type
 gtk_app_chooser_get_type
 gtk_app_chooser_button_get_type
 gtk_app_chooser_dialog_get_type
@@ -131,12 +127,10 @@ gtk_print_operation_preview_get_type
 gtk_print_settings_get_type
 @DISABLE_ON_W32@gtk_print_unix_dialog_get_type
 gtk_progress_bar_get_type
-gtk_radio_action_get_type
 gtk_radio_button_get_type
 gtk_radio_menu_item_get_type
 gtk_radio_tool_button_get_type
 gtk_range_get_type
-gtk_recent_action_get_type
 gtk_recent_chooser_get_type
 gtk_recent_chooser_dialog_get_type
 gtk_recent_chooser_menu_get_type
@@ -170,7 +164,6 @@ gtk_switch_get_type
 gtk_level_bar_get_type
 gtk_style_context_get_type
 gtk_style_provider_get_type
-gtk_table_get_type
 gtk_text_buffer_get_type
 gtk_text_child_anchor_get_type
 gtk_text_iter_get_type
@@ -178,7 +171,6 @@ gtk_text_mark_get_type
 gtk_text_tag_get_type
 gtk_text_tag_table_get_type
 gtk_text_view_get_type
-gtk_toggle_action_get_type
 gtk_toggle_button_get_type
 gtk_toggle_tool_button_get_type
 gtk_toolbar_get_type
@@ -196,7 +188,6 @@ gtk_tree_sortable_get_type
 gtk_tree_store_get_type
 gtk_tree_view_column_get_type
 gtk_tree_view_get_type
-gtk_ui_manager_get_type
 gtk_viewport_get_type
 gtk_volume_button_get_type
 gtk_widget_get_type
