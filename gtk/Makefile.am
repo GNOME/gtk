@@ -1552,15 +1552,15 @@ endif
 # Installed tools
 #
 bin_PROGRAMS = \
-	gtk-query-immodules-4.0	\
+	gtk4-query-immodules	\
 	gtk-update-icon-cache \
 	gtk-encode-symbolic-svg \
 	gtk-builder-tool \
 	gtk-query-settings \
 	gtk-launch
 
-gtk_query_immodules_4_0_SOURCES = queryimmodules.c gtkutils.c
-gtk_query_immodules_4_0_LDADD = 		\
+gtk4_query_immodules_SOURCES = queryimmodules.c gtkutils.c
+gtk4_query_immodules_LDADD = 		\
 	libgtk-4.la				\
 	$(top_builddir)/gdk/libgdk-4.la		\
 	$(top_builddir)/gsk/libgsk-4.la		\

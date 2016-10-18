@@ -293,7 +293,7 @@ content_files =					\
 	gtk-builder-tool.xml			\
 	gtk-encode-symbolic-svg.xml		\
 	gtk-launch.xml				\
-	gtk-query-immodules-4.0.xml		\
+	gtk4-query-immodules.xml		\
 	gtk-query-settings.xml			\
 	gtk-update-icon-cache.xml		\
 	input-handling.xml			\
@@ -496,7 +496,7 @@ EXTRA_DIST += version.xml.in gtk4.types.in
 ########################################################################
 
 man_MANS = 				\
-	gtk-query-immodules-4.0.1	\
+	gtk4-query-immodules.1		\
 	gtk-update-icon-cache.1		\
 	gtk-encode-symbolic-svg.1	\
 	gtk-launch.1			\

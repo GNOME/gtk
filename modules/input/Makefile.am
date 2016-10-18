@@ -209,14 +209,14 @@ install-data-hook:
 	$(AM_V_GEN) if $(RUN_QUERY_IMMODULES_TEST) ; then \
 	  echo $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-4.0/4.0.0 ; \
 	  $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-4.0/4.0.0 ; \
-	  echo "$(top_builddir)/gtk/gtk-query-immodules-4.0$(EXEEXT) > $(DESTDIR)$(libdir)/gtk-4.0/4.0.0/immodules.cache" ; \
-	  $(top_builddir)/gtk/gtk-query-immodules-4.0$(EXEEXT) > $(DESTDIR)$(libdir)/gtk-4.0/4.0.0/immodules.cache ; \
+	  echo "$(top_builddir)/gtk/gtk4-query-immodules$(EXEEXT) > $(DESTDIR)$(libdir)/gtk-4.0/4.0.0/immodules.cache" ; \
+	  $(top_builddir)/gtk/gtk4-query-immodules$(EXEEXT) > $(DESTDIR)$(libdir)/gtk-4.0/4.0.0/immodules.cache ; \
 	else \
 	  echo "***" ; \
 	  echo "*** Warning: immodules.cache not built" ; \
 	  echo "***" ; \
 	  echo "*** Generate this file manually on host" ; \
-	  echo "*** system using gtk-query-immodules-4.0" ; \
+	  echo "*** system using gtk4-query-immodules" ; \
 	  echo "***" ; \
         fi
 
@@ -262,7 +262,7 @@ noinst_LTLIBRARIES =				\
 included-modules: $(noinst_LTLIBRARIES)
 
 immodules.cache: Makefile.am $(module_LTLIBRARIES)
-	$(AM_V_GEN) $(top_builddir)/gtk/gtk-query-immodules-4.0$(EXEEXT) $(module_LTLIBRARIES) > immodules.cache
+	$(AM_V_GEN) $(top_builddir)/gtk/gtk4-query-immodules$(EXEEXT) $(module_LTLIBRARIES) > immodules.cache
 
 EXTRA_DIST += README.multipress
 
