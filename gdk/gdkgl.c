@@ -826,7 +826,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
  *
  * Uploads the contents of a Cairo @surface to a GL texture @target.
  *
- * Since: 3.22
+ * Since: 3.90
  */
 void
 gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
