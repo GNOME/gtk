@@ -333,8 +333,9 @@ struct _GtkWidget
  * @adjust_baseline_request:
  * @adjust_baseline_allocation:
  * @queue_draw_region: Invalidates the area of widget defined by
- *   region by calling gdk_window_invalidate_region() on the widget's
- *   window and all its child windows.
+ *   region.
+ * @queue_draw_child: Child wants to be redrawn. The region given is in
+ *   the child's coordinate system.
  */
 struct _GtkWidgetClass
 {
@@ -555,10 +556,13 @@ struct _GtkWidgetClass
   void         (* adjust_baseline_request)(GtkWidget         *widget,
                                            gint              *minimum_baseline,
                                            gint              *natural_baseline);
-  void         (* adjust_baseline_allocation) (GtkWidget         *widget,
-					       gint              *baseline);
-  void         (*queue_draw_region)           (GtkWidget         *widget,
-					       const cairo_region_t *region);
+  void         (* adjust_baseline_allocation) (GtkWidget             *widget,
+					       gint                  *baseline);
+  void         (* queue_draw_region)           (GtkWidget            *widget,
+					        const cairo_region_t *region);
+  void         (* queue_draw_child)            (GtkWidget            *widget,
+                                                GtkWidget            *child,
+					        const cairo_region_t *region);
 
   GskRenderNode *(* get_render_node) (GtkWidget *widget,
                                       GskRenderer *renderer);

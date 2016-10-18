@@ -705,6 +705,9 @@ static void             gtk_widget_real_state_flags_changed     (GtkWidget      
                                                                  GtkStateFlags     old_state);
 static void             gtk_widget_real_queue_draw_region       (GtkWidget         *widget,
 								 const cairo_region_t *region);
+static void             gtk_widget_real_queue_draw_child        (GtkWidget         *widget,
+                                                                 GtkWidget         *child,
+								 const cairo_region_t *region);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
@@ -1067,6 +1070,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->adjust_size_allocation = gtk_widget_real_adjust_size_allocation;
   klass->adjust_baseline_allocation = gtk_widget_real_adjust_baseline_allocation;
   klass->queue_draw_region = gtk_widget_real_queue_draw_region;
+  klass->queue_draw_child = gtk_widget_real_queue_draw_child;
 
   widget_props[PROP_NAME] =
       g_param_spec_string ("name",
@@ -5023,12 +5027,58 @@ gtk_widget_unrealize (GtkWidget *widget)
  *****************************************/
 
 static void
-gtk_widget_real_queue_draw_region (GtkWidget         *widget,
+gtk_widget_real_queue_draw_child (GtkWidget            *widget,
+                                  GtkWidget            *child,
+				  const cairo_region_t *child_region)
+{
+  GdkWindow *child_window, *window;
+  cairo_region_t *region;
+
+  window = gtk_widget_get_window (widget);
+  child_window = gtk_widget_get_window (child);
+
+  if (child_window == window)
+    gtk_widget_queue_draw_region (widget, child_region);
+
+  region = cairo_region_copy (child_region);
+  while (child_window != window && !cairo_region_is_empty (region))
+    {
+      int x, y;
+
+      /* clip to current window */
+      cairo_region_intersect_rectangle (region, &(GdkRectangle) { 
+                                        0, 0,
+                                        gdk_window_get_width (child_window),
+                                        gdk_window_get_height (child_window)});
+
+      /* make region relative to next window */
+      gdk_window_get_position (child_window, &x, &y);
+      cairo_region_translate (region, x, y);
+      child_window = gdk_window_get_parent (child_window);
+    }
+
+  gtk_widget_queue_draw_region (widget, region);
+  cairo_region_destroy (region);
+}
+
+static void
+gtk_widget_queue_draw_child (GtkWidget            *parent,
+                             GtkWidget            *child,
+                             const cairo_region_t *region)
+{
+  WIDGET_CLASS (parent)->queue_draw_child (parent, child, region);
+}
+
+static void
+gtk_widget_real_queue_draw_region (GtkWidget            *widget,
 				   const cairo_region_t *region)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidget *parent = _gtk_widget_get_parent (widget);
 
-  gdk_window_invalidate_region (priv->window, region, TRUE);
+  if (parent == NULL)
+    return;
+
+  gtk_widget_queue_draw_child (parent, widget, region);
 }
 
 /**
@@ -5053,17 +5103,14 @@ void
 gtk_widget_queue_draw_region (GtkWidget            *widget,
                               const cairo_region_t *region)
 {
-  GtkWidget *w;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (cairo_region_is_empty (region))
     return;
 
-  /* Just return if the widget or one of its ancestors isn't mapped */
-  for (w = widget; w != NULL; w = w->priv->parent)
-    if (!_gtk_widget_get_mapped (w))
-      return;
+  /* Just return if the widget isn't mapped */
+  if (!_gtk_widget_get_mapped (widget))
+    return;
 
   WIDGET_CLASS (widget)->queue_draw_region (widget, region);
 }
