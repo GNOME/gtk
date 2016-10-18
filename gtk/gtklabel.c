@@ -4280,7 +4280,7 @@ gtk_label_render (GtkCssGadget *gadget,
       if (info && (info->selection_anchor != info->selection_end))
         {
           gint range[2];
-          cairo_region_t *clip;
+          cairo_region_t *range_clip;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -4292,12 +4292,12 @@ gtk_label_render (GtkCssGadget *gadget,
               range[1] = tmp;
             }
 
-          clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
+          range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
 
           cairo_save (cr);
           gtk_style_context_save_to_node (context, info->selection_node);
 
-          gdk_cairo_region (cr, clip);
+          gdk_cairo_region (cr, range_clip);
           cairo_clip (cr);
 
           gtk_render_background (context, cr, x, y, width, height);
@@ -4305,14 +4305,14 @@ gtk_label_render (GtkCssGadget *gadget,
 
           gtk_style_context_restore (context);
           cairo_restore (cr);
-          cairo_region_destroy (clip);
+          cairo_region_destroy (range_clip);
         }
       else if (info)
         {
           GtkLabelLink *focus_link;
           GtkLabelLink *active_link;
           gint range[2];
-          cairo_region_t *clip;
+          cairo_region_t *range_clip;
           GdkRectangle rect;
 
           if (info->selectable &&
@@ -4339,11 +4339,11 @@ gtk_label_render (GtkCssGadget *gadget,
               cairo_save (cr);
               gtk_style_context_save_to_node (context, active_link->cssnode);
 
-              clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
+              range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
 
-              gdk_cairo_region (cr, clip);
+              gdk_cairo_region (cr, range_clip);
               cairo_clip (cr);
-              cairo_region_destroy (clip);
+              cairo_region_destroy (range_clip);
 
               gtk_render_background (context, cr, x, y, width, height);
               gtk_render_layout (context, cr, lx, ly, priv->layout);
@@ -4357,12 +4357,12 @@ gtk_label_render (GtkCssGadget *gadget,
               range[0] = focus_link->start;
               range[1] = focus_link->end;
 
-              clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
-              cairo_region_get_extents (clip, &rect);
+              range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
+              cairo_region_get_extents (range_clip, &rect);
 
               gtk_render_focus (context, cr, rect.x, rect.y, rect.width, rect.height);
 
-              cairo_region_destroy (clip);
+              cairo_region_destroy (range_clip);
             }
         }
     }
