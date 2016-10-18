@@ -1493,6 +1493,8 @@ gdk_window_new (GdkWindow     *parent,
  * Creates a new client-side child window.
  *
  * Returns: (transfer full): the new #GdkWindow
+ *
+ * Since: 3.90
  **/
 GdkWindow *
 gdk_window_new_child (GdkWindow          *parent,
@@ -1523,6 +1525,8 @@ gdk_window_new_child (GdkWindow          *parent,
  * Creates a new client-side input-only window.
  *
  * Returns: (transfer full): the new #GdkWindow
+ *
+ * Since: 3.90
  **/
 GdkWindow *
 gdk_window_new_input (GdkWindow          *parent,
