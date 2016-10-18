@@ -78,10 +78,6 @@
  */
 
 
-#define INDICATOR_SIZE     16
-#define INDICATOR_SPACING  2
-
-
 static void gtk_check_button_get_preferred_width                         (GtkWidget          *widget,
                                                                           gint               *minimum,
                                                                           gint               *natural);
