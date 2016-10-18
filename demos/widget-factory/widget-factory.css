@@ -1,8 +1,3 @@
-.circular-button {
-  border-radius: 20px;
-  -gtk-outline-radius: 20px;
-}
-
 .small-button {
   padding: 0;
   outline-width: 0;
