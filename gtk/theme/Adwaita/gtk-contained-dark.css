@@ -1153,6 +1153,11 @@ button:backdrop {
 .primary-toolbar
 button {
   -gtk-icon-shadow: none; }
+button.circular {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px; }
+  button.circular label {
+    padding: 0; }
 
 .stack-switcher >
 button.needs-attention > label,
@@ -4507,12 +4512,6 @@ cursor-handle {
 
 .context-menu {
   font: initial; }
-
-button.circular {
-  border-radius: 9999px;
-  -gtk-outline-radius: 9999px; }
-  button.circular label {
-    padding: 0; }
 
 .keycap {
   min-width: 20px;
