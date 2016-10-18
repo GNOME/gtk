@@ -290,12 +290,12 @@ content_files =					\
 	gtk4-demo.xml				\
 	gtk4-icon-browser.xml			\
 	gtk4-widget-factory.xml			\
-	gtk-builder-tool.xml			\
-	gtk-encode-symbolic-svg.xml		\
-	gtk-launch.xml				\
+	gtk4-builder-tool.xml			\
+	gtk4-encode-symbolic-svg.xml		\
+	gtk4-launch.xml				\
 	gtk4-query-immodules.xml		\
-	gtk-query-settings.xml			\
-	gtk-update-icon-cache.xml		\
+	gtk4-query-settings.xml			\
+	gtk4-update-icon-cache.xml		\
 	input-handling.xml			\
 	migrating-2to3.xml			\
 	migrating-3xtoy.xml			\
@@ -497,16 +497,16 @@ EXTRA_DIST += version.xml.in gtk4.types.in
 
 man_MANS = 				\
 	gtk4-query-immodules.1		\
-	gtk-update-icon-cache.1		\
-	gtk-encode-symbolic-svg.1	\
-	gtk-launch.1			\
+	gtk4-update-icon-cache.1	\
+	gtk4-encode-symbolic-svg.1	\
+	gtk4-launch.1			\
 	gtk4-demo.1			\
 	gtk4-demo-application.1		\
 	gtk4-widget-factory.1		\
 	gtk4-icon-browser.1		\
 	broadwayd.1			\
-	gtk-builder-tool.1 		\
-	gtk-query-settings.1
+	gtk4-builder-tool.1 		\
+	gtk4-query-settings.1
 
 if ENABLE_MAN
 

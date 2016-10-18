@@ -2,10 +2,10 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="gtk-builder-tool">
+<refentry id="gtk4-builder-tool">
 
 <refentryinfo>
-  <title>gtk-builder-tool</title>
+  <title>gtk4-builder-tool</title>
   <productname>GTK+</productname>
   <authorgroup>
     <author>
@@ -17,19 +17,19 @@
 </refentryinfo>
 
 <refmeta>
-  <refentrytitle>gtk-builder-tool</refentrytitle>
+  <refentrytitle>gtk4-builder-tool</refentrytitle>
   <manvolnum>1</manvolnum>
   <refmiscinfo class="manual">User Commands</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-  <refname>gtk-builder-tool</refname>
+  <refname>gtk4-builder-tool</refname>
   <refpurpose>GtkBuilder file utility</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtk-builder-tool</command>
+<command>gtk4-builder-tool</command>
 <arg choice="opt"><replaceable>COMMAND</replaceable></arg>
 <arg choice="opt" rep="repeat"><replaceable>OPTION</replaceable></arg>
 <arg choice="plain"><replaceable>FILE</replaceable></arg>
@@ -38,11 +38,11 @@
 
 <refsect1><title>Description</title>
 <para>
-  <command>gtk-builder-tool</command> can perform various operations
+  <command>gtk4-builder-tool</command> can perform various operations
   on GtkBuilder .ui files.
 </para>
 <para>
-  You should always test the modified .ui files produced by gtk-builder-tool
+  You should always test the modified .ui files produced by gtk4-builder-tool
   before using them in production.
 </para>
 </refsect1>
@@ -77,7 +77,7 @@
     <varlistentry>
     <term><option>--id=<arg choice="plain">ID</arg></option></term>
       <listitem><para>The ID of the object to preview. If not specified,
-                gtk-builder-tool will choose a suitable object on its own.</para></listitem>
+                gtk4-builder-tool will choose a suitable object on its own.</para></listitem>
     </varlistentry>
     <varlistentry>
     <term><option>--css=<arg choice="plain">FILE</arg></option></term>

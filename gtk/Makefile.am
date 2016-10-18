@@ -1553,11 +1553,11 @@ endif
 #
 bin_PROGRAMS = \
 	gtk4-query-immodules	\
-	gtk-update-icon-cache \
-	gtk-encode-symbolic-svg \
-	gtk-builder-tool \
-	gtk-query-settings \
-	gtk-launch
+	gtk4-update-icon-cache \
+	gtk4-encode-symbolic-svg \
+	gtk4-builder-tool \
+	gtk4-query-settings \
+	gtk4-launch
 
 gtk4_query_immodules_SOURCES = queryimmodules.c gtkutils.c
 gtk4_query_immodules_LDADD = 		\
@@ -1567,32 +1567,32 @@ gtk4_query_immodules_LDADD = 		\
 	$(GMODULE_LIBS)				\
 	$(GTK_DEP_LIBS)
 
-gtk_update_icon_cache_SOURCES = updateiconcache.c
-gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
+gtk4_update_icon_cache_SOURCES = updateiconcache.c
+gtk4_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
 
-gtk_encode_symbolic_svg_SOURCES = encodesymbolic.c
-gtk_encode_symbolic_svg_LDADD =			\
+gtk4_encode_symbolic_svg_SOURCES = encodesymbolic.c
+gtk4_encode_symbolic_svg_LDADD =			\
 	$(GDK_PIXBUF_LIBS)			\
 	$(top_builddir)/gdk/libgdk-4.la		\
 	$(top_builddir)/gsk/libgsk-4.la		\
 	$(GTK_DEP_LIBS)
 
-gtk_builder_tool_SOURCES = gtk-builder-tool.c
-gtk_builder_tool_LDADD =			\
+gtk4_builder_tool_SOURCES = gtk-builder-tool.c
+gtk4_builder_tool_LDADD =			\
 	libgtk-4.la				\
 	$(top_builddir)/gdk/libgdk-4.la		\
 	$(top_builddir)/gsk/libgsk-4.la		\
 	$(GTK_DEP_LIBS)
 
-gtk_query_settings_SOURCES = gtk-query-settings.c
-gtk_query_settings_LDADD= 			\
+gtk4_query_settings_SOURCES = gtk-query-settings.c
+gtk4_query_settings_LDADD= 			\
 	libgtk-4.la				\
 	$(top_builddir)/gdk/libgdk-4.la		\
 	$(top_builddir)/gsk/libgsk-4.la		\
 	$(GTK_DEP_LIBS)
 
-gtk_launch_SOURCES = gtk-launch.c
-gtk_launch_LDADD =				\
+gtk4_launch_SOURCES = gtk-launch.c
+gtk4_launch_LDADD =				\
 	libgtk-4.la				\
 	$(top_builddir)/gdk/libgdk-4.la		\
 	$(top_builddir)/gsk/libgsk-4.la		\

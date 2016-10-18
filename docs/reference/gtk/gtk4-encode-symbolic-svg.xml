@@ -2,10 +2,10 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="gtk-encode-symbolic-svg">
+<refentry id="gtk4-encode-symbolic-svg">
 
 <refentryinfo>
-  <title>gtk-encode-symbolic-svg</title>
+  <title>gtk4-encode-symbolic-svg</title>
   <productname>GTK+</productname>
   <authorgroup>
     <author>
@@ -17,19 +17,19 @@
 </refentryinfo>
 
 <refmeta>
-  <refentrytitle>gtk-encode-symbolic-svg</refentrytitle>
+  <refentrytitle>gtk4-encode-symbolic-svg</refentrytitle>
   <manvolnum>1</manvolnum>
   <refmiscinfo class="manual">User Commands</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-  <refname>gtk-encode-symbolic-svg</refname>
+  <refname>gtk4-encode-symbolic-svg</refname>
   <refpurpose>Symbolic icon conversion utility</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtk-encode-symbolic-svg</command>
+<command>gtk4-encode-symbolic-svg</command>
 <arg choice="opt">OPTION...</arg>
 <arg choice="plain"><replaceable>PATH</replaceable></arg>
 <arg choice="plain"><replaceable>WIDTH</replaceable>x<replaceable>HEIGHT</replaceable></arg>
@@ -38,7 +38,7 @@
 
 <refsect1><title>Description</title>
 <para>
-  <command>gtk-encode-symbolic-svg</command> converts symbolic svg icons into
+  <command>gtk4-encode-symbolic-svg</command> converts symbolic svg icons into
   specially prepared png files. GTK+ can load and recolor these pngs, just like
   original svgs, but loading them is much faster.
 </para>
