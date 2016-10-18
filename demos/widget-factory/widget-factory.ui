@@ -3107,7 +3107,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="visible">1</property>
                                 <style>
                                   <class name="image-button"/>
-                                  <class name="circular-button"/>
+                                  <class name="circular"/>
                                 </style>
                                 <child>
                                   <object class="GtkImage">
