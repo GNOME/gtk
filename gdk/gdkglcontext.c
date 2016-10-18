@@ -769,7 +769,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   if (priv->extensions_checked)
     return;
 
-  priv->use_es = !epoxy_is_desktop_gl ();
   priv->gl_version = epoxy_gl_version ();
 
   if (priv->use_es)
