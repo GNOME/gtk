@@ -348,13 +348,8 @@
       </para>
     </partintro>
 
-    <xi:include href="xml/migrating-2to3.xml" />
-    <xi:include href="xml/migrating-GtkStyleContext.xml" />
-    <xi:include href="xml/migrating-unique-GtkApplication.xml" />
-    <xi:include href="xml/migrating-smclient-GtkApplication.xml" />
-    <xi:include href="xml/migrating-GtkGrid.xml" />
-    <xi:include href="xml/migrating-checklist.sgml" />
-    <xi:include href="xml/migrating-3xtoy.xml" />
+    <xi:include href="xml/migrating-2to4.xml" />
+    <xi:include href="xml/migrating-3to4.xml" />
   </part>
 
   <part>

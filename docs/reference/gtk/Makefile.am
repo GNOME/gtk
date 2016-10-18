@@ -297,13 +297,8 @@ content_files =					\
 	gtk4-query-settings.xml			\
 	gtk4-update-icon-cache.xml		\
 	input-handling.xml			\
-	migrating-2to3.xml			\
-	migrating-3xtoy.xml			\
-	migrating-checklist.sgml		\
-	migrating-GtkGrid.xml			\
-	migrating-GtkStyleContext.xml		\
-	migrating-smclient-GtkApplication.xml	\
-	migrating-unique-GtkApplication.xml	\
+	migrating-2to4.xml			\
+	migrating-3to4.xml			\
 	mir.xml					\
 	osx.sgml				\
 	overview.xml 				\
@@ -324,13 +319,8 @@ expand_content_files = 				\
 	getting_started.xml			\
 	glossary.xml				\
 	input-handling.xml			\
-	migrating-2to3.xml			\
-	migrating-3xtoy.xml			\
-	migrating-checklist.sgml		\
-	migrating-GtkGrid.xml			\
-	migrating-GtkStyleContext.xml		\
-	migrating-smclient-GtkApplication.xml	\
-	migrating-unique-GtkApplication.xml	\
+	migrating-2to4.xml			\
+	migrating-3to4.xml			\
 	question_index.sgml			\
 	text_widget.sgml			\
 	tree_widget.sgml
