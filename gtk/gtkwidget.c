@@ -4057,21 +4057,6 @@ gtk_widget_new (GType        type,
   return widget;
 }
 
-static inline void
-gtk_widget_queue_draw_child (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-  GtkWidget *parent;
-
-  parent = priv->parent;
-  if (parent && _gtk_widget_is_drawable (parent))
-    gtk_widget_queue_draw_area (parent,
-				priv->clip.x,
-				priv->clip.y,
-				priv->clip.width,
-				priv->clip.height);
-}
-
 /**
  * gtk_widget_unparent:
  * @widget: a #GtkWidget
@@ -4109,7 +4094,12 @@ gtk_widget_unparent (GtkWidget *widget)
   if (gtk_container_get_focus_child (GTK_CONTAINER (priv->parent)) == widget)
     gtk_container_set_focus_child (GTK_CONTAINER (priv->parent), NULL);
 
-  gtk_widget_queue_draw_child (widget);
+  if (_gtk_widget_is_drawable (priv->parent))
+    gtk_widget_queue_draw_area (priv->parent,
+				priv->clip.x,
+				priv->clip.y,
+				priv->clip.width,
+				priv->clip.height);
 
   /* Reset the width and height here, to force reallocation if we
    * get added back to a new parent. This won't work if our new
