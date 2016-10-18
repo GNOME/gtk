@@ -764,6 +764,13 @@ button {
   .linked.vertical > &:active,
   .linked.vertical > &:checked,
   .linked.vertical > &:backdrop { @extend %linked_vertical; }
+
+  &.circular { // The Bloody Circul Button
+    border-radius: 9999px;
+    -gtk-outline-radius: 9999px;
+
+    label { padding: 0; }
+  }
 }
 
 %needs_attention {
@@ -4241,13 +4248,6 @@ cursor-handle {
 }
 
 .context-menu { font: initial; } // Decouple the font of context menus from their entry/textview
-
-button.circular { // FIXME: aggregate to buttons
-  border-radius: 9999px;
-  -gtk-outline-radius: 9999px;
-
-  label { padding: 0; }
-}
 
 // shortcut window keys
 .keycap {
