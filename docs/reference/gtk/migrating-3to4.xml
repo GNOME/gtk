@@ -7,7 +7,50 @@
   <title>Migrating from GTK+ 3.x to GTK+ 4</title>
 
   <para>
-    Information about porting from GTK+ 3 to GTK+ 4 will appear here.
+    GTK+ 4 is a major new version of GTK+ that breaks both API and ABI
+    compared to GTK+ 3.x. Thankfully, most of the changes are not hard
+    to adapt to and there are a number of steps that you can take to
+    prepare your GTK+ 3.x application for the switch to GTK+ 4. After
+    that, there's a small number of adjustments that you may have to do
+    when you actually switch your application to build against GTK+ 4.
   </para>
+
+  <section>
+    <title>Preparation in GTK+ 3.x</title>
+
+    <para>
+      The steps outlined in the following sections assume that your
+      application is working with GTK+ 3.22, which is the final stable
+      release of GTK+ 3.x. It includes all the necessary APIs and tools
+      to help you port your application to GTK+ 4. If you are still using
+      an older version of GTK+ 3.x, you should first get your application
+      to build and work with 3.22.
+    </para>
+
+    <section>
+      <title>Do not use deprecated symbols</title>
+      <para>
+        Over the years, a number of functions, and in some cases, entire
+        widgets have been deprecated. These deprecations are clearly spelled
+        out in the API reference, with hints about the recommended replacements.
+        The API reference for GTK+ 3 also includes an
+        <ulink url="https://developer.gnome.org/gtk3/3.22/api-index-deprecated.html">index</ulink> of all deprecated symbols.
+      </para>
+      <para>
+        To verify that your program does not use any deprecated symbols,
+        you can use defines to remove deprecated symbols from the header files,
+        as follows:
+        <programlisting>
+        make CFLAGS+="-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+        </programlisting>
+      </para>
+      <para>
+        Note that some parts of our API, such as enumeration values, are
+        not well covered by the deprecation warnings. In most cases, using
+        them will require you to also use deprecated functions, which will
+        trigger warnings.
+      </para>
+    </section>
+  </section>
 
 </chapter>
