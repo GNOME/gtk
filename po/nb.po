@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 3.22.x\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B\n"
 "POT-Creation-Date: 2016-10-15 16:24+0200\n"
-"PO-Revision-Date: 2016-10-15 16:29+0200\n"
+"PO-Revision-Date: 2016-10-18 07:50+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -3954,7 +3954,7 @@ msgstr "Referansetall"
 
 #: gtk/inspector/misc-info.ui:136
 msgid "Buildable ID"
-msgstr ""
+msgstr "Byggbar ID"
 
 #: gtk/inspector/misc-info.ui:170
 msgid "Default Widget"
@@ -3985,7 +3985,7 @@ msgstr "Allokering"
 
 #: gtk/inspector/misc-info.ui:362
 msgid "Baseline"
-msgstr ""
+msgstr "Grunnlinje"
 
 #: gtk/inspector/misc-info.ui:396
 msgid "Clip area"
@@ -4008,23 +4008,20 @@ msgid "Frame rate"
 msgstr "Bilderate"
 
 #: gtk/inspector/misc-info.ui:579
-#, fuzzy
 msgid "Accessible role"
-msgstr "Aksessert"
+msgstr ""
 
 #: gtk/inspector/misc-info.ui:613
-#, fuzzy
 msgid "Accessible name"
-msgstr "Aksessert"
+msgstr ""
 
 #: gtk/inspector/misc-info.ui:649
-#, fuzzy
 msgid "Accessible description"
-msgstr "Aksessert"
+msgstr ""
 
 #: gtk/inspector/misc-info.ui:685
 msgid "Mapped"
-msgstr ""
+msgstr "Koblet"
 
 #: gtk/inspector/misc-info.ui:721
 msgid "Realized"
@@ -4032,11 +4029,11 @@ msgstr "Realisert"
 
 #: gtk/inspector/misc-info.ui:757
 msgid "Is Toplevel"
-msgstr ""
+msgstr "Er toppnivå"
 
 #: gtk/inspector/misc-info.ui:793
 msgid "Child Visible"
-msgstr ""
+msgstr "Barn synlig"
 
 #: gtk/inspector/object-tree.ui:95
 msgid "Object"
@@ -4215,11 +4212,11 @@ msgstr "Begge"
 
 #: gtk/inspector/statistics.c:377
 msgid "GLib must be configured with --enable-debug"
-msgstr ""
+msgstr "GLib må være konfigurert med --enable-debug"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
-msgstr ""
+msgstr "Selv 1"
 
 #: gtk/inspector/statistics.ui:80
 msgid "Cumulative 1"
@@ -4227,7 +4224,7 @@ msgstr "Kumulativ 1"
 
 #: gtk/inspector/statistics.ui:92
 msgid "Self 2"
-msgstr ""
+msgstr "Selv 2"
 
 #: gtk/inspector/statistics.ui:104
 msgid "Cumulative 2"
@@ -4321,7 +4318,7 @@ msgstr "Animasjoner"
 
 #: gtk/inspector/visual.ui:415
 msgid "Slowdown"
-msgstr ""
+msgstr "Nedbremsing"
 
 #: gtk/inspector/visual.ui:474
 msgid "Rendering Mode"
@@ -4390,7 +4387,7 @@ msgstr "Programvareoverflater"
 
 #: gtk/inspector/visual.ui:834
 msgid "Texture Rectangle Extension"
-msgstr ""
+msgstr "Utvidelse for teksturrektangel"
 
 #: gtk/inspector/window.ui:31
 msgid "Select an Object"
@@ -4414,7 +4411,7 @@ msgstr "Vis alle ressurser"
 
 #: gtk/inspector/window.ui:267
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "Spor signalutslipp på dette objektet"
 
 #: gtk/inspector/window.ui:284
 msgid "Clear log"
@@ -4482,7 +4479,7 @@ msgstr "CSS"
 
 #: gtk/inspector/window.ui:528
 msgid "Visual"
-msgstr ""
+msgstr "Visuell"
 
 #: gtk/inspector/window.ui:537 gtk/ui/gtkprintunixdialog.ui:426
 msgid "General"
@@ -6379,13 +6376,13 @@ msgstr "Kort kant (vend)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4385
 msgctxt "output-bin"
 msgid "Top Bin"
-msgstr ""
+msgstr "Øverste boks"
 
 #. Translators: Middle output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4387
 msgctxt "output-bin"
 msgid "Middle Bin"
-msgstr ""
+msgstr "Midterste boks"
 
 #. Translators: Bottom output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4389
@@ -6397,7 +6394,7 @@ msgstr "Nederste kurv"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4391
 msgctxt "output-bin"
 msgid "Side Bin"
-msgstr ""
+msgstr "Sideboks"
 
 #. Translators: Left output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4393
@@ -6421,19 +6418,19 @@ msgstr "Midtre kurv"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4399
 msgctxt "output-bin"
 msgid "Rear Bin"
-msgstr ""
+msgstr "Bakerste boks"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4401
 msgctxt "output-bin"
 msgid "Face Up Bin"
-msgstr ""
+msgstr "Ansikt opp boks"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4403
 msgctxt "output-bin"
 msgid "Face Down Bin"
-msgstr ""
+msgstr "Ansikt ned boks"
 
 #. Translators: Large capacity output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4405
