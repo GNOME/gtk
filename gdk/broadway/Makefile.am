@@ -108,15 +108,15 @@ EXTRA_DIST += $(broadway_built_sources)
 BUILT_SOURCES = $(broadway_built_sources)
 
 # ------------------- MSVC Build Items ----------------
-MSVCPROJS = gdk3-broadway broadwayd
+MSVCPROJS = gdk4-broadway broadwayd
 
-gdk3_broadway_FILES = $(libgdk_broadway_la_SOURCES)
-gdk3_broadway_EXCLUDES = dummy
-gdk3_broadway_HEADERS_DIR = $(libgdkbroadwayincludedir)
+gdk4_broadway_FILES = $(libgdk_broadway_la_SOURCES)
+gdk4_broadway_EXCLUDES = dummy
+gdk4_broadway_HEADERS_DIR = $(libgdkbroadwayincludedir)
 
-gdk3_broadway_HEADERS_INST = $(libgdkbroadwayinclude_HEADERS)
+gdk4_broadway_HEADERS_INST = $(libgdkbroadwayinclude_HEADERS)
 
-gdk3_broadway_HEADERS_EXCLUDES = dummy
+gdk4_broadway_HEADERS_EXCLUDES = dummy
 
 broadwayd_FILES = $(broadwayd_SOURCES)
 broadwayd_EXCLUDES = dummy
@@ -124,8 +124,8 @@ broadwayd_EXCLUDES = dummy
 include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gdk3-broadway.vcproj		\
+	$(top_builddir)/build/win32/vs9/gdk4-broadway.vcproj		\
 	$(top_builddir)/build/win32/vs9/broadwayd.vcproj		\
-	$(top_builddir)/build/win32/vs9/gdk3-broadway.headers
+	$(top_builddir)/build/win32/vs9/gdk4-broadway.headers
 
 -include $(top_srcdir)/git.mk

@@ -45,7 +45,7 @@ def main(argv):
         gdk_backends += ' broadway'
         cairo_backends += ' cairo'
 
-    pkg_replace_items = {'@GTK_API_VERSION@': '3.0',
+    pkg_replace_items = {'@GTK_API_VERSION@': '4.0',
                          '@GDK_BACKENDS@': gdk_backends}
 
     pkg_required_packages = 'gdk-pixbuf >= ' + gdk_pixbuf_min_ver + ' ' + \
@@ -58,10 +58,10 @@ def main(argv):
                             '@GDK_PRIVATE_PACKAGES@': gio_package + ' ' + cairo_backends,
                             '@GDK_EXTRA_LIBS@': gdk_win32_sys_libs + broadway_extra_libs,
                             '@GDK_EXTRA_CFLAGS@': '',
-                            'gdk-3': 'gdk-3.0'}
+                            'gdk-4': 'gdk-4.0'}
 
     gtk_pc_replace_items = {'@host@': gdk_args.host,
-                            '@GTK_BINARY_VERSION@': '3.0.0',
+                            '@GTK_BINARY_VERSION@': '4.0.0',
                             '@GTK_PACKAGES@': 'atk >= ' + atk_min_ver + ' ' + \
                                               pkg_required_packages + ' ' + \
                                               gio_package,
@@ -69,29 +69,21 @@ def main(argv):
                             '@GTK_EXTRA_CFLAGS@': '',
                             '@GTK_EXTRA_LIBS@': '',
                             '@GTK_EXTRA_CFLAGS@': '',
-                            'gtk-3': 'gtk-3.0'}
-
-    gail_pc_replace_items = {'gailutil-3': 'gailutil-3.0'}
+                            'gtk-4': 'gtk-4.0'}
 
     pkg_replace_items.update(base_pc.base_replace_items)
     gdk_pc_replace_items.update(pkg_replace_items)
     gtk_pc_replace_items.update(pkg_replace_items)
-    gail_pc_replace_items.update(base_pc.base_replace_items)
 
-    # Generate gdk-3.0.pc
-    replace_multi(base_pc.top_srcdir + '/gdk-3.0.pc.in',
-                  base_pc.srcdir + '/gdk-3.0.pc',
+    # Generate gdk-4.0.pc
+    replace_multi(base_pc.top_srcdir + '/gdk-4.0.pc.in',
+                  base_pc.srcdir + '/gdk-4.0.pc',
                   gdk_pc_replace_items)
 
-    # Generate gtk+-3.0.pc
-    replace_multi(base_pc.top_srcdir + '/gtk+-3.0.pc.in',
-                  base_pc.srcdir + '/gtk+-3.0.pc',
+    # Generate gtk+-4.0.pc
+    replace_multi(base_pc.top_srcdir + '/gtk+-4.0.pc.in',
+                  base_pc.srcdir + '/gtk+-4.0.pc',
                   gtk_pc_replace_items)
-
-    # Generate gail-3.0.pc
-    replace_multi(base_pc.top_srcdir + '/gail-3.0.pc.in',
-                  base_pc.srcdir + '/gail-3.0.pc',
-                  gail_pc_replace_items)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))

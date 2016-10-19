@@ -2,15 +2,15 @@ include $(top_srcdir)/Makefile.decl
 
 EXTRA_DIST +=	\
 	README.txt	\
-	gtk+.sln	\
-	gtk3-prebuild.vcxproj	\
-	gtk3-prebuild.vcxproj.filters	\
-	gdk3-win32.vcxproj	\
-	gdk3-win32.vcxproj.filters	\
-	gdk-3.vcxproj	\
-	gdk-3.vcxproj.filters	\
-	gtk-3.vcxproj	\
-	gtk-3.vcxproj.filters	\
+	gtk+-4.sln	\
+	gtk4-prebuild.vcxproj	\
+	gtk4-prebuild.vcxproj.filters	\
+	gdk4-win32.vcxproj	\
+	gdk4-win32.vcxproj.filters	\
+	gdk-4.vcxproj	\
+	gdk-4.vcxproj.filters	\
+	gtk-4.vcxproj	\
+	gtk-4.vcxproj.filters	\
 	gtk-builder-tool.vcxproj		\
 	gtk-builder-tool.vcxproj.filters	\
 	gtk-encode-symbolic-svg.vcxproj	\
@@ -19,26 +19,24 @@ EXTRA_DIST +=	\
 	gtk-update-icon-cache.vcxproj.filters	\
 	gtk-query-settings.vcxproj		\
 	gtk-query-settings.vcxproj.filters	\
-	gtk3-demo.vcxproj	\
-	gtk3-demo.vcxproj.filters	\
-	gtk3-demo-application.vcxproj	\
-	gtk3-demo-application.vcxproj.filters	\
-	gtk3-icon-browser.vcxproj	\
-	gtk3-icon-browser.vcxproj.filters	\
-	gailutil-3.vcxproj	\
-	gailutil-3.vcxproj.filters	\
-	gtk3-install.vcxproj	\
-	gtk3-install.vcxproj.filters	\
+	gtk4-demo.vcxproj	\
+	gtk4-demo.vcxproj.filters	\
+	gtk4-demo-application.vcxproj	\
+	gtk4-demo-application.vcxproj.filters	\
+	gtk4-icon-browser.vcxproj	\
+	gtk4-icon-browser.vcxproj.filters	\
+	gtk4-install.vcxproj	\
+	gtk4-install.vcxproj.filters	\
 	broadwayd.vcxproj	\
 	broadwayd.vcxproj.filters	\
-	gdk3-broadway.vcxproj	\
-	gdk3-broadway.vcxproj.filters	\
-	gtk3-build-defines.props	\
-	gtk3-copy-gdk-broadway.props	\
-	gtk3-gen-srcs.props	\
-	gtk3-ignore-broadway.props	\
-	gtk3-install.props	\
-	gtk3-version-paths.props
+	gdk4-broadway.vcxproj	\
+	gdk4-broadway.vcxproj.filters	\
+	gtk4-build-defines.props	\
+	gtk4-copy-gdk-broadway.props	\
+	gtk4-gen-srcs.props	\
+	gtk4-ignore-broadway.props	\
+	gtk4-install.props	\
+	gtk4-version-paths.props
 
 DISTCLEANFILES = $(EXTRA_DIST)
 

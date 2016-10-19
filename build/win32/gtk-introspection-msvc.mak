@@ -2,7 +2,7 @@
 
 !include detectenv-msvc.mak
 
-APIVERSION = 3.0
+APIVERSION = 4.0
 
 CHECK_PACKAGE = gdk-pixbuf-2.0 atk pangocairo gio-2.0
 

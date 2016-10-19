@@ -43,13 +43,13 @@ gtk_win32_symbols = -export-symbols $(srcdir)/gtk.def
 gtk_win32_res = gtk-win32-res.o
 gtk_win32_res_ldflag = -Wl,gtk-win32-res.o
 
-gtk-win32-res.o : gtk-win32.rc libgtk3.manifest
+gtk-win32-res.o : gtk-win32.rc libgtk4.manifest
 	$(WINDRES) gtk-win32.rc $@
 
 gtk-win32.rc: gtk-win32.rc.body
 	echo "#include <winuser.h>" >>$@
 	cat $< >>$@
-	echo "ISOLATIONAWARE_MANIFEST_RESOURCE_ID RT_MANIFEST libgtk3.manifest" >>$@
+	echo "ISOLATIONAWARE_MANIFEST_RESOURCE_ID RT_MANIFEST libgtk4.manifest" >>$@
 
 gtk.def: libgtk-4.la
 	echo "LIBRARY libgtk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@" >$@
@@ -57,9 +57,9 @@ gtk.def: libgtk-4.la
 	objdump -p .libs/libgtk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@.dll | sed -n -e 's/\t\[\s\+\([0-9]\+\)\]\s\([A-Za-z_][A-Za-z0-9_]\)/\2/p' >>$@
 
 install-def-file: gtk.def
-	$(INSTALL) gtk.def $(DESTDIR)$(libdir)/gtk-win32-3.0.def
+	$(INSTALL) gtk.def $(DESTDIR)$(libdir)/gtk-win32-4.0.def
 uninstall-def-file:
-	-rm $(DESTDIR)$(libdir)/gtk-win32-3.0.def
+	-rm $(DESTDIR)$(libdir)/gtk-win32-4.0.def
 else
 install-def-file:
 uninstall-def-file:
@@ -68,7 +68,7 @@ endif
 if MS_LIB_AVAILABLE
 noinst_DATA = gtk-win32-$(GTK_API_VERSION).lib
 
-gtk-win32-$(GTK_API_VERSION).lib: libgtk-3.la gtk.def
+gtk-win32-$(GTK_API_VERSION).lib: libgtk-4.la gtk.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgtk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gtk.def -out:$@
 
 install-ms-lib:
@@ -1115,7 +1115,6 @@ gtk_extra_sources =				\
 	paper_names.c				\
 	paper_names_offsets.c			\
 	gen-paper-names.c			\
-	deprecated/gtkstatusicon-quartz.c	\
 	gtkversion.h.in				\
 	gtkmarshalers.list			\
 	fallback-c89.c
@@ -1411,7 +1410,7 @@ uninstall-mac-key-theme:
 endif
 
 # ------------------- MSVC Build Items ----------------
-MSVCPROJS = gtk-3
+MSVCPROJS = gtk-4
 
 gtk_4_FILES = \
 	$(gtk_base_c_sources)		\
@@ -1459,7 +1458,7 @@ GTK_MSVC_GIR_CFLAGS =						\
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
 	$(top_builddir)/build/win32/Gtk-4.0.gir.msvc.introspect		\
-	$(top_builddir)/build/win32/Gtk-4_0_gir_list
+	$(top_builddir)/build/win32/Gtk_4_0_gir_list
 
 Gtk_4_0_gir_MSVC_FILES =		\
 	$(introspected_pub_headers)	\
@@ -1482,8 +1481,8 @@ INTROSPECTION_INTERMEDIATE_ITEMS =
 endif
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gtk-3.vcproj	\
-	$(top_builddir)/build/win32/vs9/gtk-3.headers	\
+	$(top_builddir)/build/win32/vs9/gtk-4.vcproj	\
+	$(top_builddir)/build/win32/vs9/gtk-4.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 # Install a RC file for the default GTK+ theme, and key themes
@@ -1660,7 +1659,7 @@ EXTRA_DIST +=                   \
 	a11y/Makefile.inc	\
 	deprecated/Makefile.inc	\
 	inspector/Makefile.inc	\
-	libgtk3.manifest.in	\
+	libgtk4.manifest.in	\
 	gtk-win32.rc.body.in	\
 	gtk-win32.rc.body	\
 	gtkprint-win32.h	\

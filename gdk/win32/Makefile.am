@@ -88,20 +88,20 @@ libgdkwin32include_HEADERS =	\
 	gdkwin32window.h
 
 # ------------------- MSVC Build Items ----------------
-MSVCPROJS = gdk3-win32
+MSVCPROJS = gdk4-win32
 
-gdk3_win32_FILES = $(libgdk_win32_la_SOURCES)
-gdk3_win32_EXCLUDES = dummy
-gdk3_win32_HEADERS_DIR = $(libgdkwin32includedir)
+gdk4_win32_FILES = $(libgdk_win32_la_SOURCES)
+gdk4_win32_EXCLUDES = dummy
+gdk4_win32_HEADERS_DIR = $(libgdkwin32includedir)
 
-gdk3_win32_HEADERS_INST = $(libgdkwin32include_HEADERS)
+gdk4_win32_HEADERS_INST = $(libgdkwin32include_HEADERS)
 
-gdk3_win32_HEADERS_EXCLUDES = dummy
+gdk4_win32_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gdk3-win32.vcproj	\
-	$(top_builddir)/build/win32/vs9/gdk3-win32.headers
+	$(top_builddir)/build/win32/vs9/gdk4-win32.vcproj	\
+	$(top_builddir)/build/win32/vs9/gdk4-win32.headers
 
 -include $(top_srcdir)/git.mk

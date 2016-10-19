@@ -197,7 +197,7 @@ include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
 	$(top_builddir)/build/win32/vs9/gtk4-demo.vcproj	\
-	$(top_builddir)/build/win42/vs9/gtk4-demo-application.vcproj
+	$(top_builddir)/build/win32/vs9/gtk4-demo-application.vcproj
 
 DISTCLEANFILES = demos.h demos.h.win32
 
