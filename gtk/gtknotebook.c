@@ -4733,8 +4733,9 @@ gtk_notebook_redraw_arrows (GtkNotebook *notebook)
             continue;
 
           gtk_notebook_get_arrow_rect (notebook, &rect, i);
-          gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (notebook)),
-                                      &rect, FALSE);
+          gtk_widget_queue_draw_area (GTK_WIDGET (notebook),
+                                      rect.x, rect.y,
+                                      rect.width, rect.height);
         }
     }
 }
