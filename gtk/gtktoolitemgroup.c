@@ -1097,8 +1097,7 @@ gtk_tool_item_group_size_allocate (GtkWidget     *widget,
 {
   gtk_tool_item_group_real_size_allocate (widget, allocation);
 
-  if (gtk_widget_get_mapped (widget))
-    gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE);
+  gtk_widget_queue_draw (widget);
 }
 
 static void
@@ -1832,17 +1831,15 @@ gtk_tool_item_group_force_expose (GtkToolItemGroup *group)
     {
       GtkAllocation frame_allocation;
       GtkWidget *frame = gtk_tool_item_group_get_frame (group);
-      GdkRectangle area;
 
-      /* Find the header button's arrow area... */
+      /* Find the header button's arrow area and
+       * invalidate it to get it animated. */
       gtk_widget_get_allocation (frame, &frame_allocation);
-      area.x = frame_allocation.x;
-      area.y = frame_allocation.y + (frame_allocation.height - priv->expander_size) / 2;
-      area.height = priv->expander_size;
-      area.width = priv->expander_size;
-
-      /* ... and invalidated it to get it animated. */
-      gdk_window_invalidate_rect (gtk_widget_get_window (priv->header), &area, TRUE);
+      gtk_widget_queue_draw_area (priv->header,
+                                  frame_allocation.x,
+                                  frame_allocation.y + (frame_allocation.height - priv->expander_size) / 2,
+                                  priv->expander_size,
+                                  priv->expander_size);
     }
 
   if (gtk_widget_get_realized (widget))
