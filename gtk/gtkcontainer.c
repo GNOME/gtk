@@ -281,7 +281,6 @@ struct _GtkContainerPrivate
   guint resize_handler;
 
   guint has_focus_chain    : 1;
-  guint reallocate_redraws : 1;
   guint restyle_pending    : 1;
   guint request_mode       : 2;
 };
@@ -1603,7 +1602,6 @@ gtk_container_init (GtkContainer *container)
   priv = container->priv;
 
   priv->focus_child = NULL;
-  priv->reallocate_redraws = FALSE;
 }
 
 static void
@@ -1704,27 +1702,6 @@ gtk_container_remove (GtkContainer *container,
 
   g_object_unref (widget);
   g_object_unref (container);
-}
-
-/**
- * gtk_container_set_reallocate_redraws:
- * @container: a #GtkContainer
- * @needs_redraws: the new value for the container’s @reallocate_redraws flag
- *
- * Sets the @reallocate_redraws flag of the container to the given value.
- *
- * Containers requesting reallocation redraws get automatically
- * redrawn if any of their children changed allocation.
- *
- * Deprecated: 3.14: Call gtk_widget_queue_draw() in your size_allocate handler.
- **/
-void
-gtk_container_set_reallocate_redraws (GtkContainer *container,
-                                      gboolean      needs_redraws)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  container->priv->reallocate_redraws = needs_redraws ? TRUE : FALSE;
 }
 
 static gboolean
@@ -3357,12 +3334,6 @@ gtk_container_propagate_draw (GtkContainer *container,
   gtk_widget_draw_internal (child, cr, TRUE);
 
   cairo_restore (cr);
-}
-
-gboolean
-_gtk_container_get_reallocate_redraws (GtkContainer *container)
-{
-  return container->priv->reallocate_redraws;
 }
 
 /**

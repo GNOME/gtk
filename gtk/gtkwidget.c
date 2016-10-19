@@ -5599,14 +5599,6 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 	}
     }
 
-  if ((size_changed || position_changed || baseline_changed) && priv->parent &&
-      _gtk_widget_get_realized (priv->parent) && _gtk_container_get_reallocate_redraws (GTK_CONTAINER (priv->parent)))
-    {
-      cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->parent->priv->clip);
-      gtk_widget_invalidate_widget_windows (priv->parent, invalidate);
-      cairo_region_destroy (invalidate);
-    }
-
 out:
   if (priv->alloc_needed_on_child)
     gtk_widget_ensure_allocate (widget);
