@@ -1155,9 +1155,33 @@ button {
   -gtk-icon-shadow: none; }
 button.circular {
   border-radius: 9999px;
-  -gtk-outline-radius: 9999px; }
+  -gtk-outline-radius: 9999px;
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box; }
   button.circular label {
     padding: 0; }
+  button.circular:not(.flat):not(:checked):not(:active):not(:disabled):not(:backdrop) {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
+    border-color: #1b1f20;
+    border-bottom-color: #0b0c0c;
+    background-image: linear-gradient(to bottom, #2e3436, #2a2e30 60%, #25292b);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.82745);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.82745);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+    background-image: linear-gradient(to bottom, #2e3436, #2a2e30 60%, #25292b), linear-gradient(to top, #0b0c0c 25%, #1b1f20 50%);
+    border-color: transparent; }
+  button.circular:hover:not(:checked):not(:active):not(:disabled):not(:backdrop) {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
+    border-color: #1b1f20;
+    border-bottom-color: #0b0c0c;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.77945);
+    -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.77945);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+    background-image: linear-gradient(to bottom, #353c3e, #2e3436 60%, #2a2e30);
+    background-image: linear-gradient(to bottom, #353c3e, #2e3436 60%, #2a2e30), linear-gradient(to top, #0b0c0c 25%, #1b1f20 50%);
+    border-color: transparent; }
 
 .stack-switcher >
 button.needs-attention > label,
