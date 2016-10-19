@@ -2415,7 +2415,10 @@ gtk_icon_view_update_rubberband (gpointer data)
   invalid_region = cairo_region_create_rectangle (&old_area);
   cairo_region_union_rectangle (invalid_region, &new_area);
 
-  gdk_window_invalidate_region (icon_view->priv->bin_window, invalid_region, TRUE);
+  cairo_region_translate (invalid_region,
+                          - gtk_adjustment_get_value (icon_view->priv->hadjustment),
+                          - gtk_adjustment_get_value (icon_view->priv->vadjustment));
+  gtk_widget_queue_draw_region (GTK_WIDGET (icon_view), invalid_region);
     
   cairo_region_destroy (invalid_region);
 
@@ -3091,8 +3094,10 @@ gtk_icon_view_queue_draw_item (GtkIconView     *icon_view,
   rect.width  = item_area->width  + icon_view->priv->item_padding * 2;
   rect.height = item_area->height + icon_view->priv->item_padding * 2;
 
-  if (icon_view->priv->bin_window)
-    gdk_window_invalidate_rect (icon_view->priv->bin_window, &rect, TRUE);
+  rect.x -= gtk_adjustment_get_value (icon_view->priv->hadjustment);
+  rect.y -= gtk_adjustment_get_value (icon_view->priv->vadjustment);
+
+  gtk_widget_queue_draw_area (GTK_WIDGET (icon_view), rect.x, rect.y, rect.width, rect.height);
 }
 
 void
