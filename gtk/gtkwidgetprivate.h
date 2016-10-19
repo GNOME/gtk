@@ -71,7 +71,6 @@ struct _GtkWidgetPrivate
   guint child_visible         : 1;
   guint multidevice           : 1;
   guint has_shape_mask        : 1;
-  guint in_reparent           : 1;
 
   /* Queue-resize related flags */
   guint resize_needed         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
@@ -161,9 +160,6 @@ struct _GtkWidgetPrivate
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);
-gboolean     _gtk_widget_get_in_reparent    (GtkWidget *widget);
-void         _gtk_widget_set_in_reparent    (GtkWidget *widget,
-                                             gboolean   in_reparent);
 gboolean     _gtk_widget_get_anchored       (GtkWidget *widget);
 void         _gtk_widget_set_anchored       (GtkWidget *widget,
                                              gboolean   anchored);

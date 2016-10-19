@@ -4131,12 +4131,7 @@ gtk_widget_unparent (GtkWidget *widget)
   priv->allocation.height = 1;
 
   if (_gtk_widget_get_realized (widget))
-    {
-      if (priv->in_reparent)
-	gtk_widget_unmap (widget);
-      else
-	gtk_widget_unrealize (widget);
-    }
+    gtk_widget_unrealize (widget);
 
   /* If we are unanchoring the child, we save around the toplevel
    * to emit hierarchy changed
@@ -9043,7 +9038,7 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         {
           /* No parent or parent not realized on non-toplevel implies... */
 
-          if (widget->priv->realized && !widget->priv->in_reparent)
+          if (widget->priv->realized)
             g_warning ("%s %p is not realized but child %s %p is realized",
                        parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
                        G_OBJECT_TYPE_NAME (widget), widget);
@@ -9065,7 +9060,7 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         {
           /* No parent or parent not mapped on non-toplevel implies... */
 
-          if (widget->priv->mapped && !widget->priv->in_reparent)
+          if (widget->priv->mapped)
             g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
                        G_OBJECT_TYPE_NAME (widget), widget,
                        widget->priv->visible,
@@ -14588,19 +14583,6 @@ gboolean
 gtk_widget_in_destruction (GtkWidget *widget)
 {
   return widget->priv->in_destruction;
-}
-
-gboolean
-_gtk_widget_get_in_reparent (GtkWidget *widget)
-{
-  return widget->priv->in_reparent;
-}
-
-void
-_gtk_widget_set_in_reparent (GtkWidget *widget,
-                             gboolean   in_reparent)
-{
-  widget->priv->in_reparent = in_reparent;
 }
 
 gboolean
