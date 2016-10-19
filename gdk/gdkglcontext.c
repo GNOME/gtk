@@ -105,7 +105,8 @@ typedef struct {
   guint debug_enabled : 1;
   guint forward_compatible : 1;
   guint is_legacy : 1;
-  guint use_es : 1;
+
+  int use_es;
 
   GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
@@ -362,6 +363,9 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
 static void
 gdk_gl_context_init (GdkGLContext *self)
 {
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  priv->use_es = -1;
 }
 
 /*< private >
@@ -683,12 +687,17 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
 /**
  * gdk_gl_context_set_use_es:
  * @context: a #GdkGLContext:
- * @use_es: whether the context should use OpenGL ES instead of OpenGL
+ * @use_es: whether the context should use OpenGL ES instead of OpenGL,
+ *   or -1 to allow auto-detection
  *
  * Requests that GDK create a OpenGL ES context instead of an OpenGL one,
  * if the platform and windowing system allows it.
  *
  * The @context must not have been realized.
+ *
+ * By default, GDK will attempt to automatically detect whether the
+ * underlying GL implementation is OpenGL or OpenGL ES once the @context
+ * is realized.
  *
  * You should check the return value of gdk_gl_context_get_use_es() after
  * calling gdk_gl_context_realize() to decide whether to use the OpenGL or
@@ -698,14 +707,15 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
  */
 void
 gdk_gl_context_set_use_es (GdkGLContext *context,
-                           gboolean      use_es)
+                           int           use_es)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!priv->realized);
 
-  priv->use_es = !!use_es;
+  if (priv->use_es != use_es)
+    priv->use_es = use_es;
 }
 
 /**
@@ -725,7 +735,10 @@ gdk_gl_context_get_use_es (GdkGLContext *context)
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
 
-  return priv->use_es;
+  if (!priv->realized)
+    return FALSE;
+
+  return priv->use_es > 0;
 }
 
 /**
@@ -770,6 +783,9 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
     return;
 
   priv->gl_version = epoxy_gl_version ();
+
+  if (priv->use_es < 0)
+    priv->use_es = !epoxy_is_desktop_gl ();
 
   if (priv->use_es)
     {
