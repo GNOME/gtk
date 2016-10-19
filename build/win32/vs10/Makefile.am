@@ -69,6 +69,9 @@ DISTCLEANFILES = \
 	$(GENERATED_ITEMS)
 
 gtk4-install.props: $(top_srcdir)/build/win32/vs10/gtk4-install.propsin $(MSVC10_HEADERS_LISTS)
+	-$(RM) $(top_builddir)/build/win32/vs11/gtk4-install.props
+	-$(RM) $(top_builddir)/build/win32/vs12/gtk4-install.props
+	-$(RM) $(top_builddir)/build/win32/vs14/gtk4-install.props
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk4-install.propsin >$@
 	rm $(MSVC10_HEADERS_LISTS)
 
