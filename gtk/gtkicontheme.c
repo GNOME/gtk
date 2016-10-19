@@ -5557,8 +5557,6 @@ typedef struct _IconSize IconSize;
 
 struct _IconSize
 {
-  int size;
-
   const char *name;
 
   int width;
@@ -5567,71 +5565,41 @@ struct _IconSize
 
 static const IconSize icon_sizes[] = {
   [GTK_ICON_SIZE_INVALID] = {
-    .size = 0,
     .name = NULL,
     .width = 0,
     .height = 0,
   },
   [GTK_ICON_SIZE_MENU] = {
-    .size = GTK_ICON_SIZE_MENU,
     .name = "gtk-menu",
     .width = 16,
     .height = 16,
   },
   [GTK_ICON_SIZE_BUTTON] = {
-    .size = GTK_ICON_SIZE_BUTTON,
     .name = "gtk-button",
     .width = 16,
     .height = 16,
   },
   [GTK_ICON_SIZE_SMALL_TOOLBAR] = {
-    .size = GTK_ICON_SIZE_SMALL_TOOLBAR,
     .name = "gtk-small-toolbar",
     .width = 16,
     .height = 16,
   },
   [GTK_ICON_SIZE_LARGE_TOOLBAR] = {
-    .size = GTK_ICON_SIZE_LARGE_TOOLBAR,
     .name = "gtk-large-toolbar",
     .width = 24,
     .height = 24,
   },
   [GTK_ICON_SIZE_DND] = {
-    .size = GTK_ICON_SIZE_DND,
     .name = "gtk-dnd",
     .width = 32,
     .height = 32,
   },
   [GTK_ICON_SIZE_DIALOG] = {
-    .size = GTK_ICON_SIZE_DIALOG,
     .name = "gtk-dialog",
     .width = 48,
     .height = 48,
   },
 };
-
-static gboolean
-icon_size_lookup_intern (GtkIconSize  size,
-                         gint        *widthp,
-                         gint        *heightp)
-{
-  if (size == (GtkIconSize)-1)
-    return FALSE;
-
-  if (size >= G_N_ELEMENTS (icon_sizes))
-    return FALSE;
-
-  if (size == GTK_ICON_SIZE_INVALID)
-    return FALSE;
-
-  if (widthp)
-    *widthp = icon_sizes[size].width;
-
-  if (heightp)
-    *heightp = icon_sizes[size].height;
-
-  return TRUE;
-}
 
 /**
  * gtk_icon_size_lookup:
@@ -5658,5 +5626,20 @@ gtk_icon_size_lookup (GtkIconSize  size,
   GTK_NOTE (MULTIHEAD,
             g_warning ("gtk_icon_size_lookup ()) is not multihead safe"));
 
-  return icon_size_lookup_intern (size, widthp, heightp);
+  if (size == (GtkIconSize)-1)
+    return FALSE;
+
+  if (size >= G_N_ELEMENTS (icon_sizes))
+    return FALSE;
+
+  if (size == GTK_ICON_SIZE_INVALID)
+    return FALSE;
+
+  if (widthp)
+    *widthp = icon_sizes[size].width;
+
+  if (heightp)
+    *heightp = icon_sizes[size].height;
+
+  return TRUE;
 }
