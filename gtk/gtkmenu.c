@@ -3674,9 +3674,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
             {
               priv->upper_arrow_state = arrow_state;
               gtk_css_gadget_set_state (priv->top_arrow_gadget, arrow_state);
-
-              gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (menu)),
-                                          &rect, FALSE);
             }
         }
     }
@@ -3748,9 +3745,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
             {
               priv->lower_arrow_state = arrow_state;
               gtk_css_gadget_set_state (priv->bottom_arrow_gadget, arrow_state);
-
-              gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (menu)),
-                                          &rect, FALSE);
             }
         }
     }
