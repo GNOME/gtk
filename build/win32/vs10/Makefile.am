@@ -74,6 +74,9 @@ DISTCLEANFILES = \
 	$(GENERATED_ITEMS)
 
 gtk3-install.props: $(top_srcdir)/build/win32/vs10/gtk3-install.propsin $(MSVC10_HEADERS_LISTS)
+	-$(RM) $(top_builddir)/build/win32/vs11/gtk3-install.props
+	-$(RM) $(top_builddir)/build/win32/vs12/gtk3-install.props
+	-$(RM) $(top_builddir)/build/win32/vs14/gtk3-install.props
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk3-install.propsin >$@
 	rm $(MSVC10_HEADERS_LISTS)
 
