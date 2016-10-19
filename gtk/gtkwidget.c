@@ -5086,11 +5086,11 @@ gtk_widget_real_queue_draw_region (GtkWidget            *widget,
  * @widget: a #GtkWidget
  * @region: region to draw
  *
- * Invalidates the area of @widget defined by @region by calling
- * gdk_window_invalidate_region() on the widget’s window and all its
- * child windows. Once the main loop becomes idle (after the current
- * batch of events has been processed, roughly), the window will
- * receive expose events for the union of all regions that have been
+ * Invalidates the area of @widget defined by @region by notifying
+ * the parent via its GtkWidgetClass::queue_draw_child() function.
+ * Once the main loop becomes idle (after the current batch of
+ * events has been processed, roughly), the window will receive
+ * expose events for the union of all regions that have been
  * invalidated.
  *
  * Normally you would only use this function in widget
@@ -6771,7 +6771,7 @@ gtk_widget_real_grab_broken_event (GtkWidget          *widget,
  * If you want to synthesize an event though, don’t use this function;
  * instead, use gtk_main_do_event() so the event will behave as if
  * it were in the event queue. Don’t synthesize expose events; instead,
- * use gdk_window_invalidate_rect() to invalidate a region of the
+ * use gtk_widget_queue_draw_region() to invalidate a region of the
  * window.
  *
  * Returns: return from the event signal emission (%TRUE if

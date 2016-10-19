@@ -2562,7 +2562,7 @@ propagate_event (GtkWidget *widget,
  * All that said, you most likely don’t want to use any of these
  * functions; synthesizing events is rarely needed. There are almost
  * certainly better ways to achieve your goals. For example, use
- * gdk_window_invalidate_rect() or gtk_widget_queue_draw() instead
+ * gtk_widget_queue_draw() instead
  * of making up expose events.
  */
 void
