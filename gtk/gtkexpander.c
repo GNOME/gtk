@@ -671,19 +671,6 @@ gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_expander_redraw_expander (GtkExpander *expander)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget = GTK_WIDGET (expander);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      gtk_widget_get_allocation (widget, &allocation);
-      gdk_window_invalidate_rect (gtk_widget_get_window (widget), &allocation, FALSE);
-    }
-}
-
-static void
 update_node_state (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv = expander->priv;
@@ -753,8 +740,6 @@ gtk_expander_enter_notify (GtkWidget        *widget,
         gtk_widget_set_state_flags (expander->priv->label_widget,
                                     GTK_STATE_FLAG_PRELIGHT,
                                     FALSE);
-
-      gtk_expander_redraw_expander (expander);
     }
 
   return FALSE;
@@ -776,8 +761,6 @@ gtk_expander_leave_notify (GtkWidget        *widget,
       if (expander->priv->label_widget)
         gtk_widget_unset_state_flags (expander->priv->label_widget,
                                       GTK_STATE_FLAG_PRELIGHT);
-
-      gtk_expander_redraw_expander (expander);
     }
 
   return FALSE;
