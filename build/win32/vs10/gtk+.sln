@@ -20,8 +20,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-icon-browser", "gtk3-i
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-encode-symbolic-svg", "gtk-encode-symbolic-svg.vcxproj", "{F280BF1A-777A-4FB5-8005-DFBE04621EDB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gailutil-3", "gailutil-3.vcxproj", "{A1FCED61-4E51-4015-A70C-5373404D1BA0}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-update-icon-cache", "gtk-update-icon-cache.vcxproj", "{FC98AF16-4C68-42DF-906B-93A6804C198A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-builder-tool", "gtk-builder-tool.vcxproj", "{7D2397CF-4C25-45BC-A1BB-CB4B6E154BBD}"
@@ -146,22 +144,6 @@ Global
 		{BDAE6DE2-6BCC-4107-94F0-DA12214A02DE}.Release_Broadway|Win32.Build.0 = Release|Win32
 		{BDAE6DE2-6BCC-4107-94F0-DA12214A02DE}.Release_Broadway|x64.ActiveCfg = Release|x64
 		{BDAE6DE2-6BCC-4107-94F0-DA12214A02DE}.Release_Broadway|x64.Build.0 = Release|x64
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Debug|Win32.Build.0 = Debug|Win32
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Debug|x64.ActiveCfg = Debug|x64
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Debug|x64.Build.0 = Debug|x64
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Release|Win32.ActiveCfg = Release|Win32
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Release|Win32.Build.0 = Release|Win32
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Release|x64.ActiveCfg = Release|x64
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Release|x64.Build.0 = Release|x64
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Debug_Broadway|Win32.ActiveCfg = Debug|Win32
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Debug_Broadway|Win32.Build.0 = Debug|Win32
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Debug_Broadway|x64.ActiveCfg = Debug|x64
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Debug_Broadway|x64.Build.0 = Debug|x64
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Release_Broadway|Win32.ActiveCfg = Release|Win32
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Release_Broadway|Win32.Build.0 = Release|Win32
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Release_Broadway|x64.ActiveCfg = Release|x64
-		{A1FCED61-4E51-4015-A70C-5373404D1BA0}.Release_Broadway|x64.Build.0 = Release|x64
 		{23BBF35F-78AF-4E8C-983F-7B90448CD7DF}.Debug|Win32.ActiveCfg = Debug|Win32
 		{23BBF35F-78AF-4E8C-983F-7B90448CD7DF}.Debug|Win32.Build.0 = Debug|Win32
 		{23BBF35F-78AF-4E8C-983F-7B90448CD7DF}.Debug|x64.ActiveCfg = Debug|x64
