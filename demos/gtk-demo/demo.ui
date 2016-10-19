@@ -35,8 +35,9 @@
     <property name="default_width">440</property>
     <property name="title" translatable="yes">Builder</property>
     <child>
-      <object class="GtkVBox" id="vbox1">
+      <object class="GtkBox" id="vbox1">
         <property name="visible">1</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkMenuBar" id="menubar1">
             <property name="visible">1</property>
