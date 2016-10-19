@@ -102,8 +102,8 @@
  * Draw signals are normally delivered when a drawing area first comes
  * onscreen, or when it’s covered by another window and then uncovered.
  * You can also force an expose event by adding to the “damage region”
- * of the drawing area’s window; gtk_widget_queue_draw_area() and
- * gdk_window_invalidate_rect() are equally good ways to do this.
+ * of the drawing area’s window using gtk_widget_queue_draw_region(),
+ * gtk_widget_queue_draw_area() or gtk_widget_queue_draw().
  * You’ll then get a draw signal for the invalid region.
  *
  * The available routines for drawing are documented on the
