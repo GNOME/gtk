@@ -11446,6 +11446,7 @@ gtk_window_parse_geometry (GtkWindow   *window,
   if ((result & YValue) == 0)
     y = 0;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (grav == GDK_GRAVITY_SOUTH_WEST ||
       grav == GDK_GRAVITY_SOUTH_EAST)
     y = gdk_screen_get_height (screen) - h + y;
@@ -11453,6 +11454,7 @@ gtk_window_parse_geometry (GtkWindow   *window,
   if (grav == GDK_GRAVITY_SOUTH_EAST ||
       grav == GDK_GRAVITY_NORTH_EAST)
     x = gdk_screen_get_width (screen) - w + x;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* we don't let you put a window offscreen; maybe some people would
    * prefer to be able to, but it's kind of a bogus thing to do.

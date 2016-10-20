@@ -1624,7 +1624,9 @@ on_status_toplevel_configure (GtkWidget         *toplevel,
 
   if (status_window->window)
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       height = gdk_screen_get_height (gtk_widget_get_screen (toplevel));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       gdk_window_get_frame_extents (gtk_widget_get_window (toplevel),
                                     &rect);
