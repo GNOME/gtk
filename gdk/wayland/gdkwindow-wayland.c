@@ -366,9 +366,11 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->wrapper = GDK_WINDOW (window);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
       gdk_screen_get_n_monitors (screen) > 0)
     impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* logical 1x1 fake buffer */
   impl->staging_cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
@@ -687,9 +689,11 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   g_object_ref (window);
 
   /* More likely to be right than just assuming 1 */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
       gdk_screen_get_n_monitors (screen) > 0)
     impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   impl->title = NULL;
 
@@ -1450,9 +1454,11 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
   const gchar *app_id;
   GdkScreen *screen = gdk_window_get_screen (window);
   struct wl_output *fullscreen_output = NULL;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (impl->initial_fullscreen_monitor >= 0 &&
       impl->initial_fullscreen_monitor < gdk_screen_get_n_monitors (screen))
       fullscreen_output = _gdk_wayland_screen_get_wl_output (screen, impl->initial_fullscreen_monitor);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   impl->display_server.xdg_surface =
     zxdg_shell_v6_get_xdg_surface (display_wayland->xdg_shell,

@@ -222,6 +222,8 @@ get_monitor_num (GdkMonitor *monitor)
  *   a monitor close to (@x,@y) if the point is not in any monitor.
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22: Use gdk_display_get_monitor_at_point() instead
  **/
 gint
 gdk_screen_get_monitor_at_point (GdkScreen *screen,
@@ -251,6 +253,8 @@ gdk_screen_get_monitor_at_point (GdkScreen *screen,
  *     close to @window.
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22: Use gdk_display_get_monitor_at_window() instead
  **/
 gint
 gdk_screen_get_monitor_at_window (GdkScreen *screen,
@@ -658,6 +662,8 @@ get_monitor (GdkScreen *screen,
  * Returns: number of monitors which @screen consists of
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22: Use gdk_display_get_n_monitors() instead
  */
 gint
 gdk_screen_get_n_monitors (GdkScreen *screen)
@@ -686,6 +692,8 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
  * Returns: An integer index for the primary monitor, or 0 if none is configured.
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.22: Use gdk_display_get_primary_monitor() instead
  */
 gint
 gdk_screen_get_primary_monitor (GdkScreen *screen)
@@ -713,6 +721,8 @@ gdk_screen_get_primary_monitor (GdkScreen *screen)
  * Returns: the width of the monitor, or -1 if not available
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.22: Use gdk_monitor_get_width_mm() instead
  */
 gint
 gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
@@ -739,6 +749,8 @@ gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
  * Returns: the height of the monitor, or -1 if not available
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.22: Use gdk_monitor_get_height_mm() instead
  */
 gint
 gdk_screen_get_monitor_height_mm (GdkScreen *screen,
@@ -768,6 +780,8 @@ gdk_screen_get_monitor_height_mm (GdkScreen *screen,
  *   of the monitor, or %NULL if the name cannot be determined
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.22: Use gdk_monitor_get_model() instead
  */
 gchar *
 gdk_screen_get_monitor_plug_name (GdkScreen *screen,
@@ -803,6 +817,8 @@ gdk_screen_get_monitor_plug_name (GdkScreen *screen,
  * gdk_screen_get_width() and gdk_screen_get_height().
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22: Use gdk_monitor_get_geometry() instead
  */
 void
 gdk_screen_get_monitor_geometry (GdkScreen    *screen,
@@ -844,6 +860,8 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
  * @screen, use gdk_screen_get_n_monitors().
  *
  * Since: 3.4
+ *
+ * Deprecated: 3.22: Use gdk_monitor_get_workarea() instead
  */
 void
 gdk_screen_get_monitor_workarea (GdkScreen    *screen,
@@ -1088,8 +1106,11 @@ gdk_screen_get_setting (GdkScreen   *screen,
  * particular monitor, but most of the time you’re drawing to a window
  * where it is better to use gdk_window_get_scale_factor() instead.
  *
- * Since: 3.10
  * Returns: the scale factor
+ *
+ * Since: 3.10
+ *
+ * Deprecated: 3.22: Use gdk_monitor_get_scale_factor() instead
  */
 gint
 gdk_screen_get_monitor_scale_factor (GdkScreen *screen,
@@ -1099,7 +1120,9 @@ gdk_screen_get_monitor_scale_factor (GdkScreen *screen,
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 1);
   g_return_val_if_fail (monitor_num >= 0, 1);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), 1);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   monitor = get_monitor (screen, monitor_num);
 

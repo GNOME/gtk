@@ -70,36 +70,36 @@ GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
 GDK_AVAILABLE_IN_ALL
 gchar *      gdk_screen_make_display_name     (GdkScreen   *screen);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_display_get_n_monitors)
 gint         gdk_screen_get_n_monitors        (GdkScreen    *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_display_get_primary_monitor)
 gint         gdk_screen_get_primary_monitor   (GdkScreen    *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_monitor_get_geometry)
 void         gdk_screen_get_monitor_geometry  (GdkScreen    *screen,
                                                gint          monitor_num,
                                                GdkRectangle *dest);
-GDK_AVAILABLE_IN_3_4
+GDK_DEPRECATED_IN_3_22_FOR(gdk_monitor_get_workarea)
 void         gdk_screen_get_monitor_workarea  (GdkScreen    *screen,
                                                gint          monitor_num,
                                                GdkRectangle *dest);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_display_get_monitor_at_point)
 gint          gdk_screen_get_monitor_at_point  (GdkScreen *screen,
                                                 gint       x,
                                                 gint       y);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_display_get_monitor_at_window)
 gint          gdk_screen_get_monitor_at_window (GdkScreen *screen,
                                                 GdkWindow *window);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_monitor_get_width_mm)
 gint          gdk_screen_get_monitor_width_mm  (GdkScreen *screen,
                                                 gint       monitor_num);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_monitor_get_height_mm)
 gint          gdk_screen_get_monitor_height_mm (GdkScreen *screen,
                                                 gint       monitor_num);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_monitor_get_model)
 gchar *       gdk_screen_get_monitor_plug_name (GdkScreen *screen,
                                                 gint       monitor_num);
-GDK_AVAILABLE_IN_3_10
+GDK_DEPRECATED_IN_3_22_FOR(gdk_monitor_get_scale_factor)
 gint          gdk_screen_get_monitor_scale_factor (GdkScreen *screen,
                                                    gint       monitor_num);
 
