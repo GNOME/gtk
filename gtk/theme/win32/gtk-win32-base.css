@@ -998,38 +998,58 @@ scale value {
 }
 
 
-/* Progress bars */
+/* Progress bars and level bars */
 
-progressbar {
-    background-color: transparent;
-    padding: 0;
-}
-
-progressbar trough {
-    border-width: 0;
+progressbar.horizontal trough,
+levelbar.horizontal trough {
+    min-height: -gtk-win32-part-height(progress, 1, 1);
     background-image: -gtk-win32-theme-part(progress, 1, 1);
 }
-
-progressbar progress,
-entry progress,
-entry progress:focus {
-    border-width: 0;
-    background-image: -gtk-win32-theme-part(progress, 5, 1);
-}
-
-progressbar progress.pulse,
-entry progress.pulse,
-entry progress.pulse:focus {
-    background-color: transparent;
-    background-image: -gtk-win32-theme-part(progress, 8, 1);
-}
-
-progressbar.vertical trough {
+progressbar.vertical trough,
+levelbar.vertical trough {
+    min-width: -gtk-win32-part-width(progress, 1, 1);
     background-image: -gtk-win32-theme-part(progress, 2, 1);
 }
 
-progressbar.vertical progress {
+progressbar.horizontal progress, levelbar.horizontal block {
+    min-height: -gtk-win32-part-height(progress, 5, 1);
+}
+
+progressbar progress,
+levelbar block.filled,
+entry progress,
+entry progress:focus {
+    background-image: -gtk-win32-theme-part(progress, 5, 1);
+}
+
+/* We use here PBFS_PAUSED (yellow by default) and PBFS_PARTIAL (blue) */
+levelbar block.low {
+    background-image: -gtk-win32-theme-part(progress, 5, 3);
+}
+levelbar block.full {
+    background-image: -gtk-win32-theme-part(progress, 5, 4);
+}
+
+progressbar.horizontal progress.pulse,
+entry progress.pulse,
+entry progress.pulse:focus {
+    background-image: -gtk-win32-theme-part(progress, 8, 1);
+}
+
+progressbar.vertical progress,
+levelbar.vertical block {
+    min-width: -gtk-win32-part-width(progress, 6, 1);
+}
+
+progressbar.vertical progress,
+levelbar.vertical block.filled {
     background-image: -gtk-win32-theme-part(progress, 6, 1);
+}
+levelbar.vertical block.low {
+    background-image: -gtk-win32-theme-part(progress, 6, 3);
+}
+levelbar.vertical block.full {
+    background-image: -gtk-win32-theme-part(progress, 6, 4);
 }
 
 progressbar.vertical progress.pulse {
