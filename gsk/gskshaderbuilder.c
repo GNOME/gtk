@@ -65,6 +65,8 @@ gsk_shader_builder_finalize (GObject *gobject)
   GskShaderBuilder *self = GSK_SHADER_BUILDER (gobject);
 
   g_free (self->resource_base_path);
+  g_free (self->vertex_preamble);
+  g_free (self->fragment_preamble);
 
   g_clear_pointer (&self->defines, g_ptr_array_unref);
   g_clear_pointer (&self->uniforms, g_ptr_array_unref);
