@@ -150,7 +150,7 @@ void       gtk_window_set_title                (GtkWindow           *window,
 						const gchar         *title);
 GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_title             (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 void       gtk_window_set_wmclass              (GtkWindow           *window,
 						const gchar         *wmclass_name,
 						const gchar         *wmclass_class);

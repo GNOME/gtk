@@ -2405,7 +2405,8 @@ gtk_window_get_title (GtkWindow *window)
  * gtk_window_set_role() on each window in your application, for the
  * benefit of the session manager. Setting the role allows the window
  * manager to restore window positions when loading a saved session.
- * 
+ *
+ * Deprecated: 3.22
  **/
 void
 gtk_window_set_wmclass (GtkWindow *window,
