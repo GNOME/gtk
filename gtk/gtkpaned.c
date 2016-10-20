@@ -1391,11 +1391,12 @@ gtk_paned_allocate (GtkCssGadget        *gadget,
            old_handle_pos.width != priv->handle_pos.width ||
            old_handle_pos.height != priv->handle_pos.height))
         {
-          GdkWindow *window;
-
-          window = gtk_widget_get_window (widget);
-          gdk_window_invalidate_rect (window, &old_handle_pos, FALSE);
-          gdk_window_invalidate_rect (window, &priv->handle_pos, FALSE);
+          gtk_widget_queue_draw_area (widget,
+                                      old_handle_pos.x, old_handle_pos.y,
+                                      old_handle_pos.width, old_handle_pos.height);
+          gtk_widget_queue_draw_area (widget,
+                                      priv->handle_pos.x, priv->handle_pos.y,
+                                      priv->handle_pos.width, priv->handle_pos.height);
         }
 
       if (gtk_widget_get_realized (widget))
