@@ -51,6 +51,77 @@
         trigger warnings.
       </para>
     </section>
+
+    <section>
+      <title>Review your window creation flags</title>
+      <para>
+        GTK+ 4 removes the GDK_WA_CURSOR flag. Instead, just use
+        gdk_window_set_cursor() to set a cursor on the window after
+        creating it.
+      </para>
+      <para>
+        GTK+ 4 also removes the GDK_WA_VISUAL flag, and always uses
+        an RGBA visual for windows. To prepare your code for this,
+        use gdk_window_set_visual (gdk_screen_get_rgba_visual ()) after
+        creating your window.
+      </para>
+      <para>
+        GTK+ 4 also removes the GDK_WA_WMCLASS flag. If you need this
+        X11-specific functionality, use XSetClassHint() directly.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using non-RGBA visuals</title>
+      <para>
+        GTK+ 4 always uses RGBA visuals for its windows; you should make
+        sure that your code works with that.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using GtkBox::padding</title>
+      <para>
+        GTK+ 4 removes the #GtkBox::padding child property, so you should
+        use other ways to influence the layout of your boxes.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using the state argument of GtkStyleContext getters</title>
+      <para>
+        The getters in the GtkStyleContext API, such as
+        gtk_style_context_get_property(), gtk_style_context_get(),
+        or gtk_style_context_get_color() only accept the context's current
+        state for their state argument. Update all callers to pass the current
+        state.
+      </para>
+    </section>
+
+  </section>
+
+  <section>
+    <title>Changes that need to be done at the time of the switch</title>
+
+    <para>
+      This section outlines porting tasks that you need to tackle when
+      you get to the point that you actually build your application against
+      GTK+ 4. Making it possible to prepare for these in GTK+ 3 would
+      have been either impossible or impractical.
+    </para>
+
+    <section>
+      <title>Adapt to GtkStyleContext API changes</title>
+      <para>
+        The getters in the GtkStyleContext API, such as
+        gtk_style_context_get_property(), gtk_style_context_get(),
+        or gtk_style_context_get_color() have lost their state argument,
+        and always use the context's current state. Update all callers
+        to omit the state argument.
+      </para>
+    </section>
+
   </section>
 
 </chapter>
+
