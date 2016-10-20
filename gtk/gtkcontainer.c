@@ -1867,7 +1867,7 @@ gtk_container_real_check_resize (GtkContainer *container)
 
   if (_gtk_widget_get_alloc_needed (widget))
     {
-      if (_gtk_widget_is_toplevel (widget))
+      if (!_gtk_widget_is_toplevel (widget))
         {
           gtk_widget_get_preferred_size (widget, &requisition, NULL);
           gtk_widget_get_allocated_size (widget, &allocation, &baseline);
