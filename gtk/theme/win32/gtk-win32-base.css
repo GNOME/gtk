@@ -690,7 +690,9 @@ entry:focus {
 
 textview.view:disabled,
 entry:disabled {
-    background-image: -gtk-win32-theme-part(edit, 1, 4);
+    /* This theme part feels wrong here, but it looks as one would expect,
+     whereas (edit, 5, 3) BACKGROUNDWITHBORDER, EBS_DISABLED is just white */
+    background-image: -gtk-win32-theme-part(combobox, 5, 4);
     color: -gtk-win32-color(edit, graytext);
 }
 
