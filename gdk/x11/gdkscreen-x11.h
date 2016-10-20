@@ -121,6 +121,9 @@ void _gdk_x11_screen_set_window_scale       (GdkX11Screen *x11_screen,
 					     int        scale);
 void gdk_x11_screen_get_work_area           (GdkScreen    *screen,
                                              GdkRectangle *area);
+gint gdk_x11_screen_get_width               (GdkScreen *screen);
+gint gdk_x11_screen_get_height              (GdkScreen *screen);
+gint gdk_x11_screen_get_number              (GdkScreen *screen);
 
 G_END_DECLS
 

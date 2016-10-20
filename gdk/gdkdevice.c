@@ -1708,6 +1708,7 @@ _gdk_device_translate_window_coord (GdkDevice *device,
   device_width = axis_info_x->max_value - axis_info_x->min_value;
   device_height = axis_info_y->max_value - axis_info_y->min_value;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (device_width > 0)
     x_min = axis_info_x->min_value;
   else
@@ -1723,6 +1724,7 @@ _gdk_device_translate_window_coord (GdkDevice *device,
       device_height = gdk_screen_get_height (gdk_window_get_screen (window));
       y_min = 0;
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   window_width = gdk_window_get_width (window);
   window_height = gdk_window_get_height (window);
@@ -1805,6 +1807,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
 
   axis_width = axis_info.max_value - axis_info.min_value;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (axis_info.use == GDK_AXIS_X)
     {
       if (axis_width > 0)
@@ -1823,6 +1826,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
 
       offset = - window_root_y - window->abs_y;
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (axis_value)
     *axis_value = offset + scale * (value - axis_info.min_value);

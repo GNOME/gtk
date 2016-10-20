@@ -79,13 +79,13 @@ gdk_x11_screen_get_display (GdkScreen *screen)
   return GDK_X11_SCREEN (screen)->display;
 }
 
-static gint
+gint
 gdk_x11_screen_get_width (GdkScreen *screen)
 {
   return GDK_X11_SCREEN (screen)->width / GDK_X11_SCREEN (screen)->window_scale;
 }
 
-static gint
+gint
 gdk_x11_screen_get_height (GdkScreen *screen)
 {
   return GDK_X11_SCREEN (screen)->height / GDK_X11_SCREEN (screen)->window_scale;
@@ -103,7 +103,7 @@ gdk_x11_screen_get_height_mm (GdkScreen *screen)
   return HeightMMOfScreen (GDK_X11_SCREEN (screen)->xscreen);
 }
 
-static gint
+gint
 gdk_x11_screen_get_number (GdkScreen *screen)
 {
   return GDK_X11_SCREEN (screen)->screen_num;
@@ -259,8 +259,8 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
   /* Defaults in case of error */
   area->x = 0;
   area->y = 0;
-  area->width = gdk_screen_get_width (screen);
-  area->height = gdk_screen_get_height (screen);
+  area->width = gdk_x11_screen_get_width (screen);
+  area->height = gdk_x11_screen_get_height (screen);
 
   if (!gdk_x11_screen_supports_net_wm_hint (screen,
                                             gdk_atom_intern_static_string ("_NET_WORKAREA")))
@@ -783,20 +783,20 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
   if (0 != geometry.x ||
       0 != geometry.y ||
-      gdk_screen_get_width (screen) != geometry.width ||
-      gdk_screen_get_height (screen) != geometry.height ||
-      gdk_screen_get_width_mm (screen) != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
-      gdk_screen_get_height_mm (screen) != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)))
+      gdk_x11_screen_get_width (screen) != geometry.width ||
+      gdk_x11_screen_get_height (screen) != geometry.height ||
+      gdk_x11_screen_get_width_mm (screen) != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
+      gdk_x11_screen_get_height_mm (screen) != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)))
     *changed = TRUE;
 
   gdk_monitor_set_position (GDK_MONITOR (monitor), 0, 0);
   gdk_monitor_set_size (GDK_MONITOR (monitor),
-                        gdk_screen_get_width (screen),
-                        gdk_screen_get_height (screen));
+                        gdk_x11_screen_get_width (screen),
+                        gdk_x11_screen_get_height (screen));
   g_object_notify (G_OBJECT (monitor), "workarea");
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
-                                 gdk_screen_get_width_mm (screen),
-                                 gdk_screen_get_height_mm (screen));
+                                 gdk_x11_screen_get_width_mm (screen),
+                                 gdk_x11_screen_get_height_mm (screen));
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->window_scale);
 
   if (x11_display->primary_monitor != 0)
@@ -1002,8 +1002,8 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
   GdkX11Display *display_x11;
 #endif
 
-  width = gdk_screen_get_width (screen);
-  height = gdk_screen_get_height (screen);
+  width = gdk_x11_screen_get_width (screen);
+  height = gdk_x11_screen_get_height (screen);
 
 #ifdef HAVE_RANDR
   display_x11 = GDK_X11_DISPLAY (gdk_screen_get_display (screen));
@@ -1027,8 +1027,8 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
 
   process_monitors_change (screen);
 
-  if (width != gdk_screen_get_width (screen) ||
-      height != gdk_screen_get_height (screen))
+  if (width != gdk_x11_screen_get_width (screen) ||
+      height != gdk_x11_screen_get_height (screen))
     g_signal_emit_by_name (screen, "size-changed");
 }
 
@@ -1147,7 +1147,7 @@ gdk_x11_screen_make_display_name (GdkScreen *screen)
   old_display = gdk_display_get_name (gdk_screen_get_display (screen));
 
   return substitute_screen_number (old_display,
-                                   gdk_screen_get_number (screen));
+                                   gdk_x11_screen_get_number (screen));
 }
 
 static GdkWindow *

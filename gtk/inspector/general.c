@@ -396,7 +396,9 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
     }
   g_list_free (children);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   name = gdk_screen_make_display_name (screen);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_label_set_label (GTK_LABEL (gen->priv->display_name), name);
   g_free (name);
 

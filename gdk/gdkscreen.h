@@ -52,22 +52,22 @@ GDK_AVAILABLE_IN_ALL
 GdkWindow *  gdk_screen_get_root_window       (GdkScreen   *screen);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint         gdk_screen_get_number            (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint         gdk_screen_get_width             (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint         gdk_screen_get_height            (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint         gdk_screen_get_width_mm          (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint         gdk_screen_get_height_mm         (GdkScreen   *screen);
 
 GDK_AVAILABLE_IN_ALL
 GList *      gdk_screen_list_visuals          (GdkScreen   *screen);
 GDK_AVAILABLE_IN_ALL
 GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gchar *      gdk_screen_make_display_name     (GdkScreen   *screen);
 
 GDK_DEPRECATED_IN_3_22_FOR(gdk_display_get_n_monitors)
@@ -123,7 +123,7 @@ void    gdk_screen_set_resolution (GdkScreen *screen,
 GDK_AVAILABLE_IN_ALL
 gdouble gdk_screen_get_resolution (GdkScreen *screen);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 GdkWindow *gdk_screen_get_active_window (GdkScreen *screen);
 GDK_AVAILABLE_IN_ALL
 GList     *gdk_screen_get_window_stack  (GdkScreen *screen);

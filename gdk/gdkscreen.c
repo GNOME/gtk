@@ -279,11 +279,15 @@ gdk_screen_get_monitor_at_window (GdkScreen *screen,
  * gdk_screen_get_monitor_scale_factor()).
  *
  * Returns: the width of the default screen in pixels.
+ *
+ * Deprecated: 3.22: Use per-monitor information
  **/
 gint
 gdk_screen_width (void)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   return gdk_screen_get_width (gdk_screen_get_default ());
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
@@ -294,11 +298,15 @@ gdk_screen_width (void)
  * gdk_screen_get_monitor_scale_factor()).
  *
  * Returns: the height of the default screen in pixels.
+ *
+ * Deprecated: 3.22: Use per-monitor information
  **/
 gint
 gdk_screen_height (void)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   return gdk_screen_get_height (gdk_screen_get_default ());
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
@@ -309,11 +317,15 @@ gdk_screen_height (void)
  *
  * Returns: the width of the default screen in millimeters,
  * though it is not always correct.
+ *
+ * Deprecated: 3.22: Use per-monitor information
  **/
 gint
 gdk_screen_width_mm (void)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   return gdk_screen_get_width_mm (gdk_screen_get_default ());
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
@@ -324,11 +336,15 @@ gdk_screen_width_mm (void)
  *
  * Returns: the height of the default screen in millimeters,
  * though it is not always correct.
+ *
+ * Deprecated: 3.22: Use per-monitor information
  **/
 gint
 gdk_screen_height_mm (void)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   return gdk_screen_get_height_mm (gdk_screen_get_default ());
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
@@ -533,6 +549,8 @@ gdk_screen_get_display (GdkScreen *screen)
  * Returns: the width of @screen in pixels.
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22: Use per-monitor information instead
  **/
 gint
 gdk_screen_get_width (GdkScreen *screen)
@@ -553,6 +571,8 @@ gdk_screen_get_width (GdkScreen *screen)
  * Returns: the height of @screen in pixels.
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22: Use per-monitor information instead
  **/
 gint
 gdk_screen_get_height (GdkScreen *screen)
@@ -575,6 +595,8 @@ gdk_screen_get_height (GdkScreen *screen)
  * Returns: the width of @screen in millimeters.
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22: Use per-monitor information instead
  **/
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)
@@ -596,6 +618,8 @@ gdk_screen_get_width_mm (GdkScreen *screen)
  *
  * Returns: the heigth of @screen in millimeters.
  *
+ * Deprecated: 3.22: Use per-monitor information instead
+ *
  * Since: 2.2
  **/
 gint
@@ -616,6 +640,8 @@ gdk_screen_get_height_mm (GdkScreen *screen)
  * Returns: the index
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22
  **/
 gint
 gdk_screen_get_number (GdkScreen *screen)
@@ -990,6 +1016,8 @@ gdk_screen_is_composited (GdkScreen *screen)
  * Returns: a newly allocated string, free with g_free()
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.22
  **/
 gchar *
 gdk_screen_make_display_name (GdkScreen *screen)
@@ -1022,6 +1050,8 @@ gdk_screen_make_display_name (GdkScreen *screen)
  *   or %NULL.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.22
  **/
 GdkWindow *
 gdk_screen_get_active_window (GdkScreen *screen)

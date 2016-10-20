@@ -104,14 +104,14 @@ GDK_DEPRECATED_IN_3_0_FOR(gdk_display_device_is_grabbed)
 gboolean      gdk_pointer_is_grabbed (void);
 #endif /* GDK_MULTIDEVICE_SAFE */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint gdk_screen_width  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint gdk_screen_height (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint gdk_screen_width_mm  (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL

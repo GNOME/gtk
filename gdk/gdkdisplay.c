@@ -2553,12 +2553,14 @@ get_fallback_monitor (GdkDisplay *display)
     }
 
   screen = gdk_display_get_default_screen (display);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_monitor_set_size (monitor,
                         gdk_screen_get_width (screen),
                         gdk_screen_get_height (screen));
   gdk_monitor_set_physical_size (monitor,
                                  gdk_screen_get_width_mm (screen),
                                  gdk_screen_get_height_mm (screen));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return monitor;
 }

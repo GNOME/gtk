@@ -162,8 +162,10 @@ gdk_app_launch_context_get_display (GAppLaunchContext *context,
   GdkAppLaunchContext *ctx = GDK_APP_LAUNCH_CONTEXT (context);
   GdkDisplay *display;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (ctx->screen)
     return gdk_screen_make_display_name (ctx->screen);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (ctx->display)
     display = ctx->display;
