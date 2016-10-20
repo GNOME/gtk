@@ -3491,7 +3491,9 @@ gdk_window_clear_backing_region (GdkWindow *window)
 
   for (bg_window = window; bg_window; bg_window = bg_window->parent)
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       pattern = gdk_window_get_background_pattern (bg_window);
+G_GNUC_END_IGNORE_DEPRECATIONS
       if (pattern)
         break;
 
@@ -6356,9 +6358,7 @@ gdk_window_move_region (GdkWindow            *window,
  * gtk_style_context_set_background() — if you're implementing a
  * custom widget.
  *
- * See also gdk_window_set_background_pattern().
- *
- * Deprecated: 3.4: Use gdk_window_set_background_rgba() instead.
+ * Deprecated: 3.4: Don't use this function
  */
 void
 gdk_window_set_background (GdkWindow      *window,
@@ -6372,7 +6372,9 @@ gdk_window_set_background (GdkWindow      *window,
                                       color->green / 65535.,
                                       color->blue  / 65535.);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_window_set_background_pattern (window, pattern);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   cairo_pattern_destroy (pattern);
 }
@@ -6385,6 +6387,8 @@ gdk_window_set_background (GdkWindow      *window,
  * Sets the background color of @window.
  *
  * See also gdk_window_set_background_pattern().
+ *
+ * Deprecated: 3.22: Don't use this function
  **/
 void
 gdk_window_set_background_rgba (GdkWindow     *window,
@@ -6413,7 +6417,9 @@ gdk_window_set_background_rgba (GdkWindow     *window,
   pattern = cairo_pattern_create_rgba (rgba->red, rgba->green,
                                        rgba->blue, rgba->alpha);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_window_set_background_pattern (window, pattern);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   cairo_pattern_destroy (pattern);
 }
@@ -6431,6 +6437,8 @@ gdk_window_set_background_rgba (GdkWindow     *window,
  *
  * The windowing system will normally fill a window with its background
  * when the window is obscured then exposed.
+ *
+ * Deprecated: 3.22: Don't use this function
  */
 void
 gdk_window_set_background_pattern (GdkWindow       *window,
@@ -6468,6 +6476,8 @@ gdk_window_set_background_pattern (GdkWindow       *window,
  * background or %NULL to use the parent’s background.
  *
  * Since: 2.22
+ *
+ * Deprecated: 3.22: Don't use this function
  **/
 cairo_pattern_t *
 gdk_window_get_background_pattern (GdkWindow *window)

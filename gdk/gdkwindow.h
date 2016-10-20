@@ -771,16 +771,16 @@ void          gdk_window_set_startup_id    (GdkWindow     *window,
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_set_transient_for (GdkWindow     *window,
 					    GdkWindow     *parent);
-GDK_DEPRECATED_IN_3_4_FOR(gdk_window_set_background_rgba)
+GDK_DEPRECATED_IN_3_4
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  const GdkColor  *color);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 void          gdk_window_set_background_rgba (GdkWindow     *window,
                                               const GdkRGBA *rgba);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 void	      gdk_window_set_background_pattern (GdkWindow	 *window,
                                                  cairo_pattern_t *pattern);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 cairo_pattern_t *gdk_window_get_background_pattern (GdkWindow     *window);
 
 GDK_AVAILABLE_IN_ALL

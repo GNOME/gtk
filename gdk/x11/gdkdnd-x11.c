@@ -2636,7 +2636,9 @@ gdk_x11_drag_context_drop_done (GdkDragContext *context,
 
   pattern = cairo_pattern_create_for_surface (surface);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_window_set_background_pattern (x11_context->drag_window, pattern);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);
