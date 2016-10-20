@@ -9,7 +9,7 @@
   <para>
     If your application is still using GTK+ 2, you should first convert it to
     GTK+ 3, by following the <ulink url="https://developer.gnome.org/gtk3/stable/gtk-migrating-2-to-3.html">migration guide</ulink> in the GTK+ 3
-    documentation.
+    documentation, and then follow <xref linkend="gtk-migrating-3-to-4"/>.
   </para>
 
 </chapter>
