@@ -84,10 +84,6 @@
  * The style class .flat can appear with the main node.
  */
 
-
-#define LABEL_PAD 1
-#define LABEL_SIDE_PAD 2
-
 struct _GtkFramePrivate
 {
   /* Properties */
