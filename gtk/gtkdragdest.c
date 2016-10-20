@@ -185,6 +185,8 @@ gtk_drag_dest_set (GtkWidget            *widget,
  *   subwindow.
  *
  * Sets this widget as a proxy for drops to another window.
+ *
+ * Deprecated: 3.22
  */
 void
 gtk_drag_dest_set_proxy (GtkWidget       *widget,

@@ -73,7 +73,7 @@ void gtk_drag_dest_set   (GtkWidget            *widget,
                           gint                  n_targets,
                           GdkDragAction         actions);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 void gtk_drag_dest_set_proxy (GtkWidget      *widget,
                               GdkWindow      *proxy_window,
                               GdkDragProtocol protocol,
