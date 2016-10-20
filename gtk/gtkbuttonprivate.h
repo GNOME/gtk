@@ -42,7 +42,6 @@ struct _GtkButtonPrivate
   gfloat                 baseline_align;
 
   guint                  activate_timeout;
-  guint32                grab_time;
 
   guint          align_set             : 1;
   guint          button_down           : 1;

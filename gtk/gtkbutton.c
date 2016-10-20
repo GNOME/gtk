@@ -986,7 +986,6 @@ gtk_real_button_activate (GtkButton *button)
   GtkWidget *widget = GTK_WIDGET (button);
   GtkButtonPrivate *priv = button->priv;
   GdkDevice *device;
-  guint32 time;
 
   device = gtk_get_current_event_device ();
 
@@ -995,8 +994,6 @@ gtk_real_button_activate (GtkButton *button)
 
   if (gtk_widget_get_realized (widget) && !priv->activate_timeout)
     {
-      time = gtk_get_current_event_time ();
-
       /* bgo#626336 - Only grab if we have a device (from an event), not if we
        * were activated programmatically when no event is available.
        */
@@ -1008,7 +1005,6 @@ gtk_real_button_activate (GtkButton *button)
             {
               gtk_device_grab_add (widget, device, TRUE);
               priv->grab_keyboard = device;
-              priv->grab_time = time;
 	    }
 	}
 
