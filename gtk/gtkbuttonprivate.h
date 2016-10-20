@@ -34,8 +34,6 @@ struct _GtkButtonPrivate
   GdkDevice             *grab_keyboard;
   GdkWindow             *event_window;
 
-  gchar                 *label_text;
-
   GtkGesture            *gesture;
 
   /* This is only used by checkbox and subclasses */
@@ -43,11 +41,11 @@ struct _GtkButtonPrivate
 
   guint                  activate_timeout;
 
-  guint          align_set             : 1;
   guint          button_down           : 1;
   guint          constructed           : 1;
   guint          in_button             : 1;
   guint          use_underline         : 1;
+  guint          child_type            : 2;
 };
 
 

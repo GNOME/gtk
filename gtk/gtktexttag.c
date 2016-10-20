@@ -96,8 +96,6 @@ enum {
   /* Style args */
   PROP_BACKGROUND,
   PROP_FOREGROUND,
-  PROP_BACKGROUND_GDK,
-  PROP_FOREGROUND_GDK,
   PROP_BACKGROUND_RGBA,
   PROP_FOREGROUND_RGBA,
   PROP_FONT,
@@ -130,7 +128,6 @@ enum {
   PROP_TABS,
   PROP_INVISIBLE,
   PROP_PARAGRAPH_BACKGROUND,
-  PROP_PARAGRAPH_BACKGROUND_GDK,
   PROP_PARAGRAPH_BACKGROUND_RGBA,
   PROP_FALLBACK,
   PROP_LETTER_SPACING,
@@ -894,16 +891,6 @@ copy_rgba_to_gdk_color (GdkRGBA  *src,
 }
 
 static void
-copy_gdk_color_to_rgba (GdkColor *src,
-			GdkRGBA  *dest)
-{
-  dest->red   = src->red / 65535.;
-  dest->green = src->green / 65535.;
-  dest->blue  = src->blue / 65535.;
-  dest->alpha = 1;
-}
-
-static void
 set_underline_rgba (GtkTextTag    *tag,
                     const GdkRGBA *rgba)
 {
@@ -1068,49 +1055,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           g_object_notify (G_OBJECT (tag), "paragraph-background-set");
         }
     }
-}
-
-
-static void
-set_bg_color (GtkTextTag *tag, GdkColor *color)
-{
-  if (color)
-    {
-      GdkRGBA rgba;
-
-      copy_gdk_color_to_rgba (color, &rgba);
-      set_bg_rgba (tag, &rgba);
-    }
-  else
-    set_bg_rgba (tag, NULL);
-}
-
-static void
-set_fg_color (GtkTextTag *tag, GdkColor *color)
-{
-  if (color)
-    {
-      GdkRGBA rgba;
-
-      copy_gdk_color_to_rgba (color, &rgba);
-      set_fg_rgba (tag, &rgba);
-    }
-  else
-    set_fg_rgba (tag, NULL);
-}
-
-static void
-set_pg_bg_color (GtkTextTag *tag, GdkColor *color)
-{
-  if (color)
-    {
-      GdkRGBA rgba;
-
-      copy_gdk_color_to_rgba (color, &rgba);
-      set_pg_bg_rgba (tag, &rgba);
-    }
-  else
-    set_pg_bg_rgba (tag, NULL);
 }
 
 static PangoFontMask
@@ -1314,22 +1258,6 @@ gtk_text_tag_set_property (GObject      *object,
           set_fg_rgba (text_tag, &rgba);
         else
           g_warning ("Don't know color '%s'", g_value_get_string (value));
-      }
-      break;
-
-    case PROP_BACKGROUND_GDK:
-      {
-        GdkColor *color = g_value_get_boxed (value);
-
-        set_bg_color (text_tag, color);
-      }
-      break;
-
-    case PROP_FOREGROUND_GDK:
-      {
-        GdkColor *color = g_value_get_boxed (value);
-
-        set_fg_color (text_tag, color);
       }
       break;
 
@@ -1584,16 +1512,6 @@ gtk_text_tag_set_property (GObject      *object,
           set_pg_bg_rgba (text_tag, &rgba);
         else
           g_warning ("Don't know color '%s'", g_value_get_string (value));
-
-        g_object_notify (object, "paragraph-background-gdk");
-      }
-      break;
-
-    case PROP_PARAGRAPH_BACKGROUND_GDK:
-      {
-        GdkColor *color = g_value_get_boxed (value);
-
-        set_pg_bg_color (text_tag, color);
       }
       break;
 
@@ -1797,16 +1715,8 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_string (value, priv->name);
       break;
 
-    case PROP_BACKGROUND_GDK:
-      g_value_set_boxed (value, &priv->values->appearance.bg_color);
-      break;
-
     case PROP_BACKGROUND_RGBA:
       g_value_set_boxed (value, priv->values->appearance.rgba[0]);
-      break;
-
-    case PROP_FOREGROUND_GDK:
-      g_value_set_boxed (value, &priv->values->appearance.fg_color);
       break;
 
     case PROP_FOREGROUND_RGBA:
@@ -1962,9 +1872,6 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, priv->values->invisible);
       break;
       
-    case PROP_PARAGRAPH_BACKGROUND_GDK:
-      g_value_set_boxed (value, priv->values->pg_bg_color);
-      break;
 
     case PROP_PARAGRAPH_BACKGROUND_RGBA:
       g_value_set_boxed (value, priv->values->pg_bg_rgba);

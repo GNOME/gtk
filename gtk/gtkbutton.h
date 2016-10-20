@@ -115,10 +115,10 @@ gboolean              gtk_button_get_use_underline  (GtkButton      *button);
 GDK_AVAILABLE_IN_ALL
 GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_90
 void                  gtk_button_set_icon_name      (GtkButton      *button,
                                                      const char     *icon_name);
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_90
 const char *          gtk_button_get_icon_name      (GtkButton      *button);
 
 
