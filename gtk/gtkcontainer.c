@@ -328,9 +328,6 @@ static void     gtk_container_map                  (GtkWidget         *widget);
 static void     gtk_container_unmap                (GtkWidget         *widget);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
 
-static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
-                                                          GtkWidget    *child);
-
 static GtkWidgetPath * gtk_container_real_get_path_for_child (GtkContainer *container,
                                                               GtkWidget    *child);
 
@@ -476,7 +473,6 @@ gtk_container_class_init (GtkContainerClass *class)
   class->forall = NULL;
   class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
-  class->composite_name = gtk_container_child_default_composite_name;
   class->get_path_for_child = gtk_container_real_get_path_for_child;
 
   container_signals[ADD] =
@@ -2034,84 +2030,6 @@ gtk_container_get_children (GtkContainer *container)
                          &children);
 
   return g_list_reverse (children);
-}
-
-static void
-gtk_container_child_position_callback (GtkWidget *widget,
-                                       gpointer   client_data)
-{
-  struct {
-    GtkWidget *child;
-    guint i;
-    guint index;
-  } *data = client_data;
-
-  data->i++;
-  if (data->child == widget)
-    data->index = data->i;
-}
-
-static gchar*
-gtk_container_child_default_composite_name (GtkContainer *container,
-                                            GtkWidget    *child)
-{
-  struct {
-    GtkWidget *child;
-    guint i;
-    guint index;
-  } data;
-  gchar *name;
-
-  /* fallback implementation */
-  data.child = child;
-  data.i = 0;
-  data.index = 0;
-  gtk_container_forall (container,
-                        gtk_container_child_position_callback,
-                        &data);
-
-  name = g_strdup_printf ("%s-%u",
-                          g_type_name (G_TYPE_FROM_INSTANCE (child)),
-                          data.index);
-
-  return name;
-}
-
-gchar*
-_gtk_container_child_composite_name (GtkContainer *container,
-                                    GtkWidget    *child)
-{
-  gboolean composite_child;
-
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
-  g_return_val_if_fail (_gtk_widget_get_parent (child) == GTK_WIDGET (container), NULL);
-
-  g_object_get (child, "composite-child", &composite_child, NULL);
-  if (composite_child)
-    {
-      static GQuark quark_composite_name = 0;
-      gchar *name;
-
-      if (!quark_composite_name)
-        quark_composite_name = g_quark_from_static_string ("gtk-composite-name");
-
-      name = g_object_get_qdata (G_OBJECT (child), quark_composite_name);
-      if (!name)
-        {
-          GtkContainerClass *class;
-
-          class = GTK_CONTAINER_GET_CLASS (container);
-          if (class->composite_name)
-            name = class->composite_name (container, child);
-        }
-      else
-        name = g_strdup (name);
-
-      return name;
-    }
-
-  return NULL;
 }
 
 typedef struct {
