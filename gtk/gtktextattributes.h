@@ -192,9 +192,6 @@ struct _GtkTextAttributes
 
   PangoLanguage *language;
 
-  /*< private >*/
-  GdkColor *pg_bg_color;
-
   /*< public >*/
   guint invisible : 1;
   guint bg_full_height : 1;

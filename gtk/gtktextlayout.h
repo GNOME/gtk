@@ -248,8 +248,6 @@ struct _GtkTextLineDisplay
   gint insert_index;		/* Byte index of insert cursor within para or -1 */
 
   GtkTextLine *line;
-  
-  GdkColor *pg_bg_color;
 
   GdkRectangle block_cursor;
   guint cursors_invalid : 1;

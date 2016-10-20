@@ -1022,18 +1022,10 @@ set_pg_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
   if (priv->values->pg_bg_rgba)
     gdk_rgba_free (priv->values->pg_bg_rgba);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (priv->values->pg_bg_color)
-    gdk_color_free (priv->values->pg_bg_color);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
   priv->values->pg_bg_rgba = NULL;
-  priv->values->pg_bg_color = NULL;
 
   if (rgba)
     {
-      GdkColor color = { 0, };
-
       if (!priv->pg_bg_color_set)
         {
           priv->pg_bg_color_set = TRUE;
@@ -1041,11 +1033,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         }
 
       priv->values->pg_bg_rgba = gdk_rgba_copy (rgba);
-
-      copy_rgba_to_gdk_color (rgba, &color);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      priv->values->pg_bg_color = gdk_color_copy (&color);
-G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else
     {

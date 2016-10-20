@@ -107,10 +107,6 @@ GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
 gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_view,
                                                          GtkTreePath     *path,
                                                          GtkRequisition  *requisition);
-GDK_DEPRECATED_IN_3_4_FOR(gtk_cell_view_set_background_rgba)
-void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
-                                                         const GdkColor  *color);
-
 G_END_DECLS
 
 #endif /* __GTK_CELL_VIEW_H__ */

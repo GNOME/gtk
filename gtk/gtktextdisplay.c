@@ -236,31 +236,8 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
     {
       if (!text_renderer->error_color)
         {
-	  GdkColor *color = NULL;
-
-          gtk_style_context_get_style (context,
-                                       "error-underline-color", &color,
-                                       NULL);
-
-	  if (color)
-	    {
-	      GdkRGBA rgba;
-
-	      rgba.red = color->red / 65535.;
-	      rgba.green = color->green / 65535.;
-	      rgba.blue = color->blue / 65535.;
-	      rgba.alpha = 1;
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-	      gdk_color_free (color);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-	      text_renderer->error_color = gdk_rgba_copy (&rgba);
-	    }
-	  else
-	    {
-	      static const GdkRGBA red = { 1, 0, 0, 1 };
-	      text_renderer->error_color = gdk_rgba_copy (&red);
-	    }
+          static const GdkRGBA red = { 1, 0, 0, 1 };
+          text_renderer->error_color = gdk_rgba_copy (&red);
         }
 
       text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, text_renderer->error_color);

@@ -764,52 +764,6 @@ rgba_changed (GObject *object, GParamSpec *pspec, gpointer data)
 }
 
 static void
-color_modified (GtkColorButton *cb, GParamSpec *ignored, ObjectProperty *p)
-{
-  GdkRGBA rgba;
-  GdkColor color;
-  GValue val = G_VALUE_INIT;
-
-  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (cb), &rgba);
-  color.red = 65535 * rgba.red;
-  color.green = 65535 * rgba.green;
-  color.blue = 65535 * rgba.blue;
-
-  g_value_init (&val, p->spec->value_type);
-  g_value_set_boxed (&val, &color);
-  set_property_value (p->obj, p->spec, &val);
-  g_value_unset (&val);
-}
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-static void
-color_changed (GObject *object, GParamSpec *pspec, gpointer data)
-{
-  GtkColorChooser *cb = GTK_COLOR_CHOOSER (data);
-  GValue val = G_VALUE_INIT;
-  GdkColor *color;
-  GdkRGBA rgba;
-
-  g_value_init (&val, GDK_TYPE_COLOR);
-  get_property_value (object, pspec, &val);
-  color = g_value_get_boxed (&val);
-  rgba.red = color->red / 65535.0;
-  rgba.green = color->green / 65535.0;
-  rgba.blue = color->blue / 65535.0;
-  rgba.alpha = 1.0;
-
-  if (g_value_get_boxed (&val))
-    {
-      block_controller (G_OBJECT (cb));
-      gtk_color_chooser_set_rgba (cb, &rgba);
-      unblock_controller (G_OBJECT (cb));
-    }
-
-  g_value_unset (&val);
-}
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-static void
 font_modified (GtkFontChooser *fb, GParamSpec *pspec, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
@@ -1093,19 +1047,6 @@ property_editor (GObject                *object,
 
       connect_controller (G_OBJECT (prop_edit), "notify::rgba",
                           object, spec, G_CALLBACK (rgba_modified));
-    }
-  else if (type == G_TYPE_PARAM_BOXED &&
-           G_PARAM_SPEC_VALUE_TYPE (spec) == g_type_from_name ("GdkColor"))
-    {
-      prop_edit = gtk_color_chooser_widget_new ();
-      gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (prop_edit), FALSE);
-
-      g_object_connect_property (object, spec,
-                                 G_CALLBACK (color_changed),
-                                 prop_edit, G_OBJECT (prop_edit));
-
-      connect_controller (G_OBJECT (prop_edit), "notify::rgba",
-                          object, spec, G_CALLBACK (color_modified));
     }
   else if (type == G_TYPE_PARAM_BOXED &&
            G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO_TYPE_FONT_DESCRIPTION)
