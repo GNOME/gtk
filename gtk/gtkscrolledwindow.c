@@ -901,7 +901,6 @@ gtk_scrolled_window_invalidate_overshoot (GtkScrolledWindow *scrolled_window)
 {
   GtkAllocation child_allocation;
   gint overshoot_x, overshoot_y;
-  GdkRectangle rect;
 
   if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
     return;
@@ -910,32 +909,22 @@ gtk_scrolled_window_invalidate_overshoot (GtkScrolledWindow *scrolled_window)
                                            &child_allocation);
   if (overshoot_x != 0)
     {
-      if (overshoot_x < 0)
-        rect.x = child_allocation.x;
-      else
-        rect.x = child_allocation.x + child_allocation.width - MAX_OVERSHOOT_DISTANCE;
-
-      rect.y = child_allocation.y;
-      rect.width = MAX_OVERSHOOT_DISTANCE;
-      rect.height = child_allocation.height;
-
-      gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (scrolled_window)),
-                                  &rect, TRUE);
+      gtk_widget_queue_draw_area (GTK_WIDGET (scrolled_window),
+                                  overshoot_x < 0 ? child_allocation.x :
+                                      child_allocation.x + child_allocation.width - MAX_OVERSHOOT_DISTANCE,
+                                  child_allocation.y,
+                                  MAX_OVERSHOOT_DISTANCE,
+                                  child_allocation.height);
     }
 
   if (overshoot_y != 0)
     {
-      if (overshoot_y < 0)
-        rect.y = child_allocation.y;
-      else
-        rect.y = child_allocation.y + child_allocation.height - MAX_OVERSHOOT_DISTANCE;
-
-      rect.x = child_allocation.x;
-      rect.width = child_allocation.width;
-      rect.height = MAX_OVERSHOOT_DISTANCE;
-
-      gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (scrolled_window)),
-                                  &rect, TRUE);
+      gtk_widget_queue_draw_area (GTK_WIDGET (scrolled_window),
+                                  child_allocation.x,
+                                  overshoot_y < 0 ? child_allocation.y :
+                                      child_allocation.y + child_allocation.height - MAX_OVERSHOOT_DISTANCE,
+                                  child_allocation.width,
+                                  MAX_OVERSHOOT_DISTANCE);
     }
 }
 
