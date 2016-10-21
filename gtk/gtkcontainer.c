@@ -547,7 +547,7 @@ gtk_container_class_init (GtkContainerClass *class)
                            P_("Child"),
                            P_("Can be used to add a new child to the container"),
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_WRITABLE);
+                           GTK_PARAM_WRITABLE|G_PARAM_DEPRECATED);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, container_props);
 
