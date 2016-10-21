@@ -42,10 +42,8 @@
 #include "gtkprint-win32.h"
 #include "gtkintl.h"
 #include "gtkinvisible.h"
-#include "gtkplug.h"
-#include "gtk.h"
-#include "gtkwin32embedwidget.h"
 #include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 
 #define MAX_PAGE_RANGES 20
 #define STATUS_POLLING_TIME 2000
@@ -1349,7 +1347,6 @@ plug_grab_notify (GtkWidget        *widget,
 		was_grabbed);
 }
 
-
 static INT_PTR CALLBACK
 pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
@@ -1363,10 +1360,12 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 
       op = GTK_PRINT_OPERATION ((gpointer)page->lParam);
       op_win32 = op->priv->platform_data;
+      plug = g_object_new(GTK_TYPE_WIDGET, NULL);
 
       SetWindowLongPtrW (wnd, GWLP_USERDATA, (LONG_PTR)op);
-      
-      plug = _gtk_win32_embed_widget_new (wnd);
+
+      _gtk_widget_set_is_toplevel (plug, TRUE);
+
       gtk_window_set_modal (GTK_WINDOW (plug), TRUE);
       op_win32->embed_widget = plug;
       gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);
@@ -1396,8 +1395,22 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       op = GTK_PRINT_OPERATION (GetWindowLongPtrW (wnd, GWLP_USERDATA));
       op_win32 = op->priv->platform_data;
 
-      return _gtk_win32_embed_widget_dialog_procedure (GTK_WIN32_EMBED_WIDGET (op_win32->embed_widget),
-						       wnd, message, wparam, lparam);
+      /* TODO: We don't have GtkWin32EmbedWidgets anymore, but it is not currently clear
+       *       at this point what will be the proper replacement for this.  For now,
+       *       do the message handling that was in _gtk_win32_embed_widget_dialog_procedure ()
+       *       here and fill in the rest when things become clearer.
+       */
+      if (message == WM_SIZE)
+        {
+          GtkAllocation alloc;
+          alloc.width = LOWORD (lparam);
+          alloc.height = HIWORD (lparam);
+
+          gtk_widget_set_allocation (op_win32->embed_widget, &alloc);
+          gtk_widget_queue_resize (op_win32->embed_widget);
+        }
+
+      return FALSE;
     }
   
   return FALSE;
