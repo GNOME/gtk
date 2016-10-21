@@ -4794,7 +4794,8 @@ gdk_window_thaw_toplevel_updates (GdkWindow *window)
  * yourself, though you might want to use this function to enable
  * updates sometime after application startup time.
  *
- **/
+ * Deprecated: 3.22
+ */
 void
 gdk_window_set_debug_updates (gboolean setting)
 {

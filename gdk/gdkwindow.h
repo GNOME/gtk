@@ -1061,7 +1061,7 @@ void       gdk_window_process_updates     (GdkWindow    *window,
 					   gboolean      update_children);
 
 /* Enable/disable flicker, so you can tell if your code is inefficient. */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 void       gdk_window_set_debug_updates   (gboolean      setting);
 
 GDK_AVAILABLE_IN_ALL

@@ -736,8 +736,10 @@ do_post_parse_initialization (int    *argc,
       g_log_set_always_fatal (fatal_mask);
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (debug_flags[0].flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
