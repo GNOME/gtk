@@ -16621,8 +16621,8 @@ void
 _gtk_widget_set_style (GtkWidget *widget,
                        GtkStyle  *style)
 {
-  g_signal_emit (widget, widget_signals[STYLE_SET], 0, widget->priv->style);
   widget->priv->style = style;
+  g_signal_emit (widget, widget_signals[STYLE_SET], 0, widget->priv->style);
 }
 
 GtkActionMuxer *
