@@ -121,6 +121,15 @@
       </para>
     </section>
 
+    <section>
+      <title>Stop using GtkContainer::border-width</title>
+      <para>
+        GTK+ 4 has removed the #GtkContainer::border-width property.
+        Use other means to influence the spacing of your containers.
+        FIXME: what are those ?
+      </para>
+    </section>
+
   </section>
 
 </chapter>
