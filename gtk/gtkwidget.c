@@ -4475,13 +4475,9 @@ gtk_widget_show_all (GtkWidget *widget)
 void
 gtk_widget_map (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (_gtk_widget_get_visible (widget));
   g_return_if_fail (_gtk_widget_get_child_visible (widget));
-
-  priv = widget->priv;
 
   if (!_gtk_widget_get_mapped (widget))
     {
@@ -4493,7 +4489,7 @@ gtk_widget_map (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[MAP], 0);
 
       if (!_gtk_widget_get_has_window (widget))
-        gdk_window_invalidate_rect (priv->window, &priv->clip, FALSE);
+        gtk_widget_queue_draw (widget);
 
       gtk_widget_pop_verify_invariants (widget);
     }
@@ -4509,11 +4505,7 @@ gtk_widget_map (GtkWidget *widget)
 void
 gtk_widget_unmap (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   if (_gtk_widget_get_mapped (widget))
     {
@@ -4521,7 +4513,7 @@ gtk_widget_unmap (GtkWidget *widget)
       gtk_widget_push_verify_invariants (widget);
 
       if (!_gtk_widget_get_has_window (widget))
-	gdk_window_invalidate_rect (priv->window, &priv->clip, FALSE);
+	gtk_widget_queue_draw (widget);
       _gtk_tooltip_hide (widget);
 
       g_signal_emit (widget, widget_signals[UNMAP], 0);
@@ -5608,7 +5600,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 	  cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->clip);
 	  cairo_region_union_rectangle (invalidate, &old_clip);
 
-	  gdk_window_invalidate_region (priv->window, invalidate, FALSE);
+	  gtk_widget_queue_draw_region (widget, invalidate);
 	  cairo_region_destroy (invalidate);
 	}
 
