@@ -2976,22 +2976,20 @@ static void
 calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
 {
   GdkDisplay *display;
-  GdkScreen *screen;
-  gint n_monitors, monitor, other_monitor;
+  gint n_monitors, monitor_idx, other_monitor_idx;
 #if defined(MORE_AEROSNAP_DEBUGGING)
   gint i;
 #endif
 
   display = gdk_display_get_default ();
-  screen = gdk_display_get_default_screen (display);
-  n_monitors = gdk_screen_get_n_monitors (screen);
+  n_monitors = gdk_display_get_n_monitors (display);
 
 #define _M_UP 0
 #define _M_DOWN 1
 #define _M_LEFT 2
 #define _M_RIGHT 3
 
-  for (monitor = 0; monitor < n_monitors; monitor++)
+  for (monitor_idx = 0; monitor_idx < n_monitors; monitor_idx++)
     {
       GdkRectangle wa;
       GdkRectangle geometry;
@@ -3000,22 +2998,26 @@ calculate_aerosnap_regions (GdkW32DragMoveResizeContext *context)
       gboolean resize_edge[2] = { TRUE, TRUE };
       gint diff;
       gint thickness, trigger_thickness;
+      GdkMonitor *monitor;
 
-      gdk_screen_get_monitor_workarea (screen, monitor, &wa);
-      gdk_screen_get_monitor_geometry (screen, monitor, &geometry);
+      monitor = gdk_display_get_monitor (display, monitor_idx);
+      gdk_monitor_get_workarea (monitor, &wa);
+      gdk_monitor_get_geometry (monitor, &geometry);
 
-      for (other_monitor = 0;
-           other_monitor < n_monitors &&
+      for (other_monitor_idx = 0;
+           other_monitor_idx < n_monitors &&
            (move_edge[_M_UP] || move_edge[_M_LEFT] ||
            move_edge[_M_RIGHT] || resize_edge[_M_DOWN]);
-           other_monitor++)
+           other_monitor_idx++)
         {
           GdkRectangle other_wa;
+          GdkMonitor *other_monitor;
 
-          if (other_monitor == monitor)
+          if (other_monitor_idx == monitor_idx)
             continue;
 
-          gdk_screen_get_monitor_workarea (screen, other_monitor, &other_wa);
+          other_monitor = gdk_display_get_monitor (display, other_monitor_idx);
+          gdk_monitor_get_workarea (other_monitor, &other_wa);
 
           /* An edge triggers AeroSnap only if there are no
            * monitors beyond that edge.
@@ -3149,8 +3151,7 @@ discard_snapinfo (GdkWindow *window)
 
 static void
 unsnap (GdkWindow  *window,
-        GdkScreen  *screen,
-        gint        monitor)
+        GdkMonitor *monitor)
 {
   GdkWindowImplWin32 *impl;
   GdkRectangle rect;
@@ -3162,7 +3163,7 @@ unsnap (GdkWindow  *window,
   if (impl->snap_stash == NULL)
     return;
 
-  gdk_screen_get_monitor_workarea (screen, monitor, &rect);
+  gdk_monitor_get_workarea (monitor, &rect);
 
   GDK_NOTE (MISC, g_print ("Monitor work area %d x %d @ %d : %d\n", rect.width, rect.height, rect.x, rect.y));
 
@@ -3227,9 +3228,7 @@ unsnap (GdkWindow  *window,
 
 static void
 stash_window (GdkWindow          *window,
-              GdkWindowImplWin32 *impl,
-              GdkScreen          *screen,
-              gint                monitor)
+              GdkWindowImplWin32 *impl)
 {
   gint x, y;
   gint width;
@@ -3298,9 +3297,7 @@ stash_window (GdkWindow          *window,
 }
 
 static void
-snap_up (GdkWindow *window,
-         GdkScreen *screen,
-         gint       monitor)
+snap_up (GdkWindow *window)
 {
   SHORT maxysize;
   gint x, y;
@@ -3311,7 +3308,7 @@ snap_up (GdkWindow *window,
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_FULLUP;
 
-  stash_window (window, impl, screen, monitor);
+  stash_window (window, impl);
 
   maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN);
   gdk_window_get_position (window, &x, &y);
@@ -3329,10 +3326,9 @@ snap_up (GdkWindow *window,
 }
 
 static void
-snap_left (GdkWindow *window,
-           GdkScreen *screen,
-           gint       monitor,
-           gint       snap_monitor)
+snap_left (GdkWindow  *window,
+           GdkMonitor *monitor,
+           GdkMonitor *snap_monitor)
 {
   GdkRectangle rect;
   GdkWindowImplWin32 *impl;
@@ -3341,9 +3337,9 @@ snap_left (GdkWindow *window,
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFLEFT;
 
-  gdk_screen_get_monitor_workarea (screen, snap_monitor, &rect);
+  gdk_monitor_get_workarea (snap_monitor, &rect);
 
-  stash_window (window, impl, screen, monitor);
+  stash_window (window, impl);
 
   rect.width = rect.width / 2;
 
@@ -3356,10 +3352,9 @@ snap_left (GdkWindow *window,
 }
 
 static void
-snap_right (GdkWindow *window,
-            GdkScreen *screen,
-            gint       monitor,
-            gint       snap_monitor)
+snap_right (GdkWindow  *window,
+            GdkMonitor *monitor,
+            GdkMonitor *snap_monitor)
 {
   GdkRectangle rect;
   GdkWindowImplWin32 *impl;
@@ -3368,9 +3363,9 @@ snap_right (GdkWindow *window,
 
   impl->snap_state = GDK_WIN32_AEROSNAP_STATE_HALFRIGHT;
 
-  gdk_screen_get_monitor_workarea (screen, snap_monitor, &rect);
+  gdk_monitor_get_workarea (snap_monitor, &rect);
 
-  stash_window (window, impl, screen, monitor);
+  stash_window (window, impl);
 
   rect.width /= 2;
   rect.x += rect.width;
@@ -3389,18 +3384,17 @@ _gdk_win32_window_handle_aerosnap (GdkWindow            *window,
 {
   GdkWindowImplWin32 *impl;
   GdkDisplay *display;
-  GdkScreen *screen;
-  gint n_monitors, monitor;
+  gint n_monitors;
   GdkWindowState window_state = gdk_window_get_state (window);
   gboolean minimized = window_state & GDK_WINDOW_STATE_ICONIFIED;
   gboolean maximized = window_state & GDK_WINDOW_STATE_MAXIMIZED;
   gboolean halfsnapped;
+  GdkMonitor *monitor;
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   display = gdk_window_get_display (window);
-  screen = gdk_display_get_default_screen (display);
-  n_monitors = gdk_screen_get_n_monitors (screen);
-  monitor = gdk_screen_get_monitor_at_window (screen, window);
+  n_monitors = gdk_display_get_n_monitors (display);
+  monitor = gdk_display_get_monitor_at_window (display, window);
 
   if (minimized && maximized)
     minimized = FALSE;
@@ -3417,7 +3411,7 @@ _gdk_win32_window_handle_aerosnap (GdkWindow            *window,
     case GDK_WIN32_AEROSNAP_COMBO_UP:
       if (!maximized)
         {
-	  unsnap (window, screen, monitor);
+	  unsnap (window, monitor);
           gdk_window_maximize (window);
         }
       break;
@@ -3426,10 +3420,10 @@ _gdk_win32_window_handle_aerosnap (GdkWindow            *window,
       if (maximized)
         {
 	  gdk_window_unmaximize (window);
-	  unsnap (window, screen, monitor);
+	  unsnap (window, monitor);
         }
       else if (halfsnapped)
-	unsnap (window, screen, monitor);
+	unsnap (window, monitor);
       else if (!minimized)
 	gdk_window_iconify (window);
       break;
@@ -3440,17 +3434,19 @@ _gdk_win32_window_handle_aerosnap (GdkWindow            *window,
       if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_UNDETERMINED ||
 	  impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP)
 	{
-	  unsnap (window, screen, monitor);
-	  snap_left (window, screen, monitor, monitor);
+	  unsnap (window, monitor);
+	  snap_left (window, monitor, monitor);
 	}
       else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT)
 	{
-	  unsnap (window, screen, monitor);
-	  snap_right (window, screen, monitor, monitor - 1 >= 0 ? monitor - 1 : n_monitors - 1);
+	  unsnap (window, monitor);
+	  snap_right (window,
+	              monitor,
+	              gdk_monitor_is_primary (monitor) ? monitor : gdk_display_get_monitor (display, n_monitors - 1));
 	}
       else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT)
 	{
-	  unsnap (window, screen, monitor);
+	  unsnap (window, monitor);
 	}
       break;
     case GDK_WIN32_AEROSNAP_COMBO_RIGHT:
@@ -3460,24 +3456,40 @@ _gdk_win32_window_handle_aerosnap (GdkWindow            *window,
       if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_UNDETERMINED ||
 	  impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP)
 	{
-	  unsnap (window, screen, monitor);
-	  snap_right (window, screen, monitor, monitor);
+	  unsnap (window, monitor);
+	  snap_right (window, monitor, monitor);
 	}
       else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT)
 	{
-	  unsnap (window, screen, monitor);
+	  unsnap (window, monitor);
 	}
       else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT)
 	{
-	  unsnap (window, screen, monitor);
-	  snap_left (window, screen, monitor, monitor + 1 < n_monitors ? monitor + 1 : 0);
+	  gint i;
+
+	  unsnap (window, monitor);
+	  if (n_monitors == 1 ||
+	      monitor == gdk_display_get_monitor (display, n_monitors - 1))
+	    {
+	      snap_left (window, monitor, monitor);
+	    }
+	  else
+	    {
+	      for (i = 0; i < n_monitors; i++)
+	        {
+	          if (monitor == gdk_display_get_monitor (display, i))
+	            break;
+	        }
+
+	      snap_left (window, monitor, gdk_display_get_monitor (display, i + 1));
+	    }
 	}
       break;
     case GDK_WIN32_AEROSNAP_COMBO_SHIFTUP:
       if (!maximized &&
           impl->snap_state == GDK_WIN32_AEROSNAP_STATE_UNDETERMINED)
 	{
-	  snap_up (window, screen, monitor);
+	  snap_up (window);
 	}
       break;
     case GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT:
@@ -3491,30 +3503,30 @@ static void
 apply_snap (GdkWindow             *window,
             GdkWin32AeroSnapState  snap)
 {
-  GdkScreen *screen;
-  gint monitor;
+  GdkMonitor *monitor;
+  GdkDisplay *display;
 
-  screen = gdk_display_get_default_screen (gdk_window_get_display (window));
-  monitor = gdk_screen_get_monitor_at_window (screen, window);
+  display = gdk_window_get_display (window);
+  monitor = gdk_display_get_monitor_at_window (display, window);
 
   switch (snap)
     {
     case GDK_WIN32_AEROSNAP_STATE_UNDETERMINED:
       break;
     case GDK_WIN32_AEROSNAP_STATE_MAXIMIZE:
-      unsnap (window, screen, monitor);
+      unsnap (window, monitor);
       gdk_window_maximize (window);
       break;
     case GDK_WIN32_AEROSNAP_STATE_HALFLEFT:
-      unsnap (window, screen, monitor);
-      snap_left (window, screen, monitor, monitor);
+      unsnap (window, monitor);
+      snap_left (window, monitor, monitor);
       break;
     case GDK_WIN32_AEROSNAP_STATE_HALFRIGHT:
-      unsnap (window, screen, monitor);
-      snap_right (window, screen, monitor, monitor);
+      unsnap (window, monitor);
+      snap_right (window, monitor, monitor);
       break;
     case GDK_WIN32_AEROSNAP_STATE_FULLUP:
-      snap_up (window, screen, monitor);
+      snap_up (window);
       break;
     }
 }
@@ -4003,15 +4015,15 @@ start_indicator (GdkWindow                   *window,
                  gint                         y,
                  GdkWin32AeroSnapState        state)
 {
-  GdkScreen *screen;
-  gint monitor;
+  GdkMonitor *monitor;
   GdkRectangle workarea;
   SHORT maxysize;
   GdkRectangle start_size, end_size;
+  GdkDisplay *display;
 
-  screen = gdk_window_get_screen (window);
-  monitor = gdk_screen_get_monitor_at_point (screen, x, y);
-  gdk_screen_get_monitor_workarea (screen, monitor, &workarea);
+  display = gdk_window_get_display (window);
+  monitor = gdk_display_get_monitor_at_point (display, x, y);
+  gdk_monitor_get_workarea (monitor, &workarea);
 
   maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN);
   gdk_window_get_position (window, &start_size.x, &start_size.y);
@@ -4409,15 +4421,17 @@ setup_drag_move_resize_context (GdkWindow                   *window,
             impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP))
     {
       GdkScreen *screen;
-      gint monitor;
+      GdkMonitor *monitor;
       gint wx, wy, wwidth, wheight;
       gint swx, swy, swwidth, swheight;
       gboolean pointer_outside_of_window;
       gint offsetx, offsety;
       gboolean left_half;
+      GdkDisplay *display;
 
-      screen = gdk_display_get_default_screen (gdk_window_get_display (window));
-      monitor = gdk_screen_get_monitor_at_window (screen, window);
+      display = gdk_window_get_display (window);
+      screen = gdk_display_get_default_screen (display);
+      monitor = gdk_display_get_monitor_at_window (display, window);
       gdk_window_get_geometry (window, &wx, &wy, &wwidth, &wheight);
 
       swx = wx;
@@ -4564,7 +4578,7 @@ setup_drag_move_resize_context (GdkWindow                   *window,
       if (maximized)
         gdk_window_unmaximize (window);
       else
-        unsnap (window, screen, monitor);
+        unsnap (window, monitor);
 
       if (pointer_outside_of_window)
         {
