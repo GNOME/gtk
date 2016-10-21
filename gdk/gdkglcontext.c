@@ -811,6 +811,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
       priv->has_frame_terminator = epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator");
       priv->has_unpack_subimage = TRUE;
+
+      /* We asked for a core profile, but we didn't get one, so we're in legacy mode */
+      if (priv->gl_version < 32)
+        priv->is_legacy = TRUE;
     }
 
   if (!priv->use_es && G_UNLIKELY (_gdk_gl_flags & GDK_GL_TEXTURE_RECTANGLE))
@@ -823,7 +827,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
     g_warning ("GL implementation doesn't support any form of non-power-of-two textures");
 
   GDK_NOTE (OPENGL,
-            g_message ("%s version: %d.%d\n"
+            g_message ("%s version: %d.%d (%s)\n"
+                       "* GLSL version: %s\n"
                        "* Extensions checked:\n"
                        " - GL_ARB_texture_non_power_of_two: %s\n"
                        " - GL_ARB_texture_rectangle: %s\n"
@@ -832,6 +837,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        "* Using texture rectangle: %s",
                        priv->use_es ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
+                       priv->is_legacy ? "legacy" : "core",
+                       glGetString (GL_SHADING_LANGUAGE_VERSION),
                        has_npot ? "yes" : "no",
                        has_texture_rectangle ? "yes" : "no",
                        priv->has_gl_framebuffer_blit ? "yes" : "no",
