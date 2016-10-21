@@ -5680,6 +5680,8 @@ gtk_window_finalize (GObject *object)
   if (priv->drag_gesture)
     g_object_unref (priv->drag_gesture);
 
+  g_clear_object (&priv->renderer);
+
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
 
