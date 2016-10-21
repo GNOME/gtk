@@ -858,7 +858,7 @@ arrow {
 ]]></programlisting>
     </example>
 
-<literallayout><code>〈recolored image〉 = -gtk-recolored( 〈url〉[, 〈color palette〉] )</code>
+<literallayout><code>〈recolored image〉 = -gtk-recolor( 〈url〉[, 〈color palette〉] )</code>
 </literallayout>
 
     <para>
