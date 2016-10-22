@@ -78,7 +78,6 @@ enum {
   PROP_SURFACE,
   PROP_STOCK_SIZE,
   PROP_STOCK_DETAIL,
-  PROP_FOLLOW_STATE,
   PROP_ICON_NAME,
   PROP_GICON
 };
@@ -91,8 +90,6 @@ struct _GtkCellRendererPixbufPrivate
 
   GdkPixbuf *pixbuf_expander_open;
   GdkPixbuf *pixbuf_expander_closed;
-
-  gboolean follow_state;
 
   gchar *stock_detail;
 };
@@ -109,7 +106,6 @@ gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
 
   priv->image_def = gtk_image_definition_new_empty ();
   priv->icon_size = GTK_ICON_SIZE_MENU;
-  priv->follow_state = TRUE;
 }
 
 static void
@@ -217,25 +213,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							GTK_PARAM_READWRITE));
 
   /**
-   * GtkCellRendererPixbuf:follow-state:
-   *
-   * Specifies whether the rendered pixbuf should be colorized
-   * according to the #GtkCellRendererState.
-   *
-   * Since: 2.8
-   *
-   * Deprecated: 3.16: Cell renderers always follow state.
-   */
-  g_object_class_install_property (object_class,
-				   PROP_FOLLOW_STATE,
-				   g_param_spec_boolean ("follow-state",
- 							 P_("Follow State"),
- 							 P_("Whether the rendered pixbuf should be "
-							    "colorized according to the state"),
- 							 TRUE,
- 							 GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
-
-  /**
    * GtkCellRendererPixbuf:gicon:
    *
    * The GIcon representing the icon to display.
@@ -285,9 +262,6 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       break;
     case PROP_STOCK_DETAIL:
       g_value_set_string (value, priv->stock_detail);
-      break;
-    case PROP_FOLLOW_STATE:
-      g_value_set_boolean (value, priv->follow_state);
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_image_definition_get_icon_name (priv->image_def));
@@ -384,9 +358,6 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       break;
     case PROP_ICON_NAME:
       take_image_definition (cellpixbuf, gtk_image_definition_new_icon_name (g_value_get_string (value)));
-      break;
-    case PROP_FOLLOW_STATE:
-      priv->follow_state = g_value_get_boolean (value);
       break;
     case PROP_GICON:
       take_image_definition (cellpixbuf, gtk_image_definition_new_gicon (g_value_get_object (value)));
