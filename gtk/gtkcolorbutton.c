@@ -282,8 +282,6 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
   g_signal_emit (button, color_button_signals[COLOR_SET], 0);
 
   g_object_freeze_notify (G_OBJECT (button));
-  g_object_notify (G_OBJECT (button), "color");
-  g_object_notify (G_OBJECT (button), "alpha");
   g_object_notify (G_OBJECT (button), "rgba");
   g_object_thaw_notify (G_OBJECT (button));
 }
@@ -472,8 +470,6 @@ dialog_response (GtkDialog *dialog,
       g_signal_emit (button, color_button_signals[COLOR_SET], 0);
 
       g_object_freeze_notify (G_OBJECT (button));
-      g_object_notify (G_OBJECT (button), "color");
-      g_object_notify (G_OBJECT (button), "alpha");
       g_object_notify (G_OBJECT (button), "rgba");
       g_object_thaw_notify (G_OBJECT (button));
       g_object_unref (button);
