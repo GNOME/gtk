@@ -4310,8 +4310,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   /* widget->window doesn't get auto-redrawn as the layout is computed, so has to
    * be invalidated
    */
-  if (size_changed && gtk_widget_get_realized (widget))
-    gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE);
+  if (size_changed)
+    gtk_widget_queue_draw (widget);
 }
 
 static void
@@ -8705,8 +8705,10 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
        */
       if (priv->width_changed)
 	{
-	  if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
-	    gdk_window_invalidate_rect (priv->text_window->bin_window, NULL, FALSE);
+          GdkRectangle *rect = &priv->text_window->allocation;
+          gtk_widget_queue_draw_area (GTK_WIDGET (text_view),
+                                      rect->x, rect->y,
+                                      rect->width, rect->height);
 	  
 	  priv->width_changed = FALSE;
 	}
@@ -9842,6 +9844,7 @@ static void
 text_window_invalidate_rect (GtkTextWindow *win,
                              GdkRectangle  *rect)
 {
+  GtkTextViewPrivate *priv = GTK_TEXT_VIEW (win->widget)->priv;
   GdkRectangle window_rect;
 
   if (!win->bin_window)
@@ -9862,16 +9865,20 @@ text_window_invalidate_rect (GtkTextWindow *win,
   switch (win->type)
     {
     case GTK_TEXT_WINDOW_TEXT:
+      window_rect.x -= priv->xoffset;
+      window_rect.y -= priv->yoffset;
       break;
 
     case GTK_TEXT_WINDOW_LEFT:
     case GTK_TEXT_WINDOW_RIGHT:
       window_rect.x = 0;
+      window_rect.y -= priv->yoffset;
       window_rect.width = win->allocation.width;
       break;
 
     case GTK_TEXT_WINDOW_TOP:
     case GTK_TEXT_WINDOW_BOTTOM:
+      window_rect.x -= priv->xoffset;
       window_rect.y = 0;
       window_rect.height = win->allocation.height;
       break;
@@ -9882,7 +9889,14 @@ text_window_invalidate_rect (GtkTextWindow *win,
       break;
     }
           
-  gdk_window_invalidate_rect (win->bin_window, &window_rect, FALSE);
+  window_rect.x += win->allocation.x;
+  window_rect.y += win->allocation.y;
+  if (!gdk_rectangle_intersect (&window_rect, &win->allocation, &window_rect))
+    return;
+
+  gtk_widget_queue_draw_area (win->widget,
+                              window_rect.x, window_rect.y,
+                              window_rect.width, window_rect.height);
 }
 
 static void
