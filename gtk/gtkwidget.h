@@ -199,30 +199,10 @@ struct _GtkWidget
  *   to both of the virtual methods #GtkWidgetClass.get_preferred_height_for_width()
  *   and #GtkWidgetClass.get_preferred_width_for_height() since it might be 
  *   queried in either #GtkSizeRequestMode by its parent container.
- * @get_preferred_height: This is called by containers to obtain the minimum
- *   and natural height of a widget. A widget that does not actually trade
- *   any height for width or width for height only has to implement these
- *   two virtual methods (#GtkWidgetClass.get_preferred_width() and
- *   #GtkWidgetClass.get_preferred_height()).
- * @get_preferred_width_for_height: This is analogous to
- *   #GtkWidgetClass.get_preferred_height_for_width() except that it
- *   operates in the oposite orientation. It’s rare that a widget actually
- *   does %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT requests but this can happen
- *   when, for example, a widget or container gets additional columns to
- *   compensate for a smaller allocated height.
- * @get_preferred_width: This is called by containers to obtain the minimum
- *   and natural width of a widget. A widget will never be allocated a width
- *   less than its minimum and will only ever be allocated a width greater
- *   than the natural width once all of the said widget’s siblings have
- *   received their natural widths.
- *   Furthermore, a widget will only ever be allocated a width greater than
- *   its natural width if it was configured to receive extra expand space
- *   from its parent container.
- * @get_preferred_height_for_width: This is similar to
- *   #GtkWidgetClass.get_preferred_height() except that it is passed a
- *   contextual width to request height for. By implementing this virtual
- *   method it is possible for a #GtkLabel to tell its parent how much height
- *   would be required if the label were to be allocated a said width.
+ * @measure: This is called by containers to obtain the minimum and natural
+ *   size of the widget. Depending on the orientation parameter, the passed
+ *   for_size can be interpreted as width or height. A widget will never be
+ *   allocated less than its minimum size.
  * @mnemonic_activate: Activates the @widget if @group_cycling is
  *   %FALSE, and just grabs the focus if @group_cycling is %TRUE.
  * @grab_focus: Causes @widget to have the keyboard focus for the

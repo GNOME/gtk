@@ -808,6 +808,29 @@ gtk_distribute_natural_allocation (gint              extra_space,
   return extra_space;
 }
 
+/**
+ * gtk_widget_measure:
+ * @widget: A #GtkWidget instance
+ * @orientation: the orientation to measure
+ * @for_size: Size for the opposite of @orientation, i.e.
+ *   if @orientation is %GTK_ORIENTATION_HORIZONTAL, this is
+ *   the height the widget should be measured with. The %GTK_ORIENTATION_VERTICAL
+ *   case is analogous. This way, both height-for-width and width-for-height
+ *   requests can be implemented. If no size is known, -1 can be passed.
+ * @minimum: (out) (optional): location to store the minimum size, or %NULL
+ * @natural: (out) (optional): location to store the natural size, or %NULL
+ * @minimum_baseline: (out) (optional): location to store the baseline
+ *   position for the minimum size, or %NULL
+ * @natural_baseline: (out) (optional): location to store the baseline
+ *   position for the natural size, or %NULL
+ *
+ * Measures @widget in the orientation @orientation and for the given @for_size.
+ * As an example, if @orientation is GTK_ORIENTATION_HORIZONTAL and @for_size is 300,
+ * this functions will compute the minimum and natural width of @widget if
+ * it is allocated at a height of 300 pixels.
+ *
+ * Since: 3.90
+ */
 void
 gtk_widget_measure (GtkWidget      *widget,
                     GtkOrientation  orientation,
@@ -819,6 +842,8 @@ gtk_widget_measure (GtkWidget      *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (for_size >= -1);
+  g_return_if_fail (orientation == GTK_ORIENTATION_HORIZONTAL ||
+                    orientation == GTK_ORIENTATION_VERTICAL);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
