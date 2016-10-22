@@ -1299,51 +1299,6 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
 }
 
 /**
- * gtk_cell_view_get_size_of_row:
- * @cell_view: a #GtkCellView
- * @path: a #GtkTreePath 
- * @requisition: (out): return location for the size 
- *
- * Sets @requisition to the size needed by @cell_view to display 
- * the model row pointed to by @path.
- * 
- * Returns: %TRUE
- *
- * Since: 2.6
- * 
- * Deprecated: 3.0: Combo box formerly used this to calculate the
- * sizes for cellviews, now you can achieve this by either using
- * the #GtkCellView:fit-model property or by setting the currently
- * displayed row of the #GtkCellView and using gtk_widget_get_preferred_size().
- */
-gboolean
-gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
-                               GtkTreePath    *path,
-                               GtkRequisition *requisition)
-{
-  GtkTreeRowReference *tmp;
-  GtkRequisition req;
-
-  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
-
-  tmp = cell_view->priv->displayed_row;
-  cell_view->priv->displayed_row =
-    gtk_tree_row_reference_new (cell_view->priv->model, path);
-
-  gtk_widget_get_preferred_width (GTK_WIDGET (cell_view), &req.width, NULL);
-  gtk_widget_get_preferred_height_for_width (GTK_WIDGET (cell_view), req.width, &req.height, NULL);
-
-  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
-  cell_view->priv->displayed_row = tmp;
-
-  if (requisition)
-    *requisition = req;
-
-  return TRUE;
-}
-
-/**
  * gtk_cell_view_set_background_rgba:
  * @cell_view: a #GtkCellView
  * @rgba: the new background color

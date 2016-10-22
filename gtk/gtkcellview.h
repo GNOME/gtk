@@ -103,10 +103,6 @@ GDK_AVAILABLE_IN_ALL
 void              gtk_cell_view_set_fit_model           (GtkCellView     *cell_view,
                                                          gboolean         fit_model);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
-gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_view,
-                                                         GtkTreePath     *path,
-                                                         GtkRequisition  *requisition);
 G_END_DECLS
 
 #endif /* __GTK_CELL_VIEW_H__ */
