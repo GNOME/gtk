@@ -190,12 +190,13 @@ static void     gtk_scale_get_property            (GObject        *object,
                                                    guint           prop_id,
                                                    GValue         *value,
                                                    GParamSpec     *pspec);
-static void     gtk_scale_get_preferred_width     (GtkWidget      *widget,
-                                                   gint           *minimum,
-                                                   gint           *natural);
-static void     gtk_scale_get_preferred_height    (GtkWidget      *widget,
-                                                   gint           *minimum,
-                                                   gint           *natural);
+static void     gtk_scale_measure (GtkWidget      *widget,
+                                   GtkOrientation  orientation,
+                                   int             for_size,
+                                   int            *minimum,
+                                   int            *natural,
+                                   int            *minimum_baseline,
+                                   int            *natural_baseline);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
 static void     gtk_scale_get_range_size_request  (GtkRange       *range,
@@ -718,8 +719,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   widget_class->screen_changed = gtk_scale_screen_changed;
   widget_class->draw = gtk_scale_draw;
   widget_class->size_allocate = gtk_scale_size_allocate;
-  widget_class->get_preferred_width = gtk_scale_get_preferred_width;
-  widget_class->get_preferred_height = gtk_scale_get_preferred_height;
+  widget_class->measure = gtk_scale_measure;
 
   range_class->get_range_border = gtk_scale_get_range_border;
   range_class->get_range_size_request = gtk_scale_get_range_size_request;
@@ -1699,66 +1699,42 @@ gtk_scale_measure_marks (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_scale_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
+gtk_scale_measure (GtkWidget      *widget,
+                   GtkOrientation  orientation,
+                   int             for_size,
+                   int            *minimum,
+                   int            *natural,
+                   int            *minimum_baseline,
+                   int            *natural_baseline)
 {
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = scale->priv;
 
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->get_preferred_width (widget, minimum, natural);
-  
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL)
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->measure (widget,
+                                                      orientation,
+                                                      for_size,
+                                                      minimum, natural,
+                                                      minimum_baseline, natural_baseline);
+
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == orientation)
     {
-      int top_marks_width = 0, bottom_marks_width = 0, marks_width;
+      int top_marks_size = 0, bottom_marks_size = 0, marks_size;
 
       if (priv->top_marks_gadget)
         gtk_css_gadget_get_preferred_size (priv->top_marks_gadget,
-                                           GTK_ORIENTATION_HORIZONTAL, -1,
-                                           &top_marks_width, NULL,
+                                           orientation, for_size,
+                                           &top_marks_size, NULL,
                                            NULL, NULL);
       if (priv->bottom_marks_gadget)
         gtk_css_gadget_get_preferred_size (priv->bottom_marks_gadget,
-                                           GTK_ORIENTATION_HORIZONTAL, -1,
-                                           &bottom_marks_width, NULL,
+                                           orientation, for_size,
+                                           &bottom_marks_size, NULL,
                                            NULL, NULL);
 
-      marks_width = MAX (top_marks_width, bottom_marks_width);
+      marks_size = MAX (top_marks_size, bottom_marks_size);
 
-      *minimum = MAX (*minimum, marks_width);
-      *natural = MAX (*natural, marks_width);
-    }
-}
-
-static void
-gtk_scale_get_preferred_height (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
-{
-  GtkScale *scale = GTK_SCALE (widget);
-  GtkScalePrivate *priv = scale->priv;
-
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->get_preferred_height (widget, minimum, natural);
-
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
-    {
-      int top_marks_height = 0, bottom_marks_height = 0, marks_height;
-
-      if (priv->top_marks_gadget)
-        gtk_css_gadget_get_preferred_size (priv->top_marks_gadget,
-                                           GTK_ORIENTATION_VERTICAL, -1,
-                                           &top_marks_height, NULL,
-                                           NULL, NULL);
-      if (priv->bottom_marks_gadget)
-        gtk_css_gadget_get_preferred_size (priv->bottom_marks_gadget,
-                                           GTK_ORIENTATION_VERTICAL, -1,
-                                           &bottom_marks_height, NULL,
-                                           NULL, NULL);
-
-      marks_height = MAX (top_marks_height, bottom_marks_height);
-
-      *minimum = MAX (*minimum, marks_height);
-      *natural = MAX (*natural, marks_height);
+      *minimum = MAX (*minimum, marks_size);
+      *natural = MAX (*natural, marks_size);
     }
 }
 

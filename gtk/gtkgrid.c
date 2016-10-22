@@ -1488,66 +1488,17 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
 }
 
 static void
-gtk_grid_get_preferred_width (GtkWidget *widget,
-                              gint      *minimum,
-                              gint      *natural)
+gtk_grid_measure_ (GtkWidget     *widget,
+                  GtkOrientation  orientation,
+                  int             for_size,
+                  int            *minimum,
+                  int            *natural,
+                  int            *minimum_baseline,
+                  int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_GRID (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_grid_get_preferred_height (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_GRID (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_grid_get_preferred_width_for_height (GtkWidget *widget,
-                                         gint       height,
-                                         gint      *minimum,
-                                         gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_GRID (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_grid_get_preferred_height_for_width (GtkWidget *widget,
-                                         gint       width,
-                                         gint      *minimum,
-                                         gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_GRID (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_grid_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-						      gint       width,
-						      gint      *minimum,
-						      gint      *natural,
-						      gint      *minimum_baseline,
-						      gint      *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_GRID (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
                                      minimum_baseline, natural_baseline);
 }
@@ -1732,11 +1683,7 @@ gtk_grid_class_init (GtkGridClass *class)
   object_class->finalize = gtk_grid_finalize;
 
   widget_class->size_allocate = gtk_grid_size_allocate;
-  widget_class->get_preferred_width = gtk_grid_get_preferred_width;
-  widget_class->get_preferred_height = gtk_grid_get_preferred_height;
-  widget_class->get_preferred_width_for_height = gtk_grid_get_preferred_width_for_height;
-  widget_class->get_preferred_height_for_width = gtk_grid_get_preferred_height_for_width;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_grid_get_preferred_height_and_baseline_for_width;
+  widget_class->measure = gtk_grid_measure_;
   widget_class->get_render_node = gtk_grid_get_render_node;
 
   container_class->add = gtk_grid_add;

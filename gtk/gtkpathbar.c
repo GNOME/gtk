@@ -117,12 +117,13 @@ static void gtk_path_bar_finalize                 (GObject          *object);
 static void gtk_path_bar_dispose                  (GObject          *object);
 static void gtk_path_bar_realize                  (GtkWidget        *widget);
 static void gtk_path_bar_unrealize                (GtkWidget        *widget);
-static void gtk_path_bar_get_preferred_width      (GtkWidget        *widget,
-                                                   gint             *minimum,
-                                                   gint             *natural);
-static void gtk_path_bar_get_preferred_height     (GtkWidget        *widget,
-                                                   gint             *minimum,
-                                                   gint             *natural);
+static void gtk_path_bar_measure (GtkWidget *widget,
+                                  GtkOrientation  orientation,
+                                  int             for_size,
+                                  int            *minimum,
+                                  int            *natural,
+                                  int            *minimum_baseline,
+                                  int            *natural_baseline);
 static void gtk_path_bar_map                      (GtkWidget        *widget);
 static void gtk_path_bar_unmap                    (GtkWidget        *widget);
 static void gtk_path_bar_size_allocate            (GtkWidget        *widget,
@@ -221,8 +222,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   gobject_class->finalize = gtk_path_bar_finalize;
   gobject_class->dispose = gtk_path_bar_dispose;
 
-  widget_class->get_preferred_width = gtk_path_bar_get_preferred_width;
-  widget_class->get_preferred_height = gtk_path_bar_get_preferred_height;
+  widget_class->measure = gtk_path_bar_measure;
   widget_class->realize = gtk_path_bar_realize;
   widget_class->unrealize = gtk_path_bar_unrealize;
   widget_class->map = gtk_path_bar_map;
@@ -328,94 +328,89 @@ gtk_path_bar_dispose (GObject *object)
  * Ideally, our size is determined by another widget, and we are just filling
  * available space.
  */
+
 static void
-gtk_path_bar_get_preferred_width (GtkWidget *widget,
-                                  gint      *minimum,
-                                  gint      *natural)
+gtk_path_bar_measure (GtkWidget *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
 {
+  GtkPathBar *path_bar = GTK_PATH_BAR (widget);
   ButtonData *button_data;
-  GtkPathBar *path_bar;
   GList *list;
-  gint child_height;
-  gint height;
-  gint child_min, child_nat;
+  int child_size;
+  int size = 0;
+  int child_min, child_nat;
 
-  path_bar = GTK_PATH_BAR (widget);
+  *minimum = 0;
+  *natural = 0;
 
-  *minimum = *natural = 0;
-  height = 0;
 
-  for (list = path_bar->priv->button_list; list; list = list->next)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      button_data = BUTTON_DATA (list->data);
-      gtk_widget_get_preferred_width (button_data->button, &child_min, &child_nat);
-      gtk_widget_get_preferred_height (button_data->button, &child_height, NULL);
-      height = MAX (height, child_height);
-
-      if (button_data->type == NORMAL_BUTTON)
+      for (list = path_bar->priv->button_list; list; list = list->next)
         {
-          /* Use 2*Height as button width because of ellipsized label.  */
-          child_min = MAX (child_min, child_height * 2);
-          child_nat = MAX (child_min, child_height * 2);
+          button_data = BUTTON_DATA (list->data);
+          gtk_widget_get_preferred_width (button_data->button, &child_min, &child_nat);
+          gtk_widget_get_preferred_height (button_data->button, &child_size, NULL);
+          size = MAX (size, child_size);
+
+          if (button_data->type == NORMAL_BUTTON)
+            {
+              /* Use 2*Height as button width because of ellipsized label.  */
+              child_min = MAX (child_min, child_size * 2);
+              child_nat = MAX (child_min, child_size * 2);
+            }
+
+          *minimum = MAX (*minimum, child_min);
+          *natural = *natural + child_nat;
         }
 
+      /* Add space for slider, if we have more than one path */
+      /* Theoretically, the slider could be bigger than the other button.  But we're
+       * not going to worry about that now.
+       */
+      path_bar->priv->slider_width = 0;
+
+      gtk_widget_get_preferred_width (path_bar->priv->up_slider_button, &child_min, &child_nat);
+      if (path_bar->priv->button_list && path_bar->priv->button_list->next != NULL)
+        {
+          *minimum += child_min;
+          *natural += child_nat;
+        }
+      path_bar->priv->slider_width = MAX (path_bar->priv->slider_width, child_min);
+
+      gtk_widget_get_preferred_width (path_bar->priv->down_slider_button, &child_min, &child_nat);
+      if (path_bar->priv->button_list && path_bar->priv->button_list->next != NULL)
+        {
+          *minimum += child_min;
+          *natural += child_nat;
+        }
+      path_bar->priv->slider_width = MAX (path_bar->priv->slider_width, child_min);
+
+    }
+  else /* VERTICAL */
+    {
+      for (list = path_bar->priv->button_list; list; list = list->next)
+        {
+          button_data = BUTTON_DATA (list->data);
+          gtk_widget_get_preferred_height (button_data->button, &child_min, &child_nat);
+
+          *minimum = MAX (*minimum, child_min);
+          *natural = MAX (*natural, child_nat);
+        }
+
+      gtk_widget_get_preferred_height (path_bar->priv->up_slider_button, &child_min, &child_nat);
       *minimum = MAX (*minimum, child_min);
-      *natural = *natural + child_nat;
-    }
+      *natural = MAX (*natural, child_nat);
 
-  /* Add space for slider, if we have more than one path */
-  /* Theoretically, the slider could be bigger than the other button.  But we're
-   * not going to worry about that now.
-   */
-  path_bar->priv->slider_width = 0;
-
-  gtk_widget_get_preferred_width (path_bar->priv->up_slider_button, &child_min, &child_nat);
-  if (path_bar->priv->button_list && path_bar->priv->button_list->next != NULL)
-    {
-      *minimum += child_min;
-      *natural += child_nat;
-    }
-  path_bar->priv->slider_width = MAX (path_bar->priv->slider_width, child_min);
-
-  gtk_widget_get_preferred_width (path_bar->priv->down_slider_button, &child_min, &child_nat);
-  if (path_bar->priv->button_list && path_bar->priv->button_list->next != NULL)
-    {
-      *minimum += child_min;
-      *natural += child_nat;
-    }
-  path_bar->priv->slider_width = MAX (path_bar->priv->slider_width, child_min);
-}
-
-static void
-gtk_path_bar_get_preferred_height (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
-{
-  ButtonData *button_data;
-  GtkPathBar *path_bar;
-  GList *list;
-  gint child_min, child_nat;
-
-  path_bar = GTK_PATH_BAR (widget);
-
-  *minimum = *natural = 0;
-
-  for (list = path_bar->priv->button_list; list; list = list->next)
-    {
-      button_data = BUTTON_DATA (list->data);
-      gtk_widget_get_preferred_height (button_data->button, &child_min, &child_nat);
-
+      gtk_widget_get_preferred_height (path_bar->priv->down_slider_button, &child_min, &child_nat);
       *minimum = MAX (*minimum, child_min);
       *natural = MAX (*natural, child_nat);
     }
-
-  gtk_widget_get_preferred_height (path_bar->priv->up_slider_button, &child_min, &child_nat);
-  *minimum = MAX (*minimum, child_min);
-  *natural = MAX (*natural, child_nat);
-
-  gtk_widget_get_preferred_height (path_bar->priv->down_slider_button, &child_min, &child_nat);
-  *minimum = MAX (*minimum, child_min);
-  *natural = MAX (*natural, child_nat);
 }
 
 static void

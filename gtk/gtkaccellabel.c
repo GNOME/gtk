@@ -142,11 +142,13 @@ static void         gtk_accel_label_finalize     (GObject            *object);
 static GskRenderNode *gtk_accel_label_get_render_node (GtkWidget   *widget,
                                                        GskRenderer *renderer);
 static const gchar *gtk_accel_label_get_string   (GtkAccelLabel      *accel_label);
-
-
-static void         gtk_accel_label_get_preferred_width (GtkWidget           *widget,
-                                                         gint                *min_width,
-                                                         gint                *nat_width);
+static void gtk_accel_label_measure (GtkWidget      *widget,
+                                     GtkOrientation  orientation,
+                                     int             for_size,
+                                     int            *minimum,
+                                     int            *natural,
+                                     int            *minimum_baseline,
+                                     int            *natural_baseline);
 
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL)
@@ -162,7 +164,7 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   gobject_class->get_property = gtk_accel_label_get_property;
 
   widget_class->get_render_node = gtk_accel_label_get_render_node;
-  widget_class->get_preferred_width = gtk_accel_label_get_preferred_width;
+  widget_class->measure = gtk_accel_label_measure;
   widget_class->destroy = gtk_accel_label_destroy;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
@@ -413,21 +415,33 @@ gtk_accel_label_get_accel_layout (GtkAccelLabel *accel_label)
 }
 
 static void
-gtk_accel_label_get_preferred_width (GtkWidget *widget,
-                                     gint      *min_width,
-                                     gint      *nat_width)
+gtk_accel_label_measure (GtkWidget      *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
-  PangoLayout   *layout;
-  gint           width;
 
-  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->get_preferred_width (widget, min_width, nat_width);
+  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->measure (widget,
+                                                            orientation,
+                                                            for_size,
+                                                            minimum, natural,
+                                                            minimum_baseline, natural_baseline);
 
-  layout = gtk_accel_label_get_accel_layout (accel_label);
-  pango_layout_get_pixel_size (layout, &width, NULL);
-  accel_label->priv->accel_string_width = width;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      PangoLayout *layout;
+      int width;
 
-  g_object_unref (layout);
+      layout = gtk_accel_label_get_accel_layout (accel_label);
+      pango_layout_get_pixel_size (layout, &width, NULL);
+      accel_label->priv->accel_string_width = width;
+
+      g_object_unref (layout);
+    }
 }
 
 static gint

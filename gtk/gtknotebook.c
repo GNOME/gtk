@@ -361,22 +361,13 @@ static void gtk_notebook_map                 (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
 static void gtk_notebook_realize             (GtkWidget        *widget);
 static void gtk_notebook_unrealize           (GtkWidget        *widget);
-static void gtk_notebook_get_preferred_width (GtkWidget        *widget,
-                                              gint             *minimum,
-                                              gint             *natural);
-static void gtk_notebook_get_preferred_height(GtkWidget        *widget,
-                                              gint             *minimum,
-                                              gint             *natural);
-static void gtk_notebook_get_preferred_width_for_height
-                                             (GtkWidget        *widget,
-                                              gint              height,
-                                              gint             *minimum,
-                                              gint             *natural);
-static void gtk_notebook_get_preferred_height_for_width
-                                             (GtkWidget        *widget,
-                                              gint              width,
-                                              gint             *minimum,
-                                              gint             *natural);
+static void gtk_notebook_measure (GtkWidget      *widget,
+                                  GtkOrientation  orientation,
+                                  int             for_size,
+                                  int            *minimum,
+                                  int            *natural,
+                                  int            *minimum_baseline,
+                                  int            *natural_baseline);
 static void gtk_notebook_size_allocate       (GtkWidget        *widget,
                                               GtkAllocation    *allocation);
 static gboolean gtk_notebook_draw            (GtkWidget        *widget,
@@ -711,10 +702,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->realize = gtk_notebook_realize;
   widget_class->unrealize = gtk_notebook_unrealize;
-  widget_class->get_preferred_width = gtk_notebook_get_preferred_width;
-  widget_class->get_preferred_height = gtk_notebook_get_preferred_height;
-  widget_class->get_preferred_width_for_height = gtk_notebook_get_preferred_width_for_height;
-  widget_class->get_preferred_height_for_width = gtk_notebook_get_preferred_height_for_width;
+  widget_class->measure = gtk_notebook_measure;
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->draw = gtk_notebook_draw;
   widget_class->button_press_event = gtk_notebook_button_press;
@@ -2254,64 +2242,34 @@ gtk_notebook_measure_stack (GtkCssGadget   *gadget,
 
       if (gtk_widget_get_visible (page->child))
         {
-          _gtk_widget_get_preferred_size_for_size (page->child,
-                                                   orientation,
-                                                   size, 
-                                                   &child_minimum,
-                                                   &child_natural,
-                                                   NULL,
-                                                   NULL);
+          gtk_widget_measure (page->child,
+                              orientation,
+                              size,
+                              &child_minimum, &child_natural,
+                              NULL, NULL);
 
           *minimum = MAX (*minimum, child_minimum);
           *natural = MAX (*natural, child_natural);
         }
     }
 }
-
 static void
-gtk_notebook_get_preferred_width_for_height (GtkWidget *widget,
-                                             gint       height,
-                                             gint      *minimum,
-                                             gint      *natural)
+gtk_notebook_measure (GtkWidget      *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  gtk_css_gadget_get_preferred_size (priv->gadget, GTK_ORIENTATION_HORIZONTAL, height, minimum, natural, NULL, NULL);
-}
-
-static void
-gtk_notebook_get_preferred_height_for_width (GtkWidget *widget,
-                                             gint       width,
-                                             gint      *minimum,
-                                             gint      *natural)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  gtk_css_gadget_get_preferred_size (priv->gadget, GTK_ORIENTATION_VERTICAL, width, minimum, natural, NULL, NULL);
-}
-
-static void
-gtk_notebook_get_preferred_width (GtkWidget *widget,
-                                  gint      *minimum,
-                                  gint      *natural)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  gtk_css_gadget_get_preferred_size (priv->gadget, GTK_ORIENTATION_HORIZONTAL, -1, minimum, natural, NULL, NULL);
-}
-
-static void
-gtk_notebook_get_preferred_height (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  gtk_css_gadget_get_preferred_size (priv->gadget, GTK_ORIENTATION_VERTICAL, -1, minimum, natural, NULL, NULL);
+  gtk_css_gadget_get_preferred_size (priv->gadget,
+                                     orientation,
+                                     for_size,
+                                     minimum, natural,
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -4530,11 +4488,11 @@ measure_tab (GtkCssGadget           *gadget,
 {
   GtkNotebookPage *page = data;
 
-  _gtk_widget_get_preferred_size_for_size (page->tab_label,
-                                           orientation,
-                                           for_size,
-                                           minimum, natural,
-                                           minimum_baseline, natural_baseline);
+  gtk_widget_measure (page->tab_label,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
 }
 
 static void

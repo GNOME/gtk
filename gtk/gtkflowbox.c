@@ -414,53 +414,19 @@ gtk_flow_box_child_get_request_mode (GtkWidget *widget)
 }
 
 static void
-gtk_flow_box_child_get_preferred_height (GtkWidget *widget,
-                                         gint      *minimum,
-                                         gint      *natural)
+gtk_flow_box_child_measure_ (GtkWidget     *widget,
+                            GtkOrientation  orientation,
+                            int             for_size,
+                            int            *minimum,
+                            int            *natural,
+                            int            *minimum_baseline,
+                            int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_flow_box_child_get_preferred_height_for_width (GtkWidget *widget,
-                                                   gint       width,
-                                                   gint      *minimum,
-                                                   gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_flow_box_child_get_preferred_width (GtkWidget *widget,
-                                        gint      *minimum,
-                                        gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_flow_box_child_get_preferred_width_for_height (GtkWidget *widget,
-                                                   gint       height,
-                                                   gint      *minimum,
-                                                   gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -587,10 +553,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 
   widget_class->get_render_node = gtk_flow_box_child_get_render_node;
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
-  widget_class->get_preferred_height = gtk_flow_box_child_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_flow_box_child_get_preferred_height_for_width;
-  widget_class->get_preferred_width = gtk_flow_box_child_get_preferred_width;
-  widget_class->get_preferred_width_for_height = gtk_flow_box_child_get_preferred_width_for_height;
+  widget_class->measure = gtk_flow_box_child_measure_;
   widget_class->size_allocate = gtk_flow_box_child_size_allocate;
   widget_class->focus = gtk_flow_box_child_focus;
 
@@ -2062,53 +2025,19 @@ get_largest_aligned_line_length (GtkFlowBox     *box,
 }
 
 static void
-gtk_flow_box_get_preferred_width (GtkWidget *widget,
-                                  gint      *minimum,
-                                  gint      *natural)
+gtk_flow_box_measure_ (GtkWidget     *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_flow_box_get_preferred_height (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_flow_box_get_preferred_height_for_width (GtkWidget *widget,
-                                             gint       width,
-                                             gint      *minimum,
-                                             gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_flow_box_get_preferred_width_for_height (GtkWidget *widget,
-                                             gint       height,
-                                             gint      *minimum,
-                                             gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -3771,10 +3700,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   widget_class->get_render_node = gtk_flow_box_get_render_node;
   widget_class->key_press_event = gtk_flow_box_key_press_event;
   widget_class->get_request_mode = gtk_flow_box_get_request_mode;
-  widget_class->get_preferred_width = gtk_flow_box_get_preferred_width;
-  widget_class->get_preferred_height = gtk_flow_box_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_flow_box_get_preferred_height_for_width;
-  widget_class->get_preferred_width_for_height = gtk_flow_box_get_preferred_width_for_height;
+  widget_class->measure = gtk_flow_box_measure_;
 
   container_class->add = gtk_flow_box_add;
   container_class->remove = gtk_flow_box_remove;

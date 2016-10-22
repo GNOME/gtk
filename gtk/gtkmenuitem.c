@@ -560,41 +560,22 @@ gtk_menu_item_measure (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_menu_item_get_preferred_width (GtkWidget *widget,
-                                   gint      *minimum_size,
-                                   gint      *natural_size)
+gtk_menu_item_measure_ (GtkWidget      *widget,
+                        GtkOrientation  orientation,
+                        int             for_size,
+                        int            *minimum,
+                        int            *natural,
+                        int            *minimum_baseline,
+                        int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_MENU_ITEM (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_menu_item_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum_size,
-                                    gint      *natural_size)
-{
-  gtk_css_gadget_get_preferred_size (GTK_MENU_ITEM (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_menu_item_get_preferred_height_for_width (GtkWidget *widget,
-                                              gint       for_size,
-                                              gint      *minimum_size,
-                                              gint      *natural_size)
-{
-  gtk_css_gadget_get_preferred_size (GTK_MENU_ITEM (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
+                                     orientation,
                                      for_size,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
+                                     minimum, natural,
+                                     minimum_baseline, natural_baseline);
 }
+
+
 
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
@@ -620,9 +601,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
   widget_class->parent_set = gtk_menu_item_parent_set;
   widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
-  widget_class->get_preferred_width = gtk_menu_item_get_preferred_width;
-  widget_class->get_preferred_height = gtk_menu_item_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_menu_item_get_preferred_height_for_width;
+  widget_class->measure = gtk_menu_item_measure_;
   widget_class->direction_changed = gtk_menu_item_direction_changed;
 
   container_class->forall = gtk_menu_item_forall;

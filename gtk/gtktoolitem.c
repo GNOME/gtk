@@ -105,14 +105,6 @@ static void gtk_tool_item_realize       (GtkWidget      *widget);
 static void gtk_tool_item_unrealize     (GtkWidget      *widget);
 static void gtk_tool_item_map           (GtkWidget      *widget);
 static void gtk_tool_item_unmap         (GtkWidget      *widget);
-static void gtk_tool_item_get_preferred_width
-                                        (GtkWidget      *widget,
-                                         gint           *minimum,
-                                         gint           *natural);
-static void gtk_tool_item_get_preferred_height
-                                        (GtkWidget      *widget,
-                                         gint           *minimum,
-                                         gint           *natural);
 static void gtk_tool_item_size_allocate (GtkWidget      *widget,
 					 GtkAllocation  *allocation);
 
@@ -139,8 +131,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   widget_class->unrealize     = gtk_tool_item_unrealize;
   widget_class->map           = gtk_tool_item_map;
   widget_class->unmap         = gtk_tool_item_unmap;
-  widget_class->get_preferred_width = gtk_tool_item_get_preferred_width;
-  widget_class->get_preferred_height = gtk_tool_item_get_preferred_height;
   widget_class->size_allocate = gtk_tool_item_size_allocate;
   widget_class->parent_set    = gtk_tool_item_parent_set;
 
@@ -403,34 +393,6 @@ gtk_tool_item_unmap (GtkWidget *widget)
   if (toolitem->priv->drag_window)
     gdk_window_hide (toolitem->priv->drag_window);
   GTK_WIDGET_CLASS (gtk_tool_item_parent_class)->unmap (widget);
-}
-
-static void
-gtk_tool_item_get_preferred_width (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
-{
-  GtkWidget *child;
-
-  *minimum = *natural = 0;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_get_preferred_width (child, minimum, natural);
-}
-
-static void
-gtk_tool_item_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum,
-                                    gint      *natural)
-{
-  GtkWidget *child;
-
-  *minimum = *natural = 0;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_get_preferred_height (child, minimum, natural);
 }
 
 static void

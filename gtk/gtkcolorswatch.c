@@ -523,28 +523,22 @@ swatch_size_allocate (GtkWidget     *widget,
 }
 
 static void
-swatch_get_preferred_width (GtkWidget *widget,
-                            gint      *minimum,
-                            gint      *natural)
+gtk_color_swatch_measure_ (GtkWidget *widget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_COLOR_SWATCH (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
-static void
-swatch_get_preferred_height (GtkWidget *widget,
-                             gint      *minimum,
-                             gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_COLOR_SWATCH (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
+
 
 static gboolean
 swatch_popup_menu (GtkWidget *widget)
@@ -674,8 +668,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   object_class->finalize = swatch_finalize;
   object_class->dispose = swatch_dispose;
 
-  widget_class->get_preferred_width = swatch_get_preferred_width;
-  widget_class->get_preferred_height = swatch_get_preferred_height;
+  widget_class->measure = gtk_color_swatch_measure_;
   widget_class->draw = swatch_draw;
   widget_class->drag_begin = swatch_drag_begin;
   widget_class->drag_data_get = swatch_drag_data_get;

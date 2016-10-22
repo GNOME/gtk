@@ -178,20 +178,13 @@ static void     gtk_stack_size_allocate                  (GtkWidget     *widget,
                                                           GtkAllocation *allocation);
 static gboolean gtk_stack_draw                           (GtkWidget     *widget,
                                                           cairo_t       *cr);
-static void     gtk_stack_get_preferred_height           (GtkWidget     *widget,
-                                                          gint          *minimum_height,
-                                                          gint          *natural_height);
-static void     gtk_stack_get_preferred_height_for_width (GtkWidget     *widget,
-                                                          gint           width,
-                                                          gint          *minimum_height,
-                                                          gint          *natural_height);
-static void     gtk_stack_get_preferred_width            (GtkWidget     *widget,
-                                                          gint          *minimum_width,
-                                                          gint          *natural_width);
-static void     gtk_stack_get_preferred_width_for_height (GtkWidget     *widget,
-                                                          gint           height,
-                                                          gint          *minimum_width,
-                                                          gint          *natural_width);
+static void     gtk_stack_measure_                       (GtkWidget      *widget,
+                                                          GtkOrientation  orientation,
+                                                          int             for_size,
+                                                          int            *minimum,
+                                                          int            *natural,
+                                                          int            *minimum_baseline,
+                                                          int            *natural_baseline);
 static void     gtk_stack_finalize                       (GObject       *obj);
 static void     gtk_stack_get_property                   (GObject       *object,
                                                           guint          property_id,
@@ -433,10 +426,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   widget_class->unrealize = gtk_stack_unrealize;
   widget_class->map = gtk_stack_map;
   widget_class->unmap = gtk_stack_unmap;
-  widget_class->get_preferred_height = gtk_stack_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_stack_get_preferred_height_for_width;
-  widget_class->get_preferred_width = gtk_stack_get_preferred_width;
-  widget_class->get_preferred_width_for_height = gtk_stack_get_preferred_width_for_height;
+  widget_class->measure = gtk_stack_measure_;
   widget_class->compute_expand = gtk_stack_compute_expand;
 
   container_class->add = gtk_stack_add;
@@ -2287,67 +2277,22 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
 
   gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
-
 static void
-gtk_stack_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
+gtk_stack_measure_ (GtkWidget      *widget,
+                    GtkOrientation  orientation,
+                    int             for_size,
+                    int            *minimum,
+                    int            *natural,
+                    int            *minimum_baseline,
+                    int            *natural_baseline)
 {
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (widget));
 
   gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_stack_get_preferred_width_for_height (GtkWidget *widget,
-                                          gint       height,
-                                          gint      *minimum,
-                                          gint      *natural)
-{
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_stack_get_preferred_height (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
-{
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_stack_get_preferred_height_for_width (GtkWidget *widget,
-                                          gint       width,
-                                          gint      *minimum,
-                                          gint      *natural)
-{
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 #define LERP(a, b, t) ((a) + (((b) - (a)) * (1.0 - (t))))

@@ -126,11 +126,11 @@ gtk_box_gadget_measure_child (GObject        *child,
 {
   if (GTK_IS_WIDGET (child))
     {
-      _gtk_widget_get_preferred_size_for_size (GTK_WIDGET (child),
-                                               orientation,
-                                               for_size,
-                                               minimum, natural,
-                                               minimum_baseline, natural_baseline);
+      gtk_widget_measure (GTK_WIDGET (child),
+                          orientation,
+                          for_size,
+                          minimum, natural,
+                          minimum_baseline, natural_baseline);
     }
   else
     {

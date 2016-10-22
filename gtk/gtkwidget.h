@@ -400,20 +400,30 @@ struct _GtkWidgetClass
   /* size requests */
   GtkSizeRequestMode (* get_request_mode)               (GtkWidget      *widget);
 
-  void               (* get_preferred_height)           (GtkWidget       *widget,
-                                                         gint            *minimum_height,
-                                                         gint            *natural_height);
-  void               (* get_preferred_width_for_height) (GtkWidget       *widget,
-                                                         gint             height,
-                                                         gint            *minimum_width,
-                                                         gint            *natural_width);
-  void               (* get_preferred_width)            (GtkWidget       *widget,
-                                                         gint            *minimum_width,
-                                                         gint            *natural_width);
-  void               (* get_preferred_height_for_width) (GtkWidget       *widget,
-                                                         gint             width,
-                                                         gint            *minimum_height,
-                                                         gint            *natural_height);
+  //void               (* get_preferred_height)           (GtkWidget       *widget,
+                                                         //gint            *minimum_height,
+                                                         //gint            *natural_height);
+  //void               (* get_preferred_width_for_height) (GtkWidget       *widget,
+                                                         //gint             height,
+                                                         //gint            *minimum_width,
+                                                         //gint            *natural_width);
+  //void               (* get_preferred_width)            (GtkWidget       *widget,
+                                                         //gint            *minimum_width,
+                                                         //gint            *natural_width);
+  //void               (* get_preferred_height_for_width) (GtkWidget       *widget,
+                                                         //gint             width,
+                                                         //gint            *minimum_height,
+                                                         //gint            *natural_height);
+
+  void              (* measure) (GtkWidget      *widget,
+                                 GtkOrientation  orientation,
+                                 int             for_size,
+                                 int            *minimum,
+                                 int            *natural,
+                                 int            *minimum_baseline,
+                                 int            *natural_baseline);
+
+
 
   /* Mnemonics */
   gboolean (* mnemonic_activate)        (GtkWidget           *widget,
@@ -580,12 +590,6 @@ struct _GtkWidgetClass
   gboolean     (* touch_event)            (GtkWidget     *widget,
                                            GdkEventTouch *event);
 
-  void         (* get_preferred_height_and_baseline_for_width)  (GtkWidget     *widget,
-								 gint           width,
-								 gint          *minimum_height,
-								 gint          *natural_height,
-								 gint          *minimum_baseline,
-								 gint          *natural_baseline);
   void         (* adjust_baseline_request)(GtkWidget         *widget,
                                            gint              *minimum_baseline,
                                            gint              *natural_baseline);
@@ -693,6 +697,14 @@ void                gtk_widget_get_preferred_width_for_height (GtkWidget      *w
                                                                gint            height,
                                                                gint           *minimum_width,
                                                                gint           *natural_width);
+GDK_AVAILABLE_IN_3_90
+void gtk_widget_measure (GtkWidget      *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline);
 GDK_AVAILABLE_IN_3_10
 void   gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget     *widget,
 							       gint           width,

@@ -11,12 +11,13 @@
 
 static void        gtk_offscreen_box_realize       (GtkWidget       *widget);
 static void        gtk_offscreen_box_unrealize     (GtkWidget       *widget);
-static void        gtk_offscreen_box_get_preferred_width  (GtkWidget *widget,
-                                                           gint      *minimum,
-                                                           gint      *natural);
-static void        gtk_offscreen_box_get_preferred_height (GtkWidget *widget,
-                                                           gint      *minimum,
-                                                           gint      *natural);
+static void        gtk_offscreen_box_measure       (GtkWidget       *widget,
+                                                    GtkOrientation   orientation,
+                                                    int              for_size,
+                                                    int             *minimum,
+                                                    int             *natural,
+                                                    int             *minimum_baseline,
+                                                    int             *natural_baseline);
 static void        gtk_offscreen_box_size_allocate (GtkWidget       *widget,
                                                     GtkAllocation   *allocation);
 static gboolean    gtk_offscreen_box_damage        (GtkWidget       *widget,
@@ -123,8 +124,7 @@ gtk_offscreen_box_class_init (GtkOffscreenBoxClass *klass)
 
   widget_class->realize = gtk_offscreen_box_realize;
   widget_class->unrealize = gtk_offscreen_box_unrealize;
-  widget_class->get_preferred_width = gtk_offscreen_box_get_preferred_width;
-  widget_class->get_preferred_height = gtk_offscreen_box_get_preferred_height;
+  widget_class->measure = gtk_offscreen_box_measure;
   widget_class->size_allocate = gtk_offscreen_box_size_allocate;
   widget_class->draw = gtk_offscreen_box_draw;
 
@@ -512,28 +512,24 @@ gtk_offscreen_box_size_request (GtkWidget      *widget,
   requisition->height = h;
 }
 
+
 static void
-gtk_offscreen_box_get_preferred_width (GtkWidget *widget,
-                                       gint      *minimum,
-                                       gint      *natural)
+gtk_offscreen_box_measure (GtkWidget       *widget,
+                           GtkOrientation   orientation,
+                           int              for_size,
+                           int             *minimum,
+                           int             *natural,
+                           int             *minimum_baseline,
+                           int             *natural_baseline)
 {
   GtkRequisition requisition;
 
   gtk_offscreen_box_size_request (widget, &requisition);
 
-  *minimum = *natural = requisition.width;
-}
-
-static void
-gtk_offscreen_box_get_preferred_height (GtkWidget *widget,
-                                        gint      *minimum,
-                                        gint      *natural)
-{
-  GtkRequisition requisition;
-
-  gtk_offscreen_box_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = requisition.width;
+  else
+    *minimum = *natural = requisition.height;
 }
 
 static void

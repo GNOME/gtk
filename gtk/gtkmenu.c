@@ -305,17 +305,13 @@ static gboolean gtk_menu_real_can_activate_accel (GtkWidget *widget,
                                                   guint      signal_id);
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
                                            gboolean group_changed);
-
-static void gtk_menu_get_preferred_width            (GtkWidget           *widget,
-                                                     gint                *minimum_size,
-                                                     gint                *natural_size);
-static void gtk_menu_get_preferred_height           (GtkWidget           *widget,
-                                                     gint                *minimum_size,
-                                                     gint                *natural_size);
-static void gtk_menu_get_preferred_height_for_width (GtkWidget           *widget,
-                                                     gint                 for_size,
-                                                     gint                *minimum_size,
-                                                     gint                *natural_size);
+static void gtk_menu_measure (GtkWidget      *widget,
+                              GtkOrientation  orientation,
+                              int             for_size,
+                              int            *minimum,
+                              int            *natural,
+                              int            *minimum_baseline,
+                              int            *natural_baseline);
 
 
 static const gchar attach_data_key[] = "gtk-menu-attach-data";
@@ -525,9 +521,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->focus = gtk_menu_focus;
   widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
   widget_class->grab_notify = gtk_menu_grab_notify;
-  widget_class->get_preferred_width = gtk_menu_get_preferred_width;
-  widget_class->get_preferred_height = gtk_menu_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_menu_get_preferred_height_for_width;
+  widget_class->measure = gtk_menu_measure;
 
   container_class->remove = gtk_menu_remove;
   container_class->get_child_property = gtk_menu_get_child_property;
@@ -3016,189 +3010,189 @@ gtk_menu_show (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->show (widget);
 }
 
-
-static void 
-gtk_menu_get_preferred_width (GtkWidget *widget,
-                              gint      *minimum_size,
-                              gint      *natural_size)
+static void gtk_menu_measure (GtkWidget      *widget,
+                              GtkOrientation  orientation,
+                              int             for_size,
+                              int            *minimum,
+                              int            *natural,
+                              int            *minimum_baseline,
+                              int            *natural_baseline)
 {
-  GtkMenu        *menu;
-  GtkMenuShell   *menu_shell;
-  GtkMenuPrivate *priv;
-  GtkWidget      *child;
-  GList          *children;
-  guint           max_toggle_size;
-  guint           max_accel_width;
-  gint            child_min, child_nat;
-  gint            min_width, nat_width;
-  GtkBorder       padding;
+  GtkMenu *menu = GTK_MENU (widget);
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
+  GtkMenuPrivate *priv = gtk_menu_get_instance_private (menu);
+  GtkWidget *child;
 
-  menu       = GTK_MENU (widget);
-  menu_shell = GTK_MENU_SHELL (widget);
-  priv       = menu->priv;
-
-  min_width = nat_width = 0;
-
-  max_toggle_size = 0;
-  max_accel_width = 0;
-
-  children = menu_shell->priv->children;
-  while (children)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gint part;
-      gint toggle_size;
-      gint l, r, t, b;
+      GList          *children;
+      guint           max_toggle_size;
+      guint           max_accel_width;
+      gint            child_min, child_nat;
+      gint            min_width, nat_width;
+      GtkBorder       padding;
 
-      child = children->data;
-      children = children->next;
+      min_width = nat_width = 0;
 
-      if (! gtk_widget_get_visible (child))
-        continue;
+      max_toggle_size = 0;
+      max_accel_width = 0;
 
-      get_effective_child_attach (child, &l, &r, &t, &b);
-
-      /* It's important to size_request the child
-       * before doing the toggle size request, in
-       * case the toggle size request depends on the size
-       * request of a child of the child (e.g. for ImageMenuItem)
-       */
-       gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-
-       gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
-       max_toggle_size = MAX (max_toggle_size, toggle_size);
-       max_accel_width = MAX (max_accel_width,
-                              GTK_MENU_ITEM (child)->priv->accelerator_width);
-
-       part = child_min / (r - l);
-       min_width = MAX (min_width, part);
-
-       part = child_nat / (r - l);
-       nat_width = MAX (nat_width, part);
-    }
-
-  /* If the menu doesn't include any images or check items
-   * reserve the space so that all menus are consistent.
-   * We only do this for 'ordinary' menus, not for combobox
-   * menus or multi-column menus
-   */
-  if (max_toggle_size == 0 &&
-      gtk_menu_get_n_columns (menu) == 1 &&
-      !priv->no_toggle_size)
-    {
-      GtkWidget *menu_item;
-      GtkCssGadget *indicator_gadget;
-      gint indicator_width;
-
-      /* Create a GtkCheckMenuItem, to query indicator size */
-      menu_item = gtk_check_menu_item_new ();
-      indicator_gadget = _gtk_check_menu_item_get_indicator_gadget
-        (GTK_CHECK_MENU_ITEM (menu_item));
-
-      gtk_css_gadget_get_preferred_size (indicator_gadget,
-                                         GTK_ORIENTATION_HORIZONTAL,
-                                         -1,
-                                         &indicator_width, NULL,
-                                         NULL, NULL);
-      max_toggle_size = indicator_width;
-
-      gtk_widget_destroy (menu_item);
-    }
-
-  min_width += 2 * max_toggle_size + max_accel_width;
-  min_width *= gtk_menu_get_n_columns (menu);
-
-  nat_width += 2 * max_toggle_size + max_accel_width;
-  nat_width *= gtk_menu_get_n_columns (menu);
-
-  get_menu_padding (widget, &padding);
-  min_width   += padding.left + padding.right;
-  nat_width   += padding.left + padding.right;
-
-  priv->toggle_size = max_toggle_size;
-  priv->accel_size  = max_accel_width;
-
-  *minimum_size = min_width;
-  *natural_size = nat_width;
-}
-
-static void
-gtk_menu_get_preferred_height (GtkWidget *widget,
-                               gint      *minimum_size,
-                               gint      *natural_size)
-{
-  gint min_width, nat_width;
-
-  /* Menus are height-for-width only, just return the height
-   * for the minimum width
-   */
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, &nat_width);
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width, minimum_size, natural_size);
-}
-
-static void
-gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
-                                         gint       for_size,
-                                         gint      *minimum_size,
-                                         gint      *natural_size)
-{
-  GtkBorder       padding, arrow_border;
-  GtkMenu        *menu = GTK_MENU (widget);
-  GtkMenuPrivate *priv = menu->priv;
-  guint          *min_heights, *nat_heights;
-  gint            n_heights, i;
-  gint            min_height, single_height, nat_height;
-
-  get_menu_padding (widget, &padding);
-
-  min_height = nat_height = padding.top + padding.bottom;
-  single_height = 0;
-
-  n_heights =
-    calculate_line_heights (menu, for_size, &min_heights, &nat_heights);
-
-  for (i = 0; i < n_heights; i++)
-    {
-      min_height += min_heights[i];
-      single_height = MAX (single_height, min_heights[i]);
-      nat_height += nat_heights[i];
-    }
-
-  get_arrows_border (menu, &arrow_border);
-  single_height += padding.top + padding.bottom
-                   + arrow_border.top + arrow_border.bottom;
-  min_height = MIN (min_height, single_height);
-
-  if (priv->have_position)
-    {
-      GdkDisplay *display;
-      GdkMonitor *monitor;
-      GdkRectangle workarea;
-      GtkBorder border;
-
-      display = gtk_widget_get_display (priv->toplevel);
-      monitor = gdk_display_get_monitor (display, priv->monitor_num);
-      gdk_monitor_get_workarea (monitor, &workarea);
-
-      if (priv->position_y + min_height > workarea.y + workarea.height)
-        min_height = workarea.y + workarea.height - priv->position_y;
-
-      if (priv->position_y + nat_height > workarea.y + workarea.height)
-        nat_height = workarea.y + workarea.height - priv->position_y;
-
-      _gtk_window_get_shadow_width (GTK_WINDOW (priv->toplevel), &border);
-
-      if (priv->position_y + border.top < workarea.y)
+      children = menu_shell->priv->children;
+      while (children)
         {
-          min_height -= workarea.y - (priv->position_y + border.top);
-          nat_height -= workarea.y - (priv->position_y + border.top);
+          gint part;
+          gint toggle_size;
+          gint l, r, t, b;
+
+          child = children->data;
+          children = children->next;
+
+          if (! gtk_widget_get_visible (child))
+            continue;
+
+          get_effective_child_attach (child, &l, &r, &t, &b);
+
+          /* It's important to size_request the child
+           * before doing the toggle size request, in
+           * case the toggle size request depends on the size
+           * request of a child of the child (e.g. for ImageMenuItem)
+           */
+           gtk_widget_get_preferred_width (child, &child_min, &child_nat);
+
+           gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
+           max_toggle_size = MAX (max_toggle_size, toggle_size);
+           max_accel_width = MAX (max_accel_width,
+                                  GTK_MENU_ITEM (child)->priv->accelerator_width);
+
+           part = child_min / (r - l);
+           min_width = MAX (min_width, part);
+
+           part = child_nat / (r - l);
+           nat_width = MAX (nat_width, part);
+        }
+
+      /* If the menu doesn't include any images or check items
+       * reserve the space so that all menus are consistent.
+       * We only do this for 'ordinary' menus, not for combobox
+       * menus or multi-column menus
+       */
+      if (max_toggle_size == 0 &&
+          gtk_menu_get_n_columns (menu) == 1 &&
+          !priv->no_toggle_size)
+        {
+          GtkWidget *menu_item;
+          GtkCssGadget *indicator_gadget;
+          gint indicator_width;
+
+          /* Create a GtkCheckMenuItem, to query indicator size */
+          menu_item = gtk_check_menu_item_new ();
+          indicator_gadget = _gtk_check_menu_item_get_indicator_gadget
+            (GTK_CHECK_MENU_ITEM (menu_item));
+
+          gtk_css_gadget_get_preferred_size (indicator_gadget,
+                                             GTK_ORIENTATION_HORIZONTAL,
+                                             -1,
+                                             &indicator_width, NULL,
+                                             NULL, NULL);
+          max_toggle_size = indicator_width;
+
+          gtk_widget_destroy (menu_item);
+        }
+
+      min_width += 2 * max_toggle_size + max_accel_width;
+      min_width *= gtk_menu_get_n_columns (menu);
+
+      nat_width += 2 * max_toggle_size + max_accel_width;
+      nat_width *= gtk_menu_get_n_columns (menu);
+
+      get_menu_padding (widget, &padding);
+      min_width   += padding.left + padding.right;
+      nat_width   += padding.left + padding.right;
+
+      priv->toggle_size = max_toggle_size;
+      priv->accel_size  = max_accel_width;
+
+      *minimum = min_width;
+      *natural = nat_width;
+
+    }
+  else /* VERTICAL */
+    {
+      if (for_size < 0)
+        {
+          gint min_width, nat_width;
+
+          /* Menus are height-for-width only, just return the height
+           * for the minimum width
+           */
+          GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                                                  &min_width, &nat_width, NULL, NULL);
+          GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_VERTICAL, min_width,
+                                                  minimum, natural,
+                                                  minimum_baseline, natural_baseline);
+        }
+      else
+        {
+          GtkBorder       padding, arrow_border;
+          guint          *min_heights, *nat_heights;
+          gint            n_heights, i;
+          gint            min_height, single_height, nat_height;
+
+          get_menu_padding (widget, &padding);
+
+          min_height = nat_height = padding.top + padding.bottom;
+          single_height = 0;
+
+          n_heights =
+            calculate_line_heights (menu, for_size, &min_heights, &nat_heights);
+
+          for (i = 0; i < n_heights; i++)
+            {
+              min_height += min_heights[i];
+              single_height = MAX (single_height, min_heights[i]);
+              nat_height += nat_heights[i];
+            }
+
+          get_arrows_border (menu, &arrow_border);
+          single_height += padding.top + padding.bottom
+                           + arrow_border.top + arrow_border.bottom;
+          min_height = MIN (min_height, single_height);
+
+          if (priv->have_position)
+            {
+              GdkDisplay *display;
+              GdkMonitor *monitor;
+              GdkRectangle workarea;
+              GtkBorder border;
+
+              display = gtk_widget_get_display (priv->toplevel);
+              monitor = gdk_display_get_monitor (display, priv->monitor_num);
+              gdk_monitor_get_workarea (monitor, &workarea);
+
+              if (priv->position_y + min_height > workarea.y + workarea.height)
+                min_height = workarea.y + workarea.height - priv->position_y;
+
+              if (priv->position_y + nat_height > workarea.y + workarea.height)
+                nat_height = workarea.y + workarea.height - priv->position_y;
+
+              _gtk_window_get_shadow_width (GTK_WINDOW (priv->toplevel), &border);
+
+              if (priv->position_y + border.top < workarea.y)
+                {
+                  min_height -= workarea.y - (priv->position_y + border.top);
+                  nat_height -= workarea.y - (priv->position_y + border.top);
+                }
+            }
+
+          *minimum = min_height;
+          *natural = nat_height;
+
+          g_free (min_heights);
+          g_free (nat_heights);
+
+
         }
     }
-
-  *minimum_size = min_height;
-  *natural_size = nat_height;
-
-  g_free (min_heights);
-  g_free (nat_heights);
 }
 
 static gboolean

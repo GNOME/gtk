@@ -590,12 +590,13 @@ static void     gtk_tree_view_realize              (GtkWidget        *widget);
 static void     gtk_tree_view_unrealize            (GtkWidget        *widget);
 static void     gtk_tree_view_map                  (GtkWidget        *widget);
 static void     gtk_tree_view_unmap                (GtkWidget        *widget);
-static void     gtk_tree_view_get_preferred_width  (GtkWidget        *widget,
-						    gint             *minimum,
-						    gint             *natural);
-static void     gtk_tree_view_get_preferred_height (GtkWidget        *widget,
-						    gint             *minimum,
-						    gint             *natural);
+static void     gtk_tree_view_measure              (GtkWidget        *widget,
+                                                    GtkOrientation  orientation,
+                                                    int             for_size,
+                                                    int            *minimum,
+                                                    int            *natural,
+                                                    int            *minimum_baseline,
+                                                    int            *natural_baseline);
 static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
 static gboolean gtk_tree_view_draw                 (GtkWidget        *widget,
@@ -982,8 +983,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->unmap = gtk_tree_view_unmap;
   widget_class->realize = gtk_tree_view_realize;
   widget_class->unrealize = gtk_tree_view_unrealize;
-  widget_class->get_preferred_width = gtk_tree_view_get_preferred_width;
-  widget_class->get_preferred_height = gtk_tree_view_get_preferred_height;
+  widget_class->measure = gtk_tree_view_measure;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
   widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->draw = gtk_tree_view_draw;
@@ -2589,46 +2589,48 @@ gtk_tree_view_get_height (GtkTreeView *tree_view)
 }
 
 static void
-gtk_tree_view_get_preferred_width (GtkWidget *widget,
-				   gint      *minimum,
-				   gint      *natural)
+gtk_tree_view_measure (GtkWidget        *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  GList *list;
-  GtkTreeViewColumn *column;
-  gint width = 0;
 
-  /* we validate some rows initially just to make sure we have some size.
-   * In practice, with a lot of static lists, this should get a good width.
-   */
-  do_validate_rows (tree_view, FALSE);
-
-  /* keep this in sync with size_allocate below */
-  for (list = tree_view->priv->columns; list; list = list->next)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      column = list->data;
-      if (!gtk_tree_view_column_get_visible (column) || column == tree_view->priv->drag_column)
-	continue;
+      GList *list;
+      GtkTreeViewColumn *column;
+      gint width = 0;
 
-      width += _gtk_tree_view_column_request_width (column);
+      /* we validate some rows initially just to make sure we have some size.
+       * In practice, with a lot of static lists, this should get a good width.
+       */
+      do_validate_rows (tree_view, FALSE);
+
+      /* keep this in sync with size_allocate below */
+      for (list = tree_view->priv->columns; list; list = list->next)
+        {
+          column = list->data;
+          if (!gtk_tree_view_column_get_visible (column) || column == tree_view->priv->drag_column)
+            continue;
+
+          width += _gtk_tree_view_column_request_width (column);
+        }
+
+      *minimum = *natural = width;
     }
+  else /* VERTICAL */
+    {
+      int height;
 
-  *minimum = *natural = width;
-}
+      gtk_tree_view_update_height (tree_view);
+      height = gtk_tree_view_get_height (tree_view) + gtk_tree_view_get_effective_header_height (tree_view);
 
-static void
-gtk_tree_view_get_preferred_height (GtkWidget *widget,
-				    gint      *minimum,
-				    gint      *natural)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  gint height;
-
-  gtk_tree_view_update_height (tree_view);
-
-  height = gtk_tree_view_get_height (tree_view) + gtk_tree_view_get_effective_header_height (tree_view);
-
-  *minimum = *natural = height;
+      *minimum = *natural = height;
+    }
 }
 
 static int
@@ -6976,8 +6978,16 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
        * untill we've recieved an allocation (never update scroll adjustments from size-requests).
        */
       prevent_recursion_hack = TRUE;
-      gtk_tree_view_get_preferred_width (GTK_WIDGET (tree_view), &requisition.width, &dummy);
-      gtk_tree_view_get_preferred_height (GTK_WIDGET (tree_view), &requisition.height, &dummy);
+      gtk_tree_view_measure (GTK_WIDGET (tree_view),
+                             GTK_ORIENTATION_HORIZONTAL,
+                             -1,
+                             &requisition.width, &dummy,
+                             NULL, NULL);
+      gtk_tree_view_measure (GTK_WIDGET (tree_view),
+                             GTK_ORIENTATION_VERTICAL,
+                             -1,
+                             &requisition.height, &dummy,
+                             NULL, NULL);
       prevent_recursion_hack = FALSE;
 
       /* If rows above the current position have changed height, this has

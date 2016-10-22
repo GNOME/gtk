@@ -256,40 +256,27 @@ gtk_action_bar_measure (GtkCssGadget   *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_widget_get_preferred_width_for_height (priv->revealer, for_size, minimum, natural);
-  else
-    gtk_widget_get_preferred_height_and_baseline_for_width (priv->revealer, for_size, minimum, natural, minimum_baseline, natural_baseline);
+  gtk_widget_measure (priv->revealer,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
 }
 
 static void
-gtk_action_bar_get_preferred_width_for_height (GtkWidget *widget,
-                                               gint       height,
-                                               gint      *minimum,
-                                               gint      *natural)
+gtk_action_bar_measure_ (GtkWidget *widget,
+                        GtkOrientation orientation,
+                        int        for_size,
+                        int       *minimum,
+                        int       *natural,
+                        int       *minimum_baseline,
+                        int       *natural_baseline)
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
 
   gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_action_bar_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-                                                            gint       width,
-                                                            gint      *minimum,
-                                                            gint      *natural,
-                                                            gint      *minimum_baseline,
-                                                            gint      *natural_baseline)
-{
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
                                      minimum_baseline, natural_baseline);
 }
@@ -312,8 +299,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   widget_class->destroy = gtk_action_bar_destroy;
   widget_class->get_render_node = gtk_action_bar_get_render_node;
   widget_class->size_allocate = gtk_action_bar_size_allocate;
-  widget_class->get_preferred_width_for_height = gtk_action_bar_get_preferred_width_for_height;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_action_bar_get_preferred_height_and_baseline_for_width;
+  widget_class->measure = gtk_action_bar_measure_;
 
   container_class->add = gtk_action_bar_add;
   container_class->remove = gtk_action_bar_remove;

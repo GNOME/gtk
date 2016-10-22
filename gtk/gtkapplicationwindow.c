@@ -526,104 +526,71 @@ enum {
 static GParamSpec *gtk_application_window_properties[N_PROPS];
 
 static void
-gtk_application_window_real_get_preferred_height (GtkWidget *widget,
-                                                  gint      *minimum_height,
-                                                  gint      *natural_height)
+gtk_application_window_measure (GtkWidget *widget,
+                                GtkOrientation  orientation,
+                                int             for_size,
+                                int            *minimum,
+                                int            *natural,
+                                int            *minimum_baseline,
+                                int            *natural_baseline)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
+  GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
 
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-    ->get_preferred_height (widget, minimum_height, natural_height);
+  GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
+                                                                   orientation,
+                                                                   for_size,
+                                                                   minimum, natural,
+                                                                   minimum_baseline, natural_baseline);
 
-  if (window->priv->menubar != NULL)
+  if (priv->menubar != NULL)
     {
-      gint menubar_min_height, menubar_nat_height;
+      int menubar_min, menubar_nat;
 
-      gtk_widget_get_preferred_height (window->priv->menubar, &menubar_min_height, &menubar_nat_height);
-      *minimum_height += menubar_min_height;
-      *natural_height += menubar_nat_height;
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          GtkBorder border = {0};
+          int menubar_height = 0;
+
+          gtk_widget_get_preferred_height_for_width (priv->menubar, for_size, &menubar_height, NULL);
+
+          GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
+                                                                           orientation,
+                                                                           for_size - menubar_height,
+                                                                           minimum, natural,
+                                                                           minimum_baseline, natural_baseline);
+
+
+          gtk_widget_get_preferred_width_for_height (window->priv->menubar, menubar_height, &menubar_min, &menubar_nat);
+
+          _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
+          menubar_min += border.left + border.right;
+          menubar_nat += border.left + border.right;
+
+          *minimum = MAX (*minimum, menubar_min);
+          *natural = MAX (*natural, menubar_nat);
+
+        }
+      else /* VERTICAL */
+        {
+          GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
+                                                                           orientation,
+                                                                           for_size,
+                                                                           minimum, natural,
+                                                                           minimum_baseline, natural_baseline);
+
+          gtk_widget_get_preferred_height_for_width (priv->menubar, for_size, &menubar_min, &menubar_nat);
+          *minimum += menubar_min;
+          *natural += menubar_nat;
+        }
     }
-}
-
-static void
-gtk_application_window_real_get_preferred_height_for_width (GtkWidget *widget,
-                                                            gint       width,
-                                                            gint      *minimum_height,
-                                                            gint      *natural_height)
-{
-  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
-
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-    ->get_preferred_height_for_width (widget, width, minimum_height, natural_height);
-
-  if (window->priv->menubar != NULL)
-    {
-      gint menubar_min_height, menubar_nat_height;
-
-      gtk_widget_get_preferred_height_for_width (window->priv->menubar, width, &menubar_min_height, &menubar_nat_height);
-      *minimum_height += menubar_min_height;
-      *natural_height += menubar_nat_height;
-    }
-}
-
-static void
-gtk_application_window_real_get_preferred_width (GtkWidget *widget,
-                                                 gint      *minimum_width,
-                                                 gint      *natural_width)
-{
-  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
-
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-    ->get_preferred_width (widget, minimum_width, natural_width);
-
-  if (window->priv->menubar != NULL)
-    {
-      gint menubar_min_width, menubar_nat_width;
-      GtkBorder border = { 0 };
-
-      gtk_widget_get_preferred_width (window->priv->menubar, &menubar_min_width, &menubar_nat_width);
-
-      _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
-
-      menubar_min_width += border.left + border.right;
-      menubar_nat_width += border.left + border.right;
-
-      *minimum_width = MAX (*minimum_width, menubar_min_width);
-      *natural_width = MAX (*natural_width, menubar_nat_width);
-    }
-}
-
-static void
-gtk_application_window_real_get_preferred_width_for_height (GtkWidget *widget,
-                                                            gint       height,
-                                                            gint      *minimum_width,
-                                                            gint      *natural_width)
-{
-  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
-  gint menubar_height;
-
-  if (window->priv->menubar != NULL)
-    gtk_widget_get_preferred_height (window->priv->menubar, &menubar_height, NULL);
   else
-    menubar_height = 0;
-
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-    ->get_preferred_width_for_height (widget, height - menubar_height, minimum_width, natural_width);
-
-  if (window->priv->menubar != NULL)
     {
-      gint menubar_min_width, menubar_nat_width;
-      GtkBorder border = { 0 };
-
-      gtk_widget_get_preferred_width_for_height (window->priv->menubar, menubar_height, &menubar_min_width, &menubar_nat_width);
-
-      _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
-
-      menubar_min_width += border.left + border.right;
-      menubar_nat_width += border.left + border.right;
-
-      *minimum_width = MAX (*minimum_width, menubar_min_width);
-      *natural_width = MAX (*natural_width, menubar_nat_width);
+      GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
+                                                                       orientation,
+                                                                       for_size,
+                                                                       minimum, natural,
+                                                                       minimum_baseline, natural_baseline);
     }
 }
 
@@ -841,10 +808,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   container_class->forall = gtk_application_window_real_forall_internal;
-  widget_class->get_preferred_height = gtk_application_window_real_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_application_window_real_get_preferred_height_for_width;
-  widget_class->get_preferred_width = gtk_application_window_real_get_preferred_width;
-  widget_class->get_preferred_width_for_height = gtk_application_window_real_get_preferred_width_for_height;
+  widget_class->measure = gtk_application_window_measure;
   widget_class->size_allocate = gtk_application_window_real_size_allocate;
   widget_class->realize = gtk_application_window_real_realize;
   widget_class->unrealize = gtk_application_window_real_unrealize;

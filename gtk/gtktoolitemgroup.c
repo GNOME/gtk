@@ -602,29 +602,23 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
 }
 
 static void
-gtk_tool_item_group_get_preferred_width (GtkWidget *widget,
-					 gint      *minimum,
-					 gint      *natural)
+gtk_tool_item_group_measure (GtkWidget      *widget,
+                             GtkOrientation  orientation,
+                             int             for_size,
+                             int            *minimum,
+                             int            *natural,
+                             int            *minimum_baseline,
+                             int            *natural_baseline)
 {
   GtkRequisition requisition;
 
   gtk_tool_item_group_size_request (widget, &requisition);
 
-  *minimum = *natural = requisition.width;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = requisition.width;
+  else
+    *minimum = *natural = requisition.height;
 }
-
-static void
-gtk_tool_item_group_get_preferred_height (GtkWidget *widget,
-					  gint      *minimum,
-					  gint      *natural)
-{
-  GtkRequisition requisition;
-
-  gtk_tool_item_group_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
-}
-
 
 static gboolean
 gtk_tool_item_group_is_item_visible (GtkToolItemGroup      *group,
@@ -1592,8 +1586,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   oclass->finalize           = gtk_tool_item_group_finalize;
   oclass->dispose            = gtk_tool_item_group_dispose;
 
-  wclass->get_preferred_width  = gtk_tool_item_group_get_preferred_width;
-  wclass->get_preferred_height = gtk_tool_item_group_get_preferred_height;
+  wclass->measure              = gtk_tool_item_group_measure;
   wclass->size_allocate        = gtk_tool_item_group_size_allocate;
   wclass->realize              = gtk_tool_item_group_realize;
   wclass->unrealize            = gtk_tool_item_group_unrealize;

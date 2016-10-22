@@ -220,20 +220,13 @@ static void gtk_expander_buildable_add_child      (GtkBuildable *buildable,
 
 
 /* GtkWidget      */
-static void  gtk_expander_get_preferred_width             (GtkWidget           *widget,
-                                                           gint                *minimum_size,
-                                                           gint                *natural_size);
-static void  gtk_expander_get_preferred_height            (GtkWidget           *widget,
-                                                           gint                *minimum_size,
-                                                           gint                *natural_size);
-static void  gtk_expander_get_preferred_height_for_width  (GtkWidget           *layout,
-                                                           gint                 width,
-                                                           gint                *minimum_height,
-                                                           gint                *natural_height);
-static void  gtk_expander_get_preferred_width_for_height  (GtkWidget           *layout,
-                                                           gint                 width,
-                                                           gint                *minimum_height,
-                                                           gint                *natural_height);
+static void gtk_expander_measure (GtkWidget      *widget,
+                                  GtkOrientation  orientation,
+                                  int             for_size,
+                                  int            *minimum,
+                                  int            *natural,
+                                  int            *minimum_baseline,
+                                  int            *natural_baseline);
 static void gtk_expander_state_flags_changed (GtkWidget        *widget,
                                               GtkStateFlags     previous_state);
 static void gtk_expander_direction_changed   (GtkWidget        *widget,
@@ -277,10 +270,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class->focus                = gtk_expander_focus;
   widget_class->drag_motion          = gtk_expander_drag_motion;
   widget_class->drag_leave           = gtk_expander_drag_leave;
-  widget_class->get_preferred_width            = gtk_expander_get_preferred_width;
-  widget_class->get_preferred_height           = gtk_expander_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_expander_get_preferred_height_for_width;
-  widget_class->get_preferred_width_for_height = gtk_expander_get_preferred_width_for_height;
+  widget_class->measure              = gtk_expander_measure;
   widget_class->state_flags_changed  = gtk_expander_state_flags_changed;
   widget_class->direction_changed  = gtk_expander_direction_changed;
 
@@ -1119,53 +1109,19 @@ gtk_expander_activate (GtkExpander *expander)
 }
 
 static void
-gtk_expander_get_preferred_width (GtkWidget *widget,
-                                  gint      *minimum_size,
-                                  gint      *natural_size)
+gtk_expander_measure (GtkWidget      *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_EXPANDER (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_expander_get_preferred_height (GtkWidget *widget,
-                                   gint      *minimum_size,
-                                   gint      *natural_size)
-{
-  gtk_css_gadget_get_preferred_size (GTK_EXPANDER (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_expander_get_preferred_width_for_height (GtkWidget *widget,
-                                             gint       height,
-                                             gint      *minimum_size,
-                                             gint      *natural_size)
-{
-  gtk_css_gadget_get_preferred_size (GTK_EXPANDER (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_expander_get_preferred_height_for_width (GtkWidget *widget,
-                                             gint       width,
-                                             gint      *minimum_size,
-                                             gint      *natural_size)
-{
-  gtk_css_gadget_get_preferred_size (GTK_EXPANDER (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
+                                     orientation,
+                                     for_size,
+                                     minimum, natural,
+                                     minimum_baseline, natural_baseline);
 }
 
 /**

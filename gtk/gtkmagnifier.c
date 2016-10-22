@@ -134,46 +134,32 @@ _gtk_magnifier_draw (GtkWidget *widget,
 }
 
 static void
-gtk_magnifier_get_preferred_width (GtkWidget *widget,
-                                   gint      *minimum_width,
-                                   gint      *natural_width)
+gtk_magnifier_measure (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
 {
-  GtkMagnifier *magnifier;
-  GtkMagnifierPrivate *priv;
-  gint width;
-
-  magnifier = GTK_MAGNIFIER (widget);
-  priv = _gtk_magnifier_get_instance_private (magnifier);
+  GtkMagnifier *magnifier = GTK_MAGNIFIER (widget);
+  GtkMagnifierPrivate *priv = _gtk_magnifier_get_instance_private (magnifier);
+  gint size;
 
   if (priv->resize && priv->inspected)
-    width = priv->magnification * gtk_widget_get_allocated_width (priv->inspected);
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        size = priv->magnification * gtk_widget_get_allocated_width (priv->inspected);
+      else
+        size = priv->magnification * gtk_widget_get_allocated_height (priv->inspected);
+    }
   else
-    width = 0;
+    size = 0;
 
-  *minimum_width = width;
-  *natural_width = width;
+  *minimum = size;
+  *natural = size;
 }
 
-static void
-gtk_magnifier_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum_height,
-                                    gint      *natural_height)
-{
-  GtkMagnifier *magnifier;
-  GtkMagnifierPrivate *priv;
-  gint height;
-
-  magnifier = GTK_MAGNIFIER (widget);
-  priv = _gtk_magnifier_get_instance_private (magnifier);
-
-  if (priv->resize && priv->inspected)
-    height = priv->magnification * gtk_widget_get_allocated_height (priv->inspected);
-  else
-    height = 0;
-
-  *minimum_height = height;
-  *natural_height = height;
-}
 
 static void
 resize_handler (GtkWidget     *widget,
@@ -284,8 +270,7 @@ _gtk_magnifier_class_init (GtkMagnifierClass *klass)
 
   widget_class->destroy = _gtk_magnifier_destroy;
   widget_class->draw = _gtk_magnifier_draw;
-  widget_class->get_preferred_width = gtk_magnifier_get_preferred_width;
-  widget_class->get_preferred_height = gtk_magnifier_get_preferred_height;
+  widget_class->measure = gtk_magnifier_measure;
   widget_class->map = gtk_magnifier_map;
   widget_class->unmap = gtk_magnifier_unmap;
 

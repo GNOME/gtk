@@ -94,46 +94,22 @@ gtk_icon_set_property (GObject      *object,
 }
 
 static void
-gtk_icon_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-                                                      gint       for_width,
-                                                      gint      *minimum,
-                                                      gint      *natural,
-                                                      gint      *minimum_baseline,
-                                                      gint      *natural_baseline)
+gtk_icon_measure (GtkWidget *widget,
+                  GtkOrientation  orientation,
+                  int             for_size,
+                  int            *minimum,
+                  int            *natural,
+                  int            *minimum_baseline,
+                  int            *natural_baseline)
 {
   GtkIcon *self = GTK_ICON (widget);
   GtkIconPrivate *priv = gtk_icon_get_instance_private (self);
 
   gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     for_width,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
                                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_icon_get_preferred_height (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
-{
-  gtk_icon_get_preferred_height_and_baseline_for_width (widget, -1,
-                                                        minimum, natural,
-                                                        NULL, NULL);
-}
-
-static void
-gtk_icon_get_preferred_width (GtkWidget *widget,
-                              gint      *minimum,
-                              gint      *natural)
-{
-  GtkIcon *self = GTK_ICON (widget);
-  GtkIconPrivate *priv = gtk_icon_get_instance_private (self);
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
 }
 
 static void
@@ -175,9 +151,7 @@ gtk_icon_class_init (GtkIconClass *klass)
   oclass->finalize = gtk_icon_finalize;
 
   wclass->size_allocate = gtk_icon_size_allocate;
-  wclass->get_preferred_width = gtk_icon_get_preferred_width;
-  wclass->get_preferred_height = gtk_icon_get_preferred_height;
-  wclass->get_preferred_height_and_baseline_for_width = gtk_icon_get_preferred_height_and_baseline_for_width;
+  wclass->measure = gtk_icon_measure;
   wclass->draw = gtk_icon_draw;
 
   icon_props[PROP_CSS_NAME] =

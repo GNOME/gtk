@@ -253,18 +253,13 @@ static void gtk_spin_button_map            (GtkWidget          *widget);
 static void gtk_spin_button_unmap          (GtkWidget          *widget);
 static void gtk_spin_button_realize        (GtkWidget          *widget);
 static void gtk_spin_button_unrealize      (GtkWidget          *widget);
-static void gtk_spin_button_get_preferred_width  (GtkWidget          *widget,
-                                                  gint               *minimum,
-                                                  gint               *natural);
-static void gtk_spin_button_get_preferred_height (GtkWidget          *widget,
-                                                  gint               *minimum,
-                                                  gint               *natural);
-static void gtk_spin_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-									 gint       width,
-									 gint      *minimum,
-									 gint      *natural,
-									 gint      *minimum_baseline,
-									 gint      *natural_baseline);
+static void gtk_spin_button_measure (GtkWidget      *widget,
+                                     GtkOrientation  orientation,
+                                     int             for_size,
+                                     int            *minimum,
+                                     int            *natural,
+                                     int            *minimum_baseline,
+                                     int            *natural_baseline);
 static void gtk_spin_button_size_allocate  (GtkWidget          *widget,
                                             GtkAllocation      *allocation);
 static gint gtk_spin_button_draw           (GtkWidget          *widget,
@@ -345,9 +340,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->unmap = gtk_spin_button_unmap;
   widget_class->realize = gtk_spin_button_realize;
   widget_class->unrealize = gtk_spin_button_unrealize;
-  widget_class->get_preferred_width = gtk_spin_button_get_preferred_width;
-  widget_class->get_preferred_height = gtk_spin_button_get_preferred_height;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_spin_button_get_preferred_height_and_baseline_for_width;
+  widget_class->measure = gtk_spin_button_measure;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
   widget_class->draw = gtk_spin_button_draw;
   widget_class->scroll_event = gtk_spin_button_scroll;
@@ -1141,38 +1134,19 @@ gtk_spin_button_get_text_width (GtkSpinButton *spin_button)
 }
 
 static void
-gtk_spin_button_get_preferred_width (GtkWidget *widget,
-                                     gint      *minimum,
-                                     gint      *natural)
+gtk_spin_button_measure (GtkWidget      *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_SPIN_BUTTON (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_spin_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-							     gint       width,
-							     gint      *minimum,
-							     gint      *natural,
-							     gint      *minimum_baseline,
-							     gint      *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_SPIN_BUTTON (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
                                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_spin_button_get_preferred_height (GtkWidget *widget,
-                                      gint      *minimum,
-                                      gint      *natural)
-{
-  gtk_spin_button_get_preferred_height_and_baseline_for_width (widget, -1, minimum, natural, NULL, NULL);
 }
 
 static void

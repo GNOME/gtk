@@ -1241,145 +1241,69 @@ get_minimal_size (GtkPopover     *popover,
 }
 
 static void
-gtk_popover_get_preferred_width (GtkWidget *widget,
-                                 gint      *minimum_width,
-                                 gint      *natural_width)
+gtk_popover_measure (GtkWidget      *widget,
+                     GtkOrientation  orientation,
+                     int             for_size,
+                     int            *minimum,
+                     int            *natural,
+                     int            *minimum_baseline,
+                     int            *natural_baseline)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
-  GtkWidget *child;
-  gint min, nat, extra, minimal_size;
+  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
   GtkBorder border, margin;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  min = nat = 0;
-
-  if (child)
-    gtk_widget_get_preferred_width (child, &min, &nat);
-
-  get_padding_and_border (widget, &border);
-  get_margin (widget, &margin);
-  minimal_size = get_minimal_size (popover, GTK_ORIENTATION_HORIZONTAL);
-
-  min = MAX (min, minimal_size) + border.left + border.right;
-  nat = MAX (nat, minimal_size) + border.left + border.right;
-  extra = MAX (TAIL_HEIGHT, margin.left) + MAX (TAIL_HEIGHT, margin.right);
-
-  min += extra;
-  nat += extra;
-
-  *minimum_width = min;
-  *natural_width = nat;
-}
-
-static void
-gtk_popover_get_preferred_width_for_height (GtkWidget *widget,
-                                            gint       height,
-                                            gint      *minimum_width,
-                                            gint      *natural_width)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkWidget *child;
-  GdkRectangle child_rect;
-  gint min, nat, extra, minimal_size;
-  gint child_height;
-  GtkBorder border, margin;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  min = nat = 0;
-
-  gtk_popover_get_rect_for_size (popover, 0, height, &child_rect);
-  child_height = child_rect.height;
-
-
-  get_padding_and_border (widget, &border);
-  get_margin (widget, &margin);
-  child_height -= border.top + border.bottom;
-  minimal_size = get_minimal_size (popover, GTK_ORIENTATION_HORIZONTAL);
-
-  if (child)
-    gtk_widget_get_preferred_width_for_height (child, child_height, &min, &nat);
-
-  min = MAX (min, minimal_size) + border.left + border.right;
-  nat = MAX (nat, minimal_size) + border.left + border.right;
-  extra = MAX (TAIL_HEIGHT, margin.left) + MAX (TAIL_HEIGHT, margin.right);
-
-  min += extra;
-  nat += extra;
-
-  *minimum_width = min;
-  *natural_width = nat;
-}
-
-static void
-gtk_popover_get_preferred_height (GtkWidget *widget,
-                                  gint      *minimum_height,
-                                  gint      *natural_height)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkWidget *child;
-  gint min, nat, extra, minimal_size;
-  GtkBorder border, margin;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  min = nat = 0;
-
-  if (child)
-    gtk_widget_get_preferred_height (child, &min, &nat);
-
-  get_padding_and_border (widget, &border);
-  get_margin (widget, &margin);
-  minimal_size = get_minimal_size (popover, GTK_ORIENTATION_VERTICAL);
-
-  min = MAX (min, minimal_size) + border.top + border.bottom;
-  nat = MAX (nat, minimal_size) + border.top + border.bottom;
-  extra = MAX (TAIL_HEIGHT, margin.top) + MAX (TAIL_HEIGHT, margin.bottom);
-
-  min += extra;
-  nat += extra;
-
-  *minimum_height = min;
-  *natural_height = nat;
-}
-
-static void
-gtk_popover_get_preferred_height_for_width (GtkWidget *widget,
-                                            gint       width,
-                                            gint      *minimum_height,
-                                            gint      *natural_height)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkWidget *child;
-  GdkRectangle child_rect;
-  gint min, nat, extra, minimal_size;
-  gint child_width;
-  GtkBorder border, margin;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  min = nat = 0;
+  int minimal_size, extra;
 
   get_padding_and_border (widget, &border);
   get_margin (widget, &margin);
 
-  gtk_popover_get_rect_for_size (popover, width, 0, &child_rect);
-  child_width = child_rect.width;
+  *minimum = 0;
+  *natural = 0;
 
-  child_width -= border.left + border.right;
-  minimal_size = get_minimal_size (popover, GTK_ORIENTATION_VERTICAL);
-  if (child)
-    gtk_widget_get_preferred_height_for_width (child, child_width, &min, &nat);
+  if (child != NULL)
+    {
+      if (for_size >= 0)
+        {
+          int child_size;
+          GdkRectangle child_rect;
 
-  min = MAX (min, minimal_size) + border.top + border.bottom;
-  nat = MAX (nat, minimal_size) + border.top + border.bottom;
-  extra = MAX (TAIL_HEIGHT, margin.top) + MAX (TAIL_HEIGHT, margin.bottom);
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              gtk_popover_get_rect_for_size (popover, for_size, 0, &child_rect);
+              child_size = child_rect.width;
+            }
+          else
+            {
+              gtk_popover_get_rect_for_size (popover, 0, for_size, &child_rect);
+              child_size = child_rect.height;
+            }
 
-  min += extra;
-  nat += extra;
+          gtk_widget_measure (child, orientation, child_size, minimum, natural, NULL, NULL);
 
-  if (minimum_height)
-    *minimum_height = min;
+        }
+      else
+        {
+          gtk_widget_measure (child, orientation, -1, minimum, natural, NULL, NULL);
+        }
+    }
 
-  if (natural_height)
-    *natural_height = nat;
+  minimal_size = get_minimal_size (popover, orientation);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *minimum = MAX (*minimum, minimal_size) + border.left + border.right;
+      *natural = MAX (*natural, minimal_size) + border.left + border.right;
+      extra = MAX (TAIL_HEIGHT, margin.left) + MAX (TAIL_HEIGHT, margin.right);
+    }
+  else
+    {
+      *minimum = MAX (*minimum, minimal_size) + border.top + border.bottom;
+      *natural = MAX (*natural, minimal_size) + border.top + border.bottom;
+      extra = MAX (TAIL_HEIGHT, margin.bottom) + MAX (TAIL_HEIGHT, margin.top);
+
+    }
+
+  *minimum += extra;
+  *natural += extra;
 }
 
 static void
@@ -1635,10 +1559,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->realize = gtk_popover_realize;
   widget_class->map = gtk_popover_map;
   widget_class->unmap = gtk_popover_unmap;
-  widget_class->get_preferred_width = gtk_popover_get_preferred_width;
-  widget_class->get_preferred_height = gtk_popover_get_preferred_height;
-  widget_class->get_preferred_width_for_height = gtk_popover_get_preferred_width_for_height;
-  widget_class->get_preferred_height_for_width = gtk_popover_get_preferred_height_for_width;
+  widget_class->measure = gtk_popover_measure;
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->draw = gtk_popover_draw;
   widget_class->button_press_event = gtk_popover_button_press;

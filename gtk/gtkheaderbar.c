@@ -904,61 +904,21 @@ gtk_header_bar_get_content_size (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_header_bar_get_preferred_width (GtkWidget *widget,
-                                    gint      *minimum,
-                                    gint      *natural)
+gtk_header_bar_measure (GtkWidget      *widget,
+                        GtkOrientation  orientation,
+                        int             for_size,
+                        int            *minimum,
+                        int            *natural,
+                        int            *minimum_baseline,
+                        int            *natural_baseline)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
 
   gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_header_bar_get_preferred_height (GtkWidget *widget,
-                                     gint      *minimum,
-                                     gint      *natural)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_header_bar_get_preferred_width_for_height (GtkWidget *widget,
-                                               gint       height,
-                                               gint      *minimum,
-                                               gint      *natural)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_header_bar_get_preferred_height_for_width (GtkWidget *widget,
-                                               gint       width,
-                                               gint      *minimum,
-                                               gint      *natural)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -1949,10 +1909,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
 
   widget_class->destroy = gtk_header_bar_destroy;
   widget_class->size_allocate = gtk_header_bar_size_allocate;
-  widget_class->get_preferred_width = gtk_header_bar_get_preferred_width;
-  widget_class->get_preferred_height = gtk_header_bar_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_header_bar_get_preferred_height_for_width;
-  widget_class->get_preferred_width_for_height = gtk_header_bar_get_preferred_width_for_height;
+  widget_class->measure = gtk_header_bar_measure;
   widget_class->realize = gtk_header_bar_realize;
   widget_class->unrealize = gtk_header_bar_unrealize;
   widget_class->hierarchy_changed = gtk_header_bar_hierarchy_changed;

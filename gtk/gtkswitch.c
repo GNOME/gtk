@@ -404,27 +404,19 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_switch_get_preferred_width (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
+gtk_switch_measure (GtkWidget      *widget,
+                    GtkOrientation  orientation,
+                    int             for_size,
+                    int            *minimum,
+                    int            *natural,
+                    int            *minimum_baseline,
+                    int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_SWITCH (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_switch_get_preferred_height (GtkWidget *widget,
-                                 gint      *minimum,
-                                 gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_SWITCH (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -782,8 +774,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, switch_props);
 
-  widget_class->get_preferred_width = gtk_switch_get_preferred_width;
-  widget_class->get_preferred_height = gtk_switch_get_preferred_height;
+  widget_class->measure = gtk_switch_measure;
   widget_class->size_allocate = gtk_switch_size_allocate;
   widget_class->realize = gtk_switch_realize;
   widget_class->unrealize = gtk_switch_unrealize;

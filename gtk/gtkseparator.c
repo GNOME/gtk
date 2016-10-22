@@ -114,28 +114,19 @@ gtk_separator_get_property (GObject    *object,
     }
 }
 
-static void
-gtk_separator_get_preferred_width (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
+static void gtk_separator_measure (GtkWidget *widget,
+                                   GtkOrientation  orientation,
+                                   gint            for_size,
+                                   gint           *minimum,
+                                   gint           *natural,
+                                   gint           *minimum_baseline,
+                                   gint           *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_SEPARATOR (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_separator_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum,
-                                    gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_SEPARATOR (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -203,8 +194,7 @@ gtk_separator_class_init (GtkSeparatorClass *class)
   object_class->get_property = gtk_separator_get_property;
   object_class->finalize = gtk_separator_finalize;
 
-  widget_class->get_preferred_width = gtk_separator_get_preferred_width;
-  widget_class->get_preferred_height = gtk_separator_get_preferred_height;
+  widget_class->measure = gtk_separator_measure;
   widget_class->size_allocate = gtk_separator_size_allocate;
 
   widget_class->draw = gtk_separator_draw;

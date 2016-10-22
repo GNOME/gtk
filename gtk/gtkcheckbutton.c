@@ -78,26 +78,6 @@
  */
 
 
-static void gtk_check_button_get_preferred_width                         (GtkWidget          *widget,
-                                                                          gint               *minimum,
-                                                                          gint               *natural);
-static void gtk_check_button_get_preferred_width_for_height              (GtkWidget          *widget,
-                                                                          gint                height,
-                                                                          gint               *minimum,
-                                                                          gint               *natural);
-static void gtk_check_button_get_preferred_height                        (GtkWidget          *widget,
-                                                                          gint               *minimum,
-                                                                          gint               *natural);
-static void gtk_check_button_get_preferred_height_for_width              (GtkWidget          *widget,
-                                                                          gint                width,
-                                                                          gint               *minimum,
-                                                                          gint               *natural);
-static void gtk_check_button_get_preferred_height_and_baseline_for_width (GtkWidget          *widget,
-									  gint                width,
-									  gint               *minimum,
-									  gint               *natural,
-									  gint               *minimum_baseline,
-									  gint               *natural_baseline);
 static void gtk_check_button_size_allocate       (GtkWidget           *widget,
 						  GtkAllocation       *allocation);
 static GskRenderNode *gtk_check_button_get_render_node (GtkWidget   *widget,
@@ -196,6 +176,30 @@ gtk_check_button_remove (GtkContainer *container,
 }
 
 static void
+gtk_check_button_measure (GtkWidget      *widget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
+  GtkCssGadget *gadget;
+
+  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
+    gadget = priv->gadget;
+  else
+    gadget = GTK_BUTTON (widget)->priv->gadget;
+
+  gtk_css_gadget_get_preferred_size (gadget,
+                                     orientation,
+                                     for_size,
+                                     minimum, natural,
+                                     minimum_baseline, natural_baseline);
+}
+
+static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -204,11 +208,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 
   object_class->finalize = gtk_check_button_finalize;
 
-  widget_class->get_preferred_width = gtk_check_button_get_preferred_width;
-  widget_class->get_preferred_width_for_height = gtk_check_button_get_preferred_width_for_height;
-  widget_class->get_preferred_height = gtk_check_button_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_check_button_get_preferred_height_for_width;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_check_button_get_preferred_height_and_baseline_for_width;
+  widget_class->measure = gtk_check_button_measure;
   widget_class->size_allocate = gtk_check_button_size_allocate;
   widget_class->get_render_node = gtk_check_button_get_render_node;
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
@@ -335,111 +335,6 @@ gtk_check_button_new_with_mnemonic (const gchar *label)
                        "label", label, 
                        "use-underline", TRUE, 
                        NULL);
-}
-
-static void
-gtk_check_button_get_preferred_width_for_height (GtkWidget *widget,
-                                                 gint       height,
-                                                 gint      *minimum,
-                                                 gint      *natural)
-{
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkCssGadget *gadget;
-
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
-    gadget = priv->gadget;
-  else
-    gadget = GTK_BUTTON (widget)->priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_check_button_get_preferred_width (GtkWidget *widget,
-                                      gint      *minimum,
-                                      gint      *natural)
-{
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkCssGadget *gadget;
-
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
-    gadget = priv->gadget;
-  else
-    gadget = GTK_BUTTON (widget)->priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_check_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-							      gint       width,
-							      gint      *minimum,
-							      gint      *natural,
-							      gint      *minimum_baseline,
-							      gint      *natural_baseline)
-{
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkCssGadget *gadget;
-
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
-    gadget = priv->gadget;
-  else
-    gadget = GTK_BUTTON (widget)->priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_check_button_get_preferred_height_for_width (GtkWidget *widget,
-                                                 gint       width,
-                                                 gint      *minimum,
-                                                 gint      *natural)
-{
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkCssGadget *gadget;
-
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
-    gadget = priv->gadget;
-  else
-    gadget = GTK_BUTTON (widget)->priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_check_button_get_preferred_height (GtkWidget *widget,
-                                       gint      *minimum,
-                                       gint      *natural)
-{
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkCssGadget *gadget;
-
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
-    gadget = priv->gadget;
-  else
-    gadget = GTK_BUTTON (widget)->priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
 }
 
 static void

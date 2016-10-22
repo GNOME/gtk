@@ -383,12 +383,13 @@ static void gtk_text_view_get_property         (GObject         *object,
 static void gtk_text_view_destroy              (GtkWidget        *widget);
 static void gtk_text_view_size_request         (GtkWidget        *widget,
                                                 GtkRequisition   *requisition);
-static void gtk_text_view_get_preferred_width  (GtkWidget        *widget,
-						gint             *minimum,
-						gint             *natural);
-static void gtk_text_view_get_preferred_height (GtkWidget        *widget,
-						gint             *minimum,
-						gint             *natural);
+static void gtk_text_view_measure (GtkWidget      *widget,
+                                   GtkOrientation  orientation,
+                                   int             for_size,
+                                   int            *minimum,
+                                   int            *natural,
+                                   int            *minimum_baseline,
+                                   int            *natural_baseline);
 static void gtk_text_view_size_allocate        (GtkWidget        *widget,
                                                 GtkAllocation    *allocation);
 static void gtk_text_view_map                  (GtkWidget        *widget);
@@ -747,8 +748,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->style_updated = gtk_text_view_style_updated;
   widget_class->direction_changed = gtk_text_view_direction_changed;
   widget_class->state_flags_changed = gtk_text_view_state_flags_changed;
-  widget_class->get_preferred_width = gtk_text_view_get_preferred_width;
-  widget_class->get_preferred_height = gtk_text_view_get_preferred_height;
+  widget_class->measure = gtk_text_view_measure;
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->event = gtk_text_view_event;
   widget_class->key_press_event = gtk_text_view_key_press_event;
@@ -4035,29 +4035,23 @@ gtk_text_view_size_request (GtkWidget      *widget,
 }
 
 static void
-gtk_text_view_get_preferred_width (GtkWidget *widget,
-				   gint      *minimum,
-				   gint      *natural)
+gtk_text_view_measure (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
 {
   GtkRequisition requisition;
 
   gtk_text_view_size_request (widget, &requisition);
 
-  *minimum = *natural = requisition.width;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = requisition.width;
+  else
+    *minimum = *natural = requisition.height;
 }
-
-static void
-gtk_text_view_get_preferred_height (GtkWidget *widget,
-				    gint      *minimum,
-				    gint      *natural)
-{
-  GtkRequisition requisition;
-
-  gtk_text_view_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
-}
-
 
 static void
 gtk_text_view_compute_child_allocation (GtkTextView      *text_view,

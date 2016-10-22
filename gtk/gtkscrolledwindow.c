@@ -366,21 +366,13 @@ static void     gtk_scrolled_window_adjustment_value_changed (GtkAdjustment     
                                                               gpointer           data);
 static gboolean gtk_widget_should_animate              (GtkWidget           *widget);
 
-static void  gtk_scrolled_window_get_preferred_width   (GtkWidget           *widget,
-							gint                *minimum_size,
-							gint                *natural_size);
-static void  gtk_scrolled_window_get_preferred_height  (GtkWidget           *widget,
-							gint                *minimum_size,
-							gint                *natural_size);
-static void  gtk_scrolled_window_get_preferred_height_for_width  (GtkWidget           *layout,
-							gint                 width,
-							gint                *minimum_height,
-							gint                *natural_height);
-static void  gtk_scrolled_window_get_preferred_width_for_height  (GtkWidget           *layout,
-							gint                 width,
-							gint                *minimum_height,
-							gint                *natural_height);
-
+static void gtk_scrolled_window_measure_ (GtkWidget      *widget,
+                                          GtkOrientation  orientation,
+                                          int             for_size,
+                                          int            *minimum,
+                                          int            *natural,
+                                          int            *minimum_baseline,
+                                          int            *natural_baseline);
 static void  gtk_scrolled_window_map                   (GtkWidget           *widget);
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
 static void  gtk_scrolled_window_realize               (GtkWidget           *widget);
@@ -541,10 +533,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
   widget_class->scroll_event = gtk_scrolled_window_scroll_event;
   widget_class->focus = gtk_scrolled_window_focus;
-  widget_class->get_preferred_width = gtk_scrolled_window_get_preferred_width;
-  widget_class->get_preferred_height = gtk_scrolled_window_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_scrolled_window_get_preferred_height_for_width;
-  widget_class->get_preferred_width_for_height = gtk_scrolled_window_get_preferred_width_for_height;
+  widget_class->measure = gtk_scrolled_window_measure_;
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
   widget_class->grab_notify = gtk_scrolled_window_grab_notify;
@@ -3899,45 +3888,19 @@ gtk_scrolled_window_remove (GtkContainer *container,
 }
 
 static void
-gtk_scrolled_window_get_preferred_width (GtkWidget *widget,
-                                         gint      *minimum_size,
-                                         gint      *natural_size)
+gtk_scrolled_window_measure_ (GtkWidget      *widget,
+                              GtkOrientation  orientation,
+                              int             for_size,
+                              int            *minimum,
+                              int            *natural,
+                              int            *minimum_baseline,
+                              int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_SCROLLED_WINDOW (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_scrolled_window_get_preferred_height (GtkWidget *widget,
-                                          gint      *minimum_size,
-                                          gint      *natural_size)
-{
-  gtk_css_gadget_get_preferred_size (GTK_SCROLLED_WINDOW (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_scrolled_window_get_preferred_height_for_width (GtkWidget *widget,
-                                                    gint       width,
-                                                    gint      *minimum_height,
-                                                    gint      *natural_height)
-{
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
-}
-
-static void
-gtk_scrolled_window_get_preferred_width_for_height (GtkWidget *widget,
-                                                    gint       height,
-                                                    gint      *minimum_width,
-                                                    gint      *natural_width)
-{
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
+                                     orientation,
+                                     for_size,
+                                     minimum, natural,
+                                     minimum_baseline, natural_baseline);
 }
 
 static gboolean

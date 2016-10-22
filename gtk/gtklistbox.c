@@ -239,22 +239,6 @@ static void                 gtk_list_box_move_cursor                  (GtkListBo
 static void                 gtk_list_box_finalize                     (GObject             *obj);
 static void                 gtk_list_box_parent_set                   (GtkWidget           *widget,
                                                                        GtkWidget           *prev_parent);
-
-static void                 gtk_list_box_get_preferred_height           (GtkWidget           *widget,
-                                                                         gint                *minimum_height,
-                                                                         gint                *natural_height);
-static void                 gtk_list_box_get_preferred_height_for_width (GtkWidget           *widget,
-                                                                         gint                 width,
-                                                                         gint                *minimum_height,
-                                                                         gint                *natural_height);
-static void                 gtk_list_box_get_preferred_width            (GtkWidget           *widget,
-                                                                         gint                *minimum_width,
-                                                                         gint                *natural_width);
-static void                 gtk_list_box_get_preferred_width_for_height (GtkWidget           *widget,
-                                                                         gint                 height,
-                                                                         gint                *minimum_width,
-                                                                         gint                *natural_width);
-
 static void                 gtk_list_box_select_row_internal            (GtkListBox          *box,
                                                                          GtkListBoxRow       *row);
 static void                 gtk_list_box_unselect_row_internal          (GtkListBox          *box,
@@ -302,6 +286,13 @@ static void     gtk_list_box_allocate    (GtkCssGadget        *gadget,
                                           int                  baseline,
                                           GtkAllocation       *out_clip,
                                           gpointer             data);
+static void gtk_list_box_measure_ (GtkWidget     *widget,
+                                   GtkOrientation  orientation,
+                                   int             for_size,
+                                   int            *minimum,
+                                   int            *natural,
+                                   int            *minimum_baseline,
+                                   int            *natural_baseline);
 
 
 
@@ -424,10 +415,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->realize = gtk_list_box_realize;
   widget_class->compute_expand = gtk_list_box_compute_expand;
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
-  widget_class->get_preferred_height = gtk_list_box_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_list_box_get_preferred_height_for_width;
-  widget_class->get_preferred_width = gtk_list_box_get_preferred_width;
-  widget_class->get_preferred_width_for_height = gtk_list_box_get_preferred_width_for_height;
+  widget_class->measure = gtk_list_box_measure_;
   widget_class->size_allocate = gtk_list_box_size_allocate;
   widget_class->drag_leave = gtk_list_box_drag_leave;
   widget_class->parent_set = gtk_list_box_parent_set;
@@ -2558,53 +2546,19 @@ gtk_list_box_get_request_mode (GtkWidget *widget)
 }
 
 static void
-gtk_list_box_get_preferred_height (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
+gtk_list_box_measure_ (GtkWidget     *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_list_box_get_preferred_height_for_width (GtkWidget *widget,
-                                             gint       width,
-                                             gint      *minimum,
-                                             gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_list_box_get_preferred_width (GtkWidget *widget,
-                                  gint      *minimum,
-                                  gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_list_box_get_preferred_width_for_height (GtkWidget *widget,
-                                             gint       height,
-                                             gint      *minimum,
-                                             gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -3299,53 +3253,19 @@ gtk_list_box_row_measure (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_list_box_row_get_preferred_height (GtkWidget *widget,
-                                       gint      *minimum,
-                                       gint      *natural)
+gtk_list_box_row_measure_ (GtkWidget     *widget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_list_box_row_get_preferred_height_for_width (GtkWidget *widget,
-                                                 gint       width,
-                                                 gint      *minimum,
-                                                 gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_list_box_row_get_preferred_width (GtkWidget *widget,
-                                      gint      *minimum,
-                                      gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_list_box_row_get_preferred_width_for_height (GtkWidget *widget,
-                                                 gint       height,
-                                                 gint      *minimum,
-                                                 gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -3723,10 +3643,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   widget_class->show = gtk_list_box_row_show;
   widget_class->hide = gtk_list_box_row_hide;
   widget_class->get_render_node = gtk_list_box_row_get_render_node;
-  widget_class->get_preferred_height = gtk_list_box_row_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_list_box_row_get_preferred_height_for_width;
-  widget_class->get_preferred_width = gtk_list_box_row_get_preferred_width;
-  widget_class->get_preferred_width_for_height = gtk_list_box_row_get_preferred_width_for_height;
+  widget_class->measure = gtk_list_box_row_measure_;
   widget_class->size_allocate = gtk_list_box_row_size_allocate;
   widget_class->focus = gtk_list_box_row_focus;
   widget_class->grab_focus = gtk_list_box_row_grab_focus;

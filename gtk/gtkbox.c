@@ -195,29 +195,13 @@ static GType gtk_box_child_type        (GtkContainer   *container);
 static GtkWidgetPath * gtk_box_get_path_for_child
                                        (GtkContainer   *container,
                                         GtkWidget      *child);
-
-
-static void               gtk_box_get_preferred_width            (GtkWidget           *widget,
-                                                                  gint                *minimum_size,
-                                                                  gint                *natural_size);
-static void               gtk_box_get_preferred_height           (GtkWidget           *widget,
-                                                                  gint                *minimum_size,
-                                                                  gint                *natural_size);
-static void               gtk_box_get_preferred_width_for_height (GtkWidget           *widget,
-                                                                  gint                 height,
-                                                                  gint                *minimum_width,
-                                                                  gint                *natural_width);
-static void               gtk_box_get_preferred_height_for_width (GtkWidget           *widget,
-                                                                  gint                 width,
-                                                                  gint                *minimum_height,
-                                                                  gint                *natural_height);
-static void  gtk_box_get_preferred_height_and_baseline_for_width (GtkWidget           *widget,
-								  gint                 width,
-								  gint                *minimum_height,
-								  gint                *natural_height,
-								  gint                *minimum_baseline,
-								  gint                *natural_baseline);
-
+static void gtk_box_measure (GtkWidget      *widget,
+                             GtkOrientation  orientation,
+                             int             for_size,
+                             int            *minimum,
+                             int            *natural,
+                             int            *minimum_baseline,
+                             int            *natural_baseline);
 static GskRenderNode *  gtk_box_get_render_node                 (GtkWidget            *widget,
                                                                  GskRenderer          *renderer);
 
@@ -252,11 +236,7 @@ gtk_box_class_init (GtkBoxClass *class)
 
   widget_class->get_render_node                = gtk_box_get_render_node;
   widget_class->size_allocate                  = gtk_box_size_allocate;
-  widget_class->get_preferred_width            = gtk_box_get_preferred_width;
-  widget_class->get_preferred_height           = gtk_box_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_box_get_preferred_height_for_width;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_box_get_preferred_height_and_baseline_for_width;
-  widget_class->get_preferred_width_for_height = gtk_box_get_preferred_width_for_height;
+  widget_class->measure                        = gtk_box_measure;
   widget_class->direction_changed              = gtk_box_direction_changed;
 
   container_class->add = gtk_box_add;
@@ -1660,27 +1640,19 @@ gtk_box_get_size (GtkWidget      *widget,
 }
 
 static void
-gtk_box_get_preferred_width (GtkWidget *widget,
-                             gint      *minimum,
-                             gint      *natural)
+gtk_box_measure (GtkWidget      *widget,
+                 GtkOrientation  orientation,
+                 int             for_size,
+                 int            *minimum,
+                 int            *natural,
+                 int            *minimum_baseline,
+                 int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_box_get_preferred_height (GtkWidget *widget,
-                              gint      *minimum,
-                              gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -1963,34 +1935,6 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
 }
 
 static void
-gtk_box_get_preferred_width_for_height (GtkWidget *widget,
-                                        gint       height,
-                                        gint      *minimum,
-                                        gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-						     gint       width,
-						     gint      *minimum,
-						     gint      *natural,
-						     gint      *minimum_baseline,
-						     gint      *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
 gtk_box_get_content_size (GtkCssGadget   *gadget,
                           GtkOrientation  orientation,
                           gint            for_size,
@@ -2019,15 +1963,6 @@ gtk_box_get_content_size (GtkCssGadget   *gadget,
 	  gtk_box_compute_size_for_orientation (box, for_size, minimum, natural);
 	}
     }
-}
-
-static void
-gtk_box_get_preferred_height_for_width (GtkWidget *widget,
-                                        gint       width,
-                                        gint      *minimum_height,
-                                        gint      *natural_height)
-{
-  gtk_box_get_preferred_height_and_baseline_for_width (widget, width, minimum_height, natural_height, NULL, NULL);
 }
 
 static void

@@ -71,12 +71,13 @@ static void     gtk_separator_tool_item_get_property      (GObject              
                                                            guint                      prop_id,
                                                            GValue                    *value,
                                                            GParamSpec                *pspec);
-static void     gtk_separator_tool_item_get_preferred_width (GtkWidget               *widget,
-                                                           gint                      *minimum,
-                                                           gint                      *natural);
-static void     gtk_separator_tool_item_get_preferred_height (GtkWidget              *widget,
-                                                           gint                      *minimum,
-                                                           gint                      *natural);
+static void     gtk_separator_tool_item_measure           (GtkWidget *widget,
+                                                           GtkOrientation  orientation,
+                                                           gint            for_size,
+                                                           gint           *minimum,
+                                                           gint           *natural,
+                                                           gint           *minimum_baseline,
+                                                           gint           *natural_baseline);
 static void     gtk_separator_tool_item_size_allocate     (GtkWidget                 *widget,
                                                            GtkAllocation             *allocation);
 static gboolean gtk_separator_tool_item_draw              (GtkWidget                 *widget,
@@ -121,8 +122,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
   object_class->get_property = gtk_separator_tool_item_get_property;
   object_class->finalize = gtk_separator_tool_item_finalize;
 
-  widget_class->get_preferred_width = gtk_separator_tool_item_get_preferred_width;
-  widget_class->get_preferred_height = gtk_separator_tool_item_get_preferred_height;
+  widget_class->measure = gtk_separator_tool_item_measure;
   widget_class->size_allocate = gtk_separator_tool_item_size_allocate;
   widget_class->draw = gtk_separator_tool_item_draw;
   widget_class->realize = gtk_separator_tool_item_realize;
@@ -225,29 +225,20 @@ gtk_separator_tool_item_get_property (GObject      *object,
       break;
     }
 }
-
 static void
-gtk_separator_tool_item_get_preferred_width (GtkWidget *widget,
-                                             gint      *minimum,
-                                             gint      *natural)
+gtk_separator_tool_item_measure (GtkWidget *widget,
+                                 GtkOrientation  orientation,
+                                 gint            for_size,
+                                 gint           *minimum,
+                                 gint           *natural,
+                                 gint           *minimum_baseline,
+                                 gint           *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_separator_tool_item_get_preferred_height (GtkWidget *widget,
-                                              gint      *minimum,
-                                              gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void

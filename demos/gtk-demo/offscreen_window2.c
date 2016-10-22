@@ -36,12 +36,13 @@ GtkWidget* gtk_mirror_bin_new       (void);
 
 static void     gtk_mirror_bin_realize       (GtkWidget       *widget);
 static void     gtk_mirror_bin_unrealize     (GtkWidget       *widget);
-static void     gtk_mirror_bin_get_preferred_width  (GtkWidget *widget,
-                                                     gint      *minimum,
-                                                     gint      *natural);
-static void     gtk_mirror_bin_get_preferred_height (GtkWidget *widget,
-                                                     gint      *minimum,
-                                                     gint      *natural);
+static void     gtk_mirror_bin_measure       (GtkWidget       *widget,
+                                              GtkOrientation   orientation,
+                                              int              for_size,
+                                              int             *minimum,
+                                              int             *natural,
+                                              int             *minimum_baseline,
+                                              int             *natural_baseline);
 static void     gtk_mirror_bin_size_allocate (GtkWidget       *widget,
                                                GtkAllocation   *allocation);
 static gboolean gtk_mirror_bin_damage        (GtkWidget       *widget,
@@ -91,8 +92,7 @@ gtk_mirror_bin_class_init (GtkMirrorBinClass *klass)
 
   widget_class->realize = gtk_mirror_bin_realize;
   widget_class->unrealize = gtk_mirror_bin_unrealize;
-  widget_class->get_preferred_width = gtk_mirror_bin_get_preferred_width;
-  widget_class->get_preferred_height = gtk_mirror_bin_get_preferred_height;
+  widget_class->measure = gtk_mirror_bin_measure;
   widget_class->size_allocate = gtk_mirror_bin_size_allocate;
   widget_class->draw = gtk_mirror_bin_draw;
 
@@ -320,27 +320,22 @@ gtk_mirror_bin_size_request (GtkWidget      *widget,
 }
 
 static void
-gtk_mirror_bin_get_preferred_width (GtkWidget *widget,
-                                    gint      *minimum,
-                                    gint      *natural)
+gtk_mirror_bin_measure (GtkWidget       *widget,
+                        GtkOrientation   orientation,
+                        int              for_size,
+                        int             *minimum,
+                        int             *natural,
+                        int             *minimum_baseline,
+                        int             *natural_baseline)
 {
   GtkRequisition requisition;
 
   gtk_mirror_bin_size_request (widget, &requisition);
 
-  *minimum = *natural = requisition.width;
-}
-
-static void
-gtk_mirror_bin_get_preferred_height (GtkWidget *widget,
-                                     gint      *minimum,
-                                     gint      *natural)
-{
-  GtkRequisition requisition;
-
-  gtk_mirror_bin_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = requisition.width;
+  else
+    *minimum = *natural = requisition.height;
 }
 
 static void

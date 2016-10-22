@@ -144,21 +144,13 @@ static void gtk_frame_buildable_add_child           (GtkBuildable *buildable,
 						     GtkBuilder   *builder,
 						     GObject      *child,
 						     const gchar  *type);
-
-static void gtk_frame_get_preferred_width           (GtkWidget           *widget,
-                                                     gint                *minimum_size,
-						     gint                *natural_size);
-static void gtk_frame_get_preferred_height          (GtkWidget           *widget,
-						     gint                *minimum_size,
-						     gint                *natural_size);
-static void gtk_frame_get_preferred_height_for_width(GtkWidget           *layout,
-						     gint                 width,
-						     gint                *minimum_height,
-						     gint                *natural_height);
-static void gtk_frame_get_preferred_width_for_height(GtkWidget           *layout,
-						     gint                 width,
-						     gint                *minimum_height,
-						     gint                *natural_height);
+static void     gtk_frame_measure_ (GtkWidget           *widget,
+                                    GtkOrientation       orientation,
+                                    gint                 for_size,
+                                    gint                *minimum_size,
+                                    gint                *natural_size,
+                                    gint                *minimum_baseline,
+                                    gint                *natural_baseline);
 static void gtk_frame_state_flags_changed (GtkWidget     *widget,
                                            GtkStateFlags  previous_state);
 
@@ -252,10 +244,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   widget_class->get_render_node                = gtk_frame_get_render_node;
   widget_class->size_allocate                  = gtk_frame_size_allocate;
-  widget_class->get_preferred_width            = gtk_frame_get_preferred_width;
-  widget_class->get_preferred_height           = gtk_frame_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_frame_get_preferred_height_for_width;
-  widget_class->get_preferred_width_for_height = gtk_frame_get_preferred_width_for_height;
+  widget_class->measure = gtk_frame_measure_;
   widget_class->state_flags_changed            = gtk_frame_state_flags_changed;
 
   container_class->remove = gtk_frame_remove;
@@ -982,56 +971,20 @@ gtk_frame_measure_border (GtkCssGadget   *gadget,
     }
 }
 
-
 static void
-gtk_frame_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
+gtk_frame_measure_ (GtkWidget           *widget,
+                    GtkOrientation       orientation,
+                    gint                 for_size,
+                    gint                *minimum,
+                    gint                *natural,
+                    gint                *minimum_baseline,
+                    gint                *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_FRAME (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_frame_get_preferred_width_for_height (GtkWidget *widget,
-                                          gint       height,
-                                          gint      *minimum,
-                                          gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_FRAME (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_frame_get_preferred_height (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_FRAME (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-
-static void
-gtk_frame_get_preferred_height_for_width (GtkWidget *widget,
-                                          gint       width,
-                                          gint      *minimum,
-                                          gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_FRAME (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void

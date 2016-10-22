@@ -177,14 +177,13 @@ static void gtk_range_get_property   (GObject          *object,
                                       GParamSpec       *pspec);
 static void gtk_range_finalize       (GObject          *object);
 static void gtk_range_destroy        (GtkWidget        *widget);
-static void gtk_range_get_preferred_width
-                                     (GtkWidget        *widget,
-                                      gint             *minimum,
-                                      gint             *natural);
-static void gtk_range_get_preferred_height
-                                     (GtkWidget        *widget,
-                                      gint             *minimum,
-                                      gint             *natural);
+static void gtk_range_measure_       (GtkWidget      *widget,
+                                      GtkOrientation  orientation,
+                                      int             for_size,
+                                      int            *minimum,
+                                      int            *natural,
+                                      int            *minimum_baseline,
+                                      int            *natural_baseline);
 static void gtk_range_size_allocate  (GtkWidget        *widget,
                                       GtkAllocation    *allocation);
 static void gtk_range_realize        (GtkWidget        *widget);
@@ -323,8 +322,7 @@ gtk_range_class_init (GtkRangeClass *class)
   gobject_class->finalize = gtk_range_finalize;
 
   widget_class->destroy = gtk_range_destroy;
-  widget_class->get_preferred_width = gtk_range_get_preferred_width;
-  widget_class->get_preferred_height = gtk_range_get_preferred_height;
+  widget_class->measure = gtk_range_measure_;
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->realize = gtk_range_realize;
   widget_class->unrealize = gtk_range_unrealize;
@@ -1677,11 +1675,13 @@ gtk_range_measure (GtkCssGadget   *gadget,
     }
 }
 
-static void
-gtk_range_size_request (GtkWidget      *widget,
-                        GtkOrientation  orientation,
-                        gint           *minimum,
-                        gint           *natural)
+static void gtk_range_measure_ (GtkWidget     *widget,
+                               GtkOrientation  orientation,
+                               int             for_size,
+                               int            *minimum,
+                               int            *natural,
+                               int            *minimum_baseline,
+                               int            *natural_baseline)
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
@@ -1700,24 +1700,6 @@ gtk_range_size_request (GtkWidget      *widget,
       *minimum = MAX (*minimum, min);
       *natural = MAX (*natural, nat);
     }
-}
-
-static void
-gtk_range_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
-{
-  gtk_range_size_request (widget, GTK_ORIENTATION_HORIZONTAL,
-                          minimum, natural);
-}
-
-static void
-gtk_range_get_preferred_height (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
-{
-  gtk_range_size_request (widget, GTK_ORIENTATION_VERTICAL,
-                          minimum, natural);
 }
 
 static void

@@ -426,27 +426,19 @@ gtk_level_bar_measure_trough (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_level_bar_get_preferred_width (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
+gtk_level_bar_measure (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_LEVEL_BAR (widget)->priv->trough_gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_level_bar_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum,
-                                    gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_LEVEL_BAR (widget)->priv->trough_gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -976,8 +968,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
 
   wclass->draw = gtk_level_bar_draw;
   wclass->size_allocate = gtk_level_bar_size_allocate;
-  wclass->get_preferred_width = gtk_level_bar_get_preferred_width;
-  wclass->get_preferred_height = gtk_level_bar_get_preferred_height;
+  wclass->measure = gtk_level_bar_measure;
   wclass->state_flags_changed = gtk_level_bar_state_flags_changed;
   wclass->direction_changed = gtk_level_bar_direction_changed;
 

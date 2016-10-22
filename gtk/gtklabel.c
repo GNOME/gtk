@@ -549,26 +549,13 @@ static void   gtk_label_drag_gesture_update         (GtkGestureDrag *gesture,
                                                      GtkLabel       *label);
 
 static GtkSizeRequestMode gtk_label_get_request_mode                (GtkWidget           *widget);
-static void               gtk_label_get_preferred_width             (GtkWidget           *widget,
-                                                                     gint                *minimum_size,
-                                                                     gint                *natural_size);
-static void               gtk_label_get_preferred_height            (GtkWidget           *widget,
-                                                                     gint                *minimum_size,
-                                                                     gint                *natural_size);
-static void               gtk_label_get_preferred_width_for_height  (GtkWidget           *widget,
-                                                                     gint                 height,
-                                                                     gint                *minimum_width,
-                                                                     gint                *natural_width);
-static void               gtk_label_get_preferred_height_for_width  (GtkWidget           *widget,
-                                                                     gint                 width,
-                                                                     gint                *minimum_height,
-                                                                     gint                *natural_height);
-static void    gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget          *widget,
-								      gint                width,
-								      gint               *minimum_height,
-								      gint               *natural_height,
-								      gint               *minimum_baseline,
-								      gint               *natural_baseline);
+static void     gtk_label_measure_ (GtkWidget     *widget,
+                                   GtkOrientation  orientation,
+                                   int             for_size,
+                                   int            *minimum,
+                                   int            *natural,
+                                   int            *minimum_baseline,
+                                   int            *natural_baseline);
 
 static void     gtk_label_measure (GtkCssGadget   *gadget,
                                    GtkOrientation  orientation,
@@ -640,11 +627,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
-  widget_class->get_preferred_width = gtk_label_get_preferred_width;
-  widget_class->get_preferred_height = gtk_label_get_preferred_height;
-  widget_class->get_preferred_width_for_height = gtk_label_get_preferred_width_for_height;
-  widget_class->get_preferred_height_for_width = gtk_label_get_preferred_height_for_width;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_label_get_preferred_height_and_baseline_for_width;
+  widget_class->measure = gtk_label_measure_;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -3869,67 +3852,18 @@ gtk_label_measure (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_label_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum_size,
-                               gint      *natural_size)
+gtk_label_measure_ (GtkWidget     *widget,
+                    GtkOrientation  orientation,
+                    int             for_size,
+                    int            *minimum,
+                    int            *natural,
+                    int            *minimum_baseline,
+                    int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_LABEL (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_label_get_preferred_height (GtkWidget *widget,
-                                gint      *minimum_size,
-                                gint      *natural_size)
-{
-  gtk_css_gadget_get_preferred_size (GTK_LABEL (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum_size, natural_size,
-                                     NULL, NULL);
-}
-
-static void
-gtk_label_get_preferred_width_for_height (GtkWidget *widget,
-                                          gint       height,
-                                          gint      *minimum_width,
-                                          gint      *natural_width)
-{
-  gtk_css_gadget_get_preferred_size (GTK_LABEL (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum_width, natural_width,
-                                     NULL, NULL);
-}
-
-static void
-gtk_label_get_preferred_height_for_width (GtkWidget *widget,
-                                          gint       width,
-                                          gint      *minimum_height,
-                                          gint      *natural_height)
-{
-  gtk_css_gadget_get_preferred_size (GTK_LABEL (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum_height, natural_height,
-                                     NULL, NULL);
-}
-
-static void
-gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-						       gint       width,
-						       gint      *minimum_height,
-						       gint      *natural_height,
-						       gint      *minimum_baseline,
-						       gint      *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_LABEL (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum_height, natural_height,
+                                     orientation,
+                                     for_size,
+                                     minimum, natural,
                                      minimum_baseline, natural_baseline);
 }
 

@@ -102,20 +102,13 @@ static void     gtk_revealer_real_map                            (GtkWidget     
 static void     gtk_revealer_real_unmap                          (GtkWidget     *widget);
 static gboolean gtk_revealer_real_draw                           (GtkWidget     *widget,
                                                                   cairo_t       *cr);
-static void     gtk_revealer_real_get_preferred_height           (GtkWidget     *widget,
-                                                                  gint          *minimum_height,
-                                                                  gint          *natural_height);
-static void     gtk_revealer_real_get_preferred_height_for_width (GtkWidget     *widget,
-                                                                  gint           width,
-                                                                  gint          *minimum_height,
-                                                                  gint          *natural_height);
-static void     gtk_revealer_real_get_preferred_width            (GtkWidget     *widget,
-                                                                  gint          *minimum_width,
-                                                                  gint          *natural_width);
-static void     gtk_revealer_real_get_preferred_width_for_height (GtkWidget     *widget,
-                                                                  gint           height,
-                                                                  gint          *minimum_width,
-                                                                  gint          *natural_width);
+static void gtk_revealer_measure (GtkWidget      *widget,
+                                  GtkOrientation  orientation,
+                                  int             for_size,
+                                  int            *minimum,
+                                  int            *natural,
+                                  int            *minimum_baseline,
+                                  int            *natural_baseline);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkRevealer, gtk_revealer, GTK_TYPE_BIN)
 
@@ -228,10 +221,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   widget_class->map = gtk_revealer_real_map;
   widget_class->unmap = gtk_revealer_real_unmap;
   widget_class->draw = gtk_revealer_real_draw;
-  widget_class->get_preferred_height = gtk_revealer_real_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_revealer_real_get_preferred_height_for_width;
-  widget_class->get_preferred_width = gtk_revealer_real_get_preferred_width;
-  widget_class->get_preferred_width_for_height = gtk_revealer_real_get_preferred_width_for_height;
+  widget_class->measure = gtk_revealer_measure;
 
   container_class->add = gtk_revealer_real_add;
 
@@ -783,37 +773,6 @@ set_height_with_paddings (GtkRevealer *revealer,
 }
 
 static void
-gtk_revealer_real_get_preferred_height (GtkWidget *widget,
-                                        gint      *minimum_height_out,
-                                        gint      *natural_height_out)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  gint minimum_height;
-  gint natural_height;
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->get_preferred_height (widget, &minimum_height, &natural_height);
-
-  set_height_with_paddings (revealer, minimum_height, natural_height,
-                            minimum_height_out, natural_height_out);
-}
-
-static void
-gtk_revealer_real_get_preferred_height_for_width (GtkWidget *widget,
-                                                  gint       width,
-                                                  gint      *minimum_height_out,
-                                                  gint      *natural_height_out)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  gint minimum_height;
-  gint natural_height;
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->get_preferred_height_for_width (widget, width, &minimum_height, &natural_height);
-
-  set_height_with_paddings (revealer, minimum_height, natural_height,
-                            minimum_height_out, natural_height_out);
-}
-
-static void
 set_width_with_paddings (GtkRevealer *revealer,
                          gint         preferred_minimum_width,
                          gint         preferred_natural_width,
@@ -847,33 +806,24 @@ set_width_with_paddings (GtkRevealer *revealer,
 }
 
 static void
-gtk_revealer_real_get_preferred_width (GtkWidget *widget,
-                                       gint      *minimum_width_out,
-                                       gint      *natural_width_out)
+gtk_revealer_measure (GtkWidget      *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
 {
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  gint minimum_width;
-  gint natural_width;
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->get_preferred_width (widget, &minimum_width, &natural_width);
-  set_width_with_paddings (revealer, minimum_width, natural_width,
-                           minimum_width_out, natural_width_out);
-}
-
-static void
-gtk_revealer_real_get_preferred_width_for_height (GtkWidget *widget,
-                                                  gint       height,
-                                                  gint      *minimum_width_out,
-                                                  gint      *natural_width_out)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  gint minimum_width;
-  gint natural_width;
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->get_preferred_width_for_height (widget, height, &minimum_width, &natural_width);
-
-  set_width_with_paddings (revealer, minimum_width, natural_width,
-                           minimum_width_out, natural_width_out);
+  int min_size, nat_size;
+  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->measure (widget,
+                                                         orientation,
+                                                         for_size,
+                                                         &min_size, &nat_size,
+                                                         NULL, NULL);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    set_width_with_paddings (GTK_REVEALER (widget), min_size, nat_size, minimum, natural);
+  else
+    set_height_with_paddings (GTK_REVEALER (widget), min_size, nat_size, minimum, natural);
 }
 
 /**

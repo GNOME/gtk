@@ -148,19 +148,13 @@ static void gtk_image_size_allocate        (GtkWidget    *widget,
                                             GtkAllocation*allocation);
 static void gtk_image_unmap                (GtkWidget    *widget);
 static void gtk_image_unrealize            (GtkWidget    *widget);
-static void gtk_image_get_preferred_width  (GtkWidget    *widget,
-                                            gint         *minimum,
-                                            gint         *natural);
-static void gtk_image_get_preferred_height (GtkWidget    *widget,
-                                            gint         *minimum,
-                                            gint         *natural);
-static void gtk_image_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-								   gint       width,
-								   gint      *minimum,
-								   gint      *natural,
-								   gint      *minimum_baseline,
-								   gint      *natural_baseline);
-
+static void gtk_image_measure (GtkWidget      *widget,
+                               GtkOrientation  orientation,
+                               int            for_size,
+                               int           *minimum,
+                               int           *natural,
+                               int           *minimum_baseline,
+                               int           *natural_baseline);
 static void gtk_image_get_content_size (GtkCssGadget   *gadget,
                                         GtkOrientation  orientation,
                                         gint            for_size,
@@ -218,9 +212,7 @@ gtk_image_class_init (GtkImageClass *class)
 
   widget_class = GTK_WIDGET_CLASS (class);
   widget_class->get_render_node = gtk_image_get_render_node;
-  widget_class->get_preferred_width = gtk_image_get_preferred_width;
-  widget_class->get_preferred_height = gtk_image_get_preferred_height;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_image_get_preferred_height_and_baseline_for_width;
+  widget_class->measure = gtk_image_measure;
   widget_class->size_allocate = gtk_image_size_allocate;
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
@@ -1578,40 +1570,17 @@ gtk_image_clear (GtkImage *image)
 }
 
 static void
-gtk_image_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
+gtk_image_measure (GtkWidget      *widget,
+                   GtkOrientation  orientation,
+                   int            for_size,
+                   int           *minimum,
+                   int           *natural,
+                   int           *minimum_baseline,
+                   int           *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_IMAGE (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_image_get_preferred_height (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_IMAGE (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_image_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-						       gint       width,
-						       gint      *minimum,
-						       gint      *natural,
-						       gint      *minimum_baseline,
-						       gint      *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_IMAGE (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
                                      minimum_baseline, natural_baseline);
 }

@@ -63,20 +63,13 @@ static void      gtk_tree_menu_get_property                   (GObject          
                                                                GParamSpec         *pspec);
 
 /* GtkWidgetClass */
-static void      gtk_tree_menu_get_preferred_width            (GtkWidget           *widget,
-                                                               gint                *minimum_size,
-                                                               gint                *natural_size);
-static void      gtk_tree_menu_get_preferred_height           (GtkWidget           *widget,
-                                                               gint                *minimum_size,
-                                                               gint                *natural_size);
-static void      gtk_tree_menu_get_preferred_width_for_height (GtkWidget           *widget,
-                                                               gint                 for_height,
-                                                               gint                *minimum_size,
-                                                               gint                *natural_size);
-static void      gtk_tree_menu_get_preferred_height_for_width (GtkWidget           *widget,
-                                                               gint                 for_width,
-                                                               gint                *minimum_size,
-                                                               gint                *natural_size);
+static void gtk_tree_menu_measure (GtkWidget      *widget,
+                                   GtkOrientation  orientation,
+                                   int             for_size,
+                                   int            *minimum,
+                                   int            *natural,
+                                   int            *minimum_baseline,
+                                   int            *natural_baseline);
 
 /* GtkCellLayoutIface */
 static void      gtk_tree_menu_cell_layout_init               (GtkCellLayoutIface  *iface);
@@ -222,10 +215,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
   object_class->set_property = gtk_tree_menu_set_property;
   object_class->get_property = gtk_tree_menu_get_property;
 
-  widget_class->get_preferred_width  = gtk_tree_menu_get_preferred_width;
-  widget_class->get_preferred_height = gtk_tree_menu_get_preferred_height;
-  widget_class->get_preferred_width_for_height  = gtk_tree_menu_get_preferred_width_for_height;
-  widget_class->get_preferred_height_for_width = gtk_tree_menu_get_preferred_height_for_width;
+  widget_class->measure = gtk_tree_menu_measure;
 
   /*
    * GtkTreeMenu::menu-activate:
@@ -542,12 +532,17 @@ sync_reserve_submenu_size (GtkTreeMenu *menu)
   g_list_free (children);
 }
 
+
 static void
-gtk_tree_menu_get_preferred_width (GtkWidget           *widget,
-                                   gint                *minimum_size,
-                                   gint                *natural_size)
+gtk_tree_menu_measure (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
 {
-  GtkTreeMenu        *menu = GTK_TREE_MENU (widget);
+  GtkTreeMenu *menu = GTK_TREE_MENU (widget);
   GtkTreeMenuPrivate *priv = menu->priv;
 
   /* We leave the requesting work up to the cellviews which operate in the same
@@ -561,70 +556,15 @@ gtk_tree_menu_get_preferred_width (GtkWidget           *widget,
 
   sync_reserve_submenu_size (menu);
 
-  GTK_WIDGET_CLASS (_gtk_tree_menu_parent_class)->get_preferred_width (widget, minimum_size, natural_size);
+  GTK_WIDGET_CLASS (_gtk_tree_menu_parent_class)->measure (widget,
+                                                           orientation,
+                                                           for_size,
+                                                           minimum, natural,
+                                                           minimum_baseline, natural_baseline);
 
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
 }
 
-static void
-gtk_tree_menu_get_preferred_height (GtkWidget           *widget,
-                                    gint                *minimum_size,
-                                    gint                *natural_size)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (widget);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  g_signal_handler_block (priv->context, priv->size_changed_id);
-
-  sync_reserve_submenu_size (menu);
-
-  GTK_WIDGET_CLASS (_gtk_tree_menu_parent_class)->get_preferred_height (widget, minimum_size, natural_size);
-
-  g_signal_handler_unblock (priv->context, priv->size_changed_id);
-}
-
-static void
-gtk_tree_menu_get_preferred_width_for_height (GtkWidget           *widget,
-                                              gint                 for_height,
-                                              gint                *minimum_size,
-                                              gint                *natural_size)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (widget);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  /* We leave the requesting work up to the cellviews which operate in the same
-   * context, reserving space for the submenu indicator if any of the items have
-   * submenus ensures that every cellview will receive the same allocated width.
-   *
-   * Since GtkMenu does hieght-for-width correctly, we know that the width of
-   * every cell will be requested before the height-for-widths are requested.
-   */
-  g_signal_handler_block (priv->context, priv->size_changed_id);
-
-  sync_reserve_submenu_size (menu);
-
-  GTK_WIDGET_CLASS (_gtk_tree_menu_parent_class)->get_preferred_width_for_height (widget, for_height, minimum_size, natural_size);
-
-  g_signal_handler_unblock (priv->context, priv->size_changed_id);
-}
-
-static void
-gtk_tree_menu_get_preferred_height_for_width (GtkWidget           *widget,
-                                              gint                 for_width,
-                                              gint                *minimum_size,
-                                              gint                *natural_size)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (widget);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  g_signal_handler_block (priv->context, priv->size_changed_id);
-
-  sync_reserve_submenu_size (menu);
-
-  GTK_WIDGET_CLASS (_gtk_tree_menu_parent_class)->get_preferred_height_for_width (widget, for_width, minimum_size, natural_size);
-
-  g_signal_handler_unblock (priv->context, priv->size_changed_id);
-}
 
 /****************************************************************
  *                      GtkCellLayoutIface                      *

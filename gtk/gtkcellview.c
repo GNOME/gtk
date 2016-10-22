@@ -97,21 +97,13 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 								gpointer      	      *data);
 
 static GtkSizeRequestMode gtk_cell_view_get_request_mode       (GtkWidget             *widget);
-static void       gtk_cell_view_get_preferred_width            (GtkWidget             *widget,
-								gint                  *minimum_size,
-								gint                  *natural_size);
-static void       gtk_cell_view_get_preferred_height           (GtkWidget             *widget,
-								gint                  *minimum_size,
-								gint                  *natural_size);
-static void       gtk_cell_view_get_preferred_width_for_height (GtkWidget             *widget,
-								gint                   avail_size,
-								gint                  *minimum_size,
-								gint                  *natural_size);
-static void       gtk_cell_view_get_preferred_height_for_width (GtkWidget             *widget,
-								gint                   avail_size,
-								gint                  *minimum_size,
-								gint                  *natural_size);
-
+static void gtk_cell_view_measure_ (GtkWidget      *widget,
+                                   GtkOrientation  orientation,
+                                   int             for_size,
+                                   int            *minimum,
+                                   int            *natural,
+                                   int            *minimum_baseline,
+                                   int            *natural_baseline);
 static void       context_size_changed_cb                      (GtkCellAreaContext   *context,
 								GParamSpec           *pspec,
 								GtkWidget            *view);
@@ -202,10 +194,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   widget_class->draw                           = gtk_cell_view_draw;
   widget_class->size_allocate                  = gtk_cell_view_size_allocate;
   widget_class->get_request_mode               = gtk_cell_view_get_request_mode;
-  widget_class->get_preferred_width            = gtk_cell_view_get_preferred_width;
-  widget_class->get_preferred_height           = gtk_cell_view_get_preferred_height;
-  widget_class->get_preferred_width_for_height = gtk_cell_view_get_preferred_width_for_height;
-  widget_class->get_preferred_height_for_width = gtk_cell_view_get_preferred_height_for_width;
+  widget_class->measure                        = gtk_cell_view_measure_;
 
   /* properties */
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
@@ -681,54 +670,21 @@ gtk_cell_view_get_request_mode (GtkWidget *widget)
   return gtk_cell_area_get_request_mode (priv->area);
 }
 
-static void
-gtk_cell_view_get_preferred_width (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_CELL_VIEW (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
 
 static void
-gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
-                                              gint       height,
-                                              gint      *minimum,
-                                              gint      *natural)
+gtk_cell_view_measure_ (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_CELL_VIEW (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_cell_view_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum,
-                                    gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_CELL_VIEW (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
-                                              gint       width,
-                                              gint      *minimum,
-                                              gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_CELL_VIEW (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void

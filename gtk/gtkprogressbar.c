@@ -150,12 +150,6 @@ static void gtk_progress_bar_get_property         (GObject        *object,
                                                    GParamSpec     *pspec);
 static void gtk_progress_bar_size_allocate        (GtkWidget      *widget,
                                                    GtkAllocation  *allocation);
-static void gtk_progress_bar_get_preferred_width  (GtkWidget      *widget,
-                                                   gint           *minimum,
-                                                   gint           *natural);
-static void gtk_progress_bar_get_preferred_height (GtkWidget      *widget,
-                                                   gint           *minimum,
-                                                   gint           *natural);
 
 static gboolean gtk_progress_bar_draw             (GtkWidget      *widget,
                                                    cairo_t        *cr);
@@ -169,6 +163,13 @@ static void     gtk_progress_bar_direction_changed (GtkWidget        *widget,
 static void     gtk_progress_bar_state_flags_changed (GtkWidget      *widget,
                                                       GtkStateFlags   previous_state);
 
+static void     gtk_progress_bar_measure_          (GtkWidget           *widget,
+                                                    GtkOrientation       orientation,
+                                                    gint                 for_size,
+                                                    gint                *minimum,
+                                                    gint                *natural,
+                                                    gint                *minimum_baseline,
+                                                    gint                *natural_baseline);
 static void     gtk_progress_bar_measure           (GtkCssGadget        *gadget,
                                                     GtkOrientation       orientation,
                                                     gint                 for_size,
@@ -236,8 +237,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   widget_class->draw = gtk_progress_bar_draw;
   widget_class->size_allocate = gtk_progress_bar_size_allocate;
-  widget_class->get_preferred_width = gtk_progress_bar_get_preferred_width;
-  widget_class->get_preferred_height = gtk_progress_bar_get_preferred_height;
+  widget_class->measure = gtk_progress_bar_measure_;
   widget_class->direction_changed = gtk_progress_bar_direction_changed;
   widget_class->state_flags_changed = gtk_progress_bar_state_flags_changed;
 
@@ -914,28 +914,21 @@ gtk_progress_bar_allocate_trough (GtkCssGadget        *gadget,
   gtk_css_gadget_allocate (priv->progress_gadget, &alloc, -1, out_clip);
 }
 
-static void
-gtk_progress_bar_get_preferred_width (GtkWidget *widget,
-                                      gint      *minimum,
-                                      gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_PROGRESS_BAR (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
 
 static void
-gtk_progress_bar_get_preferred_height (GtkWidget *widget,
-                                       gint      *minimum,
-                                       gint      *natural)
+gtk_progress_bar_measure_ (GtkWidget      *widget,
+                           GtkOrientation  orientation,
+                           int             for_size,
+                           int            *minimum,
+                           int            *natural,
+                           int            *minimum_baseline,
+                           int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_PROGRESS_BAR (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static gboolean

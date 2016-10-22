@@ -188,19 +188,11 @@ void         _gtk_widget_add_attached_window    (GtkWidget    *widget,
 void         _gtk_widget_remove_attached_window (GtkWidget    *widget,
                                                  GtkWindow    *window);
 
-void _gtk_widget_get_preferred_size_for_size   (GtkWidget         *widget,
-                                                GtkOrientation     orientation,
-                                                gint               size,
-                                                gint              *minimum,
-                                                gint              *natural,
-                                                gint              *minimum_baseline,
-                                                gint              *natural_baseline);
 void _gtk_widget_get_preferred_size_and_baseline(GtkWidget        *widget,
                                                 GtkRequisition    *minimum_size,
                                                 GtkRequisition    *natural_size,
                                                 gint              *minimum_baseline,
                                                 gint              *natural_baseline);
-gboolean _gtk_widget_has_baseline_support (GtkWidget *widget);
 
 const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
                                                             gboolean  *locked);

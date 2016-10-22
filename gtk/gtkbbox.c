@@ -94,28 +94,13 @@ static void gtk_button_box_get_property       (GObject           *object,
                                                GParamSpec        *pspec);
 static GskRenderNode *gtk_button_box_get_render_node (GtkWidget   *widget,
                                                       GskRenderer *renderer);
-
-static void gtk_button_box_get_preferred_width            (GtkWidget *widget,
-                                                           gint      *minimum,
-                                                           gint      *natural);
-static void gtk_button_box_get_preferred_height           (GtkWidget *widget,
-                                                           gint      *minimum,
-                                                           gint      *natural);
-static void gtk_button_box_get_preferred_width_for_height (GtkWidget *widget,
-                                                           gint       height,
-                                                           gint      *minimum,
-                                                           gint      *natural);
-static void gtk_button_box_get_preferred_height_for_width (GtkWidget *widget,
-                                                           gint       width,
-                                                           gint      *minimum,
-                                                           gint      *natural);
-static void gtk_button_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-									gint       width,
-									gint      *minimum,
-									gint      *natural,
-									gint      *minimum_baseline,
-									gint      *natural_baseline);
-
+static void gtk_button_box_measure_           (GtkWidget         *widget,
+                                               GtkOrientation     orientation,
+                                               int                for_size,
+                                               int               *minimum,
+                                               int               *natural,
+                                               int               *minimum_baseline,
+                                               int               *natural_baseline);
 static void gtk_button_box_size_allocate      (GtkWidget         *widget,
                                                GtkAllocation     *allocation);
 static void gtk_button_box_remove             (GtkContainer      *container,
@@ -181,11 +166,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   gobject_class->get_property = gtk_button_box_get_property;
   gobject_class->finalize = gtk_button_box_finalize;
 
-  widget_class->get_preferred_width = gtk_button_box_get_preferred_width;
-  widget_class->get_preferred_height = gtk_button_box_get_preferred_height;
-  widget_class->get_preferred_width_for_height = gtk_button_box_get_preferred_width_for_height;
-  widget_class->get_preferred_height_for_width = gtk_button_box_get_preferred_height_for_width;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_button_box_get_preferred_height_and_baseline_for_width;
+  widget_class->measure = gtk_button_box_measure_;
   widget_class->size_allocate = gtk_button_box_size_allocate;
   widget_class->get_render_node = gtk_button_box_get_render_node;
 
@@ -808,11 +789,15 @@ gtk_button_box_measure (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_button_box_get_preferred_width (GtkWidget *widget,
-                                    gint      *minimum,
-                                    gint      *natural)
+gtk_button_box_measure_ (GtkWidget      *widget,
+                        GtkOrientation  orientation,
+                        int             for_size,
+                        int            *minimum,
+                        int            *natural,
+                        int            *minimum_baseline,
+                        int            *natural_baseline)
 {
-  GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (widget)->priv;
+  GtkButtonBoxPrivate *priv = gtk_button_box_get_instance_private (GTK_BUTTON_BOX (widget));
   GtkCssGadget *gadget;
 
   if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
@@ -821,93 +806,8 @@ gtk_button_box_get_preferred_width (GtkWidget *widget,
     gadget = priv->gadget;
 
   gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_button_box_get_preferred_height (GtkWidget *widget,
-                                     gint      *minimum,
-                                     gint      *natural)
-{
-  GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (widget)->priv;
-  GtkCssGadget *gadget;
-
-  if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    gadget = gtk_box_get_gadget (GTK_BOX (widget));
-  else
-    gadget = priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_button_box_get_preferred_width_for_height (GtkWidget *widget,
-                                               gint       height,
-                                               gint      *minimum,
-                                               gint      *natural)
-{
-  GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (widget)->priv;
-  GtkCssGadget *gadget;
-
-  if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    gadget = gtk_box_get_gadget (GTK_BOX (widget));
-  else
-    gadget = priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     height,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_button_box_get_preferred_height_for_width (GtkWidget *widget,
-                                               gint       width,
-                                               gint      *minimum,
-                                               gint      *natural)
-{
-  GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (widget)->priv;
-  GtkCssGadget *gadget;
-
-  if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    gadget = gtk_box_get_gadget (GTK_BOX (widget));
-  else
-    gadget = priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_button_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-							    gint       width,
-							    gint      *minimum,
-							    gint      *natural,
-							    gint      *minimum_baseline,
-							    gint      *natural_baseline)
-{
-  GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (widget)->priv;
-  GtkCssGadget *gadget;
-
-  if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    gadget = gtk_box_get_gadget (GTK_BOX (widget));
-  else
-    gadget = priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
                                      minimum_baseline, natural_baseline);
 }

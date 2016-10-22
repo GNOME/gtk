@@ -196,13 +196,13 @@ static gint       gtk_toolbar_draw                 (GtkWidget           *widget,
                                                     cairo_t             *cr);
 static void       gtk_toolbar_realize              (GtkWidget           *widget);
 static void       gtk_toolbar_unrealize            (GtkWidget           *widget);
-static void       gtk_toolbar_get_preferred_width  (GtkWidget           *widget,
-                                                    gint                *minimum,
-                                                    gint                *natural);
-static void       gtk_toolbar_get_preferred_height (GtkWidget           *widget,
-                                                    gint                *minimum,
-                                                    gint                *natural);
-
+static void       gtk_toolbar_measure_             (GtkWidget      *widget,
+                                                    GtkOrientation  orientation,
+                                                    int             for_size,
+                                                    int            *minimum,
+                                                    int            *natural,
+                                                    int            *minimum_baseline,
+                                                    int            *natural_baseline);
 static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
 						    GtkAllocation       *allocation);
 static void       gtk_toolbar_style_updated        (GtkWidget           *widget);
@@ -397,8 +397,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   widget_class->button_press_event = gtk_toolbar_button_press;
   widget_class->draw = gtk_toolbar_draw;
-  widget_class->get_preferred_width = gtk_toolbar_get_preferred_width;
-  widget_class->get_preferred_height = gtk_toolbar_get_preferred_height;
+  widget_class->measure = gtk_toolbar_measure_;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_updated = gtk_toolbar_style_updated;
   widget_class->focus = gtk_toolbar_focus;
@@ -970,33 +969,23 @@ gtk_toolbar_measure (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_toolbar_get_preferred_width (GtkWidget *widget,
-                                 gint      *minimum,
-                                 gint      *natural)
+gtk_toolbar_measure_ (GtkWidget      *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
 
   gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
+                                     minimum_baseline, natural_baseline);
 
-static void
-gtk_toolbar_get_preferred_height (GtkWidget *widget,
-                                  gint      *minimum,
-                                  gint      *natural)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
 }
 
 static gint

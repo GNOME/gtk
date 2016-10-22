@@ -123,12 +123,13 @@ static void gtk_layout_finalize           (GObject        *object);
 static void gtk_layout_realize            (GtkWidget      *widget);
 static void gtk_layout_unrealize          (GtkWidget      *widget);
 static void gtk_layout_map                (GtkWidget      *widget);
-static void gtk_layout_get_preferred_width  (GtkWidget     *widget,
-                                             gint          *minimum,
-                                             gint          *natural);
-static void gtk_layout_get_preferred_height (GtkWidget     *widget,
-                                             gint          *minimum,
-                                             gint          *natural);
+static void gtk_layout_measure (GtkWidget *widget,
+                                GtkOrientation  orientation,
+                                int             for_size,
+                                int            *minimum,
+                                int            *natural,
+                                int            *minimum_baseline,
+                                int            *natural_baseline);
 static void gtk_layout_size_allocate      (GtkWidget      *widget,
                                            GtkAllocation  *allocation);
 static gint gtk_layout_draw               (GtkWidget      *widget,
@@ -687,8 +688,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
   widget_class->map = gtk_layout_map;
-  widget_class->get_preferred_width = gtk_layout_get_preferred_width;
-  widget_class->get_preferred_height = gtk_layout_get_preferred_height;
+  widget_class->measure = gtk_layout_measure;
   widget_class->size_allocate = gtk_layout_size_allocate;
   widget_class->draw = gtk_layout_draw;
 
@@ -937,20 +937,17 @@ gtk_layout_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_layout_get_preferred_width (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
+gtk_layout_measure (GtkWidget *widget,
+                    GtkOrientation  orientation,
+                    int             for_size,
+                    int            *minimum,
+                    int            *natural,
+                    int            *minimum_baseline,
+                    int            *natural_baseline)
 {
   *minimum = *natural = 0;
 }
 
-static void
-gtk_layout_get_preferred_height (GtkWidget *widget,
-                                 gint      *minimum,
-                                 gint      *natural)
-{
-  *minimum = *natural = 0;
-}
 
 static void
 gtk_layout_size_allocate (GtkWidget     *widget,

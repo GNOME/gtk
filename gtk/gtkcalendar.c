@@ -261,12 +261,13 @@ static void     gtk_calendar_realize        (GtkWidget        *widget);
 static void     gtk_calendar_unrealize      (GtkWidget        *widget);
 static void     gtk_calendar_map            (GtkWidget        *widget);
 static void     gtk_calendar_unmap          (GtkWidget        *widget);
-static void     gtk_calendar_get_preferred_width  (GtkWidget   *widget,
-                                                   gint        *minimum,
-                                                   gint        *natural);
-static void     gtk_calendar_get_preferred_height (GtkWidget   *widget,
-                                                   gint        *minimum,
-                                                   gint        *natural);
+static void     gtk_calendar_measure        (GtkWidget        *widget,
+                                             GtkOrientation  orientation,
+                                             int             for_size,
+                                             int            *minimum,
+                                             int            *natural,
+                                             int            *minimum_baseline,
+                                             int            *natural_baseline);
 static void     gtk_calendar_size_allocate  (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
 static gboolean gtk_calendar_draw           (GtkWidget        *widget,
@@ -365,8 +366,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->map = gtk_calendar_map;
   widget_class->unmap = gtk_calendar_unmap;
   widget_class->draw = gtk_calendar_draw;
-  widget_class->get_preferred_width = gtk_calendar_get_preferred_width;
-  widget_class->get_preferred_height = gtk_calendar_get_preferred_height;
+  widget_class->measure = gtk_calendar_measure;
   widget_class->size_allocate = gtk_calendar_size_allocate;
   widget_class->button_press_event = gtk_calendar_button_press;
   widget_class->button_release_event = gtk_calendar_button_release;
@@ -2035,27 +2035,22 @@ gtk_calendar_size_request (GtkWidget      *widget,
 }
 
 static void
-gtk_calendar_get_preferred_width (GtkWidget *widget,
-                                  gint      *minimum,
-                                  gint      *natural)
+gtk_calendar_measure (GtkWidget        *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
 {
   GtkRequisition requisition;
 
   gtk_calendar_size_request (widget, &requisition);
 
-  *minimum = *natural = requisition.width;
-}
-
-static void
-gtk_calendar_get_preferred_height (GtkWidget *widget,
-                                   gint      *minimum,
-                                   gint      *natural)
-{
-  GtkRequisition requisition;
-
-  gtk_calendar_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = requisition.width;
+  else /* VERTICAL */
+    *minimum = *natural = requisition.height;
 }
 
 static void

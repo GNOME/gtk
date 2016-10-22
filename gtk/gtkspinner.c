@@ -84,27 +84,19 @@ gtk_spinner_finalize (GObject *object)
 }
 
 static void
-gtk_spinner_get_preferred_width (GtkWidget *widget,
-                                 gint      *minimum,
-                                 gint      *natural)
+gtk_spinner_measure (GtkWidget      *widget,
+                     GtkOrientation  orientation,
+                     int             for_size,
+                     int            *minimum,
+                     int            *natural,
+                     int            *minimum_baseline,
+                     int            *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_SPINNER (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_spinner_get_preferred_height (GtkWidget *widget,
-                                  gint      *minimum,
-                                  gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_SPINNER (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
+                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -205,8 +197,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class = GTK_WIDGET_CLASS(klass);
   widget_class->size_allocate = gtk_spinner_size_allocate;
   widget_class->get_render_node = gtk_spinner_get_render_node;
-  widget_class->get_preferred_width = gtk_spinner_get_preferred_width;
-  widget_class->get_preferred_height = gtk_spinner_get_preferred_height;
+  widget_class->measure = gtk_spinner_measure;
 
   /* GtkSpinner:active:
    *

@@ -694,20 +694,13 @@ static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 								 GdkEvent	  *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
-static void             gtk_widget_real_get_width               (GtkWidget        *widget,
-                                                                 gint             *minimum_size,
-                                                                 gint             *natural_size);
-static void             gtk_widget_real_get_height              (GtkWidget        *widget,
-                                                                 gint             *minimum_size,
-                                                                 gint             *natural_size);
-static void             gtk_widget_real_get_height_for_width    (GtkWidget        *widget,
-                                                                 gint              width,
-                                                                 gint             *minimum_height,
-                                                                 gint             *natural_height);
-static void             gtk_widget_real_get_width_for_height    (GtkWidget        *widget,
-                                                                 gint              height,
-                                                                 gint             *minimum_width,
-                                                                 gint             *natural_width);
+static void             gtk_widget_real_measure                 (GtkWidget        *widget,
+                                                                 GtkOrientation    orientation,
+                                                                 int               for_size,
+                                                                 int              *minimum,
+                                                                 int              *natural,
+                                                                 int              *minimum_baseline,
+                                                                 int              *natural_baseline);
 static void             gtk_widget_real_state_flags_changed     (GtkWidget        *widget,
                                                                  GtkStateFlags     old_state);
 static void             gtk_widget_real_queue_draw_region       (GtkWidget         *widget,
@@ -1012,11 +1005,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unrealize = gtk_widget_real_unrealize;
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->get_request_mode = gtk_widget_real_get_request_mode;
-  klass->get_preferred_width = gtk_widget_real_get_width;
-  klass->get_preferred_height = gtk_widget_real_get_height;
-  klass->get_preferred_width_for_height = gtk_widget_real_get_width_for_height;
-  klass->get_preferred_height_for_width = gtk_widget_real_get_height_for_width;
-  klass->get_preferred_height_and_baseline_for_width = NULL;
+  klass->measure = gtk_widget_real_measure;
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->parent_set = NULL;
   klass->hierarchy_changed = NULL;
@@ -5450,8 +5439,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   /* Never pass a baseline to a child unless it requested it.
      This means containers don't have to manually check for this. */
   if (baseline != -1 &&
-      (gtk_widget_get_valign_with_baseline (widget) != GTK_ALIGN_BASELINE ||
-       !_gtk_widget_has_baseline_support (widget)))
+      gtk_widget_get_valign_with_baseline (widget) != GTK_ALIGN_BASELINE)
     baseline = -1;
 
   alloc_needed = priv->alloc_needed;
@@ -13103,39 +13091,16 @@ gtk_widget_real_get_request_mode (GtkWidget *widget)
 }
 
 static void
-gtk_widget_real_get_width (GtkWidget *widget,
-			   gint      *minimum_size,
-			   gint      *natural_size)
+gtk_widget_real_measure (GtkWidget *widget,
+                         GtkOrientation orientation,
+                         int        for_size,
+                         int       *minimum,
+                         int       *natural,
+                         int       *minimum_baseline,
+                         int       *natural_baseline)
 {
-  *minimum_size = 0;
-  *natural_size = 0;
-}
-
-static void
-gtk_widget_real_get_height (GtkWidget *widget,
-			    gint      *minimum_size,
-			    gint      *natural_size)
-{
-  *minimum_size = 0;
-  *natural_size = 0;
-}
-
-static void
-gtk_widget_real_get_height_for_width (GtkWidget *widget,
-                                      gint       width,
-                                      gint      *minimum_height,
-                                      gint      *natural_height)
-{
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
-}
-
-static void
-gtk_widget_real_get_width_for_height (GtkWidget *widget,
-                                      gint       height,
-                                      gint      *minimum_width,
-                                      gint      *natural_width)
-{
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
+  *minimum = 0;
+  *natural = 0;
 }
 
 /**

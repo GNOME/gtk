@@ -86,12 +86,15 @@ enum {
 };
 
 static void gtk_fixed_realize       (GtkWidget        *widget);
-static void gtk_fixed_get_preferred_width  (GtkWidget *widget,
-                                            gint      *minimum,
-                                            gint      *natural);
-static void gtk_fixed_get_preferred_height (GtkWidget *widget,
-                                            gint      *minimum,
-                                            gint      *natural);
+static void gtk_fixed_measure (GtkWidget      *widget,
+                               GtkOrientation  orientation,
+                               int             for_size,
+                               int            *minimum,
+                               int            *natural,
+                               int            *minimum_baseline,
+                               int            *natural_baseline);
+
+
 static void gtk_fixed_size_allocate (GtkWidget        *widget,
                                      GtkAllocation    *allocation);
 static gboolean gtk_fixed_draw      (GtkWidget        *widget,
@@ -129,8 +132,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
   container_class = (GtkContainerClass*) class;
 
   widget_class->realize = gtk_fixed_realize;
-  widget_class->get_preferred_width = gtk_fixed_get_preferred_width;
-  widget_class->get_preferred_height = gtk_fixed_get_preferred_height;
+  widget_class->measure = gtk_fixed_measure;
   widget_class->size_allocate = gtk_fixed_size_allocate;
   widget_class->draw = gtk_fixed_draw;
 
@@ -368,9 +370,13 @@ gtk_fixed_realize (GtkWidget *widget)
 }
 
 static void
-gtk_fixed_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
+gtk_fixed_measure (GtkWidget      *widget,
+                   GtkOrientation  orientation,
+                   int             for_size,
+                   int            *minimum,
+                   int            *natural,
+                   int            *minimum_baseline,
+                   int            *natural_baseline)
 {
   GtkFixed *fixed = GTK_FIXED (widget);
   GtkFixedPrivate *priv = fixed->priv;
@@ -388,38 +394,18 @@ gtk_fixed_get_preferred_width (GtkWidget *widget,
       if (!gtk_widget_get_visible (child->widget))
         continue;
 
-      gtk_widget_get_preferred_width (child->widget, &child_min, &child_nat);
+      gtk_widget_measure (child->widget, orientation, -1, &child_min, &child_nat, NULL, NULL);
 
-      *minimum = MAX (*minimum, child->x + child_min);
-      *natural = MAX (*natural, child->x + child_nat);
-    }
-}
-
-static void
-gtk_fixed_get_preferred_height (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
-{
-  GtkFixed *fixed = GTK_FIXED (widget);
-  GtkFixedPrivate *priv = fixed->priv;
-  GtkFixedChild *child;
-  GList *children;
-  gint child_min, child_nat;
-
-  *minimum = 0;
-  *natural = 0;
-
-  for (children = priv->children; children; children = children->next)
-    {
-      child = children->data;
-
-      if (!gtk_widget_get_visible (child->widget))
-        continue;
-
-      gtk_widget_get_preferred_height (child->widget, &child_min, &child_nat);
-
-      *minimum = MAX (*minimum, child->y + child_min);
-      *natural = MAX (*natural, child->y + child_nat);
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          *minimum = MAX (*minimum, child->x + child_min);
+          *natural = MAX (*natural, child->x + child_nat);
+        }
+      else /* VERTICAL */
+        { 
+          *minimum = MAX (*minimum, child->y + child_min);
+          *natural = MAX (*natural, child->y + child_nat);
+        }
     }
 }
 

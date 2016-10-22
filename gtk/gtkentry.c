@@ -412,18 +412,6 @@ static void   gtk_entry_realize              (GtkWidget        *widget);
 static void   gtk_entry_unrealize            (GtkWidget        *widget);
 static void   gtk_entry_map                  (GtkWidget        *widget);
 static void   gtk_entry_unmap                (GtkWidget        *widget);
-static void   gtk_entry_get_preferred_width  (GtkWidget        *widget,
-                                              gint             *minimum,
-                                              gint             *natural);
-static void   gtk_entry_get_preferred_height (GtkWidget        *widget,
-                                              gint             *minimum,
-                                              gint             *natural);
-static void  gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-                                                                    gint       width,
-                                                                    gint      *minimum_height,
-                                                                    gint      *natural_height,
-                                                                    gint      *minimum_baseline,
-                                                                    gint      *natural_baseline);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static gint   gtk_entry_draw                 (GtkWidget        *widget,
@@ -693,6 +681,14 @@ static void         buffer_connect_signals             (GtkEntry       *entry);
 static void         buffer_disconnect_signals          (GtkEntry       *entry);
 static GtkEntryBuffer *get_buffer                      (GtkEntry       *entry);
 
+static void     gtk_entry_measure_  (GtkWidget          *gadget,
+                                    GtkOrientation       orientation,
+                                    int                  for_size,
+                                    int                 *minimum,
+                                    int                 *natural,
+                                    int                 *minimum_baseline,
+                                    int                 *natural_baseline);
+
 static void     gtk_entry_measure  (GtkCssGadget        *gadget,
                                     GtkOrientation       orientation,
                                     int                  for_size,
@@ -763,9 +759,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->unmap = gtk_entry_unmap;
   widget_class->realize = gtk_entry_realize;
   widget_class->unrealize = gtk_entry_unrealize;
-  widget_class->get_preferred_width = gtk_entry_get_preferred_width;
-  widget_class->get_preferred_height = gtk_entry_get_preferred_height;
-  widget_class->get_preferred_height_and_baseline_for_width = gtk_entry_get_preferred_height_and_baseline_for_width;
+  widget_class->measure = gtk_entry_measure_;
   widget_class->size_allocate = gtk_entry_size_allocate;
   widget_class->draw = gtk_entry_draw;
   widget_class->enter_notify_event = gtk_entry_enter_notify;
@@ -3180,40 +3174,17 @@ gtk_entry_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_entry_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
+gtk_entry_measure_ (GtkWidget      *widget,
+                    GtkOrientation  orientation,
+                    int             for_size,
+                    int             *minimum,
+                    int             *natural,
+                    int             *minimum_baseline,
+                    int             *natural_baseline)
 {
   gtk_css_gadget_get_preferred_size (GTK_ENTRY (widget)->priv->gadget,
-                                     GTK_ORIENTATION_HORIZONTAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_entry_get_preferred_height (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
-{
-  gtk_css_gadget_get_preferred_size (GTK_ENTRY (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
-}
-
-static void
-gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-						       gint       width,
-						       gint      *minimum,
-						       gint      *natural,
-						       gint      *minimum_baseline,
-						       gint      *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_ENTRY (widget)->priv->gadget,
-                                     GTK_ORIENTATION_VERTICAL,
-                                     width,
+                                     orientation,
+                                     for_size,
                                      minimum, natural,
                                      minimum_baseline, natural_baseline);
 }
