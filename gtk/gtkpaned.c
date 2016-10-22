@@ -1155,53 +1155,6 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
     }
 }
 
-static gint
-get_number (GtkCssStyle *style,
-            guint        property)
-{
-  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100.0);
-
-  if (d < 1)
-    return ceil (d);
-  else
-    return floor (d);
-}
-
-static void
-gtk_paned_measure_handle (GtkCssGadget   *gadget,
-                          GtkOrientation  orientation,
-                          int             size,
-                          int            *minimum,
-                          int            *natural,
-                          int            *minimum_baseline,
-                          int            *natural_baseline,
-                          gpointer        data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkCssStyle *style;
-  gint min_size;
-
-  style = gtk_css_gadget_get_style (gadget);
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
-  else
-    min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
-
-  if (min_size != 0)
-    *minimum = *natural = min_size;
-  else
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
-      gtk_widget_style_get (widget, "handle-size", &min_size, NULL);
-      gtk_style_context_restore (context);
-
-      *minimum = *natural = min_size;
-    }
-}
-
 static void
 gtk_paned_measure (GtkCssGadget   *gadget,
                    GtkOrientation  orientation,
@@ -1915,7 +1868,7 @@ gtk_paned_init (GtkPaned *paned)
                                                    GTK_WIDGET (paned),
                                                    priv->gadget,
                                                    NULL,
-                                                   gtk_paned_measure_handle,
+                                                   NULL,
                                                    NULL,
                                                    gtk_paned_render_handle,
                                                    NULL,
