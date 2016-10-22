@@ -1410,7 +1410,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
         {
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-          /* Resolve symbolic colors to GdkColor/GdkRGBA */
+          /* Resolve symbolic colors to GdkRGBA */
           if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)
             {
               GtkSymbolicColor *color;
@@ -1420,26 +1420,11 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
               g_value_unset (&pcache->value);
 
-              if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
-                g_value_init (&pcache->value, GDK_TYPE_RGBA);
-              else
-                g_value_init (&pcache->value, GDK_TYPE_COLOR);
+              g_assert (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA);
+              g_value_init (&pcache->value, GDK_TYPE_RGBA);
 
               if (_gtk_style_context_resolve_color (context, _gtk_symbolic_color_get_css_value (color), &rgba))
-                {
-                  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
-                    g_value_set_boxed (&pcache->value, &rgba);
-                  else
-                    {
-                      GdkColor rgb;
-
-                      rgb.red = rgba.red * 65535. + 0.5;
-                      rgb.green = rgba.green * 65535. + 0.5;
-                      rgb.blue = rgba.blue * 65535. + 0.5;
-
-                      g_value_set_boxed (&pcache->value, &rgb);
-                    }
-                }
+                g_value_set_boxed (&pcache->value, &rgba);
               else
                 g_param_value_set_default (pspec, &pcache->value);
 

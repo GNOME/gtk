@@ -171,60 +171,6 @@ rgba_value_print (const GValue *value,
 }
 
 static gboolean
-color_value_parse (GtkCssParser *parser,
-                   GValue       *value)
-{
-  GtkSymbolicColor *symbolic;
-  GdkRGBA rgba;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  symbolic = _gtk_css_symbolic_value_new (parser);
-  if (symbolic == NULL)
-    return FALSE;
-
-  if (gtk_symbolic_color_resolve (symbolic, &rgba))
-    {
-      GdkColor color;
-
-      color.red = rgba.red * 65535. + 0.5;
-      color.green = rgba.green * 65535. + 0.5;
-      color.blue = rgba.blue * 65535. + 0.5;
-
-      g_value_set_boxed (value, &color);
-      gtk_symbolic_color_unref (symbolic);
-    }
-  else
-    {
-      g_value_unset (value);
-      g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
-      g_value_take_boxed (value, symbolic);
-    }
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  return TRUE;
-}
-
-static void
-color_value_print (const GValue *value,
-                   GString      *string)
-{
-  const GdkColor *color = g_value_get_boxed (value);
-
-  if (color == NULL)
-    g_string_append (string, "none");
-  else
-    {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      char *s = gdk_color_to_string (color);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      g_string_append (string, s);
-      g_free (s);
-    }
-}
-
-static gboolean
 symbolic_color_value_parse (GtkCssParser *parser,
                             GValue       *value)
 {
@@ -801,10 +747,6 @@ gtk_css_style_funcs_init (void)
                                 rgba_value_print);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  register_conversion_function (GDK_TYPE_COLOR,
-                                color_value_parse,
-                                color_value_print);
 
   register_conversion_function (GTK_TYPE_SYMBOLIC_COLOR,
                                 symbolic_color_value_parse,
