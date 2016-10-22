@@ -3499,7 +3499,6 @@ gtk_tool_shell_get_type
 <FILE>gtktoolbar</FILE>
 <TITLE>GtkToolbar</TITLE>
 GtkToolbar
-GtkToolbarSpaceStyle
 gtk_toolbar_new
 gtk_toolbar_insert
 gtk_toolbar_get_item_index
