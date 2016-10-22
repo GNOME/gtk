@@ -1351,6 +1351,8 @@ gtk_button_get_event_window (GtkButton *button)
  * Adds a #GtkImage with the given icon name as a child. The icon will be
  * of size %GTK_ICON_SIZE_BUTTON. If @button already contains a child widget,
  * that child widget will be removed and replaced with the image.
+ *
+ * Since: 3.90
  */
 void
 gtk_button_set_icon_name (GtkButton  *button,
@@ -1391,6 +1393,8 @@ gtk_button_set_icon_name (GtkButton  *button,
  * @button: A #GtkButton
  *
  * Returns: (nullable): The icon name set via gtk_button_set_icon_name
+ *
+ * Since: 3.90
  */
 const char *
 gtk_button_get_icon_name (GtkButton *button)
