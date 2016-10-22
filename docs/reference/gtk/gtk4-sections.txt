@@ -3756,8 +3756,6 @@ gtk_tool_palette_get_drop_group
 gtk_tool_palette_get_drop_item
 GtkToolPaletteDragTargets
 gtk_tool_palette_set_drag_source
-gtk_tool_palette_get_hadjustment
-gtk_tool_palette_get_vadjustment
 
 <SUBSECTION Standard>
 GTK_TOOL_PALETTE

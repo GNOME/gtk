@@ -1813,26 +1813,6 @@ _gtk_tool_palette_set_expanding_child (GtkToolPalette *palette,
   palette->priv->expanding_child = widget;
 }
 
-/**
- * gtk_tool_palette_get_hadjustment:
- * @palette: a #GtkToolPalette
- *
- * Gets the horizontal adjustment of the tool palette.
- *
- * Returns: (transfer none): the horizontal adjustment of @palette
- *
- * Since: 2.20
- *
- * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
- */
-GtkAdjustment*
-gtk_tool_palette_get_hadjustment (GtkToolPalette *palette)
-{
-  g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), NULL);
-
-  return palette->priv->hadjustment;
-}
-
 static void
 gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,
                                   GtkAdjustment  *adjustment)
@@ -1860,26 +1840,6 @@ gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,
   priv->hadjustment = g_object_ref_sink (adjustment);
   /* FIXME: Adjustment should probably have its values updated now */
   g_object_notify (G_OBJECT (palette), "hadjustment");
-}
-
-/**
- * gtk_tool_palette_get_vadjustment:
- * @palette: a #GtkToolPalette
- *
- * Gets the vertical adjustment of the tool palette.
- *
- * Returns: (transfer none): the vertical adjustment of @palette
- *
- * Since: 2.20
- *
- * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
- */
-GtkAdjustment*
-gtk_tool_palette_get_vadjustment (GtkToolPalette *palette)
-{
-  g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), NULL);
-
-  return palette->priv->vadjustment;
 }
 
 static void

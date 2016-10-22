@@ -150,12 +150,6 @@ void                           gtk_tool_palette_add_drag_dest         (GtkToolPa
                                                                        GtkToolPaletteDragTargets  targets,
                                                                        GdkDragAction              actions);
 
-
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_hadjustment)
-GtkAdjustment*                 gtk_tool_palette_get_hadjustment       (GtkToolPalette            *palette);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_vadjustment)
-GtkAdjustment*                 gtk_tool_palette_get_vadjustment       (GtkToolPalette            *palette);
-
 GDK_AVAILABLE_IN_ALL
 const GtkTargetEntry*          gtk_tool_palette_get_drag_target_item  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
