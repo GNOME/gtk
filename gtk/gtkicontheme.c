@@ -69,36 +69,8 @@
  * should install their icons, but additional icon themes can be installed
  * as operating system vendors and users choose.
  *
- * Named icons are similar to the deprecated [Stock Items][gtkstock],
- * and the distinction between the two may be a bit confusing.
- * A few things to keep in mind:
- * 
- * - Stock images usually are used in conjunction with
- *   [Stock Items][gtkstock], such as %GTK_STOCK_OK or
- *   %GTK_STOCK_OPEN. Named icons are easier to set up and therefore
- *   are more useful for new icons that an application wants to
- *   add, such as application icons or window icons.
- * 
- * - Stock images can only be loaded at the symbolic sizes defined
- *   by the #GtkIconSize enumeration, or by custom sizes defined
- *   by gtk_icon_size_register(), while named icons are more flexible
- *   and any pixel size can be specified.
- * 
- * - Because stock images are closely tied to stock items, and thus
- *   to actions in the user interface, stock images may come in
- *   multiple variants for different widget states or writing
- *   directions.
- *
- * A good rule of thumb is that if there is a stock image for what
- * you want to use, use it, otherwise use a named icon. It turns
- * out that internally stock images are generally defined in
- * terms of one or more named icons. (An example of the
- * more than one case is icons that depend on writing direction;
- * %GTK_STOCK_GO_FORWARD uses the two themed icons
- * “gtk-stock-go-forward-ltr” and “gtk-stock-go-forward-rtl”.)
- *
  * In many cases, named themes are used indirectly, via #GtkImage
- * or stock items, rather than directly, but looking up icons
+ * rather than directly, but looking up icons
  * directly is also simple. The #GtkIconTheme object acts
  * as a database of all the icons in the current theme. You
  * can create new #GtkIconTheme objects, but it’s much more
@@ -3500,42 +3472,6 @@ icon_info_new_builtin (BuiltinIcon *icon)
   return icon_info;
 }
 
-/**
- * gtk_icon_info_copy: (skip)
- * @icon_info: a #GtkIconInfo
- * 
- * Make a copy of a #GtkIconInfo.
- * 
- * Returns: (transfer full): the new GtkIconInfo
- *
- * Since: 2.4
- *
- * Deprecated: 3.8: Use g_object_ref()
- */
-GtkIconInfo *
-gtk_icon_info_copy (GtkIconInfo *icon_info)
-{
-  g_return_val_if_fail (icon_info != NULL, NULL);
-  return g_object_ref (icon_info);
-}
-
-/**
- * gtk_icon_info_free: (skip)
- * @icon_info: a #GtkIconInfo
- * 
- * Free a #GtkIconInfo and associated information
- *
- * Since: 2.4
- *
- * Deprecated: 3.8: Use g_object_unref()
- */
-void
-gtk_icon_info_free (GtkIconInfo *icon_info)
-{
-  g_return_if_fail (icon_info != NULL);
-  g_object_unref (icon_info);
-}
-
 static void
 gtk_icon_info_finalize (GObject *object)
 {
@@ -3642,35 +3578,6 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
   g_return_val_if_fail (icon_info != NULL, NULL);
 
   return icon_info->filename;
-}
-
-/**
- * gtk_icon_info_get_builtin_pixbuf:
- * @icon_info: a #GtkIconInfo
- * 
- * Gets the built-in image for this icon, if any. To allow GTK+ to use
- * built in icon images, you must pass the %GTK_ICON_LOOKUP_USE_BUILTIN
- * to gtk_icon_theme_lookup_icon().
- *
- * Returns: (nullable) (transfer none): the built-in image pixbuf, or %NULL.
- *     No extra reference is added to the returned pixbuf, so if
- *     you want to keep it around, you must use g_object_ref().
- *     The returned image must not be modified.
- *
- * Since: 2.4
- *
- * Deprecated: 3.14: This function is deprecated, use
- *     gtk_icon_theme_add_resource_path() instead of builtin icons.
- */
-GdkPixbuf *
-gtk_icon_info_get_builtin_pixbuf (GtkIconInfo *icon_info)
-{
-  g_return_val_if_fail (icon_info != NULL, NULL);
-
-  if (icon_info->filename)
-    return NULL;
-  
-  return icon_info->cache_pixbuf;
 }
 
 /**
@@ -5100,164 +5007,6 @@ gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo   *icon_info,
                                                 GError       **error)
 {
   return gtk_icon_info_load_symbolic_finish (icon_info, result, was_symbolic, error);
-}
-
-/**
- * gtk_icon_info_set_raw_coordinates:
- * @icon_info: a #GtkIconInfo
- * @raw_coordinates: whether the coordinates of embedded rectangles
- *     and attached points should be returned in their original
- *     (unscaled) form.
- * 
- * Sets whether the coordinates returned by gtk_icon_info_get_embedded_rect()
- * and gtk_icon_info_get_attach_points() should be returned in their
- * original form as specified in the icon theme, instead of scaled
- * appropriately for the pixbuf returned by gtk_icon_info_load_icon().
- *
- * Raw coordinates are somewhat strange; they are specified to be with
- * respect to the unscaled pixmap for PNG and XPM icons, but for SVG
- * icons, they are in a 1000x1000 coordinate space that is scaled
- * to the final size of the icon.  You can determine if the icon is an SVG
- * icon by using gtk_icon_info_get_filename(), and seeing if it is non-%NULL
- * and ends in “.svg”.
- *
- * This function is provided primarily to allow compatibility wrappers
- * for older API's, and is not expected to be useful for applications.
- *
- * Since: 2.4
- *
- * Deprecated: 3.14: Embedded rectangles and attachment points are deprecated
- */
-void
-gtk_icon_info_set_raw_coordinates (GtkIconInfo *icon_info,
-                                   gboolean     raw_coordinates)
-{
-}
-
-/**
- * gtk_icon_info_get_embedded_rect:
- * @icon_info: a #GtkIconInfo
- * @rectangle: (out): #GdkRectangle in which to store embedded
- *   rectangle coordinates; coordinates are only stored
- *   when this function returns %TRUE.
- *
- * This function is deprecated and always returns %FALSE.
- * 
- * Returns: %FALSE
- *
- * Since: 2.4
- *
- * Deprecated: 3.14: Embedded rectangles are deprecated
- */
-gboolean
-gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
-                                 GdkRectangle *rectangle)
-{
-  return FALSE;
-}
-
-/**
- * gtk_icon_info_get_attach_points:
- * @icon_info: a #GtkIconInfo
- * @points: (allow-none) (array length=n_points) (out): location to store pointer
- *     to an array of points, or %NULL free the array of points with g_free().
- * @n_points: (allow-none): location to store the number of points in @points,
- *     or %NULL
- * 
- * This function is deprecated and always returns %FALSE.
- * 
- * Returns: %FALSE
- *
- * Since: 2.4
- *
- * Deprecated: 3.14: Attachment points are deprecated
- */
-gboolean
-gtk_icon_info_get_attach_points (GtkIconInfo  *icon_info,
-                                 GdkPoint    **points,
-                                 gint         *n_points)
-{
-  return FALSE;
-}
-
-/**
- * gtk_icon_info_get_display_name:
- * @icon_info: a #GtkIconInfo
- * 
- * This function is deprecated and always returns %NULL.
- * 
- * Returns: %NULL
- *
- * Since: 2.4
- *
- * Deprecated: 3.14: Display names are deprecated
- */
-const gchar *
-gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
-{
-  return NULL;
-}
-
-/*
- * Builtin icons
- */
-
-
-/**
- * gtk_icon_theme_add_builtin_icon:
- * @icon_name: the name of the icon to register
- * @size: the size in pixels at which to register the icon (different
- *     images can be registered for the same icon name at different sizes.)
- * @pixbuf: #GdkPixbuf that contains the image to use for @icon_name
- * 
- * Registers a built-in icon for icon theme lookups. The idea
- * of built-in icons is to allow an application or library
- * that uses themed icons to function requiring files to
- * be present in the file system. For instance, the default
- * images for all of GTK+’s stock icons are registered
- * as built-icons.
- *
- * In general, if you use gtk_icon_theme_add_builtin_icon()
- * you should also install the icon in the icon theme, so
- * that the icon is generally available.
- *
- * This function will generally be used with pixbufs loaded
- * via gdk_pixbuf_new_from_inline().
- *
- * Since: 2.4
- *
- * Deprecated: 3.14: Use gtk_icon_theme_add_resource_path()
- *     to add application-specific icons to the icon theme.
- */
-void
-gtk_icon_theme_add_builtin_icon (const gchar *icon_name,
-                                 gint         size,
-                                 GdkPixbuf   *pixbuf)
-{
-  BuiltinIcon *default_icon;
-  GSList *icons;
-  gpointer key;
-
-  g_return_if_fail (icon_name != NULL);
-  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-  
-  if (!icon_theme_builtin_icons)
-    icon_theme_builtin_icons = g_hash_table_new (g_str_hash, g_str_equal);
-
-  icons = g_hash_table_lookup (icon_theme_builtin_icons, icon_name);
-  if (!icons)
-    key = g_strdup (icon_name);
-  else
-    key = (gpointer)icon_name;  /* Won't get stored */
-
-  default_icon = g_new (BuiltinIcon, 1);
-  default_icon->size = size;
-  default_icon->pixbuf = g_object_ref (pixbuf);
-  icons = g_slist_prepend (icons, default_icon);
-
-  /* Replaces value, leaves key untouched
-   */
-  g_hash_table_insert (icon_theme_builtin_icons, key, icons);
 }
 
 /* Look up a builtin icon; the min_difference_p and

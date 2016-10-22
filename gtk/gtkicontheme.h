@@ -271,17 +271,8 @@ char *        gtk_icon_theme_get_example_icon_name (GtkIconTheme                
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_icon_theme_rescan_if_needed      (GtkIconTheme                *icon_theme);
 
-GDK_DEPRECATED_IN_3_14_FOR(gtk_icon_theme_add_resource_path)
-void          gtk_icon_theme_add_builtin_icon      (const gchar *icon_name,
-					            gint         size,
-					            GdkPixbuf   *pixbuf);
-
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_icon_info_get_type           (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_3_8_FOR(g_object_ref)
-GtkIconInfo *         gtk_icon_info_copy               (GtkIconInfo  *icon_info);
-GDK_DEPRECATED_IN_3_8_FOR(g_object_unref)
-void                  gtk_icon_info_free               (GtkIconInfo  *icon_info);
 
 GDK_AVAILABLE_IN_ALL
 GtkIconInfo *         gtk_icon_info_new_for_pixbuf     (GtkIconTheme  *icon_theme,
@@ -293,8 +284,6 @@ GDK_AVAILABLE_IN_3_10
 gint                  gtk_icon_info_get_base_scale     (GtkIconInfo   *icon_info);
 GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *icon_info);
-GDK_DEPRECATED_IN_3_14
-GdkPixbuf *           gtk_icon_info_get_builtin_pixbuf (GtkIconInfo   *icon_info);
 GDK_AVAILABLE_IN_3_12
 gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *icon_info);
 GDK_AVAILABLE_IN_ALL
@@ -351,19 +340,6 @@ GdkPixbuf *           gtk_icon_info_load_symbolic_for_context_finish (GtkIconInf
 								      GAsyncResult     *res,
 								      gboolean         *was_symbolic,
 								      GError          **error);
-GDK_DEPRECATED_IN_3_14
-void                  gtk_icon_info_set_raw_coordinates (GtkIconInfo  *icon_info,
-							 gboolean      raw_coordinates);
-
-GDK_DEPRECATED_IN_3_14
-gboolean              gtk_icon_info_get_embedded_rect (GtkIconInfo    *icon_info,
-						       GdkRectangle   *rectangle);
-GDK_DEPRECATED_IN_3_14
-gboolean              gtk_icon_info_get_attach_points (GtkIconInfo    *icon_info,
-						       GdkPoint      **points,
-						       gint           *n_points);
-GDK_DEPRECATED_IN_3_14
-const gchar *         gtk_icon_info_get_display_name  (GtkIconInfo    *icon_info);
 
 #ifndef GDK_MULTIHEAD_SAFE
 GDK_AVAILABLE_IN_ALL
