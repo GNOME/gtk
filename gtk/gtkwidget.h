@@ -399,22 +399,6 @@ struct _GtkWidgetClass
 
   /* size requests */
   GtkSizeRequestMode (* get_request_mode)               (GtkWidget      *widget);
-
-  //void               (* get_preferred_height)           (GtkWidget       *widget,
-                                                         //gint            *minimum_height,
-                                                         //gint            *natural_height);
-  //void               (* get_preferred_width_for_height) (GtkWidget       *widget,
-                                                         //gint             height,
-                                                         //gint            *minimum_width,
-                                                         //gint            *natural_width);
-  //void               (* get_preferred_width)            (GtkWidget       *widget,
-                                                         //gint            *minimum_width,
-                                                         //gint            *natural_width);
-  //void               (* get_preferred_height_for_width) (GtkWidget       *widget,
-                                                         //gint             width,
-                                                         //gint            *minimum_height,
-                                                         //gint            *natural_height);
-
   void              (* measure) (GtkWidget      *widget,
                                  GtkOrientation  orientation,
                                  int             for_size,
@@ -422,8 +406,6 @@ struct _GtkWidgetClass
                                  int            *natural,
                                  int            *minimum_baseline,
                                  int            *natural_baseline);
-
-
 
   /* Mnemonics */
   gboolean (* mnemonic_activate)        (GtkWidget           *widget,
