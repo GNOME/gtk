@@ -3327,8 +3327,6 @@ gtk_text_view_new
 gtk_text_view_new_with_buffer
 gtk_text_view_set_buffer
 gtk_text_view_get_buffer
-gtk_text_view_get_hadjustment
-gtk_text_view_get_vadjustment
 gtk_text_view_scroll_to_mark
 gtk_text_view_scroll_to_iter
 gtk_text_view_scroll_mark_onscreen

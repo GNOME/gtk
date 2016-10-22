@@ -8610,26 +8610,6 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     }
 }
 
-/**
- * gtk_text_view_get_hadjustment:
- * @text_view: a #GtkTextView
- *
- * Gets the horizontal-scrolling #GtkAdjustment.
- *
- * Returns: (transfer none): pointer to the horizontal #GtkAdjustment
- *
- * Since: 2.22
- *
- * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
- **/
-GtkAdjustment*
-gtk_text_view_get_hadjustment (GtkTextView *text_view)
-{
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
-
-  return text_view->priv->hadjustment;
-}
-
 static void
 gtk_text_view_set_hadjustment (GtkTextView   *text_view,
                                GtkAdjustment *adjustment)
@@ -8656,26 +8636,6 @@ gtk_text_view_set_hadjustment (GtkTextView   *text_view,
   gtk_text_view_set_hadjustment_values (text_view);
 
   g_object_notify (G_OBJECT (text_view), "hadjustment");
-}
-
-/**
- * gtk_text_view_get_vadjustment:
- * @text_view: a #GtkTextView
- *
- * Gets the vertical-scrolling #GtkAdjustment.
- *
- * Returns: (transfer none): pointer to the vertical #GtkAdjustment
- *
- * Since: 2.22
- *
- * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
- **/
-GtkAdjustment*
-gtk_text_view_get_vadjustment (GtkTextView *text_view)
-{
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
-
-  return text_view->priv->vadjustment;
 }
 
 static void
