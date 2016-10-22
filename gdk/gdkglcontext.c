@@ -576,7 +576,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   /* Enforce a minimum context version number of 3.2 */
   version = (major * 100) + minor;
 
-  if (priv->use_es || (_gdk_gl_flags & GDK_GL_GLES) != 0)
+  if (priv->use_es > 0 || (_gdk_gl_flags & GDK_GL_GLES) != 0)
     min_ver = 200;
   else
     min_ver = 302;
@@ -612,7 +612,7 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  if (priv->use_es || (_gdk_gl_flags & GDK_GL_GLES) != 0)
+  if (priv->use_es > 0 || (_gdk_gl_flags & GDK_GL_GLES) != 0)
     {
       default_major = 2;
       default_minor = 0;
