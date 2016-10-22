@@ -137,7 +137,6 @@ enum
   PROP_LABEL,
   PROP_USE_UNDERLINE,
   PROP_USE_MARKUP,
-  PROP_SPACING,
   PROP_LABEL_WIDGET,
   PROP_LABEL_FILL,
   PROP_RESIZE_TOPLEVEL
@@ -312,25 +311,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
-  /**
-   * GtkExpander:spacing:
-   *
-   * Space to put between the label and the child when the
-   * expander is expanded.
-   *
-   * Deprecated: 3.20: This property is deprecated and ignored.
-   *     Use margins on the child instead.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SPACING,
-                                   g_param_spec_int ("spacing",
-                                                     P_("Spacing"),
-                                                     P_("Space to put between the label and the child"),
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
-
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL_WIDGET,
                                    g_param_spec_object ("label-widget",
@@ -474,9 +454,6 @@ gtk_expander_set_property (GObject      *object,
     case PROP_USE_MARKUP:
       gtk_expander_set_use_markup (expander, g_value_get_boolean (value));
       break;
-    case PROP_SPACING:
-      gtk_expander_set_spacing (expander, g_value_get_int (value));
-      break;
     case PROP_LABEL_WIDGET:
       gtk_expander_set_label_widget (expander, g_value_get_object (value));
       break;
@@ -514,9 +491,6 @@ gtk_expander_get_property (GObject    *object,
       break;
     case PROP_USE_MARKUP:
       g_value_set_boolean (value, priv->use_markup);
-      break;
-    case PROP_SPACING:
-      g_value_set_int (value, priv->spacing);
       break;
     case PROP_LABEL_WIDGET:
       g_value_set_object (value,
@@ -1231,55 +1205,6 @@ gtk_expander_get_expanded (GtkExpander *expander)
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
   return expander->priv->expanded;
-}
-
-/**
- * gtk_expander_set_spacing:
- * @expander: a #GtkExpander
- * @spacing: distance between the expander and child in pixels
- *
- * Sets the spacing field of @expander, which is the number of
- * pixels to place between expander and the child.
- *
- * Since: 2.4
- *
- * Deprecated: 3.20: Use margins on the child instead.
- */
-void
-gtk_expander_set_spacing (GtkExpander *expander,
-                          gint         spacing)
-{
-  g_return_if_fail (GTK_IS_EXPANDER (expander));
-  g_return_if_fail (spacing >= 0);
-
-  if (expander->priv->spacing != spacing)
-    {
-      expander->priv->spacing = spacing;
-
-      gtk_widget_queue_resize (GTK_WIDGET (expander));
-
-      g_object_notify (G_OBJECT (expander), "spacing");
-    }
-}
-
-/**
- * gtk_expander_get_spacing:
- * @expander: a #GtkExpander
- *
- * Gets the value set by gtk_expander_set_spacing().
- *
- * Returns: spacing between the expander and child
- *
- * Since: 2.4
- *
- * Deprecated: 3.20: Use margins on the child instead.
- */
-gint
-gtk_expander_get_spacing (GtkExpander *expander)
-{
-  g_return_val_if_fail (GTK_IS_EXPANDER (expander), 0);
-
-  return expander->priv->spacing;
 }
 
 /**

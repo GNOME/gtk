@@ -1216,8 +1216,6 @@ gtk_expander_new
 gtk_expander_new_with_mnemonic
 gtk_expander_set_expanded
 gtk_expander_get_expanded
-gtk_expander_set_spacing
-gtk_expander_get_spacing
 gtk_expander_set_label
 gtk_expander_get_label
 gtk_expander_set_use_underline

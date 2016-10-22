@@ -87,13 +87,6 @@ void                  gtk_expander_set_expanded        (GtkExpander *expander,
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_expander_get_expanded        (GtkExpander *expander);
 
-/* Spacing between the expander/label and the child */
-GDK_AVAILABLE_IN_ALL
-void                  gtk_expander_set_spacing         (GtkExpander *expander,
-                                                        gint         spacing);
-GDK_AVAILABLE_IN_ALL
-gint                  gtk_expander_get_spacing         (GtkExpander *expander);
-
 GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_label           (GtkExpander *expander,
                                                         const gchar *label);
