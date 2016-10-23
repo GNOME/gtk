@@ -98,18 +98,6 @@ void           gtk_layout_get_size        (GtkLayout     *layout,
 					   guint         *width,
 					   guint         *height);
 
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_hadjustment)
-GtkAdjustment* gtk_layout_get_hadjustment (GtkLayout     *layout);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_vadjustment)
-GtkAdjustment* gtk_layout_get_vadjustment (GtkLayout     *layout);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_set_hadjustment)
-void           gtk_layout_set_hadjustment (GtkLayout     *layout,
-                                           GtkAdjustment *adjustment);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_set_vadjustment)
-void           gtk_layout_set_vadjustment (GtkLayout     *layout,
-                                           GtkAdjustment *adjustment);
-
-
 G_END_DECLS
 
 #endif /* __GTK_LAYOUT_H__ */
