@@ -35,7 +35,6 @@
 #include "gtkimageprivate.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
-#include "deprecated/gtkstock.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtkquartz.h"
@@ -1207,11 +1206,6 @@ gtk_drag_begin_internal (GtkWidget         *widget,
                                         gtk_image_definition_get_pixbuf (icon),
                                         -2, -2);
               break;
-          case GTK_IMAGE_STOCK:
-              gtk_drag_set_icon_stock (context,
-                                       gtk_image_definition_get_stock (icon),
-                                       -2, -2);
-              break;
           case GTK_IMAGE_ICON_NAME:
               gtk_drag_set_icon_name (context,
                                       gtk_image_definition_get_icon_name (icon),
@@ -1311,7 +1305,6 @@ gtk_drag_set_icon_widget (GdkDragContext    *context,
 
 static void
 set_icon_stock_pixbuf (GdkDragContext    *context,
-		       const gchar       *stock_id,
 		       GdkPixbuf         *pixbuf,
 		       gint               hot_x,
 		       gint               hot_y)
@@ -1322,19 +1315,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 
   info = gtk_drag_get_source_info (context, FALSE);
 
-  if (stock_id)
-    {
-      pixbuf = gtk_widget_render_icon_pixbuf (info->widget, stock_id,
-				              GTK_ICON_SIZE_DND);
-
-      if (!pixbuf)
-	{
-	  g_warning ("Cannot load drag icon from stock_id %s", stock_id);
-	  return;
-	}
-    }
-  else
-    g_object_ref (pixbuf);
+  g_object_ref (pixbuf);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         gdk_pixbuf_get_width (pixbuf),
@@ -1369,12 +1350,6 @@ gtk_drag_set_icon_definition (GdkDragContext     *context,
                                 hot_x, hot_y);
       break;
 
-    case GTK_IMAGE_STOCK:
-      gtk_drag_set_icon_stock (context,
-                               gtk_image_definition_get_stock (def),
-                               hot_x, hot_y);
-      break;
-
     case GTK_IMAGE_ICON_NAME:
       gtk_drag_set_icon_name (context,
                               gtk_image_definition_get_icon_name (def),
@@ -1407,30 +1382,7 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
-  set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y);
-}
-
-/**
- * gtk_drag_set_icon_stock:
- * @context: the context for a drag. (This must be called 
- *            with a  context for the source side of a drag)
- * @stock_id: the ID of the stock icon to use for the drag.
- * @hot_x: the X offset within the icon of the hotspot.
- * @hot_y: the Y offset within the icon of the hotspot.
- * 
- * Sets the icon for a given drag from a stock ID.
- **/
-void 
-gtk_drag_set_icon_stock  (GdkDragContext *context,
-			  const gchar    *stock_id,
-			  gint            hot_x,
-			  gint            hot_y)
-{
-
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (stock_id != NULL);
-
-  set_icon_stock_pixbuf (context, stock_id, NULL, hot_x, hot_y);
+  set_icon_stock_pixbuf (context, pixbuf, hot_x, hot_y);
 }
 
 /**
@@ -1511,7 +1463,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   pixbuf = gtk_icon_theme_load_icon (icon_theme, icon_name,
 		  		     icon_size, 0, NULL);
   if (pixbuf)
-    set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y);
+    set_icon_stock_pixbuf (context, pixbuf, hot_x, hot_y);
   else
     g_warning ("Cannot load drag icon from icon name %s", icon_name);
 }
