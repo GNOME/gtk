@@ -22,7 +22,7 @@
 #include "gtkbuilder.h"
 
 typedef struct {
-  const gchar *name;
+  guint tag_type;
 } TagInfo;
 
 typedef struct {

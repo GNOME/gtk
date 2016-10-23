@@ -34,6 +34,17 @@
 static void free_property_info (PropertyInfo *info);
 static void free_object_info (ObjectInfo *info);
 
+enum {
+  TAG_PROPERTY,
+  TAG_MENU,
+  TAG_REQUIRES,
+  TAG_OBJECT,
+  TAG_CHILD,
+  TAG_SIGNAL,
+  TAG_INTERFACE,
+  TAG_TEMPLATE,
+};
+
 static inline void
 state_push (ParserData *data, gpointer info)
 {
@@ -214,7 +225,7 @@ parse_requires (ParserData   *data,
   req_info->major = version_major;
   req_info->minor = version_minor;
   state_push (data, req_info);
-  req_info->tag.name = element_name;
+  req_info->tag.tag_type = TAG_REQUIRES;
 }
 
 static gboolean
@@ -251,7 +262,7 @@ parse_object (GMarkupParseContext  *context,
   gint line;
 
   child_info = state_peek_info (data, ChildInfo);
-  if (child_info && strcmp (child_info->tag.name, "object") == 0)
+  if (child_info && child_info->tag.tag_type == TAG_OBJECT)
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -332,7 +343,7 @@ parse_object (GMarkupParseContext  *context,
     }
 
   object_info = g_slice_new0 (ObjectInfo);
-  object_info->tag.name = element_name;
+  object_info->tag.tag_type = TAG_OBJECT;
   object_info->type = object_type;
   object_info->oclass = g_type_class_ref (object_type);
   object_info->id = (internal_id) ? internal_id : g_strdup (object_id);
@@ -437,7 +448,7 @@ parse_template (GMarkupParseContext  *context,
   ++data->cur_object_level;
 
   object_info = g_slice_new0 (ObjectInfo);
-  object_info->tag.name = element_name;
+  object_info->tag.tag_type = TAG_TEMPLATE;
   object_info->type = parsed_type;
   object_info->oclass = g_type_class_ref (parsed_type);
   object_info->id = g_strdup (object_class);
@@ -496,8 +507,8 @@ parse_child (ParserData   *data,
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
-      !(strcmp (object_info->tag.name, "object") == 0 ||
-        strcmp (object_info->tag.name, "template") == 0))
+      !(object_info->tag.tag_type == TAG_OBJECT ||
+        object_info->tag.tag_type == TAG_TEMPLATE))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -513,7 +524,7 @@ parse_child (ParserData   *data,
     }
 
   child_info = g_slice_new0 (ChildInfo);
-  child_info->tag.name = element_name;
+  child_info->tag.tag_type = TAG_CHILD;
   child_info->type = g_strdup (type);
   child_info->internal_child = g_strdup (internal_child);
   child_info->parent = (CommonInfo*)object_info;
@@ -551,8 +562,8 @@ parse_property (ParserData   *data,
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
-      !(strcmp (object_info->tag.name, "object") == 0 ||
-        strcmp (object_info->tag.name, "template") == 0))
+      !(object_info->tag.tag_type == TAG_OBJECT ||
+        object_info->tag.tag_type == TAG_TEMPLATE))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -620,7 +631,7 @@ parse_property (ParserData   *data,
     }
 
   info = g_slice_new (PropertyInfo);
-  info->tag.name = element_name;
+  info->tag.tag_type = TAG_PROPERTY;
   info->pspec = pspec;
   info->text = g_string_new ("");
   info->translatable = translatable;
@@ -659,8 +670,8 @@ parse_signal (ParserData   *data,
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
-      !(strcmp (object_info->tag.name, "object") == 0 ||
-        strcmp (object_info->tag.name, "template") == 0))
+      !(object_info->tag.tag_type == TAG_OBJECT||
+        object_info->tag.tag_type == TAG_TEMPLATE))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -710,7 +721,7 @@ parse_signal (ParserData   *data,
   info->connect_object_name = g_strdup (object);
   state_push (data, info);
 
-  info->tag.name = element_name;
+  info->tag.tag_type = TAG_SIGNAL;
 }
 
 /* Called by GtkBuilder */
@@ -868,8 +879,8 @@ parse_custom (GMarkupParseContext  *context,
   if (!parent_info)
     return FALSE;
 
-  if (strcmp (parent_info->tag.name, "object") == 0 ||
-      strcmp (parent_info->tag.name, "template") == 0)
+  if (parent_info->tag.tag_type == TAG_OBJECT ||
+      parent_info->tag.tag_type == TAG_TEMPLATE)
     {
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
@@ -885,7 +896,7 @@ parse_custom (GMarkupParseContext  *context,
       object = object_info->object;
       child = NULL;
     }
-  else if (strcmp (parent_info->tag.name, "child") == 0)
+  else if (parent_info->tag.tag_type == TAG_CHILD)
     {
       ChildInfo* child_info = (ChildInfo*)parent_info;
 
@@ -1096,8 +1107,8 @@ end_element (GMarkupParseContext  *context,
       g_assert (info != NULL);
 
       /* Normal properties */
-      if (strcmp (info->tag.name, "object") == 0 ||
-          strcmp (info->tag.name, "template") == 0)
+      if (info->tag.tag_type == TAG_OBJECT ||
+          info->tag.tag_type == TAG_TEMPLATE)
         {
           ObjectInfo *object_info = (ObjectInfo*)info;
 
@@ -1186,21 +1197,30 @@ text (GMarkupParseContext  *context,
 static void
 free_info (CommonInfo *info)
 {
-  if (strcmp (info->tag.name, "object") == 0 ||
-      strcmp (info->tag.name, "template") == 0)
-    free_object_info ((ObjectInfo *)info);
-  else if (strcmp (info->tag.name, "child") == 0)
-    free_child_info ((ChildInfo *)info);
-  else if (strcmp (info->tag.name, "property") == 0)
-    free_property_info ((PropertyInfo *)info);
-  else if (strcmp (info->tag.name, "signal") == 0)
-    _free_signal_info ((SignalInfo *)info, NULL);
-  else if (strcmp (info->tag.name, "requires") == 0)
-    free_requires_info ((RequiresInfo *)info, NULL);
-  else if (strcmp (info->tag.name, "menu") == 0)
-    free_menu_info ((MenuInfo *)info);
-  else
-    g_assert_not_reached ();
+  switch (info->tag.tag_type)
+    {
+      case TAG_OBJECT:
+      case TAG_TEMPLATE:
+        free_object_info ((ObjectInfo *)info);
+        break;
+      case TAG_CHILD:
+        free_child_info ((ChildInfo *)info);
+        break;
+      case TAG_PROPERTY:
+        free_property_info ((PropertyInfo *)info);
+        break;
+      case TAG_SIGNAL:
+        _free_signal_info ((SignalInfo *)info, NULL);
+        break;
+      case TAG_REQUIRES:
+        free_requires_info ((RequiresInfo *)info, NULL);
+        break;
+      case TAG_MENU:
+        free_menu_info ((MenuInfo *)info);
+        break;
+      default:
+        g_assert_not_reached ();
+    }
 }
 
 static const GMarkupParser parser = {
