@@ -50,8 +50,6 @@ struct _GtkAccessibleClass
 {
   AtkObjectClass parent_class;
 
-  void (*connect_widget_destroyed) (GtkAccessible *accessible);
-
   void (*widget_set)               (GtkAccessible *accessible);
   void (*widget_unset)             (GtkAccessible *accessible);
   /* Padding for future expansion */
@@ -67,9 +65,6 @@ void       gtk_accessible_set_widget               (GtkAccessible *accessible,
                                                     GtkWidget     *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_accessible_get_widget               (GtkAccessible *accessible);
-
-GDK_DEPRECATED_IN_3_4_FOR(gtk_accessible_set_widget)
-void       gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible);
 
 G_END_DECLS
 

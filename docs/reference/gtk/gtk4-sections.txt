@@ -159,7 +159,6 @@ gtk_accel_label_get_type
 <FILE>gtkaccessible</FILE>
 <TITLE>GtkAccessible</TITLE>
 GtkAccessible
-gtk_accessible_connect_widget_destroyed
 gtk_accessible_get_widget
 gtk_accessible_set_widget
 

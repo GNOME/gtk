@@ -50,8 +50,6 @@ enum {
   PROP_WIDGET
 };
 
-static void gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible);
-
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAccessible, gtk_accessible, ATK_TYPE_OBJECT)
 
 static void
@@ -141,7 +139,6 @@ gtk_accessible_class_init (GtkAccessibleClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *atkobject_class = ATK_OBJECT_CLASS (klass);
 
-  klass->connect_widget_destroyed = gtk_accessible_real_connect_widget_destroyed;
   klass->widget_set = gtk_accessible_real_widget_set;
   klass->widget_unset = gtk_accessible_real_widget_unset;
 
@@ -220,28 +217,6 @@ gtk_accessible_get_widget (GtkAccessible *accessible)
   return accessible->priv->widget;
 }
 
-/**
- * gtk_accessible_connect_widget_destroyed:
- * @accessible: a #GtkAccessible
- *
- * This function specifies the callback function to be called
- * when the widget corresponding to a GtkAccessible is destroyed.
- *
- * Deprecated: 3.4: Use gtk_accessible_set_widget() and its vfuncs.
- */
-void
-gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible)
-{
-  GtkAccessibleClass *class;
-
-  g_return_if_fail (GTK_IS_ACCESSIBLE (accessible));
-
-  class = GTK_ACCESSIBLE_GET_CLASS (accessible);
-
-  if (class->connect_widget_destroyed)
-    class->connect_widget_destroyed (accessible);
-}
-
 static void
 gtk_accessible_widget_destroyed (GtkWidget     *widget,
                                  GtkAccessible *accessible)
@@ -249,12 +224,3 @@ gtk_accessible_widget_destroyed (GtkWidget     *widget,
   gtk_accessible_set_widget (accessible, NULL);
 }
 
-static void
-gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
-{
-  GtkAccessiblePrivate *priv = accessible->priv;
-
-  if (priv->widget)
-    g_signal_connect (priv->widget, "destroy",
-                      G_CALLBACK (gtk_accessible_widget_destroyed), accessible);
-}
