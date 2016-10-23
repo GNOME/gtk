@@ -203,8 +203,6 @@ struct _GtkPlacesSidebarClass {
                                       GdkDragAction       action);
   void    (* show_enter_location)    (GtkPlacesSidebar   *sidebar);
 
-  void    (* show_other_locations)   (GtkPlacesSidebar   *sidebar);
-
   void    (* show_other_locations_with_flags)   (GtkPlacesSidebar   *sidebar,
                                                  GtkPlacesOpenFlags  open_flags);
 
@@ -222,7 +220,6 @@ enum {
   DRAG_ACTION_REQUESTED,
   DRAG_ACTION_ASK,
   DRAG_PERFORM_DROP,
-  SHOW_OTHER_LOCATIONS,
   SHOW_OTHER_LOCATIONS_WITH_FLAGS,
   MOUNT,
   UNMOUNT,
@@ -333,12 +330,6 @@ static void
 emit_show_enter_location (GtkPlacesSidebar *sidebar)
 {
   g_signal_emit (sidebar, places_sidebar_signals[SHOW_ENTER_LOCATION], 0);
-}
-
-static void
-emit_show_other_locations (GtkPlacesSidebar *sidebar)
-{
-  g_signal_emit (sidebar, places_sidebar_signals[SHOW_OTHER_LOCATIONS], 0);
 }
 
 static void
@@ -2320,7 +2311,6 @@ open_row (GtkSidebarRow      *row,
 
   if (place_type == PLACES_OTHER_LOCATIONS)
     {
-      emit_show_other_locations (sidebar);
       emit_show_other_locations_with_flags (sidebar, open_flags);
     }
   else if (uri != NULL)
@@ -4294,31 +4284,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_TYPE_INT);
 
   /**
-   * GtkPlacesSidebar::show-other-locations:
-   * @sidebar: the object which received the signal.
-   *
-   * The places sidebar emits this signal when it needs the calling
-   * application to present a way to show other locations e.g. drives
-   * and network access points.
-   * For example, the application may bring up a page showing persistent
-   * volumes and discovered network addresses.
-   *
-   * Deprecated: 3.20: use the #GtkPlacesSidebar::show-other-locations-with-flags
-   * which includes the open flags in order to allow the user to specify to open
-   * in a new tab or window, in a similar way than #GtkPlacesSidebar::open-location
-   *
-   * Since: 3.18
-   */
-  places_sidebar_signals [SHOW_OTHER_LOCATIONS] =
-          g_signal_new (I_("show-other-locations"),
-                        G_OBJECT_CLASS_TYPE (gobject_class),
-                        G_SIGNAL_RUN_FIRST | G_SIGNAL_DEPRECATED,
-                        G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_other_locations),
-                        NULL, NULL,
-                        NULL,
-                        G_TYPE_NONE, 0);
-
-  /**
    * GtkPlacesSidebar::show-other-locations-with-flags:
    * @sidebar: the object which received the signal.
    * @open_flags: a single value from #GtkPlacesOpenFlags specifying how it should be opened.
@@ -4807,7 +4772,7 @@ gtk_places_sidebar_get_show_enter_location (GtkPlacesSidebar *sidebar)
  * see and interact with drives and network servers directly.
  *
  * If you enable this, you should connect to the
- * #GtkPlacesSidebar::show-other-locations signal.
+ * #GtkPlacesSidebar::show-other-locations-with-flags signal.
  *
  * Since: 3.18
  */
