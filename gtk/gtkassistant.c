@@ -96,8 +96,6 @@ struct _GtkAssistantPage
   GtkWidget *page;
   GtkWidget *regular_title;
   GtkWidget *current_title;
-  GdkPixbuf *header_image;
-  GdkPixbuf *sidebar_image;
 };
 
 struct _GtkAssistantPrivate
@@ -167,12 +165,6 @@ static void       gtk_assistant_buildable_custom_finished    (GtkBuildable  *bui
 
 static GList*     find_page                                  (GtkAssistant  *assistant,
                                                               GtkWidget     *page);
-static void       gtk_assistant_do_set_page_header_image     (GtkAssistant  *assistant,
-                                                              GtkWidget     *page,
-                                                              GdkPixbuf     *pixbuf);
-static void       gtk_assistant_do_set_page_side_image       (GtkAssistant  *assistant,
-                                                              GtkWidget     *page,
-                                                              GdkPixbuf     *pixbuf);
 
 static void       on_assistant_close                         (GtkWidget     *widget,
 							      GtkAssistant  *assistant);
@@ -197,8 +189,6 @@ enum
   CHILD_PROP_0,
   CHILD_PROP_PAGE_TYPE,
   CHILD_PROP_PAGE_TITLE,
-  CHILD_PROP_PAGE_HEADER_IMAGE,
-  CHILD_PROP_PAGE_SIDEBAR_IMAGE,
   CHILD_PROP_PAGE_COMPLETE,
   CHILD_PROP_HAS_PADDING
 };
@@ -554,41 +544,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                                                    P_("Page title"),
                                                                    P_("The title of the assistant page"),
                                                                    NULL,
-                                                                   GTK_PARAM_READWRITE));
-
-  /**
-   * GtkAssistant:header-image:
-   *
-   * This image used to be displayed in the page header.
-   *
-   * Since: 2.10
-   *
-   * Deprecated: 3.2: Since GTK+ 3.2, a header is no longer shown;
-   *     add your header decoration to the page content instead.
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_PAGE_HEADER_IMAGE,
-                                              g_param_spec_object ("header-image",
-                                                                   P_("Header image"),
-                                                                   P_("Header image for the assistant page"),
-                                                                   GDK_TYPE_PIXBUF,
-                                                                   GTK_PARAM_READWRITE));
-
-  /**
-   * GtkAssistant:sidebar-image:
-   *
-   * This image used to be displayed in the 'sidebar'.
-   *
-   * Since: 2.10
-   *
-   * Deprecated: 3.2: Since GTK+ 3.2, the sidebar image is no longer shown.
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_PAGE_SIDEBAR_IMAGE,
-                                              g_param_spec_object ("sidebar-image",
-                                                                   P_("Sidebar image"),
-                                                                   P_("Sidebar image for the assistant page"),
-                                                                   GDK_TYPE_PIXBUF,
                                                                    GTK_PARAM_READWRITE));
 
   /**
@@ -1213,14 +1168,6 @@ gtk_assistant_set_child_property (GtkContainer *container,
       gtk_assistant_set_page_title (GTK_ASSISTANT (container), child,
                                     g_value_get_string (value));
       break;
-    case CHILD_PROP_PAGE_HEADER_IMAGE:
-      gtk_assistant_do_set_page_header_image (GTK_ASSISTANT (container), child,
-                                              g_value_get_object (value));
-      break;
-    case CHILD_PROP_PAGE_SIDEBAR_IMAGE:
-      gtk_assistant_do_set_page_side_image (GTK_ASSISTANT (container), child,
-                                            g_value_get_object (value));
-      break;
     case CHILD_PROP_PAGE_COMPLETE:
       gtk_assistant_set_page_complete (GTK_ASSISTANT (container), child,
                                        g_value_get_boolean (value));
@@ -1253,18 +1200,6 @@ gtk_assistant_get_child_property (GtkContainer *container,
     case CHILD_PROP_PAGE_TITLE:
       g_value_set_string (value,
                           gtk_assistant_get_page_title (assistant, child));
-      break;
-    case CHILD_PROP_PAGE_HEADER_IMAGE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      g_value_set_object (value,
-                          gtk_assistant_get_page_header_image (assistant, child));
-G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
-    case CHILD_PROP_PAGE_SIDEBAR_IMAGE:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      g_value_set_object (value,
-                          gtk_assistant_get_page_side_image (assistant, child));
-G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case CHILD_PROP_PAGE_COMPLETE:
       g_value_set_boolean (value,
@@ -2116,185 +2051,6 @@ gtk_assistant_get_page_type (GtkAssistant *assistant,
   page_info = (GtkAssistantPage*) child->data;
 
   return page_info->type;
-}
-
-/**
- * gtk_assistant_set_page_header_image:
- * @assistant: a #GtkAssistant
- * @page: a page of @assistant
- * @pixbuf: (allow-none): the new header image @page
- *
- * Sets a header image for @page.
- *
- * Since: 2.10
- *
- * Deprecated: 3.2: Since GTK+ 3.2, a header is no longer shown;
- *     add your header decoration to the page content instead.
- */
-void
-gtk_assistant_set_page_header_image (GtkAssistant *assistant,
-                                     GtkWidget    *page,
-                                     GdkPixbuf    *pixbuf)
-{
-  g_return_if_fail (GTK_IS_ASSISTANT (assistant));
-  g_return_if_fail (GTK_IS_WIDGET (page));
-  g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
-
-  gtk_assistant_do_set_page_header_image (assistant, page, pixbuf);
-}
-
-static void
-gtk_assistant_do_set_page_header_image (GtkAssistant *assistant,
-                                        GtkWidget    *page,
-                                        GdkPixbuf    *pixbuf)
-{
-  GtkAssistantPage *page_info;
-  GList *child;
-
-  child = find_page (assistant, page);
-
-  g_return_if_fail (child != NULL);
-
-  page_info = (GtkAssistantPage*) child->data;
-
-  if (pixbuf != page_info->header_image)
-    {
-      if (page_info->header_image)
-        {
-          g_object_unref (page_info->header_image);
-          page_info->header_image = NULL;
-        }
-
-      if (pixbuf)
-        page_info->header_image = g_object_ref (pixbuf);
-
-      gtk_container_child_notify (GTK_CONTAINER (assistant), page, "header-image");
-    }
-}
-
-/**
- * gtk_assistant_get_page_header_image:
- * @assistant: a #GtkAssistant
- * @page: a page of @assistant
- *
- * Gets the header image for @page.
- *
- * Returns: (transfer none): the header image for @page,
- *     or %NULL if there’s no header image for the page
- *
- * Since: 2.10
- *
- * Deprecated: 3.2: Since GTK+ 3.2, a header is no longer shown;
- *     add your header decoration to the page content instead.
- */
-GdkPixbuf*
-gtk_assistant_get_page_header_image (GtkAssistant *assistant,
-                                     GtkWidget    *page)
-{
-  GtkAssistantPage *page_info;
-  GList *child;
-
-  g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (page), NULL);
-
-  child = find_page (assistant, page);
-
-  g_return_val_if_fail (child != NULL, NULL);
-
-  page_info = (GtkAssistantPage*) child->data;
-
-  return page_info->header_image;
-}
-
-/**
- * gtk_assistant_set_page_side_image:
- * @assistant: a #GtkAssistant
- * @page: a page of @assistant
- * @pixbuf: (allow-none): the new side image @page
- *
- * Sets a side image for @page.
- *
- * This image used to be displayed in the side area of the assistant
- * when @page is the current page.
- *
- * Since: 2.10
- *
- * Deprecated: 3.2: Since GTK+ 3.2, sidebar images are not
- *     shown anymore.
- */
-void
-gtk_assistant_set_page_side_image (GtkAssistant *assistant,
-                                   GtkWidget    *page,
-                                   GdkPixbuf    *pixbuf)
-{
-  g_return_if_fail (GTK_IS_ASSISTANT (assistant));
-  g_return_if_fail (GTK_IS_WIDGET (page));
-  g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
-
-  gtk_assistant_do_set_page_side_image (assistant, page, pixbuf);
-}
-
-static void
-gtk_assistant_do_set_page_side_image (GtkAssistant *assistant,
-                                      GtkWidget    *page,
-                                      GdkPixbuf    *pixbuf)
-{
-  GtkAssistantPage *page_info;
-  GList *child;
-
-  child = find_page (assistant, page);
-
-  g_return_if_fail (child != NULL);
-
-  page_info = (GtkAssistantPage*) child->data;
-
-  if (pixbuf != page_info->sidebar_image)
-    {
-      if (page_info->sidebar_image)
-        {
-          g_object_unref (page_info->sidebar_image);
-          page_info->sidebar_image = NULL;
-        }
-
-      if (pixbuf)
-        page_info->sidebar_image = g_object_ref (pixbuf);
-
-      gtk_container_child_notify (GTK_CONTAINER (assistant), page, "sidebar-image");
-    }
-}
-
-/**
- * gtk_assistant_get_page_side_image:
- * @assistant: a #GtkAssistant
- * @page: a page of @assistant
- *
- * Gets the side image for @page.
- *
- * Returns: (transfer none): the side image for @page,
- *     or %NULL if there’s no side image for the page
- *
- * Since: 2.10
- *
- * Deprecated: 3.2: Since GTK+ 3.2, sidebar images are not
- *     shown anymore.
- */
-GdkPixbuf*
-gtk_assistant_get_page_side_image (GtkAssistant *assistant,
-                                   GtkWidget    *page)
-{
-  GtkAssistantPage *page_info;
-  GList *child;
-
-  g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (page), NULL);
-
-  child = find_page (assistant, page);
-
-  g_return_val_if_fail (child != NULL, NULL);
-
-  page_info = (GtkAssistantPage*) child->data;
-
-  return page_info->sidebar_image;
 }
 
 /**

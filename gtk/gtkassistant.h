@@ -183,21 +183,6 @@ GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_assistant_get_page_title        (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
 
-GDK_DEPRECATED_IN_3_2
-void                  gtk_assistant_set_page_header_image (GtkAssistant         *assistant,
-                                                           GtkWidget            *page,
-                                                           GdkPixbuf            *pixbuf);
-GDK_DEPRECATED_IN_3_2
-GdkPixbuf            *gtk_assistant_get_page_header_image (GtkAssistant         *assistant,
-                                                           GtkWidget            *page);
-GDK_DEPRECATED_IN_3_2
-void                  gtk_assistant_set_page_side_image   (GtkAssistant         *assistant,
-                                                           GtkWidget            *page,
-                                                           GdkPixbuf            *pixbuf);
-GDK_DEPRECATED_IN_3_2
-GdkPixbuf            *gtk_assistant_get_page_side_image   (GtkAssistant         *assistant,
-                                                           GtkWidget            *page);
-
 GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_set_page_complete     (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
