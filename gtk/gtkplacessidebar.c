@@ -171,7 +171,6 @@ struct _GtkPlacesSidebar {
   guint show_recent            : 1;
   guint show_desktop_set       : 1;
   guint show_desktop           : 1;
-  guint show_connect_to_server : 1;
   guint show_enter_location    : 1;
   guint show_other_locations   : 1;
   guint show_trash             : 1;
@@ -192,7 +191,6 @@ struct _GtkPlacesSidebarClass {
   void    (* show_error_message)     (GtkPlacesSidebar   *sidebar,
                                       const gchar        *primary,
                                       const gchar        *secondary);
-  void    (* show_connect_to_server) (GtkPlacesSidebar   *sidebar);
   GdkDragAction (* drag_action_requested)  (GtkPlacesSidebar   *sidebar,
                                       GdkDragContext     *context,
                                       GFile              *dest_file,
@@ -220,7 +218,6 @@ enum {
   OPEN_LOCATION,
   POPULATE_POPUP,
   SHOW_ERROR_MESSAGE,
-  SHOW_CONNECT_TO_SERVER,
   SHOW_ENTER_LOCATION,
   DRAG_ACTION_REQUESTED,
   DRAG_ACTION_ASK,
@@ -237,7 +234,6 @@ enum {
   PROP_OPEN_FLAGS,
   PROP_SHOW_RECENT,
   PROP_SHOW_DESKTOP,
-  PROP_SHOW_CONNECT_TO_SERVER,
   PROP_SHOW_ENTER_LOCATION,
   PROP_SHOW_TRASH,
   PROP_LOCAL_ONLY,
@@ -331,12 +327,6 @@ emit_show_error_message (GtkPlacesSidebar *sidebar,
 {
   g_signal_emit (sidebar, places_sidebar_signals[SHOW_ERROR_MESSAGE], 0,
                  primary, secondary);
-}
-
-static void
-emit_show_connect_to_server (GtkPlacesSidebar *sidebar)
-{
-  g_signal_emit (sidebar, places_sidebar_signals[SHOW_CONNECT_TO_SERVER], 0);
 }
 
 static void
@@ -1287,17 +1277,6 @@ update_places (GtkPlacesSidebar *sidebar)
   /* network */
   if (!sidebar->local_only)
     {
-      if (sidebar->show_connect_to_server)
-        {
-          icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK_SERVER);
-          add_place (sidebar, PLACES_CONNECT_TO_SERVER,
-                     SECTION_MOUNTS,
-                     _("Connect to Server"), icon, NULL,
-                     NULL, NULL, NULL, 0,
-                     _("Connect to a network server address"));
-          g_object_unref (icon);
-        }
-
       network_volumes = g_list_reverse (network_volumes);
       for (l = network_volumes; l != NULL; l = l->next)
         {
@@ -2347,10 +2326,6 @@ open_row (GtkSidebarRow      *row,
   else if (uri != NULL)
     {
       open_uri (sidebar, uri, open_flags);
-    }
-  else if (place_type == PLACES_CONNECT_TO_SERVER)
-    {
-      emit_show_connect_to_server (sidebar);
     }
   else if (place_type == PLACES_ENTER_LOCATION)
     {
@@ -3932,12 +3907,6 @@ gtk_places_sidebar_set_property (GObject      *obj,
       gtk_places_sidebar_set_show_desktop (sidebar, g_value_get_boolean (value));
       break;
 
-    case PROP_SHOW_CONNECT_TO_SERVER:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_places_sidebar_set_show_connect_to_server (sidebar, g_value_get_boolean (value));
-G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
-
     case PROP_SHOW_ENTER_LOCATION:
       gtk_places_sidebar_set_show_enter_location (sidebar, g_value_get_boolean (value));
       break;
@@ -3992,12 +3961,6 @@ gtk_places_sidebar_get_property (GObject    *obj,
 
     case PROP_SHOW_DESKTOP:
       g_value_set_boolean (value, gtk_places_sidebar_get_show_desktop (sidebar));
-      break;
-
-    case PROP_SHOW_CONNECT_TO_SERVER:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      g_value_set_boolean (value, gtk_places_sidebar_get_show_connect_to_server (sidebar));
-G_GNUC_END_IGNORE_DEPRECATIONS
       break;
 
     case PROP_SHOW_ENTER_LOCATION:
@@ -4222,28 +4185,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_TYPE_NONE, 2,
                         G_TYPE_STRING,
                         G_TYPE_STRING);
-
-  /**
-   * GtkPlacesSidebar::show-connect-to-server:
-   * @sidebar: the object which received the signal.
-   *
-   * The places sidebar emits this signal when it needs the calling
-   * application to present an way to connect directly to a network server.
-   * For example, the application may bring up a dialog box asking for
-   * a URL like "sftp://ftp.example.com".  It is up to the application to create
-   * the corresponding mount by using, for example, g_file_mount_enclosing_volume().
-   *
-   * Deprecated: 3.18: use the #GtkPlacesSidebar::show-other-locations signal
-   *     to connect to network servers.
-   */
-  places_sidebar_signals [SHOW_CONNECT_TO_SERVER] =
-          g_signal_new (I_("show-connect-to-server"),
-                        G_OBJECT_CLASS_TYPE (gobject_class),
-                        G_SIGNAL_RUN_FIRST,
-                        G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_connect_to_server),
-                        NULL, NULL,
-                        NULL,
-                        G_TYPE_NONE, 0);
 
   /**
    * GtkPlacesSidebar::show-enter-location:
@@ -4471,12 +4412,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 P_("Whether the sidebar includes a builtin shortcut to the Desktop folder"),
                                 TRUE,
                                 G_PARAM_READWRITE);
-  properties[PROP_SHOW_CONNECT_TO_SERVER] =
-          g_param_spec_boolean ("show-connect-to-server",
-                                P_("Show 'Connect to Server'"),
-                                P_("Whether the sidebar includes a builtin shortcut to a 'Connect to server' dialog"),
-                                FALSE,
-                                G_PARAM_READWRITE | G_PARAM_DEPRECATED);
   properties[PROP_SHOW_ENTER_LOCATION] =
           g_param_spec_boolean ("show-enter-location",
                                 P_("Show 'Enter Location'"),
@@ -4811,57 +4746,6 @@ gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar)
   g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
 
   return sidebar->show_desktop;
-}
-
-/**
- * gtk_places_sidebar_set_show_connect_to_server:
- * @sidebar: a places sidebar
- * @show_connect_to_server: whether to show an item for the Connect to Server command
- *
- * Sets whether the @sidebar should show an item for connecting to a network server;
- * this is off by default. An application may want to turn this on if it implements
- * a way for the user to connect to network servers directly.
- *
- * If you enable this, you should connect to the
- * #GtkPlacesSidebar::show-connect-to-server signal.
- *
- * Since: 3.10
- *
- * Deprecated: 3.18: It is recommended to group this functionality with the drives
- *     and network location under the new 'Other Location' item
- */
-void
-gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar,
-                                               gboolean          show_connect_to_server)
-{
-  g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-  show_connect_to_server = !!show_connect_to_server;
-  if (sidebar->show_connect_to_server != show_connect_to_server)
-    {
-      sidebar->show_connect_to_server = show_connect_to_server;
-      update_places (sidebar);
-      g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_SHOW_CONNECT_TO_SERVER]);
-    }
-}
-
-/**
- * gtk_places_sidebar_get_show_connect_to_server:
- * @sidebar: a places sidebar
- *
- * Returns the value previously set with gtk_places_sidebar_set_show_connect_to_server()
- *
- * Returns: %TRUE if the sidebar will display a “Connect to Server” item.
- *
- * Deprecated: 3.18: It is recommended to group this functionality with the drives
- *     and network location under the new 'Other Location' item
- */
-gboolean
-gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar *sidebar)
-{
-  g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
-
-  return sidebar->show_connect_to_server;
 }
 
 /**
