@@ -41,42 +41,12 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_test_find_widget            (GtkWidget      *widget,
                                                  const gchar    *label_pattern,
                                                  GType           widget_type);
-GDK_DEPRECATED_IN_3_20
-GtkWidget*      gtk_test_create_widget          (GType           widget_type,
-                                                 const gchar    *first_property_name,
-                                                 ...);
-GDK_DEPRECATED_IN_3_20
-GtkWidget*      gtk_test_create_simple_window   (const gchar    *window_title,
-                                                 const gchar    *dialog_text);
-GDK_DEPRECATED_IN_3_20
-GtkWidget*      gtk_test_display_button_window  (const gchar    *window_title,
-                                                 const gchar    *dialog_text,
-                                                 ...); /* NULL terminated list of (label, &int) pairs */
-GDK_DEPRECATED_IN_3_20
-void            gtk_test_slider_set_perc        (GtkWidget      *widget, /* GtkRange-alike */
-                                                 double          percentage);
-GDK_DEPRECATED_IN_3_20
-double          gtk_test_slider_get_value       (GtkWidget      *widget);
-GDK_DEPRECATED_IN_3_20
-gboolean        gtk_test_spin_button_click      (GtkSpinButton  *spinner,
-                                                 guint           button,
-                                                 gboolean        upwards);
 GDK_AVAILABLE_IN_3_10
 void            gtk_test_widget_wait_for_draw   (GtkWidget      *widget);
-GDK_DEPRECATED_IN_3_20
-gboolean        gtk_test_widget_click           (GtkWidget      *widget,
-                                                 guint           button,
-                                                 GdkModifierType modifiers);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_test_widget_send_key        (GtkWidget      *widget,
                                                  guint           keyval,
                                                  GdkModifierType modifiers);
-/* operate on GtkEntry, GtkText, GtkTextView or GtkLabel */
-GDK_DEPRECATED_IN_3_20
-void            gtk_test_text_set               (GtkWidget      *widget,
-                                                 const gchar    *string);
-GDK_DEPRECATED_IN_3_20
-gchar*          gtk_test_text_get               (GtkWidget      *widget);
 
 /* --- Gtk+ Test low-level API --- */
 GDK_AVAILABLE_IN_ALL
