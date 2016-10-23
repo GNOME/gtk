@@ -150,40 +150,6 @@ gtk_radio_tool_button_new (GSList *group)
 }
 
 /**
- * gtk_radio_tool_button_new_from_stock:
- * @group: (allow-none) (element-type GtkRadioButton): an existing radio button
- *   group, or %NULL if you are creating a new group
- * @stock_id: the name of a stock item
- * 
- * Creates a new #GtkRadioToolButton, adding it to @group. 
- * The new #GtkRadioToolButton will contain an icon and label from the
- * stock item indicated by @stock_id.
- * 
- * Returns: The new #GtkRadioToolButton
- * 
- * Since: 2.4
- *
- * Deprecated: 3.10: Use gtk_radio_tool_button_new() instead.
- **/
-GtkToolItem *
-gtk_radio_tool_button_new_from_stock (GSList      *group,
-				      const gchar *stock_id)
-{
-  GtkRadioToolButton *button;
-
-  g_return_val_if_fail (stock_id != NULL, NULL);
-  
-  button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON,
-			 "stock-id", stock_id,
-			 NULL);
-
-
-  gtk_radio_tool_button_set_group (button, group);
-  
-  return GTK_TOOL_ITEM (button);
-}
-
-/**
  * gtk_radio_tool_button_new_from_widget: (constructor)
  * @group: (allow-none): An existing #GtkRadioToolButton, or %NULL
  *
@@ -204,40 +170,6 @@ gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
     list = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (group));
   
   return gtk_radio_tool_button_new (list);
-}
-
-/**
- * gtk_radio_tool_button_new_with_stock_from_widget: (constructor)
- * @group: (allow-none): An existing #GtkRadioToolButton.
- * @stock_id: the name of a stock item
- *
- * Creates a new #GtkRadioToolButton adding it to the same group as @group.
- * The new #GtkRadioToolButton will contain an icon and label from the
- * stock item indicated by @stock_id.
- *
- * Returns: (transfer none): A new #GtkRadioToolButton
- *
- * Since: 2.4
- *
- * Deprecated: 3.10: gtk_radio_tool_button_new_from_widget
- **/
-GtkToolItem *
-gtk_radio_tool_button_new_with_stock_from_widget (GtkRadioToolButton *group,
-						  const gchar        *stock_id)
-{
-  GSList *list = NULL;
-  GtkToolItem *item;
-
-  g_return_val_if_fail (group == NULL || GTK_IS_RADIO_TOOL_BUTTON (group), NULL);
-
-  if (group != NULL)
-    list = gtk_radio_tool_button_get_group (group);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  item = gtk_radio_tool_button_new_from_stock (list, stock_id);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  return item;
 }
 
 static GtkRadioButton *
