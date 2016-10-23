@@ -1080,12 +1080,6 @@ void           gtk_style_context_set_frame_clock (GtkStyleContext *context,
 GDK_AVAILABLE_IN_3_8
 GdkFrameClock *gtk_style_context_get_frame_clock (GtkStyleContext *context);
 
-GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_set_state)
-void             gtk_style_context_set_direction (GtkStyleContext  *context,
-                                                  GtkTextDirection  direction);
-GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_get_state)
-GtkTextDirection gtk_style_context_get_direction (GtkStyleContext  *context);
-
 GDK_AVAILABLE_IN_ALL
 void             gtk_style_context_set_junction_sides (GtkStyleContext  *context,
                                                        GtkJunctionSides  sides);
@@ -1118,8 +1112,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_margin           (GtkStyleContext *context,
                                              GtkBorder       *margin);
 
-GDK_DEPRECATED_IN_3_12
-void gtk_style_context_invalidate           (GtkStyleContext *context);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_reset_widgets        (GdkScreen       *screen);
 

@@ -144,7 +144,6 @@ struct _GtkStyleContextPrivate
 enum {
   PROP_0,
   PROP_SCREEN,
-  PROP_DIRECTION,
   PROP_FRAME_CLOCK,
   PROP_PARENT,
   LAST_PROP
@@ -229,14 +228,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                            P_("The associated GdkFrameClock"),
                            GDK_TYPE_FRAME_CLOCK,
                            GTK_PARAM_READWRITE);
-
-  properties[PROP_DIRECTION] =
-      g_param_spec_enum ("direction",
-                         P_("Direction"),
-                         P_("Text direction"),
-                         GTK_TYPE_TEXT_DIRECTION,
-                         GTK_TEXT_DIR_LTR,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkStyleContext:parent:
@@ -394,11 +385,6 @@ gtk_style_context_impl_set_property (GObject      *object,
     case PROP_SCREEN:
       gtk_style_context_set_screen (context, g_value_get_object (value));
       break;
-    case PROP_DIRECTION:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_style_context_set_direction (context, g_value_get_enum (value));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      break;
     case PROP_FRAME_CLOCK:
       gtk_style_context_set_frame_clock (context, g_value_get_object (value));
       break;
@@ -424,11 +410,6 @@ gtk_style_context_impl_get_property (GObject    *object,
     {
     case PROP_SCREEN:
       g_value_set_object (value, priv->screen);
-      break;
-    case PROP_DIRECTION:
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      g_value_set_enum (value, gtk_style_context_get_direction (context));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_FRAME_CLOCK:
       g_value_set_object (value, priv->frame_clock);
@@ -898,17 +879,9 @@ void
 gtk_style_context_set_state (GtkStyleContext *context,
                              GtkStateFlags    flags)
 {
-  GtkStateFlags old_flags;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  old_flags = gtk_css_node_get_state (context->priv->cssnode);
-
   gtk_css_node_set_state (context->priv->cssnode, flags);
-
-  if (((old_flags ^ flags) & (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)) &&
-      !gtk_style_context_is_saved (context))
-    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_DIRECTION]);
 }
 
 /**
@@ -1758,83 +1731,6 @@ gtk_style_context_get_frame_clock (GtkStyleContext *context)
 }
 
 /**
- * gtk_style_context_set_direction:
- * @context: a #GtkStyleContext
- * @direction: the new direction.
- *
- * Sets the reading direction for rendering purposes.
- *
- * If you are using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), you do not need to
- * call this yourself.
- *
- * Since: 3.0
- *
- * Deprecated: 3.8: Use gtk_style_context_set_state() with
- *   #GTK_STATE_FLAG_DIR_LTR and #GTK_STATE_FLAG_DIR_RTL
- *   instead.
- **/
-void
-gtk_style_context_set_direction (GtkStyleContext  *context,
-                                 GtkTextDirection  direction)
-{
-  GtkStateFlags state;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  state = gtk_style_context_get_state (context);
-  state &= ~(GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL);
-
-  switch (direction)
-    {
-    case GTK_TEXT_DIR_LTR:
-      state |= GTK_STATE_FLAG_DIR_LTR;
-      break;
-
-    case GTK_TEXT_DIR_RTL:
-      state |= GTK_STATE_FLAG_DIR_RTL;
-      break;
-
-    case GTK_TEXT_DIR_NONE:
-    default:
-      break;
-    }
-
-  gtk_style_context_set_state (context, state);
-}
-
-/**
- * gtk_style_context_get_direction:
- * @context: a #GtkStyleContext
- *
- * Returns the widget direction used for rendering.
- *
- * Returns: the widget direction
- *
- * Since: 3.0
- *
- * Deprecated: 3.8: Use gtk_style_context_get_state() and
- *   check for #GTK_STATE_FLAG_DIR_LTR and
- *   #GTK_STATE_FLAG_DIR_RTL instead.
- **/
-GtkTextDirection
-gtk_style_context_get_direction (GtkStyleContext *context)
-{
-  GtkStateFlags state;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), GTK_TEXT_DIR_LTR);
-
-  state = gtk_style_context_get_state (context);
-
-  if (state & GTK_STATE_FLAG_DIR_LTR)
-    return GTK_TEXT_DIR_LTR;
-  else if (state & GTK_STATE_FLAG_DIR_RTL)
-    return GTK_TEXT_DIR_RTL;
-  else
-    return GTK_TEXT_DIR_NONE;
-}
-
-/**
  * gtk_style_context_set_junction_sides:
  * @context: a #GtkStyleContext
  * @sides: sides where rendered elements are visually connected to
@@ -1954,28 +1850,6 @@ gtk_style_context_validate (GtkStyleContext  *context,
   g_signal_emit (context, signals[CHANGED], 0);
 
   priv->invalidating_context = NULL;
-}
-
-/**
- * gtk_style_context_invalidate:
- * @context: a #GtkStyleContext.
- *
- * Invalidates @context style information, so it will be reconstructed
- * again. It is useful if you modify the @context and need the new
- * information immediately.
- *
- * Since: 3.0
- *
- * Deprecated: 3.12: Style contexts are invalidated automatically.
- **/
-void
-gtk_style_context_invalidate (GtkStyleContext *context)
-{
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  gtk_style_context_clear_property_cache (context);
-
-  gtk_style_context_validate (context, NULL);
 }
 
 /**

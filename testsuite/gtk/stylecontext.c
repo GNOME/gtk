@@ -258,24 +258,6 @@ test_basic_properties (void)
 }
 
 void
-test_invalidate_saved (void)
-{
-  GtkWidget *window;
-  GtkStyleContext *context;
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-  context = gtk_widget_get_style_context (window);
-  gtk_style_context_save (context);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_invalidate (context);
-G_GNUC_END_IGNORE_DEPRECATIONS
-  gtk_style_context_restore (context);
-
-  gtk_widget_destroy (window);
-}
-
-void
 test_widget_path_parent (void)
 {
   GtkStyleContext *parent, *context;
@@ -533,7 +515,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/style/path", test_path);
   g_test_add_func ("/style/match", test_match);
   g_test_add_func ("/style/basic", test_basic_properties);
-  g_test_add_func ("/style/invalidate-saved", test_invalidate_saved);
   g_test_add_func ("/style/widget-path-parent", test_widget_path_parent);
   g_test_add_func ("/style/classes", test_style_classes);
 

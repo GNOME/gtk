@@ -5396,7 +5396,6 @@ gtk_style_context_new
 gtk_style_context_add_provider
 gtk_style_context_add_provider_for_screen
 gtk_style_context_get
-gtk_style_context_get_direction
 GtkJunctionSides
 gtk_style_context_get_junction_sides
 gtk_style_context_get_parent
@@ -5417,7 +5416,6 @@ gtk_style_context_get_border
 gtk_style_context_get_padding
 gtk_style_context_get_margin
 gtk_style_context_get_font
-gtk_style_context_invalidate
 gtk_style_context_state_is_running
 gtk_style_context_lookup_color
 gtk_style_context_remove_provider
@@ -5426,7 +5424,6 @@ gtk_style_context_reset_widgets
 gtk_style_context_set_background
 gtk_style_context_restore
 gtk_style_context_save
-gtk_style_context_set_direction
 gtk_style_context_set_junction_sides
 gtk_style_context_set_parent
 gtk_style_context_set_path
