@@ -323,14 +323,11 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
 				   gint               *width,
 				   gint               *height)
 {
-  GtkCellRendererTogglePrivate *priv;
   gint calc_width;
   gint calc_height;
   gint xpad, ypad;
   GtkStyleContext *context;
   GtkBorder border, padding;
-
-  priv = GTK_CELL_RENDERER_TOGGLE (cell)->priv;
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
