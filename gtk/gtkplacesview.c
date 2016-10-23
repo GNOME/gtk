@@ -187,7 +187,7 @@ server_list_load (GtkPlacesView *view)
 
   priv = gtk_places_view_get_instance_private (view);
   bookmarks = g_bookmark_file_new ();
-  datadir = g_build_filename (g_get_user_config_dir (), "gtk-3.0", NULL);
+  datadir = g_build_filename (g_get_user_config_dir (), "gtk-4.0", NULL);
   filename = g_build_filename (datadir, "servers", NULL);
 
   g_mkdir_with_parents (datadir, 0700);
@@ -245,7 +245,7 @@ server_list_save (GBookmarkFile *bookmarks)
 {
   gchar *filename;
 
-  filename = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "servers", NULL);
+  filename = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "servers", NULL);
   g_bookmark_file_to_file (bookmarks, filename, NULL);
   g_free (filename);
 }

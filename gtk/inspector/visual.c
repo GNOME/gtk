@@ -281,7 +281,7 @@ fill_gtk (const gchar *path,
 
   while ((dir_entry = g_dir_read_name (dir)))
     {
-      gchar *filename = g_build_filename (path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+      gchar *filename = g_build_filename (path, dir_entry, "gtk-4.0", "gtk.css", NULL);
 
       if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
           !g_hash_table_contains (t, dir_entry))

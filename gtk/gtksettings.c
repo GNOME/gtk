@@ -77,8 +77,8 @@
  * utilities that let the user change these settings. In the absence of
  * an Xsettings manager, GTK+ reads default values for settings from
  * `settings.ini` files in
- * `/etc/gtk-3.0`, `$XDG_CONFIG_DIRS/gtk-3.0`
- * and `$XDG_CONFIG_HOME/gtk-3.0`.
+ * `/etc/gtk-4.0`, `$XDG_CONFIG_DIRS/gtk-4.0`
+ * and `$XDG_CONFIG_HOME/gtk-4.0`.
  * These files must be valid key files (see #GKeyFile), and have
  * a section called Settings. Themes can also provide default values
  * for settings by installing a `settings.ini` file
@@ -301,12 +301,12 @@ gtk_settings_init (GtkSettings *settings)
     }
   g_free (pspecs);
 
-  path = g_build_filename (_gtk_get_data_prefix (), "share", "gtk-3.0", "settings.ini", NULL);
+  path = g_build_filename (_gtk_get_data_prefix (), "share", "gtk-4.0", "settings.ini", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
 
-  path = g_build_filename (_gtk_get_sysconfdir (), "gtk-3.0", "settings.ini", NULL);
+  path = g_build_filename (_gtk_get_sysconfdir (), "gtk-4.0", "settings.ini", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
@@ -314,13 +314,13 @@ gtk_settings_init (GtkSettings *settings)
   config_dirs = g_get_system_config_dirs ();
   for (i = 0; config_dirs[i] != NULL; i++)
     {
-      path = g_build_filename (config_dirs[i], "gtk-3.0", "settings.ini", NULL);
+      path = g_build_filename (config_dirs[i], "gtk-4.0", "settings.ini", NULL);
       if (g_file_test (path, G_FILE_TEST_EXISTS))
         gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
       g_free (path);
     }
 
-  path = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "settings.ini", NULL);
+  path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "settings.ini", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
@@ -1158,7 +1158,7 @@ settings_init_style (GtkSettings *settings)
 
       css_provider = gtk_css_provider_new ();
       css_path = g_build_filename (g_get_user_config_dir (),
-                                   "gtk-3.0",
+                                   "gtk-4.0",
                                    "gtk.css",
                                    NULL);
 

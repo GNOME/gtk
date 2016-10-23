@@ -519,7 +519,7 @@ gtk_compose_hash_get_cache_path (guint32 hash)
 
   basename = g_strdup_printf ("%08x.cache", hash);
 
-  dir = g_build_filename (g_get_user_cache_dir (), "gtk-3.0", "compose", NULL);
+  dir = g_build_filename (g_get_user_cache_dir (), "gtk-4.0", "compose", NULL);
   path = g_build_filename (dir, basename, NULL);
   if (g_mkdir_with_parents (dir, 0755) != 0)
     {

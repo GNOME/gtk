@@ -150,7 +150,7 @@ custom_paper_get_filename (void)
   gchar *filename;
 
   filename = g_build_filename (g_get_user_config_dir (),
-                               "gtk-3.0",
+                               "gtk-4.0",
 			       CUSTOM_PAPER_FILENAME, NULL);
   g_assert (filename != NULL);
   return filename;
@@ -256,7 +256,7 @@ _gtk_print_save_custom_papers (GtkListStore *store)
 
   filename = custom_paper_get_filename ();
   parentdir = g_build_filename (g_get_user_config_dir (),
-                                "gtk-3.0",
+                                "gtk-4.0",
                                 NULL);
   if (g_mkdir_with_parents (parentdir, 0700) == 0)
     {

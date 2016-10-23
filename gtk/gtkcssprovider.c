@@ -61,7 +61,7 @@
  * gtk_style_context_add_provider_for_screen().
 
  * In addition, certain files will be read when GTK+ is initialized. First, the
- * file `$XDG_CONFIG_HOME/gtk-3.0/gtk.css` is loaded if it exists. Then, GTK+
+ * file `$XDG_CONFIG_HOME/gtk-4.0/gtk.css` is loaded if it exists. Then, GTK+
  * loads the first existing file among
  * `XDG_DATA_HOME/themes/theme-name/gtk-VERSION/gtk.css`,
  * `$HOME/.themes/theme-name/gtk-VERSION/gtk.css`,
@@ -1924,14 +1924,11 @@ _gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
 
 /*
  * Look for
- * $dir/$subdir/gtk-3.16/gtk-$variant.css
- * $dir/$subdir/gtk-3.14/gtk-$variant.css
+ * $dir/$subdir/gtk-4.16/gtk-$variant.css
+ * $dir/$subdir/gtk-4.14/gtk-$variant.css
  *  ...
- * $dir/$subdir/gtk-3.0/gtk-$variant.css
+ * $dir/$subdir/gtk-4.0/gtk-$variant.css
  * and return the first found file.
- * We don't check versions before 3.14,
- * since those GTK+ versions didn't have
- * the versioned loading mechanism.
  */
 static gchar *
 _gtk_css_find_theme_dir (const gchar *dir,
@@ -1960,7 +1957,7 @@ _gtk_css_find_theme_dir (const gchar *dir,
       if (i < 14)
         i = 0;
 
-      subsubdir = g_strdup_printf ("gtk-3.%d", i);
+      subsubdir = g_strdup_printf ("gtk-4.%d", i);
       path = g_build_filename (base, subsubdir, file, NULL);
       g_free (subsubdir);
 

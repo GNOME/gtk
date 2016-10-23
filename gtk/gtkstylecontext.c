@@ -110,7 +110,7 @@
  * to make your style information prevail to the theme’s, so you must use
  * a #GtkStyleProvider with the %GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
  * priority, keep in mind that the user settings in
- * `XDG_CONFIG_HOME/gtk-3.0/gtk.css` will
+ * `XDG_CONFIG_HOME/gtk-4.0/gtk.css` will
  * still take precedence over your changes, as it uses the
  * %GTK_STYLE_PROVIDER_PRIORITY_USER priority.
  */

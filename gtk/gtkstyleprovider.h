@@ -77,7 +77,7 @@ G_BEGIN_DECLS
  * GTK_STYLE_PROVIDER_PRIORITY_USER:
  *
  * The priority used for the style information from
- * `~/.gtk-3.0.css`.
+ * `~/.gtk-4.0.css`.
  *
  * You should not use priorities higher than this, to
  * give the user the last word.

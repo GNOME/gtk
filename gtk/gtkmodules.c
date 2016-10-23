@@ -65,9 +65,9 @@ get_module_path (void)
   exe_prefix = g_getenv ("GTK_EXE_PREFIX");
 
   if (exe_prefix)
-    default_dir = g_build_filename (exe_prefix, "lib", "gtk-3.0", NULL);
+    default_dir = g_build_filename (exe_prefix, "lib", "gtk-4.0", NULL);
   else
-    default_dir = g_build_filename (_gtk_get_libdir (), "gtk-3.0", NULL);
+    default_dir = g_build_filename (_gtk_get_libdir (), "gtk-4.0", NULL);
 
   if (module_path_env)
     module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,

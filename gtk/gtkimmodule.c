@@ -379,9 +379,9 @@ gtk_get_im_module_file (void)
       var = g_getenv ("GTK_EXE_PREFIX");
 
       if (var)
-        path = g_build_filename (var, "lib", "gtk-3.0", GTK_BINARY_VERSION, "immodules.cache", NULL);
+        path = g_build_filename (var, "lib", "gtk-4.0", GTK_BINARY_VERSION, "immodules.cache", NULL);
       else
-        path = g_build_filename (_gtk_get_libdir (), "gtk-3.0", GTK_BINARY_VERSION, "immodules.cache", NULL);
+        path = g_build_filename (_gtk_get_libdir (), "gtk-4.0", GTK_BINARY_VERSION, "immodules.cache", NULL);
 
       return path;
     }
