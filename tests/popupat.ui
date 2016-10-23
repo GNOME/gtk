@@ -428,7 +428,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -437,7 +436,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -446,7 +444,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -455,7 +452,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -470,7 +466,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                       </object>
@@ -493,7 +488,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -502,7 +496,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -511,7 +504,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -520,7 +512,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                       </object>
@@ -551,7 +542,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                       </object>
@@ -1286,7 +1276,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -1295,7 +1284,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -1304,7 +1292,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -1313,7 +1300,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -1328,7 +1314,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                       </object>
@@ -1351,7 +1336,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -1360,7 +1344,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -1369,7 +1352,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                         <child>
@@ -1378,7 +1360,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                       </object>
@@ -1409,7 +1390,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
                           </object>
                         </child>
                       </object>

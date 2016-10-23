@@ -64,9 +64,9 @@ typedef struct _GtkImageClass         GtkImageClass;
  * want to get the image from the widget, you can only get the
  * currently-stored representation. e.g.  if the
  * gtk_image_get_storage_type() returns #GTK_IMAGE_PIXBUF, then you can
- * call gtk_image_get_pixbuf() but not gtk_image_get_stock().  For empty
- * images, you can request any storage type (call any of the "get"
- * functions), but they will all return %NULL values.
+ * call gtk_image_get_pixbuf().  For empty images, you can request any
+ * storage type (call any of the "get" functions), but they will all
+ * return %NULL values.
  */
 typedef enum
 {

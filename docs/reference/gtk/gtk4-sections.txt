@@ -209,8 +209,6 @@ gtk_action_set_short_label
 gtk_action_get_short_label
 gtk_action_set_tooltip
 gtk_action_get_tooltip
-gtk_action_set_stock_id
-gtk_action_get_stock_id
 gtk_action_set_gicon
 gtk_action_get_gicon
 gtk_action_set_icon_name
