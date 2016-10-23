@@ -217,10 +217,3 @@ gtk_accessible_get_widget (GtkAccessible *accessible)
   return accessible->priv->widget;
 }
 
-static void
-gtk_accessible_widget_destroyed (GtkWidget     *widget,
-                                 GtkAccessible *accessible)
-{
-  gtk_accessible_set_widget (accessible, NULL);
-}
-
