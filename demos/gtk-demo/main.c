@@ -233,7 +233,6 @@ static gchar *types[] =
   "GtkActionEntry ",
   "GtkRadioActionEntry ",
   "GtkIconFactory ",
-  "GtkIconSet ",
   "GtkTextBuffer ",
   "GtkStatusbar ",
   "GtkTextIter ",

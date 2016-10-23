@@ -279,7 +279,6 @@ gtk_image_accessible_get_image_size (AtkImage *image,
         *width = gdk_pixbuf_get_width (pixbuf);
         break;
       }
-    case GTK_IMAGE_ICON_SET:
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       {

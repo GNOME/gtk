@@ -35,16 +35,6 @@ void signal_second (GtkButton *button, GParamSpec *spec);
 void signal_extra (GtkButton *button, GParamSpec *spec);
 void signal_extra2 (GtkButton *button, GParamSpec *spec);
 
-/* Copied from gtkiconfactory.c; keep in sync! */
-struct _GtkIconSet
-{
-  guint ref_count;
-  GSList *sources;
-  GSList *cache;
-  guint cache_size;
-  guint cache_serial;
-};
-
 
 static GtkBuilder *
 builder_new_from_string (const gchar *buffer,

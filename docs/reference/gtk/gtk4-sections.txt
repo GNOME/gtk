@@ -1689,7 +1689,6 @@ GTK_IMAGE_GET_CLASS
 <SUBSECTION Private>
 GtkImagePrivate
 gtk_image_get_type
-GtkImageIconSetData
 GtkImagePixbufData
 GtkImageAnimationData
 GtkImageIconNameData

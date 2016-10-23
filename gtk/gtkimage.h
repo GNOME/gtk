@@ -52,7 +52,6 @@ typedef struct _GtkImageClass         GtkImageClass;
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
  * @GTK_IMAGE_PIXBUF: the widget contains a #GdkPixbuf
- * @GTK_IMAGE_ICON_SET: the widget contains a #GtkIconSet
  * @GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
  * @GTK_IMAGE_ICON_NAME: the widget contains a named icon.
  *  This image type was added in GTK+ 2.6
@@ -73,7 +72,6 @@ typedef enum
 {
   GTK_IMAGE_EMPTY,
   GTK_IMAGE_PIXBUF,
-  GTK_IMAGE_ICON_SET,
   GTK_IMAGE_ANIMATION,
   GTK_IMAGE_ICON_NAME,
   GTK_IMAGE_GICON,

@@ -34,7 +34,6 @@ G_BEGIN_DECLS
 typedef struct _GtkAdjustment          GtkAdjustment;
 typedef struct _GtkBuilder             GtkBuilder;
 typedef struct _GtkClipboard	       GtkClipboard;
-typedef struct _GtkIconSet             GtkIconSet;
 typedef struct _GtkIconSource          GtkIconSource;
 typedef struct _GtkRequisition	       GtkRequisition;
 typedef struct _GtkSelectionData       GtkSelectionData;
