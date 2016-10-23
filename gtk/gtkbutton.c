@@ -727,8 +727,6 @@ gtk_button_clicked (GtkButton *button)
  * Sets the relief style of the edges of the given #GtkButton widget.
  * Two styles exist, %GTK_RELIEF_NORMAL and %GTK_RELIEF_NONE.
  * The default style is, as one can guess, %GTK_RELIEF_NORMAL.
- * The deprecated value %GTK_RELIEF_HALF behaves the same as
- * %GTK_RELIEF_NORMAL.
  */
 void
 gtk_button_set_relief (GtkButton      *button,
