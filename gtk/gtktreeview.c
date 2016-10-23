@@ -392,11 +392,6 @@ struct _GtkTreeViewPrivate
   gint last_extra_space_per_column;
   gint last_number_of_expand_columns;
 
-  /* ATK Hack */
-  GtkTreeDestroyCountFunc destroy_count_func;
-  gpointer destroy_count_data;
-  GDestroyNotify destroy_count_destroy;
-
   /* Row drag-and-drop */
   GtkTreeRowReference *drag_dest_row;
   GtkTreeViewDropPosition drag_dest_pos;
@@ -472,8 +467,6 @@ struct _GtkTreeViewPrivate
   guint reorderable : 1;
   guint header_has_focus : 1;
   guint drag_column_window_state : 3;
-  /* hint to display rows in alternating colors */
-  guint has_rules : 1;
   guint mark_rows_col_dirty : 1;
 
   /* for DnD */
@@ -1060,21 +1053,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                             P_("View is reorderable"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkTreeView:rules-hint:
-   *
-   * Sets a hint to the theme to draw rows in alternating colors.
-   *
-   * Deprecated: 3.14: The theme is responsible for drawing rows
-   *   using zebra striping
-   */
-  tree_view_props[PROP_RULES_HINT] =
-      g_param_spec_boolean ("rules-hint",
-                            P_("Rules Hint"),
-                            P_("Set a hint to the theme engine to draw rows in alternating colors"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   tree_view_props[PROP_ENABLE_SEARCH] =
       g_param_spec_boolean ("enable-search",
@@ -1920,11 +1898,6 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_REORDERABLE:
       gtk_tree_view_set_reorderable (tree_view, g_value_get_boolean (value));
       break;
-    case PROP_RULES_HINT:
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_tree_view_set_rules_hint (tree_view, g_value_get_boolean (value));
-G_GNUC_END_IGNORE_DEPRECATIONS
-      break;
     case PROP_ENABLE_SEARCH:
       gtk_tree_view_set_enable_search (tree_view, g_value_get_boolean (value));
       break;
@@ -2021,9 +1994,6 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_REORDERABLE:
       g_value_set_boolean (value, tree_view->priv->reorderable);
-      break;
-    case PROP_RULES_HINT:
-      g_value_set_boolean (value, tree_view->priv->has_rules);
       break;
     case PROP_ENABLE_SEARCH:
       g_value_set_boolean (value, tree_view->priv->enable_search);
@@ -2190,13 +2160,6 @@ gtk_tree_view_destroy (GtkWidget *widget)
     {
       tree_view->priv->column_drop_func_data_destroy (tree_view->priv->column_drop_func_data);
       tree_view->priv->column_drop_func_data = NULL;
-    }
-
-  if (tree_view->priv->destroy_count_destroy &&
-      tree_view->priv->destroy_count_data)
-    {
-      tree_view->priv->destroy_count_destroy (tree_view->priv->destroy_count_data);
-      tree_view->priv->destroy_count_data = NULL;
     }
 
   gtk_tree_row_reference_free (tree_view->priv->anchor);
@@ -9202,16 +9165,6 @@ gtk_tree_view_row_has_child_toggled (GtkTreeModel *model,
 }
 
 static void
-count_children_helper (GtkRBTree *tree,
-		       GtkRBNode *node,
-		       gpointer   data)
-{
-  if (node->children)
-    _gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, data);
-  (*((gint *)data))++;
-}
-
-static void
 check_selection_helper (GtkRBTree *tree,
                         GtkRBNode *node,
                         gpointer   data)
@@ -9307,14 +9260,6 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
         gtk_tree_path_free (cursor_path);
 
       cursor_changed = TRUE;
-    }
-
-  if (tree_view->priv->destroy_count_func)
-    {
-      gint child_count = 0;
-      if (node->children)
-	_gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, &child_count);
-      tree_view->priv->destroy_count_func (tree_view, path, child_count, tree_view->priv->destroy_count_data);
     }
 
   if (tree->root->count == 1)
@@ -11789,64 +11734,6 @@ gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view)
 }
 
 /**
- * gtk_tree_view_set_rules_hint:
- * @tree_view: a #GtkTreeView
- * @setting: %TRUE if the tree requires reading across rows
- *
- * Sets a hint for the theme to draw even/odd rows in the @tree_view
- * with different colors, also known as "zebra striping".
- *
- * This function tells the GTK+ theme that the user interface for your
- * application requires users to read across tree rows and associate
- * cells with one another.
- *
- * Do not use it just because you prefer the appearance of the ruled
- * tree; that’s a question for the theme. Some themes will draw tree
- * rows in alternating colors even when rules are turned off, and
- * users who prefer that appearance all the time can choose those
- * themes. You should call this function only as a semantic hint to
- * the theme engine that your tree makes alternating colors useful
- * from a functional standpoint (since it has lots of columns,
- * generally).
- *
- * Deprecated: 3.14
- */
-void
-gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
-                              gboolean      setting)
-{
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  setting = setting != FALSE;
-
-  if (tree_view->priv->has_rules != setting)
-    {
-      tree_view->priv->has_rules = setting;
-      gtk_widget_queue_draw (GTK_WIDGET (tree_view));
-      g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_RULES_HINT]);
-    }
-}
-
-/**
- * gtk_tree_view_get_rules_hint:
- * @tree_view: a #GtkTreeView
- *
- * Gets the setting set by gtk_tree_view_set_rules_hint().
- *
- * Returns: %TRUE if the hint is set
- *
- * Deprecated: 3.14
- */
-gboolean
-gtk_tree_view_get_rules_hint (GtkTreeView  *tree_view)
-{
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
-
-  return tree_view->priv->has_rules;
-}
-
-
-/**
  * gtk_tree_view_set_activate_on_single_click:
  * @tree_view: a #GtkTreeView
  * @single: %TRUE to emit row-activated on a single click
@@ -12859,18 +12746,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 	continue;
       if (gtk_tree_view_column_get_sizing (column) == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
 	_gtk_tree_view_column_cell_set_dirty (column, TRUE);
-    }
-
-  if (tree_view->priv->destroy_count_func)
-    {
-      GtkTreePath *child_path;
-      gint child_count = 0;
-      child_path = gtk_tree_path_copy (path);
-      gtk_tree_path_down (child_path);
-      if (node->children)
-	_gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, &child_count);
-      tree_view->priv->destroy_count_func (tree_view, child_path, child_count, tree_view->priv->destroy_count_data);
-      gtk_tree_path_free (child_path);
     }
 
   if (tree_view->priv->cursor_node)
@@ -14622,36 +14497,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   cairo_surface_set_device_offset (surface, 2, 2);
 
   return surface;
-}
-
-
-/**
- * gtk_tree_view_set_destroy_count_func:
- * @tree_view: A #GtkTreeView
- * @func: (allow-none): Function to be called when a view row is destroyed, or %NULL
- * @data: (allow-none): User data to be passed to @func, or %NULL
- * @destroy: (allow-none): Destroy notifier for @data, or %NULL
- *
- * This function should almost never be used.  It is meant for private use by
- * ATK for determining the number of visible children that are removed when the
- * user collapses a row, or a row is deleted.
- *
- * Deprecated: 3.4: Accessibility does not need the function anymore.
- **/
-void
-gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
-				      GtkTreeDestroyCountFunc  func,
-				      gpointer                 data,
-				      GDestroyNotify           destroy)
-{
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  if (tree_view->priv->destroy_count_destroy)
-    tree_view->priv->destroy_count_destroy (tree_view->priv->destroy_count_data);
-
-  tree_view->priv->destroy_count_func = func;
-  tree_view->priv->destroy_count_data = data;
-  tree_view->priv->destroy_count_destroy = destroy;
 }
 
 

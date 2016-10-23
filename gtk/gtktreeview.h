@@ -230,11 +230,6 @@ gboolean               gtk_tree_view_get_headers_clickable         (GtkTreeView 
 GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_headers_clickable         (GtkTreeView               *tree_view,
 								    gboolean                   setting);
-GDK_DEPRECATED_IN_3_14
-void                   gtk_tree_view_set_rules_hint                (GtkTreeView               *tree_view,
-								    gboolean                   setting);
-GDK_DEPRECATED_IN_3_14
-gboolean               gtk_tree_view_get_rules_hint                (GtkTreeView               *tree_view);
 GDK_AVAILABLE_IN_3_8
 gboolean               gtk_tree_view_get_activate_on_single_click  (GtkTreeView               *tree_view);
 GDK_AVAILABLE_IN_3_8
@@ -491,18 +486,6 @@ void gtk_tree_view_convert_bin_window_to_tree_coords   (GtkTreeView *tree_view,
 							gint         by,
 							gint        *tx,
 							gint        *ty);
-
-/* This function should really never be used.  It is just for use by ATK.
- */
-typedef void (* GtkTreeDestroyCountFunc)  (GtkTreeView             *tree_view,
-					   GtkTreePath             *path,
-					   gint                     children,
-					   gpointer                 user_data);
-GDK_DEPRECATED_IN_3_4
-void gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
-					   GtkTreeDestroyCountFunc  func,
-					   gpointer                 data,
-					   GDestroyNotify           destroy);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_tree_view_set_fixed_height_mode (GtkTreeView          *tree_view,
