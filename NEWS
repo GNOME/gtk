@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 3.22.2
+==================================
+
+* Several improvements to the win32 theme
+
+* Deprecations have been added for APIs that will be removed
+  in GTK+ 4
+
+* Bug fixes:
+ 767713 Fullscreen in wayland is buggy
+ 771320 Maps widget is displayed at wrong position inside gnome-contacts
+ 772345 placesviewrow: busy_spinner when visible offsets the rest of the...
+ 772389 Appending a character to a GtkEntry control in overwrite mode ri...
+ 772415 Avoid calling eglGetDisplay
+ 772552 Deprecate gtk_menu_popup
+ 772683 Usage of FALSE instead of gint in glarea demo
+ 772695 Show the keyboard shortcuts from left to right even in RTL
+ 772775 menu bindings needs attribute to force LTR for horizontal-button...
+ 772859 Fix memory leaks in implementations of common widgets
+ 772922 GtkMenu: Try using gdk_window_move_to_rect() more often
+ 772926 shortcutswindow: working version of set_section_name()
+ 773029 style-set signal problem
+ 773082 overlay: Document availability of properties
+ 773113 tests: fix clipboard test by loading correct icon
+ 773180 Don't second-guess whether our GDK GL context is GLES
+ 773246 Typo in css color definitions documentation 
+
+* Translation updates:
+ Croatian
+ Danish
+ Dutch
+ German
+ Greek
+ Italian
+ Latvian
+ Lithuanian
+ Norwegian bokmal
+ Polish
+
+
 Overview of Changes in GTK+ 3.22.1
 ==================================
 
