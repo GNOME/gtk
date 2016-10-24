@@ -13,17 +13,8 @@
             <property name="visible">True</property>
             <property name="relief">none</property>
             <property name="tooltip-text" translatable="yes">Show data</property>
+            <property name="icon-name">view-refresh-symbolic</property>
             <signal name="toggled" handler="toggle_show"/>
-            <style>
-              <class name="image-button"/>
-            </style>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="icon-name">view-refresh-symbolic</property>
-                <property name="icon-size">1</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="pack-type">start</property>
