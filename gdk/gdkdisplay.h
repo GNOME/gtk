@@ -65,8 +65,6 @@ void        gdk_display_pointer_ungrab     (GdkDisplay  *display,
 GDK_DEPRECATED_IN_3_0_FOR(gdk_device_ungrab)
 void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
                                             guint32      time_);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_display_device_is_grabbed)
-gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 GDK_AVAILABLE_IN_ALL

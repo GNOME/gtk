@@ -81,28 +81,6 @@ const gchar *         gdk_get_display_arg_name (void);
 GDK_DEPRECATED_IN_3_8_FOR(gdk_display_get_name (gdk_display_get_default ()))
 gchar*        gdk_get_display        (void);
 
-#ifndef GDK_MULTIDEVICE_SAFE
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_grab)
-GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
-                                      gboolean      owner_events,
-                                      GdkEventMask  event_mask,
-                                      GdkWindow    *confine_to,
-                                      GdkCursor    *cursor,
-                                      guint32       time_);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_grab)
-GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
-                                      gboolean      owner_events,
-                                      guint32       time_);
-#endif /* GDK_MULTIDEVICE_SAFE */
-
-#ifndef GDK_MULTIDEVICE_SAFE
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_ungrab)
-void          gdk_pointer_ungrab     (guint32       time_);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_ungrab)
-void          gdk_keyboard_ungrab    (guint32       time_);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_display_device_is_grabbed)
-gboolean      gdk_pointer_is_grabbed (void);
-#endif /* GDK_MULTIDEVICE_SAFE */
 
 GDK_AVAILABLE_IN_ALL
 void gdk_set_double_click_time (guint msec);

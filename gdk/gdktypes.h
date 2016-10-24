@@ -339,8 +339,8 @@ typedef enum
  * @GDK_GRAB_FROZEN: the resource is frozen by an active grab of another client.
  * @GDK_GRAB_FAILED: the grab failed for some other reason. Since 3.16
  *
- * Returned by gdk_device_grab(), gdk_pointer_grab() and gdk_keyboard_grab() to
- * indicate success or the reason for the failure of the grab attempt.
+ * Returned by gdk_device_grab() to indicate success or the reason for the
+ * failure of the grab attempt.
  */
 typedef enum
 {

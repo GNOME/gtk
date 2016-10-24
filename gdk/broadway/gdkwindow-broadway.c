@@ -1304,6 +1304,8 @@ create_moveresize_window (MoveResizeData *mv_resize,
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkGrabStatus status;
+  GdkSeat *seat;
+  GdkDevice *pointer;
 
   g_assert (mv_resize->moveresize_emulation_window == NULL);
 
@@ -1325,12 +1327,16 @@ create_moveresize_window (MoveResizeData *mv_resize,
 
   gdk_window_show (mv_resize->moveresize_emulation_window);
 
+  seat = gdk_display_get_default_seat (mv_resize->display);
+  pointer = gdk_seat_get_pointer (seat);
+
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  status = gdk_pointer_grab (mv_resize->moveresize_emulation_window,
+  status = gdk_device_grab (pointer,
+			     mv_resize->moveresize_emulation_window,
+			     GDK_OWNERSHIP_APPLICATION,
 			     FALSE,
 			     GDK_BUTTON_RELEASE_MASK |
 			     GDK_POINTER_MOTION_MASK,
-			     NULL,
 			     NULL,
 			     timestamp);
   G_GNUC_END_IGNORE_DEPRECATIONS;

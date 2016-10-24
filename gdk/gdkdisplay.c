@@ -1418,8 +1418,7 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
  * @device: device to get the grab information from
  * @grab_window: (out) (transfer none): location to store current grab window
  * @owner_events: (out): location to store boolean indicating whether
- *   the @owner_events flag to gdk_keyboard_grab() or
- *   gdk_pointer_grab() was %TRUE.
+ *   the @owner_events flag to gdk_device_grab() was %TRUE.
  *
  * Determines information about the current keyboard grab.
  * This is not public API and must not be used by applications.
@@ -1451,71 +1450,6 @@ gdk_device_grab_info (GdkDisplay  *display,
     }
   else
     return FALSE;
-}
-
-/**
- * gdk_device_grab_info_libgtk_only:
- * @display: the display for which to get the grab information
- * @device: device to get the grab information from
- * @grab_window: (out) (transfer none): location to store current grab window
- * @owner_events: (out): location to store boolean indicating whether
- *   the @owner_events flag to gdk_keyboard_grab() or
- *   gdk_pointer_grab() was %TRUE.
- *
- * Determines information about the current keyboard grab.
- * This is not public API and must not be used by applications.
- *
- * Returns: %TRUE if this application currently has the
- *  keyboard grabbed.
- *
- * Deprecated: 3.16: The symbol was never meant to be used outside
- *   of GTK+
- */
-gboolean
-gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
-                                  GdkDevice   *device,
-                                  GdkWindow  **grab_window,
-                                  gboolean    *owner_events)
-{
-  return gdk_device_grab_info (display, device, grab_window, owner_events);
-}
-
-/**
- * gdk_display_pointer_is_grabbed:
- * @display: a #GdkDisplay
- *
- * Test if the pointer is grabbed.
- *
- * Returns: %TRUE if an active X pointer grab is in effect
- *
- * Since: 2.2
- *
- * Deprecated: 3.0: Use gdk_display_device_is_grabbed() instead.
- */
-gboolean
-gdk_display_pointer_is_grabbed (GdkDisplay *display)
-{
-  GList *seats, *s;
-  GdkDevice *device;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
-
-  seats = gdk_display_list_seats (display);
-
-  for (s = seats; s; s = s->next)
-    {
-      device = gdk_seat_get_pointer (s->data);
-
-      if (gdk_display_device_is_grabbed (display, device))
-        {
-          g_list_free (seats);
-          return TRUE;
-        }
-    }
-
-  g_list_free (seats);
-
-  return FALSE;
 }
 
 /**

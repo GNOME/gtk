@@ -1886,8 +1886,6 @@ gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell)
  * should not display mnemonics or accelerators, since it cannot be
  * guaranteed that they will work.
  *
- * See also gdk_keyboard_grab()
- *
  * Since: 2.8
  */
 void

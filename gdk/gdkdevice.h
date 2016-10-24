@@ -245,12 +245,6 @@ void          gdk_device_warp        (GdkDevice        *device,
                                       gint              x,
                                       gint              y);
 
-GDK_DEPRECATED_IN_3_16
-gboolean gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
-                                           GdkDevice   *device,
-                                           GdkWindow  **grab_window,
-                                           gboolean    *owner_events);
-
 GDK_AVAILABLE_IN_3_12
 GdkWindow *gdk_device_get_last_event_window (GdkDevice *device);
 

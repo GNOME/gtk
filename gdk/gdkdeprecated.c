@@ -28,59 +28,6 @@
 #include "gdkwindow.h"
 
 /**
- * gdk_pointer_ungrab:
- * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no 
- *  timestamp is available.
- *
- * Ungrabs the pointer on the default display, if it is grabbed by this 
- * application.
- *
- * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
- *             instead.
- **/
-void
-gdk_pointer_ungrab (guint32 time)
-{
-  gdk_display_pointer_ungrab (gdk_display_get_default (), time);
-}
-
-/**
- * gdk_pointer_is_grabbed:
- * 
- * Returns %TRUE if the pointer on the default display is currently 
- * grabbed by this application.
- *
- * Note that this does not take the inmplicit pointer grab on button
- * presses into account.
- *
- * Returns: %TRUE if the pointer is currently grabbed by this application.
- *
- * Deprecated: 3.0: Use gdk_display_device_is_grabbed() instead.
- **/
-gboolean
-gdk_pointer_is_grabbed (void)
-{
-  return gdk_display_pointer_is_grabbed (gdk_display_get_default ());
-}
-
-/**
- * gdk_keyboard_ungrab:
- * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no
- *        timestamp is available.
- * 
- * Ungrabs the keyboard on the default display, if it is grabbed by this 
- * application.
- *
- * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
- *             instead.
- **/
-void
-gdk_keyboard_ungrab (guint32 time)
-{
-  gdk_display_keyboard_ungrab (gdk_display_get_default (), time);
-}
-
-/**
  * gdk_window_at_pointer:
  * @win_x: (out) (allow-none): return location for origin of the window under the pointer
  * @win_y: (out) (allow-none): return location for origin of the window under the pointer
