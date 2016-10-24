@@ -979,7 +979,6 @@ gdk_owner_change_get_type
 <FILE>cursors</FILE>
 GdkCursor
 GdkCursorType
-gdk_cursor_new
 gdk_cursor_new_from_pixbuf
 gdk_cursor_new_from_surface
 gdk_cursor_new_from_name
@@ -988,8 +987,6 @@ gdk_cursor_get_display
 gdk_cursor_get_image
 gdk_cursor_get_surface
 gdk_cursor_get_cursor_type
-gdk_cursor_ref
-gdk_cursor_unref
 
 <SUBSECTION Standard>
 GDK_TYPE_CURSOR_TYPE

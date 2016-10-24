@@ -224,8 +224,6 @@ GType      gdk_cursor_get_type           (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GdkCursor* gdk_cursor_new_for_display	 (GdkDisplay      *display,
 					  GdkCursorType    cursor_type);
-GDK_DEPRECATED_IN_3_16
-GdkCursor* gdk_cursor_new		 (GdkCursorType	   cursor_type);
 GDK_AVAILABLE_IN_ALL
 GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
 					  GdkPixbuf       *pixbuf,
@@ -241,10 +239,6 @@ GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
-GDK_DEPRECATED_IN_3_0_FOR(g_object_ref)
-GdkCursor * gdk_cursor_ref               (GdkCursor       *cursor);
-GDK_DEPRECATED_IN_3_0_FOR(g_object_unref)
-void        gdk_cursor_unref             (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_3_10

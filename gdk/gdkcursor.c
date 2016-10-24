@@ -148,60 +148,6 @@ gdk_cursor_init (GdkCursor *cursor)
 }
 
 /**
- * gdk_cursor_ref:
- * @cursor: a #GdkCursor
- *
- * Adds a reference to @cursor.
- *
- * Returns: (transfer full): Same @cursor that was passed in
- *
- * Deprecated: 3.0: Use g_object_ref() instead
- */
-GdkCursor*
-gdk_cursor_ref (GdkCursor *cursor)
-{
-  g_return_val_if_fail (cursor != NULL, NULL);
-
-  return g_object_ref (cursor);
-}
-
-/**
- * gdk_cursor_unref:
- * @cursor: a #GdkCursor
- *
- * Removes a reference from @cursor, deallocating the cursor
- * if no references remain.
- *
- * Deprecated: 3.0: Use g_object_unref() instead
- */
-void
-gdk_cursor_unref (GdkCursor *cursor)
-{
-  g_return_if_fail (cursor != NULL);
-
-  g_object_unref (cursor);
-}
-
-/**
- * gdk_cursor_new:
- * @cursor_type: cursor to create
- *
- * Creates a new cursor from the set of builtin cursors for the default display.
- * See gdk_cursor_new_for_display().
- *
- * To make the cursor invisible, use %GDK_BLANK_CURSOR.
- *
- * Returns: a new #GdkCursor
- *
- * Deprecated: 3.16: Use gdk_cursor_new_for_display() instead.
- */
-GdkCursor*
-gdk_cursor_new (GdkCursorType cursor_type)
-{
-  return gdk_cursor_new_for_display (gdk_display_get_default (), cursor_type);
-}
-
-/**
  * gdk_cursor_get_cursor_type:
  * @cursor:  a #GdkCursor
  *
