@@ -78,9 +78,6 @@ void                           gdk_error_trap_pop_ignored (void);
 GDK_AVAILABLE_IN_ALL
 const gchar *         gdk_get_display_arg_name (void);
 
-GDK_DEPRECATED_IN_3_8_FOR(gdk_display_get_name (gdk_display_get_default ()))
-gchar*        gdk_get_display        (void);
-
 
 GDK_AVAILABLE_IN_ALL
 void gdk_set_double_click_time (guint msec);

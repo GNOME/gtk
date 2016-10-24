@@ -17,9 +17,6 @@ gdk_get_program_class
 gdk_set_program_class
 
 <SUBSECTION>
-gdk_get_display
-
-<SUBSECTION>
 gdk_flush
 
 
