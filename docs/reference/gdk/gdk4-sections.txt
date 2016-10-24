@@ -327,7 +327,6 @@ gdk_window_get_window_type
 gdk_window_get_display
 gdk_window_get_screen
 gdk_window_get_visual
-gdk_window_at_pointer
 gdk_window_show
 gdk_window_show_unraised
 gdk_window_hide
@@ -353,8 +352,6 @@ gdk_window_set_fullscreen_mode
 gdk_window_set_keep_above
 gdk_window_set_keep_below
 gdk_window_set_opacity
-gdk_window_set_composited
-gdk_window_get_composited
 gdk_window_set_pass_through
 gdk_window_get_pass_through
 gdk_window_move
@@ -402,8 +399,6 @@ gdk_window_freeze_updates
 gdk_window_thaw_updates
 gdk_window_process_all_updates
 gdk_window_process_updates
-gdk_window_enable_synchronized_configure
-gdk_window_configure_finished
 gdk_window_get_frame_clock
 
 <SUBSECTION>
@@ -424,7 +419,6 @@ gdk_window_merge_child_shapes
 gdk_window_input_shape_combine_region
 gdk_window_set_child_input_shapes
 gdk_window_merge_child_input_shapes
-gdk_window_set_static_gravities
 gdk_window_set_title
 gdk_window_set_background
 gdk_window_set_background_rgba
@@ -525,8 +519,6 @@ GdkWindowImpl
 GdkWindowImplClass
 GdkWindowRedirect
 gdk_window_impl_get_type
-gdk_window_freeze_toplevel_updates_libgtk_only
-gdk_window_thaw_toplevel_updates_libgtk_only
 gdk_fullscreen_mode_get_type
 </SECTION>
 

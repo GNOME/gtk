@@ -521,11 +521,6 @@ GDK_AVAILABLE_IN_ALL
 GdkScreen *   gdk_window_get_screen            (GdkWindow     *window);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gdk_window_get_display           (GdkWindow     *window);
-#ifndef GDK_MULTIDEVICE_SAFE
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_get_window_at_position)
-GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
-                                                gint          *win_y);
-#endif /* GDK_MULTIDEVICE_SAFE */
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_show                  (GdkWindow     *window);
 GDK_AVAILABLE_IN_ALL
@@ -620,12 +615,6 @@ void gdk_window_shape_combine_region (GdkWindow	      *window,
 GDK_AVAILABLE_IN_ALL
 void gdk_window_set_child_shapes (GdkWindow *window);
 
-GDK_DEPRECATED_IN_3_16
-gboolean gdk_window_get_composited (GdkWindow *window);
-GDK_DEPRECATED_IN_3_16
-void gdk_window_set_composited   (GdkWindow *window,
-                                  gboolean   composited);
-
 /*
  * This routine allows you to merge (ie ADD) child shapes to your
  * own window’s shape keeping its current shape and ADDING the child
@@ -671,12 +660,6 @@ gboolean gdk_window_is_shaped      (GdkWindow *window);
 GDK_AVAILABLE_IN_ALL
 GdkWindowState gdk_window_get_state (GdkWindow *window);
 
-/* Set static bit gravity on the parent, and static
- * window gravity on all children.
- */
-GDK_DEPRECATED_IN_3_16
-gboolean gdk_window_set_static_gravities (GdkWindow *window,
-                                          gboolean   use_static);
 
 /* GdkWindow */
 
@@ -745,9 +728,6 @@ GdkDrawingContext *gdk_window_begin_draw_frame  (GdkWindow            *window,
 GDK_AVAILABLE_IN_3_22
 void          gdk_window_end_draw_frame    (GdkWindow            *window,
                                             GdkDrawingContext    *context);
-
-GDK_DEPRECATED_IN_3_14
-void	      gdk_window_flush             (GdkWindow          *window);
 
 GDK_AVAILABLE_IN_ALL
 void	      gdk_window_set_title	   (GdkWindow	  *window,
@@ -1028,11 +1008,6 @@ void       gdk_window_freeze_updates      (GdkWindow    *window);
 GDK_AVAILABLE_IN_ALL
 void       gdk_window_thaw_updates        (GdkWindow    *window);
 
-GDK_DEPRECATED_IN_3_16
-void       gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window);
-GDK_DEPRECATED_IN_3_16
-void       gdk_window_thaw_toplevel_updates_libgtk_only   (GdkWindow *window);
-
 GDK_AVAILABLE_IN_ALL
 void       gdk_window_process_all_updates (void);
 GDK_AVAILABLE_IN_ALL
@@ -1046,11 +1021,6 @@ void       gdk_window_constrain_size      (GdkGeometry    *geometry,
                                            gint            height,
                                            gint           *new_width,
                                            gint           *new_height);
-
-GDK_DEPRECATED_IN_3_8
-void gdk_window_enable_synchronized_configure (GdkWindow *window);
-GDK_DEPRECATED_IN_3_8
-void gdk_window_configure_finished            (GdkWindow *window);
 
 GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_get_default_root_window (void);

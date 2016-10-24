@@ -3316,21 +3316,6 @@ gdk_window_mark_paint_from_clip (GdkWindow *window,
 }
 
 /**
- * gdk_window_flush:
- * @window: a #GdkWindow
- *
- * This function does nothing.
- *
- * Since: 2.18
- *
- * Deprecated: 3.14
- **/
-void
-gdk_window_flush (GdkWindow *window)
-{
-}
-
-/**
  * gdk_window_get_clip_region:
  * @window: a #GdkWindow
  * 
@@ -4543,29 +4528,6 @@ gdk_window_thaw_updates (GdkWindow *window)
     gdk_window_schedule_update (GDK_WINDOW (impl_window));
 }
 
-/**
- * gdk_window_freeze_toplevel_updates_libgtk_only:
- * @window: a #GdkWindow
- *
- * Temporarily freezes a window and all its descendants such that it won't
- * receive expose events.  The window will begin receiving expose events
- * again when gdk_window_thaw_toplevel_updates_libgtk_only() is called. If
- * gdk_window_freeze_toplevel_updates_libgtk_only()
- * has been called more than once,
- * gdk_window_thaw_toplevel_updates_libgtk_only() must be called
- * an equal number of times to begin processing exposes.
- *
- * This function is not part of the GDK public API and is only
- * for use by GTK+.
- *
- * Deprecated: 3.16: This symbol was never meant to be used outside of GTK+
- */
-void
-gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window)
-{
-  gdk_window_freeze_toplevel_updates (window);
-}
-
 void
 gdk_window_freeze_toplevel_updates (GdkWindow *window)
 {
@@ -4574,24 +4536,6 @@ gdk_window_freeze_toplevel_updates (GdkWindow *window)
 
   window->update_and_descendants_freeze_count++;
   _gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
-}
-
-/**
- * gdk_window_thaw_toplevel_updates_libgtk_only:
- * @window: a #GdkWindow
- *
- * Thaws a window frozen with
- * gdk_window_freeze_toplevel_updates_libgtk_only().
- *
- * This function is not part of the GDK public API and is only
- * for use by GTK+.
- *
- * Deprecated: 3.16: This symbol was never meant to be used outside of GTK+
- */
-void
-gdk_window_thaw_toplevel_updates_libgtk_only (GdkWindow *window)
-{
-  gdk_window_thaw_toplevel_updates (window);
 }
 
 void
@@ -4751,8 +4695,7 @@ gdk_window_constrain_size (GdkGeometry    *geometry,
  * corner of @window.
  *
  * Returns: (nullable) (transfer none): the window containing the
- * pointer (as with gdk_window_at_pointer()), or %NULL if the window
- * containing the pointer isn’t known to GDK
+ * pointer, or %NULL if the window containing the pointer isn’t known to GDK
  *
  * Deprecated: 3.0: Use gdk_window_get_device_position() instead.
  **/
@@ -6961,30 +6904,6 @@ gdk_window_merge_child_input_shapes (GdkWindow *window)
   do_child_input_shapes (window, TRUE);
 }
 
-
-/**
- * gdk_window_set_static_gravities:
- * @window: a #GdkWindow
- * @use_static: %TRUE to turn on static gravity
- *
- * Used to set the bit gravity of the given window to static, and flag
- * it so all children get static subwindow gravity. This is used if you
- * are implementing scary features that involve deep knowledge of the
- * windowing system. Don’t worry about it.
- *
- * Returns: %FALSE
- *
- * Deprecated: 3.16: static gravities haven't worked on anything but X11
- *   for a long time.
- */
-gboolean
-gdk_window_set_static_gravities (GdkWindow *window,
-				 gboolean   use_static)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-
-  return FALSE;
-}
 
 /**
  * gdk_window_get_modal_hint:
@@ -10574,34 +10493,6 @@ gdk_window_begin_move_drag (GdkWindow *window,
   display = gdk_window_get_display (window);
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   gdk_window_begin_move_drag_for_device (window, device, button, root_x, root_y, timestamp);
-}
-
-/**
- * gdk_window_enable_synchronized_configure:
- * @window: a toplevel #GdkWindow
- *
- * Does nothing, present only for compatiblity.
- *
- * Since: 2.6
- * Deprecated: 3.8: this function is no longer needed
- **/
-void
-gdk_window_enable_synchronized_configure (GdkWindow *window)
-{
-}
-
-/**
- * gdk_window_configure_finished:
- * @window: a toplevel #GdkWindow
- *
- * Does nothing, present only for compatiblity.
- *
- * Since: 2.6
- * Deprecated: 3.8: this function is no longer needed
- **/
-void
-gdk_window_configure_finished (GdkWindow *window)
-{
 }
 
 /**
