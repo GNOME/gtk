@@ -207,7 +207,6 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
 
   label_widget = gtk_tool_button_get_label_widget (tool_button);
   label_text = gtk_tool_button_get_label (tool_button);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
   if (GTK_IS_LABEL (label_widget))
     {
@@ -223,8 +222,6 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
     {
       label = "";
     }
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (use_mnemonic)
     menu_item = gtk_check_menu_item_new_with_mnemonic (label);
