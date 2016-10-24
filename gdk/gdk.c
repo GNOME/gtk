@@ -255,22 +255,6 @@ gdk_add_option_entries (GOptionGroup *group)
   g_option_group_add_entries (group, gdk_args);
 }
 
-/**
- * gdk_add_option_entries_libgtk_only:
- * @group: An option group.
- *
- * Appends gdk option entries to the passed in option group. This is
- * not public API and must not be used by applications.
- *
- * Deprecated: 3.16: This symbol was never meant to be used outside
- *   of GTK+
- */
-void
-gdk_add_option_entries_libgtk_only (GOptionGroup *group)
-{
-  gdk_add_option_entries (group);
-}
-
 static gpointer
 register_resources (gpointer dummy G_GNUC_UNUSED)
 {
@@ -339,21 +323,6 @@ gdk_pre_parse (void)
     }
 }
 
-/**
- * gdk_pre_parse_libgtk_only:
- *
- * Prepare for parsing command line arguments for GDK. This is not
- * public API and should not be used in application code.
- *
- * Deprecated: 3.16: This symbol was never meant to be used outside
- *   of GTK+
- */
-void
-gdk_pre_parse_libgtk_only (void)
-{
-  gdk_pre_parse ();
-}
-  
 /**
  * gdk_parse_args:
  * @argc: the number of command line arguments.
