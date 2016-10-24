@@ -633,7 +633,6 @@ GDK_THREADS_LEAVE
 gdk_threads_init
 gdk_threads_enter
 gdk_threads_leave
-gdk_threads_set_lock_functions
 gdk_threads_add_idle
 gdk_threads_add_idle_full
 gdk_threads_add_timeout

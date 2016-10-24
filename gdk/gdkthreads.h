@@ -46,9 +46,6 @@ GDK_THREADS_DEPRECATED
 void     gdk_threads_enter                    (void);
 GDK_THREADS_DEPRECATED
 void     gdk_threads_leave                    (void);
-GDK_THREADS_DEPRECATED
-void     gdk_threads_set_lock_functions       (GCallback enter_fn,
-                                               GCallback leave_fn);
 
 GDK_AVAILABLE_IN_ALL
 guint    gdk_threads_add_idle_full            (gint           priority,

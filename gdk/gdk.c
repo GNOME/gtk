@@ -670,49 +670,6 @@ gdk_threads_init (void)
     gdk_threads_unlock = gdk_threads_impl_unlock;
 }
 
-/**
- * gdk_threads_set_lock_functions: (skip)
- * @enter_fn:   function called to guard GDK
- * @leave_fn: function called to release the guard
- *
- * Allows the application to replace the standard method that
- * GDK uses to protect its data structures. Normally, GDK
- * creates a single #GMutex that is locked by gdk_threads_enter(),
- * and released by gdk_threads_leave(); using this function an
- * application provides, instead, a function @enter_fn that is
- * called by gdk_threads_enter() and a function @leave_fn that is
- * called by gdk_threads_leave().
- *
- * The functions must provide at least same locking functionality
- * as the default implementation, but can also do extra application
- * specific processing.
- *
- * As an example, consider an application that has its own recursive
- * lock that when held, holds the GTK+ lock as well. When GTK+ unlocks
- * the GTK+ lock when entering a recursive main loop, the application
- * must temporarily release its lock as well.
- *
- * Most threaded GTK+ apps won’t need to use this method.
- *
- * This method must be called before gdk_threads_init(), and cannot
- * be called multiple times.
- *
- * Deprecated:3.6: All GDK and GTK+ calls should be made from the main
- *     thread
- *
- * Since: 2.4
- **/
-void
-gdk_threads_set_lock_functions (GCallback enter_fn,
-                                GCallback leave_fn)
-{
-  g_return_if_fail (gdk_threads_lock == NULL &&
-                    gdk_threads_unlock == NULL);
-
-  gdk_threads_lock = enter_fn;
-  gdk_threads_unlock = leave_fn;
-}
-
 static gboolean
 gdk_threads_dispatch (gpointer data)
 {
