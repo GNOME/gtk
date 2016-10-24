@@ -1203,31 +1203,6 @@ gtk_text_iter_starts_tag (const GtkTextIter *iter,
 }
 
 /**
- * gtk_text_iter_begins_tag:
- * @iter: an iterator
- * @tag: (nullable): a #GtkTextTag, or %NULL
- *
- * Returns %TRUE if @tag is toggled on at exactly this point. If @tag
- * is %NULL, returns %TRUE if any tag is toggled on at this point.
- *
- * Note that if gtk_text_iter_begins_tag() returns %TRUE, it means that @iter is
- * at the beginning of the tagged range, and that the
- * character at @iter is inside the tagged range. In other
- * words, unlike gtk_text_iter_ends_tag(), if gtk_text_iter_begins_tag() returns
- * %TRUE, gtk_text_iter_has_tag() will also return %TRUE for the same
- * parameters.
- *
- * Returns: whether @iter is the start of a range tagged with @tag
- * Deprecated: 3.20: Use gtk_text_iter_starts_tag() instead.
- **/
-gboolean
-gtk_text_iter_begins_tag (const GtkTextIter *iter,
-                          GtkTextTag        *tag)
-{
-  return gtk_text_iter_starts_tag (iter, tag);
-}
-
-/**
  * gtk_text_iter_ends_tag:
  * @iter: an iterator
  * @tag: (allow-none): a #GtkTextTag, or %NULL

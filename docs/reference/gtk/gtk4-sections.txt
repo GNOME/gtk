@@ -3063,7 +3063,6 @@ gtk_text_iter_get_marks
 gtk_text_iter_get_toggled_tags
 gtk_text_iter_get_child_anchor
 gtk_text_iter_starts_tag
-gtk_text_iter_begins_tag
 gtk_text_iter_ends_tag
 gtk_text_iter_toggles_tag
 gtk_text_iter_has_tag

@@ -174,10 +174,6 @@ GDK_AVAILABLE_IN_3_20
 gboolean gtk_text_iter_starts_tag        (const GtkTextIter  *iter,
                                           GtkTextTag         *tag);
 
-GDK_DEPRECATED_IN_3_20_FOR(gtk_text_iter_starts_tag)
-gboolean gtk_text_iter_begins_tag        (const GtkTextIter  *iter,
-                                          GtkTextTag         *tag);
-
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_ends_tag          (const GtkTextIter  *iter,
                                           GtkTextTag         *tag);
