@@ -80,30 +80,6 @@ gdk_cairo_get_clip_rectangle (cairo_t      *cr,
 }
 
 /**
- * gdk_cairo_set_source_color:
- * @cr: a cairo context
- * @color: a #GdkColor
- *
- * Sets the specified #GdkColor as the source color of @cr.
- *
- * Since: 2.8
- *
- * Deprecated: 3.4: Use gdk_cairo_set_source_rgba() instead
- */
-void
-gdk_cairo_set_source_color (cairo_t        *cr,
-                            const GdkColor *color)
-{
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (color != NULL);
-    
-  cairo_set_source_rgb (cr,
-                        color->red / 65535.,
-                        color->green / 65535.,
-                        color->blue / 65535.);
-}
-
-/**
  * gdk_cairo_set_source_rgba:
  * @cr: a cairo context
  * @rgba: a #GdkRGBA
