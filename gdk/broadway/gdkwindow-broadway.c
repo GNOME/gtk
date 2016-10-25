@@ -48,13 +48,11 @@ static void        gdk_window_impl_broadway_finalize   (GObject            *obje
 static const cairo_user_data_key_t gdk_broadway_cairo_key;
 
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 
 #define WINDOW_IS_TOPLEVEL(window)		     \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 struct _GdkBroadwayWindow {
   GdkWindow parent;

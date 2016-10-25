@@ -4620,18 +4620,6 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
 
   native = gdk_window_get_toplevel (window);
 
-  while (native->window_type == GDK_WINDOW_OFFSCREEN)
-    {
-      native = gdk_offscreen_window_get_embedder (native);
-
-      if (native == NULL ||
-          (!_gdk_window_has_impl (native) &&
-           !gdk_window_is_viewable (native)))
-        return GDK_GRAB_NOT_VIEWABLE;
-
-      native = gdk_window_get_toplevel (native);
-    }
-
   if (native == NULL || GDK_WINDOW_DESTROYED (native))
     return GDK_GRAB_NOT_VIEWABLE;
 

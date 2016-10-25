@@ -98,8 +98,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testmultidisplay		\
 	testnotebookdnd			\
 	testnouiprint			\
-	testoffscreen			\
-	testoffscreenwindow		\
 	testorientable			\
 	testoverlay			\
 	testoverlaystyleclass		\
@@ -224,8 +222,6 @@ testmountoperation_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
-testoffscreen_DEPENDENCIES = $(TEST_DEPS)
-testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
 testappchooser_DEPENDENCIES = $(TEST_DEPS)
 testappchooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
@@ -416,14 +412,6 @@ testcellarea_SOURCES =		\
 
 testtreemenu_SOURCES =		\
 	testtreemenu.c
-
-testoffscreen_SOURCES = 	\
-	gtkoffscreenbox.c	\
-	gtkoffscreenbox.h	\
-	testoffscreen.c
-
-testoffscreenwindow_SOURCES =	\
-	testoffscreenwindow.c
 
 testoverlay_SOURCES =	\
 	testoverlay.c

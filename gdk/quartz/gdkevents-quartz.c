@@ -42,8 +42,7 @@
 
 #define WINDOW_IS_TOPLEVEL(window)		     \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;
@@ -672,7 +671,7 @@ find_toplevel_for_keyboard_event (NSEvent *nsevent)
       grab = _gdk_display_get_last_device_grab (display, device);
       if (grab && grab->window && !grab->owner_events)
         {
-          window = gdk_window_get_effective_toplevel (grab->window);
+          window = gdk_window_get_toplevel (grab->window);
           break;
         }
     }
@@ -746,7 +745,7 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
           /* Finally check the grab window. */
           GdkWindow *grab_toplevel;
 
-          grab_toplevel = gdk_window_get_effective_toplevel (grab->window);
+          grab_toplevel = gdk_window_get_toplevel (grab->window);
           get_window_point_from_screen_point (grab_toplevel, screen_point,
                                               x, y);
 

@@ -119,9 +119,6 @@ struct _GdkX11Display
   guint have_input_shapes : 1;
   gint shape_event_base;
 
-  /* The offscreen window that has the pointer in it (if any) */
-  GdkWindow *active_offscreen_window;
-
   GSList *error_traps;
 
   gint wm_moveresize_button;

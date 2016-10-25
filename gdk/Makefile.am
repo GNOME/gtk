@@ -161,7 +161,6 @@ gdk_c_sources = 				\
 	gdkkeys.c				\
 	gdkkeyuni.c				\
 	gdkmonitor.c				\
-	gdkoffscreenwindow.c			\
 	gdkframeclock.c				\
 	gdkframeclockidle.c			\
 	gdkpango.c				\

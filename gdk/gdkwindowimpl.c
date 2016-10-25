@@ -184,7 +184,7 @@ traverse_to_toplevel (GdkWindow *window,
   gdouble xf = x;
   gdouble yf = y;
 
-  while ((parent = gdk_window_get_effective_parent (window)) != NULL &&
+  while ((parent = window->parent) != NULL &&
          (gdk_window_get_window_type (parent) != GDK_WINDOW_ROOT))
     {
       gdk_window_coords_to_parent (window, xf, yf, &xf, &yf);

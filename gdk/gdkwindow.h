@@ -67,8 +67,6 @@ typedef enum
  * @GDK_WINDOW_TEMP: override redirect temporary window (used to implement
  *  #GtkMenu)
  * @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
- * @GDK_WINDOW_OFFSCREEN: offscreen window (see
- *  [Offscreen Windows][OFFSCREEN-WINDOWS]). Since 2.18
  * @GDK_WINDOW_SUBSURFACE: subsurface-based window; This window is visually
  *  tied to a toplevel, and is moved/stacked with it. Currently this window
  *  type is only implemented in Wayland. Since 3.14
@@ -82,7 +80,6 @@ typedef enum
   GDK_WINDOW_CHILD,
   GDK_WINDOW_TEMP,
   GDK_WINDOW_FOREIGN,
-  GDK_WINDOW_OFFSCREEN,
   GDK_WINDOW_SUBSURFACE
 } GdkWindowType;
 
@@ -460,25 +457,6 @@ struct _GdkWindowClass
 {
   GObjectClass      parent_class;
 
-  GdkWindow       * (* pick_embedded_child) (GdkWindow *window,
-                                             gdouble    x,
-                                             gdouble    y);
-
-  /*  the following 3 signals will only be emitted by offscreen windows */
-  void              (* to_embedder)         (GdkWindow *window,
-                                             gdouble    offscreen_x,
-                                             gdouble    offscreen_y,
-                                             gdouble   *embedder_x,
-                                             gdouble   *embedder_y);
-  void              (* from_embedder)       (GdkWindow *window,
-                                             gdouble    embedder_x,
-                                             gdouble    embedder_y,
-                                             gdouble   *offscreen_x,
-                                             gdouble   *offscreen_y);
-  cairo_surface_t * (* create_surface)      (GdkWindow *window,
-                                             gint       width,
-                                             gint       height);
-
   /* Padding for future expansion */
   void (*_gdk_reserved1) (void);
   void (*_gdk_reserved2) (void);
@@ -830,11 +808,6 @@ GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_window_get_toplevel    (GdkWindow       *window);
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow *   gdk_window_get_effective_parent   (GdkWindow *window);
-GDK_AVAILABLE_IN_ALL
-GdkWindow *   gdk_window_get_effective_toplevel (GdkWindow *window);
-
-GDK_AVAILABLE_IN_ALL
 GList *	      gdk_window_get_children	 (GdkWindow	  *window);
 GDK_AVAILABLE_IN_ALL
 GList *       gdk_window_peek_children   (GdkWindow       *window);
@@ -1024,18 +997,6 @@ void       gdk_window_constrain_size      (GdkGeometry    *geometry,
 
 GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_get_default_root_window (void);
-
-/* Offscreen redirection */
-GDK_AVAILABLE_IN_ALL
-cairo_surface_t *
-           gdk_offscreen_window_get_surface    (GdkWindow     *window);
-GDK_AVAILABLE_IN_ALL
-void       gdk_offscreen_window_set_embedder   (GdkWindow     *window,
-						GdkWindow     *embedder);
-GDK_AVAILABLE_IN_ALL
-GdkWindow *gdk_offscreen_window_get_embedder   (GdkWindow     *window);
-GDK_AVAILABLE_IN_ALL
-void       gdk_window_geometry_changed         (GdkWindow     *window);
 
 /* Multidevice support */
 GDK_AVAILABLE_IN_ALL

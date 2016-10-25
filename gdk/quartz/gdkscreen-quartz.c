@@ -203,11 +203,7 @@ _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
   windows = gdk_screen_get_toplevel_windows (screen);
 
   for (list = windows; list; list = list->next)
-    {
-      if (GDK_WINDOW_TYPE(list->data) == GDK_WINDOW_OFFSCREEN)
-        continue;
-      _gdk_quartz_window_update_position (list->data);
-    }
+    _gdk_quartz_window_update_position (list->data);
 
   g_list_free (windows);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkOffscreenWindow" id="window1">
+  <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <property name="type">popup</property>
     <signal name="realize" handler="reftest:set_default_direction_ltr"/>

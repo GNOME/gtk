@@ -64,8 +64,7 @@ static void clear_toplevel_order  (void);
 
 #define WINDOW_IS_TOPLEVEL(window)		     \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 /*
  * GdkQuartzWindow
@@ -386,7 +385,7 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
     {
       GdkWindow *toplevel;
 
-      toplevel = gdk_window_get_effective_toplevel (window);
+      toplevel = gdk_window_get_toplevel (window);
       if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
         {
           GdkWindowImplQuartz *toplevel_impl;
@@ -2284,7 +2283,7 @@ gdk_quartz_window_get_frame_extents (GdkWindow    *window,
   rect->width = 1;
   rect->height = 1;
   
-  toplevel = gdk_window_get_effective_toplevel (window);
+  toplevel = gdk_window_get_toplevel (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
 
   ns_rect = [impl->toplevel frame];

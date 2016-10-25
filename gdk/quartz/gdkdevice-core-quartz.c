@@ -159,7 +159,7 @@ translate_coords_to_child_coords (GdkWindow *parent,
       *x -= tmp_x;
       *y -= tmp_y;
 
-      current = gdk_window_get_effective_parent (current);
+      current = gdk_window_get_parent (current);
     }
 }
 
@@ -209,7 +209,7 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
       return NULL;
     }
 
-  toplevel = gdk_window_get_effective_toplevel (window);
+  toplevel = gdk_window_get_toplevel (window);
 
   if (mask)
     *mask = _gdk_quartz_events_get_current_keyboard_modifiers () |

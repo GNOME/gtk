@@ -77,7 +77,6 @@ gdk_OBJECTS = \
 	gdkkeys.obj \
 	gdkkeyuni.obj \
 	gdkmarshalers.obj \
-	gdkoffscreenwindow.obj \
 	gdkpango.obj \
 	gdkpixbuf-drawable.obj \
 	gdkrectangle.obj \

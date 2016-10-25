@@ -50,7 +50,7 @@ TESTAPPS = \
 	testicontheme testiconview testimage testinput \
 	testmountoperation testmenubars testmerge testmultidisplay testmultiscreen \
 	testnouiprint testnotebookdnd \
-	testoffscreen testorientable \
+	testorientable \
 	testprint \
 	testrecentchooser testrecentchoosermenu testrichtext \
 	testscale testselection testspinbutton \
@@ -77,10 +77,6 @@ EXTRA_OBJETCS = prop-editor.obj
 
 !IFDEF EXTRA_buildertest
 EXTRA_LIBS = $(ATK_LIBS)
-!ENDIF
-
-!IFDEF EXTRA_testoffscreen
-EXTRA_OBJETCS = gtkoffscreenbox.obj
 !ENDIF
 
 !IFDEF EXTRA_testprint

@@ -251,7 +251,6 @@ gtk_OBJECTS = \
 	gtkmountoperation.obj \
 	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
-	gtkoffscreenwindow.obj \
 	gtkorientable.obj \
 	gtkpagesetup.obj \
 	gtkpaned.obj \
@@ -440,7 +439,6 @@ gtk_public_h_sources = 		\
 	gtkmodules.h		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
-	gtkoffscreenwindow.h	\
 	gtkorientable.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\

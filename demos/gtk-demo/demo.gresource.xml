@@ -167,8 +167,6 @@
     <file>markup.c</file>
     <file>menus.c</file>
     <file>modelbutton.c</file>
-    <file>offscreen_window.c</file>
-    <file>offscreen_window2.c</file>
     <file>overlay.c</file>
     <file>overlay2.c</file>
     <file>pagesetup.c</file>

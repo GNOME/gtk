@@ -1925,9 +1925,6 @@ _gdk_x11_window_set_window_scale (GdkWindow *window,
   GdkToplevelX11 *toplevel;
   GdkWindowHints geom_mask;
 
-  if (window->window_type == GDK_WINDOW_OFFSCREEN)
-    return;
-
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
   impl->window_scale = scale;

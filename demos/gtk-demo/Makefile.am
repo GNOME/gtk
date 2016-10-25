@@ -43,8 +43,6 @@ demos_base =					\
 	markup.c				\
 	menus.c					\
 	modelbutton.c				\
-	offscreen_window.c			\
-	offscreen_window2.c			\
 	overlay.c				\
 	overlay2.c				\
 	panes.c					\

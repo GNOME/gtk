@@ -503,10 +503,6 @@ test_type (gconstpointer data)
       if (type == GTK_TYPE_COLOR_BUTTON && pspec->owner_type == GTK_TYPE_BUTTON)
         continue;
 
-      /* GdkOffscreenWindow is missing many implementations */
-      if (type == GTK_TYPE_OFFSCREEN_WINDOW)
-        continue;
-
       /* Too many special cases involving -set properties */
       if (g_str_equal (g_type_name (pspec->owner_type), "GtkCellRendererText") ||
           g_str_equal (g_type_name (pspec->owner_type), "GtkTextTag"))

@@ -1871,7 +1871,7 @@ gtk_list_box_motion_notify_event (GtkWidget      *widget,
     {
       gdk_window_coords_to_parent (event_window, 0, relative_y, NULL, &parent_y);
       relative_y = parent_y;
-      event_window = gdk_window_get_effective_parent (event_window);
+      event_window = gdk_window_get_parent (event_window);
     }
 
   row = gtk_list_box_get_row_at_y (box, relative_y);

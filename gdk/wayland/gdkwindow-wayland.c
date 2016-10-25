@@ -48,13 +48,11 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 
 #define WINDOW_IS_TOPLEVEL(window)                   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
@@ -1619,11 +1617,11 @@ get_real_parent_and_translate (GdkWindow *window,
 
   while (parent &&
          !gdk_window_has_native (parent) &&
-         gdk_window_get_effective_parent (parent))
+         gdk_window_get_parent (parent))
     {
       *x += parent->x;
       *y += parent->y;
-      parent = gdk_window_get_effective_parent (parent);
+      parent = gdk_window_get_parent (parent);
     }
 
   return parent;
@@ -2296,7 +2294,7 @@ gdk_wayland_window_map (GdkWindow *window)
             }
 
           if (transient_for)
-            transient_for = get_popup_parent (gdk_window_get_effective_toplevel (transient_for));
+            transient_for = get_popup_parent (gdk_window_get_toplevel (transient_for));
 
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
@@ -2307,7 +2305,7 @@ gdk_wayland_window_map (GdkWindow *window)
         }
       else
         {
-          transient_for = gdk_window_get_effective_toplevel (impl->transient_for);
+          transient_for = gdk_window_get_toplevel (impl->transient_for);
           transient_for = get_popup_parent (transient_for);
         }
 

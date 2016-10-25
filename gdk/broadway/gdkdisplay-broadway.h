@@ -51,9 +51,6 @@ struct _GdkBroadwayDisplay
   /* drag and drop information */
   GdkDragContext *current_dest_drag;
 
-  /* The offscreen window that has the pointer in it (if any) */
-  GdkWindow *active_offscreen_window;
-
   GdkBroadwayServer *server;
 
   gpointer move_resize_data;

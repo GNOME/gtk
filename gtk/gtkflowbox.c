@@ -2937,7 +2937,7 @@ gtk_flow_box_motion_notify_event (GtkWidget      *widget,
                                    &parent_x, &parent_y);
       relative_x = parent_x;
       relative_y = parent_y;
-      event_window = gdk_window_get_effective_parent (event_window);
+      event_window = gdk_window_get_parent (event_window);
     }
 
   child = gtk_flow_box_find_child_at_pos (box, relative_x, relative_y);

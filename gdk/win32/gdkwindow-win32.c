@@ -132,8 +132,7 @@ static void    _gdk_win32_impl_release_dc (GdkWindowImplWin32 *impl);
 
 #define WINDOW_IS_TOPLEVEL(window)		   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 GdkScreen *
 GDK_WINDOW_SCREEN (GObject *win)

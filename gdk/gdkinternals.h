@@ -309,8 +309,6 @@ struct _GdkWindow
   gint shadow_right;
   gint shadow_bottom;
 
-  guint num_offscreen_children;
-
   /* The clip region is the part of the window, in window coordinates
      that is fully or partially (i.e. semi transparently) visible in
      the window hierarchy from the toplevel and down */
@@ -491,17 +489,6 @@ void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_win
 
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
-
-/*****************************
- * offscreen window routines *
- *****************************/
-GType gdk_offscreen_window_get_type (void);
-void       _gdk_offscreen_window_new                 (GdkWindow     *window,
-                                                      GdkWindowAttr *attributes,
-                                                      gint           attributes_mask);
-cairo_surface_t * _gdk_offscreen_window_create_surface (GdkWindow *window,
-                                                        gint       width,
-                                                        gint       height);
 
 G_END_DECLS
 

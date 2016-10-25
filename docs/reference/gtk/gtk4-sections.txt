@@ -2123,26 +2123,6 @@ GtkNotebookPrivate
 </SECTION>
 
 <SECTION>
-<FILE>gtkoffscreenwindow</FILE>
-<TITLE>GtkOffscreenWindow</TITLE>
-GtkOffscreenWindow
-GtkOffscreenWindowClass
-gtk_offscreen_window_new
-gtk_offscreen_window_get_surface
-gtk_offscreen_window_get_pixbuf
-<SUBSECTION Standard>
-GTK_OFFSCREEN_WINDOW
-GTK_IS_OFFSCREEN_WINDOW
-GTK_TYPE_OFFSCREEN_WINDOW
-GTK_OFFSCREEN_WINDOW_CLASS
-GTK_IS_OFFSCREEN_WINDOW_CLASS
-GTK_OFFSCREEN_WINDOW_GET_CLASS
-
-<SUBSECTION Private>
-gtk_offscreen_window_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkpaned</FILE>
 <TITLE>GtkPaned</TITLE>
 GtkPaned

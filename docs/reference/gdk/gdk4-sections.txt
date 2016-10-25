@@ -484,14 +484,8 @@ gdk_window_get_event_compression
 gdk_window_set_event_compression
 
 <SUBSECTION>
-gdk_offscreen_window_get_surface
-gdk_offscreen_window_set_embedder
-gdk_offscreen_window_get_embedder
-gdk_window_geometry_changed
 gdk_window_coords_from_parent
 gdk_window_coords_to_parent
-gdk_window_get_effective_parent
-gdk_window_get_effective_toplevel
 
 <SUBSECTION Standard>
 GDK_WINDOW

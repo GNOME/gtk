@@ -5743,7 +5743,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
       src_x = dx;
       src_y = dy;
 
-      window = gdk_window_get_effective_parent (window);
+      window = gdk_window_get_parent (window);
 
       if (!window)		/* Handle GtkHandleBox */
 	return FALSE;
@@ -5755,7 +5755,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
     {
       dest_list = g_list_prepend (dest_list, window);
 
-      window = gdk_window_get_effective_parent (window);
+      window = gdk_window_get_parent (window);
 
       if (!window)		/* Handle GtkHandleBox */
         {
@@ -11215,7 +11215,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 
       while (from_ancestor != NULL)
 	{
-	  from_ancestor = gdk_window_get_effective_parent (from_ancestor);
+	  from_ancestor = gdk_window_get_parent (from_ancestor);
           if (from_ancestor == NULL)
             break;
           from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
@@ -11240,7 +11240,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 
       while (to_ancestor != NULL)
 	{
-	  to_ancestor = gdk_window_get_effective_parent (to_ancestor);
+	  to_ancestor = gdk_window_get_parent (to_ancestor);
 	  if (to_ancestor == NULL)
             break;
           to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
@@ -11269,7 +11269,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 	{
 	  if (from_ancestor != NULL)
 	    {
-	      from_ancestor = gdk_window_get_effective_parent (from_ancestor);
+	      from_ancestor = gdk_window_get_parent (from_ancestor);
 	      if (from_ancestor == to_window)
 		break;
               if (from_ancestor)
@@ -11277,7 +11277,7 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 	    }
 	  if (to_ancestor != NULL)
 	    {
-	      to_ancestor = gdk_window_get_effective_parent (to_ancestor);
+	      to_ancestor = gdk_window_get_parent (to_ancestor);
 	      if (to_ancestor == from_window)
 		break;
               if (to_ancestor)

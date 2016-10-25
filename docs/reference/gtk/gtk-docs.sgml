@@ -62,7 +62,6 @@
       <xi:include href="xml/gtkaboutdialog.xml" />
       <xi:include href="xml/gtkassistant.xml" />
       <xi:include href="xml/gtkinvisible.xml" />
-      <xi:include href="xml/gtkoffscreenwindow.xml" />
       <xi:include href="xml/gtkwindowgroup.xml" />
     </chapter>
 

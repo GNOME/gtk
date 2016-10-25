@@ -622,7 +622,7 @@ _gtk_widget_find_at_coords (GdkWindow *window,
       child_loc.x = px;
       child_loc.y = py;
 
-      window = gdk_window_get_effective_parent (window);
+      window = gdk_window_get_parent (window);
     }
 
   /* Failing to find widget->window can happen for e.g. a detached handle box;

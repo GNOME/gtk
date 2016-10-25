@@ -1130,7 +1130,7 @@ translate_to_widget (GtkWidget *widget,
       gdk_window_get_position (window, &wx, &wy);
       event_x += wx;
       event_y += wy;
-      window = gdk_window_get_effective_parent (window);
+      window = gdk_window_get_parent (window);
     }
 
   if (!gtk_widget_get_has_window (event_widget))

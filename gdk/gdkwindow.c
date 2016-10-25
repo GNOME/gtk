@@ -68,24 +68,6 @@
  * window, the thing a user might think of as a “window” with a titlebar
  * and so on; a #GtkWindow may contain many #GdkWindows. For example,
  * each #GtkButton has a #GdkWindow associated with it.
- *
- * # Offscreen Windows # {#OFFSCREEN-WINDOWS}
- *
- * Offscreen windows are more general than composited windows, since
- * they allow not only to modify the rendering of the child window onto
- * its parent, but also to apply coordinate transformations.
- *
- * To integrate an offscreen window into a window hierarchy, one has
- * to call gdk_offscreen_window_set_embedder() and handle a number of
- * signals. The #GdkWindow::pick-embedded-child signal on the embedder
- * window is used to select an offscreen child at given coordinates,
- * and the #GdkWindow::to-embedder and #GdkWindow::from-embedder signals
- * on the offscreen window are used to translate coordinates between
- * the embedder and the offscreen window.
- *
- * For rendering an offscreen window onto its embedder, the contents
- * of the offscreen window are available as a surface, via
- * gdk_offscreen_window_get_surface().
  */
 
 
@@ -95,22 +77,17 @@
  * and the actual platform specific implementation was in a delegate
  * object available as “impl” in the window object.
  *
- * With the addition of client side windows and offscreen windows this
- * changes a bit. The application-visible GdkWindow object behaves as
- * it did before, but not all such windows now have a corresponding native
- * window. Instead windows that are “client side” are emulated by the gdk
- * code such that clipping, drawing, moving, events etc work as expected.
+ * With the addition of client side windows this changes a bit. The
+ * application-visible GdkWindow object behaves as it did before, but
+ * not all such windows now have a corresponding native
+ * window. Instead windows that are “client side” are emulated by the
+ * gdk code such that clipping, drawing, moving, events etc work as
+ * expected.
  *
  * For GdkWindows that have a native window the “impl” object is the
  * same as before. However, for all client side windows the impl object
  * is shared with its parent (i.e. all client windows descendants of one
  * native window has the same impl.
- *
- * Additionally there is a new type of platform independent impl object,
- * GdkOffscreenWindow. All windows of type GDK_WINDOW_OFFSCREEN get an impl
- * of this type (while their children are generally GDK_WINDOW_CHILD virtual
- * windows). Such windows work by allocating a #cairo_surface_t as the backing
- * store for drawing operations, which is resized with the window.
  *
  * GdkWindows have a pointer to the “impl window” they are in, i.e.
  * the topmost GdkWindow which have the same “impl” value. This is stored
@@ -121,10 +98,10 @@
  * with respect to the impl window (abs_x, abs_y). We also track the clip
  * region of the window wrt parent windows, in window-relative coordinates (clip_region).
  *
- * All toplevel windows are native windows, but also child windows can be
- * native (although not children of offscreens). We always listen to
- * a basic set of events (see get_native_event_mask) for these windows
- * so that we can emulate events for any client side children.
+ * All toplevel windows are native windows, but also child windows can
+ * be native. We always listen to a basic set of events (see
+ * get_native_event_mask) for these windows so that we can emulate
+ * events for any client side children.
  *
  * For native windows we apply the calculated clip region as a window shape
  * so that eg. client side siblings that overlap the native child properly
@@ -135,10 +112,6 @@
 #define GDK_VISIBILITY_NOT_VIEWABLE 3
 
 enum {
-  PICK_EMBEDDED_CHILD, /* only called if children are embedded */
-  TO_EMBEDDER,
-  FROM_EMBEDDER,
-  CREATE_SURFACE,
   MOVED_TO_RECT,
   LAST_SIGNAL
 };
@@ -286,30 +259,6 @@ gdk_window_init (GdkWindow *window)
                                                  NULL, g_object_unref);
 }
 
-/* Stop and return on the first non-NULL parent */
-static gboolean
-accumulate_get_window (GSignalInvocationHint *ihint,
-		       GValue		       *return_accu,
-		       const GValue	       *handler_return,
-		       gpointer               data)
-{
-  g_value_copy (handler_return, return_accu);
-  /* Continue while returning NULL */
-  return g_value_get_object (handler_return) == NULL;
-}
-
-static gboolean
-create_surface_accumulator (GSignalInvocationHint *ihint,
-                            GValue                *return_accu,
-                            const GValue          *handler_return,
-                            gpointer               data)
-{
-  g_value_copy (handler_return, return_accu);
-
-  /* Stop on the first non-NULL return value */
-  return g_value_get_boxed (handler_return) == NULL;
-}
-
 static GQuark quark_pointer_window = 0;
 
 static void
@@ -320,8 +269,6 @@ gdk_window_class_init (GdkWindowClass *klass)
   object_class->finalize = gdk_window_finalize;
   object_class->set_property = gdk_window_set_property;
   object_class->get_property = gdk_window_get_property;
-
-  klass->create_surface = _gdk_offscreen_window_create_surface;
 
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
 
@@ -343,127 +290,6 @@ gdk_window_class_init (GdkWindowClass *klass)
                            GDK_TYPE_CURSOR,
                            G_PARAM_READWRITE);
   g_object_class_install_properties (object_class, LAST_PROP, properties);
-
-  /**
-   * GdkWindow::pick-embedded-child:
-   * @window: the window on which the signal is emitted
-   * @x: x coordinate in the window
-   * @y: y coordinate in the window
-   *
-   * The ::pick-embedded-child signal is emitted to find an embedded
-   * child at the given position.
-   *
-   * Returns: (nullable) (transfer none): the #GdkWindow of the
-   *     embedded child at @x, @y, or %NULL
-   *
-   * Since: 2.18
-   */
-  signals[PICK_EMBEDDED_CHILD] =
-    g_signal_new (g_intern_static_string ("pick-embedded-child"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkWindowClass, pick_embedded_child),
-		  accumulate_get_window, NULL,
-		  _gdk_marshal_OBJECT__DOUBLE_DOUBLE,
-		  GDK_TYPE_WINDOW,
-		  2,
-		  G_TYPE_DOUBLE,
-		  G_TYPE_DOUBLE);
-
-  /**
-   * GdkWindow::to-embedder:
-   * @window: the offscreen window on which the signal is emitted
-   * @offscreen_x: x coordinate in the offscreen window
-   * @offscreen_y: y coordinate in the offscreen window
-   * @embedder_x: (out) (type double): return location for the x
-   *     coordinate in the embedder window
-   * @embedder_y: (out) (type double): return location for the y
-   *     coordinate in the embedder window
-   *
-   * The ::to-embedder signal is emitted to translate coordinates
-   * in an offscreen window to its embedder.
-   *
-   * See also #GdkWindow::from-embedder.
-   *
-   * Since: 2.18
-   */
-  signals[TO_EMBEDDER] =
-    g_signal_new (g_intern_static_string ("to-embedder"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkWindowClass, to_embedder),
-		  NULL, NULL,
-		  _gdk_marshal_VOID__DOUBLE_DOUBLE_POINTER_POINTER,
-		  G_TYPE_NONE,
-		  4,
-		  G_TYPE_DOUBLE,
-		  G_TYPE_DOUBLE,
-		  G_TYPE_POINTER,
-		  G_TYPE_POINTER);
-
-  /**
-   * GdkWindow::from-embedder:
-   * @window: the offscreen window on which the signal is emitted
-   * @embedder_x: x coordinate in the embedder window
-   * @embedder_y: y coordinate in the embedder window
-   * @offscreen_x: (out) (type double): return location for the x
-   *     coordinate in the offscreen window
-   * @offscreen_y: (out) (type double): return location for the y
-   *     coordinate in the offscreen window
-   *
-   * The ::from-embedder signal is emitted to translate coordinates
-   * in the embedder of an offscreen window to the offscreen window.
-   *
-   * See also #GdkWindow::to-embedder.
-   *
-   * Since: 2.18
-   */
-  signals[FROM_EMBEDDER] =
-    g_signal_new (g_intern_static_string ("from-embedder"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkWindowClass, from_embedder),
-		  NULL, NULL,
-		  _gdk_marshal_VOID__DOUBLE_DOUBLE_POINTER_POINTER,
-		  G_TYPE_NONE,
-		  4,
-		  G_TYPE_DOUBLE,
-		  G_TYPE_DOUBLE,
-		  G_TYPE_POINTER,
-		  G_TYPE_POINTER);
-
-  /**
-   * GdkWindow::create-surface:
-   * @window: the offscreen window on which the signal is emitted
-   * @width: the width of the offscreen surface to create
-   * @height: the height of the offscreen surface to create
-   *
-   * The ::create-surface signal is emitted when an offscreen window
-   * needs its surface (re)created, which happens either when the
-   * window is first drawn to, or when the window is being
-   * resized. The first signal handler that returns a non-%NULL
-   * surface will stop any further signal emission, and its surface
-   * will be used.
-   *
-   * Note that it is not possible to access the window's previous
-   * surface from within any callback of this signal. Calling
-   * gdk_offscreen_window_get_surface() will lead to a crash.
-   *
-   * Returns: the newly created #cairo_surface_t for the offscreen window
-   *
-   * Since: 3.0
-   */
-  signals[CREATE_SURFACE] =
-    g_signal_new (g_intern_static_string ("create-surface"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkWindowClass, create_surface),
-                  create_surface_accumulator, NULL,
-                  _gdk_marshal_BOXED__INT_INT,
-                  CAIRO_GOBJECT_TYPE_SURFACE,
-                  2,
-                  G_TYPE_INT,
-                  G_TYPE_INT);
 
   /**
    * GdkWindow::moved-to-rect:
@@ -618,12 +444,6 @@ gdk_window_get_property (GObject    *object,
     }
 }
 
-static gboolean
-gdk_window_is_offscreen (GdkWindow *window)
-{
-  return window->window_type == GDK_WINDOW_OFFSCREEN;
-}
-
 static GdkWindow *
 gdk_window_get_impl_window (GdkWindow *window)
 {
@@ -691,11 +511,6 @@ remove_sibling_overlapped_area (GdkWindow *window,
       if (!GDK_WINDOW_IS_MAPPED (sibling) || sibling->input_only)
 	continue;
 
-      /* Ignore offscreen children, as they don't draw in their parent and
-       * don't take part in the clipping */
-      if (gdk_window_is_offscreen (sibling))
-	continue;
-
       r.x = sibling->x;
       r.y = sibling->y;
       r.width = sibling->width;
@@ -751,11 +566,6 @@ remove_child_area (GdkWindow *window,
 	break;
 
       if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only)
-	continue;
-
-      /* Ignore offscreen children, as they don't draw in their parent and
-       * don't take part in the clipping */
-      if (gdk_window_is_offscreen (child))
 	continue;
 
       r.x = child->x;
@@ -869,9 +679,7 @@ should_apply_clip_as_shape (GdkWindow *window)
 {
   return
     gdk_window_has_impl (window) &&
-    /* Not for offscreens */
-    !gdk_window_is_offscreen (window) &&
-    /* or for non-shaped toplevels */
+    /* Not for non-shaped toplevels */
     (!gdk_window_is_toplevel (window) ||
      window->shape != NULL || window->applied_shape) &&
     /* or for foreign windows */
@@ -1388,7 +1196,6 @@ gdk_window_new (GdkWindow     *parent,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-    case GDK_WINDOW_OFFSCREEN:
       if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
 	g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
 		   "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
@@ -1439,12 +1246,7 @@ gdk_window_new (GdkWindow     *parent,
   if (window->parent->window_type == GDK_WINDOW_ROOT)
     native = TRUE; /* Always use native windows for toplevels */
 
-  if (gdk_window_is_offscreen (window))
-    {
-      _gdk_offscreen_window_new (window, attributes, attributes_mask);
-      window->impl_window = window;
-    }
-  else if (native)
+  if (native)
     {
       event_mask = get_native_event_mask (window);
 
@@ -1748,7 +1550,6 @@ gdk_window_reparent (GdkWindow *window,
       else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
 	GDK_WINDOW_TYPE (window) = GDK_WINDOW_TOPLEVEL;
       break;
-    case GDK_WINDOW_OFFSCREEN:
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_TEMP:
@@ -1823,8 +1624,6 @@ gdk_window_reparent (GdkWindow *window,
  * Tries to ensure that there is a window-system native window for this
  * GdkWindow. This may fail in some situations, returning %FALSE.
  *
- * Offscreen window and children of them can never have native windows.
- *
  * Some backends may not support native child windows.
  *
  * Returns: %TRUE if the window has a native window, %FALSE otherwise
@@ -1850,11 +1649,8 @@ gdk_window_ensure_native (GdkWindow *window)
 
   impl_window = gdk_window_get_impl_window (window);
 
-  if (gdk_window_is_offscreen (impl_window))
-    return FALSE; /* native in offscreens not supported */
-
   if (impl_window == window)
-    /* Already has an impl, and its not offscreen . */
+    /* Already has an impl. */
     return TRUE;
 
   /* Need to create a native window */
@@ -2056,7 +1852,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_TEMP:
     case GDK_WINDOW_FOREIGN:
-    case GDK_WINDOW_OFFSCREEN:
       if (window->window_type == GDK_WINDOW_FOREIGN && !foreign_destroy)
 	{
 	  /* Logically, it probably makes more sense to send
@@ -2331,30 +2126,6 @@ gdk_window_is_destroyed (GdkWindow *window)
   return GDK_WINDOW_DESTROYED (window);
 }
 
-static void
-to_embedder (GdkWindow *window,
-             gdouble    offscreen_x,
-             gdouble    offscreen_y,
-             gdouble   *embedder_x,
-             gdouble   *embedder_y)
-{
-  g_signal_emit (window, signals[TO_EMBEDDER], 0,
-                 offscreen_x, offscreen_y,
-                 embedder_x, embedder_y);
-}
-
-static void
-from_embedder (GdkWindow *window,
-               gdouble    embedder_x,
-               gdouble    embedder_y,
-               gdouble   *offscreen_x,
-               gdouble   *offscreen_y)
-{
-  g_signal_emit (window, signals[FROM_EMBEDDER], 0,
-                 embedder_x, embedder_y,
-                 offscreen_x, offscreen_y);
-}
-
 /**
  * gdk_window_has_native:
  * @window: a #GdkWindow
@@ -2413,11 +2184,6 @@ gdk_window_get_position (GdkWindow *window,
  * matter for toplevel windows, because the window manager may choose
  * to reparent them.
  *
- * Note that you should use gdk_window_get_effective_parent() when
- * writing generic code that walks up a window hierarchy, because
- * gdk_window_get_parent() will most likely not do what you expect if
- * there are offscreen windows in the hierarchy.
- *
  * Returns: (transfer none): parent of @window
  **/
 GdkWindow*
@@ -2429,31 +2195,6 @@ gdk_window_get_parent (GdkWindow *window)
 }
 
 /**
- * gdk_window_get_effective_parent:
- * @window: a #GdkWindow
- *
- * Obtains the parent of @window, as known to GDK. Works like
- * gdk_window_get_parent() for normal windows, but returns the
- * window’s embedder for offscreen windows.
- *
- * See also: gdk_offscreen_window_get_embedder()
- *
- * Returns: (transfer none): effective parent of @window
- *
- * Since: 2.22
- **/
-GdkWindow *
-gdk_window_get_effective_parent (GdkWindow *window)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  if (gdk_window_is_offscreen (window))
-    return gdk_offscreen_window_get_embedder (window);
-  else
-    return window->parent;
-}
-
-/**
  * gdk_window_get_toplevel:
  * @window: a #GdkWindow
  *
@@ -2462,11 +2203,6 @@ gdk_window_get_effective_parent (GdkWindow *window)
  * Any window type but %GDK_WINDOW_CHILD is considered a
  * toplevel window, as is a %GDK_WINDOW_CHILD window that
  * has a root window as parent.
- *
- * Note that you should use gdk_window_get_effective_toplevel() when
- * you want to get to a window’s toplevel as seen on screen, because
- * gdk_window_get_toplevel() will most likely not do what you expect
- * if there are offscreen windows in the hierarchy.
  *
  * Returns: (transfer none): the toplevel window containing @window
  **/
@@ -2481,35 +2217,6 @@ gdk_window_get_toplevel (GdkWindow *window)
 	break;
       window = window->parent;
     }
-
-  return window;
-}
-
-/**
- * gdk_window_get_effective_toplevel:
- * @window: a #GdkWindow
- *
- * Gets the toplevel window that’s an ancestor of @window.
- *
- * Works like gdk_window_get_toplevel(), but treats an offscreen window's
- * embedder as its parent, using gdk_window_get_effective_parent().
- *
- * See also: gdk_offscreen_window_get_embedder()
- *
- * Returns: (transfer none): the effective toplevel window containing @window
- *
- * Since: 2.22
- **/
-GdkWindow *
-gdk_window_get_effective_toplevel (GdkWindow *window)
-{
-  GdkWindow *parent;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  while ((parent = gdk_window_get_effective_parent (window)) != NULL &&
-	 (gdk_window_get_window_type (parent) != GDK_WINDOW_ROOT))
-    window = parent;
 
   return window;
 }
@@ -3623,26 +3330,6 @@ gdk_window_schedule_update (GdkWindow *window)
 }
 
 static void
-gdk_window_add_damage (GdkWindow *toplevel,
-                       cairo_region_t *damaged_region)
-{
-  GdkDisplay *display;
-  GdkEvent event = { 0, };
-
-  /* This function only makes sense for offscreen windows. */
-  g_assert (gdk_window_is_offscreen (toplevel));
-
-  event.expose.type = GDK_DAMAGE;
-  event.expose.window = toplevel;
-  event.expose.send_event = FALSE;
-  event.expose.region = damaged_region;
-  cairo_region_get_extents (event.expose.region, &event.expose.area);
-
-  display = gdk_window_get_display (event.expose.window);
-  _gdk_event_queue_append (display, gdk_event_copy (&event));
-}
-
-static void
 _gdk_window_process_updates_recurse_helper (GdkWindow *window,
                                             cairo_region_t *expose_region)
 {
@@ -3669,9 +3356,6 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
 
   if (cairo_region_is_empty (clipped_expose_region))
     goto out;
-
-  if (gdk_window_is_offscreen (window))
-    gdk_window_add_damage (window, clipped_expose_region);
 
   /* Paint the window before the children, clipped to the window region */
 
@@ -3715,11 +3399,6 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
       child = l->data;
 
       if (child->destroyed || !GDK_WINDOW_IS_MAPPED (child) || child->input_only)
-        continue;
-
-      /* Ignore offscreen children, as they don't draw in their parent and
-       * don't take part in the clipping */
-      if (gdk_window_is_offscreen (child))
         continue;
 
       /* Client side child, expose */
@@ -5625,18 +5304,6 @@ gdk_window_set_device_events (GdkWindow    *window,
 
   native = gdk_window_get_toplevel (window);
 
-  while (gdk_window_is_offscreen (native))
-    {
-      native = gdk_offscreen_window_get_embedder (native);
-
-      if (native == NULL ||
-	  (!_gdk_window_has_impl (native) &&
-	   !gdk_window_is_viewable (native)))
-	return;
-
-      native = gdk_window_get_toplevel (native);
-    }
-
   device_mask = get_native_device_event_mask (window, device);
   GDK_DEVICE_GET_CLASS (device)->select_window_events (device, native, device_mask);
 }
@@ -6461,19 +6128,8 @@ gdk_window_get_root_coords (GdkWindow *window,
  * in parent’s coordinate system, or %NULL
  *
  * Transforms window coordinates from a child window to its parent
- * window, where the parent window is the normal parent as returned by
- * gdk_window_get_parent() for normal windows, and the window's
- * embedder as returned by gdk_offscreen_window_get_embedder() for
- * offscreen windows.
- *
- * For normal windows, calling this function is equivalent to adding
- * the return values of gdk_window_get_position() to the child coordinates.
- * For offscreen windows however (which can be arbitrarily transformed),
- * this function calls the GdkWindow::to-embedder: signal to translate
- * the coordinates.
- *
- * You should always use this function when writing generic code that
- * walks up a window hierarchy.
+ * window. Calling this function is equivalent to adding the return
+ * values of gdk_window_get_position() to the child coordinates.
  *
  * See also: gdk_window_coords_from_parent()
  *
@@ -6488,26 +6144,11 @@ gdk_window_coords_to_parent (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (gdk_window_is_offscreen (window))
-    {
-      gdouble px, py;
+  if (parent_x)
+    *parent_x = x + window->x;
 
-      to_embedder (window, x, y, &px, &py);
-
-      if (parent_x)
-        *parent_x = px;
-
-      if (parent_y)
-        *parent_y = py;
-    }
-  else
-    {
-      if (parent_x)
-        *parent_x = x + window->x;
-
-      if (parent_y)
-        *parent_y = y + window->y;
-    }
+  if (parent_y)
+    *parent_y = y + window->y;
 }
 
 /**
@@ -6519,19 +6160,10 @@ gdk_window_coords_to_parent (GdkWindow *window,
  * @y: (out) (allow-none): return location for Y coordinate in child’s coordinate system
  *
  * Transforms window coordinates from a parent window to a child
- * window, where the parent window is the normal parent as returned by
- * gdk_window_get_parent() for normal windows, and the window's
- * embedder as returned by gdk_offscreen_window_get_embedder() for
- * offscreen windows.
+ * window.
  *
- * For normal windows, calling this function is equivalent to subtracting
- * the return values of gdk_window_get_position() from the parent coordinates.
- * For offscreen windows however (which can be arbitrarily transformed),
- * this function calls the GdkWindow::from-embedder: signal to translate
- * the coordinates.
- *
- * You should always use this function when writing generic code that
- * walks down a window hierarchy.
+ * Calling this function is equivalent to subtracting the return
+ * values of gdk_window_get_position() from the parent coordinates.
  *
  * See also: gdk_window_coords_to_parent()
  *
@@ -6546,26 +6178,11 @@ gdk_window_coords_from_parent (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (gdk_window_is_offscreen (window))
-    {
-      gdouble cx, cy;
+  if (x)
+    *x = parent_x - window->x;
 
-      from_embedder (window, parent_x, parent_y, &cx, &cy);
-
-      if (x)
-        *x = cx;
-
-      if (y)
-        *y = cy;
-    }
-  else
-    {
-      if (x)
-        *x = parent_x - window->x;
-
-      if (y)
-        *y = parent_y - window->y;
-    }
+  if (y)
+    *y = parent_y - window->y;
 }
 
 /**
@@ -7000,17 +6617,6 @@ gdk_window_is_shaped (GdkWindow *window)
 }
 
 /* Gets the toplevel for a window as used for events,
-   i.e. including offscreen parents */
-static GdkWindow *
-get_event_parent (GdkWindow *window)
-{
-  if (gdk_window_is_offscreen (window))
-    return gdk_offscreen_window_get_embedder ((GdkWindow *)window);
-  else
-    return window->parent;
-}
-
-/* Gets the toplevel for a window as used for events,
    i.e. including offscreen parents going up to the native
    toplevel */
 static GdkWindow *
@@ -7018,7 +6624,7 @@ get_event_toplevel (GdkWindow *window)
 {
   GdkWindow *parent;
 
-  while ((parent = get_event_parent (window)) != NULL &&
+  while ((parent = window->parent) != NULL &&
 	 (parent->window_type != GDK_WINDOW_ROOT))
     window = parent;
 
@@ -7037,7 +6643,7 @@ _gdk_window_event_parent_of (GdkWindow *parent,
       if (w == parent)
 	return TRUE;
 
-      w = get_event_parent (w);
+      w = w->parent;
     }
 
   return FALSE;
@@ -7078,7 +6684,7 @@ update_cursor (GdkDisplay *display,
      the cursor is inherited from the parent */
   while (cursor_window->cursor == NULL &&
          !g_hash_table_contains (cursor_window->device_cursor, device) &&
-	 (parent = get_event_parent (cursor_window)) != NULL &&
+	 (parent = cursor_window->parent) != NULL &&
 	 parent->window_type != GDK_WINDOW_ROOT)
     cursor_window = parent;
 
@@ -7207,7 +6813,7 @@ convert_toplevel_coords_to_window (GdkWindow *window,
   y = toplevel_y;
 
   children = NULL;
-  while ((parent = get_event_parent (window)) != NULL &&
+  while ((parent = window->parent) != NULL &&
 	 (parent->window_type != GDK_WINDOW_ROOT))
     {
       children = g_list_prepend (children, window);
@@ -7221,21 +6827,6 @@ convert_toplevel_coords_to_window (GdkWindow *window,
 
   *window_x = x;
   *window_y = y;
-}
-
-static GdkWindow *
-pick_embedded_child (GdkWindow *window,
-		     gdouble    x,
-                     gdouble    y)
-{
-  GdkWindow *res;
-
-  res = NULL;
-  g_signal_emit (window,
-		 signals[PICK_EMBEDDED_CHILD], 0,
-		 x, y, &res);
-
-  return res;
 }
 
 GdkWindow *
@@ -7262,14 +6853,6 @@ _gdk_window_find_child_at (GdkWindow *window,
                                          &child_x, &child_y);
 	  if (point_in_input_window (sub, child_x, child_y,
 				     NULL, NULL, NULL))
-	    return (GdkWindow *)sub;
-	}
-
-      if (window->num_offscreen_children > 0)
-	{
-	  sub = pick_embedded_child (window,
-				     x, y);
-	  if (sub)
 	    return (GdkWindow *)sub;
 	}
     }
@@ -7313,18 +6896,6 @@ _gdk_window_find_descendant_at (GdkWindow *window,
 		  window = input_window;
 		  found = TRUE;
 		  break;
-		}
-	    }
-	  if (!found &&
-	      window->num_offscreen_children > 0)
-	    {
-	      sub = pick_embedded_child (window,
-					 x, y);
-	      if (sub)
-		{
-		  found = TRUE;
-		  window = sub;
-		  from_embedder (sub, x, y, &x, &y);
 		}
 	    }
 	}
@@ -7552,14 +7123,14 @@ find_common_ancestor (GdkWindow *win1,
   while (tmp != NULL && tmp->window_type != GDK_WINDOW_ROOT)
     {
       path1 = g_list_prepend (path1, tmp);
-      tmp = get_event_parent (tmp);
+      tmp = tmp->parent;
     }
 
   tmp = win2;
   while (tmp != NULL && tmp->window_type != GDK_WINDOW_ROOT)
     {
       path2 = g_list_prepend (path2, tmp);
-      tmp = get_event_parent (tmp);
+      tmp = tmp->parent;
     }
 
   list1 = path1;
@@ -7896,7 +7467,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 	    notify_type = GDK_NOTIFY_VIRTUAL;
 
 	  last = a;
-	  win = get_event_parent (a);
+	  win = a->parent;
 	  while (win != c && win->window_type != GDK_WINDOW_ROOT)
 	    {
 	      send_crossing_event (display, toplevel,
@@ -7911,7 +7482,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				   serial);
 
 	      last = win;
-	      win = get_event_parent (win);
+	      win = win->parent;
 	    }
 	}
     }
@@ -7924,11 +7495,11 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
       if (c != b)
 	{
 	  path = NULL;
-	  win = get_event_parent (b);
+	  win = b->parent;
 	  while (win != c && win->window_type != GDK_WINDOW_ROOT)
 	    {
 	      path = g_list_prepend (path, win);
-	      win = get_event_parent (win);
+	      win = win->parent;
 	    }
 
 	  if (non_linear)
@@ -8037,22 +7608,6 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
     }
 
   _gdk_display_enable_motion_hints (display, device);
-}
-
-/**
- * gdk_window_geometry_changed:
- * @window: an embedded offscreen #GdkWindow
- *
- * This function informs GDK that the geometry of an embedded
- * offscreen window has changed. This is necessary for GDK to keep
- * track of which offscreen window the pointer is in.
- *
- * Since: 2.18
- */
-void
-gdk_window_geometry_changed (GdkWindow *window)
-{
-  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 static void
@@ -8366,7 +7921,7 @@ get_event_window (GdkDisplay                 *display,
 	  return pointer_window;
 	}
 
-      pointer_window = get_event_parent (pointer_window);
+      pointer_window = pointer_window->parent;
     }
 
   if (grab != NULL &&
@@ -8738,7 +8293,7 @@ proxy_button_event (GdkEvent *source_event,
       /* Find the event window, that gets the grab */
       w = pointer_window;
       while (w != NULL &&
-	     (parent = get_event_parent (w)) != NULL &&
+	     (parent = w->parent) != NULL &&
 	     parent->window_type != GDK_WINDOW_ROOT)
 	{
 	  if (w->event_mask & GDK_BUTTON_PRESS_MASK &&
@@ -9068,7 +8623,7 @@ gdk_window_print (GdkWindow *window,
     "dialog",
     "temp",
     "foreign",
-    "offscreen"
+    "subsurface"
   };
 
   g_print ("%*s%p: [%s] %d,%d %dx%d", indent, "", window,

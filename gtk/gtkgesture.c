@@ -408,7 +408,7 @@ _find_widget_window (GtkGesture *gesture,
           gtk_widget_get_window (widget) == window)
         return window;
 
-      window = gdk_window_get_effective_parent (window);
+      window = gdk_window_get_parent (window);
     }
 
   return NULL;
@@ -488,7 +488,7 @@ _update_widget_coordinates (GtkGesture *gesture,
       gdk_window_get_position (window, &wx, &wy);
       event_x += wx;
       event_y += wy;
-      window = gdk_window_get_effective_parent (window);
+      window = gdk_window_get_parent (window);
     }
 
   if (!window)
@@ -690,7 +690,7 @@ gesture_within_window (GtkGesture *gesture,
       if (window == parent)
         return TRUE;
 
-      window = gdk_window_get_effective_parent (window);
+      window = gdk_window_get_parent (window);
     }
 
   return FALSE;

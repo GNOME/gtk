@@ -250,7 +250,6 @@ gtk_public_h_sources = 		\
 	gtkmountoperation.h	\
 	gtknativedialog.h	\
 	gtknotebook.h		\
-	gtkoffscreenwindow.h	\
 	gtkorientable.h		\
 	gtkoverlay.h		\
 	gtkpadcontroller.h	\
@@ -820,7 +819,6 @@ gtk_base_c_sources = 		\
 	gtkmountoperation.c	\
 	gtknativedialog.c	\
 	gtknotebook.c		\
-	gtkoffscreenwindow.c	\
 	gtkorientable.c		\
 	gtkoverlay.c		\
 	gtkpadcontroller.c	\

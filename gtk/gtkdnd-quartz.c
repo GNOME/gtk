@@ -1145,7 +1145,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 	       * nswindow. Then, we convert to the NSWindow coordinate system.
 	       */
 	      window = event->any.window;
-	      GdkWindow *toplevel = gdk_window_get_effective_toplevel (window);
+	      GdkWindow *toplevel = gdk_window_get_toplevel (window);
 
 	      while (window != toplevel)
 		{
@@ -1154,7 +1154,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
 		  gdk_window_coords_to_parent (window, old_x, old_y,
 					       &dx, &dy);
-		  window = gdk_window_get_effective_parent (window);
+		  window = gdk_window_get_parent (window);
 		}
 	    }
 	  time = (double)gdk_event_get_time (event);

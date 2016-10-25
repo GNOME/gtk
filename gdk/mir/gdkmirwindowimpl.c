@@ -303,11 +303,11 @@ create_window_type_spec (GdkDisplay *display,
     {
       real_rect = *rect;
 
-      while (parent && !gdk_window_has_native (parent) && gdk_window_get_effective_parent (parent))
+      while (parent && !gdk_window_has_native (parent) && gdk_window_get_parent (parent))
         {
           real_rect.left += parent->x;
           real_rect.top += parent->y;
-          parent = gdk_window_get_effective_parent (parent);
+          parent = gdk_window_get_parent (parent);
         }
     }
   else
