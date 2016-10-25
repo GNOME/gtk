@@ -201,7 +201,7 @@ gdk_broadway_display_finalize (GObject *object)
   if (broadway_display->keymap)
     g_object_unref (broadway_display->keymap);
 
-  _gdk_broadway_cursor_display_finalize (GDK_DISPLAY_OBJECT(broadway_display));
+  _gdk_broadway_cursor_display_finalize (GDK_DISPLAY(broadway_display));
 
   /* Free all GdkScreens */
   g_object_unref (broadway_display->screens[0]);

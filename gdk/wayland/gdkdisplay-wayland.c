@@ -207,7 +207,7 @@ _gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
                                uint32_t id,
                                uint32_t version)
 {
-  GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (display_wayland);
+  GdkDisplay *gdk_display = GDK_DISPLAY (display_wayland);
   struct wl_seat *seat;
 
   display_wayland->seat_version = MIN (version, 5);
