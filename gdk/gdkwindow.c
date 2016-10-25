@@ -4347,42 +4347,6 @@ gdk_window_constrain_size (GdkGeometry    *geometry,
 }
 
 /**
- * gdk_window_get_pointer:
- * @window: a #GdkWindow
- * @x: (out) (allow-none): return location for X coordinate of pointer or %NULL to not
- *      return the X coordinate
- * @y: (out) (allow-none):  return location for Y coordinate of pointer or %NULL to not
- *      return the Y coordinate
- * @mask: (out) (allow-none): return location for modifier mask or %NULL to not return the
- *      modifier mask
- *
- * Obtains the current pointer position and modifier state.
- * The position is given in coordinates relative to the upper left
- * corner of @window.
- *
- * Returns: (nullable) (transfer none): the window containing the
- * pointer, or %NULL if the window containing the pointer isn’t known to GDK
- *
- * Deprecated: 3.0: Use gdk_window_get_device_position() instead.
- **/
-GdkWindow*
-gdk_window_get_pointer (GdkWindow	  *window,
-			gint		  *x,
-			gint		  *y,
-			GdkModifierType   *mask)
-{
-  GdkDisplay *display;
-  GdkDevice *pointer;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  display = gdk_window_get_display (window);
-  pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-
-  return gdk_window_get_device_position (window, pointer, x, y, mask);
-}
-
-/**
  * gdk_window_get_device_position_double:
  * @window: a #GdkWindow.
  * @device: pointer #GdkDevice to query to.
