@@ -1520,26 +1520,6 @@ gdk_display_get_name (GdkDisplay *display)
 }
 
 /**
- * gdk_display_get_n_screens:
- * @display: a #GdkDisplay
- *
- * Gets the number of screen managed by the @display.
- *
- * Returns: number of screens.
- *
- * Since: 2.2
- *
- * Deprecated: 3.10: The number of screens is always 1.
- */
-gint
-gdk_display_get_n_screens (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
-  return 1;
-}
-
-/**
  * gdk_display_get_screen:
  * @display: a #GdkDisplay
  * @screen_num: the screen number
