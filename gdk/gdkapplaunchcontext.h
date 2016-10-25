@@ -41,8 +41,6 @@ GDK_AVAILABLE_IN_ALL
 GType                gdk_app_launch_context_get_type      (void);
 
 GDK_DEPRECATED_IN_3_0_FOR(gdk_display_get_app_launch_context)
-GdkAppLaunchContext *gdk_app_launch_context_new           (void);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_display_get_app_launch_context)
 void                 gdk_app_launch_context_set_display   (GdkAppLaunchContext *context,
                                                            GdkDisplay          *display);
 GDK_AVAILABLE_IN_ALL

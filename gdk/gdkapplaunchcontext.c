@@ -332,23 +332,6 @@ gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
   context->icon_name = g_strdup (icon_name);
 }
 
-/**
- * gdk_app_launch_context_new:
- *
- * Creates a new #GdkAppLaunchContext.
- *
- * Returns: a new #GdkAppLaunchContext
- *
- * Since: 2.14
- *
- * Deprecated: 3.0: Use gdk_display_get_app_launch_context() instead
- */
-GdkAppLaunchContext *
-gdk_app_launch_context_new (void)
-{
-  return gdk_display_get_app_launch_context (gdk_display_get_default ());
-}
-
 static char *
 gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                               GAppInfo          *info,
