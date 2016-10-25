@@ -38,9 +38,6 @@ G_BEGIN_DECLS
 #define GDK_TYPE_DISPLAY              (gdk_display_get_type ())
 #define GDK_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY, GdkDisplay))
 #define GDK_IS_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY))
-#ifndef GDK_DISABLE_DEPRECATED
-#define GDK_DISPLAY_OBJECT(object)    GDK_DISPLAY(object)
-#endif
 
 GDK_AVAILABLE_IN_ALL
 GType       gdk_display_get_type (void) G_GNUC_CONST;
