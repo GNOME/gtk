@@ -40,24 +40,24 @@ typedef struct _GtkShortcutsShortcutClass GtkShortcutsShortcutClass;
  *   The shortcut is a keyboard accelerator. The #GtkShortcutsShortcut:accelerator
  *   property will be used.
  * @GTK_SHORTCUT_GESTURE_PINCH:
- *   The shortcut is a pinch gesture. GTK+ provides and icon and subtitle.
+ *   The shortcut is a pinch gesture. GTK+ provides an icon and subtitle.
  * @GTK_SHORTCUT_GESTURE_STRETCH:
- *   The shortcut is a stretch gesture. GTK+ provides and icon and subtitle.
+ *   The shortcut is a stretch gesture. GTK+ provides an icon and subtitle.
  * @GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE:
- *   The shortcut is a clockwise rotation gesture. GTK+ provides and icon and subtitle.
+ *   The shortcut is a clockwise rotation gesture. GTK+ provides an icon and subtitle.
  * @GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE:
- *   The shortcut is a counterclockwise rotation gesture. GTK+ provides and icon and subtitle.
+ *   The shortcut is a counterclockwise rotation gesture. GTK+ provides an icon and subtitle.
  * @GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT:
- *   The shortcut is a two-finger swipe gesture. GTK+ provides and icon and subtitle.
+ *   The shortcut is a two-finger swipe gesture. GTK+ provides an icon and subtitle.
  * @GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT:
- *   The shortcut is a two-finger swipe gesture. GTK+ provides and icon and subtitle.
+ *   The shortcut is a two-finger swipe gesture. GTK+ provides an icon and subtitle.
  * @GTK_SHORTCUT_GESTURE:
  *   The shortcut is a gesture. The #GtkShortcutsShortcut:icon property will be
  *   used.
  * @GTK_SHORTCUT_GESTURE_SWIPE_LEFT:
- *   The shortcut is a swipe gesture. GTK+ provides and icon and subtitle. Since 3.90
+ *   The shortcut is a swipe gesture. GTK+ provides an icon and subtitle. Since 3.90
  * @GTK_SHORTCUT_GESTURE_SWIPE_RIGHT:
- *   The shortcut is a swipe gesture. GTK+ provides and icon and subtitle. Since 3.90
+ *   The shortcut is a swipe gesture. GTK+ provides an icon and subtitle. Since 3.90
  *
  * GtkShortcutType specifies the kind of shortcut that is being described.
  * More values may be added to this enumeration over time.
