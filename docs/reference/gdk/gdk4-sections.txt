@@ -1264,7 +1264,6 @@ gdk_wayland_window_get_type
 <TITLE>Application launching</TITLE>
 <FILE>gdkapplaunchcontext</FILE>
 GdkAppLaunchContext
-gdk_app_launch_context_set_display
 gdk_app_launch_context_set_screen
 gdk_app_launch_context_set_desktop
 gdk_app_launch_context_set_timestamp

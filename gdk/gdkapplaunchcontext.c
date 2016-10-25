@@ -171,28 +171,6 @@ gdk_app_launch_context_get_display (GAppLaunchContext *context,
 }
 
 /**
- * gdk_app_launch_context_set_display:
- * @context: a #GdkAppLaunchContext
- * @display: a #GdkDisplay
- *
- * Sets the display on which applications will be launched when
- * using this context. See also gdk_app_launch_context_set_screen().
- *
- * Since: 2.14
- *
- * Deprecated: 3.0: Use gdk_display_get_app_launch_context() instead
- */
-void
-gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
-                                    GdkDisplay          *display)
-{
-  g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
-  g_return_if_fail (display == NULL || GDK_IS_DISPLAY (display));
-
-  g_warn_if_fail (display == NULL || display == context->display);
-}
-
-/**
  * gdk_app_launch_context_set_screen:
  * @context: a #GdkAppLaunchContext
  * @screen: a #GdkScreen
