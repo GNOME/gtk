@@ -85,24 +85,6 @@ void gdk_display_set_double_click_distance (GdkDisplay   *display,
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_get_default (void);
 
-#ifndef GDK_MULTIDEVICE_SAFE
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_get_position)
-void             gdk_display_get_pointer           (GdkDisplay             *display,
-                                                    GdkScreen             **screen,
-                                                    gint                   *x,
-                                                    gint                   *y,
-                                                    GdkModifierType        *mask);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_get_window_at_position)
-GdkWindow *      gdk_display_get_window_at_pointer (GdkDisplay             *display,
-                                                    gint                   *win_x,
-                                                    gint                   *win_y);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_warp)
-void             gdk_display_warp_pointer          (GdkDisplay             *display,
-                                                    GdkScreen              *screen,
-                                                    gint                   x,
-                                                    gint                   y);
-#endif /* GDK_MULTIDEVICE_SAFE */
-
 GDK_DEPRECATED_IN_3_16
 GdkDisplay *gdk_display_open_default_libgtk_only (void);
 
