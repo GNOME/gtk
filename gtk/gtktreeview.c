@@ -4524,6 +4524,33 @@ gtk_tree_view_update_rubber_band_selection (GtkTreeView *tree_view)
 }
 
 static void
+gtk_tree_view_invalidate_bin_region (GtkTreeView    *tree_view,
+                                     cairo_region_t *region)
+{
+  cairo_region_translate (region,
+                          - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
+                          gtk_tree_view_get_effective_header_height (tree_view));
+
+  cairo_region_intersect_rectangle (region,
+                                    &(GdkRectangle) { 0, 0,
+                                                      gdk_window_get_width (tree_view->priv->bin_window),
+                                                      gdk_window_get_height (tree_view->priv->bin_window)});
+
+  gtk_widget_queue_draw_region (GTK_WIDGET (tree_view), region);
+
+  cairo_region_destroy (region);
+}
+
+static void
+gtk_tree_view_invalidate_bin_area (GtkTreeView        *tree_view,
+                                   const GdkRectangle *rect)
+{
+  cairo_region_t *region = cairo_region_create_rectangle (rect);
+
+  gtk_tree_view_invalidate_bin_region (tree_view, region);
+}
+
+static void
 gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
 {
   gdouble start_x, start_y, offset_x, offset_y, x, y;
@@ -4559,9 +4586,7 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
   invalid_region = cairo_region_create_rectangle (&old_area);
   cairo_region_union_rectangle (invalid_region, &new_area);
 
-  gdk_window_invalidate_region (tree_view->priv->bin_window, invalid_region, TRUE);
-
-  cairo_region_destroy (invalid_region);
+  gtk_tree_view_invalidate_bin_region (tree_view, invalid_region);
 
   tree_view->priv->rubber_band_x = x;
   tree_view->priv->rubber_band_y = y;
@@ -4725,7 +4750,7 @@ invalidate_empty_focus (GtkTreeView *tree_view)
   area.y = 0;
   area.width = gdk_window_get_width (tree_view->priv->bin_window);
   area.height = gdk_window_get_height (tree_view->priv->bin_window);
-  gdk_window_invalidate_rect (tree_view->priv->bin_window, &area, FALSE);
+  gtk_tree_view_invalidate_bin_area (tree_view, &area);
 }
 
 /* Draws background and a focus rectangle near the edge of the bin_window;
@@ -6098,8 +6123,7 @@ gtk_tree_view_node_queue_redraw (GtkTreeView *tree_view,
   rect.width = gtk_widget_get_allocated_width (GTK_WIDGET (tree_view));
   rect.height = GTK_RBNODE_GET_HEIGHT (node);
 
-  gdk_window_invalidate_rect (tree_view->priv->bin_window,
-			      &rect, TRUE);
+  gtk_tree_view_invalidate_bin_area (tree_view, &rect);
 }
 
 static gboolean
@@ -9946,7 +9970,7 @@ gtk_tree_view_queue_draw_arrow (GtkTreeView        *tree_view,
   rect.y = gtk_tree_view_get_row_y_offset (tree_view, tree, node);
   rect.height = gtk_tree_view_get_row_height (tree_view, node);
 
-  gdk_window_invalidate_rect (tree_view->priv->bin_window, &rect, TRUE);
+  gtk_tree_view_invalidate_bin_area (tree_view, &rect);
 }
 
 void
@@ -9974,11 +9998,11 @@ _gtk_tree_view_queue_draw_node (GtkTreeView        *tree_view,
 
       gdk_rectangle_intersect (clip_rect, &rect, &new_rect);
 
-      gdk_window_invalidate_rect (tree_view->priv->bin_window, &new_rect, TRUE);
+      gtk_tree_view_invalidate_bin_area (tree_view, &new_rect);
     }
   else
     {
-      gdk_window_invalidate_rect (tree_view->priv->bin_window, &rect, TRUE);
+      gtk_tree_view_invalidate_bin_area (tree_view, &rect);
     }
 }
 
