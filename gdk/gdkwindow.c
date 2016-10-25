@@ -1058,19 +1058,6 @@ get_native_device_event_mask (GdkWindow *private,
 }
 
 static GdkEventMask
-get_native_grab_event_mask (GdkEventMask grab_mask)
-{
-  /* Similar to the above but for pointer events only */
-  return
-    GDK_POINTER_MOTION_MASK |
-    GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-    GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-    GDK_SCROLL_MASK |
-    (grab_mask &
-     ~GDK_POINTER_MOTION_HINT_MASK);
-}
-
-static GdkEventMask
 get_native_event_mask (GdkWindow *private)
 {
   return get_native_device_event_mask (private, NULL);
