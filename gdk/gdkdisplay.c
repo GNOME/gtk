@@ -1520,28 +1520,6 @@ gdk_display_get_name (GdkDisplay *display)
 }
 
 /**
- * gdk_display_get_screen:
- * @display: a #GdkDisplay
- * @screen_num: the screen number
- *
- * Returns a screen object for one of the screens of the display.
- *
- * Returns: (transfer none): the #GdkScreen object
- *
- * Since: 2.2
- * Deprecated: 3.20: There is only one screen; use gdk_display_get_default_screen() to get it.
- */
-GdkScreen *
-gdk_display_get_screen (GdkDisplay *display,
-			gint        screen_num)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (screen_num == 0, NULL);
-
-  return gdk_display_get_default_screen (display);
-}
-
-/**
  * gdk_display_get_default_screen:
  * @display: a #GdkDisplay
  *

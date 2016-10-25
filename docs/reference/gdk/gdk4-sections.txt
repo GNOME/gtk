@@ -100,7 +100,6 @@ GdkDisplay
 gdk_display_open
 gdk_display_get_default
 gdk_display_get_name
-gdk_display_get_screen
 gdk_display_get_default_screen
 gdk_display_get_device_manager
 gdk_display_pointer_ungrab
