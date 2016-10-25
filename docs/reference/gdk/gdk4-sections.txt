@@ -115,7 +115,6 @@ gdk_display_has_pending
 gdk_display_set_double_click_time
 gdk_display_set_double_click_distance
 gdk_display_get_pointer
-gdk_display_list_devices
 gdk_display_get_window_at_pointer
 gdk_display_warp_pointer
 gdk_display_supports_cursor_color

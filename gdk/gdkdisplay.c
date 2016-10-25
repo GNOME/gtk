@@ -1686,44 +1686,6 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
   return GDK_DISPLAY_GET_CLASS (display)->supports_input_shapes (display);
 }
 
-/**
- * gdk_display_list_devices:
- * @display: a #GdkDisplay
- *
- * Returns the list of available input devices attached to @display.
- * The list is statically allocated and should not be freed.
- *
- * Returns: (transfer none) (element-type GdkDevice):
- *     a list of #GdkDevice
- *
- * Since: 2.2
- *
- * Deprecated: 3.0: Use gdk_device_manager_list_devices() instead.
- **/
-GList *
-gdk_display_list_devices (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  if (!display->input_devices)
-    {
-      GdkSeat *seat;
-
-      seat = gdk_display_get_default_seat (display);
-
-      /* For backwards compatibility we only include pointing
-       * devices (the core pointer and the slaves).
-       * We store the list since this deprecated function does
-       * not transfer the list ownership.
-       */
-      display->input_devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
-      display->input_devices = g_list_prepend (display->input_devices, gdk_seat_get_pointer (seat));
-      g_list_foreach (display->input_devices, (GFunc) g_object_ref, NULL);
-    }
-
-  return display->input_devices;
-}
-
 static GdkAppLaunchContext *
 gdk_display_real_get_app_launch_context (GdkDisplay *display)
 {

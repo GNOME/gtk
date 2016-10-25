@@ -65,9 +65,6 @@ void        gdk_display_close                  (GdkDisplay  *display);
 GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_is_closed          (GdkDisplay  *display);
 
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_manager_list_devices)
-GList *     gdk_display_list_devices       (GdkDisplay  *display);
-
 GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_display_get_event  (GdkDisplay     *display);
 GDK_AVAILABLE_IN_ALL
