@@ -53,15 +53,6 @@ const gchar * gdk_display_get_name         (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
 
-#ifndef GDK_MULTIDEVICE_SAFE
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_ungrab)
-void        gdk_display_pointer_ungrab     (GdkDisplay  *display,
-                                            guint32      time_);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_device_ungrab)
-void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
-                                            guint32      time_);
-#endif /* GDK_MULTIDEVICE_SAFE */
-
 GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_device_is_grabbed  (GdkDisplay  *display,
                                             GdkDevice   *device);
