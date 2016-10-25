@@ -90,12 +90,5 @@ GDK_PIXBUF_DISABLE_DEPRECATED and G_DISABLE_DEPRECATED for GDK, GdkPixbuf and
 GLib.
 </para>
 
-<para>
-Similarly, if you want to make sure that your program doesn't use any
-functions which may be problematic in a multidevice setting, you can
-define the preprocessor symbol GDK_MULTIDEVICE_SAFE by using the command
-line option <literal>-DGTK_MULTIDEVICE_SAFE=1</literal>.
-</para>
-
 </refsect1>
 </refentry>
