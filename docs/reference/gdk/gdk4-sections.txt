@@ -699,6 +699,10 @@ gdk_device_warp
 gdk_device_get_seat
 
 <SUBSECTION>
+gdk_device_grab
+gdk_device_ungrab
+
+<SUBSECTION>
 gdk_device_get_state
 gdk_device_get_position
 gdk_device_get_position_double

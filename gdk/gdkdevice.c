@@ -544,7 +544,7 @@ gdk_device_get_property (GObject    *object,
  * Gets the current state of a pointer device relative to @window. As a slave
  * device’s coordinates are those of its master pointer, this
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them. See gdk_seat_grab().
+ * unless there is an ongoing grab on them. See gdk_device_grab().
  */
 void
 gdk_device_get_state (GdkDevice       *device,
@@ -573,7 +573,7 @@ gdk_device_get_state (GdkDevice       *device,
  * Gets the current location of @device in double precision. As a slave device's
  * coordinates are those of its master pointer, this function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them. See gdk_seat_grab().
+ * unless there is an ongoing grab on them. See gdk_device_grab().
  *
  * Since: 3.10
  **/
@@ -623,7 +623,7 @@ gdk_device_get_position_double (GdkDevice        *device,
  * Gets the current location of @device. As a slave device
  * coordinates are those of its master pointer, This function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_seat_grab().
+ * unless there is an ongoing grab on them, see gdk_device_grab().
  *
  * Since: 3.0
  **/
@@ -657,7 +657,7 @@ gdk_device_get_position (GdkDevice        *device,
  *
  * As a slave device coordinates are those of its master pointer, This
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_seat_grab().
+ * unless there is an ongoing grab on them, see gdk_device_grab().
  *
  * Returns: (nullable) (transfer none): the #GdkWindow under the
  *   device position, or %NULL.
@@ -707,7 +707,7 @@ gdk_device_get_window_at_position_double (GdkDevice  *device,
  *
  * As a slave device coordinates are those of its master pointer, This
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_seat_grab().
+ * unless there is an ongoing grab on them, see gdk_device_grab().
  *
  * Returns: (nullable) (transfer none): the #GdkWindow under the
  * device position, or %NULL.
@@ -1386,6 +1386,58 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
        GDK_BUTTON3_MOTION_MASK));
 }
 
+/**
+ * gdk_device_grab:
+ * @device: a #GdkDevice. To get the device you can use gtk_get_current_event_device()
+ *   or gdk_event_get_device() if the grab is in reaction to an event. Also, you can use
+ *   gdk_device_manager_get_client_pointer() but only in code that isn’t triggered by a
+ *   #GdkEvent and there aren’t other means to get a meaningful #GdkDevice to operate on.
+ * @window: the #GdkWindow which will own the grab (the grab window)
+ * @grab_ownership: specifies the grab ownership.
+ * @owner_events: if %FALSE then all device events are reported with respect to
+ *                @window and are only reported if selected by @event_mask. If
+ *                %TRUE then pointer events for this application are reported
+ *                as normal, but pointer events outside this application are
+ *                reported with respect to @window and only if selected by
+ *                @event_mask. In either mode, unreported events are discarded.
+ * @event_mask: specifies the event mask, which is used in accordance with
+ *              @owner_events.
+ * @cursor: (allow-none): the cursor to display while the grab is active if the device is
+ *          a pointer. If this is %NULL then the normal cursors are used for
+ *          @window and its descendants, and the cursor for @window is used
+ *          elsewhere.
+ * @time_: the timestamp of the event which led to this pointer grab. This
+ *         usually comes from the #GdkEvent struct, though %GDK_CURRENT_TIME
+ *         can be used if the time isn’t known.
+ *
+ * Grabs the device so that all events coming from this device are passed to
+ * this application until the device is ungrabbed with gdk_device_ungrab(),
+ * or the window becomes unviewable. This overrides any previous grab on the device
+ * by this client.
+ *
+ * Note that @device and @window need to be on the same display.
+ *
+ * Device grabs are used for operations which need complete control over the
+ * given device events (either pointer or keyboard). For example in GTK+ this
+ * is used for Drag and Drop operations, popup menus and such.
+ *
+ * Note that if the event mask of an X window has selected both button press
+ * and button release events, then a button press event will cause an automatic
+ * pointer grab until the button is released. X does this automatically since
+ * most applications expect to receive button press and release events in pairs.
+ * It is equivalent to a pointer grab on the window with @owner_events set to
+ * %TRUE.
+ *
+ * If you set up anything at the time you take the grab that needs to be
+ * cleaned up when the grab ends, you should handle the #GdkEventGrabBroken
+ * events that are emitted when the grab ends unvoluntarily.
+ *
+ * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
+ *
+ * Since: 3.0
+ *
+ * Deprecated: 3.20. Use gdk_seat_grab() instead.
+ **/
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
                  GdkWindow        *window,
@@ -1438,6 +1490,17 @@ gdk_device_grab (GdkDevice        *device,
   return res;
 }
 
+/**
+ * gdk_device_ungrab:
+ * @device: a #GdkDevice
+ * @time_: a timestap (e.g. %GDK_CURRENT_TIME).
+ *
+ * Release any grab on @device.
+ *
+ * Since: 3.0
+ *
+ * Deprecated: 3.20. Use gdk_seat_ungrab() instead.
+ */
 void
 gdk_device_ungrab (GdkDevice  *device,
                    guint32     time_)

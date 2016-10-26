@@ -193,18 +193,6 @@ void           gdk_device_update_tool (GdkDevice     *device,
 
 GdkInputMode gdk_device_get_input_mode (GdkDevice *device);
 
-GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
-                                      GdkWindow        *window,
-                                      GdkGrabOwnership  grab_ownership,
-                                      gboolean          owner_events,
-                                      GdkEventMask      event_mask,
-                                      GdkCursor        *cursor,
-                                      guint32           time_);
-
-void          gdk_device_ungrab      (GdkDevice        *device,
-                                      guint32           time_);
-
-
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_PRIVATE_H__ */

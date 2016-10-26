@@ -18,7 +18,6 @@
  */
 
 #include "gdkseatdefaultprivate.h"
-#include "gdkdeviceprivate.h"
 #include "gdkdevicetoolprivate.h"
 
 typedef struct _GdkSeatDefaultPrivate GdkSeatDefaultPrivate;
