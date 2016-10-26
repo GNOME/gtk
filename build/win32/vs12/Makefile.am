@@ -9,6 +9,8 @@ GENERATED_ITEMS = \
 	broadwayd.vcxproj.filters		\
 	gdk-4.vcxproj				\
 	gdk-4.vcxproj.filters			\
+	gsk-4.vcxproj				\
+	gsk-4.vcxproj.filters			\
 	gtk-4.vcxproj				\
 	gtk-4.vcxproj.filters			\
 	gtk4-demo.vcxproj			\
@@ -24,6 +26,7 @@ MSVC12_HEADERS_LISTS =	\
 	gdk4-win32.vs12.headers		\
 	gdk4-broadway.vs12.headers	\
 	gdk-4.vs12.headers		\
+	gsk-4.vs12.headers		\
 	gtk-4.vs12.headers
 
 EXTRA_DIST += \
@@ -39,6 +42,8 @@ EXTRA_DIST += \
 	broadwayd.vcxproj.filtersin		\
 	gdk-4.vcxprojin				\
 	gdk-4.vcxproj.filtersin			\
+	gsk-4.vcxprojin				\
+	gsk-4.vcxproj.filtersin			\
 	gtk-4.vcxprojin				\
 	gtk-4.vcxproj.filtersin			\
 	gtk-builder-tool.vcxproj		\

@@ -221,6 +221,10 @@
       <Project>{5ae8f5ce-9103-4951-aede-ea2f3b573be8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="gsk-4.vcxproj">
+      <Project>{5ae8f5ce-9103-4951-aede-eb2f3b573be8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="gtk4-demo.vcxproj">
       <Project>{bdae6de2-6bcc-4107-94f0-da12214a02de}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

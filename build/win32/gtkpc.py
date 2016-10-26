@@ -32,6 +32,8 @@ def main(argv):
     gdk_pixbuf_min_ver = '2.30.0'
     gdk_win32_sys_libs = '-lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid -lwinmm -ldwmapi'
     glib_min_ver = '2.45.8'
+    epoxy_min_ver = '1.0'
+    graphene_min_ver = '1.2'
 
     cairo_backends = 'cairo-win32'
     gdk_backends = 'win32'
@@ -60,6 +62,13 @@ def main(argv):
                             '@GDK_EXTRA_CFLAGS@': '',
                             'gdk-4': 'gdk-4.0'}
 
+    gsk_pc_replace_items = {'@GSK_PACKAGES@': pkg_required_packages, + ' ' + \
+                                              'graphene-1.0 >= ' + graphene_min_ver
+                            '@GSK_PRIVATE_PACKAGES@': 'epoxy >= ' + epoxy_min_ver,
+                            '@GSK_EXTRA_LIBS@': '',
+                            '@GSK_EXTRA_CFLAGS@': '',
+                            'gsk-4': 'gsk-4.0'}
+
     gtk_pc_replace_items = {'@host@': gdk_args.host,
                             '@GTK_BINARY_VERSION@': '4.0.0',
                             '@GTK_PACKAGES@': 'atk >= ' + atk_min_ver + ' ' + \
@@ -79,6 +88,11 @@ def main(argv):
     replace_multi(base_pc.top_srcdir + '/gdk-4.0.pc.in',
                   base_pc.srcdir + '/gdk-4.0.pc',
                   gdk_pc_replace_items)
+
+    # Generate gsk-4.0.pc
+    replace_multi(base_pc.top_srcdir + '/gsk-4.0.pc.in',
+                  base_pc.srcdir + '/gsk-4.0.pc',
+                  gsk_pc_replace_items)
 
     # Generate gtk+-4.0.pc
     replace_multi(base_pc.top_srcdir + '/gtk+-4.0.pc.in',

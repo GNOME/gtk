@@ -9,6 +9,8 @@ EXTRA_DIST +=	\
 	gdk4-win32.vcxproj.filters	\
 	gdk-4.vcxproj	\
 	gdk-4.vcxproj.filters	\
+	gsk-4.vcxproj	\
+	gsk-4.vcxproj.filters	\
 	gtk-4.vcxproj	\
 	gtk-4.vcxproj.filters	\
 	gtk-builder-tool.vcxproj		\

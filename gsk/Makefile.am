@@ -1,9 +1,12 @@
 include $(top_srcdir)/Makefile.decl
 
-AM_CPPFLAGS = \
+GSK_CFLAG_DEFINES = \
 	-DG_LOG_DOMAIN=\"Gsk\"			\
 	-DG_LOG_USE_STRUCTURED=1		\
-	-DGSK_COMPILATION			\
+	-DGSK_COMPILATION
+
+AM_CPPFLAGS = \
+	$(GSK_CFLAG_DEFINES)			\
 	-I$(top_srcdir)				\
 	-I$(top_srcdir)/gdk			\
 	-I$(top_builddir)			\
@@ -155,5 +158,60 @@ typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
 endif
+
+# ------------------- MSVC Build Items ----------------
+MSVCPROJS = gsk-4
+
+gsk_4_FILES = $(all_sources) $(gsk_built_source_c)
+gsk_4_EXCLUDES = dummy
+gsk_4_HEADERS_DIR = $(gskincludedir)
+gsk_4_HEADERS_INST = $(gskinclude_HEADERS)
+gsk_4_HEADERS_EXCLUDES = dummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+$(top_builddir)/build/win32/gsk.enum.headers: Makefile $(gsk_public_source_h)
+	-$(RM) $(top_builddir)/build/win32/gsk.enum.headers
+	for F in $(gsk_public_source_h); do \
+		case $$F in \
+		*.h) \
+			echo $$F' ^'>>$(top_builddir)/build/win32/gsk.enum.headers \
+			;; \
+		esac \
+	done
+
+if HAVE_INTROSPECTION
+# Introspection Items for MSVC
+MSVC_INTROSPECT_GIRS = Gsk-4.0.gir
+
+BASE_MSVC_GIR_CFLAGS =			\
+	$(GSK_CFLAG_DEFINES)		\
+	-I../.. -I../../gdk -I.../../gsk
+
+INTROSPECTION_INTERMEDIATE_ITEMS = \
+	$(top_builddir)/build/win32/Gsk-4.0.gir.msvc.introspect	\
+	$(top_builddir)/build/win32/Gsk_4_0_gir_list		\
+	$(top_builddir)/build/win32/gsk.enum.headers
+
+Gsk_4_0_gir_MSVC_FILES = $(introspection_files)
+Gsk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gsk_4_0_gir_EXPORT_PACKAGES)
+Gsk_4_0_gir_MSVC_INCLUDE_GIRS = $(Gsk_4_0_gir_INCLUDES)
+Gsk_4_0_gir_MSVC_LIBS = gdk-4.0
+Gsk_4_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
+Gsk_4_0_gir_MSVC_SCANNERFLAGS =			\
+	--add-include-path=.			\
+	--include-uninstalled=./Gdk-4.0.gir
+
+include $(top_srcdir)/build/Makefile.msvc-introspection
+
+else
+INTROSPECTION_INTERMEDIATE_ITEMS =
+endif
+
+dist-hook: \
+	$(top_builddir)/build/win32/vs12/gsk-4.vcxproj	\
+	$(top_builddir)/build/win32/vs12/gsk-4.vs12.headers	\
+	$(top_builddir)/build/win32/gsk.enum.headers	\
+	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 -include $(top_srcdir)/git.mk
