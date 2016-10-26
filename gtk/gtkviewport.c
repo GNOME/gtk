@@ -30,7 +30,6 @@
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkpixelcacheprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkrenderbackgroundprivate.h"
@@ -77,8 +76,6 @@ struct _GtkViewportPrivate
 
   GtkCssGadget *gadget;
 
-  GtkPixelCache *pixel_cache;
-
   /* GtkScrollablePolicy needs to be checked when
    * driving the scrollable adjustment values */
   guint hscroll_policy : 1;
@@ -107,12 +104,8 @@ static void gtk_viewport_finalize                 (GObject         *object);
 static void gtk_viewport_destroy                  (GtkWidget        *widget);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
-static void gtk_viewport_map                      (GtkWidget        *widget);
-static void gtk_viewport_unmap                    (GtkWidget        *widget);
 static gint gtk_viewport_draw                     (GtkWidget        *widget,
 						   cairo_t          *cr);
-static void gtk_viewport_remove                   (GtkContainer     *container,
-						   GtkWidget        *widget);
 static void gtk_viewport_add                      (GtkContainer     *container,
 						   GtkWidget        *widget);
 static void gtk_viewport_size_allocate            (GtkWidget        *widget,
@@ -122,8 +115,6 @@ static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 static void viewport_set_adjustment               (GtkViewport      *viewport,
                                                    GtkOrientation    orientation,
                                                    GtkAdjustment    *adjustment);
-static void gtk_viewport_queue_draw_region        (GtkWidget        *widget,
-						   const cairo_region_t *region);
 
 G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkViewport)
@@ -304,14 +295,6 @@ gtk_viewport_allocate (GtkCssGadget        *gadget,
   g_object_thaw_notify (G_OBJECT (vadjustment));
 }
 
-static void
-draw_bin (cairo_t *cr,
-	  gpointer user_data)
-{
-  GtkWidget *widget = GTK_WIDGET (user_data);
-  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
-}
-
 static gboolean
 gtk_viewport_render (GtkCssGadget *gadget,
                      cairo_t      *cr,
@@ -327,20 +310,7 @@ gtk_viewport_render (GtkCssGadget *gadget,
 
   if (gtk_cairo_should_draw_window (cr, priv->bin_window))
     {
-      cairo_rectangle_int_t view_rect;
-      cairo_rectangle_int_t canvas_rect;
-
-      gdk_window_get_position (priv->view_window, &view_rect.x, &view_rect.y);
-      view_rect.width = gdk_window_get_width (priv->view_window);
-      view_rect.height = gdk_window_get_height (priv->view_window);
-
-      gdk_window_get_position (priv->bin_window, &canvas_rect.x, &canvas_rect.y);
-      canvas_rect.width = gdk_window_get_width (priv->bin_window);
-      canvas_rect.height = gdk_window_get_height (priv->bin_window);
-
-      _gtk_pixel_cache_draw (priv->pixel_cache, cr, priv->bin_window,
-			     &view_rect, &canvas_rect,
-			     draw_bin, widget);
+      GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
     }
 
   return FALSE;
@@ -380,16 +350,12 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->destroy = gtk_viewport_destroy;
   widget_class->realize = gtk_viewport_realize;
   widget_class->unrealize = gtk_viewport_unrealize;
-  widget_class->map = gtk_viewport_map;
-  widget_class->unmap = gtk_viewport_unmap;
   widget_class->draw = gtk_viewport_draw;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->measure = gtk_viewport_measure_;
-  widget_class->queue_draw_region = gtk_viewport_queue_draw_region;
   
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 
-  container_class->remove = gtk_viewport_remove;
   container_class->add = gtk_viewport_add;
 
   /* GtkScrollable implementation */
@@ -505,8 +471,6 @@ gtk_viewport_init (GtkViewport *viewport)
   priv->hadjustment = NULL;
   priv->vadjustment = NULL;
 
-  priv->pixel_cache = _gtk_pixel_cache_new ();
-
   widget_node = gtk_widget_get_css_node (widget);
   priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
                                                      widget,
@@ -568,14 +532,11 @@ static void
 gtk_viewport_destroy (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = viewport->priv;
 
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->destroy (widget);
-
-  g_clear_pointer (&priv->pixel_cache, _gtk_pixel_cache_free);
 }
 
 static void
@@ -707,40 +668,6 @@ gtk_viewport_get_view_window (GtkViewport *viewport)
 }
 
 static void
-gtk_viewport_bin_window_invalidate_handler (GdkWindow *window,
-					    cairo_region_t *region)
-{
-  gpointer widget;
-  GtkViewport *viewport;
-  GtkViewportPrivate *priv;
-
-  gdk_window_get_user_data (window, &widget);
-  viewport = GTK_VIEWPORT (widget);
-  priv = viewport->priv;
-
-  _gtk_pixel_cache_invalidate (priv->pixel_cache, region);
-}
-
-static void
-gtk_viewport_queue_draw_region (GtkWidget *widget,
-				const cairo_region_t *region)
-{
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = viewport->priv;
-
-  /* There is no way we can know if a region targets the
-     not-currently-visible but in pixel cache region, so we
-     always just invalidate the whole thing whenever the
-     tree view gets a queue draw. This doesn't normally happen
-     in normal scrolling cases anyway. */
-  _gtk_pixel_cache_invalidate (priv->pixel_cache, NULL);
-
-  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->queue_draw_region (widget,
-								   region);
-}
-
-
-static void
 gtk_viewport_realize (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
@@ -782,8 +709,6 @@ gtk_viewport_realize (GtkWidget *widget)
                                              gtk_adjustment_get_upper (hadjustment),
                                              gtk_adjustment_get_upper (vadjustment)});
   gtk_widget_register_window (widget, priv->bin_window);
-  gdk_window_set_invalidate_handler (priv->bin_window,
-				     gtk_viewport_bin_window_invalidate_handler);
 
   child = gtk_bin_get_child (bin);
   if (child)
@@ -810,28 +735,6 @@ gtk_viewport_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize (widget);
 }
 
-static void
-gtk_viewport_map (GtkWidget *widget)
-{
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = viewport->priv;
-
-  _gtk_pixel_cache_map (priv->pixel_cache);
-
-  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->map (widget);
-}
-
-static void
-gtk_viewport_unmap (GtkWidget *widget)
-{
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = viewport->priv;
-
-  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unmap (widget);
-
-  _gtk_pixel_cache_unmap (priv->pixel_cache);
-}
-
 static gint
 gtk_viewport_draw (GtkWidget *widget,
                    cairo_t   *cr)
@@ -847,35 +750,6 @@ gtk_viewport_draw (GtkWidget *widget,
 }
 
 static void
-gtk_viewport_update_pixelcache_opacity (GtkWidget   *child,
-                                        GtkViewport *viewport)
-{
-  GtkViewportPrivate *priv = viewport->priv;
-
-  gtk_pixel_cache_set_is_opaque (priv->pixel_cache,
-                                 gtk_css_style_render_background_is_opaque (
-                                   gtk_style_context_lookup_style (
-                                     gtk_widget_get_style_context (child))));
-}
-
-static void
-gtk_viewport_remove (GtkContainer *container,
-		     GtkWidget    *child)
-{
-  GtkViewport *viewport = GTK_VIEWPORT (container);
-  GtkViewportPrivate *priv = viewport->priv;
-
-  if (g_signal_handlers_disconnect_by_func (child, gtk_viewport_update_pixelcache_opacity, viewport) != 1)
-    {
-      g_assert_not_reached ();
-    }
-
-  GTK_CONTAINER_CLASS (gtk_viewport_parent_class)->remove (container, child);
-
-  gtk_pixel_cache_set_is_opaque (priv->pixel_cache, FALSE);
-}
-
-static void
 gtk_viewport_add (GtkContainer *container,
 		  GtkWidget    *child)
 {
@@ -888,9 +762,6 @@ gtk_viewport_add (GtkContainer *container,
   gtk_widget_set_parent_window (child, priv->bin_window);
   
   GTK_CONTAINER_CLASS (gtk_viewport_parent_class)->add (container, child);
-
-  g_signal_connect (child, "style-updated", G_CALLBACK (gtk_viewport_update_pixelcache_opacity), viewport);
-  gtk_viewport_update_pixelcache_opacity (child, viewport);
 }
 
 static void
