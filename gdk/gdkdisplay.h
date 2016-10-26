@@ -85,9 +85,6 @@ void gdk_display_set_double_click_distance (GdkDisplay   *display,
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_get_default (void);
 
-GDK_DEPRECATED_IN_3_16
-GdkDisplay *gdk_display_open_default_libgtk_only (void);
-
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_cursor_alpha     (GdkDisplay    *display);
 GDK_AVAILABLE_IN_ALL

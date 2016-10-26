@@ -420,27 +420,6 @@ gdk_display_open_default (void)
 }
 
 /**
- * gdk_display_open_default_libgtk_only:
- *
- * Opens the default display specified by command line arguments or
- * environment variables, sets it as the default display, and returns
- * it. gdk_parse_args() must have been called first. If the default
- * display has previously been set, simply returns that. An internal
- * function that should not be used by applications.
- *
- * Returns: (nullable) (transfer none): the default display, if it
- *   could be opened, otherwise %NULL.
- *
- * Deprecated: 3.16: This symbol was never meant to be used outside
- *   of GTK+
- */
-GdkDisplay *
-gdk_display_open_default_libgtk_only (void)
-{
-  return gdk_display_open_default ();
-}
-
-/**
  * gdk_init_check:
  * @argc: (inout): the number of command line arguments.
  * @argv: (array length=argc) (inout): the array of command line arguments.

@@ -146,7 +146,6 @@ GDK_IS_DISPLAY_CLASS
 GDK_DISPLAY_GET_CLASS
 
 <SUBSECTION Private>
-gdk_display_open_default_libgtk_only
 gdk_display_get_type
 GdkDisplayClass
 </SECTION>
