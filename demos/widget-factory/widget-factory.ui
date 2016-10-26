@@ -433,6 +433,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
       <object class="GtkBox" id="box1">
         <property name="visible">1</property>
         <property name="orientation">vertical</property>
+        <property name="margin">10</property>
         <child>
           <object class="GtkStack" id="toplevel_stack">
             <property name="visible">1</property>
@@ -1780,6 +1781,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           <object class="GtkBox" id="page2box">
                             <property name="visible">1</property>
                             <property name="spacing">20</property>
+                            <property name="margin">10</property>
                             <child>
                               <object class="GtkLabel" id="page2note">
                                 <property name="visible">1</property>
