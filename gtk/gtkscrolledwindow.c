@@ -4562,7 +4562,7 @@ gtk_scrolled_window_get_min_content_width (GtkScrolledWindow *scrolled_window)
  * size of the content.
  *
  * It is a programming error to set the minimum content width to a
- * value smaller than #GtkScrolledWindow:max-content-width.
+ * value greater than #GtkScrolledWindow:max-content-width.
  *
  * Since: 3.0
  */
@@ -4616,7 +4616,7 @@ gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window)
  * size of the content.
  *
  * It is a programming error to set the minimum content height to a
- * value smaller than #GtkScrolledWindow:max-content-height.
+ * value greater than #GtkScrolledWindow:max-content-height.
  *
  * Since: 3.0
  */
@@ -4747,7 +4747,7 @@ gtk_scrolled_window_get_max_content_width (GtkScrolledWindow *scrolled_window)
  * @height: the maximum content height
  *
  * Sets the maximum height that @scrolled_window should keep visible. The
- * @scrolled_window will grow up to this width before it starts scrolling
+ * @scrolled_window will grow up to this height before it starts scrolling
  * the content.
  *
  * It is a programming error to set the maximum content height to a value
