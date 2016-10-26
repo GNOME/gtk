@@ -5048,7 +5048,11 @@ gdk_window_hide (GdkWindow *window)
                                             _gdk_display_get_next_serial (display),
                                             window,
                                             TRUE))
-            gdk_device_ungrab (device, GDK_CURRENT_TIME);
+            {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+              gdk_device_ungrab (device, GDK_CURRENT_TIME);
+G_GNUC_END_IGNORE_DEPRECATIONS
+            }
         }
 
       window->state = GDK_WINDOW_STATE_WITHDRAWN;
