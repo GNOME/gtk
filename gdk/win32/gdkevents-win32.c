@@ -3124,7 +3124,7 @@ gdk_event_translate (MSG  *msg,
       if (windowpos->flags & SWP_HIDEWINDOW ||
 	  ((windowpos->flags & SWP_STATECHANGED) && IsIconic (msg->hwnd)))
       {
-        GdkDevice *device = gdk_device_manager_get_client_pointer (device_manager);
+        GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
         if ((pointer_grab != NULL && pointer_grab->window == window) ||
             (keyboard_grab != NULL && keyboard_grab->window == window))
@@ -3492,7 +3492,7 @@ gdk_event_translate (MSG  *msg,
       if ((pointer_grab != NULL && pointer_grab -> window == window) ||
           (keyboard_grab && keyboard_grab -> window == window))
       {
-        GdkDevice *device = gdk_device_manager_get_client_pointer (device_manager);
+        GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
         gdk_device_ungrab (device, msg -> time);
       }
 
