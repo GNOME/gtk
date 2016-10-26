@@ -48,6 +48,8 @@ struct _GskGLDriver
   Vao *bound_vao;
   Fbo *bound_fbo;
 
+  int max_texture_size;
+
   gboolean in_frame : 1;
 };
 
@@ -184,6 +186,8 @@ gsk_gl_driver_init (GskGLDriver *self)
 {
   self->textures = g_hash_table_new_full (NULL, NULL, NULL, texture_free);
   self->vaos = g_hash_table_new_full (NULL, NULL, NULL, vao_free);
+
+  self->max_texture_size = -1;
 }
 
 GskGLDriver *
@@ -203,6 +207,12 @@ gsk_gl_driver_begin_frame (GskGLDriver *driver)
   g_return_if_fail (!driver->in_frame);
 
   driver->in_frame = TRUE;
+
+  if (driver->max_texture_size < 0)
+    {
+      glGetIntegerv (GL_MAX_TEXTURE_SIZE, (GLint *) &driver->max_texture_size);
+      GSK_NOTE (OPENGL, g_print ("GL max texture size: %d\n", driver->max_texture_size));
+    }
 
   glGetIntegerv (GL_FRAMEBUFFER_BINDING, (GLint *) &(driver->default_fbo.fbo_id));
   driver->bound_fbo = &driver->default_fbo;
@@ -297,6 +307,20 @@ gsk_gl_driver_collect_vaos (GskGLDriver *driver)
   return old_size - g_hash_table_size (driver->vaos);
 }
 
+int
+gsk_gl_driver_get_max_texture_size (GskGLDriver *driver)
+{
+  if (driver->max_texture_size < 0)
+    {
+      if (gdk_gl_context_get_use_es (driver->gl_context))
+        return 2048;
+
+      return 1024;
+    }
+
+  return driver->max_texture_size;
+}
+
 static Texture *
 gsk_gl_driver_get_texture (GskGLDriver *driver,
                            int          texture_id)
@@ -362,6 +386,17 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
   Texture *t;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
+
+  if (width >= driver->max_texture_size ||
+      height >= driver->max_texture_size)
+    {
+      g_critical ("Texture %d x %d is bigger than supported texture limit of %d; clipping...",
+                  width, height,
+                  driver->max_texture_size);
+
+      width = MIN (width, driver->max_texture_size);
+      height = MIN (height, driver->max_texture_size);
+    }
 
   t = find_texture_by_size (driver->textures, width, height);
   if (t != NULL && !t->in_use)

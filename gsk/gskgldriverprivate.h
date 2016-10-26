@@ -18,6 +18,8 @@ typedef struct {
 
 GskGLDriver *   gsk_gl_driver_new                       (GdkGLContext    *context);
 
+int             gsk_gl_driver_get_max_texture_size      (GskGLDriver     *driver);
+
 void            gsk_gl_driver_begin_frame               (GskGLDriver     *driver);
 void            gsk_gl_driver_end_frame                 (GskGLDriver     *driver);
 
