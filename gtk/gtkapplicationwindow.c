@@ -552,7 +552,7 @@ gtk_application_window_measure (GtkWidget *widget,
           GtkBorder border = {0};
           int menubar_height = 0;
 
-          gtk_widget_get_preferred_height_for_width (priv->menubar, for_size, &menubar_height, NULL);
+          gtk_widget_measure (priv->menubar, orientation, for_size, &menubar_height, NULL, NULL, NULL);
 
           GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
                                                                            orientation,
@@ -561,7 +561,7 @@ gtk_application_window_measure (GtkWidget *widget,
                                                                            minimum_baseline, natural_baseline);
 
 
-          gtk_widget_get_preferred_width_for_height (window->priv->menubar, menubar_height, &menubar_min, &menubar_nat);
+          gtk_widget_measure (window->priv->menubar, orientation, menubar_height, &menubar_min, &menubar_nat, NULL, NULL);
 
           _gtk_window_get_shadow_width (GTK_WINDOW (widget), &border);
           menubar_min += border.left + border.right;
@@ -579,7 +579,7 @@ gtk_application_window_measure (GtkWidget *widget,
                                                                            minimum, natural,
                                                                            minimum_baseline, natural_baseline);
 
-          gtk_widget_get_preferred_height_for_width (priv->menubar, for_size, &menubar_min, &menubar_nat);
+          gtk_widget_measure (priv->menubar, orientation, for_size, &menubar_min, &menubar_nat, NULL, NULL);
           *minimum += menubar_min;
           *natural += menubar_nat;
         }
