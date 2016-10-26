@@ -1,5 +1,3 @@
-AUTOMAKE_OPTIONS = subdir-objects
-
 include $(top_srcdir)/Makefile.decl
 
 GTK_BASE_CFLAGS_DEFINES =				\
@@ -1575,7 +1573,7 @@ nodist_gir_DATA = $(INTROSPECTION_GIRS) $(EXTRA_GIRS)
 typelibsdir = $(libdir)/girepository-1.0
 nodist_typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib) $(EXTRA_GIRS:.gir=.typelib)
 
-CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+CLEANFILES += $(nodist_gir_DATA) $(nodist_typelibs_DATA)
 endif
 
 #
