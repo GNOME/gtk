@@ -549,6 +549,15 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
       g_free (mimetype);
     }
 
+  /* If there's no targets this is local DnD, ensure we create a target for it */
+  if (!context->targets)
+    {
+      gchar *local_dnd_mime;
+      local_dnd_mime = g_strdup_printf ("application/gtk+-local-dnd-%x", getpid());
+      wl_data_source_offer (context_wayland->data_source, local_dnd_mime);
+      g_free (local_dnd_mime);
+    }
+
   return context;
 }
 
