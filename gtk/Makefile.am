@@ -1479,8 +1479,8 @@ INTROSPECTION_INTERMEDIATE_ITEMS =
 endif
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gtk-4.vcproj	\
-	$(top_builddir)/build/win32/vs9/gtk-4.headers	\
+	$(top_builddir)/build/win32/vs12/gtk-4.vcxproj	\
+	$(top_builddir)/build/win32/vs12/gtk-4.vs12.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 # Install a RC file for the default GTK+ theme, and key themes

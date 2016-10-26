@@ -43,6 +43,6 @@ gtk4_icon_browser_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
-dist-hook: $(top_builddir)/build/win32/vs9/gtk4-icon-browser.vcproj
+dist-hook: $(top_builddir)/build/win32/vs12/gtk4-icon-browser.vcxproj
 
 -include $(top_srcdir)/git.mk

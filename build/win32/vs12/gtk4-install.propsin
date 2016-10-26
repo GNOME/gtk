@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gtk4-build-defines.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
+    <GtkDoInstallBin>
+mkdir $(CopyDir)\bin
+mkdir $(CopyDir)\lib\pkgconfig
+
+copy "$(BinDir)\$(GtkDllPrefix)gdk-4$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gdk-4$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\gdk-$(ApiVersion).lib" $(CopyDir)\lib
+
+if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_BIN
+if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_BIN
+copy "$(BinDir)\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gailutil-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gtk4-demo.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-demo.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-demo-application.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-demo-application.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-icon-browser.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-icon-browser.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-encode-symbolic-svg.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-encode-symbolic-svg.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-update-icon-cache.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-update-icon-cache.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-query-settings.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-query-settings.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-builder-tool.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-builder-tool.pdb" $(CopyDir)\bin
+goto DONE_BIN
+
+:DO_BROADWAY_BIN
+copy "$(BinDir)\broadwayd.exe" $(CopyDir)\bin
+copy "$(BinDir)\broadwayd.pdb" $(CopyDir)\bin
+
+if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_RELEASE
+if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_DEBUG
+:DO_BROADWAY_RELEASE
+copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Release\$(Platform)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Release\$(Platform)\bin\gtk4-demo.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-demo.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-demo-application.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-demo-application.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-icon-browser.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-icon-browser.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-query-settings.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-query-settings.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-builder-tool.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-builder-tool.pdb $(CopyDir)\bin
+
+goto DONE_BIN
+
+:DO_BROADWAY_DEBUG
+copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Debug\$(Platform)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Debug\$(Platform)\bin\gtk4-demo.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-demo.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-demo-application.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-demo-application.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-icon-browser.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-icon-browser.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-query-settings.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-query-settings.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-builder-tool.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-builder-tool.pdb $(CopyDir)\bin
+
+:DONE_BIN
+
+copy ..\gdk-4.0.pc $(CopyDir)\lib\pkgconfig
+copy "..\gtk+-4.0.pc" $(CopyDir)\lib\pkgconfig
+copy ..\gail-4.0.pc $(CopyDir)\lib\pkgconfig
+    </GtkDoInstallBin>
+    <GtkDoInstall>
+echo off
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\deprecated
+copy ..\..\..\gdk\win32\gdkwin32.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
+#include "gdk-4.vs12.headers"
+#include "gdk4-win32.vs12.headers"
+
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
+#include "gtk-4.vs12.headers"
+
+mkdir $(CopyDir)\share\icons\hicolor\16x16\apps
+copy ..\..\..\demos\gtk-demo\data\16x16\gtk4-demo.png $(CopyDir)\share\icons\hicolor\16x16\apps
+mkdir $(CopyDir)\share\icons\hicolor\22x22\apps
+copy ..\..\..\demos\gtk-demo\data\22x22\gtk4-demo.png $(CopyDir)\share\icons\hicolor\22x22\apps
+mkdir $(CopyDir)\share\icons\hicolor\24x24\apps
+copy ..\..\..\demos\gtk-demo\data\24x24\gtk4-demo.png $(CopyDir)\share\icons\hicolor\24x24\apps
+mkdir $(CopyDir)\share\icons\hicolor\32x32\apps
+copy ..\..\..\demos\gtk-demo\data\32x32\gtk4-demo.png $(CopyDir)\share\icons\hicolor\32x32\apps
+mkdir $(CopyDir)\share\icons\hicolor\48x48\apps
+copy ..\..\..\demos\gtk-demo\data\48x48\gtk4-demo.png $(CopyDir)\share\icons\hicolor\48x48\apps
+mkdir $(CopyDir)\share\icons\hicolor\256x256\apps
+copy ..\..\..\demos\gtk-demo\data\256x256\gtk4-demo.png $(CopyDir)\share\icons\hicolor\256x256\apps
+mkdir $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\..\gtk\org.gtk.Settings.ColorChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\..\gtk\org.gtk.Settings.Debug.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+    </GtkDoInstall>
+    <GtkDoInstallBroadwayHeaders>
+copy ..\..\..\gdk\broadway\gdkbroadway.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
+#include "gdk4-broadway.vs12.headers"
+    </GtkDoInstallBroadwayHeaders>
+    <GtkPostInstall>
+echo "Compiling gsettings XML Files..."
+$(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
+
+echo "Generating icon cache......"
+$(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
+    </GtkPostInstall>
+    <GenerateGtkPC>$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
+    <GenerateGtkPCX64>$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
+    <GtkPCFiles>..\gdk-4.0.pc;..\gtk+-4.0.pc;..\gail-4.0.pc</GtkPCFiles>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtk4installsprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="BinDir">
+      <Value>$(BinDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledDlls">
+      <Value>$(InstalledDlls)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledBins">
+      <Value>$(InstalledBins)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledBroadwayBins">
+      <Value>$(InstalledBroadwayBins)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDoInstallBin">
+      <Value>$(GtkDoInstallBin)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDoInstall">
+      <Value>$(GtkDoInstall)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDoInstallBroadwayHeaders">
+      <Value>$(GtkDoInstallBroadwayHeaders)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPostInstall">
+      <Value>$(GtkPostInstall)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPC">
+      <Value>$(GenerateGtkPC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPCX64">
+      <Value>$(GenerateGtkPCX64)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPCFiles">
+      <Value>$(GtkPCFiles)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

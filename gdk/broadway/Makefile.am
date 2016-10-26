@@ -124,8 +124,8 @@ broadwayd_EXCLUDES = dummy
 include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gdk4-broadway.vcproj		\
-	$(top_builddir)/build/win32/vs9/broadwayd.vcproj		\
-	$(top_builddir)/build/win32/vs9/gdk4-broadway.headers
+	$(top_builddir)/build/win32/vs12/gdk4-broadway.vcxproj		\
+	$(top_builddir)/build/win32/vs12/broadwayd.vcxproj		\
+	$(top_builddir)/build/win32/vs12/gdk4-broadway.vs12.headers
 
 -include $(top_srcdir)/git.mk

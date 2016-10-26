@@ -1993,12 +1993,8 @@ docs/reference/gtk/version.xml
 docs/tools/Makefile
 build/Makefile
 build/win32/Makefile
-build/win32/vs9/Makefile
-build/win32/vs9/gtk4-version-paths.vsprops
-build/win32/vs10/Makefile
-build/win32/vs10/gtk4-version-paths.props
-build/win32/vs11/Makefile
 build/win32/vs12/Makefile
+build/win32/vs12/gtk4-version-paths.props
 build/win32/vs14/Makefile
 gdk/Makefile
 gdk/broadway/Makefile

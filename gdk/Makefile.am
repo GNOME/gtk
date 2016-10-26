@@ -546,8 +546,8 @@ INTROSPECTION_INTERMEDIATE_ITEMS =
 endif
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gdk-4.vcproj	\
-	$(top_builddir)/build/win32/vs9/gdk-4.headers	\
+	$(top_builddir)/build/win32/vs12/gdk-4.vcxproj	\
+	$(top_builddir)/build/win32/vs12/gdk-4.vs12.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h

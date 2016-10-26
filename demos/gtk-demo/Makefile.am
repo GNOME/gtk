@@ -194,8 +194,8 @@ gtk4_demo_application_EXCLUDES = dummy
 include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gtk4-demo.vcproj	\
-	$(top_builddir)/build/win32/vs9/gtk4-demo-application.vcproj
+	$(top_builddir)/build/win32/vs12/gtk4-demo.vcxproj	\
+	$(top_builddir)/build/win32/vs12/gtk4-demo-application.vcxproj
 
 DISTCLEANFILES = demos.h demos.h.win32
 

@@ -101,7 +101,7 @@ gdk4_win32_HEADERS_EXCLUDES = dummy
 include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gdk4-win32.vcproj	\
-	$(top_builddir)/build/win32/vs9/gdk4-win32.headers
+	$(top_builddir)/build/win32/vs12/gdk4-win32.vcxproj	\
+	$(top_builddir)/build/win32/vs12/gdk4-win32.vs12.headers
 
 -include $(top_srcdir)/git.mk
