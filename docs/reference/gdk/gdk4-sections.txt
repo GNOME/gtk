@@ -264,10 +264,7 @@ GdkByteOrder
 gdk_query_depths
 gdk_query_visual_types
 gdk_list_visuals
-gdk_visual_get_bits_per_rgb
 gdk_visual_get_blue_pixel_details
-gdk_visual_get_byte_order
-gdk_visual_get_colormap_size
 gdk_visual_get_depth
 gdk_visual_get_green_pixel_details
 gdk_visual_get_red_pixel_details
