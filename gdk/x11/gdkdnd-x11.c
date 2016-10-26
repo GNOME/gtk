@@ -29,6 +29,7 @@
 
 #include "gdkmain.h"
 #include "gdkinternals.h"
+#include "gdkdeviceprivate.h"
 #include "gdkasync.h"
 #include "gdkproperty.h"
 #include "gdkprivate-x11.h"
@@ -2816,15 +2817,11 @@ gdk_x11_drag_context_set_cursor (GdkDragContext *context,
     return;
 
   if (x11_context->grab_seat)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gdk_device_grab (gdk_seat_get_pointer (x11_context->grab_seat),
-                       x11_context->ipc_window,
-                       GDK_OWNERSHIP_APPLICATION, FALSE,
-                       GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
-                       cursor, GDK_CURRENT_TIME);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
+    gdk_device_grab (gdk_seat_get_pointer (x11_context->grab_seat),
+                     x11_context->ipc_window,
+                     GDK_OWNERSHIP_APPLICATION, FALSE,
+                     GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+                     cursor, GDK_CURRENT_TIME);
 }
 
 static void
