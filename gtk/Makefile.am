@@ -1517,25 +1517,37 @@ INTROSPECTION_COMPILER_ARGS = \
 	--includedir=../gdk
 
 Gdk-4.0.gir: $(top_builddir)/gdk/Gdk-noinst-4.0.gir
-	sed -e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" -e "s/noinst-4.0/4.0/" < $(top_builddir)/gdk/Gdk-noinst-4.0.gir > $@
+	$(AM_V_GEN) $(SED) \
+		-e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" \
+		-e "s/noinst-4.0/4.0/" \
+	< $(top_builddir)/gdk/Gdk-noinst-4.0.gir > $@
 EXTRA_GIRS = Gdk-4.0.gir
 
 if USE_X11
 GdkX11-4.0.gir: $(top_builddir)/gdk/GdkX11-noinst-4.0.gir
-	sed -e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" -e "s/noinst-4.0/4.0/" < $(top_builddir)/gdk/GdkX11-noinst-4.0.gir > $@
+	$(AM_V_GEN) $(SED) \
+		-e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" \
+		-e "s/noinst-4.0/4.0/" \
+	< $(top_builddir)/gdk/GdkX11-noinst-4.0.gir > $@
 EXTRA_GIRS += GdkX11-4.0.gir
 endif
 
 if OS_WIN32
 
 GdkWin32-4.0.gir: $(top_builddir)/gdk/GdkX11-noinst-4.0.gir
-	sed "-e s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" -e "s/noinst-4.0/4.0/" < $(top_builddir)/gdk/GdkX11-noinst-4.0.gir > $@
+	$(AM_V_GEN) $(SED) \
+		-e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" \
+		-e "s/noinst-4.0/4.0/" \
+	< $(top_builddir)/gdk/GdkX11-noinst-4.0.gir > $@
 EXTRA_GIRS += GdkWin32-4.0.gir
 
 endif
 
 Gsk-4.0.gir: $(top_builddir)/gsk/Gsk-noinst-4.0.gir
-	sed -e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" -e "s/noinst-4.0/4.0/" < $(top_builddir)/gsk/Gsk-noinst-4.0.gir > $@
+	$(AM_V_GEN) $(SED) \
+		-e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" \
+		-e "s/noinst-4.0/4.0/" \
+	< $(top_builddir)/gsk/Gsk-noinst-4.0.gir > $@
 EXTRA_GIRS += Gsk-4.0.gir
 
 Gtk-4.0.gir: $(INTROSPECTION_SCANNER) libgtk-4.la Gdk-4.0.gir Gsk-4.0.gir Makefile
@@ -1558,10 +1570,10 @@ Gtk_4_0_gir_EXPORT_PACKAGES = gtk+-4.0
 INTROSPECTION_GIRS = Gtk-4.0.gir
 
 girdir = $(datadir)/gir-1.0
-gir_DATA = $(INTROSPECTION_GIRS) $(EXTRA_GIRS)
+nodist_gir_DATA = $(INTROSPECTION_GIRS) $(EXTRA_GIRS)
 
 typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib) $(EXTRA_GIRS:.gir=.typelib)
+nodist_typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib) $(EXTRA_GIRS:.gir=.typelib)
 
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 endif
