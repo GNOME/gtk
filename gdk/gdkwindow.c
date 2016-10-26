@@ -5035,7 +5035,7 @@ gdk_window_hide (GdkWindow *window)
       display = gdk_window_get_display (window);
       seat = gdk_display_get_default_seat (display);
 
-      devices = gdk_se (seat, GDK_SEAT_CAPABILITY_ALL);
+      devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL);
       devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
       devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
