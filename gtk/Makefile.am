@@ -522,7 +522,6 @@ gtk_private_h_sources =		\
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
 	gtkprivate.h		\
-	gtkpixelcacheprivate.h	\
 	gtkprogresstrackerprivate.h	\
 	gtkquery.h		\
 	gtkrangeprivate.h	\
@@ -835,7 +834,6 @@ gtk_base_c_sources = 		\
 	gtkprivatetypebuiltins.c \
 	gtkprogressbar.c	\
 	gtkprogresstracker.c	\
-	gtkpixelcache.c		\
 	gtkpopover.c		\
 	gtkpopovermenu.c	\
 	gtkradiobutton.c	\
