@@ -166,34 +166,16 @@ gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
 }
 
 static void
-check_grab_unmap (GdkWindow *window)
-{
-  GList *list, *l;
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkDeviceManager *device_manager;
-
-  device_manager = gdk_display_get_device_manager (display);
-  list = gdk_device_manager_list_devices (device_manager,
-                                          GDK_DEVICE_TYPE_FLOATING);
-  for (l = list; l; l = l->next)
-    {
-      _gdk_display_end_device_grab (display, l->data, 0, window, TRUE);
-    }
-
-  g_list_free (list);
-}
-
-static void
 check_grab_destroy (GdkWindow *window)
 {
-  GList *list, *l;
+  GList *list = NULL, *l;
   GdkDisplay *display = gdk_window_get_display (window);
-  GdkDeviceManager *device_manager;
+  GdkSeat *seat;
 
-  /* Make sure there is no lasting grab in this native window */
-  device_manager = gdk_display_get_device_manager (display);
-  list = gdk_device_manager_list_devices (device_manager,
-                                          GDK_DEVICE_TYPE_MASTER);
+  seat = gdk_display_get_default_seat (display);
+
+  list = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+  list = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
   for (l = list; l; l = l->next)
     {
@@ -1130,8 +1112,6 @@ gdk_window_quartz_hide (GdkWindow *window)
   if (get_fullscreen_geometry (window))
     SetSystemUIMode (kUIModeNormal, 0);
 #endif
-
-  check_grab_unmap (window);
 
   _gdk_window_clear_update_area (window);
 
