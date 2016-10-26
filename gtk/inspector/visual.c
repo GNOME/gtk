@@ -23,13 +23,14 @@
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkcomboboxtext.h"
+#include "gtkcssproviderprivate.h"
+#include "gtkdebugupdatesprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtkswitch.h"
 #include "gtkscale.h"
 #include "gtkwindow.h"
-#include "gtkcssproviderprivate.h"
 
 #include "fallback-c89.c"
 
@@ -185,13 +186,11 @@ font_scale_entry_activated (GtkEntry           *entry,
 static void
 updates_activate (GtkSwitch *sw)
 {
-#if 0
   gboolean updates;
 
   updates = gtk_switch_get_active (sw);
-  /* FIXME: Do something */
+  gtk_debug_updates_set_enabled_for_display (gdk_display_get_default (), updates);
   redraw_everything ();
-#endif
 }
 
 static void
@@ -199,7 +198,7 @@ init_updates (GtkInspectorVisual *vis)
 {
   gboolean updates = FALSE;
 
-  /* FIXME: Do something */
+  updates = gtk_debug_updates_get_enabled_for_display (gdk_display_get_default ());
   gtk_switch_set_active (GTK_SWITCH (vis->priv->updates_switch), updates);
 }
 

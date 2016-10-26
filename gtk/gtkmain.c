@@ -115,6 +115,7 @@
 #include "gtkbox.h"
 #include "gtkclipboardprivate.h"
 #include "gtkdebug.h"
+#include "gtkdebugupdatesprivate.h"
 #include "gtkdndprivate.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
@@ -713,6 +714,9 @@ do_post_parse_initialization (int    *argc,
       fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
       g_log_set_always_fatal (fatal_mask);
     }
+
+  if (debug_flags[0].flags & GTK_DEBUG_UPDATES)
+    gtk_debug_updates_set_enabled (TRUE);
 
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 

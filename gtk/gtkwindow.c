@@ -41,6 +41,7 @@
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkdebugupdatesprivate.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
 #include "gtkmnemonichash.h"
@@ -8211,6 +8212,8 @@ gtk_window_queue_draw_region (GtkWidget            *widget,
       return;
     }
 
+  gtk_debug_updates_add (widget, region);
+
   gdk_window_invalidate_region (_gtk_widget_get_window (widget), region, TRUE);
 }
 
@@ -9412,7 +9415,7 @@ gtk_window_get_render_node (GtkWidget   *widget,
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkStyleContext *context;
-  GskRenderNode *node;
+  GskRenderNode *node, *updates_node;
   GtkAllocation allocation;
   GtkBorder window_border;
   gint title_height;
@@ -9505,6 +9508,13 @@ gtk_window_get_render_node (GtkWidget   *widget,
   cairo_destroy (cr);
 
   gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, node);
+
+  updates_node = gtk_debug_updates_get_render_node (widget, renderer);
+  if (updates_node)
+    {
+      gsk_render_node_append_child (node, updates_node);
+      gsk_render_node_unref (updates_node);
+    }
 
   return node;
 }

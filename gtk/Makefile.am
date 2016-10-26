@@ -458,6 +458,7 @@ gtk_private_h_sources =		\
 	gtkcsswin32sizevalueprivate.h   \
 	gtkcsswidgetnodeprivate.h	\
 	gtkcustompaperunixdialog.h \
+	gtkdebugupdatesprivate.h	\
 	gtkdialogprivate.h 	\
 	gtkdndprivate.h		\
 	gtkentryprivate.h	\
@@ -727,6 +728,7 @@ gtk_base_c_sources = 		\
 	gtkcssvalue.c		\
 	gtkcsswidgetnode.c	\
         gtkcsswin32sizevalue.c  \
+	gtkdebugupdates.c	\
 	gtkdialog.c		\
 	gtkdragsource.c		\
 	gtkdrawingarea.c	\
