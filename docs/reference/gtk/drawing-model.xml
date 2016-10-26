@@ -241,20 +241,6 @@
         hardware where self-copy operations are problematic (they break the
         rendering pipeline).
       </para>
-
-      <para>
-        Since the above causes some overhead, we introduce a caching mechanism.
-        Containers that scroll a lot (GtkViewport, GtkTextView, GtkTreeView,
-        etc) allocate an offscreen image during scrolling and render their
-        children to it (which is possible since drawing is fully hierarchical).
-        The offscreen image is a bit larger than the visible area, so most of
-        the time when scrolling it just needs to draw the offscreen in a
-        different position. This matches contemporary graphics hardware much
-        better, as well as allowing efficient transparent backgrounds.
-        In order for this to work such containers need to detect when child
-        widgets are redrawn so that it can update the offscreen. This can be
-        done with the new gdk_window_set_invalidate_handler() function.
-      </para>
     </refsect2>
 
   </refsect1>

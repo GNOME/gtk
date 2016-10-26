@@ -374,8 +374,6 @@ gdk_window_begin_draw_frame
 gdk_window_end_draw_frame
 gdk_window_should_draw
 gdk_window_get_visible_region
-GdkWindowInvalidateHandlerFunc
-gdk_window_set_invalidate_handler
 
 <SUBSECTION>
 gdk_window_invalidate_rect

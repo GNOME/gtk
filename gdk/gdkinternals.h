@@ -328,7 +328,6 @@ struct _GdkWindow
   gulong device_changed_handler_id;
 
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
-  GdkWindowInvalidateHandlerFunc invalidate_handler;
 
   GdkDrawingContext *drawing_context;
 };

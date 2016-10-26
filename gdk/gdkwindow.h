@@ -641,26 +641,6 @@ GdkWindowState gdk_window_get_state (GdkWindow *window);
 
 /* GdkWindow */
 
-/**
- * GdkWindowInvalidateHandlerFunc:
- * @window: a #GdkWindow
- * @region: a #cairo_region_t
- *
- * Whenever some area of the window is invalidated (directly in the
- * window or in a child window) this gets called with @region in
- * the coordinate space of @window. You can use @region to just
- * keep track of the dirty region, or you can actually change
- * @region in case you are doing display tricks like showing
- * a child in multiple places.
- *
- * Since: 3.10
- */
-typedef void (*GdkWindowInvalidateHandlerFunc)  (GdkWindow      *window,
-						 cairo_region_t *region);
-GDK_AVAILABLE_IN_3_10
-void gdk_window_set_invalidate_handler (GdkWindow                      *window,
-					GdkWindowInvalidateHandlerFunc  handler);
-
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_window_has_native         (GdkWindow       *window);
 GDK_AVAILABLE_IN_ALL
