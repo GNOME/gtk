@@ -40,8 +40,6 @@ GdkDisplay * gdk_device_manager_get_display        (GdkDeviceManager *device_man
 GDK_DEPRECATED_IN_3_20
 GList *      gdk_device_manager_list_devices       (GdkDeviceManager *device_manager,
                                                     GdkDeviceType     type);
-GDK_DEPRECATED_IN_3_20
-GdkDevice *  gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager);
 
 G_END_DECLS
 

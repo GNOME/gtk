@@ -339,29 +339,3 @@ gdk_device_manager_list_devices (GdkDeviceManager *device_manager,
 
   return GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->list_devices (device_manager, type);
 }
-
-/**
- * gdk_device_manager_get_client_pointer:
- * @device_manager: a #GdkDeviceManager
- *
- * Returns the client pointer, that is, the master pointer that acts as the core pointer
- * for this application. In X11, window managers may change this depending on the interaction
- * pattern under the presence of several pointers.
- *
- * You should use this function seldomly, only in code that isn’t triggered by a #GdkEvent
- * and there aren’t other means to get a meaningful #GdkDevice to operate on.
- *
- * Returns: (transfer none): The client pointer. This memory is
- *          owned by GDK and must not be freed or unreferenced.
- *
- * Since: 3.0
- *
- * Deprecated: 3.20: Use gdk_seat_get_pointer() instead.
- **/
-GdkDevice *
-gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
-
-  return GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->get_client_pointer (device_manager);
-}

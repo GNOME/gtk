@@ -788,7 +788,6 @@ GdkDeviceManager
 gdk_disable_multidevice
 gdk_device_manager_get_display
 gdk_device_manager_list_devices
-gdk_device_manager_get_client_pointer
 
 <SUBSECTION Standard>
 GDK_DEVICE_MANAGER
