@@ -28,6 +28,7 @@ do_entry_buffer (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+      g_object_set (vbox, "margin", 5, NULL);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new (NULL);

@@ -319,6 +319,7 @@ do_combobox (GtkWidget *do_widget)
                       G_CALLBACK (gtk_widget_destroyed), &window);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+    g_object_set (vbox, "margin", 10, NULL);
     gtk_container_add (GTK_CONTAINER (window), vbox);
 
     /* A combobox demonstrating cell renderers, separators and
@@ -328,6 +329,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    g_object_set (box, "margin", 5, NULL);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     model = create_icon_store ();
@@ -368,6 +370,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    g_object_set (box, "margin", 5, NULL);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     model = create_capital_store ();
@@ -395,6 +398,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    g_object_set (box, "margin", 5, NULL);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     combo = gtk_combo_box_text_new_with_entry ();
@@ -412,6 +416,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    g_object_set (box, "margin", 5, NULL);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     combo = gtk_combo_box_text_new ();

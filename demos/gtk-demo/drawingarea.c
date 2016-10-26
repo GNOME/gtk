@@ -216,6 +216,7 @@ do_drawingarea (GtkWidget *do_widget)
                         G_CALLBACK (close_window), NULL);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+      g_object_set (vbox, "margin", 16, NULL);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       /*

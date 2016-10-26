@@ -13,9 +13,7 @@
         </style>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
-            <property name="use_action_appearance">0</property>
             <property name="label" translatable="yes">Normal</property>
             <property name="use_underline">1</property>
             <property name="is_important">1</property>
@@ -27,9 +25,7 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
-            <property name="use_action_appearance">0</property>
             <property name="label" translatable="yes">Active</property>
             <property name="use_underline">1</property>
             <property name="is_important">1</property>
@@ -42,7 +38,6 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="label" translatable="yes">Insensitive</property>
@@ -56,7 +51,6 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="label" translatable="yes">Raised</property>
             <property name="use_underline">1</property>
@@ -72,7 +66,6 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="label" translatable="yes">Raised Active</property>
             <property name="use_underline">1</property>
@@ -89,7 +82,6 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="label" translatable="yes">Insensitive Active</property>
@@ -104,7 +96,6 @@
         </child>
         <child>
           <object class="GtkToolItem">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <child>
               <object class="GtkEntry" id="entry1">
@@ -119,7 +110,6 @@
         </child>
         <child>
           <object class="GtkToolItem">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <child>
               <object class="GtkSwitch" id="switch1">
@@ -142,21 +132,17 @@
         <child>
           <object class="GtkButton">
             <property name="label" translatable="yes">Hi, I am a button</property>
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
-            <property name="use_action_appearance">0</property>
           </object>
         </child>
         <child>
           <object class="GtkButton">
             <property name="label" translatable="yes">And I'm another button</property>
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
-            <property name="use_action_appearance">0</property>
           </object>
           <packing>
             <property name="position">1</property>
@@ -165,11 +151,9 @@
         <child>
           <object class="GtkButton">
             <property name="label" translatable="yes">This is a button party!</property>
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
-            <property name="use_action_appearance">0</property>
           </object>
           <packing>
             <property name="position">2</property>
@@ -188,9 +172,7 @@
         </style>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
-            <property name="use_action_appearance">0</property>
             <property name="label" translatable="yes">Normal</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-add-symbolic</property>
@@ -201,9 +183,7 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
-            <property name="use_action_appearance">0</property>
             <property name="label" translatable="yes">Normal</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-add-symbolic</property>
@@ -214,9 +194,6 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
-            <property name="visible">1</property>
-            <property name="use_action_appearance">0</property>
             <property name="label" translatable="yes">Active</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-remove-symbolic</property>
@@ -228,9 +205,7 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
-            <property name="use_action_appearance">0</property>
             <property name="label" translatable="yes">Active</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-remove-symbolic</property>
@@ -242,10 +217,8 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
-            <property name="use_action_appearance">0</property>
             <property name="label" translatable="yes">Insensitive</property>
             <property name="use_underline">1</property>
             <property name="icon_name">edit-find-symbolic</property>
@@ -256,10 +229,8 @@
         </child>
         <child>
           <object class="GtkToggleToolButton">
-            <property name="use_action_appearance">0</property>
             <property name="visible">1</property>
             <property name="sensitive">0</property>
-            <property name="use_action_appearance">0</property>
             <property name="label" translatable="yes">Insensitive Active</property>
             <property name="use_underline">1</property>
             <property name="icon_name">go-up-symbolic</property>

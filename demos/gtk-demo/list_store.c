@@ -264,6 +264,7 @@ do_list_store (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+      g_object_set (vbox, "margin", 8, NULL);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new ("This is the bug list (note: not based on real data, it would be nice to have a nice ODBC interface to bugzilla or so, though).");

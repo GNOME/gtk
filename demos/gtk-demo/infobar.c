@@ -61,6 +61,7 @@ do_infobar (GtkWidget *do_widget)
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      g_object_set (vbox, "margin", 8, NULL);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       bar = gtk_info_bar_new ();
@@ -131,6 +132,7 @@ do_infobar (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+      g_object_set (vbox2, "margin", 8, NULL);
       gtk_container_add (GTK_CONTAINER (frame), vbox2);
 
       /* Standard message dialog */

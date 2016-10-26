@@ -348,6 +348,7 @@ do_images (GtkWidget *do_widget)
                         G_CALLBACK (cleanup_callback), NULL);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+      g_object_set (vbox, "margin", 16, NULL);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new (NULL);

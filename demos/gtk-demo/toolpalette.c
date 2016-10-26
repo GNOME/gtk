@@ -446,6 +446,7 @@ do_toolpalette (GtkWidget *do_widget)
 
       /* Add widgets to control the ToolPalette appearance: */
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+      g_object_set (box, "margin", 6, NULL);
       gtk_container_add (GTK_CONTAINER (window), box);
 
       /* Orientation combo box: */
@@ -528,6 +529,7 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (palette_scroller),
                                       GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
+      g_object_set (palette_scroller, "margin", 6, NULL);
       gtk_widget_set_hexpand (palette_scroller, TRUE);
 
       gtk_container_add (GTK_CONTAINER (palette_scroller), palette);
@@ -547,6 +549,7 @@ do_toolpalette (GtkWidget *do_widget)
       /* ===== notebook ===== */
 
       notebook = gtk_notebook_new ();
+      g_object_set (notebook, "margin", 6, NULL);
       gtk_box_pack_end (GTK_BOX(hbox), notebook, FALSE, FALSE);
 
       /* ===== DnD for tool items ===== */
@@ -586,6 +589,7 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
                                 contents_scroller,
                                 gtk_label_new ("Passive DnD Mode"));
+      g_object_set (contents_scroller, "margin", 6, NULL);
 
       /* ===== interactive DnD dest ===== */
 

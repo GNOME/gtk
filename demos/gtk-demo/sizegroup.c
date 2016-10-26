@@ -108,6 +108,7 @@ do_sizegroup (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+      g_object_set (vbox, "margin", 5, NULL);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
@@ -118,6 +119,7 @@ do_sizegroup (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE);
 
       table = gtk_grid_new ();
+      g_object_set (table, "margin", 5, NULL);
       gtk_grid_set_row_spacing (GTK_GRID (table), 5);
       gtk_grid_set_column_spacing (GTK_GRID (table), 10);
       gtk_container_add (GTK_CONTAINER (frame), table);
@@ -130,6 +132,7 @@ do_sizegroup (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE);
 
       table = gtk_grid_new ();
+      g_object_set (table, "margin", 5, NULL);
       gtk_grid_set_row_spacing (GTK_GRID (table), 5);
       gtk_grid_set_column_spacing (GTK_GRID (table), 10);
       gtk_container_add (GTK_CONTAINER (frame), table);
