@@ -56,7 +56,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkpopover.h"
 #include "gtktoolbar.h"
-#include "gtkpixelcacheprivate.h"
 #include "gtkmagnifierprivate.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
@@ -237,8 +236,6 @@ struct _GtkTextViewPrivate
 
   GtkTextPendingScroll *pending_scroll;
 
-  GtkPixelCache *pixel_cache;
-
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
 
@@ -392,8 +389,6 @@ static void gtk_text_view_measure (GtkWidget      *widget,
                                    int            *natural_baseline);
 static void gtk_text_view_size_allocate        (GtkWidget        *widget,
                                                 GtkAllocation    *allocation);
-static void gtk_text_view_map                  (GtkWidget        *widget);
-static void gtk_text_view_unmap                (GtkWidget        *widget);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
 static void gtk_text_view_style_updated        (GtkWidget        *widget);
@@ -616,9 +611,6 @@ static void gtk_text_view_update_handles       (GtkTextView           *text_view
 static void gtk_text_view_selection_bubble_popup_unset (GtkTextView *text_view);
 static void gtk_text_view_selection_bubble_popup_set   (GtkTextView *text_view);
 
-static void gtk_text_view_queue_draw_region (GtkWidget            *widget,
-                                             const cairo_region_t *region);
-
 static void gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
                                              GdkRectangle *rect);
 
@@ -741,8 +733,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gobject_class->finalize = gtk_text_view_finalize;
 
   widget_class->destroy = gtk_text_view_destroy;
-  widget_class->map = gtk_text_view_map;
-  widget_class->unmap = gtk_text_view_unmap;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->style_updated = gtk_text_view_style_updated;
@@ -769,8 +759,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->drag_data_received = gtk_text_view_drag_data_received;
 
   widget_class->popup_menu = gtk_text_view_popup_menu;
-
-  widget_class->queue_draw_region = gtk_text_view_queue_draw_region;
 
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;
@@ -1671,8 +1659,6 @@ gtk_text_view_init (GtkTextView *text_view)
   priv = text_view->priv;
 
   gtk_widget_set_can_focus (widget, TRUE);
-
-  priv->pixel_cache = _gtk_pixel_cache_new ();
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
@@ -3633,12 +3619,6 @@ gtk_text_view_destroy (GtkWidget *widget)
       priv->im_spot_idle = 0;
     }
 
-  if (priv->pixel_cache)
-    {
-      _gtk_pixel_cache_free (priv->pixel_cache);
-      priv->pixel_cache = NULL;
-    }
-
   if (priv->magnifier)
     _gtk_magnifier_set_inspected (GTK_MAGNIFIER (priv->magnifier), NULL);
 
@@ -4215,9 +4195,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   DV(g_print(G_STRLOC"\n"));
 
-  _gtk_pixel_cache_set_extra_size (priv->pixel_cache, 64,
-                                   allocation->height / 2 + priv->top_border);
-
   gtk_widget_get_allocation (widget, &widget_allocation);
   size_changed =
     widget_allocation.width != allocation->width ||
@@ -4736,34 +4713,6 @@ gtk_text_view_unrealize (GtkWidget *widget)
     text_window_unrealize (priv->bottom_window);
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_text_view_map (GtkWidget *widget)
-{
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
-
-  text_view = GTK_TEXT_VIEW (widget);
-  priv = text_view->priv;
-
-  _gtk_pixel_cache_map (priv->pixel_cache);
-
-  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->map (widget);
-}
-
-static void
-gtk_text_view_unmap (GtkWidget *widget)
-{
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
-
-  text_view = GTK_TEXT_VIEW (widget);
-  priv = text_view->priv;
-
-  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unmap (widget);
-
-  _gtk_pixel_cache_unmap (priv->pixel_cache);
 }
 
 static void
@@ -5836,10 +5785,9 @@ gtk_text_view_paint (GtkWidget      *widget,
 }
 
 static void
-draw_text (cairo_t  *cr,
-           gpointer  user_data)
+draw_text (GtkWidget *widget,
+           cairo_t   *cr)
 {
-  GtkWidget *widget = user_data;
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextViewPrivate *priv = text_view->priv;
   GtkStyleContext *context;
@@ -5938,29 +5886,11 @@ gtk_text_view_draw (GtkWidget *widget,
                                      GTK_TEXT_WINDOW_TEXT);
   if (gtk_cairo_should_draw_window (cr, window))
     {
-      cairo_rectangle_int_t view_rect;
-      cairo_rectangle_int_t canvas_rect;
-      GtkAllocation alloc;
-
       DV(g_print (">Exposed ("G_STRLOC")\n"));
-
-      gtk_widget_get_allocation (widget, &alloc);
-
-      view_rect.x = 0;
-      view_rect.y = 0;
-      view_rect.width = gdk_window_get_width (window);
-      view_rect.height = gdk_window_get_height (window);
-
-      canvas_rect.x = -gtk_adjustment_get_value (priv->hadjustment);
-      canvas_rect.y = -gtk_adjustment_get_value (priv->vadjustment);
-      canvas_rect.width = priv->width;
-      canvas_rect.height = priv->height;
 
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, widget, window);
-      _gtk_pixel_cache_draw (priv->pixel_cache, cr, window,
-                             &view_rect, &canvas_rect,
-                             draw_text, widget);
+      draw_text (widget, cr); 
       cairo_restore (cr);
     }
 
@@ -9672,18 +9602,10 @@ node_style_changed_cb (GtkCssNode        *node,
                        GtkCssStyleChange *change,
                        GtkWidget         *widget)
 {
-  GtkTextViewPrivate *priv = GTK_TEXT_VIEW (widget)->priv;
-
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
     gtk_widget_queue_resize (widget);
   else
     gtk_widget_queue_draw (widget);
-
-  if (node == priv->text_window->css_node)
-    {
-      GtkCssStyle *style = gtk_css_style_change_get_new_style (change);
-      gtk_pixel_cache_set_is_opaque (priv->pixel_cache, gtk_css_style_render_background_is_opaque (style));
-    }
 }
 
 static void
@@ -9793,60 +9715,14 @@ gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
 {
   GtkTextViewPrivate *priv = text_view->priv;
   GdkWindow *window;
-  guint extra_w;
-  guint extra_h;
-
-  _gtk_pixel_cache_get_extra_size (priv->pixel_cache, &extra_w, &extra_h);
 
   window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
 
-  rect->x = gtk_adjustment_get_value (priv->hadjustment) - extra_w;
-  rect->y = gtk_adjustment_get_value (priv->vadjustment) - extra_h - priv->top_border;
+  rect->x = gtk_adjustment_get_value (priv->hadjustment);
+  rect->y = gtk_adjustment_get_value (priv->vadjustment) - priv->top_border;
 
-  rect->height = gdk_window_get_height (window) + (extra_h * 2);
-  rect->width = gdk_window_get_width (window) + (extra_w * 2);
-}
-
-static void
-gtk_text_view_queue_draw_region (GtkWidget            *widget,
-                                 const cairo_region_t *region)
-{
-  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
-
-  /* There is no way we can know if a region targets the
-     not-currently-visible but in pixel cache region, so we
-     always just invalidate the whole thing whenever the
-     text view gets a queue draw. This doesn't normally happen
-     in normal scrolling cases anyway. */
-  _gtk_pixel_cache_invalidate (text_view->priv->pixel_cache, NULL);
-
-  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->queue_draw_region (widget, region);
-}
-
-static void
-text_window_invalidate_handler (GdkWindow      *window,
-                                cairo_region_t *region)
-{
-  gpointer widget;
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
-  int x, y;
-
-  gdk_window_get_user_data (window, &widget);
-  text_view = GTK_TEXT_VIEW (widget);
-  priv = text_view->priv;
-
-  /* Scrolling will invalidate everything in the bin window,
-   * but we already have it in the cache, so we can ignore that */
-  if (priv->in_scroll)
-    return;
-
-  x = priv->xoffset;
-  y = priv->yoffset + priv->top_border;
-
-  cairo_region_translate (region, x, y);
-  _gtk_pixel_cache_invalidate (priv->pixel_cache, region);
-  cairo_region_translate (region, -x, -y);
+  rect->height = gdk_window_get_height (window);
+  rect->width = gdk_window_get_width (window);
 }
 
 static void
@@ -9880,10 +9756,6 @@ text_window_realize (GtkTextWindow *win,
                                             win->allocation.width, win->allocation.height});
 
   gtk_widget_register_window (win->widget, win->bin_window);
-
-  if (win->type == GTK_TEXT_WINDOW_TEXT)
-    gdk_window_set_invalidate_handler (win->bin_window,
-                                       text_window_invalidate_handler);
 
   gdk_window_show (win->bin_window);
 
