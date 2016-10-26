@@ -5028,19 +5028,16 @@ gdk_window_hide (GdkWindow *window)
   else if (was_mapped)
     {
       GdkDisplay *display;
-      GdkDeviceManager *device_manager;
+      GdkSeat *seat;
       GList *devices, *d;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
       /* May need to break grabs on children */
       display = gdk_window_get_display (window);
-      device_manager = gdk_display_get_device_manager (display);
+      seat = gdk_display_get_default_seat (display);
 
-      /* Get all devices */
-      devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
-      devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_SLAVE));
-      devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING));
+      devices = gdk_se (seat, GDK_SEAT_CAPABILITY_ALL);
+      devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+      devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
       for (d = devices; d; d = d->next)
         {
@@ -5056,7 +5053,6 @@ gdk_window_hide (GdkWindow *window)
 
       window->state = GDK_WINDOW_STATE_WITHDRAWN;
       g_list_free (devices);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   did_hide = _gdk_window_update_viewable (window);
