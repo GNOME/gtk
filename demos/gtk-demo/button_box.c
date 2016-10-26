@@ -23,6 +23,8 @@ create_bbox (gint  horizontal,
   else
     bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
 
+  g_object_set (bbox, "margin", 5, NULL);
+
   gtk_container_add (GTK_CONTAINER (frame), bbox);
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
@@ -62,6 +64,7 @@ do_button_box (GtkWidget *do_widget)
                       &window);
 
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    g_object_set (main_vbox, "margin", 10, NULL);
     gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
     frame_horz = gtk_frame_new ("Horizontal Button Boxes");
@@ -70,6 +73,7 @@ do_button_box (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (main_vbox), frame_horz, TRUE, TRUE);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+    g_object_set (vbox, "margin", 10, NULL);
     gtk_container_add (GTK_CONTAINER (frame_horz), vbox);
 
     gtk_box_pack_start (GTK_BOX (vbox),
@@ -100,6 +104,7 @@ do_button_box (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (main_vbox), frame_vert, TRUE, TRUE);
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    g_object_set (hbox, "margin", 10, NULL);
     gtk_container_add (GTK_CONTAINER (frame_vert), hbox);
 
     gtk_box_pack_start (GTK_BOX (hbox),
