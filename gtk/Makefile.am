@@ -302,7 +302,6 @@ gtk_public_h_sources = 		\
 	gtkstyleprovider.h	\
 	gtkswitch.h		\
 	gtktestutils.h		\
-	gtktextattributes.h	\
 	gtktextbuffer.h		\
 	gtktextbufferrichtext.h	\
 	gtktextchild.h		\
@@ -347,11 +346,6 @@ gtk_unix_print_public_h_sources = 	\
 	gtkunixprint-autocleanups.h	\
 	gtkunixprint.h
 endif
-
-# Installed header files without compatibility guarantees
-# that are not included in gtk/gtk.h
-gtk_semi_private_h_sources = \
-	gtktextlayout.h
 
 gtk_private_type_h_sources =	\
 	gtkcsstypesprivate.h	\
@@ -553,12 +547,14 @@ gtk_private_h_sources =		\
 	gtkstylepropertyprivate.h \
 	gtkstyleproviderprivate.h \
 	gtktextattributesprivate.h \
+	gtktextattributes.h	\
 	gtktextbtree.h		\
 	gtktextbufferprivate.h \
 	gtktextbufferserialize.h \
 	gtktextchildprivate.h	\
 	gtktexthandleprivate.h	\
 	gtktextiterprivate.h	\
+	gtktextlayout.h		\
 	gtktextmarkprivate.h	\
 	gtktextsegment.h	\
 	gtktexttagprivate.h	\
@@ -1364,7 +1360,7 @@ gtktestutils.c: gtktypefuncs.c
 lib_LTLIBRARIES = libgtk-4.la
 
 gtkincludedir = $(includedir)/gtk-4.0/gtk
-gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
+gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkversion.h
 
 a11yincludedir = $(includedir)/gtk-4.0/gtk/a11y
 a11yinclude_HEADERS= $(a11y_h_sources)

@@ -20,12 +20,16 @@
 #define __GTK_TEXT_VIEW_PRIVATE_H__
 
 #include "gtktextview.h"
+#include "gtktextattributes.h"
 #include "gtkcssnodeprivate.h"
 
 G_BEGIN_DECLS
 
 GtkCssNode *    gtk_text_view_get_text_node             (GtkTextView *text_view);
 GtkCssNode *    gtk_text_view_get_selection_node        (GtkTextView *text_view);
+
+GtkTextAttributes * gtk_text_view_get_default_attributes (GtkTextView *text_view);
+
 
 G_END_DECLS
 

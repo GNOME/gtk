@@ -30,6 +30,7 @@
 #include <gtk/gtk.h>
 #include "gtktextviewaccessibleprivate.h"
 #include "gtktextbufferprivate.h"
+#include "gtktextviewprivate.h"
 #include "gtk/gtkwidgetprivate.h"
 
 struct _GtkTextViewAccessiblePrivate

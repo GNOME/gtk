@@ -431,10 +431,6 @@ void             gtk_text_view_set_tabs               (GtkTextView      *text_vi
 GDK_AVAILABLE_IN_ALL
 PangoTabArray*   gtk_text_view_get_tabs               (GtkTextView      *text_view);
 
-/* note that the return value of this changes with the theme */
-GDK_AVAILABLE_IN_ALL
-GtkTextAttributes* gtk_text_view_get_default_attributes (GtkTextView    *text_view);
-
 GDK_AVAILABLE_IN_3_6
 void             gtk_text_view_set_input_purpose      (GtkTextView      *text_view,
                                                        GtkInputPurpose   purpose);
