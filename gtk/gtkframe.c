@@ -920,11 +920,7 @@ gtk_frame_measure (GtkCssGadget   *gadget,
         }
       else
         {
-          if (for_size > 0)
-            gtk_widget_get_preferred_height_for_width (priv->label_widget,
-                                                       for_size, &child_min, &child_nat);
-          else
-            gtk_widget_get_preferred_height (priv->label_widget, &child_min, &child_nat);
+          gtk_widget_measure (priv->label_widget, orientation, for_size, &child_min, &child_nat, NULL, NULL);
 
           *minimum += child_min;
           *natural += child_nat;
