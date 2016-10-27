@@ -44,7 +44,7 @@ spin_ythickness_cb (GtkSpinButton *spin, gpointer user_data)
   gtk_style_context_restore (context);
 
 
-  data = g_strdup_printf ("GtkFrame { padding: %dpx %dpx }",
+  data = g_strdup_printf ("frame { padding: %dpx %dpx }",
                           pad.top,
                           (gint)gtk_spin_button_get_value (spin));
 
@@ -80,7 +80,7 @@ spin_xthickness_cb (GtkSpinButton *spin, gpointer user_data)
   gtk_style_context_restore (context);
 
 
-  data = g_strdup_printf ("GtkFrame { padding: %dpx %dpx }",
+  data = g_strdup_printf ("frame { padding: %dpx %dpx }",
                           (gint)gtk_spin_button_get_value (spin),
                           pad.left);
 
