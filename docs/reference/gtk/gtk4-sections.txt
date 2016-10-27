@@ -3064,7 +3064,6 @@ gtk_text_iter_inside_sentence
 gtk_text_iter_is_cursor_position
 gtk_text_iter_get_chars_in_line
 gtk_text_iter_get_bytes_in_line
-gtk_text_iter_get_attributes
 gtk_text_iter_get_language
 gtk_text_iter_is_end
 gtk_text_iter_is_start
@@ -3157,13 +3156,6 @@ gtk_text_tag_get_priority
 gtk_text_tag_set_priority
 gtk_text_tag_event
 gtk_text_tag_changed
-GtkTextAttributes
-GtkTextAppearance
-gtk_text_attributes_new
-gtk_text_attributes_copy
-gtk_text_attributes_copy_values
-gtk_text_attributes_unref
-gtk_text_attributes_ref
 <SUBSECTION Standard>
 GTK_TEXT_TAG
 GTK_IS_TEXT_TAG
@@ -3171,11 +3163,9 @@ GTK_TYPE_TEXT_TAG
 GTK_TEXT_TAG_CLASS
 GTK_IS_TEXT_TAG_CLASS
 GTK_TEXT_TAG_GET_CLASS
-GTK_TYPE_TEXT_ATTRIBUTES
 <SUBSECTION Private>
 GtkTextTagPrivate
 gtk_text_tag_get_type
-gtk_text_attributes_get_type
 </SECTION>
 
 <SECTION>
@@ -3276,7 +3266,6 @@ gtk_text_view_set_tabs
 gtk_text_view_get_tabs
 gtk_text_view_set_accepts_tab
 gtk_text_view_get_accepts_tab
-gtk_text_view_get_default_attributes
 gtk_text_view_im_context_filter_keypress
 gtk_text_view_reset_im_context
 gtk_text_view_set_input_purpose
