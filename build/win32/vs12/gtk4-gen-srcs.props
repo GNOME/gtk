@@ -44,6 +44,18 @@ echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)_Broadway
     <CopyGtkWin32RC>copy ..\..\..\gtk\gtk-win32.rc.body ..\..\..\gtk\gtk-win32.rc</CopyGtkWin32RC>
     <GenerateGtkWin32Manifest>$(PythonPath)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk4.manifest.in --output=..\..\..\gtk\libgtk4.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
     <CopyDemosH>copy ..\..\..\demos\gtk-demo\demos.h.win32 ..\..\..\demos\gtk-demo\demos.h</CopyDemosH>
+    <GenGSKEnumSrcs>(cd ..) &amp; (call gen-enums.bat $(GlibEtcInstallRoot)) &amp; (cd $(SolutionDir))</GenGSKEnumSrcs>
+    <GenGSKRsrcSrcs>
+echo ^&lt;?xml version='1.0' encoding='UTF-8'?^&gt; &gt; ..\..\..\gsk\gsk.gresource.xml
+echo ^&lt;gresources^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
+echo   ^&lt;gresource prefix='/org/gtk/libgsk'^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
+for /f &#37;&#37;f in ('dir /b ..\..\..\gsk\resources\glsl\*') do echo     ^&lt;file alias='glsl/&#37;&#37;f'^&gt;resources/glsl/&#37;&#37;f^&lt;/file^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
+echo   ^&lt;/gresource^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
+echo ^&lt;/gresources^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
+
+$(GlibEtcInstallRoot)\bin\glib-compile-resources.exe --sourcedir=..\..\..\gsk --c-name _gsk --generate-header --manual-register --target=..\..\..\gsk\gskresources.h ..\..\..\gsk\gsk.gresource.xml
+$(GlibEtcInstallRoot)\bin\glib-compile-resources.exe --sourcedir=..\..\..\gsk --c-name _gsk --generate-source --manual-register --target=..\..\..\gsk\gskresources.c ..\..\..\gsk\gsk.gresource.xml
+    </GenGSKRsrcSrcs>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk4gensrcsprops</_PropertySheetDisplayName>
@@ -75,6 +87,12 @@ echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)_Broadway
     </BuildMacro>
     <BuildMacro Include="CopyDemosH">
       <Value>$(CopyDemosH)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenGSKEnumSrcs">
+      <Value>$(GenGSKEnumSrcs)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenGSKRsrcSrcs">
+      <Value>$(GenGSKRsrcSrcs)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

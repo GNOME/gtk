@@ -163,21 +163,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CustomBuild Include="..\..\..\gsk\gskenumtypes.c.template">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GSK enumeration sources...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenGSKEnumSrcs)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\gsk\gskenumtypes.h;..\..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating GSK enumeration sources...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenGSKEnumSrcs)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\gsk\gskenumtypes.h;..\..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating GSK enumeration sources...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenGSKEnumSrcs)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\gsk\gskenumtypes.h;..\..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating GSK enumeration sources...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenGSKEnumSrcs)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gsk\gskenumtypes.h;..\..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\gsk\gsk.gresource.xml">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GSK resource sources...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenGSKRsrcSrcs)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\gsk\gskresources.h;..\..\..\gsk\gskresources.c;..\..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating GSK resource sources...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenGSKRsrcSrcs)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\gsk\gskresources.h;..\..\..\gsk\gskresources.c;..\..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating GSK resource sources...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenGSKRsrcSrcs)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\gsk\gskresources.h;..\..\..\gsk\gskresources.c;..\..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating GSK resource sources...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenGSKRsrcSrcs)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gsk\gskresources.h;..\..\..\gsk\gskresources.c;..\..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-   <ClCompile Include="..\..\..\gsk\gskrenderer.c" />
-   <ClCompile Include="..\..\..\gsk\gskrendernode.c" />
-   <ClCompile Include="..\..\..\gsk\gskrendernodeiter.c" />
-   <ClCompile Include="..\..\..\gsk\gskcairorenderer.c" />
-   <ClCompile Include="..\..\..\gsk\gskdebug.c" />
-   <ClCompile Include="..\..\..\gsk\gskgldriver.c" />
-   <ClCompile Include="..\..\..\gsk\gskglprofiler.c" />
-   <ClCompile Include="..\..\..\gsk\gskglrenderer.c" />
-   <ClCompile Include="..\..\..\gsk\gskprivate.c" />
-   <ClCompile Include="..\..\..\gsk\gskprofiler.c" />
-   <ClCompile Include="..\..\..\gsk\gskshaderbuilder.c" />
-   <ClCompile Include="..\..\..\gsk\gskenumtypes.c" />
-   <ClCompile Include="..\..\..\gsk\gskresources.c" />
+#include "gsk-4.vs12.sourcefiles"
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-4.vcxproj">

@@ -15,20 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\..\..\gsk\gskenumtypes.c.template"><Filter>Resource Files</Filter></CustomBuild>
+    <CustomBuild Include="..\..\..\gsk\gsk.gresource.xml"><Filter>Resource Files</Filter></CustomBuild>
   </ItemGroup>
   <ItemGroup>
-   <ClCompile Include="..\..\..\gsk\gskrenderer.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskrendernode.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskrendernodeiter.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskcairorenderer.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskdebug.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskgldriver.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskglprofiler.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskglrenderer.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskprivate.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskprofiler.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskshaderbuilder.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskenumtypes.c"><Filter>Source Files</Filter></ClCompile>
-   <ClCompile Include="..\..\..\gsk\gskresources.c"><Filter>Source Files</Filter></ClCompile>
+#include "gsk-4.vs12.sourcefiles.filters"
   </ItemGroup>
 </Project>
