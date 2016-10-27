@@ -73,6 +73,7 @@
                     <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">18</property>
+                    <property name="margin">12</property>
                     <child>
                       <object class="GtkBox" id="box2">
                         <property name="visible">1</property>
@@ -430,6 +431,7 @@
                     <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">18</property>
+                    <property name="margin">12</property>
                     <child>
                       <object class="GtkBox" id="box4">
                         <property name="visible">1</property>
@@ -855,6 +857,7 @@
                   <object class="GtkGrid" id="job_page">
                     <property name="row-spacing">18</property>
                     <property name="column-spacing">18</property>
+                    <property name="margin">12</property>
                     <child>
                       <object class="GtkBox" id="frame_template5">
                         <property name="visible">1</property>
@@ -1188,6 +1191,7 @@
                             <property name="visible">1</property>
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
+                            <property name="margin">12</property>
                           </object>
                         </child>
                       </object>
@@ -1220,6 +1224,7 @@
                             <property name="visible">1</property>
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
+                            <property name="margin">12</property>
                           </object>
                         </child>
                       </object>
@@ -1252,6 +1257,7 @@
                             <property name="visible">1</property>
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
+                            <property name="margin">12</property>
                           </object>
                         </child>
                       </object>
@@ -1284,6 +1290,7 @@
                             <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">18</property>
+                            <property name="margin">12</property>
                           </object>
                         </child>
                       </object>

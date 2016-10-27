@@ -11,6 +11,7 @@
         <property name="orientation">vertical</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="margin">6</property>
             <property name="layout-style">end</property>
           </object>
           <packing>

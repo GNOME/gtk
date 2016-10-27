@@ -8,11 +8,13 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <property name="margin">5</property>
         <child>
           <object class="GtkFontChooserWidget" id="fontchooser">
             <property name="visible">1</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
+            <property name="margin">5</property>
             <signal name="font-activated" handler="font_activated_cb" swapped="no"/>
           </object>
           <packing>

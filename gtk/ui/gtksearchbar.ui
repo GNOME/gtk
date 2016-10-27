@@ -10,6 +10,7 @@
           <object class="GtkBox" id="tool_box">
             <property name="visible">1</property>
             <property name="spacing">6</property>
+            <property name="margin">6</property>
             <child>
               <object class="GtkBox" id="box_left">
                 <property name="visible">1</property>

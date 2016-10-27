@@ -11,6 +11,7 @@
           <object class="GtkLabel" id="font_label">
             <property name="visible">1</property>
             <property name="label" translatable="yes">Font</property>
+            <property name="margin">5</property>
           </object>
           <packing>
             <property name="expand">1</property>
@@ -33,6 +34,7 @@
               <object class="GtkLabel" id="size_label">
                 <property name="visible">1</property>
                 <property name="label">14</property>
+                <property name="margin">5</property>
               </object>
               <packing>
                 <property name="fill">0</property>
