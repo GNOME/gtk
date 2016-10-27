@@ -617,113 +617,6 @@ gdk_x11_window_create_pixmap_surface (GdkWindow *window,
   return surface;
 }
 
-static void
-tmp_unset_bg (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl;
-
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-  impl->no_bg = TRUE;
-
-  XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
-                              GDK_WINDOW_XID (window), None);
-}
-
-static void
-tmp_reset_bg (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl;
-
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-  impl->no_bg = FALSE;
-
-  XSetWindowBackground (GDK_WINDOW_XDISPLAY (window),
-                        GDK_WINDOW_XID (window), 0);
-}
-
-/* Unsetting and resetting window backgrounds.
- *
- * In many cases it is possible to avoid flicker by unsetting the
- * background of windows. For example if the background of the
- * parent window is unset when a window is unmapped, a brief flicker
- * of background painting is avoided.
- */
-void
-_gdk_x11_window_tmp_unset_bg (GdkWindow *window,
-			      gboolean   recurse)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  if (window->input_only || window->destroyed ||
-      (window->window_type != GDK_WINDOW_ROOT &&
-       !GDK_WINDOW_IS_MAPPED (window)))
-    return;
-  
-  if (_gdk_window_has_impl (window) &&
-      GDK_WINDOW_IS_X11 (window) &&
-      window->window_type != GDK_WINDOW_ROOT &&
-      window->window_type != GDK_WINDOW_FOREIGN)
-    tmp_unset_bg (window);
-
-  if (recurse)
-    {
-      GList *l;
-
-      for (l = window->children; l != NULL; l = l->next)
-	_gdk_x11_window_tmp_unset_bg (l->data, TRUE);
-    }
-}
-
-void
-_gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window)
-{
-  if (GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_ROOT)
-    return;
-  
-  window = _gdk_window_get_impl_window (window->parent);
-  _gdk_x11_window_tmp_unset_bg (window,	FALSE);
-}
-
-void
-_gdk_x11_window_tmp_reset_bg (GdkWindow *window,
-			      gboolean   recurse)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (window->input_only || window->destroyed ||
-      (window->window_type != GDK_WINDOW_ROOT &&
-       !GDK_WINDOW_IS_MAPPED (window)))
-    return;
-
-  
-  if (_gdk_window_has_impl (window) &&
-      GDK_WINDOW_IS_X11 (window) &&
-      window->window_type != GDK_WINDOW_ROOT &&
-      window->window_type != GDK_WINDOW_FOREIGN)
-    tmp_reset_bg (window);
-
-  if (recurse)
-    {
-      GList *l;
-
-      for (l = window->children; l != NULL; l = l->next)
-	_gdk_x11_window_tmp_reset_bg (l->data, TRUE);
-    }
-}
-
-void
-_gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window)
-{
-  if (GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_ROOT)
-    return;
-  
-  window = _gdk_window_get_impl_window (window->parent);
-
-  _gdk_x11_window_tmp_reset_bg (window, FALSE);
-}
-
 void
 _gdk_x11_screen_init_root_window (GdkScreen *screen)
 {
@@ -1619,10 +1512,8 @@ gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
   GdkDisplay *display;
   GdkX11Display *display_x11;
   GdkToplevelX11 *toplevel;
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
   Window xwindow = GDK_WINDOW_XID (window);
-  gboolean unset_bg;
 
   if (!already_mapped)
     set_initial_hints (window);
@@ -1639,42 +1530,14 @@ gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
 	gdk_x11_window_set_user_time (window, display_x11->user_time);
     }
   
-  unset_bg = !window->input_only &&
-    (window->window_type == GDK_WINDOW_CHILD ||
-     impl->override_redirect) &&
-    gdk_window_is_viewable (window);
-  
-  if (unset_bg)
-    _gdk_x11_window_tmp_unset_bg (window, TRUE);
-  
   XMapWindow (xdisplay, xwindow);
   
-  if (unset_bg)
-    _gdk_x11_window_tmp_reset_bg (window, TRUE);
-
   /* Fullscreen on current monitor is the default, no need to apply this mode
    * when mapping a window. This also ensures that the default behavior remains
    * consistent with pre-fullscreen mode implementation.
    */
   if (window->fullscreen_mode != GDK_FULLSCREEN_ON_CURRENT_MONITOR)
     gdk_x11_window_apply_fullscreen_mode (window);
-}
-
-static void
-pre_unmap (GdkWindow *window)
-{
-  GdkWindow *start_window = NULL;
-
-  if (window->input_only)
-    return;
-
-  if (window->window_type == GDK_WINDOW_CHILD)
-    start_window = _gdk_window_get_impl_window ((GdkWindow *)window->parent);
-  else if (window->window_type == GDK_WINDOW_TEMP)
-    start_window = get_root (window);
-
-  if (start_window)
-    _gdk_x11_window_tmp_unset_bg (start_window, TRUE);
 }
 
 static void
@@ -1692,8 +1555,6 @@ post_unmap (GdkWindow *window)
 
   if (start_window)
     {
-      _gdk_x11_window_tmp_reset_bg (start_window, TRUE);
-
       if (window->window_type == GDK_WINDOW_CHILD && window->parent)
 	{
 	  GdkRectangle invalid_rect;
@@ -1733,7 +1594,6 @@ gdk_window_x11_hide (GdkWindow *window)
   
   _gdk_window_clear_update_area (window);
   
-  pre_unmap (window);
   XUnmapWindow (GDK_WINDOW_XDISPLAY (window),
 		GDK_WINDOW_XID (window));
   post_unmap (window);
@@ -1751,8 +1611,6 @@ gdk_window_x11_withdraw (GdkWindow *window)
 
       g_assert (!GDK_WINDOW_IS_MAPPED (window));
 
-      pre_unmap (window);
-      
       XWithdrawWindow (GDK_WINDOW_XDISPLAY (window),
                        GDK_WINDOW_XID (window), 0);
 
@@ -1990,15 +1848,11 @@ gdk_window_x11_reparent (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
-  _gdk_x11_window_tmp_unset_bg (window, TRUE);
-  _gdk_x11_window_tmp_unset_parent_bg (window);
   XReparentWindow (GDK_WINDOW_XDISPLAY (window),
 		   GDK_WINDOW_XID (window),
 		   GDK_WINDOW_XID (new_parent),
 		   (new_parent->abs_x + x)  * impl->window_scale,
                    (new_parent->abs_y + y) * impl->window_scale);
-  _gdk_x11_window_tmp_reset_parent_bg (window);
-  _gdk_x11_window_tmp_reset_bg (window, TRUE);
 
   if (WINDOW_IS_TOPLEVEL (window))
     connect_frame_clock (window);
@@ -3238,22 +3092,12 @@ do_shape_combine_region (GdkWindow       *window,
 	  ? gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window))
 	  : gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
 	{
-	  if (shape == ShapeBounding)
-	    {
-	      _gdk_x11_window_tmp_unset_parent_bg (window);
-	      _gdk_x11_window_tmp_unset_bg (window, TRUE);
-	    }
 	  XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
 			     GDK_WINDOW_XID (window),
 			     shape,
 			     0, 0,
 			     None,
 			     ShapeSet);
- 	  if (shape == ShapeBounding)
-	    {
-	      _gdk_x11_window_tmp_reset_parent_bg (window);
-	      _gdk_x11_window_tmp_reset_bg (window, TRUE);
-	    }
 	}
       return;
     }
@@ -3269,11 +3113,6 @@ do_shape_combine_region (GdkWindow       *window,
                                        0, 0, impl->window_scale,
                                        &xrects, &n_rects);
       
-      if (shape == ShapeBounding)
-	{
-	  _gdk_x11_window_tmp_unset_parent_bg (window);
-	  _gdk_x11_window_tmp_unset_bg (window, TRUE);
-	}
       XShapeCombineRectangles (GDK_WINDOW_XDISPLAY (window),
                                GDK_WINDOW_XID (window),
                                shape,
@@ -3282,12 +3121,6 @@ do_shape_combine_region (GdkWindow       *window,
                                xrects, n_rects,
                                ShapeSet,
                                YXBanded);
-
-      if (shape == ShapeBounding)
-	{
-	  _gdk_x11_window_tmp_reset_parent_bg (window);
-	  _gdk_x11_window_tmp_reset_bg (window, TRUE);
-	}
       
       g_free (xrects);
     }
