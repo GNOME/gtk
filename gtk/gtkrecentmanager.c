@@ -47,6 +47,9 @@
 /* return all items by default */
 #define DEFAULT_LIMIT	-1
 
+/* limit the size of the list */
+#define MAX_LIST_SIZE 1000
+
 /* keep in sync with xdgmime */
 #define GTK_RECENT_DEFAULT_MIME	"application/octet-stream"
 
@@ -137,6 +140,8 @@ static void     gtk_recent_manager_set_filename        (GtkRecentManager  *manag
                                                         const gchar       *filename);
 static void     gtk_recent_manager_clamp_to_age        (GtkRecentManager  *manager,
                                                         gint               age);
+static void     gtk_recent_manager_clamp_to_size       (GtkRecentManager  *manager,
+                                                        const gint         size);
 
 
 static void build_recent_items_list (GtkRecentManager  *manager);
@@ -414,6 +419,7 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
         {
           GtkSettings *settings = gtk_settings_get_default ();
           gint age = 30;
+          gint max_size = MAX_LIST_SIZE;
 
           g_object_get (G_OBJECT (settings), "gtk-recent-files-max-age", &age, NULL);
           if (age > 0)
@@ -423,6 +429,9 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
               g_bookmark_file_free (priv->recent_items);
               priv->recent_items = g_bookmark_file_new ();
             }
+
+          if (max_size > 0)
+            gtk_recent_manager_clamp_to_size (manager, max_size);
         }
 
       write_error = NULL;
@@ -1580,6 +1589,31 @@ gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
       item_age = (gint) ((now - modified) / (60 * 60 * 24));
       if (item_age > age)
         g_bookmark_file_remove_item (priv->recent_items, uri, NULL);
+    }
+
+  g_strfreev (uris);
+}
+
+static void
+gtk_recent_manager_clamp_to_size (GtkRecentManager *manager,
+                                  const gint        size)
+{
+  GtkRecentManagerPrivate *priv = manager->priv;
+  gchar **uris;
+  gsize n_uris, i;
+
+  if (G_UNLIKELY (!priv->recent_items) || G_UNLIKELY (size < 0))
+    return;
+
+  uris = g_bookmark_file_get_uris (priv->recent_items, &n_uris);
+
+  if (n_uris < size)
+    return;
+
+  for (i = 0; i < n_uris - size; i++)
+    {
+      const gchar *uri = uris[i];
+      g_bookmark_file_remove_item (priv->recent_items, uri, NULL);
     }
 
   g_strfreev (uris);
