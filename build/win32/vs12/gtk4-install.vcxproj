@@ -245,19 +245,19 @@
       <Project>{e9687d21-e214-4a0c-9eb4-8b38ebb783e5}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="gtk-encode-symbolic-svg.vcxproj">
+    <ProjectReference Include="gtk4-encode-symbolic-svg.vcxproj">
       <Project>{f280bf1a-777a-4fb5-8005-dfbe04621edb}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="gtk-udpate-icon-cache.vcxproj">
+    <ProjectReference Include="gtk4-update-icon-cache.vcxproj">
       <Project>{fc98af16-4c68-42df-906b-93a6804c198a}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="gtk-builder-tool.vcxproj">
+    <ProjectReference Include="gtk4-builder-tool.vcxproj">
       <Project>{7d2397cf-4c25-45bc-a1bb-cb4b6e154bbd}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="gtk-query-settings.vcxproj">
+    <ProjectReference Include="gtk4-query-settings.vcxproj">
       <Project>{9f22107a-4ef7-4b52-b269-747b65307f36}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

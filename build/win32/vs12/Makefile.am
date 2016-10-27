@@ -46,14 +46,14 @@ EXTRA_DIST += \
 	gsk-4.vcxproj.filtersin			\
 	gtk-4.vcxprojin				\
 	gtk-4.vcxproj.filtersin			\
-	gtk-builder-tool.vcxproj		\
-	gtk-builder-tool.vcxproj.filters	\
-	gtk-encode-symbolic-svg.vcxproj		\
-	gtk-encode-symbolic-svg.vcxproj.filters	\
-	gtk-query-settings.vcxproj		\
-	gtk-query-settings.vcxproj.filters	\
-	gtk-update-icon-cache.vcxproj		\
-	gtk-update-icon-cache.vcxproj.filters	\
+	gtk4-builder-tool.vcxproj		\
+	gtk4-builder-tool.vcxproj.filters	\
+	gtk4-encode-symbolic-svg.vcxproj	\
+	gtk4-encode-symbolic-svg.vcxproj.filters	\
+	gtk4-query-settings.vcxproj		\
+	gtk4-query-settings.vcxproj.filters	\
+	gtk4-update-icon-cache.vcxproj		\
+	gtk4-update-icon-cache.vcxproj.filters	\
 	gtk4-demo.vcxprojin			\
 	gtk4-demo.vcxproj.filtersin		\
 	gtk4-demo-application.vcxprojin		\

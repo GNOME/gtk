@@ -27,14 +27,14 @@ copy "$(BinDir)\gtk4-demo-application.exe" $(CopyDir)\bin
 copy "$(BinDir)\gtk4-demo-application.pdb" $(CopyDir)\bin
 copy "$(BinDir)\gtk4-icon-browser.exe" $(CopyDir)\bin
 copy "$(BinDir)\gtk4-icon-browser.pdb" $(CopyDir)\bin
-copy "$(BinDir)\gtk-encode-symbolic-svg.exe" $(CopyDir)\bin
-copy "$(BinDir)\gtk-encode-symbolic-svg.pdb" $(CopyDir)\bin
-copy "$(BinDir)\gtk-update-icon-cache.exe" $(CopyDir)\bin
-copy "$(BinDir)\gtk-update-icon-cache.pdb" $(CopyDir)\bin
-copy "$(BinDir)\gtk-query-settings.exe" $(CopyDir)\bin
-copy "$(BinDir)\gtk-query-settings.pdb" $(CopyDir)\bin
-copy "$(BinDir)\gtk-builder-tool.exe" $(CopyDir)\bin
-copy "$(BinDir)\gtk-builder-tool.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-encode-symbolic-svg.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-encode-symbolic-svg.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-update-icon-cache.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-update-icon-cache.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-query-settings.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-query-settings.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-builder-tool.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk4-builder-tool.pdb" $(CopyDir)\bin
 goto DONE_BIN
 
 :DO_BROADWAY_BIN
@@ -56,14 +56,14 @@ copy .\Release\$(Platform)\bin\gtk4-demo-application.exe $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk4-demo-application.pdb $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk4-icon-browser.exe $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk4-icon-browser.pdb $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-query-settings.exe $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-query-settings.pdb $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-builder-tool.exe $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-builder-tool.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-encode-symbolic-svg.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-encode-symbolic-svg.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-update-icon-cache.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-update-icon-cache.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-query-settings.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-query-settings.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-builder-tool.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk4-builder-tool.pdb $(CopyDir)\bin
 
 goto DONE_BIN
 
@@ -80,14 +80,14 @@ copy .\Debug\$(Platform)\bin\gtk4-demo-application.exe $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk4-demo-application.pdb $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk4-icon-browser.exe $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk4-icon-browser.pdb $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-query-settings.exe $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-query-settings.pdb $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-builder-tool.exe $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-builder-tool.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-encode-symbolic-svg.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-encode-symbolic-svg.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-update-icon-cache.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-update-icon-cache.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-query-settings.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-query-settings.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-builder-tool.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk4-builder-tool.pdb $(CopyDir)\bin
 
 :DONE_BIN
 
@@ -138,7 +138,7 @@ echo "Compiling gsettings XML Files..."
 $(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
 
 echo "Generating icon cache......"
-$(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
+$(CopyDir)\bin\gtk4-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
     </GtkPostInstall>
     <GenerateGtkPC>$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
     <GenerateGtkPCX64>$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
