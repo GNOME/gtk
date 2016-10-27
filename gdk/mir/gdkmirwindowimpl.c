@@ -1516,11 +1516,9 @@ find_eglconfig_for_window (GdkWindow  *window,
 {
   GdkDisplay *display = gdk_window_get_display (window);
   EGLDisplay *egl_display = _gdk_mir_display_get_egl_display (display);
-  GdkVisual *visual = gdk_window_get_visual (window);
   EGLint attrs[MAX_EGL_ATTRS];
   EGLint count;
   EGLConfig *configs;
-  gboolean use_rgba;
 
   int i = 0;
 
@@ -1536,19 +1534,8 @@ find_eglconfig_for_window (GdkWindow  *window,
   attrs[i++] = 1;
   attrs[i++] = EGL_BLUE_SIZE;
   attrs[i++] = 1;
-
-  use_rgba = (visual == gdk_screen_get_rgba_visual (gdk_display_get_default_screen (display)));
-
-  if (use_rgba)
-    {
-      attrs[i++] = EGL_ALPHA_SIZE;
-      attrs[i++] = 1;
-    }
-  else
-    {
-      attrs[i++] = EGL_ALPHA_SIZE;
-      attrs[i++] = 0;
-    }
+  attrs[i++] = EGL_ALPHA_SIZE;
+  attrs[i++] = 1;
 
   attrs[i++] = EGL_NONE;
   g_assert (i < MAX_EGL_ATTRS);

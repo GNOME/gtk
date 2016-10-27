@@ -964,12 +964,11 @@ _gdk_win32_window_description (GdkWindow *d)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (d), NULL);
 
-  return static_printf ("%s:%p:%dx%dx%d",
+  return static_printf ("%s:%p:%dx%d",
 			G_OBJECT_TYPE_NAME (d),
 			GDK_WINDOW_HWND (d),
 			gdk_window_get_width (GDK_WINDOW (d)),
-                        gdk_window_get_height (GDK_WINDOW (d)),
-                        gdk_visual_get_depth (gdk_window_get_visual (GDK_WINDOW (d))));
+                        gdk_window_get_height (GDK_WINDOW (d)));
 }
 
 #endif /* G_ENABLE_DEBUG */

@@ -157,7 +157,6 @@ struct _GdkWindow
 
   GdkWindow *parent;
   GdkWindow *transient_for;
-  GdkVisual *visual;
 
   gpointer user_data;
 

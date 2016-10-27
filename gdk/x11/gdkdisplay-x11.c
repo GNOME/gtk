@@ -2899,6 +2899,21 @@ gdk_x11_display_get_primary_monitor (GdkDisplay *display)
   return NULL;
 }
 
+GdkVisual *
+gdk_x11_display_get_window_visual (GdkX11Display *display)
+{
+  GdkScreen *screen;
+  GdkVisual *visual;
+  
+  screen = gdk_display_get_default_screen (GDK_DISPLAY (display));
+
+  visual = gdk_screen_get_rgba_visual (screen);
+  if (visual == NULL)
+    visual = gdk_screen_get_system_visual (screen);
+
+  return visual;
+}
+
 static void
 gdk_x11_display_class_init (GdkX11DisplayClass * class)
 {

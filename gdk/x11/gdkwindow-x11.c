@@ -466,7 +466,7 @@ gdk_x11_create_cairo_surface (GdkWindowImplX11 *impl,
 {
   GdkVisual *visual;
     
-  visual = gdk_window_get_visual (impl->wrapper);
+  visual = gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (gdk_window_get_display (impl->wrapper)));
   return cairo_xlib_surface_create (GDK_WINDOW_XDISPLAY (impl->wrapper),
                                     GDK_WINDOW_IMPL_X11 (impl)->xid,
                                     GDK_VISUAL_XVISUAL (visual),
@@ -632,7 +632,6 @@ _gdk_x11_screen_init_root_window (GdkScreen *screen)
 
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl_window = window;
-  window->visual = gdk_screen_get_system_visual (screen);
 
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
   
@@ -903,6 +902,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   GdkWindowImplX11 *impl;
   GdkX11Screen *x11_screen;
   GdkX11Display *display_x11;
+  GdkVisual *visual;
 
   Window xparent;
   Visual *xvisual;
@@ -929,7 +929,8 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   xattributes_mask = 0;
 
-  xvisual = gdk_x11_visual_get_xvisual (window->visual);
+  visual = gdk_x11_display_get_window_visual (display_x11);
+  xvisual = gdk_x11_visual_get_xvisual (visual);
 
   if (attributes_mask & GDK_WA_NOREDIR)
     {
@@ -966,7 +967,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       xattributes.bit_gravity = NorthWestGravity;
       xattributes_mask |= CWBitGravity;
 
-      xattributes.colormap = _gdk_visual_get_x11_colormap (window->visual);
+      xattributes.colormap = _gdk_visual_get_x11_colormap (visual);
       xattributes_mask |= CWColormap;
 
       if (window->window_type == GDK_WINDOW_TEMP)
@@ -1128,8 +1129,6 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   win = _gdk_display_create_window (display);
   win->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   win->impl_window = win;
-  win->visual = gdk_x11_screen_lookup_visual (screen,
-                                              XVisualIDFromVisual (attrs.visual));
 
   impl = GDK_WINDOW_IMPL_X11 (win->impl);
   impl->wrapper = win;

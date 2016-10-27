@@ -331,7 +331,6 @@ typedef enum
  * @height: height of window
  * @wclass: #GDK_INPUT_OUTPUT (normal window) or #GDK_INPUT_ONLY (invisible
  *  window that receives events)
- * @visual: #GdkVisual for window
  * @window_type: type of window
  * @cursor: cursor for the window (see gdk_window_set_cursor())
  * @override_redirect: %TRUE to bypass the window manager
@@ -493,8 +492,6 @@ GdkWindowType gdk_window_get_window_type       (GdkWindow     *window);
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_window_is_destroyed          (GdkWindow     *window);
 
-GDK_AVAILABLE_IN_ALL
-GdkVisual *   gdk_window_get_visual            (GdkWindow     *window);
 GDK_AVAILABLE_IN_ALL
 GdkScreen *   gdk_window_get_screen            (GdkWindow     *window);
 GDK_AVAILABLE_IN_ALL

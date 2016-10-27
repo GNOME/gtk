@@ -2262,10 +2262,9 @@ gdk_win32_window_get_geometry (GdkWindow *window,
       if (height)
 	*height = rect.bottom - rect.top;
 
-      GDK_NOTE (MISC, g_print ("gdk_win32_window_get_geometry: %p: %ldx%ldx%d@%+ld%+ld\n",
+      GDK_NOTE (MISC, g_print ("gdk_win32_window_get_geometry: %p: %ldx%ld@%+ld%+ld\n",
 			       GDK_WINDOW_HWND (window),
 			       rect.right - rect.left, rect.bottom - rect.top,
-			       gdk_window_get_visual (window)->depth,
 			       rect.left, rect.top));
     }
 }

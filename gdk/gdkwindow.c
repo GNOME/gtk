@@ -1231,10 +1231,6 @@ gdk_window_new (GdkWindow     *parent,
       return NULL;
     }
 
-  window->visual = gdk_screen_get_rgba_visual (screen);
-  if (window->visual == NULL)
-    window->visual = gdk_screen_get_system_visual (screen);
-
   window->event_mask = attributes->event_mask;
 
   if (attributes->wclass == GDK_INPUT_OUTPUT)
@@ -2071,24 +2067,6 @@ gdk_window_get_window_type (GdkWindow *window)
 }
 
 /**
- * gdk_window_get_visual:
- * @window: a #GdkWindow
- * 
- * Gets the #GdkVisual describing the pixel format of @window.
- * 
- * Returns: (transfer none): a #GdkVisual
- *
- * Since: 2.24
- **/
-GdkVisual*
-gdk_window_get_visual (GdkWindow *window)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-  
-  return window->visual;
-}
-
-/**
  * gdk_window_get_screen:
  * @window: a #GdkWindow
  * 
@@ -2103,7 +2081,7 @@ gdk_window_get_screen (GdkWindow *window)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  return gdk_visual_get_screen (window->visual);
+  return gdk_display_get_default_screen (window->display);
 }
 
 /**

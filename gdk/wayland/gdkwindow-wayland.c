@@ -359,7 +359,6 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
   window = _gdk_display_create_window (GDK_DISPLAY (display_wayland));
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
   window->impl_window = window;
-  window->visual = gdk_screen_get_system_visual (screen);
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 

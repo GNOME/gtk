@@ -862,11 +862,8 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 
 	gdk_window_set_title (window, title);
   
-	if (gdk_window_get_visual (window) == gdk_screen_get_rgba_visual (_gdk_screen))
-	  {
-	    [impl->toplevel setOpaque:NO];
-	    [impl->toplevel setBackgroundColor:[NSColor clearColor]];
-	  }
+        [impl->toplevel setOpaque:NO];
+        [impl->toplevel setBackgroundColor:[NSColor clearColor]];
 
         content_rect.origin.x = 0;
         content_rect.origin.y = 0;

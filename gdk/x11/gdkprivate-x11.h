@@ -70,6 +70,7 @@ void          _gdk_x11_screen_query_visual_types         (GdkScreen      *screen
 GList *       _gdk_x11_screen_list_visuals               (GdkScreen      *screen);
 
 
+GdkVisual *   gdk_x11_display_get_window_visual          (GdkX11Display  *display);
 
 void _gdk_x11_display_add_window    (GdkDisplay *display,
                                      XID        *xid,

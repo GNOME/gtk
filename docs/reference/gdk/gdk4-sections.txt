@@ -314,7 +314,6 @@ gdk_window_destroy
 gdk_window_get_window_type
 gdk_window_get_display
 gdk_window_get_screen
-gdk_window_get_visual
 gdk_window_show
 gdk_window_show_unraised
 gdk_window_hide

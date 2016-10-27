@@ -22,6 +22,7 @@
 
 #include "gdkglcontext-x11.h"
 #include "gdkdisplay-x11.h"
+#include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 
 #include "gdkx11display.h"
@@ -1275,7 +1276,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
       return NULL;
     }
 
-  visual = gdk_window_get_visual (window);
+  visual = gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (display));
   if (!find_fbconfig_for_visual (display, visual, &config, error))
     return NULL;
 

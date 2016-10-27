@@ -211,7 +211,6 @@ _gdk_broadway_screen_init_root_window (GdkScreen * screen)
   window = broadway_screen->root_window;
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_BROADWAY, NULL);
   window->impl_window = window;
-  window->visual = gdk_screen_get_system_visual (screen);
 
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
