@@ -1458,6 +1458,32 @@ gtk_text_iter_can_insert (const GtkTextIter *iter,
     }
 }
 
+gboolean
+gtk_text_iter_get_attributes (const GtkTextIter  *iter,
+                              GtkTextAttributes  *values)
+{
+  GtkTextTag** tags;
+  gint tag_count = 0;
+
+  /* Get the tags at this spot */
+  tags = _gtk_text_btree_get_tags (iter, &tag_count);
+
+  /* No tags, use default style */
+  if (tags == NULL || tag_count == 0)
+    {
+      g_free (tags);
+
+      return FALSE;
+    }
+
+  _gtk_text_attributes_fill_from_tags (values,
+                                       tags,
+                                       tag_count);
+
+  g_free (tags);
+
+  return TRUE;
+}
 
 /**
  * gtk_text_iter_get_language:
@@ -1741,49 +1767,6 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
     count -= 1; /* Dump the newline that was in the last segment of the end iter line */
   
   return count;
-}
-
-/**
- * gtk_text_iter_get_attributes:
- * @iter: an iterator
- * @values: (out): a #GtkTextAttributes to be filled in
- *
- * Computes the effect of any tags applied to this spot in the
- * text. The @values parameter should be initialized to the default
- * settings you wish to use if no tags are in effect. You’d typically
- * obtain the defaults from gtk_text_view_get_default_attributes().
- *
- * gtk_text_iter_get_attributes() will modify @values, applying the
- * effects of any tags present at @iter. If any tags affected @values,
- * the function returns %TRUE.
- *
- * Returns: %TRUE if @values was modified
- **/
-gboolean
-gtk_text_iter_get_attributes (const GtkTextIter  *iter,
-                              GtkTextAttributes  *values)
-{
-  GtkTextTag** tags;
-  gint tag_count = 0;
-
-  /* Get the tags at this spot */
-  tags = _gtk_text_btree_get_tags (iter, &tag_count);
-
-  /* No tags, use default style */
-  if (tags == NULL || tag_count == 0)
-    {
-      g_free (tags);
-
-      return FALSE;
-    }
-
-  _gtk_text_attributes_fill_from_tags (values,
-                                       tags,
-                                       tag_count);
-
-  g_free (tags);
-
-  return TRUE;
 }
 
 /*
