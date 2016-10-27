@@ -110,18 +110,9 @@ mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 mkdir $(CopyDir)\include\gail-$(ApiVersion)\libgail-util
 #include "gailutil-3.vs10.headers"
 
-mkdir $(CopyDir)\share\icons\hicolor\16x16\apps
-copy ..\..\..\demos\gtk-demo\data\16x16\gtk3-demo.png $(CopyDir)\share\icons\hicolor\16x16\apps
-mkdir $(CopyDir)\share\icons\hicolor\22x22\apps
-copy ..\..\..\demos\gtk-demo\data\22x22\gtk3-demo.png $(CopyDir)\share\icons\hicolor\22x22\apps
-mkdir $(CopyDir)\share\icons\hicolor\24x24\apps
-copy ..\..\..\demos\gtk-demo\data\24x24\gtk3-demo.png $(CopyDir)\share\icons\hicolor\24x24\apps
-mkdir $(CopyDir)\share\icons\hicolor\32x32\apps
-copy ..\..\..\demos\gtk-demo\data\32x32\gtk3-demo.png $(CopyDir)\share\icons\hicolor\32x32\apps
-mkdir $(CopyDir)\share\icons\hicolor\48x48\apps
-copy ..\..\..\demos\gtk-demo\data\48x48\gtk3-demo.png $(CopyDir)\share\icons\hicolor\48x48\apps
-mkdir $(CopyDir)\share\icons\hicolor\256x256\apps
-copy ..\..\..\demos\gtk-demo\data\256x256\gtk3-demo.png $(CopyDir)\share\icons\hicolor\256x256\apps
+
+for &#37;&#37;s in (16 22 24 32 48 256) do ((mkdir $(CopyDir)\share\icons\hicolor\&#37;&#37;sx&#37;&#37;s\apps) &amp; (copy /b ..\..\..\demos\gtk-demo\data\&#37;&#37;sx&#37;&#37;s\gtk3-demo.png $(CopyDir)\share\icons\hicolor\&#37;&#37;sx&#37;&#37;s\apps))
+
 mkdir $(CopyDir)\share\glib-2.0\schemas
 copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 copy ..\..\..\gtk\org.gtk.Settings.ColorChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
