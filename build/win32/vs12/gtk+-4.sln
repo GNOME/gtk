@@ -20,13 +20,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-demo-application", "gt
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-icon-browser", "gtk4-icon-browser.vcxproj", "{343333C4-D46C-4C97-A986-959CCA6F1DE0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-encode-symbolic-svg", "gtk-encode-symbolic-svg.vcxproj", "{F280BF1A-777A-4FB5-8005-DFBE04621EDB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-encode-symbolic-svg", "gtk4-encode-symbolic-svg.vcxproj", "{F280BF1A-777A-4FB5-8005-DFBE04621EDB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-update-icon-cache", "gtk-update-icon-cache.vcxproj", "{FC98AF16-4C68-42DF-906B-93A6804C198A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-update-icon-cache", "gtk4-update-icon-cache.vcxproj", "{FC98AF16-4C68-42DF-906B-93A6804C198A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-builder-tool", "gtk-builder-tool.vcxproj", "{7D2397CF-4C25-45BC-A1BB-CB4B6E154BBD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-builder-tool", "gtk4-builder-tool.vcxproj", "{7D2397CF-4C25-45BC-A1BB-CB4B6E154BBD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-query-settings", "gtk-query-settings.vcxproj", "{9F22107A-3EF7-4B52-B269-747B65307F36}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-query-settings", "gtk4-query-settings.vcxproj", "{9F22107A-3EF7-4B52-B269-747B65307F36}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk4-install", "gtk4-install.vcxproj", "{23BBF35F-78AF-4E8C-983F-7B90448CD7DF}"
 EndProject
