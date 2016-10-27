@@ -151,6 +151,8 @@ struct _GdkWindow
 {
   GObject parent_instance;
 
+  GdkDisplay *display;
+
   GdkWindowImpl *impl; /* window-system-specific delegate object */
 
   GdkWindow *parent;

@@ -1877,7 +1877,9 @@ _gdk_display_create_window_impl (GdkDisplay       *display,
 GdkWindow *
 _gdk_display_create_window (GdkDisplay *display)
 {
-  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->window_type, NULL);
+  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->window_type,
+                       "display", display,
+                       NULL);
 }
 
 /**

@@ -119,6 +119,7 @@ enum {
 enum {
   PROP_0,
   PROP_CURSOR,
+  PROP_DISPLAY,
   LAST_PROP
 };
 
@@ -289,6 +290,22 @@ gdk_window_class_init (GdkWindowClass *klass)
                            P_("Cursor"),
                            GDK_TYPE_CURSOR,
                            G_PARAM_READWRITE);
+
+  /**
+   * GdkWindow:display:
+   *
+   * The #GdkDisplay connection of the window. See gdk_window_get_display()
+   * for details.
+   *
+   * Since: 3.90
+   */
+  properties[PROP_DISPLAY] =
+      g_param_spec_object ("display",
+                           P_("Display"),
+                           P_("Display"),
+                           GDK_TYPE_DISPLAY,
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
@@ -401,6 +418,8 @@ gdk_window_finalize (GObject *object)
   if (window->devices_inside)
     g_list_free (window->devices_inside);
 
+  g_clear_object (&window->display);
+
   G_OBJECT_CLASS (gdk_window_parent_class)->finalize (object);
 }
 
@@ -410,12 +429,17 @@ gdk_window_set_property (GObject      *object,
                          const GValue *value,
                          GParamSpec   *pspec)
 {
-  GdkWindow *window = (GdkWindow *)object;
+  GdkWindow *window = GDK_WINDOW (object);
 
   switch (prop_id)
     {
     case PROP_CURSOR:
       gdk_window_set_cursor (window, g_value_get_object (value));
+      break;
+
+    case PROP_DISPLAY:
+      window->display = g_value_dup_object (value);
+      g_assert (window->display != NULL);
       break;
 
     default:
@@ -430,12 +454,16 @@ gdk_window_get_property (GObject    *object,
                          GValue     *value,
                          GParamSpec *pspec)
 {
-  GdkWindow *window = (GdkWindow *) object;
+  GdkWindow *window = GDK_WINDOW (object);
 
   switch (prop_id)
     {
     case PROP_CURSOR:
       g_value_set_object (value, gdk_window_get_cursor (window));
+      break;
+
+    case PROP_DISPLAY:
+      g_value_set_object (value, window->display);
       break;
 
     default:
@@ -2095,7 +2123,7 @@ gdk_window_get_display (GdkWindow *window)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  return gdk_screen_get_display (gdk_visual_get_screen (window->visual));
+  return window->display;
 }
 /**
  * gdk_window_is_destroyed:
