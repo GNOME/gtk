@@ -220,7 +220,6 @@ _gdk_broadway_screen_init_root_window (GdkScreen * screen)
   impl->id = 0;
 
   window->window_type = GDK_WINDOW_ROOT;
-  window->depth = 24;
 
   window->x = 0;
   window->y = 0;

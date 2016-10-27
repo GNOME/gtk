@@ -1240,11 +1240,9 @@ gdk_window_new (GdkWindow     *parent,
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
       window->input_only = FALSE;
-      window->depth = window->visual->depth;
     }
   else
     {
-      window->depth = 0;
       window->input_only = TRUE;
     }
 

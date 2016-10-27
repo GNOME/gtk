@@ -376,7 +376,6 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
   cairo_surface_set_device_scale (impl->staging_cairo_surface, impl->scale, impl->scale);
 
   window->window_type = GDK_WINDOW_ROOT;
-  window->depth = 32;
 
   window->x = 0;
   window->y = 0;

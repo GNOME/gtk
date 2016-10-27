@@ -641,7 +641,6 @@ _gdk_x11_screen_init_root_window (GdkScreen *screen)
   impl->window_scale = x11_screen->window_scale;
   
   window->window_type = GDK_WINDOW_ROOT;
-  window->depth = DefaultDepthOfScreen (x11_screen->xscreen);
 
   window->x = 0;
   window->y = 0;
@@ -915,6 +914,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   unsigned int class;
   const char *title;
+  int depth;
 
   display_x11 = GDK_X11_DISPLAY (display);
   xparent = GDK_WINDOW_XID (real_parent);
@@ -978,10 +978,14 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
           impl->override_redirect = TRUE;
         }
+
+      depth = visual->depth;
     }
   else
     {
       class = InputOnly;
+
+      depth = 0;
     }
 
   if (window->width * impl->window_scale > 32767 ||
@@ -1002,7 +1006,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                              (window->x + window->parent->abs_x) * impl->window_scale,
                              (window->y + window->parent->abs_y) * impl->window_scale,
                              window->width * impl->window_scale, window->height * impl->window_scale,
-                             0, window->depth, class, xvisual,
+                             0, depth, class, xvisual,
                              xattributes_mask, &xattributes);
 
   g_object_ref (window);
@@ -1158,8 +1162,6 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   else
     win->state = 0;
   win->viewable = TRUE;
-
-  win->depth = attrs.depth;
 
   g_object_ref (win);
   _gdk_x11_display_add_window (display, &GDK_WINDOW_XID (win), win);

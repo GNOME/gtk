@@ -167,7 +167,6 @@ struct _GdkWindow
   GdkEventMask event_mask;
   guint8 window_type;
 
-  guint8 depth;
   guint8 resize_count;
 
   gint8 toplevel_window_type;
