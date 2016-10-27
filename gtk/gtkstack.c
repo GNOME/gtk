@@ -2330,20 +2330,7 @@ gtk_stack_measure (GtkCssGadget   *gadget,
 
       if (gtk_widget_get_visible (child))
         {
-          if (orientation == GTK_ORIENTATION_VERTICAL)
-            {
-              if (for_size < 0)
-                gtk_widget_get_preferred_height (child, &child_min, &child_nat);
-              else
-                gtk_widget_get_preferred_height_for_width (child, for_size, &child_min, &child_nat);
-            }
-          else
-            {
-              if (for_size < 0)
-                gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-              else
-                gtk_widget_get_preferred_width_for_height (child, for_size, &child_min, &child_nat);
-            }
+          gtk_widget_measure (child, orientation, for_size, &child_min, &child_nat, NULL, NULL);
 
           *minimum = MAX (*minimum, child_min);
           *natural = MAX (*natural, child_nat);
