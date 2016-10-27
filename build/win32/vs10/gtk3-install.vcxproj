@@ -249,7 +249,7 @@
       <Project>{f280bf1a-777a-4fb5-8005-dfbe04621edb}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="gtk-udpate-icon-cache.vcxproj">
+    <ProjectReference Include="gtk-update-icon-cache.vcxproj">
       <Project>{fc98af16-4c68-42df-906b-93a6804c198a}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
