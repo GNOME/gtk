@@ -414,8 +414,8 @@ static void   gtk_entry_map                  (GtkWidget        *widget);
 static void   gtk_entry_unmap                (GtkWidget        *widget);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
-static gint   gtk_entry_draw                 (GtkWidget        *widget,
-                                              cairo_t          *cr);
+static GskRenderNode *gtk_entry_get_render_node (GtkWidget   *widget,
+                                                 GskRenderer *renderer);
 static gboolean gtk_entry_event              (GtkWidget        *widget,
                                               GdkEvent         *event);
 static gint   gtk_entry_enter_notify         (GtkWidget        *widget,
@@ -761,7 +761,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->unrealize = gtk_entry_unrealize;
   widget_class->measure = gtk_entry_measure_;
   widget_class->size_allocate = gtk_entry_size_allocate;
-  widget_class->draw = gtk_entry_draw;
+  widget_class->get_render_node = gtk_entry_get_render_node;
   widget_class->enter_notify_event = gtk_entry_enter_notify;
   widget_class->leave_notify_event = gtk_entry_leave_notify;
   widget_class->event = gtk_entry_event;
@@ -3591,13 +3591,11 @@ should_prelight (GtkEntry             *entry,
   return TRUE;
 }
 
-static gboolean
-gtk_entry_draw (GtkWidget *widget,
-		cairo_t   *cr)
+static GskRenderNode *
+gtk_entry_get_render_node (GtkWidget   *widget,
+                           GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (GTK_ENTRY (widget)->priv->gadget, cr);
-
-  return GDK_EVENT_PROPAGATE;
+  return gtk_css_gadget_get_render_node (GTK_ENTRY (widget)->priv->gadget, renderer, FALSE);
 }
 
 #define UNDERSHOOT_SIZE 20
