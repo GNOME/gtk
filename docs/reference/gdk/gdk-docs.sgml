@@ -53,7 +53,6 @@
 
   <reference>
     <title>Deprecated</title>
-    <xi:include href="xml/colors.xml" />
     <xi:include href="xml/gdkdevicemanager.xml" />
   </reference>
 

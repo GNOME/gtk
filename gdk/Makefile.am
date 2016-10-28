@@ -92,12 +92,8 @@ gdk_public_h_sources = 				\
 	gdkvisual.h				\
 	gdkwindow.h
 
-deprecated_h_sources =				\
-	deprecated/gdkcolor.h
-
 gdk_h_sources =					\
-	$(gdk_public_h_sources)			\
-	$(deprecated_h_sources)
+	$(gdk_public_h_sources)
 
 gdk_private_headers = 				\
 	gdk-private.h				\
@@ -124,11 +120,7 @@ gdk_private_headers = 				\
 	gdkvisualprivate.h			\
 	gdkx.h
 
-deprecated_c_sources =				\
-	deprecated/gdkcolor.c
-
 gdk_c_sources = 				\
-	$(deprecated_c_sources)			\
 	gdk-private.c				\
 	gdk.c					\
 	gdkapplaunchcontext.c			\

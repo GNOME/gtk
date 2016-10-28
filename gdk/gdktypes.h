@@ -129,7 +129,6 @@ typedef struct _GdkAtom            *GdkAtom;
 #define GDK_NONE            _GDK_MAKE_ATOM (0)
 
 /* Forward declarations of commonly used types */
-typedef struct _GdkColor              GdkColor;
 typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkVisual             GdkVisual;
