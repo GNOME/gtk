@@ -693,7 +693,7 @@ gtk_frame_get_render_node (GtkWidget   *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  node = gtk_widget_create_render_node (widget, renderer, "Frame");
+  node = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
 
   cr = gsk_render_node_get_draw_context (node);
 
