@@ -387,28 +387,13 @@ gtk_check_button_get_render_node (GtkWidget   *widget,
                                   GskRenderer *renderer)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GskRenderNode *res;
-  GskRenderNode *node;
 
   if (!gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
     return GTK_WIDGET_CLASS (gtk_check_button_parent_class)->get_render_node (widget, renderer);
-
-  res = gtk_css_gadget_get_render_node (priv->gadget,
-                                        renderer,
-                                        gtk_widget_has_visible_focus (widget));
-
-  if (res == NULL)
-    return NULL;
-
-  node = gtk_css_gadget_get_render_node (priv->indicator_gadget,
-                                         renderer,
-                                         FALSE);
-  gsk_render_node_append_child (res, node);
-  gsk_render_node_unref (node);
-
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
-
-  return res;
+  else
+    return gtk_css_gadget_get_render_node (priv->gadget,
+                                           renderer,
+                                           gtk_widget_has_visible_focus (widget));
 }
 
 GtkCssNode *
