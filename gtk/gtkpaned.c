@@ -1247,6 +1247,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
+  clip.x += allocation->x;
+  clip.y += allocation->y;
   gtk_widget_set_clip (widget, &clip);
 }
 
