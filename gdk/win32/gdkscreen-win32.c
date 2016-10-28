@@ -297,10 +297,8 @@ init_root_window (GdkWin32Screen *screen_win32)
   impl_win32->wrapper = window;
 
   window->impl_window = window;
-  window->visual = gdk_screen_get_system_visual (screen);
 
   window->window_type = GDK_WINDOW_ROOT;
-  window->depth = window->visual->depth;
 
   screen_win32->root_window = window;
 

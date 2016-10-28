@@ -420,9 +420,8 @@ _create_gl_context (HDC hdc,
 }
 
 static gboolean
-_set_pixformat_for_hdc (HDC hdc,
-                        gint *best_idx,
-                        const gboolean need_alpha_bits)
+_set_pixformat_for_hdc (HDC   hdc,
+                        gint *best_idx)
 {
   PIXELFORMATDESCRIPTOR pfd;
   gboolean set_pixel_format_result = FALSE;
@@ -430,7 +429,7 @@ _set_pixformat_for_hdc (HDC hdc,
   /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
    * one single time per window HDC
    */
-  *best_idx = _get_wgl_pfd (hdc, need_alpha_bits, &pfd);
+  *best_idx = _get_wgl_pfd (hdc, &pfd);
   if (*best_idx != 0)
     set_pixel_format_result = SetPixelFormat (hdc, *best_idx, &pfd);
 
@@ -461,8 +460,7 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   if (!_set_pixformat_for_hdc (context_win32->gl_hdc,
-                               &pixel_format,
-                               context_win32->need_alpha_bits))
+                               &pixel_format))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_FORMAT,

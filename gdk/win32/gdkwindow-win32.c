@@ -953,7 +953,6 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
     return g_object_ref (window);
 
   window = _gdk_display_create_window (display);
-  window->visual = gdk_screen_get_system_visual (gdk_display_get_default_screen (display));
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   window->impl_window = window;
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
@@ -992,7 +991,6 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
   window->state &= (~GDK_WINDOW_STATE_BELOW);
   window->viewable = TRUE;
 
-  window->depth = gdk_visual_get_system ()->depth;
   GDK_WINDOW_HWND (window) = anid;
 
   g_object_ref (window);
