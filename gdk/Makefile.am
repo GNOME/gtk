@@ -459,28 +459,19 @@ stamp-gc-h: $(top_builddir)/config.status
 #
 # Resources
 #
+
+glsl_sources := $(wildcard $(srcdir)/resources/glsl/*.glsl)
+
 gdk.gresource.xml: Makefile.am
 	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
 	echo "<gresources>" >> $@; \
 	echo "  <gresource prefix='/org/gtk/libgdk'>" >> $@; \
-	for f in $(srcdir)/resources/glsl/*.glsl; do \
+	for f in $(glsl_sources); do \
 	  n=`basename $$f`; \
 	  echo "    <file alias='glsl/$$n'>resources/glsl/$$n</file>" >> $@; \
 	done; \
 	echo "  </gresource>" >> $@; \
 	echo "</gresources>" >> $@;
-
-glsl_sources = \
-	resources/glsl/gl3-texture-2d.fs.glsl \
-	resources/glsl/gl3-texture-2d.vs.glsl \
-	resources/glsl/gl3-texture-rect.fs.glsl \
-	resources/glsl/gl3-texture-rect.vs.glsl \
-	resources/glsl/gl2-texture-2d.fs.glsl \
-	resources/glsl/gl2-texture-2d.fs.glsl \
-	resources/glsl/gl2-texture-rect.vs.glsl \
-	resources/glsl/gl2-texture-rect.vs.glsl \
-	resources/glsl/gles2-texture.fs.glsl \
-	resources/glsl/gles2-texture.vs.glsl
 
 EXTRA_DIST += $(glsl_sources)
 CLEANFILES += gdk.gresource.xml
