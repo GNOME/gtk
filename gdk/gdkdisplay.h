@@ -65,6 +65,11 @@ void        gdk_display_close                  (GdkDisplay  *display);
 GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_is_closed          (GdkDisplay  *display);
 
+GDK_AVAILABLE_IN_3_90
+gboolean    gdk_display_is_composited      (GdkDisplay  *display);
+GDK_AVAILABLE_IN_3_90
+gboolean    gdk_display_is_rgba            (GdkDisplay  *display);
+
 GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_display_get_event  (GdkDisplay     *display);
 GDK_AVAILABLE_IN_ALL

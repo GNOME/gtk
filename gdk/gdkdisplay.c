@@ -24,6 +24,7 @@
 #include "gdkdisplay.h"
 #include "gdkdisplayprivate.h"
 
+#include "gdkintl.h"
 #include "gdk-private.h"
 
 #include "gdkdeviceprivate.h"
@@ -66,6 +67,15 @@
  * gdk_display_get_device_manager().
  */
 
+enum
+{
+  PROP_0,
+  PROP_COMPOSITED,
+  PROP_RGBA,
+  LAST_PROP
+};
+
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 enum {
   OPENED,
@@ -88,6 +98,29 @@ static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay 
 static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GdkDisplay, gdk_display, G_TYPE_OBJECT)
+
+static void
+gdk_display_get_property (GObject    *object,
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
+{
+  GdkDisplay *display = GDK_DISPLAY (object);
+
+  switch (prop_id)
+    {
+    case PROP_COMPOSITED:
+      g_value_set_boolean (value, gdk_display_is_composited (display));
+      break;
+
+    case PROP_RGBA:
+      g_value_set_boolean (value, gdk_display_is_rgba (display));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
 
 static void
 gdk_display_real_make_default (GdkDisplay *display)
@@ -156,6 +189,7 @@ gdk_display_class_init (GdkDisplayClass *class)
 
   object_class->finalize = gdk_display_finalize;
   object_class->dispose = gdk_display_dispose;
+  object_class->get_property = gdk_display_get_property;
 
   class->get_app_launch_context = gdk_display_real_get_app_launch_context;
   class->window_type = GDK_TYPE_WINDOW;
@@ -167,6 +201,38 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->get_default_seat = gdk_display_real_get_default_seat;
 
   class->get_primary_monitor = gdk_display_real_get_primary_monitor;
+
+  /**
+   * GdkDisplay:composited:
+   *
+   * %TRUE if the display properly composits the alpha channel.
+   * See gdk_display_is_composited() for details.
+   *
+   * Since: 3.90
+   */
+  props[PROP_COMPOSITED] =
+    g_param_spec_boolean ("composited",
+                          P_("Composited"),
+                          P_("Composited"),
+                          TRUE,
+                          G_PARAM_READABLE);
+
+  /**
+   * GdkDisplay:rgba:
+   *
+   * %TRUE if the display supports an alpha channel. See gdk_display_is_rgba()
+   * for details.
+   *
+   * Since: 3.90
+   */
+  props[PROP_RGBA] =
+    g_param_spec_boolean ("rgba",
+                          P_("RGBA"),
+                          P_("RGBA"),
+                          TRUE,
+                          G_PARAM_READABLE);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
    * GdkDisplay::opened:
@@ -2067,6 +2133,66 @@ gdk_display_set_rendering_mode (GdkDisplay       *display,
 {
   display->rendering_mode = mode;
 }
+
+/**
+ * gdk_display_is_composited:
+ * @display: a #GdkDisplay
+ *
+ * Returns whether windows can reasonably be expected to have
+ * their alpha channel drawn correctly on the screen. Check
+ * gdk_display_is_rgba() for wether the display supports an
+ * alpha channel.
+ *
+ * On X11 this function returns whether a compositing manager is
+ * compositing on @display.
+ *
+ * On modern displays, this value is always %TRUE.
+ *
+ * Returns: Whether windows with RGBA visuals can reasonably be
+ * expected to have their alpha channels drawn correctly on the screen.
+ *
+ * Since: 3.90
+ **/
+gboolean
+gdk_display_is_composited (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return gdk_screen_is_composited (gdk_display_get_default_screen (display));
+}
+
+/**
+ * gdk_display_is_rgba:
+ * @display: a #GdkDisplay
+ *
+ * Returns wether windows on this @display are created with an
+ * alpha channel.
+ *
+ * Even if a %TRUE is returned, it is possible that the
+ * window’s alpha channel won’t be honored when displaying the
+ * window on the screen: in particular, for X an appropriate
+ * windowing manager and compositing manager must be running to
+ * provide appropriate display. Use gdk_display_is_composited()
+ * to check if that is the case.
+ *
+ * For setting an overall opacity for a top-level window, see
+ * gdk_window_set_opacity().
+ *
+ * On modern displays, this value is always %TRUE.
+ *
+ * Returns: %TRUE if windows are created with an alpha channel or
+ *     %FALSE if the display does not support this functionality.
+ *
+ * Since: 3.90
+ **/
+gboolean
+gdk_display_is_rgba (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return gdk_screen_get_rgba_visual (gdk_display_get_default_screen (display)) != NULL;
+}
+
 
 void
 gdk_display_add_seat (GdkDisplay *display,
