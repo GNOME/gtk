@@ -414,8 +414,8 @@ static void   gtk_entry_map                  (GtkWidget        *widget);
 static void   gtk_entry_unmap                (GtkWidget        *widget);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
-static gint   gtk_entry_draw                 (GtkWidget        *widget,
-                                              cairo_t          *cr);
+static GskRenderNode *gtk_entry_get_render_node (GtkWidget   *widget,
+                                                 GskRenderer *renderer);
 static gboolean gtk_entry_event              (GtkWidget        *widget,
                                               GdkEvent         *event);
 static gint   gtk_entry_enter_notify         (GtkWidget        *widget,
@@ -761,7 +761,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->unrealize = gtk_entry_unrealize;
   widget_class->measure = gtk_entry_measure_;
   widget_class->size_allocate = gtk_entry_size_allocate;
-  widget_class->draw = gtk_entry_draw;
+  widget_class->get_render_node = gtk_entry_get_render_node;
   widget_class->enter_notify_event = gtk_entry_enter_notify;
   widget_class->leave_notify_event = gtk_entry_leave_notify;
   widget_class->event = gtk_entry_event;
@@ -3591,13 +3591,36 @@ should_prelight (GtkEntry             *entry,
   return TRUE;
 }
 
-static gboolean
-gtk_entry_draw (GtkWidget *widget,
-		cairo_t   *cr)
+static GskRenderNode *
+gtk_entry_get_render_node (GtkWidget   *widget,
+                           GskRenderer *renderer)
 {
-  gtk_css_gadget_draw (GTK_ENTRY (widget)->priv->gadget, cr);
+  GtkEntryPrivate *priv = GTK_ENTRY (widget)->priv;
+  GskRenderNode *res, *node;
+  int i;
 
-  return GDK_EVENT_PROPAGATE;
+  res = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
+
+  for (i = 0; i < MAX_ICONS; i++)
+    {
+      EntryIconInfo *icon_info = priv->icons[i];
+
+      if (icon_info == NULL)
+        continue;
+
+      node = gtk_css_gadget_get_render_node (icon_info->gadget, renderer, FALSE);
+      gsk_render_node_append_child (res, node);
+      gsk_render_node_unref (node);
+   }
+
+  if (priv->progress_gadget && gtk_css_gadget_get_visible (priv->progress_gadget))
+    {
+      node = gtk_css_gadget_get_render_node (priv->progress_gadget, renderer, FALSE);
+      gsk_render_node_append_child (res, node);
+      gsk_render_node_unref (node);
+    }
+
+  return res;
 }
 
 #define UNDERSHOOT_SIZE 20
@@ -3673,15 +3696,10 @@ gtk_entry_render (GtkCssGadget *gadget,
   GtkWidget *widget;
   GtkEntry *entry;
   GtkEntryPrivate *priv;
-  int i;
 
   widget = gtk_css_gadget_get_owner (gadget);
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
-
-  /* Draw progress */
-  if (priv->progress_gadget && gtk_css_gadget_get_visible (priv->progress_gadget))
-    gtk_css_gadget_draw (priv->progress_gadget, cr);
 
   /* Draw text and cursor */
   cairo_save (cr);
@@ -3698,15 +3716,6 @@ gtk_entry_render (GtkCssGadget *gadget,
     gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
 
   cairo_restore (cr);
-
-  /* Draw icons */
-  for (i = 0; i < MAX_ICONS; i++)
-    {
-      EntryIconInfo *icon_info = priv->icons[i];
-
-      if (icon_info != NULL)
-        gtk_css_gadget_draw (icon_info->gadget, cr);
-    }
 
   gtk_entry_draw_undershoot (entry, cr);
 
