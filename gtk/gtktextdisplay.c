@@ -75,7 +75,6 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "config.h"
-#include "gtktextattributesprivate.h"
 #include "gtktextdisplay.h"
 #include "gtktextviewprivate.h"
 #include "gtkwidgetprivate.h"
@@ -185,7 +184,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
   context = gtk_widget_get_style_context (text_renderer->widget);
 
   if (appearance->draw_bg && text_renderer->state == NORMAL)
-    bg_rgba = appearance->rgba[0];
+    bg_rgba = appearance->bg_rgba;
   else
     bg_rgba = NULL;
 
@@ -211,27 +210,17 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
                               NULL);
     }
   else
-    fg_rgba = appearance->rgba[1];
+    fg_rgba = appearance->fg_rgba;
 
   text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_FOREGROUND, fg_rgba);
 
-  if (GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (appearance))
-    {
-      GdkRGBA rgba;
-
-      GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA (appearance, &rgba);
-      text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH, &rgba);
-    }
+  if (appearance->strikethrough_rgba)
+    text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH, appearance->strikethrough_rgba);
   else
     text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_rgba);
 
-  if (GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (appearance))
-    {
-      GdkRGBA rgba;
-
-      GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA (appearance, &rgba);
-      text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, &rgba);
-    }
+  if (appearance->underline_rgba)
+    text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, appearance->underline_rgba);
   else if (appearance->underline == PANGO_UNDERLINE_ERROR)
     {
       if (!text_renderer->error_color)
@@ -245,7 +234,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
   else
     text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, fg_rgba);
 
-  if (fg_rgba != appearance->rgba[1])
+  if (fg_rgba != appearance->fg_rgba)
     gdk_rgba_free (fg_rgba);
 }
 

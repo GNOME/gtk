@@ -57,6 +57,8 @@ struct _GtkTextTagPrivate
    */
   guint bg_color_set : 1;
   guint fg_color_set : 1;
+  guint underline_rgba_set : 1;
+  guint strikethrough_rgba_set : 1;
   guint scale_set : 1;
   guint justification_set : 1;
   guint left_margin_set : 1;

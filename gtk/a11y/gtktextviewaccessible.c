@@ -1125,15 +1125,15 @@ gtk_text_view_accessible_get_default_attributes (AtkText *text)
                                        text_attrs->appearance.underline);
 
   value = g_strdup_printf ("%u,%u,%u",
-                           text_attrs->appearance.bg_color.red,
-                           text_attrs->appearance.bg_color.green,
-                           text_attrs->appearance.bg_color.blue);
+                           (guint)(text_attrs->appearance.bg_rgba->red * 65535),
+                           (guint)(text_attrs->appearance.bg_rgba->green * 65535),
+                           (guint)(text_attrs->appearance.bg_rgba->blue * 65535));
   attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
 
   value = g_strdup_printf ("%u,%u,%u",
-                           text_attrs->appearance.fg_color.red,
-                           text_attrs->appearance.fg_color.green,
-                           text_attrs->appearance.fg_color.blue);
+                           (guint)(text_attrs->appearance.fg_rgba->red),
+                           (guint)(text_attrs->appearance.fg_rgba->green),
+                           (guint)(text_attrs->appearance.fg_rgba->blue));
   attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_FG_COLOR, value);
 
   value = g_strdup_printf ("%g", text_attrs->font_scale);
