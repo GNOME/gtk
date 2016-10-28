@@ -827,13 +827,17 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   int contents_x, contents_y, contents_width, contents_height;
   GtkAllocation margin_box;
   GtkAllocation clip_box;
+  GtkAllocation owner_alloc;
   char *str;
+  graphene_matrix_t m;
+  graphene_point3d_t p;
 
   if (!gtk_css_gadget_get_visible (gadget))
     return NULL;
 
   margin_box = priv->allocated_size;
   clip_box = priv->clip;
+  gtk_widget_get_allocation (gtk_css_gadget_get_owner (gadget), &owner_alloc);
 
   width = clip_box.width;
   height = clip_box.height;
@@ -859,6 +863,10 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   box_node = gsk_renderer_create_render_node (renderer);
   gsk_render_node_set_name (box_node, str);
   gsk_render_node_set_bounds (box_node, &bounds);
+  graphene_matrix_init_translate (&m, graphene_point3d_init (&p,
+                                                             clip_box.x - owner_alloc.x,
+                                                             clip_box.y - owner_alloc.y, 0));
+  gsk_render_node_set_transform (box_node, &m);
   g_free (str);
 
   style = gtk_css_gadget_get_style (gadget);
