@@ -261,6 +261,10 @@ gtk_css_gadget_has_content (GtkCssGadget *gadget)
   return gadget_class->draw != gtk_css_gadget_real_draw;
 }
 
+static GskRenderNode * gtk_css_gadget_real_get_render_node (GtkCssGadget  *gadget,
+                                                            GskRenderer   *renderer,
+                                                            gboolean       draw_focus);
+
 static void
 gtk_css_gadget_class_init (GtkCssGadgetClass *klass)
 {
@@ -273,6 +277,7 @@ gtk_css_gadget_class_init (GtkCssGadgetClass *klass)
   klass->get_preferred_size = gtk_css_gadget_real_get_preferred_size;
   klass->allocate = gtk_css_gadget_real_allocate;
   klass->draw = gtk_css_gadget_real_draw;
+  klass->get_render_node = gtk_css_gadget_real_get_render_node;
   klass->style_changed = gtk_css_gadget_real_style_changed;
   klass->has_content = gtk_css_gadget_has_content;
 
@@ -812,10 +817,10 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   priv->clip = *out_clip;
 }
 
-GskRenderNode *
-gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
-                                GskRenderer   *renderer,
-                                gboolean       draw_focus)
+static GskRenderNode *
+gtk_css_gadget_real_get_render_node (GtkCssGadget  *gadget,
+                                     GskRenderer   *renderer,
+                                     gboolean       draw_focus)
 {
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
   GtkBorder clip, margin, border, padding;
@@ -1110,6 +1115,14 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
       }
   }
 #endif
+}
+
+GskRenderNode *
+gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
+                                GskRenderer   *renderer,
+                                gboolean       draw_focus)
+{
+   return GTK_CSS_GADGET_GET_CLASS (gadget)->get_render_node (gadget, renderer, draw_focus);
 }
 
 void

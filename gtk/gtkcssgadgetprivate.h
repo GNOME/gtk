@@ -68,6 +68,10 @@ struct _GtkCssGadgetClass
                                                          int                     width,
                                                          int                     height);
 
+  GskRenderNode * (* get_render_node)                   (GtkCssGadget           *gadget,
+                                                         GskRenderer            *renderer,
+                                                         gboolean                draw_focus);
+
   void          (* style_changed)                       (GtkCssGadget           *gadget,
                                                          GtkCssStyleChange      *change);
 
