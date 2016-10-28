@@ -2253,22 +2253,35 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
 
   if (priv->visible_child)
     {
-      int min, nat;
-      GtkAlign valign;
+      int min_width;
+      int min_height;
 
-      gtk_widget_get_preferred_height_for_width (priv->visible_child->widget,
-                                                 allocation->width,
-                                                 &min, &nat);
-      if (priv->interpolate_size)
+      gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
+                          allocation->height, &min_width, NULL, NULL, NULL);
+      child_allocation.width = MAX (child_allocation.width, min_width);
+
+      gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_VERTICAL,
+                          child_allocation.width, &min_height, NULL, NULL, NULL);
+      child_allocation.height = MAX (child_allocation.height, min_height);
+
+      if (child_allocation.width > allocation->width)
         {
-          valign = gtk_widget_get_valign (priv->visible_child->widget);
-          child_allocation.height = MAX (nat, allocation->height);
-          if (valign == GTK_ALIGN_END &&
-              child_allocation.height > allocation->height)
-            child_allocation.y -= nat - allocation->height;
-          else if (valign == GTK_ALIGN_CENTER &&
-                   child_allocation.height > allocation->height)
-            child_allocation.y -= (nat - allocation->height) / 2;
+          GtkAlign halign = gtk_widget_get_halign (priv->visible_child->widget);
+
+          if (halign == GTK_ALIGN_CENTER || halign == GTK_ALIGN_FILL)
+            child_allocation.x = (allocation->width - child_allocation.width) / 2;
+          else if (halign == GTK_ALIGN_END)
+            child_allocation.x = (allocation->width - child_allocation.width);
+        }
+
+      if (child_allocation.height > allocation->height)
+        {
+          GtkAlign valign = gtk_widget_get_valign (priv->visible_child->widget);
+
+          if (valign == GTK_ALIGN_CENTER || valign == GTK_ALIGN_FILL)
+            child_allocation.y = (allocation->height - child_allocation.height) / 2;
+          else if (valign == GTK_ALIGN_END)
+            child_allocation.x = (allocation->height - child_allocation.height);
         }
 
       gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
