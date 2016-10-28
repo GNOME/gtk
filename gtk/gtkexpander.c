@@ -632,31 +632,7 @@ static GskRenderNode *
 gtk_expander_get_render_node (GtkWidget   *widget,
                               GskRenderer *renderer)
 {
-  GskRenderNode *res;
-  GskRenderNode *node;
-
-  res = gtk_css_gadget_get_render_node (GTK_EXPANDER (widget)->priv->gadget,
-                                        renderer,
-                                        FALSE);
-
-  if (res == NULL)
-    return NULL;
-
-  node = gtk_css_gadget_get_render_node (GTK_EXPANDER (widget)->priv->title_gadget,
-                                         renderer,
-                                         FALSE);
-  gsk_render_node_append_child (res, node);
-  gsk_render_node_unref (node);
-
-  node = gtk_css_gadget_get_render_node (GTK_EXPANDER (widget)->priv->arrow_gadget,
-                                         renderer,
-                                         FALSE);
-  gsk_render_node_append_child (res, node);
-  gsk_render_node_unref (node);
-
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
-
-  return res;
+  return gtk_css_gadget_get_render_node (GTK_EXPANDER (widget)->priv->gadget, renderer, FALSE);
 }
 
 static void
