@@ -88,6 +88,8 @@ gdk_visual_class_init (GdkVisualClass *visual_class)
  *
  * Returns: (transfer container) (element-type GdkVisual):
  *     a list of visuals; the list must be freed, but not its contents
+ * 
+ * Deprecated: 3.22: Use gdk_screen_list_visuals (gdk_screen_get_default ()).
  */
 GList*
 gdk_list_visuals (void)
@@ -103,6 +105,8 @@ gdk_list_visuals (void)
  * The return value should not be freed.
  *
  * Returns: (transfer none): system visual
+ *
+ * Deprecated: 3.22: Use gdk_screen_get_system_visual (gdk_screen_get_default ()).
  */
 GdkVisual*
 gdk_visual_get_system (void)
@@ -118,6 +122,9 @@ gdk_visual_get_system (void)
  * per pixel.
  *
  * Returns: best available depth
+ *
+ * Deprecated: 3.22: Visual selection should be done using
+ *     gdk_screen_get_system_visual() and gdk_screen_get_rgba_visual()
  */
 gint
 gdk_visual_get_best_depth (void)
@@ -133,6 +140,9 @@ gdk_visual_get_best_depth (void)
  * Return the best available visual type for the default GDK screen.
  *
  * Returns: best visual type
+ *
+ * Deprecated: 3.22: Visual selection should be done using
+ *     gdk_screen_get_system_visual() and gdk_screen_get_rgba_visual()
  */
 GdkVisualType
 gdk_visual_get_best_type (void)
@@ -149,6 +159,9 @@ gdk_visual_get_best_type (void)
  * GDK screen. The return value should not be freed.
  *
  * Returns: (transfer none): best visual
+ *
+ * Deprecated: 3.22: Visual selection should be done using
+ *     gdk_screen_get_system_visual() and gdk_screen_get_rgba_visual()
  */
 GdkVisual*
 gdk_visual_get_best (void)
@@ -168,6 +181,9 @@ gdk_visual_get_best (void)
  * not be freed. %NULL may be returned if no visual supports @depth.
  *
  * Returns: (transfer none): best visual for the given depth
+ *
+ * Deprecated: 3.22: Visual selection should be done using
+ *     gdk_screen_get_system_visual() and gdk_screen_get_rgba_visual()
  */
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
@@ -187,6 +203,9 @@ gdk_visual_get_best_with_depth (gint depth)
  * @visual_type.
  *
  * Returns: (transfer none): best visual of the given type
+ *
+ * Deprecated: 3.22: Visual selection should be done using
+ *     gdk_screen_get_system_visual() and gdk_screen_get_rgba_visual()
  */
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
@@ -207,6 +226,9 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
  *
  * Returns: (nullable) (transfer none): best visual with both @depth
  *     and @visual_type, or %NULL if none
+ *
+ * Deprecated: 3.22: Visual selection should be done using
+ *     gdk_screen_get_system_visual() and gdk_screen_get_rgba_visual()
  */
 GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
@@ -229,6 +251,9 @@ gdk_visual_get_best_with_both (gint          depth,
  * visual, removing duplicates.
  *
  * The array returned by this function should not be freed.
+ *
+ * Deprecated: 3.22: Visual selection should be done using
+ *     gdk_screen_get_system_visual() and gdk_screen_get_rgba_visual()
  */
 void
 gdk_query_depths (gint **depths,
@@ -251,6 +276,9 @@ gdk_query_depths (gint **depths,
  * visual, removing duplicates.
  *
  * The array returned by this function should not be freed.
+ *
+ * Deprecated: 3.22: Visual selection should be done using
+ *     gdk_screen_get_system_visual() and gdk_screen_get_rgba_visual()
  */
 void
 gdk_query_visual_types (GdkVisualType **visual_types,
