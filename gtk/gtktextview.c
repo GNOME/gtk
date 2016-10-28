@@ -7773,22 +7773,19 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                          GtkTextAttributes  *values)
 {
   GtkStyleContext *context;
-  GdkRGBA bg_color, fg_color;
+  const GdkRGBA black = { 0, };
+
+  if (!values->appearance.bg_rgba)
+    values->appearance.bg_rgba = gdk_rgba_copy (&black);
+  if (!values->appearance.fg_rgba)
+    values->appearance.fg_rgba = gdk_rgba_copy (&black);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, &bg_color);
+  gtk_style_context_get_background_color (context, values->appearance.bg_rgba);
 G_GNUC_END_IGNORE_DEPRECATIONS
-  gtk_style_context_get_color (context, &fg_color);
-
-  values->appearance.bg_color.red = CLAMP (bg_color.red * 65535. + 0.5, 0, 65535);
-  values->appearance.bg_color.green = CLAMP (bg_color.green * 65535. + 0.5, 0, 65535);
-  values->appearance.bg_color.blue = CLAMP (bg_color.blue * 65535. + 0.5, 0, 65535);
-
-  values->appearance.fg_color.red = CLAMP (fg_color.red * 65535. + 0.5, 0, 65535);
-  values->appearance.fg_color.green = CLAMP (fg_color.green * 65535. + 0.5, 0, 65535);
-  values->appearance.fg_color.blue = CLAMP (fg_color.blue * 65535. + 0.5, 0, 65535);
+  gtk_style_context_get_color (context, values->appearance.fg_rgba);
 
   if (values->font)
     pango_font_description_free (values->font);

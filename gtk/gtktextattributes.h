@@ -88,9 +88,10 @@ typedef struct _GtkTextAppearance GtkTextAppearance;
  */
 struct _GtkTextAppearance
 {
-  /*< public >*/
-  GdkColor bg_color; /* pixel is taken for underline color */
-  GdkColor fg_color; /* pixel is taken for strikethrough color */
+  GdkRGBA *bg_rgba;
+  GdkRGBA *fg_rgba;
+  GdkRGBA *underline_rgba;
+  GdkRGBA *strikethrough_rgba;
 
   /* super/subscript rise, can be negative */
   gint rise;
@@ -111,27 +112,6 @@ struct _GtkTextAppearance
    */
   guint inside_selection : 1;
   guint is_text : 1;
-
-  /* For the sad story of this bit of code, see
-   * https://bugzilla.gnome.org/show_bug.cgi?id=711158
-   */
-#ifdef __GI_SCANNER__
-  /* The scanner should only see the transparent union, so that its
-   * content does not vary across architectures.
-   */
-  union {
-    GdkRGBA *rgba[2];
-    /*< private >*/
-    guint padding[4];
-  };
-#else
-  GdkRGBA *rgba[2];
-#if (defined(__SIZEOF_INT__) && defined(__SIZEOF_POINTER__)) && (__SIZEOF_INT__ == __SIZEOF_POINTER__)
-  /* unusable, just for ABI compat */
-  /*< private >*/
-  guint padding[2];
-#endif
-#endif
 };
 
 /**
@@ -165,10 +145,8 @@ struct _GtkTextAppearance
  */
 struct _GtkTextAttributes
 {
-  /*< private >*/
   guint refcount;
 
-  /*< public >*/
   GtkTextAppearance appearance;
 
   GtkJustification justification;
@@ -192,35 +170,16 @@ struct _GtkTextAttributes
 
   PangoLanguage *language;
 
-  /*< public >*/
   guint invisible : 1;
   guint bg_full_height : 1;
   guint editable : 1;
   guint no_fallback: 1;
 
-  /*< private >*/
   GdkRGBA *pg_bg_rgba;
 
-  /*< public >*/
   gint letter_spacing;
 
-#ifdef __GI_SCANNER__
-  /* The scanner should only see the transparent union, so that its
-   * content does not vary across architectures.
-   */
-  union {
-    gchar *font_features;
-    /*< private >*/
-    guint padding[2];
-  };
-#else
   gchar *font_features;
-#if (defined(__SIZEOF_INT__) && defined(__SIZEOF_POINTER__)) && (__SIZEOF_INT__ == __SIZEOF_POINTER__)
-  /* unusable, just for ABI compat */
-  /*< private >*/
-  guint padding[1];
-#endif
-#endif
 };
 
 GDK_AVAILABLE_IN_ALL

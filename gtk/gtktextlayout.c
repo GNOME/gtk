@@ -82,7 +82,6 @@
 #include "gtktextbtree.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
-#include "gtktextattributesprivate.h"
 #include "gtktextutil.h"
 #include "gtkintl.h"
 
@@ -1445,11 +1444,17 @@ gtk_text_attr_appearance_destroy (PangoAttribute *attr)
 {
   GtkTextAttrAppearance *appearance_attr = (GtkTextAttrAppearance *)attr;
 
-  if (appearance_attr->appearance.rgba[0])
-    gdk_rgba_free (appearance_attr->appearance.rgba[0]);
+  if (appearance_attr->appearance.fg_rgba)
+    gdk_rgba_free (appearance_attr->appearance.fg_rgba);
 
-  if (appearance_attr->appearance.rgba[1])
-    gdk_rgba_free (appearance_attr->appearance.rgba[1]);
+  if (appearance_attr->appearance.bg_rgba)
+    gdk_rgba_free (appearance_attr->appearance.bg_rgba);
+
+  if (appearance_attr->appearance.underline_rgba)
+    gdk_rgba_free (appearance_attr->appearance.underline_rgba);
+
+  if (appearance_attr->appearance.strikethrough_rgba)
+    gdk_rgba_free (appearance_attr->appearance.strikethrough_rgba);
 
   g_slice_free (GtkTextAttrAppearance, appearance_attr);
 }
@@ -1470,32 +1475,18 @@ static gboolean
 underline_equal (const GtkTextAppearance *appearance1,
                  const GtkTextAppearance *appearance2)
 {
-  GdkRGBA c1;
-  GdkRGBA c2;
-
-  GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA (appearance1, &c1);
-  GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA (appearance2, &c2);
-
-  return ((appearance1->underline == appearance2->underline) &&
-          (GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (appearance1) ==
-           GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (appearance2)) &&
-          gdk_rgba_equal (&c1, &c2));
+  return (appearance1->underline == appearance2->underline) &&
+          rgba_equal ((const GdkRGBA *)appearance1->underline_rgba,
+                      (const GdkRGBA *)appearance2->underline_rgba);
 }
 
 static gboolean
 strikethrough_equal (const GtkTextAppearance *appearance1,
                      const GtkTextAppearance *appearance2)
 {
-  GdkRGBA c1;
-  GdkRGBA c2;
-
-  GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA (appearance1, &c1);
-  GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA (appearance2, &c2);
-
-  return ((appearance1->strikethrough == appearance2->strikethrough) &&
-          (GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (appearance1) ==
-           GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (appearance2)) &&
-          gdk_rgba_equal (&c1, &c2));
+  return (appearance1->strikethrough == appearance2->strikethrough) &&
+          rgba_equal ((const GdkRGBA *)appearance1->strikethrough_rgba,
+                      (const GdkRGBA *)appearance2->strikethrough_rgba);
 }
 
 static gboolean
@@ -1505,8 +1496,8 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
   const GtkTextAppearance *appearance1 = &((const GtkTextAttrAppearance *)attr1)->appearance;
   const GtkTextAppearance *appearance2 = &((const GtkTextAttrAppearance *)attr2)->appearance;
 
-  return (rgba_equal (appearance1->rgba[0], appearance2->rgba[0]) &&
-          rgba_equal (appearance1->rgba[1], appearance2->rgba[1]) &&
+  return (rgba_equal (appearance1->fg_rgba, appearance2->fg_rgba) &&
+          rgba_equal (appearance1->bg_rgba, appearance2->bg_rgba) &&
           appearance1->draw_bg == appearance2->draw_bg &&
           strikethrough_equal (appearance1, appearance2) &&
           underline_equal (appearance1, appearance2));
@@ -1543,11 +1534,14 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
 
   result->appearance = *appearance;
 
-  if (appearance->rgba[0])
-    result->appearance.rgba[0] = gdk_rgba_copy (appearance->rgba[0]);
+  if (appearance->fg_rgba)
+    result->appearance.fg_rgba = gdk_rgba_copy (appearance->fg_rgba);
 
-  if (appearance->rgba[1])
-    result->appearance.rgba[1] = gdk_rgba_copy (appearance->rgba[1]);
+  if (appearance->bg_rgba)
+    result->appearance.bg_rgba = gdk_rgba_copy (appearance->bg_rgba);
+
+  if (appearance->underline_rgba)
+    result->appearance.underline_rgba = gdk_rgba_copy (appearance->underline_rgba);
 
   return (PangoAttribute *)result;
 }
@@ -1573,15 +1567,11 @@ add_generic_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
-  if (GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (appearance))
+  if (appearance->underline_rgba)
     {
-      GdkRGBA rgba;
-
-      GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA (appearance, &rgba);
-
-      attr = pango_attr_underline_color_new (rgba.red * 65535,
-                                             rgba.green * 65535,
-                                             rgba.blue * 65535);
+      attr = pango_attr_underline_color_new (appearance->underline_rgba->red * 65535,
+                                             appearance->underline_rgba->green * 65535,
+                                             appearance->underline_rgba->blue * 65535);
 
       attr->start_index = start;
       attr->end_index = start + byte_count;
@@ -1599,15 +1589,11 @@ add_generic_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
-  if (GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (appearance))
+  if (appearance->strikethrough_rgba)
     {
-      GdkRGBA rgba;
-
-      GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA (appearance, &rgba);
-
-      attr = pango_attr_strikethrough_color_new (rgba.red * 65535,
-                                                 rgba.green * 65535,
-                                                 rgba.blue * 65535);
+      attr = pango_attr_strikethrough_color_new (appearance->strikethrough_rgba->red * 65535,
+                                                 appearance->strikethrough_rgba->green * 65535,
+                                                 appearance->strikethrough_rgba->blue * 65535);
 
       attr->start_index = start;
       attr->end_index = start + byte_count;
@@ -1997,10 +1983,14 @@ add_preedit_attrs (GtkTextLayout     *layout,
 
       pango_attr_iterator_get_font (iter, font_desc, &language, &extra_attrs);
 
-      if (appearance.rgba[0])
-	appearance.rgba[0] = gdk_rgba_copy (appearance.rgba[0]);
-      if (appearance.rgba[1])
-	appearance.rgba[1] = gdk_rgba_copy (appearance.rgba[1]);
+      if (appearance.fg_rgba)
+	appearance.fg_rgba = gdk_rgba_copy (appearance.fg_rgba);
+      if (appearance.bg_rgba)
+	appearance.bg_rgba = gdk_rgba_copy (appearance.bg_rgba);
+      if (appearance.underline_rgba)
+	appearance.underline_rgba = gdk_rgba_copy (appearance.underline_rgba);
+      if (appearance.strikethrough_rgba)
+	appearance.strikethrough_rgba = gdk_rgba_copy (appearance.strikethrough_rgba);
       
       tmp_list = extra_attrs;
       while (tmp_list)
@@ -2012,15 +2002,15 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	    {
 	    case PANGO_ATTR_FOREGROUND:
 	      convert_color (&rgba, (PangoAttrColor *)attr);
-	      if (appearance.rgba[1])
-		gdk_rgba_free (appearance.rgba[1]);
-	      appearance.rgba[1] = gdk_rgba_copy (&rgba);
+	      if (appearance.fg_rgba)
+		gdk_rgba_free (appearance.fg_rgba);
+	      appearance.fg_rgba = gdk_rgba_copy (&rgba);
 	      break;
 	    case PANGO_ATTR_BACKGROUND:
 	      convert_color (&rgba, (PangoAttrColor *)attr);
-	      if (appearance.rgba[0])
-		gdk_rgba_free (appearance.rgba[0]);
-	      appearance.rgba[0] = gdk_rgba_copy (&rgba);
+	      if (appearance.bg_rgba)
+		gdk_rgba_free (appearance.bg_rgba);
+	      appearance.bg_rgba = gdk_rgba_copy (&rgba);
 	      appearance.draw_bg = TRUE;
 	      break;
 	    case PANGO_ATTR_UNDERLINE:
@@ -2028,16 +2018,18 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	      break;
             case PANGO_ATTR_UNDERLINE_COLOR:
               convert_color (&rgba, (PangoAttrColor*)attr);
-              GTK_TEXT_APPEARANCE_SET_UNDERLINE_RGBA_SET (&appearance, TRUE);
-              GTK_TEXT_APPEARANCE_SET_UNDERLINE_RGBA (&appearance, &rgba);
+	      if (appearance.underline_rgba)
+		gdk_rgba_free (appearance.underline_rgba);
+	      appearance.underline_rgba = gdk_rgba_copy (&rgba);
 	      break;
 	    case PANGO_ATTR_STRIKETHROUGH:
 	      appearance.strikethrough = ((PangoAttrInt *)attr)->value;
 	      break;
             case PANGO_ATTR_STRIKETHROUGH_COLOR:
               convert_color (&rgba, (PangoAttrColor*)attr);
-              GTK_TEXT_APPEARANCE_SET_STRIKETHROUGH_RGBA_SET (&appearance, TRUE);
-              GTK_TEXT_APPEARANCE_SET_STRIKETHROUGH_RGBA (&appearance, &rgba);
+	      if (appearance.strikethrough_rgba)
+		gdk_rgba_free (appearance.strikethrough_rgba);
+	      appearance.strikethrough_rgba = gdk_rgba_copy (&rgba);
             case PANGO_ATTR_RISE:
               appearance.rise = ((PangoAttrInt *)attr)->value;
               break;
@@ -2070,10 +2062,14 @@ add_preedit_attrs (GtkTextLayout     *layout,
                          attrs, start + offset,
                          size_only, TRUE);
       
-      if (appearance.rgba[0])
-	gdk_rgba_free (appearance.rgba[0]);
-      if (appearance.rgba[1])
-	gdk_rgba_free (appearance.rgba[1]);
+      if (appearance.fg_rgba)
+	gdk_rgba_free (appearance.fg_rgba);
+      if (appearance.bg_rgba)
+	gdk_rgba_free (appearance.bg_rgba);
+      if (appearance.underline_rgba)
+	gdk_rgba_free (appearance.underline_rgba);
+      if (appearance.strikethrough_rgba)
+	gdk_rgba_free (appearance.strikethrough_rgba);
 
       pango_font_description_free (font_desc);
     }
