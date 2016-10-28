@@ -3287,28 +3287,12 @@ gtk_container_get_path_for_child (GtkContainer *container,
   return path;
 }
 
-typedef struct {
-  GtkContainer *container;
-  GskRenderer *renderer;
-  GskRenderNode *parent;
-  GArray *child_infos;
-} RenderData;
-
-static gboolean
-should_propagate_node (GtkWidget  *child,
-                       RenderData *data)
+void
+gtk_container_propagate_render_node_for_child (GtkContainer  *container,
+                                               GtkWidget     *child,
+                                               GskRenderer   *renderer,
+                                               GskRenderNode *parent)
 {
-  if (!_gtk_widget_is_drawable (child))
-    return FALSE;
-
-  return TRUE;
-}
-
-static void
-propagate_render_node (GtkWidget *child,
-                       gpointer   data_)
-{
-  RenderData *data = data_;
   GskRenderNode *node;
   GdkWindow *window, *w;
   GtkAllocation allocation;
@@ -3316,14 +3300,17 @@ propagate_render_node (GtkWidget *child,
   graphene_matrix_t m;
   graphene_point3d_t tmp;
 
-  node = gtk_widget_get_render_node (child, data->renderer);
+  if (!_gtk_widget_is_drawable (child))
+    return;
+
+  node = gtk_widget_get_render_node (child, renderer);
   if (node == NULL)
     return;
 
   /* translate coordinates. Ugly business, that. */
-  if (!_gtk_widget_get_has_window (GTK_WIDGET (data->container)))
+  if (!_gtk_widget_get_has_window (GTK_WIDGET (container)))
     {
-      gtk_widget_get_clip (GTK_WIDGET (data->container), &allocation);
+      gtk_widget_get_clip (GTK_WIDGET (container), &allocation);
       x = -allocation.x;
       y = -allocation.y;
     }
@@ -3333,7 +3320,7 @@ propagate_render_node (GtkWidget *child,
       y = 0;
     }
 
-  window = _gtk_widget_get_window (GTK_WIDGET (data->container));
+  window = _gtk_widget_get_window (GTK_WIDGET (container));
 
   for (w = _gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
     {
@@ -3359,8 +3346,37 @@ propagate_render_node (GtkWidget *child,
   graphene_matrix_init_translate (&m, graphene_point3d_init (&tmp, x, y, 0));
   gsk_render_node_set_transform (node, &m);
 
-  gsk_render_node_append_child (data->parent, node);
+  gsk_render_node_append_child (parent, node);
   gsk_render_node_unref (node);
+}
+
+typedef struct {
+  GtkContainer *container;
+  GskRenderer *renderer;
+  GskRenderNode *parent;
+  GArray *child_infos;
+} RenderData;
+
+static gboolean
+should_propagate_node (GtkWidget  *child,
+                       RenderData *data)
+{
+  if (!_gtk_widget_is_drawable (child))
+    return FALSE;
+
+  return TRUE;
+}
+
+static void
+propagate_render_node (GtkWidget *child,
+                       gpointer   data_)
+{
+  RenderData *data = data_;
+
+  gtk_container_propagate_render_node_for_child (data->container,
+                                                 child,
+                                                 data->renderer,
+                                                 data->parent);
 }
 
 static void
