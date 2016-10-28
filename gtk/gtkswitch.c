@@ -572,17 +572,6 @@ gtk_switch_render_trough (GtkCssGadget *gadget,
 
   gtk_render_layout (context, cr, label_x, label_y, priv->off_layout);
 
-  gtk_css_gadget_draw (priv->slider_gadget, cr);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_switch_draw (GtkWidget *widget,
-                 cairo_t   *cr)
-{
-  gtk_css_gadget_draw (GTK_SWITCH (widget)->priv->gadget, cr);
-
   return FALSE;
 }
 
@@ -734,6 +723,27 @@ state_set (GtkSwitch *sw, gboolean state)
   return TRUE;
 }
 
+static GskRenderNode *
+gtk_switch_get_render_node (GtkWidget *widget, GskRenderer *renderer)
+{
+  GtkSwitchPrivate *priv =gtk_switch_get_instance_private (GTK_SWITCH (widget));
+  GskRenderNode *trough_node;
+  GskRenderNode *slider_node;
+
+  trough_node = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
+
+  if (trough_node == NULL)
+    return NULL;
+
+  slider_node = gtk_css_gadget_get_render_node (priv->slider_gadget, renderer,
+                                                gtk_widget_has_visible_focus (widget));
+
+  gsk_render_node_append_child (trough_node, slider_node);
+  gsk_render_node_unref (slider_node);
+
+  return trough_node;
+}
+
 static void
 gtk_switch_class_init (GtkSwitchClass *klass)
 {
@@ -780,11 +790,11 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->unrealize = gtk_switch_unrealize;
   widget_class->map = gtk_switch_map;
   widget_class->unmap = gtk_switch_unmap;
-  widget_class->draw = gtk_switch_draw;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
   widget_class->screen_changed = gtk_switch_screen_changed;
   widget_class->style_updated = gtk_switch_style_updated;
+  widget_class->get_render_node = gtk_switch_get_render_node;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
