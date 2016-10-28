@@ -46,6 +46,10 @@ void      gtk_container_get_children_clip       (GtkContainer  *container,
 void      gtk_container_propagate_render_node   (GtkContainer  *container,
                                                  GskRenderer   *renderer,
                                                  GskRenderNode *parent_node);
+void      gtk_container_propagate_render_node_for_child   (GtkContainer  *container,
+                                                           GtkWidget     *child,
+                                                           GskRenderer   *renderer,
+                                                           GskRenderNode *parent_node);
 
 G_END_DECLS
 
