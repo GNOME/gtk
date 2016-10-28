@@ -64,12 +64,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       return tmp;
     }
-  else if (value->g_type == GDK_TYPE_COLOR)
-    {
-      GdkColor *color = g_value_get_boxed (value);
-
-      return g_strdup_printf ("%x:%x:%x", color->red, color->green, color->blue);
-    }
   else
     {
       g_warning ("Type %s is not serializable", g_type_name (value->g_type));
@@ -133,45 +127,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	return FALSE;
 
       g_value_set_double (value, v);
-
-      return TRUE;
-    }
-  else if (value->g_type == GDK_TYPE_COLOR)
-    {
-      GdkColor color;
-      const gchar *old;
-      gchar *tmp;
-
-      old = str;
-      tmp = NULL;
-      errno = 0;
-      color.red = g_ascii_strtoll (old, &tmp, 16);
-
-      if (errno || tmp == old)
-	return FALSE;
-
-      old = tmp;
-      if (*old++ != ':')
-	return FALSE;
-
-      tmp = NULL;
-      errno = 0;
-      color.green = g_ascii_strtoll (old, &tmp, 16);
-      if (errno || tmp == old)
-	return FALSE;
-
-      old = tmp;
-      if (*old++ != ':')
-	return FALSE;
-
-      tmp = NULL;
-      errno = 0;
-      color.blue = g_ascii_strtoll (old, &tmp, 16);
-
-      if (errno || tmp == old || *tmp != '\0')
-	return FALSE;
-
-      g_value_set_boxed (value, &color);
 
       return TRUE;
     }
