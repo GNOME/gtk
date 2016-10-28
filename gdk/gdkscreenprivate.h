@@ -65,22 +65,6 @@ struct _GdkScreenClass
   gboolean     (* get_setting)           (GdkScreen   *screen,
                                           const gchar *name,
                                           GValue      *value);
-  gint         (* visual_get_best_depth) (GdkScreen   *screen);
-  GdkVisualType (* visual_get_best_type) (GdkScreen   *screen);
-  GdkVisual *  (* visual_get_best)       (GdkScreen   *screen);
-  GdkVisual *  (* visual_get_best_with_depth) (GdkScreen   *screen,
-                                               gint depth);
-  GdkVisual *  (* visual_get_best_with_type) (GdkScreen   *screen,
-                                              GdkVisualType visual_type);
-  GdkVisual *  (* visual_get_best_with_both) (GdkScreen   *screen,
-                                              gint depth,
-                                              GdkVisualType visual_type);
-  void         (* query_depths)          (GdkScreen   *screen,
-                                          gint **depths,
-                                          gint  *count);
-  void         (* query_visual_types)    (GdkScreen   *screen,
-                                          GdkVisualType **visual_types,
-                                          gint           *count);
   gint         (* get_monitor_scale_factor) (GdkScreen *screen,
                                              gint       monitor_num);
 

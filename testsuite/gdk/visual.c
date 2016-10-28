@@ -85,91 +85,6 @@ test_list_visuals (void)
   g_assert (rgba_visual == NULL || found_rgba);
 }
 
-static void
-test_depth (void)
-{
-  GdkVisual *visual;
-  gint *depths;
-  gint n_depths;
-  gint i, j;
-  gboolean is_depth;
-
-  gdk_query_depths (&depths, &n_depths);
-  g_assert_cmpint (n_depths, >, 0);
-  for (i = 0; i < n_depths; i++)
-    {
-      g_assert_cmpint (depths[i], >, 0);
-      g_assert_cmpint (depths[i], <=, 32);
-
-      visual = gdk_visual_get_best_with_depth (depths[i]);
-
-      g_assert_nonnull (visual);
-      g_assert_cmpint (gdk_visual_get_depth (visual), ==, depths[i]);
-    }
-
-  for (i = 1; i <= 32; i++)
-    {
-      is_depth = FALSE;
-      for (j = 0; j < n_depths; j++)
-        {
-          if (i == depths[j])
-            is_depth = TRUE;
-        }
-
-      visual = gdk_visual_get_best_with_depth (i);
-      if (!is_depth)
-        g_assert_null (visual);
-      else
-        {
-          g_assert_nonnull (visual);
-          g_assert_cmpint (gdk_visual_get_depth (visual), ==, i);
-        }
-    }
-}
-
-static void
-test_type (void)
-{
-  GdkVisual *visual;
-  GdkVisualType *types;
-  gint n_types;
-  gint i, j;
-  gboolean is_type;
-
-  gdk_query_visual_types (&types, &n_types);
-  g_assert_cmpint (n_types, >, 0);
-  for (i = 0; i < n_types; i++)
-    {
-      g_assert_cmpint (types[i], >=, GDK_VISUAL_STATIC_GRAY);
-      g_assert_cmpint (types[i], <=, GDK_VISUAL_DIRECT_COLOR);
-
-      visual = gdk_visual_get_best_with_type (types[i]);
-
-      g_assert_nonnull (visual);
-      g_assert_cmpint (gdk_visual_get_visual_type (visual), ==, types[i]);
-    }
-
-  for (i = GDK_VISUAL_STATIC_GRAY; i <= GDK_VISUAL_DIRECT_COLOR; i++)
-    {
-      is_type = FALSE;
-      for (j = 0; j < n_types; j++)
-        {
-          if (i == types[j])
-            is_type = TRUE;
-        }
-
-      visual = gdk_visual_get_best_with_type (i);
-      if (!is_type)
-        g_assert_null (visual);
-      else
-        {
-          g_assert_nonnull (visual);
-          g_assert_cmpint (gdk_visual_get_visual_type (visual), ==, i);
-        }
-    }
-}
-
-
 int
 main (int argc, char *argv[])
 {
@@ -181,8 +96,6 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/visual/list", test_list_visuals);
   g_test_add_func ("/visual/rgba", test_rgba_visual);
-  g_test_add_func ("/visual/depth", test_depth);
-  g_test_add_func ("/visual/type", test_type);
 
   return g_test_run ();
 }

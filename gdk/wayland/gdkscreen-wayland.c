@@ -652,77 +652,6 @@ _gdk_wayland_visual_init (GdkWaylandVisual *visual)
 {
 }
 
-static gint
-gdk_wayland_screen_visual_get_best_depth (GdkScreen *screen)
-{
-  return 32;
-}
-
-static GdkVisualType
-gdk_wayland_screen_visual_get_best_type (GdkScreen *screen)
-{
-  return GDK_VISUAL_TRUE_COLOR;
-}
-
-static GdkVisual*
-gdk_wayland_screen_visual_get_best (GdkScreen *screen)
-{
-  return GDK_WAYLAND_SCREEN (screen)->visual;
-}
-
-static GdkVisual*
-gdk_wayland_screen_visual_get_best_with_depth (GdkScreen *screen,
-					       gint       depth)
-{
-  if (depth == 32)
-    return GDK_WAYLAND_SCREEN (screen)->visual;
-  else
-    return NULL;
-}
-
-static GdkVisual*
-gdk_wayland_screen_visual_get_best_with_type (GdkScreen     *screen,
-					      GdkVisualType  visual_type)
-{
-  if (visual_type == GDK_VISUAL_TRUE_COLOR)
-    return GDK_WAYLAND_SCREEN (screen)->visual;
-  else
-    return NULL;
-}
-
-static GdkVisual*
-gdk_wayland_screen_visual_get_best_with_both (GdkScreen     *screen,
-					      gint           depth,
-					      GdkVisualType  visual_type)
-{
-  if (depth == 32 && visual_type == GDK_VISUAL_TRUE_COLOR)
-    return GDK_WAYLAND_SCREEN (screen)->visual;
-  else
-    return NULL;
-}
-
-static void
-gdk_wayland_screen_query_depths  (GdkScreen  *screen,
-				  gint      **depths,
-				  gint       *count)
-{
-  static gint static_depths[] = { 32 };
-
-  *count = G_N_ELEMENTS(static_depths);
-  *depths = static_depths;
-}
-
-static void
-gdk_wayland_screen_query_visual_types (GdkScreen      *screen,
-				       GdkVisualType **visual_types,
-				       gint           *count)
-{
-  static GdkVisualType static_visual_types[] = { GDK_VISUAL_TRUE_COLOR };
-
-  *count = G_N_ELEMENTS(static_visual_types);
-  *visual_types = static_visual_types;
-}
-
 static GList *
 gdk_wayland_screen_list_visuals (GdkScreen *screen)
 {
@@ -795,14 +724,6 @@ _gdk_wayland_screen_class_init (GdkWaylandScreenClass *klass)
   screen_class->get_rgba_visual = gdk_wayland_screen_get_rgba_visual;
   screen_class->is_composited = gdk_wayland_screen_is_composited;
   screen_class->get_setting = gdk_wayland_screen_get_setting;
-  screen_class->visual_get_best_depth = gdk_wayland_screen_visual_get_best_depth;
-  screen_class->visual_get_best_type = gdk_wayland_screen_visual_get_best_type;
-  screen_class->visual_get_best = gdk_wayland_screen_visual_get_best;
-  screen_class->visual_get_best_with_depth = gdk_wayland_screen_visual_get_best_with_depth;
-  screen_class->visual_get_best_with_type = gdk_wayland_screen_visual_get_best_with_type;
-  screen_class->visual_get_best_with_both = gdk_wayland_screen_visual_get_best_with_both;
-  screen_class->query_depths = gdk_wayland_screen_query_depths;
-  screen_class->query_visual_types = gdk_wayland_screen_query_visual_types;
   screen_class->list_visuals = gdk_wayland_screen_list_visuals;
 }
 

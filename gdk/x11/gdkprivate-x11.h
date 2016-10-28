@@ -50,23 +50,7 @@ void _gdk_x11_error_handler_pop  (void);
 
 Colormap _gdk_visual_get_x11_colormap (GdkVisual *visual);
 
-gint          _gdk_x11_screen_visual_get_best_depth      (GdkScreen      *screen);
-GdkVisualType _gdk_x11_screen_visual_get_best_type       (GdkScreen      *screen);
 GdkVisual *   _gdk_x11_screen_get_system_visual          (GdkScreen      *screen);
-GdkVisual*    _gdk_x11_screen_visual_get_best            (GdkScreen      *screen);
-GdkVisual*    _gdk_x11_screen_visual_get_best_with_depth (GdkScreen      *screen,
-                                                          gint            depth);
-GdkVisual*    _gdk_x11_screen_visual_get_best_with_type  (GdkScreen      *screen,
-                                                          GdkVisualType   visual_type);
-GdkVisual*    _gdk_x11_screen_visual_get_best_with_both  (GdkScreen      *screen,
-                                                          gint            depth,
-                                                          GdkVisualType   visual_type);
-void          _gdk_x11_screen_query_depths               (GdkScreen      *screen,
-                                                          gint          **depths,
-                                                          gint           *count);
-void          _gdk_x11_screen_query_visual_types         (GdkScreen      *screen,
-                                                          GdkVisualType **visual_types,
-                                                          gint           *count);
 GList *       _gdk_x11_screen_list_visuals               (GdkScreen      *screen);
 
 

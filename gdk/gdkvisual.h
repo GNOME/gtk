@@ -83,32 +83,6 @@ GDK_AVAILABLE_IN_ALL
 GType         gdk_visual_get_type            (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-gint          gdk_visual_get_best_depth      (void);
-GDK_AVAILABLE_IN_ALL
-GdkVisualType gdk_visual_get_best_type       (void);
-GDK_AVAILABLE_IN_ALL
-GdkVisual*    gdk_visual_get_system          (void);
-GDK_AVAILABLE_IN_ALL
-GdkVisual*    gdk_visual_get_best            (void);
-GDK_AVAILABLE_IN_ALL
-GdkVisual*    gdk_visual_get_best_with_depth (gint           depth);
-GDK_AVAILABLE_IN_ALL
-GdkVisual*    gdk_visual_get_best_with_type  (GdkVisualType  visual_type);
-GDK_AVAILABLE_IN_ALL
-GdkVisual*    gdk_visual_get_best_with_both  (gint           depth,
-                                              GdkVisualType  visual_type);
-
-GDK_AVAILABLE_IN_ALL
-void gdk_query_depths       (gint           **depths,
-                             gint            *count);
-GDK_AVAILABLE_IN_ALL
-void gdk_query_visual_types (GdkVisualType  **visual_types,
-                             gint            *count);
-
-GDK_AVAILABLE_IN_ALL
-GList* gdk_list_visuals (void);
-
-GDK_AVAILABLE_IN_ALL
 GdkScreen    *gdk_visual_get_screen (GdkVisual *visual);
 
 GDK_AVAILABLE_IN_ALL

@@ -678,74 +678,6 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
 }
 
 static gint
-gdk_mir_screen_visual_get_best_depth (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_visual_get_best_depth\n");
-  return VISUAL_DEPTH;
-}
-
-static GdkVisualType
-gdk_mir_screen_visual_get_best_type (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_visual_get_best_type\n");
-  return VISUAL_TYPE;
-}
-
-static GdkVisual*
-gdk_mir_screen_visual_get_best (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_visual_get_best\n");
-  return GDK_MIR_SCREEN (screen)->visual;
-}
-
-static GdkVisual*
-gdk_mir_screen_visual_get_best_with_depth (GdkScreen *screen,
-                                           gint       depth)
-{
-  //g_printerr ("gdk_mir_screen_visual_get_best_with_depth (%d)\n", depth);
-  return GDK_MIR_SCREEN (screen)->visual;
-}
-
-static GdkVisual*
-gdk_mir_screen_visual_get_best_with_type (GdkScreen     *screen,
-                                          GdkVisualType  visual_type)
-{
-  //g_printerr ("gdk_mir_screen_visual_get_best_with_type (%d)\n", visual_type);
-  return GDK_MIR_SCREEN (screen)->visual;
-}
-
-static GdkVisual*
-gdk_mir_screen_visual_get_best_with_both (GdkScreen     *screen,
-                                          gint           depth,
-                                          GdkVisualType  visual_type)
-{
-  //g_printerr ("gdk_mir_screen_visual_get_best_with_both\n");
-  return GDK_MIR_SCREEN (screen)->visual;
-}
-
-static void
-gdk_mir_screen_query_depths (GdkScreen  *screen,
-                             gint      **depths,
-                             gint       *count)
-{
-  //g_printerr ("gdk_mir_screen_query_depths\n");
-  static gint supported_depths[] = { VISUAL_DEPTH };
-  *depths = supported_depths;
-  *count = 1;
-}
-
-static void
-gdk_mir_screen_query_visual_types (GdkScreen      *screen,
-                                   GdkVisualType **visual_types,
-                                   gint           *count)
-{
-  //g_printerr ("gdk_mir_screen_query_visual_types\n");
-  static GdkVisualType supported_visual_types[] = { VISUAL_TYPE };
-  *visual_types = supported_visual_types;
-  *count = 1;
-}
-
-static gint
 gdk_mir_screen_get_monitor_scale_factor (GdkScreen *screen,
                                          gint       monitor_num)
 {
@@ -790,13 +722,5 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
   screen_class->get_rgba_visual = gdk_mir_screen_get_rgba_visual;
   screen_class->is_composited = gdk_mir_screen_is_composited;
   screen_class->get_setting = gdk_mir_screen_get_setting;
-  screen_class->visual_get_best_depth = gdk_mir_screen_visual_get_best_depth;
-  screen_class->visual_get_best_type = gdk_mir_screen_visual_get_best_type;
-  screen_class->visual_get_best = gdk_mir_screen_visual_get_best;
-  screen_class->visual_get_best_with_depth = gdk_mir_screen_visual_get_best_with_depth;
-  screen_class->visual_get_best_with_type = gdk_mir_screen_visual_get_best_with_type;
-  screen_class->visual_get_best_with_both = gdk_mir_screen_visual_get_best_with_both;
-  screen_class->query_depths = gdk_mir_screen_query_depths;
-  screen_class->query_visual_types = gdk_mir_screen_query_visual_types;
   screen_class->get_monitor_scale_factor = gdk_mir_screen_get_monitor_scale_factor;
 }

@@ -401,18 +401,6 @@ gdk_win32_screen_is_composited (GdkScreen *screen)
     }
 }
 
-static gint
-gdk_win32_screen_visual_get_best_depth (GdkScreen *screen)
-{
-  return GDK_WIN32_SCREEN (screen)->available_visual_depths[0];
-}
-
-static GdkVisualType
-gdk_win32_screen_visual_get_best_type (GdkScreen *screen)
-{
-  return GDK_WIN32_SCREEN (screen)->available_visual_types[0];
-}
-
 static GdkVisual *
 gdk_win32_screen_get_system_visual (GdkScreen *screen)
 {
@@ -423,73 +411,6 @@ static GdkVisual *
 gdk_win32_screen_get_rgba_visual (GdkScreen *screen)
 {
   return GDK_WIN32_SCREEN (screen)->rgba_visual;
-}
-
-static GdkVisual*
-gdk_win32_screen_visual_get_best (GdkScreen *screen)
-{
-  return GDK_WIN32_SCREEN (screen)->rgba_visual;
-}
-
-static GdkVisual *
-gdk_win32_screen_visual_get_best_with_depth (GdkScreen *screen,
-                                             gint       depth)
-{
-  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
-
-  if (depth == win32_screen->rgba_visual->depth)
-    return win32_screen->rgba_visual;
-  else if (depth == win32_screen->system_visual->depth)
-    return win32_screen->system_visual;
-
-  return NULL;
-}
-
-static GdkVisual *
-gdk_win32_screen_visual_get_best_with_type (GdkScreen     *screen,
-                                            GdkVisualType  visual_type)
-{
-  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
-
-  if (visual_type == win32_screen->rgba_visual->type)
-    return win32_screen->rgba_visual;
-  else if (visual_type == win32_screen->system_visual->type)
-    return win32_screen->system_visual;
-
-  return NULL;
-}
-
-static GdkVisual *
-gdk_win32_screen_visual_get_best_with_both (GdkScreen     *screen,
-                                            gint           depth,
-                                            GdkVisualType  visual_type)
-{
-  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
-
-  if ((depth == win32_screen->rgba_visual->depth) && (visual_type == win32_screen->rgba_visual->type))
-    return win32_screen->rgba_visual;
-  else if ((depth == win32_screen->system_visual->depth) && (visual_type == win32_screen->system_visual->type))
-    return win32_screen->system_visual;
-
-  return NULL;
-}
-
-static void
-gdk_win32_screen_query_depths (GdkScreen  *screen,
-                               gint      **depths,
-                               gint       *count)
-{
-  *count = 1;
-  *depths = GDK_WIN32_SCREEN (screen)->available_visual_depths;
-}
-
-static void
-gdk_win32_screen_query_visual_types (GdkScreen      *screen,
-                                     GdkVisualType **visual_types,
-                                     gint           *count)
-{
-  *count = 1;
-  *visual_types = GDK_WIN32_SCREEN (screen)->available_visual_types;
 }
 
 static GList *
@@ -524,13 +445,5 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   screen_class->get_setting = _gdk_win32_screen_get_setting;
   screen_class->get_system_visual = gdk_win32_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_win32_screen_get_rgba_visual;
-  screen_class->visual_get_best_depth = gdk_win32_screen_visual_get_best_depth;
-  screen_class->visual_get_best_type = gdk_win32_screen_visual_get_best_type;
-  screen_class->visual_get_best = gdk_win32_screen_visual_get_best;
-  screen_class->visual_get_best_with_depth = gdk_win32_screen_visual_get_best_with_depth;
-  screen_class->visual_get_best_with_type = gdk_win32_screen_visual_get_best_with_type;
-  screen_class->visual_get_best_with_both = gdk_win32_screen_visual_get_best_with_both;
-  screen_class->query_depths = gdk_win32_screen_query_depths;
-  screen_class->query_visual_types = gdk_win32_screen_query_visual_types;
   screen_class->list_visuals = gdk_win32_screen_list_visuals;
 }

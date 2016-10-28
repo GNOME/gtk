@@ -182,14 +182,6 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
   screen_class->get_setting = gdk_broadway_screen_get_setting;
   screen_class->get_rgba_visual = gdk_broadway_screen_get_rgba_visual;
   screen_class->get_system_visual = _gdk_broadway_screen_get_system_visual;
-  screen_class->visual_get_best_depth = _gdk_broadway_screen_visual_get_best_depth;
-  screen_class->visual_get_best_type = _gdk_broadway_screen_visual_get_best_type;
-  screen_class->visual_get_best = _gdk_broadway_screen_visual_get_best;
-  screen_class->visual_get_best_with_depth = _gdk_broadway_screen_visual_get_best_with_depth;
-  screen_class->visual_get_best_with_type = _gdk_broadway_screen_visual_get_best_with_type;
-  screen_class->visual_get_best_with_both = _gdk_broadway_screen_visual_get_best_with_both;
-  screen_class->query_depths = _gdk_broadway_screen_query_depths;
-  screen_class->query_visual_types = _gdk_broadway_screen_query_visual_types;
   screen_class->list_visuals = _gdk_broadway_screen_list_visuals;
 }
 
