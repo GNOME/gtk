@@ -2239,6 +2239,13 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
       child_allocation.height = MAX (min, allocation->height);
 
       gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation);
+
+      if (!gdk_rectangle_equal (&priv->last_visible_surface_allocation,
+                                &child_allocation))
+        {
+          cairo_surface_destroy (priv->last_visible_surface);
+          priv->last_visible_surface = NULL;
+        }
     }
 
   child_allocation.width = allocation->width;
