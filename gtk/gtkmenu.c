@@ -5202,7 +5202,10 @@ gtk_menu_position (GtkMenu  *menu,
 
       if (grab_device && attach_widget)
         {
-          rect = (GdkRectangle) { 0, 0, 1, 1 };
+          rect.x = 0;
+          rect.y = 0;
+          rect.width = 1;
+          rect.height = 1;
 
           rect_window = gtk_widget_get_window (attach_widget);
           gdk_window_get_device_position (rect_window, grab_device,
