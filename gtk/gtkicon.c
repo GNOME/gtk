@@ -128,16 +128,14 @@ gtk_icon_size_allocate (GtkWidget     *widget,
   gtk_widget_set_clip (widget, &clip);
 }
 
-static gboolean
-gtk_icon_draw (GtkWidget *widget,
-               cairo_t   *cr)
+static GskRenderNode *
+gtk_icon_get_render_node (GtkWidget   *widget,
+                          GskRenderer *renderer)
 {
   GtkIcon *self = GTK_ICON (widget);
   GtkIconPrivate *priv = gtk_icon_get_instance_private (self);
 
-  gtk_css_gadget_draw (priv->gadget, cr);
-
-  return FALSE;
+  return gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
 }
 
 static void
@@ -152,7 +150,7 @@ gtk_icon_class_init (GtkIconClass *klass)
 
   wclass->size_allocate = gtk_icon_size_allocate;
   wclass->measure = gtk_icon_measure;
-  wclass->draw = gtk_icon_draw;
+  wclass->get_render_node = gtk_icon_get_render_node;
 
   icon_props[PROP_CSS_NAME] =
     g_param_spec_string ("css-name", "CSS name",
