@@ -220,24 +220,6 @@ gdk_pixbuf_get_from_surface
 </SECTION>
 
 <SECTION>
-<TITLE>Colors</TITLE>
-<FILE>colors</FILE>
-GdkColor
-gdk_color_copy
-gdk_color_free
-gdk_color_parse
-gdk_color_equal
-gdk_color_hash
-gdk_color_to_string
-
-<SUBSECTION Standard>
-GDK_TYPE_COLOR
-
-<SUBSECTION Private>
-gdk_color_get_type
-</SECTION>
-
-<SECTION>
 <TITLE>RGBA Colors</TITLE>
 <FILE>rgba_colors</FILE>
 GdkRGBA

@@ -23,7 +23,6 @@
 #endif
 
 #include <gdk/gdkversionmacros.h>
-#include <gdk/deprecated/gdkcolor.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkdrawingcontext.h>
 #include <gdk/gdkpixbuf.h>
