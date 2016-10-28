@@ -381,6 +381,7 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
   int n_monitors;
   GtkListBox *list;
 
+    gtk_widget_show (gen->priv->display_composited);
   list = GTK_LIST_BOX (gen->priv->display_box);
   children = gtk_container_get_children (GTK_CONTAINER (list));
   for (l = children; l; l = l->next)
@@ -399,11 +400,10 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
 
   gtk_label_set_label (GTK_LABEL (gen->priv->display_name), gdk_display_get_name (display));
 
-  if (gdk_screen_get_rgba_visual (screen) != NULL)
-    gtk_widget_show (gen->priv->display_rgba);
-
-  if (gdk_screen_is_composited (screen))
-    gtk_widget_show (gen->priv->display_composited);
+  gtk_widget_set_visible (gen->priv->display_rgba,
+                          gdk_display_is_rgba (display));
+  gtk_widget_set_visible (gen->priv->display_composited,
+                          gdk_display_is_composited (display));
 
   n_monitors = gdk_display_get_n_monitors (display);
   for (i = 0; i < n_monitors; i++)
@@ -462,12 +462,23 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
 }
 
 static void
+populate_display_notify_cb (GdkDisplay          *display,
+                            GParamSpec          *pspec,
+                            GtkInspectorGeneral *gen)
+{
+  populate_display (gdk_display_get_default_screen (display), gen);
+}
+
+static void
 init_display (GtkInspectorGeneral *gen)
 {
   GdkScreen *screen;
+  GdkDisplay *display;
 
+  display = gdk_display_get_default ();
   screen = gdk_screen_get_default ();
 
+  g_signal_connect (display, "notify", G_CALLBACK (populate_display_notify_cb), gen);
   g_signal_connect (screen, "composited-changed", G_CALLBACK (populate_display), gen);
   g_signal_connect (screen, "monitors-changed", G_CALLBACK (populate_display), gen);
 
