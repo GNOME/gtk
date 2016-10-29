@@ -664,9 +664,6 @@ gtk_button_new_with_label (const gchar *label)
  * displayed instead. If the current icon theme is changed, the icon
  * will be updated appropriately.
  *
- * This function is a convenience wrapper around gtk_button_new() and
- * gtk_button_set_image().
- *
  * Returns: a new #GtkButton displaying the themed icon
  *
  * Since: 3.10
@@ -680,6 +677,7 @@ gtk_button_new_from_icon_name (const gchar *icon_name,
 
   image = gtk_image_new_from_icon_name (icon_name, size);
   button =  g_object_new (GTK_TYPE_BUTTON, NULL);
+  gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (button), image);
 
   return button;
