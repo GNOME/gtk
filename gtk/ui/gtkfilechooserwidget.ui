@@ -69,14 +69,8 @@
                                     <property name="tooltip-text" translatable="yes">Create Folder</property>
                                     <property name="use-underline">1</property>
                                     <property name="popover">new_folder_popover</property>
+                                    <property name="icon-name">folder-new-symbolic</property>
                                     <signal name="notify::active" handler="new_folder_popover_active"/>
-                                    <child>
-                                      <object class="GtkImage">
-                                        <property name="visible">1</property>
-                                        <property name="icon-name">folder-new-symbolic</property>
-                                        <property name="icon-size">1</property>
-                                      </object>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="fill">0</property>
