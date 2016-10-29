@@ -1330,6 +1330,26 @@ gsk_render_node_set_name (GskRenderNode *node,
 }
 
 /**
+ * gsk_render_node_get_name:
+ * @node: a #GskRenderNode
+ *
+ * Retrieves the name previously set via gsk_render_node_set_name().
+ * If no name has been set, %NULL is returned.
+ *
+ * Returns: (nullable) The name previously set via
+ *     gsk_render_node_set_name() or %NULL
+ *
+ * Since: 3.90
+ **/
+const char *
+gsk_render_node_get_name (GskRenderNode *node)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+
+  return node->name;
+}
+
+/**
  * gsk_render_node_set_blend_mode:
  * @node: a #GskRenderNode
  * @blend_mode: the blend mode to be applied to the node's children

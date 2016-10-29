@@ -127,6 +127,8 @@ void                    gsk_render_node_set_scaling_filter      (GskRenderNode *
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_name                (GskRenderNode *node,
                                                                  const char    *name);
+GDK_AVAILABLE_IN_3_90
+const char *            gsk_render_node_get_name                (GskRenderNode *node);
 
 #define GSK_VALUE_HOLDS_RENDER_NODE(value)	(G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE))
 
