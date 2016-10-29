@@ -390,6 +390,9 @@ gdk_display_init (GdkDisplay *display)
                                                         (GDestroyNotify) g_free);
 
   display->rendering_mode = _gdk_rendering_mode;
+
+  display->composited = TRUE;
+  display->rgba = TRUE;
 }
 
 static void
