@@ -492,17 +492,12 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
       if (!_gtk_widget_get_visible (child->widget))
 	continue;
 
-      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_widget_get_preferred_width_for_height (child->widget,
-                                                   allocation->height,
-                                                   &sizes[i].minimum_size,
-                                                   &sizes[i].natural_size);
-      else
-	gtk_widget_get_preferred_height_and_baseline_for_width (child->widget,
-								allocation->width,
-								&sizes[i].minimum_size,
-								&sizes[i].natural_size,
-								NULL, NULL);
+      gtk_widget_measure (child->widget,
+                          private->orientation,
+                          private->orientation == GTK_ORIENTATION_HORIZONTAL ?
+                                                  allocation->height : allocation->width,
+                          &sizes[i].minimum_size, &sizes[i].natural_size,
+                          NULL, NULL);
 
       /* Assert the api is working properly */
       if (sizes[i].minimum_size < 0)
@@ -623,10 +618,10 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 
 	      child_minimum_baseline = -1;
 	      child_natural_baseline = -1;
-	      gtk_widget_get_preferred_height_and_baseline_for_width (child->widget,
-								      child_allocation_width,
-								      &child_minimum_height, &child_natural_height,
-								      &child_minimum_baseline, &child_natural_baseline);
+              gtk_widget_measure (child->widget, GTK_ORIENTATION_VERTICAL,
+                                  child_allocation_width,
+                                  &child_minimum_height, &child_natural_height,
+                                  &child_minimum_baseline, &child_natural_baseline);
 
 	      if (child_minimum_baseline >= 0)
 		{
@@ -848,17 +843,12 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
       else
         req = &(sizes[child->pack][idx[child->pack]]);
 
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_get_preferred_width_for_height (child->widget,
-                                                   allocation->height,
-                                                   &req->minimum_size,
-                                                   &req->natural_size);
-      else
-        gtk_widget_get_preferred_height_and_baseline_for_width (child->widget,
-                                                                allocation->width,
-                                                                &req->minimum_size,
-                                                                &req->natural_size,
-                                                                NULL, NULL);
+      gtk_widget_measure (child->widget,
+                          priv->orientation,
+                          priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
+                                               allocation->height : allocation->width,
+                          &req->minimum_size, &req->natural_size,
+                          NULL, NULL);
 
       if (child != priv->center)
         {
@@ -967,10 +957,11 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
 
               child_minimum_baseline = -1;
               child_natural_baseline = -1;
-              gtk_widget_get_preferred_height_and_baseline_for_width (child->widget,
-                                                                      child_allocation_width,
-                                                                      &child_minimum_height, &child_natural_height,
-                                                                      &child_minimum_baseline, &child_natural_baseline);
+              gtk_widget_measure (child->widget,
+                                  GTK_ORIENTATION_VERTICAL,
+                                  child_allocation_width,
+                                  &child_minimum_height, &child_natural_height,
+                                  &child_minimum_baseline, &child_natural_baseline);
 
               if (child_minimum_baseline >= 0)
                 {
@@ -1528,13 +1519,11 @@ gtk_box_get_size (GtkWidget      *widget,
           gint child_minimum, child_natural;
           gint child_minimum_baseline = -1, child_natural_baseline = -1;
 
-	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	    gtk_widget_get_preferred_width (child->widget,
-                                            &child_minimum, &child_natural);
-	  else
-	    gtk_widget_get_preferred_height_and_baseline_for_width (child->widget, -1,
-								    &child_minimum, &child_natural,
-								    &child_minimum_baseline, &child_natural_baseline);
+          gtk_widget_measure (child->widget,
+                              orientation,
+                              -1,
+                              &child_minimum, &child_natural,
+                              &child_minimum_baseline, &child_natural_baseline);
 
           if (private->orientation == orientation)
 	    {
@@ -1694,14 +1683,11 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
       if (_gtk_widget_get_visible (child->widget))
 	{
-	  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    gtk_widget_get_preferred_width (child->widget,
-                                            &sizes[i].minimum_size,
-                                            &sizes[i].natural_size);
-	  else
-	    gtk_widget_get_preferred_height (child->widget,
-                                             &sizes[i].minimum_size,
-                                             &sizes[i].natural_size);
+          gtk_widget_measure (child->widget,
+                              private->orientation,
+                              -1,
+                              &sizes[i].minimum_size, &sizes[i].natural_size,
+                              NULL, NULL);
 
 	  /* Assert the api is working properly */
 	  if (sizes[i].minimum_size < 0)
@@ -1815,13 +1801,11 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
 	      child_minimum_baseline = child_natural_baseline = -1;
 	      /* Assign the child's position. */
-	      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-		gtk_widget_get_preferred_height_and_baseline_for_width (child->widget, child_size,
-									&child_minimum, &child_natural,
-									&child_minimum_baseline, &child_natural_baseline);
-	      else /* (private->orientation == GTK_ORIENTATION_VERTICAL) */
-		gtk_widget_get_preferred_width_for_height (child->widget,
-                                                           child_size, &child_minimum, &child_natural);
+              gtk_widget_measure (child->widget,
+                                  OPPOSITE_ORIENTATION (private->orientation),
+                                  child_size,
+                                  &child_minimum, &child_natural,
+                                  &child_minimum_baseline, &child_natural_baseline);
 
 	      if (child_minimum_baseline >= 0)
 		{
@@ -1893,13 +1877,11 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
       if (_gtk_widget_get_visible (child->widget))
         {
 
-          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    gtk_widget_get_preferred_width_for_height (child->widget,
-                                                       avail_size, &child_size, &child_natural);
-	  else
-	    gtk_widget_get_preferred_height_for_width (child->widget,
-						       avail_size, &child_size, &child_natural);
-
+          gtk_widget_measure (child->widget,
+                              private->orientation,
+                              avail_size,
+                              &child_size, &child_natural,
+                              NULL, NULL);
 
 	  if (child_size > largest_child)
 	    largest_child = child_size;
