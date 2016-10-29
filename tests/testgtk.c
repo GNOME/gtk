@@ -128,6 +128,7 @@ on_alpha_window_draw (GtkWidget *widget,
 {
   cairo_pattern_t *pattern;
   int radius, width, height;
+  GdkDisplay *display;
 
   /* Get the child allocation to avoid painting over the borders */
   GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
@@ -150,8 +151,9 @@ on_alpha_window_draw (GtkWidget *widget,
                                          height / 2,
 					 radius * 1.33);
 
-  if (gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)) &&
-      gtk_widget_is_composited (widget))
+  display = gtk_widget_get_display (widget);
+  if (gdk_display_is_rgba (display) &&
+      gdk_display_is_composited (display))
     cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
   else
     cairo_set_source_rgb (cr, 1.0, 1.0, 1.0); /* opaque white */

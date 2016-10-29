@@ -1109,10 +1109,6 @@ void             gtk_widget_set_default_direction (GtkTextDirection  dir);
 GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_widget_get_default_direction (void);
 
-/* Compositing manager functionality */
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_widget_is_composited (GtkWidget *widget);
-
 /* Counterpart to gdk_window_shape_combine_region.
  */
 GDK_AVAILABLE_IN_ALL

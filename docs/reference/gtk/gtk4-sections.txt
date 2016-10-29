@@ -4739,7 +4739,6 @@ gtk_widget_get_no_show_all
 gtk_widget_list_mnemonic_labels
 gtk_widget_add_mnemonic_label
 gtk_widget_remove_mnemonic_label
-gtk_widget_is_composited
 gtk_widget_error_bell
 gtk_widget_keynav_failed
 gtk_widget_get_tooltip_markup

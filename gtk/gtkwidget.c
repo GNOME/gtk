@@ -8844,31 +8844,6 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_is_composited:
- * @widget: a #GtkWidget
- *
- * Whether @widget can rely on having its alpha channel
- * drawn correctly. On X11 this function returns whether a
- * compositing manager is running for @widget’s display.
- *
- * Returns: %TRUE if the widget can rely on its alpha
- * channel being drawn correctly.
- *
- * Since: 2.10
- */
-gboolean
-gtk_widget_is_composited (GtkWidget *widget)
-{
-  GdkDisplay *display;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  display = gtk_widget_get_display (widget);
-
-  return gdk_display_is_composited (display);
-}
-
-/**
  * _gtk_widget_propagate_screen_changed:
  * @widget: a #GtkWidget
  * @previous_screen: Previous screen
@@ -14395,13 +14370,12 @@ gtk_widget_update_alpha (GtkWidget *widget)
  * are some limitations:
  *
  * For toplevel widgets this depends on the capabilities of the windowing
- * system. On X11 this has any effect only on X screens with a compositing manager
- * running. See gtk_widget_is_composited(). On Windows it should work
+ * system. On X11 this has any effect only on X displays with a compositing manager
+ * running. See gdk_display_is_composited(). On Windows it should work
  * always, although setting a window’s opacity after the window has been
  * shown causes it to flicker once on Windows.
  *
- * For child widgets it doesn’t work if any affected widget has a native window, or
- * disables double buffering.
+ * For child widgets it doesn’t work if any affected widget has a native window.
  *
  * Since: 3.8
  **/

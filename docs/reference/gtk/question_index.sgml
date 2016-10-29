@@ -570,7 +570,7 @@ RGBA drawing capabilities.
 Note that the presence of an RGBA visual is no guarantee that the
 window will actually appear transparent on screen. On X11, this
 requires a compositing manager to be running. See
-gtk_widget_is_composited() for a way to find out if the alpha
+gdk_display_is_composited() for a way to find out if the alpha
 channel will be respected.
 </para>
 </answer>
