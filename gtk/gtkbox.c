@@ -128,7 +128,6 @@ struct _GtkBoxPrivate
   GtkOrientation  orientation;
   gint16          spacing;
 
-  guint           default_expand : 1;
   guint           homogeneous    : 1;
   guint           spacing_set    : 1;
   guint           baseline_pos   : 2;
@@ -1979,7 +1978,6 @@ gtk_box_init (GtkBox *box)
   private->orientation = GTK_ORIENTATION_HORIZONTAL;
   private->children = NULL;
 
-  private->default_expand = FALSE;
   private->homogeneous = FALSE;
   private->spacing = 0;
   private->spacing_set = FALSE;
@@ -2143,7 +2141,7 @@ gtk_box_set_spacing (GtkBox *box,
   if (private->spacing != spacing)
     {
       private->spacing = spacing;
-      _gtk_box_set_spacing_set (box, TRUE);
+      private->spacing_set = TRUE;
 
       g_object_notify_by_pspec (G_OBJECT (box), props[PROP_SPACING]);
 
@@ -2217,32 +2215,6 @@ gtk_box_get_baseline_position (GtkBox *box)
   g_return_val_if_fail (GTK_IS_BOX (box), GTK_BASELINE_POSITION_CENTER);
 
   return box->priv->baseline_pos;
-}
-
-
-void
-_gtk_box_set_spacing_set (GtkBox  *box,
-                          gboolean spacing_set)
-{
-  GtkBoxPrivate *private;
-
-  g_return_if_fail (GTK_IS_BOX (box));
-
-  private = box->priv;
-
-  private->spacing_set = spacing_set ? TRUE : FALSE;
-}
-
-gboolean
-_gtk_box_get_spacing_set (GtkBox *box)
-{
-  GtkBoxPrivate *private;
-
-  g_return_val_if_fail (GTK_IS_BOX (box), FALSE);
-
-  private = box->priv;
-
-  return private->spacing_set;
 }
 
 /**
@@ -2435,26 +2407,12 @@ gtk_box_set_child_packing (GtkBox      *box,
   gtk_widget_thaw_child_notify (child);
 }
 
-void
-_gtk_box_set_old_defaults (GtkBox *box)
-{
-  GtkBoxPrivate *private;
-
-  g_return_if_fail (GTK_IS_BOX (box));
-
-  private = box->priv;
-
-  private->default_expand = TRUE;
-}
-
 static void
 gtk_box_add (GtkContainer *container,
 	     GtkWidget    *widget)
 {
-  GtkBoxPrivate *priv = GTK_BOX (container)->priv;
-
   gtk_box_pack_start (GTK_BOX (container), widget,
-                      priv->default_expand,
+                      FALSE,
                       TRUE);
 }
 

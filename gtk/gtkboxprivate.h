@@ -25,10 +25,6 @@
 G_BEGIN_DECLS
 
 
-void        _gtk_box_set_old_defaults   (GtkBox         *box);
-gboolean    _gtk_box_get_spacing_set    (GtkBox         *box);
-void        _gtk_box_set_spacing_set    (GtkBox         *box,
-                                         gboolean        spacing_set);
 GList      *_gtk_box_get_children       (GtkBox         *box);
 
 GtkCssGadget *gtk_box_get_gadget (GtkBox *box);
