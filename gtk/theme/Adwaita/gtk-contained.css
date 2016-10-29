@@ -2369,6 +2369,9 @@ popover.background {
   popover.background list separator {
     margin: 0px; }
 
+popover.menu {
+  padding: 8px; }
+
 /*************
  * Notebooks *
  *************/
