@@ -275,10 +275,10 @@ on_highlight_widget (GtkWidget          *button,
 static void
 deemphasize_window (GtkWidget *window)
 {
-  GdkScreen *screen;
+  GdkDisplay *display;
 
-  screen = gtk_widget_get_screen (window);
-  if (gdk_screen_is_composited (screen))
+  display = gtk_widget_get_display (window);
+  if (gdk_display_is_composited (display))
     {
       cairo_rectangle_int_t rect;
       cairo_region_t *region;
@@ -296,10 +296,10 @@ deemphasize_window (GtkWidget *window)
 static void
 reemphasize_window (GtkWidget *window)
 {
-  GdkScreen *screen;
+  GdkDisplay *display;
 
-  screen = gtk_widget_get_screen (window);
-  if (gdk_screen_is_composited (screen))
+  display = gtk_widget_get_display (window);
+  if (gdk_display_is_composited (display))
     {
       gtk_widget_set_opacity (window, 1.0);
       gtk_widget_input_shape_combine_region (window, NULL);

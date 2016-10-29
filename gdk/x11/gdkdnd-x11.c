@@ -634,7 +634,7 @@ gdk_window_cache_new (GdkScreen *screen)
    * the COW. We assume that the CM is using the COW (which is true for pretty
    * much any CM currently in use).
    */
-  if (gdk_screen_is_composited (screen))
+  if (gdk_display_is_composited (gdk_screen_get_display (screen)))
     {
       cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
       gdk_window_cache_add (result, cow, 0, 0, 

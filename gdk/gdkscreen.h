@@ -45,8 +45,6 @@ GDK_AVAILABLE_IN_ALL
 GdkVisual *  gdk_screen_get_system_visual     (GdkScreen   *screen);
 GDK_AVAILABLE_IN_ALL
 GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
-gboolean     gdk_screen_is_composited         (GdkScreen   *screen);
 
 GDK_AVAILABLE_IN_ALL
 GdkWindow *  gdk_screen_get_root_window       (GdkScreen   *screen);

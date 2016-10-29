@@ -71,7 +71,6 @@ struct _GdkX11Screen
    * fetch of window manager name
    */
   guint need_refetch_wm_name : 1;
-  guint is_composited : 1;
   guint xft_init : 1; /* Whether we've intialized these values yet */
   guint xft_antialias : 1;
   guint xft_hinting : 1;
@@ -102,12 +101,9 @@ GType       _gdk_x11_screen_get_type (void);
 GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
 				      gint	  screen_number);
 
-void _gdk_x11_screen_setup                  (GdkScreen *screen);
 void _gdk_x11_screen_update_visuals_for_gl  (GdkScreen *screen);
 void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);
 void _gdk_x11_screen_size_changed           (GdkScreen *screen,
-					     XEvent    *event);
-void _gdk_x11_screen_process_owner_change   (GdkScreen *screen,
 					     XEvent    *event);
 void _gdk_x11_screen_get_edge_monitors      (GdkScreen *screen,
 					     gint      *top,

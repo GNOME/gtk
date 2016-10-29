@@ -464,7 +464,7 @@ _gdk_win32_window_enable_transparency (GdkWindow *window)
 
   screen = gdk_window_get_screen (window);
 
-  if (!gdk_screen_is_composited (screen))
+  if (!gdk_display_is_composited (gdk_window_get_display (window)))
     return FALSE;
 
   if (window == gdk_screen_get_root_window (screen))
@@ -4911,7 +4911,7 @@ gdk_win32_window_do_move_resize_drag (GdkWindow *window,
        */
       if (impl->layered)
         {
-          if (gdk_screen_is_composited (gdk_window_get_screen (window)))
+          if (gdk_display_is_composited (gdk_window_get_display (window)))
             {
               hdc = NULL;
               window_size_ptr = NULL;

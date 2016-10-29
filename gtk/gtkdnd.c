@@ -1579,9 +1579,11 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
 
   if (!info->icon_window)
     {
+      GdkDisplay *display;
       GdkScreen *screen;
 
       screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
+      display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
 
       info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
@@ -1589,7 +1591,7 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
       gtk_widget_set_size_request (info->icon_window, 24, 24);
       gtk_widget_set_events (info->icon_window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
-      if (gdk_screen_is_composited (screen))
+      if (gdk_display_is_composited (display))
         gtk_widget_set_app_paintable (info->icon_window, TRUE);
 
       gtk_window_set_hardcoded_window (GTK_WINDOW (info->icon_window),
@@ -1779,6 +1781,7 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
                            cairo_surface_t *surface)
 {
   GtkWidget *window;
+  GdkDisplay *display;
   GdkScreen *screen;
   GdkRectangle extents;
   cairo_pattern_t *pattern;
@@ -1789,6 +1792,7 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
 
   _gtk_cairo_surface_extents (surface, &extents);
 
+  display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
   screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
@@ -1809,8 +1813,8 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
 
   g_signal_connect_data (window,
                          "draw",
-                         gdk_screen_is_composited (screen) ? G_CALLBACK (gtk_drag_draw_icon_pattern)
-                                                           : G_CALLBACK (gtk_drag_draw_icon_pattern_and_background),
+                         gdk_display_is_composited (display) ? G_CALLBACK (gtk_drag_draw_icon_pattern)
+                                                             : G_CALLBACK (gtk_drag_draw_icon_pattern_and_background),
                          pattern,
                          (GClosureNotify) cairo_pattern_destroy,
                          G_CONNECT_AFTER);

@@ -448,12 +448,6 @@ _gdk_quartz_screen_get_monitor_scale_factor (GdkScreen *screen,
   return scale_factor;
 }
 
-static gboolean
-gdk_quartz_screen_is_composited (GdkScreen *screen)
-{
-  return TRUE;
-}
-
 static void
 gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
 {
@@ -476,7 +470,6 @@ gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
   screen_class->get_monitor_plug_name = gdk_quartz_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_quartz_screen_get_monitor_geometry;
   screen_class->get_monitor_workarea = gdk_quartz_screen_get_monitor_workarea;
-  screen_class->is_composited = gdk_quartz_screen_is_composited;
   screen_class->get_setting = _gdk_quartz_screen_get_setting;
   screen_class->get_rgba_visual = _gdk_quartz_screen_get_rgba_visual;
   screen_class->get_system_visual = _gdk_quartz_screen_get_system_visual;

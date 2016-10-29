@@ -222,15 +222,19 @@ build_alpha_widgets (void)
 }
 
 static void
-on_composited_changed (GdkScreen *screen,
-		       GtkLabel  *label)
+on_composited_changed (GdkDisplay *display,
+                       GParamSpec *pspec,
+                       GtkLabel   *label)
 {
-  gboolean is_composited = gdk_screen_is_composited (screen);
+  gboolean is_composited = gdk_display_is_composited (display);
 
   if (is_composited)
     gtk_label_set_text (label, "Composited");
   else
     gtk_label_set_text (label, "Not composited");
+
+  /* We draw a different background on the GdkWindow */
+  gtk_widget_queue_draw (gtk_widget_get_toplevel (GTK_WIDGET (label)));
 }
 
 void
@@ -243,7 +247,7 @@ create_alpha_window (GtkWidget *widget)
       GtkWidget *content_area;
       GtkWidget *vbox;
       GtkWidget *label;
-      GdkScreen *screen;
+      GdkDisplay *display;
       
       window = gtk_dialog_new_with_buttons ("Alpha Window",
 					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
@@ -265,9 +269,9 @@ create_alpha_window (GtkWidget *widget)
       
       label = gtk_label_new (NULL);
       gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE);
-      screen = gtk_widget_get_screen (window);
-      on_composited_changed (screen, GTK_LABEL (label));
-      g_signal_connect (screen, "composited_changed", G_CALLBACK (on_composited_changed), label);
+      display = gtk_widget_get_display (window);
+      on_composited_changed (display, NULL, GTK_LABEL (label));
+      g_signal_connect (display, "notify::composited", G_CALLBACK (on_composited_changed), label);
 
       gtk_box_pack_start (GTK_BOX (vbox), build_alpha_widgets (), TRUE, TRUE);
 

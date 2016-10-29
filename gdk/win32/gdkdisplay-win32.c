@@ -808,6 +808,26 @@ gdk_win32_display_init (GdkWin32Display *display)
 {
   display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
   _gdk_win32_display_init_cursors (display);
+  gdk_win32_display_check_composited (display);
+}
+
+void
+gdk_win32_display_check_composited (GdkWin32Display *display)
+{
+  gboolean composited;
+
+  /* On Windows 8 and later, DWM (composition) is always enabled */
+  if (g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY))
+    {
+      composited = TRUE;
+    }
+  else
+    {
+      if (DwmIsCompositionEnabled (&composited) != S_OK)
+        composited = FALSE;
+    }
+
+  gdk_display_set_composited (GDK_DISPLAY (display), composited);
 }
 
 static void

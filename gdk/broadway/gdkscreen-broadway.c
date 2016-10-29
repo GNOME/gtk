@@ -137,23 +137,6 @@ _gdk_broadway_screen_new (GdkDisplay *display,
   return screen;
 }
 
-/*
- * It is important that we first request the selection
- * notification, and then setup the initial state of
- * is_composited to avoid a race condition here.
- */
-void
-_gdk_broadway_screen_setup (GdkScreen *screen)
-{
-}
-
-static gboolean
-gdk_broadway_screen_is_composited (GdkScreen *screen)
-{
-  return TRUE;
-}
-
-
 static gboolean
 gdk_broadway_screen_get_setting (GdkScreen   *screen,
 				 const gchar *name,
@@ -178,7 +161,6 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
 
   screen_class->get_display = gdk_broadway_screen_get_display;
   screen_class->get_root_window = gdk_broadway_screen_get_root_window;
-  screen_class->is_composited = gdk_broadway_screen_is_composited;
   screen_class->get_setting = gdk_broadway_screen_get_setting;
   screen_class->get_rgba_visual = gdk_broadway_screen_get_rgba_visual;
   screen_class->get_system_visual = _gdk_broadway_screen_get_system_visual;

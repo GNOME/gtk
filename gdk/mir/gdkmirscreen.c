@@ -412,14 +412,6 @@ gdk_mir_screen_get_rgba_visual (GdkScreen *screen)
 }
 
 static gboolean
-gdk_mir_screen_is_composited (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_is_composited\n");
-  /* We're always composited */
-  return TRUE;
-}
-
-static gboolean
 gdk_mir_screen_get_setting (GdkScreen   *screen,
                             const gchar *name,
                             GValue      *value)
@@ -720,7 +712,6 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
   screen_class->list_visuals = gdk_mir_screen_list_visuals;
   screen_class->get_system_visual = gdk_mir_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_mir_screen_get_rgba_visual;
-  screen_class->is_composited = gdk_mir_screen_is_composited;
   screen_class->get_setting = gdk_mir_screen_get_setting;
   screen_class->get_monitor_scale_factor = gdk_mir_screen_get_monitor_scale_factor;
 }

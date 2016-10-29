@@ -2158,7 +2158,21 @@ gdk_display_is_composited (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  return gdk_screen_is_composited (gdk_display_get_default_screen (display));
+  return display->composited;
+}
+
+void
+gdk_display_set_composited (GdkDisplay *display,
+                            gboolean    composited)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  if (display->composited == composited)
+    return;
+
+  display->composited = composited;
+
+  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_COMPOSITED]);
 }
 
 /**
@@ -2190,7 +2204,21 @@ gdk_display_is_rgba (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  return gdk_screen_get_rgba_visual (gdk_display_get_default_screen (display)) != NULL;
+  return display->rgba;
+}
+
+void
+gdk_display_set_rgba (GdkDisplay *display,
+                      gboolean    rgba)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  if (display->rgba == rgba)
+    return;
+
+  display->rgba = rgba;
+
+  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_RGBA]);
 }
 
 

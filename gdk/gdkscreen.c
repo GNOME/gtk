@@ -65,7 +65,6 @@ enum
 enum
 {
   SIZE_CHANGED,
-  COMPOSITED_CHANGED,
   MONITORS_CHANGED,
   LAST_SIGNAL
 };
@@ -93,25 +92,6 @@ gdk_screen_class_init (GdkScreenClass *klass)
 							G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
 							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
 
-  /**
-   * GdkScreen::composited-changed:
-   * @screen: the object on which the signal is emitted
-   *
-   * The ::composited-changed signal is emitted when the composited
-   * status of the screen changes
-   *
-   * Since: 2.10
-   */
-  signals[COMPOSITED_CHANGED] =
-    g_signal_new (g_intern_static_string ("composited-changed"),
-		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GdkScreenClass, composited_changed),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE,
-		  0);
-	
   /**
    * GdkScreen::monitors-changed:
    * @screen: the object on which the signal is emitted
@@ -376,30 +356,6 @@ gdk_screen_get_rgba_visual (GdkScreen *screen)
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   return GDK_SCREEN_GET_CLASS (screen)->get_rgba_visual (screen);
-}
-
-/**
- * gdk_screen_is_composited:
- * @screen: a #GdkScreen
- *
- * Returns whether windows with an RGBA visual can reasonably
- * be expected to have their alpha channel drawn correctly on
- * the screen.
- *
- * On X11 this function returns whether a compositing manager is
- * compositing @screen.
- *
- * Returns: Whether windows with RGBA visuals can reasonably be
- * expected to have their alpha channels drawn correctly on the screen.
- *
- * Since: 2.10
- **/
-gboolean
-gdk_screen_is_composited (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-
-  return GDK_SCREEN_GET_CLASS (screen)->is_composited (screen);
 }
 
 /**

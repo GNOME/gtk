@@ -479,7 +479,6 @@ init_display (GtkInspectorGeneral *gen)
   screen = gdk_screen_get_default ();
 
   g_signal_connect (display, "notify", G_CALLBACK (populate_display_notify_cb), gen);
-  g_signal_connect (screen, "composited-changed", G_CALLBACK (populate_display), gen);
   g_signal_connect (screen, "monitors-changed", G_CALLBACK (populate_display), gen);
 
   populate_display (screen, gen);

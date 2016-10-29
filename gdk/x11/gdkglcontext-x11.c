@@ -1298,8 +1298,6 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
 {
   GdkX11GLContext *context_x11;
   Display *dpy = gdk_x11_display_get_xdisplay (display);
-  GdkWindow *window;
-  GdkScreen *screen;
   gboolean do_frame_sync = FALSE;
 
   if (context == NULL)
@@ -1330,14 +1328,11 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
 
   if (context_x11->is_attached && GDK_X11_DISPLAY (display)->has_glx_swap_interval)
     {
-      window = gdk_gl_context_get_window (context);
-
       /* If the WM is compositing there is no particular need to delay
        * the swap when drawing on the offscreen, rendering to the screen
        * happens later anyway, and its up to the compositor to sync that
        * to the vblank. */
-      screen = gdk_window_get_screen (window);
-      do_frame_sync = ! gdk_screen_is_composited (screen);
+      do_frame_sync = ! gdk_display_is_composited (display);
 
       if (do_frame_sync != context_x11->do_frame_sync)
         {

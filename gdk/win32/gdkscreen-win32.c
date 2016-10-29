@@ -37,8 +37,6 @@ struct _GdkWin32Screen
   GdkVisualType available_visual_types[1];
 
   GdkWindow *root_window;
-
-  gint always_composited : 1;
 };
 
 struct _GdkWin32ScreenClass
@@ -353,9 +351,6 @@ gdk_win32_screen_init (GdkWin32Screen *win32_screen)
 
   _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
   init_root_window (win32_screen);
-
-  /* On Windows 8 and later, DWM (composition) is always enabled */
-  win32_screen->always_composited = g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY);
 }
 
 void
@@ -382,21 +377,6 @@ static GdkWindow *
 gdk_win32_screen_get_root_window (GdkScreen *screen)
 {
   return GDK_WIN32_SCREEN (screen)->root_window;
-}
-
-static gboolean
-gdk_win32_screen_is_composited (GdkScreen *screen)
-{
-  if (GDK_WIN32_SCREEN (screen)->always_composited)
-    return TRUE;
-  else
-    {
-      gboolean is_composited;
-
-      if (DwmIsCompositionEnabled (&is_composited) != S_OK)
-        return FALSE;
-      return is_composited;
-    }
 }
 
 static GdkVisual *
@@ -439,7 +419,6 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
 
   screen_class->get_display = gdk_win32_screen_get_display;
   screen_class->get_root_window = gdk_win32_screen_get_root_window;
-  screen_class->is_composited = gdk_win32_screen_is_composited;
   screen_class->get_setting = _gdk_win32_screen_get_setting;
   screen_class->get_system_visual = gdk_win32_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_win32_screen_get_rgba_visual;

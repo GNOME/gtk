@@ -60,4 +60,6 @@ gboolean   _gdk_win32_display_init_monitors    (GdkWin32Display *display);
 
 GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
 
+void        gdk_win32_display_check_composited (GdkWin32Display *display);
+
 #endif /* __GDK_DISPLAY__WIN32_H__ */

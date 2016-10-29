@@ -176,7 +176,6 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11Display, gdk_x11_display, GDK_TYPE_DISPLAY,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
                                                 gdk_x11_display_event_translator_init))
 
-
 static void
 gdk_x11_display_init (GdkX11Display *display)
 {
@@ -393,6 +392,12 @@ gdk_check_wm_state_changed (GdkWindow *window)
     gdk_check_wm_desktop_changed (window);
   else
     do_net_wm_state_changes (window);
+}
+
+static Atom
+get_cm_atom (GdkDisplay *display)
+{
+  return _gdk_x11_get_xatom_for_display_printf (display, "_NET_WM_CM_S%d", DefaultScreen (GDK_DISPLAY_XDISPLAY (display)));
 }
 
 static Window
@@ -985,8 +990,13 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	{
 	  XFixesSelectionNotifyEvent *selection_notify = (XFixesSelectionNotifyEvent *)xevent;
 
-	  _gdk_x11_screen_process_owner_change (screen, xevent);
-	  
+          if (selection_notify->selection == get_cm_atom (display))
+            {
+              gboolean composited = selection_notify->owner != None;
+
+              gdk_display_set_composited (display, composited);
+            }
+
 	  event->owner_change.type = GDK_OWNER_CHANGE;
 	  event->owner_change.window = window;
           if (selection_notify->owner != None)
@@ -1381,6 +1391,8 @@ _gdk_x11_display_open (const gchar *display_name)
 
   /* initialize the display's screens */ 
   display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay));
+  if (gdk_screen_get_rgba_visual (display_x11->screen) == NULL)
+    gdk_display_set_rgba (display, FALSE);
 
   /* We need to initialize events after we have the screen
    * structures in places
@@ -1571,7 +1583,15 @@ _gdk_x11_display_open (const gchar *display_name)
   }
 #endif
 
-  _gdk_x11_screen_setup (display_x11->screen);
+  /*
+   * It is important that we first request the selection
+   * notification, and then setup the initial state of
+   * is_composited to avoid a race condition here.
+   */
+  gdk_display_request_selection_notification (display,
+					      gdk_x11_xatom_to_atom_for_display (display, get_cm_atom (display)));
+  gdk_display_set_composited (GDK_DISPLAY (display),
+                              XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), get_cm_atom (display)) != None);
 
   g_signal_emit_by_name (display, "opened");
 

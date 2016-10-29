@@ -68,7 +68,6 @@ struct _GdkBroadwayScreenClass
 GType       gdk_broadway_screen_get_type (void);
 GdkScreen * _gdk_broadway_screen_new      (GdkDisplay *display,
 					   gint	  screen_number);
-void _gdk_broadway_screen_setup           (GdkScreen *screen);
 
 G_END_DECLS
 

@@ -123,6 +123,9 @@ struct _GdkDisplay
   guint has_gl_extension_texture_non_power_of_two : 1;
   guint has_gl_extension_texture_rectangle : 1;
 
+  guint rgba : 1;
+  guint composited : 1;
+
   GdkRenderingMode rendering_mode;
 
   GList *seats;
@@ -327,6 +330,11 @@ GdkWindow *         _gdk_display_create_window        (GdkDisplay       *display
 
 gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
                                                           GdkGLContext      *context);
+
+void                gdk_display_set_rgba              (GdkDisplay       *display,
+                                                       gboolean          rgba);
+void                gdk_display_set_composited        (GdkDisplay       *display,
+                                                       gboolean          composited);
 
 void                gdk_display_add_seat              (GdkDisplay       *display,
                                                        GdkSeat          *seat);

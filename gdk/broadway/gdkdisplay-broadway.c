@@ -101,8 +101,6 @@ _gdk_broadway_display_open (const gchar *display_name)
 
   _gdk_broadway_display_init_dnd (display);
 
-  _gdk_broadway_screen_setup (broadway_display->screens[0]);
-
   if (display_name == NULL)
     display_name = g_getenv ("BROADWAY_DISPLAY");
 

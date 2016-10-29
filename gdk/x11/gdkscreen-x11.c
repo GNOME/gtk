@@ -321,23 +321,6 @@ gdk_x11_screen_get_screen_number (GdkScreen *screen)
   return GDK_X11_SCREEN (screen)->screen_num;
 }
 
-static Atom
-get_cm_atom (GdkX11Screen *x11_screen)
-{
-  return _gdk_x11_get_xatom_for_display_printf (x11_screen->display, "_NET_WM_CM_S%d", x11_screen->screen_num);
-}
-
-static gboolean
-check_is_composited (GdkDisplay *display,
-		     GdkX11Screen *x11_screen)
-{
-  Window xwindow;
-  
-  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), get_cm_atom (x11_screen));
-
-  return xwindow != None;
-}
-
 static GdkX11Monitor *
 find_monitor_by_output (GdkX11Display *x11_display, XID output)
 {
@@ -887,29 +870,6 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
   g_signal_emit_by_name (GDK_SCREEN (x11_screen), "monitors-changed");
 }
 
-/*
- * It is important that we first request the selection
- * notification, and then setup the initial state of
- * is_composited to avoid a race condition here.
- */
-void
-_gdk_x11_screen_setup (GdkScreen *screen)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  gdk_display_request_selection_notification (x11_screen->display,
-					      gdk_x11_xatom_to_atom_for_display (x11_screen->display, get_cm_atom (x11_screen)));
-  x11_screen->is_composited = check_is_composited (x11_screen->display, x11_screen);
-}
-
-static gboolean
-gdk_x11_screen_is_composited (GdkScreen *screen)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  return x11_screen->is_composited;
-}
-
 static void
 init_randr_support (GdkScreen *screen)
 {
@@ -1028,28 +988,6 @@ void
 _gdk_x11_screen_window_manager_changed (GdkScreen *screen)
 {
   g_signal_emit (screen, signals[WINDOW_MANAGER_CHANGED], 0);
-}
-
-void
-_gdk_x11_screen_process_owner_change (GdkScreen *screen,
-				      XEvent *event)
-{
-#ifdef HAVE_XFIXES
-  XFixesSelectionNotifyEvent *selection_event = (XFixesSelectionNotifyEvent *)event;
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  if (selection_event->selection == get_cm_atom (x11_screen))
-    {
-      gboolean composited = selection_event->owner != None;
-
-      if (composited != x11_screen->is_composited)
-	{
-	  x11_screen->is_composited = composited;
-
-	  g_signal_emit_by_name (screen, "composited-changed");
-	}
-    }
-#endif
 }
 
 static gboolean
@@ -1355,7 +1293,6 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
   screen_class->get_root_window = gdk_x11_screen_get_root_window;
   screen_class->get_system_visual = _gdk_x11_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_x11_screen_get_rgba_visual;
-  screen_class->is_composited = gdk_x11_screen_is_composited;
   screen_class->get_setting = gdk_x11_screen_get_setting;
   screen_class->list_visuals = _gdk_x11_screen_list_visuals;
 

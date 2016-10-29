@@ -3928,36 +3928,20 @@ gtk_window_supports_client_shadow (GtkWindow *window)
 {
   GdkDisplay *display;
   GdkScreen *screen;
-  GdkVisual *visual;
 
   screen = _gtk_window_get_screen (window);
   display = gdk_screen_get_display (screen);
 
+  if (!gdk_display_is_rgba (display))
+    return FALSE;
+
+  if (!gdk_display_is_composited (display))
+    return FALSE;
+
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
     {
-      if (!gdk_screen_is_composited (screen))
-        return FALSE;
-
       if (!gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern_static_string ("_GTK_FRAME_EXTENTS")))
-        return FALSE;
-
-      /* We need a visual with alpha */
-      visual = gdk_screen_get_rgba_visual (screen);
-      if (!visual)
-        return FALSE;
-    }
-#endif
-
-#ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (display))
-    {
-      if (!gdk_screen_is_composited (screen))
-        return FALSE;
-
-      /* We need a visual with alpha */
-      visual = gdk_screen_get_rgba_visual (screen);
-      if (!visual)
         return FALSE;
     }
 #endif

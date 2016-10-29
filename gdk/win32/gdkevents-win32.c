@@ -3511,6 +3511,7 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_DWMCOMPOSITIONCHANGED:
+      gdk_win32_display_check_composited (GDK_WIN32_DISPLAY (display));
       _gdk_win32_window_enable_transparency (window);
       break;
 
