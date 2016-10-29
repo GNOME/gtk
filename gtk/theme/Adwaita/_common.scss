@@ -1562,7 +1562,7 @@ headerbar {
   }
 }
 
-.background:not(.tiled):not(.maximized) .titlebar {
+.background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar {
   &:backdrop, & {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
@@ -1570,10 +1570,10 @@ headerbar {
 }
 
 headerbar {
-  window:not(.tiled):not(.maximized) separator:first-child + &, // tackles the paned container case
-  window:not(.tiled):not(.maximized) &:first-child { &:backdrop, & { border-top-left-radius: 7px; }}
+  window:not(.tiled):not(.maximized):not(.solid-csd) separator:first-child + &, // tackles the paned container case
+  window:not(.tiled):not(.maximized):not(.solid-csd) &:first-child { &:backdrop, & { border-top-left-radius: 7px; }}
 
-  window:not(.tiled):not(.maximized) &:last-child { &:backdrop, & { border-top-right-radius: 7px; }}
+  window:not(.tiled):not(.maximized):not(.solid-csd) &:last-child { &:backdrop, & { border-top-right-radius: 7px; }}
 }
 
 .titlebar:not(headerbar) {
