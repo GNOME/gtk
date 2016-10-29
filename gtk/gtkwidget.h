@@ -289,8 +289,6 @@ struct _GtkWidget
  * @can_activate_accel: Signal allows applications and derived widgets
  *   to override the default GtkWidget handling for determining whether
  *   an accelerator can be activated.
- * @composited_changed: Signal emitted when the composited status of
- *   widgets screen changes. See gdk_screen_is_composited().
  * @query_tooltip: Signal emitted when “has-tooltip” is %TRUE and the
  *   hover timeout has expired with the cursor hovering “above”
  *   widget; or emitted when widget got focus in keyboard mode.
@@ -524,8 +522,6 @@ struct _GtkWidgetClass
   gboolean     (* can_activate_accel) (GtkWidget *widget,
                                        guint      signal_id);
 
-
-  void         (* composited_changed) (GtkWidget *widget);
 
   gboolean     (* query_tooltip)      (GtkWidget  *widget,
 				       gint        x,

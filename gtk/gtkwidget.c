@@ -551,7 +551,6 @@ enum {
   ACCEL_CLOSURES_CHANGED,
   SCREEN_CHANGED,
   CAN_ACTIVATE_ACCEL,
-  COMPOSITED_CHANGED,
   QUERY_TOOLTIP,
   DRAG_FAILED,
   STYLE_UPDATED,
@@ -2108,23 +2107,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (widget_signals[MOTION_NOTIFY_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__BOXEDv);
-
-  /**
-   * GtkWidget::composited-changed:
-   * @widget: the object on which the signal is emitted
-   *
-   * The ::composited-changed signal is emitted when the composited
-   * status of @widgets screen changes.
-   * See gdk_screen_is_composited().
-   */
-  widget_signals[COMPOSITED_CHANGED] =
-    g_signal_new (I_("composited-changed"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkWidgetClass, composited_changed),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
 
   /**
    * GtkWidget::delete-event:
@@ -8884,26 +8866,6 @@ gtk_widget_is_composited (GtkWidget *widget)
   screen = gtk_widget_get_screen (widget);
 
   return gdk_screen_is_composited (screen);
-}
-
-static void
-propagate_composited_changed (GtkWidget *widget,
-			      gpointer dummy)
-{
-  if (GTK_IS_CONTAINER (widget))
-    {
-      gtk_container_forall (GTK_CONTAINER (widget),
-			    propagate_composited_changed,
-			    NULL);
-    }
-
-  g_signal_emit (widget, widget_signals[COMPOSITED_CHANGED], 0);
-}
-
-void
-_gtk_widget_propagate_composited_changed (GtkWidget *widget)
-{
-  propagate_composited_changed (widget, NULL);
 }
 
 /**

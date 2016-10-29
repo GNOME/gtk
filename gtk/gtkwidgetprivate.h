@@ -213,7 +213,6 @@ void              _gtk_widget_propagate_hierarchy_changed  (GtkWidget *widget,
                                                             GtkWidget *previous_toplevel);
 void              _gtk_widget_propagate_screen_changed     (GtkWidget *widget,
                                                             GdkScreen *previous_screen);
-void              _gtk_widget_propagate_composited_changed (GtkWidget *widget);
 
 void              _gtk_widget_set_device_window            (GtkWidget *widget,
                                                             GdkDevice *device,

@@ -506,8 +506,6 @@ static void     get_shadow_width                      (GtkWindow    *window,
 
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
-static void	   gtk_window_on_composited_changed (GdkScreen *screen,
-						     GtkWindow *window);
 #ifdef GDK_WINDOWING_X11
 static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                                         GParamSpec  *pspec,
@@ -1693,10 +1691,6 @@ gtk_window_init (GtkWindow *window)
   priv->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);
   gtk_window_update_debugging ();
-
-  if (priv->screen)
-    g_signal_connect_object (priv->screen, "composited-changed",
-                             G_CALLBACK (gtk_window_on_composited_changed), window, 0);
 
 #ifdef GDK_WINDOWING_X11
   g_signal_connect_object (gtk_settings_get_for_screen (priv->screen),
@@ -5723,16 +5717,14 @@ gtk_window_finalize (GObject *object)
       priv->delete_event_handler = 0;
     }
 
+#ifdef GDK_WINDOWING_X11
   if (priv->screen)
     {
-      g_signal_handlers_disconnect_by_func (priv->screen,
-                                            gtk_window_on_composited_changed, window);
-#ifdef GDK_WINDOWING_X11
       g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (priv->screen),
                                             gtk_window_on_theme_variant_changed,
                                             window);
-#endif
     }
+#endif
 
   g_free (priv->startup_id);
 
@@ -10213,25 +10205,18 @@ gtk_window_set_screen (GtkWindow *window,
   priv->screen = screen;
   if (screen != previous_screen)
     {
+#ifdef GDK_WINDOWING_X11
       if (previous_screen)
         {
-          g_signal_handlers_disconnect_by_func (previous_screen,
-                                                gtk_window_on_composited_changed, window);
-#ifdef GDK_WINDOWING_X11
           g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (previous_screen),
                                                 gtk_window_on_theme_variant_changed, window);
-#endif
         }
-      g_signal_connect (screen, "composited-changed",
-                        G_CALLBACK (gtk_window_on_composited_changed), window);
-#ifdef GDK_WINDOWING_X11
       g_signal_connect (gtk_settings_get_for_screen (screen),
                         "notify::gtk-application-prefer-dark-theme",
                         G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
       _gtk_widget_propagate_screen_changed (widget, previous_screen);
-      _gtk_widget_propagate_composited_changed (widget);
     }
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SCREEN]);
 
@@ -10270,16 +10255,6 @@ gtk_window_on_theme_variant_changed (GtkSettings *settings,
     gtk_window_set_theme_variant (window);
 }
 #endif
-
-static void
-gtk_window_on_composited_changed (GdkScreen *screen,
-				  GtkWindow *window)
-{
-  GtkWidget *widget = GTK_WIDGET (window);
-
-  gtk_widget_queue_draw (widget);
-  _gtk_widget_propagate_composited_changed (widget);
-}
 
 static GdkScreen *
 gtk_window_check_screen (GtkWindow *window)
