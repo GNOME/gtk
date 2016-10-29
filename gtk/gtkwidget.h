@@ -1243,7 +1243,7 @@ GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_widget_get_default_direction (void);
 
 /* Compositing manager functionality */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gdk_screen_is_composited)
 gboolean gtk_widget_is_composited (GtkWidget *widget);
 
 /* Counterpart to gdk_window_shape_combine_region.

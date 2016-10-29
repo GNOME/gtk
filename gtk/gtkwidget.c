@@ -2280,11 +2280,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * The ::composited-changed signal is emitted when the composited
    * status of @widgets screen changes.
    * See gdk_screen_is_composited().
+   *
+   * Deprecated: 3.22: Use GdkScreen::composited-changed instead.
    */
   widget_signals[COMPOSITED_CHANGED] =
     g_signal_new (I_("composited-changed"),
 		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION | G_SIGNAL_DEPRECATED,
 		  G_STRUCT_OFFSET (GtkWidgetClass, composited_changed),
 		  NULL, NULL,
 		  NULL,
@@ -9983,6 +9985,8 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
  * channel being drawn correctly.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.22: Use gdk_screen_is_composited() instead.
  */
 gboolean
 gtk_widget_is_composited (GtkWidget *widget)
