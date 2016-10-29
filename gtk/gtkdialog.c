@@ -927,7 +927,6 @@ gtk_dialog_add_button (GtkDialog   *dialog,
   button = gtk_button_new_with_label (button_text);
   gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (button), "text-button");
   gtk_widget_set_can_default (button, TRUE);
 
   gtk_widget_show (button);
