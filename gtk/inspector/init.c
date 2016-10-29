@@ -38,6 +38,7 @@
 #include "object-hierarchy.h"
 #include "object-tree.h"
 #include "prop-list.h"
+#include "recorder.h"
 #include "resource-list.h"
 #include "selector.h"
 #include "signals-list.h"
@@ -56,6 +57,8 @@ gtk_inspector_init (void)
 {
   static GIOExtensionPoint *extension_point = NULL;
 
+  g_type_ensure (G_TYPE_LIST_STORE);
+
   g_type_ensure (GTK_TYPE_CELL_RENDERER_GRAPH);
   g_type_ensure (GTK_TYPE_GRAPH_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
@@ -71,6 +74,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY);
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_TREE);
   g_type_ensure (GTK_TYPE_INSPECTOR_PROP_LIST);
+  g_type_ensure (GTK_TYPE_INSPECTOR_RECORDER);
   g_type_ensure (GTK_TYPE_INSPECTOR_RESOURCE_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SELECTOR);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);

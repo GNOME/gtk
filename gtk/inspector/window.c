@@ -263,6 +263,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, signals_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_css_node_tree);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_recorder);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_hierarchy);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_title);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, selector);

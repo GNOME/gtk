@@ -135,6 +135,14 @@
                 <property name="visible">1</property>
               </object>
               <packing>
+                <property name="name">recorder</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">1</property>
+              </object>
+              <packing>
                 <property name="name">visual</property>
               </packing>
             </child>
@@ -445,6 +453,15 @@
           <packing>
             <property name="name">css</property>
             <property name="title" translatable="yes">CSS</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkInspectorRecorder" id="widget_recorder">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="name">recorder</property>
+            <property name="title" translatable="yes">Recorder</property>
           </packing>
         </child>
         <child>

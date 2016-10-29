@@ -19,6 +19,7 @@ inspector_c_sources = 			\
 	inspector/object-tree.c		\
 	inspector/prop-editor.c		\
 	inspector/prop-list.c		\
+	inspector/recorder.c		\
 	inspector/resource-list.c	\
 	inspector/selector.c		\
 	inspector/signals-list.c	\
@@ -49,6 +50,7 @@ inspector_h_sources = 			\
 	inspector/object-tree.h		\
 	inspector/prop-editor.h		\
 	inspector/prop-list.h		\
+	inspector/recorder.h		\
 	inspector/resource-list.h	\
 	inspector/selector.h		\
 	inspector/signals-list.h	\
@@ -71,6 +73,7 @@ inspector_templates =			\
 	inspector/object-hierarchy.ui 	\
 	inspector/object-tree.ui 	\
 	inspector/prop-list.ui 		\
+	inspector/recorder.ui		\
 	inspector/resource-list.ui	\
 	inspector/selector.ui		\
 	inspector/signals-list.ui	\
