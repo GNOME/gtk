@@ -241,8 +241,6 @@ struct _GtkWidget
  *   obscured or unobscured.
  * @window_state_event: Signal emitted when the state of the toplevel
  *   window associated to the widget changes.
- * @damage_event: Signal emitted when a redirected window belonging to
- *   widget gets drawn into.
  * @grab_broken_event: Signal emitted when a pointer or keyboard grab
  *   on a window belonging to widget gets broken.
  * @selection_get:
@@ -435,8 +433,6 @@ struct _GtkWidgetClass
 					 GdkEventVisibility  *event);
   gboolean (* window_state_event)	(GtkWidget	     *widget,
 					 GdkEventWindowState *event);
-  gboolean (* damage_event)             (GtkWidget           *widget,
-                                         GdkEventExpose      *event);
   gboolean (* grab_broken_event)        (GtkWidget           *widget,
                                          GdkEventGrabBroken  *event);
 

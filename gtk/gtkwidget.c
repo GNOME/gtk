@@ -536,7 +536,6 @@ enum {
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
   WINDOW_STATE_EVENT,
-  DAMAGE_EVENT,
   GRAB_BROKEN_EVENT,
   DRAG_BEGIN,
   DRAG_END,
@@ -2983,32 +2982,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (widget_signals[WINDOW_STATE_EVENT], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__BOXEDv);
-
-  /**
-   * GtkWidget::damage-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventExpose): the #GdkEventExpose event
-   *
-   * Emitted when a redirected window belonging to @widget gets drawn into.
-   * The region/area members of the event shows what area of the redirected
-   * drawable was drawn into.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   *
-   * Since: 2.14
-   */
-  widget_signals[DAMAGE_EVENT] =
-    g_signal_new (I_("damage-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, damage_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (widget_signals[DAMAGE_EVENT], G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__BOXEDv);
 
 /**
@@ -7091,9 +7064,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_GRAB_BROKEN:
 	  signal_num = GRAB_BROKEN_EVENT;
-	  break;
-	case GDK_DAMAGE:
-	  signal_num = DAMAGE_EVENT;
 	  break;
 	default:
 	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
