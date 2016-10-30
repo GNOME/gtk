@@ -12,7 +12,7 @@
             <property name="visible">True</property>
             <property name="orientation">horizontal</property>
             <child>
-              <object class="GtkListBox" id="visual_box">
+              <object class="GtkListBox" id="recordings_list">
                 <property name="visible">True</property>
                 <property name="selection-mode">single</property>
               </object>

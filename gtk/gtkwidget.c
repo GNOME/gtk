@@ -68,6 +68,8 @@
 #include "gtkgestureprivate.h"
 #include "gtkwidgetpathprivate.h"
 
+#include "inspector/window.h"
+
 /* for the use of round() */
 #include "fallback-c89.c"
 
@@ -15747,6 +15749,8 @@ gtk_widget_render (GtkWidget            *widget,
   root = gtk_widget_get_render_node (widget, renderer);
   if (root == NULL)
     return;
+
+  gtk_inspector_record_render (widget, window, region, root);
 
   context = gdk_window_begin_draw_frame (window, region);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Red Hat, Inc.
+ * Copyright (c) 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -42,7 +42,13 @@ typedef struct _GtkInspectorRecorderClass
 
 G_BEGIN_DECLS
 
-GType      gtk_inspector_recorder_get_type   (void);
+GType      gtk_inspector_recorder_get_type              (void);
+
+void       gtk_inspector_recorder_record_render         (GtkInspectorRecorder   *recorder,
+                                                         GtkWidget              *widget,
+                                                         GdkWindow              *window,
+                                                         const cairo_region_t   *region,
+                                                         GskRenderNode          *node);
 
 G_END_DECLS
 

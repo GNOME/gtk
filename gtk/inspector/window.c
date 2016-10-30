@@ -42,6 +42,7 @@
 #include "misc-info.h"
 #include "gestures.h"
 #include "magnifier.h"
+#include "recorder.h"
 
 #include "gtklabel.h"
 #include "gtkbutton.h"
@@ -228,6 +229,8 @@ gtk_inspector_window_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->constructed (object);
 
+  g_object_set_data (G_OBJECT (gdk_display_get_default ()), "-gtk-inspector", iw);
+
   gtk_inspector_object_tree_scan (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), NULL);
 }
 
@@ -330,6 +333,35 @@ gtk_inspector_window_rescan (GtkWidget *widget)
   GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (widget);
 
   gtk_inspector_object_tree_scan (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), NULL);
+}
+
+static GtkInspectorWindow *
+gtk_inspector_window_get_for_display (GdkDisplay *display)
+{
+  return g_object_get_data (G_OBJECT (display), "-gtk-inspector");
+}
+
+void
+gtk_inspector_record_render (GtkWidget            *widget,
+                             GdkWindow            *window,
+                             const cairo_region_t *region,
+                             GskRenderNode        *node)
+{
+  GtkInspectorWindow *iw;
+
+  iw = gtk_inspector_window_get_for_display (gtk_widget_get_display (widget));
+  if (iw == NULL)
+    return;
+
+  /* sanity check for single-display GDK backends */
+  if (GTK_WIDGET (iw) == widget)
+    return;
+
+  gtk_inspector_recorder_record_render (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
+                                        widget,
+                                        window,
+                                        region,
+                                        node);
 }
 
 // vim: set et sw=2 ts=2:

@@ -20,6 +20,8 @@ inspector_c_sources = 			\
 	inspector/prop-editor.c		\
 	inspector/prop-list.c		\
 	inspector/recorder.c		\
+	inspector/recording.c		\
+	inspector/renderrecording.c	\
 	inspector/resource-list.c	\
 	inspector/selector.c		\
 	inspector/signals-list.c	\
@@ -51,6 +53,8 @@ inspector_h_sources = 			\
 	inspector/prop-editor.h		\
 	inspector/prop-list.h		\
 	inspector/recorder.h		\
+	inspector/recording.h		\
+	inspector/renderrecording.h	\
 	inspector/resource-list.h	\
 	inspector/selector.h		\
 	inspector/signals-list.h	\
