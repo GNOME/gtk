@@ -1336,7 +1336,7 @@ gsk_render_node_set_name (GskRenderNode *node,
  * Retrieves the name previously set via gsk_render_node_set_name().
  * If no name has been set, %NULL is returned.
  *
- * Returns: (nullable) The name previously set via
+ * Returns: (nullable): The name previously set via
  *     gsk_render_node_set_name() or %NULL
  *
  * Since: 3.90
