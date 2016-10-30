@@ -256,7 +256,6 @@ create_alpha_window (GtkWidget *widget)
 					    "_Close", 0,
 					    NULL);
 
-      gtk_widget_set_app_paintable (window, TRUE);
       g_signal_connect (window, "draw",
 			G_CALLBACK (on_alpha_window_draw), NULL);
 

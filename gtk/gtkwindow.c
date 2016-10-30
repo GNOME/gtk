@@ -6808,18 +6808,15 @@ update_opaque_region (GtkWindow           *window,
   cairo_region_t *opaque_region;
   GtkStyleContext *context;
   gboolean is_opaque = FALSE;
+  const GdkRGBA *color;
 
   if (!_gtk_widget_get_realized (widget))
       return;
 
   context = gtk_widget_get_style_context (widget);
 
-  if (!gtk_widget_get_app_paintable (widget))
-    {
-      const GdkRGBA *color;
-      color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-      is_opaque = (color->alpha >= 1.0);
-    }
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  is_opaque = (color->alpha >= 1.0);
 
   if (gtk_widget_get_opacity (widget) < 1.0)
     is_opaque = FALSE;
@@ -9456,30 +9453,27 @@ gtk_window_get_render_node (GtkWidget   *widget,
       gtk_style_context_restore (context);
     }
 
-  if (!gtk_widget_get_app_paintable (widget))
-    {
-      if (priv->title_box &&
-          gtk_widget_get_visible (priv->title_box) &&
-          gtk_widget_get_child_visible (priv->title_box))
-        title_height = priv->title_height;
-      else
-        title_height = 0;
+  if (priv->title_box &&
+      gtk_widget_get_visible (priv->title_box) &&
+      gtk_widget_get_child_visible (priv->title_box))
+    title_height = priv->title_height;
+  else
+    title_height = 0;
 
-      gtk_render_background (context, cr,
-                             window_border.left,
-                             window_border.top + title_height,
-                             allocation.width -
-                               (window_border.left + window_border.right),
-                             allocation.height -
-                               (window_border.top + window_border.bottom + title_height));
-      gtk_render_frame (context, cr,
-                        window_border.left,
-                        window_border.top + title_height,
-                        allocation.width -
-                          (window_border.left + window_border.right),
-                        allocation.height -
-                          (window_border.top + window_border.bottom + title_height));
-    }
+  gtk_render_background (context, cr,
+                         window_border.left,
+                         window_border.top + title_height,
+                         allocation.width -
+                           (window_border.left + window_border.right),
+                         allocation.height -
+                           (window_border.top + window_border.bottom + title_height));
+  gtk_render_frame (context, cr,
+                    window_border.left,
+                    window_border.top + title_height,
+                    allocation.width -
+                      (window_border.left + window_border.right),
+                    allocation.height -
+                      (window_border.top + window_border.bottom + title_height));
 
   cairo_destroy (cr);
 

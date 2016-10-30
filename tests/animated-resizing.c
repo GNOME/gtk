@@ -194,7 +194,6 @@ main(int argc, char **argv)
 
   gtk_window_set_keep_above (GTK_WINDOW (window), TRUE);
   gtk_window_set_gravity (GTK_WINDOW (window), GDK_GRAVITY_CENTER);
-  gtk_widget_set_app_paintable (window, TRUE);
 
   g_signal_connect (window, "draw",
                     G_CALLBACK (on_window_draw), NULL);

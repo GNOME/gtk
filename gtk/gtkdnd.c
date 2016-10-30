@@ -1579,20 +1579,16 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
 
   if (!info->icon_window)
     {
-      GdkDisplay *display;
       GdkScreen *screen;
 
       screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
-      display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
 
       info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
       gtk_window_set_screen (GTK_WINDOW (info->icon_window), screen);
       gtk_widget_set_size_request (info->icon_window, 24, 24);
       gtk_widget_set_events (info->icon_window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-
-      if (gdk_display_is_composited (display))
-        gtk_widget_set_app_paintable (info->icon_window, TRUE);
+      gtk_style_context_remove_class (gtk_widget_get_style_context (info->icon_window), "background");
 
       gtk_window_set_hardcoded_window (GTK_WINDOW (info->icon_window),
                                        gdk_drag_context_get_drag_window (context));
@@ -1802,10 +1798,11 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
 
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-  gtk_widget_set_app_paintable (window, TRUE);
 
   gtk_widget_set_size_request (window, extents.width, extents.height);
   gtk_widget_realize (window);
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (window), "background");
 
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_matrix_init_translate (&matrix, extents.x, extents.y);

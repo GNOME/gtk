@@ -521,8 +521,7 @@ static gboolean
 gtk_event_box_draw (GtkWidget *widget,
                     cairo_t   *cr)
 {
-  if (gtk_widget_get_has_window (widget) &&
-      !gtk_widget_get_app_paintable (widget))
+  if (gtk_widget_get_has_window (widget))
     {
       GtkStyleContext *context;
 

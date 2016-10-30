@@ -798,7 +798,6 @@ create_page_setup_dialog (void)
 						 settings);
 
   info = new_widget_info ("pagesetupdialog", widget, ASIS);
-  gtk_widget_set_app_paintable (info->window, FALSE);
   info->include_decorations = TRUE;
 
   return info;

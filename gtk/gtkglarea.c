@@ -969,7 +969,6 @@ gtk_gl_area_init (GtkGLArea *area)
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
   gtk_widget_set_has_window (GTK_WIDGET (area), FALSE);
-  gtk_widget_set_app_paintable (GTK_WIDGET (area), TRUE);
 
   priv->auto_render = TRUE;
   priv->needs_render = TRUE;

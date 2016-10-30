@@ -566,7 +566,6 @@ enum {
   PROP_HEIGHT_REQUEST,
   PROP_VISIBLE,
   PROP_SENSITIVE,
-  PROP_APP_PAINTABLE,
   PROP_CAN_FOCUS,
   PROP_HAS_FOCUS,
   PROP_IS_FOCUS,
@@ -1113,13 +1112,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("Sensitive"),
                             P_("Whether the widget responds to input"),
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  widget_props[PROP_APP_PAINTABLE] =
-      g_param_spec_boolean ("app-paintable",
-                            P_("Application paintable"),
-                            P_("Whether the application will paint directly on the widget"),
-                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_CAN_FOCUS] =
@@ -3266,9 +3258,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_SENSITIVE:
       gtk_widget_set_sensitive (widget, g_value_get_boolean (value));
       break;
-    case PROP_APP_PAINTABLE:
-      gtk_widget_set_app_paintable (widget, g_value_get_boolean (value));
-      break;
     case PROP_CAN_FOCUS:
       gtk_widget_set_can_focus (widget, g_value_get_boolean (value));
       break;
@@ -3440,9 +3429,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_SENSITIVE:
       g_value_set_boolean (value, gtk_widget_get_sensitive (widget));
-      break;
-    case PROP_APP_PAINTABLE:
-      g_value_set_boolean (value, gtk_widget_get_app_paintable (widget));
       break;
     case PROP_CAN_FOCUS:
       g_value_set_boolean (value, gtk_widget_get_can_focus (widget));
@@ -8411,63 +8397,6 @@ gtk_widget_set_mapped (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   widget->priv->mapped = mapped;
-}
-
-/**
- * gtk_widget_set_app_paintable:
- * @widget: a #GtkWidget
- * @app_paintable: %TRUE if the application will paint on the widget
- *
- * Sets whether the application intends to draw on the widget in
- * an #GtkWidget::draw handler.
- *
- * This is a hint to the widget and does not affect the behavior of
- * the GTK+ core; many widgets ignore this flag entirely. For widgets
- * that do pay attention to the flag, such as #GtkEventBox and #GtkWindow,
- * the effect is to suppress default themed drawing of the widget's
- * background. (Children of the widget will still be drawn.) The application
- * is then entirely responsible for drawing the widget background.
- *
- * Note that the background is still drawn when the widget is mapped.
- **/
-void
-gtk_widget_set_app_paintable (GtkWidget *widget,
-			      gboolean   app_paintable)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  app_paintable = (app_paintable != FALSE);
-
-  if (widget->priv->app_paintable != app_paintable)
-    {
-      widget->priv->app_paintable = app_paintable;
-
-      if (_gtk_widget_is_drawable (widget))
-	gtk_widget_queue_draw (widget);
-
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_APP_PAINTABLE]);
-    }
-}
-
-/**
- * gtk_widget_get_app_paintable:
- * @widget: a #GtkWidget
- *
- * Determines whether the application intends to draw on the widget in
- * an #GtkWidget::draw handler.
- *
- * See gtk_widget_set_app_paintable()
- *
- * Returns: %TRUE if the widget is app paintable
- *
- * Since: 2.18
- **/
-gboolean
-gtk_widget_get_app_paintable (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return widget->priv->app_paintable;
 }
 
 /**

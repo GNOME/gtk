@@ -195,9 +195,9 @@ struct _GtkWidget
  *   width-for-height geometry management for a said widget and is the
  *   default return.
  *   It’s important to note (as described below) that any widget
- *   which trades height-for-width or width-for-height must respond properly 
+ *   which trades height-for-width or width-for-height must respond properly
  *   to both of the virtual methods #GtkWidgetClass.get_preferred_height_for_width()
- *   and #GtkWidgetClass.get_preferred_width_for_height() since it might be 
+ *   and #GtkWidgetClass.get_preferred_width_for_height() since it might be
  *   queried in either #GtkSizeRequestMode by its parent container.
  * @measure: This is called by containers to obtain the minimum and natural
  *   size of the widget. Depending on the orientation parameter, the passed
@@ -712,7 +712,7 @@ gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
-     
+
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   const GdkRectangle  *area,
@@ -822,12 +822,6 @@ void                  gtk_widget_set_mapped             (GtkWidget    *widget,
                                                          gboolean      mapped);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_mapped             (GtkWidget    *widget);
-
-GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_app_paintable      (GtkWidget    *widget,
-							 gboolean      app_paintable);
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_get_app_paintable      (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_redraw_on_allocate (GtkWidget    *widget,

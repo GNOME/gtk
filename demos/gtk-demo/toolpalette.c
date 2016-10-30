@@ -567,7 +567,6 @@ do_toolpalette (GtkWidget *do_widget)
       /* ===== passive DnD dest ===== */
 
       contents = gtk_drawing_area_new ();
-      gtk_widget_set_app_paintable (contents, TRUE);
 
       g_object_connect (contents,
                         "signal::draw", canvas_draw, NULL,
@@ -594,7 +593,6 @@ do_toolpalette (GtkWidget *do_widget)
       /* ===== interactive DnD dest ===== */
 
       contents = gtk_drawing_area_new ();
-      gtk_widget_set_app_paintable (contents, TRUE);
 
       g_object_connect (contents,
                         "signal::draw", canvas_draw, NULL,

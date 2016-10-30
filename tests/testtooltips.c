@@ -59,7 +59,6 @@ query_tooltip_custom_cb (GtkWidget  *widget,
 {
   GtkWindow *window = gtk_widget_get_tooltip_window (widget);
 
-  gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
   g_signal_connect (window, "draw", G_CALLBACK (draw_tooltip), NULL);
 
   return TRUE;

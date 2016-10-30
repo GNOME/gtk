@@ -149,7 +149,6 @@ main (int argc, char *argv[])
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   ebox = gtk_event_box_new ();
-  gtk_widget_set_app_paintable (ebox, TRUE);
   gtk_container_add (GTK_CONTAINER (ebox), label);
 
   gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, TRUE);

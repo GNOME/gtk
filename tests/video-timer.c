@@ -374,7 +374,6 @@ main(int argc, char **argv)
     }
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_app_paintable (window, TRUE);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
 
   g_signal_connect (window, "draw",

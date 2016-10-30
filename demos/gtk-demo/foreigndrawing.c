@@ -971,7 +971,6 @@ do_foreigndrawing (GtkWidget *do_widget)
       gtk_widget_set_size_request (da, 400, 400);
       gtk_widget_set_hexpand (da, TRUE);
       gtk_widget_set_vexpand (da, TRUE);
-      gtk_widget_set_app_paintable (da, TRUE);
       gtk_container_add (GTK_CONTAINER (box), da);
 
       g_signal_connect (da, "draw", G_CALLBACK (draw_cb), NULL);
