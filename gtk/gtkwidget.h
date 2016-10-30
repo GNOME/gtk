@@ -38,20 +38,6 @@
 
 G_BEGIN_DECLS
 
-/* Kinds of widget-specific help */
-/**
- * GtkWidgetHelpType:
- * @GTK_WIDGET_HELP_TOOLTIP: Tooltip.
- * @GTK_WIDGET_HELP_WHATS_THIS: What’s this.
- *
- * Kinds of widget-specific help. Used by the ::show-help signal.
- */
-typedef enum
-{
-  GTK_WIDGET_HELP_TOOLTIP,
-  GTK_WIDGET_HELP_WHATS_THIS
-} GtkWidgetHelpType;
-
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
  * Macros for testing whether widget or klass are of type GTK_TYPE_WIDGET.
  */
@@ -281,7 +267,6 @@ struct _GtkWidget
  *   failed.
  * @popup_menu: Signal emitted whenever a widget should pop up a
  *   context menu.
- * @show_help:
  * @get_accessible: Returns the accessible object that describes the
  *   widget to an assistive technology.
  * @screen_changed: Signal emitted when the screen of a widget has
@@ -504,14 +489,6 @@ struct _GtkWidgetClass
 
   /* Signals used only for keybindings */
   gboolean (* popup_menu)          (GtkWidget          *widget);
-
-  /* If a widget has multiple tooltips/whatsthis, it should show the
-   * one for the current focus location, or if that doesn't make
-   * sense, should cycle through them showing each tip alongside
-   * whatever piece of the widget it applies to.
-   */
-  gboolean (* show_help)           (GtkWidget          *widget,
-                                    GtkWidgetHelpType   help_type);
 
   /* accessibility support
    */

@@ -547,7 +547,6 @@ enum {
   DRAG_DATA_GET,
   DRAG_DATA_RECEIVED,
   POPUP_MENU,
-  SHOW_HELP,
   ACCEL_CLOSURES_CHANGED,
   SCREEN_CHANGED,
   CAN_ACTIVATE_ACCEL,
@@ -642,8 +641,6 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  gboolean           keyboard_tip,
 						  GtkTooltip        *tooltip);
 static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
-static gboolean gtk_widget_real_show_help        (GtkWidget         *widget,
-                                                  GtkWidgetHelpType  help_type);
 static gboolean _gtk_widget_run_controllers      (GtkWidget           *widget,
                                                   const GdkEvent      *event,
                                                   GtkPropagationPhase  phase);
@@ -1055,8 +1052,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->grab_broken_event = gtk_widget_real_grab_broken_event;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->style_updated = gtk_widget_real_style_updated;
-
-  klass->show_help = gtk_widget_real_show_help;
 
   /* Accessibility support */
   klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
@@ -3109,24 +3104,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 0);
 
   /**
-   * GtkWidget::show-help:
-   * @widget: the object which received the signal.
-   * @help_type:
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   * %FALSE to propagate the event further.
-   */
-  widget_signals[SHOW_HELP] =
-    g_signal_new (I_("show-help"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkWidgetClass, show_help),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__ENUM,
-		  G_TYPE_BOOLEAN, 1,
-		  GTK_TYPE_WIDGET_HELP_TYPE);
-
-  /**
    * GtkWidget::accel-closures-changed:
    * @widget: the object which received the signal.
    */
@@ -3185,23 +3162,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                 "popup-menu", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Menu, 0,
                                 "popup-menu", 0);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F1, GDK_CONTROL_MASK,
-                                "show-help", 1,
-                                GTK_TYPE_WIDGET_HELP_TYPE,
-                                GTK_WIDGET_HELP_TOOLTIP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_F1, GDK_CONTROL_MASK,
-                                "show-help", 1,
-                                GTK_TYPE_WIDGET_HELP_TYPE,
-                                GTK_WIDGET_HELP_TOOLTIP);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F1, GDK_SHIFT_MASK,
-                                "show-help", 1,
-                                GTK_TYPE_WIDGET_HELP_TYPE,
-                                GTK_WIDGET_HELP_WHATS_THIS);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_F1, GDK_SHIFT_MASK,
-                                "show-help", 1,
-                                GTK_TYPE_WIDGET_HELP_TYPE,
-                                GTK_WIDGET_HELP_WHATS_THIS);
 
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
   gtk_widget_class_set_css_name (klass, "widget");
@@ -7440,20 +7400,6 @@ gtk_widget_real_style_updated (GtkWidget *widget)
       if (widget->priv->anchored)
         gtk_widget_queue_resize (widget);
     }
-}
-
-static gboolean
-gtk_widget_real_show_help (GtkWidget        *widget,
-                           GtkWidgetHelpType help_type)
-{
-  if (help_type == GTK_WIDGET_HELP_TOOLTIP)
-    {
-      _gtk_tooltip_toggle_keyboard_mode (widget);
-
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
 
 static gboolean
