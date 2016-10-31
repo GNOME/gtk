@@ -24,15 +24,40 @@
 #include <gtk/gtklistbox.h>
 
 #include "recording.h"
+#include "rendernodeview.h"
 #include "renderrecording.h"
 
 struct _GtkInspectorRecorderPrivate
 {
-  GListStore *recordings;
+  GListModel *recordings;
   GtkWidget *recordings_list;
+  GtkWidget *render_node_view;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_BIN)
+
+static void 
+recordings_list_row_selected (GtkListBox           *box,
+                              GtkListBoxRow        *row,
+                              GtkInspectorRecorder *recorder)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+  GtkInspectorRecording *recording;
+  
+  if (row)
+    {
+      recording = g_list_model_get_item (priv->recordings, gtk_list_box_row_get_index (row));
+  
+      gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view),
+                                            gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+      gtk_render_node_view_set_clip_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
+                                            gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+    }
+  else
+    {
+      gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view), NULL);
+    }
+}
 
 static GtkWidget *
 gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
@@ -59,7 +84,7 @@ gtk_inspector_recorder_constructed (GObject *object)
   G_OBJECT_CLASS (gtk_inspector_recorder_parent_class)->constructed (object);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (priv->recordings_list),
-                           G_LIST_MODEL (priv->recordings),
+                           priv->recordings,
                            gtk_inspector_recorder_recordings_list_create_widget,
                            NULL,
                            NULL);
@@ -77,6 +102,9 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, recordings);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, recordings_list);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, render_node_view);
+
+  gtk_widget_class_bind_template_callback (widget_class, recordings_list_row_selected);
 }
 
 static void
@@ -104,7 +132,7 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                     gdk_window_get_height (window) },
                                                   region,
                                                   node);
-  g_list_store_append (priv->recordings, recording);
+  g_list_store_append (G_LIST_STORE (priv->recordings), recording);
   g_object_unref (recording);
 }
 

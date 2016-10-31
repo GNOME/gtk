@@ -65,4 +65,16 @@ gtk_inspector_render_recording_new (gint64                timestamp,
   return GTK_INSPECTOR_RECORDING (recording);
 }
 
+GskRenderNode *
+gtk_inspector_render_recording_get_node (GtkInspectorRenderRecording *recording)
+{
+  return recording->node;
+}
+
+const cairo_region_t *
+gtk_inspector_render_recording_get_clip_region (GtkInspectorRenderRecording *recording)
+{
+  return recording->clip;
+}
+
 // vim: set et sw=2 ts=2:

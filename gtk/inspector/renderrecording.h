@@ -49,13 +49,18 @@ typedef struct _GtkInspectorRenderRecordingClass
   GtkInspectorRecordingClass parent;
 } GtkInspectorRenderRecordingClass;
 
-GType      gtk_inspector_render_recording_get_type      (void);
+GType           gtk_inspector_render_recording_get_type      (void);
 
 GtkInspectorRecording *
-           gtk_inspector_render_recording_new           (gint64                  timestamp,
-                                                         const GdkRectangle     *area,
-                                                         const cairo_region_t   *clip,
-                                                         GskRenderNode          *node);
+                gtk_inspector_render_recording_new           (gint64                             timestamp,
+                                                              const GdkRectangle                *area,
+                                                              const cairo_region_t              *clip,
+                                                              GskRenderNode                     *node);
+
+GskRenderNode * gtk_inspector_render_recording_get_node      (GtkInspectorRenderRecording       *recording);
+const cairo_region_t *
+                gtk_inspector_render_recording_get_clip_region (GtkInspectorRenderRecording     *recording);
+
 
 G_END_DECLS
 

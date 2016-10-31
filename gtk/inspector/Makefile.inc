@@ -22,6 +22,7 @@ inspector_c_sources = 			\
 	inspector/recorder.c		\
 	inspector/recording.c		\
 	inspector/renderrecording.c	\
+	inspector/rendernodeview.c	\
 	inspector/resource-list.c	\
 	inspector/selector.c		\
 	inspector/signals-list.c	\
@@ -55,6 +56,7 @@ inspector_h_sources = 			\
 	inspector/recorder.h		\
 	inspector/recording.h		\
 	inspector/renderrecording.h	\
+	inspector/rendernodeview.h	\
 	inspector/resource-list.h	\
 	inspector/selector.h		\
 	inspector/signals-list.h	\
