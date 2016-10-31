@@ -4527,14 +4527,14 @@ static void
 gtk_tree_view_invalidate_bin_region (GtkTreeView    *tree_view,
                                      cairo_region_t *region)
 {
-  cairo_region_translate (region,
-                          - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
-                          gtk_tree_view_get_effective_header_height (tree_view));
-
   cairo_region_intersect_rectangle (region,
                                     &(GdkRectangle) { 0, 0,
                                                       gdk_window_get_width (tree_view->priv->bin_window),
                                                       gdk_window_get_height (tree_view->priv->bin_window)});
+
+  cairo_region_translate (region,
+                          - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
+                          gtk_tree_view_get_effective_header_height (tree_view));
 
   gtk_widget_queue_draw_region (GTK_WIDGET (tree_view), region);
 
