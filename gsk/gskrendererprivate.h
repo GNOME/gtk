@@ -42,15 +42,24 @@ struct _GskRendererClass
 
   void (* render) (GskRenderer *renderer,
                    GskRenderNode *root);
+
+  cairo_surface_t * (* create_cairo_surface) (GskRenderer *renderer,
+                                              cairo_format_t,
+                                              int width,
+                                              int height);
 };
 
 gboolean gsk_renderer_is_realized (GskRenderer *renderer);
 
-GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer *renderer);
-GdkDrawingContext *     gsk_renderer_get_drawing_context        (GskRenderer *renderer);
-cairo_t *               gsk_renderer_get_cairo_context          (GskRenderer *renderer);
+GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer    *renderer);
+GdkDrawingContext *     gsk_renderer_get_drawing_context        (GskRenderer    *renderer);
+cairo_t *               gsk_renderer_get_cairo_context          (GskRenderer    *renderer);
+cairo_surface_t *       gsk_renderer_create_cairo_surface       (GskRenderer    *renderer,
+                                                                 cairo_format_t  format,
+                                                                 int             width,
+                                                                 int             height);
 
-GskProfiler *           gsk_renderer_get_profiler               (GskRenderer *renderer);
+GskProfiler *           gsk_renderer_get_profiler               (GskRenderer    *renderer);
 
 G_END_DECLS
 
