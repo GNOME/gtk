@@ -967,22 +967,22 @@ start_element (GMarkupParseContext  *context,
         return;
     }
 
-  if (strcmp (element_name, "requires") == 0)
-    parse_requires (data, element_name, names, values, error);
+  if (strcmp (element_name, "property") == 0)
+    parse_property (data, element_name, names, values, error);
   else if (strcmp (element_name, "object") == 0)
     parse_object (context, data, element_name, names, values, error);
+  else if (strcmp (element_name, "child") == 0)
+    parse_child (data, element_name, names, values, error);
+  else if (strcmp (element_name, "signal") == 0)
+    parse_signal (data, element_name, names, values, error);
+  else if (strcmp (element_name, "requires") == 0)
+    parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "template") == 0)
     parse_template (context, data, element_name, names, values, error);
   else if (data->requested_objects && !data->inside_requested_object)
     {
       /* If outside a requested object, simply ignore this tag */
     }
-  else if (strcmp (element_name, "child") == 0)
-    parse_child (data, element_name, names, values, error);
-  else if (strcmp (element_name, "property") == 0)
-    parse_property (data, element_name, names, values, error);
-  else if (strcmp (element_name, "signal") == 0)
-    parse_signal (data, element_name, names, values, error);
   else if (strcmp (element_name, "interface") == 0)
     parse_interface (data, element_name, names, values, error);
   else if (strcmp (element_name, "menu") == 0)
@@ -1028,40 +1028,33 @@ end_element (GMarkupParseContext  *context,
       return;
     }
 
-  if (strcmp (element_name, "requires") == 0)
+  if (strcmp (element_name, "property") == 0)
     {
-      RequiresInfo *req_info = state_pop_info (data, RequiresInfo);
+      PropertyInfo *prop_info = state_pop_info (data, PropertyInfo);
+      CommonInfo *info = state_peek_info (data, CommonInfo);
 
-      /* TODO: Allow third party widget developers to check thier
-       * required versions, possibly throw a signal allowing them
-       * to check thier library versions here.
-       */
-      if (!strcmp (req_info->library, "gtk+"))
+      g_assert (info != NULL);
+
+      /* Normal properties */
+      if (info->tag.tag_type == TAG_OBJECT ||
+          info->tag.tag_type == TAG_TEMPLATE)
         {
-          if (!GTK_CHECK_VERSION (req_info->major, req_info->minor, 0))
+          ObjectInfo *object_info = (ObjectInfo*)info;
+
+          if (prop_info->translatable && prop_info->text->len)
             {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_VERSION_MISMATCH,
-                           "Required %s version %d.%d, current version is %d.%d",
-                           req_info->library,
-                           req_info->major, req_info->minor,
-                           GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
-              _gtk_builder_prefix_error (data->builder, context, error);
-           }
+              const gchar *translated;
+
+              translated = _gtk_builder_parser_translate (data->domain,
+                                                          prop_info->context,
+                                                          prop_info->text->str);
+              g_string_assign (prop_info->text, translated);
+            }
+
+          object_info->properties = g_slist_prepend (object_info->properties, prop_info);
         }
-      free_requires_info (req_info, NULL);
-    }
-  else if (strcmp (element_name, "interface") == 0)
-    {
-    }
-  else if (data->requested_objects && !data->inside_requested_object)
-    {
-      /* If outside a requested object, simply ignore this tag */
-    }
-  else if (strcmp (element_name, "menu") == 0)
-    {
-      _gtk_builder_menu_end (data);
+      else
+        g_assert_not_reached ();
     }
   else if (strcmp (element_name, "object") == 0 ||
            strcmp (element_name, "template") == 0)
@@ -1099,34 +1092,6 @@ end_element (GMarkupParseContext  *context,
 
       free_object_info (object_info);
     }
-  else if (strcmp (element_name, "property") == 0)
-    {
-      PropertyInfo *prop_info = state_pop_info (data, PropertyInfo);
-      CommonInfo *info = state_peek_info (data, CommonInfo);
-
-      g_assert (info != NULL);
-
-      /* Normal properties */
-      if (info->tag.tag_type == TAG_OBJECT ||
-          info->tag.tag_type == TAG_TEMPLATE)
-        {
-          ObjectInfo *object_info = (ObjectInfo*)info;
-
-          if (prop_info->translatable && prop_info->text->len)
-            {
-              const gchar *translated;
-
-              translated = _gtk_builder_parser_translate (data->domain,
-                                                          prop_info->context,
-                                                          prop_info->text->str);
-              g_string_assign (prop_info->text, translated);
-            }
-
-          object_info->properties = g_slist_prepend (object_info->properties, prop_info);
-        }
-      else
-        g_assert_not_reached ();
-    }
   else if (strcmp (element_name, "child") == 0)
     {
       ChildInfo *child_info = state_pop_info (data, ChildInfo);
@@ -1142,6 +1107,41 @@ end_element (GMarkupParseContext  *context,
       g_assert (object_info != NULL);
       signal_info->object_name = g_strdup (object_info->id);
       object_info->signals = g_slist_prepend (object_info->signals, signal_info);
+    }
+  else if (strcmp (element_name, "requires") == 0)
+    {
+      RequiresInfo *req_info = state_pop_info (data, RequiresInfo);
+
+      /* TODO: Allow third party widget developers to check thier
+       * required versions, possibly throw a signal allowing them
+       * to check thier library versions here.
+       */
+      if (!strcmp (req_info->library, "gtk+"))
+        {
+          if (!GTK_CHECK_VERSION (req_info->major, req_info->minor, 0))
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_VERSION_MISMATCH,
+                           "Required %s version %d.%d, current version is %d.%d",
+                           req_info->library,
+                           req_info->major, req_info->minor,
+                           GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
+              _gtk_builder_prefix_error (data->builder, context, error);
+           }
+        }
+      free_requires_info (req_info, NULL);
+    }
+  else if (strcmp (element_name, "interface") == 0)
+    {
+    }
+  else if (data->requested_objects && !data->inside_requested_object)
+    {
+      /* If outside a requested object, simply ignore this tag */
+    }
+  else if (strcmp (element_name, "menu") == 0)
+    {
+      _gtk_builder_menu_end (data);
     }
   else if (strcmp (element_name, "placeholder") == 0)
     {
