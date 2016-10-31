@@ -4944,13 +4944,13 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 
   bin_window_width = gdk_window_get_width (tree_view->priv->bin_window);
   bin_window_height = gdk_window_get_height (tree_view->priv->bin_window);
+  cairo_rectangle (cr, 0, 0, bin_window_width, bin_window_height);
+  cairo_clip (cr);
+
   if (!gdk_cairo_get_clip_rectangle (cr, &clip))
     return TRUE;
 
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, clip.y);
-
-  if (new_y < 0)
-    new_y = 0;
   y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
   if (gtk_tree_view_get_height (tree_view) < bin_window_height)
