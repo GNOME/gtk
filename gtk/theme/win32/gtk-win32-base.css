@@ -1271,6 +1271,21 @@ statusbar > frame {
     background-image: none;
 }
 
+/* Expander */
+
+expander title arrow {
+    background-image: -gtk-win32-theme-part(explorerbar, 7, 1);
+}
+expander title arrow:checked {
+    background-image: -gtk-win32-theme-part(explorerbar, 6, 1);
+}
+expander title:hover arrow {
+    background-image: -gtk-win32-theme-part(explorerbar, 7, 2);
+}
+expander title:hover arrow:checked {
+    background-image: -gtk-win32-theme-part(explorerbar, 6, 2);
+}
+
 /* Spinner */
 
 @keyframes spin {
