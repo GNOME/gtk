@@ -45,6 +45,7 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendernodeiter.h"
+#include "gskrendererprivate.h"
 
 #include <graphene-gobject.h>
 
@@ -1412,14 +1413,11 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
 
   if (node->surface == NULL)
     {
-      int scale_factor = gsk_renderer_get_scale_factor (node->renderer);
-      int width = node->bounds.size.width * scale_factor;
-      int height = node->bounds.size.height * scale_factor;
-
-      node->surface = cairo_image_surface_create (node->opaque ? CAIRO_FORMAT_RGB24
-                                                               : CAIRO_FORMAT_ARGB32,
-                                                  width, height);
-      cairo_surface_set_device_scale (node->surface, scale_factor, scale_factor);
+      node->surface = gsk_renderer_create_cairo_surface (node->renderer,
+                                                         node->opaque ? CAIRO_FORMAT_RGB24
+                                                                      : CAIRO_FORMAT_ARGB32,
+                                                         node->bounds.size.width,
+                                                         node->bounds.size.height);
     }
 
   res = cairo_create (node->surface);
