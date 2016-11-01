@@ -140,8 +140,8 @@ static void gtk_button_update_state   (GtkButton          *button);
 static void gtk_button_finish_activate (GtkButton         *button,
 					gboolean           do_it);
 
-static void gtk_button_state_changed   (GtkWidget             *widget,
-					GtkStateType           previous_state);
+static void gtk_button_state_flags_changed (GtkWidget     *widget,
+                                            GtkStateFlags  previous_state);
 static void gtk_button_grab_notify     (GtkWidget             *widget,
 					gboolean               was_grabbed);
 static void gtk_button_do_release      (GtkButton             *button,
@@ -229,7 +229,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->key_release_event = gtk_button_key_release;
   widget_class->enter_notify_event = gtk_button_enter_notify;
   widget_class->leave_notify_event = gtk_button_leave_notify;
-  widget_class->state_changed = gtk_button_state_changed;
+  widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
 
   container_class->add    = gtk_button_add;
@@ -1290,8 +1290,8 @@ gtk_button_screen_changed (GtkWidget *widget,
 }
 
 static void
-gtk_button_state_changed (GtkWidget    *widget,
-                          GtkStateType  previous_state)
+gtk_button_state_flags_changed (GtkWidget     *widget,
+                                GtkStateFlags  previous_state)
 {
   GtkButton *button = GTK_BUTTON (widget);
 

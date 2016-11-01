@@ -326,9 +326,6 @@ gtk_cell_renderer_spinner_get_size (GtkCellRenderer    *cellr,
 static void
 gtk_paint_spinner (GtkStyleContext *context,
                    cairo_t         *cr,
-                   GtkStateType     state_type,
-                   GtkWidget       *widget,
-                   const gchar     *detail,
                    guint            step,
                    gint             x,
                    gint             y,
@@ -400,7 +397,6 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
-  GtkStateType state;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   gint xpad, ypad;
@@ -424,25 +420,6 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
   if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     return;
 
-  state = GTK_STATE_NORMAL;
-  if ((gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE) ||
-      !gtk_cell_renderer_get_sensitive (cellr))
-    {
-      state = GTK_STATE_INSENSITIVE;
-    }
-  else
-    {
-      if ((flags & GTK_CELL_RENDERER_SELECTED) != 0)
-        {
-          if (gtk_widget_has_focus (widget))
-            state = GTK_STATE_SELECTED;
-          else
-            state = GTK_STATE_ACTIVE;
-        }
-      else
-        state = GTK_STATE_PRELIGHT;
-    }
-
   cairo_save (cr);
 
   gdk_cairo_rectangle (cr, cell_area);
@@ -450,9 +427,6 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
 
   gtk_paint_spinner (gtk_widget_get_style_context (widget),
                      cr,
-                     state,
-                     widget,
-                     "cell",
                      priv->pulse,
                      draw_rect.x, draw_rect.y,
                      draw_rect.width, draw_rect.height);

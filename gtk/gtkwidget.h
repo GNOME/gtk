@@ -342,8 +342,6 @@ struct _GtkWidgetClass
   void (* unrealize)	       (GtkWidget        *widget);
   void (* size_allocate)       (GtkWidget        *widget,
 				GtkAllocation    *allocation);
-  void (* state_changed)       (GtkWidget        *widget,
-				GtkStateType   	  previous_state);
   void (* state_flags_changed) (GtkWidget        *widget,
 				GtkStateFlags  	  previous_state_flags);
   void (* parent_set)	       (GtkWidget        *widget,

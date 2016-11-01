@@ -482,39 +482,6 @@ typedef enum
 /* Widget states */
 
 /**
- * GtkStateType:
- * @GTK_STATE_NORMAL: State during normal operation.
- * @GTK_STATE_ACTIVE: State of a currently active widget, such as a depressed button.
- * @GTK_STATE_PRELIGHT: State indicating that the mouse pointer is over
- *                      the widget and the widget will respond to mouse clicks.
- * @GTK_STATE_SELECTED: State of a selected item, such the selected row in a list.
- * @GTK_STATE_INSENSITIVE: State indicating that the widget is
- *                         unresponsive to user actions.
- * @GTK_STATE_INCONSISTENT: The widget is inconsistent, such as checkbuttons
- *                          or radiobuttons that aren’t either set to %TRUE nor %FALSE,
- *                          or buttons requiring the user attention.
- * @GTK_STATE_FOCUSED: The widget has the keyboard focus.
- *
- * This type indicates the current state of a widget; the state determines how
- * the widget is drawn. The #GtkStateType enumeration is also used to
- * identify different colors in a #GtkStyle for drawing, so states can be
- * used for subparts of a widget as well as entire widgets.
- *
- * Deprecated: 3.14: All APIs that are using this enumeration have been deprecated
- *     in favor of alternatives using #GtkStateFlags.
- */
-typedef enum
-{
-  GTK_STATE_NORMAL,
-  GTK_STATE_ACTIVE,
-  GTK_STATE_PRELIGHT,
-  GTK_STATE_SELECTED,
-  GTK_STATE_INSENSITIVE,
-  GTK_STATE_INCONSISTENT,
-  GTK_STATE_FOCUSED
-} GtkStateType;
-
-/**
  * GtkToolbarStyle:
  * @GTK_TOOLBAR_ICONS: Buttons display only icons in the toolbar.
  * @GTK_TOOLBAR_TEXT: Buttons display only text labels in the toolbar.

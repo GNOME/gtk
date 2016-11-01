@@ -155,8 +155,8 @@ static gboolean gtk_path_bar_slider_button_release(GtkWidget        *widget,
 						   GtkPathBar       *path_bar);
 static void gtk_path_bar_grab_notify              (GtkWidget        *widget,
 						   gboolean          was_grabbed);
-static void gtk_path_bar_state_changed            (GtkWidget        *widget,
-						   GtkStateType      previous_state);
+static void gtk_path_bar_state_flags_changed      (GtkWidget        *widget,
+                                                   GtkStateFlags     previous_state);
 static void gtk_path_bar_style_updated            (GtkWidget        *widget);
 static void gtk_path_bar_screen_changed           (GtkWidget        *widget,
 						   GdkScreen        *previous_screen);
@@ -231,7 +231,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   widget_class->style_updated = gtk_path_bar_style_updated;
   widget_class->screen_changed = gtk_path_bar_screen_changed;
   widget_class->grab_notify = gtk_path_bar_grab_notify;
-  widget_class->state_changed = gtk_path_bar_state_changed;
+  widget_class->state_flags_changed = gtk_path_bar_state_flags_changed;
   widget_class->scroll_event = gtk_path_bar_scroll;
 
   container_class->add = gtk_path_bar_add;
@@ -1099,8 +1099,8 @@ gtk_path_bar_grab_notify (GtkWidget *widget,
 }
 
 static void
-gtk_path_bar_state_changed (GtkWidget    *widget,
-			    GtkStateType  previous_state)
+gtk_path_bar_state_flags_changed (GtkWidget     *widget,
+                                  GtkStateFlags  previous_state)
 {
   if (!gtk_widget_is_sensitive (widget))
     gtk_path_bar_stop_scrolling (GTK_PATH_BAR (widget));
