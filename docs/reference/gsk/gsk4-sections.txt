@@ -54,7 +54,6 @@ GskBlendMode
 gsk_render_node_set_blend_mode
 GskScalingFilter
 gsk_render_node_set_scaling_filters
-gsk_render_node_get_scale_factor
 gsk_render_node_set_name
 gsk_value_set_render_node
 gsk_value_take_render_node

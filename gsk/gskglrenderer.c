@@ -625,7 +625,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   gsk_renderer_get_viewport (GSK_RENDERER (self), &viewport);
 
-  scale_factor = gsk_render_node_get_scale_factor (node);
+  scale_factor = gsk_renderer_get_scale_factor (GSK_RENDERER (self));
   if (scale_factor < 1)
     scale_factor = 1;
 

@@ -1293,24 +1293,6 @@ gsk_render_node_get_world_matrix (GskRenderNode     *node,
   *mv = node->world_matrix;
 }
 
-/*
- * gsk_render_node_get_scale_factor:
- * @node: a #GskRenderNode
- *
- * Retrieves the scale factor used when rendering.
- *
- * See also: gsk_renderer_get_scale_factor()
- *
- * Returns: the scale factor
- */
-int
-gsk_render_node_get_scale_factor (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 1);
-
-  return gsk_renderer_get_scale_factor (node->renderer);
-}
-
 /**
  * gsk_render_node_set_name:
  * @node: a #GskRenderNode
