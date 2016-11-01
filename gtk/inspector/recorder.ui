@@ -11,6 +11,7 @@
           <object class="GtkPaned">
             <property name="visible">True</property>
             <property name="orientation">horizontal</property>
+            <property name="position">300</property>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
@@ -24,11 +25,69 @@
                   </object>
                 </child>
               </object>
+              <packing>
+                <property name="shrink">False</property>
+                <property name="resize">False</property>
+              </packing>
             </child>
             <child>
-              <object class="GtkRenderNodeView" id="render_node_view">
+              <object class="GtkPaned" id="paned">
                 <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="position">100</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="expand">True</property>
+                    <property name="hscrollbar-policy">automatic</property>
+                    <property name="vscrollbar-policy">automatic</property>
+                    <property name="min-content-height">100</property>
+                    <child>
+                      <object class="GtkTreeView" id="render_node_tree">
+                        <property name="visible">True</property>
+                        <property name="search-column">0</property>
+                        <property name="enable-search">0</property>
+                        <property name="enable-grid-lines">vertical</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection">
+                            <signal name="changed" handler="render_node_list_selection_changed"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="render_node_name_column">
+                            <property name="resizable">True</property>
+                            <property name="title" translatable="yes">Name</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                                <attribute name="sensitive">1</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="shrink">False</property>
+                    <property name="resize">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRenderNodeView" id="render_node_view">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="shrink">False</property>
+                    <property name="resize">True</property>
+                  </packing>
+                </child>
               </object>
+              <packing>
+                <property name="shrink">False</property>
+                <property name="resize">True</property>
+              </packing>
             </child>
           </object>
         </child>

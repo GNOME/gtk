@@ -77,4 +77,10 @@ gtk_inspector_render_recording_get_clip_region (GtkInspectorRenderRecording *rec
   return recording->clip;
 }
 
+const cairo_rectangle_int_t *
+gtk_inspector_render_recording_get_area (GtkInspectorRenderRecording *recording)
+{
+  return &recording->area;
+}
+
 // vim: set et sw=2 ts=2:

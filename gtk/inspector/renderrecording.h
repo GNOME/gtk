@@ -60,6 +60,8 @@ GtkInspectorRecording *
 GskRenderNode * gtk_inspector_render_recording_get_node      (GtkInspectorRenderRecording       *recording);
 const cairo_region_t *
                 gtk_inspector_render_recording_get_clip_region (GtkInspectorRenderRecording     *recording);
+const cairo_rectangle_int_t *
+                gtk_inspector_render_recording_get_area      (GtkInspectorRenderRecording       *recording);
 
 
 G_END_DECLS

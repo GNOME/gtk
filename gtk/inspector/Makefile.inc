@@ -10,6 +10,7 @@ inspector_c_sources = 			\
 	inspector/graphdata.c		\
         inspector/gtkstackcombo.c       \
 	inspector/gtktreemodelcssnode.c	\
+	inspector/gtktreemodelrendernode.c \
 	inspector/init.c		\
 	inspector/inspect-button.c	\
 	inspector/magnifier.c		\
@@ -45,6 +46,7 @@ inspector_h_sources = 			\
 	inspector/graphdata.h		\
         inspector/gtkstackcombo.h       \
 	inspector/gtktreemodelcssnode.h	\
+	inspector/gtktreemodelrendernode.h \
 	inspector/init.h		\
 	inspector/magnifier.h		\
 	inspector/menu.h		\
