@@ -1,7 +1,5 @@
 #version 150
 
-uniform sampler2DRect map;
-
 attribute vec2 position;
 attribute vec2 uv;
 
