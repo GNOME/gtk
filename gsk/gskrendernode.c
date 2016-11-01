@@ -49,6 +49,8 @@
 
 #include <graphene-gobject.h>
 
+#include <math.h>
+
 #include <gobject/gvaluecollector.h>
 
 /**
@@ -1416,8 +1418,8 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
       node->surface = gsk_renderer_create_cairo_surface (node->renderer,
                                                          node->opaque ? CAIRO_FORMAT_RGB24
                                                                       : CAIRO_FORMAT_ARGB32,
-                                                         node->bounds.size.width,
-                                                         node->bounds.size.height);
+                                                         ceilf (node->bounds.size.width),
+                                                         ceilf (node->bounds.size.height));
     }
 
   res = cairo_create (node->surface);
