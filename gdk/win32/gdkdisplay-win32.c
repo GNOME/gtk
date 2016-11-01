@@ -28,6 +28,8 @@
 #include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
 
+#include <dwmapi.h>
+
 static int debug_indent = 0;
 
 static GdkMonitor *
@@ -399,6 +401,8 @@ _gdk_win32_display_open (const gchar *display_name)
   win32_display = GDK_WIN32_DISPLAY (_gdk_display);
 
   win32_display->screen = g_object_new (GDK_TYPE_WIN32_SCREEN, NULL);
+  if (gdk_screen_get_rgba_visual (win32_display->screen) == NULL)
+    gdk_display_set_rgba (_gdk_display, FALSE);
 
   _gdk_events_init (_gdk_display);
 

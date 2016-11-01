@@ -50,6 +50,7 @@
 #include "gdkwin32.h"
 #include "gdkkeysyms.h"
 #include "gdkdevicemanager-win32.h"
+#include "gdkdisplay-win32.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-wintab.h"
 #include "gdkwin32dnd.h"

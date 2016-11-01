@@ -777,7 +777,6 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
   GdkWin32GLContext *context_win32;
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   GdkWindow *window;
-  GdkScreen *screen;
 
   gboolean do_frame_sync = FALSE;
 
@@ -806,8 +805,8 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
        * the swap when drawing on the offscreen, rendering to the screen
        * happens later anyway, and its up to the compositor to sync that
        * to the vblank. */
-      screen = gdk_window_get_screen (window);
-      do_frame_sync = ! gdk_screen_is_composited (screen);
+      display = gdk_window_get_display (window);
+      do_frame_sync = ! gdk_display_is_composited (display);
 
       if (do_frame_sync != context_win32->do_frame_sync)
         {
