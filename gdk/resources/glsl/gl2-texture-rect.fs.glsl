@@ -1,4 +1,4 @@
-#version 130
+#version 110
 
 varying vec2 vUv;
 

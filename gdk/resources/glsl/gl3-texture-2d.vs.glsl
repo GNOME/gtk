@@ -1,7 +1,5 @@
 #version 150
 
-uniform sampler2D map;
-
 in vec2 position;
 in vec2 uv;
 
