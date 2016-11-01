@@ -16,8 +16,9 @@
 
 #include <epoxy/gl.h>
 
-#define SHADER_VERSION_GLES             110
-#define SHADER_VERSION_GL_LEGACY        120
+#define SHADER_VERSION_GLES             100
+#define SHADER_VERSION_GL2_LEGACY       110
+#define SHADER_VERSION_GL3_LEGACY       130
 #define SHADER_VERSION_GL3              150
 
 typedef struct {
@@ -213,7 +214,14 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
     }
   else if (gdk_gl_context_is_legacy (self->gl_context))
     {
-      gsk_shader_builder_set_version (builder, SHADER_VERSION_GL_LEGACY);
+      int maj, min;
+      gdk_gl_context_get_version (self->gl_context, &maj, &min);
+
+      if (maj == 3)
+        gsk_shader_builder_set_version (builder, SHADER_VERSION_GL3_LEGACY);
+      else
+        gsk_shader_builder_set_version (builder, SHADER_VERSION_GL2_LEGACY);
+
       gsk_shader_builder_set_vertex_preamble (builder, "gl_common.vs.glsl");
       gsk_shader_builder_set_fragment_preamble (builder, "gl_common.fs.glsl");
       gsk_shader_builder_add_define (builder, "GSK_LEGACY", "1");
