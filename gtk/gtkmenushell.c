@@ -46,7 +46,7 @@
  * clicks on one of its menuitems. When a menu is active,
  * passing the mouse over a submenu will pop it up.
  *
- * There is also is a concept of the current menu and a current
+ * There is also a concept of the current menu and a current
  * menu item. The current menu item is the selected menu item
  * that is furthest down in the hierarchy. (Every active menu shell
  * does not necessarily contain a selected menu item, but if
@@ -249,7 +249,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
    * @menushell: the object which received the signal
    * @direction: the direction to move
    *
-   * An keybinding signal which moves the current menu item
+   * A keybinding signal which moves the current menu item
    * in the direction specified by @direction.
    */
   menu_shell_signals[MOVE_CURRENT] =
