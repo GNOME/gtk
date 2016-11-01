@@ -15624,12 +15624,15 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                                const char  *name)
 {
   GskRenderNode *res = gsk_renderer_create_render_node (renderer);
-  GtkAllocation clip;
+  GtkAllocation clip, allocation;
   graphene_rect_t bounds;
 
   gtk_widget_get_clip (widget, &clip);
+  gtk_widget_get_allocation (widget, &allocation);
 
-  graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
+  graphene_rect_init (&bounds, 
+                      allocation.x - clip.x, allocation.y - clip.y,
+                      clip.width, clip.height);
 
   gsk_render_node_set_name (res, name);
   gsk_render_node_set_bounds (res, &bounds);
