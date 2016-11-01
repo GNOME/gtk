@@ -780,7 +780,12 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
       e.height *= sy;
       image = cairo_surface_map_to_image (surface, &e);
 
-      gdk_gl_context_upload_texture (paint_context, image, e.width, e.height, target);
+      gdk_gl_context_upload_texture (paint_context, 
+                                     cairo_image_surface_get_data (image),
+                                     e.width,
+                                     e.height,
+                                     cairo_image_surface_get_stride (image),
+                                     target);
 
       cairo_surface_unmap_image (surface, image);
 
@@ -855,7 +860,12 @@ gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
   rect.height = height;
   tmp = cairo_surface_map_to_image (surface, &rect);
 
-  gdk_gl_context_upload_texture (context, tmp, rect.width, rect.height, target);
+  gdk_gl_context_upload_texture (context,
+                                 cairo_image_surface_get_data (tmp),
+                                 rect.width,
+                                 rect.height,
+                                 cairo_image_surface_get_stride (tmp),
+                                 target);
 
   cairo_surface_unmap_image (surface, tmp);
 }
