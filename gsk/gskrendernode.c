@@ -1424,6 +1424,8 @@ gsk_render_node_get_draw_context (GskRenderNode *node)
 
   res = cairo_create (node->surface);
 
+  cairo_translate (res, -node->bounds.origin.x, -node->bounds.origin.y);
+
   cairo_rectangle (res,
                    node->bounds.origin.x, node->bounds.origin.y,
                    node->bounds.size.width, node->bounds.size.height);
