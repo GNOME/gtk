@@ -310,7 +310,6 @@ struct _GtkWidget
  * @style_updated: Signal emitted when the GtkStyleContext of a widget
  *   is changed.
  * @touch_event:
- * @get_preferred_height_and_baseline_for_width:
  * @adjust_baseline_request:
  * @adjust_baseline_allocation:
  * @queue_draw_region: Invalidates the area of widget defined by
@@ -427,8 +426,6 @@ struct _GtkWidgetClass
 					 GdkEventProximity   *event);
   gboolean (* proximity_out_event)	(GtkWidget	     *widget,
 					 GdkEventProximity   *event);
-  gboolean (* visibility_notify_event)	(GtkWidget	     *widget,
-					 GdkEventVisibility  *event);
   gboolean (* window_state_event)	(GtkWidget	     *widget,
 					 GdkEventWindowState *event);
   gboolean (* grab_broken_event)        (GtkWidget           *widget,
