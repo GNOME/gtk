@@ -2,7 +2,6 @@
 #define __GSK_RENDER_NODE_PRIVATE_H__
 
 #include "gskrendernode.h"
-#include "gskrenderer.h"
 #include <cairo.h>
 
 G_BEGIN_DECLS
@@ -16,9 +15,6 @@ struct _GskRenderNode
   GTypeInstance parent_instance;
 
   volatile int ref_count;
-
-  /* Back pointer to the renderer that created the node */
-  GskRenderer *renderer;
 
   /* The graph */
   GskRenderNode *parent;
@@ -77,7 +73,7 @@ struct _GskRenderNodeClass
   void (* finalize) (GskRenderNode *node);
 };
 
-GskRenderNode *gsk_render_node_new (GskRenderer *renderer);
+GskRenderNode *gsk_render_node_new (void);
 
 void gsk_render_node_make_immutable (GskRenderNode *node);
 

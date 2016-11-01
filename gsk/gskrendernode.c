@@ -247,16 +247,12 @@ gsk_render_node_get_type (void)
  * gsk_render_node_new:
  * @renderer: a #GskRenderer
  *
- * Creates a new #GskRenderNode, to be used with a #GskRenderer.
- *
  * Returns: (transfer full): the newly created #GskRenderNode
  */
 GskRenderNode *
-gsk_render_node_new (GskRenderer *renderer)
+gsk_render_node_new (void)
 {
   GskRenderNode *res = (GskRenderNode *) g_type_create_instance (GSK_TYPE_RENDER_NODE);
-
-  res->renderer = renderer;
 
   return res;
 }

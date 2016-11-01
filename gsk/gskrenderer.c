@@ -623,7 +623,6 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_return_if_fail (context == NULL || GDK_IS_DRAWING_CONTEXT (context));
   g_return_if_fail (priv->drawing_context == NULL);
   g_return_if_fail (priv->root_node == NULL);
-  g_return_if_fail (root->renderer == renderer);
 
   if (context != NULL)
     priv->drawing_context = g_object_ref (context);
@@ -683,7 +682,7 @@ gsk_renderer_create_render_node (GskRenderer *renderer)
 {
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
 
-  return gsk_render_node_new (renderer);
+  return gsk_render_node_new ();
 }
 
 /*< private >
