@@ -5329,22 +5329,6 @@ create_range_controls (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-struct {
-  GdkColor color;
-  gchar *name;
-} text_colors[] = {
- { { 0, 0x0000, 0x0000, 0x0000 }, "black" },
- { { 0, 0xFFFF, 0xFFFF, 0xFFFF }, "white" },
- { { 0, 0xFFFF, 0x0000, 0x0000 }, "red" },
- { { 0, 0x0000, 0xFFFF, 0x0000 }, "green" },
- { { 0, 0x0000, 0x0000, 0xFFFF }, "blue" }, 
- { { 0, 0x0000, 0xFFFF, 0xFFFF }, "cyan" },
- { { 0, 0xFFFF, 0x0000, 0xFFFF }, "magenta" },
- { { 0, 0xFFFF, 0xFFFF, 0x0000 }, "yellow" }
-};
-
-int ntext_colors = sizeof(text_colors) / sizeof(text_colors[0]);
-
 /*
  * GtkNotebook
  */
