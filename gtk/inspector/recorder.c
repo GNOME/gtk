@@ -20,6 +20,7 @@
 
 #include "recorder.h"
 
+#include <gtk/gtkbutton.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtktreeselection.h>
@@ -59,6 +60,15 @@ enum
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_BIN)
+
+static void
+recordings_clear_all (GtkButton            *button,
+                      GtkInspectorRecorder *recorder)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+
+  g_list_store_remove_all (G_LIST_STORE (priv->recordings));
+}
 
 static void 
 recordings_list_row_selected (GtkListBox           *box,
@@ -209,6 +219,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, render_node_view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, render_node_tree);
 
+  gtk_widget_class_bind_template_callback (widget_class, recordings_clear_all);
   gtk_widget_class_bind_template_callback (widget_class, recordings_list_row_selected);
   gtk_widget_class_bind_template_callback (widget_class, render_node_list_selection_changed);
 }

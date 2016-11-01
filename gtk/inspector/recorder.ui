@@ -17,6 +17,13 @@
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="recording" bind-flags="bidirectional|sync-create"/>
               </object>
             </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="icon-name">edit-clear-all</property>
+                <signal name="clicked" handler="recordings_clear_all"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>
