@@ -8,6 +8,18 @@
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="visible">True</property>
+                <property name="icon-name">media-record</property>
+                <property name="active" bind-source="GtkInspectorRecorder" bind-property="recording" bind-flags="bidirectional|sync-create"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="GtkPaned">
             <property name="visible">True</property>
             <property name="orientation">horizontal</property>

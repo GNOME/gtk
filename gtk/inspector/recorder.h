@@ -42,13 +42,17 @@ typedef struct _GtkInspectorRecorderClass
 
 G_BEGIN_DECLS
 
-GType      gtk_inspector_recorder_get_type              (void);
+GType           gtk_inspector_recorder_get_type                 (void);
 
-void       gtk_inspector_recorder_record_render         (GtkInspectorRecorder   *recorder,
-                                                         GtkWidget              *widget,
-                                                         GdkWindow              *window,
-                                                         const cairo_region_t   *region,
-                                                         GskRenderNode          *node);
+void            gtk_inspector_recorder_set_recording            (GtkInspectorRecorder   *recorder,
+                                                                 gboolean                record);
+gboolean        gtk_inspector_recorder_is_recording             (GtkInspectorRecorder   *recorder);
+
+void            gtk_inspector_recorder_record_render            (GtkInspectorRecorder   *recorder,
+                                                                 GtkWidget              *widget,
+                                                                 GdkWindow              *window,
+                                                                 const cairo_region_t   *region,
+                                                                 GskRenderNode          *node);
 
 G_END_DECLS
 

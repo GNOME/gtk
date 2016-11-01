@@ -38,6 +38,8 @@ struct _GtkInspectorRecorderPrivate
   GtkWidget *recordings_list;
   GtkWidget *render_node_view;
   GtkWidget *render_node_tree;
+
+  guint recording : 1;
 };
 
 enum {
@@ -46,6 +48,15 @@ enum {
   /* add more */
   N_NODE_COLUMNS
 };
+
+enum
+{
+  PROP_0,
+  PROP_RECORDING,
+  LAST_PROP
+};
+
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_BIN)
 
@@ -133,9 +144,63 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
 }
 
 static void
+gtk_inspector_recorder_get_property (GObject    *object,
+                                     guint       param_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  GtkInspectorRecorder *recorder = GTK_INSPECTOR_RECORDER (object);
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+
+  switch (param_id)
+    {
+    case PROP_RECORDING:
+      g_value_set_boolean (value, priv->recording);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_inspector_recorder_set_property (GObject      *object,
+                                     guint         param_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  GtkInspectorRecorder *recorder = GTK_INSPECTOR_RECORDER (object);
+
+  switch (param_id)
+    {
+    case PROP_RECORDING:
+      gtk_inspector_recorder_set_recording (recorder, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gtk_inspector_recorder_get_property;
+  object_class->set_property = gtk_inspector_recorder_set_property;
+
+  props[PROP_RECORDING] =
+    g_param_spec_boolean ("recording",
+                          "Recording",
+                          "Whether the recorder is currently recording",
+                          FALSE,
+                          G_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/recorder.ui");
 
@@ -171,6 +236,28 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
 }
 
 void
+gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
+                                      gboolean              recording)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+
+  if (priv->recording == recording)
+    return;
+
+  priv->recording = recording;
+
+  g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_RECORDING]);
+}
+
+gboolean
+gtk_inspector_recorder_is_recording (GtkInspectorRecorder *recorder)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+
+  return priv->recording;
+}
+
+void
 gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                       GtkWidget            *widget,
                                       GdkWindow            *window,
@@ -180,6 +267,9 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
   GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
   GtkInspectorRecording *recording;
   GdkFrameClock *frame_clock;
+
+  if (!gtk_inspector_recorder_is_recording (recorder))
+    return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
 
