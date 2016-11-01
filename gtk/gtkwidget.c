@@ -1714,9 +1714,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * #GtkStyleContext::changed signal is emitted on the @widget's associated
    * #GtkStyleContext as returned by gtk_widget_get_style_context().
    *
-   * Note that style-modifying functions like gtk_widget_override_color() also
-   * cause this signal to be emitted.
-   *
    * Since: 3.0
    */
   widget_signals[STYLE_UPDATED] =
