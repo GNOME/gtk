@@ -489,7 +489,7 @@ gtk_accel_label_get_render_node (GtkWidget   *widget,
       gtk_widget_get_clip (widget, &clip);
       _gtk_widget_get_allocation (widget, &alloc);
 
-      cr = gsk_render_node_get_draw_context (node);
+      cr = gsk_render_node_get_draw_context (node, renderer);
       cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
 
       context = gtk_widget_get_style_context (widget);

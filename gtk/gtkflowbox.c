@@ -2575,7 +2575,7 @@ gtk_flow_box_get_render_node (GtkWidget   *widget,
 
       node = gtk_widget_create_render_node (widget, renderer, "FlowBox RubberBand");
 
-      cr = gsk_render_node_get_draw_context (node);
+      cr = gsk_render_node_get_draw_context (node, renderer);
 
       vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
 

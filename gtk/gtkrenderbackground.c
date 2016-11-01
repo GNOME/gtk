@@ -499,7 +499,7 @@ gtk_css_style_add_background_render_nodes (GtkCssStyle      *style,
       bg_node = gsk_renderer_create_render_node (renderer);
       gsk_render_node_set_name (bg_node, str);
       gsk_render_node_set_bounds (bg_node, bounds);
-      cr = gsk_render_node_get_draw_context (bg_node);
+      cr = gsk_render_node_get_draw_context (bg_node, renderer);
       cairo_translate (cr, x, y);
       _gtk_css_shadows_value_paint_box (box_shadow,
                                         cr,
@@ -518,7 +518,7 @@ gtk_css_style_add_background_render_nodes (GtkCssStyle      *style,
       bg_node = gsk_renderer_create_render_node (renderer);
       gsk_render_node_set_name (bg_node, str);
       gsk_render_node_set_bounds (bg_node, bounds);
-      cr = gsk_render_node_get_draw_context (bg_node);
+      cr = gsk_render_node_get_draw_context (bg_node, renderer);
       cairo_translate (cr, x, y);
       _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
       cairo_destroy (cr);
@@ -543,7 +543,7 @@ gtk_css_style_add_background_render_nodes (GtkCssStyle      *style,
                                       translate_blend_mode (blend_mode));
       gsk_render_node_set_name (bg_node, str);
       gsk_render_node_set_bounds (bg_node, bounds);
-      cr = gsk_render_node_get_draw_context (bg_node);
+      cr = gsk_render_node_get_draw_context (bg_node, renderer);
       cairo_translate (cr, x, y);
       _gtk_theming_background_paint_layer (&bg, idx, cr, GTK_CSS_BLEND_MODE_NORMAL);
       cairo_destroy (cr);
@@ -559,7 +559,7 @@ gtk_css_style_add_background_render_nodes (GtkCssStyle      *style,
       bg_node = gsk_renderer_create_render_node (renderer);
       gsk_render_node_set_name (bg_node, str);
       gsk_render_node_set_bounds (bg_node, bounds);
-      cr = gsk_render_node_get_draw_context (bg_node);
+      cr = gsk_render_node_get_draw_context (bg_node, renderer);
       cairo_translate (cr, x, y);
       _gtk_css_shadows_value_paint_box (box_shadow,
                                         cr,

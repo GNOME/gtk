@@ -889,7 +889,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
   border_node = gsk_renderer_create_render_node (renderer);
   gsk_render_node_set_name (border_node, str);
   gsk_render_node_set_bounds (border_node, &bounds);
-  cr = gsk_render_node_get_draw_context (border_node);
+  cr = gsk_render_node_get_draw_context (border_node, renderer);
 
   gtk_css_style_render_border (style,
                                cr,
@@ -933,7 +933,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
           gsk_render_node_set_bounds (content_node, &content_bounds);
           gsk_render_node_set_transform (content_node, &content_transform);
 
-          cr = gsk_render_node_get_draw_context (content_node);
+          cr = gsk_render_node_get_draw_context (content_node, renderer);
 
           /* Compatibility mode: draw_focus is left to the draw() implementation */
           draw_focus = gadget_class->draw (gadget, cr,
@@ -956,7 +956,7 @@ gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
       gsk_render_node_set_name (focus_node, str);
       gsk_render_node_set_bounds (focus_node, &bounds);
 
-      cr = gsk_render_node_get_draw_context (focus_node);
+      cr = gsk_render_node_get_draw_context (focus_node, renderer);
       gtk_css_style_render_outline (style,
                                     cr,
                                     clip.left + margin.left,

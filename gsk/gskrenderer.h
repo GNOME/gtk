@@ -33,7 +33,6 @@ G_BEGIN_DECLS
 #define GSK_RENDERER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSK_TYPE_RENDERER, GskRenderer))
 #define GSK_IS_RENDERER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSK_TYPE_RENDERER))
 
-typedef struct _GskRenderer             GskRenderer;
 typedef struct _GskRendererClass        GskRendererClass;
 
 GDK_AVAILABLE_IN_3_90

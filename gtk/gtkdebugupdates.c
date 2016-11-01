@@ -292,7 +292,7 @@ gtk_debug_updates_get_render_node (GtkWidget   *widget,
   gtk_debug_updates_queue_get_extents (updates, &rect);
   gsk_render_node_set_bounds (node, &(graphene_rect_t) GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height));
 
-  cr = gsk_render_node_get_draw_context (node);
+  cr = gsk_render_node_get_draw_context (node, renderer);
 
   for (l = g_queue_peek_head_link (updates); l != NULL; l = l->next)
     {

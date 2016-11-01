@@ -9410,7 +9410,7 @@ gtk_window_get_render_node (GtkWidget   *widget,
   gsk_render_node_set_bounds (node, &bounds);
   gsk_render_node_set_transform (node, &m);
 
-  cr = gsk_render_node_get_draw_context (node);
+  cr = gsk_render_node_get_draw_context (node, renderer);
 
   if (priv->client_decorated &&
       priv->decorated &&

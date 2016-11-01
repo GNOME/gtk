@@ -1378,9 +1378,12 @@ gsk_render_node_get_blend_mode (GskRenderNode *node)
 /**
  * gsk_render_node_get_draw_context:
  * @node: a #GskRenderNode
+ * @renderer: (nullable): Renderer to optimize for or %NULL for any
  *
  * Creates a Cairo context for drawing using the surface associated
  * to the render node.
+ * If no surface exists yet, a surface will be created optimized for
+ * rendering to @renderer.
  *
  * Returns: (transfer full): a Cairo context used for drawing; use
  *   cairo_destroy() when done drawing
@@ -1388,20 +1391,32 @@ gsk_render_node_get_blend_mode (GskRenderNode *node)
  * Since: 3.90
  */
 cairo_t *
-gsk_render_node_get_draw_context (GskRenderNode *node)
+gsk_render_node_get_draw_context (GskRenderNode *node,
+                                  GskRenderer   *renderer)
 {
   cairo_t *res;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
   g_return_val_if_fail (node->is_mutable, NULL);
+  g_return_val_if_fail (renderer == NULL || GSK_IS_RENDERER (renderer), NULL);
 
   if (node->surface == NULL)
     {
-      node->surface = gsk_renderer_create_cairo_surface (node->renderer,
-                                                         node->opaque ? CAIRO_FORMAT_RGB24
-                                                                      : CAIRO_FORMAT_ARGB32,
-                                                         ceilf (node->bounds.size.width),
-                                                         ceilf (node->bounds.size.height));
+      if (renderer)
+        {
+          node->surface = gsk_renderer_create_cairo_surface (renderer,
+                                                             node->opaque ? CAIRO_FORMAT_RGB24
+                                                                          : CAIRO_FORMAT_ARGB32,
+                                                             ceilf (node->bounds.size.width),
+                                                             ceilf (node->bounds.size.height));
+        }
+      else
+        {
+          node->surface = cairo_image_surface_create (node->opaque ? CAIRO_FORMAT_RGB24
+                                                                   : CAIRO_FORMAT_ARGB32,
+                                                      ceilf (node->bounds.size.width),
+                                                      ceilf (node->bounds.size.height));
+        }
     }
 
   res = cairo_create (node->surface);

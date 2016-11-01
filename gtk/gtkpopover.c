@@ -1395,7 +1395,7 @@ gtk_popover_get_render_node (GtkWidget *widget, GskRenderer *renderer)
   if (node == NULL)
     return NULL;
 
-  ct = gsk_render_node_get_draw_context (node);
+  ct = gsk_render_node_get_draw_context (node, renderer);
   gtk_popover_draw (widget, ct);
 
   cairo_destroy (ct);

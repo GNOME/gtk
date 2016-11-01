@@ -695,7 +695,7 @@ gtk_frame_get_render_node (GtkWidget   *widget,
 
   node = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
 
-  cr = gsk_render_node_get_draw_context (node);
+  cr = gsk_render_node_get_draw_context (node, renderer);
 
   /* We want to use the standard gadget drawing for the border,
    * so we clip out the label allocation in order to get the

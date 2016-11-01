@@ -15676,7 +15676,7 @@ gtk_widget_get_render_node (GtkWidget   *widget,
       gsk_render_node_set_bounds (tmp, &bounds);
       gsk_render_node_set_transform (tmp, &m);
 
-      cr = gsk_render_node_get_draw_context (tmp);
+      cr = gsk_render_node_get_draw_context (tmp, renderer);
       cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
       gtk_widget_draw_internal (widget, cr, TRUE);
       cairo_destroy (cr);
@@ -15705,7 +15705,7 @@ gtk_widget_get_render_node (GtkWidget   *widget,
           gsk_render_node_set_name (tmp, str);
           gsk_render_node_set_bounds (tmp, &bounds);
 
-          cr = gsk_render_node_get_draw_context (tmp);
+          cr = gsk_render_node_get_draw_context (tmp, renderer);
           cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
           g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
           cairo_destroy (cr);
