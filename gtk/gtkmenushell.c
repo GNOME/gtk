@@ -115,7 +115,6 @@ static void gtk_menu_shell_get_property      (GObject           *object,
                                               guint              prop_id,
                                               GValue            *value,
                                               GParamSpec        *pspec);
-static void gtk_menu_shell_realize           (GtkWidget         *widget);
 static void gtk_menu_shell_finalize          (GObject           *object);
 static void gtk_menu_shell_dispose           (GObject           *object);
 static gint gtk_menu_shell_button_press      (GtkWidget         *widget,
@@ -189,7 +188,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   object_class->finalize = gtk_menu_shell_finalize;
   object_class->dispose = gtk_menu_shell_dispose;
 
-  widget_class->realize = gtk_menu_shell_realize;
   widget_class->button_press_event = gtk_menu_shell_button_press;
   widget_class->button_release_event = gtk_menu_shell_button_release;
   widget_class->grab_broken_event = gtk_menu_shell_grab_broken;
@@ -434,7 +432,7 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   menu_shell->priv = gtk_menu_shell_get_instance_private (menu_shell);
   menu_shell->priv->take_focus = TRUE;
 
-  gtk_widget_set_has_window (GTK_WIDGET (menu_shell), TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (menu_shell), FALSE);
 }
 
 static void
@@ -580,29 +578,6 @@ gtk_menu_shell_deactivate (GtkMenuShell *menu_shell)
 
   if (menu_shell->priv->active)
     g_signal_emit (menu_shell, menu_shell_signals[DEACTIVATE], 0);
-}
-
-static void
-gtk_menu_shell_realize (GtkWidget *widget)
-{
-  GtkAllocation allocation;
-  GdkWindow *window;
-
-  gtk_widget_set_realized (widget, TRUE);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 gtk_widget_get_events (widget)
-                                 | GDK_BUTTON_PRESS_MASK
-                                 | GDK_BUTTON_RELEASE_MASK
-                                 | GDK_POINTER_MOTION_MASK
-                                 | GDK_KEY_PRESS_MASK
-                                 | GDK_ENTER_NOTIFY_MASK
-                                 | GDK_LEAVE_NOTIFY_MASK,
-                                 &allocation);
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
 }
 
 static void

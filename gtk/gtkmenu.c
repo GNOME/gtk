@@ -2598,37 +2598,24 @@ gtk_menu_realize (GtkWidget *widget)
   GtkMenu *menu = GTK_MENU (widget);
   GtkMenuPrivate *priv = menu->priv;
   GtkAllocation allocation;
-  GdkWindow *window;
   GtkWidget *child;
   GList *children;
   GtkBorder arrow_border, padding;
 
-  g_return_if_fail (GTK_IS_MENU (widget));
-
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
-
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 gtk_widget_get_events (widget)
-                                 | GDK_KEY_PRESS_MASK
-                                 | GDK_ENTER_NOTIFY_MASK
-                                 | GDK_LEAVE_NOTIFY_MASK,
-                                 &allocation);
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
-
   get_menu_padding (widget, &padding);
   get_arrows_border (menu, &arrow_border);
 
-  priv->view_window = gdk_window_new_child (window,
+  priv->view_window = gdk_window_new_child (gtk_widget_get_window (widget),
                                             gtk_widget_get_events (widget)
                                             | GDK_KEY_PRESS_MASK
                                             | GDK_ENTER_NOTIFY_MASK
                                             | GDK_LEAVE_NOTIFY_MASK,
                                             &(GdkRectangle) {
-                                              padding.left,
-                                              padding.top + arrow_border.top,
+                                              allocation.x + padding.left,
+                                              allocation.y + padding.top + arrow_border.top,
                                               MAX (1, allocation.width - padding.left - padding.right),
                                               MAX (1, allocation.height - padding.top - padding.bottom
                                                       - arrow_border.top - arrow_border.bottom)});
@@ -2853,8 +2840,8 @@ gtk_menu_size_allocate (GtkWidget     *widget,
   for (i = 0; i < priv->heights_length; i++)
     priv->requested_height += priv->heights[i];
 
-  x = padding.left;
-  y = padding.top;
+  x = allocation->x + padding.left;
+  y = allocation->y + padding.top;
   width = allocation->width - padding.left - padding.right;
   height = allocation->height - padding.top - padding.bottom;
 
@@ -2886,10 +2873,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_move_resize (gtk_widget_get_window (widget),
-                              allocation->x, allocation->y,
-                              allocation->width, allocation->height);
-
       gdk_window_move_resize (priv->view_window, x, y, width, height);
     }
 
