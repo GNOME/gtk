@@ -2245,6 +2245,15 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
   child_allocation.x = 0;
   child_allocation.y = 0;
 
+  if (gtk_widget_get_realized (widget))
+    {
+      gdk_window_move_resize (priv->view_window,
+                              allocation->x, allocation->y,
+                              allocation->width, allocation->height);
+      gdk_window_move_resize (priv->bin_window,
+                              get_bin_window_x (stack, allocation), get_bin_window_y (stack, allocation),
+                              allocation->width, allocation->height);
+    }
 
   if (priv->last_visible_child)
     {
@@ -2284,17 +2293,6 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
 
       gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
     }
-
-   if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_move_resize (priv->view_window,
-                              allocation->x, allocation->y,
-                              allocation->width, allocation->height);
-      gdk_window_move_resize (priv->bin_window,
-                              get_bin_window_x (stack, allocation), get_bin_window_y (stack, allocation),
-                              allocation->width, allocation->height);
-    }
-
   gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
 
