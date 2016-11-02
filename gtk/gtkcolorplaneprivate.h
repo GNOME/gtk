@@ -37,14 +37,14 @@ typedef struct _GtkColorPlanePrivate  GtkColorPlanePrivate;
 
 struct _GtkColorPlane
 {
-  GtkDrawingArea parent_instance;
+  GtkWidget parent_instance;
 
   GtkColorPlanePrivate *priv;
 };
 
 struct _GtkColorPlaneClass
 {
-  GtkDrawingAreaClass parent_class;
+  GtkWidgetClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
