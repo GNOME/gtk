@@ -455,6 +455,8 @@ swatch_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->realize (widget);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   swatch->priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                                      gtk_widget_get_events (widget)
                                                      | GDK_BUTTON_PRESS_MASK
