@@ -8168,6 +8168,7 @@ gtk_widget_set_has_window (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   widget->priv->no_window = !has_window;
+  widget->priv->no_window_set = TRUE;
 }
 
 /**
@@ -10415,6 +10416,11 @@ gtk_widget_constructed (GObject *object)
     g_object_set_qdata (object, quark_widget_path, NULL);
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->constructed (object);
+
+  if (!widget->priv->no_window_set)
+    {
+      g_warning ("%s does not call gtk_widget_set_has_window() in its init function", G_OBJECT_TYPE_NAME (widget));
+    }
 }
 
 static void

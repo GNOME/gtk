@@ -53,6 +53,7 @@ struct _GtkWidgetPrivate
   guint toplevel              : 1;
   guint anchored              : 1;
   guint no_window             : 1;
+  guint no_window_set         : 1;
   guint realized              : 1;
   guint mapped                : 1;
   guint visible               : 1;
