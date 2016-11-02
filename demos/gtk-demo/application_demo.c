@@ -63,10 +63,10 @@ do_application_demo (GtkWidget *toplevel)
       const gchar *command;
       GError *error = NULL;
 
-      if (g_file_test ("./gtk3-demo-application" APP_EXTENSION, G_FILE_TEST_IS_EXECUTABLE))
-        command = "./gtk3-demo-application" APP_EXTENSION;
+      if (g_file_test ("./gtk4-demo-application" APP_EXTENSION, G_FILE_TEST_IS_EXECUTABLE))
+        command = "./gtk4-demo-application" APP_EXTENSION;
       else
-        command = "gtk3-demo-application";
+        command = "gtk4-demo-application";
 
       if (!g_spawn_command_line_async (command, &error))
         {

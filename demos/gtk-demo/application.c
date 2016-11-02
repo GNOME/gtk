@@ -212,7 +212,7 @@ activate_about (GSimpleAction *action,
                          "comments", "Program to demonstrate GTK+ functions.",
                          "authors", authors,
                          "documenters", documentors,
-                         "logo-icon-name", "gtk3-demo",
+                         "logo-icon-name", "gtk4-demo",
                          "title", "About GTK+ Code Demos",
                          NULL);
 }
