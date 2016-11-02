@@ -197,7 +197,7 @@ gtk_css_image_radial_draw (GtkCssImage *image,
         pos = _gtk_css_number_value_get (stop->offset, radius) / radius;
 
       pos = MAX (pos, 0);
-      step = pos / (i - last);
+      step = (pos - offset) / (i - last);
       for (last = last + 1; last <= i; last++)
         {
           const GdkRGBA *rgba;
