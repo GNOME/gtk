@@ -5975,24 +5975,6 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
   _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
-static void
-configure_native_child (GdkWindow *window)
-{
-  GdkDisplay *display;
-  GdkEvent *event;
-
-  event = gdk_event_new (GDK_CONFIGURE);
-
-  event->configure.window = g_object_ref (window);
-  event->configure.send_event = FALSE;
-  event->configure.x = window->x;
-  event->configure.y = window->y;
-  event->configure.width = window->width;
-  event->configure.height = window->height;
-
-  gdk_event_put (event);
-  gdk_event_free (event);
-}
 
 static void
 move_native_children (GdkWindow *private)
@@ -6013,10 +5995,7 @@ move_native_children (GdkWindow *private)
 				   child->width, child->height);
 	}
       else
-        {
-          configure_native_child (child);
-          move_native_children (child);
-        }
+	move_native_children  (child);
     }
 }
 
@@ -6104,7 +6083,8 @@ gdk_window_move_resize_internal (GdkWindow *window,
 			       window->x, window->y,
 			       window->width, window->height);
     }
-  else
+  else if (old_abs_x != window->abs_x ||
+	   old_abs_y != window->abs_y)
     move_native_children (window);
 
   if (expose)
