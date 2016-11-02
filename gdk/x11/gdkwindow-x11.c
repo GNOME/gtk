@@ -4268,6 +4268,23 @@ gdk_x11_window_fullscreen (GdkWindow *window)
 }
 
 static void
+gdk_x11_window_fullscreen_on_monitor (GdkWindow *window,
+                                      gint       monitor)
+{
+  GdkRectangle monitor_geom;
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+    return;
+
+  gdk_screen_get_monitor_geometry (GDK_WINDOW_SCREEN (window), monitor, &monitor_geom);
+  gdk_window_move (window, monitor_geom.x, monitor_geom.y);
+
+  gdk_window_set_fullscreen_mode (window, GDK_FULLSCREEN_ON_CURRENT_MONITOR);
+  gdk_x11_window_fullscreen (window);
+}
+
+static void
 gdk_x11_window_unfullscreen (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -5754,6 +5771,7 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->maximize = gdk_x11_window_maximize;
   impl_class->unmaximize = gdk_x11_window_unmaximize;
   impl_class->fullscreen = gdk_x11_window_fullscreen;
+  impl_class->fullscreen_on_monitor = gdk_x11_window_fullscreen_on_monitor;
   impl_class->apply_fullscreen_mode = gdk_x11_window_apply_fullscreen_mode;
   impl_class->unfullscreen = gdk_x11_window_unfullscreen;
   impl_class->set_keep_above = gdk_x11_window_set_keep_above;
