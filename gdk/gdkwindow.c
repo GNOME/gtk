@@ -5978,6 +5978,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
 static void
 configure_native_child (GdkWindow *window)
 {
+  GdkDisplay *display;
   GdkEvent *event;
 
   event = gdk_event_new (GDK_CONFIGURE);
@@ -6030,6 +6031,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   cairo_region_t *old_region, *new_region;
   GdkWindowImplClass *impl_class;
   gboolean expose;
+  int old_abs_x, old_abs_y;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -6086,6 +6088,9 @@ gdk_window_move_resize_internal (GdkWindow *window,
       window->width = width;
       window->height = height;
     }
+
+  old_abs_x = window->abs_x;
+  old_abs_y = window->abs_y;
 
   recompute_visible_regions (window, FALSE);
 
