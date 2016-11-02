@@ -70,18 +70,18 @@ recordings_clear_all (GtkButton            *button,
   g_list_store_remove_all (G_LIST_STORE (priv->recordings));
 }
 
-static void 
+static void
 recordings_list_row_selected (GtkListBox           *box,
                               GtkListBoxRow        *row,
                               GtkInspectorRecorder *recorder)
 {
   GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
   GtkInspectorRecording *recording;
-  
+
   if (row)
     {
       recording = g_list_model_get_item (priv->recordings, gtk_list_box_row_get_index (row));
-  
+
       gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view),
                                             gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_render_node_view_set_clip_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
@@ -145,9 +145,10 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
   GtkWidget *widget;
   char *str;
 
-  str = g_strdup_printf ("Cute drawing at time %lld", (long long) gtk_inspector_recording_get_timestamp (recording));
+  str = g_strdup_printf ("Frame at %lld", (long long) gtk_inspector_recording_get_timestamp (recording));
   widget = gtk_label_new (str);
   g_free (str);
+  gtk_label_set_xalign (GTK_LABEL (widget), 0);
   gtk_widget_show_all (widget);
 
   return widget;
