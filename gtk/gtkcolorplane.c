@@ -396,6 +396,7 @@ gtk_color_plane_init (GtkColorPlane *plane)
 
   plane->priv = gtk_color_plane_get_instance_private (plane);
 
+  gtk_widget_set_has_window (GTK_WIDGET (plane), TRUE);
   gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
   gtk_widget_set_events (GTK_WIDGET (plane), GDK_KEY_PRESS_MASK
                                              | GDK_TOUCH_MASK

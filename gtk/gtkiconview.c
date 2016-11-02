@@ -951,6 +951,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->pixbuf_cell = NULL;  
   icon_view->priv->tooltip_column = -1;  
 
+  gtk_widget_set_has_window (GTK_WIDGET (icon_view), TRUE);
   gtk_widget_set_can_focus (GTK_WIDGET (icon_view), TRUE);
 
   icon_view->priv->item_orientation = GTK_ORIENTATION_VERTICAL;

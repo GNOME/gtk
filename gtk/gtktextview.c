@@ -1658,6 +1658,7 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
 
+  gtk_widget_set_has_window (widget, TRUE);
   gtk_widget_set_can_focus (widget, TRUE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
