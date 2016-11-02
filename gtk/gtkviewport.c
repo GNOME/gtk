@@ -462,7 +462,7 @@ gtk_viewport_init (GtkViewport *viewport)
   priv = viewport->priv;
   widget = GTK_WIDGET (viewport);
 
-  gtk_widget_set_has_window (widget, TRUE);
+  gtk_widget_set_has_window (widget, FALSE);
   gtk_widget_set_redraw_on_allocate (widget, FALSE);
 
   priv->shadow_type = GTK_SHADOW_IN;
@@ -675,29 +675,18 @@ gtk_viewport_realize (GtkWidget *widget)
   GtkBin *bin = GTK_BIN (widget);
   GtkAdjustment *hadjustment = priv->hadjustment;
   GtkAdjustment *vadjustment = priv->vadjustment;
-  GtkAllocation allocation;
   GtkAllocation view_allocation;
   GtkWidget *child;
-  GdkWindow *window;
   gint event_mask;
 
-  gtk_widget_set_realized (widget, TRUE);
-
-  gtk_widget_get_allocation (widget, &allocation);
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->realize (widget);
 
   event_mask = gtk_widget_get_events (widget);
-
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 event_mask | GDK_SCROLL_MASK | GDK_TOUCH_MASK | GDK_SMOOTH_SCROLL_MASK,
-                                 &allocation);
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
-
   gtk_css_gadget_get_content_allocation (priv->gadget,
                                          &view_allocation, NULL);
 
-  priv->view_window = gdk_window_new_child (window,
-                                            0,
+  priv->view_window = gdk_window_new_child (gtk_widget_get_window (widget),
+                                            event_mask | GDK_SCROLL_MASK | GDK_TOUCH_MASK | GDK_SMOOTH_SCROLL_MASK,
                                             &view_allocation);
   gtk_widget_register_window (widget, priv->view_window);
 
@@ -784,22 +773,12 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (gtk_widget_get_window (widget),
-                            allocation->x,
-                            allocation->y,
-                            allocation->width,
-                            allocation->height);
-
   content_allocation = *allocation;
-  content_allocation.x = content_allocation.y = 0;
   gtk_css_gadget_allocate (priv->gadget,
                            &content_allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
-  clip.x += allocation->x;
-  clip.y += allocation->y;
   gtk_widget_set_clip (widget, &clip);
 }
 
