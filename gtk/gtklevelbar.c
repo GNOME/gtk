@@ -652,9 +652,12 @@ update_level_style_classes (GtkLevelBar *self)
 {
   GtkLevelBarPrivate *priv = self->priv;
   gdouble value;
+  const gchar *classes[3] = { NULL, NULL, NULL };
   const gchar *value_class = NULL;
   GtkLevelBarOffset *offset, *prev_offset;
   GList *l;
+  gint num_filled, num_blocks, i;
+  gboolean inverted;
 
   value = gtk_level_bar_get_value (self);
 
@@ -681,30 +684,23 @@ update_level_style_classes (GtkLevelBar *self)
         break;
     }
 
-  if (value_class)
-    {
-      const gchar *classes[3] = { NULL, NULL, NULL };
-      gint num_filled, num_blocks, i;
-      gboolean inverted;
+  inverted = gtk_level_bar_get_real_inverted (self);
+  num_blocks = gtk_level_bar_get_num_block_nodes (self);
 
-      inverted = gtk_level_bar_get_real_inverted (self);
-      num_blocks = gtk_level_bar_get_num_block_nodes (self);
+  if (priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
+    num_filled = 1;
+  else
+    num_filled = MIN (num_blocks, (gint) round (priv->cur_value) - (gint) round (priv->min_value));
 
-      if (priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
-        num_filled = 1;
-      else
-        num_filled = MIN (num_blocks, (gint) round (priv->cur_value) - (gint) round (priv->min_value));
+  classes[0] = "filled";
+  classes[1] = value_class;
+  for (i = 0; i < num_filled; i++)
+    gtk_css_node_set_classes (gtk_css_gadget_get_node (priv->block_gadget[inverted ? num_blocks - 1 - i : i]), classes);
 
-      classes[0] = "filled";
-      classes[1] = value_class;
-      for (i = 0; i < num_filled; i++)
-        gtk_css_node_set_classes (gtk_css_gadget_get_node (priv->block_gadget[inverted ? num_blocks - 1 - i : i]), classes);
-
-      classes[0] = "empty";
-      classes[1] = NULL;
-      for (; i < num_blocks; i++)
-        gtk_css_node_set_classes (gtk_css_gadget_get_node (priv->block_gadget[inverted ? num_blocks - 1 - i : i]), classes);
-    }
+  classes[0] = "empty";
+  classes[1] = NULL;
+  for (; i < num_blocks; i++)
+    gtk_css_node_set_classes (gtk_css_gadget_get_node (priv->block_gadget[inverted ? num_blocks - 1 - i : i]), classes);
 }
 
 static void
