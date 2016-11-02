@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7D2397CF-4C25-45BC-A1BB-CB4B6E154BBD}</ProjectGuid>
-    <RootNamespace>gtkencodesymbolicsvg</RootNamespace>
+    <RootNamespace>gtkbuildertool</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
