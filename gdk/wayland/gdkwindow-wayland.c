@@ -896,7 +896,9 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
   cairo_rectangle_int_t rect;
   int i, n;
 
-  if (!window->current_paint.use_gl &&
+  if (impl->staging_cairo_surface &&
+      _gdk_wayland_is_shm_surface (impl->staging_cairo_surface) &&
+      !window->current_paint.use_gl &&
       !cairo_region_is_empty (window->current_paint.region))
     {
       gdk_wayland_window_attach_image (window);
