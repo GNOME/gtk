@@ -776,17 +776,12 @@ gtk_button_realize (GtkWidget *widget)
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
   GtkAllocation allocation;
-  GdkWindow *window;
+
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  gtk_widget_set_realized (widget, TRUE);
-
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  priv->event_window = gdk_window_new_input (window,
+  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                              gtk_widget_get_events (widget)
                                              | GDK_BUTTON_PRESS_MASK
                                              | GDK_BUTTON_RELEASE_MASK

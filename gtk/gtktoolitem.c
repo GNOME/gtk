@@ -336,15 +336,9 @@ create_drag_window (GtkToolItem *toolitem)
 static void
 gtk_tool_item_realize (GtkWidget *widget)
 {
-  GtkToolItem *toolitem;
-  GdkWindow *window;
+  GtkToolItem *toolitem = GTK_TOOL_ITEM (widget);
 
-  toolitem = GTK_TOOL_ITEM (widget);
-  gtk_widget_set_realized (widget, TRUE);
-
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
+  GTK_WIDGET_CLASS (gtk_tool_item_parent_class)->realize (widget);
 
   if (toolitem->priv->use_drag_window)
     create_drag_window(toolitem);

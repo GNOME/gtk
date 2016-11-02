@@ -460,20 +460,14 @@ gtk_path_bar_unmap (GtkWidget *widget)
 static void
 gtk_path_bar_realize (GtkWidget *widget)
 {
-  GtkPathBar *path_bar;
+  GtkPathBar *path_bar = GTK_PATH_BAR (widget);
   GtkAllocation allocation;
-  GdkWindow *window;
 
-  gtk_widget_set_realized (widget, TRUE);
-
-  path_bar = GTK_PATH_BAR (widget);
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  path_bar->priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
+  path_bar->priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                                        gtk_widget_get_events (widget)
                                                        | GDK_SCROLL_MASK,
                                                        &allocation);

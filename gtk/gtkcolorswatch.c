@@ -452,16 +452,10 @@ swatch_realize (GtkWidget *widget)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
   GtkAllocation allocation;
-  GdkWindow *window;
 
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->realize (widget);
 
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  swatch->priv->event_window = gdk_window_new_input (window,
+  swatch->priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                                      gtk_widget_get_events (widget)
                                                      | GDK_BUTTON_PRESS_MASK
                                                      | GDK_BUTTON_RELEASE_MASK

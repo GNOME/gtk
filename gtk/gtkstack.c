@@ -332,8 +332,7 @@ gtk_stack_realize (GtkWidget *widget)
   GList *l;
   gint event_mask;
 
-  gtk_widget_set_realized (widget, TRUE);
-  gtk_widget_set_window (widget, g_object_ref (gtk_widget_get_parent_window (widget)));
+  GTK_WIDGET_CLASS (gtk_stack_parent_class)->realize (widget);
 
   gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
 

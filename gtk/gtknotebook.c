@@ -1818,18 +1818,13 @@ gtk_notebook_realize (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  GdkWindow *window;
   GdkRectangle event_window_pos;
 
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->realize (widget);
 
   gtk_css_gadget_get_border_allocation (priv->header_gadget, &event_window_pos, NULL);
 
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
+  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                              gtk_widget_get_events (widget)
                                              | GDK_BUTTON_PRESS_MASK
                                              | GDK_BUTTON_RELEASE_MASK

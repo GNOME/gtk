@@ -1566,15 +1566,10 @@ gtk_paned_realize (GtkWidget *widget)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
-  GdkWindow *window;
 
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->realize (widget);
 
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  priv->handle = gdk_window_new_input (window,
+  priv->handle = gdk_window_new_input (gtk_widget_get_window (widget),
                                        gtk_widget_get_events (widget)
                                        | GDK_BUTTON_PRESS_MASK
                                        | GDK_BUTTON_RELEASE_MASK

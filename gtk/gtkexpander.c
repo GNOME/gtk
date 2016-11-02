@@ -534,17 +534,14 @@ gtk_expander_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
   GtkExpanderPrivate *priv;
-  GdkWindow *window;
 
   priv = GTK_EXPANDER (widget)->priv;
 
+  GTK_WIDGET_CLASS (gtk_expander_parent_class)->realize (widget);
+
   gtk_widget_get_allocation (widget, &allocation);
 
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
+  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                              gtk_widget_get_events (widget)
                                              | GDK_BUTTON_PRESS_MASK
                                              | GDK_BUTTON_RELEASE_MASK
@@ -554,7 +551,6 @@ gtk_expander_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, priv->event_window);
 
   gtk_gesture_set_window (priv->multipress_gesture, priv->event_window);
-  gtk_widget_set_realized (widget, TRUE);
 }
 
 static void

@@ -773,17 +773,12 @@ gtk_toolbar_realize (GtkWidget *widget)
   GtkAllocation allocation;
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
-  GdkWindow *window;
 
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
+  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                              gtk_widget_get_events (widget)
                                              | GDK_BUTTON_PRESS_MASK
                                              | GDK_BUTTON_RELEASE_MASK

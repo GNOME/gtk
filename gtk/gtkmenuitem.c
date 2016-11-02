@@ -1229,17 +1229,12 @@ gtk_menu_item_realize (GtkWidget *widget)
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
   GtkAllocation allocation;
-  GdkWindow *window;
 
-  gtk_widget_set_realized (widget, TRUE);
-
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
+  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
+  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                              gtk_widget_get_events (widget)
                                              | GDK_BUTTON_PRESS_MASK
                                              | GDK_BUTTON_RELEASE_MASK
