@@ -702,12 +702,10 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GdkX11Monitor *monitor;
-  GdkWindow *root_window;
   GdkRectangle geometry;
   int width_mm, height_mm;
+  int width, height;
   int i;
-
-  root_window = gdk_screen_get_root_window (screen);
 
   for (i = 0; i < x11_display->monitors->len; i++)
     {
@@ -731,20 +729,20 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
 
   width_mm = WidthMMOfScreen (x11_screen->xscreen);
   height_mm = HeightMMOfScreen (x11_screen->xscreen);
+  width = WidthOfScreen (x11_screen->xscreen);
+  height = HeightOfScreen (x11_screen->xscreen);
 
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
   if (0 != geometry.x ||
       0 != geometry.y ||
-      gdk_window_get_width (root_window) != geometry.width ||
-      gdk_window_get_height (root_window) != geometry.height ||
+      width != geometry.width ||
+      height != geometry.height ||
       width_mm != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
       height_mm != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)))
     *changed = TRUE;
 
   gdk_monitor_set_position (GDK_MONITOR (monitor), 0, 0);
-  gdk_monitor_set_size (GDK_MONITOR (monitor),
-                        gdk_window_get_width (root_window),
-                        gdk_window_get_height (root_window));
+  gdk_monitor_set_size (GDK_MONITOR (monitor), width, height);
   g_object_notify (G_OBJECT (monitor), "workarea");
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor), width_mm, height_mm);
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->window_scale);
