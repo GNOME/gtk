@@ -13,7 +13,7 @@ if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_BIN
 if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_BIN
 copy "$(BinDir)\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll" $(CopyDir)\bin
 copy "$(BinDir)\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb" $(CopyDir)\bin
-copy "$(BinDir)\gtk-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gtk-$(ApiVersionShort).lib" $(CopyDir)\lib
 copy "$(BinDir)\gtk4-demo.exe" $(CopyDir)\bin
 copy "$(BinDir)\gtk4-demo.pdb" $(CopyDir)\bin
 copy "$(BinDir)\gtk4-demo-application.exe" $(CopyDir)\bin
@@ -39,7 +39,7 @@ if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_DEBUG
 :DO_BROADWAY_RELEASE
 copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Release\$(Platform)\bin\gtk-$(ApiVersionShort).lib $(CopyDir)\lib
 copy .\Release\$(Platform)\bin\gtk4-demo.exe $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk4-demo.pdb $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk4-demo-application.exe $(CopyDir)\bin
@@ -60,7 +60,7 @@ goto DONE_BIN
 :DO_BROADWAY_DEBUG
 copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Debug\$(Platform)\bin\gtk-$(ApiVersionShort).lib $(CopyDir)\lib
 copy .\Debug\$(Platform)\bin\gtk4-demo.exe $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk4-demo.pdb $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk4-demo-application.exe $(CopyDir)\bin

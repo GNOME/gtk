@@ -4,7 +4,8 @@
     <VSVer>12</VSVer>
     <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
     <CopyDir>..\..\..\..\vs$(VSVer)\$(Platform)</CopyDir>
-    <ApiVersion>4.0</ApiVersion>
+    <ApiVersionShort>4</ApiVersionShort>
+    <ApiVersion>$(ApiVersionShort).0</ApiVersion>
     <GtkVersion>@GTK_VERSION@</GtkVersion>
     <GtkLibtoolCompatibleDllPrefix>lib</GtkLibtoolCompatibleDllPrefix>
     <GtkLibtoolCompatibleDllSuffix>.0-0</GtkLibtoolCompatibleDllSuffix>
@@ -27,6 +28,9 @@
     </BuildMacro>
     <BuildMacro Include="CopyDir">
       <Value>$(CopyDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ApiVersionShort">
+      <Value>$(ApiVersionShort)</Value>
     </BuildMacro>
     <BuildMacro Include="ApiVersion">
       <Value>$(ApiVersion)</Value>

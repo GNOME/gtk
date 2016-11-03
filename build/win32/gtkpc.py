@@ -72,8 +72,7 @@ def main(argv):
                             '@GTK_EXTRA_CFLAGS@': '',
                             '@GDK_EXTRA_LIBS@': gdk_win32_sys_libs + broadway_extra_libs,
                             '@GSK_EXTRA_LIBS@': '',
-                            '@GTK_EXTRA_LIBS@': '',
-                            'gtk-4': 'gtk-4.0'}
+                            '@GTK_EXTRA_LIBS@': ''}
 
     pkg_replace_items.update(base_pc.base_replace_items)
     gtk_pc_replace_items.update(pkg_replace_items)

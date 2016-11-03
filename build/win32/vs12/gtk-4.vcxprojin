@@ -146,7 +146,7 @@
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).0.lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -169,7 +169,7 @@
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).0.lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -189,7 +189,7 @@
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).0.lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -211,7 +211,7 @@
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).0.lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -236,7 +236,7 @@
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).0.lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -259,7 +259,7 @@
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).0.lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -279,7 +279,7 @@
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).0.lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -301,7 +301,7 @@
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).0.lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
