@@ -45,6 +45,11 @@ struct _GdkX11Display
 
   gint grab_count;
 
+  /* Visual infos for creating Windows */
+  int window_depth;
+  Visual *window_visual;
+  Colormap window_colormap;
+
   /* Keyboard related information */
   gint xkb_event_type;
   gboolean use_xkb;

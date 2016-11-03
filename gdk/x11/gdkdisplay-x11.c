@@ -1334,6 +1334,22 @@ set_sm_client_id (GdkDisplay  *display,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
+void
+gdk_display_setup_window_visual (GdkDisplay *display,
+                                 gint        depth,
+                                 Visual     *visual,
+                                 Colormap    colormap,
+                                 gboolean    rgba)
+{
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+  display_x11->window_depth = depth;
+  display_x11->window_visual = visual;
+  display_x11->window_colormap = colormap;
+
+  gdk_display_set_rgba (display, rgba);
+}
+
 GdkDisplay *
 _gdk_x11_display_open (const gchar *display_name)
 {
@@ -1390,9 +1406,7 @@ _gdk_x11_display_open (const gchar *display_name)
 #endif
 
   /* initialize the display's screens */ 
-  display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay));
-  if (gdk_screen_get_rgba_visual (display_x11->screen) == NULL)
-    gdk_display_set_rgba (display, FALSE);
+  display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay), TRUE);
 
   /* We need to initialize events after we have the screen
    * structures in places
@@ -1993,7 +2007,7 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
   if (gdk_x11_display_error_trap_pop (display) || !result)
     return NULL;
 
-  screen = _gdk_x11_screen_new (display, XScreenNumberOfScreen (attrs.screen));
+  screen = _gdk_x11_screen_new (display, XScreenNumberOfScreen (attrs.screen), FALSE);
 
   display_x11->screens = g_list_prepend (display_x11->screens, screen);
 
@@ -2919,37 +2933,22 @@ gdk_x11_display_get_primary_monitor (GdkDisplay *display)
   return NULL;
 }
 
-static GdkVisual *
-gdk_x11_display_get_window_gdk_visual (GdkX11Display *display)
-{
-  GdkScreen *screen;
-  GdkVisual *visual;
-
-  screen = gdk_display_get_default_screen (GDK_DISPLAY (display));
-
-  visual = gdk_screen_get_rgba_visual (screen);
-  if (visual == NULL)
-    visual = gdk_screen_get_system_visual (screen);
-
-  return visual;
-}
-
 int
 gdk_x11_display_get_window_depth (GdkX11Display *display)
 {
-  return gdk_visual_get_depth (gdk_x11_display_get_window_gdk_visual (display));
+  return display->window_depth;
 }
 
 Visual *
 gdk_x11_display_get_window_visual (GdkX11Display *display)
 {
-  return gdk_x11_visual_get_xvisual (gdk_x11_display_get_window_gdk_visual (display));
+  return display->window_visual;
 }
 
 Colormap
 gdk_x11_display_get_window_colormap (GdkX11Display *display)
 {
-  return _gdk_visual_get_x11_colormap (gdk_x11_display_get_window_gdk_visual (display));
+  return display->window_colormap;
 }
 
 static void

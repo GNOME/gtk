@@ -98,7 +98,8 @@ struct _GdkX11ScreenClass
 
 GType       _gdk_x11_screen_get_type (void);
 GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
-				      gint	  screen_number);
+				      gint	  screen_number,
+                                      gboolean    setup_display);
 
 void _gdk_x11_screen_update_visuals_for_gl  (GdkScreen *screen);
 void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);

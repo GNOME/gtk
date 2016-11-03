@@ -48,12 +48,15 @@
 void _gdk_x11_error_handler_push (void);
 void _gdk_x11_error_handler_pop  (void);
 
-Colormap _gdk_visual_get_x11_colormap (GdkVisual *visual);
-
 GdkVisual *   _gdk_x11_screen_get_system_visual          (GdkScreen      *screen);
 GList *       _gdk_x11_screen_list_visuals               (GdkScreen      *screen);
 
 
+void          gdk_display_setup_window_visual            (GdkDisplay     *display,
+                                                          gint            depth,
+                                                          Visual         *visual,
+                                                          Colormap        colormap,
+                                                          gboolean        rgba);
 int           gdk_x11_display_get_window_depth           (GdkX11Display  *display);
 Visual *      gdk_x11_display_get_window_visual          (GdkX11Display  *display);
 Colormap      gdk_x11_display_get_window_colormap        (GdkX11Display  *display);
@@ -290,7 +293,8 @@ _gdk_x11_dnd_filter (GdkXEvent *xev,
                      gpointer   data);
 
 void _gdk_x11_screen_init_root_window (GdkScreen *screen);
-void _gdk_x11_screen_init_visuals     (GdkScreen *screen);
+void _gdk_x11_screen_init_visuals     (GdkScreen *screen,
+                                       gboolean   setup_display);
 
 void _gdk_x11_cursor_update_theme (GdkCursor *cursor);
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);

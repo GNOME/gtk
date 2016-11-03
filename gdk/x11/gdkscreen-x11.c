@@ -794,7 +794,8 @@ init_multihead (GdkScreen *screen)
 
 GdkScreen *
 _gdk_x11_screen_new (GdkDisplay *display,
-		     gint	 screen_number) 
+		     gint	 screen_number,
+                     gboolean    setup_display)
 {
   GdkScreen *screen;
   GdkX11Screen *x11_screen;
@@ -827,7 +828,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
   init_randr_support (screen);
   init_multihead (screen);
 
-  _gdk_x11_screen_init_visuals (screen);
+  _gdk_x11_screen_init_visuals (screen, setup_display);
   _gdk_x11_screen_init_root_window (screen);
 
   return screen;
