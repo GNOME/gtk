@@ -63,7 +63,7 @@ EXTRA_DIST += \
 	gtk4-install.vcxproj			\
 	gtk4-install.vcxproj.filters		\
 	gtk4-build-defines.props		\
-	gtk4-copy-gdk-broadway.props		\
+	gtk4-copy-gtk-broadway.props		\
 	gtk4-gen-srcs.props			\
 	gtk4-ignore-broadway.props		\
 	gtk4-install.propsin			\

@@ -166,10 +166,6 @@
     <ClCompile Include="..\..\..\gtk\gtk-query-settings.c" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="gdk-4.vcxproj">
-      <Project>{5ae8f5ce-9103-4951-aede-ea2f3b573be8}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="gtk-4.vcxproj">
       <Project>{95a4b53d-2773-4406-a2c1-8fd2840bbad8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

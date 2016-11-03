@@ -28,10 +28,10 @@ def main(argv):
     base_pc.setup(argv, gdk_parser)
 
     atk_min_ver = '2.15.1'
-    cairo_min_ver = '1.14.0'
+    cairo_min_ver = '1.15.2'
     gdk_pixbuf_min_ver = '2.30.0'
     gdk_win32_sys_libs = '-lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid -lwinmm -ldwmapi'
-    glib_min_ver = '2.45.8'
+    glib_min_ver = '2.49.4'
     epoxy_min_ver = '1.0'
     graphene_min_ver = '1.2'
 
@@ -54,45 +54,29 @@ def main(argv):
                             'cairo >= ' + cairo_min_ver + ' ' + \
                             'cairo-gobject >= ' + cairo_min_ver
 
-    gdk_pc_replace_items = {'@GDK_PACKAGES@': gio_package + ' ' + \
-                                              'pangowin32 pangocairo' + ' ' + \
-                                              pkg_required_packages,
-                            '@GDK_PRIVATE_PACKAGES@': gio_package + ' ' + cairo_backends,
-                            '@GDK_EXTRA_LIBS@': gdk_win32_sys_libs + broadway_extra_libs,
-                            '@GDK_EXTRA_CFLAGS@': '',
-                            'gdk-4': 'gdk-4.0'}
-
-    gsk_pc_replace_items = {'@GSK_PACKAGES@': pkg_required_packages, + ' ' + \
-                                              'graphene-1.0 >= ' + graphene_min_ver
-                            '@GSK_PRIVATE_PACKAGES@': 'epoxy >= ' + epoxy_min_ver,
-                            '@GSK_EXTRA_LIBS@': '',
-                            '@GSK_EXTRA_CFLAGS@': '',
-                            'gsk-4': 'gsk-4.0'}
-
     gtk_pc_replace_items = {'@host@': gdk_args.host,
                             '@GTK_BINARY_VERSION@': '4.0.0',
+                            '@GDK_PACKAGES@': gio_package + ' ' + \
+                                              'pangowin32 pangocairo' + ' ' + \
+                                              pkg_required_packages,
+                            '@GSK_PACKAGES@': pkg_required_packages + ' ' + \
+                                              'graphene-1.0 >= ' + graphene_min_ver,
                             '@GTK_PACKAGES@': 'atk >= ' + atk_min_ver + ' ' + \
                                               pkg_required_packages + ' ' + \
                                               gio_package,
+                            '@GDK_PRIVATE_PACKAGES@': gio_package + ' ' + cairo_backends,
+                            '@GSK_PRIVATE_PACKAGES@': 'epoxy >= ' + epoxy_min_ver,
                             '@GTK_PRIVATE_PACKAGES@': 'atk',
+                            '@GDK_EXTRA_CFLAGS@': '',
+                            '@GSK_EXTRA_CFLAGS@': '',
                             '@GTK_EXTRA_CFLAGS@': '',
+                            '@GDK_EXTRA_LIBS@': gdk_win32_sys_libs + broadway_extra_libs,
+                            '@GSK_EXTRA_LIBS@': '',
                             '@GTK_EXTRA_LIBS@': '',
-                            '@GTK_EXTRA_CFLAGS@': '',
                             'gtk-4': 'gtk-4.0'}
 
     pkg_replace_items.update(base_pc.base_replace_items)
-    gdk_pc_replace_items.update(pkg_replace_items)
     gtk_pc_replace_items.update(pkg_replace_items)
-
-    # Generate gdk-4.0.pc
-    replace_multi(base_pc.top_srcdir + '/gdk-4.0.pc.in',
-                  base_pc.srcdir + '/gdk-4.0.pc',
-                  gdk_pc_replace_items)
-
-    # Generate gsk-4.0.pc
-    replace_multi(base_pc.top_srcdir + '/gsk-4.0.pc.in',
-                  base_pc.srcdir + '/gsk-4.0.pc',
-                  gsk_pc_replace_items)
 
     # Generate gtk+-4.0.pc
     replace_multi(base_pc.top_srcdir + '/gtk+-4.0.pc.in',

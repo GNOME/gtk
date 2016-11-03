@@ -9,15 +9,8 @@
 mkdir $(CopyDir)\bin
 mkdir $(CopyDir)\lib\pkgconfig
 
-copy "$(BinDir)\$(GtkDllPrefix)gdk-4$(GtkDllSuffix).dll" $(CopyDir)\bin
-copy "$(BinDir)\$(GtkDllPrefix)gdk-4$(GtkDllSuffix).pdb" $(CopyDir)\bin
-copy "$(BinDir)\gdk-$(ApiVersion).lib" $(CopyDir)\lib
-
 if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_BIN
 if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_BIN
-copy "$(BinDir)\$(GtkDllPrefix)gsk-4$(GtkDllSuffix).dll" $(CopyDir)\bin
-copy "$(BinDir)\$(GtkDllPrefix)gsk-4$(GtkDllSuffix).pdb" $(CopyDir)\bin
-copy "$(BinDir)\gsk-$(ApiVersion).lib" $(CopyDir)\lib
 copy "$(BinDir)\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll" $(CopyDir)\bin
 copy "$(BinDir)\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb" $(CopyDir)\bin
 copy "$(BinDir)\gtk-$(ApiVersion).lib" $(CopyDir)\lib
@@ -44,9 +37,6 @@ copy "$(BinDir)\broadwayd.pdb" $(CopyDir)\bin
 if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_RELEASE
 if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_DEBUG
 :DO_BROADWAY_RELEASE
-copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gsk-4$(GtkDllSuffix).dll $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gsk-4$(GtkDllSuffix).pdb $(CopyDir)\bin
-copy .\Release\$(Platform)\bin\gsk-$(ApiVersion).lib $(CopyDir)\lib
 copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
@@ -68,9 +58,6 @@ copy .\Release\$(Platform)\bin\gtk4-builder-tool.pdb $(CopyDir)\bin
 goto DONE_BIN
 
 :DO_BROADWAY_DEBUG
-copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gsk-4$(GtkDllSuffix).dll $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gsk-4$(GtkDllSuffix).pdb $(CopyDir)\bin
-copy .\Debug\$(Platform)\bin\gsk-$(ApiVersion).lib $(CopyDir)\lib
 copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).dll $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-4$(GtkDllSuffix).pdb $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
@@ -91,9 +78,8 @@ copy .\Debug\$(Platform)\bin\gtk4-builder-tool.pdb $(CopyDir)\bin
 
 :DONE_BIN
 
-copy ..\gdk-4.0.pc $(CopyDir)\lib\pkgconfig
-copy ..\gsk-4.0.pc $(CopyDir)\lib\pkgconfig
 copy "..\gtk+-4.0.pc" $(CopyDir)\lib\pkgconfig
+copy "..\gtk+-4.0.pc" "$(CopyDir)\lib\pkgconfig\gtk+-win32-4.0.pc"
     </GtkDoInstallBin>
     <GtkDoInstall>
 echo off
@@ -131,7 +117,7 @@ $(CopyDir)\bin\gtk4-update-icon-cache.exe --ignore-theme-index --force "$(CopyDi
     </GtkPostInstall>
     <GenerateGtkPC>$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
     <GenerateGtkPCX64>$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
-    <GtkPCFiles>..\gdk-4.0.pc;..\gsk-4.0.pc;..\gtk+-4.0.pc</GtkPCFiles>
+    <GtkPCFiles>..\gtk+-4.0.pc</GtkPCFiles>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk4installsprops</_PropertySheetDisplayName>
