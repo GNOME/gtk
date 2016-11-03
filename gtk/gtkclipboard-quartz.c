@@ -1107,3 +1107,17 @@ _gtk_clipboard_store_all (void)
       list = list->next;
     }
 }
+
+/**
+ * gtk_clipboard_get_selection:
+ * @clipboard:
+ *
+ * Since: 3.22
+ */
+GdkAtom
+gtk_clipboard_get_selection (GtkClipboard *clipboard)
+{
+  g_return_val_if_fail (GTK_IS_CLIPBOARD (clipboard), GDK_NONE);
+
+  return clipboard->selection;
+}
