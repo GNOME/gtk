@@ -23,7 +23,6 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include "gdkscreenprivate.h"
-#include "gdkvisualprivate.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkmonitor-wayland.h"
@@ -57,9 +56,6 @@ struct _GdkWaylandScreen
 
   GdkDisplay *display;
   GdkWindow *root_window;
-
-  /* Visual Part */
-  GdkVisual *visual;
 
   GHashTable *settings;
   GsdXftSettings xft_settings;
@@ -97,8 +93,6 @@ gdk_wayland_screen_finalize (GObject *object)
 
   if (screen_wayland->root_window)
     g_object_unref (screen_wayland->root_window);
-
-  g_object_unref (screen_wayland->visual);
 
   g_hash_table_destroy (screen_wayland->settings);
 
@@ -607,55 +601,6 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
   return FALSE;
 }
 
-typedef struct _GdkWaylandVisual	GdkWaylandVisual;
-typedef struct _GdkWaylandVisualClass	GdkWaylandVisualClass;
-
-struct _GdkWaylandVisual
-{
-  GdkVisual visual;
-};
-
-struct _GdkWaylandVisualClass
-{
-  GdkVisualClass parent_class;
-};
-
-GType _gdk_wayland_visual_get_type (void);
-
-G_DEFINE_TYPE (GdkWaylandVisual, _gdk_wayland_visual, GDK_TYPE_VISUAL)
-
-static void
-_gdk_wayland_visual_class_init (GdkWaylandVisualClass *klass)
-{
-}
-
-static void
-_gdk_wayland_visual_init (GdkWaylandVisual *visual)
-{
-}
-
-#define GDK_TYPE_WAYLAND_VISUAL              (_gdk_wayland_visual_get_type ())
-#define GDK_WAYLAND_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_VISUAL, GdkWaylandVisual))
-
-/* Currently, the Wayland backend only ever uses ARGB8888.
- */
-static GdkVisual *
-gdk_wayland_visual_new (GdkScreen *screen)
-{
-  GdkVisual *visual;
-
-  visual = g_object_new (GDK_TYPE_WAYLAND_VISUAL, NULL);
-  visual->screen = GDK_SCREEN (screen);
-  visual->type = GDK_VISUAL_TRUE_COLOR;
-  visual->depth = 32;
-  visual->red_mask = 0xff0000;
-  visual->green_mask = 0x00ff00;
-  visual->blue_mask = 0x0000ff;
-  visual->bits_per_rgb = 8;
-
-  return visual;
-}
-
 GdkScreen *
 _gdk_wayland_screen_new (GdkDisplay *display)
 {
@@ -666,8 +611,6 @@ _gdk_wayland_screen_new (GdkDisplay *display)
 
   screen_wayland = GDK_WAYLAND_SCREEN (screen);
   screen_wayland->display = display;
-
-  screen_wayland->visual = gdk_wayland_visual_new (screen);
 
   screen_wayland->root_window =
     _gdk_wayland_screen_create_root_window (screen, 0, 0);
