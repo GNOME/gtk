@@ -205,6 +205,8 @@ struct _GtkNotebookPrivate
   guint          switch_tab_timer;
   GList         *switch_tab;
 
+  GtkGesture    *press_gesture;
+
   guint32        timer;
 
   guint          child_has_focus    : 1;
@@ -372,10 +374,6 @@ static void gtk_notebook_size_allocate       (GtkWidget        *widget,
                                               GtkAllocation    *allocation);
 static gboolean gtk_notebook_draw            (GtkWidget        *widget,
                                               cairo_t          *cr);
-static gboolean gtk_notebook_button_press    (GtkWidget        *widget,
-                                              GdkEventButton   *event);
-static gboolean gtk_notebook_button_release  (GtkWidget        *widget,
-                                              GdkEventButton   *event);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
 static gboolean gtk_notebook_enter_notify    (GtkWidget        *widget,
                                               GdkEventCrossing *event);
@@ -583,6 +581,18 @@ static void gtk_notebook_buildable_add_child      (GtkBuildable *buildable,
                                                    GObject      *child,
                                                    const gchar  *type);
 
+static void gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
+                                          int                   n_press,
+                                          double                x,
+                                          double                y,
+                                          gpointer              user_data);
+static void gtk_notebook_gesture_released (GtkGestureMultiPress *gesture,
+                                           int                   n_press,
+                                           double                x,
+                                           double                y,
+                                           gpointer              user_data);
+
+
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER,
@@ -705,8 +715,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->measure = gtk_notebook_measure;
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->draw = gtk_notebook_draw;
-  widget_class->button_press_event = gtk_notebook_button_press;
-  widget_class->button_release_event = gtk_notebook_button_release;
   widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->enter_notify_event = gtk_notebook_enter_notify;
   widget_class->leave_notify_event = gtk_notebook_leave_notify;
@@ -1233,6 +1241,10 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                  NULL);
   gtk_css_gadget_set_state (priv->tabs_gadget, gtk_css_node_get_state (widget_node));
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->header_gadget), 0, priv->tabs_gadget, TRUE, GTK_ALIGN_FILL);
+
+  priv->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (notebook));
+  g_signal_connect (priv->press_gesture, "pressed", G_CALLBACK (gtk_notebook_gesture_pressed), notebook);
+  g_signal_connect (priv->press_gesture, "released", G_CALLBACK (gtk_notebook_gesture_released), notebook);
 }
 
 static void
@@ -1661,8 +1673,6 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_size_allocate
  * gtk_notebook_draw
  * gtk_notebook_scroll
- * gtk_notebook_button_press
- * gtk_notebook_button_release
  * gtk_notebook_popup_menu
  * gtk_notebook_enter_notify
  * gtk_notebook_leave_notify
@@ -1732,6 +1742,7 @@ gtk_notebook_finalize (GObject *object)
   g_clear_object (&priv->header_gadget);
   g_clear_object (&priv->tabs_gadget);
   g_clear_object (&priv->stack_gadget);
+  g_clear_object (&priv->press_gesture);
 
   G_OBJECT_CLASS (gtk_notebook_parent_class)->finalize (object);
 }
@@ -2504,10 +2515,10 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
 }
 
 static gboolean
-get_widget_coordinates (GtkWidget *widget,
-                        GdkEvent  *event,
-                        gdouble   *x,
-                        gdouble   *y)
+get_widget_coordinates (GtkWidget       *widget,
+                        const GdkEvent  *event,
+                        gdouble         *x,
+                        gdouble         *y)
 {
   GdkWindow *window = ((GdkEventAny *)event)->window;
   gdouble tx, ty;
@@ -2573,35 +2584,48 @@ get_tab_at_pos (GtkNotebook *notebook,
   return NULL;
 }
 
-static gboolean
-gtk_notebook_button_press (GtkWidget      *widget,
-                           GdkEventButton *event)
+static void
+gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
+                              int                   n_press,
+                              double                x,
+                              double                y,
+                              gpointer              user_data)
 {
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebook *notebook = user_data;
+  GtkWidget *widget = user_data;
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkNotebookPage *page;
-  GList *tab;
+  GdkEventSequence *sequence;
   GtkNotebookArrow arrow;
-  gdouble x, y;
+  GtkNotebookPage *page;
+  const GdkEvent *event;
+  guint button;
+  GList *tab;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
   if (event->type != GDK_BUTTON_PRESS || !priv->children)
-    return FALSE;
+    return;
 
-  if (!get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
-    return FALSE;
+  if (!get_widget_coordinates (widget, event, &x, &y))
+    return ;
 
   arrow = gtk_notebook_get_arrow (notebook, x, y);
   if (arrow != ARROW_NONE)
-    return gtk_notebook_arrow_button_press (notebook, arrow, event->button);
-
-  if (priv->menu && gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
-      gtk_menu_popup_at_pointer (GTK_MENU (priv->menu), (GdkEvent *) event);
-      return TRUE;
+      gtk_notebook_arrow_button_press (notebook, arrow, button);
+      return;
     }
 
-  if (event->button != GDK_BUTTON_PRIMARY)
-    return FALSE;
+  if (priv->menu && gdk_event_triggers_context_menu (event))
+    {
+      gtk_menu_popup_at_pointer (GTK_MENU (priv->menu), event);
+      return;
+    }
+
+  if (button != GDK_BUTTON_PRIMARY)
+    return;
 
   if ((tab = get_tab_at_pos (notebook, x, y)) != NULL)
     {
@@ -2621,7 +2645,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
       /* save press to possibly begin a drag */
       if (page->reorderable || page->detachable)
         {
-          priv->pressed_button = event->button;
+          priv->pressed_button = button;
 
           priv->mouse_x = x;
           priv->mouse_y = y;
@@ -2635,9 +2659,8 @@ gtk_notebook_button_press (GtkWidget      *widget,
           priv->drag_offset_y = priv->drag_begin_y - allocation.y;
         }
     }
-
-  return TRUE;
 }
+
 
 static gboolean
 gtk_notebook_popup_menu (GtkWidget *widget)
@@ -2902,21 +2925,28 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
     }
 }
 
-static gboolean
-gtk_notebook_button_release (GtkWidget      *widget,
-                             GdkEventButton *event)
+static void
+gtk_notebook_gesture_released (GtkGestureMultiPress *gesture,
+                               int                   n_press,
+                               double                x,
+                               double                y,
+                               gpointer              user_data)
 {
-  GtkNotebook *notebook;
-  GtkNotebookPrivate *priv;
+  GtkNotebook *notebook = user_data;
+  GtkNotebookPrivate *priv = notebook->priv;
+  GdkEventSequence *sequence;
+  const GdkEvent *event;
+  guint button;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
   if (event->type != GDK_BUTTON_RELEASE)
-    return FALSE;
+    return;
 
-  notebook = GTK_NOTEBOOK (widget);
-  priv = notebook->priv;
-
-  if (priv->pressed_button != event->button)
-    return FALSE;
+  if (priv->pressed_button != button)
+    return;
 
   if (priv->operation == DRAG_OPERATION_REORDER &&
       priv->cur_page &&
@@ -2924,7 +2954,6 @@ gtk_notebook_button_release (GtkWidget      *widget,
     gtk_notebook_stop_reorder (notebook);
 
   stop_scrolling (notebook);
-  return TRUE;
 }
 
 static void
@@ -2952,7 +2981,7 @@ tab_prelight (GtkNotebook *notebook,
   GList *tab;
   gdouble x, y;
 
-  if (get_widget_coordinates (GTK_WIDGET (notebook), (GdkEvent *)event, &x, &y))
+  if (get_widget_coordinates (GTK_WIDGET (notebook), (const GdkEvent *)event, &x, &y))
     {
       tab = get_tab_at_pos (notebook, x, y);
       update_prelight_tab (notebook, tab == NULL ? NULL : tab->data);
@@ -2978,7 +3007,7 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
   GtkNotebookPrivate *priv = notebook->priv;
   gdouble x, y;
 
-  if (get_widget_coordinates (widget, (GdkEvent *)event, &x, &y))
+  if (get_widget_coordinates (widget, (const GdkEvent *)event, &x, &y))
     {
       if (priv->prelight_tab != NULL)
         {
