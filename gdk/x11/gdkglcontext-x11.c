@@ -924,7 +924,7 @@ find_fbconfig (GdkDisplay   *display,
   GLXFBConfig *configs;
   int n_configs, i;
   gboolean retval = FALSE;
-  VisualID xvisual_id = XVisualIDFromVisual (gdk_x11_visual_get_xvisual (gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (display))));
+  VisualID xvisual_id = XVisualIDFromVisual (gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (display)));
 
   i = 0;
   attrs[i++] = GLX_DRAWABLE_TYPE;

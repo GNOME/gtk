@@ -464,12 +464,12 @@ gdk_x11_create_cairo_surface (GdkWindowImplX11 *impl,
 			      int width,
 			      int height)
 {
-  GdkVisual *visual;
+  Visual *visual;
     
   visual = gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (gdk_window_get_display (impl->wrapper)));
   return cairo_xlib_surface_create (GDK_WINDOW_XDISPLAY (impl->wrapper),
                                     GDK_WINDOW_IMPL_X11 (impl)->xid,
-                                    GDK_VISUAL_XVISUAL (visual),
+                                    visual,
                                     width, height);
 }
 
@@ -905,7 +905,6 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   GdkWindowImplX11 *impl;
   GdkX11Screen *x11_screen;
   GdkX11Display *display_x11;
-  GdkVisual *visual;
 
   Window xparent;
   Visual *xvisual;
@@ -932,8 +931,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   xattributes_mask = 0;
 
-  visual = gdk_x11_display_get_window_visual (display_x11);
-  xvisual = gdk_x11_visual_get_xvisual (visual);
+  xvisual = gdk_x11_display_get_window_visual (display_x11);
 
   if (attributes_mask & GDK_WA_NOREDIR)
     {
@@ -970,7 +968,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       xattributes.bit_gravity = NorthWestGravity;
       xattributes_mask |= CWBitGravity;
 
-      xattributes.colormap = _gdk_visual_get_x11_colormap (visual);
+      xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
       xattributes_mask |= CWColormap;
 
       if (window->window_type == GDK_WINDOW_TEMP)
@@ -983,7 +981,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
           impl->override_redirect = TRUE;
         }
 
-      depth = visual->depth;
+      depth = gdk_x11_display_get_window_depth (display_x11);
     }
   else
     {

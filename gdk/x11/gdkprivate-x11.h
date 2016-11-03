@@ -54,7 +54,9 @@ GdkVisual *   _gdk_x11_screen_get_system_visual          (GdkScreen      *screen
 GList *       _gdk_x11_screen_list_visuals               (GdkScreen      *screen);
 
 
-GdkVisual *   gdk_x11_display_get_window_visual          (GdkX11Display  *display);
+int           gdk_x11_display_get_window_depth           (GdkX11Display  *display);
+Visual *      gdk_x11_display_get_window_visual          (GdkX11Display  *display);
+Colormap      gdk_x11_display_get_window_colormap        (GdkX11Display  *display);
 
 void _gdk_x11_display_add_window    (GdkDisplay *display,
                                      XID        *xid,

@@ -2919,12 +2919,12 @@ gdk_x11_display_get_primary_monitor (GdkDisplay *display)
   return NULL;
 }
 
-GdkVisual *
-gdk_x11_display_get_window_visual (GdkX11Display *display)
+static GdkVisual *
+gdk_x11_display_get_window_gdk_visual (GdkX11Display *display)
 {
   GdkScreen *screen;
   GdkVisual *visual;
-  
+
   screen = gdk_display_get_default_screen (GDK_DISPLAY (display));
 
   visual = gdk_screen_get_rgba_visual (screen);
@@ -2932,6 +2932,24 @@ gdk_x11_display_get_window_visual (GdkX11Display *display)
     visual = gdk_screen_get_system_visual (screen);
 
   return visual;
+}
+
+int
+gdk_x11_display_get_window_depth (GdkX11Display *display)
+{
+  return gdk_visual_get_depth (gdk_x11_display_get_window_gdk_visual (display));
+}
+
+Visual *
+gdk_x11_display_get_window_visual (GdkX11Display *display)
+{
+  return gdk_x11_visual_get_xvisual (gdk_x11_display_get_window_gdk_visual (display));
+}
+
+Colormap
+gdk_x11_display_get_window_colormap (GdkX11Display *display)
+{
+  return _gdk_visual_get_x11_colormap (gdk_x11_display_get_window_gdk_visual (display));
 }
 
 static void
