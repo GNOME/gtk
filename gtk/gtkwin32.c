@@ -39,7 +39,8 @@
 #define EMPIRIC_MANIFEST_RESOURCE_INDEX 2
 
 
-static HMODULE gtk_dll;
+static HMODULE   gtk_dll;
+extern HINSTANCE _gdk_dll_hinstance;
 
 BOOL WINAPI
 DllMain (HINSTANCE hinstDLL,
@@ -50,6 +51,7 @@ DllMain (HINSTANCE hinstDLL,
     {
     case DLL_PROCESS_ATTACH:
       gtk_dll = (HMODULE) hinstDLL;
+      _gdk_dll_hinstance = hinstDLL;
       break;
     }
 

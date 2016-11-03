@@ -203,8 +203,6 @@ endif # USE_QUARTZ
 
 if USE_WIN32
 libgdk_4_la_LIBADD += win32/libgdk-win32.la
-libgdk_4_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o
-libgdk_4_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o
 endif # USE_WIN32
 
 if USE_BROADWAY

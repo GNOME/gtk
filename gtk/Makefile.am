@@ -41,8 +41,8 @@ gtk_win32_symbols = -export-symbols $(srcdir)/gtk.def
 gtk_win32_res = gtk-win32-res.o
 gtk_win32_res_ldflag = -Wl,gtk-win32-res.o
 
-gtk-win32-res.o : gtk-win32.rc libgtk4.manifest
-	$(WINDRES) gtk-win32.rc $@
+gtk-win32-res.o : $(top_srcdir)/gdk/win32/rc/gtk.ico gtk-win32.rc libgtk4.manifest
+	$(WINDRES) -I $(top_srcdir)/gdk/win32/rc gtk-win32.rc $@
 
 gtk-win32.rc: gtk-win32.rc.body
 	echo "#include <winuser.h>" >>$@

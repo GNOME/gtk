@@ -77,7 +77,6 @@ GskRenderNode *gsk_render_node_new (void);
 
 void gsk_render_node_make_immutable (GskRenderNode *node);
 
-_GDK_EXTERN
 void gsk_render_node_get_bounds (GskRenderNode   *node,
                                  graphene_rect_t *frame);
 void gsk_render_node_get_transform (GskRenderNode     *node,

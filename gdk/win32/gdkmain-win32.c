@@ -63,16 +63,6 @@ const GOptionEntry _gdk_windowing_args[] = {
   { NULL }
 };
 
-BOOL WINAPI
-DllMain (HINSTANCE hinstDLL,
-	 DWORD     dwReason,
-	 LPVOID    reserved)
-{
-  _gdk_dll_hinstance = hinstDLL;
-
-  return TRUE;
-}
-
 void
 _gdk_win32_windowing_init (void)
 {
