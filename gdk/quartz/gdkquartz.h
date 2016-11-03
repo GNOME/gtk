@@ -73,7 +73,6 @@ G_END_DECLS
 #include <gdk/quartz/gdkquartzkeys.h>
 #include <gdk/quartz/gdkquartzscreen.h>
 #include <gdk/quartz/gdkquartzutils.h>
-#include <gdk/quartz/gdkquartzvisual.h>
 #include <gdk/quartz/gdkquartzwindow.h>
 
 #undef __GDKQUARTZ_H_INSIDE__

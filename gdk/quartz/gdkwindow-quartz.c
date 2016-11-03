@@ -940,7 +940,6 @@ _gdk_quartz_window_init_windowing (GdkDisplay *display,
 
   _gdk_root->impl = g_object_new (_gdk_root_window_impl_quartz_get_type (), NULL);
   _gdk_root->impl_window = _gdk_root;
-  _gdk_root->visual = gdk_screen_get_system_visual (screen);
 
   impl = GDK_WINDOW_IMPL_QUARTZ (_gdk_root->impl);
 

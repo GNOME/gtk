@@ -46,7 +46,6 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkselection-quartz.c	\
 	gdktestutils-quartz.c	\
 	gdkutils-quartz.c	\
-	gdkvisual-quartz.c	\
 	gdkwindow-quartz.c	\
 	gdkwindow-quartz.h	\
 	xcursors.h
@@ -64,7 +63,6 @@ libgdkquartzinclude_HEADERS =		\
 	gdkquartzkeys.h			\
 	gdkquartzscreen.h		\
 	gdkquartzutils.h		\
-	gdkquartzvisual.h		\
 	gdkquartzwindow.h
 
 
