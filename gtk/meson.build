@@ -84,10 +84,8 @@ gtk_sources = files([
   'gtkcsscolorvalue.c',
   'gtkcsscornervalue.c',
   'gtkcsscustomgadget.c',
-  'gtkcsscustomproperty.c',
   'gtkcssdimensionvalue.c',
   'gtkcsseasevalue.c',
-  'gtkcssenginevalue.c',
   'gtkcssenumvalue.c',
   'gtkcssgadget.c',
   'gtkcssiconthemevalue.c',
@@ -138,7 +136,6 @@ gtk_sources = files([
   'gtkcsstransformvalue.c',
   'gtkcsstransientnode.c',
   'gtkcsstransition.c',
-  'gtkcsstypedvalue.c',
   'gtkcsstypes.c',
   'gtkcssunsetvalue.c',
   'gtkcssvalue.c',
@@ -227,12 +224,10 @@ gtk_sources = files([
   'gtkmnemonichash.c',
   'gtkmodelbutton.c',
   'gtkmodelmenuitem.c',
-  'gtkmodifierstyle.c',
   'gtkmodules.c',
   'gtkmountoperation.c',
   'gtknativedialog.c',
   'gtknotebook.c',
-  'gtkoffscreenwindow.c',
   'gtkorientable.c',
   'gtkoverlay.c',
   'gtkpadcontroller.c',
@@ -241,7 +236,6 @@ gtk_sources = files([
   'gtkpango.c',
   'gtkpapersize.c',
   'gtkpathbar.c',
-  'gtkpixelcache.c',
   'gtkplacessidebar.c',
   'gtkplacesview.c',
   'gtkplacesviewrow.c',
@@ -502,7 +496,6 @@ gtk_public_headers = files([
   'gtkmountoperation.h',
   'gtknativedialog.h',
   'gtknotebook.h',
-  'gtkoffscreenwindow.h',
   'gtkorientable.h',
   'gtkoverlay.h',
   'gtkpadcontroller.h',
@@ -510,7 +503,6 @@ gtk_public_headers = files([
   'gtkpaned.h',
   'gtkpapersize.h',
   'gtkplacessidebar.h',
-  'gtkplug.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
   'gtkprintcontext.h',
@@ -550,7 +542,6 @@ gtk_public_headers = files([
   'gtkshow.h',
   'gtksizegroup.h',
   'gtksizerequest.h',
-  'gtksocket.h',
   'gtkspinbutton.h',
   'gtkspinner.h',
   'gtkstack.h',
@@ -597,8 +588,6 @@ gtk_public_headers = files([
   'gtkwidgetpath.h',
   'gtkwindow.h',
   'gtkwindowgroup.h',
-  'gtkx-autocleanups.h',
-  'gtkx.h',
 ])
 
 gtk_unix_sources = files([
@@ -624,10 +613,6 @@ gtkresources = gnome.compile_resources(
 )
 
 gtk_x11_sources = files([
-  'gtkplug.c',
-  'gtksocket.c',
-  'gtkxembed.c',
-  'deprecated/gtktrayicon-x11.c',
   'gtkapplication-x11.c',
   'gtkmountoperation-x11.c',
 ])
@@ -669,7 +654,7 @@ gtktypebuiltins_h = custom_target(
   input   : gtk_public_headers + gtk_deprecated_headers,
   command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtktypebuiltins.h.template', '@OUTPUT@', '@INPUT@'],
   install: true,
-  install_dir: 'include/gtk-3.0/gtk/' # XXX ???
+  install_dir: 'include/gtk-4.0/gtk/' # XXX ???
 )
 
 gtktypebuiltins_c = custom_target(
@@ -717,7 +702,7 @@ gtkversion = configure_file(
   input  : 'gtkversion.h.in',
   output : 'gtkversion.h',
   configuration: cdata,
-  install_dir: 'include/gtk-3.0/gtk/' # XXX ???
+  install_dir: 'include/gtk-4.0/gtk/' # XXX ???
 )
 
 gtk_cargs = [
@@ -758,6 +743,7 @@ gtk_deps = [
   atk_dep,
   epoxy_dep,
   mlib,
+  graphene_dep
 ]
 
 if x11_enabled
@@ -790,16 +776,15 @@ gnome.compile_schemas()
 
 # Install necessary headers
 
-install_headers(gtk_public_headers,     subdir: 'gtk-3.0/gtk/')
-install_headers(gtk_deprecated_headers, subdir: 'gtk-3.0/gtk/deprecated/')
-install_headers(a11y_headers,           subdir: 'gtk-3.0/gtk/a11y/')
+# install_headers(gtk_public_headers,     subdir: 'gtk-3.0/gtk/')
+# install_headers(gtk_deprecated_headers, subdir: 'gtk-3.0/gtk/deprecated/')
+# install_headers(a11y_headers,           subdir: 'gtk-3.0/gtk/a11y/')
 
 libgtk = shared_library('gtk',
-  gtk_sources,
-  gtkmarshal_h,
+  sources: [typefuncs, gtk_sources, gtkmarshal_h],
   c_args: gtk_cargs,
   include_directories: [confinc, gdkinc, gtkinc],
-  dependencies: [gtk_deps, libgdk_dep],
+  dependencies: [gtk_deps, libgdk_dep, libgsk_dep],
   install: true
 )
 
@@ -811,30 +796,30 @@ libgtk_dep = declare_dependency(
     gtktypebuiltins_h,
   ],
   dependencies: gtk_deps,
-  link_with: [libgtk, libgdk],
+  link_with: [libgtk, libgdk, libgsk],
   link_args: ['-Bsymbolic'],
-  include_directories: [confinc, gtkinc]
+  include_directories: [confinc, gtkinc, gdkinc]
 )
 
 
 
 ####### Utils ######
 gtk_query_settings = executable(
-  'gtk-query-settings',
+  'gtk4-query-settings',
   'gtk-query-settings.c',
   dependencies: libgtk_dep,
   install: true
 )
 
 gtk_builder_tool = executable(
-  'gtk-builder-tool',
+  'gtk4-builder-tool',
   'gtk-builder-tool.c',
   dependencies: libgtk_dep,
   install: true
 )
 
 gtk_update_icon_cache = executable(
-  'gtk-update-icon-cache',
+  'gtk4-update-icon-cache',
   'updateiconcache.c',
   dependencies: libgtk_dep,
   install: true
@@ -849,14 +834,14 @@ gtk_update_icon_cache = executable(
 # )
 
 gtk_encode_symbolic_svg = executable(
-  'gtk-encode-symbolic-svg',
+  'gtk4-encode-symbolic-svg',
   'encodesymbolic.c',
   dependencies: libgtk_dep,
   install: true
 )
 
 gtk_launch = executable(
-  'gtk-launch',
+  'gtk4-launch',
   'gtk-launch.c',
   dependencies: libgtk_dep,
   install: true

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gresources>
+  <gresource prefix='/org/gtk/libgsk'>
+    <file alias='glsl/blend.fs.glsl'>resources/glsl/blend.fs.glsl</file>
+    <file alias='glsl/blend.vs.glsl'>resources/glsl/blend.vs.glsl</file>
+    <file alias='glsl/blit.fs.glsl'>resources/glsl/blit.fs.glsl</file>
+    <file alias='glsl/blit.vs.glsl'>resources/glsl/blit.vs.glsl</file>
+    <file alias='glsl/es2_common.fs.glsl'>resources/glsl/es2_common.fs.glsl</file>
+    <file alias='glsl/es2_common.vs.glsl'>resources/glsl/es2_common.vs.glsl</file>
+    <file alias='glsl/gl3_common.fs.glsl'>resources/glsl/gl3_common.fs.glsl</file>
+    <file alias='glsl/gl3_common.vs.glsl'>resources/glsl/gl3_common.vs.glsl</file>
+    <file alias='glsl/gl_common.fs.glsl'>resources/glsl/gl_common.fs.glsl</file>
+    <file alias='glsl/gl_common.vs.glsl'>resources/glsl/gl_common.vs.glsl</file>
+  </gresource>
+</gresources>

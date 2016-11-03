@@ -1,8 +1,6 @@
 a11y_sources = files([
   'gtkaccessibility.c',
-  'gtkaccessibilitymisc.c',
   'gtkaccessibilityutil.c',
-  'gtkarrowaccessible.c',
   'gtkbooleancellaccessible.c',
   'gtkbuttonaccessible.c',
   'gtkcellaccessible.c',
@@ -58,7 +56,6 @@ a11y_sources = files([
 
 a11y_headers = files([
   'gtk-a11y-autocleanups.h',
-  'gtkarrowaccessible.h',
   'gtkbooleancellaccessible.h',
   'gtkbuttonaccessible.h',
   'gtkcellaccessible.h',
