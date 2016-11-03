@@ -143,6 +143,8 @@ static void             gtk_icon_view_get_property              (GObject        
 static void             gtk_icon_view_destroy                   (GtkWidget          *widget);
 static void             gtk_icon_view_realize                   (GtkWidget          *widget);
 static void             gtk_icon_view_unrealize                 (GtkWidget          *widget);
+static void             gtk_icon_view_map                       (GtkWidget          *widget);
+static void             gtk_icon_view_unmap                     (GtkWidget          *widget);
 static GtkSizeRequestMode gtk_icon_view_get_request_mode        (GtkWidget          *widget);
 static void gtk_icon_view_measure (GtkWidget *widget,
                                    GtkOrientation  orientation,
@@ -351,6 +353,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->destroy = gtk_icon_view_destroy;
   widget_class->realize = gtk_icon_view_realize;
   widget_class->unrealize = gtk_icon_view_unrealize;
+  widget_class->map = gtk_icon_view_map;
+  widget_class->unmap = gtk_icon_view_unmap;
   widget_class->get_request_mode = gtk_icon_view_get_request_mode;
   widget_class->measure = gtk_icon_view_measure;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
@@ -951,7 +955,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->pixbuf_cell = NULL;  
   icon_view->priv->tooltip_column = -1;  
 
-  gtk_widget_set_has_window (GTK_WIDGET (icon_view), TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (icon_view), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (icon_view), TRUE);
 
   icon_view->priv->item_orientation = GTK_ORIENTATION_VERTICAL;
@@ -1255,21 +1259,19 @@ gtk_icon_view_realize (GtkWidget *widget)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
   GtkAllocation allocation;
-  GdkWindow *window;
 
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
   /* Make the main, clipping window */
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 GDK_VISIBILITY_NOTIFY_MASK,
-                                 &allocation);
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
+  icon_view->priv->view_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                                       GDK_VISIBILITY_NOTIFY_MASK,
+                                                       &allocation);
+  gtk_widget_register_window (widget, icon_view->priv->view_window);
 
   /* Make the window for the icon view */
-  icon_view->priv->bin_window = gdk_window_new_child (window,
+  icon_view->priv->bin_window = gdk_window_new_child (icon_view->priv->view_window,
                                                       gtk_widget_get_events (widget)
                                                       | GDK_SCROLL_MASK
                                                       | GDK_SMOOTH_SCROLL_MASK
@@ -1297,7 +1299,31 @@ gtk_icon_view_unrealize (GtkWidget *widget)
   gdk_window_destroy (icon_view->priv->bin_window);
   icon_view->priv->bin_window = NULL;
 
+  gtk_widget_unregister_window (widget, icon_view->priv->view_window);
+  gdk_window_destroy (icon_view->priv->view_window);
+  icon_view->priv->view_window = NULL;
+
   GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_icon_view_map (GtkWidget *widget)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+
+  gdk_window_show (icon_view->priv->view_window);
+
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->map (widget);
+}
+
+static void
+gtk_icon_view_unmap (GtkWidget *widget)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unmap (widget);
+
+  gdk_window_hide (icon_view->priv->view_window);
 }
 
 static gint
@@ -1674,7 +1700,7 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_move_resize (gtk_widget_get_window (widget),
+      gdk_window_move_resize (icon_view->priv->view_window,
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
       gdk_window_resize (icon_view->priv->bin_window,
@@ -6081,15 +6107,12 @@ remove_scroll_timeout (GtkIconView *icon_view)
 static void
 gtk_icon_view_autoscroll (GtkIconView *icon_view)
 {
-  GdkWindow *window;
   gint px, py, width, height;
   gint hoffset, voffset;
 
-  window = gtk_widget_get_window (GTK_WIDGET (icon_view));
-
   px = icon_view->priv->event_last_x;
   py = icon_view->priv->event_last_y;
-  gdk_window_get_geometry (window, NULL, NULL, &width, &height);
+  gdk_window_get_geometry (icon_view->priv->view_window, NULL, NULL, &width, &height);
 
   /* see if we are near the edge. */
   voffset = py - 2 * SCROLL_EDGE_SIZE;

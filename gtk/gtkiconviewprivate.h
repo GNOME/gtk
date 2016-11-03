@@ -50,6 +50,7 @@ struct _GtkIconViewPrivate
 
   GtkSelectionMode selection_mode;
 
+  GdkWindow *view_window;
   GdkWindow *bin_window;
 
   GList *children;
