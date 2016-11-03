@@ -391,6 +391,8 @@ static void gtk_text_view_size_allocate        (GtkWidget        *widget,
                                                 GtkAllocation    *allocation);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
+static void gtk_text_view_map                  (GtkWidget        *widget);
+static void gtk_text_view_unmap                (GtkWidget        *widget);
 static void gtk_text_view_style_updated        (GtkWidget        *widget);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
                                                 GtkTextDirection  previous_direction);
@@ -676,6 +678,8 @@ static void           text_window_free            (GtkTextWindow     *win);
 static void           text_window_realize         (GtkTextWindow     *win,
                                                    GtkWidget         *widget);
 static void           text_window_unrealize       (GtkTextWindow     *win);
+static void           text_window_map             (GtkTextWindow     *win);
+static void           text_window_unmap           (GtkTextWindow     *win);
 static void           text_window_size_allocate   (GtkTextWindow     *win,
                                                    GdkRectangle      *rect);
 static void           text_window_scroll          (GtkTextWindow     *win,
@@ -735,6 +739,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->destroy = gtk_text_view_destroy;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
+  widget_class->map = gtk_text_view_map;
+  widget_class->unmap = gtk_text_view_unmap;
   widget_class->style_updated = gtk_text_view_style_updated;
   widget_class->direction_changed = gtk_text_view_direction_changed;
   widget_class->state_flags_changed = gtk_text_view_state_flags_changed;
@@ -1658,7 +1664,7 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
 
-  gtk_widget_set_has_window (widget, TRUE);
+  gtk_widget_set_has_window (widget, FALSE);
   gtk_widget_set_can_focus (widget, TRUE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
@@ -4203,13 +4209,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_move_resize (gtk_widget_get_window (widget),
-                              allocation->x, allocation->y,
-                              allocation->width, allocation->height);
-    }
-
   /* distribute width/height among child windows. Ensure all
    * windows get at least a 1x1 allocation.
    */
@@ -4257,8 +4256,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   right_rect.height = text_rect.height;
 
   /* Origins */
-  left_rect.x = 0;
-  top_rect.y = 0;
+  left_rect.x = allocation->x;
+  top_rect.y = allocation->y;
 
   text_rect.x = left_rect.x + left_rect.width;
   text_rect.y = top_rect.y + top_rect.height;
@@ -4618,24 +4617,14 @@ changed_handler (GtkTextLayout     *layout,
 static void
 gtk_text_view_realize (GtkWidget *widget)
 {
-  GtkAllocation allocation;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  GdkWindow *window;
   GSList *tmp_list;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
-  gtk_widget_set_realized (widget, TRUE);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 GDK_VISIBILITY_NOTIFY_MASK,
-                                 &allocation);
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->realize (widget);
 
   text_window_realize (priv->text_window, widget);
 
@@ -4714,6 +4703,58 @@ gtk_text_view_unrealize (GtkWidget *widget)
     text_window_unrealize (priv->bottom_window);
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_text_view_map (GtkWidget *widget)
+{
+  GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
+
+  text_view = GTK_TEXT_VIEW (widget);
+  priv = text_view->priv;
+
+  text_window_map (priv->text_window);
+
+  if (priv->left_window)
+    text_window_map (priv->left_window);
+
+  if (priv->top_window)
+    text_window_map (priv->top_window);
+
+  if (priv->right_window)
+    text_window_map (priv->right_window);
+
+  if (priv->bottom_window)
+    text_window_map (priv->bottom_window);
+
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->map (widget);
+}
+
+static void
+gtk_text_view_unmap (GtkWidget *widget)
+{
+  GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
+
+  text_view = GTK_TEXT_VIEW (widget);
+  priv = text_view->priv;
+
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unmap (widget);
+
+  text_window_unmap (priv->text_window);
+
+  if (priv->left_window)
+    text_window_unmap (priv->left_window);
+
+  if (priv->top_window)
+    text_window_unmap (priv->top_window);
+
+  if (priv->right_window)
+    text_window_unmap (priv->right_window);
+
+  if (priv->bottom_window)
+    text_window_unmap (priv->bottom_window);
 }
 
 static void
@@ -5875,13 +5916,10 @@ gtk_text_view_draw (GtkWidget *widget,
 
   text_window_set_padding (GTK_TEXT_VIEW (widget), context);
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    {
-      gtk_render_background (context, cr,
-			     0, 0,
-			     gtk_widget_get_allocated_width (widget),
-			     gtk_widget_get_allocated_height (widget));
-    }
+  gtk_render_background (context, cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
                                      GTK_TEXT_WINDOW_TEXT);
@@ -9724,7 +9762,6 @@ text_window_realize (GtkTextWindow *win,
                                       GDK_VISIBILITY_NOTIFY_MASK,
                                       &win->allocation);
 
-  gdk_window_show (win->window);
   gtk_widget_register_window (win->widget, win->window);
   gdk_window_lower (win->window);
 
@@ -9786,6 +9823,18 @@ text_window_unrealize (GtkTextWindow *win)
   gdk_window_destroy (win->window);
   win->window = NULL;
   win->bin_window = NULL;
+}
+
+static void
+text_window_map (GtkTextWindow *win)
+{
+  gdk_window_show (win->window);
+}
+
+static void
+text_window_unmap (GtkTextWindow *win)
+{
+  gdk_window_hide (win->window);
 }
 
 static void
@@ -10426,6 +10475,8 @@ set_window_width (GtkTextView      *text_view,
           /* if the widget is already realized we need to realize the child manually */
           if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
             text_window_realize (*winp, GTK_WIDGET (text_view));
+          if (gtk_widget_get_mapped (GTK_WIDGET (text_view)))
+            text_window_map (*winp);
           update_node_ordering (GTK_WIDGET (text_view));
         }
       else
@@ -10465,6 +10516,8 @@ set_window_height (GtkTextView      *text_view,
           /* if the widget is already realized we need to realize the child manually */
           if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
             text_window_realize (*winp, GTK_WIDGET (text_view));
+          if (gtk_widget_get_mapped (GTK_WIDGET (text_view)))
+            text_window_map (*winp);
           update_node_ordering (GTK_WIDGET (text_view));
         }
       else
