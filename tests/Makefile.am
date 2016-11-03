@@ -166,6 +166,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testrevealer2			\
 	testtitlebar			\
 	testsplitheaders		\
+	teststackedheaders		\
 	testactionbar			\
 	testwindowsize			\
 	testpopover			\
@@ -561,6 +562,7 @@ EXTRA_DIST += 			\
 	merge-3.ui		\
 	gnome-textfile.png	\
 	testsplitheaders.ui	\
+	teststackedheaders.ui	\
 	makefile.msc		\
 	mydialog.ui		\
 	mydialog2.ui		\
