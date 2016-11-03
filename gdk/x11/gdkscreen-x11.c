@@ -129,7 +129,6 @@ gdk_x11_screen_finalize (GObject *object)
   for (i = 0; i < x11_screen->nvisuals; i++)
     g_object_unref (x11_screen->visuals[i]);
   g_free (x11_screen->visuals);
-  g_hash_table_destroy (x11_screen->visual_hash);
 
   g_free (x11_screen->window_manager_name);
 

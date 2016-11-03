@@ -44,12 +44,6 @@ struct _GdkX11VisualClass
   GdkVisualClass visual_class;
 };
 
-static void     gdk_visual_add            (GdkVisual *visual);
-static guint    gdk_visual_hash           (Visual    *key);
-static gboolean gdk_visual_equal          (Visual    *a,
-					   Visual    *b);
-
-
 G_DEFINE_TYPE (GdkX11Visual, gdk_x11_visual, GDK_TYPE_VISUAL)
 
 static void
@@ -294,9 +288,6 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
 	}
     }
 
-  for (i = 0; i < nvisuals; i++)
-    gdk_visual_add (visuals[i]);
-
   if (x11_screen->navailable_types == 0)
     g_error ("unable to find a usable visual type");
 
@@ -361,31 +352,6 @@ gdk_x11_screen_lookup_visual (GdkScreen *screen,
       return x11_screen->visuals[i];
 
   return NULL;
-}
-
-static void
-gdk_visual_add (GdkVisual *visual)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (visual->screen);
-
-  if (!x11_screen->visual_hash)
-    x11_screen->visual_hash = g_hash_table_new ((GHashFunc) gdk_visual_hash,
-                                                (GEqualFunc) gdk_visual_equal);
-
-  g_hash_table_insert (x11_screen->visual_hash, GDK_X11_VISUAL (visual)->xvisual, visual);
-}
-
-static guint
-gdk_visual_hash (Visual *key)
-{
-  return key->visualid;
-}
-
-static gboolean
-gdk_visual_equal (Visual *a,
-                  Visual *b)
-{
-  return (a->visualid == b->visualid);
 }
 
 /**

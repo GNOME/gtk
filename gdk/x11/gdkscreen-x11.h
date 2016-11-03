@@ -83,7 +83,6 @@ struct _GdkX11Screen
   GdkVisualType available_types[6];
   gint16 navailable_depths;
   gint16 navailable_types;
-  GHashTable *visual_hash;
   GdkVisual *rgba_visual;
 
   /* cache for window->translate vfunc */
