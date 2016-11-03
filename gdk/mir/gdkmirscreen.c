@@ -19,7 +19,6 @@
 
 #include "gdkscreenprivate.h"
 #include "gdkdisplayprivate.h"
-#include "gdkvisualprivate.h"
 #include "gdkinternals.h"
 
 #include "gdkmir.h"
@@ -47,8 +46,6 @@ struct GdkMirScreen
 
   /* Current monitor configuration */
   MirDisplayConfiguration *display_config;
-
-  GdkVisual *visual;
 
   GdkWindow *root_window;
 };
@@ -166,7 +163,6 @@ gdk_mir_screen_finalize (GObject *object)
 
   mir_connection_set_display_config_change_callback (get_connection (screen), NULL, NULL);
   mir_display_config_destroy (screen->display_config);
-  g_clear_object (&screen->visual);
   g_clear_object (&screen->root_window);
 
   G_OBJECT_CLASS (gdk_mir_screen_parent_class)->finalize (object);
@@ -250,7 +246,6 @@ gdk_mir_screen_get_root_window (GdkScreen *screen)
 
   s->root_window = _gdk_display_create_window (s->display);
   s->root_window->impl_window = s->root_window;
-  s->root_window->visual = s->visual;
   s->root_window->window_type = GDK_WINDOW_ROOT;
   s->root_window->depth = VISUAL_DEPTH;
   s->root_window->x = 0;
@@ -660,10 +655,6 @@ gdk_mir_screen_get_monitor_scale_factor (GdkScreen *screen,
 static void
 gdk_mir_screen_init (GdkMirScreen *screen)
 {
-  screen->visual = g_object_new (GDK_TYPE_VISUAL, NULL);
-  screen->visual->screen = GDK_SCREEN (screen);
-  screen->visual->type = VISUAL_TYPE;
-  screen->visual->depth = VISUAL_DEPTH;
 }
 
 static void
