@@ -237,8 +237,6 @@ struct _GtkWidget
  * @selection_notify_event:
  * @proximity_in_event:
  * @proximity_out_event:
- * @visibility_notify_event: Signal emitted when the widget’s window is
- *   obscured or unobscured.
  * @window_state_event: Signal emitted when the state of the toplevel
  *   window associated to the widget changes.
  * @grab_broken_event: Signal emitted when a pointer or keyboard grab
