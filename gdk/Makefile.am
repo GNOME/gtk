@@ -491,20 +491,20 @@ INTROSPECTION_INTERMEDIATE_ITEMS = \
 	$(top_builddir)/build/win32/GdkWin32_4_0_gir_list
 
 Gdk_4_0_gir_MSVC_FILES = $(introspection_files)
-Gdk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gdk_4_0_gir_EXPORT_PACKAGES)
-Gdk_4_0_gir_MSVC_INCLUDE_GIRS = $(Gdk_4_0_gir_INCLUDES)
-Gdk_4_0_gir_MSVC_LIBS = gdk-4.0
+Gdk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gdk_noinst_4_0_gir_EXPORT_PACKAGES)
+Gdk_4_0_gir_MSVC_INCLUDE_GIRS = $(Gdk_noinst_4_0_gir_INCLUDES)
+Gdk_4_0_gir_MSVC_LIBS = gtk-4
 Gdk_4_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
-Gdk_4_0_gir_MSVC_SCANNERFLAGS = $(Gdk_4_0_gir_SCANNERFLAGS)
+Gdk_4_0_gir_MSVC_SCANNERFLAGS = $(Gdk_noinst_4_0_gir_SCANNERFLAGS)
 
 GdkWin32_4_0_gir_MSVC_FILES = $(w32_introspection_files)
-GdkWin32_4_0_gir_MSVC_INCLUDE_GIRS = $(GdkWin32_4_0_gir_INCLUDES)
+GdkWin32_4_0_gir_MSVC_INCLUDE_GIRS = $(GdkWin32_noinst_4_0_gir_INCLUDES)
 GdkWin32_4_0_gir_MSVC_LIBS = $(Gdk_4_0_gir_MSVC_LIBS)
 GdkWin32_4_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
 GdkWin32_4_0_gir_MSVC_SCANNERFLAGS =	\
 	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkwin32.h"	\
-	--include-uninstalled=./Gdk-noinst-4.0.gir
+	--include-uninstalled=./Gdk-4.0.gir
 
 include $(top_srcdir)/build/Makefile.msvc-introspection
 

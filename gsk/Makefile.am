@@ -184,13 +184,13 @@ INTROSPECTION_INTERMEDIATE_ITEMS = \
 	$(top_builddir)/build/win32/gsk.enum.headers
 
 Gsk_4_0_gir_MSVC_FILES = $(introspection_files)
-Gsk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gsk_4_0_gir_EXPORT_PACKAGES)
-Gsk_4_0_gir_MSVC_INCLUDE_GIRS = $(Gsk_4_0_gir_INCLUDES)
-Gsk_4_0_gir_MSVC_LIBS = gsk-4.0
+Gsk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gsk_noinst_4_0_gir_EXPORT_PACKAGES)
+Gsk_4_0_gir_MSVC_INCLUDE_GIRS = $(Gsk_noinst_4_0_gir_INCLUDES)
+Gsk_4_0_gir_MSVC_LIBS = gtk-4
 Gsk_4_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
 Gsk_4_0_gir_MSVC_SCANNERFLAGS =			\
 	--add-include-path=.			\
-	--include-uninstalled=../gdk/Gdk-noinst-4.0.gir
+	--include-uninstalled=../gdk/Gdk-4.0.gir
 
 include $(top_srcdir)/build/Makefile.msvc-introspection
 

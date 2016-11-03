@@ -1458,7 +1458,7 @@ Gtk_4_0_gir_MSVC_FILES =		\
 
 Gtk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gtk_4_0_gir_EXPORT_PACKAGES)
 Gtk_4_0_gir_MSVC_INCLUDE_GIRS = Atk-1.0
-Gtk_4_0_gir_MSVC_LIBS = gtk-4.0 gdk-4.0
+Gtk_4_0_gir_MSVC_LIBS = gtk-4
 Gtk_4_0_gir_MSVC_CFLAGS = $(GTK_MSVC_GIR_CFLAGS)
 Gtk_4_0_gir_MSVC_SCANNERFLAGS = --warn-all --add-include-path=. --include-uninstalled=./Gdk-4.0.gir --include-uninstalled=./Gsk-4.0.gir
 
