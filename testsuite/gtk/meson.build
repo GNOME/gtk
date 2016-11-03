@@ -4,10 +4,6 @@ test('gtk/accel test', test_accel)
 test_accessible = executable('accessible', 'accessible.c', dependencies: libgtk_dep)
 test('gtk/accessible test', test_accessible)
 
-test_action = executable('action', 'action.c', dependencies: libgtk_dep)
-test('gtk/action test', test_action)
-
-
 test_adjustment = executable('adjustment', 'adjustment.c', dependencies: libgtk_dep)
 test('gtk/adjustment test', test_adjustment)
 
