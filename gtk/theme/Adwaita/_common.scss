@@ -1569,11 +1569,18 @@ headerbar {
   }
 }
 
-headerbar {
+headerbar { // headerbar border rounding
   window:not(.tiled):not(.maximized):not(.solid-csd) separator:first-child + &, // tackles the paned container case
   window:not(.tiled):not(.maximized):not(.solid-csd) &:first-child { &:backdrop, & { border-top-left-radius: 7px; }}
-
   window:not(.tiled):not(.maximized):not(.solid-csd) &:last-child { &:backdrop, & { border-top-right-radius: 7px; }}
+  window:not(.tiled):not(.maximized):not(.solid-csd) stack & { // tackles the stacked headerbars case
+    &:first-child, &:last-child {
+      &:backdrop, & {
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+      }
+    }
+  }
 }
 
 .titlebar:not(headerbar) {
