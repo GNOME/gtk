@@ -36,7 +36,6 @@
 #include "gdkdisplay-broadway.h"
 
 #include "gdkbroadwaycursor.h"
-#include "gdkbroadwayvisual.h"
 #include "gdkbroadwaywindow.h"
 
 void _gdk_broadway_resync_windows (void);
@@ -96,7 +95,6 @@ void _gdk_broadway_screen_size_changed (GdkScreen *screen,
 void _gdk_broadway_events_got_input      (BroadwayInputMsg *message);
 
 void _gdk_broadway_screen_init_root_window (GdkScreen *screen);
-void _gdk_broadway_screen_init_visuals (GdkScreen *screen);
 void _gdk_broadway_display_init_dnd (GdkDisplay *display);
 GdkDisplay * _gdk_broadway_display_open (const gchar *display_name);
 void _gdk_broadway_display_queue_events (GdkDisplay *display);

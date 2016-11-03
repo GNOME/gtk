@@ -29,8 +29,7 @@ libgdkbroadwayinclude_HEADERS = 	\
 	gdkbroadwaydisplay.h		\
 	gdkbroadwaywindow.h		\
 	gdkbroadwaycursor.h		\
-	gdkbroadwaymonitor.h		\
-	gdkbroadwayvisual.h
+	gdkbroadwaymonitor.h
 
 EXTRA_DIST += toarray.pl
 
@@ -73,7 +72,6 @@ libgdk_broadway_la_SOURCES =		\
 	gdkscreen-broadway.h	\
 	gdkselection-broadway.c	\
 	gdktestutils-broadway.c	\
-	gdkvisual-broadway.c	\
 	gdkwindow-broadway.c	\
 	gdkwindow-broadway.h	\
 	gdkprivate-broadway.h   \

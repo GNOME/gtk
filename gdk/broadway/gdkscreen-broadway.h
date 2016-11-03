@@ -23,7 +23,6 @@
 #define __GDK_BROADWAY_SCREEN_H__
 
 #include <gdk/gdkscreenprivate.h>
-#include <gdk/gdkvisual.h>
 #include "gdkprivate-broadway.h"
 
 G_BEGIN_DECLS
@@ -46,16 +45,6 @@ struct _GdkBroadwayScreen
 
   GdkDisplay *display;
   GdkWindow *root_window;
-
-  /* Visual Part */
-  GdkVisual **visuals;
-  gint nvisuals;
-  GdkVisual *system_visual;
-  GdkVisual *rgba_visual;
-  gint available_depths[7];
-  gint navailable_depths;
-  GdkVisualType available_types[6];
-  gint navailable_types;
 };
 
 struct _GdkBroadwayScreenClass

@@ -99,15 +99,9 @@ static void
 gdk_broadway_screen_finalize (GObject *object)
 {
   GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (object);
-  gint          i;
 
   if (broadway_screen->root_window)
     g_object_unref (broadway_screen->root_window);
-
-  /* Visual Part */
-  for (i = 0; i < broadway_screen->nvisuals; i++)
-    g_object_unref (broadway_screen->visuals[i]);
-  g_free (broadway_screen->visuals);
 
   G_OBJECT_CLASS (gdk_broadway_screen_parent_class)->finalize (object);
 }
@@ -123,7 +117,6 @@ _gdk_broadway_screen_new (GdkDisplay *display,
 
   broadway_screen = GDK_BROADWAY_SCREEN (screen);
   broadway_screen->display = display;
-  _gdk_broadway_screen_init_visuals (screen);
   _gdk_broadway_screen_init_root_window (screen);
 
   return screen;
