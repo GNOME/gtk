@@ -915,18 +915,16 @@ gdk_x11_screen_init_gl (GdkScreen *screen)
 #define MAX_GLX_ATTRS   30
 
 static gboolean
-find_fbconfig_for_visual (GdkDisplay   *display,
-			  GdkVisual    *visual,
-                          GLXFBConfig  *fb_config_out,
-                          GError      **error)
+find_fbconfig (GdkDisplay   *display,
+               GLXFBConfig  *fb_config_out,
+               GError      **error)
 {
   static int attrs[MAX_GLX_ATTRS];
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   GLXFBConfig *configs;
   int n_configs, i;
-  gboolean use_rgba;
   gboolean retval = FALSE;
-  VisualID xvisual_id = XVisualIDFromVisual(gdk_x11_visual_get_xvisual (visual));
+  VisualID xvisual_id = XVisualIDFromVisual (gdk_x11_visual_get_xvisual (gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (display))));
 
   i = 0;
   attrs[i++] = GLX_DRAWABLE_TYPE;
@@ -945,8 +943,7 @@ find_fbconfig_for_visual (GdkDisplay   *display,
   attrs[i++] = GLX_BLUE_SIZE;
   attrs[i++] = 1;
 
-  use_rgba = (visual == gdk_screen_get_rgba_visual (gdk_display_get_default_screen (display)));
-  if (use_rgba)
+  if (gdk_display_is_rgba (display))
     {
       attrs[i++] = GLX_ALPHA_SIZE;
       attrs[i++] = 1;
@@ -1263,7 +1260,6 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 {
   GdkDisplay *display;
   GdkX11GLContext *context;
-  GdkVisual *visual;
   GLXFBConfig config;
 
   display = gdk_window_get_display (window);
@@ -1276,8 +1272,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
       return NULL;
     }
 
-  visual = gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (display));
-  if (!find_fbconfig_for_visual (display, visual, &config, error))
+  if (!find_fbconfig (display, &config, error))
     return NULL;
 
   context = g_object_new (GDK_TYPE_X11_GL_CONTEXT,
