@@ -88,18 +88,6 @@ gdk_quartz_visual_class_init (GdkQuartzVisualClass *class)
 {
 }
 
-GdkVisual *
-_gdk_quartz_screen_get_rgba_visual (GdkScreen *screen)
-{
-  return rgba_visual;
-}
-
-GdkVisual*
-_gdk_quartz_screen_get_system_visual (GdkScreen *screen)
-{
-  return system_visual;
-}
-
 void
 _gdk_quartz_screen_init_visuals (GdkScreen *screen)
 {
@@ -108,14 +96,3 @@ _gdk_quartz_screen_init_visuals (GdkScreen *screen)
   gray_visual = create_gray_visual (screen);
 }
 
-GList*
-_gdk_quartz_screen_list_visuals (GdkScreen *screen)
-{
-  GList *visuals = NULL;
-
-  visuals = g_list_append (visuals, system_visual);
-  visuals = g_list_append (visuals, rgba_visual);
-  visuals = g_list_append (visuals, gray_visual);
-
-  return visuals;
-}

@@ -162,10 +162,7 @@ GdkScreen  *_gdk_quartz_screen_new                      (void);
 void        _gdk_quartz_screen_update_window_sizes      (GdkScreen *screen);
 
 /* Screen methods - visual */
-GdkVisual *   _gdk_quartz_screen_get_rgba_visual            (GdkScreen      *screen);
-GdkVisual *   _gdk_quartz_screen_get_system_visual          (GdkScreen      *screen);
 void          _gdk_quartz_screen_init_visuals               (GdkScreen      *screen);
-GList *       _gdk_quartz_screen_list_visuals               (GdkScreen      *screen);
 
 /* Screen methods - events */
 gboolean    _gdk_quartz_screen_get_setting              (GdkScreen   *screen,

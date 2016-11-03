@@ -291,32 +291,6 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
     }
 }
 
-GdkVisual *
-_gdk_x11_screen_get_system_visual (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return ((GdkVisual *) GDK_X11_SCREEN (screen)->system_visual);
-}
-
-GList *
-_gdk_x11_screen_list_visuals (GdkScreen *screen)
-{
-  GList *list;
-  GdkX11Screen *x11_screen;
-  guint i;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  x11_screen = GDK_X11_SCREEN (screen);
-
-  list = NULL;
-
-  for (i = 0; i < x11_screen->nvisuals; ++i)
-    list = g_list_append (list, x11_screen->visuals[i]);
-
-  return list;
-}
-
 /**
  * gdk_x11_screen_lookup_visual:
  * @screen: (type GdkX11Screen): a #GdkScreen.

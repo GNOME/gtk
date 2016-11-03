@@ -110,28 +110,3 @@ _gdk_broadway_screen_init_visuals (GdkScreen *screen)
   broadway_screen->nvisuals = nvisuals;
 }
 
-GdkVisual *
-_gdk_broadway_screen_get_system_visual (GdkScreen * screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return ((GdkVisual *) GDK_BROADWAY_SCREEN (screen)->system_visual);
-}
-
-GList *
-_gdk_broadway_screen_list_visuals (GdkScreen *screen)
-{
-  GList *list;
-  GdkBroadwayScreen *broadway_screen;
-  guint i;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  broadway_screen = GDK_BROADWAY_SCREEN (screen);
-
-  list = NULL;
-
-  for (i = 0; i < broadway_screen->nvisuals; ++i)
-    list = g_list_append (list, broadway_screen->visuals[i]);
-
-  return list;
-}

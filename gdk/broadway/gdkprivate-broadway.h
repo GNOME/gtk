@@ -90,8 +90,6 @@ gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
 					guint            keycode);
 
 void _gdk_broadway_screen_events_init   (GdkScreen *screen);
-GdkVisual *_gdk_broadway_screen_get_system_visual (GdkScreen * screen);
-GList *_gdk_broadway_screen_list_visuals (GdkScreen *screen);
 void _gdk_broadway_screen_size_changed (GdkScreen *screen, 
 					BroadwayInputScreenResizeNotify *msg);
 

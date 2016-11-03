@@ -26,7 +26,6 @@ TEST_PROGS += 				\
 	rectangle			\
 	rgba				\
 	seat				\
-	visual				\
 	$(NULL)
 
 CLEANFILES = 			\

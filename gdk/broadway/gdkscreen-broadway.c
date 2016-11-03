@@ -112,14 +112,6 @@ gdk_broadway_screen_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_broadway_screen_parent_class)->finalize (object);
 }
 
-static GdkVisual *
-gdk_broadway_screen_get_rgba_visual (GdkScreen *screen)
-{
-  GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (screen);
-
-  return broadway_screen->rgba_visual;
-}
-
 GdkScreen *
 _gdk_broadway_screen_new (GdkDisplay *display,
 			  gint	 screen_number)
@@ -162,8 +154,5 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
   screen_class->get_display = gdk_broadway_screen_get_display;
   screen_class->get_root_window = gdk_broadway_screen_get_root_window;
   screen_class->get_setting = gdk_broadway_screen_get_setting;
-  screen_class->get_rgba_visual = gdk_broadway_screen_get_rgba_visual;
-  screen_class->get_system_visual = _gdk_broadway_screen_get_system_visual;
-  screen_class->list_visuals = _gdk_broadway_screen_list_visuals;
 }
 

@@ -471,8 +471,5 @@ gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
   screen_class->get_monitor_geometry = gdk_quartz_screen_get_monitor_geometry;
   screen_class->get_monitor_workarea = gdk_quartz_screen_get_monitor_workarea;
   screen_class->get_setting = _gdk_quartz_screen_get_setting;
-  screen_class->get_rgba_visual = _gdk_quartz_screen_get_rgba_visual;
-  screen_class->get_system_visual = _gdk_quartz_screen_get_system_visual;
-  screen_class->list_visuals = _gdk_quartz_screen_list_visuals;
   screen_class->get_monitor_scale_factor = _gdk_quartz_screen_get_monitor_scale_factor;
 }

@@ -379,30 +379,6 @@ gdk_win32_screen_get_root_window (GdkScreen *screen)
   return GDK_WIN32_SCREEN (screen)->root_window;
 }
 
-static GdkVisual *
-gdk_win32_screen_get_system_visual (GdkScreen *screen)
-{
-  return GDK_WIN32_SCREEN (screen)->system_visual;
-}
-
-static GdkVisual *
-gdk_win32_screen_get_rgba_visual (GdkScreen *screen)
-{
-  return GDK_WIN32_SCREEN (screen)->rgba_visual;
-}
-
-static GList *
-gdk_win32_screen_list_visuals (GdkScreen *screen)
-{
-  GdkWin32Screen *win32_screen = GDK_WIN32_SCREEN (screen);
-  GList *result = NULL;
-
-  result = g_list_append (result, win32_screen->rgba_visual);
-  result = g_list_append (result, win32_screen->system_visual);
-
-  return result;
-}
-
 static void
 gdk_win32_screen_finalize (GObject *object)
 {
@@ -420,7 +396,4 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   screen_class->get_display = gdk_win32_screen_get_display;
   screen_class->get_root_window = gdk_win32_screen_get_root_window;
   screen_class->get_setting = _gdk_win32_screen_get_setting;
-  screen_class->get_system_visual = gdk_win32_screen_get_system_visual;
-  screen_class->get_rgba_visual = gdk_win32_screen_get_rgba_visual;
-  screen_class->list_visuals = gdk_win32_screen_list_visuals;
 }

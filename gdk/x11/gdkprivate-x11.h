@@ -48,10 +48,6 @@
 void _gdk_x11_error_handler_push (void);
 void _gdk_x11_error_handler_pop  (void);
 
-GdkVisual *   _gdk_x11_screen_get_system_visual          (GdkScreen      *screen);
-GList *       _gdk_x11_screen_list_visuals               (GdkScreen      *screen);
-
-
 void          gdk_display_setup_window_visual            (GdkDisplay     *display,
                                                           gint            depth,
                                                           Visual         *visual,

@@ -40,10 +40,7 @@
  * combines several physical monitors (see gdk_screen_get_n_monitors()).
  *
  * GdkScreen is used throughout GDK and GTK+ to specify which screen
- * the top level windows are to be displayed on. it is also used to
- * query the screen specification and default settings such as
- * the default visual (gdk_screen_get_system_visual()), the dimensions
- * of the physical monitors (gdk_screen_get_monitor_geometry()), etc.
+ * the top level windows are to be displayed on.
  */
 
 
@@ -280,82 +277,6 @@ gdk_screen_get_root_window (GdkScreen *screen)
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   return GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
-}
-
-/**
- * gdk_screen_list_visuals:
- * @screen: the relevant #GdkScreen.
- *
- * Lists the available visuals for the specified @screen.
- * A visual describes a hardware image data format.
- * For example, a visual might support 24-bit color, or 8-bit color,
- * and might expect pixels to be in a certain format.
- *
- * Call g_list_free() on the return value when you’re finished with it.
- *
- * Returns: (transfer container) (element-type GdkVisual):
- *     a list of visuals; the list must be freed, but not its contents
- *
- * Since: 2.2
- **/
-GList *
-gdk_screen_list_visuals (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return GDK_SCREEN_GET_CLASS (screen)->list_visuals (screen);
-}
-
-/**
- * gdk_screen_get_system_visual:
- * @screen: a #GdkScreen.
- *
- * Get the system’s default visual for @screen.
- * This is the visual for the root window of the display.
- * The return value should not be freed.
- *
- * Returns: (transfer none): the system visual
- *
- * Since: 2.2
- **/
-GdkVisual *
-gdk_screen_get_system_visual (GdkScreen * screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_system_visual (screen);
-}
-
-/**
- * gdk_screen_get_rgba_visual:
- * @screen: a #GdkScreen
- *
- * Gets a visual to use for creating windows with an alpha channel.
- * The windowing system on which GTK+ is running
- * may not support this capability, in which case %NULL will
- * be returned. Even if a non-%NULL value is returned, its
- * possible that the window’s alpha channel won’t be honored
- * when displaying the window on the screen: in particular, for
- * X an appropriate windowing manager and compositing manager
- * must be running to provide appropriate display.
- *
- * This functionality is not implemented in the Windows backend.
- *
- * For setting an overall opacity for a top-level window, see
- * gdk_window_set_opacity().
- *
- * Returns: (nullable) (transfer none): a visual to use for windows
- *     with an alpha channel or %NULL if the capability is not
- *     available.
- *
- * Since: 2.8
- **/
-GdkVisual *
-gdk_screen_get_rgba_visual (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_rgba_visual (screen);
 }
 
 /**

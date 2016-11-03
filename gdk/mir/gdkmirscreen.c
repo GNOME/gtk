@@ -390,27 +390,6 @@ gdk_mir_screen_get_monitor_workarea (GdkScreen    *screen,
   gdk_mir_screen_get_monitor_geometry (screen, monitor_num, dest);
 }
 
-static GList *
-gdk_mir_screen_list_visuals (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_list_visuals\n");
-  return g_list_append (NULL, GDK_MIR_SCREEN (screen)->visual);
-}
-
-static GdkVisual *
-gdk_mir_screen_get_system_visual (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_system_visual\n");
-  return GDK_MIR_SCREEN (screen)->visual;
-}
-
-static GdkVisual *
-gdk_mir_screen_get_rgba_visual (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_rgba_visual\n");
-  return GDK_MIR_SCREEN (screen)->visual;
-}
-
 static gboolean
 gdk_mir_screen_get_setting (GdkScreen   *screen,
                             const gchar *name,
@@ -709,9 +688,6 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
   screen_class->get_monitor_plug_name = gdk_mir_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_mir_screen_get_monitor_geometry;
   screen_class->get_monitor_workarea = gdk_mir_screen_get_monitor_workarea;
-  screen_class->list_visuals = gdk_mir_screen_list_visuals;
-  screen_class->get_system_visual = gdk_mir_screen_get_system_visual;
-  screen_class->get_rgba_visual = gdk_mir_screen_get_rgba_visual;
   screen_class->get_setting = gdk_mir_screen_get_setting;
   screen_class->get_monitor_scale_factor = gdk_mir_screen_get_monitor_scale_factor;
 }

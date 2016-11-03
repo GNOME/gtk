@@ -117,18 +117,6 @@ gdk_wayland_screen_get_root_window (GdkScreen *screen)
   return GDK_WAYLAND_SCREEN (screen)->root_window;
 }
 
-static GdkVisual *
-gdk_wayland_screen_get_system_visual (GdkScreen * screen)
-{
-  return (GdkVisual *) GDK_WAYLAND_SCREEN (screen)->visual;
-}
-
-static GdkVisual *
-gdk_wayland_screen_get_rgba_visual (GdkScreen *screen)
-{
-  return (GdkVisual *) GDK_WAYLAND_SCREEN (screen)->visual;
-}
-
 static void
 notify_setting (GdkScreen   *screen,
                 const gchar *setting)
@@ -646,20 +634,6 @@ _gdk_wayland_visual_init (GdkWaylandVisual *visual)
 {
 }
 
-static GList *
-gdk_wayland_screen_list_visuals (GdkScreen *screen)
-{
-  GList *list;
-  GdkWaylandScreen *screen_wayland;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  screen_wayland = GDK_WAYLAND_SCREEN (screen);
-
-  list = g_list_append (NULL, screen_wayland->visual);
-
-  return list;
-}
-
 #define GDK_TYPE_WAYLAND_VISUAL              (_gdk_wayland_visual_get_type ())
 #define GDK_WAYLAND_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_VISUAL, GdkWaylandVisual))
 
@@ -714,10 +688,7 @@ _gdk_wayland_screen_class_init (GdkWaylandScreenClass *klass)
 
   screen_class->get_display = gdk_wayland_screen_get_display;
   screen_class->get_root_window = gdk_wayland_screen_get_root_window;
-  screen_class->get_system_visual = gdk_wayland_screen_get_system_visual;
-  screen_class->get_rgba_visual = gdk_wayland_screen_get_rgba_visual;
   screen_class->get_setting = gdk_wayland_screen_get_setting;
-  screen_class->list_visuals = gdk_wayland_screen_list_visuals;
 }
 
 static void

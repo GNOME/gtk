@@ -9996,10 +9996,6 @@ gdk_window_begin_move_drag (GdkWindow *window,
  * with alpha, or use gtk_widget_set_opacity() to set an overall opacity
  * for your widgets.
  *
- * For child windows this function only works for non-native windows.
- *
- * For setting up per-pixel alpha topelevels, see gdk_screen_get_rgba_visual().
- *
  * Support for non-toplevel windows was added in 3.8.
  *
  * Since: 2.12
