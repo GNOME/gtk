@@ -1461,7 +1461,7 @@ gtk_popover_key_press (GtkWidget   *widget,
 
   if (event->keyval == GDK_KEY_Escape)
     {
-      gtk_widget_hide (widget);
+      gtk_popover_popdown (GTK_POPOVER (widget));
       return GDK_EVENT_STOP;
     }
 
