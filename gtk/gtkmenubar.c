@@ -72,7 +72,6 @@ struct _GtkMenuBarPrivate
   GtkPackDirection pack_direction;
   GtkPackDirection child_pack_direction;
 
-  GdkWindow *input_window;
   GtkCssGadget *gadget;
 };
 
@@ -97,8 +96,6 @@ static void gtk_menu_bar_size_allocate     (GtkWidget       *widget,
 					    GtkAllocation   *allocation);
 static gint gtk_menu_bar_draw              (GtkWidget       *widget,
                                             cairo_t         *cr);
-static void gtk_menu_bar_realize           (GtkWidget       *widget);
-static void gtk_menu_bar_unrealize         (GtkWidget       *widget);
 static void gtk_menu_bar_hierarchy_changed (GtkWidget       *widget,
 					    GtkWidget       *old_toplevel);
 static gint gtk_menu_bar_get_popup_delay   (GtkMenuShell    *menu_shell);
@@ -147,11 +144,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   widget_class->measure = gtk_menu_bar_measure_;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
-  widget_class->size_allocate = gtk_menu_bar_size_allocate;
-  widget_class->size_allocate = gtk_menu_bar_size_allocate;
   widget_class->draw = gtk_menu_bar_draw;
-  widget_class->realize = gtk_menu_bar_realize;
-  widget_class->unrealize = gtk_menu_bar_unrealize;
   widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
 
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
@@ -322,42 +315,6 @@ gtk_menu_bar_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-gtk_menu_bar_realize (GtkWidget *widget)
-{
-  GtkMenuBar *menubar = GTK_MENU_BAR (widget);
-  GtkMenuBarPrivate *priv = menubar->priv;
-  GtkAllocation allocation;
-
-  GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->input_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                             gtk_widget_get_events (widget)
-                                             | GDK_BUTTON_PRESS_MASK
-                                             | GDK_BUTTON_RELEASE_MASK
-                                             | GDK_POINTER_MOTION_MASK
-                                             | GDK_KEY_PRESS_MASK
-                                             | GDK_ENTER_NOTIFY_MASK
-                                             | GDK_LEAVE_NOTIFY_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->input_window);
-}
-
-static void
-gtk_menu_bar_unrealize (GtkWidget *widget)
-{
-  GtkMenuBar *menubar = GTK_MENU_BAR (widget);
-  GtkMenuBarPrivate *priv = menubar->priv;
-
-  gtk_widget_unregister_window (widget, priv->input_window);
-  gdk_window_destroy (priv->input_window);
-  priv->input_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->unrealize (widget);
 }
 
 static void
@@ -601,22 +558,15 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 {
   GtkMenuBar *menu_bar = GTK_MENU_BAR (widget);
   GtkMenuBarPrivate *priv = menu_bar->priv;
-  GtkAllocation clip, content_allocation;
+  GtkAllocation clip;
 
-  gtk_widget_set_allocation (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->size_allocate (widget, allocation);
 
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->input_window,
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
-  content_allocation = *allocation;
   gtk_css_gadget_allocate (priv->gadget,
-                           &content_allocation,
+                           allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
-  clip.x += allocation->x;
-  clip.y += allocation->y;
   gtk_widget_set_clip (widget, &clip);
 }
 
