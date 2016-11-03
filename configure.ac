@@ -1999,7 +1999,6 @@ gdk/broadway/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile
 gdk/win32/rc/Makefile
-gdk/win32/rc/gdk.rc
 gdk/quartz/Makefile
 gdk/wayland/Makefile
 gdk/mir/Makefile
