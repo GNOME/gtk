@@ -23,7 +23,6 @@ gdk_sources = files([
   'gdkkeys.c',
   'gdkkeyuni.c',
   'gdkmonitor.c',
-  'gdkoffscreenwindow.c',
   'gdkpango.c',
   'gdkpixbuf-drawable.c',
   'gdkproperty.c',
@@ -268,10 +267,7 @@ gdkresources = gnome.compile_resources(
 )
 
 
-deprecated_gdk_sources = ['deprecated/gdkcolor.c']
-deprecated_h_sources = files(['deprecated/gdkcolor.h'])
-
-gdk_headers = gdk_public_h_sources + deprecated_h_sources + gdk_private_h_sources
+gdk_headers = gdk_public_h_sources  + gdk_private_h_sources
 
 gdkenum_h = custom_target(
   'gdkenum_h',
@@ -314,14 +310,14 @@ gdkconfig = configure_file(
   input  : 'gdkconfig.h.meson',
   output : 'gdkconfig.h',
   configuration : cdata,
-  install_dir: 'include/gtk-3.0/gdk/' # XXX ???
+  install_dir: 'include/gtk-4.0/gdk/' # XXX ???
 )
 
 gdkversionmacros = configure_file(
   input  : 'gdkversionmacros.h.in',
   output : 'gdkversionmacros.h',
   configuration: cdata,
-  install_dir: 'include/gtk-3.0/gdk/' # XXX ???
+  install_dir: 'include/gtk-4.0/gdk/' # XXX ???
 )
 
 xinc = include_directories('x11')
@@ -344,7 +340,6 @@ gdk_deps = [
 gdk_sources = [
   gdkconfig,
   gdk_sources,
-  deprecated_gdk_sources,
   gdkenum_c, gdkenum_h,
   gdkmarshal_c, gdkmarshal_h,
   gdkresources,
@@ -369,7 +364,7 @@ if x11_enabled
     gdk_x_private_sources
   ]
 
-  install_headers(gdk_x_public_headers, subdir: 'gtk-3.0/gdk/x11/')
+  # install_headers(gdk_x_public_headers, subdir: 'gtk-3.0/gdk/x11/')
 endif
 
 if wayland_enabled
@@ -387,7 +382,7 @@ if wayland_enabled
     gdk_wayland_private_sources
   ]
 
-  install_headers(gdk_wayland_public_headers, subdir: 'gtk-3.0/gdk/wayland/')
+  # install_headers(gdk_wayland_public_headers, subdir: 'gtk-3.0/gdk/wayland/')
 endif
 
 if broadway_enabled
@@ -401,15 +396,13 @@ if broadway_enabled
 endif
 
 
-install_headers(gdk_public_h_sources, subdir: 'gtk-3.0/gdk/')
-install_headers(deprecated_h_sources, subdir: 'gtk-3.0/gdk/deprecated/')
+# install_headers(gdk_public_h_sources, subdir: 'gtk-3.0/gdk/')
 
-libgdk = shared_library('gdk',
+libgdk = static_library('gdk',
   sources: [gdk_sources, gdkconfig, gdkenum_h],
   c_args: ['-DHAVE_CONFIG_H', '-DGDK_COMPILATION'],
   include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps,
-  install: true
 )
 
 

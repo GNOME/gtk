@@ -41,12 +41,6 @@ test_print = executable('testprint',
   dependencies: libgtk_dep
 )
 
-test_offscren = executable('testoffscreen',
-  'testoffscreen.c',
-  'gtkoffscreenbox.c',
-  'gtkoffscreenbox.h',
-  dependencies: libgtk_dep
-)
 test_gdkgears = executable('gdkgears',
   'gdkgears.c',
   'gtkgears.c',
@@ -66,8 +60,6 @@ test_entryicons = executable('testentryicons', 'testentryicons.c', dependencies:
 test_filechooser = executable('testfilechooser', 'testfilechooser.c', dependencies: libgtk_dep)
 test_filechooserbutton = executable('testfilechooserbutton', 'testfilechooserbutton.c', dependencies: libgtk_dep)
 test_flowbox = executable('testflowbox', 'testflowbox.c', dependencies: libgtk_dep)
-test_fontselection = executable('testfontselection', 'testfontselection.c', dependencies: libgtk_dep)
-test_fontselectiondialog = executable('testfontselectiondialog', 'testfontselectiondialog.c', dependencies: libgtk_dep)
 test_fontchooser = executable('testfontchooser', 'testfontchooser.c', dependencies: libgtk_dep)
 test_fontoptions = executable('testfontoptions', 'testfontoptions.c', dependencies: libgtk_dep)
 test_grid = executable('testgrid', 'testgrid.c', dependencies: libgtk_dep)
@@ -87,18 +79,13 @@ test_toolbar = executable('testtoolbar', 'testtoolbar.c', dependencies: libgtk_d
 test_toolbar2 = executable('testtoolbar2', 'testtoolbar2.c', dependencies: libgtk_dep)
 test_menubutton = executable('testmenubutton', 'testmenubutton.c', dependencies: libgtk_dep)
 test_spinbutton = executable('testspinbutton', 'testspinbutton.c', dependencies: libgtk_dep)
-test_statusicon = executable('teststatusicon', 'teststatusicon.c', dependencies: libgtk_dep)
-test_merge = executable('testmerge', 'testmerge.c', dependencies: libgtk_dep)
-test_actions = executable('testactions', 'testactions.c', dependencies: libgtk_dep)
 test_baseline = executable('testbaseline', 'testbaseline.c', dependencies: libgtk_dep)
 test_bbox = executable('testbbox', 'testbbox.c', dependencies: libgtk_dep)
 test_buttons = executable('testbuttons', 'testbuttons.c', dependencies: libgtk_dep)
 test_frame = executable('testframe', 'testframe.c', dependencies: libgtk_dep)
-test_geometry = executable('testgeometry', 'testgeometry.c', dependencies: libgtk_dep)
 test_giconpixbuf = executable('testgiconpixbuf', 'testgiconpixbuf.c', dependencies: libgtk_dep)
 test_iconview = executable('testiconview', 'testiconview.c', dependencies: libgtk_dep)
 test_iconview_keynav = executable('testiconview_keynav', 'testiconview-keynav.c', dependencies: libgtk_dep)
-test_numerableicon = executable('testnumerableicon', 'testnumerableicon.c', dependencies: libgtk_dep)
 test_recentchooser = executable('testrecentchooser', 'testrecentchooser.c', dependencies: libgtk_dep)
 test_grouping = executable('testgrouping', 'testgrouping.c', dependencies: libgtk_dep)
 test_tooltips = executable('testtooltips', 'testtooltips.c', dependencies: libgtk_dep)
@@ -107,11 +94,9 @@ test_volumebutton = executable('testvolumebutton', 'testvolumebutton.c', depende
 test_scrolledwindow = executable('testscrolledwindow', 'testscrolledwindow.c', dependencies: libgtk_dep)
 test_cellarea = executable('testcellarea', 'testcellarea.c', dependencies: libgtk_dep)
 test_treemenu = executable('testtreemenu', 'testtreemenu.c', dependencies: libgtk_dep)
-test_offscreenwindow = executable('testoffscreenwindow', 'testoffscreenwindow.c', dependencies: libgtk_dep)
 test_overlay = executable('testoverlay', 'testoverlay.c', dependencies: libgtk_dep)
 test_overlaystyleclass = executable('testoverlaystyleclass', 'testoverlaystyleclass.c', dependencies: libgtk_dep)
 test_appchooser = executable('testappchooser', 'testappchooser.c', dependencies: libgtk_dep)
-test_windows = executable('testwindows', 'testwindows.c', dependencies: libgtk_dep)
 test_expand = executable('testexpand', 'testexpand.c', dependencies: libgtk_dep)
 test_expander = executable('testexpander', 'testexpander.c', dependencies: libgtk_dep)
 test_switch = executable('testswitch', 'testswitch.c', dependencies: libgtk_dep)
@@ -175,7 +160,6 @@ test_richtext = executable('testrichtext', 'testrichtext.c', dependencies: libgt
 test_scale = executable('testscale', 'testscale.c', dependencies: libgtk_dep)
 test_selection = executable('testselection', 'testselection.c', dependencies: libgtk_dep)
 test_selectionmode = executable('testselectionmode', 'testselectionmode.c', dependencies: libgtk_dep)
-test_stockbuttonmenu = executable('teststockbuttonmenu', 'teststockbuttonmenu.c', dependencies: libgtk_dep)
 test_stresstest_toolbar = executable('stresstest-oolbar', 'stresstest-toolbar.c', dependencies: libgtk_dep)
 test_verticalcells = executable('testverticalcells', 'testverticalcells.c', dependencies: libgtk_dep)
 test_treestoretest = executable('treestoretest', 'treestoretest.c', dependencies: libgtk_dep)
@@ -190,20 +174,6 @@ test_splitheaders = executable('testsplitheaders', 'testsplitheaders.c', depende
 test_actionbar = executable('testactionbar', 'testactionbar.c', dependencies: libgtk_dep)
 test_popup = executable('testpopup', 'testpopup.c', dependencies: libgtk_dep)
 test_popupat = executable('testpopupat', 'testpopupat.c', dependencies: libgtk_dep)
-
-# Conditionally compiled tests
-if x11_enabled
-  test_socket = executable('testsocket',
-    'testsocket.c',
-    'testsocket_common.c',
-    dependencies: libgtk_dep
-  )
-  test_socket_child = executable('testsocket_child',
-    'testsocket_child.c',
-    'testsocket_common.c',
-    dependencies: libgtk_dep
-  )
-endif
 
 if os_linux
   test_fontchooserdialog = executable('testfontchooserdialog', 'testfontchooserdialog.c', dependencies: libgtk_dep)

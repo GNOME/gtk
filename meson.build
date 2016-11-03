@@ -1,5 +1,5 @@
 project('gtk+-3.0', 'c',
-        version: '3.22.0',
+        version: '3.90.0',
         default_options: [
           'buildtype=debugoptimized',
           'c_std=gnu89',
@@ -150,7 +150,6 @@ foreach f : check_functions
   endif
 endforeach
 
-#
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with
 # a stable GTK version.
@@ -181,6 +180,7 @@ colord_dep     = dependency('colord', version: '>= 0.1.9', required: false)
 fontconfig_dep = dependency('fontconfig')
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: '>= 0.2.0')
+graphene_dep   = dependency('graphene-1.0')
 
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  '>= 1.9.91')
@@ -259,6 +259,7 @@ configure_file(
 )
 
 subdir('gdk')
+subdir('gsk')
 subdir('gtk')
 subdir('demos')
 subdir('tests')
