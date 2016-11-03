@@ -134,7 +134,7 @@ gtk_revealer_init (GtkRevealer *revealer)
   priv->current_pos = 0.0;
   priv->target_pos = 0.0;
 
-  gtk_widget_set_has_window ((GtkWidget*) revealer, TRUE);
+  gtk_widget_set_has_window ((GtkWidget*) revealer, FALSE);
   gtk_widget_set_redraw_on_allocate ((GtkWidget*) revealer, FALSE);
 }
 
@@ -341,7 +341,7 @@ gtk_revealer_real_realize (GtkWidget *widget)
   GtkRevealerTransitionType transition;
   GtkBorder padding;
 
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -349,7 +349,6 @@ gtk_revealer_real_realize (GtkWidget *widget)
     gdk_window_new_child (gtk_widget_get_parent_window (widget),
                           gtk_widget_get_events (widget),
                           &allocation);
-  gtk_widget_set_window (widget, priv->view_window);
   gtk_widget_register_window (widget, priv->view_window);
 
   gtk_revealer_get_child_allocation (revealer, &allocation, &child_allocation);
@@ -395,6 +394,10 @@ gtk_revealer_real_unrealize (GtkWidget *widget)
 
   gtk_widget_unregister_window (widget, priv->bin_window);
   gdk_window_destroy (priv->bin_window);
+  priv->bin_window = NULL;
+
+  gtk_widget_unregister_window (widget, priv->view_window);
+  gdk_window_destroy (priv->view_window);
   priv->view_window = NULL;
 
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->unrealize (widget);
@@ -640,6 +643,9 @@ static void
 gtk_revealer_real_unmap (GtkWidget *widget)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
+
+  gdk_window_hide (priv->view_window);
 
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->unmap (widget);
 
