@@ -915,7 +915,6 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   XClassHint *class_hint;
 
   unsigned int class;
-  const char *title;
   int depth;
 
   display_x11 = GDK_X11_DISPLAY (display);
@@ -1009,12 +1008,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-      if (attributes_mask & GDK_WA_TITLE)
-        title = attributes->title;
-      else
-        title = get_default_title ();
-
-      gdk_window_set_title (window, title);
+      gdk_window_set_title (window, get_default_title ());
 
       class_hint = XAllocClassHint ();
       class_hint->res_name = (char *) g_get_prgname ();

@@ -732,9 +732,9 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       remaining_mask &= ~GDK_WA_Y;
     }
 
-  if ((remaining_mask & ~(GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
+  if ((remaining_mask & ~(GDK_WA_TYPE_HINT)) != 0)
     g_warning ("_gdk_window_impl_new: uexpected attribute 0x%X",
-               remaining_mask & ~(GDK_WA_TITLE|GDK_WA_TYPE_HINT));
+               remaining_mask & ~(GDK_WA_TYPE_HINT));
 
   hparent = GDK_WINDOW_HWND (real_parent);
 
@@ -845,10 +845,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       y = (window->y + window->parent->abs_y - offset_y) * impl->window_scale;
     }
 
-  if (attributes_mask & GDK_WA_TITLE)
-    title = attributes->title;
-  else
-    title = get_default_title ();
+  title = get_default_title ();
   if (!title || !*title)
     title = "";
 

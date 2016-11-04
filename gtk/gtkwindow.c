@@ -6963,7 +6963,6 @@ gtk_window_realize (GtkWidget *widget)
         attributes.window_type = GDK_WINDOW_SUBSURFACE;
 #endif
 
-      attributes.title = priv->title;
       attributes.wclass = GDK_INPUT_OUTPUT;
 
       attributes_mask = 0;
@@ -6990,7 +6989,6 @@ gtk_window_realize (GtkWidget *widget)
       attributes.type_hint = priv->type_hint;
 
       attributes_mask |= GDK_WA_TYPE_HINT;
-      attributes_mask |= (priv->title ? GDK_WA_TITLE : 0);
 
       gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
     }
@@ -7028,6 +7026,9 @@ gtk_window_realize (GtkWidget *widget)
       _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
     gdk_window_set_transient_for (gdk_window,
                                   _gtk_widget_get_window (GTK_WIDGET (priv->transient_parent)));
+
+  if (priv->title)
+    gdk_window_set_title (gdk_window, priv->title);
 
   if (priv->wm_role)
     gdk_window_set_role (gdk_window, priv->wm_role);

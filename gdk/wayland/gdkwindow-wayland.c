@@ -663,7 +663,6 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWindowImplWayland *impl;
   GdkFrameClock *frame_clock;
-  const char *title;
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
@@ -693,12 +692,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-      if (attributes_mask & GDK_WA_TITLE)
-        title = attributes->title;
-      else
-        title = get_default_title ();
-
-      gdk_window_set_title (window, title);
+      gdk_window_set_title (window, get_default_title ());
       break;
 
     case GDK_WINDOW_CHILD:

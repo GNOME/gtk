@@ -817,7 +817,6 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
         NSRect content_rect;
         NSUInteger style_mask;
         int nx, ny;
-        const char *title;
 
         /* initWithContentRect will place on the mainScreen by default.
          * We want to select the screen to place on ourselves.  We need
@@ -855,12 +854,7 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 			                                          defer:NO
                                                                   screen:screen];
 
-	if (attributes_mask & GDK_WA_TITLE)
-	  title = attributes->title;
-	else
-	  title = get_default_title ();
-
-	gdk_window_set_title (window, title);
+	gdk_window_set_title (window, get_default_title ());
   
         [impl->toplevel setOpaque:NO];
         [impl->toplevel setBackgroundColor:[NSColor clearColor]];

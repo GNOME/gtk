@@ -172,10 +172,7 @@ _gdk_mir_window_impl_new (GdkDisplay *display, GdkWindow *window, GdkWindowAttr 
 
   impl->display = display;
 
-  if (attributes && attributes_mask & GDK_WA_TITLE)
-    impl->title = g_strdup (attributes->title);
-  else
-    impl->title = g_strdup (get_default_title ());
+  impl->title = g_strdup (get_default_title ());
 
   if (attributes && attributes_mask & GDK_WA_TYPE_HINT)
     impl->type_hint = attributes->type_hint;
