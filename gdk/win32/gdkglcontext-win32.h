@@ -26,7 +26,6 @@
 
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
-#include "gdkvisual.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkmain.h"

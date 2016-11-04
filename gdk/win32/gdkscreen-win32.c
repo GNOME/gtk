@@ -21,7 +21,6 @@
 #include "gdkscreenprivate.h"
 #include "gdkwin32screen.h"
 #include "gdkdisplayprivate.h"
-#include "gdkvisualprivate.h"
 #include "gdkdisplay-win32.h"
 #include "gdkmonitor-win32.h"
 
