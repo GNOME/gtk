@@ -273,7 +273,6 @@ struct _GdkWindowImplWin32
   guint zero_margins : 1;
   guint no_bg : 1;
   guint inhibit_configure : 1;
-  guint override_redirect : 1;
 
   /* Set to TRUE if window is using true layered mode adjustments
    * via UpdateLayeredWindow().

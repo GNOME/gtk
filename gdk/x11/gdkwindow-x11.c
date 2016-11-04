@@ -3148,28 +3148,6 @@ gdk_window_x11_input_shape_combine_region (GdkWindow       *window,
 #endif
 }
 
-
-static void
-gdk_x11_window_set_override_redirect (GdkWindow *window,
-				  gboolean override_redirect)
-{
-  XSetWindowAttributes attr;
-  
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
-    {
-      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-      attr.override_redirect = (override_redirect? True : False);
-      XChangeWindowAttributes (GDK_WINDOW_XDISPLAY (window),
-			       GDK_WINDOW_XID (window),
-			       CWOverrideRedirect,
-			       &attr);
-
-      impl->override_redirect = attr.override_redirect;
-    }
-}
-
 static void
 gdk_x11_window_set_accept_focus (GdkWindow *window,
 				 gboolean accept_focus)
@@ -5419,7 +5397,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->set_startup_id = gdk_x11_window_set_startup_id;
   impl_class->set_transient_for = gdk_x11_window_set_transient_for;
   impl_class->get_frame_extents = gdk_x11_window_get_frame_extents;
-  impl_class->set_override_redirect = gdk_x11_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_x11_window_set_accept_focus;
   impl_class->set_focus_on_map = gdk_x11_window_set_focus_on_map;
   impl_class->set_icon_list = gdk_x11_window_set_icon_list;

@@ -1175,13 +1175,6 @@ gdk_mir_window_impl_get_frame_extents (GdkWindow    *window,
 }
 
 static void
-gdk_mir_window_impl_set_override_redirect (GdkWindow *window,
-                                           gboolean   override_redirect)
-{
-  //g_printerr ("gdk_mir_window_impl_set_override_redirect window=%p\n", window);
-}
-
-static void
 gdk_mir_window_impl_set_accept_focus (GdkWindow *window,
                                       gboolean   accept_focus)
 {
@@ -1805,7 +1798,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->set_startup_id = gdk_mir_window_impl_set_startup_id;
   impl_class->set_transient_for = gdk_mir_window_impl_set_transient_for;
   impl_class->get_frame_extents = gdk_mir_window_impl_get_frame_extents;
-  impl_class->set_override_redirect = gdk_mir_window_impl_set_override_redirect;
   impl_class->set_accept_focus = gdk_mir_window_impl_set_accept_focus;
   impl_class->set_focus_on_map = gdk_mir_window_impl_set_focus_on_map;
   impl_class->set_icon_list = gdk_mir_window_impl_set_icon_list;

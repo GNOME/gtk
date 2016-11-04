@@ -538,9 +538,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_window_set_user_data         (GdkWindow     *window,
                                                 gpointer       user_data);
 GDK_AVAILABLE_IN_ALL
-void          gdk_window_set_override_redirect (GdkWindow     *window,
-                                                gboolean       override_redirect);
-GDK_AVAILABLE_IN_ALL
 gboolean      gdk_window_get_accept_focus      (GdkWindow     *window);
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_set_accept_focus      (GdkWindow     *window,

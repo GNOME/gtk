@@ -9144,9 +9144,8 @@ gdk_window_set_urgency_hint (GdkWindow *window,
  * gdk_window_move_resize().
  *
  * Note that on X11, this effect has no effect on windows
- * of type %GDK_WINDOW_TEMP or windows where override redirect
- * has been turned on via gdk_window_set_override_redirect()
- * since these windows are not resizable by the user.
+ * of type %GDK_WINDOW_TEMP since these windows are not resizable
+ * by the user.
  *
  * Since you can’t count on the windowing system doing the
  * constraints for programmatic resizes, you should generally
@@ -9290,28 +9289,6 @@ gdk_window_get_frame_extents (GdkWindow    *window,
                               GdkRectangle *rect)
 {
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_frame_extents (window, rect);
-}
-
-/**
- * gdk_window_set_override_redirect:
- * @window: a toplevel #GdkWindow
- * @override_redirect: %TRUE if window should be override redirect
- *
- * An override redirect window is not under the control of the window manager.
- * This means it won’t have a titlebar, won’t be minimizable, etc. - it will
- * be entirely under the control of the application. The window manager
- * can’t see the override redirect window at all.
- *
- * Override redirect should only be used for short-lived temporary
- * windows, such as popup menus. #GtkMenu uses an override redirect
- * window in its implementation, for example.
- *
- **/
-void
-gdk_window_set_override_redirect (GdkWindow *window,
-				  gboolean override_redirect)
-{
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_override_redirect (window, override_redirect);
 }
 
 /**

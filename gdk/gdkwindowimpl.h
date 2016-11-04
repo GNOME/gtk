@@ -186,8 +186,6 @@ struct _GdkWindowImplClass
 					 GdkWindow *parent);
   void         (* get_frame_extents)    (GdkWindow    *window,
 					 GdkRectangle *rect);
-  void         (* set_override_redirect) (GdkWindow *window,
-					  gboolean override_redirect);
   void         (* set_accept_focus)     (GdkWindow *window,
 					 gboolean accept_focus);
   void         (* set_focus_on_map)     (GdkWindow *window,

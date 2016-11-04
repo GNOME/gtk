@@ -1967,13 +1967,6 @@ gdk_window_quartz_input_shape_combine_region (GdkWindow       *window,
 }
 
 static void
-gdk_quartz_window_set_override_redirect (GdkWindow *window,
-                                         gboolean override_redirect)
-{
-  /* FIXME: Implement */
-}
-
-static void
 gdk_quartz_window_set_accept_focus (GdkWindow *window,
                                     gboolean accept_focus)
 {
@@ -2893,7 +2886,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->set_startup_id = gdk_quartz_window_set_startup_id;
   impl_class->set_transient_for = gdk_quartz_window_set_transient_for;
   impl_class->get_frame_extents = gdk_quartz_window_get_frame_extents;
-  impl_class->set_override_redirect = gdk_quartz_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_quartz_window_set_accept_focus;
   impl_class->set_focus_on_map = gdk_quartz_window_set_focus_on_map;
   impl_class->set_icon_list = gdk_quartz_window_set_icon_list;

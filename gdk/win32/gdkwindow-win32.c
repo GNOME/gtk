@@ -702,7 +702,6 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   GdkWin32Display *display_win32;
   const gchar *title;
   wchar_t *wtitle;
-  gboolean override_redirect;
   gint window_width, window_height;
   gint offset_x = 0, offset_y = 0;
   gint x, y, real_x = 0, real_y = 0;
@@ -732,16 +731,10 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       g_assert (attributes->y == window->y);
       remaining_mask &= ~GDK_WA_Y;
     }
-  override_redirect = FALSE;
-  if ((attributes_mask & GDK_WA_NOREDIR) != 0)
-    {
-      override_redirect = !!attributes->override_redirect;
-      remaining_mask &= ~GDK_WA_NOREDIR;
-    }
 
-  if ((remaining_mask & ~(GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
+  if ((remaining_mask & ~(GDK_WA_NOREDIR|GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
     g_warning ("_gdk_window_impl_new: uexpected attribute 0x%X",
-               remaining_mask & ~(GDK_WA_TITLE|GDK_WA_TYPE_HINT));
+               remaining_mask & ~(GDK_WA_NOREDIR|GDK_WA_TITLE|GDK_WA_TYPE_HINT));
 
   hparent = GDK_WINDOW_HWND (real_parent);
 
@@ -749,7 +742,6 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   impl->wrapper = GDK_WINDOW (window);
   window->impl = GDK_WINDOW_IMPL (impl);
 
-  impl->override_redirect = override_redirect;
   impl->layered = FALSE;
   impl->layered_opacity = 1.0;
 
@@ -1261,8 +1253,7 @@ show_window_internal (GdkWindow *window,
   window_impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   if (!already_mapped &&
       GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL &&
-      (window_impl->hint_flags & (GDK_HINT_POS | GDK_HINT_USER_POS)) == 0 &&
-      !window_impl->override_redirect)
+      (window_impl->hint_flags & (GDK_HINT_POS | GDK_HINT_USER_POS)) == 0)
     {
       gboolean center = FALSE;
       RECT window_rect, center_on_rect;
@@ -1322,8 +1313,7 @@ show_window_internal (GdkWindow *window,
     }
 
   if (!already_mapped &&
-      GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL &&
-      !window_impl->override_redirect)
+      GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
     {
       /* Ensure new windows are fully onscreen */
       RECT window_rect;
@@ -2464,19 +2454,6 @@ do_shape_combine_region (GdkWindow *window,
     }
 
   SetWindowRgn (GDK_WINDOW_HWND (window), hrgn, TRUE);
-}
-
-static void
-gdk_win32_window_set_override_redirect (GdkWindow *window,
-				  gboolean   override_redirect)
-{
-  GdkWindowImplWin32 *window_impl;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  window_impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  window_impl->override_redirect = !!override_redirect;
 }
 
 static void
@@ -6128,7 +6105,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   //impl_class->set_startup_id = gdk_x11_window_set_startup_id;
   impl_class->set_transient_for = gdk_win32_window_set_transient_for;
   impl_class->get_frame_extents = gdk_win32_window_get_frame_extents;
-  impl_class->set_override_redirect = gdk_win32_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_win32_window_set_accept_focus;
   impl_class->set_focus_on_map = gdk_win32_window_set_focus_on_map;
   impl_class->set_icon_list = gdk_win32_window_set_icon_list;

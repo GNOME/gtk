@@ -785,13 +785,6 @@ gdk_window_broadway_input_shape_combine_region (GdkWindow       *window,
 {
 }
 
-
-static void
-gdk_broadway_window_set_override_redirect (GdkWindow *window,
-					   gboolean override_redirect)
-{
-}
-
 static void
 gdk_broadway_window_set_accept_focus (GdkWindow *window,
 				      gboolean accept_focus)
@@ -1580,7 +1573,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->set_startup_id = gdk_broadway_window_set_startup_id;
   impl_class->set_transient_for = gdk_broadway_window_set_transient_for;
   impl_class->get_frame_extents = gdk_broadway_window_get_frame_extents;
-  impl_class->set_override_redirect = gdk_broadway_window_set_override_redirect;
   impl_class->set_accept_focus = gdk_broadway_window_set_accept_focus;
   impl_class->set_focus_on_map = gdk_broadway_window_set_focus_on_map;
   impl_class->set_icon_list = gdk_broadway_window_set_icon_list;
