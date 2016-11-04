@@ -774,6 +774,12 @@ gtk_style_context_get_property (GtkStyleContext *context,
  *
  * See gtk_style_context_get_property() for details.
  *
+ * As with g_object_get(), a copy is made of the property contents for
+ * pointer-valued properties, and the caller is responsible for freeing the
+ * memory in the appropriate manner for the type. For example, by calling
+ * g_free() or g_object_unref(). Non-pointer-valued properties, such as
+ * integers, are returned by value and do not need to be freed.
+ *
  * Since: 3.0
  */
 void
@@ -818,6 +824,12 @@ gtk_style_context_get_valist (GtkStyleContext *context,
  * given state.
  *
  * See gtk_style_context_get_property() for details.
+ *
+ * As with g_object_get(), a copy is made of the property contents for
+ * pointer-valued properties, and the caller is responsible for freeing the
+ * memory in the appropriate manner for the type. For example, by calling
+ * g_free() or g_object_unref(). Non-pointer-valued properties, such as
+ * integers, are returned by value and do not need to be freed.
  *
  * Since: 3.0
  */
