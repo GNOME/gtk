@@ -204,7 +204,6 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
-#include <gtk/gtktextattributes.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextbufferrichtext.h>
 #include <gtk/gtktextchild.h>

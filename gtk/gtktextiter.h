@@ -29,7 +29,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtktextattributes.h>
 #include <gtk/gtktextchild.h>
 #include <gtk/gtktexttag.h>
 
@@ -219,9 +218,6 @@ gint     gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter);
 GDK_AVAILABLE_IN_ALL
 gint     gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter);
 
-GDK_AVAILABLE_IN_ALL
-gboolean       gtk_text_iter_get_attributes (const GtkTextIter *iter,
-					     GtkTextAttributes *values);
 GDK_AVAILABLE_IN_ALL
 PangoLanguage* gtk_text_iter_get_language   (const GtkTextIter *iter);
 GDK_AVAILABLE_IN_ALL

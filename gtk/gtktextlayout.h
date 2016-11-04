@@ -89,6 +89,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <gtk/gtktextattributes.h>
 
 G_BEGIN_DECLS
 

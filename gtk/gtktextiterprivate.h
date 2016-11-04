@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 #include <gtk/gtktextiter.h>
 #include <gtk/gtktextbtree.h>
+#include <gtk/gtktextattributes.h>
 
 GtkTextLineSegment *_gtk_text_iter_get_indexable_segment      (const GtkTextIter *iter);
 GtkTextLineSegment *_gtk_text_iter_get_any_segment            (const GtkTextIter *iter);
@@ -41,6 +42,8 @@ gboolean            _gtk_text_iter_backward_indexable_segment (GtkTextIter      
 gint                _gtk_text_iter_get_segment_byte           (const GtkTextIter *iter);
 gint                _gtk_text_iter_get_segment_char           (const GtkTextIter *iter);
 
+gboolean       gtk_text_iter_get_attributes (const GtkTextIter *iter,
+                                             GtkTextAttributes *values);
 
 /* debug */
 void _gtk_text_iter_check (const GtkTextIter *iter);
