@@ -138,12 +138,6 @@ gdk_win32_screen_init (GdkWin32Screen *win32_screen)
   if (logpixelsx > 0)
     _gdk_screen_set_resolution (screen, logpixelsx);
 
-  win32_screen->system_visual = init_visual (screen, FALSE);
-  win32_screen->rgba_visual = init_visual (screen, TRUE);
-
-  win32_screen->available_visual_depths[0] = win32_screen->rgba_visual->depth;
-  win32_screen->available_visual_types[0] = win32_screen->rgba_visual->type;
-
   _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
   init_root_window (win32_screen);
 }
