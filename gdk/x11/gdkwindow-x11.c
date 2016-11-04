@@ -3960,13 +3960,15 @@ static void
 gdk_x11_window_fullscreen_on_monitor (GdkWindow *window,
                                       gint       monitor)
 {
+  GdkMonitor *m;
   GdkRectangle monitor_geom;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
-  gdk_screen_get_monitor_geometry (GDK_WINDOW_SCREEN (window), monitor, &monitor_geom);
+  m = gdk_display_get_monitor (gdk_window_get_display (window), monitor);
+  gdk_monitor_get_geometry (m, &monitor_geom);
   gdk_window_move (window, monitor_geom.x, monitor_geom.y);
 
   gdk_window_set_fullscreen_mode (window, GDK_FULLSCREEN_ON_CURRENT_MONITOR);
