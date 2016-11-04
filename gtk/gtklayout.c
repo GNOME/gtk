@@ -817,7 +817,7 @@ gtk_layout_map (GtkWidget *widget)
   GtkLayoutPrivate *priv = layout->priv;
   GList *tmp_list;
 
-  gtk_widget_set_mapped (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_layout_parent_class)->map (widget);
 
   tmp_list = priv->children;
   while (tmp_list)

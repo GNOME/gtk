@@ -5973,7 +5973,7 @@ gtk_window_map (GtkWidget *widget)
   if (priv->initial_fullscreen_monitor > gdk_display_get_n_monitors (display))
     priv->initial_fullscreen_monitor = -1;
 
-  gtk_widget_set_mapped (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
 
   child = gtk_bin_get_child (&(window->bin));
   if (child != NULL && gtk_widget_get_visible (child))
@@ -6120,7 +6120,7 @@ gtk_window_unmap (GtkWidget *widget)
 
   gdk_window = _gtk_widget_get_window (widget);
 
-  gtk_widget_set_mapped (widget, FALSE);
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_window_withdraw (gdk_window);
 
   while (priv->configure_request_count > 0)

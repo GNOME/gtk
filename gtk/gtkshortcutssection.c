@@ -192,7 +192,7 @@ gtk_shortcuts_section_map (GtkWidget *widget)
   if (self->need_reflow)
     gtk_shortcuts_section_reflow_groups (self);
 
-  gtk_widget_set_mapped (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_shortcuts_section_parent_class)->map (widget);
 
   map_child (GTK_WIDGET (self->stack));
   map_child (GTK_WIDGET (self->footer));
@@ -203,7 +203,7 @@ gtk_shortcuts_section_unmap (GtkWidget *widget)
 {
   GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
 
-  gtk_widget_set_mapped (widget, FALSE);
+  GTK_WIDGET_CLASS (gtk_shortcuts_section_parent_class)->unmap (widget);
 
   gtk_widget_unmap (GTK_WIDGET (self->footer));
   gtk_widget_unmap (GTK_WIDGET (self->stack));

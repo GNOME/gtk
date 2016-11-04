@@ -3090,28 +3090,17 @@ gtk_container_map_child (GtkWidget *child,
 static void
 gtk_container_map (GtkWidget *widget)
 {
-  gtk_widget_set_mapped (widget, TRUE);
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         gtk_container_map_child,
                         NULL);
-
-  if (_gtk_widget_get_has_window (widget))
-    gdk_window_show (_gtk_widget_get_window (widget));
 }
 
 static void
 gtk_container_unmap (GtkWidget *widget)
 {
-  gtk_widget_set_mapped (widget, FALSE);
-
-  /* hide our window first so user doesn't see all the child windows
-   * vanishing one by one.  (only matters these days if one of the
-   * children has an actual native window instead of client-side
-   * window, e.g. a GtkSocket would)
-   */
-  if (_gtk_widget_get_has_window (widget))
-    gdk_window_hide (_gtk_widget_get_window (widget));
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback)gtk_widget_unmap,

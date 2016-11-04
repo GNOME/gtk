@@ -2272,7 +2272,7 @@ gtk_tree_view_map (GtkWidget *widget)
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *tmp_list;
 
-  gtk_widget_set_mapped (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->map (widget);
 
   tmp_list = tree_view->priv->children;
   while (tmp_list)
@@ -2289,8 +2289,6 @@ gtk_tree_view_map (GtkWidget *widget)
   gdk_window_show (tree_view->priv->bin_window);
 
   gtk_tree_view_map_buttons (tree_view);
-
-  gdk_window_show (gtk_widget_get_window (widget));
 }
 
 static void

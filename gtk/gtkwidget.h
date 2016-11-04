@@ -784,9 +784,6 @@ void                  gtk_widget_set_realized           (GtkWidget    *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_realized           (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_mapped             (GtkWidget    *widget,
-                                                         gboolean      mapped);
-GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_mapped             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL

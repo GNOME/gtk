@@ -8295,27 +8295,6 @@ gtk_widget_get_mapped (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_mapped:
- * @widget: a #GtkWidget
- * @mapped: %TRUE to mark the widget as mapped
- *
- * Marks the widget as being realized.
- *
- * This function should only ever be called in a derived widget's
- * “map” or “unmap” implementation.
- *
- * Since: 2.20
- */
-void
-gtk_widget_set_mapped (GtkWidget *widget,
-                       gboolean   mapped)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  widget->priv->mapped = mapped;
-}
-
-/**
  * gtk_widget_set_redraw_on_allocate:
  * @widget: a #GtkWidget
  * @redraw_on_allocate: if %TRUE, the entire widget will be redrawn
@@ -10684,7 +10663,7 @@ gtk_widget_real_map (GtkWidget *widget)
 
   if (!_gtk_widget_get_mapped (widget))
     {
-      gtk_widget_set_mapped (widget, TRUE);
+      priv->mapped = TRUE;
 
       if (_gtk_widget_get_has_window (widget))
 	gdk_window_show (priv->window);
@@ -10706,7 +10685,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
 
   if (_gtk_widget_get_mapped (widget))
     {
-      gtk_widget_set_mapped (widget, FALSE);
+      priv->mapped = FALSE;
 
       if (_gtk_widget_get_has_window (widget))
 	gdk_window_hide (priv->window);
