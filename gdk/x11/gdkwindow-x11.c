@@ -933,16 +933,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   xvisual = gdk_x11_display_get_window_visual (display_x11);
 
-  if (attributes_mask & GDK_WA_NOREDIR)
-    {
-      xattributes.override_redirect =
-        (attributes->override_redirect == FALSE)?False:True;
-      xattributes_mask |= CWOverrideRedirect;
-    }
-  else
-    xattributes.override_redirect = False;
-
-  impl->override_redirect = xattributes.override_redirect;
+  impl->override_redirect = FALSE;
 
   /* Sanity checks */
   switch (window->window_type)
@@ -4837,10 +4828,9 @@ create_moveresize_window (MoveResizeData *mv_resize,
   attributes.height = 10;
   attributes.window_type = GDK_WINDOW_TEMP;
   attributes.wclass = GDK_INPUT_ONLY;
-  attributes.override_redirect = TRUE;
   attributes.event_mask = 0;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   mv_resize->moveresize_emulation_window = 
     gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (mv_resize->display)),

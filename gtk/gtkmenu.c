@@ -2677,10 +2677,9 @@ menu_grab_transfer_window_get (GtkMenu *menu)
       attributes.height = 10;
       attributes.window_type = GDK_WINDOW_TEMP;
       attributes.wclass = GDK_INPUT_ONLY;
-      attributes.override_redirect = TRUE;
       attributes.event_mask = 0;
 
-      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+      attributes_mask = GDK_WA_X | GDK_WA_Y;
 
       parent = gdk_screen_get_root_window (gtk_widget_get_screen (GTK_WIDGET (menu)));
       window = gdk_window_new (parent,

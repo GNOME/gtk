@@ -246,10 +246,9 @@ gtk_invisible_realize (GtkWidget *widget)
   attributes.height = 10;
   attributes.window_type = GDK_WINDOW_TEMP;
   attributes.wclass = GDK_INPUT_ONLY;
-  attributes.override_redirect = TRUE;
   attributes.event_mask = gtk_widget_get_events (widget);
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   window = gdk_window_new (parent, &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
