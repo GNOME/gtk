@@ -15,6 +15,7 @@ demos/gtk-demo/entry_completion.c
 demos/gtk-demo/event_axes.c
 demos/gtk-demo/expander.c
 demos/gtk-demo/filtermodel.ui
+demos/gtk-demo/fishbowl.ui
 demos/gtk-demo/font-features.ui
 demos/gtk-demo/iconview.c
 demos/gtk-demo/infobar.c
