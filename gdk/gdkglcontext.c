@@ -154,6 +154,7 @@ gdk_gl_context_finalize (GObject *gobject)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_clear_pointer (&priv->paint_data, g_free);
+  G_OBJECT_CLASS (gdk_gl_context_parent_class)->finalize (gobject);
 }
 
 static void
