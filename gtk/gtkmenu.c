@@ -2942,21 +2942,20 @@ gtk_menu_draw (GtkWidget *widget,
   GtkMenu *menu;
   GtkMenuPrivate *priv;
   GtkStyleContext *context;
-  gint width, height;
+  GtkAllocation allocation;
 
   menu = GTK_MENU (widget);
   priv = menu->priv;
   context = gtk_widget_get_style_context (widget);
 
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
+  gtk_widget_get_allocation (widget, &allocation);
 
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       gtk_render_background (context, cr, 0, 0,
-                             width, height);
+                             allocation.width, allocation.height);
       gtk_render_frame (context, cr, 0, 0,
-                        width, height);
+                        allocation.width, allocation.height);
 
       if (priv->upper_arrow_visible)
         gtk_css_gadget_draw (priv->top_arrow_gadget, cr);
@@ -2970,8 +2969,9 @@ gtk_menu_draw (GtkWidget *widget,
       int x, y;
 
       gdk_window_get_position (priv->view_window, &x, &y);
+
       cairo_rectangle (cr,
-                       x, y,
+                       x - allocation.x, y - allocation.y,
                        gdk_window_get_width (priv->view_window),
                        gdk_window_get_height (priv->view_window));
       cairo_clip (cr);
@@ -4611,22 +4611,24 @@ gtk_menu_scroll_to (GtkMenu *menu,
   GtkCssNode *top_arrow_node, *bottom_arrow_node;
   GtkBorder padding;
   GtkWidget *widget;
+  GtkAllocation allocation;
   gint x, y;
   gint view_width, view_height;
 
   widget = GTK_WIDGET (menu);
 
+  gtk_widget_get_allocation (widget, &allocation);
   /* Move/resize the viewport according to arrows: */
-  view_width = gtk_widget_get_allocated_width (widget);
-  view_height = gtk_widget_get_allocated_height (widget);
+  view_width = allocation.width;
+  view_height = allocation.height;
 
   get_menu_padding (widget, &padding);
 
   view_width -= padding.left + padding.right;
   view_height -= padding.top + padding.bottom;
 
-  x = padding.left;
-  y = padding.top;
+  x = allocation.x + padding.left;
+  y = allocation.y + padding.top;
 
   top_arrow_node = gtk_css_gadget_get_node (priv->top_arrow_gadget);
   gtk_css_node_set_visible (top_arrow_node, priv->upper_arrow_visible);
