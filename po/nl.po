@@ -27,17 +27,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-05 18:00+0000\n"
-"PO-Revision-Date: 2016-10-12 13:20+0200\n"
+"POT-Creation-Date: 2016-11-05 11:13+0000\n"
+"PO-Revision-Date: 2016-11-05 17:24+0100\n"
 "Last-Translator: Hannie Dumoleyn <hannie@ubuntu-nl.org>\n"
-"Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2016-03-25 10:32+0000\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 2.0\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -462,20 +462,20 @@ msgid "Suspend"
 msgstr "Slaapstand"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1631
-#: gdk/wayland/gdkglcontext-wayland.c:421 gdk/win32/gdkglcontext-win32.c:556
+#: gdk/wayland/gdkglcontext-wayland.c:456 gdk/win32/gdkglcontext-win32.c:796
 #: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
 msgstr "Er is geen GL-implementatie beschikbaar"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:720
+#: gdk/win32/gdkglcontext-win32.c:747 gdk/x11/gdkglcontext-x11.c:720
 #: gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr "Er kan geen GL-context worden aangemaakt"
 
 #: gdk/mir/gdkmirwindowimpl.c:1593 gdk/mir/gdkmirwindowimpl.c:1603
-#: gdk/wayland/gdkglcontext-wayland.c:382
-#: gdk/wayland/gdkglcontext-wayland.c:392 gdk/win32/gdkglcontext-win32.c:482
+#: gdk/wayland/gdkglcontext-wayland.c:417
+#: gdk/wayland/gdkglcontext-wayland.c:427 gdk/win32/gdkglcontext-win32.c:702
 #: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr "Geen configuraties beschikbaar voor het gegeven beeldpuntformaat"
@@ -488,17 +488,9 @@ msgstr "3.2 core GL-profiel is niet beschikbaar bij EGL-implementatie"
 msgid "Not implemented on OS X"
 msgstr "Niet geïmplementeerd op OS X"
 
-#: gdk/wayland/gdkglcontext-wayland.c:429
+#: gdk/wayland/gdkglcontext-wayland.c:464
 msgid "Core GL is not available on EGL implementation"
 msgstr "Core GL is niet beschikbaar bij EGL-implementatie"
-
-#: gdk/win32/gdkglcontext-win32.c:565
-msgid ""
-"The WGL_ARB_create_context extension needed to create core profiles is not "
-"available"
-msgstr ""
-"De uitbreiding WGL_ARB_create_context nodig om core-profielen aan te maken "
-"is niet beschikbaar"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:53
@@ -684,15 +676,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Sl_uiten"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9044
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:9045
 msgid "Minimize"
 msgstr "Minimaliseren"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9053
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:9054
 msgid "Maximize"
 msgstr "Maximaliseren"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9010
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:9011
 msgid "Restore"
 msgstr "Herstellen"
 
@@ -1271,7 +1263,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12511 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12514 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1326,7 +1318,7 @@ msgstr "Toe_passen"
 
 # Ok/OK
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12512
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12515
 msgid "_OK"
 msgstr "_Ok"
 
@@ -1751,7 +1743,7 @@ msgstr "Gerelateerde toepassingen"
 msgid "Other Applications"
 msgstr "Andere toepassingen"
 
-#: gtk/gtkapplicationwindow.c:342 gtk/gtkprintoperation-unix.c:482
+#: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:482
 #: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Toepassing"
@@ -2166,7 +2158,7 @@ msgstr "Aangepaste kleur aanmaken"
 msgid "Custom color %d: %s"
 msgstr "Aangepaste kleur %d: %s"
 
-#: gtk/gtkcolorplane.c:401
+#: gtk/gtkcolorplane.c:409
 msgid "Color Plane"
 msgstr "Kleurvlak"
 
@@ -2660,11 +2652,11 @@ msgstr "Geen"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL-context aanmaken is mislukt"
 
-#: gtk/gtkheaderbar.c:387
+#: gtk/gtkheaderbar.c:383
 msgid "Application menu"
 msgstr "Toepassingenmenu"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9080
+#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:9081
 msgid "Close"
 msgstr "Sluiten"
 
@@ -2846,16 +2838,16 @@ msgstr "In te stellen GTK+ debug-vlaggen"
 msgid "GTK+ debugging flags to unset"
 msgstr "Uit te zetten GTK+ debug-vlaggen"
 
-#: gtk/gtkmain.c:805
+#: gtk/gtkmain.c:807
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan scherm ‘%s’ niet openen"
 
-#: gtk/gtkmain.c:914
+#: gtk/gtkmain.c:916
 msgid "GTK+ Options"
 msgstr "GTK+-opties"
 
-#: gtk/gtkmain.c:914
+#: gtk/gtkmain.c:916
 msgid "Show GTK+ Options"
 msgstr "GTK+-opties tonen"
 
@@ -2864,7 +2856,7 @@ msgstr "GTK+-opties tonen"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1246
+#: gtk/gtkmain.c:1248
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3263,18 +3255,18 @@ msgstr "Op deze computer"
 #. * should be based on the free space available.
 #. * i.e. 1 GB / 24 GB available.
 #.
-#: gtk/gtkplacesviewrow.c:132
+#: gtk/gtkplacesviewrow.c:134
 #, c-format
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
 msgstr[0] "%s / %s beschikbaar"
 msgstr[1] "%s / %s niet beschikbaar"
 
-#: gtk/gtkplacesviewrow.c:470
+#: gtk/gtkplacesviewrow.c:481
 msgid "Disconnect"
 msgstr "Verbinding verbreken"
 
-#: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:67
+#: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
 msgid "Unmount"
 msgstr "Ontkoppelen"
 
@@ -3906,24 +3898,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9028
+#: gtk/gtkwindow.c:9029
 msgid "Move"
 msgstr "Verplaatsen"
 
-#: gtk/gtkwindow.c:9036
+#: gtk/gtkwindow.c:9037
 msgid "Resize"
 msgstr "Grootte wijzigen"
 
-#: gtk/gtkwindow.c:9067
+#: gtk/gtkwindow.c:9068
 msgid "Always on Top"
 msgstr "Altijd bovenop"
 
-#: gtk/gtkwindow.c:12499
+#: gtk/gtkwindow.c:12502
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Wilt u GTK+ Inspector gebruiken?"
 
-#: gtk/gtkwindow.c:12501
+#: gtk/gtkwindow.c:12504
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3934,7 +3926,7 @@ msgstr ""
 "inwendige van een GTK+ toepassing kunt verkennen en wijzigen. Het gebruik "
 "ervan kan ertoe leiden dat de toepassing afgebroken wordt of vastloopt."
 
-#: gtk/gtkwindow.c:12506
+#: gtk/gtkwindow.c:12509
 msgid "Don't show this message again"
 msgstr "Deze boodschap niet meer tonen"
 
@@ -4011,12 +4003,12 @@ msgstr "Waarde"
 msgid "Show data"
 msgstr "Gegevens tonen"
 
-#: gtk/inspector/general.c:275
+#: gtk/inspector/general.c:309
 msgctxt "GL version"
 msgid "None"
 msgstr "Geen"
 
-#: gtk/inspector/general.c:276
+#: gtk/inspector/general.c:310
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Geen"
@@ -4394,15 +4386,15 @@ msgstr "Statistieken inschakelen met GOBJECT_DEBUG=instance-count"
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Het thema is hard gecodeerd door GTK_THEME"
 
-#: gtk/inspector/visual.c:592
+#: gtk/inspector/visual.c:594
 msgid "Backend does not support window scaling"
 msgstr "Dit backend ondersteunt geen vensterschaling"
 
-#: gtk/inspector/visual.c:687
+#: gtk/inspector/visual.c:689
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Instelling is hard gecodeerd door GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:752
+#: gtk/inspector/visual.c:754
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4410,8 +4402,8 @@ msgstr ""
 "Tijdens uitvoering niet instelbaar.\n"
 "Gebruik in plaats daarvan GDK_GL=always of GDK_GL=disable"
 
-#: gtk/inspector/visual.c:766 gtk/inspector/visual.c:767
-#: gtk/inspector/visual.c:768
+#: gtk/inspector/visual.c:768 gtk/inspector/visual.c:769
+#: gtk/inspector/visual.c:770
 msgid "GL rendering is disabled"
 msgstr "GL-rendering is uitgeschakeld"
 
@@ -5553,7 +5545,7 @@ msgstr "Met dank aan"
 
 #: gtk/ui/gtkappchooserdialog.ui:78
 msgid "_View All Applications"
-msgstr "Allel toepassingen _bekijken"
+msgstr "Alle toepassingen _bekijken"
 
 #: gtk/ui/gtkappchooserdialog.ui:86
 msgid "_Find New Applications"
@@ -5745,7 +5737,8 @@ msgstr "Serveradressen"
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
-"Serveradressen bestaan uit een protocol-voorvoegsel en een adres. Voorbeelden:"
+"Serveradressen bestaan uit een protocol-voorvoegsel en een adres. "
+"Voorbeelden:"
 
 #: gtk/ui/gtkplacesview.ui:57
 msgid "smb://foo.example.com, ssh://192.168.0.1"
@@ -6917,6 +6910,13 @@ msgstr "testafdruk.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Afdrukken om printer te testen"
+
+#~ msgid ""
+#~ "The WGL_ARB_create_context extension needed to create core profiles is "
+#~ "not available"
+#~ msgstr ""
+#~ "De uitbreiding WGL_ARB_create_context nodig om core-profielen aan te "
+#~ "maken is niet beschikbaar"
 
 #~ msgid ""
 #~ "The GLX_ARB_create_context_profile extension needed to create core "
