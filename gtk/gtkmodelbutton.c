@@ -888,7 +888,7 @@ gtk_model_button_allocate (GtkCssGadget        *gadget,
       GtkAllocation border_allocation;
       gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
 
-      gdk_window_move_resize (gtk_button_get_event_window (GTK_BUTTON (widget)),
+      gdk_window_move_resize (GTK_BUTTON (widget)->priv->event_window,
                               border_allocation.x,
                               border_allocation.y,
                               border_allocation.width,

@@ -535,7 +535,6 @@ gtk_button_set_image_position
 gtk_button_get_image_position
 gtk_button_set_always_show_image
 gtk_button_get_always_show_image
-gtk_button_get_event_window
 
 <SUBSECTION Standard>
 GTK_BUTTON
