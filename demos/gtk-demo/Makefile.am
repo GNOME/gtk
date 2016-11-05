@@ -27,6 +27,7 @@ demos_base =					\
 	event_axes.c				\
 	expander.c  				\
         filtermodel.c				\
+	fishbowl.c				\
 	foreigndrawing.c			\
 	gestures.c				\
 	glarea.c				\
