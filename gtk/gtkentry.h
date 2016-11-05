@@ -147,18 +147,6 @@ struct _GtkEntryClass
   void (* paste_clipboard)    (GtkEntry             *entry);
   void (* toggle_overwrite)   (GtkEntry             *entry);
 
-  /* hooks to add other objects beside the entry (like in GtkSpinButton) */
-  void (* get_text_area_size) (GtkEntry       *entry,
-			       gint           *x,
-			       gint           *y,
-			       gint           *width,
-			       gint           *height);
-  void (* get_frame_size)     (GtkEntry       *entry,
-                               gint           *x,
-                               gint           *y,
-			       gint           *width,
-			       gint           *height);
-
   /*< private >*/
 
   /* Padding for future expansion */
@@ -183,10 +171,6 @@ GtkEntryBuffer* gtk_entry_get_buffer            (GtkEntry       *entry);
 GDK_AVAILABLE_IN_ALL
 void       gtk_entry_set_buffer                 (GtkEntry       *entry,
                                                  GtkEntryBuffer *buffer);
-
-GDK_AVAILABLE_IN_ALL
-void       gtk_entry_get_text_area              (GtkEntry       *entry,
-                                                 GdkRectangle   *text_area);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
