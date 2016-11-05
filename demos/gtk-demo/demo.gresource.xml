@@ -94,6 +94,9 @@
     <file>zoom_in_cursor.png</file>
     <file>zoom_out_cursor.png</file>
   </gresource>
+  <gresource prefix="/fishbowl">
+    <file>fishbowl.ui</file>
+  </gresource>
   <gresource prefix="/iconview">
     <file preprocess="to-pixdata">gnome-fs-directory.png</file>
     <file preprocess="to-pixdata">gnome-fs-regular.png</file>
@@ -150,6 +153,7 @@
     <file>event_axes.c</file>
     <file>expander.c</file>
     <file>filtermodel.c</file>
+    <file>fishbowl.c</file>
     <file>flowbox.c</file>
     <file>foreigndrawing.c</file>
     <file>font_features.c</file>
