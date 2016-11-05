@@ -396,9 +396,9 @@ treeview entry.flat, treeview entry {
  ***********/
 @keyframes needs_attention {
   from {
-    background-image: -gtk-gradient(radial, center center, 0, center center, 0.01, to(#3583d5), to(transparent)); }
+    background-image: radial-gradient(#3583d5 0%, rgba(53, 131, 213, 0) 0%); }
   to {
-    background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#215d9c), to(transparent)); } }
+    background-image: radial-gradient(#3583d5 68%, rgba(53, 131, 213, 0) 70%); } }
 notebook > header > tabs > arrow, button.titlebutton,
 button {
   min-height: 24px;
@@ -1188,7 +1188,7 @@ button.needs-attention > label,
 .stack-switcher >
 button.needs-attention > image, stacksidebar row.needs-attention > label {
   animation: needs_attention 150ms ease-in;
-  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#3583d5), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.45, to(rgba(0, 0, 0, 0.82745)), to(transparent));
+  background-image: radial-gradient(#3583d5 68%, rgba(53, 131, 213, 0) 70%), radial-gradient(rgba(0, 0, 0, 0.82745) 68%, transparent 69%);
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   background-position: right 3px, right 2px; }
