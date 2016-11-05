@@ -197,8 +197,6 @@ _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
   _gdk_root->y = 0;
   _gdk_root->abs_x = 0;
   _gdk_root->abs_y = 0;
-  _gdk_root->width = gdk_screen_get_width (screen);
-  _gdk_root->height = gdk_screen_get_height (screen);
 
   windows = gdk_screen_get_toplevel_windows (screen);
 
@@ -211,11 +209,6 @@ _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
 static void
 process_display_reconfiguration (GdkQuartzScreen *screen)
 {
-  int width, height;
-
-  width = gdk_screen_get_width (GDK_SCREEN (screen));
-  height = gdk_screen_get_height (GDK_SCREEN (screen));
-
   gdk_quartz_screen_calculate_layout (GDK_QUARTZ_SCREEN (screen));
 
   _gdk_quartz_screen_update_window_sizes (GDK_SCREEN (screen));
@@ -225,10 +218,6 @@ process_display_reconfiguration (GdkQuartzScreen *screen)
       g_signal_emit_by_name (screen, "monitors-changed");
       screen->emit_monitors_changed = FALSE;
     }
-
-  if (width != gdk_screen_get_width (GDK_SCREEN (screen))
-      || height != gdk_screen_get_height (GDK_SCREEN (screen)))
-    g_signal_emit_by_name (screen, "size-changed");
 }
 
 static gboolean
@@ -294,18 +283,6 @@ gdk_quartz_screen_get_root_window (GdkScreen *screen)
 }
 
 static gint
-gdk_quartz_screen_get_width (GdkScreen *screen)
-{
-  return GDK_QUARTZ_SCREEN (screen)->width;
-}
-
-static gint
-gdk_quartz_screen_get_height (GdkScreen *screen)
-{
-  return GDK_QUARTZ_SCREEN (screen)->height;
-}
-
-static gint
 get_mm_from_pixels (NSScreen *screen, int pixels)
 {
   /* userSpaceScaleFactor is in "pixels per point", 
@@ -335,20 +312,6 @@ get_nsscreen_for_monitor (gint monitor_num)
   GDK_QUARTZ_RELEASE_POOL;
 
   return screen;
-}
-
-static gint
-gdk_quartz_screen_get_width_mm (GdkScreen *screen)
-{
-  return get_mm_from_pixels (get_nsscreen_for_monitor (0),
-                             GDK_QUARTZ_SCREEN (screen)->width);
-}
-
-static gint
-gdk_quartz_screen_get_height_mm (GdkScreen *screen)
-{
-  return get_mm_from_pixels (get_nsscreen_for_monitor (0),
-                             GDK_QUARTZ_SCREEN (screen)->height);
 }
 
 static gint
@@ -458,10 +421,6 @@ gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
   object_class->finalize = gdk_quartz_screen_finalize;
 
   screen_class->get_display = gdk_quartz_screen_get_display;
-  screen_class->get_width = gdk_quartz_screen_get_width;
-  screen_class->get_height = gdk_quartz_screen_get_height;
-  screen_class->get_width_mm = gdk_quartz_screen_get_width_mm;
-  screen_class->get_height_mm = gdk_quartz_screen_get_height_mm;
   screen_class->get_root_window = gdk_quartz_screen_get_root_window;
   screen_class->get_n_monitors = gdk_quartz_screen_get_n_monitors;
   screen_class->get_primary_monitor = gdk_quartz_screen_get_primary_monitor;
