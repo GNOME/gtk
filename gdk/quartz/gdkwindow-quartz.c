@@ -168,16 +168,16 @@ gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
 static void
 check_grab_destroy (GdkWindow *window)
 {
-  GList *list = NULL, *l;
+  GList *devices = NULL, *l;
   GdkDisplay *display = gdk_window_get_display (window);
   GdkSeat *seat;
 
   seat = gdk_display_get_default_seat (display);
 
-  list = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  list = g_list_prepend (devices, gdk_seat_get_pointer (seat));
+  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
-  for (l = list; l; l = l->next)
+  for (l = devices; l; l = l->next)
     {
       GdkDeviceGrabInfo *grab;
 
@@ -190,7 +190,7 @@ check_grab_destroy (GdkWindow *window)
         }
     }
 
-  g_list_free (list);
+  g_list_free (devices);
 }
 
 static void
@@ -941,7 +941,6 @@ _gdk_quartz_window_init_windowing (GdkDisplay *display,
 
   _gdk_root->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   _gdk_root->window_type = GDK_WINDOW_ROOT;
-  _gdk_root->depth = 24;
   _gdk_root->viewable = TRUE;
 
   impl->wrapper = _gdk_root;

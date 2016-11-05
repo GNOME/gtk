@@ -128,14 +128,14 @@ gdk_quartz_device_core_get_state (GdkDevice       *device,
                                   gdouble         *axes,
                                   GdkModifierType *mask)
 {
-  gint x_int, y_int;
+  gdouble x_pos, y_pos;
 
-  gdk_window_get_pointer (window, &x_int, &y_int, mask);
+  gdk_window_get_device_position_double (window, device, &x_pos, &y_pos, mask);
 
   if (axes)
     {
-      axes[0] = x_int;
-      axes[1] = y_int;
+      axes[0] = x_pos;
+      axes[1] = y_pos;
     }
 }
 

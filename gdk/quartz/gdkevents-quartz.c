@@ -127,15 +127,15 @@ _gdk_quartz_display_has_pending (GdkDisplay *display)
 void
 _gdk_quartz_events_break_all_grabs (guint32 time)
 {
-  GList *list = NULL, *l;
+  GList *devices = NULL, *l;
   GdkSeat *seat;
 
   seat = gdk_display_get_default_seat (_gdk_display);
 
-  list = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  list = g_list_prepend (devices, gdk_seat_get_pointer (seat));
+  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
-  for (l = list; l; l = l->next)
+  for (l = devices; l; l = l->next)
     {
       GdkDeviceGrabInfo *grab;
 
@@ -149,7 +149,7 @@ _gdk_quartz_events_break_all_grabs (guint32 time)
       _gdk_display_device_grab_update (_gdk_display, l->data, NULL, 0);
     }
 
-  g_list_free (list);
+  g_list_free (devices);
 }
 
 static void
@@ -648,7 +648,7 @@ find_toplevel_under_pointer (GdkDisplay *display,
 static GdkWindow *
 find_toplevel_for_keyboard_event (NSEvent *nsevent)
 {
-  GList *list = NULL, *l;
+  GList *devices = NULL, *l;
   GdkWindow *window;
   GdkDisplay *display;
   GdkQuartzView *view;
@@ -661,10 +661,10 @@ find_toplevel_for_keyboard_event (NSEvent *nsevent)
 
   seat = gdk_display_get_default_seat (display);
 
-  list = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  list = g_list_prepend (devices, gdk_seat_get_pointer (seat));
+  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
 
-  for (l = list; l; l = l->next)
+  for (l = devices; l; l = l->next)
     {
       GdkDeviceGrabInfo *grab;
       GdkDevice *device = l->data;
@@ -680,7 +680,7 @@ find_toplevel_for_keyboard_event (NSEvent *nsevent)
         }
     }
 
-  g_list_free (list);
+  g_list_free (devices);
 
   return window;
 }
