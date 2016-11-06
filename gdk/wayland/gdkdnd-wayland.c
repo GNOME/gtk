@@ -498,20 +498,11 @@ _gdk_wayland_window_register_dnd (GdkWindow *window)
 }
 
 static GdkWindow *
-create_dnd_window (GdkScreen *screen)
+create_dnd_window (GdkDisplay *display)
 {
-  GdkWindowAttr attrs;
   GdkWindow *window;
-  guint mask;
 
-  attrs.x = attrs.y = 0;
-  attrs.width = attrs.height = 100;
-  attrs.wclass = GDK_INPUT_OUTPUT;
-  attrs.window_type = GDK_WINDOW_TEMP;
-
-  mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
+  window = gdk_window_new_popup (display, 0, &(GdkRectangle) { 0, 0, 100, 100 });
 
   gdk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_DND);
   
@@ -538,7 +529,7 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
 
   gdk_drag_context_set_device (context, device);
 
-  context_wayland->dnd_window = create_dnd_window (gdk_window_get_screen (window));
+  context_wayland->dnd_window = create_dnd_window (gdk_window_get_display (window));
   context_wayland->dnd_surface = gdk_wayland_window_get_wl_surface (context_wayland->dnd_window);
   context_wayland->data_source =
     gdk_wayland_selection_get_data_source (window,

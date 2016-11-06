@@ -354,7 +354,6 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
   GdkWindow *root = gdk_screen_get_root_window (gdk_display_get_default_screen (display));
   static gboolean wintab_initialized = FALSE;
   GdkDeviceWintab *device;
-  GdkWindowAttr wa;
   WORD specversion;
   HCTX *hctx;
   UINT ndevices, ncursors, ncsrtypes, firstcsr, hardware;
@@ -434,18 +433,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 			    ndevices, ncursors));
 #endif
   /* Create a dummy window to receive wintab events */
-  wa.wclass = GDK_INPUT_OUTPUT;
-  wa.event_mask = GDK_ALL_EVENTS_MASK;
-  wa.width = 2;
-  wa.height = 2;
-  wa.x = -100;
-  wa.y = -100;
-  wa.window_type = GDK_WINDOW_TOPLEVEL;
-  if ((wintab_window = gdk_window_new (root, &wa, GDK_WA_X | GDK_WA_Y)) == NULL)
-    {
-      g_warning ("gdk_input_wintab_init: gdk_window_new failed");
-      return;
-    }
+  wintab_window = gdk_window_new_popup (display, GDK_ALL_EVENTS_MASK, &(GdkRectangle) { -100, -100, 2, 2 });
   g_object_ref (wintab_window);
 
   for (devix = 0; devix < ndevices; devix++)

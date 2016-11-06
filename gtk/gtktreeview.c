@@ -3938,25 +3938,15 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
       /* Create the new window */
       if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW)
 	{
-          GdkWindowAttr attributes;
-          gint attributes_mask;
-
 	  if (tree_view->priv->drag_highlight_window)
 	    {
 	      gtk_widget_unregister_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 	      gdk_window_destroy (tree_view->priv->drag_highlight_window);
 	    }
 
-	  attributes.window_type = GDK_WINDOW_TEMP;
-	  attributes.wclass = GDK_INPUT_OUTPUT;
-	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK;
-	  attributes_mask = GDK_WA_X | GDK_WA_Y;
-          attributes.x = x;
-          attributes.y = y;
-	  attributes.width = width;
-	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
-								   &attributes, attributes_mask);
+	  tree_view->priv->drag_highlight_window = gdk_window_new_popup (gtk_widget_get_display (widget),
+                                                                         GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK,
+                                                                         &(GdkRectangle) { x, y, width, height });
 	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
@@ -4017,24 +4007,15 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
       if (tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT &&
 	  tree_view->priv->drag_column_window_state != DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT)
 	{
-          GdkWindowAttr attributes;
-          gint attributes_mask;
-
 	  if (tree_view->priv->drag_highlight_window)
 	    {
 	      gtk_widget_unregister_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 	      gdk_window_destroy (tree_view->priv->drag_highlight_window);
 	    }
 
-	  attributes.window_type = GDK_WINDOW_TEMP;
-	  attributes.wclass = GDK_INPUT_OUTPUT;
-	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK;
-	  attributes_mask = GDK_WA_X | GDK_WA_Y;
-          attributes.x = x;
-          attributes.y = y;
-	  attributes.width = width;
-	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (gdk_screen_get_root_window (gtk_widget_get_screen (widget)), &attributes, attributes_mask);
+	  tree_view->priv->drag_highlight_window = gdk_window_new_popup (gtk_widget_get_display (widget),
+                                                                         GDK_VISIBILITY_NOTIFY_MASK | GDK_POINTER_MOTION_MASK,
+                                                                         &(GdkRectangle) { x, y, width, height });
 	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);

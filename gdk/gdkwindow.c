@@ -1331,6 +1331,41 @@ gdk_window_new_toplevel (GdkDisplay *display,
 }
 
 /**
+ * gdk_window_new_popup: (constructor)
+ * @display: the display to create the window on
+ * @event_mask: event mask (see gdk_window_set_events())
+ * @position: position of the window on screen
+ *
+ * Creates a new toplevel popup window. The window will bypass window
+ * management.
+ *
+ * Returns: (transfer full): the new #GdkWindow
+ *
+ * Since: 3.90
+ **/
+GdkWindow *
+gdk_window_new_popup (GdkDisplay         *display,
+                      gint                event_mask,
+                      const GdkRectangle *position)
+{
+  GdkWindowAttr attr;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (position != NULL, NULL);
+
+  attr.event_mask = event_mask;
+  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.x = position->x;
+  attr.y = position->y;
+  attr.width = position->width;
+  attr.height = position->height;
+  attr.window_type = GDK_WINDOW_TEMP;
+
+  return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
+                         &attr,
+                         GDK_WA_X | GDK_WA_Y);
+}
+/**
  * gdk_window_new_child: (constructor)
  * @parent: the parent window
  * @event_mask: event mask (see gdk_window_set_events())

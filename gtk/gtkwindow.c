@@ -6858,9 +6858,9 @@ gtk_window_realize (GtkWidget *widget)
   GtkAllocation child_allocation;
   GtkWindow *window;
   GdkWindow *gdk_window;
-  GdkWindowAttr attributes;
   GtkBorder window_border;
   GtkWindowPrivate *priv;
+  gint event_mask;
   gint i;
   GList *link;
 
@@ -6931,30 +6931,26 @@ gtk_window_realize (GtkWidget *widget)
     }
   else
     {
-      attributes.wclass = GDK_INPUT_OUTPUT;
-
       _gtk_widget_get_allocation (widget, &allocation);
-      attributes.width = allocation.width;
-      attributes.height = allocation.height;
-      attributes.event_mask = gtk_widget_get_events (widget);
-      attributes.event_mask |= (GDK_EXPOSURE_MASK |
-                                GDK_BUTTON_PRESS_MASK |
-                                GDK_BUTTON_RELEASE_MASK |
-                                GDK_BUTTON_MOTION_MASK |
-                                GDK_KEY_PRESS_MASK |
-                                GDK_KEY_RELEASE_MASK |
-                                GDK_ENTER_NOTIFY_MASK |
-                                GDK_LEAVE_NOTIFY_MASK |
-                                GDK_FOCUS_CHANGE_MASK |
-                                GDK_STRUCTURE_MASK);
+      event_mask = gtk_widget_get_events (widget);
+      event_mask |= (GDK_EXPOSURE_MASK |
+                     GDK_BUTTON_PRESS_MASK |
+                     GDK_BUTTON_RELEASE_MASK |
+                     GDK_BUTTON_MOTION_MASK |
+                     GDK_KEY_PRESS_MASK |
+                     GDK_KEY_RELEASE_MASK |
+                     GDK_ENTER_NOTIFY_MASK |
+                     GDK_LEAVE_NOTIFY_MASK |
+                     GDK_FOCUS_CHANGE_MASK |
+                     GDK_STRUCTURE_MASK);
       if (priv->decorated && priv->client_decorated)
-        attributes.event_mask |= GDK_POINTER_MOTION_MASK;
+        event_mask |= GDK_POINTER_MOTION_MASK;
 
       switch (priv->type)
         {
         case GTK_WINDOW_TOPLEVEL:
           gdk_window = gdk_window_new_toplevel (gtk_widget_get_display (widget),
-                                                attributes.event_mask,
+                                                event_mask,
                                                 allocation.width,
                                                 allocation.height);
           break;
@@ -6964,15 +6960,15 @@ gtk_window_realize (GtkWidget *widget)
               GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
             {
               gdk_window = gdk_wayland_window_new_subsurface (gtk_widget_get_display (widget),
-                                                              attributes.event_mask,
+                                                              event_mask,
                                                               &allocation);
             }
           else
 #endif
             {
-              attributes.window_type = GDK_WINDOW_TEMP;
-              gdk_window = gdk_window_new (gdk_screen_get_root_window (_gtk_window_get_screen (window)),
-                                           &attributes, 0);
+              gdk_window = gdk_window_new_popup (gtk_widget_get_display (widget),
+                                                 event_mask,
+                                                 &allocation);
             }
           break;
         default:

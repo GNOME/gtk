@@ -107,13 +107,9 @@ test_type (gconstpointer data)
     instance = g_object_ref (gtk_settings_get_default ());
   else if (g_type_is_a (type, GDK_TYPE_WINDOW))
     {
-      GdkWindowAttr attributes;
-      attributes.wclass = GDK_INPUT_OUTPUT;
-      attributes.window_type = GDK_WINDOW_TEMP;
-      attributes.event_mask = 0;
-      attributes.width = 100;
-      attributes.height = 100;
-      instance = g_object_ref (gdk_window_new (NULL, &attributes, 0));
+      instance = g_object_ref (gdk_window_new_popup (gdk_display_get_default (),
+                                                     0,
+                                                     &(GdkRectangle) { 0, 0, 100, 100 }));
     }
   else if (g_str_equal (g_type_name (type), "GdkX11Cursor"))
     instance = g_object_new (type, "display", display, NULL);

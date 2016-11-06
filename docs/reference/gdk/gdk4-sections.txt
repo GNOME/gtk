@@ -279,6 +279,7 @@ GdkWindowAttr
 GdkWindowAttributesType
 gdk_window_new
 gdk_window_new_toplevel
+gdk_window_new_popup
 gdk_window_new_child
 gdk_window_new_input
 gdk_window_destroy

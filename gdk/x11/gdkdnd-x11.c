@@ -1991,20 +1991,11 @@ gdk_drag_do_leave (GdkX11DragContext *context_x11,
 }
 
 static GdkWindow *
-create_drag_window (GdkScreen *screen)
+create_drag_window (GdkDisplay *display)
 {
-  GdkWindowAttr attrs = { 0 };
   GdkWindow *window;
-  guint mask;
 
-  attrs.x = attrs.y = 0;
-  attrs.width = attrs.height = 100;
-  attrs.wclass = GDK_INPUT_OUTPUT;
-  attrs.window_type = GDK_WINDOW_TEMP;
-
-  mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
+  window = gdk_window_new_popup (display, 0, &(GdkRectangle) { 0, 0, 100, 100 });
 
   gdk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_DND);
   
@@ -2037,7 +2028,7 @@ _gdk_x11_window_drag_begin (GdkWindow *window,
   GDK_X11_DRAG_CONTEXT (context)->start_x = x_root;
   GDK_X11_DRAG_CONTEXT (context)->start_y = y_root;
 
-  GDK_X11_DRAG_CONTEXT (context)->drag_window = create_drag_window (gdk_window_get_screen (window));
+  GDK_X11_DRAG_CONTEXT (context)->drag_window = create_drag_window (gdk_window_get_display(window));
 
   return context;
 }
