@@ -702,9 +702,6 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 
   gdk_wayland_window_create_surface (window);
 
-  if (attributes_mask & GDK_WA_TYPE_HINT)
-    gdk_window_set_type_hint (window, attributes->type_hint);
-
   frame_clock = gdk_window_get_frame_clock (window);
 
   g_signal_connect (frame_clock, "before-paint",

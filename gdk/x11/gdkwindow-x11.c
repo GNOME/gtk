@@ -1032,9 +1032,6 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       break;
     }
 
-  if (attributes_mask & GDK_WA_TYPE_HINT)
-    gdk_window_set_type_hint (window, attributes->type_hint);
-
   gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
                                       GDK_WINDOW_XID (window), event_mask,
                                       StructureNotifyMask | PropertyChangeMask);

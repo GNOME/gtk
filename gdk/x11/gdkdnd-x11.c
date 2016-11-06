@@ -1994,17 +1994,21 @@ static GdkWindow *
 create_drag_window (GdkScreen *screen)
 {
   GdkWindowAttr attrs = { 0 };
+  GdkWindow *window;
   guint mask;
 
   attrs.x = attrs.y = 0;
   attrs.width = attrs.height = 100;
   attrs.wclass = GDK_INPUT_OUTPUT;
   attrs.window_type = GDK_WINDOW_TEMP;
-  attrs.type_hint = GDK_WINDOW_TYPE_HINT_DND;
 
-  mask = GDK_WA_X | GDK_WA_Y | GDK_WA_TYPE_HINT;
+  mask = GDK_WA_X | GDK_WA_Y;
 
-  return gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
+  window = gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
+
+  gdk_window_set_type_hint (window, GDK_WINDOW_TYPE_HINT_DND);
+  
+  return window;
 }
 
 GdkDragContext *

@@ -87,7 +87,6 @@ typedef enum
  * GdkWindowAttributesType:
  * @GDK_WA_X: Honor the X coordinate field
  * @GDK_WA_Y: Honor the Y coordinate field
- * @GDK_WA_TYPE_HINT: Honor the type_hint field
  *
  * Used to indicate which fields in the #GdkWindowAttr struct should be honored.
  * For example, if you filled in the “x” and “y” fields of #GdkWindowAttr,
@@ -99,8 +98,7 @@ typedef enum
 typedef enum
 {
   GDK_WA_X	   = 1 << 1,
-  GDK_WA_Y	   = 1 << 2,
-  GDK_WA_TYPE_HINT = 1 << 3
+  GDK_WA_Y	   = 1 << 2
 } GdkWindowAttributesType;
 
 /* Size restriction enumeration.
