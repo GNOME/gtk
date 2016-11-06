@@ -697,7 +697,7 @@ gtk_compose_table_load_cache (const gchar *compose_file)
   retval = g_new0 (GtkComposeTable, 1);
   retval->data = gtk_compose_seqs;
   retval->max_seq_len = max_seq_len;
-  retval->n_seqs = length;
+  retval->n_seqs = n_seqs;
   retval->id = hash;
 
   g_free (contents);
