@@ -3673,6 +3673,41 @@ _gdk_wayland_window_set_grab_seat (GdkWindow *window,
 }
 
 /**
+ * gdk_wayland_window_new_subsurface: (constructor)
+ * @display: the display to create the window on
+ * @event_mask: event mask (see gdk_window_set_events())
+ * @position: position relative to the transient window
+ *
+ * Creates a new subsurface window.
+ *
+ * Returns: (transfer full): the new #GdkWindow
+ *
+ * Since: 3.90
+ **/
+GdkWindow *
+gdk_wayland_window_new_subsurface (GdkDisplay         *display,
+                                   int                 event_mask,
+                                   const GdkRectangle *position)
+{
+  GdkWindowAttr attr;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (position != NULL, NULL);
+
+  attr.event_mask = event_mask;
+  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.x = position->x;
+  attr.y = position->y;
+  attr.width = position->width;
+  attr.height = position->height;
+  attr.window_type = GDK_WINDOW_SUBSURFACE;
+
+  return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
+                         &attr,
+                         GDK_WA_X | GDK_WA_Y);
+}
+
+/**
  * gdk_wayland_window_get_wl_surface:
  * @window: (type GdkWaylandWindow): a #GdkWindow
  *

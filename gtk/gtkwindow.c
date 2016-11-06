@@ -6370,21 +6370,10 @@ popover_realize (GtkWidget        *widget,
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
     {
-      GdkWindowAttr attributes;
-      gint attributes_mask;
-
-      attributes.window_type = GDK_WINDOW_SUBSURFACE;
-      attributes.wclass = GDK_INPUT_OUTPUT;
-      attributes.x = rect.x;
-      attributes.y = rect.y;
-      attributes.width = rect.width;
-      attributes.height = rect.height;
-      attributes.event_mask = gtk_widget_get_events (popover->widget) |
-        GDK_EXPOSURE_MASK;
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-      popover->window = gdk_window_new (gdk_screen_get_root_window (_gtk_window_get_screen (window)),
-                                        &attributes, attributes_mask);
+      popover->window = gdk_wayland_window_new_subsurface (gtk_widget_get_display (GTK_WIDGET (window)),
+                                                           gtk_widget_get_events (popover->widget)
+                                                           | GDK_EXPOSURE_MASK,
+                                                           &rect);
       gdk_window_set_transient_for (popover->window,
                                     _gtk_widget_get_window (GTK_WIDGET (window)));
     }
@@ -6973,12 +6962,18 @@ gtk_window_realize (GtkWidget *widget)
 #ifdef GDK_WINDOWING_WAYLAND
           if (priv->use_subsurface &&
               GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-            attributes.window_type = GDK_WINDOW_SUBSURFACE;
+            {
+              gdk_window = gdk_wayland_window_new_subsurface (gtk_widget_get_display (widget),
+                                                              attributes.event_mask,
+                                                              &allocation);
+            }
           else
 #endif
-            attributes.window_type = GDK_WINDOW_TEMP;
-          gdk_window = gdk_window_new (gdk_screen_get_root_window (_gtk_window_get_screen (window)),
-                                       &attributes, 0);
+            {
+              attributes.window_type = GDK_WINDOW_TEMP;
+              gdk_window = gdk_window_new (gdk_screen_get_root_window (_gtk_window_get_screen (window)),
+                                           &attributes, 0);
+            }
           break;
         default:
           g_warning (G_STRLOC": Unknown window type %d!", priv->type);
