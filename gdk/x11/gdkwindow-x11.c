@@ -977,6 +977,14 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
       class = InputOnly;
 
+      if (window->window_type == GDK_WINDOW_TEMP)
+        {
+          xattributes.override_redirect = True;
+          xattributes_mask |= CWOverrideRedirect;
+
+          impl->override_redirect = TRUE;
+        }
+
       depth = 0;
     }
 
