@@ -31,7 +31,6 @@ endif
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	overlayscroll			\
 	syncscroll			\
-	subsurface			\
 	animated-resizing		\
 	animated-revealing		\
 	motion-compression		\
