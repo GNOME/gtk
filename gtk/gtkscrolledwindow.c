@@ -222,6 +222,8 @@ struct _GtkScrolledWindowPrivate
   GtkWidget     *hscrollbar;
   GtkWidget     *vscrollbar;
 
+  GdkWindow     *view_window;
+
   GtkCssGadget  *gadget;
   GtkCssNode    *overshoot_node[4];
   GtkCssNode    *undershoot_node[4];
@@ -2006,7 +2008,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   scrolled_window->priv = priv =
     gtk_scrolled_window_get_instance_private (scrolled_window);
 
-  gtk_widget_set_has_window (widget, TRUE);
+  gtk_widget_set_has_window (widget, FALSE);
   gtk_widget_set_can_focus (widget, TRUE);
 
   /* Instantiated by gtk_scrolled_window_set_[hv]adjustment
@@ -3245,7 +3247,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (gtk_widget_get_window (widget),
+    gdk_window_move_resize (priv->view_window,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
@@ -3925,6 +3927,9 @@ static void
 gtk_scrolled_window_map (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  gdk_window_show (priv->view_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->map (widget);
 
@@ -3935,8 +3940,11 @@ static void
 gtk_scrolled_window_unmap (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
+
+  gdk_window_hide (priv->view_window);
 
   gtk_scrolled_window_update_animating (scrolled_window);
 
@@ -3948,19 +3956,22 @@ static GdkWindow *
 create_indicator_window (GtkScrolledWindow *scrolled_window,
                          GtkWidget         *child)
 {
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
   GtkAllocation allocation;
   GdkWindow *window;
 
   gtk_scrolled_window_allocate_scrollbar (scrolled_window, child, &allocation);
 
-  window = gdk_window_new_child (gtk_widget_get_window (widget),
+  window = gdk_window_new_child (priv->view_window,
                                  gtk_widget_get_events (widget),
                                  &allocation);
   gtk_widget_register_window (widget, window);
 
   if (scrolled_window->priv->use_indicators)
     gtk_widget_set_parent_window (child, window);
+  else
+    gtk_widget_set_parent_window (child, priv->view_window);
 
   return window;
 }
@@ -4119,6 +4130,7 @@ static void
 remove_indicator (GtkScrolledWindow *scrolled_window,
                   Indicator         *indicator)
 {
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkWidget *scrollbar;
   GtkStyleContext *context;
   GtkAdjustment *adjustment;
@@ -4154,6 +4166,7 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
 
   g_object_ref (scrollbar);
   gtk_widget_unparent (scrollbar);
+  gtk_widget_set_parent_window (scrollbar, priv->view_window);
   gtk_widget_set_parent (scrollbar, GTK_WIDGET (scrolled_window));
   g_object_unref (scrollbar);
 
@@ -4208,21 +4221,21 @@ gtk_scrolled_window_realize (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  GdkWindow *window;
   GtkAllocation allocation;
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 gtk_widget_get_events (widget)
-                                 | GDK_ENTER_NOTIFY_MASK
-                                 | GDK_LEAVE_NOTIFY_MASK
-                                 | GDK_POINTER_MOTION_MASK,
-                                 &allocation);
+  priv->view_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                            gtk_widget_get_events (widget)
+                                            | GDK_ENTER_NOTIFY_MASK
+                                            | GDK_LEAVE_NOTIFY_MASK
+                                            | GDK_POINTER_MOTION_MASK,
+                                            &allocation);
 
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
-  gtk_widget_set_realized (widget, TRUE);
+  gtk_widget_register_window (widget, priv->view_window);
+
+  if (gtk_bin_get_child (GTK_BIN (widget)))
+    gtk_widget_set_parent_window (gtk_bin_get_child (GTK_BIN (widget)), priv->view_window);
 
   priv->hindicator.window = create_indicator_window (scrolled_window, priv->hscrollbar);
   priv->vindicator.window = create_indicator_window (scrolled_window, priv->vscrollbar);
@@ -4231,6 +4244,8 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   priv->vindicator.scrollbar = priv->vscrollbar;
 
   gtk_scrolled_window_sync_use_indicators (scrolled_window);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->realize (widget);
 }
 
 static void
@@ -4281,6 +4296,10 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
   gtk_widget_set_parent_window (priv->vscrollbar, NULL);
   gtk_widget_unregister_window (widget, priv->vindicator.window);
   indicator_reset (&priv->hindicator);
+
+  gtk_widget_unregister_window (widget, priv->view_window);
+  gdk_window_destroy (priv->view_window);
+  priv->view_window = NULL;
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
 }
