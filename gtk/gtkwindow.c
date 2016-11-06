@@ -6868,11 +6868,9 @@ gtk_window_realize (GtkWidget *widget)
   GtkAllocation allocation;
   GtkAllocation child_allocation;
   GtkWindow *window;
-  GdkWindow *parent_window;
   GdkWindow *gdk_window;
   GdkWindowAttr attributes;
   GtkBorder window_border;
-  gint attributes_mask;
   GtkWindowPrivate *priv;
   gint i;
   GList *link;
@@ -6944,29 +6942,7 @@ gtk_window_realize (GtkWidget *widget)
     }
   else
     {
-      switch (priv->type)
-        {
-        case GTK_WINDOW_TOPLEVEL:
-          attributes.window_type = GDK_WINDOW_TOPLEVEL;
-          break;
-        case GTK_WINDOW_POPUP:
-          attributes.window_type = GDK_WINDOW_TEMP;
-          break;
-        default:
-          g_warning (G_STRLOC": Unknown window type %d!", priv->type);
-          break;
-        }
-
-#ifdef GDK_WINDOWING_WAYLAND
-      if (priv->use_subsurface &&
-          GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-        attributes.window_type = GDK_WINDOW_SUBSURFACE;
-#endif
-
       attributes.wclass = GDK_INPUT_OUTPUT;
-
-      attributes_mask = 0;
-      parent_window = gdk_screen_get_root_window (_gtk_window_get_screen (window));
 
       _gtk_widget_get_allocation (widget, &allocation);
       attributes.width = allocation.width;
@@ -6982,11 +6958,32 @@ gtk_window_realize (GtkWidget *widget)
                                 GDK_LEAVE_NOTIFY_MASK |
                                 GDK_FOCUS_CHANGE_MASK |
                                 GDK_STRUCTURE_MASK);
-
       if (priv->decorated && priv->client_decorated)
         attributes.event_mask |= GDK_POINTER_MOTION_MASK;
 
-      gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
+      switch (priv->type)
+        {
+        case GTK_WINDOW_TOPLEVEL:
+          gdk_window = gdk_window_new_toplevel (gtk_widget_get_display (widget),
+                                                attributes.event_mask,
+                                                allocation.width,
+                                                allocation.height);
+          break;
+        case GTK_WINDOW_POPUP:
+#ifdef GDK_WINDOWING_WAYLAND
+          if (priv->use_subsurface &&
+              GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+            attributes.window_type = GDK_WINDOW_SUBSURFACE;
+          else
+#endif
+            attributes.window_type = GDK_WINDOW_TEMP;
+          gdk_window = gdk_window_new (gdk_screen_get_root_window (_gtk_window_get_screen (window)),
+                                       &attributes, 0);
+          break;
+        default:
+          g_warning (G_STRLOC": Unknown window type %d!", priv->type);
+          break;
+        }
     }
 
   gtk_widget_set_window (widget, gdk_window);

@@ -1296,6 +1296,41 @@ gdk_window_new (GdkWindow     *parent,
 }
 
 /**
+ * gdk_window_new_toplevel: (constructor)
+ * @display: the display to create the window on
+ * @event_mask: event mask (see gdk_window_set_events())
+ * @width: width of new window
+ * @height: height of new window
+ *
+ * Creates a new toplevel window. The window will be managed by the window
+ * manager.
+ *
+ * Returns: (transfer full): the new #GdkWindow
+ *
+ * Since: 3.90
+ **/
+GdkWindow *
+gdk_window_new_toplevel (GdkDisplay *display,
+                         gint        event_mask,
+                         gint        width,
+                         gint        height)
+{
+  GdkWindowAttr attr;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  attr.event_mask = event_mask;
+  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.width = width;
+  attr.height = height;
+  attr.window_type = GDK_WINDOW_TOPLEVEL;
+
+  return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
+                         &attr,
+                         0);
+}
+
+/**
  * gdk_window_new_child: (constructor)
  * @parent: the parent window
  * @event_mask: event mask (see gdk_window_set_events())
