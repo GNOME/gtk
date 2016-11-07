@@ -657,8 +657,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
                                          GdkWindow     *real_parent,
                                          GdkScreen     *screen,
                                          GdkEventMask   event_mask,
-                                         GdkWindowAttr *attributes,
-                                         gint           attributes_mask)
+                                         GdkWindowAttr *attributes)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWindowImplWayland *impl;
@@ -3703,8 +3702,7 @@ gdk_wayland_window_new_subsurface (GdkDisplay         *display,
   attr.window_type = GDK_WINDOW_SUBSURFACE;
 
   return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
-                         &attr,
-                         GDK_WA_X | GDK_WA_Y);
+                         &attr);
 }
 
 /**

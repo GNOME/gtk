@@ -255,7 +255,7 @@ gdk_mir_screen_get_root_window (GdkScreen *screen)
   s->root_window->width = width;
   s->root_window->height = height;
   s->root_window->viewable = TRUE;
-  s->root_window->impl = _gdk_mir_window_impl_new (s->display, s->root_window, NULL, 0);
+  s->root_window->impl = _gdk_mir_window_impl_new (s->display, s->root_window);
 
   return s->root_window;
 }

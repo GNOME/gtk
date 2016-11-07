@@ -195,8 +195,7 @@ struct _GdkDisplayClass
                                                     GdkWindow     *real_parent,
                                                     GdkScreen     *screen,
                                                     GdkEventMask   event_mask,
-                                                    GdkWindowAttr *attributes,
-                                                    gint           attributes_mask);
+                                                    GdkWindowAttr *attributes);
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
   void                       (*push_error_trap)    (GdkDisplay    *display);
@@ -324,8 +323,7 @@ void                _gdk_display_create_window_impl   (GdkDisplay       *display
                                                        GdkWindow        *real_parent,
                                                        GdkScreen        *screen,
                                                        GdkEventMask      event_mask,
-                                                       GdkWindowAttr    *attributes,
-                                                       gint              attributes_mask);
+                                                       GdkWindowAttr    *attributes);
 GdkWindow *         _gdk_display_create_window        (GdkDisplay       *display);
 
 gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,

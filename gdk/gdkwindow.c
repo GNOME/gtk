@@ -1113,30 +1113,13 @@ sync_native_window_stack_position (GdkWindow *window)
     }
 }
 
-/**
- * gdk_window_new: (constructor)
- * @parent: (allow-none): a #GdkWindow, or %NULL to create the window as a child of
- *   the default root window for the default display.
- * @attributes: attributes of the new window
- * @attributes_mask: (type GdkWindowAttributesType): mask indicating which
- *   fields in @attributes are valid
- *
- * Creates a new #GdkWindow using the attributes from
- * @attributes. See #GdkWindowAttr and #GdkWindowAttributesType for
- * more details.  Note: to use this on displays other than the default
- * display, @parent must be specified.
- *
- * Returns: (transfer full): the new #GdkWindow
- **/
 GdkWindow*
 gdk_window_new (GdkWindow     *parent,
-		GdkWindowAttr *attributes,
-		gint           attributes_mask)
+		GdkWindowAttr *attributes)
 {
   GdkWindow *window;
   GdkScreen *screen;
   GdkDisplay *display;
-  int x, y;
   gboolean native;
   GdkEventMask event_mask;
   GdkWindow *real_parent;
@@ -1176,18 +1159,8 @@ gdk_window_new (GdkWindow     *parent,
   window->focus_on_map = TRUE;
   window->event_compression = TRUE;
 
-  if (attributes_mask & GDK_WA_X)
-    x = attributes->x;
-  else
-    x = 0;
-
-  if (attributes_mask & GDK_WA_Y)
-    y = attributes->y;
-  else
-    y = 0;
-
-  window->x = x;
-  window->y = y;
+  window->x = attributes->x;
+  window->y = attributes->y;
   window->width = (attributes->width > 1) ? (attributes->width) : (1);
   window->height = (attributes->height > 1) ? (attributes->height) : (1);
   window->alpha = 255;
@@ -1260,7 +1233,7 @@ gdk_window_new (GdkWindow     *parent,
       event_mask = get_native_event_mask (window);
 
       /* Create the impl */
-      _gdk_display_create_window_impl (display, window, real_parent, screen, event_mask, attributes, attributes_mask);
+      _gdk_display_create_window_impl (display, window, real_parent, screen, event_mask, attributes);
       window->impl_window = window;
 
       parent->impl_window->native_children = g_list_prepend (parent->impl_window->native_children, window);
@@ -1321,13 +1294,14 @@ gdk_window_new_toplevel (GdkDisplay *display,
 
   attr.event_mask = event_mask;
   attr.wclass = GDK_INPUT_OUTPUT;
+  attr.x = 0;
+  attr.y = 0;
   attr.width = width;
   attr.height = height;
   attr.window_type = GDK_WINDOW_TOPLEVEL;
 
   return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
-                         &attr,
-                         0);
+                         &attr);
 }
 
 /**
@@ -1362,8 +1336,7 @@ gdk_window_new_popup (GdkDisplay         *display,
   attr.window_type = GDK_WINDOW_TEMP;
 
   return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
-                         &attr,
-                         GDK_WA_X | GDK_WA_Y);
+                         &attr);
 }
 
 /**
@@ -1395,8 +1368,7 @@ gdk_window_new_temp (GdkDisplay *display)
   attr.window_type = GDK_WINDOW_TEMP;
 
   return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
-                         &attr,
-                         GDK_WA_X | GDK_WA_Y);
+                         &attr);
 }
 
 /**
@@ -1428,7 +1400,7 @@ gdk_window_new_child (GdkWindow          *parent,
   attr.height = position->height;
   attr.window_type = GDK_WINDOW_CHILD;
 
-  return gdk_window_new (parent, &attr, GDK_WA_X | GDK_WA_Y);
+  return gdk_window_new (parent, &attr);
 }
 
 /**
@@ -1460,7 +1432,7 @@ gdk_window_new_input (GdkWindow          *parent,
   attr.height = position->height;
   attr.window_type = GDK_WINDOW_CHILD;
 
-  return gdk_window_new (parent, &attr, GDK_WA_X | GDK_WA_Y);
+  return gdk_window_new (parent, &attr);
 }
 
 static gboolean
@@ -1777,7 +1749,7 @@ gdk_window_ensure_native (GdkWindow *window)
                                    window, parent,
                                    screen,
                                    get_native_event_mask (window),
-                                   NULL, 0);
+                                   NULL);
   new_impl = window->impl;
 
   parent->impl_window->native_children =

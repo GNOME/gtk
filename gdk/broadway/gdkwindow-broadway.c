@@ -256,8 +256,7 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
 					  GdkWindow     *real_parent,
 					  GdkScreen     *screen,
 					  GdkEventMask   event_mask,
-					  GdkWindowAttr *attributes,
-					  gint           attributes_mask)
+					  GdkWindowAttr *attributes)
 {
   GdkWindowImplBroadway *impl;
   GdkBroadwayDisplay *broadway_display;

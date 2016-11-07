@@ -393,8 +393,7 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
                                     GdkWindow     *real_parent,
                                     GdkScreen     *screen,
                                     GdkEventMask   event_mask,
-                                    GdkWindowAttr *attributes,
-                                    gint           attributes_mask)
+                                    GdkWindowAttr *attributes)
 {
   //g_printerr ("gdk_mir_display_create_window_impl");
   //g_printerr (" window=%p", window);
@@ -404,7 +403,7 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
 
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
-      window->impl = _gdk_mir_window_impl_new (display, window, attributes, attributes_mask);
+      window->impl = _gdk_mir_window_impl_new (display, window);
       window->impl_window = window;
     }
   else /* attributes->wclass == GDK_INPUT_ONLY */

@@ -690,8 +690,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 				       GdkWindow     *real_parent,
 				       GdkScreen     *screen,
 				       GdkEventMask   event_mask,
-				       GdkWindowAttr *attributes,
-				       gint           attributes_mask)
+				       GdkWindowAttr *attributes)
 {
   HWND hwndNew;
   HANDLE hparent;
@@ -705,8 +704,6 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   gint window_width, window_height;
   gint offset_x = 0, offset_y = 0;
   gint x, y, real_x = 0, real_y = 0;
-  /* check consistency of redundant information */
-  guint remaining_mask = attributes_mask;
 
   g_return_if_fail (display == _gdk_display);
 
@@ -718,22 +715,6 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 			"???"))),
 		     (attributes->wclass == GDK_INPUT_OUTPUT ? "" : "input-only"))
 			   );
-
-  /* to ensure to not miss important information some additional check against
-   * attributes which may silently work on X11 */
-  if ((attributes_mask & GDK_WA_X) != 0)
-    {
-      g_assert (attributes->x == window->x);
-      remaining_mask &= ~GDK_WA_X;
-    }
-  if ((attributes_mask & GDK_WA_Y) != 0)
-    {
-      g_assert (attributes->y == window->y);
-      remaining_mask &= ~GDK_WA_Y;
-    }
-
-  if (remaining_mask != 0)
-    g_warning ("_gdk_window_impl_new: uexpected attribute 0x%X", remaining_mask);
 
   hparent = GDK_WINDOW_HWND (real_parent);
 

@@ -137,8 +137,7 @@ void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					      GdkWindow     *real_parent,
 					      GdkScreen     *screen,
 					      GdkEventMask   event_mask,
-					      GdkWindowAttr *attributes,
-					      gint           attributes_mask);
+					      GdkWindowAttr *attributes);
 
 GdkWindow *_gdk_wayland_display_get_selection_owner (GdkDisplay *display,
 						 GdkAtom     selection);

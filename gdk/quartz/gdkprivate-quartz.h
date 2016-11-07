@@ -124,8 +124,7 @@ void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                                                    GdkWindow     *real_parent,
                                                    GdkScreen     *screen,
                                                    GdkEventMask   event_mask,
-                                                   GdkWindowAttr *attributes,
-                                                   gint           attributes_mask);
+                                                   GdkWindowAttr *attributes);
 
 /* Display methods - keymap */
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);

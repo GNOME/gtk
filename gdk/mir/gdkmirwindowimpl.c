@@ -166,7 +166,7 @@ get_default_title (void)
 }
 
 GdkWindowImpl *
-_gdk_mir_window_impl_new (GdkDisplay *display, GdkWindow *window, GdkWindowAttr *attributes, gint attributes_mask)
+_gdk_mir_window_impl_new (GdkDisplay *display, GdkWindow *window)
 {
   GdkMirWindowImpl *impl = g_object_new (GDK_TYPE_MIR_WINDOW_IMPL, NULL);
 

@@ -272,8 +272,7 @@ void       _gdk_x11_display_create_window_impl     (GdkDisplay    *display,
                                                     GdkWindow     *real_parent,
                                                     GdkScreen     *screen,
                                                     GdkEventMask   event_mask,
-                                                    GdkWindowAttr *attributes,
-                                                    gint           attributes_mask);
+                                                    GdkWindowAttr *attributes);
 
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
                               const gchar * const *atom_names,

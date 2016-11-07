@@ -899,8 +899,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                                      GdkWindow     *real_parent,
                                      GdkScreen     *screen,
                                      GdkEventMask   event_mask,
-                                     GdkWindowAttr *attributes,
-                                     gint           attributes_mask)
+                                     GdkWindowAttr *attributes)
 {
   GdkWindowImplX11 *impl;
   GdkX11Screen *x11_screen;
