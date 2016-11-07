@@ -13,7 +13,14 @@ Overview of Changes in GTK+ 3.22.3
  - Hi-DPI is now supported
 
 * Bugs fixed:
-773479 773474 773528 773274 773885 773857 773799 768081
+ 768081 Enable HiDPI support for GDK-Win32
+ 773274 [Wayland] Crash under gdk_wayland_window_attach_image()
+ 773474 Color chooser dialog opened with show-editor=TRUE has black header bar
+ 773479 Typo in GtkShortcutType developer docs
+ 773528 Improve GL support on Windows
+ 773799 GtkLevelBar doesn't update blocks on discrete mode
+ 773857 gdkwindow-x11: Add support for gdk_window_fullscreen_on_monitor
+ 773885 pop down GtkPopover on pressing escape
 
 * Translation updates:
  Serbian
