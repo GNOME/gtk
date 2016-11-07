@@ -545,11 +545,11 @@
     @if $t==backdrop { $_small_gradient_color: $backdrop_borders_color; }
   }
 
-  $_small_gradient: radial-gradient(ellipse farthest-side at $p,
+  $_small_gradient: radial-gradient(farthest-side at $p,
                                     $_small_gradient_color 85%,
                                     transparentize($_small_gradient_color, 1));
 
-  $_big_gradient: radial-gradient(ellipse farthest-side at $p,
+  $_big_gradient: radial-gradient(farthest-side at $p,
                                   $_big_gradient_color,
                                   transparentize($_big_gradient_color, 1));
 

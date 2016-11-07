@@ -419,8 +419,8 @@ treeview entry {
 $_dot_color: if($variant=='light', $selected_bg_color,
                                    lighten($selected_bg_color,15%));
 @keyframes needs_attention {
-  from { background-image: radial-gradient($_dot_color 0%, transparentize($_dot_color, 1) 0%); }
-  to { background-image: radial-gradient($_dot_color 68%, transparentize($_dot_color, 1) 70%); }
+  from { background-image: radial-gradient(farthest-side, $_dot_color 0%, transparentize($_dot_color, 1) 0%); }
+  to { background-image: radial-gradient(farthest-side, $_dot_color 95%, transparentize($_dot_color, 1)); }
 }
 
 %button,
@@ -787,11 +787,9 @@ button {
   // simulates the shadow labels and icons normally have in buttons.
   animation: needs_attention 150ms ease-in;
   $_dot_shadow: _text_shadow_color(); // shadow color
-  $_dot_shadow_r: if($variant == 'light', 70%, 69%); // the radii of the shadow is different in
-                                                     // dark variant to dim the intensity a bit
 
-  background-image: radial-gradient($_dot_color 68%, transparentize($_dot_color,1 ) 70%),
-                    radial-gradient($_dot_shadow 68%, transparentize($_dot_shadow, 1) $_dot_shadow_r);
+  background-image: radial-gradient(farthest-side, $_dot_color 96%, transparentize($_dot_color,1 )),
+                    radial-gradient(farthest-side, $_dot_shadow 95%, transparentize($_dot_shadow, 1));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
 

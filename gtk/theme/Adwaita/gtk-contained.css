@@ -396,9 +396,9 @@ treeview entry.flat, treeview entry {
  ***********/
 @keyframes needs_attention {
   from {
-    background-image: radial-gradient(#4a90d9 0%, rgba(74, 144, 217, 0) 0%); }
+    background-image: radial-gradient(farthest-side, #4a90d9 0%, rgba(74, 144, 217, 0) 0%); }
   to {
-    background-image: radial-gradient(#4a90d9 68%, rgba(74, 144, 217, 0) 70%); } }
+    background-image: radial-gradient(farthest-side, #4a90d9 95%, rgba(74, 144, 217, 0)); } }
 notebook > header > tabs > arrow, button.titlebutton,
 button {
   min-height: 24px;
@@ -1191,7 +1191,7 @@ button.needs-attention > label,
 .stack-switcher >
 button.needs-attention > image, stacksidebar row.needs-attention > label {
   animation: needs_attention 150ms ease-in;
-  background-image: radial-gradient(#4a90d9 68%, rgba(74, 144, 217, 0) 70%), radial-gradient(rgba(255, 255, 255, 0.76923) 68%, rgba(255, 255, 255, 0) 70%);
+  background-image: radial-gradient(farthest-side, #4a90d9 96%, rgba(74, 144, 217, 0)), radial-gradient(farthest-side, rgba(255, 255, 255, 0.76923) 95%, rgba(255, 255, 255, 0));
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   background-position: right 3px, right 4px; }
@@ -3825,7 +3825,7 @@ actionbar > revealer > box {
 scrolledwindow viewport.frame {
   border-style: none; }
 scrolledwindow overshoot.top {
-  background-image: radial-gradient(ellipse farthest-side at top, #9d9d99 85%, rgba(157, 157, 153, 0)), radial-gradient(ellipse farthest-side at top, rgba(46, 52, 54, 0.07), rgba(46, 52, 54, 0));
+  background-image: radial-gradient(farthest-side at top, #9d9d99 85%, rgba(157, 157, 153, 0)), radial-gradient(farthest-side at top, rgba(46, 52, 54, 0.07), rgba(46, 52, 54, 0));
   background-size: 100% 3%, 100% 50%;
   background-repeat: no-repeat;
   background-position: top;
@@ -3833,7 +3833,7 @@ scrolledwindow overshoot.top {
   border: none;
   box-shadow: none; }
   scrolledwindow overshoot.top:backdrop {
-    background-image: radial-gradient(ellipse farthest-side at top, #c0c0bd 85%, rgba(192, 192, 189, 0));
+    background-image: radial-gradient(farthest-side at top, #c0c0bd 85%, rgba(192, 192, 189, 0));
     background-size: 100% 3%;
     background-repeat: no-repeat;
     background-position: top;
@@ -3841,7 +3841,7 @@ scrolledwindow overshoot.top {
     border: none;
     box-shadow: none; }
 scrolledwindow overshoot.bottom {
-  background-image: radial-gradient(ellipse farthest-side at bottom, #9d9d99 85%, rgba(157, 157, 153, 0)), radial-gradient(ellipse farthest-side at bottom, rgba(46, 52, 54, 0.07), rgba(46, 52, 54, 0));
+  background-image: radial-gradient(farthest-side at bottom, #9d9d99 85%, rgba(157, 157, 153, 0)), radial-gradient(farthest-side at bottom, rgba(46, 52, 54, 0.07), rgba(46, 52, 54, 0));
   background-size: 100% 3%, 100% 50%;
   background-repeat: no-repeat;
   background-position: bottom;
@@ -3849,7 +3849,7 @@ scrolledwindow overshoot.bottom {
   border: none;
   box-shadow: none; }
   scrolledwindow overshoot.bottom:backdrop {
-    background-image: radial-gradient(ellipse farthest-side at bottom, #c0c0bd 85%, rgba(192, 192, 189, 0));
+    background-image: radial-gradient(farthest-side at bottom, #c0c0bd 85%, rgba(192, 192, 189, 0));
     background-size: 100% 3%;
     background-repeat: no-repeat;
     background-position: bottom;
@@ -3857,7 +3857,7 @@ scrolledwindow overshoot.bottom {
     border: none;
     box-shadow: none; }
 scrolledwindow overshoot.left {
-  background-image: radial-gradient(ellipse farthest-side at left, #9d9d99 85%, rgba(157, 157, 153, 0)), radial-gradient(ellipse farthest-side at left, rgba(46, 52, 54, 0.07), rgba(46, 52, 54, 0));
+  background-image: radial-gradient(farthest-side at left, #9d9d99 85%, rgba(157, 157, 153, 0)), radial-gradient(farthest-side at left, rgba(46, 52, 54, 0.07), rgba(46, 52, 54, 0));
   background-size: 3% 100%, 50% 100%;
   background-repeat: no-repeat;
   background-position: left;
@@ -3865,7 +3865,7 @@ scrolledwindow overshoot.left {
   border: none;
   box-shadow: none; }
   scrolledwindow overshoot.left:backdrop {
-    background-image: radial-gradient(ellipse farthest-side at left, #c0c0bd 85%, rgba(192, 192, 189, 0));
+    background-image: radial-gradient(farthest-side at left, #c0c0bd 85%, rgba(192, 192, 189, 0));
     background-size: 3% 100%;
     background-repeat: no-repeat;
     background-position: left;
@@ -3873,7 +3873,7 @@ scrolledwindow overshoot.left {
     border: none;
     box-shadow: none; }
 scrolledwindow overshoot.right {
-  background-image: radial-gradient(ellipse farthest-side at right, #9d9d99 85%, rgba(157, 157, 153, 0)), radial-gradient(ellipse farthest-side at right, rgba(46, 52, 54, 0.07), rgba(46, 52, 54, 0));
+  background-image: radial-gradient(farthest-side at right, #9d9d99 85%, rgba(157, 157, 153, 0)), radial-gradient(farthest-side at right, rgba(46, 52, 54, 0.07), rgba(46, 52, 54, 0));
   background-size: 3% 100%, 50% 100%;
   background-repeat: no-repeat;
   background-position: right;
@@ -3881,7 +3881,7 @@ scrolledwindow overshoot.right {
   border: none;
   box-shadow: none; }
   scrolledwindow overshoot.right:backdrop {
-    background-image: radial-gradient(ellipse farthest-side at right, #c0c0bd 85%, rgba(192, 192, 189, 0));
+    background-image: radial-gradient(farthest-side at right, #c0c0bd 85%, rgba(192, 192, 189, 0));
     background-size: 3% 100%;
     background-repeat: no-repeat;
     background-position: right;
