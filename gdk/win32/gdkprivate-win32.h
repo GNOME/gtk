@@ -477,8 +477,7 @@ void       _gdk_win32_display_create_window_impl   (GdkDisplay    *display,
                                                     GdkWindow     *real_parent,
                                                     GdkScreen     *screen,
                                                     GdkEventMask   event_mask,
-                                                    GdkWindowAttr *attributes,
-                                                    gint           attributes_mask);
+                                                    GdkWindowAttr *attributes);
 
 /* stray GdkWindowImplWin32 members */
 void _gdk_win32_window_register_dnd (GdkWindow *window);
