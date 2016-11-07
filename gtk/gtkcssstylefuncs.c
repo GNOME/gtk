@@ -28,7 +28,6 @@
 #include <cairo-gobject.h>
 
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssimagegradientprivate.h"
 #include "gtkcssprovider.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -37,7 +36,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkcsswin32sizevalueprivate.h"
 
-#include "deprecated/gtkgradientprivate.h"
 #include "deprecated/gtksymboliccolorprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
@@ -476,57 +474,12 @@ border_value_print (const GValue *value, GString *string)
 }
 
 static gboolean 
-gradient_value_parse (GtkCssParser *parser,
-                      GValue       *value)
-{
-  GtkGradient *gradient;
-
-  gradient = _gtk_gradient_parse (parser);
-  if (gradient == NULL)
-    return FALSE;
-
-  g_value_take_boxed (value, gradient);
-  return TRUE;
-}
-
-static void
-gradient_value_print (const GValue *value,
-                      GString      *string)
-{
-  GtkGradient *gradient = g_value_get_boxed (value);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (gradient == NULL)
-    g_string_append (string, "none");
-  else
-    {
-      char *s = gtk_gradient_to_string (gradient);
-      g_string_append (string, s);
-      g_free (s);
-    }
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-static gboolean 
 pattern_value_parse (GtkCssParser *parser,
                      GValue       *value)
 {
   if (_gtk_css_parser_try (parser, "none", TRUE))
     {
       /* nothing to do here */
-    }
-  else if (_gtk_css_parser_begins_with (parser, '-'))
-    {
-      g_value_unset (value);
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-      g_value_init (value, GTK_TYPE_GRADIENT);
-      return gradient_value_parse (parser, value);
-
-      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   else
     {
@@ -778,15 +731,6 @@ gtk_css_style_funcs_init (void)
   register_conversion_function (GTK_TYPE_BORDER,
                                 border_value_parse,
                                 border_value_print);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  register_conversion_function (GTK_TYPE_GRADIENT,
-                                gradient_value_parse,
-                                gradient_value_print);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
                                 pattern_value_parse,
                                 pattern_value_print);

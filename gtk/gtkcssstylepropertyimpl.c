@@ -47,7 +47,6 @@
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
-#include "gtkcssimagegradientprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
@@ -607,12 +606,10 @@ css_image_value_query (GtkCssStyleProperty *property,
   cairo_pattern_t *pattern;
   cairo_surface_t *surface;
   cairo_matrix_t matrix;
-  
+
   g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
 
-  if (GTK_IS_CSS_IMAGE_GRADIENT (image))
-    g_value_set_boxed (value, GTK_CSS_IMAGE_GRADIENT (image)->pattern);
-  else if (image != NULL)
+  if (image != NULL)
     {
       double width, height;
 

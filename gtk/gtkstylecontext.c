@@ -55,7 +55,6 @@
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 
-#include "deprecated/gtkgradientprivate.h"
 #include "deprecated/gtksymboliccolorprivate.h"
 
 #include "fallback-c89.c"
