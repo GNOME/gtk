@@ -25,7 +25,6 @@
 
 /* for the types only */
 #include "gtk/gtkcssimagecrossfadeprivate.h"
-#include "gtk/gtkcssimagegradientprivate.h"
 #include "gtk/gtkcssimageiconthemeprivate.h"
 #include "gtk/gtkcssimagelinearprivate.h"
 #include "gtk/gtkcssimageradialprivate.h"
@@ -418,7 +417,6 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
     GType (* type_func) (void);
   } image_types[] = {
     { "url", _gtk_css_image_url_get_type },
-    { "-gtk-gradient", _gtk_css_image_gradient_get_type },
     { "-gtk-icontheme", _gtk_css_image_icon_theme_get_type },
     { "-gtk-scaled", _gtk_css_image_scaled_get_type },
     { "-gtk-recolor", _gtk_css_image_recolor_get_type },
