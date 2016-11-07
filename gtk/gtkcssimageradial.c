@@ -346,7 +346,7 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
 
   if (has_size && !radial->circle)
     {
-      if (!radial->sizes[1])
+      if (radial->sizes[0] && !radial->sizes[1])
         radial->sizes[1] = _gtk_css_value_ref (radial->sizes[0]);
     }
 
