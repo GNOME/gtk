@@ -6375,7 +6375,32 @@ gtk_widget_draw_internal (GtkWidget *widget,
        * render on the Cairo context; otherwise we just go through the old
        * GtkWidget::draw path
        */
-      if (widget_class->get_render_node != NULL)
+      if (widget_class->snapshot != NULL)
+        {
+          GskRenderer *renderer = gtk_widget_get_renderer (widget);
+          GtkSnapshot snapshot;
+          GskRenderer *fallback;
+          graphene_rect_t viewport;
+          GskRenderNode *node;
+
+          graphene_rect_init (&viewport,
+                              widget->priv->allocation.x - widget->priv->clip.x,
+                              widget->priv->allocation.y - widget->priv->clip.y,
+                              widget->priv->clip.width,
+                              widget->priv->clip.height);
+          fallback = gsk_renderer_create_fallback (renderer, &viewport, cr);
+          gtk_snapshot_init_root (&snapshot, renderer);
+          node = gtk_widget_snapshot (widget, &snapshot);
+          if (node != NULL)
+            {
+              gsk_renderer_render (fallback, node, NULL);
+              gsk_render_node_unref (node);
+            }
+          gtk_snapshot_finish (&snapshot);
+
+          g_object_unref (fallback);
+        }
+      else if (widget_class->get_render_node != NULL)
         {
           GskRenderer *renderer = gtk_widget_get_renderer (widget);
           GskRenderer *fallback;
@@ -15664,7 +15689,8 @@ gtk_widget_snapshot (GtkWidget         *widget,
   /* Compatibility mode: if the widget does not have a render node, we draw
    * using gtk_widget_draw() on a temporary node
    */
-  if (klass->get_render_node == NULL)
+  if (klass->get_render_node == NULL &&
+      klass->snapshot == NULL)
     {
       GskRenderNode *tmp;
       cairo_t *cr;
@@ -15682,7 +15708,10 @@ gtk_widget_snapshot (GtkWidget         *widget,
     }
   else
     {
-      node = klass->get_render_node (widget, gtk_snapshot_get_renderer (snapshot));
+      if (klass->snapshot)
+        node = klass->snapshot (widget, snapshot);
+      else
+        node = klass->get_render_node (widget, gtk_snapshot_get_renderer (snapshot));
 
       /* Compatibility mode: if there's a ::draw signal handler, we add a
        * child node with the contents of the handler
