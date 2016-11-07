@@ -1,3 +1,24 @@
+Overview of Changes in GTK+ 3.22.3
+==================================
+
+* Deprecations have been added for APIs that will be removed
+  in GTK+ 4
+
+* gtk-demo has gained a new demo for showing (and testing)
+  rendering preformance
+
+* Windows:
+ - The GL support has been improved. Legacy contexts can now
+   be created, and anti-aliasing is possible
+ - Hi-DPI is now supported
+
+* Bugs fixed:
+773479 773474 773528 773274 773885 773857 773799 768081
+
+* Translation updates:
+ Serbian
+
+
 Overview of Changes in GTK+ 3.22.2
 ==================================
 
