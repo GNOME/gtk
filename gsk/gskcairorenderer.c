@@ -6,6 +6,7 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeiter.h"
 #include "gskrendernodeprivate.h"
+#include "gsktextureprivate.h"
 
 struct _GskCairoRenderer
 {
@@ -17,6 +18,12 @@ struct _GskCairoRenderer
 struct _GskCairoRendererClass
 {
   GskRendererClass parent_class;
+};
+
+typedef struct _GskCairoTexture GskCairoTexture;
+struct _GskCairoTexture {
+  GskTexture texture;
+  cairo_surface_t *surface;
 };
 
 G_DEFINE_TYPE (GskCairoRenderer, gsk_cairo_renderer, GSK_TYPE_RENDERER)
@@ -50,7 +57,8 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
 
   cairo_save (cr);
 
-  if (!gsk_render_node_has_surface (node))
+  if (!gsk_render_node_has_surface (node) &&
+      !gsk_render_node_has_texture (node))
     goto out;
 
   gsk_render_node_get_world_matrix (node, &mvp);
@@ -89,8 +97,18 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
                             node->name,
                             node,
                             frame.origin.x, frame.origin.y));
-  cairo_set_source_surface (cr, gsk_render_node_get_surface (node), frame.origin.x, frame.origin.y); 
-  cairo_paint (cr);
+  if (gsk_render_node_has_texture (node))
+    {
+      GskCairoTexture *cairo_texture = (GskCairoTexture *) gsk_render_node_get_texture (node);
+
+      cairo_set_source_surface (cr, cairo_texture->surface, frame.origin.x, frame.origin.y); 
+      cairo_paint (cr);
+    }
+  else
+    {
+      cairo_set_source_surface (cr, gsk_render_node_get_surface (node), frame.origin.x, frame.origin.y); 
+      cairo_paint (cr);
+    }
 
   if (GSK_RENDER_MODE_CHECK (GEOMETRY))
     {
@@ -168,6 +186,77 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
   gsk_cairo_renderer_render_node (self, root, cr);
 }
 
+static GskTexture *
+gsk_cairo_texture_new_for_surface (GskRenderer     *renderer,
+                                   cairo_surface_t *surface,
+                                   int              width,
+                                   int              height)
+{
+  GskCairoTexture *texture;
+
+  texture = gsk_texture_new (GskCairoTexture, renderer, width, height);
+
+  texture->surface = cairo_surface_reference (surface);
+
+  return (GskTexture *) texture;
+}
+
+static GskTexture *
+gsk_cairo_renderer_texture_new_for_data (GskRenderer  *renderer,
+                                         const guchar *data,
+                                         int           width,
+                                         int           height,
+                                         int           stride)
+{
+  GskTexture *texture;
+  cairo_surface_t *original, *copy;
+  cairo_t *cr;
+
+  original = cairo_image_surface_create_for_data ((guchar *) data, CAIRO_FORMAT_ARGB32, width, height, stride);
+  copy = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+
+  cr = cairo_create (copy);
+  cairo_set_source_surface (cr, original, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  texture = gsk_cairo_texture_new_for_surface (renderer,
+                                               copy,
+                                               width, height);
+
+  cairo_surface_destroy (copy);
+  cairo_surface_destroy (original);
+
+  return texture;
+}
+
+static GskTexture *
+gsk_cairo_renderer_texture_new_for_pixbuf (GskRenderer *renderer,
+                                           GdkPixbuf   *pixbuf)
+{
+  GskTexture *texture;
+  cairo_surface_t *surface;
+
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+
+  texture = gsk_cairo_texture_new_for_surface (renderer,
+                                               surface,
+                                               gdk_pixbuf_get_width (pixbuf),
+                                               gdk_pixbuf_get_height (pixbuf));
+
+  cairo_surface_destroy (surface);
+
+  return texture;
+}
+
+static void
+gsk_cairo_renderer_texture_destroy (GskTexture *texture)
+{
+  GskCairoTexture *cairo_texture = (GskCairoTexture *) texture;
+
+  cairo_surface_destroy (cairo_texture->surface);
+}
+
 static void
 gsk_cairo_renderer_class_init (GskCairoRendererClass *klass)
 {
@@ -176,6 +265,10 @@ gsk_cairo_renderer_class_init (GskCairoRendererClass *klass)
   renderer_class->realize = gsk_cairo_renderer_realize;
   renderer_class->unrealize = gsk_cairo_renderer_unrealize;
   renderer_class->render = gsk_cairo_renderer_render;
+
+  renderer_class->texture_new_for_data = gsk_cairo_renderer_texture_new_for_data;
+  renderer_class->texture_new_for_pixbuf = gsk_cairo_renderer_texture_new_for_pixbuf;
+  renderer_class->texture_destroy = gsk_cairo_renderer_texture_destroy;
 }
 
 static void
