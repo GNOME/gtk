@@ -1122,7 +1122,6 @@ gdk_window_new (GdkWindow     *parent,
   GdkDisplay *display;
   gboolean native;
   GdkEventMask event_mask;
-  GdkWindow *real_parent;
 
   g_return_val_if_fail (attributes != NULL, NULL);
 
@@ -1145,13 +1144,6 @@ gdk_window_new (GdkWindow     *parent,
   display = gdk_screen_get_display (screen);
 
   window = _gdk_display_create_window (display);
-
-  /* Windows with a foreign parent are treated as if they are children
-   * of the root window, except for actual creation.
-   */
-  real_parent = parent;
-  if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
-    parent = gdk_screen_get_root_window (screen);
 
   window->parent = parent;
 
@@ -1233,14 +1225,14 @@ gdk_window_new (GdkWindow     *parent,
       event_mask = get_native_event_mask (window);
 
       /* Create the impl */
-      _gdk_display_create_window_impl (display, window, real_parent, screen, event_mask, attributes);
+      _gdk_display_create_window_impl (display, window, parent, screen, event_mask, attributes);
       window->impl_window = window;
 
       parent->impl_window->native_children = g_list_prepend (parent->impl_window->native_children, window);
 
       /* This will put the native window topmost in the native parent, which may
        * be wrong wrt other native windows in the non-native hierarchy, so restack */
-      if (!_gdk_window_has_impl (real_parent))
+      if (!_gdk_window_has_impl (parent))
 	sync_native_window_stack_position (window);
     }
   else
