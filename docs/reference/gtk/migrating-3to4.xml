@@ -133,27 +133,11 @@
     <section>
       <title>Adapt to GtkWidget's size request changes</title>
       <para>
-        GTK+ 3 used five different virtual functions in GtkWidget to
+        GTK+3 used five different virtual functions in GtkWidget to
         implement size requisition, namely the gtk_widget_get_preferred_width()
         family of functions. To simplify widget implementations, GTK+4 uses
         only one virtual function, GtkWidgetClass::measure() that widgets
         have to implement.
-      </para>
-    </section>
-
-    <section>
-      <title>Don't use symbolic colors in your CSS</title>
-      <para>
-        GTK+ 4 does not support @define-color and symbolic colors anymore.
-        We recommend that you use a css preprocessor like sass instead.
-      </para>
-    </section>
-
-    <section>
-      <title>Don't use -gtk-gradient in your CSS</title>
-      <para>
-        GTK+ now supports standard CSS syntax for both linear and radial
-        gradients, just use those.
       </para>
     </section>
 
