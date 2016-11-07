@@ -323,10 +323,10 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
 
   if (!has_shape)
     {
-      if (radial->sizes[0] && radial->sizes[1])
-        radial->circle = FALSE;
-      else
+      if (radial->sizes[0] && !radial->sizes[1])
         radial->circle = TRUE;
+      else
+        radial->circle = FALSE;
     }
 
   if (has_shape && radial->circle)
