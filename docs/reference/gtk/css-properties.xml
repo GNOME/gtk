@@ -1107,7 +1107,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>✓</entry>
               <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-image">CSS2</ulink>,
                      <ulink url="http://www.w3.org/TR/css3-background/#background-image">CSS3</ulink></entry>
-              <entry>not supported: urls without quotes, CSS radial gradients, colors in crossfades</entry>
+              <entry>not supported: urls without quotes, colors in crossfades</entry>
             </row>
             <row>
               <entry>background-blend-mode</entry>

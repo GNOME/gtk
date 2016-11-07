@@ -682,7 +682,6 @@ button {
       Gradients are images that smoothly fades from one color to another. CSS
       provides ways to specify repeating and non-repeating linear and radial
       gradients. Radial gradients can be circular, or axis-aligned ellipses.
-      In addition to CSS gradients, GTK+ has its own -gtk-gradient extensions.
     </para>
 
     <para>
@@ -734,75 +733,8 @@ label {
       GTK+ extends the CSS syntax for images and also uses it for specifying icons.
     </para>
 
-<literallayout><code>〈gtk image〉 = 〈gtk gradient〉 | 〈themed icon〉 | 〈scaled image〉 | 〈recolored image〉 | 〈win32 theme part〉</code>
+<literallayout><code>〈gtk image〉 = 〈themed icon〉 | 〈scaled image〉 | 〈recolored image〉 | 〈win32 theme part〉</code>
 </literallayout>
-
-    <para>
-      GTK+ supports an alternative syntax for linear and radial gradients (which
-      was implemented before CSS gradients were supported).
-    </para>
-
-<literallayout><code>〈gtk gradient〉 = 〈gtk linear gradient〉 | 〈gtk radial gradient〉</code>
-<code>〈gtk linear gradient〉 = -gtk-gradient(linear,</code>
-<code>                          [ 〈x position〉 〈y position〉 , ]{2}</code>
-<code>                          〈gtk color stops〉 )</code>
-<code>〈gtk radial gradient〉 = -gtk-gradient(radial,</code>
-<code>                          [ 〈x position〉 〈y position〉 , 〈radius〉 , ]{2}</code>
-<code>                          〈gtk color stops〉 )</code>
-<code>〈x position〉 = left | right | center | 〈number〉</code>
-<code>〈y position〉 = top | bottom | center | 〈number〉</code>
-<code>〈radius 〉 = 〈number〉</code>
-<code>〈gtk color stops〉 = 〈gtk color stop〉 [ , 〈gtk color stop〉 ]+</code>
-<code>〈gtk color stop〉 = color-stop( 〈number〉 , 〈color〉 ) | from( 〈color〉 ) | to( 〈color〉 )</code>
-</literallayout>
-
-    <para>
-      The numbers used to specify x and y positions, radii, as well as the
-      positions of color stops, must be between 0 and 1. The keywords for for
-      x and y positions (left, right, top, bottom, center), map to numeric
-      values of 0, 1 and 0.5 in the obvious way. Color stops using the from() and
-      to() syntax are abbreviations for color-stop with numeric positions of
-      0 and 1, respectively.
-    </para>
-
-    <example>
-      <title>Linear gradients</title>
-      <programlisting><![CDATA[
-button {
-  background-image: -gtk-gradient (linear,
-                                   left top, right bottom,
-                                   from(@yellow), to(@blue));
-}
-label {
-  background-image: -gtk-gradient (linear,
-                                   0 0, 0 1,
-                                   color-stop(0, @yellow),
-                                   color-stop(0.2, @blue),
-                                   color-stop(1, #0f0));
-}
-]]></programlisting>
-    </example>
-
-    <example>
-      <title>Radial gradients</title>
-      <programlisting><![CDATA[
-button {
-  background-image: -gtk-gradient (radial,
-                                   center center, 0,
-                                   center center, 1,
-                                   from(@yellow), to(@green));
-}
-label {
-  background-image: -gtk-gradient (radial,
-                                   0.4 0.4, 0.1,
-                                   0.6 0.6, 0.7,
-                                   color-stop(0, #f00),
-                                   color-stop(0.1, $a0f),
-                                   color-stop(0.2, @yellow),
-                                   color-stop(1, @green));
-}
-]]></programlisting>
-    </example>
 
     <para>
       GTK+ has extensive support for loading icons from icon themes. It is
