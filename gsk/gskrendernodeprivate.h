@@ -34,8 +34,8 @@ struct _GskRenderNode
   /* The contents of the node as a Cairo surface */
   cairo_surface_t *surface;
 
-  /* The contents of the node as a GL surface */
-  int texture_id;
+  /* The contents of the node as a texture */
+  GskTexture *texture;
 
   /* Paint opacity */
   double opacity;
@@ -85,7 +85,7 @@ double gsk_render_node_get_opacity (GskRenderNode *node);
 
 cairo_surface_t *gsk_render_node_get_surface (GskRenderNode *node);
 
-int gsk_render_node_get_texture (GskRenderNode *node);
+GskTexture *gsk_render_node_get_texture (GskRenderNode *node);
 
 gboolean gsk_render_node_has_surface (GskRenderNode *node);
 gboolean gsk_render_node_has_texture (GskRenderNode *node);

@@ -11,6 +11,7 @@
 #include "gskrendernodeprivate.h"
 #include "gskrendernodeiter.h"
 #include "gskshaderbuilderprivate.h"
+#include "gsktextureprivate.h"
 
 #include "gskprivate.h"
 
@@ -89,6 +90,13 @@ typedef struct {
 } ProfileTimers;
 #endif
 
+typedef struct _GskGLTexture GskGLTexture;
+struct _GskGLTexture {
+  GskTexture texture;
+
+  int texture_id;
+};
+
 struct _GskGLRenderer
 {
   GskRenderer parent_instance;
@@ -128,6 +136,86 @@ struct _GskGLRendererClass
 
 G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
 
+static GskTexture *
+gsk_gl_renderer_texture_new_for_data (GskRenderer  *renderer,
+                                      const guchar *data,
+                                      int           width,
+                                      int           height,
+                                      int           stride)
+{
+  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  GskGLTexture *texture;
+  cairo_surface_t *surface;
+
+  gdk_gl_context_make_current (self->gl_context);
+  gsk_gl_driver_begin_frame (self->gl_driver);
+
+  /* XXX: Make this work without having to create cairo surfaces */
+  surface = cairo_image_surface_create_for_data ((guchar *) data, CAIRO_FORMAT_ARGB32, width, height, stride);
+
+  texture = gsk_texture_new (GskGLTexture, renderer, width, height);
+
+  texture->texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                      TRUE,
+                                                      width, height);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, texture->texture_id);
+  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                           texture->texture_id,
+                                           surface,
+                                           GL_NEAREST,
+                                           GL_NEAREST);
+
+  cairo_surface_destroy (surface);
+
+  gsk_gl_driver_end_frame (self->gl_driver);
+
+  return &texture->texture;
+}
+
+static GskTexture *
+gsk_gl_renderer_texture_new_for_pixbuf (GskRenderer *renderer,
+                                        GdkPixbuf   *pixbuf)
+{
+  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  GskGLTexture *texture;
+  cairo_surface_t *surface;
+  int width, height;
+
+  gdk_gl_context_make_current (self->gl_context);
+  gsk_gl_driver_begin_frame (self->gl_driver);
+
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+
+  texture = gsk_texture_new (GskGLTexture, renderer, width, height);
+
+  texture->texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                      TRUE,
+                                                      width, height);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, texture->texture_id);
+  gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                           texture->texture_id,
+                                           surface,
+                                           GL_NEAREST,
+                                           GL_NEAREST);
+
+  gsk_gl_driver_end_frame (self->gl_driver);
+
+  cairo_surface_destroy (surface);
+
+  return &texture->texture;
+}
+
+static void
+gsk_gl_renderer_texture_destroy (GskTexture *texture)
+{
+  GskGLTexture *gltexture = (GskGLTexture *) texture;
+  GskGLRenderer *self = GSK_GL_RENDERER (gsk_texture_get_renderer (texture));
+
+  gsk_gl_driver_release_texture (self->gl_driver, gltexture->texture_id);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -152,6 +240,7 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self,
   if (self->texture_id == 0)
     {
       self->texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                       FALSE,
                                                        width * scale_factor,
                                                        height * scale_factor);
       gsk_gl_driver_bind_source_texture (self->gl_driver, self->texture_id);
@@ -693,7 +782,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   if (render_node_needs_render_target (node))
     {
       item.render_data.render_target_id =
-        gsk_gl_driver_create_texture (self->gl_driver, item.size.width, item.size.height);
+        gsk_gl_driver_create_texture (self->gl_driver, FALSE, item.size.width, item.size.height);
       gsk_gl_driver_init_texture_empty (self->gl_driver, item.render_data.render_target_id);
       gsk_gl_driver_create_render_target (self->gl_driver, item.render_data.render_target_id, TRUE, TRUE);
 
@@ -708,7 +797,14 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   if (gsk_render_node_has_texture (node))
     {
-      item.render_data.texture_id = gsk_render_node_get_texture (node);
+      GskTexture *texture = gsk_render_node_get_texture (node);
+
+      if (gsk_texture_get_renderer (texture) != GSK_RENDERER (self))
+        {
+          g_warning ("Given Texture belongs to wrong renderer, ignoring.");
+          goto out;
+        }
+      item.render_data.texture_id = ((GskGLTexture *) texture)->texture_id;
     }
   else if (gsk_render_node_has_surface (node))
     {
@@ -719,6 +815,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
       /* Upload the Cairo surface to a GL texture */
       item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                                  FALSE,
                                                                   item.size.width,
                                                                   item.size.height);
       gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
@@ -965,6 +1062,10 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
   renderer_class->realize = gsk_gl_renderer_realize;
   renderer_class->unrealize = gsk_gl_renderer_unrealize;
   renderer_class->render = gsk_gl_renderer_render;
+
+  renderer_class->texture_new_for_data = gsk_gl_renderer_texture_new_for_data;
+  renderer_class->texture_new_for_pixbuf = gsk_gl_renderer_texture_new_for_pixbuf;
+  renderer_class->texture_destroy = gsk_gl_renderer_texture_destroy;
 }
 
 static void

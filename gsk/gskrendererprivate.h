@@ -47,6 +47,15 @@ struct _GskRendererClass
                                               cairo_format_t,
                                               int width,
                                               int height);
+  /* called from gsktexture.c */
+  GskTexture * (* texture_new_for_data) (GskRenderer *renderer,
+                                         const guchar *data,
+                                         int width,
+                                         int height,
+                                         int stride);
+  GskTexture * (* texture_new_for_pixbuf) (GskRenderer *renderer,
+                                           GdkPixbuf   *pixbuf);
+  void (* texture_destroy) (GskTexture *texture);
 };
 
 gboolean gsk_renderer_is_realized (GskRenderer *renderer);

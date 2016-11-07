@@ -24,8 +24,11 @@ void            gsk_gl_driver_begin_frame               (GskGLDriver     *driver
 void            gsk_gl_driver_end_frame                 (GskGLDriver     *driver);
 
 int             gsk_gl_driver_create_texture            (GskGLDriver     *driver,
+                                                         gboolean         reserved,
                                                          int              width,
                                                          int              height);
+void            gsk_gl_driver_release_texture           (GskGLDriver     *driver,
+                                                         int              texture_id);
 int             gsk_gl_driver_create_vao_for_quad       (GskGLDriver     *driver,
                                                          int              position_id,
                                                          int              uv_id,

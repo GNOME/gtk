@@ -15,6 +15,7 @@ typedef struct {
   GLuint mag_filter;
   GArray *fbos;
   gboolean in_use : 1;
+  gboolean reserved : 1;
 } Texture;
 
 typedef struct {
@@ -74,6 +75,8 @@ static void
 texture_free (gpointer data)
 {
   Texture *t = data;
+
+  g_warn_if_fail (!t->reserved);
 
   g_clear_pointer (&t->fbos, g_array_unref);
   glDeleteTextures (1, &t->texture_id);
@@ -269,6 +272,9 @@ gsk_gl_driver_collect_textures (GskGLDriver *driver)
     {
       Texture *t = value_p;
 
+      if (t->reserved)
+        continue;
+
       if (t->in_use)
         {
           t->in_use = FALSE;
@@ -379,6 +385,7 @@ find_texture_by_size (GHashTable *textures,
 
 int
 gsk_gl_driver_create_texture (GskGLDriver *driver,
+                              gboolean     reserve,
                               int          width,
                               int          height)
 {
@@ -404,6 +411,7 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
       GSK_NOTE (OPENGL, g_print ("Reusing Texture(%d) for size %dx%d\n",
                                  t->texture_id, t->width, t->height));
       t->in_use = TRUE;
+      t->reserved = reserve;
       return t->texture_id;
     }
 
@@ -416,9 +424,25 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
   t->min_filter = GL_NEAREST;
   t->mag_filter = GL_NEAREST;
   t->in_use = TRUE;
+  t->reserved = reserve;
   g_hash_table_insert (driver->textures, GINT_TO_POINTER (texture_id), t);
 
   return t->texture_id;
+}
+
+void
+gsk_gl_driver_release_texture (GskGLDriver *driver,
+                               int          texture_id)
+{
+  Texture *t;
+  
+  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
+  
+  t = gsk_gl_driver_get_texture (driver, texture_id);
+  g_return_if_fail (t != NULL);
+  g_return_if_fail (t->reserved);
+
+  t->reserved = FALSE;
 }
 
 static Vao *

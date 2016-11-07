@@ -46,6 +46,7 @@
 #include "gskdebugprivate.h"
 #include "gskrendernodeiter.h"
 #include "gskrendererprivate.h"
+#include "gsktexture.h"
 
 #include <graphene-gobject.h>
 
@@ -1204,33 +1205,42 @@ gsk_render_node_has_texture (GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), FALSE);
 
-  return node->texture_id != 0;
+  return node->texture != NULL;
 }
 
-int
+GskTexture *
 gsk_render_node_get_texture (GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 0);
 
-  return node->texture_id;
+  return node->texture;
 }
 
 /**
  * gsk_render_node_set_texture:
  * @node: a #GskRenderNode
- * @texture_id: the object id of a GL texture
+ * @texture: the #GskTexture
  *
- * Associates a @texture_id to a #GskRenderNode.
+ * Associates a #GskTexture to a #GskRenderNode.
  *
  * Since: 3.90
  */
 void
 gsk_render_node_set_texture (GskRenderNode *node,
-                             int            texture_id)
+                             GskTexture    *texture)
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  node->texture_id = texture_id;
+  if (node->texture == texture)
+    return;
+
+  if (node->texture)
+    gsk_texture_unref (node->texture);
+
+  node->texture = texture;
+
+  if (texture)
+    gsk_texture_ref (texture);
 }
 
 /*< private >

@@ -42,6 +42,7 @@
 #include "gskglrendererprivate.h"
 #include "gskprofilerprivate.h"
 #include "gskrendernodeprivate.h"
+#include "gsktexture.h"
 
 #include "gskenumtypes.h"
 
@@ -131,6 +132,44 @@ gsk_renderer_real_create_cairo_surface (GskRenderer    *self,
   cairo_surface_set_device_scale (res, scale_factor, scale_factor);
 
   return res;
+}
+
+static GskTexture *
+gsk_renderer_real_texture_new_for_data (GskRenderer  *self,
+                                        const guchar *data,
+                                        int           width,
+                                        int           height,
+                                        int           stride)
+{
+  GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, texture_new_for_data);
+
+  return NULL;
+}
+
+static GskTexture *
+gsk_renderer_real_texture_new_for_pixbuf (GskRenderer *renderer,
+                                          GdkPixbuf   *pixbuf)
+{
+  GskTexture *texture;
+  cairo_surface_t *surface;
+
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+
+  texture = gsk_texture_new_for_data (renderer,
+                                      cairo_image_surface_get_data (surface),
+                                      cairo_image_surface_get_width (surface),
+                                      cairo_image_surface_get_height (surface),
+                                      cairo_image_surface_get_stride (surface));
+
+  cairo_surface_destroy (surface);
+
+  return texture;
+}
+
+static void
+gsk_renderer_real_texture_destroy (GskTexture *texture)
+{
+  GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (gsk_texture_get_renderer (texture), texture_destroy);
 }
 
 static void
@@ -239,6 +278,9 @@ gsk_renderer_class_init (GskRendererClass *klass)
   klass->unrealize = gsk_renderer_real_unrealize;
   klass->render = gsk_renderer_real_render;
   klass->create_cairo_surface = gsk_renderer_real_create_cairo_surface;
+  klass->texture_new_for_data = gsk_renderer_real_texture_new_for_data;
+  klass->texture_new_for_pixbuf = gsk_renderer_real_texture_new_for_pixbuf;
+  klass->texture_destroy = gsk_renderer_real_texture_destroy;
 
   gobject_class->constructed = gsk_renderer_constructed;
   gobject_class->set_property = gsk_renderer_set_property;
