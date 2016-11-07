@@ -480,7 +480,9 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       <para>
         -gtk-icon-palette defines a color palette for recoloring symbolic
         icons. The recognized names for colors in symbolic icons are error,
-        warning and success.
+        warning and success. The default palette maps these three names to
+        symbolic colors with the names @error_color, @warning_color and
+        @error_color.
       </para>
 
       <table pgwide="1">

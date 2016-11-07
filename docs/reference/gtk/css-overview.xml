@@ -552,11 +552,37 @@ checkbutton:indeterminate {
       GTK+ adds several additional ways to specify colors.
     </para>
 
-<literallayout><code>〈gtk color〉 = 〈color expression〉| 〈win32 color〉</code>
+<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉| 〈win32 color〉</code>
 </literallayout>
 
     <para>
-      GTK+ allows to form color expressions, which can be nested and
+      The first is a reference to a color defined via a @define-color rule.
+      The syntax for @define-color rules is as follows:
+    </para>
+
+<literallayout><code>〈define color rule〉 = @define-color 〈name〉 〈color〉</code>
+</literallayout>
+
+    <para>
+      To refer to the color defined by a @define-color rule,
+      use the name from the rule, prefixed with @.
+    </para>
+
+<literallayout><code>〈symbolic color〉 = @〈name〉</code>
+</literallayout>
+
+    <example><title>An example for defining colors</title>
+      <programlisting><![CDATA[
+@define-color bg_color #f9a039;
+
+* {
+background-color: @bg_color;
+}
+]]></programlisting>
+    </example>
+
+    <para>
+      GTK+ also allows to form color expressions, which can be nested and
       provide a rich language to define colors which are derived from a
       set of base colors.
     </para>
