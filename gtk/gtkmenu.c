@@ -2667,23 +2667,7 @@ menu_grab_transfer_window_get (GtkMenu *menu)
   GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
   if (!window)
     {
-      GdkWindowAttr attributes;
-      gint attributes_mask;
-      GdkWindow *parent;
-
-      attributes.x = -100;
-      attributes.y = -100;
-      attributes.width = 10;
-      attributes.height = 10;
-      attributes.window_type = GDK_WINDOW_TEMP;
-      attributes.wclass = GDK_INPUT_ONLY;
-      attributes.event_mask = 0;
-
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-      parent = gdk_screen_get_root_window (gtk_widget_get_screen (GTK_WIDGET (menu)));
-      window = gdk_window_new (parent,
-                               &attributes, attributes_mask);
+      window = gdk_window_new_temp (gtk_widget_get_display (GTK_WIDGET (menu)));
       gtk_widget_register_window (GTK_WIDGET (menu), window);
 
       gdk_window_show (window);

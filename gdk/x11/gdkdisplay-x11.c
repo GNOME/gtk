@@ -1356,7 +1356,6 @@ _gdk_x11_display_open (const gchar *display_name)
   Display *xdisplay;
   GdkDisplay *display;
   GdkX11Display *display_x11;
-  GdkWindowAttr attr;
   gint argc;
   gchar *argv[1];
 
@@ -1417,16 +1416,7 @@ _gdk_x11_display_open (const gchar *display_name)
 
   gdk_event_init (display);
 
-  attr.window_type = GDK_WINDOW_TOPLEVEL;
-  attr.wclass = GDK_INPUT_ONLY;
-  attr.x = 10;
-  attr.y = 10;
-  attr.width = 10;
-  attr.height = 10;
-  attr.event_mask = 0;
-
-  display_x11->leader_gdk_window = gdk_window_new (GDK_X11_SCREEN (display_x11->screen)->root_window, 
-						   &attr, GDK_WA_X | GDK_WA_Y);
+  display_x11->leader_gdk_window = gdk_window_new_temp (display);
   (_gdk_x11_window_get_toplevel (display_x11->leader_gdk_window))->is_leader = TRUE;
 
   display_x11->leader_window = GDK_WINDOW_XID (display_x11->leader_gdk_window);

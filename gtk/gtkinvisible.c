@@ -229,28 +229,11 @@ gtk_invisible_get_screen (GtkInvisible *invisible)
 static void
 gtk_invisible_realize (GtkWidget *widget)
 {
-  GdkWindow *parent;
   GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
 
   gtk_widget_set_realized (widget, TRUE);
 
-  parent = gtk_widget_get_parent_window (widget);
-  if (parent == NULL)
-    parent = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
-
-  attributes.x = -100;
-  attributes.y = -100;
-  attributes.width = 10;
-  attributes.height = 10;
-  attributes.window_type = GDK_WINDOW_TEMP;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget);
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gdk_window_new (parent, &attributes, attributes_mask);
+  window = gdk_window_new_temp (gtk_widget_get_display (widget));
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 }

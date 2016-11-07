@@ -1365,6 +1365,40 @@ gdk_window_new_popup (GdkDisplay         *display,
                          &attr,
                          GDK_WA_X | GDK_WA_Y);
 }
+
+/**
+ * gdk_window_new_temp: (constructor)
+ * @display: the display to create the window on
+ *
+ * Creates a new toplevel temporary window. The window will be
+ * situated off-screen and not handle output.
+ *
+ * You most likely do not want to use this function.
+ *
+ * Returns: (transfer full): the new #GdkWindow
+ *
+ * Since: 3.90
+ **/
+GdkWindow *
+gdk_window_new_temp (GdkDisplay *display)
+{
+  GdkWindowAttr attr;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  attr.event_mask = 0;
+  attr.wclass = GDK_INPUT_ONLY;
+  attr.x = -100;
+  attr.y = -100;
+  attr.width = 10;
+  attr.height = 10;
+  attr.window_type = GDK_WINDOW_TEMP;
+
+  return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
+                         &attr,
+                         GDK_WA_X | GDK_WA_Y);
+}
+
 /**
  * gdk_window_new_child: (constructor)
  * @parent: the parent window

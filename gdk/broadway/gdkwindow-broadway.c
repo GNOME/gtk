@@ -1290,28 +1290,13 @@ static void
 create_moveresize_window (MoveResizeData *mv_resize,
 			  guint32         timestamp)
 {
-  GdkWindowAttr attributes;
-  gint attributes_mask;
   GdkGrabStatus status;
   GdkSeat *seat;
   GdkDevice *pointer;
 
   g_assert (mv_resize->moveresize_emulation_window == NULL);
 
-  attributes.x = -100;
-  attributes.y = -100;
-  attributes.width = 10;
-  attributes.height = 10;
-  attributes.window_type = GDK_WINDOW_TEMP;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = 0;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  mv_resize->moveresize_emulation_window =
-    gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (mv_resize->display)),
-		    &attributes,
-		    attributes_mask);
+  mv_resize->moveresize_emulation_window = gdk_window_new_temp (mv_resize->display);
 
   gdk_window_show (mv_resize->moveresize_emulation_window);
 
