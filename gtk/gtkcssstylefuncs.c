@@ -36,7 +36,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkcsswin32sizevalueprivate.h"
 
-#include "deprecated/gtksymboliccolorprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -120,86 +119,6 @@ enum_print (int         value,
   g_string_append (string, enum_value->value_nick);
 
   g_type_class_unref (enum_class);
-}
-
-static gboolean
-rgba_value_parse (GtkCssParser *parser,
-                  GValue       *value)
-{
-  GtkSymbolicColor *symbolic;
-  GdkRGBA rgba;
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  symbolic = _gtk_css_symbolic_value_new (parser);
-  if (symbolic == NULL)
-    return FALSE;
-
-  if (gtk_symbolic_color_resolve (symbolic, &rgba))
-    {
-      g_value_set_boxed (value, &rgba);
-      gtk_symbolic_color_unref (symbolic);
-    }
-  else
-    {
-      g_value_unset (value);
-      g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
-      g_value_take_boxed (value, symbolic);
-    }
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  return TRUE;
-}
-
-static void
-rgba_value_print (const GValue *value,
-                  GString      *string)
-{
-  const GdkRGBA *rgba = g_value_get_boxed (value);
-
-  if (rgba == NULL)
-    g_string_append (string, "none");
-  else
-    {
-      char *s = gdk_rgba_to_string (rgba);
-      g_string_append (string, s);
-      g_free (s);
-    }
-}
-
-static gboolean
-symbolic_color_value_parse (GtkCssParser *parser,
-                            GValue       *value)
-{
-  GtkSymbolicColor *symbolic;
-
-  symbolic = _gtk_css_symbolic_value_new (parser);
-  if (symbolic == NULL)
-    return FALSE;
-
-  g_value_take_boxed (value, symbolic);
-  return TRUE;
-}
-
-static void
-symbolic_color_value_print (const GValue *value,
-                            GString      *string)
-{
-  GtkSymbolicColor *symbolic = g_value_get_boxed (value);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  if (symbolic == NULL)
-    g_string_append (string, "none");
-  else
-    {
-      char *s = gtk_symbolic_color_to_string (symbolic);
-      g_string_append (string, s);
-      g_free (s);
-    }
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static gboolean 
@@ -694,18 +613,6 @@ gtk_css_style_funcs_init (void)
 
   parse_funcs = g_hash_table_new (NULL, NULL);
   print_funcs = g_hash_table_new (NULL, NULL);
-
-  register_conversion_function (GDK_TYPE_RGBA,
-                                rgba_value_parse,
-                                rgba_value_print);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  register_conversion_function (GTK_TYPE_SYMBOLIC_COLOR,
-                                symbolic_color_value_parse,
-                                symbolic_color_value_print);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   register_conversion_function (PANGO_TYPE_FONT_DESCRIPTION,
                                 font_description_value_parse,

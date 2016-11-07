@@ -55,9 +55,6 @@
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 
-#include "deprecated/gtksymboliccolorprivate.h"
-
-#include "fallback-c89.c"
 
 /**
  * SECTION:gtkstylecontext
@@ -1392,33 +1389,6 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                  gtk_widget_path_iter_get_state (path, -1),
                                                  pspec, &pcache->value))
         {
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-          /* Resolve symbolic colors to GdkRGBA */
-          if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)
-            {
-              GtkSymbolicColor *color;
-              GdkRGBA rgba;
-
-              color = g_value_dup_boxed (&pcache->value);
-
-              g_value_unset (&pcache->value);
-
-              g_assert (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA);
-              g_value_init (&pcache->value, GDK_TYPE_RGBA);
-
-              if (_gtk_style_context_resolve_color (context, _gtk_symbolic_color_get_css_value (color), &rgba))
-                g_value_set_boxed (&pcache->value, &rgba);
-              else
-                g_param_value_set_default (pspec, &pcache->value);
-
-              gtk_symbolic_color_unref (color);
-            }
-
-          G_GNUC_END_IGNORE_DEPRECATIONS;
-
-          gtk_widget_path_unref (path);
-
           return &pcache->value;
         }
     }

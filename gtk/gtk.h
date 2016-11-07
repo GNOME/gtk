@@ -241,10 +241,6 @@
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkwindowgroup.h>
 
-#ifndef GTK_DISABLE_DEPRECATED
-#include <gtk/deprecated/gtksymboliccolor.h>
-#endif /* GTK_DISABLE_DEPRECATED */
-
 #include <gtk/gtk-autocleanups.h>
 
 #undef __GTK_H_INSIDE__

@@ -1,8 +1,5 @@
-deprecated_h_sources = 			\
-	deprecated/gtksymboliccolor.h
+deprecated_h_sources =
 
-deprecated_private_h_sources =			\
-	deprecated/gtksymboliccolorprivate.h
+deprecated_private_h_sources =
 
-deprecated_c_sources = 			\
-	deprecated/gtksymboliccolor.c
+deprecated_c_sources =
