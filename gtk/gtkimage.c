@@ -1420,43 +1420,43 @@ gtk_image_get_render_node (GtkWidget   *widget,
   if (res == NULL)
     return NULL;
 
-  node = gtk_widget_create_render_node (widget, renderer, "Image Content");
-
-  gtk_widget_get_clip (widget, &clip);
-  _gtk_widget_get_allocation (widget, &alloc);
-
-  cr = gsk_render_node_get_draw_context (node, renderer);
-  cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
-  x = 0;
-  y = 0;
-  width = alloc.width;
-  height = alloc.height;
-
-  _gtk_icon_helper_get_size (priv->icon_helper, &w, &h);
-
-  baseline = gtk_widget_get_allocated_baseline (widget);
-
-  if (baseline == -1)
-    y += floor(height - h) / 2;
-  else
-    y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
-
-  x += (width - w) / 2;
-
   if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
     {
+      node = gtk_widget_create_render_node (widget, renderer, "Image Content");
+
+      gtk_widget_get_clip (widget, &clip);
+      _gtk_widget_get_allocation (widget, &alloc);
+
+      cr = gsk_render_node_get_draw_context (node, renderer);
+      cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
+      x = 0;
+      y = 0;
+      width = alloc.width;
+      height = alloc.height;
+
+      _gtk_icon_helper_get_size (priv->icon_helper, &w, &h);
+
+      baseline = gtk_widget_get_allocated_baseline (widget);
+
+      if (baseline == -1)
+        y += floor(height - h) / 2;
+      else
+        y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
+
+      x += (width - w) / 2;
+
       GtkStyleContext *context = gtk_widget_get_style_context (widget);
       GdkPixbuf *pixbuf = get_animation_frame (image);
 
       gtk_render_icon (context, cr, pixbuf, x, y);
       g_object_unref (pixbuf);
+
+      cairo_destroy (cr);
     }
   else
     {
-      _gtk_icon_helper_draw (priv->icon_helper, cr, x, y);
+      node = gtk_icon_helper_get_render_node (priv->icon_helper, renderer);
     }
-
-  cairo_destroy (cr);
 
   gsk_render_node_append_child (res, node);
   gsk_render_node_unref (node);

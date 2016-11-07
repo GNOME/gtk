@@ -43,6 +43,7 @@ struct _GtkIconHelperPrivate {
   guint rendered_surface_is_symbolic : 1;
 
   cairo_surface_t *rendered_surface;
+  GskTexture *texture;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIconHelper, gtk_icon_helper, GTK_TYPE_CSS_GADGET)
@@ -50,6 +51,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkIconHelper, gtk_icon_helper, GTK_TYPE_CSS_GADGET)
 static void
 gtk_icon_helper_invalidate (GtkIconHelper *self)
 {
+  g_clear_pointer (&self->priv->texture, gsk_texture_unref);
+
   if (self->priv->rendered_surface != NULL)
     {
       cairo_surface_destroy (self->priv->rendered_surface);
@@ -95,6 +98,7 @@ gtk_icon_helper_take_definition (GtkIconHelper      *self,
 void
 _gtk_icon_helper_clear (GtkIconHelper *self)
 {
+  g_clear_pointer (&self->priv->texture, gsk_texture_unref);
   g_clear_pointer (&self->priv->rendered_surface, cairo_surface_destroy);
 
   gtk_image_definition_unref (self->priv->def);
@@ -554,6 +558,34 @@ gtk_icon_helper_ensure_surface (GtkIconHelper *self)
   self->priv->rendered_surface = gtk_icon_helper_load_surface (self, scale);
 }
 
+static void
+gtk_icon_helper_ensure_texture (GtkIconHelper *self,
+                                GskRenderer   *renderer)
+{
+  cairo_surface_t *map;
+  int width, height, scale;
+
+  if (self->priv->texture)
+    return;
+
+  gtk_icon_helper_ensure_surface (self);
+  if (self->priv->rendered_surface == NULL)
+    return;
+
+  scale = gtk_widget_get_scale_factor (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))),
+  _gtk_icon_helper_get_size (self, &width, &height);
+  map = cairo_surface_map_to_image (self->priv->rendered_surface,
+                                    &(GdkRectangle) { 0, 0, width * scale, height * scale});
+
+  self->priv->texture = gsk_texture_new_for_data (renderer,
+                                                  cairo_image_surface_get_data (map),
+                                                  width * scale,
+                                                  height * scale,
+                                                  cairo_image_surface_get_stride (map));
+
+  cairo_surface_unmap_image (self->priv->rendered_surface, map);
+}
+
 void
 _gtk_icon_helper_get_size (GtkIconHelper *self,
                            gint *width_out,
@@ -823,6 +855,29 @@ _gtk_icon_helper_draw (GtkIconHelper *self,
                                          self->priv->rendered_surface,
                                          x, y);
     }
+}
+
+GskRenderNode *
+gtk_icon_helper_get_render_node (GtkIconHelper *self,
+                                 GskRenderer   *renderer)
+{
+  GskTexture *texture;
+  GskRenderNode *node;
+  graphene_rect_t bounds;
+
+  gtk_icon_helper_ensure_texture (self, renderer);
+  texture = self->priv->texture;
+  if (texture == NULL)
+    return NULL;
+ 
+  graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
+
+  node = gsk_renderer_create_render_node (renderer);
+  gsk_render_node_set_name (node, "Icon Helper");
+  gsk_render_node_set_bounds (node, &bounds);
+  gsk_render_node_set_texture (node, texture);
+
+  return node;
 }
 
 gboolean
