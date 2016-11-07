@@ -1750,8 +1750,10 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
 
       gtk_widget_set_size_request (priv->tearoff_window, width, height);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       pattern = cairo_pattern_create_for_surface (surface);
       gdk_window_set_background_pattern (window, pattern);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       cairo_pattern_destroy (pattern);
       cairo_surface_destroy (surface);
@@ -2131,6 +2133,7 @@ gtk_menu_popup (GtkMenu             *menu,
 {
   g_return_if_fail (GTK_IS_MENU (menu));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_menu_popup_for_device (menu,
                              NULL,
                              parent_menu_shell,
@@ -2138,6 +2141,7 @@ gtk_menu_popup (GtkMenu             *menu,
 
                              func, data, NULL,
                              button, activate_time);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static GdkDevice *

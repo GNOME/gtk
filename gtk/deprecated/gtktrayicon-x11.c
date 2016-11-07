@@ -224,9 +224,11 @@ gtk_tray_icon_constructed (GObject *object)
   Display *xdisplay = gdk_x11_display_get_xdisplay (display);
   char buffer[256];
   
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_snprintf (buffer, sizeof (buffer),
 	      "_NET_SYSTEM_TRAY_S%d",
 	      gdk_screen_get_number (screen));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   icon->priv->selection_atom = XInternAtom (xdisplay, buffer, False);
   
@@ -950,6 +952,7 @@ gtk_tray_icon_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->realize (widget);
   window = gtk_widget_get_window (widget);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (icon->priv->manager_visual_rgba)
     {
       /* Set a transparent background */
@@ -961,6 +964,7 @@ gtk_tray_icon_realize (GtkWidget *widget)
       /* Set a parent-relative background pixmap */
       gdk_window_set_background_pattern (window, NULL);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   GTK_NOTE (PLUGSOCKET,
             g_message ("GtkStatusIcon %p: realized, window: %lx, socket window: %lx",

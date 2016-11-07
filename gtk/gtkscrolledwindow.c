@@ -4178,7 +4178,9 @@ create_indicator_window (GtkScrolledWindow *scrolled_window,
                            &attributes, attributes_mask);
   gtk_widget_register_window (widget, window);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_window_set_background_rgba (window, &transparent);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (scrolled_window->priv->use_indicators)
     gtk_widget_set_parent_window (child, window);

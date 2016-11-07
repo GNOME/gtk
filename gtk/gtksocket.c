@@ -1116,10 +1116,12 @@ gtk_socket_add_window (GtkSocket       *socket,
 
       private->need_map = private->is_mapped;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       protocol = gdk_window_get_drag_protocol (private->plug_window, NULL);
       if (protocol)
 	gtk_drag_dest_set_proxy (GTK_WIDGET (socket), private->plug_window,
 				 protocol, TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       gdk_error_trap_pop_ignored ();
 
@@ -1526,11 +1528,13 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent,
 	      (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_RECEIVER_INFO")))
 	    {
 	      gdk_error_trap_push ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
               protocol = gdk_window_get_drag_protocol (private->plug_window, NULL);
               if (protocol)
 		gtk_drag_dest_set_proxy (GTK_WIDGET (socket),
 					 private->plug_window,
 					 protocol, TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 	      gdk_error_trap_pop_ignored ();
 	      return_val = GDK_FILTER_REMOVE;

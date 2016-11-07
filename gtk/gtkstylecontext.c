@@ -2477,6 +2477,7 @@ gtk_style_context_set_background (GtkStyleContext *context,
    *
    * We could indeed just set black instead of the color we have.
    */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (gtk_css_style_render_background_is_opaque (gtk_style_context_lookup_style (context)))
     {
       const GdkRGBA *color;
@@ -2490,6 +2491,7 @@ gtk_style_context_set_background (GtkStyleContext *context,
       GdkRGBA transparent = { 0.0, 0.0, 0.0, 0.0 };
       gdk_window_set_background_rgba (window, &transparent);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
