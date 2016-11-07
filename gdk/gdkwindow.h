@@ -38,7 +38,6 @@
 G_BEGIN_DECLS
 
 typedef struct _GdkGeometry          GdkGeometry;
-typedef struct _GdkWindowAttr        GdkWindowAttr;
 typedef struct _GdkWindowRedirect    GdkWindowRedirect;
 
 /**
@@ -82,24 +81,6 @@ typedef enum
   GDK_WINDOW_FOREIGN,
   GDK_WINDOW_SUBSURFACE
 } GdkWindowType;
-
-/**
- * GdkWindowAttributesType:
- * @GDK_WA_X: Honor the X coordinate field
- * @GDK_WA_Y: Honor the Y coordinate field
- *
- * Used to indicate which fields in the #GdkWindowAttr struct should be honored.
- * For example, if you filled in the “x” and “y” fields of #GdkWindowAttr,
- * pass “@GDK_WA_X | @GDK_WA_Y” to gdk_window_new(). Fields in
- * #GdkWindowAttr not covered by a bit in this enum are required; for example,
- * the @width/@height, @wclass, and @window_type fields are required, they have
- * no corresponding flag in #GdkWindowAttributesType.
- */
-typedef enum
-{
-  GDK_WA_X	   = 1 << 1,
-  GDK_WA_Y	   = 1 << 2
-} GdkWindowAttributesType;
 
 /* Size restriction enumeration.
  */
@@ -316,32 +297,6 @@ typedef enum
 } GdkFullscreenMode;
 
 /**
- * GdkWindowAttr:
- * @event_mask: event mask (see gdk_window_set_events())
- * @x: X coordinate relative to parent window (see gdk_window_move())
- * @y: Y coordinate relative to parent window (see gdk_window_move())
- * @width: width of window
- * @height: height of window
- * @wclass: #GDK_INPUT_OUTPUT (normal window) or #GDK_INPUT_ONLY (invisible
- *  window that receives events)
- * @window_type: type of window
- * @cursor: cursor for the window (see gdk_window_set_cursor())
- * @type_hint: a hint of the function of the window
- *
- * Attributes to use for a newly-created window.
- */
-struct _GdkWindowAttr
-{
-  gint event_mask;
-  gint x, y;
-  gint width;
-  gint height;
-  GdkWindowWindowClass wclass;
-  GdkWindowType window_type;
-  GdkWindowTypeHint type_hint;
-};
-
-/**
  * GdkGeometry:
  * @min_width: minimum width of window (or -1 to use requisition, with
  *  #GtkWindow only)
@@ -461,10 +416,6 @@ struct _GdkWindowClass
  */
 GDK_AVAILABLE_IN_ALL
 GType         gdk_window_get_type              (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
-GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
-                                                GdkWindowAttr *attributes,
-                                                gint           attributes_mask);
 GDK_AVAILABLE_IN_3_90
 GdkWindow *   gdk_window_new_toplevel          (GdkDisplay    *display,
                                                 gint           event_mask,

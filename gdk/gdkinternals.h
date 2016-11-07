@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 /* Debugging support */
 
 typedef struct _GdkEventFilter         GdkEventFilter;
+typedef struct _GdkWindowAttr          GdkWindowAttr;
 
 typedef enum {
   GDK_EVENT_FILTER_REMOVED = 1 << 0
@@ -85,6 +86,12 @@ typedef enum {
   GDK_GL_LEGACY                 = 1 << 5,
   GDK_GL_GLES                   = 1 << 6
 } GdkGLFlags;
+
+typedef enum
+{
+  GDK_WA_X	   = 1 << 1,
+  GDK_WA_Y	   = 1 << 2
+} GdkWindowAttributesType;
 
 extern GList            *_gdk_default_filters;
 extern GdkWindow        *_gdk_parent_root;
@@ -146,6 +153,17 @@ struct _GdkEventPrivate
 };
 
 typedef struct _GdkWindowPaint GdkWindowPaint;
+
+struct _GdkWindowAttr
+{
+  gint event_mask;
+  gint x, y;
+  gint width;
+  gint height;
+  GdkWindowWindowClass wclass;
+  GdkWindowType window_type;
+  GdkWindowTypeHint type_hint;
+};
 
 struct _GdkWindow
 {
@@ -410,6 +428,9 @@ void            gdk_cairo_set_drawing_context    (cairo_t           *cr,
 cairo_surface_t *
            _gdk_window_ref_cairo_surface (GdkWindow *window);
 
+GdkWindow* gdk_window_new                (GdkWindow      *parent,
+                                          GdkWindowAttr  *attributes,
+                                          gint            attributes_mask);
 void       _gdk_window_destroy           (GdkWindow      *window,
                                           gboolean        foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow      *window);
