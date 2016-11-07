@@ -293,6 +293,7 @@ gtk_public_h_sources = 		\
 	gtkstacksidebar.h	\
 	gtksizegroup.h		\
 	gtksizerequest.h	\
+	gtksnapshot.h		\
 	gtkspinbutton.h		\
 	gtkspinner.h		\
 	gtkstack.h		\
@@ -540,6 +541,7 @@ gtk_private_h_sources =		\
 	gtksidebarrowprivate.h	\
 	gtksizegroup-private.h	\
 	gtksizerequestcacheprivate.h	\
+	gtksnapshotprivate.h	\
 	gtkstyleanimationprivate.h \
 	gtkstylecascadeprivate.h \
 	gtkstylecontextprivate.h \
@@ -871,10 +873,11 @@ gtk_base_c_sources = 		\
 	gtksizerequest.c	\
 	gtksizerequestcache.c	\
 	gtkshow.c		\
-	gtkstacksidebar.c	\
+	gtksnapshot.c		\
 	gtkspinbutton.c		\
 	gtkspinner.c		\
 	gtkstack.c		\
+	gtkstacksidebar.c	\
 	gtkstackswitcher.c	\
 	gtkstatusbar.c		\
 	gtkstyleanimation.c	\

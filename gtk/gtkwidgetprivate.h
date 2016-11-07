@@ -31,6 +31,7 @@
 #include "gtkeventcontroller.h"
 #include "gtkactionmuxer.h"
 #include "gtksizerequestcacheprivate.h"
+#include "gtksnapshot.h"
 
 G_BEGIN_DECLS
 
@@ -285,6 +286,8 @@ void              gtk_widget_render                        (GtkWidget           
 
 GskRenderNode *   gtk_widget_get_render_node               (GtkWidget   *widget,
                                                             GskRenderer *renderer);
+GskRenderNode *   gtk_widget_snapshot                      (GtkWidget            *widget,
+                                                            const GtkSnapshot    *snapshot);
 
 GskRenderNode *   gtk_widget_create_render_node            (GtkWidget   *widget,
                                                             GskRenderer *renderer,
