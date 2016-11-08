@@ -3729,6 +3729,10 @@ sync_stepper_gadget (GtkRange                *range,
     {
       if (*gadget_ptr != NULL)
         {
+          if (*gadget_ptr == priv->grab_location)
+            stop_scrolling (range);
+          if (*gadget_ptr == priv->mouse_location)
+            priv->mouse_location = NULL;
           gtk_css_node_set_parent (gtk_css_gadget_get_node (*gadget_ptr), NULL);
           gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->contents_gadget), *gadget_ptr);
         }
