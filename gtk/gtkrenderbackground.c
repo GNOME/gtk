@@ -376,6 +376,12 @@ gtk_css_style_render_background (GtkCssStyle      *style,
   cairo_save (cr);
   cairo_translate (cr, x, y);
 
+  /* Outset shadows */
+  _gtk_css_shadows_value_paint_box (box_shadow,
+                                    cr,
+                                    &bg.boxes[GTK_CSS_AREA_BORDER_BOX],
+                                    FALSE);
+
   /*
    * When we have a blend mode set for the background, we cannot blend the current
    * widget's drawing with whatever the content that the Cairo context may have.
@@ -392,12 +398,6 @@ gtk_css_style_render_background (GtkCssStyle      *style,
       cairo_push_group (cr);
     }
 
-  /* Outset shadows */
-  _gtk_css_shadows_value_paint_box (box_shadow,
-                                    cr,
-                                    &bg.boxes[GTK_CSS_AREA_BORDER_BOX],
-                                    FALSE);
-
   _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
 
   number_of_layers = _gtk_css_array_value_get_n_values (background_image);
@@ -411,12 +411,6 @@ gtk_css_style_render_background (GtkCssStyle      *style,
       _gtk_theming_background_paint_layer (&bg, idx, cr, blend_mode);
     }
 
-  /* Inset shadows */
-  _gtk_css_shadows_value_paint_box (box_shadow,
-                                    cr,
-                                    &bg.boxes[GTK_CSS_AREA_PADDING_BOX],
-                                    TRUE);
-
   /* Paint back the resulting surface */
   if (needs_push_group)
     {
@@ -424,6 +418,12 @@ gtk_css_style_render_background (GtkCssStyle      *style,
       cairo_paint (cr);
       cairo_restore (cr);
     }
+
+  /* Inset shadows */
+  _gtk_css_shadows_value_paint_box (box_shadow,
+                                    cr,
+                                    &bg.boxes[GTK_CSS_AREA_PADDING_BOX],
+                                    TRUE);
 
   cairo_restore (cr);
 }
