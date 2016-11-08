@@ -387,7 +387,7 @@ gtk_css_style_render_background (GtkCssStyle      *style,
   if (needs_push_group)
     {
       cairo_save (cr);
-      cairo_rectangle (cr, x, y, width, height);
+      cairo_rectangle (cr, 0, 0, width, height);
       cairo_clip (cr);
       cairo_push_group (cr);
     }
