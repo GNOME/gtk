@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-28 07:57+0000\n"
-"PO-Revision-Date: 2016-10-28 17:05+0200\n"
+"POT-Creation-Date: 2016-11-08 01:33+0000\n"
+"PO-Revision-Date: 2016-11-08 12:37+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -93,11 +93,11 @@ msgstr "PŘÍZNAKY"
 msgid "GDK debugging flags to unset"
 msgstr "Ladicí příznaky GDK, jejichž nastavení zruší"
 
-#: gdk/gdkwindow.c:2535
+#: gdk/gdkwindow.c:2603
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázána skrz GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2546
+#: gdk/gdkwindow.c:2614
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuální podpůrná vrstva nepodporuje OpenGL"
 
@@ -443,9 +443,9 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "UspatDoPaměti"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1585
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1572
 #: gdk/wayland/gdkglcontext-wayland.c:442 gdk/win32/gdkglcontext-win32.c:751
-#: gdk/x11/gdkglcontext-x11.c:1275
+#: gdk/x11/gdkglcontext-x11.c:1271
 msgid "No GL implementation is available"
 msgstr "Není k dispozici žádná implementace GL"
 
@@ -455,14 +455,14 @@ msgstr "Není k dispozici žádná implementace GL"
 msgid "Unable to create a GL context"
 msgstr "Nelze vytvořit kontext GL"
 
-#: gdk/mir/gdkmirwindowimpl.c:1547 gdk/mir/gdkmirwindowimpl.c:1557
+#: gdk/mir/gdkmirwindowimpl.c:1534 gdk/mir/gdkmirwindowimpl.c:1544
 #: gdk/wayland/gdkglcontext-wayland.c:403
 #: gdk/wayland/gdkglcontext-wayland.c:413 gdk/win32/gdkglcontext-win32.c:660
-#: gdk/x11/gdkglcontext-x11.c:969
+#: gdk/x11/gdkglcontext-x11.c:966
 msgid "No available configurations for the given pixel format"
 msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát"
 
-#: gdk/mir/gdkmirwindowimpl.c:1593
+#: gdk/mir/gdkmirwindowimpl.c:1580
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "Profil základního GL 3.2 není k dispozici v implementaci EGL"
 
@@ -522,7 +522,7 @@ msgstr[0] "Otevírání %d položky"
 msgstr[1] "Otevírání %d položek"
 msgstr[2] "Otevírání %d položek"
 
-#: gdk/x11/gdkglcontext-x11.c:997
+#: gdk/x11/gdkglcontext-x11.c:994
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát RGBA"
@@ -653,15 +653,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:407 gtk/gtkwindow.c:8440
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:407 gtk/gtkwindow.c:8400
 msgid "Minimize"
 msgstr "Minimalizovat"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:430 gtk/gtkwindow.c:8449
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:430 gtk/gtkwindow.c:8409
 msgid "Maximize"
 msgstr "Maximalizovat"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:430 gtk/gtkwindow.c:8406
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:430 gtk/gtkwindow.c:8366
 msgid "Restore"
 msgstr "Obnovit"
 
@@ -1000,7 +1000,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Z_menšit"
 
-#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:459
+#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:395
 msgid "Menu"
 msgstr "Nabídka"
 
@@ -1727,7 +1727,7 @@ msgstr "Vytvořit vlastní barvu"
 msgid "Custom color %d: %s"
 msgstr "Vlastní barva %d: %s"
 
-#: gtk/gtkcolorplane.c:409
+#: gtk/gtkcolorplane.c:472
 msgid "Color Plane"
 msgstr "Barevná rovina"
 
@@ -1809,44 +1809,44 @@ msgstr "P_ravý:"
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: gtk/gtkentry.c:9033 gtk/gtklabel.c:6531 gtk/gtktextview.c:9276
+#: gtk/gtkentry.c:8937 gtk/gtklabel.c:6531 gtk/gtktextview.c:9298
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: gtk/gtkentry.c:9037 gtk/gtklabel.c:6532 gtk/gtktextview.c:9280
+#: gtk/gtkentry.c:8941 gtk/gtklabel.c:6532 gtk/gtktextview.c:9302
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: gtk/gtkentry.c:9041 gtk/gtklabel.c:6533 gtk/gtktextview.c:9282
+#: gtk/gtkentry.c:8945 gtk/gtklabel.c:6533 gtk/gtktextview.c:9304
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: gtk/gtkentry.c:9044 gtk/gtkfilechooserwidget.c:1480
-#: gtk/gtkfilechooserwidget.c:2272 gtk/gtklabel.c:6535 gtk/gtktextview.c:9285
+#: gtk/gtkentry.c:8948 gtk/gtkfilechooserwidget.c:1480
+#: gtk/gtkfilechooserwidget.c:2272 gtk/gtklabel.c:6535 gtk/gtktextview.c:9307
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: gtk/gtkentry.c:9055 gtk/gtklabel.c:6544 gtk/gtktextview.c:9299
+#: gtk/gtkentry.c:8959 gtk/gtklabel.c:6544 gtk/gtktextview.c:9321
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
-#: gtk/gtkentry.c:9228 gtk/gtktextview.c:9524
+#: gtk/gtkentry.c:9135 gtk/gtktextview.c:9546
 msgid "Select all"
 msgstr "Vybrat vše"
 
-#: gtk/gtkentry.c:9231 gtk/gtktextview.c:9527
+#: gtk/gtkentry.c:9138 gtk/gtktextview.c:9549
 msgid "Cut"
 msgstr "Vyjmout"
 
-#: gtk/gtkentry.c:9234 gtk/gtktextview.c:9530
+#: gtk/gtkentry.c:9141 gtk/gtktextview.c:9552
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: gtk/gtkentry.c:9237 gtk/gtktextview.c:9533
+#: gtk/gtkentry.c:9144 gtk/gtktextview.c:9555
 msgid "Paste"
 msgstr "Vložit"
 
-#: gtk/gtkentry.c:10304
+#: gtk/gtkentry.c:10211
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
@@ -1866,7 +1866,7 @@ msgstr "(žádný)"
 msgid "Other…"
 msgstr "Jiné…"
 
-#: gtk/gtkfilechooserdialog.c:542
+#: gtk/gtkfilechooserdialog.c:537
 msgid "_Name"
 msgstr "_Název"
 
@@ -1876,7 +1876,7 @@ msgstr "_Název"
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:740
-#: gtk/gtkwindow.c:11418 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:11358 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -2049,7 +2049,7 @@ msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
 #: gtk/gtkfilechooserwidget.c:2271 gtk/gtkplacessidebar.c:2499
-#: gtk/ui/gtkfilechooserwidget.ui:525
+#: gtk/ui/gtkfilechooserwidget.ui:519
 msgid "_Rename"
 msgstr "Př_ejmenovat"
 
@@ -2075,7 +2075,7 @@ msgstr "_Složky řadit před soubory"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2604 gtk/inspector/css-node-tree.ui:141
-#: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:122
+#: gtk/ui/gtkfilechooserwidget.ui:201 gtk/ui/gtkprintunixdialog.ui:122
 msgid "Location"
 msgstr "Umístění"
 
@@ -2102,7 +2102,7 @@ msgid "Enter location or URL"
 msgstr "Zadat umístění nebo URL"
 
 #: gtk/gtkfilechooserwidget.c:4383 gtk/gtkfilechooserwidget.c:7286
-#: gtk/ui/gtkfilechooserwidget.ui:235
+#: gtk/ui/gtkfilechooserwidget.ui:229
 msgid "Modified"
 msgstr "Změněno"
 
@@ -2220,7 +2220,7 @@ msgstr "Vytvoření kontextu GL selhalo"
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: gtk/gtkheaderbar.c:448 gtk/gtkwindow.c:8476
+#: gtk/gtkheaderbar.c:448 gtk/gtkwindow.c:8436
 msgid "Close"
 msgstr "Zavřít"
 
@@ -2414,7 +2414,7 @@ msgid "default:LTR"
 msgstr "default:LTR"
 
 #: gtk/gtkmessagedialog.c:845 gtk/gtkmessagedialog.c:863
-#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11419
+#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11359
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -2511,7 +2511,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nelze ukončit proces s PID %d: %s"
 
-#: gtk/gtknotebook.c:4948 gtk/gtknotebook.c:7175
+#: gtk/gtknotebook.c:4972 gtk/gtknotebook.c:7199
 #, c-format
 msgid "Page %u"
 msgstr "Strana %u"
@@ -2556,7 +2556,7 @@ msgstr "Správa vlastních velikostí…"
 msgid "Page Setup"
 msgstr "Vzhled stránky"
 
-#: gtk/gtkpathbar.c:1481
+#: gtk/gtkpathbar.c:1475
 msgid "File System Root"
 msgstr "Kořen systému souborů"
 
@@ -2677,7 +2677,7 @@ msgstr "Název je již použit"
 
 #: gtk/gtkplacessidebar.c:2493 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
-#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
+#: gtk/ui/gtkfilechooserwidget.ui:183 gtk/ui/gtkfilechooserwidget.ui:493
 msgid "Name"
 msgstr "Název"
 
@@ -3234,11 +3234,11 @@ msgstr "Výsledky hledání"
 msgid "Search Shortcuts"
 msgstr "hledat zkratku"
 
-#: gtk/gtkshortcutswindow.c:1048 gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/gtkshortcutswindow.c:1048 gtk/ui/gtkfilechooserwidget.ui:304
 msgid "No Results Found"
 msgstr "Nebyly nalezeny žádné výsledky"
 
-#: gtk/gtkshortcutswindow.c:1055 gtk/ui/gtkfilechooserwidget.ui:324
+#: gtk/gtkshortcutswindow.c:1055 gtk/ui/gtkfilechooserwidget.ui:318
 #: gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Zkuste zadat jiný termín k vyhledání"
@@ -3270,107 +3270,107 @@ msgstr "Neznámá chyba při pokusu převést %s na paralelní tvar"
 msgid "No deserialize function found for format %s"
 msgstr "Pro formát %s nebyla nalezena žádná funkce převodu na paralelní tvar"
 
-#: gtk/gtktextbufferserialize.c:754 gtk/gtktextbufferserialize.c:780
+#: gtk/gtktextbufferserialize.c:709 gtk/gtktextbufferserialize.c:735
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "V prvku <%s> bylo nalezeno „id“ i „name“"
 
-#: gtk/gtktextbufferserialize.c:764 gtk/gtktextbufferserialize.c:790
+#: gtk/gtktextbufferserialize.c:719 gtk/gtktextbufferserialize.c:745
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "V prvku <%s> byl dvakrát nalezen atribut „%s“"
 
-#: gtk/gtktextbufferserialize.c:806
+#: gtk/gtktextbufferserialize.c:761
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "Prvek <%s> má neplatné ID „%s“"
 
-#: gtk/gtktextbufferserialize.c:816
+#: gtk/gtktextbufferserialize.c:771
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "Prvek <%s> nemá atribut „name“, ani „id“"
 
-#: gtk/gtktextbufferserialize.c:903
+#: gtk/gtktextbufferserialize.c:858
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Atribut „%s“ provedl dvakrát opakování na stejném prvku <%s>"
 
-#: gtk/gtktextbufferserialize.c:921 gtk/gtktextbufferserialize.c:946
+#: gtk/gtktextbufferserialize.c:876 gtk/gtktextbufferserialize.c:901
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "V tomto kontextu je atribut „%s“ v prvku <%s> neplatný"
 
-#: gtk/gtktextbufferserialize.c:985
+#: gtk/gtktextbufferserialize.c:940
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Značka „%s“ nebyla definována."
 
-#: gtk/gtktextbufferserialize.c:997
+#: gtk/gtktextbufferserialize.c:952
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Nalezena anonymní značka, značky nemohly být vytvořeny."
 
-#: gtk/gtktextbufferserialize.c:1008
+#: gtk/gtktextbufferserialize.c:963
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "Značka „%s“ ve vyrovnávací paměti neexistuje, značky nemohly být vytvořeny."
 
-#: gtk/gtktextbufferserialize.c:1109 gtk/gtktextbufferserialize.c:1184
-#: gtk/gtktextbufferserialize.c:1289 gtk/gtktextbufferserialize.c:1363
+#: gtk/gtktextbufferserialize.c:1064 gtk/gtktextbufferserialize.c:1139
+#: gtk/gtktextbufferserialize.c:1244 gtk/gtktextbufferserialize.c:1318
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Prvek <%s> není povolen pod <%s>"
 
-#: gtk/gtktextbufferserialize.c:1140
+#: gtk/gtktextbufferserialize.c:1095
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "„%s“ není platným typem atributu"
 
-#: gtk/gtktextbufferserialize.c:1148
+#: gtk/gtktextbufferserialize.c:1103
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "„%s“ není platným názvem atributu"
 
-#: gtk/gtktextbufferserialize.c:1158
+#: gtk/gtktextbufferserialize.c:1113
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "„%s“ nemohlo být převedeno na hodnotu typu „%s“ atributu „%s“"
 
-#: gtk/gtktextbufferserialize.c:1167
+#: gtk/gtktextbufferserialize.c:1122
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "„%s“ není platnou hodnotou atributu „%s“"
 
-#: gtk/gtktextbufferserialize.c:1252
+#: gtk/gtktextbufferserialize.c:1207
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Značka „%s“ již byla definována"
 
-#: gtk/gtktextbufferserialize.c:1265
+#: gtk/gtktextbufferserialize.c:1220
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Značka „%s“ má nesprávnou prioritu „%s“"
 
-#: gtk/gtktextbufferserialize.c:1318
+#: gtk/gtktextbufferserialize.c:1273
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Nejkrajnější prvek v textu musí být <text_view_markup>, nikoliv <%s>"
 
-#: gtk/gtktextbufferserialize.c:1327 gtk/gtktextbufferserialize.c:1343
+#: gtk/gtktextbufferserialize.c:1282 gtk/gtktextbufferserialize.c:1298
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Prvek <%s> již zadán byl"
 
-#: gtk/gtktextbufferserialize.c:1349
+#: gtk/gtktextbufferserialize.c:1304
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Prvek <text> se nemůže vyskytovat před prvkem <tags>"
 
-#: gtk/gtktextbufferserialize.c:1755
+#: gtk/gtktextbufferserialize.c:1710
 msgid "Serialized data is malformed"
 msgstr "Serializovaná data jsou chybná"
 
-#: gtk/gtktextbufferserialize.c:1834
+#: gtk/gtktextbufferserialize.c:1789
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
@@ -3439,24 +3439,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:8424
+#: gtk/gtkwindow.c:8384
 msgid "Move"
 msgstr "Přesunout"
 
-#: gtk/gtkwindow.c:8432
+#: gtk/gtkwindow.c:8392
 msgid "Resize"
 msgstr "Změnit velikost"
 
-#: gtk/gtkwindow.c:8463
+#: gtk/gtkwindow.c:8423
 msgid "Always on Top"
 msgstr "Vždy navrchu"
 
-#: gtk/gtkwindow.c:11406
+#: gtk/gtkwindow.c:11346
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použít GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:11408
+#: gtk/gtkwindow.c:11348
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3467,7 +3467,7 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK+. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:11413
+#: gtk/gtkwindow.c:11353
 msgid "Don't show this message again"
 msgstr "Tuto zprávu znovu nezobrazovat"
 
@@ -3640,7 +3640,7 @@ msgstr "Výchozí widget"
 #: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:237
 #: gtk/inspector/misc-info.ui:453 gtk/inspector/prop-editor.c:1025
 #: gtk/inspector/prop-editor.c:1209 gtk/inspector/prop-editor.c:1334
-#: gtk/inspector/prop-editor.c:1445 gtk/inspector/window.ui:382
+#: gtk/inspector/prop-editor.c:1445 gtk/inspector/window.ui:318
 msgid "Properties"
 msgstr "Vlastnosti"
 
@@ -3819,27 +3819,27 @@ msgstr "Atribut"
 msgid "Defined At"
 msgstr "Definováno na"
 
-#: gtk/inspector/resource-list.ui:100
+#: gtk/inspector/resource-list.ui:82
 msgid "Path"
 msgstr "Cesta"
 
-#: gtk/inspector/resource-list.ui:118 gtk/inspector/signals-list.ui:63
+#: gtk/inspector/resource-list.ui:100 gtk/inspector/signals-list.ui:63
 msgid "Count"
 msgstr "Počet"
 
-#: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:223
+#: gtk/inspector/resource-list.ui:112 gtk/ui/gtkfilechooserwidget.ui:217
 msgid "Size"
 msgstr "Velikost"
 
-#: gtk/inspector/resource-list.ui:163
+#: gtk/inspector/resource-list.ui:145
 msgid "Name:"
 msgstr "Název:"
 
-#: gtk/inspector/resource-list.ui:187
+#: gtk/inspector/resource-list.ui:169
 msgid "Type:"
 msgstr "Typ:"
 
-#: gtk/inspector/resource-list.ui:210
+#: gtk/inspector/resource-list.ui:192
 msgid "Size:"
 msgstr "Velikost:"
 
@@ -3883,7 +3883,7 @@ msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Obojí"
 
-#: gtk/inspector/statistics.c:377
+#: gtk/inspector/statistics.c:372
 msgid "GLib must be configured with --enable-debug"
 msgstr "GLib musí být nakonfigurována s --enable-debug"
 
@@ -4064,95 +4064,99 @@ msgstr "Rozšíření pro obdélníkové textury"
 msgid "Select an Object"
 msgstr "Vyberte objekt"
 
-#: gtk/inspector/window.ui:54 gtk/inspector/window.ui:134
+#: gtk/inspector/window.ui:45 gtk/inspector/window.ui:98
 msgid "Show Details"
 msgstr "Zobrazovat podrobnosti"
 
-#: gtk/inspector/window.ui:77
+#: gtk/inspector/window.ui:59
 msgid "Show all Objects"
 msgstr "Zobrazovat všechny objekty"
 
-#: gtk/inspector/window.ui:107
+#: gtk/inspector/window.ui:80
 msgid "Collect Statistics"
 msgstr "Sbírat statistiky"
 
-#: gtk/inspector/window.ui:156
+#: gtk/inspector/window.ui:111
 msgid "Show all Resources"
 msgstr "Zobrazovat všechny prostředky"
 
-#: gtk/inspector/window.ui:267
+#: gtk/inspector/window.ui:221
 msgid "Trace signal emissions on this object"
 msgstr "Sledovat vysílání signálu na tomto objektu"
 
-#: gtk/inspector/window.ui:284
+#: gtk/inspector/window.ui:229
 msgid "Clear log"
 msgstr "Vymazat protokol"
 
-#: gtk/inspector/window.ui:370
+#: gtk/inspector/window.ui:306
 msgid "Miscellaneous"
 msgstr "Různé"
 
-#: gtk/inspector/window.ui:393
+#: gtk/inspector/window.ui:329
 msgid "Signals"
 msgstr "Signály"
 
-#: gtk/inspector/window.ui:404
+#: gtk/inspector/window.ui:340
 msgid "Child Properties"
 msgstr "Vlastnosti potomka"
 
-#: gtk/inspector/window.ui:413
+#: gtk/inspector/window.ui:349
 msgid "Class Hierarchy"
 msgstr "Hierarchie tříd"
 
-#: gtk/inspector/window.ui:422
+#: gtk/inspector/window.ui:358
 msgid "CSS Selector"
 msgstr "Volič CSS"
 
-#: gtk/inspector/window.ui:431
+#: gtk/inspector/window.ui:367
 msgid "CSS nodes"
 msgstr "Uzly CSS"
 
-#: gtk/inspector/window.ui:438
+#: gtk/inspector/window.ui:374
 msgid "Size Groups"
 msgstr "Skupiny velikostí"
 
-#: gtk/inspector/window.ui:445
+#: gtk/inspector/window.ui:381
 msgid "Data"
 msgstr "Data"
 
-#: gtk/inspector/window.ui:452
+#: gtk/inspector/window.ui:388
 msgid "Actions"
 msgstr "Akce"
 
-#: gtk/inspector/window.ui:468
+#: gtk/inspector/window.ui:404
 msgid "Gestures"
 msgstr "Gesta"
 
-#: gtk/inspector/window.ui:477
+#: gtk/inspector/window.ui:413
 msgid "Magnifier"
 msgstr "Lupa"
 
-#: gtk/inspector/window.ui:490
+#: gtk/inspector/window.ui:426
 msgid "Objects"
 msgstr "Objekty"
 
-#: gtk/inspector/window.ui:500
+#: gtk/inspector/window.ui:436
 msgid "Statistics"
 msgstr "Statistiky"
 
-#: gtk/inspector/window.ui:510
+#: gtk/inspector/window.ui:446
 msgid "Resources"
 msgstr "Prostředky"
 
-#: gtk/inspector/window.ui:519
+#: gtk/inspector/window.ui:455
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:528
+#: gtk/inspector/window.ui:464
+msgid "Recorder"
+msgstr "Záznam"
+
+#: gtk/inspector/window.ui:473
 msgid "Visual"
 msgstr "Vzhled"
 
-#: gtk/inspector/window.ui:537 gtk/ui/gtkprintunixdialog.ui:423
+#: gtk/inspector/window.ui:482 gtk/ui/gtkprintunixdialog.ui:423
 msgid "General"
 msgstr "Obecné"
 
@@ -5174,23 +5178,23 @@ msgstr "Sytost"
 msgid "Create Folder"
 msgstr "Vytvořit složku"
 
-#: gtk/ui/gtkfilechooserwidget.ui:168
+#: gtk/ui/gtkfilechooserwidget.ui:162
 msgid "Files"
 msgstr "Soubory"
 
-#: gtk/ui/gtkfilechooserwidget.ui:261
+#: gtk/ui/gtkfilechooserwidget.ui:255
 msgid "Remote location — only searching the current folder"
 msgstr "Vzdálené umístění — prohledává se pouze aktuální složka"
 
-#: gtk/ui/gtkfilechooserwidget.ui:392
+#: gtk/ui/gtkfilechooserwidget.ui:386
 msgid "Select which types of files are shown"
 msgstr "Výběr zobrazených typů souborů"
 
-#: gtk/ui/gtkfilechooserwidget.ui:433
+#: gtk/ui/gtkfilechooserwidget.ui:427
 msgid "Folder Name"
 msgstr "Název složky"
 
-#: gtk/ui/gtkfilechooserwidget.ui:460
+#: gtk/ui/gtkfilechooserwidget.ui:454
 msgid "_Create"
 msgstr "_Vytvořit"
 
