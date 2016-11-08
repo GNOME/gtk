@@ -50,6 +50,10 @@ void      gtk_container_propagate_render_node_for_child   (GtkContainer  *contai
                                                            GtkWidget     *child,
                                                            GskRenderer   *renderer,
                                                            GskRenderNode *parent_node);
+void      gtk_container_snapshot_child          (GtkContainer      *container,
+                                                 GskRenderNode     *container_node,
+                                                 GtkWidget         *child,
+                                                 const GtkSnapshot *snapshot);
 
 G_END_DECLS
 

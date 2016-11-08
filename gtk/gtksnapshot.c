@@ -32,6 +32,19 @@ gtk_snapshot_init (GtkSnapshot             *state,
 }
 
 void
+gtk_snapshot_init_translate (GtkSnapshot             *state,
+                             const GtkSnapshot       *parent,
+                             int                      x,
+                             int                      y)
+{
+  graphene_matrix_t matrix;
+
+  graphene_matrix_init_translate (&matrix, &(graphene_point3d_t) GRAPHENE_POINT3D_INIT (x, y, 0));
+
+  gtk_snapshot_init (state, parent, &matrix);
+}
+
+void
 gtk_snapshot_init_root (GtkSnapshot *state,
                         GskRenderer *renderer)
 {

@@ -265,8 +265,8 @@ gtk_debug_updates_queue_get_extents (GQueue       *updates,
 }
 
 GskRenderNode *
-gtk_debug_updates_get_render_node (GtkWidget   *widget,
-                                   GskRenderer *renderer)
+gtk_debug_updates_snapshot (GtkWidget         *widget,
+                            const GtkSnapshot *snapshot)
 {
   GQueue *updates;
   GskRenderNode *node;
@@ -287,12 +287,11 @@ gtk_debug_updates_get_render_node (GtkWidget   *widget,
   
   gtk_debug_updates_print (updates, NULL, "Painting at %lli", (long long) timestamp);
 
-  node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (node, "Debug Updates");
+  node = gtk_snapshot_create_render_node (snapshot, "Debug Updates");
   gtk_debug_updates_queue_get_extents (updates, &rect);
   gsk_render_node_set_bounds (node, &(graphene_rect_t) GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height));
 
-  cr = gsk_render_node_get_draw_context (node, renderer);
+  cr = gsk_render_node_get_draw_context (node, gtk_snapshot_get_renderer (snapshot));
 
   for (l = g_queue_peek_head_link (updates); l != NULL; l = l->next)
     {

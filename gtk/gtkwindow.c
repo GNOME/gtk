@@ -447,8 +447,8 @@ static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
-static GskRenderNode *gtk_window_get_render_node (GtkWidget   *widget,
-                                                  GskRenderer *renderer);
+static GskRenderNode *gtk_window_snapshot          (GtkWidget         *widget,
+                                                    const GtkSnapshot *snapshot);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
 static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);
@@ -776,7 +776,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->measure = gtk_window_measure;
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->style_updated = gtk_window_style_updated;
-  widget_class->get_render_node = gtk_window_get_render_node;
+  widget_class->snapshot = gtk_window_snapshot;
   widget_class->queue_draw_region = gtk_window_queue_draw_region;
 
   container_class->remove = gtk_window_remove;
@@ -9384,8 +9384,8 @@ gtk_window_compute_hints (GtkWindow   *window,
  ***********************/
 
 static GskRenderNode *
-gtk_window_get_render_node (GtkWidget   *widget,
-                            GskRenderer *renderer)
+gtk_window_snapshot (GtkWidget         *widget,
+                     const GtkSnapshot *snapshot)
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkStyleContext *context;
@@ -9397,6 +9397,7 @@ gtk_window_get_render_node (GtkWidget   *widget,
   graphene_matrix_t m;
   graphene_point3d_t p;
   cairo_t *cr;
+  GList *l;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -9406,12 +9407,11 @@ gtk_window_get_render_node (GtkWidget   *widget,
   graphene_rect_init (&bounds, allocation.x, allocation.y, allocation.width, allocation.height);
   graphene_matrix_init_translate (&m, graphene_point3d_init (&p, allocation.x, allocation.y, 0.));
 
-  node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (node, "Window Decoration");
+  node = gtk_snapshot_create_render_node (snapshot, "Window Decoration");
   gsk_render_node_set_bounds (node, &bounds);
   gsk_render_node_set_transform (node, &m);
 
-  cr = gsk_render_node_get_draw_context (node, renderer);
+  cr = gsk_render_node_get_draw_context (node, gtk_snapshot_get_renderer (snapshot));
 
   if (priv->client_decorated &&
       priv->decorated &&
@@ -9478,9 +9478,19 @@ gtk_window_get_render_node (GtkWidget   *widget,
 
   cairo_destroy (cr);
 
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, node);
+  if (priv->title_box != NULL)
+    gtk_container_snapshot_child (GTK_CONTAINER (widget), node, priv->title_box, snapshot);
 
-  updates_node = gtk_debug_updates_get_render_node (widget, renderer);
+  if (gtk_bin_get_child (GTK_BIN (widget)))
+    gtk_container_snapshot_child (GTK_CONTAINER (widget), node, gtk_bin_get_child (GTK_BIN (widget)), snapshot);
+
+  for (l = priv->popovers; l; l = l->next)
+    {
+      GtkWindowPopover *data = l->data;
+      gtk_container_snapshot_child (GTK_CONTAINER (widget), node, data->widget, snapshot);
+    }
+
+  updates_node = gtk_debug_updates_snapshot (widget, snapshot);
   if (updates_node)
     {
       gsk_render_node_append_child (node, updates_node);

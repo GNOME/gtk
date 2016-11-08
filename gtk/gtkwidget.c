@@ -15742,6 +15742,9 @@ gtk_widget_snapshot (GtkWidget         *widget,
         }
     }
 
+  if (node)
+    gsk_render_node_set_transform (node, gtk_snapshot_get_transform (snapshot));
+
   return node;
 }
 
