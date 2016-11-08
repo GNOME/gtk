@@ -177,15 +177,18 @@ testdata = \
 	box-pseudo-classes.css \
 	box-pseudo-classes.ref.ui \
 	box-pseudo-classes.ui \
+	box-shadow-changes-modify-clip.css \
+	box-shadow-changes-modify-clip.ref.ui \
+	box-shadow-changes-modify-clip.ui \
 	box-shadow-spec-inset.css \
 	box-shadow-spec-inset.ref.ui \
 	box-shadow-spec-inset.ui \
 	box-shadow-spread.css \
 	box-shadow-spread.ref.ui \
 	box-shadow-spread.ui \
-	box-shadow-changes-modify-clip.css \
-	box-shadow-changes-modify-clip.ref.ui \
-	box-shadow-changes-modify-clip.ui \
+	box-shadow-with-blend-mode.css \
+	box-shadow-with-blend-mode.ref.ui \
+	box-shadow-with-blend-mode.ui \
 	button-wrapping.ui \
 	button-wrapping.ref.ui \
 	cellrenderer-pixbuf-stock-rtl.css \
