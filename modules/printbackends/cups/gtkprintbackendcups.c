@@ -752,10 +752,26 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                                    NULL, printer_absolute_uri);
 
   title = gtk_print_job_get_title (job);
-  if (title)
+  if (title) {
+    char *title_truncated = NULL;
+    size_t title_bytes = strlen (title);
+
+    if (title_bytes >= IPP_MAX_NAME)
+      {
+        gchar *end;
+
+        end = g_utf8_find_prev_char (title, title + IPP_MAX_NAME - 1);
+        title_truncated = g_utf8_substring (title,
+                                            0,
+                                            g_utf8_pointer_to_offset (title, end));
+      }
+
     gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION,
                                      IPP_TAG_NAME, "job-name",
-                                     NULL, title);
+                                     NULL,
+                                     title_truncated ? title_truncated : title);
+    g_free (title_truncated);
+  }
 
   options_data = g_new0 (CupsOptionsData, 1);
   options_data->request = request;
