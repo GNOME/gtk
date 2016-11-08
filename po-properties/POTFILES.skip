@@ -224,6 +224,8 @@ testsuite/reftests/box-shadow-changes-modify-clip.ref.ui
 testsuite/reftests/box-shadow-changes-modify-clip.ui
 testsuite/reftests/box-shadow-spread.ref.ui
 testsuite/reftests/box-shadow-spread.ui
+testsuite/reftests/box-shadow-with-blend-mode.ref.ui
+testsuite/reftests/box-shadow-with-blend-mode.ui
 testsuite/reftests/button-wrapping.ref.ui
 testsuite/reftests/button-wrapping.ui
 testsuite/reftests/css-em-label-size.ref.ui
