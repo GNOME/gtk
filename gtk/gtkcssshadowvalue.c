@@ -332,6 +332,7 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   cairo_surface_t *surface;
   cairo_t *blur_cr;
   gdouble radius, clip_radius;
+  gdouble x_scale, y_scale;
   gboolean blur_x = (blur_flags & GTK_BLUR_X) != 0;
   gboolean blur_y = (blur_flags & GTK_BLUR_Y) != 0;
 
@@ -342,6 +343,9 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
 
   radius = _gtk_css_number_value_get (shadow->radius, 0);
   clip_radius = _gtk_cairo_blur_compute_pixels (radius);
+
+  x_scale = y_scale = 1;
+  cairo_surface_get_device_scale (cairo_get_target (cr), &x_scale, &y_scale);
 
   if (blur_flags & GTK_BLUR_REPEAT)
     {
@@ -354,11 +358,13 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   /* Create a larger surface to center the blur. */
   surface = cairo_surface_create_similar_image (cairo_get_target (cr),
                                                 CAIRO_FORMAT_A8,
-                                                clip_rect.width + (blur_x ? 2 * clip_radius : 0),
-                                                clip_rect.height + (blur_y ? 2 * clip_radius : 0));
+                                                x_scale * (clip_rect.width + (blur_x ? 2 * clip_radius : 0)),
+                                                y_scale * (clip_rect.height + (blur_y ? 2 * clip_radius : 0)));
+  cairo_surface_set_device_scale (surface, x_scale, y_scale);
   cairo_surface_set_device_offset (surface,
-                                   (blur_x ? clip_radius : 0) - clip_rect.x,
-                                   (blur_y ? clip_radius : 0) - clip_rect.y);
+                                    x_scale * ((blur_x ? clip_radius: 0) - clip_rect.x),
+                                    y_scale * ((blur_y ? clip_radius * y_scale : 0) - clip_rect.y));
+
   blur_cr = cairo_create (surface);
   cairo_set_user_data (blur_cr, &original_cr_key, cairo_reference (cr), (cairo_destroy_func_t) cairo_destroy);
 
@@ -395,6 +401,7 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
   gdouble radius;
   cairo_t *original_cr;
   cairo_surface_t *surface;
+  gdouble x_scale;
 
   if (!needs_blur (shadow))
     return cr;
@@ -404,7 +411,11 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
   /* Blur the surface. */
   surface = cairo_get_target (cr);
   radius = _gtk_css_number_value_get (shadow->radius, 0);
-  _gtk_cairo_blur_surface (surface, radius, blur_flags);
+
+  x_scale = 1;
+  cairo_surface_get_device_scale (cairo_get_target (cr), &x_scale, NULL);
+
+  _gtk_cairo_blur_surface (surface, x_scale * radius, blur_flags);
 
   gdk_cairo_set_source_rgba (original_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
   if (blur_flags & GTK_BLUR_REPEAT)
