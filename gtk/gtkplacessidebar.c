@@ -3514,15 +3514,15 @@ on_button_press_event (GtkWidget      *widget,
                 "section_type", &section_type,
                 NULL);
 
-  if (section_type != SECTION_BOOKMARKS)
-    return FALSE;
+  if (section_type == SECTION_BOOKMARKS)
+    {
+      sidebar->drag_row = GTK_WIDGET (row);
+      sidebar->drag_row_x = (gint)event->x;
+      sidebar->drag_row_y = (gint)event->y;
 
-  sidebar->drag_row = GTK_WIDGET (row);
-  sidebar->drag_row_x = (gint)event->x;
-  sidebar->drag_row_y = (gint)event->y;
-
-  sidebar->drag_root_x = event->x_root;
-  sidebar->drag_root_y = event->y_root;
+      sidebar->drag_root_x = event->x_root;
+      sidebar->drag_root_y = event->y_root;
+    }
 
   g_object_unref (sidebar);
 
