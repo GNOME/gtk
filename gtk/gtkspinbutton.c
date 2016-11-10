@@ -813,7 +813,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_css_gadget_add_class (priv->down_button, "down");
   gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->down_button), widget_node);
   gtk_css_node_set_state (gtk_css_gadget_get_node (priv->down_button), gtk_css_node_get_state (widget_node));
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget),
                                 -1, priv->down_button,
                                 FALSE, GTK_ALIGN_FILL);
 
@@ -822,9 +822,9 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   _gtk_icon_helper_set_use_fallback (GTK_ICON_HELPER (priv->up_button), TRUE);
   _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (priv->up_button), "list-add-symbolic", GTK_ICON_SIZE_MENU);
   gtk_css_gadget_add_class (priv->up_button, "up");
-  gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->down_button), widget_node);
-  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->down_button), gtk_css_node_get_state (widget_node));
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->up_button), widget_node);
+  gtk_css_node_set_state (gtk_css_gadget_get_node (priv->up_button), gtk_css_node_get_state (widget_node));
+  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget),
                                 -1, priv->up_button,
                                 FALSE, GTK_ALIGN_FILL);
 
@@ -853,6 +853,8 @@ gtk_spin_button_finalize (GObject *object)
 
   gtk_spin_button_unset_adjustment (spin_button);
   g_clear_object (&priv->gadget);
+  g_clear_object (&priv->down_button);
+  g_clear_object (&priv->up_button);
 
   g_object_unref (priv->swipe_gesture);
 
