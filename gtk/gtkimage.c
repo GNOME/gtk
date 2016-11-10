@@ -1458,8 +1458,11 @@ gtk_image_get_render_node (GtkWidget   *widget,
       node = gtk_icon_helper_get_render_node (priv->icon_helper, renderer);
     }
 
-  gsk_render_node_append_child (res, node);
-  gsk_render_node_unref (node);
+  if (node != NULL)
+    {
+      gsk_render_node_append_child (res, node);
+      gsk_render_node_unref (node);
+    }
 
   return res;
 }
