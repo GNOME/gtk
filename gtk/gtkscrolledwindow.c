@@ -4513,7 +4513,7 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
 
   gtk_widget_set_parent_window (priv->vscrollbar, NULL);
   gtk_widget_unregister_window (widget, priv->vindicator.window);
-  indicator_reset (&priv->hindicator);
+  indicator_reset (&priv->vindicator);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
 }
