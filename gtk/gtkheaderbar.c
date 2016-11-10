@@ -458,8 +458,10 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
           if (n_children == 0)
             {
-              gtk_widget_destroy (box);
-              gtk_widget_destroy (separator);
+              g_object_ref_sink (box);
+              g_object_unref (box);
+              g_object_ref_sink (separator);
+              g_object_unref (separator);
               continue;
             }
 
