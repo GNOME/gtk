@@ -529,8 +529,8 @@ struct _GtkWidgetClass
 
   GskRenderNode *(* get_render_node) (GtkWidget *widget,
                                       GskRenderer *renderer);
-  GskRenderNode *(* snapshot)                  (GtkWidget            *widget,
-                                                const GtkSnapshot    *snapshot);
+  void         (* snapshot)                    (GtkWidget            *widget,
+                                                GtkSnapshot          *snapshot);
 
   /*< private >*/
 

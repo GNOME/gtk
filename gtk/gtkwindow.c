@@ -447,8 +447,8 @@ static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
-static GskRenderNode *gtk_window_snapshot          (GtkWidget         *widget,
-                                                    const GtkSnapshot *snapshot);
+static void gtk_window_snapshot                    (GtkWidget   *widget,
+                                                    GtkSnapshot *snapshot);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
 static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);
@@ -9383,13 +9383,12 @@ gtk_window_compute_hints (GtkWindow   *window,
  * Redrawing functions *
  ***********************/
 
-static GskRenderNode *
-gtk_window_snapshot (GtkWidget         *widget,
-                     const GtkSnapshot *snapshot)
+static void
+gtk_window_snapshot (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkStyleContext *context;
-  GskRenderNode *node, *updates_node;
   GtkAllocation allocation;
   GtkBorder window_border;
   gint title_height;
@@ -9407,11 +9406,9 @@ gtk_window_snapshot (GtkWidget         *widget,
   graphene_rect_init (&bounds, allocation.x, allocation.y, allocation.width, allocation.height);
   graphene_matrix_init_translate (&m, graphene_point3d_init (&p, allocation.x, allocation.y, 0.));
 
-  node = gtk_snapshot_create_render_node (snapshot, "Window Decoration");
-  gsk_render_node_set_bounds (node, &bounds);
-  gsk_render_node_set_transform (node, &m);
-
-  cr = gsk_render_node_get_draw_context (node, gtk_snapshot_get_renderer (snapshot));
+  cr = gtk_snapshot_push_cairo_node (snapshot,
+                                     &bounds, 
+                                     "Window Decoration");
 
   if (priv->client_decorated &&
       priv->decorated &&
@@ -9479,25 +9476,20 @@ gtk_window_snapshot (GtkWidget         *widget,
   cairo_destroy (cr);
 
   if (priv->title_box != NULL)
-    gtk_container_snapshot_child (GTK_CONTAINER (widget), node, priv->title_box, snapshot);
+    gtk_container_snapshot_child (GTK_CONTAINER (widget), priv->title_box, snapshot);
 
   if (gtk_bin_get_child (GTK_BIN (widget)))
-    gtk_container_snapshot_child (GTK_CONTAINER (widget), node, gtk_bin_get_child (GTK_BIN (widget)), snapshot);
+    gtk_container_snapshot_child (GTK_CONTAINER (widget), gtk_bin_get_child (GTK_BIN (widget)), snapshot);
 
   for (l = priv->popovers; l; l = l->next)
     {
       GtkWindowPopover *data = l->data;
-      gtk_container_snapshot_child (GTK_CONTAINER (widget), node, data->widget, snapshot);
+      gtk_container_snapshot_child (GTK_CONTAINER (widget), data->widget, snapshot);
     }
 
-  updates_node = gtk_debug_updates_snapshot (widget, snapshot);
-  if (updates_node)
-    {
-      gsk_render_node_append_child (node, updates_node);
-      gsk_render_node_unref (updates_node);
-    }
+  gtk_debug_updates_snapshot (widget, snapshot);
 
-  return node;
+  gtk_snapshot_pop (snapshot);
 }
 
 /**

@@ -264,12 +264,11 @@ gtk_debug_updates_queue_get_extents (GQueue       *updates,
     }
 }
 
-GskRenderNode *
-gtk_debug_updates_snapshot (GtkWidget         *widget,
-                            const GtkSnapshot *snapshot)
+void
+gtk_debug_updates_snapshot (GtkWidget   *widget,
+                            GtkSnapshot *snapshot)
 {
   GQueue *updates;
-  GskRenderNode *node;
   GtkDebugUpdate *draw;
   GdkRectangle rect;
   gint64 timestamp;
@@ -278,20 +277,19 @@ gtk_debug_updates_snapshot (GtkWidget         *widget,
   GList *l;
 
   if (!gtk_debug_updates_get_enabled_for_display (gtk_widget_get_display (widget)))
-    return NULL;
+    return;
 
   updates = g_object_get_qdata (G_OBJECT (widget), _gtk_debug_updates_quark);
   if (updates == NULL)
-    return NULL;
+    return;
   timestamp = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
   
   gtk_debug_updates_print (updates, NULL, "Painting at %lli", (long long) timestamp);
 
-  node = gtk_snapshot_create_render_node (snapshot, "Debug Updates");
   gtk_debug_updates_queue_get_extents (updates, &rect);
-  gsk_render_node_set_bounds (node, &(graphene_rect_t) GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height));
-
-  cr = gsk_render_node_get_draw_context (node, gtk_snapshot_get_renderer (snapshot));
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &(graphene_rect_t) GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height),
+                                       "Debug Updates");
 
   for (l = g_queue_peek_head_link (updates); l != NULL; l = l->next)
     {
@@ -311,7 +309,5 @@ gtk_debug_updates_snapshot (GtkWidget         *widget,
     }
 
   cairo_destroy (cr);
-
-  return node;
 }
 

@@ -23,7 +23,8 @@
 G_BEGIN_DECLS
 
 struct _GtkSnapshot {
-  const GtkSnapshot     *parent;
+  GskRenderNode         *node;
+  GskRenderNode         *root;
   
   GskRenderer           *renderer;
 
@@ -31,22 +32,14 @@ struct _GtkSnapshot {
 };
 
 void            gtk_snapshot_init               (GtkSnapshot             *state,
-                                                 const GtkSnapshot       *parent,
-                                                 const graphene_matrix_t *transform);
-void            gtk_snapshot_init_translate     (GtkSnapshot             *state,
-                                                 const GtkSnapshot       *parent,
-                                                 int                      x,
-                                                 int                      y);
-void            gtk_snapshot_init_root          (GtkSnapshot             *state,
                                                  GskRenderer             *renderer);
+GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
 
 static inline const graphene_matrix_t *
 gtk_snapshot_get_transform (const GtkSnapshot *snapshot)
 {
   return &snapshot->transform;
 }
-
-void            gtk_snapshot_finish             (GtkSnapshot             *state);
 
 G_END_DECLS
 

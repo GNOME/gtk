@@ -31,8 +31,8 @@ void            gtk_debug_updates_set_enabled_for_display       (GdkDisplay     
 
 void            gtk_debug_updates_add                           (GtkWidget              *widget,
                                                                  const cairo_region_t   *region);
-GskRenderNode * gtk_debug_updates_snapshot                      (GtkWidget              *widget,
-                                                                 const GtkSnapshot      *snapshot);
+void            gtk_debug_updates_snapshot                      (GtkWidget              *widget,
+                                                                 GtkSnapshot            *snapshot);
 
 
 G_END_DECLS

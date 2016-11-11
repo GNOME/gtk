@@ -6389,14 +6389,14 @@ gtk_widget_draw_internal (GtkWidget *widget,
                               widget->priv->clip.width,
                               widget->priv->clip.height);
           fallback = gsk_renderer_create_fallback (renderer, &viewport, cr);
-          gtk_snapshot_init_root (&snapshot, renderer);
-          node = gtk_widget_snapshot (widget, &snapshot);
+          gtk_snapshot_init (&snapshot, renderer);
+          gtk_widget_snapshot (widget, &snapshot);
+          node = gtk_snapshot_finish (&snapshot);
           if (node != NULL)
             {
               gsk_renderer_render (fallback, node, NULL);
               gsk_render_node_unref (node);
             }
-          gtk_snapshot_finish (&snapshot);
 
           g_object_unref (fallback);
         }
@@ -15657,34 +15657,30 @@ gtk_widget_get_render_node (GtkWidget   *widget,
   GtkSnapshot snapshot;
   GskRenderNode *node;
 
-  gtk_snapshot_init_root (&snapshot, renderer);
+  gtk_snapshot_init (&snapshot, renderer);
 
-  node = gtk_widget_snapshot (widget, &snapshot);
+  gtk_widget_snapshot (widget, &snapshot);
 
-  gtk_snapshot_finish (&snapshot);
+  node = gtk_snapshot_finish (&snapshot);
 
   return node;
 }
 
-GskRenderNode *
-gtk_widget_snapshot (GtkWidget         *widget,
-                     const GtkSnapshot *snapshot)
+void
+gtk_widget_snapshot (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
-  GskRenderNode *node;
-  graphene_matrix_t m;
-  graphene_point3d_t p;
   graphene_rect_t bounds;
   GtkAllocation clip;
   GtkAllocation alloc;
 
   if (_gtk_widget_get_alloc_needed (widget))
-    return NULL;
+    return;
 
   gtk_widget_get_clip (widget, &clip);
   _gtk_widget_get_allocation (widget, &alloc);
-  graphene_rect_init (&bounds, 0, 0, clip.width, clip.height);
-  graphene_matrix_init_translate (&m, graphene_point3d_init (&p, clip.x, clip.y, 0.f));
+  graphene_rect_init (&bounds, alloc.x - clip.x, alloc.y - clip.y, clip.width, clip.height);
 
   /* Compatibility mode: if the widget does not have a render node, we draw
    * using gtk_widget_draw() on a temporary node
@@ -15692,60 +15688,49 @@ gtk_widget_snapshot (GtkWidget         *widget,
   if (klass->get_render_node == NULL &&
       klass->snapshot == NULL)
     {
-      GskRenderNode *tmp;
       cairo_t *cr;
 
-      tmp = gtk_snapshot_create_render_node (snapshot, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
-      gsk_render_node_set_bounds (tmp, &bounds);
-      gsk_render_node_set_transform (tmp, &m);
-
-      cr = gsk_render_node_get_draw_context (tmp, gtk_snapshot_get_renderer (snapshot));
-      cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
+      cr = gtk_snapshot_append_cairo_node (snapshot, 
+                                           &bounds, "Fallback<%s>",
+                                           G_OBJECT_TYPE_NAME (widget));
       gtk_widget_draw_internal (widget, cr, TRUE);
       cairo_destroy (cr);
-
-      node = tmp;
     }
   else
     {
+      if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
+        gtk_snapshot_push (snapshot, &bounds, "DrawSignal<%s>", G_OBJECT_TYPE_NAME (widget));
+
       if (klass->snapshot)
-        node = klass->snapshot (widget, snapshot);
+        klass->snapshot (widget, snapshot);
       else
-        node = klass->get_render_node (widget, gtk_snapshot_get_renderer (snapshot));
+        {
+          GskRenderNode *node;
+
+          node = klass->get_render_node (widget, gtk_snapshot_get_renderer (snapshot));
+          if (node)
+            {
+              gtk_snapshot_append_node (snapshot, node);
+              gsk_render_node_unref (node);
+            }
+        }
 
       /* Compatibility mode: if there's a ::draw signal handler, we add a
        * child node with the contents of the handler
        */
       if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         {
-          GskRenderNode *tmp;
           gboolean result;
           cairo_t *cr;
 
-          tmp = gtk_snapshot_create_render_node (snapshot, "DrawSignal<%s>", G_OBJECT_TYPE_NAME (widget));
-          gsk_render_node_set_bounds (tmp, &bounds);
-
-          cr = gsk_render_node_get_draw_context (tmp, gtk_snapshot_get_renderer (snapshot));
-          cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
+          cr = gtk_snapshot_append_cairo_node (snapshot, 
+                                               &bounds,
+                                               "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
           g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
           cairo_destroy (cr);
-
-          if (node != NULL)
-            {
-              gsk_render_node_append_child (node, tmp);
-              gsk_render_node_unref (tmp);
-            }
-          else
-            {
-              node = tmp;
-            }
+          gtk_snapshot_pop (snapshot);
         }
     }
-
-  if (node)
-    gsk_render_node_set_transform (node, gtk_snapshot_get_transform (snapshot));
-
-  return node;
 }
 
 void
@@ -15766,9 +15751,9 @@ gtk_widget_render (GtkWidget            *widget,
   if (renderer == NULL)
     return;
 
-  gtk_snapshot_init_root (&snapshot, renderer);
-  root = gtk_widget_snapshot (widget, &snapshot);
-  gtk_snapshot_finish (&snapshot);
+  gtk_snapshot_init (&snapshot, renderer);
+  gtk_widget_snapshot (widget, &snapshot);
+  root = gtk_snapshot_finish (&snapshot);
   if (root == NULL)
     return;
 

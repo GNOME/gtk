@@ -20,44 +20,52 @@
 #include "gtksnapshot.h"
 #include "gtksnapshotprivate.h"
 
-void
-gtk_snapshot_init (GtkSnapshot             *state,
-                   const GtkSnapshot       *parent,
-                   const graphene_matrix_t *transform)
-{
-  state->parent = parent;
-  state->renderer = parent->renderer;
-  
-  graphene_matrix_init_from_matrix (&state->transform, transform);
-}
+#include "gsk/gskrendernodeprivate.h"
 
 void
-gtk_snapshot_init_translate (GtkSnapshot             *state,
-                             const GtkSnapshot       *parent,
-                             int                      x,
-                             int                      y)
+gtk_snapshot_init (GtkSnapshot *state,
+                   GskRenderer *renderer)
 {
-  graphene_matrix_t matrix;
-
-  graphene_matrix_init_translate (&matrix, &(graphene_point3d_t) GRAPHENE_POINT3D_INIT (x, y, 0));
-
-  gtk_snapshot_init (state, parent, &matrix);
-}
-
-void
-gtk_snapshot_init_root (GtkSnapshot *state,
-                        GskRenderer *renderer)
-{
-  state->parent = NULL;
+  state->node = NULL;
+  state->root = NULL;
   state->renderer = renderer;
 
   graphene_matrix_init_identity (&state->transform);
 }
 
-void
+GskRenderNode *
 gtk_snapshot_finish (GtkSnapshot *state)
 {
-  /* nothing to do so far */
+  if (state->node != NULL)
+    {
+      g_warning ("Too many gtk_snapshot_push() calls.");
+    }
+
+  return state->root;
+}
+
+void
+gtk_snapshot_push (GtkSnapshot   *state,
+                   GskRenderNode *node)
+{
+  gtk_snapshot_append_node (state, node);
+
+  state->node = node;
+  graphene_matrix_init_identity (&state->transform);
+}
+
+void
+gtk_snapshot_pop (GtkSnapshot *state)
+{
+  if (state->node == NULL)
+    {
+      g_warning ("Too many gtk_snapshot_pop() calls.");
+      return;
+    }
+
+  gsk_render_node_get_transform (state->node, &state->transform);
+
+  state->node = gsk_render_node_get_parent (state->node);
 }
 
 GskRenderer *
@@ -66,6 +74,7 @@ gtk_snapshot_get_renderer (const GtkSnapshot *state)
   return state->renderer;
 }
 
+#if 0
 GskRenderNode *
 gtk_snapshot_create_render_node (const GtkSnapshot *state,
                                  const char *name,
@@ -90,4 +99,121 @@ gtk_snapshot_create_render_node (const GtkSnapshot *state,
     }
 
   return node;
+}
+#endif
+
+void
+gtk_snapshot_set_transform (GtkSnapshot             *state,
+                            const graphene_matrix_t *transform)
+{
+  graphene_matrix_init_from_matrix (&state->transform, transform);
+}
+
+void
+gtk_snapshot_transform (GtkSnapshot             *state,
+                        const graphene_matrix_t *transform)
+{
+  graphene_matrix_t result;
+
+  graphene_matrix_multiply (&state->transform, transform, &result);
+  graphene_matrix_init_from_matrix (&state->transform, &result);
+}
+
+void
+gtk_snapshot_translate_2d (GtkSnapshot *state,
+                           int          x,
+                           int          y)
+{
+  graphene_matrix_t transform;
+  graphene_point3d_t point;
+
+  graphene_point3d_init (&point, x, y, 0);
+  graphene_matrix_init_translate (&transform, &point);
+  gtk_snapshot_transform (state, &transform);
+}
+
+void
+gtk_snapshot_append_node (GtkSnapshot   *state,
+                          GskRenderNode *node)
+{
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+  gsk_render_node_set_transform (node, &state->transform);
+  if (state->node)
+    gsk_render_node_append_child (state->node, node);
+  else if (state->root == NULL)
+    state->root = gsk_render_node_ref (node);
+  else
+    {
+      g_warning ("Tried appending a node to an already finished snapshot.");
+    }
+}
+
+cairo_t *
+gtk_snapshot_append_cairo_node (GtkSnapshot           *state,
+                                const graphene_rect_t *bounds,
+                                const char            *name,
+                                ...)
+{
+  GskRenderNode *node;
+
+  g_return_val_if_fail (state != NULL, NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  node = gsk_renderer_create_render_node (state->renderer);
+  gsk_render_node_set_bounds (node, bounds);
+
+  if (name)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (node, str);
+
+      g_free (str);
+    }
+
+  gtk_snapshot_append_node (state, node);
+  gsk_render_node_unref (node);
+
+  return gsk_render_node_get_draw_context (node, state->renderer);
+}
+
+cairo_t *
+gtk_snapshot_push_cairo_node (GtkSnapshot            *state,
+                              const graphene_rect_t  *bounds,
+                              const char             *name,
+                              ...)
+{
+  GskRenderNode *node;
+
+  g_return_val_if_fail (state != NULL, NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  node = gsk_renderer_create_render_node (state->renderer);
+  gsk_render_node_set_bounds (node, bounds);
+
+  if (name)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (node, str);
+
+      g_free (str);
+    }
+
+  gtk_snapshot_push (state, node);
+  gsk_render_node_unref (node);
+
+  return gsk_render_node_get_draw_context (node, state->renderer);
 }

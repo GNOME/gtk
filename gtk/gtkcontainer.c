@@ -3260,32 +3260,21 @@ gtk_container_propagate_draw (GtkContainer *container,
 
 void
 gtk_container_snapshot_child (GtkContainer      *container,
-                              GskRenderNode     *container_node,
                               GtkWidget         *child,
-                              const GtkSnapshot *snapshot)
+                              GtkSnapshot       *snapshot)
 {
-  GtkSnapshot child_snapshot;
-  GskRenderNode *child_node;
   int x, y;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (_gtk_widget_get_parent (child) == GTK_WIDGET (container));
-  g_return_if_fail (GSK_IS_RENDER_NODE (container_node));
   g_return_if_fail (snapshot != NULL);
 
   gtk_container_get_translation_to_child (container, child, &x, &y);
 
-  gtk_snapshot_init_translate (&child_snapshot, snapshot, x, y);
-  child_node = gtk_widget_snapshot (child, &child_snapshot);
-
-  if (child_node)
-    {
-      gsk_render_node_append_child (container_node, child_node);
-      gsk_render_node_unref (child_node);
-    }
-
-  gtk_snapshot_finish (&child_snapshot);
+  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_widget_snapshot (child, snapshot);
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
 }
 
 /**

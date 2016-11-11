@@ -38,12 +38,38 @@ typedef struct _GtkSnapshot GtkSnapshot;
 
 
 GDK_AVAILABLE_IN_3_90
-GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot *state);
+GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot      *state);
 
 GDK_AVAILABLE_IN_3_90
-GskRenderNode * gtk_snapshot_create_render_node         (const GtkSnapshot *state,
-                                                         const char *name,
-                                                         ...) G_GNUC_PRINTF(2, 3);
+void            gtk_snapshot_push                       (GtkSnapshot            *state,
+                                                         GskRenderNode          *node);
+GDK_AVAILABLE_IN_3_90
+cairo_t *       gtk_snapshot_push_cairo_node            (GtkSnapshot            *state,
+                                                         const graphene_rect_t  *bounds,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF(3, 4);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_pop                        (GtkSnapshot            *state);
+
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_set_transform              (GtkSnapshot            *state,
+                                                         const graphene_matrix_t *transform);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_transform                  (GtkSnapshot            *state,
+                                                         const graphene_matrix_t *matrix);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_translate_2d               (GtkSnapshot            *state,
+                                                         int                     x,
+                                                         int                     y);
+
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_append_node                (GtkSnapshot            *state,
+                                                         GskRenderNode          *node);
+GDK_AVAILABLE_IN_3_90
+cairo_t *       gtk_snapshot_append_cairo_node          (GtkSnapshot            *state,
+                                                         const graphene_rect_t  *bounds,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF(3, 4);
 
 G_END_DECLS
 
