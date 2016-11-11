@@ -1608,7 +1608,10 @@ gtk_recent_manager_clamp_to_size (GtkRecentManager *manager,
   uris = g_bookmark_file_get_uris (priv->recent_items, &n_uris);
 
   if (n_uris < size)
+  {
+    g_strfreev (uris);
     return;
+  }
 
   for (i = 0; i < n_uris - size; i++)
     {
