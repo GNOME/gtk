@@ -1496,7 +1496,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gint matches, actions, items, height;
   GdkDisplay *display;
   GdkMonitor *monitor;
-  gint vertical_separator;
   GdkRectangle area;
   GdkWindow *window;
   GtkRequisition popup_req;
@@ -1537,12 +1536,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
                                       NULL, NULL, NULL, &height);
   gtk_tree_view_column_cell_get_size (action_column, NULL,
                                       NULL, NULL, NULL, &action_height);
-
-  gtk_widget_style_get (GTK_WIDGET (completion->priv->tree_view),
-                        "vertical-separator", &vertical_separator,
-                        NULL);
-
-  height += vertical_separator;
 
   gtk_widget_realize (completion->priv->tree_view);
 

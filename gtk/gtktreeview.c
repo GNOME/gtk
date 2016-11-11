@@ -252,6 +252,17 @@ typedef enum {
 #define TREE_WINDOW_Y_TO_RBTREE_Y(tree_view,y) ((y) + tree_view->priv->dy)
 #define RBTREE_Y_TO_TREE_WINDOW_Y(tree_view,y) ((y) - tree_view->priv->dy)
 
+/* Size of the expander arrow */
+#define _TREE_VIEW_EXPANDER_SIZE 16
+/* Vertical separator width. Must be an eben number. */
+#define _TREE_VIEW_VERTICAL_SEPARATOR 2
+/* Horizontal separator width. Must be an even number.  */
+#define _TREE_VIEW_HORIZONTAL_SEPARATOR 4
+/* Tree view grid line width, in pixels */
+#define _TREE_VIEW_GRID_LINE_WIDTH 1
+/* Tree view line width, in pixels */
+#define _TREE_VIEW_TREE_LINE_WIDTH 1
+
 typedef struct _GtkTreeViewColumnReorder GtkTreeViewColumnReorder;
 struct _GtkTreeViewColumnReorder
 {
@@ -434,11 +445,9 @@ struct _GtkTreeViewPrivate
   /* Grid and tree lines */
   GtkTreeViewGridLines grid_lines;
   double grid_line_dashes[2];
-  int grid_line_width;
 
   gboolean tree_lines_enabled;
   double tree_line_dashes[2];
-  int tree_line_width;
 
   /* Row separators */
   GtkTreeViewRowSeparatorFunc row_separator_func;
@@ -782,11 +791,9 @@ static inline gint gtk_tree_view_get_effective_header_height (GtkTreeView *tree_
 
 static inline gint gtk_tree_view_get_cell_area_y_offset      (GtkTreeView *tree_view,
                                                               GtkRBTree   *tree,
-                                                              GtkRBNode   *node,
-                                                              gint         vertical_separator);
+                                                              GtkRBNode   *node);
 static inline gint gtk_tree_view_get_cell_area_height        (GtkTreeView *tree_view,
-                                                              GtkRBNode   *node,
-                                                              gint         vertical_separator);
+                                                              GtkRBNode   *node);
 
 static inline gint gtk_tree_view_get_row_y_offset            (GtkTreeView *tree_view,
                                                               GtkRBTree   *tree,
@@ -1192,80 +1199,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (o_class, LAST_PROP, tree_view_props);
-
-  /* Style properties */
-#define _TREE_VIEW_EXPANDER_SIZE 14
-#define _TREE_VIEW_VERTICAL_SEPARATOR 2
-#define _TREE_VIEW_HORIZONTAL_SEPARATOR 2
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("expander-size",
-							     P_("Expander Size"),
-							     P_("Size of the expander arrow"),
-							     0,
-							     G_MAXINT,
-							     _TREE_VIEW_EXPANDER_SIZE,
-							     GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("vertical-separator",
-							     P_("Vertical Separator Width"),
-							     P_("Vertical space between cells.  Must be an even number"),
-							     0,
-							     G_MAXINT,
-							     _TREE_VIEW_VERTICAL_SEPARATOR,
-							     GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("horizontal-separator",
-							     P_("Horizontal Separator Width"),
-							     P_("Horizontal space between cells.  Must be an even number"),
-							     0,
-							     G_MAXINT,
-							     _TREE_VIEW_HORIZONTAL_SEPARATOR,
-							     GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("allow-rules",
-								 P_("Allow Rules"),
-								 P_("Allow drawing of alternating color rows"),
-								 TRUE,
-								 GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("indent-expanders",
-								 P_("Indent Expanders"),
-								 P_("Make the expanders indented"),
-								 TRUE,
-								 GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("grid-line-width",
-							     P_("Grid line width"),
-							     P_("Width, in pixels, of the tree view grid lines"),
-							     0, G_MAXINT, 1,
-							     GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("tree-line-width",
-							     P_("Tree line width"),
-							     P_("Width, in pixels, of the tree view lines"),
-							     0, G_MAXINT, 1,
-							     GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_string ("grid-line-pattern",
-								P_("Grid line pattern"),
-								P_("Dash pattern used to draw the tree view grid lines"),
-								"\1\1",
-								GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_string ("tree-line-pattern",
-								P_("Tree line pattern"),
-								P_("Dash pattern used to draw the tree view lines"),
-								"\1\1",
-								GTK_PARAM_READABLE));
 
   /* Signals */
   /**
@@ -2946,15 +2879,7 @@ row_is_separator (GtkTreeView *tree_view,
 static int
 gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
 {
-  gint expander_size;
-  gint horizontal_separator;
-
-  gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"expander-size", &expander_size,
-                        "horizontal-separator", &horizontal_separator,
-			NULL);
-
-  return expander_size + (horizontal_separator / 2);
+  return _TREE_VIEW_EXPANDER_SIZE + (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
 }
 
 static void
@@ -2986,7 +2911,6 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                           gdouble               y,
                                           GtkTreeView          *tree_view)
 {
-  gint vertical_separator, horizontal_separator;
   GtkWidget *widget = GTK_WIDGET (tree_view);
   GdkRectangle background_area, cell_area;
   GtkTreeViewColumn *column = NULL;
@@ -3005,10 +2929,6 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   gtk_tree_view_stop_editing (tree_view, FALSE);
-  gtk_widget_style_get (widget,
-			"vertical-separator", &vertical_separator,
-			"horizontal-separator", &horizontal_separator,
-			NULL);
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
   if (button > 3)
@@ -3102,10 +3022,8 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       /* we found the focus column */
       column = candidate;
       cell_area = background_area;
-      cell_area.width -= horizontal_separator;
-      cell_area.height -= vertical_separator;
-      cell_area.x += horizontal_separator/2;
-      cell_area.y += vertical_separator/2;
+      cell_area.width -= _TREE_VIEW_HORIZONTAL_SEPARATOR;
+      cell_area.x += _TREE_VIEW_HORIZONTAL_SEPARATOR / 2;
       if (gtk_tree_view_is_expander_column (tree_view, column))
         {
           if (!rtl)
@@ -4777,7 +4695,7 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
         color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
         gdk_cairo_set_source_rgba (cr, color);
-        cairo_set_line_width (cr, tree_view->priv->tree_line_width);
+        cairo_set_line_width (cr, _TREE_VIEW_TREE_LINE_WIDTH);
         if (tree_view->priv->tree_line_dashes[0])
           cairo_set_dash (cr, tree_view->priv->tree_line_dashes, 2, 0.5);
       }
@@ -4790,7 +4708,7 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
         color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
 
         gdk_cairo_set_source_rgba (cr, color);
-        cairo_set_line_width (cr, tree_view->priv->grid_line_width);
+        cairo_set_line_width (cr, _TREE_VIEW_GRID_LINE_WIDTH);
         if (tree_view->priv->grid_line_dashes[0])
           cairo_set_dash (cr, tree_view->priv->grid_line_dashes, 2, 0.5);
       }
@@ -4887,13 +4805,9 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   gint bin_window_height;
   GtkTreePath *drag_dest_path;
   GList *first_column, *last_column;
-  gint vertical_separator;
-  gint horizontal_separator;
-  gboolean allow_rules;
   gboolean has_can_focus_cell;
   gboolean rtl;
   gint n_visible_columns;
-  gint grid_line_width;
   gint expander_size;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   GtkStyleContext *context;
@@ -4901,12 +4815,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   context = gtk_widget_get_style_context (widget);
-
-  gtk_widget_style_get (widget,
-			"horizontal-separator", &horizontal_separator,
-			"vertical-separator", &vertical_separator,
-			"allow-rules", &allow_rules,
-			NULL);
 
   if (tree_view->priv->tree == NULL)
     {
@@ -4966,9 +4874,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
     || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH;
   expander_size = gtk_tree_view_get_expander_size (tree_view);
 
-  if (draw_vgrid_lines || draw_hgrid_lines)
-    gtk_widget_style_get (widget, "grid-line-width", &grid_line_width, NULL);
-  
   n_visible_columns = 0;
   for (list = tree_view->priv->columns; list; list = list->next)
     {
@@ -5085,33 +4990,31 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  background_area.width = width;
 
           cell_area = background_area;
-          cell_area.y += vertical_separator / 2;
-          cell_area.x += horizontal_separator / 2;
-          cell_area.height -= vertical_separator;
-	  cell_area.width -= horizontal_separator;
+          cell_area.x += _TREE_VIEW_HORIZONTAL_SEPARATOR /2;
+          cell_area.width -= _TREE_VIEW_HORIZONTAL_SEPARATOR;
 
 	  if (draw_vgrid_lines)
 	    {
 	      if (list == first_column)
 	        {
-		  cell_area.width -= grid_line_width / 2;
+		  cell_area.width -= _TREE_VIEW_GRID_LINE_WIDTH / 2;
 		}
 	      else if (list == last_column)
 	        {
-		  cell_area.x += grid_line_width / 2;
-		  cell_area.width -= grid_line_width / 2;
+		  cell_area.x += _TREE_VIEW_GRID_LINE_WIDTH / 2;
+		  cell_area.width -= _TREE_VIEW_GRID_LINE_WIDTH / 2;
 		}
 	      else
 	        {
-	          cell_area.x += grid_line_width / 2;
-	          cell_area.width -= grid_line_width;
+	          cell_area.x += _TREE_VIEW_GRID_LINE_WIDTH / 2;
+	          cell_area.width -= _TREE_VIEW_GRID_LINE_WIDTH;
 		}
 	    }
 
 	  if (draw_hgrid_lines)
 	    {
-	      cell_area.y += grid_line_width / 2;
-	      cell_area.height -= grid_line_width;
+	      cell_area.y += _TREE_VIEW_GRID_LINE_WIDTH / 2;
+	      cell_area.height -= _TREE_VIEW_GRID_LINE_WIDTH;
 	    }
 
 	  if (!gdk_rectangle_intersect (&clip, &background_area, NULL))
@@ -5369,8 +5272,8 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 
 	  if (draw_hgrid_lines)
 	    {
-	      tmp_y = gtk_tree_view_get_row_y_offset (tree_view, tree, node) + grid_line_width / 2;
-              tmp_height = gtk_tree_view_get_row_height (tree_view, node) - grid_line_width;
+	      tmp_y = gtk_tree_view_get_row_y_offset (tree_view, tree, node) + _TREE_VIEW_GRID_LINE_WIDTH / 2;
+              tmp_height = gtk_tree_view_get_row_height (tree_view, node) - _TREE_VIEW_GRID_LINE_WIDTH;
 	    }
 	  else
 	    {
@@ -6156,13 +6059,10 @@ validate_row (GtkTreeView *tree_view,
   GtkStyleContext *context;
   GList *list, *first_column, *last_column;
   gint height = 0;
-  gint horizontal_separator;
-  gint vertical_separator;
   gint depth = gtk_tree_path_get_depth (path);
   gboolean retval = FALSE;
   gboolean is_separator = FALSE;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
-  gint grid_line_width;
   gint expander_size;
 
   /* double check the row needs validating */
@@ -6172,12 +6072,6 @@ validate_row (GtkTreeView *tree_view,
 
   is_separator = row_is_separator (tree_view, iter, NULL);
 
-  gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"horizontal-separator", &horizontal_separator,
-			"vertical-separator", &vertical_separator,
-			"grid-line-width", &grid_line_width,
-			NULL);
-  
   draw_vgrid_lines =
     tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_VERTICAL
     || tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH;
@@ -6233,27 +6127,26 @@ validate_row (GtkTreeView *tree_view,
         }
       else
         {
-          row_height += vertical_separator;
           height = MAX (height, row_height);
           height = MAX (height, expander_size);
         }
 
       if (gtk_tree_view_is_expander_column (tree_view, column))
         {
-	  padding += horizontal_separator + (depth - 1) * tree_view->priv->level_indentation;
+	  padding += _TREE_VIEW_HORIZONTAL_SEPARATOR + (depth - 1) * tree_view->priv->level_indentation;
 
 	  if (gtk_tree_view_draw_expanders (tree_view))
 	    padding += depth * expander_size;
 	}
       else
-	padding += horizontal_separator;
+        padding += _TREE_VIEW_HORIZONTAL_SEPARATOR;
 
       if (draw_vgrid_lines)
         {
 	  if (list->data == first_column || list->data == last_column)
-	    padding += grid_line_width / 2.0;
+	    padding += _TREE_VIEW_GRID_LINE_WIDTH / 2.0;
 	  else
-	    padding += grid_line_width;
+	    padding += _TREE_VIEW_GRID_LINE_WIDTH;
 	}
 
       /* Update the padding for the column */
@@ -6267,7 +6160,7 @@ validate_row (GtkTreeView *tree_view,
   gtk_style_context_restore (context);
 
   if (draw_hgrid_lines)
-    height += grid_line_width;
+    height += _TREE_VIEW_GRID_LINE_WIDTH;
 
   if (height != GTK_RBNODE_GET_HEIGHT (node))
     {
@@ -9325,18 +9218,11 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
   GtkTreeViewColumn *tmp_column = NULL;
   gint total_width;
   gint expander_size, expander_render_size;
-  gint horizontal_separator;
-  gboolean indent_expanders;
   gboolean rtl;
-
-  gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"indent-expanders", &indent_expanders,
-                        "horizontal-separator", &horizontal_separator,
-			NULL);
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
   expander_size = gtk_tree_view_get_expander_size (tree_view);
-  expander_render_size = expander_size - (horizontal_separator / 2);
+  expander_render_size = expander_size - (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
 
   total_width = 0;
   for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
@@ -9360,13 +9246,10 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
 
   x_offset += (expander_size - expander_render_size);
 
-  if (indent_expanders)
-    {
-      if (rtl)
-	x_offset -= expander_size * _gtk_rbtree_get_depth (tree);
-      else
-	x_offset += expander_size * _gtk_rbtree_get_depth (tree);
-    }
+  if (rtl)
+    x_offset -= expander_size * _gtk_rbtree_get_depth (tree);
+  else
+    x_offset += expander_size * _gtk_rbtree_get_depth (tree);
 
   *x1 = x_offset;
 
@@ -10104,15 +9987,10 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   GtkWidget *widget;
   gint x_offset = 0;
   gint x2;
-  gint vertical_separator;
   GtkCellRendererState flags = 0;
 
   widget = GTK_WIDGET (tree_view);
   context = gtk_widget_get_style_context (widget);
-
-  gtk_widget_style_get (widget,
-                        "vertical-separator", &vertical_separator,
-                        NULL);
 
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
     return;
@@ -10120,11 +9998,9 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gtk_tree_view_get_arrow_xrange (tree_view, tree, &x_offset, &x2);
 
   area.x = x_offset;
-  area.y = gtk_tree_view_get_cell_area_y_offset (tree_view, tree, node,
-                                                 vertical_separator);
+  area.y = gtk_tree_view_get_cell_area_y_offset (tree_view, tree, node);
   area.width = x2 - x_offset;
-  area.height = gtk_tree_view_get_cell_area_height (tree_view, node,
-                                                    vertical_separator);
+  area.height = gtk_tree_view_get_cell_area_height (tree_view, node);
 
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
     flags |= GTK_CELL_RENDERER_SELECTED;
@@ -10409,7 +10285,6 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
   GtkRBNode *cursor_node;
   gint y;
   gint window_y;
-  gint vertical_separator;
 
   if (!gtk_widget_has_focus (GTK_WIDGET (tree_view)))
     return;
@@ -10420,13 +10295,11 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
   old_cursor_path = _gtk_tree_path_new_from_rbtree (tree_view->priv->cursor_tree,
                                                     tree_view->priv->cursor_node);
 
-  gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical-separator", &vertical_separator, NULL);
-
   y = _gtk_rbtree_node_find_offset (tree_view->priv->cursor_tree, tree_view->priv->cursor_node);
   window_y = RBTREE_Y_TO_TREE_WINDOW_Y (tree_view, y);
   y += tree_view->priv->cursor_offset;
   y += count * (int)gtk_adjustment_get_page_increment (tree_view->priv->vadjustment);
-  y = CLAMP (y, (gint)gtk_adjustment_get_lower (tree_view->priv->vadjustment),  (gint)gtk_adjustment_get_upper (tree_view->priv->vadjustment) - vertical_separator);
+  y = CLAMP (y, (gint)gtk_adjustment_get_lower (tree_view->priv->vadjustment),  (gint)gtk_adjustment_get_upper (tree_view->priv->vadjustment));
 
   if (y >= gtk_tree_view_get_height (tree_view))
     y = gtk_tree_view_get_height (tree_view) - 1;
@@ -13269,8 +13142,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
 
 static inline gint
 gtk_tree_view_get_cell_area_height (GtkTreeView *tree_view,
-                                    GtkRBNode   *node,
-                                    gint         vertical_separator)
+                                    GtkRBNode   *node)
 {
   int expander_size = gtk_tree_view_get_expander_size (tree_view);
   int height;
@@ -13287,19 +13159,17 @@ gtk_tree_view_get_cell_area_height (GtkTreeView *tree_view,
   if (height < expander_size)
     height = expander_size;
 
-  return height - vertical_separator;
+  return height;
 }
 
 static inline gint
 gtk_tree_view_get_cell_area_y_offset (GtkTreeView *tree_view,
                                       GtkRBTree   *tree,
-                                      GtkRBNode   *node,
-                                      gint         vertical_separator)
+                                      GtkRBNode   *node)
 {
   int offset;
 
   offset = gtk_tree_view_get_row_y_offset (tree_view, tree, node);
-  offset += vertical_separator / 2;
 
   return offset;
 }
@@ -13329,19 +13199,12 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 {
   GtkRBTree *tree = NULL;
   GtkRBNode *node = NULL;
-  gint vertical_separator;
-  gint horizontal_separator;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
   g_return_if_fail (rect != NULL);
   g_return_if_fail (!column || gtk_tree_view_column_get_tree_view (column) == (GtkWidget *) tree_view);
   g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (tree_view)));
-
-  gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"vertical-separator", &vertical_separator,
-			"horizontal-separator", &horizontal_separator,
-			NULL);
 
   rect->x = 0;
   rect->y = 0;
@@ -13350,8 +13213,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 
   if (column)
     {
-      rect->x = gtk_tree_view_column_get_x_offset (column) + horizontal_separator/2;
-      rect->width = gtk_tree_view_column_get_width (column) - horizontal_separator;
+      rect->x = gtk_tree_view_column_get_x_offset (column) + _TREE_VIEW_HORIZONTAL_SEPARATOR / 2;
+      rect->width = gtk_tree_view_column_get_width (column) - _TREE_VIEW_HORIZONTAL_SEPARATOR;
     }
 
   if (path)
@@ -13372,10 +13235,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
         }
       else
         {
-          rect->y = gtk_tree_view_get_cell_area_y_offset (tree_view, tree, node,
-                                                          vertical_separator);
-          rect->height = gtk_tree_view_get_cell_area_height (tree_view, node,
-                                                             vertical_separator);
+          rect->y = gtk_tree_view_get_cell_area_y_offset (tree_view, tree, node);
+          rect->height = gtk_tree_view_get_cell_area_height (tree_view, node);
         }
 
       if (column &&
@@ -14316,7 +14177,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
     {
       GtkTreeViewColumn *column = list->data;
       GdkRectangle cell_area;
-      gint vertical_separator;
 
       if (!gtk_tree_view_column_get_visible (column))
         continue;
@@ -14328,14 +14188,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       background_area.x = cell_offset;
       background_area.width = gtk_tree_view_column_get_width (column);
 
-      gtk_widget_style_get (widget,
-			    "vertical-separator", &vertical_separator,
-			    NULL);
-
       cell_area = background_area;
-
-      cell_area.y += vertical_separator / 2;
-      cell_area.height -= vertical_separator;
 
       if (gtk_tree_view_is_expander_column (tree_view, column))
         {
@@ -15596,35 +15449,11 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
   
   if (gtk_widget_get_realized (widget))
     {
-      if (grid_lines == GTK_TREE_VIEW_GRID_LINES_NONE &&
-	  priv->grid_line_width)
-	{
-	  priv->grid_line_width = 0;
-	}
-      
       if (grid_lines != GTK_TREE_VIEW_GRID_LINES_NONE && 
-	  !priv->grid_line_width)
+	  _TREE_VIEW_GRID_LINE_WIDTH > 0)
 	{
-	  gint8 *dash_list;
-
-	  gtk_widget_style_get (widget,
-				"grid-line-width", &priv->grid_line_width,
-				"grid-line-pattern", (gchar *)&dash_list,
-				NULL);
-      
-          if (dash_list)
-            {
-              priv->grid_line_dashes[0] = dash_list[0];
-              if (dash_list[0])
-                priv->grid_line_dashes[1] = dash_list[1];
-	      
-              g_free (dash_list);
-            }
-          else
-            {
-              priv->grid_line_dashes[0] = 1;
-              priv->grid_line_dashes[1] = 1;
-            }
+          priv->grid_line_dashes[0] = 1;
+          priv->grid_line_dashes[1] = 1;
 	}      
     }
 
@@ -15686,32 +15515,10 @@ gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
 
   if (gtk_widget_get_realized (widget))
     {
-      if (!enabled && priv->tree_line_width)
+      if (enabled && _TREE_VIEW_TREE_LINE_WIDTH > 0)
 	{
-          priv->tree_line_width = 0;
-	}
-      
-      if (enabled && !priv->tree_line_width)
-	{
-	  gint8 *dash_list;
-	  gtk_widget_style_get (widget,
-				"tree-line-width", &priv->tree_line_width,
-				"tree-line-pattern", (gchar *)&dash_list,
-				NULL);
-	  
-          if (dash_list)
-            {
-              priv->tree_line_dashes[0] = dash_list[0];
-              if (dash_list[0])
-                priv->tree_line_dashes[1] = dash_list[1];
-	      
-              g_free (dash_list);
-            }
-          else
-            {
-              priv->tree_line_dashes[0] = 1;
-              priv->tree_line_dashes[1] = 1;
-            }
+          priv->tree_line_dashes[0] = 1;
+          priv->tree_line_dashes[1] = 1;
 	}
     }
 
