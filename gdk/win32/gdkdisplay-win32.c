@@ -17,6 +17,9 @@
  */
 
 #include "config.h"
+
+#define _WIN32_WINNT 0x0600
+
 #include "gdk.h"
 #include "gdkprivate-win32.h"
 #include "gdkdisplay-win32.h"
