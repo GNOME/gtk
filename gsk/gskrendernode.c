@@ -948,6 +948,25 @@ gsk_render_node_set_transform (GskRenderNode           *node,
 }
 
 /**
+ * gsk_render_node_get_transform:
+ * @node: a #GskRenderNode
+ * @mv: (out caller-allocates): return location for the transform matrix
+ *
+ * Retrieves the transform matrix set using gsk_render_node_set_transform().
+ *
+ * Since: 3.90
+ */
+void
+gsk_render_node_get_transform (GskRenderNode     *node,
+                               graphene_matrix_t *mv)
+{
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (mv != NULL);
+
+  graphene_matrix_init_from_matrix (mv, &node->transform);
+}
+
+/**
  * gsk_render_node_set_anchor_point:
  * @node: a #GskRenderNode
  * @offset: the anchor point
