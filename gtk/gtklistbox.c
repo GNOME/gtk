@@ -2633,7 +2633,9 @@ gtk_list_box_measure (GtkCssGadget   *gadget,
       *natural = 0;
 
       if (priv->placeholder && gtk_widget_get_child_visible (priv->placeholder))
-        gtk_widget_get_preferred_width (priv->placeholder, minimum, natural);
+        gtk_widget_measure (priv->placeholder, GTK_ORIENTATION_HORIZONTAL, -1,
+                            minimum, natural,
+                            NULL, NULL);
 
       for (iter = g_sequence_get_begin_iter (priv->children);
            !g_sequence_iter_is_end (iter);
@@ -2651,13 +2653,18 @@ gtk_list_box_measure (GtkCssGadget   *gadget,
           if (!gtk_widget_get_visible (GTK_WIDGET (row)))
             continue;
 
-          gtk_widget_get_preferred_width (GTK_WIDGET (row), &row_min, &row_nat);
+          gtk_widget_measure (GTK_WIDGET (row), orientation, -1,
+                              &row_min, &row_nat,
+                              NULL, NULL);
+
           *minimum = MAX (*minimum, row_min);
           *natural = MAX (*natural, row_nat);
 
           if (ROW_PRIV (row)->header != NULL)
             {
-              gtk_widget_get_preferred_width (ROW_PRIV (row)->header, &row_min, &row_nat);
+              gtk_widget_measure (ROW_PRIV (row)->header, orientation, -1,
+                                  &row_min, &row_nat,
+                                  NULL, NULL);
               *minimum = MAX (*minimum, row_min);
               *natural = MAX (*natural, row_nat);
             }
@@ -2675,8 +2682,9 @@ gtk_list_box_measure (GtkCssGadget   *gadget,
       *minimum = 0;
 
       if (priv->placeholder && gtk_widget_get_child_visible (priv->placeholder))
-        gtk_widget_get_preferred_height_for_width (priv->placeholder, for_size,
-                                                   minimum, NULL);
+        gtk_widget_measure (priv->placeholder, orientation, for_size,
+                            minimum, NULL,
+                            NULL, NULL);
 
       for (iter = g_sequence_get_begin_iter (priv->children);
            !g_sequence_iter_is_end (iter);
@@ -2691,10 +2699,14 @@ gtk_list_box_measure (GtkCssGadget   *gadget,
 
           if (ROW_PRIV (row)->header != NULL)
             {
-              gtk_widget_get_preferred_height_for_width (ROW_PRIV (row)->header, for_size, &row_min, NULL);
+              gtk_widget_measure (ROW_PRIV (row)->header, orientation, for_size,
+                                  &row_min, NULL,
+                                  NULL, NULL);
               *minimum += row_min;
             }
-          gtk_widget_get_preferred_height_for_width (GTK_WIDGET (row), for_size, &row_min, NULL);
+          gtk_widget_measure (GTK_WIDGET (row), orientation, for_size,
+                              &row_min, NULL,
+                              NULL, NULL);
           *minimum += row_min;
         }
 
@@ -2764,8 +2776,9 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
 
   if (priv->placeholder && gtk_widget_get_child_visible (priv->placeholder))
     {
-      gtk_widget_get_preferred_height_for_width (priv->placeholder,
-                                                 allocation->width, &child_min, NULL);
+      gtk_widget_measure (priv->placeholder, GTK_ORIENTATION_VERTICAL,
+                          allocation->width,
+                          &child_min, NULL, NULL, NULL);
       header_allocation.height = allocation->height;
       header_allocation.y = child_allocation.y;
       gtk_widget_size_allocate (priv->placeholder, &header_allocation);
@@ -2786,8 +2799,9 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
 
       if (ROW_PRIV (row)->header != NULL)
         {
-          gtk_widget_get_preferred_height_for_width (ROW_PRIV (row)->header,
-                                                     allocation->width, &child_min, NULL);
+          gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL,
+                              allocation->width,
+                              &child_min, NULL, NULL, NULL);
           header_allocation.height = child_min;
           header_allocation.y = child_allocation.y;
           gtk_widget_size_allocate (ROW_PRIV (row)->header, &header_allocation);
@@ -2796,8 +2810,9 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
 
       ROW_PRIV (row)->y = child_allocation.y;
 
-      gtk_widget_get_preferred_height_for_width (GTK_WIDGET (row),
-                                                 child_allocation.width, &child_min, NULL);
+      gtk_widget_measure (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL,
+                          child_allocation.width,
+                          &child_min, NULL, NULL, NULL);
       child_allocation.height = child_min;
 
       ROW_PRIV (row)->height = child_allocation.height;
@@ -3289,19 +3304,16 @@ gtk_list_box_row_measure (GtkCssGadget   *gadget,
   if (orientation == GTK_ORIENTATION_VERTICAL)
     {
       if (child && gtk_widget_get_visible (child))
-        {
-          if (for_size < 0)
-            gtk_widget_get_preferred_height (child, minimum, natural);
-          else
-            gtk_widget_get_preferred_height_for_width (child, for_size, minimum, natural);
-        }
+        gtk_widget_measure (child, orientation, for_size, minimum, natural, NULL, NULL);
       else
         *minimum = *natural = 0;
     }
   else
     {
       if (child && gtk_widget_get_visible (child))
-        gtk_widget_get_preferred_width (child, minimum, natural);
+        gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1,
+                            minimum, natural,
+                            NULL, NULL);
       else
         *minimum = *natural = 0;
     }
