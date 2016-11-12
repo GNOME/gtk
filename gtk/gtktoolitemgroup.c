@@ -92,8 +92,6 @@ struct _GtkToolItemGroupPrivate
 
   gint64             animation_start;
   GSource           *animation_timeout;
-  gint               expander_size;
-  gint               header_spacing;
 
   gulong             focus_set_id;
   GtkWidget         *toplevel;
@@ -300,18 +298,18 @@ gtk_tool_item_group_header_draw_cb (GtkWidget *widget,
       else
         x = 0;
 
-      y = height / 2 - priv->expander_size / 2;
+      y = height / 2 - (DEFAULT_EXPANDER_SIZE / 2);
     }
   else
     {
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-      x = width / 2 - priv->expander_size / 2;
+      x = width / 2 - (DEFAULT_EXPANDER_SIZE / 2);
       y = 0;
     }
 
   gtk_render_expander (context, cr, x, y,
-                       priv->expander_size,
-                       priv->expander_size);
+                       DEFAULT_EXPANDER_SIZE,
+                       DEFAULT_EXPANDER_SIZE);
 
   gtk_style_context_restore (context);
 
@@ -342,15 +340,10 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
   gint dx = 0, dy = 0;
   GtkTextDirection direction = gtk_widget_get_direction (widget);
 
-  gtk_widget_style_get (widget,
-                        "header-spacing", &(priv->header_spacing),
-                        "expander-size", &(priv->expander_size),
-                        NULL);
-
   switch (gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group)))
     {
       case GTK_ORIENTATION_HORIZONTAL:
-        dy = priv->header_spacing + priv->expander_size;
+        dy = DEFAULT_HEADER_SPACING + DEFAULT_EXPANDER_SIZE;
 
         if (GTK_IS_LABEL (label_widget))
           {
@@ -363,7 +356,7 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
        break;
 
       case GTK_ORIENTATION_VERTICAL:
-        dx = priv->header_spacing + priv->expander_size;
+        dx = DEFAULT_HEADER_SPACING + DEFAULT_EXPANDER_SIZE;
 
         if (GTK_IS_LABEL (label_widget))
           {
@@ -404,8 +397,6 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   group->priv = priv = gtk_tool_item_group_get_instance_private (group);
 
   priv->children = NULL;
-  priv->header_spacing = DEFAULT_HEADER_SPACING;
-  priv->expander_size = DEFAULT_EXPANDER_SIZE;
   priv->collapsed = DEFAULT_COLLAPSED;
 
   priv->label_widget = gtk_label_new (NULL);
@@ -1636,20 +1627,6 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                       GTK_TYPE_RELIEF_STYLE, GTK_RELIEF_NORMAL,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  gtk_widget_class_install_style_property (wclass,
-                                           g_param_spec_int ("expander-size",
-                                                             P_("Expander Size"),
-                                                             P_("Size of the expander arrow"),
-                                                             0, G_MAXINT, DEFAULT_EXPANDER_SIZE,
-                                                             GTK_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property (wclass,
-                                           g_param_spec_int ("header-spacing",
-                                                             P_("Header Spacing"),
-                                                             P_("Spacing between expander arrow and caption"),
-                                                             0, G_MAXINT, DEFAULT_HEADER_SPACING,
-                                                             GTK_PARAM_READABLE));
-
   gtk_container_class_install_child_property (cclass, CHILD_PROP_HOMOGENEOUS,
                                               g_param_spec_boolean ("homogeneous",
                                                                     P_("Homogeneous"),
@@ -1837,9 +1814,9 @@ gtk_tool_item_group_force_expose (GtkToolItemGroup *group)
       gtk_widget_get_allocation (frame, &frame_allocation);
       gtk_widget_queue_draw_area (priv->header,
                                   frame_allocation.x,
-                                  frame_allocation.y + (frame_allocation.height - priv->expander_size) / 2,
-                                  priv->expander_size,
-                                  priv->expander_size);
+                                  frame_allocation.y + (frame_allocation.height - DEFAULT_EXPANDER_SIZE) / 2,
+                                  DEFAULT_EXPANDER_SIZE,
+                                  DEFAULT_EXPANDER_SIZE);
     }
 
   if (gtk_widget_get_realized (widget))
