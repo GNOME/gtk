@@ -747,6 +747,8 @@ gtk_layout_init (GtkLayout *layout)
 {
   GtkLayoutPrivate *priv;
 
+  gtk_widget_set_has_window (GTK_WIDGET (layout), TRUE);
+
   layout->priv = gtk_layout_get_instance_private (layout);
   priv = layout->priv;
 
