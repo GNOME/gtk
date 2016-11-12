@@ -693,7 +693,7 @@ gtk_window_measure (GtkWidget      *widget,
 
           gtk_widget_measure (priv->title_box,
                               orientation,
-                              MAX (size, 0),
+                              MAX (size, -1),
                               &title_min_size, &title_nat_size,
                               NULL, NULL);
         }
@@ -703,7 +703,7 @@ gtk_window_measure (GtkWidget      *widget,
     {
       gtk_widget_measure (child,
                           orientation,
-                          MAX (for_size, 0),
+                          MAX (for_size, -1),
                           &child_min_size, &child_nat_size,
                           NULL, NULL);
 
@@ -7320,10 +7320,10 @@ _gtk_window_set_allocation (GtkWindow           *window,
         MAX (1, (gint) allocation->width -
              window_border.left - window_border.right);
 
-      gtk_widget_get_preferred_height_for_width (priv->title_box,
-                                                 title_allocation.width,
-                                                 NULL,
-                                                 &priv->title_height);
+      gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL,
+                          title_allocation.width,
+                          NULL, &priv->title_height,
+                          NULL, NULL);
 
       title_allocation.height = priv->title_height;
 
