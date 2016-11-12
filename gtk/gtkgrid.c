@@ -662,30 +662,26 @@ compute_request_for_child (GtkGridRequest *request,
     *minimum_baseline = -1;
   if (natural_baseline)
     *natural_baseline = -1;
+
   if (contextual)
     {
       gint size;
 
       size = compute_allocation_for_child (request, child, 1 - orientation);
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_get_preferred_width_for_height (child->widget,
-                                                   size,
-                                                   minimum, natural);
-      else
-        gtk_widget_get_preferred_height_and_baseline_for_width (child->widget,
-								size,
-								minimum, natural,
-								minimum_baseline, natural_baseline);
+
+      gtk_widget_measure (child->widget,
+                          orientation,
+                          size,
+                          minimum, natural,
+                          minimum_baseline, natural_baseline);
     }
   else
     {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_get_preferred_width (child->widget, minimum, natural);
-      else
-        gtk_widget_get_preferred_height_and_baseline_for_width (child->widget,
-								-1,
-								minimum, natural,
-								minimum_baseline, natural_baseline);
+      gtk_widget_measure (child->widget,
+                          orientation,
+                          -1,
+                          minimum, natural,
+                          minimum_baseline, natural_baseline);
     }
 }
 
