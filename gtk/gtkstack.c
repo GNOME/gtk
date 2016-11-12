@@ -2230,11 +2230,14 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
   if (priv->last_visible_child)
     {
       int min, nat;
-      gtk_widget_get_preferred_width (priv->last_visible_child->widget, &min, &nat);
+
+      gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
+                          -1,
+                          &min, &nat, NULL, NULL);
       child_allocation.width = MAX (min, allocation->width);
-      gtk_widget_get_preferred_height_for_width (priv->last_visible_child->widget,
-                                                 child_allocation.width,
-                                                 &min, &nat);
+      gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_VERTICAL,
+                          child_allocation.width,
+                          &min, &nat, NULL, NULL);
       child_allocation.height = MAX (min, allocation->height);
 
       gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation);
