@@ -4967,7 +4967,9 @@ gtk_window_update_csd_size (GtkWindow *window,
       gint minimum_height;
       gint natural_height;
 
-      gtk_widget_get_preferred_height (priv->title_box, &minimum_height, &natural_height);
+      gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL, -1,
+                          &minimum_height, &natural_height,
+                          NULL, NULL);
       h += apply * natural_height;
     }
 
@@ -5307,7 +5309,9 @@ gtk_window_translate_csd_pos (GtkWindow *window,
         {
           gint minimum_height;
 
-          gtk_widget_get_preferred_height (priv->title_box, &minimum_height, &title_height);
+          gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL, -1,
+                              &minimum_height, &title_height,
+                              NULL, NULL);
         }
 
       switch (priv->gravity)
@@ -6201,18 +6205,28 @@ gtk_window_guess_default_size (GtkWindow *window,
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {
-      gtk_widget_get_preferred_height (widget, &minimum, &natural);
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
+                          &minimum, &natural,
+                          NULL, NULL);
       *height = MAX (minimum, MIN (*height, natural));
 
-      gtk_widget_get_preferred_width_for_height (widget, *height, &minimum, &natural);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+                          *height,
+                          &minimum, &natural,
+                          NULL, NULL);
       *width = MAX (minimum, MIN (*width, natural));
     }
   else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
     {
-      gtk_widget_get_preferred_width (widget, &minimum, &natural);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &minimum, &natural,
+                          NULL, NULL);
       *width = MAX (minimum, MIN (*width, natural));
 
-      gtk_widget_get_preferred_height_for_width (widget, *width, &minimum, &natural);
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+                          *width,
+                          &minimum, &natural,
+                          NULL, NULL);
       *height = MAX (minimum, MIN (*height, natural));
     }
 }
