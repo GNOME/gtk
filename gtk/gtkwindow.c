@@ -9393,9 +9393,6 @@ gtk_window_snapshot (GtkWidget   *widget,
   GtkBorder window_border;
   gint title_height;
   graphene_rect_t bounds;
-  graphene_matrix_t m;
-  graphene_point3d_t p;
-  cairo_t *cr;
   GList *l;
 
   context = gtk_widget_get_style_context (widget);
@@ -9404,11 +9401,8 @@ gtk_window_snapshot (GtkWidget   *widget,
   _gtk_widget_get_allocation (widget, &allocation);
 
   graphene_rect_init (&bounds, allocation.x, allocation.y, allocation.width, allocation.height);
-  graphene_matrix_init_translate (&m, graphene_point3d_init (&p, allocation.x, allocation.y, 0.));
 
-  cr = gtk_snapshot_push_cairo_node (snapshot,
-                                     &bounds, 
-                                     "Window Decoration");
+  gtk_snapshot_push (snapshot, &bounds, "Window Decoration");
 
   if (priv->client_decorated &&
       priv->decorated &&
@@ -9425,28 +9419,28 @@ gtk_window_snapshot (GtkWidget   *widget,
           gtk_style_context_get_border (context, &border);
           sum_borders (&border, &padding);
 
-          gtk_render_background (context, cr,
-                                 window_border.left - border.left, window_border.top - border.top,
-                                 allocation.width -
-                                   (window_border.left + window_border.right - border.left - border.right),
-                                 allocation.height -
-                                   (window_border.top + window_border.bottom - border.top - border.bottom));
-          gtk_render_frame (context, cr,
-                            window_border.left - border.left, window_border.top - border.top,
-                            allocation.width -
-                              (window_border.left + window_border.right - border.left - border.right),
-                            allocation.height -
-                              (window_border.top + window_border.bottom - border.top - border.bottom));
+          gtk_snapshot_render_background (snapshot, context,
+                                          window_border.left - border.left, window_border.top - border.top,
+                                          allocation.width -
+                                            (window_border.left + window_border.right - border.left - border.right),
+                                          allocation.height -
+                                            (window_border.top + window_border.bottom - border.top - border.bottom));
+          gtk_snapshot_render_frame (snapshot, context,
+                                     window_border.left - border.left, window_border.top - border.top,
+                                     allocation.width -
+                                       (window_border.left + window_border.right - border.left - border.right),
+                                     allocation.height -
+                                       (window_border.top + window_border.bottom - border.top - border.bottom));
         }
       else
         {
-          gtk_render_background (context, cr, 0, 0,
-                                 allocation.width,
-                                 allocation.height);
+          gtk_snapshot_render_background (snapshot, context, 0, 0,
+                                          allocation.width,
+                                          allocation.height);
 
-          gtk_render_frame (context, cr, 0, 0,
-                            allocation.width,
-                            allocation.height);
+          gtk_snapshot_render_frame (snapshot, context, 0, 0,
+                                     allocation.width,
+                                     allocation.height);
         }
       gtk_style_context_restore (context);
     }
@@ -9458,22 +9452,20 @@ gtk_window_snapshot (GtkWidget   *widget,
   else
     title_height = 0;
 
-  gtk_render_background (context, cr,
-                         window_border.left,
-                         window_border.top + title_height,
-                         allocation.width -
-                           (window_border.left + window_border.right),
-                         allocation.height -
-                           (window_border.top + window_border.bottom + title_height));
-  gtk_render_frame (context, cr,
-                    window_border.left,
-                    window_border.top + title_height,
-                    allocation.width -
-                      (window_border.left + window_border.right),
-                    allocation.height -
-                      (window_border.top + window_border.bottom + title_height));
-
-  cairo_destroy (cr);
+  gtk_snapshot_render_background (snapshot, context,
+                                  window_border.left,
+                                  window_border.top + title_height,
+                                  allocation.width -
+                                    (window_border.left + window_border.right),
+                                  allocation.height -
+                                    (window_border.top + window_border.bottom + title_height));
+  gtk_snapshot_render_frame (snapshot, context,
+                             window_border.left,
+                             window_border.top + title_height,
+                             allocation.width -
+                               (window_border.left + window_border.right),
+                             allocation.height -
+                               (window_border.top + window_border.bottom + title_height));
 
   if (priv->title_box != NULL)
     gtk_container_snapshot_child (GTK_CONTAINER (widget), priv->title_box, snapshot);

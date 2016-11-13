@@ -24,8 +24,8 @@
 #include <cairo.h>
 
 #include "gtkcsstypesprivate.h"
+#include "gtksnapshot.h"
 #include "gtktypes.h"
-#include "gsk/gsk.h"
 
 G_BEGIN_DECLS
 
@@ -47,6 +47,11 @@ void            gtk_css_style_add_background_render_nodes       (GtkCssStyle    
                                                                  gdouble           width,
                                                                  gdouble           height,
                                                                  GtkJunctionSides  junction);
+void            gtk_css_style_snapshot_background               (GtkCssStyle          *style,
+                                                                 GtkSnapshot          *snapshot,
+                                                                 gdouble               width,
+                                                                 gdouble               height,
+                                                                 GtkJunctionSides      junction);
 
 
 

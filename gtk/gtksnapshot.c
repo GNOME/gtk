@@ -20,6 +20,10 @@
 #include "gtksnapshot.h"
 #include "gtksnapshotprivate.h"
 
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtkstylecontextprivate.h"
+
 #include "gsk/gskrendernodeprivate.h"
 
 void
@@ -45,13 +49,42 @@ gtk_snapshot_finish (GtkSnapshot *state)
 }
 
 void
-gtk_snapshot_push (GtkSnapshot   *state,
-                   GskRenderNode *node)
+gtk_snapshot_push_node (GtkSnapshot   *state,
+                        GskRenderNode *node)
 {
   gtk_snapshot_append_node (state, node);
 
   state->node = node;
   graphene_matrix_init_identity (&state->transform);
+}
+
+void
+gtk_snapshot_push (GtkSnapshot           *state,
+                   const graphene_rect_t *bounds,
+                   const char            *name,
+                   ...)
+{
+  GskRenderNode *node;
+
+  node = gsk_renderer_create_render_node (state->renderer);
+  gsk_render_node_set_bounds (node, bounds);
+
+  if (name)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (node, str);
+
+      g_free (str);
+    }
+
+  gtk_snapshot_push_node (state, node);
+  gsk_render_node_unref (node);
 }
 
 void
@@ -212,8 +245,46 @@ gtk_snapshot_push_cairo_node (GtkSnapshot            *state,
       g_free (str);
     }
 
-  gtk_snapshot_push (state, node);
+  gtk_snapshot_push_node (state, node);
   gsk_render_node_unref (node);
 
   return gsk_render_node_get_draw_context (node, state->renderer);
+}
+
+void
+gtk_snapshot_render_background (GtkSnapshot     *state,
+                                GtkStyleContext *context,
+                                gdouble          x,
+                                gdouble          y,
+                                gdouble          width,
+                                gdouble          height)
+{
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  gtk_snapshot_translate_2d (state, x, y);
+  gtk_css_style_snapshot_background (gtk_style_context_lookup_style (context),
+                                     state,
+                                     width, height,
+                                     gtk_style_context_get_junction_sides (context));
+  gtk_snapshot_translate_2d (state, -x, -y);
+}
+
+void
+gtk_snapshot_render_frame (GtkSnapshot     *state,
+                           GtkStyleContext *context,
+                           gdouble          x,
+                           gdouble          y,
+                           gdouble          width,
+                           gdouble          height)
+{
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  gtk_snapshot_translate_2d (state, x, y);
+  gtk_css_style_snapshot_border (gtk_style_context_lookup_style (context),
+                                 state,
+                                 width, height,
+                                 gtk_style_context_get_junction_sides (context));
+  gtk_snapshot_translate_2d (state, -x, -y);
 }

@@ -757,6 +757,71 @@ gtk_css_style_render_border (GtkCssStyle      *style,
     }
 }
 
+void
+gtk_css_style_snapshot_border (GtkCssStyle      *style,
+                               GtkSnapshot      *state,
+                               gdouble           width,
+                               gdouble           height,
+                               GtkJunctionSides  junction)
+{
+  GtkBorderImage border_image;
+  double border_width[4];
+  graphene_rect_t bounds;
+  cairo_t *cr;
+
+  border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  border_width[1] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  border_width[2] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+  border_width[3] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+
+  graphene_rect_init (&bounds, 0, 0, width, height);
+
+  if (gtk_border_image_init (&border_image, style))
+    {
+      cr = gtk_snapshot_append_cairo_node (state,
+                                           &bounds,
+                                           "Border Image");
+      gtk_border_image_render (&border_image, border_width, cr, 0, 0, width, height);
+      cairo_destroy (cr);
+    }
+  else
+    {
+      GtkBorderStyle border_style[4];
+      GtkRoundedBox border_box;
+      GdkRGBA colors[4];
+
+      /* Optimize the most common case of "This widget has no border" */
+      if (border_width[0] == 0 &&
+          border_width[1] == 0 &&
+          border_width[2] == 0 &&
+          border_width[3] == 0)
+        return;
+
+      cr = gtk_snapshot_append_cairo_node (state,
+                                           &bounds,
+                                           "Border");
+
+      border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+      border_style[1] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
+      border_style[2] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
+      border_style[3] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
+
+      hide_border_sides (border_width, border_style, 0);
+
+      colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+      colors[1] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
+      colors[2] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
+      colors[3] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
+
+      _gtk_rounded_box_init_rect (&border_box, 0, 0, width, height);
+      _gtk_rounded_box_apply_border_radius_for_style (&border_box, style, junction);
+
+      render_border (cr, &border_box, border_width, 0, colors, border_style);
+
+      cairo_destroy (cr);
+    }
+}
+
 gboolean
 gtk_css_style_render_border_get_clip (GtkCssStyle  *style,
                                       gdouble       x,
@@ -851,6 +916,44 @@ gtk_css_style_render_outline (GtkCssStyle *style,
       _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
 
       render_border (cr, &border_box, border_width, 0, colors, border_style);
+    }
+}
+
+void
+gtk_css_style_snapshot_outline (GtkCssStyle *style,
+                                GtkSnapshot *state,
+                                gdouble      width,
+                                gdouble      height)
+{
+  GtkBorderStyle border_style[4];
+  GtkRoundedBox border_box;
+  double border_width[4];
+  GdkRGBA colors[4];
+
+  border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_STYLE));
+  if (border_style[0] != GTK_BORDER_STYLE_NONE)
+    {
+      cairo_rectangle_t rect;
+      cairo_t *cr;
+
+      compute_outline_rect (style, 0, 0, width, height, &rect);
+
+      border_style[1] = border_style[2] = border_style[3] = border_style[0];
+      border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
+      border_width[3] = border_width[2] = border_width[1] = border_width[0];
+      colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_COLOR));
+      colors[3] = colors[2] = colors[1] = colors[0];
+
+      _gtk_rounded_box_init_rect (&border_box, rect.x, rect.y, rect.width, rect.height);
+      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
+
+      cr = gtk_snapshot_append_cairo_node (state,
+                                           &(graphene_rect_t) GRAPHENE_RECT_INIT (rect.x, rect.y, rect.width, rect.height),
+                                           "Outline");
+
+      render_border (cr, &border_box, border_width, 0, colors, border_style);
+
+      cairo_destroy (cr);
     }
 }
 

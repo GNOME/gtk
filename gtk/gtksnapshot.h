@@ -32,6 +32,8 @@
 
 #include <gsk/gsk.h>
 
+#include <gtk/gtktypes.h>
+
 G_BEGIN_DECLS
 
 typedef struct _GtkSnapshot GtkSnapshot;
@@ -42,6 +44,11 @@ GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot      
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push                       (GtkSnapshot            *state,
+                                                         const graphene_rect_t  *bounds,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF(3, 4);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_push_node                 (GtkSnapshot            *state,
                                                          GskRenderNode          *node);
 GDK_AVAILABLE_IN_3_90
 cairo_t *       gtk_snapshot_push_cairo_node            (GtkSnapshot            *state,
@@ -70,6 +77,21 @@ cairo_t *       gtk_snapshot_append_cairo_node          (GtkSnapshot            
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF(3, 4);
+
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_render_background          (GtkSnapshot            *state,
+                                                         GtkStyleContext        *context,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_render_frame               (GtkSnapshot            *state,
+                                                         GtkStyleContext        *context,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height);
 
 G_END_DECLS
 

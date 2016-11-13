@@ -593,3 +593,46 @@ gtk_css_style_render_background_is_opaque (GtkCssStyle *style)
       && corner_value_is_right_angle (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS))
       && corner_value_is_right_angle (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS));
 }
+
+void
+gtk_css_style_snapshot_background (GtkCssStyle      *style,
+                                   GtkSnapshot      *snapshot,
+                                   gdouble           width,
+                                   gdouble           height,
+                                   GtkJunctionSides  junction)
+{
+  GtkCssValue *background_image;
+  GtkCssValue *box_shadow;
+  const GdkRGBA *bg_color;
+  GtkBorder shadow;
+  graphene_rect_t bounds;
+  cairo_t *cr;
+
+  background_image = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+  bg_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  box_shadow = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW);
+
+  /* This is the common default case of no background */
+  if (gtk_rgba_is_clear (bg_color) &&
+      _gtk_css_array_value_get_n_values (background_image) == 1 &&
+      _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) == NULL &&
+      _gtk_css_shadows_value_is_none (box_shadow))
+    return;
+
+  _gtk_css_shadows_value_get_extents (box_shadow, &shadow);
+
+  graphene_rect_init (&bounds,
+                      - shadow.left,
+                      - shadow.top,
+                      ceil (width) + shadow.left + shadow.right,
+                      ceil (height) + shadow.top + shadow.bottom);
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &bounds,
+                                       "Background");
+
+  gtk_css_style_render_background (style, cr, 0, 0, width, height, junction);
+
+  cairo_destroy (cr);
+}
+
