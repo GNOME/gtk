@@ -201,8 +201,8 @@ static void gtk_box_measure (GtkWidget      *widget,
                              int            *natural,
                              int            *minimum_baseline,
                              int            *natural_baseline);
-static GskRenderNode *  gtk_box_get_render_node                 (GtkWidget            *widget,
-                                                                 GskRenderer          *renderer);
+static void gtk_box_snapshot (GtkWidget   *widget,
+                              GtkSnapshot *snapshot);
 
 static void               gtk_box_buildable_init                 (GtkBuildableIface  *iface);
 
@@ -233,10 +233,10 @@ gtk_box_class_init (GtkBoxClass *class)
   object_class->get_property = gtk_box_get_property;
   object_class->dispose = gtk_box_dispose;
 
-  widget_class->get_render_node                = gtk_box_get_render_node;
-  widget_class->size_allocate                  = gtk_box_size_allocate;
-  widget_class->measure                        = gtk_box_measure;
-  widget_class->direction_changed              = gtk_box_direction_changed;
+  widget_class->snapshot = gtk_box_snapshot;
+  widget_class->size_allocate = gtk_box_size_allocate;
+  widget_class->measure = gtk_box_measure;
+  widget_class->direction_changed = gtk_box_direction_changed;
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
@@ -397,20 +397,25 @@ gtk_box_get_property (GObject    *object,
     }
 }
 
-static GskRenderNode *
-gtk_box_get_render_node (GtkWidget   *widget,
-                         GskRenderer *renderer)
+static gboolean
+gtk_box_snapshot_contents (GtkCssGadget *gadget,
+                           GtkSnapshot  *snapshot,
+                           int           x,
+                           int           y,
+                           int           width,
+                           int           height,
+                           gpointer      data)
 {
-  GskRenderNode *res = gtk_css_gadget_get_render_node (GTK_BOX (widget)->priv->gadget,
-                                                       renderer,
-                                                       FALSE);
+  GTK_WIDGET_CLASS (gtk_box_parent_class)->snapshot (gtk_css_gadget_get_owner (gadget), snapshot);
 
-  if (res == NULL)
-    return NULL;
+  return FALSE;
+}
 
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
-
-  return res;
+static void
+gtk_box_snapshot (GtkWidget   *widget,
+                  GtkSnapshot *snapshot)
+{
+  gtk_css_gadget_snapshot (GTK_BOX (widget)->priv->gadget, snapshot);
 }
 
 static void
@@ -1970,7 +1975,7 @@ gtk_box_init (GtkBox *box)
                                                         gtk_box_get_content_size,
                                                         gtk_box_allocate_contents,
                                                         NULL,
-                                                        NULL,
+                                                        gtk_box_snapshot_contents,
                                                         NULL,
                                                         NULL);
 
