@@ -1289,6 +1289,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
                                                           gtk_scale_measure_value,
                                                           NULL,
                                                           gtk_scale_render_value,
+                                                          NULL,
                                                           NULL, NULL);
           g_signal_connect (gtk_css_gadget_get_node (priv->value_gadget), "style-changed",
                             G_CALLBACK (gtk_scale_value_style_changed), scale);
@@ -2165,6 +2166,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                        gtk_scale_measure_marks,
                                        gtk_scale_allocate_marks,
                                        gtk_scale_render_marks,
+                                       NULL,
                                        NULL, NULL);
           gtk_css_node_insert_after (widget_node,
                                      gtk_css_gadget_get_node (priv->top_marks_gadget),
@@ -2186,6 +2188,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                        gtk_scale_measure_marks,
                                        gtk_scale_allocate_marks,
                                        gtk_scale_render_marks,
+                                       NULL,
                                        NULL, NULL);
           gtk_css_node_insert_before (widget_node,
                                       gtk_css_gadget_get_node (priv->bottom_marks_gadget),
@@ -2204,6 +2207,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                gtk_scale_measure_mark,
                                gtk_scale_allocate_mark,
                                gtk_scale_render_mark,
+                               NULL,
                                mark, NULL);
   gtk_css_gadget_set_state (mark->gadget, gtk_css_node_get_state (marks_node));
 
@@ -2213,6 +2217,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                NULL,
                                NULL,
                                gtk_scale_render_mark_indicator,
+                               NULL,
                                mark, NULL);
   if (mark->markup && *mark->markup)
     {
@@ -2224,6 +2229,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                    gtk_scale_measure_mark_label,
                                    NULL,
                                    gtk_scale_render_mark_label,
+                                   NULL,
                                    mark, NULL);
       g_signal_connect (gtk_css_gadget_get_node (mark->label_gadget), "style-changed",
                         G_CALLBACK (gtk_scale_mark_style_changed), mark);

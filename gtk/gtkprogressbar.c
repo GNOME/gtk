@@ -441,6 +441,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
                                                      gtk_progress_bar_allocate,
                                                      gtk_progress_bar_render,
                                                      NULL,
+                                                     NULL,
                                                      NULL);
 
   priv->trough_gadget = gtk_css_custom_gadget_new ("trough",
@@ -451,11 +452,13 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
                                                    gtk_progress_bar_allocate_trough,
                                                    gtk_progress_bar_render_trough,
                                                    NULL,
+                                                   NULL,
                                                    NULL);
 
   priv->progress_gadget = gtk_css_custom_gadget_new ("progress",
                                                      GTK_WIDGET (pbar),
                                                      priv->trough_gadget,
+                                                     NULL,
                                                      NULL,
                                                      NULL,
                                                      NULL,
@@ -1322,6 +1325,7 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
                                                      gtk_progress_bar_measure_text,
                                                      NULL,
                                                      gtk_progress_bar_render_text,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
       g_signal_connect (gtk_css_gadget_get_node (priv->text_gadget), "style-changed",

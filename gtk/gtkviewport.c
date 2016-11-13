@@ -477,6 +477,7 @@ gtk_viewport_init (GtkViewport *viewport)
                                                      gtk_viewport_measure,
                                                      gtk_viewport_allocate,
                                                      gtk_viewport_render,
+                                                     NULL,
                                                      NULL, NULL);
 
   gtk_css_gadget_add_class (priv->gadget, GTK_STYLE_CLASS_FRAME);

@@ -237,6 +237,7 @@ gtk_button_box_init (GtkButtonBox *button_box)
                                                          gtk_button_box_allocate,
                                                          NULL,
                                                          NULL,
+                                                         NULL,
                                                          NULL);
 }
 

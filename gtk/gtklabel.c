@@ -1372,6 +1372,7 @@ gtk_label_init (GtkLabel *label)
                                                      NULL,
                                                      NULL,
                                                      NULL,
+                                                     NULL,
                                                      NULL);
 }
 

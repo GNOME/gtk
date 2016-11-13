@@ -95,6 +95,23 @@
  * Typically, GtkCssDrawFunc will draw sub-gadgets and child widgets
  * that are placed relative to the gadget, as well as custom content
  * such as icons, checkmarks, arrows or text.
+ *
+ * GtkCssSnapshotFunc:
+ * @gadget: the #GtkCssCustomGadget
+ * @snapshot: the snapshot to snapshot to
+ * @x: the x origin of the content area
+ * @y: the y origin of the content area
+ * @width: the width of the content area
+ * @height: the height of the content area
+ * @data: data provided when registering the callback
+ *
+ * The GtkCssSnapshotFunc is called to snapshot the gadget's content in
+ * gtk_css_gadget_snapshot(). It gets passed an untransformed cairo context
+ * and the coordinates of the area to draw the content in.
+ *
+ * Typically, GtkCssSnapshotFunc will draw sub-gadgets and child widgets
+ * that are placed relative to the gadget, as well as custom content
+ * such as icons, checkmarks, arrows or text.
  */
 
 typedef struct _GtkCssCustomGadgetPrivate GtkCssCustomGadgetPrivate;
@@ -102,6 +119,7 @@ struct _GtkCssCustomGadgetPrivate {
   GtkCssPreferredSizeFunc          preferred_size_func;
   GtkCssAllocateFunc               allocate_func;
   GtkCssDrawFunc                   draw_func;
+  GtkCssSnapshotFunc               snapshot_func;
   gpointer                         data;
   GDestroyNotify                   destroy_func;
 };
@@ -162,6 +180,24 @@ gtk_css_custom_gadget_draw (GtkCssGadget *gadget,
 }
 
 static gboolean
+gtk_css_custom_gadget_snapshot (GtkCssGadget *gadget,
+                                GtkSnapshot  *snapshot,
+                                int           x,
+                                int           y,
+                                int           width,
+                                int           height)
+{
+  GtkCssCustomGadgetPrivate *priv = gtk_css_custom_gadget_get_instance_private (GTK_CSS_CUSTOM_GADGET (gadget));
+
+  if (priv->snapshot_func)
+    return priv->snapshot_func (gadget, snapshot, x, y, width, height, priv->data);
+  else if (priv->draw_func)
+    return GTK_CSS_GADGET_CLASS (gtk_css_custom_gadget_parent_class)->snapshot (gadget, snapshot, x, y, width, height);
+  else
+    return FALSE;
+}
+
+static gboolean
 gtk_css_custom_gadget_has_content (GtkCssGadget *gadget)
 {
   GtkCssCustomGadgetPrivate *priv = gtk_css_custom_gadget_get_instance_private (GTK_CSS_CUSTOM_GADGET (gadget));
@@ -191,6 +227,7 @@ gtk_css_custom_gadget_class_init (GtkCssCustomGadgetClass *klass)
   gadget_class->get_preferred_size = gtk_css_custom_gadget_get_preferred_size;
   gadget_class->allocate = gtk_css_custom_gadget_allocate;
   gadget_class->draw = gtk_css_custom_gadget_draw;
+  gadget_class->snapshot = gtk_css_custom_gadget_snapshot;
   gadget_class->has_content = gtk_css_custom_gadget_has_content;
 }
 
@@ -207,6 +244,7 @@ gtk_css_custom_gadget_init (GtkCssCustomGadget *custom_gadget)
  * @preferred_size_func: (nullable): the GtkCssPreferredSizeFunc to use
  * @allocate_func: (nullable): the GtkCssAllocateFunc to use
  * @draw_func: (nullable): the GtkCssDrawFunc to use
+ * @snapshot_func: (nullable): the GtkCssSnapshotFunc to use
  * @data: (nullable): user data to pass to the callbacks
  * @destroy_func: (nullable): destroy notify for @data
  *
@@ -227,6 +265,7 @@ gtk_css_custom_gadget_new_for_node (GtkCssNode                 *node,
                                     GtkCssPreferredSizeFunc     preferred_size_func,
                                     GtkCssAllocateFunc          allocate_func,
                                     GtkCssDrawFunc              draw_func,
+                                    GtkCssSnapshotFunc          snapshot_func,
                                     gpointer                    data,
                                     GDestroyNotify              destroy_func)
 {
@@ -243,6 +282,7 @@ gtk_css_custom_gadget_new_for_node (GtkCssNode                 *node,
   priv->preferred_size_func = preferred_size_func;
   priv->allocate_func = allocate_func;
   priv->draw_func = draw_func;
+  priv->snapshot_func = snapshot_func;
   priv->data = data;
   priv->destroy_func = destroy_func;
 
@@ -258,6 +298,7 @@ gtk_css_custom_gadget_new_for_node (GtkCssNode                 *node,
  * @preferred_size_func: (nullable): the GtkCssPreferredSizeFunc to use
  * @allocate_func: (nullable): the GtkCssAllocateFunc to use
  * @draw_func: (nullable): the GtkCssDrawFunc to use
+ * @snapshot_func: (nullable): the GtkCssSnapshotFunc to use
  * @data: (nullable): user data to pass to the callbacks
  * @destroy_func: (nullable): destroy notify for @data
  *
@@ -274,6 +315,7 @@ gtk_css_custom_gadget_new (const char                 *name,
                            GtkCssPreferredSizeFunc     preferred_size_func,
                            GtkCssAllocateFunc          allocate_func,
                            GtkCssDrawFunc              draw_func,
+                           GtkCssSnapshotFunc          snapshot_func,
                            gpointer                    data,
                            GDestroyNotify              destroy_func)
 {
@@ -292,6 +334,7 @@ gtk_css_custom_gadget_new (const char                 *name,
                                                preferred_size_func,
                                                allocate_func,
                                                draw_func,
+                                               snapshot_func,
                                                data,
                                                destroy_func);
 

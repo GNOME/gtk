@@ -2075,6 +2075,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                                                      gtk_scrolled_window_measure,
                                                      gtk_scrolled_window_allocate,
                                                      gtk_scrolled_window_render,
+                                                     NULL,
                                                      NULL, NULL);
   for (i = 0; i < 4; i++)
     {

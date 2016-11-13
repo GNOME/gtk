@@ -297,16 +297,18 @@ gtk_frame_init (GtkFrame *frame)
                                                      gtk_frame_allocate,
                                                      NULL,
                                                      NULL,
+                                                     NULL,
                                                      NULL);
   priv->border_gadget = gtk_css_custom_gadget_new ("border",
-                                                       GTK_WIDGET (frame),
-                                                       priv->gadget,
-                                                       NULL,
-                                                       gtk_frame_measure_border,
-                                                       gtk_frame_allocate_border,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL);
+                                                   GTK_WIDGET (frame),
+                                                   priv->gadget,
+                                                   NULL,
+                                                   gtk_frame_measure_border,
+                                                   gtk_frame_allocate_border,
+                                                   NULL,
+                                                   NULL,
+                                                   NULL,
+                                                   NULL);
 
   gtk_css_gadget_set_state (priv->border_gadget, gtk_widget_get_state_flags (GTK_WIDGET (frame)));
 }

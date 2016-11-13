@@ -1097,6 +1097,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                                                      gtk_combo_box_measure,
                                                      gtk_combo_box_allocate,
                                                      NULL,
+                                                     NULL,
                                                      NULL, NULL);
 }
 

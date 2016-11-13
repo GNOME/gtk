@@ -1971,6 +1971,7 @@ gtk_box_init (GtkBox *box)
                                                         gtk_box_allocate_contents,
                                                         NULL,
                                                         NULL,
+                                                        NULL,
                                                         NULL);
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));

@@ -515,6 +515,7 @@ gtk_cell_view_init (GtkCellView *cellview)
                                                                gtk_cell_view_allocate,
                                                                gtk_cell_view_render,
                                                                NULL,
+                                                               NULL,
                                                                NULL);
 }
 

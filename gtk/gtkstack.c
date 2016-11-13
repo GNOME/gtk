@@ -2394,6 +2394,7 @@ gtk_stack_init (GtkStack *stack)
                                                      gtk_stack_allocate,
                                                      gtk_stack_render,
                                                      NULL,
+                                                     NULL,
                                                      NULL);
 
 }

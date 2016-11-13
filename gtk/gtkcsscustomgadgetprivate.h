@@ -54,6 +54,13 @@ typedef gboolean (* GtkCssDrawFunc)                     (GtkCssGadget           
                                                          int                     width,
                                                          int                     height,
                                                          gpointer                data);
+typedef gboolean (* GtkCssSnapshotFunc)                 (GtkCssGadget           *gadget,
+                                                         GtkSnapshot            *snapshot,
+                                                         int                     x,
+                                                         int                     y,
+                                                         int                     width,
+                                                         int                     height,
+                                                         gpointer                data);
 struct _GtkCssCustomGadget
 {
   GtkCssGadget parent;
@@ -73,6 +80,7 @@ GtkCssGadget *  gtk_css_custom_gadget_new                      (const char      
                                                                 GtkCssPreferredSizeFunc          get_preferred_size_func,
                                                                 GtkCssAllocateFunc               allocate_func,
                                                                 GtkCssDrawFunc                   draw_func,
+                                                                GtkCssSnapshotFunc               snapshot_func,
                                                                 gpointer                         data,
                                                                 GDestroyNotify                   destroy_func);
 GtkCssGadget *  gtk_css_custom_gadget_new_for_node             (GtkCssNode                      *node,
@@ -80,6 +88,7 @@ GtkCssGadget *  gtk_css_custom_gadget_new_for_node             (GtkCssNode      
                                                                 GtkCssPreferredSizeFunc          preferred_size_func,
                                                                 GtkCssAllocateFunc               allocate_func,
                                                                 GtkCssDrawFunc                   draw_func,
+                                                                GtkCssSnapshotFunc               snapshot_func,
                                                                 gpointer                         data,
                                                                 GDestroyNotify                   destroy_func);
 

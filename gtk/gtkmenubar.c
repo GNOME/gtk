@@ -247,6 +247,7 @@ gtk_menu_bar_init (GtkMenuBar *menu_bar)
                                                      gtk_menu_bar_measure,
                                                      gtk_menu_bar_allocate,
                                                      gtk_menu_bar_render,
+                                                     NULL,
                                                      NULL, NULL);
 }
 

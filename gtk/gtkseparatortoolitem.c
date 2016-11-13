@@ -166,6 +166,7 @@ gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
     gtk_css_custom_gadget_new_for_node (widget_node,
                                         widget,
                                         NULL, NULL, NULL,
+                                        NULL,
                                         NULL, NULL);
 }
 

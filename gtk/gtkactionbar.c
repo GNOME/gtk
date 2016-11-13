@@ -351,6 +351,7 @@ gtk_action_bar_init (GtkActionBar *action_bar)
                                                      gtk_action_bar_allocate,
                                                      NULL,
                                                      NULL,
+                                                     NULL,
                                                      NULL);
 }
 

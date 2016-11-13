@@ -739,6 +739,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                                                              NULL,
                                                              gtk_color_swatch_render,
                                                              NULL,
+                                                             NULL,
                                                              NULL);
   gtk_css_gadget_add_class (swatch->priv->gadget, "activatable");
 

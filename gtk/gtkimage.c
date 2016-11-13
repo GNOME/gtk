@@ -367,6 +367,7 @@ gtk_image_init (GtkImage *image)
                                                      gtk_image_get_content_size,
                                                      NULL,
                                                      NULL,
+                                                     NULL,
                                                      NULL, NULL);
 }
 

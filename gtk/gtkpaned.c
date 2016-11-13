@@ -1753,10 +1753,12 @@ gtk_paned_init (GtkPaned *paned)
                                                      gtk_paned_allocate,
                                                      NULL,
                                                      NULL,
+                                                     NULL,
                                                      NULL);
   priv->handle_gadget = gtk_css_custom_gadget_new ("separator",
                                                    GTK_WIDGET (paned),
                                                    priv->gadget,
+                                                   NULL,
                                                    NULL,
                                                    NULL,
                                                    NULL,

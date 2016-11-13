@@ -1217,6 +1217,7 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                   gtk_notebook_allocate_stack,
                                                   gtk_notebook_draw_stack,
                                                   NULL,
+                                                  NULL,
                                                   NULL);
   gtk_css_gadget_set_state (priv->stack_gadget, gtk_css_node_get_state (widget_node));
   gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->stack_gadget, TRUE, GTK_ALIGN_FILL);
@@ -1237,6 +1238,7 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                  gtk_notebook_measure_tabs,
                                                  gtk_notebook_allocate_tabs,
                                                  gtk_notebook_draw_tabs,
+                                                 NULL,
                                                  NULL,
                                                  NULL);
   gtk_css_gadget_set_state (priv->tabs_gadget, gtk_css_node_get_state (widget_node));
@@ -4637,6 +4639,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
                                             measure_tab,
                                             allocate_tab,
                                             draw_tab,
+                                            NULL,
                                             page,
                                             NULL);
   if (priv->tabs_reversed)

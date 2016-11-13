@@ -1148,6 +1148,7 @@ gtk_model_button_init (GtkModelButton *button)
                                                        gtk_model_button_allocate,
                                                        NULL,
                                                        NULL,
+                                                       NULL,
                                                        NULL);
   button->indicator_gadget = gtk_builtin_icon_new ("check",
                                                    GTK_WIDGET (button),

@@ -879,6 +879,7 @@ gtk_switch_init (GtkSwitch *self)
                                                      gtk_switch_allocate_contents,
                                                      gtk_switch_render_trough,
                                                      NULL,
+                                                     NULL,
                                                      NULL);
 
   priv->slider_gadget = gtk_css_custom_gadget_new ("slider",
@@ -888,6 +889,7 @@ gtk_switch_init (GtkSwitch *self)
                                                    NULL,
                                                    NULL,
                                                    gtk_switch_render_slider,
+                                                   NULL,
                                                    NULL,
                                                    NULL);
 

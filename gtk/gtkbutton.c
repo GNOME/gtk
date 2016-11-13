@@ -475,6 +475,7 @@ gtk_button_init (GtkButton *button)
                                                      gtk_button_allocate,
                                                      NULL,
                                                      NULL,
+                                                     NULL,
                                                      NULL);
 
 }

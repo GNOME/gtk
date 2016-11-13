@@ -648,6 +648,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
                                                      gtk_toolbar_measure,
                                                      gtk_toolbar_allocate,
                                                      gtk_toolbar_render,
+                                                     NULL,
                                                      NULL, NULL);
 
   priv->arrow_button = gtk_toggle_button_new ();
