@@ -204,7 +204,6 @@ GdkWindow *_gdk_modal_current       (void);
 gboolean   _gdk_modal_blocked       (GdkWindow *window);
 
 #ifdef G_ENABLE_DEBUG
-gchar *_gdk_win32_color_to_string      (const GdkColor *color);
 void   _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
 					const int           nentries);
 void   _gdk_win32_print_system_palette (void);

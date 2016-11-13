@@ -178,14 +178,6 @@ static_printf (const gchar *format,
   return retval;
 }
 
-gchar *
-_gdk_win32_color_to_string (const GdkColor *color)
-{
-  return static_printf ("(%.04x,%.04x,%.04x):%.06x",
-			color->red, color->green,
-			color->blue, color->pixel);
-}
-
 void
 _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
 				const int           nentries)
