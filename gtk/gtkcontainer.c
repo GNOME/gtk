@@ -325,6 +325,8 @@ static void     gtk_container_children_callback    (GtkWidget         *widget,
 static void     gtk_container_show_all             (GtkWidget         *widget);
 static gint     gtk_container_draw                 (GtkWidget         *widget,
                                                     cairo_t           *cr);
+static void     gtk_container_snapshot             (GtkWidget         *widget,
+                                                    GtkSnapshot       *snapshot);
 static void     gtk_container_map                  (GtkWidget         *widget);
 static void     gtk_container_unmap                (GtkWidget         *widget);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
@@ -462,6 +464,7 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->destroy = gtk_container_destroy;
   widget_class->compute_expand = gtk_container_compute_expand;
   widget_class->show_all = gtk_container_show_all;
+  widget_class->snapshot = gtk_container_snapshot;
   widget_class->draw = gtk_container_draw;
   widget_class->map = gtk_container_map;
   widget_class->unmap = gtk_container_unmap;
@@ -3076,6 +3079,26 @@ gtk_container_draw (GtkWidget *widget,
   g_array_free (child_infos, TRUE);
 
   return FALSE;
+}
+
+static void
+gtk_container_snapshot_forall (GtkWidget *child,
+                               gpointer   snapshot)
+{
+  gtk_container_snapshot_child (GTK_CONTAINER (_gtk_widget_get_parent (child)),
+                                child,
+                                snapshot);
+}
+
+static void
+gtk_container_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
+{
+  GtkContainer *container = GTK_CONTAINER (widget);
+  
+  gtk_container_forall (container,
+                        gtk_container_snapshot_forall,
+                        snapshot);
 }
 
 static void
