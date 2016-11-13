@@ -6318,6 +6318,34 @@ gtk_cairo_should_draw_window (cairo_t   *cr,
   return tmp == window;
 }
 
+typedef enum {
+  RENDER_SNAPSHOT,
+  RENDER_GET_RENDER_NODE,
+  RENDER_DRAW
+} RenderMode;
+
+static RenderMode
+get_render_mode (GtkWidgetClass *klass)
+{
+  GtkWidgetClass *parent_class;
+
+  for (parent_class = g_type_class_peek_parent (klass);
+       parent_class != gtk_widget_parent_class;
+       parent_class = g_type_class_peek_parent (klass))
+    {
+      if (klass->snapshot != parent_class->snapshot)
+        return RENDER_SNAPSHOT;
+      else if (klass->get_render_node != parent_class->get_render_node)
+        return RENDER_GET_RENDER_NODE;
+      else if (klass->draw != parent_class->draw)
+        return RENDER_DRAW;
+
+      klass = parent_class;
+    }
+
+  return RENDER_SNAPSHOT;
+}
+
 void
 gtk_widget_draw_internal (GtkWidget *widget,
                           cairo_t   *cr,
@@ -6342,6 +6370,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
       GdkWindow *event_window = NULL;
       gboolean result;
       gboolean push_group;
+      RenderMode mode;
 
       /* If this was a cairo_t passed via gtk_widget_draw() then we don't
        * require a window; otherwise we check for the window associated
@@ -6375,7 +6404,9 @@ gtk_widget_draw_internal (GtkWidget *widget,
        * render on the Cairo context; otherwise we just go through the old
        * GtkWidget::draw path
        */
-      if (widget_class->snapshot != NULL)
+      mode = get_render_mode (widget_class);
+
+      if (mode == RENDER_SNAPSHOT)
         {
           GskRenderer *renderer = gtk_widget_get_renderer (widget);
           GtkSnapshot snapshot;
@@ -6400,7 +6431,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
 
           g_object_unref (fallback);
         }
-      else if (widget_class->get_render_node != NULL)
+      else if (mode == RENDER_GET_RENDER_NODE)
         {
           GskRenderer *renderer = gtk_widget_get_renderer (widget);
           GskRenderer *fallback;
@@ -15674,6 +15705,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
   graphene_rect_t bounds;
   GtkAllocation clip;
   GtkAllocation alloc;
+  RenderMode mode;
 
   if (_gtk_widget_get_alloc_needed (widget))
     return;
@@ -15685,8 +15717,9 @@ gtk_widget_snapshot (GtkWidget   *widget,
   /* Compatibility mode: if the widget does not have a render node, we draw
    * using gtk_widget_draw() on a temporary node
    */
-  if (klass->get_render_node == NULL &&
-      klass->snapshot == NULL)
+  mode = get_render_mode (klass);
+
+  if (mode == RENDER_DRAW)
     {
       cairo_t *cr;
 
@@ -15701,7 +15734,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
       if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         gtk_snapshot_push (snapshot, &bounds, "DrawSignal<%s>", G_OBJECT_TYPE_NAME (widget));
 
-      if (klass->snapshot)
+      if (mode == RENDER_SNAPSHOT)
         klass->snapshot (widget, snapshot);
       else
         {
