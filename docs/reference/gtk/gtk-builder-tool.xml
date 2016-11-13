@@ -57,7 +57,8 @@
     <varlistentry>
     <term><option>simplify</option></term>
       <listitem><para>Simplifies the .ui file by removing properties that
-      are set to their default values and write the resulting XML to stdout.</para></listitem>
+      are set to their default values and write the resulting XML to stdout,
+      or back to the input file.</para></listitem>
     </varlistentry>
     <varlistentry>
     <term><option>enumerate</option></term>
@@ -67,6 +68,16 @@
     <term><option>preview</option></term>
       <listitem><para>Preview the .ui file. This command accepts options
                 to specify the ID of an object and a .css file to use.</para></listitem>
+    </varlistentry>
+  </variablelist>
+</refsect1>
+
+<refsect1><title>Simplify Options</title>
+  <para>The <option>simplify</option> command accepts the following options:</para>
+  <variablelist>
+    <varlistentry>
+    <term><option>--replace</option></term>
+      <listitem><para>Write the content back to the .ui file instead of stdout.</para></listitem>
     </varlistentry>
   </variablelist>
 </refsect1>

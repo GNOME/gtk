@@ -19,9 +19,11 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
 
@@ -40,6 +42,9 @@ typedef struct {
   GString *value;
   gboolean unclosed_starttag;
   gint indent;
+  char *input_filename;
+  char *output_filename;
+  FILE *output;
 } MyParserData;
 
 static void
@@ -229,7 +234,7 @@ maybe_start_packing (MyParserData *data)
     {
       if (!data->packing_started)
         {
-          g_printf ("%*s<packing>\n", data->indent, "");
+          g_fprintf (data->output, "%*s<packing>\n", data->indent, "");
           data->indent += 2;
           data->packing_started = TRUE;
         }
@@ -243,7 +248,7 @@ maybe_start_cell_packing (MyParserData *data)
     {
       if (!data->cell_packing_started)
         {
-          g_printf ("%*s<cell-packing>\n", data->indent, "");
+          g_fprintf (data->output, "%*s<cell-packing>\n", data->indent, "");
           data->indent += 2;
           data->cell_packing_started = TRUE;
         }
@@ -257,7 +262,7 @@ maybe_start_child (MyParserData *data)
     {
       if (data->child_started < data->in_child)
         {
-          g_printf ("%*s<child>\n", data->indent, "");
+          g_fprintf (data->output, "%*s<child>\n", data->indent, "");
           data->indent += 2;
           data->child_started += 1;
         }
@@ -312,7 +317,7 @@ maybe_emit_property (MyParserData *data)
   maybe_start_packing (data);
   maybe_start_cell_packing (data);
 
-  g_printf ("%*s<property", data->indent, "");
+  g_fprintf (data->output, "%*s<property", data->indent, "");
   for (i = 0; data->attribute_names[i]; i++)
     {
       if (!translatable &&
@@ -325,28 +330,28 @@ maybe_emit_property (MyParserData *data)
       if (strcmp (data->attribute_names[i], "name") == 0)
         canonicalize_key (escaped);
 
-      g_printf (" %s=\"%s\"", data->attribute_names[i], escaped);
+      g_fprintf (data->output, " %s=\"%s\"", data->attribute_names[i], escaped);
       g_free (escaped);
     }
 
   if (bound)
     {
-      g_printf ("/>\n");
+      g_fprintf (data->output, "/>\n");
     }
   else
     {
-      g_printf (">");
+      g_fprintf (data->output, ">");
       if (property_is_boolean (data, class_name, property_name))
         {
-          g_printf ("%s", canonical_boolean_value (data, value_string));
+          g_fprintf (data->output, "%s", canonical_boolean_value (data, value_string));
         }
       else
         {
           escaped = g_markup_escape_text (value_string, -1);
-          g_printf ("%s", escaped);
+          g_fprintf (data->output, "%s", escaped);
           g_free (escaped);
         }
-      g_printf ("</property>\n");
+      g_fprintf (data->output, "</property>\n");
     }
 }
 
@@ -355,7 +360,7 @@ maybe_close_starttag (MyParserData *data)
 {
   if (data->unclosed_starttag)
     {
-      g_printf (">\n");
+      g_fprintf (data->output, ">\n");
       data->unclosed_starttag = FALSE;
     }
 }
@@ -482,11 +487,11 @@ start_element (GMarkupParseContext  *context,
         }
     }
 
-  g_printf ("%*s<%s", data->indent, "", element_name);
+  g_fprintf (data->output, "%*s<%s", data->indent, "", element_name);
   for (i = 0; attribute_names[i]; i++)
     {
       escaped = g_markup_escape_text (attribute_values[i], -1);
-      g_printf (" %s=\"%s\"", attribute_names[i], escaped);
+      g_fprintf (data->output, " %s=\"%s\"", attribute_names[i], escaped);
       g_free (escaped);
     }
   data->unclosed_starttag = TRUE;
@@ -546,10 +551,10 @@ end_element (GMarkupParseContext  *context,
       gchar *escaped;
 
       if (data->unclosed_starttag)
-        g_printf (">");
+        g_fprintf (data->output, ">");
 
       escaped = g_markup_escape_text (data->value->str, -1);
-      g_printf ("%s</%s>\n", escaped, element_name);
+      g_fprintf (data->output, "%s</%s>\n", escaped, element_name);
       g_free (escaped);
 
       g_string_free (data->value, TRUE);
@@ -558,9 +563,9 @@ end_element (GMarkupParseContext  *context,
   else
     {
       if (data->unclosed_starttag)
-        g_printf ("/>\n");
+        g_fprintf (data->output, "/>\n");
       else
-        g_printf ("%*s</%s>\n", data->indent - 2, "", element_name);
+        g_fprintf (data->output, "%*s</%s>\n", data->indent - 2, "", element_name);
     }
 
   data->indent -= 2;
@@ -594,7 +599,7 @@ passthrough (GMarkupParseContext  *context,
 
   maybe_close_starttag (data);
 
-  g_printf ("%*s%s\n", data->indent, "", text);
+  g_fprintf (data->output, "%*s%s\n", data->indent, "", text);
 }
 
 GMarkupParser parser = {
@@ -606,14 +611,62 @@ GMarkupParser parser = {
 };
 
 static void
-do_simplify (const gchar *filename)
+do_simplify (int          *argc,
+             const char ***argv)
 {
   GMarkupParseContext *context;
-  GError *error = NULL;
   gchar *buffer;
   MyParserData data;
+  gboolean replace = FALSE;
+  char **filenames = NULL;
+  GOptionContext *ctx;
+  const GOptionEntry entries[] = {
+    { "replace", 0, 0, G_OPTION_ARG_NONE, &replace, NULL, NULL },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL },
+    { NULL, }
+  };
+  GError *error = NULL;
 
-  if (!g_file_get_contents (filename, &buffer, NULL, &error))
+  ctx = g_option_context_new (NULL);
+  g_option_context_set_help_enabled (ctx, FALSE);
+  g_option_context_add_main_entries (ctx, entries, NULL);
+
+  if (!g_option_context_parse (ctx, argc, (char ***)argv, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      g_error_free (error);
+      exit (1);
+    }
+
+  g_option_context_free (ctx);
+
+  if (filenames == NULL)
+    {
+      g_printerr ("No .ui file specified\n");
+      exit (1);
+    }
+
+  if (g_strv_length (filenames) > 1)
+    {
+      g_printerr ("Can only simplify a single .ui file\n");
+      exit (1);
+    }
+
+  data.input_filename = filenames[0];
+  data.output_filename = NULL;
+
+  if (replace)
+    {
+      int fd;
+      fd = g_file_open_tmp ("gtk-builder-tool-XXXXXX", &data.output_filename, NULL);
+      data.output = fdopen (fd, "w");
+    }
+  else
+    {
+      data.output = stdout;
+    }
+
+  if (!g_file_get_contents (filenames[0], &buffer, NULL, &error))
     {
       g_printerr (_("Can't load file: %s\n"), error->message);
       exit (1);
@@ -638,6 +691,26 @@ do_simplify (const gchar *filename)
     {
       g_printerr (_("Can't parse file: %s\n"), error->message);
       exit (1);
+    }
+
+  fclose (data.output);
+
+  if (data.output_filename)
+    {
+      char *content;
+      gsize length;
+
+      if (!g_file_get_contents (data.output_filename, &content, &length, &error))
+        {
+          g_printerr ("Failed to read %s: %s\n", data.output_filename, error->message);
+          exit (1);
+        }
+
+      if (!g_file_set_contents (data.input_filename, content, length, &error))
+        {
+          g_printerr ("Failed to write %s: %s\n", data.input_filename, error->message);
+          exit (1);
+        }
     }
 }
 
@@ -940,7 +1013,8 @@ do_preview (int          *argc,
   const GOptionEntry entries[] = {
     { "id", 0, 0, G_OPTION_ARG_STRING, &id, NULL, NULL },
     { "css", 0, 0, G_OPTION_ARG_FILENAME, &css, NULL, NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL }
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL },
+    { NULL, }
   };
   GError *error = NULL;
 
@@ -984,9 +1058,12 @@ usage (void)
              "\n"
              "Commands:\n"
              "  validate           Validate the file\n"
-             "  simplify           Simplify the file\n"
+             "  simplify [OPTIONS] Simplify the file\n"
              "  enumerate          List all named objects\n"
              "  preview [OPTIONS]  Preview the file\n"
+             "\n"
+             "Simplify Options:\n"
+             "  --replace          Replace the file\n"
              "\n"
              "Preview Options:\n"
              "  --id=ID            Preview only the named object\n"
@@ -1017,7 +1094,7 @@ main (int argc, const char *argv[])
   if (strcmp (argv[0], "validate") == 0)
     do_validate (argv[1]);
   else if (strcmp (argv[0], "simplify") == 0)
-    do_simplify (argv[1]);
+    do_simplify (&argc, &argv);
   else if (strcmp (argv[0], "enumerate") == 0)
     do_enumerate (argv[1]);
   else if (strcmp (argv[0], "preview") == 0)
