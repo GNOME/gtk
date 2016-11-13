@@ -20,6 +20,8 @@
 #include "gtksnapshot.h"
 #include "gtksnapshotprivate.h"
 
+#include "gtkcssrgbavalueprivate.h"
+#include "gtkcssshadowsvalueprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -295,3 +297,45 @@ gtk_snapshot_render_frame (GtkSnapshot     *state,
                                  gtk_style_context_get_junction_sides (context));
   gtk_snapshot_translate_2d (state, -x, -y);
 }
+
+void
+gtk_snapshot_render_layout (GtkSnapshot     *state,
+                            GtkStyleContext *context,
+                            gdouble          x,
+                            gdouble          y,
+                            PangoLayout     *layout)
+{
+  const GdkRGBA *fg_color;
+  graphene_rect_t bounds;
+  GtkBorder shadow_extents;
+  PangoRectangle ink_rect;
+  GtkCssValue *shadow;
+  cairo_t *cr;
+
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+
+  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  shadow = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
+  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+  _gtk_css_shadows_value_get_extents (shadow, &shadow_extents);
+  graphene_rect_init (&bounds,
+                      ink_rect.x - shadow_extents.left,
+                      ink_rect.y - shadow_extents.top,
+                      ink_rect.width + shadow_extents.left + shadow_extents.right,
+                      ink_rect.height + shadow_extents.top + shadow_extents.bottom);
+
+  gtk_snapshot_translate_2d (state, x, y);
+
+  cr = gtk_snapshot_append_cairo_node (state, &bounds, "Text<%dchars>", pango_layout_get_character_count (layout));
+
+  _gtk_css_shadows_value_paint_layout (shadow, cr, layout);
+
+  gdk_cairo_set_source_rgba (cr, fg_color);
+  pango_cairo_show_layout (cr, layout);
+
+  cairo_destroy (cr);
+  gtk_snapshot_translate_2d (state, -x, -y);
+}
+

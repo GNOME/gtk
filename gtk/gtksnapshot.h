@@ -96,6 +96,12 @@ void            gtk_snapshot_render_frame               (GtkSnapshot            
                                                          gdouble                 y,
                                                          gdouble                 width,
                                                          gdouble                 height);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_render_layout              (GtkSnapshot            *state,
+                                                         GtkStyleContext        *context,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         PangoLayout            *layout);
 
 G_END_DECLS
 
