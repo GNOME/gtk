@@ -79,6 +79,10 @@ cairo_t *       gtk_snapshot_append_cairo_node          (GtkSnapshot            
                                                          ...) G_GNUC_PRINTF(3, 4);
 
 GDK_AVAILABLE_IN_3_90
+gboolean        gtk_snapshot_clips_rect                 (GtkSnapshot            *snapshot,
+                                                         const graphene_rect_t  *bounds);
+
+GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_render_background          (GtkSnapshot            *state,
                                                          GtkStyleContext        *context,
                                                          gdouble                 x,

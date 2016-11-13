@@ -67,6 +67,12 @@ struct _GtkCssGadgetClass
                                                          int                     y,
                                                          int                     width,
                                                          int                     height);
+  gboolean      (* snapshot)                            (GtkCssGadget           *gadget,
+                                                         GtkSnapshot            *snapshot,
+                                                         int                     x,
+                                                         int                     y,
+                                                         int                     width,
+                                                         int                     height);
 
   GskRenderNode * (* get_render_node)                   (GtkCssGadget           *gadget,
                                                          GskRenderer            *renderer,
@@ -130,6 +136,8 @@ void            gtk_css_gadget_allocate                 (GtkCssGadget           
                                                          GtkAllocation          *out_clip);
 void            gtk_css_gadget_draw                     (GtkCssGadget           *gadget,
                                                          cairo_t                *cr);
+void            gtk_css_gadget_snapshot                 (GtkCssGadget           *gadget,
+                                                         GtkSnapshot            *snapshot);
 
 GskRenderNode * gtk_css_gadget_get_render_node          (GtkCssGadget           *gadget,
                                                          GskRenderer            *renderer,

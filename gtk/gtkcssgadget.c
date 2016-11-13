@@ -122,6 +122,51 @@ gtk_css_gadget_real_draw (GtkCssGadget *gadget,
 }
 
 static void
+gtk_css_gadget_get_clip (GtkCssGadget    *gadget,
+                         graphene_rect_t *bounds)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+
+  if (priv->owner && !gtk_widget_get_has_window (priv->owner))
+    {
+      GtkAllocation widget_alloc;
+      gtk_widget_get_allocation (priv->owner, &widget_alloc);
+
+      graphene_rect_init (bounds,
+                          priv->clip.x - widget_alloc.x, priv->clip.y - widget_alloc.y,
+                          priv->clip.width, priv->clip.height);
+    }
+  else
+    {
+      graphene_rect_init (bounds,
+                          priv->clip.x, priv->clip.y,
+                          priv->clip.width, priv->clip.height);
+    }
+}
+
+static gboolean
+gtk_css_gadget_real_snapshot (GtkCssGadget *gadget,
+                              GtkSnapshot  *snapshot,
+                              int           x,
+                              int           y,
+                              int           width,
+                              int           height)
+{
+  graphene_rect_t bounds;
+  gboolean result;
+  cairo_t *cr;
+
+  gtk_css_gadget_get_clip (gadget, &bounds);
+  cr = gtk_snapshot_append_cairo_node (snapshot, &bounds, "Fallback<%s>", G_OBJECT_TYPE_NAME (gadget));
+
+  result = GTK_CSS_GADGET_GET_CLASS (gadget)->draw (gadget, cr, x, y, width, height);
+
+  cairo_destroy (cr);
+
+  return result;
+}
+
+static void
 gtk_css_gadget_real_style_changed (GtkCssGadget      *gadget,
                                    GtkCssStyleChange *change)
 {
@@ -277,6 +322,7 @@ gtk_css_gadget_class_init (GtkCssGadgetClass *klass)
   klass->get_preferred_size = gtk_css_gadget_real_get_preferred_size;
   klass->allocate = gtk_css_gadget_real_allocate;
   klass->draw = gtk_css_gadget_real_draw;
+  klass->snapshot = gtk_css_gadget_real_snapshot;
   klass->get_render_node = gtk_css_gadget_real_get_render_node;
   klass->style_changed = gtk_css_gadget_real_style_changed;
   klass->has_content = gtk_css_gadget_has_content;
@@ -1115,6 +1161,102 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
       }
   }
 #endif
+}
+
+/**
+ * gtk_css_gadget_snapshot:
+ * @gadget: The gadget to snapshot
+ * @snapshot: The snapshot to use
+ *
+ * Will draw the gadget at the position allocated via
+ * gtk_css_gadget_allocate(). It is your responsibility to make
+ * sure that those 2 coordinate systems match.
+ *
+ * The drawing virtual function will be passed an untransformed @cr.
+ * This is important because functions like
+ * gtk_container_propagate_draw() depend on that.
+ */
+void
+gtk_css_gadget_snapshot (GtkCssGadget *gadget,
+                         GtkSnapshot  *snapshot)
+{
+  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
+  GtkBorder margin, border, padding;
+  gboolean draw_focus = FALSE;
+  GtkCssStyle *style;
+  int x, y, width, height;
+  int contents_x, contents_y, contents_width, contents_height;
+  GtkAllocation margin_box;
+  graphene_rect_t bounds;
+
+  if (!gtk_css_gadget_get_visible (gadget))
+    return;
+
+  gtk_css_gadget_get_clip (gadget, &bounds);
+  if (gtk_snapshot_clips_rect (snapshot, &bounds))
+    return;
+
+  gtk_css_gadget_get_margin_box (gadget, &margin_box);
+
+  x = margin_box.x;
+  y = margin_box.y;
+  width = margin_box.width;
+  height = margin_box.height;
+
+  if (width < 0 || height < 0)
+    {
+      g_warning ("Drawing a gadget with negative dimensions. "
+                 "Did you forget to allocate a size? (node %s owner %s)",
+                 gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
+                 G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
+      x = 0;
+      y = 0;
+      width = gtk_widget_get_allocated_width (priv->owner);
+      height = gtk_widget_get_allocated_height (priv->owner);
+    }
+
+  style = gtk_css_gadget_get_style (gadget);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  gtk_snapshot_push (snapshot, &bounds, "%s<%s>", gtk_css_node_get_name (priv->node), G_OBJECT_TYPE_NAME (priv->owner));
+
+  gtk_snapshot_translate_2d (snapshot, x + margin.left, y + margin.top);
+  gtk_css_style_snapshot_background (style,
+                                     snapshot,
+                                     width - margin.left - margin.right,
+                                     height - margin.top - margin.bottom,
+                                     gtk_css_node_get_junction_sides (priv->node));
+  gtk_css_style_snapshot_border (style,
+                                 snapshot,
+                                 width - margin.left - margin.right,
+                                 height - margin.top - margin.bottom,
+                                 gtk_css_node_get_junction_sides (priv->node));
+  gtk_snapshot_translate_2d (snapshot, - x - margin.left, - y - margin.top);
+
+  contents_x = x + margin.left + border.left + padding.left;
+  contents_y = y + margin.top + border.top + padding.top;
+  contents_width = width - margin.left - margin.right - border.left - border.right - padding.left - padding.right;
+  contents_height = height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom;
+
+  if (contents_width > 0 && contents_height > 0)
+    draw_focus = GTK_CSS_GADGET_GET_CLASS (gadget)->snapshot (gadget,
+                                                              snapshot,
+                                                              contents_x, contents_y,
+                                                              contents_width, contents_height);
+
+  if (draw_focus)
+    {
+      gtk_snapshot_translate_2d (snapshot, x + margin.left, y + margin.top);
+      gtk_css_style_snapshot_outline (style,
+                                      snapshot,
+                                      width - margin.left - margin.right,
+                                      height - margin.top - margin.bottom);
+      gtk_snapshot_translate_2d (snapshot, - x - margin.left, - y - margin.top);
+  }
+
+  gtk_snapshot_pop (snapshot);
 }
 
 GskRenderNode *

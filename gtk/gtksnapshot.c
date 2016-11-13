@@ -251,6 +251,13 @@ gtk_snapshot_push_cairo_node (GtkSnapshot            *state,
   return gsk_render_node_get_draw_context (node, state->renderer);
 }
 
+gboolean
+gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
+                         const graphene_rect_t *bounds)
+{
+  return FALSE;
+}
+
 void
 gtk_snapshot_render_background (GtkSnapshot     *state,
                                 GtkStyleContext *context,
