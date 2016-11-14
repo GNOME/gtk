@@ -80,9 +80,8 @@
 
 static void gtk_check_button_size_allocate       (GtkWidget           *widget,
 						  GtkAllocation       *allocation);
-static GskRenderNode *gtk_check_button_get_render_node (GtkWidget   *widget,
-                                                        GskRenderer *renderer);
-
+static void gtk_check_button_snapshot            (GtkWidget           *widget,
+						  GtkSnapshot         *snapshot);
 
 typedef struct {
   GtkCssGadget *gadget;
@@ -210,7 +209,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 
   widget_class->measure = gtk_check_button_measure;
   widget_class->size_allocate = gtk_check_button_size_allocate;
-  widget_class->get_render_node = gtk_check_button_get_render_node;
+  widget_class->snapshot = gtk_check_button_snapshot;
   widget_class->state_flags_changed = gtk_check_button_state_flags_changed;
   widget_class->direction_changed = gtk_check_button_direction_changed;
 
@@ -382,18 +381,16 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
     }
 }
 
-static GskRenderNode *
-gtk_check_button_get_render_node (GtkWidget   *widget,
-                                  GskRenderer *renderer)
+static void
+gtk_check_button_snapshot (GtkWidget   *widget,
+                           GtkSnapshot *snapshot)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
 
   if (!gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
-    return GTK_WIDGET_CLASS (gtk_check_button_parent_class)->get_render_node (widget, renderer);
+    GTK_WIDGET_CLASS (gtk_check_button_parent_class)->snapshot (widget, snapshot);
   else
-    return gtk_css_gadget_get_render_node (priv->gadget,
-                                           renderer,
-                                           gtk_widget_has_visible_focus (widget));
+    gtk_css_gadget_snapshot (priv->gadget, snapshot);
 }
 
 GtkCssNode *

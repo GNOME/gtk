@@ -900,6 +900,46 @@ gtk_model_button_allocate (GtkCssGadget        *gadget,
 }
 
 static void
+gtk_model_button_snapshot (GtkWidget   *widget,
+                           GtkSnapshot *snapshot)
+{
+  GtkCssGadget *gadget;
+
+  if (GTK_MODEL_BUTTON (widget)->iconic)
+    gadget = GTK_BUTTON (widget)->priv->gadget;
+  else
+    gadget = GTK_MODEL_BUTTON (widget)->gadget;
+
+  gtk_css_gadget_snapshot (gadget, snapshot);
+}
+
+static gboolean
+gtk_model_button_render (GtkCssGadget *gadget,
+                         GtkSnapshot  *snapshot,
+                         int           x,
+                         int           y,
+                         int           width,
+                         int           height,
+                         gpointer      data)
+{
+  GtkWidget *widget;
+  GtkModelButton *button;
+  GtkWidget *child;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+  button = GTK_MODEL_BUTTON (widget);
+
+  if (gtk_css_node_get_visible (gtk_css_gadget_get_node (button->indicator_gadget)))
+    gtk_css_gadget_snapshot (button->indicator_gadget, snapshot);
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (child)
+    gtk_container_snapshot_child (GTK_CONTAINER (widget), child, snapshot);
+
+  return gtk_widget_has_visible_focus (widget);
+}
+
+static void
 gtk_model_button_destroy (GtkWidget *widget)
 {
   GtkModelButton *model_button = GTK_MODEL_BUTTON (widget);
@@ -943,38 +983,6 @@ gtk_model_button_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_model_button_parent_class)->finalize (object);
 }
 
-static GskRenderNode *
-gtk_model_button_get_render_node (GtkWidget *widget, GskRenderer *renderer)
-{
-  GtkCssGadget  *button_gadget;
-  GskRenderNode *button_node;
-  GskRenderNode *indicator_node;
-
-  if (GTK_MODEL_BUTTON (widget)->iconic)
-    button_gadget = GTK_BUTTON (widget)->priv->gadget;
-  else
-    button_gadget = GTK_MODEL_BUTTON (widget)->gadget;
-
-  button_node = gtk_css_gadget_get_render_node (button_gadget, renderer,
-                                                gtk_widget_has_visible_focus (widget));
-
-  if (button_node == NULL)
-    return NULL;
-
-  indicator_node = gtk_css_gadget_get_render_node (GTK_MODEL_BUTTON (widget)->indicator_gadget,
-                                                   renderer, FALSE);
-
-  if (indicator_node != NULL)
-    {
-      gsk_render_node_append_child (button_node, indicator_node);
-      gsk_render_node_unref (indicator_node);
-    }
-
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, button_node);
-
-  return button_node;
-}
-
 static void
 gtk_model_button_class_init (GtkModelButtonClass *class)
 {
@@ -988,10 +996,10 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 
   widget_class->measure = gtk_model_button_measure_;
   widget_class->size_allocate = gtk_model_button_size_allocate;
+  widget_class->snapshot = gtk_model_button_snapshot;
   widget_class->destroy = gtk_model_button_destroy;
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
   widget_class->direction_changed = gtk_model_button_direction_changed;
-  widget_class->get_render_node = gtk_model_button_get_render_node;
 
   button_class->clicked = gtk_model_button_clicked;
 
@@ -1147,7 +1155,7 @@ gtk_model_button_init (GtkModelButton *button)
                                                        gtk_model_button_measure,
                                                        gtk_model_button_allocate,
                                                        NULL,
-                                                       NULL,
+                                                       gtk_model_button_render,
                                                        NULL,
                                                        NULL);
   button->indicator_gadget = gtk_builtin_icon_new ("check",
