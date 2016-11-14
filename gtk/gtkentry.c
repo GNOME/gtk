@@ -7151,6 +7151,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 {
   GtkEntryPrivate *priv;
   GObject *obj;
+  gboolean had_buffer = FALSE;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
@@ -7164,6 +7165,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 
   if (priv->buffer)
     {
+      had_buffer = TRUE;
       buffer_disconnect_signals (entry);
       g_object_unref (priv->buffer);
     }
@@ -7184,8 +7186,11 @@ gtk_entry_set_buffer (GtkEntry       *entry,
   g_object_notify_by_pspec (obj, entry_props[PROP_INVISIBLE_CHAR_SET]);
   g_object_thaw_notify (obj);
 
-  gtk_editable_set_position (GTK_EDITABLE (entry), 0);
-  gtk_entry_recompute (entry);
+  if (had_buffer)
+    {
+      gtk_editable_set_position (GTK_EDITABLE (entry), 0);
+      gtk_entry_recompute (entry);
+    }
 }
 
 /**
