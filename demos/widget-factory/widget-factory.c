@@ -1638,6 +1638,16 @@ scale_format_value (GtkScale *scale, gdouble value)
 }
 
 static void
+adjustment3_value_changed (GtkAdjustment *adj, GtkProgressBar *pbar)
+{
+  double fraction;
+
+  fraction = gtk_adjustment_get_value (adj) / (gtk_adjustment_get_upper (adj) - gtk_adjustment_get_lower (adj));
+
+  gtk_progress_bar_set_fraction (pbar, fraction);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1909,6 +1919,12 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (widget), "increase_button", widget2);
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "decrease_button");
   g_object_set_data (G_OBJECT (widget), "decrease_button", widget2);
+
+  adj = (GtkAdjustment *)gtk_builder_get_object (builder, "adjustment3");
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar1");
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "progressbar2");
+  g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget);
+  g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 
