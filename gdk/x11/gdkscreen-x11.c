@@ -755,10 +755,12 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 static void
 init_no_multihead (GdkScreen *screen, gboolean *changed)
 {
+  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (x11_screen->display);
   GdkX11Monitor *monitor;
   GdkRectangle geometry;
+  GdkRectangle newgeo;
   int i;
 
   for (i = 0; i < x11_display->monitors->len; i++)
@@ -782,18 +784,25 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
     }
 
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
-  if (0 != geometry.x ||
-      0 != geometry.y ||
-      gdk_x11_screen_get_width (screen) != geometry.width ||
-      gdk_x11_screen_get_height (screen) != geometry.height ||
+
+  newgeo.x = 0;
+  newgeo.y = 0;
+  newgeo.width = DisplayWidth (x11_display->xdisplay, x11_screen->screen_num) /
+                               x11_screen->window_scale;
+  newgeo.height = DisplayHeight (x11_display->xdisplay, x11_screen->screen_num) /
+                                 x11_screen->window_scale;
+
+  if (newgeo.x != geometry.x ||
+      newgeo.y != geometry.y ||
+      newgeo.width != geometry.width ||
+      newgeo.height != geometry.height ||
       gdk_x11_screen_get_width_mm (screen) != gdk_monitor_get_width_mm (GDK_MONITOR (monitor)) ||
       gdk_x11_screen_get_height_mm (screen) != gdk_monitor_get_height_mm (GDK_MONITOR (monitor)))
     *changed = TRUE;
 
-  gdk_monitor_set_position (GDK_MONITOR (monitor), 0, 0);
-  gdk_monitor_set_size (GDK_MONITOR (monitor),
-                        gdk_x11_screen_get_width (screen),
-                        gdk_x11_screen_get_height (screen));
+  gdk_monitor_set_position (GDK_MONITOR (monitor), newgeo.x, newgeo.y);
+  gdk_monitor_set_size (GDK_MONITOR (monitor), newgeo.width, newgeo.height);
+
   g_object_notify (G_OBJECT (monitor), "workarea");
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
                                  gdk_x11_screen_get_width_mm (screen),
