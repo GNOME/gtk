@@ -199,19 +199,27 @@ gtk_action_bar_set_child_property (GtkContainer *container,
                                       value);
 }
 
-static GskRenderNode *
-gtk_action_bar_get_render_node (GtkWidget   *widget,
-                                GskRenderer *renderer)
+static gboolean
+gtk_action_bar_render (GtkCssGadget *gadget,
+                       GtkSnapshot  *snapshot,
+                       int           x,
+                       int           y,
+                       int           width,
+                       int           height,
+                       gpointer      data)
+{
+  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->snapshot (gtk_css_gadget_get_owner (gadget), snapshot);
+
+  return FALSE;
+}
+
+static void
+gtk_action_bar_snapshot (GtkWidget   *widget,
+                         GtkSnapshot *snapshot)
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-  GskRenderNode *node = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
 
-  if (node == NULL)
-    return NULL;
-
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, node);
-
-  return node;
+  gtk_css_gadget_snapshot (priv->gadget, snapshot);
 }
 
 static void
@@ -297,7 +305,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   widget_class->show = gtk_action_bar_show;
   widget_class->hide = gtk_action_bar_hide;
   widget_class->destroy = gtk_action_bar_destroy;
-  widget_class->get_render_node = gtk_action_bar_get_render_node;
+  widget_class->snapshot = gtk_action_bar_snapshot;
   widget_class->size_allocate = gtk_action_bar_size_allocate;
   widget_class->measure = gtk_action_bar_measure_;
 
@@ -350,7 +358,7 @@ gtk_action_bar_init (GtkActionBar *action_bar)
                                                      gtk_action_bar_measure,
                                                      gtk_action_bar_allocate,
                                                      NULL,
-                                                     NULL,
+                                                     gtk_action_bar_render,
                                                      NULL,
                                                      NULL);
 }
