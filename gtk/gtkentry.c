@@ -416,8 +416,8 @@ static void   gtk_entry_map                  (GtkWidget        *widget);
 static void   gtk_entry_unmap                (GtkWidget        *widget);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
-static GskRenderNode *gtk_entry_get_render_node (GtkWidget   *widget,
-                                                 GskRenderer *renderer);
+static void   gtk_entry_snapshot             (GtkWidget        *widget,
+                                              GtkSnapshot      *snapshot);
 static gboolean gtk_entry_event              (GtkWidget        *widget,
                                               GdkEvent         *event);
 static gint   gtk_entry_enter_notify         (GtkWidget        *widget,
@@ -689,7 +689,7 @@ static void     gtk_entry_allocate (GtkCssGadget        *gadget,
                                     GtkAllocation       *out_clip,
                                     gpointer             data);
 static gboolean gtk_entry_render   (GtkCssGadget        *gadget,
-                                    cairo_t             *cr,
+                                    GtkSnapshot         *snapshot,
                                     int                  x,
                                     int                  y,
                                     int                  width,
@@ -747,7 +747,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->unrealize = gtk_entry_unrealize;
   widget_class->measure = gtk_entry_measure_;
   widget_class->size_allocate = gtk_entry_size_allocate;
-  widget_class->get_render_node = gtk_entry_get_render_node;
+  widget_class->snapshot = gtk_entry_snapshot;
   widget_class->enter_notify_event = gtk_entry_enter_notify;
   widget_class->leave_notify_event = gtk_entry_leave_notify;
   widget_class->event = gtk_entry_event;
@@ -2513,8 +2513,8 @@ gtk_entry_init (GtkEntry *entry)
                                                      GTK_WIDGET (entry),
                                                      gtk_entry_measure,
                                                      gtk_entry_allocate,
-                                                     gtk_entry_render,
                                                      NULL,
+                                                     gtk_entry_render,
                                                      NULL,
                                                      NULL);
 
@@ -3058,6 +3058,17 @@ gtk_entry_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->unmap (widget);
 }
 
+static void  
+gtk_entry_get_text_allocation (GtkEntry     *entry,
+                               GdkRectangle *allocation)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  gtk_css_gadget_get_content_allocation (priv->gadget, allocation, NULL);
+  allocation->x += priv->text_x;
+  allocation->width = priv->text_width;
+}
+
 static void
 gtk_entry_realize (GtkWidget *widget)
 {
@@ -3065,14 +3076,14 @@ gtk_entry_realize (GtkWidget *widget)
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
   int i;
-  GtkAllocation content_allocation;
+  GtkAllocation text_allocation;
 
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->realize (widget);
 
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &content_allocation, NULL);
+  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   priv->text_area = gdk_window_new_input (gtk_widget_get_window (widget),
                                           gtk_widget_get_events (widget)
@@ -3083,7 +3094,7 @@ gtk_entry_realize (GtkWidget *widget)
                                           | GDK_POINTER_MOTION_MASK
                                           | GDK_ENTER_NOTIFY_MASK
                                           | GDK_LEAVE_NOTIFY_MASK,
-                                          &content_allocation);
+                                          &text_allocation);
 
   if (gtk_widget_is_sensitive (widget))
     {
@@ -3336,10 +3347,10 @@ place_windows (GtkEntry *entry)
                               secondary.width, secondary.height);
     }
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &content_allocation, NULL);
+  gtk_entry_get_text_allocation (entry, &content_allocation);
   gdk_window_move_resize (priv->text_area,
-                          content_allocation.x + priv->text_x, content_allocation.y,
-                          priv->text_width, content_allocation.height);
+                          content_allocation.x, content_allocation.y,
+                          content_allocation.width, content_allocation.height);
 }
 
 static void
@@ -3368,8 +3379,6 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
   GtkEntry *entry;
   GtkWidget *widget;
   GtkEntryPrivate *priv;
-  GtkAllocation widget_allocation;
-  GtkAllocation text_allocation;
   gint i;
 
   widget = gtk_css_gadget_get_owner (gadget);
@@ -3378,18 +3387,13 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
 
   priv->text_baseline = -1;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_allocation, NULL);
-  gtk_widget_get_allocation (widget, &widget_allocation);
-  text_allocation.x += widget_allocation.x;
-  text_allocation.y += widget_allocation.y;
-
   out_clip->x = 0;
   out_clip->y = 0;
   out_clip->width = 0;
   out_clip->height = 0;
 
   priv->text_x = 0;
-  priv->text_width = text_allocation.width;
+  priv->text_width = allocation->width;
 
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -3415,18 +3419,16 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
       if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && i == GTK_ENTRY_ICON_PRIMARY) ||
           (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && i == GTK_ENTRY_ICON_SECONDARY))
         {
-          icon_alloc.x = text_allocation.x + text_allocation.width - width;
+          icon_alloc.x = allocation->x + priv->text_x + priv->text_width - width;
         }
       else
         {
-          icon_alloc.x = text_allocation.x;
-          text_allocation.x += width;
+          icon_alloc.x = allocation->x + priv->text_x;
           priv->text_x += width;
         }
-      icon_alloc.y = text_allocation.y + (text_allocation.height - height) / 2;
+      icon_alloc.y = allocation->y + (allocation->height - height) / 2;
       icon_alloc.width = width;
       icon_alloc.height = height;
-      text_allocation.width -= width;
       priv->text_width -= width;
 
       gtk_css_gadget_allocate (icon_info->gadget,
@@ -3450,7 +3452,7 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
                                          NULL, NULL);
       extra_width = allocation->width - req_width;
 
-      progress_alloc = text_allocation;
+      progress_alloc = *allocation;
 
       if (priv->progress_pulse_mode)
         {
@@ -3508,43 +3510,18 @@ should_prelight (GtkEntry             *entry,
   return TRUE;
 }
 
-static GskRenderNode *
-gtk_entry_get_render_node (GtkWidget   *widget,
-                           GskRenderer *renderer)
+static void
+gtk_entry_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
 {
-  GtkEntryPrivate *priv = GTK_ENTRY (widget)->priv;
-  GskRenderNode *res, *node;
-  int i;
-
-  res = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
-
-  for (i = 0; i < MAX_ICONS; i++)
-    {
-      EntryIconInfo *icon_info = priv->icons[i];
-
-      if (icon_info == NULL)
-        continue;
-
-      node = gtk_css_gadget_get_render_node (icon_info->gadget, renderer, FALSE);
-      gsk_render_node_append_child (res, node);
-      gsk_render_node_unref (node);
-   }
-
-  if (priv->progress_gadget && gtk_css_gadget_get_visible (priv->progress_gadget))
-    {
-      node = gtk_css_gadget_get_render_node (priv->progress_gadget, renderer, FALSE);
-      gsk_render_node_append_child (res, node);
-      gsk_render_node_unref (node);
-    }
-
-  return res;
+  gtk_css_gadget_snapshot (GTK_ENTRY (widget)->priv->gadget, snapshot);
 }
 
 #define UNDERSHOOT_SIZE 20
 
 static void
-gtk_entry_draw_undershoot (GtkEntry *entry,
-                           cairo_t  *cr)
+gtk_entry_draw_undershoot (GtkEntry    *entry,
+                           GtkSnapshot *snapshot)
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkStyleContext *context;
@@ -3558,11 +3535,10 @@ gtk_entry_draw_undershoot (GtkEntry *entry,
 
   gtk_entry_get_scroll_limits (entry, &min_offset, &max_offset);
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &rect, NULL);
+  gtk_entry_get_text_allocation (entry, &rect);
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
-  rect.x = priv->text_x;
+  rect.x -= allocation.x;
   rect.y -= allocation.y;
-  rect.width = priv->text_width;
 
   if (priv->scroll_offset > min_offset)
     {
@@ -3578,8 +3554,8 @@ gtk_entry_draw_undershoot (GtkEntry *entry,
         }
 
       gtk_style_context_save_to_node (context, priv->undershoot_node[0]);
-      gtk_render_background (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
-      gtk_render_frame (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_snapshot_render_background (snapshot, context, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
       gtk_style_context_restore (context);
     }
 
@@ -3596,15 +3572,15 @@ gtk_entry_draw_undershoot (GtkEntry *entry,
                                               NULL, NULL);
         }
       gtk_style_context_save_to_node (context, priv->undershoot_node[1]);
-      gtk_render_background (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
-      gtk_render_frame (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_snapshot_render_background (snapshot, context, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_snapshot_render_frame (snapshot, context, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
       gtk_style_context_restore (context);
     }
 }
 
 static gboolean
 gtk_entry_render (GtkCssGadget *gadget,
-                  cairo_t      *cr,
+                  GtkSnapshot  *snapshot,
                   int           x,
                   int           y,
                   int           width,
@@ -3614,13 +3590,24 @@ gtk_entry_render (GtkCssGadget *gadget,
   GtkWidget *widget;
   GtkEntry *entry;
   GtkEntryPrivate *priv;
+  cairo_t *cr;
+  int i;
 
   widget = gtk_css_gadget_get_owner (gadget);
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
 
+  /* Draw progress */
+  if (priv->progress_gadget && gtk_css_gadget_get_visible (priv->progress_gadget))
+    gtk_css_gadget_snapshot (priv->progress_gadget, snapshot);
+
   /* Draw text and cursor */
-  cairo_save (cr);
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &(graphene_rect_t) GRAPHENE_RECT_INIT (x + priv->text_x,
+                                                                              y,
+                                                                              priv->text_width,
+                                                                              height),
+                                       "Entry Text");
 
   if (priv->dnd_position != -1)
     gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
@@ -3633,9 +3620,18 @@ gtk_entry_render (GtkCssGadget *gadget,
       priv->selection_bound == priv->current_pos && priv->cursor_visible)
     gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
 
-  cairo_restore (cr);
+  cairo_destroy (cr);
 
-  gtk_entry_draw_undershoot (entry, cr);
+  /* Draw icons */
+  for (i = 0; i < MAX_ICONS; i++)
+    {
+      EntryIconInfo *icon_info = priv->icons[i];
+
+      if (icon_info != NULL)
+        gtk_css_gadget_snapshot (icon_info->gadget, snapshot);
+    }
+
+  gtk_entry_draw_undershoot (entry, snapshot);
 
   return FALSE;
 }
@@ -3774,7 +3770,7 @@ gtk_entry_move_handle (GtkEntry              *entry,
   GtkEntryPrivate *priv = entry->priv;
   GtkAllocation text_allocation;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_allocation, NULL);
+  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   if (!_gtk_text_handle_get_is_dragged (priv->text_handle, pos) &&
       (x < 0 || x > text_allocation.width))
@@ -3935,7 +3931,6 @@ gtk_entry_event (GtkWidget *widget,
       icon_info->device = device;
 
       if (!icon_info->nonactivatable) {
-        g_message ("Icon %d pressed", i);
         g_signal_emit (widget, signals[ICON_PRESS], 0, i, event);
       }
 
@@ -4220,7 +4215,7 @@ gtk_entry_show_magnifier (GtkEntry *entry,
   GtkEntryPrivate *priv = entry->priv;
   GtkAllocation text_allocation;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_allocation, NULL);
+  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   gtk_entry_ensure_magnifier (entry);
 
@@ -5783,7 +5778,7 @@ update_im_cursor_location (GtkEntry *entry)
   gint strong_xoffset;
 
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_area, NULL);
+  gtk_entry_get_text_allocation (entry, &text_area);
 
   strong_xoffset = strong_x - priv->scroll_offset;
   if (strong_xoffset < 0)
@@ -6004,7 +5999,7 @@ get_layout_position (GtkEntry *entry,
   PangoLayoutLine *line;
   GtkAllocation text_allocation;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_allocation, NULL);
+  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
@@ -6048,7 +6043,6 @@ gtk_entry_draw_text (GtkEntry *entry,
   gint x, y;
   gint start_pos, end_pos;
   GtkAllocation allocation;
-  GtkAllocation text_allocation;
 
   /* Nothing to display at all */
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
@@ -6056,31 +6050,14 @@ gtk_entry_draw_text (GtkEntry *entry,
 
   context = gtk_widget_get_style_context (widget);
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_allocation, NULL);
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
   cairo_save (cr);
 
-  cairo_rectangle (cr,
-                   priv->text_x,
-                   0,
-                   priv->text_width,
-                   text_allocation.height);
-  cairo_clip (cr);
-
   gtk_entry_get_layout_offsets (entry, &x, &y);
 
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) {
-    g_message ("text x: %d", priv->text_x);
-    g_message ("text alloc: %d, %d, %d, %d", text_allocation.x, text_allocation.y, text_allocation.width, text_allocation.height);
-    g_message ("scroll offset: %d", priv->scroll_offset);
-    g_message ("layout offsets: %d, %d", x, y);
-  }
-
-
   if (show_placeholder_text (entry))
-    pango_layout_set_width (layout, PANGO_SCALE * text_allocation.width);
+    pango_layout_set_width (layout, PANGO_SCALE * priv->text_width);
 
   gtk_render_layout (context, cr, x, y, layout);
 
@@ -6495,9 +6472,6 @@ gtk_entry_get_scroll_limits (GtkEntry *entry,
   PangoLayoutLine *line;
   PangoRectangle logical_rect;
   gint text_width;
-  GtkAllocation text_allocation;
-
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_allocation, NULL);
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   line = pango_layout_get_lines_readonly (layout)->data;
@@ -6513,14 +6487,14 @@ gtk_entry_get_scroll_limits (GtkEntry *entry,
 
   text_width = PANGO_PIXELS(logical_rect.width);
 
-  if (text_width > text_allocation.width)
+  if (text_width > priv->text_width)
     {
       *min_offset = 0;
-      *max_offset = text_width - text_allocation.width;
+      *max_offset = text_width - priv->text_width;
     }
   else
     {
-      *min_offset = (text_width - text_allocation.width) * xalign;
+      *min_offset = (text_width - priv->text_width) * xalign;
       *max_offset = *min_offset;
     }
 }
@@ -6538,9 +6512,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_allocation, NULL);
-  text_allocation.x = priv->text_x;
-  text_allocation.width = priv->text_width;
+  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   gtk_entry_get_scroll_limits (entry, &min_offset, &max_offset);
 
@@ -7860,14 +7832,22 @@ gtk_entry_get_layout_offsets (GtkEntry *entry,
                               gint     *x,
                               gint     *y)
 {
+  GtkAllocation allocation, text_allocation;
+
   g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   /* this gets coords relative to text area */
   get_layout_position (entry, x, y);
 
   /* convert to widget coords */
   if (x)
-    *x += entry->priv->text_x;
+    *x += text_allocation.x - allocation.x;
+
+  if (y)
+    *y += text_allocation.y - allocation.y;
 }
 
 
@@ -9103,7 +9083,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   gint length, start, end;
   GtkAllocation text_allocation;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &text_allocation, NULL);
+  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end);
   length = gtk_entry_buffer_get_length (get_buffer (entry));

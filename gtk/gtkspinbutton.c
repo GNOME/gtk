@@ -262,6 +262,8 @@ static void gtk_spin_button_measure (GtkWidget      *widget,
                                      int            *natural_baseline);
 static void gtk_spin_button_size_allocate  (GtkWidget          *widget,
                                             GtkAllocation      *allocation);
+static void gtk_spin_button_snapshot       (GtkWidget          *widget,
+                                            GtkSnapshot        *snapshot);
 static gint gtk_spin_button_button_press   (GtkWidget          *widget,
                                             GdkEventButton     *event);
 static gint gtk_spin_button_button_release (GtkWidget          *widget,
@@ -321,15 +323,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_ENTRY,
                                 "change-value", 1,                     \
                                 GTK_TYPE_SCROLL_TYPE, scroll)
 
-static GskRenderNode *
-gtk_spin_button_get_render_node (GtkWidget *widget, GskRenderer *renderer)
-{
-  GtkSpinButtonPrivate *priv = GTK_SPIN_BUTTON (widget)->priv;
-  GskRenderNode *node = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
-
-  return node;
-}
-
 static void
 gtk_spin_button_class_init (GtkSpinButtonClass *class)
 {
@@ -349,6 +342,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->unrealize = gtk_spin_button_unrealize;
   widget_class->measure = gtk_spin_button_measure;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
+  widget_class->snapshot = gtk_spin_button_snapshot;
   widget_class->scroll_event = gtk_spin_button_scroll;
   widget_class->button_press_event = gtk_spin_button_button_press;
   widget_class->button_release_event = gtk_spin_button_button_release;
@@ -360,7 +354,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->grab_notify = gtk_spin_button_grab_notify;
   widget_class->state_flags_changed = gtk_spin_button_state_flags_changed;
   widget_class->direction_changed = gtk_spin_button_direction_changed;
-  widget_class->get_render_node = gtk_spin_button_get_render_node;
 
   entry_class->activate = gtk_spin_button_activate;
 
@@ -1189,6 +1182,13 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
                               button_alloc.x, button_alloc.y,
                               button_alloc.width, button_alloc.height);
     }
+}
+
+static void
+gtk_spin_button_snapshot (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
+{
+  gtk_css_gadget_snapshot (GTK_SPIN_BUTTON(widget)->priv->gadget, snapshot);
 }
 
 static gint
