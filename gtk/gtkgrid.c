@@ -1651,20 +1651,25 @@ gtk_grid_allocate (GtkCssGadget        *gadget,
   gtk_container_get_children_clip (GTK_CONTAINER (grid), out_clip);
 }
 
-static GskRenderNode *
-gtk_grid_get_render_node (GtkWidget   *widget,
-                          GskRenderer *renderer)
+static gboolean
+gtk_grid_render (GtkCssGadget *gadget,
+                 GtkSnapshot  *snapshot,
+                 int           x,
+                 int           y,
+                 int           width,
+                 int           height,
+                 gpointer      data)
 {
-  GskRenderNode *res = gtk_css_gadget_get_render_node (GTK_GRID (widget)->priv->gadget,
-                                                       renderer,
-                                                       FALSE);
+  GTK_WIDGET_CLASS (gtk_grid_parent_class)->snapshot (gtk_css_gadget_get_owner (gadget), snapshot);
 
-  if (res == NULL)
-    return NULL;
+  return FALSE;
+}
 
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
-
-  return res;
+static void
+gtk_grid_snapshot (GtkWidget   *widget,
+                   GtkSnapshot *snapshot)
+{
+  gtk_css_gadget_snapshot (GTK_GRID (widget)->priv->gadget, snapshot);
 }
 
 static void
@@ -1680,7 +1685,7 @@ gtk_grid_class_init (GtkGridClass *class)
 
   widget_class->size_allocate = gtk_grid_size_allocate;
   widget_class->measure = gtk_grid_measure_;
-  widget_class->get_render_node = gtk_grid_get_render_node;
+  widget_class->snapshot = gtk_grid_snapshot;
 
   container_class->add = gtk_grid_add;
   container_class->remove = gtk_grid_remove;
@@ -1788,7 +1793,7 @@ gtk_grid_init (GtkGrid *grid)
                                                      gtk_grid_measure,
                                                      gtk_grid_allocate,
                                                      NULL,
-                                                     NULL,
+                                                     gtk_grid_render,
                                                      NULL,
                                                      NULL);
 
