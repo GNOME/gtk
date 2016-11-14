@@ -92,7 +92,9 @@ copy .\Debug\$(Platform)\bin\gtk-builder-tool.pdb $(CopyDir)\bin
 :DONE_BIN
 
 copy ..\gdk-3.0.pc $(CopyDir)\lib\pkgconfig
+copy ..\gdk-3.0.pc $(CopyDir)\lib\pkgconfig\gdk-win32-3.0.pc
 copy "..\gtk+-3.0.pc" $(CopyDir)\lib\pkgconfig
+copy "..\gtk+-3.0.pc" "$(CopyDir)\lib\pkgconfig\gtk+-3.0.pc"
 copy ..\gail-3.0.pc $(CopyDir)\lib\pkgconfig
     </GtkDoInstallBin>
     <GtkDoInstall>

@@ -30,7 +30,7 @@ def main(argv):
     atk_min_ver = '2.15.1'
     cairo_min_ver = '1.14.0'
     gdk_pixbuf_min_ver = '2.30.0'
-    gdk_win32_sys_libs = '-lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid -lwinmm -ldwmapi'
+    gdk_win32_sys_libs = '-lgdi32 -limm32 -lshell32 -lole32 -lwinmm -ldwmapi'
     glib_min_ver = '2.45.8'
 
     cairo_backends = 'cairo-win32'
@@ -41,14 +41,14 @@ def main(argv):
     gdk_args = gdk_parser.parse_args()
     if getattr(gdk_args, 'broadway', None) is 1:
         # On Visual Studio, we link to zlib1.lib
-        broadway_extra_libs = '-lzlib1'
+        broadway_extra_libs = ' -lzlib1'
         gdk_backends += ' broadway'
         cairo_backends += ' cairo'
 
     pkg_replace_items = {'@GTK_API_VERSION@': '3.0',
                          '@GDK_BACKENDS@': gdk_backends}
 
-    pkg_required_packages = 'gdk-pixbuf >= ' + gdk_pixbuf_min_ver + ' ' + \
+    pkg_required_packages = 'gdk-pixbuf-2.0 >= ' + gdk_pixbuf_min_ver + ' ' + \
                             'cairo >= ' + cairo_min_ver + ' ' + \
                             'cairo-gobject >= ' + cairo_min_ver
 
