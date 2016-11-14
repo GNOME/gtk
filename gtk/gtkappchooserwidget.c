@@ -161,16 +161,16 @@ refresh_and_emit_app_selected (GtkAppChooserWidget *self,
       if (!g_app_info_equal (self->priv->selected_app_info, info))
         {
           should_emit = TRUE;
-          g_object_unref (self->priv->selected_app_info);
-
-          self->priv->selected_app_info = info;
+          g_set_object (&self->priv->selected_app_info, info);
         }
     }
   else
     {
       should_emit = TRUE;
-      self->priv->selected_app_info = info;
+      g_set_object (&self->priv->selected_app_info, info);
     }
+
+  g_object_unref (info);
 
   if (should_emit)
     g_signal_emit (self, signals[SIGNAL_APPLICATION_SELECTED], 0,
