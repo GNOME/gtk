@@ -414,11 +414,10 @@ static void gtk_label_size_allocate     (GtkWidget        *widget,
 static void gtk_label_state_flags_changed   (GtkWidget        *widget,
                                              GtkStateFlags     prev_state);
 static void gtk_label_style_updated     (GtkWidget        *widget);
+static void gtk_label_snapshot          (GtkWidget        *widget,
+                                         GtkSnapshot      *snapshot);
 static gboolean gtk_label_focus         (GtkWidget         *widget,
                                          GtkDirectionType   direction);
-
-static GskRenderNode *gtk_label_get_render_node (GtkWidget   *label,
-                                                 GskRenderer *renderer);
 
 static void gtk_label_realize           (GtkWidget        *widget);
 static void gtk_label_unrealize         (GtkWidget        *widget);
@@ -565,6 +564,13 @@ static void     gtk_label_measure (GtkCssGadget   *gadget,
                                    int            *minimum_baseline,
                                    int            *natural_baseline,
                                    gpointer        unused);
+static gboolean gtk_label_render  (GtkCssGadget   *gadget,
+                                   GtkSnapshot    *snapshot,
+                                   int             x,
+                                   int             y,
+                                   int             width,
+                                   int             height,
+                                   gpointer        data);
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
@@ -612,7 +618,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->state_flags_changed = gtk_label_state_flags_changed;
   widget_class->style_updated = gtk_label_style_updated;
   widget_class->query_tooltip = gtk_label_query_tooltip;
-  widget_class->get_render_node = gtk_label_get_render_node;
+  widget_class->snapshot = gtk_label_snapshot;
   widget_class->realize = gtk_label_realize;
   widget_class->unrealize = gtk_label_unrealize;
   widget_class->map = gtk_label_map;
@@ -1371,7 +1377,7 @@ gtk_label_init (GtkLabel *label)
                                                      gtk_label_measure,
                                                      NULL,
                                                      NULL,
-                                                     NULL,
+                                                     gtk_label_render,
                                                      NULL,
                                                      NULL);
 }
@@ -4153,41 +4159,38 @@ gtk_label_get_focus_link (GtkLabel *label)
   return NULL;
 }
 
+static void
+gtk_label_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
+{
+  gtk_css_gadget_snapshot (GTK_LABEL (widget)->priv->gadget, snapshot);
+}
+
 static void layout_to_window_coords (GtkLabel *label,
                                      gint     *x,
                                      gint     *y);
+#define GRAPHENE_RECT_FROM_RECT(_r) ((graphene_rect_t) GRAPHENE_RECT_INIT ((_r)->x, (_r)->y, (_r)->width, (_r)->height))
 
-static GskRenderNode *
-gtk_label_get_render_node (GtkWidget   *widget,
-                           GskRenderer *renderer)
+static gboolean
+gtk_label_render (GtkCssGadget *gadget,
+                  GtkSnapshot  *snapshot,
+                  int           x,
+                  int           y,
+                  int           width,
+                  int           height,
+                  gpointer      data)
 {
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = label->priv;
-  GtkLabelSelectionInfo *info = priv->select_info;
+  GtkWidget *widget;
+  GtkLabel *label;
+  GtkLabelPrivate *priv;
+  GtkLabelSelectionInfo *info;
   GtkStyleContext *context;
-  gint x, y, width, height;
   gint lx, ly;
-  cairo_t *cr;
-  GtkAllocation alloc, clip;
-  GskRenderNode *node;
-  GskRenderNode *res;
 
-  res = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
-
-  if (res == NULL)
-    return NULL;
-
-  node = gtk_widget_create_render_node (widget, renderer, "Label Content");
-
-  gtk_widget_get_clip (widget, &clip);
-  _gtk_widget_get_allocation (widget, &alloc);
-
-  cr = gsk_render_node_get_draw_context (node, renderer);
-  cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
-  x = 0;
-  y = 0;
-  width = alloc.width;
-  height = alloc.height;
+  widget = gtk_css_gadget_get_owner (gadget);
+  label = GTK_LABEL (widget);
+  priv = label->priv;
+  info = priv->select_info;
 
   gtk_label_ensure_layout (label);
 
@@ -4206,12 +4209,14 @@ gtk_label_get_render_node (GtkWidget   *widget,
       lx = ly = 0;
       layout_to_window_coords (label, &lx, &ly);
 
-      gtk_render_layout (context, cr, lx, ly, priv->layout);
+      gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
 
       if (info && (info->selection_anchor != info->selection_end))
         {
           gint range[2];
           cairo_region_t *range_clip;
+          cairo_rectangle_int_t clip_extents;
+          cairo_t *cr;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -4224,8 +4229,10 @@ gtk_label_get_render_node (GtkWidget   *widget,
             }
 
           range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
-
-          cairo_save (cr);
+          cairo_region_get_extents (range_clip, &clip_extents);
+          cr = gtk_snapshot_append_cairo_node (snapshot,
+                                               &GRAPHENE_RECT_FROM_RECT(&clip_extents),
+                                               "Selected Text");
           gtk_style_context_save_to_node (context, info->selection_node);
 
           gdk_cairo_region (cr, range_clip);
@@ -4235,7 +4242,7 @@ gtk_label_get_render_node (GtkWidget   *widget,
           gtk_render_layout (context, cr, lx, ly, priv->layout);
 
           gtk_style_context_restore (context);
-          cairo_restore (cr);
+          cairo_destroy (cr);
           cairo_region_destroy (range_clip);
         }
       else if (info)
@@ -4244,7 +4251,9 @@ gtk_label_get_render_node (GtkWidget   *widget,
           GtkLabelLink *active_link;
           gint range[2];
           cairo_region_t *range_clip;
+          cairo_rectangle_int_t clip_extents;
           GdkRectangle rect;
+          cairo_t *cr;
 
           if (info->selectable &&
               gtk_widget_has_focus (widget) &&
@@ -4253,10 +4262,10 @@ gtk_label_get_render_node (GtkWidget   *widget,
               PangoDirection cursor_direction;
 
               cursor_direction = get_cursor_direction (label);
-              gtk_render_insertion_cursor (context, cr,
-                                           lx, ly,
-                                           priv->layout, priv->select_info->selection_end,
-                                           cursor_direction);
+              gtk_snapshot_render_insertion_cursor (snapshot, context,
+                                                    lx, ly,
+                                                    priv->layout, priv->select_info->selection_end,
+                                                    cursor_direction);
             }
 
           focus_link = gtk_label_get_focus_link (label);
@@ -4267,11 +4276,13 @@ gtk_label_get_render_node (GtkWidget   *widget,
               range[0] = active_link->start;
               range[1] = active_link->end;
 
-              cairo_save (cr);
               gtk_style_context_save_to_node (context, active_link->cssnode);
 
               range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
-
+              cairo_region_get_extents (range_clip, &clip_extents);
+              cr = gtk_snapshot_append_cairo_node (snapshot,
+                                                   &GRAPHENE_RECT_FROM_RECT(&clip_extents),
+                                                   "Active Link");
               gdk_cairo_region (cr, range_clip);
               cairo_clip (cr);
               cairo_region_destroy (range_clip);
@@ -4291,19 +4302,14 @@ gtk_label_get_render_node (GtkWidget   *widget,
               range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
               cairo_region_get_extents (range_clip, &rect);
 
-              gtk_render_focus (context, cr, rect.x, rect.y, rect.width, rect.height);
+              gtk_snapshot_render_focus (snapshot, context, rect.x, rect.y, rect.width, rect.height);
 
               cairo_region_destroy (range_clip);
             }
         }
     }
 
-  cairo_destroy (cr);
-
-  gsk_render_node_append_child (res, node);
-  gsk_render_node_unref (node);
-
-  return res;
+  return FALSE;
 }
 
 static gboolean

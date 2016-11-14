@@ -299,6 +299,24 @@ gtk_snapshot_render_frame (GtkSnapshot     *state,
 }
 
 void
+gtk_snapshot_render_focus (GtkSnapshot     *state,
+                           GtkStyleContext *context,
+                           gdouble          x,
+                           gdouble          y,
+                           gdouble          width,
+                           gdouble          height)
+{
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  gtk_snapshot_translate_2d (state, x, y);
+  gtk_css_style_snapshot_outline (gtk_style_context_lookup_style (context),
+                                  state,
+                                  width, height);
+  gtk_snapshot_translate_2d (state, -x, -y);
+}
+
+void
 gtk_snapshot_render_layout (GtkSnapshot     *state,
                             GtkStyleContext *context,
                             gdouble          x,

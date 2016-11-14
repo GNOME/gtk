@@ -97,11 +97,26 @@ void            gtk_snapshot_render_frame               (GtkSnapshot            
                                                          gdouble                 width,
                                                          gdouble                 height);
 GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_render_focus               (GtkSnapshot            *state,
+                                                         GtkStyleContext        *context,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height);
+GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_render_layout              (GtkSnapshot            *state,
                                                          GtkStyleContext        *context,
                                                          gdouble                 x,
                                                          gdouble                 y,
                                                          PangoLayout            *layout);
+GDK_AVAILABLE_IN_3_90 /* in gtkstylecontext.c */
+void            gtk_snapshot_render_insertion_cursor    (GtkSnapshot            *snapshot,
+                                                         GtkStyleContext        *context,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         PangoLayout            *layout,
+                                                         int                     index,
+                                                         PangoDirection          direction);
 
 G_END_DECLS
 

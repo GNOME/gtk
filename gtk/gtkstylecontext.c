@@ -2060,7 +2060,6 @@ draw_insertion_cursor (GtkStyleContext *context,
                        gboolean         is_primary,
                        PangoDirection   direction,
                        gboolean         draw_arrow)
-
 {
   GdkRGBA primary_color;
   GdkRGBA secondary_color;
@@ -2120,6 +2119,65 @@ draw_insertion_cursor (GtkStyleContext *context,
     }
 
   cairo_restore (cr);
+}
+
+static void
+get_insertion_cursor_bounds (gdouble          height,
+                             PangoDirection   direction,
+                             gboolean         draw_arrow,
+                             graphene_rect_t *bounds)
+{
+  gint stem_width;
+  gint offset;
+
+  stem_width = height * CURSOR_ASPECT_RATIO + 1;
+  if (direction == PANGO_DIRECTION_LTR)
+    offset = stem_width / 2;
+  else
+    offset = stem_width - stem_width / 2;
+
+  if (draw_arrow)
+    {
+      if (direction == PANGO_DIRECTION_LTR)
+        {
+          graphene_rect_init (bounds,
+                              - offset, 0,
+                              2 * stem_width + 1, height);
+        }
+      else
+        {
+          graphene_rect_init (bounds,
+                              - offset - stem_width - 2, 0,
+                              2 * stem_width + 2, height);
+        }
+    }
+  else
+    {
+      graphene_rect_init (bounds,
+                          - offset, 0,
+                          stem_width, height);
+    }
+}
+
+static void
+snapshot_insertion_cursor (GtkSnapshot     *snapshot,
+                           GtkStyleContext *context,
+                           gdouble          height,
+                           gboolean         is_primary,
+                           PangoDirection   direction,
+                           gboolean         draw_arrow)
+{
+  graphene_rect_t bounds;
+  cairo_t *cr;
+  
+  get_insertion_cursor_bounds (height, direction, draw_arrow, &bounds);
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &bounds,
+                                       "%s Cursor", is_primary ? "Primary" : "Secondary");
+
+  draw_insertion_cursor (context, cr, 0, 0, height, is_primary, direction, draw_arrow);
+
+  cairo_destroy (cr);
 }
 
 /**
@@ -2206,6 +2264,93 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                              FALSE,
                              direction2,
                              TRUE);
+    }
+}
+
+/**
+ * gtk_snapshot_render_insertion_cursor:
+ * @snapshot: snapshot to render to
+ * @context: a #GtkStyleContext
+ * @x: X origin
+ * @y: Y origin
+ * @layout: the #PangoLayout of the text
+ * @index: the index in the #PangoLayout
+ * @direction: the #PangoDirection of the text
+ *
+ * Draws a text caret on @cr at the specified index of @layout.
+ *
+ * Since: 3.90
+ **/
+void
+gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
+                                      GtkStyleContext *context,
+                                      gdouble          x,
+                                      gdouble          y,
+                                      PangoLayout     *layout,
+                                      int              index,
+                                      PangoDirection   direction)
+{
+  GtkStyleContextPrivate *priv;
+  gboolean split_cursor;
+  PangoRectangle strong_pos, weak_pos;
+  PangoRectangle *cursor1, *cursor2;
+  PangoDirection keymap_direction;
+  PangoDirection direction2;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+  g_return_if_fail (index >= 0);
+
+  priv = context->priv;
+
+  g_object_get (gtk_settings_get_for_screen (priv->screen),
+                "gtk-split-cursor", &split_cursor,
+                NULL);
+
+  keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (gdk_screen_get_display (priv->screen)));
+
+  pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
+
+  direction2 = PANGO_DIRECTION_NEUTRAL;
+
+  if (split_cursor)
+    {
+      cursor1 = &strong_pos;
+
+      if (strong_pos.x != weak_pos.x || strong_pos.y != weak_pos.y)
+        {
+          direction2 = (direction == PANGO_DIRECTION_LTR) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+          cursor2 = &weak_pos;
+        }
+    }
+  else
+    {
+      if (keymap_direction == direction)
+        cursor1 = &strong_pos;
+      else
+        cursor1 = &weak_pos;
+    }
+
+  gtk_snapshot_translate_2d (snapshot, x + PANGO_PIXELS (cursor1->x), y + PANGO_PIXELS (cursor1->y));
+  snapshot_insertion_cursor (snapshot,
+                             context,
+                             PANGO_PIXELS (cursor1->height),
+                             TRUE,
+                             direction,
+                             direction2 != PANGO_DIRECTION_NEUTRAL);
+  gtk_snapshot_translate_2d (snapshot, - x - PANGO_PIXELS (cursor1->x), - y - PANGO_PIXELS (cursor1->y));
+
+  if (direction2 != PANGO_DIRECTION_NEUTRAL)
+    {
+      gtk_snapshot_translate_2d (snapshot, x + PANGO_PIXELS (cursor2->x), y + PANGO_PIXELS (cursor2->y));
+      snapshot_insertion_cursor (snapshot,
+                                 context,
+                                 PANGO_PIXELS (cursor2->height),
+                                 FALSE,
+                                 direction2,
+                                 TRUE);
+      gtk_snapshot_translate_2d (snapshot, - x - PANGO_PIXELS (cursor2->x), - y - PANGO_PIXELS (cursor2->y));
     }
 }
 
