@@ -1420,13 +1420,23 @@ cairo_t *
 gsk_render_node_get_draw_context (GskRenderNode *node,
                                   GskRenderer   *renderer)
 {
+  int width, height;
   cairo_t *res;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
   g_return_val_if_fail (node->is_mutable, NULL);
   g_return_val_if_fail (renderer == NULL || GSK_IS_RENDERER (renderer), NULL);
 
-  if (node->surface == NULL)
+  width = ceilf (node->bounds.size.width);
+  height = ceilf (node->bounds.size.height);
+
+  if (width <= 0 || height <= 0)
+    {
+      cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
+      res = cairo_create (surface);
+      cairo_surface_destroy (surface);
+    }
+  else if (node->surface == NULL)
     {
       if (renderer)
         {
@@ -1443,9 +1453,12 @@ gsk_render_node_get_draw_context (GskRenderNode *node,
                                                       ceilf (node->bounds.size.width),
                                                       ceilf (node->bounds.size.height));
         }
+      res = cairo_create (node->surface);
     }
-
-  res = cairo_create (node->surface);
+  else
+    {
+      res = cairo_create (node->surface);
+    }
 
   cairo_translate (res, -node->bounds.origin.x, -node->bounds.origin.y);
 
