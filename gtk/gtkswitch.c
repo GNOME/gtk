@@ -67,6 +67,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtkcontainerprivate.h"
 
 #include "fallback-c89.c"
 
@@ -80,8 +81,6 @@ struct _GtkSwitchPrivate
 
   GtkCssGadget *gadget;
   GtkCssGadget *slider_gadget;
-  PangoLayout  *off_layout;
-  PangoLayout  *on_layout;
 
   double handle_pos;
   guint tick_id;
@@ -90,6 +89,9 @@ struct _GtkSwitchPrivate
   guint state                 : 1;
   guint is_active             : 1;
   guint in_switch             : 1;
+
+  GtkWidget *on_label;
+  GtkWidget *off_label;
 };
 
 enum
@@ -279,51 +281,6 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
   gtk_widget_queue_allocate (GTK_WIDGET (sw));
 }
 
-static void
-gtk_switch_create_pango_layouts (GtkSwitch *self)
-{
-  GtkSwitchPrivate *priv = self->priv;
-
-  g_clear_object (&priv->on_layout);
-  /* Translators: if the "on" state label requires more than three
-   * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
-   * the state
-   */
-  priv->on_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), C_("switch", "ON"));
-
-
-  g_clear_object (&priv->off_layout);
-  /* Translators: if the "off" state label requires more than three
-   * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-   */
-  priv->off_layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), C_("switch", "OFF"));
-}
-
-static void
-gtk_switch_screen_changed (GtkWidget *widget,
-                           GdkScreen *prev_screen)
-{
-  gtk_switch_create_pango_layouts (GTK_SWITCH (widget));
-}
-
-static void
-gtk_switch_style_updated (GtkWidget *widget)
-{
-  GtkSwitch *self = GTK_SWITCH (widget);
-  GtkStyleContext *context;
-  GtkCssStyleChange *change;
-
-  GTK_WIDGET_CLASS (gtk_switch_parent_class)->style_updated (widget);
-
-  context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (context);
-
-  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
-    gtk_switch_create_pango_layouts (self);
-}
-
-
-
 static gboolean
 gtk_switch_enter (GtkWidget        *widget,
                   GdkEventCrossing *event)
@@ -374,7 +331,7 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
   GtkSwitch *self;
   GtkSwitchPrivate *priv;
   gint slider_minimum, slider_natural;
-  PangoRectangle on_rect, off_rect;
+  int on_nat, off_nat;
 
   widget = gtk_css_gadget_get_owner (gadget);
   self = GTK_SWITCH (widget);
@@ -386,18 +343,18 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
                                      &slider_minimum, &slider_natural,
                                      NULL, NULL);
 
-  pango_layout_get_pixel_extents (priv->on_layout, NULL, &on_rect);
-  pango_layout_get_pixel_extents (priv->off_layout, NULL, &off_rect);
+  gtk_widget_measure (priv->on_label, orientation, for_size, NULL, &on_nat, NULL, NULL);
+  gtk_widget_measure (priv->off_label, orientation, for_size, NULL, &off_nat, NULL, NULL);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      int text_width = MAX (on_rect.width, off_rect.width);
+      int text_width = MAX (on_nat, off_nat);
       *minimum = 2 * MAX (slider_minimum, text_width);
       *natural = 2 * MAX (slider_natural, text_width);
     }
   else
     {
-      int text_height = MAX (on_rect.height, off_rect.height);
+      int text_height = MAX (on_nat, off_nat);
       *minimum = MAX (slider_minimum, text_height);
       *natural = MAX (slider_natural, text_height);
     }
@@ -428,8 +385,10 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
 {
   GtkSwitch *self = GTK_SWITCH (gtk_css_gadget_get_owner (gadget));
   GtkSwitchPrivate *priv = self->priv;
+  GtkAllocation child_alloc;
   GtkAllocation slider_alloc;
-  
+  int min;
+
   slider_alloc.x = allocation->x + round (priv->handle_pos * (allocation->width - allocation->width / 2));
   slider_alloc.y = allocation->y;
   slider_alloc.width = allocation->width / 2;
@@ -439,6 +398,26 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
                            &slider_alloc,
                            baseline,
                            out_clip);
+
+  /* Center ON label in left half */
+  gtk_widget_measure (priv->on_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+  child_alloc.x = allocation->x + ((allocation->width / 2) - min) / 2;
+  child_alloc.width = min;
+  gtk_widget_measure (priv->on_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
+  child_alloc.y = allocation->y + (allocation->height - min) / 2;
+  child_alloc.height = min;
+  gtk_widget_size_allocate (priv->on_label, &child_alloc);
+
+
+  /* Center OFF label in right half */
+  gtk_widget_measure (priv->off_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+  child_alloc.x = allocation->x + (allocation->width / 2) + ((allocation->width / 2) - min) / 2;
+  child_alloc.width = min;
+  gtk_widget_measure (priv->off_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
+  child_alloc.y = allocation->y + (allocation->height - min) / 2;
+  child_alloc.height = min;
+  gtk_widget_size_allocate (priv->off_label, &child_alloc);
+
 
   if (gtk_widget_get_realized (GTK_WIDGET (self)))
     {
@@ -475,7 +454,8 @@ gtk_switch_realize (GtkWidget *widget)
   GdkWindow *parent_window;
   GtkAllocation allocation;
 
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_switch_parent_class)->realize (widget);
+
   parent_window = gtk_widget_get_parent_window (widget);
   gtk_widget_set_window (widget, parent_window);
   g_object_ref (parent_window);
@@ -554,23 +534,9 @@ gtk_switch_snapshot_trough (GtkCssGadget *gadget,
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-  GtkStyleContext *context = gtk_widget_get_style_context (widget);
-  PangoRectangle rect;
-  gint label_x, label_y;
 
-  pango_layout_get_pixel_extents (priv->on_layout, NULL, &rect);
-
-  label_x = x + ((width / 2) - rect.width) / 2;
-  label_y = y + (height - rect.height) / 2;
-
-  gtk_snapshot_render_layout (snapshot, context, label_x, label_y, priv->on_layout);
-
-  pango_layout_get_pixel_extents (priv->off_layout, NULL, &rect);
-
-  label_x = x + (width / 2) + ((width / 2) - rect.width) / 2;
-  label_y = y + (height - rect.height) / 2;
-
-  gtk_snapshot_render_layout (snapshot, context, label_x, label_y, priv->off_layout);
+  gtk_widget_snapshot_child (widget, priv->on_label, snapshot);
+  gtk_widget_snapshot_child (widget, priv->off_label, snapshot);
 
   gtk_css_gadget_snapshot (priv->slider_gadget, snapshot);
 
@@ -707,9 +673,6 @@ gtk_switch_dispose (GObject *object)
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->multipress_gesture);
 
-  g_clear_object (&priv->on_layout);
-  g_clear_object (&priv->off_layout);
-
   G_OBJECT_CLASS (gtk_switch_parent_class)->dispose (object);
 }
 
@@ -781,8 +744,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->snapshot = gtk_switch_snapshot;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
-  widget_class->screen_changed = gtk_switch_screen_changed;
-  widget_class->style_updated = gtk_switch_style_updated;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
@@ -902,7 +863,20 @@ gtk_switch_init (GtkSwitch *self)
                                               GTK_PHASE_BUBBLE);
   priv->pan_gesture = gesture;
 
-  gtk_switch_create_pango_layouts (self);
+  /* Translators: if the "on" state label requires more than three
+   * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
+   * the state
+   */
+  priv->on_label = gtk_label_new (C_("switch", "ON"));
+  gtk_widget_set_parent (priv->on_label, GTK_WIDGET (self));
+  gtk_widget_show (priv->on_label);
+
+  /* Translators: if the "off" state label requires more than three
+   * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
+   */
+  priv->off_label = gtk_label_new (C_("switch", "OFF"));
+  gtk_widget_set_parent (priv->off_label, GTK_WIDGET (self));
+  gtk_widget_show (priv->off_label);
 }
 
 /**
