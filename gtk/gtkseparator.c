@@ -146,6 +146,13 @@ gtk_separator_size_allocate (GtkWidget     *widget,
 }
 
 static void
+gtk_separator_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
+{
+  gtk_css_gadget_snapshot (GTK_SEPARATOR (widget)->priv->gadget, snapshot);
+}
+
+static void
 gtk_separator_init (GtkSeparator *separator)
 {
   GtkCssNode *widget_node;
@@ -176,14 +183,6 @@ gtk_separator_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_separator_parent_class)->finalize (object);
 }
 
-static GskRenderNode *
-gtk_separator_get_render_node (GtkWidget *widget, GskRenderer *renderer)
-{
-  return gtk_css_gadget_get_render_node (GTK_SEPARATOR (widget)->priv->gadget,
-                                         renderer,
-                                         FALSE);
-}
-
 static void
 gtk_separator_class_init (GtkSeparatorClass *class)
 {
@@ -196,7 +195,8 @@ gtk_separator_class_init (GtkSeparatorClass *class)
 
   widget_class->measure = gtk_separator_measure;
   widget_class->size_allocate = gtk_separator_size_allocate;
-  widget_class->get_render_node = gtk_separator_get_render_node;
+
+  widget_class->snapshot = gtk_separator_snapshot;
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
