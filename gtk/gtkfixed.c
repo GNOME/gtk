@@ -70,9 +70,9 @@
 
 #include "gtkfixed.h"
 
-#include "gtkintl.h"
+#include "gtkcontainerprivate.h"
 #include "gtkprivate.h"
-#include "gtkwidgetprivate.h"
+#include "gtkintl.h"
 
 
 struct _GtkFixedPrivate
@@ -98,8 +98,8 @@ static void gtk_fixed_measure (GtkWidget      *widget,
 
 static void gtk_fixed_size_allocate (GtkWidget        *widget,
                                      GtkAllocation    *allocation);
-static GskRenderNode *gtk_fixed_get_render_node (GtkWidget        *widget,
-                                                 GskRenderer      *renderer);
+static void gtk_fixed_snapshot      (GtkWidget        *widget,
+                                     GtkSnapshot      *snapshot);
 static void gtk_fixed_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
@@ -135,7 +135,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
   widget_class->realize = gtk_fixed_realize;
   widget_class->measure = gtk_fixed_measure;
   widget_class->size_allocate = gtk_fixed_size_allocate;
-  widget_class->get_render_node = gtk_fixed_get_render_node;
+  widget_class->snapshot = gtk_fixed_snapshot;
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
@@ -516,19 +516,14 @@ gtk_fixed_forall (GtkContainer *container,
     }
 }
 
-static GskRenderNode *
-gtk_fixed_get_render_node (GtkWidget   *widget,
-                           GskRenderer *renderer)
+static void 
+gtk_fixed_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
 {
   GtkFixed *fixed = GTK_FIXED (widget);
   GtkFixedPrivate *priv = fixed->priv;
   GtkFixedChild *child;
-  GskRenderNode *node, *child_node;
-  graphene_matrix_t m;
-  graphene_point3d_t p;
   GList *list;
-  
-  node = gtk_widget_create_render_node (widget, renderer, G_OBJECT_TYPE_NAME (widget));
 
   for (list = priv->children;
        list;
@@ -536,17 +531,9 @@ gtk_fixed_get_render_node (GtkWidget   *widget,
     {
       child = list->data;
 
-      child_node = gtk_widget_get_render_node (child->widget, renderer);
-      if (child_node == NULL)
-        continue;
-
-      graphene_matrix_init_translate (&m, graphene_point3d_init (&p, child->x, child->y, 0));
-      gsk_render_node_set_transform (child_node, &m);
-
-      gsk_render_node_append_child (node, child_node);
-      gsk_render_node_unref (child_node);
+      gtk_container_snapshot_child (GTK_CONTAINER (fixed),
+                                    child->widget,
+                                    snapshot);
     }
-  
-  return node;
 }
 
