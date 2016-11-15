@@ -151,6 +151,7 @@ gsk_render_node_finalize (GskRenderNode *self)
   self->is_mutable = TRUE;
 
   g_clear_pointer (&self->surface, cairo_surface_destroy);
+  g_clear_pointer (&self->texture, gsk_texture_unref);
   g_clear_pointer (&self->name, g_free);
 
   gsk_render_node_iter_init (&iter, self);
