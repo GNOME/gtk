@@ -861,20 +861,17 @@ void
 gtk_icon_helper_snapshot (GtkIconHelper *self,
                           GtkSnapshot   *snapshot)
 {
+  GtkCssStyle *style;
   GskTexture *texture;
-  GskRenderNode *node;
-  graphene_rect_t bounds;
 
   gtk_icon_helper_ensure_texture (self, gtk_snapshot_get_renderer (snapshot));
   texture = self->priv->texture;
   if (texture == NULL)
     return;
  
-  graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
+  style = gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self)));
 
-  node = gtk_snapshot_append (snapshot, &bounds, "Icon Helper");
-  gsk_render_node_set_texture (node, texture);
-  gsk_render_node_unref (node);
+  gtk_css_style_snapshot_icon (style, snapshot, texture);
 }
 
 gboolean
