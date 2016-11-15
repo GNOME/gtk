@@ -74,14 +74,8 @@ struct _GtkCssGadgetClass
                                                          int                     width,
                                                          int                     height);
 
-  GskRenderNode * (* get_render_node)                   (GtkCssGadget           *gadget,
-                                                         GskRenderer            *renderer,
-                                                         gboolean                draw_focus);
-
   void          (* style_changed)                       (GtkCssGadget           *gadget,
                                                          GtkCssStyleChange      *change);
-
-  gboolean      (* has_content)                         (GtkCssGadget           *gadget);
 };
 
 GType           gtk_css_gadget_get_type                 (void) G_GNUC_CONST;
@@ -138,10 +132,6 @@ void            gtk_css_gadget_draw                     (GtkCssGadget           
                                                          cairo_t                *cr);
 void            gtk_css_gadget_snapshot                 (GtkCssGadget           *gadget,
                                                          GtkSnapshot            *snapshot);
-
-GskRenderNode * gtk_css_gadget_get_render_node          (GtkCssGadget           *gadget,
-                                                         GskRenderer            *renderer,
-                                                         gboolean                draw_focus);
 
 void            gtk_css_gadget_queue_resize             (GtkCssGadget           *gadget);
 void            gtk_css_gadget_queue_allocate           (GtkCssGadget           *gadget);

@@ -298,18 +298,6 @@ gtk_css_gadget_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_gadget_parent_class)->finalize (object);
 }
 
-static gboolean
-gtk_css_gadget_has_content (GtkCssGadget *gadget)
-{
-  GtkCssGadgetClass *gadget_class = GTK_CSS_GADGET_GET_CLASS (gadget);
-
-  return gadget_class->draw != gtk_css_gadget_real_draw;
-}
-
-static GskRenderNode * gtk_css_gadget_real_get_render_node (GtkCssGadget  *gadget,
-                                                            GskRenderer   *renderer,
-                                                            gboolean       draw_focus);
-
 static void
 gtk_css_gadget_class_init (GtkCssGadgetClass *klass)
 {
@@ -323,9 +311,7 @@ gtk_css_gadget_class_init (GtkCssGadgetClass *klass)
   klass->allocate = gtk_css_gadget_real_allocate;
   klass->draw = gtk_css_gadget_real_draw;
   klass->snapshot = gtk_css_gadget_real_snapshot;
-  klass->get_render_node = gtk_css_gadget_real_get_render_node;
   klass->style_changed = gtk_css_gadget_real_style_changed;
-  klass->has_content = gtk_css_gadget_has_content;
 
   properties[PROP_NODE] = g_param_spec_object ("node", "Node",
                                                "CSS node",
@@ -863,167 +849,6 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
   priv->clip = *out_clip;
 }
 
-static GskRenderNode *
-gtk_css_gadget_real_get_render_node (GtkCssGadget  *gadget,
-                                     GskRenderer   *renderer,
-                                     gboolean       draw_focus)
-{
-  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
-  GtkBorder clip, margin, border, padding;
-  GtkCssStyle *style;
-  cairo_t *cr;
-  GskRenderNode *box_node, *border_node;
-  graphene_rect_t bounds;
-  int width, height;
-  int contents_x, contents_y, contents_width, contents_height;
-  GtkAllocation margin_box;
-  GtkAllocation clip_box;
-  GtkAllocation owner_alloc;
-  char *str;
-  graphene_matrix_t m;
-  graphene_point3d_t p;
-
-  if (!gtk_css_gadget_get_visible (gadget))
-    return NULL;
-
-  margin_box = priv->allocated_size;
-  clip_box = priv->clip;
-  gtk_widget_get_allocation (gtk_css_gadget_get_owner (gadget), &owner_alloc);
-
-  width = clip_box.width;
-  height = clip_box.height;
-
-  clip.left = margin_box.x - clip_box.x;
-  clip.top = margin_box.y - clip_box.y;
-  clip.right = clip_box.width - margin_box.width - clip.left;
-  clip.bottom = clip_box.height - margin_box.height - clip.top;
-
-  if (width < 0 || height < 0)
-    {
-      g_warning ("Drawing a gadget with negative dimensions. "
-                 "Did you forget to allocate a size? (node %s owner %s)",
-                 gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
-                 G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
-      width = gtk_widget_get_allocated_width (priv->owner);
-      height = gtk_widget_get_allocated_height (priv->owner);
-    }
-
-  graphene_rect_init (&bounds, 0, 0, width, height);
-
-  str = g_strconcat ("Box<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
-  box_node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (box_node, str);
-  gsk_render_node_set_bounds (box_node, &bounds);
-  graphene_matrix_init_translate (&m, graphene_point3d_init (&p,
-                                                             clip_box.x - owner_alloc.x,
-                                                             clip_box.y - owner_alloc.y, 0));
-  gsk_render_node_set_transform (box_node, &m);
-  g_free (str);
-
-  style = gtk_css_gadget_get_style (gadget);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  gtk_css_style_add_background_render_nodes (style,
-                                             renderer,
-                                             box_node,
-                                             &bounds,
-                                             G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)),
-                                             clip.left + margin.left,
-                                             clip.top + margin.top,
-                                             width - clip.left - clip.right - margin.left - margin.right,
-                                             height - clip.top - clip.bottom - margin.top - margin.bottom,
-                                             gtk_css_node_get_junction_sides (priv->node));
-
-  str = g_strconcat ("Border<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
-  border_node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (border_node, str);
-  gsk_render_node_set_bounds (border_node, &bounds);
-  cr = gsk_render_node_get_draw_context (border_node, renderer);
-
-  gtk_css_style_render_border (style,
-                               cr,
-                               clip.left + margin.left,
-                               clip.top + margin.top,
-                               width - clip.left - clip.right - margin.left - margin.right,
-                               height - clip.top - clip.bottom - margin.top - margin.bottom,
-                               0,
-                               gtk_css_node_get_junction_sides (priv->node));
-
-  cairo_destroy (cr);
-  g_free (str);
-
-  gsk_render_node_append_child (box_node, border_node);
-  gsk_render_node_unref (border_node);
-
-  contents_x = clip.left + margin.left + border.left + padding.left;
-  contents_y = clip.top + margin.top + border.top + padding.top;
-  contents_width = width - clip.left - clip.right - margin.left - margin.right - border.left - border.right - padding.left - padding.right;
-  contents_height = height - clip.top - clip.bottom - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom;
-
-  if (contents_width > 0 && contents_height > 0)
-    {
-      GtkCssGadgetClass *gadget_class = GTK_CSS_GADGET_GET_CLASS (gadget);
-      graphene_rect_t content_bounds =
-        GRAPHENE_RECT_INIT (0, 0, contents_width, contents_height);
-      GskRenderNode *content_node = NULL;
-      graphene_matrix_t content_transform;
-      graphene_point3d_t tmp;
-
-      graphene_matrix_init_translate (&content_transform,
-                                      graphene_point3d_init (&tmp, contents_x, contents_y, 0));
-
-      /* If there's an override in place, create a temporary node */
-      if (gadget_class->has_content (gadget))
-        {
-          content_node = gsk_renderer_create_render_node (renderer);
-
-          str = g_strconcat ("DrawGadgetContent<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
-          gsk_render_node_set_name (content_node, str);
-          gsk_render_node_set_bounds (content_node, &content_bounds);
-          gsk_render_node_set_transform (content_node, &content_transform);
-
-          cr = gsk_render_node_get_draw_context (content_node, renderer);
-
-          /* Compatibility mode: draw_focus is left to the draw() implementation */
-          draw_focus = gadget_class->draw (gadget, cr,
-                                           0, 0,
-                                           contents_width, contents_height);
-
-          g_free (str);
-          cairo_destroy (cr);
-
-          gsk_render_node_append_child (box_node, content_node);
-          gsk_render_node_unref (content_node);
-        }
-    }
-
-  if (draw_focus)
-    {
-      GskRenderNode *focus_node = gsk_renderer_create_render_node (renderer);
-
-      str = g_strconcat ("Focus<", G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)), ">", NULL);
-      gsk_render_node_set_name (focus_node, str);
-      gsk_render_node_set_bounds (focus_node, &bounds);
-
-      cr = gsk_render_node_get_draw_context (focus_node, renderer);
-      gtk_css_style_render_outline (style,
-                                    cr,
-                                    clip.left + margin.left,
-                                    clip.top + margin.top,
-                                    width - clip.left - clip.right - margin.left - margin.right,
-                                    height - clip.top - clip.bottom - margin.top - margin.bottom);
-      g_free (str);
-      cairo_destroy (cr);
-
-      gsk_render_node_append_child (box_node, focus_node);
-      gsk_render_node_unref (focus_node);
-    }
-
-  return box_node;
-}
-
 /**
  * gtk_css_gadget_draw:
  * @gadget: The gadget to draw
@@ -1257,14 +1082,6 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
   }
 
   gtk_snapshot_pop (snapshot);
-}
-
-GskRenderNode *
-gtk_css_gadget_get_render_node (GtkCssGadget  *gadget,
-                                GskRenderer   *renderer,
-                                gboolean       draw_focus)
-{
-   return GTK_CSS_GADGET_GET_CLASS (gadget)->get_render_node (gadget, renderer, draw_focus);
 }
 
 void
