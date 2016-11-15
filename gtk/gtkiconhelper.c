@@ -48,7 +48,7 @@ struct _GtkIconHelperPrivate {
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIconHelper, gtk_icon_helper, GTK_TYPE_CSS_GADGET)
 
-static void
+void
 gtk_icon_helper_invalidate (GtkIconHelper *self)
 {
   g_clear_pointer (&self->priv->texture, gsk_texture_unref);

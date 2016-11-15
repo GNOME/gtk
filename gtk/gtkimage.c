@@ -1297,7 +1297,12 @@ gtk_image_unmap (GtkWidget *widget)
 static void
 gtk_image_unrealize (GtkWidget *widget)
 {
-  gtk_image_reset_anim_iter (GTK_IMAGE (widget));
+  GtkImage *image = GTK_IMAGE (widget);
+  GtkImagePrivate *priv = image->priv;
+
+  gtk_image_reset_anim_iter (image);
+
+  gtk_icon_helper_invalidate (priv->icon_helper);
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize (widget);
 }
