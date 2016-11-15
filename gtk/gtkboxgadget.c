@@ -519,6 +519,35 @@ gtk_box_gadget_draw (GtkCssGadget *gadget,
   return FALSE;
 }
 
+static gboolean
+gtk_box_gadget_snapshot (GtkCssGadget *gadget,
+                         GtkSnapshot  *snapshot,
+                         int           x,
+                         int           y,
+                         int           width,
+                         int           height)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (GTK_BOX_GADGET (gadget));
+  GtkWidget *owner = gtk_css_gadget_get_owner (gadget);
+  guint i;
+
+  for (i = 0; i < priv->children->len; i++)
+    {
+      guint draw_index = priv->draw_reverse ? priv->children->len - 1 - i : i;
+      GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, draw_index);
+
+      if (GTK_IS_WIDGET (child->object))
+        gtk_container_snapshot_child (GTK_CONTAINER (owner), GTK_WIDGET (child->object), snapshot);
+      else
+        gtk_css_gadget_snapshot (GTK_CSS_GADGET (child->object), snapshot);
+    }
+
+  if (priv->draw_focus && gtk_widget_has_visible_focus (owner))
+    return TRUE;
+
+  return FALSE;
+}
+
 static GskRenderNode *
 gtk_box_gadget_get_render_node (GtkCssGadget *gadget,
                                 GskRenderer  *renderer,
@@ -576,6 +605,7 @@ gtk_box_gadget_class_init (GtkBoxGadgetClass *klass)
   gadget_class->get_preferred_size = gtk_box_gadget_get_preferred_size;
   gadget_class->allocate = gtk_box_gadget_allocate;
   gadget_class->draw = gtk_box_gadget_draw;
+  gadget_class->snapshot = gtk_box_gadget_snapshot;
   gadget_class->get_render_node = gtk_box_gadget_get_render_node;
   gadget_class->has_content = gtk_box_gadget_has_content;
 }
