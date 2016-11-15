@@ -47,6 +47,7 @@ find_widget (GtkWidget      *widget,
   GtkAllocation new_allocation;
   gint x_offset = 0;
   gint y_offset = 0;
+  GtkWidget *child;
 
   gtk_widget_get_allocation (widget, &new_allocation);
 
@@ -121,9 +122,12 @@ find_widget (GtkWidget      *widget,
           new_data.found = FALSE;
           new_data.first = FALSE;
 
-          gtk_container_forall (GTK_CONTAINER (widget),
-                                (GtkCallback)find_widget,
-                                &new_data);
+          for (child = gtk_widget_get_first_child (widget);
+               child != NULL;
+               child = gtk_widget_get_next_sibling (child))
+             {
+                find_widget (child, &new_data);
+             }
 
           data->found = new_data.found;
           if (data->found)
