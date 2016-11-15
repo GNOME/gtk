@@ -205,32 +205,30 @@ gtk_render_node_view_measure (GtkWidget      *widget,
     }
 }
 
-static GskRenderNode *
-gtk_render_node_view_real_get_render_node (GtkWidget   *widget,
-                                           GskRenderer *renderer)
+static void
+gtk_render_node_view_snapshot (GtkWidget   *widget,
+                               GtkSnapshot *snapshot)
 {
   GtkRenderNodeView *view = GTK_RENDER_NODE_VIEW (widget);
   GtkRenderNodeViewPrivate *priv = gtk_render_node_view_get_instance_private (view);
   GdkRectangle viewport;
   graphene_rect_t rect;
-  GskRenderNode *node;
   GskRenderer *fallback;
   int width, height;
   cairo_t *cr;
 
   if (priv->render_node == NULL)
-    return FALSE;
+    return;
 
   gtk_render_node_view_get_effective_viewport (view, &viewport);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
-  node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (node, "RenderNodeView node");
   graphene_rect_init (&rect, 0, 0, width, height);
-  gsk_render_node_set_bounds (node, &rect);
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &rect,
+                                       "RenderNodeView");
 
-  cr = gsk_render_node_get_draw_context (node, renderer);
   cairo_translate (cr, width / 2.0, height / 2.0);
   if (width < viewport.width || height < viewport.height)
     {
@@ -239,7 +237,7 @@ gtk_render_node_view_real_get_render_node (GtkWidget   *widget,
     }
   cairo_translate (cr, - viewport.x - viewport.width / 2.0, - viewport.y - viewport.height / 2.0);
 
-  fallback = gsk_renderer_create_fallback (renderer,
+  fallback = gsk_renderer_create_fallback (gtk_snapshot_get_renderer (snapshot),
                                            &(graphene_rect_t)
                                                GRAPHENE_RECT_INIT (viewport.x, viewport.y,
                                                                    viewport.width, viewport.height),
@@ -262,8 +260,6 @@ gtk_render_node_view_real_get_render_node (GtkWidget   *widget,
     }
 
   cairo_destroy (cr);
-
-  return node;
 }
 
 static void
@@ -277,7 +273,7 @@ gtk_render_node_view_class_init (GtkRenderNodeViewClass *klass)
   object_class->dispose = gtk_render_node_view_dispose;
 
   widget_class->measure = gtk_render_node_view_measure;
-  widget_class->get_render_node = gtk_render_node_view_real_get_render_node;
+  widget_class->snapshot = gtk_render_node_view_snapshot;
 
   props[PROP_VIEWPORT] =
     g_param_spec_boxed ("viewport",
