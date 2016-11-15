@@ -1461,6 +1461,11 @@ gdk_window_new (GdkWindow     *parent,
   if (window->parent->window_type == GDK_WINDOW_ROOT)
     native = TRUE; /* Always use native windows for toplevels */
 
+#ifdef GDK_WINDOWING_WAYLAND
+  if (window->window_type == GDK_WINDOW_SUBSURFACE)
+    native = TRUE; /* Always use native windows for subsurfaces as well */
+#endif
+
   if (gdk_window_is_offscreen (window))
     {
       _gdk_offscreen_window_new (window, attributes, attributes_mask);
