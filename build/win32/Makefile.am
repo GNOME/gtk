@@ -36,4 +36,7 @@ EXTRA_DIST +=	\
 	detectenv-msvc.mak		\
 	introspection-msvc.mak		\
 	gtk-introspection-msvc.mak	\
+	gtkpc.py			\
+	pc_base.py			\
+	replace.py			\
 	$(GENERATED_ITEMS)
