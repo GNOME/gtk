@@ -122,8 +122,8 @@ static void gtk_frame_get_property (GObject     *object,
 				    guint        param_id,
 				    GValue      *value,
 				    GParamSpec  *pspec);
-static GskRenderNode * gtk_frame_get_render_node (GtkWidget   *widget,
-                                                  GskRenderer *renderer);
+static gboolean gtk_frame_draw      (GtkWidget      *widget,
+				     cairo_t        *cr);
 static void gtk_frame_size_allocate (GtkWidget      *widget,
 				     GtkAllocation  *allocation);
 static void gtk_frame_remove        (GtkContainer   *container,
@@ -179,6 +179,13 @@ static void     gtk_frame_allocate_border (GtkCssGadget        *gadget,
                                           const GtkAllocation *allocation,
                                           int                  baseline,
                                           GtkAllocation       *out_clip,
+                                          gpointer             data);
+static gboolean gtk_frame_render         (GtkCssGadget        *gadget,
+                                          cairo_t             *cr,
+                                          int                  x,
+                                          int                  y,
+                                          int                  width,
+                                          int                  height,
                                           gpointer             data);
 
 
@@ -242,10 +249,10 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 
-  widget_class->get_render_node                = gtk_frame_get_render_node;
-  widget_class->size_allocate                  = gtk_frame_size_allocate;
+  widget_class->draw = gtk_frame_draw;
+  widget_class->size_allocate = gtk_frame_size_allocate;
   widget_class->measure = gtk_frame_measure_;
-  widget_class->state_flags_changed            = gtk_frame_state_flags_changed;
+  widget_class->state_flags_changed = gtk_frame_state_flags_changed;
 
   container_class->remove = gtk_frame_remove;
   container_class->forall = gtk_frame_forall;
@@ -295,7 +302,7 @@ gtk_frame_init (GtkFrame *frame)
                                                      GTK_WIDGET (frame),
                                                      gtk_frame_measure,
                                                      gtk_frame_allocate,
-                                                     NULL,
+                                                     gtk_frame_render,
                                                      NULL,
                                                      NULL,
                                                      NULL);
@@ -683,28 +690,42 @@ gtk_frame_get_shadow_type (GtkFrame *frame)
   return frame->priv->shadow_type;
 }
 
-static GskRenderNode *
-gtk_frame_get_render_node (GtkWidget   *widget,
-                           GskRenderer *renderer)
+static gboolean
+gtk_frame_draw (GtkWidget *widget,
+		cairo_t   *cr)
 {
-  GtkFramePrivate *priv = GTK_FRAME (widget)->priv;
+  gtk_css_gadget_draw (GTK_FRAME (widget)->priv->gadget, cr);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_frame_render (GtkCssGadget *gadget,
+                  cairo_t      *cr,
+                  int           x,
+                  int           y,
+                  int           width,
+                  int           height,
+                  gpointer      data)
+{
+  GtkWidget *widget;
+  GtkFramePrivate *priv;
+  gint xc, yc, w, h;
   GtkAllocation allocation;
-  GskRenderNode *node;
-  cairo_t *cr;
-  int xc, yc, w, h;
+
+  widget = gtk_css_gadget_get_owner (gadget);
+  priv = GTK_FRAME (widget)->priv;
+
+  cairo_save (cr);
 
   gtk_widget_get_allocation (widget, &allocation);
-
-  node = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
-
-  cr = gsk_render_node_get_draw_context (node, renderer);
 
   /* We want to use the standard gadget drawing for the border,
    * so we clip out the label allocation in order to get the
    * frame gap.
    */
   xc = priv->label_allocation.x - allocation.x;
-  yc = allocation.y;
+  yc = y;
   w = priv->label_allocation.width;
   h = priv->label_allocation.height;
 
@@ -727,11 +748,11 @@ gtk_frame_get_render_node (GtkWidget   *widget,
 
   gtk_css_gadget_draw (priv->border_gadget, cr);
 
-  cairo_destroy (cr);
+  cairo_restore (cr);
 
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, node);
+  GTK_WIDGET_CLASS (gtk_frame_parent_class)->draw (widget, cr);
 
-  return node;
+  return FALSE;
 }
 
 static void
