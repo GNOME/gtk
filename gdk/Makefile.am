@@ -330,7 +330,7 @@ w32_introspection_files =		\
 	win32/gdkwindow-win32.c
 
 if OS_WIN32
-GdkWin32-noinst-4.0.gir: libgdk-3.la Gdk-noinst-4.0.gir Makefile
+GdkWin32-noinst-4.0.gir: libgdk-4.la Gdk-noinst-4.0.gir Makefile
 GdkWin32_noinst_4_0_gir_SCANNERFLAGS = \
 	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkwin32.h"	\
