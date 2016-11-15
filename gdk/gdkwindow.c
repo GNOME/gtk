@@ -1220,6 +1220,11 @@ gdk_window_new (GdkWindow     *parent,
   if (window->parent->window_type == GDK_WINDOW_ROOT)
     native = TRUE; /* Always use native windows for toplevels */
 
+#ifdef GDK_WINDOWING_WAYLAND
+  if (window->window_type == GDK_WINDOW_SUBSURFACE)
+    native = TRUE; /* Always use native windows for subsurfaces as well */
+#endif
+
   if (native)
     {
       event_mask = get_native_event_mask (window);
