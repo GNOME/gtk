@@ -26,12 +26,12 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
+#include "gtkcontainerprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkeventbox.h"
 #include "gtkframe.h"
 #include "gtkiconprivate.h"
 #include "gtkbox.h"
-#include "gtkcontainerprivate.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkmenuprivate.h"
@@ -463,6 +463,25 @@ gtk_combo_box_allocate (GtkCssGadget        *gadget,
     }
 }
 
+static gboolean
+gtk_combo_box_render (GtkCssGadget *gadget,
+                      GtkSnapshot  *snapshot,
+                      int           x,
+                      int           y,
+                      int           width,
+                      int           height,
+                      gpointer      data)
+{
+  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+  GtkComboBoxPrivate *priv = combo_box->priv;
+
+  gtk_container_snapshot_child (GTK_CONTAINER (widget),
+                                priv->box, snapshot);
+
+  return FALSE;
+}
+
 static void
 gtk_combo_box_measure_ (GtkWidget      *widget,
                        GtkOrientation  orientation,
@@ -501,20 +520,11 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
   gtk_widget_set_clip (widget, &clip);
 }
 
-static GskRenderNode *
-gtk_combo_box_get_render_node (GtkWidget   *widget,
-                               GskRenderer *renderer)
+static void
+gtk_combo_box_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
-  GskRenderNode *res = gtk_css_gadget_get_render_node (GTK_COMBO_BOX (widget)->priv->gadget,
-                                                       renderer,
-                                                       FALSE);
-
-  if (res == NULL)
-    return NULL;
-
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, res);
-
-  return res;
+  gtk_css_gadget_snapshot (GTK_COMBO_BOX (widget)->priv->gadget, snapshot);
 }
 
 static void
@@ -554,7 +564,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
-  widget_class->get_render_node = gtk_combo_box_get_render_node;
+  widget_class->snapshot = gtk_combo_box_snapshot;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
@@ -1097,7 +1107,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                                                      gtk_combo_box_measure,
                                                      gtk_combo_box_allocate,
                                                      NULL,
-                                                     NULL,
+                                                     gtk_combo_box_render,
                                                      NULL, NULL);
 }
 
