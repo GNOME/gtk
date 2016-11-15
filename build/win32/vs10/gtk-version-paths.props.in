@@ -6,12 +6,18 @@
     <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
     <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
     <ApiVersion>2.0</ApiVersion>
+    <GtkVersion>@GTK_VERSION@</GtkVersion>
     <GtkLibtoolCompatibleDllPrefix>lib</GtkLibtoolCompatibleDllPrefix>
     <GtkLibtoolCompatibleDllSuffix>-$(ApiVersion)-0</GtkLibtoolCompatibleDllSuffix>
     <GtkSeparateVSDllPrefix />
     <GtkSeparateVSDllSuffix>-2-vs$(VSVer)</GtkSeparateVSDllSuffix>
+    <!-- Change these two to GtkLibtoolCompatibleDllPrefix and
+	     GtkLibtoolCompatibleDllSuffix if that is what you want -->
     <GtkDllPrefix>$(GtkSeparateVSDllPrefix)</GtkDllPrefix>
     <GtkDllSuffix>$(GtkSeparateVSDllSuffix)</GtkDllSuffix>
+    <!-- Update the following to reflect the actual Python 2.x/3.x installation path on your system -->
+    <PythonPath>c:\python34</PythonPath>
+    <PythonPathX64>$(PythonPath).x64</PythonPathX64>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtkversionpathsprops</_PropertySheetDisplayName>
@@ -32,6 +38,9 @@
     <BuildMacro Include="ApiVersion">
       <Value>$(ApiVersion)</Value>
     </BuildMacro>
+    <BuildMacro Include="GtkVersion">
+      <Value>$(GtkVersion)</Value>
+    </BuildMacro>
     <BuildMacro Include="GtkLibtoolCompatibleDllPrefix">
       <Value>$(GtkLibtoolCompatibleDllPrefix)</Value>
     </BuildMacro>
@@ -50,5 +59,10 @@
     <BuildMacro Include="GtkDllSuffix">
       <Value>$(GtkDllSuffix)</Value>
     </BuildMacro>
+    <BuildMacro Include="PythonPath">
+      <Value>$(PythonPath)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PythonPathX64">
+      <Value>$(PythonPathX64)</Value>
   </ItemGroup>
 </Project>

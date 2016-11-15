@@ -60,7 +60,16 @@ mkdir $(CopyDir)\share\themes\Raleigh\gtk-2.0
 copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-2.0\gtkrc
 
 if exist $(CopyDir)\share\icons\hicolor $(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
+
+mkdir $(CopyDir)\lib\pkgconfig
+copy ..\gdk-2.0.pc $(CopyDir)\lib\pkgconfig
+copy ..\gdk-2.0.pc $(CopyDir)\lib\pkgconfig\gdk-win32-2.0.pc
+copy "..\gtk+-2.0.pc" "$(CopyDir)\lib\pkgconfig"
+copy "..\gtk+-2.0.pc" "$(CopyDir)\lib\pkgconfig\gtk+-win32-2.0.pc"
 </GtkDoInstall>
+    <GenerateGtkPC>$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
+    <GenerateGtkPCX64>$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
+    <GtkPCFiles>$(SolutionDir)\..\gdk-2.0.pc;$(SolutionDir)\..\gtk+-2.0.pc;$(SolutionDir)\..\gail.pc</GtkPCFiles>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtkinstallprops</_PropertySheetDisplayName>
@@ -77,6 +86,15 @@ if exist $(CopyDir)\share\icons\hicolor $(CopyDir)\bin\gtk-update-icon-cache.exe
     </BuildMacro>
     <BuildMacro Include="GtkDoInstall">
       <Value>$(GtkDoInstall)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPC">
+      <Value>$(GenerateGtkPC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPCX64">
+      <Value>$(GenerateGtkPCX64)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPCFiles">
+      <Value>$(GtkPCFiles)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

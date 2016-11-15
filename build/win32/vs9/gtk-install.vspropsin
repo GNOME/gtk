@@ -61,6 +61,20 @@ mkdir $(CopyDir)\share\themes\Raleigh\gtk-$(ApiVersion)&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-$(ApiVersion)\gtkrc&#x0D;&#x0A;
 
 if exist $(CopyDir)\share\icons\hicolor $(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force &quot;$(CopyDir)\share\icons\hicolor&quot;&#x0D;&#x0A;
+
+mkdir $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+copy ..\gdk-2.0.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+copy ..\gdk-2.0.pc $(CopyDir)\lib\pkgconfig\gdk-win32-2.0.pc&#x0D;&#x0A;
+copy &quot;..\gtk+-2.0.pc&quot; &quot;$(CopyDir)\lib\pkgconfig&quot;&#x0D;&#x0A;
+copy &quot;..\gtk+-2.0.pc&quot; &quot;$(CopyDir)\lib\pkgconfig\gtk+-win32-2.0.pc&quot;&#x0D;&#x0A;
 		      "
+	/>
+	<UserMacro
+		Name="GenerateGtkPC"
+		Value="$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)"
+	/>
+	<UserMacro
+		Name="GenerateGtkPCX64"
+		Value="$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)"
 	/>
 </VisualStudioPropertySheet>

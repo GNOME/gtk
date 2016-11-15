@@ -21,7 +21,8 @@ EXTRA_DIST +=	\
 	libwimp.vcxproj.filters	\
 	gtk-update-icon-cache.vcxproj	\
 	gtk-update-icon-cache.vcxproj.filters	\
-	gtk-install.vcxproj
+	gtk-install.vcxproj	\
+	gtk-install.vcxproj.filters
 
 DISTCLEANFILES = $(EXTRA_DIST)
 

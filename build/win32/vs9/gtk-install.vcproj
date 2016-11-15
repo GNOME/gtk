@@ -28,7 +28,7 @@
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstall)"
 			/>
 		</Configuration>
@@ -41,7 +41,7 @@
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstall)"
 			/>
 		</Configuration>
@@ -55,7 +55,7 @@
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstall)"
 			/>
 		</Configuration>
@@ -69,9 +69,47 @@
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCPostBuildEventTool"
 				CommandLine="$(GtkDoInstall)"
 			/>
 		</Configuration>
 	</Configurations>
+	<Files>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
+			<File RelativePath="..\gtkpc.py">
+				<FileConfiguration Name="Debug|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPC)"
+						Outputs="..\gdk-2.0.pc;..\gtk+-2.0.pc;..\gail.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPC)"
+						Outputs="..\gdk-2.0.pc;..\gtk+-2.0.pc;..\gail.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPCX64)"
+						Outputs="..\gdk-2.0.pc;..\gtk+-2.0.pc;..\gail.pc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating .pc files..."
+						CommandLine="$(GenerateGtkPCX64)"
+						Outputs="..\gdk-2.0.pc;..\gtk+-2.0.pc;..\gail.pc"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
 </VisualStudioProject>
