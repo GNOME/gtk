@@ -125,6 +125,17 @@ object_tree_widget_get_parent (GObject *object)
   return G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object)));
 }
 
+static gboolean
+object_tree_widget_get_sensitive (GObject *object)
+{
+  return gtk_widget_get_mapped (GTK_WIDGET (object));
+}
+
+typedef struct {
+  ObjectTreeForallFunc forall_func;
+  gpointer             forall_data;
+} ForallData;
+
 static void
 object_tree_widget_forall (GObject              *object,
                            ObjectTreeForallFunc  forall_func,
@@ -140,6 +151,7 @@ object_tree_widget_forall (GObject              *object,
     { GTK_PHASE_NONE,    "" }
   };
   gint i;
+  GtkWidget *child;
 
   for (i = 0; i < G_N_ELEMENTS (phases); i++)
     {
@@ -162,41 +174,13 @@ object_tree_widget_forall (GObject              *object,
        if (clock)
          forall_func (clock, "frame-clock", forall_data);
      }
-}
 
-static gboolean
-object_tree_widget_get_sensitive (GObject *object)
-{
-  return gtk_widget_get_mapped (GTK_WIDGET (object));
-}
-
-typedef struct {
-  ObjectTreeForallFunc forall_func;
-  gpointer             forall_data;
-} ForallData;
-
-static void
-container_children_callback (GtkWidget *widget,
-                             gpointer   client_data)
-{
-  ForallData *forall_data = client_data;
-
-  forall_data->forall_func (G_OBJECT (widget), NULL, forall_data->forall_data);
-}
-
-static void
-object_tree_container_forall (GObject              *object,
-                              ObjectTreeForallFunc  forall_func,
-                              gpointer              forall_data)
-{
-  ForallData data = {
-    forall_func,
-    forall_data
-  };
-
-  gtk_container_forall (GTK_CONTAINER (object),
-                        container_children_callback,
-                        &data);
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (object));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+     {
+       forall_func (G_OBJECT (child), NULL, forall_data);
+     }
 }
 
 static void
@@ -454,12 +438,6 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
     gtk_menu_item_get_type,
     object_tree_widget_get_parent,
     object_tree_menu_item_forall,
-    object_tree_widget_get_sensitive
-  },
-  {
-    gtk_container_get_type,
-    object_tree_widget_get_parent,
-    object_tree_container_forall,
     object_tree_widget_get_sensitive
   },
   {

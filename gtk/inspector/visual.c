@@ -87,12 +87,17 @@ fix_direction_recurse (GtkWidget *widget,
                        gpointer   data)
 {
   GtkTextDirection dir = GPOINTER_TO_INT (data);
+  GtkWidget *child;
 
   g_object_ref (widget);
 
   gtk_widget_set_direction (widget, dir);
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), fix_direction_recurse, data);
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+     {
+        fix_direction_recurse (child, data);
+     }
 
   g_object_unref (widget);
 }
