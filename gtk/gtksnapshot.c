@@ -182,7 +182,7 @@ gtk_snapshot_append_node (GtkSnapshot   *state,
     state->root = gsk_render_node_ref (node);
   else
     {
-      g_warning ("Tried appending a node to an already finished snapshot.");
+      g_critical ("Tried appending a node to an already finished snapshot.");
     }
 }
 
