@@ -527,8 +527,6 @@ struct _GtkWidgetClass
                                                 GtkWidget            *child,
 					        const cairo_region_t *region);
 
-  GskRenderNode *(* get_render_node) (GtkWidget *widget,
-                                      GskRenderer *renderer);
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);
 

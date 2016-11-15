@@ -284,14 +284,8 @@ void              gtk_widget_render                        (GtkWidget           
                                                             const cairo_region_t *region);
 
 
-GskRenderNode *   gtk_widget_get_render_node               (GtkWidget   *widget,
-                                                            GskRenderer *renderer);
 void              gtk_widget_snapshot                      (GtkWidget            *widget,
                                                             GtkSnapshot          *snapshot);
-
-GskRenderNode *   gtk_widget_create_render_node            (GtkWidget   *widget,
-                                                            GskRenderer *renderer,
-                                                            const char  *name);
 
 /* inline getters */
 
