@@ -43,13 +43,6 @@ void      _gtk_container_maybe_start_idle_sizer (GtkContainer *container);
 void      gtk_container_get_children_clip       (GtkContainer  *container,
                                                  GtkAllocation *out_clip);
 
-void      gtk_container_propagate_render_node   (GtkContainer  *container,
-                                                 GskRenderer   *renderer,
-                                                 GskRenderNode *parent_node);
-void      gtk_container_propagate_render_node_for_child   (GtkContainer  *container,
-                                                           GtkWidget     *child,
-                                                           GskRenderer   *renderer,
-                                                           GskRenderNode *parent_node);
 void      gtk_container_snapshot_child          (GtkContainer  *container,
                                                  GtkWidget     *child,
                                                  GtkSnapshot   *snapshot);
