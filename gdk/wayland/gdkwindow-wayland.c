@@ -1217,7 +1217,8 @@ surface_leave (void              *data,
 
   impl->display_server.outputs = g_slist_remove (impl->display_server.outputs, output);
 
-  window_update_scale (window);
+  if (impl->display_server.outputs)
+    window_update_scale (window);
 }
 
 static const struct wl_surface_listener surface_listener = {
