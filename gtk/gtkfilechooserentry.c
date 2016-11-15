@@ -32,6 +32,7 @@
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkfilefilterprivate.h"
 
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
 
@@ -56,6 +57,7 @@ struct _GtkFileChooserEntry
   gchar *file_part;
 
   GtkTreeModel *completion_store;
+  GtkFileFilter *current_filter;
 
   guint current_folder_loaded : 1;
   guint complete_on_load : 1;
@@ -179,6 +181,83 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
                   G_TYPE_NONE, 0);
 }
 
+static gboolean
+match_func (GtkEntryCompletion *compl,
+            const gchar        *key,
+            GtkTreeIter        *iter,
+            gpointer            user_data)
+{
+  GtkFileChooserEntry *chooser_entry = user_data;
+
+  /* If we arrive here, the GtkFileSystemModel's GtkFileFilter already filtered out all
+   * files that don't start with the current prefix, so we manually apply the GtkFileChooser's
+   * current file filter (e.g. just jpg files) here. */
+  if (chooser_entry->current_filter != NULL)
+    {
+      char *mime_type = NULL;
+      gboolean matches;
+      GFile *file;
+      GFileInfo *file_info;
+      GtkFileFilterInfo filter_info;
+      GtkFileFilterFlags needed_flags;
+
+      file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
+                                              iter);
+      file_info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
+                                                   iter);
+
+      /* We always allow navigating into subfolders, so don't ever filter directories */
+      if (g_file_info_get_file_type (file_info) != G_FILE_TYPE_REGULAR)
+        return TRUE;
+
+      needed_flags = gtk_file_filter_get_needed (chooser_entry->current_filter);
+
+      filter_info.display_name = g_file_info_get_display_name (file_info);
+      filter_info.contains |= GTK_FILE_FILTER_DISPLAY_NAME;
+
+      if (needed_flags & GTK_FILE_FILTER_MIME_TYPE)
+        {
+          const char *s = g_file_info_get_content_type (file_info);
+          if (s != NULL)
+            {
+              mime_type = g_content_type_get_mime_type (s);
+              if (mime_type != NULL)
+                {
+                  filter_info.mime_type = mime_type;
+                  filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
+                }
+            }
+        }
+
+      if (needed_flags & GTK_FILE_FILTER_FILENAME)
+        {
+          const char *path = g_file_get_path (file);
+          if (path != NULL)
+            {
+              filter_info.filename = path;
+              filter_info.contains |= GTK_FILE_FILTER_FILENAME;
+            }
+        }
+
+      if (needed_flags & GTK_FILE_FILTER_URI)
+        {
+          const char *uri = g_file_get_uri (file);
+          if (uri)
+            {
+              filter_info.uri = uri;
+              filter_info.contains |= GTK_FILE_FILTER_URI;
+            }
+        }
+
+      matches = gtk_file_filter_filter (chooser_entry->current_filter, &filter_info);
+
+      g_free (mime_type);
+      return matches;
+    }
+
+  return TRUE;
+}
+
 static void
 _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 {
@@ -198,9 +277,9 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   /* Need a match func here or entry completion uses a wrong one.
    * We do our own filtering after all. */
   gtk_entry_completion_set_match_func (comp,
-				       (GtkEntryCompletionMatchFunc) gtk_true,
-				       chooser_entry,
-				       NULL);
+                                       match_func,
+                                       chooser_entry,
+                                       NULL);
 
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (comp),
@@ -546,7 +625,8 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 {
   chooser_entry->completion_store = GTK_TREE_MODEL (
       _gtk_file_system_model_new_for_directory (chooser_entry->current_folder_file,
-                                                "standard::name,standard::display-name,standard::type",
+                                                "standard::name,standard::display-name,standard::type,"
+                                                "standard::content-type",
                                                 completion_store_set,
                                                 chooser_entry,
                                                 N_COLUMNS,
@@ -982,4 +1062,11 @@ gboolean
 _gtk_file_chooser_entry_get_local_only (GtkFileChooserEntry *chooser_entry)
 {
   return chooser_entry->local_only;
+}
+
+void
+_gtk_file_chooser_entry_set_file_filter (GtkFileChooserEntry *chooser_entry,
+                                         GtkFileFilter       *filter)
+{
+  chooser_entry->current_filter = filter;
 }

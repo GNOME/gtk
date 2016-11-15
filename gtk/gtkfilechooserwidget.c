@@ -2614,6 +2614,8 @@ location_entry_setup (GtkFileChooserWidget *impl)
 
   _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->local_only);
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
+  _gtk_file_chooser_entry_set_file_filter (GTK_FILE_CHOOSER_ENTRY (priv->location_entry),
+                                           priv->current_filter);
   gtk_entry_set_width_chars (GTK_ENTRY (priv->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (priv->location_entry), TRUE);
 }
@@ -7690,6 +7692,10 @@ filter_combo_changed (GtkComboBox          *combo_box,
   new_index = gtk_combo_box_get_active (combo_box);
   new_filter = g_slist_nth_data (priv->filters, new_index);
   set_current_filter (impl, new_filter);
+
+  if (priv->location_entry != NULL)
+    _gtk_file_chooser_entry_set_file_filter (GTK_FILE_CHOOSER_ENTRY (priv->location_entry),
+                                             new_filter);
 }
 
 static void

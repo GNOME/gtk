@@ -46,6 +46,8 @@ void               _gtk_file_chooser_entry_select_filename    (GtkFileChooserEnt
 void               _gtk_file_chooser_entry_set_local_only     (GtkFileChooserEntry *chooser_entry,
                                                                gboolean             local_only);
 gboolean           _gtk_file_chooser_entry_get_local_only     (GtkFileChooserEntry *chooser_entry);
+void               _gtk_file_chooser_entry_set_file_filter    (GtkFileChooserEntry *chooser_entry,
+                                                               GtkFileFilter       *filter);
 
 G_END_DECLS
 
