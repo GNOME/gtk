@@ -857,27 +857,24 @@ _gtk_icon_helper_draw (GtkIconHelper *self,
     }
 }
 
-GskRenderNode *
-gtk_icon_helper_get_render_node (GtkIconHelper *self,
-                                 GskRenderer   *renderer)
+void
+gtk_icon_helper_snapshot (GtkIconHelper *self,
+                          GtkSnapshot   *snapshot)
 {
   GskTexture *texture;
   GskRenderNode *node;
   graphene_rect_t bounds;
 
-  gtk_icon_helper_ensure_texture (self, renderer);
+  gtk_icon_helper_ensure_texture (self, gtk_snapshot_get_renderer (snapshot));
   texture = self->priv->texture;
   if (texture == NULL)
-    return NULL;
+    return;
  
   graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
 
-  node = gsk_renderer_create_render_node (renderer);
-  gsk_render_node_set_name (node, "Icon Helper");
-  gsk_render_node_set_bounds (node, &bounds);
+  node = gtk_snapshot_append (snapshot, &bounds, "Icon Helper");
   gsk_render_node_set_texture (node, texture);
-
-  return node;
+  gsk_render_node_unref (node);
 }
 
 gboolean

@@ -24,6 +24,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
+#include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
 
 #include "gsk/gskrendernodeprivate.h"
@@ -183,6 +184,39 @@ gtk_snapshot_append_node (GtkSnapshot   *state,
     {
       g_warning ("Tried appending a node to an already finished snapshot.");
     }
+}
+
+GskRenderNode *
+gtk_snapshot_append (GtkSnapshot           *state,
+                     const graphene_rect_t *bounds,
+                     const char            *name,
+                     ...)
+{
+  GskRenderNode *node;
+
+  g_return_val_if_fail (state != NULL, NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  node = gsk_renderer_create_render_node (state->renderer);
+  gsk_render_node_set_bounds (node, bounds);
+
+  if (name)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (node, str);
+
+      g_free (str);
+    }
+
+  gtk_snapshot_append_node (state, node);
+
+  return node;
 }
 
 cairo_t *
@@ -355,5 +389,23 @@ gtk_snapshot_render_layout (GtkSnapshot     *state,
 
   cairo_destroy (cr);
   gtk_snapshot_translate_2d (state, -x, -y);
+}
+
+void
+gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
+                          GtkStyleContext *context,
+                          GdkPixbuf       *pixbuf,
+                          gdouble          x,
+                          gdouble          y)
+{
+  GskTexture *texture;
+
+  texture = gsk_texture_new_for_pixbuf (snapshot->renderer, pixbuf);
+  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context),
+                               snapshot,
+                               texture);
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gsk_texture_unref (texture);
 }
 

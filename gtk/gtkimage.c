@@ -142,8 +142,8 @@ struct _GtkImagePrivate
 
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_BUTTON
-static GskRenderNode *gtk_image_get_render_node (GtkWidget   *widget,
-                                                 GskRenderer *renderer);
+static void gtk_image_snapshot             (GtkWidget    *widget,
+                                            GtkSnapshot  *snapshot);
 static void gtk_image_size_allocate        (GtkWidget    *widget,
                                             GtkAllocation*allocation);
 static void gtk_image_unmap                (GtkWidget    *widget);
@@ -163,6 +163,13 @@ static void gtk_image_get_content_size (GtkCssGadget   *gadget,
                                         gint           *minimum_baseline,
                                         gint           *natural_baseline,
                                         gpointer        unused);
+static gboolean gtk_image_render_contents (GtkCssGadget *gadget,
+                                           GtkSnapshot  *snapshot,
+                                           int           x,
+                                           int           y,
+                                           int           width,
+                                           int           height,
+                                           gpointer      data);
 
 static void gtk_image_style_updated        (GtkWidget    *widget);
 static void gtk_image_finalize             (GObject      *object);
@@ -211,7 +218,7 @@ gtk_image_class_init (GtkImageClass *class)
   gobject_class->finalize = gtk_image_finalize;
 
   widget_class = GTK_WIDGET_CLASS (class);
-  widget_class->get_render_node = gtk_image_get_render_node;
+  widget_class->snapshot = gtk_image_snapshot;
   widget_class->measure = gtk_image_measure;
   widget_class->size_allocate = gtk_image_size_allocate;
   widget_class->unmap = gtk_image_unmap;
@@ -367,8 +374,9 @@ gtk_image_init (GtkImage *image)
                                                      gtk_image_get_content_size,
                                                      NULL,
                                                      NULL,
-                                                     NULL,
+                                                     gtk_image_render_contents,
                                                      NULL, NULL);
+
 }
 
 static void
@@ -1403,69 +1411,60 @@ gtk_image_get_content_size (GtkCssGadget   *gadget,
 
 }
 
-static GskRenderNode *
-gtk_image_get_render_node (GtkWidget   *widget,
-                           GskRenderer *renderer)
+static void
+gtk_image_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
 {
-  GtkImage *image = GTK_IMAGE (widget);
-  GtkImagePrivate *priv = image->priv;
+  gtk_css_gadget_snapshot (GTK_IMAGE (widget)->priv->gadget,
+                           snapshot);
+}
+
+static gboolean
+gtk_image_render_contents (GtkCssGadget *gadget,
+                           GtkSnapshot  *snapshot,
+                           int           x,
+                           int           y,
+                           int           width,
+                           int           height,
+                           gpointer      data)
+{
+  GtkWidget *widget;
+  GtkImage *image;
+  GtkImagePrivate *priv;
   gint w, h, baseline;
-  gint x, y, width, height;
-  GskRenderNode *res;
-  GskRenderNode *node;
-  GtkAllocation alloc, clip;
-  cairo_t *cr;
 
-  res = gtk_css_gadget_get_render_node (priv->gadget, renderer, FALSE);
+  widget = gtk_css_gadget_get_owner (gadget);
+  image = GTK_IMAGE (widget);
+  priv = image->priv;
 
-  if (res == NULL)
-    return NULL;
+  _gtk_icon_helper_get_size (priv->icon_helper, &w, &h);
 
+  baseline = gtk_widget_get_allocated_baseline (widget);
+
+  if (baseline == -1)
+    y += floor(height - h) / 2;
+  else
+    y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
+
+  x += (width - w) / 2;
+
+  gtk_snapshot_translate_2d (snapshot, x, y);
   if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
     {
-      node = gtk_widget_create_render_node (widget, renderer, "Image Content");
-
-      gtk_widget_get_clip (widget, &clip);
-      _gtk_widget_get_allocation (widget, &alloc);
-
-      cr = gsk_render_node_get_draw_context (node, renderer);
-      cairo_translate (cr, alloc.x - clip.x, alloc.y - clip.y);
-      x = 0;
-      y = 0;
-      width = alloc.width;
-      height = alloc.height;
-
-      _gtk_icon_helper_get_size (priv->icon_helper, &w, &h);
-
-      baseline = gtk_widget_get_allocated_baseline (widget);
-
-      if (baseline == -1)
-        y += floor(height - h) / 2;
-      else
-        y += CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - h);
-
-      x += (width - w) / 2;
-
       GtkStyleContext *context = gtk_widget_get_style_context (widget);
       GdkPixbuf *pixbuf = get_animation_frame (image);
 
-      gtk_render_icon (context, cr, pixbuf, x, y);
+      gtk_snapshot_render_icon (snapshot, context, pixbuf, x, y);
+      
       g_object_unref (pixbuf);
-
-      cairo_destroy (cr);
     }
   else
     {
-      node = gtk_icon_helper_get_render_node (priv->icon_helper, renderer);
+      gtk_icon_helper_snapshot (priv->icon_helper, snapshot);
     }
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
 
-  if (node != NULL)
-    {
-      gsk_render_node_append_child (res, node);
-      gsk_render_node_unref (node);
-    }
-
-  return res;
+  return FALSE;
 }
 
 static void

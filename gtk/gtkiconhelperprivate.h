@@ -125,8 +125,8 @@ void _gtk_icon_helper_draw (GtkIconHelper *self,
                             cairo_t *cr,
                             gdouble x,
                             gdouble y);
-GskRenderNode * gtk_icon_helper_get_render_node (GtkIconHelper *self,
-                                                 GskRenderer   *renderer);
+void gtk_icon_helper_snapshot (GtkIconHelper *self,
+                               GtkSnapshot *snapshot);
 
 gboolean _gtk_icon_helper_get_force_scale_pixbuf (GtkIconHelper *self);
 void     _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,

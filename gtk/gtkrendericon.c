@@ -26,6 +26,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstransformvalueprivate.h"
+#include "gtksnapshotprivate.h"
 
 #include <math.h>
 
@@ -222,3 +223,51 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
   extents->height += border.top + border.bottom;
 }
 
+void
+gtk_css_style_snapshot_icon (GtkCssStyle *style,
+                             GtkSnapshot *snapshot,
+                             GskTexture  *texture)
+{
+  const GtkCssValue *shadows, *transform;
+  cairo_matrix_t transform_matrix;
+  graphene_matrix_t matrix, other, saved_matrix;
+  graphene_rect_t bounds;
+  GskRenderNode *node;
+  int width, height;
+
+  g_return_if_fail (GTK_IS_CSS_STYLE (style));
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GSK_IS_TEXTURE (texture));
+
+  shadows = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
+  transform = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
+  width = gsk_texture_get_width (texture);
+  height = gsk_texture_get_height (texture);
+
+  if (!_gtk_css_transform_value_get_matrix (transform, &transform_matrix))
+    return;
+
+  graphene_matrix_init_from_matrix (&saved_matrix, gtk_snapshot_get_transform (snapshot));
+
+  /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
+  graphene_matrix_init_translate (&matrix, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
+  graphene_matrix_init_from_2d (&other, transform_matrix.xx, transform_matrix.yx,
+                                        transform_matrix.xy, transform_matrix.yy,
+                                        transform_matrix.x0, transform_matrix.y0);
+  graphene_matrix_multiply (&other, &matrix, &matrix);
+  graphene_matrix_init_translate (&other, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
+  graphene_matrix_multiply (&matrix, &other, &matrix);
+  gtk_snapshot_transform (snapshot, &matrix);
+
+  graphene_rect_init (&bounds, 0, 0, width, height);
+
+  node = gtk_snapshot_append (snapshot, &bounds, "Icon");
+  if (!_gtk_css_shadows_value_is_none (shadows))
+    {
+      g_warning ("Painting shadows not implemented for textures yet.");
+    }
+  gsk_render_node_set_texture (node, texture);
+  gsk_render_node_unref (node);
+
+  gtk_snapshot_set_transform (snapshot, &saved_matrix);
+}

@@ -73,6 +73,11 @@ GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_append_node                (GtkSnapshot            *state,
                                                          GskRenderNode          *node);
 GDK_AVAILABLE_IN_3_90
+GskRenderNode * gtk_snapshot_append                     (GtkSnapshot            *state,
+                                                         const graphene_rect_t  *bounds,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF(3, 4);
+GDK_AVAILABLE_IN_3_90
 cairo_t *       gtk_snapshot_append_cairo_node          (GtkSnapshot            *state,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
@@ -117,6 +122,12 @@ void            gtk_snapshot_render_insertion_cursor    (GtkSnapshot            
                                                          PangoLayout            *layout,
                                                          int                     index,
                                                          PangoDirection          direction);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_render_icon                (GtkSnapshot            *snapshot,
+                                                         GtkStyleContext        *context,
+                                                         GdkPixbuf              *pixbuf,
+                                                         gdouble                 x,
+                                                         gdouble                 y);
 
 G_END_DECLS
 
