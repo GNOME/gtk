@@ -4822,6 +4822,8 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   gint submenu_top = 0;
   gint submenu_bottom = 0;
   gint width = 0;
+  gint x_root = 0;
+  gint y_root = 0;
   GtkWidget *event_widget;
   GtkMenuPopdownData *popdown_data;
   GdkWindow *window;
@@ -4839,6 +4841,9 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 
   width = gdk_window_get_width (gtk_widget_get_window (event_widget));
 
+  x_root = floor (event->x_root);
+  y_root = floor (event->y_root);
+
   if (event->x >= 0 && event->x < width)
     {
       gtk_menu_stop_navigating_submenu (menu);
@@ -4851,20 +4856,20 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
         {
           /* right */
           priv->navigation_x = submenu_left;
-          priv->navigation_width = event->x_root - submenu_left;
+          priv->navigation_width = x_root - submenu_left;
         }
       else
         {
           /* left */
           priv->navigation_x = submenu_right;
-          priv->navigation_width = event->x_root - submenu_right;
+          priv->navigation_width = x_root - submenu_right;
         }
 
       if (event->y < 0)
         {
           /* top */
-          priv->navigation_y = event->y_root;
-          priv->navigation_height = submenu_top - event->y_root - NAVIGATION_REGION_OVERSHOOT;
+          priv->navigation_y = y_root;
+          priv->navigation_height = submenu_top - y_root - NAVIGATION_REGION_OVERSHOOT;
 
           if (priv->navigation_height >= 0)
             return;
@@ -4872,8 +4877,8 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
       else
         {
           /* bottom */
-          priv->navigation_y = event->y_root;
-          priv->navigation_height = submenu_bottom - event->y_root + NAVIGATION_REGION_OVERSHOOT;
+          priv->navigation_y = y_root;
+          priv->navigation_height = submenu_bottom - y_root + NAVIGATION_REGION_OVERSHOOT;
 
           if (priv->navigation_height <= 0)
             return;
