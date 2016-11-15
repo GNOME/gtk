@@ -64,5 +64,6 @@
     </BuildMacro>
     <BuildMacro Include="PythonPathX64">
       <Value>$(PythonPathX64)</Value>
+    </BuildMacro>
   </ItemGroup>
 </Project>
