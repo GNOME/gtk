@@ -7138,9 +7138,6 @@ gtk_window_unrealize (GtkWidget *widget)
   GList *link;
   gint i;
 
-  if (priv->renderer != NULL)
-    gsk_renderer_unrealize (priv->renderer);
-
   /* On unrealize, we reset the size of the window such
    * that we will re-apply the default sizing stuff
    * next time we show the window.
@@ -7192,6 +7189,9 @@ gtk_window_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 
   priv->hardcoded_window = NULL;
+
+  if (priv->renderer != NULL)
+    gsk_renderer_unrealize (priv->renderer);
 }
 
 static void
