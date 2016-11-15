@@ -99,6 +99,7 @@
 #include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
+#include "gtkcontainerprivate.h"
 #include "gtkseparator.h"
 #include "gtkmodelbutton.h"
 #include "gtkwidgetprivate.h"
@@ -112,7 +113,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtkcontainerprivate.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
@@ -1095,29 +1095,39 @@ gtk_popover_update_position (GtkPopover *popover)
   _gtk_popover_update_child_visible (popover);
 }
 
-static gboolean
-gtk_popover_draw (GtkWidget *widget,
-                  cairo_t   *cr)
+static void
+gtk_popover_snapshot (GtkWidget   *widget,
+                      GtkSnapshot *snapshot)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkStyleContext *context;
-  GtkAllocation allocation;
+  GtkAllocation allocation, clip;
+  GtkWidget *child;
   GtkBorder border;
   GdkRGBA border_color;
   int rect_x, rect_y, rect_w, rect_h;
   gint initial_x, initial_y, final_x, final_y;
   gint gap_start, gap_end;
   GtkPositionType gap_side;
+  graphene_rect_t bounds;
+  cairo_t *cr;
 
   context = gtk_widget_get_style_context (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_clip (widget, &clip);
 
   gtk_style_context_get_border (context, &border);
   gtk_popover_get_rect_coords (popover,
                                &rect_x, &rect_y,
                                &rect_w, &rect_h);
 
+  graphene_rect_init (&bounds,
+                      clip.x - allocation.x, clip.y - allocation.y,
+                      clip.width, clip.height);
+  cr = gtk_snapshot_push_cairo_node (snapshot,
+                                     &bounds,
+                                     "Popover");
   /* Render the rect background */
   gtk_render_background (context, cr,
                          rect_x, rect_y,
@@ -1182,9 +1192,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   /* We're done */
-  cairo_restore (cr);
+  cairo_destroy (cr);
 
-  return GDK_EVENT_PROPAGATE;
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (child)
+    gtk_container_snapshot_child (GTK_CONTAINER (widget), child, snapshot);
+
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
@@ -1386,25 +1401,6 @@ gtk_popover_size_allocate (GtkWidget     *widget,
   gtk_widget_set_clip (widget, &clip);
 }
 
-static GskRenderNode *
-gtk_popover_get_render_node (GtkWidget *widget, GskRenderer *renderer)
-{
-  GskRenderNode *node = gtk_widget_create_render_node (widget, renderer, "Popover");
-  cairo_t *ct;
-
-  if (node == NULL)
-    return NULL;
-
-  ct = gsk_render_node_get_draw_context (node, renderer);
-  gtk_popover_draw (widget, ct);
-
-  cairo_destroy (ct);
-
-  gtk_container_propagate_render_node (GTK_CONTAINER (widget), renderer, node);
-
-  return node;
-}
-
 static gboolean
 gtk_popover_button_press (GtkWidget      *widget,
                           GdkEventButton *event)
@@ -1585,6 +1581,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->unmap = gtk_popover_unmap;
   widget_class->measure = gtk_popover_measure;
   widget_class->size_allocate = gtk_popover_size_allocate;
+  widget_class->snapshot = gtk_popover_snapshot;
   widget_class->button_press_event = gtk_popover_button_press;
   widget_class->button_release_event = gtk_popover_button_release;
   widget_class->key_press_event = gtk_popover_key_press;
@@ -1592,7 +1589,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->focus = gtk_popover_focus;
   widget_class->show = gtk_popover_show;
   widget_class->hide = gtk_popover_hide;
-  widget_class->get_render_node = gtk_popover_get_render_node;
 
   /**
    * GtkPopover:relative-to:
