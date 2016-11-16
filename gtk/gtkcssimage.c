@@ -96,6 +96,21 @@ gtk_css_image_real_transition (GtkCssImage *start,
 }
 
 static void
+gtk_css_image_real_snapshot (GtkCssImage *image,
+                             GtkSnapshot *snapshot,
+                             double       width,
+                             double       height)
+{
+  cairo_t *cr;
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &(graphene_rect_t)GRAPHENE_RECT_INIT (0, 0, width, height),
+                                       "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+  _gtk_css_image_draw (image, cr, width, height);
+  cairo_destroy (cr);
+}
+
+static void
 _gtk_css_image_class_init (GtkCssImageClass *klass)
 {
   klass->get_width = gtk_css_image_real_get_width;
@@ -104,6 +119,7 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->compute = gtk_css_image_real_compute;
   klass->equal = gtk_css_image_real_equal;
   klass->transition = gtk_css_image_real_transition;
+  klass->snapshot = gtk_css_image_real_snapshot;
 }
 
 static void
@@ -238,6 +254,24 @@ _gtk_css_image_draw (GtkCssImage        *image,
   klass->draw (image, cr, width, height);
 
   cairo_restore (cr);
+}
+
+void
+gtk_css_image_snapshot (GtkCssImage *image,
+                        GtkSnapshot *snapshot,
+                        double       width,
+                        double       height)
+{
+  GtkCssImageClass *klass;
+
+  g_return_if_fail (GTK_IS_CSS_IMAGE (image));
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  klass->snapshot (image, snapshot, width, height);
 }
 
 void

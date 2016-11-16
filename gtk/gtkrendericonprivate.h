@@ -37,13 +37,18 @@ void    gtk_css_style_render_icon               (GtkCssStyle            *style,
                                                  double                  width,
                                                  double                  height,
                                                  GtkCssImageBuiltinType  builtin_type);
+void    gtk_css_style_snapshot_icon             (GtkCssStyle            *style,
+                                                 GtkSnapshot            *snapshot,
+                                                 double                  width,
+                                                 double                  height,
+                                                 GtkCssImageBuiltinType  builtin_type);
 
 void    gtk_css_style_render_icon_surface       (GtkCssStyle            *style,
                                                  cairo_t                *cr,
                                                  cairo_surface_t        *surface,
                                                  double                  x,
                                                  double                  y);
-void    gtk_css_style_snapshot_icon             (GtkCssStyle            *style,
+void    gtk_css_style_snapshot_icon_texture     (GtkCssStyle            *style,
                                                  GtkSnapshot            *snapshot,
                                                  GskTexture             *texture);
 

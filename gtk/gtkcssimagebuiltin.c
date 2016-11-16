@@ -643,3 +643,31 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
   }
 }
 
+void
+gtk_css_image_builtin_snapshot (GtkCssImage            *image,
+                                GtkSnapshot            *snapshot,
+                                double                  width,
+                                double                  height,
+                                GtkCssImageBuiltinType  image_type)
+{
+  cairo_t *cr;
+
+  g_return_if_fail (GTK_IS_CSS_IMAGE (image));
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
+
+  if (!GTK_IS_CSS_IMAGE_BUILTIN (image))
+    {
+      gtk_css_image_snapshot (image, snapshot, width, height);
+      return;
+    }
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &(graphene_rect_t)GRAPHENE_RECT_INIT (0, 0, width, height),
+                                       "BuiltinImage<%d>", (int) image_type);
+  gtk_css_image_builtin_draw (image, cr, width, height, image_type);
+  cairo_destroy (cr);
+}
+
+

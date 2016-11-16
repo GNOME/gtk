@@ -870,7 +870,7 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
  
   style = gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self)));
 
-  gtk_css_style_snapshot_icon (style, snapshot, texture);
+  gtk_css_style_snapshot_icon_texture (style, snapshot, texture);
 }
 
 gboolean

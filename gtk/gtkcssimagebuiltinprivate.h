@@ -57,6 +57,11 @@ void           gtk_css_image_builtin_draw                  (GtkCssImage         
                                                             double                       width,
                                                             double                       height,
                                                             GtkCssImageBuiltinType       image_type);
+void           gtk_css_image_builtin_snapshot              (GtkCssImage                 *image,
+                                                            GtkSnapshot                 *snapshot,
+                                                            double                       width,
+                                                            double                       height,
+                                                            GtkCssImageBuiltinType       image_type);
 
 G_END_DECLS
 

@@ -145,6 +145,26 @@ gtk_builtin_icon_draw (GtkCssGadget *gadget,
   return FALSE;
 }
 
+static gboolean
+gtk_builtin_icon_snapshot (GtkCssGadget *gadget,
+                           GtkSnapshot  *snapshot,
+                           int           x,
+                           int           y,
+                           int           width,
+                           int           height)
+{
+  GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
+
+  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_css_style_snapshot_icon (gtk_css_gadget_get_style (gadget),
+                               snapshot,
+                               width, height,
+                               priv->image_type);
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
+
+  return FALSE;
+}
+
 static void
 gtk_builtin_icon_style_changed (GtkCssGadget      *gadget,
                                 GtkCssStyleChange *change)
@@ -165,6 +185,7 @@ gtk_builtin_icon_class_init (GtkBuiltinIconClass *klass)
   gadget_class->get_preferred_size = gtk_builtin_icon_get_preferred_size;
   gadget_class->allocate = gtk_builtin_icon_allocate;
   gadget_class->draw = gtk_builtin_icon_draw;
+  gadget_class->snapshot = gtk_builtin_icon_snapshot;
   gadget_class->style_changed = gtk_builtin_icon_style_changed;
 }
 

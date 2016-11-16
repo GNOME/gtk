@@ -25,6 +25,7 @@
 
 #include "gtk/gtkcssparserprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
+#include "gtk/gtksnapshotprivate.h"
 
 G_BEGIN_DECLS
 
@@ -74,6 +75,10 @@ struct _GtkCssImageClass
                                                     cairo_t                    *cr,
                                                     double                      width,
                                                     double                      height);
+  void         (* snapshot)                        (GtkCssImage                *image,
+                                                    GtkSnapshot                *snapshot,
+                                                    double                      width,
+                                                    double                      height);
   /* parse CSS, return TRUE on success */
   gboolean     (* parse)                           (GtkCssImage                *image,
                                                     GtkCssParser               *parser);
@@ -105,6 +110,10 @@ GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *
 
 void           _gtk_css_image_draw                 (GtkCssImage                *image,
                                                     cairo_t                    *cr,
+                                                    double                      width,
+                                                    double                      height);
+void           gtk_css_image_snapshot              (GtkCssImage                *image,
+                                                    GtkSnapshot                *snapshot,
                                                     double                      width,
                                                     double                      height);
 void           _gtk_css_image_print                (GtkCssImage                *image,
