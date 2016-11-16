@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-16 03:53+0000\n"
-"PO-Revision-Date: 2016-11-16 11:42+0100\n"
+"POT-Creation-Date: 2016-11-16 10:43+0000\n"
+"PO-Revision-Date: 2016-11-16 13:05+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2457,7 +2457,7 @@ msgstr "Proszę wprowadzić położenie lub adres URL"
 #: gtk/gtkfilechooserwidget.c:4390 gtk/gtkfilechooserwidget.c:7307
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
-msgstr "Zmodyfikowano"
+msgstr "Modyfikacja"
 
 #: gtk/gtkfilechooserwidget.c:4668
 #, c-format
