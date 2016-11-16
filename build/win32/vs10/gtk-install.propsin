@@ -17,6 +17,8 @@ copy "$(BinDir)\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll" $(CopyDir)\bin
 copy "$(BinDir)\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb" $(CopyDir)\bin
 copy "$(BinDir)\gtk-demo.exe" $(CopyDir)\bin
 copy "$(BinDir)\gtk-demo.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-update-icon-cache.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-update-icon-cache.pdb" $(CopyDir)\bin
 
 mkdir $(CopyDir)\lib
 copy "$(BinDir)\gdk-win32-$(ApiVersion).lib" $(CopyDir)\lib
