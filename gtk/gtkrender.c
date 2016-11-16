@@ -803,31 +803,7 @@ gtk_do_render_handle (GtkStyleContext *context,
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
 
-  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_GRIP))
-    {
-      GtkJunctionSides sides = gtk_style_context_get_junction_sides (context);
-
-      /* order is important here for when too many (or too few) sides are set */
-      if ((sides & GTK_JUNCTION_CORNER_BOTTOMRIGHT) == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMRIGHT;
-      else if ((sides & GTK_JUNCTION_CORNER_TOPRIGHT) == GTK_JUNCTION_CORNER_TOPRIGHT)
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_TOPRIGHT;
-      else if ((sides & GTK_JUNCTION_CORNER_BOTTOMLEFT) == GTK_JUNCTION_CORNER_BOTTOMLEFT)
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMLEFT;
-      else if ((sides & GTK_JUNCTION_CORNER_TOPLEFT) == GTK_JUNCTION_CORNER_TOPLEFT)
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_TOPLEFT;
-      else if (sides & GTK_JUNCTION_RIGHT)
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_RIGHT;
-      else if (sides & GTK_JUNCTION_BOTTOM)
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOM;
-      else if (sides & GTK_JUNCTION_TOP)
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_TOP;
-      else if (sides & GTK_JUNCTION_LEFT)
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_LEFT;
-      else
-        type = GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMRIGHT;
-    }
-  else if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR))
+  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR))
     {
       type = GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR;
     }

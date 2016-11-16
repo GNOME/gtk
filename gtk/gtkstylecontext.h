@@ -488,15 +488,6 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_LINKED "linked"
 
 /**
- * GTK_STYLE_CLASS_GRIP:
- *
- * A CSS class defining a resize grip.
- *
- * Refer to individual widget documentation for used style classes.
- */
-#define GTK_STYLE_CLASS_GRIP "grip"
-
-/**
  * GTK_STYLE_CLASS_DOCK:
  *
  * A CSS class defining a dock area.
