@@ -36,6 +36,7 @@ typedef struct {
   int position_location;
   int alpha_location;
   int blendMode_location;
+  int color_location;
 } RenderData;
 
 typedef struct {
@@ -53,6 +54,8 @@ typedef struct {
   float opacity;
   float z;
 
+  graphene_vec4_t color;
+
   const char *name;
 
   GskBlendMode blend_mode;
@@ -69,6 +72,7 @@ enum {
   MASK,
   ALPHA,
   BLEND_MODE,
+  COLOR,
   N_UNIFORMS
 };
 
@@ -202,7 +206,8 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
   self->uniforms[MASK] = gsk_shader_builder_add_uniform (builder, "uMask");
   self->uniforms[ALPHA] = gsk_shader_builder_add_uniform (builder, "uAlpha");
   self->uniforms[BLEND_MODE] = gsk_shader_builder_add_uniform (builder, "uBlendMode");
-  
+  self->uniforms[COLOR] = gsk_shader_builder_add_uniform (builder, "uColor");
+
   self->attributes[POSITION] = gsk_shader_builder_add_attribute (builder, "aPosition");
   self->attributes[UV] = gsk_shader_builder_add_attribute (builder, "aUv");
 
@@ -402,6 +407,7 @@ render_item (GskGLRenderer *self,
              RenderItem    *item)
 {
   float mvp[16];
+  float color[4];
   float opacity;
 
   if (item->children != NULL)
@@ -450,6 +456,12 @@ render_item (GskGLRenderer *self,
   GSK_NOTE (TRANSFORMS, graphene_matrix_print (&item->mvp));
   graphene_matrix_to_float (&item->mvp, mvp);
   glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
+
+  graphene_vec4_to_float (&item->color, color);
+  glUniform4fv (item->render_data.color_location, 1, color);
+  GSK_NOTE (OPENGL, g_print ("%*sColor <%g,%g,%g,%g>\n",
+                             2 * node_depth (item->node), "",
+                             color[0], color[1], color[2], color[3]));
 
   /* Draw the quad */
   GSK_NOTE2 (OPENGL, TRANSFORMS,
@@ -507,6 +519,9 @@ render_item (GskGLRenderer *self,
       GSK_NOTE (TRANSFORMS, graphene_matrix_print (&item->mvp));
       graphene_matrix_to_float (&item->mvp, mvp);
       glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
+
+      graphene_vec4_to_float (&item->color, color);
+      glUniform4fv (item->render_data.color_location, 1, color);
 
       /* Draw the quad */
       GSK_NOTE2 (OPENGL, TRANSFORMS,
@@ -685,6 +700,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
     gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[ALPHA]);
   item.render_data.blendMode_location =
     gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[BLEND_MODE]);
+  item.render_data.color_location =
+    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[COLOR]);
 
   item.render_data.position_location =
     gsk_shader_builder_get_attribute_location (self->shader_builder, program_id, self->attributes[POSITION]);
@@ -707,7 +724,19 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       item.children = NULL;
     }
 
-  if (gsk_render_node_has_texture (node))
+  if (gsk_render_node_has_solid_color (node))
+    {
+      GdkRGBA color;
+
+      gsk_render_node_get_solid_color (node, &color);
+      color.red = color.red * color.alpha;
+      color.green = color.green * color.alpha;
+      color.blue = color.blue * color.alpha;
+
+      item.render_data.texture_id = gsk_gl_driver_get_white_texture (self->gl_driver);
+      graphene_vec4_init (&item.color, color.red, color.green, color.blue, color.alpha);
+    }
+  else if (gsk_render_node_has_texture (node))
     {
       GskTexture *texture = gsk_render_node_get_texture (node);
       int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
@@ -718,6 +747,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                                                            texture,
                                                                            gl_min_filter,
                                                                            gl_mag_filter);
+      graphene_vec4_init_from_vec4 (&item.color, graphene_vec4_one ());
     }
   else if (gsk_render_node_has_surface (node))
     {
@@ -736,6 +766,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                                surface,
                                                gl_min_filter,
                                                gl_mag_filter);
+
+      graphene_vec4_init_from_vec4 (&item.color, graphene_vec4_one ());
     }
   else
     {

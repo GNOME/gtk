@@ -100,6 +100,16 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
       cairo_paint (cr);
       cairo_surface_destroy (surface);
     }
+  else if (gsk_render_node_has_solid_color (node))
+    {
+      GdkRGBA color;
+
+      gsk_render_node_get_solid_color (node, &color);
+
+      cairo_set_source_rgba (cr, color.red, color.green, color.blue, color.alpha);
+      cairo_rectangle (cr, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+      cairo_fill (cr);
+    }
   else
     {
       cairo_set_source_surface (cr, gsk_render_node_get_surface (node), frame.origin.x, frame.origin.y); 

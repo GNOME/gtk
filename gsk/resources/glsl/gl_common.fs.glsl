@@ -3,6 +3,7 @@ uniform sampler2D uSource;
 uniform sampler2D uMask;
 uniform float uAlpha;
 uniform int uBlendMode;
+uniform vec4 uColor;
 
 varying vec2 vUv;
 

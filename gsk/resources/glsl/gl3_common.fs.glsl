@@ -5,6 +5,7 @@ uniform sampler2D uMask;
 uniform mat4 uMVP;
 uniform float uAlpha;
 uniform int uBlendMode;
+uniform vec4 uColor;
 
 in vec2 vUv;
 
