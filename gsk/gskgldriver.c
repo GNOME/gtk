@@ -3,6 +3,7 @@
 #include "gskgldriverprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gsktextureprivate.h"
 
 #include <gdk/gdk.h>
 #include <epoxy/gl.h>
@@ -14,8 +15,8 @@ typedef struct {
   GLuint min_filter;
   GLuint mag_filter;
   GArray *fbos;
+  GskTexture *user;
   gboolean in_use : 1;
-  gboolean reserved : 1;
 } Texture;
 
 typedef struct {
@@ -76,7 +77,8 @@ texture_free (gpointer data)
 {
   Texture *t = data;
 
-  g_warn_if_fail (!t->reserved);
+  if (t->user)
+    gsk_texture_clear_render_data (t->user);
 
   g_clear_pointer (&t->fbos, g_array_unref);
   glDeleteTextures (1, &t->texture_id);
@@ -272,7 +274,7 @@ gsk_gl_driver_collect_textures (GskGLDriver *driver)
     {
       Texture *t = value_p;
 
-      if (t->reserved)
+      if (t->user)
         continue;
 
       if (t->in_use)
@@ -383,16 +385,13 @@ find_texture_by_size (GHashTable *textures,
   return NULL;
 }
 
-int
-gsk_gl_driver_create_texture (GskGLDriver *driver,
-                              gboolean     reserve,
-                              int          width,
-                              int          height)
+static Texture *
+create_texture (GskGLDriver *driver,
+                int          width,
+                int          height)
 {
   guint texture_id;
   Texture *t;
-
-  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
 
   if (width >= driver->max_texture_size ||
       height >= driver->max_texture_size)
@@ -406,13 +405,12 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
     }
 
   t = find_texture_by_size (driver->textures, width, height);
-  if (t != NULL && !t->in_use)
+  if (t != NULL && !t->in_use && t->user == NULL)
     {
       GSK_NOTE (OPENGL, g_print ("Reusing Texture(%d) for size %dx%d\n",
                                  t->texture_id, t->width, t->height));
       t->in_use = TRUE;
-      t->reserved = reserve;
-      return t->texture_id;
+      return t;
     }
 
   glGenTextures (1, &texture_id);
@@ -424,25 +422,67 @@ gsk_gl_driver_create_texture (GskGLDriver *driver,
   t->min_filter = GL_NEAREST;
   t->mag_filter = GL_NEAREST;
   t->in_use = TRUE;
-  t->reserved = reserve;
   g_hash_table_insert (driver->textures, GINT_TO_POINTER (texture_id), t);
+
+  return t;
+}
+
+static void
+gsk_gl_driver_release_texture (gpointer data)
+{
+  Texture *t = data;
+
+  t->user = NULL;
+}
+
+int
+gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
+                                       GskTexture  *texture,
+                                       int          min_filter,
+                                       int          mag_filter)
+{
+  Texture *t;
+  cairo_surface_t *surface;
+
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
+  g_return_val_if_fail (GSK_IS_TEXTURE (texture), -1);
+
+  t = gsk_texture_get_render_data (texture, driver);
+
+  if (t)
+    {
+      if (t->min_filter == min_filter && t->mag_filter == mag_filter)
+        return t->texture_id;
+    }
+  
+  t = create_texture (driver, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
+
+  if (gsk_texture_set_render_data (texture, driver, t, gsk_gl_driver_release_texture))
+    t->user = texture;
+
+  surface = gsk_texture_download (texture);
+  gsk_gl_driver_bind_source_texture (driver, t->texture_id);
+  gsk_gl_driver_init_texture_with_surface (driver,
+                                           t->texture_id,
+                                           surface,
+                                           min_filter,
+                                           mag_filter);
 
   return t->texture_id;
 }
 
-void
-gsk_gl_driver_release_texture (GskGLDriver *driver,
-                               int          texture_id)
+int
+gsk_gl_driver_create_texture (GskGLDriver *driver,
+                              int          width,
+                              int          height)
 {
   Texture *t;
-  
-  g_return_if_fail (GSK_IS_GL_DRIVER (driver));
-  
-  t = gsk_gl_driver_get_texture (driver, texture_id);
-  g_return_if_fail (t != NULL);
-  g_return_if_fail (t->reserved);
 
-  t->reserved = FALSE;
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
+
+  t = create_texture (driver, width, height);
+
+  return t->texture_id;
 }
 
 static Vao *

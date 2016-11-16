@@ -19,6 +19,10 @@ struct _GskTexture
 
   int width;
   int height;
+
+  gpointer render_key;
+  gpointer render_data;
+  GDestroyNotify render_notify;
 };
 
 struct _GskTextureClass {
@@ -34,6 +38,14 @@ gpointer                gsk_texture_new                 (const GskTextureClass  
                                                          int                     height);
 GskTexture *            gsk_texture_new_for_surface     (cairo_surface_t        *surface);
 cairo_surface_t *       gsk_texture_download            (GskTexture             *texture);
+
+gboolean                gsk_texture_set_render_data     (GskTexture             *self,
+                                                         gpointer                key,
+                                                         gpointer                data,
+                                                         GDestroyNotify          notify);
+void                    gsk_texture_clear_render_data   (GskTexture             *self);
+gpointer                gsk_texture_get_render_data     (GskTexture             *self,
+                                                         gpointer                key);
 
 G_END_DECLS
 

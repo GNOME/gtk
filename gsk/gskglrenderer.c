@@ -153,7 +153,6 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self,
   if (self->texture_id == 0)
     {
       self->texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                       FALSE,
                                                        width * scale_factor,
                                                        height * scale_factor);
       gsk_gl_driver_bind_source_texture (self->gl_driver, self->texture_id);
@@ -695,7 +694,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   if (render_node_needs_render_target (node))
     {
       item.render_data.render_target_id =
-        gsk_gl_driver_create_texture (self->gl_driver, FALSE, item.size.width, item.size.height);
+        gsk_gl_driver_create_texture (self->gl_driver, item.size.width, item.size.height);
       gsk_gl_driver_init_texture_empty (self->gl_driver, item.render_data.render_target_id);
       gsk_gl_driver_create_render_target (self->gl_driver, item.render_data.render_target_id, TRUE, TRUE);
 
@@ -711,22 +710,14 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   if (gsk_render_node_has_texture (node))
     {
       GskTexture *texture = gsk_render_node_get_texture (node);
-      cairo_surface_t *surface = gsk_texture_download (texture);
       int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
 
       get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
 
-      /* Upload the Cairo surface to a GL texture */
-      item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                                  FALSE,
-                                                                  item.size.width,
-                                                                  item.size.height);
-      gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
-      gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                               item.render_data.texture_id,
-                                               surface,
-                                               gl_min_filter,
-                                               gl_mag_filter);
+      item.render_data.texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                                           texture,
+                                                                           gl_min_filter,
+                                                                           gl_mag_filter);
     }
   else if (gsk_render_node_has_surface (node))
     {
@@ -737,7 +728,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
       /* Upload the Cairo surface to a GL texture */
       item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                                  FALSE,
                                                                   item.size.width,
                                                                   item.size.height);
       gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);

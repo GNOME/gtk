@@ -35,6 +35,7 @@
 #include "gsktextureprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskrenderer.h"
 
 /**
  * GskTexture: (ref-func gsk_texture_ref) (unref-func gsk_texture_unref)
@@ -49,6 +50,8 @@ G_DEFINE_BOXED_TYPE(GskTexture, gsk_texture, gsk_texture_ref, gsk_texture_unref)
 static void
 gsk_texture_finalize (GskTexture *self)
 {    
+  gsk_texture_clear_render_data (self);
+
   self->klass->finalize (self);
 
   g_free (self);
@@ -278,3 +281,41 @@ gsk_texture_download (GskTexture *texture)
   return texture->klass->download (texture);
 }
 
+gboolean
+gsk_texture_set_render_data (GskTexture     *self,
+                             gpointer        key,
+                             gpointer        data,
+                             GDestroyNotify  notify)
+{
+  g_return_val_if_fail (data != NULL, FALSE);
+ 
+  if (self->render_key != NULL)
+    return FALSE;
+
+  self->render_key = key;
+  self->render_data = data;
+  self->render_notify = notify;
+
+  return TRUE;
+}
+
+void
+gsk_texture_clear_render_data (GskTexture *self)
+{
+  if (self->render_notify)
+    self->render_notify (self->render_data);
+
+  self->render_key = NULL;
+  self->render_data = NULL;
+  self->render_notify = NULL;
+}
+
+gpointer
+gsk_texture_get_render_data (GskTexture  *self,
+                             gpointer     key)
+{
+  if (self->render_key != key)
+    return NULL;
+
+  return self->render_data;
+}
