@@ -40,17 +40,13 @@ GDK_AVAILABLE_IN_3_90
 void                    gsk_texture_unref                      (GskTexture      *texture);
 
 GDK_AVAILABLE_IN_3_90
-GskTexture *            gsk_texture_new_for_data               (GskRenderer     *renderer,
-                                                                const guchar    *data,
+GskTexture *            gsk_texture_new_for_data               (const guchar    *data,
                                                                 int              width,
                                                                 int              height,
                                                                 int              stride);
 GDK_AVAILABLE_IN_3_90
-GskTexture *            gsk_texture_new_for_pixbuf             (GskRenderer     *renderer,
-                                                                GdkPixbuf       *pixbuf);
+GskTexture *            gsk_texture_new_for_pixbuf             (GdkPixbuf       *pixbuf);
 
-GDK_AVAILABLE_IN_3_90
-GskRenderer *           gsk_texture_get_renderer               (GskTexture      *texture);
 GDK_AVAILABLE_IN_3_90
 int                     gsk_texture_get_width                  (GskTexture      *texture);
 GDK_AVAILABLE_IN_3_90

@@ -9,21 +9,31 @@ G_BEGIN_DECLS
 #define GSK_IS_TEXTURE_CLASS(klass)         (G_TYPE_CHECK_CLASS_TYPE ((klass), GSK_TYPE_TEXTURE))
 #define GSK_TEXTURE_GET_CLASS(obj)          (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_TEXTURE, GskTextureClass))
 
+typedef struct _GskTextureClass GskTextureClass;
+
 struct _GskTexture
 {
+  const GskTextureClass *klass;
+
   volatile int ref_count;
 
-  GskRenderer *renderer;
   int width;
   int height;
 };
 
-#define gsk_texture_new(type,renderer,width,height) \
-  (type *) gsk_texture_alloc(sizeof (type),(renderer),(width),(height))
-GskTexture *gsk_texture_alloc (gsize           size,
-                               GskRenderer    *renderer,
-                               int             width,
-                               int             height);
+struct _GskTextureClass {
+  const char *name;
+  gsize size;
+
+  void                  (* finalize)                    (GskTexture             *texture);
+  cairo_surface_t *     (* download)                    (GskTexture             *texture);
+};
+
+gpointer                gsk_texture_new                 (const GskTextureClass  *klass,
+                                                         int                     width,
+                                                         int                     height);
+GskTexture *            gsk_texture_new_for_surface     (cairo_surface_t        *surface);
+cairo_surface_t *       gsk_texture_download            (GskTexture             *texture);
 
 G_END_DECLS
 

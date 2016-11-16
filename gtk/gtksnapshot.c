@@ -400,7 +400,7 @@ gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
 {
   GskTexture *texture;
 
-  texture = gsk_texture_new_for_pixbuf (snapshot->renderer, pixbuf);
+  texture = gsk_texture_new_for_pixbuf (pixbuf);
   gtk_snapshot_translate_2d (snapshot, x, y);
   gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context),
                                snapshot,

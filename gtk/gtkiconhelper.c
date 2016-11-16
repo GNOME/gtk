@@ -577,8 +577,7 @@ gtk_icon_helper_ensure_texture (GtkIconHelper *self,
   map = cairo_surface_map_to_image (self->priv->rendered_surface,
                                     &(GdkRectangle) { 0, 0, width * scale, height * scale});
 
-  self->priv->texture = gsk_texture_new_for_data (renderer,
-                                                  cairo_image_surface_get_data (map),
+  self->priv->texture = gsk_texture_new_for_data (cairo_image_surface_get_data (map),
                                                   width * scale,
                                                   height * scale,
                                                   cairo_image_surface_get_stride (map));
