@@ -42,6 +42,8 @@ struct _GskGLDriver
 
   Fbo default_fbo;
 
+  Texture white_texture;
+
   GHashTable *textures;
   GHashTable *vaos;
 
@@ -217,6 +219,22 @@ gsk_gl_driver_begin_frame (GskGLDriver *driver)
     {
       glGetIntegerv (GL_MAX_TEXTURE_SIZE, (GLint *) &driver->max_texture_size);
       GSK_NOTE (OPENGL, g_print ("GL max texture size: %d\n", driver->max_texture_size));
+    }
+
+  if (driver->white_texture.texture_id == 0)
+    {
+      const float white_pixel[4] = { 1, 1, 1, 1, };
+
+      glGenTextures (1, &(driver->white_texture.texture_id));
+
+      driver->white_texture.width = 1;
+      driver->white_texture.height = 1;
+      driver->white_texture.min_filter = GL_NEAREST;
+      driver->white_texture.mag_filter = GL_NEAREST;
+      driver->white_texture.in_use = TRUE;
+
+      glBindTexture (GL_TEXTURE_2D, driver->white_texture.texture_id);
+      glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
     }
 
   glGetIntegerv (GL_FRAMEBUFFER_BINDING, (GLint *) &(driver->default_fbo.fbo_id));
@@ -847,4 +865,12 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
     glGenerateMipmap (GL_TEXTURE_2D);
 
   glBindTexture (GL_TEXTURE_2D, 0);
+}
+
+int
+gsk_gl_driver_get_white_texture (GskGLDriver *driver)
+{
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
+
+  return driver->white_texture.texture_id;
 }
