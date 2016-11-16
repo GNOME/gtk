@@ -5335,7 +5335,6 @@ gtk_render_background
 gtk_render_background_get_clip
 gtk_render_check
 gtk_render_expander
-gtk_render_extension
 gtk_render_focus
 gtk_render_frame
 gtk_render_frame_gap
