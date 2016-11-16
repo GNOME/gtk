@@ -1194,6 +1194,31 @@ gdk_wayland_window_sync_input_region (GdkWindow *window)
 }
 
 static void
+gdk_wayland_set_input_region_if_empty (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display;
+  struct wl_region *empty;
+
+  if (!impl->input_region_dirty)
+    return;
+
+  if (impl->input_region == NULL)
+    return;
+
+  if (!cairo_region_is_empty (impl->input_region))
+    return;
+
+  display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  empty = wl_compositor_create_region (display->compositor);
+
+  wl_surface_set_input_region (impl->display_server.wl_surface, empty);
+  wl_region_destroy (empty);
+
+  impl->input_region_dirty = FALSE;
+}
+
+static void
 surface_enter (void              *data,
                struct wl_surface *wl_surface,
                struct wl_output  *output)
@@ -1242,6 +1267,9 @@ on_parent_surface_committed (GdkWindowImplWayland *parent_impl,
   impl->parent_surface_committed_handler = 0;
 
   wl_subsurface_set_desync (impl->display_server.wl_subsurface);
+
+  /* Special case if the input region is empty, it won't change on resize */
+  gdk_wayland_set_input_region_if_empty (window);
 }
 
 static void
