@@ -17,7 +17,7 @@ if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; goto DoDebug&#
 
 :DoRelease&#x0D;&#x0A;
 mkdir .\Release\$(PlatformName)\bin&#x0D;&#x0A;
-copy /b $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll .\Release\$(PlatformName)\bin\&#x0D;&#x0A;
+copy /b $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-3$(GtkDllSuffix).dll .\Release\$(PlatformName)\bin\&#x0D;&#x0A;
 copy /b $(ConfigurationName)\$(PlatformName)\bin\gdk-$(ApiVersion).lib .\Release\$(PlatformName)\bin\&#x0D;&#x0A;
 goto END&#x0D;&#x0A;
 
