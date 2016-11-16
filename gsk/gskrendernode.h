@@ -126,6 +126,10 @@ void                    gsk_render_node_set_scaling_filter      (GskRenderNode *
                                                                  GskScalingFilter mag_filter);
 
 GDK_AVAILABLE_IN_3_90
+void                    gsk_render_node_set_solid_color         (GskRenderNode *node,
+                                                                 const GdkRGBA *color);
+
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_name                (GskRenderNode *node,
                                                                  const char    *name);
 GDK_AVAILABLE_IN_3_90

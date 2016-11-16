@@ -1228,12 +1228,29 @@ gsk_render_node_has_texture (GskRenderNode *node)
   return node->texture != NULL;
 }
 
+gboolean
+gsk_render_node_has_solid_color (GskRenderNode *node)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), FALSE);
+
+  return node->solid_color_set;
+}
+
 GskTexture *
 gsk_render_node_get_texture (GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 0);
 
   return node->texture;
+}
+
+void
+gsk_render_node_get_solid_color (GskRenderNode *node,
+                                 GdkRGBA       *color)
+{
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+  *color = node->solid_color;
 }
 
 /**
@@ -1261,6 +1278,24 @@ gsk_render_node_set_texture (GskRenderNode *node,
 
   if (texture)
     gsk_texture_ref (texture);
+}
+
+void
+gsk_render_node_set_solid_color (GskRenderNode *node,
+                                 const GdkRGBA *color)
+{
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+  if (color != NULL)
+    {
+      if (gdk_rgba_equal (color, &node->solid_color))
+        return;
+
+      node->solid_color = *color;
+      node->solid_color_set = TRUE;
+    }
+  else
+    node->solid_color_set = FALSE;
 }
 
 /*< private >

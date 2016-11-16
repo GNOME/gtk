@@ -37,6 +37,8 @@ struct _GskRenderNode
   /* The contents of the node as a texture */
   GskTexture *texture;
 
+  GdkRGBA solid_color;
+
   /* Paint opacity */
   double opacity;
 
@@ -63,6 +65,7 @@ struct _GskRenderNode
   gboolean hidden : 1;
   gboolean opaque : 1;
   gboolean transform_set : 1;
+  gboolean solid_color_set : 1;
   gboolean needs_world_matrix_update : 1;
 };
 
@@ -87,8 +90,12 @@ cairo_surface_t *gsk_render_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_render_node_get_texture (GskRenderNode *node);
 
+void gsk_render_node_get_solid_color (GskRenderNode *node,
+                                      GdkRGBA *color);
+
 gboolean gsk_render_node_has_surface (GskRenderNode *node);
 gboolean gsk_render_node_has_texture (GskRenderNode *node);
+gboolean gsk_render_node_has_solid_color (GskRenderNode *node);
 
 GskBlendMode gsk_render_node_get_blend_mode (GskRenderNode *node);
 
