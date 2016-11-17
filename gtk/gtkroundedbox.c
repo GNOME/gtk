@@ -722,8 +722,8 @@ _gtk_rounded_box_contains_rectangle (const GtkRoundedBox *box,
 {
   if (x1 < box->box.x ||
       y1 < box->box.y ||
-      x2 >= box->box.x + box->box.width ||
-      y2 >= box->box.y + box->box.height)
+      x2 > box->box.x + box->box.width ||
+      y2 > box->box.y + box->box.height)
     return FALSE;
 
   if (x1 < box->box.x + box->corner[GTK_CSS_TOP_LEFT].horizontal &&
