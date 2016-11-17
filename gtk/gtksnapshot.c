@@ -29,36 +29,61 @@
 
 #include "gsk/gskrendernodeprivate.h"
 
+static GtkSnapshotState *
+gtk_snapshot_state_new (GtkSnapshotState *parent,
+                        GskRenderNode    *node)
+{
+  GtkSnapshotState *state;
+
+  state = g_slice_new0 (GtkSnapshotState);
+
+  state->node = node;
+  state->parent = parent;
+  graphene_matrix_init_identity (&state->transform);
+
+  return state;
+}
+
+static void
+gtk_snapshot_state_free (GtkSnapshotState *state)
+{
+  g_slice_free (GtkSnapshotState, state);
+}
+
+static void
+gtk_snapshot_state_set_transform (GtkSnapshotState        *state,
+                                  const graphene_matrix_t *transform)
+{
+  graphene_matrix_init_from_matrix (&state->transform, transform);
+}
+
 void
 gtk_snapshot_init (GtkSnapshot *state,
                    GskRenderer *renderer)
 {
-  state->node = NULL;
+  state->state = NULL;
   state->root = NULL;
   state->renderer = renderer;
-
-  graphene_matrix_init_identity (&state->transform);
 }
 
 GskRenderNode *
-gtk_snapshot_finish (GtkSnapshot *state)
+gtk_snapshot_finish (GtkSnapshot *snapshot)
 {
-  if (state->node != NULL)
+  if (snapshot->state != NULL)
     {
       g_warning ("Too many gtk_snapshot_push() calls.");
     }
 
-  return state->root;
+  return snapshot->root;
 }
 
 void
-gtk_snapshot_push_node (GtkSnapshot   *state,
+gtk_snapshot_push_node (GtkSnapshot   *snapshot,
                         GskRenderNode *node)
 {
-  gtk_snapshot_append_node (state, node);
+  gtk_snapshot_append_node (snapshot, node);
 
-  state->node = node;
-  graphene_matrix_init_identity (&state->transform);
+  snapshot->state = gtk_snapshot_state_new (snapshot->state, node);
 }
 
 void
@@ -91,17 +116,20 @@ gtk_snapshot_push (GtkSnapshot           *state,
 }
 
 void
-gtk_snapshot_pop (GtkSnapshot *state)
+gtk_snapshot_pop (GtkSnapshot *snapshot)
 {
-  if (state->node == NULL)
+  GtkSnapshotState *state;
+
+  if (snapshot->state == NULL)
     {
       g_warning ("Too many gtk_snapshot_pop() calls.");
       return;
     }
 
-  gsk_render_node_get_transform (state->node, &state->transform);
+  state = snapshot->state;
+  snapshot->state = state->parent;
 
-  state->node = gsk_render_node_get_parent (state->node);
+  gtk_snapshot_state_free (state);
 }
 
 GskRenderer *
@@ -139,20 +167,24 @@ gtk_snapshot_create_render_node (const GtkSnapshot *state,
 #endif
 
 void
-gtk_snapshot_set_transform (GtkSnapshot             *state,
+gtk_snapshot_set_transform (GtkSnapshot             *snapshot,
                             const graphene_matrix_t *transform)
 {
-  graphene_matrix_init_from_matrix (&state->transform, transform);
+  g_return_if_fail (snapshot->state != NULL);
+
+  gtk_snapshot_state_set_transform (snapshot->state, transform);
 }
 
 void
-gtk_snapshot_transform (GtkSnapshot             *state,
+gtk_snapshot_transform (GtkSnapshot             *snapshot,
                         const graphene_matrix_t *transform)
 {
   graphene_matrix_t result;
 
-  graphene_matrix_multiply (transform, &state->transform, &result);
-  graphene_matrix_init_from_matrix (&state->transform, &result);
+  g_return_if_fail (snapshot->state != NULL);
+
+  graphene_matrix_multiply (transform, &snapshot->state->transform, &result);
+  gtk_snapshot_state_set_transform (snapshot->state, &result);
 }
 
 void
@@ -169,17 +201,21 @@ gtk_snapshot_translate_2d (GtkSnapshot *state,
 }
 
 void
-gtk_snapshot_append_node (GtkSnapshot   *state,
+gtk_snapshot_append_node (GtkSnapshot   *snapshot,
                           GskRenderNode *node)
 {
-  g_return_if_fail (state != NULL);
+  g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  gsk_render_node_set_transform (node, &state->transform);
-  if (state->node)
-    gsk_render_node_append_child (state->node, node);
-  else if (state->root == NULL)
-    state->root = gsk_render_node_ref (node);
+  if (snapshot->state)
+    {
+      gsk_render_node_append_child (snapshot->state->node, node);
+      gsk_render_node_set_transform (node, &snapshot->state->transform);
+    }
+  else if (snapshot->root == NULL)
+    {
+      snapshot->root = gsk_render_node_ref (node);
+    }
   else
     {
       g_critical ("Tried appending a node to an already finished snapshot.");
