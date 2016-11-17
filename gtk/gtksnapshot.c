@@ -151,7 +151,7 @@ gtk_snapshot_transform (GtkSnapshot             *state,
 {
   graphene_matrix_t result;
 
-  graphene_matrix_multiply (&state->transform, transform, &result);
+  graphene_matrix_multiply (transform, &state->transform, &result);
   graphene_matrix_init_from_matrix (&state->transform, &result);
 }
 
