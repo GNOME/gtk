@@ -836,7 +836,7 @@ draw_spinbutton (GtkWidget *widget,
 
   /* This information is taken from the GtkSpinButton docs, see "CSS nodes" */
   spin_context = get_style (NULL, "spinbutton.horizontal:focus");
-  entry_context = get_style (NULL, "entry:focus");
+  entry_context = get_style (spin_context, "entry:focus");
   up_context = get_style (spin_context, "button.up:focus:active");
   down_context = get_style (spin_context, "button.down:focus");
 
