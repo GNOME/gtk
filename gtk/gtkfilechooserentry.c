@@ -185,7 +185,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkEntryCompletion *comp;
   GtkCellRenderer *cell;
 
-  chooser_entry->local_only = TRUE;
+  chooser_entry->local_only = FALSE;
 
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
 
