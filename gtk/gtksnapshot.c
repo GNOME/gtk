@@ -55,6 +55,26 @@ gtk_snapshot_state_set_transform (GtkSnapshotState        *state,
                                   const graphene_matrix_t *transform)
 {
   graphene_matrix_init_from_matrix (&state->transform, transform);
+
+  state->world_is_valid = FALSE;
+}
+
+static const graphene_matrix_t *
+gtk_snapshot_state_get_world_transform (GtkSnapshotState *state)
+{
+  if (!state->world_is_valid)
+    {
+      if (state->parent)
+        graphene_matrix_multiply (gtk_snapshot_state_get_world_transform (state->parent),
+                                  &state->transform,
+                                  &state->world_transform);
+      else
+        graphene_matrix_init_from_matrix (&state->world_transform, &state->transform);
+
+      state->world_is_valid = TRUE;
+    }
+
+  return &state->world_transform;
 }
 
 void
@@ -139,34 +159,6 @@ gtk_snapshot_get_renderer (const GtkSnapshot *state)
 {
   return state->renderer;
 }
-
-#if 0
-GskRenderNode *
-gtk_snapshot_create_render_node (const GtkSnapshot *state,
-                                 const char *name,
-                                 ...)
-{
-  GskRenderNode *node;
-
-  node = gsk_renderer_create_render_node (state->renderer);
-
-  if (name)
-    {
-      va_list args;
-      char *str;
-
-      va_start (args, name);
-      str = g_strdup_vprintf (name, args);
-      va_end (args);
-
-      gsk_render_node_set_name (node, str);
-
-      g_free (str);
-    }
-
-  return node;
-}
-#endif
 
 void
 gtk_snapshot_set_transform (GtkSnapshot             *snapshot,
@@ -325,11 +317,38 @@ gtk_snapshot_push_cairo_node (GtkSnapshot            *state,
   return gsk_render_node_get_draw_context (node, state->renderer);
 }
 
+static void
+rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
+                              const graphene_rect_t *graphene)
+{
+  cairo->x = floorf (graphene->origin.x);
+  cairo->y = floorf (graphene->origin.y);
+  cairo->width = ceilf (graphene->origin.x + graphene->size.width) - cairo->x;
+  cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
+}
+
 gboolean
 gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
                          const graphene_rect_t *bounds)
 {
-  return FALSE;
+  cairo_rectangle_int_t rect;
+
+  if (snapshot->state)
+    {
+      const graphene_matrix_t *world;
+      graphene_rect_t transformed;
+
+      world = gtk_snapshot_state_get_world_transform (snapshot->state);
+
+      graphene_matrix_transform_bounds (world, bounds, &transformed);
+      rectangle_init_from_graphene (&rect, &transformed);
+    }
+  else
+    {
+      rectangle_init_from_graphene (&rect, bounds);
+    }
+
+  return cairo_region_contains_rectangle (snapshot->clip_region, &rect) == CAIRO_REGION_OVERLAP_OUT;
 }
 
 void

@@ -15657,6 +15657,8 @@ gtk_widget_snapshot (GtkWidget   *widget,
   gtk_widget_get_clip (widget, &clip);
   _gtk_widget_get_allocation (widget, &alloc);
   graphene_rect_init (&bounds, alloc.x - clip.x, alloc.y - clip.y, clip.width, clip.height);
+  if (gtk_snapshot_clips_rect (snapshot, &bounds))
+    return;
 
   /* Compatibility mode: if the widget does not have a render node, we draw
    * using gtk_widget_draw() on a temporary node

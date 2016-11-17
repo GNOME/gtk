@@ -30,6 +30,8 @@ struct _GtkSnapshotState {
   GskRenderNode         *node;
 
   graphene_matrix_t      transform;
+  graphene_matrix_t      world_transform;
+  guint                  world_is_valid : 1;
 };
 
 struct _GtkSnapshot {
