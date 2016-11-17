@@ -1876,7 +1876,6 @@ on_address_entry_show_help_pressed (GtkPlacesView        *view,
   GtkPlacesViewPrivate *priv;
   GdkRectangle rect;
 
-g_print ("show help\n");
   priv = gtk_places_view_get_instance_private (view);
 
   /* Setup the auxiliary popover's rectangle */

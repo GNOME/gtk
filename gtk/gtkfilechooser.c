@@ -387,7 +387,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 				       g_param_spec_boolean ("local-only",
 							     P_("Local Only"),
 							     P_("Whether the selected file(s) should be limited to local file: URLs"),
-							     FALSE,
+							     TRUE,
 							     GTK_PARAM_READWRITE));
   g_object_interface_install_property (iface,
 				       g_param_spec_object ("preview-widget",
