@@ -5790,7 +5790,7 @@ GtkPrintOperationPrivate
 
 
 <SECTION>
-<INCLUDE>gtk/gtkprintunixdialog.h</INCLUDE>
+<INCLUDE>gtk/gtkunixprint.h</INCLUDE>
 <FILE>gtkprintunixdialog</FILE>
 <TITLE>GtkPrintUnixDialog</TITLE>
 GtkPrintUnixDialog
@@ -6137,7 +6137,7 @@ gtk_print_context_get_type
 
 
 <SECTION>
-<INCLUDE>gtk/gtkprintjob.h</INCLUDE>
+<INCLUDE>gtk/gtkunixprint.h</INCLUDE>
 <FILE>gtkprintjob</FILE>
 <TITLE>GtkPrintJob</TITLE>
 GtkPrintJob
@@ -6188,7 +6188,7 @@ gtk_print_job_get_type
 
 
 <SECTION>
-<INCLUDE>gtk/gtkpagesetupunixdialog.h</INCLUDE>
+<INCLUDE>gtk/gtkunixprint.h</INCLUDE>
 <FILE>gtkpagesetupunixdialog</FILE>
 <TITLE>GtkPageSetupUnixDialog</TITLE>
 GtkPageSetupUnixDialog
