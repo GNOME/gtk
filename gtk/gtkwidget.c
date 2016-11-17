@@ -6413,13 +6413,13 @@ gtk_widget_draw_internal (GtkWidget *widget,
           GskRenderNode *node;
 
           graphene_rect_init (&viewport,
-                              widget->priv->allocation.x - widget->priv->clip.x,
-                              widget->priv->allocation.y - widget->priv->clip.y,
+                              widget->priv->clip.x - widget->priv->allocation.x,
+                              widget->priv->clip.y - widget->priv->allocation.y,
                               widget->priv->clip.width,
                               widget->priv->clip.height);
           clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                                widget->priv->allocation.x - widget->priv->clip.x,
-                                                widget->priv->allocation.y - widget->priv->clip.y,
+                                                widget->priv->clip.x - widget->priv->allocation.x,
+                                                widget->priv->clip.y - widget->priv->allocation.y,
                                                 widget->priv->clip.width,
                                                 widget->priv->clip.height});
           fallback = gsk_renderer_create_fallback (renderer, &viewport, cr);
@@ -15656,7 +15656,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
   gtk_widget_get_clip (widget, &clip);
   _gtk_widget_get_allocation (widget, &alloc);
-  graphene_rect_init (&bounds, alloc.x - clip.x, alloc.y - clip.y, clip.width, clip.height);
+  graphene_rect_init (&bounds, clip.x - alloc.x, clip.y - alloc.y, clip.width, clip.height);
   if (gtk_snapshot_clips_rect (snapshot, &bounds))
     return;
 
