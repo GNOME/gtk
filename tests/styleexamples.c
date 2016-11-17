@@ -208,28 +208,6 @@ draw_cb_focus (GtkWidget *widget, cairo_t *cr)
 }
 
 static gboolean
-draw_cb_extension (GtkWidget *widget, cairo_t *cr)
-{
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-
-  gtk_style_context_add_class (context, "notebook");
-
-  gtk_style_context_set_state (context, 0);
-  gtk_render_extension (context, cr, 26, 12, 24, 12, GTK_POS_BOTTOM);
-  gtk_render_extension (context, cr, 12, 26, 12, 24, GTK_POS_RIGHT);
-  gtk_render_extension (context, cr, 26, 52, 24, 12, GTK_POS_TOP);
-  gtk_render_extension (context, cr, 52, 26, 12, 24, GTK_POS_LEFT);
-
-  gtk_style_context_restore (context);
-
-  return TRUE;
-}
-
-static gboolean
 draw_cb_frame_gap (GtkWidget *widget, cairo_t *cr)
 {
   GtkStyleContext *context;
@@ -296,8 +274,6 @@ draw_cb (GtkWidget *widget, cairo_t *cr)
     return draw_cb_slider (widget, cr);
   else if (strcmp (what, "focus") == 0)
     return draw_cb_focus (widget, cr);
-  else if (strcmp (what, "extension") == 0)
-    return draw_cb_extension (widget, cr);
   else if (strcmp (what, "frame-gap") == 0)
     return draw_cb_frame_gap (widget, cr);
   else if (strcmp (what, "handle") == 0)
