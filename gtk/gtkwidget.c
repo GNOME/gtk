@@ -950,6 +950,13 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
 }
 
 static void
+gtk_widget_real_snapshot (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
+{
+  /* nothing to do here */
+}
+
+static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   static GObjectNotifyContext cpn_context = { 0, NULL, NULL };
@@ -1013,6 +1020,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->grab_notify = NULL;
   klass->child_notify = NULL;
   klass->draw = NULL;
+  klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->focus = gtk_widget_real_focus;
