@@ -37,10 +37,12 @@ struct _GtkSnapshot {
 
   GskRenderNode         *root;
   GskRenderer           *renderer;
+  const cairo_region_t  *clip_region;
 };
 
 void            gtk_snapshot_init               (GtkSnapshot             *state,
-                                                 GskRenderer             *renderer);
+                                                 GskRenderer             *renderer,
+                                                 const cairo_region_t    *clip);
 GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
 
 static inline const graphene_matrix_t *

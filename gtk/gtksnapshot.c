@@ -58,12 +58,14 @@ gtk_snapshot_state_set_transform (GtkSnapshotState        *state,
 }
 
 void
-gtk_snapshot_init (GtkSnapshot *state,
-                   GskRenderer *renderer)
+gtk_snapshot_init (GtkSnapshot          *snapshot,
+                   GskRenderer          *renderer,
+                   const cairo_region_t *clip)
 {
-  state->state = NULL;
-  state->root = NULL;
-  state->renderer = renderer;
+  snapshot->state = NULL;
+  snapshot->root = NULL;
+  snapshot->renderer = renderer;
+  snapshot->clip_region = clip;
 }
 
 GskRenderNode *
