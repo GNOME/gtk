@@ -463,7 +463,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   gdk_window_get_unscaled_size (window, NULL, &unscaled_window_height);
 
   sx = sy = 1;
-  cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
+  cairo_surface_get_device_scale (surface, &sx, &sy);
   cairo_surface_get_device_offset (surface, &device_x_offset, &device_y_offset);
 
   /* Ensure all the X stuff are synced before we read it back via texture-from-pixmap */
