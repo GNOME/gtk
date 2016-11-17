@@ -1011,6 +1011,7 @@ network_enumeration_finished (GObject      *source_object,
                                           priv->networks_fetching_cancellable,
                                           network_enumeration_next_files_finished,
                                           user_data);
+      g_object_unref (enumerator);
     }
 }
 
