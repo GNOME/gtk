@@ -8622,7 +8622,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   impl->priv = gtk_file_chooser_widget_get_instance_private (impl);
   priv = impl->priv;
 
-  priv->local_only = TRUE;
+  priv->local_only = FALSE;
   priv->preview_widget_active = TRUE;
   priv->use_preview_label = TRUE;
   priv->select_multiple = FALSE;
