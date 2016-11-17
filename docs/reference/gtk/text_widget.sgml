@@ -148,13 +148,10 @@ displays after the widget is created with gtk_text_view_set_buffer().
 
 <para>
 
-There are two ways to affect text attributes in #GtkTextView.
-You can change the default attributes for a given #GtkTextView, and you can 
-apply tags that change the attributes for a region of text.  For text features 
-that come from the theme &mdash; such as font and foreground color &mdash; use 
-standard #GtkWidget functions such as gtk_widget_modify_font() or
-gtk_widget_override_color(). For other attributes there are dedicated methods on
-#GtkTextView such as gtk_text_view_set_tabs().
+The way to affect text attributes in #GtkTextView is to
+apply tags that change the attributes for a region of text.
+For text features that come from the theme &mdash; such as font and
+foreground color &mdash; use CSS to override their default values.
 
 <informalexample><programlisting>
   GtkWidget *view;
@@ -163,6 +160,8 @@ gtk_widget_override_color(). For other attributes there are dedicated methods on
   PangoFontDescription *font_desc;
   GdkRGBA rgba;
   GtkTextTag *tag;
+  GtkCssProvider *provider;
+  GtkStyleContext *context;
 
   view = gtk_text_view_new (<!-- -->);
 
@@ -170,14 +169,18 @@ gtk_widget_override_color(). For other attributes there are dedicated methods on
 
   gtk_text_buffer_set_text (buffer, "Hello, this is some text", -1);
 
-  /* Change default font throughout the widget */
-  font_desc = pango_font_description_from_string ("Serif 15");
-  gtk_widget_modify_font (view, font_desc);
-  pango_font_description_free (font_desc);
-
-  /* Change default color throughout the widget */
-  gdk_rgba_parse ("green", &amp;rgba);
-  gtk_widget_override_color (view, GTK_STATE_FLAG_NORMAL, &amp;rgba);
+  /* Change default font and color throughout the widget */
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider,
+                                   "textview {"
+                                   " font: 15 serif;"
+                                   "  color: green;"
+                                   "}",
+                                   -1);
+  context = gtk_widget_get_style_context (view);
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   /* Change left margin throughout the widget */
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 30);
