@@ -3321,9 +3321,6 @@ place_windows (GtkEntry *entry)
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info;
   GtkAllocation content_allocation;
-  GtkAllocation widget_allocation;
-
-  gtk_widget_get_allocation (GTK_WIDGET (entry), &widget_allocation);
 
   icon_info = priv->icons[GTK_ENTRY_ICON_PRIMARY];
   if (icon_info)
@@ -3332,7 +3329,7 @@ place_windows (GtkEntry *entry)
 
       gtk_css_gadget_get_border_allocation (icon_info->gadget, &primary, NULL);
       gdk_window_move_resize (icon_info->window,
-                              primary.x - widget_allocation.x, primary.y - widget_allocation.y,
+                              primary.x, primary.y,
                               primary.width, primary.height);
     }
 
@@ -3343,7 +3340,7 @@ place_windows (GtkEntry *entry)
 
       gtk_css_gadget_get_border_allocation (icon_info->gadget, &secondary, NULL);
       gdk_window_move_resize (icon_info->window,
-                              secondary.x - widget_allocation.x, secondary.y - widget_allocation.y,
+                              secondary.x, secondary.y,
                               secondary.width, secondary.height);
     }
 
