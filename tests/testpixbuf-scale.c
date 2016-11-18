@@ -31,14 +31,14 @@ overall_changed_cb (GtkAdjustment *adjustment, gpointer data)
     }
 }
 
-gboolean
-draw_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
+static void
+draw_func (GtkDrawingArea *darea,
+           cairo_t        *cr,
+           int             width,
+           int             height,
+           gpointer        data)
 {
   GdkPixbuf *dest;
-  int width, height;
-
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
 
   dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, width, height);
 
@@ -54,8 +54,6 @@ draw_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
   cairo_paint (cr);
 
   g_object_unref (dest);
-  
-  return TRUE;
 }
 
 int
@@ -135,8 +133,7 @@ main(int argc, char **argv)
 	darea = gtk_drawing_area_new ();
 	gtk_box_pack_start (GTK_BOX (vbox), darea, TRUE, TRUE);
 
-	g_signal_connect (darea, "draw",
-			  G_CALLBACK (draw_cb), NULL);
+        gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (darea), draw_func, NULL, NULL);
 
 	gtk_window_set_default_size (GTK_WINDOW (window),
 				     gdk_pixbuf_get_width (pixbuf),

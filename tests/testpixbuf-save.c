@@ -307,12 +307,16 @@ close_app (GtkWidget *widget, gpointer data)
         return TRUE;
 }
 
-static gboolean
-draw_cb (GtkWidget *drawing_area, cairo_t *cr, gpointer data)
+static void
+draw_func (GtkDrawingArea *darea,
+           cairo_t        *cr,
+           int             width,
+           int             height,
+           gpointer        data)
 {
         GdkPixbuf *pixbuf;
          
-        pixbuf = (GdkPixbuf *) g_object_get_data (G_OBJECT (drawing_area),
+        pixbuf = (GdkPixbuf *) g_object_get_data (G_OBJECT (darea),
 						  "pixbuf");
 
         gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
@@ -369,11 +373,11 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (window), vbox);  
    
         drawing_area = gtk_drawing_area_new ();
-        gtk_widget_set_size_request (GTK_WIDGET (drawing_area),
-                                     gdk_pixbuf_get_width (pixbuf),
-                                     gdk_pixbuf_get_height (pixbuf));
-        g_signal_connect (drawing_area, "draw",
-			  G_CALLBACK (draw_cb), NULL);
+        gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area),
+                                            gdk_pixbuf_get_width (pixbuf));
+        gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area),
+                                             gdk_pixbuf_get_height (pixbuf));
+        gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area), draw_func, NULL, NULL);
 
         g_signal_connect (drawing_area, "configure_event",
 			  G_CALLBACK (configure_cb), NULL);
