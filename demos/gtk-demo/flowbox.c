@@ -10,11 +10,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-static gboolean
-draw_color (GtkWidget  *drawingarea,
-            cairo_t    *cr,
-            const char *color_name)
+static void
+draw_color (GtkDrawingArea *drawingarea,
+            cairo_t        *cr,
+            int             width,
+            int             height,
+            gpointer        data)
 {
+  const char *color_name = data;
   GdkRGBA rgba;
 
   if (gdk_rgba_parse (&rgba, color_name))
@@ -22,8 +25,6 @@ draw_color (GtkWidget  *drawingarea,
       gdk_cairo_set_source_rgba (cr, &rgba);
       cairo_paint (cr);
     }
-
-  return FALSE;
 }
 
 static GtkWidget *
@@ -33,8 +34,9 @@ color_swatch_new (const gchar *color)
 
   button = gtk_button_new ();
   area = gtk_drawing_area_new ();
-  g_signal_connect (area, "draw", G_CALLBACK (draw_color), (gpointer) color);
-  gtk_widget_set_size_request (area, 24, 24);
+  gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (area), 24);
+  gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (area), 24);
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (area), draw_color, (gpointer) color, NULL);
   gtk_container_add (GTK_CONTAINER (button), area);
   gtk_widget_show_all (button);
 

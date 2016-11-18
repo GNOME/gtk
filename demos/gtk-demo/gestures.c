@@ -60,20 +60,18 @@ zoom_scale_changed (GtkGestureZoom *gesture,
   gtk_widget_queue_draw (widget);
 }
 
-static gboolean
-drawing_area_draw (GtkWidget *widget,
-                   cairo_t   *cr)
+static void
+drawing_area_draw (GtkDrawingArea *area,
+                   cairo_t        *cr,
+                   int             width,
+                   int             height,
+                   gpointer        data)
 {
-  GtkAllocation allocation;
-
-  gtk_widget_get_allocation (widget, &allocation);
-
   if (swipe_x != 0 || swipe_y != 0)
     {
       cairo_save (cr);
       cairo_set_line_width (cr, 6);
-      cairo_move_to (cr, allocation.width / 2,
-                     allocation.height / 2);
+      cairo_move_to (cr, width / 2, height / 2);
       cairo_rel_line_to (cr, swipe_x, swipe_y);
       cairo_set_source_rgba (cr, 1, 0, 0, 0.5);
       cairo_stroke (cr);
@@ -87,9 +85,7 @@ drawing_area_draw (GtkWidget *widget,
       gdouble angle, scale;
 
       cairo_get_matrix (cr, &matrix);
-      cairo_matrix_translate (&matrix,
-                              allocation.width / 2,
-                              allocation.height / 2);
+      cairo_matrix_translate (&matrix, width / 2, height / 2);
 
       cairo_save (cr);
 
@@ -116,8 +112,8 @@ drawing_area_draw (GtkWidget *widget,
   if (long_pressed)
     {
       cairo_save (cr);
-      cairo_arc (cr, allocation.width / 2,
-                 allocation.height / 2,
+      cairo_arc (cr,
+                 width / 2, height / 2,
                  50, 0, 2 * G_PI);
 
       cairo_set_source_rgba (cr, 0, 1, 0, 0.5);
@@ -125,8 +121,6 @@ drawing_area_draw (GtkWidget *widget,
 
       cairo_restore (cr);
     }
-
-  return TRUE;
 }
 
 GtkWidget *
@@ -150,8 +144,9 @@ do_gestures (GtkWidget *do_widget)
                              GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                              GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK);
 
-      g_signal_connect (drawing_area, "draw",
-                        G_CALLBACK (drawing_area_draw), NULL);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
+                                      drawing_area_draw,
+                                      NULL, NULL);
 
       /* Swipe */
       gesture = gtk_gesture_swipe_new (drawing_area);

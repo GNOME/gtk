@@ -881,16 +881,18 @@ draw_spinbutton (GtkWidget *widget,
   g_object_unref (spin_context);
 }
 
-static gboolean
-draw_cb (GtkWidget *widget,
-         cairo_t   *cr)
+static void
+draw_func (GtkDrawingArea *da,
+           cairo_t        *cr,
+           int             width,
+           int             height,
+           gpointer        data)
 {
-  gint panewidth, width, height;
+  GtkWidget *widget = GTK_WIDGET (da);
+  gint panewidth;
   gint x, y;
 
-  width = gtk_widget_get_allocated_width (widget);
   panewidth = width / 2;
-  height = gtk_widget_get_allocated_height (widget);
 
   cairo_rectangle (cr, 0, 0, width, height);
   cairo_set_source_rgb (cr, 0.9, 0.9, 0.9);
@@ -944,8 +946,6 @@ draw_cb (GtkWidget *widget,
 
   y += height + 10;
   draw_combobox (widget, cr, 10 + panewidth, y, panewidth - 20, TRUE, &height);
-
-  return FALSE;
 }
 
 GtkWidget *
@@ -968,12 +968,12 @@ do_foreigndrawing (GtkWidget *do_widget)
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_container_add (GTK_CONTAINER (window), box);
       da = gtk_drawing_area_new ();
-      gtk_widget_set_size_request (da, 400, 400);
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 400);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 400);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_func, NULL, NULL);
       gtk_widget_set_hexpand (da, TRUE);
       gtk_widget_set_vexpand (da, TRUE);
       gtk_container_add (GTK_CONTAINER (box), da);
-
-      g_signal_connect (da, "draw", G_CALLBACK (draw_cb), NULL);
     }
 
   if (!gtk_widget_get_visible (window))

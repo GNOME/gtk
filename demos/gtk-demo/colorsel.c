@@ -15,15 +15,15 @@ static GtkWidget *frame;
 
 /* draw callback for the drawing area
  */
-static gboolean
-draw_callback (GtkWidget *widget,
-               cairo_t   *cr,
-               gpointer   data)
+static void
+draw_function (GtkDrawingArea *da,
+               cairo_t        *cr,
+               int             width,
+               int             height,
+               gpointer        data)
 {
   gdk_cairo_set_source_rgba (cr, &color);
   cairo_paint (cr);
-
-  return TRUE;
 }
 
 static void
@@ -87,11 +87,9 @@ do_colorsel (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE);
 
       da = gtk_drawing_area_new ();
-
-      g_signal_connect (da, "draw", G_CALLBACK (draw_callback), NULL);
-
-      /* set a minimum size */
-      gtk_widget_set_size_request (da, 200, 200);
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 200);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 200);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_function, NULL, NULL);
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 

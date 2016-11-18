@@ -88,10 +88,12 @@ create_fancy_attr_list_for_layout (PangoLayout *layout)
   return attrs;
 }
 
-static gboolean
-rotated_text_draw (GtkWidget *widget,
-                   cairo_t   *cr,
-                   gpointer   data)
+static void
+rotated_text_draw (GtkDrawingArea *da,
+                   cairo_t        *cr,
+                   int             width,
+                   int             height,
+                   gpointer        data)
 {
 #define RADIUS 150
 #define N_WORDS 5
@@ -106,15 +108,12 @@ rotated_text_draw (GtkWidget *widget,
   PangoAttrList *attrs;
 
   double device_radius;
-  int width, height;
   int i;
 
   /* Create a cairo context and set up a transformation matrix so that the user
    * space coordinates for the centered square where we draw are [-RADIUS, RADIUS],
    * [-RADIUS, RADIUS].
    * We first center, then change the scale. */
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
   device_radius = MIN (width, height) / 2.;
   cairo_translate (cr,
                    device_radius + (width - 2 * device_radius) / 2,
@@ -128,7 +127,7 @@ rotated_text_draw (GtkWidget *widget,
   cairo_set_source (cr, pattern);
 
   /* Create a PangoContext and set up our shape renderer */
-  context = gtk_widget_create_pango_context (widget);
+  context = gtk_widget_create_pango_context (GTK_WIDGET (da));
   pango_cairo_context_set_shape_renderer (context,
                                           fancy_shape_renderer,
                                           NULL, NULL);
@@ -164,8 +163,6 @@ rotated_text_draw (GtkWidget *widget,
   g_object_unref (layout);
   g_object_unref (context);
   cairo_pattern_destroy (pattern);
-
-  return FALSE;
 }
 
 GtkWidget *
@@ -199,8 +196,9 @@ do_rotated_text (GtkWidget *do_widget)
       gtk_style_context_add_class (gtk_widget_get_style_context (drawing_area),
                                    GTK_STYLE_CLASS_VIEW);
 
-      g_signal_connect (drawing_area, "draw",
-                        G_CALLBACK (rotated_text_draw), NULL);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
+                                      rotated_text_draw,
+                                      NULL, NULL);
 
       /* And a label */
       label = gtk_label_new (text);

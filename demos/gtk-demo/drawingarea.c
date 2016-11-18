@@ -50,15 +50,15 @@ scribble_configure_event (GtkWidget         *widget,
 }
 
 /* Redraw the screen from the surface */
-static gboolean
-scribble_draw (GtkWidget *widget,
-               cairo_t   *cr,
-               gpointer   data)
+static void
+scribble_draw (GtkDrawingArea *da,
+               cairo_t        *cr,
+               int             width,
+               int             height,
+               gpointer        data)
 {
   cairo_set_source_surface (cr, surface, 0, 0);
   cairo_paint (cr);
-
-  return FALSE;
 }
 
 /* Draw a rectangle on the screen */
@@ -136,12 +136,14 @@ scribble_motion_notify_event (GtkWidget      *widget,
 }
 
 
-static gboolean
-checkerboard_draw (GtkWidget *da,
-                   cairo_t   *cr,
-                   gpointer   data)
+static void
+checkerboard_draw (GtkDrawingArea *da,
+                   cairo_t        *cr,
+                   int             width,
+                   int             height,
+                   gpointer        data)
 {
-  gint i, j, xcount, ycount, width, height;
+  gint i, j, xcount, ycount;
 
 #define CHECK_SIZE 10
 #define SPACING 2
@@ -154,8 +156,6 @@ checkerboard_draw (GtkWidget *da,
    */
 
   xcount = 0;
-  width = gtk_widget_get_allocated_width (da);
-  height = gtk_widget_get_allocated_height (da);
   i = SPACING;
   while (i < width)
     {
@@ -180,11 +180,6 @@ checkerboard_draw (GtkWidget *da,
       i += CHECK_SIZE + SPACING;
       ++xcount;
     }
-
-  /* return TRUE because we've handled this event, so no
-   * further processing is required.
-   */
-  return TRUE;
 }
 
 static void
@@ -233,13 +228,10 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE);
 
       da = gtk_drawing_area_new ();
-      /* set a minimum size */
-      gtk_widget_set_size_request (da, 100, 100);
-
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 100);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), checkerboard_draw, NULL, NULL);
       gtk_container_add (GTK_CONTAINER (frame), da);
-
-      g_signal_connect (da, "draw",
-                        G_CALLBACK (checkerboard_draw), NULL);
 
       /*
        * Create the scribble area
@@ -255,15 +247,13 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE);
 
       da = gtk_drawing_area_new ();
-      /* set a minimum size */
-      gtk_widget_set_size_request (da, 100, 100);
-
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 100);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), scribble_draw, NULL, NULL);
       gtk_container_add (GTK_CONTAINER (frame), da);
 
       /* Signals used to handle backing surface */
 
-      g_signal_connect (da, "draw",
-                        G_CALLBACK (scribble_draw), NULL);
       g_signal_connect (da,"configure-event",
                         G_CALLBACK (scribble_configure_event), NULL);
 

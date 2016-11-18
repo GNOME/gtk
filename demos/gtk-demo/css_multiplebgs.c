@@ -51,22 +51,17 @@ css_text_changed (GtkTextBuffer  *buffer,
   gtk_style_context_reset_widgets (gdk_screen_get_default ());
 }
 
-static gboolean
-drawing_area_draw (GtkWidget *widget,
-                   cairo_t *cr)
+static void
+drawing_area_draw (GtkDrawingArea *da,
+                   cairo_t        *cr,
+                   int             width,
+                   int             height,
+                   gpointer        data)
 {
-  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (da));
 
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
-  gtk_render_frame (context, cr,
-                    0, 0,
-                    gtk_widget_get_allocated_width (widget),
-                    gtk_widget_get_allocated_height (widget));
-
-  return FALSE;
+  gtk_render_background (context, cr, 0, 0, width, height);
+  gtk_render_frame (context, cr, 0, 0, width, height);
 }
 
 static void
@@ -105,8 +100,9 @@ do_css_multiplebgs (GtkWidget *do_widget)
 
       child = gtk_drawing_area_new ();
       gtk_widget_set_name (child, "canvas");
-      g_signal_connect (child, "draw",
-                        G_CALLBACK (drawing_area_draw), NULL);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (child),
+                                      drawing_area_draw,
+                                      NULL, NULL);
       gtk_container_add (GTK_CONTAINER (container), child);
 
       child = gtk_button_new ();

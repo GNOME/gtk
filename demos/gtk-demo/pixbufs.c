@@ -75,15 +75,15 @@ load_pixbufs (GError **error)
 }
 
 /* Expose callback for the drawing area */
-static gint
-draw_cb (GtkWidget *widget,
-         cairo_t   *cr,
-         gpointer   data)
+static void
+draw_func (GtkDrawingArea *area,
+           cairo_t        *cr,
+           int             width,
+           int             height,
+           gpointer        data)
 {
   gdk_cairo_set_source_pixbuf (cr, frame, 0, 0);
   cairo_paint (cr);
-
-  return TRUE;
 }
 
 #define CYCLE_TIME 3000000 /* 3 seconds */
@@ -204,14 +204,13 @@ do_pixbufs (GtkWidget *do_widget)
         }
       else
         {
-          gtk_widget_set_size_request (window, back_width, back_height);
-
           frame = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, back_width, back_height);
 
           da = gtk_drawing_area_new ();
 
-          g_signal_connect (da, "draw",
-                            G_CALLBACK (draw_cb), NULL);
+          gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), back_width);
+          gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), back_height);
+          gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_func, NULL, NULL);
 
           gtk_container_add (GTK_CONTAINER (window), da);
 

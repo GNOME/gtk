@@ -7,10 +7,12 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-static gboolean
-draw_text (GtkWidget *da,
-           cairo_t   *cr,
-           gpointer   data)
+static void
+draw_text (GtkDrawingArea *da,
+           cairo_t        *cr,
+           int             width,
+           int             height,
+           gpointer        data)
 {
   cairo_pattern_t *pattern;
   PangoLayout *layout;
@@ -18,7 +20,7 @@ draw_text (GtkWidget *da,
 
   cairo_save (cr);
 
-  layout = gtk_widget_create_pango_layout (da, "Pango power!\nPango power!\nPango power!");
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (da), "Pango power!\nPango power!\nPango power!");
   desc = pango_font_description_from_string ("sans bold 34");
   pango_layout_set_font_description (layout, desc);
   pango_font_description_free (desc);
@@ -27,9 +29,7 @@ draw_text (GtkWidget *da,
   pango_cairo_layout_path (cr, layout);
   g_object_unref (layout);
 
-  pattern = cairo_pattern_create_linear (0.0, 0.0,
-                                         gtk_widget_get_allocated_width (da),
-                                         gtk_widget_get_allocated_height (da));
+  pattern = cairo_pattern_create_linear (0.0, 0.0, width, height);
   cairo_pattern_add_color_stop_rgb (pattern, 0.0, 1.0, 0.0, 0.0);
   cairo_pattern_add_color_stop_rgb (pattern, 0.2, 1.0, 0.0, 0.0);
   cairo_pattern_add_color_stop_rgb (pattern, 0.3, 1.0, 1.0, 0.0);
@@ -49,8 +49,6 @@ draw_text (GtkWidget *da,
   cairo_stroke (cr);
 
   cairo_restore (cr);
-
-  return TRUE;
 }
 
 GtkWidget *
@@ -72,8 +70,7 @@ do_textmask (GtkWidget *do_widget)
       da = gtk_drawing_area_new ();
 
       gtk_container_add (GTK_CONTAINER (window), da);
-      g_signal_connect (da, "draw",
-                        G_CALLBACK (draw_text), NULL);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_text, NULL, NULL);
     }
 
   if (!gtk_widget_get_visible (window))
