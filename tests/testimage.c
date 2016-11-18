@@ -75,22 +75,6 @@ idle_func (gpointer data)
   return G_SOURCE_CONTINUE;
 }
 
-static gboolean
-anim_image_draw (GtkWidget *widget,
-                 cairo_t   *cr,
-                 gpointer   data)
-{
-  g_print ("start busyness\n");
-
-  g_signal_handlers_disconnect_by_func (widget, anim_image_draw, data);
-
-  /* produce high load */
-  g_idle_add_full (G_PRIORITY_DEFAULT,
-                   idle_func, NULL, NULL);
-
-  return FALSE;
-}
-
 int
 main (int argc, char **argv)
 {
@@ -178,9 +162,8 @@ main (int argc, char **argv)
       gtk_grid_attach (GTK_GRID (grid), image, 2, 6, 1, 1);
 
       /* produce high load */
-      g_signal_connect_after (image, "draw",
-                              G_CALLBACK (anim_image_draw),
-                              NULL);
+      g_idle_add_full (G_PRIORITY_DEFAULT,
+                       idle_func, NULL, NULL);
     }
 
   gtk_widget_show_all (window);
