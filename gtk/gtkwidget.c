@@ -14565,8 +14565,14 @@ _gtk_widget_create_path (GtkWidget *widget)
 
   parent = widget->priv->parent;
 
-  if (parent)
+  if (parent && GTK_IS_CONTAINER (parent))
     return gtk_container_get_path_for_child (GTK_CONTAINER (parent), widget);
+  else if (parent)
+    {
+      GtkWidgetPath *path = _gtk_widget_create_path (parent);
+      gtk_widget_path_append_for_widget (path, widget);
+      return path;
+    }
   else
     {
       /* Widget is either toplevel or unparented, treat both
