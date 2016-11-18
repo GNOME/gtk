@@ -42,7 +42,7 @@ union _GtkCssTransform {
   GtkCssTransformType type;
   struct {
     GtkCssTransformType type;
-    cairo_matrix_t      matrix;
+    graphene_matrix_t   matrix;
   }                   matrix;
   struct {
     GtkCssTransformType type;
@@ -110,7 +110,7 @@ gtk_css_transform_init_identity (GtkCssTransform     *transform,
   switch (type)
     {
     case GTK_CSS_TRANSFORM_MATRIX:
-      cairo_matrix_init_identity (&transform->matrix.matrix);
+      graphene_matrix_init_identity (&transform->matrix.matrix);
       break;
     case GTK_CSS_TRANSFORM_TRANSLATE:
       transform->translate.x = _gtk_css_number_value_new (0, GTK_CSS_PX);
@@ -143,52 +143,53 @@ gtk_css_transform_init_identity (GtkCssTransform     *transform,
 }
 
 static void
-gtk_cairo_matrix_skew (cairo_matrix_t *matrix,
-                       double          skew_x,
-                       double          skew_y)
+gtk_css_transform_apply (const GtkCssTransform   *transform,
+                         graphene_matrix_t       *matrix)
 {
-  cairo_matrix_t skew = { 1, tan (skew_x), tan (skew_y), 1, 0, 0 };
+  graphene_matrix_t skew, tmp;
 
-  cairo_matrix_multiply (matrix, &skew, matrix);
-}
-
-static void
-gtk_css_transform_apply (const GtkCssTransform *transform,
-                         cairo_matrix_t        *matrix)
-{
   switch (transform->type)
     {
     case GTK_CSS_TRANSFORM_MATRIX:
-      cairo_matrix_multiply (matrix, &transform->matrix.matrix, matrix);
+      graphene_matrix_multiply (matrix, &transform->matrix.matrix, &tmp);
+      graphene_matrix_init_from_matrix (matrix, &tmp);
       break;
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      cairo_matrix_translate (matrix,
-                              _gtk_css_number_value_get (transform->translate.x, 100),
-                              _gtk_css_number_value_get (transform->translate.y, 100));
+      graphene_matrix_translate (matrix, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(
+                                 _gtk_css_number_value_get (transform->translate.x, 100),
+                                 _gtk_css_number_value_get (transform->translate.y, 100),
+                                 0));
       break;
     case GTK_CSS_TRANSFORM_ROTATE:
-      cairo_matrix_rotate (matrix,
-                           _gtk_css_number_value_get (transform->rotate.rotate, 100) * (2 * G_PI) / 360);
+      graphene_matrix_rotate_z (matrix,
+                                _gtk_css_number_value_get (transform->rotate.rotate, 100));
       break;
     case GTK_CSS_TRANSFORM_SCALE:
-      cairo_matrix_scale (matrix,
-                          _gtk_css_number_value_get (transform->scale.x, 1),
-                          _gtk_css_number_value_get (transform->scale.y, 1));
+      graphene_matrix_scale (matrix,
+                             _gtk_css_number_value_get (transform->scale.x, 1),
+                             _gtk_css_number_value_get (transform->scale.y, 1),
+                             1);
       break;
     case GTK_CSS_TRANSFORM_SKEW:
-      gtk_cairo_matrix_skew (matrix,
-                             _gtk_css_number_value_get (transform->skew.x, 100),
-                             _gtk_css_number_value_get (transform->skew.y, 100));
+      graphene_matrix_init_skew (&skew,
+                                 _gtk_css_number_value_get (transform->skew.x, 100),
+                                 _gtk_css_number_value_get (transform->skew.y, 100));
+      graphene_matrix_multiply (matrix, &skew, &tmp);
+      graphene_matrix_init_from_matrix (matrix, &tmp);
       break;
     case GTK_CSS_TRANSFORM_SKEW_X:
-      gtk_cairo_matrix_skew (matrix,
-                             _gtk_css_number_value_get (transform->skew_x.skew, 100),
-                             0);
+      graphene_matrix_init_skew (&skew,
+                                 _gtk_css_number_value_get (transform->skew_x.skew, 100),
+                                 0);
+      graphene_matrix_multiply (matrix, &skew, &tmp);
+      graphene_matrix_init_from_matrix (matrix, &tmp);
       break;
     case GTK_CSS_TRANSFORM_SKEW_Y:
-      gtk_cairo_matrix_skew (matrix,
-                             0,
-                             _gtk_css_number_value_get (transform->skew_y.skew, 100));
+      graphene_matrix_init_skew (&skew,
+                                 0,
+                                 _gtk_css_number_value_get (transform->skew_y.skew, 100));
+      graphene_matrix_multiply (matrix, &skew, &tmp);
+      graphene_matrix_init_from_matrix (matrix, &tmp);
       break;
     case GTK_CSS_TRANSFORM_NONE:
     default:
@@ -200,11 +201,11 @@ gtk_css_transform_apply (const GtkCssTransform *transform,
 /* NB: The returned matrix may be invalid */
 static void
 gtk_css_transform_value_compute_matrix (const GtkCssValue *value,
-                                        cairo_matrix_t    *matrix)
+                                        graphene_matrix_t *matrix)
 {
   guint i;
 
-  cairo_matrix_init_identity (matrix);
+  graphene_matrix_init_identity (matrix);
 
   for (i = 0; i < value->n_transforms; i++)
     {
@@ -318,12 +319,18 @@ gtk_css_transform_equal (const GtkCssTransform *transform1,
   switch (transform1->type)
     {
     case GTK_CSS_TRANSFORM_MATRIX:
-      return transform1->matrix.matrix.xx == transform2->matrix.matrix.xx
-          && transform1->matrix.matrix.xy == transform2->matrix.matrix.xy
-          && transform1->matrix.matrix.yx == transform2->matrix.matrix.yx
-          && transform1->matrix.matrix.yy == transform2->matrix.matrix.yy
-          && transform1->matrix.matrix.x0 == transform2->matrix.matrix.x0
-          && transform1->matrix.matrix.y0 == transform2->matrix.matrix.y0;
+      {
+        guint i, j;
+
+        for (i = 0; i < 4; i++)
+          for (j = 0; j < 4; j++)
+            {
+              if (graphene_matrix_get_value (&transform1->matrix.matrix, i, j)
+                  != graphene_matrix_get_value (&transform2->matrix.matrix, i, j))
+                return FALSE;
+            }
+        return TRUE;
+      }
     case GTK_CSS_TRANSFORM_TRANSLATE:
       return _gtk_css_value_equal (transform1->translate.x, transform2->translate.x)
           && _gtk_css_value_equal (transform1->translate.y, transform2->translate.y);
@@ -380,171 +387,6 @@ gtk_css_value_transform_equal (const GtkCssValue *value1,
   return TRUE;
 }
 
-typedef struct _DecomposedMatrix DecomposedMatrix;
-struct _DecomposedMatrix {
-  double translate[2];
-  double scale[2];
-  double angle;
-  double m11;
-  double m12;
-  double m21;
-  double m22;
-};
-
-static void
-decomposed_init (DecomposedMatrix     *decomposed,
-                 const cairo_matrix_t *matrix)
-{
-  double row0x = matrix->xx;
-  double row0y = matrix->xy;
-  double row1x = matrix->yx;
-  double row1y = matrix->yy;
-  double determinant;
-
-  decomposed->translate[0] = matrix->x0;
-  decomposed->translate[1] = matrix->y0;
-
-  decomposed->scale[0] = sqrt (row0x * row0x + row0y * row0y);
-  decomposed->scale[1] = sqrt (row1x * row1x + row1y * row1y);
-
-  /* If determinant is negative, one axis was flipped. */
-  determinant = row0x * row1y - row0y * row1x;
-  
-  if (determinant < 0)
-    {
-      /* Flip axis with minimum unit vector dot product. */
-      if (row0x < row1y)
-        decomposed->scale[0] = - decomposed->scale[0];
-      else
-        decomposed->scale[1] = - decomposed->scale[1];
-    }
-    
-  /* Renormalize matrix to remove scale. */
-  if (decomposed->scale[0])
-    {
-      row0x /= decomposed->scale[0];
-      row0y /= decomposed->scale[0];
-    }
-  if (decomposed->scale[1])
-    {
-      row1x /= decomposed->scale[1];
-      row1y /= decomposed->scale[1];
-    }
-
-  /* Compute rotation and renormalize matrix. */
-  decomposed->angle = atan2(row0y, row0x);
-
-  if (decomposed->angle)
-    {
-      /* Rotate(-angle) = [cos(angle), sin(angle), -sin(angle), cos(angle)]
-       *                = [row0x, -row0y, row0y, row0x]
-       * Thanks to the normalization above.
-       */
-      decomposed->m11 = row0x;
-      decomposed->m12 = row0y;
-      decomposed->m21 = row1x;
-      decomposed->m22 = row1y;
-    }
-  else
-    {
-      decomposed->m11 = row0x * row0x - row0y * row1x;
-      decomposed->m12 = row0x * row0y - row0y * row1y;
-      decomposed->m21 = row0y * row0x + row0x * row1x;
-      decomposed->m22 = row0y * row0y + row0x * row1y;
-    }
-  
-  /* Convert into degrees because our rotation functions expect it. */
-  decomposed->angle = decomposed->angle * 360 / (2 * G_PI);
-}
-
-static void
-decomposed_interpolate (DecomposedMatrix       *result,
-                        const DecomposedMatrix *start,
-                        const DecomposedMatrix *end,
-                        double                  progress)
-{
-  double start_angle, end_angle;
-
-  result->translate[0] = start->translate[0] + (end->translate[0] - start->translate[0]) * progress;
-  result->translate[1] = start->translate[1] + (end->translate[1] - start->translate[1]) * progress;
-  result->m11 = start->m11 + (end->m11 - start->m11) * progress;
-  result->m12 = start->m12 + (end->m12 - start->m12) * progress;
-  result->m21 = start->m21 + (end->m21 - start->m21) * progress;
-  result->m22 = start->m22 + (end->m22 - start->m22) * progress;
-
-  /* If x-axis of one is flipped, and y-axis of the other,
-   * convert to an unflipped rotation.
-   */
-  if ((start->scale[0] < 0 && end->scale[1] < 0) || (start->scale[1] < 0 && end->scale[0] < 0))
-    {
-      result->scale[0] = - start->scale[0];
-      result->scale[1] = - start->scale[1];
-      start_angle = start->angle < 0 ? start->angle + 180 : start->angle - 180;
-      end_angle = end->angle;
-    }
-  else
-    {
-      result->scale[0] = start->scale[0];
-      result->scale[1] = start->scale[1];
-      start_angle = start->angle;
-      end_angle = end->angle;
-    }
-
-  result->scale[0] = result->scale[0] + (end->scale[0] - result->scale[0]) * progress;
-  result->scale[1] = result->scale[1] + (end->scale[1] - result->scale[1]) * progress;
-
-  /* Don’t rotate the long way around. */
-  if (start_angle == 0)
-    start_angle = 360;
-  if (end_angle == 0)
-    end_angle = 360;
-
-  if (ABS (start_angle - end_angle) > 180)
-    {
-      if (start_angle > end_angle)
-        start_angle -= 360;
-      else
-        end_angle -= 360;
-    }
-
-  result->angle = start_angle + (end_angle - start_angle) * progress;
-}
-
-static void
-decomposed_apply (const DecomposedMatrix *decomposed,
-                  cairo_matrix_t         *matrix)
-{
-  matrix->xx = decomposed->m11;
-  matrix->xy = decomposed->m12;
-  matrix->yx = decomposed->m21;
-  matrix->yy = decomposed->m22;
-  matrix->x0 = 0;
-  matrix->y0 = 0;
-
-  /* Translate matrix. */
-  cairo_matrix_translate (matrix, decomposed->translate[0], decomposed->translate[1]);
-  
-  /* Rotate matrix. */
-  cairo_matrix_rotate (matrix, decomposed->angle * (2 * G_PI) / 360);
-  
-  /* Scale matrix. */
-  cairo_matrix_scale (matrix, decomposed->scale[0], decomposed->scale[1]);
-}
-
-static void
-gtk_css_transform_matrix_transition (cairo_matrix_t       *result,
-                                     const cairo_matrix_t *start,
-                                     const cairo_matrix_t *end,
-                                     double                progress)
-{
-  DecomposedMatrix dresult, dstart, dend;
-
-  decomposed_init (&dstart, start);
-  decomposed_init (&dend, end);
-  decomposed_interpolate (&dresult, &dstart, &dend, progress);
-  decomposed_apply (&dresult, result);
-}
-
 static void
 gtk_css_transform_transition (GtkCssTransform       *result,
                               const GtkCssTransform *start,
@@ -557,10 +399,10 @@ gtk_css_transform_transition (GtkCssTransform       *result,
   switch (start->type)
     {
     case GTK_CSS_TRANSFORM_MATRIX:
-      gtk_css_transform_matrix_transition (&result->matrix.matrix,
-                                           &start->matrix.matrix,
-                                           &end->matrix.matrix,
-                                           progress);
+      graphene_matrix_interpolate (&start->matrix.matrix,
+                                   &end->matrix.matrix,
+                                   progress,
+                                   &result->matrix.matrix);
       break;
     case GTK_CSS_TRANSFORM_TRANSLATE:
       result->translate.x = _gtk_css_value_transition (start->translate.x, end->translate.x, property_id, progress);
@@ -622,16 +464,16 @@ gtk_css_value_transform_transition (GtkCssValue *start,
     {
       if (start->transforms[i].type != end->transforms[i].type)
         {
-          cairo_matrix_t start_matrix, end_matrix;
+          graphene_matrix_t start_matrix, end_matrix;
 
-          cairo_matrix_init_identity (&start_matrix);
+          graphene_matrix_init_identity (&start_matrix);
           gtk_css_transform_value_compute_matrix (start, &start_matrix);
-          cairo_matrix_init_identity (&end_matrix);
+          graphene_matrix_init_identity (&end_matrix);
           gtk_css_transform_value_compute_matrix (end, &end_matrix);
 
           result = gtk_css_transform_value_alloc (1);
           result->transforms[0].type = GTK_CSS_TRANSFORM_MATRIX;
-          gtk_css_transform_matrix_transition (&result->transforms[0].matrix.matrix, &start_matrix, &end_matrix, progress);
+          graphene_matrix_interpolate (&start_matrix, &end_matrix, progress, &result->transforms[0].matrix.matrix);
 
           return result;
         }
@@ -688,22 +530,22 @@ gtk_css_transform_print (const GtkCssTransform *transform,
     {
     case GTK_CSS_TRANSFORM_MATRIX:
       g_string_append (string, "matrix(");
-      g_ascii_dtostr (buf, sizeof (buf), transform->matrix.matrix.xx);
+      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 0));
       g_string_append (string, buf);
       g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), transform->matrix.matrix.xy);
+      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 1));
       g_string_append (string, buf);
       g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), transform->matrix.matrix.x0);
+      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 2));
       g_string_append (string, buf);
       g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), transform->matrix.matrix.yx);
+      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 0));
       g_string_append (string, buf);
       g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), transform->matrix.matrix.yy);
+      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 1));
       g_string_append (string, buf);
       g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), transform->matrix.matrix.y0);
+      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 2));
       g_string_append (string, buf);
       g_string_append (string, ")");
       break;
@@ -815,24 +657,27 @@ gtk_css_transform_parse (GtkCssTransform *transform,
 {
   if (_gtk_css_parser_try (parser, "matrix(", TRUE))
     {
+      double xx, xy, x0, yx, yy, y0;
       transform->type = GTK_CSS_TRANSFORM_MATRIX;
 
       /* FIXME: Improve error handling here */
-      if (!_gtk_css_parser_try_double (parser, &transform->matrix.matrix.xx)
+      if (!_gtk_css_parser_try_double (parser, &xx)
           || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &transform->matrix.matrix.xy)
+          || !_gtk_css_parser_try_double (parser, &xy)
           || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &transform->matrix.matrix.x0)
+          || !_gtk_css_parser_try_double (parser, &x0)
           || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &transform->matrix.matrix.yx)
+          || !_gtk_css_parser_try_double (parser, &yx)
           || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &transform->matrix.matrix.yy)
+          || !_gtk_css_parser_try_double (parser, &yy)
           || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &transform->matrix.matrix.y0))
+          || !_gtk_css_parser_try_double (parser, &y0))
         {
           _gtk_css_parser_error (parser, "invalid syntax for matrix()");
           return FALSE;
         }
+      graphene_matrix_init_from_2d (&transform->matrix.matrix, 
+                                    xx, yx, xy, yy, x0, y0);
     }
   else if (_gtk_css_parser_try (parser, "translate(", TRUE))
     {
@@ -1016,21 +861,16 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
 }
 
 gboolean
-_gtk_css_transform_value_get_matrix (const GtkCssValue *transform,
-                                     cairo_matrix_t    *matrix)
+gtk_css_transform_value_get_matrix (const GtkCssValue *transform,
+                                    graphene_matrix_t *matrix)
 {
-  cairo_matrix_t invert;
+  graphene_matrix_t invert;
 
   g_return_val_if_fail (transform->class == &GTK_CSS_VALUE_TRANSFORM, FALSE);
   g_return_val_if_fail (matrix != NULL, FALSE);
   
-  gtk_css_transform_value_compute_matrix (transform, &invert);
+  gtk_css_transform_value_compute_matrix (transform, matrix);
 
-  *matrix = invert;
-
-  if (cairo_matrix_invert (&invert) != CAIRO_STATUS_SUCCESS)
-    return FALSE;
-
-  return TRUE;
+  return graphene_matrix_inverse (matrix, &invert);
 }
 

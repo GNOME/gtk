@@ -40,6 +40,7 @@ gtk_css_style_render_icon (GtkCssStyle            *style,
                            GtkCssImageBuiltinType  builtin_type)
 {
   const GtkCssValue *shadows;
+  graphene_matrix_t graphene_matrix;
   cairo_matrix_t matrix, transform_matrix, saved_matrix;
   GtkCssImage *image;
 
@@ -56,8 +57,13 @@ gtk_css_style_render_icon (GtkCssStyle            *style,
 
   cairo_translate (cr, x, y);
 
-  if (_gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
+  if (gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &graphene_matrix) &&
+      graphene_matrix_is_2d (&graphene_matrix))
     {
+      graphene_matrix_to_2d (&graphene_matrix,
+                             &transform_matrix.xx, &transform_matrix.yx,
+                             &transform_matrix.xy, &transform_matrix.yy,
+                             &transform_matrix.x0, &transform_matrix.y0);
       /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
       cairo_matrix_init_translate (&matrix, width / 2, height / 2);
       cairo_matrix_multiply (&matrix, &transform_matrix, &matrix);
@@ -90,8 +96,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
                              GtkCssImageBuiltinType  builtin_type)
 {
   const GtkCssValue *shadows, *transform;
-  cairo_matrix_t transform_matrix;
-  graphene_matrix_t m1, m2, m3, saved_matrix;
+  graphene_matrix_t transform_matrix, m1, m2, m3, saved_matrix;
   GtkCssImage *image;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
@@ -104,17 +109,14 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   shadows = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
   transform = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
 
-  if (!_gtk_css_transform_value_get_matrix (transform, &transform_matrix))
+  if (!gtk_css_transform_value_get_matrix (transform, &transform_matrix))
     return;
 
   graphene_matrix_init_from_matrix (&saved_matrix, gtk_snapshot_get_transform (snapshot));
 
   /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
   graphene_matrix_init_translate (&m1, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
-  graphene_matrix_init_from_2d (&m2, transform_matrix.xx, transform_matrix.yx,
-                                     transform_matrix.xy, transform_matrix.yy,
-                                     transform_matrix.x0, transform_matrix.y0);
-  graphene_matrix_multiply (&m2, &m1, &m3);
+  graphene_matrix_multiply (&transform_matrix, &m1, &m3);
   graphene_matrix_init_translate (&m2, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
   graphene_matrix_multiply (&m2, &m3, &m1);
   gtk_snapshot_transform (snapshot, &m1);
@@ -150,6 +152,7 @@ gtk_css_style_render_icon_surface (GtkCssStyle            *style,
                                    double                  y)
 {
   const GtkCssValue *shadows;
+  graphene_matrix_t graphene_matrix;
   cairo_matrix_t matrix, transform_matrix, saved_matrix;
   GdkRectangle extents;
 
@@ -171,10 +174,15 @@ gtk_css_style_render_icon_surface (GtkCssStyle            *style,
   cairo_get_matrix (cr, &saved_matrix);
   cairo_translate (cr, x + extents.x, y + extents.y);
 
-  if (_gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
+  if (gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &graphene_matrix) &&
+      graphene_matrix_is_2d (&graphene_matrix))
     {
       cairo_pattern_t *pattern;
 
+      graphene_matrix_to_2d (&graphene_matrix,
+                             &transform_matrix.xx, &transform_matrix.yx,
+                             &transform_matrix.xy, &transform_matrix.yy,
+                             &transform_matrix.x0, &transform_matrix.y0);
       /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
       cairo_matrix_init_translate (&matrix, extents.width / 2, extents.height / 2);
       cairo_matrix_multiply (&matrix, &transform_matrix, &matrix);
@@ -197,38 +205,6 @@ gtk_css_style_render_icon_surface (GtkCssStyle            *style,
   cairo_set_matrix (cr, &saved_matrix);
 }
 
-static void
-gtk_cairo_rectangle_transform (cairo_rectangle_int_t       *dest,
-                               const cairo_rectangle_int_t *src,
-                               const cairo_matrix_t        *matrix)
-{
-  double x1, x2, x3, x4;
-  double y1, y2, y3, y4;
-
-  g_return_if_fail (dest != NULL);
-  g_return_if_fail (src != NULL);
-  g_return_if_fail (matrix != NULL);
-
-  x1 = src->x;
-  y1 = src->y;
-  x2 = src->x + src->width;
-  y2 = src->y;
-  x3 = src->x + src->width;
-  y3 = src->y + src->height;
-  x4 = src->x;
-  y4 = src->y + src->height;
-
-  cairo_matrix_transform_point (matrix, &x1, &y1);
-  cairo_matrix_transform_point (matrix, &x2, &y2);
-  cairo_matrix_transform_point (matrix, &x3, &y3);
-  cairo_matrix_transform_point (matrix, &x4, &y4);
-
-  dest->x = floor (MIN (MIN (x1, x2), MIN (x3, x4)));
-  dest->y = floor (MIN (MIN (y1, y2), MIN (y3, y4)));
-  dest->width = ceil (MAX (MAX (x1, x2), MAX (x3, x4))) - dest->x;
-  dest->height = ceil (MAX (MAX (y1, y2), MAX (y3, y4))) - dest->y;
-}
-
 void
 gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
                                        GdkRectangle *extents,
@@ -237,9 +213,9 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
                                        gint          width,
                                        gint          height)
 {
-  cairo_matrix_t transform_matrix, matrix;
+  graphene_matrix_t transform_matrix, translate_matrix, matrix;
+  graphene_rect_t bounds;
   GtkBorder border;
-  GdkRectangle rect;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (extents != NULL);
@@ -249,24 +225,23 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
   extents->width = width;
   extents->height = height;
 
-  if (!_gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
+  if (!gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
     return;
-  
-  cairo_matrix_init_translate (&matrix, x + width / 2.0, y + height / 2.0);
-  cairo_matrix_multiply (&matrix, &transform_matrix, &matrix);
+
+  graphene_matrix_init_translate (&translate_matrix, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(x + width / 2.0, y + height / 2.0, 0));
+  graphene_matrix_multiply (&translate_matrix, &transform_matrix, &matrix);
+  graphene_rect_init (&bounds,
+                      - width / 2.0, - height / 2.0,
+                      width, height);
   /* need to round to full pixels */
-  rect.x = - (width + 1) / 2;
-  rect.y = - (height + 1) / 2;
-  rect.width = (width + 1) & ~1;
-  rect.height = (height + 1) & ~1;
-  gtk_cairo_rectangle_transform (extents, &rect, &matrix);
+  graphene_matrix_transform_bounds (&matrix, &bounds, &bounds);
 
   _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW), &border);
 
-  extents->x -= border.left;
-  extents->y -= border.top;
-  extents->width += border.left + border.right;
-  extents->height += border.top + border.bottom;
+  extents->x = floorf (bounds.origin.x) - border.left;
+  extents->y = floorf (bounds.origin.y) - border.top;
+  extents->width = ceilf (bounds.origin.x + bounds.size.width) - extents->x + border.left + border.right;
+  extents->height = ceilf (bounds.origin.y + bounds.size.height) - extents->y + border.top + border.bottom;
 }
 
 void
@@ -275,8 +250,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
                                      GskTexture  *texture)
 {
   const GtkCssValue *shadows, *transform;
-  cairo_matrix_t transform_matrix;
-  graphene_matrix_t m1, m2, m3, saved_matrix;
+  graphene_matrix_t transform_matrix, m1, m2, m3, saved_matrix;
   graphene_rect_t bounds;
   GskRenderNode *node;
   int width, height;
@@ -290,17 +264,14 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
   width = gsk_texture_get_width (texture);
   height = gsk_texture_get_height (texture);
 
-  if (!_gtk_css_transform_value_get_matrix (transform, &transform_matrix))
+  if (!gtk_css_transform_value_get_matrix (transform, &transform_matrix))
     return;
 
   graphene_matrix_init_from_matrix (&saved_matrix, gtk_snapshot_get_transform (snapshot));
 
   /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
   graphene_matrix_init_translate (&m1, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
-  graphene_matrix_init_from_2d (&m2, transform_matrix.xx, transform_matrix.yx,
-                                     transform_matrix.xy, transform_matrix.yy,
-                                     transform_matrix.x0, transform_matrix.y0);
-  graphene_matrix_multiply (&m2, &m1, &m3);
+  graphene_matrix_multiply (&transform_matrix, &m1, &m3);
   graphene_matrix_init_translate (&m2, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
   graphene_matrix_multiply (&m2, &m3, &m1);
   gtk_snapshot_transform (snapshot, &m1);
