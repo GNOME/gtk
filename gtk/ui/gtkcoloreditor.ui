@@ -139,7 +139,6 @@
       <class name="popover"/>
       <class name="osd"/>
     </style>
-    <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
       <object class="GtkGrid" id="grid4">
         <property name="visible">1</property>
@@ -186,7 +185,6 @@
       <class name="popover"/>
       <class name="osd"/>
     </style>
-    <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
       <object class="GtkGrid" id="grid3">
         <property name="visible">1</property>
@@ -233,7 +231,6 @@
       <class name="popover"/>
       <class name="osd"/>
     </style>
-    <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
       <object class="GtkGrid" id="grid2">
         <property name="visible">1</property>

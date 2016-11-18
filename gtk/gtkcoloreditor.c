@@ -335,24 +335,6 @@ scaled_adjustment (GtkAdjustment *a,
   return as;
 }
 
-static gboolean
-popup_draw (GtkWidget      *popup,
-            cairo_t        *cr,
-            GtkColorEditor *editor)
-{
-  GtkStyleContext *context;
-  gint width, height;
-
-  context = gtk_widget_get_style_context (popup);
-  width = gtk_widget_get_allocated_width (popup);
-  height = gtk_widget_get_allocated_height (popup);
-
-  gtk_render_background (context, cr, 0, 0, width, height);
-  gtk_render_frame (context, cr, 0, 0, width, height);
-
-  return FALSE;
-}
-
 static void
 gtk_color_editor_init (GtkColorEditor *editor)
 {
@@ -506,7 +488,6 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_adj);
 
   gtk_widget_class_bind_template_callback (widget_class, hsv_changed);
-  gtk_widget_class_bind_template_callback (widget_class, popup_draw);
   gtk_widget_class_bind_template_callback (widget_class, popup_key_press);
   gtk_widget_class_bind_template_callback (widget_class, dismiss_current_popup);
   gtk_widget_class_bind_template_callback (widget_class, get_child_position);
