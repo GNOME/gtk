@@ -68,6 +68,17 @@ GType      gtk_drawing_area_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_drawing_area_new      (void);
 
+GDK_AVAILABLE_IN_3_90
+void            gtk_drawing_area_set_content_width      (GtkDrawingArea         *self,
+                                                         int                     width);
+GDK_AVAILABLE_IN_3_90
+int             gtk_drawing_area_get_content_width      (GtkDrawingArea         *self);
+GDK_AVAILABLE_IN_3_90
+void            gtk_drawing_area_set_content_height     (GtkDrawingArea         *self,
+                                                         int                     height);
+GDK_AVAILABLE_IN_3_90
+int             gtk_drawing_area_get_content_height     (GtkDrawingArea         *self);
+
 G_END_DECLS
 
 #endif /* __GTK_DRAWING_AREA_H__ */

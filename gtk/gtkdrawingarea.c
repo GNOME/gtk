@@ -25,8 +25,24 @@
 #include "config.h"
 #include "gtkdrawingarea.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkstylecontext.h"
 
+typedef struct _GtkDrawingAreaPrivate GtkDrawingAreaPrivate;
+
+struct _GtkDrawingAreaPrivate {
+  int content_width;
+  int content_height;
+};
+
+enum {
+  PROP_0,
+  PROP_CONTENT_WIDTH,
+  PROP_CONTENT_HEIGHT,
+  LAST_PROP
+};
+
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 /**
  * SECTION:gtkdrawingarea
@@ -94,7 +110,8 @@
  * }
  * [...]
  *   GtkWidget *drawing_area = gtk_drawing_area_new ();
- *   gtk_widget_set_size_request (drawing_area, 100, 100);
+ *   gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area), 100);
+ *   gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area), 100);
  *   g_signal_connect (G_OBJECT (drawing_area), "draw",
  *                     G_CALLBACK (draw_callback), NULL);
  * ]|
@@ -119,12 +136,117 @@
  * gtk_render_focus() for one way to draw focus.
  */
 
-G_DEFINE_TYPE (GtkDrawingArea, gtk_drawing_area, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkDrawingArea, gtk_drawing_area, GTK_TYPE_WIDGET)
+
+static void
+gtk_drawing_area_set_property (GObject      *gobject,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GtkDrawingArea *self = GTK_DRAWING_AREA (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_CONTENT_WIDTH:
+      gtk_drawing_area_set_content_width (self, g_value_get_int (value));
+      break;
+
+    case PROP_CONTENT_HEIGHT:
+      gtk_drawing_area_set_content_height (self, g_value_get_int (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+    }
+}
+
+static void
+gtk_drawing_area_get_property (GObject    *gobject,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GtkDrawingArea *self = GTK_DRAWING_AREA (gobject);
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_CONTENT_WIDTH:
+      g_value_set_int (value, priv->content_width);
+      break;
+
+    case PROP_CONTENT_HEIGHT:
+      g_value_set_int (value, priv->content_height);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+    }
+}
+
+static void
+gtk_drawing_area_measure (GtkWidget      *widget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline)
+{
+  GtkDrawingArea *self = GTK_DRAWING_AREA (widget);
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *minimum = *natural = priv->content_width;
+    }
+  else
+    {
+      *minimum = *natural = priv->content_height;
+    }
+}
 
 static void
 gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  gobject_class->set_property = gtk_drawing_area_set_property;
+  gobject_class->get_property = gtk_drawing_area_get_property;
+
+  widget_class->measure = gtk_drawing_area_measure;
+
+  /**
+   * GtkDrawingArea:content-width
+   *
+   * The content width. See gtk_drawing_area_set_content_width() for details.
+   *
+   * Since: 3.90
+   */
+  props[PROP_CONTENT_WIDTH] =
+    g_param_spec_int ("content-width",
+                      P_("Content Width"),
+                      P_("Desired width for displayed content"),
+                      0, G_MAXINT, 0,
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkDrawingArea:content-height
+   *
+   * The content height. See gtk_drawing_area_set_content_height() for details.
+   *
+   * Since: 3.90
+   */
+  props[PROP_CONTENT_HEIGHT] =
+    g_param_spec_int ("content-height",
+                      P_("Content Height"),
+                      P_("Desired height for displayed content"),
+                      0, G_MAXINT, 0,
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 }
@@ -147,3 +269,110 @@ gtk_drawing_area_new (void)
 {
   return g_object_new (GTK_TYPE_DRAWING_AREA, NULL);
 }
+
+/**
+ * gtk_drawing_area_set_content_width:
+ * @self: a #GtkDrawingArea
+ * @width: the width of contents
+ *
+ * Sets the desired width of the contents of the drawing area. Note that
+ * because widgets may be allocated larger sizes than they requested, it is
+ * possible that the actual width passed to your draw function is larger
+ * than the width set here. You can use gtk_widget_set_halign() to avoid
+ * that.
+ *
+ * If the width is set to 0 (the default), the drawing area may disappear.
+ *
+ * Since: 3.90
+ **/
+void
+gtk_drawing_area_set_content_width (GtkDrawingArea *self,
+                                    int             width)
+{
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_DRAWING_AREA (self));
+  g_return_if_fail (width >= 0);
+
+  if (priv->content_width == width)
+    return;
+
+  priv->content_width = width;
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTENT_WIDTH]);
+}
+
+/**
+ * gtk_drawing_area_get_content_width:
+ * @self: a #GtkDrawingArea
+ *
+ * Retrieves the value previously set via gtk_drawing_area_set_content_width().
+ *
+ * Returns: The width requested for content of the drawing area
+ *
+ * Since: 3.90
+ **/
+int
+gtk_drawing_area_get_content_width (GtkDrawingArea *self)
+{
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_DRAWING_AREA (self), 0);
+
+  return priv->content_width;
+}
+
+/**
+ * gtk_drawing_area_set_content_height:
+ * @self: a #GtkDrawingArea
+ * @height: the height of contents
+ *
+ * Sets the desired height of the contents of the drawing area. Note that
+ * because widgets may be allocated larger sizes than they requested, it is
+ * possible that the actual height passed to your draw function is larger
+ * than the height set here. You can use gtk_widget_set_valign() to avoid
+ * that.
+ *
+ * If the height is set to 0 (the default), the drawing area may disappear.
+ *
+ * Since: 3.90
+ **/
+void
+gtk_drawing_area_set_content_height (GtkDrawingArea *self,
+                                     int             height)
+{
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_DRAWING_AREA (self));
+  g_return_if_fail (height >= 0);
+
+  if (priv->content_height == height)
+    return;
+
+  priv->content_height = height;
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTENT_HEIGHT]);
+}
+
+/**
+ * gtk_drawing_area_get_content_height:
+ * @self: a #GtkDrawingArea
+ *
+ * Retrieves the value previously set via gtk_drawing_area_set_content_height().
+ *
+ * Returns: The height requested for content of the drawing area
+ *
+ * Since: 3.90
+ **/
+int
+gtk_drawing_area_get_content_height (GtkDrawingArea *self)
+{
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_DRAWING_AREA (self), 0);
+
+  return priv->content_height;
+}
+
