@@ -322,7 +322,6 @@ static gboolean gtk_container_focus_move           (GtkContainer      *container
                                                     GtkDirectionType   direction);
 static void     gtk_container_children_callback    (GtkWidget         *widget,
                                                     gpointer           client_data);
-static void     gtk_container_show_all             (GtkWidget         *widget);
 static gint     gtk_container_draw                 (GtkWidget         *widget,
                                                     cairo_t           *cr);
 static void     gtk_container_snapshot             (GtkWidget         *widget,
@@ -463,7 +462,6 @@ gtk_container_class_init (GtkContainerClass *class)
 
   widget_class->destroy = gtk_container_destroy;
   widget_class->compute_expand = gtk_container_compute_expand;
-  widget_class->show_all = gtk_container_show_all;
   widget_class->snapshot = gtk_container_snapshot;
   widget_class->draw = gtk_container_draw;
   widget_class->map = gtk_container_map;
@@ -2989,18 +2987,6 @@ gtk_container_get_focus_hadjustment (GtkContainer *container)
   hadjustment = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
 
   return hadjustment;
-}
-
-
-static void
-gtk_container_show_all (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (widget));
-
-  gtk_container_foreach (GTK_CONTAINER (widget),
-                         (GtkCallback) gtk_widget_show_all,
-                         NULL);
-  gtk_widget_show (widget);
 }
 
 typedef struct {

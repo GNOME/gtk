@@ -945,6 +945,22 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
 }
 
 static void
+gtk_widget_real_show_all (GtkWidget *widget)
+{
+  GtkWidget *p;
+
+  for (p = gtk_widget_get_first_child (widget);
+       p != NULL;
+       p = gtk_widget_get_next_sibling (p))
+    {
+      if (!GTK_IS_POPOVER (p))
+        gtk_widget_show_all (p);
+    }
+
+  gtk_widget_show (widget);
+}
+
+static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   static GObjectNotifyContext cpn_context = { 0, NULL, NULL };
@@ -992,7 +1008,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->activate_signal = 0;
   klass->dispatch_child_properties_changed = gtk_widget_dispatch_child_properties_changed;
   klass->show = gtk_widget_real_show;
-  klass->show_all = gtk_widget_show;
+  klass->show_all = gtk_widget_real_show_all;
   klass->hide = gtk_widget_real_hide;
   klass->map = gtk_widget_real_map;
   klass->unmap = gtk_widget_real_unmap;
