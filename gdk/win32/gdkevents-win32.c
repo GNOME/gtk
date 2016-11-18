@@ -2097,10 +2097,10 @@ gdk_event_translate (MSG  *msg,
   GdkWindow *window = NULL;
   GdkWindowImplWin32 *impl;
 
-  GdkWindow *new_window;
+  GdkWindow *new_window = NULL;
 
-  GdkDeviceManager *device_manager;
-  GdkDeviceManagerWin32 *device_manager_win32;
+  GdkDeviceManager *device_manager = NULL;
+  GdkDeviceManagerWin32 *device_manager_win32 = NULL;
 
   GdkDeviceGrabInfo *keyboard_grab = NULL;
   GdkDeviceGrabInfo *pointer_grab = NULL;
@@ -2153,13 +2153,34 @@ gdk_event_translate (MSG  *msg,
       return FALSE;
     }
 
-  device_manager = gdk_display_get_device_manager (display);
-  device_manager_win32 = GDK_DEVICE_MANAGER_WIN32 (device_manager);
+  /* gdk_event_translate() can be called during initialization, if something
+   * sends MSGs. In this case, the default display or its device manager will
+   * be NULL, so avoid trying to read the active grabs.
+   * https://bugzilla.gnome.org/show_bug.cgi?id=774379
+   */
+  if (display != NULL)
+    {
+      device_manager = gdk_display_get_device_manager (display);
+    }
+  else
+    {
+      GDK_NOTE (EVENTS, g_print (" (no GdkDisplay)"));
+    }
 
-  keyboard_grab = _gdk_display_get_last_device_grab (display,
-                                                     device_manager_win32->core_keyboard);
-  pointer_grab = _gdk_display_get_last_device_grab (display,
-                                                    device_manager_win32->core_pointer);
+  if (device_manager != NULL)
+    {
+      device_manager_win32 = GDK_DEVICE_MANAGER_WIN32 (device_manager);
+    }
+  else
+    {
+      GDK_NOTE (EVENTS, g_print (" (no GdkDeviceManager)"));
+    }
+
+  if (device_manager_win32 != NULL)
+    {
+      keyboard_grab = _gdk_display_get_last_device_grab (display, device_manager_win32->core_keyboard);
+      pointer_grab = _gdk_display_get_last_device_grab (display, device_manager_win32->core_pointer);
+    }
 
   g_object_ref (window);
 
