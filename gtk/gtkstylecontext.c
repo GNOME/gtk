@@ -1389,6 +1389,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                  gtk_widget_path_iter_get_state (path, -1),
                                                  pspec, &pcache->value))
         {
+          gtk_widget_path_unref (path);
+
           return &pcache->value;
         }
     }
