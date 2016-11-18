@@ -75,7 +75,7 @@
  *
  * |[<!-- language="plain" -->
  * progressbar[.osd]
- * ╰── trough
+ * ╰── trough[.empty][.full]
  *     ├── [text]
  *     ╰── progress[.pulse]
  * ]|
@@ -432,6 +432,36 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 }
 
 static void
+update_fraction_classes (GtkProgressBar *pbar)
+{
+  GtkProgressBarPrivate *priv = pbar->priv;
+  gboolean empty = FALSE;
+  gboolean full = FALSE;
+
+  /* Here we set classes based on fill-level unless we're in activity-mode.
+   */
+
+  if (!priv->activity_mode)
+    {
+      if (priv->fraction <= 0.0)
+        empty = TRUE;
+
+      if (priv->fraction >= 1.0)
+        full = TRUE;
+    }
+
+  if (empty)
+    gtk_css_gadget_add_class (priv->trough_gadget, "empty");
+  else
+    gtk_css_gadget_remove_class (priv->trough_gadget, "empty");
+
+  if (full)
+    gtk_css_gadget_add_class (priv->trough_gadget, "full");
+  else
+    gtk_css_gadget_remove_class (priv->trough_gadget, "full");
+}
+
+static void
 update_node_classes (GtkProgressBar *pbar)
 {
   GtkProgressBarPrivate *priv = pbar->priv;
@@ -499,6 +529,8 @@ update_node_classes (GtkProgressBar *pbar)
     gtk_css_gadget_add_class (priv->progress_gadget, GTK_STYLE_CLASS_BOTTOM);
   else
     gtk_css_gadget_remove_class (priv->progress_gadget, GTK_STYLE_CLASS_BOTTOM);
+
+  update_fraction_classes (pbar);
 }
 
 static void
@@ -1427,6 +1459,7 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
   priv->fraction = CLAMP (fraction, 0.0, 1.0);
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
   gtk_widget_queue_allocate (GTK_WIDGET (pbar));
+  update_fraction_classes (pbar);
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_FRACTION]);
 }
