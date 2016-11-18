@@ -39,17 +39,6 @@ query_tooltip_cb (GtkWidget  *widget,
 }
 
 static gboolean
-draw_tooltip (GtkWidget *widget,
-              cairo_t   *cr,
-              gpointer   unused)
-{
-  cairo_set_source_rgb (cr, 0, 0, 1);
-  cairo_paint (cr);
-
-  return FALSE;
-}
-
-static gboolean
 query_tooltip_custom_cb (GtkWidget  *widget,
 			 gint        x,
 			 gint        y,
@@ -57,10 +46,6 @@ query_tooltip_custom_cb (GtkWidget  *widget,
 			 GtkTooltip *tooltip,
 			 gpointer    data)
 {
-  GtkWindow *window = gtk_widget_get_tooltip_window (widget);
-
-  g_signal_connect (window, "draw", G_CALLBACK (draw_tooltip), NULL);
-
   return TRUE;
 }
 
@@ -214,10 +199,12 @@ query_tooltip_drawing_area_cb (GtkWidget  *widget,
   return FALSE;
 }
 
-static gboolean
-drawing_area_draw (GtkWidget *drawing_area,
-		   cairo_t   *cr,
-		   gpointer   data)
+static void
+drawing_area_draw (GtkDrawingArea *drawing_area,
+		   cairo_t        *cr,
+                   int             width,
+                   int             height,
+		   gpointer        data)
 {
   gint i;
 
@@ -236,8 +223,6 @@ drawing_area_draw (GtkWidget *drawing_area,
       cairo_set_source_rgba (cr, r->r, r->g, r->b, 0.5);
       cairo_fill (cr);
     }
-
-  return FALSE;
 }
 
 static gboolean
@@ -403,10 +388,11 @@ main (int argc, char *argv[])
 
   /* Drawing area */
   drawing_area = gtk_drawing_area_new ();
-  gtk_widget_set_size_request (drawing_area, 320, 240);
+  gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area), 320);
+  gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area), 240);
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
+                                  drawing_area_draw, NULL, NULL);
   g_object_set (drawing_area, "has-tooltip", TRUE, NULL);
-  g_signal_connect (drawing_area, "draw",
-		    G_CALLBACK (drawing_area_draw), NULL);
   g_signal_connect (drawing_area, "query-tooltip",
 		    G_CALLBACK (query_tooltip_drawing_area_cb), NULL);
   gtk_box_pack_start (GTK_BOX (box), drawing_area, FALSE, FALSE);
