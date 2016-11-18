@@ -62,11 +62,14 @@ scale_changed_cb (GtkRange *range,
   redraw_event_box (label);
 }
 
-static gboolean
-ebox_draw_cb (GtkWidget *widget,
-              cairo_t   *cr,
-              gpointer   data)
+static void
+overlay_draw (GtkDrawingArea *da,
+              cairo_t        *cr,
+              int             width,
+              int             height,
+              gpointer        data)
 {
+  GtkWidget *widget = GTK_WIDGET (da);
   PangoLayout *layout;
   const double dashes[] = { 6, 18 };
   GtkAllocation label_allocation;
@@ -78,7 +81,8 @@ ebox_draw_cb (GtkWidget *widget,
   cairo_set_line_width (cr, 1);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_paint (cr);
+  cairo_rectangle (cr, 0, 0, width, height);
+  cairo_fill (cr);
 
   gtk_widget_translate_coordinates (label, widget, 0, 0, &x, &y);
   layout = gtk_widget_create_pango_layout (widget, "");
@@ -115,15 +119,13 @@ ebox_draw_cb (GtkWidget *widget,
   cairo_set_source_rgb (cr, 0.2, 0.8, 0.2);
   cairo_set_dash (cr, dashes, 2, 12.5);
   cairo_stroke (cr);
-
-  return FALSE;
 }
 
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *vbox, *label;
-  GtkWidget *combo, *scale, *ebox;
+  GtkWidget *combo, *scale, *overlay, *da;
 
   gtk_init (&argc, &argv);
 
@@ -148,18 +150,22 @@ main (int argc, char *argv[])
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
-  ebox = gtk_event_box_new ();
-  gtk_container_add (GTK_CONTAINER (ebox), label);
+  da = gtk_drawing_area_new ();
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), overlay_draw, label, NULL);
+
+  overlay = gtk_overlay_new ();
+  gtk_container_add (GTK_CONTAINER (overlay), da);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
 
   gtk_box_pack_start (GTK_BOX (vbox), combo, FALSE, TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), ebox, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), overlay, TRUE, TRUE);
 
   g_object_set_data (G_OBJECT (label), "combo", combo);
 
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed_cb), label);
   g_signal_connect (scale, "value-changed", G_CALLBACK (scale_changed_cb), label);
-  g_signal_connect (ebox, "draw", G_CALLBACK (ebox_draw_cb), label);
+
 
   gtk_widget_show_all (window);
 
