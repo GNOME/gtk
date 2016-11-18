@@ -15,14 +15,18 @@ stop_main (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
-static gboolean
-on_draw (GtkWidget *widget, cairo_t *cr)
+static void
+on_draw (GtkDrawingArea *da,
+         cairo_t        *cr,
+         int             width,
+         int             height,
+         gpointer        data)
 {
   gint i, j;
 
-  for (i = 0; 20 * i < gtk_widget_get_allocated_width (widget); i++)
+  for (i = 0; 20 * i < width; i++)
     {
-      for (j = 0; 20 * j < gtk_widget_get_allocated_height (widget); j++)
+      for (j = 0; 20 * j < height; j++)
         {
           if ((i + j) % 2 == 1)
             cairo_set_source_rgb (cr, 1., 1., 1.);
@@ -33,8 +37,6 @@ on_draw (GtkWidget *widget, cairo_t *cr)
           cairo_fill (cr);
         }
     }
-
-  return FALSE;
 }
 
 static gboolean
@@ -49,16 +51,16 @@ static void
 test_default_size (void)
 {
   GtkWidget *window;
-  GtkWidget *box;
+  GtkWidget *da;
   gint w, h;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "draw", G_CALLBACK (on_draw), NULL);
   if (interactive)
     g_signal_connect (window, "key-press-event", G_CALLBACK (on_keypress), NULL);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  da = gtk_drawing_area_new ();
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (window), da);
 
   /* check that default size is unset initially */
   gtk_window_get_default_size (GTK_WINDOW (window), &w, &h);
@@ -88,8 +90,8 @@ test_default_size (void)
   g_assert_cmpint (w, ==, 300);
   g_assert_cmpint (h, ==, 300);
 
-  g_assert_cmpint (gtk_widget_get_allocated_width (box), ==, 300);
-  g_assert_cmpint (gtk_widget_get_allocated_height (box), ==, 300);
+  g_assert_cmpint (gtk_widget_get_allocated_width (da), ==, 300);
+  g_assert_cmpint (gtk_widget_get_allocated_height (da), ==, 300);
 
   /* check that setting default size after the fact does not change
    * window size
@@ -126,16 +128,16 @@ static void
 test_resize (void)
 {
   GtkWidget *window;
-  GtkWidget *box;
+  GtkWidget *da;
   gint w, h;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "draw", G_CALLBACK (on_draw), NULL);
   if (interactive)
     g_signal_connect (window, "key-press-event", G_CALLBACK (on_keypress), NULL);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), box);
+  da = gtk_drawing_area_new ();
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (window), da);
 
   /* test that resize before show overrides default size */
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
