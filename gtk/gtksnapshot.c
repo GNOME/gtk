@@ -150,14 +150,14 @@ gtk_snapshot_push_node (GtkSnapshot   *snapshot,
  * Since: 3.90
  */
 void
-gtk_snapshot_push (GtkSnapshot           *state,
+gtk_snapshot_push (GtkSnapshot           *snapshot,
                    const graphene_rect_t *bounds,
                    const char            *name,
                    ...)
 {
   GskRenderNode *node;
 
-  node = gsk_renderer_create_render_node (state->renderer);
+  node = gsk_renderer_create_render_node (snapshot->renderer);
   gsk_render_node_set_bounds (node, bounds);
 
   if (name)
@@ -174,7 +174,7 @@ gtk_snapshot_push (GtkSnapshot           *state,
       g_free (str);
     }
 
-  gtk_snapshot_push_node (state, node);
+  gtk_snapshot_push_node (snapshot, node);
   gsk_render_node_unref (node);
 }
 
@@ -216,9 +216,9 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
  * Since: 3.90
  */
 GskRenderer *
-gtk_snapshot_get_renderer (const GtkSnapshot *state)
+gtk_snapshot_get_renderer (const GtkSnapshot *snapshot)
 {
-  return state->renderer;
+  return snapshot->renderer;
 }
 
 /**
@@ -262,7 +262,7 @@ gtk_snapshot_transform (GtkSnapshot             *snapshot,
 
 /**
  * gtk_snapshot_translate_2d:
- * @state: a $GtkSnapshot
+ * @snapshot: a $GtkSnapshot
  * @x: horizontal translation
  * @y: vertical translation
  *
@@ -271,7 +271,7 @@ gtk_snapshot_transform (GtkSnapshot             *snapshot,
  * Since: 3.90
  */
 void
-gtk_snapshot_translate_2d (GtkSnapshot *state,
+gtk_snapshot_translate_2d (GtkSnapshot *snapshot,
                            int          x,
                            int          y)
 {
@@ -280,7 +280,7 @@ gtk_snapshot_translate_2d (GtkSnapshot *state,
 
   graphene_point3d_init (&point, x, y, 0);
   graphene_matrix_init_translate (&transform, &point);
-  gtk_snapshot_transform (state, &transform);
+  gtk_snapshot_transform (snapshot, &transform);
 }
 
 /**
@@ -330,17 +330,17 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
  * Returns: the newly created #GskRenderNode
  */
 GskRenderNode *
-gtk_snapshot_append (GtkSnapshot           *state,
+gtk_snapshot_append (GtkSnapshot           *snapshot,
                      const graphene_rect_t *bounds,
                      const char            *name,
                      ...)
 {
   GskRenderNode *node;
 
-  g_return_val_if_fail (state != NULL, NULL);
+  g_return_val_if_fail (snapshot != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_renderer_create_render_node (state->renderer);
+  node = gsk_renderer_create_render_node (snapshot->renderer);
   gsk_render_node_set_bounds (node, bounds);
 
   if (name)
@@ -357,14 +357,14 @@ gtk_snapshot_append (GtkSnapshot           *state,
       g_free (str);
     }
 
-  gtk_snapshot_append_node (state, node);
+  gtk_snapshot_append_node (snapshot, node);
 
   return node;
 }
 
 /**
  * gtk_snapshot_append_cairo_node:
- * @state: a #GtkSnapshot
+ * @snapshot: a #GtkSnapshot
  * @bounds: the bounds for the new node
  * @name: a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
@@ -378,17 +378,17 @@ gtk_snapshot_append (GtkSnapshot           *state,
  * Since: 3.90
  */
 cairo_t *
-gtk_snapshot_append_cairo_node (GtkSnapshot           *state,
+gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
                                 const graphene_rect_t *bounds,
                                 const char            *name,
                                 ...)
 {
   GskRenderNode *node;
 
-  g_return_val_if_fail (state != NULL, NULL);
+  g_return_val_if_fail (snapshot != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_renderer_create_render_node (state->renderer);
+  node = gsk_renderer_create_render_node (snapshot->renderer);
   gsk_render_node_set_bounds (node, bounds);
 
   if (name)
@@ -405,15 +405,15 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *state,
       g_free (str);
     }
 
-  gtk_snapshot_append_node (state, node);
+  gtk_snapshot_append_node (snapshot, node);
   gsk_render_node_unref (node);
 
-  return gsk_render_node_get_draw_context (node, state->renderer);
+  return gsk_render_node_get_draw_context (node, snapshot->renderer);
 }
 
 /**
  * gtk_snapshot_push_cairo_node:
- * @state: a #GtkSnapshot
+ * @snapshot: a #GtkSnapshot
  * @bounds: the bounds for the new node
  * @name: a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
@@ -427,17 +427,17 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *state,
  * Since: 3.90
  */
 cairo_t *
-gtk_snapshot_push_cairo_node (GtkSnapshot            *state,
+gtk_snapshot_push_cairo_node (GtkSnapshot            *snapshot,
                               const graphene_rect_t  *bounds,
                               const char             *name,
                               ...)
 {
   GskRenderNode *node;
 
-  g_return_val_if_fail (state != NULL, NULL);
+  g_return_val_if_fail (snapshot != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_renderer_create_render_node (state->renderer);
+  node = gsk_renderer_create_render_node (snapshot->renderer);
   gsk_render_node_set_bounds (node, bounds);
 
   if (name)
@@ -454,10 +454,10 @@ gtk_snapshot_push_cairo_node (GtkSnapshot            *state,
       g_free (str);
     }
 
-  gtk_snapshot_push_node (state, node);
+  gtk_snapshot_push_node (snapshot, node);
   gsk_render_node_unref (node);
 
-  return gsk_render_node_get_draw_context (node, state->renderer);
+  return gsk_render_node_get_draw_context (node, snapshot->renderer);
 }
 
 static void
@@ -507,7 +507,7 @@ gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
 
 /**
  * gtk_snapshot_render_background:
- * @state: a #GtkSnapshot
+ * @snapshot: a #GtkSnapshot
  * @context: the #GtkStyleContext to use
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
@@ -521,46 +521,61 @@ gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
  * Since: 3.90
  */
 void
-gtk_snapshot_render_background (GtkSnapshot     *state,
+gtk_snapshot_render_background (GtkSnapshot     *snapshot,
                                 GtkStyleContext *context,
                                 gdouble          x,
                                 gdouble          y,
                                 gdouble          width,
                                 gdouble          height)
 {
-  g_return_if_fail (state != NULL);
+  g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_translate_2d (state, x, y);
+  gtk_snapshot_translate_2d (snapshot, x, y);
   gtk_css_style_snapshot_background (gtk_style_context_lookup_style (context),
-                                     state,
+                                     snapshot,
                                      width, height,
                                      gtk_style_context_get_junction_sides (context));
-  gtk_snapshot_translate_2d (state, -x, -y);
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
 }
 
+/**
+ * gtk_snapshot_render_frame:
+ * @snapshot: a #GtkSnapshot
+ * @context: the #GtkStyleContext to use
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Creates a render node for the CSS border according to @context,
+ * and appends it to the current node of @snapshot, without changing
+ * the current node.
+ *
+ * Since: 3.90
+ */
 void
-gtk_snapshot_render_frame (GtkSnapshot     *state,
+gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
                            GtkStyleContext *context,
                            gdouble          x,
                            gdouble          y,
                            gdouble          width,
                            gdouble          height)
 {
-  g_return_if_fail (state != NULL);
+  g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_translate_2d (state, x, y);
+  gtk_snapshot_translate_2d (snapshot, x, y);
   gtk_css_style_snapshot_border (gtk_style_context_lookup_style (context),
-                                 state,
+                                 snapshot,
                                  width, height,
                                  gtk_style_context_get_junction_sides (context));
-  gtk_snapshot_translate_2d (state, -x, -y);
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
 }
 
 /**
  * gtk_snapshot_render_focus:
- * @state: a #GtkSnapshot
+ * @snapshot: a #GtkSnapshot
  * @context: the #GtkStyleContext to use
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
@@ -574,26 +589,26 @@ gtk_snapshot_render_frame (GtkSnapshot     *state,
  * Since: 3.90
  */
 void
-gtk_snapshot_render_focus (GtkSnapshot     *state,
+gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
                            GtkStyleContext *context,
                            gdouble          x,
                            gdouble          y,
                            gdouble          width,
                            gdouble          height)
 {
-  g_return_if_fail (state != NULL);
+  g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_translate_2d (state, x, y);
+  gtk_snapshot_translate_2d (snapshot, x, y);
   gtk_css_style_snapshot_outline (gtk_style_context_lookup_style (context),
-                                  state,
+                                  snapshot,
                                   width, height);
-  gtk_snapshot_translate_2d (state, -x, -y);
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
 }
 
 /**
  * gtk_snapshot_render_layout:
- * @state: a #GtkSnapshot
+ * @snapshot: a #GtkSnapshot
  * @context: the #GtkStyleContext to use
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
@@ -606,7 +621,7 @@ gtk_snapshot_render_focus (GtkSnapshot     *state,
  * Since: 3.90
  */
 void
-gtk_snapshot_render_layout (GtkSnapshot     *state,
+gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
                             GtkStyleContext *context,
                             gdouble          x,
                             gdouble          y,
@@ -619,7 +634,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *state,
   GtkCssValue *shadow;
   cairo_t *cr;
 
-  g_return_if_fail (state != NULL);
+  g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
@@ -633,9 +648,9 @@ gtk_snapshot_render_layout (GtkSnapshot     *state,
                       ink_rect.width + shadow_extents.left + shadow_extents.right,
                       ink_rect.height + shadow_extents.top + shadow_extents.bottom);
 
-  gtk_snapshot_translate_2d (state, x, y);
+  gtk_snapshot_translate_2d (snapshot, x, y);
 
-  cr = gtk_snapshot_append_cairo_node (state, &bounds, "Text<%dchars>", pango_layout_get_character_count (layout));
+  cr = gtk_snapshot_append_cairo_node (snapshot, &bounds, "Text<%dchars>", pango_layout_get_character_count (layout));
 
   _gtk_css_shadows_value_paint_layout (shadow, cr, layout);
 
@@ -643,7 +658,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *state,
   pango_cairo_show_layout (cr, layout);
 
   cairo_destroy (cr);
-  gtk_snapshot_translate_2d (state, -x, -y);
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
 }
 
 /**

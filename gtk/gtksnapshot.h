@@ -40,45 +40,45 @@ typedef struct _GtkSnapshot GtkSnapshot;
 
 
 GDK_AVAILABLE_IN_3_90
-GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot      *state);
+GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot      *snapshot);
 
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_push                       (GtkSnapshot            *state,
+void            gtk_snapshot_push                       (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF(3, 4);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_push_node                 (GtkSnapshot            *state,
+void            gtk_snapshot_push_node                  (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);
 GDK_AVAILABLE_IN_3_90
-cairo_t *       gtk_snapshot_push_cairo_node            (GtkSnapshot            *state,
+cairo_t *       gtk_snapshot_push_cairo_node            (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF(3, 4);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_pop                        (GtkSnapshot            *state);
+void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_set_transform              (GtkSnapshot            *state,
+void            gtk_snapshot_set_transform              (GtkSnapshot            *snapshot,
                                                          const graphene_matrix_t *transform);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_transform                  (GtkSnapshot            *state,
+void            gtk_snapshot_transform                  (GtkSnapshot            *snapshot,
                                                          const graphene_matrix_t *matrix);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_translate_2d               (GtkSnapshot            *state,
+void            gtk_snapshot_translate_2d               (GtkSnapshot            *snapshot,
                                                          int                     x,
                                                          int                     y);
 
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_append_node                (GtkSnapshot            *state,
+void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);
 GDK_AVAILABLE_IN_3_90
-GskRenderNode * gtk_snapshot_append                     (GtkSnapshot            *state,
+GskRenderNode * gtk_snapshot_append                     (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF(3, 4);
 GDK_AVAILABLE_IN_3_90
-cairo_t *       gtk_snapshot_append_cairo_node          (GtkSnapshot            *state,
+cairo_t *       gtk_snapshot_append_cairo_node          (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF(3, 4);
@@ -88,28 +88,28 @@ gboolean        gtk_snapshot_clips_rect                 (GtkSnapshot            
                                                          const graphene_rect_t  *bounds);
 
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_render_background          (GtkSnapshot            *state,
+void            gtk_snapshot_render_background          (GtkSnapshot            *snapshot,
                                                          GtkStyleContext        *context,
                                                          gdouble                 x,
                                                          gdouble                 y,
                                                          gdouble                 width,
                                                          gdouble                 height);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_render_frame               (GtkSnapshot            *state,
+void            gtk_snapshot_render_frame               (GtkSnapshot            *snapshot,
                                                          GtkStyleContext        *context,
                                                          gdouble                 x,
                                                          gdouble                 y,
                                                          gdouble                 width,
                                                          gdouble                 height);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_render_focus               (GtkSnapshot            *state,
+void            gtk_snapshot_render_focus               (GtkSnapshot            *snapshot,
                                                          GtkStyleContext        *context,
                                                          gdouble                 x,
                                                          gdouble                 y,
                                                          gdouble                 width,
                                                          gdouble                 height);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_render_layout              (GtkSnapshot            *state,
+void            gtk_snapshot_render_layout              (GtkSnapshot            *snapshot,
                                                          GtkStyleContext        *context,
                                                          gdouble                 x,
                                                          gdouble                 y,
