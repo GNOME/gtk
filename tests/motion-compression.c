@@ -19,8 +19,11 @@ on_motion_notify (GtkWidget      *window,
 }
 
 static void
-on_draw (GtkWidget *window,
-         cairo_t   *cr)
+on_draw (GtkDrawingArea *da,
+         cairo_t        *cr,
+         int             width,
+         int             height,
+         gpointer        data)
 {
   cairo_set_source_rgb (cr, 1, 1, 1);
   cairo_paint (cr);
@@ -38,6 +41,7 @@ main (int argc, char **argv)
   GtkWidget *vbox;
   GtkWidget *label;
   GtkWidget *scale;
+  GtkWidget *da;
 
   gtk_init (&argc, &argv);
 
@@ -56,10 +60,12 @@ main (int argc, char **argv)
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_box_pack_end (GTK_BOX (vbox), label, FALSE, FALSE);
 
+  da = gtk_drawing_area_new ();
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
+  gtk_box_pack_end (GTK_BOX (vbox), da, TRUE, TRUE);
+  
   g_signal_connect (window, "motion-notify-event",
                     G_CALLBACK (on_motion_notify), NULL);
-  g_signal_connect (window, "draw",
-                    G_CALLBACK (on_draw), NULL);
   g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
