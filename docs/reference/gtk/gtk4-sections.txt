@@ -896,6 +896,7 @@ gtk_drawing_area_get_content_width
 gtk_drawing_area_set_content_width
 gtk_drawing_area_get_content_height
 gtk_drawing_area_set_content_height
+gtk_drawing_area_set_draw_func
 <SUBSECTION Standard>
 GTK_DRAWING_AREA
 GTK_IS_DRAWING_AREA

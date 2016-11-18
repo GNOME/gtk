@@ -42,9 +42,31 @@ G_BEGIN_DECLS
 #define GTK_IS_DRAWING_AREA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_DRAWING_AREA))
 #define GTK_DRAWING_AREA_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_DRAWING_AREA, GtkDrawingAreaClass))
 
-
 typedef struct _GtkDrawingArea       GtkDrawingArea;
 typedef struct _GtkDrawingAreaClass  GtkDrawingAreaClass;
+
+/**
+ * GtkDrawingAreaDrawFunc:
+ * @drawing_area: the #GtkDrawingArea to redraw
+ * @cr: the context to draw to
+ * @width: the actual width of the contents. This value will be at least
+ *   as wide as GtkDrawingArea:width.
+ * @height: the actual height of the contents. This value will be at least
+ *   as wide as GtkDrawingArea:height.
+ * @user_data: (closure): user data
+ *
+ * Whenever @drawing_area needs to redraw, this function will be called.
+ *
+ * This function should exclusively redraw the contents of the drawing area
+ * and must not call any widget functions that cause changes.
+ *
+ * Since: 3.90
+ */
+typedef void (* GtkDrawingAreaDrawFunc)  (GtkDrawingArea *drawing_area,
+                                          cairo_t        *cr,
+                                          int             width,
+                                          int             height,
+                                          gpointer        user_data);
 
 struct _GtkDrawingArea
 {
@@ -78,6 +100,11 @@ void            gtk_drawing_area_set_content_height     (GtkDrawingArea         
                                                          int                     height);
 GDK_AVAILABLE_IN_3_90
 int             gtk_drawing_area_get_content_height     (GtkDrawingArea         *self);
+GDK_AVAILABLE_IN_3_90
+void            gtk_drawing_area_set_draw_func          (GtkDrawingArea         *self,
+                                                         GtkDrawingAreaDrawFunc  draw_func,
+                                                         gpointer                user_data,
+                                                         GDestroyNotify          destroy);
 
 G_END_DECLS
 

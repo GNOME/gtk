@@ -33,6 +33,10 @@ typedef struct _GtkDrawingAreaPrivate GtkDrawingAreaPrivate;
 struct _GtkDrawingAreaPrivate {
   int content_width;
   int content_height;
+
+  GtkDrawingAreaDrawFunc draw_func;
+  gpointer draw_func_target;
+  GDestroyNotify draw_func_target_destroy_notify;
 };
 
 enum {
@@ -46,7 +50,7 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
 
 /**
  * SECTION:gtkdrawingarea
- * @Short_description: A widget for custom user interface elements
+ * @Short_description: A simple widget for custom user interface elements
  * @Title: GtkDrawingArea
  * @See_also: #GtkImage
  *
@@ -65,32 +69,30 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  * - The #GtkWidget::size-allocate signal to take any necessary
  *   actions when the widget changes size.
  *
- * - The #GtkWidget::draw signal to handle redrawing the
+ * - Call gtk_drawing_area_set_draw_func() to handle redrawing the
  *   contents of the widget.
  *
  * The following code portion demonstrates using a drawing
  * area to display a circle in the normal widget foreground
  * color.
  *
- * Note that GDK automatically clears the exposed area before sending
- * the expose event, and that drawing is implicitly clipped to the exposed
+ * Note that GDK automatically clears the exposed area before causing a
+ * redraw, and that drawing is implicitly clipped to the exposed
  * area. If you want to have a theme-provided background, you need
  * to call gtk_render_background() in your ::draw method.
  *
  * ## Simple GtkDrawingArea usage
  *
  * |[<!-- language="C" -->
- * gboolean
- * draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
+ * void
+ * draw_function (GtkDrawingArea *area, cairo_t *cr,
+ *                int width, int height,
+ *                gpointer data)
  * {
- *   guint width, height;
  *   GdkRGBA color;
  *   GtkStyleContext *context;
  *
- *   context = gtk_widget_get_style_context (widget);
- *
- *   width = gtk_widget_get_allocated_width (widget);
- *   height = gtk_widget_get_allocated_height (widget);
+ *   context = gtk_widget_get_style_context (GTK_WIDGET (area));
  *
  *   gtk_render_background (context, cr, 0, 0, width, height);
  *
@@ -105,23 +107,22 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  *   gdk_cairo_set_source_rgba (cr, &color);
  *
  *   cairo_fill (cr);
- *
- *  return FALSE;
  * }
  * [...]
- *   GtkWidget *drawing_area = gtk_drawing_area_new ();
- *   gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (drawing_area), 100);
- *   gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (drawing_area), 100);
- *   g_signal_connect (G_OBJECT (drawing_area), "draw",
- *                     G_CALLBACK (draw_callback), NULL);
+ *   GtkWidget *area = gtk_drawing_area_new ();
+ *   gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (area), 100);
+ *   gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (area), 100);
+ *   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (area),
+ *                                   draw_function,
+ *                                   NULL, NULL);
  * ]|
  *
- * Draw signals are normally delivered when a drawing area first comes
+ * The draw function is normally called when a drawing area first comes
  * onscreen, or when it’s covered by another window and then uncovered.
- * You can also force an expose event by adding to the “damage region”
- * of the drawing area’s window using gtk_widget_queue_draw_region(),
+ * You can also force a redraw by adding to the “damage region” of the
+ * drawing area’s window using gtk_widget_queue_draw_region(),
  * gtk_widget_queue_draw_area() or gtk_widget_queue_draw().
- * You’ll then get a draw signal for the invalid region.
+ * This will cause the drawing area to call the draw function again.
  *
  * The available routines for drawing are documented on the
  * [GDK Drawing Primitives][gdk3-Cairo-Interaction] page
@@ -134,6 +135,9 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  * area is focused. Use gtk_widget_has_focus() in your expose event
  * handler to decide whether to draw the focus indicator. See
  * gtk_render_focus() for one way to draw focus.
+ *
+ * If you need more complex control over your widget, you should consider
+ * creating your own #GtkWidget subclass.
  */
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkDrawingArea, gtk_drawing_area, GTK_TYPE_WIDGET)
@@ -186,6 +190,22 @@ gtk_drawing_area_get_property (GObject    *gobject,
 }
 
 static void
+gtk_drawing_area_dispose (GObject *object)
+{
+  GtkDrawingArea *self = GTK_DRAWING_AREA (object);
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+
+  if (priv->draw_func_target_destroy_notify != NULL)
+    priv->draw_func_target_destroy_notify (priv->draw_func_target);
+
+  priv->draw_func = NULL;
+  priv->draw_func_target = NULL;
+  priv->draw_func_target_destroy_notify = NULL;
+
+  G_OBJECT_CLASS (gtk_drawing_area_parent_class)->dispose (object);
+}
+
+static void
 gtk_drawing_area_measure (GtkWidget      *widget,
                           GtkOrientation  orientation,
                           int             for_size,
@@ -208,6 +228,30 @@ gtk_drawing_area_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_drawing_area_snapshot (GtkWidget   *widget,
+                           GtkSnapshot *snapshot)
+{
+  GtkDrawingArea *self = GTK_DRAWING_AREA (widget);
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+  cairo_t *cr;
+
+  if (!priv->draw_func)
+    return;
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &(graphene_rect_t) GRAPHENE_RECT_INIT(0, 0,
+                                         gtk_widget_get_allocated_width (widget),
+                                         gtk_widget_get_allocated_height (widget)),
+                                       "DrawingAreaContents");
+  priv->draw_func (self,
+                   cr,
+                   gtk_widget_get_allocated_width (widget),
+                   gtk_widget_get_allocated_height (widget),
+                   priv->draw_func_target);
+  cairo_destroy (cr);
+}
+
+static void
 gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
@@ -215,8 +259,10 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 
   gobject_class->set_property = gtk_drawing_area_set_property;
   gobject_class->get_property = gtk_drawing_area_get_property;
+  gobject_class->dispose = gtk_drawing_area_dispose;
 
   widget_class->measure = gtk_drawing_area_measure;
+  widget_class->snapshot = gtk_drawing_area_snapshot;
 
   /**
    * GtkDrawingArea:content-width
@@ -374,5 +420,48 @@ gtk_drawing_area_get_content_height (GtkDrawingArea *self)
   g_return_val_if_fail (GTK_IS_DRAWING_AREA (self), 0);
 
   return priv->content_height;
+}
+
+/**
+ * gtk_drawing_area_set_draw_func:
+ * @self: a #GtkDrawingArea
+ * @draw_func: (closure user_data) (allow-none): callback that lets you draw
+ *     the drawing area's contents
+ * @user_data: user data passed to @draw_func
+ * @destroy: destroy notifier for @user_data
+ *
+ * Setting a draw function is the main thing you want to do when using a drawing
+ * area. It is called whenever GTK needs to draw the contents of the drawing area 
+ * to the screen.
+ *
+ * The draw function will be called during the drawing stage of GTK. In the
+ * drawing stage it is not allowed to change properties of any GTK widgets or call
+ * any functions that would cause any properties to be changed.
+ * You should restrict yourself exclusively to drawing your contents in the draw
+ * function.
+ *
+ * If what you are drawing does change, call gtk_widget_queue_draw() on the
+ * drawing area. This will call a redraw and will call @draw_func again.
+ *
+ * Since: 3.90
+ */
+void
+gtk_drawing_area_set_draw_func (GtkDrawingArea         *self,
+                                GtkDrawingAreaDrawFunc  draw_func,
+                                gpointer                user_data,
+                                GDestroyNotify          destroy)
+{
+  GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_DRAWING_AREA (self));
+
+  if (priv->draw_func_target_destroy_notify != NULL)
+    priv->draw_func_target_destroy_notify (priv->draw_func_target);
+
+  priv->draw_func = draw_func;
+  priv->draw_func_target = user_data;
+  priv->draw_func_target_destroy_notify = destroy;
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
