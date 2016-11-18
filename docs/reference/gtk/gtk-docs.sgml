@@ -364,7 +364,7 @@
     <xi:include href="gtk4-builder-tool.xml" />
     <xi:include href="gtk4-launch.xml" />
     <xi:include href="gtk4-query-settings.xml" />
-    <xi:include href="broadwayd.xml" />
+    <xi:include href="gtk4-broadwayd.xml" />
   </part>
 
   <part id="platform-support">

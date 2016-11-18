@@ -278,7 +278,6 @@ MKHTML_OPTIONS="--path=\"$(abs_srcdir):$(top_srcdir)/examples\""
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files =					\
 	broadway.xml				\
-	broadwayd.xml				\
 	building.sgml				\
 	compiling.sgml				\
 	css-overview.xml			\
@@ -286,6 +285,7 @@ content_files =					\
 	drawing-model.xml			\
 	getting_started.xml			\
 	glossary.xml				\
+	gtk4-broadwayd.xml			\
 	gtk4-demo-application.xml		\
 	gtk4-demo.xml				\
 	gtk4-icon-browser.xml			\
@@ -486,17 +486,17 @@ EXTRA_DIST += version.xml.in gtk4.types.in
 ########################################################################
 
 man_MANS = 				\
-	gtk4-query-immodules.1		\
-	gtk4-update-icon-cache.1	\
-	gtk4-encode-symbolic-svg.1	\
-	gtk4-launch.1			\
+	gtk4-broadwayd.1		\
+	gtk4-builder-tool.1 		\
 	gtk4-demo.1			\
 	gtk4-demo-application.1		\
-	gtk4-widget-factory.1		\
+	gtk4-encode-symbolic-svg.1	\
 	gtk4-icon-browser.1		\
-	broadwayd.1			\
-	gtk4-builder-tool.1 		\
-	gtk4-query-settings.1
+	gtk4-launch.1			\
+	gtk4-query-immodules.1		\
+	gtk4-query-settings.1		\
+	gtk4-update-icon-cache.1	\
+	gtk4-widget-factory.1
 
 if ENABLE_MAN
 

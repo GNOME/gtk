@@ -449,7 +449,7 @@ main (int argc, char *argv[])
     {
       if (*argv[1] != ':')
 	{
-	  g_printerr ("Usage broadwayd [:DISPLAY]\n");
+	  g_printerr ("Usage gtk4-broadwayd [:DISPLAY]\n");
 	  exit (1);
 	}
       display = argv[1];

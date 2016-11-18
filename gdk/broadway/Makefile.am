@@ -20,7 +20,7 @@ LDADDS = $(GDK_DEP_LIBS) -lrt
 
 noinst_LTLIBRARIES = libgdk-broadway.la
 
-bin_PROGRAMS = broadwayd
+bin_PROGRAMS = gtk4-broadwayd
 
 libgdkinclude_HEADERS = 	\
 	gdkbroadway.h
@@ -84,7 +84,7 @@ libgdk_broadway_la_LIBADD = \
 	$(NULL)
 endif
 
-broadwayd_SOURCES = \
+gtk4_broadwayd_SOURCES = \
 	broadway-protocol.h		\
 	broadwayd.c 			\
 	broadway-server.h		\
@@ -95,9 +95,9 @@ broadwayd_SOURCES = \
 	broadway-output.c
 
 if OS_WIN32
-broadwayd_LDADD = $(GDK_DEP_LIBS) -lws2_32
+gtk4_broadwayd_LDADD = $(GDK_DEP_LIBS) -lws2_32
 else
-broadwayd_LDADD = $(GDK_DEP_LIBS) @SHM_LIBS@
+gtk4_broadwayd_LDADD = $(GDK_DEP_LIBS) @SHM_LIBS@
 endif
 
 MAINTAINERCLEANFILES = $(broadway_built_sources)
@@ -106,7 +106,7 @@ EXTRA_DIST += $(broadway_built_sources)
 BUILT_SOURCES = $(broadway_built_sources)
 
 # ------------------- MSVC Build Items ----------------
-MSVCPROJS = gdk4-broadway broadwayd
+MSVCPROJS = gdk4-broadway gtk4-broadwayd
 
 gdk4_broadway_FILES = $(libgdk_broadway_la_SOURCES)
 gdk4_broadway_EXCLUDES = dummy
@@ -116,8 +116,8 @@ gdk4_broadway_HEADERS_INST = $(libgdkbroadwayinclude_HEADERS)
 
 gdk4_broadway_HEADERS_EXCLUDES = dummy
 
-broadwayd_FILES = $(broadwayd_SOURCES)
-broadwayd_EXCLUDES = dummy
+gtk4_broadwayd_FILES = $(broadwayd_SOURCES)
+gtk4_broadwayd_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
