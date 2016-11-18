@@ -1181,9 +1181,9 @@ gtk_button_set_label (GtkButton   *button,
  * @button: a #GtkButton
  *
  * Fetches the text from the label of the button, as set by
- * gtk_button_set_label(). If the label text has not 
- * been set the return value will be %NULL. This will be the 
- * case if you create an empty button with gtk_button_new() to 
+ * gtk_button_set_label(). If the label text has not
+ * been set the return value will be %NULL. This will be the
+ * case if you create an empty button with gtk_button_new() to
  * use as a container.
  *
  * Returns: (nullable): The text of the label widget. This string is owned
@@ -1246,7 +1246,7 @@ gtk_button_set_use_underline (GtkButton *button,
  * @button: a #GtkButton
  *
  * Returns whether an embedded underline in the button label indicates a
- * mnemonic. See gtk_button_set_use_underline ().
+ * mnemonic. See gtk_button_set_use_underline().
  *
  * Returns: %TRUE if an embedded underline in the button label
  *               indicates the mnemonic accelerator keys.
@@ -1380,7 +1380,9 @@ gtk_button_set_icon_name (GtkButton  *button,
  * gtk_button_get_icon_name:
  * @button: A #GtkButton
  *
- * Returns: (nullable): The icon name set via gtk_button_set_icon_name
+ * Returns the icon name set via gtk_button_set_icon_name().
+ *
+ * Returns: (nullable): The icon name set via gtk_button_set_icon_name()
  *
  * Since: 3.90
  */

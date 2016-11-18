@@ -63,7 +63,7 @@ void            gtk_snapshot_set_transform              (GtkSnapshot            
                                                          const graphene_matrix_t *transform);
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_transform                  (GtkSnapshot            *snapshot,
-                                                         const graphene_matrix_t *matrix);
+                                                         const graphene_matrix_t *transform);
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_translate_2d               (GtkSnapshot            *snapshot,
                                                          int                     x,

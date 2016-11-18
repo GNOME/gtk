@@ -31,8 +31,10 @@ IGNORE_HFILES = \
 	gtkapplicationprivate.h		\
 	gtkbindingsprivate.h		\
 	gtkbitmaskprivate.h		\
+	gtkboxgadgetprivate.h	        \
 	gtkboxprivate.h		        \
 	gtkbuilderprivate.h		\
+	gtkbuiltiniconprivate.h		\
 	gtkbuttonprivate.h		\
 	gtkcairoblurprivate.h		\
 	gtkcellareaboxcontextprivate.h	\
@@ -49,12 +51,16 @@ IGNORE_HFILES = \
 	gtkcssarrayvalueprivate.h	\
 	gtkcssbgsizevalueprivate.h	\
 	gtkcssbordervalueprivate.h	\
+	gtkcsscalcvalueprivate.h	\
 	gtkcsscolorvalueprivate.h	\
 	gtkcsscornervalueprivate.h	\
+	gtkcsscustomgadgetprivate.h	\
 	gtkcsscustompropertyprivate.h	\
+	gtkcssdimensionvalueprivate.h	\
 	gtkcsseasevalueprivate.h	\
 	gtkcssenginevalueprivate.h	\
 	gtkcssenumvalueprivate.h	\
+	gtkcssgadgetprivate.h		\
 	gtkcssiconthemevalueprivate.h	\
 	gtkcssimagebuiltinprivate.h	\
 	gtkcssimagecrossfadeprivate.h	\
@@ -73,8 +79,10 @@ IGNORE_HFILES = \
 	gtkcsslookupprivate.h		\
 	gtkcssmatcherprivate.h		\
 	gtkcssnodeprivate.h		\
+	gtkcssnodestylecacheprivate.h	\
 	gtkcssnodedeclarationprivate.h	\
 	gtkcssnumbervalueprivate.h	\
+	gtkcsspalettevalueprivate.h	\
 	gtkcsspathnodeprivate.h		\
 	gtkcssparserprivate.h		\
 	gtkcsspositionvalueprivate.h	\
@@ -119,6 +127,7 @@ IGNORE_HFILES = \
 	gtkiconhelperprivate.h		\
 	gtkiconviewprivate.h		\
 	gtkimageprivate.h		\
+	gtkimcontextsimpleprivate.h	\
 	gtkimmoduleprivate.h		\
 	gtklabelprivate.h		\
 	gtklockbuttonprivate.h		\
@@ -163,6 +172,7 @@ IGNORE_HFILES = \
 	gtkstylecontextprivate.h	\
 	gtkstylepropertyprivate.h	\
 	gtkstyleproviderprivate.h	\
+	gtktextattributes.h		\
 	gtktextattributesprivate.h	\
 	gtktextchildprivate.h		\
 	gtktexthandleprivate.h		\
