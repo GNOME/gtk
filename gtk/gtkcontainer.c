@@ -326,8 +326,6 @@ static gint     gtk_container_draw                 (GtkWidget         *widget,
                                                     cairo_t           *cr);
 static void     gtk_container_snapshot             (GtkWidget         *widget,
                                                     GtkSnapshot       *snapshot);
-static void     gtk_container_map                  (GtkWidget         *widget);
-static void     gtk_container_unmap                (GtkWidget         *widget);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
 
 static GtkWidgetPath * gtk_container_real_get_path_for_child (GtkContainer *container,
@@ -464,8 +462,6 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->compute_expand = gtk_container_compute_expand;
   widget_class->snapshot = gtk_container_snapshot;
   widget_class->draw = gtk_container_draw;
-  widget_class->map = gtk_container_map;
-  widget_class->unmap = gtk_container_unmap;
   widget_class->focus = gtk_container_focus;
   widget_class->get_request_mode = gtk_container_get_request_mode;
 
@@ -3085,36 +3081,6 @@ gtk_container_snapshot (GtkWidget   *widget,
   gtk_container_forall (container,
                         gtk_container_snapshot_forall,
                         snapshot);
-}
-
-static void
-gtk_container_map_child (GtkWidget *child,
-                         gpointer   client_data)
-{
-  if (_gtk_widget_get_visible (child) &&
-      _gtk_widget_get_child_visible (child) &&
-      !_gtk_widget_get_mapped (child))
-    gtk_widget_map (child);
-}
-
-static void
-gtk_container_map (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
-
-  gtk_container_forall (GTK_CONTAINER (widget),
-                        gtk_container_map_child,
-                        NULL);
-}
-
-static void
-gtk_container_unmap (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
-
-  gtk_container_forall (GTK_CONTAINER (widget),
-                        (GtkCallback)gtk_widget_unmap,
-                        NULL);
 }
 
 static gboolean
