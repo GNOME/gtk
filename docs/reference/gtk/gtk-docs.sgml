@@ -439,7 +439,7 @@
     <xi:include href="xml/api-index-3.22.xml"><xi:fallback /></xi:include>
   </index>
   <index id="api-index-3-90" role="3.90">
-    <title>Index of new symbols in 3.22</title>
+    <title>Index of new symbols in 3.90</title>
     <xi:include href="xml/api-index-3.90.xml"><xi:fallback /></xi:include>
   </index>
 
