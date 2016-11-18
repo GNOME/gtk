@@ -164,9 +164,11 @@ static void     update_print_at_entry_sensitivity  (GtkWidget          *button,
 						    GtkPrintUnixDialog *dialog);
 static void     update_print_at_option             (GtkPrintUnixDialog *dialog);
 static void     update_dialog_from_capabilities    (GtkPrintUnixDialog *dialog);
-static gboolean draw_collate_cb                    (GtkWidget          *widget,
+static void     draw_collate                       (GtkDrawingArea     *da,
 						    cairo_t            *cr,
-						    GtkPrintUnixDialog *dialog);
+                                                    int                 width,
+                                                    int                 height,
+                                                    gpointer            data);
 static gboolean is_printer_active                  (GtkTreeModel        *model,
 						    GtkTreeIter         *iter,
 						    GtkPrintUnixDialog  *dialog);
@@ -183,9 +185,11 @@ static void     page_name_func                     (GtkCellLayout       *cell_la
 						    GtkTreeIter         *iter,
 						    gpointer             data);
 static void     update_number_up_layout            (GtkPrintUnixDialog  *dialog);
-static gboolean draw_page_cb                       (GtkWidget           *widget,
+static void     draw_page                          (GtkDrawingArea      *da,
 						    cairo_t             *cr,
-						    GtkPrintUnixDialog  *dialog);
+                                                    int                  width,
+                                                    int                  height,
+                                                    gpointer             data);
 
 
 static gboolean dialog_get_collate                 (GtkPrintUnixDialog *dialog);
@@ -552,11 +556,9 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, update_print_at_option);
   gtk_widget_class_bind_template_callback (widget_class, update_dialog_from_capabilities);
   gtk_widget_class_bind_template_callback (widget_class, update_collate_icon);
-  gtk_widget_class_bind_template_callback (widget_class, draw_collate_cb);
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
   gtk_widget_class_bind_template_callback (widget_class, update_number_up_layout);
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
-  gtk_widget_class_bind_template_callback (widget_class, draw_page_cb);
 
   gtk_widget_class_set_css_name (widget_class, "printdialog");
 }
@@ -795,6 +797,13 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   /* Load custom papers */
   _gtk_print_load_custom_papers (priv->custom_paper_list);
+
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (priv->collate_image),
+                                  draw_collate,
+                                  dialog, NULL);
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (priv->page_layout_preview),
+                                  draw_page,
+                                  dialog, NULL);
 
   gtk_css_node_set_name (gtk_widget_get_css_node (priv->collate_image), I_("paper"));
   gtk_css_node_set_name (gtk_widget_get_css_node (priv->page_layout_preview), I_("paper"));
@@ -2244,11 +2253,15 @@ paint_page (GtkWidget  *widget,
   cairo_show_text (cr, text);
 }
 
-static gboolean
-draw_collate_cb (GtkWidget          *widget,
-                 cairo_t            *cr,
-                 GtkPrintUnixDialog *dialog)
+static void
+draw_collate (GtkDrawingArea *da,
+              cairo_t        *cr,
+              int             width,
+              int             height,
+              gpointer        data)
 {
+  GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
+  GtkWidget *widget = GTK_WIDGET (da);
   gboolean collate, reverse, rtl;
   gint copies;
   gint text_x;
@@ -2258,10 +2271,10 @@ draw_collate_cb (GtkWidget          *widget,
   reverse = dialog_get_reverse (dialog);
   copies = dialog_get_n_copies (dialog);
 
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
+  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
-  x = (gtk_widget_get_allocated_width (widget) - 30) / 2;
-  y = (gtk_widget_get_allocated_height (widget) - 36) / 2;
+  x = (width - 30) / 2;
+  y = (height - 36) / 2;
   if (rtl)
     {
       x1 = x;
@@ -2292,8 +2305,6 @@ draw_collate_cb (GtkWidget          *widget,
       paint_page (widget, cr, x2 + p1, y, reverse ? "1" : "2", text_x);
       paint_page (widget, cr, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
     }
-
-  return TRUE;
 }
 
 static void
@@ -2647,11 +2658,15 @@ dialog_get_number_up_layout (GtkPrintUnixDialog *dialog)
   return layout;
 }
 
-static gboolean
-draw_page_cb (GtkWidget          *widget,
-              cairo_t            *cr,
-              GtkPrintUnixDialog *dialog)
+static void
+draw_page (GtkDrawingArea *da,
+           cairo_t        *cr,
+           int             width,
+           int             height,
+           gpointer        data)
 {
+  GtkWidget *widget = GTK_WIDGET (da);
+  GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkStyleContext *context;
   gdouble ratio;
@@ -2667,7 +2682,6 @@ draw_page_cb (GtkWidget          *widget,
   GtkNumberUpLayout number_up_layout;
   gint start_x, end_x, start_y, end_y;
   gint dx, dy;
-  gint width, height;
   gboolean horizontal;
   GtkPageSetup *page_setup;
   gdouble paper_width, paper_height;
@@ -2681,8 +2695,6 @@ draw_page_cb (GtkWidget          *widget,
     (orientation == GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE);
 
   number_up_layout = dialog_get_number_up_layout (dialog);
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
 
   cairo_save (cr);
 
@@ -3050,8 +3062,6 @@ draw_page_cb (GtkWidget          *widget,
       cairo_line_to (cr, pos_x + w + 0.5, pos_y + h + shadow_offset + RULER_DISTANCE + RULER_RADIUS);
       cairo_stroke (cr);
     }
-
-  return TRUE;
 }
 
 static void

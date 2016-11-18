@@ -383,8 +383,8 @@
                                 </child>
                                 <child>
                                   <object class="GtkDrawingArea" id="collate_image">
-                                    <property name="width-request">70</property>
-                                    <property name="height-request">90</property>
+                                    <property name="content-width">70</property>
+                                    <property name="content-height">90</property>
                                     <property name="visible">1</property>
                                     <signal name="draw" handler="draw_collate_cb" swapped="no"/>
                                   </object>
@@ -823,8 +823,8 @@
                         <property name="visible">1</property>
                         <child>
                           <object class="GtkDrawingArea" id="page_layout_preview">
-                            <property name="width-request">320</property>
-                            <property name="height-request">160</property>
+                            <property name="content-width">320</property>
+                            <property name="content-height">160</property>
                             <property name="visible">1</property>
                             <signal name="draw" handler="draw_page_cb" swapped="no"/>
                           </object>
