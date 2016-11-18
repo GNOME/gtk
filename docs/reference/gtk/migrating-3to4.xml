@@ -149,6 +149,27 @@
       </para>
     </section>
 
+    <section>
+      <title>Adapt to drawing model changes</title>
+      <para>
+        This area has seen the most radical changes in the transition from GTK+ 3
+        to GTK+ 4. Widgets no longer use a draw() function to render their contents
+        to a cairo surface. Instead, they have a snapshot() function that creates
+        one or more GskRenderNodes to represent their content. Third-party widgets
+        that use a draw() function or a #GtkWidget::draw signal handler for custom
+        drawing will need to be converted to use gtk_snapshot_append_cairo_node().
+      </para>
+      <para>
+        The auxiliary #GtkSnapshot object has APIs to help with creating render
+        nodes.
+      </para>
+      <para>
+        If you are using a #GtkDrawingArea for custom drawing, you need to switch
+        to using gtk_drawing_area_set_draw_func() to set a draw function. This is
+        pretty much a direct replacement for a #GtkWidget::draw signal handler.
+      </para>
+    </section>
+
   </section>
 
 </chapter>
