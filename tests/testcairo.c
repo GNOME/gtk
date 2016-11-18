@@ -113,16 +113,17 @@ draw_3circles (cairo_t *cr,
   cairo_fill (cr);
 }
 
-static gboolean
-on_draw (GtkWidget *widget,
-         cairo_t   *cr)
+static void
+on_draw (GtkDrawingArea *darea,
+         cairo_t        *cr,
+         int             width,
+         int             height,
+         gpointer        data)
 {
   cairo_surface_t *overlay, *punch, *circles;
   cairo_t *overlay_cr, *punch_cr, *circles_cr;
 
   /* Fill the background */
-  int width = gtk_widget_get_allocated_width (widget);
-  int height = gtk_widget_get_allocated_height (widget);
   double radius = 0.5 * (width < height ? width : height) - 10;
   double xc = width / 2.;
   double yc = height / 2.;
@@ -181,8 +182,6 @@ on_draw (GtkWidget *widget,
   cairo_surface_destroy (overlay);
   cairo_surface_destroy (punch);
   cairo_surface_destroy (circles);
-
-  return FALSE;
 }
 
 int
@@ -200,8 +199,7 @@ main (int argc, char **argv)
   darea = gtk_drawing_area_new ();
   gtk_container_add (GTK_CONTAINER (window), darea);
 
-  g_signal_connect (darea, "draw",
-		    G_CALLBACK (on_draw), NULL);
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (darea), on_draw, NULL, NULL);
   g_signal_connect (window, "destroy-event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
