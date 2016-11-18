@@ -66,17 +66,16 @@ ensure_resources(cairo_surface_t *target)
       }
 }
 
-static gboolean
-on_window_draw (GtkWidget *widget,
-                cairo_t   *cr)
+static void
+on_draw (GtkDrawingArea *da,
+         cairo_t        *cr,
+         int             width,
+         int             height,
+         gpointer        data)
 
 {
   GRand *rand = g_rand_new_with_seed(0);
   int i;
-  int width, height;
-
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
 
   ensure_resources (cairo_get_target (cr));
 
@@ -108,8 +107,6 @@ on_window_draw (GtkWidget *widget,
     }
 
   g_rand_free(rand);
-
-  return FALSE;
 }
 
 static void
@@ -168,6 +165,7 @@ int
 main(int argc, char **argv)
 {
   GError *error = NULL;
+  GtkWidget *da;
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle monitor_bounds;
@@ -195,8 +193,10 @@ main(int argc, char **argv)
   gtk_window_set_keep_above (GTK_WINDOW (window), TRUE);
   gtk_window_set_gravity (GTK_WINDOW (window), GDK_GRAVITY_CENTER);
 
-  g_signal_connect (window, "draw",
-                    G_CALLBACK (on_window_draw), NULL);
+  da = gtk_drawing_area_new ();
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (window), da);
+
   g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
@@ -212,7 +212,7 @@ main(int argc, char **argv)
                    monitor_bounds.x + (monitor_bounds.width - window_width) / 2,
                    monitor_bounds.y + (monitor_bounds.height - window_height) / 2);
 
-  gtk_widget_show (window);
+  gtk_widget_show_all (window);
 
   gtk_main ();
 
