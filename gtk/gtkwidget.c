@@ -10382,8 +10382,10 @@ gtk_widget_dispose (GObject *object)
   GtkWidgetPrivate *priv = widget->priv;
   GSList *sizegroups;
 
-  if (priv->parent)
+  if (priv->parent && GTK_IS_CONTAINER (priv->parent))
     gtk_container_remove (GTK_CONTAINER (priv->parent), widget);
+  else if (priv->parent)
+    gtk_widget_unparent (widget);
   else if (_gtk_widget_get_visible (widget))
     gtk_widget_hide (widget);
 
