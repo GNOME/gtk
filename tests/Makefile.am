@@ -133,7 +133,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testswitch			\
 	testcellarea			\
 	testswitch			\
-	styleexamples			\
 	testtreemenu			\
 	testtoplevelembed		\
 	testnoscreen			\
@@ -256,7 +255,6 @@ testtreemenu_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
-styleexamples_DEPENDENCIES = $(TEST_DEPS)
 testtoplevelembed_DEPENDENCIES = $(TEST_DEPS)
 testnoscreen_DEPENDENCIES = $(TEST_DEPS)
 testtreepos_DEPENDENCIES = $(TEST_DEPS)
@@ -429,8 +427,6 @@ testexpand_SOURCES = testexpand.c
 testexpander_SOURCES = testexpander.c
 
 testswitch_SOURCES = testswitch.c
-
-styleexamples_SOURCES = styleexamples.c
 
 testtoplevelembed_SOURCES = testtoplevelembed.c
 
