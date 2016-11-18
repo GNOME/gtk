@@ -467,6 +467,7 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
                                            surface,
                                            min_filter,
                                            mag_filter);
+  cairo_surface_destroy (surface);
 
   return t->texture_id;
 }
