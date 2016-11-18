@@ -190,22 +190,23 @@ adjust_clock_for_phase (gint64 frame_clock_time,
 
 /* Drawing */
 
-static gboolean
-on_window_draw (GtkWidget *widget,
-                cairo_t   *cr)
+static void
+on_draw (GtkDrawingArea *da,
+         cairo_t        *cr,
+         int             width,
+         int             height,
+         gpointer        data)
 {
-  GdkRectangle allocation;
   double cx, cy, r;
 
   cairo_set_source_rgb (cr, 1., 1., 1.);
   cairo_paint (cr);
 
   cairo_set_source_rgb (cr, 0., 0., 0.);
-  gtk_widget_get_allocation (widget, &allocation);
 
-  cx = allocation.width / 2.;
-  cy = allocation.height / 2.;
-  r = MIN (allocation.width, allocation.height) / 2.;
+  cx = width / 2.;
+  cy = height / 2.;
+  r = MIN (width, height) / 2.;
 
   cairo_arc (cr, cx, cy, r,
              0, 2 * M_PI);
@@ -224,8 +225,6 @@ on_window_draw (GtkWidget *widget,
           displayed_frame->frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
         }
     }
-
-  return FALSE;
 }
 
 static void
@@ -363,6 +362,7 @@ static GOptionEntry options[] = {
 int
 main(int argc, char **argv)
 {
+  GtkWidget *da;
   GError *error = NULL;
   GdkFrameClock *frame_clock;
 
@@ -375,13 +375,14 @@ main(int argc, char **argv)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
-
-  g_signal_connect (window, "draw",
-                    G_CALLBACK (on_window_draw), NULL);
   g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
-  gtk_widget_show (window);
+  da = gtk_drawing_area_new ();
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (window), da);
+
+  gtk_widget_show_all (window);
 
   frame_queue = g_queue_new ();
   g_mutex_init (&frame_mutex);
