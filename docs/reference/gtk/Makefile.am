@@ -157,6 +157,7 @@ IGNORE_HFILES = \
 	gtksidebarrowprivate.h		\
 	gtksizegroup-private.h		\
 	gtksizerequestcacheprivate.h	\
+	gtksnapshotprivate.h		\
 	gtkstyleanimationprivate.h	\
 	gtkstylecascadeprivate.h	\
 	gtkstylecontextprivate.h	\
