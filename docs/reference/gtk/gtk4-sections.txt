@@ -1127,6 +1127,10 @@ gtk_file_chooser_select_file
 gtk_file_chooser_set_current_folder_file
 gtk_file_chooser_set_file
 gtk_file_chooser_unselect_file
+gtk_file_chooser_add_choice
+gtk_file_chooser_remove_choice
+gtk_file_chooser_set_choice
+gtk_file_chooser_get_choice
 <SUBSECTION Standard>
 GTK_FILE_CHOOSER
 GTK_IS_FILE_CHOOSER
@@ -7038,6 +7042,7 @@ GTK_GET_SHORTCUTS_WINDOW_CLASS
 <SUBSECTION Private>
 GtkShortcutsWindowClass
 gtk_shortcuts_window_get_type
+GTK_SHORTCUTS_WINDOW_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -7053,6 +7058,7 @@ GTK_GET_SHORTCUTS_SECTION_CLASS
 <SUBSECTION Private>
 GtkShortcutsSectionClass
 gtk_shortcuts_section_get_type
+GTK_SHORTCUTS_SECTION_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -7068,6 +7074,7 @@ GTK_GET_SHORTCUTS_GROUP_CLASS
 <SUBSECTION Private>
 GtkShortcutsGroupClass
 gtk_shortcuts_group_get_type
+GTK_SHORTCUTS_GROUP_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -7084,4 +7091,25 @@ GTK_GET_SHORTCUTS_SHORTCUT_CLASS
 <SUBSECTION Private>
 GtkShortcutsShortcutClass
 gtk_shortcuts_shortcut_get_type
+gtk_shortcuts_shortcut_update_accel
+GTK_SHORTCUTS_SHORTCUT_GET_CLASS
+</SECTION>
+
+<SECTION>
+<FILE>gtkshortcutlabel</FILE>
+GtkShortcutLabel
+gtk_shortcut_label_new
+gtk_shortcut_label_get_accelerator
+gtk_shortcut_label_get_disabled_text
+gtk_shortcut_label_set_accelerator
+gtk_shortcut_label_set_disabled_text
+
+<SUBSECTION Private>
+gtk_shortcut_label_get_type
+GTK_TYPE_SHORTCUT_LABEL
+GTK_SHORTCUT_LABEL
+GTK_SHORTCUT_LABEL_CLASS
+GTK_SHORTCUT_LABEL_GET_CLASS
+GTK_IS_SHORTCUT_LABEL
+GTK_IS_SHORTCUT_LABEL_CLASS
 </SECTION>

@@ -64,10 +64,13 @@ IGNORE_HFILES = \
 	gtkcssiconthemevalueprivate.h	\
 	gtkcssimagebuiltinprivate.h	\
 	gtkcssimagecrossfadeprivate.h	\
+	gtkcssimagefallbackprivate.h	\
 	gtkcssimagegradientprivate.h	\
 	gtkcssimageiconthemeprivate.h	\
 	gtkcssimagelinearprivate.h	\
+	gtkcssimageradialprivate.h	\
 	gtkcssimageprivate.h		\
+	gtkcssimagerecolorprivate.h	\
 	gtkcssimagescaledprivate.h	\
 	gtkcssimagesurfaceprivate.h	\
 	gtkcssimageurlprivate.h		\
@@ -96,6 +99,7 @@ IGNORE_HFILES = \
 	gtkcssshorthandpropertyprivate.h\
 	gtkcssstaticstyleprivate.h	\
 	gtkcssstringvalueprivate.h	\
+	gtkcssstylechangeprivate.h	\
 	gtkcssstylefuncsprivate.h	\
 	gtkcssstyleprivate.h		\
 	gtkcssstylepropertyprivate.h	\
@@ -110,6 +114,7 @@ IGNORE_HFILES = \
 	gtkdialogprivate.h		\
 	gtkentryprivate.h		\
 	gtkeventcontrollerprivate.h	\
+	gtkfilechoosernativeprivate.h	\
 	gtkfilechooserprivate.h		\
 	gtkfilechooserwidgetprivate.h	\
 	gtkfontchooserprivate.h		\
@@ -124,8 +129,10 @@ IGNORE_HFILES = \
 	gtkgesturezoomprivate.h		\
 	gtkheaderbarprivate.h		\
 	gtkhslaprivate.h		\
+	gtkiconprivate.h		\
 	gtkiconhelperprivate.h		\
 	gtkiconviewprivate.h		\
+	gtkimagedefinitionprivate.h	\
 	gtkimageprivate.h		\
 	gtkimcontextsimpleprivate.h	\
 	gtkimmoduleprivate.h		\
@@ -147,6 +154,7 @@ IGNORE_HFILES = \
 	gtkprinter-private.h		\
 	gtkprintoperation-private.h	\
 	gtkprivate.h		        \
+	gtkprogresstrackerprivate.h     \
 	gtkrangeprivate.h		\
 	gtkrecentchooserprivate.h	\
 	gtkrenderbackgroundprivate.h	\
@@ -163,6 +171,8 @@ IGNORE_HFILES = \
 	gtksearchentryprivate.h		\
 	gtkselectionprivate.h		\
 	gtksettingsprivate.h		\
+	gtkshortcutsshortcutprivate.h	\
+	gtkshortcutswindowprivate.h	\
 	gtksidebarrowprivate.h		\
 	gtksizegroup-private.h		\
 	gtksizerequestcacheprivate.h	\
