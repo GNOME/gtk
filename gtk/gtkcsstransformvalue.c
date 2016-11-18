@@ -577,25 +577,42 @@ gtk_css_transform_print (const GtkCssTransform *transform,
   switch (transform->type)
     {
     case GTK_CSS_TRANSFORM_MATRIX:
-      g_string_append (string, "matrix(");
-      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 0));
-      g_string_append (string, buf);
-      g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 1));
-      g_string_append (string, buf);
-      g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 2));
-      g_string_append (string, buf);
-      g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 0));
-      g_string_append (string, buf);
-      g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 1));
-      g_string_append (string, buf);
-      g_string_append (string, ", ");
-      g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 2));
-      g_string_append (string, buf);
-      g_string_append (string, ")");
+      if (graphene_matrix_is_2d (&transform->matrix.matrix))
+        {
+          g_string_append (string, "matrix(");
+          g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 0));
+          g_string_append (string, buf);
+          g_string_append (string, ", ");
+          g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 1));
+          g_string_append (string, buf);
+          g_string_append (string, ", ");
+          g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 0, 2));
+          g_string_append (string, buf);
+          g_string_append (string, ", ");
+          g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 0));
+          g_string_append (string, buf);
+          g_string_append (string, ", ");
+          g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 1));
+          g_string_append (string, buf);
+          g_string_append (string, ", ");
+          g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, 1, 2));
+          g_string_append (string, buf);
+          g_string_append (string, ")");
+        }
+      else
+        {
+          guint i;
+
+          g_string_append (string, "matrix3d(");
+          for (i = 0; i < 16; i++)
+            {
+              g_ascii_dtostr (buf, sizeof (buf), graphene_matrix_get_value (&transform->matrix.matrix, i / 4, i % 4));
+              g_string_append (string, buf);
+              if (i < 15)
+                g_string_append (string, ", ");
+            }
+          g_string_append (string, ")");
+        }
       break;
     case GTK_CSS_TRANSFORM_TRANSLATE:
       g_string_append (string, "translate3d(");
@@ -747,6 +764,32 @@ gtk_css_transform_parse (GtkCssTransform *transform,
         }
       graphene_matrix_init_from_2d (&transform->matrix.matrix, 
                                     xx, yx, xy, yy, x0, y0);
+    }
+  else if (_gtk_css_parser_try (parser, "matrix3d(", TRUE))
+    {
+      float f[16];
+      double d;
+      guint i;
+
+      transform->type = GTK_CSS_TRANSFORM_MATRIX;
+
+      for (i = 0; i < 16; i++)
+        {
+          if (!_gtk_css_parser_try_double (parser, &d))
+            break;
+          f[i] = d;
+
+          if (i < 15 && !_gtk_css_parser_try (parser, ",", TRUE))
+            break;
+        }
+
+      if (i < 16)
+        {
+          /* FIXME: Improve error handling here */
+          _gtk_css_parser_error (parser, "invalid syntax for matrix3d()");
+          return FALSE;
+        }
+      graphene_matrix_init_from_float (&transform->matrix.matrix, f);
     }
   else if (_gtk_css_parser_try (parser, "translate(", TRUE))
     {
