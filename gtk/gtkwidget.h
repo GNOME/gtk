@@ -1254,6 +1254,15 @@ void                    gtk_widget_set_font_map         (GtkWidget             *
 GDK_AVAILABLE_IN_3_18
 PangoFontMap *          gtk_widget_get_font_map         (GtkWidget             *widget);
 
+GDK_AVAILABLE_IN_3_90
+GtkWidget *             gtk_widget_get_first_child      (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_90
+GtkWidget *             gtk_widget_get_last_child       (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_90
+GtkWidget *             gtk_widget_get_next_sibling     (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_90
+GtkWidget *             gtk_widget_get_prev_sibling     (GtkWidget *widget);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
 

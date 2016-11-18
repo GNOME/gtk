@@ -149,12 +149,16 @@ struct _GtkWidgetPrivate
   GdkWindow *window;
   GList *registered_windows;
 
-  /* The widget's parent */
-  GtkWidget *parent;
-
   GList *event_controllers;
 
   AtkObject *accessible;
+
+  /* Widget tree */
+  GtkWidget *parent;
+  GtkWidget *prev_sibling;
+  GtkWidget *next_sibling;
+  GtkWidget *first_child;
+  GtkWidget *last_child;
 };
 
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
@@ -296,6 +300,10 @@ void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
                                                             gint      *minimum_baseline,
                                                             gint      *natural_baseline);
 
+void              gtk_widget_forall                        (GtkWidget            *widget,
+                                                            GtkCallback           callback,
+                                                            gpointer              user_data);
+
 /* inline getters */
 
 static inline gboolean
@@ -404,6 +412,30 @@ _gtk_widget_get_allocation (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
   *allocation = widget->priv->allocation;
+}
+
+static inline GtkWidget *
+_gtk_widget_get_prev_sibling (GtkWidget *widget)
+{
+  return widget->priv->prev_sibling;
+}
+
+static inline GtkWidget *
+_gtk_widget_get_next_sibling (GtkWidget *widget)
+{
+  return widget->priv->next_sibling;
+}
+
+static inline GtkWidget *
+_gtk_widget_get_first_child (GtkWidget *widget)
+{
+  return widget->priv->first_child;
+}
+
+static inline GtkWidget *
+_gtk_widget_get_last_child (GtkWidget *widget)
+{
+  return widget->priv->last_child;
 }
 
 G_END_DECLS

@@ -3784,6 +3784,10 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->alpha = 255;
   priv->window = NULL;
   priv->parent = NULL;
+  priv->first_child = NULL;
+  priv->last_child = NULL;
+  priv->prev_sibling = NULL;
+  priv->next_sibling = NULL;
 
   priv->sensitive = TRUE;
   priv->redraw_on_alloc = TRUE;
@@ -4027,7 +4031,22 @@ gtk_widget_unparent (GtkWidget *widget)
   priv->child_visible = TRUE;
 
   old_parent = priv->parent;
+  if (old_parent)
+    {
+      if (old_parent->priv->first_child == widget)
+        old_parent->priv->first_child = priv->next_sibling;
+
+      if (old_parent->priv->last_child == widget)
+        old_parent->priv->last_child = priv->prev_sibling;
+
+      if (priv->prev_sibling)
+        priv->prev_sibling->priv->next_sibling = priv->next_sibling;
+      if (priv->next_sibling)
+        priv->next_sibling->priv->prev_sibling = priv->prev_sibling;
+    }
   priv->parent = NULL;
+  priv->prev_sibling = NULL;
+  priv->next_sibling = NULL;
 
   /* parent may no longer expand if the removed
    * child was expand=TRUE and could therefore
@@ -8395,6 +8414,15 @@ gtk_widget_set_parent (GtkWidget *widget,
   gtk_widget_push_verify_invariants (widget);
 
   priv->parent = parent;
+  if (parent)
+    {
+      priv->prev_sibling = parent->priv->last_child;
+      if (parent->priv->last_child)
+        parent->priv->last_child->priv->next_sibling = widget;
+      parent->priv->last_child = widget;
+      if (!parent->priv->first_child)
+        parent->priv->first_child = widget;
+    }
 
   parent_flags = _gtk_widget_get_state_flags (parent);
 
@@ -15654,4 +15682,55 @@ gtk_widget_render (GtkWidget            *widget,
 
 
   gsk_renderer_end_draw_frame (renderer, context);
+}
+
+GtkWidget *
+gtk_widget_get_first_child (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return widget->priv->first_child;
+}
+
+GtkWidget *
+gtk_widget_get_last_child (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return widget->priv->last_child;
+}
+
+GtkWidget *
+gtk_widget_get_next_sibling (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return widget->priv->next_sibling;
+}
+
+GtkWidget *
+gtk_widget_get_prev_sibling (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return widget->priv->prev_sibling;
+}
+
+void
+gtk_widget_forall (GtkWidget   *widget,
+                   GtkCallback  callback,
+                   gpointer     user_data)
+{
+  GtkWidget *child;
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  child = gtk_widget_get_first_child (widget);
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      callback(child, user_data);
+
+      child = next;
+    }
 }
