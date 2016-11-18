@@ -1,14 +1,14 @@
 #include <gtk/gtk.h>
 
-static gboolean
-draw_popup (GtkWidget *widget,
-            cairo_t   *cr,
-            gpointer   data)
+static void
+draw_popup (GtkDrawingArea  *da,
+            cairo_t         *cr,
+            int              width,
+            int              height,
+            gpointer         data)
 {
   cairo_set_source_rgb (cr, 1, 0, 0);
   cairo_paint (cr);
-
-  return FALSE;
 }
 
 static gboolean
@@ -32,16 +32,18 @@ on_map_event (GtkWidget *parent,
               GdkEvent  *event,
               gpointer   data)
 {
-  GtkWidget *popup;
+  GtkWidget *popup, *da;
 
   popup = gtk_window_new (GTK_WINDOW_POPUP);
+  da = gtk_drawing_area_new ();
+  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_popup, NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (popup), da);
 
   gtk_widget_set_size_request (GTK_WIDGET (popup), 20, 20);
   gtk_window_set_transient_for (GTK_WINDOW (popup), GTK_WINDOW (parent));
-  g_signal_connect (popup, "draw", G_CALLBACK (draw_popup), NULL);
   g_signal_connect (parent, "motion-notify-event", G_CALLBACK (place_popup), popup);
 
-  gtk_widget_show (popup);
+  gtk_widget_show_all (popup);
 
   return FALSE;
 }
