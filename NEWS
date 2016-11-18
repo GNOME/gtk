@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.22.4
+==================================
+
+* Bug fixes:
+ 767713 Fullscreen in wayland is buggy
+ 768081 Enable HiDPI support for GDK-Win32
+ 768531 wayland: Startup notification doesn't work on some apps (eg. gnome-terminal)...
+ 772075 GTK+ uses a lot more CPU under Wayland than under X11
+ 772202 Handling of scaled monitors is broken
+ 773587 recent-manager: Add a limit to the list's size
+ 773916 GtkComposeTable caches broken: using a same ~/.XCompose does not work twice...
+ 773979 GdkGLContext does not chain finalize handler
+ 774046 GtkSpinButton does not always unref priv->{up,down}_button
+ 774066 GtkHeaderBar does not unref all GtkBox and GtkSeparator it creates
+ 774097 GtkPrintOperation should not truncate job names
+ 774185 GtkPlacesSidebar does not unref itsel as many times as it references
+ 774352 GtkAppChooserWidget does not unref all GAppInfo it references
+
+* Translation updates:
+ Czech
+ Dutch
+
+
 Overview of Changes in GTK+ 3.22.3
 ==================================
 
