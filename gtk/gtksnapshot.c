@@ -29,6 +29,25 @@
 
 #include "gsk/gskrendernodeprivate.h"
 
+
+/**
+ * SECTION:gtksnapshot
+ * @Short_description: Auxiliary object for snapshots
+ * @Title: GtkSnapshot
+ *
+ * GtkSnapshot is an auxiliary object that assists in creating #GskRenderNodes
+ * in the #GtkWidget::snapshot vfunc. It functions in a similar way to
+ * a cairo context, and maintains a stack of render nodes and their associated
+ * transformations.
+ *
+ * The node at the top of the stack is the the one that gtk_snapshot_append_node()
+ * operates on. Use the gtk_snapshot_push_() and gtk_snapshot_pop() functions to
+ * change the current node.
+ *
+ * The only way to obtain a #GtkSnapshot object is as an argument to
+ * the #GtkWidget::snapshot vfunc.
+ */
+
 static GtkSnapshotState *
 gtk_snapshot_state_new (GtkSnapshotState *parent,
                         GskRenderNode    *node)
@@ -99,6 +118,16 @@ gtk_snapshot_finish (GtkSnapshot *snapshot)
   return snapshot->root;
 }
 
+/**
+ * gtk_snapshot_push_node:
+ * @snapshot: a #GtkSnapshot
+ * @node: the render node to push
+ *
+ * Appends @node to the current render node of @snapshot,
+ * and makes @node the new current render node.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_push_node (GtkSnapshot   *snapshot,
                         GskRenderNode *node)
@@ -108,6 +137,18 @@ gtk_snapshot_push_node (GtkSnapshot   *snapshot,
   snapshot->state = gtk_snapshot_state_new (snapshot->state, node);
 }
 
+/**
+ * gtk_snapshot_push:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the bounds for the new node
+ * @name: a printf() style format string for the name for the new node
+ * @...: arguments to insert into the format string
+ *
+ * Creates a new render node, appends it to the current render
+ * node of @snapshot, and makes it the new current render node.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_push (GtkSnapshot           *state,
                    const graphene_rect_t *bounds,
@@ -137,6 +178,15 @@ gtk_snapshot_push (GtkSnapshot           *state,
   gsk_render_node_unref (node);
 }
 
+/**
+ * gtk_snapshot_pop:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Removes the top element from the stack of render nodes,
+ * making the node underneath the current node again.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_pop (GtkSnapshot *snapshot)
 {
@@ -154,12 +204,32 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
   gtk_snapshot_state_free (state);
 }
 
+/**
+ * gtk_snapshot_get_renderer:
+ * @snapshot: a #GtkSnapshot
+ *
+ * Obtains the #GskRenderer that this snapshot will be
+ * rendered with.
+ *
+ * Returns: the #GskRenderer
+ *
+ * Since: 3.90
+ */
 GskRenderer *
 gtk_snapshot_get_renderer (const GtkSnapshot *state)
 {
   return state->renderer;
 }
 
+/**
+ * gtk_snapshot_set_transform:
+ * @snapshot: a #GtkSnapshot
+ * @transform: a transformation matrix
+ *
+ * Replaces the current transformation with the given @transform.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_set_transform (GtkSnapshot             *snapshot,
                             const graphene_matrix_t *transform)
@@ -169,6 +239,15 @@ gtk_snapshot_set_transform (GtkSnapshot             *snapshot,
   gtk_snapshot_state_set_transform (snapshot->state, transform);
 }
 
+/**
+ * gtk_snapshot_transform:
+ * @snapshot: a #GtkSnapshot
+ * @transform: a transformation matrix
+ *
+ * Appends @transform to the current transformation.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_transform (GtkSnapshot             *snapshot,
                         const graphene_matrix_t *transform)
@@ -181,6 +260,16 @@ gtk_snapshot_transform (GtkSnapshot             *snapshot,
   gtk_snapshot_state_set_transform (snapshot->state, &result);
 }
 
+/**
+ * gtk_snapshot_translate_2d:
+ * @state: a $GtkSnapshot
+ * @x: horizontal translation
+ * @y: vertical translation
+ *
+ * Appends a translation by (@x, @y) to the current transformation.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_translate_2d (GtkSnapshot *state,
                            int          x,
@@ -194,6 +283,16 @@ gtk_snapshot_translate_2d (GtkSnapshot *state,
   gtk_snapshot_transform (state, &transform);
 }
 
+/**
+ * gtk_snapshot_append_node:
+ * @snapshot: a #GtkSnapshot
+ * @node: a #GskRenderNode
+ *
+ * Appends @node to the current render node of @snapshot,
+ * without changing the current node. If @snapshot does
+ * not have a current node yet, @node will become the
+ * initial node.
+ */
 void
 gtk_snapshot_append_node (GtkSnapshot   *snapshot,
                           GskRenderNode *node)
@@ -216,6 +315,20 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
     }
 }
 
+/**
+ * gtk_snapshot_append:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the bounds for the new node
+ * @name: a printf() style format string for the name for the new node
+ * @...: arguments to insert into the format string
+ *
+ * Creates a new render node and appends it to the current render
+ * node of @snapshot, without changing the current node.
+ *
+ * Since: 3.90
+ *
+ * Returns: the newly created #GskRenderNode
+ */
 GskRenderNode *
 gtk_snapshot_append (GtkSnapshot           *state,
                      const graphene_rect_t *bounds,
@@ -249,6 +362,21 @@ gtk_snapshot_append (GtkSnapshot           *state,
   return node;
 }
 
+/**
+ * gtk_snapshot_append_cairo_node:
+ * @state: a #GtkSnapshot
+ * @bounds: the bounds for the new node
+ * @name: a printf() style format string for the name for the new node
+ * @...: arguments to insert into the format string
+ *
+ * Creates a new render node and appends it to the current render
+ * node of @snapshot, without changing the current node.
+ *
+ * Returns: a cairo_t suitable for drawing the contents of the newly
+ *     created render node
+ *
+ * Since: 3.90
+ */
 cairo_t *
 gtk_snapshot_append_cairo_node (GtkSnapshot           *state,
                                 const graphene_rect_t *bounds,
@@ -283,6 +411,21 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *state,
   return gsk_render_node_get_draw_context (node, state->renderer);
 }
 
+/**
+ * gtk_snapshot_push_cairo_node:
+ * @state: a #GtkSnapshot
+ * @bounds: the bounds for the new node
+ * @name: a printf() style format string for the name for the new node
+ * @...: arguments to insert into the format string
+ *
+ * Creates a new render node, appends it to the current render
+ * node of @snapshot, and makes it the new current render node.
+ *
+ * Returns: a cairo_t suitable for drawing the contents of the newly
+ *     created render node
+ *
+ * Since: 3.90
+ */
 cairo_t *
 gtk_snapshot_push_cairo_node (GtkSnapshot            *state,
                               const graphene_rect_t  *bounds,
@@ -327,6 +470,17 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
   cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
 }
 
+/**
+ * gtk_snapshot_clips_rect:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: a rectangle
+ *
+ * Tests whether the rectangle is entirely outside the clip region of @snapshot.
+ *
+ * Returns: %TRUE is @bounds is entirely outside the clip region
+ *
+ * Since: 3.90
+ */
 gboolean
 gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
                          const graphene_rect_t *bounds)
@@ -351,6 +505,21 @@ gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
   return cairo_region_contains_rectangle (snapshot->clip_region, &rect) == CAIRO_REGION_OVERLAP_OUT;
 }
 
+/**
+ * gtk_snapshot_render_background:
+ * @state: a #GtkSnapshot
+ * @context: the #GtkStyleContext to use
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Creates a render node for the CSS background according to @context,
+ * and appends it to the current node of @snapshot, without changing
+ * the current node.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_render_background (GtkSnapshot     *state,
                                 GtkStyleContext *context,
@@ -389,6 +558,21 @@ gtk_snapshot_render_frame (GtkSnapshot     *state,
   gtk_snapshot_translate_2d (state, -x, -y);
 }
 
+/**
+ * gtk_snapshot_render_focus:
+ * @state: a #GtkSnapshot
+ * @context: the #GtkStyleContext to use
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Creates a render node for the focus outline according to @context,
+ * and appends it to the current node of @snapshot, without changing
+ * the current node.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_render_focus (GtkSnapshot     *state,
                            GtkStyleContext *context,
@@ -407,6 +591,20 @@ gtk_snapshot_render_focus (GtkSnapshot     *state,
   gtk_snapshot_translate_2d (state, -x, -y);
 }
 
+/**
+ * gtk_snapshot_render_layout:
+ * @state: a #GtkSnapshot
+ * @context: the #GtkStyleContext to use
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @layout: the #PangoLayout to render
+ *
+ * Creates a render node for rendering @layout according to the style
+ * information in @context, and appends it to the current node of @snapshot,
+ * without changing the current node.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_render_layout (GtkSnapshot     *state,
                             GtkStyleContext *context,
@@ -448,6 +646,20 @@ gtk_snapshot_render_layout (GtkSnapshot     *state,
   gtk_snapshot_translate_2d (state, -x, -y);
 }
 
+/**
+ * gtk_snapshot_render_icon:
+ * @snapshot: a #GtkSnapshot
+ * @context: the #GtkStyleContext to use
+ * @pixbuf: the #GdkPixbuf to render
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ *
+ * Creates a render node for rendering @pixbuf according to the style
+ * information in @context, and appends it to the current node of @snapshot,
+ * without changing the current node.
+ *
+ * Since: 3.90
+ */
 void
 gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
                           GtkStyleContext *context,
