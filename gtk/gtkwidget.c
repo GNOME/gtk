@@ -4011,8 +4011,11 @@ gtk_widget_unparent (GtkWidget *widget)
   if (_gtk_widget_is_toplevel (toplevel))
     _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
 
-  if (gtk_container_get_focus_child (GTK_CONTAINER (priv->parent)) == widget)
-    gtk_container_set_focus_child (GTK_CONTAINER (priv->parent), NULL);
+  if (GTK_IS_CONTAINER (priv->parent))
+    {
+      if (gtk_container_get_focus_child (GTK_CONTAINER (priv->parent)) == widget)
+        gtk_container_set_focus_child (GTK_CONTAINER (priv->parent), NULL);
+    }
 
   if (_gtk_widget_is_drawable (priv->parent))
     gtk_widget_queue_draw_area (priv->parent,
