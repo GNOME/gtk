@@ -316,6 +316,42 @@ _gtk_css_shadows_value_paint_box (const GtkCssValue   *shadows,
 }
 
 void
+gtk_css_shadows_value_snapshot_outset (const GtkCssValue   *shadows,
+                                       GtkSnapshot         *snapshot,
+                                       const GtkRoundedBox *border_box)
+{
+  guint i;
+
+  g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
+
+  for (i = 0; i < shadows->len; i++)
+    {
+      if (_gtk_css_shadow_value_get_inset (shadows->values[i]))
+        continue;
+
+      gtk_css_shadow_value_snapshot_outset (shadows->values[i], snapshot, border_box);
+    }
+}
+
+void
+gtk_css_shadows_value_snapshot_inset (const GtkCssValue   *shadows,
+                                      GtkSnapshot         *snapshot,
+                                      const GtkRoundedBox *padding_box)
+{
+  guint i;
+
+  g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
+
+  for (i = 0; i < shadows->len; i++)
+    {
+      if (!_gtk_css_shadow_value_get_inset (shadows->values[i]))
+        continue;
+
+      gtk_css_shadow_value_snapshot_inset (shadows->values[i], snapshot, padding_box);
+    }
+}
+
+void
 _gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
                                     GtkBorder         *border)
 {

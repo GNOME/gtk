@@ -25,6 +25,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkrenderprivate.h"
 #include "gtkpango.h"
@@ -1019,3 +1020,55 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 
   cairo_restore (cr);
 }
+
+void
+gtk_css_shadow_value_snapshot_outset (const GtkCssValue   *shadow,
+                                      GtkSnapshot         *snapshot,
+                                      const GtkRoundedBox *border_box)
+{
+  GtkBorder extents;
+  cairo_t *cr;
+
+  g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
+
+  /* We don't need to draw invisible shadows */
+  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+    return;
+
+  gtk_css_shadow_value_get_extents (shadow, &extents);
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &(graphene_rect_t) GRAPHENE_RECT_INIT (
+                                          border_box->box.x - extents.left,
+                                          border_box->box.y - extents.top,
+                                          border_box->box.width + extents.left + extents.right,
+                                          border_box->box.height + extents.top + extents.bottom),
+                                       "Outset Shadow");
+  _gtk_css_shadow_value_paint_box (shadow, cr, border_box);
+  cairo_destroy (cr);
+}
+
+void
+gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
+                                     GtkSnapshot         *snapshot,
+                                     const GtkRoundedBox *padding_box)
+{
+  cairo_t *cr;
+
+  g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
+
+  /* We don't need to draw invisible shadows */
+  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+    return;
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &(graphene_rect_t) GRAPHENE_RECT_INIT (
+                                          padding_box->box.x,
+                                          padding_box->box.y,
+                                          padding_box->box.width,
+                                          padding_box->box.height),
+                                       "Inset Shadow");
+  _gtk_css_shadow_value_paint_box (shadow, cr, padding_box);
+  cairo_destroy (cr);
+}
+

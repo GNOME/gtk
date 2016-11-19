@@ -47,6 +47,12 @@ void            _gtk_css_shadows_value_paint_box      (const GtkCssValue        
                                                        cairo_t                  *cr,
                                                        const GtkRoundedBox      *padding_box,
                                                        gboolean                  inset);
+void            gtk_css_shadows_value_snapshot_outset (const GtkCssValue        *shadows,
+                                                       GtkSnapshot              *snapshot,
+                                                       const GtkRoundedBox      *border_box);
+void            gtk_css_shadows_value_snapshot_inset  (const GtkCssValue        *shadows,
+                                                       GtkSnapshot              *snapshot,
+                                                       const GtkRoundedBox      *padding_box);
 
 void            _gtk_css_shadows_value_get_extents    (const GtkCssValue        *shadows,
                                                        GtkBorder                *border);

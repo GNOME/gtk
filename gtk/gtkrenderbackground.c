@@ -302,12 +302,15 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
 }
 
 static void
-_gtk_theming_background_init_style (GtkThemingBackground *bg,
-                                    double                width,
-                                    double                height,
-                                    GtkJunctionSides      junction)
+gtk_theming_background_init (GtkThemingBackground *bg,
+                             GtkCssStyle          *style,
+                             double                width,
+                             double                height,
+                             GtkJunctionSides      junction)
 {
   GtkBorder border, padding;
+
+  bg->style = style;
 
   border.top = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
   border.right = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
@@ -370,8 +373,7 @@ gtk_css_style_render_background (GtkCssStyle      *style,
       _gtk_css_shadows_value_is_none (box_shadow))
     return;
 
-  bg.style = style;
-  _gtk_theming_background_init_style (&bg, width, height, junction);
+  gtk_theming_background_init (&bg, style, width, height, junction);
 
   cairo_save (cr);
   cairo_translate (cr, x, y);
@@ -435,14 +437,17 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
                                    gdouble           height,
                                    GtkJunctionSides  junction)
 {
+  GtkThemingBackground bg;
+  gint idx;
   GtkCssValue *background_image;
+  GtkCssValue *blend_modes;
   GtkCssValue *box_shadow;
   const GdkRGBA *bg_color;
-  GtkBorder shadow;
-  graphene_rect_t bounds;
+  gint number_of_layers;
   cairo_t *cr;
 
   background_image = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+  blend_modes = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
   bg_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   box_shadow = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW);
 
@@ -453,20 +458,37 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
       _gtk_css_shadows_value_is_none (box_shadow))
     return;
 
-  _gtk_css_shadows_value_get_extents (box_shadow, &shadow);
+  gtk_theming_background_init (&bg, style, width, height, junction);
 
-  graphene_rect_init (&bounds,
-                      - shadow.left,
-                      - shadow.top,
-                      ceil (width) + shadow.left + shadow.right,
-                      ceil (height) + shadow.top + shadow.bottom);
+  gtk_css_shadows_value_snapshot_outset (box_shadow,
+                                         snapshot,
+                                         &bg.boxes[GTK_CSS_AREA_BORDER_BOX]);
 
+  /*
+   * When we have a blend mode set for the background, we must blend on a transparent
+   * background. GSK can't do that yet.
+   */
   cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &bounds,
-                                       "Background");
+                                       &(graphene_rect_t)GRAPHENE_RECT_INIT(0, 0, width, height),
+                                       "Background with blend mode");
 
-  gtk_css_style_render_background (style, cr, 0, 0, width, height, junction);
+  _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
+
+  number_of_layers = _gtk_css_array_value_get_n_values (background_image);
+
+  for (idx = number_of_layers - 1; idx >= 0; idx--)
+    {
+      GtkCssBlendMode blend_mode;
+
+      blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
+
+      _gtk_theming_background_paint_layer (&bg, idx, cr, blend_mode);
+    }
 
   cairo_destroy (cr);
+
+  gtk_css_shadows_value_snapshot_inset (box_shadow,
+                                        snapshot,
+                                        &bg.boxes[GTK_CSS_AREA_PADDING_BOX]);
 }
 
