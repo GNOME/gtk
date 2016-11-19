@@ -320,9 +320,8 @@ _gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
                                     GtkBorder         *border)
 {
   guint i;
-  GtkBorder b = { 0 };
+  GtkBorder b = { 0 }, sb;
   const GtkCssValue *shadow;
-  gdouble hoffset, voffset, spread, radius, clip_radius;
 
   g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
 
@@ -335,19 +334,8 @@ _gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
       if (_gtk_css_shadow_value_get_inset (shadow))
         continue;
 
-      _gtk_css_shadow_value_get_geometry (shadow,
-                                          &hoffset, &voffset,
-                                          &radius, &spread);
-      clip_radius = _gtk_cairo_blur_compute_pixels (radius);
+      gtk_css_shadow_value_get_extents (shadow, &sb);
 
-      b.top = MAX (0, ceil (clip_radius + spread - voffset));
-      b.right = MAX (0, ceil (clip_radius + spread + hoffset));
-      b.bottom = MAX (0, ceil (clip_radius + spread + voffset));
-      b.left = MAX (0, ceil (clip_radius + spread - hoffset));
-
-      border->top = MAX (border->top, b.top);
-      border->right = MAX (border->right, b.right);
-      border->bottom = MAX (border->bottom, b.bottom);
-      border->left = MAX (border->left, b.left);
+      b.top = MAX (b.top, sb.top);
     }
 }

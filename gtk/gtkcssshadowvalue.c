@@ -605,23 +605,21 @@ _gtk_css_shadow_value_get_inset (const GtkCssValue *shadow)
 }
 
 void
-_gtk_css_shadow_value_get_geometry (const GtkCssValue *shadow,
-                                    gdouble           *hoffset,
-                                    gdouble           *voffset,
-                                    gdouble           *radius,
-                                    gdouble           *spread)
+gtk_css_shadow_value_get_extents (const GtkCssValue *shadow,
+                                  GtkBorder         *border)
 {
-  g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
+  gdouble hoffset, voffset, spread, radius, clip_radius;
 
-  if (hoffset != NULL)
-    *hoffset = _gtk_css_number_value_get (shadow->hoffset, 0);
-  if (voffset != NULL)
-    *voffset = _gtk_css_number_value_get (shadow->voffset, 0);
+  spread = _gtk_css_number_value_get (shadow->spread, 0);
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  clip_radius = _gtk_cairo_blur_compute_pixels (radius);
+  hoffset = _gtk_css_number_value_get (shadow->hoffset, 0);
+  voffset = _gtk_css_number_value_get (shadow->voffset, 0);
 
-  if (radius != NULL)
-    *radius = _gtk_css_number_value_get (shadow->radius, 0);
-  if (spread != NULL)
-    *spread = _gtk_css_number_value_get (shadow->spread, 0);
+  border->top = MAX (0, ceil (clip_radius + spread - voffset));
+  border->right = MAX (0, ceil (clip_radius + spread + hoffset));
+  border->bottom = MAX (0, ceil (clip_radius + spread + voffset));
+  border->left = MAX (0, ceil (clip_radius + spread - hoffset));
 }
 
 static gboolean

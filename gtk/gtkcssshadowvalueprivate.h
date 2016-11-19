@@ -37,11 +37,8 @@ GtkCssValue *   _gtk_css_shadow_value_parse           (GtkCssParser             
 
 gboolean        _gtk_css_shadow_value_get_inset       (const GtkCssValue        *shadow);
 
-void            _gtk_css_shadow_value_get_geometry    (const GtkCssValue        *shadow,
-                                                       gdouble                  *hoffset,
-                                                       gdouble                  *voffset,
-                                                       gdouble                  *radius,
-                                                       gdouble                  *spread);
+void            gtk_css_shadow_value_get_extents      (const GtkCssValue        *shadow,
+                                                       GtkBorder                *border);
 
 void            _gtk_css_shadow_value_paint_layout    (const GtkCssValue        *shadow,
                                                        cairo_t                  *cr,
