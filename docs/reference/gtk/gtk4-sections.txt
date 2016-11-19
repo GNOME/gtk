@@ -4940,11 +4940,6 @@ gtk_get_micro_version
 gtk_get_binary_age
 gtk_get_interface_age
 gtk_check_version
-gtk_major_version
-gtk_minor_version
-gtk_micro_version
-gtk_binary_age
-gtk_interface_age
 
 <SUBSECTION>
 GTK_MAJOR_VERSION
