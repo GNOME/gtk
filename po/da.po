@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-06 11:53+0000\n"
-"PO-Revision-Date: 2016-10-08 00:22+0200\n"
+"PO-Revision-Date: 2016-11-19 16:23+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -1290,7 +1290,7 @@ msgstr "_Udseende:"
 #: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/ui/gtkassistant.ui:50
 msgid "_Apply"
-msgstr "_Anvend"
+msgstr "An_vend"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
 #: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12512
@@ -2823,11 +2823,11 @@ msgstr "Forbind som"
 
 #: gtk/gtkmountoperation.c:631
 msgid "_Anonymous"
-msgstr "_Anonym"
+msgstr "A_nonym"
 
 #: gtk/gtkmountoperation.c:640
 msgid "Registered U_ser"
-msgstr "Registreret br_uger"
+msgstr "_Registreret bruger"
 
 #: gtk/gtkmountoperation.c:651
 msgid "_Username"
@@ -2839,11 +2839,11 @@ msgstr "_Domæne"
 
 #: gtk/gtkmountoperation.c:662
 msgid "_Password"
-msgstr "_Adgangskode"
+msgstr "Adgangs_kode"
 
 #: gtk/gtkmountoperation.c:684
 msgid "Forget password _immediately"
-msgstr "Glem adgangskode _omgående"
+msgstr "_Glem adgangskode omgående"
 
 #: gtk/gtkmountoperation.c:694
 msgid "Remember password until you _logout"
@@ -2851,7 +2851,7 @@ msgstr "Husk adgangskode indtil du logger _ud"
 
 #: gtk/gtkmountoperation.c:704
 msgid "Remember _forever"
-msgstr "Husk for _altid"
+msgstr "_Husk for altid"
 
 #: gtk/gtkmountoperation.c:1093
 #, c-format
