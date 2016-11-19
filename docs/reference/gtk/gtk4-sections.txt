@@ -1744,6 +1744,7 @@ gtk_menu_set_accel_path
 gtk_menu_get_accel_path
 gtk_menu_set_monitor
 gtk_menu_get_monitor
+gtk_menu_place_on_monitor
 gtk_menu_set_reserve_toggle_size
 gtk_menu_get_reserve_toggle_size
 <SUBSECTION>
