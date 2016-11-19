@@ -2053,6 +2053,7 @@ GTK_IS_PANED_CLASS
 GTK_PANED_GET_CLASS
 
 <SUBSECTION Private>
+GtkPanedPrivate
 gtk_paned_get_type
 </SECTION>
 
@@ -7103,6 +7104,7 @@ gtk_shortcut_label_set_accelerator
 gtk_shortcut_label_set_disabled_text
 
 <SUBSECTION Private>
+GtkShortcutLabelClass
 gtk_shortcut_label_get_type
 GTK_TYPE_SHORTCUT_LABEL
 GTK_SHORTCUT_LABEL
