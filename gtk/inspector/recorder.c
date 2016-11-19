@@ -360,6 +360,31 @@ gtk_inspector_recorder_is_recording (GtkInspectorRecorder *recorder)
   return priv->recording;
 }
 
+static void
+gtk_inspector_recorder_add_recording (GtkInspectorRecorder  *recorder,
+                                      GtkInspectorRecording *recording)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+  guint count;
+  GtkListBoxRow *selected_row;
+  gboolean should_select_new_row;
+
+  count = g_list_model_get_n_items (priv->recordings);
+  selected_row = gtk_list_box_get_selected_row (GTK_LIST_BOX (priv->recordings_list));
+  if (count == 0 || selected_row == NULL)
+    should_select_new_row = TRUE;
+  else
+    should_select_new_row = (gtk_list_box_row_get_index (selected_row) == count - 1);
+
+  g_list_store_append (G_LIST_STORE (priv->recordings), recording);
+
+  if (should_select_new_row)
+    {
+      gtk_list_box_select_row (GTK_LIST_BOX (priv->recordings_list),
+                               gtk_list_box_get_row_at_index (GTK_LIST_BOX (priv->recordings_list), count));
+    }
+}
+
 void
 gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                       GtkWidget            *widget,
@@ -367,7 +392,6 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                       const cairo_region_t *region,
                                       GskRenderNode        *node)
 {
-  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
   GtkInspectorRecording *recording;
   GdkFrameClock *frame_clock;
 
@@ -382,7 +406,7 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                     gdk_window_get_height (window) },
                                                   region,
                                                   node);
-  g_list_store_append (G_LIST_STORE (priv->recordings), recording);
+  gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
 }
 
