@@ -6986,7 +6986,7 @@ gtk_window_realize (GtkWidget *widget)
             }
           break;
         default:
-          g_warning (G_STRLOC": Unknown window type %d!", priv->type);
+          g_error (G_STRLOC": Unknown window type %d!", priv->type);
           break;
         }
     }
