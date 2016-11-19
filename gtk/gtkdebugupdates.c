@@ -19,6 +19,8 @@
 
 #include "gtkdebugupdatesprivate.h"
 
+#include "gtksnapshot.h"
+
 /* duration before we start fading in us */
 #define GDK_DRAW_REGION_MIN_DURATION 50 * 1000
 /* duration when fade is finished in us */

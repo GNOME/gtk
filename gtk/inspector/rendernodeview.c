@@ -23,8 +23,9 @@
 #include <glib/gi18n-lib.h>
 #include <math.h>
 
+#include <gtk/gtksnapshot.h>
+
 #include "gsk/gskrendernodeprivate.h"
-#include "gtkwidgetprivate.h"
 
 #include "fallback-c89.c"
 

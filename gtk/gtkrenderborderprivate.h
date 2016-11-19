@@ -25,7 +25,7 @@
 #include "gtkborder.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssvalueprivate.h"
-#include "gtksnapshot.h"
+#include "gtktypes.h"
 
 G_BEGIN_DECLS
 

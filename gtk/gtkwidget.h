@@ -33,7 +33,6 @@
 #include <gsk/gsk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkborder.h>
-#include <gtk/gtksnapshot.h>
 #include <gtk/gtktypes.h>
 #include <atk/atk.h>
 

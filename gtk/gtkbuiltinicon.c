@@ -24,6 +24,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkrendericonprivate.h"
+#include "gtksnapshot.h"
 
 /* GtkBuiltinIcon is a gadget implementation that is meant to replace
  * all calls to gtk_render_ functions to render arrows, expanders, checks

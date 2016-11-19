@@ -37,6 +37,7 @@ typedef struct _GtkClipboard	       GtkClipboard;
 typedef struct _GtkRequisition	       GtkRequisition;
 typedef struct _GtkSelectionData       GtkSelectionData;
 typedef struct _GtkSettings            GtkSettings;
+typedef struct _GtkSnapshot            GtkSnapshot;
 typedef struct _GtkStyleContext        GtkStyleContext;
 typedef struct _GtkTooltip             GtkTooltip;
 typedef struct _GtkWidget              GtkWidget;

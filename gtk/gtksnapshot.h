@@ -36,9 +36,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkSnapshot GtkSnapshot;
-
-
 GDK_AVAILABLE_IN_3_90
 GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot      *snapshot);
 

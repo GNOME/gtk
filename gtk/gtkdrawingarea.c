@@ -26,6 +26,7 @@
 #include "gtkdrawingarea.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontext.h"
 
 typedef struct _GtkDrawingAreaPrivate GtkDrawingAreaPrivate;

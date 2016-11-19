@@ -31,7 +31,6 @@
 #include "gtkeventcontroller.h"
 #include "gtkactionmuxer.h"
 #include "gtksizerequestcacheprivate.h"
-#include "gtksnapshot.h"
 
 G_BEGIN_DECLS
 
