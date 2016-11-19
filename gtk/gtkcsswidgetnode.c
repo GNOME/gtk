@@ -140,46 +140,6 @@ gtk_css_widget_node_validate (GtkCssNode *node)
   gtk_css_style_change_finish (&change);
 }
 
-typedef GtkWidgetPath * (* GetPathForChildFunc) (GtkContainer *, GtkWidget *);
-
-static gboolean
-widget_needs_widget_path (GtkWidget *widget)
-{
-  static GetPathForChildFunc funcs[2];
-  GtkContainerClass *class;
-  GtkWidget *parent;
-  GetPathForChildFunc parent_func;
-  guint i;
-
-  if (G_UNLIKELY (funcs[0] == NULL))
-    {
-      i = 0;
-
-      class = (GtkContainerClass*)g_type_class_ref (GTK_TYPE_CONTAINER);
-      funcs[i++] = class->get_path_for_child;
-      g_type_class_unref (class);
-
-      class = (GtkContainerClass*)g_type_class_ref (GTK_TYPE_BOX);
-      funcs[i++] = class->get_path_for_child;
-      g_type_class_unref (class);
-
-      g_assert (i == G_N_ELEMENTS (funcs));
-    }
-
-  parent = _gtk_widget_get_parent (widget);
-  if (parent == NULL)
-    return FALSE;
-
-  parent_func = GTK_CONTAINER_GET_CLASS (GTK_CONTAINER (parent))->get_path_for_child;
-  for (i = 0; i < G_N_ELEMENTS (funcs); i++)
-    {
-      if (funcs[i] == parent_func)
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
 static gboolean
 gtk_css_widget_node_init_matcher (GtkCssNode     *node,
                                   GtkCssMatcher  *matcher)
@@ -189,12 +149,7 @@ gtk_css_widget_node_init_matcher (GtkCssNode     *node,
   if (widget_node->widget == NULL)
     return FALSE;
 
-  if (!widget_needs_widget_path (widget_node->widget))
-    return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->init_matcher (node, matcher);
-
-  return _gtk_css_matcher_init (matcher,
-                                gtk_widget_get_path (widget_node->widget),
-                                gtk_css_node_get_declaration (node));
+  return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->init_matcher (node, matcher);
 }
 
 static GtkWidgetPath *
