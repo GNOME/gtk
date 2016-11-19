@@ -229,7 +229,7 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
     return;
 
   graphene_matrix_init_translate (&translate_matrix, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(x + width / 2.0, y + height / 2.0, 0));
-  graphene_matrix_multiply (&translate_matrix, &transform_matrix, &matrix);
+  graphene_matrix_multiply (&transform_matrix, &translate_matrix, &matrix);
   graphene_rect_init (&bounds,
                       - width / 2.0, - height / 2.0,
                       width, height);
@@ -240,8 +240,8 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
 
   extents->x = floorf (bounds.origin.x) - border.left;
   extents->y = floorf (bounds.origin.y) - border.top;
-  extents->width = ceilf (bounds.origin.x + bounds.size.width) - extents->x + border.left + border.right;
-  extents->height = ceilf (bounds.origin.y + bounds.size.height) - extents->y + border.top + border.bottom;
+  extents->width = ceilf (bounds.origin.x + bounds.size.width) - extents->x + border.right;
+  extents->height = ceilf (bounds.origin.y + bounds.size.height) - extents->y + border.bottom;
 }
 
 void
