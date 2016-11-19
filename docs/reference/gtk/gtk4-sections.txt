@@ -5942,6 +5942,7 @@ gtk_print_job_get_printer
 gtk_print_job_get_title
 gtk_print_job_get_status
 gtk_print_job_set_source_file
+gtk_print_job_set_source_fd
 gtk_print_job_get_surface
 gtk_print_job_send
 gtk_print_job_set_track_print_status
