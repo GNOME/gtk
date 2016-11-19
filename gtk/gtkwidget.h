@@ -315,6 +315,8 @@ struct _GtkWidget
  *   region.
  * @queue_draw_child: Child wants to be redrawn. The region given is in
  *   the child's coordinate system.
+ * @snapshot: Signal emitted when a widget is supposed to create a snapshot
+ *   of itself.
  */
 struct _GtkWidgetClass
 {
