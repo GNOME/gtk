@@ -321,8 +321,6 @@ draw_func (GtkDrawingArea *darea,
 
         gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
         cairo_paint (cr);
-
-        return FALSE;
 }
 
 static int
