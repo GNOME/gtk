@@ -3087,6 +3087,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::accel-closures-changed:
    * @widget: the object which received the signal.
+   *
+   * The ::accel-closures-changed signal gets emitted when accelerators for this
+   * widget get added, removed or changed.
    */
   widget_signals[ACCEL_CLOSURES_CHANGED] =
     g_signal_new (I_("accel-closures-changed"),
