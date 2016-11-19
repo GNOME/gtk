@@ -864,10 +864,9 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
   GdkDeviceWintab *device;
   GList *tmp_list;
 
-  for (tmp_list = device_manager->wintab_devices; tmp_list; tmp_list = tmp_list->next)
+  for (tmp_list = device_manager->wintab_devices; tmp_list != NULL; tmp_list = tmp_list->next)
     {
       device = tmp_list->data;
-      tmp_list = tmp_list->next;
 
       if (device->hctx == hctx &&
           device->cursor == cursor)
