@@ -183,7 +183,7 @@ _gtk_trash_monitor_init (GtkTrashMonitor *monitor)
   recompute_trash_state (monitor);
 }
 
-/**
+/*
  * _gtk_trash_monitor_get:
  *
  * Returns: (transfer full): a new reference to the singleton
@@ -206,7 +206,7 @@ _gtk_trash_monitor_get (void)
   return the_trash_monitor;
 }
 
-/**
+/*
  * _gtk_trash_monitor_get_icon:
  * @monitor: a #GtkTrashMonitor
  *
@@ -229,7 +229,7 @@ _gtk_trash_monitor_get_icon (GtkTrashMonitor *monitor)
   return g_themed_icon_new (icon_name);
 }
 
-/**
+/*
  * _gtk_trash_monitor_get_has_trash:
  * @monitor: a #GtkTrashMonitor
  *
