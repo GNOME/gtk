@@ -1420,7 +1420,7 @@ gtk_im_context_simple_set_client_window  (GtkIMContext *context,
  * @max_seq_len: Maximum length of a sequence in the table
  *               (cannot be greater than #GTK_MAX_COMPOSE_LEN)
  * @n_seqs: number of sequences in the table
- * 
+ *
  * Adds an additional table to search to the input context.
  * Each row of the table consists of @max_seq_len key symbols
  * followed by two #guint16 interpreted as the high and low
@@ -1453,6 +1453,8 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
  * @compose_file: The path of compose file
  *
  * Adds an additional table from the X11 compose file.
+ *
+ * Since: 3.20
  */
 void
 gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
