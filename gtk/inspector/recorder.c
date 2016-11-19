@@ -25,6 +25,7 @@
 #include <gtk/gtklistbox.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeview.h>
+#include <gsk/gskrendernodeprivate.h>
 
 #include "gtktreemodelrendernode.h"
 #include "recording.h"
@@ -39,6 +40,8 @@ struct _GtkInspectorRecorderPrivate
   GtkWidget *recordings_list;
   GtkWidget *render_node_view;
   GtkWidget *render_node_tree;
+  GtkWidget *node_property_tree;
+  GtkTreeModel *render_node_properties;
 
   guint recording : 1;
 };
@@ -123,6 +126,88 @@ render_node_list_get_value (GtkTreeModelRenderNode *model,
 }
 
 static void
+populate_render_node_properties (GtkListStore  *store,
+                                 GskRenderNode *node)
+{
+  graphene_matrix_t m;
+  graphene_rect_t bounds;
+  GString *s;
+  int i;
+  char *tmp;
+  GEnumClass *class;
+
+  gtk_list_store_clear (store);
+
+  gsk_render_node_get_transform (node, &m);
+
+  s = g_string_new ("");
+  for (i = 0; i < 4; i++)
+    {
+      if (i > 0)
+        g_string_append (s, "\n");
+      g_string_append_printf (s, "| %+.6f %+.6f %+.6f %+.6f |",
+                              graphene_matrix_get_value (&m, i, 0),
+                              graphene_matrix_get_value (&m, i, 1),
+                              graphene_matrix_get_value (&m, i, 2),
+                              graphene_matrix_get_value (&m, i, 3));
+    }
+
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, "Transform",
+                                     1, s->str,
+                                     -1);
+
+  g_string_free (s, TRUE);
+
+  gsk_render_node_get_bounds (node, &bounds);
+
+  tmp = g_strdup_printf ("%.6f x %.6f + %.6f + %.6f",
+                         bounds.size.width,
+                         bounds.size.height,
+                         bounds.origin.x,
+                         bounds.origin.y);
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, "Bounds",
+                                     1, tmp,
+                                     -1);
+  g_free (tmp);
+
+  tmp = g_strdup_printf ("%.2f", gsk_render_node_get_opacity (node));
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, "Opacity",
+                                     1, tmp,
+                                     -1);
+  g_free (tmp);
+
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, "Has Surface",
+                                     1, gsk_render_node_has_surface (node) ? "TRUE" : "FALSE",
+                                     -1);
+
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, "Has Texture",
+                                     1, gsk_render_node_has_texture (node) ? "TRUE" : "FALSE",
+                                     -1);
+
+  class = g_type_class_ref (gsk_blend_mode_get_type ());
+  for (i = 0; i < class->n_values; i++)
+    {
+      if (class->values[i].value == gsk_render_node_get_blend_mode (node))
+        {
+          tmp = g_strdup (class->values[i].value_nick);
+          break;
+        }
+    }
+  g_type_class_unref (class);
+
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, "Blendmode",
+                                     1, tmp,
+                                     -1);
+  g_free (tmp);
+}
+
+static void
 render_node_list_selection_changed (GtkTreeSelection     *selection,
                                     GtkInspectorRecorder *recorder)
 {
@@ -135,6 +220,8 @@ render_node_list_selection_changed (GtkTreeSelection     *selection,
 
   node = gtk_tree_model_render_node_get_node_from_iter (GTK_TREE_MODEL_RENDER_NODE (priv->render_node_model), &iter);
   gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view), node);
+
+  populate_render_node_properties (GTK_LIST_STORE (priv->render_node_properties), node);
 }
 
 static GtkWidget *
@@ -219,6 +306,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, recordings_list);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, render_node_view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, render_node_tree);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, node_property_tree);
 
   gtk_widget_class_bind_template_callback (widget_class, recordings_clear_all);
   gtk_widget_class_bind_template_callback (widget_class, recordings_list_row_selected);
@@ -245,6 +333,9 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->render_node_tree), priv->render_node_model);
   g_object_unref (priv->render_node_model);
 
+  priv->render_node_properties = GTK_TREE_MODEL (gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING));
+  gtk_tree_view_set_model (GTK_TREE_VIEW (priv->node_property_tree), priv->render_node_properties);
+  g_object_unref (priv->render_node_properties);
 }
 
 void
