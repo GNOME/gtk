@@ -38,13 +38,16 @@ IGNORE_HFILES = \
 	gtkbuttonprivate.h		\
 	gtkcairoblurprivate.h		\
 	gtkcellareaboxcontextprivate.h	\
+	gtkcheckbuttonprivate.h		\
 	gtkclipboardprivate.h		\
 	gtkcolorchooserprivate.h	\
 	gtkcoloreditorprivate.h		\
 	gtkcolorplaneprivate.h		\
 	gtkcolorscaleprivate.h		\
 	gtkcolorswatchprivate.h		\
+	gtkcolorutils.h			\
 	gtkcomboboxprivate.h		\
+	gtkcomposetable.h		\
 	gtkcontainerprivate.h		\
 	gtkcssanimatedstyleprivate.h	\
 	gtkcssanimationprivate.h	\
@@ -111,7 +114,10 @@ IGNORE_HFILES = \
 	gtkcssunsetvalueprivate.h	\
 	gtkcssvalueprivate.h		\
 	gtkcsswidgetnodeprivate.h	\
+	gtkcsswin32sizevalueprivate.h	\
+	gtkdebugupdatesprivate.h	\
 	gtkdialogprivate.h		\
+	gtkdndprivate.h			\
 	gtkentryprivate.h		\
 	gtkeventcontrollerprivate.h	\
 	gtkfilechoosernativeprivate.h	\
@@ -131,6 +137,7 @@ IGNORE_HFILES = \
 	gtkhslaprivate.h		\
 	gtkiconprivate.h		\
 	gtkiconhelperprivate.h		\
+	gtkiconthemeprivate.h		\
 	gtkiconviewprivate.h		\
 	gtkimagedefinitionprivate.h	\
 	gtkimageprivate.h		\
@@ -189,11 +196,13 @@ IGNORE_HFILES = \
 	gtktextiterprivate.h		\
 	gtktextmarkprivate.h		\
 	gtktexttagprivate.h		\
+	gtktextviewprivate.h		\
 	gtktogglebuttonprivate.h	\
 	gtktoolbarprivate.h		\
 	gtktoolpaletteprivate.h		\
 	gtktooltipprivate.h		\
 	gtktooltipwindowprivate.h	\
+	gtkutilsprivate.h		\
 	gtktreeprivate.h		\
 	gtkwidgetprivate.h		\
 	gtkwin32themeprivate.h		\
@@ -240,6 +249,8 @@ IGNORE_HFILES = \
 	gtkprinteroption.h		\
 	gtkprinteroptionset.h		\
 	gtkprinteroptionwidget.h	\
+	gtkprinter-private.h		\
+	gtkprintoperation-portal.h	\
 	gtkprint-win32.h		\
 	gtkprintutils.h			\
 	gtkprivate.h			\
@@ -267,7 +278,10 @@ IGNORE_HFILES = \
 	gtktreedatalist.h		\
 	gtktreemenu.h			\
 	gtktypebuiltins.h		\
+	gtkwidgetpathprivate.h		\
 	gtkwindow-decorate.h		\
+	gtkwin32drawprivate.h		\
+	gtkwin32themeprivate.h		\
 	xdgmime				\
 	xembed.h
 
