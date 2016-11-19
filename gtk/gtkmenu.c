@@ -6097,6 +6097,15 @@ gtk_menu_get_monitor (GtkMenu *menu)
   return menu->priv->monitor_num;
 }
 
+/**
+ * gtk_menu_place_on_monitor:
+ * @menu: a #GtkMenu
+ * @monitor: the monitor to place the menu on
+ *
+ * Places @menu on the given monitor.
+ *
+ * Since: 3.22
+ */
 void
 gtk_menu_place_on_monitor (GtkMenu    *menu,
                            GdkMonitor *monitor)
