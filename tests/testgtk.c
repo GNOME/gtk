@@ -8896,7 +8896,7 @@ create_main_window (void)
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box1);
 
-  if (gtk_micro_version > 0)
+  if (gtk_get_micro_version () > 0)
     sprintf (buffer,
 	     "Gtk+ v%d.%d.%d",
 	     gtk_get_major_version (),
