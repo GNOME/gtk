@@ -28,7 +28,7 @@
 #include "gtkplacesviewrowprivate.h"
 #include "gtktypebuiltins.h"
 
-/**
+/*
  * SECTION:gtkplacesview
  * @Short_description: Widget that displays persistent drives and manages mounted networks
  * @Title: GtkPlacesView
@@ -2169,7 +2169,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   widget_class->destroy = gtk_places_view_destroy;
   widget_class->map = gtk_places_view_map;
 
-  /**
+  /*
    * GtkPlacesView::open-location:
    * @view: the object which received the signal.
    * @location: (type Gio.File): #GFile to which the caller should switch.
@@ -2193,7 +2193,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                         G_TYPE_OBJECT,
                         GTK_TYPE_PLACES_OPEN_FLAGS);
 
-  /**
+  /*
    * GtkPlacesView::show-error-message:
    * @view: the object which received the signal.
    * @primary: primary message with a summary of the error to show.
@@ -2288,7 +2288,7 @@ gtk_places_view_init (GtkPlacesView *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-/**
+/*
  * gtk_places_view_new:
  *
  * Creates a new #GtkPlacesView widget.
@@ -2307,7 +2307,7 @@ gtk_places_view_new (void)
   return g_object_new (GTK_TYPE_PLACES_VIEW, NULL);
 }
 
-/**
+/*
  * gtk_places_view_set_open_flags:
  * @view: a #GtkPlacesView
  * @flags: Bitmask of modes in which the calling application can open locations
@@ -2347,7 +2347,7 @@ gtk_places_view_set_open_flags (GtkPlacesView      *view,
     }
 }
 
-/**
+/*
  * gtk_places_view_get_open_flags:
  * @view: a #GtkPlacesSidebar
  *
@@ -2369,7 +2369,7 @@ gtk_places_view_get_open_flags (GtkPlacesView *view)
   return priv->open_flags;
 }
 
-/**
+/*
  * gtk_places_view_get_search_query:
  * @view: a #GtkPlacesView
  *
@@ -2389,7 +2389,7 @@ gtk_places_view_get_search_query (GtkPlacesView *view)
   return priv->search_query;
 }
 
-/**
+/*
  * gtk_places_view_set_search_query:
  * @view: a #GtkPlacesView
  * @query_text: the query, or NULL.
@@ -2419,7 +2419,7 @@ gtk_places_view_set_search_query (GtkPlacesView *view,
     }
 }
 
-/**
+/*
  * gtk_places_view_get_loading:
  * @view: a #GtkPlacesView
  *
@@ -2501,7 +2501,7 @@ gtk_places_view_set_fetching_networks (GtkPlacesView *view,
     }
 }
 
-/**
+/*
  * gtk_places_view_get_local_only:
  * @view: a #GtkPlacesView
  *
@@ -2524,7 +2524,7 @@ gtk_places_view_get_local_only (GtkPlacesView *view)
   return priv->local_only;
 }
 
-/**
+/*
  * gtk_places_view_set_local_only:
  * @view: a #GtkPlacesView
  * @local_only: %TRUE to hide remote locations, %FALSE to show.
