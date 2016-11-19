@@ -89,9 +89,7 @@ typedef struct _GtkStyleProvider GtkStyleProvider; /* dummy typedef */
 
 /**
  * GtkStyleProviderIface:
- * @get_style: Gets a set of style information that applies to a widget path.
  * @get_style_property: Gets the value of a widget style property that applies to a widget path.
- * @get_icon_factory: Gets the icon factory that applies to a widget path.
  */
 struct _GtkStyleProviderIface
 {

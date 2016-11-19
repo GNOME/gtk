@@ -107,13 +107,6 @@ struct _GtkEntry
  *   the current selection if one exists.
  * @toggle_overwrite: Class handler for the #GtkEntry::toggle-overwrite signal.
  *   The default implementation toggles overwrite mode and blinks the cursor.
- * @get_text_area_size: Calculate the size of the text area, which is its
- *   allocated width and requested height, minus space for margins and borders.
- *   This virtual function must be non-%NULL.
- * @get_frame_size: Calculate the size of the text area frame, which is its
- *   allocated width and requested height, minus space for margins and borders,
- *   and taking baseline and text height into account. This virtual function
- *   must be non-%NULL.
  *
  * Class structure for #GtkEntry. All virtual functions have a default
  * implementation. Derived classes may set the virtual function pointers for the
