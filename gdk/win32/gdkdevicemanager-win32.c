@@ -625,17 +625,12 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
               num_axes++;
             }
 
-          /* The wintab driver for the Wacom ArtPad II reports
-           * PK_ORIENTATION in CSR_PKTDATA, but the tablet doesn't
-           * actually sense tilt. Catch this by noticing that the
-           * orientation axis's azimuth resolution is zero.
-           */
-          if ((device->pktdata & PK_ORIENTATION) && axis_or[0].axResolution == 0)
+          if (device->pktdata & PK_ORIENTATION)
             {
               device->orientation_axes[0] = axis_or[0];
               device->orientation_axes[1] = axis_or[1];
 
-              /* Wintab gives us aximuth and altitude, which
+              /* Wintab gives us azimuth and altitude, which
                * we convert to x and y tilt in the -1000..1000 range
                */
               _gdk_device_add_axis (GDK_DEVICE (device),
@@ -817,11 +812,32 @@ decode_tilt (gint   *axis_data,
 {
   double az, el;
 
-  /* As I don't have a tilt-sensing tablet,
-   * I cannot test this code.
+  /* The wintab driver for the Wacom ArtPad II reports
+   * PK_ORIENTATION in CSR_PKTDATA, but the tablet doesn't
+   * actually sense tilt. Catch this by noticing that the
+   * orientation axis's azimuth resolution is zero.
+   *
+   * The same is true of the Huion H610PRO, but in this case
+   * it's the altitude resolution that's zero. GdkEvents with
+   * sensible tilts will need both, so only add the GDK tilt axes
+   * if both wintab axes are going to be well-behaved in use.
+   */
+  if ((axes == NULL) || (axis_data == NULL) ||
+      (axes[0].axResolution == 0) ||
+      (axes[1].axResolution == 0))
+    {
+      axis_data[0] = 0;
+      axis_data[1] = 0;
+      return;
+    }
+
+  /*
+   * Tested with a Wacom Intuos 5 touch M (PTH-650) + Wacom drivers 6.3.18-5.
+   * Wintab's reference angle leads gdk's by 90 degrees.
    */
   az = TWOPI * packet->pkOrientation.orAzimuth /
     (axes[0].axResolution / 65536.);
+  az -= G_PI / 2;
   el = TWOPI * packet->pkOrientation.orAltitude /
     (axes[1].axResolution / 65536.);
 
