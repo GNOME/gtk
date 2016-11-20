@@ -8,11 +8,22 @@
 #include "gskrendernodeprivate.h"
 #include "gsktextureprivate.h"
 
+#ifdef G_ENABLE_DEBUG
+typedef struct {
+  GQuark cpu_time;
+  GQuark gpu_time;
+} ProfileTimers;
+#endif
+
 struct _GskCairoRenderer
 {
   GskRenderer parent_instance;
 
   graphene_rect_t viewport;
+
+#ifdef G_ENABLE_DEBUG
+  ProfileTimers profile_timers;
+#endif
 };
 
 struct _GskCairoRendererClass
@@ -147,6 +158,11 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   GdkDrawingContext *context = gsk_renderer_get_drawing_context (renderer);
+#ifdef G_ENABLE_DEBUG
+  GskProfiler *profiler;
+  gint64 cpu_time;
+#endif
+
   cairo_t *cr;
 
   if (context != NULL)
@@ -179,7 +195,19 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
       cairo_restore (cr);
     }
 
+#ifdef G_ENABLE_DEBUG
+  profiler = gsk_renderer_get_profiler (renderer);
+  gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
+#endif
+
   gsk_cairo_renderer_render_node (self, root, cr);
+
+#ifdef G_ENABLE_DEBUG
+  cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
+  gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
+
+  gsk_profiler_push_samples (profiler);
+#endif
 }
 
 static void
@@ -195,5 +223,9 @@ gsk_cairo_renderer_class_init (GskCairoRendererClass *klass)
 static void
 gsk_cairo_renderer_init (GskCairoRenderer *self)
 {
+#ifdef G_ENABLE_DEBUG
+  GskProfiler *profiler = gsk_renderer_get_profiler (GSK_RENDERER (self));
 
+  self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
+#endif
 }
