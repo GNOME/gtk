@@ -195,7 +195,12 @@ gtk_inspector_gestures_set_object (GtkInspectorGestures *sl,
     {
       list = _gtk_widget_list_controllers (GTK_WIDGET (object), phase);
       for (l = list; l; l = l->next)
-        g_hash_table_insert (hash, l->data, GINT_TO_POINTER (phase));
+        {
+          GtkEventController *controller = l->data;
+
+          if (GTK_IS_GESTURE (controller))
+            g_hash_table_insert (hash, controller, GINT_TO_POINTER (phase));
+        }
       g_list_free (list);
     }
 
