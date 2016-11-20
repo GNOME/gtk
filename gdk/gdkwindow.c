@@ -2910,8 +2910,6 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
       return NULL;
     }
 
-  gdk_window_begin_paint_internal (window, region);
-
   context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
                           "window", window,
                           "clip", region,
@@ -2919,6 +2917,8 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
 
   /* Do not take a reference, to avoid creating cycles */
   window->drawing_context = context;
+
+  gdk_window_begin_paint_internal (window, region);
 
   return context;
 }
