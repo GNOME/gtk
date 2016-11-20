@@ -41,92 +41,6 @@
  * #GdkWindows and cairo surfaces.
  */
 
-
-/**
- * gdk_pixbuf_get_from_window:
- * @window: Source window
- * @src_x: Source X coordinate within @window
- * @src_y: Source Y coordinate within @window
- * @width: Width in pixels of region to get
- * @height: Height in pixels of region to get
- *
- * Transfers image data from a #GdkWindow and converts it to an RGB(A)
- * representation inside a #GdkPixbuf. In other words, copies
- * image data from a server-side drawable to a client-side RGB(A) buffer.
- * This allows you to efficiently read individual pixels on the client side.
- *
- * This function will create an RGB pixbuf with 8 bits per channel with
- * the size specified by the @width and @height arguments scaled by the
- * scale factor of @window. The pixbuf will contain an alpha channel if
- * the @window contains one.
- *
- * If the window is off the screen, then there is no image data in the
- * obscured/offscreen regions to be placed in the pixbuf. The contents of
- * portions of the pixbuf corresponding to the offscreen region are undefined.
- *
- * If the window you’re obtaining data from is partially obscured by
- * other windows, then the contents of the pixbuf areas corresponding
- * to the obscured regions are undefined.
- *
- * If the window is not mapped (typically because it’s iconified/minimized
- * or not on the current workspace), then %NULL will be returned.
- *
- * If memory can’t be allocated for the return value, %NULL will be returned
- * instead.
- *
- * (In short, there are several ways this function can fail, and if it fails
- *  it returns %NULL; so check the return value.)
- *
- * Returns: (nullable) (transfer full): A newly-created pixbuf with a
- *     reference count of 1, or %NULL on error
- */
-GdkPixbuf *
-gdk_pixbuf_get_from_window (GdkWindow *src,
-                            gint       src_x,
-                            gint       src_y,
-                            gint       width,
-                            gint       height)
-{
-  cairo_surface_t *surface;
-  cairo_surface_t *copy;
-  cairo_t *cr;
-  GdkPixbuf *dest;
-  int scale;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (src), NULL);
-  g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
-
-  surface = _gdk_window_ref_cairo_surface (src);
-  scale = gdk_window_get_scale_factor (src);
-
-  /* We do not know what happened to this surface outside of GDK.
-   * Especially for foreign windows, they will have been modified
-   * by external applications.
-   * So be on the safe side and:
-   */
-  cairo_surface_mark_dirty (surface);
-
-  if (cairo_surface_get_content (surface) & CAIRO_CONTENT_ALPHA)
-    copy = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
-  else
-    copy = cairo_image_surface_create (CAIRO_FORMAT_RGB24, width * scale, height * scale);
-
-  cairo_surface_set_device_scale (copy, scale, scale);
-
-  cr = cairo_create (copy);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_set_source_surface (cr, surface, -src_x, -src_y);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-
-  dest = gdk_pixbuf_get_from_surface (copy, 0, 0, width * scale, height * scale);
-
-  cairo_surface_destroy (copy);
-  cairo_surface_destroy (surface);
-
-  return dest;
-}
-
 static cairo_format_t
 gdk_cairo_format_for_content (cairo_content_t content)
 {
@@ -244,8 +158,7 @@ convert_no_alpha (guchar *dest_data,
  *
  * Transfers image data from a #cairo_surface_t and converts it to an RGB(A)
  * representation inside a #GdkPixbuf. This allows you to efficiently read
- * individual pixels from cairo surfaces. For #GdkWindows, use
- * gdk_pixbuf_get_from_window() instead.
+ * individual pixels from cairo surfaces.
  *
  * This function will create an RGB pixbuf with 8 bits per channel.
  * The pixbuf will contain an alpha channel if the @surface contains one.

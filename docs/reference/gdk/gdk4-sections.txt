@@ -213,7 +213,6 @@ gdk_screen_get_type
 <SECTION>
 <TITLE>Pixbufs</TITLE>
 <FILE>pixbufs</FILE>
-gdk_pixbuf_get_from_window
 gdk_pixbuf_get_from_surface
 </SECTION>
 
@@ -538,7 +537,6 @@ gdk_cairo_get_clip_rectangle
 gdk_cairo_get_drawing_context
 gdk_cairo_set_source_rgba
 gdk_cairo_set_source_pixbuf
-gdk_cairo_set_source_window
 gdk_cairo_rectangle
 gdk_cairo_region
 gdk_cairo_region_create_from_surface

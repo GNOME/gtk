@@ -42,11 +42,6 @@ void       gdk_cairo_set_source_pixbuf  (cairo_t              *cr,
                                          const GdkPixbuf      *pixbuf,
                                          gdouble               pixbuf_x,
                                          gdouble               pixbuf_y);
-GDK_AVAILABLE_IN_ALL
-void       gdk_cairo_set_source_window  (cairo_t              *cr,
-                                         GdkWindow            *window,
-                                         gdouble               x,
-                                         gdouble               y);
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_rectangle          (cairo_t              *cr,

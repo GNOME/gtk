@@ -323,40 +323,6 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
   cairo_surface_destroy (surface);
 }
 
-/**
- * gdk_cairo_set_source_window:
- * @cr: a cairo context
- * @window: a #GdkWindow
- * @x: X coordinate of location to place upper left corner of @window
- * @y: Y coordinate of location to place upper left corner of @window
- *
- * Sets the given window as the source pattern for @cr.
- *
- * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
- * so that the origin of @window is @x, @y. The window contains all its
- * subwindows when rendering.
- *
- * Note that the contents of @window are undefined outside of the
- * visible part of @window, so use this function with care.
- *
- * Since: 2.24
- */
-void
-gdk_cairo_set_source_window (cairo_t   *cr,
-                             GdkWindow *window,
-                             gdouble    x,
-                             gdouble    y)
-{
-  cairo_surface_t *surface;
-
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  surface = _gdk_window_ref_cairo_surface (window);
-  cairo_set_source_surface (cr, surface, x, y);
-  cairo_surface_destroy (surface);
-}
-
 /*
  * _gdk_cairo_surface_extents:
  * @surface: surface to measure

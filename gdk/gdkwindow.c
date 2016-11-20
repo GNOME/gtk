@@ -3175,62 +3175,6 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
     }
 }
 
-#if 0
-/**
- * gdk_cairo_create:
- * @window: a #GdkWindow
- * 
- * Creates a Cairo context for drawing to @window.
- *
- * Note that calling cairo_reset_clip() on the resulting #cairo_t will
- * produce undefined results, so avoid it at all costs.
- *
- * Typically, this function is used to draw on a #GdkWindow out of the paint
- * cycle of the toolkit; this should be avoided, as it breaks various assumptions
- * and optimizations.
- *
- * If you are drawing on a native #GdkWindow in response to a %GDK_EXPOSE event
- * you should use gdk_window_begin_draw_frame() and gdk_drawing_context_get_cairo_context()
- * instead. GTK will automatically do this for you when drawing a widget.
- *
- * Returns: A newly created Cairo context. Free with
- *  cairo_destroy() when you are done drawing.
- * 
- * Since: 2.8
- *
- * Deprecated: 3.22: Use gdk_window_begin_draw_frame() and
- *   gdk_drawing_context_get_cairo_context() instead
- **/
-cairo_t *
-gdk_cairo_create (GdkWindow *window)
-{
-  cairo_region_t *region;
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  surface = _gdk_window_ref_cairo_surface (window);
-
-  cr = cairo_create (surface);
-
-  region = gdk_window_get_current_paint_region (window);
-  gdk_cairo_region (cr, region);
-  cairo_region_destroy (region);
-  cairo_clip (cr);
-
-  /* Assign a drawing context, if one is set; if gdk_cairo_create()
-   * is called outside of a frame drawing then this is going to be
-   * NULL.
-   */
-  gdk_cairo_set_drawing_context (cr, window->drawing_context);
-
-  cairo_surface_destroy (surface);
-
-  return cr;
-}
-#endif
-
 /* Code for dirty-region queueing
  */
 static GSList *update_windows = NULL;
