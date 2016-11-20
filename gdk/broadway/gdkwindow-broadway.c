@@ -33,6 +33,7 @@
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"
 #include "gdkdisplay-broadway.h"
+#include "gdkdrawingcontext-broadway.h"
 #include "gdkprivate-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
@@ -1510,6 +1511,16 @@ gdk_broadway_get_last_seen_time (GdkWindow  *window)
   return _gdk_broadway_server_get_last_seen_time (GDK_BROADWAY_DISPLAY (display)->server);
 }
 
+static GdkDrawingContext *
+gdk_broadway_window_create_draw_context (GdkWindow            *window,
+                                        const cairo_region_t *region)
+{
+  return g_object_new (GDK_TYPE_BROADWAY_DRAWING_CONTEXT,
+                       "window", window,
+                       "clip", region,
+                       NULL);
+}
+
 static void
 gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
 {
@@ -1588,4 +1599,5 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->change_property = _gdk_broadway_window_change_property;
   impl_class->delete_property = _gdk_broadway_window_delete_property;
   impl_class->get_drag_protocol = _gdk_broadway_window_get_drag_protocol;
+  impl_class->create_draw_context = gdk_broadway_window_create_draw_context;
 }

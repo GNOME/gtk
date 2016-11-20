@@ -41,6 +41,7 @@
 #include "gdkwin32window.h"
 #include "gdkglcontext-win32.h"
 #include "gdkdisplay-win32.h"
+#include "gdkdrawingcontext-win32.h"
 
 #include <cairo-win32.h>
 #include <dwmapi.h>
@@ -6025,6 +6026,16 @@ _gdk_win32_window_get_unscaled_size (GdkWindow *window,
     *unscaled_height = impl->unscaled_height;
 }
 
+static GdkDrawingContext *
+gdk_win32_window_create_draw_context (GdkWindow            *window,
+                                      const cairo_region_t *region)
+{
+  return g_object_new (GDK_TYPE_WIN32_DRAWING_CONTEXT,
+                       "window", window,
+                       "clip", region,
+                       NULL);
+}
+
 static void
 gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 {
@@ -6114,6 +6125,7 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->change_property = _gdk_win32_window_change_property;
   impl_class->delete_property = _gdk_win32_window_delete_property;
   impl_class->create_gl_context = _gdk_win32_window_create_gl_context;
+  impl_class->create_draw_context = _gdk_win32_window_create_draw_context;
   impl_class->invalidate_for_new_frame = _gdk_win32_window_invalidate_for_new_frame;
   impl_class->get_scale_factor = _gdk_win32_window_get_scale_factor;
   impl_class->get_unscaled_size = _gdk_win32_window_get_unscaled_size;

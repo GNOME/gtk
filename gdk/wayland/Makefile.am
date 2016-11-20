@@ -46,6 +46,8 @@ libgdk_wayland_la_SOURCES =			\
 	gdkdevice-wayland.c			\
 	gdkdisplay-wayland.c			\
 	gdkdisplay-wayland.h			\
+	gdkdrawingcontext-wayland.c		\
+	gdkdrawingcontext-wayland.h		\
 	gdkdnd-wayland.c			\
 	gdkeventsource.c			\
 	gdkkeys-wayland.c                       \

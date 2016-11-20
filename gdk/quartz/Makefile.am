@@ -30,6 +30,8 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkdevicemanager-core-quartz.h	\
 	gdkdisplay-quartz.c	\
 	gdkdisplaymanager-quartz.c	\
+	gdkdrawingcontext-quartz.c	\
+	gdkdrawingcontext-quartz.h	\
 	gdkdnd-quartz.c		\
 	gdkdnd-quartz.h		\
 	gdkevents-quartz.c	\

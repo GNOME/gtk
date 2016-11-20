@@ -1832,5 +1832,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->set_opaque_region = gdk_mir_window_impl_set_opaque_region;
   impl_class->set_shadow_width = gdk_mir_window_impl_set_shadow_width;
   impl_class->create_gl_context = gdk_mir_window_impl_create_gl_context;
+  impl_class->create_draw_context = gdk_mir_drawing_context_new;
   impl_class->invalidate_for_new_frame = gdk_mir_window_impl_invalidate_for_new_frame;
 }

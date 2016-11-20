@@ -2892,7 +2892,6 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
                              const cairo_region_t *region)
 {
   GdkDrawingContext *context;
-  GdkWindowImplClass *impl_class;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
@@ -2907,18 +2906,7 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
   if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
     gdk_window_begin_paint_internal (window, region);
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-  if (impl_class->create_draw_context != NULL)
-    {
-      context = impl_class->create_draw_context (window, region);
-    }
-  else
-    {
-      context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
-                              "window", window,
-                              "clip", region,
-                              NULL);
-    }
+  context = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_draw_context (window, region);
 
   /* Do not take a reference, to avoid creating cycles */
   window->drawing_context = context;
