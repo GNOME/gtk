@@ -50,6 +50,7 @@ gboolean        gtk_inspector_recorder_is_recording             (GtkInspectorRec
 
 void            gtk_inspector_recorder_record_render            (GtkInspectorRecorder   *recorder,
                                                                  GtkWidget              *widget,
+                                                                 GskRenderer            *renderer,
                                                                  GdkWindow              *window,
                                                                  const cairo_region_t   *region,
                                                                  GskRenderNode          *node);

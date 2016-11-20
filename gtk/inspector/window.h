@@ -107,6 +107,7 @@ void       gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow 
 void       gtk_inspector_window_rescan     (GtkWidget          *iw);
 
 void       gtk_inspector_record_render     (GtkWidget          *widget,
+                                            GskRenderer        *renderer,
                                             GdkWindow          *window,
                                             const cairo_region_t *region,
                                             GskRenderNode      *node);

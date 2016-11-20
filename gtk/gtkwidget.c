@@ -15739,7 +15739,7 @@ gtk_widget_render (GtkWidget            *widget,
   if (root == NULL)
     return;
 
-  gtk_inspector_record_render (widget, window, region, root);
+  gtk_inspector_record_render (widget, renderer, window, region, root);
 
   context = gdk_window_begin_draw_frame (window, region);
 

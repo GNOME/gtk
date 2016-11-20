@@ -25,6 +25,7 @@
 #include <gtk/gtklistbox.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeview.h>
+#include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 
 #include "gtktreemodelrendernode.h"
@@ -410,6 +411,7 @@ gtk_inspector_recorder_is_recording (GtkInspectorRecorder *recorder)
 void
 gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                       GtkWidget            *widget,
+                                      GskRenderer          *renderer,
                                       GdkWindow            *window,
                                       const cairo_region_t *region,
                                       GskRenderNode        *node)
@@ -423,6 +425,7 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
   frame_clock = gtk_widget_get_frame_clock (widget);
 
   recording = gtk_inspector_render_recording_new (gdk_frame_clock_get_frame_time (frame_clock),
+                                                  gsk_renderer_get_profiler (renderer),
                                                   &(GdkRectangle) { 0, 0,
                                                     gdk_window_get_width (window),
                                                     gdk_window_get_height (window) },
