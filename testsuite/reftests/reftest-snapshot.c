@@ -24,6 +24,11 @@
 
 #include "reftest-module.h"
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#include <cairo-xlib.h>
+#endif
+
 #include <string.h>
 
 typedef enum {
@@ -92,6 +97,44 @@ check_for_draw (GdkEvent *event, gpointer data)
   gtk_main_do_event (event);
 }
 
+static void
+snapshot_window_native (GdkWindow *window,
+                        cairo_t   *cr)
+{
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_WINDOW (window))
+    {
+      cairo_surface_t *surface;
+      XWindowAttributes attrs;
+
+      if (gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL ||
+          gdk_window_get_window_type (window) == GDK_WINDOW_FOREIGN)
+        {
+          /* give the WM/server some time to sync. They need it.
+           * Also, do use popups instead of toplevels in your tests
+           * whenever you can.
+           */
+          gdk_display_sync (gdk_window_get_display (window));
+          g_timeout_add (500, quit_when_idle, loop);
+          g_main_loop_run (loop);
+        }
+
+      XGetWindowAttributes (gdk_x11_display_get_xdisplay (gdk_window_get_display (window)),
+                            gdk_x11_window_get_xid (window),
+                            &attrs);
+      surface = cairo_xlib_surface_create (gdk_x11_display_get_xdisplay (gdk_window_get_display (window)),
+                                           gdk_x11_window_get_xid (window),
+                                           attrs.visual,
+                                           attrs.width,
+                                           attrs.height);
+
+      cairo_set_source_surface (cr, surface, 0, 0);
+      cairo_paint (cr);
+      cairo_surface_destroy (surface);
+    }
+#endif
+}
+
 static cairo_surface_t *
 snapshot_widget (GtkWidget *widget, SnapshotMode mode)
 {
@@ -125,22 +168,7 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
   switch (mode)
     {
     case SNAPSHOT_WINDOW:
-      {
-        GdkWindow *window = gtk_widget_get_window (widget);
-        if (gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL ||
-            gdk_window_get_window_type (window) == GDK_WINDOW_FOREIGN)
-          {
-            /* give the WM/server some time to sync. They need it.
-             * Also, do use popups instead of toplevels in your tests
-             * whenever you can.
-             */
-            gdk_display_sync (gdk_window_get_display (window));
-            g_timeout_add (500, quit_when_idle, loop);
-            g_main_loop_run (loop);
-          }
-        gdk_cairo_set_source_window (cr, window, 0, 0);
-        cairo_paint (cr);
-      }
+      snapshot_window_native (gtk_widget_get_window (widget), cr);
       break;
     case SNAPSHOT_DRAW:
       gtk_widget_draw (widget, cr);
