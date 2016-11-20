@@ -53,6 +53,14 @@
     </section>
 
     <section>
+      <title>Do not use widget style properties</title>
+      <para>
+        Style properties do not exist in GTK+ 4. You should stop using them in
+        your custom CSS.
+      </para>
+    </section>
+
+    <section>
       <title>Review your window creation flags</title>
       <para>
         GTK+ 4 removes the GDK_WA_CURSOR flag. Instead, just use
@@ -98,6 +106,14 @@
       </para>
     </section>
 
+    <section>
+      <title>Stop using gdk_pixbuf_get_from_window() and gdk_cairo_set_source_window()</title>
+      <para>
+        These functions are not supported in GTK+ 4. Instead, either use backend-specific
+        APIs, or render your widgets using gtk_widget_render().
+      </para>
+    </section>
+
   </section>
 
   <section>
@@ -111,6 +127,17 @@
     </para>
 
     <section>
+      <title>Adapt to GdkWindow API changes</title>
+      <para>
+        The gdk_window_new() function has been replaced by a number of more
+        specialized constructors: gdk_window_new_toplevel(), gdk_window_new_popup(),
+        gdk_window_new_temp(), gdk_window_new_child(), gdk_window_new_input(),
+        gdk_wayland_window_new_subsurface(). Use the appropriate ones to create
+        your windows.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GtkStyleContext API changes</title>
       <para>
         The getters in the GtkStyleContext API, such as
@@ -118,6 +145,15 @@
         or gtk_style_context_get_color() have lost their state argument,
         and always use the context's current state. Update all callers
         to omit the state argument.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to GtkCssProvider API changes</title>
+      <para>
+        In GTK+ 4, the various #GtkCssProvider load functions have lost
+        their #GError argument. If you want to handle CSS loading errors,
+        use the #GtkCssProvider::parsing-error signal instead.
       </para>
     </section>
 
@@ -146,6 +182,14 @@
       <para>
         GTK+ now supports standard CSS syntax for both linear and radial
         gradients, just use those.
+      </para>
+    </section>
+
+    <section>
+      <title>Use gtk_widget_measure</title>
+      <para>
+        gtk_widget_measure replaces the various gtk_widget_get_preferred_ functions
+        for querying sizes.
       </para>
     </section>
 
