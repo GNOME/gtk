@@ -28,6 +28,7 @@ inspector_c_sources = 			\
 	inspector/selector.c		\
 	inspector/signals-list.c	\
 	inspector/size-groups.c		\
+	inspector/startrecording.c	\
 	inspector/statistics.c		\
         inspector/strv-editor.c         \
 	inspector/treewalk.c		\
@@ -63,6 +64,7 @@ inspector_h_sources = 			\
 	inspector/selector.h		\
 	inspector/signals-list.h	\
 	inspector/size-groups.h		\
+	inspector/startrecording.h	\
 	inspector/statistics.h		\
         inspector/strv-editor.h         \
 	inspector/treewalk.h		\

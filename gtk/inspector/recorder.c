@@ -31,6 +31,7 @@
 #include "recording.h"
 #include "rendernodeview.h"
 #include "renderrecording.h"
+#include "startrecording.h"
 
 struct _GtkInspectorRecorderPrivate
 {
@@ -43,7 +44,7 @@ struct _GtkInspectorRecorderPrivate
   GtkWidget *node_property_tree;
   GtkTreeModel *render_node_properties;
 
-  guint recording : 1;
+  GtkInspectorRecording *recording; /* start recording if recording or NULL if not */
 };
 
 enum {
@@ -82,9 +83,12 @@ recordings_list_row_selected (GtkListBox           *box,
   GtkInspectorRecording *recording;
 
   if (row)
-    {
-      recording = g_list_model_get_item (priv->recordings, gtk_list_box_row_get_index (row));
+    recording = g_list_model_get_item (priv->recordings, gtk_list_box_row_get_index (row));
+  else
+    recording = NULL;
 
+  if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
+    {
       gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view),
                                             gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_render_node_view_set_clip_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
@@ -232,11 +236,21 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
   GtkWidget *widget;
   char *str;
 
-  str = g_strdup_printf ("Frame at %lld", (long long) gtk_inspector_recording_get_timestamp (recording));
-  widget = gtk_label_new (str);
-  g_free (str);
-  gtk_label_set_xalign (GTK_LABEL (widget), 0);
-  gtk_widget_show_all (widget);
+  if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
+    {
+      str = g_strdup_printf ("Frame at %lld", (long long) gtk_inspector_recording_get_timestamp (recording));
+      widget = gtk_label_new (str);
+      g_free (str);
+      gtk_label_set_xalign (GTK_LABEL (widget), 0);
+      gtk_widget_show_all (widget);
+    }
+  else
+    {
+      widget = gtk_label_new ("Start Recording");
+      gtk_label_set_xalign (GTK_LABEL (widget), 0);
+      gtk_widget_show_all (widget);
+
+    }
 
   return widget;
 }
@@ -253,7 +267,7 @@ gtk_inspector_recorder_get_property (GObject    *object,
   switch (param_id)
     {
     case PROP_RECORDING:
-      g_value_set_boolean (value, priv->recording);
+      g_value_set_boolean (value, priv->recording != NULL);
       break;
 
     default:
@@ -338,28 +352,6 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   g_object_unref (priv->render_node_properties);
 }
 
-void
-gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
-                                      gboolean              recording)
-{
-  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
-
-  if (priv->recording == recording)
-    return;
-
-  priv->recording = recording;
-
-  g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_RECORDING]);
-}
-
-gboolean
-gtk_inspector_recorder_is_recording (GtkInspectorRecorder *recorder)
-{
-  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
-
-  return priv->recording;
-}
-
 static void
 gtk_inspector_recorder_add_recording (GtkInspectorRecorder  *recorder,
                                       GtkInspectorRecording *recording)
@@ -383,6 +375,36 @@ gtk_inspector_recorder_add_recording (GtkInspectorRecorder  *recorder,
       gtk_list_box_select_row (GTK_LIST_BOX (priv->recordings_list),
                                gtk_list_box_get_row_at_index (GTK_LIST_BOX (priv->recordings_list), count));
     }
+}
+
+void
+gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
+                                      gboolean              recording)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+
+  if (gtk_inspector_recorder_is_recording (recorder) == recording)
+    return;
+
+  if (recording)
+    {
+      priv->recording = gtk_inspector_start_recording_new ();
+      gtk_inspector_recorder_add_recording (recorder, priv->recording);
+    }
+  else
+    {
+      g_clear_object (&priv->recording);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_RECORDING]);
+}
+
+gboolean
+gtk_inspector_recorder_is_recording (GtkInspectorRecorder *recorder)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+
+  return priv->recording != NULL;
 }
 
 void
