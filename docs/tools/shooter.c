@@ -1,6 +1,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <gdkx.h>
+#include <cairo-xlib.h>
 #include <stdio.h>
 #include <errno.h>
 #include <sys/wait.h>
@@ -136,9 +137,10 @@ static GdkPixbuf *
 take_window_shot (Window         child,
                   DecorationType decor)
 {
-  GdkWindow *window, *root_window;
+  cairo_surface_t *surface;
+  XWindowAttributes attrs;
   Window xid;
-  gint x_orig, y_orig;
+  Display *dpy;
   gint x = 0, y = 0;
   gint width, height;
 
@@ -150,35 +152,39 @@ take_window_shot (Window         child,
   else
     xid = child;
 
-  window = gdk_x11_window_foreign_new_for_display (gdk_display_get_default (), xid);
-  root_window = gdk_screen_get_root_window (gdk_window_get_screen (window));
+  dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+  XGetWindowAttributes (dpy, xid, &attrs);
 
-  width = gdk_window_get_width (window);
-  height = gdk_window_get_height (window);
-  gdk_window_get_origin (window, &x_orig, &y_orig);
+  width = attrs.width;
+  height = attrs.height;
 
-  if (x_orig < 0)
+  if (attrs.x < 0)
     {
-      x = - x_orig;
-      width = width + x_orig;
-      x_orig = 0;
+      x = - attrs.x;
+      width = width + attrs.x;
     }
 
-  if (y_orig < 0)
+  if (attrs.y < 0)
     {
-      y = - y_orig;
-      height = height + y_orig;
-      y_orig = 0;
+      y = - attrs.y;
+      height = height + attrs.y;
     }
 
-  if (x_orig + width > gdk_window_get_width (root_window))
-    width = gdk_window_get_width (root_window) - x_orig;
+  if (attrs.x + x + width > WidthOfScreen (DefaultScreenOfDisplay (dpy)))
+    width = WidthOfScreen (DefaultScreenOfDisplay (dpy)) - attrs.x - x;
 
-  if (y_orig + height > gdk_window_get_height (root_window))
-    height = gdk_window_get_height (root_window) - y_orig;
+  if (attrs.y + y + height > HeightOfScreen (DefaultScreenOfDisplay (dpy)))
+    height = HeightOfScreen (DefaultScreenOfDisplay (dpy)) - attrs.y - y;
 
-  tmp = gdk_pixbuf_get_from_window (window,
-				    x, y, width, height);
+  surface = cairo_xlib_surface_create (dpy,
+                                       xid,
+                                       attrs.visual,
+                                       attrs.width,
+                                       attrs.height);
+  tmp = gdk_pixbuf_get_from_surface (surface,
+                                     x, y,
+                                     width, height);
+  cairo_surface_destroy (surface);
 
   if (tmp != NULL)
     {
@@ -203,8 +209,8 @@ take_window_shot (Window         child,
 
 static GList *toplevels;
 static guint shot_id;
-static gboolean
 
+static gboolean
 window_is_csd (GdkWindow *window)
 {
   gboolean set;
