@@ -51,6 +51,7 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkdialogprivate.h"
 
 #include <glib/gprintf.h>
 
@@ -527,9 +528,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   priv->dialog = dialog;
 
   content_area = gtk_dialog_get_content_area (dialog);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (dialog);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Set the dialog up with HIG properties */
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */

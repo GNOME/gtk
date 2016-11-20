@@ -876,7 +876,7 @@ static void
 test_children (void)
 {
   GtkBuilder * builder;
-  GtkWidget *content_area, *dialog_action_area;
+  GtkWidget *content_area;
   GList *children;
   const gchar buffer1[] =
     "<interface>"
@@ -939,16 +939,11 @@ test_children (void)
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (content_area)), "dialog1-vbox") == 0);
 
   action_area = gtk_builder_get_object (builder, "dialog1-action_area");
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  dialog_action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
-G_GNUC_END_IGNORE_DEPRECATIONS
   g_assert (action_area != NULL);
   g_assert (GTK_IS_BUTTON_BOX (action_area));
   g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (action_area)) == GTK_ORIENTATION_HORIZONTAL);
   g_assert (gtk_widget_get_parent (GTK_WIDGET (action_area)) != NULL);
-  g_assert (dialog_action_area != NULL);
   g_assert (gtk_buildable_get_name (GTK_BUILDABLE (action_area)) != NULL);
-  g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (dialog_action_area)), "dialog1-action_area") == 0);
   gtk_widget_destroy (GTK_WIDGET (dialog));
   g_object_unref (builder);
 }

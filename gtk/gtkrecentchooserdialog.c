@@ -155,9 +155,7 @@ gtk_recent_chooser_item_activated_cb (GtkRecentChooser *chooser,
   if (gtk_window_activate_default (GTK_WINDOW (dialog)))
     return;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (rc_dialog);
-G_GNUC_END_IGNORE_DEPRECATIONS
   children = gtk_container_get_children (GTK_CONTAINER (action_area));
   
   for (l = children; l; l = l->next)

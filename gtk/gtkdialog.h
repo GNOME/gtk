@@ -188,8 +188,6 @@ void gtk_dialog_response           (GtkDialog *dialog,
 GDK_AVAILABLE_IN_ALL
 gint gtk_dialog_run                (GtkDialog *dialog);
 
-GDK_DEPRECATED_IN_3_10
-GtkWidget * gtk_dialog_get_action_area  (GtkDialog *dialog);
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
 GDK_AVAILABLE_IN_3_12

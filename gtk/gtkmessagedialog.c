@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "gtkmessagedialog.h"
+#include "gtkdialogprivate.h"
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"
 #include "gtklabel.h"
@@ -293,9 +294,7 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   priv->message_type = GTK_MESSAGE_OTHER;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
-G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_button_box_set_layout (GTK_BUTTON_BOX (action_area), GTK_BUTTONBOX_EXPAND);
 
   settings = gtk_widget_get_settings (GTK_WIDGET (dialog));

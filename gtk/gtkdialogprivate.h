@@ -30,6 +30,7 @@
 G_BEGIN_DECLS
 
 void gtk_dialog_set_use_header_bar_from_setting (GtkDialog *dialog);
+GtkWidget *gtk_dialog_get_action_area (GtkDialog *dialog);
 
 G_END_DECLS
 

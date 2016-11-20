@@ -69,10 +69,6 @@
  * recommended; it allows you to set the dialog title, some convenient
  * flags, and add simple buttons.
  *
- * If “dialog” is a newly created dialog, the two primary areas of the
- * window can be accessed through gtk_dialog_get_content_area() and
- * gtk_dialog_get_action_area(), as can be seen from the example below.
- *
  * A “modal” dialog (that is, one which freezes the rest of the application
  * from user input), can be created by calling gtk_window_set_modal() on the
  * dialog. Use the GTK_WINDOW() macro to cast the widget returned from
@@ -1604,19 +1600,6 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
     GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
 }
 
-/**
- * gtk_dialog_get_action_area:
- * @dialog: a #GtkDialog
- *
- * Returns the action area of @dialog.
- *
- * Returns: (transfer none): the action area
- *
- * Since: 2.14
- *
- * Deprecated:3.12: Direct access to the action area
- *   is discouraged; use gtk_dialog_add_button(), etc.
- */
 GtkWidget *
 gtk_dialog_get_action_area (GtkDialog *dialog)
 {

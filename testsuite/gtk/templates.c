@@ -37,9 +37,6 @@ test_dialog_basic (void)
 
   dialog = gtk_dialog_new();
   g_assert (GTK_IS_DIALOG (dialog));
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  g_assert (gtk_dialog_get_action_area (GTK_DIALOG (dialog)) != NULL);
-G_GNUC_END_IGNORE_DEPRECATIONS
   g_assert (gtk_dialog_get_content_area (GTK_DIALOG (dialog)) != NULL);
 
   gtk_widget_destroy (dialog);
