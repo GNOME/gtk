@@ -16,6 +16,38 @@
             <property name="pack_type">end</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkToggleButton" id="changes_allow">
+            <property name="active">False</property>
+            <property name="visible" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean">True</property>
+            <property name="relief">none</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">changes-allow</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="changes_prevent">
+            <property name="active" bind-source="changes_allow" bind-property="active" bind-flags="bidirectional|invert-boolean">True</property>
+            <property name="visible" bind-source="changes_prevent" bind-property="active" bind-flags="invert-boolean">False</property>
+            <property name="relief">none</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">changes-prevent</property>
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
       </object>
     </child>
     <child>
