@@ -140,8 +140,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testsensitive			\
 	testtextview			\
 	testanimation			\
-	testpixbuf-save			\
-	testpixbuf-color		\
 	testpixbuf-scale		\
 	testgmenu			\
 	testlogout			\
@@ -261,8 +259,6 @@ testtreepos_DEPENDENCIES = $(TEST_DEPS)
 testsensitive_DEPENDENCIES = $(TEST_DEPS)
 testtextview_DEPENDENCIES = $(TEST_DEPS)
 testanimation_DEPENDENCIES = $(TEST_DEPS)
-testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
-testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
 testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
@@ -435,10 +431,6 @@ testtextview_SOURCES = testtextview.c
 testanimation_SOURCES = testanimation.c
 
 testpixbuf_scale_SOURCES = testpixbuf-scale.c
-
-testpixbuf_color_SOURCES = testpixbuf-color.c
-
-testpixbuf_save_SOURCES = testpixbuf-save.c
 
 testcolorchooser_SOURCES = testcolorchooser.c
 
