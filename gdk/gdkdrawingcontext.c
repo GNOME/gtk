@@ -50,6 +50,7 @@ typedef struct _GdkDrawingContextPrivate GdkDrawingContextPrivate;
 
 struct _GdkDrawingContextPrivate {
   GdkWindow *window;
+  GdkGLContext *paint_context;
 
   cairo_region_t *clip;
   cairo_t *cr;
@@ -81,6 +82,7 @@ gdk_drawing_context_dispose (GObject *gobject)
     gdk_cairo_set_drawing_context (priv->cr, NULL);
 
   g_clear_object (&priv->window);
+  g_clear_object (&priv->paint_context);
   g_clear_pointer (&priv->clip, cairo_region_destroy);
   g_clear_pointer (&priv->cr, cairo_destroy);
 
@@ -100,6 +102,17 @@ gdk_drawing_context_set_property (GObject      *gobject,
     {
     case PROP_WINDOW:
       priv->window = g_value_dup_object (value);
+      if (priv->window == NULL)
+        {
+          g_critical ("The drawing context of type %s does not have a window "
+                      "associated to it. Drawing contexts can only be created "
+                      "using gdk_window_begin_draw_frame().",
+                      G_OBJECT_TYPE_NAME (gobject));
+          return;
+        }
+      priv->paint_context = priv->window->gl_paint_context;
+      if (priv->paint_context)
+        g_object_ref (priv->paint_context);
       break;
 
     case PROP_CLIP:
@@ -136,28 +149,10 @@ gdk_drawing_context_get_property (GObject    *gobject,
 }
 
 static void
-gdk_drawing_context_constructed (GObject *gobject)
-{
-  GdkDrawingContext *self = GDK_DRAWING_CONTEXT (gobject);
-  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (self);
-
-  if (priv->window == NULL)
-    {
-      g_critical ("The drawing context of type %s does not have a window "
-                  "associated to it. Drawing contexts can only be created "
-                  "using gdk_window_begin_draw_frame().",
-                  G_OBJECT_TYPE_NAME (gobject));
-    }
-
-  G_OBJECT_CLASS (gdk_drawing_context_parent_class)->constructed (gobject);
-}
-
-static void
 gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->constructed = gdk_drawing_context_constructed;
   gobject_class->set_property = gdk_drawing_context_set_property;
   gobject_class->get_property = gdk_drawing_context_get_property;
   gobject_class->dispose = gdk_drawing_context_dispose;
