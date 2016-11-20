@@ -12,11 +12,6 @@ G_BEGIN_DECLS
 struct _GdkDrawingContext
 {
   GObject parent_instance;
-
-  GdkWindow *window;
-
-  cairo_region_t *clip;
-  cairo_t *cr;
 };
 
 struct _GdkDrawingContextClass

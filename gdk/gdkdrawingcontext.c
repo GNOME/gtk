@@ -46,7 +46,16 @@
 #include "gdkglcontextprivate.h"
 #include "gdk-private.h"
 
-G_DEFINE_TYPE (GdkDrawingContext, gdk_drawing_context, G_TYPE_OBJECT)
+typedef struct _GdkDrawingContextPrivate GdkDrawingContextPrivate;
+
+struct _GdkDrawingContextPrivate {
+  GdkWindow *window;
+
+  cairo_region_t *clip;
+  cairo_t *cr;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (GdkDrawingContext, gdk_drawing_context, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -63,16 +72,17 @@ static void
 gdk_drawing_context_dispose (GObject *gobject)
 {
   GdkDrawingContext *self = GDK_DRAWING_CONTEXT (gobject);
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (self);
 
   /* Unset the drawing context, in case somebody is holding
    * onto the Cairo context
    */
-  if (self->cr != NULL)
-    gdk_cairo_set_drawing_context (self->cr, NULL);
+  if (priv->cr != NULL)
+    gdk_cairo_set_drawing_context (priv->cr, NULL);
 
-  g_clear_object (&self->window);
-  g_clear_pointer (&self->clip, cairo_region_destroy);
-  g_clear_pointer (&self->cr, cairo_destroy);
+  g_clear_object (&priv->window);
+  g_clear_pointer (&priv->clip, cairo_region_destroy);
+  g_clear_pointer (&priv->cr, cairo_destroy);
 
   G_OBJECT_CLASS (gdk_drawing_context_parent_class)->dispose (gobject);
 }
@@ -84,15 +94,16 @@ gdk_drawing_context_set_property (GObject      *gobject,
                                   GParamSpec   *pspec)
 {
   GdkDrawingContext *self = GDK_DRAWING_CONTEXT (gobject);
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_WINDOW:
-      self->window = g_value_dup_object (value);
+      priv->window = g_value_dup_object (value);
       break;
 
     case PROP_CLIP:
-      self->clip = g_value_dup_boxed (value);
+      priv->clip = g_value_dup_boxed (value);
       break;
 
     default:
@@ -107,15 +118,16 @@ gdk_drawing_context_get_property (GObject    *gobject,
                                   GParamSpec *pspec)
 {
   GdkDrawingContext *self = GDK_DRAWING_CONTEXT (gobject);
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_WINDOW:
-      g_value_set_object (value, self->window);
+      g_value_set_object (value, priv->window);
       break;
 
     case PROP_CLIP:
-      g_value_set_boxed (value, self->clip);
+      g_value_set_boxed (value, priv->clip);
       break;
 
     default:
@@ -127,8 +139,9 @@ static void
 gdk_drawing_context_constructed (GObject *gobject)
 {
   GdkDrawingContext *self = GDK_DRAWING_CONTEXT (gobject);
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (self);
 
-  if (self->window == NULL)
+  if (priv->window == NULL)
     {
       g_critical ("The drawing context of type %s does not have a window "
                   "associated to it. Drawing contexts can only be created "
@@ -232,29 +245,31 @@ gdk_cairo_get_drawing_context (cairo_t *cr)
 cairo_t *
 gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
 {
-  g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
-  g_return_val_if_fail (GDK_IS_WINDOW (context->window), NULL);
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
 
-  if (context->cr == NULL)
+  g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
+  g_return_val_if_fail (GDK_IS_WINDOW (priv->window), NULL);
+
+  if (priv->cr == NULL)
     {
       cairo_region_t *region;
       cairo_surface_t *surface;
 
-      surface = _gdk_window_ref_cairo_surface (context->window);
-      context->cr = cairo_create (surface);
+      surface = _gdk_window_ref_cairo_surface (priv->window);
+      priv->cr = cairo_create (surface);
 
-      gdk_cairo_set_drawing_context (context->cr, context);
+      gdk_cairo_set_drawing_context (priv->cr, context);
 
-      region = gdk_window_get_current_paint_region (context->window);
-      cairo_region_union (region, context->clip);
-      gdk_cairo_region (context->cr, region);
-      cairo_clip (context->cr);
+      region = gdk_window_get_current_paint_region (priv->window);
+      cairo_region_union (region, priv->clip);
+      gdk_cairo_region (priv->cr, region);
+      cairo_clip (priv->cr);
 
       cairo_region_destroy (region);
       cairo_surface_destroy (surface);
     }
 
-  return context->cr;
+  return priv->cr;
 }
 
 /**
@@ -270,9 +285,11 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
 GdkWindow *
 gdk_drawing_context_get_window (GdkDrawingContext *context)
 {
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
+
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
 
-  return context->window;
+  return priv->window;
 }
 
 /**
@@ -288,12 +305,14 @@ gdk_drawing_context_get_window (GdkDrawingContext *context)
 cairo_region_t *
 gdk_drawing_context_get_clip (GdkDrawingContext *context)
 {
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
+
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
 
-  if (context->clip == NULL)
+  if (priv->clip == NULL)
     return NULL;
 
-  return cairo_region_copy (context->clip);
+  return cairo_region_copy (priv->clip);
 }
 
 /**
@@ -309,12 +328,14 @@ gdk_drawing_context_get_clip (GdkDrawingContext *context)
 gboolean
 gdk_drawing_context_is_valid (GdkDrawingContext *context)
 {
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
+
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), FALSE);
 
-  if (context->window == NULL)
+  if (priv->window == NULL)
     return FALSE;
 
-  if (gdk_window_get_drawing_context (context->window) != context)
+  if (gdk_window_get_drawing_context (priv->window) != context)
     return FALSE;
 
   return TRUE;
