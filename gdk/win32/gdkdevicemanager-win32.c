@@ -66,6 +66,8 @@ static t_WTOverlap p_WTOverlap;
 static t_WTPacket p_WTPacket;
 static t_WTQueueSizeSet p_WTQueueSizeSet;
 
+static gboolean default_display_opened = FALSE;
+
 G_DEFINE_TYPE (GdkDeviceManagerWin32, gdk_device_manager_win32, GDK_TYPE_DEVICE_MANAGER)
 
 static GdkDevice *
@@ -675,11 +677,42 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
     }
 }
 
+/* Only initialize Wintab after the default display is set for
+ * the first time. WTOpenA() executes code beyond our control,
+ * and it can cause messages to be sent to the application even
+ * before a window is opened. GDK has to be in a fit state to
+ * handle them when they come.
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=774379
+ */
+static void
+wintab_default_display_notify_cb (GdkDisplayManager *display_manager)
+{
+  GdkDeviceManagerWin32 *device_manager = NULL;
+  GdkDisplay *display = gdk_display_get_default();
+
+  if (default_display_opened)
+    return;
+
+  g_assert (display != NULL);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
+G_GNUC_END_IGNORE_DEPRECATIONS;
+  g_assert (display_manager != NULL);
+
+  default_display_opened = TRUE;
+  GDK_NOTE (INPUT, g_print ("wintab init: doing delayed initialization\n"));
+  wintab_init_check (device_manager);
+}
+
 static void
 gdk_device_manager_win32_constructed (GObject *object)
 {
   GdkDeviceManagerWin32 *device_manager;
   GdkSeat *seat;
+  GdkDisplayManager *display_manager = NULL;
+  GdkDisplay *default_display = NULL;
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
   device_manager->core_pointer =
@@ -722,7 +755,18 @@ gdk_device_manager_win32_constructed (GObject *object)
   gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
 
-  wintab_init_check (device_manager);
+  /* Only call Wintab init stuff after the default display
+   * is globally known and accessible through the display manager
+   * singleton. Approach lifted from gtkmodules.c.
+   */
+  display_manager = gdk_display_manager_get();
+  g_assert (display_manager != NULL);
+  default_display = gdk_display_manager_get_default_display (display_manager);
+  g_assert (default_display == NULL);
+
+  g_signal_connect (display_manager, "notify::default-display",
+                    G_CALLBACK (wintab_default_display_notify_cb),
+                    NULL);
 }
 
 static GList *
