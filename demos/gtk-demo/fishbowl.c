@@ -10,6 +10,8 @@
 char **icon_names = NULL;
 gsize n_icon_names = 0;
 
+GtkWidget *allow_changes;
+
 static void
 init_icon_names (GtkIconTheme *theme)
 {
@@ -24,7 +26,7 @@ init_icon_names (GtkIconTheme *theme)
 
   for (l = icon_list; l; l = l->next)
     {
-      if (g_str_has_suffix (l->data, "-symbolic"))
+      if (g_str_has_suffix (l->data, "symbolic"))
         continue;
 
       g_ptr_array_add (icons, g_strdup (l->data));
@@ -119,7 +121,6 @@ do_stats (GtkWidget *widget,
             stats->last_suggestion *= 2;
           else
             stats->last_suggestion = 1;
-          *suggested_change = stats->last_suggestion;
         }
       else
         {
@@ -128,17 +129,22 @@ do_stats (GtkWidget *widget,
           else
             stats->last_suggestion = -1;
           stats->last_suggestion = MAX (stats->last_suggestion, 1 - (int) stats->item_counter[stats->stats_index]);
-          *suggested_change = stats->last_suggestion;
         }
 
       stats->stats_index = (stats->stats_index + 1) % N_STATS;
       stats->frame_counter[stats->stats_index] = 0;
       stats->item_counter[stats->stats_index] = stats->item_counter[(stats->stats_index + N_STATS - 1) % N_STATS];
       stats->last_stats = frame_time;
+      
+      if (suggested_change)
+        *suggested_change = stats->last_suggestion;
+      else
+        stats->last_suggestion = 0;
     }
   else
     {
-      *suggested_change = 0;
+      if (suggested_change)
+        *suggested_change = 0;
     }
 
   stats->last_frame = frame_time;
@@ -284,9 +290,11 @@ move_fish (GtkWidget     *bowl,
            gpointer       info_label)
 {
   gint64 elapsed;
-  gint suggested_change;
+  gint suggested_change = 0;
   
-  elapsed = do_stats (bowl, info_label, &suggested_change);
+  elapsed = do_stats (bowl,
+                      info_label,
+                      !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (allow_changes)) ? &suggested_change : NULL);
 
   gtk_container_foreach (GTK_CONTAINER (bowl), move_one_fish, &elapsed);
 
@@ -313,6 +321,7 @@ do_fishbowl (GtkWidget *do_widget)
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       bowl = GTK_WIDGET (gtk_builder_get_object (builder, "bowl"));
       info_label = GTK_WIDGET (gtk_builder_get_object (builder, "info_label"));
+      allow_changes = GTK_WIDGET (gtk_builder_get_object (builder, "changes_allow"));
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
       g_signal_connect (window, "destroy",
@@ -320,12 +329,10 @@ do_fishbowl (GtkWidget *do_widget)
 
       gtk_widget_realize (window);
       gtk_widget_add_tick_callback (bowl, move_fish, info_label, NULL);
-
-      //add_fish (bowl, 300);
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
+    gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
 
