@@ -593,6 +593,8 @@ _gtk_module_has_mixed_deps (GModule *module_to_check)
 
   if (g_module_symbol (module, "gtk_progress_get_type", &func))
     result = TRUE;
+  else if (g_module_symbol (module, "gtk_misc_get_type", &func))
+    result = TRUE;
   else
     result = FALSE;
 
