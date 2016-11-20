@@ -1,3 +1,127 @@
+Overview of Changes in GTK+ 3.89.1
+==================================
+
+This release marks the first snapshot of development leading to GTK+ 4,
+it is unstable and expected to change drastically.
+
+Do not use it in production.
+
+GTK+ 3.89 is parallel-installable with the stable GTK+ 3.22.x releases.
+
+The API documentation contains an initial migration guide for porting
+from GTK+ 3 to GTK+ 4.
+
+Detailed changes:
+
+* GSK has been integrated. Widgets are now rendered into
+  GskRenderNodes, which then get drawn using GL
+
+* GTK+ now installs a single shared library, libgtk.so, which includes
+  GDK and GSK as well
+
+* All installed binaries now use a consistent gtk4- prefix to avoid conflicts
+
+* Dropped APIs:
+  - all APIs that have been deprecated in GTK+ 3
+  - (almost) all widget style properties
+  - offscreen windows
+  - -gtk-gradient in CSS
+  - gdk_pixbuf_get_from_window and gdk_cairo_set_source_window
+
+* Changed APIs:
+ - GtkCssProvider load functions lost their GError argument
+
+* New APIs:
+ - GMenu items can now have a text-direction attribute
+ - GtkShortcutsShortcut supports single-finger swipe gestures
+ - gdk_display_is_rgba and gdk_display_is_composited
+ - New GtkButton API to construct image buttons:
+     gtk_button_new_from_icon_name
+     gtk_button_set_icon_name
+ - New GdkWindow constructors replacing gdk_window_new:
+     gdk_window_new_toplevel
+     gdk_window_new_popup
+     gdk_window_new_temp
+     gdk_window_new_child
+     gdk_window_new_input
+     gdk_wayland_window_new_subsurface
+ - gtk_widget_measure replaces gtk_widget_get_preferred_...
+ - gtk_widget_snapshot replaces gtk_widget_render
+ - gtk_drawing_area_set_draw_func replaces the ::draw signal
+
+* New examples in gtk4-demo:
+ - Gestures
+ - Fishbowl
+
+* GtkInspector now has a frame recorder which shows detailed information
+  about the widget to render node conversion
+
+* Hi-DPI is now supported with the Windows backend
+
+* gtk-builder-tool can now replace the input file
+
+* Bugs fixed:
+ 756570 gtkplacesview no longer provides guidance on address formats
+ 767713 Fullscreen in wayland is buggy
+ 768531 wayland: Startup notification doesn't work on some apps (eg. gnome-terminal)...
+ 771205 Buttons with circular style class have a suddenly clipped shadow at the bottom
+ 771320 [Wayland] Maps widget is displayed at wrong position inside gnome-contacts
+ 771694 GtkSourceView completion popup window not shown, no grabbed seat found
+ 772075 GTK+ uses a lot more CPU under Wayland than under X11
+ 772345 placesviewrow: busy_spinner when visible offsets the rest of the widgets on the row
+ 772348 placesviewrow: busy_spinner when visible offsets the rest of the widgets on the row
+ 772683 Usage of FALSE instead of gint in glarea demo
+ 772695 Show the keyboard shortcuts from left to right even in RTL
+ 772770 [GtkShortcutsWindow] Support for single-finger swipe gestures
+ 772859 Fix memory leaks in implementations of common widgets
+ 772922 GtkMenu: Try using gdk_window_move_to_rect() more often
+ 772926 shortcutswindow: working version of set_section_name()
+ 773007 GtkFilechooser gives completion for non-matching extensions
+ 773082 overlay: Document availability of properties
+ 773113 tests: fix clipboard test by loading correct icon
+ 773180 Don't second-guess whether our GDK GL context is GLES
+ 773246 Typo in css color definitions documentation
+ 773299 Ensure GTK+-4.x builds and works on Windows (MSVC in particular)
+ 773474 Color chooser dialog opened with show-editor=TRUE has black header bar
+ 773587 recent-manager: Add a limit to the list's size
+ 773799 GtkLevelBar doesn't update blocks on discrete mode
+ 773857 gdkwindow-x11: Add support for gdk_window_fullscreen_on_monitor
+ 773885 pop down GtkPopover on pressing escape
+ 773903 Gtk+4: gtk.h and gtktextiter.h include private gtktextattributes.h
+ 773916 GtkComposeTable caches broken: using a same ~/.XCompose does not work twice in a row
+ 773954 gtkstylecontext: Clarify memory allocation behaviour of getters
+ 773979 GdkGLContext does not chain finalize handler
+ 774046 GtkSpinButton does not always unref priv->{up,down}_button
+ 774066 GtkHeaderBar does not unref all GtkBox and GtkSeparator it creates
+ 774097 GtkPrintOperation should not truncate job names
+ 774185 GtkPlacesSidebar does not unref itsel as many times as it references
+ 774347 Fails to build: unknown type name GdkColor
+ 774352 GtkAppChooserWidget does not unref all GAppInfo it references
+ 774475 wayland: gtk+ prevents using subsurfaces if the parent is not root
+ 774476 surfaces with no outputs get scale factor reset
+ 774490 Deprecated example for modify color or font
+ 774609 small fix to foreign drawing spinbutton demo
+ 774614 Wrong #include in Print docs
+ 774634 GtkPlacesView does not unref all GDaemonFileEnumerator it references
+ 774695 GtkProgressbar needs full and empty classes
+
+* Translation updates
+ Brazilian Portuguese
+ Catalan
+ Czech
+ Danish
+ French
+ German
+ Greek
+ Hungarian
+ Kazakh
+ Lithuanian
+ Polish
+
+
+=======================================================================
+
+
 Overview of Changes in GTK+ 3.22.1
 ==================================
 
