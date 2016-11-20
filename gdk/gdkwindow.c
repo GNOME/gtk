@@ -2933,8 +2933,6 @@ void
 gdk_window_end_draw_frame (GdkWindow         *window,
                            GdkDrawingContext *context)
 {
-  GdkWindowImplClass *impl_class;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
 
@@ -2945,17 +2943,14 @@ gdk_window_end_draw_frame (GdkWindow         *window,
                   "gdk_window_end_draw_frame().", window);
       return;
     }
+  g_return_if_fail (window->drawing_context == context);
 
   if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
     gdk_window_end_paint_internal (window);
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-  if (impl_class->destroy_draw_context != NULL)
-    impl_class->destroy_draw_context (window, context);
-  else
-    g_object_unref (context);
-
   window->drawing_context = NULL;
+
+  g_object_unref (context);
 }
 
 /*< private >
