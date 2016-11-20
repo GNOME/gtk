@@ -18,7 +18,6 @@ test_css_style_CFLAGS = \
 	$(NULL)
 
 test_css_style_LDADD = \
-        $(top_builddir)/gdk/libgdk-4.la \
         $(top_builddir)/gtk/libgtk-4.la \
         $(GTK_DEP_LIBS)			\
 	$(NULL)
