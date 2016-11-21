@@ -174,7 +174,7 @@ gtk_css_transform_apply (const GtkCssTransform   *transform,
       graphene_matrix_init_from_matrix (matrix, &tmp);
       break;
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      graphene_matrix_translate (matrix, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(
+      graphene_matrix_translate (matrix, &GRAPHENE_POINT3D_INIT(
                                  _gtk_css_number_value_get (transform->translate.x, 100),
                                  _gtk_css_number_value_get (transform->translate.y, 100),
                                  _gtk_css_number_value_get (transform->translate.z, 100)));

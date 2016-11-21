@@ -290,7 +290,7 @@ gtk_debug_updates_snapshot (GtkWidget   *widget,
 
   gtk_debug_updates_queue_get_extents (updates, &rect);
   cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &(graphene_rect_t) GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height),
+                                       &GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height),
                                        "Debug Updates");
 
   for (l = g_queue_peek_head_link (updates); l != NULL; l = l->next)

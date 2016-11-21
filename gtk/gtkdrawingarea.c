@@ -240,7 +240,7 @@ gtk_drawing_area_snapshot (GtkWidget   *widget,
     return;
 
   cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &(graphene_rect_t) GRAPHENE_RECT_INIT(0, 0,
+                                       &GRAPHENE_RECT_INIT (0, 0,
                                          gtk_widget_get_allocated_width (widget),
                                          gtk_widget_get_allocated_height (widget)),
                                        "DrawingAreaContents");

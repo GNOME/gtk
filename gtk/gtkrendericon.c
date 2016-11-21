@@ -116,9 +116,9 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   graphene_matrix_init_from_matrix (&saved_matrix, gtk_snapshot_get_transform (snapshot));
 
   /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-  graphene_matrix_init_translate (&m1, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
+  graphene_matrix_init_translate (&m1, &GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
   graphene_matrix_multiply (&transform_matrix, &m1, &m3);
-  graphene_matrix_init_translate (&m2, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
+  graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
   graphene_matrix_multiply (&m2, &m3, &m1);
   gtk_snapshot_transform (snapshot, &m1);
 
@@ -230,7 +230,7 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
   if (!gtk_css_transform_value_get_matrix (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
     return;
 
-  graphene_matrix_init_translate (&translate_matrix, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(x + width / 2.0, y + height / 2.0, 0));
+  graphene_matrix_init_translate (&translate_matrix, &GRAPHENE_POINT3D_INIT(x + width / 2.0, y + height / 2.0, 0));
   graphene_matrix_multiply (&transform_matrix, &translate_matrix, &matrix);
   graphene_rect_init (&bounds,
                       - width / 2.0, - height / 2.0,
@@ -273,9 +273,9 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
   graphene_matrix_init_from_matrix (&saved_matrix, gtk_snapshot_get_transform (snapshot));
 
   /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-  graphene_matrix_init_translate (&m1, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
+  graphene_matrix_init_translate (&m1, &GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
   graphene_matrix_multiply (&transform_matrix, &m1, &m3);
-  graphene_matrix_init_translate (&m2, &(graphene_point3d_t)GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
+  graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
   graphene_matrix_multiply (&m2, &m3, &m1);
   gtk_snapshot_transform (snapshot, &m1);
 

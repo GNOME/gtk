@@ -664,7 +664,7 @@ gtk_css_image_builtin_snapshot (GtkCssImage            *image,
     }
 
   cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &(graphene_rect_t)GRAPHENE_RECT_INIT (0, 0, width, height),
+                                       &GRAPHENE_RECT_INIT (0, 0, width, height),
                                        "BuiltinImage<%d>", (int) image_type);
   gtk_css_image_builtin_draw (image, cr, width, height, image_type);
   cairo_destroy (cr);

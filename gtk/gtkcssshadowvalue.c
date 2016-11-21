@@ -1038,7 +1038,7 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue   *shadow,
   gtk_css_shadow_value_get_extents (shadow, &extents);
 
   cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &(graphene_rect_t) GRAPHENE_RECT_INIT (
+                                       &GRAPHENE_RECT_INIT (
                                           border_box->box.x - extents.left,
                                           border_box->box.y - extents.top,
                                           border_box->box.width + extents.left + extents.right,
@@ -1062,7 +1062,7 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
     return;
 
   cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &(graphene_rect_t) GRAPHENE_RECT_INIT (
+                                       &GRAPHENE_RECT_INIT (
                                           padding_box->box.x,
                                           padding_box->box.y,
                                           padding_box->box.width,

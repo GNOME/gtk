@@ -239,9 +239,8 @@ gtk_render_node_view_snapshot (GtkWidget   *widget,
   cairo_translate (cr, - viewport.x - viewport.width / 2.0, - viewport.y - viewport.height / 2.0);
 
   fallback = gsk_renderer_create_fallback (gtk_snapshot_get_renderer (snapshot),
-                                           &(graphene_rect_t)
-                                               GRAPHENE_RECT_INIT (viewport.x, viewport.y,
-                                                                   viewport.width, viewport.height),
+                                           &GRAPHENE_RECT_INIT (viewport.x, viewport.y,
+                                                                viewport.width, viewport.height),
                                            cr);
   gsk_renderer_render (fallback, priv->render_node, NULL);
   g_object_unref (fallback);

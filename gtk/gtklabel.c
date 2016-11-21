@@ -4169,7 +4169,7 @@ gtk_label_snapshot (GtkWidget   *widget,
 static void layout_to_window_coords (GtkLabel *label,
                                      gint     *x,
                                      gint     *y);
-#define GRAPHENE_RECT_FROM_RECT(_r) ((graphene_rect_t) GRAPHENE_RECT_INIT ((_r)->x, (_r)->y, (_r)->width, (_r)->height))
+#define GRAPHENE_RECT_FROM_RECT(_r) (GRAPHENE_RECT_INIT ((_r)->x, (_r)->y, (_r)->width, (_r)->height))
 
 static gboolean
 gtk_label_render (GtkCssGadget *gadget,
@@ -4231,7 +4231,7 @@ gtk_label_render (GtkCssGadget *gadget,
           range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
           cairo_region_get_extents (range_clip, &clip_extents);
           cr = gtk_snapshot_append_cairo_node (snapshot,
-                                               &GRAPHENE_RECT_FROM_RECT(&clip_extents),
+                                               &GRAPHENE_RECT_FROM_RECT (&clip_extents),
                                                "Selected Text");
           gtk_style_context_save_to_node (context, info->selection_node);
 

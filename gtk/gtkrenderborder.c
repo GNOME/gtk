@@ -948,7 +948,7 @@ gtk_css_style_snapshot_outline (GtkCssStyle *style,
       _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
 
       cr = gtk_snapshot_append_cairo_node (state,
-                                           &(graphene_rect_t) GRAPHENE_RECT_INIT (rect.x, rect.y, rect.width, rect.height),
+                                           &GRAPHENE_RECT_INIT (rect.x, rect.y, rect.width, rect.height),
                                            "Outline");
 
       render_border (cr, &border_box, border_width, 0, colors, border_style);

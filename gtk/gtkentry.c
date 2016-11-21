@@ -3600,10 +3600,10 @@ gtk_entry_render (GtkCssGadget *gadget,
 
   /* Draw text and cursor */
   cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &(graphene_rect_t) GRAPHENE_RECT_INIT (x + priv->text_x,
-                                                                              y,
-                                                                              priv->text_width,
-                                                                              height),
+                                       &GRAPHENE_RECT_INIT (x + priv->text_x,
+                                                            y,
+                                                            priv->text_width,
+                                                            height),
                                        "Entry Text");
 
   if (priv->dnd_position != -1)

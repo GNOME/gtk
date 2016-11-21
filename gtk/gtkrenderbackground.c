@@ -465,7 +465,7 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
    * background. GSK can't do that yet.
    */
   cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &(graphene_rect_t)GRAPHENE_RECT_INIT(0, 0, width, height),
+                                       &GRAPHENE_RECT_INIT (0, 0, width, height),
                                        "Background");
 
   _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
