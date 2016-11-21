@@ -24,6 +24,10 @@
 #include "gdkmonitor.h"
 #include "gdkinternals.h"
 
+#ifdef GDK_WINDOWING_VULKAN
+#include <vulkan/vulkan.h>
+#endif
+
 G_BEGIN_DECLS
 
 #define GDK_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY, GdkDisplayClass))
@@ -120,9 +124,14 @@ struct _GdkDisplay
   guint double_click_time;  /* Maximum time between clicks in msecs */
   guint double_click_distance;   /* Maximum distance between clicks in pixels */
 
-  guint has_gl_extension_texture_non_power_of_two : 1;
-  guint has_gl_extension_texture_rectangle : 1;
+#ifdef GDK_WINDOWING_VULKAN
+  VkInstance vk_instance;
+  VkPhysicalDevice vk_physical_device;
+  VkDevice vk_device;
+  VkQueue vk_queue;
 
+  guint vulkan_refcount;
+#endif /* GDK_WINDOWING_VULKAN */
   guint rgba : 1;
   guint composited : 1;
 

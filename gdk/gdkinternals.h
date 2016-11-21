@@ -69,6 +69,7 @@ typedef enum {
   GDK_DEBUG_FRAMES        = 1 << 11,
   GDK_DEBUG_SETTINGS      = 1 << 12,
   GDK_DEBUG_OPENGL        = 1 << 13,
+  GDK_DEBUG_VULKAN        = 1 << 14
 } GdkDebugFlag;
 
 typedef enum {

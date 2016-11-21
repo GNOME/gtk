@@ -91,6 +91,7 @@ gdk_public_h_sources = 				\
 	gdkthreads.h				\
 	gdktypes.h				\
 	gdkvisual.h				\
+	gdkvulkancontext.h			\
 	gdkwindow.h
 
 gdk_h_sources =					\
@@ -120,6 +121,7 @@ gdk_private_headers = 				\
 	gdkintl.h				\
 	gdkkeysprivate.h			\
 	gdkvisualprivate.h			\
+	gdkvulkancontextprivate.h		\
 	gdkx.h
 
 gdk_c_sources = 				\
@@ -157,6 +159,7 @@ gdk_c_sources = 				\
 	gdkseatdefault.c			\
 	gdkselection.c				\
 	gdkvisual.c				\
+	gdkvulkancontext.c			\
 	gdkwindow.c				\
 	gdkwindowimpl.c
 
