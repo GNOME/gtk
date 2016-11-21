@@ -4470,14 +4470,6 @@ typedef struct {
 } DeviceEnableData;
 
 static void
-device_enable_foreach (GtkWidget *widget,
-                       gpointer   user_data)
-{
-  DeviceEnableData *data = user_data;
-  gtk_widget_set_device_enabled_internal (widget, data->device, TRUE, data->enabled);
-}
-
-static void
 device_enable_foreach_window (gpointer win,
                               gpointer user_data)
 {
@@ -4529,8 +4521,19 @@ gtk_widget_set_device_enabled_internal (GtkWidget *widget,
       g_list_foreach (window_list, device_enable_foreach_window, &data);
     }
 
-  if (recurse && GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), device_enable_foreach, &data);
+  if (recurse)
+    {
+      GtkWidget *child;
+      for (child = gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          gtk_widget_set_device_enabled_internal (child,
+                                                  device,
+                                                  TRUE,
+                                                  enabled);
+        }
+    }
 }
 
 static void
@@ -8564,10 +8567,7 @@ gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
       g_signal_emit (widget, widget_signals[HIERARCHY_CHANGED], 0, info->previous_toplevel);
       do_screen_change (widget, info->previous_screen, info->new_screen);
 
-      if (GTK_IS_CONTAINER (widget))
-	gtk_container_forall (GTK_CONTAINER (widget),
-			      gtk_widget_propagate_hierarchy_changed_recurse,
-			      client_data);
+      gtk_widget_forall (widget, gtk_widget_propagate_hierarchy_changed_recurse, client_data);
 
       g_object_unref (widget);
     }
@@ -8616,15 +8616,18 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
 					     gpointer   client_data)
 {
   HierarchyChangedInfo *info = client_data;
+  GtkWidget *child;
 
   g_object_ref (widget);
 
   do_screen_change (widget, info->previous_screen, info->new_screen);
 
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-			  gtk_widget_propagate_screen_changed_recurse,
-			  client_data);
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      gtk_widget_propagate_screen_changed_recurse (child, client_data);
+    }
 
   g_object_unref (widget);
 }
@@ -8656,14 +8659,11 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 }
 
 static void
-reset_style_recurse (GtkWidget *widget, gpointer data)
+reset_style_recurse (GtkWidget *widget, gpointer user_data)
 {
   gtk_css_node_invalidate (widget->priv->cssnode, GTK_CSS_CHANGE_ANY);
 
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-			  reset_style_recurse,
-			  NULL);
+  gtk_widget_forall (widget, reset_style_recurse, user_data);
 }
 
 /**
@@ -8834,8 +8834,7 @@ gtk_widget_push_verify_invariants (GtkWidget *widget)
 }
 
 static void
-gtk_widget_verify_child_invariants (GtkWidget *widget,
-                                    gpointer   client_data)
+gtk_widget_verify_child_invariants (GtkWidget *widget)
 {
   /* We don't recurse further; this is a one-level check. */
   gtk_widget_verify_invariants (widget);
@@ -8850,21 +8849,22 @@ gtk_widget_pop_verify_invariants (GtkWidget *widget)
 
   if (widget->priv->verifying_invariants_count == 0)
     {
+      GtkWidget *child;
       gtk_widget_verify_invariants (widget);
 
-      if (GTK_IS_CONTAINER (widget))
+      /* Check one level of children, because our
+       * push_verify_invariants() will have prevented some of the
+       * checks. This does not recurse because if recursion is
+       * needed, it will happen naturally as each child has a
+       * push/pop on that child. For example if we're recursively
+       * mapping children, we'll push/pop on each child as we map
+       * it.
+       */
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
         {
-          /* Check one level of children, because our
-           * push_verify_invariants() will have prevented some of the
-           * checks. This does not recurse because if recursion is
-           * needed, it will happen naturally as each child has a
-           * push/pop on that child. For example if we're recursively
-           * mapping children, we'll push/pop on each child as we map
-           * it.
-           */
-          gtk_container_forall (GTK_CONTAINER (widget),
-                                gtk_widget_verify_child_invariants,
-                                NULL);
+          gtk_widget_verify_child_invariants (child);
         }
     }
 }
@@ -9032,17 +9032,14 @@ gtk_widget_get_font_options (GtkWidget *widget)
 }
 
 static void
-gtk_widget_set_font_map_recurse (GtkWidget *widget, gpointer data)
+gtk_widget_set_font_map_recurse (GtkWidget *widget, gpointer user_data)
 {
   if (g_object_get_qdata (G_OBJECT (widget), quark_font_map))
     return;
 
   gtk_widget_update_pango_context (widget);
 
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-                          gtk_widget_set_font_map_recurse,
-                          data);
+  gtk_widget_forall (widget, gtk_widget_set_font_map_recurse, user_data);
 }
 
 /**
@@ -9074,10 +9071,8 @@ gtk_widget_set_font_map (GtkWidget    *widget,
                            g_object_unref);
 
   gtk_widget_update_pango_context (widget);
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-                          gtk_widget_set_font_map_recurse,
-                          NULL);
+
+  gtk_widget_forall (widget, gtk_widget_set_font_map_recurse, NULL);
 }
 
 /**
@@ -9399,10 +9394,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
 
   gtk_widget_queue_draw (widget);
 
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-                          (GtkCallback) _gtk_widget_scale_changed,
-                          NULL);
+  gtk_widget_forall (widget, (GtkCallback)_gtk_widget_scale_changed, NULL);
 }
 
 /**
@@ -10275,16 +10267,19 @@ static void
 gtk_widget_set_default_direction_recurse (GtkWidget *widget, gpointer data)
 {
   GtkTextDirection old_dir = GPOINTER_TO_UINT (data);
+  GtkWidget *child;
 
   g_object_ref (widget);
 
   if (widget->priv->direction == GTK_TEXT_DIR_NONE)
     gtk_widget_emit_direction_changed (widget, old_dir);
 
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-			  gtk_widget_set_default_direction_recurse,
-			  data);
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      gtk_widget_set_default_direction_recurse (child, data);
+    }
 
   g_object_unref (widget);
 }
@@ -10698,10 +10693,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
     * (for example, gdk_ic_destroy () with destroyed window causes crash.)
     */
 
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-			  (GtkCallback) gtk_widget_unrealize,
-			  NULL);
+  gtk_widget_forall (widget, (GtkCallback)gtk_widget_unrealize, NULL);
 
   if (_gtk_widget_get_has_window (widget))
     {
@@ -11102,6 +11094,8 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 {
   GtkWidgetPrivate *priv = widget->priv;
   GtkStateFlags new_flags, old_flags = priv->state_flags;
+  GtkStateData child_data;
+  GtkWidget *child;
 
   priv->state_flags |= data->flags_to_set;
   priv->state_flags &= ~(data->flags_to_unset);
@@ -11173,17 +11167,16 @@ gtk_widget_propagate_state (GtkWidget    *widget,
       if (!gtk_widget_is_sensitive (widget))
         gtk_widget_reset_controllers (widget);
 
-      if (GTK_IS_CONTAINER (widget))
+
+      /* Make sure to only propagate the right states further */
+      child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_PROPAGATE;
+      child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_PROPAGATE;
+
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
         {
-          GtkStateData child_data;
-
-          /* Make sure to only propagate the right states further */
-          child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_PROPAGATE;
-          child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_PROPAGATE;
-
-          gtk_container_forall (GTK_CONTAINER (widget),
-                                (GtkCallback) gtk_widget_propagate_state,
-                                &child_data);
+          gtk_widget_propagate_state (child, &child_data);
         }
 
       g_object_unref (widget);
@@ -14401,12 +14394,16 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
     }
   else if (priv->alloc_needed_on_child)
     {
+      GtkWidget *child;
+
       priv->alloc_needed_on_child = FALSE;
 
-      if (GTK_IS_CONTAINER (widget))
-        gtk_container_forall (GTK_CONTAINER (widget),
-                              (GtkCallback) gtk_widget_ensure_allocate,
-                              NULL);
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
+        {
+          gtk_widget_ensure_allocate (child);
+        }
     }
 }
 
