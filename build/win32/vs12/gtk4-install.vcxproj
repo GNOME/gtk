@@ -225,16 +225,16 @@
       <Project>{95a4b53d-2773-4406-a2c1-8fd2840bbad8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="gtk4-broadwayd.vcxproj">
+      <Project>{e9687d21-e214-4a0c-9eb4-8b38ebb783e5}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="gtk4-demo-application.vcxproj">
       <Project>{be6b4973-c6ff-4c8f-8e97-a47793c50f44}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gtk4-icon-browser.vcxproj">
       <Project>{343333c4-d46c-4c97-a986-959cca6f1de0}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="broadwayd.vcxproj">
-      <Project>{e9687d21-e214-4a0c-9eb4-8b38ebb783e5}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="gtk4-encode-symbolic-svg.vcxproj">
