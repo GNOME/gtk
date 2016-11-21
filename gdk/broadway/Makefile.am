@@ -118,14 +118,14 @@ gdk4_broadway_HEADERS_INST = $(libgdkbroadwayinclude_HEADERS)
 
 gdk4_broadway_HEADERS_EXCLUDES = dummy
 
-gtk4_broadwayd_FILES = $(broadwayd_SOURCES)
+gtk4_broadwayd_FILES = $(gtk4_broadwayd_SOURCES)
 gtk4_broadwayd_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
 	$(top_builddir)/build/win32/vs12/gdk4-broadway.vcxproj		\
-	$(top_builddir)/build/win32/vs12/broadwayd.vcxproj		\
+	$(top_builddir)/build/win32/vs12/gtk4-broadwayd.vcxproj		\
 	$(top_builddir)/build/win32/vs12/gdk4-broadway.vs12.headers
 
 -include $(top_srcdir)/git.mk

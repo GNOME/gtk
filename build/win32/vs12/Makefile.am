@@ -5,14 +5,14 @@ GENERATED_ITEMS = \
 	gdk4-win32.vcxproj.filters		\
 	gdk4-broadway.vcxproj			\
 	gdk4-broadway.vcxproj.filters		\
-	broadwayd.vcxproj			\
-	broadwayd.vcxproj.filters		\
 	gdk-4.vcxproj				\
 	gdk-4.vcxproj.filters			\
 	gsk-4.vcxproj				\
 	gsk-4.vcxproj.filters			\
 	gtk-4.vcxproj				\
 	gtk-4.vcxproj.filters			\
+	gtk4-broadwayd.vcxproj			\
+	gtk4-broadwayd.vcxproj.filters		\
 	gtk4-demo.vcxproj			\
 	gtk4-demo.vcxproj.filters		\
 	gtk4-demo-application.vcxproj		\
@@ -38,14 +38,14 @@ EXTRA_DIST += \
 	gdk4-win32.vcxproj.filtersin		\
 	gdk4-broadway.vcxprojin			\
 	gdk4-broadway.vcxproj.filtersin		\
-	broadwayd.vcxprojin			\
-	broadwayd.vcxproj.filtersin		\
 	gdk-4.vcxprojin				\
 	gdk-4.vcxproj.filtersin			\
 	gsk-4.vcxprojin				\
 	gsk-4.vcxproj.filtersin			\
 	gtk-4.vcxprojin				\
 	gtk-4.vcxproj.filtersin			\
+	gtk4-broadwayd.vcxprojin		\
+	gtk4-broadwayd.vcxproj.filtersin	\
 	gtk4-builder-tool.vcxproj		\
 	gtk4-builder-tool.vcxproj.filters	\
 	gtk4-encode-symbolic-svg.vcxproj	\

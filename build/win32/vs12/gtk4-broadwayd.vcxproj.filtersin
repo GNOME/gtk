@@ -15,6 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-#include "broadwayd.vs12.sourcefiles.filters"
+#include "gtk4-broadwayd.vs12.sourcefiles.filters"
   </ItemGroup>
 </Project>

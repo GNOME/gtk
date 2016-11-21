@@ -163,7 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-#include "broadwayd.vs12.sourcefiles"
+#include "gtk4-broadwayd.vs12.sourcefiles"
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gtk4-prebuild.vcxproj">
