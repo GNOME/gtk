@@ -94,6 +94,7 @@ Detailed changes:
  774046 GtkSpinButton does not always unref priv->{up,down}_button
  774066 GtkHeaderBar does not unref all GtkBox and GtkSeparator it creates
  774097 GtkPrintOperation should not truncate job names
+ 774114 Window shadows are repainted even if only the contents of the window change
  774185 GtkPlacesSidebar does not unref itsel as many times as it references
  774347 Fails to build: unknown type name GdkColor
  774352 GtkAppChooserWidget does not unref all GAppInfo it references
@@ -104,6 +105,7 @@ Detailed changes:
  774614 Wrong #include in Print docs
  774634 GtkPlacesView does not unref all GDaemonFileEnumerator it references
  774695 GtkProgressbar needs full and empty classes
+ 774699 wintab: list iteration regression causes odd-indexed devices to be ignored during...
 
 * Translation updates
  Brazilian Portuguese
