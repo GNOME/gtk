@@ -297,6 +297,11 @@ AC_ARG_ENABLE(installed_tests,
               [enable_installed_tests=no])
 AM_CONDITIONAL(BUILDOPT_INSTALL_TESTS, test x$enable_installed_tests = xyes)
 
+AC_ARG_ENABLE(vulkan,
+              [AS_HELP_STRING([--enable-vulkan],
+                              [support Vulkan graphics API [default=maybe]])],,
+              [enable_vulkan="maybe"])
+
 AC_ARG_ENABLE(xkb,
               [AS_HELP_STRING([--enable-xkb],
                               [support XKB extension [default=maybe]])],,
@@ -1313,6 +1318,30 @@ if test "$have_gio_unix" = "yes"; then
 else
   GDK_GIO_PACKAGE="gio-2.0 >= glib_required_version"
 fi
+
+# Check for Vulkan support.
+
+have_vulkan="no"
+if test "x$enable_vulkan" != "xno"; then
+      vulkan_error=""
+      AC_CHECK_HEADER([vulkan/vulkan.h], [], [vulkan_error="Vulkan header not found"])
+      AC_CHECK_LIB([vulkan], [vkCreateInstance], [], [vulkan_error="Vulkan library not found"])
+      if "x$vulkan_error" != "x"; then
+          if "x$enable_vulkan" = "xyes"; then
+              AC_MSG_ERROR($vulkan_error)
+          else
+              AC_MSG_WARN($vulkan_error)
+          fi
+      else
+          GDK_EXTRA_LIBS="-lvulkan"
+          have_vulkan="yes"
+          GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_VULKAN"
+      fi
+else
+      AC_MSG_WARN(Vulkan support explicitly disabled)
+fi
+AM_CONDITIONAL(HAVE_VULKAN, test "$have_vulkan" = "yes")
 
 # Check for Pango flags
 
