@@ -64,7 +64,7 @@ m4_define([wayland_protocols_required_version], [1.7])
 m4_define([mirclient_required_version], [0.22.0])
 m4_define([mircookie_required_version], [0.17.0])
 m4_define([epoxy_required_version], [1.0])
-m4_define([graphene_required_version], [1.2])
+m4_define([graphene_required_version], [1.5.1])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
 ATK_REQUIRED_VERSION=atk_required_version
