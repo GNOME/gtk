@@ -812,6 +812,8 @@ decode_tilt (gint   *axis_data,
 {
   double az, el;
 
+  g_return_if_fail (axis_data != NULL);
+
   /* The wintab driver for the Wacom ArtPad II reports
    * PK_ORIENTATION in CSR_PKTDATA, but the tablet doesn't
    * actually sense tilt. Catch this by noticing that the
@@ -822,7 +824,7 @@ decode_tilt (gint   *axis_data,
    * sensible tilts will need both, so only add the GDK tilt axes
    * if both wintab axes are going to be well-behaved in use.
    */
-  if ((axes == NULL) || (axis_data == NULL) ||
+  if ((axes == NULL) ||
       (axes[0].axResolution == 0) ||
       (axes[1].axResolution == 0))
     {
