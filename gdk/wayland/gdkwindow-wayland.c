@@ -882,6 +882,7 @@ gdk_window_impl_wayland_begin_paint (GdkWindow *window)
 static void
 gdk_window_impl_wayland_end_paint (GdkWindow *window)
 {
+#if 0
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   cairo_rectangle_int_t rect;
   int i, n;
@@ -920,6 +921,7 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
 
       impl->pending_commit = TRUE;
     }
+#endif
 
   gdk_wayland_window_sync_margin (window);
   gdk_wayland_window_sync_opaque_region (window);

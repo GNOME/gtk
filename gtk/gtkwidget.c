@@ -6252,24 +6252,6 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
-static const cairo_user_data_key_t mark_for_draw_key;
-
-static gboolean
-gtk_cairo_is_marked_for_draw (cairo_t *cr)
-{
-  return cairo_get_user_data (cr, &mark_for_draw_key) != NULL;
-}
-
-static void
-gtk_cairo_set_marked_for_draw (cairo_t  *cr,
-                               gboolean  marked)
-{
-  if (marked)
-    cairo_set_user_data (cr, &mark_for_draw_key, GINT_TO_POINTER (1), NULL);
-  else
-    cairo_set_user_data (cr, &mark_for_draw_key, NULL, NULL);
-}
-
 static GskRenderer *
 gtk_widget_get_renderer (GtkWidget *widget)
 {
@@ -6332,23 +6314,6 @@ gtk_widget_draw_internal (GtkWidget *widget,
       gboolean result;
       gboolean push_group;
       RenderMode mode;
-
-      /* If this was a cairo_t passed via gtk_widget_draw() then we don't
-       * require a window; otherwise we check for the window associated
-       * to the drawing context and mark it using the clip region of the
-       * Cairo context.
-       */
-      if (!gtk_cairo_is_marked_for_draw (cr))
-        {
-          GdkDrawingContext *context = gdk_cairo_get_drawing_context (cr);
-
-          if (context != NULL)
-            {
-              event_window = gdk_drawing_context_get_window (context);
-              if (event_window != NULL)
-                gdk_window_mark_paint_from_clip (event_window, cr);
-            }
-        }
 
       push_group =
         widget->priv->alpha != 255 && !_gtk_widget_is_toplevel (widget);
@@ -6500,8 +6465,6 @@ void
 gtk_widget_draw (GtkWidget *widget,
                  cairo_t   *cr)
 {
-  gboolean was_marked;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!widget->priv->alloc_needed);
   g_return_if_fail (!widget->priv->alloc_needed_on_child);
@@ -6509,16 +6472,7 @@ gtk_widget_draw (GtkWidget *widget,
 
   cairo_save (cr);
 
-  was_marked = gtk_cairo_is_marked_for_draw (cr);
-
-  /* We mark the window so that gtk_cairo_should_draw_window()
-   * will always return TRUE, and all GdkWindows get drawn
-   */
-  gtk_cairo_set_marked_for_draw (cr, TRUE);
-
   gtk_widget_draw_internal (widget, cr, TRUE);
-
-  gtk_cairo_set_marked_for_draw (cr, was_marked);
 
   cairo_restore (cr);
 }

@@ -340,18 +340,11 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   GdkGLContext *paint_context;
   cairo_surface_t *image;
   cairo_matrix_t matrix;
-  int dx, dy, window_scale;
-  gboolean trivial_transform;
-  cairo_surface_t *group_target;
-  GdkWindow *direct_window, *impl_window;
   guint framebuffer;
   int alpha_size = 0;
   cairo_region_t *clip_region;
   GdkGLContextPaintData *paint_data;
-
-  impl_window = window->impl_window;
-
-  window_scale = gdk_window_get_scale_factor (impl_window);
+  int major, minor, version;
 
   paint_context = gdk_window_get_paint_gl_context (window, NULL);
   if (paint_context == NULL)
@@ -388,324 +381,71 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       return;
     }
 
-  group_target = cairo_get_group_target (cr);
-  direct_window = cairo_surface_get_user_data (group_target, &direct_key);
-
   cairo_get_matrix (cr, &matrix);
 
-  dx = matrix.x0;
-  dy = matrix.y0;
+  gdk_gl_context_get_version (paint_context, &major, &minor);
+  version = major * 100 + minor;
 
-  /* Trivial == integer-only translation */
-  trivial_transform =
-    (double)dx == matrix.x0 && (double)dy == matrix.y0 &&
-    matrix.xx == 1.0 && matrix.xy == 0.0 &&
-    matrix.yx == 0.0 && matrix.yy == 1.0;
+  /* TODO: Use glTexSubImage2D() and do a row-by-row copy to replace
+   * the GL_UNPACK_ROW_LENGTH support
+   */
+  if (gdk_gl_context_get_use_es (paint_context) &&
+      !(version >= 300 || gdk_gl_context_has_unpack_subimage (paint_context)))
+    goto out;
 
-  /* For direct paint of non-alpha renderbuffer, we can
-     just do a bitblit */
-  if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_GL) == 0 &&
-      source_type == GL_RENDERBUFFER &&
-      alpha_size == 0 &&
-      direct_window != NULL &&
-      direct_window->current_paint.use_gl &&
-      trivial_transform &&
-      clip_region != NULL)
+  /* TODO: avoid reading back non-required data due to dest clip */
+  image = cairo_surface_create_similar_image (cairo_get_target (cr),
+                                              (alpha_size == 0) ? CAIRO_FORMAT_RGB24 : CAIRO_FORMAT_ARGB32,
+                                              width, height);
+
+  cairo_surface_set_device_scale (image, buffer_scale, buffer_scale);
+
+  framebuffer = paint_data->tmp_framebuffer;
+  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
+
+  if (source_type == GL_RENDERBUFFER)
     {
-      int unscaled_window_height;
-      int i;
-
       /* Create a framebuffer with the source renderbuffer and
          make it the current target for reads */
-      framebuffer = paint_data->tmp_framebuffer;
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
       glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
                                     GL_RENDERBUFFER_EXT, source);
-      glBindFramebufferEXT (GL_DRAW_FRAMEBUFFER_EXT, 0);
-
-      /* Translate to impl coords */
-      cairo_region_translate (clip_region, dx, dy);
-
-      glEnable (GL_SCISSOR_TEST);
-
-      gdk_window_get_unscaled_size (impl_window, NULL, &unscaled_window_height);
-
-      /* We can use glDrawBuffer on OpenGL only; on GLES 2.0 we are already
-       * double buffered so we don't need it...
-       */
-      if (!gdk_gl_context_get_use_es (paint_context))
-        glDrawBuffer (GL_BACK);
-      else
-        {
-          int maj, min;
-
-          gdk_gl_context_get_version (paint_context, &maj, &min);
-
-          /* ... but on GLES 3.0 we can use the vectorized glDrawBuffers
-           * call.
-           */
-          if ((maj * 100 + min) >= 300)
-            {
-              static const GLenum buffers[] = { GL_BACK };
-
-              glDrawBuffers (G_N_ELEMENTS (buffers), buffers);
-            }
-        }
-
-#define FLIP_Y(_y) (unscaled_window_height - (_y))
-
-      for (i = 0; i < cairo_region_num_rectangles (clip_region); i++)
-        {
-          cairo_rectangle_int_t clip_rect, dest;
-
-          cairo_region_get_rectangle (clip_region, i, &clip_rect);
-          clip_rect.x *= window_scale;
-          clip_rect.y *= window_scale;
-          clip_rect.width *= window_scale;
-          clip_rect.height *= window_scale;
-
-          glScissor (clip_rect.x, FLIP_Y (clip_rect.y + clip_rect.height),
-                     clip_rect.width, clip_rect.height);
-
-          dest.x = dx * window_scale;
-          dest.y = dy * window_scale;
-          dest.width = width * window_scale / buffer_scale;
-          dest.height = height * window_scale / buffer_scale;
-
-          if (gdk_rectangle_intersect (&clip_rect, &dest, &dest))
-            {
-              int clipped_src_x = x + (dest.x - dx * window_scale);
-              int clipped_src_y = y + (height - dest.height - (dest.y - dy * window_scale));
-              glBlitFramebufferEXT(clipped_src_x, clipped_src_y,
-                                   (clipped_src_x + dest.width), (clipped_src_y + dest.height),
-                                   dest.x, FLIP_Y(dest.y + dest.height),
-                                   dest.x + dest.width, FLIP_Y(dest.y),
-                                   GL_COLOR_BUFFER_BIT, GL_NEAREST);
-              if (impl_window->current_paint.flushed_region)
-                {
-                  cairo_rectangle_int_t flushed_rect;
-
-                  flushed_rect.x = dest.x / window_scale;
-                  flushed_rect.y = dest.y / window_scale;
-                  flushed_rect.width = (dest.x + dest.width + window_scale - 1) / window_scale - flushed_rect.x;
-                  flushed_rect.height = (dest.y + dest.height + window_scale - 1) / window_scale - flushed_rect.y;
-
-                  cairo_region_union_rectangle (impl_window->current_paint.flushed_region,
-                                                &flushed_rect);
-                  cairo_region_subtract_rectangle (impl_window->current_paint.need_blend_region,
-                                                   &flushed_rect);
-                }
-            }
-        }
-
-      glDisable (GL_SCISSOR_TEST);
-
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
-
-#undef FLIP_Y
-
-    }
-  /* For direct paint of alpha or non-alpha textures we can use texturing */
-  else if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_GL) == 0 &&
-           source_type == GL_TEXTURE &&
-           direct_window != NULL &&
-           direct_window->current_paint.use_gl &&
-           trivial_transform &&
-           clip_region != NULL)
-    {
-      int unscaled_window_height;
-      GLint texture_width;
-      GLint texture_height;
-      int i, n_rects, n_quads;
-      GdkTexturedQuad *quads;
-      cairo_rectangle_int_t clip_rect;
-
-      /* Translate to impl coords */
-      cairo_region_translate (clip_region, dx, dy);
-
-      if (alpha_size != 0)
-        {
-          cairo_region_t *opaque_region, *blend_region;
-
-          opaque_region = cairo_region_copy (clip_region);
-          cairo_region_subtract (opaque_region, impl_window->current_paint.flushed_region);
-          cairo_region_subtract (opaque_region, impl_window->current_paint.need_blend_region);
-
-          if (!cairo_region_is_empty (opaque_region))
-            gdk_gl_texture_from_surface (impl_window->current_paint.surface,
-                                         opaque_region);
-
-          blend_region = cairo_region_copy (clip_region);
-          cairo_region_intersect (blend_region, impl_window->current_paint.need_blend_region);
-
-          glEnable (GL_BLEND);
-          if (!cairo_region_is_empty (blend_region))
-            gdk_gl_texture_from_surface (impl_window->current_paint.surface,
-                                         blend_region);
-
-          cairo_region_destroy (opaque_region);
-          cairo_region_destroy (blend_region);
-        }
-
-      glBindTexture (GL_TEXTURE_2D, source);
-
-      if (gdk_gl_context_get_use_es (paint_context))
-        {
-          texture_width = width;
-          texture_height = height;
-        }
-      else
-        {
-          glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &texture_width);
-          glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &texture_height);
-        }
-
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-      glEnable (GL_SCISSOR_TEST);
-
-      gdk_window_get_unscaled_size (impl_window, NULL, &unscaled_window_height);
-
-#define FLIP_Y(_y) (unscaled_window_height - (_y))
-
-      cairo_region_get_extents (clip_region, &clip_rect);
-
-      glScissor (clip_rect.x * window_scale, FLIP_Y ((clip_rect.y + clip_rect.height) * window_scale),
-                 clip_rect.width * window_scale, clip_rect.height * window_scale);
-
-      n_quads = 0;
-      n_rects = cairo_region_num_rectangles (clip_region);
-      quads = g_new (GdkTexturedQuad, n_rects);
-      for (i = 0; i < n_rects; i++)
-        {
-          cairo_rectangle_int_t dest;
-
-          cairo_region_get_rectangle (clip_region, i, &clip_rect);
-
-          clip_rect.x *= window_scale;
-          clip_rect.y *= window_scale;
-          clip_rect.width *= window_scale;
-          clip_rect.height *= window_scale;
-
-          dest.x = dx * window_scale;
-          dest.y = dy * window_scale;
-          dest.width = width * window_scale / buffer_scale;
-          dest.height = height * window_scale / buffer_scale;
-
-          if (gdk_rectangle_intersect (&clip_rect, &dest, &dest))
-            {
-              int clipped_src_x = x + (dest.x - dx * window_scale);
-              int clipped_src_y = y + (height - dest.height - (dest.y - dy * window_scale));
-              GdkTexturedQuad quad = {
-                dest.x, FLIP_Y(dest.y),
-                dest.x + dest.width, FLIP_Y(dest.y + dest.height),
-                clipped_src_x / (float)texture_width, (clipped_src_y + dest.height) / (float)texture_height,
-                (clipped_src_x + dest.width) / (float)texture_width, clipped_src_y / (float)texture_height,
-              };
-
-              quads[n_quads++] = quad;
-
-              if (impl_window->current_paint.flushed_region)
-                {
-                  cairo_rectangle_int_t flushed_rect;
-
-                  flushed_rect.x = dest.x / window_scale;
-                  flushed_rect.y = dest.y / window_scale;
-                  flushed_rect.width = (dest.x + dest.width + window_scale - 1) / window_scale - flushed_rect.x;
-                  flushed_rect.height = (dest.y + dest.height + window_scale - 1) / window_scale - flushed_rect.y;
-
-                  cairo_region_union_rectangle (impl_window->current_paint.flushed_region,
-                                                &flushed_rect);
-                  cairo_region_subtract_rectangle (impl_window->current_paint.need_blend_region,
-                                                   &flushed_rect);
-                }
-            }
-        }
-
-      if (n_quads > 0)
-        gdk_gl_texture_quads (paint_context, GL_TEXTURE_2D, n_quads, quads, FALSE);
-
-      g_free (quads);
-
-      if (alpha_size != 0)
-        glDisable (GL_BLEND);
-
-#undef FLIP_Y
-
     }
   else
     {
-      /* Software fallback */
-      int major, minor, version;
-
-      gdk_gl_context_get_version (paint_context, &major, &minor);
-      version = major * 100 + minor;
-
-      /* TODO: Use glTexSubImage2D() and do a row-by-row copy to replace
-       * the GL_UNPACK_ROW_LENGTH support
-       */
-      if (gdk_gl_context_get_use_es (paint_context) &&
-          !(version >= 300 || gdk_gl_context_has_unpack_subimage (paint_context)))
-        goto out;
-
-      /* TODO: avoid reading back non-required data due to dest clip */
-      image = cairo_surface_create_similar_image (cairo_get_target (cr),
-                                                  (alpha_size == 0) ? CAIRO_FORMAT_RGB24 : CAIRO_FORMAT_ARGB32,
-                                                  width, height);
-
-      cairo_surface_set_device_scale (image, buffer_scale, buffer_scale);
-
-      framebuffer = paint_data->tmp_framebuffer;
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
-
-      if (source_type == GL_RENDERBUFFER)
-        {
-          /* Create a framebuffer with the source renderbuffer and
-             make it the current target for reads */
-          glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                        GL_RENDERBUFFER_EXT, source);
-        }
-      else
-        {
-          glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                     GL_TEXTURE_2D, source, 0);
-        }
-
-      glPixelStorei (GL_PACK_ALIGNMENT, 4);
-      glPixelStorei (GL_PACK_ROW_LENGTH, cairo_image_surface_get_stride (image) / 4);
-
-      /* The implicit format conversion is going to make this path slower */
-      if (!gdk_gl_context_get_use_es (paint_context))
-        glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                      cairo_image_surface_get_data (image));
-      else
-        glReadPixels (x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
-                      cairo_image_surface_get_data (image));
-
-      glPixelStorei (GL_PACK_ROW_LENGTH, 0);
-
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
-
-      cairo_surface_mark_dirty (image);
-
-      /* Invert due to opengl having different origin */
-      cairo_scale (cr, 1, -1);
-      cairo_translate (cr, 0, -height / buffer_scale);
-
-      cairo_set_source_surface (cr, image, 0, 0);
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_paint (cr);
-
-      cairo_surface_destroy (image);
+      glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                 GL_TEXTURE_2D, source, 0);
     }
+
+  glPixelStorei (GL_PACK_ALIGNMENT, 4);
+  glPixelStorei (GL_PACK_ROW_LENGTH, cairo_image_surface_get_stride (image) / 4);
+
+  /* The implicit format conversion is going to make this path slower */
+  if (!gdk_gl_context_get_use_es (paint_context))
+    glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                  cairo_image_surface_get_data (image));
+  else
+    glReadPixels (x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
+                  cairo_image_surface_get_data (image));
+
+  glPixelStorei (GL_PACK_ROW_LENGTH, 0);
+
+  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
+
+  cairo_surface_mark_dirty (image);
+
+  /* Invert due to opengl having different origin */
+  cairo_scale (cr, 1, -1);
+  cairo_translate (cr, 0, -height / buffer_scale);
+
+  cairo_set_source_surface (cr, image, 0, 0);
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+  cairo_paint (cr);
+
+  cairo_surface_destroy (image);
 
 out:
   if (clip_region)
     cairo_region_destroy (clip_region);
-
 }
 
 /* This is always called with the paint context current */
@@ -726,6 +466,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   float umax, vmax;
   gboolean use_texture_rectangle;
   guint target;
+
   paint_context = gdk_gl_context_get_current ();
   if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_SURFACE) == 0 &&
       paint_context &&

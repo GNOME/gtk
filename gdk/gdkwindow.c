@@ -1874,12 +1874,6 @@ gdk_window_free_current_paint (GdkWindow *window)
   cairo_region_destroy (window->current_paint.region);
   window->current_paint.region = NULL;
 
-  cairo_region_destroy (window->current_paint.flushed_region);
-  window->current_paint.flushed_region = NULL;
-
-  cairo_region_destroy (window->current_paint.need_blend_region);
-  window->current_paint.need_blend_region = NULL;
-
   window->current_paint.surface_needs_composite = FALSE;
 }
 
@@ -2719,13 +2713,9 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
   cairo_region_intersect (window->current_paint.region, window->clip_region);
   cairo_region_get_extents (window->current_paint.region, &clip_box);
 
-  window->current_paint.flushed_region = cairo_region_create ();
-  window->current_paint.need_blend_region = cairo_region_create ();
-
   surface_content = gdk_window_get_content (window);
 
-  window->current_paint.use_gl = FALSE;
-
+#if 0
   if (window->current_paint.use_gl)
     {
       GdkGLContext *context;
@@ -2757,6 +2747,7 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
           glViewport (0, 0, ww, wh);
         }
     }
+#endif
 
   if (needs_surface)
     {
@@ -2806,11 +2797,10 @@ gdk_window_end_paint_internal (GdkWindow *window)
     {
       cairo_surface_t *surface;
 
+#if 0
       if (window->current_paint.use_gl)
         {
           cairo_region_t *opaque_region = cairo_region_copy (window->current_paint.region);
-          cairo_region_subtract (opaque_region, window->current_paint.flushed_region);
-          cairo_region_subtract (opaque_region, window->current_paint.need_blend_region);
 
           gdk_gl_context_make_current (window->gl_paint_context);
 
@@ -2831,23 +2821,21 @@ gdk_window_end_paint_internal (GdkWindow *window)
                                     window->current_paint.region,
                                     window->active_update_area);
         }
-      else
-        {
-          surface = gdk_window_ref_impl_surface (window);
-          cr = cairo_create (surface);
+#endif
+      surface = gdk_window_ref_impl_surface (window);
+      cr = cairo_create (surface);
 
-          cairo_set_source_surface (cr, window->current_paint.surface, 0, 0);
-          gdk_cairo_region (cr, window->current_paint.region);
-          cairo_clip (cr);
+      cairo_set_source_surface (cr, window->current_paint.surface, 0, 0);
+      gdk_cairo_region (cr, window->current_paint.region);
+      cairo_clip (cr);
 
-          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-          cairo_paint (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      cairo_paint (cr);
 
-          cairo_destroy (cr);
+      cairo_destroy (cr);
 
-          cairo_surface_flush (surface);
-          cairo_surface_destroy (surface);
-        }
+      cairo_surface_flush (surface);
+      cairo_surface_destroy (surface);
     }
 
   gdk_window_free_current_paint (window);
@@ -3005,76 +2993,6 @@ gdk_window_get_drawing_context (GdkWindow *window)
     return NULL;
 
   return window->drawing_context;
-}
-
-/**
- * gdk_window_mark_paint_from_clip:
- * @window: a #GdkWindow
- * @cr: a #cairo_t
- *
- * If you call this during a paint (e.g. between gdk_window_begin_paint_region()
- * and gdk_window_end_paint() then GDK will mark the current clip region of the
- * window as being drawn. This is required when mixing GL rendering via
- * gdk_cairo_draw_from_gl() and cairo rendering, as otherwise GDK has no way
- * of knowing when something paints over the GL-drawn regions.
- *
- * This is typically called automatically by GTK+ and you don't need
- * to care about this.
- *
- * Since: 3.16
- **/
-void
-gdk_window_mark_paint_from_clip (GdkWindow *window,
-                                 cairo_t   *cr)
-{
-  cairo_region_t *clip_region;
-  GdkWindow *impl_window = window->impl_window;
-
-  if (impl_window->current_paint.surface == NULL ||
-      cairo_get_target (cr) != impl_window->current_paint.surface)
-    return;
-
-  if (cairo_region_is_empty (impl_window->current_paint.flushed_region))
-    return;
-
-  /* This here seems a bit weird, but basically, we're taking the current
-     clip and applying also the flushed region, and the result is that the
-     new clip is the intersection of these. This is the area where the newly
-     drawn region overlaps a previosly flushed area, which is an area of the
-     double buffer surface that need to be blended OVER the back buffer rather
-     than SRCed. */
-  cairo_save (cr);
-  /* We set the identity matrix here so we get and apply regions in native
-     window coordinates. */
-  cairo_identity_matrix (cr);
-  gdk_cairo_region (cr, impl_window->current_paint.flushed_region);
-  cairo_clip (cr);
-
-  clip_region = gdk_cairo_region_from_clip (cr);
-  if (clip_region == NULL)
-    {
-      /* Failed to represent clip as region, mark all as requiring
-         blend */
-      cairo_region_union (impl_window->current_paint.need_blend_region,
-                          impl_window->current_paint.flushed_region);
-      cairo_region_destroy (impl_window->current_paint.flushed_region);
-      impl_window->current_paint.flushed_region = cairo_region_create ();
-    }
-  else
-    {
-      cairo_region_subtract (impl_window->current_paint.flushed_region, clip_region);
-      cairo_region_union (impl_window->current_paint.need_blend_region, clip_region);
-    }
-  cairo_region_destroy (clip_region);
-
-  /* Clear the area on the double buffer surface to transparent so we
-     can start drawing from scratch the area "above" the flushed
-     region */
-  cairo_set_source_rgba (cr, 0, 0, 0, 0);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_paint (cr);
-
-  cairo_restore (cr);
 }
 
 /**
