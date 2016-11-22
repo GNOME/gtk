@@ -15694,7 +15694,7 @@ gtk_widget_render (GtkWidget            *widget,
 
   gtk_inspector_record_render (widget, renderer, window, region, root);
 
-  context = gdk_window_begin_draw_frame (window, region);
+  context = gdk_window_begin_draw_frame (window, NULL, region);
 
   gsk_renderer_render (renderer, root, context);
   gsk_render_node_unref (root);

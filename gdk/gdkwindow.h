@@ -626,8 +626,9 @@ GDK_AVAILABLE_IN_3_16
 void	      gdk_window_mark_paint_from_clip (GdkWindow          *window,
 					       cairo_t            *cr);
 
-GDK_AVAILABLE_IN_3_22
+GDK_AVAILABLE_IN_3_90
 GdkDrawingContext *gdk_window_begin_draw_frame  (GdkWindow            *window,
+                                                 GdkGLContext         *context,
                                                  const cairo_region_t *region);
 GDK_AVAILABLE_IN_3_22
 void          gdk_window_end_draw_frame    (GdkWindow            *window,

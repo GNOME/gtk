@@ -63,6 +63,7 @@ enum {
 
   PROP_WINDOW,
   PROP_CLIP,
+  PROP_PAINT_CONTEXT,
 
   N_PROPS
 };
@@ -110,9 +111,9 @@ gdk_drawing_context_set_property (GObject      *gobject,
                       G_OBJECT_TYPE_NAME (gobject));
           return;
         }
-      priv->paint_context = priv->window->gl_paint_context;
-      if (priv->paint_context)
-        g_object_ref (priv->paint_context);
+
+    case PROP_PAINT_CONTEXT:
+      priv->paint_context = g_value_dup_object (value);
       break;
 
     case PROP_CLIP:
@@ -141,6 +142,10 @@ gdk_drawing_context_get_property (GObject    *gobject,
 
     case PROP_CLIP:
       g_value_set_boxed (value, priv->clip);
+      break;
+
+    case PROP_PAINT_CONTEXT:
+      g_value_set_object (value, priv->paint_context);
       break;
 
     default:
@@ -183,6 +188,19 @@ gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS);
+  /**
+   * GdkDrawingContext:paint-context:
+   *
+   * The #GdkGLContext used to draw or %NULL if Cairo is used.
+   *
+   * Since: 3.90
+   */
+  obj_property[PROP_PAINT_CONTEXT] =
+    g_param_spec_object ("paint-context", "Paint context", "The context used to draw",
+                         GDK_TYPE_GL_CONTEXT,
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_READWRITE |
+                         G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, obj_property);
 }
@@ -285,6 +303,26 @@ gdk_drawing_context_get_window (GdkDrawingContext *context)
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
 
   return priv->window;
+}
+
+/**
+ * gdk_drawing_context_get_paint_context:
+ * @context: a #GdkDrawingContext
+ *
+ * Retrieves the paint context used to draw with.
+ *
+ * Returns: (transfer none): a #GdkGLContext or %NULL
+ *
+ * Since: 3.90
+ */
+GdkGLContext *
+gdk_drawing_context_get_paint_context (GdkDrawingContext *context)
+{
+  GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
+
+  return priv->paint_context;
 }
 
 /**
