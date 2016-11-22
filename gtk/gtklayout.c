@@ -132,8 +132,6 @@ static void gtk_layout_measure (GtkWidget *widget,
                                 int            *natural_baseline);
 static void gtk_layout_size_allocate      (GtkWidget      *widget,
                                            GtkAllocation  *allocation);
-static gint gtk_layout_draw               (GtkWidget      *widget,
-                                           cairo_t        *cr);
 static void gtk_layout_add                (GtkContainer   *container,
 					   GtkWidget      *widget);
 static void gtk_layout_remove             (GtkContainer   *container,
@@ -603,7 +601,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->map = gtk_layout_map;
   widget_class->measure = gtk_layout_measure;
   widget_class->size_allocate = gtk_layout_size_allocate;
-  widget_class->draw = gtk_layout_draw;
 
   container_class->add = gtk_layout_add;
   container_class->remove = gtk_layout_remove;
@@ -897,19 +894,6 @@ gtk_layout_size_allocate (GtkWidget     *widget,
 
   gtk_layout_set_hadjustment_values (layout);
   gtk_layout_set_vadjustment_values (layout);
-}
-
-static gboolean
-gtk_layout_draw (GtkWidget *widget,
-                 cairo_t   *cr)
-{
-  GtkLayout *layout = GTK_LAYOUT (widget);
-  GtkLayoutPrivate *priv = layout->priv;
-
-  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-    GTK_WIDGET_CLASS (gtk_layout_parent_class)->draw (widget, cr);
-
-  return FALSE;
 }
 
 /* Container methods

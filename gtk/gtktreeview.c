@@ -5362,37 +5362,36 @@ gtk_tree_view_draw (GtkWidget *widget,
                     cairo_t   *cr)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  GtkWidget   *button;
+  GtkWidget *button;
   GtkStyleContext *context;
+  GList *list;
 
   context = gtk_widget_get_style_context (widget);
 
-  if (gtk_cairo_should_draw_window (cr, tree_view->priv->bin_window))
+  gtk_render_background (context, cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+
+  cairo_save (cr);
+
+  gtk_cairo_transform_to_window (cr, widget, tree_view->priv->bin_window);
+  gtk_tree_view_bin_draw (widget, cr);
+
+  cairo_restore (cr);
+
+  /* We can't just chain up to Container::draw as it will try to send the
+   * event to the headers, so we handle propagating it to our children
+   * (eg. widgets being edited) ourselves.
+   */
+  for (list = tree_view->priv->children; list; list = list->next)
     {
-      GList *tmp_list;
+      GtkTreeViewChild *child = list->data;
 
-      cairo_save (cr);
-
-      gtk_cairo_transform_to_window (cr, widget, tree_view->priv->bin_window);
-      gtk_tree_view_bin_draw (widget, cr);
-
-      cairo_restore (cr);
-
-      /* We can't just chain up to Container::draw as it will try to send the
-       * event to the headers, so we handle propagating it to our children
-       * (eg. widgets being edited) ourselves.
-       */
-      tmp_list = tree_view->priv->children;
-      while (tmp_list)
-        {
-          GtkTreeViewChild *child = tmp_list->data;
-          tmp_list = tmp_list->next;
-
-          gtk_container_propagate_draw (GTK_CONTAINER (tree_view), child->widget, cr);
-        }
+      gtk_container_propagate_draw (GTK_CONTAINER (tree_view), child->widget, cr);
     }
-  else if (tree_view->priv->drag_highlight_window &&
-           gtk_cairo_should_draw_window (cr, tree_view->priv->drag_highlight_window))
+  
+  if (tree_view->priv->drag_highlight_window)
     {
       GdkRGBA color;
 
@@ -5417,39 +5416,26 @@ gtk_tree_view_draw (GtkWidget *widget,
         }
       cairo_restore (cr);
     }
-  else
-    {
-      gtk_render_background (context, cr,
-                             0, 0,
-                             gtk_widget_get_allocated_width (widget),
-                             gtk_widget_get_allocated_height (widget));
-    }
 
   gtk_style_context_save (context);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VIEW);
 
-  if (gtk_cairo_should_draw_window (cr, tree_view->priv->header_window))
+  for (list = tree_view->priv->columns; list != NULL; list = list->next)
     {
-      GList *list;
-      
-      for (list = tree_view->priv->columns; list != NULL; list = list->next)
-	{
-	  GtkTreeViewColumn *column = list->data;
+      GtkTreeViewColumn *column = list->data;
 
-	  if (column == tree_view->priv->drag_column)
-	    continue;
+      if (column == tree_view->priv->drag_column)
+        continue;
 
-	  if (gtk_tree_view_column_get_visible (column))
-	    {
-	      button = gtk_tree_view_column_get_button (column);
-	      gtk_container_propagate_draw (GTK_CONTAINER (tree_view),
-					    button, cr);
-	    }
-	}
+      if (gtk_tree_view_column_get_visible (column))
+        {
+          button = gtk_tree_view_column_get_button (column);
+          gtk_container_propagate_draw (GTK_CONTAINER (tree_view),
+                                        button, cr);
+        }
     }
-  
-  if (tree_view->priv->drag_window &&
-      gtk_cairo_should_draw_window (cr, tree_view->priv->drag_window))
+
+  if (tree_view->priv->drag_window)
     {
       button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
       gtk_container_propagate_draw (GTK_CONTAINER (tree_view),

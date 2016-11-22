@@ -1757,9 +1757,6 @@ gtk_icon_view_draw (GtkWidget *widget,
                          gtk_widget_get_allocated_width (widget),
                          gtk_widget_get_allocated_height (widget));
 
-  if (!gtk_cairo_should_draw_window (cr, icon_view->priv->bin_window))
-    return FALSE;
-
   cairo_save (cr);
 
   gtk_cairo_transform_to_window (cr, widget, icon_view->priv->bin_window);

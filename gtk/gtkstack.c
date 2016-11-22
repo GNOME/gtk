@@ -2024,8 +2024,7 @@ gtk_stack_draw_slide (GtkWidget *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  if (priv->last_visible_surface &&
-      gtk_cairo_should_draw_window (cr, priv->view_window))
+  if (priv->last_visible_surface)
     {
       GtkAllocation allocation;
       int x, y;
@@ -2078,10 +2077,9 @@ gtk_stack_draw_slide (GtkWidget *widget,
       cairo_restore (cr);
      }
 
-  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-    gtk_container_propagate_draw (GTK_CONTAINER (stack),
-                                  priv->visible_child->widget,
-                                  cr);
+  gtk_container_propagate_draw (GTK_CONTAINER (stack),
+                                priv->visible_child->widget,
+                                cr);
 }
 
 static gboolean
@@ -2108,19 +2106,15 @@ gtk_stack_render (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkStyleContext *context;
   cairo_t *pattern_cr;
 
-  if (gtk_cairo_should_draw_window (cr, priv->view_window))
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (widget);
-      gtk_render_background (context,
-                             cr,
-                             0, 0,
-                             gtk_widget_get_allocated_width (widget),
-                             gtk_widget_get_allocated_height (widget));
-    }
+  context = gtk_widget_get_style_context (widget);
+  gtk_render_background (context,
+                         cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
 
   if (priv->visible_child)
     {
@@ -2153,8 +2147,7 @@ gtk_stack_render (GtkCssGadget *gadget,
           switch (priv->active_transition_type)
             {
             case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
-	      if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-		gtk_stack_draw_crossfade (widget, cr);
+	      gtk_stack_draw_crossfade (widget, cr);
               break;
             case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
             case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
@@ -2170,15 +2163,14 @@ gtk_stack_render (GtkCssGadget *gadget,
             case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
             case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
             case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
-	      if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-		gtk_stack_draw_under (widget, cr);
+	      gtk_stack_draw_under (widget, cr);
               break;
             default:
               g_assert_not_reached ();
             }
 
         }
-      else if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+      else
         gtk_container_propagate_draw (GTK_CONTAINER (stack),
                                       priv->visible_child->widget,
                                       cr);

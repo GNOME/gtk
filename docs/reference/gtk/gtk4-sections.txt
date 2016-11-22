@@ -4598,7 +4598,6 @@ gtk_widget_trigger_tooltip_query
 gtk_widget_get_window
 gtk_widget_register_window
 gtk_widget_unregister_window
-gtk_cairo_should_draw_window
 gtk_cairo_transform_to_window
 gtk_widget_get_allocated_width
 gtk_widget_get_allocated_height

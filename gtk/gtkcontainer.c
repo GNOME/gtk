@@ -3147,19 +3147,7 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
                                      GtkWidget      *child,
                                      cairo_t        *cr)
 {
-  GdkWindow *child_in_window;
-
   if (!_gtk_widget_is_drawable (child))
-    return FALSE;
-
-  /* Never propagate to a child window when exposing a window
-   * that is not the one the child widget is in.
-   */
-  if (_gtk_widget_get_has_window (child))
-    child_in_window = gdk_window_get_parent (_gtk_widget_get_window (child));
-  else
-    child_in_window = _gtk_widget_get_window (child);
-  if (!gtk_cairo_should_draw_window (cr, child_in_window))
     return FALSE;
 
   return TRUE;

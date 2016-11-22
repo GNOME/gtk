@@ -305,13 +305,8 @@ gtk_viewport_render (GtkCssGadget *gadget,
                      gpointer      data)
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkViewportPrivate *priv = viewport->priv;
 
-  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-    {
-      GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
-    }
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
@@ -732,9 +727,7 @@ gtk_viewport_draw (GtkWidget *widget,
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)) ||
-      gtk_cairo_should_draw_window (cr, priv->bin_window))
-    gtk_css_gadget_draw (priv->gadget, cr);
+  gtk_css_gadget_draw (priv->gadget, cr);
 
   return FALSE;
 }

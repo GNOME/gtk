@@ -5881,27 +5881,24 @@ paint_border_window (GtkTextView     *text_view,
                      GtkStyleContext *context)
 {
   GdkWindow *window;
+  gint w, h;
+
 
   if (text_window == NULL)
     return;
 
   window = gtk_text_view_get_window (text_view, text_window->type);
-  if (gtk_cairo_should_draw_window (cr, window))
-    {
-      gint w, h;
+  w = gdk_window_get_width (window);
+  h = gdk_window_get_height (window);
 
-      gtk_style_context_save_to_node (context, text_window->css_node);
+  gtk_style_context_save_to_node (context, text_window->css_node);
 
-      w = gdk_window_get_width (window);
-      h = gdk_window_get_height (window);
+  cairo_save (cr);
+  gtk_cairo_transform_to_window (cr, GTK_WIDGET (text_view), window);
+  gtk_render_background (context, cr, 0, 0, w, h);
+  cairo_restore (cr);
 
-      cairo_save (cr);
-      gtk_cairo_transform_to_window (cr, GTK_WIDGET (text_view), window);
-      gtk_render_background (context, cr, 0, 0, w, h);
-      cairo_restore (cr);
-
-      gtk_style_context_restore (context);
-    }
+  gtk_style_context_restore (context);
 }
 
 static gboolean
@@ -5924,15 +5921,13 @@ gtk_text_view_draw (GtkWidget *widget,
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
                                      GTK_TEXT_WINDOW_TEXT);
-  if (gtk_cairo_should_draw_window (cr, window))
-    {
-      DV(g_print (">Exposed ("G_STRLOC")\n"));
 
-      cairo_save (cr);
-      gtk_cairo_transform_to_window (cr, widget, window);
-      draw_text (widget, cr); 
-      cairo_restore (cr);
-    }
+  DV(g_print (">Exposed ("G_STRLOC")\n"));
+
+  cairo_save (cr);
+  gtk_cairo_transform_to_window (cr, widget, window);
+  draw_text (widget, cr); 
+  cairo_restore (cr);
 
   paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->left_window, context);
   paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->right_window, context);

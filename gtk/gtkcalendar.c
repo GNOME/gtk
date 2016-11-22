@@ -2742,26 +2742,22 @@ gtk_calendar_draw (GtkWidget *widget,
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;
+  GtkStyleContext *context;
   int i;
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    {
-      GtkStyleContext *context;
+  context = gtk_widget_get_style_context (widget);
 
-      context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_render_background (context, cr, 0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+  gtk_render_frame (context, cr, 0, 0,
+                    gtk_widget_get_allocated_width (widget),
+                    gtk_widget_get_allocated_height (widget));
 
-      gtk_render_background (context, cr, 0, 0,
-                             gtk_widget_get_allocated_width (widget),
-                             gtk_widget_get_allocated_height (widget));
-      gtk_render_frame (context, cr, 0, 0,
-                        gtk_widget_get_allocated_width (widget),
-                        gtk_widget_get_allocated_height (widget));
-
-      gtk_style_context_restore (context);
-    }
+  gtk_style_context_restore (context);
 
   calendar_paint_main (calendar, cr);
 

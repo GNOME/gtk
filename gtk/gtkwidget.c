@@ -6282,53 +6282,6 @@ gtk_widget_get_renderer (GtkWidget *widget)
   return NULL;
 }
 
-/**
- * gtk_cairo_should_draw_window:
- * @cr: a cairo context
- * @window: the window to check. @window may not be an input-only
- *          window.
- *
- * This function is supposed to be called in #GtkWidget::draw
- * implementations for widgets that support multiple windows.
- * @cr must be untransformed from invoking of the draw function.
- * This function will return %TRUE if the contents of the given
- * @window are supposed to be drawn and %FALSE otherwise. Note
- * that when the drawing was not initiated by the windowing
- * system this function will return %TRUE for all windows, so
- * you need to draw the bottommost window first. Also, do not
- * use “else if” statements to check which window should be drawn.
- *
- * Returns: %TRUE if @window should be drawn
- *
- * Since: 3.0
- */
-gboolean
-gtk_cairo_should_draw_window (cairo_t   *cr,
-                              GdkWindow *window)
-{
-  GdkDrawingContext *context;
-  GdkWindow *tmp;
-
-  g_return_val_if_fail (cr != NULL, FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-
-  if (gtk_cairo_is_marked_for_draw (cr))
-    return TRUE;
-
-  context = gdk_cairo_get_drawing_context (cr);
-  if (context == NULL)
-    return TRUE;
-
-  tmp = gdk_drawing_context_get_window (context);
-  if (tmp == NULL)
-    return TRUE;
-
-  while (!gdk_window_has_native (window))
-    window = gdk_window_get_parent (window);
-
-  return tmp == window;
-}
-
 typedef enum {
   RENDER_SNAPSHOT,
   RENDER_DRAW

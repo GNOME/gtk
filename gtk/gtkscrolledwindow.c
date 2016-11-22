@@ -1973,20 +1973,14 @@ gtk_scrolled_window_render (GtkCssGadget *gadget,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    {
-      if (priv->hscrollbar_visible &&
-          priv->vscrollbar_visible)
-        gtk_scrolled_window_draw_scrollbars_junction (scrolled_window, cr);
-    }
+  if (priv->hscrollbar_visible &&
+      priv->vscrollbar_visible)
+    gtk_scrolled_window_draw_scrollbars_junction (scrolled_window, cr);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->draw (widget, cr);
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    {
-      gtk_scrolled_window_draw_undershoot (scrolled_window, cr);
-      gtk_scrolled_window_draw_overshoot (scrolled_window, cr);
-    }
+  gtk_scrolled_window_draw_undershoot (scrolled_window, cr);
+  gtk_scrolled_window_draw_overshoot (scrolled_window, cr);
 
   return FALSE;
 }

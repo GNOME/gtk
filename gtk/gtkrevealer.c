@@ -100,8 +100,6 @@ static void     gtk_revealer_real_size_allocate                  (GtkWidget     
                                                                   GtkAllocation *allocation);
 static void     gtk_revealer_real_map                            (GtkWidget     *widget);
 static void     gtk_revealer_real_unmap                          (GtkWidget     *widget);
-static gboolean gtk_revealer_real_draw                           (GtkWidget     *widget,
-                                                                  cairo_t       *cr);
 static void gtk_revealer_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -220,7 +218,6 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   widget_class->size_allocate = gtk_revealer_real_size_allocate;
   widget_class->map = gtk_revealer_real_map;
   widget_class->unmap = gtk_revealer_real_unmap;
-  widget_class->draw = gtk_revealer_real_draw;
   widget_class->measure = gtk_revealer_measure;
 
   container_class->add = gtk_revealer_real_add;
@@ -650,19 +647,6 @@ gtk_revealer_real_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->unmap (widget);
 
   gtk_revealer_stop_animation (revealer);
-}
-
-static gboolean
-gtk_revealer_real_draw (GtkWidget *widget,
-                        cairo_t   *cr)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
-  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-    GTK_WIDGET_CLASS (gtk_revealer_parent_class)->draw (widget, cr);
-
-  return GDK_EVENT_PROPAGATE;
 }
 
 /**

@@ -1665,8 +1665,7 @@ gtk_paned_render (GtkCssGadget *gadget,
   int window_x, window_y;
 
   gtk_widget_get_allocation (widget, &widget_allocation);
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)) &&
-      priv->child1 && gtk_widget_get_visible (priv->child1) &&
+  if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     gtk_css_gadget_draw (priv->handle_gadget, cr);
 

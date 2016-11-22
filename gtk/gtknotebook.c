@@ -2381,11 +2381,9 @@ gtk_notebook_draw (GtkWidget *widget,
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    gtk_css_gadget_draw (priv->gadget, cr);
+  gtk_css_gadget_draw (priv->gadget, cr);
 
-  if (priv->operation == DRAG_OPERATION_REORDER &&
-      gtk_cairo_should_draw_window (cr, priv->drag_window))
+  if (priv->operation == DRAG_OPERATION_REORDER)
     gtk_css_gadget_draw (priv->cur_page->gadget, cr);
 
   return FALSE;

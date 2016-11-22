@@ -8323,9 +8323,6 @@ layout_draw_handler (GtkWidget *widget, cairo_t *cr)
   layout = GTK_LAYOUT (widget);
   bin_window = gtk_layout_get_bin_window (layout);
 
-  if (!gtk_cairo_should_draw_window (cr, bin_window))
-    return FALSE;
-  
   gdk_window_get_position (bin_window, &x, &y);
   cairo_translate (cr, x, y);
 

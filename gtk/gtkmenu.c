@@ -2927,6 +2927,7 @@ gtk_menu_draw (GtkWidget *widget,
   GtkMenuPrivate *priv;
   GtkStyleContext *context;
   GtkAllocation allocation;
+  int x, y;
 
   menu = GTK_MENU (widget);
   priv = menu->priv;
@@ -2934,34 +2935,26 @@ gtk_menu_draw (GtkWidget *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    {
-      gtk_render_background (context, cr, 0, 0,
-                             allocation.width, allocation.height);
-      gtk_render_frame (context, cr, 0, 0,
-                        allocation.width, allocation.height);
+  gtk_render_background (context, cr, 0, 0,
+                         allocation.width, allocation.height);
+  gtk_render_frame (context, cr, 0, 0,
+                    allocation.width, allocation.height);
 
-      if (priv->upper_arrow_visible)
-        gtk_css_gadget_draw (priv->top_arrow_gadget, cr);
+  if (priv->upper_arrow_visible)
+    gtk_css_gadget_draw (priv->top_arrow_gadget, cr);
 
-      if (priv->lower_arrow_visible)
-        gtk_css_gadget_draw (priv->bottom_arrow_gadget, cr);
-    }
+  if (priv->lower_arrow_visible)
+    gtk_css_gadget_draw (priv->bottom_arrow_gadget, cr);
 
-  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-    {
-      int x, y;
+  gdk_window_get_position (priv->view_window, &x, &y);
 
-      gdk_window_get_position (priv->view_window, &x, &y);
+  cairo_rectangle (cr,
+                   x - allocation.x, y - allocation.y,
+                   gdk_window_get_width (priv->view_window),
+                   gdk_window_get_height (priv->view_window));
+  cairo_clip (cr);
 
-      cairo_rectangle (cr,
-                       x - allocation.x, y - allocation.y,
-                       gdk_window_get_width (priv->view_window),
-                       gdk_window_get_height (priv->view_window));
-      cairo_clip (cr);
-
-      GTK_WIDGET_CLASS (gtk_menu_parent_class)->draw (widget, cr);
-    }
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
