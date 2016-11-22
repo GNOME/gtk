@@ -2724,7 +2724,7 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
 
   surface_content = gdk_window_get_content (window);
 
-  window->current_paint.use_gl = window->impl_window->gl_paint_context != NULL;
+  window->current_paint.use_gl = FALSE;
 
   if (window->current_paint.use_gl)
     {
