@@ -2576,18 +2576,6 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
     gtk_spin_button_set_value (spin_button, val);
 }
 
-void
-_gtk_spin_button_get_panels (GtkSpinButton  *spin_button,
-                             GdkWindow     **down_panel,
-                             GdkWindow     **up_panel)
-{
-  if (down_panel != NULL)
-    *down_panel = spin_button->priv->down_panel;
-
-  if (up_panel != NULL)
-    *up_panel = spin_button->priv->up_panel;
-}
-
 static void
 gtk_spin_button_direction_changed (GtkWidget        *widget,
                                    GtkTextDirection  previous_dir)
