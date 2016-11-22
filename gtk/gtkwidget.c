@@ -8653,7 +8653,7 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 static void
 reset_style_recurse (GtkWidget *widget, gpointer data)
 {
-  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_ANY);
+  gtk_css_node_invalidate (widget->priv->cssnode, GTK_CSS_CHANGE_ANY);
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
@@ -14693,13 +14693,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
     }
 
   return widget->priv->context;
-}
-
-void
-_gtk_widget_invalidate_style_context (GtkWidget    *widget,
-                                      GtkCssChange  change)
-{
-  gtk_css_node_invalidate (widget->priv->cssnode, change);
 }
 
 /**
