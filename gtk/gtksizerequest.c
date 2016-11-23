@@ -589,48 +589,6 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
                       NULL, NULL);
 }
 
-/**
- * gtk_widget_get_preferred_height_and_baseline_for_width:
- * @widget: a #GtkWidget instance
- * @width: the width which is available for allocation, or -1 if none
- * @minimum_height: (out) (allow-none): location for storing the minimum height, or %NULL
- * @natural_height: (out) (allow-none): location for storing the natural height, or %NULL
- * @minimum_baseline: (out) (allow-none): location for storing the baseline for the minimum height, or %NULL
- * @natural_baseline: (out) (allow-none): location for storing the baseline for the natural height, or %NULL
- *
- * Retrieves a widget’s minimum and natural height and the corresponding baselines if it would be given
- * the specified @width, or the default height if @width is -1. The baselines may be -1 which means
- * that no baseline is requested for this widget.
- *
- * The returned request will be modified by the
- * GtkWidgetClass::adjust_size_request and GtkWidgetClass::adjust_baseline_request virtual methods
- * and by any #GtkSizeGroups that have been applied. That is, the returned request
- * is the one that should be used for layout, not necessarily the one
- * returned by the widget itself.
- *
- * Since: 3.10
- */
-void
-gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-							gint       width,
-							gint      *minimum_height,
-							gint      *natural_height,
-							gint      *minimum_baseline,
-							gint      *natural_baseline)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (minimum_height != NULL || natural_height != NULL);
-  g_return_if_fail (width >= -1);
-
-  gtk_widget_measure (widget,
-                      GTK_ORIENTATION_VERTICAL,
-                      width,
-                      minimum_height,
-                      natural_height,
-                      minimum_baseline,
-                      natural_baseline);
-}
-
 /*
  * _gtk_widget_get_preferred_size_and_baseline:
  * @widget: a #GtkWidget instance
@@ -670,20 +628,23 @@ _gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
       if (minimum_size)
 	{
 	  minimum_size->width = min_width;
-	  gtk_widget_get_preferred_height_and_baseline_for_width (widget, min_width,
-								  &minimum_size->height, NULL, minimum_baseline, NULL);
+          gtk_widget_measure (widget,
+                              GTK_ORIENTATION_VERTICAL, min_width,
+                              &minimum_size->height, NULL, minimum_baseline, NULL);
 	}
 
       if (natural_size)
 	{
 	  natural_size->width = nat_width;
-	  gtk_widget_get_preferred_height_and_baseline_for_width (widget, nat_width,
-								  NULL, &natural_size->height, NULL, natural_baseline);
+          gtk_widget_measure (widget,
+                              GTK_ORIENTATION_VERTICAL, nat_width,
+                              NULL, &natural_size->height, NULL, natural_baseline);
 	}
     }
   else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT or CONSTANT_SIZE */
     {
-      gtk_widget_get_preferred_height_and_baseline_for_width (widget, -1, &min_height, &nat_height, minimum_baseline, natural_baseline);
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+                          -1, &min_height, &nat_height, minimum_baseline, natural_baseline);
 
       if (minimum_size)
 	{
@@ -720,7 +681,7 @@ _gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
  * height for the natural width is generally smaller than the required height for
  * the minimum width.
  *
- * Use gtk_widget_get_preferred_height_and_baseline_for_width() if you want to support
+ * Use gtk_widget_measure() if you want to support
  * baseline alignment.
  *
  * Since: 3.0

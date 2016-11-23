@@ -730,9 +730,10 @@ gtk_model_button_measure (GtkCssGadget   *gadget,
                 for_size -= check_nat;
             }
 
-          gtk_widget_get_preferred_height_and_baseline_for_width (child, for_size,
-                                                                  &child_min, &child_nat,
-                                                                  &child_min_baseline, &child_nat_baseline);
+          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
+                              for_size,
+                              &child_min, &child_nat,
+                              &child_min_baseline, &child_nat_baseline);
 
           if (button->centered)
             {

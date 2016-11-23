@@ -635,13 +635,6 @@ void gtk_widget_measure (GtkWidget      *widget,
                          int            *natural,
                          int            *minimum_baseline,
                          int            *natural_baseline);
-GDK_AVAILABLE_IN_3_10
-void   gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget     *widget,
-							       gint           width,
-							       gint          *minimum_height,
-							       gint          *natural_height,
-							       gint          *minimum_baseline,
-							       gint          *natural_baseline);
 GDK_AVAILABLE_IN_ALL
 void                gtk_widget_get_preferred_size             (GtkWidget      *widget,
                                                                GtkRequisition *minimum_size,
