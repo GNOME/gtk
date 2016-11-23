@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 #define GDK_DRAWING_CONTEXT(obj)        (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_DRAWING_CONTEXT, GdkDrawingContext))
 #define GDK_IS_DRAWING_CONTEXT(obj)     (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_DRAWING_CONTEXT))
 
-typedef struct _GdkDrawingContext       GdkDrawingContext;
 typedef struct _GdkDrawingContextClass  GdkDrawingContextClass;
 
 GDK_AVAILABLE_IN_3_22
