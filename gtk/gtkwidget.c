@@ -11454,61 +11454,6 @@ gtk_widget_class_list_style_properties (GtkWidgetClass *klass,
 }
 
 /**
- * gtk_widget_style_get_property:
- * @widget: a #GtkWidget
- * @property_name: the name of a style property
- * @value: location to return the property value
- *
- * Gets the value of a style property of @widget.
- */
-void
-gtk_widget_style_get_property (GtkWidget   *widget,
-			       const gchar *property_name,
-			       GValue      *value)
-{
-  GParamSpec *pspec;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (property_name != NULL);
-  g_return_if_fail (G_IS_VALUE (value));
-
-  g_object_ref (widget);
-  pspec = g_param_spec_pool_lookup (style_property_spec_pool,
-				    property_name,
-				    G_OBJECT_TYPE (widget),
-				    TRUE);
-  if (!pspec)
-    g_warning ("%s: widget class '%s' has no property named '%s'",
-	       G_STRLOC,
-	       G_OBJECT_TYPE_NAME (widget),
-	       property_name);
-  else
-    {
-      GtkStyleContext *context;
-      const GValue *peek_value;
-
-      context = _gtk_widget_get_style_context (widget);
-
-      peek_value = _gtk_style_context_peek_style_property (context,
-                                                           G_OBJECT_TYPE (widget),
-                                                           pspec);
-
-      /* auto-conversion of the caller's value type
-       */
-      if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
-	g_value_copy (peek_value, value);
-      else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
-	g_value_transform (peek_value, value);
-      else
-	g_warning ("can't retrieve style property '%s' of type '%s' as value of type '%s'",
-		   pspec->name,
-		   g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-		   G_VALUE_TYPE_NAME (value));
-    }
-  g_object_unref (widget);
-}
-
-/**
  * gtk_widget_style_get_valist:
  * @widget: a #GtkWidget
  * @first_property_name: the name of the first property to get
