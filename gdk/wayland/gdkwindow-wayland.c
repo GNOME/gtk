@@ -1263,7 +1263,9 @@ gdk_wayland_window_create_subsurface (GdkWindow *window)
       impl->display_server.wl_subsurface =
         wl_subcompositor_get_subsurface (display_wayland->subcompositor,
                                          impl->display_server.wl_surface, parent_impl->display_server.wl_surface);
-      wl_subsurface_set_position (impl->display_server.wl_subsurface, window->x, window->y);
+      wl_subsurface_set_position (impl->display_server.wl_subsurface,
+                                  window->x + window->abs_x,
+                                  window->y + window->abs_y);
 
       /* In order to synchronize the initial position with the initial frame
        * content, wait with making the subsurface desynchronized until after
@@ -2592,7 +2594,9 @@ gdk_window_wayland_move_resize (GdkWindow *window,
 
           if (impl->display_server.wl_subsurface)
             {
-              wl_subsurface_set_position (impl->display_server.wl_subsurface, x, y);
+              wl_subsurface_set_position (impl->display_server.wl_subsurface,
+                                          window->x + window->abs_x,
+                                          window->y + window->abs_y);
               gdk_window_request_transient_parent_commit (window);
             }
         }
