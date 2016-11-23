@@ -219,7 +219,7 @@ gsk_gl_driver_begin_frame (GskGLDriver *driver)
       GSK_NOTE (OPENGL, g_print ("GL max texture size: %d\n", driver->max_texture_size));
     }
 
-  glGetIntegerv (GL_FRAMEBUFFER_BINDING, (GLint *) &(driver->default_fbo.fbo_id));
+  glBindFramebuffer (GL_FRAMEBUFFER, 0);
   driver->bound_fbo = &driver->default_fbo;
 
   glActiveTexture (GL_TEXTURE0);
@@ -248,6 +248,8 @@ gsk_gl_driver_end_frame (GskGLDriver *driver)
   driver->bound_mask_texture = NULL;
   driver->bound_vao = NULL;
   driver->bound_fbo = NULL;
+
+  driver->default_fbo.fbo_id = 0;
 
   GSK_NOTE (OPENGL,
             g_print ("*** Frame end: textures=%d, vaos=%d\n",
@@ -733,6 +735,13 @@ gsk_gl_driver_bind_render_target (GskGLDriver *driver,
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), FALSE);
   g_return_val_if_fail (driver->in_frame, FALSE);
 
+  if (texture_id == 0)
+    {
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
+      driver->bound_fbo = &driver->default_fbo;
+      goto out;
+    }
+
   f = gsk_gl_driver_get_fbo (driver, texture_id);
   if (f == NULL)
     {
@@ -747,6 +756,7 @@ gsk_gl_driver_bind_render_target (GskGLDriver *driver,
       driver->bound_fbo = f;
     }
 
+out:
   status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
 
   return status == GL_FRAMEBUFFER_COMPLETE;
