@@ -1937,6 +1937,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_TEMP:
     case GDK_WINDOW_FOREIGN:
+    case GDK_WINDOW_SUBSURFACE:
       if (window->window_type == GDK_WINDOW_FOREIGN && !foreign_destroy)
 	{
 	  /* Logically, it probably makes more sense to send
