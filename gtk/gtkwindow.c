@@ -7186,12 +7186,16 @@ gtk_window_unrealize (GtkWidget *widget)
       popover_unrealize (popover->widget, popover, window);
     }
 
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
-
-  priv->hardcoded_window = NULL;
+  gtk_container_forall (GTK_CONTAINER (widget),
+                        (GtkCallback) gtk_widget_unrealize,
+                        NULL);
 
   if (priv->renderer != NULL)
     gsk_renderer_unrealize (priv->renderer);
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
+
+  priv->hardcoded_window = NULL;
 }
 
 static void
