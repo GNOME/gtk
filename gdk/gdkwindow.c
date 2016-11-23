@@ -3510,79 +3510,35 @@ gdk_window_process_updates_internal (GdkWindow *window)
   g_object_unref (window);
 }
 
-enum {
-  PROCESS_UPDATES_NO_RECURSE,
-  PROCESS_UPDATES_WITH_ALL_CHILDREN,
-  PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN
-};
-
 static void
-find_impl_windows_to_update (GPtrArray  *list,
-                             GdkWindow  *window,
-                             gint        recurse_mode)
+gdk_window_paint_on_clock (GdkFrameClock *clock,
+			   void          *data)
 {
-  GList *node;
+  GdkWindow *window;
 
-  /* Recurse first, so that we process updates in reverse stacking
-   * order so composition or painting over achieves the desired effect
-   * for offscreen windows
-   */
-  if (recurse_mode != PROCESS_UPDATES_NO_RECURSE)
-    {
-      for (node = window->children; node; node = node->next)
-        {
-          GdkWindow *child = node->data;
-
-          if (!GDK_WINDOW_DESTROYED (child) &&
-              (recurse_mode == PROCESS_UPDATES_WITH_ALL_CHILDREN ||
-              (recurse_mode == PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN &&
-               child->frame_clock == NULL)))
-            {
-              find_impl_windows_to_update (list, child, recurse_mode);
-            }
-        }
-    }
-
-  /* add reference count so the window cannot be deleted in a callback */
-  if (window->impl_window == window)
-    g_ptr_array_add (list, g_object_ref (window));
-}
-
-static void
-gdk_window_process_updates_with_mode (GdkWindow     *window,
-                                      int            recurse_mode)
-{
-  GPtrArray *list = g_ptr_array_new_with_free_func (g_object_unref);
-  int i;
+  window = GDK_WINDOW (data);
 
   g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (window->impl_window == window);
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  find_impl_windows_to_update (list, window, recurse_mode);
+  g_object_ref (window);
 
-  if (window->impl_window != window)
-    g_ptr_array_add (list, g_object_ref (window->impl_window));
+  if (window->update_area &&
+      !window->update_freeze_count &&
+      !gdk_window_is_toplevel_frozen (window) &&
 
-  for (i = (int)list->len - 1; i >= 0; i --)
+      /* Don't recurse into process_updates_internal, we'll
+       * do the update later when idle instead. */
+      !window->in_update)
     {
-      GdkWindow *impl_window = g_ptr_array_index (list, i);
-
-      if (impl_window->update_area &&
-          !impl_window->update_freeze_count &&
-          !gdk_window_is_toplevel_frozen (impl_window) &&
-
-          /* Don't recurse into process_updates_internal, we'll
-           * do the update later when idle instead. */
-          !impl_window->in_update)
-        {
-          gdk_window_process_updates_internal (impl_window);
-          gdk_window_remove_update_window (impl_window);
-        }
+      gdk_window_process_updates_internal (window);
+      gdk_window_remove_update_window (window);
     }
 
-  g_ptr_array_free (list, TRUE);
+  g_object_unref (window);
 }
 
 static void
@@ -10195,19 +10151,6 @@ gdk_window_flush_events (GdkFrameClock *clock,
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
 
   window->frame_clock_events_paused = TRUE;
-}
-
-static void
-gdk_window_paint_on_clock (GdkFrameClock *clock,
-			   void          *data)
-{
-  GdkWindow *window;
-
-  window = GDK_WINDOW (data);
-
-  /* Update window and any children on the same clock.
-   */
-  gdk_window_process_updates_with_mode (window, PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN);
 }
 
 static void
