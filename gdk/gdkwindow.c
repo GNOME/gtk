@@ -973,9 +973,12 @@ recompute_visible_regions_internal (GdkWindow *private,
   old_abs_y = private->abs_y;
 
   /* Update absolute position */
-  if (gdk_window_has_impl (private))
+  if ((gdk_window_has_impl (private) &&
+       private->window_type != GDK_WINDOW_SUBSURFACE) ||
+      (gdk_window_is_toplevel (private) &&
+       private->window_type == GDK_WINDOW_SUBSURFACE))
     {
-      /* Native window starts here */
+      /* Native windows and toplevel subsurfaces start here */
       private->abs_x = 0;
       private->abs_y = 0;
     }
