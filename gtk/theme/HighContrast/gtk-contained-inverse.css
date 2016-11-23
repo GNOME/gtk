@@ -372,9 +372,9 @@ entry:drop(active):not(:only-child) + combobox > box > button.combo {
  ***********/
 @keyframes needs_attention {
   from {
-    background-image: -gtk-gradient(radial, center center, 0, center center, 0.01, to(#ddd), to(transparent)); }
+    background-image: radial-gradient(#ddd 0%, rgba(221, 221, 221, 0) 0%); }
   to {
-    background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#ddd), to(transparent)); } }
+    background-image: radial-gradient(#ddd 68%, rgba(221, 221, 221, 0) 70%); } }
 button.titlebutton, button {
   min-height: 24px;
   min-width: 16px;
@@ -840,7 +840,7 @@ button.destructive-action {
 .stack-switcher > button.needs-attention > label,
 .stack-switcher > button.needs-attention > image, stacksidebar row.needs-attention > label {
   animation: needs_attention 150ms ease-in;
-  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#ddd), to(transparent));
+  background-image: radial-gradient(#ddd 68%, rgba(221, 221, 221, 0) 70%);
   background-size: 6px 6px;
   background-repeat: no-repeat;
   background-position: right 3px; }
