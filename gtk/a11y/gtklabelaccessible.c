@@ -158,8 +158,8 @@ gtk_label_accessible_link_impl_new (GtkLabelAccessible *label,
   GtkLabelAccessibleLinkImpl *impl;
 
   impl = g_object_new (_gtk_label_accessible_link_impl_get_type (), NULL);
-  atk_object_set_parent (ATK_OBJECT (impl), ATK_OBJECT (label));
   impl->link = gtk_label_accessible_link_new (label, idx);
+  atk_object_set_parent (ATK_OBJECT (impl), ATK_OBJECT (label));
 
   return impl;
 }
