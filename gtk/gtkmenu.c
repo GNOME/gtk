@@ -3056,6 +3056,8 @@ static void gtk_menu_measure (GtkWidget      *widget,
           max_toggle_size = indicator_width;
 
           gtk_widget_destroy (menu_item);
+          g_object_ref_sink (menu_item);
+          g_object_unref (menu_item);
         }
 
       min_width += 2 * max_toggle_size + max_accel_width;
