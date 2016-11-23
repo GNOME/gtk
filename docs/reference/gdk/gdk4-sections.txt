@@ -352,7 +352,6 @@ gdk_window_get_update_area
 gdk_window_freeze_updates
 gdk_window_thaw_updates
 gdk_window_process_all_updates
-gdk_window_process_updates
 gdk_window_get_frame_clock
 
 <SUBSECTION>

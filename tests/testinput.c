@@ -110,7 +110,6 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   gtk_widget_queue_draw_area (widget,
 			      update_rect.x, update_rect.y,
 			      update_rect.width, update_rect.height);
-  gdk_window_process_updates (gtk_widget_get_window (widget), TRUE);
 }
 
 static guint32 motion_time;

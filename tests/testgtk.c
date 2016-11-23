@@ -8069,7 +8069,6 @@ scroll_test_adjustment_changed (GtkAdjustment *adjustment, GtkWidget *widget)
 
   window = gtk_widget_get_window (widget);
   gdk_window_scroll (window, 0, dy);
-  gdk_window_process_updates (window, FALSE);
 }
 
 

@@ -3699,33 +3699,6 @@ gdk_window_process_updates_with_mode (GdkWindow     *window,
   g_ptr_array_free (list, TRUE);
 }
 
-/**
- * gdk_window_process_updates:
- * @window: a #GdkWindow
- * @update_children: whether to also process updates for child windows
- *
- * Sends one or more expose events to @window. The areas in each
- * expose event will cover the entire update area for the window (see
- * gdk_window_invalidate_region() for details). Normally GDK calls
- * gdk_window_process_all_updates() on your behalf, so there’s no
- * need to call this function unless you want to force expose events
- * to be delivered immediately and synchronously (vs. the usual
- * case, where GDK delivers them in an idle handler). Occasionally
- * this is useful to produce nicer scrolling behavior, for example.
- *
- **/
-void
-gdk_window_process_updates (GdkWindow *window,
-			    gboolean   update_children)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  gdk_window_process_updates_with_mode (window,
-                                        update_children ?
-                                        PROCESS_UPDATES_WITH_ALL_CHILDREN :
-                                        PROCESS_UPDATES_NO_RECURSE);
-}
-
 static void
 gdk_window_invalidate_rect_full (GdkWindow          *window,
 				  const GdkRectangle *rect,
