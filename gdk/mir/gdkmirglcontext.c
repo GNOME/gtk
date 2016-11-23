@@ -98,6 +98,25 @@ gdk_mir_gl_context_realize (GdkGLContext *context,
 }
 
 static void
+gdk_mir_gl_context_begin_frame (GdkGLContext   *context,
+                                cairo_region_t *update_area)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (window);
+  GdkWindow *window;
+
+  if (_gdk_mir_display_have_egl_swap_buffers_with_damage (display))
+    return;
+
+  /* If nothing else is known, repaint everything so that the back
+     buffer is fully up-to-date for the swapbuffer */
+  window = gdk_gl_context_get_window (context);
+  cairo_region_union_rectangle (update_area, &(GdkRectangle) {
+                                                 0, 0,
+                                                 gdk_window_get_width (window),
+                                                 gdk_window_get_height (window) });
+}
+
+static void
 gdk_mir_gl_context_end_frame (GdkGLContext *context,
                               cairo_region_t *painted,
                               cairo_region_t *damage)
@@ -168,6 +187,7 @@ gdk_mir_gl_context_class_init (GdkMirGLContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->realize = gdk_mir_gl_context_realize;
+  context_class->begin_frame = gdk_mir_gl_context_begin_frame;
   context_class->end_frame = gdk_mir_gl_context_end_frame;
   gobject_class->dispose = gdk_mir_gl_context_dispose;
 }

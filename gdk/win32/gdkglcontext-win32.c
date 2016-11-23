@@ -82,23 +82,6 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
 }
 
 static void
-gdk_win32_gl_context_class_init (GdkWin32GLContextClass *klass)
-{
-  GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  context_class->end_frame = _gdk_win32_gl_context_end_frame;
-  context_class->realize = _gdk_win32_gl_context_realize;
-
-  gobject_class->dispose = _gdk_win32_gl_context_dispose;
-}
-
-static void
-gdk_win32_gl_context_init (GdkWin32GLContext *self)
-{
-}
-
-static void
 gdk_gl_blit_region (GdkWindow *window, cairo_region_t *region)
 {
   int n_rects, i;
@@ -117,10 +100,10 @@ gdk_gl_blit_region (GdkWindow *window, cairo_region_t *region)
     }
 }
 
-void
-_gdk_win32_gl_context_end_frame (GdkGLContext *context,
-                                 cairo_region_t *painted,
-                                 cairo_region_t *damage)
+static void
+gdk_win32_gl_context_end_frame (GdkGLContext *context,
+                                cairo_region_t *painted,
+                                cairo_region_t *damage)
 {
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
   GdkWindow *window = gdk_gl_context_get_window (context);
@@ -149,7 +132,12 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
         }
     }
 
-  if (context_win32->do_blit_swap)
+  whole_window = (GdkRectangle) { 0, 0, gdk_window_get_width (window), gdk_window_get_height (window) };
+  if (cairo_region_contains_rectangle (painted, &whole_window) == CAIRO_REGION_OVERLAP_IN)
+    {
+      SwapBuffers (context_win32->gl_hdc);
+    }
+  else if (gdk_gl_context_has_framebuffer_blit (context))
     {
       glDrawBuffer(GL_FRONT);
       glReadBuffer(GL_BACK);
@@ -161,44 +149,28 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
         glFrameTerminatorGREMEDY ();
     }
   else
-    SwapBuffers (context_win32->gl_hdc);
+    {
+      g_warning ("Need to swap whole buffer even thouigh not everything was redrawn. Expect artifacts.");
+      SwapBuffers (context_win32->gl_hdc);
+    }
 }
 
-void
-_gdk_win32_window_invalidate_for_new_frame (GdkWindow *window,
-                                            cairo_region_t *update_area)
+static void
+gdk_win32_gl_context_begin_frame (GdkGLContext   *context,
+                                  cairo_region_t *update_area)
 {
-  cairo_rectangle_int_t window_rect;
-  gboolean invalidate_all = FALSE;
-  GdkWin32GLContext *context_win32;
-  cairo_rectangle_int_t whole_window = { 0, 0, gdk_window_get_width (window), gdk_window_get_height (window) };
+  GdkWindow *window;
 
-  /* Minimal update is ok if we're not drawing with gl */
-  if (window->gl_paint_context == NULL)
+  if (gdk_gl_context_has_framebuffer_blit (context))
     return;
 
-  context_win32 = GDK_WIN32_GL_CONTEXT (window->gl_paint_context);
-  context_win32->do_blit_swap = FALSE;
-
-  if (gdk_gl_context_has_framebuffer_blit (window->gl_paint_context) &&
-      cairo_region_contains_rectangle (update_area, &whole_window) != CAIRO_REGION_OVERLAP_IN)
-    {
-      context_win32->do_blit_swap = TRUE;
-    }
-  else
-    invalidate_all = TRUE;
-
-  if (invalidate_all)
-    {
-      window_rect.x = 0;
-      window_rect.y = 0;
-      window_rect.width = gdk_window_get_width (window);
-      window_rect.height = gdk_window_get_height (window);
-
-      /* If nothing else is known, repaint everything so that the back
-         buffer is fully up-to-date for the swapbuffer */
-      cairo_region_union_rectangle (update_area, &window_rect);
-    }
+  /* If nothing else is known, repaint everything so that the back
+     buffer is fully up-to-date for the swapbuffer */
+  window = gdk_gl_context_get_window (context);
+  cairo_region_union_rectangle (update_area, &(GdkRectangle) {
+                                                 0, 0,
+                                                 gdk_window_get_width (window),
+                                                 gdk_window_get_height (window) });
 }
 
 typedef struct
@@ -630,9 +602,9 @@ _set_pixformat_for_hdc (HDC              hdc,
   return TRUE;
 }
 
-gboolean
-_gdk_win32_gl_context_realize (GdkGLContext *context,
-                               GError **error)
+static gboolean
+gdk_win32_gl_context_realize (GdkGLContext *context,
+                              GError **error)
 {
   GdkGLContext *share = gdk_gl_context_get_shared_context (context);
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
@@ -728,6 +700,24 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
   gdk_gl_context_set_is_legacy (context, legacy_bit);
 
   return TRUE;
+}
+
+static void
+gdk_win32_gl_context_class_init (GdkWin32GLContextClass *klass)
+{
+  GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  context_class->begin_frame = gdk_win32_gl_context_begin_frame;
+  context_class->end_frame = gdk_win32_gl_context_end_frame;
+  context_class->realize = _gdk_win32_gl_context_realize;
+
+  gobject_class->dispose = _gdk_win32_gl_context_dispose;
+}
+
+static void
+gdk_win32_gl_context_init (GdkWin32GLContext *self)
+{
 }
 
 GdkGLContext *

@@ -47,8 +47,6 @@ struct _GdkX11GLContext
   guint is_attached : 1;
   guint is_direct : 1;
   guint do_frame_sync : 1;
-
-  guint do_blit_swap : 1;
 };
 
 struct _GdkX11GLContextClass
@@ -61,8 +59,6 @@ GdkGLContext *  gdk_x11_window_create_gl_context                (GdkWindow      
 								 gboolean           attached,
                                                                  GdkGLContext      *share,
                                                                  GError           **error);
-void            gdk_x11_window_invalidate_for_new_frame         (GdkWindow         *window,
-                                                                 cairo_region_t    *update_area);
 gboolean        gdk_x11_display_make_gl_context_current         (GdkDisplay        *display,
                                                                  GdkGLContext      *context);
 

@@ -3656,7 +3656,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->set_shadow_width = gdk_wayland_window_set_shadow_width;
   impl_class->show_window_menu = gdk_wayland_window_show_window_menu;
   impl_class->create_gl_context = gdk_wayland_window_create_gl_context;
-  impl_class->invalidate_for_new_frame = gdk_wayland_window_invalidate_for_new_frame;
 
   signals[COMMITTED] = g_signal_new ("committed",
                                      G_TYPE_FROM_CLASS (object_class),

@@ -43,6 +43,8 @@ struct _GdkGLContextClass
   gboolean (* realize) (GdkGLContext *context,
                         GError **error);
 
+  void (* begin_frame)  (GdkGLContext *context,
+                         cairo_region_t *update_area);
   void (* end_frame)    (GdkGLContext *context,
                          cairo_region_t *painted,
                          cairo_region_t *damage);

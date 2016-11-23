@@ -119,79 +119,22 @@ maybe_wait_for_vblank (GdkDisplay  *display,
     }
 }
 
-void
-gdk_x11_window_invalidate_for_new_frame (GdkWindow      *window,
-                                         cairo_region_t *update_area)
+static void
+gdk_x11_gl_context_begin_frame (GdkGLContext   *context,
+                                cairo_region_t *update_area)
 {
-  cairo_rectangle_int_t window_rect;
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  Display *dpy = gdk_x11_display_get_xdisplay (display);
-  GdkX11GLContext *context_x11;
-  unsigned int buffer_age;
-  gboolean invalidate_all;
+  GdkWindow *window;
 
-  /* Minimal update is ok if we're not drawing with gl */
-  if (window->gl_paint_context == NULL)
+  if (gdk_gl_context_has_framebuffer_blit (context))
     return;
 
-  context_x11 = GDK_X11_GL_CONTEXT (window->gl_paint_context);
-
-  buffer_age = 0;
-
-  context_x11->do_blit_swap = FALSE;
-
-  if (display_x11->has_glx_buffer_age)
-    {
-      gdk_gl_context_make_current (window->gl_paint_context);
-      glXQueryDrawable(dpy, context_x11->drawable,
-		       GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
-    }
-
-
-  invalidate_all = FALSE;
-  if (buffer_age == 0 || buffer_age >= 4)
-    {
-      cairo_rectangle_int_t whole_window = { 0, 0, gdk_window_get_width (window), gdk_window_get_height (window) };
-
-      if (gdk_gl_context_has_framebuffer_blit (window->gl_paint_context) &&
-          cairo_region_contains_rectangle (update_area, &whole_window) != CAIRO_REGION_OVERLAP_IN)
-        {
-          context_x11->do_blit_swap = TRUE;
-        }
-      else
-        invalidate_all = TRUE;
-    }
-  else
-    {
-      if (buffer_age >= 2)
-        {
-          if (window->old_updated_area[0])
-            cairo_region_union (update_area, window->old_updated_area[0]);
-          else
-            invalidate_all = TRUE;
-        }
-      if (buffer_age >= 3)
-        {
-          if (window->old_updated_area[1])
-            cairo_region_union (update_area, window->old_updated_area[1]);
-          else
-            invalidate_all = TRUE;
-        }
-    }
-
-  if (invalidate_all)
-    {
-      window_rect.x = 0;
-      window_rect.y = 0;
-      window_rect.width = gdk_window_get_width (window);
-      window_rect.height = gdk_window_get_height (window);
-
-      /* If nothing else is known, repaint everything so that the back
-         buffer is fully up-to-date for the swapbuffer */
-      cairo_region_union_rectangle (update_area, &window_rect);
-    }
-
+  window = gdk_gl_context_get_window (context);
+  /* If nothing else is known, repaint everything so that the back
+     buffer is fully up-to-date for the swapbuffer */
+  cairo_region_union_rectangle (update_area, &(GdkRectangle) {
+                                                 0, 0,
+                                                 gdk_window_get_width (window),
+                                                 gdk_window_get_height (window) });
 }
 
 static void
@@ -218,25 +161,27 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
                               cairo_region_t *painted,
                               cairo_region_t *damage)
 {
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+  GdkGLContext *shared = gdk_gl_context_get_shared_context (context);
+  GdkX11GLContext *shared_x11 = GDK_X11_GL_CONTEXT (shared);
   GdkWindow *window = gdk_gl_context_get_window (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkRectangle whole_window;
   DrawableInfo *info;
   GLXDrawable drawable;
 
-  gdk_gl_context_make_current (context);
+  gdk_gl_context_make_current (shared);
 
   info = get_glx_drawable_info (window);
 
-  drawable = context_x11->drawable;
+  drawable = shared_x11->drawable;
 
   GDK_NOTE (OPENGL,
             g_message ("Flushing GLX buffers for drawable %lu (window: %lu), frame sync: %s",
                        (unsigned long) drawable,
                        (unsigned long) gdk_x11_window_get_xid (window),
-                       context_x11->do_frame_sync ? "yes" : "no"));
+                       shared_x11->do_frame_sync ? "yes" : "no"));
 
   /* if we are going to wait for the vertical refresh manually
    * we need to flush pending redraws, and we also need to wait
@@ -246,7 +191,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
    * GLX_SGI_swap_control, and we ask the driver to do the right
    * thing.
    */
-  if (context_x11->do_frame_sync)
+  if (shared_x11->do_frame_sync)
     {
       guint32 end_frame_counter = 0;
       gboolean has_counter = display_x11->has_glx_video_sync;
@@ -255,7 +200,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
       if (display_x11->has_glx_video_sync)
         glXGetVideoSyncSGI (&end_frame_counter);
 
-      if (context_x11->do_frame_sync && !display_x11->has_glx_swap_interval)
+      if (shared_x11->do_frame_sync && !display_x11->has_glx_swap_interval)
         {
           glFinish ();
 
@@ -271,7 +216,12 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
         }
     }
 
-  if (context_x11->do_blit_swap)
+  whole_window = (GdkRectangle) { 0, 0, gdk_window_get_width (window), gdk_window_get_height (window) };
+  if (cairo_region_contains_rectangle (painted, &whole_window) == CAIRO_REGION_OVERLAP_IN)
+    {
+      glXSwapBuffers (dpy, drawable);
+    }
+  else if (gdk_gl_context_has_framebuffer_blit (shared))
     {
       glDrawBuffer(GL_FRONT);
       glReadBuffer(GL_BACK);
@@ -279,13 +229,16 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
       glDrawBuffer(GL_BACK);
       glFlush();
 
-      if (gdk_gl_context_has_frame_terminator (context))
+      if (gdk_gl_context_has_frame_terminator (shared))
         glFrameTerminatorGREMEDY ();
     }
   else
-    glXSwapBuffers (dpy, drawable);
+    {
+      g_warning ("Need to swap whole buffer even thouigh not everything was redrawn. Expect artifacts.");
+      glXSwapBuffers (dpy, drawable);
+    }
 
-  if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
+  if (shared_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
     glXGetVideoSyncSGI (&info->last_frame_counter);
 }
 
@@ -828,6 +781,7 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->realize = gdk_x11_gl_context_realize;
+  context_class->begin_frame = gdk_x11_gl_context_begin_frame;
   context_class->end_frame = gdk_x11_gl_context_end_frame;
   context_class->texture_from_surface = gdk_x11_gl_context_texture_from_surface;
 

@@ -37,68 +37,19 @@ G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void gdk_x11_gl_context_dispose (GObject *gobject);
 
-void
-gdk_wayland_window_invalidate_for_new_frame (GdkWindow      *window,
-                                             cairo_region_t *update_area)
+static void
+gdk_wayland_gl_context_begin_frame (GdkGLContext   *context,
+                                    cairo_region_t *update_area)
 {
-  cairo_rectangle_int_t window_rect;
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GdkWaylandGLContext *context_wayland;
-  int buffer_age;
-  gboolean invalidate_all;
-  EGLSurface egl_surface;
+  GdkWindow *window;
 
-  /* Minimal update is ok if we're not drawing with gl */
-  if (window->gl_paint_context == NULL)
-    return;
-
-  context_wayland = GDK_WAYLAND_GL_CONTEXT (window->gl_paint_context);
-  buffer_age = 0;
-
-  egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
-                                                    context_wayland->egl_config);
-
-  if (display_wayland->have_egl_buffer_age)
-    {
-      gdk_gl_context_make_current (window->gl_paint_context);
-      eglQuerySurface (display_wayland->egl_display, egl_surface,
-		       EGL_BUFFER_AGE_EXT, &buffer_age);
-    }
-
-  invalidate_all = FALSE;
-  if (buffer_age == 0 || buffer_age >= 4)
-    invalidate_all = TRUE;
-  else
-    {
-      if (buffer_age >= 2)
-        {
-          if (window->old_updated_area[0])
-            cairo_region_union (update_area, window->old_updated_area[0]);
-          else
-            invalidate_all = TRUE;
-        }
-      if (buffer_age >= 3)
-        {
-          if (window->old_updated_area[1])
-            cairo_region_union (update_area, window->old_updated_area[1]);
-          else
-            invalidate_all = TRUE;
-        }
-    }
-
-  if (invalidate_all)
-    {
-      window_rect.x = 0;
-      window_rect.y = 0;
-      window_rect.width = gdk_window_get_width (window);
-      window_rect.height = gdk_window_get_height (window);
-
-      /* If nothing else is known, repaint everything so that the back
-       * buffer is fully up-to-date for the swapbuffer
-       */
-      cairo_region_union_rectangle (update_area, &window_rect);
-    }
+  /* If nothing else is known, repaint everything so that the back
+     buffer is fully up-to-date for the swapbuffer */
+  window = gdk_gl_context_get_window (context);
+  cairo_region_union_rectangle (update_area, &(GdkRectangle) {
+                                                 0, 0,
+                                                 gdk_window_get_width (window),
+                                                 gdk_window_get_height (window) });
 }
 
 #define N_EGL_ATTRS     16
@@ -227,13 +178,14 @@ gdk_wayland_gl_context_end_frame (GdkGLContext   *context,
   GdkWindow *window = gdk_gl_context_get_window (context);
   GdkDisplay *display = gdk_window_get_display (window);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
+  GdkGLContext *shared = gdk_gl_context_get_shared_context (context);
+  GdkWaylandGLContext *shared_wayland = GDK_WAYLAND_GL_CONTEXT (shared);
   EGLSurface egl_surface;
 
-  gdk_gl_context_make_current (context);
+  gdk_gl_context_make_current (shared);
 
   egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
-                                                    context_wayland->egl_config);
+                                                    shared_wayland->egl_config);
 
   if (display_wayland->have_egl_swap_buffers_with_damage)
     {
@@ -266,6 +218,7 @@ gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
   gobject_class->dispose = gdk_x11_gl_context_dispose;
 
   context_class->realize = gdk_wayland_gl_context_realize;
+  context_class->begin_frame = gdk_wayland_gl_context_begin_frame;
   context_class->end_frame = gdk_wayland_gl_context_end_frame;
 }
 

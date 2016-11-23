@@ -1595,67 +1595,6 @@ gdk_mir_window_impl_create_gl_context (GdkWindow     *window,
   return GDK_GL_CONTEXT (context);
 }
 
-static void
-gdk_mir_window_impl_invalidate_for_new_frame (GdkWindow *window,
-                                              cairo_region_t *update_area)
-{
-  cairo_rectangle_int_t window_rect;
-  GdkDisplay *display = gdk_window_get_display (window);
-  GdkMirGLContext *context_mir;
-  int buffer_age;
-  gboolean invalidate_all;
-  EGLSurface egl_surface;
-
-  /* Minimal update is ok if we're not drawing with gl */
-  if (window->gl_paint_context == NULL)
-    return;
-
-  context_mir = GDK_MIR_GL_CONTEXT (window->gl_paint_context);
-  buffer_age = 0;
-
-  egl_surface = _gdk_mir_window_get_egl_surface (window, context_mir->egl_config);
-
-  if (_gdk_mir_display_have_egl_buffer_age (display))
-    {
-      gdk_gl_context_make_current (window->gl_paint_context);
-      eglQuerySurface (_gdk_mir_display_get_egl_display (display), egl_surface,
-                       EGL_BUFFER_AGE_EXT, &buffer_age);
-    }
-
-  invalidate_all = FALSE;
-  if (buffer_age == 0 || buffer_age >= 4)
-    invalidate_all = TRUE;
-  else
-    {
-      if (buffer_age >= 2)
-        {
-          if (window->old_updated_area[0])
-            cairo_region_union (update_area, window->old_updated_area[0]);
-          else
-            invalidate_all = TRUE;
-        }
-      if (buffer_age >= 3)
-        {
-          if (window->old_updated_area[1])
-            cairo_region_union (update_area, window->old_updated_area[1]);
-          else
-            invalidate_all = TRUE;
-        }
-    }
-
-  if (invalidate_all)
-    {
-      window_rect.x = 0;
-      window_rect.y = 0;
-      window_rect.width = gdk_window_get_width (window);
-      window_rect.height = gdk_window_get_height (window);
-
-      /* If nothing else is known, repaint everything so that the back
-         buffer is fully up-to-date for the swapbuffer */
-      cairo_region_union_rectangle (update_area, &window_rect);
-    }
-}
-
 EGLSurface
 _gdk_mir_window_get_egl_surface (GdkWindow *window,
                                  EGLConfig config)
@@ -1830,5 +1769,4 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->set_opaque_region = gdk_mir_window_impl_set_opaque_region;
   impl_class->set_shadow_width = gdk_mir_window_impl_set_shadow_width;
   impl_class->create_gl_context = gdk_mir_window_impl_create_gl_context;
-  impl_class->invalidate_for_new_frame = gdk_mir_window_impl_invalidate_for_new_frame;
 }
