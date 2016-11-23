@@ -1843,6 +1843,10 @@ gtk_notebook_finalize (GObject *object)
   g_clear_object (&priv->gadget);
   g_clear_object (&priv->header_gadget);
   g_clear_object (&priv->tabs_gadget);
+  g_clear_object (&priv->arrow_gadget[0]);
+  g_clear_object (&priv->arrow_gadget[1]);
+  g_clear_object (&priv->arrow_gadget[2]);
+  g_clear_object (&priv->arrow_gadget[3]);
   g_clear_object (&priv->stack_gadget);
 
   G_OBJECT_CLASS (gtk_notebook_parent_class)->finalize (object);
