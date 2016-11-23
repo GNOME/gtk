@@ -2529,6 +2529,8 @@ progressbar progress {
   progressbar progress.osd {
     border-width: 0;
     border-radius: 0; }
+progressbar trough.empty progress {
+  all: unset; }
 
 /*************
  * Level Bar *
