@@ -42,7 +42,8 @@ struct _GdkX11GLContext
 
   GLXContext glx_context;
   GLXFBConfig glx_config;
-  GLXDrawable drawable;
+  GLXDrawable attached_drawable;
+  GLXDrawable unattached_drawable;
 
   guint is_attached : 1;
   guint is_direct : 1;

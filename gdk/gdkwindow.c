@@ -2715,40 +2715,6 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
 
   surface_content = gdk_window_get_content (window);
 
-#if 0
-  if (window->current_paint.use_gl)
-    {
-      GdkGLContext *context;
-
-      int ww = gdk_window_get_width (window) * gdk_window_get_scale_factor (window);
-      int wh = gdk_window_get_height (window) * gdk_window_get_scale_factor (window);
-
-      context = gdk_window_get_paint_gl_context (window, NULL);
-      if (context == NULL)
-        {
-          g_warning ("gl rendering failed, context: %p", context);
-          window->current_paint.use_gl = FALSE;
-        }
-      else
-        {
-	  gdk_gl_context_make_current (context);
-          /* With gl we always need a surface to combine the gl
-             drawing with the native drawing. */
-          needs_surface = TRUE;
-          /* Also, we need the surface to include alpha */
-          surface_content = CAIRO_CONTENT_COLOR_ALPHA;
-
-          /* Initial setup */
-          glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-          glDisable (GL_DEPTH_TEST);
-          glDisable(GL_BLEND);
-          glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
-          glViewport (0, 0, ww, wh);
-        }
-    }
-#endif
-
   if (needs_surface)
     {
       window->current_paint.surface = gdk_window_create_similar_surface (window,
@@ -2797,31 +2763,6 @@ gdk_window_end_paint_internal (GdkWindow *window)
     {
       cairo_surface_t *surface;
 
-#if 0
-      if (window->current_paint.use_gl)
-        {
-          cairo_region_t *opaque_region = cairo_region_copy (window->current_paint.region);
-
-          gdk_gl_context_make_current (window->gl_paint_context);
-
-          if (!cairo_region_is_empty (opaque_region))
-            gdk_gl_texture_from_surface (window->current_paint.surface,
-                                         opaque_region);
-          if (!cairo_region_is_empty (window->current_paint.need_blend_region))
-            {
-              glEnable(GL_BLEND);
-              gdk_gl_texture_from_surface (window->current_paint.surface,
-                                           window->current_paint.need_blend_region);
-              glDisable(GL_BLEND);
-            }
-
-          cairo_region_destroy (opaque_region);
-
-          gdk_gl_context_end_frame (window->gl_paint_context,
-                                    window->current_paint.region,
-                                    window->active_update_area);
-        }
-#endif
       surface = gdk_window_ref_impl_surface (window);
       cr = cairo_create (surface);
 

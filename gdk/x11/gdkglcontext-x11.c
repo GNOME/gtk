@@ -175,7 +175,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
 
   info = get_glx_drawable_info (window);
 
-  drawable = shared_x11->drawable;
+  drawable = shared_x11->attached_drawable;
 
   GDK_NOTE (OPENGL,
             g_message ("Flushing GLX buffers for drawable %lu (window: %lu), frame sync: %s",
@@ -573,7 +573,6 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   GdkX11Display *display_x11;
   GdkDisplay *display;
   GdkX11GLContext *context_x11;
-  GLXWindow drawable;
   XVisualInfo *xvisinfo;
   Display *dpy;
   DrawableInfo *info;
@@ -736,13 +735,10 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
 
   XFree (xvisinfo);
 
-  if (context_x11->is_attached)
-    drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_window_get_xid (window->impl_window);
-  else
-    drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
+  context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_window_get_xid (window->impl_window);
+  context_x11->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
 
   context_x11->is_direct = glXIsDirect (dpy, context_x11->glx_context);
-  context_x11->drawable = drawable;
 
   GDK_NOTE (OPENGL,
             g_message ("Realized GLX context[%p], %s",
@@ -1248,6 +1244,7 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
   GdkX11GLContext *context_x11;
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   gboolean do_frame_sync = FALSE;
+  GLXWindow drawable;
 
   if (context == NULL)
     {
@@ -1263,11 +1260,16 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
       return FALSE;
     }
 
-  GDK_NOTE (OPENGL,
-            g_message ("Making GLX context current to drawable %lu",
-                       (unsigned long) context_x11->drawable));
+  if (context_x11->is_attached || gdk_gl_context_is_drawing (context))
+    drawable = context_x11->attached_drawable;
+  else
+    drawable = context_x11->unattached_drawable;
 
-  if (!glXMakeContextCurrent (dpy, context_x11->drawable, context_x11->drawable,
+  GDK_NOTE (OPENGL,
+            g_message ("Making GLX context %p current to drawable %lu",
+                       context, (unsigned long) drawable));
+
+  if (!glXMakeContextCurrent (dpy, drawable, drawable,
                               context_x11->glx_context))
     {
       GDK_NOTE (OPENGL,

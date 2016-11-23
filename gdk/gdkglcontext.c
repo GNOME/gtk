@@ -97,6 +97,7 @@ typedef struct {
   int gl_version;
 
   guint realized : 1;
+  guint is_drawing : 1;
   guint use_texture_rectangle : 1;
   guint has_gl_framebuffer_blit : 1;
   guint has_frame_terminator : 1;
@@ -369,6 +370,78 @@ gdk_gl_context_init (GdkGLContext *self)
 }
 
 /*< private >
+ * gdk_gl_context_is_drawing:
+ * @context: a #GdkGLContext
+ *
+ * Returns %TRUE if @context is in the process of drawing to its window. In such
+ * cases, it will have access to the window's backbuffer to render the new frame
+ * onto it.
+ *
+ * Returns: %TRUE if the context is between begin_frame() and end_frame() calls.
+ *
+ * Since: 3.90
+ */
+gboolean
+gdk_gl_context_is_drawing (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->is_drawing;
+}
+
+/*< private >
+ * gdk_gl_context_begin_frame:
+ * @context: a #GdkGLContext
+ * @region: (inout): The clip region that needs to be repainted
+ *
+ * Sets up @context and @drawing for a new drawing.
+ *
+ * The @context is free to update @region to the size that actually needs to
+ * be repainted. Contexts that do not support partial blits for example may
+ * want to invalidate the whole window instead.
+ *
+ * The function does not clear the background. Clearing the backgroud is the
+ * job of the renderer. The contents of the backbuffer are undefined after this
+ * function call.
+ *
+ * Since: 3.90
+ */
+void
+gdk_gl_context_begin_frame (GdkGLContext   *context,
+                            cairo_region_t *region)
+{
+  GdkGLContextPrivate *priv, *shared_priv;
+  GdkGLContext *shared;
+  int ww, wh;
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+  g_return_if_fail (region != NULL);
+
+  priv = gdk_gl_context_get_instance_private (context);
+  priv->is_drawing = TRUE;
+
+  shared = gdk_gl_context_get_shared_context (context);
+  shared_priv = gdk_gl_context_get_instance_private (shared);
+  shared_priv->is_drawing = TRUE;
+
+  GDK_GL_CONTEXT_GET_CLASS (context)->begin_frame (context, region);
+
+  ww = gdk_window_get_width (priv->window) * gdk_window_get_scale_factor (priv->window);
+  wh = gdk_window_get_height (priv->window) * gdk_window_get_scale_factor (priv->window);
+
+  gdk_gl_context_make_current (shared);
+
+  /* Initial setup */
+  glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+  glDisable (GL_DEPTH_TEST);
+  glDisable (GL_BLEND);
+  glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+  glViewport (0, 0, ww, wh);
+
+}
+
+/*< private >
  * gdk_gl_context_end_frame:
  * @context: a #GdkGLContext
  * @painted: The area that has been redrawn this frame
@@ -387,15 +460,24 @@ gdk_gl_context_end_frame (GdkGLContext   *context,
                           cairo_region_t *painted,
                           cairo_region_t *damage)
 {
+  GdkGLContextPrivate *priv, *shared_priv;
+  GdkGLContext *shared;
+
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   GDK_GL_CONTEXT_GET_CLASS (context)->end_frame (context, painted, damage);
+
+  priv = gdk_gl_context_get_instance_private (context);
+  priv->is_drawing = FALSE;
+
+  shared = gdk_gl_context_get_shared_context (context);
+  shared_priv = gdk_gl_context_get_instance_private (shared);
+  shared_priv->is_drawing = FALSE;
 }
 
 GdkGLContextPaintData *
 gdk_gl_context_get_paint_data (GdkGLContext *context)
 {
-
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   if (priv->paint_data == NULL)
