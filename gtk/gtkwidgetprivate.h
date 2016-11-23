@@ -282,6 +282,19 @@ void              gtk_widget_render                        (GtkWidget           
 
 void              gtk_widget_snapshot                      (GtkWidget            *widget,
                                                             GtkSnapshot          *snapshot);
+void              gtk_widget_adjust_size_request           (GtkWidget      *widget,
+                                                            GtkOrientation  orientation,
+                                                            gint           *minimum_size,
+                                                            gint           *natural_size);
+void              gtk_widget_adjust_size_allocation        (GtkWidget         *widget,
+                                                            GtkOrientation     orientation,
+                                                            gint              *minimum_size,
+                                                            gint              *natural_size,
+                                                            gint              *allocated_pos,
+                                                            gint              *allocated_size);
+void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
+                                                            gint      *minimum_baseline,
+                                                            gint      *natural_baseline);
 
 /* inline getters */
 

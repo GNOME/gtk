@@ -747,21 +747,8 @@ static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget      
 static void             gtk_widget_queue_tooltip_query          (GtkWidget *widget);
 
 
-static void             gtk_widget_real_adjust_size_request     (GtkWidget         *widget,
-                                                                 GtkOrientation     orientation,
-                                                                 gint              *minimum_size,
-                                                                 gint              *natural_size);
-static void             gtk_widget_real_adjust_baseline_request (GtkWidget         *widget,
-								 gint              *minimum_baseline,
-								 gint              *natural_baseline);
-static void             gtk_widget_real_adjust_size_allocation  (GtkWidget         *widget,
-                                                                 GtkOrientation     orientation,
-                                                                 gint              *minimum_size,
-                                                                 gint              *natural_size,
-                                                                 gint              *allocated_pos,
-                                                                 gint              *allocated_size);
-static void             gtk_widget_real_adjust_baseline_allocation (GtkWidget         *widget,
-								    gint              *baseline);
+static void             gtk_widget_adjust_baseline_allocation (GtkWidget         *widget,
+                                                               gint              *baseline);
 
 static void                  template_data_free                 (GtkWidgetTemplate    *template_data);
 
@@ -1068,10 +1055,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->priv->accessible_role = ATK_ROLE_INVALID;
   klass->get_accessible = gtk_widget_real_get_accessible;
 
-  klass->adjust_size_request = gtk_widget_real_adjust_size_request;
-  klass->adjust_baseline_request = gtk_widget_real_adjust_baseline_request;
-  klass->adjust_size_allocation = gtk_widget_real_adjust_size_allocation;
-  klass->adjust_baseline_allocation = gtk_widget_real_adjust_baseline_allocation;
   klass->queue_draw_region = gtk_widget_real_queue_draw_region;
   klass->queue_draw_child = gtk_widget_real_queue_draw_child;
 
@@ -5431,21 +5414,20 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 #endif
   /* Now that we have the right natural height and width, go ahead and remove any margins from the
    * allocated sizes and possibly limit them to the natural sizes */
-  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
-							 GTK_ORIENTATION_HORIZONTAL,
-							 &dummy,
-							 &natural_width,
-							 &adjusted_allocation.x,
-							 &adjusted_allocation.width);
-  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
-							 GTK_ORIENTATION_VERTICAL,
-							 &dummy,
-							 &natural_height,
-							 &adjusted_allocation.y,
-							 &adjusted_allocation.height);
+  gtk_widget_adjust_size_allocation (widget,
+                                     GTK_ORIENTATION_HORIZONTAL,
+                                     &dummy,
+                                     &natural_width,
+                                     &adjusted_allocation.x,
+                                     &adjusted_allocation.width);
+  gtk_widget_adjust_size_allocation (widget,
+                                     GTK_ORIENTATION_VERTICAL,
+                                     &dummy,
+                                     &natural_height,
+                                     &adjusted_allocation.y,
+                                     &adjusted_allocation.height);
   if (baseline >= 0)
-    GTK_WIDGET_GET_CLASS (widget)->adjust_baseline_allocation (widget,
-							       &baseline);
+    gtk_widget_adjust_baseline_allocation (widget, &baseline);
 
   if (adjusted_allocation.x < real_allocation.x ||
       adjusted_allocation.y < real_allocation.y ||
@@ -5824,13 +5806,13 @@ adjust_for_margin(gint               start_margin,
   *allocated_size -= (start_margin + end_margin);
 }
 
-static void
-gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
-                                        GtkOrientation     orientation,
-                                        gint              *minimum_size,
-                                        gint              *natural_size,
-                                        gint              *allocated_pos,
-                                        gint              *allocated_size)
+void
+gtk_widget_adjust_size_allocation (GtkWidget         *widget,
+                                   GtkOrientation     orientation,
+                                   gint              *minimum_size,
+                                   gint              *natural_size,
+                                   gint              *allocated_pos,
+                                   gint              *allocated_size)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
@@ -5855,8 +5837,8 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
 }
 
 static void
-gtk_widget_real_adjust_baseline_allocation (GtkWidget *widget,
-					    gint      *baseline)
+gtk_widget_adjust_baseline_allocation (GtkWidget *widget,
+                                       gint      *baseline)
 {
   if (*baseline >= 0)
     *baseline -= widget->priv->margin.top;
@@ -10719,11 +10701,11 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   gtk_widget_set_realized (widget, FALSE);
 }
 
-static void
-gtk_widget_real_adjust_size_request (GtkWidget      *widget,
-                                     GtkOrientation  orientation,
-                                     gint           *minimum_size,
-                                     gint           *natural_size)
+void
+gtk_widget_adjust_size_request (GtkWidget      *widget,
+                                GtkOrientation  orientation,
+                                gint           *minimum_size,
+                                gint           *natural_size)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
@@ -10750,10 +10732,10 @@ gtk_widget_real_adjust_size_request (GtkWidget      *widget,
     }
 }
 
-static void
-gtk_widget_real_adjust_baseline_request (GtkWidget *widget,
-					 gint      *minimum_baseline,
-					 gint      *natural_baseline)
+void
+gtk_widget_adjust_baseline_request (GtkWidget *widget,
+                                    gint      *minimum_baseline,
+                                    gint      *natural_baseline)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
