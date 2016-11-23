@@ -67,6 +67,7 @@ typedef struct
   GskScalingFilter mag_filter;
 
   GdkWindow *window;
+  GdkGLContext *gl_context;
   GdkDrawingContext *drawing_context;
   GskRenderNode *root_node;
   GdkDisplay *display;
@@ -580,6 +581,8 @@ gsk_renderer_unrealize (GskRenderer *renderer)
 
   GSK_RENDERER_GET_CLASS (renderer)->unrealize (renderer);
 
+  g_warn_if_fail (priv->gl_context == NULL);
+
   priv->is_realized = FALSE;
 }
 
@@ -587,7 +590,9 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * gsk_renderer_render:
  * @renderer: a #GskRenderer
  * @root: a #GskRenderNode
- * @context: a #GdkDrawingContext
+ * @context: a #GdkDrawingContext using the context returned by
+ *     gsk_renderer_get_gl_context() or %NULL if the renderer was created
+ *     via gsk_renderer_create_fallback().
  *
  * Renders the scene graph, described by a tree of #GskRenderNode instances,
  * using the given #GdkDrawingContext.
@@ -819,6 +824,32 @@ gsk_renderer_get_cairo_context (GskRenderer *renderer)
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   return priv->cairo_context;
+}
+
+void
+gsk_renderer_set_gl_context (GskRenderer  *renderer,
+                             GdkGLContext *context)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_set_object (&priv->gl_context, context);
+}
+
+/**
+ * gsk_renderer_get_gl_context:
+ * @renderer: a #GskRenderer
+ *
+ * Returns the GL context used by @renderer. The only use for using this
+ * function is to pass the result to gdk_window_begin_draw_frame().
+ *
+ * Returns: The GL context to use for creating drawing contexts
+ **/
+GdkGLContext *
+gsk_renderer_get_gl_context (GskRenderer *renderer)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  return priv->gl_context;
 }
 
 /**

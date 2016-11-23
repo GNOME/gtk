@@ -15686,18 +15686,22 @@ gtk_widget_render (GtkWidget            *widget,
   if (renderer == NULL)
     return;
 
-  gtk_snapshot_init (&snapshot, renderer, region);
+  context = gdk_window_begin_draw_frame (window,
+                                         gsk_renderer_get_gl_context (renderer),
+                                         region);
+
+  gtk_snapshot_init (&snapshot,
+                     renderer,
+                     gdk_drawing_context_get_clip (context));
   gtk_widget_snapshot (widget, &snapshot);
   root = gtk_snapshot_finish (&snapshot);
-  if (root == NULL)
-    return;
+  if (root != NULL)
+    {
+      gtk_inspector_record_render (widget, renderer, window, region, root);
 
-  gtk_inspector_record_render (widget, renderer, window, region, root);
-
-  context = gdk_window_begin_draw_frame (window, NULL, region);
-
-  gsk_renderer_render (renderer, root, context);
-  gsk_render_node_unref (root);
+      gsk_renderer_render (renderer, root, context);
+      gsk_render_node_unref (root);
+    }
 
   gdk_window_end_draw_frame (window, context);
 }

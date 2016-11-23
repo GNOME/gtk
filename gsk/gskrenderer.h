@@ -77,6 +77,8 @@ GskRenderer *           gsk_renderer_create_fallback            (GskRenderer    
                                                                  cairo_t                 *cr);
 
 GDK_AVAILABLE_IN_3_90
+GdkGLContext *          gsk_renderer_get_gl_context             (GskRenderer             *renderer);
+GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_render                     (GskRenderer             *renderer,
                                                                  GskRenderNode           *root,
                                                                  GdkDrawingContext       *context);
