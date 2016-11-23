@@ -240,10 +240,13 @@ gdk_cairo_get_drawing_context (cairo_t *cr)
 
 /**
  * gdk_drawing_context_get_cairo_context:
- * @context:
+ * @context: a #GdkDrawingContext created with a %NULL paint context
  *
  * Retrieves a Cairo context to be used to draw on the #GdkWindow
- * that created the #GdkDrawingContext.
+ * that created the #GdkDrawingContext. The @context must have been
+ * created without a #GdkGLContext for this function to work. If
+ * gdk_drawing_context_get_paint_context() does not return %NULL,
+ * then this function will.
  *
  * The returned context is guaranteed to be valid as long as the
  * #GdkDrawingContext is valid, that is between a call to
@@ -251,7 +254,8 @@ gdk_cairo_get_drawing_context (cairo_t *cr)
  *
  * Returns: (transfer none): a Cairo context to be used to draw
  *   the contents of the #GdkWindow. The context is owned by the
- *   #GdkDrawingContext and should not be destroyed
+ *   #GdkDrawingContext and should not be destroyed. %NULL is
+ *   returned when a paint context is in used.
  *
  * Since: 3.22
  */
@@ -262,6 +266,9 @@ gdk_drawing_context_get_cairo_context (GdkDrawingContext *context)
 
   g_return_val_if_fail (GDK_IS_DRAWING_CONTEXT (context), NULL);
   g_return_val_if_fail (GDK_IS_WINDOW (priv->window), NULL);
+
+  if (priv->paint_context != NULL)
+    return NULL;
 
   if (priv->cr == NULL)
     {

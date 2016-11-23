@@ -99,7 +99,6 @@ struct _GskGLRenderer
 
   guint frame_buffer;
   guint depth_stencil_buffer;
-  guint texture_id;
 
   GQuark uniforms[N_UNIFORMS];
   GQuark attributes[N_ATTRIBUTES];
@@ -150,17 +149,6 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self,
 
   GSK_NOTE (OPENGL, g_print ("Creating buffers (w:%d, h:%d, scale:%d)\n", width, height, scale_factor));
 
-  if (self->texture_id == 0)
-    {
-      self->texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                       width * scale_factor,
-                                                       height * scale_factor);
-      gsk_gl_driver_bind_source_texture (self->gl_driver, self->texture_id);
-      gsk_gl_driver_init_texture_empty (self->gl_driver, self->texture_id);
-    }
-
-  gsk_gl_driver_create_render_target (self->gl_driver, self->texture_id, TRUE, TRUE);
-
   self->has_buffers = TRUE;
 }
 
@@ -176,12 +164,6 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
   GSK_NOTE (OPENGL, g_print ("Destroying buffers\n"));
 
   gdk_gl_context_make_current (self->gl_context);
-
-  if (self->texture_id != 0)
-    {
-      gsk_gl_driver_destroy_texture (self->gl_driver, self->texture_id);
-      self->texture_id = 0;
-    }
 
   self->has_buffers = FALSE;
 }
@@ -695,7 +677,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
     }
   else
     {
-      item.render_data.render_target_id = self->texture_id;
+      item.render_data.render_target_id = 0;
       item.children = NULL;
     }
 
@@ -732,7 +714,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   else
     {
       /* If the node does not draw anything, we skip it */
-      if (item.render_data.render_target_id == self->texture_id)
+      if (item.render_data.render_target_id == 0)
         goto out;
     }
 
@@ -845,7 +827,6 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
   graphene_rect_t viewport;
   guint i;
   int scale_factor;
-  GdkDrawingContext *context;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 gpu_time, cpu_time;
@@ -853,8 +834,6 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
 
   if (self->gl_context == NULL)
     return;
-
-  context = gsk_renderer_get_drawing_context (renderer);
 
 #ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
@@ -890,7 +869,7 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
 #endif
 
   /* Ensure that the viewport is up to date */
-  if (gsk_gl_driver_bind_render_target (self->gl_driver, self->texture_id))
+  if (gsk_gl_driver_bind_render_target (self->gl_driver, 0))
     gsk_gl_renderer_resize_viewport (self, &viewport, scale_factor);
 
   gsk_gl_renderer_clear (self);
@@ -925,31 +904,6 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
 #endif
 
 out:
-  {
-    GdkWindow *window;
-    cairo_t *cr;
-
-    if (context != NULL)
-      {
-        /* XXX: Add GdkDrawingContext API */
-        cr = gdk_drawing_context_get_cairo_context (context);
-        window = gdk_drawing_context_get_window (context);
-      }
-    else
-      {
-        cr = gsk_renderer_get_cairo_context (renderer);
-        window = gsk_renderer_get_window (renderer);
-      }
-
-    gdk_cairo_draw_from_gl (cr, window,
-                            self->texture_id,
-                            GL_TEXTURE,
-                            scale_factor,
-                            0, 0,
-                            viewport.size.width * scale_factor,
-                            viewport.size.height * scale_factor);
-  }
-
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
   gsk_gl_renderer_destroy_buffers (self);
