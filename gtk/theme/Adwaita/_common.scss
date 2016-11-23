@@ -3219,6 +3219,8 @@ progressbar {
       border-radius: 0;
     }
   }
+
+  trough.empty progress { all: unset; } // makes the progress indicator disappear, when the fraction is 0
 }
 
 
