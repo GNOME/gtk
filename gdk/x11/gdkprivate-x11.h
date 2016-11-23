@@ -265,8 +265,6 @@ void       _gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
 void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
                                                      guint      *width,
                                                      guint      *height);
-void       _gdk_x11_display_before_process_all_updates (GdkDisplay *display);
-void       _gdk_x11_display_after_process_all_updates  (GdkDisplay *display);
 void       _gdk_x11_display_create_window_impl     (GdkDisplay    *display,
                                                     GdkWindow     *window,
                                                     GdkWindow     *real_parent,

@@ -2976,8 +2976,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->supports_cursor_alpha = _gdk_x11_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_x11_display_supports_cursor_color;
 
-  display_class->before_process_all_updates = _gdk_x11_display_before_process_all_updates;
-  display_class->after_process_all_updates = _gdk_x11_display_after_process_all_updates;
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
   display_class->create_window_impl = _gdk_x11_display_create_window_impl;

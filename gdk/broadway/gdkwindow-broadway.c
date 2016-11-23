@@ -1492,16 +1492,6 @@ gdk_broadway_window_set_opacity (GdkWindow *window,
     opacity = 1;
 }
 
-void
-_gdk_broadway_display_before_process_all_updates (GdkDisplay *display)
-{
-}
-
-void
-_gdk_broadway_display_after_process_all_updates (GdkDisplay *display)
-{
-}
-
 guint32
 gdk_broadway_get_last_seen_time (GdkWindow  *window)
 {

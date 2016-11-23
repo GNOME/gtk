@@ -772,17 +772,6 @@ gdk_wayland_display_supports_input_shapes (GdkDisplay *display)
   return TRUE;
 }
 
-static void
-gdk_wayland_display_before_process_all_updates (GdkDisplay *display)
-{
-}
-
-static void
-gdk_wayland_display_after_process_all_updates (GdkDisplay *display)
-{
-  /* Post the damage here instead? */
-}
-
 static gulong
 gdk_wayland_display_get_next_serial (GdkDisplay *display)
 {
@@ -952,8 +941,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_cursor_for_surface = _gdk_wayland_display_get_cursor_for_surface;
   display_class->supports_cursor_alpha = _gdk_wayland_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_wayland_display_supports_cursor_color;
-  display_class->before_process_all_updates = gdk_wayland_display_before_process_all_updates;
-  display_class->after_process_all_updates = gdk_wayland_display_after_process_all_updates;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
   display_class->create_window_impl = _gdk_wayland_display_create_window_impl;

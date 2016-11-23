@@ -361,18 +361,6 @@ gdk_mir_display_get_app_launch_context (GdkDisplay *display)
   return NULL;
 }
 
-static void
-gdk_mir_display_before_process_all_updates (GdkDisplay *display)
-{
-  //g_printerr ("gdk_mir_display_before_process_all_updates\n");
-}
-
-static void
-gdk_mir_display_after_process_all_updates (GdkDisplay *display)
-{
-  //g_printerr ("gdk_mir_display_after_process_all_updates\n");
-}
-
 static gulong
 gdk_mir_display_get_next_serial (GdkDisplay *display)
 {
@@ -737,8 +725,6 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->get_cursor_for_name = gdk_mir_display_get_cursor_for_name;
   display_class->get_cursor_for_surface = gdk_mir_display_get_cursor_for_surface;
   display_class->get_app_launch_context = gdk_mir_display_get_app_launch_context;
-  display_class->before_process_all_updates = gdk_mir_display_before_process_all_updates;
-  display_class->after_process_all_updates = gdk_mir_display_after_process_all_updates;
   display_class->get_next_serial = gdk_mir_display_get_next_serial;
   display_class->notify_startup_complete = gdk_mir_display_notify_startup_complete;
   display_class->create_window_impl = gdk_mir_display_create_window_impl;

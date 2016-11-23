@@ -178,9 +178,6 @@ struct _GdkDisplayClass
 
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
 
-  void                       (*before_process_all_updates) (GdkDisplay *display);
-  void                       (*after_process_all_updates)  (GdkDisplay *display);
-
   gulong                     (*get_next_serial) (GdkDisplay *display);
 
   void                       (*notify_startup_complete) (GdkDisplay  *display,

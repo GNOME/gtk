@@ -1091,17 +1091,6 @@ gdk_win32_display_check_composited (GdkWin32Display *display)
 }
 
 static void
-gdk_win32_display_before_process_all_updates (GdkDisplay  *display)
-{
-  /* nothing */
-}
-static void
-gdk_win32_display_after_process_all_updates (GdkDisplay  *display)
-{
-  /* nothing */
-}
-
-static void
 gdk_win32_display_notify_startup_complete (GdkDisplay  *display,
                                            const gchar *startup_id)
 {
@@ -1273,8 +1262,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->supports_cursor_alpha = _gdk_win32_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_win32_display_supports_cursor_color;
 
-  display_class->before_process_all_updates = gdk_win32_display_before_process_all_updates;
-  display_class->after_process_all_updates = gdk_win32_display_after_process_all_updates;
   display_class->get_next_serial = gdk_win32_display_get_next_serial;
   display_class->notify_startup_complete = gdk_win32_display_notify_startup_complete;
   display_class->create_window_impl = _gdk_win32_display_create_window_impl;

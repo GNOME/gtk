@@ -400,44 +400,6 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
    */
 }
 
-void
-_gdk_quartz_display_before_process_all_updates (GdkDisplay *display)
-{
-  in_process_all_updates = TRUE;
-
-  NSDisableScreenUpdates ();
-}
-
-void
-_gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
-{
-  GSList *old_update_nswindows = update_nswindows;
-  GSList *tmp_list = update_nswindows;
-
-  update_nswindows = NULL;
-
-  while (tmp_list)
-    {
-      NSWindow *nswindow = tmp_list->data;
-
-      [[nswindow contentView] displayIfNeeded];
-
-      _gdk_quartz_window_flush (NULL);
-
-      [nswindow enableFlushWindow];
-      [nswindow flushWindow];
-      [nswindow release];
-
-      tmp_list = tmp_list->next;
-    }
-
-  g_slist_free (old_update_nswindows);
-
-  in_process_all_updates = FALSE;
-
-  NSEnableScreenUpdates ();
-}
-
 static const gchar *
 get_default_title (void)
 {
