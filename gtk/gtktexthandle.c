@@ -458,24 +458,20 @@ _gtk_text_handle_set_scrollable (GtkTextHandle *handle,
 
   priv = handle->priv;
 
-  if (priv->parent_scrollable)
+  if (priv->vadj)
     {
-      if (priv->vadj)
-        {
-          g_signal_handlers_disconnect_by_data (priv->vadj, handle);
-          g_object_unref (priv->vadj);
-          priv->vadj = NULL;
-        }
-
-      if (priv->hadj)
-        {
-          g_signal_handlers_disconnect_by_data (priv->hadj, handle);
-          g_object_unref (priv->hadj);
-          priv->hadj = NULL;
-        }
- 
-      g_object_remove_weak_pointer (G_OBJECT (priv->parent_scrollable), (gpointer *) &priv->parent_scrollable);
+      g_signal_handlers_disconnect_by_data (priv->vadj, handle);
+      g_clear_object (&priv->vadj);
     }
+
+  if (priv->hadj)
+    {
+      g_signal_handlers_disconnect_by_data (priv->hadj, handle);
+      g_clear_object (&priv->hadj);
+    }
+
+  if (priv->parent_scrollable)
+    g_object_remove_weak_pointer (G_OBJECT (priv->parent_scrollable), (gpointer *) &priv->parent_scrollable);
 
   priv->parent_scrollable = scrollable;
 
