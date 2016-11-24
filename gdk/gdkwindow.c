@@ -3739,11 +3739,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  * @user_data: data passed to @child_func
  *
  * Adds @region to the update area for @window. The update area is the
- * region that needs to be redrawn, or “dirty region.” The call
- * gdk_window_process_updates() sends one or more expose events to the
- * window, which together cover the entire update area. An
- * application would normally redraw the contents of @window in
- * response to those expose events.
+ * region that needs to be redrawn, or “dirty region.”
  *
  * GDK will process all updates whenever the frame clock schedules a redraw,
  * so there’s no need to do forces redraws manually, you just need to
@@ -3789,11 +3785,7 @@ gdk_window_invalidate_region_full (GdkWindow       *window,
  * @invalidate_children: %TRUE to also invalidate child windows
  *
  * Adds @region to the update area for @window. The update area is the
- * region that needs to be redrawn, or “dirty region.” The call
- * gdk_window_process_updates() sends one or more expose events to the
- * window, which together cover the entire update area. An
- * application would normally redraw the contents of @window in
- * response to those expose events.
+ * region that needs to be redrawn, or “dirty region.”
  *
  * GDK will process all updates whenever the frame clock schedules a redraw,
  * so there’s no need to do forces redraws manually, you just need to
@@ -3821,12 +3813,7 @@ gdk_window_invalidate_region (GdkWindow       *window,
  * @window: a #GdkWindow
  * @region: a #cairo_region_t
  *
- * Adds @region to the update area for @window. The update area is the
- * region that needs to be redrawn, or “dirty region.” The call
- * gdk_window_process_updates() sends one or more expose events to the
- * window, which together cover the entire update area. An
- * application would normally redraw the contents of @window in
- * response to those expose events.
+ * Adds @region to the update area for @window.
  *
  * GDK will process all updates whenever the frame clock schedules a redraw,
  * so there’s no need to do forces redraws manually, you just need to
