@@ -3030,13 +3030,6 @@ gtk_drag_context_dnd_finished_cb (GdkDragContext    *context,
                        info->proxy_dest->proxy_drop_time);
     }
 
-  if (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE)
-    {
-      g_signal_emit_by_name (info->widget,
-                             "drag-data-delete",
-                             context);
-    }
-
   gtk_drag_source_info_destroy (info);
 }
 
