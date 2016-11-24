@@ -36,6 +36,9 @@
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+#include "wayland/gdkwayland.h"
+#endif
 
 #include "gdk/gdk-private.h"
 
@@ -139,14 +142,46 @@ redraw_everything (void)
   g_list_free (toplevels);
 }
 
+static double
+get_font_scale (GtkInspectorVisual *vis)
+{
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
+    {
+      int dpi_int;
+
+      g_object_get (gtk_settings_get_default (),
+                    "gtk-xft-dpi", &dpi_int,
+                    NULL);
+
+      return dpi_int / (96.0 * 1024.0);
+    }
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
+    {
+      int dpi_int;
+
+      g_object_get (gtk_settings_get_default (),
+                    "gtk-xft-dpi", &dpi_int,
+                    NULL);
+
+      return dpi_int / (96.0 * 1024.0);
+    }
+#endif
+
+  return 1.0;
+}
+
 static void
 update_font_scale (GtkInspectorVisual *vis,
                    gdouble             factor,
                    gboolean            update_adjustment,
                    gboolean            update_entry)
 {
-  g_object_set (gtk_settings_get_default (), "gtk-xft-dpi",
-                (gint)(factor * 96 * 1024), NULL);
+  g_object_set (gtk_settings_get_default (),
+                "gtk-xft-dpi", (gint)(factor * 96 * 1024),
+                NULL);
 
   if (update_adjustment)
     gtk_adjustment_set_value (vis->priv->font_scale_adjustment, factor);
@@ -546,8 +581,10 @@ init_font (GtkInspectorVisual *vis)
 static void
 init_font_scale (GtkInspectorVisual *vis)
 {
-  /* There is no backend agnostic way to get the default value, so use 1.0 */
-  update_font_scale (vis, 1.0, TRUE, TRUE);
+  double scale;
+
+  scale = get_font_scale (vis);
+  update_font_scale (vis, scale, TRUE, TRUE);
   g_signal_connect (vis->priv->font_scale_adjustment, "value-changed",
                     G_CALLBACK (font_scale_adjustment_changed), vis);
   g_signal_connect (vis->priv->font_scale_entry, "activate",
