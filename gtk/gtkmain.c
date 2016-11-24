@@ -632,7 +632,7 @@ do_pre_parse_initialization (int    *argc,
   if (_gtk_module_has_mixed_deps (NULL))
     g_error ("GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported");
 
-  GDK_PRIVATE_CALL (gdk_pre_parse) ();
+  gdk_pre_parse ();
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
 
 #ifdef G_ENABLE_DEBUG
@@ -775,7 +775,7 @@ post_parse_hook (GOptionContext *context,
   
   if (info->open_default_display)
     {
-      if (GDK_PRIVATE_CALL (gdk_display_open_default) () == NULL)
+      if (gdk_display_open_default () == NULL)
         {
           const char *display_name = gdk_get_display_arg_name ();
           g_set_error (error,
@@ -893,7 +893,7 @@ gtk_get_option_group (gboolean open_default_display)
   group = g_option_group_new ("gtk", _("GTK+ Options"), _("Show GTK+ Options"), info, g_free);
   g_option_group_set_parse_hooks (group, pre_parse_hook, post_parse_hook);
 
-  GDK_PRIVATE_CALL (gdk_add_option_entries) (group);
+  gdk_add_option_entries (group);
   g_option_group_add_entries (group, gtk_args);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   
@@ -965,7 +965,7 @@ gtk_init_with_args (gint                 *argc,
     return FALSE;
 
 done:
-  return GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL;
+  return gdk_display_open_default () != NULL;
 }
 
 
@@ -1056,7 +1056,7 @@ gtk_init_check (int    *argc,
   if (!gtk_parse_args (argc, argv))
     return FALSE;
 
-  ret = GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL;
+  ret = gdk_display_open_default () != NULL;
 
   if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
     gtk_window_set_interactive_debugging (TRUE);
@@ -1525,7 +1525,7 @@ rewrite_event_for_grabs (GdkEvent *event)
       display = gdk_window_get_display (event->any.window);
       device = gdk_event_get_device (event);
 
-      if (!GDK_PRIVATE_CALL (gdk_device_grab_info) (display, device, &grab_window, &owner_events) ||
+      if (!gdk_device_grab_info (display, device, &grab_window, &owner_events) ||
           !owner_events)
         return NULL;
       break;

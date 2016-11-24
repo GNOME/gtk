@@ -121,7 +121,6 @@ gdk_private_headers = 				\
 	gdkx.h
 
 gdk_c_sources = 				\
-	gdk-private.c				\
 	gdk.c					\
 	gdkapplaunchcontext.c			\
 	gdkcairo.c				\

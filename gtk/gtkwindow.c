@@ -6130,7 +6130,7 @@ gtk_window_unmap (GtkWidget *widget)
   while (priv->configure_request_count > 0)
     {
       priv->configure_request_count--;
-      GDK_PRIVATE_CALL (gdk_window_thaw_toplevel_updates) (_gtk_widget_get_window (widget));
+      gdk_window_thaw_toplevel_updates (_gtk_widget_get_window (widget));
     }
   priv->configure_notify_received = FALSE;
 
@@ -7444,7 +7444,7 @@ gtk_window_configure_event (GtkWidget         *widget,
     {
       priv->configure_request_count -= 1;
 
-      GDK_PRIVATE_CALL (gdk_window_thaw_toplevel_updates) (_gtk_widget_get_window (widget));
+      gdk_window_thaw_toplevel_updates (_gtk_widget_get_window (widget));
     }
 
   /*
@@ -9160,7 +9160,7 @@ gtk_window_move_resize (GtkWindow *window)
 	  /* Increment the number of have-not-yet-received-notify requests */
 	  priv->configure_request_count += 1;
 
-          GDK_PRIVATE_CALL (gdk_window_freeze_toplevel_updates) (gdk_window);
+          gdk_window_freeze_toplevel_updates (gdk_window);
 
 	  /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
 	   * configure event in response to our resizing request.
