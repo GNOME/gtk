@@ -3745,9 +3745,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  * application would normally redraw the contents of @window in
  * response to those expose events.
  *
- * GDK will call gdk_window_process_all_updates() on your behalf
- * whenever your program returns to the main loop and becomes idle, so
- * normally there’s no need to do that manually, you just need to
+ * GDK will process all updates whenever the frame clock schedules a redraw,
+ * so there’s no need to do forces redraws manually, you just need to
  * invalidate regions that you know should be redrawn.
  *
  * The @child_func parameter controls whether the region of
@@ -3796,9 +3795,8 @@ gdk_window_invalidate_region_full (GdkWindow       *window,
  * application would normally redraw the contents of @window in
  * response to those expose events.
  *
- * GDK will call gdk_window_process_all_updates() on your behalf
- * whenever your program returns to the main loop and becomes idle, so
- * normally there’s no need to do that manually, you just need to
+ * GDK will process all updates whenever the frame clock schedules a redraw,
+ * so there’s no need to do forces redraws manually, you just need to
  * invalidate regions that you know should be redrawn.
  *
  * The @invalidate_children parameter controls whether the region of
@@ -3830,9 +3828,8 @@ gdk_window_invalidate_region (GdkWindow       *window,
  * application would normally redraw the contents of @window in
  * response to those expose events.
  *
- * GDK will call gdk_window_process_all_updates() on your behalf
- * whenever your program returns to the main loop and becomes idle, so
- * normally there’s no need to do that manually, you just need to
+ * GDK will process all updates whenever the frame clock schedules a redraw,
+ * so there’s no need to do forces redraws manually, you just need to
  * invalidate regions that you know should be redrawn.
  *
  * This version of invalidation is used when you recieve expose events

@@ -901,9 +901,6 @@ GDK_AVAILABLE_IN_ALL
 void       gdk_window_thaw_updates        (GdkWindow    *window);
 
 GDK_AVAILABLE_IN_ALL
-void       gdk_window_process_all_updates (void);
-
-GDK_AVAILABLE_IN_ALL
 void       gdk_window_constrain_size      (GdkGeometry    *geometry,
                                            GdkWindowHints  flags,
                                            gint            width,
