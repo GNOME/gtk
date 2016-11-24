@@ -2894,6 +2894,8 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
   GdkDrawingContext *context;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (gdk_window_has_native (window), NULL);
+  g_return_val_if_fail (gdk_window_is_toplevel (window), NULL);
 
   if (window->drawing_context != NULL)
     {
@@ -2903,8 +2905,7 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
       return NULL;
     }
 
-  if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
-    gdk_window_begin_paint_internal (window, region);
+  gdk_window_begin_paint_internal (window, region);
 
   context = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_draw_context (window, region);
 
@@ -2935,18 +2936,9 @@ gdk_window_end_draw_frame (GdkWindow         *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
-
-  if (window->drawing_context == NULL)
-    {
-      g_critical ("The window %p has no drawing context. You must call "
-                  "gdk_window_begin_draw_frame() before calling "
-                  "gdk_window_end_draw_frame().", window);
-      return;
-    }
   g_return_if_fail (window->drawing_context == context);
 
-  if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
-    gdk_window_end_paint_internal (window);
+  gdk_window_end_paint_internal (window);
 
   window->drawing_context = NULL;
 
