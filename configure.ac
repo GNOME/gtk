@@ -1374,7 +1374,7 @@ GSK_EXTRA_LIBS=
 GSK_EXTRA_CFLAGS=
 
 GSK_PACKAGES="gdk-pixbuf-2.0 >= gdk_pixbuf_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version graphene-1.0 >= graphene_required_version"
-GSK_PRIVATE_PACKAGES="epoxy >= epoxy_required_version"
+GSK_PRIVATE_PACKAGES="epoxy >= epoxy_required_version $WAYLAND_PACKAGES"
 
 PKG_CHECK_MODULES(GSK_DEP, $PANGO_PACKAGES $GSK_PACKAGES $GSK_PRIVATE_PACKAGES)
 GSK_DEP_LIBS="$GSK_EXTRA_LIBS $GSK_DEP_LIBS $MATH_LIB"
