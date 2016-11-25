@@ -4060,7 +4060,7 @@ colorchooser .popover.osd { border-radius: 5px; }
 
   &:backdrop { background-color: darken($bg_color,7%); }
 
-  rubberband { @extend rubberband; }
+  rubberband, .rubberband { @extend rubberband; }
 }
 
 .scale-popup {

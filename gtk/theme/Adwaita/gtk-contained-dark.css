@@ -80,7 +80,8 @@ textview border {
 rubberband,
 flowbox rubberband,
 treeview.view rubberband,
-.content-view rubberband {
+.content-view rubberband,
+.content-view .rubberband {
   border: 1px solid #184472;
   background-color: rgba(24, 68, 114, 0.2); }
 
