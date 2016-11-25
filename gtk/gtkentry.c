@@ -1473,6 +1473,9 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * This is mainly useful to change the size or weight of the text.
    *
+   * The #PangoAttribute's @start_index and @end_index must refer to the
+   * #GtkEntryBuffer text, i.e. without the preedit string.
+   *
    * Since: 3.6
    */
   entry_props[PROP_ATTRIBUTES] =
