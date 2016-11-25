@@ -1001,13 +1001,30 @@ gdk_wayland_window_maybe_configure (GdkWindow *window,
                                     int        scale)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  gboolean is_xdg_popup;
+  gboolean is_visible;
 
   if (window->width == width &&
       window->height == height &&
       impl->scale == scale)
     return;
 
+  /* For xdg_popup using an xdg_positioner, there is a race condition if
+   * the application tries to change the size after it's mapped, but before
+   * the initial configure is received, so hide and show the surface again
+   * force the new size onto the compositor. See bug #772505.
+   */
+
+  is_xdg_popup = (impl->display_server.xdg_popup != NULL);
+  is_visible = gdk_window_is_visible (window);
+
+  if (is_xdg_popup && is_visible && !impl->initial_configure_received)
+    gdk_window_hide (window);
+
   gdk_wayland_window_configure (window, width, height, scale);
+
+  if (is_xdg_popup && is_visible && !impl->initial_configure_received)
+    gdk_window_show (window);
 }
 
 static void
