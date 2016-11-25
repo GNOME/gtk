@@ -8188,12 +8188,11 @@ gtk_entry_get_layout (GtkEntry *entry)
  * gtk_entry_layout_index_to_text_index:
  * @entry: a #GtkEntry
  * @layout_index: byte index into the entry layout text
- * 
- * Converts from a position in the entry contents (returned
- * by gtk_entry_get_text()) to a position in the
- * entry’s #PangoLayout (returned by gtk_entry_get_layout(),
- * with text retrieved via pango_layout_get_text()).
- * 
+ *
+ * Converts from a position in the entry’s #PangoLayout (returned by
+ * gtk_entry_get_layout()) to a position in the entry contents
+ * (returned by gtk_entry_get_text()).
+ *
  * Returns: byte index into the entry contents
  **/
 gint
@@ -8228,11 +8227,12 @@ gtk_entry_layout_index_to_text_index (GtkEntry *entry,
  * gtk_entry_text_index_to_layout_index:
  * @entry: a #GtkEntry
  * @text_index: byte index into the entry contents
- * 
- * Converts from a position in the entry’s #PangoLayout (returned by
- * gtk_entry_get_layout()) to a position in the entry contents
- * (returned by gtk_entry_get_text()).
- * 
+ *
+ * Converts from a position in the entry contents (returned
+ * by gtk_entry_get_text()) to a position in the
+ * entry’s #PangoLayout (returned by gtk_entry_get_layout(),
+ * with text retrieved via pango_layout_get_text()).
+ *
  * Returns: byte index into the entry layout text
  **/
 gint
