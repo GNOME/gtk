@@ -282,7 +282,7 @@ main (int argc, char **argv)
 
   basename = g_path_get_basename (path);
 
-  dot = strchr(basename, '.');
+  dot = strrchr (basename, '.');
   if (dot != NULL)
     *dot = 0;
   pngfile = g_strconcat (basename, ".symbolic.png", NULL);
