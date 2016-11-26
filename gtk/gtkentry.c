@@ -1573,7 +1573,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry::populate-popup:
    * @entry: The entry on which the signal is emitted
-   * @popup: the container that is being populated
+   * @widget: the container that is being populated
    *
    * The ::populate-popup signal gets emitted before showing the
    * context menu of the entry.
