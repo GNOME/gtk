@@ -688,7 +688,8 @@ gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
   gtk_snapshot_translate_2d (snapshot, x, y);
   gtk_css_style_snapshot_icon_texture (gtk_style_context_lookup_style (context),
                                        snapshot,
-                                       texture);
+                                       texture,
+                                       1);
   gtk_snapshot_translate_2d (snapshot, -x, -y);
   gsk_texture_unref (texture);
 }

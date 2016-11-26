@@ -49,7 +49,8 @@ void    gtk_css_style_render_icon_surface       (GtkCssStyle            *style,
                                                  double                  y);
 void    gtk_css_style_snapshot_icon_texture     (GtkCssStyle            *style,
                                                  GtkSnapshot            *snapshot,
-                                                 GskTexture             *texture);
+                                                 GskTexture             *texture,
+                                                 double                  texture_scale);
 
 void    gtk_css_style_render_icon_get_extents   (GtkCssStyle            *style,
                                                  GdkRectangle           *extents,
