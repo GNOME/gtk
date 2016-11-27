@@ -346,6 +346,28 @@ gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
   return result;
 }
 
+static GdkDrawingContext *
+gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
+                                  const cairo_region_t *region)
+{
+  cairo_region_t *whole_window;
+  GdkDrawingContext *result;
+  GdkWindow *window;
+
+  window = gsk_renderer_get_window (renderer);
+  
+  whole_window = cairo_region_create_rectangle (&(GdkRectangle) {
+                                                         0, 0,
+                                                         gdk_window_get_width (window),
+                                                         gdk_window_get_height (window) });
+
+  result = GSK_RENDERER_CLASS (gsk_gl_renderer_parent_class)->begin_draw_frame (renderer, whole_window);
+
+  cairo_region_destroy (whole_window);
+
+  return result;
+}
+
 static void
 gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
                                  const graphene_rect_t *viewport,
