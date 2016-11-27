@@ -112,6 +112,27 @@ gsk_renderer_real_unrealize (GskRenderer *self)
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, unrealize);
 }
 
+static GdkDrawingContext *
+gsk_renderer_real_begin_draw_frame (GskRenderer          *self,
+                                    const cairo_region_t *region)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
+
+  return gdk_window_begin_draw_frame (priv->window,
+                                      priv->gl_context,
+                                      region);
+}
+
+static void
+gsk_renderer_real_end_draw_frame (GskRenderer       *self,
+                                  GdkDrawingContext *context)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
+
+  gdk_window_end_draw_frame (priv->window,
+                             context);
+}
+
 static void
 gsk_renderer_real_render (GskRenderer *self,
                           GskRenderNode *root)
@@ -236,6 +257,8 @@ gsk_renderer_class_init (GskRendererClass *klass)
 
   klass->realize = gsk_renderer_real_realize;
   klass->unrealize = gsk_renderer_real_unrealize;
+  klass->begin_draw_frame = gsk_renderer_real_begin_draw_frame;
+  klass->end_draw_frame = gsk_renderer_real_end_draw_frame;
   klass->render = gsk_renderer_real_render;
   klass->create_cairo_surface = gsk_renderer_real_create_cairo_surface;
 
@@ -590,9 +613,7 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * gsk_renderer_render:
  * @renderer: a #GskRenderer
  * @root: a #GskRenderNode
- * @context: a #GdkDrawingContext using the context returned by
- *     gsk_renderer_get_gl_context() or %NULL if the renderer was created
- *     via gsk_renderer_create_fallback().
+ * @context: The drawing context created via gsk_renderer_begin_draw_frame()
  *
  * Renders the scene graph, described by a tree of #GskRenderNode instances,
  * using the given #GdkDrawingContext.
@@ -612,19 +633,16 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_return_if_fail (GSK_IS_RENDERER (renderer));
   g_return_if_fail (priv->is_realized);
   g_return_if_fail (GSK_IS_RENDER_NODE (root));
-  g_return_if_fail (context == NULL || GDK_IS_DRAWING_CONTEXT (context));
-  g_return_if_fail (priv->drawing_context == NULL);
   g_return_if_fail (priv->root_node == NULL);
+  g_return_if_fail (context == priv->drawing_context);
 
-  if (context != NULL)
-    priv->drawing_context = g_object_ref (context);
-  else
+  if (priv->drawing_context == NULL)
     {
       if (priv->cairo_context == NULL)
         {
           g_critical ("The given GskRenderer instance was not created using "
-                      "gsk_renderer_create_fallback(), but you forgot to pass "
-                      "a GdkDrawingContext.");
+                      "gsk_renderer_create_fallback(), but you forgot to call "
+                      "gsk_renderer_begin_draw_frame().");
           return;
         }
     }
@@ -655,7 +673,6 @@ gsk_renderer_render (GskRenderer       *renderer,
     }
 #endif
 
-  g_clear_object (&priv->drawing_context);
   g_clear_pointer (&priv->root_node, gsk_render_node_unref);
 }
 
@@ -854,6 +871,36 @@ gsk_renderer_get_gl_context (GskRenderer *renderer)
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   return priv->gl_context;
+}
+
+GdkDrawingContext *
+gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
+                               const cairo_region_t *region)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
+  g_return_val_if_fail (region != NULL, NULL);
+  g_return_val_if_fail (priv->drawing_context == NULL, NULL);
+
+  priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, region);
+
+  return priv->drawing_context;
+}
+
+void
+gsk_renderer_end_draw_frame (GskRenderer       *renderer,
+                             GdkDrawingContext *context)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  g_return_if_fail (GSK_IS_RENDERER (renderer));
+  g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
+  g_return_if_fail (priv->drawing_context == context);
+
+  priv->drawing_context = NULL;
+
+  GSK_RENDERER_GET_CLASS (renderer)->end_draw_frame (renderer, context);
 }
 
 /**

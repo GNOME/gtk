@@ -42,6 +42,10 @@ struct _GskRendererClass
                         GError **error);
   void (* unrealize) (GskRenderer *renderer);
 
+  GdkDrawingContext * (* begin_draw_frame) (GskRenderer *renderer,
+                                            const cairo_region_t *region);
+  void (* end_draw_frame) (GskRenderer *renderer,
+                           GdkDrawingContext *context);
   void (* render) (GskRenderer *renderer,
                    GskRenderNode *root);
 

@@ -77,10 +77,14 @@ GskRenderer *           gsk_renderer_create_fallback            (GskRenderer    
                                                                  cairo_t                 *cr);
 
 GDK_AVAILABLE_IN_3_90
-GdkGLContext *          gsk_renderer_get_gl_context             (GskRenderer             *renderer);
+GdkDrawingContext *     gsk_renderer_begin_draw_frame           (GskRenderer             *renderer,
+                                                                 const cairo_region_t    *region);
 GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_render                     (GskRenderer             *renderer,
                                                                  GskRenderNode           *root,
+                                                                 GdkDrawingContext       *context);
+GDK_AVAILABLE_IN_3_90
+void                    gsk_renderer_end_draw_frame             (GskRenderer             *renderer,
                                                                  GdkDrawingContext       *context);
 
 G_END_DECLS

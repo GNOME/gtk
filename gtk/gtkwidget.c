@@ -15640,9 +15640,7 @@ gtk_widget_render (GtkWidget            *widget,
   if (renderer == NULL)
     return;
 
-  context = gdk_window_begin_draw_frame (window,
-                                         gsk_renderer_get_gl_context (renderer),
-                                         region);
+  context = gsk_renderer_begin_draw_frame (renderer, region);
 
   gtk_snapshot_init (&snapshot,
                      renderer,
@@ -15662,5 +15660,5 @@ gtk_widget_render (GtkWidget            *widget,
       gsk_render_node_unref (root);
     }
 
-  gdk_window_end_draw_frame (window, context);
+  gsk_renderer_end_draw_frame (renderer, context);
 }
