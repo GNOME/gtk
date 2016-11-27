@@ -324,6 +324,32 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   gsk_renderer_set_gl_context (renderer, NULL);
 }
 
+static GdkDrawingContext *
+gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
+                                  const cairo_region_t *region)
+{
+  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  cairo_region_t *whole_window;
+  GdkDrawingContext *result;
+  GdkWindow *window;
+
+  window = gsk_renderer_get_window (renderer);
+  
+  whole_window = cairo_region_create_rectangle (&(GdkRectangle) {
+                                                    0, 0,
+                                                    gdk_window_get_width (window),
+                                                    gdk_window_get_height (window)
+                                                });
+
+  result = gdk_window_begin_draw_frame (window,
+                                        self->gl_context,
+                                        region);
+
+  cairo_region_destroy (whole_window);
+
+  return result;
+}
+
 static void
 gsk_gl_renderer_resize_viewport (GskGLRenderer         *self,
                                  const graphene_rect_t *viewport,
@@ -919,6 +945,7 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
 
   renderer_class->realize = gsk_gl_renderer_realize;
   renderer_class->unrealize = gsk_gl_renderer_unrealize;
+  renderer_class->begin_draw_frame = gsk_gl_renderer_begin_draw_frame;
   renderer_class->render = gsk_gl_renderer_render;
 }
 
