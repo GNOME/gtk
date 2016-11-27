@@ -18,9 +18,6 @@
 #ifndef __GDK_WIN32_KEYS_H__
 #define __GDK_WIN32_KEYS_H__
 
-#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdkwin32.h> can be included directly."
-#endif
 
 #include <gdk/gdk.h>
 

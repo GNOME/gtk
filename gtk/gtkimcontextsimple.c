@@ -32,7 +32,7 @@
 #include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_WIN32
-#include <win32/gdkwin32.h>
+#include <win32/gdkwin32keys.h>
 #endif
 
 typedef struct _GtkComposeTable GtkComposeTable;
