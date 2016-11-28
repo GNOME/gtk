@@ -2682,6 +2682,45 @@ gdk_window_create_gl_context (GdkWindow    *window,
                                                                       error);
 }
 
+/**
+ * gdk_window_create_vulkan_context:
+ * @window: a #GdkWindow
+ * @error: return location for an error
+ *
+ * Creates a new #GdkVulkanContext for rendering on @window.
+ *
+ * If the creation of the #GdkVulkanContext failed, @error will be set.
+ *
+ * Returns: (transfer full): the newly created #GdkVulkanContext, or
+ * %NULL on error
+ *
+ * Since: 3.90
+ **/
+GdkVulkanContext *
+gdk_window_create_vulkan_context (GdkWindow  *window,
+                                  GError    **error)
+{
+  GdkDisplay *display;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  display = gdk_window_get_display (window);
+
+  if (GDK_DISPLAY_GET_CLASS (display)->vk_extension_name == NULL)
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+                   "The %s backend has no Vulkan support.", G_OBJECT_TYPE_NAME (display));
+      return FALSE;
+    }
+
+  return g_initable_new (GDK_DISPLAY_GET_CLASS (display)->vk_context_type,
+                         NULL,
+                         error,
+                         "window", window,
+                         NULL);
+}
+
 static void
 gdk_window_begin_paint_internal (GdkWindow            *window,
 			         const cairo_region_t *region)

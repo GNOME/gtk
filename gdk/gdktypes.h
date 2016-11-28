@@ -490,6 +490,21 @@ typedef enum {
 } GdkGLError;
 
 /**
+ * GdkVulkanError:
+ * @GDK_VULKAN_ERROR_UNSUPPORTED: Vulkan is not supported on this backend or has not been
+ *     compiled in.
+ * @GDK_VULKAN_ERROR_NOT_AVAILABLE: Vulkan support is not available on this Window
+ *
+ * Error enumeration for #GdkVulkanContext.
+ *
+ * Since: 3.90
+ */
+typedef enum {
+  GDK_VULKAN_ERROR_UNSUPPORTED,
+  GDK_VULKAN_ERROR_NOT_AVAILABLE,
+} GdkVulkanError;
+
+/**
  * GdkWindowTypeHint:
  * @GDK_WINDOW_TYPE_HINT_NORMAL: Normal toplevel window.
  * @GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.

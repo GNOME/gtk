@@ -32,6 +32,8 @@ typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
 
 struct _GdkVulkanContextPrivate {
   GdkWindow *window;
+
+  VkSurfaceKHR surface;
 };
 
 enum {
@@ -47,13 +49,19 @@ static GParamSpec *pspecs[LAST_PROP] = { NULL, };
 
 G_DEFINE_QUARK (gdk-vulkan-error-quark, gdk_vulkan_error)
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkVulkanContext, gdk_vulkan_context, G_TYPE_OBJECT)
+static void gdk_vulkan_context_initable_init (GInitableIface *iface);
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkVulkanContext, gdk_vulkan_context, G_TYPE_OBJECT,
+                                  G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, gdk_vulkan_context_initable_init)
+                                  G_ADD_PRIVATE (GdkVulkanContext))
 
 static void
 gdk_vulkan_context_dispose (GObject *gobject)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  gdk_display_unref_vulkan (gdk_vulkan_context_get_display (context));
 
   g_clear_object (&priv->window);
 
@@ -153,6 +161,33 @@ gdk_vulkan_context_init (GdkVulkanContext *self)
 {
 }
 
+static gboolean
+gdk_vulkan_context_real_init (GInitable     *initable,
+                              GCancellable  *cancellable,
+                              GError       **error)
+{
+  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (initable);
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  if (!gdk_display_ref_vulkan (gdk_vulkan_context_get_display (context), error))
+    return FALSE;
+
+  if (GDK_VULKAN_CONTEXT_GET_CLASS (context)->create_surface (context, &priv->surface) != VK_SUCCESS)
+    {
+      g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                           "Vulkan support not available for this window.");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+gdk_vulkan_context_initable_init (GInitableIface *iface)
+{
+  iface->init = gdk_vulkan_context_real_init;
+}
+
 /**
  * gdk_vulkan_context_get_display:
  * @context: a #GdkVulkanContext
@@ -195,8 +230,17 @@ gdk_vulkan_context_get_window (GdkVulkanContext *context)
 
 #ifdef GDK_WINDOWING_VULKAN
 
+VkInstance
+gdk_vulkan_context_get_instance (GdkVulkanContext *context)
+{
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), NULL);
+
+  return gdk_vulkan_context_get_display (context)->vk_instance;
+}
+
 static gboolean
-gdk_display_create_vulkan_device (GdkDisplay *display)
+gdk_display_create_vulkan_device (GdkDisplay  *display,
+                                  GError     **error)
 {
   uint32_t i, j;
 
@@ -204,6 +248,14 @@ gdk_display_create_vulkan_device (GdkDisplay *display)
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, NULL);
   VkPhysicalDevice devices[n_devices];
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, devices);
+
+  if (n_devices == 0)
+    {
+      /* Give a different error for 0 devices so people know their drivers suck. */
+      g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                           "No Vulkan devices available.");
+      return FALSE;
+    }
 
   for (i = 0; i < n_devices; i++)
     {
@@ -265,14 +317,23 @@ gdk_display_create_vulkan_device (GdkDisplay *display)
         }
     }
 
+  g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                       "Could not find a Vulkan device with the required features.");
   return FALSE;
 }
 
 static gboolean
-gdk_display_create_vulkan_instance (GdkDisplay *display,
-                                    const char *wsi_extension_name)
+gdk_display_create_vulkan_instance (GdkDisplay  *display,
+                                    GError     **error)
 {
   uint32_t i;
+
+  if (GDK_DISPLAY_GET_CLASS (display)->vk_extension_name == NULL)
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+                   "The %s backend has no Vulkan support.", G_OBJECT_TYPE_NAME (display));
+      return FALSE;
+    }
 
   uint32_t n_extensions;
   GDK_VK_CHECK (vkEnumerateInstanceExtensionProperties, NULL, &n_extensions, NULL);
@@ -308,31 +369,39 @@ gdk_display_create_vulkan_instance (GdkDisplay *display,
                                            NULL,
                                            0,
                                            &(VkApplicationInfo) {
-                                                VK_STRUCTURE_TYPE_APPLICATION_INFO,
-                                                NULL,
-                                                g_get_application_name (),
-                                                0,
-                                                "GTK+",
-                                                VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
-                                                VK_API_VERSION_1_0 },
+                                               VK_STRUCTURE_TYPE_APPLICATION_INFO,
+                                               NULL,
+                                               g_get_application_name (),
+                                               0,
+                                               "GTK+",
+                                               VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
+                                               VK_API_VERSION_1_0 },
                                            0,
                                            NULL,
-                                           1,
-                                           &wsi_extension_name },
+                                           2,
+                                           (const char *const *) &(const char *[2]) {
+                                               VK_KHR_SURFACE_EXTENSION_NAME, 
+                                               GDK_DISPLAY_GET_CLASS (display)->vk_extension_name
+                                           },
+                                       },
                                        NULL,
                                        &display->vk_instance) != VK_SUCCESS)
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+                           "Could not create a Vulkan instance.");
+      return FALSE;
+    }
 
-  return gdk_display_create_vulkan_device (display);
+  return gdk_display_create_vulkan_device (display, error);
 }
 
 gboolean
 gdk_display_ref_vulkan (GdkDisplay *display,
-                        const char *wsi_extension_name)
+                        GError     **error)
 {
   if (display->vulkan_refcount == 0)
     {
-      if (!gdk_display_create_vulkan_instance (display, wsi_extension_name))
+      if (!gdk_display_create_vulkan_instance (display, error))
         return FALSE;
     }
 

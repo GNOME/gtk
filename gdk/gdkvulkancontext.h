@@ -28,6 +28,10 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 
+#ifdef GDK_WINDOWING_VULKAN
+#include <vulkan/vulkan.h>
+#endif
+
 G_BEGIN_DECLS
 
 #define GDK_TYPE_VULKAN_CONTEXT             (gdk_vulkan_context_get_type ())
@@ -46,6 +50,13 @@ GDK_AVAILABLE_IN_3_90
 GdkDisplay *            gdk_vulkan_context_get_display              (GdkVulkanContext  *context);
 GDK_AVAILABLE_IN_3_90
 GdkWindow *             gdk_vulkan_context_get_window               (GdkVulkanContext  *context);
+
+#ifdef GDK_WINDOWING_VULKAN
+
+GDK_AVAILABLE_IN_3_90
+VkInstance              gdk_vulkan_context_get_instance             (GdkVulkanContext  *context);
+
+#endif /* GDK_WINDOWING_VULKAN */
 
 G_END_DECLS
 

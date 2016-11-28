@@ -946,6 +946,10 @@ gboolean  gdk_window_show_window_menu          (GdkWindow      *window,
 GDK_AVAILABLE_IN_3_16
 GdkGLContext * gdk_window_create_gl_context    (GdkWindow      *window,
                                                 GError        **error);
+GDK_AVAILABLE_IN_3_90
+GdkVulkanContext *
+               gdk_window_create_vulkan_context(GdkWindow      *window,
+                                                GError        **error);
 
 G_END_DECLS
 

@@ -21,7 +21,11 @@
 #ifndef __GDK_X11_VULKAN_CONTEXT__
 #define __GDK_X11_VULKAN_CONTEXT__
 
+#include "gdkconfig.h"
+
 #ifdef GDK_WINDOWING_VULKAN
+
+#define VK_USE_PLATFORM_XLIB_KHR
 
 #include "gdkvulkancontextprivate.h"
 
@@ -34,6 +38,9 @@ G_BEGIN_DECLS
 #define GDK_IS_X11_VULKAN_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_VULKAN_CONTEXT))
 #define GDK_X11_VULKAN_CONTEXT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_VULKAN_CONTEXT, GdkX11VulkanContextClass))
 
+typedef struct _GdkX11VulkanContext GdkX11VulkanContext;
+typedef struct _GdkX11VulkanContextClass GdkX11VulkanContextClass;
+
 struct _GdkX11VulkanContext
 {
   GdkVulkanContext parent_instance;
@@ -43,6 +50,9 @@ struct _GdkX11VulkanContextClass
 {
   GdkVulkanContextClass parent_class;
 };
+
+GDK_AVAILABLE_IN_3_90
+GType gdk_x11_vulkan_context_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 

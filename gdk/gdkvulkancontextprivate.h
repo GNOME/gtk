@@ -43,6 +43,9 @@ struct _GdkVulkanContext
 struct _GdkVulkanContextClass
 {
   GObjectClass parent_class;
+
+  VkResult     (* create_surface)       (GdkVulkanContext       *context,
+                                         VkSurfaceKHR           *surface);
 };
 
 #ifdef GDK_WINDOWING_VULKAN
@@ -61,16 +64,19 @@ gdk_vulkan_handle_result (VkResult    res,
 #define GDK_VK_CHECK(func, ...) gdk_vulkan_handle_result (func (__VA_ARGS__), G_STRINGIFY (func))
 
 gboolean        gdk_display_ref_vulkan                          (GdkDisplay      *display,
-                                                                 const char      *wsi_extension_name);
+                                                                 GError         **error);
 void            gdk_display_unref_vulkan                        (GdkDisplay      *display);
 
 #else /* !GDK_WINDOWING_VULKAN */
 
 static inline gboolean
-gdk_display_init_vulkan (GdkDisplay *display,
-                         const char *wsi_extension_name)
+gdk_display_ref_vulkan (GdkDisplay  *display,
+                        GError     **error)
 {
   GDK_NOTE (VULKAN, g_print ("Support for Vulkan disabled at compile-time"));
+
+  g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+                       "Vulkan support was not enabled at compie time.");
 
   return FALSE;
 }

@@ -145,6 +145,8 @@ struct _GdkDisplayClass
   GObjectClass parent_class;
 
   GType window_type;          /* type for native windows for this display, set in class_init */
+  GType vk_context_type;      /* type for GdkVulkanContext, must be set if vk_extension_name != NULL */
+  const char *vk_extension_name; /* Name of required windowing vulkan extension or %NULL (default) if Vulkan isn't supported */
 
   const gchar *              (*get_name)           (GdkDisplay *display);
   GdkScreen *                (*get_default_screen) (GdkDisplay *display);

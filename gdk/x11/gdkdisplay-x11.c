@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#define VK_USE_PLATFORM_XLIB_KHR
+
 #include "gdkasync.h"
 #include "gdkdisplay.h"
 #include "gdkeventsource.h"
@@ -38,6 +40,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkglcontext-x11.h"
+#include "gdkvulkancontext-x11.h"
 #include "gdk-private.h"
 
 #include <glib.h>
@@ -2951,6 +2954,10 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   object_class->finalize = gdk_x11_display_finalize;
 
   display_class->window_type = GDK_TYPE_X11_WINDOW;
+#ifdef GDK_WINDOWING_VULKAN
+  display_class->vk_context_type = GDK_TYPE_X11_VULKAN_CONTEXT;
+  display_class->vk_extension_name = VK_KHR_XLIB_SURFACE_EXTENSION_NAME;
+#endif
 
   display_class->get_name = gdk_x11_display_get_name;
   display_class->get_default_screen = gdk_x11_display_get_default_screen;
