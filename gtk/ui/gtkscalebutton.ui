@@ -15,11 +15,6 @@
       </object>
     </child>
   </template>
-  <object class="GtkAdjustment" id="adjustment">
-    <property name="upper">100</property>
-    <property name="step-increment">2</property>
-    <property name="page-increment">20</property>
-  </object>
   <object class="GtkPopover" id="dock">
     <signal name="map" handler="cb_popup_mapped" swapped="no"/>
     <style>
@@ -63,7 +58,6 @@
             <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="orientation">vertical</property>
-            <property name="adjustment">adjustment</property>
             <property name="inverted">1</property>
             <property name="round-digits">1</property>
             <property name="draw-value">0</property>

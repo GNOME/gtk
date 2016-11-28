@@ -334,7 +334,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, scale);
   gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, image);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkScaleButton, adjustment);
 
   gtk_widget_class_bind_template_callback (widget_class, cb_button_press);
   gtk_widget_class_bind_template_callback (widget_class, cb_button_release);
@@ -362,7 +361,9 @@ gtk_scale_button_init (GtkScaleButton *button)
   gtk_popover_set_relative_to (GTK_POPOVER (priv->dock), GTK_WIDGET (button));
 
   /* Need a local reference to the adjustment */
-  g_object_ref (priv->adjustment);
+  priv->adjustment = gtk_adjustment_new (0, 0, 100, 2, 20, 0);
+  g_object_ref_sink (priv->adjustment);
+  gtk_range_set_adjustment (GTK_RANGE (priv->scale), priv->adjustment);
 
   gtk_widget_add_events (GTK_WIDGET (button), GDK_SMOOTH_SCROLL_MASK);
 
