@@ -749,7 +749,6 @@ _gdk_win32_window_create_gl_context (GdkWindow *window,
   display_win32->gl_hwnd = hwnd;
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT,
-                          "display", display,
                           "window", window,
                           "shared-context", share,
                           NULL);

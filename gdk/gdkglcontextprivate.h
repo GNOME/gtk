@@ -22,6 +22,7 @@
 #define __GDK_GL_CONTEXT_PRIVATE_H__
 
 #include "gdkglcontext.h"
+#include "gdkdrawcontextprivate.h"
 
 G_BEGIN_DECLS
 
@@ -33,12 +34,12 @@ typedef struct _GdkGLContextClass       GdkGLContextClass;
 
 struct _GdkGLContext
 {
-  GObject parent_instance;
+  GdkDrawContext parent_instance;
 };
 
 struct _GdkGLContextClass
 {
-  GObjectClass parent_class;
+  GdkDrawContextClass parent_class;
 
   gboolean (* realize) (GdkGLContext *context,
                         GError **error);

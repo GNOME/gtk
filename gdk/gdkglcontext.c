@@ -88,8 +88,6 @@
 #include <epoxy/gl.h>
 
 typedef struct {
-  GdkDisplay *display;
-  GdkWindow *window;
   GdkGLContext *shared_context;
 
   int major;
@@ -115,8 +113,6 @@ typedef struct {
 enum {
   PROP_0,
 
-  PROP_DISPLAY,
-  PROP_WINDOW,
   PROP_SHARED_CONTEXT,
 
   LAST_PROP
@@ -126,7 +122,7 @@ static GParamSpec *obj_pspecs[LAST_PROP] = { NULL, };
 
 G_DEFINE_QUARK (gdk-gl-error-quark, gdk_gl_error)
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkGLContext, gdk_gl_context, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkGLContext, gdk_gl_context, GDK_TYPE_DRAW_CONTEXT)
 
 static GPrivate thread_current_context = G_PRIVATE_INIT (g_object_unref);
 
@@ -141,8 +137,6 @@ gdk_gl_context_dispose (GObject *gobject)
   if (current == context)
     g_private_replace (&thread_current_context, NULL);
 
-  g_clear_object (&priv->display);
-  g_clear_object (&priv->window);
   g_clear_object (&priv->shared_context);
 
   G_OBJECT_CLASS (gdk_gl_context_parent_class)->dispose (gobject);
@@ -168,34 +162,6 @@ gdk_gl_context_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
-      {
-        GdkDisplay *display = g_value_get_object (value);
-
-        if (display)
-          g_object_ref (display);
-
-        if (priv->display)
-          g_object_unref (priv->display);
-
-        priv->display = display;
-      }
-      break;
-
-    case PROP_WINDOW:
-      {
-        GdkWindow *window = g_value_get_object (value);
-
-        if (window)
-          g_object_ref (window);
-
-        if (priv->window)
-          g_object_unref (priv->window);
-
-        priv->window = window;
-      }
-      break;
-
     case PROP_SHARED_CONTEXT:
       {
         GdkGLContext *context = g_value_get_object (value);
@@ -220,14 +186,6 @@ gdk_gl_context_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
-      g_value_set_object (value, priv->display);
-      break;
-
-    case PROP_WINDOW:
-      g_value_set_object (value, priv->window);
-      break;
-
     case PROP_SHARED_CONTEXT:
       g_value_set_object (value, priv->shared_context);
       break;
@@ -306,38 +264,6 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   klass->realize = gdk_gl_context_real_realize;
 
   /**
-   * GdkGLContext:display:
-   *
-   * The #GdkDisplay used to create the #GdkGLContext.
-   *
-   * Since: 3.16
-   */
-  obj_pspecs[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         P_("Display"),
-                         P_("The GDK display used to create the GL context"),
-                         GDK_TYPE_DISPLAY,
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GdkGLContext:window:
-   *
-   * The #GdkWindow the gl context is bound to.
-   *
-   * Since: 3.16
-   */
-  obj_pspecs[PROP_WINDOW] =
-    g_param_spec_object ("window",
-                         P_("Window"),
-                         P_("The GDK window bound to the GL context"),
-                         GDK_TYPE_WINDOW,
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
-
-  /**
    * GdkGLContext:shared-context:
    *
    * The #GdkGLContext that this context is sharing data with, or #NULL
@@ -412,10 +338,13 @@ gdk_gl_context_begin_frame (GdkGLContext   *context,
 {
   GdkGLContextPrivate *priv, *shared_priv;
   GdkGLContext *shared;
+  GdkWindow *window;
   int ww, wh;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (region != NULL);
+
+  window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
 
   priv = gdk_gl_context_get_instance_private (context);
   priv->is_drawing = TRUE;
@@ -426,8 +355,8 @@ gdk_gl_context_begin_frame (GdkGLContext   *context,
 
   GDK_GL_CONTEXT_GET_CLASS (context)->begin_frame (context, region);
 
-  ww = gdk_window_get_width (priv->window) * gdk_window_get_scale_factor (priv->window);
-  wh = gdk_window_get_height (priv->window) * gdk_window_get_scale_factor (priv->window);
+  ww = gdk_window_get_width (window) * gdk_window_get_scale_factor (window);
+  wh = gdk_window_get_height (window) * gdk_window_get_scale_factor (window);
 
   gdk_gl_context_make_current (shared);
 
@@ -964,7 +893,7 @@ gdk_gl_context_make_current (GdkGLContext *context)
         }
     }
 
-  if (gdk_display_make_gl_context_current (priv->display, context))
+  if (gdk_display_make_gl_context_current (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), context))
     {
       g_private_replace (&thread_current_context, g_object_ref (context));
       gdk_gl_context_check_extensions (context);
@@ -984,11 +913,9 @@ gdk_gl_context_make_current (GdkGLContext *context)
 GdkDisplay *
 gdk_gl_context_get_display (GdkGLContext *context)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
 
-  return priv->display;
+  return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 }
 
 /**
@@ -1004,11 +931,9 @@ gdk_gl_context_get_display (GdkGLContext *context)
 GdkWindow *
 gdk_gl_context_get_window (GdkGLContext *context)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
 
-  return priv->window;
+  return gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
 }
 
 /**
@@ -1077,9 +1002,7 @@ gdk_gl_context_clear_current (void)
   current = g_private_get (&thread_current_context);
   if (current != NULL)
     {
-      GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (current);
-
-      if (gdk_display_make_gl_context_current (priv->display, NULL))
+      if (gdk_display_make_gl_context_current (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (current)), NULL))
         g_private_replace (&thread_current_context, NULL);
     }
 }

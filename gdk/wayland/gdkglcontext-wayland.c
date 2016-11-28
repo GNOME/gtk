@@ -408,7 +408,6 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
     return NULL;
 
   context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
-                          "display", display,
                           "window", window,
                           "shared-context", share,
                           NULL);
