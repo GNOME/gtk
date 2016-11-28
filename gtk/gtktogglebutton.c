@@ -101,11 +101,6 @@
  * ]|
  */
 
-
-#define DEFAULT_LEFT_POS  4
-#define DEFAULT_TOP_POS   4
-#define DEFAULT_SPACING   7
-
 struct _GtkToggleButtonPrivate
 {
   guint active         : 1;
