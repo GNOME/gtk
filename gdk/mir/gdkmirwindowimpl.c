@@ -576,7 +576,6 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
   MirGraphicsRegion region;
   cairo_format_t pixel_format = CAIRO_FORMAT_ARGB32;
   cairo_surface_t *cairo_surface;
-  cairo_t *c;
 
   if (impl->cairo_surface)
     {
@@ -1763,7 +1762,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->restack_toplevel = gdk_mir_window_impl_restack_toplevel;
   impl_class->move_resize = gdk_mir_window_impl_move_resize;
   impl_class->move_to_rect = gdk_mir_window_impl_move_to_rect;
-  impl_class->set_background = gdk_mir_window_impl_set_background;
   impl_class->get_events = gdk_mir_window_impl_get_events;
   impl_class->set_events = gdk_mir_window_impl_set_events;
   impl_class->reparent = gdk_mir_window_impl_reparent;

@@ -16,6 +16,7 @@
  */
 
 #include "config.h"
+#include "gdk/gdkdrawingcontextprivate.h"
 
 #define GDK_TYPE_MIR_DRAWING_CONTEXT                (gdk_mir_drawing_context_get_type ())
 #define GDK_MIR_DRAWING_CONTEXT(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_MIR_DRAWING_CONTEXT, GdkMirDrawingContext))

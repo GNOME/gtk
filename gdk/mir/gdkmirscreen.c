@@ -25,7 +25,6 @@
 #include "gdkmir-private.h"
 
 #define VISUAL_TYPE GDK_VISUAL_TRUE_COLOR
-#define VISUAL_DEPTH 32
 
 typedef struct GdkMirScreen      GdkMirScreen;
 typedef struct GdkMirScreenClass GdkMirScreenClass;
@@ -88,29 +87,6 @@ get_screen_size (MirDisplayConfiguration *config, gint *width, gint *height)
       h = o->position_y + o->modes[o->current_mode].vertical_resolution;
       if (h > *height)
         *height = h;
-    }
-}
-
-static void
-get_screen_size_mm (MirDisplayConfiguration *config, gint *width, gint *height)
-{
-  uint32_t i;
-
-  *width = 0;
-  *height = 0;
-
-  if (!config)
-    return;
-
-  for (i = 0; i < config->num_outputs; i++)
-    {
-      MirDisplayOutput *o = &config->outputs[i];
-
-      if (!o->used)
-        continue;
-
-      *width += o->physical_width_mm;
-      *height += o->physical_height_mm;
     }
 }
 
@@ -196,42 +172,6 @@ get_output (GdkScreen *screen, gint monitor_num)
   return NULL;
 }
 
-static gint
-gdk_mir_screen_get_width (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_width\n");
-  gint width, height;
-  get_screen_size (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
-  return width;
-}
-
-static gint
-gdk_mir_screen_get_height (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_height\n");
-  gint width, height;
-  get_screen_size (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
-  return height;
-}
-
-static gint
-gdk_mir_screen_get_width_mm (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_width_mm\n");
-  gint width, height;
-  get_screen_size_mm (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
-  return width;
-}
-
-static gint
-gdk_mir_screen_get_height_mm (GdkScreen *screen)
-{
-  //g_printerr ("gdk_mir_screen_get_height_mm\n");
-  gint width, height;
-  get_screen_size_mm (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
-  return height;
-}
-
 static GdkWindow *
 gdk_mir_screen_get_root_window (GdkScreen *screen)
 {
@@ -247,7 +187,6 @@ gdk_mir_screen_get_root_window (GdkScreen *screen)
   s->root_window = _gdk_display_create_window (s->display);
   s->root_window->impl_window = s->root_window;
   s->root_window->window_type = GDK_WINDOW_ROOT;
-  s->root_window->depth = VISUAL_DEPTH;
   s->root_window->x = 0;
   s->root_window->y = 0;
   s->root_window->abs_x = 0;
@@ -667,10 +606,6 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
   object_class->finalize = gdk_mir_screen_finalize;
 
   screen_class->get_display = gdk_mir_screen_get_display;
-  screen_class->get_width = gdk_mir_screen_get_width;
-  screen_class->get_height = gdk_mir_screen_get_height;
-  screen_class->get_width_mm = gdk_mir_screen_get_width_mm;
-  screen_class->get_height_mm = gdk_mir_screen_get_height_mm;
   screen_class->get_root_window = gdk_mir_screen_get_root_window;
   screen_class->get_n_monitors = gdk_mir_screen_get_n_monitors;
   screen_class->get_primary_monitor = gdk_mir_screen_get_primary_monitor;
