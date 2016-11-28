@@ -36,8 +36,8 @@ static VkResult
 gdk_x11_vulkan_context_create_surface (GdkVulkanContext *context,
                                        VkSurfaceKHR     *surface)
 {
-  GdkWindow *window = gdk_vulkan_context_get_window (context);
-  GdkDisplay *display = gdk_vulkan_context_get_display (context);
+  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
   return GDK_VK_CHECK (vkCreateXlibSurfaceKHR, gdk_vulkan_context_get_instance (context),
                                                &(VkXlibSurfaceCreateInfoKHR) {

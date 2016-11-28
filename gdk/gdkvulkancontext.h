@@ -46,11 +46,6 @@ GQuark gdk_vulkan_error_quark (void);
 GDK_AVAILABLE_IN_3_90
 GType gdk_vulkan_context_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_3_90
-GdkDisplay *            gdk_vulkan_context_get_display              (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_3_90
-GdkWindow *             gdk_vulkan_context_get_window               (GdkVulkanContext  *context);
-
 #ifdef GDK_WINDOWING_VULKAN
 
 GDK_AVAILABLE_IN_3_90

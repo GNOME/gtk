@@ -31,27 +31,14 @@
 typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
 
 struct _GdkVulkanContextPrivate {
-  GdkWindow *window;
-
   VkSurfaceKHR surface;
 };
-
-enum {
-  PROP_0,
-
-  PROP_DISPLAY,
-  PROP_WINDOW,
-
-  LAST_PROP
-};
-
-static GParamSpec *pspecs[LAST_PROP] = { NULL, };
 
 G_DEFINE_QUARK (gdk-vulkan-error-quark, gdk_vulkan_error)
 
 static void gdk_vulkan_context_initable_init (GInitableIface *iface);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkVulkanContext, gdk_vulkan_context, G_TYPE_OBJECT,
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkVulkanContext, gdk_vulkan_context, GDK_TYPE_DRAW_CONTEXT,
                                   G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, gdk_vulkan_context_initable_init)
                                   G_ADD_PRIVATE (GdkVulkanContext))
 
@@ -60,57 +47,22 @@ gdk_vulkan_context_dispose (GObject *gobject)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GdkDisplay *display;
 
-  gdk_display_unref_vulkan (gdk_vulkan_context_get_display (context));
+  if (priv->surface != VK_NULL_HANDLE)
+    {
+      vkDestroySurfaceKHR (gdk_vulkan_context_get_instance (context),
+                           priv->surface,
+                           NULL);
+      priv->surface = VK_NULL_HANDLE;
+    }
 
-  g_clear_object (&priv->window);
+  /* display will be unset in gdk_draw_context_dispose() */
+  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  if (display)
+    gdk_display_unref_vulkan (display);
 
   G_OBJECT_CLASS (gdk_vulkan_context_parent_class)->dispose (gobject);
-}
-
-static void
-gdk_vulkan_context_set_property (GObject      *gobject,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
-{
-  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  switch (prop_id)
-    {
-    case PROP_WINDOW:
-      priv->window = g_value_dup_object (value);
-      g_assert (priv->window != NULL);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-    }
-}
-
-static void
-gdk_vulkan_context_get_property (GObject    *gobject,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
-{
-  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  switch (prop_id)
-    {
-    case PROP_DISPLAY:
-      g_value_set_object (value, gdk_vulkan_context_get_display (context));
-      break;
-
-    case PROP_WINDOW:
-      g_value_set_object (value, priv->window);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-    }
 }
 
 static void
@@ -118,42 +70,7 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->set_property = gdk_vulkan_context_set_property;
-  gobject_class->get_property = gdk_vulkan_context_get_property;
   gobject_class->dispose = gdk_vulkan_context_dispose;
-
-  /**
-   * GdkVulkanContext:display:
-   *
-   * The #GdkDisplay used to create the #GdkVulkanContext.
-   *
-   * Since: 3.16
-   */
-  pspecs[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         P_("Display"),
-                         P_("The GDK display used to create the Vulkan context"),
-                         GDK_TYPE_DISPLAY,
-                         G_PARAM_READABLE |
-                         G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GdkVulkanContext:window:
-   *
-   * The #GdkWindow the gl context is bound to.
-   *
-   * Since: 3.16
-   */
-  pspecs[PROP_WINDOW] =
-    g_param_spec_object ("window",
-                         P_("Window"),
-                         P_("The GDK window bound to the Vulkan context"),
-                         GDK_TYPE_WINDOW,
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (gobject_class, LAST_PROP, pspecs);
 }
 
 static void
@@ -169,7 +86,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (initable);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
 
-  if (!gdk_display_ref_vulkan (gdk_vulkan_context_get_display (context), error))
+  if (!gdk_display_ref_vulkan (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), error))
     return FALSE;
 
   if (GDK_VULKAN_CONTEXT_GET_CLASS (context)->create_surface (context, &priv->surface) != VK_SUCCESS)
@@ -188,46 +105,6 @@ gdk_vulkan_context_initable_init (GInitableIface *iface)
   iface->init = gdk_vulkan_context_real_init;
 }
 
-/**
- * gdk_vulkan_context_get_display:
- * @context: a #GdkVulkanContext
- *
- * Retrieves the #GdkDisplay the @context is created for
- *
- * Returns: (nullable) (transfer none): a #GdkDisplay or %NULL
- *
- * Since: 3.90
- */
-GdkDisplay *
-gdk_vulkan_context_get_display (GdkVulkanContext *context)
-{
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), NULL);
-
-  return priv->window ? gdk_window_get_display (priv->window) : NULL;
-}
-
-/**
- * gdk_vulkan_context_get_window:
- * @context: a #GdkVulkanContext
- *
- * Retrieves the #GdkWindow used by the @context.
- *
- * Returns: (nullable) (transfer none): a #GdkWindow or %NULL
- *
- * Since: 3.90
- */
-GdkWindow *
-gdk_vulkan_context_get_window (GdkVulkanContext *context)
-{
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), NULL);
-
-  return priv->window;
-}
-
 #ifdef GDK_WINDOWING_VULKAN
 
 VkInstance
@@ -235,7 +112,7 @@ gdk_vulkan_context_get_instance (GdkVulkanContext *context)
 {
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), NULL);
 
-  return gdk_vulkan_context_get_display (context)->vk_instance;
+  return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_instance;
 }
 
 static gboolean

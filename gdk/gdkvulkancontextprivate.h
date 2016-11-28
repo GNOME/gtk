@@ -23,6 +23,7 @@
 
 #include "gdkvulkancontext.h"
 
+#include "gdkdrawcontextprivate.h"
 #include "gdkinternals.h"
 
 #include <vulkan/vulkan.h>
@@ -37,12 +38,12 @@ typedef struct _GdkVulkanContextClass GdkVulkanContextClass;
 
 struct _GdkVulkanContext
 {
-  GObject parent_instance;
+  GdkDrawContext parent_instance;
 };
 
 struct _GdkVulkanContextClass
 {
-  GObjectClass parent_class;
+  GdkDrawContextClass parent_class;
 
   VkResult     (* create_surface)       (GdkVulkanContext       *context,
                                          VkSurfaceKHR           *surface);
