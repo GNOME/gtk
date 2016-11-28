@@ -1276,6 +1276,22 @@ gdk_frame_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gdkdrawcontext</FILE>
+GdkDrawContext
+gdk_draw_context_get_display
+gdk_draw_context_get_window
+
+<SUBSECTION Standard>
+GDK_DRAW_CONTEXT
+GDK_IS_DRAW_CONTEXT
+GDK_TYPE_DRAW_CONTEXT
+GDK_DRAW_CONTEXT_CLASS
+GDK_DRAW_CONTEXT_GET_CLASS
+GDK_IS_DRAW_CONTEXT_CLASS
+gdk_draw_context_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gdkglcontext</FILE>
 GdkGLContext
 gdk_gl_context_get_display

@@ -67,6 +67,7 @@ gdk_public_h_sources = 				\
 	gdkdisplay.h				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\
+	gdkdrawcontext.h			\
 	gdkdrawingcontext.h			\
 	gdkevents.h				\
 	gdkframetimings.h			\
@@ -106,6 +107,7 @@ gdk_private_headers = 				\
 	gdkdisplaymanagerprivate.h		\
 	gdkdisplayprivate.h			\
 	gdkdndprivate.h				\
+	gdkdrawcontextprivate.h			\
 	gdkdrawingcontextprivate.h		\
 	gdkframeclockidle.h			\
 	gdkframeclockprivate.h			\
@@ -133,6 +135,7 @@ gdk_c_sources = 				\
 	gdkdisplay.c				\
 	gdkdisplaymanager.c			\
 	gdkdnd.c				\
+	gdkdrawcontext.c			\
 	gdkdrawingcontext.c			\
 	gdkevents.c     			\
 	gdkframetimings.c			\
