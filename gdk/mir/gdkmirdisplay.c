@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gdkdisplayprivate.h"
+#include "gdkmonitorprivate.h"
 #include "gdkinternals.h"
 
 #include "gdkmir.h"
@@ -35,6 +36,9 @@ typedef struct GdkMirDisplay
 
   /* Connection to Mir server */
   MirConnection *connection;
+
+  const MirDisplayConfig *config;
+  GList *monitors;
 
   /* Event source */
   GdkMirEventSource *event_source;
@@ -100,6 +104,54 @@ static void get_pixel_formats (MirConnection *, MirPixelFormat *sw, MirPixelForm
 
 G_DEFINE_TYPE (GdkMirDisplay, gdk_mir_display, GDK_TYPE_DISPLAY)
 
+static void
+config_changed_cb (MirConnection *connection,
+                   void          *context)
+{
+  GdkMirDisplay *display = context;
+  GdkMonitor *monitor;
+  const MirOutput *output;
+  const MirOutputMode *mode;
+  gint i;
+
+  g_list_free_full (display->monitors, g_object_unref);
+  g_clear_pointer (&display->config, mir_display_config_release);
+
+  display->config = mir_connection_create_display_configuration (display->connection);
+  display->monitors = NULL;
+
+  for (i = mir_display_config_get_num_outputs (display->config) - 1; i >= 0; i--)
+    {
+      output = mir_display_config_get_output (display->config, i);
+
+      if (!mir_output_is_enabled (output))
+        continue;
+
+      mode = mir_output_get_current_mode (output);
+      monitor = gdk_monitor_new (GDK_DISPLAY (display));
+
+      gdk_monitor_set_position (monitor,
+                                mir_output_get_position_x (output),
+                                mir_output_get_position_y (output));
+
+      gdk_monitor_set_size (monitor,
+                            mir_output_mode_get_width (mode),
+                            mir_output_mode_get_height (mode));
+
+      gdk_monitor_set_physical_size (monitor,
+                                     mir_output_get_physical_width_mm (output),
+                                     mir_output_get_physical_height_mm (output));
+
+      gdk_monitor_set_scale_factor (monitor,
+                                    (gint) mir_output_get_scale_factor (output));
+
+      gdk_monitor_set_refresh_rate (monitor,
+                                    (gint) mir_output_mode_get_refresh_rate (mode));
+
+      display->monitors = g_list_prepend (display->monitors, monitor);
+    }
+}
+
 GdkDisplay *
 _gdk_mir_display_open (const gchar *display_name)
 {
@@ -133,6 +185,9 @@ _gdk_mir_display_open (const gchar *display_name)
   display = g_object_new (GDK_TYPE_MIR_DISPLAY, NULL);
 
   display->connection = connection;
+  config_changed_cb (display->connection, display);
+  mir_connection_set_display_config_change_callback (display->connection, config_changed_cb, display);
+
   GDK_DISPLAY (display)->device_manager = _gdk_mir_device_manager_new (GDK_DISPLAY (display));
   display->screen = _gdk_mir_screen_new (GDK_DISPLAY (display));
   display->sw_pixel_format = sw_pixel_format;
@@ -177,6 +232,9 @@ gdk_mir_display_dispose (GObject *object)
   g_clear_object (&display->keymap);
   g_clear_pointer (&display->event_source, g_source_unref);
 
+  g_list_free_full (display->monitors, g_object_unref);
+  display->monitors = NULL;
+
   G_OBJECT_CLASS (gdk_mir_display_parent_class)->dispose (object);
 }
 
@@ -184,6 +242,8 @@ static void
 gdk_mir_display_finalize (GObject *object)
 {
   GdkMirDisplay *display = GDK_MIR_DISPLAY (object);
+
+  g_clear_pointer (&display->config, mir_display_config_release);
 
   mir_connection_release (display->connection);
 
@@ -683,6 +743,20 @@ gboolean _gdk_mir_display_have_egl_surfaceless_context (GdkDisplay *display)
   return GDK_MIR_DISPLAY (display)->have_egl_surfaceless_context;
 }
 
+static int
+gdk_mir_display_get_n_monitors (GdkDisplay *display)
+{
+  return g_list_length (GDK_MIR_DISPLAY (display)->monitors);
+}
+
+static GdkMonitor *
+gdk_mir_display_get_monitor (GdkDisplay *display,
+                             int         index)
+{
+  g_return_val_if_fail (0 <= index && index < gdk_display_get_n_monitors (display), NULL);
+
+  return g_list_nth_data (GDK_MIR_DISPLAY (display)->monitors, index);
+}
 
 static void
 gdk_mir_display_init (GdkMirDisplay *display)
@@ -739,4 +813,6 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->text_property_to_utf8_list = gdk_mir_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = gdk_mir_display_utf8_to_string_target;
   display_class->make_gl_context_current = gdk_mir_display_make_gl_context_current;
+  display_class->get_n_monitors = gdk_mir_display_get_n_monitors;
+  display_class->get_monitor = gdk_mir_display_get_monitor;
 }
