@@ -371,7 +371,6 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget *widget,
 
   site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
   g_return_if_fail (site != NULL); 
-  g_object_ref (pixbuf);
 
   g_clear_pointer (&site->image_def, gtk_image_definition_unref);
   site->image_def = gtk_image_definition_new_pixbuf (pixbuf, 1);
