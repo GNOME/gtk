@@ -88,11 +88,17 @@ typedef enum {
   GDK_GL_GLES                   = 1 << 6
 } GdkGLFlags;
 
+typedef enum {
+  GDK_VULKAN_DISABLE                = 1 << 0,
+  GDK_VULKAN_VALIDATE               = 1 << 1,
+} GdkVulkanFlags;
+
 extern GList            *_gdk_default_filters;
 extern GdkWindow        *_gdk_parent_root;
 
 extern guint _gdk_debug_flags;
 extern guint _gdk_gl_flags;
+extern guint _gdk_vulkan_flags;
 extern GdkRenderingMode    _gdk_rendering_mode;
 
 #ifdef G_ENABLE_DEBUG

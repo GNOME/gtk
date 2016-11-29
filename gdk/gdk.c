@@ -150,6 +150,11 @@ static const GDebugKey gdk_gl_keys[] = {
   { "gles",                  GDK_GL_GLES },
 };
 
+static const GDebugKey gdk_vulkan_keys[] = {
+  { "disable",               GDK_VULKAN_DISABLE },
+  { "validate",              GDK_VULKAN_VALIDATE },
+};
+
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
   { "events",        GDK_DEBUG_EVENTS },
@@ -276,7 +281,7 @@ void
 gdk_pre_parse (void)
 {
   const char *rendering_mode;
-  const gchar *gl_string;
+  const gchar *gl_string, *vulkan_string;
 
   gdk_initialized = TRUE;
 
@@ -304,6 +309,12 @@ gdk_pre_parse (void)
     _gdk_gl_flags = g_parse_debug_string (gl_string,
                                           (GDebugKey *) gdk_gl_keys,
                                           G_N_ELEMENTS (gdk_gl_keys));
+
+  vulkan_string = getenv("GDK_VULKAN");
+  if (vulkan_string != NULL)
+    _gdk_vulkan_flags = g_parse_debug_string (vulkan_string,
+                                              (GDebugKey *) gdk_vulkan_keys,
+                                              G_N_ELEMENTS (gdk_vulkan_keys));
 
   if (getenv ("GDK_NATIVE_WINDOWS"))
     {

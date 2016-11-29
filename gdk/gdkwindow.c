@@ -2705,6 +2705,13 @@ gdk_window_create_vulkan_context (GdkWindow  *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
+  if (_gdk_vulkan_flags & GDK_VULKAN_DISABLE)
+    {
+      g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                           _("Vulkan support disabled via GDK_DEBUG"));
+      return NULL;
+    }
+
   display = gdk_window_get_display (window);
 
   if (GDK_DISPLAY_GET_CLASS (display)->vk_extension_name == NULL)

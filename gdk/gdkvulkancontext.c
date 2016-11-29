@@ -457,6 +457,9 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                     GError     **error)
 {
   uint32_t i;
+  GPtrArray *used_layers;
+  gboolean validate = FALSE;
+  VkResult res;
 
   if (GDK_DISPLAY_GET_CLASS (display)->vk_extension_name == NULL)
     {
@@ -484,6 +487,8 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   VkLayerProperties layers[n_layers];
   GDK_VK_CHECK (vkEnumerateInstanceLayerProperties, &n_layers, layers);
 
+  used_layers = g_ptr_array_new ();
+
   for (i = 0; i < n_layers; i++)
     {
       GDK_NOTE (VULKAN, g_print ("Layer available: %s v%u.%u.%u (%s)\n",
@@ -492,37 +497,58 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                  VK_VERSION_MINOR (layers[i].specVersion),
                                  VK_VERSION_PATCH (layers[i].specVersion),
                                  layers[i].description));
+      if ((_gdk_vulkan_flags & GDK_VULKAN_VALIDATE) &&
+          g_str_equal (layers[i].layerName, "VK_LAYER_LUNARG_standard_validation"))
+        {
+          g_ptr_array_add (used_layers, (gpointer) "VK_LAYER_LUNARG_standard_validation");
+          validate = TRUE;
+        }
     }
 
-  if (GDK_VK_CHECK (vkCreateInstance, &(VkInstanceCreateInfo) {
-                                           VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-                                           NULL,
-                                           0,
-                                           &(VkApplicationInfo) {
-                                               VK_STRUCTURE_TYPE_APPLICATION_INFO,
-                                               NULL,
-                                               g_get_application_name (),
-                                               0,
-                                               "GTK+",
-                                               VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
-                                               VK_API_VERSION_1_0 },
-                                           0,
-                                           NULL,
-                                           2,
-                                           (const char *const *) &(const char *[2]) {
-                                               VK_KHR_SURFACE_EXTENSION_NAME, 
-                                               GDK_DISPLAY_GET_CLASS (display)->vk_extension_name
-                                           },
-                                       },
-                                       NULL,
-                                       &display->vk_instance) != VK_SUCCESS)
+  if ((_gdk_vulkan_flags & GDK_VULKAN_VALIDATE) && !validate)
     {
-      g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
-                           "Could not create a Vulkan instance.");
+      g_warning ("Vulkan validation layers were requested, but not found. Running without.");
+    }
+
+  res = GDK_VK_CHECK (vkCreateInstance, &(VkInstanceCreateInfo) {
+                                             VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+                                             NULL,
+                                             0,
+                                             &(VkApplicationInfo) {
+                                                 VK_STRUCTURE_TYPE_APPLICATION_INFO,
+                                                 NULL,
+                                                 g_get_application_name (),
+                                                 0,
+                                                 "GTK+",
+                                                 VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
+                                                 VK_API_VERSION_1_0 },
+                                             used_layers->len,
+                                             (const char * const *) used_layers->pdata,
+                                             2,
+                                             (const char *const *) &(const char *[2]) {
+                                                 VK_KHR_SURFACE_EXTENSION_NAME, 
+                                                 GDK_DISPLAY_GET_CLASS (display)->vk_extension_name
+                                             },
+                                         },
+                                         NULL,
+                                         &display->vk_instance);
+  g_ptr_array_free (used_layers, TRUE);
+
+  if (res != VK_SUCCESS)
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+                   "Could not create a Vulkan instance: %s", gdk_vulkan_strerror (res));
       return FALSE;
     }
 
-  return gdk_display_create_vulkan_device (display, error);
+  if (!gdk_display_create_vulkan_device (display, error))
+    {
+      vkDestroyInstance (display->vk_instance, NULL);
+      display->vk_instance = VK_NULL_HANDLE;
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 gboolean
