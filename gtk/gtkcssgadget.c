@@ -127,21 +127,9 @@ gtk_css_gadget_get_clip (GtkCssGadget    *gadget,
 {
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
 
-  if (priv->owner && !gtk_widget_get_has_window (priv->owner))
-    {
-      GtkAllocation widget_alloc;
-      gtk_widget_get_allocation (priv->owner, &widget_alloc);
-
-      graphene_rect_init (bounds,
-                          priv->clip.x - widget_alloc.x, priv->clip.y - widget_alloc.y,
-                          priv->clip.width, priv->clip.height);
-    }
-  else
-    {
-      graphene_rect_init (bounds,
-                          priv->clip.x, priv->clip.y,
-                          priv->clip.width, priv->clip.height);
-    }
+  graphene_rect_init (bounds,
+                      priv->clip.x - priv->allocated_size.x, priv->clip.y - priv->allocated_size.y,
+                      priv->clip.width, priv->clip.height);
 }
 
 static gboolean
