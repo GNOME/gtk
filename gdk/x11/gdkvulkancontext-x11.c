@@ -39,6 +39,13 @@ gdk_x11_vulkan_context_create_surface (GdkVulkanContext *context,
   GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
+  /* This is necessary so that Vulkan sees the Window.
+   * Usually, vkCreateXlibSurfaceKHR() will not cause a problem to happen as
+   * it just creates resources, but futher calls with the resulting surface
+   * do cause issues.
+   */
+  gdk_display_sync (display);
+
   return GDK_VK_CHECK (vkCreateXlibSurfaceKHR, gdk_vulkan_context_get_instance (context),
                                                &(VkXlibSurfaceCreateInfoKHR) {
                                                    VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR,
