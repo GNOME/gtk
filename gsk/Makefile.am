@@ -22,6 +22,13 @@ DISTCLEANFILES =
 
 noinst_LTLIBRARIES =
 
+if HAVE_VULKAN
+gsk_private_vulan_source_h = \
+	gskvulkanrendererprivate.h
+gsk_private_vulkan_source_c = \
+	gskvulkanrenderer.c
+endif
+
 gsk_public_source_h = \
 	gskenums.h \
 	gskrenderer.h \
@@ -30,6 +37,7 @@ gsk_public_source_h = \
 	gsktexture.h \
 	gsktypes.h
 gsk_private_source_h = \
+	$(gsk_private_vulkan_source_h) \
 	gskcairorendererprivate.h \
 	gskdebugprivate.h \
 	gskgldriverprivate.h \
@@ -40,6 +48,7 @@ gsk_private_source_h = \
 	gskrendererprivate.h \
 	gskrendernodeprivate.h \
 	gskshaderbuilderprivate.h \
+	gskvulkanrendererprivate.h \
 	gsktextureprivate.h
 gsk_public_source_c = \
 	gskrenderer.c \
@@ -47,6 +56,7 @@ gsk_public_source_c = \
 	gskrendernodeiter.c \
 	gsktexture.c
 gsk_private_source_c = \
+	$(gsk_private_vulkan_source_c) \
 	gskcairorenderer.c \
 	gskdebug.c \
 	gskgldriver.c \

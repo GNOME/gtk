@@ -56,6 +56,9 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
 #endif
+#ifdef GDK_WINDOWING_VULKAN
+#include "gskvulkanrendererprivate.h"
+#endif
 
 typedef struct
 {
@@ -724,6 +727,10 @@ get_renderer_for_env_var (GdkWindow *window)
         env_var_type = GSK_TYPE_CAIRO_RENDERER;
       else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0)
         env_var_type = GSK_TYPE_GL_RENDERER;
+#ifdef GDK_WINDOWING_VULKAN
+      else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
+        env_var_type = GSK_TYPE_VULKAN_RENDERER;
+#endif
       else
         env_var_type = G_TYPE_INVALID;
     }
