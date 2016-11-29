@@ -36,9 +36,20 @@ struct _GdkVulkanContextPrivate {
 
   int swapchain_width, swapchain_height;
   VkSwapchainKHR swapchain;
+
+  guint n_images;
+  VkImage *images;
+};
+
+enum {
+  IMAGES_UPDATED,
+
+  LAST_SIGNAL
 };
 
 G_DEFINE_QUARK (gdk-vulkan-error-quark, gdk_vulkan_error)
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gdk_vulkan_context_initable_init (GInitableIface *iface);
 
@@ -111,6 +122,9 @@ gdk_vulkan_context_dispose (GObject *gobject)
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GdkDisplay *display;
 
+  g_clear_pointer (&priv->images, g_free);
+  priv->n_images = 0;
+
   if (priv->swapchain != VK_NULL_HANDLE)
     {
       vkDestroySwapchainKHR (gdk_vulkan_context_get_device (context),
@@ -141,6 +155,23 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->dispose = gdk_vulkan_context_dispose;
+
+  /**
+   * GdkVulkanContext::images-updated:
+   * @context: the object on which the signal is emitted
+   *
+   * This signal is emitted when the images managed by this context have
+   * changed. Usually this means that the swapchain had to be recreated,
+   * for example in response to a change of the window size.
+   */
+  signals[IMAGES_UPDATED] =
+    g_signal_new (g_intern_static_string ("images-updated"),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 }
 
 static void
@@ -158,10 +189,13 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkCompositeAlphaFlagBitsKHR composite_alpha;
   VkSwapchainKHR new_swapchain;
   VkResult res;
+  VkDevice device;
 
   if (gdk_window_get_width (window) == priv->swapchain_width &&
       gdk_window_get_height (window) == priv->swapchain_height)
     return TRUE;
+
+  device = gdk_vulkan_context_get_device (context);
 
   res = GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceCapabilitiesKHR, gdk_vulkan_context_get_physical_device (context),
                                                                  priv->surface,
@@ -188,7 +222,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
       composite_alpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     }
 
-  res = GDK_VK_CHECK (vkCreateSwapchainKHR, gdk_vulkan_context_get_device (context),
+  res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
                                             &(VkSwapchainCreateInfoKHR) {
                                                 .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
                                                 .pNext = NULL,
@@ -215,15 +249,29 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                             &new_swapchain);
 
   if (priv->swapchain != VK_NULL_HANDLE)
-    vkDestroySwapchainKHR (gdk_vulkan_context_get_device (context),
-                           priv->swapchain,
-                           NULL);
+    {
+      vkDestroySwapchainKHR (device,
+                             priv->swapchain,
+                             NULL);
+      g_clear_pointer (&priv->images, g_free);
+      priv->n_images = 0;
+    }
 
   if (res == VK_SUCCESS)
     {
       priv->swapchain_width = gdk_window_get_width (window);
       priv->swapchain_height = gdk_window_get_height (window);
       priv->swapchain = new_swapchain;
+
+      GDK_VK_CHECK (vkGetSwapchainImagesKHR, device,
+                                             priv->swapchain,
+                                             &priv->n_images,
+                                             NULL);
+      priv->images = g_new (VkImage, priv->n_images);
+      GDK_VK_CHECK (vkGetSwapchainImagesKHR, device,
+                                             priv->swapchain,
+                                             &priv->n_images,
+                                             priv->images);
     }
   else
     {
@@ -235,7 +283,9 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
       return FALSE;
     }
 
-  return TRUE;
+  g_signal_emit (context, signals[IMAGES_UPDATED], 0);
+
+  return res == VK_SUCCESS;
 }
 
 static gboolean
@@ -365,6 +415,28 @@ gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), VK_FORMAT_UNDEFINED);
 
   return priv->image_format.format;
+}
+
+guint
+gdk_vulkan_context_get_n_images (GdkVulkanContext *context)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
+
+  return priv->n_images;
+}
+
+VkImage
+gdk_vulkan_context_get_image (GdkVulkanContext *context,
+                              guint             id)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), VK_NULL_HANDLE);
+  g_return_val_if_fail (id < priv->n_images, VK_NULL_HANDLE);
+
+  return priv->images[id];
 }
 
 static gboolean
@@ -672,6 +744,14 @@ gdk_display_unref_vulkan (GdkDisplay *display)
 static void
 gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
 {
+  signals[IMAGES_UPDATED] =
+    g_signal_new (g_intern_static_string ("images-updated"),
+		  G_OBJECT_CLASS_TYPE (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 }
 
 static void

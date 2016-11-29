@@ -63,6 +63,11 @@ GDK_AVAILABLE_IN_3_90
 uint32_t                gdk_vulkan_context_get_queue_family_index   (GdkVulkanContext  *context);
 GDK_AVAILABLE_IN_3_90
 VkFormat                gdk_vulkan_context_get_image_format         (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+guint                   gdk_vulkan_context_get_n_images             (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+VkImage                 gdk_vulkan_context_get_image                (GdkVulkanContext  *context,
+                                                                     guint              id);
 
 #endif /* GDK_WINDOWING_VULKAN */
 
