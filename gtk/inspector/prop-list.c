@@ -528,7 +528,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
         }
 
       parent = gtk_widget_get_parent (GTK_WIDGET (object));
-      if (!parent)
+      if (!parent || !GTK_IS_CONTAINER (parent))
         {
           gtk_widget_hide (GTK_WIDGET (pl));
           return TRUE;
