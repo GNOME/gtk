@@ -2735,7 +2735,6 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (widget);
-  GtkAllocation child_allocation;
   GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
@@ -2745,18 +2744,11 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
-  child_allocation.x = 0;
-  child_allocation.y = 0;
-  child_allocation.width = allocation->width;
-  child_allocation.height = allocation->height;
-
   gtk_css_gadget_allocate (BOX_PRIV (widget)->gadget,
-                           &child_allocation,
+                           allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
-  clip.x += allocation->x;
-  clip.y += allocation->y;
   gtk_widget_set_clip (widget, &clip);
 }
 
@@ -2772,17 +2764,20 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
   GtkListBoxPrivate *priv = BOX_PRIV (widget);
   GtkAllocation child_allocation;
   GtkAllocation header_allocation;
+  GtkAllocation widget_allocation;
   GtkListBoxRow *row;
   GSequenceIter *iter;
   int child_min;
 
-  child_allocation.x = allocation->x;
-  child_allocation.y = allocation->y;
+  gtk_widget_get_allocation (widget, &widget_allocation);
+
+  child_allocation.x = allocation->x - widget_allocation.x;
+  child_allocation.y = allocation->y - widget_allocation.y;
   child_allocation.width = allocation->width;
   child_allocation.height = 0;
 
-  header_allocation.x = allocation->x;
-  header_allocation.y = allocation->y;
+  header_allocation.x = allocation->x - widget_allocation.x;
+  header_allocation.y = allocation->y - widget_allocation.y;
   header_allocation.width = allocation->width;
   header_allocation.height = 0;
 
