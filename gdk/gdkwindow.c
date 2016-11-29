@@ -2278,7 +2278,8 @@ gdk_window_get_toplevel (GdkWindow *window)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  while (window->window_type == GDK_WINDOW_CHILD)
+  while (window->window_type == GDK_WINDOW_CHILD ||
+         window->window_type == GDK_WINDOW_SUBSURFACE)
     {
       if (gdk_window_is_toplevel (window))
 	break;
