@@ -129,6 +129,7 @@ struct _GdkDisplay
   VkPhysicalDevice vk_physical_device;
   VkDevice vk_device;
   VkQueue vk_queue;
+  uint32_t vk_queue_family_index;
 
   guint vulkan_refcount;
 #endif /* GDK_WINDOWING_VULKAN */

@@ -32,6 +32,10 @@ typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
 
 struct _GdkVulkanContextPrivate {
   VkSurfaceKHR surface;
+  VkSurfaceFormatKHR image_format;
+
+  int swapchain_width, swapchain_height;
+  VkSwapchainKHR swapchain;
 };
 
 G_DEFINE_QUARK (gdk-vulkan-error-quark, gdk_vulkan_error)
@@ -42,12 +46,78 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkVulkanContext, gdk_vulkan_context, GDK_TYPE
                                   G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, gdk_vulkan_context_initable_init)
                                   G_ADD_PRIVATE (GdkVulkanContext))
 
+#ifdef GDK_WINDOWING_VULKAN
+
+const char *
+gdk_vulkan_strerror (VkResult result)
+{
+  switch (result)
+  {
+    case VK_SUCCESS:
+      return "Command successfully completed.";
+    case VK_NOT_READY:
+      return "A fence or query has not yet completed.";
+    case VK_TIMEOUT:
+      return "A wait operation has not completed in the specified time.";
+    case VK_EVENT_SET:
+      return "An event is signaled.";
+    case VK_EVENT_RESET:
+      return "An event is unsignaled.";
+    case VK_INCOMPLETE:
+      return "A return array was too small for the result.";
+    case VK_SUBOPTIMAL_KHR:
+      return "A swapchain no longer matches the surface properties exactly, but can still be used to present to the surface successfully.";
+    case VK_ERROR_OUT_OF_HOST_MEMORY:
+      return "A host memory allocation has failed.";
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
+      return "A device memory allocation has failed.";
+    case VK_ERROR_INITIALIZATION_FAILED:
+      return "Initialization of an object could not be completed for implementation-specific reasons.";
+    case VK_ERROR_DEVICE_LOST:
+      return "The logical or physical device has been lost.";
+    case VK_ERROR_MEMORY_MAP_FAILED:
+      return "Mapping of a memory object has failed.";
+    case VK_ERROR_LAYER_NOT_PRESENT:
+      return "A requested layer is not present or could not be loaded.";
+    case VK_ERROR_EXTENSION_NOT_PRESENT:
+      return "A requested extension is not supported.";
+    case VK_ERROR_FEATURE_NOT_PRESENT:
+      return "A requested feature is not supported.";
+    case VK_ERROR_INCOMPATIBLE_DRIVER:
+      return "The requested version of Vulkan is not supported by the driver or is otherwise incompatible for implementation-specific reasons.";
+    case VK_ERROR_TOO_MANY_OBJECTS:
+      return "Too many objects of the type have already been created.";
+    case VK_ERROR_FORMAT_NOT_SUPPORTED:
+      return "A requested format is not supported on this device.";
+    case VK_ERROR_FRAGMENTED_POOL:
+      return "A requested pool allocation has failed due to fragmentation of the pool’s memory.";
+    case VK_ERROR_SURFACE_LOST_KHR:
+      return "A surface is no longer available.";
+    case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
+      return "The requested window is already in use by Vulkan or another API in a manner which prevents it from being used again.";
+    case VK_ERROR_OUT_OF_DATE_KHR:
+      return "A surface has changed in such a way that it is no longer compatible with the swapchain.";
+    case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
+      return "The display used by a swapchain does not use the same presentable image layout, or is incompatible in a way that prevents sharing an image.";
+    default:
+      return "Unknown Vulkan error.";
+  }
+}
+
 static void
 gdk_vulkan_context_dispose (GObject *gobject)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GdkDisplay *display;
+
+  if (priv->swapchain != VK_NULL_HANDLE)
+    {
+      vkDestroySwapchainKHR (gdk_vulkan_context_get_device (context),
+                             priv->swapchain,
+                             NULL);
+      priv->swapchain = VK_NULL_HANDLE;
+    }
 
   if (priv->surface != VK_NULL_HANDLE)
     {
@@ -79,24 +149,166 @@ gdk_vulkan_context_init (GdkVulkanContext *self)
 }
 
 static gboolean
+gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
+                                    GError           **error)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  VkSurfaceCapabilitiesKHR capabilities;
+  VkCompositeAlphaFlagBitsKHR composite_alpha;
+  VkSwapchainKHR new_swapchain;
+  VkResult res;
+
+  if (gdk_window_get_width (window) == priv->swapchain_width &&
+      gdk_window_get_height (window) == priv->swapchain_height)
+    return TRUE;
+
+  res = GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceCapabilitiesKHR, gdk_vulkan_context_get_physical_device (context),
+                                                                 priv->surface,
+                                                                 &capabilities);
+  if (res != VK_SUCCESS)
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                   "Could not query surface capabilities: %s", gdk_vulkan_strerror (res));
+      return FALSE;
+    }
+
+  if (capabilities.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR)
+    composite_alpha = VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR;
+  else if (capabilities.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR)
+    composite_alpha = VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR;
+  else if (capabilities.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR)
+    {
+      /* let's hope the backend knows what it's doing */
+      composite_alpha = VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
+    }
+  else
+    {
+      GDK_NOTE (VULKAN, g_warning ("Vulkan swapchain doesn't do transparency. Using opaque swapchain instead."));
+      composite_alpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    }
+
+  res = GDK_VK_CHECK (vkCreateSwapchainKHR, gdk_vulkan_context_get_device (context),
+                                            &(VkSwapchainCreateInfoKHR) {
+                                                .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+                                                .pNext = NULL,
+                                                .flags = 0,
+                                                .surface = priv->surface,
+                                                .minImageCount = 2,
+                                                .imageFormat = priv->image_format.format,
+                                                .imageColorSpace = priv->image_format.colorSpace,
+                                                .imageExtent = capabilities.currentExtent,
+                                                .imageArrayLayers = 1,
+                                                .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                                                .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
+                                                .queueFamilyIndexCount = 1,
+                                                .pQueueFamilyIndices = (uint32_t[1]) {
+                                                    gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_queue_family_index
+                                                },
+                                                .preTransform = capabilities.currentTransform,
+                                                .compositeAlpha = composite_alpha,
+                                                .presentMode = VK_PRESENT_MODE_FIFO_KHR,
+                                                .clipped = VK_FALSE,
+                                                .oldSwapchain = priv->swapchain
+                                            },
+                                            NULL,
+                                            &new_swapchain);
+
+  if (priv->swapchain != VK_NULL_HANDLE)
+    vkDestroySwapchainKHR (gdk_vulkan_context_get_device (context),
+                           priv->swapchain,
+                           NULL);
+
+  if (res == VK_SUCCESS)
+    {
+      priv->swapchain_width = gdk_window_get_width (window);
+      priv->swapchain_height = gdk_window_get_height (window);
+      priv->swapchain = new_swapchain;
+    }
+  else
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                   "Could not create swapchain for this window: %s", gdk_vulkan_strerror (res));
+      priv->swapchain = VK_NULL_HANDLE;
+      priv->swapchain_width = 0;
+      priv->swapchain_height = 0;
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
 gdk_vulkan_context_real_init (GInitable     *initable,
                               GCancellable  *cancellable,
                               GError       **error)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (initable);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  VkResult res;
+  VkBool32 supported;
+  uint32_t i;
 
   if (!gdk_display_ref_vulkan (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), error))
     return FALSE;
 
-  if (GDK_VULKAN_CONTEXT_GET_CLASS (context)->create_surface (context, &priv->surface) != VK_SUCCESS)
+  res = GDK_VULKAN_CONTEXT_GET_CLASS (context)->create_surface (context, &priv->surface);
+  if (res != VK_SUCCESS)
     {
-      g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                           "Vulkan support not available for this window.");
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                   "Could not create surface for this window: %s", gdk_vulkan_strerror (res));
       return FALSE;
     }
 
-  return TRUE;
+  res = GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceSupportKHR, gdk_vulkan_context_get_physical_device (context),
+                                                            gdk_vulkan_context_get_queue_family_index (context),
+                                                            priv->surface,
+                                                            &supported);
+  if (res != VK_SUCCESS)
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                   "Could not check if queue family supports this window: %s", gdk_vulkan_strerror (res));
+    }
+  else if (!supported)
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                   "FIXME: Queue family does not support surface. Write code to try different queue family.");
+    }
+  else
+    {
+      uint32_t n_formats;
+      GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceFormatsKHR, gdk_vulkan_context_get_physical_device (context),
+                                                          priv->surface,
+                                                          &n_formats, NULL);
+      VkSurfaceFormatKHR formats[n_formats];
+      GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceFormatsKHR, gdk_vulkan_context_get_physical_device (context),
+                                                          priv->surface,
+                                                          &n_formats, formats);
+      for (i = 0; i < n_formats; i++)
+        {
+          if (formats[i].format == VK_FORMAT_B8G8R8A8_SRGB)
+            break;
+        }
+      if (i == n_formats)
+        {
+          g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                               "No supported image format found.");
+          goto out_surface;  
+        }
+      priv->image_format = formats[i];
+
+      if (!gdk_vulkan_context_check_swapchain (context, error))
+        goto out_surface;
+
+      return TRUE;
+    }
+
+out_surface:
+  vkDestroySurfaceKHR (gdk_vulkan_context_get_instance (context),
+                       priv->surface,
+                       NULL);
+  priv->surface = VK_NULL_HANDLE;
+  return FALSE;
 }
 
 static void
@@ -105,14 +317,54 @@ gdk_vulkan_context_initable_init (GInitableIface *iface)
   iface->init = gdk_vulkan_context_real_init;
 }
 
-#ifdef GDK_WINDOWING_VULKAN
-
 VkInstance
 gdk_vulkan_context_get_instance (GdkVulkanContext *context)
 {
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), NULL);
 
   return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_instance;
+}
+
+VkPhysicalDevice
+gdk_vulkan_context_get_physical_device (GdkVulkanContext *context)
+{
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), NULL);
+
+  return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_physical_device;
+}
+
+VkDevice
+gdk_vulkan_context_get_device (GdkVulkanContext *context)
+{
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), NULL);
+
+  return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_device;
+}
+
+VkQueue
+gdk_vulkan_context_get_queue (GdkVulkanContext *context)
+{
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), NULL);
+
+  return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_queue;
+}
+
+uint32_t
+gdk_vulkan_context_get_queue_family_index (GdkVulkanContext *context)
+{
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
+
+  return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_queue_family_index;
+}
+
+VkFormat
+gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), VK_FORMAT_UNDEFINED);
+
+  return priv->image_format.format;
 }
 
 static gboolean
@@ -189,6 +441,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
               display->vk_physical_device = devices[i];
               vkGetDeviceQueue(display->vk_device, j, 0, &display->vk_queue);
+              display->vk_queue_family_index = j;
               return TRUE;
             }
         }
@@ -299,6 +552,23 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   
   vkDestroyDevice (display->vk_device, NULL);
   vkDestroyInstance (display->vk_instance, NULL);
+}
+
+#else /* GDK_WINDOWING_VULKAN */
+
+static void
+gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
+{
+}
+
+static void
+gdk_vulkan_context_init (GdkVulkanContext *self)
+{
+}
+
+static void
+gdk_vulkan_context_initable_init (GInitableIface *iface)
+{
 }
 
 #endif /* GDK_WINDOWING_VULKAN */

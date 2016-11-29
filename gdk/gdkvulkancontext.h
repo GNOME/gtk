@@ -49,7 +49,20 @@ GType gdk_vulkan_context_get_type (void) G_GNUC_CONST;
 #ifdef GDK_WINDOWING_VULKAN
 
 GDK_AVAILABLE_IN_3_90
+const char *            gdk_vulkan_strerror                         (VkResult           result);
+
+GDK_AVAILABLE_IN_3_90
 VkInstance              gdk_vulkan_context_get_instance             (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+VkPhysicalDevice        gdk_vulkan_context_get_physical_device      (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+VkDevice                gdk_vulkan_context_get_device               (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+VkQueue                 gdk_vulkan_context_get_queue                (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+uint32_t                gdk_vulkan_context_get_queue_family_index   (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+VkFormat                gdk_vulkan_context_get_image_format         (GdkVulkanContext  *context);
 
 #endif /* GDK_WINDOWING_VULKAN */
 
