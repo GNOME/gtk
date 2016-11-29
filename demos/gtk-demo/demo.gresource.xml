@@ -192,6 +192,7 @@
     <file>stack.c</file>
     <file>spinbutton.c</file>
     <file>spinner.c</file>
+    <file>tabs.c</file>
     <file>textview.c</file>
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>

@@ -64,6 +64,7 @@ demos_base =					\
 	spinbutton.c				\
 	spinner.c				\
 	stack.c					\
+	tabs.c					\
 	textmask.c				\
 	textview.c				\
 	textscroll.c				\
