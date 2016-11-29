@@ -187,10 +187,11 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
 }
 
 static gboolean
-gsk_gl_renderer_create_programs (GskGLRenderer *self)
+gsk_gl_renderer_create_programs (GskGLRenderer  *self,
+                                 GError        **error)
 {
   GskShaderBuilder *builder;
-  GError *error = NULL;
+  GError *shader_error = NULL;
   gboolean res = FALSE;
 
   builder = gsk_shader_builder_new ();
@@ -241,21 +242,23 @@ gsk_gl_renderer_create_programs (GskGLRenderer *self)
 #endif
 
   self->blend_program_id =
-    gsk_shader_builder_create_program (builder, "blend.vs.glsl", "blend.fs.glsl", &error);
-  if (error != NULL)
+    gsk_shader_builder_create_program (builder, "blend.vs.glsl", "blend.fs.glsl", &shader_error);
+  if (shader_error != NULL)
     {
-      g_critical ("Unable to create 'blend' program: %s", error->message);
-      g_error_free (error);
+      g_propagate_prefixed_error (error,
+                                  shader_error,
+                                  "Unable to create 'blend' program: ");
       g_object_unref (builder);
       goto out;
     }
 
   self->blit_program_id =
-    gsk_shader_builder_create_program (builder, "blit.vs.glsl", "blit.fs.glsl", &error);
-  if (error != NULL)
+    gsk_shader_builder_create_program (builder, "blit.vs.glsl", "blit.fs.glsl", &shader_error);
+  if (shader_error != NULL)
     {
-      g_critical ("Unable to create 'blit' program: %s", error->message);
-      g_error_free (error);
+      g_propagate_prefixed_error (error,
+                                  shader_error,
+                                  "Unable to create 'blit' program: ");
       g_object_unref (builder);
       goto out;
     }
@@ -278,35 +281,24 @@ gsk_gl_renderer_destroy_programs (GskGLRenderer *self)
 }
 
 static gboolean
-gsk_gl_renderer_realize (GskRenderer *renderer,
-                         GdkWindow   *window)
+gsk_gl_renderer_realize (GskRenderer  *renderer,
+                         GdkWindow    *window,
+                         GError      **error)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  GError *error = NULL;
 
   /* If we didn't get a GdkGLContext before realization, try creating
    * one now, for our exclusive use.
    */
   if (self->gl_context == NULL)
     {
-      self->gl_context = gdk_window_create_gl_context (window, &error);
-      if (error != NULL)
-        {
-          g_critical ("Unable to create GL context for renderer: %s",
-                      error->message);
-          g_error_free (error);
-
-          return FALSE;
-        }
+      self->gl_context = gdk_window_create_gl_context (window, error);
+      if (self->gl_context == NULL)
+        return FALSE;
     }
 
-  gdk_gl_context_realize (self->gl_context, &error);
-  if (error != NULL)
-    {
-      g_critical ("Unable to realize GL renderer: %s", error->message);
-      g_error_free (error);
-      return FALSE;
-    }
+  if (!gdk_gl_context_realize (self->gl_context, error))
+    return FALSE;
 
   gdk_gl_context_make_current (self->gl_context);
 
@@ -315,7 +307,7 @@ gsk_gl_renderer_realize (GskRenderer *renderer,
   self->gl_profiler = gsk_gl_profiler_new (self->gl_context);
 
   GSK_NOTE (OPENGL, g_print ("Creating buffers and programs\n"));
-  if (!gsk_gl_renderer_create_programs (self))
+  if (!gsk_gl_renderer_create_programs (self, error))
     return FALSE;
 
   return TRUE;

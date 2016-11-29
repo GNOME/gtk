@@ -63,7 +63,8 @@ GdkDisplay *            gsk_renderer_get_display                (GskRenderer    
 
 GDK_AVAILABLE_IN_3_90
 gboolean                gsk_renderer_realize                    (GskRenderer             *renderer,
-                                                                 GdkWindow               *window);
+                                                                 GdkWindow               *window,
+                                                                 GError                 **error);
 GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
 

@@ -97,8 +97,9 @@ static GParamSpec *gsk_renderer_properties[N_PROPS];
   g_critical ("Renderer of type '%s' does not implement GskRenderer::" # method, G_OBJECT_TYPE_NAME (obj))
 
 static gboolean
-gsk_renderer_real_realize (GskRenderer *self,
-                           GdkWindow   *window)
+gsk_renderer_real_realize (GskRenderer  *self,
+                           GdkWindow    *window,
+                           GError      **error)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, realize);
   return FALSE;
@@ -528,6 +529,7 @@ gsk_renderer_is_realized (GskRenderer *renderer)
  * gsk_renderer_realize:
  * @renderer: a #GskRenderer
  * @window: the #GdkWindow renderer will be used on
+ * @error: return location for an error
  *
  * Creates the resources needed by the @renderer to render the scene
  * graph.
@@ -535,18 +537,20 @@ gsk_renderer_is_realized (GskRenderer *renderer)
  * Since: 3.90
  */
 gboolean
-gsk_renderer_realize (GskRenderer *renderer,
-                      GdkWindow   *window)
+gsk_renderer_realize (GskRenderer  *renderer,
+                      GdkWindow    *window,
+                      GError      **error)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
   g_return_val_if_fail (!gsk_renderer_is_realized (renderer), FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   priv->window = g_object_ref (window);
 
-  if (!GSK_RENDERER_GET_CLASS (renderer)->realize (renderer, window))
+  if (!GSK_RENDERER_GET_CLASS (renderer)->realize (renderer, window, error))
     {
       g_clear_object (&priv->window);
       return FALSE;
@@ -750,6 +754,7 @@ gsk_renderer_new_for_window (GdkWindow *window)
 {
   GType renderer_type;
   GskRenderer *renderer;
+  GError *error = NULL;
   guint i;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
@@ -764,7 +769,7 @@ gsk_renderer_new_for_window (GdkWindow *window)
                                "display", gdk_window_get_display (window),
                                NULL);
 
-      if (gsk_renderer_realize (renderer, window))
+      if (gsk_renderer_realize (renderer, window, &error))
         {
           GSK_NOTE (RENDERER, g_print ("Using renderer of type '%s' for display '%s'\n",
                                        G_OBJECT_TYPE_NAME (renderer),
@@ -772,10 +777,12 @@ gsk_renderer_new_for_window (GdkWindow *window)
           return renderer;
         }
 
-      GSK_NOTE (RENDERER, g_print ("Failed to realize renderer of type '%s' for window '%s'\n",
+      GSK_NOTE (RENDERER, g_print ("Failed to realize renderer of type '%s' for window '%s': %s\n",
                                    G_OBJECT_TYPE_NAME (renderer),
-                                   G_OBJECT_TYPE_NAME (window)));
+                                   G_OBJECT_TYPE_NAME (window),
+                                   error->message));
       g_object_unref (renderer);
+      g_clear_error (&error);
     }
 
   g_assert_not_reached ();
@@ -850,7 +857,7 @@ gsk_renderer_create_fallback (GskRenderer           *renderer,
                       NULL);
 
   gsk_renderer_set_cairo_context (res, cr);
-  gsk_renderer_realize (res, priv->window);
+  gsk_renderer_realize (res, priv->window, NULL);
 
   return res;
 }
