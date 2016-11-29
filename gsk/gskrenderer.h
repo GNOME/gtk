@@ -39,7 +39,7 @@ GDK_AVAILABLE_IN_3_90
 GType gsk_renderer_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_90
-GskRenderer *           gsk_renderer_get_for_display            (GdkDisplay              *display);
+GskRenderer *           gsk_renderer_new_for_window             (GdkWindow               *window);
 
 GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_set_viewport               (GskRenderer             *renderer,

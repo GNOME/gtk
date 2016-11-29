@@ -6886,12 +6886,6 @@ gtk_window_realize (GtkWidget *widget)
 
   _gtk_widget_get_allocation (widget, &allocation);
 
-  if (priv->renderer == NULL)
-    {
-      priv->renderer = gsk_renderer_get_for_display (gtk_widget_get_display (widget));
-      gsk_renderer_set_scale_factor (priv->renderer, gtk_widget_get_scale_factor (widget));
-    }
-
   if (gtk_widget_get_parent_window (widget))
     {
       gdk_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
@@ -6910,7 +6904,8 @@ gtk_window_realize (GtkWidget *widget)
           popover_realize (popover->widget, popover, window);
         }
 
-      gsk_renderer_realize (priv->renderer, gdk_window);
+      priv->renderer = gsk_renderer_new_for_window (gdk_window);
+      gsk_renderer_set_scale_factor (priv->renderer, gtk_widget_get_scale_factor (widget));
 
       return;
     }
@@ -6993,6 +6988,12 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, gdk_window);
   gtk_widget_register_window (widget, gdk_window);
   gtk_widget_set_realized (widget, TRUE);
+
+  if (priv->renderer == NULL)
+    {
+      priv->renderer = gsk_renderer_new_for_window (gdk_window);
+      gsk_renderer_set_scale_factor (priv->renderer, gtk_widget_get_scale_factor (widget));
+    }
 
   if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
     {
@@ -7106,9 +7107,6 @@ gtk_window_realize (GtkWidget *widget)
     }
 
   check_scale_changed (window);
-
-  /* Renderer */
-  gsk_renderer_realize (priv->renderer, gdk_window);
 }
 
 static void

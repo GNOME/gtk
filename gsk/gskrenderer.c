@@ -686,22 +686,10 @@ gsk_renderer_get_profiler (GskRenderer *renderer)
   return priv->profiler;
 }
 
-/**
- * gsk_renderer_get_for_display:
- * @display: a #GdkDisplay
- *
- * Creates an appropriate #GskRenderer instance for the given @display.
- *
- * Returns: (transfer full) (nullable): a #GskRenderer
- *
- * Since: 3.90
- */
-GskRenderer *
-gsk_renderer_get_for_display (GdkDisplay *display)
+static GType
+get_renderer_for_env_var (GdkWindow *window)
 {
   static const char *use_software;
-
-  GType renderer_type = G_TYPE_INVALID;
 
   if (use_software == NULL)
     {
@@ -711,27 +699,87 @@ gsk_renderer_get_for_display (GdkDisplay *display)
     }
 
   if (use_software[0] != '0')
-    return g_object_new (GSK_TYPE_CAIRO_RENDERER, "display", display, NULL);
+    return GSK_TYPE_CAIRO_RENDERER;
 
+  return G_TYPE_INVALID;
+}
+
+static GType
+get_renderer_for_backend (GdkWindow *window)
+{
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (display))
-    renderer_type = GSK_TYPE_GL_RENDERER; 
-  else
+  if (GDK_IS_X11_WINDOW (window))
+    return GSK_TYPE_GL_RENDERER; 
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (display))
-    renderer_type = GSK_TYPE_GL_RENDERER;
-  else
+  if (GDK_IS_WAYLAND_WINDOW (window))
+    return GSK_TYPE_GL_RENDERER;
 #endif
-    renderer_type = GSK_TYPE_CAIRO_RENDERER;
 
-  GSK_NOTE (RENDERER, g_print ("Creating renderer of type '%s' for display '%s'\n",
-                               g_type_name (renderer_type),
-                               G_OBJECT_TYPE_NAME (display)));
+  return G_TYPE_INVALID;
+}
 
-  g_assert (renderer_type != G_TYPE_INVALID);
+static GType
+get_renderer_fallback (GdkWindow *window)
+{
+  return GSK_TYPE_CAIRO_RENDERER;
+}
 
-  return g_object_new (renderer_type, "display", display, NULL);
+static struct {
+  GType (* get_renderer) (GdkWindow *window);
+} renderer_possibilities[] = {
+  { get_renderer_for_env_var },
+  { get_renderer_for_backend },
+  { get_renderer_fallback },
+};
+
+/**
+ * gsk_renderer_new_for_window:
+ * @display: a #GdkDisplay
+ *
+ * Creates an appropriate #GskRenderer instance for the given @window.
+ *
+ * The renderer will be realized when it is returned.
+ *
+ * Returns: (transfer full) (nullable): a #GskRenderer
+ *
+ * Since: 3.90
+ */
+GskRenderer *
+gsk_renderer_new_for_window (GdkWindow *window)
+{
+  GType renderer_type;
+  GskRenderer *renderer;
+  guint i;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (renderer_possibilities); i++)
+    {
+      renderer_type = renderer_possibilities[i].get_renderer (window);
+      if (renderer_type == G_TYPE_INVALID)
+        continue;
+
+      renderer = g_object_new (renderer_type,
+                               "display", gdk_window_get_display (window),
+                               NULL);
+
+      if (gsk_renderer_realize (renderer, window))
+        {
+          GSK_NOTE (RENDERER, g_print ("Using renderer of type '%s' for display '%s'\n",
+                                       G_OBJECT_TYPE_NAME (renderer),
+                                       G_OBJECT_TYPE_NAME (window)));
+          return renderer;
+        }
+
+      GSK_NOTE (RENDERER, g_print ("Failed to realize renderer of type '%s' for window '%s'\n",
+                                   G_OBJECT_TYPE_NAME (renderer),
+                                   G_OBJECT_TYPE_NAME (window)));
+      g_object_unref (renderer);
+    }
+
+  g_assert_not_reached ();
+  return NULL;
 }
 
 cairo_surface_t *
