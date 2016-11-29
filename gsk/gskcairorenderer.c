@@ -34,7 +34,8 @@ struct _GskCairoRendererClass
 G_DEFINE_TYPE (GskCairoRenderer, gsk_cairo_renderer, GSK_TYPE_RENDERER)
 
 static gboolean
-gsk_cairo_renderer_realize (GskRenderer *renderer)
+gsk_cairo_renderer_realize (GskRenderer *renderer,
+                            GdkWindow   *window)
 {
   return TRUE;
 }

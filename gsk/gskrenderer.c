@@ -97,7 +97,8 @@ static GParamSpec *gsk_renderer_properties[N_PROPS];
   g_critical ("Renderer of type '%s' does not implement GskRenderer::" # method, G_OBJECT_TYPE_NAME (obj))
 
 static gboolean
-gsk_renderer_real_realize (GskRenderer *self)
+gsk_renderer_real_realize (GskRenderer *self,
+                           GdkWindow   *window)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, realize);
   return FALSE;
@@ -145,7 +146,6 @@ gsk_renderer_dispose (GObject *gobject)
   g_clear_pointer (&priv->cairo_context, cairo_destroy);
 
   g_clear_object (&priv->profiler);
-  g_clear_object (&priv->window);
   g_clear_object (&priv->display);
 
   G_OBJECT_CLASS (gsk_renderer_parent_class)->dispose (gobject);
@@ -168,10 +168,6 @@ gsk_renderer_set_property (GObject      *gobject,
 
     case PROP_SCALE_FACTOR:
       gsk_renderer_set_scale_factor (self, g_value_get_int (value));
-      break;
-
-    case PROP_WINDOW:
-      gsk_renderer_set_window (self, g_value_get_object (value));
       break;
 
     case PROP_DISPLAY:
@@ -432,33 +428,11 @@ gsk_renderer_get_scale_factor (GskRenderer *renderer)
 }
 
 /**
- * gsk_renderer_set_window:
- * @renderer: a #GskRenderer
- * @window: the window to set
- *
- * Sets the window on which the @renderer is rendering.
- *
- * Since: 3.90
- */
-void
-gsk_renderer_set_window (GskRenderer *renderer,
-                         GdkWindow   *window)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-  g_return_if_fail (!priv->is_realized);
-  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
-
-  if (g_set_object (&priv->window, window))
-    g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_WINDOW]);
-}
-
-/**
  * gsk_renderer_get_window:
  * @renderer: a #GskRenderer
  *
- * Retrieves the #GdkWindow set using gsk_renderer_set_window().
+ * Retrieves the #GdkWindow set using gsk_renderer_realize(). If the renderer
+ * has not been realized yet, %NULL will be returned.
  *
  * Returns: (transfer none) (nullable): a #GdkWindow
  *
@@ -553,6 +527,7 @@ gsk_renderer_is_realized (GskRenderer *renderer)
 /**
  * gsk_renderer_realize:
  * @renderer: a #GskRenderer
+ * @window: the #GdkWindow renderer will be used on
  *
  * Creates the resources needed by the @renderer to render the scene
  * graph.
@@ -560,18 +535,25 @@ gsk_renderer_is_realized (GskRenderer *renderer)
  * Since: 3.90
  */
 gboolean
-gsk_renderer_realize (GskRenderer *renderer)
+gsk_renderer_realize (GskRenderer *renderer,
+                      GdkWindow   *window)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
+  g_return_val_if_fail (!gsk_renderer_is_realized (renderer), FALSE);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  if (priv->is_realized)
-    return TRUE;
+  priv->window = g_object_ref (window);
 
-  priv->is_realized = GSK_RENDERER_GET_CLASS (renderer)->realize (renderer);
+  if (!GSK_RENDERER_GET_CLASS (renderer)->realize (renderer, window))
+    {
+      g_clear_object (&priv->window);
+      return FALSE;
+    }
 
-  return priv->is_realized;
+  priv->is_realized = TRUE;
+  return TRUE;
 }
 
 /**
@@ -815,13 +797,12 @@ gsk_renderer_create_fallback (GskRenderer           *renderer,
 
   res = g_object_new (GSK_TYPE_CAIRO_RENDERER,
                       "display", priv->display,
-                      "window", priv->window,
                       "scale-factor", priv->scale_factor,
                       "viewport", viewport,
                       NULL);
 
   gsk_renderer_set_cairo_context (res, cr);
-  gsk_renderer_realize (res);
+  gsk_renderer_realize (res, priv->window);
 
   return res;
 }

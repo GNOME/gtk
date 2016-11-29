@@ -278,7 +278,8 @@ gsk_gl_renderer_destroy_programs (GskGLRenderer *self)
 }
 
 static gboolean
-gsk_gl_renderer_realize (GskRenderer *renderer)
+gsk_gl_renderer_realize (GskRenderer *renderer,
+                         GdkWindow   *window)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   GError *error = NULL;
@@ -288,11 +289,6 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
    */
   if (self->gl_context == NULL)
     {
-      GdkWindow *window = gsk_renderer_get_window (renderer);
-
-      if (window == NULL)
-        return FALSE;
-
       self->gl_context = gdk_window_create_gl_context (window, &error);
       if (error != NULL)
         {

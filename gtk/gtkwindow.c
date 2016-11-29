@@ -6910,8 +6910,7 @@ gtk_window_realize (GtkWidget *widget)
           popover_realize (popover->widget, popover, window);
         }
 
-      gsk_renderer_set_window (priv->renderer, gdk_window);
-      gsk_renderer_realize (priv->renderer);
+      gsk_renderer_realize (priv->renderer, gdk_window);
 
       return;
     }
@@ -7109,8 +7108,7 @@ gtk_window_realize (GtkWidget *widget)
   check_scale_changed (window);
 
   /* Renderer */
-  gsk_renderer_set_window (priv->renderer, gdk_window);
-  gsk_renderer_realize (priv->renderer);
+  gsk_renderer_realize (priv->renderer, gdk_window);
 }
 
 static void

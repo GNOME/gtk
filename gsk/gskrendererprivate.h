@@ -37,7 +37,8 @@ struct _GskRendererClass
 {
   GObjectClass parent_class;
 
-  gboolean (* realize) (GskRenderer *renderer);
+  gboolean (* realize) (GskRenderer *renderer,
+                        GdkWindow *window);
   void (* unrealize) (GskRenderer *renderer);
 
   void (* render) (GskRenderer *renderer,
