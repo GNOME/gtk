@@ -698,19 +698,23 @@ gsk_renderer_get_profiler (GskRenderer *renderer)
 static GType
 get_renderer_for_env_var (GdkWindow *window)
 {
-  static const char *use_software;
+  static GType env_var_type = G_TYPE_NONE;
 
-  if (use_software == NULL)
+  if (env_var_type == G_TYPE_NONE)
     {
-      use_software = g_getenv ("GSK_USE_SOFTWARE");
-      if (use_software == NULL)
-        use_software = "0";
+      const char *renderer_name = g_getenv ("GSK_RENDERER");
+
+      if (renderer_name == NULL)
+        env_var_type = G_TYPE_INVALID;
+      else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
+        env_var_type = GSK_TYPE_CAIRO_RENDERER;
+      else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0)
+        env_var_type = GSK_TYPE_GL_RENDERER;
+      else
+        env_var_type = G_TYPE_INVALID;
     }
 
-  if (use_software[0] != '0')
-    return GSK_TYPE_CAIRO_RENDERER;
-
-  return G_TYPE_INVALID;
+  return env_var_type;
 }
 
 static GType
