@@ -519,8 +519,6 @@ gtk_flow_box_child_size_allocate (GtkWidget     *widget,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
-  clip.x += allocation->x;
-  clip.y += allocation->y;
   gtk_widget_set_clip (widget, &clip);
 }
 
@@ -1575,7 +1573,6 @@ gtk_flow_box_size_allocate (GtkWidget     *widget,
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate  *priv = BOX_PRIV (box);
   GtkAllocation clip;
-  GtkAllocation child_allocation;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -1584,13 +1581,8 @@ gtk_flow_box_size_allocate (GtkWidget     *widget,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
-  child_allocation.x = 0;
-  child_allocation.y = 0;
-  child_allocation.width = allocation->width;
-  child_allocation.height = allocation->height;
-
   gtk_css_gadget_allocate (BOX_PRIV (widget)->gadget,
-                           &child_allocation,
+                           allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
@@ -1607,6 +1599,7 @@ gtk_flow_box_allocate (GtkCssGadget        *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate  *priv = BOX_PRIV (box);
+  GtkAllocation widget_allocation;
   GtkAllocation child_allocation;
   gint avail_size, avail_other_size, min_items, item_spacing, line_spacing;
   GtkAlign item_align;
@@ -1622,6 +1615,8 @@ gtk_flow_box_allocate (GtkCssGadget        *gadget,
   gint extra_line_pixels = 0, extra_per_line = 0, extra_line_extra = 0;
   gint i, this_line_size;
   GSequenceIter *iter;
+
+  gtk_widget_get_allocation (widget, &widget_allocation);
 
   min_items = MAX (1, priv->min_children_per_line);
 
@@ -1803,8 +1798,8 @@ gtk_flow_box_allocate (GtkCssGadget        *gadget,
    * Prepare item/line initial offsets and jump into the
    * real allocation loop.
    */
-  line_offset = allocation->y;
-  item_offset = allocation->x;
+  line_offset = allocation->y - widget_allocation.y;
+  item_offset = allocation->x - widget_allocation.x;
 
   /* prepend extra space to item_offset/line_offset for SPREAD_END */
   item_offset += get_offset_pixels (item_align, extra_pixels);
@@ -1868,7 +1863,7 @@ gtk_flow_box_allocate (GtkCssGadget        *gadget,
                 }
             }
 
-          item_offset = allocation->x;
+          item_offset = allocation->x - widget_allocation.x;
 
           if (item_align == GTK_ALIGN_CENTER)
             {
