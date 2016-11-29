@@ -19,8 +19,6 @@ typedef struct _GskCairoRendererClass           GskCairoRendererClass;
 
 GType gsk_cairo_renderer_get_type (void) G_GNUC_CONST;
 
-GskRenderer *gsk_cairo_renderer_new (void);
-
 G_END_DECLS
 
 #endif /* __GSK_CAIRO_RENDERER_PRIVATE_H__ */
