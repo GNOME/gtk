@@ -452,13 +452,48 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   return FALSE;
 }
 
+static VkBool32
+gdk_vulkan_debug_report (VkDebugReportFlagsEXT      flags,
+                         VkDebugReportObjectTypeEXT objectType,
+                         uint64_t                   object,
+                         size_t                     location,
+                         int32_t                    messageCode,
+                         const char*                pLayerPrefix,
+                         const char*                pMessage,
+                         void*                      pUserData)
+{
+  if (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT)
+    {
+      g_critical ("Vulkan: %s: %s\n", pLayerPrefix, pMessage);
+    }
+  else if (flags & VK_DEBUG_REPORT_WARNING_BIT_EXT)
+    {
+      g_critical ("Vulkan: %s: %s\n", pLayerPrefix, pMessage);
+    }
+  else if (flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT)
+    {
+      g_warning ("Vulkan: %s: %s\n", pLayerPrefix, pMessage);
+    }
+  else if (flags & VK_DEBUG_REPORT_DEBUG_BIT_EXT)
+    {
+      g_debug ("Vulkan: %s: %s\n", pLayerPrefix, pMessage);
+    }
+  else
+    {
+      g_message ("Vulkan: %s: %s\n", pLayerPrefix, pMessage);
+    }
+  
+  return VK_TRUE;
+}
+
 static gboolean
 gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                     GError     **error)
 {
   uint32_t i;
+  GPtrArray *used_extensions;
   GPtrArray *used_layers;
-  gboolean validate = FALSE;
+  gboolean validate = FALSE, have_debug_report = FALSE;
   VkResult res;
 
   if (GDK_DISPLAY_GET_CLASS (display)->vk_extension_name == NULL)
@@ -473,6 +508,10 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   VkExtensionProperties extensions[n_extensions];
   GDK_VK_CHECK (vkEnumerateInstanceExtensionProperties, NULL, &n_extensions, extensions);
 
+  used_extensions = g_ptr_array_new ();
+  g_ptr_array_add (used_extensions, (gpointer) VK_KHR_SURFACE_EXTENSION_NAME); 
+  g_ptr_array_add (used_extensions, (gpointer) GDK_DISPLAY_GET_CLASS (display)->vk_extension_name); 
+
   for (i = 0; i < n_extensions; i++)
     {
       GDK_NOTE (VULKAN, g_print ("Extension available: %s v%u.%u.%u\n",
@@ -480,6 +519,12 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                  VK_VERSION_MAJOR (extensions[i].specVersion),
                                  VK_VERSION_MINOR (extensions[i].specVersion),
                                  VK_VERSION_PATCH (extensions[i].specVersion)));
+
+      if (g_str_equal (extensions[i].extensionName, VK_EXT_DEBUG_REPORT_EXTENSION_NAME))
+        {
+          g_ptr_array_add (used_extensions, (gpointer) VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+          have_debug_report = TRUE;
+        }
     }
 
   uint32_t n_layers;
@@ -511,28 +556,27 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
     }
 
   res = GDK_VK_CHECK (vkCreateInstance, &(VkInstanceCreateInfo) {
-                                             VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-                                             NULL,
-                                             0,
-                                             &(VkApplicationInfo) {
-                                                 VK_STRUCTURE_TYPE_APPLICATION_INFO,
-                                                 NULL,
-                                                 g_get_application_name (),
-                                                 0,
-                                                 "GTK+",
-                                                 VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
-                                                 VK_API_VERSION_1_0 },
-                                             used_layers->len,
-                                             (const char * const *) used_layers->pdata,
-                                             2,
-                                             (const char *const *) &(const char *[2]) {
-                                                 VK_KHR_SURFACE_EXTENSION_NAME, 
-                                                 GDK_DISPLAY_GET_CLASS (display)->vk_extension_name
+                                             .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+                                             .pNext = NULL,
+                                             .flags = 0,
+                                             .pApplicationInfo = &(VkApplicationInfo) {
+                                                 .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+                                                 .pNext = NULL,
+                                                 .pApplicationName = g_get_application_name (),
+                                                 .applicationVersion = 0,
+                                                 .pEngineName = "GTK+",
+                                                 .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
+                                                 .apiVersion = VK_API_VERSION_1_0
                                              },
+                                             .enabledLayerCount = used_layers->len,
+                                             .ppEnabledLayerNames = (const char * const *) used_layers->pdata,
+                                             .enabledExtensionCount = used_extensions->len,
+                                             .ppEnabledExtensionNames = (const char * const *) used_extensions->pdata
                                          },
                                          NULL,
                                          &display->vk_instance);
   g_ptr_array_free (used_layers, TRUE);
+  g_ptr_array_free (used_extensions, TRUE);
 
   if (res != VK_SUCCESS)
     {
@@ -541,8 +585,39 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
       return FALSE;
     }
 
+  if (have_debug_report)
+    {
+      PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT;
+      
+      vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT) vkGetInstanceProcAddr (display->vk_instance, "vkCreateDebugReportCallbackEXT" );
+      GDK_VK_CHECK (vkCreateDebugReportCallbackEXT, display->vk_instance,
+                                                    &(VkDebugReportCallbackCreateInfoEXT) {
+                                                        .sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
+                                                        .pNext = NULL,
+                                                        .flags = VK_DEBUG_REPORT_INFORMATION_BIT_EXT
+                                                               | VK_DEBUG_REPORT_WARNING_BIT_EXT
+                                                               | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT
+                                                               | VK_DEBUG_REPORT_ERROR_BIT_EXT
+                                                               | VK_DEBUG_REPORT_DEBUG_BIT_EXT,
+                                                        .pfnCallback = gdk_vulkan_debug_report,
+                                                        .pUserData = NULL
+                                                    },
+                                                    NULL,
+                                                    &display->vk_debug_callback);
+    }
+
   if (!gdk_display_create_vulkan_device (display, error))
     {
+      if (display->vk_debug_callback != VK_NULL_HANDLE)
+        {
+          PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT;
+
+          vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT) vkGetInstanceProcAddr (display->vk_instance, "vkDestroyDebugReportCallbackEXT");
+          vkDestroyDebugReportCallbackEXT (display->vk_instance,
+                                           display->vk_debug_callback,
+                                           NULL);
+          display->vk_debug_callback = VK_NULL_HANDLE;
+        }
       vkDestroyInstance (display->vk_instance, NULL);
       display->vk_instance = VK_NULL_HANDLE;
       return FALSE;
@@ -577,7 +652,19 @@ gdk_display_unref_vulkan (GdkDisplay *display)
     return;
   
   vkDestroyDevice (display->vk_device, NULL);
+  display->vk_device = VK_NULL_HANDLE;
+  if (display->vk_debug_callback != VK_NULL_HANDLE)
+    {
+      PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT;
+
+      vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT) vkGetInstanceProcAddr (display->vk_instance, "vkDestroyDebugReportCallbackEXT");
+      vkDestroyDebugReportCallbackEXT (display->vk_instance,
+                                       display->vk_debug_callback,
+                                       NULL);
+      display->vk_debug_callback = VK_NULL_HANDLE;
+    }
   vkDestroyInstance (display->vk_instance, NULL);
+  display->vk_instance = VK_NULL_HANDLE;
 }
 
 #else /* GDK_WINDOWING_VULKAN */

@@ -126,6 +126,7 @@ struct _GdkDisplay
 
 #ifdef GDK_WINDOWING_VULKAN
   VkInstance vk_instance;
+  VkDebugReportCallbackEXT vk_debug_callback;
   VkPhysicalDevice vk_physical_device;
   VkDevice vk_device;
   VkQueue vk_queue;
