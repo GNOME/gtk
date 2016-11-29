@@ -27,8 +27,6 @@ do_tabs (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-
       view = gtk_text_view_new ();
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
       gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 20);
