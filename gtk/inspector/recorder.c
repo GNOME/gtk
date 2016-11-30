@@ -490,6 +490,7 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                       GskRenderer          *renderer,
                                       GdkWindow            *window,
                                       const cairo_region_t *region,
+                                      GdkDrawingContext    *context,
                                       GskRenderNode        *node)
 {
   GtkInspectorRecording *recording;
@@ -506,6 +507,7 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                     gdk_window_get_width (window),
                                                     gdk_window_get_height (window) },
                                                   region,
+                                                  gdk_drawing_context_get_clip (context),
                                                   node);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);

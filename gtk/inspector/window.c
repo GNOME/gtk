@@ -346,6 +346,7 @@ gtk_inspector_record_render (GtkWidget            *widget,
                              GskRenderer          *renderer,
                              GdkWindow            *window,
                              const cairo_region_t *region,
+                             GdkDrawingContext    *context,
                              GskRenderNode        *node)
 {
   GtkInspectorWindow *iw;
@@ -363,6 +364,7 @@ gtk_inspector_record_render (GtkWidget            *widget,
                                         renderer,
                                         window,
                                         region,
+                                        context,
                                         node);
 }
 

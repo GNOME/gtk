@@ -41,7 +41,8 @@ typedef struct _GtkInspectorRenderRecording
   GtkInspectorRecording parent;
 
   GdkRectangle area;
-  cairo_region_t *clip;
+  cairo_region_t *clip_region;
+  cairo_region_t *render_region;
   GskRenderNode *node;
   char *profiler_info;
 } GtkInspectorRenderRecording;
@@ -57,12 +58,15 @@ GtkInspectorRecording *
                 gtk_inspector_render_recording_new           (gint64                             timestamp,
                                                               GskProfiler                       *profiler,
                                                               const GdkRectangle                *area,
-                                                              const cairo_region_t              *clip,
+                                                              const cairo_region_t              *clip_region,
+                                                              const cairo_region_t              *render_region,
                                                               GskRenderNode                     *node);
 
 GskRenderNode * gtk_inspector_render_recording_get_node      (GtkInspectorRenderRecording       *recording);
 const cairo_region_t *
                 gtk_inspector_render_recording_get_clip_region (GtkInspectorRenderRecording     *recording);
+const cairo_region_t *
+                gtk_inspector_render_recording_get_render_region (GtkInspectorRenderRecording     *recording);
 const cairo_rectangle_int_t *
                 gtk_inspector_render_recording_get_area      (GtkInspectorRenderRecording       *recording);
 const char *    gtk_inspector_render_recording_get_profiler_info

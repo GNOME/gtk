@@ -15651,7 +15651,12 @@ gtk_widget_render (GtkWidget            *widget,
   root = gtk_snapshot_finish (&snapshot);
   if (root != NULL)
     {
-      gtk_inspector_record_render (widget, renderer, window, region, root);
+      gtk_inspector_record_render (widget,
+                                   renderer,
+                                   window,
+                                   region,
+                                   context,
+                                   root);
 
       gsk_renderer_render (renderer, root, context);
       gsk_render_node_unref (root);
