@@ -40,8 +40,6 @@ libgdk_win32_la_SOURCES = \
 	gdkdisplay-win32.c \
 	gdkdisplay-win32.h \
 	gdkdisplaymanager-win32.c \
-	gdkdrawingcontext-win32.c \
-	gdkdrawingcontext-win32.h \
 	gdkdnd-win32.c \
 	gdkevents-win32.c \
 	gdkgeometry-win32.c \

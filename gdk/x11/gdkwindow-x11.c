@@ -36,7 +36,6 @@
 #include "gdkasync.h"
 #include "gdkeventsource.h"
 #include "gdkdisplay-x11.h"
-#include "gdkdrawingcontext-x11.h"
 #include "gdkglcontext-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdk-private.h"
@@ -209,16 +208,6 @@ gdk_x11_window_get_unscaled_size (GdkWindow *window,
 
   if (unscaled_height)
     *unscaled_height = impl->unscaled_height;
-}
-
-static GdkDrawingContext *
-gdk_x11_window_create_draw_context (GdkWindow            *window,
-                                    const cairo_region_t *region)
-{
-  return g_object_new (GDK_TYPE_X11_DRAWING_CONTEXT,
-                       "window", window,
-                       "clip", region,
-                       NULL);
 }
 
 static void
@@ -5405,6 +5394,5 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->show_window_menu = gdk_x11_window_show_window_menu;
   impl_class->create_gl_context = gdk_x11_window_create_gl_context;
   impl_class->invalidate_for_new_frame = gdk_x11_window_invalidate_for_new_frame;
-  impl_class->create_draw_context = gdk_x11_window_create_draw_context;
   impl_class->get_unscaled_size = gdk_x11_window_get_unscaled_size;
 }
