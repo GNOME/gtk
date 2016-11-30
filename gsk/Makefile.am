@@ -134,7 +134,7 @@ if HAVE_INTROSPECTION
 
 introspection_files = $(gsk_public_source_h) $(gsk_public_source_c)
 
-Gsk-4.0_noinst.gir: libgsk-4.la Makefile
+Gsk-noinst-4.0.gir: libgsk-4.la Makefile
 Gsk_noinst_4_0_gir_SCANNERFLAGS = \
 	--add-include-path=$(top_builddir)/gdk \
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-noinst-4.0.gir \
