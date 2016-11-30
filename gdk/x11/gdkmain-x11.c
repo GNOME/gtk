@@ -245,7 +245,7 @@ gdk_x_io_error (Display *display)
    */
   if (errno == EPIPE)
     {
-      g_warning ("The application '%s' lost its connection to the display %s;\n"
+      g_message ("The application '%s' lost its connection to the display %s;\n"
                  "most likely the X server was shut down or you killed/destroyed\n"
                  "the application.\n",
                  g_get_prgname (),
@@ -253,7 +253,7 @@ gdk_x_io_error (Display *display)
     }
   else
     {
-      g_warning ("%s: Fatal IO error %d (%s) on X server %s.\n",
+      g_message ("%s: Fatal IO error %d (%s) on X server %s.\n",
                  g_get_prgname (),
                  errno, g_strerror (errno),
                  display ? DisplayString (display) : gdk_get_display_arg_name ());
