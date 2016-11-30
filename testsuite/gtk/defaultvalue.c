@@ -343,41 +343,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
   g_free (pspecs);
 
-  if (g_type_is_a (type, GTK_TYPE_WIDGET))
-    {
-      g_object_set (gtk_settings_get_default (), "gtk-theme-name", "Raleigh", NULL);
-      pspecs = gtk_widget_class_list_style_properties (GTK_WIDGET_CLASS (klass), &n_pspecs);
-
-      for (i = 0; i < n_pspecs; ++i)
-	{
-	  GParamSpec *pspec = pspecs[i];
-	  GValue value = G_VALUE_INIT;
-
-	  if (pspec->owner_type != type)
-	    continue;
-
-	  if ((pspec->flags & G_PARAM_READABLE) == 0)
-	    continue;
-
-          if (g_type_is_a (type, GTK_TYPE_BUTTON) &&
-              strcmp (pspec->name, "default-border") == 0)
-            continue;
-
-          if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
-              (strcmp (pspec->name, "resize-grip-width") == 0 ||
-               strcmp (pspec->name, "resize-grip-height") == 0 ||
-               strcmp (pspec->name, "decoration-button-layout") == 0))
-            continue;
-
-	  g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-	  gtk_widget_style_get_property (GTK_WIDGET (instance), pspec->name, &value);
-	  check_property ("Style property", pspec, &value);
-	  g_value_unset (&value);
-	}
-
-      g_free (pspecs);
-    }
-
   if (g_type_is_a (type, GDK_TYPE_WINDOW))
     gdk_window_destroy (GDK_WINDOW (instance));
   else
