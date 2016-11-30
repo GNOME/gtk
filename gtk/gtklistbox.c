@@ -1830,7 +1830,7 @@ gtk_list_box_enter_notify_event (GtkWidget        *widget,
   GtkListBox *box = GTK_LIST_BOX (widget);
   GtkListBoxRow *row;
 
-  if (event->window != gtk_widget_get_window (widget))
+  if (event->window != BOX_PRIV (box)->view_window)
     return FALSE;
 
   BOX_PRIV (box)->in_widget = TRUE;
@@ -1849,7 +1849,7 @@ gtk_list_box_leave_notify_event (GtkWidget        *widget,
   GtkListBox *box = GTK_LIST_BOX (widget);
   GtkListBoxRow *row = NULL;
 
-  if (event->window != gtk_widget_get_window (widget))
+  if (event->window != BOX_PRIV (box)->view_window)
     return FALSE;
 
   if (event->detail != GDK_NOTIFY_INFERIOR)
@@ -1879,7 +1879,7 @@ gtk_list_box_motion_notify_event (GtkWidget      *widget,
   if (!BOX_PRIV (box)->in_widget)
     return FALSE;
 
-  window = gtk_widget_get_window (widget);
+  window = BOX_PRIV (box)->view_window;
   event_window = event->window;
   relative_y = event->y;
 
