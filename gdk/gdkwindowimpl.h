@@ -299,9 +299,6 @@ struct _GdkWindowImplClass
 					   gboolean        attached,
                                            GdkGLContext   *share,
                                            GError        **error);
-  gboolean     (* realize_gl_context)     (GdkWindow      *window,
-                                           GdkGLContext   *context,
-                                           GError        **error);
   void         (*invalidate_for_new_frame)(GdkWindow      *window,
                                            cairo_region_t *update_area);
 
