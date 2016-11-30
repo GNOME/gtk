@@ -25,7 +25,9 @@ struct _GskVulkanRenderer
 
   guint n_targets;
   GskVulkanTarget **targets;
+
   VkRenderPass render_pass;
+  VkCommandPool command_pool;
 
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
@@ -167,10 +169,63 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                              GError      **error)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
+  VkDevice device;
 
   self->vulkan = gdk_window_create_vulkan_context (window, error);
   if (self->vulkan == NULL)
     return FALSE;
+
+  device = gdk_vulkan_context_get_device (self->vulkan);
+
+  GSK_VK_CHECK (vkCreateRenderPass, gdk_vulkan_context_get_device (self->vulkan),
+                                    &(VkRenderPassCreateInfo) {
+                                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
+                                        .attachmentCount = 1,
+                                        .pAttachments = (VkAttachmentDescription[]) {
+                                           {
+                                              .format = gdk_vulkan_context_get_image_format (self->vulkan),
+                                              .samples = VK_SAMPLE_COUNT_1_BIT,
+                                              .loadOp = VK_ATTACHMENT_LOAD_OP_LOAD,
+                                              .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
+                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                                              .finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                           }
+                                        },
+                                        .subpassCount = 1,
+                                        .pSubpasses = (VkSubpassDescription []) {
+                                           {
+                                              .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                              .inputAttachmentCount = 0,
+                                              .colorAttachmentCount = 1,
+                                              .pColorAttachments = (VkAttachmentReference []) {
+                                                 {
+                                                    .attachment = 0,
+                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+                                                  }
+                                               },
+                                               .pResolveAttachments = (VkAttachmentReference []) {
+                                                  {
+                                                     .attachment = VK_ATTACHMENT_UNUSED,
+                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+                                                  }
+                                               },
+                                               .pDepthStencilAttachment = NULL,
+                                               .preserveAttachmentCount = 1,
+                                               .pPreserveAttachments = (uint32_t []) { 0 },
+                                            }
+                                         },
+                                         .dependencyCount = 0
+                                      },
+                                      NULL,
+                                      &self->render_pass);
+   GSK_VK_CHECK (vkCreateCommandPool, device,
+                                      &(const VkCommandPoolCreateInfo) {
+                                          .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+                                          .queueFamilyIndex = gdk_vulkan_context_get_queue_family_index (self->vulkan),
+                                          .flags = 0
+                                      },
+                                      NULL,
+                                      &self->command_pool);
 
   g_signal_connect (self->vulkan,
                     "images-updated",
@@ -185,11 +240,25 @@ static void
 gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
+  VkDevice device;
+
+  device = gdk_vulkan_context_get_device (self->vulkan);
 
   gsk_vulkan_renderer_free_targets (self);
   g_signal_handlers_disconnect_by_func(self->vulkan,
                                        gsk_vulkan_renderer_update_images_cb,
                                        self);
+
+  vkDestroyCommandPool (device,
+                        self->command_pool,
+                        NULL);
+  self->command_pool = VK_NULL_HANDLE;
+
+  vkDestroyRenderPass (device,
+                       self->render_pass,
+                       NULL);
+  self->render_pass = VK_NULL_HANDLE;
+
   g_clear_object (&self->vulkan);
 }
 
