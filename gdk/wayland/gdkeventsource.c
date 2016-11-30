@@ -89,7 +89,10 @@ gdk_event_source_check (GSource *base)
       if (source->pfd.revents & G_IO_IN)
         {
           if (wl_display_read_events (display_wayland->wl_display) < 0)
-            g_error ("Error reading events from display: %s", g_strerror (errno));
+            {
+              g_message ("Error reading events from display: %s", g_strerror (errno));
+              _exit (1);
+            }
         }
       else
         wl_display_cancel_read (display_wayland->wl_display);
