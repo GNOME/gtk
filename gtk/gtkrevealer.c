@@ -316,11 +316,13 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
       transition = effective_transition (revealer);
       if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-        gtk_widget_get_preferred_width_for_height (child, MAX (0, allocation->height - vertical_padding), NULL,
-                                                   &child_allocation->width);
+        gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
+                            MAX (0, allocation->height - vertical_padding),
+                            NULL, &child_allocation->width, NULL, NULL);
       else
-        gtk_widget_get_preferred_height_for_width (child, MAX (0, allocation->width - horizontal_padding), NULL,
-                                                   &child_allocation->height);
+        gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
+                            MAX (0, allocation->width - horizontal_padding),
+                            NULL, &child_allocation->height, NULL, NULL);
     }
 
   child_allocation->width = MAX (child_allocation->width, allocation->width - horizontal_padding);
