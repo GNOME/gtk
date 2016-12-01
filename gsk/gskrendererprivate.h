@@ -57,8 +57,6 @@ struct _GskRendererClass
 
 gboolean gsk_renderer_is_realized (GskRenderer *renderer);
 
-void                    gsk_renderer_set_gl_context             (GskRenderer    *renderer,
-                                                                 GdkGLContext   *context);
 GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer    *renderer);
 GdkDrawingContext *     gsk_renderer_get_drawing_context        (GskRenderer    *renderer);
 cairo_t *               gsk_renderer_get_cairo_context          (GskRenderer    *renderer);

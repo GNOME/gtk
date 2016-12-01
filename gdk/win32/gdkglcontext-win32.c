@@ -101,15 +101,20 @@ gdk_gl_blit_region (GdkWindow *window, cairo_region_t *region)
 }
 
 static void
-gdk_win32_gl_context_end_frame (GdkGLContext *context,
+gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
                                 cairo_region_t *painted,
                                 cairo_region_t *damage)
 {
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
   GdkWindow *window = gdk_gl_context_get_window (context);
   GdkWin32Display *display = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
-
   gboolean can_wait = display->hasWglOMLSyncControl;
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->end_frame (draw_context, painted, damage);
+  if (gdk_gl_context_get_shared_context (context))
+    return;
+
   gdk_gl_context_make_current (context);
 
   if (context_win32->do_frame_sync)
@@ -156,10 +161,15 @@ gdk_win32_gl_context_end_frame (GdkGLContext *context,
 }
 
 static void
-gdk_win32_gl_context_begin_frame (GdkGLContext   *context,
+gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *update_area)
 {
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWindow *window;
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->begin_frame (draw_context, update_area);
+  if (gdk_gl_context_get_shared_context (context))
+    return;
 
   if (gdk_gl_context_has_framebuffer_blit (context))
     return;

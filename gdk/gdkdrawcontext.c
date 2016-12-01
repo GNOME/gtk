@@ -31,7 +31,7 @@
  * @Short_description: Drawing context base class
  *
  * #GdkDrawContext is the base object used by contexts implementing different
- * rendering methods, such as #GdkGLContext or #GdkVulkanContext. They provide
+ * rendering methods, such as #GdkDrawContext or #GdkVulkanContext. They provide
  * shared functionality between those contexts.
  *
  * You will always interact with one of those subclasses.
@@ -40,6 +40,8 @@ typedef struct _GdkDrawContextPrivate GdkDrawContextPrivate;
 
 struct _GdkDrawContextPrivate {
   GdkWindow *window;
+
+  guint is_drawing : 1;
 };
 
 enum {
@@ -157,6 +159,87 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
 static void
 gdk_draw_context_init (GdkDrawContext *self)
 {
+}
+
+/*< private >
+ * gdk_draw_context_is_drawing:
+ * @context: a #GdkDrawContext
+ *
+ * Returns %TRUE if @context is in the process of drawing to its window. In such
+ * cases, it will have access to the window's backbuffer to render the new frame
+ * onto it.
+ *
+ * Returns: %TRUE if the context is between begin_frame() and end_frame() calls.
+ *
+ * Since: 3.90
+ */
+gboolean
+gdk_draw_context_is_drawing (GdkDrawContext *context)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+
+  return priv->is_drawing;
+}
+
+/*< private >
+ * gdk_draw_context_begin_frame:
+ * @context: a #GdkDrawContext
+ * @region: (inout): The clip region that needs to be repainted
+ *
+ * Sets up @context and @drawing for a new drawing.
+ *
+ * The @context is free to update @region to the size that actually needs to
+ * be repainted. Contexts that do not support partial blits for example may
+ * want to invalidate the whole window instead.
+ *
+ * The function does not clear the background. Clearing the backgroud is the
+ * job of the renderer. The contents of the backbuffer are undefined after this
+ * function call.
+ *
+ * Since: 3.90
+ */
+void
+gdk_draw_context_begin_frame (GdkDrawContext *context,
+                              cairo_region_t *region)
+{
+  GdkDrawContextPrivate *priv;
+
+  g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
+  g_return_if_fail (region != NULL);
+
+  priv = gdk_draw_context_get_instance_private (context);
+  priv->is_drawing = TRUE;
+
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, region);
+}
+
+/*< private >
+ * gdk_draw_context_end_frame:
+ * @context: a #GdkDrawContext
+ * @painted: The area that has been redrawn this frame
+ * @damage: The area that we know is actually different from the last frame
+ *
+ * Copies the back buffer to the front buffer.
+ *
+ * This function may call `glFlush()` implicitly before returning; it
+ * is not recommended to call `glFlush()` explicitly before calling
+ * this function.
+ *
+ * Since: 3.16
+ */
+void
+gdk_draw_context_end_frame (GdkDrawContext *context,
+                            cairo_region_t *painted,
+                            cairo_region_t *damage)
+{
+  GdkDrawContextPrivate *priv;
+
+  g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
+
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, painted, damage);
+
+  priv = gdk_draw_context_get_instance_private (context);
+  priv->is_drawing = FALSE;
 }
 
 /**

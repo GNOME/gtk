@@ -39,7 +39,20 @@ struct _GdkDrawContext
 struct _GdkDrawContextClass
 {
   GObjectClass parent_class;
+
+  void                  (* begin_frame)                         (GdkDrawContext         *context,
+                                                                 cairo_region_t         *update_area);
+  void                  (* end_frame)                           (GdkDrawContext         *context,
+                                                                 cairo_region_t         *painted,
+                                                                 cairo_region_t         *damage);
 };
+
+gboolean                gdk_draw_context_is_drawing             (GdkDrawContext         *context);
+void                    gdk_draw_context_begin_frame            (GdkDrawContext         *context,
+                                                                 cairo_region_t         *region);
+void                    gdk_draw_context_end_frame              (GdkDrawContext         *context,
+                                                                 cairo_region_t         *painted,
+                                                                 cairo_region_t         *damage);
 
 G_END_DECLS
 

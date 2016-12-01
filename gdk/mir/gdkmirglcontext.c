@@ -98,11 +98,16 @@ gdk_mir_gl_context_realize (GdkGLContext *context,
 }
 
 static void
-gdk_mir_gl_context_begin_frame (GdkGLContext   *context,
+gdk_mir_gl_context_begin_frame (GdkDrawContext *draw_context,
                                 cairo_region_t *update_area)
 {
-  GdkDisplay *display = gdk_gl_context_get_display (window);
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
+  GdkDisplay *display = gdk_draw_context_get_display (draw_context);
   GdkWindow *window;
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->begin_frame (draw_context, update_area);
+  if (gdk_gl_context_get_shared_context (context))
+    return;
 
   if (_gdk_mir_display_have_egl_swap_buffers_with_damage (display))
     return;
@@ -121,11 +126,16 @@ gdk_mir_gl_context_end_frame (GdkGLContext *context,
                               cairo_region_t *painted,
                               cairo_region_t *damage)
 {
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWindow *window = gdk_gl_context_get_window (context);
   GdkDisplay *display = gdk_window_get_display (window);
   GdkMirGLContext *context_mir = GDK_MIR_GL_CONTEXT (context);
   EGLDisplay egl_display = _gdk_mir_display_get_egl_display (display);
   EGLSurface egl_surface;
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->end_frame (draw_context, painted, damage);
+  if (gdk_gl_context_get_shared_context (context))
+    return;
 
   gdk_gl_context_make_current (context);
 

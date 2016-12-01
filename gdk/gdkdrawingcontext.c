@@ -50,7 +50,7 @@ typedef struct _GdkDrawingContextPrivate GdkDrawingContextPrivate;
 
 struct _GdkDrawingContextPrivate {
   GdkWindow *window;
-  GdkGLContext *paint_context;
+  GdkDrawContext *paint_context;
 
   cairo_region_t *clip;
   cairo_t *cr;
@@ -191,13 +191,13 @@ gdk_drawing_context_class_init (GdkDrawingContextClass *klass)
   /**
    * GdkDrawingContext:paint-context:
    *
-   * The #GdkGLContext used to draw or %NULL if Cairo is used.
+   * The #GdkDrawContext used to draw or %NULL if Cairo is used.
    *
    * Since: 3.90
    */
   obj_property[PROP_PAINT_CONTEXT] =
     g_param_spec_object ("paint-context", "Paint context", "The context used to draw",
-                         GDK_TYPE_GL_CONTEXT,
+                         GDK_TYPE_DRAW_CONTEXT,
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS);
@@ -244,7 +244,7 @@ gdk_cairo_get_drawing_context (cairo_t *cr)
  *
  * Retrieves a Cairo context to be used to draw on the #GdkWindow
  * that created the #GdkDrawingContext. The @context must have been
- * created without a #GdkGLContext for this function to work. If
+ * created without a #GdkDrawContext for this function to work. If
  * gdk_drawing_context_get_paint_context() does not return %NULL,
  * then this function will.
  *
@@ -318,11 +318,11 @@ gdk_drawing_context_get_window (GdkDrawingContext *context)
  *
  * Retrieves the paint context used to draw with.
  *
- * Returns: (transfer none): a #GdkGLContext or %NULL
+ * Returns: (transfer none): a #GdkDrawContext or %NULL
  *
  * Since: 3.90
  */
-GdkGLContext *
+GdkDrawContext *
 gdk_drawing_context_get_paint_context (GdkDrawingContext *context)
 {
   GdkDrawingContextPrivate *priv = gdk_drawing_context_get_instance_private (context);

@@ -2816,7 +2816,7 @@ gdk_window_end_paint_internal (GdkWindow *window)
  */
 GdkDrawingContext *
 gdk_window_begin_draw_frame (GdkWindow            *window,
-                             GdkGLContext         *gl_context,
+                             GdkDrawContext       *draw_context,
                              const cairo_region_t *region)
 {
   GdkDrawingContext *context;
@@ -2826,10 +2826,10 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
   g_return_val_if_fail (gdk_window_has_native (window), NULL);
   g_return_val_if_fail (gdk_window_is_toplevel (window), NULL);
   g_return_val_if_fail (region != NULL, NULL);
-  if (gl_context != NULL)
+  if (draw_context != NULL)
     {
-      g_return_val_if_fail (GDK_IS_GL_CONTEXT (gl_context), NULL);
-      g_return_val_if_fail (gdk_gl_context_get_window (gl_context) == window, NULL);
+      g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (draw_context), NULL);
+      g_return_val_if_fail (gdk_draw_context_get_window (draw_context) == window, NULL);
     }
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -2845,14 +2845,14 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
 
   real_region = cairo_region_copy (region);
 
-  if (gl_context)
-    gdk_gl_context_begin_frame (gl_context, real_region);
+  if (draw_context)
+    gdk_draw_context_begin_frame (draw_context, real_region);
   else
     gdk_window_begin_paint_internal (window, real_region);
 
   context = g_object_new (GDK_TYPE_DRAWING_CONTEXT,
                           "window", window,
-                          "paint-context", gl_context,
+                          "paint-context", draw_context,
                           "clip", real_region,
                           NULL);
 
@@ -2883,7 +2883,7 @@ void
 gdk_window_end_draw_frame (GdkWindow         *window,
                            GdkDrawingContext *context)
 {
-  GdkGLContext *paint_context;
+  GdkDrawContext *paint_context;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
@@ -2903,9 +2903,9 @@ gdk_window_end_draw_frame (GdkWindow         *window,
   paint_context = gdk_drawing_context_get_paint_context (context);
   if (paint_context)
     {
-      gdk_gl_context_end_frame (paint_context,
-                                gdk_drawing_context_get_clip (context),
-                                window->active_update_area);
+      gdk_draw_context_end_frame (paint_context,
+                                  gdk_drawing_context_get_clip (context),
+                                  window->active_update_area);
     }
   else
     {

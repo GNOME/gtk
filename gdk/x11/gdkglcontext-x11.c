@@ -120,10 +120,15 @@ maybe_wait_for_vblank (GdkDisplay  *display,
 }
 
 static void
-gdk_x11_gl_context_begin_frame (GdkGLContext   *context,
+gdk_x11_gl_context_begin_frame (GdkDrawContext *draw_context,
                                 cairo_region_t *update_area)
 {
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWindow *window;
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->begin_frame (draw_context, update_area);
+  if (gdk_gl_context_get_shared_context (context))
+    return;
 
   if (gdk_gl_context_has_framebuffer_blit (context))
     return;
@@ -157,12 +162,12 @@ gdk_gl_blit_region (GdkWindow *window, cairo_region_t *region)
 }
 
 static void
-gdk_x11_gl_context_end_frame (GdkGLContext *context,
+gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
                               cairo_region_t *painted,
                               cairo_region_t *damage)
 {
-  GdkGLContext *shared = gdk_gl_context_get_shared_context (context);
-  GdkX11GLContext *shared_x11 = GDK_X11_GL_CONTEXT (shared);
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
   GdkWindow *window = gdk_gl_context_get_window (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
@@ -171,17 +176,21 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
   DrawableInfo *info;
   GLXDrawable drawable;
 
-  gdk_gl_context_make_current (shared);
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->end_frame (draw_context, painted, damage);
+  if (gdk_gl_context_get_shared_context (context))
+    return;
+
+  gdk_gl_context_make_current (context);
 
   info = get_glx_drawable_info (window);
 
-  drawable = shared_x11->attached_drawable;
+  drawable = context_x11->attached_drawable;
 
   GDK_NOTE (OPENGL,
             g_message ("Flushing GLX buffers for drawable %lu (window: %lu), frame sync: %s",
                        (unsigned long) drawable,
                        (unsigned long) gdk_x11_window_get_xid (window),
-                       shared_x11->do_frame_sync ? "yes" : "no"));
+                       context_x11->do_frame_sync ? "yes" : "no"));
 
   /* if we are going to wait for the vertical refresh manually
    * we need to flush pending redraws, and we also need to wait
@@ -191,7 +200,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
    * GLX_SGI_swap_control, and we ask the driver to do the right
    * thing.
    */
-  if (shared_x11->do_frame_sync)
+  if (context_x11->do_frame_sync)
     {
       guint32 end_frame_counter = 0;
       gboolean has_counter = display_x11->has_glx_video_sync;
@@ -200,7 +209,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
       if (display_x11->has_glx_video_sync)
         glXGetVideoSyncSGI (&end_frame_counter);
 
-      if (shared_x11->do_frame_sync && !display_x11->has_glx_swap_interval)
+      if (context_x11->do_frame_sync && !display_x11->has_glx_swap_interval)
         {
           glFinish ();
 
@@ -221,7 +230,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
     {
       glXSwapBuffers (dpy, drawable);
     }
-  else if (gdk_gl_context_has_framebuffer_blit (shared))
+  else if (gdk_gl_context_has_framebuffer_blit (context))
     {
       glDrawBuffer(GL_FRONT);
       glReadBuffer(GL_BACK);
@@ -229,7 +238,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
       glDrawBuffer(GL_BACK);
       glFlush();
 
-      if (gdk_gl_context_has_frame_terminator (shared))
+      if (gdk_gl_context_has_frame_terminator (context))
         glFrameTerminatorGREMEDY ();
     }
   else
@@ -238,7 +247,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
       glXSwapBuffers (dpy, drawable);
     }
 
-  if (shared_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
+  if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
     glXGetVideoSyncSGI (&info->last_frame_counter);
 }
 
@@ -774,12 +783,14 @@ static void
 gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
 {
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->realize = gdk_x11_gl_context_realize;
-  context_class->begin_frame = gdk_x11_gl_context_begin_frame;
-  context_class->end_frame = gdk_x11_gl_context_end_frame;
   context_class->texture_from_surface = gdk_x11_gl_context_texture_from_surface;
+
+  draw_context_class->begin_frame = gdk_x11_gl_context_begin_frame;
+  draw_context_class->end_frame = gdk_x11_gl_context_end_frame;
 
   gobject_class->dispose = gdk_x11_gl_context_dispose;
 }
@@ -1259,7 +1270,7 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
       return FALSE;
     }
 
-  if (context_x11->is_attached || gdk_gl_context_is_drawing (context))
+  if (context_x11->is_attached || gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)))
     drawable = context_x11->attached_drawable;
   else
     drawable = context_x11->unattached_drawable;

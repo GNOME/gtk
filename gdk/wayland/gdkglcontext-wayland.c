@@ -35,13 +35,18 @@
 
 G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
-static void gdk_x11_gl_context_dispose (GObject *gobject);
+static void gdk_wayland_gl_context_dispose (GObject *gobject);
 
 static void
-gdk_wayland_gl_context_begin_frame (GdkGLContext   *context,
+gdk_wayland_gl_context_begin_frame (GdkDrawContext *draw_context,
                                     cairo_region_t *update_area)
 {
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWindow *window;
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, update_area);
+  if (gdk_gl_context_get_shared_context (context))
+    return;
 
   /* If nothing else is known, repaint everything so that the back
      buffer is fully up-to-date for the swapbuffer */
@@ -171,21 +176,25 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
 }
 
 static void
-gdk_wayland_gl_context_end_frame (GdkGLContext   *context,
+gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted,
                                   cairo_region_t *damage)
 {
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWindow *window = gdk_gl_context_get_window (context);
   GdkDisplay *display = gdk_window_get_display (window);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GdkGLContext *shared = gdk_gl_context_get_shared_context (context);
-  GdkWaylandGLContext *shared_wayland = GDK_WAYLAND_GL_CONTEXT (shared);
+  GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   EGLSurface egl_surface;
 
-  gdk_gl_context_make_current (shared);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted, damage);
+  if (gdk_gl_context_get_shared_context (context))
+    return;
+
+  gdk_gl_context_make_current (context);
 
   egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
-                                                    shared_wayland->egl_config);
+                                                    context_wayland->egl_config);
 
   if (display_wayland->have_egl_swap_buffers_with_damage)
     {
@@ -213,13 +222,15 @@ static void
 gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
 
-  gobject_class->dispose = gdk_x11_gl_context_dispose;
+  gobject_class->dispose = gdk_wayland_gl_context_dispose;
+
+  draw_context_class->begin_frame = gdk_wayland_gl_context_begin_frame;
+  draw_context_class->end_frame = gdk_wayland_gl_context_end_frame;
 
   context_class->realize = gdk_wayland_gl_context_realize;
-  context_class->begin_frame = gdk_wayland_gl_context_begin_frame;
-  context_class->end_frame = gdk_wayland_gl_context_end_frame;
 }
 
 static void
@@ -419,7 +430,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
 }
 
 static void
-gdk_x11_gl_context_dispose (GObject *gobject)
+gdk_wayland_gl_context_dispose (GObject *gobject)
 {
   GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (gobject);
 
@@ -463,7 +474,7 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   window = gdk_gl_context_get_window (context);
 
-  if (context_wayland->is_attached || gdk_gl_context_is_drawing (context))
+  if (context_wayland->is_attached || gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)))
     egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window, context_wayland->egl_config);
   else
     {
