@@ -137,18 +137,19 @@ struct _GdkX11Display
 
   guint server_time_is_monotonic_time : 1;
 
-  guint have_glx : 1;
+  guint supports_gl : 1;
 
-  /* GLX extensions we check */
-  guint has_glx_swap_interval : 1;
-  guint has_glx_create_context : 1;
-  guint has_glx_texture_from_pixmap : 1;
-  guint has_glx_video_sync : 1;
-  guint has_glx_buffer_age : 1;
-  guint has_glx_sync_control : 1;
-  guint has_glx_multisample : 1;
-  guint has_glx_visual_rating : 1;
-  guint has_glx_create_es2_context : 1;
+  /* Platform-specific GL extensions we check */
+  guint has_swap_interval : 1;
+  guint has_create_context : 1;
+  guint has_texture_from_pixmap : 1;
+  guint has_video_sync : 1;
+  guint has_buffer_age : 1;
+  guint has_sync_control : 1;
+  guint has_multisample : 1;
+  guint has_visual_rating : 1;
+  guint has_create_es2_context : 1;
+  guint has_swap_buffers_with_damage : 1;
 };
 
 struct _GdkX11DisplayClass

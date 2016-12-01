@@ -24,9 +24,6 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
-#include <epoxy/gl.h>
-#include <epoxy/glx.h>
-
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkvisual.h"
@@ -36,27 +33,6 @@
 
 G_BEGIN_DECLS
 
-struct _GdkX11GLContext
-{
-  GdkGLContext parent_instance;
-
-  GLXContext glx_context;
-  GLXFBConfig glx_config;
-  GLXDrawable drawable;
-
-  guint is_attached : 1;
-  guint is_direct : 1;
-  guint do_frame_sync : 1;
-
-  guint do_blit_swap : 1;
-};
-
-struct _GdkX11GLContextClass
-{
-  GdkGLContextClass parent_class;
-};
-
-gboolean        gdk_x11_screen_init_gl                          (GdkScreen         *screen);
 GdkGLContext *  gdk_x11_window_create_gl_context                (GdkWindow         *window,
 								 gboolean           attached,
                                                                  GdkGLContext      *share,
