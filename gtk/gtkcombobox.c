@@ -186,7 +186,7 @@ struct _GtkComboBoxPrivate
 /* While debugging this evil code, I have learned that
  * there are actually 4 modes to this widget, which can
  * be characterized as follows
- * 
+ *
  * 1) menu mode, no child added
  *
  * tree_view -> NULL
@@ -198,9 +198,9 @@ struct _GtkComboBoxPrivate
  * scrolled_window -> NULL
  *
  * 2) menu mode, child added
- * 
+ *
  * tree_view -> NULL
- * cell_view -> NULL 
+ * cell_view -> NULL
  * button -> GtkToggleButton set_parent to combo
  * arrow -> GtkArrow, child of button
  * popup_widget -> GtkMenu
@@ -208,7 +208,7 @@ struct _GtkComboBoxPrivate
  * scrolled_window -> NULL
  *
  * 3) list mode, no child added
- * 
+ *
  * tree_view -> GtkTreeView, child of scrolled_window
  * cell_view -> GtkCellView, regular child
  * button -> GtkToggleButton, set_parent to combo
@@ -226,7 +226,7 @@ struct _GtkComboBoxPrivate
  * popup_widget -> tree_view
  * popup_window -> GtkWindow
  * scrolled_window -> GtkScrolledWindow, child of popup_window
- * 
+ *
  */
 
 enum {
@@ -365,7 +365,7 @@ static void     gtk_combo_box_entry_contents_changed         (GtkEntry        *e
 static void     gtk_combo_box_entry_active_changed           (GtkComboBox     *combo_box,
                                                               gpointer         user_data);
 static gchar   *gtk_combo_box_format_entry_text              (GtkComboBox     *combo_box,
-							      const gchar     *path);
+                                                              const gchar     *path);
 
 /* GtkBuildable method implementation */
 static GtkBuildableIface *parent_buildable_iface;
@@ -585,7 +585,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   /**
    * GtkComboBox::changed:
    * @widget: the object which received the signal
-   * 
+   *
    * The changed signal is emitted when the active
    * item is changed. The can be due to the user selecting
    * a different item from the list, or due to a
@@ -677,7 +677,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    *
    * Connect a signal handler which returns an allocated string representing
    * @path. That string will then be used to set the text in the combo box's entry.
-   * The default signal handler uses the text from the GtkComboBox::entry-text-column 
+   * The default signal handler uses the text from the GtkComboBox::entry-text-column
    * model column.
    *
    * Here's an example signal handler which fetches data from the model and
@@ -691,11 +691,11 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    *   GtkTreeIter iter;
    *   GtkTreeModel model;
    *   gdouble      value;
-   *   
+   *
    *   model = gtk_combo_box_get_model (combo);
    *
    *   gtk_tree_model_get_iter_from_string (model, &iter, path);
-   *   gtk_tree_model_get (model, &iter, 
+   *   gtk_tree_model_get (model, &iter,
    *                       THE_DOUBLE_VALUE_COLUMN, &value,
    *                       -1);
    *
@@ -703,7 +703,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * }
    * ]|
    *
-   * Returns: (transfer full): a newly allocated string representing @path 
+   * Returns: (transfer full): a newly allocated string representing @path
    * for the current GtkComboBox model.
    *
    * Since: 3.4
@@ -1017,7 +1017,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     *
     * The #GtkCellArea used to layout cell renderers for this combo box.
     *
-    * If no area is specified when creating the combo box with gtk_combo_box_new_with_area() 
+    * If no area is specified when creating the combo box with gtk_combo_box_new_with_area()
     * a horizontally oriented #GtkCellAreaBox will be used.
     *
     * Since: 3.0
@@ -1487,7 +1487,7 @@ gtk_combo_box_detacher (GtkWidget *widget,
   g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
                                         gtk_combo_box_menu_hide,
                                         combo_box);
-  
+
   priv->popup_widget = NULL;
 }
 
@@ -3373,38 +3373,38 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
 
       if (entry)
         {
-	  GtkTreePath *path;
-	  gchar       *path_str;
-	  gchar       *text = NULL;
+          GtkTreePath *path;
+          gchar       *path_str;
+          gchar       *text = NULL;
 
           model    = gtk_combo_box_get_model (combo_box);
-	  path     = gtk_tree_model_get_path (model, &iter);
-	  path_str = gtk_tree_path_to_string (path);
+          path     = gtk_tree_model_get_path (model, &iter);
+          path_str = gtk_tree_path_to_string (path);
 
           g_signal_handlers_block_by_func (entry,
                                            gtk_combo_box_entry_contents_changed,
                                            combo_box);
 
 
-	  g_signal_emit (combo_box, combo_box_signals[FORMAT_ENTRY_TEXT], 0, 
-			 path_str, &text);
+          g_signal_emit (combo_box, combo_box_signals[FORMAT_ENTRY_TEXT], 0,
+                         path_str, &text);
 
-	  gtk_entry_set_text (entry, text);
+          gtk_entry_set_text (entry, text);
 
           g_signal_handlers_unblock_by_func (entry,
                                              gtk_combo_box_entry_contents_changed,
                                              combo_box);
 
-	  gtk_tree_path_free (path);
-	  g_free (text);
-	  g_free (path_str);
+          gtk_tree_path_free (path);
+          g_free (text);
+          g_free (path_str);
         }
     }
 }
 
 static gchar *
 gtk_combo_box_format_entry_text (GtkComboBox     *combo_box,
-				 const gchar     *path)
+                                 const gchar     *path)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreeModel       *model;
@@ -3417,8 +3417,8 @@ gtk_combo_box_format_entry_text (GtkComboBox     *combo_box,
       gtk_tree_model_get_iter_from_string (model, &iter, path);
 
       gtk_tree_model_get (model, &iter,
-			  priv->text_column, &text,
-			  -1);
+        priv->text_column, &text,
+        -1);
     }
 
   return text;
