@@ -598,10 +598,8 @@ add_child_size (GtkWidget      *child,
   if (!gtk_widget_get_visible (child))
     return FALSE;
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_widget_get_preferred_width (child, &child_minimum, &child_natural);
-  else
-    gtk_widget_get_preferred_height (child, &child_minimum, &child_natural);
+  gtk_widget_measure (child, orientation, -1, &child_minimum, &child_natural,
+                      NULL, NULL);
 
   if (GTK_ORIENTATION_HORIZONTAL == orientation)
     {
@@ -715,8 +713,8 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
 
       if (gtk_widget_get_visible (child->widget))
         {
-          gtk_widget_get_preferred_width_for_height (child->widget,
-                                                     avail_size, &child_size, &child_natural);
+          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, avail_size,
+                              &child_size, &child_natural, NULL, NULL);
 
           required_size += child_size;
           required_natural += child_natural;
@@ -727,8 +725,8 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
 
   if (priv->label_box != NULL)
     {
-      gtk_widget_get_preferred_width (priv->label_sizing_box,
-                                      &child_size, &child_natural);
+      gtk_widget_measure (priv->label_sizing_box, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &child_size, &child_natural, NULL, NULL);
       required_size += child_size;
       required_natural += child_natural;
     }
@@ -736,16 +734,17 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
   if (priv->custom_title != NULL &&
       gtk_widget_get_visible (priv->custom_title))
     {
-      gtk_widget_get_preferred_width (priv->custom_title,
-                                      &child_size, &child_natural);
+      gtk_widget_measure (priv->custom_title, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &child_size, &child_natural, NULL, NULL);
+
       required_size += child_size;
       required_natural += child_natural;
     }
 
   if (priv->titlebar_start_box != NULL)
     {
-      gtk_widget_get_preferred_width (priv->titlebar_start_box,
-                                      &child_size, &child_natural);
+      gtk_widget_measure (priv->titlebar_start_box, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &child_size, &child_natural, NULL, NULL);
       required_size += child_size;
       required_natural += child_natural;
       nvis_children += 1;
@@ -753,8 +752,9 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
 
   if (priv->titlebar_end_box != NULL)
     {
-      gtk_widget_get_preferred_width (priv->titlebar_end_box,
-                                      &child_size, &child_natural);
+      gtk_widget_measure (priv->titlebar_end_box, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &child_size, &child_natural, NULL, NULL);
+
       required_size += child_size;
       required_natural += child_natural;
       nvis_children += 1;
@@ -806,9 +806,9 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
 
       if (gtk_widget_get_visible (child->widget))
         {
-          gtk_widget_get_preferred_width (child->widget,
-                                          &sizes[i].minimum_size,
-                                          &sizes[i].natural_size);
+          gtk_widget_measure (child->widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                              &sizes[i].minimum_size, &sizes[i].natural_size,
+                              NULL, NULL);
 
           size -= sizes[i].minimum_size;
           sizes[i].data = child;
@@ -842,8 +842,8 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
 
           child_size = sizes[i].minimum_size;
 
-          gtk_widget_get_preferred_height_for_width (child->widget,
-                                                     child_size, &child_minimum, &child_natural);
+          gtk_widget_measure (child->widget, GTK_ORIENTATION_VERTICAL, child_size,
+                              &child_minimum, &child_natural, NULL, NULL);
 
           computed_minimum = MAX (computed_minimum, child_minimum);
           computed_natural = MAX (computed_natural, child_natural);
@@ -854,29 +854,31 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
   center_min = center_nat = 0;
   if (priv->label_box != NULL)
     {
-      gtk_widget_get_preferred_height (priv->label_sizing_box,
-                                       &center_min, &center_nat);
+      gtk_widget_measure (priv->label_sizing_box, GTK_ORIENTATION_VERTICAL, -1,
+                          &center_min, &center_nat, NULL, NULL);
     }
 
   if (priv->custom_title != NULL &&
       gtk_widget_get_visible (priv->custom_title))
     {
-      gtk_widget_get_preferred_height (priv->custom_title,
-                                       &center_min, &center_nat);
+      gtk_widget_measure (priv->custom_title, GTK_ORIENTATION_VERTICAL, -1,
+                          &center_min, &center_nat, NULL, NULL);
     }
 
   if (priv->titlebar_start_box != NULL)
     {
-      gtk_widget_get_preferred_height (priv->titlebar_start_box,
-                                       &child_minimum, &child_natural);
+      gtk_widget_measure (priv->titlebar_start_box, GTK_ORIENTATION_VERTICAL, -1,
+                          &center_min, &center_nat, NULL, NULL);
+
       computed_minimum = MAX (computed_minimum, child_minimum);
       computed_natural = MAX (computed_natural, child_natural);
     }
 
   if (priv->titlebar_end_box != NULL)
     {
-      gtk_widget_get_preferred_height (priv->titlebar_end_box,
-                                       &child_minimum, &child_natural);
+      gtk_widget_measure (priv->titlebar_end_box, GTK_ORIENTATION_VERTICAL, -1,
+                          &center_min, &center_nat, NULL, NULL);
+
       computed_minimum = MAX (computed_minimum, child_minimum);
       computed_natural = MAX (computed_natural, child_natural);
     }
@@ -985,10 +987,10 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
       if (gtk_widget_compute_expand (child->widget, GTK_ORIENTATION_HORIZONTAL))
         nexpand_children[child->pack_type]++;
 
-      gtk_widget_get_preferred_width_for_height (child->widget,
-                                                 height,
-                                                 &sizes[i].minimum_size,
-                                                 &sizes[i].natural_size);
+      gtk_widget_measure (child->widget, GTK_ORIENTATION_HORIZONTAL, height,
+                          &sizes[i].minimum_size, &sizes[i].natural_size,
+                          NULL, NULL);
+
       width -= sizes[i].minimum_size;
       i++;
     }
@@ -1006,10 +1008,10 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
 
   if (title_widget)
     {
-      gtk_widget_get_preferred_width_for_height (title_widget,
-                                                 height,
-                                                 &title_minimum_size,
-                                                 &title_natural_size);
+      gtk_widget_measure (title_widget, GTK_ORIENTATION_HORIZONTAL, height,
+                          &title_minimum_size, &title_natural_size,
+                          NULL, NULL);
+
       width -= title_natural_size;
 
       title_expands = gtk_widget_compute_expand (title_widget, GTK_ORIENTATION_HORIZONTAL);
@@ -1019,9 +1021,10 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   if (priv->titlebar_start_box != NULL)
     {
       gint min, nat;
-      gtk_widget_get_preferred_width_for_height (priv->titlebar_start_box,
-                                                 height,
-                                                 &min, &nat);
+      gtk_widget_measure (priv->titlebar_start_box, GTK_ORIENTATION_HORIZONTAL, height,
+                          &min, &nat,
+                          NULL, NULL);
+
       start_width = nat + priv->spacing;
     }
   width -= start_width;
@@ -1030,9 +1033,10 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   if (priv->titlebar_end_box != NULL)
     {
       gint min, nat;
-      gtk_widget_get_preferred_width_for_height (priv->titlebar_end_box,
-                                                 height,
-                                                 &min, &nat);
+      gtk_widget_measure (priv->titlebar_end_box, GTK_ORIENTATION_HORIZONTAL, height,
+                          &min, &nat,
+                          NULL, NULL);
+
       end_width = nat + priv->spacing;
     }
   width -= end_width;
