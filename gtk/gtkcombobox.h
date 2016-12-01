@@ -63,7 +63,7 @@ struct _GtkComboBoxClass
   /* signals */
   void     (* changed)           (GtkComboBox *combo_box);
   gchar   *(* format_entry_text) (GtkComboBox *combo_box,
-				  const gchar *path);
+                                  const gchar *path);
 
   /*< private >*/
 
