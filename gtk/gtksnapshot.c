@@ -141,7 +141,7 @@ gtk_snapshot_push_node (GtkSnapshot   *snapshot,
  * gtk_snapshot_push:
  * @snapshot: a #GtkSnapshot
  * @bounds: the bounds for the new node
- * @name: a printf() style format string for the name for the new node
+ * @name: (transfer none): a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
  *
  * Creates a new render node, appends it to the current render
@@ -211,7 +211,7 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
  * Obtains the #GskRenderer that this snapshot will be
  * rendered with.
  *
- * Returns: the #GskRenderer
+ * Returns: (transfer none): the #GskRenderer
  *
  * Since: 3.90
  */
@@ -319,7 +319,7 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
  * gtk_snapshot_append:
  * @snapshot: a #GtkSnapshot
  * @bounds: the bounds for the new node
- * @name: a printf() style format string for the name for the new node
+ * @name: (transfer none): a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
  *
  * Creates a new render node and appends it to the current render
@@ -327,7 +327,7 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
  *
  * Since: 3.90
  *
- * Returns: the newly created #GskRenderNode
+ * Returns: (transfer full): the newly created #GskRenderNode
  */
 GskRenderNode *
 gtk_snapshot_append (GtkSnapshot           *snapshot,
@@ -366,7 +366,7 @@ gtk_snapshot_append (GtkSnapshot           *snapshot,
  * gtk_snapshot_append_cairo_node:
  * @snapshot: a #GtkSnapshot
  * @bounds: the bounds for the new node
- * @name: a printf() style format string for the name for the new node
+ * @name: (transfer none): a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
  *
  * Creates a new render node and appends it to the current render
@@ -415,7 +415,7 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
  * gtk_snapshot_push_cairo_node:
  * @snapshot: a #GtkSnapshot
  * @bounds: the bounds for the new node
- * @name: a printf() style format string for the name for the new node
+ * @name: (transfer none): a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
  *
  * Creates a new render node, appends it to the current render
