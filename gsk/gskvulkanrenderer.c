@@ -285,6 +285,32 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 #endif
 }
 
+static GdkDrawingContext *
+gsk_vulkan_renderer_begin_draw_frame (GskRenderer          *renderer,
+                                      const cairo_region_t *region)
+{
+  GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
+  cairo_region_t *whole_window;
+  GdkDrawingContext *result;
+  GdkWindow *window;
+
+  window = gsk_renderer_get_window (renderer);
+  
+  whole_window = cairo_region_create_rectangle (&(GdkRectangle) {
+                                                    0, 0,
+                                                    gdk_window_get_width (window),
+                                                    gdk_window_get_height (window)
+                                                });
+
+  result = gdk_window_begin_draw_frame (window,
+                                        GDK_DRAW_CONTEXT (self->vulkan),
+                                        region);
+
+  cairo_region_destroy (whole_window);
+
+  return result;
+}
+
 static void
 gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
 {
@@ -293,6 +319,7 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   renderer_class->realize = gsk_vulkan_renderer_realize;
   renderer_class->unrealize = gsk_vulkan_renderer_unrealize;
   renderer_class->render = gsk_vulkan_renderer_render;
+  renderer_class->begin_draw_frame = gsk_vulkan_renderer_begin_draw_frame;
 }
 
 static void

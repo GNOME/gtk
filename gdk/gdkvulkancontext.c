@@ -36,9 +36,12 @@ struct _GdkVulkanContextPrivate {
 
   int swapchain_width, swapchain_height;
   VkSwapchainKHR swapchain;
+  VkSemaphore draw_semaphore;
 
   guint n_images;
   VkImage *images;
+
+  uint32_t draw_index;
 };
 
 enum {
@@ -121,13 +124,24 @@ gdk_vulkan_context_dispose (GObject *gobject)
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GdkDisplay *display;
+  VkDevice device;
 
   g_clear_pointer (&priv->images, g_free);
   priv->n_images = 0;
 
+  device = gdk_vulkan_context_get_device (context);
+
+  if (priv->draw_semaphore != VK_NULL_HANDLE)
+    {
+      vkDestroySemaphore (device,
+                           priv->draw_semaphore,
+                           NULL);
+      priv->draw_semaphore = VK_NULL_HANDLE;
+    }
+
   if (priv->swapchain != VK_NULL_HANDLE)
     {
-      vkDestroySwapchainKHR (gdk_vulkan_context_get_device (context),
+      vkDestroySwapchainKHR (device,
                              priv->swapchain,
                              NULL);
       priv->swapchain = VK_NULL_HANDLE;
@@ -147,36 +161,6 @@ gdk_vulkan_context_dispose (GObject *gobject)
     gdk_display_unref_vulkan (display);
 
   G_OBJECT_CLASS (gdk_vulkan_context_parent_class)->dispose (gobject);
-}
-
-static void
-gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->dispose = gdk_vulkan_context_dispose;
-
-  /**
-   * GdkVulkanContext::images-updated:
-   * @context: the object on which the signal is emitted
-   *
-   * This signal is emitted when the images managed by this context have
-   * changed. Usually this means that the swapchain had to be recreated,
-   * for example in response to a change of the window size.
-   */
-  signals[IMAGES_UPDATED] =
-    g_signal_new (g_intern_static_string ("images-updated"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-}
-
-static void
-gdk_vulkan_context_init (GdkVulkanContext *self)
-{
 }
 
 static gboolean
@@ -259,8 +243,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   if (res == VK_SUCCESS)
     {
-      priv->swapchain_width = gdk_window_get_width (window);
-      priv->swapchain_height = gdk_window_get_height (window);
+      priv->swapchain_width = capabilities.currentExtent.width;
+      priv->swapchain_height = capabilities.currentExtent.height;
       priv->swapchain = new_swapchain;
 
       GDK_VK_CHECK (vkGetSwapchainImagesKHR, device,
@@ -286,6 +270,84 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   g_signal_emit (context, signals[IMAGES_UPDATED], 0);
 
   return res == VK_SUCCESS;
+}
+
+static void
+gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
+                                cairo_region_t *region)
+{
+  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GError *error = NULL;
+
+  if (!gdk_vulkan_context_check_swapchain (context, &error))
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
+                                       priv->swapchain,
+                                       UINT64_MAX,
+                                       priv->draw_semaphore,
+                                       VK_NULL_HANDLE,
+                                       &priv->draw_index);
+}
+
+static void
+gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
+                              cairo_region_t *painted,
+                              cairo_region_t *damage)
+{
+  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  GDK_VK_CHECK (vkQueuePresentKHR, gdk_vulkan_context_get_queue (context),
+                                   &(VkPresentInfoKHR) {
+                                       .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+                                       .swapchainCount = 1,
+                                       .pSwapchains = (VkSwapchainKHR[]) { 
+                                           priv->swapchain
+                                       },
+                                       .pImageIndices = (uint32_t[]) {
+                                           priv->draw_index
+                                       },
+                                   });
+}
+
+static void
+gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
+
+  gobject_class->dispose = gdk_vulkan_context_dispose;
+
+  draw_context_class->begin_frame = gdk_vulkan_context_begin_frame;
+  draw_context_class->end_frame = gdk_vulkan_context_end_frame;
+
+  /**
+   * GdkVulkanContext::images-updated:
+   * @context: the object on which the signal is emitted
+   *
+   * This signal is emitted when the images managed by this context have
+   * changed. Usually this means that the swapchain had to be recreated,
+   * for example in response to a change of the window size.
+   */
+  signals[IMAGES_UPDATED] =
+    g_signal_new (g_intern_static_string ("images-updated"),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+}
+
+static void
+gdk_vulkan_context_init (GdkVulkanContext *self)
+{
 }
 
 static gboolean
@@ -349,6 +411,13 @@ gdk_vulkan_context_real_init (GInitable     *initable,
 
       if (!gdk_vulkan_context_check_swapchain (context, error))
         goto out_surface;
+
+      GDK_VK_CHECK (vkCreateSemaphore, gdk_vulkan_context_get_device (context),
+                                       &(VkSemaphoreCreateInfo) {
+                                           .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                                       },
+                                       NULL,
+                                       &priv->draw_semaphore);
 
       return TRUE;
     }
@@ -417,7 +486,7 @@ gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
   return priv->image_format.format;
 }
 
-guint
+uint32_t
 gdk_vulkan_context_get_n_images (GdkVulkanContext *context)
 {
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
@@ -437,6 +506,28 @@ gdk_vulkan_context_get_image (GdkVulkanContext *context,
   g_return_val_if_fail (id < priv->n_images, VK_NULL_HANDLE);
 
   return priv->images[id];
+}
+
+uint32_t
+gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
+  g_return_val_if_fail (gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)), 0);
+
+  return priv->draw_index;
+}
+
+VkSemaphore
+gdk_vulkan_context_get_draw_semaphore (GdkVulkanContext *context)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), VK_NULL_HANDLE);
+  g_return_val_if_fail (gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)), VK_NULL_HANDLE);
+
+  return priv->draw_semaphore;
 }
 
 static gboolean
