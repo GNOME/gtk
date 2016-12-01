@@ -40,7 +40,6 @@ libgdk_x11_la_SOURCES = 	\
 	gdkeventtranslator.c	\
 	gdkeventtranslator.h	\
 	gdkgeometry-x11.c  	\
-	gdkglcontext-x11.c	\
 	gdkglcontext-x11.h	\
 	gdkkeys-x11.c		\
 	gdkmain-x11.c		\
@@ -60,6 +59,12 @@ libgdk_x11_la_SOURCES = 	\
 	gdkprivate-x11.h	\
 	xsettings-client.h	\
 	xsettings-client.c
+
+if USE_EGL_X11
+libgdk_x11_la_SOURCES += gdkglcontext-x11-eglx.c
+else
+libgdk_x11_la_SOURCES += gdkglcontext-x11.c
+endif
 
 libgdkinclude_HEADERS = 	\
 	gdkx.h
