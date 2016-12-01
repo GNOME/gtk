@@ -3420,8 +3420,8 @@ gtk_combo_box_format_entry_text (GtkComboBox     *combo_box,
       gtk_tree_model_get_iter_from_string (model, &iter, path);
 
       gtk_tree_model_get (model, &iter,
-        priv->text_column, &text,
-        -1);
+                          priv->text_column, &text,
+                          -1);
     }
 
   return text;
