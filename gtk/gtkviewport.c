@@ -145,103 +145,90 @@ gtk_viewport_measure (GtkCssGadget   *gadget,
 }
 
 static void
-viewport_set_hadjustment_values (GtkViewport *viewport)
+viewport_set_adjustment_values (GtkViewport    *viewport,
+                                GtkOrientation  orientation)
 {
   GtkBin *bin = GTK_BIN (viewport);
+  GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+  GtkAdjustment *adjustment;
+  GtkScrollablePolicy scroll_policy;
+  GtkScrollablePolicy other_scroll_policy;
+  GtkOrientation other_orientation;
   GtkAllocation view_allocation;
-  GtkAdjustment *hadjustment = viewport->priv->hadjustment;
   GtkWidget *child;
   gdouble upper, value;
+  int viewport_size, other_viewport_size;
 
   gtk_css_gadget_get_content_allocation (viewport->priv->gadget,
                                          &view_allocation, NULL);
 
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      adjustment = priv->hadjustment;
+      other_orientation = GTK_ORIENTATION_VERTICAL;
+      viewport_size = view_allocation.width;
+      other_viewport_size = view_allocation.height;
+      scroll_policy = priv->hscroll_policy;
+      other_scroll_policy = priv->vscroll_policy;
+    }
+  else /* VERTICAL */
+    {
+      adjustment = priv->vadjustment;
+      other_orientation = GTK_ORIENTATION_HORIZONTAL;
+      viewport_size = view_allocation.height;
+      other_viewport_size = view_allocation.width;
+      scroll_policy = priv->vscroll_policy;
+      other_scroll_policy = priv->hscroll_policy;
+    }
+
+
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
     {
-      gint minimum_width, natural_width;
-      gint scroll_height;
+      int min_size, nat_size;
+      int scroll_size;
 
-      if (viewport->priv->vscroll_policy == GTK_SCROLL_MINIMUM)
-	gtk_widget_get_preferred_height (child, &scroll_height, NULL);
+      if (other_scroll_policy == GTK_SCROLL_MINIMUM)
+        gtk_widget_measure (child, other_orientation, -1,
+                            &scroll_size, NULL, NULL, NULL);
       else
-	gtk_widget_get_preferred_height (child, NULL, &scroll_height);
+        gtk_widget_measure (child, other_orientation, -1,
+                            NULL, &scroll_size, NULL, NULL);
 
-      gtk_widget_get_preferred_width_for_height (child,
-                                                 MAX (view_allocation.height, scroll_height),
-                                                 &minimum_width,
-                                                 &natural_width);
+      gtk_widget_measure (child, orientation,
+                          MAX (other_viewport_size, scroll_size),
+                          &min_size, &nat_size, NULL, NULL);
 
-      if (viewport->priv->hscroll_policy == GTK_SCROLL_MINIMUM)
-	upper = MAX (minimum_width, view_allocation.width);
+      if (scroll_policy == GTK_SCROLL_MINIMUM)
+        upper = MAX (min_size, viewport_size);
       else
-	upper = MAX (natural_width, view_allocation.width);
+        upper = MAX (nat_size, viewport_size);
+
     }
   else
-    upper = view_allocation.width;
-
-  value = gtk_adjustment_get_value (hadjustment);
-  /* We clamp to the left in RTL mode */
-  if (gtk_widget_get_direction (GTK_WIDGET (viewport)) == GTK_TEXT_DIR_RTL)
     {
-      gdouble dist = gtk_adjustment_get_upper (hadjustment)
-                     - value
-                     - gtk_adjustment_get_page_size (hadjustment);
-      value = upper - dist - view_allocation.width;
+      upper = viewport_size;
     }
 
-  gtk_adjustment_configure (hadjustment,
+  value = gtk_adjustment_get_value (adjustment);
+
+  /* We clamp to the left in RTL mode */
+  if (orientation == GTK_ORIENTATION_HORIZONTAL &&
+      gtk_widget_get_direction (GTK_WIDGET (viewport)) == GTK_TEXT_DIR_RTL)
+    {
+      gdouble dist = gtk_adjustment_get_upper (adjustment)
+                     - value
+                     - gtk_adjustment_get_page_size (adjustment);
+      value = upper - dist - viewport_size;
+    }
+
+  gtk_adjustment_configure (adjustment,
                             value,
                             0,
                             upper,
-                            view_allocation.width * 0.1,
-                            view_allocation.width * 0.9,
-                            view_allocation.width);
-}
-
-static void
-viewport_set_vadjustment_values (GtkViewport *viewport)
-{
-  GtkBin *bin = GTK_BIN (viewport);
-  GtkAllocation view_allocation;
-  GtkAdjustment *vadjustment = viewport->priv->vadjustment;
-  GtkWidget *child;
-  gdouble upper;
-
-  gtk_css_gadget_get_content_allocation (viewport->priv->gadget,
-                                         &view_allocation, NULL);
-
-  child = gtk_bin_get_child (bin);
-  if (child && gtk_widget_get_visible (child))
-    {
-      gint minimum_height, natural_height;
-      gint scroll_width;
-
-      if (viewport->priv->hscroll_policy == GTK_SCROLL_MINIMUM)
-	gtk_widget_get_preferred_width (child, &scroll_width, NULL);
-      else
-	gtk_widget_get_preferred_width (child, NULL, &scroll_width);
-
-      gtk_widget_get_preferred_height_for_width (child,
-                                                 MAX (view_allocation.width, scroll_width),
-                                                 &minimum_height,
-                                                 &natural_height);
-
-      if (viewport->priv->vscroll_policy == GTK_SCROLL_MINIMUM)
-	upper = MAX (minimum_height, view_allocation.height);
-      else
-	upper = MAX (natural_height, view_allocation.height);
-    }
-  else
-    upper = view_allocation.height;
-
-  gtk_adjustment_configure (vadjustment,
-                            gtk_adjustment_get_value (vadjustment),
-                            0,
-                            upper,
-                            view_allocation.height * 0.1,
-                            view_allocation.height * 0.9,
-                            view_allocation.height);
+                            viewport_size * 0.1,
+                            viewport_size * 0.9,
+                            viewport_size);
 }
 
 static void
@@ -261,8 +248,8 @@ gtk_viewport_allocate (GtkCssGadget        *gadget,
   g_object_freeze_notify (G_OBJECT (hadjustment));
   g_object_freeze_notify (G_OBJECT (vadjustment));
 
-  viewport_set_hadjustment_values (viewport);
-  viewport_set_vadjustment_values (viewport);
+  viewport_set_adjustment_values (viewport, GTK_ORIENTATION_HORIZONTAL);
+  viewport_set_adjustment_values (viewport, GTK_ORIENTATION_VERTICAL);
 
   if (gtk_widget_get_realized (widget))
     {
@@ -562,10 +549,7 @@ viewport_set_adjustment (GtkViewport    *viewport,
   *adjustmentp = adjustment;
   g_object_ref_sink (adjustment);
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    viewport_set_hadjustment_values (viewport);
-  else
-    viewport_set_vadjustment_values (viewport);
+  viewport_set_adjustment_values (viewport, orientation);
 
   g_signal_connect (adjustment, "value-changed",
 		    G_CALLBACK (gtk_viewport_adjustment_value_changed),
