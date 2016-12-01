@@ -2115,6 +2115,7 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
   gint rect_anchor_dy = -2;
   gint child_height;
   GtkWidget *active;
+  GtkWidget *select;
   GtkWidget *child;
   GList *i;
 
@@ -2177,10 +2178,9 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
     {
       /* FIXME handle nested menus better */
       active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
+      select = active;
 
-      if (active)
-        gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget), active);
-      else
+      if (!active)
         {
           for (i = GTK_MENU_SHELL (priv->popup_widget)->priv->children; i && !active; i = i->next)
             {
@@ -2224,6 +2224,9 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
                                 GDK_GRAVITY_WEST,
                                 GDK_GRAVITY_NORTH_WEST,
                                 trigger_event);
+
+      if (select)
+        gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget), select);
     }
 }
 
