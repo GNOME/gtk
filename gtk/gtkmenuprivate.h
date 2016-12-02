@@ -28,6 +28,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkcssgadgetprivate.h>
 #include <gtk/gtkcssnodeprivate.h>
+#include <gtk/gtkgesturemultipress.h>
 
 G_BEGIN_DECLS
 
@@ -77,6 +78,8 @@ struct _GtkMenuPrivate
 
   GtkCssGadget *top_arrow_gadget;
   GtkCssGadget *bottom_arrow_gadget;
+
+  GtkGesture *click_gesture;
 
   gint scroll_offset;
   gint saved_scroll_offset;

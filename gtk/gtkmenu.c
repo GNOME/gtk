@@ -240,10 +240,6 @@ static gboolean gtk_menu_key_press         (GtkWidget        *widget,
                                             GdkEventKey      *event);
 static gboolean gtk_menu_scroll            (GtkWidget        *widget,
                                             GdkEventScroll   *event);
-static gboolean gtk_menu_button_press      (GtkWidget        *widget,
-                                            GdkEventButton   *event);
-static gboolean gtk_menu_button_release    (GtkWidget        *widget,
-                                            GdkEventButton   *event);
 static gboolean gtk_menu_motion_notify     (GtkWidget        *widget,
                                             GdkEventMotion   *event);
 static gboolean gtk_menu_enter_notify      (GtkWidget        *widget,
@@ -312,6 +308,16 @@ static void gtk_menu_measure (GtkWidget      *widget,
                               int            *natural,
                               int            *minimum_baseline,
                               int            *natural_baseline);
+static void gtk_menu_pressed_cb (GtkGestureMultiPress *gesture,
+                                 int                   n_press,
+                                 double                x,
+                                 double                y,
+                                 gpointer              user_data);
+static void gtk_menu_released_cb (GtkGestureMultiPress *gesture,
+                                  int                   n_press,
+                                  double                x,
+                                  double                y,
+                                  gpointer              user_data);
 
 
 static const gchar attach_data_key[] = "gtk-menu-attach-data";
@@ -512,8 +518,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->draw = gtk_menu_draw;
   widget_class->scroll_event = gtk_menu_scroll;
   widget_class->key_press_event = gtk_menu_key_press;
-  widget_class->button_press_event = gtk_menu_button_press;
-  widget_class->button_release_event = gtk_menu_button_release;
   widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->show_all = gtk_menu_show_all;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
@@ -1207,6 +1211,13 @@ gtk_menu_init (GtkMenu *menu)
   gtk_css_node_set_parent (bottom_arrow_node, widget_node);
   gtk_css_node_set_visible (bottom_arrow_node, FALSE);
   gtk_css_node_set_state (bottom_arrow_node, gtk_css_node_get_state (widget_node));
+
+  priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (menu));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture), GTK_PHASE_BUBBLE);
+  g_signal_connect (priv->click_gesture, "pressed", G_CALLBACK (gtk_menu_pressed_cb), menu);
+  g_signal_connect (priv->click_gesture, "released", G_CALLBACK (gtk_menu_released_cb), menu);
 }
 
 static void
@@ -1278,6 +1289,7 @@ gtk_menu_finalize (GObject *object)
 
   g_clear_object (&priv->top_arrow_gadget);
   g_clear_object (&priv->bottom_arrow_gadget);
+  g_clear_object (&priv->click_gesture);
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
@@ -3188,21 +3200,23 @@ pointer_in_menu_window (GtkWidget *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_menu_button_press (GtkWidget      *widget,
-                       GdkEventButton *event)
+
+static void
+gtk_menu_pressed_cb (GtkGestureMultiPress *gesture,
+                     int                   n_press,
+                     double                x,
+                     double                y,
+                     gpointer              user_data)
 {
+  GtkMenu *menu = user_data;
+  GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  const GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  const GdkEventButton *button_event = (GdkEventButton *)event;
   GdkDevice *source_device;
   GtkWidget *event_widget;
-  GtkMenu *menu;
 
-  if (event->type != GDK_BUTTON_PRESS)
-    return FALSE;
-
-  source_device = gdk_event_get_source_device ((GdkEvent *) event);
-  event_widget = gtk_get_event_widget ((GdkEvent *) event);
-  menu = GTK_MENU (widget);
-
+  source_device = gdk_event_get_source_device (event);
+  event_widget = gtk_get_event_widget ((GdkEvent *)event);
   /*  Don't pass down to menu shell if a non-menuitem part of the menu
    *  was clicked. The check for the event_widget being a GtkMenuShell
    *  works because we have the pointer grabbed on menu_shell->window
@@ -3211,8 +3225,11 @@ gtk_menu_button_press (GtkWidget      *widget,
    *  menu_shell->window.
    */
   if (GTK_IS_MENU_SHELL (event_widget) &&
-      pointer_in_menu_window (widget, event->x_root, event->y_root))
-    return TRUE;
+      pointer_in_menu_window (GTK_WIDGET (menu), button_event->x_root, button_event->y_root))
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      return;
+    }
 
   if (GTK_IS_MENU_ITEM (event_widget) &&
       gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN &&
@@ -3220,42 +3237,45 @@ gtk_menu_button_press (GtkWidget      *widget,
       !gtk_widget_is_drawable (GTK_MENU_ITEM (event_widget)->priv->submenu))
     menu->priv->ignore_button_release = TRUE;
 
-  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_press_event (widget, event);
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
 }
 
-static gboolean
-gtk_menu_button_release (GtkWidget      *widget,
-                         GdkEventButton *event)
+static void
+gtk_menu_released_cb (GtkGestureMultiPress *gesture,
+                      int                   n_press,
+                      double                x,
+                      double                y,
+                      gpointer              user_data)
 {
-  GtkMenuPrivate *priv = GTK_MENU (widget)->priv;
+  GtkMenu *menu = user_data;
+  GtkMenuPrivate *priv = menu->priv;
+  GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  const GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  const GdkEventButton *button_event = (GdkEventButton *)event;
 
   if (priv->ignore_button_release)
     {
       priv->ignore_button_release = FALSE;
-      return FALSE;
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
     }
-
-  if (event->type != GDK_BUTTON_RELEASE)
-    return FALSE;
 
   /*  Don't pass down to menu shell if a non-menuitem part of the menu
    *  was clicked (see comment in button_press()).
    */
   if (GTK_IS_MENU_SHELL (gtk_get_event_widget ((GdkEvent *) event)) &&
-      pointer_in_menu_window (widget, event->x_root, event->y_root))
+      pointer_in_menu_window (GTK_WIDGET (menu), button_event->x_root, button_event->y_root))
     {
       /*  Ugly: make sure menu_shell->button gets reset to 0 when we
        *  bail out early here so it is in a consistent state for the
        *  next button_press/button_release in GtkMenuShell.
        *  See bug #449371.
        */
-      if (GTK_MENU_SHELL (widget)->priv->active)
-        GTK_MENU_SHELL (widget)->priv->button = 0;
+      if (GTK_MENU_SHELL (menu)->priv->active)
+        GTK_MENU_SHELL (menu)->priv->button = 0;
 
-      return TRUE;
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
     }
-
-  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_release_event (widget, event);
 }
 
 static gboolean
