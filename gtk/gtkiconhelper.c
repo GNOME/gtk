@@ -565,6 +565,23 @@ gtk_icon_helper_ensure_texture (GtkIconHelper *self,
 
   scale = gtk_widget_get_scale_factor (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))),
   _gtk_icon_helper_get_size (self, &width, &height);
+
+  if (cairo_image_surface_get_format (self->priv->rendered_surface) != CAIRO_FORMAT_ARGB32)
+    {
+      cairo_surface_t *argb_surface = cairo_surface_create_similar_image (self->priv->rendered_surface,
+                                                                          CAIRO_FORMAT_ARGB32,
+                                                                          width, height);
+      cairo_t *ct;
+      cairo_surface_set_device_scale (argb_surface, scale, scale);
+
+      ct = cairo_create (argb_surface);
+      cairo_set_source_surface (ct, self->priv->rendered_surface, 0, 0);
+      cairo_paint (ct);
+      cairo_destroy (ct);
+      cairo_surface_destroy (self->priv->rendered_surface);
+      self->priv->rendered_surface = argb_surface;
+    }
+
   map = cairo_surface_map_to_image (self->priv->rendered_surface,
                                     &(GdkRectangle) { 0, 0, width * scale, height * scale});
 
