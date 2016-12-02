@@ -60,6 +60,7 @@
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkgesturemultipress.h"
 
 
 /**
@@ -129,6 +130,8 @@ struct _GtkToolbarPrivate
   GList           *content;
 
   GTimer          *timer;
+
+  GtkGesture      *click_gesture;
 
   gulong           settings_connection;
 
@@ -245,8 +248,6 @@ static void       gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar
 						    GtkToolbarStyle      style);
 static gboolean   gtk_toolbar_focus_home_or_end    (GtkToolbar          *toolbar,
 						    gboolean             focus_home);
-static gboolean   gtk_toolbar_button_press         (GtkWidget           *toolbar,
-						    GdkEventButton      *event);
 static gboolean   gtk_toolbar_arrow_button_press   (GtkWidget           *button,
 						    GdkEventButton      *event,
 						    GtkToolbar          *toolbar);
@@ -275,6 +276,12 @@ static gboolean   gtk_toolbar_render               (GtkCssGadget *gadget,
                                                     int           width,
                                                     int           height,
                                                     gpointer      data);
+static void       gtk_toolbar_pressed_cb           (GtkGestureMultiPress *gesture,
+                                                    int                   n_press,
+                                                    double                x,
+                                                    double                y,
+                                                    gpointer              user_data);
+
 
 /* methods on ToolbarContent 'class' */
 static ToolbarContent *toolbar_content_new_tool_item        (GtkToolbar          *toolbar,
@@ -395,7 +402,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   gobject_class->finalize = gtk_toolbar_finalize;
   gobject_class->dispose = gtk_toolbar_dispose;
   
-  widget_class->button_press_event = gtk_toolbar_button_press;
   widget_class->draw = gtk_toolbar_draw;
   widget_class->measure = gtk_toolbar_measure_;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
@@ -674,6 +680,12 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   priv->max_homogeneous_pixels = -1;
   
   priv->timer = g_timer_new ();
+
+  priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (toolbar));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture), GTK_PHASE_BUBBLE);
+  g_signal_connect (priv->click_gesture, "pressed", G_CALLBACK (gtk_toolbar_pressed_cb), toolbar);
 }
 
 static void
@@ -2553,22 +2565,31 @@ gtk_toolbar_arrow_button_press (GtkWidget      *button,
   return TRUE;
 }
 
-static gboolean
-gtk_toolbar_button_press (GtkWidget      *toolbar,
-    			  GdkEventButton *event)
+
+static void
+gtk_toolbar_pressed_cb (GtkGestureMultiPress *gesture,
+                        int                   n_press,
+                        double                x,
+                        double                y,
+                        gpointer              user_data)
 {
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
+  GtkToolbar *toolbar = user_data;
+  GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  const GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (gdk_event_triggers_context_menu (event))
     {
       gboolean return_value;
 
       g_signal_emit (toolbar, toolbar_signals[POPUP_CONTEXT_MENU], 0,
-		     (int)event->x_root, (int)event->y_root, event->button,
-		     &return_value);
+                     (int)x, (int)y, button, &return_value);
 
-      return return_value;
+      if (return_value)
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      else
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
     }
-
-  return FALSE;
 }
 
 static gboolean
@@ -2941,6 +2962,7 @@ gtk_toolbar_finalize (GObject *object)
     g_source_remove (priv->idle_id);
 
   g_clear_object (&priv->gadget);
+  g_clear_object (&priv->click_gesture);
 
   G_OBJECT_CLASS (gtk_toolbar_parent_class)->finalize (object);
 }
