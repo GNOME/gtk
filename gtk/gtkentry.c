@@ -8177,9 +8177,6 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
-  cairo_surface_t *surface;
-  GdkPixbuf *pixbuf;
-  int width, height;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
   g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
@@ -8191,25 +8188,7 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  _gtk_icon_helper_get_size (GTK_ICON_HELPER (icon_info->gadget), &width, &height);
-  surface = gtk_icon_helper_load_surface (GTK_ICON_HELPER (icon_info->gadget), 1);
-
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-
-  cairo_surface_destroy (surface);
-
-  /* HACK: unfortunately this is transfer none, so we attach it somehwere
-   * convenient.
-   */
-  if (pixbuf)
-    {
-      g_object_set_data_full (G_OBJECT (icon_info->gadget),
-                              "gtk-entry-pixbuf",
-                              pixbuf,
-                              g_object_unref);
-    }
-
-  return pixbuf;
+  return _gtk_icon_helper_peek_pixbuf (GTK_ICON_HELPER (icon_info->gadget));
 }
 
 /**

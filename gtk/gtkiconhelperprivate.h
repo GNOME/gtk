@@ -115,8 +115,6 @@ cairo_surface_t *_gtk_icon_helper_peek_surface (GtkIconHelper *self);
 GtkImageDefinition *gtk_icon_helper_get_definition (GtkIconHelper *self);
 const gchar *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
 
-cairo_surface_t *gtk_icon_helper_load_surface (GtkIconHelper *self,
-                                               int              scale);
 void _gtk_icon_helper_get_size (GtkIconHelper *self,
                                 gint *width_out,
                                 gint *height_out);

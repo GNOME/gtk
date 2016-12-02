@@ -483,7 +483,7 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
   return surface;
 }
 
-cairo_surface_t *
+static cairo_surface_t *
 gtk_icon_helper_load_surface (GtkIconHelper   *self,
                               int              scale)
 {
