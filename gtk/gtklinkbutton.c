@@ -77,6 +77,7 @@ struct _GtkLinkButtonPrivate
   gboolean visited;
 
   GtkWidget *popup_menu;
+  GtkGesture *click_gesture;
 };
 
 enum
@@ -102,8 +103,6 @@ static void     gtk_link_button_set_property (GObject          *object,
 					      guint             prop_id,
 					      const GValue     *value,
 					      GParamSpec       *pspec);
-static gboolean gtk_link_button_button_press (GtkWidget        *widget,
-					      GdkEventButton   *event);
 static void     gtk_link_button_clicked      (GtkButton        *button);
 static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
 static void     gtk_link_button_unrealize    (GtkWidget        *widget);
@@ -125,6 +124,12 @@ static gboolean gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
                                                   gboolean      keyboard_tip,
                                                   GtkTooltip   *tooltip,
                                                   gpointer      data);
+static void gtk_link_button_pressed_cb (GtkGestureMultiPress *gesture,
+                                        int                   n_press,
+                                        double                x,
+                                        double                y,
+                                        gpointer              user_data);
+
 static gboolean gtk_link_button_activate_link (GtkLinkButton *link_button);
 
 static const GtkTargetEntry link_drop_types[] = {
@@ -147,7 +152,6 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   gobject_class->get_property = gtk_link_button_get_property;
   gobject_class->finalize = gtk_link_button_finalize;
 
-  widget_class->button_press_event = gtk_link_button_button_press;
   widget_class->popup_menu = gtk_link_button_popup_menu;
   widget_class->unrealize = gtk_link_button_unrealize;
 
@@ -216,9 +220,10 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 static void
 gtk_link_button_init (GtkLinkButton *link_button)
 {
+  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
   GtkStyleContext *context;
 
-  link_button->priv = gtk_link_button_get_instance_private (link_button);
+  link_button->priv = priv;
 
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
@@ -240,6 +245,13 @@ gtk_link_button_init (GtkLinkButton *link_button)
   		       link_drop_types, G_N_ELEMENTS (link_drop_types),
   		       GDK_ACTION_COPY);
 
+  priv->click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (link_button));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->click_gesture), FALSE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture), GTK_PHASE_BUBBLE);
+  g_signal_connect (priv->click_gesture, "pressed", G_CALLBACK (gtk_link_button_pressed_cb),
+                    link_button);
+
   context = gtk_widget_get_style_context (GTK_WIDGET (link_button));
   gtk_style_context_add_class (context, "link");
 }
@@ -250,6 +262,7 @@ gtk_link_button_finalize (GObject *object)
   GtkLinkButton *link_button = GTK_LINK_BUTTON (object);
   
   g_free (link_button->priv->uri);
+  g_object_unref (link_button->priv->click_gesture);
   
   G_OBJECT_CLASS (gtk_link_button_parent_class)->finalize (object);
 }
@@ -388,27 +401,31 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
     }
 }
 
-static gboolean
-gtk_link_button_button_press (GtkWidget      *widget,
-			      GdkEventButton *event)
+static void
+gtk_link_button_pressed_cb (GtkGestureMultiPress *gesture,
+                            int                   n_press,
+                            double                x,
+                            double                y,
+                            gpointer              user_data)
 {
-  if (!gtk_widget_has_focus (widget))
-    gtk_widget_grab_focus (widget);
+  GtkLinkButton *link_button = user_data;
+  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
+  GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  const GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
-  /* Don't popup the menu if there's no URI set,
-   * otherwise the menu item will trigger a warning */
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
-      GTK_LINK_BUTTON (widget)->priv->uri != NULL)
+  if (!gtk_widget_has_focus (GTK_WIDGET (link_button)))
+    gtk_widget_grab_focus (GTK_WIDGET (link_button));
+
+  if (gdk_event_triggers_context_menu (event) &&
+      priv->uri != NULL)
     {
-      gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), (GdkEvent *) event);
-
-      return TRUE;
+      gtk_link_button_do_popup (link_button, event);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
     }
-
-  if (GTK_WIDGET_CLASS (gtk_link_button_parent_class)->button_press_event)
-    return GTK_WIDGET_CLASS (gtk_link_button_parent_class)->button_press_event (widget, event);
-  
-  return FALSE;
+  else
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+    }
 }
 
 static gboolean
