@@ -130,15 +130,6 @@ gtk_icon_helper_get_preferred_size (GtkCssGadget   *gadget,
     *minimum = *natural = icon_height;
 }
 
-static void
-gtk_icon_helper_allocate (GtkCssGadget        *gadget,
-                          const GtkAllocation *allocation,
-                          int                  baseline,
-                          GtkAllocation       *out_clip)
-{
-  GTK_CSS_GADGET_CLASS (gtk_icon_helper_parent_class)->allocate (gadget, allocation, baseline, out_clip);
-}
-
 static gboolean
 gtk_icon_helper_draw (GtkCssGadget *gadget,
                       cairo_t      *cr,
@@ -205,7 +196,6 @@ gtk_icon_helper_class_init (GtkIconHelperClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   gadget_class->get_preferred_size = gtk_icon_helper_get_preferred_size;
-  gadget_class->allocate = gtk_icon_helper_allocate;
   gadget_class->draw = gtk_icon_helper_draw;
   gadget_class->style_changed = gtk_icon_helper_style_changed;
 
