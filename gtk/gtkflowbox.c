@@ -4321,7 +4321,7 @@ gtk_flow_box_get_child_at_index (GtkFlowBox *box,
   g_return_val_if_fail (GTK_IS_FLOW_BOX (box), NULL);
 
   iter = g_sequence_get_iter_at_pos (BOX_PRIV (box)->children, idx);
-  if (iter)
+  if (!g_sequence_iter_is_end (iter))
     return g_sequence_get (iter);
 
   return NULL;
