@@ -441,8 +441,7 @@ update_fraction_classes (GtkProgressBar *pbar)
     {
       if (priv->fraction <= 0.0)
         empty = TRUE;
-
-      if (priv->fraction >= 1.0)
+      else if (priv->fraction >= 1.0)
         full = TRUE;
     }
 
