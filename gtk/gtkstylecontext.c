@@ -24,8 +24,6 @@
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
 
-#include "gtkcontainerprivate.h"
-#include "gtkcssanimatedstyleprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
@@ -35,10 +33,7 @@
 #include "gtkcsspathnodeprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
-#include "gtkcssstaticstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkcsstransformvalueprivate.h"
 #include "gtkcsstransientnodeprivate.h"
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkdebug.h"
