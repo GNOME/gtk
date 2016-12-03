@@ -413,16 +413,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             <property name="visible">1</property>
             <property name="valign">center</property>
             <property name="menu_model">gear_menu</property>
-            <style>
-              <class name="image-button"/>
-            </style>
-            <child>
-              <object class="GtkImage" id="gear_image">
-                <property name="visible">1</property>
-                <property name="icon_size">1</property>
-                <property name="icon_name">open-menu-symbolic</property>
-              </object>
-            </child>
+            <property name="icon-name">open-menu-symbolic</property>
           </object>
           <packing>
             <property name="pack_type">end</property>
@@ -537,13 +528,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkButton" id="button224">
                                 <property name="visible">1</property>
                                 <property name="can_focus">1</property>
-                                <child>
-                                  <object class="GtkImage" id="button224img">
-                                    <property name="visible">1</property>
-                                    <property name="icon-name">window-close-symbolic</property>
-                                    <property name="icon-size">1</property>
-                                  </object>
-                                </child>
+                                <property name="icon-name">window-close-symbolic</property>
                               </object>
                               <packing>
                                 <property name="fill">0</property>
@@ -1803,16 +1788,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="visible">1</property>
                                 <property name="focus-on-click">0</property>
                                 <property name="relief">none</property>
-                                <style>
-                                  <class name="image-button"/>
-                                </style>
-                                <child>
-                                  <object class="GtkImage" id="page2dismissi">
-                                    <property name="visible">1</property>
-                                    <property name="icon-name">window-close-symbolic</property>
-                                    <property name="icon-size">1</property>
-                                  </object>
-                                </child>
+                                <property name="icon-name">window-close-symbolic</property>
                               </object>
                             </child>
                           </object>
@@ -1959,15 +1935,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="menu-model">dinner_menu</property>
                                         <property name="halign">center</property>
                                         <property name="valign">center</property>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">1</property>
-                                            <property name="icon-name">emblem-system-symbolic</property>
-                                          </object>
-                                        </child>
-                                        <style>
-                                          <class name="image-button"/>
-                                        </style>
+                                        <property name="icon-name">emblem-system-symbolic</property>
                                       </object>
                                       <packing>
                                         <property name="pack_type">end</property>
@@ -2166,16 +2134,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="margin-bottom">6</property>
                                             <property name="margin-start">12</property>
                                             <property name="margin-end">12</property>
-                                            <style>
-                                              <class name="image-button"/>
-                                            </style>
-                                            <child>
-                                              <object class="GtkImage">
-                                                <property name="visible">1</property>
-                                                <property name="icon-size">1</property>
-                                                <property name="icon-name">appointment-soon-symbolic</property>
-                                              </object>
-                                            </child>
+                                            <property name="icon-name">appointment-soon-symbolic</property>
                                           </object>
                                         </child>
                                       </object>
@@ -3032,16 +2991,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="visible">1</property>
                                     <property name="draw-indicator">0</property>
                                     <property name="active">1</property>
-                                    <style>
-                                      <class name="image-button"/>
-                                    </style>
-                                    <child>
-                                      <object class="GtkImage">
-                                        <property name="visible">1</property>
-                                        <property name="icon-size">1</property>
-                                        <property name="icon-name">view-grid-symbolic</property>
-                                      </object>
-                                    </child>
+                                    <property name="icon-name">view-grid-symbolic</property>
                                   </object>
                                 </child>
                                 <child>
@@ -3050,16 +3000,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="visible">1</property>
                                     <property name="draw-indicator">0</property>
                                     <property name="group">grid_button</property>
-                                    <style>
-                                      <class name="image-button"/>
-                                    </style>
-                                    <child>
-                                      <object class="GtkImage">
-                                        <property name="visible">1</property>
-                                        <property name="icon-size">1</property>
-                                        <property name="icon-name">view-list-symbolic</property>
-                                      </object>
-                                    </child>
+                                    <property name="icon-name">view-list-symbolic</property>
                                   </object>
                                 </child>
                               </object>
@@ -3067,17 +3008,10 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkButton" id="circular_button">
                                 <property name="visible">1</property>
+                                <property name="icon-name">emblem-system-symbolic</property>
                                 <style>
-                                  <class name="image-button"/>
                                   <class name="circular"/>
                                 </style>
-                                <child>
-                                  <object class="GtkImage">
-                                    <property name="visible">1</property>
-                                    <property name="icon-size">1</property>
-                                    <property name="icon-name">emblem-system-symbolic</property>
-                                  </object>
-                                </child>
                               </object>
                             </child>
                           </object>
@@ -3377,48 +3311,21 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkButton" id="cutbutton">
                                         <property name="visible">1</property>
                                         <property name="sensitive">0</property>
-                                        <style>
-                                          <class name="image-button"/>
-                                        </style>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">1</property>
-                                            <property name="icon-size">1</property>
-                                            <property name="icon-name">edit-cut-symbolic</property>
-                                          </object>
-                                        </child>
+                                        <property name="icon-name">edit-cut-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="copybutton">
                                         <property name="visible">1</property>
                                         <property name="sensitive">0</property>
-                                        <style>
-                                          <class name="image-button"/>
-                                        </style>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">1</property>
-                                            <property name="icon-size">1</property>
-                                            <property name="icon-name">edit-copy-symbolic</property>
-                                          </object>
-                                        </child>
+                                        <property name="icon-name">edit-copy-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="pastebutton">
                                         <property name="visible">1</property>
                                         <property name="sensitive">0</property>
-                                        <style>
-                                          <class name="image-button"/>
-                                        </style>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">1</property>
-                                            <property name="icon-size">1</property>
-                                            <property name="icon-name">edit-paste-symbolic</property>
-                                          </object>
-                                        </child>
+                                        <property name="icon-name">edit-paste-symbolic</property>
                                       </object>
                                     </child>
                                   </object>
@@ -3428,16 +3335,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="visible">1</property>
                                     <property name="sensitive">0</property>
                                     <property name="valign">end</property>
-                                    <style>
-                                      <class name="image-button"/>
-                                    </style>
-                                    <child>
-                                      <object class="GtkImage">
-                                        <property name="visible">1</property>
-                                        <property name="icon-size">1</property>
-                                        <property name="icon-name">edit-delete-symbolic</property>
-                                      </object>
-                                    </child>
+                                    <property name="icon-name">edit-delete-symbolic</property>
                                   </object>
                                   <packing>
                                     <property name="expand">1</property>
@@ -3473,31 +3371,13 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="visible">1</property>
-                                        <style>
-                                          <class name="image-button"/>
-                                        </style>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">1</property>
-                                            <property name="icon-name">pan-start-symbolic</property>
-                                            <property name="icon-size">1</property>
-                                          </object>
-                                        </child>
+                                        <property name="icon-name">pan-start-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="visible">1</property>
-                                        <style>
-                                          <class name="image-button"/>
-                                        </style>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">1</property>
-                                            <property name="icon-name">pan-end-symbolic</property>
-                                            <property name="icon-size">1</property>
-                                          </object>
-                                        </child>
+                                        <property name="icon-name">pan-end-symbolic</property>
                                       </object>
                                     </child>
                                   </object>
@@ -3571,17 +3451,11 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="visible">1</property>
                                             <property name="relief">none</property>
                                             <property name="focus-on-click">0</property>
+                                            <property name="icon-name">window-close-symbolic</property>
                                             <signal name="clicked" handler="tab_close_cb" object="closable_page_1"/>
                                             <style>
                                               <class name="small-button"/>
                                             </style>
-                                            <child>
-                                              <object class="GtkImage">
-                                                <property name="visible">1</property>
-                                                <property name="icon-name">window-close-symbolic</property>
-                                                <property name="icon-size">1</property>
-                                              </object>
-                                            </child>
                                           </object>
                                           <packing>
                                             <property name="pack-type">end</property>
@@ -3612,17 +3486,11 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="visible">1</property>
                                             <property name="relief">none</property>
                                             <property name="focus-on-click">0</property>
+                                            <property name="icon-name">window-close-symbolic</property>
                                             <signal name="clicked" handler="tab_close_cb" object="closable_page_2"/>
                                             <style>
                                               <class name="small-button"/>
                                             </style>
-                                            <child>
-                                              <object class="GtkImage">
-                                                <property name="visible">1</property>
-                                                <property name="icon-name">window-close-symbolic</property>
-                                                <property name="icon-size">1</property>
-                                              </object>
-                                            </child>
                                           </object>
                                           <packing>
                                             <property name="pack-type">end</property>
@@ -3711,15 +3579,8 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="visible">1</property>
                             <property name="valign">center</property>
                             <property name="popover">notebook_info_popover</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="visible">1</property>
-                                <property name="icon-name">emblem-important-symbolic</property>
-                                <property name="icon-size">1</property>
-                              </object>
-                            </child>
+                            <property name="icon-name">emblem-important-symbolic</property>
                             <style>
-                              <class name="image-button"/>
                               <class name="circular"/>
                               <class name="flat"/>
                             </style>
