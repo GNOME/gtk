@@ -1085,8 +1085,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_PARENT] =
       g_param_spec_object ("parent",
                            P_("Parent widget"),
-                           P_("The parent widget of this widget. Must be a Container widget"),
-                           GTK_TYPE_CONTAINER,
+                           P_("The parent widget of this widget."),
+                           GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 
   widget_props[PROP_WIDTH_REQUEST] =
@@ -8507,9 +8507,9 @@ gtk_widget_set_parent (GtkWidget *widget,
  * gtk_widget_get_parent:
  * @widget: a #GtkWidget
  *
- * Returns the parent container of @widget.
+ * Returns the parent widget of @widget.
  *
- * Returns: (transfer none) (nullable): the parent container of @widget, or %NULL
+ * Returns: (transfer none) (nullable): the parent widget of @widget, or %NULL
  **/
 GtkWidget *
 gtk_widget_get_parent (GtkWidget *widget)
