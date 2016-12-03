@@ -804,9 +804,11 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
       else
 	xalign = 1 - priv->label_xalign;
 
-      gtk_widget_get_preferred_width (priv->label_widget, NULL, &nat_width);
+      gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          NULL, &nat_width, NULL, NULL);
       width = MIN (new_allocation.width, nat_width);
-      gtk_widget_get_preferred_height_for_width (priv->label_widget, width, &height, NULL);
+      gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_VERTICAL, width,
+                          &height, NULL, NULL, NULL);
 
       priv->label_allocation.x = new_allocation.x + (new_allocation.width - width) * xalign;
       priv->label_allocation.y = new_allocation.y - height;
@@ -891,9 +893,11 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
     {
       gint nat_width, width;
 
-      gtk_widget_get_preferred_width (priv->label_widget, NULL, &nat_width);
+      gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          NULL, &nat_width, NULL, NULL);
       width = MIN (allocation.width, nat_width);
-      gtk_widget_get_preferred_height_for_width (priv->label_widget, width, &height, NULL);
+      gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_VERTICAL, width,
+                          &height, NULL, NULL, NULL);
     }
   else
     height = 0;
@@ -937,7 +941,7 @@ gtk_frame_measure (GtkCssGadget   *gadget,
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_widget_get_preferred_width (priv->label_widget, &child_min, &child_nat);
+          gtk_widget_measure (priv->label_widget, orientation, -1, &child_min, &child_nat, NULL, NULL);
           *minimum = MAX (child_min, *minimum);
           *natural = MAX (child_nat, *natural);
         }
@@ -968,17 +972,7 @@ gtk_frame_measure_border (GtkCssGadget   *gadget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-        }
-      else
-        {
-          if (for_size > 0)
-            gtk_widget_get_preferred_height_for_width (child, for_size, &child_min, &child_nat);
-          else
-            gtk_widget_get_preferred_height (child, &child_min, &child_nat);
-        }
+      gtk_widget_measure (child, orientation, for_size, &child_min, &child_nat, NULL, NULL);
 
       *minimum = child_min;
       *natural = child_nat;
