@@ -34,6 +34,7 @@ struct _GtkRenderNodeViewPrivate
 {
   GdkRectangle viewport;
   GskRenderNode *render_node;
+  cairo_region_t *render_region;
   cairo_region_t *clip_region;
 };
 
@@ -42,6 +43,7 @@ enum
   PROP_0,
   PROP_VIEWPORT,
   PROP_RENDER_NODE,
+  PROP_RENDER_REGION,
   PROP_CLIP_REGION,
   LAST_PROP
 };
@@ -108,6 +110,10 @@ gtk_render_node_view_get_property (GObject    *object,
       g_value_set_pointer (value, priv->render_node);
       break;
 
+    case PROP_RENDER_REGION:
+      g_value_set_boxed (value, priv->render_region);
+      break;
+
     case PROP_CLIP_REGION:
       g_value_set_boxed (value, priv->clip_region);
       break;
@@ -136,6 +142,10 @@ gtk_render_node_view_set_property (GObject      *object,
       gtk_render_node_view_set_render_node (view, g_value_get_pointer (value));
       break;
 
+    case PROP_RENDER_REGION:
+      gtk_render_node_view_set_render_region (view, g_value_get_boxed (value));
+      break;
+
     case PROP_CLIP_REGION:
       gtk_render_node_view_set_clip_region (view, g_value_get_boxed (value));
       break;
@@ -153,6 +163,7 @@ gtk_render_node_view_dispose (GObject *object)
   GtkRenderNodeViewPrivate *priv = gtk_render_node_view_get_instance_private (view);
 
   g_clear_pointer (&priv->render_node, gsk_render_node_unref);
+  g_clear_pointer (&priv->render_region, cairo_region_destroy);
   g_clear_pointer (&priv->clip_region, cairo_region_destroy);
 
   G_OBJECT_CLASS (gtk_render_node_view_parent_class)->dispose (object);
@@ -245,6 +256,29 @@ gtk_render_node_view_snapshot (GtkWidget   *widget,
   gsk_renderer_render (fallback, priv->render_node, NULL);
   g_object_unref (fallback);
 
+  if (priv->render_region)
+    {
+      cairo_region_t *draw;
+      cairo_pattern_t *linear;
+
+      linear = cairo_pattern_create_linear (0, 0, 10, 10);
+      cairo_pattern_set_extend (linear, CAIRO_EXTEND_REPEAT);
+      cairo_pattern_add_color_stop_rgba (linear, 0.4, 0, 0, 0, 0);
+      cairo_pattern_add_color_stop_rgba (linear, 0.45, 0, 0, 0, 0.5);
+      cairo_pattern_add_color_stop_rgba (linear, 0.55, 0, 0, 0, 0.5);
+      cairo_pattern_add_color_stop_rgba (linear, 0.6, 0, 0, 0, 0);
+      
+      draw = cairo_region_create_rectangle (&viewport);
+      cairo_region_subtract (draw, priv->render_region);
+
+      cairo_set_source (cr, linear);
+      gdk_cairo_region (cr, draw);
+      cairo_fill (cr);
+
+      cairo_region_destroy (draw);
+      cairo_pattern_destroy (linear);
+    }
+
   if (priv->clip_region)
     {
       cairo_region_t *draw;
@@ -289,6 +323,13 @@ gtk_render_node_view_class_init (GtkRenderNodeViewClass *klass)
                           /* GSK_TYPE_RENDER_NODE, */
                           G_PARAM_READWRITE);
 
+  props[PROP_RENDER_REGION] =
+    g_param_spec_boxed ("render-region",
+                        "Render region",
+                        "Actually rendered region",
+                        CAIRO_GOBJECT_TYPE_REGION,
+                        G_PARAM_READWRITE);
+
   props[PROP_CLIP_REGION] =
     g_param_spec_boxed ("clip-region",
                         "Clip region",
@@ -297,7 +338,6 @@ gtk_render_node_view_class_init (GtkRenderNodeViewClass *klass)
                         G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
-
 }
 
 static void
@@ -391,6 +431,29 @@ gtk_render_node_view_get_clip_region (GtkRenderNodeView *view)
   GtkRenderNodeViewPrivate *priv = gtk_render_node_view_get_instance_private (view);
 
   return priv->clip_region;
+}
+
+void
+gtk_render_node_view_set_render_region (GtkRenderNodeView    *view,
+                                        const cairo_region_t *region)
+{
+  GtkRenderNodeViewPrivate *priv = gtk_render_node_view_get_instance_private (view);
+
+  if (priv->render_region)
+    cairo_region_destroy (priv->render_region);
+  priv->render_region = cairo_region_copy (region);
+
+  gtk_widget_queue_draw (GTK_WIDGET (view));
+
+  g_object_notify_by_pspec (G_OBJECT (view), props[PROP_RENDER_REGION]);
+}
+
+const cairo_region_t*
+gtk_render_node_view_get_render_region (GtkRenderNodeView *view)
+{
+  GtkRenderNodeViewPrivate *priv = gtk_render_node_view_get_instance_private (view);
+
+  return priv->render_region;
 }
 
 

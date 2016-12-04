@@ -95,6 +95,8 @@ recordings_list_row_selected (GtkListBox           *box,
                                             gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_render_node_view_set_clip_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
                                             gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+      gtk_render_node_view_set_render_region (GTK_RENDER_NODE_VIEW (priv->render_node_view),
+                                              gtk_inspector_render_recording_get_render_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_render_node_view_set_viewport (GTK_RENDER_NODE_VIEW (priv->render_node_view),
                                          gtk_inspector_render_recording_get_area (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_tree_model_render_node_set_root_node (GTK_TREE_MODEL_RENDER_NODE (priv->render_node_model),
