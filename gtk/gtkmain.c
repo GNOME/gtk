@@ -2073,8 +2073,17 @@ gtk_grab_notify_foreach (GtkWidget *child,
 
   g_object_ref (child);
 
-  if ((was_shadowed || is_shadowed) && GTK_IS_CONTAINER (child))
-    gtk_container_forall (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
+  if (was_shadowed || is_shadowed)
+    {
+      GtkWidget *p;
+
+      for (p = _gtk_widget_get_first_child (child);
+           p != NULL;
+           p = _gtk_widget_get_next_sibling (p))
+        {
+          gtk_grab_notify_foreach (p, info);
+        }
+    }
 
   if (info->device &&
       _gtk_widget_get_device_window (child, info->device))
