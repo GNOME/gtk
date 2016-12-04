@@ -1321,27 +1321,29 @@ fi
 
 # Check for Vulkan support.
 
-have_vulkan="no"
 if test "x$enable_vulkan" != "xno"; then
       vulkan_error=""
       AC_CHECK_HEADER([vulkan/vulkan.h], [], [vulkan_error="Vulkan header not found"])
       AC_CHECK_LIB([vulkan], [vkCreateInstance], [], [vulkan_error="Vulkan library not found"])
-      if "x$vulkan_error" != "x"; then
+      if test "x$vulkan_result" != "x"; then
           if "x$enable_vulkan" = "xyes"; then
               AC_MSG_ERROR($vulkan_error)
           else
               AC_MSG_WARN($vulkan_error)
           fi
+          vulkan_result="no ($vulkan_error)"
       else
           GDK_EXTRA_LIBS="-lvulkan"
-          have_vulkan="yes"
           GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_VULKAN"
+          AC_PATH_PROG([GLSLC], [glslc])
+          vulkan_result="yes"
       fi
 else
       AC_MSG_WARN(Vulkan support explicitly disabled)
+      vulkan_result="no (Vulkan support explicitly disabled)"
 fi
-AM_CONDITIONAL(HAVE_VULKAN, test "$have_vulkan" = "yes")
+AM_CONDITIONAL(HAVE_VULKAN, test "$vulkan_result" = "yes")
 
 # Check for Pango flags
 
@@ -2063,6 +2065,7 @@ echo "        GDK backends:         $GDK_BACKENDS"
 if test "$enable_x11_backend" = "yes"; then
 echo "        X11 extensions:       $X_EXTENSIONS"
 fi
+echo "        Vulkan support:       $vulkan_result"
 echo "        Print backends:       $PRINT_BACKENDS"
 echo "        Dynamic modules:      $build_dynamic_modules"
 echo "        Included immodules:   $included_immodules"
