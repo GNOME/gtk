@@ -255,6 +255,18 @@ gdk_gl_context_real_realize (GdkGLContext  *self,
   return FALSE;
 }
 
+static cairo_region_t *
+gdk_gl_context_real_get_damage (GdkGLContext *context)
+{
+  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+
+  return cairo_region_create_rectangle (&(GdkRectangle) {
+                                            0, 0,
+                                            gdk_window_get_width (window),
+                                            gdk_window_get_height (window)
+                                        });
+}
+
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
                                  cairo_region_t *region)
@@ -262,6 +274,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWindow *window;
   GdkGLContext *shared;
+  cairo_region_t *damage;
   int ww, wh;
 
   shared = gdk_gl_context_get_shared_context (context);
@@ -270,6 +283,10 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
       gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (shared), region);
       return;
     }
+
+  damage = gdk_gl_context_get_damage (context);
+  cairo_region_union (region, damage);
+  cairo_region_destroy (damage);
 
   window = gdk_draw_context_get_window (draw_context);
   ww = gdk_window_get_width (window) * gdk_window_get_scale_factor (window);
@@ -309,6 +326,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
 
   klass->realize = gdk_gl_context_real_realize;
+  klass->get_damage = gdk_gl_context_real_get_damage;
 
   draw_context_class->begin_frame = gdk_gl_context_real_begin_frame;
   draw_context_class->end_frame = gdk_gl_context_real_end_frame;
@@ -343,6 +361,24 @@ gdk_gl_context_init (GdkGLContext *self)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   priv->use_es = -1;
+}
+
+/**
+ * gdk_gl_context_get_damage:
+ * @context: a #GdkGLContext
+ *
+ * Returns the part of the backbuffer that is known to be damaged and would
+ * need to be redrawn. This is the area that needs to be respected in addition
+ * to areas invalidated by GTK or the windowing system itself.
+ *
+ * Returns: The damage to the backbuffer
+ **/
+cairo_region_t *
+gdk_gl_context_get_damage (GdkGLContext *context)
+{
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), cairo_region_create ());
+
+  return GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
 }
 
 GdkGLContextPaintData *

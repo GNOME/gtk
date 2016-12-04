@@ -97,28 +97,47 @@ gdk_mir_gl_context_realize (GdkGLContext *context,
   return TRUE;
 }
 
-static void
-gdk_mir_gl_context_begin_frame (GdkDrawContext *draw_context,
-                                cairo_region_t *update_area)
+static cairo_region_t *
+gdk_mir_gl_context_get_damage (GdkGLContext *context)
 {
-  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkDisplay *display = gdk_draw_context_get_display (draw_context);
-  GdkWindow *window;
+  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  EGLSurface egl_surface;
+  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  unsigned int buffer_age = 0;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->begin_frame (draw_context, update_area);
-  if (gdk_gl_context_get_shared_context (context))
-    return;
+  if (_gdk_mir_display_have_egl_buffer_age (display))
+    {
+      GdkGLContext *shared;
+      GdkMirGLContext *shared_mir;
+     
+      shared = gdk_gl_context_get_shared_context (context);
+      if (shared == NULL)
+        shared = context;
+      shared_mir = GDK_MIR_GL_CONTEXT (shared);
 
-  if (_gdk_mir_display_have_egl_swap_buffers_with_damage (display))
-    return;
+      egl_surface = _gdk_mir_window_get_egl_surface (window, shared_mir->egl_config);
+      gdk_gl_context_make_current (shared);
+      eglQuerySurface (_gdk_mir_display_get_egl_display (display), egl_surface,
+                       EGL_BUFFER_AGE_EXT, &buffer_age);
 
-  /* If nothing else is known, repaint everything so that the back
-     buffer is fully up-to-date for the swapbuffer */
-  window = gdk_gl_context_get_window (context);
-  cairo_region_union_rectangle (update_area, &(GdkRectangle) {
-                                                 0, 0,
-                                                 gdk_window_get_width (window),
-                                                 gdk_window_get_height (window) });
+      if (buffer_age >= 2)
+        {
+          if (window->old_updated_area[0])
+            return cairo_region_copy (window->old_updated_area[0]);
+        }
+      else if (buffer_age >= 3)
+        {
+          if (window->old_updated_area[0] &&
+              window->old_updated_area[1])
+            {
+              cairo_region_t *damage = cairo_region_copy (window->old_updated_area[0]);
+              cairo_region_union (damage, window->old_updated_area[1]);
+              return damage;
+            }
+        }
+    }
+
+  return GDK_GL_CONTEXT_CLASS (gdk_mir_gl_context_parent_class)->get_damage (context);
 }
 
 static void
@@ -197,7 +216,7 @@ gdk_mir_gl_context_class_init (GdkMirGLContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->realize = gdk_mir_gl_context_realize;
-  context_class->begin_frame = gdk_mir_gl_context_begin_frame;
+  context_class->get_damage = gdk_mir_gl_context_get_damage;
   context_class->end_frame = gdk_mir_gl_context_end_frame;
   gobject_class->dispose = gdk_mir_gl_context_dispose;
 }

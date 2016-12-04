@@ -120,48 +120,6 @@ maybe_wait_for_vblank (GdkDisplay  *display,
 }
 
 static void
-gdk_x11_gl_context_begin_frame (GdkDrawContext *draw_context,
-                                cairo_region_t *update_area)
-{
-  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkWindow *window;
-
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->begin_frame (draw_context, update_area);
-  if (gdk_gl_context_get_shared_context (context))
-    return;
-
-  if (gdk_gl_context_has_framebuffer_blit (context))
-    return;
-
-  window = gdk_gl_context_get_window (context);
-  /* If nothing else is known, repaint everything so that the back
-     buffer is fully up-to-date for the swapbuffer */
-  cairo_region_union_rectangle (update_area, &(GdkRectangle) {
-                                                 0, 0,
-                                                 gdk_window_get_width (window),
-                                                 gdk_window_get_height (window) });
-}
-
-static void
-gdk_gl_blit_region (GdkWindow *window, cairo_region_t *region)
-{
-  int n_rects, i;
-  int scale = gdk_window_get_scale_factor (window);
-  int wh = gdk_window_get_height (window);
-  cairo_rectangle_int_t rect;
-
-  n_rects = cairo_region_num_rectangles (region);
-  for (i = 0; i < n_rects; i++)
-    {
-      cairo_region_get_rectangle (region, i, &rect);
-      glScissor (rect.x * scale, (wh - rect.y - rect.height) * scale, rect.width * scale, rect.height * scale);
-      glBlitFramebuffer (rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
-                         rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
-                         GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    }
-}
-
-static void
 gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
                               cairo_region_t *painted,
                               cairo_region_t *damage)
@@ -172,7 +130,7 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
   GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  GdkRectangle whole_window;
+  //GdkRectangle whole_window;
   DrawableInfo *info;
   GLXDrawable drawable;
 
@@ -225,30 +183,53 @@ gdk_x11_gl_context_end_frame (GdkDrawContext *draw_context,
         }
     }
 
-  whole_window = (GdkRectangle) { 0, 0, gdk_window_get_width (window), gdk_window_get_height (window) };
-  if (cairo_region_contains_rectangle (painted, &whole_window) == CAIRO_REGION_OVERLAP_IN)
-    {
-      glXSwapBuffers (dpy, drawable);
-    }
-  else if (gdk_gl_context_has_framebuffer_blit (context))
-    {
-      glDrawBuffer(GL_FRONT);
-      glReadBuffer(GL_BACK);
-      gdk_gl_blit_region (window, painted);
-      glDrawBuffer(GL_BACK);
-      glFlush();
-
-      if (gdk_gl_context_has_frame_terminator (context))
-        glFrameTerminatorGREMEDY ();
-    }
-  else
-    {
-      g_warning ("Need to swap whole buffer even thouigh not everything was redrawn. Expect artifacts.");
-      glXSwapBuffers (dpy, drawable);
-    }
+  glXSwapBuffers (dpy, drawable);
 
   if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
     glXGetVideoSyncSGI (&info->last_frame_counter);
+}
+
+static cairo_region_t *
+gdk_x11_gl_context_get_damage (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  unsigned int buffer_age = 0;
+
+  if (display_x11->has_glx_buffer_age)
+    {
+      GdkGLContext *shared;
+      GdkX11GLContext *shared_x11;
+     
+      shared = gdk_gl_context_get_shared_context (context);
+      if (shared == NULL)
+        shared = context;
+      shared_x11 = GDK_X11_GL_CONTEXT (shared);
+
+      gdk_gl_context_make_current (shared);
+      glXQueryDrawable(dpy, shared_x11->attached_drawable,
+		       GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
+
+      if (buffer_age >= 2)
+        {
+          if (window->old_updated_area[0])
+            return cairo_region_copy (window->old_updated_area[0]);
+        }
+      else if (buffer_age >= 3)
+        {
+          if (window->old_updated_area[0] &&
+              window->old_updated_area[1])
+            {
+              cairo_region_t *damage = cairo_region_copy (window->old_updated_area[0]);
+              cairo_region_union (damage, window->old_updated_area[1]);
+              return damage;
+            }
+        }
+    }
+
+  return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->get_damage (context);
 }
 
 typedef struct {
@@ -787,9 +768,9 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->realize = gdk_x11_gl_context_realize;
+  context_class->get_damage = gdk_x11_gl_context_get_damage;
   context_class->texture_from_surface = gdk_x11_gl_context_texture_from_surface;
 
-  draw_context_class->begin_frame = gdk_x11_gl_context_begin_frame;
   draw_context_class->end_frame = gdk_x11_gl_context_end_frame;
 
   gobject_class->dispose = gdk_x11_gl_context_dispose;

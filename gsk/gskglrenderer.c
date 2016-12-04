@@ -90,6 +90,11 @@ typedef struct {
 } ProfileTimers;
 #endif
 
+typedef enum {
+  RENDER_FULL,
+  RENDER_SCISSOR
+} RenderMode;
+
 struct _GskGLRenderer
 {
   GskRenderer parent_instance;
@@ -117,6 +122,8 @@ struct _GskGLRenderer
   ProfileCounters profile_counters;
   ProfileTimers profile_timers;
 #endif
+
+  RenderMode render_mode;
 
   gboolean has_buffers : 1;
 };
@@ -322,48 +329,45 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 
 static GdkDrawingContext *
 gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
-                                  const cairo_region_t *region)
+                                  const cairo_region_t *update_area)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  cairo_region_t *whole_window;
+  cairo_region_t *damage;
   GdkDrawingContext *result;
+  GdkRectangle whole_window;
   GdkWindow *window;
 
   window = gsk_renderer_get_window (renderer);
+  whole_window = (GdkRectangle) {
+                     0, 0,
+                     gdk_window_get_width (window),
+                     gdk_window_get_height (window) 
+                 };
+  damage = gdk_gl_context_get_damage (self->gl_context);
+  cairo_region_union (damage, update_area);
   
-  whole_window = cairo_region_create_rectangle (&(GdkRectangle) {
-                                                    0, 0,
-                                                    gdk_window_get_width (window),
-                                                    gdk_window_get_height (window)
-                                                });
+  if (cairo_region_contains_rectangle (damage, &whole_window) == CAIRO_REGION_OVERLAP_IN)
+    {
+      self->render_mode = RENDER_FULL;
+    }
+  else
+    {
+      GdkRectangle extents;
 
-  return gdk_window_begin_draw_frame (window,
-                                      GDK_DRAW_CONTEXT (self->gl_context),
-                                      region);
+      cairo_region_get_extents (damage, &extents);
+      cairo_region_union_rectangle (damage, &extents);
 
-  cairo_region_destroy (whole_window);
+      if (gdk_rectangle_equal (&extents, &whole_window))
+        self->render_mode = RENDER_FULL;
+      else
+        self->render_mode = RENDER_SCISSOR;
+    }
 
-  return result;
-}
+  result = gdk_window_begin_draw_frame (window,
+                                        GDK_DRAW_CONTEXT (self->gl_context),
+                                        damage);
 
-static GdkDrawingContext *
-gsk_gl_renderer_begin_draw_frame (GskRenderer          *renderer,
-                                  const cairo_region_t *region)
-{
-  cairo_region_t *whole_window;
-  GdkDrawingContext *result;
-  GdkWindow *window;
-
-  window = gsk_renderer_get_window (renderer);
-  
-  whole_window = cairo_region_create_rectangle (&(GdkRectangle) {
-                                                         0, 0,
-                                                         gdk_window_get_width (window),
-                                                         gdk_window_get_height (window) });
-
-  result = GSK_RENDERER_CLASS (gsk_gl_renderer_parent_class)->begin_draw_frame (renderer, whole_window);
-
-  cairo_region_destroy (whole_window);
+  cairo_region_destroy (damage);
 
   return result;
 }
@@ -859,6 +863,32 @@ gsk_gl_renderer_clear (GskGLRenderer *self)
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
+static void
+gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
+{
+  switch (self->render_mode)
+  {
+    case RENDER_FULL:
+      glDisable (GL_SCISSOR_TEST);
+      break;
+
+    case RENDER_SCISSOR:
+      {
+        GdkDrawingContext *context = gsk_renderer_get_drawing_context (GSK_RENDERER (self));
+        GdkWindow *window = gsk_renderer_get_window (GSK_RENDERER (self));
+        GdkRectangle extents;
+        cairo_region_get_extents (gdk_drawing_context_get_clip (context), &extents);
+        glScissor (extents.x, gdk_window_get_height (window) - extents.height - extents.y, extents.width, extents.height);
+        glEnable (GL_SCISSOR_TEST);
+        break;
+      }
+
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+}
+
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
@@ -915,6 +945,8 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
   /* Ensure that the viewport is up to date */
   if (gsk_gl_driver_bind_render_target (self->gl_driver, 0))
     gsk_gl_renderer_resize_viewport (self, &viewport, scale_factor);
+
+  gsk_gl_renderer_setup_render_mode (self);
 
   gsk_gl_renderer_clear (self);
 

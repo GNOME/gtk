@@ -37,26 +37,6 @@ G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void gdk_wayland_gl_context_dispose (GObject *gobject);
 
-static void
-gdk_wayland_gl_context_begin_frame (GdkDrawContext *draw_context,
-                                    cairo_region_t *update_area)
-{
-  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkWindow *window;
-
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, update_area);
-  if (gdk_gl_context_get_shared_context (context))
-    return;
-
-  /* If nothing else is known, repaint everything so that the back
-     buffer is fully up-to-date for the swapbuffer */
-  window = gdk_gl_context_get_window (context);
-  cairo_region_union_rectangle (update_area, &(GdkRectangle) {
-                                                 0, 0,
-                                                 gdk_window_get_width (window),
-                                                 gdk_window_get_height (window) });
-}
-
 #define N_EGL_ATTRS     16
 
 static gboolean
@@ -175,6 +155,51 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   return TRUE;
 }
 
+static cairo_region_t *
+gdk_wayland_gl_context_get_damage (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  EGLSurface egl_surface;
+  GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
+  int buffer_age = 0;
+
+  if (display_wayland->have_egl_buffer_age)
+    {
+      GdkGLContext *shared;
+      GdkWaylandGLContext *shared_wayland;
+     
+      shared = gdk_gl_context_get_shared_context (context);
+      if (shared == NULL)
+        shared = context;
+      shared_wayland = GDK_WAYLAND_GL_CONTEXT (shared);
+
+      egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
+                                                        shared_wayland->egl_config);
+      gdk_gl_context_make_current (shared);
+      eglQuerySurface (display_wayland->egl_display, egl_surface,
+                       EGL_BUFFER_AGE_EXT, &buffer_age);
+
+      if (buffer_age >= 2)
+        {
+          if (window->old_updated_area[0])
+            return cairo_region_copy (window->old_updated_area[0]);
+        }
+      else if (buffer_age >= 3)
+        {
+          if (window->old_updated_area[0] &&
+              window->old_updated_area[1])
+            {
+              cairo_region_t *damage = cairo_region_copy (window->old_updated_area[0]);
+              cairo_region_union (damage, window->old_updated_area[1]);
+              return damage;
+            }
+        }
+    }
+
+  return GDK_GL_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->get_damage (context);
+}
+
 static void
 gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted,
@@ -227,10 +252,10 @@ gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 
   gobject_class->dispose = gdk_wayland_gl_context_dispose;
 
-  draw_context_class->begin_frame = gdk_wayland_gl_context_begin_frame;
   draw_context_class->end_frame = gdk_wayland_gl_context_end_frame;
 
   context_class->realize = gdk_wayland_gl_context_realize;
+  context_class->get_damage = gdk_wayland_gl_context_get_damage;
 }
 
 static void
