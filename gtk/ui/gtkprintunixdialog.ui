@@ -826,7 +826,6 @@
                             <property name="content-width">320</property>
                             <property name="content-height">160</property>
                             <property name="visible">1</property>
-                            <signal name="draw" handler="draw_page_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">1</property>
