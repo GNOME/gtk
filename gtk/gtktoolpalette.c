@@ -222,6 +222,8 @@ gtk_tool_palette_init (GtkToolPalette *palette)
       dnd_target_atom_item = gdk_atom_intern_static_string (dnd_targets[0].target);
       dnd_target_atom_group = gdk_atom_intern_static_string (dnd_targets[1].target);
     }
+
+  gtk_widget_set_has_window (GTK_WIDGET (palette), TRUE);
 }
 
 static void
