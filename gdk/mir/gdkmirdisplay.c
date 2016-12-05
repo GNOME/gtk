@@ -691,7 +691,7 @@ gdk_mir_display_make_gl_context_current (GdkDisplay   *display,
   mir_context = GDK_MIR_GL_CONTEXT (context);
   window = gdk_gl_context_get_window (context);
 
-  if (mir_context->is_attached || gdk_draw_context_is_drawing (context))
+  if (mir_context->is_attached || gdk_draw_context_is_drawing (GDK_DRAW_CONTEXT (context)))
     {
       egl_surface = _gdk_mir_window_get_egl_surface (window,
                                                      mir_context->egl_config);
