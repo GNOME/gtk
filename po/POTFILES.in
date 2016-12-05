@@ -9,6 +9,7 @@ gdk/gdkdevicemanager.c
 gdk/gdkdisplay.c
 gdk/gdkdisplaymanager.c
 gdk/gdkdnd.c
+gdk/gdkdrawcontext.c
 gdk/gdkglcontext.c
 gdk/gdkpango.c
 gdk/gdkscreen.c
