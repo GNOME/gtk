@@ -1518,7 +1518,7 @@ Gdk-4.0.gir: $(top_builddir)/gdk/Gdk-noinst-4.0.gir
 EXTRA_GIRS = Gdk-4.0.gir
 
 if USE_X11
-GdkX11-4.0.gir: $(top_builddir)/gdk/GdkX11-noinst-4.0.gir
+GdkX11-4.0.gir: $(top_builddir)/gdk/GdkX11-noinst-4.0.gir Gdk-4.0.gir
 	$(AM_V_GEN) $(SED) \
 		-e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" \
 		-e "s/noinst-4.0/4.0/" \
@@ -1528,7 +1528,7 @@ endif
 
 if OS_WIN32
 
-GdkWin32-4.0.gir: $(top_builddir)/gdk/GdkX11-noinst-4.0.gir
+GdkWin32-4.0.gir: $(top_builddir)/gdk/GdkX11-noinst-4.0.gir Gdk-4.0.gir
 	$(AM_V_GEN) $(SED) \
 		-e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" \
 		-e "s/noinst-4.0/4.0/" \
@@ -1537,7 +1537,7 @@ EXTRA_GIRS += GdkWin32-4.0.gir
 
 endif
 
-Gsk-4.0.gir: $(top_builddir)/gsk/Gsk-noinst-4.0.gir
+Gsk-4.0.gir: $(top_builddir)/gsk/Gsk-noinst-4.0.gir Gdk-4.0.gir
 	$(AM_V_GEN) $(SED) \
 		-e "s/shared-library=\"[^\"]*\"/shared-library=\"libgtk-4.so.0\"/" \
 		-e "s/noinst-4.0/4.0/" \
