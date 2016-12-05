@@ -5150,19 +5150,8 @@ gdk_x11_get_server_time (GdkWindow *window)
 XID
 gdk_x11_window_get_xid (GdkWindow *window)
 {
-  /* Try to ensure the window has a native window */
-  if (!_gdk_window_has_impl (window))
-    {
-      gdk_window_ensure_native (window);
-
-      /* We sync here to ensure the window is created in the Xserver when
-       * this function returns. This is required because the returned XID
-       * for this window must be valid immediately, even with another
-       * connection to the Xserver */
-      gdk_display_sync (gdk_window_get_display (window));
-    }
-  
-  if (!GDK_WINDOW_IS_X11 (window))
+  if (!GDK_WINDOW_IS_X11 (window) ||
+      !_gdk_window_has_impl (window))
     {
       g_warning (G_STRLOC " drawable is not a native X11 window");
       return None;
@@ -5200,11 +5189,8 @@ void
 gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
                                        gboolean   frame_sync_enabled)
 {
-  /* Try to ensure the window has a native window */
-  if (!_gdk_window_has_impl (window))
-    gdk_window_ensure_native (window);
-
-  if (!GDK_WINDOW_IS_X11 (window))
+  if (!GDK_WINDOW_IS_X11 (window) ||
+      !_gdk_window_has_impl (window))
     {
       g_warning (G_STRLOC " drawable is not a native X11 window");
       return;
