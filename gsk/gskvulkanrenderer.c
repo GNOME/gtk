@@ -277,13 +277,13 @@ gsk_vulkan_renderer_do_render_commands (GskVulkanRenderer *self,
 {
   GskVulkanBuffer *buffer;
   float pts[] = {
-    -1.0, -1.0,
-    1.0, -1.0,
-    -1.0, 1.0,
+    -1.0, -1.0,  0.0, 0.0,
+     1.0, -1.0,  1.0, 0.0,
+    -1.0,  1.0,  0.0, 1.0,
 
-    -1.0, 1.0,
-    1.0, -1.0,
-    1.0, 1.0
+    -1.0,  1.0,  0.0, 1.0,
+     1.0, -1.0,  1.0, 0.0,
+     1.0,  1.0,  1.0, 1.0
   };
   guchar *data;
 

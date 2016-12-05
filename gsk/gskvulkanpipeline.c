@@ -95,17 +95,23 @@ gsk_vulkan_pipeline_new (GdkVulkanContext *context,
                                                    .pVertexBindingDescriptions = (VkVertexInputBindingDescription[]) {
                                                        {
                                                            .binding = 0,
-                                                           .stride = 2 * sizeof(float),
+                                                           .stride = 4 * sizeof (float),
                                                            .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
                                                        }
                                                    },
-                                                   .vertexAttributeDescriptionCount = 1,
+                                                   .vertexAttributeDescriptionCount = 2,
                                                    .pVertexAttributeDescriptions = (VkVertexInputAttributeDescription[]) {
                                                        {
                                                            .location = 0,
                                                            .binding = 0,
                                                            .format = VK_FORMAT_R32G32_SFLOAT,
                                                            .offset = 0,
+                                                       },
+                                                       {
+                                                           .location = 1,
+                                                           .binding = 0,
+                                                           .format = VK_FORMAT_R32G32_SFLOAT,
+                                                           .offset = 2 * sizeof (float),
                                                        }
                                                    }
                                                },
