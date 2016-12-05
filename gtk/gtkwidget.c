@@ -5402,8 +5402,10 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
        * of get_height_for_width will internally limit the for_size to natural size
        * when aligning implicitly.
        */
-      gtk_widget_get_preferred_width (widget, &min_width, &natural_width);
-      gtk_widget_get_preferred_height_for_width (widget, real_allocation.width, &min_height, &natural_height);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &min_width, &natural_width, NULL, NULL);
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, real_allocation.width,
+                          &min_height, &natural_height, NULL, NULL);
     }
   else
     {
@@ -5411,8 +5413,10 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
        * of get_width_for_height will internally limit the for_size to natural size
        * when aligning implicitly.
        */
-      gtk_widget_get_preferred_height (widget, &min_height, &natural_height);
-      gtk_widget_get_preferred_width_for_height (widget, real_allocation.height, &min_width, &natural_width);
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
+                          &min_height, &natural_height, NULL, NULL);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, real_allocation.height,
+                          &min_width, &natural_width, NULL, NULL);
     }
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
