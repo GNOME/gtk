@@ -37,6 +37,7 @@ struct _GtkIMContextXIM
   gchar *mb_charset;
 
   GdkWindow *client_window;
+  Window client_window_xid;
   GtkWidget *client_widget;
 
   /* The status window for this input context; we claim the
@@ -572,11 +573,23 @@ set_ic_client_window (GtkIMContextXIM *context_xim,
     }
   
   context_xim->client_window = client_window;
+  context_xim->client_window_xid = None;
 
   if (context_xim->client_window)
     {
+      GdkWindow *native;
+
       context_xim->im_info = get_im (context_xim->client_window, context_xim->locale);
       context_xim->im_info->ics = g_slist_prepend (context_xim->im_info->ics, context_xim);
+
+      for (native = client_window; native; native = gdk_window_get_parent (native))
+        {
+          if (gdk_window_has_native (native))
+            {
+              context_xim->client_window_xid = gdk_x11_window_get_xid (native);
+              break;
+            }
+        }
     }
   
   update_client_widget (context_xim);
@@ -670,7 +683,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.keycode = event->hardware_keycode;
   xevent.same_screen = True;
   
-  if (XFilterEvent ((XEvent *)&xevent, GDK_WINDOW_XID (context_xim->client_window)))
+  if (XFilterEvent ((XEvent *)&xevent, context_xim->client_window_xid))
     return TRUE;
   
   if (event->state &
@@ -1386,7 +1399,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 
       xic = XCreateIC (context_xim->im_info->im,
 		       XNInputStyle, im_style,
-		       XNClientWindow, GDK_WINDOW_XID (context_xim->client_window),
+		       XNClientWindow, context_xim->client_window_xid,
 		       name1, list1,
 		       name2, list2,
 		       NULL);
