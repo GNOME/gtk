@@ -974,11 +974,13 @@ gdk_mir_window_impl_begin_paint (GdkWindow *window)
 static void
 gdk_mir_window_impl_end_paint (GdkWindow *window)
 {
+#if 0
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   //g_printerr ("gdk_mir_window_impl_end_paint window=%p\n", window);
   if (impl->visible && !window->current_paint.use_gl)
     send_buffer (window);
+#endif
 }
 
 static cairo_region_t *

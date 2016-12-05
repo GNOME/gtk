@@ -103,7 +103,7 @@ gdk_mir_gl_context_get_damage (GdkGLContext *context)
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   EGLSurface egl_surface;
   GdkWindow *window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (context));
-  unsigned int buffer_age = 0;
+  int buffer_age = 0;
 
   if (_gdk_mir_display_have_egl_buffer_age (display))
     {
@@ -141,22 +141,22 @@ gdk_mir_gl_context_get_damage (GdkGLContext *context)
 }
 
 static void
-gdk_mir_gl_context_end_frame (GdkGLContext *context,
+gdk_mir_gl_context_end_frame (GdkDrawContext *context,
                               cairo_region_t *painted,
                               cairo_region_t *damage)
 {
-  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkWindow *window = gdk_gl_context_get_window (context);
+  GdkGLContext *gl_context = GDK_GL_CONTEXT (context);
+  GdkMirGLContext *context_mir = GDK_MIR_GL_CONTEXT (gl_context);
+  GdkWindow *window = gdk_gl_context_get_window (gl_context);
   GdkDisplay *display = gdk_window_get_display (window);
-  GdkMirGLContext *context_mir = GDK_MIR_GL_CONTEXT (context);
   EGLDisplay egl_display = _gdk_mir_display_get_egl_display (display);
   EGLSurface egl_surface;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->end_frame (draw_context, painted, damage);
-  if (gdk_gl_context_get_shared_context (context))
+  GDK_DRAW_CONTEXT_CLASS (gdk_mir_gl_context_parent_class)->end_frame (context, painted, damage);
+  if (gdk_gl_context_get_shared_context (gl_context))
     return;
 
-  gdk_gl_context_make_current (context);
+  gdk_gl_context_make_current (gl_context);
 
   egl_surface = _gdk_mir_window_get_egl_surface (window,
                                                  context_mir->egl_config);
@@ -212,12 +212,13 @@ gdk_mir_gl_context_dispose (GObject *gobject)
 static void
 gdk_mir_gl_context_class_init (GdkMirGLContextClass *klass)
 {
-  GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
+  GdkGLContextClass *gl_context_class = GDK_GL_CONTEXT_CLASS (klass);
 
-  context_class->realize = gdk_mir_gl_context_realize;
-  context_class->get_damage = gdk_mir_gl_context_get_damage;
-  context_class->end_frame = gdk_mir_gl_context_end_frame;
+  gl_context_class->realize = gdk_mir_gl_context_realize;
+  gl_context_class->get_damage = gdk_mir_gl_context_get_damage;
+  draw_context_class->end_frame = gdk_mir_gl_context_end_frame;
   gobject_class->dispose = gdk_mir_gl_context_dispose;
 }
 
