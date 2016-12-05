@@ -3,10 +3,13 @@
 #include "gskvulkanrendererprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeiter.h"
 #include "gskrendernodeprivate.h"
 #include "gsktextureprivate.h"
+#include "gskvulkanbufferprivate.h"
+#include "gskvulkanpipelineprivate.h"
 
 typedef struct _GskVulkanTarget GskVulkanTarget;
 
@@ -28,6 +31,9 @@ struct _GskVulkanRenderer
 
   VkRenderPass render_pass;
   VkCommandPool command_pool;
+  VkFence command_pool_fence;
+
+  GskVulkanPipeline *pipeline;
 
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
@@ -46,19 +52,6 @@ struct _GskVulkanTarget {
   VkImageView image_view;
   VkFramebuffer framebuffer;
 }; 
-
-static inline VkResult
-gsk_vulkan_handle_result (VkResult    res,
-                          const char *called_function)
-{
-  if (res != VK_SUCCESS)
-    {
-      GSK_NOTE (VULKAN,g_printerr ("%s(): %s (%d)\n", called_function, gdk_vulkan_strerror (res), res));
-    }
-  return res;
-}
-
-#define GSK_VK_CHECK(func, ...) gsk_vulkan_handle_result (func (__VA_ARGS__), G_STRINGIFY (func))
 
 static GskVulkanTarget *
 gsk_vulkan_target_new_for_image (GskVulkanRenderer *self,
@@ -218,14 +211,25 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                                       },
                                       NULL,
                                       &self->render_pass);
-   GSK_VK_CHECK (vkCreateCommandPool, device,
-                                      &(const VkCommandPoolCreateInfo) {
-                                          .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-                                          .queueFamilyIndex = gdk_vulkan_context_get_queue_family_index (self->vulkan),
-                                          .flags = 0
-                                      },
-                                      NULL,
-                                      &self->command_pool);
+  GSK_VK_CHECK (vkCreateCommandPool, device,
+                                     &(const VkCommandPoolCreateInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+                                         .queueFamilyIndex = gdk_vulkan_context_get_queue_family_index (self->vulkan),
+                                         .flags = 0
+                                     },
+                                     NULL,
+                                     &self->command_pool);
+
+  GSK_VK_CHECK (vkCreateFence, device,
+                               &(VkFenceCreateInfo) {
+                                   .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                                   .flags = 0
+                               },
+                               NULL,
+                               &self->command_pool_fence);
+
+
+  self->pipeline = gsk_vulkan_pipeline_new (self->vulkan, self->render_pass);
 
   g_signal_connect (self->vulkan,
                     "images-updated",
@@ -249,6 +253,11 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
                                        gsk_vulkan_renderer_update_images_cb,
                                        self);
 
+  vkDestroyFence (device,
+                  self->command_pool_fence,
+                  NULL);
+  self->command_pool_fence = VK_NULL_HANDLE;
+
   vkDestroyCommandPool (device,
                         self->command_pool,
                         NULL);
@@ -263,10 +272,105 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 }
 
 static void
+gsk_vulkan_renderer_do_render_commands (GskVulkanRenderer *self,
+                                        VkCommandBuffer    command_buffer)
+{
+  GskVulkanBuffer *buffer;
+  float pts[] = {
+    -1.0, -1.0,
+    1.0, -1.0,
+    -1.0, 1.0,
+
+    -1.0, 1.0,
+    1.0, -1.0,
+    1.0, 1.0
+  };
+  guchar *data;
+
+  buffer = gsk_vulkan_buffer_new (self->vulkan, sizeof (pts));
+
+  data = gsk_vulkan_buffer_map (buffer);
+  memcpy (data, pts, sizeof (pts));
+  gsk_vulkan_buffer_unmap (buffer);
+
+  vkCmdBindPipeline (command_buffer,
+                     VK_PIPELINE_BIND_POINT_GRAPHICS,
+                     gsk_vulkan_pipeline_get_pipeline (self->pipeline));
+
+  vkCmdBindVertexBuffers (command_buffer,
+                          0,
+                          1,
+                          (VkBuffer[1]) {
+                              gsk_vulkan_buffer_get_buffer (buffer)
+                          },
+                          (VkDeviceSize[1]) { 0 });
+
+  vkCmdDraw (command_buffer,
+             6, 1,
+             0, 0);
+
+  gsk_vulkan_buffer_free (buffer);
+}
+
+static void
+gsk_vulkan_renderer_do_render_pass (GskVulkanRenderer *self,
+                                    VkCommandBuffer    command_buffer,
+                                    GskRenderNode     *root)
+{
+  GdkRectangle extents;
+  GdkWindow *window;
+
+  window = gsk_renderer_get_window (GSK_RENDERER (self));
+  cairo_region_get_extents (gdk_drawing_context_get_clip (gsk_renderer_get_drawing_context (GSK_RENDERER (self))),
+                            &extents);
+
+  vkCmdBeginRenderPass (command_buffer,
+                        &(VkRenderPassBeginInfo) {
+                            .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                            .renderPass = self->render_pass,
+                            .framebuffer = self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]->framebuffer,
+                            .renderArea = { 
+                                { 0, 0 },
+                                { gdk_window_get_width (window), gdk_window_get_height (window) }
+                            },
+                            .clearValueCount = 1,
+                            .pClearValues = (VkClearValue [1]) {
+                                { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
+                            }
+                        },
+                        VK_SUBPASS_CONTENTS_INLINE);
+
+  vkCmdSetViewport (command_buffer,
+                    0,
+                    1,
+                    &(VkViewport) {
+                      .x = 0,
+                      .y = 0,
+                      .width = gdk_window_get_width (window),
+                      .height = gdk_window_get_height (window),
+                      .minDepth = 0,
+                      .maxDepth = 1
+                    });
+
+  vkCmdSetScissor (command_buffer,
+                   0,
+                   1,
+                   &(VkRect2D) {
+                       { extents.x, extents.y },
+                       { extents.width, extents.height }
+                   });
+
+  gsk_vulkan_renderer_do_render_commands (self, command_buffer);
+
+  vkCmdEndRenderPass (command_buffer);
+}
+
+static void
 gsk_vulkan_renderer_render (GskRenderer   *renderer,
                             GskRenderNode *root)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
+  VkCommandBuffer command_buffer;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
@@ -277,6 +381,54 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
+  GSK_VK_CHECK (vkAllocateCommandBuffers, gdk_vulkan_context_get_device (self->vulkan),
+                                          &(VkCommandBufferAllocateInfo) {
+                                              .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                                              .commandPool = self->command_pool,
+                                              .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                                              .commandBufferCount = 1,
+                                          },
+                                          &command_buffer);
+
+  GSK_VK_CHECK (vkBeginCommandBuffer, command_buffer,
+                                      &(VkCommandBufferBeginInfo) {
+                                          .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                          .flags = 0
+                                      });
+
+  gsk_vulkan_renderer_do_render_pass (self, command_buffer, root);
+
+  GSK_VK_CHECK (vkEndCommandBuffer, command_buffer);
+
+  GSK_VK_CHECK (vkQueueSubmit, gdk_vulkan_context_get_queue (self->vulkan),
+                               1,
+                               &(VkSubmitInfo) {
+                                  .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                                  .waitSemaphoreCount = 1,
+                                  .pWaitSemaphores = (VkSemaphore[1]) {
+                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan),
+                                  },
+                                  .pWaitDstStageMask = (VkPipelineStageFlags []) {
+                                     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                  },
+                                  .commandBufferCount = 1,
+                                  .pCommandBuffers = &command_buffer,
+                               },
+                               self->command_pool_fence);
+
+  GSK_VK_CHECK (vkWaitForFences, gdk_vulkan_context_get_device (self->vulkan),
+                                 1,
+                                 &self->command_pool_fence,
+                                 true,
+                                 INT64_MAX);
+  GSK_VK_CHECK (vkResetFences, gdk_vulkan_context_get_device (self->vulkan),
+                               1,
+                               &self->command_pool_fence);
+
+  GSK_VK_CHECK (vkResetCommandPool, gdk_vulkan_context_get_device (self->vulkan),
+                                    self->command_pool,
+                                    0);
+   
 #ifdef G_ENABLE_DEBUG
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
   gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
@@ -304,7 +456,7 @@ gsk_vulkan_renderer_begin_draw_frame (GskRenderer          *renderer,
 
   result = gdk_window_begin_draw_frame (window,
                                         GDK_DRAW_CONTEXT (self->vulkan),
-                                        region);
+                                        whole_window);
 
   cairo_region_destroy (whole_window);
 
@@ -327,7 +479,11 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
 {
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler = gsk_renderer_get_profiler (GSK_RENDERER (self));
+#endif
 
+  gsk_ensure_resources ();
+
+#ifdef G_ENABLE_DEBUG
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
 #endif
 }

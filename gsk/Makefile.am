@@ -24,9 +24,17 @@ noinst_LTLIBRARIES =
 
 if HAVE_VULKAN
 gsk_private_vulan_source_h = \
-	gskvulkanrendererprivate.h
+	gskvulkanbufferprivate.h \
+	gskvulkanmemoryprivate.h \
+	gskvulkanpipelineprivate.h \
+	gskvulkanrendererprivate.h \
+	gskvulkanshaderprivate.h
 gsk_private_vulkan_source_c = \
-	gskvulkanrenderer.c
+	gskvulkanbuffer.c \
+	gskvulkanmemory.c \
+	gskvulkanpipeline.c \
+	gskvulkanrenderer.c \
+	gskvulkanshader.c
 endif
 
 gsk_public_source_h = \
@@ -48,7 +56,6 @@ gsk_private_source_h = \
 	gskrendererprivate.h \
 	gskrendernodeprivate.h \
 	gskshaderbuilderprivate.h \
-	gskvulkanrendererprivate.h \
 	gsktextureprivate.h
 gsk_public_source_c = \
 	gskrenderer.c \
@@ -95,6 +102,14 @@ DISTCLEANFILES += gskenumtypes.h gskenumtypes.c
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/gsk.resources.xml)
 
+resources/vulkan/%.frag.spv: resources/vulkan/%.frag.glsl
+	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
+	$(AM_V_GEN) $(GLSLC) -fshader-stage=fragment -o $@.tmp $< && mv $@.tmp $@
+
+resources/vulkan/%.vert.spv: resources/vulkan/%.vert.glsl
+	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
+	$(AM_V_GEN) $(GLSLC) -fshader-stage=vertex -o $@.tmp $< && mv $@.tmp $@
+
 gsk.resources.xml: Makefile.am
 	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
 	echo "<gresources>" >> $@; \
@@ -102,6 +117,14 @@ gsk.resources.xml: Makefile.am
 	for f in $(top_srcdir)/gsk/resources/glsl/*; do \
 	  n=`basename $$f`; \
 	  echo "    <file alias='glsl/$$n'>resources/glsl/$$n</file>" >> $@; \
+	done; \
+	for f in $(top_srcdir)/gsk/resources/vulkan/*.spv; do \
+	  n=`basename $$f`; \
+	  echo "    <file alias='vulkan/$$n'>resources/vulkan/$$n</file>" >> $@; \
+	done; \
+	for f in $(top_srcdir)/gsk/resources/vulkan/*.glsl; do \
+	  n=`basename $$f`; \
+	  echo "    <file alias='vulkan/$$n'>resources/vulkan/$$n</file>" >> $@; \
 	done; \
 	echo "  </gresource>" >> $@; \
 	echo "</gresources>" >> $@
