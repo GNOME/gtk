@@ -241,6 +241,8 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
     }
   else
     eglSwapBuffers (display_wayland->egl_display, egl_surface);
+
+  gdk_wayland_window_sync (window);
 }
 
 static void

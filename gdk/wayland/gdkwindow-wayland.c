@@ -920,6 +920,12 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
       impl->pending_commit = TRUE;
     }
 
+  gdk_wayland_window_sync (window);
+}
+
+void
+gdk_wayland_window_sync (GdkWindow *window)
+{
   gdk_wayland_window_sync_margin (window);
   gdk_wayland_window_sync_opaque_region (window);
   gdk_wayland_window_sync_input_region (window);
