@@ -110,8 +110,9 @@ gdk_win32_gl_context_end_frame (GdkDrawContext *draw_context,
   GdkWindow *window = gdk_gl_context_get_window (context);
   GdkWin32Display *display = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
   gboolean can_wait = display->hasWglOMLSyncControl;
+  cairo_rectangle_int_t whole_window;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->end_frame (draw_context, painted, damage);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->end_frame (draw_context, painted, damage);
   if (gdk_gl_context_get_shared_context (context))
     return;
 
@@ -167,7 +168,7 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWindow *window;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->begin_frame (draw_context, update_area);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->begin_frame (draw_context, update_area);
   if (gdk_gl_context_get_shared_context (context))
     return;
 
@@ -715,12 +716,14 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
 static void
 gdk_win32_gl_context_class_init (GdkWin32GLContextClass *klass)
 {
-  GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
+  GdkGLContextClass *gl_context_class = GDK_GL_CONTEXT_CLASS(klass);
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS(klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  context_class->begin_frame = gdk_win32_gl_context_begin_frame;
-  context_class->end_frame = gdk_win32_gl_context_end_frame;
-  context_class->realize = _gdk_win32_gl_context_realize;
+  gl_context_class->realize = gdk_win32_gl_context_realize;
+
+  draw_context_class->begin_frame = gdk_win32_gl_context_begin_frame;
+  draw_context_class->end_frame = gdk_win32_gl_context_end_frame;
 
   gobject_class->dispose = _gdk_win32_gl_context_dispose;
 }

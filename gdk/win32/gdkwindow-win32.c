@@ -326,12 +326,19 @@ gdk_win32_window_begin_paint (GdkWindow *window)
   if (impl->layered)
     return FALSE;
 
+  /* FIXME: Possibly remove the following lines when we transition to GL
+   *        drawing fully.  This will probably mean that we won't
+   *        be able to use layered windows, as layered windows seem
+   *        to support only up to OpenGL 1.1, which is not enough for our
+   *        needs here.
+   */
+
   /* Non-GL windows are moved *after* repaint.
    * We don't supply our own surface, return TRUE to make GDK create
    * one by itself.
-   */
+   *//*
   if (!window->current_paint.use_gl)
-    return TRUE;
+    return TRUE;*/
 
   /* GL windows are moved *before* repaint (otherwise
    * repainting doesn't work), but if there's no move queued up,
@@ -355,6 +362,13 @@ gdk_win32_window_begin_paint (GdkWindow *window)
 static void
 gdk_win32_window_end_paint (GdkWindow *window)
 {
+  /* FIXME: Possibly make gdk_win32_window_end_paint() a
+   *        no-op stub, like what is done in Wayland, as
+   *        the items here rely on layered window usage,
+   *        when we transition to full GL drawing, as
+   *        layered windows do not support enough GL
+   *        for our needs here
+   */
   GdkWindowImplWin32 *impl;
   RECT window_rect;
   HDC hdc;
@@ -370,8 +384,8 @@ gdk_win32_window_end_paint (GdkWindow *window)
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   /* GL windows are moved *before* repaint */
-  if (window->current_paint.use_gl)
-    return;
+  /*if (window->current_paint.use_gl)
+    return;*/
 
   /* No move/resize is queued up, and we don't need to update
    * the contents of a layered window, so return immediately.
