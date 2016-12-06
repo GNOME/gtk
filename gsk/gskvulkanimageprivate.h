@@ -5,6 +5,14 @@
 
 G_BEGIN_DECLS
 
+/* Modify here for benchmarking */
+#define GSK_VULKAN_UPLOAD_IMAGE_DEFAULT GSK_VULKAN_UPLOAD_DIRECTLY
+
+typedef enum {
+  GSK_VULKAN_UPLOAD_DIRECTLY,
+  GSK_VULKAN_UPLOAD_VIA_STAGING_IMAGE
+} GstkVulkanImageUpload;
+
 typedef struct _GskVulkanImage GskVulkanImage;
 
 GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GdkVulkanContext       *context,
