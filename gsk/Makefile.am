@@ -25,12 +25,14 @@ noinst_LTLIBRARIES =
 if HAVE_VULKAN
 gsk_private_vulan_source_h = \
 	gskvulkanbufferprivate.h \
+	gskvulkanimageprivate.h \
 	gskvulkanmemoryprivate.h \
 	gskvulkanpipelineprivate.h \
 	gskvulkanrendererprivate.h \
 	gskvulkanshaderprivate.h
 gsk_private_vulkan_source_c = \
 	gskvulkanbuffer.c \
+	gskvulkanimage.c \
 	gskvulkanmemory.c \
 	gskvulkanpipeline.c \
 	gskvulkanrenderer.c \

@@ -28,6 +28,8 @@ GskVulkanPipeline *     gsk_vulkan_pipeline_new                         (GdkVulk
                                                                          VkRenderPass            render_pass);
 
 VkPipeline              gsk_vulkan_pipeline_get_pipeline                (GskVulkanPipeline      *self);
+VkPipelineLayout        gsk_vulkan_pipeline_get_pipeline_layout         (GskVulkanPipeline      *self);
+VkDescriptorSetLayout   gsk_vulkan_pipeline_get_descriptor_set_layout   (GskVulkanPipeline      *self);
 
 G_END_DECLS
 
