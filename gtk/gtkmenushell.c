@@ -563,8 +563,8 @@ gtk_menu_shell_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 }
 
-void
-_gtk_menu_shell_activate (GtkMenuShell *menu_shell)
+static void
+gtk_menu_shell_activate (GtkMenuShell *menu_shell)
 {
   if (!menu_shell->active)
     {
@@ -609,7 +609,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 
   if (!menu_shell->active || !menu_shell->button)
     {
-      _gtk_menu_shell_activate (menu_shell);
+      gtk_menu_shell_activate (menu_shell);
 
       menu_shell->button = event->button;
 
@@ -1203,6 +1203,8 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
 
       return;
     }
+
+  gtk_menu_shell_activate (menu_shell);
 
   menu_shell->active_menu_item = menu_item;
   if (pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT)

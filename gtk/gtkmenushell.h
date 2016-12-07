@@ -116,7 +116,6 @@ void  gtk_menu_shell_select_first      (GtkMenuShell *menu_shell,
 					gboolean      search_sensitive);
 void _gtk_menu_shell_select_last       (GtkMenuShell *menu_shell,
 					gboolean      search_sensitive);
-void  _gtk_menu_shell_activate         (GtkMenuShell *menu_shell);
 gint  _gtk_menu_shell_get_popup_delay  (GtkMenuShell *menu_shell);
 void  gtk_menu_shell_cancel            (GtkMenuShell *menu_shell);
 
