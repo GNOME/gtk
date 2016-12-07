@@ -679,7 +679,10 @@ gtk_switch_dispose (GObject *object)
 static void
 gtk_switch_finalize (GObject *object)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (object)->priv;
   gtk_switch_end_toggle_animation (GTK_SWITCH (object));
+  g_object_unref (priv->on_label);
+  g_object_unref (priv->off_label);
 
   G_OBJECT_CLASS (gtk_switch_parent_class)->finalize (object);
 }
