@@ -12,6 +12,8 @@
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpipelineprivate.h"
 
+#include <graphene.h>
+
 typedef struct _GskVulkanTarget GskVulkanTarget;
 
 #ifdef G_ENABLE_DEBUG
@@ -374,14 +376,17 @@ gsk_vulkan_renderer_do_render_commands (GskVulkanRenderer *self,
                                         VkCommandBuffer    command_buffer)
 {
   GskVulkanBuffer *buffer;
+  GdkWindow *window = gsk_renderer_get_window (GSK_RENDERER (self));
+  int width = gdk_window_get_width (window);
+  int height = gdk_window_get_height (window);
   float pts[] = {
-    -1.0, -1.0,  0.0, 0.0,
-     1.0, -1.0,  1.0, 0.0,
-    -1.0,  1.0,  0.0, 1.0,
+    0.0,   0.0,     0.0, 0.0,
+    width, 0.0,     1.0, 0.0,
+    0.0,   height,  0.0, 1.0,
 
-    -1.0,  1.0,  0.0, 1.0,
-     1.0, -1.0,  1.0, 0.0,
-     1.0,  1.0,  1.0, 1.0
+    0.0,   height,  0.0, 1.0,
+    width, 0.0,     1.0, 0.0,
+    width, height,  1.0, 1.0
   };
   guchar *data;
 
@@ -419,6 +424,9 @@ gsk_vulkan_renderer_do_render_commands (GskVulkanRenderer *self,
   gsk_vulkan_buffer_free (buffer);
 }
 
+#define ORTHO_NEAR_PLANE        -10000
+#define ORTHO_FAR_PLANE          10000
+
 static void
 gsk_vulkan_renderer_do_render_pass (GskVulkanRenderer *self,
                                     VkCommandBuffer    command_buffer,
@@ -426,10 +434,15 @@ gsk_vulkan_renderer_do_render_pass (GskVulkanRenderer *self,
 {
   GdkRectangle extents;
   GdkWindow *window;
+  int scale_factor, unscaled_width, unscaled_height;
+  graphene_matrix_t modelview, projection, mvp;
 
   window = gsk_renderer_get_window (GSK_RENDERER (self));
   cairo_region_get_extents (gdk_drawing_context_get_clip (gsk_renderer_get_drawing_context (GSK_RENDERER (self))),
                             &extents);
+  scale_factor = gsk_renderer_get_scale_factor (GSK_RENDERER (self));
+  unscaled_width = gdk_window_get_width (window) * scale_factor;
+  unscaled_height = gdk_window_get_height (window) * scale_factor;
 
   vkUpdateDescriptorSets (gdk_vulkan_context_get_device (self->vulkan),
                           1,
@@ -457,7 +470,7 @@ gsk_vulkan_renderer_do_render_pass (GskVulkanRenderer *self,
                             .framebuffer = self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]->framebuffer,
                             .renderArea = { 
                                 { 0, 0 },
-                                { gdk_window_get_width (window), gdk_window_get_height (window) }
+                                { unscaled_width, unscaled_height }
                             },
                             .clearValueCount = 1,
                             .pClearValues = (VkClearValue [1]) {
@@ -472,8 +485,8 @@ gsk_vulkan_renderer_do_render_pass (GskVulkanRenderer *self,
                     &(VkViewport) {
                       .x = 0,
                       .y = 0,
-                      .width = gdk_window_get_width (window),
-                      .height = gdk_window_get_height (window),
+                      .width = unscaled_width,
+                      .height = unscaled_height,
                       .minDepth = 0,
                       .maxDepth = 1
                     });
@@ -482,9 +495,24 @@ gsk_vulkan_renderer_do_render_pass (GskVulkanRenderer *self,
                    0,
                    1,
                    &(VkRect2D) {
-                       { extents.x, extents.y },
-                       { extents.width, extents.height }
+                       { extents.x * scale_factor, extents.y * scale_factor },
+                       { extents.width * scale_factor, extents.height * scale_factor }
                    });
+
+  graphene_matrix_init_scale (&modelview, scale_factor, scale_factor, 1.0);
+  graphene_matrix_init_ortho (&projection,
+                              0, unscaled_width,
+                              0, unscaled_height,
+                              ORTHO_NEAR_PLANE,
+                              ORTHO_FAR_PLANE);
+  graphene_matrix_multiply (&modelview, &projection, &mvp);
+
+  vkCmdPushConstants (command_buffer,
+                      gsk_vulkan_pipeline_get_pipeline_layout (self->pipeline),
+                      VK_SHADER_STAGE_VERTEX_BIT,
+                      0,
+                      sizeof (graphene_matrix_t),
+                      &mvp);
 
   gsk_vulkan_renderer_do_render_commands (self, command_buffer);
 
