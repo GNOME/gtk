@@ -11,6 +11,7 @@
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpipelineprivate.h"
+#include "gskvulkanrenderprivate.h"
 
 #include <graphene.h>
 
@@ -524,7 +525,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
                             GskRenderNode *root)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
-  VkCommandBuffer command_buffer;
+  GskVulkanRender render;
   GskVulkanImage *image;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
@@ -536,57 +537,17 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  GSK_VK_CHECK (vkAllocateCommandBuffers, gdk_vulkan_context_get_device (self->vulkan),
-                                          &(VkCommandBufferAllocateInfo) {
-                                              .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-                                              .commandPool = self->command_pool,
-                                              .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-                                              .commandBufferCount = 1,
-                                          },
-                                          &command_buffer);
+  gsk_vulkan_render_init (&render, self->vulkan, self->command_pool);
 
-  GSK_VK_CHECK (vkBeginCommandBuffer, command_buffer,
-                                      &(VkCommandBufferBeginInfo) {
-                                          .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-                                          .flags = 0
-                                      });
+  image = gsk_vulkan_renderer_prepare_render (self, render.command_buffer, root);
 
-  image = gsk_vulkan_renderer_prepare_render (self, command_buffer, root);
+  gsk_vulkan_renderer_do_render_pass (self, render.command_buffer, image);
 
-  gsk_vulkan_renderer_do_render_pass (self, command_buffer, image);
+  gsk_vulkan_render_submit (&render, self->command_pool_fence);
 
-  GSK_VK_CHECK (vkEndCommandBuffer, command_buffer);
-
-  GSK_VK_CHECK (vkQueueSubmit, gdk_vulkan_context_get_queue (self->vulkan),
-                               1,
-                               &(VkSubmitInfo) {
-                                  .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-                                  .waitSemaphoreCount = 1,
-                                  .pWaitSemaphores = (VkSemaphore[1]) {
-                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan),
-                                  },
-                                  .pWaitDstStageMask = (VkPipelineStageFlags []) {
-                                     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                  },
-                                  .commandBufferCount = 1,
-                                  .pCommandBuffers = &command_buffer,
-                               },
-                               self->command_pool_fence);
-
-  GSK_VK_CHECK (vkWaitForFences, gdk_vulkan_context_get_device (self->vulkan),
-                                 1,
-                                 &self->command_pool_fence,
-                                 true,
-                                 INT64_MAX);
-  GSK_VK_CHECK (vkResetFences, gdk_vulkan_context_get_device (self->vulkan),
-                               1,
-                               &self->command_pool_fence);
-
-  GSK_VK_CHECK (vkResetCommandPool, gdk_vulkan_context_get_device (self->vulkan),
-                                    self->command_pool,
-                                    0);
-   
   gsk_vulkan_image_free (image);
+
+  gsk_vulkan_render_finish (&render);
 
 #ifdef G_ENABLE_DEBUG
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);

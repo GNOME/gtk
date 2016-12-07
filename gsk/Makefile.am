@@ -28,6 +28,7 @@ gsk_private_vulan_source_h = \
 	gskvulkanimageprivate.h \
 	gskvulkanmemoryprivate.h \
 	gskvulkanpipelineprivate.h \
+	gskvulkanrenderprivate.h \
 	gskvulkanrendererprivate.h \
 	gskvulkanshaderprivate.h
 gsk_private_vulkan_source_c = \
@@ -35,6 +36,7 @@ gsk_private_vulkan_source_c = \
 	gskvulkanimage.c \
 	gskvulkanmemory.c \
 	gskvulkanpipeline.c \
+	gskvulkanrender.c \
 	gskvulkanrenderer.c \
 	gskvulkanshader.c
 endif
