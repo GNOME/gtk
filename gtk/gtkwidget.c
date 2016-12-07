@@ -10615,6 +10615,19 @@ gtk_widget_finalize (GObject *object)
   g_list_free_full (priv->event_controllers, g_free);
   priv->event_controllers = NULL;
 
+  if (_gtk_widget_get_first_child (widget) != NULL)
+    {
+      GtkWidget *child;
+      g_warning ("Finalizing %s %p, but it still has children left:",
+                 gtk_widget_get_name (widget), widget);
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
+        {
+          g_warning ("   - %s %p", gtk_widget_get_name (child), child);
+        }
+    }
+
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
                "called g_object_unref() on an object that had only a floating\n"
