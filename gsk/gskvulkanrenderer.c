@@ -332,201 +332,12 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
   g_clear_object (&self->vulkan);
 }
 
-static GskVulkanImage *
-gsk_vulkan_renderer_prepare_render (GskVulkanRenderer *self,
-                                    VkCommandBuffer    command_buffer,
-                                    GskRenderNode     *root)
-{
-  GdkWindow *window;
-  GskRenderer *fallback;
-  GskVulkanImage *image;
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  window = gsk_renderer_get_window (GSK_RENDERER (self));
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gdk_window_get_width (window),
-                                        gdk_window_get_height (window));
-  cr = cairo_create (surface);
-  fallback = gsk_renderer_create_fallback (GSK_RENDERER (self),
-                                           &GRAPHENE_RECT_INIT(
-                                               0, 0,
-                                               gdk_window_get_width (window),
-                                               gdk_window_get_height (window)
-                                           ),
-                                           cr);
-
-  gsk_renderer_render (fallback, root, NULL);
-  g_object_unref (fallback);
-  
-  cairo_destroy (cr);
-
-  image = gsk_vulkan_image_new_from_data (self->vulkan,
-                                          command_buffer,
-                                          cairo_image_surface_get_data (surface),
-                                          cairo_image_surface_get_width (surface),
-                                          cairo_image_surface_get_height (surface),
-                                          cairo_image_surface_get_stride (surface));
-  cairo_surface_destroy (surface);
-
-  return image;
-}
-
-static void
-gsk_vulkan_renderer_do_render_commands (GskVulkanRenderer *self,
-                                        VkCommandBuffer    command_buffer)
-{
-  GskVulkanBuffer *buffer;
-  GdkWindow *window = gsk_renderer_get_window (GSK_RENDERER (self));
-  int width = gdk_window_get_width (window);
-  int height = gdk_window_get_height (window);
-  float pts[] = {
-    0.0,   0.0,     0.0, 0.0,
-    width, 0.0,     1.0, 0.0,
-    0.0,   height,  0.0, 1.0,
-
-    0.0,   height,  0.0, 1.0,
-    width, 0.0,     1.0, 0.0,
-    width, height,  1.0, 1.0
-  };
-  guchar *data;
-
-  buffer = gsk_vulkan_buffer_new (self->vulkan, sizeof (pts));
-
-  data = gsk_vulkan_buffer_map (buffer);
-  memcpy (data, pts, sizeof (pts));
-  gsk_vulkan_buffer_unmap (buffer);
-
-  vkCmdBindPipeline (command_buffer,
-                     VK_PIPELINE_BIND_POINT_GRAPHICS,
-                     gsk_vulkan_pipeline_get_pipeline (self->pipeline));
-
-  vkCmdBindDescriptorSets (command_buffer,
-                           VK_PIPELINE_BIND_POINT_GRAPHICS,
-                           gsk_vulkan_pipeline_get_pipeline_layout (self->pipeline),
-                           0,
-                           1,
-                           &self->descriptor_set,
-                           0,
-                           NULL);
-
-  vkCmdBindVertexBuffers (command_buffer,
-                          0,
-                          1,
-                          (VkBuffer[1]) {
-                              gsk_vulkan_buffer_get_buffer (buffer)
-                          },
-                          (VkDeviceSize[1]) { 0 });
-
-  vkCmdDraw (command_buffer,
-             6, 1,
-             0, 0);
-
-  gsk_vulkan_buffer_free (buffer);
-}
-
-#define ORTHO_NEAR_PLANE        -10000
-#define ORTHO_FAR_PLANE          10000
-
-static void
-gsk_vulkan_renderer_do_render_pass (GskVulkanRenderer *self,
-                                    VkCommandBuffer    command_buffer,
-                                    GskVulkanImage    *image)
-{
-  GdkRectangle extents;
-  GdkWindow *window;
-  int scale_factor, unscaled_width, unscaled_height;
-  graphene_matrix_t modelview, projection, mvp;
-
-  window = gsk_renderer_get_window (GSK_RENDERER (self));
-  cairo_region_get_extents (gdk_drawing_context_get_clip (gsk_renderer_get_drawing_context (GSK_RENDERER (self))),
-                            &extents);
-  scale_factor = gsk_renderer_get_scale_factor (GSK_RENDERER (self));
-  unscaled_width = gdk_window_get_width (window) * scale_factor;
-  unscaled_height = gdk_window_get_height (window) * scale_factor;
-
-  vkUpdateDescriptorSets (gdk_vulkan_context_get_device (self->vulkan),
-                          1,
-                          (VkWriteDescriptorSet[1]) {
-                              {
-                                  .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                  .dstSet = self->descriptor_set,
-                                  .dstBinding = 0,
-                                  .dstArrayElement = 0,
-                                  .descriptorCount = 1,
-                                  .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                  .pImageInfo = &(VkDescriptorImageInfo) {
-                                      .sampler = self->sampler,
-                                      .imageView = gsk_vulkan_image_get_image_view (image),
-                                      .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-                                  }
-                              }
-                          },
-                          0, NULL);
-
-  vkCmdBeginRenderPass (command_buffer,
-                        &(VkRenderPassBeginInfo) {
-                            .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                            .renderPass = self->render_pass,
-                            .framebuffer = self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]->framebuffer,
-                            .renderArea = { 
-                                { 0, 0 },
-                                { unscaled_width, unscaled_height }
-                            },
-                            .clearValueCount = 1,
-                            .pClearValues = (VkClearValue [1]) {
-                                { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
-                            }
-                        },
-                        VK_SUBPASS_CONTENTS_INLINE);
-
-  vkCmdSetViewport (command_buffer,
-                    0,
-                    1,
-                    &(VkViewport) {
-                      .x = 0,
-                      .y = 0,
-                      .width = unscaled_width,
-                      .height = unscaled_height,
-                      .minDepth = 0,
-                      .maxDepth = 1
-                    });
-
-  vkCmdSetScissor (command_buffer,
-                   0,
-                   1,
-                   &(VkRect2D) {
-                       { extents.x * scale_factor, extents.y * scale_factor },
-                       { extents.width * scale_factor, extents.height * scale_factor }
-                   });
-
-  graphene_matrix_init_scale (&modelview, scale_factor, scale_factor, 1.0);
-  graphene_matrix_init_ortho (&projection,
-                              0, unscaled_width,
-                              0, unscaled_height,
-                              ORTHO_NEAR_PLANE,
-                              ORTHO_FAR_PLANE);
-  graphene_matrix_multiply (&modelview, &projection, &mvp);
-
-  vkCmdPushConstants (command_buffer,
-                      gsk_vulkan_pipeline_get_pipeline_layout (self->pipeline),
-                      VK_SHADER_STAGE_VERTEX_BIT,
-                      0,
-                      sizeof (graphene_matrix_t),
-                      &mvp);
-
-  gsk_vulkan_renderer_do_render_commands (self, command_buffer);
-
-  vkCmdEndRenderPass (command_buffer);
-}
-
 static void
 gsk_vulkan_renderer_render (GskRenderer   *renderer,
                             GskRenderNode *root)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender render;
-  GskVulkanImage *image;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
@@ -537,15 +348,18 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  gsk_vulkan_render_init (&render, self->vulkan, self->command_pool);
+  gsk_vulkan_render_init (&render, renderer, self->vulkan, self->command_pool);
 
-  image = gsk_vulkan_renderer_prepare_render (self, render.command_buffer, root);
+  gsk_vulkan_render_add_node (&render, root);
 
-  gsk_vulkan_renderer_do_render_pass (self, render.command_buffer, image);
+  gsk_vulkan_render_upload (&render);
+
+  gsk_vulkan_render_draw (&render, self->pipeline,
+                          self->render_pass,
+                          self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]->framebuffer,
+                          self->descriptor_set, self->sampler);
 
   gsk_vulkan_render_submit (&render, self->command_pool_fence);
-
-  gsk_vulkan_image_free (image);
 
   gsk_vulkan_render_finish (&render);
 
