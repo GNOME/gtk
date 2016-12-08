@@ -64,8 +64,10 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass *self,
 }
 
 static void
-gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderOp *op,
-                                        GskVulkanRender   *render)
+gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass *self,
+                                        GskVulkanRenderOp   *op,
+                                        GskVulkanRender     *render,
+                                        VkCommandBuffer      command_buffer)
 {
   graphene_rect_t bounds;
   GskRenderer *fallback;
@@ -80,7 +82,7 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderOp *op,
   cr = cairo_create (surface);
   cairo_translate (cr, bounds.origin.x, bounds.origin.y);
 
-  fallback = gsk_renderer_create_fallback (render->renderer,
+  fallback = gsk_renderer_create_fallback (gsk_vulkan_render_get_renderer (render),
                                            &bounds,
                                            cr);
   gsk_renderer_render (fallback, op->node, NULL);
@@ -88,8 +90,8 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderOp *op,
   
   cairo_destroy (cr);
 
-  op->source = gsk_vulkan_image_new_from_data (render->vulkan,
-                                               render->command_buffer,
+  op->source = gsk_vulkan_image_new_from_data (self->vulkan,
+                                               command_buffer,
                                                cairo_image_surface_get_data (surface),
                                                cairo_image_surface_get_width (surface),
                                                cairo_image_surface_get_height (surface),
@@ -102,7 +104,8 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderOp *op,
 
 void
 gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
-                               GskVulkanRender     *render)
+                               GskVulkanRender     *render,
+                               VkCommandBuffer      command_buffer)
 {
   GskVulkanRenderOp *op;
   guint i;
@@ -114,7 +117,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
-          gsk_vulkan_render_pass_upload_fallback (op, render);
+          gsk_vulkan_render_pass_upload_fallback (self, op, render, command_buffer);
           break;
 
         default:
@@ -217,7 +220,8 @@ gsk_vulkan_render_pass_update_descriptor_sets (GskVulkanRenderPass *self,
 
 void
 gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
-                             GskVulkanRender     *render)
+                             GskVulkanRender     *render,
+                             VkCommandBuffer      command_buffer)
 {
   GskVulkanRenderOp *op;
   guint i;
@@ -226,7 +230,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
     {
       op = &g_array_index (self->render_ops, GskVulkanRenderOp, i);
 
-      vkCmdDraw (render->command_buffer,
+      vkCmdDraw (command_buffer,
                  op->vertex_count, 1,
                  op->vertex_offset, 0);
     }

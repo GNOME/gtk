@@ -18,7 +18,8 @@ void                    gsk_vulkan_render_pass_add_node                 (GskVulk
                                                                          GskRenderNode          *node);
 
 void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render);
+                                                                         GskVulkanRender        *render,
+                                                                         VkCommandBuffer         command_buffer);
 
 gsize                   gsk_vulkan_render_pass_count_vertices           (GskVulkanRenderPass    *self);
 gsize                   gsk_vulkan_render_pass_collect_vertices         (GskVulkanRenderPass    *self,
@@ -30,7 +31,8 @@ void                    gsk_vulkan_render_pass_update_descriptor_sets   (GskVulk
                                                                          VkDescriptorSet         descriptor_set,
                                                                          VkSampler               sampler);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render);
+                                                                         GskVulkanRender        *render,
+                                                                         VkCommandBuffer         command_buffer);
 
 G_END_DECLS
 

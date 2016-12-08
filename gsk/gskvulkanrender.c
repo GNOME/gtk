@@ -10,6 +10,23 @@
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
+struct _GskVulkanRender
+{
+  GskRenderer *renderer;
+  GdkVulkanContext *vulkan;
+
+  graphene_matrix_t mvp;
+  int scale_factor;
+  VkExtent2D size;
+  VkRect2D scissor;
+
+  VkCommandPool command_pool;
+  VkCommandBuffer command_buffer;
+
+  GSList *render_passes;
+  GSList *cleanup_images;
+};
+
 static void
 gsk_vulkan_render_compute_mvp (GskVulkanRender *self)
 {
@@ -95,7 +112,7 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_upload (l->data, self);
+      gsk_vulkan_render_pass_upload (l->data, self, self->command_buffer);
     }
 }
 
@@ -219,7 +236,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_draw (l->data, self);
+      gsk_vulkan_render_pass_draw (l->data, self, self->command_buffer);
     }
 
   vkCmdEndRenderPass (self->command_buffer);
@@ -274,4 +291,10 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   g_slist_free_full (self->cleanup_images, (GDestroyNotify) gsk_vulkan_image_free);
 
   g_slice_free (GskVulkanRender, self);
+}
+
+GskRenderer *
+gsk_vulkan_render_get_renderer (GskVulkanRender *self)
+{
+  return self->renderer;
 }
