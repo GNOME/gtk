@@ -12,6 +12,8 @@ struct _GskVulkanImage
 
   GdkVulkanContext *vulkan;
 
+  gsize width;
+  gsize height;
   VkImage vk_image;
   VkImageView vk_image_view;
 
@@ -34,6 +36,8 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
   self->vulkan = g_object_ref (context);
+  self->width = width;
+  self->height = height;
 
   GSK_VK_CHECK (vkCreateImage, gdk_vulkan_context_get_device (context),
                                 &(VkImageCreateInfo) {
@@ -358,6 +362,18 @@ gsk_vulkan_image_class_init (GskVulkanImageClass *klass)
 static void
 gsk_vulkan_image_init (GskVulkanImage *self)
 {
+}
+
+gsize
+gsk_vulkan_image_get_width (GskVulkanImage *self)
+{
+  return self->width;
+}
+
+gsize
+gsk_vulkan_image_get_height (GskVulkanImage *self)
+{
+  return self->height;
 }
 
 VkImage

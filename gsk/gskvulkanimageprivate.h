@@ -16,6 +16,8 @@ GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GdkVulk
                                                                          gsize                   height,
                                                                          gsize                   stride);
 
+gsize                   gsk_vulkan_image_get_width                      (GskVulkanImage         *self);
+gsize                   gsk_vulkan_image_get_height                     (GskVulkanImage         *self);
 VkImage                 gsk_vulkan_image_get_image                      (GskVulkanImage         *self);
 VkImageView             gsk_vulkan_image_get_image_view                 (GskVulkanImage         *self);
 
