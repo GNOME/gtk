@@ -17,8 +17,10 @@ typedef enum {
 } GskDebugFlags;
 
 typedef enum {
-  GSK_RENDERING_MODE_GEOMETRY = 1 << 0,
-  GSK_RENDERING_MODE_SHADERS  = 1 << 1
+  GSK_RENDERING_MODE_GEOMETRY      = 1 << 0,
+  GSK_RENDERING_MODE_SHADERS       = 1 << 1,
+  GSK_RENDERING_MODE_SYNC          = 1 << 2,
+  GSK_RENDERING_MODE_STAGING_IMAGE = 1 << 3
 } GskRenderingMode;
 
 gboolean gsk_check_debug_flags (GskDebugFlags flags);

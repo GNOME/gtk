@@ -272,11 +272,14 @@ gsk_vulkan_render_submit (GskVulkanRender *self)
                                },
                                self->fence);
 
-  GSK_VK_CHECK (vkWaitForFences, gdk_vulkan_context_get_device (self->vulkan),
-                                 1,
-                                 &self->fence,
-                                 VK_TRUE,
-                                 INT64_MAX);
+  if (GSK_RENDER_MODE_CHECK (SYNC))
+    {
+      GSK_VK_CHECK (vkWaitForFences, gdk_vulkan_context_get_device (self->vulkan),
+                                     1,
+                                     &self->fence,
+                                     VK_TRUE,
+                                     INT64_MAX);
+    }
 }
 
 static void
