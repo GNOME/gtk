@@ -31,13 +31,6 @@ struct _GskVulkanRenderer
   guint n_targets;
   GskVulkanImage **targets;
 
-  VkRenderPass render_pass;
-
-  VkDescriptorPool descriptor_pool;
-  VkDescriptorSet descriptor_set;  
-
-  GskVulkanPipeline *pipeline;
-
   VkSampler sampler;
 
   GSList *renders;
@@ -110,76 +103,6 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
-  GSK_VK_CHECK (vkCreateRenderPass, gdk_vulkan_context_get_device (self->vulkan),
-                                    &(VkRenderPassCreateInfo) {
-                                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
-                                        .attachmentCount = 1,
-                                        .pAttachments = (VkAttachmentDescription[]) {
-                                           {
-                                              .format = gdk_vulkan_context_get_image_format (self->vulkan),
-                                              .samples = VK_SAMPLE_COUNT_1_BIT,
-                                              .loadOp = VK_ATTACHMENT_LOAD_OP_LOAD,
-                                              .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                                              .finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                                           }
-                                        },
-                                        .subpassCount = 1,
-                                        .pSubpasses = (VkSubpassDescription []) {
-                                           {
-                                              .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                              .inputAttachmentCount = 0,
-                                              .colorAttachmentCount = 1,
-                                              .pColorAttachments = (VkAttachmentReference []) {
-                                                 {
-                                                    .attachment = 0,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pResolveAttachments = (VkAttachmentReference []) {
-                                                  {
-                                                     .attachment = VK_ATTACHMENT_UNUSED,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pDepthStencilAttachment = NULL,
-                                               .preserveAttachmentCount = 1,
-                                               .pPreserveAttachments = (uint32_t []) { 0 },
-                                            }
-                                         },
-                                         .dependencyCount = 0
-                                      },
-                                      NULL,
-                                      &self->render_pass);
-
-  self->pipeline = gsk_vulkan_pipeline_new (self->vulkan, self->render_pass);
-
-  GSK_VK_CHECK (vkCreateDescriptorPool, device,
-                                        &(VkDescriptorPoolCreateInfo) {
-                                            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                                            .maxSets = 1,
-                                            .poolSizeCount = 1,
-                                            .pPoolSizes = (VkDescriptorPoolSize[1]) {
-                                                {
-                                                    .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                    .descriptorCount = 1
-                                                }
-                                            }
-                                        },
-                                        NULL,
-                                        &self->descriptor_pool);
-
-  GSK_VK_CHECK (vkAllocateDescriptorSets, device,
-                                          &(VkDescriptorSetAllocateInfo) {
-                                              .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-                                              .descriptorPool = self->descriptor_pool,
-                                              .descriptorSetCount = 1,
-                                              .pSetLayouts = (VkDescriptorSetLayout[1]) {
-                                                  gsk_vulkan_pipeline_get_descriptor_set_layout (self->pipeline)
-                                              }
-                                          },
-                                          &self->descriptor_set);
-
   GSK_VK_CHECK (vkCreateSampler, device,
                                  &(VkSamplerCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
@@ -201,7 +124,7 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
   gsk_vulkan_renderer_update_images_cb (self->vulkan, self);
 
   /* We will need at least one render object, so create it early where we can still fail fine */
-  self->renders = g_slist_prepend (self->renders, gsk_vulkan_render_new (renderer, self->vulkan, self->render_pass));
+  self->renders = g_slist_prepend (self->renders, gsk_vulkan_render_new (renderer, self->vulkan));
 
   return TRUE;
 }
@@ -226,19 +149,6 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
                     self->sampler,
                     NULL);
   self->sampler = VK_NULL_HANDLE;
-
-  vkDestroyDescriptorPool (device,
-                           self->descriptor_pool,
-                           NULL);
-  self->descriptor_pool = VK_NULL_HANDLE;
-  self->descriptor_set = VK_NULL_HANDLE;
-
-  g_clear_object (&self->pipeline);
-
-  vkDestroyRenderPass (device,
-                       self->render_pass,
-                       NULL);
-  self->render_pass = VK_NULL_HANDLE;
 
   g_clear_object (&self->vulkan);
 }
@@ -271,7 +181,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
     }
   else
     {
-      render = gsk_vulkan_render_new (renderer, self->vulkan, self->render_pass);
+      render = gsk_vulkan_render_new (renderer, self->vulkan);
       self->renders = g_slist_prepend (self->renders, render);
     }
 
@@ -281,8 +191,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 
   gsk_vulkan_render_upload (render);
 
-  gsk_vulkan_render_draw (render, self->pipeline,
-                          self->descriptor_set, self->sampler);
+  gsk_vulkan_render_draw (render, self->sampler);
 
   gsk_vulkan_render_submit (render);
 

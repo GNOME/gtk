@@ -21,8 +21,7 @@ struct _GskVulkanVertex
 };
 
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
-                                                                         GdkVulkanContext       *context,
-                                                                         VkRenderPass            pretend_you_didnt_see_me);
+                                                                         GdkVulkanContext       *context);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
 
 gboolean                gsk_vulkan_render_is_busy                       (GskVulkanRender        *self);
@@ -40,8 +39,6 @@ void                    gsk_vulkan_render_add_node                      (GskVulk
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self,
-                                                                         GskVulkanPipeline      *pipeline,
-                                                                         VkDescriptorSet         descriptor_set,
                                                                          VkSampler               sampler);
 
 void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);

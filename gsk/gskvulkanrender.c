@@ -22,8 +22,11 @@ struct _GskVulkanRender
 
   GHashTable *framebuffers;
   VkCommandPool command_pool;
-  VkRenderPass render_pass;
   VkFence fence;
+  VkRenderPass render_pass;
+  VkDescriptorPool descriptor_pool;
+  VkDescriptorSet descriptor_set;  
+  GskVulkanPipeline *pipeline;
 
   VkCommandBuffer command_buffer;
 
@@ -62,8 +65,7 @@ gsk_vulkan_render_compute_mvp (GskVulkanRender *self)
 
 GskVulkanRender *
 gsk_vulkan_render_new (GskRenderer      *renderer,
-                       GdkVulkanContext *context,
-                       VkRenderPass      pretend_you_didnt_see_me)
+                       GdkVulkanContext *context)
 {
   GskVulkanRender *self;
   VkDevice device;
@@ -72,7 +74,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
   self->vulkan = context;
   self->renderer = renderer;
-  self->render_pass = pretend_you_didnt_see_me;
   self->framebuffers = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
@@ -93,6 +94,76 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                },
                                NULL,
                                &self->fence);
+
+  GSK_VK_CHECK (vkCreateDescriptorPool, device,
+                                        &(VkDescriptorPoolCreateInfo) {
+                                            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+                                            .maxSets = 1,
+                                            .poolSizeCount = 1,
+                                            .pPoolSizes = (VkDescriptorPoolSize[1]) {
+                                                {
+                                                    .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                    .descriptorCount = 1
+                                                }
+                                            }
+                                        },
+                                        NULL,
+                                        &self->descriptor_pool);
+
+  GSK_VK_CHECK (vkCreateRenderPass, gdk_vulkan_context_get_device (self->vulkan),
+                                    &(VkRenderPassCreateInfo) {
+                                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
+                                        .attachmentCount = 1,
+                                        .pAttachments = (VkAttachmentDescription[]) {
+                                           {
+                                              .format = gdk_vulkan_context_get_image_format (self->vulkan),
+                                              .samples = VK_SAMPLE_COUNT_1_BIT,
+                                              .loadOp = VK_ATTACHMENT_LOAD_OP_LOAD,
+                                              .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
+                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                                              .finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                           }
+                                        },
+                                        .subpassCount = 1,
+                                        .pSubpasses = (VkSubpassDescription []) {
+                                           {
+                                              .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                              .inputAttachmentCount = 0,
+                                              .colorAttachmentCount = 1,
+                                              .pColorAttachments = (VkAttachmentReference []) {
+                                                 {
+                                                    .attachment = 0,
+                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+                                                  }
+                                               },
+                                               .pResolveAttachments = (VkAttachmentReference []) {
+                                                  {
+                                                     .attachment = VK_ATTACHMENT_UNUSED,
+                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+                                                  }
+                                               },
+                                               .pDepthStencilAttachment = NULL,
+                                               .preserveAttachmentCount = 1,
+                                               .pPreserveAttachments = (uint32_t []) { 0 },
+                                            }
+                                         },
+                                         .dependencyCount = 0
+                                      },
+                                      NULL,
+                                      &self->render_pass);
+
+  self->pipeline = gsk_vulkan_pipeline_new (self->vulkan, self->render_pass);
+
+  GSK_VK_CHECK (vkAllocateDescriptorSets, device,
+                                          &(VkDescriptorSetAllocateInfo) {
+                                              .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+                                              .descriptorPool = self->descriptor_pool,
+                                              .descriptorSetCount = 1,
+                                              .pSetLayouts = (VkDescriptorSetLayout[1]) {
+                                                  gsk_vulkan_pipeline_get_descriptor_set_layout (self->pipeline)
+                                              }
+                                          },
+                                          &self->descriptor_set);
 
   return self;
 }
@@ -219,8 +290,6 @@ gsk_vulkan_render_collect_vertices (GskVulkanRender *self)
 
 void
 gsk_vulkan_render_draw (GskVulkanRender   *self,
-                        GskVulkanPipeline *pipeline,
-                        VkDescriptorSet    descriptor_set,
                         VkSampler          sampler)
 {
   GskVulkanBuffer *buffer;
@@ -230,7 +299,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_update_descriptor_sets (l->data, descriptor_set, sampler);
+      gsk_vulkan_render_pass_update_descriptor_sets (l->data, self->descriptor_set, sampler);
     }
 
   vkCmdSetViewport (self->command_buffer,
@@ -268,14 +337,14 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   vkCmdBindPipeline (self->command_buffer,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
-                     gsk_vulkan_pipeline_get_pipeline (pipeline));
+                     gsk_vulkan_pipeline_get_pipeline (self->pipeline));
 
   vkCmdBindDescriptorSets (self->command_buffer,
                            VK_PIPELINE_BIND_POINT_GRAPHICS,
-                           gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
+                           gsk_vulkan_pipeline_get_pipeline_layout (self->pipeline),
                            0,
                            1,
-                           &descriptor_set,
+                           &self->descriptor_set,
                            0,
                            NULL);
 
@@ -288,7 +357,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                           (VkDeviceSize[1]) { 0 });
 
   vkCmdPushConstants (self->command_buffer,
-                      gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
+                      gsk_vulkan_pipeline_get_pipeline_layout (self->pipeline),
                       VK_SHADER_STAGE_VERTEX_BIT,
                       0,
                       sizeof (graphene_matrix_t),
@@ -390,6 +459,16 @@ gsk_vulkan_render_free (GskVulkanRender *self)
       g_hash_table_iter_remove (&iter);
     }
   g_hash_table_unref (self->framebuffers);
+
+  g_clear_object (&self->pipeline);
+
+  vkDestroyRenderPass (device,
+                       self->render_pass,
+                       NULL);
+
+  vkDestroyDescriptorPool (device,
+                           self->descriptor_pool,
+                           NULL);
 
   vkDestroyFence (device,
                   self->fence,
