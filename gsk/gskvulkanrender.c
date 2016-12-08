@@ -303,7 +303,7 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
 
   g_slist_free_full (self->render_passes, (GDestroyNotify) gsk_vulkan_render_pass_free);
   self->render_passes = NULL;
-  g_slist_free_full (self->cleanup_images, (GDestroyNotify) gsk_vulkan_image_free);
+  g_slist_free_full (self->cleanup_images, g_object_unref);
   self->cleanup_images = NULL;
 }
 

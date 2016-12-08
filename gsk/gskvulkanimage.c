@@ -8,6 +8,8 @@
 
 struct _GskVulkanImage
 {
+  GObject parent_instance;
+
   GdkVulkanContext *vulkan;
 
   VkImage vk_image;
@@ -15,6 +17,8 @@ struct _GskVulkanImage
 
   GskVulkanMemory *memory;
 };
+
+G_DEFINE_TYPE (GskVulkanImage, gsk_vulkan_image, G_TYPE_OBJECT)
 
 static GskVulkanImage *
 gsk_vulkan_image_new (GdkVulkanContext      *context,
@@ -27,7 +31,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
   VkMemoryRequirements requirements;
   GskVulkanImage *self;
 
-  self = g_slice_new0 (GskVulkanImage);
+  self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
   self->vulkan = g_object_ref (context);
 
@@ -251,7 +255,7 @@ gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext  *context,
                         });
 
   /* XXX: Is this okay or do we need to keep the staging image around until the commands execute */
-  gsk_vulkan_image_free (staging);
+  g_object_unref (staging);
 
   gsk_vulkan_image_ensure_view (self);
 
@@ -323,8 +327,10 @@ gsk_vulkan_image_new_from_data (GdkVulkanContext  *context,
 }
 
 void
-gsk_vulkan_image_free (GskVulkanImage *self)
+gsk_vulkan_image_finalize (GObject *object)
 {
+  GskVulkanImage *self = GSK_VULKAN_IMAGE (object);
+
   if (self->vk_image_view != VK_NULL_HANDLE)
     {
       vkDestroyImageView (gdk_vulkan_context_get_device (self->vulkan),
@@ -340,7 +346,18 @@ gsk_vulkan_image_free (GskVulkanImage *self)
 
   g_object_unref (self->vulkan);
 
-  g_slice_free (GskVulkanImage, self);
+  G_OBJECT_CLASS (gsk_vulkan_image_parent_class)->finalize (object);
+}
+
+static void
+gsk_vulkan_image_class_init (GskVulkanImageClass *klass)
+{
+  G_OBJECT_CLASS (klass)->finalize = gsk_vulkan_image_finalize;
+}
+
+static void
+gsk_vulkan_image_init (GskVulkanImage *self)
+{
 }
 
 VkImage

@@ -5,7 +5,9 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GskVulkanImage GskVulkanImage;
+#define GSK_TYPE_VULKAN_IMAGE (gsk_vulkan_image_get_type ())
+
+G_DECLARE_FINAL_TYPE (GskVulkanImage, gsk_vulkan_image, GSK, VULKAN_IMAGE, GObject)
 
 GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GdkVulkanContext       *context,
                                                                          VkCommandBuffer         command_buffer,
@@ -13,7 +15,6 @@ GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GdkVulk
                                                                          gsize                   width,
                                                                          gsize                   height,
                                                                          gsize                   stride);
-void                    gsk_vulkan_image_free                           (GskVulkanImage         *image);
 
 VkImage                 gsk_vulkan_image_get_image                      (GskVulkanImage         *self);
 VkImageView             gsk_vulkan_image_get_image_view                 (GskVulkanImage         *self);
