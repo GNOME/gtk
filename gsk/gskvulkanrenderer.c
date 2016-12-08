@@ -42,6 +42,8 @@ struct _GskVulkanRenderer
 
   VkSampler sampler;
 
+  GSList *renders;
+
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
 #endif
@@ -267,6 +269,9 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                     self);
   gsk_vulkan_renderer_update_images_cb (self->vulkan, self);
 
+  /* We will need at least one render object, so create it early where we can still fail fine */
+  self->renders = g_slist_prepend (self->renders, gsk_vulkan_render_new (renderer, self->vulkan));
+
   return TRUE;
 }
 
@@ -275,6 +280,9 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   VkDevice device;
+
+  g_slist_free_full (self->renders, (GDestroyNotify) gsk_vulkan_render_free);
+  self->renders = NULL;
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
@@ -310,6 +318,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender *render;
+  GSList *l;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
@@ -320,7 +329,22 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  render = gsk_vulkan_render_new (renderer, self->vulkan);
+  for (l = self->renders; l; l = l->next)
+    {
+      if (!gsk_vulkan_render_is_busy (l->data))
+        break;
+    }
+  if (l)
+    {
+      render = l->data;
+    }
+  else
+    {
+      render = gsk_vulkan_render_new (renderer, self->vulkan);
+      self->renders = g_slist_prepend (self->renders, render);
+    }
+
+  gsk_vulkan_render_reset (render);
 
   gsk_vulkan_render_add_node (render, root);
 
@@ -332,8 +356,6 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
                           self->descriptor_set, self->sampler);
 
   gsk_vulkan_render_submit (render);
-
-  gsk_vulkan_render_free (render);
 
 #ifdef G_ENABLE_DEBUG
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);

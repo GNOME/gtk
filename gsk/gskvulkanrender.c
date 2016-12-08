@@ -68,8 +68,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   self->vulkan = context;
   self->renderer = renderer;
 
-  gsk_vulkan_render_compute_mvp (self);
-
   device = gdk_vulkan_context_get_device (self->vulkan);
 
   GSK_VK_CHECK (vkCreateCommandPool, device,
@@ -84,25 +82,10 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   GSK_VK_CHECK (vkCreateFence, device,
                                &(VkFenceCreateInfo) {
                                    .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
-                                   .flags = 0
+                                   .flags = VK_FENCE_CREATE_SIGNALED_BIT
                                },
                                NULL,
                                &self->fence);
-
-  GSK_VK_CHECK (vkAllocateCommandBuffers, device,
-                                          &(VkCommandBufferAllocateInfo) {
-                                              .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-                                              .commandPool = self->command_pool,
-                                              .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-                                              .commandBufferCount = 1,
-                                          },
-                                          &self->command_buffer);
-
-  GSK_VK_CHECK (vkBeginCommandBuffer, self->command_buffer,
-                                      &(VkCommandBufferBeginInfo) {
-                                          .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-                                          .flags = 0
-                                      });
 
   return self;
 }
@@ -294,22 +277,41 @@ gsk_vulkan_render_submit (GskVulkanRender *self)
                                  &self->fence,
                                  VK_TRUE,
                                  INT64_MAX);
-  GSK_VK_CHECK (vkResetFences, gdk_vulkan_context_get_device (self->vulkan),
-                               1,
-                               &self->fence);
 }
 
-void
-gsk_vulkan_render_free (GskVulkanRender *self)
+static void
+gsk_vulkan_render_cleanup (GskVulkanRender *self)
 {
   VkDevice device = gdk_vulkan_context_get_device (self->vulkan);
 
+  /* XXX: Wait for fence here or just in reset()? */
+  GSK_VK_CHECK (vkWaitForFences, device,
+                                 1,
+                                 &self->fence,
+                                 VK_TRUE,
+                                 INT64_MAX);
+
+  GSK_VK_CHECK (vkResetFences, device,
+                               1,
+                               &self->fence);
   GSK_VK_CHECK (vkResetCommandPool, device,
                                     self->command_pool,
                                     0);
 
   g_slist_free_full (self->render_passes, (GDestroyNotify) gsk_vulkan_render_pass_free);
+  self->render_passes = NULL;
   g_slist_free_full (self->cleanup_images, (GDestroyNotify) gsk_vulkan_image_free);
+  self->cleanup_images = NULL;
+}
+
+void
+gsk_vulkan_render_free (GskVulkanRender *self)
+{
+  VkDevice device;
+  
+  gsk_vulkan_render_cleanup (self);
+
+  device = gdk_vulkan_context_get_device (self->vulkan);
 
   vkDestroyFence (device,
                   self->fence,
@@ -319,6 +321,39 @@ gsk_vulkan_render_free (GskVulkanRender *self)
                         NULL);
 
   g_slice_free (GskVulkanRender, self);
+}
+
+gboolean
+gsk_vulkan_render_is_busy (GskVulkanRender *self)
+{
+  return vkGetFenceStatus (gdk_vulkan_context_get_device (self->vulkan), self->fence) != VK_SUCCESS;
+}
+
+void
+gsk_vulkan_render_reset (GskVulkanRender *self)
+{
+  VkDevice device;
+
+  gsk_vulkan_render_cleanup (self);
+
+  gsk_vulkan_render_compute_mvp (self);
+
+  device = gdk_vulkan_context_get_device (self->vulkan);
+
+  GSK_VK_CHECK (vkAllocateCommandBuffers, device,
+                                          &(VkCommandBufferAllocateInfo) {
+                                              .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                                              .commandPool = self->command_pool,
+                                              .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+                                              .commandBufferCount = 1,
+                                          },
+                                          &self->command_buffer);
+
+  GSK_VK_CHECK (vkBeginCommandBuffer, self->command_buffer,
+                                      &(VkCommandBufferBeginInfo) {
+                                          .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                                          .flags = 0
+                                      });
 }
 
 GskRenderer *

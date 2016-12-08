@@ -24,6 +24,9 @@ GskVulkanRender *       gsk_vulkan_render_new                           (GskRend
                                                                          GdkVulkanContext       *context);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
 
+gboolean                gsk_vulkan_render_is_busy                       (GskVulkanRender        *self);
+void                    gsk_vulkan_render_reset                         (GskVulkanRender        *self);
+
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_add_cleanup_image             (GskVulkanRender        *self,
