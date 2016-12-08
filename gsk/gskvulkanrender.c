@@ -37,18 +37,18 @@ gsk_vulkan_render_compute_mvp (GskVulkanRender *self)
   graphene_matrix_multiply (&modelview, &projection, &self->mvp);
 }
 
-void
-gsk_vulkan_render_init (GskVulkanRender    *self,
-                        GskRenderer        *renderer,
-                        GdkVulkanContext   *context,
-                        VkCommandPool       command_pool)
+GskVulkanRender *
+gsk_vulkan_render_new (GskRenderer      *renderer,
+                       GdkVulkanContext *context,
+                       VkCommandPool     command_pool)
 {
+  GskVulkanRender *self;
+
+  self = g_slice_new0 (GskVulkanRender);
+
   self->vulkan = context;
   self->renderer = renderer;
   self->command_pool = command_pool;
-
-  self->render_passes = NULL;
-  self->cleanup_images = NULL;
 
   gsk_vulkan_render_compute_mvp (self);
 
@@ -66,6 +66,8 @@ gsk_vulkan_render_init (GskVulkanRender    *self,
                                           .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
                                           .flags = 0
                                       });
+
+  return self;
 }
 
 void
@@ -262,7 +264,7 @@ gsk_vulkan_render_submit (GskVulkanRender *self,
 }
 
 void
-gsk_vulkan_render_finish (GskVulkanRender *self)
+gsk_vulkan_render_free (GskVulkanRender *self)
 {
   GSK_VK_CHECK (vkResetCommandPool, gdk_vulkan_context_get_device (self->vulkan),
                                     self->command_pool,
@@ -270,4 +272,6 @@ gsk_vulkan_render_finish (GskVulkanRender *self)
 
   g_slist_free_full (self->render_passes, (GDestroyNotify) gsk_vulkan_render_pass_free);
   g_slist_free_full (self->cleanup_images, (GDestroyNotify) gsk_vulkan_image_free);
+
+  g_slice_free (GskVulkanRender, self);
 }

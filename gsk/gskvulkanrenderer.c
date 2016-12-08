@@ -337,7 +337,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
                             GskRenderNode *root)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
-  GskVulkanRender render;
+  GskVulkanRender *render;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
@@ -348,20 +348,20 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  gsk_vulkan_render_init (&render, renderer, self->vulkan, self->command_pool);
+  render = gsk_vulkan_render_new (renderer, self->vulkan, self->command_pool);
 
-  gsk_vulkan_render_add_node (&render, root);
+  gsk_vulkan_render_add_node (render, root);
 
-  gsk_vulkan_render_upload (&render);
+  gsk_vulkan_render_upload (render);
 
-  gsk_vulkan_render_draw (&render, self->pipeline,
+  gsk_vulkan_render_draw (render, self->pipeline,
                           self->render_pass,
                           self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]->framebuffer,
                           self->descriptor_set, self->sampler);
 
-  gsk_vulkan_render_submit (&render, self->command_pool_fence);
+  gsk_vulkan_render_submit (render, self->command_pool_fence);
 
-  gsk_vulkan_render_finish (&render);
+  gsk_vulkan_render_free (render);
 
 #ifdef G_ENABLE_DEBUG
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);

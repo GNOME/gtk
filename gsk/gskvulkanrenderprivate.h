@@ -38,11 +38,10 @@ struct _GskVulkanVertex
   float tex_y;
 };
 
-void                    gsk_vulkan_render_init                          (GskVulkanRender        *self,
-                                                                         GskRenderer            *renderer,
+GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
                                                                          GdkVulkanContext       *context,
                                                                          VkCommandPool           command_pool);
-void                    gsk_vulkan_render_finish                        (GskVulkanRender        *self);
+void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_add_cleanup_image             (GskVulkanRender        *self,
                                                                          GskVulkanImage         *image);
