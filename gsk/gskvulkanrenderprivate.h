@@ -21,11 +21,13 @@ struct _GskVulkanVertex
 };
 
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
-                                                                         GdkVulkanContext       *context);
+                                                                         GdkVulkanContext       *context,
+                                                                         VkRenderPass            pretend_you_didnt_see_me);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
 
 gboolean                gsk_vulkan_render_is_busy                       (GskVulkanRender        *self);
-void                    gsk_vulkan_render_reset                         (GskVulkanRender        *self);
+void                    gsk_vulkan_render_reset                         (GskVulkanRender        *self,
+                                                                         GskVulkanImage         *target);
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
 
@@ -39,8 +41,6 @@ void                    gsk_vulkan_render_upload                        (GskVulk
 
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self,
                                                                          GskVulkanPipeline      *pipeline,
-                                                                         VkRenderPass            render_pass,
-                                                                         VkFramebuffer           framebuffer,
                                                                          VkDescriptorSet         descriptor_set,
                                                                          VkSampler               sampler);
 

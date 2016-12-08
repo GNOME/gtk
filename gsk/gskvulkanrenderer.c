@@ -15,8 +15,6 @@
 
 #include <graphene.h>
 
-typedef struct _GskVulkanTarget GskVulkanTarget;
-
 #ifdef G_ENABLE_DEBUG
 typedef struct {
   GQuark cpu_time;
@@ -31,7 +29,7 @@ struct _GskVulkanRenderer
   GdkVulkanContext *vulkan;
 
   guint n_targets;
-  GskVulkanTarget **targets;
+  GskVulkanImage **targets;
 
   VkRenderPass render_pass;
 
@@ -56,63 +54,6 @@ struct _GskVulkanRendererClass
 
 G_DEFINE_TYPE (GskVulkanRenderer, gsk_vulkan_renderer, GSK_TYPE_RENDERER)
 
-struct _GskVulkanTarget {
-  GskVulkanImage *image;
-  VkFramebuffer framebuffer;
-}; 
-
-static GskVulkanTarget *
-gsk_vulkan_target_new_for_image (GskVulkanRenderer *self,
-                                 VkImage            image,
-                                 gsize              width,
-                                 gsize              height)
-{
-  GskVulkanTarget *target;
-  VkDevice device;
-
-  device = gdk_vulkan_context_get_device (self->vulkan);
-
-  target = g_slice_new0 (GskVulkanTarget);
-
-  target->image = gsk_vulkan_image_new_for_swapchain (self->vulkan,
-                                                      image,
-                                                      gdk_vulkan_context_get_image_format (self->vulkan),
-                                                      width, height);
-  GSK_VK_CHECK (vkCreateFramebuffer, device,
-                                     &(VkFramebufferCreateInfo) {
-                                         .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-                                         .renderPass = self->render_pass,
-                                         .attachmentCount = 1,
-                                         .pAttachments = (VkImageView[1]) {
-                                             gsk_vulkan_image_get_image_view (target->image)
-                                         },
-                                         .width = width,
-                                         .height = height,
-                                         .layers = 1
-                                     },
-                                     NULL,
-                                     &target->framebuffer);
-
-  return target;
-}
-
-static void
-gsk_vulkan_target_free (GskVulkanRenderer *self,
-                        GskVulkanTarget   *target)
-{
-  VkDevice device;
-
-  device = gdk_vulkan_context_get_device (self->vulkan);
-
-  vkDestroyFramebuffer (device,
-                        target->framebuffer,
-                        NULL);
-
-  g_object_unref (target->image);
-
-  g_slice_free (GskVulkanTarget, target);
-}
-
 static void
 gsk_vulkan_renderer_free_targets (GskVulkanRenderer *self)
 {
@@ -120,7 +61,7 @@ gsk_vulkan_renderer_free_targets (GskVulkanRenderer *self)
 
   for (i = 0; i < self->n_targets; i++)
     {
-      gsk_vulkan_target_free (self, self->targets[i]);
+      g_object_unref (self->targets[i]);
     }
 
   g_clear_pointer (&self->targets, g_free);
@@ -139,7 +80,7 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
   gsk_vulkan_renderer_free_targets (self);
 
   self->n_targets = gdk_vulkan_context_get_n_images (context);
-  self->targets = g_new (GskVulkanTarget *, self->n_targets);
+  self->targets = g_new (GskVulkanImage *, self->n_targets);
 
   window = gsk_renderer_get_window (GSK_RENDERER (self));
   scale_factor = gdk_window_get_scale_factor (window);
@@ -148,9 +89,10 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
 
   for (i = 0; i < self->n_targets; i++)
     {
-      self->targets[i] = gsk_vulkan_target_new_for_image (self,
-                                                          gdk_vulkan_context_get_image (context, i),
-                                                          width, height);
+      self->targets[i] = gsk_vulkan_image_new_for_swapchain (self->vulkan,
+                                                             gdk_vulkan_context_get_image (context, i),
+                                                             gdk_vulkan_context_get_image_format (self->vulkan),
+                                                             width, height);
     }
 }
 
@@ -259,7 +201,7 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
   gsk_vulkan_renderer_update_images_cb (self->vulkan, self);
 
   /* We will need at least one render object, so create it early where we can still fail fine */
-  self->renders = g_slist_prepend (self->renders, gsk_vulkan_render_new (renderer, self->vulkan));
+  self->renders = g_slist_prepend (self->renders, gsk_vulkan_render_new (renderer, self->vulkan, self->render_pass));
 
   return TRUE;
 }
@@ -329,19 +271,17 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
     }
   else
     {
-      render = gsk_vulkan_render_new (renderer, self->vulkan);
+      render = gsk_vulkan_render_new (renderer, self->vulkan, self->render_pass);
       self->renders = g_slist_prepend (self->renders, render);
     }
 
-  gsk_vulkan_render_reset (render);
+  gsk_vulkan_render_reset (render, self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]);
 
   gsk_vulkan_render_add_node (render, root);
 
   gsk_vulkan_render_upload (render);
 
   gsk_vulkan_render_draw (render, self->pipeline,
-                          self->render_pass,
-                          self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]->framebuffer,
                           self->descriptor_set, self->sampler);
 
   gsk_vulkan_render_submit (render);

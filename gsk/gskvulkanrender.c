@@ -20,10 +20,14 @@ struct _GskVulkanRender
   VkExtent2D size;
   VkRect2D scissor;
 
+  GHashTable *framebuffers;
   VkCommandPool command_pool;
+  VkRenderPass render_pass;
   VkFence fence;
 
   VkCommandBuffer command_buffer;
+
+  GskVulkanImage *target;
 
   GSList *render_passes;
   GSList *cleanup_images;
@@ -58,7 +62,8 @@ gsk_vulkan_render_compute_mvp (GskVulkanRender *self)
 
 GskVulkanRender *
 gsk_vulkan_render_new (GskRenderer      *renderer,
-                       GdkVulkanContext *context)
+                       GdkVulkanContext *context,
+                       VkRenderPass      pretend_you_didnt_see_me)
 {
   GskVulkanRender *self;
   VkDevice device;
@@ -67,6 +72,8 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
   self->vulkan = context;
   self->renderer = renderer;
+  self->render_pass = pretend_you_didnt_see_me;
+  self->framebuffers = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
@@ -88,6 +95,58 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                &self->fence);
 
   return self;
+}
+
+typedef struct {
+  VkFramebuffer framebuffer;
+} HashFramebufferEntry;
+
+static void
+gsk_vulkan_render_remove_framebuffer_from_image (gpointer  data,
+                                                 GObject  *image)
+{
+  GskVulkanRender *self = data;
+  HashFramebufferEntry *fb;
+
+  fb = g_hash_table_lookup (self->framebuffers, image);
+  g_hash_table_remove (self->framebuffers, image);
+
+  vkDestroyFramebuffer (gdk_vulkan_context_get_device (self->vulkan),
+                        fb->framebuffer,
+                        NULL);
+
+  g_slice_free (HashFramebufferEntry, fb);
+}
+
+static VkFramebuffer
+gsk_vulkan_render_get_framebuffer (GskVulkanRender *self,
+                                   GskVulkanImage  *image)
+{
+  HashFramebufferEntry *fb;
+
+  fb = g_hash_table_lookup (self->framebuffers, image);
+  if (fb)
+    return fb->framebuffer;
+
+  fb = g_slice_new0 (HashFramebufferEntry);
+  GSK_VK_CHECK (vkCreateFramebuffer, gdk_vulkan_context_get_device (self->vulkan),
+                                     &(VkFramebufferCreateInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+                                         .renderPass = self->render_pass,
+                                         .attachmentCount = 1,
+                                         .pAttachments = (VkImageView[1]) {
+                                             gsk_vulkan_image_get_image_view (image)
+                                         },
+                                         .width = gsk_vulkan_image_get_width (image),
+                                         .height = gsk_vulkan_image_get_height (image),
+                                         .layers = 1
+                                     },
+                                     NULL,
+                                     &fb->framebuffer);
+  g_hash_table_insert (self->framebuffers, image, fb);
+  g_object_weak_ref (G_OBJECT (image), gsk_vulkan_render_remove_framebuffer_from_image, self);
+
+  return fb->framebuffer;
 }
 
 void
@@ -161,8 +220,6 @@ gsk_vulkan_render_collect_vertices (GskVulkanRender *self)
 void
 gsk_vulkan_render_draw (GskVulkanRender   *self,
                         GskVulkanPipeline *pipeline,
-                        VkRenderPass       render_pass,
-                        VkFramebuffer      framebuffer,
                         VkDescriptorSet    descriptor_set,
                         VkSampler          sampler)
 {
@@ -196,8 +253,8 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
   vkCmdBeginRenderPass (self->command_buffer,
                         &(VkRenderPassBeginInfo) {
                             .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                            .renderPass = render_pass,
-                            .framebuffer = framebuffer,
+                            .renderPass = self->render_pass,
+                            .framebuffer = gsk_vulkan_render_get_framebuffer (self, self->target),
                             .renderArea = { 
                                 { 0, 0 },
                                 { self->size.width, self->size.height }
@@ -305,16 +362,34 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
   self->render_passes = NULL;
   g_slist_free_full (self->cleanup_images, g_object_unref);
   self->cleanup_images = NULL;
+
+  g_clear_object (&self->target);
 }
 
 void
 gsk_vulkan_render_free (GskVulkanRender *self)
 {
+  GHashTableIter iter;
+  gpointer key, value;
   VkDevice device;
   
   gsk_vulkan_render_cleanup (self);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
+
+  g_hash_table_iter_init (&iter, self->framebuffers);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      HashFramebufferEntry *fb = value;
+
+      vkDestroyFramebuffer (gdk_vulkan_context_get_device (self->vulkan),
+                            fb->framebuffer,
+                            NULL);
+      g_slice_free (HashFramebufferEntry, fb);
+      g_object_weak_unref (G_OBJECT (key), gsk_vulkan_render_remove_framebuffer_from_image, self);
+      g_hash_table_iter_remove (&iter);
+    }
+  g_hash_table_unref (self->framebuffers);
 
   vkDestroyFence (device,
                   self->fence,
@@ -333,11 +408,14 @@ gsk_vulkan_render_is_busy (GskVulkanRender *self)
 }
 
 void
-gsk_vulkan_render_reset (GskVulkanRender *self)
+gsk_vulkan_render_reset (GskVulkanRender *self,
+                         GskVulkanImage  *target)
 {
   VkDevice device;
 
   gsk_vulkan_render_cleanup (self);
+
+  self->target = g_object_ref (target);
 
   gsk_vulkan_render_compute_mvp (self);
 
