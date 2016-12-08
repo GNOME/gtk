@@ -34,8 +34,6 @@ struct _GskVulkanRenderer
   GskVulkanTarget **targets;
 
   VkRenderPass render_pass;
-  VkCommandPool command_pool;
-  VkFence command_pool_fence;
 
   VkDescriptorPool descriptor_pool;
   VkDescriptorSet descriptor_set;  
@@ -220,22 +218,6 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                                       },
                                       NULL,
                                       &self->render_pass);
-  GSK_VK_CHECK (vkCreateCommandPool, device,
-                                     &(const VkCommandPoolCreateInfo) {
-                                         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-                                         .queueFamilyIndex = gdk_vulkan_context_get_queue_family_index (self->vulkan),
-                                         .flags = 0
-                                     },
-                                     NULL,
-                                     &self->command_pool);
-
-  GSK_VK_CHECK (vkCreateFence, device,
-                               &(VkFenceCreateInfo) {
-                                   .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
-                                   .flags = 0
-                               },
-                               NULL,
-                               &self->command_pool_fence);
 
   self->pipeline = gsk_vulkan_pipeline_new (self->vulkan, self->render_pass);
 
@@ -314,16 +296,6 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 
   g_clear_object (&self->pipeline);
 
-  vkDestroyFence (device,
-                  self->command_pool_fence,
-                  NULL);
-  self->command_pool_fence = VK_NULL_HANDLE;
-
-  vkDestroyCommandPool (device,
-                        self->command_pool,
-                        NULL);
-  self->command_pool = VK_NULL_HANDLE;
-
   vkDestroyRenderPass (device,
                        self->render_pass,
                        NULL);
@@ -348,7 +320,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  render = gsk_vulkan_render_new (renderer, self->vulkan, self->command_pool);
+  render = gsk_vulkan_render_new (renderer, self->vulkan);
 
   gsk_vulkan_render_add_node (render, root);
 
@@ -359,7 +331,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
                           self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]->framebuffer,
                           self->descriptor_set, self->sampler);
 
-  gsk_vulkan_render_submit (render, self->command_pool_fence);
+  gsk_vulkan_render_submit (render);
 
   gsk_vulkan_render_free (render);
 

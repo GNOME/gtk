@@ -21,8 +21,7 @@ struct _GskVulkanVertex
 };
 
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
-                                                                         GdkVulkanContext       *context,
-                                                                         VkCommandPool           command_pool);
+                                                                         GdkVulkanContext       *context);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
@@ -42,8 +41,7 @@ void                    gsk_vulkan_render_draw                          (GskVulk
                                                                          VkDescriptorSet         descriptor_set,
                                                                          VkSampler               sampler);
 
-void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self,
-                                                                         VkFence                 fence);
+void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);
 
 G_END_DECLS
 
