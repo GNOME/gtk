@@ -306,6 +306,10 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
   GDK_VK_CHECK (vkQueuePresentKHR, gdk_vulkan_context_get_queue (context),
                                    &(VkPresentInfoKHR) {
                                        .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+                                       .waitSemaphoreCount = 1,
+                                       .pWaitSemaphores = (VkSemaphore[]) {
+                                           priv->draw_semaphore
+                                       },
                                        .swapchainCount = 1,
                                        .pSwapchains = (VkSwapchainKHR[]) { 
                                            priv->swapchain

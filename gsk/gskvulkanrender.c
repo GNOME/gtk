@@ -237,13 +237,17 @@ gsk_vulkan_render_submit (GskVulkanRender *self,
                                   .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
                                   .waitSemaphoreCount = 1,
                                   .pWaitSemaphores = (VkSemaphore[1]) {
-                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan),
+                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan)
                                   },
                                   .pWaitDstStageMask = (VkPipelineStageFlags []) {
                                      VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                   },
                                   .commandBufferCount = 1,
                                   .pCommandBuffers = &self->command_buffer,
+                                  .signalSemaphoreCount = 1,
+                                  .pSignalSemaphores = (VkSemaphore[1]) {
+                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan)
+                                  }
                                },
                                fence);
 
