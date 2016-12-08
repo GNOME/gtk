@@ -57,56 +57,37 @@ struct _GskVulkanRendererClass
 G_DEFINE_TYPE (GskVulkanRenderer, gsk_vulkan_renderer, GSK_TYPE_RENDERER)
 
 struct _GskVulkanTarget {
-  VkImage image;
-  VkImageView image_view;
+  GskVulkanImage *image;
   VkFramebuffer framebuffer;
 }; 
 
 static GskVulkanTarget *
 gsk_vulkan_target_new_for_image (GskVulkanRenderer *self,
-                                 VkImage            image)
+                                 VkImage            image,
+                                 gsize              width,
+                                 gsize              height)
 {
   GskVulkanTarget *target;
-  GdkWindow *window;
   VkDevice device;
 
   device = gdk_vulkan_context_get_device (self->vulkan);
-  window = gdk_draw_context_get_window (GDK_DRAW_CONTEXT (self->vulkan));
 
   target = g_slice_new0 (GskVulkanTarget);
 
-  target->image = image;
-
-  GSK_VK_CHECK (vkCreateImageView, device,
-                                   &(VkImageViewCreateInfo) {
-                                       .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-                                       .image = target->image,
-                                       .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                       .format = gdk_vulkan_context_get_image_format (self->vulkan),
-                                       .components = {
-                                           .r = VK_COMPONENT_SWIZZLE_R,
-                                           .g = VK_COMPONENT_SWIZZLE_G,
-                                           .b = VK_COMPONENT_SWIZZLE_B,
-                                           .a = VK_COMPONENT_SWIZZLE_A,
-                                       },
-                                       .subresourceRange = {
-                                           .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                           .baseMipLevel = 0,
-                                           .levelCount = 1,
-                                           .baseArrayLayer = 0,
-                                           .layerCount = 1,
-                                       },
-                                   },
-                                   NULL,
-                                   &target->image_view);
+  target->image = gsk_vulkan_image_new_for_swapchain (self->vulkan,
+                                                      image,
+                                                      gdk_vulkan_context_get_image_format (self->vulkan),
+                                                      width, height);
   GSK_VK_CHECK (vkCreateFramebuffer, device,
                                      &(VkFramebufferCreateInfo) {
                                          .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                                          .renderPass = self->render_pass,
                                          .attachmentCount = 1,
-                                         .pAttachments = &target->image_view,
-                                         .width = gdk_window_get_width (window),
-                                         .height = gdk_window_get_height (window),
+                                         .pAttachments = (VkImageView[1]) {
+                                             gsk_vulkan_image_get_image_view (target->image)
+                                         },
+                                         .width = width,
+                                         .height = height,
                                          .layers = 1
                                      },
                                      NULL,
@@ -126,9 +107,8 @@ gsk_vulkan_target_free (GskVulkanRenderer *self,
   vkDestroyFramebuffer (device,
                         target->framebuffer,
                         NULL);
-  vkDestroyImageView (device,
-                      target->image_view,
-                      NULL);
+
+  g_object_unref (target->image);
 
   g_slice_free (GskVulkanTarget, target);
 }
@@ -151,6 +131,9 @@ static void
 gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
                                       GskVulkanRenderer *self)
 {
+  GdkWindow *window;
+  gint scale_factor;
+  gsize width, height;
   guint i;
 
   gsk_vulkan_renderer_free_targets (self);
@@ -158,10 +141,16 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
   self->n_targets = gdk_vulkan_context_get_n_images (context);
   self->targets = g_new (GskVulkanTarget *, self->n_targets);
 
+  window = gsk_renderer_get_window (GSK_RENDERER (self));
+  scale_factor = gdk_window_get_scale_factor (window);
+  width = gdk_window_get_width (window) * scale_factor;
+  height = gdk_window_get_height (window) * scale_factor;
+
   for (i = 0; i < self->n_targets; i++)
     {
       self->targets[i] = gsk_vulkan_target_new_for_image (self,
-                                                          gdk_vulkan_context_get_image (context, i));
+                                                          gdk_vulkan_context_get_image (context, i),
+                                                          width, height);
     }
 }
 

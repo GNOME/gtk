@@ -9,6 +9,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GskVulkanImage, gsk_vulkan_image, GSK, VULKAN_IMAGE, GObject)
 
+GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulkanContext       *context,
+                                                                         VkImage                 image,
+                                                                         VkFormat                format,
+                                                                         gsize                   width,
+                                                                         gsize                   height);
 GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GdkVulkanContext       *context,
                                                                          VkCommandBuffer         command_buffer,
                                                                          guchar                 *data,

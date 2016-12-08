@@ -109,14 +109,15 @@ gsk_vulkan_image_upload_data (GskVulkanImage *self,
 }
 
 static void
-gsk_vulkan_image_ensure_view (GskVulkanImage *self)
+gsk_vulkan_image_ensure_view (GskVulkanImage *self,
+                              VkFormat        format)
 {
   GSK_VK_CHECK (vkCreateImageView, gdk_vulkan_context_get_device (self->vulkan),
                                    &(VkImageViewCreateInfo) {
                                        .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                        .image = self->vk_image,
                                        .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                       .format = VK_FORMAT_B8G8R8A8_SRGB,
+                                       .format = format,
                                        .components = {
                                            .r = VK_COMPONENT_SWIZZLE_R,
                                            .g = VK_COMPONENT_SWIZZLE_G,
@@ -261,7 +262,7 @@ gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext  *context,
   /* XXX: Is this okay or do we need to keep the staging image around until the commands execute */
   g_object_unref (staging);
 
-  gsk_vulkan_image_ensure_view (self);
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
 
   return self;
 }
@@ -311,7 +312,7 @@ gsk_vulkan_image_new_from_data_directly (GdkVulkanContext  *context,
                             }
                         });
 
-  gsk_vulkan_image_ensure_view (self);
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
 
   return self;
 }
@@ -330,6 +331,27 @@ gsk_vulkan_image_new_from_data (GdkVulkanContext  *context,
     return gsk_vulkan_image_new_from_data_directly (context, command_buffer, data, width, height, stride);
 }
 
+GskVulkanImage *
+gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
+                                    VkImage           image,
+                                    VkFormat          format,
+                                    gsize             width,
+                                    gsize             height)
+{
+  GskVulkanImage *self;
+
+  self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
+
+  self->vulkan = g_object_ref (context);
+  self->width = width;
+  self->height = height;
+  self->vk_image = image;
+
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
+
+  return self;
+}
+
 void
 gsk_vulkan_image_finalize (GObject *object)
 {
@@ -342,11 +364,16 @@ gsk_vulkan_image_finalize (GObject *object)
                           NULL);
     }
 
-  gsk_vulkan_memory_free (self->memory);
+  /* memory is NULL for for_swapchain() images, where we don't own
+   * the VkImage */
+  if (self->memory)
+    {
+      gsk_vulkan_memory_free (self->memory);
 
-  vkDestroyImage (gdk_vulkan_context_get_device (self->vulkan),
-                  self->vk_image,
-                  NULL);
+      vkDestroyImage (gdk_vulkan_context_get_device (self->vulkan),
+                      self->vk_image,
+                      NULL);
+    }
 
   g_object_unref (self->vulkan);
 
