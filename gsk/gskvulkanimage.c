@@ -316,16 +316,10 @@ gsk_vulkan_image_new_from_data (GdkVulkanContext  *context,
                                 gsize              height,
                                 gsize              stride)
 {
-  switch (GSK_VULKAN_UPLOAD_IMAGE_DEFAULT)
-    {
-    default:
-      g_assert_not_reached ();
-      /* fall through */
-    case GSK_VULKAN_UPLOAD_DIRECTLY:
-      return gsk_vulkan_image_new_from_data_directly (context, command_buffer, data, width, height, stride);
-    case GSK_VULKAN_UPLOAD_VIA_STAGING_IMAGE:
-      return gsk_vulkan_image_new_from_data_via_staging_image (context, command_buffer, data, width, height, stride);
-    }
+  if (GSK_RENDER_MODE_CHECK (STAGING_IMAGE))
+    return gsk_vulkan_image_new_from_data_via_staging_image (context, command_buffer, data, width, height, stride);
+  else
+    return gsk_vulkan_image_new_from_data_directly (context, command_buffer, data, width, height, stride);
 }
 
 void
