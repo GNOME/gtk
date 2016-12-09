@@ -24,7 +24,7 @@
 #include "gdkmonitor.h"
 #include "gdkinternals.h"
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
 #endif
 
@@ -124,7 +124,7 @@ struct _GdkDisplay
   guint double_click_time;  /* Maximum time between clicks in msecs */
   guint double_click_distance;   /* Maximum distance between clicks in pixels */
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
   VkInstance vk_instance;
   VkDebugReportCallbackEXT vk_debug_callback;
   VkPhysicalDevice vk_physical_device;
@@ -133,7 +133,7 @@ struct _GdkDisplay
   uint32_t vk_queue_family_index;
 
   guint vulkan_refcount;
-#endif /* GDK_WINDOWING_VULKAN */
+#endif /* GDK_RENDERING_VULKAN */
   guint rgba : 1;
   guint composited : 1;
 

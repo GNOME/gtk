@@ -22,7 +22,7 @@
 
 #include "gdkconfig.h"
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 
 #include "gdkvulkancontext-x11.h"
 
@@ -71,5 +71,5 @@ gdk_x11_vulkan_context_init (GdkX11VulkanContext *self)
 {
 }
 
-#endif /* GDK_WINDOWING_VULKAN */
+#endif /* GDK_RENDERING_VULKAN */
 

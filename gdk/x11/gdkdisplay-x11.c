@@ -2954,7 +2954,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   object_class->finalize = gdk_x11_display_finalize;
 
   display_class->window_type = GDK_TYPE_X11_WINDOW;
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_X11_VULKAN_CONTEXT;
   display_class->vk_extension_name = VK_KHR_XLIB_SURFACE_EXTENSION_NAME;
 #endif

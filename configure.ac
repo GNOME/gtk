@@ -1335,7 +1335,7 @@ if test "x$enable_vulkan" != "xno"; then
       else
           GDK_EXTRA_LIBS="-lvulkan"
           GDK_WINDOWING="$GDK_WINDOWING
-#define GDK_WINDOWING_VULKAN"
+#define GDK_RENDERING_VULKAN"
           AC_PATH_PROG([GLSLC], [glslc])
           vulkan_result="yes"
       fi

@@ -26,7 +26,7 @@
 #include "gdkdrawcontextprivate.h"
 #include "gdkinternals.h"
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
 #endif
 
@@ -51,7 +51,7 @@ struct _GdkVulkanContextClass
                                          VkSurfaceKHR           *surface);
 };
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 
 static inline VkResult
 gdk_vulkan_handle_result (VkResult    res,
@@ -70,7 +70,7 @@ gboolean        gdk_display_ref_vulkan                          (GdkDisplay     
                                                                  GError         **error);
 void            gdk_display_unref_vulkan                        (GdkDisplay      *display);
 
-#else /* !GDK_WINDOWING_VULKAN */
+#else /* !GDK_RENDERING_VULKAN */
 
 static inline gboolean
 gdk_display_ref_vulkan (GdkDisplay  *display,
@@ -84,7 +84,7 @@ gdk_display_ref_vulkan (GdkDisplay  *display,
   return FALSE;
 }
 
-#endif /* !GDK_WINDOWING_VULKAN */
+#endif /* !GDK_RENDERING_VULKAN */
 
 G_END_DECLS
 

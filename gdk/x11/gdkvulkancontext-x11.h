@@ -23,7 +23,7 @@
 
 #include "gdkconfig.h"
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 
 #define VK_USE_PLATFORM_XLIB_KHR
 
@@ -56,6 +56,6 @@ GType gdk_x11_vulkan_context_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* !GDK_WINDOWING_VULKAN */
+#endif /* !GDK_RENDERING_VULKAN */
 
 #endif /* __GDK_X11_VULKAN_CONTEXT__ */

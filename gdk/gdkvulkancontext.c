@@ -22,7 +22,7 @@
 
 #include "gdkvulkancontextprivate.h"
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
 #endif
 
@@ -62,7 +62,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkVulkanContext, gdk_vulkan_context, GDK_TYPE
                                   G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, gdk_vulkan_context_initable_init)
                                   G_ADD_PRIVATE (GdkVulkanContext))
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 
 const char *
 gdk_vulkan_strerror (VkResult result)
@@ -836,7 +836,7 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   display->vk_instance = VK_NULL_HANDLE;
 }
 
-#else /* GDK_WINDOWING_VULKAN */
+#else /* GDK_RENDERING_VULKAN */
 
 static void
 gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
@@ -861,4 +861,4 @@ gdk_vulkan_context_initable_init (GInitableIface *iface)
 {
 }
 
-#endif /* GDK_WINDOWING_VULKAN */
+#endif /* GDK_RENDERING_VULKAN */
