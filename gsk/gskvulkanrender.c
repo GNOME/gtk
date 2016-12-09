@@ -331,11 +331,38 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
   needed_sets = g_hash_table_size (self->descriptor_set_indexes);
   if (needed_sets > self->n_descriptor_sets)
     {
-      g_assert (needed_sets < self->descriptor_pool_maxsets);
+      if (needed_sets > self->descriptor_pool_maxsets)
+        {
+          guint added_sets = needed_sets - self->descriptor_pool_maxsets;
+          added_sets = added_sets + DESCRIPTOR_POOL_MAXSETS_INCREASE - 1;
+          added_sets -= added_sets % DESCRIPTOR_POOL_MAXSETS_INCREASE;
 
-      GSK_VK_CHECK (vkResetDescriptorPool, device,
-                                           self->descriptor_pool,
-                                           0);
+          vkDestroyDescriptorPool (device,
+                                   self->descriptor_pool,
+                                   NULL);
+          self->descriptor_pool_maxsets += added_sets;
+          GSK_VK_CHECK (vkCreateDescriptorPool, device,
+                                                &(VkDescriptorPoolCreateInfo) {
+                                                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+                                                    .maxSets = self->descriptor_pool_maxsets,
+                                                    .poolSizeCount = 1,
+                                                    .pPoolSizes = (VkDescriptorPoolSize[1]) {
+                                                        {
+                                                            .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                            .descriptorCount = 1
+                                                        }
+                                                    }
+                                                },
+                                                NULL,
+                                                &self->descriptor_pool);
+        }
+      else
+        {
+          GSK_VK_CHECK (vkResetDescriptorPool, device,
+                                               self->descriptor_pool,
+                                               0);
+        }
+
       self->n_descriptor_sets = needed_sets;
       self->descriptor_sets = g_renew (VkDescriptorSet, self->descriptor_sets, needed_sets);
 
