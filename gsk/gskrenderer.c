@@ -56,7 +56,7 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
 #endif
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanrendererprivate.h"
 #endif
 
@@ -728,7 +728,7 @@ get_renderer_for_env_var (GdkWindow *window)
       else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0
             || g_ascii_strcasecmp (renderer_name, "gl") == 0)
         env_var_type = GSK_TYPE_GL_RENDERER;
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
       else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
         env_var_type = GSK_TYPE_VULKAN_RENDERER;
 #endif
@@ -737,7 +737,9 @@ get_renderer_for_env_var (GdkWindow *window)
           g_print ("Supported arguments for GSK_RENDERER environment variable:\n");
           g_print ("   cairo - Use the Cairo fallback renderer\n");
           g_print ("  opengl - Use the default OpenGL renderer\n");
-          g_print ("  vulkan - Use the Vulkan renderer (available if GTK is compiled with Vulkan support)\n");
+#ifdef GDK_RENDERING_VULKAN
+          g_print ("  vulkan - Use the Vulkan renderer\n");
+#endif
           g_print ("    help - Print this help\n\n");
           g_print ("Other arguments will cause a warning and be ignored.\n");
           env_var_type = G_TYPE_INVALID;
