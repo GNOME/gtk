@@ -178,10 +178,19 @@ gsk_vulkan_pipeline_new (GdkVulkanContext *context,
                                                    .sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
                                                    .attachmentCount = 1,
                                                    .pAttachments = (VkPipelineColorBlendAttachmentState []) {
-                                                       { .colorWriteMask = VK_COLOR_COMPONENT_A_BIT |
-                                                                           VK_COLOR_COMPONENT_R_BIT |
-                                                                           VK_COLOR_COMPONENT_G_BIT |
-                                                                           VK_COLOR_COMPONENT_B_BIT },
+                                                       {
+                                                           .blendEnable = VK_TRUE,
+                                                           .colorBlendOp = VK_BLEND_OP_ADD,
+                                                           .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
+                                                           .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                                           .alphaBlendOp = VK_BLEND_OP_ADD,
+                                                           .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+                                                           .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                                           .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
+                                                                           | VK_COLOR_COMPONENT_R_BIT
+                                                                           | VK_COLOR_COMPONENT_G_BIT
+                                                                           | VK_COLOR_COMPONENT_B_BIT
+                                                       },
                                                    }
                                                },
                                                .pDynamicState = &(VkPipelineDynamicStateCreateInfo) {
