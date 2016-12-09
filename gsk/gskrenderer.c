@@ -725,14 +725,28 @@ get_renderer_for_env_var (GdkWindow *window)
         env_var_type = G_TYPE_INVALID;
       else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
         env_var_type = GSK_TYPE_CAIRO_RENDERER;
-      else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0)
+      else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0
+            || g_ascii_strcasecmp (renderer_name, "gl") == 0)
         env_var_type = GSK_TYPE_GL_RENDERER;
 #ifdef GDK_WINDOWING_VULKAN
       else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
         env_var_type = GSK_TYPE_VULKAN_RENDERER;
 #endif
+      else if (g_ascii_strcasecmp (renderer_name, "help") == 0)
+        {
+          g_print ("Supported arguments for GSK_RENDERER environment variable:\n");
+          g_print ("   cairo - Use the Cairo fallback renderer\n");
+          g_print ("  opengl - Use the default OpenGL renderer\n");
+          g_print ("  vulkan - Use the Vulkan renderer (available if GTK is compiled with Vulkan support)\n");
+          g_print ("    help - Print this help\n\n");
+          g_print ("Other arguments will cause a warning and be ignored.\n");
+          env_var_type = G_TYPE_INVALID;
+        }
       else
-        env_var_type = G_TYPE_INVALID;
+        {
+          g_warning ("Unrecognized renderer \"%s\". Try GSK_RENDERER=help", renderer_name);
+          env_var_type = G_TYPE_INVALID;
+        }
     }
 
   return env_var_type;
@@ -760,11 +774,12 @@ get_renderer_fallback (GdkWindow *window)
 }
 
 static struct {
+  gboolean verbose;
   GType (* get_renderer) (GdkWindow *window);
 } renderer_possibilities[] = {
-  { get_renderer_for_env_var },
-  { get_renderer_for_backend },
-  { get_renderer_fallback },
+  { TRUE,  get_renderer_for_env_var },
+  { FALSE, get_renderer_for_backend },
+  { FALSE, get_renderer_fallback },
 };
 
 /**
@@ -785,6 +800,7 @@ gsk_renderer_new_for_window (GdkWindow *window)
   GType renderer_type;
   GskRenderer *renderer;
   GError *error = NULL;
+  gboolean verbose = FALSE;
   guint i;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
@@ -795,22 +811,32 @@ gsk_renderer_new_for_window (GdkWindow *window)
       if (renderer_type == G_TYPE_INVALID)
         continue;
 
+      /* If a renderer is selected that's marked as verbose, start printing
+       * information to stdout.
+       */
+      verbose |= renderer_possibilities[i].verbose;
       renderer = g_object_new (renderer_type,
                                "display", gdk_window_get_display (window),
                                NULL);
 
       if (gsk_renderer_realize (renderer, window, &error))
         {
-          GSK_NOTE (RENDERER, g_print ("Using renderer of type '%s' for display '%s'\n",
-                                       G_OBJECT_TYPE_NAME (renderer),
-                                       G_OBJECT_TYPE_NAME (window)));
+          if (verbose || GSK_DEBUG_CHECK (RENDERER))
+            {
+              g_print ("Using renderer of type '%s' for display '%s'\n",
+                       G_OBJECT_TYPE_NAME (renderer),
+                       G_OBJECT_TYPE_NAME (window));
+            }
           return renderer;
         }
 
-      GSK_NOTE (RENDERER, g_print ("Failed to realize renderer of type '%s' for window '%s': %s\n",
-                                   G_OBJECT_TYPE_NAME (renderer),
-                                   G_OBJECT_TYPE_NAME (window),
-                                   error->message));
+      if (verbose || GSK_DEBUG_CHECK (RENDERER))
+        {
+          g_print ("Failed to realize renderer of type '%s' for window '%s': %s\n",
+                   G_OBJECT_TYPE_NAME (renderer),
+                   G_OBJECT_TYPE_NAME (window),
+                   error->message);
+        }
       g_object_unref (renderer);
       g_clear_error (&error);
     }
