@@ -437,16 +437,9 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                           },
                           (VkDeviceSize[1]) { 0 });
 
-  vkCmdPushConstants (self->command_buffer,
-                      gsk_vulkan_pipeline_get_pipeline_layout (self->pipeline),
-                      VK_SHADER_STAGE_VERTEX_BIT,
-                      0,
-                      sizeof (graphene_matrix_t),
-                      &self->mvp);
-
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_draw (l->data, self, self->pipeline, self->command_buffer);
+      gsk_vulkan_render_pass_draw (l->data, self, &self->mvp, self->pipeline, self->command_buffer);
     }
 
   vkCmdEndRenderPass (self->command_buffer);

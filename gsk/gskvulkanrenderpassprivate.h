@@ -31,6 +31,7 @@ void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulk
                                                                          GskVulkanRender        *render);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
+                                                                         const graphene_matrix_t*root_mvp,
                                                                          GskVulkanPipeline      *pipeline,
                                                                          VkCommandBuffer         command_buffer);
 
