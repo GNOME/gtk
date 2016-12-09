@@ -47,8 +47,10 @@ struct _GdkVulkanContextClass
 {
   GdkDrawContextClass parent_class;
 
+#ifdef GDK_RENDERING_VULKAN
   VkResult     (* create_surface)       (GdkVulkanContext       *context,
                                          VkSurfaceKHR           *surface);
+#endif
 };
 
 #ifdef GDK_RENDERING_VULKAN

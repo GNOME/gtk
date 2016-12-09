@@ -20,11 +20,9 @@
 
 #include "config.h"
 
-#include "gdkvulkancontextprivate.h"
+#include "gdkvulkancontext.h"
 
-#ifdef GDK_RENDERING_VULKAN
-#include <vulkan/vulkan.h>
-#endif
+#include "gdkvulkancontextprivate.h"
 
 #include "gdkdisplayprivate.h"
 #include "gdkinternals.h"
@@ -33,6 +31,7 @@
 typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
 
 struct _GdkVulkanContextPrivate {
+#ifdef GDK_RENDERING_VULKAN
   VkSurfaceKHR surface;
   VkSurfaceFormatKHR image_format;
 
@@ -42,8 +41,9 @@ struct _GdkVulkanContextPrivate {
 
   guint n_images;
   VkImage *images;
+#endif
 
-  uint32_t draw_index;
+  guint32 draw_index;
 };
 
 enum {
