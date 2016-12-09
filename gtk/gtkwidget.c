@@ -6338,7 +6338,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
                                                 widget->priv->clip.width,
                                                 widget->priv->clip.height});
           fallback = gsk_renderer_create_fallback (renderer, &viewport, cr);
-          gtk_snapshot_init (&snapshot, renderer, clip);
+          gtk_snapshot_init (&snapshot, renderer, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
           gtk_widget_snapshot (widget, &snapshot);
           node = gtk_snapshot_finish (&snapshot);
           if (node != NULL)
@@ -15623,7 +15623,8 @@ gtk_widget_render (GtkWidget            *widget,
 
   gtk_snapshot_init (&snapshot,
                      renderer,
-                     gdk_drawing_context_get_clip (context));
+                     gdk_drawing_context_get_clip (context),
+                     "Render<%s>", G_OBJECT_TYPE_NAME (widget));
   gtk_widget_snapshot (widget, &snapshot);
   root = gtk_snapshot_finish (&snapshot);
   if (root != NULL)

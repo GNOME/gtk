@@ -44,7 +44,9 @@ struct _GtkSnapshot {
 
 void            gtk_snapshot_init               (GtkSnapshot             *state,
                                                  GskRenderer             *renderer,
-                                                 const cairo_region_t    *clip);
+                                                 const cairo_region_t    *clip,
+                                                 const char              *name,
+                                                 ...) G_GNUC_PRINTF (4, 5);
 GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
 
 static inline const graphene_matrix_t *

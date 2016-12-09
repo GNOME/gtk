@@ -99,17 +99,42 @@ gtk_snapshot_state_get_world_transform (GtkSnapshotState *state)
 void
 gtk_snapshot_init (GtkSnapshot          *snapshot,
                    GskRenderer          *renderer,
-                   const cairo_region_t *clip)
+                   const cairo_region_t *clip,
+                   const char           *name,
+                   ...)
 {
+  cairo_rectangle_int_t extents;
+
+  cairo_region_get_extents (clip, &extents);
+
   snapshot->state = NULL;
-  snapshot->root = NULL;
   snapshot->renderer = renderer;
   snapshot->clip_region = clip;
+  snapshot->root = gsk_renderer_create_render_node (renderer);
+  gsk_render_node_set_bounds (snapshot->root, &GRAPHENE_RECT_INIT (extents.x, extents.y, extents.width, extents.height));
+
+  if (name)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (snapshot->root, str);
+
+      g_free (str);
+    }
+
+  snapshot->state = gtk_snapshot_state_new (NULL, snapshot->root);
 }
 
 GskRenderNode *
 gtk_snapshot_finish (GtkSnapshot *snapshot)
 {
+  gtk_snapshot_pop (snapshot);
+
   if (snapshot->state != NULL)
     {
       g_warning ("Too many gtk_snapshot_push() calls.");
@@ -304,10 +329,6 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
     {
       gsk_render_node_append_child (snapshot->state->node, node);
       gsk_render_node_set_transform (node, &snapshot->state->transform);
-    }
-  else if (snapshot->root == NULL)
-    {
-      snapshot->root = gsk_render_node_ref (node);
     }
   else
     {
