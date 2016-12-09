@@ -38,6 +38,10 @@ void                    gsk_vulkan_render_add_node                      (GskVulk
 
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
+VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self,
+                                                                         gsize                   id);
+gsize                   gsk_vulkan_render_reserve_descriptor_set        (GskVulkanRender        *self,
+                                                                         GskVulkanImage         *source);
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self,
                                                                          VkSampler               sampler);
 

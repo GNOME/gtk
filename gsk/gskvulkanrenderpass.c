@@ -20,6 +20,7 @@ struct _GskVulkanRenderOp
   GskVulkanImage      *source; /* source image to render */
   gsize                vertex_offset; /* offset into vertex buffer */
   gsize                vertex_count; /* number of vertices */
+  gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
 };
 
 struct _GskVulkanRenderPass
@@ -186,9 +187,8 @@ gsk_vulkan_render_pass_collect_vertices (GskVulkanRenderPass *self,
 }
 
 void
-gsk_vulkan_render_pass_update_descriptor_sets (GskVulkanRenderPass *self,
-                                               VkDescriptorSet      descriptor_set,
-                                               VkSampler            sampler)
+gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
+                                                GskVulkanRender     *render)
 {
   GskVulkanRenderOp *op;
   guint i;
@@ -197,30 +197,23 @@ gsk_vulkan_render_pass_update_descriptor_sets (GskVulkanRenderPass *self,
     {
       op = &g_array_index (self->render_ops, GskVulkanRenderOp, i);
 
-      vkUpdateDescriptorSets (gdk_vulkan_context_get_device (self->vulkan),
-                              1,
-                              (VkWriteDescriptorSet[1]) {
-                                  {
-                                      .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                      .dstSet = descriptor_set,
-                                      .dstBinding = 0,
-                                      .dstArrayElement = 0,
-                                      .descriptorCount = 1,
-                                      .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                      .pImageInfo = &(VkDescriptorImageInfo) {
-                                          .sampler = sampler,
-                                          .imageView = gsk_vulkan_image_get_image_view (op->source),
-                                          .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-                                      }
-                                  }
-                              },
-                              0, NULL);
+      switch (op->type)
+        {
+        case GSK_VULKAN_OP_FALLBACK:
+          op->descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->source);
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+        }
     }
 }
 
 void
 gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                              GskVulkanRender     *render,
+                             GskVulkanPipeline   *pipeline,
                              VkCommandBuffer      command_buffer)
 {
   GskVulkanRenderOp *op;
@@ -229,6 +222,17 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
   for (i = 0; i < self->render_ops->len; i++)
     {
       op = &g_array_index (self->render_ops, GskVulkanRenderOp, i);
+
+      vkCmdBindDescriptorSets (command_buffer,
+                               VK_PIPELINE_BIND_POINT_GRAPHICS,
+                               gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
+                               0,
+                               1,
+                               (VkDescriptorSet[1]) {
+                                   gsk_vulkan_render_get_descriptor_set (render, op->descriptor_set_index)
+                               },
+                               0,
+                               NULL);
 
       vkCmdDraw (command_buffer,
                  op->vertex_count, 1,

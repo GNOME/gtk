@@ -27,11 +27,11 @@ gsize                   gsk_vulkan_render_pass_collect_vertices         (GskVulk
                                                                          gsize                   offset,
                                                                          gsize                   total);
 
-void                    gsk_vulkan_render_pass_update_descriptor_sets   (GskVulkanRenderPass    *self,
-                                                                         VkDescriptorSet         descriptor_set,
-                                                                         VkSampler               sampler);
+void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulkanRenderPass    *self,
+                                                                         GskVulkanRender        *render);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
+                                                                         GskVulkanPipeline      *pipeline,
                                                                          VkCommandBuffer         command_buffer);
 
 G_END_DECLS

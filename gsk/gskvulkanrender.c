@@ -10,6 +10,9 @@
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
+#define DESCRIPTOR_POOL_MAXSETS 128
+#define DESCRIPTOR_POOL_MAXSETS_INCREASE 128
+
 struct _GskVulkanRender
 {
   GskRenderer *renderer;
@@ -24,8 +27,12 @@ struct _GskVulkanRender
   VkCommandPool command_pool;
   VkFence fence;
   VkRenderPass render_pass;
+
+  GHashTable *descriptor_set_indexes;
   VkDescriptorPool descriptor_pool;
-  VkDescriptorSet descriptor_set;  
+  uint32_t descriptor_pool_maxsets;
+  VkDescriptorSet *descriptor_sets;  
+  gsize n_descriptor_sets;
   GskVulkanPipeline *pipeline;
 
   VkCommandBuffer command_buffer;
@@ -75,6 +82,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   self->vulkan = context;
   self->renderer = renderer;
   self->framebuffers = g_hash_table_new (g_direct_hash, g_direct_equal);
+  self->descriptor_set_indexes = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
@@ -95,10 +103,11 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                NULL,
                                &self->fence);
 
+  self->descriptor_pool_maxsets = DESCRIPTOR_POOL_MAXSETS;
   GSK_VK_CHECK (vkCreateDescriptorPool, device,
                                         &(VkDescriptorPoolCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                                            .maxSets = 1,
+                                            .maxSets = self->descriptor_pool_maxsets,
                                             .poolSizeCount = 1,
                                             .pPoolSizes = (VkDescriptorPoolSize[1]) {
                                                 {
@@ -153,17 +162,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                       &self->render_pass);
 
   self->pipeline = gsk_vulkan_pipeline_new (self->vulkan, self->render_pass);
-
-  GSK_VK_CHECK (vkAllocateDescriptorSets, device,
-                                          &(VkDescriptorSetAllocateInfo) {
-                                              .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-                                              .descriptorPool = self->descriptor_pool,
-                                              .descriptorSetCount = 1,
-                                              .pSetLayouts = (VkDescriptorSetLayout[1]) {
-                                                  gsk_vulkan_pipeline_get_descriptor_set_layout (self->pipeline)
-                                              }
-                                          },
-                                          &self->descriptor_set);
 
   return self;
 }
@@ -288,6 +286,101 @@ gsk_vulkan_render_collect_vertices (GskVulkanRender *self)
   return buffer;
 }
 
+VkDescriptorSet
+gsk_vulkan_render_get_descriptor_set (GskVulkanRender *self,
+                                      gsize            id)
+{
+  g_assert (id < self->n_descriptor_sets);
+
+  return self->descriptor_sets[id];
+}
+
+gsize
+gsk_vulkan_render_reserve_descriptor_set (GskVulkanRender *self,
+                                          GskVulkanImage  *source)
+{
+  gpointer id_plus_one;
+
+  id_plus_one = g_hash_table_lookup (self->descriptor_set_indexes, source);
+  if (id_plus_one)
+    return GPOINTER_TO_SIZE (id_plus_one) - 1;
+
+  id_plus_one = GSIZE_TO_POINTER (g_hash_table_size (self->descriptor_set_indexes) + 1);
+  g_hash_table_insert (self->descriptor_set_indexes, source, id_plus_one);
+  
+  return GPOINTER_TO_SIZE (id_plus_one) - 1;
+}
+
+static void
+gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
+                                           VkSampler        sampler)
+{
+  GHashTableIter iter;
+  gpointer key, value;
+  VkDevice device;
+  GSList *l;
+  guint i, needed_sets;
+
+  device = gdk_vulkan_context_get_device (self->vulkan);
+
+  for (l = self->render_passes; l; l = l->next)
+    {
+      gsk_vulkan_render_pass_reserve_descriptor_sets (l->data, self);
+    }
+  
+  needed_sets = g_hash_table_size (self->descriptor_set_indexes);
+  if (needed_sets > self->n_descriptor_sets)
+    {
+      g_assert (needed_sets < self->descriptor_pool_maxsets);
+
+      GSK_VK_CHECK (vkResetDescriptorPool, device,
+                                           self->descriptor_pool,
+                                           0);
+      self->n_descriptor_sets = needed_sets;
+      self->descriptor_sets = g_renew (VkDescriptorSet, self->descriptor_sets, needed_sets);
+
+      VkDescriptorSetLayout layouts[needed_sets];
+      for (i = 0; i < needed_sets; i++)
+        {
+          layouts[i] = gsk_vulkan_pipeline_get_descriptor_set_layout (self->pipeline);
+        }
+      GSK_VK_CHECK (vkAllocateDescriptorSets, device,
+                                              &(VkDescriptorSetAllocateInfo) {
+                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+                                                  .descriptorPool = self->descriptor_pool,
+                                                  .descriptorSetCount = needed_sets,
+                                                  .pSetLayouts = layouts
+                                              },
+                                              self->descriptor_sets);
+    }
+
+  g_hash_table_iter_init (&iter, self->descriptor_set_indexes);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GskVulkanImage *image = key;
+      gsize id = GPOINTER_TO_SIZE (value) - 1;
+
+      vkUpdateDescriptorSets (device,
+                              1,
+                              (VkWriteDescriptorSet[1]) {
+                                  {
+                                      .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                                      .dstSet = self->descriptor_sets[id],
+                                      .dstBinding = 0,
+                                      .dstArrayElement = 0,
+                                      .descriptorCount = 1,
+                                      .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                      .pImageInfo = &(VkDescriptorImageInfo) {
+                                          .sampler = sampler,
+                                          .imageView = gsk_vulkan_image_get_image_view (image),
+                                          .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                                      }
+                                  }
+                              },
+                              0, NULL);
+    }
+}
+
 void
 gsk_vulkan_render_draw (GskVulkanRender   *self,
                         VkSampler          sampler)
@@ -295,12 +388,9 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
   GskVulkanBuffer *buffer;
   GSList *l;
 
-  buffer = gsk_vulkan_render_collect_vertices (self);
+  gsk_vulkan_render_prepare_descriptor_sets (self, sampler);
 
-  for (l = self->render_passes; l; l = l->next)
-    {
-      gsk_vulkan_render_pass_update_descriptor_sets (l->data, self->descriptor_set, sampler);
-    }
+  buffer = gsk_vulkan_render_collect_vertices (self);
 
   vkCmdSetViewport (self->command_buffer,
                     0,
@@ -339,15 +429,6 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
                      gsk_vulkan_pipeline_get_pipeline (self->pipeline));
 
-  vkCmdBindDescriptorSets (self->command_buffer,
-                           VK_PIPELINE_BIND_POINT_GRAPHICS,
-                           gsk_vulkan_pipeline_get_pipeline_layout (self->pipeline),
-                           0,
-                           1,
-                           &self->descriptor_set,
-                           0,
-                           NULL);
-
   vkCmdBindVertexBuffers (self->command_buffer,
                           0,
                           1,
@@ -365,7 +446,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_draw (l->data, self, self->command_buffer);
+      gsk_vulkan_render_pass_draw (l->data, self, self->pipeline, self->command_buffer);
     }
 
   vkCmdEndRenderPass (self->command_buffer);
@@ -427,6 +508,8 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
                                     self->command_pool,
                                     0);
 
+  g_hash_table_remove_all (self->descriptor_set_indexes);
+
   g_slist_free_full (self->render_passes, (GDestroyNotify) gsk_vulkan_render_pass_free);
   self->render_passes = NULL;
   g_slist_free_full (self->cleanup_images, g_object_unref);
@@ -469,6 +552,8 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   vkDestroyDescriptorPool (device,
                            self->descriptor_pool,
                            NULL);
+  g_free (self->descriptor_sets);
+  g_hash_table_unref (self->descriptor_set_indexes);
 
   vkDestroyFence (device,
                   self->fence,
