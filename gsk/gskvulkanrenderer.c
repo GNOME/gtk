@@ -33,7 +33,7 @@ struct _GskVulkanRenderer
 
   VkSampler sampler;
 
-  GSList *renders;
+  GskVulkanRender *render;
 
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
@@ -123,8 +123,7 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                     self);
   gsk_vulkan_renderer_update_images_cb (self->vulkan, self);
 
-  /* We will need at least one render object, so create it early where we can still fail fine */
-  self->renders = g_slist_prepend (self->renders, gsk_vulkan_render_new (renderer, self->vulkan));
+  self->render = gsk_vulkan_render_new (renderer, self->vulkan);
 
   return TRUE;
 }
@@ -135,8 +134,7 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   VkDevice device;
 
-  g_slist_free_full (self->renders, (GDestroyNotify) gsk_vulkan_render_free);
-  self->renders = NULL;
+  g_clear_pointer (&self->render, gsk_vulkan_render_free);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
@@ -159,7 +157,6 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender *render;
-  GSList *l;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
@@ -170,20 +167,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  for (l = self->renders; l; l = l->next)
-    {
-      if (!gsk_vulkan_render_is_busy (l->data))
-        break;
-    }
-  if (l)
-    {
-      render = l->data;
-    }
-  else
-    {
-      render = gsk_vulkan_render_new (renderer, self->vulkan);
-      self->renders = g_slist_prepend (self->renders, render);
-    }
+  render = self->render;
 
   gsk_vulkan_render_reset (render, self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]);
 
