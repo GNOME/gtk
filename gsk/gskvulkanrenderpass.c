@@ -5,18 +5,20 @@
 #include "gskvulkanimageprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderer.h"
+#include "gsktextureprivate.h"
 
 typedef struct _GskVulkanRenderOp GskVulkanRenderOp;
 
 typedef enum {
-  GSK_VULKAN_OP_FALLBACK
+  GSK_VULKAN_OP_FALLBACK,
+  GSK_VULKAN_OP_SURFACE,
+  GSK_VULKAN_OP_TEXTURE
 } GskVulkanOpType;
 
 struct _GskVulkanRenderOp
 {
   GskVulkanOpType      type;
   GskRenderNode       *node; /* node that's the source of this op */
-  GskVulkanRenderPass *pass; /* render pass required to set up node */
   GskVulkanImage      *source; /* source image to render */
   gsize                vertex_offset; /* offset into vertex buffer */
   gsize                vertex_count; /* number of vertices */
@@ -56,11 +58,43 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass *self,
                                  GskVulkanRender     *render,
                                  GskRenderNode       *node)
 {
+  GskRenderNode *child;
   GskVulkanRenderOp op = {
     .type = GSK_VULKAN_OP_FALLBACK,
     .node = node
   };
 
+  if (gsk_render_node_is_hidden (node))
+    return;
+
+  if (gsk_render_node_get_opacity (node) < 1.0)
+    goto fallback;
+
+  if (gsk_render_node_has_surface (node))
+    {
+      op.type = GSK_VULKAN_OP_SURFACE;
+      g_array_append_val (self->render_ops, op);
+    }
+  else if (gsk_render_node_has_texture (node))
+    {
+      op.type = GSK_VULKAN_OP_TEXTURE;
+      g_array_append_val (self->render_ops, op);
+    }
+  else
+    {
+      /* nothing to do for nodes without sources */
+    }
+
+  for (child = gsk_render_node_get_first_child (node);
+       child;
+       child = gsk_render_node_get_next_sibling (child))
+    {
+      gsk_vulkan_render_pass_add_node (self, render, child);
+    }
+
+  return;
+
+fallback:
   g_array_append_val (self->render_ops, op);
 }
 
@@ -121,6 +155,33 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
           gsk_vulkan_render_pass_upload_fallback (self, op, render, command_buffer);
           break;
 
+        case GSK_VULKAN_OP_SURFACE:
+          {
+            cairo_surface_t *surface = gsk_render_node_get_surface (op->node);
+            op->source = gsk_vulkan_image_new_from_data (self->vulkan,
+                                                         command_buffer,
+                                                         cairo_image_surface_get_data (surface),
+                                                         cairo_image_surface_get_width (surface),
+                                                         cairo_image_surface_get_height (surface),
+                                                         cairo_image_surface_get_stride (surface));
+            gsk_vulkan_render_add_cleanup_image (render, op->source);
+          }
+          break;
+
+        case GSK_VULKAN_OP_TEXTURE:
+          {
+            cairo_surface_t *surface = gsk_texture_download (gsk_render_node_get_texture (op->node));
+            op->source = gsk_vulkan_image_new_from_data (self->vulkan,
+                                                         command_buffer,
+                                                         cairo_image_surface_get_data (surface),
+                                                         cairo_image_surface_get_width (surface),
+                                                         cairo_image_surface_get_height (surface),
+                                                         cairo_image_surface_get_stride (surface));
+            gsk_vulkan_render_add_cleanup_image (render, op->source);
+            cairo_surface_destroy (surface);
+          }
+          break;
+
         default:
           g_assert_not_reached ();
           break;
@@ -170,6 +231,8 @@ gsk_vulkan_render_pass_collect_vertices (GskVulkanRenderPass *self,
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_SURFACE:
+        case GSK_VULKAN_OP_TEXTURE:
           op->vertex_offset = offset + n;
           op->vertex_count = gsk_vulkan_render_op_collect_vertices (op, vertices + n + offset);
           break;
@@ -200,6 +263,8 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_SURFACE:
+        case GSK_VULKAN_OP_TEXTURE:
           op->descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->source);
           break;
 
