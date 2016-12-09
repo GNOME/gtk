@@ -15582,8 +15582,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
           gboolean result;
           cairo_t *cr;
 
-          gtk_snapshot_push (snapshot, &bounds, "DrawSignal<%s>", G_OBJECT_TYPE_NAME (widget));
-
           klass->snapshot (widget, snapshot);
 
           cr = gtk_snapshot_append_cairo_node (snapshot, 
@@ -15591,8 +15589,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
                                                "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
           g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
           cairo_destroy (cr);
-
-          gtk_snapshot_pop (snapshot);
         }
       else
         {

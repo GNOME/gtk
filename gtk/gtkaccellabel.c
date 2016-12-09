@@ -464,16 +464,8 @@ gtk_accel_label_snapshot (GtkWidget   *widget,
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   guint ac_width;
-  GtkAllocation allocation, clip;
+  GtkAllocation allocation;
   GtkRequisition requisition;
-  graphene_rect_t bounds;
-
-  gtk_widget_get_clip (widget, &clip);
-  gtk_widget_get_allocation (widget, &allocation);
-  graphene_rect_init (&bounds,
-                      clip.x - allocation.x, clip.y - allocation.y,
-                      clip.width, clip.height);
-  gtk_snapshot_push (snapshot, &bounds, "AccelLabel");
 
   GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->snapshot (widget, snapshot);
 
@@ -508,8 +500,6 @@ gtk_accel_label_snapshot (GtkWidget   *widget,
 
       g_object_unref (accel_layout);
     }
-
-  gtk_snapshot_pop (snapshot);
 }
 
 static void

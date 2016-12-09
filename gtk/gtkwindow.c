@@ -9392,17 +9392,12 @@ gtk_window_snapshot (GtkWidget   *widget,
   GtkAllocation allocation;
   GtkBorder window_border;
   gint title_height;
-  graphene_rect_t bounds;
   GList *l;
 
   context = gtk_widget_get_style_context (widget);
 
   get_shadow_width (GTK_WINDOW (widget), &window_border);
   _gtk_widget_get_allocation (widget, &allocation);
-
-  graphene_rect_init (&bounds, allocation.x, allocation.y, allocation.width, allocation.height);
-
-  gtk_snapshot_push (snapshot, &bounds, "Window Decoration");
 
   if (priv->client_decorated &&
       priv->decorated &&
@@ -9480,8 +9475,6 @@ gtk_window_snapshot (GtkWidget   *widget,
     }
 
   gtk_debug_updates_snapshot (widget, snapshot);
-
-  gtk_snapshot_pop (snapshot);
 }
 
 /**

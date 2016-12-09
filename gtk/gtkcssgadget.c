@@ -1033,8 +1033,6 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  gtk_snapshot_push (snapshot, &bounds, "%s<%s>", gtk_css_node_get_name (priv->node), G_OBJECT_TYPE_NAME (priv->owner));
-
   gtk_snapshot_translate_2d (snapshot, x + margin.left, y + margin.top);
   gtk_css_style_snapshot_background (style,
                                      snapshot,
@@ -1068,8 +1066,6 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
                                       height - margin.top - margin.bottom);
       gtk_snapshot_translate_2d (snapshot, - x - margin.left, - y - margin.top);
   }
-
-  gtk_snapshot_pop (snapshot);
 }
 
 void

@@ -3095,21 +3095,10 @@ gtk_container_snapshot (GtkWidget   *widget,
                         GtkSnapshot *snapshot)
 {
   GtkContainer *container = GTK_CONTAINER (widget);
-  GtkAllocation allocation, clip;
-  graphene_rect_t bounds;
-
-  gtk_widget_get_clip (widget, &clip);
-  gtk_widget_get_allocation (widget, &allocation);
-  graphene_rect_init (&bounds,
-                      clip.x - allocation.x, clip.y - allocation.y,
-                      clip.width, clip.height);
-  gtk_snapshot_push (snapshot, &bounds, "Children<%s>", G_OBJECT_TYPE_NAME (container));
 
   gtk_container_forall (container,
                         gtk_container_snapshot_forall,
                         snapshot);
-
-  gtk_snapshot_pop (snapshot);
 }
 
 static void
