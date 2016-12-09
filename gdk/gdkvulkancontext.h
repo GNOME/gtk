@@ -28,7 +28,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
 #endif
 
@@ -46,7 +46,7 @@ GQuark gdk_vulkan_error_quark (void);
 GDK_AVAILABLE_IN_3_90
 GType gdk_vulkan_context_get_type (void) G_GNUC_CONST;
 
-#ifdef GDK_WINDOWING_VULKAN
+#ifdef GDK_RENDERING_VULKAN
 
 GDK_AVAILABLE_IN_3_90
 const char *            gdk_vulkan_strerror                         (VkResult           result);
@@ -73,7 +73,7 @@ uint32_t                gdk_vulkan_context_get_draw_index           (GdkVulkanCo
 GDK_AVAILABLE_IN_3_90
 VkSemaphore             gdk_vulkan_context_get_draw_semaphore       (GdkVulkanContext  *context);
 
-#endif /* GDK_WINDOWING_VULKAN */
+#endif /* GDK_RENDERING_VULKAN */
 
 G_END_DECLS
 
