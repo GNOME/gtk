@@ -1,3 +1,36 @@
+Overview of Changes in GTK+ 3.22.5
+==================================
+
+* gtk3-demo now has an example for using PangoTabArray to create a multi-column layout
+
+* Bug fixes:
+ 771242 opening menu for certain types of GtkComboBox causes Gdk-CRITICAL assertion...
+ 774114 Window shadows are repainted even if only the contents of the window change
+ 774265 No tilt for wintab devices
+ 774379 gdk: mingw64 builds segfault during initialization of Huion H610PRO wintab
+ 774686 GtkMenu does not unref all GtkCheckMenuItem it creates
+ 774695 GtkProgressbar needs full and empty classes
+ 774699 list iteration regression causes odd-indexed devices to be ignored during l...
+ 774743 GtkNotebook does not unref all GtkBuiltinIcon it creates
+ 774760 inspector: ensure controller is a GtkGesture
+ 774790 GtkTextHandle does not unref all GtkAdjustment it references
+ 774893 Application font sizes scaling gets clamped to 1.00 when starting GtkInspector
+ 774915 Destroying the parent of a subsurface causes _gdk_window_destroy_hierarchy:...
+ 774917 [wayland] child subsurfaces need to be placed relative to their parent
+ 774939 GtkLabelAccessible: Initialize link before setting parent
+ 775212 GtkScaleButton does not unref all GtkAdjustment it references
+ 775316 gtk_drag_source_set_icon_pixbuf references the pixbuf received once too much
+ 775319 gdk_window_get_toplevel() fails to return the toplevel of a child subsurface
+ 775525 gtk_flow_box_get_child_at_index shouldn't crash with an invalid index
+
+* Translation updates:
+ Hungarian
+ Italian
+ Kazakh
+ Russian
+ Swedish
+
+
 Overview of Changes in GTK+ 3.22.4
 ==================================
 
