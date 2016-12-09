@@ -186,8 +186,6 @@ gsk_render_node_init (GskRenderNode *self)
 
   graphene_matrix_init_identity (&self->transform);
 
-  graphene_point3d_init (&self->anchor_point, 0.f, 0.f, 0.f);
-
   self->opacity = 1.0;
 
   self->min_filter = GSK_SCALING_FILTER_NEAREST;
@@ -968,25 +966,6 @@ gsk_render_node_get_transform (GskRenderNode     *node,
 }
 
 /**
- * gsk_render_node_set_anchor_point:
- * @node: a #GskRenderNode
- * @offset: the anchor point
- *
- * Set the anchor point used when rendering the @node.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_anchor_point (GskRenderNode            *node,
-                                  const graphene_point3d_t *offset)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (node->is_mutable);
-
-  graphene_point3d_init_from_point (&node->anchor_point, offset);
-}
-
-/**
  * gsk_render_node_set_opacity:
  * @node: a #GskRenderNode
  * @opacity: the opacity of the node, between 0 (fully transparent) and
@@ -1198,8 +1177,6 @@ gsk_render_node_update_world_matrix (GskRenderNode *node,
 
           if (node->transform_set)
             graphene_matrix_multiply (&tmp, &node->transform, &tmp);
-
-          graphene_matrix_translate (&tmp, &node->anchor_point);
 
           graphene_matrix_multiply (&tmp, &parent->world_matrix, &node->world_matrix);
         }

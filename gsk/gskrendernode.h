@@ -95,9 +95,6 @@ GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_transform           (GskRenderNode            *node,
                                                                  const graphene_matrix_t  *transform);
 GDK_AVAILABLE_IN_3_90
-void                    gsk_render_node_set_anchor_point        (GskRenderNode            *node,
-                                                                 const graphene_point3d_t *offset);
-GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_opacity             (GskRenderNode *node,
                                                                  double         opacity);
 GDK_AVAILABLE_IN_3_90

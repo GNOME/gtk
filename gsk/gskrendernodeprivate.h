@@ -56,8 +56,6 @@ struct _GskRenderNode
   /* Transformations applied to the node */
   graphene_matrix_t transform;
 
-  graphene_point3d_t anchor_point;
-
   /* Bit fields; leave at the end */
   gboolean is_mutable : 1;
   gboolean hidden : 1;
