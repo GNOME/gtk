@@ -1051,7 +1051,7 @@ example_app_window_init (ExampleAppWindow *win)
 
     <para>The contents of a widget often need to be partially or fully redrawn,
     e.g. when another window is moved and uncovers part of the widget, or
-    when tie window containing it is resized. It is also possible to explicitly
+    when the window containing it is resized. It is also possible to explicitly
     cause part or all of the widget to be redrawn, by calling
     gtk_widget_queue_draw() or its variants. GTK+ takes care of most of the
     details by providing a ready-to-use cairo context to the ::draw signal
