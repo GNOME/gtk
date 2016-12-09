@@ -5,7 +5,7 @@
 #include "gskvulkanimageprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderer.h"
-#include "gsktextureprivate.h"
+#include "gskvulkanrendererprivate.h"
 
 typedef struct _GskVulkanRenderOp GskVulkanRenderOp;
 
@@ -170,15 +170,10 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
 
         case GSK_VULKAN_OP_TEXTURE:
           {
-            cairo_surface_t *surface = gsk_texture_download (gsk_render_node_get_texture (op->node));
-            op->source = gsk_vulkan_image_new_from_data (self->vulkan,
-                                                         command_buffer,
-                                                         cairo_image_surface_get_data (surface),
-                                                         cairo_image_surface_get_width (surface),
-                                                         cairo_image_surface_get_height (surface),
-                                                         cairo_image_surface_get_stride (surface));
+            op->source = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
+                                                                gsk_render_node_get_texture (op->node),
+                                                                command_buffer);
             gsk_vulkan_render_add_cleanup_image (render, op->source);
-            cairo_surface_destroy (surface);
           }
           break;
 

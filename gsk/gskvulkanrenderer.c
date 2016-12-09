@@ -15,6 +15,14 @@
 
 #include <graphene.h>
 
+typedef struct _GskVulkanTextureData GskVulkanTextureData;
+
+struct _GskVulkanTextureData {
+  GskTexture *texture;
+  GskVulkanImage *image;
+  GskVulkanRenderer *renderer;
+};
+
 #ifdef G_ENABLE_DEBUG
 typedef struct {
   GQuark cpu_time;
@@ -34,6 +42,8 @@ struct _GskVulkanRenderer
   VkSampler sampler;
 
   GskVulkanRender *render;
+
+  GSList *textures;
 
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
@@ -133,6 +143,16 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   VkDevice device;
+  GSList *l;
+
+  for (l = self->textures; l; l = l->next)
+    {
+      GskVulkanTextureData *data = l->data;
+
+      data->renderer = NULL;
+      gsk_texture_clear_render_data (data->texture);
+    }
+  g_clear_pointer (&self->textures, (GDestroyNotify) g_slist_free);
 
   g_clear_pointer (&self->render, gsk_vulkan_render_free);
 
@@ -236,4 +256,57 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
 #ifdef G_ENABLE_DEBUG
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
 #endif
+}
+
+static void
+gsk_vulkan_renderer_clear_texture (gpointer p)
+{
+  GskVulkanTextureData *data = p;
+
+  if (data->renderer != NULL)
+    data->renderer->textures = g_slist_remove (data->renderer->textures, data);
+
+  g_object_unref (data->image);
+
+  g_slice_free (GskVulkanTextureData, data);
+}
+
+GskVulkanImage *
+gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
+                                       GskTexture        *texture,
+                                       VkCommandBuffer    command_buffer)
+{
+  GskVulkanTextureData *data;
+  cairo_surface_t *surface;
+  GskVulkanImage *image;
+
+  data = gsk_texture_get_render_data (texture, self);
+  if (data)
+    return g_object_ref (data->image);
+
+  surface = gsk_texture_download (texture);
+  image = gsk_vulkan_image_new_from_data (self->vulkan,
+                                          command_buffer,
+                                          cairo_image_surface_get_data (surface),
+                                          cairo_image_surface_get_width (surface),
+                                          cairo_image_surface_get_height (surface),
+                                          cairo_image_surface_get_stride (surface));
+  cairo_surface_destroy (surface);
+
+  data = g_slice_new0 (GskVulkanTextureData);
+  data->image = image;
+  data->texture = texture;
+  data->renderer = self;
+
+  if (gsk_texture_set_render_data (texture, self, data, gsk_vulkan_renderer_clear_texture))
+    {
+      g_object_ref (data->image);
+      self->textures = g_slist_prepend (self->textures, data);
+    }
+  else
+    {
+      g_slice_free (GskVulkanTextureData, data);
+    }
+
+  return image;
 }

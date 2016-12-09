@@ -4,6 +4,8 @@
 #include <vulkan/vulkan.h>
 #include <gsk/gskrenderer.h>
 
+#include "gsk/gskvulkanimageprivate.h"
+
 G_BEGIN_DECLS
 
 #define GSK_TYPE_VULKAN_RENDERER (gsk_vulkan_renderer_get_type ())
@@ -18,6 +20,10 @@ typedef struct _GskVulkanRenderer                GskVulkanRenderer;
 typedef struct _GskVulkanRendererClass           GskVulkanRendererClass;
 
 GType gsk_vulkan_renderer_get_type (void) G_GNUC_CONST;
+
+GskVulkanImage *        gsk_vulkan_renderer_ref_texture_image           (GskVulkanRenderer      *self,
+                                                                         GskTexture             *texture,
+                                                                         VkCommandBuffer         command_buffer);
 
 G_END_DECLS
 
