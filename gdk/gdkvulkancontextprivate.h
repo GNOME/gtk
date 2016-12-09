@@ -26,7 +26,9 @@
 #include "gdkdrawcontextprivate.h"
 #include "gdkinternals.h"
 
+#ifdef GDK_WINDOWING_VULKAN
 #include <vulkan/vulkan.h>
+#endif
 
 G_BEGIN_DECLS
 
