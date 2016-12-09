@@ -636,14 +636,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   int program_id;
   int scale_factor;
 
-  if (gsk_render_node_is_hidden (node))
-    {
-      GSK_NOTE (OPENGL, g_print ("Skipping hidden node <%s>[%p]\n",
-                                 node->name != NULL ? node->name : "unnamed",
-                                 node));
-      return;
-    }
-
   memset (&item, 0, sizeof (RenderItem));
 
   gsk_renderer_get_viewport (GSK_RENDERER (self), &viewport);

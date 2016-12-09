@@ -98,11 +98,6 @@ GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_opacity             (GskRenderNode *node,
                                                                  double         opacity);
 GDK_AVAILABLE_IN_3_90
-void                    gsk_render_node_set_hidden              (GskRenderNode *node,
-                                                                 gboolean       hidden);
-GDK_AVAILABLE_IN_3_90
-gboolean                gsk_render_node_is_hidden               (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_opaque              (GskRenderNode *node,
                                                                  gboolean       opaque);
 GDK_AVAILABLE_IN_3_90

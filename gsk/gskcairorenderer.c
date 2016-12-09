@@ -59,9 +59,6 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
   cairo_matrix_t ctm;
   graphene_rect_t frame;
 
-  if (gsk_render_node_is_hidden (node))
-    return;
-
   cairo_save (cr);
 
   if (!gsk_render_node_has_surface (node) &&

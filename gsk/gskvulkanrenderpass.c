@@ -64,9 +64,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass *self,
     .node = node
   };
 
-  if (gsk_render_node_is_hidden (node))
-    return;
-
   if (gsk_render_node_get_opacity (node) < 1.0)
     goto fallback;
 

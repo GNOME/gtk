@@ -51,7 +51,6 @@ struct _GtkInspectorRecorderPrivate
 
 enum {
   COLUMN_NODE_NAME,
-  COLUMN_NODE_VISIBLE,
   /* add more */
   N_NODE_COLUMNS
 };
@@ -121,10 +120,6 @@ render_node_list_get_value (GtkTreeModelRenderNode *model,
     {
     case COLUMN_NODE_NAME:
       g_value_set_string (value, gsk_render_node_get_name (node));
-      break;
-
-    case COLUMN_NODE_VISIBLE:
-      g_value_set_boolean (value, !gsk_render_node_is_hidden (node));
       break;
 
     default:
@@ -421,8 +416,7 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
 
   priv->render_node_model = gtk_tree_model_render_node_new (render_node_list_get_value,
                                                             N_NODE_COLUMNS,
-                                                            G_TYPE_STRING,
-                                                            G_TYPE_BOOLEAN);
+                                                            G_TYPE_STRING);
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->render_node_tree), priv->render_node_model);
   g_object_unref (priv->render_node_model);
 

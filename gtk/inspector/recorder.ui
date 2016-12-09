@@ -93,7 +93,6 @@
                               <object class="GtkCellRendererText"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
-                                <attribute name="sensitive">1</attribute>
                               </attributes>
                             </child>
                           </object>

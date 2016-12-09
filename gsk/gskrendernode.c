@@ -1004,45 +1004,6 @@ gsk_render_node_get_opacity (GskRenderNode *node)
 }
 
 /**
- * gsk_render_node_set_hidden:
- * @node: a #GskRenderNode
- * @hidden: whether the @node should be hidden or not
- *
- * Sets whether the @node should be hidden.
- *
- * Hidden nodes, and their descendants, are not rendered.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_hidden (GskRenderNode *node,
-                            gboolean       hidden)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (node->is_mutable);
-
-  node->hidden = !!hidden;
-}
-
-/**
- * gsk_render_node_is_hidden:
- * @node: a #GskRenderNode
- *
- * Checks whether a @node is hidden.
- *
- * Returns: %TRUE if the #GskRenderNode is hidden
- *
- * Since: 3.90
- */
-gboolean
-gsk_render_node_is_hidden (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), TRUE);
-
-  return node->hidden;
-}
-
-/**
  * gsk_render_node_set_opaque:
  * @node: a #GskRenderNode
  * @opaque: whether the node is fully opaque or not
