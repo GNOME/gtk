@@ -71,7 +71,7 @@ double gsk_render_node_get_opacity (GskRenderNode *node);
 
 cairo_surface_t *gsk_render_node_get_surface (GskRenderNode *node);
 
-GskTexture *gsk_render_node_get_texture (GskRenderNode *node);
+GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
 
 gboolean gsk_render_node_has_surface (GskRenderNode *node);
 gboolean gsk_render_node_has_texture (GskRenderNode *node);

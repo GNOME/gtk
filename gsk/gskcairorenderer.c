@@ -101,7 +101,7 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
                             frame.origin.x, frame.origin.y));
   if (gsk_render_node_has_texture (node))
     {
-      GskTexture *texture = gsk_render_node_get_texture (node);
+      GskTexture *texture = gsk_texture_node_get_texture (node);
       cairo_surface_t *surface = gsk_texture_download (texture);
 
       cairo_set_source_surface (cr, surface, frame.origin.x, frame.origin.y); 

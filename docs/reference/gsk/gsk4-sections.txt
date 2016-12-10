@@ -55,6 +55,7 @@ gsk_render_node_set_blend_mode
 GskScalingFilter
 gsk_render_node_set_scaling_filters
 gsk_render_node_set_name
+gsk_texture_node_new
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE

@@ -768,6 +768,7 @@ gsk_render_node_set_bounds (GskRenderNode         *node,
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
   g_return_if_fail (node->is_mutable);
+  g_return_if_fail (node->type == GSK_CONTAINER_NODE);
 
   if (bounds == NULL)
     graphene_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
@@ -1041,38 +1042,41 @@ gsk_render_node_has_texture (GskRenderNode *node)
 }
 
 GskTexture *
-gsk_render_node_get_texture (GskRenderNode *node)
+gsk_texture_node_get_texture (GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 0);
+  g_return_val_if_fail (node->type == GSK_TEXTURE_NODE, 0);
 
   return node->texture;
 }
 
 /**
- * gsk_render_node_set_texture:
- * @node: a #GskRenderNode
+ * gsk_texture_node_new:
  * @texture: the #GskTexture
+ * @bounds: the rectangle to render the texture into
  *
- * Associates a #GskTexture to a #GskRenderNode.
+ * Creates a #GskRenderNode that will render the given
+ * @texture into the area given by @bounds.
+ *
+ * Returns: A new #GskRenderNode
  *
  * Since: 3.90
  */
-void
-gsk_render_node_set_texture (GskRenderNode *node,
-                             GskTexture    *texture)
+GskRenderNode *
+gsk_texture_node_new (GskTexture            *texture,
+                      const graphene_rect_t *bounds)
 {
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  GskRenderNode *node;
 
-  if (node->texture == texture)
-    return;
+  g_return_val_if_fail (GSK_IS_TEXTURE (texture), NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
 
-  if (node->texture)
-    gsk_texture_unref (node->texture);
+  node = gsk_render_node_new (GSK_TEXTURE_NODE);
 
-  node->texture = texture;
+  node->texture = gsk_texture_ref (texture);
+  graphene_rect_init_from_rect (&node->bounds, bounds);
 
-  if (texture)
-    gsk_texture_ref (texture);
+  return node;
 }
 
 /*< private >

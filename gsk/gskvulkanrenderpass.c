@@ -168,7 +168,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_TEXTURE:
           {
             op->source = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                                                gsk_render_node_get_texture (op->node),
+                                                                gsk_texture_node_get_texture (op->node),
                                                                 command_buffer);
             gsk_vulkan_render_add_cleanup_image (render, op->source);
           }

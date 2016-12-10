@@ -283,13 +283,14 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
 
   graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
 
-  node = gtk_snapshot_append (snapshot, &bounds, "Icon");
+  node = gsk_texture_node_new (texture, &bounds);
+  gsk_render_node_set_name (node, "Icon");
+  gtk_snapshot_append_node (snapshot, node);
   if (!_gtk_css_shadows_value_is_none (shadows) && !shadow_warning)
     {
       g_warning ("Painting shadows not implemented for textures yet.");
       shadow_warning = TRUE;
     }
-  gsk_render_node_set_texture (node, texture);
   gsk_render_node_unref (node);
 
   gtk_snapshot_set_transform (snapshot, &saved_matrix);
