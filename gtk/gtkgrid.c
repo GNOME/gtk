@@ -28,6 +28,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
+#include "gtkcsspositionvalueprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -549,6 +551,23 @@ gtk_grid_child_type (GtkContainer *container)
   return GTK_TYPE_WIDGET;
 }
 
+static int
+get_spacing (GtkGrid        *grid,
+             GtkOrientation  orientation)
+{
+  GtkGridPrivate *priv = grid->priv;
+  GtkCssValue *border_spacing;
+  gint css_spacing;
+
+  border_spacing = _gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (grid)), GTK_CSS_PROPERTY_BORDER_SPACING);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    css_spacing = _gtk_css_position_value_get_x (border_spacing, 100);
+  else
+    css_spacing = _gtk_css_position_value_get_y (border_spacing, 100);
+
+  return css_spacing + priv->linedata[orientation].spacing;
+}
+
 /* Calculates the min and max numbers for both orientations.
  */
 static void
@@ -626,19 +645,16 @@ compute_allocation_for_child (GtkGridRequest *request,
                               GtkGridChild   *child,
                               GtkOrientation  orientation)
 {
-  GtkGridPrivate *priv = request->grid->priv;
-  GtkGridLineData *linedata;
   GtkGridLines *lines;
   GtkGridLine *line;
   GtkGridChildAttach *attach;
   gint size;
   gint i;
 
-  linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
   attach = &child->attach[orientation];
 
-  size = (attach->span - 1) * linedata->spacing;
+  size = (attach->span - 1) * get_spacing (request->grid, orientation);
   for (i = 0; i < attach->span; i++)
     {
       line = &lines->lines[attach->pos - lines->min + i];
@@ -831,6 +847,7 @@ gtk_grid_request_spanning (GtkGridRequest *request,
   gint span_natural;
   gint span_expand;
   gboolean force_expand;
+  gint spacing;
   gint extra;
   gint expand;
   gint line_extra;
@@ -838,6 +855,7 @@ gtk_grid_request_spanning (GtkGridRequest *request,
 
   linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
+  spacing = get_spacing (request->grid, orientation);
 
   for (list = priv->children; list; list = list->next)
     {
@@ -853,8 +871,8 @@ gtk_grid_request_spanning (GtkGridRequest *request,
       /* We ignore baselines for spanning children */
       compute_request_for_child (request, child, orientation, contextual, &minimum, &natural, NULL, NULL);
 
-      span_minimum = (attach->span - 1) * linedata->spacing;
-      span_natural = (attach->span - 1) * linedata->spacing;
+      span_minimum = (attach->span - 1) * spacing;
+      span_natural = (attach->span - 1) * spacing;
       span_expand = 0;
       force_expand = FALSE;
       for (i = 0; i < attach->span; i++)
@@ -886,7 +904,7 @@ gtk_grid_request_spanning (GtkGridRequest *request,
             {
               gint total, m;
 
-              total = minimum - (attach->span - 1) * linedata->spacing;
+              total = minimum - (attach->span - 1) * spacing;
               m = total / attach->span + (total % attach->span ? 1 : 0);
               for (i = 0; i < attach->span; i++)
                 {
@@ -918,7 +936,7 @@ gtk_grid_request_spanning (GtkGridRequest *request,
             {
               gint total, n;
 
-              total = natural - (attach->span - 1) * linedata->spacing;
+              total = natural - (attach->span - 1) * spacing;
               n = total / attach->span + (total % attach->span ? 1 : 0);
               for (i = 0; i < attach->span; i++)
                 {
@@ -1071,16 +1089,16 @@ gtk_grid_request_sum (GtkGridRequest *request,
 		      gint           *natural_baseline)
 {
   GtkGridPrivate *priv = request->grid->priv;
-  GtkGridLineData *linedata;
   GtkGridLines *lines;
   gint i;
   gint min, nat;
   gint nonempty;
+  gint spacing;
 
   gtk_grid_request_compute_expand (request, orientation, G_MININT, G_MAXINT, &nonempty, NULL);
 
-  linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
+  spacing = get_spacing (request->grid, orientation);
 
   min = 0;
   nat = 0;
@@ -1101,16 +1119,16 @@ gtk_grid_request_sum (GtkGridRequest *request,
 
       if (!lines->lines[i].empty)
 	{
-	  min += linedata->spacing;
-	  nat += linedata->spacing;
+	  min += spacing;
+	  nat += spacing;
 	}
     }
 
   /* Remove last spacing, if any was applied */
   if (nonempty > 0)
     {
-      min -= linedata->spacing;
-      nat -= linedata->spacing;
+      min -= spacing;
+      nat -= spacing;
     }
 
   *minimum = min;
@@ -1226,9 +1244,11 @@ gtk_grid_request_allocate (GtkGridRequest *request,
   gint rest;
   gint size1, size2;
   gint split, split_pos;
+  gint spacing;
 
   linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
+  spacing = get_spacing (request->grid, orientation);
 
   baseline = gtk_widget_get_allocated_baseline (GTK_WIDGET (request->grid));
 
@@ -1243,12 +1263,12 @@ gtk_grid_request_allocate (GtkGridRequest *request,
 
       if (nonempty2 > 0)
 	{
-	  size1 = split_pos - (nonempty1) * linedata->spacing;
-	  size2 = (total_size - split_pos) - (nonempty2 - 1) * linedata->spacing;
+	  size1 = split_pos - (nonempty1) * spacing;
+	  size2 = (total_size - split_pos) - (nonempty2 - 1) * spacing;
 	}
       else
 	{
-	  size1 = total_size - (nonempty1 - 1) * linedata->spacing;
+	  size1 = total_size - (nonempty1 - 1) * spacing;
 	  size2 = 0;
 	}
     }
@@ -1258,7 +1278,7 @@ gtk_grid_request_allocate (GtkGridRequest *request,
       nonempty2 = expand2 = 0;
       split = lines->max;
 
-      size1 = total_size - (nonempty1 - 1) * linedata->spacing;
+      size1 = total_size - (nonempty1 - 1) * spacing;
       size2 = 0;
     }
 
@@ -1357,15 +1377,15 @@ gtk_grid_request_position (GtkGridRequest *request,
                            GtkOrientation  orientation)
 {
   GtkGridPrivate *priv = request->grid->priv;
-  GtkGridLineData *linedata;
   GtkGridLines *lines;
   GtkGridLine *line;
   gint position, old_position;
   int allocated_baseline;
+  gint spacing;
   gint i, j;
 
-  linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
+  spacing = get_spacing (request->grid, orientation);
 
   allocated_baseline = gtk_widget_get_allocated_baseline (GTK_WIDGET(request->grid));
 
@@ -1393,7 +1413,7 @@ gtk_grid_request_position (GtkGridRequest *request,
       if (!line->empty)
         {
           line->position = position;
-          position += line->allocation + linedata->spacing;
+          position += line->allocation + spacing;
 
 	  if (orientation == GTK_ORIENTATION_VERTICAL &&
 	      i + lines->min == priv->baseline_row &&
@@ -1529,14 +1549,11 @@ allocate_child (GtkGridRequest *request,
                 gint           *size,
 		gint           *baseline)
 {
-  GtkGridPrivate *priv = request->grid->priv;
-  GtkGridLineData *linedata;
   GtkGridLines *lines;
   GtkGridLine *line;
   GtkGridChildAttach *attach;
   gint i;
 
-  linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
   attach = &child->attach[orientation];
 
@@ -1546,7 +1563,7 @@ allocate_child (GtkGridRequest *request,
   else
     *baseline = -1;
 
-  *size = (attach->span - 1) * linedata->spacing;
+  *size = (attach->span - 1) * get_spacing (request->grid, orientation);
   for (i = 0; i < attach->span; i++)
     {
       line = &lines->lines[attach->pos - lines->min + i];
