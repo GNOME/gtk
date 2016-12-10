@@ -29,11 +29,12 @@ GtkCssValue *   _gtk_css_position_value_new           (GtkCssValue            *x
                                                        GtkCssValue            *y);
 GtkCssValue *   _gtk_css_position_value_parse         (GtkCssParser           *parser);
 GtkCssValue *   _gtk_css_position_value_try_parse     (GtkCssParser           *parser);
+GtkCssValue *   gtk_css_position_value_parse_spacing  (GtkCssParser           *parser);
 
 double          _gtk_css_position_value_get_x         (const GtkCssValue      *position,
-                                                     double                  one_hundred_percent);
+                                                       double                  one_hundred_percent);
 double          _gtk_css_position_value_get_y         (const GtkCssValue      *position,
-                                                     double                  one_hundred_percent);
+                                                       double                  one_hundred_percent);
 
 
 G_END_DECLS

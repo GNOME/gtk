@@ -291,6 +291,32 @@ _gtk_css_position_value_try_parse (GtkCssParser *parser)
   return position_value_parse (parser, TRUE);
 }
 
+GtkCssValue *
+gtk_css_position_value_parse_spacing (GtkCssParser *parser)
+{
+  GtkCssValue *x, *y;
+
+  x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
+  if (x == NULL)
+    return NULL;
+
+  if (gtk_css_number_value_can_parse (parser))
+    {
+      y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
+      if (y == NULL)
+        {
+          _gtk_css_value_unref (x);
+          return NULL;
+        }
+    }
+  else
+    {
+      y = _gtk_css_value_ref (x);
+    }
+
+  return _gtk_css_position_value_new (x, y);
+}
+
 double
 _gtk_css_position_value_get_x (const GtkCssValue *position,
                                double             one_hundred_percent)

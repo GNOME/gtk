@@ -563,6 +563,13 @@ transform_value_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+border_spacing_value_parse (GtkCssStyleProperty *property,
+                            GtkCssParser        *parser)
+{
+  return gtk_css_position_value_parse_spacing (parser);
+}
+
+static GtkCssValue *
 border_corner_radius_value_parse (GtkCssStyleProperty *property,
                                   GtkCssParser        *parser)
 {
@@ -1447,6 +1454,16 @@ _gtk_css_style_property_init_properties (void)
                                           transform_value_parse,
                                           NULL,
                                           _gtk_css_transform_value_new_none ());
+
+  gtk_css_style_property_register        ("border-spacing",
+                                          GTK_CSS_PROPERTY_BORDER_SPACING,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_SIZE,
+                                          border_spacing_value_parse,
+                                          NULL,
+                                          _gtk_css_position_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                       _gtk_css_number_value_new (0, GTK_CSS_PX)));
 
   gtk_css_style_property_register        ("min-width",
                                           GTK_CSS_PROPERTY_MIN_WIDTH,
