@@ -82,14 +82,20 @@ gsk_render_node_finalize (GskRenderNode *self)
 
 /*< private >
  * gsk_render_node_new:
- * @renderer: a #GskRenderer
+ * @type: type of the new node
  *
  * Returns: (transfer full): the newly created #GskRenderNode
  */
 GskRenderNode *
-gsk_render_node_new (void)
+gsk_render_node_new (GskRenderNodeType type)
 {
-  GskRenderNode *self = g_slice_new0 (GskRenderNode);
+  GskRenderNode *self;
+  
+  g_return_val_if_fail (type != GSK_NOT_A_RENDER_NODE, NULL);
+
+  self = g_slice_new0 (GskRenderNode);
+
+  self->type = type;
 
   self->ref_count = 1;
 
@@ -146,6 +152,24 @@ gsk_render_node_unref (GskRenderNode *node)
 
   if (g_atomic_int_dec_and_test (&node->ref_count))
     gsk_render_node_finalize (node);
+}
+
+/**
+ * gsk_render_node_get_node_type:
+ * @node: a #GskRenderNode
+ *
+ * Returns the type of the @node.
+ *
+ * Returns: the type of the #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNodeType
+gsk_render_node_get_node_type (GskRenderNode *node)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), GSK_NOT_A_RENDER_NODE);
+
+  return node->type;
 }
 
 /**

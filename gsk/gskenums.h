@@ -23,6 +23,24 @@
 #endif
 
 /**
+ * GskRenderNodeType:
+ * @GSK_NOT_A_RENDER_NODE: Error type. No node will ever have this type.
+ * @GSK_CONTAINER_NODE: A node containing a stack of children
+ * @GSK_CAIRO_NODE: A node drawing a #cairo_surface_t
+ * @GSK_TEXTURE_NODE: A node drawing a #GskTexture
+ *
+ * The type of a node determines what the node is rendering.
+ *
+ * Since: 3.90
+ **/
+typedef enum {
+  GSK_NOT_A_RENDER_NODE = 0,
+  GSK_CONTAINER_NODE,
+  GSK_CAIRO_NODE,
+  GSK_TEXTURE_NODE
+} GskRenderNodeType;
+
+/**
  * GskScalingFilter:
  * @GSK_SCALING_FILTER_LINEAR: linear interpolation filter
  * @GSK_SCALING_FILTER_NEAREST: nearest neighbor interpolation filter

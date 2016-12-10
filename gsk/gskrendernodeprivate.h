@@ -8,6 +8,8 @@ G_BEGIN_DECLS
 
 struct _GskRenderNode
 {
+  GskRenderNodeType type;
+
   volatile int ref_count;
 
   /* The graph */
@@ -57,7 +59,7 @@ struct _GskRenderNode
   gboolean needs_world_matrix_update : 1;
 };
 
-GskRenderNode *gsk_render_node_new (void);
+GskRenderNode *gsk_render_node_new (GskRenderNodeType type);
 
 void gsk_render_node_make_immutable (GskRenderNode *node);
 

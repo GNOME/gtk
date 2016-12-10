@@ -691,7 +691,7 @@ gsk_renderer_create_render_node (GskRenderer *renderer)
 {
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
 
-  return gsk_render_node_new ();
+  return gsk_render_node_new (GSK_CONTAINER_NODE);
 }
 
 /*< private >

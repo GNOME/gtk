@@ -42,6 +42,9 @@ GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_unref                   (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNodeType       gsk_render_node_get_node_type           (GskRenderNode *node);
+
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_parent              (GskRenderNode *node);
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_first_child         (GskRenderNode *node);
