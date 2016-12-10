@@ -432,55 +432,6 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
   return gsk_render_node_get_draw_context (node, snapshot->renderer);
 }
 
-/**
- * gtk_snapshot_push_cairo_node:
- * @snapshot: a #GtkSnapshot
- * @bounds: the bounds for the new node
- * @name: (transfer none): a printf() style format string for the name for the new node
- * @...: arguments to insert into the format string
- *
- * Creates a new render node, appends it to the current render
- * node of @snapshot, and makes it the new current render node.
- *
- * Returns: a cairo_t suitable for drawing the contents of the newly
- *     created render node
- *
- * Since: 3.90
- */
-cairo_t *
-gtk_snapshot_push_cairo_node (GtkSnapshot            *snapshot,
-                              const graphene_rect_t  *bounds,
-                              const char             *name,
-                              ...)
-{
-  GskRenderNode *node;
-
-  g_return_val_if_fail (snapshot != NULL, NULL);
-  g_return_val_if_fail (bounds != NULL, NULL);
-
-  node = gsk_renderer_create_render_node (snapshot->renderer);
-  gsk_render_node_set_bounds (node, bounds);
-
-  if (name)
-    {
-      va_list args;
-      char *str;
-
-      va_start (args, name);
-      str = g_strdup_vprintf (name, args);
-      va_end (args);
-
-      gsk_render_node_set_name (node, str);
-
-      g_free (str);
-    }
-
-  gtk_snapshot_push_node (snapshot, node);
-  gsk_render_node_unref (node);
-
-  return gsk_render_node_get_draw_context (node, snapshot->renderer);
-}
-
 static void
 rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
                               const graphene_rect_t *graphene)

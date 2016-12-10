@@ -48,11 +48,6 @@ GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push_node                  (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);
 GDK_AVAILABLE_IN_3_90
-cairo_t *       gtk_snapshot_push_cairo_node            (GtkSnapshot            *snapshot,
-                                                         const graphene_rect_t  *bounds,
-                                                         const char             *name,
-                                                         ...) G_GNUC_PRINTF(3, 4);
-GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_3_90
