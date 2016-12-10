@@ -129,7 +129,6 @@ struct _GtkBoxPrivate
   gint16          spacing;
 
   guint           homogeneous    : 1;
-  guint           spacing_set    : 1;
   guint           baseline_pos   : 2;
 };
 
@@ -1967,7 +1966,6 @@ gtk_box_init (GtkBox *box)
 
   private->homogeneous = FALSE;
   private->spacing = 0;
-  private->spacing_set = FALSE;
   private->baseline_pos = GTK_BASELINE_POSITION_CENTER;
 
   private->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (box)),
@@ -2129,7 +2127,6 @@ gtk_box_set_spacing (GtkBox *box,
   if (private->spacing != spacing)
     {
       private->spacing = spacing;
-      private->spacing_set = TRUE;
 
       g_object_notify_by_pspec (G_OBJECT (box), props[PROP_SPACING]);
 
