@@ -4,7 +4,6 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
-#include "gskrendernodeiter.h"
 #include "gskrendernodeprivate.h"
 #include "gsktextureprivate.h"
 
@@ -52,7 +51,6 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
                                 GskRenderNode    *node,
                                 cairo_t          *cr)
 {
-  GskRenderNodeIter iter;
   GskRenderNode *child;
   gboolean pop_group = FALSE;
   graphene_matrix_t mvp;
@@ -136,9 +134,12 @@ out:
       GSK_NOTE (CAIRO, g_print ("Drawing %d children of node [%p]\n",
                                 gsk_render_node_get_n_children (node),
                                 node));
-      gsk_render_node_iter_init (&iter, node);
-      while (gsk_render_node_iter_next (&iter, &child))
-        gsk_cairo_renderer_render_node (self, child, cr);
+      for (child = gsk_render_node_get_first_child (node);
+           child != NULL;
+           child = gsk_render_node_get_next_sibling (child))
+        {
+          gsk_cairo_renderer_render_node (self, child, cr);
+        }
     }
 
   if (pop_group)

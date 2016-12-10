@@ -44,7 +44,6 @@
 #include "gskrendernodeprivate.h"
 
 #include "gskdebugprivate.h"
-#include "gskrendernodeiter.h"
 #include "gskrendererprivate.h"
 #include "gsktexture.h"
 
@@ -69,17 +68,14 @@ G_DEFINE_BOXED_TYPE (GskRenderNode, gsk_render_node,
 static void
 gsk_render_node_finalize (GskRenderNode *self)
 {
-  GskRenderNodeIter iter;
-
   self->is_mutable = TRUE;
 
   g_clear_pointer (&self->surface, cairo_surface_destroy);
   g_clear_pointer (&self->texture, gsk_texture_unref);
   g_clear_pointer (&self->name, g_free);
 
-  gsk_render_node_iter_init (&iter, self);
-  while (gsk_render_node_iter_next (&iter, NULL))
-    gsk_render_node_iter_remove (&iter);
+  while (self->first_child)
+    gsk_render_node_remove_child (self, self->first_child);
 
   g_slice_free (GskRenderNode, self);
 }
@@ -697,17 +693,14 @@ gsk_render_node_remove_child (GskRenderNode *node,
 GskRenderNode *
 gsk_render_node_remove_all_children (GskRenderNode *node)
 {
-  GskRenderNodeIter iter;
-
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
   g_return_val_if_fail (node->is_mutable, node);
 
   if (node->n_children == 0)
     return node;
 
-  gsk_render_node_iter_init (&iter, node);
-  while (gsk_render_node_iter_next (&iter, NULL))
-    gsk_render_node_iter_remove (&iter);
+  while (node->first_child != NULL)
+    gsk_render_node_remove_child (node, node->first_child);
 
   g_assert (node->n_children == 0);
   g_assert (node->first_child == NULL);
@@ -967,7 +960,6 @@ void
 gsk_render_node_update_world_matrix (GskRenderNode *node,
                                      gboolean       force)
 {
-  GskRenderNodeIter iter;
   GskRenderNode *child;
 
   if (force || node->needs_world_matrix_update)
@@ -1000,9 +992,12 @@ gsk_render_node_update_world_matrix (GskRenderNode *node,
       node->needs_world_matrix_update = FALSE;
     }
 
-  gsk_render_node_iter_init (&iter, node);
-  while (gsk_render_node_iter_next (&iter, &child))
-    gsk_render_node_update_world_matrix (child, TRUE);
+  for (child = gsk_render_node_get_first_child (node);
+       child != NULL;
+       child = gsk_render_node_get_next_sibling (child))
+    {
+      gsk_render_node_update_world_matrix (child, TRUE);
+    }
 }
 
 gboolean
@@ -1289,7 +1284,6 @@ gsk_render_node_get_draw_context (GskRenderNode *node,
 void
 gsk_render_node_make_immutable (GskRenderNode *node)
 {
-  GskRenderNodeIter iter;
   GskRenderNode *child;
 
   if (!node->is_mutable)
@@ -1297,9 +1291,12 @@ gsk_render_node_make_immutable (GskRenderNode *node)
 
   node->is_mutable = FALSE;
 
-  gsk_render_node_iter_init (&iter, node);
-  while (gsk_render_node_iter_next (&iter, &child))
-    gsk_render_node_make_immutable (child);
+  for (child = gsk_render_node_get_first_child (node);
+       child != NULL;
+       child = gsk_render_node_get_next_sibling (child))
+    {
+      gsk_render_node_make_immutable (child);
+    }
 }
 
 /*< private >
@@ -1313,16 +1310,18 @@ gsk_render_node_make_immutable (GskRenderNode *node)
 int
 gsk_render_node_get_size (GskRenderNode *root)
 {
-  GskRenderNodeIter iter;
   GskRenderNode *child;
   int res;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (root), 0);
 
   res = 1;
-  gsk_render_node_iter_init (&iter, root);
-  while (gsk_render_node_iter_next (&iter, &child))
-    res += gsk_render_node_get_size (child);
+  for (child = gsk_render_node_get_first_child (root);
+       child != NULL;
+       child = gsk_render_node_get_next_sibling (child))
+    {
+      res += gsk_render_node_get_size (child);
+    }
 
   return res;
 }

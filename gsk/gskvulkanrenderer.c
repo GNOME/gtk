@@ -5,7 +5,6 @@
 #include "gskdebugprivate.h"
 #include "gskprivate.h"
 #include "gskrendererprivate.h"
-#include "gskrendernodeiter.h"
 #include "gskrendernodeprivate.h"
 #include "gsktextureprivate.h"
 #include "gskvulkanbufferprivate.h"

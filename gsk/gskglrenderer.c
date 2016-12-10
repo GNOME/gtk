@@ -9,7 +9,6 @@
 #include "gskprofilerprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gskrendernodeiter.h"
 #include "gskshaderbuilderprivate.h"
 #include "gsktextureprivate.h"
 
@@ -627,7 +626,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                  RenderItem              *parent)
 {
   graphene_rect_t viewport;
-  GskRenderNodeIter iter;
   graphene_matrix_t mv;
   graphene_rect_t bounds;
   GskRenderNode *child;
@@ -789,9 +787,12 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
     render_items = item.children;
 
 out:
-  gsk_render_node_iter_init (&iter, node);
-  while (gsk_render_node_iter_next (&iter, &child))
-    gsk_gl_renderer_add_render_item (self, projection, render_items, child, ritem);
+  for (child = gsk_render_node_get_first_child (node);
+       child != NULL;
+       child = gsk_render_node_get_next_sibling (child))
+    {
+      gsk_gl_renderer_add_render_item (self, projection, render_items, child, ritem);
+    }
 }
 
 static gboolean

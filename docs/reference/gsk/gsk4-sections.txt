@@ -63,18 +63,3 @@ GskRenderNodeClass
 gsk_render_node_get_type
 GSK_TYPE_BLEND_MODE
 </SECTION>
-
-<SECTION>
-<FILE>GskRenderNodeIter</FILE>
-gsk_render_node_iter_new
-gsk_render_node_iter_free
-gsk_render_node_iter_init
-gsk_render_node_iter_is_valid
-gsk_render_node_iter_prev
-gsk_render_node_iter_next
-gsk_render_node_iter_remove
-<SUBSECTION Standard>
-GSK_TYPE_RENDER_NODE_ITER
-GskRenderNodeIter
-gsk_render_node_iter_get_type
-</SECTION>
