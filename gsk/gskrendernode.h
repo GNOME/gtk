@@ -123,19 +123,6 @@ void                    gsk_render_node_set_name                (GskRenderNode *
 GDK_AVAILABLE_IN_3_90
 const char *            gsk_render_node_get_name                (GskRenderNode *node);
 
-#define GSK_VALUE_HOLDS_RENDER_NODE(value)	(G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE))
-
-GDK_AVAILABLE_IN_3_90
-void                    gsk_value_set_render_node               (GValue        *value,
-                                                                 GskRenderNode *node);
-GDK_AVAILABLE_IN_3_90
-void                    gsk_value_take_render_node              (GValue        *value,
-                                                                 GskRenderNode *node);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_value_get_render_node               (const GValue  *value);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_value_dup_render_node               (const GValue  *value);
-
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_H__ */

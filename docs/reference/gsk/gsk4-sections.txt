@@ -53,10 +53,6 @@ gsk_render_node_set_blend_mode
 GskScalingFilter
 gsk_render_node_set_scaling_filters
 gsk_render_node_set_name
-gsk_value_set_render_node
-gsk_value_take_render_node
-gsk_value_get_render_node
-gsk_value_dup_render_node
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE
