@@ -6,14 +6,8 @@
 
 G_BEGIN_DECLS
 
-#define GSK_RENDER_NODE_CLASS(klass)            (G_TYPE_CHECK_CLASS_CAST ((klass), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
-#define GSK_IS_RENDER_NODE_CLASS(klass)         (G_TYPE_CHECK_CLASS_TYPE ((klass), GSK_TYPE_RENDER_NODE))
-#define GSK_RENDER_NODE_GET_CLASS(obj)          (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
-
 struct _GskRenderNode
 {
-  GTypeInstance parent_instance;
-
   volatile int ref_count;
 
   /* The graph */
@@ -61,13 +55,6 @@ struct _GskRenderNode
   gboolean opaque : 1;
   gboolean transform_set : 1;
   gboolean needs_world_matrix_update : 1;
-};
-
-struct _GskRenderNodeClass
-{
-  GTypeClass parent_class;
-
-  void (* finalize) (GskRenderNode *node);
 };
 
 GskRenderNode *gsk_render_node_new (void);

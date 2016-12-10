@@ -55,93 +55,16 @@
 #include <gobject/gvaluecollector.h>
 
 /**
- * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref) (set-value-func gsk_value_set_render_node) (get-value-func gsk_value_get_render_node)
+ * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref)
  *
  * The `GskRenderNode` structure contains only private data.
  *
  * Since: 3.90
  */
 
-static void
-value_render_node_init (GValue *value)
-{
-  value->data[0].v_pointer = NULL;
-}
-
-static void
-value_render_node_free (GValue *value)
-{
-  if (value->data[0].v_pointer != NULL)
-    gsk_render_node_unref (value->data[0].v_pointer);
-}
-
-static void
-value_render_node_copy (const GValue *src,
-                        GValue       *dst)
-{
-  if (src->data[0].v_pointer != NULL)
-    dst->data[0].v_pointer = gsk_render_node_ref (src->data[0].v_pointer);
-  else
-    dst->data[0].v_pointer = NULL;
-}
-
-static gpointer
-value_render_node_peek_pointer (const GValue *value)
-{
-  return value->data[0].v_pointer;
-}
-
-static gchar *
-value_render_node_collect_value (GValue      *value,
-                                 guint        n_collect_values,
-                                 GTypeCValue *collect_values,
-                                 guint        collect_flags)
-{
-  GskRenderNode *node;
-
-  node = collect_values[0].v_pointer;
-
-  if (node == NULL)
-    {
-      value->data[0].v_pointer = NULL;
-      return NULL;
-    }
-
-  if (node->parent_instance.g_class == NULL)
-    return g_strconcat ("invalid unclassed GskRenderNode pointer for "
-                        "value type '",
-                        G_VALUE_TYPE_NAME (value),
-                        "'",
-                        NULL);
-
-  value->data[0].v_pointer = gsk_render_node_ref (node);
-
-  return NULL;
-}
-
-static gchar *
-value_render_node_lcopy_value (const GValue *value,
-                               guint         n_collect_values,
-                               GTypeCValue  *collect_values,
-                               guint         collect_flags)
-{
-  GskRenderNode **node_p = collect_values[0].v_pointer;
-
-  if (node_p == NULL)
-    return g_strconcat ("value location for '",
-                        G_VALUE_TYPE_NAME (value),
-                        "' passed as NULL",
-                        NULL);
-
-  if (value->data[0].v_pointer == NULL)
-    *node_p = NULL;
-  else if (collect_flags & G_VALUE_NOCOPY_CONTENTS)
-    *node_p = value->data[0].v_pointer;
-  else
-    *node_p = gsk_render_node_ref (value->data[0].v_pointer);
-
-  return NULL;
-}
+G_DEFINE_BOXED_TYPE (GskRenderNode, gsk_render_node,
+                     gsk_render_node_ref,
+                     gsk_render_node_unref)
 
 static void
 gsk_render_node_finalize (GskRenderNode *self)
@@ -158,28 +81,20 @@ gsk_render_node_finalize (GskRenderNode *self)
   while (gsk_render_node_iter_next (&iter, NULL))
     gsk_render_node_iter_remove (&iter);
 
-  g_type_free_instance ((GTypeInstance *) self);
+  g_slice_free (GskRenderNode, self);
 }
 
-static void
-gsk_render_node_class_base_init (GskRenderNodeClass *klass)
+/*< private >
+ * gsk_render_node_new:
+ * @renderer: a #GskRenderer
+ *
+ * Returns: (transfer full): the newly created #GskRenderNode
+ */
+GskRenderNode *
+gsk_render_node_new (void)
 {
-}
+  GskRenderNode *self = g_slice_new0 (GskRenderNode);
 
-static void
-gsk_render_node_class_base_finalize (GskRenderNodeClass *klass)
-{
-}
-
-static void
-gsk_render_node_class_init (GskRenderNodeClass *klass)
-{
-  klass->finalize = gsk_render_node_finalize;
-}
-
-static void
-gsk_render_node_init (GskRenderNode *self)
-{
   self->ref_count = 1;
 
   graphene_rect_init_from_rect (&self->bounds, graphene_rect_zero ());
@@ -193,68 +108,8 @@ gsk_render_node_init (GskRenderNode *self)
 
   self->is_mutable = TRUE;
   self->needs_world_matrix_update = TRUE;
-}
 
-GType
-gsk_render_node_get_type (void)
-{
-  static volatile gsize gsk_render_node_type__volatile;
-
-  if (g_once_init_enter (&gsk_render_node_type__volatile))
-    {
-      static const GTypeFundamentalInfo finfo = {
-        (G_TYPE_FLAG_CLASSED |
-         G_TYPE_FLAG_INSTANTIATABLE |
-         G_TYPE_FLAG_DERIVABLE |
-         G_TYPE_FLAG_DEEP_DERIVABLE),
-      };
-      static const GTypeValueTable render_node_value_table = {
-        value_render_node_init,
-        value_render_node_free,
-        value_render_node_copy,
-        value_render_node_peek_pointer,
-        "p", value_render_node_collect_value,
-        "p", value_render_node_lcopy_value,
-      };
-      const GTypeInfo render_node_info = {
-        sizeof (GskRenderNodeClass),
-
-        (GBaseInitFunc) gsk_render_node_class_base_init,
-        (GBaseFinalizeFunc) gsk_render_node_class_base_finalize,
-        (GClassInitFunc) gsk_render_node_class_init,
-        (GClassFinalizeFunc) NULL,
-        NULL,
-
-        sizeof (GskRenderNode), 16,
-        (GInstanceInitFunc) gsk_render_node_init,
-
-        &render_node_value_table,
-      };
-      GType gsk_render_node_type =
-        g_type_register_fundamental (g_type_fundamental_next (),
-                                     g_intern_static_string ("GskRenderNode"),
-                                     &render_node_info,
-                                     &finfo,
-                                     0);
-
-      g_once_init_leave (&gsk_render_node_type__volatile, gsk_render_node_type);
-    }
-
-  return gsk_render_node_type__volatile;
-}
-
-/*< private >
- * gsk_render_node_new:
- * @renderer: a #GskRenderer
- *
- * Returns: (transfer full): the newly created #GskRenderNode
- */
-GskRenderNode *
-gsk_render_node_new (void)
-{
-  GskRenderNode *res = (GskRenderNode *) g_type_create_instance (GSK_TYPE_RENDER_NODE);
-
-  return res;
+  return self;
 }
 
 /**
@@ -294,7 +149,7 @@ gsk_render_node_unref (GskRenderNode *node)
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
   if (g_atomic_int_dec_and_test (&node->ref_count))
-    GSK_RENDER_NODE_GET_CLASS (node)->finalize (node);
+    gsk_render_node_finalize (node);
 }
 
 /**

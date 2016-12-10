@@ -29,11 +29,9 @@ G_BEGIN_DECLS
 
 #define GSK_TYPE_RENDER_NODE (gsk_render_node_get_type ())
 
-#define GSK_RENDER_NODE(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSK_TYPE_RENDER_NODE, GskRenderNode))
-#define GSK_IS_RENDER_NODE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSK_TYPE_RENDER_NODE))
+#define GSK_IS_RENDER_NODE(obj) ((obj) != NULL)
 
 typedef struct _GskRenderNode           GskRenderNode;
-typedef struct _GskRenderNodeClass      GskRenderNodeClass;
 
 GDK_AVAILABLE_IN_3_90
 GType gsk_render_node_get_type (void) G_GNUC_CONST;
