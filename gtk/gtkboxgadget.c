@@ -22,6 +22,7 @@
 #include "gtkboxgadgetprivate.h"
 
 #include "gtkcssnodeprivate.h"
+#include "gtkcsspositionvalueprivate.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
@@ -116,6 +117,18 @@ effective_align (GtkAlign align,
     }
 }
 
+static int
+get_spacing (GtkCssGadget *gadget)
+{
+  GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (GTK_BOX_GADGET (gadget));
+  GtkCssValue *spacing = gtk_css_style_get_value (gtk_css_gadget_get_style (gadget), GTK_CSS_PROPERTY_BORDER_SPACING);
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    return _gtk_css_position_value_get_x (spacing, 100);
+  else
+    return _gtk_css_position_value_get_y (spacing, 100);
+}
+
 static void
 gtk_box_gadget_measure_child (GObject        *child,
                               GtkOrientation  orientation,
@@ -151,8 +164,11 @@ gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
 {
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (GTK_BOX_GADGET (gadget));
   guint i, n_expand;
+  gint spacing;
 
   n_expand = 0;
+  spacing = get_spacing (GTK_CSS_GADGET (gadget));
+  size += spacing;
 
   for (i = 0 ; i < priv->children->len; i++)
     {
@@ -163,9 +179,12 @@ gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
                                     for_size,
                                     &sizes[i].minimum_size, &sizes[i].natural_size,
                                     NULL, NULL);
-      if (gtk_box_gadget_child_is_visible (child->object) &&
-          gtk_box_gadget_child_compute_expand (gadget, child))
-        n_expand++;
+      if (gtk_box_gadget_child_is_visible (child->object))
+        {
+          size -= spacing;
+          if (gtk_box_gadget_child_compute_expand (gadget, child))
+            n_expand++;
+        }
       size -= sizes[i].minimum_size;
     }
 
@@ -193,7 +212,6 @@ gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
       size -= size / n_expand;
       n_expand--;
     }
-
 }
 
 static void
@@ -206,11 +224,13 @@ gtk_box_gadget_measure_orientation (GtkCssGadget   *gadget,
                                     gint           *natural_baseline)
 {
   GtkBoxGadgetPrivate *priv = gtk_box_gadget_get_instance_private (GTK_BOX_GADGET (gadget));
-  gint child_min, child_nat;
-  guint i;
+  gint child_min, child_nat, spacing;
+  guint i, n_visible;
 
   *minimum = 0;
   *natural = 0;
+  spacing = get_spacing (gadget);
+  n_visible = 0;
 
   for (i = 0 ; i < priv->children->len; i++)
     {
@@ -224,7 +244,13 @@ gtk_box_gadget_measure_orientation (GtkCssGadget   *gadget,
 
       *minimum += child_min;
       *natural += child_nat;
+
+      if (gtk_box_gadget_child_is_visible (child->object))
+        n_visible++;
     }
+
+  *minimum += (MAX (n_visible, 1) - 1) * spacing;
+  *natural += (MAX (n_visible, 1) - 1) * spacing;
 }
 
 static void
@@ -415,10 +441,12 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
   GtkRequestedSize *sizes;
   GtkAllocation child_allocation, child_clip;
   GtkAlign child_align;
+  gint spacing;
   guint i;
 
   child_allocation = *allocation;
   sizes = g_newa (GtkRequestedSize, priv->children->len);
+  spacing = get_spacing (gadget);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -435,7 +463,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
           child_allocation.height = allocation->height;
           child_allocation.y = allocation->y;
           if (priv->allocate_reverse)
-            child_allocation.x -= child_allocation.width;
+            child_allocation.x -= child_allocation.width + spacing;
 
           child_align = gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child);
           gtk_box_gadget_allocate_child (child->object,
@@ -451,7 +479,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
             gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
           if (!priv->allocate_reverse)
-            child_allocation.x += sizes[idx].minimum_size;
+            child_allocation.x += sizes[idx].minimum_size + spacing;
         }
     }
   else
@@ -469,7 +497,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
           child_allocation.width = allocation->width;
           child_allocation.x = allocation->x;
           if (priv->allocate_reverse)
-            child_allocation.y -= child_allocation.height;
+            child_allocation.y -= child_allocation.height + spacing;
 
           child_align = gtk_box_gadget_child_get_align (GTK_BOX_GADGET (gadget), child);
           gtk_box_gadget_allocate_child (child->object,
@@ -485,7 +513,7 @@ gtk_box_gadget_allocate (GtkCssGadget        *gadget,
             gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
           if (!priv->allocate_reverse)
-            child_allocation.y += sizes[idx].minimum_size;
+            child_allocation.y += sizes[idx].minimum_size + spacing;
         }
     }
 }
