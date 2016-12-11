@@ -59,10 +59,6 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
 
   cairo_save (cr);
 
-  if (!gsk_render_node_has_surface (node) &&
-      !gsk_render_node_has_texture (node))
-    goto out;
-
   gsk_render_node_get_world_matrix (node, &mvp);
   if (graphene_matrix_to_2d (&mvp, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
     {
@@ -98,19 +94,49 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
                             node->name,
                             node,
                             frame.origin.x, frame.origin.y));
-  if (gsk_render_node_has_texture (node))
-    {
-      GskTexture *texture = gsk_texture_node_get_texture (node);
-      cairo_surface_t *surface = gsk_texture_download (texture);
 
-      cairo_set_source_surface (cr, surface, frame.origin.x, frame.origin.y); 
-      cairo_paint (cr);
-      cairo_surface_destroy (surface);
-    }
-  else
+  switch (gsk_render_node_get_node_type (node))
     {
-      cairo_set_source_surface (cr, gsk_cairo_node_get_surface (node), frame.origin.x, frame.origin.y); 
-      cairo_paint (cr);
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
+      break;
+
+    case GSK_CONTAINER_NODE:
+      if (gsk_render_node_get_n_children (node) != 0)
+        {
+          cairo_matrix_invert (&ctm);
+          cairo_transform (cr, &ctm);
+
+          GSK_NOTE (CAIRO, g_print ("Drawing %d children of node [%p]\n",
+                                    gsk_render_node_get_n_children (node),
+                                    node));
+          for (child = gsk_render_node_get_first_child (node);
+               child != NULL;
+               child = gsk_render_node_get_next_sibling (child))
+            {
+              gsk_cairo_renderer_render_node (self, child, cr);
+            }
+        }
+      break;
+
+    case GSK_TEXTURE_NODE:
+      {
+        GskTexture *texture = gsk_texture_node_get_texture (node);
+        cairo_surface_t *surface = gsk_texture_download (texture);
+
+        cairo_set_source_surface (cr, surface, frame.origin.x, frame.origin.y); 
+        cairo_paint (cr);
+        cairo_surface_destroy (surface);
+      }
+      break;
+
+    case GSK_CAIRO_NODE:
+      {
+        cairo_set_source_surface (cr, gsk_cairo_node_get_surface (node), frame.origin.x, frame.origin.y); 
+        cairo_paint (cr);
+      }
+      break;
     }
 
   if (GSK_RENDER_MODE_CHECK (GEOMETRY))
@@ -122,23 +148,6 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
       cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
       cairo_stroke (cr);
       cairo_restore (cr);
-    }
-
-  cairo_matrix_invert (&ctm);
-  cairo_transform (cr, &ctm);
-
-out:
-  if (gsk_render_node_get_n_children (node) != 0)
-    {
-      GSK_NOTE (CAIRO, g_print ("Drawing %d children of node [%p]\n",
-                                gsk_render_node_get_n_children (node),
-                                node));
-      for (child = gsk_render_node_get_first_child (node);
-           child != NULL;
-           child = gsk_render_node_get_next_sibling (child))
-        {
-          gsk_cairo_renderer_render_node (self, child, cr);
-        }
     }
 
   if (pop_group)

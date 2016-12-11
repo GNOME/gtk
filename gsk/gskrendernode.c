@@ -753,22 +753,6 @@ gsk_render_node_update_world_matrix (GskRenderNode *node,
     }
 }
 
-gboolean
-gsk_render_node_has_surface (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), FALSE);
-
-  return node->surface != NULL;
-}
-
-gboolean
-gsk_render_node_has_texture (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), FALSE);
-
-  return node->texture != NULL;
-}
-
 GskTexture *
 gsk_texture_node_get_texture (GskRenderNode *node)
 {

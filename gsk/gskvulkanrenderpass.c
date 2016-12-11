@@ -58,7 +58,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass *self,
                                  GskVulkanRender     *render,
                                  GskRenderNode       *node)
 {
-  GskRenderNode *child;
   GskVulkanRenderOp op = {
     .type = GSK_VULKAN_OP_FALLBACK,
     .node = node
@@ -67,26 +66,31 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass *self,
   if (gsk_render_node_get_opacity (node) < 1.0)
     goto fallback;
 
-  if (gsk_render_node_has_surface (node))
+  switch (gsk_render_node_get_node_type (node))
     {
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
+      break;
+
+    case GSK_CAIRO_NODE:
       op.type = GSK_VULKAN_OP_SURFACE;
       g_array_append_val (self->render_ops, op);
-    }
-  else if (gsk_render_node_has_texture (node))
-    {
+      break;
+
+    case GSK_TEXTURE_NODE:
       op.type = GSK_VULKAN_OP_TEXTURE;
       g_array_append_val (self->render_ops, op);
-    }
-  else
-    {
-      /* nothing to do for nodes without sources */
-    }
+      break;
 
-  for (child = gsk_render_node_get_first_child (node);
-       child;
-       child = gsk_render_node_get_next_sibling (child))
-    {
-      gsk_vulkan_render_pass_add_node (self, render, child);
+    case GSK_CONTAINER_NODE:
+      for (GskRenderNode *child = gsk_render_node_get_first_child (node);
+           child;
+           child = gsk_render_node_get_next_sibling (child))
+        {
+          gsk_vulkan_render_pass_add_node (self, render, child);
+        }
+      break;
     }
 
   return;

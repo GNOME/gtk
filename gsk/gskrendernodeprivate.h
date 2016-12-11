@@ -73,9 +73,6 @@ cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
 
-gboolean gsk_render_node_has_surface (GskRenderNode *node);
-gboolean gsk_render_node_has_texture (GskRenderNode *node);
-
 GskBlendMode gsk_render_node_get_blend_mode (GskRenderNode *node);
 
 GskRenderNode *gsk_render_node_get_toplevel (GskRenderNode *node);

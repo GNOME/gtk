@@ -719,38 +719,43 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       item.children = NULL;
     }
 
-  if (gsk_render_node_has_texture (node))
+  switch (gsk_render_node_get_node_type (node))
     {
-      GskTexture *texture = gsk_texture_node_get_texture (node);
-      int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
+    case GSK_TEXTURE_NODE:
+      {
+        GskTexture *texture = gsk_texture_node_get_texture (node);
+        int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
 
-      get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+        get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
 
-      item.render_data.texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                                           texture,
-                                                                           gl_min_filter,
-                                                                           gl_mag_filter);
-    }
-  else if (gsk_render_node_has_surface (node))
-    {
-      cairo_surface_t *surface = gsk_cairo_node_get_surface (node);
-      int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
+        item.render_data.texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                                             texture,
+                                                                             gl_min_filter,
+                                                                             gl_mag_filter);
+      }
+      break;
 
-      get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+    case GSK_CAIRO_NODE:
+      {
+        cairo_surface_t *surface = gsk_cairo_node_get_surface (node);
+        int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
 
-      /* Upload the Cairo surface to a GL texture */
-      item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
-                                                                  item.size.width,
-                                                                  item.size.height);
-      gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
-      gsk_gl_driver_init_texture_with_surface (self->gl_driver,
-                                               item.render_data.texture_id,
-                                               surface,
-                                               gl_min_filter,
-                                               gl_mag_filter);
-    }
-  else
-    {
+        get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+
+        /* Upload the Cairo surface to a GL texture */
+        item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                                    item.size.width,
+                                                                    item.size.height);
+        gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
+        gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                                 item.render_data.texture_id,
+                                                 surface,
+                                                 gl_min_filter,
+                                                 gl_mag_filter);
+      }
+      break;
+
+    default:
       /* If the node does not draw anything, we skip it */
       if (item.render_data.render_target_id == 0)
         goto out;

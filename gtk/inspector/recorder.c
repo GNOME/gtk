@@ -184,12 +184,12 @@ populate_render_node_properties (GtkListStore  *store,
 
   gtk_list_store_insert_with_values (store, NULL, -1,
                                      0, "Has Surface",
-                                     1, gsk_render_node_has_surface (node) ? "TRUE" : "FALSE",
+                                     1, gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE ? "TRUE" : "FALSE",
                                      -1);
 
   gtk_list_store_insert_with_values (store, NULL, -1,
                                      0, "Has Texture",
-                                     1, gsk_render_node_has_texture (node) ? "TRUE" : "FALSE",
+                                     1, gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE ? "TRUE" : "FALSE",
                                      -1);
 
   class = g_type_class_ref (gsk_blend_mode_get_type ());
