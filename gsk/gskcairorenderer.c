@@ -94,8 +94,7 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
       pop_group = TRUE;
     }
 
-  GSK_NOTE (CAIRO, g_print ("Rendering surface %p for node %s[%p] at %g, %g\n",
-                            gsk_render_node_get_surface (node),
+  GSK_NOTE (CAIRO, g_print ("Rendering node %s[%p] at %g, %g\n",
                             node->name,
                             node,
                             frame.origin.x, frame.origin.y));
@@ -110,7 +109,7 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
     }
   else
     {
-      cairo_set_source_surface (cr, gsk_render_node_get_surface (node), frame.origin.x, frame.origin.y); 
+      cairo_set_source_surface (cr, gsk_cairo_node_get_surface (node), frame.origin.x, frame.origin.y); 
       cairo_paint (cr);
     }
 

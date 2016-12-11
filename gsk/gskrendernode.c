@@ -1080,7 +1080,7 @@ gsk_texture_node_new (GskTexture            *texture,
 }
 
 /*< private >
- * gsk_render_node_get_surface:
+ * gsk_cairo_node_get_surface:
  * @node: a #GskRenderNode
  *
  * Retrieves the surface set using gsk_render_node_set_surface().
@@ -1088,9 +1088,10 @@ gsk_texture_node_new (GskTexture            *texture,
  * Returns: (transfer none) (nullable): a Cairo surface
  */
 cairo_surface_t *
-gsk_render_node_get_surface (GskRenderNode *node)
+gsk_cairo_node_get_surface (GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (node->type == GSK_CAIRO_NODE, NULL);
 
   return node->surface;
 }
@@ -1218,8 +1219,34 @@ gsk_render_node_get_blend_mode (GskRenderNode *node)
 }
 
 /**
- * gsk_render_node_get_draw_context:
- * @node: a #GskRenderNode
+ * gsk_cairo_node_new:
+ * @bounds: the rectangle to render the to
+ *
+ * Creates a #GskRenderNode that will render a cairo surface
+ * into the area given by @bounds. You can draw to the cairo
+ * surface using gsk_cairo_node_get_draw_context()
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_cairo_node_new (const graphene_rect_t *bounds)
+{
+  GskRenderNode *node;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  node = gsk_render_node_new (GSK_CAIRO_NODE);
+
+  graphene_rect_init_from_rect (&node->bounds, bounds);
+
+  return node;
+}
+
+/**
+ * gsk_cairo_node_get_draw_context:
+ * @node: a cairo #GskRenderNode
  * @renderer: (nullable): Renderer to optimize for or %NULL for any
  *
  * Creates a Cairo context for drawing using the surface associated
@@ -1233,13 +1260,14 @@ gsk_render_node_get_blend_mode (GskRenderNode *node)
  * Since: 3.90
  */
 cairo_t *
-gsk_render_node_get_draw_context (GskRenderNode *node,
-                                  GskRenderer   *renderer)
+gsk_cairo_node_get_draw_context (GskRenderNode *node,
+                                 GskRenderer   *renderer)
 {
   int width, height;
   cairo_t *res;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (node->type == GSK_CAIRO_NODE, NULL);
   g_return_val_if_fail (node->is_mutable, NULL);
   g_return_val_if_fail (renderer == NULL || GSK_IS_RENDERER (renderer), NULL);
 

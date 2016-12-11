@@ -154,7 +154,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
 
         case GSK_VULKAN_OP_SURFACE:
           {
-            cairo_surface_t *surface = gsk_render_node_get_surface (op->node);
+            cairo_surface_t *surface = gsk_cairo_node_get_surface (op->node);
             op->source = gsk_vulkan_image_new_from_data (self->vulkan,
                                                          command_buffer,
                                                          cairo_image_surface_get_data (surface),

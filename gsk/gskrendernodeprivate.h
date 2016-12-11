@@ -69,7 +69,7 @@ void gsk_render_node_get_transform (GskRenderNode     *node,
                                     graphene_matrix_t *mv);
 double gsk_render_node_get_opacity (GskRenderNode *node);
 
-cairo_surface_t *gsk_render_node_get_surface (GskRenderNode *node);
+cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
 

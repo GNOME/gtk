@@ -49,6 +49,12 @@ GskRenderNode *         gsk_texture_node_new                    (GskTexture     
                                                                  const graphene_rect_t    *bounds);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_cairo_node_new                      (const graphene_rect_t    *bounds);
+GDK_AVAILABLE_IN_3_90
+cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node,
+                                                                 GskRenderer              *renderer);
+
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_parent              (GskRenderNode *node);
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_first_child         (GskRenderNode *node);
@@ -107,9 +113,6 @@ void                    gsk_render_node_set_opaque              (GskRenderNode *
                                                                  gboolean       opaque);
 GDK_AVAILABLE_IN_3_90
 gboolean                gsk_render_node_is_opaque               (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_90
-cairo_t *               gsk_render_node_get_draw_context        (GskRenderNode *node,
-                                                                 GskRenderer   *renderer);
 
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_blend_mode          (GskRenderNode *node,

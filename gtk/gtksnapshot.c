@@ -409,8 +409,7 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
   g_return_val_if_fail (snapshot != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_renderer_create_render_node (snapshot->renderer);
-  gsk_render_node_set_bounds (node, bounds);
+  node = gsk_cairo_node_new (bounds);
 
   if (name)
     {
@@ -429,7 +428,7 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
   gtk_snapshot_append_node (snapshot, node);
   gsk_render_node_unref (node);
 
-  return gsk_render_node_get_draw_context (node, snapshot->renderer);
+  return gsk_cairo_node_get_draw_context (node, snapshot->renderer);
 }
 
 static void
