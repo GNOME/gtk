@@ -81,7 +81,7 @@ gsk_render_node_finalize (GskRenderNode *self)
   while (self->first_child)
     gsk_render_node_remove_child (self, self->first_child);
 
-  g_slice_free (GskRenderNode, self);
+  g_slice_free1 (self->node_class->struct_size, self);
 }
 
 /*< private >
@@ -98,7 +98,7 @@ gsk_render_node_new (const GskRenderNodeClass *node_class)
   g_return_val_if_fail (node_class != NULL, NULL);
   g_return_val_if_fail (node_class->node_type != GSK_NOT_A_RENDER_NODE, NULL);
 
-  self = g_slice_new0 (GskRenderNode);
+  self = g_slice_alloc0 (node_class->struct_size);
 
   self->node_class = node_class;
 

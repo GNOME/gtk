@@ -24,14 +24,26 @@
 
 /*** GSK_TEXTURE_NODE ***/
 
+typedef struct _GskTextureNode GskTextureNode;
+
+struct _GskTextureNode
+{
+  GskRenderNode render_node;
+
+  GskTexture *texture;
+};
+
 static void
 gsk_texture_node_finalize (GskRenderNode *node)
 {
-  gsk_texture_unref (node->texture);
+  GskTextureNode *self = (GskTextureNode *) node;
+
+  gsk_texture_unref (self->texture);
 }
 
 static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   GSK_TEXTURE_NODE,
+  sizeof (GskTextureNode),
   "GskTextureNode",
   gsk_texture_node_finalize
 };
@@ -39,9 +51,11 @@ static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
 GskTexture *
 gsk_texture_node_get_texture (GskRenderNode *node)
 {
+  GskTextureNode *self = (GskTextureNode *) node;
+
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXTURE_NODE), 0);
 
-  return node->texture;
+  return self->texture;
 }
 
 /**
@@ -60,14 +74,16 @@ GskRenderNode *
 gsk_texture_node_new (GskTexture            *texture,
                       const graphene_rect_t *bounds)
 {
+  GskTextureNode *self;
   GskRenderNode *node;
 
   g_return_val_if_fail (GSK_IS_TEXTURE (texture), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
   node = gsk_render_node_new (&GSK_TEXTURE_NODE_CLASS);
+  self = (GskTextureNode *) node;
 
-  node->texture = gsk_texture_ref (texture);
+  self->texture = gsk_texture_ref (texture);
   graphene_rect_init_from_rect (&node->bounds, bounds);
 
   return node;
@@ -75,15 +91,27 @@ gsk_texture_node_new (GskTexture            *texture,
 
 /*** GSK_CAIRO_NODE ***/
 
+typedef struct _GskCairoNode GskCairoNode;
+
+struct _GskCairoNode
+{
+  GskRenderNode render_node;
+
+  cairo_surface_t *surface;
+};
+
 static void
 gsk_cairo_node_finalize (GskRenderNode *node)
 {
-  if (node->surface)
-    cairo_surface_destroy (node->surface);
+  GskCairoNode *self = (GskCairoNode *) node;
+
+  if (self->surface)
+    cairo_surface_destroy (self->surface);
 }
 
 static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   GSK_CAIRO_NODE,
+  sizeof (GskCairoNode),
   "GskCairoNode",
   gsk_cairo_node_finalize
 };
@@ -99,9 +127,11 @@ static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
 cairo_surface_t *
 gsk_cairo_node_get_surface (GskRenderNode *node)
 {
+  GskCairoNode *self = (GskCairoNode *) node;
+
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CAIRO_NODE), NULL);
 
-  return node->surface;
+  return self->surface;
 }
 
 /**
@@ -149,6 +179,7 @@ cairo_t *
 gsk_cairo_node_get_draw_context (GskRenderNode *node,
                                  GskRenderer   *renderer)
 {
+  GskCairoNode *self = (GskCairoNode *) node;
   int width, height;
   cairo_t *res;
 
@@ -165,11 +196,11 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
       res = cairo_create (surface);
       cairo_surface_destroy (surface);
     }
-  else if (node->surface == NULL)
+  else if (self->surface == NULL)
     {
       if (renderer)
         {
-          node->surface = gsk_renderer_create_cairo_surface (renderer,
+          self->surface = gsk_renderer_create_cairo_surface (renderer,
                                                              node->opaque ? CAIRO_FORMAT_RGB24
                                                                           : CAIRO_FORMAT_ARGB32,
                                                              ceilf (node->bounds.size.width),
@@ -177,16 +208,16 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
         }
       else
         {
-          node->surface = cairo_image_surface_create (node->opaque ? CAIRO_FORMAT_RGB24
+          self->surface = cairo_image_surface_create (node->opaque ? CAIRO_FORMAT_RGB24
                                                                    : CAIRO_FORMAT_ARGB32,
                                                       ceilf (node->bounds.size.width),
                                                       ceilf (node->bounds.size.height));
         }
-      res = cairo_create (node->surface);
+      res = cairo_create (self->surface);
     }
   else
     {
-      res = cairo_create (node->surface);
+      res = cairo_create (self->surface);
     }
 
   cairo_translate (res, -node->bounds.origin.x, -node->bounds.origin.y);
@@ -225,6 +256,7 @@ gsk_container_node_finalize (GskRenderNode *node)
 
 static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   GSK_CONTAINER_NODE,
+  sizeof (GskRenderNode),
   "GskContainerNode",
   gsk_container_node_finalize
 };

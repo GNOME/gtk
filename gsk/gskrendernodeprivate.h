@@ -31,12 +31,6 @@ struct _GskRenderNode
   /* Tag updated when adding/removing children */
   gint64 age;
 
-  /* The contents of the node as a Cairo surface */
-  cairo_surface_t *surface;
-
-  /* The contents of the node as a texture */
-  GskTexture *texture;
-
   /* Paint opacity */
   double opacity;
 
@@ -66,6 +60,7 @@ struct _GskRenderNode
 struct _GskRenderNodeClass
 {
   GskRenderNodeType node_type;
+  gsize struct_size;
   const char *type_name;
   void (* finalize) (GskRenderNode *node);
 };
