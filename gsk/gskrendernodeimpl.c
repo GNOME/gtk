@@ -41,11 +41,17 @@ gsk_texture_node_finalize (GskRenderNode *node)
   gsk_texture_unref (self->texture);
 }
 
+static void
+gsk_texture_node_make_immutable (GskRenderNode *node)
+{
+}
+
 static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   GSK_TEXTURE_NODE,
   sizeof (GskTextureNode),
   "GskTextureNode",
-  gsk_texture_node_finalize
+  gsk_texture_node_finalize,
+  gsk_texture_node_make_immutable
 };
 
 GskTexture *
@@ -109,11 +115,17 @@ gsk_cairo_node_finalize (GskRenderNode *node)
     cairo_surface_destroy (self->surface);
 }
 
+static void
+gsk_cairo_node_make_immutable (GskRenderNode *node)
+{
+}
+
 static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   GSK_CAIRO_NODE,
   sizeof (GskCairoNode),
   "GskCairoNode",
-  gsk_cairo_node_finalize
+  gsk_cairo_node_finalize,
+  gsk_cairo_node_make_immutable
 };
 
 /*< private >
@@ -252,11 +264,25 @@ gsk_container_node_finalize (GskRenderNode *node)
 {
 }
 
+static void
+gsk_container_node_make_immutable (GskRenderNode *node)
+{
+  GskRenderNode *child;
+
+  for (child = gsk_render_node_get_first_child (node);
+       child != NULL;
+       child = gsk_render_node_get_next_sibling (child))
+    {
+      gsk_render_node_make_immutable (child);
+    }
+}
+
 static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   GSK_CONTAINER_NODE,
   sizeof (GskRenderNode),
   "GskContainerNode",
-  gsk_container_node_finalize
+  gsk_container_node_finalize,
+  gsk_container_node_make_immutable
 };
 
 /**

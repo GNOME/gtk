@@ -841,19 +841,12 @@ gsk_render_node_get_blend_mode (GskRenderNode *node)
 void
 gsk_render_node_make_immutable (GskRenderNode *node)
 {
-  GskRenderNode *child;
-
   if (!node->is_mutable)
     return;
 
-  node->is_mutable = FALSE;
+  node->node_class->make_immutable (node);
 
-  for (child = gsk_render_node_get_first_child (node);
-       child != NULL;
-       child = gsk_render_node_get_next_sibling (child))
-    {
-      gsk_render_node_make_immutable (child);
-    }
+  node->is_mutable = FALSE;
 }
 
 /*< private >

@@ -62,6 +62,7 @@ struct _GskRenderNodeClass
   gsize struct_size;
   const char *type_name;
   void (* finalize) (GskRenderNode *node);
+  void (* make_immutable) (GskRenderNode *node);
 };
 
 GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class);
