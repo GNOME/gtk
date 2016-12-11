@@ -86,20 +86,21 @@ gsk_render_node_finalize (GskRenderNode *self)
 
 /*< private >
  * gsk_render_node_new:
- * @type: type of the new node
+ * @node_class: class structure for this node
  *
  * Returns: (transfer full): the newly created #GskRenderNode
  */
 GskRenderNode *
-gsk_render_node_new (GskRenderNodeType type)
+gsk_render_node_new (const GskRenderNodeClass *node_class)
 {
   GskRenderNode *self;
   
-  g_return_val_if_fail (type != GSK_NOT_A_RENDER_NODE, NULL);
+  g_return_val_if_fail (node_class != NULL, NULL);
+  g_return_val_if_fail (node_class->node_type != GSK_NOT_A_RENDER_NODE, NULL);
 
   self = g_slice_new0 (GskRenderNode);
 
-  self->type = type;
+  self->node_class = node_class;
 
   self->ref_count = 1;
 
@@ -173,7 +174,7 @@ gsk_render_node_get_node_type (GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), GSK_NOT_A_RENDER_NODE);
 
-  return node->type;
+  return node->node_class->node_type;
 }
 
 /**
@@ -393,8 +394,7 @@ GskRenderNode *
 gsk_render_node_append_child (GskRenderNode *node,
                               GskRenderNode *child)
 {
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (node->type == GSK_CONTAINER_NODE, NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
   g_return_val_if_fail (node->is_mutable, node);
 
@@ -494,9 +494,8 @@ void
 gsk_render_node_set_bounds (GskRenderNode         *node,
                             const graphene_rect_t *bounds)
 {
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE));
   g_return_if_fail (node->is_mutable);
-  g_return_if_fail (node->type == GSK_CONTAINER_NODE);
 
   if (bounds == NULL)
     graphene_rect_init_from_rect (&node->bounds, graphene_rect_zero ());

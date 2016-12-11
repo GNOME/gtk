@@ -6,9 +6,13 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GskRenderNodeClass GskRenderNodeClass;
+
+#define GSK_IS_RENDER_NODE_TYPE(node,type) (GSK_IS_RENDER_NODE (node) && (node)->node_class->node_type == (type))
+
 struct _GskRenderNode
 {
-  GskRenderNodeType type;
+  const GskRenderNodeClass *node_class;
 
   volatile int ref_count;
 
@@ -59,7 +63,13 @@ struct _GskRenderNode
   gboolean needs_world_matrix_update : 1;
 };
 
-GskRenderNode *gsk_render_node_new (GskRenderNodeType type);
+struct _GskRenderNodeClass
+{
+  GskRenderNodeType node_type;
+  const char *type_name;
+};
+
+GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class);
 
 void gsk_render_node_make_immutable (GskRenderNode *node);
 

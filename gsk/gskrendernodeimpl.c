@@ -24,11 +24,15 @@
 
 /*** GSK_TEXTURE_NODE ***/
 
+static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
+  GSK_TEXTURE_NODE,
+  "GskTextureNode"
+};
+
 GskTexture *
 gsk_texture_node_get_texture (GskRenderNode *node)
 {
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 0);
-  g_return_val_if_fail (node->type == GSK_TEXTURE_NODE, 0);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXTURE_NODE), 0);
 
   return node->texture;
 }
@@ -54,7 +58,7 @@ gsk_texture_node_new (GskTexture            *texture,
   g_return_val_if_fail (GSK_IS_TEXTURE (texture), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_render_node_new (GSK_TEXTURE_NODE);
+  node = gsk_render_node_new (&GSK_TEXTURE_NODE_CLASS);
 
   node->texture = gsk_texture_ref (texture);
   graphene_rect_init_from_rect (&node->bounds, bounds);
@@ -63,6 +67,11 @@ gsk_texture_node_new (GskTexture            *texture,
 }
 
 /*** GSK_CAIRO_NODE ***/
+
+static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
+  GSK_CAIRO_NODE,
+  "GskCairoNode"
+};
 
 /*< private >
  * gsk_cairo_node_get_surface:
@@ -75,8 +84,7 @@ gsk_texture_node_new (GskTexture            *texture,
 cairo_surface_t *
 gsk_cairo_node_get_surface (GskRenderNode *node)
 {
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (node->type == GSK_CAIRO_NODE, NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CAIRO_NODE), NULL);
 
   return node->surface;
 }
@@ -100,7 +108,7 @@ gsk_cairo_node_new (const graphene_rect_t *bounds)
 
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_render_node_new (GSK_CAIRO_NODE);
+  node = gsk_render_node_new (&GSK_CAIRO_NODE_CLASS);
 
   graphene_rect_init_from_rect (&node->bounds, bounds);
 
@@ -129,8 +137,7 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
   int width, height;
   cairo_t *res;
 
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (node->type == GSK_CAIRO_NODE, NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CAIRO_NODE), NULL);
   g_return_val_if_fail (node->is_mutable, NULL);
   g_return_val_if_fail (renderer == NULL || GSK_IS_RENDERER (renderer), NULL);
 
