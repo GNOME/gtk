@@ -4461,7 +4461,6 @@ gtk_snapshot_set_transform
 gtk_snapshot_transform
 gtk_snapshot_translate_2d
 gtk_snapshot_append_node
-gtk_snapshot_append
 gtk_snapshot_append_cairo_node
 gtk_snapshot_clips_rect
 gtk_snapshot_render_background

@@ -337,53 +337,6 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
 }
 
 /**
- * gtk_snapshot_append:
- * @snapshot: a #GtkSnapshot
- * @bounds: the bounds for the new node
- * @name: (transfer none): a printf() style format string for the name for the new node
- * @...: arguments to insert into the format string
- *
- * Creates a new render node and appends it to the current render
- * node of @snapshot, without changing the current node.
- *
- * Since: 3.90
- *
- * Returns: (transfer full): the newly created #GskRenderNode
- */
-GskRenderNode *
-gtk_snapshot_append (GtkSnapshot           *snapshot,
-                     const graphene_rect_t *bounds,
-                     const char            *name,
-                     ...)
-{
-  GskRenderNode *node;
-
-  g_return_val_if_fail (snapshot != NULL, NULL);
-  g_return_val_if_fail (bounds != NULL, NULL);
-
-  node = gsk_renderer_create_render_node (snapshot->renderer);
-  gsk_render_node_set_bounds (node, bounds);
-
-  if (name)
-    {
-      va_list args;
-      char *str;
-
-      va_start (args, name);
-      str = g_strdup_vprintf (name, args);
-      va_end (args);
-
-      gsk_render_node_set_name (node, str);
-
-      g_free (str);
-    }
-
-  gtk_snapshot_append_node (snapshot, node);
-
-  return node;
-}
-
-/**
  * gtk_snapshot_append_cairo_node:
  * @snapshot: a #GtkSnapshot
  * @bounds: the bounds for the new node
