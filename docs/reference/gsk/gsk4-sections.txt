@@ -39,8 +39,6 @@ gsk_render_node_contains
 gsk_render_node_set_bounds
 gsk_render_node_set_transform
 gsk_render_node_set_opacity
-gsk_render_node_set_opaque
-gsk_render_node_is_opaque
 GskBlendMode
 gsk_render_node_set_blend_mode
 GskScalingFilter

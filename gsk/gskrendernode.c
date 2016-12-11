@@ -604,48 +604,6 @@ gsk_render_node_get_opacity (GskRenderNode *node)
 }
 
 /**
- * gsk_render_node_set_opaque:
- * @node: a #GskRenderNode
- * @opaque: whether the node is fully opaque or not
- *
- * Sets whether the node is known to be fully opaque.
- *
- * Fully opaque nodes will ignore the opacity set using gsk_render_node_set_opacity(),
- * but if their parent is not opaque they may still be rendered with an opacity.
- *
- * Renderers may use this information to optimize the rendering pipeline.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_opaque (GskRenderNode *node,
-                            gboolean       opaque)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (node->is_mutable);
-
-  node->opaque = !!opaque;
-}
-
-/**
- * gsk_render_node_is_opaque:
- * @node: a #GskRenderNode
- *
- * Retrieves the value set using gsk_render_node_set_opaque().
- *
- * Returns: %TRUE if the #GskRenderNode is fully opaque
- *
- * Since: 3.90
- */
-gboolean
-gsk_render_node_is_opaque (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), TRUE);
-
-  return node->opaque;
-}
-
-/**
  * gsk_render_node_contains:
  * @node: a #GskRenderNode
  * @descendant: a #GskRenderNode

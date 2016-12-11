@@ -52,7 +52,6 @@ struct _GskRenderNode
 
   /* Bit fields; leave at the end */
   gboolean is_mutable : 1;
-  gboolean opaque : 1;
   gboolean transform_set : 1;
   gboolean needs_world_matrix_update : 1;
 };

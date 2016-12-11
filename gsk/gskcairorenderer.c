@@ -82,7 +82,7 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
       cairo_clip (cr);
     }
 
-  if (!gsk_render_node_is_opaque (node) && gsk_render_node_get_opacity (node) != 1.0)
+  if (gsk_render_node_get_opacity (node) != 1.0)
     {
       GSK_NOTE (CAIRO, g_print ("Pushing opacity group (opacity:%g)\n",
                                 gsk_render_node_get_opacity (node)));

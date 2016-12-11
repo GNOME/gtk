@@ -48,7 +48,6 @@ typedef struct {
 
   graphene_matrix_t mvp;
 
-  gboolean opaque : 1;
   float opacity;
   float z;
 
@@ -460,7 +459,7 @@ render_item (GskGLRenderer *self,
     }
 
   /* Pass the opacity component */
-  if (item->children != NULL || item->opaque)
+  if (item->children != NULL)
     opacity = 1.0;
   else
     opacity = item->opacity;
@@ -479,7 +478,7 @@ render_item (GskGLRenderer *self,
                       item->name,
                       item,
                       item->size.width, item->size.height,
-                      item->opaque ? 1 : item->opacity,
+                      item->opacity,
                       item->blend_mode));
 
   glDrawArrays (GL_TRIANGLES, 0, N_VERTICES);
@@ -607,13 +606,10 @@ project_item (const graphene_matrix_t *projection,
 static gboolean
 render_node_needs_render_target (GskRenderNode *node)
 {
-  if (!gsk_render_node_is_opaque (node))
-    {
-      double opacity = gsk_render_node_get_opacity (node);
+  double opacity = gsk_render_node_get_opacity (node);
 
-      if (opacity < 1.0)
-        return TRUE;
-    }
+  if (opacity < 1.0)
+    return TRUE;
 
   return FALSE;
 }
@@ -667,7 +663,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   graphene_matrix_multiply (&mv, &self->mvp, &item.mvp);
   item.z = project_item (projection, &mv);
 
-  item.opaque = gsk_render_node_is_opaque (node);
   item.opacity = gsk_render_node_get_opacity (node);
 
   item.blend_mode = gsk_render_node_get_blend_mode (node);

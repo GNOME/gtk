@@ -201,15 +201,13 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
       if (renderer)
         {
           self->surface = gsk_renderer_create_cairo_surface (renderer,
-                                                             node->opaque ? CAIRO_FORMAT_RGB24
-                                                                          : CAIRO_FORMAT_ARGB32,
+                                                             CAIRO_FORMAT_ARGB32,
                                                              ceilf (node->bounds.size.width),
                                                              ceilf (node->bounds.size.height));
         }
       else
         {
-          self->surface = cairo_image_surface_create (node->opaque ? CAIRO_FORMAT_RGB24
-                                                                   : CAIRO_FORMAT_ARGB32,
+          self->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                       ceilf (node->bounds.size.width),
                                                       ceilf (node->bounds.size.height));
         }
