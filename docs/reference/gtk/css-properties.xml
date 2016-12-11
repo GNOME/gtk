@@ -1375,5 +1375,33 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       〈binding name〉 must have been assigned to a binding set with a @binding-set rule.
     </para>
 
+      <table pgwide="1">
+        <title>Table-related properties</title>
+        <tgroup cols="7">
+          <colspec colnum="4" align="center"/>
+          <colspec colnum="5" align="center"/>
+          <thead>
+            <row><entry>Name</entry><entry>Value</entry><entry>Initial</entry><entry>Inh.</entry><entry>Ani.</entry><entry>Reference</entry><entry>Notes</entry></row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>border‑spacing</entry>
+              <entry><code>〈length〉{1,2}</code></entry>
+              <entry><code>0</code></entry>
+              <entry>✓</entry>
+              <entry>✓</entry>
+              <entry><ulink url="https://www.w3.org/TR/CSS2/tables.html#separated-borders">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/2016/WD-css-tables-3-20161025/#border-spacing-property">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+    <para>
+      The border-spacing property is respected by GtkBox and GtkGrid, and by box gadgets that
+      are used internally in complex widgets.
+    </para>
+
 </refsect1>
 </refentry>
