@@ -69,30 +69,6 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_append_child            (GskRenderNode *node,
                                                                  GskRenderNode *child);
 GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_prepend_child           (GskRenderNode *node,
-                                                                 GskRenderNode *child);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_insert_child_at_pos     (GskRenderNode *node,
-                                                                 GskRenderNode *child,
-                                                                 int            index_);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_insert_child_before     (GskRenderNode *node,
-                                                                 GskRenderNode *child,
-                                                                 GskRenderNode *sibling);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_insert_child_after      (GskRenderNode *node,
-                                                                 GskRenderNode *child,
-                                                                 GskRenderNode *sibling);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_remove_child            (GskRenderNode *node,
-                                                                 GskRenderNode *child);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_replace_child           (GskRenderNode *node,
-                                                                 GskRenderNode *new_child,
-                                                                 GskRenderNode *old_child);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_remove_all_children     (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_90
 guint                   gsk_render_node_get_n_children          (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_3_90

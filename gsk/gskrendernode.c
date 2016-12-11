@@ -65,6 +65,10 @@ G_DEFINE_BOXED_TYPE (GskRenderNode, gsk_render_node,
                      gsk_render_node_ref,
                      gsk_render_node_unref)
 
+static GskRenderNode *
+gsk_render_node_remove_child (GskRenderNode *node,
+                              GskRenderNode *child);
+
 static void
 gsk_render_node_finalize (GskRenderNode *self)
 {
@@ -390,258 +394,13 @@ gsk_render_node_append_child (GskRenderNode *node,
                               GskRenderNode *child)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (node->type == GSK_CONTAINER_NODE, NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
   g_return_val_if_fail (node->is_mutable, node);
 
   gsk_render_node_insert_child_internal (node, child,
 					 insert_child_at_pos,
 					 GINT_TO_POINTER (node->n_children));
-
-  return node;
-}
-
-/**
- * gsk_render_node_prepend_child:
- * @node: a #GskRenderNode
- * @child: a #GskRenderNode
- *
- * Prepends @child to the list of children of @node.
- *
- * This function acquires a reference on @child.
- *
- * Returns: (transfer none): the #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_render_node_prepend_child (GskRenderNode *node,
-                               GskRenderNode *child)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
-  g_return_val_if_fail (node->is_mutable, node);
-
-  gsk_render_node_insert_child_internal (node, child,
-                                         insert_child_at_pos,
-                                         GINT_TO_POINTER (0));
-
-  return node;
-}
-
-/**
- * gsk_render_node_insert_child_at_pos:
- * @node: a #GskRenderNode
- * @child: a #GskRenderNode
- * @index_: the index in the list of children where @child should be inserted at
- *
- * Inserts @child into the list of children of @node, using the given @index_.
- *
- * If @index_ is 0, the @child will be prepended to the list of children.
- *
- * If @index_ is less than zero, or equal to the number of children, the @child
- * will be appended to the list of children.
- *
- * This function acquires a reference on @child.
- *
- * Returns: (transfer none): the #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_render_node_insert_child_at_pos (GskRenderNode *node,
-                                     GskRenderNode *child,
-                                     int            index_)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
-  g_return_val_if_fail (node->is_mutable, node);
-
-  gsk_render_node_insert_child_internal (node, child,
-					 insert_child_at_pos,
-					 GINT_TO_POINTER (index_));
-
-  return node;
-}
-
-static void
-insert_child_before (GskRenderNode *node,
-                     GskRenderNode *child,
-                     gpointer       user_data)
-{
-  GskRenderNode *sibling = user_data;
-
-  if (sibling == NULL)
-    sibling = node->first_child;
-
-  child->next_sibling = sibling;
-
-  if (sibling != NULL)
-    {
-      GskRenderNode *tmp = sibling->prev_sibling;
-
-      child->prev_sibling = tmp;
-
-      if (tmp != NULL)
-	tmp->next_sibling = child;
-
-      sibling->prev_sibling = child;
-    }
-  else
-    child->prev_sibling = NULL;
-}
-
-/**
- * gsk_render_node_insert_child_before:
- * @node: a #GskRenderNode
- * @child: a #GskRenderNode
- * @sibling: (nullable): a #GskRenderNode, or %NULL
- *
- * Inserts @child in the list of children of @node, before @sibling.
- *
- * If @sibling is %NULL, the @child will be inserted at the beginning of the
- * list of children.
- *
- * This function acquires a reference of @child.
- *
- * Returns: (transfer none): the #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_render_node_insert_child_before (GskRenderNode *node,
-                                     GskRenderNode *child,
-                                     GskRenderNode *sibling)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
-  g_return_val_if_fail (sibling == NULL || GSK_IS_RENDER_NODE (sibling), node);
-  g_return_val_if_fail (node->is_mutable, node);
-
-  gsk_render_node_insert_child_internal (node, child, insert_child_before, sibling);
-
-  return node;
-}
-
-static void
-insert_child_after (GskRenderNode *node,
-                    GskRenderNode *child,
-                    gpointer       user_data)
-{
-  GskRenderNode *sibling = user_data;
-
-  if (sibling == NULL)
-    sibling = node->last_child;
-
-  child->prev_sibling = sibling;
-
-  if (sibling != NULL)
-    {
-      GskRenderNode *tmp = sibling->next_sibling;
-
-      child->next_sibling = tmp;
-
-      if (tmp != NULL)
-	tmp->prev_sibling = child;
-
-      sibling->next_sibling = child;
-    }
-  else
-    child->next_sibling = NULL;
-}
-
-/**
- * gsk_render_node_insert_child_after:
- * @node: a #GskRenderNode
- * @child: a #GskRenderNode
- * @sibling: (nullable): a #GskRenderNode, or %NULL
- *
- * Inserts @child in the list of children of @node, after @sibling.
- *
- * If @sibling is %NULL, the @child will be inserted at the end of the list
- * of children.
- *
- * This function acquires a reference of @child.
- *
- * Returns: (transfer none): the #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_render_node_insert_child_after (GskRenderNode *node,
-                                    GskRenderNode *child,
-                                    GskRenderNode *sibling)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
-  g_return_val_if_fail (sibling == NULL || GSK_IS_RENDER_NODE (sibling), node);
-  g_return_val_if_fail (node->is_mutable, node);
-
-  if (sibling != NULL)
-    g_return_val_if_fail (sibling->parent == node, node);
-
-  gsk_render_node_insert_child_internal (node, child, insert_child_after, sibling);
-
-  return node;
-}
-
-typedef struct {
-  GskRenderNode *prev_sibling;
-  GskRenderNode *next_sibling;
-} InsertBetween;
-
-static void
-insert_child_between (GskRenderNode *node,
-                      GskRenderNode *child,
-                      gpointer       data_)
-{
-  InsertBetween *data = data_;
-
-  child->prev_sibling = data->prev_sibling;
-  child->next_sibling = data->next_sibling;
-
-  if (data->prev_sibling != NULL)
-    data->prev_sibling->next_sibling = child;
-
-  if (data->next_sibling != NULL)
-    data->next_sibling->prev_sibling = child;
-}
-
-/**
- * gsk_render_node_replace_child:
- * @node: a #GskRenderNode
- * @new_child: the #GskRenderNode to add
- * @old_child: the #GskRenderNode to replace
- *
- * Replaces @old_child with @new_child in the list of children of @node.
- *
- * This function acquires a reference to @new_child, and releases a reference
- * of @old_child.
- *
- * Returns: (transfer none): the #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_render_node_replace_child (GskRenderNode *node,
-                               GskRenderNode *new_child,
-                               GskRenderNode *old_child)
-{
-  InsertBetween clos;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (new_child), node);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (old_child), node);
-
-  g_return_val_if_fail (new_child->parent == NULL, node);
-  g_return_val_if_fail (old_child->parent == node, node);
-
-  g_return_val_if_fail (node->is_mutable, node);
-
-  clos.prev_sibling = old_child->prev_sibling;
-  clos.next_sibling = old_child->next_sibling;
-  gsk_render_node_remove_child (node, old_child);
-
-  gsk_render_node_insert_child_internal (node, new_child, insert_child_between, &clos);
 
   return node;
 }
@@ -658,7 +417,7 @@ gsk_render_node_replace_child (GskRenderNode *node,
  *
  * Returns: (transfer none): the #GskRenderNode
  */
-GskRenderNode *
+static GskRenderNode *
 gsk_render_node_remove_child (GskRenderNode *node,
                               GskRenderNode *child)
 {
@@ -698,37 +457,6 @@ gsk_render_node_remove_child (GskRenderNode *node,
     node->last_child = prev_sibling;
 
   gsk_render_node_unref (child);
-
-  return node;
-}
-
-/**
- * gsk_render_node_remove_all_children:
- * @node: a #GskRenderNode
- *
- * Removes all children of @node.
- *
- * See also: gsk_render_node_remove_child()
- *
- * Returns: (transfer none): the #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_render_node_remove_all_children (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-  g_return_val_if_fail (node->is_mutable, node);
-
-  if (node->n_children == 0)
-    return node;
-
-  while (node->first_child != NULL)
-    gsk_render_node_remove_child (node, node->first_child);
-
-  g_assert (node->n_children == 0);
-  g_assert (node->first_child == NULL);
-  g_assert (node->last_child == NULL);
 
   return node;
 }
