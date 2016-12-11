@@ -800,28 +800,23 @@ gsk_gl_renderer_validate_tree (GskGLRenderer           *self,
                                GskRenderNode           *root,
                                const graphene_matrix_t *projection)
 {
-  int n_nodes;
-
   if (self->gl_context == NULL)
     {
       GSK_NOTE (OPENGL, g_print ("No valid GL context associated to the renderer"));
       return FALSE;
     }
 
-  n_nodes = gsk_render_node_get_size (root);
-
   gdk_gl_context_make_current (self->gl_context);
 
-  self->render_items = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem), n_nodes);
+  self->render_items = g_array_new (FALSE, FALSE, sizeof (RenderItem));
 
   gsk_gl_driver_begin_frame (self->gl_driver);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
   gsk_gl_renderer_add_render_item (self, projection, self->render_items, root, NULL);
 
-  GSK_NOTE (OPENGL, g_print ("Total render items: %d of max:%d\n",
-                             self->render_items->len,
-                             n_nodes));
+  GSK_NOTE (OPENGL, g_print ("Total render items: %d\n",
+                             self->render_items->len));
 
   gsk_gl_driver_end_frame (self->gl_driver);
 

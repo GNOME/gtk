@@ -849,30 +849,3 @@ gsk_render_node_make_immutable (GskRenderNode *node)
   node->is_mutable = FALSE;
 }
 
-/*< private >
- * gsk_render_node_get_size:
- * @root: a #GskRenderNode
- *
- * Computes the total number of children of @root.
- *
- * Returns: the size of the tree
- */
-int
-gsk_render_node_get_size (GskRenderNode *root)
-{
-  GskRenderNode *child;
-  int res;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (root), 0);
-
-  res = 1;
-  for (child = gsk_render_node_get_first_child (root);
-       child != NULL;
-       child = gsk_render_node_get_next_sibling (child))
-    {
-      res += gsk_render_node_get_size (child);
-    }
-
-  return res;
-}
-
