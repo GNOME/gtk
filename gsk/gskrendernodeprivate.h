@@ -67,6 +67,7 @@ struct _GskRenderNodeClass
 {
   GskRenderNodeType node_type;
   const char *type_name;
+  void (* finalize) (GskRenderNode *node);
 };
 
 GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class);

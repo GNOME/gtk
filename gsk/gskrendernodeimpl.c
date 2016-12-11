@@ -24,9 +24,16 @@
 
 /*** GSK_TEXTURE_NODE ***/
 
+static void
+gsk_texture_node_finalize (GskRenderNode *node)
+{
+  gsk_texture_unref (node->texture);
+}
+
 static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   GSK_TEXTURE_NODE,
-  "GskTextureNode"
+  "GskTextureNode",
+  gsk_texture_node_finalize
 };
 
 GskTexture *
@@ -68,9 +75,17 @@ gsk_texture_node_new (GskTexture            *texture,
 
 /*** GSK_CAIRO_NODE ***/
 
+static void
+gsk_cairo_node_finalize (GskRenderNode *node)
+{
+  if (node->surface)
+    cairo_surface_destroy (node->surface);
+}
+
 static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   GSK_CAIRO_NODE,
-  "GskCairoNode"
+  "GskCairoNode",
+  gsk_cairo_node_finalize
 };
 
 /*< private >
@@ -203,9 +218,15 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
 
 /**** GSK_CONTAINER_NODE ***/
 
+static void
+gsk_container_node_finalize (GskRenderNode *node)
+{
+}
+
 static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   GSK_CONTAINER_NODE,
-  "GskContainerNode"
+  "GskContainerNode",
+  gsk_container_node_finalize
 };
 
 /**
