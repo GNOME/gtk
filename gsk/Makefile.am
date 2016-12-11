@@ -65,6 +65,7 @@ gsk_private_source_h = \
 gsk_public_source_c = \
 	gskrenderer.c \
 	gskrendernode.c \
+	gskrendernodeimpl.c \
 	gsktexture.c
 gsk_private_source_c = \
 	$(gsk_private_vulkan_source_c) \
