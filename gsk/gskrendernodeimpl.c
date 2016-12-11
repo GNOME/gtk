@@ -201,3 +201,27 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
   return res;
 }
 
+/**** GSK_CONTAINER_NODE ***/
+
+static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
+  GSK_CONTAINER_NODE,
+  "GskContainerNode"
+};
+
+/**
+ * gsk_container_node_new:
+ *
+ * Creates a new #GskRenderNode instance for holding multiple different
+ * render nodes. You can use gsk_container_node_append_child() to add
+ * nodes to the container.
+ *
+ * Returns: (transfer full): the new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_container_node_new (void)
+{
+  return gsk_render_node_new (&GSK_CONTAINER_NODE_CLASS);
+}
+

@@ -11,7 +11,6 @@ gsk_renderer_realize
 gsk_renderer_unrealize
 gsk_renderer_begin_draw_frame
 gsk_renderer_end_draw_frame
-gsk_renderer_create_render_node
 gsk_renderer_render
 <SUBSECTION Standard>
 GSK_IS_RENDERER
@@ -50,6 +49,7 @@ gsk_render_node_set_name
 gsk_texture_node_new
 gsk_cairo_node_new
 gsk_cairo_node_get_draw_context
+gsk_container_node_new
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE

@@ -55,6 +55,9 @@ cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode  
                                                                  GskRenderer              *renderer);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_container_node_new                  (void);
+
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_parent              (GskRenderNode *node);
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_first_child         (GskRenderNode *node);

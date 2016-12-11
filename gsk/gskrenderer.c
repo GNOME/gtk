@@ -676,29 +676,6 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_clear_pointer (&priv->root_node, gsk_render_node_unref);
 }
 
-static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
-  GSK_CONTAINER_NODE,
-  "GskContainerNode"
-};
-
-/**
- * gsk_renderer_create_render_node:
- * @renderer: a #GskRenderer
- *
- * Creates a new #GskRenderNode instance tied to the given @renderer.
- *
- * Returns: (transfer full): the new #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_renderer_create_render_node (GskRenderer *renderer)
-{
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-
-  return gsk_render_node_new (&GSK_CONTAINER_NODE_CLASS);
-}
-
 /*< private >
  * gsk_renderer_get_profiler:
  * @renderer: a #GskRenderer

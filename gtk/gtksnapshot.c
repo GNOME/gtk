@@ -110,7 +110,7 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
   snapshot->state = NULL;
   snapshot->renderer = renderer;
   snapshot->clip_region = clip;
-  snapshot->root = gsk_renderer_create_render_node (renderer);
+  snapshot->root = gsk_container_node_new ();
   gsk_render_node_set_bounds (snapshot->root, &GRAPHENE_RECT_INIT (extents.x, extents.y, extents.width, extents.height));
 
   if (name)
@@ -182,7 +182,7 @@ gtk_snapshot_push (GtkSnapshot           *snapshot,
 {
   GskRenderNode *node;
 
-  node = gsk_renderer_create_render_node (snapshot->renderer);
+  node = gsk_container_node_new ();
   gsk_render_node_set_bounds (node, bounds);
 
   if (name)

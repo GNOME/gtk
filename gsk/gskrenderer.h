@@ -69,9 +69,6 @@ GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_renderer_create_render_node         (GskRenderer             *renderer);
-
-GDK_AVAILABLE_IN_3_90
 GskRenderer *           gsk_renderer_create_fallback            (GskRenderer             *renderer,
                                                                  const graphene_rect_t   *viewport,
                                                                  cairo_t                 *cr);
