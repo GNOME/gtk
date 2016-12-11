@@ -74,15 +74,3 @@ r {
 s {
   background-image: -gtk-scaled(-gtk-icontheme("object-select-symbolic"),linear-gradient(yellow, blue));
 }
-
-t {
-  background-image: -gtk-gradient(linear, left top, 0 1, from(red), to(green));
-}
-
-u {
-  background-image: -gtk-gradient(linear, center center, 0.2 bottom, color-stop(0, rgb(0,0,0)), color-stop(0.5, rgb(128,128,128)), color-stop(1, rgb(255,255,255)));
-}
-
-v {
-  background-image: -gtk-gradient(radial, left top, 0.1, 0 1, 0.3, color-stop(0, black), color-stop(1, blue));
-}
