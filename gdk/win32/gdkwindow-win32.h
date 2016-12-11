@@ -285,6 +285,12 @@ struct _GdkWindowImplWin32
    */
   guint have_temp_styles : 1;
 
+  /* If TRUE, the window is in the process of being maximized.
+   * This is set by WM_SYSCOMMAND and by gdk_win32_window_maximize (),
+   * and is unset when WM_WINDOWPOSCHANGING is handled.
+   */
+  guint maximizing : 1;
+
   /* GDK does not keep window contents around, it just draws new
    * stuff over the window where changes occurred.
    * cache_surface retains old window contents, because

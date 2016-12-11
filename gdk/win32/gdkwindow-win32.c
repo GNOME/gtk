@@ -5677,6 +5677,10 @@ GtkShowWindow (GdkWindow *window,
       break;
     }
 
+  /* Ensure that maximized window size is corrected later on */
+  if (cmd_show == SW_MAXIMIZE)
+    impl->maximizing = TRUE;
+
   return ShowWindow (hwnd, cmd_show);
 }
 

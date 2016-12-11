@@ -2078,6 +2078,25 @@ _gdk_win32_window_fill_min_max_info (GdkWindow  *window,
     }
   else
     {
+      /* According to "How does the window manager adjust ptMaxSize and
+       * ptMaxPosition for multiple monitors?" article
+       * https://blogs.msdn.microsoft.com/oldnewthing/20150501-00/?p=44964
+       * if ptMaxSize >= primary_monitor_size, then it will be adjusted by
+       * WM to account for the monitor size differences if the window gets
+       * maximized on a non-primary monitor, by simply adding the size
+       * difference (i.e. if non-primary monitor is larger by 100px, then
+       * window will be made larger exactly by 100px).
+       * If ptMaxSize < primary_monitor_size at least in one direction,
+       * nothing is adjusted.
+       * Therefore, if primary monitor is smaller than the actual monitor,
+       * then it is not possible to give window a size that is larger than
+       * the primary monitor and smaller than the non-primary monitor,
+       * because WM will always enlarge the window.
+       * Therefore, it is impossible to account for taskbar size.
+       * So we don't try at all. Instead we just remember that we're trying
+       * to maximize the window, catch WM_WINDOWPOSCHANGING and
+       * adjust the size then.
+       */
       HMONITOR nearest_monitor;
       MONITORINFO nearest_info;
 
@@ -3108,6 +3127,10 @@ gdk_event_translate (MSG  *msg,
 	case SC_RESTORE:
 	  do_show_window (window, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
 	  break;
+        case SC_MAXIMIZE:
+          impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+          impl->maximizing = TRUE;
+	  break;
 	}
 
       break;
@@ -3159,7 +3182,26 @@ gdk_event_translate (MSG  *msg,
 				  GetNextWindow (msg->hwnd, GW_HWNDPREV))));
 
       if (GDK_WINDOW_IS_MAPPED (window))
-	return_val = ensure_stacking_on_window_pos_changing (msg, window);
+        {
+	  return_val = ensure_stacking_on_window_pos_changing (msg, window);
+
+          impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+          if (impl->maximizing)
+            {
+              MINMAXINFO our_mmi;
+
+              if (_gdk_win32_window_fill_min_max_info (window, &our_mmi))
+                {
+                  windowpos = (WINDOWPOS *) msg->lParam;
+                  windowpos->cx = our_mmi.ptMaxSize.x;
+                  windowpos->cy = our_mmi.ptMaxSize.y;
+                }
+
+              impl->maximizing = FALSE;
+            }
+        }
+
       break;
 
     case WM_WINDOWPOSCHANGED:
