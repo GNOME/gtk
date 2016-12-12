@@ -41,9 +41,6 @@ struct _GskRenderNode
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
 
-  /* Clip rectangle */
-  graphene_rect_t bounds;
-
   /* Transformations relative to the root of the scene */
   graphene_matrix_t world_matrix;
 
@@ -63,6 +60,8 @@ struct _GskRenderNodeClass
   const char *type_name;
   void (* finalize) (GskRenderNode *node);
   void (* make_immutable) (GskRenderNode *node);
+  void (* get_bounds) (GskRenderNode   *node,
+                       graphene_rect_t *bounds);
 };
 
 GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class);

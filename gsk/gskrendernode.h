@@ -79,9 +79,6 @@ gboolean                gsk_render_node_contains                (GskRenderNode *
 								 GskRenderNode *descendant);
 
 GDK_AVAILABLE_IN_3_90
-void                    gsk_render_node_set_bounds              (GskRenderNode            *node,
-                                                                 const graphene_rect_t    *bounds);
-GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_transform           (GskRenderNode            *node,
                                                                  const graphene_matrix_t  *transform);
 GDK_AVAILABLE_IN_3_90

@@ -36,7 +36,6 @@ gsk_render_node_get_previous_sibling
 gsk_render_node_append_child
 gsk_render_node_get_n_children
 gsk_render_node_contains
-gsk_render_node_set_bounds
 gsk_render_node_set_transform
 gsk_render_node_set_opacity
 GskBlendMode

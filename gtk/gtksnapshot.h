@@ -41,9 +41,8 @@ GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot      
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push                       (GtkSnapshot            *snapshot,
-                                                         const graphene_rect_t  *bounds,
                                                          const char             *name,
-                                                         ...) G_GNUC_PRINTF(3, 4);
+                                                         ...) G_GNUC_PRINTF(2, 3);
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push_node                  (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);

@@ -104,8 +104,6 @@ gsk_render_node_new (const GskRenderNodeClass *node_class)
 
   self->ref_count = 1;
 
-  graphene_rect_init_from_rect (&self->bounds, graphene_rect_zero ());
-
   graphene_matrix_init_identity (&self->transform);
 
   self->opacity = 1.0;
@@ -480,35 +478,12 @@ gsk_render_node_get_n_children (GskRenderNode *node)
 }
 
 /**
- * gsk_render_node_set_bounds:
- * @node: a #GskRenderNode
- * @bounds: (nullable): the boundaries of @node
- *
- * Sets the boundaries of @node, which describe the geometry of the
- * render node, and are used to clip the surface associated to it
- * when rendering.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_bounds (GskRenderNode         *node,
-                            const graphene_rect_t *bounds)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE));
-  g_return_if_fail (node->is_mutable);
-
-  if (bounds == NULL)
-    graphene_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
-  else
-    graphene_rect_init_from_rect (&node->bounds, bounds);
-}
-
-/**
  * gsk_render_node_get_bounds:
  * @node: a #GskRenderNode
  * @bounds: (out caller-allocates): return location for the boundaries
  *
- * Retrieves the boundaries set using gsk_render_node_set_bounds().
+ * Retrieves the boundaries of the @node. The node will not draw outside
+ * of its boundaries.
  *
  * Since: 3.90
  */
@@ -519,7 +494,7 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
   g_return_if_fail (bounds != NULL);
 
-  *bounds = node->bounds;
+  node->node_class->get_bounds (node, bounds);
 }
 
 /**

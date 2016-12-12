@@ -31,6 +31,7 @@ struct _GskTextureNode
   GskRenderNode render_node;
 
   GskTexture *texture;
+  graphene_rect_t bounds;
 };
 
 static void
@@ -46,12 +47,22 @@ gsk_texture_node_make_immutable (GskRenderNode *node)
 {
 }
 
+static void
+gsk_texture_node_get_bounds (GskRenderNode   *node,
+                             graphene_rect_t *bounds)
+{
+  GskTextureNode *self = (GskTextureNode *) node;
+
+  graphene_rect_init_from_rect (bounds, &self->bounds); 
+}
+
 static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   GSK_TEXTURE_NODE,
   sizeof (GskTextureNode),
   "GskTextureNode",
   gsk_texture_node_finalize,
-  gsk_texture_node_make_immutable
+  gsk_texture_node_make_immutable,
+  gsk_texture_node_get_bounds
 };
 
 GskTexture *
@@ -81,18 +92,16 @@ gsk_texture_node_new (GskTexture            *texture,
                       const graphene_rect_t *bounds)
 {
   GskTextureNode *self;
-  GskRenderNode *node;
 
   g_return_val_if_fail (GSK_IS_TEXTURE (texture), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_render_node_new (&GSK_TEXTURE_NODE_CLASS);
-  self = (GskTextureNode *) node;
+  self = (GskTextureNode *) gsk_render_node_new (&GSK_TEXTURE_NODE_CLASS);
 
   self->texture = gsk_texture_ref (texture);
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  graphene_rect_init_from_rect (&self->bounds, bounds);
 
-  return node;
+  return &self->render_node;
 }
 
 /*** GSK_CAIRO_NODE ***/
@@ -104,6 +113,7 @@ struct _GskCairoNode
   GskRenderNode render_node;
 
   cairo_surface_t *surface;
+  graphene_rect_t bounds;
 };
 
 static void
@@ -120,12 +130,22 @@ gsk_cairo_node_make_immutable (GskRenderNode *node)
 {
 }
 
+static void
+gsk_cairo_node_get_bounds (GskRenderNode   *node,
+                           graphene_rect_t *bounds)
+{
+  GskCairoNode *self = (GskCairoNode *) node;
+
+  graphene_rect_init_from_rect (bounds, &self->bounds); 
+}
+
 static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   GSK_CAIRO_NODE,
   sizeof (GskCairoNode),
   "GskCairoNode",
   gsk_cairo_node_finalize,
-  gsk_cairo_node_make_immutable
+  gsk_cairo_node_make_immutable,
+  gsk_cairo_node_get_bounds
 };
 
 /*< private >
@@ -161,15 +181,15 @@ gsk_cairo_node_get_surface (GskRenderNode *node)
 GskRenderNode *
 gsk_cairo_node_new (const graphene_rect_t *bounds)
 {
-  GskRenderNode *node;
+  GskCairoNode *self;
 
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_render_node_new (&GSK_CAIRO_NODE_CLASS);
+  self = (GskCairoNode *) gsk_render_node_new (&GSK_CAIRO_NODE_CLASS);
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  graphene_rect_init_from_rect (&self->bounds, bounds);
 
-  return node;
+  return &self->render_node;
 }
 
 /**
@@ -199,8 +219,8 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
   g_return_val_if_fail (node->is_mutable, NULL);
   g_return_val_if_fail (renderer == NULL || GSK_IS_RENDERER (renderer), NULL);
 
-  width = ceilf (node->bounds.size.width);
-  height = ceilf (node->bounds.size.height);
+  width = ceilf (self->bounds.size.width);
+  height = ceilf (self->bounds.size.height);
 
   if (width <= 0 || height <= 0)
     {
@@ -214,14 +234,14 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
         {
           self->surface = gsk_renderer_create_cairo_surface (renderer,
                                                              CAIRO_FORMAT_ARGB32,
-                                                             ceilf (node->bounds.size.width),
-                                                             ceilf (node->bounds.size.height));
+                                                             ceilf (self->bounds.size.width),
+                                                             ceilf (self->bounds.size.height));
         }
       else
         {
           self->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                      ceilf (node->bounds.size.width),
-                                                      ceilf (node->bounds.size.height));
+                                                      ceilf (self->bounds.size.width),
+                                                      ceilf (self->bounds.size.height));
         }
       res = cairo_create (self->surface);
     }
@@ -230,11 +250,11 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
       res = cairo_create (self->surface);
     }
 
-  cairo_translate (res, -node->bounds.origin.x, -node->bounds.origin.y);
+  cairo_translate (res, -self->bounds.origin.x, -self->bounds.origin.y);
 
   cairo_rectangle (res,
-                   node->bounds.origin.x, node->bounds.origin.y,
-                   node->bounds.size.width, node->bounds.size.height);
+                   self->bounds.origin.x, self->bounds.origin.y,
+                   self->bounds.size.width, self->bounds.size.height);
   cairo_clip (res);
 
   if (GSK_DEBUG_CHECK (SURFACE))
@@ -245,8 +265,8 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
         {
           cairo_save (res);
           cairo_rectangle (res,
-                           node->bounds.origin.x + 1, node->bounds.origin.y + 1,
-                           node->bounds.size.width - 2, node->bounds.size.height - 2);
+                           self->bounds.origin.x + 1, self->bounds.origin.y + 1,
+                           self->bounds.size.width - 2, self->bounds.size.height - 2);
           cairo_set_line_width (res, 2);
           cairo_set_source_rgb (res, 1, 0, 0);
           cairo_stroke (res);
@@ -277,12 +297,41 @@ gsk_container_node_make_immutable (GskRenderNode *node)
     }
 }
 
+static void
+gsk_container_node_get_bounds (GskRenderNode   *node,
+                               graphene_rect_t *bounds)
+{
+  GskRenderNode *child;
+
+  child = gsk_render_node_get_first_child (node);
+
+  if (child == NULL)
+    {
+      graphene_rect_init_from_rect (bounds, graphene_rect_zero()); 
+      return;
+    }
+
+  gsk_render_node_get_bounds (child, bounds);
+
+  for (child = gsk_render_node_get_next_sibling (child);
+       child;
+       child = gsk_render_node_get_next_sibling (child))
+    {
+      graphene_rect_t child_bounds, union_bounds;
+  
+      gsk_render_node_get_bounds (child, &child_bounds);
+      graphene_rect_union (bounds, &child_bounds, &union_bounds);
+      graphene_rect_init_from_rect (bounds, &union_bounds); 
+    }
+}
+
 static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   GSK_CONTAINER_NODE,
   sizeof (GskRenderNode),
   "GskContainerNode",
   gsk_container_node_finalize,
-  gsk_container_node_make_immutable
+  gsk_container_node_make_immutable,
+  gsk_container_node_get_bounds
 };
 
 /**
