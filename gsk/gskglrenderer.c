@@ -611,7 +611,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   graphene_rect_t viewport;
   graphene_matrix_t mv, transform;
   graphene_rect_t bounds;
-  GskRenderNode *child;
   RenderItem item;
   RenderItem *ritem = NULL;
   int program_id;
@@ -693,8 +692,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       gsk_gl_driver_init_texture_empty (self->gl_driver, item.render_data.render_target_id);
       gsk_gl_driver_create_render_target (self->gl_driver, item.render_data.render_target_id, TRUE, TRUE);
 
-      item.children = g_array_sized_new (FALSE, FALSE, sizeof (RenderItem),
-                                         gsk_render_node_get_n_children (node));
+      item.children = g_array_new (FALSE, FALSE, sizeof (RenderItem));
     }
   else
     {
@@ -738,10 +736,21 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       }
       break;
 
+    case GSK_CONTAINER_NODE:
+      {
+        guint i;
+
+        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+          {
+            GskRenderNode *child = gsk_container_node_get_child (node, i);
+            gsk_gl_renderer_add_render_item (self, projection, &mv, render_items, child, ritem);
+          }
+      }
+      return;
+
+    case GSK_NOT_A_RENDER_NODE:
     default:
-      /* If the node does not draw anything, we skip it */
-      if (item.render_data.render_target_id == 0)
-        goto out;
+      return;
     }
 
   /* Create the vertex buffers holding the geometry of the quad */
@@ -772,14 +781,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   if (item.children != NULL)
     render_items = item.children;
-
-out:
-  for (child = gsk_render_node_get_first_child (node);
-       child != NULL;
-       child = gsk_render_node_get_next_sibling (child))
-    {
-      gsk_gl_renderer_add_render_item (self, projection, &mv, render_items, child, ritem);
-    }
 }
 
 static gboolean

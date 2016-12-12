@@ -527,15 +527,13 @@ append_node (GtkTreeModelRenderNode *nodemodel,
 
     case GSK_CONTAINER_NODE:
       {
-        GskRenderNode *child;
         gint elt_index;
+        guint i;
 
         elt_index = priv->nodes->len - 1;
-        for (child = gsk_render_node_get_first_child (node);
-             child;
-             child = gsk_render_node_get_next_sibling (child))
+        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
           {
-            append_node (nodemodel, child, elt_index);
+            append_node (nodemodel, gsk_container_node_get_child (node, i), elt_index);
           }
       }
       break;
@@ -579,7 +577,7 @@ gtk_tree_model_render_node_set_root_node (GtkTreeModelRenderNode *model,
       iter_from_element (model, &iter, 0);
       path = gtk_tree_path_new_first ();
       gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
-      if (gsk_render_node_get_first_child (node))
+      if (priv->nodes->len > 1)
         gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (model), path, &iter);
       gtk_tree_path_free (path);
     }

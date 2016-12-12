@@ -28,12 +28,6 @@ gsk_render_node_ref
 gsk_render_node_unref
 GskRenderNodeType
 gsk_render_node_get_node_type
-gsk_render_node_get_first_child
-gsk_render_node_get_last_child
-gsk_render_node_get_next_sibling
-gsk_render_node_get_previous_sibling
-gsk_render_node_append_child
-gsk_render_node_get_n_children
 gsk_render_node_set_transform
 gsk_render_node_set_opacity
 GskBlendMode
@@ -45,6 +39,9 @@ gsk_texture_node_new
 gsk_cairo_node_new
 gsk_cairo_node_get_draw_context
 gsk_container_node_new
+gsk_container_node_append_child
+gsk_container_node_get_n_children
+gsk_container_node_get_child
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE

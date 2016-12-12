@@ -156,6 +156,8 @@ void
 gtk_snapshot_push_node (GtkSnapshot   *snapshot,
                         GskRenderNode *node)
 {
+  g_return_if_fail (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE);
+
   gtk_snapshot_append_node (snapshot, node);
 
   snapshot->state = gtk_snapshot_state_new (snapshot->state, node);
@@ -324,7 +326,7 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
 
   if (snapshot->state)
     {
-      gsk_render_node_append_child (snapshot->state->node, node);
+      gsk_container_node_append_child (snapshot->state->node, node);
       gsk_render_node_set_transform (node, &snapshot->state->transform);
     }
   else

@@ -84,12 +84,14 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass *self,
       break;
 
     case GSK_CONTAINER_NODE:
-      for (GskRenderNode *child = gsk_render_node_get_first_child (node);
-           child;
-           child = gsk_render_node_get_next_sibling (child))
-        {
-          gsk_vulkan_render_pass_add_node (self, render, child);
-        }
+      {
+        guint i;
+
+        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+          {
+            gsk_vulkan_render_pass_add_node (self, render, gsk_container_node_get_child (node, i));
+          }
+      }
       break;
     }
 

@@ -51,7 +51,6 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
                                 GskRenderNode    *node,
                                 cairo_t          *cr)
 {
-  GskRenderNode *child;
   gboolean pop_group = FALSE;
   graphene_matrix_t mat;
   cairo_matrix_t ctm;
@@ -103,18 +102,16 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
       break;
 
     case GSK_CONTAINER_NODE:
-      if (gsk_render_node_get_n_children (node) != 0)
-        {
-          GSK_NOTE (CAIRO, g_print ("Drawing %d children of node [%p]\n",
-                                    gsk_render_node_get_n_children (node),
-                                    node));
-          for (child = gsk_render_node_get_first_child (node);
-               child != NULL;
-               child = gsk_render_node_get_next_sibling (child))
-            {
-              gsk_cairo_renderer_render_node (self, child, cr);
-            }
-        }
+      {
+        guint i;
+        GSK_NOTE (CAIRO, g_print ("Drawing %d children of node [%p]\n",
+                                  gsk_container_node_get_n_children (node),
+                                  node));
+        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+          {
+            gsk_cairo_renderer_render_node (self, gsk_container_node_get_child (node, i), cr);
+          }
+      }
       break;
 
     case GSK_TEXTURE_NODE:

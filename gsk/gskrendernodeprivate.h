@@ -16,20 +16,8 @@ struct _GskRenderNode
 
   volatile int ref_count;
 
-  /* The graph */
-  GskRenderNode *parent;
-  GskRenderNode *first_child;
-  GskRenderNode *last_child;
-  GskRenderNode *prev_sibling;
-  GskRenderNode *next_sibling;
-
-  int n_children;
-
   /* Use for debugging */
   char *name;
-
-  /* Tag updated when adding/removing children */
-  gint64 age;
 
   /* Paint opacity */
   double opacity;

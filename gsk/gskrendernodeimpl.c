@@ -279,21 +279,32 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
 
 /**** GSK_CONTAINER_NODE ***/
 
+typedef struct _GskContainerNode GskContainerNode;
+
+struct _GskContainerNode
+{
+  GskRenderNode render_node;
+
+  GPtrArray *children;
+};
+
 static void
 gsk_container_node_finalize (GskRenderNode *node)
 {
+  GskContainerNode *container = (GskContainerNode *) node;
+
+  g_ptr_array_unref (container->children);
 }
 
 static void
 gsk_container_node_make_immutable (GskRenderNode *node)
 {
-  GskRenderNode *child;
+  GskContainerNode *container = (GskContainerNode *) node;
+  guint i;
 
-  for (child = gsk_render_node_get_first_child (node);
-       child != NULL;
-       child = gsk_render_node_get_next_sibling (child))
+  for (i = 1; i < container->children->len; i++)
     {
-      gsk_render_node_make_immutable (child);
+      gsk_render_node_make_immutable (g_ptr_array_index (container->children, i));
     }
 }
 
@@ -301,33 +312,29 @@ static void
 gsk_container_node_get_bounds (GskRenderNode   *node,
                                graphene_rect_t *bounds)
 {
-  GskRenderNode *child;
+  GskContainerNode *container = (GskContainerNode *) node;
+  guint i;
 
-  child = gsk_render_node_get_first_child (node);
-
-  if (child == NULL)
+  if (container->n_children == 0)
     {
       graphene_rect_init_from_rect (bounds, graphene_rect_zero()); 
       return;
     }
 
-  gsk_render_node_get_bounds (child, bounds);
+  gsk_render_node_get_bounds (container->children[0], bounds);
 
-  for (child = gsk_render_node_get_next_sibling (child);
-       child;
-       child = gsk_render_node_get_next_sibling (child))
+  for (i = 1; i < container->n_children; i++)
     {
-      graphene_rect_t child_bounds, union_bounds;
+      graphene_rect_t child_bounds;
   
-      gsk_render_node_get_bounds (child, &child_bounds);
-      graphene_rect_union (bounds, &child_bounds, &union_bounds);
-      graphene_rect_init_from_rect (bounds, &union_bounds); 
+      gsk_render_node_get_bounds (container->children[i], &child_bounds);
+      graphene_rect_union (bounds, &child_bounds, bounds);
     }
 }
 
 static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   GSK_CONTAINER_NODE,
-  sizeof (GskRenderNode),
+  sizeof (GskContainerNode),
   "GskContainerNode",
   gsk_container_node_finalize,
   gsk_container_node_make_immutable,
@@ -348,6 +355,72 @@ static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
 GskRenderNode *
 gsk_container_node_new (void)
 {
-  return gsk_render_node_new (&GSK_CONTAINER_NODE_CLASS);
+  GskContainerNode *container;
+
+  container = (GskContainerNode *) gsk_render_node_new (&GSK_CONTAINER_NODE_CLASS);
+
+  container->children = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
+
+  return &container->render_node;
+}
+
+/**
+ * gsk_container_node_append_child:
+ * @node: a container node
+ * @child: a #GskRenderNode
+ *
+ * Appends @child to the list of children of @node.
+ *
+ * This function acquires a reference on @child.
+ *
+ * Returns: (transfer none): the #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_container_node_append_child (GskRenderNode *node,
+                                 GskRenderNode *child)
+{
+  GskContainerNode *container = (GskContainerNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE), NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
+  g_return_val_if_fail (node->is_mutable, node);
+
+  g_ptr_array_add (container->children, gsk_render_node_ref (child));
+
+  return node;
+}
+
+/**
+ * gsk_container_node_get_n_children:
+ * @node: a container #GskRenderNode
+ *
+ * Retrieves the number of direct children of @node.
+ *
+ * Returns: the number of children of the #GskRenderNode
+ *
+ * Since: 3.90
+ */
+guint
+gsk_container_node_get_n_children (GskRenderNode *node)
+{
+  GskContainerNode *container = (GskContainerNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE), 0);
+
+  return container->children->len;
+}
+
+GskRenderNode *
+gsk_container_node_get_child (GskRenderNode *node,
+                              guint          idx)
+{
+  GskContainerNode *container = (GskContainerNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE), NULL);
+  g_return_val_if_fail (idx < container->children->len, 0);
+
+  return g_ptr_array_index (container->children, idx);
 }
 
