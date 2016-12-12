@@ -132,35 +132,12 @@ static void
 populate_render_node_properties (GtkListStore  *store,
                                  GskRenderNode *node)
 {
-  graphene_matrix_t m;
   graphene_rect_t bounds;
-  GString *s;
   int i;
   char *tmp;
   GEnumClass *class;
 
   gtk_list_store_clear (store);
-
-  gsk_render_node_get_transform (node, &m);
-
-  s = g_string_new ("");
-  for (i = 0; i < 4; i++)
-    {
-      if (i > 0)
-        g_string_append (s, "\n");
-      g_string_append_printf (s, "| %+.6f %+.6f %+.6f %+.6f |",
-                              graphene_matrix_get_value (&m, i, 0),
-                              graphene_matrix_get_value (&m, i, 1),
-                              graphene_matrix_get_value (&m, i, 2),
-                              graphene_matrix_get_value (&m, i, 3));
-    }
-
-  gtk_list_store_insert_with_values (store, NULL, -1,
-                                     0, "Transform",
-                                     1, s->str,
-                                     -1);
-
-  g_string_free (s, TRUE);
 
   gsk_render_node_get_bounds (node, &bounds);
 

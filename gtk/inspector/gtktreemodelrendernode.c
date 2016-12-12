@@ -525,6 +525,10 @@ append_node (GtkTreeModelRenderNode *nodemodel,
       /* no children */
       break;
 
+    case GSK_TRANSFORM_NODE:
+      append_node (nodemodel, gsk_transform_node_get_child (node), priv->nodes->len - 1);
+      break;
+
     case GSK_CONTAINER_NODE:
       {
         gint elt_index;

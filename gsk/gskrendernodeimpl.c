@@ -424,3 +424,112 @@ gsk_container_node_get_child (GskRenderNode *node,
   return g_ptr_array_index (container->children, idx);
 }
 
+/*** GSK_TRANSFORM_NODE ***/
+
+typedef struct _GskTransformNode GskTransformNode;
+
+struct _GskTransformNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  graphene_matrix_t transform;
+};
+
+static void
+gsk_transform_node_finalize (GskRenderNode *node)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+
+  gsk_render_node_unref (self->child);
+}
+
+static void
+gsk_transform_node_make_immutable (GskRenderNode *node)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+
+  gsk_render_node_make_immutable (self->child);
+}
+
+static void
+gsk_transform_node_get_bounds (GskRenderNode   *node,
+                           graphene_rect_t *bounds)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+  graphene_rect_t child_bounds;
+
+  gsk_render_node_get_bounds (self->child, &child_bounds);
+
+  graphene_matrix_transform_bounds (&self->transform,
+                                    &child_bounds,
+                                    bounds);
+}
+
+static const GskRenderNodeClass GSK_TRANSFORM_NODE_CLASS = {
+  GSK_TRANSFORM_NODE,
+  sizeof (GskTransformNode),
+  "GskTransformNode",
+  gsk_transform_node_finalize,
+  gsk_transform_node_make_immutable,
+  gsk_transform_node_get_bounds
+};
+
+/**
+ * gsk_transform_node_new:
+ * @child: The node to transform
+ * @transform: The transform to apply
+ *
+ * Creates a #GskRenderNode that will transform the given @child
+ * with the given @transform.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_transform_node_new (GskRenderNode           *child,
+                        const graphene_matrix_t *transform)
+{
+  GskTransformNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+  g_return_val_if_fail (transform != NULL, NULL);
+
+  self = (GskTransformNode *) gsk_render_node_new (&GSK_TRANSFORM_NODE_CLASS);
+
+  self->child = gsk_render_node_ref (child);
+  graphene_matrix_init_from_matrix (&self->transform, transform);
+
+  return &self->render_node;
+}
+
+/**
+ * gsk_transform_node_get_child:
+ * @node: a transform @GskRenderNode
+ *
+ * Gets the child node that is getting transformed by the given @node.
+ *
+ * Returns: (transfer none): The child that is getting transformed
+ **/
+GskRenderNode *
+gsk_transform_node_get_child (GskRenderNode *node)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TRANSFORM_NODE), NULL);
+
+  return self->child;
+}
+
+void
+gsk_transform_node_get_transform (GskRenderNode     *node,
+                                  graphene_matrix_t *transform)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+
+  g_return_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TRANSFORM_NODE));
+
+  graphene_matrix_init_from_matrix (transform, &self->transform);
+}
+

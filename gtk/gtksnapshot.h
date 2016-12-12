@@ -50,15 +50,13 @@ GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_set_transform              (GtkSnapshot            *snapshot,
-                                                         const graphene_matrix_t *transform);
-GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_transform                  (GtkSnapshot            *snapshot,
-                                                         const graphene_matrix_t *transform);
-GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_translate_2d               (GtkSnapshot            *snapshot,
                                                          int                     x,
                                                          int                     y);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_get_offset                 (GtkSnapshot            *snapshot,
+                                                         double                 *x,
+                                                         double                 *y);
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,

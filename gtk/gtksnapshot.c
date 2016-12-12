@@ -41,7 +41,7 @@
  * transformations.
  *
  * The node at the top of the stack is the the one that gtk_snapshot_append_node()
- * operates on. Use the gtk_snapshot_push_() and gtk_snapshot_pop() functions to
+ * operates on. Use the gtk_snapshot_push() and gtk_snapshot_pop() functions to
  * change the current node.
  *
  * The only way to obtain a #GtkSnapshot object is as an argument to
@@ -58,7 +58,6 @@ gtk_snapshot_state_new (GtkSnapshotState *parent,
 
   state->node = node;
   state->parent = parent;
-  graphene_matrix_init_identity (&state->transform);
 
   return state;
 }
@@ -67,33 +66,6 @@ static void
 gtk_snapshot_state_free (GtkSnapshotState *state)
 {
   g_slice_free (GtkSnapshotState, state);
-}
-
-static void
-gtk_snapshot_state_set_transform (GtkSnapshotState        *state,
-                                  const graphene_matrix_t *transform)
-{
-  graphene_matrix_init_from_matrix (&state->transform, transform);
-
-  state->world_is_valid = FALSE;
-}
-
-static const graphene_matrix_t *
-gtk_snapshot_state_get_world_transform (GtkSnapshotState *state)
-{
-  if (!state->world_is_valid)
-    {
-      if (state->parent)
-        graphene_matrix_multiply (gtk_snapshot_state_get_world_transform (state->parent),
-                                  &state->transform,
-                                  &state->world_transform);
-      else
-        graphene_matrix_init_from_matrix (&state->world_transform, &state->transform);
-
-      state->world_is_valid = TRUE;
-    }
-
-  return &state->world_transform;
 }
 
 void
@@ -147,8 +119,8 @@ gtk_snapshot_finish (GtkSnapshot *snapshot)
  * @snapshot: a #GtkSnapshot
  * @node: the render node to push
  *
- * Appends @node to the current render node of @snapshot,
- * and makes @node the new current render node.
+ * Makes @node the new current render node. You are responsible for adding
+ * @node to the snapshot.
  *
  * Since: 3.90
  */
@@ -157,8 +129,6 @@ gtk_snapshot_push_node (GtkSnapshot   *snapshot,
                         GskRenderNode *node)
 {
   g_return_if_fail (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE);
-
-  gtk_snapshot_append_node (snapshot, node);
 
   snapshot->state = gtk_snapshot_state_new (snapshot->state, node);
 }
@@ -198,6 +168,7 @@ gtk_snapshot_push (GtkSnapshot           *snapshot,
       g_free (str);
     }
 
+  gtk_snapshot_append_node (snapshot, node);
   gtk_snapshot_push_node (snapshot, node);
   gsk_render_node_unref (node);
 }
@@ -246,45 +217,6 @@ gtk_snapshot_get_renderer (const GtkSnapshot *snapshot)
 }
 
 /**
- * gtk_snapshot_set_transform:
- * @snapshot: a #GtkSnapshot
- * @transform: a transformation matrix
- *
- * Replaces the current transformation with the given @transform.
- *
- * Since: 3.90
- */
-void
-gtk_snapshot_set_transform (GtkSnapshot             *snapshot,
-                            const graphene_matrix_t *transform)
-{
-  g_return_if_fail (snapshot->state != NULL);
-
-  gtk_snapshot_state_set_transform (snapshot->state, transform);
-}
-
-/**
- * gtk_snapshot_transform:
- * @snapshot: a #GtkSnapshot
- * @transform: a transformation matrix
- *
- * Appends @transform to the current transformation.
- *
- * Since: 3.90
- */
-void
-gtk_snapshot_transform (GtkSnapshot             *snapshot,
-                        const graphene_matrix_t *transform)
-{
-  graphene_matrix_t result;
-
-  g_return_if_fail (snapshot->state != NULL);
-
-  graphene_matrix_multiply (transform, &snapshot->state->transform, &result);
-  gtk_snapshot_state_set_transform (snapshot->state, &result);
-}
-
-/**
  * gtk_snapshot_translate_2d:
  * @snapshot: a $GtkSnapshot
  * @x: horizontal translation
@@ -299,12 +231,37 @@ gtk_snapshot_translate_2d (GtkSnapshot *snapshot,
                            int          x,
                            int          y)
 {
-  graphene_matrix_t transform;
-  graphene_point3d_t point;
+  snapshot->state->translate_x += x;
+  snapshot->state->translate_y += y;
+}
 
-  graphene_point3d_init (&point, x, y, 0);
-  graphene_matrix_init_translate (&transform, &point);
-  gtk_snapshot_transform (snapshot, &transform);
+/**
+ * gtk_snapshot_get_offset:
+ * @snapshot: a #GtkSnapshot
+ * @x: (out allow-none): return location for x offset
+ * @y: (out allow-none): return location for y offset
+ *
+ * Queries the offset managed by @snapshot. This offset is the
+ * accumulated sum of calls to gtk_snapshot_translate_2d().
+ *
+ * Use this offset to determine how to offset nodes that you
+ * manually add to the snapshot using
+ * gtk_snapshot_append_node().
+ *
+ * Note that other functions that add nodes for you, such as
+ * gtk_snapshot_append_cairo_node() will add this offset for
+ * you.
+ **/
+void
+gtk_snapshot_get_offset (GtkSnapshot *snapshot,
+                         double      *x,
+                         double      *y)
+{
+  if (x)
+    *x = snapshot->state->translate_x;
+
+  if (y)
+    *y = snapshot->state->translate_y;
 }
 
 /**
@@ -327,7 +284,6 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
   if (snapshot->state)
     {
       gsk_container_node_append_child (snapshot->state->node, node);
-      gsk_render_node_set_transform (node, &snapshot->state->transform);
     }
   else
     {
@@ -357,11 +313,14 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
                                 ...)
 {
   GskRenderNode *node;
+  graphene_rect_t real_bounds;
+  cairo_t *cr;
 
   g_return_val_if_fail (snapshot != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  node = gsk_cairo_node_new (bounds);
+  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
+  node = gsk_cairo_node_new (&real_bounds);
 
   if (name)
     {
@@ -380,7 +339,11 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
   gtk_snapshot_append_node (snapshot, node);
   gsk_render_node_unref (node);
 
-  return gsk_cairo_node_get_draw_context (node, snapshot->renderer);
+  cr = gsk_cairo_node_get_draw_context (node, snapshot->renderer);
+
+  cairo_translate (cr, snapshot->state->translate_x, snapshot->state->translate_y);
+
+  return cr;
 }
 
 static void
@@ -408,22 +371,11 @@ gboolean
 gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
                          const graphene_rect_t *bounds)
 {
+  graphene_rect_t offset_bounds;
   cairo_rectangle_int_t rect;
 
-  if (snapshot->state)
-    {
-      const graphene_matrix_t *world;
-      graphene_rect_t transformed;
-
-      world = gtk_snapshot_state_get_world_transform (snapshot->state);
-
-      graphene_matrix_transform_bounds (world, bounds, &transformed);
-      rectangle_init_from_graphene (&rect, &transformed);
-    }
-  else
-    {
-      rectangle_init_from_graphene (&rect, bounds);
-    }
+  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &offset_bounds);
+  rectangle_init_from_graphene (&rect, &offset_bounds);
 
   return cairo_region_contains_rectangle (snapshot->clip_region, &rect) == CAIRO_REGION_OVERLAP_OUT;
 }

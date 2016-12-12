@@ -233,7 +233,7 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
 
   self->render_passes = g_slist_prepend (self->render_passes, pass);
 
-  gsk_vulkan_render_pass_add_node (pass, self, node);
+  gsk_vulkan_render_pass_add (pass, self, &self->mvp, node);
 }
 
 void
@@ -466,7 +466,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_draw (l->data, self, &self->mvp, self->pipeline, self->command_buffer);
+      gsk_vulkan_render_pass_draw (l->data, self, self->pipeline, self->command_buffer);
     }
 
   vkCmdEndRenderPass (self->command_buffer);

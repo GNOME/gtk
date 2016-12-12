@@ -29,9 +29,8 @@ struct _GtkSnapshotState {
 
   GskRenderNode         *node;
 
-  graphene_matrix_t      transform;
-  graphene_matrix_t      world_transform;
-  guint                  world_is_valid : 1;
+  double                 translate_x;
+  double                 translate_y;
 };
 
 struct _GtkSnapshot {
@@ -48,12 +47,6 @@ void            gtk_snapshot_init               (GtkSnapshot             *state,
                                                  const char              *name,
                                                  ...) G_GNUC_PRINTF (4, 5);
 GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
-
-static inline const graphene_matrix_t *
-gtk_snapshot_get_transform (const GtkSnapshot *snapshot)
-{
-  return &snapshot->state->transform;
-}
 
 G_END_DECLS
 

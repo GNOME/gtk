@@ -29,9 +29,6 @@ struct _GskRenderNode
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
 
-  /* Transformations applied to the node */
-  graphene_matrix_t transform;
-
   /* Bit fields; leave at the end */
   gboolean is_mutable : 1;
 };
@@ -53,13 +50,13 @@ void gsk_render_node_make_immutable (GskRenderNode *node);
 
 void gsk_render_node_get_bounds (GskRenderNode   *node,
                                  graphene_rect_t *frame);
-void gsk_render_node_get_transform (GskRenderNode     *node,
-                                    graphene_matrix_t *mv);
 double gsk_render_node_get_opacity (GskRenderNode *node);
 
 cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
+
+void gsk_transform_node_get_transform (GskRenderNode *node, graphene_matrix_t *transform);
 
 GskBlendMode gsk_render_node_get_blend_mode (GskRenderNode *node);
 

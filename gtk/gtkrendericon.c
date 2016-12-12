@@ -96,9 +96,9 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
                              GtkCssImageBuiltinType  builtin_type)
 {
   const GtkCssValue *shadows, *transform;
-  graphene_matrix_t transform_matrix, m1, m2, m3, saved_matrix;
-  GtkCssImage *image;
   static gboolean shadow_warning;
+  graphene_matrix_t transform_matrix;
+  GtkCssImage *image;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
@@ -113,23 +113,39 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   if (!gtk_css_transform_value_get_matrix (transform, &transform_matrix))
     return;
 
-  graphene_matrix_init_from_matrix (&saved_matrix, gtk_snapshot_get_transform (snapshot));
-
-  /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-  graphene_matrix_init_translate (&m1, &GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
-  graphene_matrix_multiply (&transform_matrix, &m1, &m3);
-  graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
-  graphene_matrix_multiply (&m2, &m3, &m1);
-  gtk_snapshot_transform (snapshot, &m1);
-
   if (!_gtk_css_shadows_value_is_none (shadows) && !shadow_warning)
     {
       g_warning ("Painting shadows not implemented for textures yet.");
       shadow_warning = TRUE;
     }
-  gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
 
-  gtk_snapshot_set_transform (snapshot, &saved_matrix);
+  if (graphene_matrix_is_identity (&transform_matrix))
+    {
+      gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
+    }
+  else
+    {
+      graphene_matrix_t m1, m2, m3;
+      GskRenderNode *transform_node, *container_node;
+      double offset_x, offset_y;
+
+      gtk_snapshot_get_offset (snapshot, &offset_x, &offset_y);
+      /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
+      graphene_matrix_init_translate (&m1, &GRAPHENE_POINT3D_INIT(offset_x + width / 2.0, offset_y + height / 2.0, 0));
+      graphene_matrix_multiply (&transform_matrix, &m1, &m3);
+      graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
+      graphene_matrix_multiply (&m2, &m3, &m1);
+
+      container_node = gsk_container_node_new ();
+      gsk_render_node_set_name (container_node, "CSS Icon Transform Container");
+      transform_node = gsk_transform_node_new (container_node, &m1);
+      gsk_render_node_set_name (transform_node, "CSS Icon Transform");
+      gtk_snapshot_append_node (snapshot, transform_node);
+      
+      gtk_snapshot_push_node (snapshot, container_node);
+      gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
+      gtk_snapshot_pop (snapshot);
+    }
 }
 
 static gboolean
@@ -253,9 +269,9 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
                                      double       texture_scale)
 {
   const GtkCssValue *shadows, *transform;
-  graphene_matrix_t transform_matrix, translate, matrix, saved_matrix;
+  graphene_matrix_t transform_matrix;
   graphene_rect_t bounds;
-  GskRenderNode *node;
+  GskRenderNode *icon_node, *transform_node;
   double width, height;
   static gboolean shadow_warning;
 
@@ -272,26 +288,47 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
   if (!gtk_css_transform_value_get_matrix (transform, &transform_matrix))
     return;
 
-  graphene_matrix_init_from_matrix (&saved_matrix, gtk_snapshot_get_transform (snapshot));
-
-  /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-  graphene_matrix_init_translate (&translate, &GRAPHENE_POINT3D_INIT(width / 2.0, height / 2.0, 0));
-  graphene_matrix_multiply (&transform_matrix, &translate, &matrix);
-  graphene_matrix_translate (&matrix, &GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
-  graphene_matrix_scale (&matrix, 1.0 / texture_scale, 1.0 / texture_scale, 1);
-  gtk_snapshot_transform (snapshot, &matrix);
-
-  graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
-
-  node = gsk_texture_node_new (texture, &bounds);
-  gsk_render_node_set_name (node, "Icon");
-  gtk_snapshot_append_node (snapshot, node);
   if (!_gtk_css_shadows_value_is_none (shadows) && !shadow_warning)
     {
       g_warning ("Painting shadows not implemented for textures yet.");
       shadow_warning = TRUE;
     }
-  gsk_render_node_unref (node);
 
-  gtk_snapshot_set_transform (snapshot, &saved_matrix);
+  if (graphene_matrix_is_identity (&transform_matrix))
+    {
+      double offset_x, offset_y;
+
+      gtk_snapshot_get_offset (snapshot, &offset_x, &offset_y);
+      graphene_rect_init (&bounds,
+                          offset_x, offset_y,
+                          gsk_texture_get_width (texture) / texture_scale,
+                          gsk_texture_get_height (texture) / texture_scale);
+      icon_node = gsk_texture_node_new (texture, &bounds);
+      gsk_render_node_set_name (icon_node, "Icon");
+      
+      gtk_snapshot_append_node (snapshot, icon_node);
+    }
+  else
+    {
+      graphene_matrix_t translate, matrix;
+      double offset_x, offset_y;
+
+      gtk_snapshot_get_offset (snapshot, &offset_x, &offset_y);
+      /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
+      graphene_matrix_init_translate (&translate, &GRAPHENE_POINT3D_INIT(offset_x + width / 2.0, offset_y + height / 2.0, 0));
+      graphene_matrix_multiply (&transform_matrix, &translate, &matrix);
+      graphene_matrix_translate (&matrix, &GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
+      graphene_matrix_scale (&matrix, 1.0 / texture_scale, 1.0 / texture_scale, 1);
+
+      graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
+      icon_node = gsk_texture_node_new (texture, &bounds);
+      gsk_render_node_set_name (icon_node, "Icon");
+
+      transform_node = gsk_transform_node_new (icon_node, &matrix);
+      gsk_render_node_set_name (transform_node, "Icon Transform");
+      gtk_snapshot_append_node (snapshot, transform_node);
+
+      gsk_render_node_unref (icon_node);
+      gsk_render_node_unref (transform_node);
+    }
 }

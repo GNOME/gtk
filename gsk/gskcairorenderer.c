@@ -52,23 +52,9 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
                                 cairo_t          *cr)
 {
   gboolean pop_group = FALSE;
-  graphene_matrix_t mat;
-  cairo_matrix_t ctm;
   graphene_rect_t frame;
 
   cairo_save (cr);
-
-  gsk_render_node_get_transform (node, &mat);
-  if (graphene_matrix_to_2d (&mat, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
-    {
-      GSK_NOTE (CAIRO, g_print ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }\n",
-                                ctm.xx, ctm.yx,
-                                ctm.xy, ctm.yy,
-                                ctm.x0, ctm.y0));
-      cairo_transform (cr, &ctm);
-    }
-  else
-    g_critical ("Invalid non-affine transformation for node %p", node);
 
   gsk_render_node_get_bounds (node, &frame);
   GSK_NOTE (CAIRO, g_print ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }\n",
@@ -129,6 +115,27 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
       {
         cairo_set_source_surface (cr, gsk_cairo_node_get_surface (node), frame.origin.x, frame.origin.y); 
         cairo_paint (cr);
+      }
+      break;
+
+    case GSK_TRANSFORM_NODE:
+      {
+        graphene_matrix_t mat;
+        cairo_matrix_t ctm;
+
+        gsk_transform_node_get_transform (node, &mat);
+        if (graphene_matrix_to_2d (&mat, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
+          {
+            GSK_NOTE (CAIRO, g_print ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }\n",
+                                      ctm.xx, ctm.yx,
+                                      ctm.xy, ctm.yy,
+                                      ctm.x0, ctm.y0));
+            cairo_transform (cr, &ctm);
+          }
+        else
+          g_critical ("Invalid non-affine transformation for node %p", node);
+
+        gsk_cairo_renderer_render_node (self, gsk_transform_node_get_child (node), cr);
       }
       break;
     }

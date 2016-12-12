@@ -97,8 +97,6 @@ gsk_render_node_new (const GskRenderNodeClass *node_class)
 
   self->ref_count = 1;
 
-  graphene_matrix_init_identity (&self->transform);
-
   self->opacity = 1.0;
 
   self->min_filter = GSK_SCALING_FILTER_NEAREST;
@@ -185,47 +183,6 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
   g_return_if_fail (bounds != NULL);
 
   node->node_class->get_bounds (node, bounds);
-}
-
-/**
- * gsk_render_node_set_transform:
- * @node: a #GskRenderNode
- * @transform: (nullable): a transformation matrix
- *
- * Sets the transformation matrix used when rendering the @node.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_transform (GskRenderNode           *node,
-                               const graphene_matrix_t *transform)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (node->is_mutable);
-
-  if (transform == NULL)
-    graphene_matrix_init_identity (&node->transform);
-  else
-    graphene_matrix_init_from_matrix (&node->transform, transform);
-}
-
-/**
- * gsk_render_node_get_transform:
- * @node: a #GskRenderNode
- * @mv: (out caller-allocates): return location for the transform matrix
- *
- * Retrieves the transform matrix set using gsk_render_node_set_transform().
- *
- * Since: 3.90
- */
-void
-gsk_render_node_get_transform (GskRenderNode     *node,
-                               graphene_matrix_t *mv)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (mv != NULL);
-
-  graphene_matrix_init_from_matrix (mv, &node->transform);
 }
 
 /**

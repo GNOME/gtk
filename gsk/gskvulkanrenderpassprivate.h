@@ -13,8 +13,9 @@ typedef struct _GskVulkanRenderPass GskVulkanRenderPass;
 GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulkanContext       *context);
 void                    gsk_vulkan_render_pass_free                     (GskVulkanRenderPass    *self);
 
-void                    gsk_vulkan_render_pass_add_node                 (GskVulkanRenderPass    *self,
+void                    gsk_vulkan_render_pass_add                      (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
+                                                                         const graphene_matrix_t*mvp,
                                                                          GskRenderNode          *node);
 
 void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,
@@ -31,7 +32,6 @@ void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulk
                                                                          GskVulkanRender        *render);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         const graphene_matrix_t*root_mvp,
                                                                          GskVulkanPipeline      *pipeline,
                                                                          VkCommandBuffer         command_buffer);
 

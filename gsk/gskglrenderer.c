@@ -603,13 +603,12 @@ render_node_needs_render_target (GskRenderNode *node)
 static void
 gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                  const graphene_matrix_t *projection,
-                                 const graphene_matrix_t *parent_modelview,
+                                 const graphene_matrix_t *modelview,
                                  GArray                  *render_items,
                                  GskRenderNode           *node,
                                  RenderItem              *parent)
 {
   graphene_rect_t viewport;
-  graphene_matrix_t mv, transform;
   graphene_rect_t bounds;
   RenderItem item;
   RenderItem *ritem = NULL;
@@ -645,10 +644,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   item.max.z = 0.f;
 
   /* The location of the item, in normalized world coordinates */
-  gsk_render_node_get_transform (node, &transform);
-  graphene_matrix_multiply (&transform, parent_modelview, &mv);
-  graphene_matrix_multiply (&mv, &self->mvp, &item.mvp);
-  item.z = project_item (projection, &mv);
+  graphene_matrix_multiply (modelview, &self->mvp, &item.mvp);
+  item.z = project_item (projection, modelview);
 
   item.opacity = gsk_render_node_get_opacity (node);
 
@@ -743,8 +740,22 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
         for (i = 0; i < gsk_container_node_get_n_children (node); i++)
           {
             GskRenderNode *child = gsk_container_node_get_child (node, i);
-            gsk_gl_renderer_add_render_item (self, projection, &mv, render_items, child, ritem);
+            gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
           }
+      }
+      return;
+
+    case GSK_TRANSFORM_NODE:
+      {
+        graphene_matrix_t transform, transformed_mv;
+
+        gsk_transform_node_get_transform (node, &transform);
+        graphene_matrix_multiply (&transform, modelview, &transformed_mv);
+        gsk_gl_renderer_add_render_item (self,
+                                         projection, &transformed_mv,
+                                         render_items,
+                                         gsk_transform_node_get_child (node),
+                                         ritem);
       }
       return;
 

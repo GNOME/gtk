@@ -12,7 +12,8 @@ typedef struct _GskVulkanRenderOp GskVulkanRenderOp;
 typedef enum {
   GSK_VULKAN_OP_FALLBACK,
   GSK_VULKAN_OP_SURFACE,
-  GSK_VULKAN_OP_TEXTURE
+  GSK_VULKAN_OP_TEXTURE,
+  GSK_VULKAN_OP_BIND_MVP
 } GskVulkanOpType;
 
 struct _GskVulkanRenderOp
@@ -20,6 +21,7 @@ struct _GskVulkanRenderOp
   GskVulkanOpType      type;
   GskRenderNode       *node; /* node that's the source of this op */
   GskVulkanImage      *source; /* source image to render */
+  graphene_matrix_t    mvp; /* new mvp to set */
   gsize                vertex_offset; /* offset into vertex buffer */
   gsize                vertex_count; /* number of vertices */
   gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
@@ -54,9 +56,10 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 }
 
 void
-gsk_vulkan_render_pass_add_node (GskVulkanRenderPass *self,
-                                 GskVulkanRender     *render,
-                                 GskRenderNode       *node)
+gsk_vulkan_render_pass_add_node (GskVulkanRenderPass     *self,
+                                 GskVulkanRender         *render,
+                                 const graphene_matrix_t *mvp,
+                                 GskRenderNode           *node)
 {
   GskVulkanRenderOp op = {
     .type = GSK_VULKAN_OP_FALLBACK,
@@ -89,16 +92,46 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass *self,
 
         for (i = 0; i < gsk_container_node_get_n_children (node); i++)
           {
-            gsk_vulkan_render_pass_add_node (self, render, gsk_container_node_get_child (node, i));
+            gsk_vulkan_render_pass_add_node (self, render, mvp, gsk_container_node_get_child (node, i));
           }
       }
       break;
+    case GSK_TRANSFORM_NODE:
+      {
+        graphene_matrix_t transform;
+
+        op.type = GSK_VULKAN_OP_BIND_MVP;
+        gsk_transform_node_get_transform (node, &transform);
+        graphene_matrix_multiply (&transform, mvp, &op.mvp);
+        g_array_append_val (self->render_ops, op);
+        gsk_vulkan_render_pass_add_node (self, render, &op.mvp, gsk_transform_node_get_child (node));
+        graphene_matrix_init_from_matrix (&op.mvp, mvp);
+        g_array_append_val (self->render_ops, op);
+      }
+      break;
+
     }
 
   return;
 
 fallback:
   g_array_append_val (self->render_ops, op);
+}
+
+void
+gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
+                            GskVulkanRender         *render,
+                            const graphene_matrix_t *mvp,
+                            GskRenderNode           *node)
+{
+  GskVulkanRenderOp op = {
+    .type = GSK_VULKAN_OP_BIND_MVP,
+    .mvp = *mvp
+  };
+
+  g_array_append_val (self->render_ops, op);
+
+  gsk_vulkan_render_pass_add_node (self, render, mvp, node);
 }
 
 static void
@@ -182,6 +215,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
+        case GSK_VULKAN_OP_BIND_MVP:
           break;
         }
     }
@@ -237,6 +271,9 @@ gsk_vulkan_render_pass_collect_vertices (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
+        case GSK_VULKAN_OP_BIND_MVP:
+          op->vertex_offset = 0;
+          op->vertex_count = 0;
           break;
         }
 
@@ -268,6 +305,7 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
+        case GSK_VULKAN_OP_BIND_MVP:
           break;
         }
     }
@@ -276,12 +314,10 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 void
 gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                              GskVulkanRender         *render,
-                             const graphene_matrix_t *parent_mvp,
                              GskVulkanPipeline       *pipeline,
                              VkCommandBuffer          command_buffer)
 {
   GskVulkanRenderOp *op;
-  graphene_matrix_t transform, mvp;
   float float_matrix[16];
   guint i;
 
@@ -289,30 +325,41 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
     {
       op = &g_array_index (self->render_ops, GskVulkanRenderOp, i);
 
-      vkCmdBindDescriptorSets (command_buffer,
-                               VK_PIPELINE_BIND_POINT_GRAPHICS,
-                               gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
-                               0,
-                               1,
-                               (VkDescriptorSet[1]) {
-                                   gsk_vulkan_render_get_descriptor_set (render, op->descriptor_set_index)
-                               },
-                               0,
-                               NULL);
+      switch (op->type)
+        {
+        case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_SURFACE:
+        case GSK_VULKAN_OP_TEXTURE:
+          vkCmdBindDescriptorSets (command_buffer,
+                                   VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                   gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
+                                   0,
+                                   1,
+                                   (VkDescriptorSet[1]) {
+                                       gsk_vulkan_render_get_descriptor_set (render, op->descriptor_set_index)
+                                   },
+                                   0,
+                                   NULL);
 
-      gsk_render_node_get_transform (op->node, &transform);
-      graphene_matrix_multiply (&transform, parent_mvp, &mvp);
-      graphene_matrix_to_float (&mvp, float_matrix);
+          vkCmdDraw (command_buffer,
+                     op->vertex_count, 1,
+                     op->vertex_offset, 0);
+          break;
 
-      vkCmdPushConstants (command_buffer,
-                          gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
-                          VK_SHADER_STAGE_VERTEX_BIT,
-                          0,
-                          sizeof (float_matrix),
-                          &float_matrix);
+        case GSK_VULKAN_OP_BIND_MVP:
+          graphene_matrix_to_float (&op->mvp, float_matrix);
+          vkCmdPushConstants (command_buffer,
+                              gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
+                              VK_SHADER_STAGE_VERTEX_BIT,
+                              0,
+                              sizeof (float_matrix),
+                              &float_matrix);
 
-      vkCmdDraw (command_buffer,
-                 op->vertex_count, 1,
-                 op->vertex_offset, 0);
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+        }
     }
 }
