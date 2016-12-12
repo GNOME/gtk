@@ -274,12 +274,12 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 void
 gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                              GskVulkanRender         *render,
-                             const graphene_matrix_t *root_mvp,
+                             const graphene_matrix_t *parent_mvp,
                              GskVulkanPipeline       *pipeline,
                              VkCommandBuffer          command_buffer)
 {
   GskVulkanRenderOp *op;
-  graphene_matrix_t world, mvp;
+  graphene_matrix_t transform, mvp;
   float float_matrix[16];
   guint i;
 
@@ -298,8 +298,8 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                0,
                                NULL);
 
-      gsk_render_node_get_world_matrix (op->node, &world);
-      graphene_matrix_multiply (&world, root_mvp, &mvp);
+      gsk_render_node_get_transform (op->node, &transform);
+      graphene_matrix_multiply (&transform, parent_mvp, &mvp);
       graphene_matrix_to_float (&mvp, float_matrix);
 
       vkCmdPushConstants (command_buffer,

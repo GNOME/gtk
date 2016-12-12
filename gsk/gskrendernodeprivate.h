@@ -41,16 +41,11 @@ struct _GskRenderNode
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
 
-  /* Transformations relative to the root of the scene */
-  graphene_matrix_t world_matrix;
-
   /* Transformations applied to the node */
   graphene_matrix_t transform;
 
   /* Bit fields; leave at the end */
   gboolean is_mutable : 1;
-  gboolean transform_set : 1;
-  gboolean needs_world_matrix_update : 1;
 };
 
 struct _GskRenderNodeClass
@@ -81,12 +76,6 @@ GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
 GskBlendMode gsk_render_node_get_blend_mode (GskRenderNode *node);
 
 GskRenderNode *gsk_render_node_get_toplevel (GskRenderNode *node);
-
-void gsk_render_node_update_world_matrix (GskRenderNode *node,
-                                          gboolean       force);
-
-void gsk_render_node_get_world_matrix (GskRenderNode     *node,
-                                       graphene_matrix_t *mv);
 
 G_END_DECLS
 

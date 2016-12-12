@@ -53,14 +53,14 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
 {
   GskRenderNode *child;
   gboolean pop_group = FALSE;
-  graphene_matrix_t mvp;
+  graphene_matrix_t mat;
   cairo_matrix_t ctm;
   graphene_rect_t frame;
 
   cairo_save (cr);
 
-  gsk_render_node_get_world_matrix (node, &mvp);
-  if (graphene_matrix_to_2d (&mvp, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
+  gsk_render_node_get_transform (node, &mat);
+  if (graphene_matrix_to_2d (&mat, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
     {
       GSK_NOTE (CAIRO, g_print ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }\n",
                                 ctm.xx, ctm.yx,
@@ -105,9 +105,6 @@ gsk_cairo_renderer_render_node (GskCairoRenderer *self,
     case GSK_CONTAINER_NODE:
       if (gsk_render_node_get_n_children (node) != 0)
         {
-          cairo_matrix_invert (&ctm);
-          cairo_transform (cr, &ctm);
-
           GSK_NOTE (CAIRO, g_print ("Drawing %d children of node [%p]\n",
                                     gsk_render_node_get_n_children (node),
                                     node));

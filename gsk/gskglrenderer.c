@@ -617,12 +617,13 @@ render_node_needs_render_target (GskRenderNode *node)
 static void
 gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                  const graphene_matrix_t *projection,
+                                 const graphene_matrix_t *parent_modelview,
                                  GArray                  *render_items,
                                  GskRenderNode           *node,
                                  RenderItem              *parent)
 {
   graphene_rect_t viewport;
-  graphene_matrix_t mv;
+  graphene_matrix_t mv, transform;
   graphene_rect_t bounds;
   GskRenderNode *child;
   RenderItem item;
@@ -659,7 +660,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   item.max.z = 0.f;
 
   /* The location of the item, in normalized world coordinates */
-  gsk_render_node_get_world_matrix (node, &mv);
+  gsk_render_node_get_transform (node, &transform);
+  graphene_matrix_multiply (&transform, parent_modelview, &mv);
   graphene_matrix_multiply (&mv, &self->mvp, &item.mvp);
   item.z = project_item (projection, &mv);
 
@@ -791,7 +793,7 @@ out:
        child != NULL;
        child = gsk_render_node_get_next_sibling (child))
     {
-      gsk_gl_renderer_add_render_item (self, projection, render_items, child, ritem);
+      gsk_gl_renderer_add_render_item (self, projection, &mv, render_items, child, ritem);
     }
 }
 
@@ -800,11 +802,15 @@ gsk_gl_renderer_validate_tree (GskGLRenderer           *self,
                                GskRenderNode           *root,
                                const graphene_matrix_t *projection)
 {
+  graphene_matrix_t identity;
+
   if (self->gl_context == NULL)
     {
       GSK_NOTE (OPENGL, g_print ("No valid GL context associated to the renderer"));
       return FALSE;
     }
+
+  graphene_matrix_init_identity (&identity);
 
   gdk_gl_context_make_current (self->gl_context);
 
@@ -813,7 +819,7 @@ gsk_gl_renderer_validate_tree (GskGLRenderer           *self,
   gsk_gl_driver_begin_frame (self->gl_driver);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
-  gsk_gl_renderer_add_render_item (self, projection, self->render_items, root, NULL);
+  gsk_gl_renderer_add_render_item (self, projection, &identity, self->render_items, root, NULL);
 
   GSK_NOTE (OPENGL, g_print ("Total render items: %d\n",
                              self->render_items->len));

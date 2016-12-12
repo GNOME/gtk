@@ -112,7 +112,6 @@ gsk_render_node_new (const GskRenderNodeClass *node_class)
   self->mag_filter = GSK_SCALING_FILTER_NEAREST;
 
   self->is_mutable = TRUE;
-  self->needs_world_matrix_update = TRUE;
 
   return self;
 }
@@ -304,11 +303,9 @@ gsk_render_node_insert_child_internal (GskRenderNode   *node,
 
   child->parent = node;
   child->age = 0;
-  child->needs_world_matrix_update = TRUE;
 
   node->n_children += 1;
   node->age += 1;
-  node->needs_world_matrix_update = TRUE;
 
   if (child->prev_sibling == NULL)
     node->first_child = child;
@@ -517,8 +514,6 @@ gsk_render_node_set_transform (GskRenderNode           *node,
     graphene_matrix_init_identity (&node->transform);
   else
     graphene_matrix_init_from_matrix (&node->transform, transform);
-
-  node->transform_set = !graphene_matrix_is_identity (&node->transform);
 }
 
 /**
@@ -634,57 +629,6 @@ gsk_render_node_get_toplevel (GskRenderNode *node)
   return NULL;
 }
 
-/*< private >
- * gsk_render_node_update_world_matrix:
- * @node: a #GskRenderNode
- * @force: %TRUE if the update should be forced
- *
- * Updates the cached world matrix of @node and its children, if needed.
- */
-void
-gsk_render_node_update_world_matrix (GskRenderNode *node,
-                                     gboolean       force)
-{
-  GskRenderNode *child;
-
-  if (force || node->needs_world_matrix_update)
-    {
-      GSK_NOTE (RENDER_NODE, g_print ("Updating cached world matrix on node %p [parent=%p, t_set=%s]\n",
-                                      node,
-                                      node->parent != NULL ? node->parent : 0,
-                                      node->transform_set ? "y" : "n"));
-
-      if (node->parent == NULL)
-        {
-          if (node->transform_set)
-            graphene_matrix_init_from_matrix (&node->world_matrix, &node->transform);
-          else
-            graphene_matrix_init_identity (&node->world_matrix);
-        }
-      else
-        {
-          GskRenderNode *parent = node->parent;
-          graphene_matrix_t tmp;
-
-          graphene_matrix_init_identity (&tmp);
-
-          if (node->transform_set)
-            graphene_matrix_multiply (&tmp, &node->transform, &tmp);
-
-          graphene_matrix_multiply (&tmp, &parent->world_matrix, &node->world_matrix);
-        }
-
-      node->needs_world_matrix_update = FALSE;
-    }
-
-  for (child = gsk_render_node_get_first_child (node);
-       child != NULL;
-       child = gsk_render_node_get_next_sibling (child))
-    {
-      gsk_render_node_update_world_matrix (child, TRUE);
-    }
-}
-
 void
 gsk_render_node_set_scaling_filters (GskRenderNode    *node,
                                      GskScalingFilter  min_filter,
@@ -696,33 +640,6 @@ gsk_render_node_set_scaling_filters (GskRenderNode    *node,
     node->min_filter = min_filter;
   if (node->mag_filter != mag_filter)
     node->mag_filter = mag_filter;
-}
-
-/*< private >
- * gsk_render_node_get_world_matrix:
- * @node: a #GskRenderNode
- * @mv: (out caller-allocates): return location for the modelview matrix
- *   in world-relative coordinates
- *
- * Retrieves the modelview matrix in world-relative coordinates.
- */
-void
-gsk_render_node_get_world_matrix (GskRenderNode     *node,
-                                  graphene_matrix_t *mv)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (mv != NULL);
-
-  if (node->needs_world_matrix_update)
-    {
-      GskRenderNode *tmp = gsk_render_node_get_toplevel (node);
-
-      gsk_render_node_update_world_matrix (tmp, TRUE);
-
-      g_assert (!node->needs_world_matrix_update);
-    }
-
-  *mv = node->world_matrix;
 }
 
 /**
