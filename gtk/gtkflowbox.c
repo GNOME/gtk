@@ -3225,7 +3225,7 @@ gtk_flow_box_remove (GtkContainer *container,
   if (was_visible && gtk_widget_get_visible (GTK_WIDGET (box)))
     gtk_widget_queue_resize (GTK_WIDGET (box));
 
-  if (was_selected)
+  if (was_selected && !gtk_widget_in_destruction (GTK_WIDGET (box)))
     g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
 }
 
