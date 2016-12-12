@@ -69,9 +69,6 @@ void          gtk_tree_model_render_node_set_root_node          (GtkTreeModelRen
 GskRenderNode*gtk_tree_model_render_node_get_root_node          (GtkTreeModelRenderNode *model);
 GskRenderNode*gtk_tree_model_render_node_get_node_from_iter     (GtkTreeModelRenderNode *model,
                                                                  GtkTreeIter            *iter);
-void          gtk_tree_model_render_node_get_iter_from_node     (GtkTreeModelRenderNode *model,
-                                                                 GtkTreeIter            *iter,
-                                                                 GskRenderNode          *node);
 
 
 G_END_DECLS

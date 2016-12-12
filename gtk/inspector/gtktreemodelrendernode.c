@@ -19,6 +19,18 @@
 
 #include "gtktreemodelrendernode.h"
 
+typedef struct _TreeElement TreeElement;
+
+/* This is an array of all nodes and the index of their parent. When adding a node,
+ * we first add the node itself, and then all their children pointing the parent to
+ * this element.
+ */
+struct _TreeElement
+{
+  GskRenderNode *node;
+  int            parent;
+};
+
 struct _GtkTreeModelRenderNodePrivate
 {
   GtkTreeModelRenderNodeGetFunc  get_func;
@@ -26,6 +38,7 @@ struct _GtkTreeModelRenderNodePrivate
   GType                         *column_types;
 
   GskRenderNode                 *root;
+  GArray                        *nodes;
 };
 
 static void gtk_tree_model_render_node_tree_model_init  (GtkTreeModelIface   *iface);
@@ -35,27 +48,82 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeModelRenderNode, gtk_tree_model_render_node, G_T
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
 						gtk_tree_model_render_node_tree_model_init))
 
-static GskRenderNode *
-get_nth_child (GskRenderNode *node,
-               gint           i)
+static gint
+element_from_iter (GtkTreeModelRenderNode *model,
+                   GtkTreeIter            *iter)
 {
-  for (node = gsk_render_node_get_first_child (node);
-       node != NULL && i > 0;
-       node = gsk_render_node_get_next_sibling (node))
-    i--;
-
-  return node;
+  return GPOINTER_TO_INT (iter->user_data2);
 }
 
-static int
-get_node_index (GskRenderNode *node)
+static void
+iter_from_element (GtkTreeModelRenderNode *model,
+                   GtkTreeIter            *iter,
+                   gint                    elt)
 {
-  int result = 0;
+  iter->user_data = model;
+  iter->user_data2 = GINT_TO_POINTER (elt);
+}
 
-  while ((node = gsk_render_node_get_previous_sibling (node)))
-    result++;
+static GskRenderNode *
+node_from_element (GtkTreeModelRenderNode *model,
+                   gint                    elt)
+{
+  return g_array_index (model->priv->nodes, TreeElement, elt).node;
+}
 
-  return result;
+static gint
+parent_element (GArray *nodes,
+        gint    idx)
+{
+  return g_array_index (nodes, TreeElement, idx).parent;
+}
+
+static gint
+get_nth_child (GArray *nodes,
+               gint    elt,
+               gint    nth)
+{
+  guint i, count;
+
+  count = 0;
+  for (i = elt + 1; i < nodes->len; i++)
+    {
+      gint parent = parent_element (nodes, i);
+
+      if (parent < elt)
+        return FALSE;
+
+      if (parent != elt)
+        continue;
+
+      if (count == nth)
+        return i;
+
+      count++;
+    }
+
+  return -1;
+}
+
+static gint
+get_node_index (GArray *nodes,
+                gint    elt)
+{
+  gint parent, i, idx;
+
+  if (elt == 0)
+    return 0;
+
+  parent = parent_element (nodes, elt);
+  idx = 0;
+
+  for (i = elt; i > parent; i--)
+    {
+      if (parent_element (nodes, i) == parent)
+        idx++;
+    }
+
+  return idx;
 }
 
 static GtkTreeModelFlags
@@ -92,9 +160,9 @@ gtk_tree_model_render_node_get_iter (GtkTreeModel *tree_model,
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
   GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
-  GskRenderNode *node;
   int *indices;
   int depth, i;
+  int elt;
 
   if (priv->root == NULL)
     return FALSE;
@@ -105,15 +173,15 @@ gtk_tree_model_render_node_get_iter (GtkTreeModel *tree_model,
   if (depth < 1 || indices[0] != 0)
     return FALSE;
 
-  node = priv->root;
+  elt = 0;
   for (i = 1; i < depth; i++)
     {
-      node = get_nth_child (node, indices[i]);
-      if (node == NULL)
+      elt = get_nth_child (priv->nodes, elt, indices[i]);
+      if (elt < 0)
         return FALSE;
     }
 
-  gtk_tree_model_render_node_get_iter_from_node (nodemodel, iter, node);
+  iter_from_element (nodemodel, iter, elt);
   return TRUE;
 }
 
@@ -123,18 +191,16 @@ gtk_tree_model_render_node_get_path (GtkTreeModel *tree_model,
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
   GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
-  GskRenderNode *node;
   GtkTreePath *path;
+  gint elt;
 
   g_return_val_if_fail (priv->root != NULL, NULL);
 
   path = gtk_tree_path_new ();
-  node = gtk_tree_model_render_node_get_node_from_iter (nodemodel, iter);
 
-  while (node != priv->root)
+  for (elt = element_from_iter (nodemodel, iter); elt >= 0; elt = parent_element (priv->nodes, elt))
     {
-      gtk_tree_path_prepend_index (path, get_node_index (node));
-      node = gsk_render_node_get_parent (node);
+      gtk_tree_path_prepend_index (path, get_node_index (priv->nodes, elt));
     }
 
   gtk_tree_path_prepend_index (path, 0);
@@ -153,7 +219,7 @@ gtk_tree_model_render_node_get_value (GtkTreeModel *tree_model,
 
   g_value_init (value, priv->column_types[column]);
   priv->get_func (nodemodel,
-                  gtk_tree_model_render_node_get_node_from_iter (nodemodel, iter),
+                  node_from_element (nodemodel, element_from_iter (nodemodel, iter)),
                   column,
                   value);
 }
@@ -164,18 +230,27 @@ gtk_tree_model_render_node_iter_next (GtkTreeModel *tree_model,
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
   GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
-  GskRenderNode *node;
+  gint i, parent;
 
-  node = gtk_tree_model_render_node_get_node_from_iter (nodemodel, iter);
-  if (node == priv->root)
-    return FALSE;
-  
-  node = gsk_render_node_get_next_sibling (node);
-  if (node == NULL)
+  i = element_from_iter (nodemodel, iter);
+  parent = parent_element (priv->nodes, i);
+
+  if (parent < 0)
     return FALSE;
 
-  gtk_tree_model_render_node_get_iter_from_node (nodemodel, iter, node);
-  return TRUE;
+  for (i = i + 1; i < priv->nodes->len; i++)
+    {
+      if (parent_element (priv->nodes, i) < parent)
+        return FALSE;
+
+      if (parent_element (priv->nodes, i) == parent)
+        {
+          iter_from_element (nodemodel, iter, i);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -184,18 +259,24 @@ gtk_tree_model_render_node_iter_previous (GtkTreeModel  *tree_model,
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
   GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
-  GskRenderNode *node;
+  gint i, parent;
 
-  node = gtk_tree_model_render_node_get_node_from_iter (nodemodel, iter);
-  if (node == priv->root)
-    return FALSE;
-  
-  node = gsk_render_node_get_previous_sibling (node);
-  if (node == NULL)
+  i = element_from_iter (nodemodel, iter);
+  parent = parent_element (priv->nodes, i);
+
+  if (parent < 0)
     return FALSE;
 
-  gtk_tree_model_render_node_get_iter_from_node (nodemodel, iter, node);
-  return TRUE;
+  for (i = i - 1; i > parent; i--)
+    {
+      if (parent_element (priv->nodes, i) == parent)
+        {
+          iter_from_element (nodemodel, iter, i);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -205,22 +286,27 @@ gtk_tree_model_render_node_iter_children (GtkTreeModel *tree_model,
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
   GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
-  GskRenderNode *node;
+  gint elt;
 
   if (parent == NULL)
     {
-      node = priv->root;
+      if (!priv->root)
+        return FALSE;
+
+      iter_from_element (nodemodel, iter, 0);
+      return TRUE;
     }
   else
     {
-      node = gtk_tree_model_render_node_get_node_from_iter (nodemodel, parent);
-      node = gsk_render_node_get_first_child (node);
-    }
-  if (node == NULL)
-    return FALSE;
+      elt = element_from_iter (nodemodel, parent);
+      if (elt + 1 >= priv->nodes->len)
+        return FALSE;
+      if (parent_element (priv->nodes, elt + 1) != elt)
+        return FALSE;
 
-  gtk_tree_model_render_node_get_iter_from_node (nodemodel, iter, node);
-  return TRUE;
+      iter_from_element (nodemodel, iter, elt + 1);
+      return TRUE;
+    }
 }
 
 static gboolean
@@ -228,11 +314,16 @@ gtk_tree_model_render_node_iter_has_child (GtkTreeModel *tree_model,
 			                   GtkTreeIter  *iter)
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
-  GskRenderNode *node;
+  GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
+  gint elt;
 
-  node = gtk_tree_model_render_node_get_node_from_iter (nodemodel, iter);
+  elt = element_from_iter (nodemodel, iter);
+  if (elt + 1 >= priv->nodes->len)
+    return FALSE;
+  if (parent_element (priv->nodes, elt + 1) != elt)
+    return FALSE;
 
-  return gsk_render_node_get_first_child (node) != NULL;
+  return TRUE;
 }
 
 static gint
@@ -241,18 +332,26 @@ gtk_tree_model_render_node_iter_n_children (GtkTreeModel *tree_model,
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
   GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
-  GskRenderNode *node;
+  gint elt, i, count;
 
   if (iter == NULL)
     return priv->root ? 1 : 0;
 
-  node = gtk_tree_model_render_node_get_node_from_iter (nodemodel, iter);
+  elt = element_from_iter (nodemodel, iter);
+  count = 0;
 
-  node = gsk_render_node_get_last_child (node);
-  if (node == NULL)
-    return 0;
+  for (i = elt + 1; i < priv->nodes->len; i++)
+    {
+      int parent = parent_element (priv->nodes, i);
 
-  return get_node_index (node) + 1;
+      if (parent < elt)
+        break;
+
+      if (parent == elt)
+        count++;
+    }
+
+  return count;
 }
 
 static gboolean
@@ -263,26 +362,28 @@ gtk_tree_model_render_node_iter_nth_child (GtkTreeModel *tree_model,
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
   GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
-  GskRenderNode *node;
+  gint elt;
 
   if (parent == NULL)
     {
       if (n > 0)
         return FALSE;
       
-      node = priv->root;
+      iter_from_element (nodemodel, iter, 0);
+      return TRUE;
     }
   else
     {
-      node = gtk_tree_model_render_node_get_node_from_iter (nodemodel, parent);
-      node = get_nth_child (node, n);
-    }
+      gint nth;
 
-  if (node == NULL)
-    return FALSE;
-  
-  gtk_tree_model_render_node_get_iter_from_node (nodemodel, iter, node);
-  return TRUE;
+      elt = element_from_iter (nodemodel, parent);
+      nth = get_nth_child (priv->nodes, elt, n);
+      if (nth < 0)
+        return FALSE;
+
+      iter_from_element (nodemodel, iter, nth);
+      return TRUE;
+    }
 }
 
 static gboolean
@@ -292,15 +393,15 @@ gtk_tree_model_render_node_iter_parent (GtkTreeModel *tree_model,
 {
   GtkTreeModelRenderNode *nodemodel = GTK_TREE_MODEL_RENDER_NODE (tree_model);
   GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
-  GskRenderNode *node;
+  gint elt, parent;
 
-  node = gtk_tree_model_render_node_get_node_from_iter (nodemodel, child);
-  if (node == priv->root)
+  elt = element_from_iter (nodemodel, child);
+  parent = parent_element (priv->nodes, elt);
+
+  if (parent < 0)
     return FALSE;
 
-  node = gsk_render_node_get_parent (node);
-
-  gtk_tree_model_render_node_get_iter_from_node (nodemodel, iter, node);
+  iter_from_element (nodemodel, iter, parent);
   return TRUE;
 }
 
@@ -329,6 +430,7 @@ gtk_tree_model_render_node_finalize (GObject *object)
   GtkTreeModelRenderNodePrivate *priv = model->priv;
 
   g_clear_pointer (&priv->root, gsk_render_node_unref);
+  g_clear_pointer (&priv->nodes, g_array_unref);
 
   G_OBJECT_CLASS (gtk_tree_model_render_node_parent_class)->finalize (object);
 }
@@ -345,11 +447,13 @@ static void
 gtk_tree_model_render_node_init (GtkTreeModelRenderNode *nodemodel)
 {
   nodemodel->priv = gtk_tree_model_render_node_get_instance_private (nodemodel);
+
+  nodemodel->priv->nodes = g_array_new (FALSE, FALSE, sizeof (TreeElement));
 }
 
 GtkTreeModel *
 gtk_tree_model_render_node_new (GtkTreeModelRenderNodeGetFunc get_func,
-                                gint                       n_columns,
+                                gint                          n_columns,
                                 ...)
 {
   GtkTreeModel *result;
@@ -399,6 +503,45 @@ gtk_tree_model_render_node_newv (GtkTreeModelRenderNodeGetFunc  get_func,
   return GTK_TREE_MODEL (result);
 }
 
+static void
+append_node (GtkTreeModelRenderNode *nodemodel,
+             GskRenderNode          *node,
+             int                     parent_index)
+{
+  GtkTreeModelRenderNodePrivate *priv = nodemodel->priv;
+  TreeElement element = { node, parent_index };
+
+  g_array_append_val (priv->nodes, element);
+
+  switch (gsk_render_node_get_node_type (node))
+    {
+    default:
+    case GSK_NOT_A_RENDER_NODE:
+      g_assert_not_reached ();
+      break;
+
+    case GSK_CAIRO_NODE:
+    case GSK_TEXTURE_NODE:
+      /* no children */
+      break;
+
+    case GSK_CONTAINER_NODE:
+      {
+        GskRenderNode *child;
+        gint elt_index;
+
+        elt_index = priv->nodes->len - 1;
+        for (child = gsk_render_node_get_first_child (node);
+             child;
+             child = gsk_render_node_get_next_sibling (child))
+          {
+            append_node (nodemodel, child, elt_index);
+          }
+      }
+      break;
+    }
+}
+
 void
 gtk_tree_model_render_node_set_root_node (GtkTreeModelRenderNode *model,
                                           GskRenderNode          *node)
@@ -421,6 +564,7 @@ gtk_tree_model_render_node_set_root_node (GtkTreeModelRenderNode *model,
       gtk_tree_path_free (path);
 
       gsk_render_node_unref (priv->root);
+      g_array_set_size (priv->nodes, 0);
     }
 
   priv->root = node;
@@ -430,8 +574,9 @@ gtk_tree_model_render_node_set_root_node (GtkTreeModelRenderNode *model,
       GtkTreeIter iter;
 
       gsk_render_node_ref (node);
+      append_node (model, node, -1);
 
-      gtk_tree_model_render_node_get_iter_from_node (model, &iter, node);
+      iter_from_element (model, &iter, 0);
       path = gtk_tree_path_new_first ();
       gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
       if (gsk_render_node_get_first_child (node))
@@ -455,20 +600,8 @@ gtk_tree_model_render_node_get_node_from_iter (GtkTreeModelRenderNode *model,
   g_return_val_if_fail (GTK_IS_TREE_MODEL_RENDER_NODE (model), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
   g_return_val_if_fail (iter->user_data == model, NULL);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (iter->user_data2), NULL);
+  g_return_val_if_fail (GPOINTER_TO_INT (iter->user_data2) < model->priv->nodes->len, NULL);
 
-  return iter->user_data2;
+  return node_from_element (model, element_from_iter (model, iter));
 }
 
-void
-gtk_tree_model_render_node_get_iter_from_node (GtkTreeModelRenderNode *model,
-                                               GtkTreeIter            *iter,
-                                               GskRenderNode          *node)
-{
-  g_return_if_fail (GTK_IS_TREE_MODEL_RENDER_NODE (model));
-  g_return_if_fail (iter != NULL);
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-
-  iter->user_data = model;
-  iter->user_data2 = node;
-}
