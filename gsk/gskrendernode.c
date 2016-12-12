@@ -175,24 +175,6 @@ gsk_render_node_get_node_type (GskRenderNode *node)
 }
 
 /**
- * gsk_render_node_get_parent:
- * @node: a #GskRenderNode
- *
- * Returns the parent of the @node.
- *
- * Returns: (transfer none): the parent of the #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_render_node_get_parent (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
-
-  return node->parent;
-}
-
-/**
  * gsk_render_node_get_first_child:
  * @node: a #GskRenderNode
  *
@@ -281,15 +263,6 @@ gsk_render_node_insert_child_internal (GskRenderNode   *node,
       return;
     }
 
-  if (child->parent != NULL)
-    {
-      g_critical ("The render node of type '%s' already has a parent of type '%s'; "
-                  "render nodes cannot be added to multiple parents.",
-		  G_OBJECT_TYPE_NAME (child),
-		  G_OBJECT_TYPE_NAME (node));
-      return;
-    }
-
   if (!node->is_mutable)
     {
       g_critical ("The render node of type '%s' is immutable.",
@@ -301,7 +274,6 @@ gsk_render_node_insert_child_internal (GskRenderNode   *node,
 
   gsk_render_node_ref (child);
 
-  child->parent = node;
   child->age = 0;
 
   node->n_children += 1;
@@ -422,18 +394,9 @@ gsk_render_node_remove_child (GskRenderNode *node,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
   g_return_val_if_fail (node->is_mutable, node);
 
-  if (child->parent != node)
-    {
-      g_critical ("The render node of type '%s' is not a child of the render node of type '%s'",
-		  G_OBJECT_TYPE_NAME (child),
-		  G_OBJECT_TYPE_NAME (node));
-      return node;
-    }
-
   prev_sibling = child->prev_sibling;
   next_sibling = child->next_sibling;
 
-  child->parent = NULL;
   child->prev_sibling = NULL;
   child->next_sibling = NULL;
   child->age = 0;
@@ -571,62 +534,6 @@ gsk_render_node_get_opacity (GskRenderNode *node)
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 0.0);
 
   return node->opacity;
-}
-
-/**
- * gsk_render_node_contains:
- * @node: a #GskRenderNode
- * @descendant: a #GskRenderNode
- *
- * Checks whether @node contains @descendant.
- *
- * Returns: %TRUE if the #GskRenderNode contains the given
- *   descendant
- *
- * Since: 3.90
- */
-gboolean
-gsk_render_node_contains (GskRenderNode *node,
-			  GskRenderNode *descendant)
-{
-  GskRenderNode *tmp;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), FALSE);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (descendant), FALSE);
-
-  for (tmp = descendant; tmp != NULL; tmp = tmp->parent)
-    if (tmp == node)
-      return TRUE;
-
-  return FALSE;
-}
-
-/*< private >
- * gsk_render_node_get_toplevel:
- * @node: a #GskRenderNode
- *
- * Retrieves the top level #GskRenderNode without a parent.
- *
- * Returns: (transfer none): the top level #GskRenderNode
- */
-GskRenderNode *
-gsk_render_node_get_toplevel (GskRenderNode *node)
-{
-  GskRenderNode *parent;
-
-  parent = node->parent;
-  if (parent == NULL)
-    return node;
-
-  while (parent != NULL)
-    {
-      if (parent->parent == NULL)
-        return parent;
-
-      parent = parent->parent;
-    }
-
-  return NULL;
 }
 
 void

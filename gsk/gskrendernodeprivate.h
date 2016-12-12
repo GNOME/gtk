@@ -75,8 +75,6 @@ GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
 
 GskBlendMode gsk_render_node_get_blend_mode (GskRenderNode *node);
 
-GskRenderNode *gsk_render_node_get_toplevel (GskRenderNode *node);
-
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_PRIVATE_H__ */

@@ -58,8 +58,6 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_container_node_new                  (void);
 
 GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_get_parent              (GskRenderNode *node);
-GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_first_child         (GskRenderNode *node);
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_get_last_child          (GskRenderNode *node);
@@ -73,10 +71,6 @@ GskRenderNode *         gsk_render_node_append_child            (GskRenderNode *
                                                                  GskRenderNode *child);
 GDK_AVAILABLE_IN_3_90
 guint                   gsk_render_node_get_n_children          (GskRenderNode *node);
-
-GDK_AVAILABLE_IN_3_90
-gboolean                gsk_render_node_contains                (GskRenderNode *node,
-								 GskRenderNode *descendant);
 
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_transform           (GskRenderNode            *node,
