@@ -145,7 +145,7 @@ typedef struct {
   guint transition_duration;
 
   GtkStackChildInfo *last_visible_child;
-  cairo_surface_t *last_visible_surface;
+  GskRenderNode *last_visible_node;
   GtkAllocation last_visible_surface_allocation;
   guint tick_id;
   GtkProgressTracker tracker;
@@ -176,8 +176,8 @@ static void     gtk_stack_compute_expand                 (GtkWidget     *widget,
                                                           gboolean      *vexpand);
 static void     gtk_stack_size_allocate                  (GtkWidget     *widget,
                                                           GtkAllocation *allocation);
-static gboolean gtk_stack_draw                           (GtkWidget     *widget,
-                                                          cairo_t       *cr);
+static void     gtk_stack_snapshot                       (GtkWidget     *widget,
+                                                          GtkSnapshot   *snapshot);
 static void     gtk_stack_measure_                       (GtkWidget      *widget,
                                                           GtkOrientation  orientation,
                                                           int             for_size,
@@ -220,8 +220,7 @@ gtk_stack_finalize (GObject *obj)
 
   gtk_stack_unschedule_ticks (stack);
 
-  if (priv->last_visible_surface != NULL)
-    cairo_surface_destroy (priv->last_visible_surface);
+  g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
 
   g_clear_object (&priv->gadget);
 
@@ -408,7 +407,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   object_class->finalize = gtk_stack_finalize;
 
   widget_class->size_allocate = gtk_stack_size_allocate;
-  widget_class->draw = gtk_stack_draw;
+  widget_class->snapshot = gtk_stack_snapshot;
   widget_class->realize = gtk_stack_realize;
   widget_class->unrealize = gtk_stack_unrealize;
   widget_class->map = gtk_stack_map;
@@ -874,11 +873,7 @@ gtk_stack_progress_updated (GtkStack *stack)
 
   if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
-      if (priv->last_visible_surface != NULL)
-        {
-          cairo_surface_destroy (priv->last_visible_surface);
-          priv->last_visible_surface = NULL;
-        }
+      g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
 
       if (priv->last_visible_child != NULL)
         {
@@ -1065,9 +1060,7 @@ set_visible_child (GtkStack               *stack,
     gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
   priv->last_visible_child = NULL;
 
-  if (priv->last_visible_surface != NULL)
-    cairo_surface_destroy (priv->last_visible_surface);
-  priv->last_visible_surface = NULL;
+  g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
 
   if (priv->visible_child && priv->visible_child->widget)
     {
@@ -1877,6 +1870,7 @@ gtk_stack_forall (GtkContainer *container,
     }
 }
 
+#include <gsk/gskrendernodeprivate.h>
 static void
 gtk_stack_compute_expand (GtkWidget *widget,
                           gboolean  *hexpand_p,
@@ -1913,43 +1907,48 @@ gtk_stack_compute_expand (GtkWidget *widget,
 }
 
 static void
-gtk_stack_draw_crossfade (GtkWidget *widget,
-                          cairo_t   *cr)
+gtk_stack_snapshot_crossfade (GtkWidget   *widget,
+                              GtkSnapshot *snapshot)
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   gdouble progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
+  cairo_t *cr;
 
-  cairo_push_group (cr);
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &GRAPHENE_RECT_INIT(
+                                           0, 0,
+                                           gtk_widget_get_allocated_width (widget),
+                                           gtk_widget_get_allocated_height (widget)
+                                       ),
+                                       "GtkStackCrossfade");
+
   gtk_container_propagate_draw (GTK_CONTAINER (stack),
                                 priv->visible_child->widget,
                                 cr);
-  cairo_save (cr);
 
   /* Multiply alpha by progress */
   cairo_set_source_rgba (cr, 1, 1, 1, progress);
   cairo_set_operator (cr, CAIRO_OPERATOR_DEST_IN);
   cairo_paint (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
 
-  if (priv->last_visible_surface)
+  if (priv->last_visible_node)
     {
-      cairo_set_source_surface (cr, priv->last_visible_surface,
-                                priv->last_visible_surface_allocation.x,
-                                priv->last_visible_surface_allocation.y);
+      cairo_push_group (cr);
+      cairo_translate (cr, priv->last_visible_surface_allocation.x, priv->last_visible_surface_allocation.y);
+      gsk_render_node_draw (priv->last_visible_node, cr);
+      cairo_pop_group_to_source (cr);
       cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
       cairo_paint_with_alpha (cr, MAX (1.0 - progress, 0));
     }
 
-  cairo_restore (cr);
-
-  cairo_pop_group_to_source (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  cairo_paint (cr);
+  cairo_destroy (cr);
 }
 
 static void
-gtk_stack_draw_under (GtkWidget *widget,
-                      cairo_t   *cr)
+gtk_stack_snapshot_under (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -1988,33 +1987,39 @@ gtk_stack_draw_under (GtkWidget *widget,
       g_assert_not_reached ();
     }
 
-  cairo_save (cr);
-  cairo_rectangle (cr, x, y, width, height);
-  cairo_clip (cr);
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT(x, y, width, height),
+                          "StackUnder");
 
-  gtk_container_propagate_draw (GTK_CONTAINER (stack),
+  gtk_container_snapshot_child (GTK_CONTAINER (stack),
                                 priv->visible_child->widget,
-                                cr);
+                                snapshot);
 
-  cairo_restore (cr);
+  gtk_snapshot_pop_and_append (snapshot);
 
-  if (priv->last_visible_surface)
+  if (priv->last_visible_node)
     {
-      cairo_set_source_surface (cr, priv->last_visible_surface, pos_x, pos_y);
-      cairo_paint (cr);
+      graphene_matrix_t matrix;
+
+      graphene_matrix_init_translate (&matrix, &GRAPHENE_POINT3D_INIT (pos_x, pos_y, 0));
+
+      gtk_snapshot_push_transform (snapshot, &matrix, "StackUnder");
+      gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+      gtk_snapshot_pop_and_append (snapshot);
     }
 }
 
 static void
-gtk_stack_draw_slide (GtkWidget *widget,
-                      cairo_t   *cr)
+gtk_stack_snapshot_slide (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  if (priv->last_visible_surface)
+  if (priv->last_visible_node)
     {
       GtkAllocation allocation;
+      graphene_matrix_t matrix;
       int x, y;
 
       gtk_widget_get_allocation (widget, &allocation);
@@ -2052,39 +2057,36 @@ gtk_stack_draw_slide (GtkWidget *widget,
       x += priv->last_visible_surface_allocation.x;
       y += priv->last_visible_surface_allocation.y;
 
-
       if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
           priv->last_visible_widget_height > allocation.height)
         y -= priv->last_visible_widget_height - allocation.height;
       else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
         y -= (priv->last_visible_widget_height - allocation.height) / 2;
 
-      cairo_save (cr);
-      cairo_set_source_surface (cr, priv->last_visible_surface, x, y);
-      cairo_paint (cr);
-      cairo_restore (cr);
+      graphene_matrix_init_translate (&matrix, &GRAPHENE_POINT3D_INIT (x, y, 0));
+      gtk_snapshot_push_transform (snapshot, &matrix, "StackSlide");
+      gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+      gtk_snapshot_pop_and_append (snapshot);
      }
 
-  gtk_container_propagate_draw (GTK_CONTAINER (stack),
+  gtk_container_snapshot_child (GTK_CONTAINER (stack),
                                 priv->visible_child->widget,
-                                cr);
+                                snapshot);
 }
 
-static gboolean
-gtk_stack_draw (GtkWidget *widget,
-                cairo_t   *cr)
+static void
+gtk_stack_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  gtk_css_gadget_draw (priv->gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (priv->gadget, snapshot);
 }
 
 static gboolean
 gtk_stack_render (GtkCssGadget *gadget,
-                  cairo_t      *cr,
+                  GtkSnapshot  *snapshot,
                   int           x,
                   int           y,
                   int           width,
@@ -2094,40 +2096,33 @@ gtk_stack_render (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  cairo_t *pattern_cr;
 
   if (priv->visible_child)
     {
       if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
         {
-          if (priv->last_visible_surface == NULL &&
+          if (priv->last_visible_node == NULL &&
               priv->last_visible_child != NULL)
             {
               gtk_widget_get_allocation (priv->last_visible_child->widget,
                                          &priv->last_visible_surface_allocation);
-              priv->last_visible_surface =
-                gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                                   CAIRO_CONTENT_COLOR_ALPHA,
-                                                   priv->last_visible_surface_allocation.width,
-                                                   priv->last_visible_surface_allocation.height);
-              pattern_cr = cairo_create (priv->last_visible_surface);
-              /* We don't use propagate_draw here, because we don't want to apply
-               * the bin_window offset
-               */
-              gtk_widget_draw (priv->last_visible_child->widget, pattern_cr);
-              cairo_destroy (pattern_cr);
+              gtk_snapshot_push (snapshot, FALSE, "StackCaptureLastVisibleChild");
+              gtk_widget_snapshot (priv->last_visible_child->widget, snapshot);
+              priv->last_visible_node = gtk_snapshot_pop (snapshot);
             }
 
-          cairo_rectangle (cr,
-                           0, 0,
-                           gtk_widget_get_allocated_width (widget),
-                           gtk_widget_get_allocated_height (widget));
-          cairo_clip (cr);
+          gtk_snapshot_push_clip (snapshot,
+                                  &GRAPHENE_RECT_INIT(
+                                      0, 0,
+                                      gtk_widget_get_allocated_width (widget),
+                                      gtk_widget_get_allocated_height (widget)
+                                  ),
+                                  "StackAnimationClip");
 
           switch (priv->active_transition_type)
             {
             case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
-	      gtk_stack_draw_crossfade (widget, cr);
+	      gtk_stack_snapshot_crossfade (widget, snapshot);
               break;
             case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
             case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
@@ -2137,23 +2132,24 @@ gtk_stack_render (GtkCssGadget *gadget,
             case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
             case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
             case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
-              gtk_stack_draw_slide (widget, cr);
+              gtk_stack_snapshot_slide (widget, snapshot);
               break;
             case GTK_STACK_TRANSITION_TYPE_UNDER_UP:
             case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
             case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
             case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
-	      gtk_stack_draw_under (widget, cr);
+	      gtk_stack_snapshot_under (widget, snapshot);
               break;
             default:
               g_assert_not_reached ();
             }
 
+          gtk_snapshot_pop_and_append (snapshot);
         }
       else
-        gtk_container_propagate_draw (GTK_CONTAINER (stack),
+        gtk_container_snapshot_child (GTK_CONTAINER (stack),
                                       priv->visible_child->widget,
-                                      cr);
+                                      snapshot);
     }
 
   return FALSE;
@@ -2226,8 +2222,7 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
       if (!gdk_rectangle_equal (&priv->last_visible_surface_allocation,
                                 &child_allocation))
         {
-          cairo_surface_destroy (priv->last_visible_surface);
-          priv->last_visible_surface = NULL;
+          g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
         }
     }
 
@@ -2364,8 +2359,8 @@ gtk_stack_init (GtkStack *stack)
                                                      GTK_WIDGET (stack),
                                                      gtk_stack_measure,
                                                      gtk_stack_allocate,
-                                                     gtk_stack_render,
                                                      NULL,
+                                                     gtk_stack_render,
                                                      NULL,
                                                      NULL);
 
