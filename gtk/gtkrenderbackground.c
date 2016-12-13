@@ -74,6 +74,41 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
   cairo_fill (cr);
 }
 
+static void
+gtk_theming_background_snapshot_color (GtkThemingBackground *bg,
+                                       GtkSnapshot          *snapshot,
+                                       const GdkRGBA        *bg_color,
+                                       GtkCssValue          *background_image)
+{
+  gint n_values = _gtk_css_array_value_get_n_values (background_image);
+  GtkCssArea clip = _gtk_css_area_value_get 
+    (_gtk_css_array_value_get_nth 
+     (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP), 
+      n_values - 1));
+
+  if (gtk_rgba_is_clear (bg_color))
+    return;
+
+  if (gsk_rounded_rect_is_rectilinear (&bg->boxes[clip]))
+    {
+      gtk_snapshot_append_color_node (snapshot,
+                                      bg_color,
+                                      &bg->boxes[clip].bounds,
+                                      "BackgroundColor");
+    }
+  else
+    {
+      gtk_snapshot_push_rounded_clip (snapshot,
+                                      &bg->boxes[clip],
+                                      "BackgroundColorClip");
+      gtk_snapshot_append_color_node (snapshot,
+                                      bg_color,
+                                      &bg->boxes[clip].bounds,
+                                      "BackgroundColor");
+      gtk_snapshot_pop_and_append (snapshot);
+    }
+}
+
 static gboolean
 _gtk_theming_background_needs_push_group (GtkCssStyle *style)
 {
@@ -299,6 +334,196 @@ gtk_theming_background_paint_layer (GtkThemingBackground *bg,
 }
 
 static void
+gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
+                                       guint                 idx,
+                                       GtkSnapshot          *snapshot)
+{
+  GtkCssRepeatStyle hrepeat, vrepeat;
+  const GtkCssValue *pos, *repeat;
+  GtkCssImage *image;
+  const GskRoundedRect *origin, *clip;
+  double image_width, image_height;
+  double width, height;
+
+  pos = _gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_POSITION), idx);
+  repeat = _gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), idx);
+  hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
+  vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
+  image = _gtk_css_image_value_get_image (
+              _gtk_css_array_value_get_nth (
+                  gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE),
+                  idx));
+
+  origin = &bg->boxes[
+               _gtk_css_area_value_get (
+                   _gtk_css_array_value_get_nth (
+                       gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN),
+                       idx))];
+  clip = &bg->boxes[
+              _gtk_css_area_value_get (
+                                _gtk_css_array_value_get_nth (
+                                                    gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP),
+                                                                      idx))];
+
+  width = origin->bounds.size.width;
+  height = origin->bounds.size.height;
+
+  if (image == NULL || width <= 0 || height <= 0)
+    return;
+
+  _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_SIZE), idx),
+                                       image,
+                                       width,
+                                       height,
+                                       &image_width,
+                                       &image_height);
+
+  if (image_width <= 0 || image_height <= 0)
+    return;
+
+  /* optimization */
+  if (image_width == width)
+    hrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
+  if (image_height == height)
+    vrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
+
+  gtk_snapshot_push_rounded_clip (snapshot, clip, "BackgroundLayerClip<%u>", idx);
+
+  gtk_snapshot_translate_2d (snapshot, origin->bounds.origin.x, origin->bounds.origin.y);
+
+  if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
+    {
+      /* shortcut for normal case */
+      double x, y;
+
+      x = _gtk_css_position_value_get_x (pos, width - image_width);
+      y = _gtk_css_position_value_get_y (pos, height - image_height);
+
+      gtk_snapshot_translate_2d (snapshot, x, y);
+
+      gtk_css_image_snapshot (image, snapshot, image_width, image_height);
+
+      gtk_snapshot_translate_2d (snapshot, -x, -y);
+    }
+  else
+    {
+      int surface_width, surface_height;
+      cairo_rectangle_t fill_rect;
+      cairo_surface_t *surface;
+      cairo_t *cr, *cr2;
+
+      cr = gtk_snapshot_append_cairo_node (snapshot,
+                                           &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                           "BackgroundLayer<%u>", idx);
+
+      /* If ‘background-repeat’ is ‘round’ for one (or both) dimensions,
+       * there is a second step. The UA must scale the image in that
+       * dimension (or both dimensions) so that it fits a whole number of
+       * times in the background positioning area. In the case of the width
+       * (height is analogous):
+       *
+       * If X ≠ 0 is the width of the image after step one and W is the width
+       * of the background positioning area, then the rounded width
+       * X' = W / round(W / X) where round() is a function that returns the
+       * nearest natural number (integer greater than zero). 
+       *
+       * If ‘background-repeat’ is ‘round’ for one dimension only and if
+       * ‘background-size’ is ‘auto’ for the other dimension, then there is
+       * a third step: that other dimension is scaled so that the original
+       * aspect ratio is restored. 
+       */
+      if (hrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
+        {
+          double n = round (width / image_width);
+
+          n = MAX (1, n);
+
+          if (vrepeat != GTK_CSS_REPEAT_STYLE_ROUND
+              /* && vsize == auto (it is by default) */)
+            image_height *= width / (image_width * n);
+          image_width = width / n;
+        }
+      if (vrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
+        {
+          double n = round (height / image_height);
+
+          n = MAX (1, n);
+
+          if (hrepeat != GTK_CSS_REPEAT_STYLE_ROUND
+              /* && hsize == auto (it is by default) */)
+            image_width *= height / (image_height * n);
+          image_height = height / n;
+        }
+
+      /* if hrepeat or vrepeat is 'space', we create a somewhat larger surface
+       * to store the extra space. */
+      if (hrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
+        {
+          double n = floor (width / image_width);
+          surface_width = n ? round (width / n) : 0;
+        }
+      else
+        surface_width = round (image_width);
+
+      if (vrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
+        {
+          double n = floor (height / image_height);
+          surface_height = n ? round (height / n) : 0;
+        }
+      else
+        surface_height = round (image_height);
+
+      surface = cairo_surface_create_similar (cairo_get_target (cr),
+                                              CAIRO_CONTENT_COLOR_ALPHA,
+                                              surface_width, surface_height);
+      cr2 = cairo_create (surface);
+      cairo_translate (cr2,
+                       0.5 * (surface_width - image_width),
+                       0.5 * (surface_height - image_height));
+      _gtk_css_image_draw (image, cr2, image_width, image_height);
+      cairo_destroy (cr2);
+
+      cairo_set_source_surface (cr, surface,
+                                _gtk_css_position_value_get_x (pos, width - image_width),
+                                _gtk_css_position_value_get_y (pos, height - image_height));
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
+      cairo_surface_destroy (surface);
+
+      if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
+        {
+          fill_rect.x = _gtk_css_position_value_get_x (pos, width - image_width);
+          fill_rect.width = image_width;
+        }
+      else
+        {
+          fill_rect.x = 0;
+          fill_rect.width = width;
+        }
+
+      if (vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
+        {
+          fill_rect.y = _gtk_css_position_value_get_y (pos, height - image_height);
+          fill_rect.height = image_height;
+        }
+      else
+        {
+          fill_rect.y = 0;
+          fill_rect.height = height;
+        }
+
+      cairo_rectangle (cr, fill_rect.x, fill_rect.y,
+                       fill_rect.width, fill_rect.height);
+      cairo_fill (cr);
+
+      cairo_destroy (cr);
+    }
+
+  gtk_snapshot_translate_2d (snapshot, - origin->bounds.origin.x, - origin->bounds.origin.y);
+
+  gtk_snapshot_pop_and_append (snapshot);
+}
+
+static void
 gtk_theming_background_init (GtkThemingBackground *bg,
                              GtkCssStyle          *style,
                              double                width,
@@ -434,7 +659,6 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
   GtkCssValue *box_shadow;
   const GdkRGBA *bg_color;
   gint number_of_layers;
-  cairo_t *cr;
 
   background_image = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
   bg_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
@@ -457,20 +681,36 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
    * When we have a blend mode set for the background, we must blend on a transparent
    * background. GSK can't do that yet.
    */
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                       "Background");
-
-  _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
-
-  number_of_layers = _gtk_css_array_value_get_n_values (background_image);
-
-  for (idx = number_of_layers - 1; idx >= 0; idx--)
+  if (_gtk_theming_background_needs_push_group (style))
     {
-      gtk_theming_background_paint_layer (&bg, idx, cr);
-    }
+      cairo_t *cr;
 
-  cairo_destroy (cr);
+      cr = gtk_snapshot_append_cairo_node (snapshot,
+                                           &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                           "Background");
+
+      _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
+
+      number_of_layers = _gtk_css_array_value_get_n_values (background_image);
+
+      for (idx = number_of_layers - 1; idx >= 0; idx--)
+        {
+          gtk_theming_background_paint_layer (&bg, idx, cr);
+        }
+
+      cairo_destroy (cr);
+    }
+  else
+    {
+      gtk_theming_background_snapshot_color (&bg, snapshot, bg_color, background_image);
+
+      number_of_layers = _gtk_css_array_value_get_n_values (background_image);
+
+      for (idx = number_of_layers - 1; idx >= 0; idx--)
+        {
+          gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
+        }
+    }
 
   gtk_css_shadows_value_snapshot_inset (box_shadow,
                                         snapshot,
