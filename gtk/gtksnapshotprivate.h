@@ -24,6 +24,11 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
 
+typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GskRenderNode **nodes,
+                                                    guint           n_nodes,
+                                                    const char     *name,
+                                                    gpointer        user_data);
+
 struct _GtkSnapshotState {
   GtkSnapshotState      *parent;
 
@@ -33,6 +38,9 @@ struct _GtkSnapshotState {
   cairo_region_t        *clip_region;
   double                 translate_x;
   double                 translate_y;
+
+  GtkSnapshotCollectFunc collect_func;
+  gpointer               collect_data;
 };
 
 struct _GtkSnapshot {
