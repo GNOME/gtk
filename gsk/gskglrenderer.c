@@ -760,8 +760,40 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       return;
 
     case GSK_NOT_A_RENDER_NODE:
-    default:
+      g_assert_not_reached ();
       return;
+
+    default:
+      {
+        graphene_rect_t bounds;
+        cairo_surface_t *surface;
+        cairo_t *cr;
+
+        gsk_render_node_get_bounds (node, &bounds);
+
+        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                              ceil (bounds.size.width),
+                                              ceil (bounds.size.height));
+        cr = cairo_create (surface);
+        cairo_translate (cr, -bounds.origin.x, -bounds.origin.y);
+
+        gsk_render_node_draw (node, cr);
+        
+        cairo_destroy (cr);
+
+        /* Upload the Cairo surface to a GL texture */
+        item.render_data.texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                                    item.size.width,
+                                                                    item.size.height);
+        gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
+        gsk_gl_driver_init_texture_with_surface (self->gl_driver,
+                                                 item.render_data.texture_id,
+                                                 surface,
+                                                 GL_NEAREST, GL_NEAREST);
+
+        cairo_surface_destroy (surface);
+      }
+      break;
     }
 
   /* Create the vertex buffers holding the geometry of the quad */

@@ -72,8 +72,12 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass     *self,
   switch (gsk_render_node_get_node_type (node))
     {
     case GSK_NOT_A_RENDER_NODE:
-    default:
       g_assert_not_reached ();
+      break;
+
+    default:
+      op.type = GSK_VULKAN_OP_FALLBACK;
+      g_array_append_val (self->render_ops, op);
       break;
 
     case GSK_CAIRO_NODE:
@@ -150,7 +154,7 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass *self,
                                         ceil (bounds.size.width),
                                         ceil (bounds.size.height));
   cr = cairo_create (surface);
-  cairo_translate (cr, bounds.origin.x, bounds.origin.y);
+  cairo_translate (cr, -bounds.origin.x, -bounds.origin.y);
 
   gsk_render_node_draw (op->node, cr);
   
