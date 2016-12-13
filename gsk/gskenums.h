@@ -27,6 +27,7 @@
  * @GSK_NOT_A_RENDER_NODE: Error type. No node will ever have this type.
  * @GSK_CONTAINER_NODE: A node containing a stack of children
  * @GSK_CAIRO_NODE: A node drawing a #cairo_surface_t
+ * @GSK_COLOR_NODE: A node drawing a single color rectangle
  * @GSK_TEXTURE_NODE: A node drawing a #GskTexture
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a
  *     matrix transform
@@ -39,6 +40,7 @@ typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
   GSK_CAIRO_NODE,
+  GSK_COLOR_NODE,
   GSK_TEXTURE_NODE,
   GSK_TRANSFORM_NODE
 } GskRenderNodeType;

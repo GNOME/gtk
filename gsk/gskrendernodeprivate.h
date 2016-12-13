@@ -58,6 +58,8 @@ cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
 
+const GdkRGBA *gsk_color_node_peek_color (GskRenderNode *node);
+
 void gsk_transform_node_get_transform (GskRenderNode *node, graphene_matrix_t *transform);
 
 GskBlendMode gsk_render_node_get_blend_mode (GskRenderNode *node);

@@ -45,6 +45,10 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNodeType       gsk_render_node_get_node_type           (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_color_node_new                      (const GdkRGBA            *rgba,
+                                                                 const graphene_rect_t    *bounds);
+
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_texture_node_new                    (GskTexture               *texture,
                                                                  const graphene_rect_t    *bounds);
 

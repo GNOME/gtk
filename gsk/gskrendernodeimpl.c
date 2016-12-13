@@ -22,6 +22,98 @@
 #include "gskrendererprivate.h"
 #include "gsktextureprivate.h"
 
+/*** GSK_COLOR_NODE ***/
+
+typedef struct _GskColorNode GskColorNode;
+
+struct _GskColorNode
+{
+  GskRenderNode render_node;
+
+  GdkRGBA color;
+  graphene_rect_t bounds;
+};
+
+static void
+gsk_color_node_finalize (GskRenderNode *node)
+{
+}
+
+static void
+gsk_color_node_make_immutable (GskRenderNode *node)
+{
+}
+
+static void
+gsk_color_node_draw (GskRenderNode *node,
+                     cairo_t       *cr)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  gdk_cairo_set_source_rgba (cr, &self->color);
+
+  cairo_rectangle (cr,
+                   self->bounds.origin.x, self->bounds.origin.y,
+                   self->bounds.size.width, self->bounds.size.height);
+  cairo_fill (cr);
+}
+
+static void
+gsk_color_node_get_bounds (GskRenderNode   *node,
+                           graphene_rect_t *bounds)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  graphene_rect_init_from_rect (bounds, &self->bounds); 
+}
+
+static const GskRenderNodeClass GSK_COLOR_NODE_CLASS = {
+  GSK_COLOR_NODE,
+  sizeof (GskColorNode),
+  "GskColorNode",
+  gsk_color_node_finalize,
+  gsk_color_node_make_immutable,
+  gsk_color_node_draw,
+  gsk_color_node_get_bounds
+};
+
+const GdkRGBA *
+gsk_color_node_peek_color (GskRenderNode *node)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  return &self->color;
+}
+
+/**
+ * gsk_color_node_new:
+ * @color: the #GskColor
+ * @bounds: the rectangle to render the color into
+ *
+ * Creates a #GskRenderNode that will render the given
+ * @color into the area given by @bounds.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_color_node_new (const GdkRGBA         *rgba,
+                    const graphene_rect_t *bounds)
+{
+  GskColorNode *self;
+
+  g_return_val_if_fail (rgba != NULL, NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  self = (GskColorNode *) gsk_render_node_new (&GSK_COLOR_NODE_CLASS);
+
+  self->color = *rgba;
+  graphene_rect_init_from_rect (&self->bounds, bounds);
+
+  return &self->render_node;
+}
+
 /*** GSK_TEXTURE_NODE ***/
 
 typedef struct _GskTextureNode GskTextureNode;
