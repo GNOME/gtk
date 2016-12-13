@@ -656,10 +656,10 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
   border.right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
   border.bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
   border.left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-  corner[GTK_CSS_TOP_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
-  corner[GTK_CSS_TOP_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
-  corner[GTK_CSS_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
-  corner[GTK_CSS_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
+  corner[GSK_CORNER_TOP_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
+  corner[GSK_CORNER_TOP_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
+  corner[GSK_CORNER_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
+  corner[GSK_CORNER_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -674,10 +674,10 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
 
-      if (xy0_gap < _gtk_css_corner_value_get_x (corner[GTK_CSS_TOP_LEFT], width))
+      if (xy0_gap < _gtk_css_corner_value_get_x (corner[GSK_CORNER_TOP_LEFT], width))
         junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if (xy1_gap > width - _gtk_css_corner_value_get_x (corner[GTK_CSS_TOP_RIGHT], width))
+      if (xy1_gap > width - _gtk_css_corner_value_get_x (corner[GSK_CORNER_TOP_RIGHT], width))
         junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
       break;
     case GTK_POS_BOTTOM:
@@ -686,10 +686,10 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
 
-      if (xy0_gap < _gtk_css_corner_value_get_x (corner[GTK_CSS_BOTTOM_LEFT], width))
+      if (xy0_gap < _gtk_css_corner_value_get_x (corner[GSK_CORNER_BOTTOM_LEFT], width))
         junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
-      if (xy1_gap > width - _gtk_css_corner_value_get_x (corner[GTK_CSS_BOTTOM_RIGHT], width))
+      if (xy1_gap > width - _gtk_css_corner_value_get_x (corner[GSK_CORNER_BOTTOM_RIGHT], width))
         junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       break;
@@ -699,10 +699,10 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
 
-      if (xy0_gap < _gtk_css_corner_value_get_y (corner[GTK_CSS_TOP_LEFT], height))
+      if (xy0_gap < _gtk_css_corner_value_get_y (corner[GSK_CORNER_TOP_LEFT], height))
         junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if (xy1_gap > height - _gtk_css_corner_value_get_y (corner[GTK_CSS_BOTTOM_LEFT], height))
+      if (xy1_gap > height - _gtk_css_corner_value_get_y (corner[GSK_CORNER_BOTTOM_LEFT], height))
         junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
       break;
@@ -712,10 +712,10 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
 
-      if (xy0_gap < _gtk_css_corner_value_get_y (corner[GTK_CSS_TOP_RIGHT], height))
+      if (xy0_gap < _gtk_css_corner_value_get_y (corner[GSK_CORNER_TOP_RIGHT], height))
         junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
 
-      if (xy1_gap > height - _gtk_css_corner_value_get_y (corner[GTK_CSS_BOTTOM_RIGHT], height))
+      if (xy1_gap > height - _gtk_css_corner_value_get_y (corner[GSK_CORNER_BOTTOM_RIGHT], height))
         junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       break;

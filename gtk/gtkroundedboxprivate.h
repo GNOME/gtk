@@ -20,6 +20,7 @@
 
 #include <glib-object.h>
 #include <cairo.h>
+#include <gsk/gsk.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypes.h>
 
