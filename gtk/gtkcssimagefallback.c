@@ -62,25 +62,27 @@ gtk_css_image_fallback_get_aspect_ratio (GtkCssImage *image)
 }
 
 static void
-gtk_css_image_fallback_draw (GtkCssImage *image,
-                             cairo_t     *cr,
-                             double       width,
-                             double       height)
+gtk_css_image_fallback_snapshot (GtkCssImage *image,
+                                 GtkSnapshot *snapshot,
+                                 double       width,
+                                 double       height)
 {
   GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
 
   if (fallback->used < 0)
     {
-      if (fallback->color)
-        gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (fallback->color));
-      else
-        cairo_set_source_rgb (cr, 1.0, 0.0, 0.0);
+      GdkRGBA red = { 1, 0, 0, 1 };
+      const GdkRGBA *color;
 
-      cairo_rectangle (cr, 0, 0, width, height);
-      cairo_fill (cr);
+      if (fallback->color)
+        color = _gtk_css_rgba_value_get_rgba (fallback->color);
+      else
+        color = &red;
+
+      gtk_snapshot_append_color_node (snapshot, color, &GRAPHENE_RECT_INIT (0, 0, width, height), "image() Fallback Color");
     }
   else
-    _gtk_css_image_draw (fallback->images[fallback->used], cr, width, height);
+    gtk_css_image_snapshot (fallback->images[fallback->used], snapshot, width, height);
 }
 
 static void
@@ -241,7 +243,7 @@ _gtk_css_image_fallback_class_init (GtkCssImageFallbackClass *klass)
   image_class->get_width = gtk_css_image_fallback_get_width;
   image_class->get_height = gtk_css_image_fallback_get_height;
   image_class->get_aspect_ratio = gtk_css_image_fallback_get_aspect_ratio;
-  image_class->draw = gtk_css_image_fallback_draw;
+  image_class->snapshot = gtk_css_image_fallback_snapshot;
   image_class->parse = gtk_css_image_fallback_parse;
   image_class->compute = gtk_css_image_fallback_compute;
   image_class->print = gtk_css_image_fallback_print;
