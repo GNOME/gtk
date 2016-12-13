@@ -33,6 +33,7 @@
  *     matrix transform
  * @GSK_OPACITY_NODE: A node that changes the opacity of its child
  * @GSK_CLIP_NODE: A node that clips its child to a rectangular area
+ * @GSK_ROUNDED_CLIP_NODE: A node that clips its child to a rounded rectangle
  *
  * The type of a node determines what the node is rendering.
  *
@@ -46,7 +47,8 @@ typedef enum {
   GSK_TEXTURE_NODE,
   GSK_TRANSFORM_NODE,
   GSK_OPACITY_NODE,
-  GSK_CLIP_NODE
+  GSK_CLIP_NODE,
+  GSK_ROUNDED_CLIP_NODE
 } GskRenderNodeType;
 
 /**
@@ -108,5 +110,21 @@ typedef enum {
   GSK_BLEND_MODE_DIFFERENCE,
   GSK_BLEND_MODE_EXCLUSION
 } GskBlendMode;
+
+/**
+ * GskCorner:
+ * @GSK_CORNER_TOP_LEFT: The top left corner
+ * @GSK_CORNER_TOP_RIGHT: The top right corner
+ * @GSK_CORNER_BOTTOM_RIGHT: The bottom right corner
+ * @GSK_CORNER_BOTTOM_LEFT: The bottom left corner
+ *
+ * The corner indices used by #GskRoundedRect.
+ */
+typedef enum {
+  GSK_CORNER_TOP_LEFT,
+  GSK_CORNER_TOP_RIGHT,
+  GSK_CORNER_BOTTOM_RIGHT,
+  GSK_CORNER_BOTTOM_LEFT
+} GskCorner;
 
 #endif /* __GSK_TYPES_H__ */

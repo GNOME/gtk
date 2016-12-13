@@ -57,3 +57,15 @@ GskRenderNodeClass
 gsk_render_node_get_type
 GSK_TYPE_BLEND_MODE
 </SECTION>
+
+<SECTION>
+<FILE>GskRoundedRect</FILE>
+GskCorner
+GskRoundedRect
+gsk_rounded_rect_init
+gsk_rounded_rect_init_copy
+gsk_rounded_rect_init_from_rect
+gsk_rounded_rect_normalize
+gsk_rounded_rect_offset
+gsk_rounded_rect_is_rectilinear
+</SECTION>

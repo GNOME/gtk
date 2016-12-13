@@ -47,6 +47,7 @@ gsk_public_source_h = \
 	gskenums.h \
 	gskrenderer.h \
 	gskrendernode.h \
+	gskroundedrect.h \
 	gsktexture.h \
 	gsktypes.h
 gsk_private_source_h = \
@@ -60,12 +61,14 @@ gsk_private_source_h = \
 	gskprofilerprivate.h \
 	gskrendererprivate.h \
 	gskrendernodeprivate.h \
+	gskroundedrectprivate.h \
 	gskshaderbuilderprivate.h \
 	gsktextureprivate.h
 gsk_public_source_c = \
 	gskrenderer.c \
 	gskrendernode.c \
 	gskrendernodeimpl.c \
+	gskroundedrect.c \
 	gsktexture.c
 gsk_private_source_c = \
 	$(gsk_private_vulkan_source_c) \
