@@ -350,13 +350,13 @@ hide_border_sides (double         border[4],
 }
 
 static void
-render_frame_fill (cairo_t       *cr,
-                   GtkRoundedBox *border_box,
-                   const double   border_width[4],
-                   GdkRGBA        colors[4],
-                   guint          hidden_side)
+render_frame_fill (cairo_t        *cr,
+                   GskRoundedRect *border_box,
+                   const double    border_width[4],
+                   GdkRGBA         colors[4],
+                   guint           hidden_side)
 {
-  GtkRoundedBox padding_box;
+  GskRoundedRect padding_box;
   guint i, j;
 
   padding_box = *border_box;
@@ -465,15 +465,15 @@ set_stroke_style (cairo_t        *cr,
 }
 
 static void
-render_frame_stroke (cairo_t       *cr,
-                     GtkRoundedBox *border_box,
-                     const double   border_width[4],
-                     GdkRGBA        colors[4],
-                     guint          hidden_side,
-                     GtkBorderStyle stroke_style)
+render_frame_stroke (cairo_t        *cr,
+                     GskRoundedRect *border_box,
+                     const double    border_width[4],
+                     GdkRGBA         colors[4],
+                     guint           hidden_side,
+                     GtkBorderStyle  stroke_style)
 {
   gboolean different_colors, different_borders;
-  GtkRoundedBox stroke_box;
+  GskRoundedRect stroke_box;
   guint i;
 
   different_colors = !gdk_rgba_equal (&colors[0], &colors[1]) ||
@@ -508,7 +508,7 @@ render_frame_stroke (cairo_t       *cr,
     }
   else
     {
-      GtkRoundedBox padding_box;
+      GskRoundedRect padding_box;
 
       padding_box = *border_box;
       _gtk_rounded_box_shrink (&padding_box,
@@ -564,12 +564,12 @@ color_shade (const GdkRGBA *color,
 }
 
 static void
-render_border (cairo_t       *cr,
-               GtkRoundedBox *border_box,
-               const double   border_width[4],
-               guint          hidden_side,
-               GdkRGBA        colors[4],
-               GtkBorderStyle border_style[4])
+render_border (cairo_t        *cr,
+               GskRoundedRect *border_box,
+               const double    border_width[4],
+               guint           hidden_side,
+               GdkRGBA         colors[4],
+               GtkBorderStyle  border_style[4])
 {
   guint i, j;
 
@@ -621,7 +621,7 @@ render_border (cairo_t       *cr,
           break;
         case GTK_BORDER_STYLE_DOUBLE:
           {
-            GtkRoundedBox other_box;
+            GskRoundedRect other_box;
             double other_border[4];
             guint dont_draw = hidden_side;
 
@@ -649,7 +649,7 @@ render_border (cairo_t       *cr,
         case GTK_BORDER_STYLE_GROOVE:
         case GTK_BORDER_STYLE_RIDGE:
           {
-            GtkRoundedBox other_box;
+            GskRoundedRect other_box;
             GdkRGBA other_colors[4];
             guint dont_draw = hidden_side;
             double other_border[4];
@@ -728,7 +728,7 @@ gtk_css_style_render_border (GtkCssStyle      *style,
   else
     {
       GtkBorderStyle border_style[4];
-      GtkRoundedBox border_box;
+      GskRoundedRect border_box;
       GdkRGBA colors[4];
 
       /* Optimize the most common case of "This widget has no border" */
@@ -787,7 +787,7 @@ gtk_css_style_snapshot_border (GtkCssStyle      *style,
   else
     {
       GtkBorderStyle border_style[4];
-      GtkRoundedBox border_box;
+      GskRoundedRect border_box;
       GdkRGBA colors[4];
 
       /* Optimize the most common case of "This widget has no border" */
@@ -895,7 +895,7 @@ gtk_css_style_render_outline (GtkCssStyle *style,
                               gdouble      height)
 {
   GtkBorderStyle border_style[4];
-  GtkRoundedBox border_box;
+  GskRoundedRect border_box;
   double border_width[4];
   GdkRGBA colors[4];
 
@@ -926,7 +926,7 @@ gtk_css_style_snapshot_outline (GtkCssStyle *style,
                                 gdouble      height)
 {
   GtkBorderStyle border_style[4];
-  GtkRoundedBox border_box;
+  GskRoundedRect border_box;
   double border_width[4];
   GdkRGBA colors[4];
 

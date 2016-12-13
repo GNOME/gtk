@@ -301,7 +301,7 @@ _gtk_css_shadows_value_paint_icon (const GtkCssValue *shadows,
 void
 _gtk_css_shadows_value_paint_box (const GtkCssValue   *shadows,
                                   cairo_t             *cr,
-                                  const GtkRoundedBox *padding_box,
+                                  const GskRoundedRect*padding_box,
                                   gboolean             inset)
 {
   guint i;
@@ -318,7 +318,7 @@ _gtk_css_shadows_value_paint_box (const GtkCssValue   *shadows,
 void
 gtk_css_shadows_value_snapshot_outset (const GtkCssValue   *shadows,
                                        GtkSnapshot         *snapshot,
-                                       const GtkRoundedBox *border_box)
+                                       const GskRoundedRect*border_box)
 {
   guint i;
 
@@ -336,7 +336,7 @@ gtk_css_shadows_value_snapshot_outset (const GtkCssValue   *shadows,
 void
 gtk_css_shadows_value_snapshot_inset (const GtkCssValue   *shadows,
                                       GtkSnapshot         *snapshot,
-                                      const GtkRoundedBox *padding_box)
+                                      const GskRoundedRect*padding_box)
 {
   guint i;
 

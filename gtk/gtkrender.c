@@ -976,7 +976,7 @@ gtk_render_content_path (GtkStyleContext *context,
                          double           width,
                          double           height)
 {
-  GtkRoundedBox box;
+  GskRoundedRect box;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);

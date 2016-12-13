@@ -52,7 +52,7 @@ typedef struct _GtkThemingBackground GtkThemingBackground;
 struct _GtkThemingBackground {
   GtkCssStyle *style;
 
-  GtkRoundedBox boxes[N_BOXES];
+  GskRoundedRect boxes[N_BOXES];
 };
 
 static void
@@ -115,7 +115,7 @@ gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   const GtkCssValue *pos, *repeat;
   GtkCssImage *image;
   GtkCssBlendMode blend_mode;
-  const GtkRoundedBox *origin;
+  const GskRoundedRect *origin;
   double image_width, image_height;
   double width, height;
 

@@ -28,68 +28,66 @@
 
 G_BEGIN_DECLS
 
-typedef GskRoundedRect GtkRoundedBox;
+void            _gtk_rounded_box_init_rect                      (GskRoundedRect         *box,
+                                                                 double                  x,
+                                                                 double                  y,
+                                                                 double                  width,
+                                                                 double                  height);
 
-void            _gtk_rounded_box_init_rect                      (GtkRoundedBox       *box,
-                                                                 double               x,
-                                                                 double               y,
-                                                                 double               width,
-                                                                 double               height);
+void            _gtk_rounded_box_apply_border_radius_for_style  (GskRoundedRect         *box,
+                                                                 GtkCssStyle            *style,
+                                                                 GtkJunctionSides        junction);
 
-void            _gtk_rounded_box_apply_border_radius_for_style  (GtkRoundedBox       *box,
-                                                                 GtkCssStyle         *style,
-                                                                 GtkJunctionSides     junction);
+void            _gtk_rounded_box_apply_outline_radius_for_style (GskRoundedRect         *box,
+                                                                 GtkCssStyle            *style,
+                                                                 GtkJunctionSides        junction);
 
-void            _gtk_rounded_box_apply_outline_radius_for_style (GtkRoundedBox       *box,
-                                                                 GtkCssStyle         *style,
-                                                                 GtkJunctionSides     junction);
+void            _gtk_rounded_box_grow                           (GskRoundedRect         *box,
+                                                                 double                  top,
+                                                                 double                  right,
+                                                                 double                  bottom,
+                                                                 double                  left);
+void            _gtk_rounded_box_shrink                         (GskRoundedRect         *box,
+                                                                 double                  top,
+                                                                 double                  right,
+                                                                 double                  bottom,
+                                                                 double                  left);
+void            _gtk_rounded_box_move                           (GskRoundedRect         *box,
+                                                                 double                  dx,
+                                                                 double                  dy);
 
-void            _gtk_rounded_box_grow                           (GtkRoundedBox       *box,
-                                                                 double               top,
-                                                                 double               right,
-                                                                 double               bottom,
-                                                                 double               left);
-void            _gtk_rounded_box_shrink                         (GtkRoundedBox       *box,
-                                                                 double               top,
-                                                                 double               right,
-                                                                 double               bottom,
-                                                                 double               left);
-void            _gtk_rounded_box_move                           (GtkRoundedBox       *box,
-                                                                 double               dx,
-                                                                 double               dy);
+double          _gtk_rounded_box_guess_length                   (const GskRoundedRect   *box,
+                                                                 GtkCssSide              side);
 
-double          _gtk_rounded_box_guess_length                   (const GtkRoundedBox *box,
-                                                                 GtkCssSide           side);
-
-void            _gtk_rounded_box_path                           (const GtkRoundedBox *box,
-                                                                 cairo_t             *cr);
-void            _gtk_rounded_box_path_side                      (const GtkRoundedBox *box,
-                                                                 cairo_t             *cr,
-                                                                 GtkCssSide           side);
-void            _gtk_rounded_box_path_top                       (const GtkRoundedBox *outer,
-                                                                 const GtkRoundedBox *inner,
-                                                                 cairo_t             *cr);
-void            _gtk_rounded_box_path_right                     (const GtkRoundedBox *outer,
-                                                                 const GtkRoundedBox *inner,
-                                                                 cairo_t             *cr);
-void            _gtk_rounded_box_path_bottom                    (const GtkRoundedBox *outer,
-                                                                 const GtkRoundedBox *inner,
-                                                                 cairo_t             *cr);
-void            _gtk_rounded_box_path_left                      (const GtkRoundedBox *outer,
-                                                                 const GtkRoundedBox *inner,
-                                                                 cairo_t             *cr);
-void            _gtk_rounded_box_clip_path                      (const GtkRoundedBox *box,
-                                                                 cairo_t             *cr);
-gboolean        _gtk_rounded_box_intersects_rectangle           (const GtkRoundedBox *box,
-                                                                 gdouble              x1,
-                                                                 gdouble              y1,
-                                                                 gdouble              x2,
-                                                                 gdouble              y2);
-gboolean        _gtk_rounded_box_contains_rectangle             (const GtkRoundedBox *box,
-                                                                 gdouble              x1,
-                                                                 gdouble              y1,
-                                                                 gdouble              x2,
-                                                                 gdouble              y2);
+void            _gtk_rounded_box_path                           (const GskRoundedRect   *box,
+                                                                 cairo_t                *cr);
+void            _gtk_rounded_box_path_side                      (const GskRoundedRect   *box,
+                                                                 cairo_t                *cr,
+                                                                 GtkCssSide              side);
+void            _gtk_rounded_box_path_top                       (const GskRoundedRect   *outer,
+                                                                 const GskRoundedRect   *inner,
+                                                                 cairo_t                *cr);
+void            _gtk_rounded_box_path_right                     (const GskRoundedRect   *outer,
+                                                                 const GskRoundedRect   *inner,
+                                                                 cairo_t                *cr);
+void            _gtk_rounded_box_path_bottom                    (const GskRoundedRect   *outer,
+                                                                 const GskRoundedRect   *inner,
+                                                                 cairo_t                *cr);
+void            _gtk_rounded_box_path_left                      (const GskRoundedRect   *outer,
+                                                                 const GskRoundedRect   *inner,
+                                                                 cairo_t                *cr);
+void            _gtk_rounded_box_clip_path                      (const GskRoundedRect   *box,
+                                                                 cairo_t                *cr);
+gboolean        _gtk_rounded_box_intersects_rectangle           (const GskRoundedRect   *box,
+                                                                 gdouble                 x1,
+                                                                 gdouble                 y1,
+                                                                 gdouble                 x2,
+                                                                 gdouble                 y2);
+gboolean        _gtk_rounded_box_contains_rectangle             (const GskRoundedRect   *box,
+                                                                 gdouble                 x1,
+                                                                 gdouble                 y1,
+                                                                 gdouble                 x2,
+                                                                 gdouble                 y2);
 
 G_END_DECLS
 

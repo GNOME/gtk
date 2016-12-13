@@ -635,8 +635,8 @@ has_empty_clip (cairo_t *cr)
 static void
 draw_shadow (const GtkCssValue   *shadow,
 	     cairo_t             *cr,
-	     GtkRoundedBox       *box,
-	     GtkRoundedBox       *clip_box,
+	     GskRoundedRect      *box,
+	     GskRoundedRect      *clip_box,
 	     GtkBlurFlags         blur_flags)
 {
   cairo_t *shadow_cr;
@@ -689,14 +689,14 @@ corner_mask_equal (CornerMask *mask1,
 static void
 draw_shadow_corner (const GtkCssValue     *shadow,
                     cairo_t               *cr,
-                    GtkRoundedBox         *box,
-                    GtkRoundedBox         *clip_box,
+                    GskRoundedRect        *box,
+                    GskRoundedRect        *clip_box,
                     GskCorner              corner,
                     cairo_rectangle_int_t *drawn_rect)
 {
   gdouble radius, clip_radius;
   int x1, x2, x3, y1, y2, y3, x, y;
-  GtkRoundedBox corner_box;
+  GskRoundedRect corner_box;
   cairo_t *mask_cr;
   cairo_surface_t *mask;
   cairo_pattern_t *pattern;
@@ -828,8 +828,8 @@ draw_shadow_corner (const GtkCssValue     *shadow,
 static void
 draw_shadow_side (const GtkCssValue   *shadow,
                   cairo_t             *cr,
-                  GtkRoundedBox       *box,
-                  GtkRoundedBox       *clip_box,
+                  GskRoundedRect      *box,
+                  GskRoundedRect      *clip_box,
                   GtkCssSide           side,
                   cairo_rectangle_int_t *drawn_rect)
 {
@@ -887,9 +887,9 @@ draw_shadow_side (const GtkCssValue   *shadow,
 void
 _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
                                  cairo_t             *cr,
-                                 const GtkRoundedBox *padding_box)
+                                 const GskRoundedRect*padding_box)
 {
-  GtkRoundedBox box, clip_box;
+  GskRoundedRect box, clip_box;
   double spread, radius, clip_radius, x, y, outside;
   double x1c, y1c, x2c, y2c;
 
@@ -1024,7 +1024,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 void
 gtk_css_shadow_value_snapshot_outset (const GtkCssValue   *shadow,
                                       GtkSnapshot         *snapshot,
-                                      const GtkRoundedBox *border_box)
+                                      const GskRoundedRect*border_box)
 {
   GtkBorder extents;
   cairo_t *cr;
@@ -1051,7 +1051,7 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue   *shadow,
 void
 gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
                                      GtkSnapshot         *snapshot,
-                                     const GtkRoundedBox *padding_box)
+                                     const GskRoundedRect*padding_box)
 {
   cairo_t *cr;
 

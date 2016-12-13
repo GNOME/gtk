@@ -903,7 +903,7 @@ gtk_popover_fill_border_path (GtkPopover *popover,
   GtkAllocation allocation;
   GtkStyleContext *context;
   int x, y, w, h;
-  GtkRoundedBox box;
+  GskRoundedRect box;
 
   context = gtk_widget_get_style_context (widget);
   gtk_widget_get_allocation (widget, &allocation);
