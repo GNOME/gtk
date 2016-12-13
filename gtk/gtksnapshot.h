@@ -64,6 +64,18 @@ cairo_t *       gtk_snapshot_append_cairo_node          (GtkSnapshot            
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF(3, 4);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_append_texture_node        (GtkSnapshot            *snapshot,
+                                                         GskTexture             *texture,
+                                                         const graphene_rect_t  *bounds,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (4, 5);
+GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_append_color_node          (GtkSnapshot            *snapshot,
+                                                         const GdkRGBA          *color,
+                                                         const graphene_rect_t  *bounds,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (4, 5);
 
 GDK_AVAILABLE_IN_3_90
 gboolean        gtk_snapshot_clips_rect                 (GtkSnapshot            *snapshot,

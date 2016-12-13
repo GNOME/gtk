@@ -374,6 +374,100 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
   return cr;
 }
 
+/**
+ * gtk_snapshot_append_texture_node:
+ * @snapshot: a #GtkSnapshot
+ * @texture: the #GskTexture to render
+ * @bounds: the bounds for the new node
+ * @name: (transfer none): a printf() style format string for the name for the new node
+ * @...: arguments to insert into the format string
+ *
+ * Creates a new render node drawing the @texture into the given @bounds and appends it
+ * to the current render node of @snapshot.
+ **/
+void
+gtk_snapshot_append_texture_node (GtkSnapshot            *snapshot,
+                                  GskTexture             *texture,
+                                  const graphene_rect_t  *bounds,
+                                  const char             *name,
+                                  ...)
+{
+  GskRenderNode *node;
+  graphene_rect_t real_bounds;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GSK_IS_TEXTURE (texture));
+  g_return_if_fail (bounds != NULL);
+
+  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
+  node = gsk_texture_node_new (texture, &real_bounds);
+
+  if (name)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (node, str);
+
+      g_free (str);
+    }
+
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
+}
+
+/**
+ * gtk_snapshot_append_color_node:
+ * @snapshot: a #GtkSnapshot
+ * @color: the #GdkRGBA to draw
+ * @bounds: the bounds for the new node
+ * @name: (transfer none): a printf() style format string for the name for the new node
+ * @...: arguments to insert into the format string
+ *
+ * Creates a new render node drawing the @color into the given @bounds and appends it
+ * to the current render node of @snapshot.
+ *
+ * You should try to avoid calling this function if @color is transparent.
+ **/
+void
+gtk_snapshot_append_color_node (GtkSnapshot           *snapshot,
+                                const GdkRGBA         *color,
+                                const graphene_rect_t *bounds,
+                                const char            *name,
+                                ...)
+{
+  GskRenderNode *node;
+  graphene_rect_t real_bounds;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (color != NULL);
+  g_return_if_fail (bounds != NULL);
+
+  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
+  node = gsk_color_node_new (color, &real_bounds);
+
+  if (name)
+    {
+      va_list args;
+      char *str;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+
+      gsk_render_node_set_name (node, str);
+
+      g_free (str);
+    }
+
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
+}
+
 static void
 rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
                               const graphene_rect_t *graphene)

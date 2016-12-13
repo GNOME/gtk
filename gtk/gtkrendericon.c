@@ -297,17 +297,11 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
-      double offset_x, offset_y;
-
-      gtk_snapshot_get_offset (snapshot, &offset_x, &offset_y);
       graphene_rect_init (&bounds,
-                          offset_x, offset_y,
+                          0, 0,
                           gsk_texture_get_width (texture) / texture_scale,
                           gsk_texture_get_height (texture) / texture_scale);
-      icon_node = gsk_texture_node_new (texture, &bounds);
-      gsk_render_node_set_name (icon_node, "Icon");
-      
-      gtk_snapshot_append_node (snapshot, icon_node);
+      gtk_snapshot_append_texture_node (snapshot, texture, &bounds, "Icon");
     }
   else
     {
