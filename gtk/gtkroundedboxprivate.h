@@ -52,9 +52,6 @@ void            _gtk_rounded_box_shrink                         (GskRoundedRect 
                                                                  double                  right,
                                                                  double                  bottom,
                                                                  double                  left);
-void            _gtk_rounded_box_move                           (GskRoundedRect         *box,
-                                                                 double                  dx,
-                                                                 double                  dy);
 
 double          _gtk_rounded_box_guess_length                   (const GskRoundedRect   *box,
                                                                  GtkCssSide              side);

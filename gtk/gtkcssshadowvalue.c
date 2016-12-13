@@ -930,7 +930,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
     }
 
   box = *padding_box;
-  _gtk_rounded_box_move (&box, x, y);
+  gsk_rounded_rect_offset (&box, x, y);
 
   if (shadow->inset)
     _gtk_rounded_box_shrink (&box, spread, spread, spread, spread);

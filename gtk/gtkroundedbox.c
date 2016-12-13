@@ -213,15 +213,6 @@ _gtk_rounded_box_shrink (GskRoundedRect *box,
   _gtk_rounded_box_grow (box, -top, -right, -bottom, -left);
 }
 
-void
-_gtk_rounded_box_move (GskRoundedRect *box,
-                       double          dx,
-                       double          dy)
-{
-  box->bounds.origin.x += dx;
-  box->bounds.origin.y += dy;
-}
-
 typedef struct {
   double angle1;
   double angle2;
