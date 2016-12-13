@@ -2094,15 +2094,7 @@ gtk_stack_render (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStyleContext *context;
   cairo_t *pattern_cr;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_render_background (context,
-                         cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
 
   if (priv->visible_child)
     {
