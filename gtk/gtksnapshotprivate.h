@@ -48,6 +48,8 @@ void            gtk_snapshot_init               (GtkSnapshot             *state,
                                                  ...) G_GNUC_PRINTF (4, 5);
 GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
 
+GskRenderer *   gtk_snapshot_get_renderer       (const GtkSnapshot       *snapshot);
+
 G_END_DECLS
 
 #endif /* __GTK_SNAPSHOT_PRIVATE_H__ */

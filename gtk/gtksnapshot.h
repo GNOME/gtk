@@ -37,9 +37,6 @@
 G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_3_90
-GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot      *snapshot);
-
-GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push                       (GtkSnapshot            *snapshot,
                                                          gboolean                keep_coordinates,
                                                          const char             *name,

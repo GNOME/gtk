@@ -4453,7 +4453,6 @@ gtk_volume_button_get_type
 <FILE>gtksnapshot</FILE>
 <TITLE>GtkSnapshot</TITLE>
 GtkSnapshot
-gtk_snapshot_get_renderer
 gtk_snapshot_push
 gtk_snapshot_push_node
 gtk_snapshot_pop

@@ -553,8 +553,7 @@ gtk_icon_helper_ensure_surface (GtkIconHelper *self)
 }
 
 static void
-gtk_icon_helper_ensure_texture (GtkIconHelper *self,
-                                GskRenderer   *renderer)
+gtk_icon_helper_ensure_texture (GtkIconHelper *self)
 {
   cairo_surface_t *map;
   int width, height, scale;
@@ -874,7 +873,7 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
   GtkCssStyle *style;
   GskTexture *texture;
 
-  gtk_icon_helper_ensure_texture (self, gtk_snapshot_get_renderer (snapshot));
+  gtk_icon_helper_ensure_texture (self);
   texture = self->priv->texture;
   if (texture == NULL)
     return;
