@@ -28,7 +28,10 @@ gtk_css_image_surface_get_width (GtkCssImage *image)
 {
   GtkCssImageSurface *surface = GTK_CSS_IMAGE_SURFACE (image);
 
-  return cairo_image_surface_get_width (surface->surface);
+  if (surface->texture == NULL)
+    return 0;
+
+  return gsk_texture_get_width (surface->texture);
 }
 
 static int
@@ -36,65 +39,36 @@ gtk_css_image_surface_get_height (GtkCssImage *image)
 {
   GtkCssImageSurface *surface = GTK_CSS_IMAGE_SURFACE (image);
 
-  return cairo_image_surface_get_height (surface->surface);
+  if (surface->texture == NULL)
+    return 0;
+
+  return gsk_texture_get_height (surface->texture);
 }
 
 static void
-gtk_css_image_surface_draw (GtkCssImage *image,
-                            cairo_t     *cr,
-                            double       width,
-                            double       height)
+gtk_css_image_surface_snapshot (GtkCssImage *image,
+                                GtkSnapshot *snapshot,
+                                double       width,
+                                double       height)
 {
   GtkCssImageSurface *surface = GTK_CSS_IMAGE_SURFACE (image);
-  int image_width, image_height;
 
-  image_width = cairo_image_surface_get_width (surface->surface);
-  image_height = cairo_image_surface_get_height (surface->surface);
-
-  if (image_width == 0 || image_height == 0)
+  if (surface->texture == NULL)
     return;
 
-  cairo_rectangle (cr, 0, 0, width, height);
-  cairo_scale (cr,
-               width / image_width,
-               height / image_height);
-  cairo_set_source_surface (cr, surface->surface, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
-  cairo_fill (cr);
-}
-
-static cairo_status_t
-surface_write (void                *closure,
-               const unsigned char *data,
-               unsigned int         length)
-{
-  g_byte_array_append (closure, data, length);
-
-  return CAIRO_STATUS_SUCCESS;
+  gtk_snapshot_append_texture_node (snapshot,
+                                    surface->texture,
+                                    &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                    "Surface Image %dx%d",
+                                    gsk_texture_get_width (surface->texture),
+                                    gsk_texture_get_height (surface->texture));
 }
 
 static void
 gtk_css_image_surface_print (GtkCssImage *image,
                              GString     *string)
 {
-#if CAIRO_HAS_PNG_FUNCTIONS
-  GtkCssImageSurface *surface = GTK_CSS_IMAGE_SURFACE (image);
-  GByteArray *array;
-  char *base64;
-  
-  array = g_byte_array_new ();
-  cairo_surface_write_to_png_stream (surface->surface, surface_write, array);
-  base64 = g_base64_encode (array->data, array->len);
-  g_byte_array_free (array, TRUE);
-
-  g_string_append (string, "url(\"data:image/png;base64,");
-  g_string_append (string, base64);
-  g_string_append (string, "\")");
-
-  g_free (base64);
-#else
-  g_string_append (string, "none /* you need cairo png functions enabled to make this work */");
-#endif
+  g_string_append (string, "none /* FIXME */");
 }
 
 static void
@@ -102,11 +76,7 @@ gtk_css_image_surface_dispose (GObject *object)
 {
   GtkCssImageSurface *surface = GTK_CSS_IMAGE_SURFACE (object);
 
-  if (surface->surface)
-    {
-      cairo_surface_destroy (surface->surface);
-      surface->surface = NULL;
-    }
+  g_clear_pointer (&surface->texture, gsk_texture_unref);
 
   G_OBJECT_CLASS (_gtk_css_image_surface_parent_class)->dispose (object);
 }
@@ -119,7 +89,7 @@ _gtk_css_image_surface_class_init (GtkCssImageSurfaceClass *klass)
 
   image_class->get_width = gtk_css_image_surface_get_width;
   image_class->get_height = gtk_css_image_surface_get_height;
-  image_class->draw = gtk_css_image_surface_draw;
+  image_class->snapshot = gtk_css_image_surface_snapshot;
   image_class->print = gtk_css_image_surface_print;
 
   object_class->dispose = gtk_css_image_surface_dispose;
@@ -131,31 +101,29 @@ _gtk_css_image_surface_init (GtkCssImageSurface *image_surface)
 }
 
 GtkCssImage *
-_gtk_css_image_surface_new (cairo_surface_t *surface)
+gtk_css_image_surface_new (GskTexture *texture)
 {
   GtkCssImage *image;
 
-  g_return_val_if_fail (surface != NULL, NULL);
-
   image = g_object_new (GTK_TYPE_CSS_IMAGE_SURFACE, NULL);
   
-  GTK_CSS_IMAGE_SURFACE (image)->surface = cairo_surface_reference (surface);
+  if (texture)
+    GTK_CSS_IMAGE_SURFACE (image)->texture = gsk_texture_ref (texture);
 
   return image;
 }
 
 GtkCssImage *
-_gtk_css_image_surface_new_for_pixbuf (GdkPixbuf *pixbuf)
+gtk_css_image_surface_new_for_pixbuf (GdkPixbuf *pixbuf)
 {
   GtkCssImage *image;
-  cairo_surface_t *surface;
+  GskTexture *texture;
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
-
-  image = _gtk_css_image_surface_new (surface);
-  cairo_surface_destroy (surface);
+  texture = gsk_texture_new_for_pixbuf (pixbuf);
+  image = gtk_css_image_surface_new (texture);
+  gsk_texture_unref (texture);
 
   return image;
 }

@@ -120,8 +120,6 @@ gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
 
   if (pixbuf == NULL)
     {
-      cairo_surface_t *empty;
-
       if (gerror)
         {
           char *uri;
@@ -135,13 +133,11 @@ gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
           g_free (uri);
        }
 
-      empty = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
-      image = _gtk_css_image_surface_new (empty);
-      cairo_surface_destroy (empty);
+      image = gtk_css_image_surface_new (NULL);
       return image;
     }
 
-  image = _gtk_css_image_surface_new_for_pixbuf (pixbuf);
+  image = gtk_css_image_surface_new_for_pixbuf (pixbuf);
   g_object_unref (pixbuf);
 
   return image;

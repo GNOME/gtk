@@ -66,8 +66,6 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
 
   if (pixbuf == NULL)
     {
-      cairo_surface_t *empty;
-
       if (error)
         {
           char *uri;
@@ -81,13 +79,11 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
           g_free (uri);
        }
 
-      empty = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
-      url->loaded_image = _gtk_css_image_surface_new (empty);
-      cairo_surface_destroy (empty);
+      url->loaded_image = gtk_css_image_surface_new (NULL);
       return url->loaded_image;
     }
 
-  url->loaded_image = _gtk_css_image_surface_new_for_pixbuf (pixbuf);
+  url->loaded_image = gtk_css_image_surface_new_for_pixbuf (pixbuf);
   g_object_unref (pixbuf);
 
   return url->loaded_image;
