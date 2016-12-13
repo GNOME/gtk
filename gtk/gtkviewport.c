@@ -31,8 +31,9 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkscrollable.h"
 #include "gtkrenderbackgroundprivate.h"
+#include "gtkscrollable.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -104,8 +105,8 @@ static void gtk_viewport_finalize                 (GObject         *object);
 static void gtk_viewport_destroy                  (GtkWidget        *widget);
 static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
-static gint gtk_viewport_draw                     (GtkWidget        *widget,
-						   cairo_t          *cr);
+static void gtk_viewport_snapshot                 (GtkWidget        *widget,
+						   GtkSnapshot      *snapshot);
 static void gtk_viewport_add                      (GtkContainer     *container,
 						   GtkWidget        *widget);
 static void gtk_viewport_size_allocate            (GtkWidget        *widget,
@@ -284,7 +285,7 @@ gtk_viewport_allocate (GtkCssGadget        *gadget,
 
 static gboolean
 gtk_viewport_render (GtkCssGadget *gadget,
-                     cairo_t      *cr,
+                     GtkSnapshot  *snapshot,
                      int           x,
                      int           y,
                      int           width,
@@ -293,7 +294,11 @@ gtk_viewport_render (GtkCssGadget *gadget,
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
 
-  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
+  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT(x, y, width, height), "Viewport");
+
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->snapshot (widget, snapshot);
+
+  gtk_snapshot_pop_and_append (snapshot);
 
   return FALSE;
 }
@@ -332,7 +337,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->destroy = gtk_viewport_destroy;
   widget_class->realize = gtk_viewport_realize;
   widget_class->unrealize = gtk_viewport_unrealize;
-  widget_class->draw = gtk_viewport_draw;
+  widget_class->snapshot = gtk_viewport_snapshot;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->measure = gtk_viewport_measure_;
   
@@ -458,8 +463,8 @@ gtk_viewport_init (GtkViewport *viewport)
                                                      widget,
                                                      gtk_viewport_measure,
                                                      gtk_viewport_allocate,
-                                                     gtk_viewport_render,
                                                      NULL,
+                                                     gtk_viewport_render,
                                                      NULL, NULL);
 
   gtk_css_gadget_add_class (priv->gadget, GTK_STYLE_CLASS_FRAME);
@@ -704,16 +709,14 @@ gtk_viewport_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize (widget);
 }
 
-static gint
-gtk_viewport_draw (GtkWidget *widget,
-                   cairo_t   *cr)
+static void
+gtk_viewport_snapshot (GtkWidget   *widget,
+                       GtkSnapshot *snapshot)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
 
-  gtk_css_gadget_draw (priv->gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (priv->gadget, snapshot);
 }
 
 static void
