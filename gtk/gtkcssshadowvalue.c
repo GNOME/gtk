@@ -713,46 +713,46 @@ draw_shadow_corner (const GtkCssValue     *shadow,
   overlapped = FALSE;
   if (corner == GSK_CORNER_TOP_LEFT || corner == GSK_CORNER_BOTTOM_LEFT)
     {
-      x1 = floor (box->box.x - clip_radius);
-      x2 = ceil (box->box.x + box->corner[corner].width + clip_radius);
+      x1 = floor (box->bounds.origin.x - clip_radius);
+      x2 = ceil (box->bounds.origin.x + box->corner[corner].width + clip_radius);
       x = x1;
       sx = 1;
       max_other = MAX(box->corner[GSK_CORNER_TOP_RIGHT].width, box->corner[GSK_CORNER_BOTTOM_RIGHT].width);
-      x3 = floor (box->box.x + box->box.width - max_other - clip_radius);
+      x3 = floor (box->bounds.origin.x + box->bounds.size.width - max_other - clip_radius);
       if (x2 > x3)
         overlapped = TRUE;
     }
   else
     {
-      x1 = floor (box->box.x + box->box.width - box->corner[corner].width - clip_radius);
-      x2 = ceil (box->box.x + box->box.width + clip_radius);
+      x1 = floor (box->bounds.origin.x + box->bounds.size.width - box->corner[corner].width - clip_radius);
+      x2 = ceil (box->bounds.origin.x + box->bounds.size.width + clip_radius);
       x = x2;
       sx = -1;
       max_other = MAX(box->corner[GSK_CORNER_TOP_LEFT].width, box->corner[GSK_CORNER_BOTTOM_LEFT].width);
-      x3 = ceil (box->box.x + max_other + clip_radius);
+      x3 = ceil (box->bounds.origin.x + max_other + clip_radius);
       if (x3 > x1)
         overlapped = TRUE;
     }
 
   if (corner == GSK_CORNER_TOP_LEFT || corner == GSK_CORNER_TOP_RIGHT)
     {
-      y1 = floor (box->box.y - clip_radius);
-      y2 = ceil (box->box.y + box->corner[corner].height + clip_radius);
+      y1 = floor (box->bounds.origin.y - clip_radius);
+      y2 = ceil (box->bounds.origin.y + box->corner[corner].height + clip_radius);
       y = y1;
       sy = 1;
       max_other = MAX(box->corner[GSK_CORNER_BOTTOM_LEFT].height, box->corner[GSK_CORNER_BOTTOM_RIGHT].height);
-      y3 = floor (box->box.y + box->box.height - max_other - clip_radius);
+      y3 = floor (box->bounds.origin.y + box->bounds.size.height - max_other - clip_radius);
       if (y2 > y3)
         overlapped = TRUE;
     }
   else
     {
-      y1 = floor (box->box.y + box->box.height - box->corner[corner].height - clip_radius);
-      y2 = ceil (box->box.y + box->box.height + clip_radius);
+      y1 = floor (box->bounds.origin.y + box->bounds.size.height - box->corner[corner].height - clip_radius);
+      y2 = ceil (box->bounds.origin.y + box->bounds.size.height + clip_radius);
       y = y2;
       sy = -1;
       max_other = MAX(box->corner[GSK_CORNER_TOP_LEFT].height, box->corner[GSK_CORNER_TOP_RIGHT].height);
-      y3 = ceil (box->box.y + max_other + clip_radius);
+      y3 = ceil (box->bounds.origin.y + max_other + clip_radius);
       if (y3 > y1)
         overlapped = TRUE;
     }
@@ -843,35 +843,35 @@ draw_shadow_side (const GtkCssValue   *shadow,
   if (side == GTK_CSS_TOP || side == GTK_CSS_BOTTOM)
     {
       blur_flags |= GTK_BLUR_Y;
-      x1 = floor (box->box.x - clip_radius);
-      x2 = ceil (box->box.x + box->box.width + clip_radius);
+      x1 = floor (box->bounds.origin.x - clip_radius);
+      x2 = ceil (box->bounds.origin.x + box->bounds.size.width + clip_radius);
     }
   else if (side == GTK_CSS_LEFT)
     {
-      x1 = floor (box->box.x -clip_radius);
-      x2 = ceil (box->box.x + clip_radius);
+      x1 = floor (box->bounds.origin.x -clip_radius);
+      x2 = ceil (box->bounds.origin.x + clip_radius);
     }
   else
     {
-      x1 = floor (box->box.x + box->box.width -clip_radius);
-      x2 = ceil (box->box.x + box->box.width + clip_radius);
+      x1 = floor (box->bounds.origin.x + box->bounds.size.width -clip_radius);
+      x2 = ceil (box->bounds.origin.x + box->bounds.size.width + clip_radius);
     }
 
   if (side == GTK_CSS_LEFT || side == GTK_CSS_RIGHT)
     {
       blur_flags |= GTK_BLUR_X;
-      y1 = floor (box->box.y - clip_radius);
-      y2 = ceil (box->box.y + box->box.height + clip_radius);
+      y1 = floor (box->bounds.origin.y - clip_radius);
+      y2 = ceil (box->bounds.origin.y + box->bounds.size.height + clip_radius);
     }
   else if (side == GTK_CSS_TOP)
     {
-      y1 = floor (box->box.y -clip_radius);
-      y2 = ceil (box->box.y + clip_radius);
+      y1 = floor (box->bounds.origin.y -clip_radius);
+      y2 = ceil (box->bounds.origin.y + clip_radius);
     }
   else
     {
-      y1 = floor (box->box.y + box->box.height -clip_radius);
-      y2 = ceil (box->box.y + box->box.height + clip_radius);
+      y1 = floor (box->bounds.origin.y + box->bounds.size.height -clip_radius);
+      y2 = ceil (box->bounds.origin.y + box->bounds.size.height + clip_radius);
     }
 
   drawn_rect->x = x1;
@@ -961,20 +961,20 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 	   * We could remove the part of "box" where the blur doesn't
 	   * reach, but computing that is a bit tricky since the
 	   * rounded corners are on the "inside" of it. */
-	  r.x = floor (clip_box.box.x);
-	  r.y = floor (clip_box.box.y);
-	  r.width = ceil (clip_box.box.x + clip_box.box.width) - r.x;
-	  r.height = ceil (clip_box.box.y + clip_box.box.height) - r.y;
+	  r.x = floor (clip_box.bounds.origin.x);
+	  r.y = floor (clip_box.bounds.origin.y);
+	  r.width = ceil (clip_box.bounds.origin.x + clip_box.bounds.size.width) - r.x;
+	  r.height = ceil (clip_box.bounds.origin.y + clip_box.bounds.size.height) - r.y;
 	  remaining = cairo_region_create_rectangle (&r);
 	}
       else
 	{
 	  /* In the outset case we want to paint the entire box, plus as far
 	   * as the radius reaches from it */
-	  r.x = floor (box.box.x - clip_radius);
-	  r.y = floor (box.box.y - clip_radius);
-	  r.width = ceil (box.box.x + box.box.width + clip_radius) - r.x;
-	  r.height = ceil (box.box.y + box.box.height + clip_radius) - r.y;
+	  r.x = floor (box.bounds.origin.x - clip_radius);
+	  r.y = floor (box.bounds.origin.y - clip_radius);
+	  r.width = ceil (box.bounds.origin.x + box.bounds.size.width + clip_radius) - r.x;
+	  r.height = ceil (box.bounds.origin.y + box.bounds.size.height + clip_radius) - r.y;
 
 	  remaining = cairo_region_create_rectangle (&r);
 	}
@@ -1039,10 +1039,10 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue   *shadow,
 
   cr = gtk_snapshot_append_cairo_node (snapshot,
                                        &GRAPHENE_RECT_INIT (
-                                          border_box->box.x - extents.left,
-                                          border_box->box.y - extents.top,
-                                          border_box->box.width + extents.left + extents.right,
-                                          border_box->box.height + extents.top + extents.bottom),
+                                          border_box->bounds.origin.x - extents.left,
+                                          border_box->bounds.origin.y - extents.top,
+                                          border_box->bounds.size.width + extents.left + extents.right,
+                                          border_box->bounds.size.height + extents.top + extents.bottom),
                                        "Outset Shadow");
   _gtk_css_shadow_value_paint_box (shadow, cr, border_box);
   cairo_destroy (cr);
@@ -1063,10 +1063,10 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
 
   cr = gtk_snapshot_append_cairo_node (snapshot,
                                        &GRAPHENE_RECT_INIT (
-                                          padding_box->box.x,
-                                          padding_box->box.y,
-                                          padding_box->box.width,
-                                          padding_box->box.height),
+                                          padding_box->bounds.origin.x,
+                                          padding_box->bounds.origin.y,
+                                          padding_box->bounds.size.width,
+                                          padding_box->bounds.size.height),
                                        "Inset Shadow");
   _gtk_css_shadow_value_paint_box (shadow, cr, padding_box);
   cairo_destroy (cr);

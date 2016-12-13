@@ -45,10 +45,10 @@ _gtk_rounded_box_init_rect (GtkRoundedBox *box,
 {
   memset (box, 0, sizeof (GtkRoundedBox));
 
-  box->box.x = x;
-  box->box.y = y;
-  box->box.width = width;
-  box->box.height = height;
+  box->bounds.origin.x = x;
+  box->bounds.origin.y = y;
+  box->bounds.size.width = width;
+  box->bounds.size.height = height;
 }
 
 /* clamp border radius, following CSS specs */
@@ -60,19 +60,19 @@ gtk_rounded_box_clamp_border_radius (GtkRoundedBox *box)
 
   corners = box->corner[GSK_CORNER_TOP_LEFT].width + box->corner[GSK_CORNER_TOP_RIGHT].width;
   if (corners != 0)
-    factor = MIN (factor, box->box.width / corners);
+    factor = MIN (factor, box->bounds.size.width / corners);
 
   corners = box->corner[GSK_CORNER_TOP_RIGHT].height + box->corner[GSK_CORNER_BOTTOM_RIGHT].height;
   if (corners != 0)
-    factor = MIN (factor, box->box.height / corners);
+    factor = MIN (factor, box->bounds.size.height / corners);
 
   corners = box->corner[GSK_CORNER_BOTTOM_RIGHT].width + box->corner[GSK_CORNER_BOTTOM_LEFT].width;
   if (corners != 0)
-    factor = MIN (factor, box->box.width / corners);
+    factor = MIN (factor, box->bounds.size.width / corners);
 
   corners = box->corner[GSK_CORNER_TOP_LEFT].height + box->corner[GSK_CORNER_BOTTOM_LEFT].height;
   if (corners != 0)
-    factor = MIN (factor, box->box.height / corners);
+    factor = MIN (factor, box->bounds.size.height / corners);
 
   box->corner[GSK_CORNER_TOP_LEFT].width *= factor;
   box->corner[GSK_CORNER_TOP_LEFT].height *= factor;
@@ -92,30 +92,30 @@ _gtk_rounded_box_apply_border_radius (GtkRoundedBox *box,
   if (corner[GSK_CORNER_TOP_LEFT] && (junction & GTK_JUNCTION_CORNER_TOPLEFT) == 0)
     {
       box->corner[GSK_CORNER_TOP_LEFT].width = _gtk_css_corner_value_get_x (corner[GSK_CORNER_TOP_LEFT],
-                                                                              box->box.width);
+                                                                              box->bounds.size.width);
       box->corner[GSK_CORNER_TOP_LEFT].height = _gtk_css_corner_value_get_y (corner[GSK_CORNER_TOP_LEFT],
-                                                                            box->box.height);
+                                                                            box->bounds.size.height);
     }
   if (corner[GSK_CORNER_TOP_RIGHT] && (junction & GTK_JUNCTION_CORNER_TOPRIGHT) == 0)
     {
       box->corner[GSK_CORNER_TOP_RIGHT].width = _gtk_css_corner_value_get_x (corner[GSK_CORNER_TOP_RIGHT],
-                                                                               box->box.width);
+                                                                               box->bounds.size.width);
       box->corner[GSK_CORNER_TOP_RIGHT].height = _gtk_css_corner_value_get_y (corner[GSK_CORNER_TOP_RIGHT],
-                                                                             box->box.height);
+                                                                             box->bounds.size.height);
     }
   if (corner[GSK_CORNER_BOTTOM_RIGHT] && (junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT) == 0)
     {
       box->corner[GSK_CORNER_BOTTOM_RIGHT].width = _gtk_css_corner_value_get_x (corner[GSK_CORNER_BOTTOM_RIGHT],
-                                                                                  box->box.width);
+                                                                                  box->bounds.size.width);
       box->corner[GSK_CORNER_BOTTOM_RIGHT].height = _gtk_css_corner_value_get_y (corner[GSK_CORNER_BOTTOM_RIGHT],
-                                                                                box->box.height);
+                                                                                box->bounds.size.height);
     }
   if (corner[GSK_CORNER_BOTTOM_LEFT] && (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT) == 0)
     {
       box->corner[GSK_CORNER_BOTTOM_LEFT].width = _gtk_css_corner_value_get_x (corner[GSK_CORNER_BOTTOM_LEFT],
-                                                                                 box->box.width);
+                                                                                 box->bounds.size.width);
       box->corner[GSK_CORNER_BOTTOM_LEFT].height = _gtk_css_corner_value_get_y (corner[GSK_CORNER_BOTTOM_LEFT],
-                                                                               box->box.height);
+                                                                               box->bounds.size.height);
     }
 
   gtk_rounded_box_clamp_border_radius (box);
@@ -175,26 +175,26 @@ _gtk_rounded_box_grow (GtkRoundedBox *box,
                        double         bottom,
                        double         left)
 {
-  if (box->box.width + left + right < 0)
+  if (box->bounds.size.width + left + right < 0)
     {
-      box->box.x -= left * box->box.width / (left + right);
-      box->box.width = 0;
+      box->bounds.origin.x -= left * box->bounds.size.width / (left + right);
+      box->bounds.size.width = 0;
     }
   else
     {
-      box->box.x -= left;
-      box->box.width += left + right;
+      box->bounds.origin.x -= left;
+      box->bounds.size.width += left + right;
     }
 
-  if (box->box.height + bottom + top < 0)
+  if (box->bounds.size.height + bottom + top < 0)
     {
-      box->box.y -= top * box->box.height / (top + bottom);
-      box->box.height = 0;
+      box->bounds.origin.y -= top * box->bounds.size.height / (top + bottom);
+      box->bounds.size.height = 0;
     }
   else
     {
-      box->box.y -= top;
-      box->box.height += top + bottom;
+      box->bounds.origin.y -= top;
+      box->bounds.size.height += top + bottom;
     }
 
   gtk_css_border_radius_grow (&box->corner[GSK_CORNER_TOP_LEFT], left, top);
@@ -218,8 +218,8 @@ _gtk_rounded_box_move (GtkRoundedBox *box,
                        double         dx,
                        double         dy)
 {
-  box->box.x += dx;
-  box->box.y += dy;
+  box->bounds.origin.x += dx;
+  box->bounds.origin.y += dy;
 }
 
 typedef struct {
@@ -361,26 +361,26 @@ _gtk_rounded_box_path (const GtkRoundedBox *box,
   cairo_new_sub_path (cr);
 
   _cairo_ellipsis (cr,
-                   box->box.x + box->corner[GSK_CORNER_TOP_LEFT].width,
-                   box->box.y + box->corner[GSK_CORNER_TOP_LEFT].height,
+                   box->bounds.origin.x + box->corner[GSK_CORNER_TOP_LEFT].width,
+                   box->bounds.origin.y + box->corner[GSK_CORNER_TOP_LEFT].height,
                    box->corner[GSK_CORNER_TOP_LEFT].width,
                    box->corner[GSK_CORNER_TOP_LEFT].height,
                    G_PI, 3 * G_PI_2);
   _cairo_ellipsis (cr, 
-                   box->box.x + box->box.width - box->corner[GSK_CORNER_TOP_RIGHT].width,
-                   box->box.y + box->corner[GSK_CORNER_TOP_RIGHT].height,
+                   box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_TOP_RIGHT].width,
+                   box->bounds.origin.y + box->corner[GSK_CORNER_TOP_RIGHT].height,
                    box->corner[GSK_CORNER_TOP_RIGHT].width,
                    box->corner[GSK_CORNER_TOP_RIGHT].height,
                    - G_PI_2, 0);
   _cairo_ellipsis (cr,
-                   box->box.x + box->box.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                   box->box.y + box->box.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
+                   box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                   box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                    box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
                    box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                    0, G_PI_2);
   _cairo_ellipsis (cr,
-                   box->box.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                   box->box.y + box->box.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                   box->bounds.origin.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width,
+                   box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height,
                    box->corner[GSK_CORNER_BOTTOM_LEFT].width,
                    box->corner[GSK_CORNER_BOTTOM_LEFT].height,
                    G_PI_2, G_PI);
@@ -399,11 +399,11 @@ _gtk_rounded_box_guess_length (const GtkRoundedBox *box,
   after = (side + 1) % 4;
 
   if (side & 1)
-    length = box->box.height
+    length = box->bounds.size.height
              - box->corner[before].height
              - box->corner[after].height;
   else
-    length = box->box.width
+    length = box->bounds.size.width
              - box->corner[before].width
              - box->corner[after].width;
 
@@ -424,56 +424,56 @@ _gtk_rounded_box_path_side (const GtkRoundedBox *box,
     {
     case GTK_CSS_TOP:
       _cairo_ellipsis (cr,
-                       box->box.x + box->corner[GSK_CORNER_TOP_LEFT].width,
-                       box->box.y + box->corner[GSK_CORNER_TOP_LEFT].height,
+                       box->bounds.origin.x + box->corner[GSK_CORNER_TOP_LEFT].width,
+                       box->bounds.origin.y + box->corner[GSK_CORNER_TOP_LEFT].height,
                        box->corner[GSK_CORNER_TOP_LEFT].width,
                        box->corner[GSK_CORNER_TOP_LEFT].height,
                        5 * G_PI_4, 3 * G_PI_2);
       _cairo_ellipsis (cr, 
-                       box->box.x + box->box.width - box->corner[GSK_CORNER_TOP_RIGHT].width,
-                       box->box.y + box->corner[GSK_CORNER_TOP_RIGHT].height,
+                       box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_TOP_RIGHT].width,
+                       box->bounds.origin.y + box->corner[GSK_CORNER_TOP_RIGHT].height,
                        box->corner[GSK_CORNER_TOP_RIGHT].width,
                        box->corner[GSK_CORNER_TOP_RIGHT].height,
                        - G_PI_2, -G_PI_4);
       break;
     case GTK_CSS_RIGHT:
       _cairo_ellipsis (cr, 
-                       box->box.x + box->box.width - box->corner[GSK_CORNER_TOP_RIGHT].width,
-                       box->box.y + box->corner[GSK_CORNER_TOP_RIGHT].height,
+                       box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_TOP_RIGHT].width,
+                       box->bounds.origin.y + box->corner[GSK_CORNER_TOP_RIGHT].height,
                        box->corner[GSK_CORNER_TOP_RIGHT].width,
                        box->corner[GSK_CORNER_TOP_RIGHT].height,
                        - G_PI_4, 0);
       _cairo_ellipsis (cr,
-                       box->box.x + box->box.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                       box->box.y + box->box.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
+                       box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                       box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                        box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
                        box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                        0, G_PI_4);
       break;
     case GTK_CSS_BOTTOM:
       _cairo_ellipsis (cr,
-                       box->box.x + box->box.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                       box->box.y + box->box.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
+                       box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                       box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                        box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
                        box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                        G_PI_4, G_PI_2);
       _cairo_ellipsis (cr,
-                       box->box.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                       box->box.y + box->box.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                       box->bounds.origin.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width,
+                       box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height,
                        box->corner[GSK_CORNER_BOTTOM_LEFT].width,
                        box->corner[GSK_CORNER_BOTTOM_LEFT].height,
                        G_PI_2, 3 * G_PI_4);
       break;
     case GTK_CSS_LEFT:
       _cairo_ellipsis (cr,
-                       box->box.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                       box->box.y + box->box.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                       box->bounds.origin.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width,
+                       box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height,
                        box->corner[GSK_CORNER_BOTTOM_LEFT].width,
                        box->corner[GSK_CORNER_BOTTOM_LEFT].height,
                        3 * G_PI_4, G_PI);
       _cairo_ellipsis (cr,
-                       box->box.x + box->corner[GSK_CORNER_TOP_LEFT].width,
-                       box->box.y + box->corner[GSK_CORNER_TOP_LEFT].height,
+                       box->bounds.origin.x + box->corner[GSK_CORNER_TOP_LEFT].width,
+                       box->bounds.origin.y + box->corner[GSK_CORNER_TOP_LEFT].height,
                        box->corner[GSK_CORNER_TOP_LEFT].width,
                        box->corner[GSK_CORNER_TOP_LEFT].height,
                        G_PI, 5 * G_PI_4);
@@ -491,15 +491,15 @@ _gtk_rounded_box_path_top (const GtkRoundedBox *outer,
 {
   double start_angle, middle_angle, end_angle;
 
-  if (outer->box.y == inner->box.y)
+  if (outer->bounds.origin.y == inner->bounds.origin.y)
     return;
 
-  if (outer->box.x == inner->box.x)
+  if (outer->bounds.origin.x == inner->bounds.origin.x)
     start_angle = G_PI;
   else
     start_angle = 5 * G_PI_4;
   middle_angle = 3 * G_PI_2;
-  if (outer->box.x + outer->box.width == inner->box.x + inner->box.width)
+  if (outer->bounds.origin.x + outer->bounds.size.width == inner->bounds.origin.x + inner->bounds.size.width)
     end_angle = 0;
   else
     end_angle = 7 * G_PI_4;
@@ -507,27 +507,27 @@ _gtk_rounded_box_path_top (const GtkRoundedBox *outer,
   cairo_new_sub_path (cr);
 
   _cairo_ellipsis (cr,
-                   outer->box.x + outer->corner[GSK_CORNER_TOP_LEFT].width,
-                   outer->box.y + outer->corner[GSK_CORNER_TOP_LEFT].height,
+                   outer->bounds.origin.x + outer->corner[GSK_CORNER_TOP_LEFT].width,
+                   outer->bounds.origin.y + outer->corner[GSK_CORNER_TOP_LEFT].height,
                    outer->corner[GSK_CORNER_TOP_LEFT].width,
                    outer->corner[GSK_CORNER_TOP_LEFT].height,
                    start_angle, middle_angle);
   _cairo_ellipsis (cr, 
-                   outer->box.x + outer->box.width - outer->corner[GSK_CORNER_TOP_RIGHT].width,
-                   outer->box.y + outer->corner[GSK_CORNER_TOP_RIGHT].height,
+                   outer->bounds.origin.x + outer->bounds.size.width - outer->corner[GSK_CORNER_TOP_RIGHT].width,
+                   outer->bounds.origin.y + outer->corner[GSK_CORNER_TOP_RIGHT].height,
                    outer->corner[GSK_CORNER_TOP_RIGHT].width,
                    outer->corner[GSK_CORNER_TOP_RIGHT].height,
                    middle_angle, end_angle);
 
   _cairo_ellipsis_negative (cr, 
-                            inner->box.x + inner->box.width - inner->corner[GSK_CORNER_TOP_RIGHT].width,
-                            inner->box.y + inner->corner[GSK_CORNER_TOP_RIGHT].height,
+                            inner->bounds.origin.x + inner->bounds.size.width - inner->corner[GSK_CORNER_TOP_RIGHT].width,
+                            inner->bounds.origin.y + inner->corner[GSK_CORNER_TOP_RIGHT].height,
                             inner->corner[GSK_CORNER_TOP_RIGHT].width,
                             inner->corner[GSK_CORNER_TOP_RIGHT].height,
                             end_angle, middle_angle);
   _cairo_ellipsis_negative (cr,
-                            inner->box.x + inner->corner[GSK_CORNER_TOP_LEFT].width,
-                            inner->box.y + inner->corner[GSK_CORNER_TOP_LEFT].height,
+                            inner->bounds.origin.x + inner->corner[GSK_CORNER_TOP_LEFT].width,
+                            inner->bounds.origin.y + inner->corner[GSK_CORNER_TOP_LEFT].height,
                             inner->corner[GSK_CORNER_TOP_LEFT].width,
                             inner->corner[GSK_CORNER_TOP_LEFT].height,
                             middle_angle, start_angle);
@@ -542,15 +542,15 @@ _gtk_rounded_box_path_right (const GtkRoundedBox *outer,
 {
   double start_angle, middle_angle, end_angle;
 
-  if (outer->box.x + outer->box.width == inner->box.x + inner->box.width)
+  if (outer->bounds.origin.x + outer->bounds.size.width == inner->bounds.origin.x + inner->bounds.size.width)
     return;
 
-  if (outer->box.y == inner->box.y)
+  if (outer->bounds.origin.y == inner->bounds.origin.y)
     start_angle = 3 * G_PI_2;
   else
     start_angle = 7 * G_PI_4;
   middle_angle = 0;
-  if (outer->box.y + outer->box.height == inner->box.y + inner->box.height)
+  if (outer->bounds.origin.y + outer->bounds.size.height == inner->bounds.origin.y + inner->bounds.size.height)
     end_angle = G_PI_2;
   else
     end_angle = G_PI_4;
@@ -558,27 +558,27 @@ _gtk_rounded_box_path_right (const GtkRoundedBox *outer,
   cairo_new_sub_path (cr);
 
   _cairo_ellipsis (cr, 
-                   outer->box.x + outer->box.width - outer->corner[GSK_CORNER_TOP_RIGHT].width,
-                   outer->box.y + outer->corner[GSK_CORNER_TOP_RIGHT].height,
+                   outer->bounds.origin.x + outer->bounds.size.width - outer->corner[GSK_CORNER_TOP_RIGHT].width,
+                   outer->bounds.origin.y + outer->corner[GSK_CORNER_TOP_RIGHT].height,
                    outer->corner[GSK_CORNER_TOP_RIGHT].width,
                    outer->corner[GSK_CORNER_TOP_RIGHT].height,
                    start_angle, middle_angle);
   _cairo_ellipsis (cr,
-                   outer->box.x + outer->box.width - outer->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                   outer->box.y + outer->box.height - outer->corner[GSK_CORNER_BOTTOM_RIGHT].height,
+                   outer->bounds.origin.x + outer->bounds.size.width - outer->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                   outer->bounds.origin.y + outer->bounds.size.height - outer->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                    outer->corner[GSK_CORNER_BOTTOM_RIGHT].width,
                    outer->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                    middle_angle, end_angle);
 
   _cairo_ellipsis_negative (cr,
-                            inner->box.x + inner->box.width - inner->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                            inner->box.y + inner->box.height - inner->corner[GSK_CORNER_BOTTOM_RIGHT].height,
+                            inner->bounds.origin.x + inner->bounds.size.width - inner->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                            inner->bounds.origin.y + inner->bounds.size.height - inner->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                             inner->corner[GSK_CORNER_BOTTOM_RIGHT].width,
                             inner->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                             end_angle, middle_angle);
   _cairo_ellipsis_negative (cr, 
-                            inner->box.x + inner->box.width - inner->corner[GSK_CORNER_TOP_RIGHT].width,
-                            inner->box.y + inner->corner[GSK_CORNER_TOP_RIGHT].height,
+                            inner->bounds.origin.x + inner->bounds.size.width - inner->corner[GSK_CORNER_TOP_RIGHT].width,
+                            inner->bounds.origin.y + inner->corner[GSK_CORNER_TOP_RIGHT].height,
                             inner->corner[GSK_CORNER_TOP_RIGHT].width,
                             inner->corner[GSK_CORNER_TOP_RIGHT].height,
                             middle_angle, start_angle);
@@ -593,15 +593,15 @@ _gtk_rounded_box_path_bottom (const GtkRoundedBox *outer,
 {
   double start_angle, middle_angle, end_angle;
 
-  if (outer->box.y + outer->box.height == inner->box.y + inner->box.height)
+  if (outer->bounds.origin.y + outer->bounds.size.height == inner->bounds.origin.y + inner->bounds.size.height)
     return;
 
-  if (outer->box.x + outer->box.width == inner->box.x + inner->box.width)
+  if (outer->bounds.origin.x + outer->bounds.size.width == inner->bounds.origin.x + inner->bounds.size.width)
     start_angle = 0;
   else
     start_angle = G_PI_4;
   middle_angle = G_PI_2;
-  if (outer->box.x == inner->box.x)
+  if (outer->bounds.origin.x == inner->bounds.origin.x)
     end_angle = G_PI;
   else
     end_angle = 3 * G_PI_4;
@@ -609,27 +609,27 @@ _gtk_rounded_box_path_bottom (const GtkRoundedBox *outer,
   cairo_new_sub_path (cr);
 
   _cairo_ellipsis (cr,
-                   outer->box.x + outer->box.width - outer->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                   outer->box.y + outer->box.height - outer->corner[GSK_CORNER_BOTTOM_RIGHT].height,
+                   outer->bounds.origin.x + outer->bounds.size.width - outer->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                   outer->bounds.origin.y + outer->bounds.size.height - outer->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                    outer->corner[GSK_CORNER_BOTTOM_RIGHT].width,
                    outer->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                    start_angle, middle_angle);
   _cairo_ellipsis (cr,
-                   outer->box.x + outer->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                   outer->box.y + outer->box.height - outer->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                   outer->bounds.origin.x + outer->corner[GSK_CORNER_BOTTOM_LEFT].width,
+                   outer->bounds.origin.y + outer->bounds.size.height - outer->corner[GSK_CORNER_BOTTOM_LEFT].height,
                    outer->corner[GSK_CORNER_BOTTOM_LEFT].width,
                    outer->corner[GSK_CORNER_BOTTOM_LEFT].height,
                    middle_angle, end_angle);
 
   _cairo_ellipsis_negative (cr,
-                            inner->box.x + inner->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                            inner->box.y + inner->box.height - inner->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                            inner->bounds.origin.x + inner->corner[GSK_CORNER_BOTTOM_LEFT].width,
+                            inner->bounds.origin.y + inner->bounds.size.height - inner->corner[GSK_CORNER_BOTTOM_LEFT].height,
                             inner->corner[GSK_CORNER_BOTTOM_LEFT].width,
                             inner->corner[GSK_CORNER_BOTTOM_LEFT].height,
                             end_angle, middle_angle);
   _cairo_ellipsis_negative (cr,
-                            inner->box.x + inner->box.width - inner->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                            inner->box.y + inner->box.height - inner->corner[GSK_CORNER_BOTTOM_RIGHT].height,
+                            inner->bounds.origin.x + inner->bounds.size.width - inner->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                            inner->bounds.origin.y + inner->bounds.size.height - inner->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                             inner->corner[GSK_CORNER_BOTTOM_RIGHT].width,
                             inner->corner[GSK_CORNER_BOTTOM_RIGHT].height,
                             middle_angle, start_angle);
@@ -644,15 +644,15 @@ _gtk_rounded_box_path_left (const GtkRoundedBox *outer,
 {
   double start_angle, middle_angle, end_angle;
 
-  if (outer->box.x == inner->box.x)
+  if (outer->bounds.origin.x == inner->bounds.origin.x)
     return;
 
-  if (outer->box.y + outer->box.height == inner->box.y + inner->box.height)
+  if (outer->bounds.origin.y + outer->bounds.size.height == inner->bounds.origin.y + inner->bounds.size.height)
     start_angle = G_PI_2;
   else
     start_angle = 3 * G_PI_4;
   middle_angle = G_PI;
-  if (outer->box.y == inner->box.y)
+  if (outer->bounds.origin.y == inner->bounds.origin.y)
     end_angle = 3 * G_PI_2;
   else
     end_angle = 5 * G_PI_4;
@@ -660,27 +660,27 @@ _gtk_rounded_box_path_left (const GtkRoundedBox *outer,
   cairo_new_sub_path (cr);
 
   _cairo_ellipsis (cr,
-                   outer->box.x + outer->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                   outer->box.y + outer->box.height - outer->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                   outer->bounds.origin.x + outer->corner[GSK_CORNER_BOTTOM_LEFT].width,
+                   outer->bounds.origin.y + outer->bounds.size.height - outer->corner[GSK_CORNER_BOTTOM_LEFT].height,
                    outer->corner[GSK_CORNER_BOTTOM_LEFT].width,
                    outer->corner[GSK_CORNER_BOTTOM_LEFT].height,
                    start_angle, middle_angle);
   _cairo_ellipsis (cr,
-                   outer->box.x + outer->corner[GSK_CORNER_TOP_LEFT].width,
-                   outer->box.y + outer->corner[GSK_CORNER_TOP_LEFT].height,
+                   outer->bounds.origin.x + outer->corner[GSK_CORNER_TOP_LEFT].width,
+                   outer->bounds.origin.y + outer->corner[GSK_CORNER_TOP_LEFT].height,
                    outer->corner[GSK_CORNER_TOP_LEFT].width,
                    outer->corner[GSK_CORNER_TOP_LEFT].height,
                    middle_angle, end_angle);
 
   _cairo_ellipsis_negative (cr,
-                            inner->box.x + inner->corner[GSK_CORNER_TOP_LEFT].width,
-                            inner->box.y + inner->corner[GSK_CORNER_TOP_LEFT].height,
+                            inner->bounds.origin.x + inner->corner[GSK_CORNER_TOP_LEFT].width,
+                            inner->bounds.origin.y + inner->corner[GSK_CORNER_TOP_LEFT].height,
                             inner->corner[GSK_CORNER_TOP_LEFT].width,
                             inner->corner[GSK_CORNER_TOP_LEFT].height,
                             end_angle, middle_angle);
   _cairo_ellipsis_negative (cr,
-                            inner->box.x + inner->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                            inner->box.y + inner->box.height - inner->corner[GSK_CORNER_BOTTOM_LEFT].height,
+                            inner->bounds.origin.x + inner->corner[GSK_CORNER_BOTTOM_LEFT].width,
+                            inner->bounds.origin.y + inner->bounds.size.height - inner->corner[GSK_CORNER_BOTTOM_LEFT].height,
                             inner->corner[GSK_CORNER_BOTTOM_LEFT].width,
                             inner->corner[GSK_CORNER_BOTTOM_LEFT].height,
                             middle_angle, start_angle);
@@ -693,8 +693,8 @@ _gtk_rounded_box_clip_path (const GtkRoundedBox *box,
                             cairo_t             *cr)
 {
   cairo_rectangle (cr,
-                   box->box.x, box->box.y,
-                   box->box.width, box->box.height);
+                   box->bounds.origin.x, box->bounds.origin.y,
+                   box->bounds.size.width, box->bounds.size.height);
 }
 
 gboolean
@@ -704,10 +704,10 @@ _gtk_rounded_box_intersects_rectangle (const GtkRoundedBox *box,
                                        gdouble              x2,
                                        gdouble              y2)
 {
-  if (x2 < box->box.x ||
-      y2 < box->box.y ||
-      x1 >= box->box.x + box->box.width ||
-      y1 >= box->box.y + box->box.height)
+  if (x2 < box->bounds.origin.x ||
+      y2 < box->bounds.origin.y ||
+      x1 >= box->bounds.origin.x + box->bounds.size.width ||
+      y1 >= box->bounds.origin.y + box->bounds.size.height)
     return FALSE;
 
   return TRUE;
@@ -720,26 +720,26 @@ _gtk_rounded_box_contains_rectangle (const GtkRoundedBox *box,
                                      gdouble              x2,
                                      gdouble              y2)
 {
-  if (x1 < box->box.x ||
-      y1 < box->box.y ||
-      x2 > box->box.x + box->box.width ||
-      y2 > box->box.y + box->box.height)
+  if (x1 < box->bounds.origin.x ||
+      y1 < box->bounds.origin.y ||
+      x2 > box->bounds.origin.x + box->bounds.size.width ||
+      y2 > box->bounds.origin.y + box->bounds.size.height)
     return FALSE;
 
-  if (x1 < box->box.x + box->corner[GSK_CORNER_TOP_LEFT].width &&
-      y1 < box->box.y + box->corner[GSK_CORNER_TOP_LEFT].height)
+  if (x1 < box->bounds.origin.x + box->corner[GSK_CORNER_TOP_LEFT].width &&
+      y1 < box->bounds.origin.y + box->corner[GSK_CORNER_TOP_LEFT].height)
     return FALSE;
 
-  if (x2 > box->box.x + box->box.width - box->corner[GSK_CORNER_TOP_RIGHT].width &&
-      y1 < box->box.y + box->corner[GSK_CORNER_TOP_RIGHT].height)
+  if (x2 > box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_TOP_RIGHT].width &&
+      y1 < box->bounds.origin.y + box->corner[GSK_CORNER_TOP_RIGHT].height)
     return FALSE;
 
-  if (x2 > box->box.x + box->box.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width &&
-      y2 > box->box.y + box->box.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height)
+  if (x2 > box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width &&
+      y2 > box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height)
     return FALSE;
 
-  if (x1 < box->box.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width &&
-      y2 > box->box.y + box->box.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height)
+  if (x1 < box->bounds.origin.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width &&
+      y2 > box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height)
     return FALSE;
 
   return TRUE;

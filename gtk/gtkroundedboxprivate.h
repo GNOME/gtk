@@ -28,13 +28,7 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkRoundedBox GtkRoundedBox;
-
-struct _GtkRoundedBox {
-  /*< private >*/
-  cairo_rectangle_t        box;
-  graphene_size_t          corner[4];
-};
+typedef GskRoundedRect GtkRoundedBox;
 
 void            _gtk_rounded_box_init_rect                      (GtkRoundedBox       *box,
                                                                  double               x,

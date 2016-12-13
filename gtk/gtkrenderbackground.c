@@ -136,8 +136,8 @@ gtk_theming_background_paint_layer (GtkThemingBackground *bg,
                    _gtk_css_array_value_get_nth (
                        gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN),
                        idx))];
-  width = origin->box.width;
-  height = origin->box.height;
+  width = origin->bounds.size.width;
+  height = origin->bounds.size.height;
 
   if (image == NULL || width <= 0 || height <= 0)
     return;
@@ -171,7 +171,7 @@ gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   cairo_clip (cr);
 
 
-  cairo_translate (cr, origin->box.x, origin->box.y);
+  cairo_translate (cr, origin->bounds.origin.x, origin->bounds.origin.y);
 
   /*
    * Apply the blend mode, if any.
