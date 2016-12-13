@@ -36,6 +36,8 @@
 #include "gtkhslaprivate.h"
 #include "gtkroundedboxprivate.h"
 
+#include "gsk/gskroundedrectprivate.h"
+
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
  */
@@ -373,8 +375,8 @@ render_frame_fill (cairo_t        *cr,
     {
       gdk_cairo_set_source_rgba (cr, &colors[0]);
 
-      _gtk_rounded_box_path (border_box, cr);
-      _gtk_rounded_box_path (&padding_box, cr);
+      gsk_rounded_rect_path (border_box, cr);
+      gsk_rounded_rect_path (&padding_box, cr);
       cairo_fill (cr);
     }
   else
@@ -501,7 +503,7 @@ render_frame_stroke (cairo_t        *cr,
           length += _gtk_rounded_box_guess_length (&stroke_box, i);
         }
 
-      _gtk_rounded_box_path (&stroke_box, cr);
+      gsk_rounded_rect_path (&stroke_box, cr);
       gdk_cairo_set_source_rgba (cr, &colors[0]);
       set_stroke_style (cr, border_width[0], stroke_style, length);
       cairo_stroke (cr);

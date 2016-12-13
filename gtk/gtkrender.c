@@ -35,6 +35,8 @@
 #include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
 
+#include "gsk/gskroundedrectprivate.h"
+
 #include "fallback-c89.c"
 
 static void
@@ -994,5 +996,5 @@ gtk_render_content_path (GtkStyleContext *context,
                            _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100)
                            + _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_LEFT), 100));
 
-  _gtk_rounded_box_path (&box, cr);
+  gsk_rounded_rect_path (&box, cr);
 }

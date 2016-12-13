@@ -30,6 +30,8 @@
 #include "gtkrenderprivate.h"
 #include "gtkpango.h"
 
+#include "gsk/gskroundedrectprivate.h"
+
 #include <math.h>
 
 struct _GtkCssValue {
@@ -653,7 +655,7 @@ draw_shadow (const GtkCssValue   *shadow,
     shadow_cr = cr;
 
   cairo_set_fill_rule (shadow_cr, CAIRO_FILL_RULE_EVEN_ODD);
-  _gtk_rounded_box_path (box, shadow_cr);
+  gsk_rounded_rect_path (box, shadow_cr);
   if (shadow->inset)
     _gtk_rounded_box_clip_path (clip_box, shadow_cr);
 
@@ -808,7 +810,7 @@ draw_shadow_corner (const GtkCssValue     *shadow,
       mask_cr = cairo_create (mask);
       _gtk_rounded_box_init_rect (&corner_box, clip_radius, clip_radius, 2*drawn_rect->width, 2*drawn_rect->height);
       corner_box.corner[0] = box->corner[corner];
-      _gtk_rounded_box_path (&corner_box, mask_cr);
+      gsk_rounded_rect_path (&corner_box, mask_cr);
       cairo_fill (mask_cr);
       _gtk_cairo_blur_surface (mask, radius, GTK_BLUR_X | GTK_BLUR_Y);
       cairo_destroy (mask_cr);
@@ -914,13 +916,13 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 
   if (shadow->inset)
     {
-      _gtk_rounded_box_path (padding_box, cr);
+      gsk_rounded_rect_path (padding_box, cr);
       cairo_clip (cr);
     }
   else
     {
       cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
-      _gtk_rounded_box_path (padding_box, cr);
+      gsk_rounded_rect_path (padding_box, cr);
       outside = spread + clip_radius + MAX (fabs (x), fabs (y));
       clip_box = *padding_box;
       _gtk_rounded_box_grow (&clip_box, outside, outside, outside, outside);

@@ -345,40 +345,6 @@ _cairo_ellipsis_negative (cairo_t *cr,
   cairo_set_matrix (cr, &save);
 }
 
-void
-_gtk_rounded_box_path (const GskRoundedRect *box,
-                       cairo_t              *cr)
-{
-  cairo_new_sub_path (cr);
-
-  _cairo_ellipsis (cr,
-                   box->bounds.origin.x + box->corner[GSK_CORNER_TOP_LEFT].width,
-                   box->bounds.origin.y + box->corner[GSK_CORNER_TOP_LEFT].height,
-                   box->corner[GSK_CORNER_TOP_LEFT].width,
-                   box->corner[GSK_CORNER_TOP_LEFT].height,
-                   G_PI, 3 * G_PI_2);
-  _cairo_ellipsis (cr, 
-                   box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_TOP_RIGHT].width,
-                   box->bounds.origin.y + box->corner[GSK_CORNER_TOP_RIGHT].height,
-                   box->corner[GSK_CORNER_TOP_RIGHT].width,
-                   box->corner[GSK_CORNER_TOP_RIGHT].height,
-                   - G_PI_2, 0);
-  _cairo_ellipsis (cr,
-                   box->bounds.origin.x + box->bounds.size.width - box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                   box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
-                   box->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                   box->corner[GSK_CORNER_BOTTOM_RIGHT].height,
-                   0, G_PI_2);
-  _cairo_ellipsis (cr,
-                   box->bounds.origin.x + box->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                   box->bounds.origin.y + box->bounds.size.height - box->corner[GSK_CORNER_BOTTOM_LEFT].height,
-                   box->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                   box->corner[GSK_CORNER_BOTTOM_LEFT].height,
-                   G_PI_2, G_PI);
-
-  cairo_close_path (cr);
-}
-
 double
 _gtk_rounded_box_guess_length (const GskRoundedRect *box,
                                GtkCssSide            side)

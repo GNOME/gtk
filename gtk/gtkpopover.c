@@ -114,6 +114,8 @@
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
 
+#include "gsk/gskroundedrectprivate.h"
+
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
 #endif
@@ -920,7 +922,7 @@ gtk_popover_fill_border_path (GtkPopover *popover,
   _gtk_rounded_box_apply_border_radius_for_style (&box,
                                                   gtk_style_context_lookup_style (context),
                                                   0);
-  _gtk_rounded_box_path (&box, cr);
+  gsk_rounded_rect_path (&box, cr);
   cairo_fill (cr);
 }
 

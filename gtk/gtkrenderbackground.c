@@ -40,6 +40,8 @@
 
 #include <gdk/gdk.h>
 
+#include "gsk/gskroundedrectprivate.h"
+
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
  */
@@ -67,7 +69,7 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
      (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP), 
       n_values - 1));
 
-  _gtk_rounded_box_path (&bg->boxes[clip], cr);
+  gsk_rounded_rect_path (&bg->boxes[clip], cr);
   gdk_cairo_set_source_rgba (cr, bg_color);
   cairo_fill (cr);
 }
@@ -161,7 +163,7 @@ gtk_theming_background_paint_layer (GtkThemingBackground *bg,
 
   cairo_save (cr);
 
-  _gtk_rounded_box_path (
+  gsk_rounded_rect_path (
       &bg->boxes[
           _gtk_css_area_value_get (
               _gtk_css_array_value_get_nth (
