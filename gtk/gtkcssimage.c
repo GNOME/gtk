@@ -22,6 +22,7 @@
 #include "gtkcssimageprivate.h"
 
 #include "gtkcssstyleprivate.h"
+#include "gtksnapshotprivate.h"
 
 /* for the types only */
 #include "gtk/gtkcssimagecrossfadeprivate.h"
@@ -96,6 +97,28 @@ gtk_css_image_real_transition (GtkCssImage *start,
 }
 
 static void
+gtk_css_image_real_draw (GtkCssImage *image,
+                         cairo_t     *cr,
+                         double       width,
+                         double       height)
+{
+  GtkSnapshot snapshot;
+  GskRenderNode *node;
+  cairo_region_t *clip;
+
+  clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, width, height });
+  gtk_snapshot_init (&snapshot, NULL, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+  gtk_css_image_snapshot (image, &snapshot, width, height);
+  node = gtk_snapshot_finish (&snapshot);
+
+  if (node != NULL)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
+}
+
+static void
 gtk_css_image_real_snapshot (GtkCssImage *image,
                              GtkSnapshot *snapshot,
                              double       width,
@@ -119,6 +142,7 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->compute = gtk_css_image_real_compute;
   klass->equal = gtk_css_image_real_equal;
   klass->transition = gtk_css_image_real_transition;
+  klass->draw = gtk_css_image_real_draw;
   klass->snapshot = gtk_css_image_real_snapshot;
 }
 
