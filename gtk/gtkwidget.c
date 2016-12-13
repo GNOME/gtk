@@ -6322,33 +6322,24 @@ gtk_widget_draw_internal (GtkWidget *widget,
         {
           GskRenderer *renderer = gtk_widget_get_renderer (widget);
           GtkSnapshot snapshot;
-          GskRenderer *fallback;
-          graphene_rect_t viewport;
           cairo_region_t *clip;
           GskRenderNode *node;
 
-          graphene_rect_init (&viewport,
-                              widget->priv->clip.x - widget->priv->allocation.x,
-                              widget->priv->clip.y - widget->priv->allocation.y,
-                              widget->priv->clip.width,
-                              widget->priv->clip.height);
           clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                 widget->priv->clip.x - widget->priv->allocation.x,
                                                 widget->priv->clip.y - widget->priv->allocation.y,
                                                 widget->priv->clip.width,
                                                 widget->priv->clip.height});
-          fallback = gsk_renderer_create_fallback (renderer, &viewport, cr);
           gtk_snapshot_init (&snapshot, renderer, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (widget));
           gtk_widget_snapshot (widget, &snapshot);
           node = gtk_snapshot_finish (&snapshot);
           if (node != NULL)
             {
-              gsk_renderer_render (fallback, node, NULL);
+              gsk_render_node_draw (node, cr);
               gsk_render_node_unref (node);
             }
 
           cairo_region_destroy (clip);
-          g_object_unref (fallback);
         }
       else
         {

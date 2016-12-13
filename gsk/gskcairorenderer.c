@@ -59,13 +59,9 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
 
   cairo_t *cr;
 
-  if (context != NULL)
-    cr = gdk_drawing_context_get_cairo_context (context);
-  else
-    cr = gsk_renderer_get_cairo_context (renderer);
+  cr = gdk_drawing_context_get_cairo_context (context);
 
-  if (cr == NULL)
-    return;
+  g_return_if_fail (cr != NULL);
 
   gsk_renderer_get_viewport (renderer, &self->viewport);
 
