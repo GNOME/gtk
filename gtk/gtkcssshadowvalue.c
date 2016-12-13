@@ -665,15 +665,15 @@ draw_shadow (const GtkCssValue   *shadow,
 
 typedef struct {
   double radius;
-  GtkRoundedBoxCorner corner;
+  graphene_size_t corner;
 } CornerMask;
 
 static guint
 corner_mask_hash (CornerMask *mask)
 {
   return ((guint)mask->radius << 24) ^
-    ((guint)(mask->corner.horizontal*4)) << 12 ^
-    ((guint)(mask->corner.vertical*4)) << 0;
+    ((guint)(mask->corner.width*4)) << 12 ^
+    ((guint)(mask->corner.height*4)) << 0;
 }
 
 static gboolean
@@ -682,8 +682,8 @@ corner_mask_equal (CornerMask *mask1,
 {
   return
     mask1->radius == mask2->radius &&
-    mask1->corner.horizontal == mask2->corner.horizontal &&
-    mask1->corner.vertical == mask2->corner.vertical;
+    mask1->corner.width == mask2->corner.width &&
+    mask1->corner.height == mask2->corner.height;
 }
 
 static void
@@ -714,21 +714,21 @@ draw_shadow_corner (const GtkCssValue     *shadow,
   if (corner == GSK_CORNER_TOP_LEFT || corner == GSK_CORNER_BOTTOM_LEFT)
     {
       x1 = floor (box->box.x - clip_radius);
-      x2 = ceil (box->box.x + box->corner[corner].horizontal + clip_radius);
+      x2 = ceil (box->box.x + box->corner[corner].width + clip_radius);
       x = x1;
       sx = 1;
-      max_other = MAX(box->corner[GSK_CORNER_TOP_RIGHT].horizontal, box->corner[GSK_CORNER_BOTTOM_RIGHT].horizontal);
+      max_other = MAX(box->corner[GSK_CORNER_TOP_RIGHT].width, box->corner[GSK_CORNER_BOTTOM_RIGHT].width);
       x3 = floor (box->box.x + box->box.width - max_other - clip_radius);
       if (x2 > x3)
         overlapped = TRUE;
     }
   else
     {
-      x1 = floor (box->box.x + box->box.width - box->corner[corner].horizontal - clip_radius);
+      x1 = floor (box->box.x + box->box.width - box->corner[corner].width - clip_radius);
       x2 = ceil (box->box.x + box->box.width + clip_radius);
       x = x2;
       sx = -1;
-      max_other = MAX(box->corner[GSK_CORNER_TOP_LEFT].horizontal, box->corner[GSK_CORNER_BOTTOM_LEFT].horizontal);
+      max_other = MAX(box->corner[GSK_CORNER_TOP_LEFT].width, box->corner[GSK_CORNER_BOTTOM_LEFT].width);
       x3 = ceil (box->box.x + max_other + clip_radius);
       if (x3 > x1)
         overlapped = TRUE;
@@ -737,21 +737,21 @@ draw_shadow_corner (const GtkCssValue     *shadow,
   if (corner == GSK_CORNER_TOP_LEFT || corner == GSK_CORNER_TOP_RIGHT)
     {
       y1 = floor (box->box.y - clip_radius);
-      y2 = ceil (box->box.y + box->corner[corner].vertical + clip_radius);
+      y2 = ceil (box->box.y + box->corner[corner].height + clip_radius);
       y = y1;
       sy = 1;
-      max_other = MAX(box->corner[GSK_CORNER_BOTTOM_LEFT].vertical, box->corner[GSK_CORNER_BOTTOM_RIGHT].vertical);
+      max_other = MAX(box->corner[GSK_CORNER_BOTTOM_LEFT].height, box->corner[GSK_CORNER_BOTTOM_RIGHT].height);
       y3 = floor (box->box.y + box->box.height - max_other - clip_radius);
       if (y2 > y3)
         overlapped = TRUE;
     }
   else
     {
-      y1 = floor (box->box.y + box->box.height - box->corner[corner].vertical - clip_radius);
+      y1 = floor (box->box.y + box->box.height - box->corner[corner].height - clip_radius);
       y2 = ceil (box->box.y + box->box.height + clip_radius);
       y = y2;
       sy = -1;
-      max_other = MAX(box->corner[GSK_CORNER_TOP_LEFT].vertical, box->corner[GSK_CORNER_TOP_RIGHT].vertical);
+      max_other = MAX(box->corner[GSK_CORNER_TOP_LEFT].height, box->corner[GSK_CORNER_TOP_RIGHT].height);
       y3 = ceil (box->box.y + max_other + clip_radius);
       if (y3 > y1)
         overlapped = TRUE;
