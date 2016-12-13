@@ -32,6 +32,7 @@
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a
  *     matrix transform
  * @GSK_OPACITY_NODE: A node that changes the opacity of its child
+ * @GSK_CLIP_NODE: A node that clips its child to a rectangular area
  *
  * The type of a node determines what the node is rendering.
  *
@@ -44,7 +45,8 @@ typedef enum {
   GSK_COLOR_NODE,
   GSK_TEXTURE_NODE,
   GSK_TRANSFORM_NODE,
-  GSK_OPACITY_NODE
+  GSK_OPACITY_NODE,
+  GSK_CLIP_NODE
 } GskRenderNodeType;
 
 /**

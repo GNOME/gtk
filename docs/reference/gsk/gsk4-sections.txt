@@ -45,6 +45,8 @@ gsk_transform_node_new
 gsk_transform_node_get_child
 gsk_opacity_node_new
 gsk_opacity_node_get_child
+gsk_clip_node_new
+gsk_clip_node_get_child
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE

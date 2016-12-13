@@ -819,3 +819,128 @@ gsk_opacity_node_get_opacity (GskRenderNode *node)
   return self->opacity;
 }
 
+/*** GSK_CLIP_NODE ***/
+
+typedef struct _GskClipNode GskClipNode;
+
+struct _GskClipNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  graphene_rect_t clip;
+};
+
+static void
+gsk_clip_node_finalize (GskRenderNode *node)
+{
+  GskClipNode *self = (GskClipNode *) node;
+
+  gsk_render_node_unref (self->child);
+}
+
+static void
+gsk_clip_node_make_immutable (GskRenderNode *node)
+{
+  GskClipNode *self = (GskClipNode *) node;
+
+  gsk_render_node_make_immutable (self->child);
+}
+
+static void
+gsk_clip_node_draw (GskRenderNode *node,
+                    cairo_t       *cr)
+{
+  GskClipNode *self = (GskClipNode *) node;
+
+  cairo_save (cr);
+
+  cairo_rectangle (cr,
+                   self->clip.origin.x, self->clip.origin.y,
+                   self->clip.size.width, self->clip.size.height);
+  cairo_clip (cr);
+
+  gsk_render_node_draw (self->child, cr);
+
+  cairo_restore (cr);
+}
+
+static void
+gsk_clip_node_get_bounds (GskRenderNode   *node,
+                          graphene_rect_t *bounds)
+{
+  GskClipNode *self = (GskClipNode *) node;
+  graphene_rect_t child_bounds;
+
+  gsk_render_node_get_bounds (self->child, &child_bounds);
+
+  graphene_rect_intersection (&self->clip, &child_bounds, bounds);
+}
+
+static const GskRenderNodeClass GSK_CLIP_NODE_CLASS = {
+  GSK_CLIP_NODE,
+  sizeof (GskClipNode),
+  "GskClipNode",
+  gsk_clip_node_finalize,
+  gsk_clip_node_make_immutable,
+  gsk_clip_node_draw,
+  gsk_clip_node_get_bounds
+};
+
+/**
+ * gsk_clip_node_new:
+ * @child: The node to draw
+ * @clip: The clip to apply
+ *
+ * Creates a #GskRenderNode that will clip the @child to the area
+ * given by @clip.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_clip_node_new (GskRenderNode         *child,
+                   const graphene_rect_t *clip)
+{
+  GskClipNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+  g_return_val_if_fail (clip != NULL, NULL);
+
+  self = (GskClipNode *) gsk_render_node_new (&GSK_CLIP_NODE_CLASS);
+
+  self->child = gsk_render_node_ref (child);
+  graphene_rect_normalize_r (clip, &self->clip);
+
+  return &self->render_node;
+}
+
+/**
+ * gsk_clip_node_get_child:
+ * @node: a clip @GskRenderNode
+ *
+ * Gets the child node that is getting clipped by the given @node.
+ *
+ * Returns: (transfer none): The child that is getting clipped
+ **/
+GskRenderNode *
+gsk_clip_node_get_child (GskRenderNode *node)
+{
+  GskClipNode *self = (GskClipNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CLIP_NODE), NULL);
+
+  return self->child;
+}
+
+const graphene_rect_t *
+gsk_clip_node_peek_clip (GskRenderNode *node)
+{
+  GskClipNode *self = (GskClipNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CLIP_NODE), NULL);
+
+  return &self->clip;
+}
+

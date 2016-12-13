@@ -80,6 +80,12 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_opacity_node_get_child              (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_clip_node_new                       (GskRenderNode            *child,
+                                                                 const graphene_rect_t    *clip);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_clip_node_get_child                 (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_blend_mode          (GskRenderNode *node,
                                                                  GskBlendMode   blend_mode);
 
