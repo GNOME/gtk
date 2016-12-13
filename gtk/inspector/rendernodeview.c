@@ -225,7 +225,6 @@ gtk_render_node_view_snapshot (GtkWidget   *widget,
   GtkRenderNodeViewPrivate *priv = gtk_render_node_view_get_instance_private (view);
   GdkRectangle viewport;
   graphene_rect_t rect;
-  GskRenderer *fallback;
   int width, height;
   cairo_t *cr;
 
@@ -249,12 +248,7 @@ gtk_render_node_view_snapshot (GtkWidget   *widget,
     }
   cairo_translate (cr, - viewport.x - viewport.width / 2.0, - viewport.y - viewport.height / 2.0);
 
-  fallback = gsk_renderer_create_fallback (gtk_snapshot_get_renderer (snapshot),
-                                           &GRAPHENE_RECT_INIT (viewport.x, viewport.y,
-                                                                viewport.width, viewport.height),
-                                           cr);
-  gsk_renderer_render (fallback, priv->render_node, NULL);
-  g_object_unref (fallback);
+  gsk_render_node_draw (priv->render_node, cr);
 
   if (priv->render_region)
     {

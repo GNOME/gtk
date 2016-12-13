@@ -141,7 +141,6 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass *self,
                                         VkCommandBuffer      command_buffer)
 {
   graphene_rect_t bounds;
-  GskRenderer *fallback;
   cairo_surface_t *surface;
   cairo_t *cr;
 
@@ -153,11 +152,7 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass *self,
   cr = cairo_create (surface);
   cairo_translate (cr, bounds.origin.x, bounds.origin.y);
 
-  fallback = gsk_renderer_create_fallback (gsk_vulkan_render_get_renderer (render),
-                                           &bounds,
-                                           cr);
-  gsk_renderer_render (fallback, op->node, NULL);
-  g_object_unref (fallback);
+  gsk_render_node_draw (op->node, cr);
   
   cairo_destroy (cr);
 
