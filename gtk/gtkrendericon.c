@@ -126,7 +126,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   else
     {
       graphene_matrix_t m1, m2, m3;
-      GskRenderNode *transform_node, *container_node;
+      GskRenderNode *transform_node, *icon_node;
       double offset_x, offset_y;
 
       gtk_snapshot_get_offset (snapshot, &offset_x, &offset_y);
@@ -136,15 +136,16 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
       graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
       graphene_matrix_multiply (&m2, &m3, &m1);
 
-      container_node = gsk_container_node_new ();
-      gsk_render_node_set_name (container_node, "CSS Icon Transform Container");
-      transform_node = gsk_transform_node_new (container_node, &m1);
+      gtk_snapshot_push (snapshot, FALSE, "CSS Icon Transform Container");
+      gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
+      icon_node = gtk_snapshot_pop (snapshot);
+
+      transform_node = gsk_transform_node_new (icon_node, &m1);
       gsk_render_node_set_name (transform_node, "CSS Icon Transform");
       gtk_snapshot_append_node (snapshot, transform_node);
       
-      gtk_snapshot_push_node (snapshot, container_node);
-      gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
-      gtk_snapshot_pop (snapshot);
+      gsk_render_node_unref (transform_node);
+      gsk_render_node_unref (icon_node);
     }
 }
 

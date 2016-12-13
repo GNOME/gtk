@@ -27,7 +27,8 @@ typedef struct _GtkSnapshotState GtkSnapshotState;
 struct _GtkSnapshotState {
   GtkSnapshotState      *parent;
 
-  GskRenderNode         *node;
+  char                  *name;
+  GPtrArray             *nodes;
 
   cairo_region_t        *clip_region;
   double                 translate_x;
@@ -37,7 +38,6 @@ struct _GtkSnapshotState {
 struct _GtkSnapshot {
   GtkSnapshotState      *state;
 
-  GskRenderNode         *root;
   GskRenderer           *renderer;
 };
 

@@ -38,7 +38,6 @@ gsk_texture_node_new
 gsk_cairo_node_new
 gsk_cairo_node_get_draw_context
 gsk_container_node_new
-gsk_container_node_append_child
 gsk_container_node_get_n_children
 gsk_container_node_get_child
 gsk_transform_node_new

@@ -285,15 +285,20 @@ struct _GskContainerNode
 {
   GskRenderNode render_node;
 
-  GPtrArray *children;
+  GskRenderNode **children;
+  guint n_children;
 };
 
 static void
 gsk_container_node_finalize (GskRenderNode *node)
 {
   GskContainerNode *container = (GskContainerNode *) node;
+  guint i;
 
-  g_ptr_array_unref (container->children);
+  for (i = 0; i < container->n_children; i++)
+    gsk_render_node_unref (container->children[i]);
+
+  g_free (container->children);
 }
 
 static void
@@ -302,9 +307,9 @@ gsk_container_node_make_immutable (GskRenderNode *node)
   GskContainerNode *container = (GskContainerNode *) node;
   guint i;
 
-  for (i = 1; i < container->children->len; i++)
+  for (i = 1; i < container->n_children; i++)
     {
-      gsk_render_node_make_immutable (g_ptr_array_index (container->children, i));
+      gsk_render_node_make_immutable (container->children[i]);
     }
 }
 
@@ -343,53 +348,32 @@ static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
 
 /**
  * gsk_container_node_new:
+ * @children: (array length=n_children) (transfer none): The children of the node
+ * @n_children: Number of children in the @children array
  *
- * Creates a new #GskRenderNode instance for holding multiple different
- * render nodes. You can use gsk_container_node_append_child() to add
- * nodes to the container.
+ * Creates a new #GskRenderNode instance for holding the given @children.
+ * The new node will acquire a reference to each of the children.
  *
  * Returns: (transfer full): the new #GskRenderNode
  *
  * Since: 3.90
  */
 GskRenderNode *
-gsk_container_node_new (void)
+gsk_container_node_new (GskRenderNode **children,
+                        guint           n_children)
 {
   GskContainerNode *container;
+  guint i;
 
   container = (GskContainerNode *) gsk_render_node_new (&GSK_CONTAINER_NODE_CLASS);
 
-  container->children = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
+  container->children = g_memdup (children, sizeof (GskRenderNode *) * n_children);
+  container->n_children = n_children;
+
+  for (i = 0; i < container->n_children; i++)
+    gsk_render_node_ref (container->children[i]);
 
   return &container->render_node;
-}
-
-/**
- * gsk_container_node_append_child:
- * @node: a container node
- * @child: a #GskRenderNode
- *
- * Appends @child to the list of children of @node.
- *
- * This function acquires a reference on @child.
- *
- * Returns: (transfer none): the #GskRenderNode
- *
- * Since: 3.90
- */
-GskRenderNode *
-gsk_container_node_append_child (GskRenderNode *node,
-                                 GskRenderNode *child)
-{
-  GskContainerNode *container = (GskContainerNode *) node;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE), NULL);
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), node);
-  g_return_val_if_fail (node->is_mutable, node);
-
-  g_ptr_array_add (container->children, gsk_render_node_ref (child));
-
-  return node;
 }
 
 /**
@@ -409,7 +393,7 @@ gsk_container_node_get_n_children (GskRenderNode *node)
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE), 0);
 
-  return container->children->len;
+  return container->n_children;
 }
 
 GskRenderNode *
@@ -419,9 +403,9 @@ gsk_container_node_get_child (GskRenderNode *node,
   GskContainerNode *container = (GskContainerNode *) node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CONTAINER_NODE), NULL);
-  g_return_val_if_fail (idx < container->children->len, 0);
+  g_return_val_if_fail (idx < container->n_children, 0);
 
-  return g_ptr_array_index (container->children, idx);
+  return container->children[idx];
 }
 
 /*** GSK_TRANSFORM_NODE ***/

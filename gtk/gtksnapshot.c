@@ -50,15 +50,21 @@
 
 static GtkSnapshotState *
 gtk_snapshot_state_new (GtkSnapshotState *parent,
+                        char             *name,
                         cairo_region_t   *clip,
-                        GskRenderNode    *node)
+                        double            translate_x,
+                        double            translate_y)
 {
   GtkSnapshotState *state;
 
   state = g_slice_new0 (GtkSnapshotState);
 
-  state->node = node;
+  state->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
+
   state->parent = parent;
+  state->name = name;
+  state->translate_x = translate_x;
+  state->translate_y = translate_y;
   if (clip)
     state->clip_region = cairo_region_reference (clip);
 
@@ -68,8 +74,12 @@ gtk_snapshot_state_new (GtkSnapshotState *parent,
 static void
 gtk_snapshot_state_free (GtkSnapshotState *state)
 {
+  g_ptr_array_unref (state->nodes);
+
   if (state->clip_region)
     cairo_region_destroy (state->clip_region);
+
+  g_free (state->name);
 
   g_slice_free (GtkSnapshotState, state);
 }
@@ -81,66 +91,49 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
                    const char           *name,
                    ...)
 {
-  cairo_rectangle_int_t extents;
-
-  cairo_region_get_extents (clip, &extents);
+  char *str;
 
   snapshot->state = NULL;
   snapshot->renderer = renderer;
-  snapshot->root = gsk_container_node_new ();
 
   if (name)
     {
       va_list args;
-      char *str;
 
       va_start (args, name);
       str = g_strdup_vprintf (name, args);
       va_end (args);
-
-      gsk_render_node_set_name (snapshot->root, str);
-
-      g_free (str);
     }
+  else
+    str = NULL;
 
-  snapshot->state = gtk_snapshot_state_new (NULL, (cairo_region_t *) clip, snapshot->root);
+  snapshot->state = gtk_snapshot_state_new (NULL,
+                                            str,
+                                            (cairo_region_t *) clip,
+                                            0, 0);
 }
 
 GskRenderNode *
 gtk_snapshot_finish (GtkSnapshot *snapshot)
 {
-  gtk_snapshot_pop (snapshot);
+  GskRenderNode *result;
+  
+  result = gtk_snapshot_pop (snapshot);
 
   if (snapshot->state != NULL)
     {
       g_warning ("Too many gtk_snapshot_push() calls.");
     }
 
-  return snapshot->root;
-}
-
-/**
- * gtk_snapshot_push_node:
- * @snapshot: a #GtkSnapshot
- * @node: the render node to push
- *
- * Makes @node the new current render node. You are responsible for adding
- * @node to the snapshot.
- *
- * Since: 3.90
- */
-void
-gtk_snapshot_push_node (GtkSnapshot   *snapshot,
-                        GskRenderNode *node)
-{
-  g_return_if_fail (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE);
-
-  snapshot->state = gtk_snapshot_state_new (snapshot->state, snapshot->state->clip_region, node);
+  return result;
 }
 
 /**
  * gtk_snapshot_push:
  * @snapshot: a #GtkSnapshot
+ * @keep_coordinates: If %TRUE, the current offset and clip will be kept.
+ *     Otherwise, the clip will be unset and the offset will be reset to
+ *     (0, 0).
  * @bounds: the bounds for the new node
  * @name: (transfer none): a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
@@ -152,30 +145,38 @@ gtk_snapshot_push_node (GtkSnapshot   *snapshot,
  */
 void
 gtk_snapshot_push (GtkSnapshot           *snapshot,
+                   gboolean               keep_coordinates,
                    const char            *name,
                    ...)
 {
-  GskRenderNode *node;
-
-  node = gsk_container_node_new ();
+  char *str;
 
   if (name)
     {
       va_list args;
-      char *str;
 
       va_start (args, name);
       str = g_strdup_vprintf (name, args);
       va_end (args);
-
-      gsk_render_node_set_name (node, str);
-
-      g_free (str);
     }
+  else
+    str = NULL;
 
-  gtk_snapshot_append_node (snapshot, node);
-  gtk_snapshot_push_node (snapshot, node);
-  gsk_render_node_unref (node);
+  if (keep_coordinates)
+    {
+      snapshot->state = gtk_snapshot_state_new (snapshot->state,
+                                                str,
+                                                snapshot->state->clip_region,
+                                                snapshot->state->translate_x,
+                                                snapshot->state->translate_y);
+    }
+  else
+    {
+      snapshot->state = gtk_snapshot_state_new (snapshot->state,
+                                                str,
+                                                NULL,
+                                                0, 0);
+    }
 }
 
 /**
@@ -185,23 +186,45 @@ gtk_snapshot_push (GtkSnapshot           *snapshot,
  * Removes the top element from the stack of render nodes,
  * making the node underneath the current node again.
  *
+ * Returns: (transfer full) (allow none): A #GskRenderNode for
+ *     the contents that were rendered to @snapshot since
+ *     the corresponding gtk_snapshot_push() call
+ *
  * Since: 3.90
  */
-void
+GskRenderNode *
 gtk_snapshot_pop (GtkSnapshot *snapshot)
 {
   GtkSnapshotState *state;
+  GskRenderNode *node;
 
   if (snapshot->state == NULL)
     {
       g_warning ("Too many gtk_snapshot_pop() calls.");
-      return;
+      return NULL;
     }
 
   state = snapshot->state;
   snapshot->state = state->parent;
 
+  if (state->nodes->len == 0)
+    {
+      node = NULL;
+    }
+  else if (state->nodes->len == 1)
+    {
+      node = gsk_render_node_ref (g_ptr_array_index (state->nodes, 0));
+    }
+  else
+    {
+      node = gsk_container_node_new ((GskRenderNode **) state->nodes->pdata,
+                                     state->nodes->len);
+      gsk_render_node_set_name (node, state->name);
+    }
+
   gtk_snapshot_state_free (state);
+
+  return node;
 }
 
 /**
@@ -288,7 +311,7 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
 
   if (snapshot->state)
     {
-      gsk_container_node_append_child (snapshot->state->node, node);
+      g_ptr_array_add (snapshot->state->nodes, gsk_render_node_ref (node));
     }
   else
     {

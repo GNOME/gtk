@@ -55,15 +55,13 @@ cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode  
                                                                  GskRenderer              *renderer);
 
 GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_container_node_new                  (void);
+GskRenderNode *         gsk_container_node_new                  (GskRenderNode           **children,
+                                                                 guint                     n_children);
 GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_container_node_append_child         (GskRenderNode           *node,
-                                                                 GskRenderNode           *child);
+guint                   gsk_container_node_get_n_children       (GskRenderNode            *node);
 GDK_AVAILABLE_IN_3_90
-guint                   gsk_container_node_get_n_children       (GskRenderNode           *node);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_container_node_get_child            (GskRenderNode           *node,
-                                                                 guint                    idx);
+GskRenderNode *         gsk_container_node_get_child            (GskRenderNode            *node,
+                                                                 guint                     idx);
 
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_transform_node_new                  (GskRenderNode            *child,

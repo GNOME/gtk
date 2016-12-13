@@ -41,13 +41,11 @@ GskRenderer *   gtk_snapshot_get_renderer               (const GtkSnapshot      
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push                       (GtkSnapshot            *snapshot,
+                                                         gboolean                keep_coordinates,
                                                          const char             *name,
-                                                         ...) G_GNUC_PRINTF(2, 3);
+                                                         ...) G_GNUC_PRINTF (3, 4);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_push_node                  (GtkSnapshot            *snapshot,
-                                                         GskRenderNode          *node);
-GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
+GskRenderNode * gtk_snapshot_pop                        (GtkSnapshot            *snapshot) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_translate_2d               (GtkSnapshot            *snapshot,
