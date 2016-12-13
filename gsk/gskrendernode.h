@@ -88,6 +88,9 @@ void                    gsk_render_node_set_name                (GskRenderNode *
 GDK_AVAILABLE_IN_3_90
 const char *            gsk_render_node_get_name                (GskRenderNode *node);
 
+GDK_AVAILABLE_IN_3_90
+void                    gsk_render_node_draw                    (GskRenderNode *node,
+                                                                 cairo_t       *cr);
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_H__ */

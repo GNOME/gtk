@@ -47,121 +47,6 @@ gsk_cairo_renderer_unrealize (GskRenderer *renderer)
 }
 
 static void
-gsk_cairo_renderer_render_node (GskCairoRenderer *self,
-                                GskRenderNode    *node,
-                                cairo_t          *cr)
-{
-  gboolean pop_group = FALSE;
-  graphene_rect_t frame;
-
-  cairo_save (cr);
-
-  gsk_render_node_get_bounds (node, &frame);
-  GSK_NOTE (CAIRO, g_print ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }\n",
-                            frame.origin.x, frame.origin.y,
-                            frame.size.width, frame.size.height));
-
-  if (!GSK_RENDER_MODE_CHECK (GEOMETRY))
-    {
-      cairo_rectangle (cr, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
-      cairo_clip (cr);
-    }
-
-  if (gsk_render_node_get_opacity (node) != 1.0)
-    {
-      GSK_NOTE (CAIRO, g_print ("Pushing opacity group (opacity:%g)\n",
-                                gsk_render_node_get_opacity (node)));
-      cairo_push_group (cr);
-      pop_group = TRUE;
-    }
-
-  GSK_NOTE (CAIRO, g_print ("Rendering node %s[%p] at %g, %g\n",
-                            node->name,
-                            node,
-                            frame.origin.x, frame.origin.y));
-
-  switch (gsk_render_node_get_node_type (node))
-    {
-    case GSK_NOT_A_RENDER_NODE:
-    default:
-      g_assert_not_reached ();
-      break;
-
-    case GSK_CONTAINER_NODE:
-      {
-        guint i;
-        GSK_NOTE (CAIRO, g_print ("Drawing %d children of node [%p]\n",
-                                  gsk_container_node_get_n_children (node),
-                                  node));
-        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
-          {
-            gsk_cairo_renderer_render_node (self, gsk_container_node_get_child (node, i), cr);
-          }
-      }
-      break;
-
-    case GSK_TEXTURE_NODE:
-      {
-        GskTexture *texture = gsk_texture_node_get_texture (node);
-        cairo_surface_t *surface = gsk_texture_download (texture);
-
-        cairo_set_source_surface (cr, surface, frame.origin.x, frame.origin.y); 
-        cairo_paint (cr);
-        cairo_surface_destroy (surface);
-      }
-      break;
-
-    case GSK_CAIRO_NODE:
-      {
-        cairo_set_source_surface (cr, gsk_cairo_node_get_surface (node), frame.origin.x, frame.origin.y); 
-        cairo_paint (cr);
-      }
-      break;
-
-    case GSK_TRANSFORM_NODE:
-      {
-        graphene_matrix_t mat;
-        cairo_matrix_t ctm;
-
-        gsk_transform_node_get_transform (node, &mat);
-        if (graphene_matrix_to_2d (&mat, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
-          {
-            GSK_NOTE (CAIRO, g_print ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }\n",
-                                      ctm.xx, ctm.yx,
-                                      ctm.xy, ctm.yy,
-                                      ctm.x0, ctm.y0));
-            cairo_transform (cr, &ctm);
-          }
-        else
-          g_critical ("Invalid non-affine transformation for node %p", node);
-
-        gsk_cairo_renderer_render_node (self, gsk_transform_node_get_child (node), cr);
-      }
-      break;
-    }
-
-  if (GSK_RENDER_MODE_CHECK (GEOMETRY))
-    {
-      cairo_save (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_rectangle (cr, frame.origin.x - 1, frame.origin.y - 1, frame.size.width + 2, frame.size.height + 2);
-      cairo_set_line_width (cr, 2);
-      cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
-      cairo_stroke (cr);
-      cairo_restore (cr);
-    }
-
-  if (pop_group)
-    {
-      cairo_pop_group_to_source (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_paint_with_alpha (cr, gsk_render_node_get_opacity (node));
-    }
-
-  cairo_restore (cr);
-}
-
-static void
 gsk_cairo_renderer_render (GskRenderer   *renderer,
                            GskRenderNode *root)
 {
@@ -209,7 +94,7 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  gsk_cairo_renderer_render_node (self, root, cr);
+  gsk_render_node_draw (root, cr);
 
 #ifdef G_ENABLE_DEBUG
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);

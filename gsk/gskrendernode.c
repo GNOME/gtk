@@ -335,3 +335,62 @@ gsk_render_node_make_immutable (GskRenderNode *node)
   node->is_mutable = FALSE;
 }
 
+/**
+ * gsk_render_node_draw:
+ * @node: a #GskRenderNode
+ * @cr: cairo context to draw to
+ *
+ * Draw the contents of @node to the given cairo context.
+ *
+ * Typically, you'll use this function to implement fallback rendering
+ * of #GskRenderNodes on an intermediate Cairo context, instead of using
+ * the drawing context associated to a #GdkWindow's rendering buffer.
+ *
+ * For advanced nodes that cannot be supported using Cairo, in particular
+ * for nodes doing 3D operations, this function may fail.
+ **/
+void
+gsk_render_node_draw (GskRenderNode *node,
+                      cairo_t       *cr)
+{
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (cr != NULL);
+
+  cairo_save (cr);
+
+  if (!GSK_RENDER_MODE_CHECK (GEOMETRY))
+    {
+      graphene_rect_t frame;
+
+      gsk_render_node_get_bounds (node, &frame);
+      GSK_NOTE (CAIRO, g_print ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }\n",
+                                frame.origin.x, frame.origin.y,
+                                frame.size.width, frame.size.height));
+
+      cairo_rectangle (cr, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+      cairo_clip (cr);
+    }
+
+  GSK_NOTE (CAIRO, g_print ("Rendering node %s[%p]\n",
+                            node->name,
+                            node));
+
+  node->node_class->draw (node, cr);
+
+  if (GSK_RENDER_MODE_CHECK (GEOMETRY))
+    {
+      graphene_rect_t frame;
+
+      gsk_render_node_get_bounds (node, &frame);
+
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_rectangle (cr, frame.origin.x - 1, frame.origin.y - 1, frame.size.width + 2, frame.size.height + 2);
+      cairo_set_line_width (cr, 2);
+      cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
+      cairo_stroke (cr);
+    }
+
+  cairo_restore (cr);
+}
+
+

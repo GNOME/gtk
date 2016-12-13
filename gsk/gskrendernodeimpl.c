@@ -20,7 +20,7 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
-#include "gsktexture.h"
+#include "gsktextureprivate.h"
 
 /*** GSK_TEXTURE_NODE ***/
 
@@ -48,6 +48,30 @@ gsk_texture_node_make_immutable (GskRenderNode *node)
 }
 
 static void
+gsk_texture_node_draw (GskRenderNode *node,
+                       cairo_t       *cr)
+{
+  GskTextureNode *self = (GskTextureNode *) node;
+  cairo_surface_t *surface;
+
+  surface = gsk_texture_download (self->texture);
+
+  cairo_save (cr);
+
+  cairo_translate (cr, self->bounds.origin.x, self->bounds.origin.y);
+  cairo_scale (cr,
+               self->bounds.size.width / gsk_texture_get_width (self->texture),
+               self->bounds.size.height / gsk_texture_get_height (self->texture));
+
+  cairo_set_source_surface (cr, surface, 0, 0);
+  cairo_paint (cr);
+
+  cairo_restore (cr);
+
+  cairo_surface_destroy (surface);
+}
+
+static void
 gsk_texture_node_get_bounds (GskRenderNode   *node,
                              graphene_rect_t *bounds)
 {
@@ -62,6 +86,7 @@ static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   "GskTextureNode",
   gsk_texture_node_finalize,
   gsk_texture_node_make_immutable,
+  gsk_texture_node_draw,
   gsk_texture_node_get_bounds
 };
 
@@ -131,6 +156,19 @@ gsk_cairo_node_make_immutable (GskRenderNode *node)
 }
 
 static void
+gsk_cairo_node_draw (GskRenderNode *node,
+                     cairo_t       *cr)
+{
+  GskCairoNode *self = (GskCairoNode *) node;
+
+  if (self->surface == NULL)
+    return;
+
+  cairo_set_source_surface (cr, self->surface, self->bounds.origin.x, self->bounds.origin.y);
+  cairo_paint (cr);
+}
+
+static void
 gsk_cairo_node_get_bounds (GskRenderNode   *node,
                            graphene_rect_t *bounds)
 {
@@ -145,6 +183,7 @@ static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   "GskCairoNode",
   gsk_cairo_node_finalize,
   gsk_cairo_node_make_immutable,
+  gsk_cairo_node_draw,
   gsk_cairo_node_get_bounds
 };
 
@@ -314,6 +353,19 @@ gsk_container_node_make_immutable (GskRenderNode *node)
 }
 
 static void
+gsk_container_node_draw (GskRenderNode *node,
+                         cairo_t       *cr)
+{
+  GskContainerNode *container = (GskContainerNode *) node;
+  guint i;
+
+  for (i = 0; i < container->n_children; i++)
+    {
+      gsk_render_node_draw (container->children[i], cr);
+    }
+}
+
+static void
 gsk_container_node_get_bounds (GskRenderNode   *node,
                                graphene_rect_t *bounds)
 {
@@ -343,6 +395,7 @@ static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   "GskContainerNode",
   gsk_container_node_finalize,
   gsk_container_node_make_immutable,
+  gsk_container_node_draw,
   gsk_container_node_get_bounds
 };
 
@@ -437,8 +490,37 @@ gsk_transform_node_make_immutable (GskRenderNode *node)
 }
 
 static void
+gsk_transform_node_draw (GskRenderNode *node,
+                         cairo_t       *cr)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+  cairo_matrix_t ctm;
+
+  if (graphene_matrix_to_2d (&self->transform, &ctm.xx, &ctm.yx, &ctm.xy, &ctm.yy, &ctm.x0, &ctm.y0))
+    {
+      GSK_NOTE (CAIRO, g_print ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }\n",
+                                ctm.xx, ctm.yx,
+                                ctm.xy, ctm.yy,
+                                ctm.x0, ctm.y0));
+      cairo_transform (cr, &ctm);
+  
+      gsk_render_node_draw (self->child, cr);
+    }
+  else
+    {
+      graphene_rect_t bounds;
+
+      gsk_render_node_get_bounds (node, &bounds);
+
+      cairo_set_source_rgb (cr, 255 / 255., 105 / 255., 180 / 255.);
+      cairo_rectangle (cr, bounds.origin.x, bounds.origin.x, bounds.size.width, bounds.size.height);
+      cairo_fill (cr);
+    }
+}
+
+static void
 gsk_transform_node_get_bounds (GskRenderNode   *node,
-                           graphene_rect_t *bounds)
+                               graphene_rect_t *bounds)
 {
   GskTransformNode *self = (GskTransformNode *) node;
   graphene_rect_t child_bounds;
@@ -456,6 +538,7 @@ static const GskRenderNodeClass GSK_TRANSFORM_NODE_CLASS = {
   "GskTransformNode",
   gsk_transform_node_finalize,
   gsk_transform_node_make_immutable,
+  gsk_transform_node_draw,
   gsk_transform_node_get_bounds
 };
 

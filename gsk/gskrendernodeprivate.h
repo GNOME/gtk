@@ -40,6 +40,8 @@ struct _GskRenderNodeClass
   const char *type_name;
   void (* finalize) (GskRenderNode *node);
   void (* make_immutable) (GskRenderNode *node);
+  void (* draw) (GskRenderNode *node,
+                 cairo_t       *cr);
   void (* get_bounds) (GskRenderNode   *node,
                        graphene_rect_t *bounds);
 };
