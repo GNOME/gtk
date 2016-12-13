@@ -461,11 +461,13 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
 {
   GtkInspectorRecording *recording;
   GdkFrameClock *frame_clock;
+  cairo_region_t *clip;
 
   if (!gtk_inspector_recorder_is_recording (recorder))
     return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
+  clip = gdk_drawing_context_get_clip (context);
 
   recording = gtk_inspector_render_recording_new (gdk_frame_clock_get_frame_time (frame_clock),
                                                   gsk_renderer_get_profiler (renderer),
@@ -473,10 +475,11 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                     gdk_window_get_width (window),
                                                     gdk_window_get_height (window) },
                                                   region,
-                                                  gdk_drawing_context_get_clip (context),
+                                                  clip,
                                                   node);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
+  cairo_region_destroy (clip);
 }
 
 // vim: set et sw=2 ts=2:

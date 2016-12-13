@@ -15616,6 +15616,7 @@ gtk_widget_render (GtkWidget            *widget,
   GtkSnapshot snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
+  cairo_region_t *clip;
 
   /* We only render double buffered on native windows */
   if (!gdk_window_has_native (window))
@@ -15626,11 +15627,13 @@ gtk_widget_render (GtkWidget            *widget,
     return;
 
   context = gsk_renderer_begin_draw_frame (renderer, region);
+  clip = gdk_drawing_context_get_clip (context);
 
   gtk_snapshot_init (&snapshot,
                      renderer,
-                     gdk_drawing_context_get_clip (context),
+                     clip,
                      "Render<%s>", G_OBJECT_TYPE_NAME (widget));
+  cairo_region_destroy (clip);
   gtk_widget_snapshot (widget, &snapshot);
   root = gtk_snapshot_finish (&snapshot);
   if (root != NULL)
@@ -15645,6 +15648,7 @@ gtk_widget_render (GtkWidget            *widget,
       gsk_renderer_render (renderer, root, context);
       gsk_render_node_unref (root);
     }
+
 
   gsk_renderer_end_draw_frame (renderer, context);
 }
