@@ -77,17 +77,8 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
 static gboolean
 _gtk_theming_background_needs_push_group (GtkCssStyle *style)
 {
-  const GdkRGBA *bg_color;
-  GtkCssValue *background_color;
   GtkCssValue *blend_modes;
   gint i;
-
-  background_color = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR);
-  bg_color = _gtk_css_rgba_value_get_rgba (background_color);
-
-  /* An opaque background-color means we don't need to push the group */
-  if (bg_color->alpha == 1)
-    return FALSE;
 
   blend_modes = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
 

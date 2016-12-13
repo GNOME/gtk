@@ -84,6 +84,9 @@ testdata = \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
+	background-blend-mode-clip-interaction.css \
+	background-blend-mode-clip-interaction.ref.ui \
+	background-blend-mode-clip-interaction.ui \
 	background-color-transparent.css \
 	background-color-transparent.ref.ui \
 	background-color-transparent.ui \
