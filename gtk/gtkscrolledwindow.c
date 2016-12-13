@@ -1422,11 +1422,14 @@ gtk_scrolled_window_allocate (GtkCssGadget        *gadget,
   GtkBin *bin;
   GtkAllocation relative_allocation;
   GtkAllocation child_allocation;
+  GtkAllocation sw_allocation;
   GtkWidget *child;
   gint sb_width;
   gint sb_height;
 
   bin = GTK_BIN (scrolled_window);
+  gtk_widget_get_allocation (GTK_WIDGET (scrolled_window), &sw_allocation);
+
 
   /* Get possible scrollbar dimensions */
   gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
@@ -1825,33 +1828,17 @@ gtk_scrolled_window_draw_scrollbars_junction (GtkScrolledWindow *scrolled_window
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
-  GtkAllocation content_allocation, hscr_allocation, vscr_allocation;
+  GtkAllocation hscr_allocation, vscr_allocation;
   GtkStyleContext *context;
   GdkRectangle junction_rect;
-  gboolean is_rtl;
 
-  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   gtk_widget_get_allocation (GTK_WIDGET (priv->hscrollbar), &hscr_allocation);
   gtk_widget_get_allocation (GTK_WIDGET (priv->vscrollbar), &vscr_allocation);
-  gtk_css_gadget_get_content_allocation (priv->gadget, &content_allocation,
-                                         NULL);
 
-  junction_rect.x = content_allocation.x;
-  junction_rect.y = content_allocation.y;
+  junction_rect.x = vscr_allocation.x;
+  junction_rect.y = hscr_allocation.y;
   junction_rect.width = vscr_allocation.width;
   junction_rect.height = hscr_allocation.height;
-
-  if ((is_rtl &&
-       (priv->window_placement == GTK_CORNER_TOP_RIGHT ||
-        priv->window_placement == GTK_CORNER_BOTTOM_RIGHT)) ||
-      (!is_rtl &&
-       (priv->window_placement == GTK_CORNER_TOP_LEFT ||
-        priv->window_placement == GTK_CORNER_BOTTOM_LEFT)))
-    junction_rect.x += hscr_allocation.width;
-
-  if (priv->window_placement == GTK_CORNER_TOP_LEFT ||
-      priv->window_placement == GTK_CORNER_TOP_RIGHT)
-    junction_rect.y += vscr_allocation.height;
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_named (context, "junction");
@@ -3047,7 +3034,7 @@ static void
 gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 					 GtkAllocation *allocation)
 {
-  GtkAllocation content_allocation;
+  GtkAllocation content_allocation, widget_allocation;
   GtkScrolledWindow *scrolled_window;
   GtkScrolledWindowPrivate *priv;
   gint sb_width;
@@ -3066,9 +3053,10 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
                       &sb_height, NULL, NULL, NULL);
 
   gtk_css_gadget_get_content_allocation (priv->gadget, &content_allocation, NULL);
+  gtk_widget_get_allocation (widget, &widget_allocation);
 
-  allocation->x = content_allocation.x;
-  allocation->y = content_allocation.y;
+  allocation->x = content_allocation.x - widget_allocation.x;
+  allocation->y = content_allocation.y - widget_allocation.y;
   allocation->width = content_allocation.width;
   allocation->height = content_allocation.height;
 
@@ -3241,7 +3229,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 {
   GtkScrolledWindow *scrolled_window;
   GtkScrolledWindowPrivate *priv;
-  GtkAllocation clip, content_allocation;
+  GtkAllocation clip;
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   priv = scrolled_window->priv;
@@ -3253,15 +3241,11 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
-  content_allocation = *allocation;
-  content_allocation.x = content_allocation.y = 0;
   gtk_css_gadget_allocate (priv->gadget,
-                           &content_allocation,
+                           allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
-  clip.x += allocation->x;
-  clip.y += allocation->y;
   gtk_widget_set_clip (widget, &clip);
 }
 
