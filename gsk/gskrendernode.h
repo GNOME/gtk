@@ -23,6 +23,7 @@
 #error "Only <gsk/gsk.h> can be included directly."
 #endif
 
+#include <gsk/gskroundedrect.h>
 #include <gsk/gsktypes.h>
 
 G_BEGIN_DECLS
@@ -84,6 +85,12 @@ GskRenderNode *         gsk_clip_node_new                       (GskRenderNode  
                                                                  const graphene_rect_t    *clip);
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_clip_node_get_child                 (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_rounded_clip_node_new               (GskRenderNode            *child,
+                                                                 const GskRoundedRect     *clip);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_rounded_clip_node_get_child         (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_blend_mode          (GskRenderNode *node,

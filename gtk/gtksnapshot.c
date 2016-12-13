@@ -352,6 +352,74 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
   cairo_region_destroy (clip);
 }
 
+static GskRenderNode *
+gtk_snapshot_collect_rounded_clip (GskRenderNode **nodes,
+                                   guint           n_nodes,
+                                   const char     *name,
+                                   gpointer        bounds)
+{
+  GskRenderNode *node, *clip_node;
+
+  node = gtk_snapshot_collect_default (nodes, n_nodes, name, NULL);
+  if (node == NULL)
+    return NULL;
+
+  clip_node = gsk_rounded_clip_node_new (node, bounds);
+  gsk_render_node_set_name (clip_node, name);
+
+  gsk_render_node_unref (node);
+  g_slice_free (GskRoundedRect, bounds);
+
+  return clip_node;
+}
+
+void
+gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
+                                const GskRoundedRect *bounds,
+                                const char           *name,
+                                ...)
+{
+  GskRoundedRect *real_bounds;
+  cairo_region_t *clip;
+  cairo_rectangle_int_t rect;
+  char *str;
+
+  real_bounds = g_slice_new (GskRoundedRect);
+  gsk_rounded_rect_init_copy (real_bounds, bounds);
+  gsk_rounded_rect_offset (real_bounds, snapshot->state->translate_x, snapshot->state->translate_y);
+
+  if (name)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+  
+  rectangle_init_from_graphene (&rect, &real_bounds->bounds);
+  if (snapshot->state->clip_region)
+    {
+      clip = cairo_region_copy (snapshot->state->clip_region);
+      cairo_region_intersect_rectangle (clip, &rect);
+    }
+  else
+    {
+      clip = cairo_region_create_rectangle (&rect);
+    }
+  snapshot->state = gtk_snapshot_state_new (snapshot->state,
+                                            str,
+                                            clip,
+                                            snapshot->state->translate_x,
+                                            snapshot->state->translate_y,
+                                            gtk_snapshot_collect_rounded_clip,
+                                            real_bounds);
+
+  cairo_region_destroy (clip);
+}
+
 /**
  * gtk_snapshot_pop:
  * @snapshot: a #GtkSnapshot

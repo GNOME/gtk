@@ -4457,6 +4457,7 @@ gtk_snapshot_push
 gtk_snapshot_push_node
 gtk_snapshot_push_transform
 gtk_snapshot_push_clip
+gtk_snapshot_push_rounded_clip
 gtk_snapshot_pop
 gtk_snapshot_pop_and_append
 gtk_snapshot_set_transform

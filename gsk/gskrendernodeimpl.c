@@ -20,6 +20,7 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
+#include "gskroundedrectprivate.h"
 #include "gsktextureprivate.h"
 
 /*** GSK_COLOR_NODE ***/
@@ -940,6 +941,129 @@ gsk_clip_node_peek_clip (GskRenderNode *node)
   GskClipNode *self = (GskClipNode *) node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CLIP_NODE), NULL);
+
+  return &self->clip;
+}
+
+/*** GSK_ROUNDED_CLIP_NODE ***/
+
+typedef struct _GskRoundedClipNode GskRoundedClipNode;
+
+struct _GskRoundedClipNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  GskRoundedRect clip;
+};
+
+static void
+gsk_rounded_clip_node_finalize (GskRenderNode *node)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+
+  gsk_render_node_unref (self->child);
+}
+
+static void
+gsk_rounded_clip_node_make_immutable (GskRenderNode *node)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+
+  gsk_render_node_make_immutable (self->child);
+}
+
+static void
+gsk_rounded_clip_node_draw (GskRenderNode *node,
+                            cairo_t       *cr)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+
+  cairo_save (cr);
+
+  gsk_rounded_rect_path (&self->clip, cr);
+  cairo_clip (cr);
+
+  gsk_render_node_draw (self->child, cr);
+
+  cairo_restore (cr);
+}
+
+static void
+gsk_rounded_clip_node_get_bounds (GskRenderNode   *node,
+                                  graphene_rect_t *bounds)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+  graphene_rect_t child_bounds;
+
+  gsk_render_node_get_bounds (self->child, &child_bounds);
+
+  graphene_rect_intersection (&self->clip.bounds, &child_bounds, bounds);
+}
+
+static const GskRenderNodeClass GSK_ROUNDED_CLIP_NODE_CLASS = {
+  GSK_ROUNDED_CLIP_NODE,
+  sizeof (GskRoundedClipNode),
+  "GskRoundedClipNode",
+  gsk_rounded_clip_node_finalize,
+  gsk_rounded_clip_node_make_immutable,
+  gsk_rounded_clip_node_draw,
+  gsk_rounded_clip_node_get_bounds
+};
+
+/**
+ * gsk_rounded_clip_node_new:
+ * @child: The node to draw
+ * @clip: The clip to apply
+ *
+ * Creates a #GskRenderNode that will clip the @child to the area
+ * given by @clip.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_rounded_clip_node_new (GskRenderNode         *child,
+                           const GskRoundedRect  *clip)
+{
+  GskRoundedClipNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+  g_return_val_if_fail (clip != NULL, NULL);
+
+  self = (GskRoundedClipNode *) gsk_render_node_new (&GSK_ROUNDED_CLIP_NODE_CLASS);
+
+  self->child = gsk_render_node_ref (child);
+  gsk_rounded_rect_init_copy (&self->clip, clip);
+
+  return &self->render_node;
+}
+
+/**
+ * gsk_rounded_clip_node_get_child:
+ * @node: a clip @GskRenderNode
+ *
+ * Gets the child node that is getting clipped by the given @node.
+ *
+ * Returns: (transfer none): The child that is getting clipped
+ **/
+GskRenderNode *
+gsk_rounded_clip_node_get_child (GskRenderNode *node)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_ROUNDED_CLIP_NODE), NULL);
+
+  return self->child;
+}
+
+const GskRoundedRect *
+gsk_rounded_clip_node_peek_clip (GskRenderNode *node)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_ROUNDED_CLIP_NODE), NULL);
 
   return &self->clip;
 }

@@ -538,6 +538,10 @@ append_node (GtkTreeModelRenderNode *nodemodel,
       append_node (nodemodel, gsk_clip_node_get_child (node), priv->nodes->len - 1);
       break;
 
+    case GSK_ROUNDED_CLIP_NODE:
+      append_node (nodemodel, gsk_rounded_clip_node_get_child (node), priv->nodes->len - 1);
+      break;
+
     case GSK_CONTAINER_NODE:
       {
         gint elt_index;
