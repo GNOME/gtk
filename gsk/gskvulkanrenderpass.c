@@ -66,9 +66,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass     *self,
     .node = node
   };
 
-  if (gsk_render_node_get_opacity (node) < 1.0)
-    goto fallback;
-
   switch (gsk_render_node_get_node_type (node))
     {
     case GSK_NOT_A_RENDER_NODE:
@@ -115,11 +112,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass     *self,
       break;
 
     }
-
-  return;
-
-fallback:
-  g_array_append_val (self->render_ops, op);
 }
 
 void

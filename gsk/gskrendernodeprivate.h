@@ -52,7 +52,7 @@ void gsk_render_node_make_immutable (GskRenderNode *node);
 
 void gsk_render_node_get_bounds (GskRenderNode   *node,
                                  graphene_rect_t *frame);
-double gsk_render_node_get_opacity (GskRenderNode *node);
+double gsk_opacity_node_get_opacity (GskRenderNode *node);
 
 cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 

@@ -692,3 +692,130 @@ gsk_transform_node_get_transform (GskRenderNode     *node,
   graphene_matrix_init_from_matrix (transform, &self->transform);
 }
 
+/*** GSK_OPACITY_NODE ***/
+
+typedef struct _GskOpacityNode GskOpacityNode;
+
+struct _GskOpacityNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  double opacity;
+};
+
+static void
+gsk_opacity_node_finalize (GskRenderNode *node)
+{
+  GskOpacityNode *self = (GskOpacityNode *) node;
+
+  gsk_render_node_unref (self->child);
+}
+
+static void
+gsk_opacity_node_make_immutable (GskRenderNode *node)
+{
+  GskOpacityNode *self = (GskOpacityNode *) node;
+
+  gsk_render_node_make_immutable (self->child);
+}
+
+static void
+gsk_opacity_node_draw (GskRenderNode *node,
+                       cairo_t       *cr)
+{
+  GskOpacityNode *self = (GskOpacityNode *) node;
+  graphene_rect_t bounds;
+
+  cairo_save (cr);
+
+  /* clip so the push_group() creates a smaller surface */
+  gsk_render_node_get_bounds (self->child, &bounds);
+  cairo_rectangle (cr, bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
+  cairo_clip (cr);
+
+  cairo_push_group (cr);
+
+  gsk_render_node_draw (self->child, cr);
+
+  cairo_pop_group_to_source (cr);
+  cairo_paint_with_alpha (cr, self->opacity);
+
+  cairo_restore (cr);
+}
+
+static void
+gsk_opacity_node_get_bounds (GskRenderNode   *node,
+                             graphene_rect_t *bounds)
+{
+  GskOpacityNode *self = (GskOpacityNode *) node;
+
+  gsk_render_node_get_bounds (self->child, bounds);
+}
+
+static const GskRenderNodeClass GSK_OPACITY_NODE_CLASS = {
+  GSK_OPACITY_NODE,
+  sizeof (GskOpacityNode),
+  "GskOpacityNode",
+  gsk_opacity_node_finalize,
+  gsk_opacity_node_make_immutable,
+  gsk_opacity_node_draw,
+  gsk_opacity_node_get_bounds
+};
+
+/**
+ * gsk_opacity_node_new:
+ * @child: The node to draw
+ * @opacity: The opacity to apply
+ *
+ * Creates a #GskRenderNode that will drawn the @child with reduced
+ * @opacity.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_opacity_node_new (GskRenderNode *child,
+                      double         opacity)
+{
+  GskOpacityNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = (GskOpacityNode *) gsk_render_node_new (&GSK_OPACITY_NODE_CLASS);
+
+  self->child = gsk_render_node_ref (child);
+  self->opacity = CLAMP (opacity, 0.0, 1.0);
+
+  return &self->render_node;
+}
+
+/**
+ * gsk_opacity_node_get_child:
+ * @node: a opacity @GskRenderNode
+ *
+ * Gets the child node that is getting opacityed by the given @node.
+ *
+ * Returns: (transfer none): The child that is getting opacityed
+ **/
+GskRenderNode *
+gsk_opacity_node_get_child (GskRenderNode *node)
+{
+  GskOpacityNode *self = (GskOpacityNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OPACITY_NODE), NULL);
+
+  return self->child;
+}
+
+double
+gsk_opacity_node_get_opacity (GskRenderNode *node)
+{
+  GskOpacityNode *self = (GskOpacityNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OPACITY_NODE), 1.0);
+
+  return self->opacity;
+}
+

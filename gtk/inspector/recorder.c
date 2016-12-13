@@ -152,13 +152,6 @@ populate_render_node_properties (GtkListStore  *store,
                                      -1);
   g_free (tmp);
 
-  tmp = g_strdup_printf ("%.2f", gsk_render_node_get_opacity (node));
-  gtk_list_store_insert_with_values (store, NULL, -1,
-                                     0, "Opacity",
-                                     1, tmp,
-                                     -1);
-  g_free (tmp);
-
   gtk_list_store_insert_with_values (store, NULL, -1,
                                      0, "Has Surface",
                                      1, gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE ? "TRUE" : "FALSE",

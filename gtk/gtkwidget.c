@@ -6298,14 +6298,7 @@ gtk_widget_draw_internal (GtkWidget *widget,
       GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
       GdkWindow *event_window = NULL;
       gboolean result;
-      gboolean push_group;
       RenderMode mode;
-
-      push_group =
-        widget->priv->alpha != 255 && !_gtk_widget_is_toplevel (widget);
-
-      if (push_group)
-        cairo_push_group (cr);
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
       if (_gtk_widget_get_alloc_needed (widget))
@@ -6343,6 +6336,12 @@ gtk_widget_draw_internal (GtkWidget *widget,
         }
       else
         {
+          gboolean push_group = 
+            widget->priv->alpha != 255 && !_gtk_widget_is_toplevel (widget);
+
+          if (push_group)
+            cairo_push_group (cr);
+
           if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
             {
               g_signal_emit (widget, widget_signals[DRAW],
@@ -6354,6 +6353,13 @@ gtk_widget_draw_internal (GtkWidget *widget,
               cairo_save (cr);
               GTK_WIDGET_GET_CLASS (widget)->draw (widget, cr);
               cairo_restore (cr);
+            }
+
+          if (push_group)
+            {
+              cairo_pop_group_to_source (cr);
+              cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+              cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
             }
         }
 
@@ -6389,13 +6395,6 @@ gtk_widget_draw_internal (GtkWidget *widget,
           widget->priv->highlight_resize = FALSE;
         }
 #endif
-
-      if (push_group)
-        {
-          cairo_pop_group_to_source (cr);
-          cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-          cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
-        }
 
       if (cairo_status (cr) &&
           event_window != NULL)
@@ -15538,6 +15537,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
   GtkAllocation clip;
   GtkAllocation alloc;
   RenderMode mode;
+  double opacity;
 
   if (_gtk_widget_get_alloc_needed (widget))
     return;
@@ -15546,6 +15546,13 @@ gtk_widget_snapshot (GtkWidget   *widget,
   _gtk_widget_get_allocation (widget, &alloc);
   graphene_rect_init (&bounds, clip.x - alloc.x, clip.y - alloc.y, clip.width, clip.height);
   if (gtk_snapshot_clips_rect (snapshot, &bounds))
+    return;
+
+  if (_gtk_widget_is_toplevel (widget))
+    opacity = 1.0;
+  else
+    opacity = widget->priv->alpha / 255.0;
+  if (opacity <= 0.0)
     return;
 
   /* Compatibility mode: if the widget does not have a render node, we draw
@@ -15565,6 +15572,11 @@ gtk_widget_snapshot (GtkWidget   *widget,
     }
   else
     {
+      if (opacity < 1.0)
+        gtk_snapshot_push (snapshot, TRUE, "OpacityGroup<%s>", G_OBJECT_TYPE_NAME (widget));
+
+      klass->snapshot (widget, snapshot);
+
       if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         {
           /* Compatibility mode: if there's a ::draw signal handler, we add a
@@ -15573,17 +15585,24 @@ gtk_widget_snapshot (GtkWidget   *widget,
           gboolean result;
           cairo_t *cr;
 
-          klass->snapshot (widget, snapshot);
-
           cr = gtk_snapshot_append_cairo_node (snapshot, 
                                                &bounds,
                                                "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
           g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
           cairo_destroy (cr);
         }
-      else
+
+      if (opacity < 1.0)
         {
-          klass->snapshot (widget, snapshot);
+          GskRenderNode *opacity_node, *node;
+
+          node = gtk_snapshot_pop (snapshot);
+          opacity_node = gsk_opacity_node_new (node, opacity);
+          gsk_render_node_set_name (opacity_node, "Opacity");
+          gsk_render_node_unref (node);
+
+          gtk_snapshot_append_node (snapshot, opacity_node);
+          gsk_render_node_unref (opacity_node);
         }
     }
 }

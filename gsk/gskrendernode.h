@@ -74,8 +74,10 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_transform_node_get_child            (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
-void                    gsk_render_node_set_opacity             (GskRenderNode *node,
-                                                                 double         opacity);
+GskRenderNode *         gsk_opacity_node_new                    (GskRenderNode            *child,
+                                                                 double                    opacity);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_opacity_node_get_child              (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_blend_mode          (GskRenderNode *node,

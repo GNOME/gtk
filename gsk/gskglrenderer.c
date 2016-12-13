@@ -592,11 +592,6 @@ project_item (const graphene_matrix_t *projection,
 static gboolean
 render_node_needs_render_target (GskRenderNode *node)
 {
-  double opacity = gsk_render_node_get_opacity (node);
-
-  if (opacity < 1.0)
-    return TRUE;
-
   return FALSE;
 }
 
@@ -647,7 +642,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   graphene_matrix_multiply (modelview, &self->mvp, &item.mvp);
   item.z = project_item (projection, modelview);
 
-  item.opacity = gsk_render_node_get_opacity (node);
+  item.opacity = 1.0;
 
   item.blend_mode = gsk_render_node_get_blend_mode (node);
 

@@ -97,8 +97,6 @@ gsk_render_node_new (const GskRenderNodeClass *node_class)
 
   self->ref_count = 1;
 
-  self->opacity = 1.0;
-
   self->min_filter = GSK_SCALING_FILTER_NEAREST;
   self->mag_filter = GSK_SCALING_FILTER_NEAREST;
 
@@ -183,44 +181,6 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
   g_return_if_fail (bounds != NULL);
 
   node->node_class->get_bounds (node, bounds);
-}
-
-/**
- * gsk_render_node_set_opacity:
- * @node: a #GskRenderNode
- * @opacity: the opacity of the node, between 0 (fully transparent) and
- *   1 (fully opaque)
- *
- * Sets the opacity of the @node.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_opacity (GskRenderNode *node,
-                             double         opacity)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (node->is_mutable);
-
-  node->opacity = CLAMP (opacity, 0.0, 1.0);
-}
-
-/**
- * gsk_render_node_get_opacity:
- * @node: a #GskRenderNode
- *
- * Retrieves the opacity set using gsk_render_node_set_opacity().
- *
- * Returns: the opacity of the #GskRenderNode
- *
- * Since: 3.90
- */
-double
-gsk_render_node_get_opacity (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), 0.0);
-
-  return node->opacity;
 }
 
 void
