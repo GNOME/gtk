@@ -29,6 +29,7 @@ struct _GtkSnapshotState {
 
   GskRenderNode         *node;
 
+  cairo_region_t        *clip_region;
   double                 translate_x;
   double                 translate_y;
 };
@@ -38,7 +39,6 @@ struct _GtkSnapshot {
 
   GskRenderNode         *root;
   GskRenderer           *renderer;
-  const cairo_region_t  *clip_region;
 };
 
 void            gtk_snapshot_init               (GtkSnapshot             *state,

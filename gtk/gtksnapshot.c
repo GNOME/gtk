@@ -50,6 +50,7 @@
 
 static GtkSnapshotState *
 gtk_snapshot_state_new (GtkSnapshotState *parent,
+                        cairo_region_t   *clip,
                         GskRenderNode    *node)
 {
   GtkSnapshotState *state;
@@ -58,6 +59,8 @@ gtk_snapshot_state_new (GtkSnapshotState *parent,
 
   state->node = node;
   state->parent = parent;
+  if (clip)
+    state->clip_region = cairo_region_reference (clip);
 
   return state;
 }
@@ -65,6 +68,9 @@ gtk_snapshot_state_new (GtkSnapshotState *parent,
 static void
 gtk_snapshot_state_free (GtkSnapshotState *state)
 {
+  if (state->clip_region)
+    cairo_region_destroy (state->clip_region);
+
   g_slice_free (GtkSnapshotState, state);
 }
 
@@ -81,7 +87,6 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
 
   snapshot->state = NULL;
   snapshot->renderer = renderer;
-  snapshot->clip_region = clip;
   snapshot->root = gsk_container_node_new ();
 
   if (name)
@@ -98,7 +103,7 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
       g_free (str);
     }
 
-  snapshot->state = gtk_snapshot_state_new (NULL, snapshot->root);
+  snapshot->state = gtk_snapshot_state_new (NULL, (cairo_region_t *) clip, snapshot->root);
 }
 
 GskRenderNode *
@@ -130,7 +135,7 @@ gtk_snapshot_push_node (GtkSnapshot   *snapshot,
 {
   g_return_if_fail (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE);
 
-  snapshot->state = gtk_snapshot_state_new (snapshot->state, node);
+  snapshot->state = gtk_snapshot_state_new (snapshot->state, snapshot->state->clip_region, node);
 }
 
 /**
@@ -374,10 +379,13 @@ gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
   graphene_rect_t offset_bounds;
   cairo_rectangle_int_t rect;
 
+  if (snapshot->state->clip_region == NULL)
+    return FALSE;
+
   graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &offset_bounds);
   rectangle_init_from_graphene (&rect, &offset_bounds);
 
-  return cairo_region_contains_rectangle (snapshot->clip_region, &rect) == CAIRO_REGION_OVERLAP_OUT;
+  return cairo_region_contains_rectangle (snapshot->state->clip_region, &rect) == CAIRO_REGION_OVERLAP_OUT;
 }
 
 /**
