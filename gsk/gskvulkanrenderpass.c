@@ -17,6 +17,7 @@ typedef enum {
   GSK_VULKAN_OP_FALLBACK,
   GSK_VULKAN_OP_SURFACE,
   GSK_VULKAN_OP_TEXTURE,
+  GSK_VULKAN_OP_COLOR,
   /* GskVulkanOpPushConstants */
   GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
   GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS
@@ -26,6 +27,7 @@ struct _GskVulkanOpRender
 {
   GskVulkanOpType      type;
   GskRenderNode       *node; /* node that's the source of this op */
+  GskVulkanPipeline   *pipeline; /* pipeline to use */
   GskVulkanImage      *source; /* source image to render */
   gsize                vertex_offset; /* offset into vertex buffer */
   gsize                vertex_count; /* number of vertices */
@@ -93,16 +95,30 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     default:
       op.type = GSK_VULKAN_OP_FALLBACK;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
       g_array_append_val (self->render_ops, op);
       break;
 
     case GSK_CAIRO_NODE:
       op.type = GSK_VULKAN_OP_SURFACE;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
       g_array_append_val (self->render_ops, op);
       break;
 
     case GSK_TEXTURE_NODE:
       op.type = GSK_VULKAN_OP_TEXTURE;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
+      g_array_append_val (self->render_ops, op);
+      break;
+
+    case GSK_COLOR_NODE:
+      op.type = GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS;
+      gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
+      gsk_vulkan_push_constants_set_color (&op.constants.constants, gsk_color_node_peek_color (node));
+      g_array_append_val (self->render_ops, op);
+
+      op.type = GSK_VULKAN_OP_COLOR;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_COLOR);
       g_array_append_val (self->render_ops, op);
       break;
 
@@ -125,6 +141,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
         gsk_vulkan_push_constants_multiply_mvp (&op.constants.constants, &transform);
         g_array_append_val (self->render_ops, op);
+
         gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, gsk_transform_node_get_child (node));
         gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
         g_array_append_val (self->render_ops, op);
@@ -228,6 +245,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
+        case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
         case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           break;
@@ -279,6 +297,7 @@ gsk_vulkan_render_pass_collect_vertices (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_FALLBACK:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
+        case GSK_VULKAN_OP_COLOR:
           op->render.vertex_offset = offset + n;
           op->render.vertex_count = gsk_vulkan_render_op_collect_vertices (&op->render, vertices + n + offset);
           break;
@@ -318,6 +337,7 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
+        case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
         case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           break;
@@ -331,6 +351,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                              GskVulkanPipelineLayout *layout,
                              VkCommandBuffer          command_buffer)
 {
+  GskVulkanPipeline *current_pipeline = NULL;
   GskVulkanOp *op;
   guint i;
 
@@ -353,6 +374,15 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                    },
                                    0,
                                    NULL);
+          /* fall through */                        
+        case GSK_VULKAN_OP_COLOR:
+          if (current_pipeline != op->render.pipeline)
+            {
+              current_pipeline = op->render.pipeline;
+              vkCmdBindPipeline (command_buffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                 gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+            }
 
           vkCmdDraw (command_buffer,
                      op->render.vertex_count, 1,

@@ -34,7 +34,7 @@ struct _GskVulkanRender
   uint32_t descriptor_pool_maxsets;
   VkDescriptorSet *descriptor_sets;  
   gsize n_descriptor_sets;
-  GskVulkanPipeline *pipeline;
+  GskVulkanPipeline *pipelines[GSK_VULKAN_N_PIPELINES];
 
   VkCommandBuffer command_buffer;
 
@@ -164,8 +164,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
   self->layout = gsk_vulkan_pipeline_layout_new (self->vulkan);
 
-  self->pipeline = gsk_vulkan_pipeline_new (self->layout, "blit", self->render_pass);
-
   return self;
 }
 
@@ -287,6 +285,29 @@ gsk_vulkan_render_collect_vertices (GskVulkanRender *self)
   gsk_vulkan_buffer_unmap (buffer);
 
   return buffer;
+}
+
+GskVulkanPipeline *
+gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
+                                GskVulkanPipelineType  type)
+{
+  static const struct {
+    const char *name;
+  } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
+    { "blit" },
+    { "color" }
+  };
+
+  g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
+
+  if (self->pipelines[type] == NULL)
+    {
+      self->pipelines[type] = gsk_vulkan_pipeline_new (self->layout,
+                                                       pipeline_info[type].name,
+                                                       self->render_pass);
+    }
+
+  return self->pipelines[type];
 }
 
 VkDescriptorSet
@@ -455,10 +476,6 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                         },
                         VK_SUBPASS_CONTENTS_INLINE);
 
-  vkCmdBindPipeline (self->command_buffer,
-                     VK_PIPELINE_BIND_POINT_GRAPHICS,
-                     gsk_vulkan_pipeline_get_pipeline (self->pipeline));
-
   vkCmdBindVertexBuffers (self->command_buffer,
                           0,
                           1,
@@ -547,6 +564,7 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   GHashTableIter iter;
   gpointer key, value;
   VkDevice device;
+  guint i;
   
   gsk_vulkan_render_cleanup (self);
 
@@ -566,7 +584,8 @@ gsk_vulkan_render_free (GskVulkanRender *self)
     }
   g_hash_table_unref (self->framebuffers);
 
-  g_clear_object (&self->pipeline);
+  for (i = 0; i < GSK_VULKAN_N_PIPELINES; i++)
+    g_clear_object (&self->pipelines[i]);
 
   g_clear_pointer (&self->layout, gsk_vulkan_pipeline_layout_unref);
 

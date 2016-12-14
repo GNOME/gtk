@@ -9,6 +9,13 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GSK_VULKAN_PIPELINE_BLIT,
+  GSK_VULKAN_PIPELINE_COLOR,
+  /* add more */
+  GSK_VULKAN_N_PIPELINES
+} GskVulkanPipelineType;
+
 typedef struct _GskVulkanRender GskVulkanRender;
 typedef struct _GskVulkanVertex GskVulkanVertex;
 
@@ -38,6 +45,8 @@ void                    gsk_vulkan_render_add_node                      (GskVulk
 
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
+GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
+                                                                         GskVulkanPipelineType   pipeline_type);
 VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self,
                                                                          gsize                   id);
 gsize                   gsk_vulkan_render_reserve_descriptor_set        (GskVulkanRender        *self,
