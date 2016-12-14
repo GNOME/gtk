@@ -7,6 +7,8 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GskVulkanPipelineLayout GskVulkanPipelineLayout;
+
 #define GSK_TYPE_VULKAN_PIPELINE (gsk_vulkan_pipeline_get_type ())
 
 G_DECLARE_FINAL_TYPE (GskVulkanPipeline, gsk_vulkan_pipeline, GSK, VULKAN_PIPELINE, GObject)
@@ -24,12 +26,21 @@ gsk_vulkan_handle_result (VkResult    res,
 
 #define GSK_VK_CHECK(func, ...) gsk_vulkan_handle_result (func (__VA_ARGS__), G_STRINGIFY (func))
 
-GskVulkanPipeline *     gsk_vulkan_pipeline_new                         (GdkVulkanContext       *context,
-                                                                         VkRenderPass            render_pass);
+GskVulkanPipelineLayout *       gsk_vulkan_pipeline_layout_new          (GdkVulkanContext               *context);
+GskVulkanPipelineLayout *       gsk_vulkan_pipeline_layout_ref          (GskVulkanPipelineLayout        *self);
+void                            gsk_vulkan_pipeline_layout_unref        (GskVulkanPipelineLayout        *self);
 
-VkPipeline              gsk_vulkan_pipeline_get_pipeline                (GskVulkanPipeline      *self);
-VkPipelineLayout        gsk_vulkan_pipeline_get_pipeline_layout         (GskVulkanPipeline      *self);
-VkDescriptorSetLayout   gsk_vulkan_pipeline_get_descriptor_set_layout   (GskVulkanPipeline      *self);
+VkPipelineLayout                gsk_vulkan_pipeline_layout_get_pipeline_layout
+                                                                        (GskVulkanPipelineLayout        *self);
+VkDescriptorSetLayout           gsk_vulkan_pipeline_layout_get_descriptor_set_layout
+                                                                        (GskVulkanPipelineLayout        *self);
+
+
+GskVulkanPipeline *     gsk_vulkan_pipeline_new                         (GskVulkanPipelineLayout        *layout,
+                                                                         const char                     *shader_name,
+                                                                         VkRenderPass                    render_pass);
+
+VkPipeline              gsk_vulkan_pipeline_get_pipeline                (GskVulkanPipeline              *self);
 
 G_END_DECLS
 

@@ -32,7 +32,7 @@ void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulk
                                                                          GskVulkanRender        *render);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         GskVulkanPipeline      *pipeline,
+                                                                         GskVulkanPipelineLayout *layout,
                                                                          VkCommandBuffer         command_buffer);
 
 G_END_DECLS

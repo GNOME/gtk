@@ -27,6 +27,7 @@ struct _GskVulkanRender
   VkCommandPool command_pool;
   VkFence fence;
   VkRenderPass render_pass;
+  GskVulkanPipelineLayout *layout;
 
   GHashTable *descriptor_set_indexes;
   VkDescriptorPool descriptor_pool;
@@ -161,7 +162,9 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                       NULL,
                                       &self->render_pass);
 
-  self->pipeline = gsk_vulkan_pipeline_new (self->vulkan, self->render_pass);
+  self->layout = gsk_vulkan_pipeline_layout_new (self->vulkan);
+
+  self->pipeline = gsk_vulkan_pipeline_new (self->layout, "blit", self->render_pass);
 
   return self;
 }
@@ -369,7 +372,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
       VkDescriptorSetLayout layouts[needed_sets];
       for (i = 0; i < needed_sets; i++)
         {
-          layouts[i] = gsk_vulkan_pipeline_get_descriptor_set_layout (self->pipeline);
+          layouts[i] = gsk_vulkan_pipeline_layout_get_descriptor_set_layout (self->layout);
         }
       GSK_VK_CHECK (vkAllocateDescriptorSets, device,
                                               &(VkDescriptorSetAllocateInfo) {
@@ -466,7 +469,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_draw (l->data, self, self->pipeline, self->command_buffer);
+      gsk_vulkan_render_pass_draw (l->data, self, self->layout, self->command_buffer);
     }
 
   vkCmdEndRenderPass (self->command_buffer);
@@ -564,6 +567,8 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   g_hash_table_unref (self->framebuffers);
 
   g_clear_object (&self->pipeline);
+
+  g_clear_pointer (&self->layout, gsk_vulkan_pipeline_layout_unref);
 
   vkDestroyRenderPass (device,
                        self->render_pass,

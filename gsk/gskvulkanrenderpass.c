@@ -328,7 +328,7 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 void
 gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                              GskVulkanRender         *render,
-                             GskVulkanPipeline       *pipeline,
+                             GskVulkanPipelineLayout *layout,
                              VkCommandBuffer          command_buffer)
 {
   GskVulkanOp *op;
@@ -345,7 +345,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
         case GSK_VULKAN_OP_TEXTURE:
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                   gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
+                                   gsk_vulkan_pipeline_layout_get_pipeline_layout (layout),
                                    0,
                                    1,
                                    (VkDescriptorSet[1]) {
@@ -362,13 +362,13 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
           gsk_vulkan_push_constants_push_vertex (&op->constants.constants,
                                                  command_buffer, 
-                                                 gsk_vulkan_pipeline_get_pipeline_layout (pipeline));
+                                                 gsk_vulkan_pipeline_layout_get_pipeline_layout (layout));
           break;
 
         case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           gsk_vulkan_push_constants_push_fragment (&op->constants.constants,
                                                    command_buffer, 
-                                                   gsk_vulkan_pipeline_get_pipeline_layout (pipeline));
+                                                   gsk_vulkan_pipeline_layout_get_pipeline_layout (layout));
           break;
 
         default:
