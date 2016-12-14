@@ -45,6 +45,7 @@
 #include "gtkwidgetpath.h"
 #include "gtkboxgadgetprivate.h"
 #include "gtkbuiltiniconprivate.h"
+#include "gtkcontainerprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtksizerequest.h"
@@ -372,8 +373,8 @@ static void gtk_notebook_measure (GtkWidget      *widget,
                                   int            *natural_baseline);
 static void gtk_notebook_size_allocate       (GtkWidget        *widget,
                                               GtkAllocation    *allocation);
-static gboolean gtk_notebook_draw            (GtkWidget        *widget,
-                                              cairo_t          *cr);
+static void gtk_notebook_snapshot            (GtkWidget        *widget,
+                                              GtkSnapshot      *snapshot);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
 static gboolean gtk_notebook_enter_notify    (GtkWidget        *widget,
                                               GdkEventCrossing *event);
@@ -478,8 +479,8 @@ static void gtk_notebook_allocate_tabs       (GtkCssGadget     *gadget,
                                               int               baseline,
                                               GtkAllocation    *out_clip,
                                               gpointer          data);
-static gboolean gtk_notebook_draw_tabs       (GtkCssGadget     *gadget,
-                                              cairo_t          *cr,
+static gboolean gtk_notebook_snapshot_tabs   (GtkCssGadget     *gadget,
+                                              GtkSnapshot      *snapshot,
                                               int               x,
                                               int               y,
                                               int               width,
@@ -498,8 +499,8 @@ static void gtk_notebook_allocate_stack      (GtkCssGadget     *gadget,
                                               int               baseline,
                                               GtkAllocation    *out_clip,
                                               gpointer          data);
-static gboolean gtk_notebook_draw_stack      (GtkCssGadget     *gadget,
-                                              cairo_t          *cr,
+static gboolean gtk_notebook_snapshot_stack  (GtkCssGadget     *gadget,
+                                              GtkSnapshot      *snapshot,
                                               int               x,
                                               int               y,
                                               int               width,
@@ -714,7 +715,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->unrealize = gtk_notebook_unrealize;
   widget_class->measure = gtk_notebook_measure;
   widget_class->size_allocate = gtk_notebook_size_allocate;
-  widget_class->draw = gtk_notebook_draw;
+  widget_class->snapshot = gtk_notebook_snapshot;
   widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->enter_notify_event = gtk_notebook_enter_notify;
   widget_class->leave_notify_event = gtk_notebook_leave_notify;
@@ -1215,8 +1216,8 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                   NULL,
                                                   gtk_notebook_measure_stack,
                                                   gtk_notebook_allocate_stack,
-                                                  gtk_notebook_draw_stack,
                                                   NULL,
+                                                  gtk_notebook_snapshot_stack,
                                                   NULL,
                                                   NULL);
   gtk_css_gadget_set_state (priv->stack_gadget, gtk_css_node_get_state (widget_node));
@@ -1237,8 +1238,8 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                  NULL,
                                                  gtk_notebook_measure_tabs,
                                                  gtk_notebook_allocate_tabs,
-                                                 gtk_notebook_draw_tabs,
                                                  NULL,
+                                                 gtk_notebook_snapshot_tabs,
                                                  NULL,
                                                  NULL);
   gtk_css_gadget_set_state (priv->tabs_gadget, gtk_css_node_get_state (widget_node));
@@ -1673,7 +1674,7 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_unmap
  * gtk_notebook_realize
  * gtk_notebook_size_allocate
- * gtk_notebook_draw
+ * gtk_notebook_snapshot
  * gtk_notebook_scroll
  * gtk_notebook_popup_menu
  * gtk_notebook_enter_notify
@@ -2358,39 +2359,37 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 }
 
 static gboolean
-gtk_notebook_draw_stack (GtkCssGadget *gadget,
-                         cairo_t      *cr,
-                         int           x,
-                         int           y,
-                         int           width,
-                         int           height,
-                         gpointer      unused)
+gtk_notebook_snapshot_stack (GtkCssGadget *gadget,
+                             GtkSnapshot  *snapshot,
+                             int           x,
+                             int           y,
+                             int           width,
+                             int           height,
+                             gpointer      unused)
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
   if (gtk_notebook_has_current_page (notebook))
-    gtk_container_propagate_draw (GTK_CONTAINER (notebook),
+    gtk_container_snapshot_child (GTK_CONTAINER (notebook),
                                   priv->cur_page->child,
-                                  cr);
+                                  snapshot);
 
   return FALSE;
 }
 
-static gboolean
-gtk_notebook_draw (GtkWidget *widget,
-                   cairo_t   *cr)
+static void
+gtk_notebook_snapshot (GtkWidget   *widget,
+                       GtkSnapshot *snapshot)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  gtk_css_gadget_draw (priv->gadget, cr);
+  gtk_css_gadget_snapshot (priv->gadget, snapshot);
 
   if (priv->operation == DRAG_OPERATION_REORDER)
-    gtk_css_gadget_draw (priv->cur_page->gadget, cr);
-
-  return FALSE;
+    gtk_css_gadget_snapshot (priv->cur_page->gadget, snapshot);
 }
 
 static gboolean
@@ -4579,22 +4578,22 @@ allocate_tab (GtkCssGadget        *gadget,
 }
 
 static gboolean
-draw_tab (GtkCssGadget *gadget,
-          cairo_t      *cr,
-          int           x,
-          int           y,
-          int           width,
-          int           height,
-          gpointer      data)
+snapshot_tab (GtkCssGadget *gadget,
+              GtkSnapshot  *snapshot,
+              int           x,
+              int           y,
+              int           width,
+              int           height,
+              gpointer      data)
 {
   GtkNotebookPage *page = data;
   GtkWidget *widget;
 
   widget = gtk_css_gadget_get_owner (gadget);
 
-  gtk_container_propagate_draw (GTK_CONTAINER (widget),
+  gtk_container_snapshot_child (GTK_CONTAINER (widget),
                                 page->tab_label,
-                                cr);
+                                snapshot);
 
   return gtk_widget_has_visible_focus (widget) &&
          GTK_NOTEBOOK (widget)->priv->cur_page == page;
@@ -4640,8 +4639,8 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
                                             sibling,
                                             measure_tab,
                                             allocate_tab,
-                                            draw_tab,
                                             NULL,
+                                            snapshot_tab,
                                             page,
                                             NULL);
   if (priv->tabs_reversed)
@@ -5063,13 +5062,13 @@ gtk_notebook_search_page (GtkNotebook *notebook,
 }
 
 static gboolean
-gtk_notebook_draw_tabs (GtkCssGadget *gadget,
-                        cairo_t      *cr,
-                        int           x,
-                        int           y,
-                        int           width,
-                        int           height,
-                        gpointer      unused)
+gtk_notebook_snapshot_tabs (GtkCssGadget *gadget,
+                            GtkSnapshot  *snapshot,
+                            int           x,
+                            int           y,
+                            int           width,
+                            int           height,
+                            gpointer      unused)
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
@@ -5139,7 +5138,7 @@ gtk_notebook_draw_tabs (GtkCssGadget *gadget,
       if (!gtk_notebook_page_tab_label_is_visible (page))
         continue;
 
-      gtk_css_gadget_draw (page->gadget, cr);
+      gtk_css_gadget_snapshot (page->gadget, snapshot);
     }
 
   if (children != NULL)
@@ -5162,7 +5161,7 @@ gtk_notebook_draw_tabs (GtkCssGadget *gadget,
       for (children = other_order; children; children = children->next)
         {
           page = children->data;
-          gtk_css_gadget_draw (page->gadget, cr);
+          gtk_css_gadget_snapshot (page->gadget, snapshot);
         }
 
       g_list_free (other_order);
@@ -5175,12 +5174,12 @@ gtk_notebook_draw_tabs (GtkCssGadget *gadget,
           if (priv->arrow_gadget[i] == NULL)
             continue;
           
-          gtk_css_gadget_draw (priv->arrow_gadget[i], cr);
+          gtk_css_gadget_snapshot (priv->arrow_gadget[i], snapshot);
         }
     }
 
   if (priv->operation != DRAG_OPERATION_DETACH)
-    gtk_css_gadget_draw (priv->cur_page->gadget, cr);
+    gtk_css_gadget_snapshot (priv->cur_page->gadget, snapshot);
 
   return FALSE;
 }
