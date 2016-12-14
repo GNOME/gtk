@@ -446,13 +446,14 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   legacy_bit = !display_x11->has_create_context ||
                (_gdk_gl_flags & GDK_GL_LEGACY) != 0;
 
-  es_bit = ((_gdk_gl_flags & GDK_GL_GLES) != 0 ||
-            (share != NULL && gdk_gl_context_get_use_es (share)));
+  /* XXX: Force GLES */
+  es_bit =  TRUE;
 
   if (es_bit)
     {
+      /* XXX: Force GLES 2.0 */
       context_attrs[0] = EGL_CONTEXT_CLIENT_VERSION;
-      context_attrs[1] = major == 3 ? 3 : 2;
+      context_attrs[1] = 2;
       context_attrs[2] = EGL_NONE;
 
       eglBindAPI (EGL_OPENGL_ES_API);
@@ -490,7 +491,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
 
   GDK_NOTE (OPENGL,
             g_message ("Creating EGL context (version:%d.%d, debug:%s, forward:%s, legacy:%s, es:%s)",
-                       major, minor,
+                       2, 0,
                        debug_bit ? "yes" : "no",
                        compat_bit ? "yes" : "no",
                        legacy_bit ? "yes" : "no",
@@ -606,7 +607,7 @@ gdk_x11_display_init_gl (GdkDisplay *display)
   if (!eglInitialize (edpy, &major, &minor))
     return FALSE;
 
-  if (!eglBindAPI (EGL_OPENGL_API))
+  if (!eglBindAPI (EGL_OPENGL_ES_API))
     return FALSE;
 
   display_x11->supports_gl = TRUE;
