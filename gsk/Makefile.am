@@ -28,6 +28,7 @@ gsk_private_vulan_source_h = \
 	gskvulkanimageprivate.h \
 	gskvulkanmemoryprivate.h \
 	gskvulkanpipelineprivate.h \
+	gskvulkanpushconstantsprivate.h \
 	gskvulkanrenderprivate.h \
 	gskvulkanrendererprivate.h \
 	gskvulkanrenderpassprivate.h \
@@ -37,6 +38,7 @@ gsk_private_vulkan_source_c = \
 	gskvulkanimage.c \
 	gskvulkanmemory.c \
 	gskvulkanpipeline.c \
+	gskvulkanpushconstants.c \
 	gskvulkanrender.c \
 	gskvulkanrenderer.c \
 	gskvulkanrenderpass.c \

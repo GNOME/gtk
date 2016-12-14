@@ -5,6 +5,7 @@
 #include "gskvulkanimageprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderer.h"
+#include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanrendererprivate.h"
 
 typedef struct _GskVulkanRenderOp GskVulkanRenderOp;
@@ -13,7 +14,8 @@ typedef enum {
   GSK_VULKAN_OP_FALLBACK,
   GSK_VULKAN_OP_SURFACE,
   GSK_VULKAN_OP_TEXTURE,
-  GSK_VULKAN_OP_BIND_MVP
+  GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
+  GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS
 } GskVulkanOpType;
 
 struct _GskVulkanRenderOp
@@ -21,7 +23,7 @@ struct _GskVulkanRenderOp
   GskVulkanOpType      type;
   GskRenderNode       *node; /* node that's the source of this op */
   GskVulkanImage      *source; /* source image to render */
-  graphene_matrix_t    mvp; /* new mvp to set */
+  GskVulkanPushConstants constants; /* new constants to push */
   gsize                vertex_offset; /* offset into vertex buffer */
   gsize                vertex_count; /* number of vertices */
   gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
@@ -56,10 +58,10 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 }
 
 void
-gsk_vulkan_render_pass_add_node (GskVulkanRenderPass     *self,
-                                 GskVulkanRender         *render,
-                                 const graphene_matrix_t *mvp,
-                                 GskRenderNode           *node)
+gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
+                                 GskVulkanRender               *render,
+                                 const GskVulkanPushConstants  *constants,
+                                 GskRenderNode                 *node)
 {
   GskVulkanRenderOp op = {
     .type = GSK_VULKAN_OP_FALLBACK,
@@ -93,7 +95,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass     *self,
 
         for (i = 0; i < gsk_container_node_get_n_children (node); i++)
           {
-            gsk_vulkan_render_pass_add_node (self, render, mvp, gsk_container_node_get_child (node, i));
+            gsk_vulkan_render_pass_add_node (self, render, constants, gsk_container_node_get_child (node, i));
           }
       }
       break;
@@ -101,12 +103,13 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass     *self,
       {
         graphene_matrix_t transform;
 
-        op.type = GSK_VULKAN_OP_BIND_MVP;
         gsk_transform_node_get_transform (node, &transform);
-        graphene_matrix_multiply (&transform, mvp, &op.mvp);
+        op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
+        gsk_vulkan_push_constants_init_copy (&op.constants, constants);
+        gsk_vulkan_push_constants_multiply_mvp (&op.constants, &transform);
         g_array_append_val (self->render_ops, op);
-        gsk_vulkan_render_pass_add_node (self, render, &op.mvp, gsk_transform_node_get_child (node));
-        graphene_matrix_init_from_matrix (&op.mvp, mvp);
+        gsk_vulkan_render_pass_add_node (self, render, &op.constants, gsk_transform_node_get_child (node));
+        gsk_vulkan_push_constants_init_copy (&op.constants, constants);
         g_array_append_val (self->render_ops, op);
       }
       break;
@@ -120,14 +123,16 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                             const graphene_matrix_t *mvp,
                             GskRenderNode           *node)
 {
-  GskVulkanRenderOp op = {
-    .type = GSK_VULKAN_OP_BIND_MVP,
-    .mvp = *mvp
-  };
+  GskVulkanRenderOp op = { 0, };
 
+  op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
+  gsk_vulkan_push_constants_init (&op.constants, mvp);
   g_array_append_val (self->render_ops, op);
 
-  gsk_vulkan_render_pass_add_node (self, render, mvp, node);
+  op.type = GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS;
+  g_array_append_val (self->render_ops, op);
+
+  gsk_vulkan_render_pass_add_node (self, render, &op.constants, node);
 }
 
 static void
@@ -206,7 +211,8 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
-        case GSK_VULKAN_OP_BIND_MVP:
+        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           break;
         }
     }
@@ -262,7 +268,8 @@ gsk_vulkan_render_pass_collect_vertices (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
-        case GSK_VULKAN_OP_BIND_MVP:
+        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           op->vertex_offset = 0;
           op->vertex_count = 0;
           break;
@@ -296,7 +303,8 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
-        case GSK_VULKAN_OP_BIND_MVP:
+        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           break;
         }
     }
@@ -309,7 +317,6 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                              VkCommandBuffer          command_buffer)
 {
   GskVulkanRenderOp *op;
-  float float_matrix[16];
   guint i;
 
   for (i = 0; i < self->render_ops->len; i++)
@@ -337,15 +344,16 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                      op->vertex_offset, 0);
           break;
 
-        case GSK_VULKAN_OP_BIND_MVP:
-          graphene_matrix_to_float (&op->mvp, float_matrix);
-          vkCmdPushConstants (command_buffer,
-                              gsk_vulkan_pipeline_get_pipeline_layout (pipeline),
-                              VK_SHADER_STAGE_VERTEX_BIT,
-                              0,
-                              sizeof (float_matrix),
-                              &float_matrix);
+        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+          gsk_vulkan_push_constants_push_vertex (&op->constants,
+                                                 command_buffer, 
+                                                 gsk_vulkan_pipeline_get_pipeline_layout (pipeline));
+          break;
 
+        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
+          gsk_vulkan_push_constants_push_fragment (&op->constants,
+                                                   command_buffer, 
+                                                   gsk_vulkan_pipeline_get_pipeline_layout (pipeline));
           break;
 
         default:

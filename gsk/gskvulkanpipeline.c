@@ -2,6 +2,7 @@
 
 #include "gskvulkanpipelineprivate.h"
 
+#include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanshaderprivate.h"
 
 #include <graphene.h>
@@ -96,14 +97,8 @@ gsk_vulkan_pipeline_new (GdkVulkanContext *context,
                                             .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
                                             .setLayoutCount = 1,
                                             .pSetLayouts = &self->descriptor_set_layout,
-                                            .pushConstantRangeCount = 1,
-                                            .pPushConstantRanges = (VkPushConstantRange[1]) {
-                                                {
-                                                    .stageFlags = VK_SHADER_STAGE_VERTEX_BIT,
-                                                    .offset = 0,
-                                                    .size = sizeof (graphene_matrix_t)
-                                                }
-                                            }
+                                            .pushConstantRangeCount = gst_vulkan_push_constants_get_range_count (),
+                                            .pPushConstantRanges = gst_vulkan_push_constants_get_ranges ()
                                         },
                                         NULL,
                                         &self->pipeline_layout);
