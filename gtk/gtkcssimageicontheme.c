@@ -26,6 +26,7 @@
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkiconthemeprivate.h"
 
@@ -39,15 +40,17 @@ gtk_css_image_icon_theme_get_aspect_ratio (GtkCssImage *image)
 }
 
 static void
-gtk_css_image_icon_theme_draw (GtkCssImage        *image,
-                               cairo_t            *cr,
-                               double              width,
-                               double              height)
+gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
+                                   GtkSnapshot *snapshot,
+                                   double       width,
+                                   double       height)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GError *error = NULL;
   GtkIconInfo *icon_info;
+  GskTexture *texture;
   GdkPixbuf *pixbuf;
+  double texture_width, texture_height;
   gint size;
 
   size = floor (MIN (width, height));
@@ -79,14 +82,21 @@ gtk_css_image_icon_theme_draw (GtkCssImage        *image,
       return;
     }
 
-  cairo_translate (cr, width / 2.0, height / 2.0);
-  cairo_scale (cr, 1.0 / icon_theme->scale, 1.0 / icon_theme->scale);
-  gdk_cairo_set_source_pixbuf (cr,
-                               pixbuf,
-                               - gdk_pixbuf_get_width (pixbuf) / 2.0,
-                               - gdk_pixbuf_get_height (pixbuf) / 2.0);
-  cairo_paint (cr);
+  texture = gsk_texture_new_for_pixbuf (pixbuf);
+  texture_width = (double) gdk_pixbuf_get_width (pixbuf) / icon_theme->scale;
+  texture_height = (double) gdk_pixbuf_get_height (pixbuf) / icon_theme->scale;
 
+  gtk_snapshot_append_texture_node (snapshot,
+                                    texture,
+                                    &GRAPHENE_RECT_INIT(
+                                        (width - texture_width) / 2.0,
+                                        (height - texture_height) / 2.0,
+                                        texture_width,
+                                        texture_height
+                                    ),
+                                    "CssImageIconTheme<%s@%d>", icon_theme->name, icon_theme->scale);
+
+  gsk_texture_unref (texture);
   g_object_unref (pixbuf);
   g_object_unref (icon_info);
 }
@@ -175,7 +185,7 @@ _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   image_class->get_aspect_ratio = gtk_css_image_icon_theme_get_aspect_ratio;
-  image_class->draw = gtk_css_image_icon_theme_draw;
+  image_class->snapshot = gtk_css_image_icon_theme_snapshot;
   image_class->parse = gtk_css_image_icon_theme_parse;
   image_class->print = gtk_css_image_icon_theme_print;
   image_class->compute = gtk_css_image_icon_theme_compute;

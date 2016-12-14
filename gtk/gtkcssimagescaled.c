@@ -50,14 +50,14 @@ gtk_css_image_scaled_get_aspect_ratio (GtkCssImage *image)
 }
 
 static void
-gtk_css_image_scaled_draw (GtkCssImage *image,
-			   cairo_t     *cr,
-			   double       width,
-			   double       height)
+gtk_css_image_scaled_snapshot (GtkCssImage *image,
+                               GtkSnapshot *snapshot,
+                               double       width,
+                               double       height)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
 
-  _gtk_css_image_draw (scaled->images[scaled->scale - 1], cr, width, height);
+  gtk_css_image_snapshot (scaled->images[scaled->scale - 1], snapshot, width, height);
 }
 
 static void
@@ -189,7 +189,7 @@ _gtk_css_image_scaled_class_init (GtkCssImageScaledClass *klass)
   image_class->get_width = gtk_css_image_scaled_get_width;
   image_class->get_height = gtk_css_image_scaled_get_height;
   image_class->get_aspect_ratio = gtk_css_image_scaled_get_aspect_ratio;
-  image_class->draw = gtk_css_image_scaled_draw;
+  image_class->snapshot = gtk_css_image_scaled_snapshot;
   image_class->parse = gtk_css_image_scaled_parse;
   image_class->compute = gtk_css_image_scaled_compute;
   image_class->print = gtk_css_image_scaled_print;
