@@ -409,6 +409,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       alpha_size == 0 &&
       direct_window != NULL &&
       direct_window->current_paint.use_gl &&
+      gdk_gl_context_has_framebuffer_blit (paint_context) &&
       trivial_transform &&
       clip_region != NULL)
     {
