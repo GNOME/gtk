@@ -192,7 +192,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
   if (error)
     {
-      g_warning ("Failed to get the GNOME session proxy: %s", error->message);
+      g_debug ("Failed to get the GNOME session proxy: %s", error->message);
       g_clear_error (&error);
     }
 
@@ -210,7 +210,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
 
       if (error)
         {
-          g_warning ("Failed to get the Xfce session proxy: %s", error->message);
+          g_debug ("Failed to get the Xfce session proxy: %s", error->message);
           g_clear_error (&error);
           goto out;
         }
@@ -329,7 +329,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
                                                                           &error);
       if (error)
         {
-          g_warning ("Failed to get an inhibit portal proxy: %s", error->message);
+          g_debug ("Failed to get an inhibit portal proxy: %s", error->message);
           g_clear_error (&error);
         }
     }
