@@ -80,8 +80,8 @@ static void     gtk_separator_tool_item_measure           (GtkWidget *widget,
                                                            gint           *natural_baseline);
 static void     gtk_separator_tool_item_size_allocate     (GtkWidget                 *widget,
                                                            GtkAllocation             *allocation);
-static gboolean gtk_separator_tool_item_draw              (GtkWidget                 *widget,
-                                                           cairo_t                   *cr);
+static void     gtk_separator_tool_item_snapshot          (GtkWidget                 *widget,
+                                                           GtkSnapshot               *snapshot);
 static void     gtk_separator_tool_item_add               (GtkContainer              *container,
                                                            GtkWidget                 *child);
 static void     gtk_separator_tool_item_realize           (GtkWidget                 *widget);
@@ -120,7 +120,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 
   widget_class->measure = gtk_separator_tool_item_measure;
   widget_class->size_allocate = gtk_separator_tool_item_size_allocate;
-  widget_class->draw = gtk_separator_tool_item_draw;
+  widget_class->snapshot = gtk_separator_tool_item_snapshot;
   widget_class->realize = gtk_separator_tool_item_realize;
   widget_class->unrealize = gtk_separator_tool_item_unrealize;
   widget_class->map = gtk_separator_tool_item_map;
@@ -325,14 +325,12 @@ gtk_separator_tool_item_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_separator_tool_item_parent_class)->unmap (widget);
 }
 
-static gboolean
-gtk_separator_tool_item_draw (GtkWidget *widget,
-                              cairo_t   *cr)
+static void
+gtk_separator_tool_item_snapshot (GtkWidget   *widget,
+                                  GtkSnapshot *snapshot)
 {
   if (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->draw)
-    gtk_css_gadget_draw (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->gadget, cr);
-
-  return FALSE;
+    gtk_css_gadget_snapshot (GTK_SEPARATOR_TOOL_ITEM (widget)->priv->gadget, snapshot);
 }
 
 /**
