@@ -100,9 +100,12 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       break;
 
     case GSK_CAIRO_NODE:
-      op.type = GSK_VULKAN_OP_SURFACE;
-      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
-      g_array_append_val (self->render_ops, op);
+      if (gsk_cairo_node_get_surface (node) != NULL)
+        {
+          op.type = GSK_VULKAN_OP_SURFACE;
+          op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
+          g_array_append_val (self->render_ops, op);
+        }
       break;
 
     case GSK_TEXTURE_NODE:

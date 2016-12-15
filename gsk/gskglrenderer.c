@@ -713,6 +713,9 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
         cairo_surface_t *surface = gsk_cairo_node_get_surface (node);
         int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
 
+        if (surface == NULL)
+          return;
+
         get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
 
         /* Upload the Cairo surface to a GL texture */
