@@ -7743,6 +7743,10 @@ gdk_window_create_similar_surface (GdkWindow *     window,
  *                                              scale);
  * ]|
  *
+ * Note that unlike cairo_surface_create_similar_image(), the new
+ * surface's device scale is set to @scale, or to the scale factor of
+ * @window if @scale is 0.
+ *
  * Returns: a pointer to the newly allocated surface. The caller
  * owns the surface and should call cairo_surface_destroy() when done
  * with it.
