@@ -209,8 +209,8 @@ static void     gtk_scale_value_style_changed     (GtkCssNode        *node,
                                                    GtkScale          *scale);
 static void     gtk_scale_screen_changed          (GtkWidget      *widget,
                                                    GdkScreen      *old_screen);
-static gboolean gtk_scale_draw                    (GtkWidget      *widget,
-                                                   cairo_t        *cr);
+static void     gtk_scale_snapshot                (GtkWidget      *widget,
+                                                   GtkSnapshot    *snapshot);
 static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
                                                    gint           *x,
                                                    gint           *y);
@@ -717,7 +717,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   gobject_class->finalize = gtk_scale_finalize;
 
   widget_class->screen_changed = gtk_scale_screen_changed;
-  widget_class->draw = gtk_scale_draw;
+  widget_class->snapshot = gtk_scale_snapshot;
   widget_class->size_allocate = gtk_scale_size_allocate;
   widget_class->measure = gtk_scale_measure;
 
@@ -1134,7 +1134,7 @@ gtk_scale_get_digits (GtkScale *scale)
 
 static gboolean
 gtk_scale_render_value (GtkCssGadget *gadget,
-                        cairo_t      *cr,
+                        GtkSnapshot  *snapshot,
                         int           x,
                         int           y,
                         int           width,
@@ -1150,7 +1150,7 @@ gtk_scale_render_value (GtkCssGadget *gadget,
   gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
 
   layout = gtk_scale_get_layout (scale);
-  gtk_render_layout (context, cr, x, y, layout);
+  gtk_snapshot_render_layout (snapshot, context, x, y, layout);
 
   gtk_style_context_restore (context);
 
@@ -1288,8 +1288,8 @@ gtk_scale_set_draw_value (GtkScale *scale,
                                                           widget, NULL, NULL,
                                                           gtk_scale_measure_value,
                                                           NULL,
-                                                          gtk_scale_render_value,
                                                           NULL,
+                                                          gtk_scale_render_value,
                                                           NULL, NULL);
           g_signal_connect (gtk_css_gadget_get_node (priv->value_gadget), "style-changed",
                             G_CALLBACK (gtk_scale_value_style_changed), scale);
@@ -1741,7 +1741,7 @@ gtk_scale_measure (GtkWidget      *widget,
 
 static gboolean
 gtk_scale_render_mark_indicator (GtkCssGadget *gadget,
-                                 cairo_t      *cr,
+                                 GtkSnapshot  *snapshot,
                                  int           x,
                                  int           y,
                                  int           width,
@@ -1751,19 +1751,23 @@ gtk_scale_render_mark_indicator (GtkCssGadget *gadget,
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkStyleContext *context;
   GtkOrientation orientation;
+  GdkRGBA color;
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
 
+  gtk_style_context_get_color (context, &color);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_render_line (context, cr,
-                     x + width / 2, y,
-                     x + width / 2, y + height);
+    gtk_snapshot_append_color_node (snapshot,
+                                    &color, 
+                                    &GRAPHENE_RECT_INIT(x + width / 2, y, 1, height),
+                                    "ScaleMark");
   else
-    gtk_render_line (context, cr,
-                     x, y + height / 2,
-                     x + width, y + height / 2);
+    gtk_snapshot_append_color_node (snapshot,
+                                    &color, 
+                                    &GRAPHENE_RECT_INIT(x, y + height / 2, width, 1),
+                                    "ScaleMark");
 
   gtk_style_context_restore (context);
 
@@ -1772,7 +1776,7 @@ gtk_scale_render_mark_indicator (GtkCssGadget *gadget,
 
 static gboolean
 gtk_scale_render_mark_label (GtkCssGadget *gadget,
-                             cairo_t      *cr,
+                             GtkSnapshot  *snapshot,
                              int           x,
                              int           y,
                              int           width,
@@ -1787,7 +1791,7 @@ gtk_scale_render_mark_label (GtkCssGadget *gadget,
   gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (gadget));
   gtk_css_node_update_layout_attributes (gtk_css_gadget_get_node (gadget), mark->layout);
 
-  gtk_render_layout (context, cr, x, y, mark->layout);
+  gtk_snapshot_render_layout (snapshot, context, x, y, mark->layout);
 
   gtk_style_context_restore (context);
 
@@ -1796,7 +1800,7 @@ gtk_scale_render_mark_label (GtkCssGadget *gadget,
 
 static gboolean
 gtk_scale_render_mark (GtkCssGadget *gadget,
-                       cairo_t      *cr,
+                       GtkSnapshot  *snapshot,
                        int           x,
                        int           y,
                        int           width,
@@ -1805,16 +1809,16 @@ gtk_scale_render_mark (GtkCssGadget *gadget,
 {
   GtkScaleMark *mark = user_data;
 
-  gtk_css_gadget_draw (mark->indicator_gadget, cr);
+  gtk_css_gadget_snapshot (mark->indicator_gadget, snapshot);
   if (mark->label_gadget)
-    gtk_css_gadget_draw (mark->label_gadget, cr);
+    gtk_css_gadget_snapshot (mark->label_gadget, snapshot);
 
   return FALSE;
 }
 
 static gboolean
 gtk_scale_render_marks (GtkCssGadget *gadget,
-                        cairo_t      *cr,
+                        GtkSnapshot  *snapshot,
                         int           x,
                         int           y,
                         int           width,
@@ -1834,30 +1838,28 @@ gtk_scale_render_marks (GtkCssGadget *gadget,
           (mark->position == GTK_POS_BOTTOM && gadget == priv->top_marks_gadget))
         continue;
 
-      gtk_css_gadget_draw (mark->gadget, cr);
+      gtk_css_gadget_snapshot (mark->gadget, snapshot);
     }
 
   return FALSE;
 }
 
-static gboolean
-gtk_scale_draw (GtkWidget *widget,
-                cairo_t   *cr)
+static void
+gtk_scale_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
 {
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = scale->priv;
 
   if (priv->top_marks_gadget)
-    gtk_css_gadget_draw (priv->top_marks_gadget, cr);
+    gtk_css_gadget_snapshot (priv->top_marks_gadget, snapshot);
   if (priv->bottom_marks_gadget)
-    gtk_css_gadget_draw (priv->bottom_marks_gadget, cr);
+    gtk_css_gadget_snapshot (priv->bottom_marks_gadget, snapshot);
 
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->draw (widget, cr);
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->snapshot (widget, snapshot);
 
   if (priv->value_gadget)
-    gtk_css_gadget_draw (priv->value_gadget, cr);
-
-  return FALSE;
+    gtk_css_gadget_snapshot (priv->value_gadget, snapshot);
 }
 
 static void
@@ -2165,8 +2167,8 @@ gtk_scale_add_mark (GtkScale        *scale,
                                        widget, NULL, NULL,
                                        gtk_scale_measure_marks,
                                        gtk_scale_allocate_marks,
-                                       gtk_scale_render_marks,
                                        NULL,
+                                       gtk_scale_render_marks,
                                        NULL, NULL);
           gtk_css_node_insert_after (widget_node,
                                      gtk_css_gadget_get_node (priv->top_marks_gadget),
@@ -2187,8 +2189,8 @@ gtk_scale_add_mark (GtkScale        *scale,
                                        widget, NULL, NULL,
                                        gtk_scale_measure_marks,
                                        gtk_scale_allocate_marks,
-                                       gtk_scale_render_marks,
                                        NULL,
+                                       gtk_scale_render_marks,
                                        NULL, NULL);
           gtk_css_node_insert_before (widget_node,
                                       gtk_css_gadget_get_node (priv->bottom_marks_gadget),
@@ -2206,8 +2208,8 @@ gtk_scale_add_mark (GtkScale        *scale,
                                widget, NULL, NULL,
                                gtk_scale_measure_mark,
                                gtk_scale_allocate_mark,
-                               gtk_scale_render_mark,
                                NULL,
+                               gtk_scale_render_mark,
                                mark, NULL);
   gtk_css_gadget_set_state (mark->gadget, gtk_css_node_get_state (marks_node));
 
@@ -2216,8 +2218,8 @@ gtk_scale_add_mark (GtkScale        *scale,
                                widget, mark->gadget, NULL,
                                NULL,
                                NULL,
-                               gtk_scale_render_mark_indicator,
                                NULL,
+                               gtk_scale_render_mark_indicator,
                                mark, NULL);
   if (mark->markup && *mark->markup)
     {
@@ -2228,8 +2230,8 @@ gtk_scale_add_mark (GtkScale        *scale,
                                    NULL : mark->indicator_gadget,
                                    gtk_scale_measure_mark_label,
                                    NULL,
-                                   gtk_scale_render_mark_label,
                                    NULL,
+                                   gtk_scale_render_mark_label,
                                    mark, NULL);
       g_signal_connect (gtk_css_gadget_get_node (mark->label_gadget), "style-changed",
                         G_CALLBACK (gtk_scale_mark_style_changed), mark);

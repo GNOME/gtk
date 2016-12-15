@@ -190,8 +190,8 @@ static void gtk_range_realize        (GtkWidget        *widget);
 static void gtk_range_unrealize      (GtkWidget        *widget);
 static void gtk_range_map            (GtkWidget        *widget);
 static void gtk_range_unmap          (GtkWidget        *widget);
-static gboolean gtk_range_draw       (GtkWidget        *widget,
-                                      cairo_t          *cr);
+static void gtk_range_snapshot       (GtkWidget        *widget,
+                                      GtkSnapshot      *snapshot);
 
 static void gtk_range_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
                                                    guint                 n_press,
@@ -273,7 +273,7 @@ static void          gtk_range_allocate_trough          (GtkCssGadget        *ga
                                                          GtkAllocation       *out_clip,
                                                          gpointer             data);
 static gboolean      gtk_range_render_trough            (GtkCssGadget *gadget,
-                                                         cairo_t      *cr,
+                                                         GtkSnapshot  *snapshot,
                                                          int           x,
                                                          int           y,
                                                          int           width,
@@ -293,7 +293,7 @@ static void          gtk_range_allocate                 (GtkCssGadget        *ga
                                                          GtkAllocation       *out_clip,
                                                          gpointer             data);
 static gboolean      gtk_range_render                   (GtkCssGadget *gadget,
-                                                         cairo_t      *cr,
+                                                         GtkSnapshot  *snapshot,
                                                          int           x,
                                                          int           y,
                                                          int           width,
@@ -328,7 +328,7 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->unrealize = gtk_range_unrealize;
   widget_class->map = gtk_range_map;
   widget_class->unmap = gtk_range_unmap;
-  widget_class->draw = gtk_range_draw;
+  widget_class->snapshot = gtk_range_snapshot;
   widget_class->event = gtk_range_event;
   widget_class->scroll_event = gtk_range_scroll_event;
   widget_class->key_press_event = gtk_range_key_press;
@@ -667,8 +667,8 @@ gtk_range_init (GtkRange *range)
                                                      GTK_WIDGET (range),
                                                      gtk_range_measure,
                                                      gtk_range_allocate,
-                                                     gtk_range_render,
                                                      NULL,
+                                                     gtk_range_render,
                                                      NULL, NULL);
   priv->contents_gadget = gtk_box_gadget_new ("contents",
                                               GTK_WIDGET (range),
@@ -678,8 +678,8 @@ gtk_range_init (GtkRange *range)
                                                    NULL, NULL,
                                                    gtk_range_measure_trough,
                                                    gtk_range_allocate_trough,
-                                                   gtk_range_render_trough,
                                                    NULL,
+                                                   gtk_range_render_trough,
                                                    NULL, NULL);
   gtk_css_gadget_set_state (priv->trough_gadget,
                             gtk_css_node_get_state (widget_node));
@@ -2110,7 +2110,7 @@ gtk_range_state_flags_changed (GtkWidget     *widget,
 
 static gboolean
 gtk_range_render_trough (GtkCssGadget *gadget,
-                         cairo_t      *cr,
+                         GtkSnapshot  *snapshot,
                          int           x,
                          int           y,
                          int           width,
@@ -2125,22 +2125,22 @@ gtk_range_render_trough (GtkCssGadget *gadget,
    * so we let it...
    */
   if (GTK_IS_COLOR_SCALE (widget))
-    gtk_color_scale_draw_trough (GTK_COLOR_SCALE (widget), cr, x, y, width, height);
+    gtk_color_scale_snapshot_trough (GTK_COLOR_SCALE (widget), snapshot, x, y, width, height);
 
   if (priv->show_fill_level &&
       gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
       gtk_adjustment_get_lower (priv->adjustment) != 0)
-    gtk_css_gadget_draw (priv->fill_gadget, cr);
+    gtk_css_gadget_snapshot (priv->fill_gadget, snapshot);
 
   if (priv->has_origin)
-    gtk_css_gadget_draw (priv->highlight_gadget, cr);
+    gtk_css_gadget_snapshot (priv->highlight_gadget, snapshot);
 
   return gtk_widget_has_visible_focus (widget);
 }
 
 static gboolean
 gtk_range_render (GtkCssGadget *gadget,
-                  cairo_t      *cr,
+                  GtkSnapshot  *snapshot,
                   int           x,
                   int           y,
                   int           width,
@@ -2151,24 +2151,22 @@ gtk_range_render (GtkCssGadget *gadget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
 
-  gtk_css_gadget_draw (priv->contents_gadget, cr);
+  gtk_css_gadget_snapshot (priv->contents_gadget, snapshot);
 
   /* Draw the slider last, so that e.g. the focus ring stays below it */
-  gtk_css_gadget_draw (priv->slider_gadget, cr);
+  gtk_css_gadget_snapshot (priv->slider_gadget, snapshot);
 
   return FALSE;
 }
 
-static gboolean
-gtk_range_draw (GtkWidget *widget,
-                cairo_t   *cr)
+static void
+gtk_range_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
 
-  gtk_css_gadget_draw (priv->gadget, cr);
-
-  return GDK_EVENT_PROPAGATE;
+  gtk_css_gadget_snapshot (priv->gadget, snapshot);
 }
 
 static void

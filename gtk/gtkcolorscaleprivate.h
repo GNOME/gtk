@@ -64,12 +64,12 @@ GtkWidget * gtk_color_scale_new      (GtkAdjustment     *adjustment,
 void        gtk_color_scale_set_rgba (GtkColorScale     *scale,
                                       const GdkRGBA     *color);
 
-void        gtk_color_scale_draw_trough (GtkColorScale  *scale,
-                                         cairo_t        *cr,
-                                         int             x,
-                                         int             y,
-                                         int             width,
-                                         int             height);
+void        gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
+                                             GtkSnapshot    *snapshot,
+                                             int             x,
+                                             int             y,
+                                             int             width,
+                                             int             height);
 
 G_END_DECLS
 

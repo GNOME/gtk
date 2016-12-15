@@ -29,6 +29,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkrenderprivate.h"
+#include "gtksnapshot.h"
 
 #include <math.h>
 
@@ -54,24 +55,23 @@ static void hold_action (GtkGestureLongPress *gesture,
 G_DEFINE_TYPE_WITH_PRIVATE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
 
 void
-gtk_color_scale_draw_trough (GtkColorScale  *scale,
-                             cairo_t        *cr,
-                             int             x,
-                             int             y,
-                             int             width,
-                             int             height)
+gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
+                                 GtkSnapshot    *snapshot,
+                                 int             x,
+                                 int             y,
+                                 int             width,
+                                 int             height)
 {
-  GtkWidget *widget;
+  GtkWidget *widget = GTK_WIDGET (scale);
+  cairo_t *cr;
 
   if (width <= 1 || height <= 1)
     return;
 
-  cairo_save (cr);
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &GRAPHENE_RECT_INIT(x, y, width, height),
+                                       "ColorScaleTrough");
   cairo_translate (cr, x, y);
-
-  widget = GTK_WIDGET (scale);
-  cairo_rectangle (cr, 0, 0, width, height);
-  cairo_clip (cr);
 
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
       gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
@@ -145,7 +145,7 @@ gtk_color_scale_draw_trough (GtkColorScale  *scale,
       cairo_pattern_destroy (pattern);
     }
 
-  cairo_restore (cr);
+  cairo_destroy (cr);
 }
 
 static void
