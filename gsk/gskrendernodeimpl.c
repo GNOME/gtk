@@ -115,6 +115,162 @@ gsk_color_node_new (const GdkRGBA         *rgba,
   return &self->render_node;
 }
 
+/*** GSK_LINEAR_GRADIENT_NODE ***/
+
+typedef struct _GskLinearGradientNode GskLinearGradientNode;
+
+struct _GskLinearGradientNode
+{
+  GskRenderNode render_node;
+
+  graphene_rect_t bounds;
+
+  graphene_point_t start;
+  graphene_point_t end;
+
+  GskColorStop *stops;
+  gsize n_stops;
+};
+
+static void
+gsk_linear_gradient_node_finalize (GskRenderNode *node)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  g_free (self->stops);
+}
+
+static void
+gsk_linear_gradient_node_make_immutable (GskRenderNode *node)
+{
+}
+
+static void
+gsk_linear_gradient_node_draw (GskRenderNode *node,
+                               cairo_t       *cr)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+  cairo_pattern_t *pattern;
+  gsize i;
+
+  pattern = cairo_pattern_create_linear (self->start.x, self->start.y,
+                                         self->end.x, self->end.y);
+
+  if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+
+  for (i = 0; i < self->n_stops; i++)
+    {
+      cairo_pattern_add_color_stop_rgba (pattern,
+                                         self->stops[i].offset,
+                                         self->stops[i].color.red,
+                                         self->stops[i].color.green,
+                                         self->stops[i].color.blue,
+                                         self->stops[i].color.alpha);
+    }
+
+  cairo_set_source (cr, pattern);
+  cairo_pattern_destroy (pattern);
+
+  cairo_rectangle (cr,
+                   self->bounds.origin.x, self->bounds.origin.y,
+                   self->bounds.size.width, self->bounds.size.height);
+  cairo_fill (cr);
+}
+
+static void
+gsk_linear_gradient_node_get_bounds (GskRenderNode   *node,
+                                     graphene_rect_t *bounds)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  graphene_rect_init_from_rect (bounds, &self->bounds); 
+}
+
+static const GskRenderNodeClass GSK_LINEAR_GRADIENT_NODE_CLASS = {
+  GSK_LINEAR_GRADIENT_NODE,
+  sizeof (GskLinearGradientNode),
+  "GskLinearGradientNode",
+  gsk_linear_gradient_node_finalize,
+  gsk_linear_gradient_node_make_immutable,
+  gsk_linear_gradient_node_draw,
+  gsk_linear_gradient_node_get_bounds
+};
+
+static const GskRenderNodeClass GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS = {
+  GSK_REPEATING_LINEAR_GRADIENT_NODE,
+  sizeof (GskLinearGradientNode),
+  "GskLinearGradientNode",
+  gsk_linear_gradient_node_finalize,
+  gsk_linear_gradient_node_make_immutable,
+  gsk_linear_gradient_node_draw,
+  gsk_linear_gradient_node_get_bounds
+};
+
+/**
+ * gsk_linear_gradient_node_new:
+ * @linear_gradient: the #GskLinearGradient
+ * @bounds: the rectangle to render the linear_gradient into
+ *
+ * Creates a #GskRenderNode that will render the given
+ * @linear_gradient into the area given by @bounds.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
+                              const graphene_point_t *start,
+                              const graphene_point_t *end,
+                              const GskColorStop     *color_stops,
+                              gsize                   n_color_stops)
+{
+  GskLinearGradientNode *self;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+  g_return_val_if_fail (start != NULL, NULL);
+  g_return_val_if_fail (end != NULL, NULL);
+  g_return_val_if_fail (color_stops != NULL, NULL);
+
+  self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_LINEAR_GRADIENT_NODE_CLASS);
+
+  graphene_rect_init_from_rect (&self->bounds, bounds);
+  graphene_point_init_from_point (&self->start, start);
+  graphene_point_init_from_point (&self->end, end);
+
+  self->stops = g_memdup (color_stops, sizeof (GskColorStop) * n_color_stops);
+  self->n_stops = n_color_stops;
+
+  return &self->render_node;
+}
+
+GskRenderNode *
+gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
+                                        const graphene_point_t *start,
+                                        const graphene_point_t *end,
+                                        const GskColorStop     *color_stops,
+                                        gsize                   n_color_stops)
+{
+  GskLinearGradientNode *self;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+  g_return_val_if_fail (start != NULL, NULL);
+  g_return_val_if_fail (end != NULL, NULL);
+  g_return_val_if_fail (color_stops != NULL, NULL);
+
+  self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS);
+
+  graphene_rect_init_from_rect (&self->bounds, bounds);
+  graphene_point_init_from_point (&self->start, start);
+  graphene_point_init_from_point (&self->end, end);
+
+  self->stops = g_memdup (color_stops, sizeof (GskColorStop) * n_color_stops);
+  self->n_stops = n_color_stops;
+
+  return &self->render_node;
+}
+
 /*** GSK_TEXTURE_NODE ***/
 
 typedef struct _GskTextureNode GskTextureNode;

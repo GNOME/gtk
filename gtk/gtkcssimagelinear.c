@@ -128,19 +128,22 @@ gtk_css_image_linear_compute_start_point (double angle_in_degrees,
 }
                                          
 static void
-gtk_css_image_linear_draw (GtkCssImage        *image,
-                           cairo_t            *cr,
-                           double              width,
-                           double              height)
+gtk_css_image_linear_snapshot (GtkCssImage        *image,
+                               GtkSnapshot        *snapshot,
+                               double              width,
+                               double              height)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
-  cairo_pattern_t *pattern;
+  GskColorStop stops[linear->stops->len];
+  GskRenderNode *node;
+  double off_x, off_y; /* snapshot offset */
   double angle; /* actual angle of the gradiant line in degrees */
   double x, y; /* coordinates of start point */
   double length; /* distance in pixels for 100% */
   double start, end; /* position of first/last point on gradient line - with gradient line being [0, 1] */
   double offset;
   int i, last;
+  char *name;
 
   if (linear->side)
     {
@@ -177,12 +180,6 @@ gtk_css_image_linear_draw (GtkCssImage        *image,
 
   length = sqrt (x * x + y * y);
   gtk_css_image_linear_get_start_end (linear, length, &start, &end);
-  pattern = cairo_pattern_create_linear (x * (start - 0.5), y * (start - 0.5),
-                                         x * (end - 0.5),   y * (end - 0.5));
-  if (linear->repeating)
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  else
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
   offset = start;
   last = -1;
@@ -209,31 +206,45 @@ gtk_css_image_linear_draw (GtkCssImage        *image,
       step = (pos - offset) / (i - last);
       for (last = last + 1; last <= i; last++)
         {
-          const GdkRGBA *rgba;
-
           stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, last);
 
-          rgba = _gtk_css_rgba_value_get_rgba (stop->color);
           offset += step;
 
-          cairo_pattern_add_color_stop_rgba (pattern,
-                                             (offset - start) / (end - start),
-                                             rgba->red,
-                                             rgba->green,
-                                             rgba->blue,
-                                             rgba->alpha);
+          stops[last].offset = (offset - start) / (end - start);
+          stops[last].color = *_gtk_css_rgba_value_get_rgba (stop->color);
         }
 
       offset = pos;
       last = i;
     }
 
-  cairo_rectangle (cr, 0, 0, width, height);
-  cairo_translate (cr, width / 2, height / 2);
-  cairo_set_source (cr, pattern);
-  cairo_fill (cr);
+  gtk_snapshot_get_offset (snapshot, &off_x, &off_y);
 
-  cairo_pattern_destroy (pattern);
+  if (linear->repeating)
+    {
+      node = gsk_repeating_linear_gradient_node_new (
+          &GRAPHENE_RECT_INIT (off_x, off_y, width, height),
+          &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (start - 0.5), off_y + height / 2 + y * (start - 0.5)),
+          &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (end - 0.5),   off_y + height / 2 + y * (end - 0.5)),
+          stops,
+          linear->stops->len);
+    }
+  else
+    {
+      node = gsk_linear_gradient_node_new (
+          &GRAPHENE_RECT_INIT (off_x, off_y, width, height),
+          &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (start - 0.5), off_y + height / 2 + y * (start - 0.5)),
+          &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (end - 0.5),   off_y + height / 2 + y * (end - 0.5)),
+          stops,
+          linear->stops->len);
+    }
+  name = g_strdup_printf ("%sLinearGradient<%ustops>", linear->repeating ? "Repeating" : "", linear->stops->len);
+  gsk_render_node_set_name (node, name);
+  g_free (name);
+
+  gtk_snapshot_append_node (snapshot, node);
+
+  gsk_render_node_unref (node);
 }
 
 
@@ -604,7 +615,7 @@ _gtk_css_image_linear_class_init (GtkCssImageLinearClass *klass)
   GtkCssImageClass *image_class = GTK_CSS_IMAGE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  image_class->draw = gtk_css_image_linear_draw;
+  image_class->snapshot = gtk_css_image_linear_snapshot;
   image_class->parse = gtk_css_image_linear_parse;
   image_class->print = gtk_css_image_linear_print;
   image_class->compute = gtk_css_image_linear_compute;

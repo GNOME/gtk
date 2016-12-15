@@ -28,6 +28,9 @@
  * @GSK_CONTAINER_NODE: A node containing a stack of children
  * @GSK_CAIRO_NODE: A node drawing a #cairo_surface_t
  * @GSK_COLOR_NODE: A node drawing a single color rectangle
+ * @GSK_LINEAR_GRADIENT_NODE: A node drawing a linear gradient
+ * @GSK_REPEATING_LINEAR_GRADIENT_NODE: A node drawing a repeating
+ *     linear gradient
  * @GSK_TEXTURE_NODE: A node drawing a #GskTexture
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a
  *     matrix transform
@@ -45,6 +48,8 @@ typedef enum {
   GSK_CONTAINER_NODE,
   GSK_CAIRO_NODE,
   GSK_COLOR_NODE,
+  GSK_LINEAR_GRADIENT_NODE,
+  GSK_REPEATING_LINEAR_GRADIENT_NODE,
   GSK_TEXTURE_NODE,
   GSK_TRANSFORM_NODE,
   GSK_OPACITY_NODE,

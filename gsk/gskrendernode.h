@@ -33,6 +33,13 @@ G_BEGIN_DECLS
 #define GSK_IS_RENDER_NODE(obj) ((obj) != NULL)
 
 typedef struct _GskRenderNode           GskRenderNode;
+typedef struct _GskColorStop            GskColorStop;
+
+struct _GskColorStop
+{
+  double offset;
+  GdkRGBA color;
+};
 
 GDK_AVAILABLE_IN_3_90
 GType gsk_render_node_get_type (void) G_GNUC_CONST;
@@ -52,6 +59,19 @@ GskRenderNode *         gsk_color_node_new                      (const GdkRGBA  
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_texture_node_new                    (GskTexture               *texture,
                                                                  const graphene_rect_t    *bounds);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_linear_gradient_node_new            (const graphene_rect_t    *bounds,
+                                                                 const graphene_point_t   *start,
+                                                                 const graphene_point_t   *end,
+                                                                 const GskColorStop       *color_stops,
+                                                                 gsize                     n_color_stops);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_repeating_linear_gradient_node_new  (const graphene_rect_t    *bounds,
+                                                                 const graphene_point_t   *start,
+                                                                 const graphene_point_t   *end,
+                                                                 const GskColorStop       *color_stops,
+                                                                 gsize                     n_color_stops);
 
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_cairo_node_new                      (const graphene_rect_t    *bounds);
