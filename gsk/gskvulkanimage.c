@@ -1,6 +1,8 @@
 #include "config.h"
 
 #include "gskvulkanimageprivate.h"
+
+#include "gskvulkanbufferprivate.h"
 #include "gskvulkanmemoryprivate.h"
 #include "gskvulkanpipelineprivate.h"
 
@@ -134,6 +136,125 @@ gsk_vulkan_image_ensure_view (GskVulkanImage *self,
                                    },
                                    NULL,
                                    &self->vk_image_view);
+}
+
+GskVulkanImage *
+gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext  *context,
+                                                   VkCommandBuffer    command_buffer,
+                                                   guchar            *data,
+                                                   gsize              width,
+                                                   gsize              height,
+                                                   gsize              stride)
+{
+  GskVulkanImage *self;
+  GskVulkanBuffer *staging;
+  guchar *mem;
+
+  staging = gsk_vulkan_buffer_new_staging (context, width * height * 4);
+  mem = gsk_vulkan_buffer_map (staging);
+
+  if (stride == width * 4)
+    {
+      memcpy (mem, data, stride * height);
+    }
+  else
+    {
+      for (gsize i = 0; i < height; i++)
+        {
+          memcpy (mem + i * width * 4, data + i * stride, width * 4);
+        }
+    }
+
+  gsk_vulkan_buffer_unmap (staging);
+
+  self = gsk_vulkan_image_new (context,
+                               width,
+                               height, 
+                               VK_IMAGE_TILING_OPTIMAL,
+                               VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+  vkCmdPipelineBarrier (command_buffer,
+                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                        0,
+                        0, NULL,
+                        0, NULL,
+                        1, (VkImageMemoryBarrier[1]) {
+                            {
+                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
+                                .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                                .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
+                                .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                .image = self->vk_image,
+                                .subresourceRange = {
+                                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                    .baseMipLevel = 0,
+                                    .levelCount = 1,
+                                    .baseArrayLayer = 0,
+                                    .layerCount = 1
+                                }
+                            }
+                        });
+
+  vkCmdCopyBufferToImage (command_buffer,
+                          gsk_vulkan_buffer_get_buffer (staging),
+                          self->vk_image,
+                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                          1,
+                          (VkBufferImageCopy[1]) {
+                               {
+                                   .bufferOffset = 0,
+                                   .imageSubresource = {
+                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                       .mipLevel = 0,
+                                       .baseArrayLayer = 0,
+                                       .layerCount = 1
+                                   },
+                                   .imageOffset = { 0, 0, 0 },
+                                   .imageExtent = {
+                                       .width = width,
+                                       .height = height,
+                                       .depth = 1
+                                   }
+                               }
+                          });
+
+  vkCmdPipelineBarrier (command_buffer,
+                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                        0,
+                        0, NULL,
+                        0, NULL,
+                        1, (VkImageMemoryBarrier[1]) {
+                            {
+                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                                .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+                                .oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                .newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                .image = self->vk_image,
+                                .subresourceRange = {
+                                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                    .baseMipLevel = 0,
+                                    .levelCount = 1,
+                                    .baseArrayLayer = 0,
+                                    .layerCount = 1
+                                }
+                            }
+                        });
+
+  /* XXX: Is this okay or do we need to keep the staging image around until the commands execute */
+  gsk_vulkan_buffer_free (staging);
+
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
+
+  return self;
 }
 
 GskVulkanImage *
@@ -325,6 +446,8 @@ gsk_vulkan_image_new_from_data (GdkVulkanContext  *context,
                                 gsize              height,
                                 gsize              stride)
 {
+  if (GSK_RENDER_MODE_CHECK (STAGING_BUFFER))
+    return gsk_vulkan_image_new_from_data_via_staging_buffer (context, command_buffer, data, width, height, stride);
   if (GSK_RENDER_MODE_CHECK (STAGING_IMAGE))
     return gsk_vulkan_image_new_from_data_via_staging_image (context, command_buffer, data, width, height, stride);
   else

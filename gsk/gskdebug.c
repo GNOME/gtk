@@ -18,6 +18,7 @@ static const GDebugKey gsk_rendering_keys[] = {
   { "shaders", GSK_RENDERING_MODE_SHADERS },
   { "sync", GSK_RENDERING_MODE_SYNC },
   { "staging-image", GSK_RENDERING_MODE_STAGING_IMAGE },
+  { "staging-buffer", GSK_RENDERING_MODE_STAGING_BUFFER }
 };
 
 gboolean

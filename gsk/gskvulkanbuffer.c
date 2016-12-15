@@ -15,9 +15,10 @@ struct _GskVulkanBuffer
   GskVulkanMemory *memory;
 };
 
-GskVulkanBuffer *
-gsk_vulkan_buffer_new (GdkVulkanContext  *context,
-                       gsize              size)
+static GskVulkanBuffer *
+gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
+                                gsize              size,
+                                VkBufferUsageFlags usage)
 {
   VkMemoryRequirements requirements;
   GskVulkanBuffer *self;
@@ -32,8 +33,7 @@ gsk_vulkan_buffer_new (GdkVulkanContext  *context,
                                     .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
                                     .size = size,
                                     .flags = 0,
-                                    .usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
-                                           | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                                    .usage = usage,
                                     .sharingMode = VK_SHARING_MODE_EXCLUSIVE
                                 },
                                 NULL,
@@ -53,6 +53,22 @@ gsk_vulkan_buffer_new (GdkVulkanContext  *context,
                                     gsk_vulkan_memory_get_device_memory (self->memory),
                                     0);
   return self;
+}
+
+GskVulkanBuffer *
+gsk_vulkan_buffer_new (GdkVulkanContext  *context,
+                       gsize              size)
+{
+  return gsk_vulkan_buffer_new_internal (context, size,
+                                         VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
+                                         | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
+}
+
+GskVulkanBuffer *
+gsk_vulkan_buffer_new_staging (GdkVulkanContext  *context,
+                               gsize              size)
+{
+  return gsk_vulkan_buffer_new_internal (context, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
 }
 
 void
