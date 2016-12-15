@@ -195,8 +195,8 @@ static void       gtk_toolbar_get_property         (GObject             *object,
 						    guint                prop_id,
 						    GValue              *value,
 						    GParamSpec          *pspec);
-static gint       gtk_toolbar_draw                 (GtkWidget           *widget,
-                                                    cairo_t             *cr);
+static void       gtk_toolbar_snapshot             (GtkWidget           *widget,
+                                                    GtkSnapshot         *snapshot);
 static void       gtk_toolbar_realize              (GtkWidget           *widget);
 static void       gtk_toolbar_unrealize            (GtkWidget           *widget);
 static void       gtk_toolbar_measure_             (GtkWidget      *widget,
@@ -270,7 +270,7 @@ static void       gtk_toolbar_measure              (GtkCssGadget   *gadget,
                                                     int            *natural_baseline,
                                                     gpointer        data);
 static gboolean   gtk_toolbar_render               (GtkCssGadget *gadget,
-                                                    cairo_t      *cr,
+                                                    GtkSnapshot  *snapshot,
                                                     int           x,
                                                     int           y,
                                                     int           width,
@@ -291,9 +291,9 @@ static ToolbarContent *toolbar_content_new_tool_item        (GtkToolbar         
 static void            toolbar_content_remove               (ToolbarContent      *content,
 							     GtkToolbar          *toolbar);
 static void            toolbar_content_free                 (ToolbarContent      *content);
-static void            toolbar_content_draw                 (ToolbarContent      *content,
+static void            toolbar_content_snapshot             (ToolbarContent      *content,
 							     GtkContainer        *container,
-                                                             cairo_t             *cr);
+                                                             GtkSnapshot         *snapshot);
 static gboolean        toolbar_content_visible              (ToolbarContent      *content,
 							     GtkToolbar          *toolbar);
 static void            toolbar_content_size_request         (ToolbarContent      *content,
@@ -402,7 +402,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   gobject_class->finalize = gtk_toolbar_finalize;
   gobject_class->dispose = gtk_toolbar_dispose;
   
-  widget_class->draw = gtk_toolbar_draw;
+  widget_class->snapshot = gtk_toolbar_snapshot;
   widget_class->measure = gtk_toolbar_measure_;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_updated = gtk_toolbar_style_updated;
@@ -653,8 +653,8 @@ gtk_toolbar_init (GtkToolbar *toolbar)
                                                      widget,
                                                      gtk_toolbar_measure,
                                                      gtk_toolbar_allocate,
-                                                     gtk_toolbar_render,
                                                      NULL,
+                                                     gtk_toolbar_render,
                                                      NULL, NULL);
 
   priv->arrow_button = gtk_toggle_button_new ();
@@ -820,7 +820,7 @@ gtk_toolbar_unrealize (GtkWidget *widget)
 
 static gboolean
 gtk_toolbar_render (GtkCssGadget *gadget,
-                    cairo_t      *cr,
+                    GtkSnapshot  *snapshot,
                     int           x,
                     int           y,
                     int           width,
@@ -836,26 +836,24 @@ gtk_toolbar_render (GtkCssGadget *gadget,
     {
       ToolbarContent *content = list->data;
       
-      toolbar_content_draw (content, GTK_CONTAINER (widget), cr);
+      toolbar_content_snapshot (content, GTK_CONTAINER (widget), snapshot);
     }
   
-  gtk_container_propagate_draw (GTK_CONTAINER (widget),
+  gtk_container_snapshot_child (GTK_CONTAINER (widget),
 				priv->arrow_button,
-				cr);
+				snapshot);
 
   return FALSE;
 }
 
-static gint
-gtk_toolbar_draw (GtkWidget *widget,
-                  cairo_t   *cr)
+static void
+gtk_toolbar_snapshot (GtkWidget   *widget,
+                      GtkSnapshot *snapshot)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
 
-  gtk_css_gadget_draw (priv->gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (priv->gadget, snapshot);
 }
 
 static void
@@ -3147,9 +3145,9 @@ calculate_max_homogeneous_pixels (GtkWidget *widget)
 }
 
 static void
-toolbar_content_draw (ToolbarContent *content,
-                      GtkContainer   *container,
-                      cairo_t        *cr)
+toolbar_content_snapshot (ToolbarContent *content,
+                          GtkContainer   *container,
+                          GtkSnapshot    *snapshot)
 {
   GtkWidget *widget;
 
@@ -3159,7 +3157,7 @@ toolbar_content_draw (ToolbarContent *content,
   widget = GTK_WIDGET (content->item);
 
   if (widget)
-    gtk_container_propagate_draw (container, widget, cr);
+    gtk_container_snapshot_child (container, widget, snapshot);
 }
 
 static gboolean
