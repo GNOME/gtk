@@ -79,15 +79,9 @@
  *
  * With the addition of client side windows this changes a bit. The
  * application-visible GdkWindow object behaves as it did before, but
- * not all such windows now have a corresponding native
- * window. Instead windows that are “client side” are emulated by the
- * gdk code such that clipping, drawing, moving, events etc work as
- * expected.
- *
- * For GdkWindows that have a native window the “impl” object is the
- * same as before. However, for all client side windows the impl object
- * is shared with its parent (i.e. all client windows descendants of one
- * native window has the same impl.
+ * such windows now don't a corresponding native window. Instead subwindows
+ * windows are “client side”, i.e. emulated by the gdk code such
+ * that clipping, drawing, moving, events etc work as expected.
  *
  * GdkWindows have a pointer to the “impl window” they are in, i.e.
  * the topmost GdkWindow which have the same “impl” value. This is stored
@@ -97,15 +91,6 @@
  * (x, y), the size of the window (width, height), the position of the window
  * with respect to the impl window (abs_x, abs_y). We also track the clip
  * region of the window wrt parent windows, in window-relative coordinates (clip_region).
- *
- * All toplevel windows are native windows, but also child windows can
- * be native. We always listen to a basic set of events (see
- * get_native_event_mask) for these windows so that we can emulate
- * events for any client side children.
- *
- * For native windows we apply the calculated clip region as a window shape
- * so that eg. client side siblings that overlap the native child properly
- * draws over the native child window.
  */
 
 /* This adds a local value to the GdkVisibilityState enum */
@@ -141,7 +126,6 @@ static void gdk_window_clear_backing_region (GdkWindow *window);
 static void recompute_visible_regions   (GdkWindow *private,
 					 gboolean recalculate_children);
 static void gdk_window_invalidate_in_parent (GdkWindow *private);
-static void move_native_children        (GdkWindow *private);
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
 static void impl_window_add_update_area (GdkWindow *impl_window,
@@ -519,7 +503,6 @@ remove_sibling_overlapped_area (GdkWindow *window,
   cairo_region_t *child_region;
   GdkRectangle r;
   GList *l;
-  cairo_region_t *shape;
 
   parent = window->parent;
 
@@ -553,15 +536,6 @@ remove_sibling_overlapped_area (GdkWindow *window,
 	  cairo_region_intersect (child_region, sibling->shape);
 	  cairo_region_translate (sibling->shape, -sibling->x, -sibling->y);
 	}
-      else if (window->window_type == GDK_WINDOW_FOREIGN)
-	{
-	  shape = GDK_WINDOW_IMPL_GET_CLASS (sibling)->get_shape (sibling);
-	  if (shape)
-	    {
-	      cairo_region_intersect (child_region, shape);
-	      cairo_region_destroy (shape);
-	    }
-	}
 
       cairo_region_subtract (region, child_region);
       cairo_region_destroy (child_region);
@@ -582,7 +556,6 @@ remove_child_area (GdkWindow *window,
   cairo_region_t *child_region;
   GdkRectangle r;
   GList *l;
-  cairo_region_t *shape;
 
   for (l = window->children; l; l = l->next)
     {
@@ -614,29 +587,11 @@ remove_child_area (GdkWindow *window,
 	  cairo_region_intersect (child_region, child->shape);
 	  cairo_region_translate (child->shape, -child->x, -child->y);
 	}
-      else if (window->window_type == GDK_WINDOW_FOREIGN)
-	{
-	  shape = GDK_WINDOW_IMPL_GET_CLASS (child)->get_shape (child);
-	  if (shape)
-	    {
-	      cairo_region_intersect (child_region, shape);
-	      cairo_region_destroy (shape);
-	    }
-	}
 
       if (for_input)
 	{
 	  if (child->input_shape)
 	    cairo_region_intersect (child_region, child->input_shape);
-	  else if (window->window_type == GDK_WINDOW_FOREIGN)
-	    {
-	      shape = GDK_WINDOW_IMPL_GET_CLASS (child)->get_input_shape (child);
-	      if (shape)
-		{
-		  cairo_region_intersect (child_region, shape);
-		  cairo_region_destroy (shape);
-		}
-	    }
 	}
 
       cairo_region_subtract (region, child_region);
@@ -708,8 +663,7 @@ should_apply_clip_as_shape (GdkWindow *window)
   return
     gdk_window_has_impl (window) &&
     /* Not for non-shaped toplevels */
-    (!gdk_window_is_toplevel (window) ||
-     window->shape != NULL || window->applied_shape) &&
+    (window->shape != NULL || window->applied_shape) &&
     /* or for foreign windows */
     window->window_type != GDK_WINDOW_FOREIGN &&
     /* or for the root window */
@@ -967,64 +921,6 @@ _gdk_window_update_size (GdkWindow *window)
   recompute_visible_regions (window, FALSE);
 }
 
-/* Find the native window that would be just above "child"
- * in the native stacking order if “child” was a native window
- * (it doesn’t have to be native). If there is no such native
- * window inside this native parent then NULL is returned.
- * If child is NULL, find lowest native window in parent.
- */
-static GdkWindow *
-find_native_sibling_above_helper (GdkWindow *parent,
-				  GdkWindow *child)
-{
-  GdkWindow *w;
-  GList *l;
-
-  if (child)
-    {
-      l = g_list_find (parent->children, child);
-      g_assert (l != NULL); /* Better be a child of its parent... */
-      l = l->prev; /* Start looking at the one above the child */
-    }
-  else
-    l = g_list_last (parent->children);
-
-  for (; l != NULL; l = l->prev)
-    {
-      w = l->data;
-
-      if (gdk_window_has_impl (w))
-	return w;
-
-      g_assert (parent != w);
-      w = find_native_sibling_above_helper (w, NULL);
-      if (w)
-	return w;
-    }
-
-  return NULL;
-}
-
-
-static GdkWindow *
-find_native_sibling_above (GdkWindow *parent,
-			   GdkWindow *child)
-{
-  GdkWindow *w;
-
-  if (!parent)
-    return NULL;
-
-  w = find_native_sibling_above_helper (parent, child);
-  if (w)
-    return w;
-
-  if (gdk_window_has_impl (parent))
-    return NULL;
-  else
-    return find_native_sibling_above (parent->parent, parent);
-}
-
 static GdkEventMask
 get_native_device_event_mask (GdkWindow *private,
                               GdkDevice *device)
@@ -1057,32 +953,11 @@ get_native_device_event_mask (GdkWindow *private,
       mask |=
 	GDK_EXPOSURE_MASK |
 	GDK_VISIBILITY_NOTIFY_MASK |
-	GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK;
-
-      /* Additionally we select for pointer and button events
-       * for toplevels as we need to get these to emulate
-       * them for non-native subwindows. Even though we don't
-       * select on them for all native windows we will get them
-       * as the events are propagated out to the first window
-       * that select for them.
-       * Not selecting for button press on all windows is an
-       * important thing, because in X only one client can do
-       * so, and we don't want to unexpectedly prevent another
-       * client from doing it.
-       *
-       * We also need to do the same if the app selects for button presses
-       * because then we will get implicit grabs for this window, and the
-       * event mask used for that grab is based on the rest of the mask
-       * for the window, but we might need more events than this window
-       * lists due to some non-native child window.
-       */
-      if (gdk_window_is_toplevel (private) ||
-          mask & GDK_BUTTON_PRESS_MASK)
-        mask |=
-          GDK_TOUCH_MASK |
-          GDK_POINTER_MOTION_MASK |
-          GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-          GDK_SCROLL_MASK;
+	GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+        GDK_TOUCH_MASK |
+        GDK_POINTER_MOTION_MASK |
+        GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+        GDK_SCROLL_MASK;
 
       return mask;
     }
@@ -1092,28 +967,6 @@ static GdkEventMask
 get_native_event_mask (GdkWindow *private)
 {
   return get_native_device_event_mask (private, NULL);
-}
-
-/* Puts the native window in the right order wrt the other native windows
- * in the hierarchy, given the position it has in the client side data.
- * This is useful if some operation changed the stacking order.
- * This calls assumes the native window is now topmost in its native parent.
- */
-static void
-sync_native_window_stack_position (GdkWindow *window)
-{
-  GdkWindow *above;
-  GdkWindowImplClass *impl_class;
-  GList listhead = {0};
-
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-
-  above = find_native_sibling_above (window->parent, window);
-  if (above)
-    {
-      listhead.data = window;
-      impl_class->restack_under (above, &listhead);
-    }
 }
 
 GdkWindow*
@@ -1181,7 +1034,7 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_TEMP:
       if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
 	g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
-		   "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
+		   "a window of type GDK_WINDOW_ROOT");
       break;
     case GDK_WINDOW_SUBSURFACE:
 #ifdef GDK_WINDOWING_WAYLAND
@@ -1193,6 +1046,13 @@ gdk_window_new (GdkWindow     *parent,
 #endif
       break;
     case GDK_WINDOW_CHILD:
+      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT ||
+          GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+        {
+          g_warning (G_STRLOC "Child windows must not be created as children of\n"
+                     "a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
+          return NULL;
+        }
       break;
     default:
       g_warning (G_STRLOC "cannot make windows of type %d", window->window_type);
@@ -1235,13 +1095,6 @@ gdk_window_new (GdkWindow     *parent,
       /* Create the impl */
       _gdk_display_create_window_impl (display, window, parent, screen, event_mask, attributes);
       window->impl_window = window;
-
-      parent->impl_window->native_children = g_list_prepend (parent->impl_window->native_children, window);
-
-      /* This will put the native window topmost in the native parent, which may
-       * be wrong wrt other native windows in the non-native hierarchy, so restack */
-      if (!_gdk_window_has_impl (parent))
-	sync_native_window_stack_position (window);
     }
   else
     {
@@ -1478,48 +1331,11 @@ change_impl (GdkWindow *private,
     {
       child = l->data;
 
-      if (child->impl == old_impl)
-	change_impl (child, impl_window, new);
-      else
-        {
-          /* The child is a native, update native_children */
-          old_impl_window->native_children =
-            g_list_remove (old_impl_window->native_children, child);
-          impl_window->native_children =
-            g_list_prepend (impl_window->native_children, child);
-        }
+      g_assert (child->impl == old_impl); /* All children should be the same impl */
+
+      change_impl (child, impl_window, new);
     }
 }
-
-static void
-reparent_to_impl (GdkWindow *private)
-{
-  GList *l;
-  GdkWindow *child;
-  gboolean show;
-  GdkWindowImplClass *impl_class;
-
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (private->impl);
-
-  /* Enumerate in reverse order so we get the right order for the native
-     windows (first in childrens list is topmost, and reparent places on top) */
-  for (l = g_list_last (private->children); l != NULL; l = l->prev)
-    {
-      child = l->data;
-
-      if (child->impl == private->impl)
-	reparent_to_impl (child);
-      else
-	{
-	  show = impl_class->reparent ((GdkWindow *)child,
-				       (GdkWindow *)private,
-				       child->x, child->y);
-	  if (show)
-	    gdk_window_show_unraised ((GdkWindow *)child);
-	}
-    }
-}
-
 
 /**
  * gdk_window_reparent:
@@ -1541,7 +1357,6 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindow *old_parent;
   GdkScreen *screen;
   gboolean show, was_mapped;
-  gboolean do_reparent_to_impl;
   GdkEventMask old_native_event_mask;
   GdkWindowImplClass *impl_class;
 
@@ -1557,6 +1372,21 @@ gdk_window_reparent (GdkWindow *window,
   if (!new_parent)
     new_parent = gdk_screen_get_root_window (screen);
 
+  /* Don't allow reparenting to/from toplevel status */
+  if (!gdk_window_is_toplevel (window) && (new_parent->window_type == GDK_WINDOW_ROOT ||
+                                           new_parent->window_type == GDK_WINDOW_FOREIGN))
+    {
+      g_warning ("Can't reparent to toplevel");
+      return;
+    }
+
+  if (gdk_window_is_toplevel (window) && (new_parent->window_type != GDK_WINDOW_ROOT ||
+                                          new_parent->window_type != GDK_WINDOW_FOREIGN))
+    {
+      g_warning ("Can't reparent from toplevel");
+      return;
+    }
+
   /* No input-output children of input-only windows */
   if (new_parent->input_only && !window->input_only)
     return;
@@ -1570,29 +1400,26 @@ gdk_window_reparent (GdkWindow *window,
 
   was_mapped = GDK_WINDOW_IS_MAPPED (window);
 
-  /* Reparenting to toplevel. Ensure we have a native window so this can work */
-  if (new_parent->window_type == GDK_WINDOW_ROOT ||
-      new_parent->window_type == GDK_WINDOW_FOREIGN)
-    gdk_window_ensure_native (window);
-
   old_native_event_mask = 0;
-  do_reparent_to_impl = FALSE;
   if (gdk_window_has_impl (window))
     {
+      /* This shouldn't happen, check anyway to see if that ever fails */
+      g_assert (new_parent->window_type == GDK_WINDOW_ROOT ||
+                new_parent->window_type == GDK_WINDOW_FOREIGN);
+
       old_native_event_mask = get_native_event_mask (window);
       /* Native window */
       show = impl_class->reparent (window, new_parent, x, y);
     }
   else
     {
-      /* This shouldn't happen, as we created a native in this case, check anyway to see if that ever fails */
+      /* This shouldn't happen, check anyway to see if that ever fails */
       g_assert (new_parent->window_type != GDK_WINDOW_ROOT &&
 		new_parent->window_type != GDK_WINDOW_FOREIGN);
 
       show = was_mapped;
       gdk_window_hide (window);
 
-      do_reparent_to_impl = TRUE;
       change_impl (window,
 		   new_parent->impl_window,
 		   new_parent->impl);
@@ -1607,22 +1434,13 @@ gdk_window_reparent (GdkWindow *window,
     }
 
   if (old_parent)
-    {
-      old_parent->children = g_list_remove_link (old_parent->children, &window->children_list_node);
-
-      if (gdk_window_has_impl (window))
-        old_parent->impl_window->native_children =
-          g_list_remove (old_parent->impl_window->native_children, window);
-    }
+    old_parent->children = g_list_remove_link (old_parent->children, &window->children_list_node);
 
   window->parent = new_parent;
   window->x = x;
   window->y = y;
 
   new_parent->children = g_list_concat (&window->children_list_node, new_parent->children);
-
-  if (gdk_window_has_impl (window))
-    new_parent->impl_window->native_children = g_list_prepend (new_parent->impl_window->native_children, window);
 
   /* Switch the window type as appropriate */
 
@@ -1685,108 +1503,10 @@ gdk_window_reparent (GdkWindow *window,
 
   recompute_visible_regions (window, FALSE);
 
-  if (do_reparent_to_impl)
-    reparent_to_impl (window);
-  else
-    {
-      /* The reparent will have put the native window topmost in the native parent,
-       * which may be wrong wrt other native windows in the non-native hierarchy,
-       * so restack */
-      if (!gdk_window_has_impl (new_parent))
-	sync_native_window_stack_position (window);
-    }
-
   if (show)
     gdk_window_show_unraised (window);
   else
     _gdk_synthesize_crossing_events_for_geometry_change (window);
-}
-
-/**
- * gdk_window_ensure_native:
- * @window: a #GdkWindow
- *
- * Tries to ensure that there is a window-system native window for this
- * GdkWindow. This may fail in some situations, returning %FALSE.
- *
- * Some backends may not support native child windows.
- *
- * Returns: %TRUE if the window has a native window, %FALSE otherwise
- *
- * Since: 2.18
- */
-gboolean
-gdk_window_ensure_native (GdkWindow *window)
-{
-  GdkWindow *impl_window;
-  GdkWindowImpl *new_impl, *old_impl;
-  GdkDisplay *display;
-  GdkScreen *screen;
-  GdkWindow *above, *parent;
-  GList listhead;
-  GdkWindowImplClass *impl_class;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT ||
-      GDK_WINDOW_DESTROYED (window))
-    return FALSE;
-
-  impl_window = gdk_window_get_impl_window (window);
-
-  if (impl_window == window)
-    /* Already has an impl. */
-    return TRUE;
-
-  /* Need to create a native window */
-
-  screen = gdk_window_get_screen (window);
-  display = gdk_screen_get_display (screen);
-  parent = window->parent;
-
-  old_impl = window->impl;
-  _gdk_display_create_window_impl (display,
-                                   window, parent,
-                                   screen,
-                                   get_native_event_mask (window),
-                                   NULL);
-  new_impl = window->impl;
-
-  parent->impl_window->native_children =
-    g_list_prepend (parent->impl_window->native_children, window);
-
-  window->impl = old_impl;
-  change_impl (window, window, new_impl);
-
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-
-  /* Native window creation will put the native window topmost in the
-   * native parent, which may be wrong wrt the position of the previous
-   * non-native window wrt to the other non-native children, so correct this.
-   */
-  above = find_native_sibling_above (parent, window);
-  if (above)
-    {
-      listhead.data = window;
-      listhead.prev = NULL;
-      listhead.next = NULL;
-      impl_class->restack_under ((GdkWindow *)above, &listhead);
-    }
-
-  recompute_visible_regions (window, FALSE);
-
-  reparent_to_impl (window);
-
-  impl_class->input_shape_combine_region (window,
-                                          window->input_shape,
-                                          0, 0);
-
-  if (gdk_window_is_viewable (window))
-    impl_class->show (window, FALSE);
-
-  gdk_window_invalidate_in_parent (window);
-
-  return TRUE;
 }
 
 /**
@@ -1934,21 +1654,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     case GDK_WINDOW_SUBSURFACE:
       if (window->window_type == GDK_WINDOW_FOREIGN && !foreign_destroy)
 	{
-	  /* Logically, it probably makes more sense to send
-	   * a "destroy yourself" message to the foreign window
-	   * whether or not it's in our hierarchy; but for historical
-	   * reasons, we only send "destroy yourself" messages to
-	   * foreign windows in our hierarchy.
-	   */
-	  if (window->parent)
-            {
-              impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-
-              if (gdk_window_has_impl (window))
-                impl_class->destroy_foreign (window);
-            }
-
-	  /* Also for historical reasons, we remove any filters
+	  /* For historical reasons, we remove any filters
 	   * on a foreign window when it or a parent is destroyed;
 	   * this likely causes problems if two separate portions
 	   * of code are maintaining filter lists on a foreign window.
@@ -1961,10 +1667,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	    {
 	      if (window->parent->children)
                 window->parent->children = g_list_remove_link (window->parent->children, &window->children_list_node);
-
-              if (gdk_window_has_impl (window))
-                window->parent->impl_window->native_children =
-                  g_list_remove (window->parent->impl_window->native_children, window);
 
 	      if (!recursing &&
 		  GDK_WINDOW_IS_MAPPED (window))
@@ -2009,10 +1711,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 						   recursing_native || gdk_window_has_impl (window),
 						   foreign_destroy);
 		}
-
-
-              if (gdk_window_has_impl (window))
-                g_assert (window->native_children == NULL);
 	    }
 
 	  _gdk_window_clear_update_area (window);
@@ -2407,8 +2105,11 @@ gdk_window_add_filter (GdkWindow     *window,
 
   /* Filters are for the native events on the native window, so
      ensure there is a native window. */
-  if (window)
-    gdk_window_ensure_native (window);
+  if (window && !gdk_window_has_impl (window))
+    {
+      g_warning ("Filters only work on toplevel windows");
+      return;
+    }
 
   if (window)
     tmp_list = window->filters;
@@ -3296,18 +2997,8 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 static void
 gdk_window_update_native_shapes (GdkWindow *window)
 {
-  GdkWindow *child;
-  GList *l;
-
   if (should_apply_clip_as_shape (window))
     apply_clip_as_shape (window);
-
-  for (l = window->native_children; l != NULL; l = l->next)
-    {
-      child = l->data;
-
-      gdk_window_update_native_shapes (child);
-    }
 }
 
 /* Process and remove any invalid area on the native window by creating
@@ -3470,86 +3161,6 @@ static void
 gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 					  const cairo_region_t *region,
                                           GdkWindowChildFunc    child_func,
-					  gpointer              user_data);
-
-/* Returns true if window is a decendant of parent, but stops looking
- * at the first native window. Also ensures that all parents match
- * child_func if non-null..
- *
- * This is useful in combination with
- * window->impl_window->native_children as it lets you find all native
- * decendants in an efficient way (assuming few children are native).
- */
-static gboolean
-has_visible_ancestor_in_impl (GdkWindow *window,
-                              GdkWindow *ancestor,
-                              GdkWindowChildFunc child_func,
-                              gpointer user_data)
-{
-  GdkWindow *p;
-  GdkWindow *stop_at;
-
-  p = window->parent;
-  stop_at = p->impl_window;
-  while (p != NULL)
-    {
-      if (!p->viewable)
-        return FALSE;
-      if (child_func &&
-          !(*child_func) ((GdkWindow *)p, user_data))
-        return FALSE;
-      if (p == ancestor)
-        return TRUE;
-      if (p == stop_at)
-        return FALSE;
-      p = p->parent;
-    }
-  return FALSE;
-}
-
-static void
-invalidate_impl_subwindows (GdkWindow            *window,
-			    const cairo_region_t *region,
-			    GdkWindowChildFunc    child_func,
-			    gpointer              user_data)
-{
-  GList *l;
-
-  /* Iterate over all native children of the native window
-     that window is in. */
-  for (l = window->impl_window->native_children;
-       l != NULL;
-       l = l->next)
-    {
-      GdkWindow *native_child = l->data;
-      cairo_region_t *tmp;
-      int dx, dy;
-
-      if (native_child->input_only)
-	continue;
-
-      /* Then skip any that does not have window as an ancestor,
-       * also checking that the ancestors are visible and pass child_func
-       * This is fast if we assume native children are rare */
-      if (!has_visible_ancestor_in_impl (native_child, window,
-                                         child_func, user_data))
-        continue;
-
-      dx = native_child->parent->abs_x + native_child->x - window->abs_x;
-      dy = native_child->parent->abs_y + native_child->y - window->abs_y;
-
-      tmp = cairo_region_copy (region);
-      cairo_region_translate (tmp, -dx, -dy);
-      gdk_window_invalidate_maybe_recurse_full (native_child,
-                                                tmp, child_func, user_data);
-      cairo_region_destroy (tmp);
-    }
-}
-
-static void
-gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
-					  const cairo_region_t *region,
-                                          GdkWindowChildFunc    child_func,
 					  gpointer              user_data)
 {
   cairo_region_t *visible_region;
@@ -3570,9 +3181,6 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
   r.y = 0;
 
   visible_region = cairo_region_copy (region);
-
-  if (child_func)
-    invalidate_impl_subwindows (window, region, child_func, user_data);
 
   while (window != NULL && 
 	 !cairo_region_is_empty (visible_region))
@@ -3688,8 +3296,7 @@ gdk_window_invalidate_region (GdkWindow       *window,
  *
  * This version of invalidation is used when you recieve expose events
  * from the native window system. It exposes the native window, plus
- * any non-native child windows (but not native child windows, as those would
- * have gotten their own expose events).
+ * any non-native child windows.
  **/
 void
 _gdk_window_invalidate_for_expose (GdkWindow       *window,
@@ -4094,32 +3701,11 @@ gdk_get_default_root_window (void)
   return gdk_screen_get_root_window (gdk_screen_get_default ());
 }
 
-static void
-get_all_native_children (GdkWindow *window,
-			 GList **native)
-{
-  GdkWindow *child;
-  GList *l;
-
-  for (l = window->children; l != NULL; l = l->next)
-    {
-      child = l->data;
-
-      if (gdk_window_has_impl (child))
-	*native = g_list_prepend (*native, child);
-      else
-	get_all_native_children (child, native);
-    }
-}
-
 
 static gboolean
 gdk_window_raise_internal (GdkWindow *window)
 {
   GdkWindow *parent = window->parent;
-  GdkWindow *above;
-  GList *native_children;
-  GList *l, listhead;
   GdkWindowImplClass *impl_class;
   gboolean did_raise = FALSE;
 
@@ -4131,51 +3717,10 @@ gdk_window_raise_internal (GdkWindow *window)
     }
 
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
   /* Just do native raise for toplevels */
-  if (gdk_window_is_toplevel (window) ||
-      /* The restack_under codepath should work correctly even if the parent
-	 is native, but it relies on the order of ->children to be correct,
-	 and some apps like SWT reorder the x windows without gdks knowledge,
-	 so we use raise directly in order to make these behave as before
-	 when using native windows */
-      (gdk_window_has_impl (window) && gdk_window_has_impl (parent)))
-    {
+  if (gdk_window_has_impl (window))
       impl_class->raise (window);
-    }
-  else if (gdk_window_has_impl (window))
-    {
-      above = find_native_sibling_above (parent, window);
-      if (above)
-	{
-	  listhead.data = window;
-	  listhead.next = NULL;
-	  listhead.prev = NULL;
-	  impl_class->restack_under ((GdkWindow *)above,
-				     &listhead);
-	}
-      else
-	impl_class->raise (window);
-    }
-  else
-    {
-      native_children = NULL;
-      get_all_native_children (window, &native_children);
-      if (native_children != NULL)
-	{
-	  above = find_native_sibling_above (parent, window);
-
-	  if (above)
-	    impl_class->restack_under (above, native_children);
-	  else
-	    {
-	      /* Right order, since native_children is bottom-topmost first */
-	      for (l = native_children; l != NULL; l = l->next)
-		impl_class->raise (l->data);
-	    }
-
-	  g_list_free (native_children);
-	}
-    }
 
   return did_raise;
 }
@@ -4186,7 +3731,6 @@ set_viewable (GdkWindow *w,
 	      gboolean val)
 {
   GdkWindow *child;
-  GdkWindowImplClass *impl_class;
   GList *l;
 
   if (w->viewable == val)
@@ -4201,45 +3745,8 @@ set_viewable (GdkWindow *w,
     {
       child = l->data;
 
-      if (GDK_WINDOW_IS_MAPPED (child) &&
-	  child->window_type != GDK_WINDOW_FOREIGN)
+      if (GDK_WINDOW_IS_MAPPED (child))
 	set_viewable (child, val);
-    }
-
-  if (gdk_window_has_impl (w)  &&
-      w->window_type != GDK_WINDOW_FOREIGN &&
-      !gdk_window_is_toplevel (w))
-    {
-      /* For most native windows we show/hide them not when they are
-       * mapped/unmapped, because that may not produce the correct results.
-       * For instance, if a native window have a non-native parent which is
-       * hidden, but its native parent is viewable then showing the window
-       * would make it viewable to X but its not viewable wrt the non-native
-       * hierarchy. In order to handle this we track the gdk side viewability
-       * and only map really viewable windows.
-       *
-       * There are two exceptions though:
-       *
-       * For foreign windows we don't want ever change the mapped state
-       * except when explicitly done via gdk_window_show/hide, as this may
-       * cause problems for client owning the foreign window when its window
-       * is suddenly mapped or unmapped.
-       *
-       * For toplevel windows embedded in a foreign window (e.g. a plug)
-       * we sometimes synthesize a map of a window, but the native
-       * window is really shown by the embedder, so we don't want to
-       * do the show ourselves. We can't really tell this case from the normal
-       * toplevel show as such toplevels are seen by gdk as parents of the
-       * root window, so we make an exception for all toplevels.
-       */
-
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (w->impl);
-      if (val)
-	impl_class->show ((GdkWindow *)w, FALSE);
-      else
-	impl_class->hide ((GdkWindow *)w);
-
-      return TRUE;
     }
 
   return FALSE;
@@ -4388,9 +3895,6 @@ gdk_window_lower_internal (GdkWindow *window)
 {
   GdkWindow *parent = window->parent;
   GdkWindowImplClass *impl_class;
-  GdkWindow *above;
-  GList *native_children;
-  GList *l, listhead;
 
   if (parent)
     {
@@ -4399,52 +3903,10 @@ gdk_window_lower_internal (GdkWindow *window)
     }
 
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
   /* Just do native lower for toplevels */
-  if (gdk_window_is_toplevel (window) ||
-      /* The restack_under codepath should work correctly even if the parent
-	 is native, but it relies on the order of ->children to be correct,
-	 and some apps like SWT reorder the x windows without gdks knowledge,
-	 so we use lower directly in order to make these behave as before
-	 when using native windows */
-      (gdk_window_has_impl (window) && gdk_window_has_impl (parent)))
-    {
-      impl_class->lower (window);
-    }
-  else if (gdk_window_has_impl (window))
-    {
-      above = find_native_sibling_above (parent, window);
-      if (above)
-	{
-	  listhead.data = window;
-	  listhead.next = NULL;
-	  listhead.prev = NULL;
-	  impl_class->restack_under ((GdkWindow *)above, &listhead);
-	}
-      else
-	impl_class->raise (window);
-    }
-  else
-    {
-      native_children = NULL;
-      get_all_native_children (window, &native_children);
-      if (native_children != NULL)
-	{
-	  above = find_native_sibling_above (parent, window);
-
-	  if (above)
-	    impl_class->restack_under ((GdkWindow *)above,
-				       native_children);
-	  else
-	    {
-	      /* Right order, since native_children is bottom-topmost first */
-	      for (l = native_children; l != NULL; l = l->next)
-		impl_class->raise (l->data);
-	    }
-
-	  g_list_free (native_children);
-	}
-
-    }
+  if (gdk_window_has_impl (window))
+    impl_class->lower (window);
 }
 
 static void
@@ -4526,10 +3988,7 @@ gdk_window_restack (GdkWindow     *window,
 {
   GdkWindowImplClass *impl_class;
   GdkWindow *parent;
-  GdkWindow *above_native;
   GList *sibling_link;
-  GList *native_children;
-  GList *l, listhead;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (sibling == NULL || GDK_IS_WINDOW (sibling));
@@ -4571,41 +4030,6 @@ gdk_window_restack (GdkWindow     *window,
 	parent->children = list_insert_link_before (parent->children,
                                                     sibling_link->next,
                                                     &window->children_list_node);
-
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-      if (gdk_window_has_impl (window))
-	{
-	  above_native = find_native_sibling_above (parent, window);
-	  if (above_native)
-	    {
-	      listhead.data = window;
-	      listhead.next = NULL;
-	      listhead.prev = NULL;
-	      impl_class->restack_under (above_native, &listhead);
-	    }
-	  else
-	    impl_class->raise (window);
-	}
-      else
-	{
-	  native_children = NULL;
-	  get_all_native_children (window, &native_children);
-	  if (native_children != NULL)
-	    {
-	      above_native = find_native_sibling_above (parent, window);
-	      if (above_native)
-		impl_class->restack_under (above_native,
-					   native_children);
-	      else
-		{
-		  /* Right order, since native_children is bottom-topmost first */
-		  for (l = native_children; l != NULL; l = l->next)
-		    impl_class->raise (l->data);
-		}
-
-	      g_list_free (native_children);
-	    }
-	}
     }
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
@@ -4981,29 +4405,6 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
 
 
 static void
-move_native_children (GdkWindow *private)
-{
-  GList *l;
-  GdkWindow *child;
-  GdkWindowImplClass *impl_class;
-
-  for (l = private->children; l; l = l->next)
-    {
-      child = l->data;
-
-      if (child->impl != private->impl)
-	{
-	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (child->impl);
-	  impl_class->move_resize (child, TRUE,
-				   child->x, child->y,
-				   child->width, child->height);
-	}
-      else
-	move_native_children  (child);
-    }
-}
-
-static void
 gdk_window_move_resize_internal (GdkWindow *window,
 				 gboolean   with_move,
 				 gint       x,
@@ -5012,9 +4413,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
 				 gint       height)
 {
   cairo_region_t *old_region, *new_region;
-  GdkWindowImplClass *impl_class;
   gboolean expose;
-  int old_abs_x, old_abs_y;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5072,24 +4471,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
       window->height = height;
     }
 
-  old_abs_x = window->abs_x;
-  old_abs_y = window->abs_y;
-
   recompute_visible_regions (window, FALSE);
-
-  if (gdk_window_has_impl (window))
-    {
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-
-      /* Do the actual move after recomputing things, as this will have set the shape to
-	 the now correct one, thus avoiding copying regions that should not be copied. */
-      impl_class->move_resize (window, TRUE,
-			       window->x, window->y,
-			       window->width, window->height);
-    }
-  else if (old_abs_x != window->abs_x ||
-	   old_abs_y != window->abs_y)
-    move_native_children (window);
 
   if (expose)
     {
@@ -5288,8 +4670,6 @@ gdk_window_scroll (GdkWindow *window,
     }
 
   recompute_visible_regions (window, TRUE);
-
-  move_native_children (window);
 
   gdk_window_invalidate_rect_full (window, NULL, TRUE);
 

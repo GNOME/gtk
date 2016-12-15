@@ -192,7 +192,6 @@ struct _GdkWindow
   GList *filters;
   GList *children;
   GList children_list_node;
-  GList *native_children;
 
   struct {
     /* The temporary surface that we're painting to. This will be composited

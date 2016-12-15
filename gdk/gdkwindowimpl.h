@@ -63,8 +63,6 @@ struct _GdkWindowImplClass
   void         (* withdraw)             (GdkWindow       *window);
   void         (* raise)                (GdkWindow       *window);
   void         (* lower)                (GdkWindow       *window);
-  void         (* restack_under)        (GdkWindow       *window,
-					 GList           *native_siblings);
   void         (* restack_toplevel)     (GdkWindow       *window,
 					 GdkWindow       *sibling,
 					 gboolean        above);
@@ -114,8 +112,6 @@ struct _GdkWindowImplClass
   gboolean    (* begin_paint)           (GdkWindow       *window);
   void        (* end_paint)             (GdkWindow       *window);
 
-  cairo_region_t * (* get_shape)        (GdkWindow       *window);
-  cairo_region_t * (* get_input_shape)  (GdkWindow       *window);
   void         (* shape_combine_region) (GdkWindow       *window,
                                          const cairo_region_t *shape_region,
                                          gint             offset_x,
@@ -149,13 +145,6 @@ struct _GdkWindowImplClass
 					 gboolean         recursing,
 					 gboolean         foreign_destroy);
 
-
- /* Called when gdk_window_destroy() is called on a foreign window
-  * or an ancestor of the foreign window. It should generally reparent
-  * the window out of it's current heirarchy, hide it, and then
-  * send a message to the owner requesting that the window be destroyed.
-  */
-  void         (*destroy_foreign)       (GdkWindow       *window);
 
   /* optional */
   gboolean     (* beep)                 (GdkWindow       *window);

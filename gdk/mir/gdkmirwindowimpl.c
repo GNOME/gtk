@@ -732,14 +732,6 @@ gdk_mir_window_impl_lower (GdkWindow *window)
 }
 
 static void
-gdk_mir_window_impl_restack_under (GdkWindow *window,
-                                   GList     *native_siblings)
-{
-  //g_printerr ("gdk_mir_window_impl_restack_under window=%p\n", window);
-  /* We don't support client window stacking */
-}
-
-static void
 gdk_mir_window_impl_restack_toplevel (GdkWindow *window,
                                       GdkWindow *sibling,
                                       gboolean   above)
@@ -980,20 +972,6 @@ gdk_mir_window_impl_end_paint (GdkWindow *window)
     send_buffer (window);
 }
 
-static cairo_region_t *
-gdk_mir_window_impl_get_shape (GdkWindow *window)
-{
-  //g_printerr ("gdk_mir_window_impl_get_shape window=%p\n", window);
-  return NULL;
-}
-
-static cairo_region_t *
-gdk_mir_window_impl_get_input_shape (GdkWindow *window)
-{
-  //g_printerr ("gdk_mir_window_impl_get_input_shape window=%p\n", window);
-  return NULL;
-}
-
 static void
 gdk_mir_window_impl_shape_combine_region (GdkWindow            *window,
                                           const cairo_region_t *shape_region,
@@ -1022,12 +1000,6 @@ gdk_mir_window_impl_destroy (GdkWindow *window,
 
   impl->visible = FALSE;
   ensure_no_surface (window);
-}
-
-static void
-gdk_mir_window_impl_destroy_foreign (GdkWindow *window)
-{
-  //g_printerr ("gdk_mir_window_impl_destroy_foreign window=%p\n", window);
 }
 
 static void
@@ -1695,7 +1667,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->withdraw = gdk_mir_window_impl_withdraw;
   impl_class->raise = gdk_mir_window_impl_raise;
   impl_class->lower = gdk_mir_window_impl_lower;
-  impl_class->restack_under = gdk_mir_window_impl_restack_under;
   impl_class->restack_toplevel = gdk_mir_window_impl_restack_toplevel;
   impl_class->move_resize = gdk_mir_window_impl_move_resize;
   impl_class->move_to_rect = gdk_mir_window_impl_move_to_rect;
@@ -1708,12 +1679,9 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->get_device_state = gdk_mir_window_impl_get_device_state;
   impl_class->begin_paint = gdk_mir_window_impl_begin_paint;
   impl_class->end_paint = gdk_mir_window_impl_end_paint;
-  impl_class->get_shape = gdk_mir_window_impl_get_shape;
-  impl_class->get_input_shape = gdk_mir_window_impl_get_input_shape;
   impl_class->shape_combine_region = gdk_mir_window_impl_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_mir_window_impl_input_shape_combine_region;
   impl_class->destroy = gdk_mir_window_impl_destroy;
-  impl_class->destroy_foreign = gdk_mir_window_impl_destroy_foreign;
   impl_class->focus = gdk_mir_window_impl_focus;
   impl_class->set_type_hint = gdk_mir_window_impl_set_type_hint;
   impl_class->get_type_hint = gdk_mir_window_impl_get_type_hint;

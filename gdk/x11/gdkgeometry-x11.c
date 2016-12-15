@@ -35,50 +35,6 @@ struct _GdkWindowQueueItem
   cairo_region_t *antiexpose_area;
 };
 
-void
-_gdk_x11_window_move_resize_child (GdkWindow *window,
-                                   gint       x,
-                                   gint       y,
-                                   gint       width,
-                                   gint       height)
-{
-  GdkWindowImplX11 *impl;
-
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-  if (width * impl->window_scale > 65535 ||
-      height * impl->window_scale > 65535)
-    {
-      g_warning ("Native children wider or taller than 65535 pixels are not supported");
-
-      if (width * impl->window_scale > 65535)
-        width = 65535 / impl->window_scale;
-      if (height * impl->window_scale > 65535)
-        height = 65535 / impl->window_scale;
-    }
-
-  window->x = x;
-  window->y = y;
-  impl->unscaled_width = width * impl->window_scale;
-  impl->unscaled_height = height * impl->window_scale;
-  window->width = width;
-  window->height = height;
-
-  /* We don't really care about origin overflow, because on overflow
-   * the window won't be visible anyway and thus it will be shaped
-   * to nothing
-   */
-  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-                     GDK_WINDOW_XID (window),
-                     (window->x + window->parent->abs_x) * impl->window_scale,
-                     (window->y + window->parent->abs_y) * impl->window_scale,
-                     width * impl->window_scale,
-                     height * impl->window_scale);
-}
-
 static Bool
 expose_serial_predicate (Display *xdisplay,
 			 XEvent  *xev,

@@ -316,13 +316,6 @@ gdk_pre_parse (void)
                                               (GDebugKey *) gdk_vulkan_keys,
                                               G_N_ELEMENTS (gdk_vulkan_keys));
 
-  if (getenv ("GDK_NATIVE_WINDOWS"))
-    {
-      g_warning ("The GDK_NATIVE_WINDOWS environment variable is not supported in GTK3.\n"
-                 "See the documentation for gdk_window_ensure_native() on how to get native windows.");
-      g_unsetenv ("GDK_NATIVE_WINDOWS");
-    }
-
   rendering_mode = g_getenv ("GDK_RENDERING");
   if (rendering_mode)
     {

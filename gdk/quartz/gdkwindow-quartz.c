@@ -2752,20 +2752,6 @@ gdk_quartz_window_set_shadow_width (GdkWindow *window,
   _gdk_quartz_window_update_has_shadow (impl);
 }
 
-static cairo_region_t *
-gdk_quartz_window_get_shape (GdkWindow *window)
-{
-  /* FIXME: implement */
-  return NULL;
-}
-
-static cairo_region_t *
-gdk_quartz_window_get_input_shape (GdkWindow *window)
-{
-  /* FIXME: implement */
-  return NULL;
-}
-
 /* Protocol to build cleanly for OSX < 10.7 */
 @protocol ScaleFactor
 - (CGFloat) backingScaleFactor;
@@ -2817,8 +2803,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
   impl_class->destroy = gdk_quartz_window_destroy;
   impl_class->destroy_foreign = gdk_quartz_window_destroy_foreign;
-  impl_class->get_shape = gdk_quartz_window_get_shape;
-  impl_class->get_input_shape = gdk_quartz_window_get_input_shape;
   impl_class->begin_paint = gdk_window_impl_quartz_begin_paint;
   impl_class->get_scale_factor = gdk_quartz_window_get_scale_factor;
 

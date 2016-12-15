@@ -525,7 +525,11 @@ _gdk_x11_window_change_property (GdkWindow    *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  gdk_window_ensure_native (window);
+  if (!gdk_window_has_native (window))
+    {
+      g_warning ("Can't change property on non-native window");
+      return;
+    }
 
   display = gdk_window_get_display (window);
   xproperty = gdk_x11_atom_to_xatom_for_display (display, property);

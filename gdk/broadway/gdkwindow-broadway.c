@@ -385,11 +385,6 @@ _gdk_broadway_window_destroy (GdkWindow *window,
 				       impl->id);
 }
 
-static void
-gdk_broadway_window_destroy_foreign (GdkWindow *window)
-{
-}
-
 /* This function is called when the XWindow is really gone.
  */
 static void
@@ -519,12 +514,6 @@ gdk_window_broadway_reparent (GdkWindow *window,
 
 static void
 gdk_window_broadway_raise (GdkWindow *window)
-{
-}
-
-static void
-gdk_window_broadway_restack_under (GdkWindow *window,
-				   GList *native_siblings /* in requested order, first is bottom-most */)
 {
 }
 
@@ -1010,18 +999,6 @@ gdk_broadway_window_set_functions (GdkWindow    *window,
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
-}
-
-static cairo_region_t *
-gdk_broadway_window_get_shape (GdkWindow *window)
-{
-  return NULL;
-}
-
-static cairo_region_t *
-gdk_broadway_window_get_input_shape (GdkWindow *window)
-{
-  return NULL;
 }
 
 static void
@@ -1516,7 +1493,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->get_events = gdk_window_broadway_get_events;
   impl_class->raise = gdk_window_broadway_raise;
   impl_class->lower = gdk_window_broadway_lower;
-  impl_class->restack_under = gdk_window_broadway_restack_under;
   impl_class->restack_toplevel = gdk_window_broadway_restack_toplevel;
   impl_class->move_resize = gdk_window_broadway_move_resize;
   impl_class->reparent = gdk_window_broadway_reparent;
@@ -1527,9 +1503,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->shape_combine_region = gdk_window_broadway_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_broadway_input_shape_combine_region;
   impl_class->destroy = _gdk_broadway_window_destroy;
-  impl_class->destroy_foreign = gdk_broadway_window_destroy_foreign;
-  impl_class->get_shape = gdk_broadway_window_get_shape;
-  impl_class->get_input_shape = gdk_broadway_window_get_input_shape;
   impl_class->end_paint = gdk_broadway_window_end_paint;
   impl_class->beep = gdk_broadway_window_beep;
 

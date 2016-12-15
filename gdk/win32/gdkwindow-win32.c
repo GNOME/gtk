@@ -951,9 +951,8 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
   impl->wrapper = window;
   parent = GetParent (anid);
 
-  window->parent = gdk_win32_handle_table_lookup (parent);
-  if (!window->parent || GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_FOREIGN)
-    window->parent = gdk_get_default_root_window ();
+  /* Always treat foreigns as toplevels */
+  window->parent = gdk_get_default_root_window ();
 
   window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
   window->parent->impl_window->native_children =
@@ -1038,18 +1037,6 @@ gdk_win32_window_destroy (GdkWindow *window,
       window->destroyed = TRUE;
       DestroyWindow (GDK_WINDOW_HWND (window));
     }
-}
-
-static void
-gdk_win32_window_destroy_foreign (GdkWindow *window)
-{
-  /* It's somebody else's window, but in our hierarchy, so reparent it
-   * to the desktop, and then try to destroy it.
-   */
-  gdk_window_hide (window);
-  gdk_window_reparent (window, NULL, 0, 0);
-
-  PostMessage (GDK_WINDOW_HWND (window), WM_CLOSE, 0, 0);
 }
 
 /* This function is called when the window really gone.
@@ -2299,13 +2286,6 @@ gdk_win32_window_get_root_coords (GdkWindow *window,
 			   y * impl->window_scale,
 			   (tx + _gdk_offset_x) / impl->window_scale,
 			   (ty + _gdk_offset_y) / impl->window_scale));
-}
-
-static void
-gdk_win32_window_restack_under (GdkWindow *window,
-				GList *native_siblings)
-{
-	// ### TODO
 }
 
 static void
@@ -5595,35 +5575,6 @@ gdk_win32_window_set_opacity (GdkWindow *window,
     }
 }
 
-static cairo_region_t *
-gdk_win32_window_get_shape (GdkWindow *window)
-{
-  HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
-  int  type = GetWindowRgn (GDK_WINDOW_HWND (window), hrgn);
-  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  if (type == SIMPLEREGION || type == COMPLEXREGION)
-    {
-      cairo_region_t *region = _gdk_win32_hrgn_to_region (hrgn, impl->window_scale);
-
-      DeleteObject (hrgn);
-      return region;
-    }
-
-  return NULL;
-}
-
-static void
-gdk_win32_input_shape_combine_region (GdkWindow *window,
-				      const cairo_region_t *shape_region,
-				      gint offset_x,
-				      gint offset_y)
-{
-  /* Partial input shape support is implemented by handling the
-   * WM_NCHITTEST message.
-   */
-}
-
 gboolean
 gdk_win32_window_is_win32 (GdkWindow *window)
 {
@@ -6058,7 +6009,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->get_events = gdk_win32_window_get_events;
   impl_class->raise = gdk_win32_window_raise;
   impl_class->lower = gdk_win32_window_lower;
-  impl_class->restack_under = gdk_win32_window_restack_under;
   impl_class->restack_toplevel = gdk_win32_window_restack_toplevel;
   impl_class->move_resize = gdk_win32_window_move_resize;
   impl_class->reparent = gdk_win32_window_reparent;
@@ -6070,9 +6020,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->shape_combine_region = gdk_win32_window_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_win32_input_shape_combine_region;
   impl_class->destroy = gdk_win32_window_destroy;
-  impl_class->destroy_foreign = gdk_win32_window_destroy_foreign;
-  impl_class->get_shape = gdk_win32_window_get_shape;
-  //FIXME?: impl_class->get_input_shape = gdk_win32_window_get_input_shape;
   impl_class->begin_paint = gdk_win32_window_begin_paint;
   impl_class->end_paint = gdk_win32_window_end_paint;
 
@@ -6135,10 +6082,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 HGDIOBJ
 gdk_win32_window_get_handle (GdkWindow *window)
 {
-  /* Try to ensure the window has a native window */
-  if (!_gdk_window_has_impl (window))
-    gdk_window_ensure_native (window);
-
   if (!GDK_WINDOW_IS_WIN32 (window))
     {
       g_warning (G_STRLOC " window is not a native Win32 window");

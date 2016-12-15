@@ -2567,12 +2567,6 @@ gdk_window_wayland_lower (GdkWindow *window)
 }
 
 static void
-gdk_window_wayland_restack_under (GdkWindow *window,
-                                  GList     *native_siblings)
-{
-}
-
-static void
 gdk_window_wayland_restack_toplevel (GdkWindow *window,
                                      GdkWindow *sibling,
                                      gboolean   above)
@@ -2810,23 +2804,6 @@ gdk_wayland_window_destroy (GdkWindow *window,
 
   gdk_wayland_window_hide_surface (window);
   drop_cairo_surfaces (window);
-}
-
-static void
-gdk_window_wayland_destroy_foreign (GdkWindow *window)
-{
-}
-
-static cairo_region_t *
-gdk_wayland_window_get_shape (GdkWindow *window)
-{
-  return NULL;
-}
-
-static cairo_region_t *
-gdk_wayland_window_get_input_shape (GdkWindow *window)
-{
-  return NULL;
 }
 
 static void
@@ -3617,7 +3594,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->get_events = gdk_window_wayland_get_events;
   impl_class->raise = gdk_window_wayland_raise;
   impl_class->lower = gdk_window_wayland_lower;
-  impl_class->restack_under = gdk_window_wayland_restack_under;
   impl_class->restack_toplevel = gdk_window_wayland_restack_toplevel;
   impl_class->move_resize = gdk_window_wayland_move_resize;
   impl_class->move_to_rect = gdk_window_wayland_move_to_rect;
@@ -3629,9 +3605,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->shape_combine_region = gdk_window_wayland_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_wayland_input_shape_combine_region;
   impl_class->destroy = gdk_wayland_window_destroy;
-  impl_class->destroy_foreign = gdk_window_wayland_destroy_foreign;
-  impl_class->get_shape = gdk_wayland_window_get_shape;
-  impl_class->get_input_shape = gdk_wayland_window_get_input_shape;
   impl_class->begin_paint = gdk_window_impl_wayland_begin_paint;
   impl_class->end_paint = gdk_window_impl_wayland_end_paint;
   impl_class->beep = gdk_window_impl_wayland_beep;

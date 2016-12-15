@@ -943,6 +943,11 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
           /* The common code warns for this case */
           xparent = GDK_SCREEN_XROOTWIN (screen);
         }
+      break;
+
+    case GDK_WINDOW_CHILD:
+      g_assert_not_reached ();
+      break;
     }
 
   if (!window->input_only)
@@ -1037,8 +1042,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   connect_frame_clock (window);
 
-  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
-    gdk_window_freeze_toplevel_updates (window);
+  gdk_window_freeze_toplevel_updates (window);
 }
 
 static GdkEventMask
@@ -1124,14 +1128,10 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   impl->wrapper = win;
   impl->window_scale = GDK_X11_SCREEN (screen)->window_scale;
 
-  win->parent = gdk_x11_window_lookup_for_display (display, parent);
-
-  if (!win->parent || GDK_WINDOW_TYPE (win->parent) == GDK_WINDOW_FOREIGN)
-    win->parent = gdk_screen_get_root_window (screen);
+  /* Always treat foreigns as toplevels */
+  win->parent = gdk_screen_get_root_window (screen);
 
   win->parent->children = g_list_concat (&win->children_list_node, win->parent->children);
-  win->parent->impl_window->native_children =
-    g_list_prepend (win->parent->impl_window->native_children, win);
 
   impl->xid = window;
 
@@ -1222,46 +1222,6 @@ gdk_x11_window_destroy (GdkWindow *window,
 
   if (!recursing && !foreign_destroy)
     XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
-}
-
-static void
-gdk_x11_window_destroy_foreign (GdkWindow *window)
-{
-  /* It's somebody else's window, but in our hierarchy,
-   * so reparent it to the root window, and then send
-   * it a delete event, as if we were a WM
-   */
-  XClientMessageEvent xclient;
-  GdkDisplay *display;
-
-  display = GDK_WINDOW_DISPLAY (window);
-  gdk_x11_display_error_trap_push (display);
-  gdk_window_hide (window);
-  gdk_window_reparent (window, NULL, 0, 0);
-
-  memset (&xclient, 0, sizeof (xclient));
-  xclient.type = ClientMessage;
-  xclient.window = GDK_WINDOW_XID (window);
-  xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "WM_PROTOCOLS");
-  xclient.format = 32;
-  xclient.data.l[0] = gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW");
-  xclient.data.l[1] = CurrentTime;
-  xclient.data.l[2] = 0;
-  xclient.data.l[3] = 0;
-  xclient.data.l[4] = 0;
-  
-  XSendEvent (GDK_WINDOW_XDISPLAY (window),
-              GDK_WINDOW_XID (window),
-              False, 0, (XEvent *)&xclient);
-  gdk_x11_display_error_trap_pop_ignored (display);
-}
-
-static GdkWindow *
-get_root (GdkWindow *window)
-{
-  GdkScreen *screen = gdk_window_get_screen (window);
-
-  return gdk_screen_get_root_window (screen);
 }
 
 /* This function is called when the XWindow is really gone.
@@ -1532,34 +1492,6 @@ gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
 }
 
 static void
-post_unmap (GdkWindow *window)
-{
-  GdkWindow *start_window = NULL;
-  
-  if (window->input_only)
-    return;
-
-  if (window->window_type == GDK_WINDOW_CHILD)
-    start_window = _gdk_window_get_impl_window ((GdkWindow *)window->parent);
-  else if (window->window_type == GDK_WINDOW_TEMP)
-    start_window = get_root (window);
-
-  if (start_window)
-    {
-      if (window->window_type == GDK_WINDOW_CHILD && window->parent)
-	{
-	  GdkRectangle invalid_rect;
-      
-	  gdk_window_get_position (window, &invalid_rect.x, &invalid_rect.y);
-	  invalid_rect.width = gdk_window_get_width (window);
-	  invalid_rect.height = gdk_window_get_height (window);
-	  gdk_window_invalidate_rect ((GdkWindow *)window->parent,
-				      &invalid_rect, TRUE);
-	}
-    }
-}
-
-static void
 gdk_window_x11_hide (GdkWindow *window)
 {
   /* We'll get the unmap notify eventually, and handle it then,
@@ -1587,7 +1519,6 @@ gdk_window_x11_hide (GdkWindow *window)
   
   XUnmapWindow (GDK_WINDOW_XDISPLAY (window),
 		GDK_WINDOW_XID (window));
-  post_unmap (window);
 }
 
 static void
@@ -1604,8 +1535,6 @@ gdk_window_x11_withdraw (GdkWindow *window)
 
       XWithdrawWindow (GDK_WINDOW_XDISPLAY (window),
                        GDK_WINDOW_XID (window), 0);
-
-      post_unmap (window);
     }
 }
 
@@ -1616,25 +1545,14 @@ window_x11_move (GdkWindow *window,
 {
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
-    {
-      /* The window isn't actually damaged, but it's parent is */
-      window_pre_damage (window);
-      _gdk_x11_window_move_resize_child (window,
-                                         x, y,
-                                         window->width, window->height);
-    }
-  else
-    {
-      XMoveWindow (GDK_WINDOW_XDISPLAY (window),
-                   GDK_WINDOW_XID (window),
-                   x * impl->window_scale, y * impl->window_scale);
+  XMoveWindow (GDK_WINDOW_XDISPLAY (window),
+               GDK_WINDOW_XID (window),
+               x * impl->window_scale, y * impl->window_scale);
 
-      if (impl->override_redirect)
-        {
-          window->x = x;
-          window->y = y;
-        }
+  if (impl->override_redirect)
+    {
+      window->x = x;
+      window->y = y;
     }
 }
 
@@ -1643,6 +1561,8 @@ window_x11_resize (GdkWindow *window,
                    gint       width,
                    gint       height)
 {
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
   if (width < 1)
     width = 1;
 
@@ -1651,33 +1571,22 @@ window_x11_resize (GdkWindow *window,
 
   window_pre_damage (window);
 
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+  XResizeWindow (GDK_WINDOW_XDISPLAY (window),
+                 GDK_WINDOW_XID (window),
+                 width * impl->window_scale, height * impl->window_scale);
+
+  if (impl->override_redirect)
     {
-      _gdk_x11_window_move_resize_child (window,
-                                         window->x, window->y,
-                                         width, height);
+      impl->unscaled_width = width * impl->window_scale;
+      impl->unscaled_height = height * impl->window_scale;
+      window->width = width;
+      window->height = height;
+      _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
     }
   else
     {
-      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-      XResizeWindow (GDK_WINDOW_XDISPLAY (window),
-                     GDK_WINDOW_XID (window),
-                     width * impl->window_scale, height * impl->window_scale);
-
-      if (impl->override_redirect)
-        {
-          impl->unscaled_width = width * impl->window_scale;
-          impl->unscaled_height = height * impl->window_scale;
-          window->width = width;
-          window->height = height;
-          _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
-        }
-      else
-        {
-          if (width * impl->window_scale != impl->unscaled_width || height * impl->window_scale != impl->unscaled_height)
-            window->resize_count += 1;
-        }
+      if (width * impl->window_scale != impl->unscaled_width || height * impl->window_scale != impl->unscaled_height)
+        window->resize_count += 1;
     }
 }
 
@@ -1688,6 +1597,8 @@ window_x11_move_resize (GdkWindow *window,
                         gint       width,
                         gint       height)
 {
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
   if (width < 1)
     width = 1;
 
@@ -1696,37 +1607,27 @@ window_x11_move_resize (GdkWindow *window,
 
   window_pre_damage (window);
 
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
+                     GDK_WINDOW_XID (window),
+                     x * impl->window_scale, y * impl->window_scale,
+                     width * impl->window_scale, height * impl->window_scale);
+
+  if (impl->override_redirect)
     {
-      _gdk_x11_window_move_resize_child (window, x, y, width, height);
+      window->x = x;
+      window->y = y;
+
+      impl->unscaled_width = width * impl->window_scale;
+      impl->unscaled_height = height * impl->window_scale;
+      window->width = width;
+      window->height = height;
+
       _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
     }
   else
     {
-      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-      XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-                         GDK_WINDOW_XID (window),
-                         x * impl->window_scale, y * impl->window_scale,
-                         width * impl->window_scale, height * impl->window_scale);
-
-      if (impl->override_redirect)
-        {
-          window->x = x;
-          window->y = y;
-
-          impl->unscaled_width = width * impl->window_scale;
-          impl->unscaled_height = height * impl->window_scale;
-          window->width = width;
-          window->height = height;
-
-          _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
-        }
-      else
-        {
-          if (width * impl->window_scale != impl->unscaled_width || height * impl->window_scale != impl->unscaled_height)
-            window->resize_count += 1;
-        }
+      if (width * impl->window_scale != impl->unscaled_width || height * impl->window_scale != impl->unscaled_height)
+        window->resize_count += 1;
     }
 }
 
@@ -1746,23 +1647,6 @@ gdk_window_x11_move_resize (GdkWindow *window,
         window_x11_move_resize (window, x, y, width, height);
       else
         window_x11_resize (window, width, height);
-    }
-}
-
-static void
-set_scale_recursive (GdkWindow *window, int scale)
-{
-  GdkWindow *child;
-  GList *l;
-
-  for (l = window->children; l; l = l->next)
-    {
-      child = l->data;
-
-      if (child->impl != window->impl)
-        _gdk_x11_window_set_window_scale (child, scale);
-      else
-        set_scale_recursive (child, scale);
     }
 }
 
@@ -1798,7 +1682,7 @@ _gdk_x11_window_set_window_scale (GdkWindow *window,
                  GDK_WINDOW_XID (window),
                  (window->x + window->parent->abs_x) * impl->window_scale,
                  (window->y + window->parent->abs_y) * impl->window_scale);
-  else if (WINDOW_IS_TOPLEVEL(window))
+  else
     {
       if (impl->override_redirect)
         {
@@ -1811,22 +1695,8 @@ _gdk_x11_window_set_window_scale (GdkWindow *window,
                      window->width * impl->window_scale,
                      window->height * impl->window_scale);
     }
-  else
-    {
-      impl->unscaled_width = window->width * impl->window_scale;
-      impl->unscaled_height = window->height * impl->window_scale;
-
-      XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-                         GDK_WINDOW_XID (window),
-                         (window->x + window->parent->abs_x) * impl->window_scale,
-                         (window->y + window->parent->abs_y) * impl->window_scale,
-                         window->width * impl->window_scale,
-                         window->height * impl->window_scale);
-    }
 
   gdk_window_invalidate_rect (window, NULL, TRUE);
-
-  set_scale_recursive (window, scale);
 }
 
 static gboolean
@@ -1906,28 +1776,6 @@ static void
 gdk_window_x11_raise (GdkWindow *window)
 {
   XRaiseWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
-}
-
-static void
-gdk_window_x11_restack_under (GdkWindow *window,
-			      GList *native_siblings /* in requested order, first is bottom-most */)
-{
-  Window *windows;
-  int n_windows, i;
-  GList *l;
-
-  n_windows = g_list_length (native_siblings) + 1;
-  windows = g_new (Window, n_windows);
-
-  windows[0] = GDK_WINDOW_XID (window);
-  /* Reverse order, as input order is bottom-most first */
-  i = n_windows - 1;
-  for (l = native_siblings; l != NULL; l = l->next)
-    windows[i--] = GDK_WINDOW_XID (l->data);
- 
-  XRestackWindows (GDK_WINDOW_XDISPLAY (window), windows, n_windows);
-  
-  g_free (windows);
 }
 
 static void
@@ -4257,39 +4105,6 @@ _gdk_x11_xwindow_get_shape (Display *xdisplay,
   return shape;
 }
 
-
-static cairo_region_t *
-gdk_x11_window_get_shape (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
-    return _gdk_x11_xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
-                                       GDK_WINDOW_XID (window),
-                                       impl->window_scale,
-                                       ShapeBounding);
-
-  return NULL;
-}
-
-static cairo_region_t *
-gdk_x11_window_get_input_shape (GdkWindow *window)
-{
-#if defined(ShapeInput)
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
-    return _gdk_x11_xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
-                                       GDK_WINDOW_XID (window),
-                                       impl->window_scale,
-                                       ShapeInput);
-#endif
-
-  return NULL;
-}
-
 /* From the WM spec */
 #define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
 #define _NET_WM_MOVERESIZE_SIZE_TOP          1
@@ -5310,7 +5125,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->get_events = gdk_window_x11_get_events;
   impl_class->raise = gdk_window_x11_raise;
   impl_class->lower = gdk_window_x11_lower;
-  impl_class->restack_under = gdk_window_x11_restack_under;
   impl_class->restack_toplevel = gdk_window_x11_restack_toplevel;
   impl_class->move_resize = gdk_window_x11_move_resize;
   impl_class->reparent = gdk_window_x11_reparent;
@@ -5322,9 +5136,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->input_shape_combine_region = gdk_window_x11_input_shape_combine_region;
   impl_class->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
   impl_class->destroy = gdk_x11_window_destroy;
-  impl_class->destroy_foreign = gdk_x11_window_destroy_foreign;
-  impl_class->get_shape = gdk_x11_window_get_shape;
-  impl_class->get_input_shape = gdk_x11_window_get_input_shape;
   impl_class->beep = gdk_x11_window_beep;
 
   impl_class->focus = gdk_x11_window_focus;

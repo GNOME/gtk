@@ -121,7 +121,11 @@ _gdk_x11_display_set_selection_owner (GdkDisplay *display,
       if (GDK_WINDOW_DESTROYED (owner) || !GDK_WINDOW_IS_X11 (owner))
         return FALSE;
 
-      gdk_window_ensure_native (owner);
+      if (!gdk_window_has_native (owner))
+        {
+          g_warning ("Can't use selectors on non-native window");
+          return FALSE;
+        }
       xdisplay = GDK_WINDOW_XDISPLAY (owner);
       xwindow = GDK_WINDOW_XID (owner);
     }
@@ -191,7 +195,11 @@ _gdk_x11_display_convert_selection (GdkDisplay *display,
   if (GDK_WINDOW_DESTROYED (requestor) || !GDK_WINDOW_IS_X11 (requestor))
     return;
 
-  gdk_window_ensure_native (requestor);
+  if (!gdk_window_has_native (requestor))
+    {
+      g_warning ("Can't use selections on non-native window");
+      return;
+    }
 
   XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),
                      gdk_x11_atom_to_xatom_for_display (display, selection),
