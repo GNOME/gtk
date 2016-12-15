@@ -93,8 +93,9 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_rounded_clip_node_get_child         (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
-void                    gsk_render_node_set_blend_mode          (GskRenderNode *node,
-                                                                 GskBlendMode   blend_mode);
+GskRenderNode *         gsk_blend_node_new                      (GskRenderNode            *bottom,
+                                                                 GskRenderNode            *top,
+                                                                 GskBlendMode              blend_mode);
 
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_scaling_filter      (GskRenderNode *node,

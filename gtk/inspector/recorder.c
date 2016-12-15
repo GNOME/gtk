@@ -133,9 +133,7 @@ populate_render_node_properties (GtkListStore  *store,
                                  GskRenderNode *node)
 {
   graphene_rect_t bounds;
-  int i;
   char *tmp;
-  GEnumClass *class;
 
   gtk_list_store_clear (store);
 
@@ -161,23 +159,6 @@ populate_render_node_properties (GtkListStore  *store,
                                      0, "Has Texture",
                                      1, gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE ? "TRUE" : "FALSE",
                                      -1);
-
-  class = g_type_class_ref (gsk_blend_mode_get_type ());
-  for (i = 0; i < class->n_values; i++)
-    {
-      if (class->values[i].value == gsk_render_node_get_blend_mode (node))
-        {
-          tmp = g_strdup (class->values[i].value_nick);
-          break;
-        }
-    }
-  g_type_class_unref (class);
-
-  gtk_list_store_insert_with_values (store, NULL, -1,
-                                     0, "Blendmode",
-                                     1, tmp,
-                                     -1);
-  g_free (tmp);
 }
 
 static void

@@ -29,8 +29,6 @@ gsk_render_node_unref
 GskRenderNodeType
 gsk_render_node_get_node_type
 gsk_render_node_draw
-GskBlendMode
-gsk_render_node_set_blend_mode
 GskScalingFilter
 gsk_render_node_set_scaling_filters
 gsk_render_node_set_name
@@ -49,6 +47,8 @@ gsk_clip_node_new
 gsk_clip_node_get_child
 gsk_rounded_clip_node_new
 gsk_rounded_clip_node_get_child
+GskBlendMode
+gsk_blend_node_new
 <SUBSECTION Standard>
 GSK_IS_RENDER_NODE
 GSK_RENDER_NODE

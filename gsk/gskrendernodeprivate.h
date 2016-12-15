@@ -19,12 +19,6 @@ struct _GskRenderNode
   /* Use for debugging */
   char *name;
 
-  /* Paint opacity */
-  double opacity;
-
-  /* Blend mode */
-  GskBlendMode blend_mode;
-
   /* Scaling filters */
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
@@ -66,7 +60,9 @@ const GskRoundedRect * gsk_rounded_clip_node_peek_clip (GskRenderNode *node);
 
 void gsk_transform_node_get_transform (GskRenderNode *node, graphene_matrix_t *transform);
 
-GskBlendMode gsk_render_node_get_blend_mode (GskRenderNode *node);
+GskRenderNode * gsk_blend_node_get_bottom_child (GskRenderNode *node);
+GskRenderNode * gsk_blend_node_get_top_child (GskRenderNode *node);
+GskBlendMode gsk_blend_node_get_blend_node (GskRenderNode *node);
 
 G_END_DECLS
 

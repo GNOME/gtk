@@ -237,47 +237,6 @@ gsk_render_node_get_name (GskRenderNode *node)
   return node->name;
 }
 
-/**
- * gsk_render_node_set_blend_mode:
- * @node: a #GskRenderNode
- * @blend_mode: the blend mode to be applied to the node's children
- *
- * Sets the blend mode to be used when rendering the children
- * of the @node.
- *
- * The default value is %GSK_BLEND_MODE_DEFAULT.
- *
- * Since: 3.90
- */
-void
-gsk_render_node_set_blend_mode (GskRenderNode *node,
-                                GskBlendMode   blend_mode)
-{
-  g_return_if_fail (GSK_IS_RENDER_NODE (node));
-  g_return_if_fail (node->is_mutable);
-
-  if (node->blend_mode == blend_mode)
-    return;
-
-  node->blend_mode = blend_mode;
-}
-
-/*
- * gsk_render_node_get_blend_mode:
- * @node: a #GskRenderNode
- *
- * Retrieves the blend mode set by gsk_render_node_set_blend_mode().
- *
- * Returns: the blend mode
- */
-GskBlendMode
-gsk_render_node_get_blend_mode (GskRenderNode *node)
-{
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), GSK_BLEND_MODE_DEFAULT);
-
-  return node->blend_mode;
-}
-
 /*< private >
  * gsk_render_node_make_immutable:
  * @node: a #GskRenderNode

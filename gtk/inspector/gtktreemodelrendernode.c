@@ -19,6 +19,8 @@
 
 #include "gtktreemodelrendernode.h"
 
+#include "gsk/gskrendernodeprivate.h"
+
 typedef struct _TreeElement TreeElement;
 
 /* This is an array of all nodes and the index of their parent. When adding a node,
@@ -540,6 +542,15 @@ append_node (GtkTreeModelRenderNode *nodemodel,
 
     case GSK_ROUNDED_CLIP_NODE:
       append_node (nodemodel, gsk_rounded_clip_node_get_child (node), priv->nodes->len - 1);
+      break;
+
+    case GSK_BLEND_NODE:
+      {
+        int elt_index = priv->nodes->len - 1;
+
+        append_node (nodemodel, gsk_blend_node_get_bottom_child (node), elt_index);
+        append_node (nodemodel, gsk_blend_node_get_top_child (node), elt_index);
+      }
       break;
 
     case GSK_CONTAINER_NODE:

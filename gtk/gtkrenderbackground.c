@@ -683,22 +683,54 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
    */
   if (_gtk_theming_background_needs_push_group (style))
     {
-      cairo_t *cr;
+      GtkCssValue *blend_modes;
+      GskBlendMode blend_mode;
 
-      cr = gtk_snapshot_append_cairo_node (snapshot,
-                                           &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                           "Background");
+      blend_modes = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
 
-      _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
+      gtk_snapshot_push (snapshot, TRUE, "BackgroundBlendGroup");
+
+      gtk_theming_background_snapshot_color (&bg, snapshot, bg_color, background_image);
 
       number_of_layers = _gtk_css_array_value_get_n_values (background_image);
 
       for (idx = number_of_layers - 1; idx >= 0; idx--)
         {
-          gtk_theming_background_paint_layer (&bg, idx, cr);
+          blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
+
+          if (blend_mode == GSK_BLEND_MODE_DEFAULT)
+            {
+              gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
+            }
+          else
+            {
+              GskRenderNode *bottom, *top, *blend;
+
+              bottom = gtk_snapshot_pop (snapshot);
+
+              gtk_snapshot_push (snapshot, TRUE, "BackgroundBlendGroup<Mode%u>", blend_mode);
+              gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
+              top = gtk_snapshot_pop (snapshot);
+
+              /* XXX: Is this necessary? Do we need a NULL node? */
+              if (top == NULL)
+                top = gsk_container_node_new (NULL, 0);
+              if (bottom == NULL)
+                bottom = gsk_container_node_new (NULL, 0);
+
+              blend = gsk_blend_node_new (bottom, top, blend_mode);
+              gsk_render_node_set_name (blend, "BackgroundBlend");
+
+              gtk_snapshot_push (snapshot, TRUE, "BackgroundBlendGroup");
+              gtk_snapshot_append_node (snapshot, blend);
+
+              gsk_render_node_unref (blend);
+              gsk_render_node_unref (top);
+              gsk_render_node_unref (bottom);
+            }
         }
 
-      cairo_destroy (cr);
+      gtk_snapshot_pop_and_append (snapshot);
     }
   else
     {

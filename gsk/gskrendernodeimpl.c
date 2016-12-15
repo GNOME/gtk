@@ -1068,3 +1068,181 @@ gsk_rounded_clip_node_peek_clip (GskRenderNode *node)
   return &self->clip;
 }
 
+/*** GSK_BLEND_NODE ***/
+
+typedef struct _GskBlendNode GskBlendNode;
+
+struct _GskBlendNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *bottom;
+  GskRenderNode *top;
+  GskBlendMode blend_mode;
+};
+
+static cairo_operator_t
+gsk_blend_mode_to_cairo_operator (GskBlendMode blend_mode)
+{
+  switch (blend_mode)
+    {
+    default:
+      g_assert_not_reached ();
+    case GSK_BLEND_MODE_DEFAULT:
+      return CAIRO_OPERATOR_OVER;
+    case GSK_BLEND_MODE_MULTIPLY:
+      return CAIRO_OPERATOR_MULTIPLY;
+    case GSK_BLEND_MODE_SCREEN:
+      return CAIRO_OPERATOR_SCREEN;
+    case GSK_BLEND_MODE_OVERLAY:
+      return CAIRO_OPERATOR_OVERLAY;
+    case GSK_BLEND_MODE_DARKEN:
+      return CAIRO_OPERATOR_DARKEN;
+    case GSK_BLEND_MODE_LIGHTEN:
+      return CAIRO_OPERATOR_LIGHTEN;
+    case GSK_BLEND_MODE_COLOR_DODGE:
+      return CAIRO_OPERATOR_COLOR_DODGE;
+    case GSK_BLEND_MODE_COLOR_BURN:
+      return CAIRO_OPERATOR_COLOR_BURN;
+    case GSK_BLEND_MODE_HARD_LIGHT:
+      return CAIRO_OPERATOR_HARD_LIGHT;
+    case GSK_BLEND_MODE_SOFT_LIGHT:
+      return CAIRO_OPERATOR_SOFT_LIGHT;
+    case GSK_BLEND_MODE_DIFFERENCE:
+      return CAIRO_OPERATOR_DIFFERENCE;
+    case GSK_BLEND_MODE_EXCLUSION:
+      return CAIRO_OPERATOR_EXCLUSION;
+    case GSK_BLEND_MODE_COLOR:
+      return CAIRO_OPERATOR_HSL_COLOR;
+    case GSK_BLEND_MODE_HUE:
+      return CAIRO_OPERATOR_HSL_HUE;
+    case GSK_BLEND_MODE_SATURATION:
+      return CAIRO_OPERATOR_HSL_SATURATION;
+    case GSK_BLEND_MODE_LUMINOSITY:
+      return CAIRO_OPERATOR_HSL_LUMINOSITY;
+    }
+}
+
+static void
+gsk_blend_node_finalize (GskRenderNode *node)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+
+  gsk_render_node_unref (self->bottom);
+  gsk_render_node_unref (self->top);
+}
+
+static void
+gsk_blend_node_make_immutable (GskRenderNode *node)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+
+  gsk_render_node_make_immutable (self->bottom);
+  gsk_render_node_make_immutable (self->top);
+}
+
+static void
+gsk_blend_node_draw (GskRenderNode *node,
+                     cairo_t       *cr)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->bottom, cr);
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->top, cr);
+
+  cairo_pop_group_to_source (cr);
+  cairo_set_operator (cr, gsk_blend_mode_to_cairo_operator (self->blend_mode));
+  cairo_paint (cr);
+
+  cairo_pop_group_to_source (cr); /* resets operator */
+  cairo_paint (cr);
+}
+
+static void
+gsk_blend_node_get_bounds (GskRenderNode   *node,
+                           graphene_rect_t *bounds)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+  graphene_rect_t bottom_bounds, top_bounds;
+
+  gsk_render_node_get_bounds (self->bottom, &bottom_bounds);
+  gsk_render_node_get_bounds (self->top, &top_bounds);
+
+  graphene_rect_union (&bottom_bounds, &top_bounds, bounds);
+}
+
+static const GskRenderNodeClass GSK_BLEND_NODE_CLASS = {
+  GSK_BLEND_NODE,
+  sizeof (GskBlendNode),
+  "GskBlendNode",
+  gsk_blend_node_finalize,
+  gsk_blend_node_make_immutable,
+  gsk_blend_node_draw,
+  gsk_blend_node_get_bounds
+};
+
+/**
+ * gsk_blend_node_new:
+ * @bottom: The bottom node to be drawn
+ * @top: The node to be blended onto the @bottom node
+ * @blend_mode: The blend mode to use
+ *
+ * Creates a #GskRenderNode that will use @blend_mode to blend the @top
+ * node onto the @bottom node.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_blend_node_new (GskRenderNode *bottom,
+                    GskRenderNode *top,
+                    GskBlendMode   blend_mode)
+{
+  GskBlendNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (bottom), NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (top), NULL);
+
+  self = (GskBlendNode *) gsk_render_node_new (&GSK_BLEND_NODE_CLASS);
+
+  self->bottom = gsk_render_node_ref (bottom);
+  self->top = gsk_render_node_ref (top);
+  self->blend_mode = blend_mode;
+
+  return &self->render_node;
+}
+
+GskRenderNode *
+gsk_blend_node_get_bottom_child (GskRenderNode *node)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_BLEND_NODE), NULL);
+
+  return self->bottom;
+}
+
+GskRenderNode *
+gsk_blend_node_get_top_child (GskRenderNode *node)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_BLEND_NODE), NULL);
+
+  return self->top;
+}
+
+GskBlendMode
+gsk_blend_node_get_blend_mode (GskRenderNode *node)
+{
+  GskBlendNode *self = (GskBlendNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_BLEND_NODE), GSK_BLEND_MODE_DEFAULT);
+
+  return self->blend_mode;
+}
+

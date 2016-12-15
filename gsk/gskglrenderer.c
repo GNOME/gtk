@@ -644,7 +644,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   item.opacity = 1.0;
 
-  item.blend_mode = gsk_render_node_get_blend_mode (node);
+  item.blend_mode = GSK_BLEND_MODE_DEFAULT;
 
   /* Back-pointer to the parent node */
   if (parent != NULL)
