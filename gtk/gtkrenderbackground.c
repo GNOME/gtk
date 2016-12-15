@@ -123,11 +123,11 @@ _gtk_theming_background_needs_push_group (GtkCssStyle *style)
    */
   for (i = _gtk_css_array_value_get_n_values (blend_modes); i > 0; i--)
     {
-      GtkCssBlendMode blend_mode;
+      GskBlendMode blend_mode;
 
       blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, i - 1));
 
-      if (blend_mode != GTK_CSS_BLEND_MODE_NORMAL)
+      if (blend_mode != GSK_BLEND_MODE_DEFAULT)
         return TRUE;
     }
 
@@ -142,7 +142,7 @@ gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   GtkCssRepeatStyle hrepeat, vrepeat;
   const GtkCssValue *pos, *repeat;
   GtkCssImage *image;
-  GtkCssBlendMode blend_mode;
+  GskBlendMode blend_mode;
   const GskRoundedRect *origin;
   double image_width, image_height;
   double width, height;

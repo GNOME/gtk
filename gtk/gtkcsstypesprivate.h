@@ -19,6 +19,7 @@
 #define __GTK_CSS_TYPES_PRIVATE_H__
 
 #include <glib-object.h>
+#include <gsk/gsk.h>
 #include <gtk/gtkstylecontext.h>
 
 G_BEGIN_DECLS
@@ -232,25 +233,6 @@ enum { /*< skip >*/
 };
 
 typedef enum /*< skip >*/ {
-  GTK_CSS_BLEND_MODE_COLOR,
-  GTK_CSS_BLEND_MODE_COLOR_BURN,
-  GTK_CSS_BLEND_MODE_COLOR_DODGE,
-  GTK_CSS_BLEND_MODE_DARKEN,
-  GTK_CSS_BLEND_MODE_DIFFERENCE,
-  GTK_CSS_BLEND_MODE_EXCLUSION,
-  GTK_CSS_BLEND_MODE_HARD_LIGHT,
-  GTK_CSS_BLEND_MODE_HUE,
-  GTK_CSS_BLEND_MODE_LIGHTEN,
-  GTK_CSS_BLEND_MODE_LUMINOSITY,
-  GTK_CSS_BLEND_MODE_MULTIPLY,
-  GTK_CSS_BLEND_MODE_NORMAL,
-  GTK_CSS_BLEND_MODE_OVERLAY,
-  GTK_CSS_BLEND_MODE_SATURATE,
-  GTK_CSS_BLEND_MODE_SCREEN,
-  GTK_CSS_BLEND_MODE_SOFT_LIGHT
-} GtkCssBlendMode;
-
-typedef enum /*< skip >*/ {
   GTK_CSS_IMAGE_BUILTIN_NONE,
   GTK_CSS_IMAGE_BUILTIN_CHECK,
   GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT,
@@ -377,7 +359,7 @@ typedef enum /*< skip >*/ {
   GTK_CSS_MS,
 } GtkCssUnit;
 
-cairo_operator_t        _gtk_css_blend_mode_get_operator         (GtkCssBlendMode    mode);
+cairo_operator_t        _gtk_css_blend_mode_get_operator         (GskBlendMode       mode);
 
 GtkCssChange            _gtk_css_change_for_sibling              (GtkCssChange       match);
 GtkCssChange            _gtk_css_change_for_child                (GtkCssChange       match);

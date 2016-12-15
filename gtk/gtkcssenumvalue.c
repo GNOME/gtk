@@ -137,26 +137,26 @@ static const GtkCssValueClass GTK_CSS_VALUE_BLEND_MODE = {
 };
 
 static GtkCssValue blend_mode_values[] = {
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_COLOR_BURN, "color-burn" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_COLOR_DODGE, "color-dodge" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_COLOR, "color" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_DARKEN, "darken" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_DIFFERENCE, "difference" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_EXCLUSION, "exclusion" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_HARD_LIGHT, "hard-light" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_HUE, "hue" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_LIGHTEN, "lighten" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_LUMINOSITY, "luminosity" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_MULTIPLY, "multiply" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_NORMAL, "normal" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_OVERLAY, "overlay" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_SATURATE, "saturate" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_SCREEN, "screen" },
-  { &GTK_CSS_VALUE_BLEND_MODE, 1, GTK_CSS_BLEND_MODE_SOFT_LIGHT, "soft-light" }
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_DEFAULT, "normal" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_MULTIPLY, "multiply" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_SCREEN, "screen" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_OVERLAY, "overlay" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_DARKEN, "darken" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_LIGHTEN, "lighten" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_COLOR_DODGE, "color_dodge" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_COLOR_BURN, "color_burn" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_HARD_LIGHT, "hard_light" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_SOFT_LIGHT, "soft_light" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_DIFFERENCE, "difference" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_EXCLUSION, "exclusion" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_COLOR, "color" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_HUE, "hue" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_SATURATION, "saturation" },
+  { &GTK_CSS_VALUE_BLEND_MODE, 1, GSK_BLEND_MODE_LUMINOSITY, "luminosity" }
 };
 
 GtkCssValue *
-_gtk_css_blend_mode_value_new (GtkCssBlendMode blend_mode)
+_gtk_css_blend_mode_value_new (GskBlendMode blend_mode)
 {
   g_return_val_if_fail (blend_mode < G_N_ELEMENTS (blend_mode_values), NULL);
 
@@ -179,10 +179,10 @@ _gtk_css_blend_mode_value_try_parse (GtkCssParser *parser)
   return NULL;
 }
 
-GtkCssBlendMode
+GskBlendMode
 _gtk_css_blend_mode_value_get (const GtkCssValue *value)
 {
-  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BLEND_MODE, GTK_CSS_BLEND_MODE_NORMAL);
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BLEND_MODE, GSK_BLEND_MODE_DEFAULT);
 
   return value->value;
 }

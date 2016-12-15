@@ -1378,7 +1378,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           blend_mode_value_parse,
                                           NULL,
-                                          _gtk_css_array_value_new (_gtk_css_blend_mode_value_new (GTK_CSS_BLEND_MODE_NORMAL)));
+                                          _gtk_css_array_value_new (_gtk_css_blend_mode_value_new (GSK_BLEND_MODE_DEFAULT)));
 
   gtk_css_style_property_register        ("border-image-source",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE,
