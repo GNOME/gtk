@@ -131,21 +131,24 @@ gtk_icon_helper_get_preferred_size (GtkCssGadget   *gadget,
 }
 
 static gboolean
-gtk_icon_helper_draw (GtkCssGadget *gadget,
-                      cairo_t      *cr,
-                      int           x,
-                      int           y,
-                      int           width,
-                      int           height)
+gtk_icon_helper_real_snapshot (GtkCssGadget *gadget,
+                               GtkSnapshot  *snapshot,
+                               int           x,
+                               int           y,
+                               int           width,
+                               int           height)
 {
   GtkIconHelper *self = GTK_ICON_HELPER (gadget);
   int icon_width, icon_height;
 
   _gtk_icon_helper_get_size (self, &icon_width, &icon_height);
-  _gtk_icon_helper_draw (self,
-                         cr,
-                         x + (width - icon_width) / 2,
-                         y + (height - icon_height) / 2);
+  gtk_snapshot_translate_2d (snapshot,
+                             x + (width - icon_width) / 2,
+                             y + (height - icon_height) / 2);
+  gtk_icon_helper_snapshot (self, snapshot);
+  gtk_snapshot_translate_2d (snapshot,
+                             - (x + (width - icon_width) / 2),
+                             - (y + (height - icon_height) / 2));
 
   return FALSE;
 }
@@ -196,7 +199,7 @@ gtk_icon_helper_class_init (GtkIconHelperClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   gadget_class->get_preferred_size = gtk_icon_helper_get_preferred_size;
-  gadget_class->draw = gtk_icon_helper_draw;
+  gadget_class->snapshot = gtk_icon_helper_real_snapshot;
   gadget_class->style_changed = gtk_icon_helper_style_changed;
 
   object_class->constructed = gtk_icon_helper_constructed;
