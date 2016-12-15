@@ -30,6 +30,7 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtksizerequest.h"
+#include "gtksnapshot.h"
 
 
 /**
@@ -61,8 +62,8 @@ static void     gtk_event_box_map           (GtkWidget        *widget);
 static void     gtk_event_box_unmap         (GtkWidget        *widget);
 static void     gtk_event_box_size_allocate (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
-static gboolean gtk_event_box_draw          (GtkWidget        *widget,
-                                             cairo_t          *cr);
+static void     gtk_event_box_snapshot      (GtkWidget        *widget,
+                                             GtkSnapshot      *snapshot);
 static void     gtk_event_box_set_property  (GObject          *object,
                                              guint             prop_id,
                                              const GValue     *value,
@@ -88,7 +89,7 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   widget_class->map = gtk_event_box_map;
   widget_class->unmap = gtk_event_box_unmap;
   widget_class->size_allocate = gtk_event_box_size_allocate;
-  widget_class->draw = gtk_event_box_draw;
+  widget_class->snapshot = gtk_event_box_snapshot;
 
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBLE_WINDOW,
@@ -517,9 +518,9 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
     gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
 }
 
-static gboolean
-gtk_event_box_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+static void
+gtk_event_box_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
   if (gtk_widget_get_has_window (widget))
     {
@@ -527,15 +528,13 @@ gtk_event_box_draw (GtkWidget *widget,
 
       context = gtk_widget_get_style_context (widget);
 
-      gtk_render_background (context, cr, 0, 0,
-                             gtk_widget_get_allocated_width (widget),
-                             gtk_widget_get_allocated_height (widget));
-      gtk_render_frame (context, cr, 0, 0,
-                        gtk_widget_get_allocated_width (widget),
-                        gtk_widget_get_allocated_height (widget));
+      gtk_snapshot_render_background (snapshot, context, 0, 0,
+                                      gtk_widget_get_allocated_width (widget),
+                                      gtk_widget_get_allocated_height (widget));
+      gtk_snapshot_render_frame (snapshot, context, 0, 0,
+                                 gtk_widget_get_allocated_width (widget),
+                                 gtk_widget_get_allocated_height (widget));
     }
 
-  GTK_WIDGET_CLASS (gtk_event_box_parent_class)->draw (widget, cr);
-
-  return FALSE;
+  GTK_WIDGET_CLASS (gtk_event_box_parent_class)->snapshot (widget, snapshot);
 }
