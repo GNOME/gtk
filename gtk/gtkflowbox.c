@@ -894,9 +894,9 @@ get_visible_children (GtkFlowBox *box)
 }
 
 static GtkFlowBoxChild *
-gtk_flow_box_find_child_at_pos (GtkFlowBox *box,
-                                gint        x,
-                                gint        y)
+gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
+                               gint        x,
+                               gint        y)
 {
   GtkWidget *child;
   GSequenceIter *iter;
@@ -2820,7 +2820,7 @@ autoscroll_cb (GtkWidget     *widget,
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (priv->drag_gesture));
       gtk_gesture_get_point (priv->drag_gesture, sequence, &x, &y);
 
-      child = gtk_flow_box_find_child_at_pos (box, x, y);
+      child = gtk_flow_box_get_child_at_pos (box, x, y);
 
       gtk_flow_box_update_active (box, child);
 
@@ -2923,7 +2923,7 @@ gtk_flow_box_enter_notify_event (GtkWidget        *widget,
   if (event->window != gtk_widget_get_window (GTK_WIDGET (box)))
     return FALSE;
 
-  child = gtk_flow_box_find_child_at_pos (box, event->x, event->y);
+  child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
   gtk_flow_box_update_active (box, child);
 
   return FALSE;
@@ -2942,7 +2942,7 @@ gtk_flow_box_leave_notify_event (GtkWidget        *widget,
   if (event->detail != GDK_NOTIFY_INFERIOR)
     child = NULL;
   else
-    child = gtk_flow_box_find_child_at_pos (box, event->x, event->y);
+    child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
 
   gtk_flow_box_update_active (box, child);
 
@@ -2966,7 +2966,7 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
       (offset_x * offset_x) + (offset_y * offset_y) > RUBBERBAND_START_DISTANCE * RUBBERBAND_START_DISTANCE)
     {
       priv->rubberband_select = TRUE;
-      priv->rubberband_first = gtk_flow_box_find_child_at_pos (box, start_x, start_y);
+      priv->rubberband_first = gtk_flow_box_get_child_at_pos (box, start_x, start_y);
   
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (box));
       priv->rubberband_node = gtk_css_node_new ();
@@ -2982,7 +2982,7 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
 
   if (priv->rubberband_select)
     {
-      child = gtk_flow_box_find_child_at_pos (box, start_x + offset_x,
+      child = gtk_flow_box_get_child_at_pos (box, start_x + offset_x,
                                               start_y + offset_y);
 
       if (priv->rubberband_first == NULL)
@@ -3023,7 +3023,7 @@ gtk_flow_box_motion_notify_event (GtkWidget      *widget,
       event_window = gdk_window_get_effective_parent (event_window);
     }
 
-  child = gtk_flow_box_find_child_at_pos (box, relative_x, relative_y);
+  child = gtk_flow_box_get_child_at_pos (box, relative_x, relative_y);
   gtk_flow_box_update_active (box, child);
 
   return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->motion_notify_event (widget, event);
@@ -3039,7 +3039,7 @@ gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkFlowBoxChild *child;
 
-  child = gtk_flow_box_find_child_at_pos (box, x, y);
+  child = gtk_flow_box_get_child_at_pos (box, x, y);
 
   if (child == NULL)
     return;
