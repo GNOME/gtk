@@ -640,18 +640,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   else
     {
       /* Software fallback */
-      int major, minor, version;
-
-      gdk_gl_context_get_version (paint_context, &major, &minor);
-      version = major * 100 + minor;
-
-      /* TODO: Use glTexSubImage2D() and do a row-by-row copy to replace
-       * the GL_UNPACK_ROW_LENGTH support
-       */
-      if (gdk_gl_context_get_use_es (paint_context) &&
-          !(version >= 300 || gdk_gl_context_has_unpack_subimage (paint_context)))
-        goto out;
-
       /* TODO: avoid reading back non-required data due to dest clip */
       image = cairo_surface_create_similar_image (cairo_get_target (cr),
                                                   (alpha_size == 0) ? CAIRO_FORMAT_RGB24 : CAIRO_FORMAT_ARGB32,
@@ -675,24 +663,15 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
                                   GL_TEXTURE_2D, source, 0);
         }
 
-      glPixelStorei (GL_PACK_ALIGNMENT, 4);
-      glPixelStorei (GL_PACK_ROW_LENGTH, cairo_image_surface_get_stride (image) / 4);
-
-      /* The implicit format conversion is going to make this path slower */
-      if (!gdk_gl_context_get_use_es (paint_context))
-        glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                      cairo_image_surface_get_data (image));
-      else
-        glReadPixels (x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
-                      cairo_image_surface_get_data (image));
-
-      glPixelStorei (GL_PACK_ROW_LENGTH, 0);
+      gdk_gl_context_download_texture (paint_context,
+                                       x, y, width, height,
+                                       image);
 
       glBindFramebuffer (GL_FRAMEBUFFER_EXT, 0);
 
       cairo_surface_mark_dirty (image);
 
-      /* Invert due to opengl having different origin */
+      /* Invert due to GL framebuffers having different origin */
       cairo_scale (cr, 1, -1);
       cairo_translate (cr, 0, -height / buffer_scale);
 
@@ -703,10 +682,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       cairo_surface_destroy (image);
     }
 
-out:
   if (clip_region)
     cairo_region_destroy (clip_region);
-
 }
 
 /* This is always called with the paint context current */
