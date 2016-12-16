@@ -181,6 +181,11 @@ GDK_AVAILABLE_IN_3_12
 GtkFlowBoxChild      *gtk_flow_box_get_child_at_index           (GtkFlowBox        *box,
                                                                  gint               idx);
 
+GDK_AVAILABLE_IN_3_22
+GtkFlowBoxChild      *gtk_flow_box_get_child_at_pos             (GtkFlowBox        *box,
+                                                                 gint               x,
+                                                                 gint               y);
+
 typedef void (* GtkFlowBoxForeachFunc) (GtkFlowBox      *box,
                                         GtkFlowBoxChild *child,
                                         gpointer         user_data);
