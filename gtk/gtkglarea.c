@@ -391,7 +391,7 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
 
   priv->have_buffers = TRUE;
 
-  glGenFramebuffersEXT (1, &priv->frame_buffer);
+  glGenFramebuffers (1, &priv->frame_buffer);
 
   if (priv->has_alpha)
     {
@@ -402,7 +402,7 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
       /* Delete old render buffer if any */
       if (priv->render_buffer != 0)
         {
-          glDeleteRenderbuffersEXT(1, &priv->render_buffer);
+          glDeleteRenderbuffers(1, &priv->render_buffer);
           priv->render_buffer = 0;
         }
     }
@@ -410,7 +410,7 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
     {
     /* For non-alpha we use render buffers so we can blit instead of texture the result */
       if (priv->render_buffer == 0)
-        glGenRenderbuffersEXT (1, &priv->render_buffer);
+        glGenRenderbuffers (1, &priv->render_buffer);
 
       /* Delete old texture if any */
       if (priv->texture != 0)
@@ -423,12 +423,12 @@ gtk_gl_area_ensure_buffers (GtkGLArea *area)
   if ((priv->has_depth_buffer || priv->has_stencil_buffer))
     {
       if (priv->depth_stencil_buffer == 0)
-        glGenRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+        glGenRenderbuffers (1, &priv->depth_stencil_buffer);
     }
   else if (priv->depth_stencil_buffer != 0)
     {
       /* Delete old depth/stencil buffer */
-      glDeleteRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+      glDeleteRenderbuffers (1, &priv->depth_stencil_buffer);
       priv->depth_stencil_buffer = 0;
     }
 
@@ -515,23 +515,23 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
   else if (priv->needs_resize)
     gtk_gl_area_allocate_buffers (area);
 
-  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, priv->frame_buffer);
+  glBindFramebuffer (GL_FRAMEBUFFER, priv->frame_buffer);
 
   if (priv->texture)
-    glFramebufferTexture2D (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+    glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                             GL_TEXTURE_2D, priv->texture, 0);
   else if (priv->render_buffer)
-    glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                  GL_RENDERBUFFER_EXT, priv->render_buffer);
+    glFramebufferRenderbuffer (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                               GL_RENDERBUFFER, priv->render_buffer);
 
   if (priv->depth_stencil_buffer)
     {
       if (priv->has_depth_buffer)
-        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                                      GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
+        glFramebufferRenderbuffer (GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                   GL_RENDERBUFFER, priv->depth_stencil_buffer);
       if (priv->has_stencil_buffer)
-        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-                                      GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
+        glFramebufferRenderbuffer (GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                   GL_RENDERBUFFER, priv->depth_stencil_buffer);
     }
 }
 
@@ -547,7 +547,7 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
 
   if (priv->render_buffer != 0)
     {
-      glDeleteRenderbuffersEXT (1, &priv->render_buffer);
+      glDeleteRenderbuffers (1, &priv->render_buffer);
       priv->render_buffer = 0;
     }
 
@@ -559,14 +559,14 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
 
   if (priv->depth_stencil_buffer != 0)
     {
-      glDeleteRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+      glDeleteRenderbuffers (1, &priv->depth_stencil_buffer);
       priv->depth_stencil_buffer = 0;
     }
 
   if (priv->frame_buffer != 0)
     {
-      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
-      glDeleteFramebuffersEXT (1, &priv->frame_buffer);
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
+      glDeleteFramebuffers (1, &priv->frame_buffer);
       priv->frame_buffer = 0;
     }
 }
@@ -698,6 +698,21 @@ gtk_gl_area_draw (GtkWidget *widget,
 
   gtk_gl_area_attach_buffers (area);
 
+  status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
+  if (status != GL_FRAMEBUFFER_COMPLETE)
+    {
+      g_set_error_literal (&priv->error,
+                           GDK_GL_ERROR, GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                           "Unsupported framebuffer configuration");
+
+      gtk_gl_area_draw_error_screen (area,
+                                     cr,
+                                     gtk_widget_get_allocated_width (widget),
+                                     gtk_widget_get_allocated_height (widget));
+
+      return FALSE;
+    }
+
  if (priv->has_depth_buffer)
    glEnable (GL_DEPTH_TEST);
  else
@@ -707,33 +722,25 @@ gtk_gl_area_draw (GtkWidget *widget,
   w = gtk_widget_get_allocated_width (widget) * scale;
   h = gtk_widget_get_allocated_height (widget) * scale;
 
-  status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
-  if (status == GL_FRAMEBUFFER_COMPLETE_EXT)
+  if (priv->needs_render || priv->auto_render)
     {
-      if (priv->needs_render || priv->auto_render)
+      if (priv->needs_resize)
         {
-          if (priv->needs_resize)
-            {
-              g_signal_emit (area, area_signals[RESIZE], 0, w, h, NULL);
-              priv->needs_resize = FALSE;
-            }
-
-          g_signal_emit (area, area_signals[RENDER], 0, priv->context, &unused);
+          g_signal_emit (area, area_signals[RESIZE], 0, w, h, NULL);
+          priv->needs_resize = FALSE;
         }
 
-      priv->needs_render = FALSE;
+      g_signal_emit (area, area_signals[RENDER], 0, priv->context, &unused);
+    }
 
-      gdk_cairo_draw_from_gl (cr,
-                              gtk_widget_get_window (widget),
-                              priv->texture ? priv->texture : priv->render_buffer,
-                              priv->texture ? GL_TEXTURE : GL_RENDERBUFFER,
-                              scale, 0, 0, w, h);
-      gtk_gl_area_make_current (area);
-    }
-  else
-    {
-      g_warning ("fb setup not supported");
-    }
+  priv->needs_render = FALSE;
+
+  gdk_cairo_draw_from_gl (cr,
+                          gtk_widget_get_window (widget),
+                          priv->texture ? priv->texture : priv->render_buffer,
+                          priv->texture ? GL_TEXTURE : GL_RENDERBUFFER,
+                          scale, 0, 0, w, h);
+  gtk_gl_area_make_current (area);
 
   return TRUE;
 }
