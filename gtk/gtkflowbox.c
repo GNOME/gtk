@@ -893,31 +893,6 @@ get_visible_children (GtkFlowBox *box)
   return i;
 }
 
-static GtkFlowBoxChild *
-gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
-                               gint        x,
-                               gint        y)
-{
-  GtkWidget *child;
-  GSequenceIter *iter;
-  GtkAllocation allocation;
-
-  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      child = g_sequence_get (iter);
-      if (!child_is_visible (child))
-        continue;
-      gtk_widget_get_allocation (child, &allocation);
-      if (x >= allocation.x && x < (allocation.x + allocation.width) &&
-          y >= allocation.y && y < (allocation.y + allocation.height))
-        return GTK_FLOW_BOX_CHILD (child);
-    }
-
-  return NULL;
-}
-
 static void
 gtk_flow_box_update_active (GtkFlowBox      *box,
                             GtkFlowBoxChild *child)
@@ -4323,6 +4298,45 @@ gtk_flow_box_get_child_at_index (GtkFlowBox *box,
   iter = g_sequence_get_iter_at_pos (BOX_PRIV (box)->children, idx);
   if (!g_sequence_iter_is_end (iter))
     return g_sequence_get (iter);
+
+  return NULL;
+}
+
+/**
+ * gtk_flow_box_get_child_at_pos:
+ * @box: a #GtkFlowBox
+ * @x: the x coordinate of the child
+ * @y: the y coordinate of the child
+ *
+ * Gets the child in the (@x, @y) position.
+ *
+ * Returns: (transfer none) (nullable): the child widget, which will
+ *     always be a #GtkFlowBoxChild or %NULL in case no child widget
+ *     exists for the given x and y coordinates.
+ *
+ * Since: 3.22.6
+ */
+GtkFlowBoxChild *
+gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
+                               gint        x,
+                               gint        y)
+{
+  GtkWidget *child;
+  GSequenceIter *iter;
+  GtkAllocation allocation;
+
+  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      child = g_sequence_get (iter);
+      if (!child_is_visible (child))
+        continue;
+      gtk_widget_get_allocation (child, &allocation);
+      if (x >= allocation.x && x < (allocation.x + allocation.width) &&
+          y >= allocation.y && y < (allocation.y + allocation.height))
+        return GTK_FLOW_BOX_CHILD (child);
+    }
 
   return NULL;
 }
