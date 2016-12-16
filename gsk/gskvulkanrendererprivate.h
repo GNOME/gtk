@@ -23,7 +23,7 @@ GType gsk_vulkan_renderer_get_type (void) G_GNUC_CONST;
 
 GskVulkanImage *        gsk_vulkan_renderer_ref_texture_image           (GskVulkanRenderer      *self,
                                                                          GskTexture             *texture,
-                                                                         VkCommandBuffer         command_buffer);
+                                                                         GskVulkanCommandPool   *command_pool);
 
 G_END_DECLS
 

@@ -173,10 +173,10 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
 }
 
 static void
-gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass *self,
-                                        GskVulkanOpRender   *op,
-                                        GskVulkanRender     *render,
-                                        VkCommandBuffer      command_buffer)
+gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
+                                        GskVulkanOpRender    *op,
+                                        GskVulkanRender      *render,
+                                        GskVulkanCommandPool *command_pool)
 {
   graphene_rect_t bounds;
   cairo_surface_t *surface;
@@ -195,7 +195,7 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass *self,
   cairo_destroy (cr);
 
   op->source = gsk_vulkan_image_new_from_data (self->vulkan,
-                                               command_buffer,
+                                               command_pool,
                                                cairo_image_surface_get_data (surface),
                                                cairo_image_surface_get_width (surface),
                                                cairo_image_surface_get_height (surface),
@@ -207,9 +207,9 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass *self,
 }
 
 void
-gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
-                               GskVulkanRender     *render,
-                               VkCommandBuffer      command_buffer)
+gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
+                               GskVulkanRender      *render,
+                               GskVulkanCommandPool *command_pool)
 {
   GskVulkanOp *op;
   guint i;
@@ -221,14 +221,14 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
-          gsk_vulkan_render_pass_upload_fallback (self, &op->render, render, command_buffer);
+          gsk_vulkan_render_pass_upload_fallback (self, &op->render, render, command_pool);
           break;
 
         case GSK_VULKAN_OP_SURFACE:
           {
             cairo_surface_t *surface = gsk_cairo_node_get_surface (op->render.node);
             op->render.source = gsk_vulkan_image_new_from_data (self->vulkan,
-                                                                command_buffer,
+                                                                command_pool,
                                                                 cairo_image_surface_get_data (surface),
                                                                 cairo_image_surface_get_width (surface),
                                                                 cairo_image_surface_get_height (surface),
@@ -241,7 +241,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass *self,
           {
             op->render.source = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
                                                                        gsk_texture_node_get_texture (op->render.node),
-                                                                       command_buffer);
+                                                                       command_pool);
             gsk_vulkan_render_add_cleanup_image (render, op->render.source);
           }
           break;

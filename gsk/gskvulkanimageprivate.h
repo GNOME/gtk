@@ -3,6 +3,8 @@
 
 #include <gdk/gdk.h>
 
+#include "gsk/gskvulkancommandpoolprivate.h"
+
 G_BEGIN_DECLS
 
 #define GSK_TYPE_VULKAN_IMAGE (gsk_vulkan_image_get_type ())
@@ -15,7 +17,7 @@ GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulk
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GdkVulkanContext       *context,
-                                                                         VkCommandBuffer         command_buffer,
+                                                                         GskVulkanCommandPool   *pool,
                                                                          guchar                 *data,
                                                                          gsize                   width,
                                                                          gsize                   height,

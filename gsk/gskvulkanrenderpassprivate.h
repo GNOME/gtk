@@ -4,6 +4,7 @@
 #include <gdk/gdk.h>
 #include <gsk/gskrendernode.h>
 
+#include "gsk/gskvulkancommandpoolprivate.h"
 #include "gsk/gskvulkanrenderprivate.h"
 
 G_BEGIN_DECLS
@@ -20,7 +21,7 @@ void                    gsk_vulkan_render_pass_add                      (GskVulk
 
 void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         VkCommandBuffer         command_buffer);
+                                                                         GskVulkanCommandPool   *command_pool);
 
 gsize                   gsk_vulkan_render_pass_count_vertices           (GskVulkanRenderPass    *self);
 gsize                   gsk_vulkan_render_pass_collect_vertices         (GskVulkanRenderPass    *self,

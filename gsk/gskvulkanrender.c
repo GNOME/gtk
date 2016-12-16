@@ -4,6 +4,7 @@
 
 #include "gskrendererprivate.h"
 #include "gskvulkanbufferprivate.h"
+#include "gskvulkancommandpoolprivate.h"
 #include "gskvulkanpipelineprivate.h"
 #include "gskvulkanrenderpassprivate.h"
 
@@ -24,7 +25,7 @@ struct _GskVulkanRender
   VkRect2D scissor;
 
   GHashTable *framebuffers;
-  VkCommandPool command_pool;
+  GskVulkanCommandPool *command_pool;
   VkFence fence;
   VkRenderPass render_pass;
   GskVulkanPipelineLayout *layout;
@@ -35,8 +36,6 @@ struct _GskVulkanRender
   VkDescriptorSet *descriptor_sets;  
   gsize n_descriptor_sets;
   GskVulkanPipeline *pipelines[GSK_VULKAN_N_PIPELINES];
-
-  VkCommandBuffer command_buffer;
 
   GskVulkanImage *target;
 
@@ -87,15 +86,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
-  GSK_VK_CHECK (vkCreateCommandPool, device,
-                                     &(const VkCommandPoolCreateInfo) {
-                                         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-                                         .queueFamilyIndex = gdk_vulkan_context_get_queue_family_index (self->vulkan),
-                                         .flags = 0
-                                     },
-                                     NULL,
-                                     &self->command_pool);
-
+  self->command_pool = gsk_vulkan_command_pool_new (self->vulkan);
   GSK_VK_CHECK (vkCreateFence, device,
                                &(VkFenceCreateInfo) {
                                    .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
@@ -244,7 +235,7 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_upload (l->data, self, self->command_buffer);
+      gsk_vulkan_render_pass_upload (l->data, self, self->command_pool);
     }
 }
 
@@ -437,13 +428,16 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                         VkSampler          sampler)
 {
   GskVulkanBuffer *buffer;
+  VkCommandBuffer command_buffer;
   GSList *l;
 
   gsk_vulkan_render_prepare_descriptor_sets (self, sampler);
 
+  command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
+
   buffer = gsk_vulkan_render_collect_vertices (self);
 
-  vkCmdSetViewport (self->command_buffer,
+  vkCmdSetViewport (command_buffer,
                     0,
                     1,
                     &(VkViewport) {
@@ -455,12 +449,12 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                       .maxDepth = 1
                     });
 
-  vkCmdSetScissor (self->command_buffer,
+  vkCmdSetScissor (command_buffer,
                    0,
                    1,
                    &self->scissor);
 
-  vkCmdBeginRenderPass (self->command_buffer,
+  vkCmdBeginRenderPass (command_buffer,
                         &(VkRenderPassBeginInfo) {
                             .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
                             .renderPass = self->render_pass,
@@ -476,7 +470,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                         },
                         VK_SUBPASS_CONTENTS_INLINE);
 
-  vkCmdBindVertexBuffers (self->command_buffer,
+  vkCmdBindVertexBuffers (command_buffer,
                           0,
                           1,
                           (VkBuffer[1]) {
@@ -486,38 +480,14 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_draw (l->data, self, self->layout, self->command_buffer);
+      gsk_vulkan_render_pass_draw (l->data, self, self->layout, command_buffer);
     }
 
-  vkCmdEndRenderPass (self->command_buffer);
+  vkCmdEndRenderPass (command_buffer);
+
+  gsk_vulkan_command_pool_submit_buffer (self->command_pool, command_buffer, self->fence);
 
   gsk_vulkan_buffer_free (buffer);
-}
-
-void
-gsk_vulkan_render_submit (GskVulkanRender *self)
-{
-  GSK_VK_CHECK (vkEndCommandBuffer, self->command_buffer);
-
-  GSK_VK_CHECK (vkQueueSubmit, gdk_vulkan_context_get_queue (self->vulkan),
-                               1,
-                               &(VkSubmitInfo) {
-                                  .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-                                  .waitSemaphoreCount = 1,
-                                  .pWaitSemaphores = (VkSemaphore[1]) {
-                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan)
-                                  },
-                                  .pWaitDstStageMask = (VkPipelineStageFlags []) {
-                                     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                  },
-                                  .commandBufferCount = 1,
-                                  .pCommandBuffers = &self->command_buffer,
-                                  .signalSemaphoreCount = 1,
-                                  .pSignalSemaphores = (VkSemaphore[1]) {
-                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan)
-                                  }
-                               },
-                               self->fence);
 
   if (GSK_RENDER_MODE_CHECK (SYNC))
     {
@@ -544,9 +514,8 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
   GSK_VK_CHECK (vkResetFences, device,
                                1,
                                &self->fence);
-  GSK_VK_CHECK (vkResetCommandPool, device,
-                                    self->command_pool,
-                                    0);
+
+  gsk_vulkan_command_pool_reset (self->command_pool);
 
   g_hash_table_remove_all (self->descriptor_set_indexes);
 
@@ -602,9 +571,8 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   vkDestroyFence (device,
                   self->fence,
                   NULL);
-  vkDestroyCommandPool (device,
-                        self->command_pool,
-                        NULL);
+
+  gsk_vulkan_command_pool_free (self->command_pool);
 
   g_slice_free (GskVulkanRender, self);
 }
@@ -619,30 +587,11 @@ void
 gsk_vulkan_render_reset (GskVulkanRender *self,
                          GskVulkanImage  *target)
 {
-  VkDevice device;
-
   gsk_vulkan_render_cleanup (self);
 
   self->target = g_object_ref (target);
 
   gsk_vulkan_render_compute_mvp (self);
-
-  device = gdk_vulkan_context_get_device (self->vulkan);
-
-  GSK_VK_CHECK (vkAllocateCommandBuffers, device,
-                                          &(VkCommandBufferAllocateInfo) {
-                                              .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-                                              .commandPool = self->command_pool,
-                                              .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-                                              .commandBufferCount = 1,
-                                          },
-                                          &self->command_buffer);
-
-  GSK_VK_CHECK (vkBeginCommandBuffer, self->command_buffer,
-                                      &(VkCommandBufferBeginInfo) {
-                                          .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-                                          .flags = 0
-                                      });
 }
 
 GskRenderer *

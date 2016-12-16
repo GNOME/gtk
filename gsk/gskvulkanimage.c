@@ -139,15 +139,16 @@ gsk_vulkan_image_ensure_view (GskVulkanImage *self,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext  *context,
-                                                   VkCommandBuffer    command_buffer,
-                                                   guchar            *data,
-                                                   gsize              width,
-                                                   gsize              height,
-                                                   gsize              stride)
+gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext     *context,
+                                                   GskVulkanCommandPool *command_pool,
+                                                   guchar               *data,
+                                                   gsize                 width,
+                                                   gsize                 height,
+                                                   gsize                 stride)
 {
   GskVulkanImage *self;
   GskVulkanBuffer *staging;
+  VkCommandBuffer command_buffer;
   guchar *mem;
 
   staging = gsk_vulkan_buffer_new_staging (context, width * height * 4);
@@ -173,6 +174,8 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext  *context,
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+  command_buffer = gsk_vulkan_command_pool_get_buffer (command_pool);
 
   vkCmdPipelineBarrier (command_buffer,
                         VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
@@ -249,6 +252,8 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext  *context,
                             }
                         });
 
+  gsk_vulkan_command_pool_submit_buffer (command_pool, command_buffer, VK_NULL_HANDLE);
+
   /* XXX: Is this okay or do we need to keep the staging image around until the commands execute */
   gsk_vulkan_buffer_free (staging);
 
@@ -258,14 +263,15 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext  *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext  *context,
-                                                  VkCommandBuffer    command_buffer,
-                                                  guchar            *data,
-                                                  gsize              width,
-                                                  gsize              height,
-                                                  gsize              stride)
+gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext     *context,
+                                                  GskVulkanCommandPool *command_pool,
+                                                  guchar               *data,
+                                                  gsize                 width,
+                                                  gsize                 height,
+                                                  gsize                 stride)
 {
   GskVulkanImage *self, *staging;
+  VkCommandBuffer command_buffer;
 
   staging = gsk_vulkan_image_new (context,
                                   width,
@@ -282,6 +288,8 @@ gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext  *context,
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+  command_buffer = gsk_vulkan_command_pool_get_buffer (command_pool);
 
   vkCmdPipelineBarrier (command_buffer,
                         VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
@@ -380,6 +388,8 @@ gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext  *context,
                             }
                         });
 
+  gsk_vulkan_command_pool_submit_buffer (command_pool, command_buffer, VK_NULL_HANDLE);
+
   /* XXX: Is this okay or do we need to keep the staging image around until the commands execute */
   g_object_unref (staging);
 
@@ -389,14 +399,17 @@ gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext  *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_from_data_directly (GdkVulkanContext  *context,
-                                         VkCommandBuffer    command_buffer,
-                                         guchar            *data,
-                                         gsize              width,
-                                         gsize              height,
-                                         gsize              stride)
+gsk_vulkan_image_new_from_data_directly (GdkVulkanContext     *context,
+                                         GskVulkanCommandPool *command_pool,
+                                         guchar               *data,
+                                         gsize                 width,
+                                         gsize                 height,
+                                         gsize                 stride)
 {
+  VkCommandBuffer command_buffer;
   GskVulkanImage *self;
+
+  command_buffer = gsk_vulkan_command_pool_get_buffer (command_pool);
 
   self = gsk_vulkan_image_new (context,
                                width,
@@ -433,25 +446,27 @@ gsk_vulkan_image_new_from_data_directly (GdkVulkanContext  *context,
                             }
                         });
 
+  gsk_vulkan_command_pool_submit_buffer (command_pool, command_buffer, VK_NULL_HANDLE);
+
   gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
 
   return self;
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_from_data (GdkVulkanContext  *context,
-                                VkCommandBuffer    command_buffer,
-                                guchar            *data,
-                                gsize              width,
-                                gsize              height,
-                                gsize              stride)
+gsk_vulkan_image_new_from_data (GdkVulkanContext     *context,
+                                GskVulkanCommandPool *command_pool,
+                                guchar               *data,
+                                gsize                 width,
+                                gsize                 height,
+                                gsize                 stride)
 {
   if (GSK_RENDER_MODE_CHECK (STAGING_BUFFER))
-    return gsk_vulkan_image_new_from_data_via_staging_buffer (context, command_buffer, data, width, height, stride);
+    return gsk_vulkan_image_new_from_data_via_staging_buffer (context, command_pool, data, width, height, stride);
   if (GSK_RENDER_MODE_CHECK (STAGING_IMAGE))
-    return gsk_vulkan_image_new_from_data_via_staging_image (context, command_buffer, data, width, height, stride);
+    return gsk_vulkan_image_new_from_data_via_staging_image (context, command_pool, data, width, height, stride);
   else
-    return gsk_vulkan_image_new_from_data_directly (context, command_buffer, data, width, height, stride);
+    return gsk_vulkan_image_new_from_data_directly (context, command_pool, data, width, height, stride);
 }
 
 GskVulkanImage *

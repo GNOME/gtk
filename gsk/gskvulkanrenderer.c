@@ -196,8 +196,6 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 
   gsk_vulkan_render_draw (render, self->sampler);
 
-  gsk_vulkan_render_submit (render);
-
 #ifdef G_ENABLE_DEBUG
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
   gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
@@ -271,9 +269,9 @@ gsk_vulkan_renderer_clear_texture (gpointer p)
 }
 
 GskVulkanImage *
-gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
-                                       GskTexture        *texture,
-                                       VkCommandBuffer    command_buffer)
+gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer    *self,
+                                       GskTexture           *texture,
+                                       GskVulkanCommandPool *command_pool)
 {
   GskVulkanTextureData *data;
   cairo_surface_t *surface;
@@ -285,7 +283,7 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
 
   surface = gsk_texture_download (texture);
   image = gsk_vulkan_image_new_from_data (self->vulkan,
-                                          command_buffer,
+                                          command_pool,
                                           cairo_image_surface_get_data (surface),
                                           cairo_image_surface_get_width (surface),
                                           cairo_image_surface_get_height (surface),
