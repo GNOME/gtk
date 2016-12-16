@@ -237,6 +237,72 @@ gdk_gl_context_get_property (GObject    *gobject,
 }
 
 void
+gdk_gl_context_download_texture (GdkGLContext    *context,
+                                 int              x,
+                                 int              y,
+                                 int              width,
+                                 int              height,
+                                 cairo_surface_t *image_surface)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  gboolean es_read_bgra = FALSE;
+
+#ifdef GDK_WINDOWING_WIN32
+  /* on ANGLE GLES, we need to set the glReadPixel() format as GL_BGRA instead */
+  if (GDK_WIN32_IS_GL_CONTEXT (context))
+    es_read_bgra = TRUE;
+#endif
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+
+  /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
+   * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
+   */
+  if (!priv->use_es ||
+      (priv->use_es && (priv->gl_version >= 30 || priv->has_unpack_subimage)))
+    {
+      glPixelStorei (GL_PACK_ALIGNMENT, 4);
+      glPixelStorei (GL_PACK_ROW_LENGTH, cairo_image_surface_get_stride (image_surface) / 4);
+
+      if (priv->use_es)
+        glReadPixels (x, y, width, height,
+                      es_read_bgra ? GL_BGRA : GL_RGBA,
+                      GL_UNSIGNED_BYTE,
+                      cairo_image_surface_get_data (image_surface));
+      else
+        glReadPixels (x, y, width, height,
+                      GL_BGRA,
+                      GL_UNSIGNED_INT_8_8_8_8_REV,
+                      cairo_image_surface_get_data (image_surface));
+
+      glPixelStorei (GL_PACK_ROW_LENGTH, 0);
+    }
+  else
+    {
+      GLvoid *data = cairo_image_surface_get_data (image_surface);
+      int stride = cairo_image_surface_get_stride (image_surface);
+      int i;
+
+      if (priv->use_es)
+        {
+          for (i = y; i < height; i++)
+            glReadPixels (x, i, width, 1,
+                          es_read_bgra ? GL_BGRA : GL_RGBA,
+                          GL_UNSIGNED_BYTE,
+                          (unsigned char *) data + (i * stride));
+        }
+      else
+        {
+          for (i = y; i < height; i++)
+            glReadPixels (x, i, width, 1,
+                          GL_BGRA,
+                          GL_UNSIGNED_INT_8_8_8_8_REV,
+                          (unsigned char *) data + (i * stride));
+        }
+    }
+}
+
+void
 gdk_gl_context_upload_texture (GdkGLContext    *context,
                                cairo_surface_t *image_surface,
                                int              width,

@@ -645,13 +645,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
     {
       /* Software fallback */
       int major, minor, version;
-      gboolean es_read_bgra = FALSE;
-
-#ifdef GDK_WINDOWING_WIN32
-      /* on ANGLE GLES, we need to set the glReadPixel() format as GL_BGRA instead */
-      if (GDK_WIN32_IS_GL_CONTEXT(paint_context))
-        es_read_bgra = TRUE;
-#endif
 
       gdk_gl_context_get_version (paint_context, &major, &minor);
       version = major * 100 + minor;
@@ -686,24 +679,15 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
                                   GL_TEXTURE_2D, source, 0);
         }
 
-      glPixelStorei (GL_PACK_ALIGNMENT, 4);
-      glPixelStorei (GL_PACK_ROW_LENGTH, cairo_image_surface_get_stride (image) / 4);
-
-      /* The implicit format conversion is going to make this path slower */
-      if (!gdk_gl_context_get_use_es (paint_context))
-        glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                      cairo_image_surface_get_data (image));
-      else
-        glReadPixels (x, y, width, height, es_read_bgra ? GL_BGRA : GL_RGBA, GL_UNSIGNED_BYTE,
-                      cairo_image_surface_get_data (image));
-
-      glPixelStorei (GL_PACK_ROW_LENGTH, 0);
+      gdk_gl_context_download_texture (paint_context,
+                                       x, y, width, height,
+                                       image);
 
       glBindFramebuffer (GL_FRAMEBUFFER_EXT, 0);
 
       cairo_surface_mark_dirty (image);
 
-      /* Invert due to opengl having different origin */
+      /* Invert due to GL framebuffers having different origin */
       cairo_scale (cr, 1, -1);
       cairo_translate (cr, 0, -height / buffer_scale);
 
@@ -717,7 +701,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 out:
   if (clip_region)
     cairo_region_destroy (clip_region);
-
 }
 
 /* This is always called with the paint context current */
