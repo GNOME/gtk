@@ -1699,79 +1699,6 @@ _gdk_x11_window_set_window_scale (GdkWindow *window,
   gdk_window_invalidate_rect (window, NULL, TRUE);
 }
 
-static gboolean
-gdk_window_x11_reparent (GdkWindow *window,
-                         GdkWindow *new_parent,
-                         gint       x,
-                         gint       y)
-{
-  GdkWindowImplX11 *impl;
-
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-
-  XReparentWindow (GDK_WINDOW_XDISPLAY (window),
-		   GDK_WINDOW_XID (window),
-		   GDK_WINDOW_XID (new_parent),
-		   (new_parent->abs_x + x)  * impl->window_scale,
-                   (new_parent->abs_y + y) * impl->window_scale);
-
-  if (WINDOW_IS_TOPLEVEL (window))
-    connect_frame_clock (window);
-  else
-    /* old frame clock was disposed, our signal handlers removed */
-    impl->frame_clock_connected = FALSE;
-
-  if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
-    new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
-
-  window->parent = new_parent;
-
-  /* Switch the window type as appropriate */
-
-  switch (GDK_WINDOW_TYPE (new_parent))
-    {
-    case GDK_WINDOW_ROOT:
-    case GDK_WINDOW_FOREIGN:
-      /* Reparenting to toplevel */
-      
-      if (!WINDOW_IS_TOPLEVEL (window) &&
-	  GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
-	{
-	  /* This is also done in common code at a later stage, but we
-	     need it in setup_toplevel, so do it here too */
-	  if (window->toplevel_window_type != -1)
-	    GDK_WINDOW_TYPE (window) = window->toplevel_window_type;
-	  else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
-	    GDK_WINDOW_TYPE (window) = GDK_WINDOW_TOPLEVEL;
-	  
-	  /* Wasn't a toplevel, set up */
-	  setup_toplevel_window (window, new_parent);
-	}
-
-      break;
-      
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_TEMP:
-      if (WINDOW_IS_TOPLEVEL (window) &&
-	  impl->toplevel)
-	{
-	  if (impl->toplevel->focus_window)
-	    {
-	      XDestroyWindow (GDK_WINDOW_XDISPLAY (window), impl->toplevel->focus_window);
-              _gdk_x11_display_remove_window (GDK_WINDOW_DISPLAY (window), impl->toplevel->focus_window);
-	    }
-	  
-	  gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), 
-					  impl->toplevel);
-	  g_free (impl->toplevel);
-	  impl->toplevel = NULL;
-	}
-    }
-
-  return FALSE;
-}
-
 static void
 gdk_window_x11_raise (GdkWindow *window)
 {
@@ -5127,7 +5054,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->lower = gdk_window_x11_lower;
   impl_class->restack_toplevel = gdk_window_x11_restack_toplevel;
   impl_class->move_resize = gdk_window_x11_move_resize;
-  impl_class->reparent = gdk_window_x11_reparent;
   impl_class->set_device_cursor = gdk_window_x11_set_device_cursor;
   impl_class->get_geometry = gdk_window_x11_get_geometry;
   impl_class->get_root_coords = gdk_window_x11_get_root_coords;

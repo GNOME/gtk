@@ -946,12 +946,6 @@ gdk_quartz_window_destroy (GdkWindow *window,
     }
 }
 
-static void
-gdk_quartz_window_destroy_foreign (GdkWindow *window)
-{
-  /* Foreign windows aren't supported in OSX. */
-}
-
 /* FIXME: This might be possible to simplify with client-side windows. Also
  * note that already_mapped is not used yet, see the x11 backend.
 */
@@ -1288,54 +1282,6 @@ gdk_window_quartz_move_resize (GdkWindow *window,
       else
         window_quartz_resize (window, width, height);
     }
-}
-
-/* FIXME: This might need fixing (reparenting didn't work before client-side
- * windows either).
- */
-static gboolean
-gdk_window_quartz_reparent (GdkWindow *window,
-                            GdkWindow *new_parent,
-                            gint       x,
-                            gint       y)
-{
-  GdkWindow *old_parent;
-  GdkWindowImplQuartz *impl, *old_parent_impl, *new_parent_impl;
-  NSView *view, *new_parent_view;
-
-  if (new_parent == _gdk_root)
-    {
-      /* Could be added, just needs implementing. */
-      g_warning ("Reparenting to root window is not supported yet in the Mac OS X backend");
-      return FALSE;
-    }
-
-  impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-  view = impl->view;
-
-  new_parent_impl = GDK_WINDOW_IMPL_QUARTZ (new_parent->impl);
-  new_parent_view = new_parent_impl->view;
-
-  old_parent = window->parent;
-  old_parent_impl = GDK_WINDOW_IMPL_QUARTZ (old_parent->impl);
-
-  [view retain];
-
-  [view removeFromSuperview];
-  [new_parent_view addSubview:view];
-
-  [view release];
-
-  window->parent = new_parent;
-
-  if (old_parent)
-    {
-      old_parent_impl->sorted_children = g_list_remove (old_parent_impl->sorted_children, window);
-    }
-
-  new_parent_impl->sorted_children = g_list_prepend (new_parent_impl->sorted_children, window);
-
-  return FALSE;
 }
 
 /* Get the toplevel ordering from NSApp and update our own list. We do
@@ -2794,7 +2740,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->lower = gdk_window_quartz_lower;
   impl_class->restack_toplevel = gdk_window_quartz_restack_toplevel;
   impl_class->move_resize = gdk_window_quartz_move_resize;
-  impl_class->reparent = gdk_window_quartz_reparent;
   impl_class->set_device_cursor = gdk_window_quartz_set_device_cursor;
   impl_class->get_geometry = gdk_window_quartz_get_geometry;
   impl_class->get_root_coords = gdk_window_quartz_get_root_coords;
@@ -2802,7 +2747,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->shape_combine_region = gdk_window_quartz_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
   impl_class->destroy = gdk_quartz_window_destroy;
-  impl_class->destroy_foreign = gdk_quartz_window_destroy_foreign;
   impl_class->begin_paint = gdk_window_impl_quartz_begin_paint;
   impl_class->get_scale_factor = gdk_quartz_window_get_scale_factor;
 

@@ -503,15 +503,6 @@ gdk_window_broadway_move_resize (GdkWindow *window,
     window->resize_count++;
 }
 
-static gboolean
-gdk_window_broadway_reparent (GdkWindow *window,
-			      GdkWindow *new_parent,
-			      gint       x,
-			      gint       y)
-{
-  return FALSE;
-}
-
 static void
 gdk_window_broadway_raise (GdkWindow *window)
 {
@@ -1495,7 +1486,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->lower = gdk_window_broadway_lower;
   impl_class->restack_toplevel = gdk_window_broadway_restack_toplevel;
   impl_class->move_resize = gdk_window_broadway_move_resize;
-  impl_class->reparent = gdk_window_broadway_reparent;
   impl_class->set_device_cursor = gdk_window_broadway_set_device_cursor;
   impl_class->get_geometry = gdk_window_broadway_get_geometry;
   impl_class->get_root_coords = gdk_window_broadway_get_root_coords;

@@ -84,11 +84,6 @@ struct _GdkWindowImplClass
   GdkEventMask (* get_events)           (GdkWindow       *window);
   void         (* set_events)           (GdkWindow       *window,
                                          GdkEventMask     event_mask);
-  
-  gboolean     (* reparent)             (GdkWindow       *window,
-                                         GdkWindow       *new_parent,
-                                         gint             x,
-                                         gint             y);
 
   void         (* set_device_cursor)    (GdkWindow       *window,
                                          GdkDevice       *device,

@@ -471,11 +471,6 @@ void          gdk_window_move_resize           (GdkWindow     *window,
                                                 gint           width,
                                                 gint           height);
 GDK_AVAILABLE_IN_ALL
-void          gdk_window_reparent              (GdkWindow     *window,
-                                                GdkWindow     *new_parent,
-                                                gint           x,
-                                                gint           y);
-GDK_AVAILABLE_IN_ALL
 void          gdk_window_raise                 (GdkWindow     *window);
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_lower                 (GdkWindow     *window);

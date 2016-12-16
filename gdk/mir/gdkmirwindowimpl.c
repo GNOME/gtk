@@ -870,16 +870,6 @@ gdk_mir_window_impl_set_events (GdkWindow    *window,
   /* We send all events and let GDK decide */
 }
 
-static gboolean
-gdk_mir_window_impl_reparent (GdkWindow *window,
-                              GdkWindow *new_parent,
-                              gint       x,
-                              gint       y)
-{
-  //g_printerr ("gdk_mir_window_impl_reparent window=%p new-parent=%p\n", window, new_parent);
-  return FALSE;
-}
-
 static void
 gdk_mir_window_impl_set_device_cursor (GdkWindow *window,
                                        GdkDevice *device,
@@ -1672,7 +1662,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->move_to_rect = gdk_mir_window_impl_move_to_rect;
   impl_class->get_events = gdk_mir_window_impl_get_events;
   impl_class->set_events = gdk_mir_window_impl_set_events;
-  impl_class->reparent = gdk_mir_window_impl_reparent;
   impl_class->set_device_cursor = gdk_mir_window_impl_set_device_cursor;
   impl_class->get_geometry = gdk_mir_window_impl_get_geometry;
   impl_class->get_root_coords = gdk_mir_window_impl_get_root_coords;

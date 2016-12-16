@@ -1628,95 +1628,6 @@ gdk_win32_window_move_resize (GdkWindow *window,
     _gdk_win32_emit_configure_event (window);
 }
 
-static gboolean
-gdk_win32_window_reparent (GdkWindow *window,
-			   GdkWindow *new_parent,
-			   gint       x,
-			   gint       y)
-{
-  GdkScreen *screen;
-  GdkWindowImplWin32 *impl;
-  gboolean new_parent_is_root;
-  gboolean was_toplevel;
-  LONG style;
-
-  screen = gdk_window_get_screen (window);
-
-  if (!new_parent)
-    {
-      new_parent = gdk_screen_get_root_window (screen);
-      new_parent_is_root = TRUE;
-    }
-  else
-     new_parent_is_root = (gdk_screen_get_root_window (screen) == new_parent);
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  GDK_NOTE (MISC, g_print ("gdk_win32_window_reparent: %p: %p\n",
-			   GDK_WINDOW_HWND (window),
-			   GDK_WINDOW_HWND (new_parent)));
-
-  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-
-  was_toplevel = GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) == GetDesktopWindow ();
-  if (was_toplevel && !new_parent_is_root)
-    {
-      /* Reparenting from top-level (child of desktop). Clear out
-       * decorations.
-       */
-      style &= ~(WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
-      style |= WS_CHILD;
-      SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
-    }
-  else if (new_parent_is_root)
-    {
-      /* Reparenting to top-level. Add decorations. */
-      style &= ~(WS_CHILD);
-      style |= WS_OVERLAPPEDWINDOW;
-      SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
-    }
-
-  API_CALL (SetParent, (GDK_WINDOW_HWND (window),
-			GDK_WINDOW_HWND (new_parent)));
-
-  /* From here on, we treat parents of type GDK_WINDOW_FOREIGN like
-   * the root window
-   */
-  if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
-    new_parent = gdk_screen_get_root_window (screen);
-
-  window->parent = new_parent;
-
-  /* Switch the window type as appropriate */
-
-  switch (GDK_WINDOW_TYPE (new_parent))
-    {
-    case GDK_WINDOW_ROOT:
-      if (impl->toplevel_window_type != -1)
-	GDK_WINDOW_TYPE (window) = impl->toplevel_window_type;
-      else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
-	GDK_WINDOW_TYPE (window) = GDK_WINDOW_TOPLEVEL;
-      break;
-
-    case GDK_WINDOW_TOPLEVEL:
-    case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_TEMP:
-      if (WINDOW_IS_TOPLEVEL (window))
-	{
-	  /* Save the original window type so we can restore it if the
-	   * window is reparented back to be a toplevel.
-	   */
-	  impl->toplevel_window_type = GDK_WINDOW_TYPE (window);
-	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_CHILD;
-	}
-    }
-
-  /* Move window into desired position while keeping the same client area */
-  gdk_win32_window_move_resize (window, TRUE, x, y, window->width, window->height);
-
-  return FALSE;
-}
-
 static void
 gdk_win32_window_raise (GdkWindow *window)
 {
@@ -6011,7 +5922,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->lower = gdk_win32_window_lower;
   impl_class->restack_toplevel = gdk_win32_window_restack_toplevel;
   impl_class->move_resize = gdk_win32_window_move_resize;
-  impl_class->reparent = gdk_win32_window_reparent;
   impl_class->set_device_cursor = gdk_win32_window_set_device_cursor;
   impl_class->get_geometry = gdk_win32_window_get_geometry;
   impl_class->get_device_state = gdk_window_win32_get_device_state;
