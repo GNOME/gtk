@@ -99,55 +99,68 @@ gtk_css_image_cross_fade_equal (GtkCssImage *image1,
 }
 
 static void
-gtk_css_image_cross_fade_draw (GtkCssImage        *image,
-                               cairo_t            *cr,
-                               double              width,
-                               double              height)
+gtk_css_image_cross_fade_snapshot (GtkCssImage *image,
+                                   GtkSnapshot *snapshot,
+                                   double       width,
+                                   double       height)
 {
   GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
 
   if (cross_fade->progress <= 0.0)
     {
       if (cross_fade->start)
-        _gtk_css_image_draw (cross_fade->start, cr, width, height);
+        gtk_css_image_snapshot (cross_fade->start, snapshot, width, height);
     }
   else if (cross_fade->progress >= 1.0)
     {
       if (cross_fade->end)
-        _gtk_css_image_draw (cross_fade->end, cr, width, height);
+        gtk_css_image_snapshot (cross_fade->end, snapshot, width, height);
     }
   else
     {
-      if (cross_fade->start && cross_fade->end)
+      GskRenderNode *start_node, *end_node;
+      if (cross_fade->start)
         {
-          /* to reduce the group size */
-          cairo_rectangle (cr, 0, 0, ceil (width), ceil (height));
-          cairo_clip (cr);
-
-          cairo_push_group (cr);
-
-          /* performance trick */
-          cairo_reset_clip (cr);
-
-          _gtk_css_image_draw (cross_fade->start, cr, width, height);
-
-          cairo_push_group (cr);
-          _gtk_css_image_draw (cross_fade->end, cr, width, height);
-          cairo_pop_group_to_source (cr);
-
-          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-          cairo_paint_with_alpha (cr, cross_fade->progress);
-
-          cairo_pop_group_to_source (cr);
-          cairo_paint (cr);
+          gtk_snapshot_push (snapshot, TRUE, "CrossFadeStart");
+          gtk_css_image_snapshot (cross_fade->start, snapshot, width, height);
+          start_node = gtk_snapshot_pop (snapshot);
         }
-      else if (cross_fade->start || cross_fade->end)
-        {
-          cairo_push_group (cr);
-          _gtk_css_image_draw (cross_fade->start ? cross_fade->start : cross_fade->end, cr, width, height);
-          cairo_pop_group_to_source (cr);
+      else
+        start_node = NULL;
 
-          cairo_paint_with_alpha (cr, cross_fade->start ? 1.0 - cross_fade->progress : cross_fade->progress);
+      if (cross_fade->end)
+        {
+          gtk_snapshot_push (snapshot, TRUE, "CrossFadeStart");
+          gtk_css_image_snapshot (cross_fade->end, snapshot, width, height);
+          end_node = gtk_snapshot_pop (snapshot);
+        }
+      else
+        end_node = NULL;
+
+      if (start_node && end_node)
+        {
+          GskRenderNode *node = gsk_cross_fade_node_new (start_node, end_node, cross_fade->progress);
+
+          gsk_render_node_set_name (node, "CrossFade");
+          gtk_snapshot_append_node (snapshot, node);
+
+          gsk_render_node_unref (node);
+          gsk_render_node_unref (start_node);
+          gsk_render_node_unref (end_node);
+        }
+      else if (start_node)
+        {
+          gtk_snapshot_push_opacity (snapshot, cross_fade->progress, "CrossFadeStart");
+          gtk_snapshot_append_node (snapshot, start_node);
+          gtk_snapshot_pop_and_append (snapshot);
+          gsk_render_node_unref (start_node);
+        }
+      else if (end_node)
+        {
+          gtk_snapshot_push_opacity (snapshot, 1.0 - cross_fade->progress, "CrossFadeEnd");
+          gtk_snapshot_append_node (snapshot, end_node);
+          gtk_snapshot_pop_and_append (snapshot);
+          gsk_render_node_unref (end_node);
         }
     }
 }
@@ -268,7 +281,7 @@ _gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
   image_class->get_width = gtk_css_image_cross_fade_get_width;
   image_class->get_height = gtk_css_image_cross_fade_get_height;
   image_class->equal = gtk_css_image_cross_fade_equal;
-  image_class->draw = gtk_css_image_cross_fade_draw;
+  image_class->snapshot = gtk_css_image_cross_fade_snapshot;
   image_class->parse = gtk_css_image_cross_fade_parse;
   image_class->print = gtk_css_image_cross_fade_print;
   image_class->compute = gtk_css_image_cross_fade_compute;
