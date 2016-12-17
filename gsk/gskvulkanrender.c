@@ -240,6 +240,8 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
     {
       gsk_vulkan_render_pass_upload (l->data, self, self->uploader);
     }
+
+  gsk_vulkan_uploader_upload (self->uploader);
 }
 
 static gsize

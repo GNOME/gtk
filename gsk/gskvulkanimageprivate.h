@@ -18,6 +18,7 @@ GskVulkanUploader *     gsk_vulkan_uploader_new                         (GdkVulk
 void                    gsk_vulkan_uploader_free                        (GskVulkanUploader      *self);
 
 void                    gsk_vulkan_uploader_reset                       (GskVulkanUploader      *self);
+void                    gsk_vulkan_uploader_upload                      (GskVulkanUploader      *self);
 
 GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulkanContext       *context,
                                                                          VkImage                 image,

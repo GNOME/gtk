@@ -14,6 +14,10 @@ struct _GskVulkanUploader
 
   GskVulkanCommandPool *command_pool;
 
+  GArray *before_barriers;
+  VkCommandBuffer copy_buffer;
+  GArray *after_barriers;
+
   GSList *staging_image_free_list;
   GSList *staging_buffer_free_list;
 };
@@ -45,6 +49,9 @@ gsk_vulkan_uploader_new (GdkVulkanContext     *context,
   self->vulkan = g_object_ref (context);
   self->command_pool = command_pool;
 
+  self->before_barriers = g_array_new (FALSE, FALSE, sizeof (VkImageMemoryBarrier));
+  self->after_barriers = g_array_new (FALSE, FALSE, sizeof (VkImageMemoryBarrier));
+
   return self;
 }
 
@@ -53,14 +60,85 @@ gsk_vulkan_uploader_free (GskVulkanUploader *self)
 {
   gsk_vulkan_uploader_reset (self);
 
+  g_array_unref (self->after_barriers);
+  g_array_unref (self->before_barriers);
+
   g_object_unref (self->vulkan);
 
   g_slice_free (GskVulkanUploader, self);
 }
 
+static void
+gsk_vulkan_uploader_add_image_barrier (GskVulkanUploader          *self,
+                                       gboolean                    after,
+                                       const VkImageMemoryBarrier *barrier)
+{
+  GArray *array;
+
+  if (after)
+    array = self->after_barriers;
+  else
+    array = self->before_barriers;
+
+  g_array_append_val (array, *barrier);
+}
+
+static VkCommandBuffer
+gsk_vulkan_uploader_get_copy_buffer (GskVulkanUploader *self)
+{
+  if (self->copy_buffer == VK_NULL_HANDLE)
+    self->copy_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
+
+  return self->copy_buffer;
+}
+
+void
+gsk_vulkan_uploader_upload (GskVulkanUploader *self)
+{
+  if (self->before_barriers->len > 0)
+    {
+      VkCommandBuffer command_buffer;
+
+      command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
+      vkCmdPipelineBarrier (command_buffer,
+                            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                            0,
+                            0, NULL,
+                            0, NULL,
+                            self->before_barriers->len, (VkImageMemoryBarrier *) self->before_barriers->data);
+      gsk_vulkan_command_pool_submit_buffer (self->command_pool, command_buffer, VK_NULL_HANDLE);
+      g_array_set_size (self->before_barriers, 0);
+    }
+
+  /* append these to existing buffer */
+  if (self->after_barriers->len > 0)
+    {
+      VkCommandBuffer command_buffer = gsk_vulkan_uploader_get_copy_buffer (self);
+      vkCmdPipelineBarrier (command_buffer,
+                            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                            0,
+                            0, NULL,
+                            0, NULL,
+                            self->after_barriers->len, (VkImageMemoryBarrier *) self->after_barriers->data);
+      g_array_set_size (self->after_barriers, 0);
+    }
+
+  if (self->copy_buffer != VK_NULL_HANDLE)
+    {
+      gsk_vulkan_command_pool_submit_buffer (self->command_pool, self->copy_buffer, VK_NULL_HANDLE);
+      self->copy_buffer = VK_NULL_HANDLE;
+    }
+}
+
 void
 gsk_vulkan_uploader_reset (GskVulkanUploader *self)
 {
+  g_array_set_size (self->before_barriers, 0);
+  self->copy_buffer = VK_NULL_HANDLE;
+  g_array_set_size (self->after_barriers, 0);
+
   g_slist_free_full (self->staging_image_free_list, g_object_unref);
   self->staging_image_free_list = NULL;
   g_slist_free_full (self->staging_buffer_free_list, (GDestroyNotify) gsk_vulkan_buffer_free);
@@ -190,7 +268,6 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
 {
   GskVulkanImage *self;
   GskVulkanBuffer *staging;
-  VkCommandBuffer command_buffer;
   guchar *mem;
 
   staging = gsk_vulkan_buffer_new_staging (uploader->vulkan, width * height * 4);
@@ -217,35 +294,27 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-  command_buffer = gsk_vulkan_command_pool_get_buffer (uploader->command_pool);
+  gsk_vulkan_uploader_add_image_barrier (uploader,
+                                         FALSE,
+                                         &(VkImageMemoryBarrier) {
+                                             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                             .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
+                                             .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                                             .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
+                                             .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .image = self->vk_image,
+                                             .subresourceRange = {
+                                                 .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                 .baseMipLevel = 0,
+                                                 .levelCount = 1,
+                                                 .baseArrayLayer = 0,
+                                                 .layerCount = 1
+                                             }
+                                         });
 
-  vkCmdPipelineBarrier (command_buffer,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        0,
-                        0, NULL,
-                        0, NULL,
-                        1, (VkImageMemoryBarrier[1]) {
-                            {
-                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-                                .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
-                                .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
-                                .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
-                                .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .image = self->vk_image,
-                                .subresourceRange = {
-                                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                    .baseMipLevel = 0,
-                                    .levelCount = 1,
-                                    .baseArrayLayer = 0,
-                                    .layerCount = 1
-                                }
-                            }
-                        });
-
-  vkCmdCopyBufferToImage (command_buffer,
+  vkCmdCopyBufferToImage (gsk_vulkan_uploader_get_copy_buffer (uploader),
                           gsk_vulkan_buffer_get_buffer (staging),
                           self->vk_image,
                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
@@ -268,33 +337,25 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
                                }
                           });
 
-  vkCmdPipelineBarrier (command_buffer,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        0,
-                        0, NULL,
-                        0, NULL,
-                        1, (VkImageMemoryBarrier[1]) {
-                            {
-                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-                                .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
-                                .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
-                                .oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                .newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .image = self->vk_image,
-                                .subresourceRange = {
-                                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                    .baseMipLevel = 0,
-                                    .levelCount = 1,
-                                    .baseArrayLayer = 0,
-                                    .layerCount = 1
-                                }
-                            }
-                        });
-
-  gsk_vulkan_command_pool_submit_buffer (uploader->command_pool, command_buffer, VK_NULL_HANDLE);
+  gsk_vulkan_uploader_add_image_barrier (uploader,
+                                         TRUE,
+                                         &(VkImageMemoryBarrier) {
+                                             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                             .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                                             .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+                                             .oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                             .newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .image = self->vk_image,
+                                             .subresourceRange = {
+                                                 .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                 .baseMipLevel = 0,
+                                                 .levelCount = 1,
+                                                 .baseArrayLayer = 0,
+                                                 .layerCount = 1
+                                             }
+                                         });
 
   uploader->staging_buffer_free_list = g_slist_prepend (uploader->staging_buffer_free_list, staging);
 
@@ -311,7 +372,6 @@ gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
                                                   gsize              stride)
 {
   GskVulkanImage *self, *staging;
-  VkCommandBuffer command_buffer;
 
   staging = gsk_vulkan_image_new (uploader->vulkan,
                                   width,
@@ -329,52 +389,46 @@ gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-  command_buffer = gsk_vulkan_command_pool_get_buffer (uploader->command_pool);
+  gsk_vulkan_uploader_add_image_barrier (uploader,
+                                         FALSE,
+                                         &(VkImageMemoryBarrier) {
+                                             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                             .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
+                                             .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
+                                             .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
+                                             .newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .image = staging->vk_image,
+                                             .subresourceRange = {
+                                                 .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                 .baseMipLevel = 0,
+                                                 .levelCount = 1,
+                                                 .baseArrayLayer = 0,
+                                                 .layerCount = 1
+                                             }
+                                         });
+  gsk_vulkan_uploader_add_image_barrier (uploader,
+                                         FALSE,
+                                         &(VkImageMemoryBarrier) {
+                                             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                             .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
+                                             .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                                             .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
+                                             .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .image = self->vk_image,
+                                             .subresourceRange = {
+                                                 .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                 .baseMipLevel = 0,
+                                                 .levelCount = 1,
+                                                 .baseArrayLayer = 0,
+                                                 .layerCount = 1
+                                             }
+                                         });
 
-  vkCmdPipelineBarrier (command_buffer,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        0,
-                        0, NULL,
-                        0, NULL,
-                        2, (VkImageMemoryBarrier[2]) {
-                            {
-                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-                                .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
-                                .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
-                                .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
-                                .newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .image = staging->vk_image,
-                                .subresourceRange = {
-                                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                    .baseMipLevel = 0,
-                                    .levelCount = 1,
-                                    .baseArrayLayer = 0,
-                                    .layerCount = 1
-                                }
-                            },
-                            {
-                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-                                .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
-                                .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
-                                .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
-                                .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .image = self->vk_image,
-                                .subresourceRange = {
-                                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                    .baseMipLevel = 0,
-                                    .levelCount = 1,
-                                    .baseArrayLayer = 0,
-                                    .layerCount = 1
-                                }
-                            }
-                        });
-
-  vkCmdCopyImage (command_buffer,
+  vkCmdCopyImage (gsk_vulkan_uploader_get_copy_buffer (uploader),
                   staging->vk_image,
                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                   self->vk_image,
@@ -402,33 +456,25 @@ gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
                       }
                   });
 
-  vkCmdPipelineBarrier (command_buffer,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        0,
-                        0, NULL,
-                        0, NULL,
-                        1, (VkImageMemoryBarrier[1]) {
-                            {
-                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-                                .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
-                                .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
-                                .oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                .newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .image = self->vk_image,
-                                .subresourceRange = {
-                                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                    .baseMipLevel = 0,
-                                    .levelCount = 1,
-                                    .baseArrayLayer = 0,
-                                    .layerCount = 1
-                                }
-                            }
-                        });
-
-  gsk_vulkan_command_pool_submit_buffer (uploader->command_pool, command_buffer, VK_NULL_HANDLE);
+  gsk_vulkan_uploader_add_image_barrier (uploader,
+                                         TRUE,
+                                         &(VkImageMemoryBarrier) {
+                                             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                             .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                                             .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+                                             .oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                             .newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .image = self->vk_image,
+                                             .subresourceRange = {
+                                                 .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                 .baseMipLevel = 0,
+                                                 .levelCount = 1,
+                                                 .baseArrayLayer = 0,
+                                                 .layerCount = 1
+                                             }
+                                         });
 
   uploader->staging_image_free_list = g_slist_prepend (uploader->staging_image_free_list, staging);
 
@@ -444,10 +490,7 @@ gsk_vulkan_image_new_from_data_directly (GskVulkanUploader *uploader,
                                          gsize              height,
                                          gsize              stride)
 {
-  VkCommandBuffer command_buffer;
   GskVulkanImage *self;
-
-  command_buffer = gsk_vulkan_command_pool_get_buffer (uploader->command_pool);
 
   self = gsk_vulkan_image_new (uploader->vulkan,
                                width,
@@ -458,33 +501,25 @@ gsk_vulkan_image_new_from_data_directly (GskVulkanUploader *uploader,
 
   gsk_vulkan_image_upload_data (self, data, width, height, stride);
 
-  vkCmdPipelineBarrier (command_buffer,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                        0,
-                        0, NULL,
-                        0, NULL,
-                        1, (VkImageMemoryBarrier[1]) {
-                            {
-                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-                                .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
-                                .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
-                                .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
-                                .newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                .image = self->vk_image,
-                                .subresourceRange = {
-                                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                    .baseMipLevel = 0,
-                                    .levelCount = 1,
-                                    .baseArrayLayer = 0,
-                                    .layerCount = 1
-                                }
-                            }
-                        });
-
-  gsk_vulkan_command_pool_submit_buffer (uploader->command_pool, command_buffer, VK_NULL_HANDLE);
+  gsk_vulkan_uploader_add_image_barrier (uploader,
+                                         TRUE,
+                                         &(VkImageMemoryBarrier) {
+                                             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                             .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
+                                             .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+                                             .oldLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
+                                             .newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .image = self->vk_image,
+                                             .subresourceRange = {
+                                                 .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                 .baseMipLevel = 0,
+                                                 .levelCount = 1,
+                                                 .baseArrayLayer = 0,
+                                                 .layerCount = 1
+                                             }
+                                         });
 
   gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
 
