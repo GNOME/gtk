@@ -42,7 +42,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkcssnumbervalueprivate.h"
+#include "gtkrendericonprivate.h"
 
 #include <math.h>
 
@@ -222,8 +222,8 @@ static void     gtk_paned_state_flags_changed   (GtkWidget        *widget,
                                                  GtkStateFlags     previous_state);
 static void     gtk_paned_direction_changed     (GtkWidget        *widget,
                                                  GtkTextDirection  previous_direction);
-static gboolean gtk_paned_draw                  (GtkWidget        *widget,
-						 cairo_t          *cr);
+static void     gtk_paned_snapshot              (GtkWidget        *widget,
+						 GtkSnapshot      *snapshot);
 static gboolean gtk_paned_enter                 (GtkWidget        *widget,
 						 GdkEventCrossing *event);
 static gboolean gtk_paned_leave                 (GtkWidget        *widget,
@@ -321,7 +321,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->map = gtk_paned_map;
   widget_class->unmap = gtk_paned_unmap;
-  widget_class->draw = gtk_paned_draw;
+  widget_class->snapshot = gtk_paned_snapshot;
   widget_class->focus = gtk_paned_focus;
   widget_class->enter_notify_event = gtk_paned_enter;
   widget_class->leave_notify_event = gtk_paned_leave;
@@ -1640,18 +1640,16 @@ gtk_paned_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_paned_parent_class)->unmap (widget);
 }
 
-static gboolean
-gtk_paned_draw (GtkWidget *widget,
-                cairo_t   *cr)
+static void
+gtk_paned_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_draw (GTK_PANED (widget)->priv->gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (GTK_PANED (widget)->priv->gadget, snapshot);
 }
 
 static gboolean
 gtk_paned_render (GtkCssGadget *gadget,
-                  cairo_t      *cr,
+                  GtkSnapshot  *snapshot,
                   int           x,
                   int           y,
                   int           width,
@@ -1667,34 +1665,36 @@ gtk_paned_render (GtkCssGadget *gadget,
   gtk_widget_get_allocation (widget, &widget_allocation);
   if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
-    gtk_css_gadget_draw (priv->handle_gadget, cr);
+    gtk_css_gadget_snapshot (priv->handle_gadget, snapshot);
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1))
     {
       gdk_window_get_position (priv->child1_window, &window_x, &window_y);
-      cairo_save (cr);
-      cairo_rectangle (cr, 
-                       window_x - widget_allocation.x,
-                       window_y - widget_allocation.y,
-                       gdk_window_get_width (priv->child1_window),
-                       gdk_window_get_height (priv->child1_window));
-      cairo_clip (cr);
-      gtk_container_propagate_draw (GTK_CONTAINER (widget), priv->child1, cr);
-      cairo_restore (cr);
+      gtk_snapshot_push_clip (snapshot,
+                              &GRAPHENE_RECT_INIT (
+                                  window_x - widget_allocation.x,
+                                  window_y - widget_allocation.y,
+                                  gdk_window_get_width (priv->child1_window),
+                                  gdk_window_get_height (priv->child1_window)
+                              ),
+                              "GtkPanedChild1");
+      gtk_container_snapshot_child (GTK_CONTAINER (widget), priv->child1, snapshot);
+      gtk_snapshot_pop_and_append (snapshot);
     }
 
   if (priv->child2 && gtk_widget_get_visible (priv->child2))
     {
       gdk_window_get_position (priv->child2_window, &window_x, &window_y);
-      cairo_save (cr);
-      cairo_rectangle (cr, 
-                       window_x - widget_allocation.x,
-                       window_y - widget_allocation.y,
-                       gdk_window_get_width (priv->child2_window),
-                       gdk_window_get_height (priv->child2_window));
-      cairo_clip (cr);
-      gtk_container_propagate_draw (GTK_CONTAINER (widget), priv->child2, cr);
-      cairo_restore (cr);
+      gtk_snapshot_push_clip (snapshot,
+                              &GRAPHENE_RECT_INIT (
+                                  window_x - widget_allocation.x,
+                                  window_y - widget_allocation.y,
+                                  gdk_window_get_width (priv->child2_window),
+                                  gdk_window_get_height (priv->child2_window)
+                              ),
+                              "GtkPanedChild2");
+      gtk_container_snapshot_child (GTK_CONTAINER (widget), priv->child2, snapshot);
+      gtk_snapshot_pop_and_append (snapshot);
     }
 
   return FALSE;
@@ -1702,7 +1702,7 @@ gtk_paned_render (GtkCssGadget *gadget,
 
 static gboolean
 gtk_paned_render_handle (GtkCssGadget *gadget,
-                         cairo_t      *cr,
+                         GtkSnapshot  *snapshot,
                          int           x,
                          int           y,
                          int           width,
@@ -1715,7 +1715,14 @@ gtk_paned_render_handle (GtkCssGadget *gadget,
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (priv->handle_gadget));
-  gtk_render_handle (context, cr, x, y, width, height);
+  gtk_snapshot_translate_2d (snapshot, x, y);
+
+  gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context),
+                               snapshot,
+                               width, height,
+                               GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
+
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
   gtk_style_context_restore (context);
 
   return FALSE;
@@ -1810,8 +1817,8 @@ gtk_paned_init (GtkPaned *paned)
                                                      GTK_WIDGET (paned),
                                                      gtk_paned_measure,
                                                      gtk_paned_allocate,
-                                                     gtk_paned_render,
                                                      NULL,
+                                                     gtk_paned_render,
                                                      NULL,
                                                      NULL);
   priv->handle_gadget = gtk_css_custom_gadget_new ("separator",
@@ -1820,8 +1827,8 @@ gtk_paned_init (GtkPaned *paned)
                                                    NULL,
                                                    NULL,
                                                    NULL,
-                                                   gtk_paned_render_handle,
                                                    NULL,
+                                                   gtk_paned_render_handle,
                                                    NULL,
                                                    NULL);
   update_node_state (GTK_WIDGET (paned));
