@@ -64,6 +64,10 @@ GskRenderNode * gsk_blend_node_get_bottom_child (GskRenderNode *node);
 GskRenderNode * gsk_blend_node_get_top_child (GskRenderNode *node);
 GskBlendMode gsk_blend_node_get_blend_node (GskRenderNode *node);
 
+GskRenderNode * gsk_cross_fade_node_get_start_child (GskRenderNode *node);
+GskRenderNode * gsk_cross_fade_node_get_end_child (GskRenderNode *node);
+double gsk_cross_fade_node_get_progress (GskRenderNode *node);
+
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_PRIVATE_H__ */

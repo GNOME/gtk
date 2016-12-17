@@ -1402,3 +1402,139 @@ gsk_blend_node_get_blend_mode (GskRenderNode *node)
   return self->blend_mode;
 }
 
+/*** GSK_CROSS_FADE_NODE ***/
+
+typedef struct _GskCrossFadeNode GskCrossFadeNode;
+
+struct _GskCrossFadeNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *start;
+  GskRenderNode *end;
+  double         progress;
+};
+
+static void
+gsk_cross_fade_node_finalize (GskRenderNode *node)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  gsk_render_node_unref (self->start);
+  gsk_render_node_unref (self->end);
+}
+
+static void
+gsk_cross_fade_node_make_immutable (GskRenderNode *node)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  gsk_render_node_make_immutable (self->start);
+  gsk_render_node_make_immutable (self->end);
+}
+
+static void
+gsk_cross_fade_node_draw (GskRenderNode *node,
+                          cairo_t       *cr)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->start, cr);
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->end, cr);
+
+  cairo_pop_group_to_source (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint_with_alpha (cr, self->progress);
+
+  cairo_pop_group_to_source (cr); /* resets operator */
+  cairo_paint (cr);
+}
+
+static void
+gsk_cross_fade_node_get_bounds (GskRenderNode   *node,
+                                graphene_rect_t *bounds)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+  graphene_rect_t start_bounds, end_bounds;
+
+  gsk_render_node_get_bounds (self->start, &start_bounds);
+  gsk_render_node_get_bounds (self->end, &end_bounds);
+
+  graphene_rect_union (&start_bounds, &end_bounds, bounds);
+}
+
+static const GskRenderNodeClass GSK_CROSS_FADE_NODE_CLASS = {
+  GSK_CROSS_FADE_NODE,
+  sizeof (GskCrossFadeNode),
+  "GskCrossFadeNode",
+  gsk_cross_fade_node_finalize,
+  gsk_cross_fade_node_make_immutable,
+  gsk_cross_fade_node_draw,
+  gsk_cross_fade_node_get_bounds
+};
+
+/**
+ * gsk_cross_fade_node_new:
+ * @start: The start node to be drawn
+ * @end: The node to be cross_fadeed onto the @start node
+ * @progress: How far the fade has progressed from start to end. The value will
+ *     be clamped to the range [0 ... 1]
+ *
+ * Creates a #GskRenderNode that will do a cross-fade between @start and @end.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_cross_fade_node_new (GskRenderNode *start,
+                         GskRenderNode *end,
+                         double         progress)
+{
+  GskCrossFadeNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (start), NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (end), NULL);
+
+  self = (GskCrossFadeNode *) gsk_render_node_new (&GSK_CROSS_FADE_NODE_CLASS);
+
+  self->start = gsk_render_node_ref (start);
+  self->end = gsk_render_node_ref (end);
+  self->progress = CLAMP (progress, 0.0, 1.0);
+
+  return &self->render_node;
+}
+
+GskRenderNode *
+gsk_cross_fade_node_get_start_child (GskRenderNode *node)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CROSS_FADE_NODE), NULL);
+
+  return self->start;
+}
+
+GskRenderNode *
+gsk_cross_fade_node_get_end_child (GskRenderNode *node)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CROSS_FADE_NODE), NULL);
+
+  return self->end;
+}
+
+double
+gsk_cross_fade_node_get_progress (GskRenderNode *node)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CROSS_FADE_NODE), 0.0);
+
+  return self->progress;
+}
+

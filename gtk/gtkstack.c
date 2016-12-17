@@ -1913,37 +1913,41 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   gdouble progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
-  cairo_t *cr;
+  GskRenderNode *end_node, *node;
+  char *name;
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT(
-                                           0, 0,
-                                           gtk_widget_get_allocated_width (widget),
-                                           gtk_widget_get_allocated_height (widget)
-                                       ),
-                                       "GtkStackCrossfade");
-
-  gtk_container_propagate_draw (GTK_CONTAINER (stack),
+  gtk_snapshot_push (snapshot, TRUE, "GtkStackCrossFadeEnd");
+  gtk_container_snapshot_child (GTK_CONTAINER (stack),
                                 priv->visible_child->widget,
-                                cr);
-
-  /* Multiply alpha by progress */
-  cairo_set_source_rgba (cr, 1, 1, 1, progress);
-  cairo_set_operator (cr, CAIRO_OPERATOR_DEST_IN);
-  cairo_paint (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+                                snapshot);
+  end_node = gtk_snapshot_pop (snapshot);
 
   if (priv->last_visible_node)
     {
-      cairo_push_group (cr);
-      cairo_translate (cr, priv->last_visible_surface_allocation.x, priv->last_visible_surface_allocation.y);
-      gsk_render_node_draw (priv->last_visible_node, cr);
-      cairo_pop_group_to_source (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
-      cairo_paint_with_alpha (cr, MAX (1.0 - progress, 0));
+      graphene_matrix_t identity;
+      GskRenderNode *start_node;
+
+      graphene_matrix_init_identity (&identity);
+
+      gtk_snapshot_push_transform (snapshot, &identity, "CrossFadeStart");
+      gtk_snapshot_append_node (snapshot, priv->last_visible_node);
+      start_node = gtk_snapshot_pop (snapshot);
+      node = gsk_cross_fade_node_new (start_node, end_node, progress);
+      gsk_render_node_unref (start_node);
+    }
+  else
+    {
+      node = gsk_opacity_node_new (end_node, 1.0 - progress);
     }
 
-  cairo_destroy (cr);
+  name = g_strdup_printf ("CrossFade<%g>", progress);
+  gsk_render_node_set_name (node, name);
+  g_free (name);
+
+  gtk_snapshot_append_node (snapshot, node);
+
+  gsk_render_node_unref (node);
+  gsk_render_node_unref (end_node);
 }
 
 static void

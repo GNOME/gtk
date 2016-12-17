@@ -555,6 +555,15 @@ append_node (GtkTreeModelRenderNode *nodemodel,
       }
       break;
 
+    case GSK_CROSS_FADE_NODE:
+      {
+        int elt_index = priv->nodes->len - 1;
+
+        append_node (nodemodel, gsk_cross_fade_node_get_start_child (node), elt_index);
+        append_node (nodemodel, gsk_cross_fade_node_get_end_child (node), elt_index);
+      }
+      break;
+
     case GSK_CONTAINER_NODE:
       {
         gint elt_index;

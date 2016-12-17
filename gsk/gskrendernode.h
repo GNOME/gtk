@@ -118,6 +118,11 @@ GskRenderNode *         gsk_blend_node_new                      (GskRenderNode  
                                                                  GskBlendMode              blend_mode);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_cross_fade_node_new                 (GskRenderNode            *start,
+                                                                 GskRenderNode            *end,
+                                                                 double                    progress);
+
+GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_scaling_filter      (GskRenderNode *node,
                                                                  GskScalingFilter min_filter,
                                                                  GskScalingFilter mag_filter);

@@ -38,6 +38,7 @@
  * @GSK_CLIP_NODE: A node that clips its child to a rectangular area
  * @GSK_ROUNDED_CLIP_NODE: A node that clips its child to a rounded rectangle
  * @GSK_BLEND_NODE: A node the blends two children together
+ * @GSK_CROSS_FADE_NODE: A node the cross-fades between two children
  *
  * The type of a node determines what the node is rendering.
  *
@@ -55,7 +56,8 @@ typedef enum {
   GSK_OPACITY_NODE,
   GSK_CLIP_NODE,
   GSK_ROUNDED_CLIP_NODE,
-  GSK_BLEND_NODE
+  GSK_BLEND_NODE,
+  GSK_CROSS_FADE_NODE
 } GskRenderNodeType;
 
 /**
