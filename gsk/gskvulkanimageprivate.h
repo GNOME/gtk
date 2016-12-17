@@ -7,17 +7,24 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GskVulkanUploader GskVulkanUploader;
+
 #define GSK_TYPE_VULKAN_IMAGE (gsk_vulkan_image_get_type ())
 
 G_DECLARE_FINAL_TYPE (GskVulkanImage, gsk_vulkan_image, GSK, VULKAN_IMAGE, GObject)
+
+GskVulkanUploader *     gsk_vulkan_uploader_new                         (GdkVulkanContext       *context,
+                                                                         GskVulkanCommandPool   *command_pool);
+void                    gsk_vulkan_uploader_free                        (GskVulkanUploader      *self);
+
+void                    gsk_vulkan_uploader_reset                       (GskVulkanUploader      *self);
 
 GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulkanContext       *context,
                                                                          VkImage                 image,
                                                                          VkFormat                format,
                                                                          gsize                   width,
                                                                          gsize                   height);
-GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GdkVulkanContext       *context,
-                                                                         GskVulkanCommandPool   *pool,
+GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GskVulkanUploader      *uploader,
                                                                          guchar                 *data,
                                                                          gsize                   width,
                                                                          gsize                   height,

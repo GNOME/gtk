@@ -21,7 +21,7 @@ void                    gsk_vulkan_render_pass_add                      (GskVulk
 
 void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         GskVulkanCommandPool   *command_pool);
+                                                                         GskVulkanUploader      *uploader);
 
 gsize                   gsk_vulkan_render_pass_count_vertices           (GskVulkanRenderPass    *self);
 gsize                   gsk_vulkan_render_pass_collect_vertices         (GskVulkanRenderPass    *self,

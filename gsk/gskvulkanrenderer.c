@@ -269,9 +269,9 @@ gsk_vulkan_renderer_clear_texture (gpointer p)
 }
 
 GskVulkanImage *
-gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer    *self,
-                                       GskTexture           *texture,
-                                       GskVulkanCommandPool *command_pool)
+gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
+                                       GskTexture        *texture,
+                                       GskVulkanUploader *uploader)
 {
   GskVulkanTextureData *data;
   cairo_surface_t *surface;
@@ -282,8 +282,7 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer    *self,
     return g_object_ref (data->image);
 
   surface = gsk_texture_download (texture);
-  image = gsk_vulkan_image_new_from_data (self->vulkan,
-                                          command_pool,
+  image = gsk_vulkan_image_new_from_data (uploader,
                                           cairo_image_surface_get_data (surface),
                                           cairo_image_surface_get_width (surface),
                                           cairo_image_surface_get_height (surface),

@@ -29,6 +29,7 @@ struct _GskVulkanRender
   VkFence fence;
   VkRenderPass render_pass;
   GskVulkanPipelineLayout *layout;
+  GskVulkanUploader *uploader;
 
   GHashTable *descriptor_set_indexes;
   VkDescriptorPool descriptor_pool;
@@ -155,6 +156,8 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
   self->layout = gsk_vulkan_pipeline_layout_new (self->vulkan);
 
+  self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
+
   return self;
 }
 
@@ -235,7 +238,7 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_upload (l->data, self, self->command_pool);
+      gsk_vulkan_render_pass_upload (l->data, self, self->uploader);
     }
 }
 
@@ -515,6 +518,8 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
                                1,
                                &self->fence);
 
+  gsk_vulkan_uploader_reset (self->uploader);
+
   gsk_vulkan_command_pool_reset (self->command_pool);
 
   g_hash_table_remove_all (self->descriptor_set_indexes);
@@ -555,6 +560,8 @@ gsk_vulkan_render_free (GskVulkanRender *self)
 
   for (i = 0; i < GSK_VULKAN_N_PIPELINES; i++)
     g_clear_object (&self->pipelines[i]);
+
+  g_clear_pointer (&self->uploader, gsk_vulkan_uploader_free);
 
   g_clear_pointer (&self->layout, gsk_vulkan_pipeline_layout_unref);
 

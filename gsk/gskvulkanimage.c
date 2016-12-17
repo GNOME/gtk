@@ -8,6 +8,16 @@
 
 #include <string.h>
 
+struct _GskVulkanUploader
+{
+  GdkVulkanContext *vulkan;
+
+  GskVulkanCommandPool *command_pool;
+
+  GSList *staging_image_free_list;
+  GSList *staging_buffer_free_list;
+};
+
 struct _GskVulkanImage
 {
   GObject parent_instance;
@@ -23,6 +33,39 @@ struct _GskVulkanImage
 };
 
 G_DEFINE_TYPE (GskVulkanImage, gsk_vulkan_image, G_TYPE_OBJECT)
+
+GskVulkanUploader *
+gsk_vulkan_uploader_new (GdkVulkanContext     *context,
+                         GskVulkanCommandPool *command_pool)
+{
+  GskVulkanUploader *self;
+
+  self = g_slice_new0 (GskVulkanUploader);
+
+  self->vulkan = g_object_ref (context);
+  self->command_pool = command_pool;
+
+  return self;
+}
+
+void
+gsk_vulkan_uploader_free (GskVulkanUploader *self)
+{
+  gsk_vulkan_uploader_reset (self);
+
+  g_object_unref (self->vulkan);
+
+  g_slice_free (GskVulkanUploader, self);
+}
+
+void
+gsk_vulkan_uploader_reset (GskVulkanUploader *self)
+{
+  g_slist_free_full (self->staging_image_free_list, g_object_unref);
+  self->staging_image_free_list = NULL;
+  g_slist_free_full (self->staging_buffer_free_list, (GDestroyNotify) gsk_vulkan_buffer_free);
+  self->staging_buffer_free_list = NULL;
+}
 
 static GskVulkanImage *
 gsk_vulkan_image_new (GdkVulkanContext      *context,
@@ -139,19 +182,18 @@ gsk_vulkan_image_ensure_view (GskVulkanImage *self,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext     *context,
-                                                   GskVulkanCommandPool *command_pool,
-                                                   guchar               *data,
-                                                   gsize                 width,
-                                                   gsize                 height,
-                                                   gsize                 stride)
+gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
+                                                   guchar            *data,
+                                                   gsize              width,
+                                                   gsize              height,
+                                                   gsize              stride)
 {
   GskVulkanImage *self;
   GskVulkanBuffer *staging;
   VkCommandBuffer command_buffer;
   guchar *mem;
 
-  staging = gsk_vulkan_buffer_new_staging (context, width * height * 4);
+  staging = gsk_vulkan_buffer_new_staging (uploader->vulkan, width * height * 4);
   mem = gsk_vulkan_buffer_map (staging);
 
   if (stride == width * 4)
@@ -168,14 +210,14 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext     *context
 
   gsk_vulkan_buffer_unmap (staging);
 
-  self = gsk_vulkan_image_new (context,
+  self = gsk_vulkan_image_new (uploader->vulkan,
                                width,
                                height, 
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-  command_buffer = gsk_vulkan_command_pool_get_buffer (command_pool);
+  command_buffer = gsk_vulkan_command_pool_get_buffer (uploader->command_pool);
 
   vkCmdPipelineBarrier (command_buffer,
                         VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
@@ -252,10 +294,9 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext     *context
                             }
                         });
 
-  gsk_vulkan_command_pool_submit_buffer (command_pool, command_buffer, VK_NULL_HANDLE);
+  gsk_vulkan_command_pool_submit_buffer (uploader->command_pool, command_buffer, VK_NULL_HANDLE);
 
-  /* XXX: Is this okay or do we need to keep the staging image around until the commands execute */
-  gsk_vulkan_buffer_free (staging);
+  uploader->staging_buffer_free_list = g_slist_prepend (uploader->staging_buffer_free_list, staging);
 
   gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
 
@@ -263,17 +304,16 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GdkVulkanContext     *context
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext     *context,
-                                                  GskVulkanCommandPool *command_pool,
-                                                  guchar               *data,
-                                                  gsize                 width,
-                                                  gsize                 height,
-                                                  gsize                 stride)
+gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
+                                                  guchar            *data,
+                                                  gsize              width,
+                                                  gsize              height,
+                                                  gsize              stride)
 {
   GskVulkanImage *self, *staging;
   VkCommandBuffer command_buffer;
 
-  staging = gsk_vulkan_image_new (context,
+  staging = gsk_vulkan_image_new (uploader->vulkan,
                                   width,
                                   height, 
                                   VK_IMAGE_TILING_LINEAR,
@@ -282,14 +322,14 @@ gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext     *context,
 
   gsk_vulkan_image_upload_data (staging, data, width, height, stride);
 
-  self = gsk_vulkan_image_new (context,
+  self = gsk_vulkan_image_new (uploader->vulkan,
                                width,
                                height, 
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-  command_buffer = gsk_vulkan_command_pool_get_buffer (command_pool);
+  command_buffer = gsk_vulkan_command_pool_get_buffer (uploader->command_pool);
 
   vkCmdPipelineBarrier (command_buffer,
                         VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
@@ -388,10 +428,9 @@ gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext     *context,
                             }
                         });
 
-  gsk_vulkan_command_pool_submit_buffer (command_pool, command_buffer, VK_NULL_HANDLE);
+  gsk_vulkan_command_pool_submit_buffer (uploader->command_pool, command_buffer, VK_NULL_HANDLE);
 
-  /* XXX: Is this okay or do we need to keep the staging image around until the commands execute */
-  g_object_unref (staging);
+  uploader->staging_image_free_list = g_slist_prepend (uploader->staging_image_free_list, staging);
 
   gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
 
@@ -399,19 +438,18 @@ gsk_vulkan_image_new_from_data_via_staging_image (GdkVulkanContext     *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_from_data_directly (GdkVulkanContext     *context,
-                                         GskVulkanCommandPool *command_pool,
-                                         guchar               *data,
-                                         gsize                 width,
-                                         gsize                 height,
-                                         gsize                 stride)
+gsk_vulkan_image_new_from_data_directly (GskVulkanUploader *uploader,
+                                         guchar            *data,
+                                         gsize              width,
+                                         gsize              height,
+                                         gsize              stride)
 {
   VkCommandBuffer command_buffer;
   GskVulkanImage *self;
 
-  command_buffer = gsk_vulkan_command_pool_get_buffer (command_pool);
+  command_buffer = gsk_vulkan_command_pool_get_buffer (uploader->command_pool);
 
-  self = gsk_vulkan_image_new (context,
+  self = gsk_vulkan_image_new (uploader->vulkan,
                                width,
                                height, 
                                VK_IMAGE_TILING_LINEAR,
@@ -446,7 +484,7 @@ gsk_vulkan_image_new_from_data_directly (GdkVulkanContext     *context,
                             }
                         });
 
-  gsk_vulkan_command_pool_submit_buffer (command_pool, command_buffer, VK_NULL_HANDLE);
+  gsk_vulkan_command_pool_submit_buffer (uploader->command_pool, command_buffer, VK_NULL_HANDLE);
 
   gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
 
@@ -454,19 +492,18 @@ gsk_vulkan_image_new_from_data_directly (GdkVulkanContext     *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_from_data (GdkVulkanContext     *context,
-                                GskVulkanCommandPool *command_pool,
-                                guchar               *data,
-                                gsize                 width,
-                                gsize                 height,
-                                gsize                 stride)
+gsk_vulkan_image_new_from_data (GskVulkanUploader *uploader,
+                                guchar            *data,
+                                gsize              width,
+                                gsize              height,
+                                gsize              stride)
 {
   if (GSK_RENDER_MODE_CHECK (STAGING_BUFFER))
-    return gsk_vulkan_image_new_from_data_via_staging_buffer (context, command_pool, data, width, height, stride);
+    return gsk_vulkan_image_new_from_data_via_staging_buffer (uploader, data, width, height, stride);
   if (GSK_RENDER_MODE_CHECK (STAGING_IMAGE))
-    return gsk_vulkan_image_new_from_data_via_staging_image (context, command_pool, data, width, height, stride);
+    return gsk_vulkan_image_new_from_data_via_staging_image (uploader, data, width, height, stride);
   else
-    return gsk_vulkan_image_new_from_data_directly (context, command_pool, data, width, height, stride);
+    return gsk_vulkan_image_new_from_data_directly (uploader, data, width, height, stride);
 }
 
 GskVulkanImage *
