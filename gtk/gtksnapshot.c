@@ -473,8 +473,11 @@ gtk_snapshot_pop_and_append (GtkSnapshot *snapshot)
   GskRenderNode *node;
 
   node = gtk_snapshot_pop (snapshot);
-  gtk_snapshot_append_node (snapshot, node);
-  gsk_render_node_unref (node);
+  if (node)
+    {
+      gtk_snapshot_append_node (snapshot, node);
+      gsk_render_node_unref (node);
+    }
 }
 
 /**
