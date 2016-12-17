@@ -331,35 +331,35 @@ gtk_level_bar_get_real_inverted (GtkLevelBar *self)
 }
 
 static void
-gtk_level_bar_draw_fill_continuous (GtkLevelBar *self,
-                                    cairo_t     *cr)
+gtk_level_bar_snapshot_fill_continuous (GtkLevelBar *self,
+                                        GtkSnapshot *snapshot)
 {
   gboolean inverted;
 
   inverted = gtk_level_bar_get_real_inverted (self);
 
   /* render the empty (unfilled) part */
-  gtk_css_gadget_draw (self->priv->block_gadget[inverted ? 0 : 1], cr);
+  gtk_css_gadget_snapshot (self->priv->block_gadget[inverted ? 0 : 1], snapshot);
 
   /* now render the filled part on top of it */
-  gtk_css_gadget_draw (self->priv->block_gadget[inverted ? 1 : 0], cr);
+  gtk_css_gadget_snapshot (self->priv->block_gadget[inverted ? 1 : 0], snapshot);
 }
 
 static void
-gtk_level_bar_draw_fill_discrete (GtkLevelBar *self,
-                                  cairo_t     *cr)
+gtk_level_bar_snapshot_fill_discrete (GtkLevelBar *self,
+                                      GtkSnapshot *snapshot)
 {
   gint num_blocks, i;
 
   num_blocks = gtk_level_bar_get_num_blocks (self);
 
   for (i = 0; i < num_blocks; i++)
-    gtk_css_gadget_draw (self->priv->block_gadget[i], cr);
+    gtk_css_gadget_snapshot (self->priv->block_gadget[i], snapshot);
 }
 
 static gboolean
 gtk_level_bar_render_trough (GtkCssGadget *gadget,
-                             cairo_t      *cr,
+                             GtkSnapshot  *snapshot,
                              int           x,
                              int           y,
                              int           width,
@@ -370,22 +370,20 @@ gtk_level_bar_render_trough (GtkCssGadget *gadget,
   GtkLevelBar *self = GTK_LEVEL_BAR (widget);
 
   if (self->priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
-    gtk_level_bar_draw_fill_continuous (self, cr);
+    gtk_level_bar_snapshot_fill_continuous (self, snapshot);
   else
-    gtk_level_bar_draw_fill_discrete (self, cr);
+    gtk_level_bar_snapshot_fill_discrete (self, snapshot);
 
   return FALSE;
 }
 
-static gboolean
-gtk_level_bar_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+static void
+gtk_level_bar_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
   GtkLevelBar *self = GTK_LEVEL_BAR (widget);
 
-  gtk_css_gadget_draw (self->priv->trough_gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (self->priv->trough_gadget, snapshot);
 }
 
 static void
@@ -963,7 +961,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   oclass->set_property = gtk_level_bar_set_property;
   oclass->finalize = gtk_level_bar_finalize;
 
-  wclass->draw = gtk_level_bar_draw;
+  wclass->snapshot = gtk_level_bar_snapshot;
   wclass->size_allocate = gtk_level_bar_size_allocate;
   wclass->measure = gtk_level_bar_measure;
   wclass->state_flags_changed = gtk_level_bar_state_flags_changed;
@@ -1109,8 +1107,8 @@ gtk_level_bar_init (GtkLevelBar *self)
                                                    NULL, NULL,
                                                    gtk_level_bar_measure_trough,
                                                    gtk_level_bar_allocate_trough,
-                                                   gtk_level_bar_render_trough,
                                                    NULL,
+                                                   gtk_level_bar_render_trough,
                                                    NULL, NULL);
   trough_node = gtk_css_gadget_get_node (priv->trough_gadget);
   gtk_css_node_set_parent (trough_node, widget_node);
