@@ -63,7 +63,8 @@ gsk_vulkan_pipeline_init (GskVulkanPipeline *self)
 }
 
 GskVulkanPipeline *
-gsk_vulkan_pipeline_new (GskVulkanPipelineLayout *layout,
+gsk_vulkan_pipeline_new (GType                    pipeline_type,
+                         GskVulkanPipelineLayout *layout,
                          const char              *shader_name,
                          VkRenderPass             render_pass)
 {
@@ -72,11 +73,12 @@ gsk_vulkan_pipeline_new (GskVulkanPipelineLayout *layout,
   
   VkDevice device;
 
+  g_return_val_if_fail (!g_type_is_a (pipeline_type, GSK_TYPE_VULKAN_PIPELINE), NULL);
   g_return_val_if_fail (layout != NULL, NULL);
   g_return_val_if_fail (shader_name != NULL, NULL);
   g_return_val_if_fail (render_pass != VK_NULL_HANDLE, NULL);
 
-  self = g_object_new (GSK_TYPE_VULKAN_PIPELINE, NULL);
+  self = g_object_new (pipeline_type, NULL);
 
   priv = gsk_vulkan_pipeline_get_instance_private (self);
 

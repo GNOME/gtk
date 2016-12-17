@@ -41,7 +41,8 @@ VkDescriptorSetLayout           gsk_vulkan_pipeline_layout_get_descriptor_set_la
                                                                         (GskVulkanPipelineLayout        *self);
 
 
-GskVulkanPipeline *     gsk_vulkan_pipeline_new                         (GskVulkanPipelineLayout        *layout,
+GskVulkanPipeline *     gsk_vulkan_pipeline_new                         (GType                           pipeline_type,
+                                                                         GskVulkanPipelineLayout        *layout,
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 

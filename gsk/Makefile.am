@@ -24,6 +24,7 @@ noinst_LTLIBRARIES =
 
 if HAVE_VULKAN
 gsk_private_vulan_source_h = \
+	gskvulkanblendpipelineprivate.h \
 	gskvulkanbufferprivate.h \
 	gskvulkancommandpoolprivate.h \
 	gskvulkanimageprivate.h \
@@ -35,6 +36,7 @@ gsk_private_vulan_source_h = \
 	gskvulkanrenderpassprivate.h \
 	gskvulkanshaderprivate.h
 gsk_private_vulkan_source_c = \
+	gskvulkanblendpipeline.c \
 	gskvulkanbuffer.c \
 	gskvulkancommandpool.c \
 	gskvulkanimage.c \

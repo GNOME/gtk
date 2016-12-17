@@ -3,6 +3,7 @@
 #include "gskvulkanrenderprivate.h"
 
 #include "gskrendererprivate.h"
+#include "gskvulkanblendpipelineprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkancommandpoolprivate.h"
 #include "gskvulkanpipelineprivate.h"
@@ -298,9 +299,9 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
 
   if (self->pipelines[type] == NULL)
     {
-      self->pipelines[type] = gsk_vulkan_pipeline_new (self->layout,
-                                                       pipeline_info[type].name,
-                                                       self->render_pass);
+      self->pipelines[type] = gsk_vulkan_blend_pipeline_new (self->layout,
+                                                             pipeline_info[type].name,
+                                                             self->render_pass);
     }
 
   return self->pipelines[type];
