@@ -68,14 +68,14 @@ gtk_model_menu_item_activate (GtkMenuItem *item)
 }
 
 static void
-gtk_model_menu_item_draw_indicator (GtkCheckMenuItem *check_item,
-                                    cairo_t          *cr)
+gtk_model_menu_item_snapshot_indicator (GtkCheckMenuItem *check_item,
+                                        GtkSnapshot      *snapshot)
 {
   GtkModelMenuItem *item = GTK_MODEL_MENU_ITEM (check_item);
 
   if (item->has_indicator)
     GTK_CHECK_MENU_ITEM_CLASS (gtk_model_menu_item_parent_class)
-      ->draw_indicator (check_item, cr);
+      ->snapshot_indicator (check_item, snapshot);
 }
 
 static void
@@ -474,7 +474,7 @@ gtk_model_menu_item_class_init (GtkModelMenuItemClass *class)
   GtkMenuItemClass *item_class = GTK_MENU_ITEM_CLASS (class);
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  check_class->draw_indicator = gtk_model_menu_item_draw_indicator;
+  check_class->snapshot_indicator = gtk_model_menu_item_snapshot_indicator;
 
   item_class->toggle_size_request = gtk_model_menu_item_toggle_size_request;
   item_class->activate = gtk_model_menu_item_activate;

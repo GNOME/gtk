@@ -254,7 +254,7 @@ gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
 
 static gboolean
 gtk_menu_item_render (GtkCssGadget *gadget,
-                      cairo_t      *cr,
+                      GtkSnapshot  *snapshot,
                       int           x,
                       int           y,
                       int           width,
@@ -269,20 +269,18 @@ gtk_menu_item_render (GtkCssGadget *gadget,
   parent = gtk_widget_get_parent (widget);
 
   if (priv->submenu && !GTK_IS_MENU_BAR (parent))
-    gtk_css_gadget_draw (priv->arrow_gadget, cr);
+    gtk_css_gadget_snapshot (priv->arrow_gadget, snapshot);
 
-  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
+  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->snapshot (widget, snapshot);
 
   return FALSE;
 }
 
-static gboolean
-gtk_menu_item_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+static void
+gtk_menu_item_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_draw (GTK_MENU_ITEM (widget)->priv->gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (GTK_MENU_ITEM (widget)->priv->gadget, snapshot);
 }
 
 static void
@@ -590,7 +588,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   widget_class->destroy = gtk_menu_item_destroy;
   widget_class->size_allocate = gtk_menu_item_size_allocate;
-  widget_class->draw = gtk_menu_item_draw;
+  widget_class->snapshot = gtk_menu_item_snapshot;
   widget_class->realize = gtk_menu_item_realize;
   widget_class->unrealize = gtk_menu_item_unrealize;
   widget_class->map = gtk_menu_item_map;
@@ -783,8 +781,8 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
                                                      GTK_WIDGET (menu_item),
                                                      gtk_menu_item_measure,
                                                      gtk_menu_item_allocate,
-                                                     gtk_menu_item_render,
                                                      NULL,
+                                                     gtk_menu_item_render,
                                                      NULL, NULL);
 }
 

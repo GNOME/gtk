@@ -67,9 +67,9 @@ struct _GtkCheckMenuItemClass
 
   /*< public >*/
 
-  void (* toggled)	  (GtkCheckMenuItem *check_menu_item);
-  void (* draw_indicator) (GtkCheckMenuItem *check_menu_item,
-			   cairo_t          *cr);
+  void (* toggled)	        (GtkCheckMenuItem *check_menu_item);
+  void (* snapshot_indicator)   (GtkCheckMenuItem *check_menu_item,
+			         GtkSnapshot      *snapshot);
 
   /*< private >*/
 

@@ -84,13 +84,13 @@ enum {
   PROP_DRAW_AS_RADIO
 };
 
-static gint gtk_check_menu_item_draw                 (GtkWidget             *widget,
-                                                      cairo_t               *cr);
+static void gtk_check_menu_item_snapshot             (GtkWidget             *widget,
+                                                      GtkSnapshot           *snapshot);
 static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
 static void gtk_check_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
                                                       gint                  *requisition);
-static void gtk_real_check_menu_item_draw_indicator  (GtkCheckMenuItem      *check_menu_item,
-                                                      cairo_t               *cr);
+static void gtk_real_check_menu_item_snapshot_indicator (GtkCheckMenuItem   *check_menu_item,
+                                                      GtkSnapshot           *snapshot);
 static void gtk_check_menu_item_set_property         (GObject               *object,
                                                       guint                  prop_id,
                                                       const GValue          *value,
@@ -213,14 +213,14 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  widget_class->draw = gtk_check_menu_item_draw;
+  widget_class->snapshot = gtk_check_menu_item_snapshot;
 
   menu_item_class->activate = gtk_check_menu_item_activate;
   menu_item_class->hide_on_activate = FALSE;
   menu_item_class->toggle_size_request = gtk_check_menu_item_toggle_size_request;
   
   klass->toggled = NULL;
-  klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
+  klass->snapshot_indicator = gtk_real_check_menu_item_snapshot_indicator;
 
   /**
    * GtkCheckMenuItem::toggled:
@@ -501,19 +501,17 @@ gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
   update_node_state (check_menu_item);
 }
 
-static gint
-gtk_check_menu_item_draw (GtkWidget *widget,
-                          cairo_t   *cr)
+static void
+gtk_check_menu_item_snapshot (GtkWidget   *widget,
+                              GtkSnapshot *snapshot)
 {
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
 
-  if (GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->draw)
-    GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->draw (widget, cr);
+  if (GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->snapshot)
+    GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->snapshot (widget, snapshot);
 
-  if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator)
-    GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator (check_menu_item, cr);
-
-  return FALSE;
+  if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->snapshot_indicator)
+    GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->snapshot_indicator (check_menu_item, snapshot);
 }
 
 static void
@@ -581,10 +579,10 @@ gtk_check_menu_item_direction_changed (GtkWidget        *widget,
 }
 
 static void
-gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
-                                         cairo_t          *cr)
+gtk_real_check_menu_item_snapshot_indicator (GtkCheckMenuItem *check_menu_item,
+                                             GtkSnapshot      *snapshot)
 {
-  gtk_css_gadget_draw (check_menu_item->priv->indicator_gadget, cr);
+  gtk_css_gadget_snapshot (check_menu_item->priv->indicator_gadget, snapshot);
 }
 
 static void

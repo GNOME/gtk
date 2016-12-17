@@ -234,8 +234,8 @@ static void     gtk_menu_unrealize         (GtkWidget        *widget);
 static void     gtk_menu_size_allocate     (GtkWidget        *widget,
                                             GtkAllocation    *allocation);
 static void     gtk_menu_show              (GtkWidget        *widget);
-static gboolean gtk_menu_draw              (GtkWidget        *widget,
-                                            cairo_t          *cr);
+static void     gtk_menu_snapshot          (GtkWidget        *widget,
+                                            GtkSnapshot      *snapshot);
 static gboolean gtk_menu_key_press         (GtkWidget        *widget,
                                             GdkEventKey      *event);
 static gboolean gtk_menu_scroll            (GtkWidget        *widget,
@@ -515,7 +515,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->unrealize = gtk_menu_unrealize;
   widget_class->size_allocate = gtk_menu_size_allocate;
   widget_class->show = gtk_menu_show;
-  widget_class->draw = gtk_menu_draw;
+  widget_class->snapshot = gtk_menu_snapshot;
   widget_class->scroll_event = gtk_menu_scroll;
   widget_class->key_press_event = gtk_menu_key_press;
   widget_class->motion_notify_event = gtk_menu_motion_notify;
@@ -2931,9 +2931,9 @@ gtk_menu_size_allocate (GtkWidget     *widget,
     }
 }
 
-static gboolean
-gtk_menu_draw (GtkWidget *widget,
-               cairo_t   *cr)
+static void
+gtk_menu_snapshot (GtkWidget   *widget,
+                   GtkSnapshot *snapshot)
 {
   GtkMenu *menu;
   GtkMenuPrivate *priv;
@@ -2947,28 +2947,30 @@ gtk_menu_draw (GtkWidget *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  gtk_render_background (context, cr, 0, 0,
-                         allocation.width, allocation.height);
-  gtk_render_frame (context, cr, 0, 0,
-                    allocation.width, allocation.height);
+  gtk_snapshot_render_background (snapshot, context, 0, 0,
+                                  allocation.width, allocation.height);
+  gtk_snapshot_render_frame (snapshot, context, 0, 0,
+                             allocation.width, allocation.height);
 
   if (priv->upper_arrow_visible)
-    gtk_css_gadget_draw (priv->top_arrow_gadget, cr);
+    gtk_css_gadget_snapshot (priv->top_arrow_gadget, snapshot);
 
   if (priv->lower_arrow_visible)
-    gtk_css_gadget_draw (priv->bottom_arrow_gadget, cr);
+    gtk_css_gadget_snapshot (priv->bottom_arrow_gadget, snapshot);
 
   gdk_window_get_position (priv->view_window, &x, &y);
 
-  cairo_rectangle (cr,
-                   x - allocation.x, y - allocation.y,
-                   gdk_window_get_width (priv->view_window),
-                   gdk_window_get_height (priv->view_window));
-  cairo_clip (cr);
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT(
+                              x - allocation.x, y - allocation.y,
+                              gdk_window_get_width (priv->view_window),
+                              gdk_window_get_height (priv->view_window)
+                          ),
+                          "MenuClip");
 
-  GTK_WIDGET_CLASS (gtk_menu_parent_class)->draw (widget, cr);
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->snapshot (widget, snapshot);
 
-  return FALSE;
+  gtk_snapshot_pop_and_append (snapshot);
 }
 
 static void
