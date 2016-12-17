@@ -11,7 +11,12 @@ typedef struct _GskVulkanPipelineLayout GskVulkanPipelineLayout;
 
 #define GSK_TYPE_VULKAN_PIPELINE (gsk_vulkan_pipeline_get_type ())
 
-G_DECLARE_FINAL_TYPE (GskVulkanPipeline, gsk_vulkan_pipeline, GSK, VULKAN_PIPELINE, GObject)
+G_DECLARE_DERIVABLE_TYPE (GskVulkanPipeline, gsk_vulkan_pipeline, GSK, VULKAN_PIPELINE, GObject)
+
+struct _GskVulkanPipelineClass
+{
+  GObjectClass parent_class;
+};
 
 static inline VkResult
 gsk_vulkan_handle_result (VkResult    res,
