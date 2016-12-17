@@ -15573,7 +15573,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
   else
     {
       if (opacity < 1.0)
-        gtk_snapshot_push (snapshot, TRUE, "OpacityGroup<%s>", G_OBJECT_TYPE_NAME (widget));
+        gtk_snapshot_push_opacity (snapshot, opacity, "Opacity<%s,%f>", G_OBJECT_TYPE_NAME (widget), opacity);
 
       klass->snapshot (widget, snapshot);
 
@@ -15593,17 +15593,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
         }
 
       if (opacity < 1.0)
-        {
-          GskRenderNode *opacity_node, *node;
-
-          node = gtk_snapshot_pop (snapshot);
-          opacity_node = gsk_opacity_node_new (node, opacity);
-          gsk_render_node_set_name (opacity_node, "Opacity");
-          gsk_render_node_unref (node);
-
-          gtk_snapshot_append_node (snapshot, opacity_node);
-          gsk_render_node_unref (opacity_node);
-        }
+        gtk_snapshot_pop_and_append (snapshot);
     }
 }
 

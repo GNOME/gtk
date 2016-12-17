@@ -275,6 +275,58 @@ gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
                                             real_transform);
 }
 
+static GskRenderNode *
+gtk_snapshot_collect_opacity (GskRenderNode **nodes,
+                              guint           n_nodes,
+                              const char     *name,
+                              gpointer        opacity)
+{
+  GskRenderNode *node, *opacity_node;
+
+  node = gtk_snapshot_collect_default (nodes, n_nodes, name, NULL);
+  if (node == NULL)
+    return NULL;
+
+  opacity_node = gsk_opacity_node_new (node, *(double *) opacity);
+  gsk_render_node_set_name (opacity_node, name);
+
+  gsk_render_node_unref (node);
+  g_free (opacity);
+
+  return opacity_node;
+}
+
+void
+gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
+                           double       opacity,
+                           const char  *name,
+                           ...)
+{
+  double *real_opacity;
+  char *str;
+
+  if (name)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  real_opacity = g_memdup (&opacity, sizeof (gdouble));
+
+  snapshot->state = gtk_snapshot_state_new (snapshot->state,
+                                            str,
+                                            snapshot->state->clip_region,
+                                            snapshot->state->translate_x,
+                                            snapshot->state->translate_y,
+                                            gtk_snapshot_collect_opacity,
+                                            real_opacity);
+}
+
 static void
 rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
                               const graphene_rect_t *graphene)
