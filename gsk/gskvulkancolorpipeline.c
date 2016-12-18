@@ -7,12 +7,12 @@ struct _GskVulkanColorPipeline
   GObject parent_instance;
 };
 
-typedef struct _GskVulkanVertex GskVulkanVertex;
+typedef struct _GskVulkanColorInstance GskVulkanColorInstance;
 
-struct _GskVulkanVertex
+struct _GskVulkanColorInstance
 {
-  float x;
-  float y;
+  float rect[4];
+  float color[4];
 };
 
 G_DEFINE_TYPE (GskVulkanColorPipeline, gsk_vulkan_color_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -23,16 +23,22 @@ gsk_vulkan_color_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
   static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
       {
           .binding = 0,
-          .stride = sizeof (GskVulkanVertex),
-          .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
+          .stride = sizeof (GskVulkanColorInstance),
+          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
       }
   };
   static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
       {
           .location = 0,
           .binding = 0,
-          .format = VK_FORMAT_R32G32_SFLOAT,
+          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
           .offset = 0,
+      },
+      {
+          .location = 1,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+          .offset = G_STRUCT_OFFSET (GskVulkanColorInstance, color),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -80,22 +86,25 @@ gsk_vulkan_color_pipeline_new (GskVulkanPipelineLayout *layout,
 gsize
 gsk_vulkan_color_pipeline_count_vertex_data (GskVulkanColorPipeline *pipeline)
 {
-  return sizeof (GskVulkanVertex) * 6;
+  return sizeof (GskVulkanColorInstance);
 }
 
 void
 gsk_vulkan_color_pipeline_collect_vertex_data (GskVulkanColorPipeline *pipeline,
                                                guchar                 *data,
-                                               const graphene_rect_t  *rect)
+                                               const graphene_rect_t  *rect,
+                                               const GdkRGBA          *color)
 {
-  GskVulkanVertex *vertices = (GskVulkanVertex *) data;
+  GskVulkanColorInstance *instance = (GskVulkanColorInstance *) data;
 
-  vertices[0] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y };
-  vertices[1] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y };
-  vertices[2] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y + rect->size.height };
-  vertices[3] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y + rect->size.height };
-  vertices[4] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y };
-  vertices[5] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y + rect->size.height };
+  instance->rect[0] = rect->origin.x;
+  instance->rect[1] = rect->origin.y;
+  instance->rect[2] = rect->size.width;
+  instance->rect[3] = rect->size.height;
+  instance->color[0] = pow (color->red, 2.2);
+  instance->color[1] = pow (color->green, 2.2);
+  instance->color[2] = pow (color->blue, 2.2);
+  instance->color[3] = color->alpha;
 }
 
 gsize
@@ -105,8 +114,8 @@ gsk_vulkan_color_pipeline_draw (GskVulkanColorPipeline *pipeline,
                                 gsize                   n_commands)
 {
   vkCmdDraw (command_buffer,
-             n_commands * 6, 1,
-             offset, 0);
+             6, n_commands,
+             0, offset);
 
-  return n_commands * 6;
+  return n_commands;
 }

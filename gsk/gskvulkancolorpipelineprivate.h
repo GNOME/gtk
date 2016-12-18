@@ -20,7 +20,8 @@ GskVulkanPipeline *     gsk_vulkan_color_pipeline_new                   (GskVulk
 gsize                   gsk_vulkan_color_pipeline_count_vertex_data     (GskVulkanColorPipeline         *pipeline);
 void                    gsk_vulkan_color_pipeline_collect_vertex_data   (GskVulkanColorPipeline         *pipeline,
                                                                          guchar                         *data,
-                                                                         const graphene_rect_t          *rect);
+                                                                         const graphene_rect_t          *rect,
+                                                                         const GdkRGBA                  *color);
 gsize                   gsk_vulkan_color_pipeline_draw                  (GskVulkanColorPipeline         *pipeline,
                                                                          VkCommandBuffer                 command_buffer,
                                                                          gsize                           offset,
