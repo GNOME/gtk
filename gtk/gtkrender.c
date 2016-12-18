@@ -332,7 +332,6 @@ gtk_render_frame (GtkStyleContext *context,
   gtk_css_style_render_border (gtk_style_context_lookup_style (context),
                                cr,
                                x, y, width, height,
-                               0,
                                gtk_style_context_get_junction_sides (context));
 }
 
@@ -595,7 +594,6 @@ gtk_do_render_slider (GtkStyleContext *context,
   gtk_css_style_render_border (style,
                                cr,
                                x, y, width, height,
-                               0,
                                junction);
 }
 
@@ -732,7 +730,7 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
 
   gtk_css_style_render_border (style, cr,
                                x, y, width, height,
-                               0, junction);
+                               junction);
 
   cairo_restore (cr);
 }

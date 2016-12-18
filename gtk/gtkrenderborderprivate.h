@@ -36,7 +36,6 @@ void            gtk_css_style_render_border             (GtkCssStyle            
                                                          gdouble                 y,
                                                          gdouble                 width,
                                                          gdouble                 height,
-                                                         guint                   hidden_side,
                                                          GtkJunctionSides        junction);
 gboolean        gtk_css_style_render_border_get_clip    (GtkCssStyle            *style,
                                                          gdouble                 x,

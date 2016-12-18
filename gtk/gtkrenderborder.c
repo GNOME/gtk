@@ -338,20 +338,6 @@ gtk_border_image_render (GtkBorderImage   *image,
 }
 
 static void
-hide_border_sides (double         border[4],
-                   GtkBorderStyle border_style[4],
-                   guint          hidden_side)
-{
-  guint i;
-
-  for (i = 0; i < 4; i++)
-    {
-      if (hidden_side & (1 << i))
-        border[i] = 0;
-    }
-}
-
-static void
 render_frame_fill (cairo_t        *cr,
                    GskRoundedRect *border_box,
                    const double    border_width[4],
@@ -569,10 +555,10 @@ static void
 render_border (cairo_t        *cr,
                GskRoundedRect *border_box,
                const double    border_width[4],
-               guint           hidden_side,
                GdkRGBA         colors[4],
                GtkBorderStyle  border_style[4])
 {
+  guint hidden_side = 0;
   guint i, j;
 
   cairo_save (cr);
@@ -712,7 +698,6 @@ gtk_css_style_render_border (GtkCssStyle      *style,
                              gdouble           y,
                              gdouble           width,
                              gdouble           height,
-                             guint             hidden_side,
                              GtkJunctionSides  junction)
 {
   GtkBorderImage border_image;
@@ -745,8 +730,6 @@ gtk_css_style_render_border (GtkCssStyle      *style,
       border_style[2] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
       border_style[3] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
 
-      hide_border_sides (border_width, border_style, hidden_side);
-
       colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
       colors[1] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
       colors[2] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
@@ -755,7 +738,7 @@ gtk_css_style_render_border (GtkCssStyle      *style,
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
       _gtk_rounded_box_apply_border_radius_for_style (&border_box, style, junction);
 
-      render_border (cr, &border_box, border_width, hidden_side, colors, border_style);
+      render_border (cr, &border_box, border_width, colors, border_style);
     }
 }
 
@@ -808,8 +791,6 @@ gtk_css_style_snapshot_border (GtkCssStyle      *style,
       border_style[2] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
       border_style[3] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
 
-      hide_border_sides (border_width, border_style, 0);
-
       colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
       colors[1] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
       colors[2] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
@@ -818,7 +799,7 @@ gtk_css_style_snapshot_border (GtkCssStyle      *style,
       _gtk_rounded_box_init_rect (&border_box, 0, 0, width, height);
       _gtk_rounded_box_apply_border_radius_for_style (&border_box, style, junction);
 
-      render_border (cr, &border_box, border_width, 0, colors, border_style);
+      render_border (cr, &border_box, border_width, colors, border_style);
 
       cairo_destroy (cr);
     }
@@ -917,7 +898,7 @@ gtk_css_style_render_outline (GtkCssStyle *style,
       _gtk_rounded_box_init_rect (&border_box, rect.x, rect.y, rect.width, rect.height);
       _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
 
-      render_border (cr, &border_box, border_width, 0, colors, border_style);
+      render_border (cr, &border_box, border_width, colors, border_style);
     }
 }
 
@@ -953,7 +934,7 @@ gtk_css_style_snapshot_outline (GtkCssStyle *style,
                                            &GRAPHENE_RECT_INIT (rect.x, rect.y, rect.width, rect.height),
                                            "Outline");
 
-      render_border (cr, &border_box, border_width, 0, colors, border_style);
+      render_border (cr, &border_box, border_width, colors, border_style);
 
       cairo_destroy (cr);
     }

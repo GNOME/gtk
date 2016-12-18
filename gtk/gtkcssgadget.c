@@ -902,7 +902,6 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
                                y + margin.top,
                                width - margin.left - margin.right,
                                height - margin.top - margin.bottom,
-                               0,
                                gtk_css_node_get_junction_sides (priv->node));
 
   contents_x = x + margin.left + border.left + padding.left;
