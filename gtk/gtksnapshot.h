@@ -62,6 +62,12 @@ void            gtk_snapshot_push_rounded_clip          (GtkSnapshot            
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF (3, 4);
 GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_push_shadow                (GtkSnapshot            *snapshot,
+                                                         const GskShadow        *shadow,
+                                                         gsize                   n_shadows,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (4, 5);
+GDK_AVAILABLE_IN_3_90
 GskRenderNode * gtk_snapshot_pop                        (GtkSnapshot            *snapshot) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_pop_and_append             (GtkSnapshot            *snapshot);

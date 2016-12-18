@@ -472,6 +472,67 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
   cairo_region_destroy (clip);
 }
 
+typedef struct {
+  gsize n_shadows;
+  GskShadow shadows[0];
+} Shadow;
+
+static GskRenderNode *
+gtk_snapshot_collect_shadow (GskRenderNode **nodes,
+                             guint           n_nodes,
+                             const char     *name,
+                             gpointer        data)
+{
+  Shadow *shadow = data;
+  GskRenderNode *node, *shadow_node;
+
+  node = gtk_snapshot_collect_default (nodes, n_nodes, name, NULL);
+  if (node == NULL)
+    return NULL;
+
+  shadow_node = gsk_shadow_node_new (node, shadow->shadows, shadow->n_shadows);
+  gsk_render_node_set_name (shadow_node, name);
+
+  gsk_render_node_unref (node);
+  g_free (shadow);
+
+  return shadow_node;
+}
+
+void
+gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
+                          const GskShadow        *shadow,
+                          gsize                   n_shadows,
+                          const char             *name,
+                          ...)
+{
+  Shadow *real_shadow;
+  char *str;
+
+  real_shadow = g_malloc (sizeof (GskShadow) * n_shadows + sizeof (GskShadow));
+  real_shadow->n_shadows = n_shadows;
+  memcpy (real_shadow->shadows, shadow, sizeof (GskShadow) * n_shadows);
+
+  if (name)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+  
+  snapshot->state = gtk_snapshot_state_new (snapshot->state,
+                                            str,
+                                            snapshot->state->clip_region,
+                                            snapshot->state->translate_x,
+                                            snapshot->state->translate_y,
+                                            gtk_snapshot_collect_shadow,
+                                            real_shadow);
+}
+
 /**
  * gtk_snapshot_pop:
  * @snapshot: a #GtkSnapshot

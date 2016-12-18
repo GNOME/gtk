@@ -18,6 +18,7 @@
 
 #include "gskrendernodeprivate.h"
 
+#include "gskcairoblurprivate.h"
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
@@ -1408,6 +1409,175 @@ gsk_rounded_clip_node_peek_clip (GskRenderNode *node)
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_ROUNDED_CLIP_NODE), NULL);
 
   return &self->clip;
+}
+
+/*** GSK_SHADOW_NODE ***/
+
+typedef struct _GskShadowNode GskShadowNode;
+
+struct _GskShadowNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+
+  GskShadow *shadows;
+  gsize n_shadows;
+};
+
+static void
+gsk_shadow_node_finalize (GskRenderNode *node)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+
+  gsk_render_node_unref (self->child);
+
+  g_free (self->shadows);
+}
+
+static void
+gsk_shadow_node_make_immutable (GskRenderNode *node)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+
+  gsk_render_node_make_immutable (self->child);
+}
+
+static void
+gsk_shadow_node_draw (GskRenderNode *node,
+                      cairo_t       *cr)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+  cairo_pattern_t *pattern;
+  gsize i;
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->child, cr);
+  pattern = cairo_pop_group (cr);
+
+  for (i = 0; i < self->n_shadows; i++)
+    {
+      GskShadow *shadow = &self->shadows[i];
+
+      /* We don't need to draw invisible shadows */
+      if (gdk_rgba_is_clear (&shadow->color))
+        continue;
+
+      cairo_save (cr);
+      gdk_cairo_set_source_rgba (cr, &shadow->color);
+      cr = gsk_cairo_blur_start_drawing (cr, shadow->radius, GSK_BLUR_X | GSK_BLUR_Y);
+
+      cairo_translate (cr, shadow->dx, shadow->dy);
+      cairo_mask (cr, pattern);
+
+      cr = gsk_cairo_blur_finish_drawing (cr, shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
+      cairo_restore (cr);
+    }
+
+  cairo_set_source (cr, pattern);
+  cairo_paint (cr);
+
+  cairo_pattern_destroy (pattern);
+}
+
+static void
+gsk_shadow_node_get_bounds (GskRenderNode   *node,
+                            graphene_rect_t *bounds)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+  float top = 0, right = 0, bottom = 0, left = 0;
+  gsize i;
+
+  gsk_render_node_get_bounds (self->child, bounds);
+
+  for (i = 0; i < self->n_shadows; i++)
+    {
+      float clip_radius = gsk_cairo_blur_compute_pixels (self->shadows[i].radius);
+      top = MAX (top, clip_radius - self->shadows[i].dy);
+      right = MAX (right, clip_radius + self->shadows[i].dx);
+      bottom = MAX (bottom, clip_radius + self->shadows[i].dy);
+      left = MAX (left, clip_radius - self->shadows[i].dx);
+    }
+
+  bounds->origin.x -= left;
+  bounds->origin.y -= top;
+  bounds->size.width += left + right;
+  bounds->size.height += top + bottom;
+}
+
+static const GskRenderNodeClass GSK_SHADOW_NODE_CLASS = {
+  GSK_SHADOW_NODE,
+  sizeof (GskShadowNode),
+  "GskShadowNode",
+  gsk_shadow_node_finalize,
+  gsk_shadow_node_make_immutable,
+  gsk_shadow_node_draw,
+  gsk_shadow_node_get_bounds
+};
+
+/**
+ * gsk_shadow_node_new:
+ * @child: The node to draw
+ * @shadows: (array length=n_shadows): The shadows to apply
+ * @n_shadows: number of entries in the @shadows array
+ *
+ * Creates a #GskRenderNode that will draw a @child with the given
+ * @shadows below it.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_shadow_node_new (GskRenderNode         *child,
+                     const GskShadow       *shadows,
+                     gsize                  n_shadows)
+{
+  GskShadowNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+  g_return_val_if_fail (shadows != NULL, NULL);
+  g_return_val_if_fail (n_shadows > 0, NULL);
+
+  self = (GskShadowNode *) gsk_render_node_new (&GSK_SHADOW_NODE_CLASS);
+
+  self->child = gsk_render_node_ref (child);
+  self->shadows = g_memdup (shadows, n_shadows * sizeof (GskShadow));
+  self->n_shadows = n_shadows;
+
+  return &self->render_node;
+}
+
+GskRenderNode *
+gsk_shadow_node_get_child (GskRenderNode *node)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_SHADOW_NODE), NULL);
+
+  return self->child;
+}
+
+const GskShadow *
+gsk_shadow_node_peek_shadow (GskRenderNode *node,
+                             gsize          i)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_SHADOW_NODE), NULL);
+  g_return_val_if_fail (i < self->n_shadows, NULL);
+
+  return &self->shadows[i];
+}
+
+gsize
+gsk_shadow_node_get_n_shadows (GskRenderNode *node)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_SHADOW_NODE), 0);
+
+  return self->n_shadows;
 }
 
 /*** GSK_BLEND_NODE ***/

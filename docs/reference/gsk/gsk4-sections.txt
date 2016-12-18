@@ -50,6 +50,8 @@ gsk_clip_node_new
 gsk_clip_node_get_child
 gsk_rounded_clip_node_new
 gsk_rounded_clip_node_get_child
+GskShadow
+gsk_shadow_node_new
 GskBlendMode
 gsk_blend_node_new
 gsk_cross_fade_node_new

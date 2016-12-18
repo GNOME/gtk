@@ -24,7 +24,7 @@
 #ifndef _GSK_CAIRO_BLUR_H
 #define _GSK_CAIRO_BLUR_H
 
-#include <glib.h>
+#include <gdk/gdk.h>
 #include <cairo.h>
 
 G_BEGIN_DECLS
@@ -40,6 +40,14 @@ void            gsk_cairo_blur_surface          (cairo_surface_t *surface,
                                                  double           radius,
 						 GskBlurFlags     flags);
 int             gsk_cairo_blur_compute_pixels   (double           radius);
+
+cairo_t *       gsk_cairo_blur_start_drawing    (cairo_t         *cr,
+                                                 float            radius,
+                                                 GskBlurFlags     blur_flags);
+cairo_t *       gsk_cairo_blur_finish_drawing   (cairo_t         *cr,
+                                                 float            radius,
+                                                 const GdkRGBA   *color,
+                                                 GskBlurFlags     blur_flags);
 
 G_END_DECLS
 

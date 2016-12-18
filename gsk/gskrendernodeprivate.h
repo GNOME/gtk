@@ -62,6 +62,10 @@ const graphene_rect_t * gsk_clip_node_peek_clip (GskRenderNode *node);
 
 const GskRoundedRect * gsk_rounded_clip_node_peek_clip (GskRenderNode *node);
 
+GskRenderNode * gsk_shadow_node_get_child (GskRenderNode *node);
+const GskShadow * gsk_shadow_node_peek_shadow (GskRenderNode *node, gsize i);
+gsize gsk_shadow_node_get_n_shadows (GskRenderNode *node);
+
 void gsk_transform_node_get_transform (GskRenderNode *node, graphene_matrix_t *transform);
 
 GskRenderNode * gsk_blend_node_get_bottom_child (GskRenderNode *node);

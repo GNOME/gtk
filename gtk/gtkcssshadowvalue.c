@@ -625,6 +625,17 @@ gtk_css_shadow_value_get_extents (const GtkCssValue *shadow,
   border->left = MAX (0, ceil (clip_radius + spread - hoffset));
 }
 
+void
+gtk_css_shadow_value_get_shadow (const GtkCssValue *value,
+                                 GskShadow         *shadow)
+{
+  shadow->color = *_gtk_css_rgba_value_get_rgba (value->color);
+  shadow->dx = _gtk_css_number_value_get (value->hoffset, 0);
+  shadow->dy = _gtk_css_number_value_get (value->voffset, 0);
+  shadow->spread = _gtk_css_number_value_get (value->spread, 0);
+  shadow->radius = _gtk_css_number_value_get (value->radius, 0);
+}
+
 static gboolean
 has_empty_clip (cairo_t *cr)
 {

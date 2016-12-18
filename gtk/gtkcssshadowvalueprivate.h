@@ -39,6 +39,8 @@ gboolean        _gtk_css_shadow_value_get_inset       (const GtkCssValue        
 
 void            gtk_css_shadow_value_get_extents      (const GtkCssValue        *shadow,
                                                        GtkBorder                *border);
+void            gtk_css_shadow_value_get_shadow       (const GtkCssValue        *value,
+                                                       GskShadow                *shadow);
 
 void            _gtk_css_shadow_value_paint_layout    (const GtkCssValue        *shadow,
                                                        cairo_t                  *cr,

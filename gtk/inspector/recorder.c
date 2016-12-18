@@ -159,6 +159,8 @@ node_type_name (GskRenderNodeType type)
       return "Clip";
     case GSK_ROUNDED_CLIP_NODE:
       return "Rounded Clip";
+    case GSK_SHADOW_NODE:
+      return "Shadow";
     case GSK_BLEND_NODE:
       return "Blend";
     case GSK_CROSS_FADE_NODE:

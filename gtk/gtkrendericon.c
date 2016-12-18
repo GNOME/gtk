@@ -95,10 +95,11 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
                              double                  height,
                              GtkCssImageBuiltinType  builtin_type)
 {
-  const GtkCssValue *shadows, *transform;
-  static gboolean shadow_warning;
+  const GtkCssValue *shadows_value, *transform;
   graphene_matrix_t transform_matrix;
   GtkCssImage *image;
+  GskShadow *shadows;
+  gsize n_shadows;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
@@ -107,17 +108,15 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   if (image == NULL)
     return;
 
-  shadows = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
+  shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
   transform = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
 
   if (!gtk_css_transform_value_get_matrix (transform, &transform_matrix))
     return;
 
-  if (!_gtk_css_shadows_value_is_none (shadows) && !shadow_warning)
-    {
-      g_warning ("Painting shadows not implemented for textures yet.");
-      shadow_warning = TRUE;
-    }
+  shadows = gtk_css_shadows_value_get_shadows (shadows_value, &n_shadows);
+  if (shadows)
+    gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
@@ -138,6 +137,12 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
       gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
 
       gtk_snapshot_pop_and_append (snapshot);
+    }
+
+  if (shadows)
+    {
+      gtk_snapshot_pop_and_append (snapshot);
+      g_free (shadows);
     }
 }
 
@@ -261,18 +266,19 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
                                      GskTexture  *texture,
                                      double       texture_scale)
 {
-  const GtkCssValue *shadows, *transform;
+  const GtkCssValue *shadows_value, *transform;
   graphene_matrix_t transform_matrix;
   graphene_rect_t bounds;
   double width, height;
-  static gboolean shadow_warning;
+  GskShadow *shadows;
+  gsize n_shadows;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GSK_IS_TEXTURE (texture));
   g_return_if_fail (texture_scale > 0);
 
-  shadows = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
+  shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
   transform = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
   width = gsk_texture_get_width (texture) / texture_scale;
   height = gsk_texture_get_height (texture) / texture_scale;
@@ -280,11 +286,9 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
   if (!gtk_css_transform_value_get_matrix (transform, &transform_matrix))
     return;
 
-  if (!_gtk_css_shadows_value_is_none (shadows) && !shadow_warning)
-    {
-      g_warning ("Painting shadows not implemented for textures yet.");
-      shadow_warning = TRUE;
-    }
+  shadows = gtk_css_shadows_value_get_shadows (shadows_value, &n_shadows);
+  if (shadows)
+    gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
@@ -310,5 +314,11 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
       gtk_snapshot_append_texture_node (snapshot, texture, &bounds, "Icon");
 
       gtk_snapshot_pop_and_append (snapshot);
+    }
+
+  if (shadows)
+    {
+      gtk_snapshot_pop_and_append (snapshot);
+      g_free (shadows);
     }
 }

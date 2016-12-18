@@ -34,11 +34,21 @@ G_BEGIN_DECLS
 
 typedef struct _GskRenderNode           GskRenderNode;
 typedef struct _GskColorStop            GskColorStop;
+typedef struct _GskShadow               GskShadow;
 
 struct _GskColorStop
 {
   double offset;
   GdkRGBA color;
+};
+
+struct _GskShadow
+{
+  GdkRGBA color;
+  float dx;
+  float dy;
+  float spread;
+  float radius;
 };
 
 GDK_AVAILABLE_IN_3_90
@@ -116,6 +126,11 @@ GskRenderNode *         gsk_rounded_clip_node_new               (GskRenderNode  
                                                                  const GskRoundedRect     *clip);
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_rounded_clip_node_get_child         (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_shadow_node_new                     (GskRenderNode            *child,
+                                                                 const GskShadow          *shadows,
+                                                                 gsize                     n_shadows);
 
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_blend_node_new                      (GskRenderNode            *bottom,
