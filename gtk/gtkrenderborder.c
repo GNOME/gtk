@@ -406,6 +406,44 @@ render_frame_fill (cairo_t        *cr,
 }
 
 static void
+snapshot_frame_fill (GtkSnapshot          *snapshot,
+                     const GskRoundedRect *outline,
+                     const float           border_width[4],
+                     const GdkRGBA         colors[4],
+                     guint                 hidden_side)
+{
+  GskRoundedRect offset_outline;
+  GskRenderNode *node;
+  double off_x, off_y;
+
+  if (hidden_side)
+    {
+      GdkRGBA real_colors[4];
+      guint i;
+
+      for (i = 0; i < 4; i++)
+        {
+          if (hidden_side & (1 << i))
+            real_colors[i] = (GdkRGBA) { 0, 0, 0, 0 };
+          else
+            real_colors[i] = colors[i];
+        }
+
+      snapshot_frame_fill (snapshot, outline, border_width, real_colors, 0);
+      return;
+    }
+
+  gtk_snapshot_get_offset (snapshot, &off_x, &off_y);
+  gsk_rounded_rect_init_copy (&offset_outline, outline);
+  gsk_rounded_rect_offset (&offset_outline, off_x, off_y);
+  
+  node = gsk_border_node_new (&offset_outline, border_width, colors);
+  gsk_render_node_set_name (node, "Border");
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
+}
+
+static void
 set_stroke_style (cairo_t        *cr,
                   double          line_width,
                   GtkBorderStyle  style,
@@ -537,6 +575,24 @@ render_frame_stroke (cairo_t        *cr,
           cairo_restore (cr);
         }
     }
+}
+
+static void
+snapshot_frame_stroke (GtkSnapshot    *snapshot,
+                       GskRoundedRect *outline,
+                       const float     border_width[4],
+                       GdkRGBA         colors[4],
+                       guint           hidden_side,
+                       GtkBorderStyle  stroke_style)
+{
+  double double_width[4] = { border_width[0], border_width[1], border_width[2], border_width[3] };
+  cairo_t *cr;
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &outline->bounds,
+                                       "BorderStroke");
+  render_frame_stroke (cr, outline, double_width, colors, hidden_side, stroke_style);
+  cairo_destroy (cr);
 }
 
 static void
@@ -679,6 +735,128 @@ render_border (cairo_t        *cr,
   cairo_restore (cr);
 }
 
+static void
+snapshot_border (GtkSnapshot    *snapshot,
+                 GskRoundedRect *border_box,
+                 const float     border_width[4],
+                 GdkRGBA         colors[4],
+                 GtkBorderStyle  border_style[4])
+{
+  guint hidden_side = 0;
+  guint i, j;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (hidden_side & (1 << i))
+        continue;
+
+      /* NB: code below divides by this value */
+      /* a border smaller than this will not noticably modify
+       * pixels on screen, and since we don't compare with 0,
+       * we'll use this value */
+      if (border_width[i] < 1.0 / 1024)
+        continue;
+
+      switch (border_style[i])
+        {
+        case GTK_BORDER_STYLE_NONE:
+        case GTK_BORDER_STYLE_HIDDEN:
+        case GTK_BORDER_STYLE_SOLID:
+          break;
+        case GTK_BORDER_STYLE_INSET:
+          if (i == 1 || i == 2)
+            color_shade (&colors[i], 1.8, &colors[i]);
+          break;
+        case GTK_BORDER_STYLE_OUTSET:
+          if (i == 0 || i == 3)
+            color_shade (&colors[i], 1.8, &colors[i]);
+          break;
+        case GTK_BORDER_STYLE_DOTTED:
+        case GTK_BORDER_STYLE_DASHED:
+          {
+            guint dont_draw = hidden_side;
+
+            for (j = 0; j < 4; j++)
+              {
+                if (border_style[j] == border_style[i])
+                  hidden_side |= (1 << j);
+                else
+                  dont_draw |= (1 << j);
+              }
+            
+            snapshot_frame_stroke (snapshot, border_box, border_width, colors, dont_draw, border_style[i]);
+          }
+          break;
+        case GTK_BORDER_STYLE_DOUBLE:
+          {
+            GskRoundedRect other_box;
+            float other_border[4];
+            guint dont_draw = hidden_side;
+
+            for (j = 0; j < 4; j++)
+              {
+                if (border_style[j] == GTK_BORDER_STYLE_DOUBLE)
+                  hidden_side |= (1 << j);
+                else
+                  dont_draw |= (1 << j);
+                
+                other_border[j] = border_width[j] / 3;
+              }
+            
+            snapshot_frame_fill (snapshot, border_box, other_border, colors, dont_draw);
+            
+            other_box = *border_box;
+            gsk_rounded_rect_shrink (&other_box,
+                                     2 * other_border[GTK_CSS_TOP],
+                                     2 * other_border[GTK_CSS_RIGHT],
+                                     2 * other_border[GTK_CSS_BOTTOM],
+                                     2 * other_border[GTK_CSS_LEFT]);
+            snapshot_frame_fill (snapshot, &other_box, other_border, colors, dont_draw);
+          }
+          break;
+        case GTK_BORDER_STYLE_GROOVE:
+        case GTK_BORDER_STYLE_RIDGE:
+          {
+            GskRoundedRect other_box;
+            GdkRGBA other_colors[4];
+            guint dont_draw = hidden_side;
+            float other_border[4];
+
+            for (j = 0; j < 4; j++)
+              {
+                other_colors[j] = colors[j];
+                if ((j == 0 || j == 3) ^ (border_style[j] == GTK_BORDER_STYLE_RIDGE))
+                  color_shade (&other_colors[j], 1.8, &other_colors[j]);
+                else
+                  color_shade (&colors[j], 1.8, &colors[j]);
+                if (border_style[j] == GTK_BORDER_STYLE_GROOVE ||
+                    border_style[j] == GTK_BORDER_STYLE_RIDGE)
+                  hidden_side |= (1 << j);
+                else
+                  dont_draw |= (1 << j);
+                other_border[j] = border_width[j] / 2;
+              }
+            
+            snapshot_frame_fill (snapshot, border_box, other_border, colors, dont_draw);
+            
+            other_box = *border_box;
+            gsk_rounded_rect_shrink (&other_box,
+                                     other_border[GTK_CSS_TOP],
+                                     other_border[GTK_CSS_RIGHT],
+                                     other_border[GTK_CSS_BOTTOM],
+                                     other_border[GTK_CSS_LEFT]);
+            snapshot_frame_fill (snapshot, &other_box, other_border, other_colors, dont_draw);
+          }
+          break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+    }
+  
+  snapshot_frame_fill (snapshot, border_box, border_width, colors, hidden_side);
+}
+
 gboolean
 gtk_css_style_render_has_border (GtkCssStyle *style)
 {
@@ -744,13 +922,13 @@ gtk_css_style_render_border (GtkCssStyle      *style,
 
 void
 gtk_css_style_snapshot_border (GtkCssStyle      *style,
-                               GtkSnapshot      *state,
+                               GtkSnapshot      *snapshot,
                                gdouble           width,
                                gdouble           height,
                                GtkJunctionSides  junction)
 {
   GtkBorderImage border_image;
-  double border_width[4];
+  float border_width[4];
   graphene_rect_t bounds;
   cairo_t *cr;
 
@@ -763,10 +941,12 @@ gtk_css_style_snapshot_border (GtkCssStyle      *style,
 
   if (gtk_border_image_init (&border_image, style))
     {
-      cr = gtk_snapshot_append_cairo_node (state,
+      double double_width[4] = { border_width[0], border_width[1], border_width[2], border_width[3] };
+
+      cr = gtk_snapshot_append_cairo_node (snapshot,
                                            &bounds,
                                            "Border Image");
-      gtk_border_image_render (&border_image, border_width, cr, 0, 0, width, height);
+      gtk_border_image_render (&border_image, double_width, cr, 0, 0, width, height);
       cairo_destroy (cr);
     }
   else
@@ -782,10 +962,6 @@ gtk_css_style_snapshot_border (GtkCssStyle      *style,
           border_width[3] == 0)
         return;
 
-      cr = gtk_snapshot_append_cairo_node (state,
-                                           &bounds,
-                                           "Border");
-
       border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
       border_style[1] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
       border_style[2] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
@@ -799,9 +975,7 @@ gtk_css_style_snapshot_border (GtkCssStyle      *style,
       _gtk_rounded_box_init_rect (&border_box, 0, 0, width, height);
       _gtk_rounded_box_apply_border_radius_for_style (&border_box, style, junction);
 
-      render_border (cr, &border_box, border_width, colors, border_style);
-
-      cairo_destroy (cr);
+      snapshot_border (snapshot, &border_box, border_width, colors, border_style);
     }
 }
 
@@ -904,20 +1078,19 @@ gtk_css_style_render_outline (GtkCssStyle *style,
 
 void
 gtk_css_style_snapshot_outline (GtkCssStyle *style,
-                                GtkSnapshot *state,
+                                GtkSnapshot *snapshot,
                                 gdouble      width,
                                 gdouble      height)
 {
   GtkBorderStyle border_style[4];
   GskRoundedRect border_box;
-  double border_width[4];
+  float border_width[4];
   GdkRGBA colors[4];
 
   border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_STYLE));
   if (border_style[0] != GTK_BORDER_STYLE_NONE)
     {
       cairo_rectangle_t rect;
-      cairo_t *cr;
 
       compute_outline_rect (style, 0, 0, width, height, &rect);
 
@@ -930,13 +1103,7 @@ gtk_css_style_snapshot_outline (GtkCssStyle *style,
       _gtk_rounded_box_init_rect (&border_box, rect.x, rect.y, rect.width, rect.height);
       _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
 
-      cr = gtk_snapshot_append_cairo_node (state,
-                                           &GRAPHENE_RECT_INIT (rect.x, rect.y, rect.width, rect.height),
-                                           "Outline");
-
-      render_border (cr, &border_box, border_width, colors, border_style);
-
-      cairo_destroy (cr);
+      snapshot_border (snapshot, &border_box, border_width, colors, border_style);
     }
 }
 

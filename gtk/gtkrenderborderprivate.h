@@ -44,7 +44,7 @@ gboolean        gtk_css_style_render_border_get_clip    (GtkCssStyle            
                                                          gdouble                 height,
                                                          GdkRectangle           *out_clip) G_GNUC_WARN_UNUSED_RESULT;
 void            gtk_css_style_snapshot_border           (GtkCssStyle            *style,
-                                                         GtkSnapshot            *state,
+                                                         GtkSnapshot            *snapshot,
                                                          gdouble                 width,
                                                          gdouble                 height,
                                                          GtkJunctionSides        junction);
@@ -57,7 +57,7 @@ void            gtk_css_style_render_outline            (GtkCssStyle            
                                                          gdouble                 width,
                                                          gdouble                 height);
 void            gtk_css_style_snapshot_outline          (GtkCssStyle            *style,
-                                                         GtkSnapshot            *state,
+                                                         GtkSnapshot            *snapshot,
                                                          gdouble                 width,
                                                          gdouble                 height);
 gboolean        gtk_css_style_render_outline_get_clip   (GtkCssStyle            *style,

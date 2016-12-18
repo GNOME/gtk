@@ -48,6 +48,10 @@ void gsk_render_node_get_bounds (GskRenderNode   *node,
                                  graphene_rect_t *frame);
 double gsk_opacity_node_get_opacity (GskRenderNode *node);
 
+const GskRoundedRect * gsk_border_node_peek_outline (GskRenderNode *node);
+float gsk_border_node_get_width (GskRenderNode *node, guint i);
+const GdkRGBA * gsk_border_node_peek_color (GskRenderNode *node, guint i);
+
 cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);

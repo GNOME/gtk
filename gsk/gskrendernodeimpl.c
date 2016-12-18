@@ -271,6 +271,192 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   return &self->render_node;
 }
 
+/*** GSK_BORDER_NODE ***/
+
+typedef struct _GskBorderNode GskBorderNode;
+
+struct _GskBorderNode
+{
+  GskRenderNode render_node;
+
+  GskRoundedRect outline;
+  float border_width[4];
+  GdkRGBA border_color[4];
+};
+
+static void
+gsk_border_node_finalize (GskRenderNode *node)
+{
+}
+
+static void
+gsk_border_node_make_immutable (GskRenderNode *node)
+{
+}
+
+static void
+gsk_border_node_draw (GskRenderNode *node,
+                       cairo_t       *cr)
+{
+  GskBorderNode *self = (GskBorderNode *) node;
+  GskRoundedRect inside;
+
+  cairo_save (cr);
+
+  gsk_rounded_rect_init_copy (&inside, &self->outline);
+  gsk_rounded_rect_shrink (&inside,
+                           self->border_width[0], self->border_width[1],
+                           self->border_width[2], self->border_width[3]);
+
+  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+  gsk_rounded_rect_path (&self->outline, cr);
+  gsk_rounded_rect_path (&inside, cr);
+
+  if (gdk_rgba_equal (&self->border_color[0], &self->border_color[1]) &&
+      gdk_rgba_equal (&self->border_color[0], &self->border_color[2]) &&
+      gdk_rgba_equal (&self->border_color[0], &self->border_color[3]))
+    {
+      gdk_cairo_set_source_rgba (cr, &self->border_color[0]);
+      cairo_fill (cr);
+    }
+  else
+    {
+      const graphene_rect_t *bounds = &self->outline.bounds;
+      /* distance to center "line":
+       * +-------------------------+
+       * |                         |
+       * |                         |
+       * |     ---this-line---     |
+       * |                         |
+       * |                         |
+       * +-------------------------+
+       * That line is equidistant from all sides. It's either horiontal
+       * or vertical, depending on if the rect is wider or taller.
+       * We use the 4 sides spanned up by connecting the line to the corner
+       * points to color the regions of the rectangle differently.
+       * Note that the call to cairo_fill() will add the potential final
+       * segment by closing the path, so we don't have to care.
+       */
+      float dst = MIN (bounds->size.width, bounds->size.height) / 2.0;
+
+      cairo_clip (cr);
+
+      /* top */
+      cairo_move_to (cr, bounds->origin.x + dst, bounds->origin.y + dst);
+      cairo_rel_line_to (cr, - dst, - dst);
+      cairo_rel_line_to (cr, bounds->size.width, 0);
+      cairo_rel_line_to (cr, - dst, dst);
+      gdk_cairo_set_source_rgba (cr, &self->border_color[0]);
+      cairo_fill (cr);
+
+      /* right */
+      cairo_move_to (cr, bounds->origin.x + bounds->size.width - dst, bounds->origin.y + dst);
+      cairo_rel_line_to (cr, dst, - dst);
+      cairo_rel_line_to (cr, 0, bounds->size.height);
+      cairo_rel_line_to (cr, - dst, - dst);
+      gdk_cairo_set_source_rgba (cr, &self->border_color[1]);
+      cairo_fill (cr);
+
+      /* bottom */
+      cairo_move_to (cr, bounds->origin.x + bounds->size.width - dst, bounds->origin.y + bounds->size.height - dst);
+      cairo_rel_line_to (cr, dst, dst);
+      cairo_rel_line_to (cr, - bounds->size.width, 0);
+      cairo_rel_line_to (cr, dst, - dst);
+      gdk_cairo_set_source_rgba (cr, &self->border_color[2]);
+      cairo_fill (cr);
+
+      /* left */
+      cairo_move_to (cr, bounds->origin.x + dst, bounds->origin.y + bounds->size.height - dst);
+      cairo_rel_line_to (cr, - dst, dst);
+      cairo_rel_line_to (cr, 0, - bounds->size.height);
+      cairo_rel_line_to (cr, dst, dst);
+      gdk_cairo_set_source_rgba (cr, &self->border_color[3]);
+      cairo_fill (cr);
+    }
+
+  cairo_restore (cr);
+}
+
+static void
+gsk_border_node_get_bounds (GskRenderNode   *node,
+                            graphene_rect_t *bounds)
+{
+  GskBorderNode *self = (GskBorderNode *) node;
+
+  graphene_rect_init_from_rect (bounds, &self->outline.bounds);
+}
+
+static const GskRenderNodeClass GSK_BORDER_NODE_CLASS = {
+  GSK_BORDER_NODE,
+  sizeof (GskBorderNode),
+  "GskBorderNode",
+  gsk_border_node_finalize,
+  gsk_border_node_make_immutable,
+  gsk_border_node_draw,
+  gsk_border_node_get_bounds
+};
+
+const GskRoundedRect *
+gsk_border_node_peek_outline (GskRenderNode *node)
+{
+  GskBorderNode *self = (GskBorderNode *) node;
+
+  return &self->outline;
+}
+
+float
+gsk_border_node_get_width (GskRenderNode *node,
+                           guint          i)
+{
+  GskBorderNode *self = (GskBorderNode *) node;
+
+  return self->border_width[i];
+}
+
+const GdkRGBA *
+gsk_border_node_peek_color (GskRenderNode *node,
+                            guint          i)
+{
+  GskBorderNode *self = (GskBorderNode *) node;
+
+  return &self->border_color[i];
+}
+
+/**
+ * gsk_border_node_new:
+ * @outline: a #GskRoundedRect describing the outline of the border
+ * @border_width: the stroke width of the border on the top, right, bottom and
+ *     left side respectively.
+ * @border_color: the color used on the top, right, bottom and left side.
+ *
+ * Creates a #GskRenderNode that will stroke a border rectangle inside the
+ * given @outline. The 4 sides of the border can have different widths and
+ * colors.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_border_node_new (const GskRoundedRect     *outline,
+                     const float               border_width[4],
+                     const GdkRGBA             border_color[4])
+{
+  GskBorderNode *self;
+
+  g_return_val_if_fail (outline != NULL, NULL);
+  g_return_val_if_fail (border_width != NULL, NULL);
+  g_return_val_if_fail (border_color != NULL, NULL);
+
+  self = (GskBorderNode *) gsk_render_node_new (&GSK_BORDER_NODE_CLASS);
+
+  gsk_rounded_rect_init_copy (&self->outline, outline);
+  memcpy (self->border_width, border_width, sizeof (self->border_width));
+  memcpy (self->border_color, border_color, sizeof (self->border_color));
+
+  return &self->render_node;
+}
+
 /*** GSK_TEXTURE_NODE ***/
 
 typedef struct _GskTextureNode GskTextureNode;

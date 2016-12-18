@@ -74,6 +74,11 @@ GskRenderNode *         gsk_repeating_linear_gradient_node_new  (const graphene_
                                                                  gsize                     n_color_stops);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_border_node_new                     (const GskRoundedRect     *outline,
+                                                                 const float               border_width[4],
+                                                                 const GdkRGBA             border_color[4]);
+
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_cairo_node_new                      (const graphene_rect_t    *bounds);
 GDK_AVAILABLE_IN_3_90
 cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node,
