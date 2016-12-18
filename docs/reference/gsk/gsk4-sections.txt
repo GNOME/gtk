@@ -72,5 +72,6 @@ gsk_rounded_rect_init_copy
 gsk_rounded_rect_init_from_rect
 gsk_rounded_rect_normalize
 gsk_rounded_rect_offset
+gsk_rounded_rect_shrink
 gsk_rounded_rect_is_rectilinear
 </SECTION>

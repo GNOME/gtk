@@ -42,17 +42,6 @@ void            _gtk_rounded_box_apply_outline_radius_for_style (GskRoundedRect 
                                                                  GtkCssStyle            *style,
                                                                  GtkJunctionSides        junction);
 
-void            _gtk_rounded_box_grow                           (GskRoundedRect         *box,
-                                                                 double                  top,
-                                                                 double                  right,
-                                                                 double                  bottom,
-                                                                 double                  left);
-void            _gtk_rounded_box_shrink                         (GskRoundedRect         *box,
-                                                                 double                  top,
-                                                                 double                  right,
-                                                                 double                  bottom,
-                                                                 double                  left);
-
 double          _gtk_rounded_box_guess_length                   (const GskRoundedRect   *box,
                                                                  GtkCssSide              side);
 

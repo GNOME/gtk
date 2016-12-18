@@ -87,6 +87,12 @@ GDK_AVAILABLE_IN_3_90
 GskRoundedRect *        gsk_rounded_rect_offset                 (GskRoundedRect           *self,
                                                                  float                     dx,
                                                                  float                     dy);
+GDK_AVAILABLE_IN_3_90
+GskRoundedRect *        gsk_rounded_rect_shrink                 (GskRoundedRect           *self,
+                                                                 float                     top,
+                                                                 float                     right,
+                                                                 float                     bottom,
+                                                                 float                     left);
 
 GDK_AVAILABLE_IN_3_90
 gboolean                gsk_rounded_rect_is_rectilinear         (GskRoundedRect           *self);

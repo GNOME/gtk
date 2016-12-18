@@ -925,7 +925,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
       gsk_rounded_rect_path (padding_box, cr);
       outside = spread + clip_radius + MAX (fabs (x), fabs (y));
       clip_box = *padding_box;
-      _gtk_rounded_box_grow (&clip_box, outside, outside, outside, outside);
+      gsk_rounded_rect_shrink (&clip_box, -outside, -outside, -outside, -outside);
       _gtk_rounded_box_clip_path (&clip_box, cr);
 
       cairo_clip (cr);
@@ -935,12 +935,12 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
   gsk_rounded_rect_offset (&box, x, y);
 
   if (shadow->inset)
-    _gtk_rounded_box_shrink (&box, spread, spread, spread, spread);
+    gsk_rounded_rect_shrink (&box, spread, spread, spread, spread);
   else /* Outset */
-    _gtk_rounded_box_grow (&box, spread, spread, spread, spread);
+    gsk_rounded_rect_shrink (&box, -spread, -spread, -spread, -spread);
 
   clip_box = *padding_box;
-  _gtk_rounded_box_shrink (&clip_box, -clip_radius, -clip_radius, -clip_radius, -clip_radius);
+  gsk_rounded_rect_shrink (&clip_box, -clip_radius, -clip_radius, -clip_radius, -clip_radius);
 
   if (!needs_blur (shadow))
     draw_shadow (shadow, cr, &box, &clip_box, GTK_BLUR_NONE);

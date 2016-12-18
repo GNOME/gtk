@@ -151,68 +151,6 @@ _gtk_rounded_box_apply_outline_radius_for_style (GskRoundedRect   *box,
   _gtk_rounded_box_apply_border_radius (box, corner, junction);
 }
 
-static void
-gtk_css_border_radius_grow (graphene_size_t *corner,
-                            double           width,
-                            double           height)
-{
-  if (corner->width)
-    corner->width += width;
-  if (corner->height)
-    corner->height += height;
-
-  if (corner->width <= 0 || corner->height <= 0)
-    {
-      corner->width = 0;
-      corner->height = 0;
-    }
-}
-
-void
-_gtk_rounded_box_grow (GskRoundedRect *box,
-                       double          top,
-                       double          right,
-                       double          bottom,
-                       double          left)
-{
-  if (box->bounds.size.width + left + right < 0)
-    {
-      box->bounds.origin.x -= left * box->bounds.size.width / (left + right);
-      box->bounds.size.width = 0;
-    }
-  else
-    {
-      box->bounds.origin.x -= left;
-      box->bounds.size.width += left + right;
-    }
-
-  if (box->bounds.size.height + bottom + top < 0)
-    {
-      box->bounds.origin.y -= top * box->bounds.size.height / (top + bottom);
-      box->bounds.size.height = 0;
-    }
-  else
-    {
-      box->bounds.origin.y -= top;
-      box->bounds.size.height += top + bottom;
-    }
-
-  gtk_css_border_radius_grow (&box->corner[GSK_CORNER_TOP_LEFT], left, top);
-  gtk_css_border_radius_grow (&box->corner[GSK_CORNER_TOP_RIGHT], right, top);
-  gtk_css_border_radius_grow (&box->corner[GSK_CORNER_BOTTOM_RIGHT], right, bottom);
-  gtk_css_border_radius_grow (&box->corner[GSK_CORNER_BOTTOM_LEFT], left, bottom);
-}
-
-void
-_gtk_rounded_box_shrink (GskRoundedRect *box,
-                         double          top,
-                         double          right,
-                         double          bottom,
-                         double          left)
-{
-  _gtk_rounded_box_grow (box, -top, -right, -bottom, -left);
-}
-
 typedef struct {
   double angle1;
   double angle2;

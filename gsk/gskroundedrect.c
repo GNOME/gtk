@@ -205,6 +205,78 @@ gsk_rounded_rect_offset (GskRoundedRect *self,
   return self;
 }
 
+static void
+border_radius_shrink (graphene_size_t *corner,
+                      double           width,
+                      double           height)
+{
+  if (corner->width > 0)
+    corner->width -= width;
+  if (corner->height > 0)
+    corner->height -= height;
+
+  if (corner->width <= 0 || corner->height <= 0)
+    {
+      corner->width = 0;
+      corner->height = 0;
+    }
+}
+
+/**
+ * gsk_rounded_rect_shrink:
+ * @self: The @GskRoundedRect to shrink or grow
+ * @top: How far to move the top side downwards
+ * @right: How far to move the right side to the left
+ * @bottom: How far to move the bottom side upwards
+ * @left: How far to move the left side to the right
+ *
+ * Shrinks (or grows) the given rectangle by moving the 4 sides
+ * according to the offsets given. The corner radii will be changed
+ * in a way that tries to keep the center of the corner circle intact.
+ * This emulates CSS behavior.
+ *
+ * This function also works for growing rectangles if you pass
+ * negative values for the @top, @right, @bottom or @left.
+ *
+ * Returns: @self
+ **/
+GskRoundedRect *
+gsk_rounded_rect_shrink (GskRoundedRect *self,
+                         float           top,
+                         float           right,
+                         float           bottom,
+                         float           left)
+{
+  if (self->bounds.size.width - left - right < 0)
+    {
+      self->bounds.origin.x += left * self->bounds.size.width / (left + right);
+      self->bounds.size.width = 0;
+    }
+  else
+    {
+      self->bounds.origin.x += left;
+      self->bounds.size.width -= left + right;
+    }
+
+  if (self->bounds.size.height - bottom - top < 0)
+    {
+      self->bounds.origin.y += top * self->bounds.size.height / (top + bottom);
+      self->bounds.size.height = 0;
+    }
+  else
+    {
+      self->bounds.origin.y += top;
+      self->bounds.size.height -= top + bottom;
+    }
+
+  border_radius_shrink (&self->corner[GSK_CORNER_TOP_LEFT], left, top);
+  border_radius_shrink (&self->corner[GSK_CORNER_TOP_RIGHT], right, top);
+  border_radius_shrink (&self->corner[GSK_CORNER_BOTTOM_RIGHT], right, bottom);
+  border_radius_shrink (&self->corner[GSK_CORNER_BOTTOM_LEFT], left, bottom);
+
+  return self;
+}
+
 /**
  * gsk_rounded_rect_is_rectilinear:
  * @self: the #GskRoundedRect to check

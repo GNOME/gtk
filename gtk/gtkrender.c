@@ -986,7 +986,7 @@ gtk_render_content_path (GtkStyleContext *context,
   _gtk_rounded_box_init_rect (&box, x, y, width, height);
   _gtk_rounded_box_apply_border_radius_for_style (&box, gtk_style_context_lookup_style (context), 0);
 
-  _gtk_rounded_box_shrink (&box,
+  gsk_rounded_rect_shrink (&box,
                            _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100)
                            + _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_TOP), 100),
                            _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100)

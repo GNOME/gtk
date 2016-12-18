@@ -555,12 +555,12 @@ gtk_theming_background_init (GtkThemingBackground *bg,
   _gtk_rounded_box_apply_border_radius_for_style (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], bg->style, junction);
 
   bg->boxes[GTK_CSS_AREA_PADDING_BOX] = bg->boxes[GTK_CSS_AREA_BORDER_BOX];
-  _gtk_rounded_box_shrink (&bg->boxes[GTK_CSS_AREA_PADDING_BOX],
+  gsk_rounded_rect_shrink (&bg->boxes[GTK_CSS_AREA_PADDING_BOX],
 			   border.top, border.right,
 			   border.bottom, border.left);
 
   bg->boxes[GTK_CSS_AREA_CONTENT_BOX] = bg->boxes[GTK_CSS_AREA_PADDING_BOX];
-  _gtk_rounded_box_shrink (&bg->boxes[GTK_CSS_AREA_CONTENT_BOX],
+  gsk_rounded_rect_shrink (&bg->boxes[GTK_CSS_AREA_CONTENT_BOX],
 			   padding.top, padding.right,
 			   padding.bottom, padding.left);
 }

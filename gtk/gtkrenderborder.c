@@ -362,7 +362,7 @@ render_frame_fill (cairo_t        *cr,
   guint i, j;
 
   padding_box = *border_box;
-  _gtk_rounded_box_shrink (&padding_box,
+  gsk_rounded_rect_shrink (&padding_box,
                            border_width[GTK_CSS_TOP],
                            border_width[GTK_CSS_RIGHT],
                            border_width[GTK_CSS_BOTTOM],
@@ -486,7 +486,7 @@ render_frame_stroke (cairo_t        *cr,
                       border_width[0] != border_width[3] ;
 
   stroke_box = *border_box;
-  _gtk_rounded_box_shrink (&stroke_box,
+  gsk_rounded_rect_shrink (&stroke_box,
                            border_width[GTK_CSS_TOP] / 2.0,
                            border_width[GTK_CSS_RIGHT] / 2.0,
                            border_width[GTK_CSS_BOTTOM] / 2.0,
@@ -513,7 +513,7 @@ render_frame_stroke (cairo_t        *cr,
       GskRoundedRect padding_box;
 
       padding_box = *border_box;
-      _gtk_rounded_box_shrink (&padding_box,
+      gsk_rounded_rect_shrink (&padding_box,
                                border_width[GTK_CSS_TOP],
                                border_width[GTK_CSS_RIGHT],
                                border_width[GTK_CSS_BOTTOM],
@@ -640,7 +640,7 @@ render_border (cairo_t        *cr,
             render_frame_fill (cr, border_box, other_border, colors, dont_draw);
             
             other_box = *border_box;
-            _gtk_rounded_box_shrink (&other_box,
+            gsk_rounded_rect_shrink (&other_box,
                                      2 * other_border[GTK_CSS_TOP],
                                      2 * other_border[GTK_CSS_RIGHT],
                                      2 * other_border[GTK_CSS_BOTTOM],
@@ -674,7 +674,7 @@ render_border (cairo_t        *cr,
             render_frame_fill (cr, border_box, other_border, colors, dont_draw);
             
             other_box = *border_box;
-            _gtk_rounded_box_shrink (&other_box,
+            gsk_rounded_rect_shrink (&other_box,
                                      other_border[GTK_CSS_TOP],
                                      other_border[GTK_CSS_RIGHT],
                                      other_border[GTK_CSS_BOTTOM],
