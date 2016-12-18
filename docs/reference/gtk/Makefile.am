@@ -36,7 +36,6 @@ IGNORE_HFILES = \
 	gtkbuilderprivate.h		\
 	gtkbuiltiniconprivate.h		\
 	gtkbuttonprivate.h		\
-	gtkcairoblurprivate.h		\
 	gtkcellareaboxcontextprivate.h	\
 	gtkcheckbuttonprivate.h		\
 	gtkclipboardprivate.h		\

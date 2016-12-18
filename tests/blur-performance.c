@@ -1,6 +1,6 @@
 /* -*- mode: C; c-basic-offset: 2; indent-tabs-mode: nil; -*- */
 
-#include <gtk/gtkcairoblurprivate.h>
+#include <gsk/gskcairoblurprivate.h>
 
 static void
 init_surface (cairo_t *cr)
@@ -41,7 +41,7 @@ main (int argc, char **argv)
 	{
 	  init_surface (cr);
 	  g_timer_start (timer);
-	  _gtk_cairo_blur_surface (surface, i, GTK_BLUR_X | GTK_BLUR_Y);
+	  gsk_cairo_blur_surface (surface, i, GSK_BLUR_X | GSK_BLUR_Y);
 	  msec = g_timer_elapsed (timer, NULL) * 1000;
 	  if (j == 1)
 	    g_print ("Radius %2d: %.2f msec, %.2f kpixels/msec:\n", i, msec, size*size/(msec*1000));

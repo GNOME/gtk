@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GSK - The GIMP Toolkit
  *
  * Copyright (C) 2014 Red Hat
  *
@@ -20,7 +20,7 @@
  *     Owen Taylor <otaylor@redhat.com>
  */
 
-#include "gtkcairoblurprivate.h"
+#include "gskcairoblurprivate.h"
 
 #include <math.h>
 #include <string.h>
@@ -190,14 +190,14 @@ _boxblur (guchar      *buffer,
           int          width,
           int          height,
           int          radius,
-          GtkBlurFlags flags)
+          GskBlurFlags flags)
 {
   guchar *flipped_buffer;
   int d = get_box_filter_size (radius);
 
   flipped_buffer = g_malloc (width * height);
 
-  if (flags & GTK_BLUR_Y)
+  if (flags & GSK_BLUR_Y)
     {
       /* Step 1: swap rows and columns */
       flip_buffer (flipped_buffer, buffer, width, height);
@@ -209,7 +209,7 @@ _boxblur (guchar      *buffer,
       flip_buffer (buffer, flipped_buffer, height, width);
     }
 
-  if (flags & GTK_BLUR_X)
+  if (flags & GSK_BLUR_X)
     {
       /* Step 4: blur rows */
       blur_rows (buffer, flipped_buffer, width, height, d);
@@ -219,16 +219,16 @@ _boxblur (guchar      *buffer,
 }
 
 /*
- * _gtk_cairo_blur_surface:
+ * _gsk_cairo_blur_surface:
  * @surface: a cairo image surface.
  * @radius: the blur radius.
  *
  * Blurs the cairo image surface at the given radius.
  */
 void
-_gtk_cairo_blur_surface (cairo_surface_t* surface,
-                         double           radius_d,
-                         GtkBlurFlags     flags)
+gsk_cairo_blur_surface (cairo_surface_t* surface,
+                        double           radius_d,
+                        GskBlurFlags     flags)
 {
   int radius = radius_d;
 
@@ -241,7 +241,7 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   if (radius <= 1)
     return;
 
-  if ((flags & (GTK_BLUR_X|GTK_BLUR_Y)) == 0)
+  if ((flags & (GSK_BLUR_X|GSK_BLUR_Y)) == 0)
     return;
 
   /* Before we mess with the surface, execute any pending drawing. */
@@ -256,8 +256,8 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   cairo_surface_mark_dirty (surface);
 }
 
-/*
- * _gtk_cairo_blur_compute_pixels:
+/*<private>
+ * gsk_cairo_blur_compute_pixels:
  * @radius: the radius to compute the pixels for
  *
  * Computes the number of pixels necessary to extend an image in one
@@ -275,7 +275,8 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
  * https://bugzilla.mozilla.org/show_bug.cgi?id=590039#c19
  */
 int
-_gtk_cairo_blur_compute_pixels (double radius)
+gsk_cairo_blur_compute_pixels (double radius)
 {
   return floor (radius * GAUSSIAN_SCALE_FACTOR * 1.5 + 0.5);
 }
+

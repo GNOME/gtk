@@ -23,7 +23,6 @@
 
 #include <math.h>
 
-#include "gtkcairoblurprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 
 #include <string.h>

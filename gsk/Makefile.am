@@ -60,6 +60,7 @@ gsk_public_source_h = \
 	gsktypes.h
 gsk_private_source_h = \
 	$(gsk_private_vulkan_source_h) \
+	gskcairoblurprivate.h \
 	gskcairorendererprivate.h \
 	gskdebugprivate.h \
 	gskgldriverprivate.h \
@@ -80,6 +81,7 @@ gsk_public_source_c = \
 	gsktexture.c
 gsk_private_source_c = \
 	$(gsk_private_vulkan_source_c) \
+	gskcairoblur.c \
 	gskcairorenderer.c \
 	gskdebug.c \
 	gskgldriver.c \

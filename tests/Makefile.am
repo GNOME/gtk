@@ -290,7 +290,7 @@ scrolling_performance_SOURCES = \
 
 blur_performance_SOURCES = \
 	blur-performance.c	\
-	../gtk/gtkcairoblur.c
+	../gsk/gskcairoblur.c
 
 video_timer_SOURCES = 	\
 	video-timer.c	\
