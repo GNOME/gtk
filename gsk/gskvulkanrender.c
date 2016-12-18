@@ -246,37 +246,37 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 }
 
 static gsize
-gsk_vulkan_renderer_count_vertices (GskVulkanRender *self)
+gsk_vulkan_renderer_count_vertex_data (GskVulkanRender *self)
 {
-  gsize count;
+  gsize n_bytes;
   GSList *l;
 
-  count = 0;
+  n_bytes = 0;
   for (l = self->render_passes; l; l = l->next)
     {
-      count += gsk_vulkan_render_pass_count_vertices (l->data);
+      n_bytes += gsk_vulkan_render_pass_count_vertex_data (l->data);
     }
 
-  return count;
+  return n_bytes;
 }
 
 static GskVulkanBuffer *
-gsk_vulkan_render_collect_vertices (GskVulkanRender *self)
+gsk_vulkan_render_collect_vertex_data (GskVulkanRender *self)
 {
   GskVulkanBuffer *buffer;
-  GskVulkanVertex *vertices;
+  guchar *data;
   GSList *l;
-  gsize offset, count;
+  gsize offset, n_bytes;
   
   offset = 0;
-  count = gsk_vulkan_renderer_count_vertices (self);
-  buffer = gsk_vulkan_buffer_new (self->vulkan, sizeof (GskVulkanVertex) * count);
-  vertices = (GskVulkanVertex *) gsk_vulkan_buffer_map (buffer);
+  n_bytes = gsk_vulkan_renderer_count_vertex_data (self);
+  buffer = gsk_vulkan_buffer_new (self->vulkan, n_bytes);
+  data = gsk_vulkan_buffer_map (buffer);
 
   for (l = self->render_passes; l; l = l->next)
     {
-      offset += gsk_vulkan_render_pass_collect_vertices (l->data, vertices, offset, count - offset);
-      g_assert (offset <= count);
+      offset += gsk_vulkan_render_pass_collect_vertex_data (l->data, data, offset, n_bytes - offset);
+      g_assert (offset <= n_bytes);
     }
 
   gsk_vulkan_buffer_unmap (buffer);
@@ -441,7 +441,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
 
-  buffer = gsk_vulkan_render_collect_vertices (self);
+  buffer = gsk_vulkan_render_collect_vertex_data (self);
 
   vkCmdSetViewport (command_buffer,
                     0,
@@ -476,17 +476,9 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                         },
                         VK_SUBPASS_CONTENTS_INLINE);
 
-  vkCmdBindVertexBuffers (command_buffer,
-                          0,
-                          1,
-                          (VkBuffer[1]) {
-                              gsk_vulkan_buffer_get_buffer (buffer)
-                          },
-                          (VkDeviceSize[1]) { 0 });
-
   for (l = self->render_passes; l; l = l->next)
     {
-      gsk_vulkan_render_pass_draw (l->data, self, self->layout, command_buffer);
+      gsk_vulkan_render_pass_draw (l->data, self, buffer, self->layout, command_buffer);
     }
 
   vkCmdEndRenderPass (command_buffer);

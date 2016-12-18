@@ -2,6 +2,7 @@
 
 #include "gskvulkanrenderpassprivate.h"
 
+#include "gskvulkanblendpipelineprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderer.h"
@@ -255,40 +256,13 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
 }
 
 gsize
-gsk_vulkan_render_pass_count_vertices (GskVulkanRenderPass *self)
-{
-  return self->render_ops->len * 6;
-}
-
-static gsize
-gsk_vulkan_render_op_collect_vertices (GskVulkanOpRender *op,
-                                       GskVulkanVertex   *vertices)
-{
-  graphene_rect_t bounds;
-
-  gsk_render_node_get_bounds (op->node, &bounds);
-
-  vertices[0] = (GskVulkanVertex) { bounds.origin.x,                     bounds.origin.y,                      0.0, 0.0 };
-  vertices[1] = (GskVulkanVertex) { bounds.origin.x + bounds.size.width, bounds.origin.y,                      1.0, 0.0 };
-  vertices[2] = (GskVulkanVertex) { bounds.origin.x,                     bounds.origin.y + bounds.size.height, 0.0, 1.0 };
-  vertices[3] = (GskVulkanVertex) { bounds.origin.x,                     bounds.origin.y + bounds.size.height, 0.0, 1.0 };
-  vertices[4] = (GskVulkanVertex) { bounds.origin.x + bounds.size.width, bounds.origin.y,                      1.0, 0.0 };
-  vertices[5] = (GskVulkanVertex) { bounds.origin.x + bounds.size.width, bounds.origin.y + bounds.size.height, 1.0, 1.0 };
-
-  return 6;
-}
-
-gsize
-gsk_vulkan_render_pass_collect_vertices (GskVulkanRenderPass *self,
-                                         GskVulkanVertex     *vertices,
-                                         gsize                offset,
-                                         gsize                total)
+gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
 {
   GskVulkanOp *op;
-  gsize n;
+  gsize n_bytes;
   guint i;
 
-  n = 0;
+  n_bytes = 0;
   for (i = 0; i < self->render_ops->len; i++)
     {
       op = &g_array_index (self->render_ops, GskVulkanOp, i);
@@ -299,8 +273,52 @@ gsk_vulkan_render_pass_collect_vertices (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
         case GSK_VULKAN_OP_COLOR:
-          op->render.vertex_offset = offset + n;
-          op->render.vertex_count = gsk_vulkan_render_op_collect_vertices (&op->render, vertices + n + offset);
+          op->render.vertex_count = gsk_vulkan_blend_pipeline_count_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline));
+          n_bytes += op->render.vertex_count;
+          break;
+
+        default:
+          g_assert_not_reached ();
+        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
+          continue;
+        }
+    }
+
+  return n_bytes;
+}
+
+gsize
+gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
+                                            guchar              *data,
+                                            gsize                offset,
+                                            gsize                total)
+{
+  GskVulkanOp *op;
+  gsize n_bytes;
+  guint i;
+
+  n_bytes = 0;
+  for (i = 0; i < self->render_ops->len; i++)
+    {
+      op = &g_array_index (self->render_ops, GskVulkanOp, i);
+
+      switch (op->type)
+        {
+        case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_SURFACE:
+        case GSK_VULKAN_OP_TEXTURE:
+        case GSK_VULKAN_OP_COLOR:
+          {
+            graphene_rect_t bounds;
+
+            gsk_render_node_get_bounds (op->render.node, &bounds);
+            op->render.vertex_offset = offset + n_bytes;
+            gsk_vulkan_blend_pipeline_collect_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline),
+                                                           data + n_bytes + offset,
+                                                           &bounds);
+            n_bytes += op->render.vertex_count;
+          }
           break;
 
         default:
@@ -310,11 +328,10 @@ gsk_vulkan_render_pass_collect_vertices (GskVulkanRenderPass *self,
           continue;
         }
 
-      n += op->render.vertex_count;
-      g_assert (n + offset <= total);
+      g_assert (n_bytes + offset <= total);
     }
 
-  return n;
+  return n_bytes;
 }
 
 void
@@ -349,10 +366,12 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 void
 gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                              GskVulkanRender         *render,
+                             GskVulkanBuffer         *vertex_buffer,
                              GskVulkanPipelineLayout *layout,
                              VkCommandBuffer          command_buffer)
 {
   GskVulkanPipeline *current_pipeline = NULL;
+  gsize current_draw_index = 0;
   GskVulkanOp *op;
   guint i;
 
@@ -383,11 +402,19 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
               vkCmdBindPipeline (command_buffer,
                                  VK_PIPELINE_BIND_POINT_GRAPHICS,
                                  gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+              vkCmdBindVertexBuffers (command_buffer,
+                                      0,
+                                      1,
+                                      (VkBuffer[1]) {
+                                          gsk_vulkan_buffer_get_buffer (vertex_buffer)
+                                      },
+                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+              current_draw_index = 0;
             }
 
-          vkCmdDraw (command_buffer,
-                     op->render.vertex_count, 1,
-                     op->render.vertex_offset, 0);
+          current_draw_index += gsk_vulkan_blend_pipeline_draw (GSK_VULKAN_BLEND_PIPELINE (current_pipeline),
+                                                                command_buffer,
+                                                                current_draw_index, 1);
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:

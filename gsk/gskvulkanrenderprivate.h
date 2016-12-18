@@ -17,15 +17,6 @@ typedef enum {
 } GskVulkanPipelineType;
 
 typedef struct _GskVulkanRender GskVulkanRender;
-typedef struct _GskVulkanVertex GskVulkanVertex;
-
-struct _GskVulkanVertex
-{
-  float x;
-  float y;
-  float tex_x;
-  float tex_y;
-};
 
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
                                                                          GdkVulkanContext       *context);

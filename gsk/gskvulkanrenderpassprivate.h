@@ -4,7 +4,7 @@
 #include <gdk/gdk.h>
 #include <gsk/gskrendernode.h>
 
-#include "gsk/gskvulkancommandpoolprivate.h"
+#include "gsk/gskvulkanbufferprivate.h"
 #include "gsk/gskvulkanrenderprivate.h"
 
 G_BEGIN_DECLS
@@ -23,9 +23,9 @@ void                    gsk_vulkan_render_pass_upload                   (GskVulk
                                                                          GskVulkanRender        *render,
                                                                          GskVulkanUploader      *uploader);
 
-gsize                   gsk_vulkan_render_pass_count_vertices           (GskVulkanRenderPass    *self);
-gsize                   gsk_vulkan_render_pass_collect_vertices         (GskVulkanRenderPass    *self,
-                                                                         GskVulkanVertex        *vertices,
+gsize                   gsk_vulkan_render_pass_count_vertex_data        (GskVulkanRenderPass    *self);
+gsize                   gsk_vulkan_render_pass_collect_vertex_data      (GskVulkanRenderPass    *self,
+                                                                         guchar                 *data,
                                                                          gsize                   offset,
                                                                          gsize                   total);
 
@@ -33,6 +33,7 @@ void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulk
                                                                          GskVulkanRender        *render);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
+                                                                         GskVulkanBuffer        *vertex_buffer,
                                                                          GskVulkanPipelineLayout *layout,
                                                                          VkCommandBuffer         command_buffer);
 

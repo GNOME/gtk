@@ -73,7 +73,7 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
   
   VkDevice device;
 
-  g_return_val_if_fail (!g_type_is_a (pipeline_type, GSK_TYPE_VULKAN_PIPELINE), NULL);
+  g_return_val_if_fail (g_type_is_a (pipeline_type, GSK_TYPE_VULKAN_PIPELINE), NULL);
   g_return_val_if_fail (layout != NULL, NULL);
   g_return_val_if_fail (shader_name != NULL, NULL);
   g_return_val_if_fail (render_pass != VK_NULL_HANDLE, NULL);
