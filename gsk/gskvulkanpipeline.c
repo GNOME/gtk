@@ -99,32 +99,7 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
                                                    GST_VULKAN_SHADER_STAGE_CREATE_INFO (priv->vertex_shader),
                                                    GST_VULKAN_SHADER_STAGE_CREATE_INFO (priv->fragment_shader)
                                                },
-                                               .pVertexInputState = &(VkPipelineVertexInputStateCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-                                                   .vertexBindingDescriptionCount = 1,
-                                                   .pVertexBindingDescriptions = (VkVertexInputBindingDescription[]) {
-                                                       {
-                                                           .binding = 0,
-                                                           .stride = 4 * sizeof (float),
-                                                           .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
-                                                       }
-                                                   },
-                                                   .vertexAttributeDescriptionCount = 2,
-                                                   .pVertexAttributeDescriptions = (VkVertexInputAttributeDescription[]) {
-                                                       {
-                                                           .location = 0,
-                                                           .binding = 0,
-                                                           .format = VK_FORMAT_R32G32_SFLOAT,
-                                                           .offset = 0,
-                                                       },
-                                                       {
-                                                           .location = 1,
-                                                           .binding = 0,
-                                                           .format = VK_FORMAT_R32G32_SFLOAT,
-                                                           .offset = 2 * sizeof (float),
-                                                       }
-                                                   }
-                                               },
+                                               .pVertexInputState = GSK_VULKAN_PIPELINE_GET_CLASS (self)->get_input_state_create_info (self),
                                                .pInputAssemblyState = &(VkPipelineInputAssemblyStateCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
                                                    .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,

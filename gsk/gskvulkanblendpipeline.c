@@ -19,6 +19,41 @@ struct _GskVulkanVertex
 
 G_DEFINE_TYPE (GskVulkanBlendPipeline, gsk_vulkan_blend_pipeline, GSK_TYPE_VULKAN_PIPELINE)
 
+static const VkPipelineVertexInputStateCreateInfo *
+gsk_vulkan_blend_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
+{
+  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
+      {
+          .binding = 0,
+          .stride = 4 * sizeof (float),
+          .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
+      }
+  };
+  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
+      {
+          .location = 0,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32_SFLOAT,
+          .offset = 0,
+      },
+      {
+          .location = 1,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32_SFLOAT,
+          .offset = 2 * sizeof (float),
+      }
+  };
+  static const VkPipelineVertexInputStateCreateInfo info = {
+      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
+      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
+      .pVertexBindingDescriptions = vertexBindingDescriptions,
+      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
+      .pVertexAttributeDescriptions = vertexInputAttributeDescription
+  };
+
+  return &info;
+}
+
 static void
 gsk_vulkan_blend_pipeline_finalize (GObject *gobject)
 {
@@ -30,7 +65,11 @@ gsk_vulkan_blend_pipeline_finalize (GObject *gobject)
 static void
 gsk_vulkan_blend_pipeline_class_init (GskVulkanBlendPipelineClass *klass)
 {
+  GskVulkanPipelineClass *pipeline_class = GSK_VULKAN_PIPELINE_CLASS (klass);
+
   G_OBJECT_CLASS (klass)->finalize = gsk_vulkan_blend_pipeline_finalize;
+
+  pipeline_class->get_input_state_create_info = gsk_vulkan_blend_pipeline_get_input_state_create_info;
 }
 
 static void

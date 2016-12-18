@@ -16,6 +16,9 @@ G_DECLARE_DERIVABLE_TYPE (GskVulkanPipeline, gsk_vulkan_pipeline, GSK, VULKAN_PI
 struct _GskVulkanPipelineClass
 {
   GObjectClass parent_class;
+
+  const VkPipelineVertexInputStateCreateInfo *
+                                (* get_input_state_create_info)         (GskVulkanPipeline              *self);
 };
 
 static inline VkResult
