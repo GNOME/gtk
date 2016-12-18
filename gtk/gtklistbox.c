@@ -2549,7 +2549,7 @@ gtk_list_box_remove (GtkContainer *container,
   if (was_visible && gtk_widget_get_visible (GTK_WIDGET (box)))
     gtk_widget_queue_resize (widget);
 
-  if (was_selected)
+  if (was_selected && !gtk_widget_in_destruction (widget))
     {
       g_signal_emit (box, signals[ROW_SELECTED], 0, NULL);
       g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
