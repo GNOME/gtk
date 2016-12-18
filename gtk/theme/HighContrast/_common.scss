@@ -2556,7 +2556,7 @@ levelbar {
 /**********
  * frames *
  **********/
-frame border,
+frame,
 .frame {
   border: 1px solid $borders_color;
   &.flat { border-style: none; }

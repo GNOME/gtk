@@ -2609,14 +2609,14 @@ popover.background radiobutton:selected,
 /**********
  * frames *
  **********/
-frame border,
+frame,
 .frame {
   border: 1px solid gray;
   padding: 0; }
-  frame border.flat,
+  frame.flat,
   .frame.flat {
     border-style: none; }
-  frame border:backdrop,
+  frame:backdrop,
   .frame:backdrop {
     border-color: #737373; }
 
