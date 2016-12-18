@@ -8,10 +8,7 @@ void
 gsk_vulkan_push_constants_init (GskVulkanPushConstants  *constants,
                                 const graphene_matrix_t *mvp)
 {
-  GdkRGBA transparent = { 0, 0, 0, 0 };
-
   gsk_vulkan_push_constants_set_mvp (constants, mvp);
-  gsk_vulkan_push_constants_set_color (constants, &transparent);
 }
 
 void
@@ -40,16 +37,6 @@ gsk_vulkan_push_constants_multiply_mvp (GskVulkanPushConstants  *self,
 }
 
 void
-gsk_vulkan_push_constants_set_color (GskVulkanPushConstants *self,
-                                     const GdkRGBA          *color)
-{
-  self->fragment.color[0] = pow (color->red, 2.2);
-  self->fragment.color[1] = pow (color->green, 2.2);
-  self->fragment.color[2] = pow (color->blue, 2.2);
-  self->fragment.color[3] = color->alpha;
-}
-
-void
 gsk_vulkan_push_constants_push_vertex (GskVulkanPushConstants *self,
                                        VkCommandBuffer         command_buffer,
                                        VkPipelineLayout        pipeline_layout)
@@ -62,6 +49,7 @@ gsk_vulkan_push_constants_push_vertex (GskVulkanPushConstants *self,
                       &self->vertex);
 }
 
+#if 0
 void
 gsk_vulkan_push_constants_push_fragment (GskVulkanPushConstants *self,
                                          VkCommandBuffer         command_buffer,
@@ -74,6 +62,7 @@ gsk_vulkan_push_constants_push_fragment (GskVulkanPushConstants *self,
                       sizeof (self->fragment),
                       &self->fragment);
 }
+#endif
 
 uint32_t
 gst_vulkan_push_constants_get_range_count (void)
@@ -89,11 +78,13 @@ gst_vulkan_push_constants_get_ranges (void)
           .stageFlags = VK_SHADER_STAGE_VERTEX_BIT,
           .offset = G_STRUCT_OFFSET (GskVulkanPushConstants, vertex),
           .size = sizeof (((GskVulkanPushConstants *) 0)->vertex)
+#if 0
       },
       {
           .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
           .offset = G_STRUCT_OFFSET (GskVulkanPushConstants, fragment),
           .size = sizeof (((GskVulkanPushConstants *) 0)->fragment)
+#endif
       }
   };
 

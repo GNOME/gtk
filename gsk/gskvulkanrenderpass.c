@@ -21,8 +21,7 @@ typedef enum {
   GSK_VULKAN_OP_TEXTURE,
   GSK_VULKAN_OP_COLOR,
   /* GskVulkanOpPushConstants */
-  GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
-  GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS
+  GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS
 } GskVulkanOpType;
 
 struct _GskVulkanOpRender
@@ -117,11 +116,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       break;
 
     case GSK_COLOR_NODE:
-      op.type = GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS;
-      gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
-      gsk_vulkan_push_constants_set_color (&op.constants.constants, gsk_color_node_peek_color (node));
-      g_array_append_val (self->render_ops, op);
-
       op.type = GSK_VULKAN_OP_COLOR;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_COLOR);
       g_array_append_val (self->render_ops, op);
@@ -166,9 +160,6 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
 
   op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
   gsk_vulkan_push_constants_init (&op.constants.constants, mvp);
-  g_array_append_val (self->render_ops, op);
-
-  op.type = GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS;
   g_array_append_val (self->render_ops, op);
 
   gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, node);
@@ -250,7 +241,6 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           g_assert_not_reached ();
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           break;
         }
     }
@@ -285,7 +275,6 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           continue;
         }
     }
@@ -342,7 +331,6 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           continue;
         }
 
@@ -375,7 +363,6 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
           g_assert_not_reached ();
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
           break;
         }
     }
@@ -460,12 +447,6 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
           gsk_vulkan_push_constants_push_vertex (&op->constants.constants,
                                                  command_buffer, 
                                                  gsk_vulkan_pipeline_layout_get_pipeline_layout (layout));
-          break;
-
-        case GSK_VULKAN_OP_PUSH_FRAGMENT_CONSTANTS:
-          gsk_vulkan_push_constants_push_fragment (&op->constants.constants,
-                                                   command_buffer, 
-                                                   gsk_vulkan_pipeline_layout_get_pipeline_layout (layout));
           break;
 
         default:

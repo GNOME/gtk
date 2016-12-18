@@ -13,9 +13,10 @@ struct _GskVulkanPushConstants
   struct {
     float mvp[16];
   } vertex;
+#if 0
   struct {
-    float color[4];
   } fragment;
+#endif
 };
 
 const VkPushConstantRange *
@@ -31,13 +32,8 @@ void                    gsk_vulkan_push_constants_set_mvp               (GskVulk
                                                                          const graphene_matrix_t        *mvp);
 void                    gsk_vulkan_push_constants_multiply_mvp          (GskVulkanPushConstants         *self,
                                                                          const graphene_matrix_t        *transform);
-void                    gsk_vulkan_push_constants_set_color             (GskVulkanPushConstants         *self,
-                                                                         const GdkRGBA                  *color);
 
 void                    gsk_vulkan_push_constants_push_vertex           (GskVulkanPushConstants         *self,
-                                                                         VkCommandBuffer                 command_buffer,
-                                                                         VkPipelineLayout                pipeline_layout);
-void                    gsk_vulkan_push_constants_push_fragment         (GskVulkanPushConstants         *self,
                                                                          VkCommandBuffer                 command_buffer,
                                                                          VkPipelineLayout                pipeline_layout);
 
