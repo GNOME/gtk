@@ -6811,15 +6811,13 @@ update_opaque_region (GtkWindow           *window,
   cairo_region_t *opaque_region;
   GtkStyleContext *context;
   gboolean is_opaque = FALSE;
-  const GdkRGBA *color;
 
   if (!_gtk_widget_get_realized (widget))
       return;
 
   context = gtk_widget_get_style_context (widget);
 
-  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  is_opaque = (color->alpha >= 1.0);
+  is_opaque = gdk_rgba_is_opaque (_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)));
 
   if (gtk_widget_get_opacity (widget) < 1.0)
     is_opaque = FALSE;

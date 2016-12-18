@@ -533,7 +533,7 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   /* We don't need to draw invisible shadows */
-  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+  if (gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
     return;
 
   if (!cairo_has_current_point (cr))
@@ -579,7 +579,7 @@ _gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   /* We don't need to draw invisible shadows */
-  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+  if (gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
     return;
 
   cairo_save (cr);
@@ -898,7 +898,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   /* We don't need to draw invisible shadows */
-  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+  if (gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
     return;
 
   cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
@@ -1034,7 +1034,7 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue   *shadow,
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   /* We don't need to draw invisible shadows */
-  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+  if (gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
     return;
 
   gtk_css_shadow_value_get_extents (shadow, &extents);
@@ -1060,7 +1060,7 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   /* We don't need to draw invisible shadows */
-  if (gtk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+  if (gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
     return;
 
   cr = gtk_snapshot_append_cairo_node (snapshot,

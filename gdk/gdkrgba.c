@@ -90,6 +90,40 @@ gdk_rgba_free (GdkRGBA *rgba)
   g_slice_free (GdkRGBA, rgba);
 }
 
+/**
+ * gdk_rgba_is_clear:
+ * @rgba: a #GdkRGBA
+ *
+ * Checks if an @rgba value is transparent. That is, drawing with the value
+ * would not produce any change.
+ *
+ * Returns: %TRUE if the @rgab is clear
+ *
+ * Since: 3.90
+ */
+gboolean
+gdk_rgba_is_clear (const GdkRGBA *rgba)
+{
+  return rgba->alpha < ((double) 0x00ff / (double) 0xffff);
+}
+
+/**
+ * gdk_rgba_is_opaque:
+ * @rgba: a #GdkRGBA
+ *
+ * Checks if an @rgba value is opaque. That is, drawing with the value
+ * will not retain any results from previous contents.
+ *
+ * Returns: %TRUE if the @rgab is opaque
+ *
+ * Since: 3.90
+ */
+gboolean
+gdk_rgba_is_opaque (const GdkRGBA *rgba)
+{
+  return rgba->alpha > ((double)0xff00 / (double)0xffff);
+}
+
 #define SKIP_WHITESPACES(s) while (*(s) == ' ') (s)++;
 
 /* Parses a single color component from a rgb() or rgba() specification

@@ -222,6 +222,8 @@ gdk_pixbuf_get_from_surface
 GdkRGBA
 gdk_rgba_copy
 gdk_rgba_free
+gdk_rgba_is_clear
+gdk_rgba_is_opaque
 gdk_rgba_parse
 gdk_rgba_equal
 gdk_rgba_hash
