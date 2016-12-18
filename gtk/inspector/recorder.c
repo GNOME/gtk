@@ -128,6 +128,44 @@ render_node_list_get_value (GtkTreeModelRenderNode *model,
     }
 }
 
+static const char *
+node_type_name (GskRenderNodeType type)
+{
+  switch (type)
+    {
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
+      return "Unknown";
+    case GSK_CONTAINER_NODE:
+      return "Container";
+    case GSK_CAIRO_NODE:
+      return "Cairo";
+    case GSK_COLOR_NODE:
+      return "Color";
+    case GSK_LINEAR_GRADIENT_NODE:
+      return "Linear Gradient";
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+      return "Repeating Linear Gradient";
+    case GSK_BORDER_NODE:
+      return "Border";
+    case GSK_TEXTURE_NODE:
+      return "Texture";
+    case GSK_TRANSFORM_NODE:
+      return "Transform";
+    case GSK_OPACITY_NODE:
+      return "Opacity";
+    case GSK_CLIP_NODE:
+      return "Clip";
+    case GSK_ROUNDED_CLIP_NODE:
+      return "Rounded Clip";
+    case GSK_BLEND_NODE:
+      return "Blend";
+    case GSK_CROSS_FADE_NODE:
+      return "CrossFade";
+    }
+}
+
 static void
 populate_render_node_properties (GtkListStore  *store,
                                  GskRenderNode *node)
@@ -138,6 +176,11 @@ populate_render_node_properties (GtkListStore  *store,
   gtk_list_store_clear (store);
 
   gsk_render_node_get_bounds (node, &bounds);
+
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, "Type",
+                                     1, node_type_name (gsk_render_node_get_node_type (node)),
+                                     -1);
 
   tmp = g_strdup_printf ("%.6f x %.6f + %.6f + %.6f",
                          bounds.size.width,
