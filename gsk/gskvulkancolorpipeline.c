@@ -13,8 +13,6 @@ struct _GskVulkanVertex
 {
   float x;
   float y;
-  float tex_x;
-  float tex_y;
 };
 
 G_DEFINE_TYPE (GskVulkanColorPipeline, gsk_vulkan_color_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -25,7 +23,7 @@ gsk_vulkan_color_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
   static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
       {
           .binding = 0,
-          .stride = 4 * sizeof (float),
+          .stride = sizeof (GskVulkanVertex),
           .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
       }
   };
@@ -35,12 +33,6 @@ gsk_vulkan_color_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
           .binding = 0,
           .format = VK_FORMAT_R32G32_SFLOAT,
           .offset = 0,
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_SFLOAT,
-          .offset = 2 * sizeof (float),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -98,12 +90,12 @@ gsk_vulkan_color_pipeline_collect_vertex_data (GskVulkanColorPipeline *pipeline,
 {
   GskVulkanVertex *vertices = (GskVulkanVertex *) data;
 
-  vertices[0] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y,                     0.0, 0.0 };
-  vertices[1] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y,                     1.0, 0.0 };
-  vertices[2] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y + rect->size.height, 0.0, 1.0 };
-  vertices[3] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y + rect->size.height, 0.0, 1.0 };
-  vertices[4] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y,                     1.0, 0.0 };
-  vertices[5] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y + rect->size.height, 1.0, 1.0 };
+  vertices[0] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y };
+  vertices[1] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y };
+  vertices[2] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y + rect->size.height };
+  vertices[3] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y + rect->size.height };
+  vertices[4] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y };
+  vertices[5] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y + rect->size.height };
 }
 
 gsize

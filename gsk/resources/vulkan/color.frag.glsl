@@ -1,7 +1,5 @@
 #version 420 core
 
-layout(location = 0) in vec2 inTexCoord;
-
 layout(set = 0, binding = 0) uniform sampler2D inTexture;
 
 layout(push_constant) uniform PushConstants {
