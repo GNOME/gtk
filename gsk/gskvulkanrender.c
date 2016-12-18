@@ -3,11 +3,13 @@
 #include "gskvulkanrenderprivate.h"
 
 #include "gskrendererprivate.h"
-#include "gskvulkanblendpipelineprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkancommandpoolprivate.h"
 #include "gskvulkanpipelineprivate.h"
 #include "gskvulkanrenderpassprivate.h"
+
+#include "gskvulkanblendpipelineprivate.h"
+#include "gskvulkancolorpipelineprivate.h"
 
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
@@ -290,18 +292,19 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
 {
   static const struct {
     const char *name;
+    GskVulkanPipeline * (* create_func) (GskVulkanPipelineLayout *layout, const char *name, VkRenderPass render_pass);
   } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
-    { "blit" },
-    { "color" }
+    { "blit", gsk_vulkan_blend_pipeline_new },
+    { "color", gsk_vulkan_color_pipeline_new }
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
 
   if (self->pipelines[type] == NULL)
     {
-      self->pipelines[type] = gsk_vulkan_blend_pipeline_new (self->layout,
-                                                             pipeline_info[type].name,
-                                                             self->render_pass);
+      self->pipelines[type] = pipeline_info[type].create_func (self->layout,
+                                                               pipeline_info[type].name,
+                                                               self->render_pass);
     }
 
   return self->pipelines[type];

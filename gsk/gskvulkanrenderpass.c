@@ -3,6 +3,7 @@
 #include "gskvulkanrenderpassprivate.h"
 
 #include "gskvulkanblendpipelineprivate.h"
+#include "gskvulkancolorpipelineprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderer.h"
@@ -272,8 +273,12 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_FALLBACK:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
-        case GSK_VULKAN_OP_COLOR:
           op->render.vertex_count = gsk_vulkan_blend_pipeline_count_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline));
+          n_bytes += op->render.vertex_count;
+          break;
+
+        case GSK_VULKAN_OP_COLOR:
+          op->render.vertex_count = gsk_vulkan_color_pipeline_count_vertex_data (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline));
           n_bytes += op->render.vertex_count;
           break;
 
@@ -308,13 +313,25 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_FALLBACK:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
-        case GSK_VULKAN_OP_COLOR:
           {
             graphene_rect_t bounds;
 
             gsk_render_node_get_bounds (op->render.node, &bounds);
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_blend_pipeline_collect_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline),
+                                                           data + n_bytes + offset,
+                                                           &bounds);
+            n_bytes += op->render.vertex_count;
+          }
+          break;
+
+        case GSK_VULKAN_OP_COLOR:
+          {
+            graphene_rect_t bounds;
+
+            gsk_render_node_get_bounds (op->render.node, &bounds);
+            op->render.vertex_offset = offset + n_bytes;
+            gsk_vulkan_color_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline),
                                                            data + n_bytes + offset,
                                                            &bounds);
             n_bytes += op->render.vertex_count;
@@ -384,6 +401,22 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
         case GSK_VULKAN_OP_FALLBACK:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
+          if (current_pipeline != op->render.pipeline)
+            {
+              current_pipeline = op->render.pipeline;
+              vkCmdBindPipeline (command_buffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                 gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+              vkCmdBindVertexBuffers (command_buffer,
+                                      0,
+                                      1,
+                                      (VkBuffer[1]) {
+                                          gsk_vulkan_buffer_get_buffer (vertex_buffer)
+                                      },
+                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+              current_draw_index = 0;
+            }
+
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
                                    gsk_vulkan_pipeline_layout_get_pipeline_layout (layout),
@@ -394,7 +427,12 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                    },
                                    0,
                                    NULL);
-          /* fall through */                        
+
+          current_draw_index += gsk_vulkan_blend_pipeline_draw (GSK_VULKAN_BLEND_PIPELINE (current_pipeline),
+                                                                command_buffer,
+                                                                current_draw_index, 1);
+          break;
+
         case GSK_VULKAN_OP_COLOR:
           if (current_pipeline != op->render.pipeline)
             {
@@ -412,7 +450,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
               current_draw_index = 0;
             }
 
-          current_draw_index += gsk_vulkan_blend_pipeline_draw (GSK_VULKAN_BLEND_PIPELINE (current_pipeline),
+          current_draw_index += gsk_vulkan_color_pipeline_draw (GSK_VULKAN_COLOR_PIPELINE (current_pipeline),
                                                                 command_buffer,
                                                                 current_draw_index, 1);
           break;
