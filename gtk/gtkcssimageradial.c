@@ -163,7 +163,7 @@ gtk_css_image_radial_draw (GtkCssImage *image,
 
   gtk_css_image_radial_get_start_end (radial, radius, &start, &end);
 
-  pattern = cairo_pattern_create_radial (0, 0, 0, 0, 0, radius);
+  pattern = cairo_pattern_create_radial (0, 0, radius * start, 0, 0, radius * end);
   if (yscale != 1.0)
     {
       cairo_matrix_init_scale (&matrix, 1.0, 1.0 / yscale);

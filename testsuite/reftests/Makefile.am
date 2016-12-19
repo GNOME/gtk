@@ -377,6 +377,9 @@ testdata = \
 	quit-mnemonic.css \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
+	repeating-radial-gradient-at-beginning.css \
+	repeating-radial-gradient-at-beginning.ref.ui \
+	repeating-radial-gradient-at-beginning.ui \
 	reset-to-defaults.css \
 	revealer-extra-size.ref.ui \
 	revealer-extra-size.ui \
