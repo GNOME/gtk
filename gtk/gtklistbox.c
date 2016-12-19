@@ -658,7 +658,6 @@ gtk_list_box_init (GtkListBox *box)
                                                      GTK_WIDGET (box),
                                                      gtk_list_box_measure,
                                                      gtk_list_box_allocate,
-                                                     NULL,
                                                      gtk_list_box_render,
                                                      NULL,
                                                      NULL);
@@ -3790,7 +3789,6 @@ gtk_list_box_row_init (GtkListBoxRow *row)
                                                      GTK_WIDGET (row),
                                                      gtk_list_box_row_measure,
                                                      gtk_list_box_row_allocate,
-                                                     NULL,
                                                      gtk_list_box_row_render,
                                                      NULL,
                                                      NULL);

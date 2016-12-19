@@ -667,7 +667,6 @@ gtk_range_init (GtkRange *range)
                                                      GTK_WIDGET (range),
                                                      gtk_range_measure,
                                                      gtk_range_allocate,
-                                                     NULL,
                                                      gtk_range_render,
                                                      NULL, NULL);
   priv->contents_gadget = gtk_box_gadget_new ("contents",
@@ -678,7 +677,6 @@ gtk_range_init (GtkRange *range)
                                                    NULL, NULL,
                                                    gtk_range_measure_trough,
                                                    gtk_range_allocate_trough,
-                                                   NULL,
                                                    gtk_range_render_trough,
                                                    NULL, NULL);
   gtk_css_gadget_set_state (priv->trough_gadget,
@@ -1392,7 +1390,6 @@ gtk_range_set_show_fill_level (GtkRange *range,
                                                      GTK_WIDGET (range),
                                                      priv->trough_gadget, NULL,
                                                      NULL, NULL, NULL,
-                                                     NULL,
                                                      NULL, NULL);
       gtk_css_gadget_set_state (priv->fill_gadget,
                                 gtk_css_node_get_state (gtk_css_gadget_get_node (priv->trough_gadget)));
@@ -3609,7 +3606,7 @@ _gtk_range_set_has_origin (GtkRange *range,
       priv->highlight_gadget = gtk_css_custom_gadget_new ("highlight",
                                                           GTK_WIDGET (range),
                                                           priv->trough_gadget, NULL,
-                                                          NULL, NULL, NULL,
+                                                          NULL, NULL,
                                                           NULL,
                                                           NULL, NULL);
       gtk_css_gadget_set_state (priv->highlight_gadget,

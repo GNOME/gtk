@@ -47,13 +47,6 @@ typedef void    (* GtkCssAllocateFunc)                  (GtkCssGadget           
                                                          int                     baseline,
                                                          GtkAllocation          *out_clip,
                                                          gpointer                data);
-typedef gboolean (* GtkCssDrawFunc)                     (GtkCssGadget           *gadget,
-                                                         cairo_t                *cr,
-                                                         int                     x,
-                                                         int                     y,
-                                                         int                     width,
-                                                         int                     height,
-                                                         gpointer                data);
 typedef gboolean (* GtkCssSnapshotFunc)                 (GtkCssGadget           *gadget,
                                                          GtkSnapshot            *snapshot,
                                                          int                     x,
@@ -79,7 +72,6 @@ GtkCssGadget *  gtk_css_custom_gadget_new                      (const char      
                                                                 GtkCssGadget                    *next_sibling,
                                                                 GtkCssPreferredSizeFunc          get_preferred_size_func,
                                                                 GtkCssAllocateFunc               allocate_func,
-                                                                GtkCssDrawFunc                   draw_func,
                                                                 GtkCssSnapshotFunc               snapshot_func,
                                                                 gpointer                         data,
                                                                 GDestroyNotify                   destroy_func);
@@ -87,7 +79,6 @@ GtkCssGadget *  gtk_css_custom_gadget_new_for_node             (GtkCssNode      
                                                                 GtkWidget                       *owner,
                                                                 GtkCssPreferredSizeFunc          preferred_size_func,
                                                                 GtkCssAllocateFunc               allocate_func,
-                                                                GtkCssDrawFunc                   draw_func,
                                                                 GtkCssSnapshotFunc               snapshot_func,
                                                                 gpointer                         data,
                                                                 GDestroyNotify                   destroy_func);

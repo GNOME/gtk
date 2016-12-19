@@ -1216,7 +1216,6 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                   NULL,
                                                   gtk_notebook_measure_stack,
                                                   gtk_notebook_allocate_stack,
-                                                  NULL,
                                                   gtk_notebook_snapshot_stack,
                                                   NULL,
                                                   NULL);
@@ -1238,7 +1237,6 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                  NULL,
                                                  gtk_notebook_measure_tabs,
                                                  gtk_notebook_allocate_tabs,
-                                                 NULL,
                                                  gtk_notebook_snapshot_tabs,
                                                  NULL,
                                                  NULL);
@@ -4639,7 +4637,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
                                             sibling,
                                             measure_tab,
                                             allocate_tab,
-                                            NULL,
                                             snapshot_tab,
                                             page,
                                             NULL);

@@ -751,7 +751,6 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                                                              GTK_WIDGET (swatch),
                                                              gtk_color_swatch_measure,
                                                              NULL,
-                                                             NULL,
                                                              gtk_color_swatch_render,
                                                              NULL,
                                                              NULL);

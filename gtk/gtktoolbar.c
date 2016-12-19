@@ -653,7 +653,6 @@ gtk_toolbar_init (GtkToolbar *toolbar)
                                                      widget,
                                                      gtk_toolbar_measure,
                                                      gtk_toolbar_allocate,
-                                                     NULL,
                                                      gtk_toolbar_render,
                                                      NULL, NULL);
 

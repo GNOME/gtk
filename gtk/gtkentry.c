@@ -2513,7 +2513,6 @@ gtk_entry_init (GtkEntry *entry)
                                                      GTK_WIDGET (entry),
                                                      gtk_entry_measure,
                                                      gtk_entry_allocate,
-                                                     NULL,
                                                      gtk_entry_render,
                                                      NULL,
                                                      NULL);
@@ -9864,7 +9863,6 @@ gtk_entry_ensure_progress_gadget (GtkEntry *entry)
   priv->progress_gadget = gtk_css_custom_gadget_new ("progress",
                                                      GTK_WIDGET (entry),
                                                      priv->gadget,
-                                                     NULL,
                                                      NULL,
                                                      NULL,
                                                      NULL,

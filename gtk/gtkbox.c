@@ -1999,7 +1999,6 @@ gtk_box_init (GtkBox *box)
                                                         GTK_WIDGET (box),
                                                         gtk_box_get_content_size,
                                                         gtk_box_allocate_contents,
-                                                        NULL,
                                                         gtk_box_snapshot_contents,
                                                         NULL,
                                                         NULL);

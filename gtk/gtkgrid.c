@@ -1809,7 +1809,6 @@ gtk_grid_init (GtkGrid *grid)
                                                      GTK_WIDGET (grid),
                                                      gtk_grid_measure,
                                                      gtk_grid_allocate,
-                                                     NULL,
                                                      gtk_grid_render,
                                                      NULL,
                                                      NULL);

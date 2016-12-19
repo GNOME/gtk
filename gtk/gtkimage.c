@@ -373,7 +373,6 @@ gtk_image_init (GtkImage *image)
                                                      GTK_WIDGET (image),
                                                      gtk_image_get_content_size,
                                                      NULL,
-                                                     NULL,
                                                      gtk_image_render_contents,
                                                      NULL, NULL);
 

@@ -592,7 +592,6 @@ update_block_nodes (GtkLevelBar *self)
                                                              GTK_WIDGET (self),
                                                              priv->trough_gadget,
                                                              NULL,
-                                                             NULL,
                                                              NULL, NULL, NULL,
                                                              NULL, NULL);
           gtk_css_gadget_set_state (priv->block_gadget[i], gtk_css_node_get_state (trough_node));
@@ -1107,7 +1106,6 @@ gtk_level_bar_init (GtkLevelBar *self)
                                                    NULL, NULL,
                                                    gtk_level_bar_measure_trough,
                                                    gtk_level_bar_allocate_trough,
-                                                   NULL,
                                                    gtk_level_bar_render_trough,
                                                    NULL, NULL);
   trough_node = gtk_css_gadget_get_node (priv->trough_gadget);

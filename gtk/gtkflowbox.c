@@ -603,7 +603,6 @@ gtk_flow_box_child_init (GtkFlowBoxChild *child)
                                                      GTK_WIDGET (child),
                                                      gtk_flow_box_child_measure,
                                                      gtk_flow_box_child_allocate,
-                                                     NULL,
                                                      gtk_flow_box_child_render,
                                                      NULL,
                                                      NULL);
@@ -4074,7 +4073,6 @@ gtk_flow_box_init (GtkFlowBox *box)
                                                      GTK_WIDGET (box),
                                                      gtk_flow_box_measure,
                                                      gtk_flow_box_allocate,
-                                                     NULL,
                                                      gtk_flow_box_render,
                                                      NULL,
                                                      NULL);

@@ -110,17 +110,6 @@ gtk_css_gadget_real_allocate (GtkCssGadget        *gadget,
   *out_clip = *allocation;
 }
 
-static gboolean
-gtk_css_gadget_real_draw (GtkCssGadget *gadget,
-                          cairo_t      *cr,
-                          int           x,
-                          int           y,
-                          int           width,
-                          int           height)
-{
-  return FALSE;
-}
-
 static void
 gtk_css_gadget_get_clip (GtkCssGadget    *gadget,
                          graphene_rect_t *bounds)
@@ -140,18 +129,7 @@ gtk_css_gadget_real_snapshot (GtkCssGadget *gadget,
                               int           width,
                               int           height)
 {
-  graphene_rect_t bounds;
-  gboolean result;
-  cairo_t *cr;
-
-  gtk_css_gadget_get_clip (gadget, &bounds);
-  cr = gtk_snapshot_append_cairo_node (snapshot, &bounds, "Fallback<%s>", G_OBJECT_TYPE_NAME (gadget));
-
-  result = GTK_CSS_GADGET_GET_CLASS (gadget)->draw (gadget, cr, x, y, width, height);
-
-  cairo_destroy (cr);
-
-  return result;
+  return FALSE;
 }
 
 static void
@@ -297,7 +275,6 @@ gtk_css_gadget_class_init (GtkCssGadgetClass *klass)
 
   klass->get_preferred_size = gtk_css_gadget_real_get_preferred_size;
   klass->allocate = gtk_css_gadget_real_allocate;
-  klass->draw = gtk_css_gadget_real_draw;
   klass->snapshot = gtk_css_gadget_real_snapshot;
   klass->style_changed = gtk_css_gadget_real_style_changed;
 
@@ -835,142 +812,6 @@ gtk_css_gadget_allocate (GtkCssGadget        *gadget,
     gdk_rectangle_union (&tmp_clip, out_clip, out_clip);
 
   priv->clip = *out_clip;
-}
-
-/**
- * gtk_css_gadget_draw:
- * @gadget: The gadget to draw
- * @cr: The cairo context to draw to
- *
- * Will draw the gadget at the position allocated via
- * gtk_css_gadget_allocate(). It is your responsibility to make
- * sure that those 2 coordinate systems match.
- *
- * The drawing virtual function will be passed an untransformed @cr.
- * This is important because functions like
- * gtk_container_propagate_draw() depend on that.
- */
-void
-gtk_css_gadget_draw (GtkCssGadget *gadget,
-                     cairo_t      *cr)
-{
-  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
-  GtkBorder margin, border, padding;
-  gboolean draw_focus = FALSE;
-  GtkCssStyle *style;
-  int x, y, width, height;
-  int contents_x, contents_y, contents_width, contents_height;
-  GtkAllocation margin_box;
-
-  if (!gtk_css_gadget_get_visible (gadget))
-    return;
-
-  gtk_css_gadget_get_margin_box (gadget, &margin_box);
-
-  x = margin_box.x;
-  y = margin_box.y;
-  width = margin_box.width;
-  height = margin_box.height;
-
-  if (width < 0 || height < 0)
-    {
-      g_warning ("Drawing a gadget with negative dimensions. "
-                 "Did you forget to allocate a size? (node %s owner %s)",
-                 gtk_css_node_get_name (gtk_css_gadget_get_node (gadget)),
-                 G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (gadget)));
-      x = 0;
-      y = 0;
-      width = gtk_widget_get_allocated_width (priv->owner);
-      height = gtk_widget_get_allocated_height (priv->owner);
-    }
-
-  style = gtk_css_gadget_get_style (gadget);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  gtk_css_style_render_background (style,
-                                   cr,
-                                   x + margin.left,
-                                   y + margin.top,
-                                   width - margin.left - margin.right,
-                                   height - margin.top - margin.bottom);
-  gtk_css_style_render_border (style,
-                               cr,
-                               x + margin.left,
-                               y + margin.top,
-                               width - margin.left - margin.right,
-                               height - margin.top - margin.bottom);
-
-  contents_x = x + margin.left + border.left + padding.left;
-  contents_y = y + margin.top + border.top + padding.top;
-  contents_width = width - margin.left - margin.right - border.left - border.right - padding.left - padding.right;
-  contents_height = height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom;
-
-  if (contents_width > 0 && contents_height > 0)
-    draw_focus = GTK_CSS_GADGET_GET_CLASS (gadget)->draw (gadget,
-                                                          cr,
-                                                          contents_x, contents_y,
-                                                          contents_width, contents_height);
-
-  if (draw_focus)
-    gtk_css_style_render_outline (style,
-                                  cr,
-                                  x + margin.left,
-                                  y + margin.top,
-                                  width - margin.left - margin.right,
-                                  height - margin.top - margin.bottom);
-
-#if G_ENABLE_DEBUG
-  {
-    GdkDisplay *display = gtk_widget_get_display (gtk_css_gadget_get_owner (gadget));
-    GtkDebugFlag flags = gtk_get_display_debug_flags (display);
-    if G_UNLIKELY (flags & GTK_DEBUG_LAYOUT)
-      {
-        cairo_save (cr);
-        cairo_new_path (cr);
-        cairo_rectangle (cr,
-                         x + margin.left,
-                         y + margin.top,
-                         width - margin.left - margin.right,
-                         height - margin.top - margin.bottom);
-        cairo_set_line_width (cr, 1.0);
-        cairo_set_source_rgba (cr, 0, 0, 1.0, 0.33);
-        cairo_stroke (cr);
-        cairo_rectangle (cr,
-                         contents_x,
-                         contents_y,
-                         contents_width,
-                         contents_height);
-        cairo_set_line_width (cr, 1.0);
-        cairo_set_source_rgba (cr, 1.0, 0, 1.0, 0.33);
-        cairo_stroke (cr);
-        cairo_restore (cr);
-      }
-    if G_UNLIKELY (flags & GTK_DEBUG_BASELINES)
-      {
-        int baseline = priv->allocated_baseline;
-
-        if (baseline != -1)
-          {
-            if (priv->owner && !gtk_widget_get_has_window (priv->owner))
-              {
-                GtkAllocation widget_alloc;
-                gtk_widget_get_allocation (priv->owner, &widget_alloc);
-                baseline -= widget_alloc.y;
-              }
-            cairo_save (cr);
-            cairo_new_path (cr);
-            cairo_move_to (cr, x + margin.left, baseline + 0.5);
-            cairo_rel_line_to (cr, width - margin.left - margin.right, 0);
-            cairo_set_line_width (cr, 1.0);
-            cairo_set_source_rgba (cr, 1.0, 0, 0.25, 0.25);
-            cairo_stroke (cr);
-            cairo_restore (cr);
-          }
-      }
-  }
-#endif
 }
 
 /**

@@ -357,7 +357,6 @@ gtk_action_bar_init (GtkActionBar *action_bar)
                                                      GTK_WIDGET (action_bar),
                                                      gtk_action_bar_measure,
                                                      gtk_action_bar_allocate,
-                                                     NULL,
                                                      gtk_action_bar_render,
                                                      NULL,
                                                      NULL);

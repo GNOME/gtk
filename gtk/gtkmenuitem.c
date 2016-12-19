@@ -781,7 +781,6 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
                                                      GTK_WIDGET (menu_item),
                                                      gtk_menu_item_measure,
                                                      gtk_menu_item_allocate,
-                                                     NULL,
                                                      gtk_menu_item_render,
                                                      NULL, NULL);
 }

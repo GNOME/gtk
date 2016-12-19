@@ -263,7 +263,6 @@ gtk_button_box_init (GtkButtonBox *button_box)
                                                          GTK_WIDGET (button_box),
                                                          gtk_button_box_measure,
                                                          gtk_button_box_allocate,
-                                                         NULL,
                                                          gtk_button_box_render,
                                                          NULL,
                                                          NULL);

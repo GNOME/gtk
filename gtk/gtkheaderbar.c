@@ -2081,7 +2081,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
                                                      GTK_WIDGET (bar),
                                                      gtk_header_bar_get_content_size,
                                                      gtk_header_bar_allocate_contents,
-                                                     NULL,
                                                      gtk_header_bar_render_contents,
                                                      NULL,
                                                      NULL);

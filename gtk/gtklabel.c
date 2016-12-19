@@ -1376,7 +1376,6 @@ gtk_label_init (GtkLabel *label)
                                                      GTK_WIDGET (label),
                                                      gtk_label_measure,
                                                      NULL,
-                                                     NULL,
                                                      gtk_label_render,
                                                      NULL,
                                                      NULL);

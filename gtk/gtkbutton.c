@@ -479,7 +479,6 @@ gtk_button_init (GtkButton *button)
                                                      GTK_WIDGET (button),
                                                      gtk_button_measure,
                                                      gtk_button_allocate,
-                                                     NULL,
                                                      gtk_button_render,
                                                      NULL,
                                                      NULL);

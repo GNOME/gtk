@@ -865,7 +865,6 @@ gtk_switch_init (GtkSwitch *self)
                                                      GTK_WIDGET (self),
                                                      gtk_switch_get_content_size,
                                                      gtk_switch_allocate_contents,
-                                                     NULL,
                                                      gtk_switch_snapshot_trough,
                                                      NULL,
                                                      NULL);
@@ -873,7 +872,6 @@ gtk_switch_init (GtkSwitch *self)
   priv->slider_gadget = gtk_css_custom_gadget_new ("slider",
                                                    GTK_WIDGET (self),
                                                    priv->gadget,
-                                                   NULL,
                                                    NULL,
                                                    NULL,
                                                    NULL,

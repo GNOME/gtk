@@ -61,12 +61,6 @@ struct _GtkCssGadgetClass
                                                          int                     baseline,
                                                          GtkAllocation          *out_clip);
 
-  gboolean      (* draw)                                (GtkCssGadget           *gadget,
-                                                         cairo_t                *cr,
-                                                         int                     x,
-                                                         int                     y,
-                                                         int                     width,
-                                                         int                     height);
   gboolean      (* snapshot)                            (GtkCssGadget           *gadget,
                                                          GtkSnapshot            *snapshot,
                                                          int                     x,
@@ -128,8 +122,6 @@ void            gtk_css_gadget_allocate                 (GtkCssGadget           
                                                          const GtkAllocation    *allocation,
                                                          int                     baseline,
                                                          GtkAllocation          *out_clip);
-void            gtk_css_gadget_draw                     (GtkCssGadget           *gadget,
-                                                         cairo_t                *cr);
 void            gtk_css_gadget_snapshot                 (GtkCssGadget           *gadget,
                                                          GtkSnapshot            *snapshot);
 

@@ -283,7 +283,6 @@ gtk_frame_init (GtkFrame *frame)
                                                      GTK_WIDGET (frame),
                                                      gtk_frame_measure,
                                                      gtk_frame_allocate,
-                                                     NULL,
                                                      gtk_frame_render,
                                                      NULL,
                                                      NULL);

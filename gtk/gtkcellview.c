@@ -451,7 +451,6 @@ gtk_cell_view_init (GtkCellView *cellview)
                                                                GTK_WIDGET (cellview),
                                                                gtk_cell_view_measure,
                                                                gtk_cell_view_allocate,
-                                                               NULL,
                                                                gtk_cell_view_render,
                                                                NULL,
                                                                NULL);

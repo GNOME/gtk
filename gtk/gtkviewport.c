@@ -463,7 +463,6 @@ gtk_viewport_init (GtkViewport *viewport)
                                                      widget,
                                                      gtk_viewport_measure,
                                                      gtk_viewport_allocate,
-                                                     NULL,
                                                      gtk_viewport_render,
                                                      NULL, NULL);
 
