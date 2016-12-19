@@ -3266,8 +3266,7 @@ gdk_event_translate (MSG  *msg,
 	  !(windowpos->flags & SWP_NOCLIENTSIZE) ||
 	  (windowpos->flags & SWP_SHOWWINDOW))
 	{
-	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
-	      !IsIconic (msg->hwnd) &&
+	  if (!IsIconic (msg->hwnd) &&
 	      !GDK_WINDOW_DESTROYED (window))
 	    _gdk_win32_emit_configure_event (window);
 	}
