@@ -95,6 +95,13 @@ GskRenderNode *         gsk_inset_shadow_node_new               (const GskRounde
                                                                  float                     dy,
                                                                  float                     spread,
                                                                  float                     blur_radius);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_outset_shadow_node_new              (const GskRoundedRect     *outline,
+                                                                 const GdkRGBA            *color,
+                                                                 float                     dx,
+                                                                 float                     dy,
+                                                                 float                     spread,
+                                                                 float                     blur_radius);
 
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_cairo_node_new                      (const graphene_rect_t    *bounds);

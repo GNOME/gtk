@@ -866,11 +866,11 @@ draw_shadow_side (cairo_t               *cr,
 }
 
 static gboolean
-needs_blur (GskInsetShadowNode *self)
+needs_blur (double radius)
 {
   /* The code doesn't actually do any blurring for radius 1, as it
    * ends up with box filter size 1 */
-  if (self->blur_radius <= 1.0)
+  if (radius <= 1.0)
     return FALSE;
 
   return TRUE;
@@ -907,7 +907,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
   gsk_rounded_rect_init_copy (&clip_box, &self->outline);
   gsk_rounded_rect_shrink (&clip_box, -clip_radius, -clip_radius, -clip_radius, -clip_radius);
 
-  if (!needs_blur (self))
+  if (!needs_blur (self->blur_radius))
     draw_shadow (cr, TRUE, &box, &clip_box, self->blur_radius, &self->color, GSK_BLUR_NONE);
   else
     {
@@ -1023,6 +1023,220 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
   g_return_val_if_fail (color != NULL, NULL);
 
   self = (GskInsetShadowNode *) gsk_render_node_new (&GSK_INSET_SHADOW_NODE_CLASS);
+
+  gsk_rounded_rect_init_copy (&self->outline, outline);
+  self->color = *color;
+  self->dx = dx;
+  self->dy = dy;
+  self->spread = spread;
+  self->blur_radius = blur_radius;
+
+  return &self->render_node;
+}
+
+/*** GSK_OUTSET_SHADOW_NODE ***/
+
+typedef struct _GskOutsetShadowNode GskOutsetShadowNode;
+
+struct _GskOutsetShadowNode
+{
+  GskRenderNode render_node;
+
+  GskRoundedRect outline;
+  GdkRGBA color;
+  float dx;
+  float dy;
+  float spread;
+  float blur_radius;
+};
+
+static void
+gsk_outset_shadow_node_finalize (GskRenderNode *node)
+{
+}
+
+static void
+gsk_outset_shadow_node_make_immutable (GskRenderNode *node)
+{
+}
+
+static void
+gsk_outset_shadow_get_extents (GskOutsetShadowNode *self,
+                               float               *top,
+                               float               *right,
+                               float               *bottom,
+                               float               *left)
+{
+  float clip_radius;
+
+  clip_radius = gsk_cairo_blur_compute_pixels (self->blur_radius);
+  *top = MAX (0, clip_radius + self->spread - self->dy);
+  *right = MAX (0, ceil (clip_radius + self->spread + self->dx));
+  *bottom = MAX (0, ceil (clip_radius + self->spread + self->dy));
+  *left = MAX (0, ceil (clip_radius + self->spread - self->dx));
+}
+
+static void
+gsk_outset_shadow_node_draw (GskRenderNode *node,
+                             cairo_t       *cr)
+{
+  GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
+  GskRoundedRect box, clip_box;
+  int clip_radius;
+  double x1c, y1c, x2c, y2c;
+  float top, right, bottom, left;
+
+  /* We don't need to draw invisible shadows */
+  if (gdk_rgba_is_clear (&self->color))
+    return;
+
+  cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
+  if (gsk_rounded_rect_contains_rect (&self->outline, &GRAPHENE_RECT_INIT (x1c, y1c, x2c - x1c, y2c - y1c)))
+    return;
+
+  clip_radius = gsk_cairo_blur_compute_pixels (self->blur_radius);
+
+  cairo_save (cr);
+
+  gsk_rounded_rect_init_copy (&clip_box, &self->outline);
+  gsk_outset_shadow_get_extents (self, &top, &right, &bottom, &left);
+  gsk_rounded_rect_shrink (&clip_box, -top, -right, -bottom, -left);
+
+  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+  gsk_rounded_rect_path (&self->outline, cr);
+  cairo_rectangle (cr,
+                   clip_box.bounds.origin.x, clip_box.bounds.origin.y,
+                   clip_box.bounds.size.width, clip_box.bounds.size.height);
+
+  cairo_clip (cr);
+
+  gsk_rounded_rect_init_copy (&box, &self->outline);
+  gsk_rounded_rect_offset (&box, self->dx, self->dy);
+  gsk_rounded_rect_shrink (&box, -self->spread, -self->spread, -self->spread, -self->spread);
+
+  if (!needs_blur (self->blur_radius))
+    draw_shadow (cr, FALSE, &box, &clip_box, self->blur_radius, &self->color, GSK_BLUR_NONE);
+  else
+    {
+      int i;
+      cairo_region_t *remaining;
+      cairo_rectangle_int_t r;
+
+      /* For the blurred case we divide the rendering into 9 parts,
+       * 4 of the corners, 4 for the horizonat/vertical lines and
+       * one for the interior. We make the non-interior parts
+       * large enought to fit the full radius of the blur, so that
+       * the interior part can be drawn solidly.
+       */
+
+      /* In the outset case we want to paint the entire box, plus as far
+       * as the radius reaches from it */
+      r.x = floor (box.bounds.origin.x - clip_radius);
+      r.y = floor (box.bounds.origin.y - clip_radius);
+      r.width = ceil (box.bounds.origin.x + box.bounds.size.width + clip_radius) - r.x;
+      r.height = ceil (box.bounds.origin.y + box.bounds.size.height + clip_radius) - r.y;
+
+      remaining = cairo_region_create_rectangle (&r);
+
+      /* First do the corners of box */
+      for (i = 0; i < 4; i++)
+	{
+	  cairo_save (cr);
+          /* Always clip with remaining to ensure we never draw any area twice */
+          gdk_cairo_region (cr, remaining);
+          cairo_clip (cr);
+	  draw_shadow_corner (cr, FALSE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
+	  cairo_restore (cr);
+
+	  /* We drew the region, remove it from remaining */
+	  cairo_region_subtract_rectangle (remaining, &r);
+	}
+
+      /* Then the sides */
+      for (i = 0; i < 4; i++)
+	{
+	  cairo_save (cr);
+          /* Always clip with remaining to ensure we never draw any area twice */
+          gdk_cairo_region (cr, remaining);
+          cairo_clip (cr);
+	  draw_shadow_side (cr, FALSE, &box, &clip_box, self->blur_radius, &self->color, i, &r);
+	  cairo_restore (cr);
+
+	  /* We drew the region, remove it from remaining */
+	  cairo_region_subtract_rectangle (remaining, &r);
+	}
+
+      /* Then the rest, which needs no blurring */
+
+      cairo_save (cr);
+      gdk_cairo_region (cr, remaining);
+      cairo_clip (cr);
+      draw_shadow (cr, FALSE, &box, &clip_box, self->blur_radius, &self->color, GSK_BLUR_NONE);
+      cairo_restore (cr);
+
+      cairo_region_destroy (remaining);
+    }
+
+  cairo_restore (cr);
+}
+
+static void
+gsk_outset_shadow_node_get_bounds (GskRenderNode   *node,
+                                   graphene_rect_t *bounds)
+{
+  GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
+  float top, right, bottom, left;
+
+  gsk_outset_shadow_get_extents (self, &top, &right, &bottom, &left);
+
+  graphene_rect_init_from_rect (bounds, &self->outline.bounds); 
+
+  bounds->origin.x -= left;
+  bounds->origin.y -= top;
+  bounds->size.width += left + right;
+  bounds->size.height += top + bottom;
+}
+
+static const GskRenderNodeClass GSK_OUTSET_SHADOW_NODE_CLASS = {
+  GSK_OUTSET_SHADOW_NODE,
+  sizeof (GskOutsetShadowNode),
+  "GskOutsetShadowNode",
+  gsk_outset_shadow_node_finalize,
+  gsk_outset_shadow_node_make_immutable,
+  gsk_outset_shadow_node_draw,
+  gsk_outset_shadow_node_get_bounds
+};
+
+/**
+ * gsk_outset_shadow_node_new:
+ * @outline: outline of the region surrounded by shadow
+ * @color: color of the shadow
+ * @dx: horizontal offset of shadow
+ * @dy: vertical offset of shadow
+ * @spread: how far the shadow spreads towards the inside
+ * @blur_radius: how much blur to apply to the shadow
+ *
+ * Creates a #GskRenderNode that will render an outset shadow
+ * around the box given by @outline.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_outset_shadow_node_new (const GskRoundedRect *outline,
+                            const GdkRGBA        *color,
+                            float                 dx,
+                            float                 dy,
+                            float                 spread,
+                            float                 blur_radius)
+{
+  GskOutsetShadowNode *self;
+
+  g_return_val_if_fail (outline != NULL, NULL);
+  g_return_val_if_fail (color != NULL, NULL);
+
+  self = (GskOutsetShadowNode *) gsk_render_node_new (&GSK_OUTSET_SHADOW_NODE_CLASS);
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   self->color = *color;

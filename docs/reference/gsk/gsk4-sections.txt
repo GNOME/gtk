@@ -38,6 +38,7 @@ gsk_repeating_linear_gradient_node_new
 gsk_border_node_new
 gsk_texture_node_new
 gsk_inset_shadow_node_new
+gsk_outset_shadow_node_new
 gsk_cairo_node_new
 gsk_cairo_node_get_draw_context
 gsk_container_node_new

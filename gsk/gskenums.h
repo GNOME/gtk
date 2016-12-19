@@ -34,6 +34,7 @@
  * @GSK_BORDER_NODE: A node stroking a border around an area
  * @GSK_TEXTURE_NODE: A node drawing a #GskTexture
  * @GSK_INSET_SHADOW_NODE: A node drawing an inset shadow
+ * @GSK_OUTSET_SHADOW_NODE: A node drawing an outset shadow
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a
  *     matrix transform
  * @GSK_OPACITY_NODE: A node that changes the opacity of its child
@@ -57,6 +58,7 @@ typedef enum {
   GSK_BORDER_NODE,
   GSK_TEXTURE_NODE,
   GSK_INSET_SHADOW_NODE,
+  GSK_OUTSET_SHADOW_NODE,
   GSK_TRANSFORM_NODE,
   GSK_OPACITY_NODE,
   GSK_CLIP_NODE,
