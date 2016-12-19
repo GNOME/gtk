@@ -119,8 +119,8 @@ static void gtk_frame_get_property (GObject     *object,
 				    guint        param_id,
 				    GValue      *value,
 				    GParamSpec  *pspec);
-static gboolean gtk_frame_draw      (GtkWidget      *widget,
-				     cairo_t        *cr);
+static void gtk_frame_snapshot      (GtkWidget      *widget,
+				     GtkSnapshot    *snapshot);
 static void gtk_frame_size_allocate (GtkWidget      *widget,
 				     GtkAllocation  *allocation);
 static void gtk_frame_remove        (GtkContainer   *container,
@@ -163,7 +163,7 @@ static void     gtk_frame_allocate       (GtkCssGadget        *gadget,
                                           GtkAllocation       *out_clip,
                                           gpointer             data);
 static gboolean gtk_frame_render         (GtkCssGadget        *gadget,
-                                          cairo_t             *cr,
+                                          GtkSnapshot         *snapshot,
                                           int                  x,
                                           int                  y,
                                           int                  width,
@@ -231,7 +231,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 
-  widget_class->draw = gtk_frame_draw;
+  widget_class->snapshot = gtk_frame_snapshot;
   widget_class->size_allocate = gtk_frame_size_allocate;
   widget_class->measure = gtk_frame_measure_;
 
@@ -283,8 +283,8 @@ gtk_frame_init (GtkFrame *frame)
                                                      GTK_WIDGET (frame),
                                                      gtk_frame_measure,
                                                      gtk_frame_allocate,
-                                                     gtk_frame_render,
                                                      NULL,
+                                                     gtk_frame_render,
                                                      NULL,
                                                      NULL);
 }
@@ -658,18 +658,16 @@ gtk_frame_get_shadow_type (GtkFrame *frame)
   return frame->priv->shadow_type;
 }
 
-static gboolean
-gtk_frame_draw (GtkWidget *widget,
-		cairo_t   *cr)
+static void
+gtk_frame_snapshot (GtkWidget   *widget,
+		    GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_draw (GTK_FRAME (widget)->priv->gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (GTK_FRAME (widget)->priv->gadget, snapshot);
 }
 
 static gboolean
 gtk_frame_render (GtkCssGadget *gadget,
-                  cairo_t      *cr,
+		  GtkSnapshot  *snapshot,
                   int           x,
                   int           y,
                   int           width,
@@ -680,7 +678,7 @@ gtk_frame_render (GtkCssGadget *gadget,
 
   widget = gtk_css_gadget_get_owner (gadget);
 
-  GTK_WIDGET_CLASS (gtk_frame_parent_class)->draw (widget, cr);
+  GTK_WIDGET_CLASS (gtk_frame_parent_class)->snapshot (widget, snapshot);
 
   return FALSE;
 }
