@@ -90,9 +90,6 @@ void              gtk_cell_view_set_displayed_row       (GtkCellView     *cell_v
 GDK_AVAILABLE_IN_ALL
 GtkTreePath      *gtk_cell_view_get_displayed_row       (GtkCellView     *cell_view);
 GDK_AVAILABLE_IN_ALL
-void              gtk_cell_view_set_background_rgba     (GtkCellView     *cell_view,
-                                                         const GdkRGBA   *rgba);
-GDK_AVAILABLE_IN_ALL
 gboolean          gtk_cell_view_get_draw_sensitive      (GtkCellView     *cell_view);
 GDK_AVAILABLE_IN_ALL
 void              gtk_cell_view_set_draw_sensitive      (GtkCellView     *cell_view,

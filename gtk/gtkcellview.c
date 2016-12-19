@@ -143,14 +143,11 @@ struct _GtkCellViewPrivate
 
   GtkCssGadget        *gadget;
 
-  GdkRGBA              background;
-
   gulong               size_changed_id;
   gulong               row_changed_id;
 
   GtkOrientation       orientation;
 
-  guint                background_set : 1;
   guint                draw_sensitive : 1;
   guint                fit_model      : 1;
 };
@@ -161,9 +158,6 @@ enum
 {
   PROP_0,
   PROP_ORIENTATION,
-  PROP_BACKGROUND,
-  PROP_BACKGROUND_RGBA,
-  PROP_BACKGROUND_SET,
   PROP_MODEL,
   PROP_CELL_AREA,
   PROP_CELL_AREA_CONTEXT,
@@ -198,29 +192,6 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 
   /* properties */
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
-
-  g_object_class_install_property (gobject_class,
-                                   PROP_BACKGROUND,
-                                   g_param_spec_string ("background",
-                                                        P_("Background color name"),
-                                                        P_("Background color as a string"),
-                                                        NULL,
-                                                        GTK_PARAM_WRITABLE));
-
-  /**
-   * GtkCellView:background-rgba:
-   *
-   * The background color as a #GdkRGBA
-   *
-   * Since: 3.0
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_BACKGROUND_RGBA,
-                                   g_param_spec_boxed ("background-rgba",
-                                                      P_("Background RGBA color"),
-                                                      P_("Background color as a GdkRGBA"),
-                                                      GDK_TYPE_RGBA,
-                                                      GTK_PARAM_READWRITE));
 
   /**
    * GtkCellView:model:
@@ -318,13 +289,6 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							  FALSE,
 							  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
-
-  ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
-                P_("Background set"),
-                P_("Whether this tag affects the background color"));
-
   gtk_widget_class_set_css_name (widget_class, "cellview");
 }
 
@@ -378,12 +342,6 @@ gtk_cell_view_get_property (GObject    *object,
     case PROP_ORIENTATION:
       g_value_set_enum (value, view->priv->orientation);
       break;
-    case PROP_BACKGROUND_RGBA:
-      g_value_set_boxed (value, &view->priv->background);
-      break;
-    case PROP_BACKGROUND_SET:
-      g_value_set_boolean (value, view->priv->background_set);
-      break;
     case PROP_MODEL:
       g_value_set_object (value, view->priv->model);
       break;
@@ -427,26 +385,6 @@ gtk_cell_view_set_property (GObject      *object,
           _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
           g_object_notify_by_pspec (object, pspec);
         }
-      break;
-    case PROP_BACKGROUND:
-      {
-        GdkRGBA color;
-
-	if (!g_value_get_string (value))
-          gtk_cell_view_set_background_rgba (view, NULL);
-	else if (gdk_rgba_parse (&color, g_value_get_string (value)))
-          gtk_cell_view_set_background_rgba (view, &color);
-	else
-	  g_warning ("Don't know color '%s'", g_value_get_string (value));
-
-        g_object_notify (object, "background-rgba");
-      }
-      break;
-    case PROP_BACKGROUND_RGBA:
-      gtk_cell_view_set_background_rgba (view, g_value_get_boxed (value));
-      break;
-    case PROP_BACKGROUND_SET:
-      view->priv->background_set = g_value_get_boolean (value);
       break;
     case PROP_MODEL:
       gtk_cell_view_set_model (view, g_value_get_object (value));
@@ -815,14 +753,6 @@ gtk_cell_view_render (GtkCssGadget *gadget,
   area.y = y;
   area.width  = width;
   area.height = height;
-
-  /* "blank" background */
-  if (cellview->priv->background_set)
-    {
-      gdk_cairo_rectangle (cr, &area);
-      gdk_cairo_set_source_rgba (cr, &cellview->priv->background);
-      cairo_fill (cr);
-    }
 
   /* set cell data (if available) */
   if (cellview->priv->displayed_row)
@@ -1253,43 +1183,6 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
     return NULL;
 
   return gtk_tree_row_reference_get_path (cell_view->priv->displayed_row);
-}
-
-/**
- * gtk_cell_view_set_background_rgba:
- * @cell_view: a #GtkCellView
- * @rgba: the new background color
- *
- * Sets the background color of @cell_view.
- *
- * Since: 3.0
- */
-void
-gtk_cell_view_set_background_rgba (GtkCellView   *cell_view,
-                                   const GdkRGBA *rgba)
-{
-  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
-
-  if (rgba)
-    {
-      if (!cell_view->priv->background_set)
-        {
-          cell_view->priv->background_set = TRUE;
-          g_object_notify (G_OBJECT (cell_view), "background-set");
-        }
-
-      cell_view->priv->background = *rgba;
-    }
-  else
-    {
-      if (cell_view->priv->background_set)
-        {
-          cell_view->priv->background_set = FALSE;
-          g_object_notify (G_OBJECT (cell_view), "background-set");
-        }
-    }
-
-  gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
 /**
