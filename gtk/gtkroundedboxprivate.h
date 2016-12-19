@@ -62,16 +62,6 @@ void            _gtk_rounded_box_path_left                      (const GskRounde
                                                                  cairo_t                *cr);
 void            _gtk_rounded_box_clip_path                      (const GskRoundedRect   *box,
                                                                  cairo_t                *cr);
-gboolean        _gtk_rounded_box_intersects_rectangle           (const GskRoundedRect   *box,
-                                                                 gdouble                 x1,
-                                                                 gdouble                 y1,
-                                                                 gdouble                 x2,
-                                                                 gdouble                 y2);
-gboolean        _gtk_rounded_box_contains_rectangle             (const GskRoundedRect   *box,
-                                                                 gdouble                 x1,
-                                                                 gdouble                 y1,
-                                                                 gdouble                 x2,
-                                                                 gdouble                 y2);
 
 G_END_DECLS
 

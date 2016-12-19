@@ -290,7 +290,7 @@ gsk_rounded_rect_shrink (GskRoundedRect *self,
  * Returns: %TRUE if the rectangle is rectilinear
  **/
 gboolean
-gsk_rounded_rect_is_rectilinear (GskRoundedRect *self)
+gsk_rounded_rect_is_rectilinear (const GskRoundedRect *self)
 {
   guint i;
 
@@ -300,6 +300,124 @@ gsk_rounded_rect_is_rectilinear (GskRoundedRect *self)
           self->corner[i].height > 0)
         return FALSE;
     }
+
+  return TRUE;
+}
+
+gboolean
+ellipsis_contains_point (const graphene_size_t *ellipsis,
+                         const graphene_point_t *point)
+{
+  return (point->x * point->x) / (ellipsis->width * ellipsis->width)
+       + (point->y * point->y) / (ellipsis->height * ellipsis->height) <= 1;
+}
+
+/**
+ * gsk_rounded_rect_contains_point:
+ * @self: a #GskRoundedRect
+ * @point: the point to check
+ *
+ * Checks if the given @point is inside the rounded rectangle. This function
+ * returns %FALSE if the point is in the rounded corner areas.
+ *
+ * Returns: %TRUE if the @point is inside the rounded rectangle
+ **/
+gboolean
+gsk_rounded_rect_contains_point (const GskRoundedRect   *self,
+                                 const graphene_point_t *point)
+{
+  if (!graphene_rect_contains_point (&self->bounds, point))
+    return FALSE;
+
+  if (self->bounds.origin.x + self->corner[GSK_CORNER_TOP_LEFT].width > point->x &&
+      self->bounds.origin.y + self->corner[GSK_CORNER_TOP_LEFT].height > point->y &&
+      !ellipsis_contains_point (&self->corner[GSK_CORNER_TOP_LEFT],
+                                &GRAPHENE_POINT_INIT (
+                                    self->bounds.origin.x + self->corner[GSK_CORNER_TOP_LEFT].width - point->x,
+                                    self->bounds.origin.y + self->corner[GSK_CORNER_TOP_LEFT].height- point->y
+                                )))
+    return FALSE;
+
+  if (self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_TOP_RIGHT].width < point->x &&
+      self->bounds.origin.y + self->corner[GSK_CORNER_TOP_RIGHT].height > point->y &&
+      !ellipsis_contains_point (&self->corner[GSK_CORNER_TOP_RIGHT],
+                                &GRAPHENE_POINT_INIT (
+                                    self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_TOP_RIGHT].width - point->x,
+                                    self->bounds.origin.y + self->corner[GSK_CORNER_TOP_RIGHT].height- point->y
+                                )))
+    return FALSE;
+
+  if (self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width > point->x &&
+      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height > point->y &&
+      !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_LEFT],
+                                &GRAPHENE_POINT_INIT (
+                                    self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width - point->x,
+                                    self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height- point->y
+                                )))
+    return FALSE;
+
+  if (self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width < point->x &&
+      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height > point->y &&
+      !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_RIGHT],
+                                &GRAPHENE_POINT_INIT (
+                                    self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width - point->x,
+                                    self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height- point->y
+                                )))
+    return FALSE;
+
+  return TRUE;
+}
+
+/**
+ * gsk_rounded_rect_contains_rect:
+ * @self: a #GskRoundedRect
+ * @rect: the rectangle to check
+ *
+ * Checks if the given @rect is contained inside the rounded rectangle.
+ * This function returns %FALSE if @rect extends into one of the rounded
+ * corner areas.
+ *
+ * Returns: %TRUE if the @rect is fully contained inside the rounded rectangle
+ **/
+gboolean
+gsk_rounded_rect_contains_rect (const GskRoundedRect  *self,
+                                const graphene_rect_t *rect)
+{
+  if (!graphene_rect_contains_rect (&self->bounds, rect))
+    return FALSE;
+
+  if (!gsk_rounded_rect_contains_point (self, &rect->origin) ||
+      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y)) ||
+      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x, rect->origin.y + rect->size.height)) ||
+      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y + rect->size.height)))
+    return FALSE;
+
+  return TRUE;
+}
+
+/**
+ * gsk_rounded_rect_intersects_rect:
+ * @self: a #GskRoundedRect
+ * @rect: the rectangle to check
+ *
+ * Checks if part of the given @rect is contained inside the rounded rectangle.
+ * This function returns %FALSE if @rect only extends into one of the rounded
+ * corner areas but not into the rounded rectangle itself.
+ *
+ * Returns: %TRUE if the @rect intersects with the rounded rectangle
+ **/
+gboolean
+gsk_rounded_rect_intersects_rect (const GskRoundedRect  *self,
+                                  const graphene_rect_t *rect)
+{
+  if (!graphene_rect_intersection (&self->bounds, rect, NULL))
+    return FALSE;
+
+  if (!gsk_rounded_rect_contains_point (self, &rect->origin) &&
+      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y)) &&
+      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x, rect->origin.y + rect->size.height)) &&
+      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y + rect->size.height)))
+    return FALSE;
 
   return TRUE;
 }

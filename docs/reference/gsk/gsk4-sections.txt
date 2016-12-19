@@ -77,4 +77,7 @@ gsk_rounded_rect_normalize
 gsk_rounded_rect_offset
 gsk_rounded_rect_shrink
 gsk_rounded_rect_is_rectilinear
+gsk_rounded_rect_contains_point
+gsk_rounded_rect_contains_rect
+gsk_rounded_rect_intersects_rect
 </SECTION>

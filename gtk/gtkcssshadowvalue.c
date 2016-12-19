@@ -913,8 +913,8 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
     return;
 
   cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
-  if ((shadow->inset && !_gtk_rounded_box_intersects_rectangle (padding_box, x1c, y1c, x2c, y2c)) ||
-      (!shadow->inset && _gtk_rounded_box_contains_rectangle (padding_box, x1c, y1c, x2c, y2c)))
+  if ((shadow->inset && !gsk_rounded_rect_intersects_rect (padding_box, &GRAPHENE_RECT_INIT (x1c, y1c, x2c - x1c, y2c - y1c))) ||
+      (!shadow->inset && gsk_rounded_rect_contains_rect (padding_box, &GRAPHENE_RECT_INIT (x1c, y1c, x2c - x1c, y2c - y1c))))
     return;
 
   cairo_save (cr);
