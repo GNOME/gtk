@@ -33,9 +33,14 @@ void            _gtk_rounded_box_init_rect                      (GskRoundedRect 
                                                                  double                  y,
                                                                  double                  width,
                                                                  double                  height);
-
-void            _gtk_rounded_box_apply_border_radius_for_style  (GskRoundedRect         *box,
-                                                                 GtkCssStyle            *style);
+void            gtk_rounded_boxes_init_for_style                (GskRoundedRect         *border_box,
+                                                                 GskRoundedRect         *padding_box,
+                                                                 GskRoundedRect         *content_box,
+                                                                 GtkCssStyle            *style,
+                                                                 double                  x,
+                                                                 double                  y,
+                                                                 double                  width,
+                                                                 double                  height);
 
 void            _gtk_rounded_box_apply_outline_radius_for_style (GskRoundedRect         *box,
                                                                  GtkCssStyle            *style);

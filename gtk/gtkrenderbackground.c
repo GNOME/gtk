@@ -529,39 +529,13 @@ gtk_theming_background_init (GtkThemingBackground *bg,
                              double                width,
                              double                height)
 {
-  GtkBorder border, padding;
-
   bg->style = style;
 
-  border.top = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border.right = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border.bottom = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border.left = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-  padding.top = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_PADDING_TOP), 100);
-  padding.right = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_PADDING_RIGHT), 100);
-  padding.bottom = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_PADDING_BOTTOM), 100);
-  padding.left = _gtk_css_number_value_get (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
-
-  /* In the CSS box model, by default the background positioning area is
-   * the padding-box, i.e. all the border-box minus the borders themselves,
-   * which determines also its default size, see
-   * http://dev.w3.org/csswg/css3-background/#background-origin
-   *
-   * In the future we might want to support different origins or clips, but
-   * right now we just shrink to the default.
-   */
-  _gtk_rounded_box_init_rect (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], 0, 0, width, height);
-  _gtk_rounded_box_apply_border_radius_for_style (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], bg->style);
-
-  bg->boxes[GTK_CSS_AREA_PADDING_BOX] = bg->boxes[GTK_CSS_AREA_BORDER_BOX];
-  gsk_rounded_rect_shrink (&bg->boxes[GTK_CSS_AREA_PADDING_BOX],
-			   border.top, border.right,
-			   border.bottom, border.left);
-
-  bg->boxes[GTK_CSS_AREA_CONTENT_BOX] = bg->boxes[GTK_CSS_AREA_PADDING_BOX];
-  gsk_rounded_rect_shrink (&bg->boxes[GTK_CSS_AREA_CONTENT_BOX],
-			   padding.top, padding.right,
-			   padding.bottom, padding.left);
+  gtk_rounded_boxes_init_for_style (&bg->boxes[GTK_CSS_AREA_BORDER_BOX],
+                                    &bg->boxes[GTK_CSS_AREA_PADDING_BOX],
+                                    &bg->boxes[GTK_CSS_AREA_CONTENT_BOX],
+                                    style,
+                                    0, 0, width, height);
 }
 
 void

@@ -166,7 +166,6 @@ IGNORE_HFILES = \
 	gtkrenderbackgroundprivate.h	\
 	gtkrenderborderprivate.h	\
 	gtkrendericonprivate.h		\
-	gtkrenderprivate.h		\
 	gtkroundedboxprivate.h		\
 	gtkscaleprivate.h		\
 	gtksearchengine.h		\

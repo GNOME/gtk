@@ -28,7 +28,6 @@
 #include "gtkaccessible.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkrenderprivate.h"
 #include "gtksnapshot.h"
 
 #include <math.h>

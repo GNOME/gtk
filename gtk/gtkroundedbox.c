@@ -20,6 +20,7 @@
 #include "gtkroundedboxprivate.h"
 
 #include "gtkcsscornervalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkstylecontextprivate.h"
 
@@ -121,17 +122,50 @@ _gtk_rounded_box_apply_border_radius (GskRoundedRect *box,
 }
 
 void
-_gtk_rounded_box_apply_border_radius_for_style (GskRoundedRect   *box,
-                                                GtkCssStyle      *style)
+gtk_rounded_boxes_init_for_style (GskRoundedRect *border_box,
+                                  GskRoundedRect *padding_box,
+                                  GskRoundedRect *content_box,
+                                  GtkCssStyle    *style,
+                                  double          x,
+                                  double          y,
+                                  double          width,
+                                  double          height)
 {
   GtkCssValue *corner[4];
+  GskRoundedRect box;
+
+  gsk_rounded_rect_init_from_rect (&box, &GRAPHENE_RECT_INIT (x, y, width, height), 0);
 
   corner[GSK_CORNER_TOP_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
   corner[GSK_CORNER_TOP_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
   corner[GSK_CORNER_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
   corner[GSK_CORNER_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
 
-  _gtk_rounded_box_apply_border_radius (box, corner);
+  _gtk_rounded_box_apply_border_radius (&box, corner);
+
+  if (border_box)
+    gsk_rounded_rect_init_copy (border_box, &box);
+
+  if (padding_box || content_box)
+    {
+      gsk_rounded_rect_shrink (&box,
+                               _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100),
+                               _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100),
+                               _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100),
+                               _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100));
+      if (padding_box)
+        gsk_rounded_rect_init_copy (padding_box, &box);
+
+      if (content_box)
+        {
+          gsk_rounded_rect_shrink (&box,
+                                   _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100),
+                                   _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_RIGHT), 100),
+                                   _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_BOTTOM), 100),
+                                   _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_LEFT), 100));
+          gsk_rounded_rect_init_copy (content_box, &box);
+        }
+    }
 }
 
 void

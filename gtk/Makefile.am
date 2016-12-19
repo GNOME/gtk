@@ -526,7 +526,6 @@ gtk_private_h_sources =		\
 	gtkrenderbackgroundprivate.h \
 	gtkrenderborderprivate.h \
 	gtkrendericonprivate.h	\
-	gtkrenderprivate.h	\
 	gtkresources.h		\
 	gtkroundedboxprivate.h	\
 	gtksearchengine.h	\

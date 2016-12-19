@@ -26,7 +26,6 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkrenderprivate.h"
 #include "gtkpango.h"
 
 #include "gsk/gskcairoblurprivate.h"

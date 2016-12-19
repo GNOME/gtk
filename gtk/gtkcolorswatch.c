@@ -28,14 +28,15 @@
 #include "gtkmenushell.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkrenderprivate.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
+#include "gtkroundedboxprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
+#include "gsk/gskroundedrectprivate.h"
 
 /*
  * GtkColorSwatch has two CSS nodes, the main one named colorswatch
@@ -120,6 +121,7 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
       GtkAllocation allocation, border_allocation;
+      GskRoundedRect content_box;
 
       gtk_widget_get_allocation (widget, &allocation);
       gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
@@ -127,11 +129,15 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
       border_allocation.x -= allocation.x;
       border_allocation.y -= allocation.y;
 
-      gtk_render_content_path (context, cr,
-                               border_allocation.x,
-                               border_allocation.y,
-                               border_allocation.width,
-                               border_allocation.height);
+      gtk_rounded_boxes_init_for_style (NULL,
+                                        NULL,
+                                        &content_box,
+                                        gtk_style_context_lookup_style (context),
+                                        border_allocation.x,
+                                        border_allocation.y,
+                                        border_allocation.width,
+                                        border_allocation.height);
+      gsk_rounded_rect_path (&content_box, cr);
 
       if (swatch->priv->use_alpha)
         {

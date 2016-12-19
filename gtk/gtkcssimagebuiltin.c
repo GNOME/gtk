@@ -26,7 +26,6 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkhslaprivate.h"
-#include "gtkrenderprivate.h"
 
 #include <math.h>
 
