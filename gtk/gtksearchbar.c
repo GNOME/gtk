@@ -34,6 +34,7 @@
 #include "gtkrender.h"
 #include "gtksearchbar.h"
 #include "gtksearchentryprivate.h"
+#include "gtksnapshot.h"
 
 /**
  * SECTION:gtksearchbar
@@ -361,9 +362,9 @@ gtk_search_bar_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_search_bar_parent_class)->dispose (object);
 }
 
-static gboolean
-gtk_search_bar_draw (GtkWidget *widget,
-                     cairo_t *cr)
+static void
+gtk_search_bar_snapshot (GtkWidget   *widget,
+                         GtkSnapshot *snapshot)
 {
   gint width, height;
   GtkStyleContext *context;
@@ -372,12 +373,10 @@ gtk_search_bar_draw (GtkWidget *widget,
   height = gtk_widget_get_allocated_height (widget);
   context = gtk_widget_get_style_context (widget);
 
-  gtk_render_background (context, cr, 0, 0, width, height);
-  gtk_render_frame (context, cr, 0, 0, width, height);
+  gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
+  gtk_snapshot_render_frame (snapshot, context, 0, 0, width, height);
 
-  GTK_WIDGET_CLASS (gtk_search_bar_parent_class)->draw (widget, cr);
-
-  return FALSE;
+  GTK_WIDGET_CLASS (gtk_search_bar_parent_class)->snapshot (widget, snapshot);
 }
 
 static void
@@ -390,7 +389,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   object_class->dispose = gtk_search_bar_dispose;
   object_class->set_property = gtk_search_bar_set_property;
   object_class->get_property = gtk_search_bar_get_property;
-  widget_class->draw = gtk_search_bar_draw;
+  widget_class->snapshot = gtk_search_bar_snapshot;
 
   container_class->add = gtk_search_bar_add;
 
