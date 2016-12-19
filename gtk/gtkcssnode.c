@@ -1167,19 +1167,6 @@ gtk_css_node_get_state (GtkCssNode *cssnode)
   return gtk_css_node_declaration_get_state (cssnode->decl);
 }
 
-void
-gtk_css_node_set_junction_sides (GtkCssNode       *cssnode,
-                                 GtkJunctionSides  junction_sides)
-{
-  gtk_css_node_declaration_set_junction_sides (&cssnode->decl, junction_sides);
-}
-
-GtkJunctionSides
-gtk_css_node_get_junction_sides (GtkCssNode *cssnode)
-{
-  return gtk_css_node_declaration_get_junction_sides (cssnode->decl);
-}
-
 static void
 gtk_css_node_clear_classes (GtkCssNode *cssnode)
 {

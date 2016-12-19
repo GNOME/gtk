@@ -24,7 +24,6 @@
 
 struct _GtkCssNodeDeclaration {
   guint refcount;
-  GtkJunctionSides junction_sides;
   GType type;
   const /* interned */ char *name;
   const /* interned */ char *id;
@@ -101,7 +100,6 @@ gtk_css_node_declaration_new (void)
   static GtkCssNodeDeclaration empty = {
     1, /* need to own a ref ourselves so the copy-on-write path kicks in when people change things */
     0,
-    0,
     NULL,
     NULL,
     0,
@@ -127,25 +125,6 @@ gtk_css_node_declaration_unref (GtkCssNodeDeclaration *decl)
     return;
 
   g_free (decl);
-}
-
-gboolean
-gtk_css_node_declaration_set_junction_sides (GtkCssNodeDeclaration **decl,
-                                             GtkJunctionSides        junction_sides)
-{
-  if ((*decl)->junction_sides == junction_sides)
-    return FALSE;
-  
-  gtk_css_node_declaration_make_writable (decl);
-  (*decl)->junction_sides = junction_sides;
-
-  return TRUE;
-}
-
-GtkJunctionSides
-gtk_css_node_declaration_get_junction_sides (const GtkCssNodeDeclaration *decl)
-{
-  return decl->junction_sides;
 }
 
 gboolean
@@ -382,7 +361,6 @@ gtk_css_node_declaration_hash (gconstpointer elem)
       hash += classes[i];
     }
 
-  hash ^= ((guint) decl->junction_sides) << (sizeof (guint) * 8 - 5);
   hash ^= decl->state;
 
   return hash;
@@ -422,9 +400,6 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
       if (classes1[i] != classes2[i])
         return FALSE;
     }
-
-  if (decl1->junction_sides != decl2->junction_sides)
-    return FALSE;
 
   return TRUE;
 }

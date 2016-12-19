@@ -894,15 +894,13 @@ gtk_css_gadget_draw (GtkCssGadget *gadget,
                                    x + margin.left,
                                    y + margin.top,
                                    width - margin.left - margin.right,
-                                   height - margin.top - margin.bottom,
-                                   gtk_css_node_get_junction_sides (priv->node));
+                                   height - margin.top - margin.bottom);
   gtk_css_style_render_border (style,
                                cr,
                                x + margin.left,
                                y + margin.top,
                                width - margin.left - margin.right,
-                               height - margin.top - margin.bottom,
-                               gtk_css_node_get_junction_sides (priv->node));
+                               height - margin.top - margin.bottom);
 
   contents_x = x + margin.left + border.left + padding.left;
   contents_y = y + margin.top + border.top + padding.top;
@@ -1036,13 +1034,11 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
   gtk_css_style_snapshot_background (style,
                                      snapshot,
                                      width - margin.left - margin.right,
-                                     height - margin.top - margin.bottom,
-                                     gtk_css_node_get_junction_sides (priv->node));
+                                     height - margin.top - margin.bottom);
   gtk_css_style_snapshot_border (style,
                                  snapshot,
                                  width - margin.left - margin.right,
-                                 height - margin.top - margin.bottom,
-                                 gtk_css_node_get_junction_sides (priv->node));
+                                 height - margin.top - margin.bottom);
   gtk_snapshot_translate_2d (snapshot, - x - margin.left, - y - margin.top);
 
   contents_x = x + margin.left + border.left + padding.left;

@@ -1708,51 +1708,6 @@ gtk_style_context_get_frame_clock (GtkStyleContext *context)
   return context->priv->frame_clock;
 }
 
-/**
- * gtk_style_context_set_junction_sides:
- * @context: a #GtkStyleContext
- * @sides: sides where rendered elements are visually connected to
- *     other elements
- *
- * Sets the sides where rendered elements (mostly through
- * gtk_render_frame()) will visually connect with other visual elements.
- *
- * This is merely a hint that may or may not be honored
- * by themes.
- *
- * Container widgets are expected to set junction hints as appropriate
- * for their children, so it should not normally be necessary to call
- * this function manually.
- *
- * Since: 3.0
- **/
-void
-gtk_style_context_set_junction_sides (GtkStyleContext  *context,
-                                      GtkJunctionSides  sides)
-{
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  gtk_css_node_set_junction_sides (context->priv->cssnode, sides);
-}
-
-/**
- * gtk_style_context_get_junction_sides:
- * @context: a #GtkStyleContext
- *
- * Returns the sides where rendered elements connect visually with others.
- *
- * Returns: the junction sides
- *
- * Since: 3.0
- **/
-GtkJunctionSides
-gtk_style_context_get_junction_sides (GtkStyleContext *context)
-{
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
-
-  return gtk_css_node_get_junction_sides (context->priv->cssnode);
-}
-
 gboolean
 _gtk_style_context_resolve_color (GtkStyleContext    *context,
                                   GtkCssValue        *color,

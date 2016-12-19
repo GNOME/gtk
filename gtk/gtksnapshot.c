@@ -890,8 +890,7 @@ gtk_snapshot_render_background (GtkSnapshot     *snapshot,
   gtk_snapshot_translate_2d (snapshot, x, y);
   gtk_css_style_snapshot_background (gtk_style_context_lookup_style (context),
                                      snapshot,
-                                     width, height,
-                                     gtk_style_context_get_junction_sides (context));
+                                     width, height);
   gtk_snapshot_translate_2d (snapshot, -x, -y);
 }
 
@@ -924,8 +923,7 @@ gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
   gtk_snapshot_translate_2d (snapshot, x, y);
   gtk_css_style_snapshot_border (gtk_style_context_lookup_style (context),
                                  snapshot,
-                                 width, height,
-                                 gtk_style_context_get_junction_sides (context));
+                                 width, height);
   gtk_snapshot_translate_2d (snapshot, -x, -y);
 }
 

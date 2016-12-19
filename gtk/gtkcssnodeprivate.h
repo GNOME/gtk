@@ -129,9 +129,6 @@ void                    gtk_css_node_set_id             (GtkCssNode            *
 void                    gtk_css_node_set_state          (GtkCssNode            *cssnode,
                                                          GtkStateFlags          state_flags);
 GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *cssnode);
-void                    gtk_css_node_set_junction_sides (GtkCssNode            *cssnode,
-                                                         GtkJunctionSides       junction_sides);
-GtkJunctionSides        gtk_css_node_get_junction_sides (GtkCssNode            *cssnode);
 void                    gtk_css_node_set_classes        (GtkCssNode            *cssnode,
                                                          const char           **classes);
 char **                 gtk_css_node_get_classes        (GtkCssNode            *cssnode);

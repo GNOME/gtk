@@ -870,13 +870,12 @@ gtk_css_style_render_has_border (GtkCssStyle *style)
 }
 
 void
-gtk_css_style_render_border (GtkCssStyle      *style,
-                             cairo_t          *cr,
-                             gdouble           x,
-                             gdouble           y,
-                             gdouble           width,
-                             gdouble           height,
-                             GtkJunctionSides  junction)
+gtk_css_style_render_border (GtkCssStyle *style,
+                             cairo_t     *cr,
+                             gdouble      x,
+                             gdouble      y,
+                             gdouble      width,
+                             gdouble      height)
 {
   GtkBorderImage border_image;
   double border_width[4];
@@ -914,18 +913,17 @@ gtk_css_style_render_border (GtkCssStyle      *style,
       colors[3] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius_for_style (&border_box, style, junction);
+      _gtk_rounded_box_apply_border_radius_for_style (&border_box, style);
 
       render_border (cr, &border_box, border_width, colors, border_style);
     }
 }
 
 void
-gtk_css_style_snapshot_border (GtkCssStyle      *style,
-                               GtkSnapshot      *snapshot,
-                               gdouble           width,
-                               gdouble           height,
-                               GtkJunctionSides  junction)
+gtk_css_style_snapshot_border (GtkCssStyle *style,
+                               GtkSnapshot *snapshot,
+                               gdouble      width,
+                               gdouble      height)
 {
   GtkBorderImage border_image;
   float border_width[4];
@@ -973,7 +971,7 @@ gtk_css_style_snapshot_border (GtkCssStyle      *style,
       colors[3] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
       _gtk_rounded_box_init_rect (&border_box, 0, 0, width, height);
-      _gtk_rounded_box_apply_border_radius_for_style (&border_box, style, junction);
+      _gtk_rounded_box_apply_border_radius_for_style (&border_box, style);
 
       snapshot_border (snapshot, &border_box, border_width, colors, border_style);
     }
@@ -1070,7 +1068,7 @@ gtk_css_style_render_outline (GtkCssStyle *style,
       colors[3] = colors[2] = colors[1] = colors[0];
 
       _gtk_rounded_box_init_rect (&border_box, rect.x, rect.y, rect.width, rect.height);
-      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
+      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style);
 
       render_border (cr, &border_box, border_width, colors, border_style);
     }
@@ -1101,7 +1099,7 @@ gtk_css_style_snapshot_outline (GtkCssStyle *style,
       colors[3] = colors[2] = colors[1] = colors[0];
 
       _gtk_rounded_box_init_rect (&border_box, rect.x, rect.y, rect.width, rect.height);
-      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
+      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style);
 
       snapshot_border (snapshot, &border_box, border_width, colors, border_style);
     }

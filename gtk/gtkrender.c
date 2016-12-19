@@ -260,8 +260,7 @@ gtk_render_background (GtkStyleContext *context,
     return;
 
   gtk_css_style_render_background (gtk_style_context_lookup_style (context),
-                                   cr, x, y, width, height,
-                                   gtk_style_context_get_junction_sides (context));
+                                   cr, x, y, width, height);
 }
 
 /**
@@ -331,8 +330,7 @@ gtk_render_frame (GtkStyleContext *context,
 
   gtk_css_style_render_border (gtk_style_context_lookup_style (context),
                                cr,
-                               x, y, width, height,
-                               gtk_style_context_get_junction_sides (context));
+                               x, y, width, height);
 }
 
 static void
@@ -582,19 +580,15 @@ gtk_do_render_slider (GtkStyleContext *context,
                       GtkOrientation   orientation)
 {
   GtkCssStyle *style;
-  GtkJunctionSides junction;
 
   style = gtk_style_context_lookup_style (context);
-  junction = gtk_style_context_get_junction_sides (context);
 
   gtk_css_style_render_background (style,
                                    cr,
-                                   x, y, width, height,
-                                   junction);
+                                   x, y, width, height);
   gtk_css_style_render_border (style,
                                cr,
-                               x, y, width, height,
-                               junction);
+                               x, y, width, height);
 }
 
 /**
@@ -644,11 +638,9 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
                                 gdouble          height,
                                 GtkPositionType  gap_side,
                                 gdouble          xy0_gap,
-                                gdouble          xy1_gap,
-                                GtkJunctionSides junction)
+                                gdouble          xy1_gap)
 {
   gint border_width;
-  GtkCssValue *corner[4];
   gdouble x0, y0, x1, y1, xc = 0.0, yc = 0.0, wc = 0.0, hc = 0.0;
   GtkBorder border;
 
@@ -656,10 +648,6 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
   border.right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
   border.bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
   border.left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-  corner[GSK_CORNER_TOP_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
-  corner[GSK_CORNER_TOP_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
-  corner[GSK_CORNER_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
-  corner[GSK_CORNER_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -673,51 +661,27 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
       yc = y;
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
-
-      if (xy0_gap < _gtk_css_corner_value_get_x (corner[GSK_CORNER_TOP_LEFT], width))
-        junction |= GTK_JUNCTION_CORNER_TOPLEFT;
-
-      if (xy1_gap > width - _gtk_css_corner_value_get_x (corner[GSK_CORNER_TOP_RIGHT], width))
-        junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
       break;
+
     case GTK_POS_BOTTOM:
       xc = x + xy0_gap + border_width;
       yc = y + height - border_width;
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
-
-      if (xy0_gap < _gtk_css_corner_value_get_x (corner[GSK_CORNER_BOTTOM_LEFT], width))
-        junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
-
-      if (xy1_gap > width - _gtk_css_corner_value_get_x (corner[GSK_CORNER_BOTTOM_RIGHT], width))
-        junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
-
       break;
+
     case GTK_POS_LEFT:
       xc = x;
       yc = y + xy0_gap + border_width;
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
-
-      if (xy0_gap < _gtk_css_corner_value_get_y (corner[GSK_CORNER_TOP_LEFT], height))
-        junction |= GTK_JUNCTION_CORNER_TOPLEFT;
-
-      if (xy1_gap > height - _gtk_css_corner_value_get_y (corner[GSK_CORNER_BOTTOM_LEFT], height))
-        junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
-
       break;
+
     case GTK_POS_RIGHT:
       xc = x + width - border_width;
       yc = y + xy0_gap + border_width;
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
-
-      if (xy0_gap < _gtk_css_corner_value_get_y (corner[GSK_CORNER_TOP_RIGHT], height))
-        junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
-
-      if (xy1_gap > height - _gtk_css_corner_value_get_y (corner[GSK_CORNER_BOTTOM_RIGHT], height))
-        junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
-
       break;
     }
 
@@ -729,8 +693,7 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
   cairo_clip (cr);
 
   gtk_css_style_render_border (style, cr,
-                               x, y, width, height,
-                               junction);
+                               x, y, width, height);
 
   cairo_restore (cr);
 }
@@ -786,8 +749,7 @@ gtk_render_frame_gap (GtkStyleContext *context,
   gtk_css_style_render_frame_gap (gtk_style_context_lookup_style (context),
                                   cr,
                                   x, y, width, height, gap_side,
-                                  xy0_gap, xy1_gap,
-                                  gtk_style_context_get_junction_sides (context));
+                                  xy0_gap, xy1_gap);
 }
 
 static void
@@ -982,7 +944,7 @@ gtk_render_content_path (GtkStyleContext *context,
   g_return_if_fail (cr != NULL);
 
   _gtk_rounded_box_init_rect (&box, x, y, width, height);
-  _gtk_rounded_box_apply_border_radius_for_style (&box, gtk_style_context_lookup_style (context), 0);
+  _gtk_rounded_box_apply_border_radius_for_style (&box, gtk_style_context_lookup_style (context));
 
   gsk_rounded_rect_shrink (&box,
                            _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100)

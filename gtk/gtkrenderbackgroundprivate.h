@@ -33,13 +33,11 @@ void            gtk_css_style_render_background                 (GtkCssStyle    
                                                                  gdouble               x,
                                                                  gdouble               y,
                                                                  gdouble               width,
-                                                                 gdouble               height,
-                                                                 GtkJunctionSides      junction);
+                                                                 gdouble               height);
 void            gtk_css_style_snapshot_background               (GtkCssStyle          *style,
                                                                  GtkSnapshot          *snapshot,
                                                                  gdouble               width,
-                                                                 gdouble               height,
-                                                                 GtkJunctionSides      junction);
+                                                                 gdouble               height);
 
 
 

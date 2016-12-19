@@ -35,8 +35,7 @@ void            gtk_css_style_render_border             (GtkCssStyle            
                                                          gdouble                 x,
                                                          gdouble                 y,
                                                          gdouble                 width,
-                                                         gdouble                 height,
-                                                         GtkJunctionSides        junction);
+                                                         gdouble                 height);
 gboolean        gtk_css_style_render_border_get_clip    (GtkCssStyle            *style,
                                                          gdouble                 x,
                                                          gdouble                 y,
@@ -46,8 +45,7 @@ gboolean        gtk_css_style_render_border_get_clip    (GtkCssStyle            
 void            gtk_css_style_snapshot_border           (GtkCssStyle            *style,
                                                          GtkSnapshot            *snapshot,
                                                          gdouble                 width,
-                                                         gdouble                 height,
-                                                         GtkJunctionSides        junction);
+                                                         gdouble                 height);
 
 gboolean        gtk_css_style_render_has_outline        (GtkCssStyle            *style);
 void            gtk_css_style_render_outline            (GtkCssStyle            *style,

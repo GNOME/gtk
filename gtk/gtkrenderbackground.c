@@ -527,8 +527,7 @@ static void
 gtk_theming_background_init (GtkThemingBackground *bg,
                              GtkCssStyle          *style,
                              double                width,
-                             double                height,
-                             GtkJunctionSides      junction)
+                             double                height)
 {
   GtkBorder border, padding;
 
@@ -552,7 +551,7 @@ gtk_theming_background_init (GtkThemingBackground *bg,
    * right now we just shrink to the default.
    */
   _gtk_rounded_box_init_rect (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], 0, 0, width, height);
-  _gtk_rounded_box_apply_border_radius_for_style (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], bg->style, junction);
+  _gtk_rounded_box_apply_border_radius_for_style (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], bg->style);
 
   bg->boxes[GTK_CSS_AREA_PADDING_BOX] = bg->boxes[GTK_CSS_AREA_BORDER_BOX];
   gsk_rounded_rect_shrink (&bg->boxes[GTK_CSS_AREA_PADDING_BOX],
@@ -571,8 +570,7 @@ gtk_css_style_render_background (GtkCssStyle      *style,
                                  gdouble           x,
                                  gdouble           y,
                                  gdouble           width,
-                                 gdouble           height,
-                                 GtkJunctionSides  junction)
+                                 gdouble           height)
 {
   GtkThemingBackground bg;
   gint idx;
@@ -593,7 +591,7 @@ gtk_css_style_render_background (GtkCssStyle      *style,
       _gtk_css_shadows_value_is_none (box_shadow))
     return;
 
-  gtk_theming_background_init (&bg, style, width, height, junction);
+  gtk_theming_background_init (&bg, style, width, height);
 
   cairo_save (cr);
   cairo_translate (cr, x, y);
@@ -650,8 +648,7 @@ void
 gtk_css_style_snapshot_background (GtkCssStyle      *style,
                                    GtkSnapshot      *snapshot,
                                    gdouble           width,
-                                   gdouble           height,
-                                   GtkJunctionSides  junction)
+                                   gdouble           height)
 {
   GtkThemingBackground bg;
   gint idx;
@@ -671,7 +668,7 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
       _gtk_css_shadows_value_is_none (box_shadow))
     return;
 
-  gtk_theming_background_init (&bg, style, width, height, junction);
+  gtk_theming_background_init (&bg, style, width, height);
 
   gtk_css_shadows_value_snapshot_outset (box_shadow,
                                          snapshot,

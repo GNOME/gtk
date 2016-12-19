@@ -1072,12 +1072,6 @@ GDK_AVAILABLE_IN_3_8
 GdkFrameClock *gtk_style_context_get_frame_clock (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_style_context_set_junction_sides (GtkStyleContext  *context,
-                                                       GtkJunctionSides  sides);
-GDK_AVAILABLE_IN_ALL
-GtkJunctionSides gtk_style_context_get_junction_sides (GtkStyleContext  *context);
-
-GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
                                          const gchar     *color_name,
                                          GdkRGBA         *color);

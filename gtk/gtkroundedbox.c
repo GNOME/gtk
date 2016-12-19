@@ -86,31 +86,30 @@ gtk_rounded_box_clamp_border_radius (GskRoundedRect *box)
 
 static void
 _gtk_rounded_box_apply_border_radius (GskRoundedRect *box,
-                                      GtkCssValue **corner,
-                                      GtkJunctionSides junction)
+                                      GtkCssValue **corner)
 {
-  if (corner[GSK_CORNER_TOP_LEFT] && (junction & GTK_JUNCTION_CORNER_TOPLEFT) == 0)
+  if (corner[GSK_CORNER_TOP_LEFT])
     {
       box->corner[GSK_CORNER_TOP_LEFT].width = _gtk_css_corner_value_get_x (corner[GSK_CORNER_TOP_LEFT],
                                                                               box->bounds.size.width);
       box->corner[GSK_CORNER_TOP_LEFT].height = _gtk_css_corner_value_get_y (corner[GSK_CORNER_TOP_LEFT],
                                                                             box->bounds.size.height);
     }
-  if (corner[GSK_CORNER_TOP_RIGHT] && (junction & GTK_JUNCTION_CORNER_TOPRIGHT) == 0)
+  if (corner[GSK_CORNER_TOP_RIGHT])
     {
       box->corner[GSK_CORNER_TOP_RIGHT].width = _gtk_css_corner_value_get_x (corner[GSK_CORNER_TOP_RIGHT],
                                                                                box->bounds.size.width);
       box->corner[GSK_CORNER_TOP_RIGHT].height = _gtk_css_corner_value_get_y (corner[GSK_CORNER_TOP_RIGHT],
                                                                              box->bounds.size.height);
     }
-  if (corner[GSK_CORNER_BOTTOM_RIGHT] && (junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT) == 0)
+  if (corner[GSK_CORNER_BOTTOM_RIGHT])
     {
       box->corner[GSK_CORNER_BOTTOM_RIGHT].width = _gtk_css_corner_value_get_x (corner[GSK_CORNER_BOTTOM_RIGHT],
                                                                                   box->bounds.size.width);
       box->corner[GSK_CORNER_BOTTOM_RIGHT].height = _gtk_css_corner_value_get_y (corner[GSK_CORNER_BOTTOM_RIGHT],
                                                                                 box->bounds.size.height);
     }
-  if (corner[GSK_CORNER_BOTTOM_LEFT] && (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT) == 0)
+  if (corner[GSK_CORNER_BOTTOM_LEFT])
     {
       box->corner[GSK_CORNER_BOTTOM_LEFT].width = _gtk_css_corner_value_get_x (corner[GSK_CORNER_BOTTOM_LEFT],
                                                                                  box->bounds.size.width);
@@ -123,8 +122,7 @@ _gtk_rounded_box_apply_border_radius (GskRoundedRect *box,
 
 void
 _gtk_rounded_box_apply_border_radius_for_style (GskRoundedRect   *box,
-                                                GtkCssStyle      *style,
-                                                GtkJunctionSides  junction)
+                                                GtkCssStyle      *style)
 {
   GtkCssValue *corner[4];
 
@@ -133,13 +131,12 @@ _gtk_rounded_box_apply_border_radius_for_style (GskRoundedRect   *box,
   corner[GSK_CORNER_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
   corner[GSK_CORNER_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
 
-  _gtk_rounded_box_apply_border_radius (box, corner, junction);
+  _gtk_rounded_box_apply_border_radius (box, corner);
 }
 
 void
 _gtk_rounded_box_apply_outline_radius_for_style (GskRoundedRect   *box,
-                                                 GtkCssStyle      *style,
-                                                 GtkJunctionSides  junction)
+                                                 GtkCssStyle      *style)
 {
   GtkCssValue *corner[4];
 
@@ -148,7 +145,7 @@ _gtk_rounded_box_apply_outline_radius_for_style (GskRoundedRect   *box,
   corner[GSK_CORNER_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS);
   corner[GSK_CORNER_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS);
 
-  _gtk_rounded_box_apply_border_radius (box, corner, junction);
+  _gtk_rounded_box_apply_border_radius (box, corner);
 }
 
 typedef struct {

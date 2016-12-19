@@ -3787,7 +3787,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (sidebar));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SIDEBAR);
-  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_RIGHT | GTK_JUNCTION_LEFT);
 
   /* list box */
   sidebar->list_box = gtk_list_box_new ();

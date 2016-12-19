@@ -920,8 +920,7 @@ gtk_popover_fill_border_path (GtkPopover *popover,
 
   _gtk_rounded_box_init_rect (&box, x, y, w, h);
   _gtk_rounded_box_apply_border_radius_for_style (&box,
-                                                  gtk_style_context_lookup_style (context),
-                                                  0);
+                                                  gtk_style_context_lookup_style (context));
   gsk_rounded_rect_path (&box, cr);
   cairo_fill (cr);
 }

@@ -810,32 +810,6 @@ typedef enum
 } GtkStateFlags;
 
 /**
- * GtkJunctionSides:
- * @GTK_JUNCTION_NONE: No junctions.
- * @GTK_JUNCTION_CORNER_TOPLEFT: Element connects on the top-left corner.
- * @GTK_JUNCTION_CORNER_TOPRIGHT: Element connects on the top-right corner.
- * @GTK_JUNCTION_CORNER_BOTTOMLEFT: Element connects on the bottom-left corner.
- * @GTK_JUNCTION_CORNER_BOTTOMRIGHT: Element connects on the bottom-right corner.
- * @GTK_JUNCTION_TOP: Element connects on the top side.
- * @GTK_JUNCTION_BOTTOM: Element connects on the bottom side.
- * @GTK_JUNCTION_LEFT: Element connects on the left side.
- * @GTK_JUNCTION_RIGHT: Element connects on the right side.
- *
- * Describes how a rendered element connects to adjacent elements.
- */
-typedef enum {
-  GTK_JUNCTION_NONE   = 0,
-  GTK_JUNCTION_CORNER_TOPLEFT = 1 << 0,
-  GTK_JUNCTION_CORNER_TOPRIGHT = 1 << 1,
-  GTK_JUNCTION_CORNER_BOTTOMLEFT = 1 << 2,
-  GTK_JUNCTION_CORNER_BOTTOMRIGHT = 1 << 3,
-  GTK_JUNCTION_TOP    = (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_TOPRIGHT),
-  GTK_JUNCTION_BOTTOM = (GTK_JUNCTION_CORNER_BOTTOMLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT),
-  GTK_JUNCTION_LEFT   = (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMLEFT),
-  GTK_JUNCTION_RIGHT  = (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMRIGHT)
-} GtkJunctionSides;
-
-/**
  * GtkBorderStyle:
  * @GTK_BORDER_STYLE_NONE: No visible border
  * @GTK_BORDER_STYLE_SOLID: A single line segment

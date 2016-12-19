@@ -1051,9 +1051,6 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE);
   gtk_widget_show (scrolled);
 
-  context = gtk_widget_get_style_context (scrolled);
-  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_BOTTOM);
-
   treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->custom_paper_list));
   priv->treeview = treeview;
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (treeview), FALSE);
@@ -1080,7 +1077,6 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_MENU);
 
   context = gtk_widget_get_style_context (toolbar);
-  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE);
