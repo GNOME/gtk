@@ -151,6 +151,8 @@ node_type_name (GskRenderNodeType type)
       return "Border";
     case GSK_TEXTURE_NODE:
       return "Texture";
+    case GSK_INSET_SHADOW_NODE:
+      return "Inset Shadow";
     case GSK_TRANSFORM_NODE:
       return "Transform";
     case GSK_OPACITY_NODE:

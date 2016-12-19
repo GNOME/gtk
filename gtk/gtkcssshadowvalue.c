@@ -1066,7 +1066,9 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
                                      GtkSnapshot         *snapshot,
                                      const GskRoundedRect*padding_box)
 {
-  cairo_t *cr;
+  GskRoundedRect outline;
+  GskRenderNode *node;
+  double off_x, off_y;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
@@ -1074,14 +1076,18 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
   if (gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
     return;
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (
-                                          padding_box->bounds.origin.x,
-                                          padding_box->bounds.origin.y,
-                                          padding_box->bounds.size.width,
-                                          padding_box->bounds.size.height),
-                                       "Inset Shadow");
-  _gtk_css_shadow_value_paint_box (shadow, cr, padding_box);
-  cairo_destroy (cr);
+  gtk_snapshot_get_offset (snapshot, &off_x, &off_y);
+  gsk_rounded_rect_init_copy (&outline, padding_box);
+  gsk_rounded_rect_offset (&outline, off_x, off_y);
+
+  node = gsk_inset_shadow_node_new (&outline, 
+                                    _gtk_css_rgba_value_get_rgba (shadow->color),
+                                    _gtk_css_number_value_get (shadow->hoffset, 0),
+                                    _gtk_css_number_value_get (shadow->voffset, 0),
+                                    _gtk_css_number_value_get (shadow->spread, 0),
+                                    _gtk_css_number_value_get (shadow->radius, 0));
+  gsk_render_node_set_name (node, "Inset Shadow");
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
 }
 

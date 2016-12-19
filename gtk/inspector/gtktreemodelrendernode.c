@@ -528,6 +528,7 @@ append_node (GtkTreeModelRenderNode *nodemodel,
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
       /* no children */
       break;
 
