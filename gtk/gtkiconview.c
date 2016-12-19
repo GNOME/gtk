@@ -41,6 +41,7 @@
 #include "gtkcombobox.h"
 #include "gtkscrollable.h"
 #include "gtksizerequest.h"
+#include "gtksnapshotprivate.h"
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -155,8 +156,8 @@ static void gtk_icon_view_measure (GtkWidget *widget,
                                    int            *natural_baseline);
 static void             gtk_icon_view_size_allocate             (GtkWidget          *widget,
 								 GtkAllocation      *allocation);
-static gboolean         gtk_icon_view_draw                      (GtkWidget          *widget,
-                                                                 cairo_t            *cr);
+static void             gtk_icon_view_snapshot                  (GtkWidget          *widget,
+                                                                 GtkSnapshot        *snapshot);
 static gboolean         gtk_icon_view_motion                    (GtkWidget          *widget,
 								 GdkEventMotion     *event);
 static gboolean         gtk_icon_view_leave                     (GtkWidget          *widget,
@@ -196,14 +197,14 @@ static void                 gtk_icon_view_set_vadjustment                (GtkIco
 static void                 gtk_icon_view_adjustment_changed             (GtkAdjustment          *adjustment,
 									  GtkIconView            *icon_view);
 static void                 gtk_icon_view_layout                         (GtkIconView            *icon_view);
-static void                 gtk_icon_view_paint_item                     (GtkIconView            *icon_view,
-									  cairo_t                *cr,
+static void                 gtk_icon_view_snapshot_item                  (GtkIconView            *icon_view,
+									  GtkSnapshot            *snapshot,
 									  GtkIconViewItem        *item,
 									  gint                    x,
 									  gint                    y,
 									  gboolean                draw_focus);
-static void                 gtk_icon_view_paint_rubberband               (GtkIconView            *icon_view,
-								          cairo_t                *cr);
+static void                 gtk_icon_view_snapshot_rubberband            (GtkIconView            *icon_view,
+								          GtkSnapshot            *snapshot);
 static void                 gtk_icon_view_queue_draw_path                (GtkIconView *icon_view,
 									  GtkTreePath *path);
 static void                 gtk_icon_view_queue_draw_item                (GtkIconView            *icon_view,
@@ -358,7 +359,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->get_request_mode = gtk_icon_view_get_request_mode;
   widget_class->measure = gtk_icon_view_measure;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
-  widget_class->draw = gtk_icon_view_draw;
+  widget_class->snapshot = gtk_icon_view_snapshot;
   widget_class->motion_notify_event = gtk_icon_view_motion;
   widget_class->leave_notify_event = gtk_icon_view_leave;
   widget_class->button_press_event = gtk_icon_view_button_press;
@@ -1737,9 +1738,9 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
   g_object_thaw_notify (G_OBJECT (icon_view->priv->vadjustment));
 }
 
-static gboolean
-gtk_icon_view_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+static void
+gtk_icon_view_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
   GtkIconView *icon_view;
   GList *icons;
@@ -1752,16 +1753,22 @@ gtk_icon_view_draw (GtkWidget *widget,
   icon_view = GTK_ICON_VIEW (widget);
 
   context = gtk_widget_get_style_context (widget);
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
+  gtk_snapshot_render_background (snapshot, context,
+                                  0, 0,
+                                  gtk_widget_get_allocated_width (widget),
+                                  gtk_widget_get_allocated_height (widget));
 
-  cairo_save (cr);
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT (
+                              0, 0,
+                              gtk_widget_get_allocated_width (widget),
+                              gtk_widget_get_allocated_height (widget)
+                          ),
+                          "IconView Clip");
 
-  gtk_cairo_transform_to_window (cr, widget, icon_view->priv->bin_window);
-
-  cairo_set_line_width (cr, 1.);
+  gtk_snapshot_translate_2d (snapshot,
+                             - gtk_adjustment_get_value (icon_view->priv->hadjustment),
+                             - gtk_adjustment_get_value (icon_view->priv->vadjustment));
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &dest_pos);
 
@@ -1776,29 +1783,22 @@ gtk_icon_view_draw (GtkWidget *widget,
   for (icons = icon_view->priv->items; icons; icons = icons->next)
     {
       GtkIconViewItem *item = icons->data;
-      GdkRectangle paint_area;
 
-      paint_area.x      = item->cell_area.x      - icon_view->priv->item_padding;
-      paint_area.y      = item->cell_area.y      - icon_view->priv->item_padding;
-      paint_area.width  = item->cell_area.width  + icon_view->priv->item_padding * 2;
-      paint_area.height = item->cell_area.height + icon_view->priv->item_padding * 2;
-
-      cairo_save (cr);
-
-      cairo_rectangle (cr, paint_area.x, paint_area.y, paint_area.width, paint_area.height);
-      cairo_clip (cr);
-
-      if (gdk_cairo_get_clip_rectangle (cr, NULL))
+      if (!gtk_snapshot_clips_rect (snapshot,
+                                    &GRAPHENE_RECT_INIT (
+                                        item->cell_area.x      - icon_view->priv->item_padding,
+                                        item->cell_area.y      - icon_view->priv->item_padding,
+                                        item->cell_area.width  + icon_view->priv->item_padding * 2,
+                                        item->cell_area.height + icon_view->priv->item_padding * 2
+                                    )))
         {
-          gtk_icon_view_paint_item (icon_view, cr, item,
-                                    item->cell_area.x, item->cell_area.y,
-                                    icon_view->priv->draw_focus);
+          gtk_icon_view_snapshot_item (icon_view, snapshot, item,
+                                       item->cell_area.x, item->cell_area.y,
+                                       icon_view->priv->draw_focus);
 
           if (dest_index == item->index)
             dest_item = item;
         }
-
-      cairo_restore (cr);
     }
 
   if (dest_item &&
@@ -1838,17 +1838,17 @@ gtk_icon_view_draw (GtkWidget *widget,
 	  break;
         }
 
-      gtk_render_focus (context, cr,
-                        rect.x, rect.y,
-                        rect.width, rect.height);
+      gtk_snapshot_render_focus (snapshot, context,
+                                 rect.x, rect.y,
+                                 rect.width, rect.height);
     }
 
   if (icon_view->priv->doing_rubberband)
-    gtk_icon_view_paint_rubberband (icon_view, cr);
+    gtk_icon_view_snapshot_rubberband (icon_view, snapshot);
 
-  cairo_restore (cr);
+  gtk_snapshot_pop_and_append (snapshot);
 
-  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->draw (widget, cr);
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->snapshot (widget, snapshot);
 }
 
 static gboolean
@@ -2982,12 +2982,12 @@ gtk_icon_view_item_invalidate_size (GtkIconViewItem *item)
 }
 
 static void
-gtk_icon_view_paint_item (GtkIconView     *icon_view,
-                          cairo_t         *cr,
-                          GtkIconViewItem *item,
-                          gint             x,
-                          gint             y,
-                          gboolean         draw_focus)
+gtk_icon_view_snapshot_item (GtkIconView     *icon_view,
+                             GtkSnapshot     *snapshot,
+                             GtkIconViewItem *item,
+                             gint             x,
+                             gint             y,
+                             gboolean         draw_focus)
 {
   GdkRectangle cell_area;
   GtkStateFlags state = 0;
@@ -3028,16 +3028,16 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
   gtk_style_context_set_state (style_context, state);
 
-  gtk_render_background (style_context, cr,
-                         x - priv->item_padding,
-                         y - priv->item_padding,
-                         item->cell_area.width  + priv->item_padding * 2,
-                         item->cell_area.height + priv->item_padding * 2);
-  gtk_render_frame (style_context, cr,
-                    x - priv->item_padding,
-                    y - priv->item_padding,
-                    item->cell_area.width  + priv->item_padding * 2,
-                    item->cell_area.height + priv->item_padding * 2);
+  gtk_snapshot_render_background (snapshot, style_context,
+                                  x - priv->item_padding,
+                                  y - priv->item_padding,
+                                  item->cell_area.width  + priv->item_padding * 2,
+                                  item->cell_area.height + priv->item_padding * 2);
+  gtk_snapshot_render_frame (snapshot, style_context,
+                             x - priv->item_padding,
+                             y - priv->item_padding,
+                             item->cell_area.width  + priv->item_padding * 2,
+                             item->cell_area.height + priv->item_padding * 2);
 
   cell_area.x      = x;
   cell_area.y      = y;
@@ -3045,22 +3045,20 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   cell_area.height = item->cell_area.height;
 
   context = g_ptr_array_index (priv->row_contexts, item->row);
-  gtk_cell_area_render (priv->cell_area, context,
-                        widget, cr, &cell_area, &cell_area, flags,
-                        draw_focus);
+  gtk_cell_area_snapshot (priv->cell_area, context,
+                          widget, snapshot, &cell_area, &cell_area, flags,
+                          draw_focus);
 
   gtk_style_context_restore (style_context);
 }
 
 static void
-gtk_icon_view_paint_rubberband (GtkIconView *icon_view,
-				cairo_t     *cr)
+gtk_icon_view_snapshot_rubberband (GtkIconView *icon_view,
+                                   GtkSnapshot *snapshot)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkStyleContext *context;
   GdkRectangle rect;
-
-  cairo_save (cr);
 
   rect.x = MIN (priv->rubberband_x1, priv->rubberband_x2);
   rect.y = MIN (priv->rubberband_y1, priv->rubberband_y2);
@@ -3071,18 +3069,14 @@ gtk_icon_view_paint_rubberband (GtkIconView *icon_view,
 
   gtk_style_context_save_to_node (context, priv->rubberband_node);
 
-  gdk_cairo_rectangle (cr, &rect);
-  cairo_clip (cr);
-
-  gtk_render_background (context, cr,
-                         rect.x, rect.y,
-                         rect.width, rect.height);
-  gtk_render_frame (context, cr,
-                    rect.x, rect.y,
-                    rect.width, rect.height);
+  gtk_snapshot_render_background (snapshot, context,
+                                  rect.x, rect.y,
+                                  rect.width, rect.height);
+  gtk_snapshot_render_frame (snapshot, context,
+                             rect.x, rect.y,
+                             rect.width, rect.height);
 
   gtk_style_context_restore (context);
-  cairo_restore (cr);
 }
 
 static void
@@ -6984,6 +6978,8 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 				GtkTreePath *path)
 {
   GtkWidget *widget;
+  GtkSnapshot snapshot;
+  GskRenderNode *node;
   cairo_t *cr;
   cairo_surface_t *surface;
   GList *l;
@@ -7017,13 +7013,15 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
                                                        rect.width,
                                                        rect.height);
 
+          gtk_snapshot_init (&snapshot, NULL, NULL, "IconView DragIcon");
+	  gtk_icon_view_snapshot_item (icon_view, &snapshot, item, 
+                                       icon_view->priv->item_padding,
+                                       icon_view->priv->item_padding,
+                                       FALSE);
+          node = gtk_snapshot_finish (&snapshot);
+
 	  cr = cairo_create (surface);
-
-	  gtk_icon_view_paint_item (icon_view, cr, item, 
-				    icon_view->priv->item_padding,
-				    icon_view->priv->item_padding,
-                                    FALSE);
-
+          gsk_render_node_draw (node, cr);
 	  cairo_destroy (cr);
 
 	  return surface;
