@@ -317,6 +317,15 @@ void                  gtk_cell_area_render                         (GtkCellArea 
                                                                     const GdkRectangle   *cell_area,
                                                                     GtkCellRendererState  flags,
                                                                     gboolean              paint_focus);
+GDK_AVAILABLE_IN_3_90
+void                  gtk_cell_area_snapshot                       (GtkCellArea          *area,
+                                                                    GtkCellAreaContext   *context,
+                                                                    GtkWidget            *widget,
+                                                                    GtkSnapshot          *snapshot,
+                                                                    const GdkRectangle   *background_area,
+                                                                    const GdkRectangle   *cell_area,
+                                                                    GtkCellRendererState  flags,
+                                                                    gboolean              paint_focus);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_cell_area_get_cell_allocation            (GtkCellArea          *area,

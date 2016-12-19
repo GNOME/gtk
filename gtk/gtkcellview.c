@@ -69,8 +69,8 @@ static void        gtk_cell_view_finalize                 (GObject          *obj
 static void        gtk_cell_view_dispose                  (GObject          *object);
 static void        gtk_cell_view_size_allocate            (GtkWidget        *widget,
                                                            GtkAllocation    *allocation);
-static gboolean    gtk_cell_view_draw                     (GtkWidget        *widget,
-                                                           cairo_t          *cr);
+static void        gtk_cell_view_snapshot                 (GtkWidget        *widget,
+                                                           GtkSnapshot      *snapshot);
 static void        gtk_cell_view_set_value                (GtkCellView     *cell_view,
                                                            GtkCellRenderer *renderer,
                                                            const char      *property,
@@ -126,7 +126,7 @@ static void     gtk_cell_view_allocate (GtkCssGadget        *gadget,
                                         GtkAllocation       *out_clip,
                                         gpointer             data);
 static gboolean gtk_cell_view_render   (GtkCssGadget        *gadget,
-                                        cairo_t             *cr,
+                                        GtkSnapshot         *snapshot,
                                         int                  x,
                                         int                  y,
                                         int                  width,
@@ -185,7 +185,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   gobject_class->finalize = gtk_cell_view_finalize;
   gobject_class->dispose = gtk_cell_view_dispose;
 
-  widget_class->draw                           = gtk_cell_view_draw;
+  widget_class->snapshot                       = gtk_cell_view_snapshot;
   widget_class->size_allocate                  = gtk_cell_view_size_allocate;
   widget_class->get_request_mode               = gtk_cell_view_get_request_mode;
   widget_class->measure                        = gtk_cell_view_measure_;
@@ -451,8 +451,8 @@ gtk_cell_view_init (GtkCellView *cellview)
                                                                GTK_WIDGET (cellview),
                                                                gtk_cell_view_measure,
                                                                gtk_cell_view_allocate,
-                                                               gtk_cell_view_render,
                                                                NULL,
+                                                               gtk_cell_view_render,
                                                                NULL,
                                                                NULL);
 }
@@ -722,18 +722,16 @@ gtk_cell_view_measure (GtkCssGadget   *gadget,
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
 }
 
-static gboolean
-gtk_cell_view_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+static void
+gtk_cell_view_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_draw (GTK_CELL_VIEW (widget)->priv->gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (GTK_CELL_VIEW (widget)->priv->gadget, snapshot);
 }
 
 static gboolean
 gtk_cell_view_render (GtkCssGadget *gadget,
-                      cairo_t      *cr,
+                      GtkSnapshot  *snapshot,
                       int           x,
                       int           y,
                       int           width,
@@ -766,8 +764,8 @@ gtk_cell_view_render (GtkCssGadget *gadget,
     state = 0;
 
   /* Render the cells */
-  gtk_cell_area_render (cellview->priv->area, cellview->priv->context,
-			widget, cr, &area, &area, state, FALSE);
+  gtk_cell_area_snapshot (cellview->priv->area, cellview->priv->context,
+			  widget, snapshot, &area, &area, state, FALSE);
 
   return FALSE;
 }

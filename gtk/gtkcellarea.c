@@ -352,6 +352,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkrender.h"
+#include "gtksnapshot.h"
 
 #include <gobject/gvaluecollector.h>
 
@@ -1845,6 +1846,53 @@ gtk_cell_area_render (GtkCellArea          *area,
   else
     g_warning ("GtkCellAreaClass::render not implemented for '%s'",
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
+}
+
+/**
+ * gtk_cell_area_snapshot:
+ * @area: a #GtkCellArea
+ * @context: the #GtkCellAreaContext for this row of data.
+ * @widget: the #GtkWidget that @area is rendering to
+ * @snapshot: the #GtkSnapshot to draw to
+ * @background_area: the @widget relative coordinates for @area’s background
+ * @cell_area: the @widget relative coordinates for @area
+ * @flags: the #GtkCellRendererState for @area in this row.
+ * @paint_focus: whether @area should paint focus on focused cells for focused rows or not.
+ *
+ * Snapshots @area’s cells according to @area’s layout onto at
+ * the given coordinates.
+ *
+ * Since: 3.90
+ */
+void
+gtk_cell_area_snapshot (GtkCellArea          *area,
+                        GtkCellAreaContext   *context,
+                        GtkWidget            *widget,
+                        GtkSnapshot          *snapshot,
+                        const GdkRectangle   *background_area,
+                        const GdkRectangle   *cell_area,
+                        GtkCellRendererState  flags,
+                        gboolean              paint_focus)
+{
+  cairo_t *cr;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (background_area != NULL);
+  g_return_if_fail (cell_area != NULL);
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &GRAPHENE_RECT_INIT (
+                                           background_area->x,
+                                           background_area->y,
+                                           background_area->width,
+                                           background_area->height
+                                       ),
+                                       "CellArea<%s>", G_OBJECT_TYPE_NAME (area));
+  gtk_cell_area_render (area, context, widget, cr, background_area, cell_area, flags, paint_focus);
+  cairo_destroy (cr);
 }
 
 static gboolean
