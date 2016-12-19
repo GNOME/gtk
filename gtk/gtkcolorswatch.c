@@ -88,20 +88,18 @@ static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_WIDGET)
 
-static gboolean
-swatch_draw (GtkWidget *widget,
-             cairo_t   *cr)
+static void
+swatch_snapshot (GtkWidget   *widget,
+                 GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_draw (GTK_COLOR_SWATCH (widget)->priv->gadget, cr);
-
-  return FALSE;
+  gtk_css_gadget_snapshot (GTK_COLOR_SWATCH (widget)->priv->gadget, snapshot);
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
 
 static gboolean
 gtk_color_swatch_render (GtkCssGadget *gadget,
-                         cairo_t      *cr,
+                         GtkSnapshot  *snapshot,
                          int           x,
                          int           y,
                          int           width,
@@ -137,16 +135,19 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
                                         border_allocation.y,
                                         border_allocation.width,
                                         border_allocation.height);
-      gsk_rounded_rect_path (&content_box, cr);
+      gtk_snapshot_push_rounded_clip (snapshot,
+                                      &content_box,
+                                      "ColorSwatchClip");
 
-      if (swatch->priv->use_alpha)
+      if (swatch->priv->use_alpha && !gdk_rgba_is_opaque (&swatch->priv->color))
         {
-          cairo_save (cr);
+          cairo_t *cr;
 
-          cairo_clip_preserve (cr);
-
+          cr = gtk_snapshot_append_cairo_node (snapshot,
+                                               &content_box.bounds,
+                                               "CheckeredBackground");
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
-          cairo_fill_preserve (cr);
+          cairo_paint (cr);
 
           pattern = _gtk_color_chooser_get_checkered_pattern ();
           cairo_matrix_init_scale (&matrix, 0.125, 0.125);
@@ -156,22 +157,29 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
           cairo_mask (cr, pattern);
           cairo_pattern_destroy (pattern);
 
-          cairo_restore (cr);
+          cairo_destroy (cr);
 
-          gdk_cairo_set_source_rgba (cr, &swatch->priv->color);
+          gtk_snapshot_append_color_node (snapshot,
+                                          &swatch->priv->color,
+                                          &content_box.bounds,
+                                          "ColorSwatch Color");
         }
       else
         {
-          cairo_set_source_rgb (cr,
-                                swatch->priv->color.red,
-                                swatch->priv->color.green,
-                                swatch->priv->color.blue);
+          GdkRGBA color = swatch->priv->color;
+
+          color.alpha = 1.0;
+
+          gtk_snapshot_append_color_node (snapshot,
+                                          &color,
+                                          &content_box.bounds,
+                                          "ColorSwatch Opaque Color");
         }
 
-      cairo_fill (cr);
+      gtk_snapshot_pop_and_append (snapshot);
     }
 
-  gtk_css_gadget_draw (swatch->priv->overlay_gadget, cr);
+  gtk_css_gadget_snapshot (swatch->priv->overlay_gadget, snapshot);
 
   return gtk_widget_has_visible_focus (widget);
 }
@@ -671,7 +679,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   object_class->dispose = swatch_dispose;
 
   widget_class->measure = gtk_color_swatch_measure_;
-  widget_class->draw = swatch_draw;
+  widget_class->snapshot = swatch_snapshot;
   widget_class->drag_begin = swatch_drag_begin;
   widget_class->drag_data_get = swatch_drag_data_get;
   widget_class->drag_data_received = swatch_drag_data_received;
@@ -743,8 +751,8 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                                                              GTK_WIDGET (swatch),
                                                              gtk_color_swatch_measure,
                                                              NULL,
-                                                             gtk_color_swatch_render,
                                                              NULL,
+                                                             gtk_color_swatch_render,
                                                              NULL,
                                                              NULL);
   gtk_css_gadget_add_class (swatch->priv->gadget, "activatable");
