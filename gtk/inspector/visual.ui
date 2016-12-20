@@ -610,40 +610,6 @@
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
-                          <object class="GtkLabel" id="pixelcache_label">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Show Pixel Cache</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSwitch" id="pixelcache_switch">
-                            <property name="visible">True</property>
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <signal name="notify::active" handler="pixelcache_activate"/>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkListBoxRow">
-                    <property name="visible">True</property>
-                    <property name="activatable">False</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="margin">10</property>
-                        <property name="spacing">40</property>
-                        <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">Show Widget Resizes</property>
@@ -875,7 +841,6 @@
       <widget name="updates_label"/>
       <widget name="baselines_label"/>
       <widget name="layout_label"/>
-      <widget name="pixelcache_label"/>
       <widget name="touchscreen_label"/>
       <widget name="gl_label"/>
       <widget name="software_gl_label"/>

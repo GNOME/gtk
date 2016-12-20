@@ -167,8 +167,6 @@ static const GDebugKey gtk_debug_keys[] = {
   { "size-request", GTK_DEBUG_SIZE_REQUEST },
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE },
   { "baselines", GTK_DEBUG_BASELINES },
-  { "pixel-cache", GTK_DEBUG_PIXEL_CACHE },
-  { "no-pixel-cache", GTK_DEBUG_NO_PIXEL_CACHE },
   { "interactive", GTK_DEBUG_INTERACTIVE },
   { "touchscreen", GTK_DEBUG_TOUCHSCREEN },
   { "actions", GTK_DEBUG_ACTIONS },

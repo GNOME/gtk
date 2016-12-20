@@ -179,18 +179,6 @@ additional environment variables.
       <listitem><para>Bypass caching for CSS style properties</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>no-pixel-cache</term>
-      <listitem><para>Disable the pixel cache</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>plugsocket</term>
-      <listitem><para>Cross-process embedding</para></listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>pixel-cache</term>
-      <listitem><para>Pixel cache</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>printing</term>
       <listitem><para>Printing support</para></listitem>
     </varlistentry>

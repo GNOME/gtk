@@ -270,27 +270,6 @@ layout_activate (GtkSwitch *sw)
 }
 
 static void
-pixelcache_activate (GtkSwitch *sw)
-{
-  guint flags;
-
-  flags = gtk_get_debug_flags ();
-
-  if (gtk_switch_get_active (sw))
-    flags |= GTK_DEBUG_PIXEL_CACHE;
-  else
-    flags &= ~GTK_DEBUG_PIXEL_CACHE;
-
-  gtk_set_debug_flags (flags);
-  /* FIXME: this doesn't work, because it is redrawing
-   * _from_ the cache. We need to recurse over the tree
-   * and invalidate the pixel cache of every widget that
-   * has one.
-   */
-  redraw_everything ();
-}
-
-static void
 widget_resize_activate (GtkSwitch *sw)
 {
   guint flags = gtk_get_debug_flags ();
@@ -940,7 +919,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, rendering_mode_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
-  gtk_widget_class_bind_template_callback (widget_class, pixelcache_activate);
   gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_surface_activate);
