@@ -210,6 +210,10 @@ additional environment variables.
       <term>layout</term>
       <listitem><para>Show layout borders</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>snapshot</term>
+      <listitem><para>Include debug render nodes in the generated snapshots</para></listitem>
+    </varlistentry>
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
   debug options. The special value <literal>help</literal> can be used

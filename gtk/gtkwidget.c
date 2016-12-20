@@ -15560,6 +15560,9 @@ gtk_widget_snapshot (GtkWidget   *widget,
    */
   mode = get_render_mode (klass);
 
+  if (GTK_DEBUG_CHECK (SNAPSHOT))
+    gtk_snapshot_push (snapshot, TRUE, "%s<%p>", gtk_widget_get_name (widget), widget);
+
   if (mode == RENDER_DRAW)
     {
       cairo_t *cr;
@@ -15595,6 +15598,9 @@ gtk_widget_snapshot (GtkWidget   *widget,
       if (opacity < 1.0)
         gtk_snapshot_pop_and_append (snapshot);
     }
+
+  if (GTK_DEBUG_CHECK (SNAPSHOT))
+    gtk_snapshot_pop_and_append (snapshot);
 }
 
 void
