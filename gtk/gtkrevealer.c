@@ -21,13 +21,15 @@
  */
 
 #include "config.h"
+
 #include "gtkrevealer.h"
-#include <gdk/gdk.h>
-#include "gtktypebuiltins.h"
-#include "gtkprivate.h"
-#include "gtksettingsprivate.h"
-#include "gtkprogresstrackerprivate.h"
+
 #include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkprogresstrackerprivate.h"
+#include "gtksettingsprivate.h"
+#include "gtksnapshot.h"
+#include "gtktypebuiltins.h"
 
 #include "fallback-c89.c"
 
@@ -107,6 +109,8 @@ static void gtk_revealer_measure (GtkWidget      *widget,
                                   int            *natural,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
+static void     gtk_revealer_snapshot                            (GtkWidget     *widget,
+                                                                  GtkSnapshot   *snapshot);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkRevealer, gtk_revealer, GTK_TYPE_BIN)
 
@@ -219,6 +223,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   widget_class->map = gtk_revealer_real_map;
   widget_class->unmap = gtk_revealer_real_unmap;
   widget_class->measure = gtk_revealer_measure;
+  widget_class->snapshot = gtk_revealer_snapshot;
 
   container_class->add = gtk_revealer_real_add;
 
@@ -816,6 +821,37 @@ gtk_revealer_measure (GtkWidget      *widget,
     set_width_with_paddings (GTK_REVEALER (widget), min_size, nat_size, minimum, natural);
   else
     set_height_with_paddings (GTK_REVEALER (widget), min_size, nat_size, minimum, natural);
+}
+
+static void
+gtk_revealer_snapshot (GtkWidget   *widget,
+                       GtkSnapshot *snapshot)
+{
+  GtkRevealer *revealer = GTK_REVEALER (widget);
+  GtkRevealerTransitionType transition;
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (revealer));
+  if (child == NULL || !gtk_widget_get_mapped (child))
+    return;
+
+  transition = effective_transition (revealer);
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE)
+    {
+      gtk_container_snapshot_child (GTK_CONTAINER (revealer), child, snapshot);
+    }
+  else
+    {
+      gtk_snapshot_push_clip (snapshot,
+                              &GRAPHENE_RECT_INIT(
+                                  0, 0,
+                                  gtk_widget_get_allocated_width (widget),
+                                  gtk_widget_get_allocated_height (widget)
+                              ),
+                              "RevealerClip");
+      gtk_container_snapshot_child (GTK_CONTAINER (revealer), child, snapshot);
+      gtk_snapshot_pop_and_append (snapshot);
+    }
 }
 
 /**
