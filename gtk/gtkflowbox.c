@@ -3070,6 +3070,13 @@ gtk_flow_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
           gtk_flow_box_update_selection (box, priv->active_child, modify, extend);
         }
     }
+}
+
+static void
+gtk_flow_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
+                                         GtkFlowBox           *box)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
   priv->active_child = NULL;
   priv->active_child_active = FALSE;
@@ -4106,6 +4113,8 @@ gtk_flow_box_init (GtkFlowBox *box)
                     G_CALLBACK (gtk_flow_box_multipress_gesture_pressed), box);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_flow_box_multipress_gesture_released), box);
+  g_signal_connect (priv->multipress_gesture, "stopped",
+                    G_CALLBACK (gtk_flow_box_multipress_gesture_stopped), box);
 
   priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (box));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->drag_gesture),
