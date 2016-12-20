@@ -735,6 +735,7 @@ gtk_container_child_notify
 gtk_container_child_notify_by_pspec
 gtk_container_forall
 gtk_container_propagate_draw
+gtk_container_snapshot_child
 gtk_container_get_focus_chain
 gtk_container_set_focus_chain
 gtk_container_unset_focus_chain

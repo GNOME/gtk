@@ -43,10 +43,6 @@ void      _gtk_container_maybe_start_idle_sizer (GtkContainer *container);
 void      gtk_container_get_children_clip       (GtkContainer  *container,
                                                  GtkAllocation *out_clip);
 
-void      gtk_container_snapshot_child          (GtkContainer  *container,
-                                                 GtkWidget     *child,
-                                                 GtkSnapshot   *snapshot);
-
 G_END_DECLS
 
 #endif /* __GTK_CONTAINER_PRIVATE_H__ */

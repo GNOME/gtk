@@ -142,6 +142,10 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_container_propagate_draw   (GtkContainer   *container,
 					 GtkWidget      *child,
 					 cairo_t        *cr);
+GDK_AVAILABLE_IN_3_90
+void      gtk_container_snapshot_child (GtkContainer *container,
+                                        GtkWidget    *child,
+                                        GtkSnapshot  *snapshot);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_container_set_focus_chain  (GtkContainer   *container,

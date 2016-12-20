@@ -3269,6 +3269,26 @@ gtk_container_propagate_draw (GtkContainer *container,
   cairo_restore (cr);
 }
 
+/**
+ * gtk_container_snapshot_child:
+ * @container: a #GtkContainer
+ * @child: a child of @container
+ * @snapshot: $GtkSnapshot as passed to the container. In particular, no
+ *   calls to gtk_snapshot_translate_2d() should have been applied by the
+ *   parent.
+ *
+ * When a container receives a call to the snapshot function, it must send
+ * synthetic #GtkWidget::snapshot calls to all children. This function
+ * provides a convenient way of doing this. A container, when it receives
+ * a call to its #GtkWidget::snapshot function, calls
+ * gtk_container_snapshot_child() once for each child, passing in
+ * the @snapshot the container received.
+ *
+ * gtk_container_snapshot_child() takes care of translating the origin of
+ * @snapshot, and deciding whether the child needs to be snapshot. It is a
+ * convenient and optimized way of getting the same effect as calling
+ * gtk_widget_snapshot() on the child directly.
+ **/
 void
 gtk_container_snapshot_child (GtkContainer      *container,
                               GtkWidget         *child,

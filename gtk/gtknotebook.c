@@ -45,7 +45,6 @@
 #include "gtkwidgetpath.h"
 #include "gtkboxgadgetprivate.h"
 #include "gtkbuiltiniconprivate.h"
-#include "gtkcontainerprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtksizerequest.h"
