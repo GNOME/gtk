@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-19 19:00+0000\n"
-"PO-Revision-Date: 2016-11-20 21:44+0100\n"
+"POT-Creation-Date: 2016-12-18 23:55+0000\n"
+"PO-Revision-Date: 2016-12-19 17:10+0100\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -20,55 +20,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "A Broadway kijelzőtípus nem támogatott: %s"
 
-#: gdk/gdk.c:182
+#: gdk/gdk.c:188
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Hiba a --gdk-debug kapcsoló feldolgozásakor"
 
-#: gdk/gdk.c:202
+#: gdk/gdk.c:208
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Hiba a --gdk-no-debug kapcsoló feldolgozásakor"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:231
+#: gdk/gdk.c:237
 msgid "Program class as used by the window manager"
 msgstr "A program osztálya, ahogy az ablakkezelő használja"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:232
+#: gdk/gdk.c:238
 msgid "CLASS"
 msgstr "OSZTÁLY"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:234
+#: gdk/gdk.c:240
 msgid "Program name as used by the window manager"
 msgstr "A programnév, ahogy az ablakkezelő használja"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:235
+#: gdk/gdk.c:241
 msgid "NAME"
 msgstr "NÉV"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:238
+#: gdk/gdk.c:244
 msgid "X display to use"
 msgstr "Használandó X-megjelenítő"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:239
+#: gdk/gdk.c:245
 msgid "DISPLAY"
 msgstr "MEGJELENÍTŐ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:243
+#: gdk/gdk.c:249
 msgid "GDK debugging flags to set"
 msgstr "Beállítandó GDK hibakeresési jelzőbitek"
 
@@ -76,22 +76,26 @@ msgstr "Beállítandó GDK hibakeresési jelzőbitek"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:449 gtk/gtkmain.c:452
+#: gdk/gdk.c:250 gdk/gdk.c:253 gtk/gtkmain.c:449 gtk/gtkmain.c:452
 msgid "FLAGS"
 msgstr "JELZŐK"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:246
+#: gdk/gdk.c:252
 msgid "GDK debugging flags to unset"
 msgstr "Kikapcsolandó GDK jelzőbitek"
 
-#: gdk/gdkwindow.c:2608
+#: gdk/gdkwindow.c:2087
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL támogatás letiltva a GDK_DEBUG beállításon keresztül"
 
-#: gdk/gdkwindow.c:2619
+#: gdk/gdkwindow.c:2098
 msgid "The current backend does not support OpenGL"
 msgstr "A jelenlegi háttérprogram nem támogatja az OpenGL-t"
+
+#: gdk/gdkwindow.c:2191
+msgid "Vulkan support disabled via GDK_DEBUG"
+msgstr "Vulkan támogatás letiltva a GDK_DEBUG beállításon keresztül"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -435,26 +439,26 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Felfüggesztés"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1572
-#: gdk/wayland/gdkglcontext-wayland.c:442 gdk/win32/gdkglcontext-win32.c:751
-#: gdk/x11/gdkglcontext-x11.c:1271
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1532
+#: gdk/wayland/gdkglcontext-wayland.c:433 gdk/win32/gdkglcontext-win32.c:754
+#: gdk/x11/gdkglcontext-x11.c:1213
 msgid "No GL implementation is available"
 msgstr "Nem érhető el GL megvalósítás"
 
-#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:705 gdk/x11/gdkglcontext-x11.c:721
-#: gdk/x11/gdkglcontext-x11.c:771
+#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:144
+#: gdk/win32/gdkglcontext-win32.c:688 gdk/x11/gdkglcontext-x11.c:663
+#: gdk/x11/gdkglcontext-x11.c:713
 msgid "Unable to create a GL context"
 msgstr "Nem lehet létrehozni GL környezetet"
 
-#: gdk/mir/gdkmirwindowimpl.c:1534 gdk/mir/gdkmirwindowimpl.c:1544
-#: gdk/wayland/gdkglcontext-wayland.c:403
-#: gdk/wayland/gdkglcontext-wayland.c:413 gdk/win32/gdkglcontext-win32.c:660
-#: gdk/x11/gdkglcontext-x11.c:966
+#: gdk/mir/gdkmirwindowimpl.c:1494 gdk/mir/gdkmirwindowimpl.c:1504
+#: gdk/wayland/gdkglcontext-wayland.c:394
+#: gdk/wayland/gdkglcontext-wayland.c:404 gdk/win32/gdkglcontext-win32.c:643
+#: gdk/x11/gdkglcontext-x11.c:908
 msgid "No available configurations for the given pixel format"
 msgstr "Nincs elérhető beállítás a megadott képpontformátumhoz"
 
-#: gdk/mir/gdkmirwindowimpl.c:1580
+#: gdk/mir/gdkmirwindowimpl.c:1540
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "A 3.2-es alap GL profil nem érhető el az EGL megvalósításban"
 
@@ -462,7 +466,7 @@ msgstr "A 3.2-es alap GL profil nem érhető el az EGL megvalósításban"
 msgid "Not implemented on OS X"
 msgstr "Nincs megvalósítva OS X rendszeren"
 
-#: gdk/wayland/gdkglcontext-wayland.c:450
+#: gdk/wayland/gdkglcontext-wayland.c:441
 msgid "Core GL is not available on EGL implementation"
 msgstr "Az alap GL nem érhető el az EGL megvalósításban"
 
@@ -513,7 +517,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d elem megnyitása"
 msgstr[1] "%d elem megnyitása"
 
-#: gdk/x11/gdkglcontext-x11.c:994
+#: gdk/x11/gdkglcontext-x11.c:936
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Nincs elérhető beállítás a megadott RGBA képpontformátumhoz"
@@ -1114,53 +1118,53 @@ msgstr "GNU Lesser General Public License, csak 3. verzió"
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public License 3. vagy újabb verzió"
 
-#: gtk/gtkaboutdialog.c:695
+#: gtk/gtkaboutdialog.c:689
 msgid "C_redits"
 msgstr "_Köszönet"
 
-#: gtk/gtkaboutdialog.c:703
+#: gtk/gtkaboutdialog.c:700
 msgid "_License"
 msgstr "_Licenc"
 
-#: gtk/gtkaboutdialog.c:712 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:849 gtk/ui/gtkassistant.ui:144
+#: gtk/gtkaboutdialog.c:711 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkmessagedialog.c:848 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "_Bezárás"
 
-#: gtk/gtkaboutdialog.c:996
+#: gtk/gtkaboutdialog.c:995
 msgid "Could not show link"
 msgstr "Nem jeleníthető meg a hivatkozás"
 
-#: gtk/gtkaboutdialog.c:1033
+#: gtk/gtkaboutdialog.c:1032
 msgid "Website"
 msgstr "Weboldal"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1083 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1082 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "%s névjegye"
 
-#: gtk/gtkaboutdialog.c:2311
+#: gtk/gtkaboutdialog.c:2310
 msgid "Created by"
 msgstr "Készítették"
 
-#: gtk/gtkaboutdialog.c:2314
+#: gtk/gtkaboutdialog.c:2313
 msgid "Documented by"
 msgstr "Dokumentáció"
 
-#: gtk/gtkaboutdialog.c:2324
+#: gtk/gtkaboutdialog.c:2323
 msgid "Translated by"
 msgstr "Fordította"
 
-#: gtk/gtkaboutdialog.c:2329
+#: gtk/gtkaboutdialog.c:2328
 msgid "Artwork by"
 msgstr "Grafika"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2489
+#: gtk/gtkaboutdialog.c:2488
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1174,7 +1178,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:181 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkaccellabel.c:182 gtk/gtkshortcutlabel.c:102
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1185,7 +1189,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:187 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkaccellabel.c:188 gtk/gtkshortcutlabel.c:105
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1196,7 +1200,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:193 gtk/gtkshortcutlabel.c:108
+#: gtk/gtkaccellabel.c:194 gtk/gtkshortcutlabel.c:108
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1207,7 +1211,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:851 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkaccellabel.c:842 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
@@ -1218,7 +1222,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:864 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkaccellabel.c:855 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1229,18 +1233,18 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:878 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkaccellabel.c:869 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:895
+#: gtk/gtkaccellabel.c:886
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Szóköz"
 
-#: gtk/gtkaccellabel.c:898 gtk/gtkshortcutlabel.c:181
+#: gtk/gtkaccellabel.c:889 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Fordított törtvonal"
@@ -1306,7 +1310,7 @@ msgid "Other Applications"
 msgstr "Más alkalmazások"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:482
-#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1627
+#: gtk/gtkprintoperation-win32.c:1466 gtk/inspector/prop-editor.c:1627
 msgid "Application"
 msgstr "Alkalmazás"
 
@@ -1808,44 +1812,44 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: gtk/gtkentry.c:8920 gtk/gtklabel.c:6538 gtk/gtktextview.c:9298
+#: gtk/gtkentry.c:8899 gtk/gtklabel.c:6538 gtk/gtktextview.c:9293
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtkentry.c:8924 gtk/gtklabel.c:6539 gtk/gtktextview.c:9302
+#: gtk/gtkentry.c:8903 gtk/gtklabel.c:6539 gtk/gtktextview.c:9297
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtkentry.c:8928 gtk/gtklabel.c:6540 gtk/gtktextview.c:9304
+#: gtk/gtkentry.c:8907 gtk/gtklabel.c:6540 gtk/gtktextview.c:9299
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: gtk/gtkentry.c:8931 gtk/gtkfilechooserwidget.c:1480
-#: gtk/gtkfilechooserwidget.c:2272 gtk/gtklabel.c:6542 gtk/gtktextview.c:9307
+#: gtk/gtkentry.c:8910 gtk/gtkfilechooserwidget.c:1480
+#: gtk/gtkfilechooserwidget.c:2272 gtk/gtklabel.c:6542 gtk/gtktextview.c:9302
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: gtk/gtkentry.c:8942 gtk/gtklabel.c:6551 gtk/gtktextview.c:9321
+#: gtk/gtkentry.c:8921 gtk/gtklabel.c:6551 gtk/gtktextview.c:9316
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: gtk/gtkentry.c:9118 gtk/gtktextview.c:9546
+#: gtk/gtkentry.c:9097 gtk/gtktextview.c:9541
 msgid "Select all"
 msgstr "Összes kijelölése"
 
-#: gtk/gtkentry.c:9121 gtk/gtktextview.c:9549
+#: gtk/gtkentry.c:9100 gtk/gtktextview.c:9544
 msgid "Cut"
 msgstr "Kivágás"
 
-#: gtk/gtkentry.c:9124 gtk/gtktextview.c:9552
+#: gtk/gtkentry.c:9103 gtk/gtktextview.c:9547
 msgid "Copy"
 msgstr "Másolás"
 
-#: gtk/gtkentry.c:9127 gtk/gtktextview.c:9555
+#: gtk/gtkentry.c:9106 gtk/gtktextview.c:9550
 msgid "Paste"
 msgstr "Beillesztés"
 
-#: gtk/gtkentry.c:10195
+#: gtk/gtkentry.c:10174
 msgid "Caps Lock is on"
 msgstr "A Caps Lock be van kapcsolva"
 
@@ -1871,11 +1875,11 @@ msgstr "_Név"
 
 #: gtk/gtkfilechoosernative.c:514 gtk/gtkfilechoosernative.c:599
 #: gtk/gtkfilechooserwidget.c:1479 gtk/gtkfilechooserwidget.c:6367
-#: gtk/gtkmessagedialog.c:853 gtk/gtkmessagedialog.c:862
-#: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
+#: gtk/gtkmessagedialog.c:852 gtk/gtkmessagedialog.c:861
+#: gtk/gtkmountoperation.c:542 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:675 gtk/gtkprintunixdialog.c:742
-#: gtk/gtkwindow.c:11366 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:11359 gtk/inspector/css-editor.c:208
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -2243,19 +2247,19 @@ msgctxt "input method menu"
 msgid "None"
 msgstr "Nincs"
 
-#: gtk/gtkinfobar.c:1084 gtk/gtkmessagedialog.c:354
+#: gtk/gtkinfobar.c:1084 gtk/gtkmessagedialog.c:353
 msgid "Information"
 msgstr "Információk"
 
-#: gtk/gtkinfobar.c:1088 gtk/gtkmessagedialog.c:358
+#: gtk/gtkinfobar.c:1088 gtk/gtkmessagedialog.c:357
 msgid "Question"
 msgstr "Kérdés"
 
-#: gtk/gtkinfobar.c:1092 gtk/gtkmessagedialog.c:362
+#: gtk/gtkinfobar.c:1092 gtk/gtkmessagedialog.c:361
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: gtk/gtkinfobar.c:1096 gtk/gtkmessagedialog.c:366
+#: gtk/gtkinfobar.c:1096 gtk/gtkmessagedialog.c:365
 msgid "Error"
 msgstr "Hiba"
 
@@ -2327,11 +2331,11 @@ msgstr "%s: nincs ilyen alkalmazás: %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: hiba az alkalmazás indításakor: %s\n"
 
-#: gtk/gtklinkbutton.c:370
+#: gtk/gtklinkbutton.c:383
 msgid "Copy URL"
 msgstr "URL másolása"
 
-#: gtk/gtklinkbutton.c:531
+#: gtk/gtklinkbutton.c:548
 msgid "Invalid URI"
 msgstr "Érvénytelen URI"
 
@@ -2414,70 +2418,70 @@ msgstr "GTK+ beállítások megjelenítése"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmessagedialog.c:845 gtk/gtkmessagedialog.c:863
-#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11367
+#: gtk/gtkmessagedialog.c:844 gtk/gtkmessagedialog.c:862
+#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11360
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkmessagedialog.c:857
+#: gtk/gtkmessagedialog.c:856
 msgid "_No"
 msgstr "_Nem"
 
-#: gtk/gtkmessagedialog.c:858
+#: gtk/gtkmessagedialog.c:857
 msgid "_Yes"
 msgstr "_Igen"
 
-#: gtk/gtkmountoperation.c:544
+#: gtk/gtkmountoperation.c:543
 msgid "Co_nnect"
 msgstr "Kap_csolódás"
 
-#: gtk/gtkmountoperation.c:613
+#: gtk/gtkmountoperation.c:612
 msgid "Connect As"
 msgstr "Kapcsolódás mint"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:621
 msgid "_Anonymous"
 msgstr "Névtelenül"
 
-#: gtk/gtkmountoperation.c:631
+#: gtk/gtkmountoperation.c:630
 msgid "Registered U_ser"
 msgstr "_Regisztrált felhasználó"
 
-#: gtk/gtkmountoperation.c:642
+#: gtk/gtkmountoperation.c:641
 msgid "_Username"
 msgstr "_Felhasználónév"
 
-#: gtk/gtkmountoperation.c:647
+#: gtk/gtkmountoperation.c:646
 msgid "_Domain"
 msgstr "_Tartomány"
 
-#: gtk/gtkmountoperation.c:653
+#: gtk/gtkmountoperation.c:652
 msgid "_Password"
 msgstr "_Jelszó"
 
-#: gtk/gtkmountoperation.c:675
+#: gtk/gtkmountoperation.c:674
 msgid "Forget password _immediately"
 msgstr "Jelszó a_zonnali elfelejtése"
 
-#: gtk/gtkmountoperation.c:685
+#: gtk/gtkmountoperation.c:684
 msgid "Remember password until you _logout"
 msgstr "Jelszó megjegyzése _kijelentkezésig"
 
-#: gtk/gtkmountoperation.c:695
+#: gtk/gtkmountoperation.c:694
 msgid "Remember _forever"
 msgstr "_Megjegyzés örökre"
 
-#: gtk/gtkmountoperation.c:1084
+#: gtk/gtkmountoperation.c:1083
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Ismeretlen alkalmazás (PID: %d)"
 
-#: gtk/gtkmountoperation.c:1269
+#: gtk/gtkmountoperation.c:1268
 #, c-format
 msgid "Unable to end process"
 msgstr "A folyamat nem fejeztethető be"
 
-#: gtk/gtkmountoperation.c:1303
+#: gtk/gtkmountoperation.c:1302
 msgid "_End Process"
 msgstr "Folyamat _befejezése"
 
@@ -2513,7 +2517,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nem fejeztethető be a(z) %d azonosítójú folyamat: %s"
 
-#: gtk/gtknotebook.c:4975 gtk/gtknotebook.c:7202
+#: gtk/gtknotebook.c:4977 gtk/gtknotebook.c:7204
 #, c-format
 msgid "Page %u"
 msgstr "%u. oldal"
@@ -2554,7 +2558,7 @@ msgid "Manage Custom Sizes…"
 msgstr "Egyéni méretek kezelése…"
 
 #: gtk/gtkpagesetupunixdialog.c:893 gtk/ui/gtkpagesetupunixdialog.ui:30
-#: gtk/ui/gtkprintunixdialog.ui:849
+#: gtk/ui/gtkprintunixdialog.ui:848
 msgid "Page Setup"
 msgstr "Oldalbeállítás"
 
@@ -2922,58 +2926,58 @@ msgstr "A legvalószínűbb ok, hogy egy ideiglenes fájl nem hozható létre."
 msgid "Print"
 msgstr "Nyomtatás"
 
-#: gtk/gtkprintoperation-win32.c:617
+#: gtk/gtkprintoperation-win32.c:615
 msgid "Printer offline"
 msgstr "A nyomtató nem érhető el"
 
-#: gtk/gtkprintoperation-win32.c:619
+#: gtk/gtkprintoperation-win32.c:617
 msgid "Out of paper"
 msgstr "Kifogyott a papír"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:621
+#: gtk/gtkprintoperation-win32.c:619
 #: modules/printbackends/cups/gtkprintbackendcups.c:2588
 msgid "Paused"
 msgstr "Szüneteltetve"
 
-#: gtk/gtkprintoperation-win32.c:623
+#: gtk/gtkprintoperation-win32.c:621
 msgid "Need user intervention"
 msgstr "Felhasználói beavatkozás szükséges"
 
-#: gtk/gtkprintoperation-win32.c:723
+#: gtk/gtkprintoperation-win32.c:721
 msgid "Custom size"
 msgstr "Egyéni méret"
 
-#: gtk/gtkprintoperation-win32.c:1545
+#: gtk/gtkprintoperation-win32.c:1558
 msgid "No printer found"
 msgstr "Nem található nyomtató"
 
-#: gtk/gtkprintoperation-win32.c:1572
+#: gtk/gtkprintoperation-win32.c:1585
 msgid "Invalid argument to CreateDC"
 msgstr "Érvénytelen paraméter a CreateDC-hez"
 
-#: gtk/gtkprintoperation-win32.c:1608 gtk/gtkprintoperation-win32.c:1854
+#: gtk/gtkprintoperation-win32.c:1621 gtk/gtkprintoperation-win32.c:1867
 msgid "Error from StartDoc"
 msgstr "Hiba a StartDoc elemtől"
 
-#: gtk/gtkprintoperation-win32.c:1709 gtk/gtkprintoperation-win32.c:1732
-#: gtk/gtkprintoperation-win32.c:1780
+#: gtk/gtkprintoperation-win32.c:1722 gtk/gtkprintoperation-win32.c:1745
+#: gtk/gtkprintoperation-win32.c:1793
 msgid "Not enough free memory"
 msgstr "Nincs elég szabad memória"
 
-#: gtk/gtkprintoperation-win32.c:1785
+#: gtk/gtkprintoperation-win32.c:1798
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Érvénytelen paraméter a PrintDlgEx-re"
 
-#: gtk/gtkprintoperation-win32.c:1790
+#: gtk/gtkprintoperation-win32.c:1803
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Érvénytelen mutató a PrintDlgEx-re"
 
-#: gtk/gtkprintoperation-win32.c:1795
+#: gtk/gtkprintoperation-win32.c:1808
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Érvénytelen kezelő a PrintDlgEx-re"
 
-#: gtk/gtkprintoperation-win32.c:1800
+#: gtk/gtkprintoperation-win32.c:1813
 msgid "Unspecified error"
 msgstr "Meghatározatlan hiba"
 
@@ -3059,7 +3063,7 @@ msgstr "Fentről le"
 msgid "Bottom to top"
 msgstr "Lentről fel"
 
-#: gtk/gtkprogressbar.c:626
+#: gtk/gtkprogressbar.c:625
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3456,12 +3460,12 @@ msgstr "Átméretezés"
 msgid "Always on Top"
 msgstr "Mindig felül"
 
-#: gtk/gtkwindow.c:11354
+#: gtk/gtkwindow.c:11347
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Szeretné használni a GTK+ vizsgálót?"
 
-#: gtk/gtkwindow.c:11356
+#: gtk/gtkwindow.c:11349
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3472,7 +3476,7 @@ msgstr ""
 "alkalmazás belső működésének felfedezését és módosítását. A használata miatt "
 "az alkalmazás hibásan működhet vagy összeomolhat."
 
-#: gtk/gtkwindow.c:11361
+#: gtk/gtkwindow.c:11354
 msgid "Don't show this message again"
 msgstr "Ne jelenjen meg többé ez az üzenet"
 
@@ -3921,19 +3925,19 @@ msgstr "Halmozott"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Statisztika engedélyezése a GOBJECT_DEBUG=instance-count használatával"
 
-#: gtk/inspector/visual.c:372 gtk/inspector/visual.c:387
+#: gtk/inspector/visual.c:407 gtk/inspector/visual.c:422
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "A téma bedrótozva a GTK_THEME-ben"
 
-#: gtk/inspector/visual.c:593
+#: gtk/inspector/visual.c:630
 msgid "Backend does not support window scaling"
 msgstr "A háttérprogram nem támogatja az ablak átméretezését"
 
-#: gtk/inspector/visual.c:688
+#: gtk/inspector/visual.c:725
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "A beállítás bedrótozva a GTK_TEST_TOUCHSCREEN-ben"
 
-#: gtk/inspector/visual.c:753
+#: gtk/inspector/visual.c:790
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -3941,8 +3945,8 @@ msgstr ""
 "Nem állítható be futási időben.\n"
 "GDK_GL=always vagy GDK_GL=disable értéket használjon helyette"
 
-#: gtk/inspector/visual.c:767 gtk/inspector/visual.c:768
-#: gtk/inspector/visual.c:769
+#: gtk/inspector/visual.c:804 gtk/inspector/visual.c:805
+#: gtk/inspector/visual.c:806
 msgid "GL rendering is disabled"
 msgstr "GL megjelenítés ki van kapcsolva"
 
@@ -5456,36 +5460,36 @@ msgstr "Kimeneti tál_ca:"
 msgid "Or_ientation:"
 msgstr "_Tájolás:"
 
-#: gtk/ui/gtkprintunixdialog.ui:871
+#: gtk/ui/gtkprintunixdialog.ui:870
 msgid "Job Details"
 msgstr "Feladat részletei"
 
-#: gtk/ui/gtkprintunixdialog.ui:894
+#: gtk/ui/gtkprintunixdialog.ui:893
 msgid "Pri_ority:"
 msgstr "_Prioritás:"
 
-#: gtk/ui/gtkprintunixdialog.ui:918
+#: gtk/ui/gtkprintunixdialog.ui:917
 msgid "_Billing info:"
 msgstr "_Fizetési információk:"
 
-#: gtk/ui/gtkprintunixdialog.ui:962
+#: gtk/ui/gtkprintunixdialog.ui:961
 msgid "Print Document"
 msgstr "Dokumentum nyomtatása"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:982
+#: gtk/ui/gtkprintunixdialog.ui:981
 msgid "_Now"
 msgstr "_Azonnal"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:998
+#: gtk/ui/gtkprintunixdialog.ui:997
 msgid "A_t:"
 msgstr "_Ekkor:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:1002 gtk/ui/gtkprintunixdialog.ui:1004
-#: gtk/ui/gtkprintunixdialog.ui:1023 gtk/ui/gtkprintunixdialog.ui:1025
-#: gtk/ui/gtkprintunixdialog.ui:1030
+#: gtk/ui/gtkprintunixdialog.ui:1001 gtk/ui/gtkprintunixdialog.ui:1003
+#: gtk/ui/gtkprintunixdialog.ui:1022 gtk/ui/gtkprintunixdialog.ui:1024
+#: gtk/ui/gtkprintunixdialog.ui:1029
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -5493,57 +5497,57 @@ msgstr ""
 "A nyomtatás idejének megadása\n"
 " például: 15.30, 2.35 du, 14.15.20, 11.46.30 de, 4 du"
 
-#: gtk/ui/gtkprintunixdialog.ui:1029
+#: gtk/ui/gtkprintunixdialog.ui:1028
 msgid "Time of print"
 msgstr "Nyomtatás ideje"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:1043
+#: gtk/ui/gtkprintunixdialog.ui:1042
 msgid "On _hold"
 msgstr "_Várakoztatás"
 
-#: gtk/ui/gtkprintunixdialog.ui:1047 gtk/ui/gtkprintunixdialog.ui:1048
+#: gtk/ui/gtkprintunixdialog.ui:1046 gtk/ui/gtkprintunixdialog.ui:1047
 msgid "Hold the job until it is explicitly released"
 msgstr "A feladat felfüggesztése kifejezett elengedéséig"
 
-#: gtk/ui/gtkprintunixdialog.ui:1085
+#: gtk/ui/gtkprintunixdialog.ui:1084
 msgid "Add Cover Page"
 msgstr "Borítóoldal hozzáadása"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1108
+#: gtk/ui/gtkprintunixdialog.ui:1107
 msgid "Be_fore:"
 msgstr "_Elé:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1132
+#: gtk/ui/gtkprintunixdialog.ui:1131
 msgid "_After:"
 msgstr "_Mögé:"
 
-#: gtk/ui/gtkprintunixdialog.ui:1174
+#: gtk/ui/gtkprintunixdialog.ui:1173
 msgid "Job"
 msgstr "Feladat"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1207
+#: gtk/ui/gtkprintunixdialog.ui:1206
 msgid "Image Quality"
 msgstr "Képminőség"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1240
+#: gtk/ui/gtkprintunixdialog.ui:1239
 msgid "Color"
 msgstr "Szín"
 
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1273
+#: gtk/ui/gtkprintunixdialog.ui:1272
 msgid "Finishing"
 msgstr "Befejezés"
 
-#: gtk/ui/gtkprintunixdialog.ui:1306
+#: gtk/ui/gtkprintunixdialog.ui:1305
 msgid "Advanced"
 msgstr "Speciális"
 
-#: gtk/ui/gtkprintunixdialog.ui:1330
+#: gtk/ui/gtkprintunixdialog.ui:1329
 msgid "Some of the settings in the dialog conflict"
 msgstr "A párbeszédablak egyes beállításai ütköznek"
 
