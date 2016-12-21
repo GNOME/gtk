@@ -18,7 +18,6 @@
     <title>API Reference</title>
     <xi:include href="xml/GskRenderer.xml" />
     <xi:include href="xml/GskRenderNode.xml" />
-    <xi:include href="xml/GskRenderNodeIter.xml" />
   </reference>
 
   <index id="api-index-full">
