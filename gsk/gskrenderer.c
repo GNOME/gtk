@@ -650,7 +650,6 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
   g_return_val_if_fail (priv->root_node == NULL, NULL);
 
   priv->root_node = gsk_render_node_ref (root);
-  gsk_render_node_make_immutable (priv->root_node);
 
   if (viewport == NULL)
     {

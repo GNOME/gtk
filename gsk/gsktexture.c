@@ -37,6 +37,8 @@
 #include "gskdebugprivate.h"
 #include "gskrenderer.h"
 
+#include "gdk/gdkinternals.h"
+
 /**
  * GskTexture: (ref-func gsk_texture_ref) (unref-func gsk_texture_unref)
  *
@@ -142,10 +144,35 @@ gsk_texture_cairo_download_surface (GskTexture *texture)
   return cairo_surface_reference (cairo->surface);
 }
 
+static void
+gsk_texture_cairo_download (GskTexture *texture,
+                            guchar     *data,
+                            gsize       stride)
+{
+  GskCairoTexture *cairo = (GskCairoTexture *) texture;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create_for_data (data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 texture->width, texture->height,
+                                                 stride);
+  cr = cairo_create (surface);
+
+  cairo_set_source_surface (cr, cairo->surface, 0, 0);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+  cairo_surface_finish (surface);
+  cairo_surface_destroy (surface);
+}
+
 static const GskTextureClass GSK_TEXTURE_CLASS_CAIRO = {
   "cairo",
   sizeof (GskCairoTexture),
   gsk_texture_cairo_finalize,
+  gsk_texture_cairo_download,
   gsk_texture_cairo_download_surface
 };
 
@@ -208,6 +235,23 @@ gsk_texture_pixbuf_finalize (GskTexture *texture)
   g_object_unref (pixbuf->pixbuf);
 }
 
+static void
+gsk_texture_pixbuf_download (GskTexture *texture,
+                             guchar     *data,
+                             gsize       stride)
+{
+  GskPixbufTexture *pixbuf = (GskPixbufTexture *) texture;
+  cairo_surface_t *surface;
+
+  surface = cairo_image_surface_create_for_data (data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 texture->width, texture->height,
+                                                 stride);
+  gdk_cairo_surface_paint_pixbuf (surface, pixbuf->pixbuf);
+  cairo_surface_finish (surface);
+  cairo_surface_destroy (surface);
+}
+
 static cairo_surface_t *
 gsk_texture_pixbuf_download_surface (GskTexture *texture)
 {
@@ -220,7 +264,8 @@ static const GskTextureClass GSK_TEXTURE_CLASS_PIXBUF = {
   "pixbuf",
   sizeof (GskPixbufTexture),
   gsk_texture_pixbuf_finalize,
-  gsk_texture_pixbuf_download_surface,
+  gsk_texture_pixbuf_download,
+  gsk_texture_pixbuf_download_surface
 };
 
 GskTexture *
@@ -278,7 +323,57 @@ gsk_texture_get_height (GskTexture *texture)
 cairo_surface_t *
 gsk_texture_download_surface (GskTexture *texture)
 {
-  return texture->klass->download_surface (texture);
+  cairo_surface_t *surface;
+
+  if (texture->klass->download_surface)
+    return texture->klass->download_surface (texture);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        texture->width, texture->height);
+  gsk_texture_download (texture,
+                        cairo_image_surface_get_data (surface),
+                        cairo_image_surface_get_stride (surface));
+  cairo_surface_mark_dirty (surface);
+
+  return surface;
+}
+
+/**
+ * gsk_texture_download:
+ * @texture: a #GskTexture
+ * @data: pointer to enough memory to be filled with the
+ *     downloaded data of @texture
+ * @stride: rowstride in bytes
+ *
+ * Downloads the @texture into local memory. This may be
+ * an expensive operation, as the actual texture data may
+ * reside on a GPU or on a remote display server.
+ *
+ * The data format of the downloaded data is equivalent to
+ * %CAIRO_FORMAT_ARGB32, so every downloaded pixel requires
+ * 4 bytes of memory.
+ *
+ * Downloading a texture into a Cairo image surface:
+ * |[<!-- language="C" -->
+ * surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+ *                                       gsk_texture_get_width (texture),
+ *                                       gsk_texture_get_height (texture));
+ * gsk_texture_download (texture,
+ *                       cairo_image_surface_get_data (surface),
+ *                       cairo_image_surface_get_stride (surface));
+ * cairo_surface_mark_dirty (surface);
+ * ]|
+ **/
+void
+gsk_texture_download (GskTexture *texture,
+                      guchar     *data,
+                      gsize       stride)
+{
+  g_return_if_fail (GSK_IS_TEXTURE (texture));
+  g_return_if_fail (data != NULL);
+  g_return_if_fail (stride >= gsk_texture_get_width (texture) * 4);
+
+  return texture->klass->download (texture, data, stride);
 }
 
 gboolean
