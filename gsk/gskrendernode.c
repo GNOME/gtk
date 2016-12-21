@@ -285,4 +285,54 @@ gsk_render_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+#define GSK_RENDER_NODE_SERIALIZATION_VERSION 0
+#define GSK_RENDER_NODE_SERIALIZATION_ID "GskRenderNode"
+
+GBytes *
+gsk_render_node_serialize (GskRenderNode *node)
+{
+  GVariant *node_variant, *variant;
+  GBytes *result;
+
+  node_variant = gsk_render_node_serialize_node (node);
+
+  variant = g_variant_new ("(suuv)",
+                           GSK_RENDER_NODE_SERIALIZATION_ID,
+                           (guint32) GSK_RENDER_NODE_SERIALIZATION_VERSION,
+                           (guint32) gsk_render_node_get_node_type (node),
+                           node_variant);
+
+  result = g_variant_get_data_as_bytes (variant);
+  g_variant_unref (variant);
+
+  return result;
+}
+
+GskRenderNode *
+gsk_render_node_deserialize (GBytes *bytes)
+{
+  char *id_string;
+  guint32 version, node_type;
+  GVariant *variant, *node_variant;
+  GskRenderNode *node = NULL;
+
+  variant = g_variant_new_from_bytes (G_VARIANT_TYPE ("(suuv)"), bytes, FALSE);
+
+  g_variant_get (variant, "(suuv)", &id_string, &version, &node_type, &node_variant);
+
+  if (!g_str_equal (id_string, GSK_RENDER_NODE_SERIALIZATION_ID))
+    goto out;
+
+  if (version != GSK_RENDER_NODE_SERIALIZATION_VERSION)
+    goto out;
+
+  node = gsk_render_node_deserialize_node (node_type, node_variant);
+
+out:
+  g_free (id_string);
+  g_variant_unref (node_variant);
+  g_variant_unref (variant);
+
+  return node;
+}
 

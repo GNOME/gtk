@@ -170,6 +170,12 @@ const char *            gsk_render_node_get_name                (GskRenderNode *
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_draw                    (GskRenderNode *node,
                                                                  cairo_t       *cr);
+
+GDK_AVAILABLE_IN_3_90
+GBytes *                gsk_render_node_serialize               (GskRenderNode *node);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_render_node_deserialize             (GBytes        *bytes);
+
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_H__ */
