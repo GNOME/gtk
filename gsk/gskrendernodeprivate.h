@@ -22,6 +22,8 @@ struct _GskRenderNode
   /* Scaling filters */
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
+
+  graphene_rect_t bounds;
 };
 
 struct _GskRenderNodeClass
@@ -32,8 +34,6 @@ struct _GskRenderNodeClass
   void (* finalize) (GskRenderNode *node);
   void (* draw) (GskRenderNode *node,
                  cairo_t       *cr);
-  void (* get_bounds) (GskRenderNode   *node,
-                       graphene_rect_t *bounds);
 };
 
 GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class);

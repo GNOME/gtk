@@ -171,20 +171,20 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
                                         GskVulkanRender      *render,
                                         GskVulkanUploader    *uploader)
 {
-  graphene_rect_t bounds;
+  GskRenderNode *node;
   cairo_surface_t *surface;
   cairo_t *cr;
 
-  gsk_render_node_get_bounds (op->node, &bounds);
+  node = op->node;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceil (bounds.size.width),
-                                        ceil (bounds.size.height));
+                                        ceil (node->bounds.size.width),
+                                        ceil (node->bounds.size.height));
   cr = cairo_create (surface);
-  cairo_translate (cr, -bounds.origin.x, -bounds.origin.y);
+  cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 
-  gsk_render_node_draw (op->node, cr);
-  
+  gsk_render_node_draw (node, cr);
+
   cairo_destroy (cr);
 
   op->source = gsk_vulkan_image_new_from_data (uploader,
@@ -303,26 +303,20 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
           {
-            graphene_rect_t bounds;
-
-            gsk_render_node_get_bounds (op->render.node, &bounds);
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_blend_pipeline_collect_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline),
                                                            data + n_bytes + offset,
-                                                           &bounds);
+                                                           &op->render.node.bounds);
             n_bytes += op->render.vertex_count;
           }
           break;
 
         case GSK_VULKAN_OP_COLOR:
           {
-            graphene_rect_t bounds;
-
-            gsk_render_node_get_bounds (op->render.node, &bounds);
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_color_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline),
                                                            data + n_bytes + offset,
-                                                           &bounds,
+                                                           &op->render.node.bounds,
                                                            gsk_color_node_peek_color (op->render.node));
             n_bytes += op->render.vertex_count;
           }
