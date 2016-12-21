@@ -22,9 +22,6 @@ struct _GskRenderNode
   /* Scaling filters */
   GskScalingFilter min_filter;
   GskScalingFilter mag_filter;
-
-  /* Bit fields; leave at the end */
-  gboolean is_mutable : 1;
 };
 
 struct _GskRenderNodeClass
@@ -33,7 +30,6 @@ struct _GskRenderNodeClass
   gsize struct_size;
   const char *type_name;
   void (* finalize) (GskRenderNode *node);
-  void (* make_immutable) (GskRenderNode *node);
   void (* draw) (GskRenderNode *node,
                  cairo_t       *cr);
   void (* get_bounds) (GskRenderNode   *node,
@@ -41,8 +37,6 @@ struct _GskRenderNodeClass
 };
 
 GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class);
-
-void gsk_render_node_make_immutable (GskRenderNode *node);
 
 void gsk_render_node_get_bounds (GskRenderNode   *node,
                                  graphene_rect_t *frame);
