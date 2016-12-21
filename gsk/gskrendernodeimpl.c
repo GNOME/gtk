@@ -1969,7 +1969,7 @@ gsk_transform_node_draw (GskRenderNode *node,
   else
     {
       cairo_set_source_rgb (cr, 255 / 255., 105 / 255., 180 / 255.);
-      cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.x, node->bounds.size.width, node->bounds.size.height);
+      cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y, node->bounds.size.width, node->bounds.size.height);
       cairo_fill (cr);
     }
 }
