@@ -631,7 +631,6 @@ gtk_css_shadow_value_get_shadow (const GtkCssValue *value,
   shadow->color = *_gtk_css_rgba_value_get_rgba (value->color);
   shadow->dx = _gtk_css_number_value_get (value->hoffset, 0);
   shadow->dy = _gtk_css_number_value_get (value->voffset, 0);
-  shadow->spread = _gtk_css_number_value_get (value->spread, 0);
   shadow->radius = _gtk_css_number_value_get (value->radius, 0);
 }
 
