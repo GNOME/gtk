@@ -343,6 +343,9 @@ void           gdk_gl_texture_quads               (GdkGLContext *paint_context,
                                                    GdkTexturedQuad *quads,
                                                    gboolean flip_colors);
 
+void            gdk_cairo_surface_paint_pixbuf   (cairo_surface_t *surface,
+                                                  const GdkPixbuf *pixbuf);
+
 void            gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
                                                   GdkWindow       *window);
 cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
