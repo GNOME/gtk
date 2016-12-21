@@ -47,7 +47,6 @@ struct _GskShadow
   GdkRGBA color;
   float dx;
   float dy;
-  float spread;
   float radius;
 };
 
