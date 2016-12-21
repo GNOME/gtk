@@ -166,6 +166,9 @@ void                    gsk_render_node_set_name                (GskRenderNode *
                                                                  const char    *name);
 GDK_AVAILABLE_IN_3_90
 const char *            gsk_render_node_get_name                (GskRenderNode *node);
+GDK_AVAILABLE_IN_3_90
+void                    gsk_render_node_get_bounds              (GskRenderNode   *node,
+                                                                 graphene_rect_t *frame);
 
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_draw                    (GskRenderNode *node,
