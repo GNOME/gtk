@@ -1,3 +1,83 @@
+Overview of Changes in GTK+ 3.89.2
+==================================
+
+* gtk4-icon-browser works again
+
+* gtk-encode symbolic works for icons with names containing dots
+
+* GtkFlowBox and GtkListBox have been changed to no longer emit
+  the ::selected-children-changed signal during destruction
+
+* gtk-demo has gained an example for using PangoTabArray with GtkTextView
+
+* We now support CSS border-spacing in GtkGrid, GtkBox and in gadgets
+
+* The rendering in GDK and GSK has been further refactored. We now
+  only draw toplevel windows, and we always redraw the whole window.
+
+* A Vulkan implementation has been added in parallel to the GL one
+
+* Dropped APIs:
+ gdk_window_process_updates
+ gdk_window_process_all_updates
+ gdk_window_reparent
+ support for native and foreign subwindows
+ gsk_render_node_{append/prepend/insert} variations
+ gsk_render_node_make_immutable
+ gtk_cairo_should_draw_window
+ gtk_snapshot_append
+ GtkJunctionSides
+
+* New APIs:
+ gdk_rgba_is_clear
+ gdk_rgba_is_opaque
+ GdkDrawContext: A base class for vulkan and gl contexts
+ Render node subclasses
+ GskRoundedRect
+ gtk_container_snapshot_child
+
+* The GSK_USE_SOFTWARE environment variable has been generalized as GSK_RENDERER.
+  Use GSK_RENDERER=help to learn about possible values. Other environment variables
+  that have gained new possible values in clude GSK_DEBUG=vulkan and GTK_DEBUG=snapshot.
+
+* Bugs fixed
+ 749012 GtkStack: Don't emit notify::visible-child during destruction
+ 771242 opening menu for certain types of GtkComboBox causes Gdk-CRITICAL assertion...
+ 772371 Take advantage of Unicode
+ 773299 Ensure GTK+-4.x builds and works on Windows (MSVC in particular)
+ 774265 No tilt for wintab devices
+ 774534 input shape and opaque region not applied without begin_paint()/end_paint()
+ 774686 GtkMenu does not unref all GtkCheckMenuItem it creates
+ 774695 GtkProgressbar needs full and empty classes
+ 774743 GtkNotebook does not unref all GtkBuiltinIcon it creates
+ 774760 inspector: ensure controller is a GtkGesture
+ 774784 Failed to get desktop session proxy is not an error!
+ 774790 GtkTextHandle does not unref all GtkAdjustment it references
+ 774893 Application font sizes scaling gets clamped to 1.00 when starting GtkInspector
+ 774915 Destroying the parent of a subsurface causes _gdk_window_destroy_hierarchy: ...
+ 774917 child subsurfaces need to be placed relative to their parent
+ 774939 GtkLabelAccessible: Initialize link before setting parent
+ 775038 Build: Add wayland to GSKs dependencies
+ 775212 GtkScaleButton does not unref all GtkAdjustment it references
+ 775316 gtk_drag_source_set_icon_pixbuf references the pixbuf received once too much
+ 775319 gdk_window_get_toplevel() fails to return the toplevel of a child subsurface
+ 775410 gsk/Makefile.am runs g-ir-scanner before libgsk-4.la is linked
+ 775525 gtk_flow_box_get_child_at_index shouldn't crash with an invalid index
+ 775651 GdkX11-4.0.gir, GdkWin32-4.0.gir, and Gsk-4.0.gir are generated before Gdk-4...
+ 776132 Mention the difference between gdk_window_create_similar_image_surface and c...
+ 776187 flowbox: Add gtk_flow_box_get_child_at_pos to gtk3
+ 776306 flowbox: Sometimes emits child-activated during rubberband selection
+
+* Translation updates
+ Czech
+ German
+ Hungarian
+ Italian
+ Kazakh
+ Russian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.89.1
 ==================================
 
