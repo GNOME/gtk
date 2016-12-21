@@ -27,6 +27,7 @@ fontconfig_programs = testfontchooserdialog
 endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
+	rendernode			\
 	overlayscroll			\
 	syncscroll			\
 	animated-resizing		\
@@ -161,6 +162,7 @@ if USE_X11
 noinst_PROGRAMS += testerrors
 endif
 
+rendernode_DEPENDENCIES = $(TEST_DEPS)
 animated_resizing_DEPENDENCIES = $(TEST_DEPS)
 animated_revealing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
