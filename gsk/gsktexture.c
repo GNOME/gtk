@@ -135,7 +135,7 @@ gsk_texture_cairo_finalize (GskTexture *texture)
 }
 
 static cairo_surface_t *
-gsk_texture_cairo_download (GskTexture *texture)
+gsk_texture_cairo_download_surface (GskTexture *texture)
 {
   GskCairoTexture *cairo = (GskCairoTexture *) texture;
 
@@ -146,7 +146,7 @@ static const GskTextureClass GSK_TEXTURE_CLASS_CAIRO = {
   "cairo",
   sizeof (GskCairoTexture),
   gsk_texture_cairo_finalize,
-  gsk_texture_cairo_download
+  gsk_texture_cairo_download_surface
 };
 
 GskTexture *
@@ -209,7 +209,7 @@ gsk_texture_pixbuf_finalize (GskTexture *texture)
 }
 
 static cairo_surface_t *
-gsk_texture_pixbuf_download (GskTexture *texture)
+gsk_texture_pixbuf_download_surface (GskTexture *texture)
 {
   GskPixbufTexture *pixbuf = (GskPixbufTexture *) texture;
 
@@ -220,7 +220,7 @@ static const GskTextureClass GSK_TEXTURE_CLASS_PIXBUF = {
   "pixbuf",
   sizeof (GskPixbufTexture),
   gsk_texture_pixbuf_finalize,
-  gsk_texture_pixbuf_download
+  gsk_texture_pixbuf_download_surface,
 };
 
 GskTexture *
@@ -276,9 +276,9 @@ gsk_texture_get_height (GskTexture *texture)
 }
 
 cairo_surface_t *
-gsk_texture_download (GskTexture *texture)
+gsk_texture_download_surface (GskTexture *texture)
 {
-  return texture->klass->download (texture);
+  return texture->klass->download_surface (texture);
 }
 
 gboolean
