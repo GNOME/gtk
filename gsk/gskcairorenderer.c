@@ -65,12 +65,6 @@ gsk_cairo_renderer_render (GskRenderer   *renderer,
 
   gsk_renderer_get_viewport (renderer, &self->viewport);
 
-  cairo_save (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  cairo_set_source_rgba (cr, 0, 0, 0, 0);
-  cairo_paint (cr);
-  cairo_restore (cr);
-
   if (GSK_RENDER_MODE_CHECK (GEOMETRY))
     {
       cairo_save (cr);
