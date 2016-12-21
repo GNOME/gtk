@@ -151,7 +151,7 @@ gdk_cairo_region (cairo_t              *cr,
     }
 }
 
-static void
+void
 gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
                                 const GdkPixbuf *pixbuf)
 {
@@ -198,7 +198,9 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
               q[0] = p[2];
               q[1] = p[1];
               q[2] = p[0];
+              q[3] = 0xFF;
 #else
+              q[0] = 0xFF;
               q[1] = p[0];
               q[2] = p[1];
               q[3] = p[2];
