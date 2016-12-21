@@ -165,7 +165,6 @@ gtk_snapshot_finish (GtkSnapshot *snapshot)
  * @keep_coordinates: If %TRUE, the current offset and clip will be kept.
  *     Otherwise, the clip will be unset and the offset will be reset to
  *     (0, 0).
- * @bounds: the bounds for the new node
  * @name: (transfer none): a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
  *
@@ -540,7 +539,7 @@ gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
  * Removes the top element from the stack of render nodes,
  * making the node underneath the current node again.
  *
- * Returns: (transfer full) (allow none): A #GskRenderNode for
+ * Returns: (transfer full) (nullable): A #GskRenderNode for
  *     the contents that were rendered to @snapshot since
  *     the corresponding gtk_snapshot_push() call
  *
@@ -632,8 +631,8 @@ gtk_snapshot_translate_2d (GtkSnapshot *snapshot,
 /**
  * gtk_snapshot_get_offset:
  * @snapshot: a #GtkSnapshot
- * @x: (out allow-none): return location for x offset
- * @y: (out allow-none): return location for y offset
+ * @x: (out) (optional): return location for x offset
+ * @y: (out) (optional): return location for y offset
  *
  * Queries the offset managed by @snapshot. This offset is the
  * accumulated sum of calls to gtk_snapshot_translate_2d().
