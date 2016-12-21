@@ -13,8 +13,7 @@ typedef struct _GskRenderNodeClass GskRenderNodeClass;
 struct _GskRenderNode
 {
   const GskRenderNodeClass *node_class;
-
-  volatile int ref_count;
+  GskRenderTree *tree;
 
   /* Use for debugging */
   char *name;
@@ -31,19 +30,23 @@ struct _GskRenderNodeClass
   GskRenderNodeType node_type;
   gsize struct_size;
   const char *type_name;
-  void (* finalize) (GskRenderNode *node);
   void (* draw) (GskRenderNode *node,
                  cairo_t       *cr);
   GVariant * (* serialize) (GskRenderNode *node);
-  GskRenderNode * (* deserialize) (GVariant  *variant,
+  GskRenderNode * (* deserialize) (GskRenderTree *tree,
+                                   GVariant  *variant,
                                    GError   **error);
 };
 
-GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size);
+GskRenderNode *gsk_render_tree_new_node (GskRenderTree  *tree, const GskRenderNodeClass *node_class, gsize extra_size);
+gpointer gsk_render_tree_allocate (GskRenderTree *self, gsize n_bytes, gsize align_size);
+void gsk_render_tree_add_cleanup (GskRenderTree  *tree, GDestroyNotify notify, gpointer data);
+GskRenderNode *gsk_render_tree_ref_foreign (GskRenderTree  *tree, GskRenderNode *node);
 
 GVariant * gsk_render_node_serialize_node (GskRenderNode *node);
-GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType type, GVariant *variant, GError **error);
+GskRenderNode * gsk_render_node_deserialize_node (GskRenderTree *tree, GskRenderNodeType type, GVariant *variant, GError **error);
 
+GskRenderTree *gsk_render_node_get_tree (GskRenderNode *self);
 double gsk_opacity_node_get_opacity (GskRenderNode *node);
 
 GskRenderNode * gsk_color_matrix_node_get_child (GskRenderNode *node);
@@ -62,7 +65,7 @@ const GskRoundedRect * gsk_border_node_peek_outline (GskRenderNode *node);
 float gsk_border_node_get_width (GskRenderNode *node, guint i);
 const GdkRGBA * gsk_border_node_peek_color (GskRenderNode *node, guint i);
 
-GskRenderNode *gsk_cairo_node_new_for_surface (const graphene_rect_t *bounds, cairo_surface_t *surface);
+GskRenderNode *gsk_cairo_node_new_for_surface (GskRenderTree *tree, const graphene_rect_t *bounds, cairo_surface_t *surface);
 cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);

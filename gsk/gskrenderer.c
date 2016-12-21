@@ -688,38 +688,38 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
 /**
  * gsk_renderer_render:
  * @renderer: a #GskRenderer
- * @root: a #GskRenderNode
+ * @root_node: a #GskRenderNode
  * @context: The drawing context created via gsk_renderer_begin_draw_frame()
  *
  * Renders the scene graph, described by a tree of #GskRenderNode instances,
  * using the given #GdkDrawingContext.
  *
- * The @renderer will acquire a reference on the #GskRenderNode tree while
+ * The @renderer will acquire a reference on the #GskRenderNode while
  * the rendering is in progress.
  *
  * Since: 3.90
  */
 void
 gsk_renderer_render (GskRenderer       *renderer,
-                     GskRenderNode     *root,
+                     GskRenderNode     *root_node,
                      GdkDrawingContext *context)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
 
   g_return_if_fail (GSK_IS_RENDERER (renderer));
   g_return_if_fail (priv->is_realized);
-  g_return_if_fail (GSK_IS_RENDER_NODE (root));
+  g_return_if_fail (GSK_IS_RENDER_NODE (root_node));
   g_return_if_fail (priv->root_node == NULL);
   g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
   g_return_if_fail (context == priv->drawing_context);
 
-  priv->root_node = gsk_render_node_ref (root);
+  priv->root_node = gsk_render_node_ref (root_node);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_reset (priv->profiler);
 #endif
 
-  GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root);
+  GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root_node);
 
 #ifdef G_ENABLE_DEBUG
   if (GSK_DEBUG_CHECK (RENDERER))

@@ -238,6 +238,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
   if (linear->repeating)
     {
       node = gsk_repeating_linear_gradient_node_new (
+          gtk_snapshot_get_tree (snapshot),
           &GRAPHENE_RECT_INIT (off_x, off_y, width, height),
           &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (start - 0.5), off_y + height / 2 + y * (start - 0.5)),
           &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (end - 0.5),   off_y + height / 2 + y * (end - 0.5)),
@@ -247,6 +248,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
   else
     {
       node = gsk_linear_gradient_node_new (
+          gtk_snapshot_get_tree (snapshot),
           &GRAPHENE_RECT_INIT (off_x, off_y, width, height),
           &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (start - 0.5), off_y + height / 2 + y * (start - 0.5)),
           &GRAPHENE_POINT_INIT (off_x + width / 2 + x * (end - 0.5),   off_y + height / 2 + y * (end - 0.5)),
@@ -262,8 +264,6 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
     }
 
   gtk_snapshot_append_node (snapshot, node);
-
-  gsk_render_node_unref (node);
 }
 
 

@@ -53,6 +53,113 @@
 
 #include <gobject/gvaluecollector.h>
 
+#define ALLOCATE_CHUNK_SIZE (16*1024 - 2*sizeof(gsize))
+
+#define ALIGN(size, base)       ((base) * (gsize) (((size) + (base) - 1) / (base)))
+
+struct _GskRenderTree
+{
+  GObject parent_instance;
+
+  guint8 *chunk;
+  gsize chunk_offset;
+  int chunk_count;
+
+  GPtrArray *destroy_list;
+};
+
+G_DEFINE_TYPE (GskRenderTree, gsk_render_tree, G_TYPE_OBJECT)
+G_DEFINE_QUARK (gsk-serialization-error-quark, gsk_serialization_error)
+
+static void
+gsk_render_tree_finalize (GObject *gobject)
+{
+  GskRenderTree *self = GSK_RENDER_TREE (gobject);
+  int i;
+
+  /* We free in reverse order, because the notify may touch
+     something allocated before it */
+  for (i = self->destroy_list->len - 2; i >= 0 ; i -= 2)
+    {
+      GDestroyNotify notify = g_ptr_array_index (self->destroy_list, i);
+      gpointer data = g_ptr_array_index (self->destroy_list, i + 1);
+      notify (data);
+    }
+
+  g_ptr_array_free (self->destroy_list, TRUE);
+
+  G_OBJECT_CLASS (gsk_render_tree_parent_class)->finalize (gobject);
+}
+
+static void
+gsk_render_tree_class_init (GskRenderTreeClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gsk_render_tree_finalize;
+}
+
+static void
+gsk_render_tree_init (GskRenderTree *self)
+{
+  self->destroy_list = g_ptr_array_new ();
+}
+
+void
+gsk_render_tree_add_cleanup (GskRenderTree  *self,
+                             GDestroyNotify notify,
+                             gpointer data)
+{
+  g_ptr_array_add (self->destroy_list, notify);
+  g_ptr_array_add (self->destroy_list, data);
+}
+
+/* Note: Align-size must be a power of two */
+gpointer
+gsk_render_tree_allocate (GskRenderTree *self, gsize n_bytes, gsize align_size)
+{
+  gpointer data = NULL;
+
+  if (n_bytes >= ALLOCATE_CHUNK_SIZE / 4)
+    {
+      data = g_malloc0 (n_bytes);
+      gsk_render_tree_add_cleanup (self, g_free, data);
+    }
+  else
+    {
+      self->chunk_offset = (self->chunk_offset + align_size - 1) & ~(align_size - 1);
+      if (self->chunk == NULL || (ALLOCATE_CHUNK_SIZE - self->chunk_offset) < n_bytes)
+        {
+          self->chunk = g_malloc (ALLOCATE_CHUNK_SIZE);
+          gsk_render_tree_add_cleanup (self, g_free, self->chunk);
+          self->chunk_offset = 0;
+        }
+
+      data = self->chunk + self->chunk_offset;
+      self->chunk_offset += n_bytes;
+      memset (data, 0, n_bytes);
+    }
+
+  return data;
+}
+
+GskRenderNode *
+gsk_render_tree_ref_foreign (GskRenderTree  *tree, GskRenderNode *node)
+{
+  if (node->tree != tree)
+    gsk_render_tree_add_cleanup (tree, (GDestroyNotify)gsk_render_node_unref, gsk_render_node_ref (node));
+
+  return node;
+}
+
+
+GskRenderTree *
+gsk_render_tree_new ()
+{
+  return g_object_new (GSK_TYPE_RENDER_TREE,
+                       NULL);
+}
+
 /**
  * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref)
  *
@@ -65,42 +172,34 @@ G_DEFINE_BOXED_TYPE (GskRenderNode, gsk_render_node,
                      gsk_render_node_ref,
                      gsk_render_node_unref)
 
-G_DEFINE_QUARK (gsk-serialization-error-quark, gsk_serialization_error)
-
-static void
-gsk_render_node_finalize (GskRenderNode *self)
-{
-  self->node_class->finalize (self);
-
-  g_clear_pointer (&self->name, g_free);
-
-  g_free (self);
-}
-
 /*< private >
- * gsk_render_node_new:
+ * gsk_render_tree_new_node:
  * @node_class: class structure for this node
  *
  * Returns: (transfer full): the newly created #GskRenderNode
  */
 GskRenderNode *
-gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
+gsk_render_tree_new_node (GskRenderTree *self, const GskRenderNodeClass *node_class, gsize extra_size)
 {
-  GskRenderNode *self;
+  GskRenderNode *node;
 
   g_return_val_if_fail (node_class != NULL, NULL);
   g_return_val_if_fail (node_class->node_type != GSK_NOT_A_RENDER_NODE, NULL);
 
-  self = g_malloc0 (node_class->struct_size + extra_size);
+  node = gsk_render_tree_allocate (self, node_class->struct_size + extra_size, 2*sizeof(gsize));
 
-  self->node_class = node_class;
+  node->node_class = node_class;
+  node->tree = self;
+  node->min_filter = GSK_SCALING_FILTER_NEAREST;
+  node->mag_filter = GSK_SCALING_FILTER_NEAREST;
 
-  self->ref_count = 1;
+  return node;
+}
 
-  self->min_filter = GSK_SCALING_FILTER_NEAREST;
-  self->mag_filter = GSK_SCALING_FILTER_NEAREST;
-
-  return self;
+GskRenderTree *
+gsk_render_node_get_tree (GskRenderNode *self)
+{
+  return self->tree;
 }
 
 /**
@@ -108,6 +207,10 @@ gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
  * @node: a #GskRenderNode
  *
  * Acquires a reference on the given #GskRenderNode.
+ * All nodes are owned by the tree they are part of, so normally you don't
+ * need to ref individual nodes.
+ *
+ * Note: This keeps the whole tree alive for the lifetime of the node.
  *
  * Returns: (transfer none): the #GskRenderNode with an additional reference
  *
@@ -116,9 +219,12 @@ gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
 GskRenderNode *
 gsk_render_node_ref (GskRenderNode *node)
 {
+  GskRenderTree *tree;
+
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
 
-  g_atomic_int_inc (&node->ref_count);
+  tree = gsk_render_node_get_tree (node);
+  g_object_ref (tree);
 
   return node;
 }
@@ -137,10 +243,12 @@ gsk_render_node_ref (GskRenderNode *node)
 void
 gsk_render_node_unref (GskRenderNode *node)
 {
+  GskRenderTree *tree;
+
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  if (g_atomic_int_dec_and_test (&node->ref_count))
-    gsk_render_node_finalize (node);
+  tree = gsk_render_node_get_tree (node);
+  g_object_unref (tree);
 }
 
 /**
@@ -209,10 +317,16 @@ void
 gsk_render_node_set_name (GskRenderNode *node,
                           const char    *name)
 {
+  GskRenderTree *tree;
+  char *new_name;
+
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  g_free (node->name);
-  node->name = g_strdup (name);
+  tree = gsk_render_node_get_tree (node);
+
+  new_name = gsk_render_tree_allocate (tree, strlen (name) + 1, 1);
+  strcpy (new_name, name);
+  node->name = new_name;
 }
 
 /**
@@ -391,6 +505,7 @@ gsk_render_node_deserialize (GBytes  *bytes,
   guint32 version, node_type;
   GVariant *variant, *node_variant;
   GskRenderNode *node = NULL;
+  GskRenderTree *tree;
 
   variant = g_variant_new_from_bytes (G_VARIANT_TYPE ("(suuv)"), bytes, FALSE);
 
@@ -410,7 +525,10 @@ gsk_render_node_deserialize (GBytes  *bytes,
       goto out;
     }
 
-  node = gsk_render_node_deserialize_node (node_type, node_variant, error);
+  tree = gsk_render_tree_new ();
+  node = gsk_render_node_deserialize_node (tree, node_type, node_variant, error);
+  gsk_render_node_ref (node);
+  g_object_unref (tree);
 
 out:
   g_free (id_string);

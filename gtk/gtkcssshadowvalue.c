@@ -1051,7 +1051,8 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *shadow,
   gsk_rounded_rect_init_copy (&outline, border_box);
   gsk_rounded_rect_offset (&outline, off_x, off_y);
 
-  node = gsk_outset_shadow_node_new (&outline, 
+  node = gsk_outset_shadow_node_new (gtk_snapshot_get_tree (snapshot),
+                                     &outline,
                                      _gtk_css_rgba_value_get_rgba (shadow->color),
                                      _gtk_css_number_value_get (shadow->hoffset, 0),
                                      _gtk_css_number_value_get (shadow->voffset, 0),
@@ -1060,7 +1061,6 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *shadow,
   if (snapshot->record_names)
     gsk_render_node_set_name (node, "Outset Shadow");
   gtk_snapshot_append_node (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
 void
@@ -1082,7 +1082,8 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
   gsk_rounded_rect_init_copy (&outline, padding_box);
   gsk_rounded_rect_offset (&outline, off_x, off_y);
 
-  node = gsk_inset_shadow_node_new (&outline, 
+  node = gsk_inset_shadow_node_new (gtk_snapshot_get_tree (snapshot),
+                                     &outline,
                                     _gtk_css_rgba_value_get_rgba (shadow->color),
                                     _gtk_css_number_value_get (shadow->hoffset, 0),
                                     _gtk_css_number_value_get (shadow->voffset, 0),
@@ -1091,6 +1092,5 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
   if (snapshot->record_names)
     gsk_render_node_set_name (node, "Inset Shadow");
   gtk_snapshot_append_node (snapshot, node);
-  gsk_render_node_unref (node);
 }
 

@@ -34,6 +34,7 @@ struct _GtkSnapshotState {
   GtkSnapshotState      *cached_state; /* A cleared state object we can (re)use */
 
   char                  *name;
+  GskRenderTree         *tree;
   GPtrArray             *nodes;
 
   cairo_region_t        *clip_region;
@@ -74,6 +75,7 @@ struct _GtkSnapshot {
   GtkSnapshotState      *state;
   gboolean               record_names;
   GskRenderer           *renderer;
+  GskRenderTree         *tree;
 };
 
 void            gtk_snapshot_init               (GtkSnapshot             *state,

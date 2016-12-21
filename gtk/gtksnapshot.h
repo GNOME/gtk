@@ -92,6 +92,8 @@ GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_get_offset                 (GtkSnapshot            *snapshot,
                                                          int                    *x,
                                                          int                    *y);
+GDK_AVAILABLE_IN_3_90
+GskRenderTree *gtk_snapshot_get_tree                   (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,

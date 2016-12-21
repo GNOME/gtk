@@ -7024,6 +7024,8 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
           gsk_render_node_draw (node, cr);
 	  cairo_destroy (cr);
 
+          gsk_render_node_unref (node);
+
 	  return surface;
 	}
     }

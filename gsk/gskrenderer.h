@@ -75,7 +75,7 @@ GdkDrawingContext *     gsk_renderer_begin_draw_frame           (GskRenderer    
                                                                  const cairo_region_t    *region);
 GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_render                     (GskRenderer             *renderer,
-                                                                 GskRenderNode           *root,
+                                                                 GskRenderNode           *root_node,
                                                                  GdkDrawingContext       *context);
 GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_end_draw_frame             (GskRenderer             *renderer,

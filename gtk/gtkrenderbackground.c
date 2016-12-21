@@ -676,20 +676,16 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
 
               /* XXX: Is this necessary? Do we need a NULL node? */
               if (top == NULL)
-                top = gsk_container_node_new (NULL, 0);
+                top = gsk_container_node_new (gtk_snapshot_get_tree (snapshot), NULL, 0);
               if (bottom == NULL)
-                bottom = gsk_container_node_new (NULL, 0);
+                bottom = gsk_container_node_new (gtk_snapshot_get_tree (snapshot), NULL, 0);
 
-              blend = gsk_blend_node_new (bottom, top, blend_mode);
+              blend = gsk_blend_node_new (gtk_snapshot_get_tree (snapshot), bottom, top, blend_mode);
               if (snapshot->record_names)
                 gsk_render_node_set_name (blend, "BackgroundBlend");
 
               gtk_snapshot_push (snapshot, TRUE, "BackgroundBlendGroup");
               gtk_snapshot_append_node (snapshot, blend);
-
-              gsk_render_node_unref (blend);
-              gsk_render_node_unref (top);
-              gsk_render_node_unref (bottom);
             }
         }
 
