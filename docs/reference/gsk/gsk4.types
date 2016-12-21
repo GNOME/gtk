@@ -1,3 +1,2 @@
 gsk_render_node_get_type
-gsk_render_node_iter_get_type
 gsk_renderer_get_type
