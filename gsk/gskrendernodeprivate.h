@@ -34,18 +34,24 @@ struct _GskRenderNodeClass
   void (* finalize) (GskRenderNode *node);
   void (* draw) (GskRenderNode *node,
                  cairo_t       *cr);
+  GVariant * (* serialize) (GskRenderNode *node);
+  GskRenderNode * (* deserialize) (GVariant *variant);
 };
 
 GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size);
 
 void gsk_render_node_get_bounds (GskRenderNode   *node,
                                  graphene_rect_t *frame);
+GVariant * gsk_render_node_serialize_node (GskRenderNode *node);
+GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType type, GVariant *variant);
+
 double gsk_opacity_node_get_opacity (GskRenderNode *node);
 
 const GskRoundedRect * gsk_border_node_peek_outline (GskRenderNode *node);
 float gsk_border_node_get_width (GskRenderNode *node, guint i);
 const GdkRGBA * gsk_border_node_peek_color (GskRenderNode *node, guint i);
 
+GskRenderNode *gsk_cairo_node_new_for_surface (const graphene_rect_t *bounds, cairo_surface_t *surface);
 cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
