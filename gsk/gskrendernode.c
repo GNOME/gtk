@@ -176,7 +176,7 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
   g_return_if_fail (bounds != NULL);
 
-  node->node_class->get_bounds (node, bounds);
+  graphene_rect_init_from_rect (bounds, &node->bounds);
 }
 
 void
@@ -258,14 +258,11 @@ gsk_render_node_draw (GskRenderNode *node,
 
   if (!GSK_RENDER_MODE_CHECK (GEOMETRY))
     {
-      graphene_rect_t frame;
-
-      gsk_render_node_get_bounds (node, &frame);
       GSK_NOTE (CAIRO, g_print ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }\n",
-                                frame.origin.x, frame.origin.y,
-                                frame.size.width, frame.size.height));
+                                node->bounds.origin.x, node->bounds.origin.y,
+                                node->bounds.size.width, node->bounds.size.height));
 
-      cairo_rectangle (cr, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+      cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y, node->bounds.size.width, node->bounds.size.height);
       cairo_clip (cr);
     }
 
@@ -277,12 +274,9 @@ gsk_render_node_draw (GskRenderNode *node,
 
   if (GSK_RENDER_MODE_CHECK (GEOMETRY))
     {
-      graphene_rect_t frame;
-
-      gsk_render_node_get_bounds (node, &frame);
-
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_rectangle (cr, frame.origin.x - 1, frame.origin.y - 1, frame.size.width + 2, frame.size.height + 2);
+      cairo_rectangle (cr, node->bounds.origin.x - 1, node->bounds.origin.y - 1,
+                       node->bounds.size.width + 2, node->bounds.size.height + 2);
       cairo_set_line_width (cr, 2);
       cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
       cairo_stroke (cr);

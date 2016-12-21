@@ -604,7 +604,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                  RenderItem              *parent)
 {
   graphene_rect_t viewport;
-  graphene_rect_t bounds;
   RenderItem item;
   RenderItem *ritem = NULL;
   int program_id;
@@ -618,24 +617,22 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
   if (scale_factor < 1)
     scale_factor = 1;
 
-  gsk_render_node_get_bounds (node, &bounds);
-
   item.node = node;
   item.name = node->name != NULL ? node->name : "unnamed";
 
   /* The texture size */
-  item.size.width = bounds.size.width * scale_factor;
-  item.size.height = bounds.size.height * scale_factor;
+  item.size.width = node->bounds.size.width * scale_factor;
+  item.size.height = node->bounds.size.height * scale_factor;
 
   /* Each render item is an axis-aligned bounding box that we
    * transform using the given transformation matrix
    */
-  item.min.x = bounds.origin.x;
-  item.min.y = bounds.origin.y;
+  item.min.x = node->bounds.origin.x;
+  item.min.y = node->bounds.origin.y;
   item.min.z = 0.f;
 
-  item.max.x = item.min.x + bounds.size.width;
-  item.max.y = item.min.y + bounds.size.height;
+  item.max.x = item.min.x + node->bounds.size.width;
+  item.max.y = item.min.y + node->bounds.size.height;
   item.max.z = 0.f;
 
   /* The location of the item, in normalized world coordinates */
@@ -763,17 +760,14 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
     default:
       {
-        graphene_rect_t bounds;
         cairo_surface_t *surface;
         cairo_t *cr;
 
-        gsk_render_node_get_bounds (node, &bounds);
-
         surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                              ceil (bounds.size.width),
-                                              ceil (bounds.size.height));
+                                              ceil (node->bounds.size.width),
+                                              ceil (node->bounds.size.height));
         cr = cairo_create (surface);
-        cairo_translate (cr, -bounds.origin.x, -bounds.origin.y);
+        cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 
         gsk_render_node_draw (node, cr);
         
