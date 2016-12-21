@@ -134,7 +134,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
                                double              height)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
-  GskColorStop stops[linear->stops->len];
+  GskColorStop *stops;
   GskRenderNode *node;
   double off_x, off_y; /* snapshot offset */
   double angle; /* actual angle of the gradiant line in degrees */
@@ -183,6 +183,8 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
 
   offset = start;
   last = -1;
+  stops = g_newa (GskColorStop, linear->stops->len);
+
   for (i = 0; i < linear->stops->len; i++)
     {
       GtkCssImageLinearColorStop *stop;
@@ -238,6 +240,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
           stops,
           linear->stops->len);
     }
+
   name = g_strdup_printf ("%sLinearGradient<%ustops>", linear->repeating ? "Repeating" : "", linear->stops->len);
   gsk_render_node_set_name (node, name);
   g_free (name);
