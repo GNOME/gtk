@@ -79,6 +79,7 @@ gsk_texture_new_for_data
 gsk_texture_new_for_pixbuf
 gsk_texture_get_width
 gsk_texture_get_height
+gsk_texture_download
 <SUBSECTION Standard>
 GskTexture
 gsk_texture_get_type

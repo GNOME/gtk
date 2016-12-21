@@ -30,6 +30,9 @@ struct _GskTextureClass {
   gsize size;
 
   void                  (* finalize)                    (GskTexture             *texture);
+  void                  (* download)                    (GskTexture             *texture,
+                                                         guchar                 *data,
+                                                         gsize                   stride);
   cairo_surface_t *     (* download_surface)            (GskTexture             *texture);
 };
 

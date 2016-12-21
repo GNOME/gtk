@@ -52,6 +52,11 @@ int                     gsk_texture_get_width                  (GskTexture      
 GDK_AVAILABLE_IN_3_90
 int                     gsk_texture_get_height                 (GskTexture      *texture);
 
+GDK_AVAILABLE_IN_3_90
+void                    gsk_texture_download                   (GskTexture      *texture,
+                                                                guchar          *data,
+                                                                gsize            stride);
+
 G_END_DECLS
 
 #endif /* __GSK_TEXTURE_H__ */
