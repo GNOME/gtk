@@ -72,6 +72,21 @@ GSK_TYPE_BLEND_MODE
 </SECTION>
 
 <SECTION>
+<FILE>GskTexture</FILE>
+gsk_texture_ref
+gsk_texture_unref
+gsk_texture_new_for_data
+gsk_texture_new_for_pixbuf
+gsk_texture_get_width
+gsk_texture_get_height
+<SUBSECTION Standard>
+GskTexture
+gsk_texture_get_type
+GSK_TYPE_TEXTURE
+GSK_IS_TEXTURE
+</SECTION>
+
+<SECTION>
 <FILE>GskRoundedRect</FILE>
 GskCorner
 GskRoundedRect
