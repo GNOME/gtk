@@ -36,7 +36,7 @@ struct _GskRenderNodeClass
                  cairo_t       *cr);
 };
 
-GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class);
+GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size);
 
 void gsk_render_node_get_bounds (GskRenderNode   *node,
                                  graphene_rect_t *frame);

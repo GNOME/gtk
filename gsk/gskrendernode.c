@@ -72,7 +72,7 @@ gsk_render_node_finalize (GskRenderNode *self)
 
   g_clear_pointer (&self->name, g_free);
 
-  g_slice_free1 (self->node_class->struct_size, self);
+  g_free (self);
 }
 
 /*< private >
@@ -82,14 +82,14 @@ gsk_render_node_finalize (GskRenderNode *self)
  * Returns: (transfer full): the newly created #GskRenderNode
  */
 GskRenderNode *
-gsk_render_node_new (const GskRenderNodeClass *node_class)
+gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
 {
   GskRenderNode *self;
-  
+
   g_return_val_if_fail (node_class != NULL, NULL);
   g_return_val_if_fail (node_class->node_type != GSK_NOT_A_RENDER_NODE, NULL);
 
-  self = g_slice_alloc0 (node_class->struct_size);
+  self = g_malloc0 (node_class->struct_size + extra_size);
 
   self->node_class = node_class;
 

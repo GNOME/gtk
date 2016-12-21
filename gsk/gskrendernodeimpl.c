@@ -91,7 +91,7 @@ gsk_color_node_new (const GdkRGBA         *rgba,
   g_return_val_if_fail (rgba != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  self = (GskColorNode *) gsk_render_node_new (&GSK_COLOR_NODE_CLASS);
+  self = (GskColorNode *) gsk_render_node_new (&GSK_COLOR_NODE_CLASS, 0);
 
   self->color = *rgba;
   graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
@@ -110,16 +110,13 @@ struct _GskLinearGradientNode
   graphene_point_t start;
   graphene_point_t end;
 
-  GskColorStop *stops;
   gsize n_stops;
+  GskColorStop stops[];
 };
 
 static void
 gsk_linear_gradient_node_finalize (GskRenderNode *node)
 {
-  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
-
-  g_free (self->stops);
 }
 
 static void
@@ -197,13 +194,13 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (end != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
 
-  self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_LINEAR_GRADIENT_NODE_CLASS);
+  self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_LINEAR_GRADIENT_NODE_CLASS, sizeof (GskColorStop) * n_color_stops);
 
   graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
   graphene_point_init_from_point (&self->start, start);
   graphene_point_init_from_point (&self->end, end);
 
-  self->stops = g_memdup (color_stops, sizeof (GskColorStop) * n_color_stops);
+  memcpy (&self->stops, color_stops, sizeof (GskColorStop) * n_color_stops);
   self->n_stops = n_color_stops;
 
   return &self->render_node;
@@ -223,13 +220,13 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (end != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
 
-  self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS);
+  self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS, sizeof (GskColorStop) * n_color_stops);
 
   graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
   graphene_point_init_from_point (&self->start, start);
   graphene_point_init_from_point (&self->end, end);
 
-  self->stops = g_memdup (color_stops, sizeof (GskColorStop) * n_color_stops);
+  memcpy (&self->stops, color_stops, sizeof (GskColorStop) * n_color_stops);
   self->n_stops = n_color_stops;
 
   return &self->render_node;
@@ -396,7 +393,7 @@ gsk_border_node_new (const GskRoundedRect     *outline,
   g_return_val_if_fail (border_width != NULL, NULL);
   g_return_val_if_fail (border_color != NULL, NULL);
 
-  self = (GskBorderNode *) gsk_render_node_new (&GSK_BORDER_NODE_CLASS);
+  self = (GskBorderNode *) gsk_render_node_new (&GSK_BORDER_NODE_CLASS, 0);
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   memcpy (self->border_width, border_width, sizeof (self->border_width));
@@ -489,7 +486,7 @@ gsk_texture_node_new (GskTexture            *texture,
   g_return_val_if_fail (GSK_IS_TEXTURE (texture), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  self = (GskTextureNode *) gsk_render_node_new (&GSK_TEXTURE_NODE_CLASS);
+  self = (GskTextureNode *) gsk_render_node_new (&GSK_TEXTURE_NODE_CLASS, 0);
 
   self->texture = gsk_texture_ref (texture);
   graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
@@ -938,7 +935,7 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
   g_return_val_if_fail (outline != NULL, NULL);
   g_return_val_if_fail (color != NULL, NULL);
 
-  self = (GskInsetShadowNode *) gsk_render_node_new (&GSK_INSET_SHADOW_NODE_CLASS);
+  self = (GskInsetShadowNode *) gsk_render_node_new (&GSK_INSET_SHADOW_NODE_CLASS, 0);
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   self->color = *color;
@@ -1131,7 +1128,7 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
   g_return_val_if_fail (outline != NULL, NULL);
   g_return_val_if_fail (color != NULL, NULL);
 
-  self = (GskOutsetShadowNode *) gsk_render_node_new (&GSK_OUTSET_SHADOW_NODE_CLASS);
+  self = (GskOutsetShadowNode *) gsk_render_node_new (&GSK_OUTSET_SHADOW_NODE_CLASS, 0);
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   self->color = *color;
@@ -1230,7 +1227,7 @@ gsk_cairo_node_new (const graphene_rect_t *bounds)
 
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  self = (GskCairoNode *) gsk_render_node_new (&GSK_CAIRO_NODE_CLASS);
+  self = (GskCairoNode *) gsk_render_node_new (&GSK_CAIRO_NODE_CLASS, 0);
 
   graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
 
@@ -1329,8 +1326,8 @@ struct _GskContainerNode
 {
   GskRenderNode render_node;
 
-  GskRenderNode **children;
   guint n_children;
+  GskRenderNode *children[];
 };
 
 static void
@@ -1341,8 +1338,6 @@ gsk_container_node_finalize (GskRenderNode *node)
 
   for (i = 0; i < container->n_children; i++)
     gsk_render_node_unref (container->children[i]);
-
-  g_free (container->children);
 }
 
 static void
@@ -1402,13 +1397,12 @@ gsk_container_node_new (GskRenderNode **children,
   GskContainerNode *container;
   guint i;
 
-  container = (GskContainerNode *) gsk_render_node_new (&GSK_CONTAINER_NODE_CLASS);
+  container = (GskContainerNode *) gsk_render_node_new (&GSK_CONTAINER_NODE_CLASS, sizeof (GskRenderNode *) * n_children);
 
-  container->children = g_memdup (children, sizeof (GskRenderNode *) * n_children);
   container->n_children = n_children;
 
   for (i = 0; i < container->n_children; i++)
-    gsk_render_node_ref (container->children[i]);
+    container->children[i] = gsk_render_node_ref (children[i]);
 
   gsk_container_node_get_bounds (container, &container->render_node.bounds);
 
@@ -1521,7 +1515,7 @@ gsk_transform_node_new (GskRenderNode           *child,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (transform != NULL, NULL);
 
-  self = (GskTransformNode *) gsk_render_node_new (&GSK_TRANSFORM_NODE_CLASS);
+  self = (GskTransformNode *) gsk_render_node_new (&GSK_TRANSFORM_NODE_CLASS, 0);
 
   self->child = gsk_render_node_ref (child);
   graphene_matrix_init_from_matrix (&self->transform, transform);
@@ -1632,7 +1626,7 @@ gsk_opacity_node_new (GskRenderNode *child,
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
 
-  self = (GskOpacityNode *) gsk_render_node_new (&GSK_OPACITY_NODE_CLASS);
+  self = (GskOpacityNode *) gsk_render_node_new (&GSK_OPACITY_NODE_CLASS, 0);
 
   self->child = gsk_render_node_ref (child);
   self->opacity = CLAMP (opacity, 0.0, 1.0);
@@ -1737,7 +1731,7 @@ gsk_clip_node_new (GskRenderNode         *child,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (clip != NULL, NULL);
 
-  self = (GskClipNode *) gsk_render_node_new (&GSK_CLIP_NODE_CLASS);
+  self = (GskClipNode *) gsk_render_node_new (&GSK_CLIP_NODE_CLASS, 0);
 
   self->child = gsk_render_node_ref (child);
   graphene_rect_normalize_r (clip, &self->clip);
@@ -1840,7 +1834,7 @@ gsk_rounded_clip_node_new (GskRenderNode         *child,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (clip != NULL, NULL);
 
-  self = (GskRoundedClipNode *) gsk_render_node_new (&GSK_ROUNDED_CLIP_NODE_CLASS);
+  self = (GskRoundedClipNode *) gsk_render_node_new (&GSK_ROUNDED_CLIP_NODE_CLASS, 0);
 
   self->child = gsk_render_node_ref (child);
   gsk_rounded_rect_init_copy (&self->clip, clip);
@@ -1888,8 +1882,8 @@ struct _GskShadowNode
 
   GskRenderNode *child;
 
-  GskShadow *shadows;
   gsize n_shadows;
+  GskShadow shadows[];
 };
 
 static void
@@ -1898,8 +1892,6 @@ gsk_shadow_node_finalize (GskRenderNode *node)
   GskShadowNode *self = (GskShadowNode *) node;
 
   gsk_render_node_unref (self->child);
-
-  g_free (self->shadows);
 }
 
 static void
@@ -1995,10 +1987,10 @@ gsk_shadow_node_new (GskRenderNode         *child,
   g_return_val_if_fail (shadows != NULL, NULL);
   g_return_val_if_fail (n_shadows > 0, NULL);
 
-  self = (GskShadowNode *) gsk_render_node_new (&GSK_SHADOW_NODE_CLASS);
+  self = (GskShadowNode *) gsk_render_node_new (&GSK_SHADOW_NODE_CLASS, n_shadows * sizeof (GskShadow));
 
   self->child = gsk_render_node_ref (child);
-  self->shadows = g_memdup (shadows, n_shadows * sizeof (GskShadow));
+  memcpy (&self->shadows, shadows, n_shadows * sizeof (GskShadow));
   self->n_shadows = n_shadows;
 
   gsk_shadow_node_get_bounds (self, &self->render_node.bounds);
@@ -2153,7 +2145,7 @@ gsk_blend_node_new (GskRenderNode *bottom,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (bottom), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (top), NULL);
 
-  self = (GskBlendNode *) gsk_render_node_new (&GSK_BLEND_NODE_CLASS);
+  self = (GskBlendNode *) gsk_render_node_new (&GSK_BLEND_NODE_CLASS, 0);
 
   self->bottom = gsk_render_node_ref (bottom);
   self->top = gsk_render_node_ref (top);
@@ -2267,7 +2259,7 @@ gsk_cross_fade_node_new (GskRenderNode *start,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (start), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (end), NULL);
 
-  self = (GskCrossFadeNode *) gsk_render_node_new (&GSK_CROSS_FADE_NODE_CLASS);
+  self = (GskCrossFadeNode *) gsk_render_node_new (&GSK_CROSS_FADE_NODE_CLASS, 0);
 
   self->start = gsk_render_node_ref (start);
   self->end = gsk_render_node_ref (end);
