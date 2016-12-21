@@ -53,9 +53,6 @@ void                    gsk_renderer_set_scale_factor           (GskRenderer    
 GDK_AVAILABLE_IN_3_90
 int                     gsk_renderer_get_scale_factor           (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_3_90
-void                    gsk_renderer_set_window                 (GskRenderer             *renderer,
-                                                                 GdkWindow               *window);
-GDK_AVAILABLE_IN_3_90
 GdkWindow *             gsk_renderer_get_window                 (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_3_90
@@ -67,11 +64,6 @@ gboolean                gsk_renderer_realize                    (GskRenderer    
                                                                  GError                 **error);
 GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderer *           gsk_renderer_create_fallback            (GskRenderer             *renderer,
-                                                                 const graphene_rect_t   *viewport,
-                                                                 cairo_t                 *cr);
 
 GDK_AVAILABLE_IN_3_90
 GdkDrawingContext *     gsk_renderer_begin_draw_frame           (GskRenderer             *renderer,
