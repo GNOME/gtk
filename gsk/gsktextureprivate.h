@@ -30,14 +30,14 @@ struct _GskTextureClass {
   gsize size;
 
   void                  (* finalize)                    (GskTexture             *texture);
-  cairo_surface_t *     (* download)                    (GskTexture             *texture);
+  cairo_surface_t *     (* download_surface)            (GskTexture             *texture);
 };
 
 gpointer                gsk_texture_new                 (const GskTextureClass  *klass,
                                                          int                     width,
                                                          int                     height);
 GskTexture *            gsk_texture_new_for_surface     (cairo_surface_t        *surface);
-cairo_surface_t *       gsk_texture_download            (GskTexture             *texture);
+cairo_surface_t *       gsk_texture_download_surface    (GskTexture             *texture);
 
 gboolean                gsk_texture_set_render_data     (GskTexture             *self,
                                                          gpointer                key,

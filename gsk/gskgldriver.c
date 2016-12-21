@@ -462,7 +462,7 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
   if (gsk_texture_set_render_data (texture, driver, t, gsk_gl_driver_release_texture))
     t->user = texture;
 
-  surface = gsk_texture_download (texture);
+  surface = gsk_texture_download_surface (texture);
   gsk_gl_driver_bind_source_texture (driver, t->texture_id);
   gsk_gl_driver_init_texture_with_surface (driver,
                                            t->texture_id,

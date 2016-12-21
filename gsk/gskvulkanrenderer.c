@@ -281,7 +281,7 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
   if (data)
     return g_object_ref (data->image);
 
-  surface = gsk_texture_download (texture);
+  surface = gsk_texture_download_surface (texture);
   image = gsk_vulkan_image_new_from_data (uploader,
                                           cairo_image_surface_get_data (surface),
                                           cairo_image_surface_get_width (surface),

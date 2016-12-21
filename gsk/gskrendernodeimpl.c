@@ -601,7 +601,7 @@ gsk_texture_node_draw (GskRenderNode *node,
   GskTextureNode *self = (GskTextureNode *) node;
   cairo_surface_t *surface;
 
-  surface = gsk_texture_download (self->texture);
+  surface = gsk_texture_download_surface (self->texture);
 
   cairo_save (cr);
 
@@ -627,7 +627,7 @@ gsk_texture_node_serialize (GskRenderNode *node)
   cairo_surface_t *surface;
   GVariant *result;
 
-  surface = gsk_texture_download (self->texture);
+  surface = gsk_texture_download_surface (self->texture);
 
   g_assert (cairo_image_surface_get_width (surface) * 4 == cairo_image_surface_get_stride (surface));
 
