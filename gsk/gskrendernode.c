@@ -35,8 +35,8 @@
  *
  * Render nodes are meant to be transient; once they have been associated
  * to a #GskRenderer it's safe to release any reference you have on them.
- * Once a #GskRenderNode has been rendered, it is marked as immutable, and
- * cannot be modified.
+ * All #GskRenderNodes are immutable, you can only specify their properties
+ * during construction.
  */
 
 #include "config.h"
@@ -68,8 +68,6 @@ G_DEFINE_BOXED_TYPE (GskRenderNode, gsk_render_node,
 static void
 gsk_render_node_finalize (GskRenderNode *self)
 {
-  self->is_mutable = TRUE;
-
   self->node_class->finalize (self);
 
   g_clear_pointer (&self->name, g_free);
@@ -99,8 +97,6 @@ gsk_render_node_new (const GskRenderNodeClass *node_class)
 
   self->min_filter = GSK_SCALING_FILTER_NEAREST;
   self->mag_filter = GSK_SCALING_FILTER_NEAREST;
-
-  self->is_mutable = TRUE;
 
   return self;
 }
@@ -235,23 +231,6 @@ gsk_render_node_get_name (GskRenderNode *node)
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
 
   return node->name;
-}
-
-/*< private >
- * gsk_render_node_make_immutable:
- * @node: a #GskRenderNode
- *
- * Marks @node, and all its children, as immutable.
- */
-void
-gsk_render_node_make_immutable (GskRenderNode *node)
-{
-  if (!node->is_mutable)
-    return;
-
-  node->node_class->make_immutable (node);
-
-  node->is_mutable = FALSE;
 }
 
 /**

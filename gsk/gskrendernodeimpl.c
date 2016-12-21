@@ -42,11 +42,6 @@ gsk_color_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_color_node_make_immutable (GskRenderNode *node)
-{
-}
-
-static void
 gsk_color_node_draw (GskRenderNode *node,
                      cairo_t       *cr)
 {
@@ -74,7 +69,6 @@ static const GskRenderNodeClass GSK_COLOR_NODE_CLASS = {
   sizeof (GskColorNode),
   "GskColorNode",
   gsk_color_node_finalize,
-  gsk_color_node_make_immutable,
   gsk_color_node_draw,
   gsk_color_node_get_bounds
 };
@@ -142,11 +136,6 @@ gsk_linear_gradient_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_linear_gradient_node_make_immutable (GskRenderNode *node)
-{
-}
-
-static void
 gsk_linear_gradient_node_draw (GskRenderNode *node,
                                cairo_t       *cr)
 {
@@ -193,7 +182,6 @@ static const GskRenderNodeClass GSK_LINEAR_GRADIENT_NODE_CLASS = {
   sizeof (GskLinearGradientNode),
   "GskLinearGradientNode",
   gsk_linear_gradient_node_finalize,
-  gsk_linear_gradient_node_make_immutable,
   gsk_linear_gradient_node_draw,
   gsk_linear_gradient_node_get_bounds
 };
@@ -203,7 +191,6 @@ static const GskRenderNodeClass GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS = {
   sizeof (GskLinearGradientNode),
   "GskLinearGradientNode",
   gsk_linear_gradient_node_finalize,
-  gsk_linear_gradient_node_make_immutable,
   gsk_linear_gradient_node_draw,
   gsk_linear_gradient_node_get_bounds
 };
@@ -287,11 +274,6 @@ struct _GskBorderNode
 
 static void
 gsk_border_node_finalize (GskRenderNode *node)
-{
-}
-
-static void
-gsk_border_node_make_immutable (GskRenderNode *node)
 {
 }
 
@@ -392,7 +374,6 @@ static const GskRenderNodeClass GSK_BORDER_NODE_CLASS = {
   sizeof (GskBorderNode),
   "GskBorderNode",
   gsk_border_node_finalize,
-  gsk_border_node_make_immutable,
   gsk_border_node_draw,
   gsk_border_node_get_bounds
 };
@@ -479,11 +460,6 @@ gsk_texture_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_texture_node_make_immutable (GskRenderNode *node)
-{
-}
-
-static void
 gsk_texture_node_draw (GskRenderNode *node,
                        cairo_t       *cr)
 {
@@ -521,7 +497,6 @@ static const GskRenderNodeClass GSK_TEXTURE_NODE_CLASS = {
   sizeof (GskTextureNode),
   "GskTextureNode",
   gsk_texture_node_finalize,
-  gsk_texture_node_make_immutable,
   gsk_texture_node_draw,
   gsk_texture_node_get_bounds
 };
@@ -583,11 +558,6 @@ struct _GskInsetShadowNode
 
 static void
 gsk_inset_shadow_node_finalize (GskRenderNode *node)
-{
-}
-
-static void
-gsk_inset_shadow_node_make_immutable (GskRenderNode *node)
 {
 }
 
@@ -988,7 +958,6 @@ static const GskRenderNodeClass GSK_INSET_SHADOW_NODE_CLASS = {
   sizeof (GskInsetShadowNode),
   "GskInsetShadowNode",
   gsk_inset_shadow_node_finalize,
-  gsk_inset_shadow_node_make_immutable,
   gsk_inset_shadow_node_draw,
   gsk_inset_shadow_node_get_bounds
 };
@@ -1052,11 +1021,6 @@ struct _GskOutsetShadowNode
 
 static void
 gsk_outset_shadow_node_finalize (GskRenderNode *node)
-{
-}
-
-static void
-gsk_outset_shadow_node_make_immutable (GskRenderNode *node)
 {
 }
 
@@ -1202,7 +1166,6 @@ static const GskRenderNodeClass GSK_OUTSET_SHADOW_NODE_CLASS = {
   sizeof (GskOutsetShadowNode),
   "GskOutsetShadowNode",
   gsk_outset_shadow_node_finalize,
-  gsk_outset_shadow_node_make_immutable,
   gsk_outset_shadow_node_draw,
   gsk_outset_shadow_node_get_bounds
 };
@@ -1270,11 +1233,6 @@ gsk_cairo_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_cairo_node_make_immutable (GskRenderNode *node)
-{
-}
-
-static void
 gsk_cairo_node_draw (GskRenderNode *node,
                      cairo_t       *cr)
 {
@@ -1301,7 +1259,6 @@ static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   sizeof (GskCairoNode),
   "GskCairoNode",
   gsk_cairo_node_finalize,
-  gsk_cairo_node_make_immutable,
   gsk_cairo_node_draw,
   gsk_cairo_node_get_bounds
 };
@@ -1374,7 +1331,6 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node,
   cairo_t *res;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CAIRO_NODE), NULL);
-  g_return_val_if_fail (node->is_mutable, NULL);
   g_return_val_if_fail (renderer == NULL || GSK_IS_RENDERER (renderer), NULL);
 
   width = ceilf (self->bounds.size.width);
@@ -1460,18 +1416,6 @@ gsk_container_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_container_node_make_immutable (GskRenderNode *node)
-{
-  GskContainerNode *container = (GskContainerNode *) node;
-  guint i;
-
-  for (i = 1; i < container->n_children; i++)
-    {
-      gsk_render_node_make_immutable (container->children[i]);
-    }
-}
-
-static void
 gsk_container_node_draw (GskRenderNode *node,
                          cairo_t       *cr)
 {
@@ -1513,7 +1457,6 @@ static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   sizeof (GskContainerNode),
   "GskContainerNode",
   gsk_container_node_finalize,
-  gsk_container_node_make_immutable,
   gsk_container_node_draw,
   gsk_container_node_get_bounds
 };
@@ -1601,14 +1544,6 @@ gsk_transform_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_transform_node_make_immutable (GskRenderNode *node)
-{
-  GskTransformNode *self = (GskTransformNode *) node;
-
-  gsk_render_node_make_immutable (self->child);
-}
-
-static void
 gsk_transform_node_draw (GskRenderNode *node,
                          cairo_t       *cr)
 {
@@ -1656,7 +1591,6 @@ static const GskRenderNodeClass GSK_TRANSFORM_NODE_CLASS = {
   sizeof (GskTransformNode),
   "GskTransformNode",
   gsk_transform_node_finalize,
-  gsk_transform_node_make_immutable,
   gsk_transform_node_draw,
   gsk_transform_node_get_bounds
 };
@@ -1740,14 +1674,6 @@ gsk_opacity_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_opacity_node_make_immutable (GskRenderNode *node)
-{
-  GskOpacityNode *self = (GskOpacityNode *) node;
-
-  gsk_render_node_make_immutable (self->child);
-}
-
-static void
 gsk_opacity_node_draw (GskRenderNode *node,
                        cairo_t       *cr)
 {
@@ -1785,7 +1711,6 @@ static const GskRenderNodeClass GSK_OPACITY_NODE_CLASS = {
   sizeof (GskOpacityNode),
   "GskOpacityNode",
   gsk_opacity_node_finalize,
-  gsk_opacity_node_make_immutable,
   gsk_opacity_node_draw,
   gsk_opacity_node_get_bounds
 };
@@ -1867,14 +1792,6 @@ gsk_clip_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_clip_node_make_immutable (GskRenderNode *node)
-{
-  GskClipNode *self = (GskClipNode *) node;
-
-  gsk_render_node_make_immutable (self->child);
-}
-
-static void
 gsk_clip_node_draw (GskRenderNode *node,
                     cairo_t       *cr)
 {
@@ -1909,7 +1826,6 @@ static const GskRenderNodeClass GSK_CLIP_NODE_CLASS = {
   sizeof (GskClipNode),
   "GskClipNode",
   gsk_clip_node_finalize,
-  gsk_clip_node_make_immutable,
   gsk_clip_node_draw,
   gsk_clip_node_get_bounds
 };
@@ -1992,14 +1908,6 @@ gsk_rounded_clip_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_rounded_clip_node_make_immutable (GskRenderNode *node)
-{
-  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
-
-  gsk_render_node_make_immutable (self->child);
-}
-
-static void
 gsk_rounded_clip_node_draw (GskRenderNode *node,
                             cairo_t       *cr)
 {
@@ -2032,7 +1940,6 @@ static const GskRenderNodeClass GSK_ROUNDED_CLIP_NODE_CLASS = {
   sizeof (GskRoundedClipNode),
   "GskRoundedClipNode",
   gsk_rounded_clip_node_finalize,
-  gsk_rounded_clip_node_make_immutable,
   gsk_rounded_clip_node_draw,
   gsk_rounded_clip_node_get_bounds
 };
@@ -2119,14 +2026,6 @@ gsk_shadow_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_shadow_node_make_immutable (GskRenderNode *node)
-{
-  GskShadowNode *self = (GskShadowNode *) node;
-
-  gsk_render_node_make_immutable (self->child);
-}
-
-static void
 gsk_shadow_node_draw (GskRenderNode *node,
                       cairo_t       *cr)
 {
@@ -2193,7 +2092,6 @@ static const GskRenderNodeClass GSK_SHADOW_NODE_CLASS = {
   sizeof (GskShadowNode),
   "GskShadowNode",
   gsk_shadow_node_finalize,
-  gsk_shadow_node_make_immutable,
   gsk_shadow_node_draw,
   gsk_shadow_node_get_bounds
 };
@@ -2328,15 +2226,6 @@ gsk_blend_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_blend_node_make_immutable (GskRenderNode *node)
-{
-  GskBlendNode *self = (GskBlendNode *) node;
-
-  gsk_render_node_make_immutable (self->bottom);
-  gsk_render_node_make_immutable (self->top);
-}
-
-static void
 gsk_blend_node_draw (GskRenderNode *node,
                      cairo_t       *cr)
 {
@@ -2374,7 +2263,6 @@ static const GskRenderNodeClass GSK_BLEND_NODE_CLASS = {
   sizeof (GskBlendNode),
   "GskBlendNode",
   gsk_blend_node_finalize,
-  gsk_blend_node_make_immutable,
   gsk_blend_node_draw,
   gsk_blend_node_get_bounds
 };
@@ -2464,15 +2352,6 @@ gsk_cross_fade_node_finalize (GskRenderNode *node)
 }
 
 static void
-gsk_cross_fade_node_make_immutable (GskRenderNode *node)
-{
-  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
-
-  gsk_render_node_make_immutable (self->start);
-  gsk_render_node_make_immutable (self->end);
-}
-
-static void
 gsk_cross_fade_node_draw (GskRenderNode *node,
                           cairo_t       *cr)
 {
@@ -2510,7 +2389,6 @@ static const GskRenderNodeClass GSK_CROSS_FADE_NODE_CLASS = {
   sizeof (GskCrossFadeNode),
   "GskCrossFadeNode",
   gsk_cross_fade_node_finalize,
-  gsk_cross_fade_node_make_immutable,
   gsk_cross_fade_node_draw,
   gsk_cross_fade_node_get_bounds
 };

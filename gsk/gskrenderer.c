@@ -616,7 +616,7 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * using the given #GdkDrawingContext.
  *
  * The @renderer will acquire a reference on the #GskRenderNode tree while
- * the rendering is in progress, and will make the tree immutable.
+ * the rendering is in progress.
  *
  * Since: 3.90
  */
@@ -635,7 +635,6 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_return_if_fail (context == priv->drawing_context);
 
   priv->root_node = gsk_render_node_ref (root);
-  gsk_render_node_make_immutable (priv->root_node);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_reset (priv->profiler);
