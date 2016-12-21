@@ -66,6 +66,11 @@ GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_3_90
+GskTexture *            gsk_renderer_render_texture             (GskRenderer             *renderer,
+                                                                 GskRenderNode           *root,
+                                                                 const graphene_rect_t   *viewport);
+
+GDK_AVAILABLE_IN_3_90
 GdkDrawingContext *     gsk_renderer_begin_draw_frame           (GskRenderer             *renderer,
                                                                  const cairo_region_t    *region);
 GDK_AVAILABLE_IN_3_90
