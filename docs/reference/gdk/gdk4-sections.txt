@@ -127,7 +127,6 @@ gdk_display_supports_clipboard_persistence
 gdk_display_store_clipboard
 gdk_display_supports_shapes
 gdk_display_supports_input_shapes
-gdk_display_supports_composite
 gdk_display_get_app_launch_context
 gdk_display_notify_startup_complete
 gdk_display_get_default_seat
@@ -180,21 +179,8 @@ GdkScreen
 gdk_screen_get_default
 gdk_screen_get_root_window
 gdk_screen_get_display
-gdk_screen_get_number
 gdk_screen_get_toplevel_windows
-gdk_screen_get_n_monitors
-gdk_screen_get_primary_monitor
-gdk_screen_get_monitor_geometry
-gdk_screen_get_monitor_workarea
-gdk_screen_get_monitor_at_point
-gdk_screen_get_monitor_at_window
-gdk_screen_get_monitor_height_mm
-gdk_screen_get_monitor_width_mm
-gdk_screen_get_monitor_plug_name
-gdk_screen_get_monitor_scale_factor
 gdk_screen_get_setting
-gdk_screen_get_font_options
-gdk_screen_set_font_options
 gdk_screen_get_resolution
 gdk_screen_set_resolution
 
@@ -317,10 +303,7 @@ gdk_window_resize
 gdk_window_move_resize
 gdk_window_scroll
 gdk_window_move_region
-gdk_window_flush
 gdk_window_has_native
-gdk_window_ensure_native
-gdk_window_reparent
 gdk_window_raise
 gdk_window_lower
 gdk_window_restack
@@ -336,13 +319,13 @@ gdk_window_beep
 gdk_window_get_scale_factor
 gdk_window_set_opaque_region
 gdk_window_create_gl_context
+gdk_window_create_vulkan_context
 gdk_window_mark_paint_from_clip
 
 <SUBSECTION>
 gdk_window_get_clip_region
 gdk_window_begin_draw_frame
 gdk_window_end_draw_frame
-gdk_window_should_draw
 gdk_window_get_visible_region
 
 <SUBSECTION>
@@ -373,10 +356,6 @@ gdk_window_input_shape_combine_region
 gdk_window_set_child_input_shapes
 gdk_window_merge_child_input_shapes
 gdk_window_set_title
-gdk_window_set_background
-gdk_window_set_background_rgba
-gdk_window_set_background_pattern
-gdk_window_get_background_pattern
 GDK_PARENT_RELATIVE
 gdk_window_set_cursor
 gdk_window_get_cursor
@@ -542,6 +521,7 @@ gdk_cairo_region
 gdk_cairo_region_create_from_surface
 gdk_cairo_surface_create_from_pixbuf
 gdk_cairo_draw_from_gl
+gdk_cairo_surface_upload_to_gl
 </SECTION>
 
 <SECTION>
@@ -679,6 +659,7 @@ gdk_device_get_last_event_window
 <SUBSECTION>
 gdk_device_tool_get_serial
 gdk_device_tool_get_tool_type
+gdk_device_tool_get_hardware_id
 
 <SUBSECTION Standard>
 GDK_TYPE_AXIS_USE
@@ -698,6 +679,8 @@ GDK_TYPE_DEVICE
 GdkDeviceClass
 gdk_device_get_type
 gdk_device_type_get_type
+gdk_device_tool_get_type
+gdk_device_tool_new
 GDK_MAX_TIMECOORD_AXES
 </SECTION>
 
@@ -1372,4 +1355,24 @@ GdkDrawingContextClass
 GDK_TYPE_DRAWING_CONTEXT
 GDK_DRAWING_CONTEXT
 GDK_IS_DRAWING_CONTEXT
+</SECTION>
+
+<SECTION>
+<FILE>gdkvulkancontext</FILE>
+GdkVulkanContext
+gdk_vulkan_context_get_device
+gdk_vulkan_context_get_draw_index
+gdk_vulkan_context_get_draw_semaphore
+gdk_vulkan_context_get_image
+gdk_vulkan_context_get_image_format
+gdk_vulkan_context_get_instance
+gdk_vulkan_context_get_n_images
+gdk_vulkan_context_get_physical_device
+gdk_vulkan_context_get_queue
+gdk_vulkan_context_get_queue_family_index
+
+<SUBSECTION Standard>
+gdk_vulkan_context_get_type
+gdk_vulkan_error_quark
+gdk_vulkan_strerror
 </SECTION>

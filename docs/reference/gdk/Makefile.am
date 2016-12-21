@@ -34,13 +34,16 @@ IGNORE_HFILES= 			\
 	gdkdisplaymanagerprivate.h \
 	gdkdisplayprivate.h	\
 	gdkdndprivate.h		\
+	gdkdrawcontextprivate.h	\
 	gdkframeclockprivate.h	\
 	gdkglcontextprivate.h	\
 	gdkkeysprivate.h	\
+	gdkmonitorprivate.h	\
 	gdkscreenprivate.h	\
 	gdkseatdefaultprivate.h	\
 	gdkseatprivate.h	\
 	gdkvisualprivate.h	\
+	gdkvulkancontextprivate.h \
 	keyname-table.h		\
 	win32			\
 	x11			\
