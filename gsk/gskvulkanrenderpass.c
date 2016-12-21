@@ -306,7 +306,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_blend_pipeline_collect_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline),
                                                            data + n_bytes + offset,
-                                                           &op->render.node.bounds);
+                                                           &op->render.node->bounds);
             n_bytes += op->render.vertex_count;
           }
           break;
@@ -316,7 +316,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_color_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline),
                                                            data + n_bytes + offset,
-                                                           &op->render.node.bounds,
+                                                           &op->render.node->bounds,
                                                            gsk_color_node_peek_color (op->render.node));
             n_bytes += op->render.vertex_count;
           }
