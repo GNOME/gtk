@@ -21,8 +21,10 @@
 #include "recorder.h"
 
 #include <gtk/gtkbox.h>
+#include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklistbox.h>
+#include <gtk/gtkmessagedialog.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeview.h>
@@ -43,6 +45,7 @@ struct _GtkInspectorRecorderPrivate
   GtkWidget *recordings_list;
   GtkWidget *render_node_view;
   GtkWidget *render_node_tree;
+  GtkWidget *render_node_save_button;
   GtkWidget *node_property_tree;
   GtkTreeModel *render_node_properties;
 
@@ -219,12 +222,90 @@ render_node_list_selection_changed (GtkTreeSelection     *selection,
   GtkTreeIter iter;
 
   if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
-    return;
+    {
+      gtk_widget_set_sensitive (priv->render_node_save_button, FALSE);
+      return;
+    }
 
+  gtk_widget_set_sensitive (priv->render_node_save_button, TRUE);
   node = gtk_tree_model_render_node_get_node_from_iter (GTK_TREE_MODEL_RENDER_NODE (priv->render_node_model), &iter);
   gtk_render_node_view_set_render_node (GTK_RENDER_NODE_VIEW (priv->render_node_view), node);
 
   populate_render_node_properties (GTK_LIST_STORE (priv->render_node_properties), node);
+}
+
+static void
+render_node_save_response (GtkWidget     *dialog,
+                           gint           response,
+                           GskRenderNode *node)
+{
+  gtk_widget_hide (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      GBytes *bytes = gsk_render_node_serialize (node);
+      GError *error = NULL;
+
+      if (!g_file_replace_contents (gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog)),
+                                    g_bytes_get_data (bytes, NULL),
+                                    g_bytes_get_size (bytes),
+                                    NULL,
+                                    FALSE,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    &error))
+        {
+          GtkWidget *message_dialog;
+
+          message_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))),
+                                                   GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                   GTK_MESSAGE_INFO,
+                                                   GTK_BUTTONS_OK,
+                                                   _("Saving RenderNode failed"));
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
+                                                    "%s", error->message);
+          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          gtk_widget_show (message_dialog);
+          g_error_free (error);
+        }
+
+      g_bytes_unref (bytes);
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
+render_node_save (GtkButton            *button,
+                  GtkInspectorRecorder *recorder)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+  GskRenderNode *node;
+  GtkTreeIter iter;
+  GtkWidget *dialog;
+  char *filename;
+
+  if (!gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->render_node_tree)), NULL, &iter))
+    return;
+
+  node = gtk_tree_model_render_node_get_node_from_iter (GTK_TREE_MODEL_RENDER_NODE (priv->render_node_model), &iter);
+
+  dialog = gtk_file_chooser_dialog_new ("",
+                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (recorder))),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                        _("_Save"), GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  filename = g_strdup_printf ("%s.node", gsk_render_node_get_name (node) ? gsk_render_node_get_name (node)
+                                                                         : node_type_name (gsk_render_node_get_node_type (node)));
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), filename);
+  g_free (filename);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  g_signal_connect (dialog, "response", G_CALLBACK (render_node_save_response), node);
+  gtk_widget_show (dialog);
 }
 
 static char *
@@ -394,11 +475,13 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, recordings_list);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, render_node_view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, render_node_tree);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, render_node_save_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorRecorder, node_property_tree);
 
   gtk_widget_class_bind_template_callback (widget_class, recordings_clear_all);
   gtk_widget_class_bind_template_callback (widget_class, recordings_list_row_selected);
   gtk_widget_class_bind_template_callback (widget_class, render_node_list_selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, render_node_save);
 }
 
 static void
