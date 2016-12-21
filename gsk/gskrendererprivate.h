@@ -42,6 +42,9 @@ struct _GskRendererClass
                         GError **error);
   void (* unrealize) (GskRenderer *renderer);
 
+  GskTexture * (* render_texture) (GskRenderer           *renderer,
+                                   GskRenderNode         *root,
+                                   const graphene_rect_t *viewport);
   GdkDrawingContext * (* begin_draw_frame) (GskRenderer *renderer,
                                             const cairo_region_t *region);
   void (* end_draw_frame) (GskRenderer *renderer,

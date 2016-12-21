@@ -113,6 +113,15 @@ gsk_renderer_real_unrealize (GskRenderer *self)
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, unrealize);
 }
 
+static GskTexture *
+gsk_renderer_real_render_texture (GskRenderer           *self,
+                                  GskRenderNode         *root,
+                                  const graphene_rect_t *viewport)
+{
+  GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, render_texture);
+  return NULL;
+}
+
 static GdkDrawingContext *
 gsk_renderer_real_begin_draw_frame (GskRenderer          *self,
                                     const cairo_region_t *region)
@@ -259,6 +268,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
   klass->begin_draw_frame = gsk_renderer_real_begin_draw_frame;
   klass->end_draw_frame = gsk_renderer_real_end_draw_frame;
   klass->render = gsk_renderer_real_render;
+  klass->render_texture = gsk_renderer_real_render_texture;
   klass->create_cairo_surface = gsk_renderer_real_create_cairo_surface;
 
   gobject_class->constructed = gsk_renderer_constructed;
@@ -604,6 +614,76 @@ gsk_renderer_unrealize (GskRenderer *renderer)
   GSK_RENDERER_GET_CLASS (renderer)->unrealize (renderer);
 
   priv->is_realized = FALSE;
+}
+
+/**
+ * gsk_renderer_render_texture:
+ * @renderer: a realized #GdkRenderer
+ * @root: a #GskRenderNode
+ * @viewport: (allow-none): the section to draw or %NULL to use @root's bounds
+ *
+ * Renders the scene graph, described by a tree of #GskRenderNode instances,
+ * to a #GskTexture.
+ *
+ * The @renderer will acquire a reference on the #GskRenderNode tree while
+ * the rendering is in progress, and will make the tree immutable.
+ *
+ * If you want to apply any transformations to @root, you should put it into a 
+ * transform node and pass that node instead.
+ *
+ * Returns: (transfer full): a #GskTexture with the rendered contents of @root.
+ *
+ * Since: 3.90
+ */
+GskTexture *
+gsk_renderer_render_texture (GskRenderer           *renderer,
+                             GskRenderNode         *root,
+                             const graphene_rect_t *viewport)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+  graphene_rect_t real_viewport;
+  GskTexture *texture;
+
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
+  g_return_val_if_fail (priv->is_realized, NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (root), NULL);
+  g_return_val_if_fail (priv->root_node == NULL, NULL);
+
+  priv->root_node = gsk_render_node_ref (root);
+  gsk_render_node_make_immutable (priv->root_node);
+
+  if (viewport == NULL)
+    {
+      gsk_render_node_get_bounds (root, &real_viewport);
+      viewport = &real_viewport;
+    }
+
+#ifdef G_ENABLE_DEBUG
+  gsk_profiler_reset (priv->profiler);
+#endif
+
+  texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK (RENDERER))
+    {
+      GString *buf = g_string_new ("*** Texture stats ***\n\n");
+
+      gsk_profiler_append_counters (priv->profiler, buf);
+      g_string_append_c (buf, '\n');
+
+      gsk_profiler_append_timers (priv->profiler, buf);
+      g_string_append_c (buf, '\n');
+
+      g_print ("%s\n***\n\n", buf->str);
+
+      g_string_free (buf, TRUE);
+    }
+#endif
+
+  g_clear_pointer (&priv->root_node, gsk_render_node_unref);
+
+  return texture;
 }
 
 /**
