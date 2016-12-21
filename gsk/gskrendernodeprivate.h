@@ -40,8 +40,6 @@ struct _GskRenderNodeClass
 
 GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size);
 
-void gsk_render_node_get_bounds (GskRenderNode   *node,
-                                 graphene_rect_t *frame);
 GVariant * gsk_render_node_serialize_node (GskRenderNode *node);
 GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType type, GVariant *variant);
 

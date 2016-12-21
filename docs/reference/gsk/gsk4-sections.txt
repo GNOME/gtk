@@ -32,6 +32,8 @@ gsk_render_node_draw
 GskScalingFilter
 gsk_render_node_set_scaling_filters
 gsk_render_node_set_name
+gsk_render_node_get_name
+gsk_render_node_get_bounds
 gsk_color_node_new
 gsk_linear_gradient_node_new
 gsk_repeating_linear_gradient_node_new
