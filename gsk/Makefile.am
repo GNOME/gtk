@@ -23,7 +23,7 @@ DISTCLEANFILES =
 noinst_LTLIBRARIES =
 
 if HAVE_VULKAN
-gsk_private_vulan_source_h = \
+gsk_private_vulkan_source_h = \
 	gskvulkanblendpipelineprivate.h \
 	gskvulkanbufferprivate.h \
 	gskvulkancolorpipelineprivate.h \
