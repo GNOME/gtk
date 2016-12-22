@@ -1,16 +1,17 @@
 #include <gtk/gtk.h>
 
+static gboolean fallback = FALSE;
+
 static GOptionEntry options[] = {
+  { "fallback", '\0', 0, G_OPTION_ARG_NONE, &fallback, "Draw node without a renderer", NULL },
   { NULL }
 };
 
 int
 main(int argc, char **argv)
 {
-  graphene_rect_t bounds;
   cairo_surface_t *surface;
   GskRenderNode *node;
-  cairo_t *cr;
   GError *error = NULL;
   GBytes *bytes;
   char *contents;
@@ -45,14 +46,42 @@ main(int argc, char **argv)
       return 1;
     }
 
-  gsk_render_node_get_bounds (node, &bounds);
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, ceil (bounds.size.width), ceil (bounds.size.height));
-  cr = cairo_create (surface);
+  if (fallback)
+    {
+      graphene_rect_t bounds;
+      cairo_t *cr;
 
-  cairo_translate (cr, - bounds.origin.x, - bounds.origin.y);
-  gsk_render_node_draw (node, cr);
+      gsk_render_node_get_bounds (node, &bounds);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, ceil (bounds.size.width), ceil (bounds.size.height));
+      cr = cairo_create (surface);
 
-  cairo_destroy (cr);
+      cairo_translate (cr, - bounds.origin.x, - bounds.origin.y);
+      gsk_render_node_draw (node, cr);
+
+      cairo_destroy (cr);
+    }
+  else
+    {
+      GskRenderer *renderer;
+      GdkWindow *window;
+      GskTexture *texture;
+
+      window = gdk_window_new_toplevel (gdk_display_get_default(), 0, 10 , 10);
+      renderer = gsk_renderer_new_for_window (window);
+
+      texture = gsk_renderer_render_texture (renderer, node, NULL);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            gsk_texture_get_width (texture),
+                                            gsk_texture_get_height (texture));
+      gsk_texture_download (texture,
+                            cairo_image_surface_get_data (surface),
+                            cairo_image_surface_get_stride (surface));
+      cairo_surface_mark_dirty (surface);
+      gsk_texture_unref (texture);
+      g_object_unref (window);
+      g_object_unref (renderer);
+    }
+
   gsk_render_node_unref (node);
 
   if (cairo_surface_write_to_png (surface, argv[2]))
