@@ -596,8 +596,8 @@ static void     gtk_tree_view_measure              (GtkWidget        *widget,
                                                     int            *natural_baseline);
 static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
-static gboolean gtk_tree_view_draw                 (GtkWidget        *widget,
-                                                    cairo_t          *cr);
+static void     gtk_tree_view_snapshot             (GtkWidget        *widget,
+                                                    GtkSnapshot      *snapshot);
 static gboolean gtk_tree_view_key_press            (GtkWidget        *widget,
 						    GdkEventKey      *event);
 static gboolean gtk_tree_view_key_release          (GtkWidget        *widget,
@@ -978,7 +978,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->measure = gtk_tree_view_measure;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
   widget_class->motion_notify_event = gtk_tree_view_motion;
-  widget_class->draw = gtk_tree_view_draw;
+  widget_class->snapshot = gtk_tree_view_snapshot;
   widget_class->key_press_event = gtk_tree_view_key_press;
   widget_class->key_release_event = gtk_tree_view_key_release;
   widget_class->enter_notify_event = gtk_tree_view_enter_notify;
@@ -4647,22 +4647,21 @@ invalidate_empty_focus (GtkTreeView *tree_view)
  * used when the tree is empty.
  */
 static void
-draw_empty (GtkTreeView *tree_view,
-            cairo_t     *cr)
+snapshot_empty (GtkTreeView *tree_view,
+                GtkSnapshot *snapshot)
 {
   GtkWidget *widget = GTK_WIDGET (tree_view);
   GtkStyleContext *context;
-  gint width, height;
 
   context = gtk_widget_get_style_context (widget);
 
-  width = gdk_window_get_width (tree_view->priv->bin_window);
-  height = gdk_window_get_height (tree_view->priv->bin_window);
-
-  gtk_render_background (context, cr, 0, 0, width, height);
-
   if (gtk_widget_has_visible_focus (widget))
-    gtk_render_focus (context, cr, 0, 0, width, height);
+    {
+      gtk_snapshot_render_focus (snapshot, context,
+                                 0, 0, 
+                                 gdk_window_get_width (tree_view->priv->bin_window),
+                                 gdk_window_get_height (tree_view->priv->bin_window));
+    }
 }
 
 typedef enum {
@@ -4781,9 +4780,9 @@ gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
  * KEEP IN SYNC WITH gtk_tree_view_create_row_drag_icon()!
  * FIXME: It’s not...
  */
-static gboolean
-gtk_tree_view_bin_draw (GtkWidget      *widget,
-			cairo_t        *cr)
+static void
+gtk_tree_view_bin_snapshot (GtkWidget   *widget,
+			    GtkSnapshot *snapshot)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreePath *path;
@@ -4812,24 +4811,20 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   GtkStyleContext *context;
   gboolean parity;
+  cairo_t *cr;
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   context = gtk_widget_get_style_context (widget);
 
   if (tree_view->priv->tree == NULL)
     {
-      draw_empty (tree_view, cr);
-      return TRUE;
+      snapshot_empty (tree_view, snapshot);
+      return;
     }
 
   bin_window_width = gdk_window_get_width (tree_view->priv->bin_window);
   bin_window_height = gdk_window_get_height (tree_view->priv->bin_window);
-  cairo_rectangle (cr, 0, 0, bin_window_width, bin_window_height);
-  cairo_clip (cr);
-
-  if (!gdk_cairo_get_clip_rectangle (cr, &clip))
-    return TRUE;
-
+  clip = (GdkRectangle) { 0, 0, bin_window_width, bin_window_height };
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, clip.y);
   y_offset = -_gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
@@ -4838,16 +4833,24 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
 
-      gtk_render_background (context, cr,
-                             0, gtk_tree_view_get_height (tree_view),
-                             bin_window_width,
-                             bin_window_height - gtk_tree_view_get_height (tree_view));
+      gtk_snapshot_render_background (snapshot, context,
+                                      0, gtk_tree_view_get_height (tree_view),
+                                      bin_window_width,
+                                      bin_window_height - gtk_tree_view_get_height (tree_view));
 
       gtk_style_context_restore (context);
     }
 
   if (node == NULL)
-    return TRUE;
+    return;
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &GRAPHENE_RECT_INIT (
+                                           0, 0,
+                                           gdk_window_get_width (tree_view->priv->bin_window),
+                                           gdk_window_get_height (tree_view->priv->bin_window)
+                                       ),
+                                       "FallbackTreeViewContents");
 
   /* find the path for the node */
   path = _gtk_tree_path_new_from_rbtree (tree, node);
@@ -5304,7 +5307,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  depth++;
 
 	  /* Sanity Check! */
-	  TREE_VIEW_INTERNAL_ASSERT (has_child, FALSE);
+	  TREE_VIEW_INTERNAL_ASSERT_VOID (has_child);
 	}
       else
 	{
@@ -5319,7 +5322,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 		  done = TRUE;
 
 		  /* Sanity Check! */
-		  TREE_VIEW_INTERNAL_ASSERT (has_next, FALSE);
+		  TREE_VIEW_INTERNAL_ASSERT_VOID (has_next);
 		}
 	      else
 		{
@@ -5337,7 +5340,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 		  depth--;
 
 		  /* Sanity check */
-		  TREE_VIEW_INTERNAL_ASSERT (has_parent, FALSE);
+		  TREE_VIEW_INTERNAL_ASSERT_VOID (has_parent);
 		}
 	    }
 	  while (!done);
@@ -5353,32 +5356,43 @@ done:
 
   if (drag_dest_path)
     gtk_tree_path_free (drag_dest_path);
-
-  return FALSE;
+  
+  cairo_destroy (cr);
 }
 
-static gboolean
-gtk_tree_view_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+static void
+gtk_tree_view_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkWidget *button;
   GtkStyleContext *context;
   GList *list;
+  gint width, height;
 
   context = gtk_widget_get_style_context (widget);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
 
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
+  gtk_snapshot_render_background (snapshot, context,
+                                  0, 0,
+                                  width, height);
 
-  cairo_save (cr);
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT(
+                              0, gtk_tree_view_get_effective_header_height (tree_view),
+                              width,
+                              height - gtk_tree_view_get_effective_header_height (tree_view)
+                          ),
+                          "TreeViewContentClip");
 
-  gtk_cairo_transform_to_window (cr, widget, tree_view->priv->bin_window);
-  gtk_tree_view_bin_draw (widget, cr);
-
-  cairo_restore (cr);
+  gtk_snapshot_translate_2d (snapshot,
+                             - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
+                             gtk_tree_view_get_effective_header_height (tree_view));
+  gtk_tree_view_bin_snapshot (widget, snapshot);
+  gtk_snapshot_translate_2d (snapshot,
+                             (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
+                             - gtk_tree_view_get_effective_header_height (tree_view));
 
   /* We can't just chain up to Container::draw as it will try to send the
    * event to the headers, so we handle propagating it to our children
@@ -5388,9 +5402,13 @@ gtk_tree_view_draw (GtkWidget *widget,
     {
       GtkTreeViewChild *child = list->data;
 
-      gtk_container_propagate_draw (GTK_CONTAINER (tree_view), child->widget, cr);
+      gtk_container_snapshot_child (GTK_CONTAINER (tree_view), child->widget, snapshot);
     }
+
+  gtk_snapshot_pop_and_append (snapshot);
   
+#if 0
+  Thyis clearly does not work. priv->drag_highlight_window is potentially a toplevel...
   if (tree_view->priv->drag_highlight_window)
     {
       GdkRGBA color;
@@ -5416,6 +5434,15 @@ gtk_tree_view_draw (GtkWidget *widget,
         }
       cairo_restore (cr);
     }
+#endif
+
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT(
+                              0, 0,
+                              width,
+                              gtk_tree_view_get_effective_header_height (tree_view)
+                          ),
+                          "TreeViewHeaderClip");
 
   gtk_style_context_save (context);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VIEW);
@@ -5430,21 +5457,21 @@ gtk_tree_view_draw (GtkWidget *widget,
       if (gtk_tree_view_column_get_visible (column))
         {
           button = gtk_tree_view_column_get_button (column);
-          gtk_container_propagate_draw (GTK_CONTAINER (tree_view),
-                                        button, cr);
+          gtk_container_snapshot_child (GTK_CONTAINER (tree_view),
+                                        button, snapshot);
         }
     }
 
   if (tree_view->priv->drag_window)
     {
       button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
-      gtk_container_propagate_draw (GTK_CONTAINER (tree_view),
-                                    button, cr);
+      gtk_container_snapshot_child (GTK_CONTAINER (tree_view),
+                                    button, snapshot);
     }
 
   gtk_style_context_restore (context);
 
-  return FALSE;
+  gtk_snapshot_pop_and_append (snapshot);
 }
 
 enum
