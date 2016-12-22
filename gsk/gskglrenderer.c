@@ -102,6 +102,7 @@ struct _GskGLRenderer
 
   guint frame_buffer;
   guint depth_stencil_buffer;
+  guint texture_id;
 
   GQuark uniforms[N_UNIFORMS];
   GQuark attributes[N_ATTRIBUTES];
@@ -154,6 +155,17 @@ gsk_gl_renderer_create_buffers (GskGLRenderer *self,
 
   GSK_NOTE (OPENGL, g_print ("Creating buffers (w:%d, h:%d, scale:%d)\n", width, height, scale_factor));
 
+  if (self->texture_id == 0)
+    {
+      self->texture_id = gsk_gl_driver_create_texture (self->gl_driver,
+                                                       width * scale_factor,
+                                                       height * scale_factor);
+      gsk_gl_driver_bind_source_texture (self->gl_driver, self->texture_id);
+      gsk_gl_driver_init_texture_empty (self->gl_driver, self->texture_id);
+    }
+
+  gsk_gl_driver_create_render_target (self->gl_driver, self->texture_id, TRUE, TRUE);
+
   self->has_buffers = TRUE;
 }
 
@@ -169,6 +181,12 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
   GSK_NOTE (OPENGL, g_print ("Destroying buffers\n"));
 
   gdk_gl_context_make_current (self->gl_context);
+
+  if (self->texture_id != 0)
+    {
+      gsk_gl_driver_destroy_texture (self->gl_driver, self->texture_id);
+      self->texture_id = 0;
+    }
 
   self->has_buffers = FALSE;
 }
@@ -603,15 +621,12 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                  GskRenderNode           *node,
                                  RenderItem              *parent)
 {
-  graphene_rect_t viewport;
   RenderItem item;
   RenderItem *ritem = NULL;
   int program_id;
   int scale_factor;
 
   memset (&item, 0, sizeof (RenderItem));
-
-  gsk_renderer_get_viewport (GSK_RENDERER (self), &viewport);
 
   scale_factor = gsk_renderer_get_scale_factor (GSK_RENDERER (self));
   if (scale_factor < 1)
@@ -685,7 +700,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
     }
   else
     {
-      item.render_data.render_target_id = 0;
+      item.render_data.render_target_id = self->texture_id;
       item.children = NULL;
     }
 
@@ -908,47 +923,37 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
 #define ORTHO_FAR_PLANE          10000
 
 static void
-gsk_gl_renderer_render (GskRenderer   *renderer,
-                        GskRenderNode *root)
+gsk_gl_renderer_do_render (GskRenderer           *renderer,
+                           GskRenderNode         *root,
+                           const graphene_rect_t *viewport,
+                           int                    scale_factor)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_matrix_t modelview, projection;
-  graphene_rect_t viewport;
   guint i;
-  int scale_factor;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 gpu_time, cpu_time;
 #endif
 
-  if (self->gl_context == NULL)
-    return;
-
 #ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
 #endif
 
-  gdk_gl_context_make_current (self->gl_context);
-
-  gsk_renderer_get_viewport (renderer, &viewport);
-  scale_factor = gsk_renderer_get_scale_factor (renderer);
-
-  gsk_gl_driver_begin_frame (self->gl_driver);
-  gsk_gl_renderer_create_buffers (self, viewport.size.width, viewport.size.height, scale_factor);
-  gsk_gl_driver_end_frame (self->gl_driver);
-
   /* Set up the modelview and projection matrices to fit our viewport */
   graphene_matrix_init_scale (&modelview, scale_factor, scale_factor, 1.0);
   graphene_matrix_init_ortho (&projection,
-                              0, viewport.size.width * scale_factor,
-                              viewport.size.height * scale_factor, 0,
+                              viewport->origin.x,
+                              viewport->origin.x + viewport->size.width * scale_factor,
+                              viewport->origin.y + viewport->size.height * scale_factor,
+                              viewport->origin.y,
                               ORTHO_NEAR_PLANE,
                               ORTHO_FAR_PLANE);
 
   gsk_gl_renderer_update_frustum (self, &modelview, &projection);
 
   if (!gsk_gl_renderer_validate_tree (self, root, &projection))
-    goto out;
+    return;
 
   gsk_gl_driver_begin_frame (self->gl_driver);
 
@@ -958,8 +963,8 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
 #endif
 
   /* Ensure that the viewport is up to date */
-  if (gsk_gl_driver_bind_render_target (self->gl_driver, 0))
-    gsk_gl_renderer_resize_viewport (self, &viewport, scale_factor);
+  if (gsk_gl_driver_bind_render_target (self->gl_driver, self->texture_id))
+    gsk_gl_renderer_resize_viewport (self, viewport, scale_factor);
 
   gsk_gl_renderer_setup_render_mode (self);
 
@@ -993,8 +998,68 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
 
   gsk_profiler_push_samples (profiler);
 #endif
+}
 
-out:
+static GskTexture *
+gsk_gl_renderer_render_texture (GskRenderer           *renderer,
+                                GskRenderNode         *root,
+                                const graphene_rect_t *viewport)
+{
+  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  GskTexture *texture;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  g_return_val_if_fail (self->gl_context != NULL, NULL);
+
+  self->render_mode = RENDER_FULL;
+
+  gdk_gl_context_make_current (self->gl_context);
+
+  gsk_gl_driver_begin_frame (self->gl_driver);
+  gsk_gl_renderer_create_buffers (self, ceilf (viewport->size.width), ceilf (viewport->size.height), 1);
+  gsk_gl_driver_end_frame (self->gl_driver);
+
+  gsk_gl_renderer_do_render (renderer, root, viewport, 1);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        ceilf (viewport->size.width),
+                                        ceilf (viewport->size.height));
+  cr = cairo_create (surface);
+  gdk_cairo_draw_from_gl (cr,
+                          gsk_renderer_get_window (renderer),
+                          self->texture_id,
+                          GL_TEXTURE,
+                          1.0,
+                          0, 0,
+                          viewport->size.width,
+                          viewport->size.height);
+  cairo_destroy (cr);
+
+  texture = gsk_texture_new_for_surface (surface);
+  cairo_surface_destroy (surface);
+
+  return texture;
+}
+
+static void
+gsk_gl_renderer_render (GskRenderer   *renderer,
+                        GskRenderNode *root)
+{
+  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  graphene_rect_t viewport;
+  int scale_factor;
+
+  if (self->gl_context == NULL)
+    return;
+
+  gdk_gl_context_make_current (self->gl_context);
+
+  gsk_renderer_get_viewport (renderer, &viewport);
+  scale_factor = gsk_renderer_get_scale_factor (renderer);
+
+  gsk_gl_renderer_do_render (renderer, root, &viewport, scale_factor);
+
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
   gsk_gl_renderer_destroy_buffers (self);
@@ -1012,6 +1077,7 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
   renderer_class->unrealize = gsk_gl_renderer_unrealize;
   renderer_class->begin_draw_frame = gsk_gl_renderer_begin_draw_frame;
   renderer_class->render = gsk_gl_renderer_render;
+  renderer_class->render_texture = gsk_gl_renderer_render_texture;
 }
 
 static void
