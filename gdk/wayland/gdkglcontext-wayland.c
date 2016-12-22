@@ -369,6 +369,7 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
 static gboolean
 find_eglconfig_for_window (GdkWindow  *window,
                            EGLConfig  *egl_config_out,
+                           EGLint     *min_swap_interval_out,
                            GError    **error)
 {
   GdkDisplay *display = gdk_window_get_display (window);
@@ -376,7 +377,7 @@ find_eglconfig_for_window (GdkWindow  *window,
   GdkVisual *visual = gdk_window_get_visual (window);
   EGLint attrs[MAX_EGL_ATTRS];
   EGLint count;
-  EGLConfig *configs;
+  EGLConfig *configs, chosen_config;
   gboolean use_rgba;
 
   int i = 0;
@@ -429,9 +430,20 @@ find_eglconfig_for_window (GdkWindow  *window,
     }
 
   /* Pick first valid configuration i guess? */
+  chosen_config = configs[0];
+
+  if (!eglGetConfigAttrib (display_wayland->egl_display, chosen_config,
+                           EGL_MIN_SWAP_INTERVAL, min_swap_interval_out))
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           "Could not retrieve the minimum swap interval");
+      g_free (configs);
+      return FALSE;
+    }
 
   if (egl_config_out != NULL)
-    *egl_config_out = configs[0];
+    *egl_config_out = chosen_config;
 
   g_free (configs);
 
@@ -465,7 +477,9 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
       return NULL;
     }
 
-  if (!find_eglconfig_for_window (window, &config, error))
+  if (!find_eglconfig_for_window (window, &config,
+                                  &display_wayland->egl_min_swap_interval,
+                                  error))
     return NULL;
 
   context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
@@ -542,6 +556,11 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
       g_warning ("eglMakeCurrent failed");
       return FALSE;
     }
+
+  if (display_wayland->egl_min_swap_interval == 0)
+    eglSwapInterval (display_wayland->egl_display, 0);
+  else
+    g_debug ("Can't disable GL swap interval");
 
   return TRUE;
 }
