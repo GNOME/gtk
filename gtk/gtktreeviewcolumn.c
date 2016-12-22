@@ -2865,9 +2865,9 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
 }
 
 /**
- * gtk_tree_view_column_cell_render:
+ * gtk_tree_view_column_cell_snapshot:
  * @tree_column: A #GtkTreeViewColumn.
- * @cr: cairo context to draw to
+ * @snapshot: #GtkSnapshot to draw to
  * @background_area: entire cell area (including tree expanders and maybe padding on the sides)
  * @cell_area: area normally rendered by a cell renderer
  * @flags: flags that affect rendering
@@ -2876,30 +2876,26 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
  * #GtkTreeView.
  **/
 void
-_gtk_tree_view_column_cell_render (GtkTreeViewColumn  *tree_column,
-				   cairo_t            *cr,
-				   const GdkRectangle *background_area,
-				   const GdkRectangle *cell_area,
-				   guint               flags,
-                                   gboolean            draw_focus)
+gtk_tree_view_column_cell_snapshot (GtkTreeViewColumn  *tree_column,
+				    GtkSnapshot        *snapshot,
+				    const GdkRectangle *background_area,
+				    const GdkRectangle *cell_area,
+				    guint               flags,
+                                    gboolean            draw_focus)
 {
   GtkTreeViewColumnPrivate *priv;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-  g_return_if_fail (cr != NULL);
+  g_return_if_fail (snapshot != NULL);
   g_return_if_fail (background_area != NULL);
   g_return_if_fail (cell_area != NULL);
 
   priv = tree_column->priv;
 
-  cairo_save (cr);
-
-  gtk_cell_area_render (priv->cell_area, priv->cell_area_context,
-                        priv->tree_view, cr,
-                        background_area, cell_area, flags,
-                        draw_focus);
-
-  cairo_restore (cr);
+  gtk_cell_area_snapshot (priv->cell_area, priv->cell_area_context,
+                          priv->tree_view, snapshot,
+                          background_area, cell_area, flags,
+                          draw_focus);
 }
 
 gboolean

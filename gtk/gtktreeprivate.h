@@ -126,8 +126,8 @@ gboolean          _gtk_tree_view_column_is_blank_at_pos  (GtkTreeViewColumn  *co
                                                           gint                x,
                                                           gint                y);
 
-void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn  *tree_column,
-							  cairo_t            *cr,
+void		  gtk_tree_view_column_cell_snapshot     (GtkTreeViewColumn  *tree_column,
+							  GtkSnapshot        *snapshot,
 							  const GdkRectangle *background_area,
 							  const GdkRectangle *cell_area,
 							  guint               flags,
