@@ -71,6 +71,12 @@ gsk_vulkan_buffer_new_staging (GdkVulkanContext  *context,
   return gsk_vulkan_buffer_new_internal (context, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
 }
 
+GskVulkanBuffer *
+gsk_vulkan_buffer_new_download (GdkVulkanContext  *context,
+                                gsize              size)
+{
+  return gsk_vulkan_buffer_new_internal (context, size, VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+}
 void
 gsk_vulkan_buffer_free (GskVulkanBuffer *self)
 {

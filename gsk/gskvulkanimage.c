@@ -562,6 +562,91 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
   return self;
 }
 
+GskVulkanImage *
+gsk_vulkan_image_new_for_framebuffer (GdkVulkanContext *context,
+                                      gsize             width,
+                                      gsize             height)
+{
+  GskVulkanImage *self;
+
+
+  self = gsk_vulkan_image_new (context,
+                               width,
+                               height, 
+                               VK_IMAGE_TILING_OPTIMAL,
+                               VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
+
+  return self;
+}
+
+GskTexture *
+gsk_vulkan_image_download (GskVulkanImage    *self,
+                           GskVulkanUploader *uploader)
+{
+  GskVulkanBuffer *buffer;
+  GskTexture *texture;
+  guchar *mem;
+
+  gsk_vulkan_uploader_add_image_barrier (uploader,
+                                         FALSE,
+                                         &(VkImageMemoryBarrier) {
+                                             .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                             .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                                             .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
+                                             .oldLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                             .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                             .image = self->vk_image,
+                                             .subresourceRange = {
+                                                 .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                                 .baseMipLevel = 0,
+                                                 .levelCount = 1,
+                                                 .baseArrayLayer = 0,
+                                                 .layerCount = 1
+                                             }
+                                         });
+
+  buffer = gsk_vulkan_buffer_new_download (self->vulkan, self->width * self->height * 4);
+
+  vkCmdCopyImageToBuffer (gsk_vulkan_uploader_get_copy_buffer (uploader),
+                          self->vk_image,
+                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                          gsk_vulkan_buffer_get_buffer (buffer),
+                          1,
+                          (VkBufferImageCopy[1]) {
+                               {
+                                   .bufferOffset = 0,
+                                   .imageSubresource = {
+                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                       .mipLevel = 0,
+                                       .baseArrayLayer = 0,
+                                       .layerCount = 1
+                                   },
+                                   .imageOffset = { 0, 0, 0 },
+                                   .imageExtent = {
+                                       .width = self->width,
+                                       .height = self->height,
+                                       .depth = 1
+                                   }
+                               }
+                          });
+
+  gsk_vulkan_uploader_upload (uploader);
+
+  GSK_VK_CHECK (vkQueueWaitIdle, gdk_vulkan_context_get_queue (self->vulkan));
+
+  mem = gsk_vulkan_buffer_map (buffer);
+  texture = gsk_texture_new_for_data (mem, self->width, self->height, self->width * 4);
+  gsk_vulkan_buffer_unmap (buffer);
+  gsk_vulkan_buffer_free (buffer);
+
+  return texture;
+}
+
 void
 gsk_vulkan_image_finalize (GObject *object)
 {

@@ -24,7 +24,8 @@ void                    gsk_vulkan_render_free                          (GskVulk
 
 gboolean                gsk_vulkan_render_is_busy                       (GskVulkanRender        *self);
 void                    gsk_vulkan_render_reset                         (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *target);
+                                                                         GskVulkanImage         *target,
+                                                                         const graphene_rect_t  *rect);
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
 
@@ -46,6 +47,8 @@ void                    gsk_vulkan_render_draw                          (GskVulk
                                                                          VkSampler               sampler);
 
 void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);
+
+GskTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 
 G_END_DECLS
 

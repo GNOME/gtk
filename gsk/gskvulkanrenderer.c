@@ -170,6 +170,54 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
   g_clear_object (&self->vulkan);
 }
 
+static GskTexture *
+gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
+                                    GskRenderNode         *root,
+                                    const graphene_rect_t *viewport)
+{
+  GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
+  GskVulkanRender *render;
+  GskVulkanImage *image;
+  GskTexture *texture;
+#ifdef G_ENABLE_DEBUG
+  GskProfiler *profiler;
+  gint64 cpu_time;
+#endif
+
+#ifdef G_ENABLE_DEBUG
+  profiler = gsk_renderer_get_profiler (renderer);
+  gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
+#endif
+
+  render = gsk_vulkan_render_new (renderer, self->vulkan);
+
+  image = gsk_vulkan_image_new_for_framebuffer (self->vulkan,
+                                                ceil (viewport->size.width),
+                                                ceil (viewport->size.height));
+
+  gsk_vulkan_render_reset (render, image, viewport);
+
+  gsk_vulkan_render_add_node (render, root);
+
+  gsk_vulkan_render_upload (render);
+
+  gsk_vulkan_render_draw (render, self->sampler);
+
+  texture = gsk_vulkan_render_download_target (render);
+
+  g_object_unref (image);
+  gsk_vulkan_render_free (render);
+
+#ifdef G_ENABLE_DEBUG
+  cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
+  gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
+
+  gsk_profiler_push_samples (profiler);
+#endif
+
+  return texture;
+}
+
 static void
 gsk_vulkan_renderer_render (GskRenderer   *renderer,
                             GskRenderNode *root)
@@ -188,7 +236,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 
   render = self->render;
 
-  gsk_vulkan_render_reset (render, self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)]);
+  gsk_vulkan_render_reset (render, self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)], NULL);
 
   gsk_vulkan_render_add_node (render, root);
 
@@ -238,6 +286,7 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   renderer_class->realize = gsk_vulkan_renderer_realize;
   renderer_class->unrealize = gsk_vulkan_renderer_unrealize;
   renderer_class->render = gsk_vulkan_renderer_render;
+  renderer_class->render_texture = gsk_vulkan_renderer_render_texture;
   renderer_class->begin_draw_frame = gsk_vulkan_renderer_begin_draw_frame;
 }
 
