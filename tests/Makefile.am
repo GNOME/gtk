@@ -28,6 +28,7 @@ endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	rendernode			\
+	rendernode-create-tests		\
 	overlayscroll			\
 	syncscroll			\
 	animated-resizing		\
@@ -163,6 +164,7 @@ noinst_PROGRAMS += testerrors
 endif
 
 rendernode_DEPENDENCIES = $(TEST_DEPS)
+rendernode_create_tests_DEPENDENCIES = $(TEST_DEPS)
 animated_resizing_DEPENDENCIES = $(TEST_DEPS)
 animated_revealing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
