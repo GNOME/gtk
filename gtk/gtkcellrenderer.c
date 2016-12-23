@@ -83,12 +83,6 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 static void set_cell_bg_color               (GtkCellRenderer      *cell,
 					     GdkRGBA              *rgba);
 
-static void gtk_cell_renderer_real_snapshot (GtkCellRenderer      *cell,
-                                             GtkSnapshot          *snapshot,
-                                             GtkWidget            *widget,
-                                             const GdkRectangle   *background_area,
-                                             const GdkRectangle   *cell_area,
-                                             GtkCellRendererState  flags);
 /* Fallback GtkCellRenderer    implementation to use remaining ->get_size() implementations */
 static GtkSizeRequestMode gtk_cell_renderer_real_get_request_mode(GtkCellRenderer         *cell);
 static void gtk_cell_renderer_real_get_preferred_width           (GtkCellRenderer         *cell,
@@ -208,8 +202,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   object_class->get_property = gtk_cell_renderer_get_property;
   object_class->set_property = gtk_cell_renderer_set_property;
 
-  class->render = NULL;
-  class->snapshot = gtk_cell_renderer_real_snapshot;
+  class->snapshot = NULL;
   class->get_size = NULL;
   class->get_request_mode               = gtk_cell_renderer_real_get_request_mode;
   class->get_preferred_width            = gtk_cell_renderer_real_get_preferred_width;
@@ -1253,30 +1246,6 @@ gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
       if (canceled)
 	g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
     }
-}
-
-static void
-gtk_cell_renderer_real_snapshot (GtkCellRenderer      *cell,
-                                 GtkSnapshot          *snapshot,
-                                 GtkWidget            *widget,
-                                 const GdkRectangle   *background_area,
-                                 const GdkRectangle   *cell_area,
-                                 GtkCellRendererState  flags)
-{
-  cairo_t *cr;
-
-  g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
-
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (
-                                           background_area->x,
-                                           background_area->y,
-                                           background_area->width,
-                                           background_area->height
-                                       ),
-                                       "CellFallback<%s>", G_OBJECT_TYPE_NAME (cell));
-  GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell, cr, widget, background_area, cell_area, flags);
-  cairo_destroy (cr);
 }
 
 static void

@@ -31,14 +31,10 @@
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
+#include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
 
 #include <math.h>
-
-#undef GDK_DEPRECATED
-#undef GDK_DEPRECATED_FOR
-#define GDK_DEPRECATED
-#define GDK_DEPRECATED_FOR(f)
 
 /**
  * SECTION:gtkcellrendererspinner
@@ -90,8 +86,8 @@ static void gtk_cell_renderer_spinner_get_size     (GtkCellRenderer *cell,
                                                     gint               *y_offset,
                                                     gint               *width,
                                                     gint               *height);
-static void gtk_cell_renderer_spinner_render       (GtkCellRenderer      *cell,
-                                                    cairo_t              *cr,
+static void gtk_cell_renderer_spinner_snapshot     (GtkCellRenderer      *cell,
+                                                    GtkSnapshot          *snapshot,
                                                     GtkWidget            *widget,
                                                     const GdkRectangle   *background_area,
                                                     const GdkRectangle   *cell_area,
@@ -109,7 +105,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
   object_class->set_property = gtk_cell_renderer_spinner_set_property;
 
   cell_class->get_size = gtk_cell_renderer_spinner_get_size;
-  cell_class->render = gtk_cell_renderer_spinner_render;
+  cell_class->snapshot = gtk_cell_renderer_spinner_snapshot;
 
   /* GtkCellRendererSpinner:active:
    *
@@ -388,18 +384,19 @@ gtk_paint_spinner (GtkStyleContext *context,
 }
 
 static void
-gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
-                                  cairo_t              *cr,
-                                  GtkWidget            *widget,
-                                  const GdkRectangle   *background_area,
-                                  const GdkRectangle   *cell_area,
-                                  GtkCellRendererState  flags)
+gtk_cell_renderer_spinner_snapshot (GtkCellRenderer      *cellr,
+                                    GtkSnapshot          *snapshot,
+                                    GtkWidget            *widget,
+                                    const GdkRectangle   *background_area,
+                                    const GdkRectangle   *cell_area,
+                                    GtkCellRendererState  flags)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   gint xpad, ypad;
+  cairo_t *cr;
 
   if (!priv->active)
     return;
@@ -420,10 +417,12 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
   if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     return;
 
-  cairo_save (cr);
-
-  gdk_cairo_rectangle (cr, cell_area);
-  cairo_clip (cr);
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &GRAPHENE_RECT_INIT (
+                                           cell_area->x, cell_area->y,
+                                           cell_area->width, cell_area->height
+                                       ),
+                                       "CellSpinner");
 
   gtk_paint_spinner (gtk_widget_get_style_context (widget),
                      cr,
@@ -431,5 +430,5 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
                      draw_rect.x, draw_rect.y,
                      draw_rect.width, draw_rect.height);
 
-  cairo_restore (cr);
+  cairo_destroy (cr);
 }

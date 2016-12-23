@@ -153,12 +153,12 @@ gtk_cell_renderer_graph_get_size (GtkCellRenderer    *cell,
 }
 
 static void
-gtk_cell_renderer_graph_render (GtkCellRenderer      *cell,
-                                cairo_t              *cr,
-                                GtkWidget            *widget,
-                                const GdkRectangle   *background_area,
-                                const GdkRectangle   *cell_area,
-                                GtkCellRendererState  flags)
+gtk_cell_renderer_graph_snapshot (GtkCellRenderer      *cell,
+                                  GtkSnapshot          *snapshot,
+                                  GtkWidget            *widget,
+                                  const GdkRectangle   *background_area,
+                                  const GdkRectangle   *cell_area,
+                                  GtkCellRendererState  flags)
 {
   GtkCellRendererGraph *graph = GTK_CELL_RENDERER_GRAPH (cell);
   GtkCellRendererGraphPrivate *priv = graph->priv;
@@ -166,6 +166,7 @@ gtk_cell_renderer_graph_render (GtkCellRenderer      *cell,
   double minimum, maximum, diff;
   double x, y, width, height;
   int xpad, ypad;
+  cairo_t *cr;
   GdkRGBA color;
   guint i, n;
 
@@ -193,6 +194,13 @@ gtk_cell_renderer_graph_render (GtkCellRenderer      *cell,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (context, &color);
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &GRAPHENE_RECT_INIT (
+                                           background_area->x, background_area->y,
+                                           background_area->width, background_area->height
+                                       ),
+                                       "CellGraph");
 
   cairo_set_line_width (cr, 1.0);
 
@@ -226,6 +234,8 @@ gtk_cell_renderer_graph_render (GtkCellRenderer      *cell,
   color.alpha *= 0.2;
   gdk_cairo_set_source_rgba (cr, &color);
   cairo_fill (cr);
+
+  cairo_destroy (cr);
 }
 
 static void
@@ -239,7 +249,7 @@ gtk_cell_renderer_graph_class_init (GtkCellRendererGraphClass *klass)
   object_class->set_property = gtk_cell_renderer_graph_set_property;
 
   cell_class->get_size = gtk_cell_renderer_graph_get_size;
-  cell_class->render = gtk_cell_renderer_graph_render;
+  cell_class->snapshot = gtk_cell_renderer_graph_snapshot;
 
   g_object_class_install_property (object_class,
                                    PROP_DATA,
