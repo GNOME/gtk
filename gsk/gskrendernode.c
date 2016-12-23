@@ -317,6 +317,42 @@ gsk_render_node_serialize (GskRenderNode *node)
   return result;
 }
 
+/**
+ * gsk_render_node_write_to_file:
+ * @node: a #GskRenderNode
+ * @filename: the file to save it to.
+ * @error: Return location for a potential error
+ *
+ * This function is equivalent to calling gsk_render_node_serialize()
+ * followed by g_file_set_contents(). See those two functions for details
+ * on the arguments.
+ *
+ * It is mostly intended for use inside a debugger to quickly dump a render
+ * node to a file for later inspection.
+ *
+ * Returns: %TRUE if saving was successful
+ **/
+gboolean
+gsk_render_node_write_to_file (GskRenderNode *node,
+                               const char    *filename,
+                               GError       **error)
+{
+  GBytes *bytes;
+  gboolean result;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), FALSE);
+  g_return_val_if_fail (filename != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  bytes = gsk_render_node_serialize (node);
+  result = g_file_set_contents (filename,
+                                g_bytes_get_data (bytes, NULL),
+                                g_bytes_get_size (bytes),
+                                error);
+
+  return result;
+}
+
 GskRenderNode *
 gsk_render_node_deserialize (GBytes *bytes)
 {

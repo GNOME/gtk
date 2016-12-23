@@ -30,6 +30,9 @@ gsk_render_node_unref
 GskRenderNodeType
 gsk_render_node_get_node_type
 gsk_render_node_draw
+gsk_render_node_serialize
+gsk_render_node_deserialize
+gsk_render_node_write_to_file
 GskScalingFilter
 gsk_render_node_set_scaling_filters
 gsk_render_node_set_name

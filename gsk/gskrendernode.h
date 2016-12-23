@@ -177,6 +177,10 @@ void                    gsk_render_node_draw                    (GskRenderNode *
 GDK_AVAILABLE_IN_3_90
 GBytes *                gsk_render_node_serialize               (GskRenderNode *node);
 GDK_AVAILABLE_IN_3_90
+gboolean                gsk_render_node_write_to_file           (GskRenderNode *node,
+                                                                 const char    *filename,
+                                                                 GError       **error);
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_deserialize             (GBytes        *bytes);
 
 G_END_DECLS
