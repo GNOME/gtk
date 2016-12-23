@@ -21,6 +21,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktreeprivate.h"
 #include "a11y/gtkbooleancellaccessible.h"
@@ -53,8 +54,8 @@ static void gtk_cell_renderer_toggle_get_size   (GtkCellRenderer            *cel
 						 gint                       *y_offset,
 						 gint                       *width,
 						 gint                       *height);
-static void gtk_cell_renderer_toggle_render     (GtkCellRenderer            *cell,
-						 cairo_t                    *cr,
+static void gtk_cell_renderer_toggle_snapshot   (GtkCellRenderer            *cell,
+						 GtkSnapshot                *snapshot,
 						 GtkWidget                  *widget,
 						 const GdkRectangle         *background_area,
 						 const GdkRectangle         *cell_area,
@@ -125,7 +126,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
   object_class->set_property = gtk_cell_renderer_toggle_set_property;
 
   cell_class->get_size = gtk_cell_renderer_toggle_get_size;
-  cell_class->render = gtk_cell_renderer_toggle_render;
+  cell_class->snapshot = gtk_cell_renderer_toggle_snapshot;
   cell_class->activate = gtk_cell_renderer_toggle_activate;
   
   g_object_class_install_property (object_class,
@@ -373,12 +374,12 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
 }
 
 static void
-gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
-				 cairo_t              *cr,
-				 GtkWidget            *widget,
-				 const GdkRectangle   *background_area,
-				 const GdkRectangle   *cell_area,
-				 GtkCellRendererState  flags)
+gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
+				   GtkSnapshot          *snapshot,
+                                   GtkWidget            *widget,
+                                   const GdkRectangle   *background_area,
+                                   const GdkRectangle   *cell_area,
+                                   GtkCellRendererState  flags)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
   GtkCellRendererTogglePrivate *priv = celltoggle->priv;
@@ -388,6 +389,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   gint xpad, ypad;
   GtkStateFlags state;
   GtkBorder padding, border;
+  GtkCssImageBuiltinType image_type;
 
   context = gtk_widget_get_style_context (widget);
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
@@ -413,45 +415,57 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   if (priv->active)
     state |= GTK_STATE_FLAG_CHECKED;
 
-  cairo_save (cr);
-
-  gdk_cairo_rectangle (cr, cell_area);
-  cairo_clip (cr);
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT (
+                             cell_area->x, cell_area->y,
+                             cell_area->width, cell_area->height
+                          ),
+                          "CellToggleClip");
 
   context = gtk_cell_renderer_toggle_save_context (cell, widget);
   gtk_style_context_set_state (context, state);
 
-  gtk_render_background (context, cr,
-                         cell_area->x + x_offset + xpad,
-                         cell_area->y + y_offset + ypad,
-                         width, height);
-  gtk_render_frame (context, cr,
-                    cell_area->x + x_offset + xpad,
-                    cell_area->y + y_offset + ypad,
-                    width, height);
+  gtk_snapshot_render_background (snapshot, context,
+                                  cell_area->x + x_offset + xpad,
+                                  cell_area->y + y_offset + ypad,
+                                  width, height);
+  gtk_snapshot_render_frame (snapshot, context,
+                             cell_area->x + x_offset + xpad,
+                             cell_area->y + y_offset + ypad,
+                             width, height);
 
   gtk_style_context_get_padding (context, &padding);
   gtk_style_context_get_border (context, &border);
 
   if (priv->radio)
     {
-      gtk_render_option (context, cr,
-                         cell_area->x + x_offset + xpad + padding.left + border.left,
-                         cell_area->y + y_offset + ypad + padding.top + border.top,
-                         width - padding.left - padding.right - border.left - border.right,
-                         height - padding.top - padding.bottom - border.top - border.bottom);
+      if (state & GTK_STATE_FLAG_INCONSISTENT)
+        image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT;
+      else if (state & GTK_STATE_FLAG_CHECKED)
+        image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
+      else
+        image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
     }
   else
     {
-      gtk_render_check (context, cr,
-                        cell_area->x + x_offset + xpad + padding.left + border.left,
-                        cell_area->y + y_offset + ypad + padding.top + border.top,
-                        width - padding.left - padding.right - border.left - border.right,
-                        height - padding.top - padding.bottom - border.top - border.bottom);
+      if (state & GTK_STATE_FLAG_INCONSISTENT)
+        image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT;
+      else if (state & GTK_STATE_FLAG_CHECKED)
+        image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
+      else
+        image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
     }
 
+  gtk_snapshot_translate_2d (snapshot,
+                             cell_area->x + x_offset + xpad + padding.left + border.left,
+                             cell_area->y + y_offset + ypad + padding.top + border.top);
+  gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context), snapshot,
+                               width - padding.left - padding.right - border.left - border.right,
+                               height - padding.top - padding.bottom - border.top - border.bottom,
+                               image_type);
+
   gtk_style_context_restore (context);
-  cairo_restore (cr);
+  gtk_snapshot_pop_and_append (snapshot);
 }
 
 static gint
