@@ -13,7 +13,8 @@ typedef enum {
   GSK_DEBUG_SHADERS     = 1 << 4,
   GSK_DEBUG_TRANSFORMS  = 1 << 5,
   GSK_DEBUG_SURFACE     = 1 << 6,
-  GSK_DEBUG_VULKAN      = 1 << 7
+  GSK_DEBUG_VULKAN      = 1 << 7,
+  GSK_DEBUG_FALLBACK    = 1 << 8
 } GskDebugFlags;
 
 typedef enum {

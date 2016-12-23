@@ -2,6 +2,7 @@
 
 #include "gskvulkanrenderpassprivate.h"
 
+#include "gskdebugprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderer.h"
 #include "gskroundedrectprivate.h"
@@ -82,6 +83,11 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_slice_free (GskVulkanRenderPass, self);
 }
 
+#define FALLBACK(...) G_STMT_START { \
+  GSK_NOTE (FALLBACK, g_print (__VA_ARGS__)); \
+  goto fallback; \
+}G_STMT_END
+
 void
 gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
                                  GskVulkanRender               *render,
@@ -100,13 +106,13 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       g_assert_not_reached ();
       return;
     default:
-      goto fallback;
+      FALLBACK ("Unsupported node '%s'\n", node->node_class->type_name);
 
     case GSK_CAIRO_NODE:
       if (gsk_cairo_node_get_surface (node) == NULL)
         return;
       if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
-        goto fallback;
+        FALLBACK ("Cairo nodes can't deal with clip type %u\n", clip->type);
       op.type = GSK_VULKAN_OP_SURFACE;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
       g_array_append_val (self->render_ops, op);
@@ -114,7 +120,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     case GSK_TEXTURE_NODE:
       if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
-        goto fallback;
+        FALLBACK ("Texture nodes can't deal with clip type %u\n", clip->type);
       op.type = GSK_VULKAN_OP_TEXTURE;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
       g_array_append_val (self->render_ops, op);
@@ -122,7 +128,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     case GSK_COLOR_NODE:
       if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
-        goto fallback;
+        FALLBACK ("Color nodes can't deal with clip type %u\n", clip->type);
       op.type = GSK_VULKAN_OP_COLOR;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_COLOR);
       g_array_append_val (self->render_ops, op);
@@ -146,7 +152,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         graphene_rect_t rect;
 
         if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
-          goto fallback;
+          FALLBACK ("Transform nodes can't deal with clip type %u\n", clip->type);
 
         gsk_transform_node_get_transform (node, &transform);
         op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
@@ -168,7 +174,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         GskVulkanClip new_clip;
 
         if (!gsk_vulkan_clip_intersect_rect (&new_clip, clip, gsk_clip_node_peek_clip (node)))
-          goto fallback;
+          FALLBACK ("Failed to find intersection between clip of type %u and rectangle\n", clip->type);
         if (new_clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
           return;
 
@@ -181,7 +187,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         GskVulkanClip new_clip;
 
         if (!gsk_vulkan_clip_intersect_rounded_rect (&new_clip, clip, gsk_rounded_clip_node_peek_clip (node)))
-          goto fallback;
+          FALLBACK ("Failed to find intersection between clip of type %u and rounded rectangle\n", clip->type);
         if (new_clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
           return;
 
@@ -216,6 +222,7 @@ fallback:
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
   g_array_append_val (self->render_ops, op);
 }
+#undef FALLBACK
 
 void
 gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,

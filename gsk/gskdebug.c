@@ -9,7 +9,8 @@ static const GDebugKey gsk_debug_keys[] = {
   { "shaders", GSK_DEBUG_SHADERS },
   { "transforms", GSK_DEBUG_TRANSFORMS },
   { "surface", GSK_DEBUG_SURFACE },
-  { "vulkan", GSK_DEBUG_VULKAN }
+  { "vulkan", GSK_DEBUG_VULKAN },
+  { "fallback", GSK_DEBUG_FALLBACK }
 };
 #endif
 
