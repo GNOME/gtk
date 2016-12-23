@@ -55,8 +55,8 @@ static void gtk_cell_renderer_text_set_property  (GObject                  *obje
 						  guint                     param_id,
 						  const GValue             *value,
 						  GParamSpec               *pspec);
-static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
-					       cairo_t                  *cr,
+static void gtk_cell_renderer_text_snapshot   (GtkCellRenderer          *cell,
+					       GtkSnapshot              *snapshot,
 					       GtkWidget                *widget,
 					       const GdkRectangle       *background_area,
 					       const GdkRectangle       *cell_area,
@@ -241,7 +241,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   object_class->get_property = gtk_cell_renderer_text_get_property;
   object_class->set_property = gtk_cell_renderer_text_set_property;
 
-  cell_class->render = gtk_cell_renderer_text_render;
+  cell_class->snapshot = gtk_cell_renderer_text_snapshot;
   cell_class->start_editing = gtk_cell_renderer_text_start_editing;
   cell_class->get_preferred_width = gtk_cell_renderer_text_get_preferred_width;
   cell_class->get_preferred_height = gtk_cell_renderer_text_get_preferred_height;
@@ -1712,12 +1712,12 @@ get_size (GtkCellRenderer    *cell,
 }
 
 static void
-gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
-			       cairo_t              *cr,
-			       GtkWidget            *widget,
-			       const GdkRectangle   *background_area,
-			       const GdkRectangle   *cell_area,
-			       GtkCellRendererState  flags)
+gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
+			         GtkSnapshot          *snapshot,
+                                 GtkWidget            *widget,
+                                 const GdkRectangle   *background_area,
+                                 const GdkRectangle   *cell_area,
+                                 GtkCellRendererState  flags)
 
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
@@ -1735,9 +1735,13 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 
   if (priv->background_set && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
-      gdk_cairo_rectangle (cr, background_area);
-      gdk_cairo_set_source_rgba (cr, &priv->background);
-      cairo_fill (cr);
+      gtk_snapshot_append_color_node (snapshot,
+                                      &priv->background,
+                                      &GRAPHENE_RECT_INIT(
+                                          background_area->x, background_area->y,
+                                          background_area->width, background_area->height
+                                      ),
+                                      "CellTextBackground");
     }
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
@@ -1751,17 +1755,19 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   pango_layout_get_pixel_extents (layout, NULL, &rect);
   x_offset = x_offset - rect.x;
 
-  cairo_save (cr);
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT(
+                              cell_area->x, cell_area->y,
+                              cell_area->width, cell_area->height
+                          ),
+                          "CellTextClip");
 
-  gdk_cairo_rectangle (cr, cell_area);
-  cairo_clip (cr);
+  gtk_snapshot_render_layout (snapshot, context,
+                              cell_area->x + x_offset + xpad,
+                              cell_area->y + y_offset + ypad,
+                              layout);
 
-  gtk_render_layout (context, cr,
-                     cell_area->x + x_offset + xpad,
-                     cell_area->y + y_offset + ypad,
-                     layout);
-
-  cairo_restore (cr);
+  gtk_snapshot_pop_and_append (snapshot);
 
   g_object_unref (layout);
 }
