@@ -4052,7 +4052,7 @@ gtk_cell_area_has_renderer
 gtk_cell_area_foreach
 gtk_cell_area_foreach_alloc
 gtk_cell_area_event
-gtk_cell_area_render
+gtk_cell_area_snapshot
 gtk_cell_area_get_cell_allocation
 gtk_cell_area_get_cell_at_position
 gtk_cell_area_create_context
@@ -4170,7 +4170,7 @@ GtkCellRendererClass
 gtk_cell_renderer_class_set_accessible_type
 gtk_cell_renderer_get_aligned_area
 gtk_cell_renderer_get_size
-gtk_cell_renderer_render
+gtk_cell_renderer_snapshot
 gtk_cell_renderer_activate
 gtk_cell_renderer_start_editing
 gtk_cell_renderer_stop_editing

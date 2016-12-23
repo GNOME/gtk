@@ -112,7 +112,7 @@ struct _GtkCellArea
  * @event: Handle an event in the area, this is generally used to activate
  *     a cell at the event location for button events but can also be used
  *     to generically pass events to #GtkWidgets drawn onto the area.
- * @render: Actually render the area’s cells to the specified rectangle,
+ * @snapshot: Actually snapshot the area’s cells to the specified rectangle,
  *     @background_area should be correctly distributed to the cells
  *     corresponding background areas.
  * @apply_attributes: Apply the cell attributes to the cells. This is
@@ -198,10 +198,10 @@ struct _GtkCellAreaClass
                                                           GdkEvent                *event,
                                                           const GdkRectangle      *cell_area,
                                                           GtkCellRendererState     flags);
-  void               (* render)                          (GtkCellArea             *area,
+  void               (* snapshot)                        (GtkCellArea             *area,
                                                           GtkCellAreaContext      *context,
                                                           GtkWidget               *widget,
-                                                          cairo_t                 *cr,
+                                                          GtkSnapshot             *snapshot,
                                                           const GdkRectangle      *background_area,
                                                           const GdkRectangle      *cell_area,
                                                           GtkCellRendererState     flags,
@@ -308,15 +308,6 @@ gint                  gtk_cell_area_event                          (GtkCellArea 
                                                                     GdkEvent             *event,
                                                                     const GdkRectangle   *cell_area,
                                                                     GtkCellRendererState  flags);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_cell_area_render                         (GtkCellArea          *area,
-                                                                    GtkCellAreaContext   *context,
-                                                                    GtkWidget            *widget,
-                                                                    cairo_t              *cr,
-                                                                    const GdkRectangle   *background_area,
-                                                                    const GdkRectangle   *cell_area,
-                                                                    GtkCellRendererState  flags,
-                                                                    gboolean              paint_focus);
 GDK_AVAILABLE_IN_3_90
 void                  gtk_cell_area_snapshot                       (GtkCellArea          *area,
                                                                     GtkCellAreaContext   *context,

@@ -43,7 +43,7 @@
  * CellRenderer keep any permanent state around.  Instead, any state is set
  * just prior to use using #GObjects property system.  Then, the
  * cell is measured using gtk_cell_renderer_get_size(). Finally, the cell
- * is rendered in the correct location using gtk_cell_renderer_render().
+ * is rendered in the correct location using gtk_cell_renderer_snapshot().
  *
  * There are a number of rules that must be followed when writing a new
  * #GtkCellRenderer.  First and foremost, it’s important that a certain set
@@ -83,6 +83,12 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 static void set_cell_bg_color               (GtkCellRenderer      *cell,
 					     GdkRGBA              *rgba);
 
+static void gtk_cell_renderer_real_snapshot (GtkCellRenderer      *cell,
+                                             GtkSnapshot          *snapshot,
+                                             GtkWidget            *widget,
+                                             const GdkRectangle   *background_area,
+                                             const GdkRectangle   *cell_area,
+                                             GtkCellRendererState  flags);
 /* Fallback GtkCellRenderer    implementation to use remaining ->get_size() implementations */
 static GtkSizeRequestMode gtk_cell_renderer_real_get_request_mode(GtkCellRenderer         *cell);
 static void gtk_cell_renderer_real_get_preferred_width           (GtkCellRenderer         *cell,
@@ -203,6 +209,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   object_class->set_property = gtk_cell_renderer_set_property;
 
   class->render = NULL;
+  class->snapshot = gtk_cell_renderer_real_snapshot;
   class->get_size = NULL;
   class->get_request_mode               = gtk_cell_renderer_real_get_request_mode;
   class->get_preferred_width            = gtk_cell_renderer_real_get_preferred_width;
@@ -680,7 +687,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
  *
  * Obtains the width and height needed to render the cell. Used by view 
  * widgets to determine the appropriate size for the cell_area passed to
- * gtk_cell_renderer_render().  If @cell_area is not %NULL, fills in the
+ * gtk_cell_renderer_snapshot().  If @cell_area is not %NULL, fills in the
  * x and y offsets (if set) of the cell relative to this location. 
  *
  * Please note that the values set in @width and @height, as well as those 
@@ -716,9 +723,9 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
 }
 
 /**
- * gtk_cell_renderer_render:
+ * gtk_cell_renderer_snapshot:
  * @cell: a #GtkCellRenderer
- * @cr: a cairo context to draw to
+ * @snapshot: a #GtkSnapshot to draw to
  * @widget: the widget owning @window
  * @background_area: entire cell area (including tree expanders and maybe 
  *    padding on the sides)
@@ -732,14 +739,16 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
  * blank space around the cell, and also the area containing the tree expander;
  * so the @background_area rectangles for all cells tile to cover the entire
  * @window.
+ *
+ * Since: 3.90
  **/
 void
-gtk_cell_renderer_render (GtkCellRenderer      *cell,
-                          cairo_t              *cr,
-                          GtkWidget            *widget,
-                          const GdkRectangle   *background_area,
-                          const GdkRectangle   *cell_area,
-                          GtkCellRendererState  flags)
+gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
+                            GtkSnapshot          *snapshot,
+                            GtkWidget            *widget,
+                            const GdkRectangle   *background_area,
+                            const GdkRectangle   *cell_area,
+                            GtkCellRendererState  flags)
 {
   gboolean selected = FALSE;
   GtkCellRendererPrivate *priv = cell->priv;
@@ -747,22 +756,28 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
   GtkStateFlags state;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-  g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
-  g_return_if_fail (cr != NULL);
+  g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->snapshot != NULL);
+  g_return_if_fail (snapshot != NULL);
 
   selected = (flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED;
 
-  cairo_save (cr);
-
   if (priv->cell_background_set && !selected)
     {
-      gdk_cairo_rectangle (cr, background_area);
-      gdk_cairo_set_source_rgba (cr, &priv->cell_background);
-      cairo_fill (cr);
+      gtk_snapshot_append_color_node (snapshot,
+                                      &priv->cell_background,
+                                      &GRAPHENE_RECT_INIT (
+                                          background_area->x, background_area->y,
+                                          background_area->width, background_area->height
+                                      ),
+                                      "CellBackground");
     }
 
-  gdk_cairo_rectangle (cr, background_area);
-  cairo_clip (cr);
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT (
+                              background_area->x, background_area->y,
+                              background_area->width, background_area->height
+                          ),
+                          "CellClip");
 
   context = gtk_widget_get_style_context (widget);
 
@@ -772,14 +787,14 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
   state = gtk_cell_renderer_get_state (cell, widget, flags);
   gtk_style_context_set_state (context, state);
 
-  GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell,
-                                              cr,
-					      widget,
-					      background_area,
-					      cell_area,
-					      flags);
+  GTK_CELL_RENDERER_GET_CLASS (cell)->snapshot (cell,
+                                                snapshot,
+                                                widget,
+                                                background_area,
+                                                cell_area,
+                                                flags);
   gtk_style_context_restore (context);
-  cairo_restore (cr);
+  gtk_snapshot_pop_and_append (snapshot);
 }
 
 /**
@@ -1238,6 +1253,30 @@ gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
       if (canceled)
 	g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
     }
+}
+
+static void
+gtk_cell_renderer_real_snapshot (GtkCellRenderer      *cell,
+                                 GtkSnapshot          *snapshot,
+                                 GtkWidget            *widget,
+                                 const GdkRectangle   *background_area,
+                                 const GdkRectangle   *cell_area,
+                                 GtkCellRendererState  flags)
+{
+  cairo_t *cr;
+
+  g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &GRAPHENE_RECT_INIT (
+                                           background_area->x,
+                                           background_area->y,
+                                           background_area->width,
+                                           background_area->height
+                                       ),
+                                       "CellFallback<%s>", G_OBJECT_TYPE_NAME (cell));
+  GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell, cr, widget, background_area, cell_area, flags);
+  cairo_destroy (cr);
 }
 
 static void

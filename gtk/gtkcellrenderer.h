@@ -151,6 +151,12 @@ struct _GtkCellRendererClass
                                                           const GdkRectangle   *background_area,
                                                           const GdkRectangle   *cell_area,
                                                           GtkCellRendererState  flags);
+  void               (* snapshot)                        (GtkCellRenderer      *cell,
+                                                          GtkSnapshot          *snapshot,
+                                                          GtkWidget            *widget,
+                                                          const GdkRectangle   *background_area,
+                                                          const GdkRectangle   *cell_area,
+                                                          GtkCellRendererState  flags);
   gboolean           (* activate)                        (GtkCellRenderer      *cell,
                                                           GdkEvent             *event,
                                                           GtkWidget            *widget,
@@ -229,9 +235,9 @@ void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
                                                    gint                 *y_offset,
                                                    gint                 *width,
                                                    gint                 *height);
-GDK_AVAILABLE_IN_ALL
-void             gtk_cell_renderer_render         (GtkCellRenderer      *cell,
-                                                   cairo_t              *cr,
+GDK_AVAILABLE_IN_3_90
+void             gtk_cell_renderer_snapshot       (GtkCellRenderer      *cell,
+                                                   GtkSnapshot          *snapshot,
 						   GtkWidget            *widget,
 						   const GdkRectangle   *background_area,
 						   const GdkRectangle   *cell_area,

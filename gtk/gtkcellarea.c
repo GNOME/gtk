@@ -390,10 +390,10 @@ static gint      gtk_cell_area_real_event                          (GtkCellArea 
                                                                     GdkEvent             *event,
                                                                     const GdkRectangle   *cell_area,
                                                                     GtkCellRendererState  flags);
-static void      gtk_cell_area_real_render                         (GtkCellArea          *area,
+static void      gtk_cell_area_real_snapshot                       (GtkCellArea          *area,
                                                                     GtkCellAreaContext   *context,
                                                                     GtkWidget            *widget,
-                                                                    cairo_t              *cr,
+                                                                    GtkSnapshot          *snapshot,
                                                                     const GdkRectangle   *background_area,
                                                                     const GdkRectangle   *cell_area,
                                                                     GtkCellRendererState  flags,
@@ -487,7 +487,7 @@ typedef struct {
 typedef struct {
   GtkCellArea         *area;
   GtkWidget           *widget;
-  cairo_t             *cr;
+  GtkSnapshot         *snapshot;
   GdkRectangle         focus_rect;
   GtkCellRendererState render_flags;
   guint                paint_focus : 1;
@@ -653,7 +653,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->foreach          = gtk_cell_area_real_foreach;
   class->foreach_alloc    = gtk_cell_area_real_foreach_alloc;
   class->event            = gtk_cell_area_real_event;
-  class->render           = gtk_cell_area_real_render;
+  class->snapshot         = gtk_cell_area_real_snapshot;
   class->apply_attributes = gtk_cell_area_real_apply_attributes;
 
   /* geometry */
@@ -1110,10 +1110,10 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 }
 
 static gboolean
-render_cell (GtkCellRenderer        *renderer,
-             const GdkRectangle     *cell_area,
-             const GdkRectangle     *cell_background,
-             CellRenderData         *data)
+snapshot_cell (GtkCellRenderer        *renderer,
+               const GdkRectangle     *cell_area,
+               const GdkRectangle     *cell_background,
+               CellRenderData         *data)
 {
   GtkCellRenderer      *focus_cell;
   GtkCellRendererState  flags;
@@ -1145,27 +1145,27 @@ render_cell (GtkCellRenderer        *renderer,
         }
     }
 
-  gtk_cell_renderer_render (renderer, data->cr, data->widget,
-                            cell_background, &inner_area, flags);
+  gtk_cell_renderer_snapshot (renderer, data->snapshot, data->widget,
+                              cell_background, &inner_area, flags);
 
   return FALSE;
 }
 
 static void
-gtk_cell_area_real_render (GtkCellArea          *area,
-                           GtkCellAreaContext   *context,
-                           GtkWidget            *widget,
-                           cairo_t              *cr,
-                           const GdkRectangle   *background_area,
-                           const GdkRectangle   *cell_area,
-                           GtkCellRendererState  flags,
-                           gboolean              paint_focus)
+gtk_cell_area_real_snapshot (GtkCellArea          *area,
+                             GtkCellAreaContext   *context,
+                             GtkWidget            *widget,
+                             GtkSnapshot          *snapshot,
+                             const GdkRectangle   *background_area,
+                             const GdkRectangle   *cell_area,
+                             GtkCellRendererState  flags,
+                             gboolean              paint_focus)
 {
   CellRenderData render_data =
     {
       area,
       widget,
-      cr,
+      snapshot,
       { 0, },
       flags,
       paint_focus,
@@ -1188,7 +1188,7 @@ gtk_cell_area_real_render (GtkCellArea          *area,
     render_data.focus_all = TRUE;
 
   gtk_cell_area_foreach_alloc (area, context, widget, cell_area, background_area,
-                               (GtkCellAllocCallback)render_cell, &render_data);
+                               (GtkCellAllocCallback) snapshot_cell, &render_data);
 
   if (render_data.paint_focus &&
       render_data.focus_rect.width != 0 &&
@@ -1203,17 +1203,11 @@ gtk_cell_area_real_render (GtkCellArea          *area,
       renderer_state = gtk_cell_renderer_get_state (NULL, widget, flags);
       gtk_style_context_set_state (style_context, renderer_state);
 
-      cairo_save (cr);
-
-      gdk_cairo_rectangle (cr, background_area);
-      cairo_clip (cr);
-
-      gtk_render_focus (style_context, cr,
-                        render_data.focus_rect.x,     render_data.focus_rect.y,
-                        render_data.focus_rect.width, render_data.focus_rect.height);
+      gtk_snapshot_render_focus (snapshot, style_context,
+                                 render_data.focus_rect.x,     render_data.focus_rect.y,
+                                 render_data.focus_rect.width, render_data.focus_rect.height);
 
       gtk_style_context_restore (style_context);
-      cairo_restore (cr);
     }
 }
 
@@ -1805,50 +1799,6 @@ gtk_cell_area_event (GtkCellArea          *area,
 }
 
 /**
- * gtk_cell_area_render:
- * @area: a #GtkCellArea
- * @context: the #GtkCellAreaContext for this row of data.
- * @widget: the #GtkWidget that @area is rendering to
- * @cr: the #cairo_t to render with
- * @background_area: the @widget relative coordinates for @area’s background
- * @cell_area: the @widget relative coordinates for @area
- * @flags: the #GtkCellRendererState for @area in this row.
- * @paint_focus: whether @area should paint focus on focused cells for focused rows or not.
- *
- * Renders @area’s cells according to @area’s layout onto @widget at
- * the given coordinates.
- *
- * Since: 3.0
- */
-void
-gtk_cell_area_render (GtkCellArea          *area,
-                      GtkCellAreaContext   *context,
-                      GtkWidget            *widget,
-                      cairo_t              *cr,
-                      const GdkRectangle   *background_area,
-                      const GdkRectangle   *cell_area,
-                      GtkCellRendererState  flags,
-                      gboolean              paint_focus)
-{
-  GtkCellAreaClass *class;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (background_area != NULL);
-  g_return_if_fail (cell_area != NULL);
-
-  class = GTK_CELL_AREA_GET_CLASS (area);
-
-  if (class->render)
-    class->render (area, context, widget, cr, background_area, cell_area, flags, paint_focus);
-  else
-    g_warning ("GtkCellAreaClass::render not implemented for '%s'",
-               g_type_name (G_TYPE_FROM_INSTANCE (area)));
-}
-
-/**
  * gtk_cell_area_snapshot:
  * @area: a #GtkCellArea
  * @context: the #GtkCellAreaContext for this row of data.
@@ -1874,7 +1824,7 @@ gtk_cell_area_snapshot (GtkCellArea          *area,
                         GtkCellRendererState  flags,
                         gboolean              paint_focus)
 {
-  cairo_t *cr;
+  GtkCellAreaClass *class;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
@@ -1883,16 +1833,13 @@ gtk_cell_area_snapshot (GtkCellArea          *area,
   g_return_if_fail (background_area != NULL);
   g_return_if_fail (cell_area != NULL);
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (
-                                           background_area->x,
-                                           background_area->y,
-                                           background_area->width,
-                                           background_area->height
-                                       ),
-                                       "CellArea<%s>", G_OBJECT_TYPE_NAME (area));
-  gtk_cell_area_render (area, context, widget, cr, background_area, cell_area, flags, paint_focus);
-  cairo_destroy (cr);
+  class = GTK_CELL_AREA_GET_CLASS (area);
+
+  if (class->snapshot)
+    class->snapshot (area, context, widget, snapshot, background_area, cell_area, flags, paint_focus);
+  else
+    g_warning ("GtkCellAreaClass::snapshot not implemented for '%s'",
+               g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
 static gboolean
