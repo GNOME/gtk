@@ -372,11 +372,12 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
   GskVulkanPipeline *current_pipeline = NULL;
   gsize current_draw_index = 0;
   GskVulkanOp *op;
-  guint i;
+  guint i, step;
 
-  for (i = 0; i < self->render_ops->len; i++)
+  for (i = 0; i < self->render_ops->len; i += step)
     {
       op = &g_array_index (self->render_ops, GskVulkanOp, i);
+      step = 1;
 
       switch (op->type)
         {
@@ -432,9 +433,14 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
               current_draw_index = 0;
             }
 
+          for (step = 1; step + i < self->render_ops->len; step++)
+            {
+              if (g_array_index (self->render_ops, GskVulkanOp, i + step).type != GSK_VULKAN_OP_COLOR)
+                break;
+            }
           current_draw_index += gsk_vulkan_color_pipeline_draw (GSK_VULKAN_COLOR_PIPELINE (current_pipeline),
                                                                 command_buffer,
-                                                                current_draw_index, 1);
+                                                                current_draw_index, step);
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
