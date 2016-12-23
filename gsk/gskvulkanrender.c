@@ -243,7 +243,14 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
 
   self->render_passes = g_slist_prepend (self->render_passes, pass);
 
-  gsk_vulkan_render_pass_add (pass, self, &self->mvp, node);
+  gsk_vulkan_render_pass_add (pass,
+                              self,
+                              &self->mvp,
+                              &GRAPHENE_RECT_INIT (
+                                  self->viewport.offset.x, self->viewport.offset.y,
+                                  self->viewport.extent.width, self->viewport.extent.height
+                              ),
+                              node);
 }
 
 void

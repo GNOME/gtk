@@ -26,6 +26,7 @@ if HAVE_VULKAN
 gsk_private_vulkan_source_h = \
 	gskvulkanblendpipelineprivate.h \
 	gskvulkanbufferprivate.h \
+	gskvulkanclipprivate.h \
 	gskvulkancolorpipelineprivate.h \
 	gskvulkancommandpoolprivate.h \
 	gskvulkanimageprivate.h \
@@ -39,6 +40,7 @@ gsk_private_vulkan_source_h = \
 gsk_private_vulkan_source_c = \
 	gskvulkanblendpipeline.c \
 	gskvulkanbuffer.c \
+	gskvulkanclip.c \
 	gskvulkancolorpipeline.c \
 	gskvulkancommandpool.c \
 	gskvulkanimage.c \

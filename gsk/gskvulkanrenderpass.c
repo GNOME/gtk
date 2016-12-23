@@ -2,11 +2,13 @@
 
 #include "gskvulkanrenderpassprivate.h"
 
-#include "gskvulkanblendpipelineprivate.h"
-#include "gskvulkancolorpipelineprivate.h"
-#include "gskvulkanimageprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrenderer.h"
+#include "gskroundedrectprivate.h"
+#include "gskvulkanblendpipelineprivate.h"
+#include "gskvulkanclipprivate.h"
+#include "gskvulkancolorpipelineprivate.h"
+#include "gskvulkanimageprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanrendererprivate.h"
 
@@ -17,6 +19,8 @@ typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
 typedef enum {
   /* GskVulkanOpRender */
   GSK_VULKAN_OP_FALLBACK,
+  GSK_VULKAN_OP_FALLBACK_CLIP,
+  GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP,
   GSK_VULKAN_OP_SURFACE,
   GSK_VULKAN_OP_TEXTURE,
   GSK_VULKAN_OP_COLOR,
@@ -29,6 +33,7 @@ struct _GskVulkanOpRender
   GskVulkanOpType      type;
   GskRenderNode       *node; /* node that's the source of this op */
   GskVulkanPipeline   *pipeline; /* pipeline to use */
+  GskRoundedRect       clip; /* clip rect (or random memory if not relevant) */
   GskVulkanImage      *source; /* source image to render */
   gsize                vertex_offset; /* offset into vertex buffer */
   gsize                vertex_count; /* number of vertices */
@@ -81,6 +86,7 @@ void
 gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
                                  GskVulkanRender               *render,
                                  const GskVulkanPushConstants  *constants,
+                                 const GskVulkanClip           *clip,
                                  GskRenderNode                 *node)
 {
   GskVulkanOp op = {
@@ -92,34 +98,35 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     {
     case GSK_NOT_A_RENDER_NODE:
       g_assert_not_reached ();
-      break;
-
+      return;
     default:
-      op.type = GSK_VULKAN_OP_FALLBACK;
-      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
-      g_array_append_val (self->render_ops, op);
-      break;
+      goto fallback;
 
     case GSK_CAIRO_NODE:
-      if (gsk_cairo_node_get_surface (node) != NULL)
-        {
-          op.type = GSK_VULKAN_OP_SURFACE;
-          op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
-          g_array_append_val (self->render_ops, op);
-        }
-      break;
+      if (gsk_cairo_node_get_surface (node) == NULL)
+        return;
+      if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
+        goto fallback;
+      op.type = GSK_VULKAN_OP_SURFACE;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
+      g_array_append_val (self->render_ops, op);
+      return;
 
     case GSK_TEXTURE_NODE:
+      if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
+        goto fallback;
       op.type = GSK_VULKAN_OP_TEXTURE;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
       g_array_append_val (self->render_ops, op);
-      break;
+      return;
 
     case GSK_COLOR_NODE:
+      if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
+        goto fallback;
       op.type = GSK_VULKAN_OP_COLOR;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_COLOR);
       g_array_append_val (self->render_ops, op);
-      break;
+      return;
 
     case GSK_CONTAINER_NODE:
       {
@@ -127,13 +134,19 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
         for (i = 0; i < gsk_container_node_get_n_children (node); i++)
           {
-            gsk_vulkan_render_pass_add_node (self, render, constants, gsk_container_node_get_child (node, i));
+            gsk_vulkan_render_pass_add_node (self, render, constants, clip, gsk_container_node_get_child (node, i));
           }
       }
-      break;
+      return;
+
     case GSK_TRANSFORM_NODE:
       {
         graphene_matrix_t transform;
+        GskVulkanClip new_clip;
+        graphene_rect_t rect;
+
+        if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
+          goto fallback;
 
         gsk_transform_node_get_transform (node, &transform);
         op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
@@ -141,28 +154,86 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         gsk_vulkan_push_constants_multiply_mvp (&op.constants.constants, &transform);
         g_array_append_val (self->render_ops, op);
 
-        gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, gsk_transform_node_get_child (node));
+        graphene_matrix_transform_bounds (&transform, &clip->rect.bounds, &rect);
+        gsk_vulkan_clip_init_empty (&new_clip, &rect);
+
+        gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, &new_clip, gsk_transform_node_get_child (node));
         gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
         g_array_append_val (self->render_ops, op);
       }
-      break;
+      return;
 
+    case GSK_CLIP_NODE:
+      {
+        GskVulkanClip new_clip;
+
+        if (!gsk_vulkan_clip_intersect_rect (&new_clip, clip, gsk_clip_node_peek_clip (node)))
+          goto fallback;
+        if (new_clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
+          return;
+
+        gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, &new_clip, gsk_clip_node_get_child (node));
+      }
+      return;
+
+    case GSK_ROUNDED_CLIP_NODE:
+      {
+        GskVulkanClip new_clip;
+
+        if (!gsk_vulkan_clip_intersect_rounded_rect (&new_clip, clip, gsk_rounded_clip_node_peek_clip (node)))
+          goto fallback;
+        if (new_clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
+          return;
+
+        gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, &new_clip, gsk_rounded_clip_node_get_child (node));
+      }
+      return;
     }
+
+  g_assert_not_reached ();
+  return;
+
+fallback:
+  switch (clip->type)
+    {
+      case GSK_VULKAN_CLIP_NONE:
+        op.type = GSK_VULKAN_OP_FALLBACK;
+        break;
+      case GSK_VULKAN_CLIP_RECT:
+        op.type = GSK_VULKAN_OP_FALLBACK_CLIP;
+        gsk_rounded_rect_init_copy (&op.render.clip, &clip->rect);
+        break;
+      case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
+      case GSK_VULKAN_CLIP_ROUNDED:
+        op.type = GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP;
+        gsk_rounded_rect_init_copy (&op.render.clip, &clip->rect);
+        break;
+      case GSK_VULKAN_CLIP_ALL_CLIPPED:
+      default:
+        g_assert_not_reached ();
+        return;
+    }
+  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
+  g_array_append_val (self->render_ops, op);
 }
 
 void
 gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                             GskVulkanRender         *render,
                             const graphene_matrix_t *mvp,
+                            const graphene_rect_t   *viewport,
                             GskRenderNode           *node)
 {
   GskVulkanOp op = { 0, };
+  GskVulkanClip clip;
 
   op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
   gsk_vulkan_push_constants_init (&op.constants.constants, mvp);
   g_array_append_val (self->render_ops, op);
 
-  gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, node);
+  gsk_vulkan_clip_init_empty (&clip, viewport);
+
+  gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, &clip, node);
 }
 
 static void
@@ -177,11 +248,29 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
 
   node = op->node;
 
+  /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         ceil (node->bounds.size.width),
                                         ceil (node->bounds.size.height));
   cr = cairo_create (surface);
   cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+
+  if (op->type == GSK_VULKAN_OP_FALLBACK_CLIP)
+    {
+      cairo_rectangle (cr,
+                       op->clip.bounds.origin.x, op->clip.bounds.origin.y,
+                       op->clip.bounds.size.width, op->clip.bounds.size.height);
+      cairo_clip (cr);
+    }
+  else if (op->type == GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP)
+    {
+      gsk_rounded_rect_path (&op->clip, cr);
+      cairo_clip (cr);
+    }
+  else
+    {
+      g_assert (op->type == GSK_VULKAN_OP_FALLBACK);
+    }
 
   gsk_render_node_draw (node, cr);
 
@@ -213,6 +302,8 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_FALLBACK_CLIP:
+        case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
           gsk_vulkan_render_pass_upload_fallback (self, &op->render, render, uploader);
           break;
 
@@ -261,6 +352,8 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_FALLBACK_CLIP:
+        case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
           op->render.vertex_count = gsk_vulkan_blend_pipeline_count_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline));
@@ -300,6 +393,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_FALLBACK_CLIP:
+        case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
           {
@@ -348,6 +443,8 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_FALLBACK_CLIP:
+        case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
           op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source);
@@ -382,6 +479,8 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
       switch (op->type)
         {
         case GSK_VULKAN_OP_FALLBACK:
+        case GSK_VULKAN_OP_FALLBACK_CLIP:
+        case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
           if (current_pipeline != op->render.pipeline)

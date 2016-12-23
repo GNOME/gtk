@@ -17,6 +17,7 @@ void                    gsk_vulkan_render_pass_free                     (GskVulk
 void                    gsk_vulkan_render_pass_add                      (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
                                                                          const graphene_matrix_t*mvp,
+                                                                         const graphene_rect_t  *viewport,
                                                                          GskRenderNode          *node);
 
 void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,

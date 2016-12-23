@@ -7,6 +7,8 @@
 
 G_BEGIN_DECLS
 
+gboolean                 gsk_rounded_rect_is_circular           (const GskRoundedRect     *self);
+
 void                     gsk_rounded_rect_path                  (const GskRoundedRect     *self,
                                                                  cairo_t                  *cr);
 

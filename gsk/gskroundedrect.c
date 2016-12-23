@@ -277,6 +277,21 @@ gsk_rounded_rect_shrink (GskRoundedRect *self,
   return self;
 }
 
+/* XXX: Fina a better name */
+gboolean
+gsk_rounded_rect_is_circular (const GskRoundedRect *self)
+{
+  guint i;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (self->corner[i].width != self->corner[i].height)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 /**
  * gsk_rounded_rect_is_rectilinear:
  * @self: the #GskRoundedRect to check
