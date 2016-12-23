@@ -30,7 +30,7 @@
 #include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtkrender.h"
+#include "gtksnapshot.h"
 
 
 /**
@@ -99,8 +99,8 @@ static void gtk_cell_renderer_progress_get_size     (GtkCellRenderer         *ce
 						     gint                    *y_offset,
 						     gint                    *width,
 						     gint                    *height);
-static void gtk_cell_renderer_progress_render       (GtkCellRenderer         *cell,
-						     cairo_t                 *cr,
+static void gtk_cell_renderer_progress_snapshot     (GtkCellRenderer         *cell,
+						     GtkSnapshot             *snapshot,
 						     GtkWidget               *widget,
 						     const GdkRectangle      *background_area,
 						     const GdkRectangle      *cell_area,
@@ -122,7 +122,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
   object_class->set_property = gtk_cell_renderer_progress_set_property;
   
   cell_class->get_size = gtk_cell_renderer_progress_get_size;
-  cell_class->render = gtk_cell_renderer_progress_render;
+  cell_class->snapshot = gtk_cell_renderer_progress_snapshot;
   
   /**
    * GtkCellRendererProgress:value:
@@ -544,12 +544,12 @@ get_bar_position (gint     start,
 }
 
 static void
-gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
-                                   cairo_t              *cr,
-				   GtkWidget            *widget,
-				   const GdkRectangle   *background_area,
-				   const GdkRectangle   *cell_area,
-				   GtkCellRendererState  flags)
+gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
+                                     GtkSnapshot          *snapshot,
+                                     GtkWidget            *widget,
+                                     const GdkRectangle   *background_area,
+                                     const GdkRectangle   *cell_area,
+                                     GtkCellRendererState  flags)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
   GtkCellRendererProgressPrivate *priv= cellprogress->priv;
@@ -574,8 +574,8 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 
-  gtk_render_background (context, cr, x, y, w, h);
-  gtk_render_frame (context, cr, x, y, w, h);
+  gtk_snapshot_render_background (snapshot, context, x, y, w, h);
+  gtk_snapshot_render_frame (snapshot, context, x, y, w, h);
 
   gtk_style_context_get_padding (context, &padding);
 
@@ -632,8 +632,8 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
 
-      gtk_render_background (context, cr, clip.x, clip.y, clip.width, clip.height);
-      gtk_render_frame (context, cr, clip.x, clip.y, clip.width, clip.height);
+      gtk_snapshot_render_background (snapshot, context, clip.x, clip.y, clip.width, clip.height);
+      gtk_snapshot_render_frame (snapshot, context, clip.x, clip.y, clip.width, clip.height);
 
       gtk_style_context_restore (context);
     }
@@ -656,19 +656,22 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       y_pos = y + padding.top + priv->text_yalign *
 	(h - padding.top - padding.bottom - logical_rect.height);
 
-      cairo_save (cr);
-      gdk_cairo_rectangle (cr, &clip);
-      cairo_clip (cr);
+      gtk_snapshot_push_clip (snapshot,
+                              &GRAPHENE_RECT_INIT(
+                                  clip.x, clip.y,
+                                  clip.width, clip.height
+                              ),
+                              "CellProgressClip");
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
 
-      gtk_render_layout (context, cr,
-                         x_pos, y_pos,
-                         layout);
+      gtk_snapshot_render_layout (snapshot, context,
+                                  x_pos, y_pos,
+                                  layout);
 
       gtk_style_context_restore (context);
-      cairo_restore (cr);
+      gtk_snapshot_pop_and_append (snapshot);
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
@@ -686,15 +689,18 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
 	      clip.height = bar_position - y;
 	    }
 
-          cairo_save (cr);
-          gdk_cairo_rectangle (cr, &clip);
-          cairo_clip (cr);
+          gtk_snapshot_push_clip (snapshot,
+                                  &GRAPHENE_RECT_INIT(
+                                      clip.x, clip.y,
+                                      clip.width, clip.height
+                                  ),
+                                  "CellTroughClip");
 
-          gtk_render_layout (context, cr,
-                             x_pos, y_pos,
-                             layout);
+          gtk_snapshot_render_layout (snapshot, context,
+                                      x_pos, y_pos,
+                                      layout);
 
-          cairo_restore (cr);
+          gtk_snapshot_pop_and_append (snapshot);
         }
 
       if (bar_position + bar_size < start + full_size)
@@ -710,15 +716,18 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
 	      clip.height = y + h - (bar_position + bar_size);
 	    }
 
-          cairo_save (cr);
-          gdk_cairo_rectangle (cr, &clip);
-          cairo_clip (cr);
+          gtk_snapshot_push_clip (snapshot,
+                                  &GRAPHENE_RECT_INIT(
+                                      clip.x, clip.y,
+                                      clip.width, clip.height
+                                  ),
+                                  "CellTroughClip");
 
-          gtk_render_layout (context, cr,
-                             x_pos, y_pos,
-                             layout);
+          gtk_snapshot_render_layout (snapshot, context,
+                                      x_pos, y_pos,
+                                      layout);
 
-          cairo_restore (cr);
+          gtk_snapshot_pop_and_append (snapshot);
         }
 
       gtk_style_context_restore (context);
