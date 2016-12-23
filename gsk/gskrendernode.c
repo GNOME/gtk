@@ -253,6 +253,7 @@ gsk_render_node_draw (GskRenderNode *node,
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (cairo_status (cr) == CAIRO_STATUS_SUCCESS);
 
   cairo_save (cr);
 
@@ -283,6 +284,14 @@ gsk_render_node_draw (GskRenderNode *node,
     }
 
   cairo_restore (cr);
+
+  if (cairo_status (cr))
+    {
+      g_warning ("drawing failure for render node %s '%s': %s",
+                 node->node_class->type_name,
+                 gsk_render_node_get_name (node),
+                 cairo_status_to_string (cairo_status (cr)));
+    }
 }
 
 #define GSK_RENDER_NODE_SERIALIZATION_VERSION 0
