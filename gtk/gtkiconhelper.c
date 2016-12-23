@@ -873,13 +873,13 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
   GtkCssStyle *style;
   GskTexture *texture;
 
+  style = gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self)));
+
   gtk_icon_helper_ensure_texture (self);
   texture = self->priv->texture;
   if (texture == NULL)
     return;
  
-  style = gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self)));
-
   gtk_css_style_snapshot_icon_texture (style,
                                        snapshot,
                                        texture,
