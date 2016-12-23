@@ -32,6 +32,8 @@ G_BEGIN_DECLS
 
 #define GSK_IS_RENDER_NODE(obj) ((obj) != NULL)
 
+#define GSK_SERIALIZATION_ERROR       (gsk_serialization_error_quark ())
+
 typedef struct _GskRenderNode           GskRenderNode;
 typedef struct _GskColorStop            GskColorStop;
 typedef struct _GskShadow               GskShadow;
@@ -51,7 +53,10 @@ struct _GskShadow
 };
 
 GDK_AVAILABLE_IN_3_90
-GType gsk_render_node_get_type (void) G_GNUC_CONST;
+GType                   gsk_render_node_get_type                (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_3_90
+GQuark                  gsk_serialization_error_quark           (void);
 
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_ref                     (GskRenderNode *node);
@@ -181,7 +186,8 @@ gboolean                gsk_render_node_write_to_file           (GskRenderNode *
                                                                  const char    *filename,
                                                                  GError       **error);
 GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_render_node_deserialize             (GBytes        *bytes);
+GskRenderNode *         gsk_render_node_deserialize             (GBytes        *bytes,
+                                                                 GError       **error);
 
 G_END_DECLS
 

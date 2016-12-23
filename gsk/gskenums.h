@@ -152,4 +152,21 @@ typedef enum {
   GSK_CORNER_BOTTOM_LEFT
 } GskCorner;
 
+/**
+ * GskSerializationError:
+ * @GSK_SERIALIZATION_UNSUPPORTED_FORMAT: The format can not be
+ *     identified
+ * @GSK_SERIALIZATION_UNSUPPORTED_VERSION: The version of the data
+ *     is not understood
+ * @GSK_SERIALIZATION_INVALID_DATA: The given data may not exist in
+ *     a proper serialization
+ *
+ * Errors that can happen during (de)serialization.
+ */
+typedef enum {
+  GSK_SERIALIZATION_UNSUPPORTED_FORMAT,
+  GSK_SERIALIZATION_UNSUPPORTED_VERSION,
+  GSK_SERIALIZATION_INVALID_DATA
+} GskSerializationError;
+
 #endif /* __GSK_TYPES_H__ */

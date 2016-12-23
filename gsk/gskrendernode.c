@@ -65,6 +65,8 @@ G_DEFINE_BOXED_TYPE (GskRenderNode, gsk_render_node,
                      gsk_render_node_ref,
                      gsk_render_node_unref)
 
+G_DEFINE_QUARK (gsk-serialization-error-quark, gsk_serialization_error)
+
 static void
 gsk_render_node_finalize (GskRenderNode *self)
 {
@@ -297,6 +299,22 @@ gsk_render_node_draw (GskRenderNode *node,
 #define GSK_RENDER_NODE_SERIALIZATION_VERSION 0
 #define GSK_RENDER_NODE_SERIALIZATION_ID "GskRenderNode"
 
+/**
+ * gsk_render_node_serialize:
+ * @node: a #GskRenderNode
+ *
+ * Serializes the @node for later deserialization via
+ * gsk_render_node_deserialize(). No guarantees are made about the format
+ * used other than that the same version of GTK+ will be able to deserialize
+ * the result of a call to gsk_render_node_serialize() and
+ * gsk_render_node_deserialize() will correctly reject files it cannot open
+ * that were created with previous versions of GTK+.
+ *
+ * The intended use of this functions is testing, benchmarking and debugging.
+ * The format is not meant as a permanent storage format.
+ *
+ * Returns: a #GBytes representing the node.
+ **/
 GBytes *
 gsk_render_node_serialize (GskRenderNode *node)
 {
@@ -353,8 +371,20 @@ gsk_render_node_write_to_file (GskRenderNode *node,
   return result;
 }
 
+/**
+ * gsk_render_node_deserialize:
+ * @bytes: the bytes containing the data
+ * @error: (allow-none): location to store error or %NULL
+ *
+ * Loads data previously created via gsk_render_node_serialize(). For a
+ * discussion of the supported format, see that function.
+ *
+ * Returns: (nullable) (transfer full): a new #GskRenderNode or %NULL on
+ *     error.
+ **/
 GskRenderNode *
-gsk_render_node_deserialize (GBytes *bytes)
+gsk_render_node_deserialize (GBytes  *bytes,
+                             GError **error)
 {
   char *id_string;
   guint32 version, node_type;
@@ -366,12 +396,20 @@ gsk_render_node_deserialize (GBytes *bytes)
   g_variant_get (variant, "(suuv)", &id_string, &version, &node_type, &node_variant);
 
   if (!g_str_equal (id_string, GSK_RENDER_NODE_SERIALIZATION_ID))
-    goto out;
+    {
+      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_UNSUPPORTED_FORMAT,
+                   "Data not in GskRenderNode serialization format.");
+      goto out;
+    }
 
   if (version != GSK_RENDER_NODE_SERIALIZATION_VERSION)
-    goto out;
+    {
+      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_UNSUPPORTED_VERSION,
+                   "Format version %u not supported.", version);
+      goto out;
+    }
 
-  node = gsk_render_node_deserialize_node (node_type, node_variant);
+  node = gsk_render_node_deserialize_node (node_type, node_variant, error);
 
 out:
   g_free (id_string);

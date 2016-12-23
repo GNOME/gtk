@@ -51,7 +51,7 @@ main(int argc, char **argv)
     }
 
   start = g_get_monotonic_time ();
-  node = gsk_render_node_deserialize (bytes);
+  node = gsk_render_node_deserialize (bytes, &error);
   end = g_get_monotonic_time ();
   if (benchmark)
     {
@@ -63,7 +63,8 @@ main(int argc, char **argv)
 
   if (node == NULL)
     {
-      g_printerr ("Invalid node file.\n");
+      g_printerr ("Invalid node file: %s\n", error->message);
+      g_clear_error (&error);
       return 1;
     }
 

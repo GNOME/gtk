@@ -26,6 +26,22 @@
 #include "gskroundedrectprivate.h"
 #include "gsktextureprivate.h"
 
+static gboolean
+check_variant_type (GVariant *variant,
+                    const char *type_string,
+                    GError     **error)
+{
+  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (type_string)))
+    {
+      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_INVALID_DATA,
+                   "Wrong variant type, got '%s' but needed '%s",
+                   g_variant_get_type_string (variant), type_string);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
 /*** GSK_COLOR_NODE ***/
 
 typedef struct _GskColorNode GskColorNode;
@@ -71,12 +87,13 @@ gsk_color_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_color_node_deserialize (GVariant *variant)
+gsk_color_node_deserialize (GVariant  *variant,
+                            GError   **error)
 {
   double x, y, w, h;
   GdkRGBA color;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_COLOR_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_COLOR_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_COLOR_NODE_VARIANT_TYPE,
@@ -213,14 +230,15 @@ gsk_linear_gradient_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_linear_gradient_node_real_deserialize (GVariant *variant,
-                                           gboolean  repeating)
+gsk_linear_gradient_node_real_deserialize (GVariant  *variant,
+                                           gboolean   repeating,
+                                           GError   **error)
 {
   GVariantIter *iter;
   double x, y, w, h, start_x, start_y, end_x, end_y;
   gsize i, n_stops;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_LINEAR_GRADIENT_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_LINEAR_GRADIENT_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_LINEAR_GRADIENT_NODE_VARIANT_TYPE,
@@ -250,15 +268,17 @@ gsk_linear_gradient_node_real_deserialize (GVariant *variant,
 }
 
 static GskRenderNode *
-gsk_linear_gradient_node_deserialize (GVariant *variant)
+gsk_linear_gradient_node_deserialize (GVariant  *variant,
+                                      GError   **error)
 {
-  return gsk_linear_gradient_node_real_deserialize (variant, FALSE);
+  return gsk_linear_gradient_node_real_deserialize (variant, FALSE, error);
 }
 
 static GskRenderNode *
-gsk_repeating_linear_gradient_node_deserialize (GVariant *variant)
+gsk_repeating_linear_gradient_node_deserialize (GVariant  *variant,
+                                                GError   **error)
 {
-  return gsk_linear_gradient_node_real_deserialize (variant, TRUE);
+  return gsk_linear_gradient_node_real_deserialize (variant, TRUE, error);
 }
 
 static const GskRenderNodeClass GSK_LINEAR_GRADIENT_NODE_CLASS = {
@@ -473,12 +493,13 @@ gsk_border_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_border_node_deserialize (GVariant *variant)
+gsk_border_node_deserialize (GVariant  *variant,
+                             GError   **error)
 {
   double doutline[12], dwidths[4];
   GdkRGBA colors[4];
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_BORDER_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_BORDER_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_BORDER_NODE_VARIANT_TYPE,
@@ -650,7 +671,8 @@ gsk_texture_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_texture_node_deserialize (GVariant *variant)
+gsk_texture_node_deserialize (GVariant  *variant,
+                              GError   **error)
 {
   GskRenderNode *node;
   GskTexture *texture;
@@ -659,7 +681,7 @@ gsk_texture_node_deserialize (GVariant *variant)
   GVariant *pixel_variant;
   gsize n_pixels;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_TEXTURE_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_TEXTURE_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, "(dddduu@au)",
@@ -1152,12 +1174,13 @@ gsk_inset_shadow_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_inset_shadow_node_deserialize (GVariant *variant)
+gsk_inset_shadow_node_deserialize (GVariant  *variant,
+                                   GError   **error)
 {
   double doutline[12], dx, dy, spread, radius;
   GdkRGBA color;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_INSET_SHADOW_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_INSET_SHADOW_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_INSET_SHADOW_NODE_VARIANT_TYPE,
@@ -1394,12 +1417,13 @@ gsk_outset_shadow_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_outset_shadow_node_deserialize (GVariant *variant)
+gsk_outset_shadow_node_deserialize (GVariant  *variant,
+                                    GError   **error)
 {
   double doutline[12], dx, dy, spread, radius;
   GdkRGBA color;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_OUTSET_SHADOW_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_OUTSET_SHADOW_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_INSET_SHADOW_NODE_VARIANT_TYPE,
@@ -1554,7 +1578,8 @@ gsk_cairo_node_serialize (GskRenderNode *node)
 const cairo_user_data_key_t gsk_surface_variant_key;
 
 static GskRenderNode *
-gsk_cairo_node_deserialize (GVariant *variant)
+gsk_cairo_node_deserialize (GVariant  *variant,
+                            GError   **error)
 {
   GskRenderNode *result;
   cairo_surface_t *surface;
@@ -1563,7 +1588,7 @@ gsk_cairo_node_deserialize (GVariant *variant)
   GVariant *pixel_variant;
   gsize n_pixels;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_CAIRO_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_CAIRO_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, "(dddduu@au)",
@@ -1821,7 +1846,8 @@ gsk_container_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_container_node_deserialize (GVariant *variant)
+gsk_container_node_deserialize (GVariant  *variant,
+                                GError   **error)
 {
   GskRenderNode *result;
   GVariantIter iter;
@@ -1829,7 +1855,7 @@ gsk_container_node_deserialize (GVariant *variant)
   guint32 child_type;
   GVariant *child_variant;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_CONTAINER_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_CONTAINER_NODE_VARIANT_TYPE, error))
     return NULL;
 
   i = 0;
@@ -1838,7 +1864,7 @@ gsk_container_node_deserialize (GVariant *variant)
 
   while (g_variant_iter_loop (&iter, "(uv)", &child_type, &child_variant))
     {
-      children[i] = gsk_render_node_deserialize_node (child_type, child_variant);
+      children[i] = gsk_render_node_deserialize_node (child_type, child_variant, error);
       if (children[i] == NULL)
         {
           guint j;
@@ -1996,7 +2022,8 @@ gsk_transform_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_transform_node_deserialize (GVariant *variant)
+gsk_transform_node_deserialize (GVariant  *variant,
+                                GError   **error)
 {
   graphene_matrix_t transform;
   double mat[16];
@@ -2004,7 +2031,7 @@ gsk_transform_node_deserialize (GVariant *variant)
   GVariant *child_variant;
   GskRenderNode *result, *child;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_TRANSFORM_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_TRANSFORM_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_TRANSFORM_NODE_VARIANT_TYPE,
@@ -2014,7 +2041,7 @@ gsk_transform_node_deserialize (GVariant *variant)
                  &mat[12], &mat[13], &mat[14], &mat[15],
                  &child_type, &child_variant);
 
-  child = gsk_render_node_deserialize_node (child_type, child_variant);
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
   g_variant_unref (child_variant);
 
   if (child == NULL)
@@ -2163,21 +2190,22 @@ gsk_opacity_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_opacity_node_deserialize (GVariant *variant)
+gsk_opacity_node_deserialize (GVariant  *variant,
+                              GError   **error)
 {
   double opacity;
   guint32 child_type;
   GVariant *child_variant;
   GskRenderNode *result, *child;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_OPACITY_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_OPACITY_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_OPACITY_NODE_VARIANT_TYPE,
                  &opacity,
                  &child_type, &child_variant);
 
-  child = gsk_render_node_deserialize_node (child_type, child_variant);
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
   g_variant_unref (child_variant);
 
   if (child == NULL)
@@ -2311,21 +2339,22 @@ gsk_clip_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_clip_node_deserialize (GVariant *variant)
+gsk_clip_node_deserialize (GVariant  *variant,
+                           GError   **error)
 {
   double x, y, width, height;
   guint32 child_type;
   GVariant *child_variant;
   GskRenderNode *result, *child;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_CLIP_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_CLIP_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_CLIP_NODE_VARIANT_TYPE,
                  &x, &y, &width, &height,
                  &child_type, &child_variant);
 
-  child = gsk_render_node_deserialize_node (child_type, child_variant);
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
   g_variant_unref (child_variant);
 
   if (child == NULL)
@@ -2462,14 +2491,15 @@ gsk_rounded_clip_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_rounded_clip_node_deserialize (GVariant *variant)
+gsk_rounded_clip_node_deserialize (GVariant  *variant,
+                                   GError   **error)
 {
   double doutline[12];
   guint32 child_type;
   GVariant *child_variant;
   GskRenderNode *child, *result;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_ROUNDED_CLIP_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_ROUNDED_CLIP_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_ROUNDED_CLIP_NODE_VARIANT_TYPE,
@@ -2478,7 +2508,7 @@ gsk_rounded_clip_node_deserialize (GVariant *variant)
                  &doutline[8], &doutline[9], &doutline[10], &doutline[11],
                  &child_type, &child_variant);
 
-  child = gsk_render_node_deserialize_node (child_type, child_variant);
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
   g_variant_unref (child_variant);
 
   if (child == NULL)
@@ -2678,7 +2708,8 @@ gsk_shadow_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_shadow_node_deserialize (GVariant *variant)
+gsk_shadow_node_deserialize (GVariant  *variant,
+                             GError   **error)
 {
   gsize n_shadows;
   guint32 child_type;
@@ -2687,13 +2718,13 @@ gsk_shadow_node_deserialize (GVariant *variant)
   GVariantIter *iter;
   gsize i;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_SHADOW_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_SHADOW_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_SHADOW_NODE_VARIANT_TYPE,
                  &child_type, &child_variant, &iter);
 
-  child = gsk_render_node_deserialize_node (child_type, child_variant);
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
   g_variant_unref (child_variant);
 
   if (child == NULL)
@@ -2901,13 +2932,14 @@ gsk_blend_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_blend_node_deserialize (GVariant *variant)
+gsk_blend_node_deserialize (GVariant  *variant,
+                            GError   **error)
 {
   guint32 bottom_child_type, top_child_type, blend_mode;
   GVariant *bottom_child_variant, *top_child_variant;
   GskRenderNode *bottom_child, *top_child, *result;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_BLEND_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_BLEND_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_BLEND_NODE_VARIANT_TYPE,
@@ -2915,7 +2947,7 @@ gsk_blend_node_deserialize (GVariant *variant)
                  &top_child_type, &top_child_variant,
                  &blend_mode);
 
-  bottom_child = gsk_render_node_deserialize_node (bottom_child_type, bottom_child_variant);
+  bottom_child = gsk_render_node_deserialize_node (bottom_child_type, bottom_child_variant, error);
   g_variant_unref (bottom_child_variant);
   if (bottom_child == NULL)
     {
@@ -2923,7 +2955,7 @@ gsk_blend_node_deserialize (GVariant *variant)
       return NULL;
     }
 
-  top_child = gsk_render_node_deserialize_node (top_child_type, top_child_variant);
+  top_child = gsk_render_node_deserialize_node (top_child_type, top_child_variant, error);
   g_variant_unref (top_child_variant);
   if (top_child == NULL)
     {
@@ -3071,14 +3103,15 @@ gsk_cross_fade_node_serialize (GskRenderNode *node)
 }
 
 static GskRenderNode *
-gsk_cross_fade_node_deserialize (GVariant *variant)
+gsk_cross_fade_node_deserialize (GVariant  *variant,
+                                 GError   **error)
 {
   guint32 start_child_type, end_child_type;
   GVariant *start_child_variant, *end_child_variant;
   GskRenderNode *start_child, *end_child, *result;
   double progress;
 
-  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE (GSK_CROSS_FADE_NODE_VARIANT_TYPE)))
+  if (!check_variant_type (variant, GSK_CROSS_FADE_NODE_VARIANT_TYPE, error))
     return NULL;
 
   g_variant_get (variant, GSK_CROSS_FADE_NODE_VARIANT_TYPE,
@@ -3086,7 +3119,7 @@ gsk_cross_fade_node_deserialize (GVariant *variant)
                  &end_child_type, &end_child_variant,
                  &progress);
 
-  start_child = gsk_render_node_deserialize_node (start_child_type, start_child_variant);
+  start_child = gsk_render_node_deserialize_node (start_child_type, start_child_variant, error);
   g_variant_unref (start_child_variant);
   if (start_child == NULL)
     {
@@ -3094,7 +3127,7 @@ gsk_cross_fade_node_deserialize (GVariant *variant)
       return NULL;
     }
 
-  end_child = gsk_render_node_deserialize_node (end_child_type, end_child_variant);
+  end_child = gsk_render_node_deserialize_node (end_child_type, end_child_variant, error);
   g_variant_unref (end_child_variant);
   if (end_child == NULL)
     {
@@ -3204,8 +3237,9 @@ static const GskRenderNodeClass *klasses[] = {
 };
 
 GskRenderNode *
-gsk_render_node_deserialize_node (GskRenderNodeType  type,
-                                  GVariant          *variant)
+gsk_render_node_deserialize_node (GskRenderNodeType   type,
+                                  GVariant           *variant,
+                                  GError            **error)
 {
   const GskRenderNodeClass *klass;
   GskRenderNode *result;
@@ -3216,9 +3250,13 @@ gsk_render_node_deserialize_node (GskRenderNodeType  type,
     klass = NULL;
 
   if (klass == NULL)
-    return NULL;
+    {
+      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_INVALID_DATA,
+                   "Type %u is not a valid node type", type);
+      return NULL;
+    }
 
-  result = klass->deserialize (variant);
+  result = klass->deserialize (variant, error);
 
   return result;
 }

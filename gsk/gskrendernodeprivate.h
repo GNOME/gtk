@@ -35,13 +35,14 @@ struct _GskRenderNodeClass
   void (* draw) (GskRenderNode *node,
                  cairo_t       *cr);
   GVariant * (* serialize) (GskRenderNode *node);
-  GskRenderNode * (* deserialize) (GVariant *variant);
+  GskRenderNode * (* deserialize) (GVariant  *variant,
+                                   GError   **error);
 };
 
 GskRenderNode *gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size);
 
 GVariant * gsk_render_node_serialize_node (GskRenderNode *node);
-GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType type, GVariant *variant);
+GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType type, GVariant *variant, GError **error);
 
 double gsk_opacity_node_get_opacity (GskRenderNode *node);
 
