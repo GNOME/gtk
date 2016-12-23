@@ -62,8 +62,8 @@ static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cel
 						 gint                       *y_offset,
 						 gint                       *width,
 						 gint                       *height);
-static void gtk_cell_renderer_pixbuf_render     (GtkCellRenderer            *cell,
-						 cairo_t                    *cr,
+static void gtk_cell_renderer_pixbuf_snapshot   (GtkCellRenderer            *cell,
+						 GtkSnapshot                *snapshot,
 						 GtkWidget                  *widget,
 						 const GdkRectangle         *background_area,
 						 const GdkRectangle         *cell_area,
@@ -138,7 +138,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   object_class->set_property = gtk_cell_renderer_pixbuf_set_property;
 
   cell_class->get_size = gtk_cell_renderer_pixbuf_get_size;
-  cell_class->render = gtk_cell_renderer_pixbuf_render;
+  cell_class->snapshot = gtk_cell_renderer_pixbuf_snapshot;
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF,
@@ -482,12 +482,12 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
 }
 
 static void
-gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
-                                 cairo_t              *cr,
-				 GtkWidget            *widget,
-				 const GdkRectangle   *background_area,
-				 const GdkRectangle   *cell_area,
-				 GtkCellRendererState  flags)
+gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
+                                   GtkSnapshot          *snapshot,
+                                   GtkWidget            *widget,
+                                   const GdkRectangle   *background_area,
+                                   const GdkRectangle   *cell_area,
+                                   GtkCellRendererState  flags)
 
 {
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
@@ -541,9 +541,10 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   if (icon_helper == NULL)
     icon_helper = create_icon_helper (cellpixbuf, widget);
 
-  _gtk_icon_helper_draw (icon_helper,
-                         cr,
-                         pix_rect.x, pix_rect.y);
+  gtk_snapshot_translate_2d (snapshot, pix_rect.x, pix_rect.y);
+  gtk_icon_helper_snapshot (icon_helper, snapshot);
+  gtk_snapshot_translate_2d (snapshot, - pix_rect.x, - pix_rect.y);
+
   g_object_unref (icon_helper);
 
   gtk_style_context_restore (context);
