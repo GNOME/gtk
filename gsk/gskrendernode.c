@@ -367,6 +367,7 @@ gsk_render_node_write_to_file (GskRenderNode *node,
                                 g_bytes_get_data (bytes, NULL),
                                 g_bytes_get_size (bytes),
                                 error);
+  g_bytes_unref (bytes);
 
   return result;
 }
