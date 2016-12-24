@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-21 10:56+0000\n"
-"PO-Revision-Date: 2016-12-22 23:49+0100\n"
+"POT-Creation-Date: 2016-12-23 15:18+0000\n"
+"PO-Revision-Date: 2016-12-24 14:39+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -1422,7 +1422,7 @@ msgstr ""
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:800
+#: gtk/gtkcalendar.c:802
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1430,7 +1430,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:838
+#: gtk/gtkcalendar.c:840
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1439,7 +1439,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1843
+#: gtk/gtkcalendar.c:1845
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1454,7 +1454,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1874 gtk/gtkcalendar.c:2565
+#: gtk/gtkcalendar.c:1876 gtk/gtkcalendar.c:2564
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1470,7 +1470,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1906 gtk/gtkcalendar.c:2431
+#: gtk/gtkcalendar.c:1908 gtk/gtkcalendar.c:2431
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1486,7 +1486,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2198
+#: gtk/gtkcalendar.c:2200
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1888,8 +1888,9 @@ msgstr "_Název"
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:675 gtk/gtkprintunixdialog.c:742
 #: gtk/gtkwindow.c:11357 gtk/inspector/css-editor.c:208
-#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
-#: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
+#: gtk/inspector/recorder.c:297 gtk/ui/gtkappchooserdialog.ui:61
+#: gtk/ui/gtkassistant.ui:125 gtk/ui/gtkcolorchooserdialog.ui:34
+#: gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -1900,6 +1901,7 @@ msgid "_Open"
 msgstr "_Otevřít"
 
 #: gtk/gtkfilechoosernative.c:593 gtk/inspector/css-editor.c:209
+#: gtk/inspector/recorder.c:298
 msgid "_Save"
 msgstr "_Uložit"
 
@@ -3522,7 +3524,7 @@ msgstr "Změny jsou požity okamžitě a globálně, pro celou aplikaci."
 #: gtk/inspector/css-editor.c:169
 #, c-format
 msgid "Saving CSS failed"
-msgstr "Ukládání CSS selhalo"
+msgstr "Uložení CSS selhalo"
 
 #: gtk/inspector/css-editor.ui:34
 msgid "Disable this custom CSS"
@@ -3828,6 +3830,11 @@ msgstr "Atribut"
 #: gtk/inspector/prop-list.ui:102 gtk/inspector/signals-list.ui:73
 msgid "Defined At"
 msgstr "Definováno na"
+
+#: gtk/inspector/recorder.c:265
+#, c-format
+msgid "Saving RenderNode failed"
+msgstr "Uložení RenderNode selhalo"
 
 #: gtk/inspector/resource-list.ui:82
 msgid "Path"
