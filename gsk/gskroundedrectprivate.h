@@ -11,6 +11,8 @@ gboolean                 gsk_rounded_rect_is_circular           (const GskRounde
 
 void                     gsk_rounded_rect_path                  (const GskRoundedRect     *self,
                                                                  cairo_t                  *cr);
+void                     gsk_rounded_rect_to_float              (const GskRoundedRect     *self,
+                                                                 float                     rect[12]);
 
 G_END_DECLS
 

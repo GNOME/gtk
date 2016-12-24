@@ -3,6 +3,7 @@
 
 #include <gdk/gdk.h>
 #include <graphene.h>
+#include <gsk/gskvulkanclipprivate.h>
 
 G_BEGIN_DECLS
 
@@ -12,12 +13,14 @@ typedef struct _GskVulkanPushConstantsWire GskVulkanPushConstantsWire;
 struct _GskVulkanPushConstants
 {
   graphene_matrix_t mvp;
+  GskVulkanClip clip;
 };
 
 struct _GskVulkanPushConstantsWire
 {
   struct {
     float mvp[16];
+    float clip[12];
   } vertex;
 #if 0
   struct {
@@ -30,12 +33,21 @@ const VkPushConstantRange *
 uint32_t                gst_vulkan_push_constants_get_range_count       (void) G_GNUC_PURE;
 
 void                    gsk_vulkan_push_constants_init                  (GskVulkanPushConstants         *constants,
-                                                                         const graphene_matrix_t        *mvp);
+                                                                         const graphene_matrix_t        *mvp,
+                                                                         const graphene_rect_t          *viewport);
 void                    gsk_vulkan_push_constants_init_copy             (GskVulkanPushConstants         *self,
                                                                          const GskVulkanPushConstants   *src);
-void                    gsk_vulkan_push_constants_init_transform        (GskVulkanPushConstants         *self,
+
+gboolean                gsk_vulkan_push_constants_transform             (GskVulkanPushConstants         *self,
                                                                          const GskVulkanPushConstants   *src,
-                                                                         const graphene_matrix_t        *transform);
+                                                                         const graphene_matrix_t        *transform,
+                                                                         const graphene_rect_t          *viewport);
+gboolean                gsk_vulkan_push_constants_intersect_rect        (GskVulkanPushConstants         *self,
+                                                                         const GskVulkanPushConstants   *src,
+                                                                         const graphene_rect_t          *rect);
+gboolean                gsk_vulkan_push_constants_intersect_rounded     (GskVulkanPushConstants         *self,
+                                                                         const GskVulkanPushConstants   *src,
+                                                                         const GskRoundedRect           *rect);
 
 void                    gsk_vulkan_push_constants_push_vertex           (const GskVulkanPushConstants   *self,
                                                                          VkCommandBuffer                 command_buffer,

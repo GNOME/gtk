@@ -128,6 +128,34 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
 }
 
 gboolean
+gsk_vulkan_clip_transform (GskVulkanClip           *dest,
+                           const GskVulkanClip     *src,
+                           const graphene_matrix_t *transform,
+                           const graphene_rect_t   *viewport)
+{
+  switch (dest->type)
+    {
+    default:
+      g_assert_not_reached();
+      return FALSE;
+
+    case GSK_VULKAN_CLIP_ALL_CLIPPED:
+      gsk_vulkan_clip_init_copy (dest, src);
+      return TRUE;
+
+    case GSK_VULKAN_CLIP_NONE:
+      gsk_vulkan_clip_init_empty (dest, viewport);
+      return TRUE;
+
+    case GSK_VULKAN_CLIP_RECT:
+    case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
+    case GSK_VULKAN_CLIP_ROUNDED:
+      /* FIXME: Handle 2D operations, in particular transform and scale */
+      return FALSE;
+    }
+}
+
+gboolean
 gsk_vulkan_clip_contains_rect (const GskVulkanClip   *self,
                                const graphene_rect_t *rect)
 {

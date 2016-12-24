@@ -501,3 +501,33 @@ gsk_rounded_rect_path (const GskRoundedRect *self,
   cairo_close_path (cr);
 }
 
+/*
+ * Converts to the format we use in our shaders:
+ * vec4 rect;
+ * vec4 corner_widths;
+ * vec4 corner_heights;
+ * rect is (x, y, width, height), the corners are the same
+ * order as in the rounded rect.
+ *
+ * This is so that shaders can use just the first vec4 for
+ * rectilinear rects, the 2nd vec4 for circular rects and
+ * only look at the last vec4 if they have to.
+ */
+void
+gsk_rounded_rect_to_float (const GskRoundedRect *self,
+                           float                 rect[12])
+{
+  guint i;
+
+  rect[0] = self->bounds.origin.x;
+  rect[1] = self->bounds.origin.y;
+  rect[2] = self->bounds.size.width;
+  rect[3] = self->bounds.size.height;
+
+  for (i = 0; i < 4; i++)
+    {
+      rect[4 + i] = self->corner[i].width;
+      rect[8 + i] = self->corner[i].height;
+    }
+}
+
