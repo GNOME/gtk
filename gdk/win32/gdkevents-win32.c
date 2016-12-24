@@ -144,6 +144,10 @@ static int debug_indent = 0;
 
 static int both_shift_pressed[2]; /* to store keycodes for shift keys */
 
+/* low-level keyboard hook handle */
+static HHOOK keyboard_hook = NULL;
+static UINT aerosnap_message;
+
 static void
 track_mouse_event (DWORD dwFlags,
 		   HWND  hwnd)
@@ -292,6 +296,124 @@ _gdk_win32_window_procedure (HWND   hwnd,
   return retval;
 }
 
+static LRESULT
+low_level_keystroke_handler (WPARAM message,
+                                       KBDLLHOOKSTRUCT *kbdhook,
+                                       GdkWindow *window)
+{
+  GdkWindow *toplevel = gdk_window_get_toplevel (window);
+  static DWORD last_keydown = 0;
+
+  if (message == WM_KEYDOWN &&
+      !GDK_WINDOW_DESTROYED (toplevel) &&
+      _gdk_win32_window_lacks_wm_decorations (toplevel) && /* For CSD only */
+      last_keydown != kbdhook->vkCode &&
+      ((GetKeyState (VK_LWIN) & 0x8000) ||
+      (GetKeyState (VK_RWIN) & 0x8000)))
+	{
+	  GdkWin32AeroSnapCombo combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
+	  gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
+          gboolean rshiftdown = GetKeyState (VK_RSHIFT) & 0x8000;
+          gboolean oneshiftdown = (lshiftdown || rshiftdown) && !(lshiftdown && rshiftdown);
+          gboolean maximized = gdk_window_get_state (toplevel) & GDK_WINDOW_STATE_MAXIMIZED;
+
+	  switch (kbdhook->vkCode)
+	    {
+	    case VK_UP:
+	      combo = GDK_WIN32_AEROSNAP_COMBO_UP;
+	      break;
+	    case VK_DOWN:
+	      combo = GDK_WIN32_AEROSNAP_COMBO_DOWN;
+	      break;
+	    case VK_LEFT:
+	      combo = GDK_WIN32_AEROSNAP_COMBO_LEFT;
+	      break;
+	    case VK_RIGHT:
+	      combo = GDK_WIN32_AEROSNAP_COMBO_RIGHT;
+	      break;
+	    }
+
+	  if (oneshiftdown && combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
+	    combo += 4;
+
+	  /* These are the only combos that Windows WM does handle for us */
+	  if (combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT ||
+              combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTRIGHT)
+            combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
+
+          /* On Windows 10 the WM will handle this specific combo */
+          if (combo == GDK_WIN32_AEROSNAP_COMBO_DOWN && maximized &&
+              g_win32_check_windows_version (6, 4, 0, G_WIN32_OS_ANY))
+            combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
+
+	  if (combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
+            PostMessage (GDK_WINDOW_HWND (toplevel), aerosnap_message, (WPARAM) combo, 0);
+	}
+
+  if (message == WM_KEYDOWN)
+    last_keydown = kbdhook->vkCode;
+  else if (message = WM_KEYUP && last_keydown == kbdhook->vkCode)
+    last_keydown = 0;
+
+  return 0;
+}
+
+static LRESULT CALLBACK
+low_level_keyboard_proc (int    code,
+                         WPARAM wParam,
+                         LPARAM lParam)
+{
+  KBDLLHOOKSTRUCT *kbdhook;
+  HWND kbd_focus_owner;
+  GdkWindow *gdk_kbd_focus_owner;
+  LRESULT chain;
+
+  do
+  {
+    if (code < 0)
+      break;
+
+    kbd_focus_owner = GetFocus ();
+
+    if (kbd_focus_owner == NULL)
+      break;
+
+    gdk_kbd_focus_owner = gdk_win32_handle_table_lookup (kbd_focus_owner);
+
+    if (gdk_kbd_focus_owner == NULL)
+      break;
+
+    kbdhook = (KBDLLHOOKSTRUCT *) lParam;
+    chain = low_level_keystroke_handler (wParam, kbdhook, gdk_kbd_focus_owner);
+
+    if (chain != 0)
+      return chain;
+  } while (FALSE);
+
+  return CallNextHookEx (0, code, wParam, lParam);
+}
+
+static void
+set_up_low_level_keyboard_hook (void)
+{
+  HHOOK hook_handle;
+
+  if (keyboard_hook != NULL)
+    return;
+
+  hook_handle = SetWindowsHookEx (WH_KEYBOARD_LL,
+                                  (HOOKPROC) low_level_keyboard_proc,
+                                  _gdk_dll_hinstance,
+                                  0);
+
+  if (hook_handle != NULL)
+    keyboard_hook = hook_handle;
+  else
+    WIN32_API_FAILED ("SetWindowsHookEx");
+
+  aerosnap_message = RegisterWindowMessage ("GDK_WIN32_AEROSNAP_MESSAGE");
+}
+
 void
 _gdk_events_init (GdkDisplay *display)
 {
@@ -402,6 +524,8 @@ _gdk_events_init (GdkDisplay *display)
   g_source_add_poll (source, &event_source->event_poll_fd);
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
+
+  set_up_low_level_keyboard_hook ();
 }
 
 gboolean
@@ -2279,6 +2403,10 @@ gdk_event_translate (MSG  *msg,
 	}
     }
 
+  if (msg->message == aerosnap_message)
+    _gdk_win32_window_handle_aerosnap (gdk_window_get_toplevel (window),
+                                       (GdkWin32AeroSnapCombo) msg->wParam);
+
   switch (msg->message)
     {
     case WM_INPUTLANGCHANGE:
@@ -2357,48 +2485,6 @@ gdk_event_translate (MSG  *msg,
 	break;
 
       impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-      if (msg->message == WM_KEYUP &&
-          !GDK_WINDOW_DESTROYED (gdk_window_get_toplevel (window)) &&
-          _gdk_win32_window_lacks_wm_decorations (gdk_window_get_toplevel (window)) && /* For CSD only */
-          ((GetKeyState (VK_LWIN) & 0x8000) ||
-           (GetKeyState (VK_RWIN) & 0x8000)))
-	{
-	  GdkWin32AeroSnapCombo combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
-	  gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
-          gboolean rshiftdown = GetKeyState (VK_RSHIFT) & 0x8000;
-          gboolean oneshiftdown = (lshiftdown || rshiftdown) && !(lshiftdown && rshiftdown);
-
-	  switch (msg->wParam)
-	    {
-	    case VK_UP:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_UP;
-	      break;
-	    case VK_DOWN:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_DOWN;
-	      break;
-	    case VK_LEFT:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_LEFT;
-	      break;
-	    case VK_RIGHT:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_RIGHT;
-	      break;
-	    }
-
-	  if (oneshiftdown && combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
-	    combo += 4;
-
-	  /* These are the only combos that Windows WM does handle for us */
-	  if (combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT ||
-              combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTRIGHT)
-            combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
-
-	  if (combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
-	    {
-	      _gdk_win32_window_handle_aerosnap (gdk_window_get_toplevel (window), combo);
-	      break;
-	    }
-	}
 
       API_CALL (GetKeyboardState, (key_state));
 
