@@ -8,7 +8,7 @@ void
 gsk_vulkan_push_constants_init (GskVulkanPushConstants  *constants,
                                 const graphene_matrix_t *mvp)
 {
-  gsk_vulkan_push_constants_set_mvp (constants, mvp);
+  graphene_matrix_init_from_matrix (&constants->mvp, mvp);
 }
 
 void
@@ -19,34 +19,36 @@ gsk_vulkan_push_constants_init_copy (GskVulkanPushConstants       *self,
 }
 
 void
-gsk_vulkan_push_constants_set_mvp (GskVulkanPushConstants  *self,
-                                   const graphene_matrix_t *mvp)
+gsk_vulkan_push_constants_init_transform (GskVulkanPushConstants       *self,
+                                          const GskVulkanPushConstants *src,
+                                          const graphene_matrix_t      *transform)
+
 {
-  graphene_matrix_to_float (mvp, self->vertex.mvp);
+  graphene_matrix_multiply (transform, &src->mvp, &self->mvp);
+}
+
+static void
+gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire   *wire,
+                                     const GskVulkanPushConstants *self)
+{
+  graphene_matrix_to_float (&self->mvp, wire->vertex.mvp);
 }
 
 void
-gsk_vulkan_push_constants_multiply_mvp (GskVulkanPushConstants  *self,
-                                        const graphene_matrix_t *transform)
+gsk_vulkan_push_constants_push_vertex (const GskVulkanPushConstants *self,
+                                       VkCommandBuffer               command_buffer,
+                                       VkPipelineLayout              pipeline_layout)
 {
-  graphene_matrix_t old_mvp, new_mvp;
+  GskVulkanPushConstantsWire wire;
 
-  graphene_matrix_init_from_float (&old_mvp, self->vertex.mvp);
-  graphene_matrix_multiply (transform, &old_mvp, &new_mvp);
-  gsk_vulkan_push_constants_set_mvp (self, &new_mvp);
-}
+  gsk_vulkan_push_constants_wire_init (&wire, self);
 
-void
-gsk_vulkan_push_constants_push_vertex (GskVulkanPushConstants *self,
-                                       VkCommandBuffer         command_buffer,
-                                       VkPipelineLayout        pipeline_layout)
-{
   vkCmdPushConstants (command_buffer,
                       pipeline_layout,
                       VK_SHADER_STAGE_VERTEX_BIT,
-                      G_STRUCT_OFFSET (GskVulkanPushConstants, vertex),
-                      sizeof (self->vertex),
-                      &self->vertex);
+                      G_STRUCT_OFFSET (GskVulkanPushConstantsWire, vertex),
+                      sizeof (wire.vertex),
+                      &wire.vertex);
 }
 
 #if 0
@@ -76,8 +78,8 @@ gst_vulkan_push_constants_get_ranges (void)
   static const VkPushConstantRange ranges[2] = {
       {
           .stageFlags = VK_SHADER_STAGE_VERTEX_BIT,
-          .offset = G_STRUCT_OFFSET (GskVulkanPushConstants, vertex),
-          .size = sizeof (((GskVulkanPushConstants *) 0)->vertex)
+          .offset = G_STRUCT_OFFSET (GskVulkanPushConstantsWire, vertex),
+          .size = sizeof (((GskVulkanPushConstantsWire *) 0)->vertex)
 #if 0
       },
       {

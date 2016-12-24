@@ -7,8 +7,14 @@
 G_BEGIN_DECLS
 
 typedef struct _GskVulkanPushConstants GskVulkanPushConstants;
+typedef struct _GskVulkanPushConstantsWire GskVulkanPushConstantsWire;
 
 struct _GskVulkanPushConstants
+{
+  graphene_matrix_t mvp;
+};
+
+struct _GskVulkanPushConstantsWire
 {
   struct {
     float mvp[16];
@@ -27,13 +33,11 @@ void                    gsk_vulkan_push_constants_init                  (GskVulk
                                                                          const graphene_matrix_t        *mvp);
 void                    gsk_vulkan_push_constants_init_copy             (GskVulkanPushConstants         *self,
                                                                          const GskVulkanPushConstants   *src);
-
-void                    gsk_vulkan_push_constants_set_mvp               (GskVulkanPushConstants         *self,
-                                                                         const graphene_matrix_t        *mvp);
-void                    gsk_vulkan_push_constants_multiply_mvp          (GskVulkanPushConstants         *self,
+void                    gsk_vulkan_push_constants_init_transform        (GskVulkanPushConstants         *self,
+                                                                         const GskVulkanPushConstants   *src,
                                                                          const graphene_matrix_t        *transform);
 
-void                    gsk_vulkan_push_constants_push_vertex           (GskVulkanPushConstants         *self,
+void                    gsk_vulkan_push_constants_push_vertex           (const GskVulkanPushConstants   *self,
                                                                          VkCommandBuffer                 command_buffer,
                                                                          VkPipelineLayout                pipeline_layout);
 

@@ -156,8 +156,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
         gsk_transform_node_get_transform (node, &transform);
         op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
-        gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
-        gsk_vulkan_push_constants_multiply_mvp (&op.constants.constants, &transform);
+        gsk_vulkan_push_constants_init_transform (&op.constants.constants, constants, &transform);
         g_array_append_val (self->render_ops, op);
 
         graphene_matrix_transform_bounds (&transform, &clip->rect.bounds, &rect);
