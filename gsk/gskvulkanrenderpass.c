@@ -98,6 +98,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     .type = GSK_VULKAN_OP_FALLBACK,
     .render.node = node
   };
+  GskVulkanPipelineType pipeline_type;
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -126,10 +127,14 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       return;
 
     case GSK_COLOR_NODE:
-      if (!gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+        pipeline_type = GSK_VULKAN_PIPELINE_COLOR;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+        pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP_ROUNDED;
+      else
         FALLBACK ("Color nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_COLOR;
-      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_COLOR);
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
       g_array_append_val (self->render_ops, op);
       return;
 

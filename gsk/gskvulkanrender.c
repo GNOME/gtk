@@ -314,7 +314,8 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     GskVulkanPipeline * (* create_func) (GskVulkanPipelineLayout *layout, const char *name, VkRenderPass render_pass);
   } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
     { "blit", gsk_vulkan_blend_pipeline_new },
-    { "color", gsk_vulkan_color_pipeline_new }
+    { "color", gsk_vulkan_color_pipeline_new },
+    { "color-clip-rounded", gsk_vulkan_color_pipeline_new }
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
