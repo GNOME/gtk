@@ -554,9 +554,9 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
        * minimum sizes for children that are not going to fill
        */
       if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-	size = allocation->width - (nvis_children - 1) * get_spacing (box);
+	size = allocation->width - (nvis_children - 1) * spacing;
       else
-	size = allocation->height - (nvis_children - 1) * get_spacing (box);
+	size = allocation->height - (nvis_children - 1) * spacing;
 
       extra = size / nvis_children;
       n_extra_widgets = size % nvis_children;
