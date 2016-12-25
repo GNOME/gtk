@@ -3,11 +3,13 @@
 static gboolean benchmark = FALSE;
 static gboolean dump_variant = FALSE;
 static gboolean fallback = FALSE;
+static int runs;
 
 static GOptionEntry options[] = {
   { "benchmark", 'b', 0, G_OPTION_ARG_NONE, &benchmark, "Time operations", NULL },
   { "dump-variant", 'd', 0, G_OPTION_ARG_NONE, &dump_variant, "Dump GVariant structure", NULL },
   { "fallback", '\0', 0, G_OPTION_ARG_NONE, &fallback, "Draw node without a renderer", NULL },
+  { "runs", 'r', 0, G_OPTION_ARG_INT, &runs, "Render the test N times", "N" },
   { NULL }
 };
 
@@ -21,6 +23,7 @@ main(int argc, char **argv)
   gint64 start, end;
   char *contents;
   gsize len;
+  int run;
 
   if (!gtk_init_with_args (&argc, &argv, "NODE-FILE PNG-FILE",
                            options, NULL, &error))
@@ -78,11 +81,21 @@ main(int argc, char **argv)
       cr = cairo_create (surface);
 
       cairo_translate (cr, - bounds.origin.x, - bounds.origin.y);
-      start = g_get_monotonic_time ();
-      gsk_render_node_draw (node, cr);
-      end = g_get_monotonic_time ();
-      if (benchmark)
-        g_print ("Rendered fallback in %.4gs\n", (double) (end - start) / G_USEC_PER_SEC);
+      for (run = 0; run < runs; run++)
+        {
+          if (run > 0)
+            {
+              cairo_save (cr);
+              cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+              cairo_paint (cr);
+              cairo_restore (cr);
+            }
+          start = g_get_monotonic_time ();
+          gsk_render_node_draw (node, cr);
+          end = g_get_monotonic_time ();
+          if (benchmark)
+            g_print ("Run %d: Rendered fallback in %.4gs\n", run, (double) (end - start) / G_USEC_PER_SEC);
+        }
 
       cairo_destroy (cr);
     }
@@ -95,11 +108,17 @@ main(int argc, char **argv)
       window = gdk_window_new_toplevel (gdk_display_get_default(), 0, 10 , 10);
       renderer = gsk_renderer_new_for_window (window);
 
-      start = g_get_monotonic_time ();
-      texture = gsk_renderer_render_texture (renderer, node, NULL);
-      end = g_get_monotonic_time ();
-      if (benchmark)
-        g_print ("Rendered using %s in %.4gs\n", G_OBJECT_TYPE_NAME (renderer), (double) (end - start) / G_USEC_PER_SEC);
+      for (run = 0; run < runs; run++)
+        {
+          if (run > 0)
+            gsk_texture_unref (texture);
+          start = g_get_monotonic_time ();
+          texture = gsk_renderer_render_texture (renderer, node, NULL);
+          end = g_get_monotonic_time ();
+          if (benchmark)
+            g_print ("Run %u: Rendered using %s in %.4gs\n", run, G_OBJECT_TYPE_NAME (renderer), (double) (end - start) / G_USEC_PER_SEC);
+        }
+
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                             gsk_texture_get_width (texture),
                                             gsk_texture_get_height (texture));
