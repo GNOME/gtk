@@ -481,8 +481,9 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 
   GtkPackType packing;
 
-  gint size;
-  gint extra;
+  gint extra_space;
+  gint children_minimum_size = 0;
+  gint size_given_to_child;
   gint n_extra_widgets = 0; /* Number of widgets that receive 1 extra px */
   gint x = 0, y = 0, i;
   gint child_size;
@@ -500,9 +501,9 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
   spacing = get_spacing (box);
 
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-    size = allocation->width - (nvis_children - 1) * spacing;
+    extra_space = allocation->width - (nvis_children - 1) * spacing;
   else
-    size = allocation->height - (nvis_children - 1) * spacing;
+    extra_space = allocation->height - (nvis_children - 1) * spacing;
 
   have_baseline = FALSE;
   minimum_above = natural_above = 0;
@@ -541,7 +542,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
 		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
 
-      size -= sizes[i].minimum_size;
+      children_minimum_size += sizes[i].minimum_size;
 
       sizes[i].data = child;
 
@@ -550,32 +551,31 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 
   if (private->homogeneous)
     {
-      /* If were homogenous we still need to run the above loop to get the
-       * minimum sizes for children that are not going to fill
+      /* We still need to run the above loop to populate the minimum sizes for
+       * children that aren't going to fill.
        */
-      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-	size = allocation->width - (nvis_children - 1) * spacing;
-      else
-	size = allocation->height - (nvis_children - 1) * spacing;
 
-      extra = size / nvis_children;
-      n_extra_widgets = size % nvis_children;
+      size_given_to_child = extra_space / nvis_children;
+      n_extra_widgets = extra_space % nvis_children;
     }
   else
     {
-      /* Bring children up to size first */
-      size = gtk_distribute_natural_allocation (MAX (0, size), nvis_children, sizes);
+      extra_space -= children_minimum_size;
+      extra_space = MAX (0, extra_space);
+      extra_space = gtk_distribute_natural_allocation (extra_space, nvis_children, sizes);
 
       /* Calculate space which hasn't distributed yet,
        * and is available for expanding children.
        */
       if (nexpand_children > 0)
 	{
-	  extra = size / nexpand_children;
-	  n_extra_widgets = size % nexpand_children;
+          size_given_to_child = extra_space / nexpand_children;
+          n_extra_widgets = extra_space % nexpand_children;
 	}
       else
-	extra = 0;
+        {
+          size_given_to_child = 0;
+        }
     }
 
   /* Allocate child sizes. */
@@ -603,7 +603,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	  /* Assign the child's size. */
 	  if (private->homogeneous)
 	    {
-	      child_size = extra;
+              child_size = size_given_to_child;
 
 	      if (n_extra_widgets > 0)
 		{
@@ -617,7 +617,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 
 	      if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
 		{
-		  child_size += extra;
+                  child_size += size_given_to_child;
 
 		  if (n_extra_widgets > 0)
 		    {
@@ -815,7 +815,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
   GtkPackType packing;
   gint min_size[2];
   gint nat_size[2];
-  gint extra[2];
+  gint size_given_to_child[2];
   gint n_extra_widgets[2];
   gint x = 0, y = 0, i;
   gint child_size;
@@ -895,30 +895,33 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
 
   if (priv->homogeneous)
     {
-      extra[0] = ((box_size - center_size) / 2 - nvis[0] * spacing) / nvis[0];
-      extra[1] = ((box_size - center_size) / 2 - nvis[1] * spacing) / nvis[1];
-      extra[0] = MIN (extra[0], extra[1]);
+      size_given_to_child[0] = ((box_size - center_size) / 2 - nvis[0] * spacing) / nvis[0];
+      size_given_to_child[1] = ((box_size - center_size) / 2 - nvis[1] * spacing) / nvis[1];
+      size_given_to_child[0] = MIN (size_given_to_child[0], size_given_to_child[1]);
       n_extra_widgets[0] = 0;
     }
   else
     {
       for (packing = GTK_PACK_START; packing <= GTK_PACK_END; packing++)
         {
-          gint s;
+          gint extra_space;
           /* Distribute the remainder naturally on each side */
-          s = MIN ((box_size - center_size) / 2 - min_size[packing], box_size - center_size - min_size[0] - min_size[1]);
-          s = gtk_distribute_natural_allocation (MAX (0, s), nvis[packing], sizes[packing]);
+          extra_space = MIN ((box_size - center_size) / 2 - min_size[packing],
+                             box_size - center_size - min_size[0] - min_size[1]);
+          extra_space = gtk_distribute_natural_allocation (MAX (0, extra_space), nvis[packing], sizes[packing]);
 
           /* Calculate space which hasn't distributed yet,
            * and is available for expanding children.
            */
           if (nexp[packing] > 0)
             {
-              extra[packing] = s / nexp[packing];
-              n_extra_widgets[packing] = s % nexp[packing];
+              size_given_to_child[packing] = extra_space / nexp[packing];
+              n_extra_widgets[packing] = extra_space % nexp[packing];
             }
-           else
-	     extra[packing] = 0;
+          else
+            {
+              size_given_to_child[packing] = 0;
+            }
         }
     }
 
@@ -944,7 +947,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
           /* Assign the child's size. */
           if (priv->homogeneous)
             {
-              child_size = extra[0];
+              child_size = size_given_to_child[0];
 
               if (n_extra_widgets[0] > 0)
                 {
@@ -958,7 +961,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
 
               if (child->expand || gtk_widget_compute_expand (child->widget, priv->orientation))
                 {
-                  child_size += extra[packing];
+                  child_size += size_given_to_child[packing];
 
                   if (n_extra_widgets[packing] > 0)
                     {
@@ -1679,7 +1682,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 					       gint   *minimum_baseline,
 					       gint   *natural_baseline)
 {
-  GtkBoxPrivate       *private = box->priv;
+  GtkBoxPrivate    *private = box->priv;
   GtkBoxChild      *child;
   GList            *children;
   gint              nvis_children;
@@ -1690,7 +1693,8 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
   gint              computed_minimum_baseline = -1, computed_natural_baseline = -1;
   GtkRequestedSize *sizes;
   GtkPackType       packing;
-  gint              size, extra, i;
+  gint              extra_space, size_given_to_child, i;
+  gint              children_minimum_size = 0;
   gint              child_size, child_minimum, child_natural;
   gint              child_minimum_baseline, child_natural_baseline;
   gint              n_extra_widgets = 0;
@@ -1704,7 +1708,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
   spacing = get_spacing (box);
   sizes = g_newa (GtkRequestedSize, nvis_children);
-  size = avail_size - (nvis_children - 1) * spacing;
+  extra_space = avail_size - (nvis_children - 1) * spacing;
 
   /* Retrieve desired size for visible children */
   for (i = 0, children = private->children; children; children = children->next)
@@ -1733,7 +1737,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 		     sizes[i].natural_size,
 		     sizes[i].minimum_size);
 
-	  size -= sizes[i].minimum_size;
+          children_minimum_size += sizes[i].minimum_size;
 
 	  sizes[i].data = child;
 
@@ -1743,28 +1747,32 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
   if (private->homogeneous)
     {
-      /* If were homogenous we still need to run the above loop to get the
-       * minimum sizes for children that are not going to fill
+      /* We still need to run the above loop to populate the minimum sizes for
+       * children that aren't going to fill.
        */
-      size = avail_size - (nvis_children - 1) * spacing;
-      extra = size / nvis_children;
-      n_extra_widgets = size % nvis_children;
+
+      size_given_to_child = extra_space / nvis_children;
+      n_extra_widgets = extra_space % nvis_children;
     }
   else
     {
       /* Bring children up to size first */
-      size = gtk_distribute_natural_allocation (MAX (0, size), nvis_children, sizes);
+      extra_space -= children_minimum_size;
+      extra_space = MAX (0, extra_space);
+      extra_space = gtk_distribute_natural_allocation (extra_space, nvis_children, sizes);
 
       /* Calculate space which hasn't distributed yet,
        * and is available for expanding children.
        */
       if (nexpand_children > 0)
 	{
-	  extra = size / nexpand_children;
-	  n_extra_widgets = size % nexpand_children;
+          size_given_to_child = extra_space / nexpand_children;
+          n_extra_widgets = extra_space % nexpand_children;
 	}
       else
-	extra = 0;
+        {
+          size_given_to_child = 0;
+        }
     }
 
   have_baseline = FALSE;
@@ -1795,7 +1803,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 	      /* Assign the child's size. */
 	      if (private->homogeneous)
 		{
-		  child_size = extra;
+                  child_size = size_given_to_child;
 
 		  if (n_extra_widgets > 0)
 		    {
@@ -1809,7 +1817,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 
 		  if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
 		    {
-		      child_size += extra;
+                      child_size += size_given_to_child;
 
 		      if (n_extra_widgets > 0)
 			{
@@ -1820,13 +1828,9 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 		}
 
 	      if (child->fill)
-		{
-		  child_size = MAX (1, child_size);
-		}
+		child_size = MAX (1, child_size);
 	      else
-		{
-		  child_size = sizes[i].minimum_size;
-		}
+		child_size = sizes[i].minimum_size;
 
 
 	      child_minimum_baseline = child_natural_baseline = -1;
