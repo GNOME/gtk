@@ -404,7 +404,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                                                           &n_formats, formats);
       for (i = 0; i < n_formats; i++)
         {
-          if (formats[i].format == VK_FORMAT_B8G8R8A8_SRGB)
+          if (formats[i].format == VK_FORMAT_B8G8R8A8_UNORM)
             break;
         }
       if (i == n_formats)

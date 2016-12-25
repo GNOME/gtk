@@ -167,7 +167,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
                                     .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                                     .flags = 0,
                                     .imageType = VK_IMAGE_TYPE_2D,
-                                    .format = VK_FORMAT_B8G8R8A8_SRGB,
+                                    .format = VK_FORMAT_B8G8R8A8_UNORM,
                                     .extent = { width, height, 1 },
                                     .mipLevels = 1,
                                     .arrayLayers = 1,
@@ -359,7 +359,7 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
 
   uploader->staging_buffer_free_list = g_slist_prepend (uploader->staging_buffer_free_list, staging);
 
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }
@@ -478,7 +478,7 @@ gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
 
   uploader->staging_image_free_list = g_slist_prepend (uploader->staging_image_free_list, staging);
 
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }
@@ -521,7 +521,7 @@ gsk_vulkan_image_new_from_data_directly (GskVulkanUploader *uploader,
                                              }
                                          });
 
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }
@@ -557,7 +557,7 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
   self->height = height;
   self->vk_image = image;
 
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }
@@ -577,7 +577,7 @@ gsk_vulkan_image_new_for_framebuffer (GdkVulkanContext *context,
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_SRGB);
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }

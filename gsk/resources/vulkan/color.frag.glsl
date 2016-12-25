@@ -6,5 +6,5 @@ layout(location = 0) out vec4 color;
 
 void main()
 {
-    color = inColor;
+    color = vec4(inColor.rgb * inColor.a, inColor.a);
 }

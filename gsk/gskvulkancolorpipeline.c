@@ -101,9 +101,9 @@ gsk_vulkan_color_pipeline_collect_vertex_data (GskVulkanColorPipeline *pipeline,
   instance->rect[1] = rect->origin.y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
-  instance->color[0] = pow (color->red, 2.2);
-  instance->color[1] = pow (color->green, 2.2);
-  instance->color[2] = pow (color->blue, 2.2);
+  instance->color[0] = color->red;
+  instance->color[1] = color->green;
+  instance->color[2] = color->blue;
   instance->color[3] = color->alpha;
 }
 
