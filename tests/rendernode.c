@@ -3,7 +3,7 @@
 static gboolean benchmark = FALSE;
 static gboolean dump_variant = FALSE;
 static gboolean fallback = FALSE;
-static int runs;
+static int runs = 1;
 
 static GOptionEntry options[] = {
   { "benchmark", 'b', 0, G_OPTION_ARG_NONE, &benchmark, "Time operations", NULL },
@@ -32,6 +32,11 @@ main(int argc, char **argv)
       return 1;
     }
 
+  if (runs < 1)
+    {
+      g_printerr ("Number of runs given with -r/--runs must be at least 1 and not %d.\n", runs);
+      return 1;
+    }
   if (!(argc == 3 || (argc == 2 && (dump_variant || benchmark))))
     {
       g_printerr ("Usage: %s [OPTIONS] NODE-FILE PNG-FILE\n", argv[0]);
