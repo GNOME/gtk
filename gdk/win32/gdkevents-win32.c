@@ -1977,21 +1977,27 @@ handle_wm_sysmenu (GdkWindow *window, MSG *msg, gint *ret_valp)
 
   style = GetWindowLongPtr (msg->hwnd, GWL_STYLE);
 
-  maximized = IsZoomed (msg->hwnd);
-  minimized = IsIconic (msg->hwnd);
+  maximized = IsZoomed (msg->hwnd) || (style & WS_MAXIMIZE);
+  minimized = IsIconic (msg->hwnd) || (style & WS_MINIMIZE);
   additional_styles = 0;
 
   if (!(style & WS_SYSMENU))
     additional_styles |= WS_SYSMENU;
 
-  if (!maximized && !(style & WS_MAXIMIZEBOX))
+  if (!(style & WS_MAXIMIZEBOX))
     additional_styles |= WS_MAXIMIZEBOX;
 
-  if (!minimized && !(style & WS_MINIMIZEBOX))
+  if (!(style & WS_MINIMIZEBOX))
     additional_styles |= WS_MINIMIZEBOX;
 
-  if (!minimized && !maximized && !(style & WS_SIZEBOX))
+  if (!(style & WS_SIZEBOX))
     additional_styles |= WS_SIZEBOX;
+
+  if (!(style & WS_DLGFRAME))
+    additional_styles |= WS_DLGFRAME;
+
+  if (!(style & WS_BORDER))
+    additional_styles |= WS_BORDER;
 
   if (additional_styles == 0)
     /* The caller will eventually pass this to DefWindowProc (),
