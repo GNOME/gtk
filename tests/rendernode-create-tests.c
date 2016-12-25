@@ -172,6 +172,57 @@ colors (guint n)
   return container;
 }
 
+GskRenderNode *
+clipped_colors (guint n)
+{
+  GskRenderNode *nodes[n];
+  GskRenderNode *container;
+  graphene_rect_t bounds;
+  GdkRGBA color;
+  guint i;
+
+  for (i = 0; i < n; i++)
+    {
+      bounds.size.width = g_random_int_range (20, 100);
+      bounds.origin.x = g_random_int_range (0, 1000 - bounds.size.width);
+      bounds.size.height = g_random_int_range (20, 100);
+      bounds.origin.y = g_random_int_range (0, 1000 - bounds.size.height);
+      hsv_to_rgb (&color, g_random_double (), g_random_double_range (0.15, 0.4), g_random_double_range (0.6, 0.85));
+      color.alpha = g_random_double_range (0.5, 0.75);
+      nodes[i] = gsk_color_node_new (&color, &bounds);
+    }
+
+  container = gsk_container_node_new (nodes, n);
+
+  for (i = 0; i < n; i++)
+    gsk_render_node_unref (nodes[i]);
+
+#define GRID_SIZE 4
+  for (i = 0; i < GRID_SIZE * GRID_SIZE; i++)
+    {
+      guint x = i % GRID_SIZE;
+      guint y = i / GRID_SIZE;
+
+      if ((x + y) % 2)
+        continue;
+
+      nodes[i / 2] = gsk_clip_node_new (container,
+                                        &GRAPHENE_RECT_INIT(
+                                            x * 1000 / GRID_SIZE, y * 1000 / GRID_SIZE,
+                                            1000 / GRID_SIZE, 1000 / GRID_SIZE
+                                        ));
+    }
+
+  gsk_render_node_unref (container);
+
+  container = gsk_container_node_new (nodes, GRID_SIZE * GRID_SIZE / 2);
+
+  for (i = 0; i < GRID_SIZE * GRID_SIZE / 2; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  return container;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -180,6 +231,7 @@ main (int argc, char **argv)
     GskRenderNode * (* func) (guint n);
   } functions[] = {
     { "colors.node", colors },
+    { "clipped-colors.node", clipped_colors },
     { "rounded-borders.node", rounded_borders },
     { "rounded-backgrounds.node", rounded_backgrounds },
   };
