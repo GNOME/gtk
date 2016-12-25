@@ -32,7 +32,7 @@ main(int argc, char **argv)
       return 1;
     }
 
-  if (argc != 3 && (argc != 2 && (dump_variant || benchmark)))
+  if (!(argc == 3 || (argc == 2 && (dump_variant || benchmark))))
     {
       g_printerr ("Usage: %s [OPTIONS] NODE-FILE PNG-FILE\n", argv[0]);
       return 1;
