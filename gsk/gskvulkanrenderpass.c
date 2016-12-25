@@ -129,6 +129,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     case GSK_COLOR_NODE:
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_COLOR;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+        pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP;
       else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
         pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP_ROUNDED;
       else
@@ -551,7 +553,9 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
 
           for (step = 1; step + i < self->render_ops->len; step++)
             {
-              if (g_array_index (self->render_ops, GskVulkanOp, i + step).type != GSK_VULKAN_OP_COLOR)
+              GskVulkanOp *cmp = &g_array_index (self->render_ops, GskVulkanOp, i + step);
+              if (cmp->type != GSK_VULKAN_OP_COLOR || 
+                  cmp->render.pipeline != current_pipeline)
                 break;
             }
           current_draw_index += gsk_vulkan_color_pipeline_draw (GSK_VULKAN_COLOR_PIPELINE (current_pipeline),
