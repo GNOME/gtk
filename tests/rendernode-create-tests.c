@@ -237,17 +237,29 @@ main (int argc, char **argv)
   };
   GError *error = NULL;
   GskRenderNode *node;
+  GPatternSpec *matcher;
+  char *pattern;
   guint i, n;
 
   gtk_init (&argc, &argv);
 
+  n = 100000;
+  pattern = "*";
+
   if (argc > 1)
-    n = atoi (argv[1]);
-  else
-    n = 100000;
+    {
+      if (argc > 2)
+        pattern = argv[2];
+      n = atoi (argv[1]);
+    }
+
+  matcher = g_pattern_spec_new (pattern);
 
   for (i = 0; i < G_N_ELEMENTS (functions); i++)
     {
+      if (!g_pattern_match_string (matcher, functions[i].name))
+        continue;
+
       node = functions[i].func (n);
       if (!gsk_render_node_write_to_file (node, functions[i].name, &error))
         {
@@ -258,6 +270,8 @@ main (int argc, char **argv)
       gsk_render_node_unref (node);
       g_print ("Created test file \"%s\".\n", functions[i].name);
     }
+
+  g_pattern_spec_free (matcher);
 
   return 0;
 }
