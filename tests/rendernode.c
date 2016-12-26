@@ -53,8 +53,11 @@ main(int argc, char **argv)
   if (dump_variant)
     {
       GVariant *variant = g_variant_new_from_bytes (G_VARIANT_TYPE ("(suuv)"), bytes, FALSE);
+      char *s;
 
-      g_variant_print (variant, FALSE);
+      s = g_variant_print (variant, FALSE);
+      g_print ("%s\n", s);
+      g_free (s);
       g_variant_unref (variant);
     }
 
