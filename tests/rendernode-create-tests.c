@@ -223,6 +223,87 @@ clipped_colors (guint n)
   return container;
 }
 
+static int
+compare_color_stops (gconstpointer a,
+                     gconstpointer b,
+                     gpointer user_data)
+{
+  const GskColorStop *stopa = a;
+  const GskColorStop *stopb = b;
+
+  if (stopa->offset < stopb->offset)
+    return -1;
+  else if (stopa->offset > stopb->offset)
+    return 1;
+  else
+    return 0;
+}
+
+GskRenderNode *
+linear_gradient (guint n)
+{
+  GskRenderNode *nodes[n];
+  GskRenderNode *container;
+  graphene_rect_t bounds;
+  GskColorStop stops[5];
+  graphene_point_t start, end;
+  guint i, j, n_stops;
+
+  for (i = 0; i < n; i++)
+    {
+      bounds.size.width = g_random_int_range (20, 100);
+      bounds.origin.x = g_random_int_range (0, 1000 - bounds.size.width);
+      bounds.size.height = g_random_int_range (20, 100);
+      bounds.origin.y = g_random_int_range (0, 1000 - bounds.size.height);
+      do {
+        start.x = g_random_double_range (- bounds.size.width / 4, bounds.size.width / 4);
+        if (start.x >= 0)
+          start.x += bounds.origin.x;
+        else
+          start.x += bounds.origin.x + bounds.size.width;
+        start.y = g_random_double_range (- bounds.size.height / 4, bounds.size.height / 4);
+        if (start.y >= 0)
+          start.y += bounds.origin.y;
+        else
+          start.y += bounds.origin.y + bounds.size.height;
+        end.x = g_random_double_range (- bounds.size.width / 4, bounds.size.width / 4);
+        if (end.x >= 0)
+          end.x += bounds.origin.x;
+        else
+          end.x += bounds.origin.x + bounds.size.width;
+        end.y = g_random_double_range (- bounds.size.height / 4, bounds.size.height / 4);
+        if (end.y >= 0)
+          end.y += bounds.origin.y;
+        else
+          end.y += bounds.origin.y + bounds.size.height;
+      } while (graphene_point_equal (&start, &end));
+      n_stops = g_random_int_range (2, 5);
+      for (j = 0; j < n_stops; j++)
+        {
+          if (j == 0)
+            stops[j].offset = 0;
+          else if (j == n_stops - 1)
+            stops[j].offset = 1;
+          else
+            stops[j].offset = g_random_double_range (0, 1);
+          hsv_to_rgb (&stops[j].color, g_random_double (), g_random_double_range (0.15, 0.4), g_random_double_range (0.6, 0.85));
+          stops[j].color.alpha = g_random_double_range (0, 1);
+        }
+      g_qsort_with_data (stops, n_stops, sizeof (stops[0]), compare_color_stops, 0);
+      if (g_random_boolean ())
+        nodes[i] = gsk_linear_gradient_node_new (&bounds, &start, &end, stops, n_stops);
+      else
+        nodes[i] = gsk_repeating_linear_gradient_node_new (&bounds, &start, &end, stops, n_stops);
+    }
+
+  container = gsk_container_node_new (nodes, n);
+
+  for (i = 0; i < n; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  return container;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -234,6 +315,7 @@ main (int argc, char **argv)
     { "clipped-colors.node", clipped_colors },
     { "rounded-borders.node", rounded_borders },
     { "rounded-backgrounds.node", rounded_backgrounds },
+    { "linear-gradient.node", linear_gradient },
   };
   GError *error = NULL;
   GskRenderNode *node;
