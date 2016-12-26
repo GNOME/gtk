@@ -181,6 +181,19 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
   length = sqrt (x * x + y * y);
   gtk_css_image_linear_get_start_end (linear, length, &start, &end);
 
+  if (start == end)
+    {
+      /* repeating gradients with all color stops sharing the same offset
+       * get the color of the last color stop */
+      GtkCssImageLinearColorStop *stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, linear->stops->len - 1);
+
+      gtk_snapshot_append_color_node (snapshot,
+                                      _gtk_css_rgba_value_get_rgba (stop->color),
+                                      &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                      "RepeatingLinearGradient<degenerate>");
+      return;
+    }
+
   offset = start;
   last = -1;
   stops = g_newa (GskColorStop, linear->stops->len);
