@@ -12,6 +12,11 @@ struct RoundedRect {
   vec4 corners;
 };
 
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 float clip(vec2 pos, RoundedRect r) {
   vec2 ref_tl = r.bounds.xy + vec2( r.corners.x,  r.corners.x);
   vec2 ref_tr = r.bounds.zy + vec2(-r.corners.y,  r.corners.y);
