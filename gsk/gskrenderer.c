@@ -916,7 +916,24 @@ gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
   g_return_val_if_fail (region != NULL, NULL);
   g_return_val_if_fail (priv->drawing_context == NULL, NULL);
 
-  priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, region);
+  if (GSK_RENDER_MODE_CHECK (FULL_REDRAW))
+    {
+      cairo_region_t *full_window;
+      
+      full_window = cairo_region_create_rectangle (&(GdkRectangle) {
+                                                       0, 0,
+                                                       gdk_window_get_width (priv->window),
+                                                       gdk_window_get_height (priv->window)
+                                                   });
+      
+      priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, full_window);
+
+      cairo_region_destroy (full_window);
+    }
+  else
+    {
+      priv->drawing_context = GSK_RENDERER_GET_CLASS (renderer)->begin_draw_frame (renderer, region);
+    }
 
   return priv->drawing_context;
 }
