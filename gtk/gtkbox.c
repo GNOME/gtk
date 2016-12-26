@@ -560,6 +560,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
     }
   else
     {
+      /* Bring children up to size first */
       extra_space -= children_minimum_size;
       extra_space = MAX (0, extra_space);
       extra_space = gtk_distribute_natural_allocation (extra_space, nvis_children, sizes);
@@ -908,7 +909,8 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
           /* Distribute the remainder naturally on each side */
           extra_space = MIN ((box_size - center_size) / 2 - min_size[packing],
                              box_size - center_size - min_size[0] - min_size[1]);
-          extra_space = gtk_distribute_natural_allocation (MAX (0, extra_space), nvis[packing], sizes[packing]);
+          extra_space = MAX (0, extra_space);
+          extra_space = gtk_distribute_natural_allocation (extra_space, nvis[packing], sizes[packing]);
 
           /* Calculate space which hasn't distributed yet,
            * and is available for expanding children.
