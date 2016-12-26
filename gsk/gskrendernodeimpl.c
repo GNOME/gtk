@@ -383,6 +383,38 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   return &self->render_node;
 }
 
+const graphene_point_t *
+gsk_linear_gradient_node_peek_start (GskRenderNode *node)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  return &self->start;
+}
+
+const graphene_point_t *
+gsk_linear_gradient_node_peek_end (GskRenderNode *node)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  return &self->end;
+}
+
+const gsize
+gsk_linear_gradient_node_get_n_color_stops (GskRenderNode *node)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  return self->n_stops;
+}
+
+const GskColorStop *
+gsk_linear_gradient_node_peek_color_stops (GskRenderNode *node)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  return self->stops;
+}
+
 /*** GSK_BORDER_NODE ***/
 
 typedef struct _GskBorderNode GskBorderNode;

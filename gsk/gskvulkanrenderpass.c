@@ -9,6 +9,7 @@
 #include "gskvulkanblendpipelineprivate.h"
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
+#include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanrendererprivate.h"
@@ -25,6 +26,7 @@ typedef enum {
   GSK_VULKAN_OP_SURFACE,
   GSK_VULKAN_OP_TEXTURE,
   GSK_VULKAN_OP_COLOR,
+  GSK_VULKAN_OP_LINEAR_GRADIENT,
   /* GskVulkanOpPushConstants */
   GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS
 } GskVulkanOpType;
@@ -136,6 +138,25 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       else
         FALLBACK ("Color nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_COLOR;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+      g_array_append_val (self->render_ops, op);
+      return;
+
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+      if (gsk_linear_gradient_node_get_n_color_stops (node) > GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS)
+        FALLBACK ("Linear gradient with %zu color stops, hardcoded limit is %u\n",
+                  gsk_linear_gradient_node_get_n_color_stops (node),
+                  GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS);
+      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+        pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+        pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+        pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP_ROUNDED;
+      else
+        FALLBACK ("Linear gradient nodes can't deal with clip type %u\n", constants->clip.type);
+      op.type = GSK_VULKAN_OP_LINEAR_GRADIENT;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
       g_array_append_val (self->render_ops, op);
       return;
@@ -350,6 +371,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_COLOR:
+        case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
           break;
         }
@@ -381,6 +403,11 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
 
         case GSK_VULKAN_OP_COLOR:
           op->render.vertex_count = gsk_vulkan_color_pipeline_count_vertex_data (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline));
+          n_bytes += op->render.vertex_count;
+          break;
+
+        case GSK_VULKAN_OP_LINEAR_GRADIENT:
+          op->render.vertex_count = gsk_vulkan_linear_gradient_pipeline_count_vertex_data (GSK_VULKAN_LINEAR_GRADIENT_PIPELINE (op->render.pipeline));
           n_bytes += op->render.vertex_count;
           break;
 
@@ -436,6 +463,21 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
           }
           break;
 
+        case GSK_VULKAN_OP_LINEAR_GRADIENT:
+          {
+            op->render.vertex_offset = offset + n_bytes;
+            gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GSK_VULKAN_LINEAR_GRADIENT_PIPELINE (op->render.pipeline),
+                                                                     data + n_bytes + offset,
+                                                                     &op->render.node->bounds,
+                                                                     gsk_linear_gradient_node_peek_start (op->render.node),
+                                                                     gsk_linear_gradient_node_peek_end (op->render.node),
+                                                                     gsk_render_node_get_node_type (op->render.node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
+                                                                     gsk_linear_gradient_node_get_n_color_stops (op->render.node),
+                                                                     gsk_linear_gradient_node_peek_color_stops (op->render.node));
+            n_bytes += op->render.vertex_count;
+          }
+          break;
+
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
@@ -472,6 +514,7 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_COLOR:
+        case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
           break;
         }
@@ -561,6 +604,27 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
           current_draw_index += gsk_vulkan_color_pipeline_draw (GSK_VULKAN_COLOR_PIPELINE (current_pipeline),
                                                                 command_buffer,
                                                                 current_draw_index, step);
+          break;
+
+        case GSK_VULKAN_OP_LINEAR_GRADIENT:
+          if (current_pipeline != op->render.pipeline)
+            {
+              current_pipeline = op->render.pipeline;
+              vkCmdBindPipeline (command_buffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                 gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+              vkCmdBindVertexBuffers (command_buffer,
+                                      0,
+                                      1,
+                                      (VkBuffer[1]) {
+                                          gsk_vulkan_buffer_get_buffer (vertex_buffer)
+                                      },
+                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+              current_draw_index = 0;
+            }
+          current_draw_index += gsk_vulkan_linear_gradient_pipeline_draw (GSK_VULKAN_LINEAR_GRADIENT_PIPELINE (current_pipeline),
+                                                                          command_buffer,
+                                                                          current_draw_index, 1);
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:

@@ -29,6 +29,7 @@ gsk_private_vulkan_source_h = \
 	gskvulkanclipprivate.h \
 	gskvulkancolorpipelineprivate.h \
 	gskvulkancommandpoolprivate.h \
+	gskvulkanlineargradientpipelineprivate.h \
 	gskvulkanimageprivate.h \
 	gskvulkanmemoryprivate.h \
 	gskvulkanpipelineprivate.h \
@@ -43,6 +44,7 @@ gsk_private_vulkan_source_c = \
 	gskvulkanclip.c \
 	gskvulkancolorpipeline.c \
 	gskvulkancommandpool.c \
+	gskvulkanlineargradientpipeline.c \
 	gskvulkanimage.c \
 	gskvulkanmemory.c \
 	gskvulkanpipeline.c \
