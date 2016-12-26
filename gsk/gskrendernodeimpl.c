@@ -321,11 +321,20 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
                               gsize                   n_color_stops)
 {
   GskLinearGradientNode *self;
+  gsize i;
 
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (start != NULL, NULL);
   g_return_val_if_fail (end != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
+  g_return_val_if_fail (n_color_stops >= 2, NULL);
+  g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
+  for (i = 1; i < n_color_stops; i++)
+    {
+      g_return_val_if_fail (color_stops[i].offset >= color_stops[i-1].offset, NULL);
+
+    }
+  g_return_val_if_fail (color_stops[n_color_stops - 1].offset <= 1, NULL);
 
   self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_LINEAR_GRADIENT_NODE_CLASS, sizeof (GskColorStop) * n_color_stops);
 
@@ -347,11 +356,20 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
                                         gsize                   n_color_stops)
 {
   GskLinearGradientNode *self;
+  gsize i;
 
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (start != NULL, NULL);
   g_return_val_if_fail (end != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
+  g_return_val_if_fail (n_color_stops >= 2, NULL);
+  g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
+  for (i = 1; i < n_color_stops; i++)
+    {
+      g_return_val_if_fail (color_stops[i].offset >= color_stops[i-1].offset, NULL);
+
+    }
+  g_return_val_if_fail (color_stops[n_color_stops - 1].offset <= 1, NULL);
 
   self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS, sizeof (GskColorStop) * n_color_stops);
 
