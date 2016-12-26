@@ -41,6 +41,7 @@ struct _GdkVulkanContextPrivate {
 
   guint n_images;
   VkImage *images;
+  cairo_region_t **regions;
 #endif
 
   guint32 draw_index;
@@ -127,7 +128,13 @@ gdk_vulkan_context_dispose (GObject *gobject)
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GdkDisplay *display;
   VkDevice device;
+  guint i;
 
+  for (i = 0; i < priv->n_images; i++)
+    {
+      cairo_region_destroy (priv->regions[i]);
+    }
+  g_clear_pointer (&priv->regions, g_free);
   g_clear_pointer (&priv->images, g_free);
   priv->n_images = 0;
 
@@ -176,6 +183,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkSwapchainKHR new_swapchain;
   VkResult res;
   VkDevice device;
+  guint i;
 
   if (gdk_window_get_width (window) == priv->swapchain_width &&
       gdk_window_get_height (window) == priv->swapchain_height)
@@ -239,6 +247,11 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
       vkDestroySwapchainKHR (device,
                              priv->swapchain,
                              NULL);
+      for (i = 0; i < priv->n_images; i++)
+        {
+          cairo_region_destroy (priv->regions[i]);
+        }
+      g_clear_pointer (&priv->regions, g_free);
       g_clear_pointer (&priv->images, g_free);
       priv->n_images = 0;
     }
@@ -258,6 +271,15 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                              priv->swapchain,
                                              &priv->n_images,
                                              priv->images);
+      priv->regions = g_new (cairo_region_t *, priv->n_images);
+      for (i = 0; i < priv->n_images; i++)
+        {
+          priv->regions[i] = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                                0, 0,
+                                                                gdk_window_get_width (window),
+                                                                gdk_window_get_height (window),
+                                                            });
+        }
     }
   else
     {
@@ -281,6 +303,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GError *error = NULL;
+  guint i;
 
   if (!gdk_vulkan_context_check_swapchain (context, &error))
     {
@@ -289,12 +312,19 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
       return;
     }
 
+  for (i = 0; i < priv->n_images; i++)
+    {
+      cairo_region_union (priv->regions[i], region);
+    }
+
   GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
                                        priv->swapchain,
                                        UINT64_MAX,
                                        priv->draw_semaphore,
                                        VK_NULL_HANDLE,
                                        &priv->draw_index);
+
+  cairo_region_union (region, priv->regions[priv->draw_index]);
 }
 
 static void
@@ -320,6 +350,9 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
                                            priv->draw_index
                                        },
                                    });
+
+  cairo_region_destroy (priv->regions[priv->draw_index]);
+  priv->regions[priv->draw_index] = cairo_region_create ();
 }
 
 static void
