@@ -57,8 +57,8 @@ gsk_vulkan_render_compute_mvp (GskVulkanRender       *self,
 
   if (rect)
     {
-      self->scissor = (VkRect2D) { { rect->origin.x, rect->origin.y }, { rect->size.width, rect->size.height } };
-      self->viewport = self->scissor;
+      self->scissor = (VkRect2D) { { 0, 0 }, { rect->size.width, rect->size.height } };
+      self->viewport = (VkRect2D) { { rect->origin.x, rect->origin.y }, { rect->size.width, rect->size.height } };
       self->scale_factor = 1;
     }
   else
@@ -78,8 +78,8 @@ gsk_vulkan_render_compute_mvp (GskVulkanRender       *self,
 
   graphene_matrix_init_scale (&modelview, self->scale_factor, self->scale_factor, 1.0);
   graphene_matrix_init_ortho (&projection,
-                              self->viewport.offset.x, self->viewport.extent.width,
-                              self->viewport.offset.y, self->viewport.extent.height,
+                              self->viewport.offset.x, self->viewport.offset.x + self->viewport.extent.width,
+                              self->viewport.offset.y, self->viewport.offset.y + self->viewport.extent.height,
                               ORTHO_NEAR_PLANE,
                               ORTHO_FAR_PLANE);
 
@@ -471,8 +471,8 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                     0,
                     1,
                     &(VkViewport) {
-                      .x = self->viewport.offset.x,
-                      .y = self->viewport.offset.x,
+                      .x = 0,
+                      .y = 0,
                       .width = self->viewport.extent.width,
                       .height = self->viewport.extent.height,
                       .minDepth = 0,
