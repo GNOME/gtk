@@ -26,7 +26,7 @@ struct _GskVulkanRender
   graphene_matrix_t mvp;
   int scale_factor;
   VkRect2D viewport;
-  VkRect2D scissor;
+  cairo_region_t *clip;
 
   GHashTable *framebuffers;
   GskVulkanCommandPool *command_pool;
@@ -49,32 +49,31 @@ struct _GskVulkanRender
 };
 
 static void
-gsk_vulkan_render_compute_mvp (GskVulkanRender       *self,
-                               const graphene_rect_t *rect)
+gsk_vulkan_render_setup (GskVulkanRender       *self,
+                         GskVulkanImage        *target,
+                         const graphene_rect_t *rect)
 {
   GdkWindow *window = gsk_renderer_get_window (self->renderer);
   graphene_matrix_t modelview, projection;
-  cairo_rectangle_int_t extents;
+
+  self->target = g_object_ref (target);
 
   if (rect)
     {
-      self->scissor = (VkRect2D) { { 0, 0 }, { rect->size.width, rect->size.height } };
       self->viewport = (VkRect2D) { { rect->origin.x, rect->origin.y }, { rect->size.width, rect->size.height } };
       self->scale_factor = 1;
+      self->clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                      0, 0,
+                                                      gsk_vulkan_image_get_width (target), gsk_vulkan_image_get_height (target)
+                                                  });
     }
   else
     {
-      cairo_region_get_extents (gdk_drawing_context_get_clip (gsk_renderer_get_drawing_context (self->renderer)),
-                                &extents);
-
       self->scale_factor = gsk_renderer_get_scale_factor (self->renderer);
       self->viewport.offset = (VkOffset2D) { 0, 0 };
       self->viewport.extent.width = gdk_window_get_width (window) * self->scale_factor;
       self->viewport.extent.height = gdk_window_get_height (window) * self->scale_factor;
-      self->scissor.offset.x = extents.x * self->scale_factor;
-      self->scissor.offset.y = extents.y * self->scale_factor;
-      self->scissor.extent.width = extents.width * self->scale_factor;
-      self->scissor.extent.height = extents.height * self->scale_factor;
+      self->clip = gdk_drawing_context_get_clip (gsk_renderer_get_drawing_context (self->renderer));
     }
 
   graphene_matrix_init_scale (&modelview, self->scale_factor, self->scale_factor, 1.0);
@@ -464,6 +463,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
   GskVulkanBuffer *buffer;
   VkCommandBuffer command_buffer;
   GSList *l;
+  guint i;
 
   gsk_vulkan_render_prepare_descriptor_sets (self, sampler);
 
@@ -483,36 +483,43 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
                       .maxDepth = 1
                     });
 
-  vkCmdSetScissor (command_buffer,
-                   0,
-                   1,
-                   &self->scissor);
+  for (i = 0; i < cairo_region_num_rectangles (self->clip); i++)
+    {
+      cairo_rectangle_int_t rect;
 
-  vkCmdBeginRenderPass (command_buffer,
-                        &(VkRenderPassBeginInfo) {
-                            .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                            .renderPass = self->render_pass,
-                            .framebuffer = gsk_vulkan_render_get_framebuffer (self, self->target),
-                            .renderArea = { 
-                                { 0, 0 },
-                                {
-                                    gsk_vulkan_image_get_width (self->target),
-                                    gsk_vulkan_image_get_height (self->target)
+      cairo_region_get_rectangle (self->clip, i, &rect);
+
+      vkCmdSetScissor (command_buffer,
+                       0,
+                       1,
+                       &(VkRect2D) {
+                           { rect.x * self->scale_factor, rect.y * self->scale_factor },
+                           { rect.width * self->scale_factor, rect.height * self->scale_factor }
+                       });
+
+      vkCmdBeginRenderPass (command_buffer,
+                            &(VkRenderPassBeginInfo) {
+                                .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                                .renderPass = self->render_pass,
+                                .framebuffer = gsk_vulkan_render_get_framebuffer (self, self->target),
+                                .renderArea = { 
+                                    { rect.x * self->scale_factor, rect.y * self->scale_factor },
+                                    { rect.width * self->scale_factor, rect.height * self->scale_factor }
+                                },
+                                .clearValueCount = 1,
+                                .pClearValues = (VkClearValue [1]) {
+                                    { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
                                 }
                             },
-                            .clearValueCount = 1,
-                            .pClearValues = (VkClearValue [1]) {
-                                { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
-                            }
-                        },
-                        VK_SUBPASS_CONTENTS_INLINE);
+                            VK_SUBPASS_CONTENTS_INLINE);
 
-  for (l = self->render_passes; l; l = l->next)
-    {
-      gsk_vulkan_render_pass_draw (l->data, self, buffer, self->layout, command_buffer);
+      for (l = self->render_passes; l; l = l->next)
+        {
+          gsk_vulkan_render_pass_draw (l->data, self, buffer, self->layout, command_buffer);
+        }
+
+      vkCmdEndRenderPass (command_buffer);
     }
-
-  vkCmdEndRenderPass (command_buffer);
 
   gsk_vulkan_command_pool_submit_buffer (self->command_pool, command_buffer, self->fence);
 
@@ -563,6 +570,7 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
   g_slist_free_full (self->cleanup_images, g_object_unref);
   self->cleanup_images = NULL;
 
+  g_clear_pointer (&self->clip, cairo_region_destroy);
   g_clear_object (&self->target);
 }
 
@@ -631,9 +639,7 @@ gsk_vulkan_render_reset (GskVulkanRender       *self,
 {
   gsk_vulkan_render_cleanup (self);
 
-  self->target = g_object_ref (target);
-
-  gsk_vulkan_render_compute_mvp (self, rect);
+  gsk_vulkan_render_setup (self, target, rect);
 }
 
 GskRenderer *
