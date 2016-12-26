@@ -247,7 +247,7 @@ gsk_linear_gradient_node_real_deserialize (GVariant  *variant,
                  &iter);
 
   n_stops = g_variant_iter_n_children (iter);
-  GskColorStop stops[n_stops];
+  GskColorStop *stops = g_newa (GskColorStop, n_stops);
   for (i = 0; i < n_stops; i++)
     {
       double offset;
@@ -1910,7 +1910,7 @@ gsk_container_node_deserialize (GVariant  *variant,
 
   i = 0;
   n_children = g_variant_iter_init (&iter, variant);
-  GskRenderNode *children[n_children];
+  GskRenderNode **children = g_newa (GskRenderNode *, n_children);
 
   while (g_variant_iter_loop (&iter, "(uv)", &child_type, &child_variant))
     {
@@ -2784,7 +2784,7 @@ gsk_shadow_node_deserialize (GVariant  *variant,
     }
 
   n_shadows = g_variant_iter_n_children (iter);
-  GskShadow shadows[n_shadows];
+  GskShadow *shadows = g_newa (GskShadow, n_shadows);
   for (i = 0; i < n_shadows; i++)
     {
       double dx, dy, radius;
