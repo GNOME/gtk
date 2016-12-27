@@ -77,7 +77,7 @@
  * #GtkAboutDialog::activate-link signal.
  *
  * To specify a person with an email address, use a string like
- * "Edgar Allan Poe <edgar@poe.com>". To specify a website with a title,
+ * "Edgar Allan Poe <edgar\@poe.com>". To specify a website with a title,
  * use a string like "GTK+ team http://www.gtk.org".
  *
  * To make constructing a GtkAboutDialog as convenient as possible, you can
