@@ -327,8 +327,6 @@ gtk_application_local_command_line (GApplication   *application,
                                     gchar        ***arguments,
                                     gint           *exit_status)
 {
-  g_application_add_option_group (application, gtk_get_option_group (FALSE));
-
   return G_APPLICATION_CLASS (gtk_application_parent_class)->local_command_line (application, arguments, exit_status);
 }
 

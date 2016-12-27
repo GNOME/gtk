@@ -80,9 +80,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_init_check           (int    *argc,
                                    char ***argv);
 
-GDK_AVAILABLE_IN_ALL
-GOptionGroup *gtk_get_option_group (gboolean open_default_display);
-
 #ifdef G_OS_WIN32
 
 /* Variants that are used to check for correct struct packing

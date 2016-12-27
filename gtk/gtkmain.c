@@ -864,24 +864,7 @@ gtk_simulate_touchscreen (void)
   return test_touchscreen > 0 || (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
  }
 
-/**
- * gtk_get_option_group:
- * @open_default_display: whether to open the default display
- *     when parsing the commandline arguments
- *
- * Returns a #GOptionGroup for the commandline arguments recognized
- * by GTK+ and GDK.
- *
- * You should add this group to your #GOptionContext
- * with g_option_context_add_group(), if you are using
- * g_option_context_parse() to parse your commandline arguments.
- *
- * Returns: (transfer full): a #GOptionGroup for the commandline
- *     arguments recognized by GTK+
- *
- * Since: 2.6
- */
-GOptionGroup *
+static GOptionGroup *
 gtk_get_option_group (gboolean open_default_display)
 {
   GOptionGroup *group;
