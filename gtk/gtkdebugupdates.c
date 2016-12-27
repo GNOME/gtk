@@ -247,25 +247,6 @@ gtk_debug_updates_add (GtkWidget              *widget,
   gtk_debug_updates_print (updates, draw->region, "Added new region");
 }
 
-static void
-gtk_debug_updates_queue_get_extents (GQueue       *updates,
-                                     GdkRectangle *extents)
-{
-  GtkDebugUpdate *draw;
-  GdkRectangle rect;
-  GList *l;
-
-  *extents = (GdkRectangle) { 0, 0, 0, 0 };
-
-  for (l = g_queue_peek_head_link (updates); l != NULL; l = l->next)
-    {
-      draw = l->data;
-
-      cairo_region_get_extents (draw->region, &rect);
-      gdk_rectangle_union (extents, &rect, extents);
-    }
-}
-
 void
 gtk_debug_updates_snapshot (GtkWidget   *widget,
                             GtkSnapshot *snapshot)
@@ -275,8 +256,8 @@ gtk_debug_updates_snapshot (GtkWidget   *widget,
   GdkRectangle rect;
   gint64 timestamp;
   double progress;
-  cairo_t *cr;
   GList *l;
+  guint i;
 
   if (!gtk_debug_updates_get_enabled_for_display (gtk_widget_get_display (widget)))
     return;
@@ -287,11 +268,6 @@ gtk_debug_updates_snapshot (GtkWidget   *widget,
   timestamp = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
   
   gtk_debug_updates_print (updates, NULL, "Painting at %lli", (long long) timestamp);
-
-  gtk_debug_updates_queue_get_extents (updates, &rect);
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height),
-                                       "Debug Updates");
 
   for (l = g_queue_peek_head_link (updates); l != NULL; l = l->next)
     {
@@ -304,12 +280,15 @@ gtk_debug_updates_snapshot (GtkWidget   *widget,
       else
         continue;
 
-      cairo_set_source_rgba (cr, 1, 0, 0, 0.4 * (1 - progress));
       gtk_debug_updates_print (updates, draw->region, "Painting with progress %g", progress);
-      gdk_cairo_region (cr, draw->region);
-      cairo_fill (cr);
+      for (i = 0; i < cairo_region_num_rectangles (draw->region); i++)
+        {
+          cairo_region_get_rectangle (draw->region, i, &rect);
+          gtk_snapshot_append_color_node (snapshot,
+                                          &(GdkRGBA) { 1, 0, 0, 0.4 * (1 - progress) },
+                                          &GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height),
+                                          "Debug Updates<%g>", progress);
+        }
     }
-
-  cairo_destroy (cr);
 }
 
