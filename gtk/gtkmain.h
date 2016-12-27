@@ -85,14 +85,6 @@ gboolean gtk_init_check           (int    *argc,
                                    char ***argv);
 
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_init_with_args       (gint                 *argc,
-                                   gchar              ***argv,
-                                   const gchar          *parameter_string,
-                                   const GOptionEntry   *entries,
-                                   const gchar          *translation_domain,
-                                   GError              **error);
-
-GDK_AVAILABLE_IN_ALL
 GOptionGroup *gtk_get_option_group (gboolean open_default_display);
 
 #ifdef G_OS_WIN32
