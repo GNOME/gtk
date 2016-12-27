@@ -397,37 +397,7 @@ gtk_disable_setlocale (void)
 
 static GString *gtk_modules_string = NULL;
 
-#ifdef G_ENABLE_DEBUG
-static gboolean
-gtk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
-{
-  debug_flags[0].flags |= g_parse_debug_string (value,
-                                                gtk_debug_keys,
-                                                G_N_ELEMENTS (gtk_debug_keys));
-
-  return TRUE;
-}
-
-static gboolean
-gtk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
-{
-  debug_flags[0].flags &= ~g_parse_debug_string (value,
-                                                 gtk_debug_keys,
-                                                 G_N_ELEMENTS (gtk_debug_keys));
-
-  return TRUE;
-}
-#endif /* G_ENABLE_DEBUG */
-
 static const GOptionEntry gtk_args[] = {
-#ifdef G_ENABLE_DEBUG
-  { "gtk-debug",        0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_debug_cb,    
-    /* Description of --gtk-debug=FLAGS in --help output */    N_("GTK+ debugging flags to set"), 
-    /* Placeholder in --gtk-debug=FLAGS in --help output */    N_("FLAGS") },
-  { "gtk-no-debug",     0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_no_debug_cb, 
-    /* Description of --gtk-no-debug=FLAGS in --help output */ N_("GTK+ debugging flags to unset"), 
-    /* Placeholder in --gtk-no-debug=FLAGS in --help output */ N_("FLAGS") },
-#endif 
   { NULL }
 };
 
