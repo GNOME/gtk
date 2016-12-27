@@ -79,8 +79,6 @@ main (int argc, char *argv[])
               "optionally passing one or more URIs as arguments.");
   g_option_context_set_summary (context, summary);
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
-  g_option_context_add_group (context, gtk_get_option_group (FALSE));
-
   g_option_context_parse (context, &argc, &argv, &error);
 
   g_option_context_free (context);
