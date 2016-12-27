@@ -899,29 +899,7 @@ gtk_get_option_group (gboolean open_default_display)
   return group;
 }
 
-/**
- * gtk_parse_args:
- * @argc: (inout): a pointer to the number of command line arguments
- * @argv: (array length=argc) (inout): a pointer to the array of
- *     command line arguments
- *
- * Parses command line arguments, and initializes global
- * attributes of GTK+, but does not actually open a connection
- * to a display. (See gdk_display_open(), gdk_get_display_arg_name())
- *
- * Any arguments used by GTK+ or GDK are removed from the array and
- * @argc and @argv are updated accordingly.
- *
- * There is no need to call this function explicitly if you are using
- * gtk_init(), or gtk_init_check().
- *
- * Note that many aspects of GTK+ require a display connection to
- * function, so this way of initializing GTK+ is really only useful
- * for specialized use cases.
- *
- * Returns: %TRUE if initialization succeeded, otherwise %FALSE
- */
-gboolean
+static gboolean
 gtk_parse_args (int    *argc,
                 char ***argv)
 {

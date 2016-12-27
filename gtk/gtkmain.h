@@ -73,10 +73,6 @@ const gchar* gtk_check_version (guint   required_major,
  */
 
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_parse_args           (int    *argc,
-                                   char ***argv);
-
-GDK_AVAILABLE_IN_ALL
 void     gtk_init                 (int    *argc,
                                    char ***argv);
 
