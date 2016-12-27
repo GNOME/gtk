@@ -396,7 +396,6 @@ gtk_disable_setlocale (void)
 #endif
 
 static GString *gtk_modules_string = NULL;
-static gboolean g_fatal_warnings = FALSE;
 
 #ifdef G_ENABLE_DEBUG
 static gboolean
@@ -421,8 +420,6 @@ gtk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
 #endif /* G_ENABLE_DEBUG */
 
 static const GOptionEntry gtk_args[] = {
-  { "g-fatal-warnings", 0, 0, G_OPTION_ARG_NONE, &g_fatal_warnings, 
-    /* Description of --g-fatal-warnings in --help output */   N_("Make all warnings fatal"), NULL },
 #ifdef G_ENABLE_DEBUG
   { "gtk-debug",        0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_debug_cb,    
     /* Description of --gtk-debug=FLAGS in --help output */    N_("GTK+ debugging flags to set"), 
@@ -685,15 +682,6 @@ do_post_parse_initialization (int    *argc,
 #ifdef SIGPIPE
   signal (SIGPIPE, SIG_IGN);
 #endif
-
-  if (g_fatal_warnings)
-    {
-      GLogLevelFlags fatal_mask;
-
-      fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
-      fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
-      g_log_set_always_fatal (fatal_mask);
-    }
 
   if (debug_flags[0].flags & GTK_DEBUG_UPDATES)
     gtk_debug_updates_set_enabled (TRUE);
