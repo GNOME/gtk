@@ -420,26 +420,7 @@ gtk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
 }
 #endif /* G_ENABLE_DEBUG */
 
-static gboolean
-gtk_arg_module_cb (const char *key, const char *value, gpointer user_data)
-{
-  if (value && *value)
-    {
-      if (gtk_modules_string)
-        g_string_append_c (gtk_modules_string, G_SEARCHPATH_SEPARATOR);
-      else
-        gtk_modules_string = g_string_new (NULL);
-      
-      g_string_append (gtk_modules_string, value);
-    }
-
-  return TRUE;
-}
-
 static const GOptionEntry gtk_args[] = {
-  { "gtk-module",       0, 0, G_OPTION_ARG_CALLBACK, gtk_arg_module_cb,   
-    /* Description of --gtk-module=MODULES in --help output */ N_("Load additional GTK+ modules"), 
-    /* Placeholder in --gtk-module=MODULES in --help output */ N_("MODULES") },
   { "g-fatal-warnings", 0, 0, G_OPTION_ARG_NONE, &g_fatal_warnings, 
     /* Description of --g-fatal-warnings in --help output */   N_("Make all warnings fatal"), NULL },
 #ifdef G_ENABLE_DEBUG
