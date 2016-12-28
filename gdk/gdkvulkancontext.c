@@ -431,7 +431,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
       GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceFormatsKHR, gdk_vulkan_context_get_physical_device (context),
                                                           priv->surface,
                                                           &n_formats, NULL);
-      VkSurfaceFormatKHR formats[n_formats];
+      VkSurfaceFormatKHR *formats = g_newa (VkSurfaceFormatKHR, n_formats);
       GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceFormatsKHR, gdk_vulkan_context_get_physical_device (context),
                                                           priv->surface,
                                                           &n_formats, formats);
@@ -577,7 +577,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
   uint32_t n_devices;
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, NULL);
-  VkPhysicalDevice devices[n_devices];
+  VkPhysicalDevice *devices = g_newa (VkPhysicalDevice, n_devices);
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, devices);
 
   if (n_devices == 0)
@@ -609,7 +609,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
       uint32_t n_queue_props;
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, NULL);
-      VkQueueFamilyProperties queue_props[n_queue_props];
+      VkQueueFamilyProperties *queue_props = g_newa (VkQueueFamilyProperties, n_queue_props);
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, queue_props);
 
       for (j = 0; j < n_queue_props; j++)
@@ -707,7 +707,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
 
   uint32_t n_extensions;
   GDK_VK_CHECK (vkEnumerateInstanceExtensionProperties, NULL, &n_extensions, NULL);
-  VkExtensionProperties extensions[n_extensions];
+  VkExtensionProperties *extensions = g_newa (VkExtensionProperties, n_extensions);
   GDK_VK_CHECK (vkEnumerateInstanceExtensionProperties, NULL, &n_extensions, extensions);
 
   used_extensions = g_ptr_array_new ();
@@ -731,7 +731,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
 
   uint32_t n_layers;
   GDK_VK_CHECK (vkEnumerateInstanceLayerProperties, &n_layers, NULL);
-  VkLayerProperties layers[n_layers];
+  VkLayerProperties *layers = g_newa (VkLayerProperties, n_layers);
   GDK_VK_CHECK (vkEnumerateInstanceLayerProperties, &n_layers, layers);
 
   used_layers = g_ptr_array_new ();
