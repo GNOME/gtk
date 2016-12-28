@@ -19,6 +19,7 @@
 #include "config.h"
 
 #define _WIN32_WINNT 0x0600
+#define VK_USE_PLATFORM_WIN32_KHR
 
 #include "gdk.h"
 #include "gdkprivate-win32.h"
@@ -30,6 +31,7 @@
 #include "gdkwin32window.h"
 #include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
+#include "gdkvulkancontext-win32.h"
 
 #include <dwmapi.h>
 
@@ -1281,6 +1283,11 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->get_n_monitors = gdk_win32_display_get_n_monitors;
   display_class->get_monitor = gdk_win32_display_get_monitor;
   display_class->get_primary_monitor = gdk_win32_display_get_primary_monitor;
+
+#ifdef GDK_RENDERING_VULKAN
+  display_class->vk_context_type = GDK_TYPE_WIN32_VULKAN_CONTEXT;
+  display_class->vk_extension_name = VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
+#endif
 
   _gdk_win32_windowing_init ();
 }

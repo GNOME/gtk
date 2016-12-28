@@ -55,6 +55,8 @@ libgdk_win32_la_SOURCES = \
 	gdkscreen-win32.c \
 	gdkselection-win32.c \
 	gdktestutils-win32.c \
+	gdkvulkancontext-win32.c \
+	gdkvulkancontext-win32.h \
 	gdkwin32cursor.h \
 	gdkwin32display.h \
 	gdkwin32displaymanager.h \
