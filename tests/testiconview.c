@@ -420,7 +420,7 @@ main (gint argc, gchar **argv)
   GtkCellRenderer *cell;
   GtkTreeViewColumn *tvc;
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /* to test rtl layout, set RTL=1 in the environment */
   if (g_getenv ("RTL"))

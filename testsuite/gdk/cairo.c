@@ -1,4 +1,4 @@
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 static void
 test_set_source_big_pixbuf (void)
@@ -32,7 +32,7 @@ int
 main (int argc, char *argv[])
 {
   g_test_init (&argc, &argv, NULL);
-  gdk_init (&argc, &argv);
+  gtk_init ();
 
   g_test_add_func ("/drawing/set-source-big-pixbuf", test_set_source_big_pixbuf);
 

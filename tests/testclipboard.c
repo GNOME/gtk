@@ -109,7 +109,7 @@ main (int argc, char **argv)
 {
   GtkWidget *window;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_dialog_new_with_buttons ("Clipboard",
                                         NULL,

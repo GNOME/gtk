@@ -234,7 +234,7 @@ main (int argc, char **argv)
   
   test_init ();
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   model = gtk_list_store_new (1, G_TYPE_STRING);
   contents = g_array_new (FALSE, FALSE, sizeof (char));

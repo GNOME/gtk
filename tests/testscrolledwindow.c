@@ -364,7 +364,7 @@ scrollable_policy (void)
 int
 main (int argc, char *argv[])
 {
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   scrollable_policy ();
 

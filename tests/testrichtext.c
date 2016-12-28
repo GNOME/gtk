@@ -143,7 +143,7 @@ main (gint   argc,
   GdkAtom        atom;
   guint          i, broken = 0;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /* initialize random numbers, disable this for deterministic testing */
   if (1)        

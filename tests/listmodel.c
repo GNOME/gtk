@@ -171,7 +171,7 @@ main (int argc, char *argv[])
   GListStore *store;
   gint i;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   store = g_list_store_new (my_object_get_type ());
   for (i = 0; i < 100; i++)

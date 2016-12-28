@@ -127,7 +127,7 @@ main (int argc, char *argv[])
   GtkWidget *button;
   GtkTreePath *path;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   path = gtk_tree_path_new_from_string ("80");
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);

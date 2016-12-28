@@ -28,7 +28,7 @@ main (int argc,
   GEmblem *emblem;
   gchar *str;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   pixbuf = gdk_pixbuf_new_from_file ("apple-red.png", NULL);
   toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);

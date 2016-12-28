@@ -179,7 +179,7 @@ main (int argc, char *argv[])
   GSimpleActionGroup *group;
   GSimpleAction *action;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   builder = gtk_builder_new_from_file ("selectionmode.ui");
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));

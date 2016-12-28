@@ -106,13 +106,19 @@ main (int argc, char *argv[])
     { "no-pw-save", 's', 0, G_OPTION_ARG_NONE, &dont_save_password, "Don't show password save options.", NULL },
     { NULL }
   };
+  GOptionContext *context;
 
-  if (!gtk_init_with_args (&argc, &argv, "", options, NULL, &error))
+  context = g_option_context_new ("");
+  g_option_context_add_main_entries (context, options, NULL);
+  if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_print ("Failed to parse args: %s\n", error->message);
       g_error_free (error);
       return 1;
     }
+  g_option_context_free (context);
+
+  gtk_init ();
 
   if (force_rtl)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);

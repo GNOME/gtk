@@ -96,7 +96,7 @@ gtk_test_init (int    *argcp,
    */
   gdk_disable_multidevice ();
 
-  gtk_init (argcp, argvp);
+  gtk_init ();
 }
 
 static GSList*

@@ -545,7 +545,7 @@ tree_menu (void)
 int
 main (int argc, char *argv[])
 {
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   tree_menu ();
 

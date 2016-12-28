@@ -52,7 +52,7 @@ main (int argc, char *argv[])
 {
   gint i;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
   load_types ();
 
   for (i = 0; tests[i].test; i++)

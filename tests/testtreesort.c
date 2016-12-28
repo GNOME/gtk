@@ -112,7 +112,7 @@ main (int argc, char *argv[])
   GtkWidget *window2, *vbox2, *scrolled_window2, *tree_view2;
   GtkWidget *window3, *vbox3, *scrolled_window3, *tree_view3;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /**
    * First window - Just a GtkTreeStore

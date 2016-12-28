@@ -30,7 +30,7 @@ main (int argc, char *argv[])
   GtkWidget *tv;
   GtkTextBuffer *buffer;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   dialog = gtk_message_dialog_new_with_markup (NULL,
                        0,

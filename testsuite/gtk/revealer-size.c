@@ -128,7 +128,7 @@ slide_up_no_animations ()
 int
 main (int argc, char **argv)
 {
-  gtk_init (&argc, &argv);
+  gtk_init ();
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/sizing/revealer/slide_right_animations", slide_right_animations);

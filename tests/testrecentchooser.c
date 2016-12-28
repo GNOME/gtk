@@ -111,7 +111,7 @@ main (int   argc,
   gint i;
   gboolean multiple = FALSE;
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /* to test rtl layout, set RTL=1 in the environment */
   if (g_getenv ("RTL"))

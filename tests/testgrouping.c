@@ -105,7 +105,7 @@ main (int argc, char **argv)
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   model = create_model ();
 

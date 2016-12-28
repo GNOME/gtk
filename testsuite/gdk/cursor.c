@@ -1,4 +1,4 @@
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 static char *cursor_names[] = {
   "none",
@@ -76,7 +76,7 @@ main (int argc, char *argv[])
   char *test_name;
 
   g_test_init (&argc, &argv, NULL);
-  gdk_init (NULL, NULL);
+  gtk_init ();
 
   for (i = 0; i < G_N_ELEMENTS (cursor_names); i++)
     {

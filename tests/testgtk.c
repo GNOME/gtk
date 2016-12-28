@@ -8894,7 +8894,7 @@ main (int argc, char *argv[])
 
   g_set_application_name ("GTK+ Test Program");
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   provider = gtk_css_provider_new ();
 

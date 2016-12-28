@@ -967,7 +967,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = create_window ();
 

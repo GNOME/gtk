@@ -108,7 +108,7 @@ main (int argc, char *argv[])
   GdkDisplay *display;
   gint i, num_monitors;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   display = gdk_display_get_default ();
 

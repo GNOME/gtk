@@ -508,7 +508,7 @@ test_style_priorities_three_context_higher (PrioritiesFixture *f,
 int
 main (int argc, char *argv[])
 {
-  gtk_init (NULL, NULL);
+  gtk_init ();
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/style/parse/selectors", test_parse_selectors);

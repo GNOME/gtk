@@ -108,7 +108,7 @@ main (int argc, char **argv)
   GIcon *icon;
   GtkTargetList *tlist;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Gtk Entry Icons Test");

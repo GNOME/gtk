@@ -720,7 +720,7 @@ main (int argc, char *argv[])
   GtkTreeModel *sample_model;
   gint i;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /* First initialize all the models for signal purposes */
   left_tree_model = (GtkTreeModel *) gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_POINTER);

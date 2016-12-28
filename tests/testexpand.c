@@ -156,7 +156,7 @@ create_grid_window (void)
 int
 main (int argc, char *argv[])
 {
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);

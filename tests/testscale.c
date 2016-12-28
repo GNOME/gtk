@@ -114,7 +114,7 @@ int main (int argc, char *argv[])
   gdouble pos_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
   const gchar *pos_labels[4] = { "Left", "Right", "Top", "Bottom" };
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Ranges with marks");

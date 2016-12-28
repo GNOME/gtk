@@ -146,7 +146,7 @@ main (gint argc, gchar **argv)
   GtkStyleProvider *provider;
   GtkTextBuffer *css;
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   css = gtk_text_buffer_new (NULL);
   gtk_text_buffer_create_tag (css,

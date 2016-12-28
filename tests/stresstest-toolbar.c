@@ -135,7 +135,7 @@ main (gint argc, gchar **argv)
 {
   Info info;
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   info.toolbar = NULL;
   info.counter = 0;

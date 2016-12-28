@@ -62,7 +62,7 @@ int main (int argc, char *argv[])
   GtkWidget *widget;
   GtkAccessible *accessible;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   widget = GTK_WIDGET (g_object_new (my_button_get_type (), NULL));
   accessible = GTK_ACCESSIBLE (gtk_widget_get_accessible (widget));

@@ -170,7 +170,7 @@ main (int argc, char **argv)
   GtkWidget *tree_view;
   GtkWidget *button;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /* Window and box */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);

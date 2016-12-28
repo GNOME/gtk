@@ -296,7 +296,7 @@ main (int argc, char *argv[])
   GtkTreeModel *completion_model;
   GtkCellRenderer *cell;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (window, "delete_event", gtk_main_quit, NULL);

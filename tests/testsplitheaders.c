@@ -42,7 +42,7 @@ main (int argc, char *argv[])
   GtkWidget *check;
   GtkWidget *header;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   builder = gtk_builder_new_from_file ("testsplitheaders.ui");
 

@@ -44,7 +44,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window, *vbox, *button;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 

@@ -118,7 +118,7 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *box;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 

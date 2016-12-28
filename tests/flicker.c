@@ -203,7 +203,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window1;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window1 = create_flicker ();
   gtk_widget_show (window1);

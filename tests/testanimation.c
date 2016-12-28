@@ -410,7 +410,7 @@ main (int    argc,
 {
   gint i;
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   i = 1;
   while (i < argc)

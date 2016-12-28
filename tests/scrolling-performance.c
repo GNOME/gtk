@@ -105,14 +105,14 @@ main (int argc, char **argv)
   GOptionContext *context = g_option_context_new (NULL);
   g_option_context_add_main_entries (context, options, NULL);
   frame_stats_add_options (g_option_context_get_main_group (context));
-  g_option_context_add_group (context,
-                              gtk_get_option_group (TRUE));
 
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_printerr ("Option parsing failed: %s\n", error->message);
       return 1;
     }
+
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   frame_stats_ensure (GTK_WINDOW (window));

@@ -32,7 +32,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window, *label, *grid, *demo;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   grid = gtk_grid_new ();

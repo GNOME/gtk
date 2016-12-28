@@ -105,7 +105,7 @@ main (int argc, char *argv[])
   GdkScreen *scr2 = NULL;	/* Quiet GCC */
   gboolean correct_second_display = FALSE;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   if (argc == 2)
     screen2_name = g_strdup (argv[1]);

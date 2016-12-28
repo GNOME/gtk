@@ -1,5 +1,5 @@
 #include <locale.h>
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 static void
 test_keysyms_basic (void)
@@ -59,7 +59,7 @@ int main (int argc, char *argv[])
   setlocale (LC_ALL, "");
 
   g_test_init (&argc, &argv, NULL);
-  gdk_init (&argc, &argv);
+  gtk_init ();
 
   g_test_add_func ("/keysyms/basic", test_keysyms_basic);
   g_test_add_func ("/keysyms/void", test_keysyms_void);

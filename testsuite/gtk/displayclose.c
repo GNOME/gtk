@@ -6,14 +6,17 @@ main (int argc, char **argv)
   const gchar *display_name;
   GdkDisplay *display;
   GtkWidget *win, *but;
+  gboolean has_display;
 
   g_log_set_always_fatal (G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL);
 
-  if (!gtk_parse_args (&argc, &argv))
-    return 1;
+  gdk_set_allowed_backends ("x11");
+  display_name = g_getenv ("DISPLAY");
+  g_unsetenv ("DISPLAY");
+  has_display = gtk_init_check ();
+  g_assert (!has_display);
 
-  display_name = gdk_get_display_arg_name();
-  display = gdk_display_open(display_name);
+  display = gdk_display_open (display_name);
 
   if (!display)
     return 1;

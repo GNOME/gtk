@@ -1058,7 +1058,7 @@ main (int argc, char **argv)
         gchar *text;
         gint i;
 
-        gtk_init (&argc, &argv);
+        gtk_init ();
 
 	if (g_getenv ("RTL"))
 	  gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);

@@ -9,7 +9,7 @@ int main (int argc, char *argv[])
   GtkWidget *view;
   GtkWidget *button;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);

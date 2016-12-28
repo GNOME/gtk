@@ -58,7 +58,7 @@ int main (int argc, char *argv[])
   GtkWidget *bu;
   GtkWidget *w, *c;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);

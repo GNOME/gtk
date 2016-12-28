@@ -65,7 +65,7 @@ test_section_load_nonexisting_file (void)
 int
 main (int argc, char *argv[])
 {
-  gtk_init (NULL, NULL);
+  gtk_init ();
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/cssprovider/section-in-load-from-data", test_section_in_load_from_data);

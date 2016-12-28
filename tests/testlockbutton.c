@@ -218,7 +218,7 @@ main (int argc, char *argv[])
   GtkWidget *update;
   GPermission *permission;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   permission = g_object_new (G_TYPE_TEST_PERMISSION, NULL);
 

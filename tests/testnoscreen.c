@@ -26,8 +26,12 @@ int main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *button;
   GdkDisplay *display;
+  gboolean has_display;
 
-  gtk_parse_args (&argc, &argv);
+  gdk_set_allowed_backends ("x11");
+  g_unsetenv ("DISPLAY");
+  has_display = gtk_init_check ();
+  g_assert (!has_display);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   button = gtk_button_new ();

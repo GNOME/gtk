@@ -48,7 +48,7 @@ main (int argc, char *argv[])
   GtkWidget *check;
   GtkWidget *combo;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);

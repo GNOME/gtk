@@ -235,7 +235,7 @@ main (int argc, char *argv[])
   GtkWidget *vbox;
   Views views;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   set_styles ();
 

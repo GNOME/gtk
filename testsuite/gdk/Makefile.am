@@ -5,13 +5,13 @@ NULL=
 noinst_PROGRAMS = $(TEST_PROGS)
 
 AM_CPPFLAGS = 				\
-	$(GDK_DEP_CFLAGS) 		\
+	$(GTK_DEP_CFLAGS) 		\
 	-I$(top_srcdir) 		\
 	-I$(top_builddir)/gdk 		\
 	$(NULL)
 
 LDADD = 				\
-	$(GDK_DEP_LIBS) 		\
+	$(GTK_DEP_LIBS) 		\
 	$(top_builddir)/gtk/libgtk-4.la \
 	$(NULL)
 

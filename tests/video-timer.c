@@ -365,13 +365,20 @@ main(int argc, char **argv)
   GtkWidget *da;
   GError *error = NULL;
   GdkFrameClock *frame_clock;
+  GOptionContext *context;
 
-  if (!gtk_init_with_args (&argc, &argv, "",
-                           options, NULL, &error))
+  context = g_option_context_new ("");
+  g_option_context_add_main_entries (context, options, NULL);
+
+  if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_printerr ("Option parsing failed: %s\n", error->message);
       return 1;
     }
+
+  g_option_context_free (context);
+
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);

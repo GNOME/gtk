@@ -87,7 +87,7 @@ main (int argc, char **argv)
   GIcon *icon;
   GFile *file;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   if (argc > 1)
     icon_name = argv[1];

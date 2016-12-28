@@ -44,7 +44,7 @@ main (int   argc,
   GtkWidget *window;
   GtkWidget *app_chooser_widget;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   builder = gtk_builder_new_from_file ("popupat.ui");
 

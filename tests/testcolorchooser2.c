@@ -41,7 +41,7 @@ int main (int argc, char *argv[])
   GtkWidget *entry;
   GtkBuilder *builder;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   builder = gtk_builder_new_from_file ("testcolorchooser2.ui");
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
