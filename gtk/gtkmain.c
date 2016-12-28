@@ -397,10 +397,6 @@ gtk_disable_setlocale (void)
 
 static GString *gtk_modules_string = NULL;
 
-static const GOptionEntry gtk_args[] = {
-  { NULL }
-};
-
 #ifdef G_OS_WIN32
 
 static char *iso639_to_check = NULL;
@@ -683,55 +679,6 @@ do_post_parse_initialization (int    *argc,
                     NULL);
 }
 
-
-typedef struct
-{
-  gboolean open_default_display;
-} OptionGroupInfo;
-
-static gboolean
-pre_parse_hook (GOptionContext *context,
-                GOptionGroup   *group,
-                gpointer        data,
-                GError        **error)
-{
-  do_pre_parse_initialization (NULL, NULL);
-  
-  return TRUE;
-}
-
-static gboolean
-post_parse_hook (GOptionContext *context,
-                 GOptionGroup   *group,
-                 gpointer       data,
-                 GError        **error)
-{
-  OptionGroupInfo *info = data;
-
-  
-  do_post_parse_initialization (NULL, NULL);
-  
-  if (info->open_default_display)
-    {
-      if (gdk_display_open_default () == NULL)
-        {
-          const char *display_name = gdk_get_display_arg_name ();
-          g_set_error (error,
-                       G_OPTION_ERROR,
-                       G_OPTION_ERROR_FAILED,
-                       _("Cannot open display: %s"),
-                       display_name ? display_name : "" );
-
-          return FALSE;
-        }
-
-      if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
-        gtk_window_set_interactive_debugging (TRUE);
-    }
-
-  return TRUE;
-}
-
 guint
 gtk_get_display_debug_flags (GdkDisplay *display)
 {
@@ -803,59 +750,6 @@ gtk_simulate_touchscreen (void)
   return test_touchscreen > 0 || (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
  }
 
-static GOptionGroup *
-gtk_get_option_group (gboolean open_default_display)
-{
-  GOptionGroup *group;
-  OptionGroupInfo *info;
-
-  gettext_initialization ();
-
-  info = g_new0 (OptionGroupInfo, 1);
-  info->open_default_display = open_default_display;
-  
-  group = g_option_group_new ("gtk", _("GTK+ Options"), _("Show GTK+ Options"), info, g_free);
-  g_option_group_set_parse_hooks (group, pre_parse_hook, post_parse_hook);
-
-  gdk_add_option_entries (group);
-  g_option_group_add_entries (group, gtk_args);
-  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
-  
-  return group;
-}
-
-static gboolean
-gtk_parse_args (int    *argc,
-                char ***argv)
-{
-  GOptionContext *option_context;
-  GOptionGroup *gtk_group;
-  GError *error = NULL;
-  
-  if (gtk_initialized)
-    return TRUE;
-
-  gettext_initialization ();
-
-  if (!check_setugid ())
-    return FALSE;
-
-  option_context = g_option_context_new (NULL);
-  g_option_context_set_ignore_unknown_options (option_context, TRUE);
-  g_option_context_set_help_enabled (option_context, FALSE);
-  gtk_group = gtk_get_option_group (FALSE);
-  g_option_context_set_main_group (option_context, gtk_group);
-  if (!g_option_context_parse (option_context, argc, argv, &error))
-    {
-      g_warning ("%s", error->message);
-      g_error_free (error);
-    }
-
-  g_option_context_free (option_context);
-
-  return TRUE;
-}
-
 #ifdef G_PLATFORM_WIN32
 #undef gtk_init_check
 #endif
@@ -886,8 +780,16 @@ gtk_init_check (int    *argc,
 {
   gboolean ret;
 
-  if (!gtk_parse_args (argc, argv))
+  if (gtk_initialized)
+    return TRUE;
+
+  gettext_initialization ();
+
+  if (!check_setugid ())
     return FALSE;
+
+  do_pre_parse_initialization (NULL, NULL);
+  do_post_parse_initialization (NULL, NULL);
 
   ret = gdk_display_open_default () != NULL;
 
@@ -950,7 +852,7 @@ gtk_init (int *argc, char ***argv)
     {
       const char *display_name_arg = gdk_get_display_arg_name ();
       if (display_name_arg == NULL)
-        display_name_arg = getenv("DISPLAY");
+        display_name_arg = getenv ("DISPLAY");
       g_warning ("cannot open display: %s", display_name_arg ? display_name_arg : "");
       exit (1);
     }
