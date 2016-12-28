@@ -91,7 +91,7 @@ int main (int argc, char *argv[])
   GtkTreeStore *store;
   GtkTreeIter iter;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   sw = gtk_scrolled_window_new (NULL, NULL);

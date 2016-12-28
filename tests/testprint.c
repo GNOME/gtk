@@ -98,7 +98,7 @@ main (int argc, char **argv)
   GtkPrintOperation *print;
   TestPrintFileOperation *print_file;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /* Test some random drawing, with per-page paper settings */
   print = gtk_print_operation_new ();

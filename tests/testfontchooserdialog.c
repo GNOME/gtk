@@ -70,7 +70,7 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *font_button;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   font_button = gtk_font_button_new ();
 

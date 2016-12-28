@@ -1,4 +1,4 @@
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 static void
 test_list_seats (void)
@@ -109,7 +109,7 @@ main (int argc, char *argv[])
 {
   g_test_init (&argc, &argv, NULL);
 
-  gdk_init (NULL, NULL);
+  gtk_init ();
 
   g_test_bug_base ("http://bugzilla.gnome.org/");
 

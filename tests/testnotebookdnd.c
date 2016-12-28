@@ -320,7 +320,7 @@ main (gint argc, gchar *argv[])
 {
   GtkWidget *window, *grid;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   grid = gtk_grid_new ();

@@ -150,7 +150,7 @@ main (int argc, char *argv[])
   GtkWidget *button;
   GtkAccelGroup *accel_group;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   manager = gtk_recent_manager_get_default ();
 

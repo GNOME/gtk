@@ -625,8 +625,12 @@ main (int argc, char *argv[])
     { "import", 0, 0, G_OPTION_ARG_NONE, &do_import, "Use exported actions and menus", NULL },
     { NULL, }
   };
+  GOptionContext *context;
 
-  gtk_init_with_args (&argc, &argv, NULL, entries, NULL, NULL);
+  context = g_option_context_new ("");
+  g_option_context_add_main_entries (context, entries, NULL);
+  g_option_context_parse (context, &argc, &argv, NULL);
+  gtk_init ();
 
   if (do_export && do_import)
     {

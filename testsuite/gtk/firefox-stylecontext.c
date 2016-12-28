@@ -53,11 +53,7 @@ test_init_of_theme (void)
 int
 main (int argc, char *argv[])
 {
-  /* If gdk_init() is called before gtk_init() the GTK code takes
-   * a different path (why?)
-   */
-  gdk_init (NULL, NULL);
-  gtk_init (NULL, NULL);
+  gtk_init ();
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/style/init_of_theme", test_init_of_theme);

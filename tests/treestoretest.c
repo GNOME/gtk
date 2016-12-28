@@ -439,7 +439,7 @@ make_window (gint view_type)
 int
 main (int argc, char *argv[])
 {
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   base_model = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 

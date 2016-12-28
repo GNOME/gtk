@@ -136,7 +136,7 @@ create_window (void)
 int
 main (int argc, char *argv[])
 {
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   create_window ();
 

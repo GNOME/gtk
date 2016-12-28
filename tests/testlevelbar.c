@@ -82,7 +82,7 @@ main (int argc, char *argv[])
   GtkWidget *box2;
   GtkWidget *sw;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   add_custom_css ();
 

@@ -362,7 +362,7 @@ main (int argc, char **argv)
   char *pattern;
   guint i, n;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   n = 100000;
   pattern = "*";

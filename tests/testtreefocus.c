@@ -346,7 +346,7 @@ main (int argc, char *argv[])
   gint col_offset;
   GtkTreeViewColumn *column;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Card planning sheet");

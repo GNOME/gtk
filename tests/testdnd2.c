@@ -355,7 +355,7 @@ main (int argc, char *Argv[])
   GtkWidget *grid;
   GtkWidget *entry;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Drag And Drop");

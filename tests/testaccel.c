@@ -121,7 +121,7 @@ main (gint argc, gchar **argv)
 {
   GtkWidget *dialog;
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   dialog = key_test ();
 

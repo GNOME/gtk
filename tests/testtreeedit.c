@@ -229,7 +229,7 @@ main (gint argc, gchar **argv)
   GtkCellArea *area;
   CallbackData callback[4];
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);

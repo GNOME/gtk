@@ -402,7 +402,7 @@ main (int argc, char *argv[])
   };
   static gint ntargets = sizeof(targetlist) / sizeof(targetlist[0]);
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   init_atoms();
 

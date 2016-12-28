@@ -23,7 +23,7 @@ main (int argc, char *argv[])
   GtkBuilder *builder;
   GtkWidget *win;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   builder = gtk_builder_new ();
   gtk_builder_add_callback_symbol (builder, "back_to_main", G_CALLBACK (back_to_main));

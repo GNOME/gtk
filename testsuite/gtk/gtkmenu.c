@@ -422,7 +422,7 @@ test_bind_menu (void)
   GRand *rand;
   gint i;
 
-  gtk_init (0, 0);
+  gtk_init ();
 
   rand = g_rand_new_with_seed (g_test_rand_int ());
   model = random_menu_new (rand, TOP_ORDER);

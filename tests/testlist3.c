@@ -51,7 +51,7 @@ main (int argc, char *argv[])
   gint i;
   gchar *text;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 300);

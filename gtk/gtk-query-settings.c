@@ -30,7 +30,7 @@ main (int argc, char **argv)
   int           max_prop_name_length = 0;
   gchar        *pattern = NULL;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   if (argc > 1)
     pattern = argv[1];

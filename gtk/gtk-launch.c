@@ -114,7 +114,7 @@ main (int argc, char *argv[])
     }
 
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   app_name = *args;
 #ifdef G_OS_UNIX

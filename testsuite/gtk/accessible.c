@@ -24,7 +24,7 @@ main (int argc, char *argv[])
   const GType *tp;
   guint i, n;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   tp = gtk_test_list_all_types (&n);
 

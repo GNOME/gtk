@@ -238,7 +238,7 @@ main (int argc, char *argv[])
   GdkWindow *gdk_win;
   GdkSeat *seat;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   seat = gdk_display_get_default_seat (gdk_display_get_default ());
 

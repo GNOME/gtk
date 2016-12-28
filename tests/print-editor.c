@@ -781,7 +781,7 @@ main (int argc, char **argv)
   GtkApplication *app;
   GError *error = NULL;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   settings = gtk_print_settings_new_from_file ("print-settings.ini", &error);
   if (error) {

@@ -67,7 +67,7 @@ main(int argc, char **argv)
         const gchar *creator;
         GError *error;
 
-	gtk_init (&argc, &argv);
+	gtk_init ();
 
 	if (argc != 2) {
 		fprintf (stderr, "Usage: testpixbuf-scale FILE\n");

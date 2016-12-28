@@ -24,13 +24,17 @@ main(int argc, char **argv)
   char *contents;
   gsize len;
   int run;
+  GOptionContext *context;
 
-  if (!gtk_init_with_args (&argc, &argv, "NODE-FILE PNG-FILE",
-                           options, NULL, &error))
+  context = g_option_context_new ("NODE-FILE PNG-FILE");
+  g_option_context_add_main_entries (context, options, NULL);
+  if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_printerr ("Option parsing failed: %s\n", error->message);
       return 1;
     }
+
+  gtk_init ();
 
   if (runs < 1)
     {

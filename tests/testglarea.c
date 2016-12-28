@@ -397,7 +397,7 @@ main (int argc, char *argv[])
   GtkWidget *window, *box, *button, *controls;
   int i;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /* create a new pixel format; we use this to configure the
    * GL context, and to check for features

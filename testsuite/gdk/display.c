@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 static void
 test_unset_display_subprocess1 (void)
@@ -9,7 +9,7 @@ test_unset_display_subprocess1 (void)
 
   g_unsetenv ("DISPLAY");
 
-  g_assert (!gdk_init_check (NULL, NULL));
+  g_assert (!gtk_init_check ());
   manager = gdk_display_manager_get ();
   g_assert (manager != NULL);
   g_assert (gdk_display_manager_get_default_display (manager) == NULL);
@@ -20,7 +20,7 @@ test_unset_display_subprocess2 (void)
 {
   g_unsetenv ("DISPLAY");
 
-  gdk_init (NULL, NULL);
+  gtk_init ();
 }
 
 static void
@@ -41,7 +41,7 @@ test_bad_display_subprocess1 (void)
 
   g_setenv ("DISPLAY", "poo", TRUE);
 
-  g_assert (!gdk_init_check (NULL, NULL));
+  g_assert (!gtk_init_check ());
   manager = gdk_display_manager_get ();
   g_assert (manager != NULL);
   g_assert (gdk_display_manager_get_default_display (manager) == NULL);
@@ -51,7 +51,7 @@ static void
 test_bad_display_subprocess2 (void)
 {
   g_setenv ("DISPLAY", "poo", TRUE);
-  gdk_init (NULL, NULL);
+  gtk_init ();
 }
 
 static void

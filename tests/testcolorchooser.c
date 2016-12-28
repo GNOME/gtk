@@ -36,7 +36,7 @@ main (int argc, char *argv[])
   GtkWidget *dialog;
   gint i;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   dialog = gtk_color_chooser_dialog_new ("Select a color", NULL);
 

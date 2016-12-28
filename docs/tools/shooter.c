@@ -302,7 +302,7 @@ int main (int argc, char **argv)
 {
   /* If there's no DISPLAY, we silently error out.  We don't want to break
    * headless builds. */
-  if (! gtk_init_check (&argc, &argv))
+  if (! gtk_init_check ())
     return 0;
 
   toplevels = get_all_widgets ();

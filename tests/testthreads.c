@@ -127,7 +127,7 @@ main (int argc, char **argv)
       exit(1);
     }
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   pthread_mutex_lock (&nthreads_mutex);
 

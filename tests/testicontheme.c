@@ -69,7 +69,7 @@ main (int argc, char *argv[])
   int scale = 1;
   GtkIconLookupFlags flags;
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   if (argc < 3)
     {

@@ -51,7 +51,7 @@ main (int argc, char **argv)
   GtkWidget *box, *button;
   GList *orientables = NULL;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   grid= gtk_grid_new ();

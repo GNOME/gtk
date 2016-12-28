@@ -68,7 +68,7 @@ main (int argc,
 {
   GtkWidget *w;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 

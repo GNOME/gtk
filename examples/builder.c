@@ -15,7 +15,7 @@ main (int   argc,
   GObject *window;
   GObject *button;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   /* Construct a GtkBuilder instance and load our UI description */
   builder = gtk_builder_new ();

@@ -1071,7 +1071,7 @@ main (int argc, const char *argv[])
 {
   g_set_prgname ("gtk-builder-tool");
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   gtk_test_register_all_types ();
 

@@ -540,13 +540,19 @@ main (int argc, char **argv)
     { "initial-folder", 'F', 0, G_OPTION_ARG_FILENAME, &initial_folder, "Initial folder to show", "FILENAME" },
     { NULL }
   };
+  GOptionContext *context;
 
-  if (!gtk_init_with_args (&argc, &argv, "", options, NULL, &error))
+  context = g_option_context_new ("");
+  g_option_context_add_main_entries (context, options, NULL);
+  if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_print ("Failed to parse args: %s\n", error->message);
       g_error_free (error);
       return 1;
     }
+  g_option_context_free (context);
+
+  gtk_init ();
 
   if (initial_filename && initial_folder)
     {

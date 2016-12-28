@@ -30,7 +30,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   window = g_object_connect (g_object_new (gtk_window_get_type (),
                                            "type", GTK_WINDOW_TOPLEVEL,

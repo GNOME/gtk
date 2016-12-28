@@ -46,7 +46,7 @@ int main (int argc, char **argv)
 	guint row = 0;
 	GMenu *menu;
 
-	gtk_init (&argc, &argv);
+	gtk_init ();
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_resize (GTK_WINDOW (window), 400, 300);

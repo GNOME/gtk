@@ -255,7 +255,7 @@ main (int argc, char *argv[])
   GtkWidget *window, *hbox, *vbox, *list, *row, *row3, *row_vbox, *row_hbox, *l;
   GtkWidget *check, *button, *combo, *scrolled;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

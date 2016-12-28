@@ -299,7 +299,7 @@ main (gint argc, gchar **argv)
   GtkTreeViewColumn *column;
   GtkCellArea *area;
   
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);

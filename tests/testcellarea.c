@@ -614,7 +614,7 @@ background_area (void)
 int
 main (int argc, char *argv[])
 {
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);

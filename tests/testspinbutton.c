@@ -68,7 +68,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
 int
 main (int argc, char **argv)
 {
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   prepare_window_for_orientation (GTK_ORIENTATION_HORIZONTAL);
   prepare_window_for_orientation (GTK_ORIENTATION_VERTICAL);

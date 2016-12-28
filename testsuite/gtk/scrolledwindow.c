@@ -125,7 +125,7 @@ min_max_content_height (void)
 int
 main (int argc, char **argv)
 {
-  gtk_init (&argc, &argv);
+  gtk_init ();
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/sizing/scrolledwindow/min_content_width", min_content_width);

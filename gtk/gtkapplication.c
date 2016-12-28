@@ -290,7 +290,7 @@ gtk_application_startup (GApplication *g_application)
 
   gtk_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   application->priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
   gtk_application_impl_startup (application->priv->impl, application->priv->register_session);

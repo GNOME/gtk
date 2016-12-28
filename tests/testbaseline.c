@@ -76,7 +76,7 @@ main (int    argc,
   int i, j;
   GtkCssProvider *provider;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider,

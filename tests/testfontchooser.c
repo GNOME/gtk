@@ -61,7 +61,7 @@ main (int argc, char *argv[])
   GtkWidget *box;
   GtkWidget *fontchooser;
 
-  gtk_init (NULL, NULL);
+  gtk_init ();
 
   fontchooser = gtk_font_chooser_widget_new ();
 

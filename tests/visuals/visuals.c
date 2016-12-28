@@ -62,7 +62,7 @@ main (int argc, char *argv[])
   GtkWidget  *window;
   const gchar *filename;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   if (argc < 2)
     return 1;

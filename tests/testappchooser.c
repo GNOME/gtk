@@ -157,7 +157,7 @@ main (int argc, char **argv)
   GtkWidget *w1;
   gchar *path;
 
-  gtk_init (&argc, &argv);
+  gtk_init ();
 
   toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   grid = gtk_grid_new ();
