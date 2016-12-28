@@ -561,12 +561,11 @@ setlocale_initialization (void)
 }
 
 static void
-do_pre_parse_initialization (int    *argc,
-                             char ***argv)
+do_pre_parse_initialization (void)
 {
   const gchar *env_string;
   double slowdown;
-  
+
   if (pre_initialized)
     return;
 
@@ -624,7 +623,7 @@ gettext_initialization (void)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
 #    endif
-#endif  
+#endif
 }
 
 static void
@@ -635,8 +634,7 @@ default_display_notify_cb (GdkDisplayManager *dm)
 }
 
 static void
-do_post_parse_initialization (int    *argc,
-                              char ***argv)
+do_post_parse_initialization (void)
 {
   GdkDisplayManager *display_manager;
 
@@ -662,12 +660,12 @@ do_post_parse_initialization (int    *argc,
 
   if (gtk_modules_string)
     {
-      _gtk_modules_init (argc, argv, gtk_modules_string->str);
+      _gtk_modules_init (NULL, NULL, gtk_modules_string->str);
       g_string_free (gtk_modules_string, TRUE);
     }
   else
     {
-      _gtk_modules_init (argc, argv, NULL);
+      _gtk_modules_init (NULL, NULL, NULL);
     }
 
   display_manager = gdk_display_manager_get ();
@@ -756,12 +754,6 @@ gtk_simulate_touchscreen (void)
 
 /**
  * gtk_init_check:
- * @argc: (inout): Address of the `argc` parameter of
- *     your main() function (or 0 if @argv is %NULL). This will be changed if 
- *     any arguments were handled.
- * @argv: (array length=argc) (inout) (allow-none): Address of the
- *     `argv` parameter of main(), or %NULL. Any options
- *     understood by GTK+ are stripped before return.
  *
  * This function does the same work as gtk_init() with only a single
  * change: It does not terminate the program if the windowing system
@@ -775,8 +767,7 @@ gtk_simulate_touchscreen (void)
  *     initialized, %FALSE otherwise
  */
 gboolean
-gtk_init_check (int    *argc,
-                char ***argv)
+gtk_init_check (void)
 {
   gboolean ret;
 
@@ -788,8 +779,8 @@ gtk_init_check (int    *argc,
   if (!check_setugid ())
     return FALSE;
 
-  do_pre_parse_initialization (NULL, NULL);
-  do_post_parse_initialization (NULL, NULL);
+  do_pre_parse_initialization ();
+  do_post_parse_initialization ();
 
   ret = gdk_display_open_default () != NULL;
 
@@ -805,32 +796,13 @@ gtk_init_check (int    *argc,
 
 /**
  * gtk_init:
- * @argc: (inout): Address of the `argc` parameter of
- *     your main() function (or 0 if @argv is %NULL). This will be changed if 
- *     any arguments were handled.
- * @argv: (array length=argc) (inout) (allow-none): Address of the
- *     `argv` parameter of main(), or %NULL. Any options
- *     understood by GTK+ are stripped before return.
  *
  * Call this function before using any other GTK+ functions in your GUI
  * applications.  It will initialize everything needed to operate the
  * toolkit and parses some standard command line options.
  *
- * Although you are expected to pass the @argc, @argv parameters from main() to 
- * this function, it is possible to pass %NULL if @argv is not available or 
- * commandline handling is not required.
- *
- * @argc and @argv are adjusted accordingly so your own code will
- * never see those standard arguments.
- *
- * Note that there are some alternative ways to initialize GTK+:
- * if you are calling gtk_parse_args(), gtk_init_check(),
- * gtk_init_with_args() or g_option_context_parse() with
- * the option group returned by gtk_get_option_group(),
- * you don’t have to call gtk_init().
- *
- * And if you are using #GtkApplication, you don't have to call any of the
- * initialization functions either; the #GtkApplication::startup handler
+ * If you are using #GtkApplication, you don't have to call gtk_init()
+ * or gtk_init_check(); the #GtkApplication::startup handler
  * does it for you.
  *
  * This function will terminate your program if it was unable to
@@ -846,9 +818,9 @@ gtk_init_check (int    *argc,
  * similar things.
  */
 void
-gtk_init (int *argc, char ***argv)
+gtk_init (void)
 {
-  if (!gtk_init_check (argc, argv))
+  if (!gtk_init_check ())
     {
       const char *display_name_arg = gdk_get_display_arg_name ();
       if (display_name_arg == NULL)

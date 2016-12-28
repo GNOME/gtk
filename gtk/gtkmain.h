@@ -73,12 +73,10 @@ const gchar* gtk_check_version (guint   required_major,
  */
 
 GDK_AVAILABLE_IN_ALL
-void     gtk_init                 (int    *argc,
-                                   char ***argv);
+void     gtk_init                 (void);
 
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_init_check           (int    *argc,
-                                   char ***argv);
+gboolean gtk_init_check           (void);
 
 #ifdef G_OS_WIN32
 
