@@ -83,12 +83,12 @@ gsk_vulkan_command_pool_submit_buffer (GskVulkanCommandPool *self,
                                1,
                                &(VkSubmitInfo) {
                                   .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-#if 0
+/*
                                   .waitSemaphoreCount = 1,
                                   .pWaitSemaphores = (VkSemaphore[1]) {
                                       gdk_vulkan_context_get_draw_semaphore (self->vulkan)
                                   },
-#endif
+*/
                                   .pWaitDstStageMask = (VkPipelineStageFlags []) {
                                       VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                   },
@@ -96,12 +96,12 @@ gsk_vulkan_command_pool_submit_buffer (GskVulkanCommandPool *self,
                                   .pCommandBuffers = (VkCommandBuffer[1]) {
                                       command_buffer
                                   },
-#if 0
+/*
                                   .signalSemaphoreCount = 1,
                                   .pSignalSemaphores = (VkSemaphore[1]) {
                                       gdk_vulkan_context_get_draw_semaphore (self->vulkan)
                                   }
-#endif
+*/
                                },
                                fence);
 }

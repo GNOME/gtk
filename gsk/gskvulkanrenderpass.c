@@ -199,7 +199,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       {
         if (!gsk_vulkan_push_constants_intersect_rect (&op.constants.constants, constants, gsk_clip_node_peek_clip (node)))
           FALLBACK ("Failed to find intersection between clip of type %u and rectangle\n", constants->clip.type);
-        if (&op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
+        if (op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
           return;
 
         op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
@@ -218,7 +218,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
                                                           constants,
                                                           gsk_rounded_clip_node_peek_clip (node)))
           FALLBACK ("Failed to find intersection between clip of type %u and rounded rectangle\n", constants->clip.type);
-        if (&op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
+        if (op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
           return;
 
         op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
