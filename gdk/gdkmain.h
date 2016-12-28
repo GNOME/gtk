@@ -41,16 +41,6 @@ G_BEGIN_DECLS
 #define GDK_PRIORITY_EVENTS (G_PRIORITY_DEFAULT)
 
 GDK_AVAILABLE_IN_ALL
-void                  gdk_parse_args                      (gint           *argc,
-                                                           gchar        ***argv);
-GDK_AVAILABLE_IN_ALL
-void                  gdk_init                            (gint           *argc,
-                                                           gchar        ***argv);
-GDK_AVAILABLE_IN_ALL
-gboolean              gdk_init_check                      (gint           *argc,
-                                                           gchar        ***argv);
-
-GDK_AVAILABLE_IN_ALL
 const gchar *         gdk_get_program_class               (void);
 GDK_AVAILABLE_IN_ALL
 void                  gdk_set_program_class               (const gchar    *program_class);

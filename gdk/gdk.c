@@ -172,93 +172,7 @@ static const GDebugKey gdk_debug_keys[] = {
   { "opengl",        GDK_DEBUG_OPENGL },
   { "vulkan",        GDK_DEBUG_VULKAN }
 };
-
-static gboolean
-gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
-{
-  guint debug_value = g_parse_debug_string (value,
-                                            (GDebugKey *) gdk_debug_keys,
-                                            G_N_ELEMENTS (gdk_debug_keys));
-
-  if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
-    {
-      g_set_error (error,
-                   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
-                   _("Error parsing option --gdk-debug"));
-      return FALSE;
-    }
-
-  _gdk_debug_flags |= debug_value;
-
-  return TRUE;
-}
-
-static gboolean
-gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
-{
-  guint debug_value = g_parse_debug_string (value,
-                                            (GDebugKey *) gdk_debug_keys,
-                                            G_N_ELEMENTS (gdk_debug_keys));
-
-  if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
-    {
-      g_set_error (error,
-                   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
-                   _("Error parsing option --gdk-no-debug"));
-      return FALSE;
-    }
-
-  _gdk_debug_flags &= ~debug_value;
-
-  return TRUE;
-}
-#endif /* G_ENABLE_DEBUG */
-
-static gboolean
-gdk_arg_class_cb (const char *key, const char *value, gpointer user_data, GError **error)
-{
-  gdk_set_program_class (value);
-  gdk_progclass_overridden = TRUE;
-
-  return TRUE;
-}
-
-static gboolean
-gdk_arg_name_cb (const char *key, const char *value, gpointer user_data, GError **error)
-{
-  g_set_prgname (value);
-
-  return TRUE;
-}
-
-static const GOptionEntry gdk_args[] = {
-  { "class",        0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_class_cb,
-    /* Description of --class=CLASS in --help output */        N_("Program class as used by the window manager"),
-    /* Placeholder in --class=CLASS in --help output */        N_("CLASS") },
-  { "name",         0, 0,                     G_OPTION_ARG_CALLBACK, gdk_arg_name_cb,
-    /* Description of --name=NAME in --help output */          N_("Program name as used by the window manager"),
-    /* Placeholder in --name=NAME in --help output */          N_("NAME") },
-#ifndef G_OS_WIN32
-  { "display",      0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,   &_gdk_display_name,
-    /* Description of --display=DISPLAY in --help output */    N_("X display to use"),
-    /* Placeholder in --display=DISPLAY in --help output */    N_("DISPLAY") },
 #endif
-#ifdef G_ENABLE_DEBUG
-  { "gdk-debug",    0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_debug_cb,  
-    /* Description of --gdk-debug=FLAGS in --help output */    N_("GDK debugging flags to set"),
-    /* Placeholder in --gdk-debug=FLAGS in --help output */    N_("FLAGS") },
-  { "gdk-no-debug", 0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_no_debug_cb, 
-    /* Description of --gdk-no-debug=FLAGS in --help output */ N_("GDK debugging flags to unset"),
-    /* Placeholder in --gdk-no-debug=FLAGS in --help output */ N_("FLAGS") },
-#endif 
-  { NULL }
-};
-
-void
-gdk_add_option_entries (GOptionGroup *group)
-{
-  g_option_group_add_entries (group, gdk_args);
-}
 
 static gpointer
 register_resources (gpointer dummy G_GNUC_UNUSED)
@@ -328,53 +242,6 @@ gdk_pre_parse (void)
 }
 
 /**
- * gdk_parse_args:
- * @argc: the number of command line arguments.
- * @argv: (inout) (array length=argc): the array of command line arguments.
- * 
- * Parse command line arguments, and store for future
- * use by calls to gdk_display_open().
- *
- * Any arguments used by GDK are removed from the array and @argc and @argv are
- * updated accordingly.
- *
- * You shouldn’t call this function explicitly if you are using
- * gtk_init(), gtk_init_check(), gdk_init(), or gdk_init_check().
- *
- * Since: 2.2
- **/
-void
-gdk_parse_args (int    *argc,
-                char ***argv)
-{
-  GOptionContext *option_context;
-  GOptionGroup *option_group;
-  GError *error = NULL;
-
-  if (gdk_initialized)
-    return;
-
-  gdk_pre_parse ();
-
-  option_context = g_option_context_new (NULL);
-  g_option_context_set_ignore_unknown_options (option_context, TRUE);
-  g_option_context_set_help_enabled (option_context, FALSE);
-  option_group = g_option_group_new (NULL, NULL, NULL, NULL, NULL);
-  g_option_context_set_main_group (option_context, option_group);
-
-  g_option_group_add_entries (option_group, gdk_args);
-
-  if (!g_option_context_parse (option_context, argc, argv, &error))
-    {
-      g_warning ("%s", error->message);
-      g_error_free (error);
-    }
-  g_option_context_free (option_context);
-
-  GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
-}
-
-/**
  * gdk_get_display_arg_name:
  *
  * Gets the display name specified in the command line arguments passed
@@ -422,60 +289,6 @@ gdk_display_open_default (void)
 
   return display;
 }
-
-/**
- * gdk_init_check:
- * @argc: (inout): the number of command line arguments.
- * @argv: (array length=argc) (inout): the array of command line arguments.
- *
- * Initializes the GDK library and connects to the windowing system,
- * returning %TRUE on success.
- *
- * Any arguments used by GDK are removed from the array and @argc and @argv
- * are updated accordingly.
- *
- * GTK+ initializes GDK in gtk_init() and so this function is not usually
- * needed by GTK+ applications.
- *
- * Returns: %TRUE if initialization succeeded.
- */
-gboolean
-gdk_init_check (int    *argc,
-                char ***argv)
-{
-  gdk_parse_args (argc, argv);
-
-  return gdk_display_open_default () != NULL;
-}
-
-
-/**
- * gdk_init:
- * @argc: (inout): the number of command line arguments.
- * @argv: (array length=argc) (inout): the array of command line arguments.
- *
- * Initializes the GDK library and connects to the windowing system.
- * If initialization fails, a warning message is output and the application
- * terminates with a call to `exit(1)`.
- *
- * Any arguments used by GDK are removed from the array and @argc and @argv
- * are updated accordingly.
- *
- * GTK+ initializes GDK in gtk_init() and so this function is not usually
- * needed by GTK+ applications.
- */
-void
-gdk_init (int *argc, char ***argv)
-{
-  if (!gdk_init_check (argc, argv))
-    {
-      const char *display_name = gdk_get_display_arg_name ();
-      g_warning ("cannot open display: %s", display_name ? display_name : "");
-      exit(1);
-    }
-}
-
-
 
 /**
  * SECTION:threads
