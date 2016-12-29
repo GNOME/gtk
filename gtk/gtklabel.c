@@ -6739,7 +6739,8 @@ emit_activate_link (GtkLabel     *label,
   GtkStateFlags state;
 
   g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
-  if (handled && priv->track_links && !link->visited)
+  if (handled && priv->track_links && !link->visited &&
+      priv->select_info && priv->select_info->links)
     {
       link->visited = TRUE;
       state = gtk_css_node_get_state (link->cssnode);
