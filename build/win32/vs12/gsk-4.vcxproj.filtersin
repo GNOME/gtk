@@ -20,5 +20,19 @@
   </ItemGroup>
   <ItemGroup>
 #include "gsk-4.vs12.sourcefiles.filters"
+   <ClCompile Include="..\..\..\gsk\gskvulkanblendpipeline.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanbuffer.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanclip.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkancolorpipeline.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkancommandpool.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanlineargradientpipeline.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanimage.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanmemory.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanpipeline.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanpushconstants.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanrender.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanrenderer.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanrenderpass.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanshader.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
 </Project>

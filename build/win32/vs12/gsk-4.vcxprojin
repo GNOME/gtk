@@ -154,6 +154,62 @@
   </ItemGroup>
   <ItemGroup>
 #include "gsk-4.vs12.sourcefiles"
+   <ClCompile Include="..\..\..\gsk\gskvulkanblendpipeline.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanbuffer.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanclip.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkancolorpipeline.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkancommandpool.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanlineargradientpipeline.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanimage.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanmemory.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanpipeline.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanpushconstants.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanrender.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanrenderer.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanrenderpass.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkanshader.c">
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+     <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+   </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

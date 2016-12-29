@@ -211,7 +211,7 @@ endif
 MSVCPROJS = gsk-4
 
 gsk_4_FILES = $(all_sources) $(gsk_built_source_c)
-gsk_4_EXCLUDES = dummy
+gsk_4_EXCLUDES = gskvulkan*.c
 gsk_4_HEADERS_DIR = $(gskincludedir)
 gsk_4_HEADERS_INST = $(gskinclude_HEADERS)
 gsk_4_HEADERS_EXCLUDES = dummy
