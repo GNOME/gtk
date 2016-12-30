@@ -10,6 +10,7 @@
 
 #include "gskvulkanblendpipelineprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
+#include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 
 #define ORTHO_NEAR_PLANE        -10000
@@ -319,7 +320,10 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "color-clip-rounded", gsk_vulkan_color_pipeline_new },
     { "linear", gsk_vulkan_linear_gradient_pipeline_new },
     { "linear-clip", gsk_vulkan_linear_gradient_pipeline_new },
-    { "linear-clip-rounded", gsk_vulkan_linear_gradient_pipeline_new }
+    { "linear-clip-rounded", gsk_vulkan_linear_gradient_pipeline_new },
+    { "opacity", gsk_vulkan_effect_pipeline_new },
+    { "opacity-clip", gsk_vulkan_effect_pipeline_new },
+    { "opacity-clip-rounded", gsk_vulkan_effect_pipeline_new }
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
