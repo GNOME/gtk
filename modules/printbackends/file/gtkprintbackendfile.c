@@ -660,7 +660,7 @@ file_printer_get_options (GtkPrinter           *printer,
   GtkPrinterOption *option;
   const gchar *n_up[] = {"1", "2", "4", "6", "9", "16" };
   const gchar *pages_per_sheet = NULL;
-  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("Postscript"), N_("SVG") };
+  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("PostScript"), N_("SVG") };
   const gchar *supported_formats[N_FORMATS];
   gchar *display_format_names[N_FORMATS];
   gint n_formats = 0;
