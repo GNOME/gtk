@@ -121,14 +121,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Debug_Broadway'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Release_Broadway'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -320,82 +316,46 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\gtk\gtkdbusinterfaces.xml">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenerateGtkDbusBuiltSourcesX64)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenerateGtkDbusBuiltSourcesX64)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">$(GenerateGtkDbusBuiltSourcesX64)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(GenerateGtkDbusBuiltSourcesX64)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Broadway'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\gtk\gtk-win32.rc.body">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Broadway'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\gtk\libgtk4.manifest.in">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Broadway'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

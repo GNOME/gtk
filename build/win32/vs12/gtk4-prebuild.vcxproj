@@ -121,22 +121,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GlibEtcInstallRoot)\</OutDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GlibEtcInstallRoot)\</OutDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GlibEtcInstallRoot)\</OutDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GlibEtcInstallRoot)\</OutDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">$(GlibEtcInstallRoot)\</OutDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">$(GlibEtcInstallRoot)\</OutDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">$(GlibEtcInstallRoot)\</OutDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(GlibEtcInstallRoot)\</OutDir>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'" />
+    <OutDir Condition="'$(Configuration)'=='Debug'">$(GlibEtcInstallRoot)\</OutDir>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)'=='Debug'" />
+    <OutDir Condition="'$(Configuration)'=='Release'">$(GlibEtcInstallRoot)\</OutDir>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)'=='Release'" />
+    <OutDir Condition="'$(Configuration)'=='Debug_Broadway'">$(GlibEtcInstallRoot)\</OutDir>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)'=='Debug_Broadway'" />
+    <OutDir Condition="'$(Configuration)'=='Release_Broadway'">$(GlibEtcInstallRoot)\</OutDir>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)'=='Release_Broadway'" />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
   </ItemDefinitionGroup>
@@ -156,84 +148,48 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\config.h.win32">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying config.h from config.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenConfigH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\config.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">Copying config.h from config.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">$(GenConfigH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">..\..\..\config.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying config.h from config.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenConfigH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\config.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">Copying config.h from config.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">$(GenConfigH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">..\..\..\config.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying config.h from config.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenConfigH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\config.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">Copying config.h from config.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">$(GenConfigH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">..\..\..\config.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying config.h from config.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenConfigH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\config.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">Copying config.h from config.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(GenConfigH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">..\..\..\config.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug'">Copying config.h from config.h.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(GenConfigH)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\..\config.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Copying config.h from config.h.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(GenConfigH)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\config.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Copying config.h from config.h.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(GenConfigH)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\config.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Broadway'">Copying config.h from config.h.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(GenConfigH)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\config.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\gdk\gdkconfig.h.win32">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying gdkconfig from gdkconfig.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenGdkConfigHWin32)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(Configuration);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying gdkconfig from gdkconfig.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenGdkConfigHWin32)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(Configuration);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying gdkconfig from gdkconfig.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenGdkConfigHWin32)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(Configuration);%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying gdkconfig from gdkconfig.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenGdkConfigHWin32)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(Configuration);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug'">Copying gdkconfig from gdkconfig.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(GenGdkConfigHWin32)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(Configuration);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Copying gdkconfig from gdkconfig.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(GenGdkConfigHWin32)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(Configuration);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\gdk\gdkconfig.h.win32_broadway">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">Copying gdkconfig from gdkconfig.win32_broadway...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">$(GenGdkConfigHBroadway)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(Configuration)_Broadway;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">Copying gdkconfig from gdkconfig.win32_broadway...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">$(GenGdkConfigHBroadway)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(Configuration)_Broadway;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">Copying gdkconfig from gdkconfig.win32_broadway...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">$(GenGdkConfigHBroadway)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(Configuration)_Broadway;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">Copying gdkconfig from gdkconfig.win32_broadway...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(GenGdkConfigHBroadway)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(Configuration)_Broadway;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Copying gdkconfig from gdkconfig.win32_broadway...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(GenGdkConfigHBroadway)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(Configuration)_Broadway;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Broadway'">Copying gdkconfig from gdkconfig.win32_broadway...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(GenGdkConfigHBroadway)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(Configuration)_Broadway;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\demos\gtk-demo\demos.h.win32">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying demos.h from demos.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CopyDemosH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">Copying demos.h from demos.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">$(CopyDemosH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying demos.h from demos.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CopyDemosH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">Copying demos.h from demos.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">$(CopyDemosH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying demos.h from demos.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CopyDemosH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">Copying demos.h from demos.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">$(CopyDemosH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying demos.h from demos.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CopyDemosH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">Copying demos.h from demos.h.win32...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(CopyDemosH)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Broadway'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
