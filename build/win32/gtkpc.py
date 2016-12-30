@@ -43,7 +43,7 @@ def main(argv):
     gdk_args = gdk_parser.parse_args()
     if getattr(gdk_args, 'vulkan', None) is 1:
         # On Visual Studio, we link to zlib1.lib
-        vulkan_extra_libs = '-lvulkan-1'
+        vulkan_extra_libs = ' -lvulkan-1'
         gdk_backends += ' vulkan'
         cairo_backends += ' cairo'
 
