@@ -87,28 +87,30 @@
                       </object>
                       <packing>
                         <property name="fill">0</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="hbox">
-                        <property name="visible">1</property>
-                        <property name="homogeneous">1</property>
-                        <child>
-                          <object class="GtkLabel" id="website_label">
-                            <property name="no-show-all">1</property>
-                            <property name="label">http://website.com</property>
-                            <property name="selectable">1</property>
-                            <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
-                          </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
-                        </child>
+                      <object class="GtkLabel" id="website_label">
+                        <property name="no-show-all">1</property>
+                        <property name="label">http://website.com</property>
+                        <property name="selectable">1</property>
+                        <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
                       </object>
                       <packing>
                         <property name="fill">0</property>
-                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="copyright_label">
+                        <property name="label">copyright</property>
+                        <property name="justify">center</property>
+                        <property name="wrap">1</property>
+                        <property name="selectable">1</property>
+                        <property name="no-show-all">1</property>
+                        <property name="max-width-chars">60</property>
+                      </object>
+                      <packing>
+                        <property name="fill">0</property>
                       </packing>
                     </child>
                     <child>
@@ -123,23 +125,6 @@
                       </object>
                       <packing>
                         <property name="fill">0</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="copyright_label">
-                        <property name="label">copyright</property>
-                        <property name="justify">center</property>
-                        <property name="wrap">1</property>
-                        <property name="selectable">1</property>
-                        <property name="no-show-all">1</property>
-                        <property name="max-width-chars">60</property>
-                      </object>
-                      <packing>
-                        <property name="fill">0</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
