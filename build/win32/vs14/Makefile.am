@@ -29,14 +29,8 @@ EXTRA_DIST +=	\
 	gtk4-icon-browser.vcxproj.filters	\
 	gtk4-install.vcxproj	\
 	gtk4-install.vcxproj.filters	\
-	gtk4-broadwayd.vcxproj	\
-	gtk4-broadwayd.vcxproj.filters	\
-	gdk4-broadway.vcxproj	\
-	gdk4-broadway.vcxproj.filters	\
 	gtk4-build-defines.props	\
-	gtk4-copy-gtk-broadway.props	\
 	gtk4-gen-srcs.props	\
-	gtk4-ignore-broadway.props	\
 	gtk4-install.props	\
 	gtk4-version-paths.props
 

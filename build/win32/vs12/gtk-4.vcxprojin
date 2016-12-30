@@ -89,35 +89,35 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk4-ignore-broadway.props" />
+    <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk4-copy-gtk-broadway.props" />
+    <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk4-ignore-broadway.props" />
+    <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk4-copy-gtk-broadway.props" />
+    <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk4-ignore-broadway.props" />
+    <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk4-copy-gtk-broadway.props" />
+    <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk4-ignore-broadway.props" />
+    <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk4-copy-gtk-broadway.props" />
+    <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -149,6 +149,7 @@
       <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -168,10 +169,11 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <OutputFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(SolutionDir)Debug\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -192,6 +194,7 @@
       <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -210,10 +213,11 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <OutputFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(SolutionDir)Release\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -239,6 +243,7 @@
       <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
@@ -258,10 +263,11 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <OutputFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(SolutionDir)Debug\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
@@ -282,6 +288,7 @@
       <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -300,10 +307,11 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <OutputFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(SolutionDir)Release\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -417,10 +425,6 @@
     <Manifest Include="..\..\..\gtk\libgtk4.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="gdk4-broadway.vcxproj">
-      <Project>{1df4c475-4472-4ee4-ac2b-3ab5a4c1a453}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="gdk4-win32.vcxproj">
       <Project>{aba7685a-7cbb-4626-b5e5-6eeea5b489ef}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

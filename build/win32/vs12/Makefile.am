@@ -3,16 +3,12 @@ include $(top_srcdir)/Makefile.decl
 GENERATED_ITEMS = \
 	gdk4-win32.vcxproj			\
 	gdk4-win32.vcxproj.filters		\
-	gdk4-broadway.vcxproj			\
-	gdk4-broadway.vcxproj.filters		\
 	gdk-4.vcxproj				\
 	gdk-4.vcxproj.filters			\
 	gsk-4.vcxproj				\
 	gsk-4.vcxproj.filters			\
 	gtk-4.vcxproj				\
 	gtk-4.vcxproj.filters			\
-	gtk4-broadwayd.vcxproj			\
-	gtk4-broadwayd.vcxproj.filters		\
 	gtk4-demo.vcxproj			\
 	gtk4-demo.vcxproj.filters		\
 	gtk4-demo-application.vcxproj		\
@@ -24,7 +20,6 @@ GENERATED_ITEMS = \
 
 MSVC12_HEADERS_LISTS =	\
 	gdk4-win32.vs12.headers		\
-	gdk4-broadway.vs12.headers	\
 	gdk-4.vs12.headers		\
 	gsk-4.vs12.headers		\
 	gtk-4.vs12.headers
@@ -36,16 +31,12 @@ EXTRA_DIST += \
 	gtk4-prebuild.vcxproj.filters		\
 	gdk4-win32.vcxprojin			\
 	gdk4-win32.vcxproj.filtersin		\
-	gdk4-broadway.vcxprojin			\
-	gdk4-broadway.vcxproj.filtersin		\
 	gdk-4.vcxprojin				\
 	gdk-4.vcxproj.filtersin			\
 	gsk-4.vcxprojin				\
 	gsk-4.vcxproj.filtersin			\
 	gtk-4.vcxprojin				\
 	gtk-4.vcxproj.filtersin			\
-	gtk4-broadwayd.vcxprojin		\
-	gtk4-broadwayd.vcxproj.filtersin	\
 	gtk4-builder-tool.vcxproj		\
 	gtk4-builder-tool.vcxproj.filters	\
 	gtk4-encode-symbolic-svg.vcxproj	\
@@ -63,9 +54,7 @@ EXTRA_DIST += \
 	gtk4-install.vcxproj			\
 	gtk4-install.vcxproj.filters		\
 	gtk4-build-defines.props		\
-	gtk4-copy-gtk-broadway.props		\
 	gtk4-gen-srcs.props			\
-	gtk4-ignore-broadway.props		\
 	gtk4-install.propsin			\
 	gtk4-version-paths.props.in		\
 	$(GENERATED_ITEMS)
