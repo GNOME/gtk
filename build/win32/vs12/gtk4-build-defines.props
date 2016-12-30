@@ -13,7 +13,7 @@
     <GtkDefines>GTK_COMPILATION;G_LOG_DOMAIN="Gtk";GTK_HOST="i686-pc-vs$(VSVer)";GTK_PRINT_BACKENDS="file";GTK_PRINT_BACKEND_ENABLE_UNSUPPORTED;$(GtkIncludedImmodulesDefines);GTK_LIBDIR="$(GtkDummyPrefix)/lib";GTK_DATADIR="$(GtkDummyPrefix)/share";GTK_DATA_PREFIX="$(GtkDummyPrefix)";GTK_SYSCONFDIR="$(GtkDummyPrefix)/etc";MULTIPRESS_CONFDIR="$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)";MULTIPRESS_LOCALEDIR="$(GtkDummyPrefix)/share/locale";GTK_VERSION="$(GtkVersion)/etc";GTK_BINARY_VERSION="$(GtkBinaryVersion)/etc";GDK_DISABLE_DEPRECATED;ISOLATION_AWARE_ENABLED</GtkDefines>
     <GtkGdkCommonLibs>imm32.lib</GtkGdkCommonLibs>
     <GdkAdditionalLibs>winmm.lib;dwmapi.lib;setupapi.lib;$(GtkGdkCommonLibs)</GdkAdditionalLibs>
-    <GdkBroadwayAdditionalLibs>ws2_32.lib</GdkBroadwayAdditionalLibs>
+    <VulkanLibs>vulkan-1.lib</VulkanLibs>
     <GtkAdditionalLibs>atk-1.0.lib;pangowin32-1.0.lib;winspool.lib;comctl32.lib;$(GdkAdditionalLibs)</GtkAdditionalLibs>
     <GtkExportGdkWin32DisplayMgr>/EXPORT:gdk_win32_display_manager_get_type</GtkExportGdkWin32DisplayMgr>
   </PropertyGroup>
@@ -60,8 +60,8 @@
     <BuildMacro Include="GdkAdditionalLibs">
       <Value>$(GdkAdditionalLibs)</Value>
     </BuildMacro>
-    <BuildMacro Include="GdkBroadwayAdditionalLibs">
-      <Value>$(GdkBroadwayAdditionalLibs)</Value>
+    <BuildMacro Include="VulkanLibs">
+      <Value>$(VulkanLibs)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkAdditionalLibs">
       <Value>$(GtkAdditionalLibs)</Value>

@@ -18,10 +18,10 @@ def main(argv):
     base_pc = BasePCItems()
 
     gdk_parser = argparse.ArgumentParser(description='Setup basic .pc file info')
-    gdk_parser.add_argument('--broadway',
+    gdk_parser.add_argument('--vulkan',
                               action='store_const',
                               const=1,
-                              help='GDK with Broadway backend')
+                              help='GSK with Vulkan renderer')
     gdk_parser.add_argument('--host',
                             required=True,
                             help='Build type')
@@ -38,13 +38,13 @@ def main(argv):
     cairo_backends = 'cairo-win32'
     gdk_backends = 'win32'
     gio_package = 'gio-2.0 >= ' + glib_min_ver
-    broadway_extra_libs = ''
+    vulkan_extra_libs = ''
 
     gdk_args = gdk_parser.parse_args()
-    if getattr(gdk_args, 'broadway', None) is 1:
+    if getattr(gdk_args, 'vulkan', None) is 1:
         # On Visual Studio, we link to zlib1.lib
-        broadway_extra_libs = '-lzlib1'
-        gdk_backends += ' broadway'
+        vulkan_extra_libs = '-lvulkan-1'
+        gdk_backends += ' vulkan'
         cairo_backends += ' cairo'
 
     pkg_replace_items = {'@GTK_API_VERSION@': '4.0',
@@ -70,7 +70,7 @@ def main(argv):
                             '@GDK_EXTRA_CFLAGS@': '',
                             '@GSK_EXTRA_CFLAGS@': '',
                             '@GTK_EXTRA_CFLAGS@': '',
-                            '@GDK_EXTRA_LIBS@': gdk_win32_sys_libs + broadway_extra_libs,
+                            '@GDK_EXTRA_LIBS@': gdk_win32_sys_libs + vulkan_extra_libs,
                             '@GSK_EXTRA_LIBS@': '',
                             '@GTK_EXTRA_LIBS@': ''}
 

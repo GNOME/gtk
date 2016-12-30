@@ -9,8 +9,8 @@
 if exist ..\..\..\MSVC_$(Configuration) goto DONE_GDKCONFIG_H
 
 if exist ..\..\..\gdk\gdkconfig.h del ..\..\..\gdk\gdkconfig.h
-if exist ..\..\..\GDK_BROADWAY_BUILD del ..\..\..\GDK_BROADWAY_BUILD
-if exist ..\..\..\MSVC_$(Configuration)_Broadway del ..\..\..\MSVC_$(Configuration)_Broadway
+if exist ..\..\..\GDK_VULKAN_BUILD del ..\..\..\GDK_VULKAN_BUILD
+if exist ..\..\..\MSVC_$(Configuration)_Vulkan del ..\..\..\MSVC_$(Configuration)_Vulkan
 if exist $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll del $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll
 if exist $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib del $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib
 if "$(Configuration)" == "Release" del ..\..\..\MSVC_Debug
@@ -21,23 +21,23 @@ echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)
 
 :DONE_GDKCONFIG_H
     </GenGdkConfigHWin32>
-    <GenGdkConfigHBroadway>
-if exist ..\..\..\MSVC_$(Configuration)_Broadway goto DONE_GDKCONFIG_H
+    <GenGdkConfigHVulkan>
+if exist ..\..\..\MSVC_$(Configuration)_Vulkan goto DONE_GDKCONFIG_H
 
 if exist ..\..\..\gdk\gdkconfig.h del ..\..\..\gdk\gdkconfig.h
 if exist ..\..\..\GDK_WIN32ONLY_BUILD del ..\..\..\GDK_WIN32ONLY_BUILD
 if exist ..\..\..\MSVC_Release del ..\..\..\MSVC_Release
 if exist ..\..\..\MSVC_Debug del ..\..\..\MSVC_Debug
 
-if "$(Configuration)" == "Release_Broadway" del ..\..\..\MSVC_Debug_Broadway
-if "$(Configuration)" == "Debug_Broadway" del ..\..\..\MSVC_Release_Broadway
+if "$(Configuration)" == "Release_Vulkan" del ..\..\..\MSVC_Debug_Vulkan
+if "$(Configuration)" == "Debug_Vulkan" del ..\..\..\MSVC_Release_Vulkan
 
-copy ..\..\..\gdk\gdkconfig.h.win32_broadway ..\..\..\gdk\gdkconfig.h
-copy ..\..\..\gdk\gdkconfig.h.win32_broadway ..\..\..\GDK_BROADWAY_BUILD
-echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)_Broadway
+copy ..\..\..\gdk\gdkconfig.h.win32_vulkan ..\..\..\gdk\gdkconfig.h
+copy ..\..\..\gdk\gdkconfig.h.win32_vulkan ..\..\..\GDK_VULKAN_BUILD
+echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)_Vulkan
 
 :DONE_GDKCONFIG_H
-    </GenGdkConfigHBroadway>
+    </GenGdkConfigHVulkan>
     <GDbusCodeGenCmd>$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml</GDbusCodeGenCmd>
     <GenerateGtkDbusBuiltSources>cd ..\..\..\gtk &amp; $(PythonPath)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
     <GenerateGtkDbusBuiltSourcesX64>cd ..\..\..\gtk &amp; $(PythonPathX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSourcesX64>
@@ -50,6 +50,8 @@ echo ^&lt;?xml version='1.0' encoding='UTF-8'?^&gt; &gt; ..\..\..\gsk\gsk.gresou
 echo ^&lt;gresources^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
 echo   ^&lt;gresource prefix='/org/gtk/libgsk'^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
 for /f &#37;&#37;f in ('dir /b ..\..\..\gsk\resources\glsl\*') do echo     ^&lt;file alias='glsl/&#37;&#37;f'^&gt;resources/glsl/&#37;&#37;f^&lt;/file^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
+for /f &#37;&#37;f in ('dir /b ..\..\..\gsk\resources\vulkan\*.spv') do echo     ^&lt;file alias='vulkan/&#37;&#37;f'^&gt;resources/vulkan/&#37;&#37;f^&lt;/file^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
+for /f &#37;&#37;f in ('dir /b ..\..\..\gsk\resources\vulkan\*.glsl') do echo     ^&lt;file alias='vulkan/&#37;&#37;f'^&gt;resources/vulkan/&#37;&#37;f^&lt;/file^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
 echo   ^&lt;/gresource^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
 echo ^&lt;/gresources^&gt; &gt;&gt; ..\..\..\gsk\gsk.gresource.xml
 
@@ -67,8 +69,8 @@ $(GlibEtcInstallRoot)\bin\glib-compile-resources.exe --sourcedir=..\..\..\gsk --
     <BuildMacro Include="GenGdkConfigHWin32">
       <Value>$(GenGdkConfigHWin32)</Value>
     </BuildMacro>
-    <BuildMacro Include="GenGdkConfigHBroadway">
-      <Value>$(GenGdkConfigHBroadway)</Value>
+    <BuildMacro Include="GenGdkConfigHVulkan">
+      <Value>$(GenGdkConfigHVulkan)</Value>
     </BuildMacro>
     <BuildMacro Include="GDbusCodeGenCmd">
       <Value>$(GDbusCodeGenCmd)</Value>

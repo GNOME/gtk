@@ -9,7 +9,7 @@
   <ItemGroup>
     <CustomBuild Include="..\..\..\config.h.win32"><Filter>Resource Files</Filter></CustomBuild>
     <CustomBuild Include="..\..\..\gdk\gdkconfig.h.win32"><Filter>Resource Files</Filter></CustomBuild>
-    <CustomBuild Include="..\..\..\gdk\gdkconfig.h.win32_broadway"><Filter>Resource Files</Filter></CustomBuild>
+    <CustomBuild Include="..\..\..\gdk\gdkconfig.h.win32_vulkan"><Filter>Resource Files</Filter></CustomBuild>
     <CustomBuild Include="..\..\..\demos\gtk-demo\demos.h.win32"><Filter>Resource Files</Filter></CustomBuild>
   </ItemGroup>
 </Project>

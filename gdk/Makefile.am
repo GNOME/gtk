@@ -24,7 +24,7 @@ EXTRA_DIST += 			\
 	gdkkeynames.c		\
 	gen-keyname-table.pl	\
 	gdkconfig.h.win32	\
-	gdkconfig.h.win32_broadway	\
+	gdkconfig.h.win32_vulkan	\
 	gdkkeysyms-update.pl	\
 	gdkmarshalers.list	\
 	gdkwindowimpl.h		\

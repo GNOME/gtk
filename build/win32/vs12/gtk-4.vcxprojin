@@ -5,16 +5,16 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug_Broadway|Win32">
-      <Configuration>Debug_Broadway</Configuration>
+    <ProjectConfiguration Include="Debug_Vulkan|Win32">
+      <Configuration>Debug_Vulkan</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug_Broadway|x64">
-      <Configuration>Debug_Broadway</Configuration>
+    <ProjectConfiguration Include="Debug_Vulkan|x64">
+      <Configuration>Debug_Vulkan</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -22,8 +22,8 @@
       <Platform>Win32</Platform>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release_Broadway|Win32">
-      <Configuration>Release_Broadway</Configuration>
+    <ProjectConfiguration Include="Release_Vulkan|Win32">
+      <Configuration>Release_Vulkan</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
@@ -31,8 +31,8 @@
       <Platform>x64</Platform>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release_Broadway|x64">
-      <Configuration>Release_Broadway</Configuration>
+    <ProjectConfiguration Include="Release_Vulkan|x64">
+      <Configuration>Release_Vulkan</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
@@ -57,7 +57,7 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
@@ -67,7 +67,7 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -78,7 +78,7 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -91,7 +91,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
@@ -99,7 +99,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
@@ -107,7 +107,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
@@ -115,16 +115,16 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="gtk4-gen-srcs.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)'=='Debug_Broadway'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Debug_Vulkan'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)'=='Release_Broadway'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Release_Vulkan'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,7 +150,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -164,7 +164,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(GtkAdditionalLibs);$(VulkanLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <ImportLibrary>$(SolutionDir)Debug\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -197,7 +197,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -208,7 +208,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(GtkAdditionalLibs);$(VulkanLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <ImportLibrary>$(SolutionDir)Release\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -244,7 +244,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -258,7 +258,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(GtkAdditionalLibs);$(VulkanLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <ImportLibrary>$(SolutionDir)Debug\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -291,7 +291,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -302,7 +302,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(GtkAdditionalLibs);$(VulkanLibs);%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <ImportLibrary>$(SolutionDir)Release\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -322,12 +322,12 @@
       <Message Condition="'$(Configuration)'=='Release'">Generating GTK+ DBus Sources...</Message>
       <Command Condition="'$(Configuration)'=='Release'">$(GenerateGtkDbusBuiltSources)</Command>
       <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release_Broadway'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\gtk\gtk-win32.rc.body">
       <Message Condition="'$(Configuration)'=='Debug'">Copying GTK+ Win32 Version Resource...</Message>
@@ -336,12 +336,12 @@
       <Message Condition="'$(Configuration)'=='Release'">Copying GTK+ Win32 Version Resource...</Message>
       <Command Condition="'$(Configuration)'=='Release'">$(CopyGtkWin32RC)</Command>
       <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release_Broadway'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\gtk\libgtk4.manifest.in">
       <Message Condition="'$(Configuration)'=='Debug'">Generating GTK+ Win32 Manifest...</Message>
@@ -350,12 +350,12 @@
       <Message Condition="'$(Configuration)'=='Release'">Generating GTK+ Win32 Manifest...</Message>
       <Command Condition="'$(Configuration)'=='Release'">$(GenerateGtkWin32Manifest)</Command>
       <Outputs Condition="'$(Configuration)'=='Release'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Debug_Broadway'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)'=='Debug_Broadway'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug_Broadway'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release_Broadway'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)'=='Release_Broadway'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release_Broadway'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

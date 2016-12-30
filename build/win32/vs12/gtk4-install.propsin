@@ -9,8 +9,8 @@
 mkdir $(CopyDir)\bin
 mkdir $(CopyDir)\lib\pkgconfig
 
-if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_RELEASE
-if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_DEBUG
+if "$(Configuration)" == "Release_Vulkan" goto DO_VULKAN_RELEASE
+if "$(Configuration)" == "Debug_Vulkan" goto DO_VULKAN_DEBUG
 
 copy "$(BinDir)\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).dll" $(CopyDir)\bin
 copy "$(BinDir)\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).pdb" $(CopyDir)\bin
@@ -30,7 +30,7 @@ copy "$(BinDir)\gtk$(ApiVersionShort)-query-settings.pdb" $(CopyDir)\bin
 copy "$(BinDir)\gtk$(ApiVersionShort)-builder-tool.exe" $(CopyDir)\bin
 copy "$(BinDir)\gtk$(ApiVersionShort)-builder-tool.pdb" $(CopyDir)\bin
 
-:DO_BROADWAY_RELEASE
+:DO_VULKAN_RELEASE
 copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).dll $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).pdb $(CopyDir)\bin
 copy .\Release\$(Platform)\bin\gtk-$(ApiVersionShort).lib $(CopyDir)\lib
@@ -51,7 +51,7 @@ copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-builder-tool.pdb $(CopyDir)
 
 goto DONE_BIN
 
-:DO_BROADWAY_DEBUG
+:DO_VULKAN_DEBUG
 copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).dll $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).pdb $(CopyDir)\bin
 copy .\Debug\$(Platform)\bin\gtk-$(ApiVersionShort).lib $(CopyDir)\lib
@@ -121,17 +121,11 @@ $(CopyDir)\bin\gtk$(ApiVersionShort)-update-icon-cache.exe --ignore-theme-index 
     <BuildMacro Include="InstalledBins">
       <Value>$(InstalledBins)</Value>
     </BuildMacro>
-    <BuildMacro Include="InstalledBroadwayBins">
-      <Value>$(InstalledBroadwayBins)</Value>
-    </BuildMacro>
     <BuildMacro Include="GtkDoInstallBin">
       <Value>$(GtkDoInstallBin)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkDoInstall">
       <Value>$(GtkDoInstall)</Value>
-    </BuildMacro>
-    <BuildMacro Include="GtkDoInstallBroadwayHeaders">
-      <Value>$(GtkDoInstallBroadwayHeaders)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkPostInstall">
       <Value>$(GtkPostInstall)</Value>
