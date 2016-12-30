@@ -34,6 +34,14 @@ possible, especially those from and using the GTK+ stack (i.e. GLib,
 Cairo, ATK, Pango, GDK-Pixbuf), so that crashes caused by mixing calls
 to different CRTs can be kept at a minimum.
 
+To build with Vulkan renderer support, use the configs that end with _Vulkan.
+You will need the LunarG Vulkan SDK installed, and its include\ directory
+and Bin\ (64-bit) or Bin32 (32-bit) need to be in your INCLUDE and LIB paths
+(or need to be set in your additional include paths and additional library paths)
+so that they can be found by the build.  To run with the Vulkan renderer, set
+GSK_RENDERER=vulkan--you will need a video adapter with driver support for Vulkan
+to support this.
+
 zlib, libpng, and Cairo do contain support for compiling under VS12
 using VS project files and/or makefiles at this time of writing, For the
 GTK+ stack, VS12 project files are either available under
