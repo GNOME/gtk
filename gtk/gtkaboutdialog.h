@@ -163,6 +163,11 @@ void                   gtk_about_dialog_set_wrap_license       (GtkAboutDialog  
                                                                 gboolean         wrap_license);
 
 GDK_AVAILABLE_IN_ALL
+const gchar *          gtk_about_dialog_get_system_information (GtkAboutDialog  *about);
+GDK_AVAILABLE_IN_ALL
+void                   gtk_about_dialog_set_system_information (GtkAboutDialog  *about,
+                                                                const gchar     *system_information);
+GDK_AVAILABLE_IN_ALL
 const gchar *          gtk_about_dialog_get_website            (GtkAboutDialog  *about);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_about_dialog_set_website            (GtkAboutDialog  *about,

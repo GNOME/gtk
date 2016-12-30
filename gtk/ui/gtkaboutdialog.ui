@@ -87,7 +87,6 @@
                       </object>
                       <packing>
                         <property name="fill">0</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -99,7 +98,19 @@
                       </object>
                       <packing>
                         <property name="fill">0</property>
-                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="copyright_label">
+                        <property name="label">copyright</property>
+                        <property name="justify">center</property>
+                        <property name="wrap">1</property>
+                        <property name="selectable">1</property>
+                        <property name="no-show-all">1</property>
+                        <property name="max-width-chars">60</property>
+                      </object>
+                      <packing>
+                        <property name="fill">0</property>
                       </packing>
                     </child>
                     <child>
@@ -114,23 +125,6 @@
                       </object>
                       <packing>
                         <property name="fill">0</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="copyright_label">
-                        <property name="label">copyright</property>
-                        <property name="justify">center</property>
-                        <property name="wrap">1</property>
-                        <property name="selectable">1</property>
-                        <property name="no-show-all">1</property>
-                        <property name="max-width-chars">60</property>
-                      </object>
-                      <packing>
-                        <property name="fill">0</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
@@ -210,6 +204,39 @@
                   <packing>
                     <property name="name">license</property>
                     <property name="title" translatable="yes">License</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="system_page">
+                    <property name="no-show-all">1</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">8</property>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">1</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="shadow-type">in</property>
+                        <child>
+                          <object class="GtkTextView" id="system_view">
+                            <property name="visible">1</property>
+                            <property name="editable">0</property>
+                            <property name="left-margin">8</property>
+                            <property name="right-margin">8</property>
+                            <property name="cursor-visible">0</property>
+                            <signal name="event-after" handler="text_view_event_after" swapped="no"/>
+                            <signal name="key-press-event" handler="text_view_key_press_event" swapped="no"/>
+                            <signal name="motion-notify-event" handler="text_view_motion_notify_event" swapped="no"/>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">system</property>
+                    <property name="title" translatable="yes">System</property>
                   </packing>
                 </child>
               </object>

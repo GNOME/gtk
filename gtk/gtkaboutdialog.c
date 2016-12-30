@@ -142,6 +142,7 @@ struct _GtkAboutDialogPrivate
   gchar *website_text;
   gchar *translator_credits;
   gchar *license;
+  gchar *system_information;
 
   gchar **authors;
   gchar **documenters;
@@ -151,11 +152,13 @@ struct _GtkAboutDialogPrivate
 
   gboolean credits_page_initialized;
   gboolean license_page_initialized;
+  gboolean system_page_initialized;
 
   GtkWidget *stack;
   GtkWidget *stack_switcher;
   GtkWidget *credits_button;
   GtkWidget *license_button;
+  GtkWidget *system_button;
 
   GtkWidget *logo_image;
   GtkWidget *name_label;
@@ -167,9 +170,11 @@ struct _GtkAboutDialogPrivate
 
   GtkWidget *credits_page;
   GtkWidget *license_page;
+  GtkWidget *system_page;
 
   GtkWidget *credits_grid;
   GtkWidget *license_view;
+  GtkWidget *system_view;
 
   GdkCursor *hand_cursor;
   GdkCursor *regular_cursor;
@@ -194,6 +199,7 @@ enum
   PROP_WEBSITE,
   PROP_WEBSITE_LABEL,
   PROP_LICENSE,
+  PROP_SYSTEM_INFORMATION,
   PROP_AUTHORS,
   PROP_DOCUMENTERS,
   PROP_TRANSLATOR_CREDITS,
@@ -228,6 +234,7 @@ static void                 set_cursor_if_appropriate       (GtkAboutDialog     
                                                              gint                y);
 static void                 populate_credits_page           (GtkAboutDialog     *about);
 static void                 populate_license_page           (GtkAboutDialog     *about);
+static void                 populate_system_page            (GtkAboutDialog     *about);
 static void                 close_cb                        (GtkAboutDialog     *about);
 static gboolean             gtk_about_dialog_activate_link  (GtkAboutDialog     *about,
                                                              const gchar        *uri);
@@ -280,6 +287,14 @@ stack_visible_child_notify (GtkStack       *stack,
         {
           populate_license_page (about);
           priv->license_page_initialized = TRUE;
+        }
+    }
+  else if (child == priv->system_page)
+    {
+      if (!priv->system_page_initialized)
+        {
+          populate_system_page (about);
+          priv->system_page_initialized = TRUE;
         }
     }
 
@@ -399,12 +414,37 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * #GtkAboutDialog:license-type property is set to %GTK_LICENSE_CUSTOM
    * as a side effect.
    *
+   * The text may contain links in this format <http://www.some.place/>
+   * and email references in the form <mail-to@some.body>, and these will
+   * be converted into clickable links.
+   *
    * Since: 2.6
    */
   props[PROP_LICENSE] =
     g_param_spec_string ("license",
                          P_("License"),
                          P_("The license of the program"),
+                         NULL,
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkAboutDialog:system-information:
+   *
+   * Information about the system on which the program is running.
+   * This is displayed in a separate tab, therefore it is fine to use
+   * a long multi-paragraph text. Note that the text should contain
+   * the intended linebreaks.
+   *
+   * The text may contain links in this format <http://www.some.place/>
+   * and email references in the form <mail-to@some.body>, and these will
+   * be converted into clickable links.
+   *
+   * Since: 3.90
+   */
+  props[PROP_SYSTEM_INFORMATION] =
+    g_param_spec_string ("system-information",
+                         P_("System Information"),
+                         P_("Information about the system on which the program is running"),
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -592,8 +632,10 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, website_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, credits_page);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, license_page);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, system_page);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, credits_grid);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, license_view);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, system_view);
 
   gtk_widget_class_bind_template_callback (widget_class, emit_activate_link);
   gtk_widget_class_bind_template_callback (widget_class, text_view_event_after);
@@ -619,7 +661,8 @@ update_stack_switcher_visibility (GtkAboutDialog *about)
   GtkAboutDialogPrivate *priv = about->priv;
 
   if (gtk_widget_get_visible (priv->credits_page) ||
-      gtk_widget_get_visible (priv->license_page))
+      gtk_widget_get_visible (priv->license_page) ||
+      gtk_widget_get_visible (priv->system_page))
     gtk_widget_show (priv->stack_switcher);
   else
     gtk_widget_hide (priv->stack_switcher);
@@ -634,6 +677,19 @@ update_license_button_visibility (GtkAboutDialog *about)
     gtk_widget_show (priv->license_page);
   else
     gtk_widget_hide (priv->license_page);
+
+  update_stack_switcher_visibility (about);
+}
+
+static void
+update_system_button_visibility (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = about->priv;
+
+  if (priv->system_information != NULL && priv->system_information[0] != '\0')
+    gtk_widget_show (priv->system_page);
+  else
+    gtk_widget_hide (priv->system_page);
 
   update_stack_switcher_visibility (about);
 }
@@ -841,6 +897,9 @@ gtk_about_dialog_set_property (GObject      *object,
     case PROP_LICENSE:
       gtk_about_dialog_set_license (about, g_value_get_string (value));
       break;
+    case PROP_SYSTEM_INFORMATION:
+      gtk_about_dialog_set_system_information (about, g_value_get_string (value));
+      break;
     case PROP_LICENSE_TYPE:
       gtk_about_dialog_set_license_type (about, g_value_get_enum (value));
       break;
@@ -905,6 +964,9 @@ gtk_about_dialog_get_property (GObject    *object,
       break;
     case PROP_LICENSE:
       g_value_set_string (value, priv->license);
+      break;
+    case PROP_SYSTEM_INFORMATION:
+      g_value_set_string (value, priv->system_information);
       break;
     case PROP_LICENSE_TYPE:
       g_value_set_enum (value, priv->license_type);
@@ -1352,6 +1414,30 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
 
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE]);
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE_TYPE]);
+}
+
+const gchar *
+gtk_about_dialog_get_system_information (GtkAboutDialog *about)
+{
+  g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
+
+  return about->priv->system_information;
+}
+
+void
+gtk_about_dialog_set_system_information (GtkAboutDialog *about,
+                                         const gchar    *system_information)
+{
+  GtkAboutDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
+
+  priv = about->priv;
+
+  priv->system_information = g_strdup (system_information);
+  update_system_button_visibility (about);
+
+  g_object_notify_by_pspec (G_OBJECT (about), props[PROP_SYSTEM_INFORMATION]);
 }
 
 /**
@@ -2351,6 +2437,20 @@ populate_license_page (GtkAboutDialog *about)
   strings[1] = NULL;
   buffer = text_buffer_new (about, strings);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->license_view), buffer);
+  g_object_unref (buffer);
+}
+
+static void
+populate_system_page (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = about->priv;
+  GtkTextBuffer *buffer;
+  gchar *strings[2];
+
+  strings[0] = priv->system_information;
+  strings[1] = NULL;
+  buffer = text_buffer_new (about, strings);
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (priv->system_view), buffer);
   g_object_unref (buffer);
 }
 
