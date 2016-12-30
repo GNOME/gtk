@@ -91,20 +91,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="hbox">
-                        <property name="visible">1</property>
-                        <property name="homogeneous">1</property>
-                        <child>
-                          <object class="GtkLabel" id="website_label">
-                            <property name="no-show-all">1</property>
-                            <property name="label">http://website.com</property>
-                            <property name="selectable">1</property>
-                            <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
-                          </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
-                        </child>
+                      <object class="GtkLabel" id="website_label">
+                        <property name="no-show-all">1</property>
+                        <property name="label">http://website.com</property>
+                        <property name="selectable">1</property>
+                        <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
                       </object>
                       <packing>
                         <property name="fill">0</property>
