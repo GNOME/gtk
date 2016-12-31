@@ -412,18 +412,6 @@ parse_css_fill_mode (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
-image_effect_parse (GtkCssStyleProperty *property,
-		    GtkCssParser        *parser)
-{
-  GtkCssValue *value = _gtk_css_icon_effect_value_try_parse (parser);
-
-  if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
-
-  return value;
-}
-
-static GtkCssValue *
 icon_palette_parse (GtkCssStyleProperty *property,
 		    GtkCssParser        *parser)
 {
@@ -1606,15 +1594,6 @@ _gtk_css_style_property_init_properties (void)
                                           opacity_parse,
                                           opacity_query,
                                           _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
-  gtk_css_style_property_register        ("-gtk-icon-effect",
-					  GTK_CSS_PROPERTY_ICON_EFFECT,
-					  G_TYPE_NONE,
-					  GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_ICON,
-					  image_effect_parse,
-					  NULL,
-					  _gtk_css_icon_effect_value_new (GTK_CSS_ICON_EFFECT_NONE));
-  _gtk_style_property_add_alias ("-gtk-icon-effect", "-gtk-image-effect");
 
   /* Private property holding the binding sets */
   gtk_css_style_property_register        ("-gtk-key-bindings",

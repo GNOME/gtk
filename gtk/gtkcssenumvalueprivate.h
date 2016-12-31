@@ -81,12 +81,6 @@ GtkCssValue *   _gtk_css_fill_mode_value_new          (GtkCssFillMode     fill_m
 GtkCssValue *   _gtk_css_fill_mode_value_try_parse    (GtkCssParser      *parser);
 GtkCssFillMode  _gtk_css_fill_mode_value_get          (const GtkCssValue *value);
 
-GtkCssValue *   _gtk_css_icon_effect_value_new        (GtkCssIconEffect   image_effect);
-GtkCssValue *   _gtk_css_icon_effect_value_try_parse  (GtkCssParser      *parser);
-GtkCssIconEffect _gtk_css_icon_effect_value_get       (const GtkCssValue *value);
-void            gtk_css_icon_effect_apply             (GtkCssIconEffect   icon_effect,
-                                                       cairo_surface_t   *surface);
-
 GtkCssValue *   _gtk_css_icon_style_value_new         (GtkCssIconStyle    icon_style);
 GtkCssValue *   _gtk_css_icon_style_value_try_parse   (GtkCssParser      *parser);
 GtkCssIconStyle _gtk_css_icon_style_value_get         (const GtkCssValue *value);

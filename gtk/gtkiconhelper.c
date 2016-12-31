@@ -379,7 +379,6 @@ ensure_surface_from_pixbuf (GtkIconHelper *self,
   gint width, height;
   cairo_surface_t *surface;
   GdkPixbuf *pixbuf;
-  GtkCssIconEffect icon_effect;
 
   if (get_pixbuf_size (self,
                        scale,
@@ -393,8 +392,6 @@ ensure_surface_from_pixbuf (GtkIconHelper *self,
     pixbuf = g_object_ref (orig_pixbuf);
 
   surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
-  icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
-  gtk_css_icon_effect_apply (icon_effect, surface);
   g_object_unref (pixbuf);
 
   return surface;
@@ -469,14 +466,7 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
 
   surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
 
-  if (!symbolic)
-    {
-      GtkCssIconEffect icon_effect;
-
-      icon_effect = _gtk_css_icon_effect_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_EFFECT));
-      gtk_css_icon_effect_apply (icon_effect, surface);
-    }
-  else
+  if (symbolic)
     {
       priv->rendered_surface_is_symbolic = TRUE;
     }
