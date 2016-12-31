@@ -470,6 +470,7 @@ gtk_accel_label_snapshot (GtkWidget   *widget,
   GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->snapshot (widget, snapshot);
 
   ac_width = gtk_accel_label_get_accel_width (accel_label);
+  gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_get_preferred_size (widget, NULL, &requisition);
 
   if (allocation.width >= requisition.width + ac_width)
