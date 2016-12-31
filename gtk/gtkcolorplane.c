@@ -19,12 +19,13 @@
 
 #include "gtkcolorplaneprivate.h"
 
-#include "gtkgesturedrag.h"
-#include "gtkgesturelongpress.h"
 #include "gtkaccessible.h"
 #include "gtkadjustment.h"
 #include "gtkcolorutils.h"
+#include "gtkgesturedrag.h"
+#include "gtkgesturelongpress.h"
 #include "gtkintl.h"
+#include "gtksnapshot.h"
 
 struct _GtkColorPlanePrivate
 {
@@ -66,20 +67,25 @@ sv_to_xy (GtkColorPlane *plane,
   *y = CLAMP (height * (1 - s), 0, height - 1);
 }
 
-static gboolean
-plane_draw (GtkWidget *widget,
-            cairo_t   *cr)
+static void
+plane_snapshot (GtkWidget   *widget,
+                GtkSnapshot *snapshot)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   gint x, y;
   gint width, height;
-
-  cairo_set_source_surface (cr, plane->priv->surface, 0, 0);
-  cairo_paint (cr);
+  cairo_t *cr;
 
   sv_to_xy (plane, &x, &y);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
+
+  cr = gtk_snapshot_append_cairo_node (snapshot,
+                                       &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                       "ColorPlane");
+
+  cairo_set_source_surface (cr, plane->priv->surface, 0, 0);
+  cairo_paint (cr);
 
   cairo_move_to (cr, 0,     y + 0.5);
   cairo_line_to (cr, width, y + 0.5);
@@ -104,7 +110,7 @@ plane_draw (GtkWidget *widget,
       cairo_stroke (cr);
     }
 
-  return FALSE;
+  cairo_destroy (cr);
 }
 
 static void
@@ -560,7 +566,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   object_class->finalize = plane_finalize;
   object_class->set_property = plane_set_property;
 
-  widget_class->draw = plane_draw;
+  widget_class->snapshot = plane_snapshot;
   widget_class->size_allocate = plane_size_allocate;
   widget_class->realize = plane_realize;
   widget_class->unrealize = plane_unrealize;
