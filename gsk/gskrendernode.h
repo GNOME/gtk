@@ -135,6 +135,11 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_opacity_node_get_child              (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_color_matrix_node_new               (GskRenderNode            *child,
+                                                                 const graphene_matrix_t  *color_matrix,
+                                                                 const graphene_vec4_t    *color_offset);
+
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_clip_node_new                       (GskRenderNode            *child,
                                                                  const graphene_rect_t    *clip);
 GDK_AVAILABLE_IN_3_90

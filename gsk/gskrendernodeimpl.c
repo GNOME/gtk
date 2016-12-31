@@ -2336,6 +2336,251 @@ gsk_opacity_node_get_opacity (GskRenderNode *node)
   return self->opacity;
 }
 
+/*** GSK_COLOR_MATRIX_NODE ***/
+
+typedef struct _GskColorMatrixNode GskColorMatrixNode;
+
+struct _GskColorMatrixNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  graphene_matrix_t color_matrix;
+  graphene_vec4_t color_offset;
+};
+
+static void
+gsk_color_matrix_node_finalize (GskRenderNode *node)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+
+  gsk_render_node_unref (self->child);
+}
+
+static void
+gsk_color_matrix_node_draw (GskRenderNode *node,
+                            cairo_t       *cr)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+  cairo_pattern_t *pattern;
+  cairo_surface_t *surface, *image_surface;
+  graphene_vec4_t pixel;
+  guint32* pixel_data;
+  guchar *data;
+  gsize x, y, width, height, stride;
+  float alpha;
+
+  cairo_save (cr);
+
+  /* clip so the push_group() creates a smaller surface */
+  cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y,
+                   node->bounds.size.width, node->bounds.size.height);
+  cairo_clip (cr);
+
+  cairo_push_group (cr);
+
+  gsk_render_node_draw (self->child, cr);
+
+  pattern = cairo_pop_group (cr);
+  cairo_pattern_get_surface (pattern, &surface);
+  image_surface = cairo_surface_map_to_image (surface, NULL);
+
+  data = cairo_image_surface_get_data (image_surface);
+  width = cairo_image_surface_get_width (image_surface);
+  height = cairo_image_surface_get_height (image_surface);
+  stride = cairo_image_surface_get_stride (image_surface);
+
+  for (y = 0; y < height; y++)
+    {
+      pixel_data = (guint32 *) data;
+      for (x = 0; x < width; x++)
+        {
+          alpha = ((pixel_data[x] >> 24) & 0xFF) / 255.0;
+
+          if (alpha == 0)
+            {
+              graphene_vec4_init (&pixel, 0.0, 0.0, 0.0, 0.0);
+            }
+          else
+            {
+              graphene_vec4_init (&pixel,
+                                  ((pixel_data[x] >> 16) & 0xFF) / (255.0 * alpha),
+                                  ((pixel_data[x] >>  8) & 0xFF) / (255.0 * alpha),
+                                  ( pixel_data[x]        & 0xFF) / (255.0 * alpha),
+                                  alpha);
+              graphene_matrix_transform_vec4 (&self->color_matrix, &pixel, &pixel);
+            }
+
+          graphene_vec4_add (&pixel, &self->color_offset, &pixel);
+
+          alpha = graphene_vec4_get_w (&pixel);
+          if (alpha > 0.0)
+            {
+              alpha = MIN (alpha, 1.0);
+              pixel_data[x] = (((guint32) (alpha * 255)) << 24) |
+                              (((guint32) (CLAMP (graphene_vec4_get_x (&pixel), 0, 1) * alpha * 255)) << 16) |
+                              (((guint32) (CLAMP (graphene_vec4_get_y (&pixel), 0, 1) * alpha * 255)) <<  8) |
+                               ((guint32) (CLAMP (graphene_vec4_get_z (&pixel), 0, 1) * alpha * 255));
+            }
+          else
+            {
+              pixel_data[x] = 0;
+            }
+        }
+      data += stride;
+    }
+
+  cairo_surface_mark_dirty (image_surface);
+  cairo_surface_unmap_image (surface, image_surface);
+
+  cairo_set_source (cr, pattern);
+  cairo_paint (cr);
+
+  cairo_restore (cr);
+}
+
+#define GSK_COLOR_MATRIX_NODE_VARIANT_TYPE "(dddddddddddddddddddduv)"
+
+static GVariant *
+gsk_color_matrix_node_serialize (GskRenderNode *node)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+  float mat[16], vec[4];
+
+  graphene_matrix_to_float (&self->color_matrix, mat);
+  graphene_vec4_to_float (&self->color_offset, vec);
+
+  return g_variant_new (GSK_COLOR_MATRIX_NODE_VARIANT_TYPE,
+                        (double) mat[0], (double) mat[1], (double) mat[2], (double) mat[3],
+                        (double) mat[4], (double) mat[5], (double) mat[6], (double) mat[7],
+                        (double) mat[8], (double) mat[9], (double) mat[10], (double) mat[11],
+                        (double) mat[12], (double) mat[13], (double) mat[14], (double) mat[15],
+                        (double) vec[0], (double) vec[1], (double) vec[2], (double) vec[3],
+                        (guint32) gsk_render_node_get_node_type (self->child),
+                        gsk_render_node_serialize_node (self->child));
+}
+
+static GskRenderNode *
+gsk_color_matrix_node_deserialize (GVariant  *variant,
+                                   GError   **error)
+{
+  double mat[16], vec[4];
+  guint32 child_type;
+  GVariant *child_variant;
+  GskRenderNode *result, *child;
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset;
+
+  if (!check_variant_type (variant, GSK_COLOR_MATRIX_NODE_VARIANT_TYPE, error))
+    return NULL;
+
+  g_variant_get (variant, GSK_COLOR_MATRIX_NODE_VARIANT_TYPE,
+                 &mat[0], &mat[1], &mat[2], &mat[3],
+                 &mat[4], &mat[5], &mat[6], &mat[7],
+                 &mat[8], &mat[9], &mat[10], &mat[11],
+                 &mat[12], &mat[13], &mat[14], &mat[15],
+                 &vec[0], &vec[1], &vec[2], &vec[3],
+                 &child_type, &child_variant);
+
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
+  g_variant_unref (child_variant);
+
+  if (child == NULL)
+    return NULL;
+
+  graphene_matrix_init_from_float (&matrix,
+                                   (float[16]) {
+                                       mat[0], mat[1], mat[2], mat[3],
+                                       mat[4], mat[5], mat[6], mat[7],
+                                       mat[8], mat[9], mat[10], mat[11],
+                                       mat[12], mat[13], mat[14], mat[15]
+                                   });
+  graphene_vec4_init (&offset, vec[0], vec[1], vec[2], vec[3]);
+                                    
+  result = gsk_color_matrix_node_new (child, &matrix, &offset);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static const GskRenderNodeClass GSK_COLOR_MATRIX_NODE_CLASS = {
+  GSK_COLOR_MATRIX_NODE,
+  sizeof (GskColorMatrixNode),
+  "GskColorMatrixNode",
+  gsk_color_matrix_node_finalize,
+  gsk_color_matrix_node_draw,
+  gsk_color_matrix_node_serialize,
+  gsk_color_matrix_node_deserialize
+};
+
+/**
+ * gsk_color_matrix_node_new:
+ * @child: The node to draw
+ * @color_matrix: The matrix to apply
+ * @color_offset: Values to add to the color
+ *
+ * Creates a #GskRenderNode that will drawn the @child with reduced
+ * @color_matrix.
+ *
+ * In particular, the node will transform the operation  
+ *   pixel = color_matrix * pixel + color_offset
+ * for every pixel.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_color_matrix_node_new (GskRenderNode           *child,
+                           const graphene_matrix_t *color_matrix,
+                           const graphene_vec4_t   *color_offset)
+{
+  GskColorMatrixNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = (GskColorMatrixNode *) gsk_render_node_new (&GSK_COLOR_MATRIX_NODE_CLASS, 0);
+
+  self->child = gsk_render_node_ref (child);
+  graphene_matrix_init_from_matrix (&self->color_matrix, color_matrix);
+  graphene_vec4_init_from_vec4 (&self->color_offset, color_offset);
+
+  graphene_rect_init_from_rect (&self->render_node.bounds, &child->bounds);
+
+  return &self->render_node;
+}
+
+GskRenderNode *
+gsk_color_matrix_node_get_child (GskRenderNode *node)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_MATRIX_NODE), NULL);
+
+  return self->child;
+}
+
+const graphene_matrix_t *
+gsk_color_matrix_node_peek_color_matrix (GskRenderNode *node)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_MATRIX_NODE), NULL);
+
+  return &self->color_matrix;
+}
+
+const graphene_vec4_t *
+gsk_color_matrix_node_peek_color_offset (GskRenderNode *node)
+{
+  GskColorMatrixNode *self = (GskColorMatrixNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_MATRIX_NODE), NULL);
+
+  return &self->color_offset;
+}
+
 /*** GSK_CLIP_NODE ***/
 
 typedef struct _GskClipNode GskClipNode;
@@ -3279,6 +3524,7 @@ static const GskRenderNodeClass *klasses[] = {
   [GSK_OUTSET_SHADOW_NODE] = &GSK_OUTSET_SHADOW_NODE_CLASS,
   [GSK_TRANSFORM_NODE] = &GSK_TRANSFORM_NODE_CLASS,
   [GSK_OPACITY_NODE] = &GSK_OPACITY_NODE_CLASS,
+  [GSK_COLOR_MATRIX_NODE] = &GSK_COLOR_MATRIX_NODE_CLASS,
   [GSK_CLIP_NODE] = &GSK_CLIP_NODE_CLASS,
   [GSK_ROUNDED_CLIP_NODE] = &GSK_ROUNDED_CLIP_NODE_CLASS,
   [GSK_SHADOW_NODE] = &GSK_SHADOW_NODE_CLASS,

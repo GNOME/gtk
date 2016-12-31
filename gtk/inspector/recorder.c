@@ -162,6 +162,8 @@ node_type_name (GskRenderNodeType type)
       return "Transform";
     case GSK_OPACITY_NODE:
       return "Opacity";
+    case GSK_COLOR_MATRIX_NODE:
+      return "Color Matrix";
     case GSK_CLIP_NODE:
       return "Clip";
     case GSK_ROUNDED_CLIP_NODE:

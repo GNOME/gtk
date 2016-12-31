@@ -46,6 +46,10 @@ GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType type, GVaria
 
 double gsk_opacity_node_get_opacity (GskRenderNode *node);
 
+GskRenderNode * gsk_color_matrix_node_get_child (GskRenderNode *node);
+const graphene_matrix_t * gsk_color_matrix_node_peek_color_matrix (GskRenderNode *node);
+const graphene_vec4_t * gsk_color_matrix_node_peek_color_offset (GskRenderNode *node);
+
 const graphene_point_t * gsk_linear_gradient_node_peek_start (GskRenderNode *node);
 const graphene_point_t * gsk_linear_gradient_node_peek_end (GskRenderNode *node);
 const gsize gsk_linear_gradient_node_get_n_color_stops (GskRenderNode *node);
