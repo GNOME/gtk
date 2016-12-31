@@ -52,6 +52,12 @@ void            gtk_snapshot_push_opacity               (GtkSnapshot            
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF (3, 4);
 GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_push_color_matrix          (GtkSnapshot            *snapshot,
+                                                         const graphene_matrix_t*color_matrix,
+                                                         const graphene_vec4_t  *color_offset,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (4, 5);
+GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push_clip                  (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,

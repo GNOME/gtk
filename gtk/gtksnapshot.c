@@ -295,6 +295,12 @@ gtk_snapshot_collect_opacity (GskRenderNode **nodes,
   return opacity_node;
 }
 
+typedef struct _ColorMatrix ColorMatrix;
+struct _ColorMatrix {
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset;
+};
+
 void
 gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
                            double       opacity,
@@ -324,6 +330,64 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
                                             snapshot->state->translate_y,
                                             gtk_snapshot_collect_opacity,
                                             real_opacity);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_color_matrix (GskRenderNode **nodes,
+                                   guint           n_nodes,
+                                   const char     *name,
+                                   gpointer        data)
+{
+  ColorMatrix *color_matrix = data;
+  GskRenderNode *node, *color_matrix_node;
+
+  node = gtk_snapshot_collect_default (nodes, n_nodes, name, NULL);
+  if (node == NULL)
+    return NULL;
+
+  color_matrix_node = gsk_color_matrix_node_new (node,
+                                                 &color_matrix->matrix,
+                                                 &color_matrix->offset);
+  gsk_render_node_set_name (color_matrix_node, name);
+
+  gsk_render_node_unref (node);
+  g_free (color_matrix);
+
+  return color_matrix_node;
+}
+
+void
+gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
+                                const graphene_matrix_t *color_matrix,
+                                const graphene_vec4_t   *color_offset,
+                                const char              *name,
+                                ...)
+{
+  ColorMatrix *color_matrix_data;
+  char *str;
+
+  if (name)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  color_matrix_data = g_new (ColorMatrix, 1);
+  graphene_matrix_init_from_matrix (&color_matrix_data->matrix, color_matrix);
+  graphene_vec4_init_from_vec4 (&color_matrix_data->offset, color_offset);
+
+  snapshot->state = gtk_snapshot_state_new (snapshot->state,
+                                            str,
+                                            snapshot->state->clip_region,
+                                            snapshot->state->translate_x,
+                                            snapshot->state->translate_y,
+                                            gtk_snapshot_collect_color_matrix,
+                                            color_matrix_data);
 }
 
 static void
