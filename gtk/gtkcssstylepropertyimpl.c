@@ -1594,6 +1594,14 @@ _gtk_css_style_property_init_properties (void)
                                           opacity_parse,
                                           opacity_query,
                                           _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
+  gtk_css_style_property_register        ("filter",
+                                          GTK_CSS_PROPERTY_FILTER,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_REDRAW,
+                                          filter_value_parse,
+                                          NULL,
+                                          gtk_css_filter_value_new_none ());
 
   /* Private property holding the binding sets */
   gtk_css_style_property_register        ("-gtk-key-bindings",

@@ -37,9 +37,10 @@
 #include "gtkaccelmapprivate.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkclipboard.h"
-#include "gtkcssstylepropertyprivate.h"
+#include "gtkcssfiltervalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkselectionprivate.h"
@@ -15534,6 +15535,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   graphene_rect_t bounds;
+  GtkCssValue *filter_value;
   GtkAllocation clip;
   GtkAllocation alloc;
   RenderMode mode;
@@ -15562,6 +15564,9 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
   if (GTK_DEBUG_CHECK (SNAPSHOT))
     gtk_snapshot_push (snapshot, TRUE, "%s<%p>", gtk_widget_get_name (widget), widget);
+
+  filter_value = _gtk_style_context_peek_property (gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
+  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   if (mode == RENDER_DRAW)
     {
@@ -15598,6 +15603,8 @@ gtk_widget_snapshot (GtkWidget   *widget,
       if (opacity < 1.0)
         gtk_snapshot_pop_and_append (snapshot);
     }
+
+  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
   if (GTK_DEBUG_CHECK (SNAPSHOT))
     gtk_snapshot_pop_and_append (snapshot);
