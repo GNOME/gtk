@@ -34,7 +34,7 @@
    Everytime a wildcard is used a kitten dies, painfully.
 */
 *:disabled {
-  -gtk-icon-effect: dim; }
+  -gtk-icon-filter: opacity(0.5); }
 
 .gtkstyle-fallback {
   color: #eeeeec;
@@ -442,7 +442,7 @@ button {
     -gtk-icon-shadow: 0 -1px rgba(0, 0, 0, 0.77945);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
     background-image: linear-gradient(to bottom, #353c3e, #2e3436 60%, #2a2e30);
-    -gtk-icon-effect: highlight; }
+    -gtk-icon-filter: brightness(1.2); }
   notebook > header > tabs > arrow:active, button.titlebutton:active, notebook > header > tabs > arrow:checked, button.titlebutton:checked,
   button:active,
   button:checked {
@@ -463,7 +463,7 @@ button {
     -gtk-icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     transition: 200ms ease-out;
-    -gtk-icon-effect: none; }
+    -gtk-icon-filter: none; }
     notebook > header > tabs > arrow:backdrop label, button.sidebar-button:backdrop label, button.titlebutton:backdrop label, notebook > header > tabs > arrow:backdrop, button.sidebar-button:backdrop, button.titlebutton:backdrop, notebook > header > tabs > arrow:backdrop label, button.titlebutton:backdrop label, notebook > header > tabs > arrow:backdrop, button.titlebutton:backdrop,
     button:backdrop.flat label,
     button:backdrop.flat,
@@ -1801,7 +1801,7 @@ headerbar {
         text-shadow: none;
         -gtk-icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0);
-        -gtk-icon-effect: none;
+        -gtk-icon-filter: none;
         border-color: #0f2b48; }
         .selection-mode.titlebar:not(headerbar) button:backdrop.flat label, .selection-mode.titlebar:not(headerbar) button:backdrop.flat, .selection-mode.titlebar:not(headerbar) button:backdrop label, .selection-mode.titlebar:not(headerbar) button:backdrop,
         headerbar.selection-mode button:backdrop.flat label,
@@ -4393,7 +4393,7 @@ colorchooser .popover.osd {
 .content-view {
   background-color: #222728; }
   .content-view:hover {
-    -gtk-icon-effect: highlight; }
+    -gtk-icon-filter: brightness(1.2); }
   .content-view:backdrop {
     background-color: #222728; }
 

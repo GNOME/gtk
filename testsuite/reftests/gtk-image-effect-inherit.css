@@ -1,11 +1,11 @@
 GtkBox > :nth-child(1) {
-  -gtk-icon-effect: none;
+  -gtk-icon-filter: none;
 }
 
 GtkBox > :nth-child(2) {
-  -gtk-icon-effect: highlight;
+  -gtk-icon-filter: brightness(1.2);
 }
 
 GtkBox > :nth-child(3) {
-  -gtk-icon-effect: dim;
+  -gtk-icon-filter: opacity(0.5);
 }

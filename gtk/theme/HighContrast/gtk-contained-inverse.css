@@ -68,7 +68,7 @@
    Everytime a wildcard is used a kitten dies, painfully.
 */
 *:disabled {
-  -gtk-icon-effect: dim; }
+  -gtk-icon-filter: opacity(0.5); }
 
 .gtkstyle-fallback {
   background-color: #000;
@@ -415,7 +415,7 @@ button.titlebutton, button {
     background-color: #000;
     border-color: gray;
     background-image: none;
-    -gtk-icon-effect: highlight; }
+    -gtk-icon-filter: brightness(1.2); }
   button.titlebutton:active, button.titlebutton:checked, button:active, button:checked {
     border-width: 2px;
     border-style: solid;
@@ -431,7 +431,7 @@ button.titlebutton, button {
     background-color: #000;
     border-color: #737373;
     background-image: none;
-    -gtk-icon-effect: none; }
+    -gtk-icon-filter: none; }
     button.titlebutton:backdrop:active, button.titlebutton:backdrop:checked, button:backdrop:active, button:backdrop:checked {
       border-width: 2px;
       border-style: solid;

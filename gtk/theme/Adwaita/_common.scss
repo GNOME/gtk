@@ -63,7 +63,7 @@ $button_transition: all 200ms $ease-out-quad;
    Everytime a wildcard is used a kitten dies, painfully.
 */
 
-*:disabled { -gtk-icon-effect: dim; }
+*:disabled { -gtk-icon-filter: opacity(0.5); }
 
 .gtkstyle-fallback {
   color: $fg_color;
@@ -454,7 +454,7 @@ button {
 
     &:hover {
       @include button(hover);
-      -gtk-icon-effect: highlight;
+      -gtk-icon-filter: brightness(1.2);
     }
 
     &:active,
@@ -469,7 +469,7 @@ button {
         @include button(backdrop);
 
         transition: $backdrop_transition;
-        -gtk-icon-effect: none;
+        -gtk-icon-filter: none;
 
         &:active,
         &:checked { @include button(backdrop-active); }
@@ -1410,7 +1410,7 @@ headerbar {
         &.flat, & {
           @include button(backdrop, $selected_bg_color, $selected_fg_color);
 
-          -gtk-icon-effect: none;
+          -gtk-icon-filter: none;
           border-color: $selected_borders_color;
 
           &:active,
@@ -4083,7 +4083,7 @@ colorchooser .popover.osd { border-radius: 5px; }
 .content-view {
   background-color: darken($bg_color,7%);
 
-  &:hover { -gtk-icon-effect: highlight; }
+  &:hover { -gtk-icon-filter: brightness(1.2); }
 
   &:backdrop { background-color: darken($bg_color,7%); }
 
