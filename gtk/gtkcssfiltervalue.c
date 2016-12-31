@@ -849,7 +849,7 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
   gtk_snapshot_push_color_matrix (snapshot,
                                   &matrix,
                                   &offset,
-                                  "IconFilter<%u>", filter->n_filters);
+                                  "CssFilter<%u>", filter->n_filters);
 }
 
 void
