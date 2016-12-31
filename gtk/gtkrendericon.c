@@ -21,6 +21,7 @@
 
 #include "gtkrendericonprivate.h"
 
+#include "gtkcssfiltervalueprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -95,7 +96,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
                              double                  height,
                              GtkCssImageBuiltinType  builtin_type)
 {
-  const GtkCssValue *shadows_value, *transform;
+  const GtkCssValue *shadows_value, *transform_value, *filter_value;
   graphene_matrix_t transform_matrix;
   GtkCssImage *image;
   GskShadow *shadows;
@@ -109,10 +110,13 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
     return;
 
   shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
-  transform = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
+  transform_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
+  filter_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_FILTER);
 
-  if (!gtk_css_transform_value_get_matrix (transform, &transform_matrix))
+  if (!gtk_css_transform_value_get_matrix (transform_value, &transform_matrix))
     return;
+
+  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   shadows = gtk_css_shadows_value_get_shadows (shadows_value, &n_shadows);
   if (shadows)
@@ -144,6 +148,8 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
       gtk_snapshot_pop_and_append (snapshot);
       g_free (shadows);
     }
+  
+  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 }
 
 static gboolean
@@ -266,7 +272,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
                                      GskTexture  *texture,
                                      double       texture_scale)
 {
-  const GtkCssValue *shadows_value, *transform;
+  const GtkCssValue *shadows_value, *transform_value, *filter_value;
   graphene_matrix_t transform_matrix;
   graphene_rect_t bounds;
   double width, height;
@@ -279,12 +285,15 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
   g_return_if_fail (texture_scale > 0);
 
   shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
-  transform = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
+  transform_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
+  filter_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_FILTER);
   width = gsk_texture_get_width (texture) / texture_scale;
   height = gsk_texture_get_height (texture) / texture_scale;
 
-  if (!gtk_css_transform_value_get_matrix (transform, &transform_matrix))
+  if (!gtk_css_transform_value_get_matrix (transform_value, &transform_matrix))
     return;
+
+  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   shadows = gtk_css_shadows_value_get_shadows (shadows_value, &n_shadows);
   if (shadows)
@@ -321,4 +330,6 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
       gtk_snapshot_pop_and_append (snapshot);
       g_free (shadows);
     }
+  
+  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 }

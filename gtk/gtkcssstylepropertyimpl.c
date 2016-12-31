@@ -44,6 +44,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
+#include "gtkcssfiltervalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
@@ -560,6 +561,13 @@ transform_value_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser)
 {
   return _gtk_css_transform_value_parse (parser);
+}
+
+static GtkCssValue *
+filter_value_parse (GtkCssStyleProperty *property,
+                    GtkCssParser        *parser)
+{
+  return gtk_css_filter_value_parse (parser);
 }
 
 static GtkCssValue *
@@ -1454,6 +1462,14 @@ _gtk_css_style_property_init_properties (void)
                                           transform_value_parse,
                                           NULL,
                                           _gtk_css_transform_value_new_none ());
+  gtk_css_style_property_register        ("-gtk-icon-filter",
+                                          GTK_CSS_PROPERTY_ICON_FILTER,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_CLIP,
+                                          filter_value_parse,
+                                          NULL,
+                                          gtk_css_filter_value_new_none ());
 
   gtk_css_style_property_register        ("border-spacing",
                                           GTK_CSS_PROPERTY_BORDER_SPACING,
