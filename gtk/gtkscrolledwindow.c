@@ -2722,7 +2722,7 @@ gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
  * @scrolled_window: a #GtkScrolledWindow
  * @capture_button_press: %TRUE to capture button presses
  *
- * Changes the behaviour of @scrolled_window wrt. to the initial
+ * Changes the behaviour of @scrolled_window with regard to the initial
  * event that possibly starts kinetic scrolling. When @capture_button_press
  * is set to %TRUE, the event is captured by the scrolled window, and
  * then later replayed if it is meant to go to the child widget.
