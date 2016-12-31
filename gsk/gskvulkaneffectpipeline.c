@@ -13,7 +13,8 @@ struct _GskVulkanEffectInstance
 {
   float rect[4];
   float tex_rect[4];
-  float value;
+  float color_matrix[16];
+  float color_offset[4];
 };
 
 G_DEFINE_TYPE (GskVulkanEffectPipeline, gsk_vulkan_effect_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -45,7 +46,31 @@ gsk_vulkan_effect_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
           .location = 2,
           .binding = 0,
           .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, value),
+          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_matrix),
+      },
+      {
+          .location = 3,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_matrix) + sizeof (float) * 4,
+      },
+      {
+          .location = 4,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_matrix) + sizeof (float) * 8,
+      },
+      {
+          .location = 5,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_matrix) + sizeof (float) * 12,
+      },
+      {
+          .location = 6,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_offset),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -100,7 +125,8 @@ void
 gsk_vulkan_effect_pipeline_collect_vertex_data (GskVulkanEffectPipeline *pipeline,
                                                 guchar                  *data,
                                                 const graphene_rect_t   *rect,
-                                                float                    value)
+                                                const graphene_matrix_t *color_matrix,
+                                                const graphene_vec4_t   *color_offset)
 {
   GskVulkanEffectInstance *instance = (GskVulkanEffectInstance *) data;
 
@@ -112,7 +138,8 @@ gsk_vulkan_effect_pipeline_collect_vertex_data (GskVulkanEffectPipeline *pipelin
   instance->tex_rect[1] = 0.0;
   instance->tex_rect[2] = 1.0;
   instance->tex_rect[3] = 1.0;
-  instance->value = value;
+  graphene_matrix_to_float (color_matrix, instance->color_matrix);
+  graphene_vec4_to_float (color_offset, instance->color_offset);
 }
 
 gsize

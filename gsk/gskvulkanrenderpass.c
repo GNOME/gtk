@@ -171,11 +171,11 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     case GSK_OPACITY_NODE:
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
-        pipeline_type = GSK_VULKAN_PIPELINE_OPACITY;
+        pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX;
       else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
-        pipeline_type = GSK_VULKAN_PIPELINE_OPACITY_CLIP;
+        pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP;
       else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
-        pipeline_type = GSK_VULKAN_PIPELINE_OPACITY_CLIP_ROUNDED;
+        pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
       else
         FALLBACK ("Opacity nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_OPACITY;
@@ -554,11 +554,22 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
 
         case GSK_VULKAN_OP_OPACITY:
           {
+            graphene_matrix_t color_matrix;
+            graphene_vec4_t color_offset;
+            graphene_matrix_init_from_float (&color_matrix,
+                                             (float[16]) {
+                                                 1.0, 0.0, 0.0, 0.0,         
+                                                 0.0, 1.0, 0.0, 0.0,         
+                                                 0.0, 0.0, 1.0, 0.0,         
+                                                 0.0, 0.0, 0.0, gsk_opacity_node_get_opacity (op->render.node)
+                                             });
+            graphene_vec4_init (&color_offset, 0.0, 0.0, 0.0, 0.0);
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_effect_pipeline_collect_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline),
                                                             data + n_bytes + offset,
                                                             &op->render.node->bounds,
-                                                            gsk_opacity_node_get_opacity (op->render.node));
+                                                            &color_matrix,
+                                                            &color_offset);
             n_bytes += op->render.vertex_count;
           }
           break;

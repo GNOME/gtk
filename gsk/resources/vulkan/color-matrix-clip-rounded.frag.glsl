@@ -7,9 +7,10 @@ struct RoundedRect {
 
 layout(location = 0) in vec2 inPos;
 layout(location = 1) in vec2 inTexCoord;
-layout(location = 2) in flat float inOpacity;
-layout(location = 3) in flat vec4 inClipBounds;
-layout(location = 4) in flat vec4 inClipWidths;
+layout(location = 2) in flat vec4 inClipBounds;
+layout(location = 3) in flat vec4 inClipWidths;
+layout(location = 4) in flat mat4 inColorMatrix;
+layout(location = 8) in flat vec4 inColorOffset;
 
 layout(set = 0, binding = 0) uniform sampler2D inTexture;
 
@@ -51,14 +52,25 @@ float clip(vec2 pos, RoundedRect r) {
 }
 
 vec4
-opacity (vec4 color, float value)
+color_matrix (vec4 color, mat4 color_matrix, vec4 color_offset)
 {
-  return color * value;
+  /* unpremultiply */
+  if (color.a != 0.0)
+    color.rgb /= color.a;
+
+  color = color_matrix * color + color_offset;
+  color = clamp(color, 0.0, 1.0);
+
+  /* premultiply */
+  if (color.a != 0.0)
+    color.rgb *= color.a;
+
+  return color;
 }
 
 void main()
 {
   RoundedRect r = RoundedRect(vec4(inClipBounds.xy, inClipBounds.xy + inClipBounds.zw), inClipWidths);
 
-  color = opacity (texture (inTexture, inTexCoord), inOpacity) * clip (inPos, r);
+  color = color_matrix (texture (inTexture, inTexCoord), inColorMatrix, inColorOffset) * clip (inPos, r);
 }

@@ -321,9 +321,9 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "linear", gsk_vulkan_linear_gradient_pipeline_new },
     { "linear-clip", gsk_vulkan_linear_gradient_pipeline_new },
     { "linear-clip-rounded", gsk_vulkan_linear_gradient_pipeline_new },
-    { "opacity", gsk_vulkan_effect_pipeline_new },
-    { "opacity-clip", gsk_vulkan_effect_pipeline_new },
-    { "opacity-clip-rounded", gsk_vulkan_effect_pipeline_new }
+    { "color-matrix", gsk_vulkan_effect_pipeline_new },
+    { "color-matrix-clip", gsk_vulkan_effect_pipeline_new },
+    { "color-matrix-clip-rounded", gsk_vulkan_effect_pipeline_new }
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);

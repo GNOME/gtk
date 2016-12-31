@@ -2,7 +2,8 @@
 
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inTexRect;
-layout(location = 2) in float inOpacity;
+layout(location = 2) in mat4 inColorMatrix;
+layout(location = 6) in vec4 inColorOffset;
 
 layout(push_constant) uniform PushConstants {
     mat4 mvp;
@@ -12,7 +13,8 @@ layout(push_constant) uniform PushConstants {
 } push;
 
 layout(location = 0) out vec2 outTexCoord;
-layout(location = 1) out flat float outOpacity;
+layout(location = 1) out flat mat4 outColorMatrix;
+layout(location = 5) out flat vec4 outColorOffset;
 
 out gl_PerVertex {
   vec4 gl_Position;
@@ -30,5 +32,6 @@ void main() {
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
 
   outTexCoord = inTexRect.xy + inTexRect.zw * offsets[gl_VertexIndex];
-  outOpacity = inOpacity;
+  outColorMatrix = inColorMatrix;
+  outColorOffset = inColorOffset;
 }
