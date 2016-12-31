@@ -324,6 +324,23 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
   cairo_surface_t *surface;
   cairo_t *cr;
 
+  if (graphene_rect_equal (bounds, &node->bounds))
+    {
+      switch (gsk_render_node_get_node_type (node))
+        {
+        case GSK_TEXTURE_NODE:
+          return gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
+                                                        gsk_texture_node_get_texture (node),
+                                                        uploader);
+        case GSK_CAIRO_NODE:
+          surface = cairo_surface_reference (gsk_cairo_node_get_surface (node));
+          goto got_surface;
+
+        default:
+          break;
+        }
+    }
+
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         ceil (bounds->size.width),
@@ -335,6 +352,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
   cairo_destroy (cr);
 
+got_surface:
   result = gsk_vulkan_image_new_from_data (uploader,
                                            cairo_image_surface_get_data (surface),
                                            cairo_image_surface_get_width (surface),
