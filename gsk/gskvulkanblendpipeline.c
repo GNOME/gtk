@@ -7,14 +7,12 @@ struct _GskVulkanBlendPipeline
   GObject parent_instance;
 };
 
-typedef struct _GskVulkanVertex GskVulkanVertex;
+typedef struct _GskVulkanBlendInstance GskVulkanBlendInstance;
 
-struct _GskVulkanVertex
+struct _GskVulkanBlendInstance
 {
-  float x;
-  float y;
-  float tex_x;
-  float tex_y;
+  float rect[4];
+  float tex_rect[4];
 };
 
 G_DEFINE_TYPE (GskVulkanBlendPipeline, gsk_vulkan_blend_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -25,22 +23,22 @@ gsk_vulkan_blend_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
   static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
       {
           .binding = 0,
-          .stride = 4 * sizeof (float),
-          .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
+          .stride = sizeof (GskVulkanBlendInstance),
+          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
       }
   };
   static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
       {
           .location = 0,
           .binding = 0,
-          .format = VK_FORMAT_R32G32_SFLOAT,
-          .offset = 0,
+          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+          .offset = G_STRUCT_OFFSET (GskVulkanBlendInstance, rect),
       },
       {
           .location = 1,
           .binding = 0,
-          .format = VK_FORMAT_R32G32_SFLOAT,
-          .offset = 2 * sizeof (float),
+          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
+          .offset = G_STRUCT_OFFSET (GskVulkanBlendInstance, tex_rect),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -88,7 +86,7 @@ gsk_vulkan_blend_pipeline_new (GskVulkanPipelineLayout *layout,
 gsize
 gsk_vulkan_blend_pipeline_count_vertex_data (GskVulkanBlendPipeline *pipeline)
 {
-  return sizeof (GskVulkanVertex) * 6;
+  return sizeof (GskVulkanBlendInstance);
 }
 
 void
@@ -96,14 +94,16 @@ gsk_vulkan_blend_pipeline_collect_vertex_data (GskVulkanBlendPipeline *pipeline,
                                                guchar                 *data,
                                                const graphene_rect_t  *rect)
 {
-  GskVulkanVertex *vertices = (GskVulkanVertex *) data;
+  GskVulkanBlendInstance *instance = (GskVulkanBlendInstance *) data;
 
-  vertices[0] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y,                     0.0, 0.0 };
-  vertices[1] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y,                     1.0, 0.0 };
-  vertices[2] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y + rect->size.height, 0.0, 1.0 };
-  vertices[3] = (GskVulkanVertex) { rect->origin.x,                    rect->origin.y + rect->size.height, 0.0, 1.0 };
-  vertices[4] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y,                     1.0, 0.0 };
-  vertices[5] = (GskVulkanVertex) { rect->origin.x + rect->size.width, rect->origin.y + rect->size.height, 1.0, 1.0 };
+  instance->rect[0] = rect->origin.x;
+  instance->rect[1] = rect->origin.y;
+  instance->rect[2] = rect->size.width;
+  instance->rect[3] = rect->size.height;
+  instance->tex_rect[0] = 0.0;
+  instance->tex_rect[1] = 0.0;
+  instance->tex_rect[2] = 1.0;
+  instance->tex_rect[3] = 1.0;
 }
 
 gsize
@@ -113,8 +113,8 @@ gsk_vulkan_blend_pipeline_draw (GskVulkanBlendPipeline *pipeline,
                                 gsize                   n_commands)
 {
   vkCmdDraw (command_buffer,
-             n_commands * 6, 1,
-             offset, 0);
+             6, n_commands,
+             0, offset);
 
-  return n_commands * 6;
+  return n_commands;
 }

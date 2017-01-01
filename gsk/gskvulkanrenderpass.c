@@ -122,18 +122,30 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     case GSK_CAIRO_NODE:
       if (gsk_cairo_node_get_surface (node) == NULL)
         return;
-      if (!gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP_ROUNDED;
+      else
         FALLBACK ("Cairo nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_SURFACE;
-      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
       g_array_append_val (self->render_ops, op);
       return;
 
     case GSK_TEXTURE_NODE:
-      if (!gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP_ROUNDED;
+      else
         FALLBACK ("Texture nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_TEXTURE;
-      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
       g_array_append_val (self->render_ops, op);
       return;
 
@@ -292,7 +304,7 @@ fallback:
         g_assert_not_reached ();
         return;
     }
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLIT);
+  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLEND);
   g_array_append_val (self->render_ops, op);
 }
 #undef FALLBACK
