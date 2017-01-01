@@ -1108,6 +1108,6 @@ gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
                                        texture,
                                        1);
   gtk_snapshot_translate_2d (snapshot, -x, -y);
-  gsk_texture_unref (texture);
+  g_object_unref (texture);
 }
 

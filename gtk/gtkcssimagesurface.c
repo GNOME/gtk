@@ -76,7 +76,7 @@ gtk_css_image_surface_dispose (GObject *object)
 {
   GtkCssImageSurface *surface = GTK_CSS_IMAGE_SURFACE (object);
 
-  g_clear_pointer (&surface->texture, gsk_texture_unref);
+  g_clear_object (&surface->texture);
 
   G_OBJECT_CLASS (_gtk_css_image_surface_parent_class)->dispose (object);
 }
@@ -108,7 +108,7 @@ gtk_css_image_surface_new (GskTexture *texture)
   image = g_object_new (GTK_TYPE_CSS_IMAGE_SURFACE, NULL);
   
   if (texture)
-    GTK_CSS_IMAGE_SURFACE (image)->texture = gsk_texture_ref (texture);
+    GTK_CSS_IMAGE_SURFACE (image)->texture = g_object_ref (texture);
 
   return image;
 }
@@ -123,7 +123,7 @@ gtk_css_image_surface_new_for_pixbuf (GdkPixbuf *pixbuf)
 
   texture = gsk_texture_new_for_pixbuf (pixbuf);
   image = gtk_css_image_surface_new (texture);
-  gsk_texture_unref (texture);
+  g_object_unref (texture);
 
   return image;
 }

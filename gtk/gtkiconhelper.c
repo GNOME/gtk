@@ -52,7 +52,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkIconHelper, gtk_icon_helper, GTK_TYPE_CSS_GADGET)
 void
 gtk_icon_helper_invalidate (GtkIconHelper *self)
 {
-  g_clear_pointer (&self->priv->texture, gsk_texture_unref);
+  g_clear_object (&self->priv->texture);
 
   if (self->priv->rendered_surface != NULL)
     {
@@ -99,7 +99,7 @@ gtk_icon_helper_take_definition (GtkIconHelper      *self,
 void
 _gtk_icon_helper_clear (GtkIconHelper *self)
 {
-  g_clear_pointer (&self->priv->texture, gsk_texture_unref);
+  g_clear_object (&self->priv->texture);
   g_clear_pointer (&self->priv->rendered_surface, cairo_surface_destroy);
 
   gtk_image_definition_unref (self->priv->def);

@@ -664,7 +664,7 @@ gsk_texture_node_finalize (GskRenderNode *node)
 {
   GskTextureNode *self = (GskTextureNode *) node;
 
-  gsk_texture_unref (self->texture);
+  g_object_unref (self->texture);
 }
 
 static void
@@ -745,7 +745,7 @@ gsk_texture_node_deserialize (GVariant  *variant,
 
   node = gsk_texture_node_new (texture, &GRAPHENE_RECT_INIT(bounds[0], bounds[1], bounds[2], bounds[3]));
 
-  gsk_texture_unref (texture);
+  g_object_unref (texture);
 
   return node;
 }
@@ -793,7 +793,7 @@ gsk_texture_node_new (GskTexture            *texture,
 
   self = (GskTextureNode *) gsk_render_node_new (&GSK_TEXTURE_NODE_CLASS, 0);
 
-  self->texture = gsk_texture_ref (texture);
+  self->texture = g_object_ref (texture);
   graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
 
   return &self->render_node;

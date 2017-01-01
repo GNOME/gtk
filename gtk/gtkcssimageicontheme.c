@@ -96,7 +96,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                     ),
                                     "CssImageIconTheme<%s@%d>", icon_theme->name, icon_theme->scale);
 
-  gsk_texture_unref (texture);
+  g_object_unref (texture);
   g_object_unref (pixbuf);
   g_object_unref (icon_info);
 }

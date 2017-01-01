@@ -25,9 +25,9 @@
  *
  * You cannot get your pixel data back once you've uploaded it.
  *
- * #GskTexture is an immutable structure: That means you cannot change
+ * #GskTexture is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
- * gsk_texture_ref().
+ * g_object_ref().
  */
 
 #include "config.h"
@@ -40,116 +40,208 @@
 #include "gdk/gdkinternals.h"
 
 /**
- * GskTexture: (ref-func gsk_texture_ref) (unref-func gsk_texture_unref)
+ * GskTexture:
  *
  * The `GskTexture` structure contains only private data.
  *
  * Since: 3.90
  */
 
-G_DEFINE_BOXED_TYPE(GskTexture, gsk_texture, gsk_texture_ref, gsk_texture_unref)
+enum {
+  PROP_0,
+  PROP_WIDTH,
+  PROP_HEIGHT,
+
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
+
+G_DEFINE_ABSTRACT_TYPE (GskTexture, gsk_texture, G_TYPE_OBJECT)
+
+#define GSK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD(obj,method) \
+  g_critical ("Texture of type '%s' does not implement GskTexture::" # method, G_OBJECT_TYPE_NAME (obj))
 
 static void
-gsk_texture_finalize (GskTexture *self)
+gsk_texture_real_download (GskTexture *self,
+                           guchar     *data,
+                           gsize       stride)
+{
+  GSK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD (self, download);
+}
+
+static cairo_surface_t *
+gsk_texture_real_download_surface (GskTexture *texture)
+{
+  cairo_surface_t *surface;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        texture->width, texture->height);
+  gsk_texture_download (texture,
+                        cairo_image_surface_get_data (surface),
+                        cairo_image_surface_get_stride (surface));
+  cairo_surface_mark_dirty (surface);
+
+  return surface;
+}
+
+static void
+gsk_texture_set_property (GObject      *gobject,
+                          guint         prop_id,
+                          const GValue *value,
+                          GParamSpec   *pspec)
+{
+  GskTexture *self = GSK_TEXTURE (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_WIDTH:
+      self->width = g_value_get_int (value);
+      break;
+
+    case PROP_HEIGHT:
+      self->height = g_value_get_int (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gsk_texture_get_property (GObject    *gobject,
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
+{
+  GskTexture *self = GSK_TEXTURE (gobject);
+
+  switch (prop_id)
+    {
+    case PROP_WIDTH:
+      g_value_set_int (value, self->width);
+      break;
+
+    case PROP_HEIGHT:
+      g_value_set_int (value, self->height);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gsk_texture_dispose (GObject *object)
 {    
+  GskTexture *self = GSK_TEXTURE (object);
+
   gsk_texture_clear_render_data (self);
 
-  self->klass->finalize (self);
-
-  g_free (self);
+  G_OBJECT_CLASS (gsk_texture_parent_class)->dispose (object);
 }
 
-/**
- * gsk_texture_ref:
- * @texture: a #GskTexture
- *
- * Acquires a reference on the given #GskTexture.
- *
- * Returns: (transfer none): the #GskTexture with an additional reference
- *
- * Since: 3.90
- */
-GskTexture *
-gsk_texture_ref (GskTexture *texture)
+static void
+gsk_texture_class_init (GskTextureClass *klass)
 {
-  g_return_val_if_fail (GSK_IS_TEXTURE (texture), NULL);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  g_atomic_int_inc (&texture->ref_count);
+  klass->download = gsk_texture_real_download;
+  klass->download_surface = gsk_texture_real_download_surface;
 
-  return texture;
+  gobject_class->set_property = gsk_texture_set_property;
+  gobject_class->get_property = gsk_texture_get_property;
+  gobject_class->dispose = gsk_texture_dispose;
+
+  /**
+   * GskRenderer:width:
+   *
+   * The width of the texture.
+   *
+   * Since: 3.90
+   */
+  properties[PROP_WIDTH] =
+    g_param_spec_int ("width",
+                      "Width",
+                      "The width of the texture",
+                      1,
+                      G_MAXINT,
+                      1,
+                      G_PARAM_READWRITE |
+                      G_PARAM_CONSTRUCT_ONLY |
+                      G_PARAM_STATIC_STRINGS |
+                      G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GskRenderer:height:
+   *
+   * The height of the texture.
+   *
+   * Since: 3.90
+   */
+  properties[PROP_HEIGHT] =
+    g_param_spec_int ("height",
+                      "Height",
+                      "The height of the texture",
+                      1,
+                      G_MAXINT,
+                      1,
+                      G_PARAM_READWRITE |
+                      G_PARAM_CONSTRUCT_ONLY |
+                      G_PARAM_STATIC_STRINGS |
+                      G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
-/**
- * gsk_texture_unref:
- * @texture: a #GskTexture
- *
- * Releases a reference on the given #GskTexture.
- *
- * If the reference was the last, the resources associated to the @texture are
- * freed.
- *
- * Since: 3.90
- */
-void
-gsk_texture_unref (GskTexture *texture)
+static void
+gsk_texture_init (GskTexture *self)
 {
-  g_return_if_fail (GSK_IS_TEXTURE (texture));
-
-  if (g_atomic_int_dec_and_test (&texture->ref_count))
-    gsk_texture_finalize (texture);
-}
-
-gpointer
-gsk_texture_new (const GskTextureClass *klass,
-                 int                    width,
-                 int                    height)
-{
-  GskTexture *self;
-
-  g_assert (klass->size >= sizeof (GskTexture));
-
-  self = g_malloc0 (klass->size);
-
-  self->klass = klass;
-  self->ref_count = 1;
-
-  self->width = width;
-  self->height = height;
-
-  return self;
 }
 
 /* GskCairoTexture */
 
-typedef struct _GskCairoTexture GskCairoTexture;
+#define GSK_TYPE_CAIRO_TEXTURE (gsk_cairo_texture_get_type ())
+
+G_DECLARE_FINAL_TYPE (GskCairoTexture, gsk_cairo_texture, GSK, CAIRO_TEXTURE, GskTexture)
 
 struct _GskCairoTexture {
-  GskTexture texture;
+  GskTexture parent_instance;
   cairo_surface_t *surface;
 };
 
-static void
-gsk_texture_cairo_finalize (GskTexture *texture)
-{
-  GskCairoTexture *cairo = (GskCairoTexture *) texture;
+struct _GskCairoTextureClass {
+  GskTextureClass parent_class;
+};
 
-  cairo_surface_destroy (cairo->surface);
+G_DEFINE_TYPE (GskCairoTexture, gsk_cairo_texture, GSK_TYPE_TEXTURE)
+
+static void
+gsk_cairo_texture_finalize (GObject *object)
+{
+  GskCairoTexture *self = GSK_CAIRO_TEXTURE (object);
+
+  cairo_surface_destroy (self->surface);
+
+  G_OBJECT_CLASS (gsk_cairo_texture_parent_class)->finalize (object);
 }
 
 static cairo_surface_t *
-gsk_texture_cairo_download_surface (GskTexture *texture)
+gsk_cairo_texture_download_surface (GskTexture *texture)
 {
-  GskCairoTexture *cairo = (GskCairoTexture *) texture;
+  GskCairoTexture *self = GSK_CAIRO_TEXTURE (texture);
 
-  return cairo_surface_reference (cairo->surface);
+  return cairo_surface_reference (self->surface);
 }
 
 static void
-gsk_texture_cairo_download (GskTexture *texture,
+gsk_cairo_texture_download (GskTexture *texture,
                             guchar     *data,
                             gsize       stride)
 {
-  GskCairoTexture *cairo = (GskCairoTexture *) texture;
+  GskCairoTexture *self = GSK_CAIRO_TEXTURE (texture);
   cairo_surface_t *surface;
   cairo_t *cr;
 
@@ -159,7 +251,7 @@ gsk_texture_cairo_download (GskTexture *texture,
                                                  stride);
   cr = cairo_create (surface);
 
-  cairo_set_source_surface (cr, cairo->surface, 0, 0);
+  cairo_set_source_surface (cr, self->surface, 0, 0);
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   cairo_paint (cr);
 
@@ -168,28 +260,21 @@ gsk_texture_cairo_download (GskTexture *texture,
   cairo_surface_destroy (surface);
 }
 
-static const GskTextureClass GSK_TEXTURE_CLASS_CAIRO = {
-  "cairo",
-  sizeof (GskCairoTexture),
-  gsk_texture_cairo_finalize,
-  gsk_texture_cairo_download,
-  gsk_texture_cairo_download_surface
-};
-
-GskTexture *
-gsk_texture_new_for_surface (cairo_surface_t *surface)
+static void
+gsk_cairo_texture_class_init (GskCairoTextureClass *klass)
 {
-  GskCairoTexture *texture;
+  GskTextureClass *texture_class = GSK_TEXTURE_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  g_return_val_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE, NULL);
+  texture_class->download = gsk_cairo_texture_download;
+  texture_class->download_surface = gsk_cairo_texture_download_surface;
 
-  texture = gsk_texture_new (&GSK_TEXTURE_CLASS_CAIRO,
-                             cairo_image_surface_get_width (surface),
-                             cairo_image_surface_get_height (surface));
+  gobject_class->finalize = gsk_cairo_texture_finalize;
+}
 
-  texture->surface = cairo_surface_reference (surface);
-
-  return (GskTexture *) texture;
+static void
+gsk_cairo_texture_init (GskCairoTexture *self)
+{
 }
 
 GskTexture *
@@ -213,75 +298,114 @@ gsk_texture_new_for_data (const guchar *data,
   texture = gsk_texture_new_for_surface (copy);
 
   cairo_surface_destroy (copy);
+  cairo_surface_finish (original);
   cairo_surface_destroy (original);
 
   return texture;
 }
 
+GskTexture *
+gsk_texture_new_for_surface (cairo_surface_t *surface)
+{
+  GskCairoTexture *texture;
+
+  g_return_val_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE, NULL);
+
+  texture = g_object_new (GSK_TYPE_CAIRO_TEXTURE,
+                          "width", cairo_image_surface_get_width (surface),
+                          "height", cairo_image_surface_get_height (surface),
+                          NULL);
+
+  texture->surface = cairo_surface_reference (surface);
+
+  return (GskTexture *) texture;
+}
+
 /* GskPixbufTexture */
 
-typedef struct _GskPixbufTexture GskPixbufTexture;
+#define GSK_TYPE_PIXBUF_TEXTURE (gsk_pixbuf_texture_get_type ())
+
+G_DECLARE_FINAL_TYPE (GskPixbufTexture, gsk_pixbuf_texture, GSK, PIXBUF_TEXTURE, GskTexture)
 
 struct _GskPixbufTexture {
-  GskTexture texture;
+  GskTexture parent_instance;
+
   GdkPixbuf *pixbuf;
 };
 
-static void
-gsk_texture_pixbuf_finalize (GskTexture *texture)
-{
-  GskPixbufTexture *pixbuf = (GskPixbufTexture *) texture;
+struct _GskPixbufTextureClass {
+  GskTextureClass parent_class;
+};
 
-  g_object_unref (pixbuf->pixbuf);
+G_DEFINE_TYPE (GskPixbufTexture, gsk_pixbuf_texture, GSK_TYPE_TEXTURE)
+
+static void
+gsk_pixbuf_texture_finalize (GObject *object)
+{
+  GskPixbufTexture *self = GSK_PIXBUF_TEXTURE (object);
+
+  g_object_unref (self->pixbuf);
+
+  G_OBJECT_CLASS (gsk_pixbuf_texture_parent_class)->finalize (object);
 }
 
 static void
-gsk_texture_pixbuf_download (GskTexture *texture,
+gsk_pixbuf_texture_download (GskTexture *texture,
                              guchar     *data,
                              gsize       stride)
 {
-  GskPixbufTexture *pixbuf = (GskPixbufTexture *) texture;
+  GskPixbufTexture *self = GSK_PIXBUF_TEXTURE (texture);
   cairo_surface_t *surface;
 
   surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
                                                  texture->width, texture->height,
                                                  stride);
-  gdk_cairo_surface_paint_pixbuf (surface, pixbuf->pixbuf);
+  gdk_cairo_surface_paint_pixbuf (surface, self->pixbuf);
   cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
 }
 
 static cairo_surface_t *
-gsk_texture_pixbuf_download_surface (GskTexture *texture)
+gsk_pixbuf_texture_download_surface (GskTexture *texture)
 {
-  GskPixbufTexture *pixbuf = (GskPixbufTexture *) texture;
+  GskPixbufTexture *self = GSK_PIXBUF_TEXTURE (texture);
 
-  return gdk_cairo_surface_create_from_pixbuf (pixbuf->pixbuf, 1, NULL);
+  return gdk_cairo_surface_create_from_pixbuf (self->pixbuf, 1, NULL);
 }
 
-static const GskTextureClass GSK_TEXTURE_CLASS_PIXBUF = {
-  "pixbuf",
-  sizeof (GskPixbufTexture),
-  gsk_texture_pixbuf_finalize,
-  gsk_texture_pixbuf_download,
-  gsk_texture_pixbuf_download_surface
-};
+static void
+gsk_pixbuf_texture_class_init (GskPixbufTextureClass *klass)
+{
+  GskTextureClass *texture_class = GSK_TEXTURE_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  texture_class->download = gsk_pixbuf_texture_download;
+  texture_class->download_surface = gsk_pixbuf_texture_download_surface;
+
+  gobject_class->finalize = gsk_pixbuf_texture_finalize;
+}
+
+static void
+gsk_pixbuf_texture_init (GskPixbufTexture *self)
+{
+}
 
 GskTexture *
 gsk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
 {
-  GskPixbufTexture *texture;
+  GskPixbufTexture *self;
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
-  texture = gsk_texture_new (&GSK_TEXTURE_CLASS_PIXBUF,
-                             gdk_pixbuf_get_width (pixbuf),
-                             gdk_pixbuf_get_height (pixbuf));
+  self = g_object_new (GSK_TYPE_PIXBUF_TEXTURE,
+                       "width", gdk_pixbuf_get_width (pixbuf),
+                       "height", gdk_pixbuf_get_height (pixbuf),
+                       NULL);
 
-  texture->pixbuf = g_object_ref (pixbuf);
+  self->pixbuf = g_object_ref (pixbuf);
 
-  return &texture->texture;
+  return GSK_TEXTURE (self);
 }
 
 /**
@@ -323,19 +447,7 @@ gsk_texture_get_height (GskTexture *texture)
 cairo_surface_t *
 gsk_texture_download_surface (GskTexture *texture)
 {
-  cairo_surface_t *surface;
-
-  if (texture->klass->download_surface)
-    return texture->klass->download_surface (texture);
-
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        texture->width, texture->height);
-  gsk_texture_download (texture,
-                        cairo_image_surface_get_data (surface),
-                        cairo_image_surface_get_stride (surface));
-  cairo_surface_mark_dirty (surface);
-
-  return surface;
+  return GSK_TEXTURE_GET_CLASS (texture)->download_surface (texture);
 }
 
 /**
@@ -373,7 +485,7 @@ gsk_texture_download (GskTexture *texture,
   g_return_if_fail (data != NULL);
   g_return_if_fail (stride >= gsk_texture_get_width (texture) * 4);
 
-  return texture->klass->download (texture, data, stride);
+  return GSK_TEXTURE_GET_CLASS (texture)->download (texture, data, stride);
 }
 
 gboolean

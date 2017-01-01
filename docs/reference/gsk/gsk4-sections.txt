@@ -82,8 +82,6 @@ GSK_TYPE_SERIALIZATION_ERROR
 
 <SECTION>
 <FILE>GskTexture</FILE>
-gsk_texture_ref
-gsk_texture_unref
 gsk_texture_new_for_data
 gsk_texture_new_for_pixbuf
 gsk_texture_get_width

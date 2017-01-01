@@ -29,15 +29,16 @@ G_BEGIN_DECLS
 
 #define GSK_TYPE_TEXTURE (gsk_texture_get_type ())
 
-#define GSK_IS_TEXTURE(texture) ((texture) != NULL)
+#define GSK_TEXTURE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSK_TYPE_TEXTURE, GskTexture))
+#define GSK_IS_TEXTURE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSK_TYPE_TEXTURE))
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskTexture, g_object_unref)
+
+typedef struct _GskTextureClass        GskTextureClass;
+
 
 GDK_AVAILABLE_IN_3_90
 GType gsk_texture_get_type (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_3_90
-GskTexture *            gsk_texture_ref                        (GskTexture      *texture);
-GDK_AVAILABLE_IN_3_90
-void                    gsk_texture_unref                      (GskTexture      *texture);
 
 GDK_AVAILABLE_IN_3_90
 GskTexture *            gsk_texture_new_for_data               (const guchar    *data,

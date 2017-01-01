@@ -119,7 +119,7 @@ main(int argc, char **argv)
       for (run = 0; run < runs; run++)
         {
           if (run > 0)
-            gsk_texture_unref (texture);
+            g_object_unref (texture);
           start = g_get_monotonic_time ();
           texture = gsk_renderer_render_texture (renderer, node, NULL);
           end = g_get_monotonic_time ();
@@ -134,7 +134,7 @@ main(int argc, char **argv)
                             cairo_image_surface_get_data (surface),
                             cairo_image_surface_get_stride (surface));
       cairo_surface_mark_dirty (surface);
-      gsk_texture_unref (texture);
+      g_object_unref (texture);
       g_object_unref (window);
       g_object_unref (renderer);
     }

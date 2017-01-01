@@ -9,13 +9,9 @@ G_BEGIN_DECLS
 #define GSK_IS_TEXTURE_CLASS(klass)         (G_TYPE_CHECK_CLASS_TYPE ((klass), GSK_TYPE_TEXTURE))
 #define GSK_TEXTURE_GET_CLASS(obj)          (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_TEXTURE, GskTextureClass))
 
-typedef struct _GskTextureClass GskTextureClass;
-
 struct _GskTexture
 {
-  const GskTextureClass *klass;
-
-  volatile int ref_count;
+  GObject parent_instance;
 
   int width;
   int height;
@@ -26,10 +22,8 @@ struct _GskTexture
 };
 
 struct _GskTextureClass {
-  const char *name;
-  gsize size;
+  GObjectClass parent_class;
 
-  void                  (* finalize)                    (GskTexture             *texture);
   void                  (* download)                    (GskTexture             *texture,
                                                          guchar                 *data,
                                                          gsize                   stride);
