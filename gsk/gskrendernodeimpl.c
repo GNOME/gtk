@@ -2581,6 +2581,177 @@ gsk_color_matrix_node_peek_color_offset (GskRenderNode *node)
   return &self->color_offset;
 }
 
+/*** GSK_REPEAT_NODE ***/
+
+typedef struct _GskRepeatNode GskRepeatNode;
+
+struct _GskRepeatNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  graphene_rect_t child_bounds;
+};
+
+static void
+gsk_repeat_node_finalize (GskRenderNode *node)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+
+  gsk_render_node_unref (self->child);
+}
+
+static void
+gsk_repeat_node_draw (GskRenderNode *node,
+                      cairo_t       *cr)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+  cairo_pattern_t *pattern;
+  cairo_surface_t *surface;
+  cairo_t *surface_cr;
+
+  surface = cairo_surface_create_similar (cairo_get_target (cr),
+                                          CAIRO_CONTENT_COLOR_ALPHA,
+                                          ceilf (self->child_bounds.size.width),
+                                          ceilf (self->child_bounds.size.height));
+  surface_cr = cairo_create (surface);
+  cairo_translate (surface_cr,
+                   - self->child_bounds.origin.x,
+                   - self->child_bounds.origin.y);
+  gsk_render_node_draw (self->child, surface_cr);
+  cairo_destroy (surface_cr);
+
+  pattern = cairo_pattern_create_for_surface (surface);
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+  cairo_pattern_set_matrix (pattern,
+                            &(cairo_matrix_t) {
+                                .xx = 1.0,
+                                .yy = 1.0,
+                                .x0 = - self->child_bounds.origin.x,
+                                .y0 = - self->child_bounds.origin.y
+                            });
+
+  cairo_set_source (cr, pattern);
+  cairo_paint (cr);
+
+  cairo_pattern_destroy (pattern);
+  cairo_surface_destroy (surface);
+}
+
+#define GSK_REPEAT_NODE_VARIANT_TYPE "(dddddddduv)"
+
+static GVariant *
+gsk_repeat_node_serialize (GskRenderNode *node)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+
+  return g_variant_new (GSK_REPEAT_NODE_VARIANT_TYPE,
+                        (double) node->bounds.origin.x, (double) node->bounds.origin.y,
+                        (double) node->bounds.size.width, (double) node->bounds.size.height,
+                        (double) self->child_bounds.origin.x, (double) self->child_bounds.origin.y,
+                        (double) self->child_bounds.size.width, (double) self->child_bounds.size.height,
+                        (guint32) gsk_render_node_get_node_type (self->child),
+                        gsk_render_node_serialize_node (self->child));
+}
+
+static GskRenderNode *
+gsk_repeat_node_deserialize (GVariant  *variant,
+                             GError   **error)
+{
+  double x, y, width, height, child_x, child_y, child_width, child_height;
+  guint32 child_type;
+  GVariant *child_variant;
+  GskRenderNode *result, *child;
+
+  if (!check_variant_type (variant, GSK_REPEAT_NODE_VARIANT_TYPE, error))
+    return NULL;
+
+  g_variant_get (variant, GSK_REPEAT_NODE_VARIANT_TYPE,
+                 &x, &y, &width, &height,
+                 &child_x, &child_y, &child_width, &child_height,
+                 &child_type, &child_variant);
+
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
+  g_variant_unref (child_variant);
+
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_repeat_node_new (&GRAPHENE_RECT_INIT (x, y, width, height),
+                                child,
+                                &GRAPHENE_RECT_INIT (child_x, child_y, child_width, child_height));
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static const GskRenderNodeClass GSK_REPEAT_NODE_CLASS = {
+  GSK_REPEAT_NODE,
+  sizeof (GskRepeatNode),
+  "GskRepeatNode",
+  gsk_repeat_node_finalize,
+  gsk_repeat_node_draw,
+  gsk_repeat_node_serialize,
+  gsk_repeat_node_deserialize
+};
+
+/**
+ * gsk_repeat_node_new:
+ * @bounds: The bounds of the area to be painted
+ * @child: The child to repeat
+ * @child_bounds: (optional): The area of the child to repeat or %NULL to
+ *     use the child's bounds
+ *
+ * Creates a #GskRenderNode that will repeat the drawing of @child across
+ * the given @bounds.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
+GskRenderNode *
+gsk_repeat_node_new (const graphene_rect_t *bounds,
+                     GskRenderNode         *child,
+                     const graphene_rect_t *child_bounds)
+{
+  GskRepeatNode *self;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = (GskRepeatNode *) gsk_render_node_new (&GSK_REPEAT_NODE_CLASS, 0);
+
+  graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
+  self->child = gsk_render_node_ref (child);
+  if (child_bounds)
+    graphene_rect_init_from_rect (&self->child_bounds, child_bounds);
+  else
+    graphene_rect_init_from_rect (&self->child_bounds, &child->bounds);
+
+  return &self->render_node;
+}
+
+GskRenderNode *
+gsk_repeat_node_get_child (GskRenderNode *node)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_REPEAT_NODE), NULL);
+
+  return self->child;
+}
+
+const graphene_rect_t *
+gsk_repeat_node_peek_child_bounds (GskRenderNode *node)
+{
+  GskRepeatNode *self = (GskRepeatNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_REPEAT_NODE), NULL);
+
+  return &self->child_bounds;
+}
+
 /*** GSK_CLIP_NODE ***/
 
 typedef struct _GskClipNode GskClipNode;

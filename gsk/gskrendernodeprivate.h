@@ -50,6 +50,9 @@ GskRenderNode * gsk_color_matrix_node_get_child (GskRenderNode *node);
 const graphene_matrix_t * gsk_color_matrix_node_peek_color_matrix (GskRenderNode *node);
 const graphene_vec4_t * gsk_color_matrix_node_peek_color_offset (GskRenderNode *node);
 
+GskRenderNode * gsk_repeat_node_get_child (GskRenderNode *node);
+const graphene_rect_t * gsk_repeat_node_peek_child_bounds (GskRenderNode *node);
+
 const graphene_point_t * gsk_linear_gradient_node_peek_start (GskRenderNode *node);
 const graphene_point_t * gsk_linear_gradient_node_peek_end (GskRenderNode *node);
 const gsize gsk_linear_gradient_node_get_n_color_stops (GskRenderNode *node);

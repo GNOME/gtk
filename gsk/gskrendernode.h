@@ -140,6 +140,11 @@ GskRenderNode *         gsk_color_matrix_node_new               (GskRenderNode  
                                                                  const graphene_vec4_t    *color_offset);
 
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_repeat_node_new                     (const graphene_rect_t    *bounds,
+                                                                 GskRenderNode            *child,
+                                                                 const graphene_rect_t    *child_bounds);
+
+GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_clip_node_new                       (GskRenderNode            *child,
                                                                  const graphene_rect_t    *clip);
 GDK_AVAILABLE_IN_3_90

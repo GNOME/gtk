@@ -4459,6 +4459,7 @@ gtk_snapshot_push_node
 gtk_snapshot_push_transform
 gtk_snapshot_push_opacity
 gtk_snapshot_push_color_matrix
+gtk_snapshot_push_repeat
 gtk_snapshot_push_clip
 gtk_snapshot_push_rounded_clip
 gtk_snapshot_pop

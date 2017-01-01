@@ -401,6 +401,76 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
 }
 
 static GskRenderNode *
+gtk_snapshot_collect_repeat (GskRenderNode **nodes,
+                             guint           n_nodes,
+                             const char     *name,
+                             gpointer        data)
+{
+  GskRenderNode *node, *repeat_node;
+  graphene_rect_t *bounds = data;
+
+  node = gtk_snapshot_collect_default (nodes, n_nodes, name, NULL);
+  if (node == NULL)
+    return NULL;
+
+  repeat_node = gsk_repeat_node_new (&bounds[0],
+                                     node,
+                                     bounds[1].size.width > 0 ? &bounds[1] : NULL);
+  gsk_render_node_set_name (repeat_node, name);
+
+  gsk_render_node_unref (node);
+  g_free (data);
+
+  return repeat_node;
+}
+
+void
+gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
+                          const graphene_rect_t *bounds,
+                          const graphene_rect_t *child_bounds,
+                          const char            *name,
+                          ...)
+{
+  cairo_region_t *clip;
+  graphene_rect_t *data;
+  char *str;
+
+  if (name)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  data = g_new0 (graphene_rect_t, 2);
+  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &data[0]);
+  if (child_bounds)
+    {
+      cairo_rectangle_int_t rect;
+      graphene_rect_offset_r (child_bounds, snapshot->state->translate_x, snapshot->state->translate_y, &data[1]);
+      rectangle_init_from_graphene (&rect, &data[1]);
+      clip = cairo_region_create_rectangle (&rect);
+    }
+  else
+    clip = NULL;
+
+  snapshot->state = gtk_snapshot_state_new (snapshot->state,
+                                            str,
+                                            clip,
+                                            snapshot->state->translate_x,
+                                            snapshot->state->translate_y,
+                                            gtk_snapshot_collect_repeat,
+                                            data);
+
+  if (clip)
+    cairo_region_destroy (clip);
+}
+
+static GskRenderNode *
 gtk_snapshot_collect_clip (GskRenderNode **nodes,
                            guint           n_nodes,
                            const char     *name,

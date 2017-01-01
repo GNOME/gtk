@@ -407,14 +407,9 @@ gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
     }
   else
     {
-      int surface_width, surface_height;
-      cairo_rectangle_t fill_rect;
-      cairo_surface_t *surface;
-      cairo_t *cr, *cr2;
-
-      cr = gtk_snapshot_append_cairo_node (snapshot,
-                                           &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                           "BackgroundLayer<%u>", idx);
+      float repeat_width, repeat_height;
+      float position_x, position_y;
+      graphene_rect_t fill_rect;
 
       /* If ‘background-repeat’ is ‘round’ for one (or both) dimensions,
        * there is a second step. The UA must scale the image in that
@@ -460,62 +455,58 @@ gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
       if (hrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
         {
           double n = floor (width / image_width);
-          surface_width = n ? round (width / n) : 0;
+          repeat_width = n ? round (width / n) : 0;
         }
       else
-        surface_width = round (image_width);
+        repeat_width = round (image_width);
 
       if (vrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
         {
           double n = floor (height / image_height);
-          surface_height = n ? round (height / n) : 0;
+          repeat_height = n ? round (height / n) : 0;
         }
       else
-        surface_height = round (image_height);
-
-      surface = cairo_surface_create_similar (cairo_get_target (cr),
-                                              CAIRO_CONTENT_COLOR_ALPHA,
-                                              surface_width, surface_height);
-      cr2 = cairo_create (surface);
-      cairo_translate (cr2,
-                       0.5 * (surface_width - image_width),
-                       0.5 * (surface_height - image_height));
-      _gtk_css_image_draw (image, cr2, image_width, image_height);
-      cairo_destroy (cr2);
-
-      cairo_set_source_surface (cr, surface,
-                                _gtk_css_position_value_get_x (pos, width - image_width),
-                                _gtk_css_position_value_get_y (pos, height - image_height));
-      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
-      cairo_surface_destroy (surface);
+        repeat_height = round (image_height);
 
       if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
         {
-          fill_rect.x = _gtk_css_position_value_get_x (pos, width - image_width);
-          fill_rect.width = image_width;
+          fill_rect.origin.x = _gtk_css_position_value_get_x (pos, width - image_width);
+          fill_rect.size.width = image_width;
         }
       else
         {
-          fill_rect.x = 0;
-          fill_rect.width = width;
+          fill_rect.origin.x = 0;
+          fill_rect.size.width = width;
         }
 
       if (vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
         {
-          fill_rect.y = _gtk_css_position_value_get_y (pos, height - image_height);
-          fill_rect.height = image_height;
+          fill_rect.origin.y = _gtk_css_position_value_get_y (pos, height - image_height);
+          fill_rect.size.height = image_height;
         }
       else
         {
-          fill_rect.y = 0;
-          fill_rect.height = height;
+          fill_rect.origin.y = 0;
+          fill_rect.size.height = height;
         }
 
-      cairo_rectangle (cr, fill_rect.x, fill_rect.y,
-                       fill_rect.width, fill_rect.height);
-      cairo_fill (cr);
+      position_x = _gtk_css_position_value_get_x (pos, width - image_width);
+      position_y = _gtk_css_position_value_get_y (pos, height - image_height);
 
-      cairo_destroy (cr);
+      gtk_snapshot_push_repeat (snapshot,
+                                &fill_rect,
+                                &GRAPHENE_RECT_INIT (
+                                    position_x, position_y,
+                                    repeat_width, repeat_height
+                                ),
+                                "BackgroundLayerRepeat<%u>", idx);
+                                
+      gtk_snapshot_translate_2d (snapshot,
+                                 position_x + 0.5 * (repeat_width - image_width),
+                                 position_y + 0.5 * (repeat_height - image_height));
+      gtk_css_image_snapshot (image, snapshot, image_width, image_height);
+
+      gtk_snapshot_pop_and_append (snapshot);
     }
 
   gtk_snapshot_translate_2d (snapshot, - origin->bounds.origin.x, - origin->bounds.origin.y);

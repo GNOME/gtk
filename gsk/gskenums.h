@@ -38,6 +38,8 @@
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a
  *     matrix transform
  * @GSK_OPACITY_NODE: A node that changes the opacity of its child
+ * @GSK_COLOR_MATRIX_NODE: A node that applies a color matrix to every pixel
+ * @GSK_REPEAT_NODE: A node that repeats the child's contents
  * @GSK_CLIP_NODE: A node that clips its child to a rectangular area
  * @GSK_ROUNDED_CLIP_NODE: A node that clips its child to a rounded rectangle
  * @GSK_SHADOW_NODE: A node that draws a shadow below its child
@@ -62,6 +64,7 @@ typedef enum {
   GSK_TRANSFORM_NODE,
   GSK_OPACITY_NODE,
   GSK_COLOR_MATRIX_NODE,
+  GSK_REPEAT_NODE,
   GSK_CLIP_NODE,
   GSK_ROUNDED_CLIP_NODE,
   GSK_SHADOW_NODE,
