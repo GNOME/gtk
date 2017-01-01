@@ -1405,7 +1405,7 @@ AC_SUBST(GDK_DEP_CFLAGS)
 GSK_EXTRA_LIBS=
 GSK_EXTRA_CFLAGS=
 
-GSK_PACKAGES="gdk-pixbuf-2.0 >= gdk_pixbuf_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version graphene-1.0 >= graphene_required_version"
+GSK_PACKAGES="gdk-pixbuf-2.0 >= gdk_pixbuf_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version graphene-gobject-1.0 >= graphene_required_version"
 GSK_PRIVATE_PACKAGES="epoxy >= epoxy_required_version $WAYLAND_PACKAGES"
 
 PKG_CHECK_MODULES(GSK_DEP, $PANGO_PACKAGES $GSK_PACKAGES $GSK_PRIVATE_PACKAGES)
@@ -1432,7 +1432,7 @@ fi
 PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
 
 GTK_PACKAGES="atk >= atk_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version gdk-pixbuf-2.0 >= gdk_pixbuf_required_version gio-2.0 >= glib_required_version"
-GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES epoxy >= epoxy_required_version graphene-1.0 >= graphene_required_version"
+GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES epoxy >= epoxy_required_version graphene-gobject-1.0 >= graphene_required_version"
 if test "x$enable_x11_backend" = xyes -o "x$enable_wayland_backend" = xyes; then
   GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
 fi
