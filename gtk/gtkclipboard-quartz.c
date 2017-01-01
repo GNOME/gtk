@@ -370,7 +370,6 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 			    gpointer              user_data,
 			    gboolean              have_owner)
 {
-  GtkClipboardOwner *owner;
   NSSet *types;
   NSAutoreleasePool *pool;
 
@@ -406,26 +405,35 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
    */
   if (user_data && user_data == clipboard->user_data)
     {
-      owner = [clipboard->owner retain];
-
-      owner->setting_same_owner = TRUE;
+      clipboard->owner->setting_same_owner = TRUE;
       clipboard->change_count = [clipboard->pasteboard declareTypes: [types allObjects]
-                                                              owner: owner];
-      owner->setting_same_owner = FALSE;
+                                                              owner: clipboard->owner];
+      clipboard->owner->setting_same_owner = FALSE;
     }
   else
     {
-      owner = [[GtkClipboardOwner alloc] initWithClipboard:clipboard];
+      GtkClipboardOwner *new_owner;
 
+      /* We do not set the new owner on clipboard->owner immediately,
+       * because declareTypes could (but not always does -- see also the
+       * comment at pasteboardChangedOwner above) cause clipboard_unset
+       * to be called, which releases clipboard->owner.
+       */
+      new_owner = [[GtkClipboardOwner alloc] initWithClipboard:clipboard];
       clipboard->change_count = [clipboard->pasteboard declareTypes: [types allObjects]
-                                                              owner: owner];
+                                                              owner: new_owner];
+
+      /* In case pasteboardChangedOwner was not triggered, check to see
+       * whether the previous owner still needs to be released.
+       */
+      if (clipboard->owner)
+        [clipboard->owner release];
+      clipboard->owner = new_owner;
     }
 
-  [owner release];
   [types release];
   [pool release];
 
-  clipboard->owner = owner;
   clipboard->user_data = user_data;
   clipboard->have_owner = have_owner;
   if (have_owner)
@@ -538,6 +546,8 @@ clipboard_unset (GtkClipboard *clipboard)
   g_free (clipboard->storable_targets);
   clipboard->storable_targets = NULL;
 
+  if (clipboard->owner)
+    [clipboard->owner release];
   clipboard->owner = NULL;
   clipboard->get_func = NULL;
   clipboard->clear_func = NULL;
