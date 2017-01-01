@@ -897,7 +897,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_COLOR,
                                           GDK_TYPE_RGBA,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_FOREGROUND | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
+                                          GTK_CSS_AFFECTS_CONTENT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
                                           color_parse,
                                           color_query,
                                           _gtk_css_color_value_new_rgba (1, 1, 1, 1));
@@ -1446,7 +1446,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_ICON_TRANSFORM,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_CLIP,
+                                          GTK_CSS_AFFECTS_CONTENT | GTK_CSS_AFFECTS_CLIP,
                                           transform_value_parse,
                                           NULL,
                                           _gtk_css_transform_value_new_none ());
@@ -1454,7 +1454,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_ICON_FILTER,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_CLIP,
+                                          GTK_CSS_AFFECTS_CONTENT,
                                           filter_value_parse,
                                           NULL,
                                           gtk_css_filter_value_new_none ());
@@ -1590,7 +1590,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_OPACITY,
                                           G_TYPE_DOUBLE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
-                                          0,
+                                          GTK_CSS_AFFECTS_POSTEFFECT,
                                           opacity_parse,
                                           opacity_query,
                                           _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
@@ -1598,7 +1598,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FILTER,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_REDRAW,
+                                          GTK_CSS_AFFECTS_POSTEFFECT,
                                           filter_value_parse,
                                           NULL,
                                           gtk_css_filter_value_new_none ());

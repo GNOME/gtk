@@ -96,7 +96,7 @@ typedef guint64 GtkCssChange;
 
 /*
  * GtkCssAffects:
- * @GTK_CSS_AFFECTS_FOREGROUND: The foreground rendering is affected.
+ * @GTK_CSS_AFFECTS_CONTENT: The content rendering is affected.
  *   This does not include things that affect the font. For those,
  *   see @GTK_CSS_AFFECTS_FONT.
  * @GTK_CSS_AFFECTS_BACKGROUND: The background rendering is affected.
@@ -116,6 +116,8 @@ typedef guint64 GtkCssChange;
  * @GTK_CSS_AFFECTS_SIZE: Changes in this property may have an effect
  *   on the allocated size of the element. Changes in these properties
  *   should cause a recomputation of the element's allocated size.
+ * @GTK_CSS_AFFECTS_POSTEFFECT: An effect is applied after drawing that changes
+ *   the drawing.
  *
  * The generic effects that a CSS property can have. If a value is
  * set, then the property will have an influence on that feature.
@@ -123,7 +125,7 @@ typedef guint64 GtkCssChange;
  * Note that multiple values can be set.
  */
 typedef enum {
-  GTK_CSS_AFFECTS_FOREGROUND = (1 << 0),
+  GTK_CSS_AFFECTS_CONTENT = (1 << 0),
   GTK_CSS_AFFECTS_BACKGROUND = (1 << 1),
   GTK_CSS_AFFECTS_BORDER = (1 << 2),
   GTK_CSS_AFFECTS_FONT = (1 << 3),
@@ -133,15 +135,17 @@ typedef enum {
   GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 7),
   GTK_CSS_AFFECTS_OUTLINE = (1 << 8),
   GTK_CSS_AFFECTS_CLIP = (1 << 9),
-  GTK_CSS_AFFECTS_SIZE = (1 << 10)
+  GTK_CSS_AFFECTS_SIZE = (1 << 10),
+  GTK_CSS_AFFECTS_POSTEFFECT = (1 << 11)
 } GtkCssAffects;
 
-#define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_FOREGROUND |    \
+#define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_CONTENT |       \
                                 GTK_CSS_AFFECTS_BACKGROUND |    \
                                 GTK_CSS_AFFECTS_BORDER |        \
                                 GTK_CSS_AFFECTS_ICON |          \
                                 GTK_CSS_AFFECTS_SYMBOLIC_ICON | \
-                                GTK_CSS_AFFECTS_OUTLINE)
+                                GTK_CSS_AFFECTS_OUTLINE |       \
+                                GTK_CSS_AFFECTS_POSTEFFECT)
 
 enum { /*< skip >*/
   GTK_CSS_PROPERTY_COLOR,
