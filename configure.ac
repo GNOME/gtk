@@ -1327,7 +1327,7 @@ if test "x$enable_vulkan" != "xno"; then
           [AC_CHECK_LIB([vulkan], [vkCreateInstance], [], [vulkan_error="Vulkan library not found"])],
           [vulkan_error="Vulkan header not found"])
       if test "x$vulkan_error" != "x"; then
-          if "x$enable_vulkan" = "xyes"; then
+          if test "x$enable_vulkan" = "xyes"; then
               AC_MSG_ERROR($vulkan_error)
           else
               AC_MSG_WARN($vulkan_error)
