@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  *
- * gdkvulkancontext-x11.h:  specific Vulkan wrappers
+ * gdkvulkancontextprivate.h: specific Vulkan wrappers
  *
  * Copyright © 2016  Benjamin Otte
  *
