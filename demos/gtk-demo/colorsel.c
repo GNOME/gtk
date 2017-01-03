@@ -32,7 +32,10 @@ response_cb (GtkDialog *dialog,
              gpointer   user_data)
 {
   if (response_id == GTK_RESPONSE_OK)
-    gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
+    {
+      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
+      gtk_widget_queue_draw (da);
+    }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
