@@ -216,6 +216,17 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
       composite_alpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     }
 
+  /*
+   * Per https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/xhtml/vkspec.html#VkSurfaceCapabilitiesKHR
+   * the current extent may assume a special value, meaning that the extend should assume whatever
+   * value the window has.
+   */
+  if (capabilities.currentExtent.width == -1 || capabilities.currentExtent.height == -1)
+    {
+      capabilities.currentExtent.width = gdk_window_get_width (window) * gdk_window_get_scale_factor (window);
+      capabilities.currentExtent.height = gdk_window_get_height (window) * gdk_window_get_scale_factor (window);
+    }
+
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
                                             &(VkSwapchainCreateInfoKHR) {
                                                 .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
