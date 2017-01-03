@@ -25,6 +25,7 @@
    <ClCompile Include="..\..\..\gsk\gskvulkanclip.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\..\gsk\gskvulkancolorpipeline.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\..\gsk\gskvulkancommandpool.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\..\gsk\gskvulkaneffectpipeline.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\..\gsk\gskvulkanlineargradientpipeline.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\..\gsk\gskvulkanimage.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\..\gsk\gskvulkanmemory.c"><Filter>Source Files</Filter></ClCompile>
