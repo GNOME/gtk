@@ -56,6 +56,8 @@ libgdk_wayland_la_SOURCES =			\
 	gdkscreen-wayland.c			\
 	gdkseat-wayland.h			\
 	gdkselection-wayland.c			\
+	gdkvulkancontext-wayland.c		\
+	gdkvulkancontext-wayland.h		\
 	gdkwindow-wayland.c			\
 	gdkwayland.h				\
 	gdkprivate-wayland.h			\

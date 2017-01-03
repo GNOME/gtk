@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+#define VK_USE_PLATFORM_WAYLAND_KHR
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -41,6 +43,7 @@
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkglcontext-wayland.h"
+#include "gdkvulkancontext-wayland.h"
 #include "gdkwaylandmonitor.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
 #include "tablet-unstable-v2-client-protocol.h"
@@ -918,6 +921,12 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   object_class->finalize = gdk_wayland_display_finalize;
 
   display_class->window_type = gdk_wayland_window_get_type ();
+
+#ifdef GDK_RENDERING_VULKAN
+  display_class->vk_context_type = GDK_TYPE_WAYLAND_VULKAN_CONTEXT;
+  display_class->vk_extension_name = VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME;
+#endif
+
   display_class->get_name = gdk_wayland_display_get_name;
   display_class->get_default_screen = gdk_wayland_display_get_default_screen;
   display_class->beep = gdk_wayland_display_beep;
