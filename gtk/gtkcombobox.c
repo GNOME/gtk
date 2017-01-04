@@ -259,8 +259,6 @@ enum {
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
 
-#define SCROLL_TIME  100
-
 /* common */
 
 static void     gtk_combo_box_cell_layout_init     (GtkCellLayoutIface *iface);
