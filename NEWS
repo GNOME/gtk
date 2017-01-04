@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.22.6
+==================================
+
+* Bugs fixed:
+ 774534 776132 776187 776012 774784 776187 776306 775808 776524 776560
+ 774534 input shape and opaque region not applied without begin_paint()/end_paint()
+ 774784 Failed to get desktop session proxy is not an error!
+ 775808 win32 maximized window is larger than the extended screen in dual monitor
+ 776012 GtkFlowBox, GtkListBox: Don't emit signals etc. during destruction
+ 776132 Mention the difference between gdk_window_create_similar_image_surface and...
+ 776187 flowbox: Add gtk_flow_box_get_child_at_pos to gtk3
+ 776306 flowbox: Sometimes emits child-activated during rubberband selection
+ 776524 GtkAboutDialog: Fix formatting of example email address in html documentation
+ 776560 icon-browser: window opens at very narrow size, only showing 1 column of icons
+        Fix GL checks to work better on OpenGL ES 2.0
+        Avoid a possible crash in ::activate-url handlers
+        scrolledwindow: Fix func summary being cut off in bindings using doxygen
+
+* Translation updates:
+ German
+ Russian
+
+
 Overview of Changes in GTK+ 3.22.5
 ==================================
 
