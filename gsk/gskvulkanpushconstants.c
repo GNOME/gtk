@@ -101,13 +101,13 @@ gsk_vulkan_push_constants_push_fragment (GskVulkanPushConstants *self,
 uint32_t
 gst_vulkan_push_constants_get_range_count (void)
 {
-  return 2;
+  return 1;
 }
 
 const VkPushConstantRange *
 gst_vulkan_push_constants_get_ranges (void)
 {
-  static const VkPushConstantRange ranges[2] = {
+  static const VkPushConstantRange ranges[1] = {
       {
           .stageFlags = VK_SHADER_STAGE_VERTEX_BIT,
           .offset = G_STRUCT_OFFSET (GskVulkanPushConstantsWire, vertex),
