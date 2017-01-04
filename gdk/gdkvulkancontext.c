@@ -45,6 +45,8 @@ struct _GdkVulkanContextPrivate {
 #endif
 
   guint32 draw_index;
+
+  guint vulkan_ref: 1;
 };
 
 enum {
@@ -166,7 +168,7 @@ gdk_vulkan_context_dispose (GObject *gobject)
 
   /* display will be unset in gdk_draw_context_dispose() */
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-  if (display)
+  if (display && priv->vulkan_ref)
     gdk_display_unref_vulkan (display);
 
   G_OBJECT_CLASS (gdk_vulkan_context_parent_class)->dispose (gobject);
@@ -411,7 +413,8 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   VkBool32 supported;
   uint32_t i;
 
-  if (!gdk_display_ref_vulkan (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), error))
+  priv->vulkan_ref = gdk_display_ref_vulkan (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), error);
+  if (!priv->vulkan_ref)
     return FALSE;
 
   res = GDK_VULKAN_CONTEXT_GET_CLASS (context)->create_surface (context, &priv->surface);
