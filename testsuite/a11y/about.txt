@@ -252,68 +252,59 @@ window1
                                 weight: <omitted>
                                 wrap-mode: word
             <AtkHypertext>
-          hbox
-            "filler"
+          website_label
+            "label"
             parent: page_vbox
             index: 2
-            state: enabled horizontal sensitive showing visible
+            name: Website
+            state: enabled focusable multi-line sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            website_label
-              "label"
-              parent: hbox
-              index: 0
-              name: Website
-              state: enabled focusable multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Website
-              character count: 7
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
+            <AtkText>
+            text: Website
+            character count: 7
+            caret offset: 0
+            default attributes: bg-color: <omitted>
+                                bg-full-height: 0
+                                direction: <omitted>
+                                editable: false
+                                family-name: <omitted>
+                                fg-color: <omitted>
+                                indent: 0
+                                invisible: false
+                                justification: left
+                                language: <omitted>
+                                left-margin: 0
+                                pixels-above-lines: 0
+                                pixels-below-lines: 0
+                                pixels-inside-wrap: 0
+                                right-margin: 0
+                                rise: 0
+                                scale: 1
+                                size: <omitted>
+                                stretch: <omitted>
+                                strikethrough: false
+                                style: <omitted>
+                                underline: none
+                                variant: <omitted>
+                                weight: <omitted>
+                                wrap-mode: word
+            <AtkHypertext>
+              <AtkHyperlink>
+              start index: 0
+              end index: 7
+              anchors: http://www.gtk.org
+            unnamed-GtkLabelAccessibleLinkImpl-3
+              "link"
+              parent: website_label
+              state: enabled focusable focused multi-line sensitive showing visible
+              <AtkHyperlinkImpl>
                 <AtkHyperlink>
                 start index: 0
                 end index: 7
                 anchors: http://www.gtk.org
-              unnamed-GtkLabelAccessibleLinkImpl-3
-                "link"
-                parent: website_label
-                state: enabled focusable focused multi-line sensitive showing visible
-                <AtkHyperlinkImpl>
-                  <AtkHyperlink>
-                  start index: 0
-                  end index: 7
-                  anchors: http://www.gtk.org
           copyright_label
             "label"
             parent: page_vbox
