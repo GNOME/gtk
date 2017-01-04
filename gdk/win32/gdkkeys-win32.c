@@ -42,8 +42,12 @@ enum _GdkWin32KeyLevelState
 {
   GDK_WIN32_LEVEL_NONE = 0,
   GDK_WIN32_LEVEL_SHIFT,
+  GDK_WIN32_LEVEL_CAPSLOCK,
+  GDK_WIN32_LEVEL_SHIFT_CAPSLOCK,
   GDK_WIN32_LEVEL_ALTGR,
   GDK_WIN32_LEVEL_SHIFT_ALTGR,
+  GDK_WIN32_LEVEL_CAPSLOCK_ALTGR,
+  GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR,
   GDK_WIN32_LEVEL_COUNT
 };
 
@@ -124,16 +128,11 @@ struct _GdkWin32KeyGroupOptions
   /* character that should be used as the decimal separator */
   wchar_t         decimal_mark;
 
-  /* the bits that indicate level shift when set (usually Shift, sometimes also CapsLock) */
-  GdkModifierType shift_modifiers;
-
   /* Scancode for the VK_RSHIFT */
   guint           scancode_rshift;
 
   /* TRUE if Ctrl+Alt emulates AltGr */
   gboolean        has_altgr;
-
-  gboolean        capslock_tested;
 
   GArray         *dead_keys;
 };
@@ -155,9 +154,9 @@ struct _GdkWin32Keymap
   GArray *layout_handles;
 
   /* VirtualKeyCode -> gdk_keyval table
-   * length = 256 * length(layout_handles) * 2 * 2
+   * length = 256 * length(layout_handles) * 2 * 4
    * 256 is the number of virtual key codes,
-   * 2x2 is the number of Shift/AltGr combinations (level),
+   * 2x4 is the number of Shift/AltGr/CapsLock combinations (level),
    * length(layout_handles) is the number of layout handles (group).
    */
   guint  *keysym_tab;
@@ -233,10 +232,9 @@ print_keysym_tab (GdkWin32Keymap *keymap)
   for (li = 0; li < group_size; li++)
     {
       options = &g_array_index (keymap->options, GdkWin32KeyGroupOptions, li);
-      g_print ("keymap %d (0x%p):%s%s\n",
+      g_print ("keymap %d (0x%p):%s\n",
                li, g_array_index (keymap->layout_handles, HKL, li),
-               options->has_altgr ? " (uses AltGr)" : "",
-               (options->shift_modifiers & GDK_LOCK_MASK) ? " (has ShiftLock)" : "");
+               options->has_altgr ? " (uses AltGr)" : "");
 
       for (vk = 0; vk < KEY_STATE_SIZE; vk++)
         {
@@ -427,18 +425,42 @@ set_level_vks (guchar               *key_state,
     {
     case GDK_WIN32_LEVEL_NONE:
       key_state[VK_SHIFT] = 0;
+      key_state[VK_CAPITAL] = 0;
       key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
       break;
     case GDK_WIN32_LEVEL_SHIFT:
       key_state[VK_SHIFT] = 0x80;
+      key_state[VK_CAPITAL] = 0;
+      key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
+      break;
+    case GDK_WIN32_LEVEL_CAPSLOCK:
+      key_state[VK_SHIFT] = 0;
+      key_state[VK_CAPITAL] = 0x01;
+      key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
+      break;
+    case GDK_WIN32_LEVEL_SHIFT_CAPSLOCK:
+      key_state[VK_SHIFT] = 0x80;
+      key_state[VK_CAPITAL] = 0x01;
       key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
       break;
     case GDK_WIN32_LEVEL_ALTGR:
       key_state[VK_SHIFT] = 0;
+      key_state[VK_CAPITAL] = 0;
       key_state[VK_CONTROL] = key_state[VK_MENU] = 0x80;
       break;
     case GDK_WIN32_LEVEL_SHIFT_ALTGR:
       key_state[VK_SHIFT] = 0x80;
+      key_state[VK_CAPITAL] = 0;
+      key_state[VK_CONTROL] = key_state[VK_MENU] = 0x80;
+      break;
+    case GDK_WIN32_LEVEL_CAPSLOCK_ALTGR:
+      key_state[VK_SHIFT] = 0;
+      key_state[VK_CAPITAL] = 0x01;
+      key_state[VK_CONTROL] = key_state[VK_MENU] = 0x80;
+      break;
+    case GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR:
+      key_state[VK_SHIFT] = 0x80;
+      key_state[VK_CAPITAL] = 0x01;
       key_state[VK_CONTROL] = key_state[VK_MENU] = 0x80;
       break;
     case GDK_WIN32_LEVEL_COUNT:
@@ -458,6 +480,7 @@ reset_after_dead (guchar key_state[KEY_STATE_SIZE],
 
   temp_key_state[VK_SHIFT] =
     temp_key_state[VK_CONTROL] =
+    temp_key_state[VK_CAPITAL] =
     temp_key_state[VK_MENU] = 0;
 
   ToUnicodeEx (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
@@ -664,7 +687,7 @@ update_keymap (GdkKeymap *gdk_keymap)
 
   GDK_NOTE (EVENTS, g_print ("\n"));
 
-  keysym_tab_size = hkls_len * 256 * 2 * 2;
+  keysym_tab_size = hkls_len * 256 * 2 * 4;
 
   if (hkls_len != keymap->layout_handles->len)
     keymap->keysym_tab = g_renew (guint, keymap->keysym_tab, keysym_tab_size);
@@ -678,10 +701,8 @@ update_keymap (GdkKeymap *gdk_keymap)
       options = &g_array_index (keymap->options, GdkWin32KeyGroupOptions, i);
 
       options->decimal_mark = 0;
-      options->shift_modifiers = GDK_SHIFT_MASK;
       options->scancode_rshift = 0;
       options->has_altgr = FALSE;
-      options->capslock_tested = FALSE;
       options->dead_keys = g_array_new (FALSE, FALSE, sizeof (GdkWin32KeyNode));
       g_array_set_clear_func (options->dead_keys, (GDestroyNotify) gdk_win32_key_node_clear);
 
@@ -811,6 +832,8 @@ update_keymap (GdkKeymap *gdk_keymap)
 
           /* Check if keyboard has an AltGr key by checking if
            * the mapping with Control+Alt is different.
+           * Don't test CapsLock here, as it does not seem to affect
+           * dead keys themselves, only the results of dead key combinations.
            */
           if (!options->has_altgr)
             if ((keygroup[GDK_WIN32_LEVEL_ALTGR] != GDK_KEY_VoidSymbol &&
@@ -818,43 +841,6 @@ update_keymap (GdkKeymap *gdk_keymap)
                 (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR] != GDK_KEY_VoidSymbol &&
                  keygroup[GDK_WIN32_LEVEL_SHIFT] != keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR]))
               options->has_altgr = TRUE;
-
-          if (!options->capslock_tested)
-            {
-              /* Can we use this virtual key to determine the CapsLock
-               * key behaviour: CapsLock or ShiftLock? If it generates
-               * keysyms for printable characters and has a shifted
-               * keysym that isn't just the upperacase of the
-               * unshifted keysym, check the behaviour of VK_CAPITAL.
-               */
-              if (g_unichar_isgraph (gdk_keyval_to_unicode (keygroup[GDK_WIN32_LEVEL_NONE])) &&
-                  keygroup[GDK_WIN32_LEVEL_SHIFT] != keygroup[GDK_WIN32_LEVEL_NONE] &&
-                  g_unichar_isgraph (gdk_keyval_to_unicode (keygroup[GDK_WIN32_LEVEL_SHIFT])) &&
-                  keygroup[GDK_WIN32_LEVEL_SHIFT] != gdk_keyval_to_upper (keygroup[GDK_WIN32_LEVEL_NONE]))
-                {
-                  guchar chars[2];
-
-                  options->capslock_tested = TRUE;
-
-                  key_state[VK_SHIFT] = 0;
-                  key_state[VK_CONTROL] = key_state[VK_MENU] = 0;
-                  key_state[VK_CAPITAL] = 1;
-
-                  if (ToAsciiEx (vk, scancode, key_state,
-                                 (LPWORD) chars, 0, hkls[group]) == 1)
-                    {
-                      if (chars[0] >= GDK_KEY_space &&
-                          chars[0] <= GDK_KEY_asciitilde &&
-                          chars[0] == keygroup[GDK_WIN32_LEVEL_SHIFT])
-                        {
-                          /* CapsLock acts as ShiftLock */
-                          options->shift_modifiers |= GDK_LOCK_MASK;
-                        }
-                    }
-
-                  key_state[VK_CAPITAL] = 0;
-                }
-            }
         }
     }
 
@@ -930,13 +916,33 @@ update_keymap (GdkKeymap *gdk_keymap)
                         wchar_t t = gdk_keyval_to_unicode (dead_key->undead_gdk_keycode);
                         dead_key_undead_u8 = g_utf16_to_utf8 (&t, 1, NULL, NULL, NULL);
                         wcs_u8 = g_utf16_to_utf8 (wcs, 1, NULL, NULL, NULL);
-                        g_fprintf (stdout, "%d %s%s0x%02x (%s) + %s%s0x%02x = 0x%04x (%s)\n", group,
-                                 (dead_key->level == GDK_WIN32_LEVEL_SHIFT || dead_key->level == GDK_WIN32_LEVEL_SHIFT_ALTGR) ? "SHIFT-" : "      ",
-                                 (dead_key->level == GDK_WIN32_LEVEL_ALTGR || dead_key->level == GDK_WIN32_LEVEL_SHIFT_ALTGR) ? "ALTGR-" : "      ",
+                        g_fprintf (stdout, "%d %s%s%s0x%02x (%s) + %s%s%s0x%02x = 0x%04x (%s)\n", group,
+                                 (dead_key->level == GDK_WIN32_LEVEL_SHIFT ||
+                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_ALTGR ||
+                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK ||
+                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "SHIFT-" : "      ",
+                                 (dead_key->level == GDK_WIN32_LEVEL_CAPSLOCK ||
+                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK ||
+                                  dead_key->level == GDK_WIN32_LEVEL_CAPSLOCK_ALTGR ||
+                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "CAPSLOCK-" : "         ",
+                                 (dead_key->level == GDK_WIN32_LEVEL_ALTGR ||
+                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_ALTGR ||
+                                  dead_key->level == GDK_WIN32_LEVEL_CAPSLOCK_ALTGR ||
+                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "ALTGR-" : "      ",
                                  dead_key->vk,
                                  dead_key_undead_u8,
-                                 (combo.level == GDK_WIN32_LEVEL_SHIFT || combo.level == GDK_WIN32_LEVEL_SHIFT_ALTGR) ? "SHIFT-" : "      ",
-                                 (combo.level == GDK_WIN32_LEVEL_ALTGR || combo.level == GDK_WIN32_LEVEL_SHIFT_ALTGR) ? "ALTGR-" : "      ",
+                                 (combo.level == GDK_WIN32_LEVEL_SHIFT ||
+                                  combo.level == GDK_WIN32_LEVEL_SHIFT_ALTGR ||
+                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK ||
+                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "SHIFT-" : "      ",
+                                 (combo.level == GDK_WIN32_LEVEL_CAPSLOCK ||
+                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK ||
+                                  combo.level == GDK_WIN32_LEVEL_CAPSLOCK_ALTGR ||
+                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "CAPSLOCK-" : "         ",
+                                 (combo.level == GDK_WIN32_LEVEL_ALTGR ||
+                                  combo.level == GDK_WIN32_LEVEL_SHIFT_ALTGR ||
+                                  combo.level == GDK_WIN32_LEVEL_CAPSLOCK_ALTGR ||
+                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "ALTGR-" : "      ",
                                  vk,
                                  wcs[0],
                                  wcs_u8);
@@ -1498,7 +1504,6 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   guint tmp_keyval;
   guint *keygroup;
   GdkWin32KeyLevelState shift_level;
-  GdkWin32KeyGroupOptions  *options;
   GdkModifierType modifiers = GDK_SHIFT_MASK | GDK_LOCK_MASK | GDK_MOD2_MASK;
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
@@ -1529,34 +1534,30 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   if (group < 0 || group >= keymap->layout_handles->len)
     return FALSE;
 
-  options = &g_array_index (keymap->options, GdkWin32KeyGroupOptions, group);
   keygroup = &keymap->keysym_tab[(hardware_keycode * keymap->layout_handles->len + group) * GDK_WIN32_LEVEL_COUNT];
 
-  if ((state & GDK_LOCK_MASK) &&
-      (state & GDK_SHIFT_MASK) &&
-      ((options->shift_modifiers & GDK_LOCK_MASK) ||
-       (keygroup[GDK_WIN32_LEVEL_SHIFT] == gdk_keyval_to_upper (keygroup[GDK_WIN32_LEVEL_NONE]))))
-    /* Shift always disables ShiftLock. Shift disables CapsLock for
-     * keys with lowercase/uppercase letter pairs.
-     */
-    shift_level = GDK_WIN32_LEVEL_NONE;
-  else if (state & options->shift_modifiers)
+  if ((state & (GDK_SHIFT_MASK | GDK_LOCK_MASK)) == (GDK_SHIFT_MASK | GDK_LOCK_MASK))
+    shift_level = GDK_WIN32_LEVEL_SHIFT_CAPSLOCK;
+  else if (state & GDK_SHIFT_MASK)
     shift_level = GDK_WIN32_LEVEL_SHIFT;
+  else if (state & GDK_LOCK_MASK)
+    shift_level = GDK_WIN32_LEVEL_CAPSLOCK;
   else
     shift_level = GDK_WIN32_LEVEL_NONE;
 
-  if (shift_level == GDK_WIN32_LEVEL_NONE)
+  if (state & GDK_MOD2_MASK)
     {
-      if (state & GDK_MOD2_MASK)
+      if (shift_level == GDK_WIN32_LEVEL_NONE)
         shift_level = GDK_WIN32_LEVEL_ALTGR;
-    }
-  else
-    {
-      if (state & GDK_MOD2_MASK)
+      else if (shift_level == GDK_WIN32_LEVEL_SHIFT)
         shift_level = GDK_WIN32_LEVEL_SHIFT_ALTGR;
+      else if (shift_level == GDK_WIN32_LEVEL_CAPSLOCK)
+        shift_level = GDK_WIN32_LEVEL_CAPSLOCK_ALTGR;
+      else
+        shift_level = GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR;
     }
 
-  /* Drop altgr and shift if there are no keysymbols on
+  /* Drop altgr, capslock and shift if there are no keysymbols on
    * the key for those.
    */
   if (keygroup[shift_level] == GDK_KEY_VoidSymbol)
@@ -1565,11 +1566,25 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
         {
          case GDK_WIN32_LEVEL_NONE:
          case GDK_WIN32_LEVEL_ALTGR:
+         case GDK_WIN32_LEVEL_SHIFT:
+         case GDK_WIN32_LEVEL_CAPSLOCK:
            if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_NONE;
            break;
-         case GDK_WIN32_LEVEL_SHIFT:
-           if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
+         case GDK_WIN32_LEVEL_SHIFT_CAPSLOCK:
+           if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_CAPSLOCK;
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_SHIFT;
+           else if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_NONE;
+           break;
+         case GDK_WIN32_LEVEL_CAPSLOCK_ALTGR:
+           if (keygroup[GDK_WIN32_LEVEL_ALTGR] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_ALTGR;
+           else if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_CAPSLOCK;
+           else if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_NONE;
            break;
          case GDK_WIN32_LEVEL_SHIFT_ALTGR:
@@ -1580,42 +1595,55 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
            else if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_NONE;
            break;
+         case GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR:
+           if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_CAPSLOCK_ALTGR;
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_SHIFT_ALTGR;
+           else if (keygroup[GDK_WIN32_LEVEL_ALTGR] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_ALTGR;
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_SHIFT_CAPSLOCK;
+           else if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_CAPSLOCK;
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_SHIFT;
+           else if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
+             shift_level = GDK_WIN32_LEVEL_NONE;
+           break;
          case GDK_WIN32_LEVEL_COUNT:
            g_assert_not_reached ();
         }
     }
 
-  /* See whether the group and shift level actually mattered
+  /* See whether the shift level actually mattered
    * to know what to put in consumed_modifiers
    */
   if ((keygroup[GDK_WIN32_LEVEL_SHIFT] == GDK_KEY_VoidSymbol ||
        keygroup[GDK_WIN32_LEVEL_NONE] == keygroup[GDK_WIN32_LEVEL_SHIFT]) &&
       (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_ALTGR] == keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR]))
-      modifiers &= ~(GDK_SHIFT_MASK | GDK_LOCK_MASK);
+       keygroup[GDK_WIN32_LEVEL_ALTGR] == keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR]) &&
+      (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK] == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_CAPSLOCK] == keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK]))
+      modifiers &= ~GDK_SHIFT_MASK;
+
+  if ((keygroup[GDK_WIN32_LEVEL_CAPSLOCK] == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_NONE] == keygroup[GDK_WIN32_LEVEL_CAPSLOCK]) &&
+      (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR] == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_ALTGR] == keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR]) &&
+      (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK] == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_SHIFT] == keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK]))
+      modifiers &= ~GDK_LOCK_MASK;
 
   if ((keygroup[GDK_WIN32_LEVEL_ALTGR] == GDK_KEY_VoidSymbol ||
        keygroup[GDK_WIN32_LEVEL_NONE] == keygroup[GDK_WIN32_LEVEL_ALTGR]) &&
       (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_SHIFT] == keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR]))
+       keygroup[GDK_WIN32_LEVEL_SHIFT] == keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR]) &&
+      (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR] == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_CAPSLOCK] == keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR]))
       modifiers &= ~GDK_MOD2_MASK;
 
   tmp_keyval = keygroup[shift_level];
-
-  /* If a true CapsLock is toggled, and Shift is not down,
-   * and the shifted keysym is the uppercase of the unshifted,
-   * use it.
-   */
-  if (!(options->shift_modifiers & GDK_LOCK_MASK) &&
-      !(state & GDK_SHIFT_MASK) &&
-      (state & GDK_LOCK_MASK) &&
-      (shift_level < GDK_WIN32_LEVEL_SHIFT_ALTGR))
-    {
-      guint upper = gdk_keyval_to_upper (tmp_keyval);
-
-      if (upper == keygroup[shift_level + 1])
-	tmp_keyval = upper;
-    }
 
   if (keyval)
     *keyval = tmp_keyval;
