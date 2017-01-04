@@ -809,6 +809,9 @@ post_parse_hook (GOptionContext *context,
 
           return FALSE;
         }
+
+      if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
+        gtk_window_set_interactive_debugging (TRUE);
     }
 
   return TRUE;
@@ -988,7 +991,15 @@ gtk_init_with_args (gint                 *argc,
     return FALSE;
 
 done:
-  return GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL;
+  if (GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL)
+    {
+      if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
+        gtk_window_set_interactive_debugging (TRUE);
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 
