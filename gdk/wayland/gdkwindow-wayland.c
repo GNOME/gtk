@@ -1641,13 +1641,25 @@ get_real_parent_and_translate (GdkWindow *window,
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindow *parent = impl->transient_for;
 
-  while (parent &&
-         !gdk_window_has_native (parent) &&
-         gdk_window_get_parent (parent))
+  while (parent)
     {
+      GdkWindowImplWayland *parent_impl =
+        GDK_WINDOW_IMPL_WAYLAND (parent->impl);
+      GdkWindow *effective_parent = gdk_window_get_parent (parent);
+
+      if ((gdk_window_has_native (parent) &&
+           !parent_impl->display_server.wl_subsurface) ||
+          !effective_parent)
+        break;
+
       *x += parent->x;
       *y += parent->y;
-      parent = gdk_window_get_parent (parent);
+
+      if (gdk_window_has_native (parent) &&
+          parent_impl->display_server.wl_subsurface)
+        parent = parent->transient_for;
+      else
+        parent = effective_parent;
     }
 
   return parent;
