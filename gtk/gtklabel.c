@@ -3447,6 +3447,18 @@ gtk_label_update_layout_width (GtkLabel *label)
     }
 }
 
+static gboolean
+filter_func (PangoAttribute *attribute,
+             gpointer        data)
+{
+  GtkLabelLink *link = data;
+
+  attribute->start_index = link->start;
+  attribute->end_index = link->end;
+
+  return FALSE;
+}
+
 static void
 gtk_label_update_layout_attributes (GtkLabel *label)
 {
@@ -3463,8 +3475,6 @@ gtk_label_update_layout_attributes (GtkLabel *label)
 
   if (priv->select_info && priv->select_info->links)
     {
-      GdkRGBA link_color;
-      PangoAttribute *attribute;
       GList *list;
 
       attrs = pango_attr_list_new ();
@@ -3473,21 +3483,14 @@ gtk_label_update_layout_attributes (GtkLabel *label)
         {
           GtkLabelLink *link = list->data;
 
-          attribute = pango_attr_underline_new (TRUE);
-          attribute->start_index = link->start;
-          attribute->end_index = link->end;
-          pango_attr_list_insert (attrs, attribute);
-
           gtk_style_context_save_to_node (context, link->cssnode);
-          gtk_style_context_get_color (context, &link_color);
+          style_attrs = _gtk_style_context_get_pango_attributes (context);
+          if (style_attrs)
+            {
+              pango_attr_list_filter (style_attrs, filter_func, link);
+              attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
+            }
           gtk_style_context_restore (context);
-
-          attribute = pango_attr_foreground_new (link_color.red * 65535,
-                                                 link_color.green * 65535,
-                                                 link_color.blue * 65535);
-          attribute->start_index = link->start;
-          attribute->end_index = link->end;
-          pango_attr_list_insert (attrs, attribute);
         }
     }
   else if (priv->markup_attrs && priv->attrs)
