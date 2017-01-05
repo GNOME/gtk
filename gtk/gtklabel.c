@@ -229,9 +229,10 @@
  *
  * Since 2.18, GTK+ supports markup for clickable hyperlinks in addition
  * to regular Pango markup. The markup for links is borrowed from HTML,
- * using the `<a>` with “href“ and “title“ attributes. GTK+ renders links
+ * using the `<a>` with “href“, “title“ and “class“ attributes. GTK+ renders links
  * similar to the way they appear in web browsers, with colored, underlined
- * text. The “title“ attribute is displayed as a tooltip on the link.
+ * text. The “title“ attribute is displayed as a tooltip on the link. The “class“
+ * attribute is used as style class on the CSS node for the link.
  *
  * An example looks like this:
  *
@@ -2379,6 +2380,7 @@ start_element_handler (GMarkupParseContext  *context,
       GtkLabelLink *link;
       const gchar *uri = NULL;
       const gchar *title = NULL;
+      const gchar *class = NULL;
       gboolean visited = FALSE;
       gint line_number;
       gint char_number;
@@ -2396,6 +2398,8 @@ start_element_handler (GMarkupParseContext  *context,
             uri = attribute_values[i];
           else if (strcmp (attr, "title") == 0)
             title = attribute_values[i];
+          else if (strcmp (attr, "class") == 0)
+            class = attribute_values[i];
           else
             {
               g_set_error (error,
@@ -2443,6 +2447,9 @@ start_element_handler (GMarkupParseContext  *context,
       link->cssnode = gtk_css_node_new ();
       gtk_css_node_set_name (link->cssnode, I_("link"));
       gtk_css_node_set_parent (link->cssnode, widget_node);
+      if (class)
+        gtk_css_node_add_class (link->cssnode, g_quark_from_string (class));
+
       state = gtk_css_node_get_state (widget_node);
       if (visited)
         state |= GTK_STATE_FLAG_VISITED;
