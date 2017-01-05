@@ -55,6 +55,10 @@ gsk_private_vulkan_source_c = \
 	gskvulkanrenderer.c \
 	gskvulkanrenderpass.c \
 	gskvulkanshader.c
+gsk_private_vulkan_shaders = \
+	resources/vulkan/*.glsl
+gsk_private_vulkan_compiled_shaders = \
+	$(gsk_private_vulkan_shaders:.glsl=.spv)
 endif
 
 gsk_public_source_h = \
@@ -79,6 +83,8 @@ gsk_private_source_h = \
 	gskroundedrectprivate.h \
 	gskshaderbuilderprivate.h \
 	gsktextureprivate.h
+gsk_private_source_shaders = \
+	resources/glsl/*.glsl
 gsk_public_source_c = \
 	gskrenderer.c \
 	gskrendernode.c \
@@ -138,15 +144,15 @@ gsk.resources.xml: Makefile.am
 	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
 	echo "<gresources>" >> $@; \
 	echo "  <gresource prefix='/org/gtk/libgsk'>" >> $@; \
-	for f in $(top_srcdir)/gsk/resources/glsl/*; do \
+	for f in $(gsk_private_source_shaders); do \
 	  n=`basename $$f`; \
 	  echo "    <file alias='glsl/$$n'>resources/glsl/$$n</file>" >> $@; \
 	done; \
-	for f in $(top_srcdir)/gsk/resources/vulkan/*.spv; do \
+	for f in $(gsk_private_vulkan_compiled_shaders); do \
 	  n=`basename $$f`; \
 	  echo "    <file alias='vulkan/$$n'>resources/vulkan/$$n</file>" >> $@; \
 	done; \
-	for f in $(top_srcdir)/gsk/resources/vulkan/*.glsl; do \
+	for f in $(gsk_private_vulkan_shaders); do \
 	  n=`basename $$f`; \
 	  echo "    <file alias='vulkan/$$n'>resources/vulkan/$$n</file>" >> $@; \
 	done; \
