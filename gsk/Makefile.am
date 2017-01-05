@@ -56,7 +56,30 @@ gsk_private_vulkan_source_c = \
 	gskvulkanrenderpass.c \
 	gskvulkanshader.c
 gsk_private_vulkan_shaders = \
-	resources/vulkan/*.glsl
+	resources/vulkan/blend-clip.frag.glsl \
+	resources/vulkan/blend-clip-rounded.frag.glsl \
+	resources/vulkan/blend-clip-rounded.vert.glsl \
+	resources/vulkan/blend-clip.vert.glsl \
+	resources/vulkan/blend.frag.glsl \
+	resources/vulkan/blend.vert.glsl \
+	resources/vulkan/color-clip.frag.glsl \
+	resources/vulkan/color-clip-rounded.frag.glsl \
+	resources/vulkan/color-clip-rounded.vert.glsl \
+	resources/vulkan/color-clip.vert.glsl \
+	resources/vulkan/color.frag.glsl \
+	resources/vulkan/color.vert.glsl \
+	resources/vulkan/color-matrix-clip.frag.glsl \
+	resources/vulkan/color-matrix-clip-rounded.frag.glsl \
+	resources/vulkan/color-matrix-clip-rounded.vert.glsl \
+	resources/vulkan/color-matrix-clip.vert.glsl \
+	resources/vulkan/color-matrix.frag.glsl \
+	resources/vulkan/color-matrix.vert.glsl \
+	resources/vulkan/linear-clip.frag.glsl \
+	resources/vulkan/linear-clip-rounded.frag.glsl \
+	resources/vulkan/linear-clip-rounded.vert.glsl \
+	resources/vulkan/linear-clip.vert.glsl \
+	resources/vulkan/linear.frag.glsl \
+	resources/vulkan/linear.vert.glsl
 gsk_private_vulkan_compiled_shaders = \
 	$(gsk_private_vulkan_shaders:.glsl=.spv)
 endif
@@ -84,7 +107,16 @@ gsk_private_source_h = \
 	gskshaderbuilderprivate.h \
 	gsktextureprivate.h
 gsk_private_source_shaders = \
-	resources/glsl/*.glsl
+	resources/glsl/blend.fs.glsl \
+	resources/glsl/blend.vs.glsl \
+	resources/glsl/blit.fs.glsl \
+	resources/glsl/blit.vs.glsl \
+	resources/glsl/es2_common.fs.glsl \
+	resources/glsl/es2_common.vs.glsl \
+	resources/glsl/gl3_common.fs.glsl \
+	resources/glsl/gl3_common.vs.glsl \
+	resources/glsl/gl_common.fs.glsl \
+	resources/glsl/gl_common.vs.glsl
 gsk_public_source_c = \
 	gskrenderer.c \
 	gskrendernode.c \
