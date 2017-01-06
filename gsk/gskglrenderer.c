@@ -22,12 +22,8 @@
 #define SHADER_VERSION_GL3              150
 
 typedef struct {
-  int render_target_id;
-  int vao_id;
-  int buffer_id;
-  int texture_id;
-  int program_id;
-
+  int id;
+  /* Common locations (gl_common)*/
   int mvp_location;
   int source_location;
   int mask_location;
@@ -35,6 +31,20 @@ typedef struct {
   int position_location;
   int alpha_location;
   int blendMode_location;
+
+  /* Shader-specific locations */
+  union {
+  };
+} Program;
+
+typedef struct {
+  int render_target_id;
+  int vao_id;
+  int buffer_id;
+  int texture_id;
+  int program_id;
+
+  Program *program;
 } RenderData;
 
 typedef struct {
@@ -51,6 +61,10 @@ typedef struct {
   float opacity;
   float z;
 
+  /* mode-specific data for shaders */
+  union {
+  };
+
   const char *name;
 
   GskBlendMode blend_mode;
@@ -60,6 +74,8 @@ typedef struct {
 
   GArray *children;
 } RenderItem;
+
+
 
 enum {
   MVP,
@@ -93,6 +109,8 @@ typedef enum {
   RENDER_SCISSOR
 } RenderMode;
 
+#define NUM_PROGRAMS 2
+
 struct _GskGLRenderer
 {
   GskRenderer parent_instance;
@@ -112,8 +130,15 @@ struct _GskGLRenderer
   GskGLProfiler *gl_profiler;
   GskShaderBuilder *shader_builder;
 
-  int blend_program_id;
-  int blit_program_id;
+  union {
+    struct {
+      Program blend_program;
+      Program blit_program;
+    };
+    struct {
+      Program programs[NUM_PROGRAMS];
+    };
+  };
 
   GArray *render_items;
 
@@ -191,6 +216,27 @@ gsk_gl_renderer_destroy_buffers (GskGLRenderer *self)
   self->has_buffers = FALSE;
 }
 
+static void
+init_common_locations (GskGLRenderer *self,
+                       Program       *prog)
+{
+  prog->source_location =
+    gsk_shader_builder_get_uniform_location (self->shader_builder, prog->id, self->uniforms[SOURCE]);
+  prog->mask_location =
+    gsk_shader_builder_get_uniform_location (self->shader_builder, prog->id, self->uniforms[MASK]);
+  prog->mvp_location =
+    gsk_shader_builder_get_uniform_location (self->shader_builder, prog->id, self->uniforms[MVP]);
+  prog->alpha_location =
+    gsk_shader_builder_get_uniform_location (self->shader_builder, prog->id, self->uniforms[ALPHA]);
+  prog->blendMode_location =
+    gsk_shader_builder_get_uniform_location (self->shader_builder, prog->id, self->uniforms[BLEND_MODE]);
+
+  prog->position_location =
+    gsk_shader_builder_get_attribute_location (self->shader_builder, prog->id, self->attributes[POSITION]);
+  prog->uv_location =
+    gsk_shader_builder_get_attribute_location (self->shader_builder, prog->id, self->attributes[UV]);
+}
+
 static gboolean
 gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                  GError        **error)
@@ -245,8 +291,12 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   if (GSK_RENDER_MODE_CHECK (SHADERS))
     gsk_shader_builder_add_define (builder, "GSK_DEBUG", "1");
 #endif
+  /* Keep a pointer to query for the uniform and attribute locations
+   * when rendering the scene
+   */
+  self->shader_builder = builder;
 
-  self->blend_program_id =
+  self->blend_program.id = 
     gsk_shader_builder_create_program (builder, "blend.vs.glsl", "blend.fs.glsl", &shader_error);
   if (shader_error != NULL)
     {
@@ -256,8 +306,9 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       g_object_unref (builder);
       goto out;
     }
+  init_common_locations (self, &self->blend_program);
 
-  self->blit_program_id =
+  self->blit_program.id =
     gsk_shader_builder_create_program (builder, "blit.vs.glsl", "blit.fs.glsl", &shader_error);
   if (shader_error != NULL)
     {
@@ -267,11 +318,9 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       g_object_unref (builder);
       goto out;
     }
+  init_common_locations (self, &self->blit_program);
 
-  /* Keep a pointer to query for the uniform and attribute locations
-   * when rendering the scene
-   */
-  self->shader_builder = builder;
+
 
   res = TRUE;
 
@@ -448,17 +497,17 @@ render_item (GskGLRenderer *self,
   if (item->render_data.texture_id != 0)
     {
       /* Use texture unit 0 for the source */
-      glUniform1i (item->render_data.source_location, 0);
+      glUniform1i (item->render_data.program->source_location, 0);
       gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.texture_id);
 
       if (item->parent_data != NULL)
         {
-          glUniform1i (item->render_data.blendMode_location, item->blend_mode);
+          glUniform1i (item->render_data.program->blendMode_location, item->blend_mode);
 
           /* Use texture unit 1 for the mask */
           if (item->parent_data->texture_id != 0)
             {
-              glUniform1i (item->render_data.mask_location, 1);
+              glUniform1i (item->render_data.program->mask_location, 1);
               gsk_gl_driver_bind_mask_texture (self->gl_driver, item->parent_data->texture_id);
             }
         }
@@ -470,12 +519,12 @@ render_item (GskGLRenderer *self,
   else
     opacity = item->opacity;
 
-  glUniform1f (item->render_data.alpha_location, opacity);
+  glUniform1f (item->render_data.program->alpha_location, opacity);
 
   /* Pass the mvp to the vertex shader */
   GSK_NOTE (TRANSFORMS, graphene_matrix_print (&item->mvp));
   graphene_matrix_to_float (&item->mvp, mvp);
-  glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
+  glUniformMatrix4fv (item->render_data.program->mvp_location, 1, GL_FALSE, mvp);
 
   /* Draw the quad */
   GSK_NOTE2 (OPENGL, TRANSFORMS,
@@ -517,21 +566,21 @@ render_item (GskGLRenderer *self,
       gsk_gl_driver_bind_vao (self->gl_driver, item->render_data.vao_id);
 
       /* Since we're rendering the target texture, we only need the blit program */
-      glUseProgram (self->blit_program_id);
+      glUseProgram (self->blit_program.id);
 
       /* Use texture unit 0 for the render target */
-      glUniform1i (item->render_data.source_location, 0);
+      glUniform1i (item->render_data.program->source_location, 0);
       gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.render_target_id);
 
       /* Pass the opacity component; if we got here, we know that the original render
        * target is neither fully opaque nor at full opacity
        */
-      glUniform1f (item->render_data.alpha_location, item->opacity);
+      glUniform1f (item->render_data.program->alpha_location, item->opacity);
 
       /* Pass the mvp to the vertex shader */
       GSK_NOTE (TRANSFORMS, graphene_matrix_print (&item->mvp));
       graphene_matrix_to_float (&item->mvp, mvp);
-      glUniformMatrix4fv (item->render_data.mvp_location, 1, GL_FALSE, mvp);
+      glUniformMatrix4fv (item->render_data.program->mvp_location, 1, GL_FALSE, mvp);
 
       /* Draw the quad */
       GSK_NOTE2 (OPENGL, TRANSFORMS,
@@ -666,28 +715,15 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   /* Select the program to use */
   if (parent != NULL)
-    program_id = self->blend_program_id;
+    {
+      item.render_data.program = &self->blend_program;
+      program_id = self->blend_program.id;
+    }
   else
-    program_id = self->blit_program_id;
-
-  item.render_data.program_id = program_id;
-
-  /* Retrieve all the uniforms and attributes */
-  item.render_data.source_location =
-    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[SOURCE]);
-  item.render_data.mask_location =
-    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[MASK]);
-  item.render_data.mvp_location =
-    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[MVP]);
-  item.render_data.alpha_location =
-    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[ALPHA]);
-  item.render_data.blendMode_location =
-    gsk_shader_builder_get_uniform_location (self->shader_builder, program_id, self->uniforms[BLEND_MODE]);
-
-  item.render_data.position_location =
-    gsk_shader_builder_get_attribute_location (self->shader_builder, program_id, self->attributes[POSITION]);
-  item.render_data.uv_location =
-    gsk_shader_builder_get_attribute_location (self->shader_builder, program_id, self->attributes[UV]);
+    {
+      item.render_data.program = &self->blit_program;
+      program_id = self->blit_program.id;
+    }
 
   if (render_node_needs_render_target (node))
     {
@@ -745,9 +781,9 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
     case GSK_CONTAINER_NODE:
       {
-        guint i;
+        guint i, p;
 
-        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+        for (i = 0, p = gsk_container_node_get_n_children (node); i < p; i++)
           {
             GskRenderNode *child = gsk_container_node_get_child (node, i);
             gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
@@ -804,6 +840,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       break;
     }
 
+  item.render_data.program_id = program_id;
+
   /* Create the vertex buffers holding the geometry of the quad */
   {
     GskQuadVertex vertex_data[N_VERTICES] = {
@@ -818,8 +856,8 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
     item.render_data.vao_id =
       gsk_gl_driver_create_vao_for_quad (self->gl_driver,
-                                         item.render_data.position_location,
-                                         item.render_data.uv_location,
+                                         item.render_data.program->position_location,
+                                         item.render_data.program->uv_location,
                                          N_VERTICES,
                                          vertex_data);
   }
