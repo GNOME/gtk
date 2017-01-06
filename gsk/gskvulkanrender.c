@@ -420,21 +420,22 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
 
       self->n_descriptor_sets = needed_sets;
       self->descriptor_sets = g_renew (VkDescriptorSet, self->descriptor_sets, needed_sets);
-
-      VkDescriptorSetLayout *layouts = g_newa (VkDescriptorSetLayout, needed_sets);
-      for (i = 0; i < needed_sets; i++)
-        {
-          layouts[i] = gsk_vulkan_pipeline_layout_get_descriptor_set_layout (self->layout);
-        }
-      GSK_VK_CHECK (vkAllocateDescriptorSets, device,
-                                              &(VkDescriptorSetAllocateInfo) {
-                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-                                                  .descriptorPool = self->descriptor_pool,
-                                                  .descriptorSetCount = needed_sets,
-                                                  .pSetLayouts = layouts
-                                              },
-                                              self->descriptor_sets);
     }
+
+  VkDescriptorSetLayout *layouts = g_newa (VkDescriptorSetLayout, needed_sets);
+  for (i = 0; i < needed_sets; i++)
+    {
+      layouts[i] = gsk_vulkan_pipeline_layout_get_descriptor_set_layout (self->layout);
+    }
+
+  GSK_VK_CHECK (vkAllocateDescriptorSets, device,
+                                          &(VkDescriptorSetAllocateInfo) {
+                                              .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+                                              .descriptorPool = self->descriptor_pool,
+                                              .descriptorSetCount = needed_sets,
+                                              .pSetLayouts = layouts
+                                          },
+                                          self->descriptor_sets);
 
   g_hash_table_iter_init (&iter, self->descriptor_set_indexes);
   while (g_hash_table_iter_next (&iter, &key, &value))
