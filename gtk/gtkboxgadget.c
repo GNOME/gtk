@@ -536,7 +536,7 @@ gtk_box_gadget_snapshot (GtkCssGadget *gadget,
       GtkBoxGadgetChild *child = &g_array_index (priv->children, GtkBoxGadgetChild, draw_index);
 
       if (GTK_IS_WIDGET (child->object))
-        gtk_container_snapshot_child (GTK_CONTAINER (owner), GTK_WIDGET (child->object), snapshot);
+        gtk_widget_snapshot_child (owner, GTK_WIDGET (child->object), snapshot);
       else
         gtk_css_gadget_snapshot (GTK_CSS_GADGET (child->object), snapshot);
     }
