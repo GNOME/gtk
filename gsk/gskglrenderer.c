@@ -34,6 +34,9 @@ typedef struct {
 
   /* Shader-specific locations */
   union {
+    struct {
+      int color_location;
+    };
   };
 } Program;
 
@@ -47,7 +50,14 @@ typedef struct {
   Program *program;
 } RenderData;
 
+enum {
+  MODE_COLOR = 1,
+  MODE_TEXTURE,
+  N_MODES
+};
+
 typedef struct {
+  int mode;
   /* Back pointer to the node, only meant for comparison */
   GskRenderNode *node;
 
@@ -61,8 +71,13 @@ typedef struct {
   float opacity;
   float z;
 
-  /* mode-specific data for shaders */
   union {
+    struct {
+      GdkRGBA color;
+    } color_data;
+    struct {
+      int a,b;
+    } texture_data;
   };
 
   const char *name;
@@ -109,7 +124,7 @@ typedef enum {
   RENDER_SCISSOR
 } RenderMode;
 
-#define NUM_PROGRAMS 2
+#define NUM_PROGRAMS 3
 
 struct _GskGLRenderer
 {
@@ -134,6 +149,7 @@ struct _GskGLRenderer
     struct {
       Program blend_program;
       Program blit_program;
+      Program color_program;
     };
     struct {
       Program programs[NUM_PROGRAMS];
@@ -320,7 +336,22 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     }
   init_common_locations (self, &self->blit_program);
 
-
+  self->color_program.id =
+    gsk_shader_builder_create_program (builder, "color.vs.glsl", "color.fs.glsl", &shader_error);
+  if (shader_error != NULL)
+    {
+      g_propagate_prefixed_error (error,
+                                  shader_error,
+                                  "Unable to create 'color' program: ");
+      g_object_unref (builder);
+      goto out;
+    }
+  init_common_locations (self, &self->color_program);
+  self->color_program.color_location = gsk_shader_builder_get_uniform_location (self->shader_builder,
+                                                                                self->color_program.id,
+                                                                                g_quark_from_string("uColor"));
+  self->color_program.color_location = glGetUniformLocation(self->color_program.id, "uColor");
+  g_assert(self->color_program.color_location >= 0);
 
   res = TRUE;
 
@@ -492,25 +523,43 @@ render_item (GskGLRenderer *self,
 
   gsk_gl_driver_bind_vao (self->gl_driver, item->render_data.vao_id);
 
-  glUseProgram (item->render_data.program_id);
+  glUseProgram (item->render_data.program->id);
 
-  if (item->render_data.texture_id != 0)
+  switch(item->mode)
     {
-      /* Use texture unit 0 for the source */
-      glUniform1i (item->render_data.program->source_location, 0);
-      gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.texture_id);
-
-      if (item->parent_data != NULL)
+      case MODE_COLOR:
         {
-          glUniform1i (item->render_data.program->blendMode_location, item->blend_mode);
+          glUniform4f (item->render_data.program->color_location,
+                       item->color_data.color.red,
+                       item->color_data.color.green,
+                       item->color_data.color.blue,
+                       item->color_data.color.alpha);
+        }
+      break;
 
-          /* Use texture unit 1 for the mask */
-          if (item->parent_data->texture_id != 0)
+      case MODE_TEXTURE:
+        {
+          g_assert(item->render_data.texture_id != 0);
+          /* Use texture unit 0 for the source */
+          glUniform1i (item->render_data.program->source_location, 0);
+          gsk_gl_driver_bind_source_texture (self->gl_driver, item->render_data.texture_id);
+
+          if (item->parent_data != NULL)
             {
-              glUniform1i (item->render_data.program->mask_location, 1);
-              gsk_gl_driver_bind_mask_texture (self->gl_driver, item->parent_data->texture_id);
+              glUniform1i (item->render_data.program->blendMode_location, item->blend_mode);
+
+              /* Use texture unit 1 for the mask */
+              if (item->parent_data->texture_id != 0)
+                {
+                  glUniform1i (item->render_data.program->mask_location, 1);
+                  gsk_gl_driver_bind_mask_texture (self->gl_driver, item->parent_data->texture_id);
+                }
             }
         }
+      break;
+
+      default:
+        g_assert_not_reached ();
     }
 
   /* Pass the opacity component */
@@ -753,6 +802,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                                                              texture,
                                                                              gl_min_filter,
                                                                              gl_mag_filter);
+        item.mode = MODE_TEXTURE;
       }
       break;
 
@@ -776,6 +826,17 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                                  surface,
                                                  gl_min_filter,
                                                  gl_mag_filter);
+        item.mode = MODE_TEXTURE;
+      }
+      break;
+
+    case GSK_COLOR_NODE:
+      {
+        const GdkRGBA *c = gsk_color_node_peek_color(node);
+        program_id = self->color_program.id;
+        item.render_data.program = &self->color_program;
+        item.mode = MODE_COLOR;
+        item.color_data.color= *c;
       }
       break;
 
@@ -822,7 +883,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
         cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 
         gsk_render_node_draw (node, cr);
-        
+
         cairo_destroy (cr);
 
         /* Upload the Cairo surface to a GL texture */
@@ -836,6 +897,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
                                                  GL_NEAREST, GL_NEAREST);
 
         cairo_surface_destroy (surface);
+        item.mode = MODE_TEXTURE;
       }
       break;
     }
