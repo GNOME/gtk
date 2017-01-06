@@ -121,7 +121,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                             .pPoolSizes = (VkDescriptorPoolSize[1]) {
                                                 {
                                                     .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                    .descriptorCount = 1
+                                                    .descriptorCount = self->descriptor_pool_maxsets
                                                 }
                                             }
                                         },
@@ -403,7 +403,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
                                                     .pPoolSizes = (VkDescriptorPoolSize[1]) {
                                                         {
                                                             .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                            .descriptorCount = 1
+                                                            .descriptorCount = self->descriptor_pool_maxsets
                                                         }
                                                     }
                                                 },
