@@ -7231,7 +7231,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 		  while (widget->priv->parent)
 		    {
 		      widget = widget->priv->parent;
-		      gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
+                      gtk_widget_set_focus_child (widget, NULL);
 		      if (widget == common_ancestor)
 		        break;
 		    }
@@ -7255,7 +7255,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
       widget = focus_widget;
       while (widget->priv->parent)
 	{
-	  gtk_container_set_focus_child (GTK_CONTAINER (widget->priv->parent), widget);
+          gtk_widget_set_focus_child (widget->priv->parent, widget);
 	  widget = widget->priv->parent;
 	}
       if (GTK_IS_WINDOW (widget))
@@ -15803,4 +15803,22 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   gtk_snapshot_translate_2d (snapshot, x, y);
   gtk_widget_snapshot (child, snapshot);
   gtk_snapshot_translate_2d (snapshot, -x, -y);
+}
+
+void
+gtk_widget_set_focus_child (GtkWidget *widget,
+                            GtkWidget *child)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (child != NULL)
+    {
+      g_return_if_fail (GTK_IS_WIDGET (child));
+      g_return_if_fail (gtk_widget_get_parent (child) == widget);
+    }
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_set_focus_child (GTK_CONTAINER (widget), child);
+
+  /* TODO: ??? */
 }

@@ -2539,7 +2539,7 @@ gtk_window_set_focus (GtkWindow *window,
 	  while ((parent = _gtk_widget_get_parent (widget)))
 	    {
 	      widget = parent;
-	      gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
+              gtk_widget_set_focus_child (widget, NULL);
 	    }
 	}
       
