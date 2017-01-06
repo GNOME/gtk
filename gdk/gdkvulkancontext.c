@@ -701,7 +701,7 @@ gdk_vulkan_debug_report (VkDebugReportFlagsEXT      flags,
       g_message ("Vulkan: %s: %s\n", pLayerPrefix, pMessage);
     }
   
-  return VK_TRUE;
+  return VK_FALSE;
 }
 
 static gboolean
