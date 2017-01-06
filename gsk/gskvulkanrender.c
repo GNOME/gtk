@@ -35,6 +35,7 @@ struct _GskVulkanRender
   VkRenderPass render_pass;
   GskVulkanPipelineLayout *layout;
   GskVulkanUploader *uploader;
+  GskVulkanBuffer *vertex_buffer;
 
   GHashTable *descriptor_set_indexes;
   VkDescriptorPool descriptor_pool;
@@ -466,7 +467,6 @@ void
 gsk_vulkan_render_draw (GskVulkanRender   *self,
                         VkSampler          sampler)
 {
-  GskVulkanBuffer *buffer;
   VkCommandBuffer command_buffer;
   GSList *l;
   guint i;
@@ -475,7 +475,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
 
-  buffer = gsk_vulkan_render_collect_vertex_data (self);
+  self->vertex_buffer = gsk_vulkan_render_collect_vertex_data (self);
 
   vkCmdSetViewport (command_buffer,
                     0,
@@ -521,15 +521,13 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
       for (l = self->render_passes; l; l = l->next)
         {
-          gsk_vulkan_render_pass_draw (l->data, self, buffer, self->layout, command_buffer);
+          gsk_vulkan_render_pass_draw (l->data, self, self->vertex_buffer, self->layout, command_buffer);
         }
 
       vkCmdEndRenderPass (command_buffer);
     }
 
   gsk_vulkan_command_pool_submit_buffer (self->command_pool, command_buffer, self->fence);
-
-  gsk_vulkan_buffer_free (buffer);
 
   if (GSK_RENDER_MODE_CHECK (SYNC))
     {
@@ -568,6 +566,8 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
   gsk_vulkan_uploader_reset (self->uploader);
 
   gsk_vulkan_command_pool_reset (self->command_pool);
+
+  g_clear_pointer (&self->vertex_buffer, gsk_vulkan_buffer_free);
 
   g_hash_table_remove_all (self->descriptor_set_indexes);
   GSK_VK_CHECK (vkResetDescriptorPool, device,
