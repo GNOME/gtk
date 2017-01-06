@@ -15735,3 +15735,72 @@ gtk_widget_forall (GtkWidget   *widget,
       child = next;
     }
 }
+
+static void
+gtk_widget_get_translation_to_child (GtkWidget *widget,
+                                     GtkWidget *child,
+                                     int       *x_out,
+                                     int       *y_out)
+{
+  GtkAllocation allocation;
+  GdkWindow *window, *w;
+  int x, y;
+
+  /* translate coordinates. Ugly business, that. */
+  if (!_gtk_widget_get_has_window (widget))
+    {
+      _gtk_widget_get_allocation (widget, &allocation);
+      x = -allocation.x;
+      y = -allocation.y;
+    }
+  else
+    {
+      x = 0;
+      y = 0;
+    }
+
+  window = _gtk_widget_get_window (widget);
+
+  for (w = _gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
+    {
+      int wx, wy;
+      gdk_window_get_position (w, &wx, &wy);
+      x += wx;
+      y += wy;
+    }
+
+  if (w == NULL)
+    {
+      x = 0;
+      y = 0;
+    }
+
+  if (!_gtk_widget_get_has_window (child))
+    {
+      _gtk_widget_get_allocation (child, &allocation);
+      x += allocation.x;
+      y += allocation.y;
+    }
+
+  *x_out = x;
+  *y_out = y;
+}
+
+void
+gtk_widget_snapshot_child (GtkWidget   *widget,
+                           GtkWidget   *child,
+                           GtkSnapshot *snapshot)
+{
+  int x, y;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (_gtk_widget_get_parent (child) == widget);
+  g_return_if_fail (snapshot != NULL);
+
+  gtk_widget_get_translation_to_child (widget, child, &x, &y);
+
+  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_widget_snapshot (child, snapshot);
+  gtk_snapshot_translate_2d (snapshot, -x, -y);
+}
