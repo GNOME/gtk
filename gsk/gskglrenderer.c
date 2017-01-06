@@ -840,6 +840,52 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       }
       break;
 
+    case GSK_COLOR_MATRIX_NODE:
+      {
+        GskRenderNode *child = gsk_color_matrix_node_get_child (node);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
+      }
+      return;
+
+    case GSK_SHADOW_NODE:
+      {
+        GskRenderNode *child = gsk_shadow_node_get_child (node);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
+      }
+      return;
+
+    case GSK_REPEAT_NODE:
+      {
+        GskRenderNode *child = gsk_repeat_node_get_child (node);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
+      }
+      return;
+
+    case GSK_BLEND_NODE:
+      {
+        GskRenderNode *child = gsk_blend_node_get_bottom_child (node);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
+
+        child = gsk_blend_node_get_top_child (node);
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
+      }
+      return;
+
+    case GSK_CROSS_FADE_NODE:
+      {
+        GskRenderNode *child = gsk_cross_fade_node_get_start_child (node);
+
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
+
+        child = gsk_cross_fade_node_get_end_child (node);
+        gsk_gl_renderer_add_render_item (self, projection, modelview, render_items, child, ritem);
+      }
+      return;
+
     case GSK_CONTAINER_NODE:
       {
         guint i, p;
