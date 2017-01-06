@@ -570,6 +570,9 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
   gsk_vulkan_command_pool_reset (self->command_pool);
 
   g_hash_table_remove_all (self->descriptor_set_indexes);
+  GSK_VK_CHECK (vkResetDescriptorPool, device,
+                                       self->descriptor_pool,
+                                       0);
 
   g_slist_free_full (self->render_passes, (GDestroyNotify) gsk_vulkan_render_pass_free);
   self->render_passes = NULL;
