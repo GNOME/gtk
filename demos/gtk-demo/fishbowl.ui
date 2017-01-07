@@ -10,7 +10,16 @@
         <child>
           <object class="GtkLabel" id="info_label">
             <property name="visible">True</property>
-            <property name="label">0 icons - 0 fps</property>
+            <property name="label">icons - 0 fps</property>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" bind-source="bowl" bind-property="count">0</property>
           </object>
           <packing>
             <property name="pack_type">end</property>
