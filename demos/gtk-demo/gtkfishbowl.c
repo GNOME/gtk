@@ -237,9 +237,9 @@ gtk_fishbowl_snapshot (GtkWidget   *widget,
     {
       child = list->data;
 
-      gtk_container_snapshot_child (GTK_CONTAINER (fishbowl),
-                                    child->widget,
-                                    snapshot);
+      gtk_widget_snapshot_child (widget,
+                                 child->widget,
+                                 snapshot);
     }
 }
 
