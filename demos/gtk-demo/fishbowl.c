@@ -70,8 +70,7 @@ do_stats (GtkWidget *widget,
           n_frames += stats->frame_counter[i];
         }
       
-      new_label = g_strdup_printf ("%u icons - %.1f fps",
-                                   stats->item_counter[stats->stats_index],
+      new_label = g_strdup_printf ("icons - %.1f fps",
                                    (double) G_USEC_PER_SEC * n_frames
                                        / (N_STATS * STATS_UPDATE_TIME));
       gtk_label_set_label (GTK_LABEL (info_label), new_label);
