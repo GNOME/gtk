@@ -135,6 +135,8 @@ nodist_gtk4_demo_SOURCES = demos.h
 
 gtk4_demo_SOURCES = 		\
 	$(demos)		\
+	gtkfishbowl.c		\
+	gtkfishbowl.h		\
 	demo_resources.c	\
 	main.c
 

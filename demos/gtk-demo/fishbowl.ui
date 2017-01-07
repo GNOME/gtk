@@ -41,8 +41,9 @@
       </object>
     </child>
     <child>
-      <object class="GtkFixed" id="bowl">
+      <object class="GtkFishbowl" id="bowl">
         <property name="visible">True</property>
+        <property name="animating">True</property>
       </object>
     </child>
   </object>
