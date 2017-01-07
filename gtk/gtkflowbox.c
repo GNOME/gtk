@@ -2749,18 +2749,14 @@ get_view_rect (GtkFlowBox   *box,
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkWidget *parent;
-  GdkWindow *view;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (box));
   if (GTK_IS_VIEWPORT (parent))
     {
-      view = gtk_viewport_get_view_window (GTK_VIEWPORT (parent));
-      rect->x = rect->y = 0;
-
       rect->x = gtk_adjustment_get_value (priv->hadjustment);
       rect->y = gtk_adjustment_get_value (priv->vadjustment);
-      rect->width = gdk_window_get_width (view);
-      rect->height = gdk_window_get_height (view);
+      rect->width = gtk_widget_get_allocated_width (parent);
+      rect->height = gtk_widget_get_allocated_height (parent);
       return TRUE;
     }
 

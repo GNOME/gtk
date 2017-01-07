@@ -615,42 +615,6 @@ gtk_viewport_get_shadow_type (GtkViewport *viewport)
   return viewport->priv->shadow_type;
 }
 
-/**
- * gtk_viewport_get_bin_window:
- * @viewport: a #GtkViewport
- *
- * Gets the bin window of the #GtkViewport.
- *
- * Returns: (transfer none): a #GdkWindow
- *
- * Since: 2.20
- **/
-GdkWindow*
-gtk_viewport_get_bin_window (GtkViewport *viewport)
-{
-  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
-
-  return viewport->priv->bin_window;
-}
-
-/**
- * gtk_viewport_get_view_window:
- * @viewport: a #GtkViewport
- *
- * Gets the view window of the #GtkViewport.
- *
- * Returns: (transfer none): a #GdkWindow
- *
- * Since: 2.22
- **/
-GdkWindow*
-gtk_viewport_get_view_window (GtkViewport *viewport)
-{
-  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
-
-  return viewport->priv->view_window;
-}
-
 static void
 gtk_viewport_realize (GtkWidget *widget)
 {
