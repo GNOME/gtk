@@ -138,6 +138,8 @@ nodist_gtk3_demo_SOURCES = demos.h
 
 gtk3_demo_SOURCES = 		\
 	$(demos)		\
+	gtkfishbowl.c		\
+	gtkfishbowl.h		\
 	demo_resources.c	\
 	main.c
 

@@ -7,46 +7,9 @@
 
 #include <gtk/gtk.h>
 
-char **icon_names = NULL;
-gsize n_icon_names = 0;
+#include "gtkfishbowl.h"
 
 GtkWidget *allow_changes;
-
-static void
-init_icon_names (GtkIconTheme *theme)
-{
-  GPtrArray *icons;
-  GList *l, *icon_list;
-
-  if (icon_names)
-    return;
-
-  icon_list = gtk_icon_theme_list_icons (theme, NULL);
-  icons = g_ptr_array_new ();
-
-  for (l = icon_list; l; l = l->next)
-    {
-      if (g_str_has_suffix (l->data, "symbolic"))
-        continue;
-
-      g_ptr_array_add (icons, g_strdup (l->data));
-    }
-
-  n_icon_names = icons->len;
-  g_ptr_array_add (icons, NULL); /* NULL-terminate the array */
-  icon_names = (char **) g_ptr_array_free (icons, FALSE);
-
-  /* don't free strings, we assigned them to the array */
-  g_list_free_full (icon_list, g_free);
-}
-
-static const char *
-get_random_icon_name (GtkIconTheme *theme)
-{
-  init_icon_names (theme);
-
-  return icon_names[g_random_int_range(0, n_icon_names)];
-}
 
 #define N_STATS 5
 
@@ -85,17 +48,16 @@ get_stats (GtkWidget *widget)
   return stats;
 }
 
-static gint64
+static void
 do_stats (GtkWidget *widget,
           GtkWidget *info_label,
           gint      *suggested_change)
 {
   Stats *stats;
-  gint64 frame_time, elapsed;
+  gint64 frame_time;
 
   stats = get_stats (widget);
   frame_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
-  elapsed = frame_time - stats->last_frame;
 
   if (stats->last_stats + STATS_UPDATE_TIME < frame_time)
     {
@@ -150,138 +112,16 @@ do_stats (GtkWidget *widget,
   stats->last_frame = frame_time;
   stats->frame_counter[stats->stats_index]++;
   stats->frame_counter_max = MAX (stats->frame_counter_max, stats->frame_counter[stats->stats_index]);
-
-  return elapsed;
 }
 
 static void
-stats_update (GtkWidget *widget,
-              gint       n_items)
+stats_update (GtkWidget *widget)
 {
   Stats *stats;
 
   stats = get_stats (widget);
 
-  g_assert ((gint) stats->item_counter[stats->stats_index] + n_items > 0);
-  stats->item_counter[stats->stats_index] += n_items;
-}
-
-typedef struct _FishData FishData;
-struct _FishData {
-  double x;
-  double y;
-  double x_speed;
-  double y_speed;
-};
-
-static FishData *
-get_fish_data (GtkWidget *fish)
-{
-  static GQuark fish_quark = 0;
-  FishData *data;
-
-  if (G_UNLIKELY (fish_quark == 0))
-    fish_quark = g_quark_from_static_string ("fish");
-
-  data = g_object_get_qdata (G_OBJECT (fish), fish_quark);
-  if (data == NULL)
-    {
-      data = g_new0 (FishData, 1);
-      g_object_set_qdata_full (G_OBJECT (fish), fish_quark, data, g_free);
-      data->x = 10;
-      data->y = 10;
-      data->x_speed = g_random_double_range (1, 200);
-      data->y_speed = g_random_double_range (1, 200);
-    }
-
-  return data;
-}
-
-static void
-add_fish (GtkWidget *bowl,
-          guint      n_fish)
-{
-  GtkWidget *new_fish;
-  guint i;
-
-  for (i = 0; i < n_fish; i++)
-    {
-      new_fish = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()),
-                                               GTK_ICON_SIZE_DIALOG);
-      gtk_widget_show (new_fish);
-
-      gtk_fixed_put (GTK_FIXED (bowl),
-                     new_fish,
-                     10, 10);
-    }
-
-  stats_update (bowl, n_fish);
-}
-
-static void
-remove_fish (GtkWidget *bowl,
-             guint      n_fish)
-{
-  GList *list, *children;
-  guint i;
-
-  children = gtk_container_get_children (GTK_CONTAINER (bowl));
-  g_assert (n_fish < g_list_length (children));
-
-  list = children;
-  for (i = 0; i < n_fish; i++)
-    {
-      gtk_container_remove (GTK_CONTAINER (bowl), list->data);
-      list = list->next;
-    }
-
-  g_list_free (children);
-
-  stats_update (bowl, - (gint) n_fish);
-
-  {
-    Stats *stats = get_stats (bowl);
-
-    children = gtk_container_get_children (GTK_CONTAINER (bowl));
-    g_assert (stats->item_counter[stats->stats_index] == g_list_length (children));
-    g_list_free (children);
-  }
-}
-
-static void
-move_one_fish (GtkWidget *fish,
-               gpointer   elapsedp)
-{
-  GtkWidget *fixed = gtk_widget_get_parent (fish);
-  FishData *data = get_fish_data (fish);
-  gint64 elapsed = *(gint64 *) elapsedp;
-
-  data->x += data->x_speed * ((double) elapsed / G_USEC_PER_SEC);
-  data->y += data->y_speed * ((double) elapsed / G_USEC_PER_SEC);
-
-  if (data->x <= 0)
-    {
-      data->x = 0;
-      data->x_speed = - g_random_double_range (1, 200) * (data->x_speed > 0 ? 1 : -1);
-    }
-  else if (data->x > gtk_widget_get_allocated_width (fixed) - gtk_widget_get_allocated_width (fish))
-    {
-      data->x = gtk_widget_get_allocated_width (fixed) - gtk_widget_get_allocated_width (fish);
-      data->x_speed = - g_random_double_range (1, 200) * (data->x_speed > 0 ? 1 : -1);
-    }
-
-  if (data->y <= 0)
-    {
-      data->y = 0;
-      data->y_speed = - g_random_double_range (1, 200) * (data->y_speed > 0 ? 1 : -1);
-    }
-  else if (data->y > gtk_widget_get_allocated_height (fixed) - gtk_widget_get_allocated_height (fish))
-    {
-      data->y = gtk_widget_get_allocated_height (fixed) - gtk_widget_get_allocated_height (fish);
-      data->y_speed = - g_random_double_range (1, 200) * (data->y_speed > 0 ? 1 : -1);
-    }
-
-  gtk_fixed_move (GTK_FIXED (fixed), fish, data->x, data->y);
+  stats->item_counter[stats->stats_index] = gtk_fishbowl_get_count (GTK_FISHBOWL (widget));
 }
 
 static gboolean
@@ -289,19 +129,15 @@ move_fish (GtkWidget     *bowl,
            GdkFrameClock *frame_clock,
            gpointer       info_label)
 {
-  gint64 elapsed;
   gint suggested_change = 0;
   
-  elapsed = do_stats (bowl,
-                      info_label,
-                      !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (allow_changes)) ? &suggested_change : NULL);
+  do_stats (bowl,
+            info_label,
+            !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (allow_changes)) ? &suggested_change : NULL);
 
-  gtk_container_foreach (GTK_CONTAINER (bowl), move_one_fish, &elapsed);
-
-  if (suggested_change > 0)
-    add_fish (bowl, suggested_change);
-  else if (suggested_change < 0)
-    remove_fish (bowl, - suggested_change);
+  gtk_fishbowl_set_count (GTK_FISHBOWL (bowl),
+                          gtk_fishbowl_get_count (GTK_FISHBOWL (bowl)) + suggested_change);
+  stats_update (bowl);
 
   return G_SOURCE_CONTINUE;
 }
@@ -315,6 +151,8 @@ do_fishbowl (GtkWidget *do_widget)
     {
       GtkBuilder *builder;
       GtkWidget *bowl, *info_label;
+
+      g_type_ensure (GTK_TYPE_FISHBOWL);
 
       builder = gtk_builder_new_from_resource ("/fishbowl/fishbowl.ui");
       gtk_builder_connect_signals (builder, NULL);
