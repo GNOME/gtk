@@ -1669,8 +1669,7 @@ gdk_window_is_destroyed (GdkWindow *window)
  * gdk_window_has_native:
  * @window: a #GdkWindow
  *
- * Checks whether the window has a native window or not. Note that
- * you can use gdk_window_ensure_native() if a native window is needed.
+ * Checks whether the window has a native window or not.
  *
  * Returns: %TRUE if the @window has a native window, %FALSE otherwise.
  *
