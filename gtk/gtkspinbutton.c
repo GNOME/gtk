@@ -902,6 +902,9 @@ gtk_spin_button_finalize (GObject *object)
   g_object_unref (priv->up_click_gesture);
   g_object_unref (priv->down_click_gesture);
 
+  gtk_widget_unparent (priv->up_button);
+  gtk_widget_unparent (priv->down_button);
+
   G_OBJECT_CLASS (gtk_spin_button_parent_class)->finalize (object);
 }
 
