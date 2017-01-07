@@ -935,7 +935,7 @@ gtk_model_button_render (GtkCssGadget *gadget,
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
-    gtk_container_snapshot_child (GTK_CONTAINER (widget), child, snapshot);
+    gtk_widget_snapshot_child (widget, child, snapshot);
 
   return gtk_widget_has_visible_focus (widget);
 }

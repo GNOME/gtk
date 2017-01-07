@@ -1199,7 +1199,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   child = gtk_bin_get_child (GTK_BIN (widget));
 
   if (child)
-    gtk_container_snapshot_child (GTK_CONTAINER (widget), child, snapshot);
+    gtk_widget_snapshot_child (widget, child, snapshot);
 }
 
 static void

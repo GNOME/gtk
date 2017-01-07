@@ -30,6 +30,7 @@
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 #include "fallback-c89.c"
 
@@ -838,7 +839,7 @@ gtk_revealer_snapshot (GtkWidget   *widget,
   transition = effective_transition (revealer);
   if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE)
     {
-      gtk_container_snapshot_child (GTK_CONTAINER (revealer), child, snapshot);
+      gtk_widget_snapshot_child (widget, child, snapshot);
     }
   else
     {
@@ -849,7 +850,7 @@ gtk_revealer_snapshot (GtkWidget   *widget,
                                   gtk_widget_get_allocated_height (widget)
                               ),
                               "RevealerClip");
-      gtk_container_snapshot_child (GTK_CONTAINER (revealer), child, snapshot);
+      gtk_widget_snapshot_child (widget, child, snapshot);
       gtk_snapshot_pop_and_append (snapshot);
     }
 }

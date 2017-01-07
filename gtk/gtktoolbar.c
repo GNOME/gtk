@@ -838,9 +838,9 @@ gtk_toolbar_render (GtkCssGadget *gadget,
       toolbar_content_snapshot (content, GTK_CONTAINER (widget), snapshot);
     }
   
-  gtk_container_snapshot_child (GTK_CONTAINER (widget),
-				priv->arrow_button,
-				snapshot);
+  gtk_widget_snapshot_child (widget,
+                             priv->arrow_button,
+                             snapshot);
 
   return FALSE;
 }
@@ -3156,7 +3156,7 @@ toolbar_content_snapshot (ToolbarContent *content,
   widget = GTK_WIDGET (content->item);
 
   if (widget)
-    gtk_container_snapshot_child (container, widget, snapshot);
+    gtk_widget_snapshot_child (GTK_WIDGET (container), widget, snapshot);
 }
 
 static gboolean

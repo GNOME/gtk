@@ -15786,6 +15786,26 @@ gtk_widget_get_translation_to_child (GtkWidget *widget,
   *y_out = y;
 }
 
+/**
+ * gtk_widget_snapshot_child:
+ * @widget: a #GtkWidget
+ * @child: a child of @widget
+ * @snapshot: $GtkSnapshot as passed to the container. In particular, no
+ *   calls to gtk_snapshot_translate_2d() should have been applied by the
+ *   parent.
+ *
+ * When a widget receives a call to the snapshot function, it must send
+ * synthetic #GtkWidget::snapshot calls to all children. This function
+ * provides a convenient way of doing this. A widget, when it receives
+ * a call to its #GtkWidget::snapshot function, calls
+ * gtk_widget_snapshot_child() once for each child, passing in
+ * the @snapshot the widget received.
+ *
+ * gtk_widget_snapshot_child() takes care of translating the origin of
+ * @snapshot, and deciding whether the child needs to be snapshot. It is a
+ * convenient and optimized way of getting the same effect as calling
+ * gtk_widget_snapshot() on the child directly.
+ **/
 void
 gtk_widget_snapshot_child (GtkWidget   *widget,
                            GtkWidget   *child,

@@ -1917,9 +1917,9 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
   char *name;
 
   gtk_snapshot_push (snapshot, TRUE, "GtkStackCrossFadeEnd");
-  gtk_container_snapshot_child (GTK_CONTAINER (stack),
-                                priv->visible_child->widget,
-                                snapshot);
+  gtk_widget_snapshot_child (widget,
+                             priv->visible_child->widget,
+                             snapshot);
   end_node = gtk_snapshot_pop (snapshot);
 
   if (priv->last_visible_node)
@@ -1995,9 +1995,9 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
                           &GRAPHENE_RECT_INIT(x, y, width, height),
                           "StackUnder");
 
-  gtk_container_snapshot_child (GTK_CONTAINER (stack),
-                                priv->visible_child->widget,
-                                snapshot);
+  gtk_widget_snapshot_child (widget,
+                             priv->visible_child->widget,
+                             snapshot);
 
   gtk_snapshot_pop_and_append (snapshot);
 
@@ -2073,9 +2073,9 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
       gtk_snapshot_pop_and_append (snapshot);
      }
 
-  gtk_container_snapshot_child (GTK_CONTAINER (stack),
-                                priv->visible_child->widget,
-                                snapshot);
+  gtk_widget_snapshot_child (widget,
+                             priv->visible_child->widget,
+                             snapshot);
 }
 
 static void
@@ -2151,9 +2151,9 @@ gtk_stack_render (GtkCssGadget *gadget,
           gtk_snapshot_pop_and_append (snapshot);
         }
       else
-        gtk_container_snapshot_child (GTK_CONTAINER (stack),
-                                      priv->visible_child->widget,
-                                      snapshot);
+        gtk_widget_snapshot_child (widget,
+                                   priv->visible_child->widget,
+                                   snapshot);
     }
 
   return FALSE;

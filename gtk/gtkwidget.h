@@ -1261,6 +1261,10 @@ GtkWidget *             gtk_widget_get_prev_sibling     (GtkWidget *widget);
 GDK_AVAILABLE_IN_3_90
 void                    gtk_widget_set_focus_child      (GtkWidget *widget,
                                                          GtkWidget *child);
+GDK_AVAILABLE_IN_3_90
+void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
+                                                         GtkWidget   *child,
+                                                         GtkSnapshot *snapshot);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)

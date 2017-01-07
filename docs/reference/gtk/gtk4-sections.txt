@@ -735,7 +735,6 @@ gtk_container_child_notify
 gtk_container_child_notify_by_pspec
 gtk_container_forall
 gtk_container_propagate_draw
-gtk_container_snapshot_child
 gtk_container_get_focus_chain
 gtk_container_set_focus_chain
 gtk_container_unset_focus_chain
@@ -4650,6 +4649,7 @@ gtk_widget_set_opacity
 gtk_widget_list_action_prefixes
 gtk_widget_get_action_group
 gtk_widget_measure
+gtk_widget_snapshot_child
 
 <SUBSECTION>
 gtk_widget_get_path

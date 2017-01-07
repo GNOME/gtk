@@ -9461,15 +9461,15 @@ gtk_window_snapshot (GtkWidget   *widget,
                                (window_border.top + window_border.bottom + title_height));
 
   if (priv->title_box != NULL)
-    gtk_container_snapshot_child (GTK_CONTAINER (widget), priv->title_box, snapshot);
+    gtk_widget_snapshot_child (widget, priv->title_box, snapshot);
 
   if (gtk_bin_get_child (GTK_BIN (widget)))
-    gtk_container_snapshot_child (GTK_CONTAINER (widget), gtk_bin_get_child (GTK_BIN (widget)), snapshot);
+    gtk_widget_snapshot_child (widget, gtk_bin_get_child (GTK_BIN (widget)), snapshot);
 
   for (l = priv->popovers; l; l = l->next)
     {
       GtkWindowPopover *data = l->data;
-      gtk_container_snapshot_child (GTK_CONTAINER (widget), data->widget, snapshot);
+      gtk_widget_snapshot_child (widget, data->widget, snapshot);
     }
 
   gtk_debug_updates_snapshot (widget, snapshot);

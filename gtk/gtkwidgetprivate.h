@@ -304,11 +304,6 @@ void              gtk_widget_forall                        (GtkWidget           
                                                             GtkCallback           callback,
                                                             gpointer              user_data);
 
-void              gtk_widget_snapshot_child                (GtkWidget   *widget,
-                                                            GtkWidget   *child,
-                                                            GtkSnapshot *snapshot);
-
-
 /* inline getters */
 
 static inline gboolean

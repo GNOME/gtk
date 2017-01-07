@@ -71,6 +71,7 @@
 #include "gtkfixed.h"
 
 #include "gtkcontainerprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -531,9 +532,9 @@ gtk_fixed_snapshot (GtkWidget   *widget,
     {
       child = list->data;
 
-      gtk_container_snapshot_child (GTK_CONTAINER (fixed),
-                                    child->widget,
-                                    snapshot);
+      gtk_widget_snapshot_child (widget,
+                                 child->widget,
+                                 snapshot);
     }
 }
 

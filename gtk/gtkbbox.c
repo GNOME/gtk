@@ -214,9 +214,9 @@ static void
 gtk_button_box_snapshot_forall (GtkWidget *child,
                                 gpointer   snapshot)
 {
-  gtk_container_snapshot_child (GTK_CONTAINER (gtk_widget_get_parent (child)),
-                                child,
-                                snapshot);
+  gtk_widget_snapshot_child (gtk_widget_get_parent (child),
+                             child,
+                             snapshot);
 }
 
 static gboolean

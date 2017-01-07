@@ -2369,9 +2369,9 @@ gtk_notebook_snapshot_stack (GtkCssGadget *gadget,
   GtkNotebookPrivate *priv = notebook->priv;
 
   if (gtk_notebook_has_current_page (notebook))
-    gtk_container_snapshot_child (GTK_CONTAINER (notebook),
-                                  priv->cur_page->child,
-                                  snapshot);
+    gtk_widget_snapshot_child (widget,
+                               priv->cur_page->child,
+                               snapshot);
 
   return FALSE;
 }
@@ -4588,9 +4588,9 @@ snapshot_tab (GtkCssGadget *gadget,
 
   widget = gtk_css_gadget_get_owner (gadget);
 
-  gtk_container_snapshot_child (GTK_CONTAINER (widget),
-                                page->tab_label,
-                                snapshot);
+  gtk_widget_snapshot_child (widget,
+                             page->tab_label,
+                             snapshot);
 
   return gtk_widget_has_visible_focus (widget) &&
          GTK_NOTEBOOK (widget)->priv->cur_page == page;

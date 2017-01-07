@@ -1678,7 +1678,7 @@ gtk_paned_render (GtkCssGadget *gadget,
                                   gdk_window_get_height (priv->child1_window)
                               ),
                               "GtkPanedChild1");
-      gtk_container_snapshot_child (GTK_CONTAINER (widget), priv->child1, snapshot);
+      gtk_widget_snapshot_child (widget, priv->child1, snapshot);
       gtk_snapshot_pop_and_append (snapshot);
     }
 
@@ -1693,7 +1693,7 @@ gtk_paned_render (GtkCssGadget *gadget,
                                   gdk_window_get_height (priv->child2_window)
                               ),
                               "GtkPanedChild2");
-      gtk_container_snapshot_child (GTK_CONTAINER (widget), priv->child2, snapshot);
+      gtk_widget_snapshot_child (widget, priv->child2, snapshot);
       gtk_snapshot_pop_and_append (snapshot);
     }
 

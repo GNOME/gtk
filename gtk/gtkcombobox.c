@@ -474,8 +474,8 @@ gtk_combo_box_render (GtkCssGadget *gadget,
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
 
-  gtk_container_snapshot_child (GTK_CONTAINER (widget),
-                                priv->box, snapshot);
+  gtk_widget_snapshot_child (widget,
+                             priv->box, snapshot);
 
   return FALSE;
 }
