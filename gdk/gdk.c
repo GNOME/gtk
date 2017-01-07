@@ -166,7 +166,6 @@ static const GDebugKey gdk_debug_keys[] = {
   { "cursor",        GDK_DEBUG_CURSOR },
   { "multihead",     GDK_DEBUG_MULTIHEAD },
   { "xinerama",      GDK_DEBUG_XINERAMA },
-  { "draw",          GDK_DEBUG_DRAW },
   { "eventloop",     GDK_DEBUG_EVENTLOOP },
   { "frames",        GDK_DEBUG_FRAMES },
   { "settings",      GDK_DEBUG_SETTINGS },
