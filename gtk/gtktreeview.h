@@ -345,8 +345,6 @@ void                   gtk_tree_view_get_cursor                    (GtkTreeView 
 
 /* Layout information */
 GDK_AVAILABLE_IN_ALL
-GdkWindow             *gtk_tree_view_get_bin_window                (GtkTreeView               *tree_view);
-GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_path_at_pos               (GtkTreeView               *tree_view,
 								    gint                       x,
 								    gint                       y,

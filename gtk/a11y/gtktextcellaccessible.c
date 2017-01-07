@@ -486,14 +486,20 @@ get_origins (GtkWidget *widget,
 {
   GdkWindow *window;
 
-  if (GTK_IS_TREE_VIEW (widget))
-    window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (widget));
-  else
-    window = gtk_widget_get_window (widget);
-
+  window = gtk_widget_get_window (widget);
   gdk_window_get_origin (window, x_window, y_window);
   window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
   gdk_window_get_origin (window, x_toplevel, y_toplevel);
+
+  if (GTK_IS_TREE_VIEW (widget))
+    {
+      gtk_tree_view_convert_widget_to_bin_window_coords (GTK_TREE_VIEW (widget),
+                                                         *x_window, *y_window,
+                                                         x_window, y_window);
+      gtk_tree_view_convert_widget_to_bin_window_coords (GTK_TREE_VIEW (widget),
+                                                         *x_toplevel, *y_toplevel,
+                                                         x_toplevel, y_toplevel);
+    }
 }
 
 static void

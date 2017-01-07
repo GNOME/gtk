@@ -1718,9 +1718,6 @@ recent_view_button_press_cb (GtkWidget      *widget,
       GtkTreePath *path;
       gboolean res;
 
-      if (event->window != gtk_tree_view_get_bin_window (GTK_TREE_VIEW (impl->priv->recent_view)))
-        return FALSE;
-
       res = gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (impl->priv->recent_view),
 		      			   event->x, event->y,
 					   &path,

@@ -1081,7 +1081,6 @@ gtk_tree_view_accessible_get_cell_extents (GtkCellAccessibleParent *parent,
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
-  GdkWindow *bin_window;
   GdkRectangle cell_rect;
   gint w_x, w_y;
 
@@ -1091,19 +1090,20 @@ gtk_tree_view_accessible_get_cell_extents (GtkCellAccessibleParent *parent,
 
   tree_view = GTK_TREE_VIEW (widget);
   gtk_tree_view_accessible_get_cell_area (parent, cell, &cell_rect);
-  bin_window = gtk_tree_view_get_bin_window (tree_view);
-  gdk_window_get_origin (bin_window, &w_x, &w_y);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view,
+                                                     0, 0, 
+                                                     &w_x, &w_y);
 
-  if (coord_type == ATK_XY_WINDOW)
+  if (coord_type != ATK_XY_WINDOW)
     {
       GdkWindow *window;
       gint x_toplevel, y_toplevel;
 
-      window = gdk_window_get_toplevel (bin_window);
+      window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
       gdk_window_get_origin (window, &x_toplevel, &y_toplevel);
 
-      w_x -= x_toplevel;
-      w_y -= y_toplevel;
+      w_x += x_toplevel;
+      w_y += y_toplevel;
     }
 
   *width = cell_rect.width;

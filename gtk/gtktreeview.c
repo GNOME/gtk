@@ -13014,25 +13014,6 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
 }
 
 /**
- * gtk_tree_view_get_bin_window:
- * @tree_view: A #GtkTreeView
- *
- * Returns the window that @tree_view renders to.
- * This is used primarily to compare to `event->window`
- * to confirm that the event on @tree_view is on the right window.
- *
- * Returns: (nullable) (transfer none): A #GdkWindow, or %NULL when @tree_view
- * hasn’t been realized yet.
- **/
-GdkWindow *
-gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
-{
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
-
-  return tree_view->priv->bin_window;
-}
-
-/**
  * gtk_tree_view_get_path_at_pos:
  * @tree_view: A #GtkTreeView.
  * @x: The x position to be identified (relative to bin_window).
@@ -13046,11 +13027,10 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * @cell_y: (out) (optional): A pointer where the Y coordinate
  *   relative to the cell can be placed, or %NULL
  *
- * Finds the path at the point (@x, @y), relative to bin_window coordinates
- * (please see gtk_tree_view_get_bin_window()).
- * That is, @x and @y are relative to an events coordinates. @x and @y must
- * come from an event on the @tree_view only where `event->window ==
- * gtk_tree_view_get_bin_window ()`. It is primarily for
+ * Finds the path at the point (@x, @y), relative to bin_window coordinates.
+ * That is, @x and @y are relative to an events coordinates. Widget-relative
+ * coordinates must be converted using
+ * gtk_tree_view_convert_widget_to_bin_window_coords(). It is primarily for
  * things like popup menus. If @path is non-%NULL, then it will be filled
  * with the #GtkTreePath at that point.  This path should be freed with
  * gtk_tree_path_free().  If @column is non-%NULL, then it will be filled
@@ -13491,8 +13471,7 @@ gtk_tree_view_convert_tree_to_widget_coords (GtkTreeView *tree_view,
  * @bx: (out): return location for bin_window X coordinate
  * @by: (out): return location for bin_window Y coordinate
  *
- * Converts widget coordinates to coordinates for the bin_window
- * (see gtk_tree_view_get_bin_window()).
+ * Converts widget coordinates to coordinates for the bin_window.
  *
  * Since: 2.12
  **/
@@ -13519,8 +13498,7 @@ gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
  * @wx: (out): return location for widget X coordinate
  * @wy: (out): return location for widget Y coordinate
  *
- * Converts bin_window coordinates (see gtk_tree_view_get_bin_window())
- * to widget relative coordinates.
+ * Converts bin_window coordinates to widget relative coordinates.
  *
  * Since: 2.12
  **/
@@ -13676,8 +13654,8 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
  * selection, having a custom context menu or starting rubber banding.
  *
  * The @x and @y coordinate that are provided must be relative to bin_window
- * coordinates.  That is, @x and @y must come from an event on @tree_view
- * where `event->window == gtk_tree_view_get_bin_window ()`.
+ * coordinates.  Widget-relative coordinates must be converted using
+ * gtk_tree_view_convert_widget_to_bin_window_coords().
  *
  * For converting widget coordinates (eg. the ones you get from
  * GtkWidget::query-tooltip), please see
