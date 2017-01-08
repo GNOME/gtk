@@ -87,7 +87,6 @@ gdk_public_h_sources = 				\
 	gdkscreen.h				\
 	gdkseat.h				\
 	gdkselection.h				\
-	gdktestutils.h				\
 	gdkthreads.h				\
 	gdktypes.h				\
 	gdkvisual.h				\
@@ -264,7 +263,6 @@ x11_introspection_files = 		\
 	x11/gdkscreen-x11.c		\
 	x11/gdkselection-x11.c		\
 	x11/gdksettings.c		\
-	x11/gdktestutils-x11.c		\
 	x11/gdkvisual-x11.c		\
 	x11/gdkwindow-x11.c		\
 	x11/gdkxftdefaults.c		\
@@ -321,7 +319,6 @@ w32_introspection_files =		\
 	win32/gdkproperty-win32.c	\
 	win32/gdkscreen-win32.c		\
 	win32/gdkselection-win32.c	\
-	win32/gdktestutils-win32.c	\
 	win32/gdkwin32.h		\
 	win32/gdkwin32cursor.h		\
 	win32/gdkwin32display.h		\

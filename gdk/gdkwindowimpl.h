@@ -231,20 +231,6 @@ struct _GdkWindowImplClass
   void         (*process_updates_recurse) (GdkWindow      *window,
                                            cairo_region_t *region);
 
-  void         (*sync_rendering)          (GdkWindow      *window);
-  gboolean     (*simulate_key)            (GdkWindow      *window,
-                                           gint            x,
-                                           gint            y,
-                                           guint           keyval,
-                                           GdkModifierType modifiers,
-                                           GdkEventType    event_type);
-  gboolean     (*simulate_button)         (GdkWindow      *window,
-                                           gint            x,
-                                           gint            y,
-                                           guint           button,
-                                           GdkModifierType modifiers,
-                                           GdkEventType    event_type);
-
   gboolean     (*get_property)            (GdkWindow      *window,
                                            GdkAtom         property,
                                            GdkAtom         type,

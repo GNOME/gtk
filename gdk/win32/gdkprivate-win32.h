@@ -481,18 +481,6 @@ void       _gdk_win32_display_create_window_impl   (GdkDisplay    *display,
 /* stray GdkWindowImplWin32 members */
 void _gdk_win32_window_register_dnd (GdkWindow *window);
 GdkDragContext *_gdk_win32_window_drag_begin (GdkWindow *window, GdkDevice *device, GList *targets, gint x_root, gint y_root);
-gboolean _gdk_win32_window_simulate_key (GdkWindow      *window,
-				  gint            x,
-				  gint            y,
-				  guint           keyval,
-				  GdkModifierType modifiers,
-				  GdkEventType    key_pressrelease);
-gboolean _gdk_win32_window_simulate_button (GdkWindow      *window,
-				     gint            x,
-				     gint            y,
-				     guint           button, /*1..3*/
-				     GdkModifierType modifiers,
-				     GdkEventType    button_pressrelease);
 
 gint _gdk_win32_window_get_property (GdkWindow   *window,
 				     GdkAtom      property,

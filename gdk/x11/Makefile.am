@@ -50,7 +50,6 @@ libgdk_x11_la_SOURCES = 	\
 	gdkscreen-x11.c		\
 	gdkscreen-x11.h		\
 	gdkselection-x11.c	\
-	gdktestutils-x11.c	\
 	gdkvisual-x11.c		\
 	gdkvulkancontext-x11.c	\
 	gdkvulkancontext-x11.h	\

@@ -194,21 +194,6 @@ void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
 void       _gdk_quartz_window_update_position           (GdkWindow    *window);
 void       _gdk_quartz_window_update_fullscreen_state   (GdkWindow    *window);
 
-/* Window methods - testing */
-void     _gdk_quartz_window_sync_rendering    (GdkWindow       *window);
-gboolean _gdk_quartz_window_simulate_key      (GdkWindow       *window,
-                                               gint             x,
-                                               gint             y,
-                                               guint            keyval,
-                                               GdkModifierType  modifiers,
-                                               GdkEventType     key_pressrelease);
-gboolean _gdk_quartz_window_simulate_button   (GdkWindow       *window,
-                                               gint             x,
-                                               gint             y,
-                                               guint            button,
-                                               GdkModifierType  modifiers,
-                                               GdkEventType     button_pressrelease);
-
 /* Window methods - property */
 gboolean _gdk_quartz_window_get_property      (GdkWindow    *window,
                                                GdkAtom       property,

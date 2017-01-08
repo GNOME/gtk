@@ -1400,37 +1400,6 @@ gdk_mir_window_impl_process_updates_recurse (GdkWindow      *window,
   _gdk_window_process_updates_recurse (window, region);
 }
 
-static void
-gdk_mir_window_impl_sync_rendering (GdkWindow *window)
-{
-  //g_printerr ("gdk_mir_window_impl_sync_rendering window=%p\n", window);
-  // FIXME: Only used for benchmarking
-}
-
-static gboolean
-gdk_mir_window_impl_simulate_key (GdkWindow       *window,
-                                  gint             x,
-                                  gint             y,
-                                  guint            keyval,
-                                  GdkModifierType  modifiers,
-                                  GdkEventType     key_pressrelease)
-{
-  //g_printerr ("gdk_mir_window_impl_simulate_key window=%p\n", window);
-  return FALSE;
-}
-
-static gboolean
-gdk_mir_window_impl_simulate_button (GdkWindow       *window,
-                                     gint             x,
-                                     gint             y,
-                                     guint            button,
-                                     GdkModifierType  modifiers,
-                                     GdkEventType     button_pressrelease)
-{
-  //g_printerr ("gdk_mir_window_impl_simulate_button window=%p\n", window);
-  return FALSE;
-}
-
 static gboolean
 gdk_mir_window_impl_get_property (GdkWindow  *window,
                                   GdkAtom     property,
@@ -2007,9 +1976,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->register_dnd = gdk_mir_window_impl_register_dnd;
   impl_class->drag_begin = gdk_mir_window_impl_drag_begin;
   impl_class->process_updates_recurse = gdk_mir_window_impl_process_updates_recurse;
-  impl_class->sync_rendering = gdk_mir_window_impl_sync_rendering;
-  impl_class->simulate_key = gdk_mir_window_impl_simulate_key;
-  impl_class->simulate_button = gdk_mir_window_impl_simulate_button;
   impl_class->get_property = gdk_mir_window_impl_get_property;
   impl_class->change_property = gdk_mir_window_impl_change_property;
   impl_class->delete_property = gdk_mir_window_impl_delete_property;

@@ -1218,14 +1218,6 @@ gdk_app_launch_context_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>Testing</TITLE>
-<FILE>gdktestutils</FILE>
-gdk_test_render_sync
-gdk_test_simulate_button
-gdk_test_simulate_key
-</SECTION>
-
-<SECTION>
 <TITLE>GdkFrameClock</TITLE>
 <FILE>gdkframeclock</FILE>
 GdkFrameClock

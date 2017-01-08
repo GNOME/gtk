@@ -74,19 +74,6 @@ void _gdk_x11_window_process_expose    (GdkWindow     *window,
                                         gulong         serial,
                                         GdkRectangle  *area);
 
-void     _gdk_x11_window_sync_rendering    (GdkWindow       *window);
-gboolean _gdk_x11_window_simulate_key      (GdkWindow       *window,
-                                            gint             x,
-                                            gint             y,
-                                            guint            keyval,
-                                            GdkModifierType  modifiers,
-                                            GdkEventType     key_pressrelease);
-gboolean _gdk_x11_window_simulate_button   (GdkWindow       *window,
-                                            gint             x,
-                                            gint             y,
-                                            guint            button,
-                                            GdkModifierType  modifiers,
-                                            GdkEventType     button_pressrelease);
 gboolean _gdk_x11_window_get_property      (GdkWindow    *window,
                                             GdkAtom       property,
                                             GdkAtom       type,

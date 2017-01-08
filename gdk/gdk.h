@@ -58,7 +58,6 @@
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkseat.h>
 #include <gdk/gdkselection.h>
-#include <gdk/gdktestutils.h>
 #include <gdk/gdkthreads.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>

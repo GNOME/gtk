@@ -1534,9 +1534,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->destroy_notify = gdk_broadway_window_destroy_notify;
   impl_class->register_dnd = _gdk_broadway_window_register_dnd;
   impl_class->drag_begin = _gdk_broadway_window_drag_begin;
-  impl_class->sync_rendering = _gdk_broadway_window_sync_rendering;
-  impl_class->simulate_key = _gdk_broadway_window_simulate_key;
-  impl_class->simulate_button = _gdk_broadway_window_simulate_button;
   impl_class->get_property = _gdk_broadway_window_get_property;
   impl_class->change_property = _gdk_broadway_window_change_property;
   impl_class->delete_property = _gdk_broadway_window_delete_property;

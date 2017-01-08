@@ -2791,9 +2791,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->register_dnd = _gdk_quartz_window_register_dnd;
   impl_class->drag_begin = _gdk_quartz_window_drag_begin;
   impl_class->process_updates_recurse = _gdk_quartz_window_process_updates_recurse;
-  impl_class->sync_rendering = _gdk_quartz_window_sync_rendering;
-  impl_class->simulate_key = _gdk_quartz_window_simulate_key;
-  impl_class->simulate_button = _gdk_quartz_window_simulate_button;
   impl_class->get_property = _gdk_quartz_window_get_property;
   impl_class->change_property = _gdk_quartz_window_change_property;
   impl_class->delete_property = _gdk_quartz_window_delete_property;

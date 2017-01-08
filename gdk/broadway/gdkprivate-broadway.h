@@ -161,19 +161,6 @@ BroadwayInputMsg * _gdk_broadway_display_block_for_input (GdkDisplay *display,
 							  gboolean remove);
 
 /* Window methods - testing */
-void     _gdk_broadway_window_sync_rendering    (GdkWindow       *window);
-gboolean _gdk_broadway_window_simulate_key      (GdkWindow       *window,
-						 gint             x,
-						 gint             y,
-						 guint            keyval,
-						 GdkModifierType  modifiers,
-						 GdkEventType     key_pressrelease);
-gboolean _gdk_broadway_window_simulate_button   (GdkWindow       *window,
-						 gint             x,
-						 gint             y,
-						 guint            button,
-						 GdkModifierType  modifiers,
-						 GdkEventType     button_pressrelease);
 void _gdk_broadway_window_resize_surface        (GdkWindow *window);
 
 void _gdk_broadway_cursor_update_theme (GdkCursor *cursor);

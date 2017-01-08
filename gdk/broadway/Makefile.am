@@ -71,7 +71,6 @@ libgdk_broadway_la_SOURCES =		\
 	gdkscreen-broadway.c	\
 	gdkscreen-broadway.h	\
 	gdkselection-broadway.c	\
-	gdktestutils-broadway.c	\
 	gdkwindow-broadway.c	\
 	gdkwindow-broadway.h	\
 	gdkprivate-broadway.h   \
