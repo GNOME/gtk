@@ -595,6 +595,7 @@ enum {
   PROP_VEXPAND_SET,
   PROP_EXPAND,
   PROP_SCALE_FACTOR,
+  PROP_CSS_NAME,
   NUM_PROPERTIES
 };
 
@@ -1506,6 +1507,20 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         1, G_MAXINT,
                         1,
                         GTK_PARAM_READABLE);
+
+  /**
+   * GtkWidget:css-name:
+   *
+   * The name of this widget in the CSS tree.
+   *
+   * Since: 3.90
+   */
+  widget_props[PROP_CSS_NAME] =
+      g_param_spec_string ("css-name",
+                           P_("CSS Name"),
+                           P_("The name of this widget in the css tree"),
+                           NULL,
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
@@ -3326,6 +3341,12 @@ gtk_widget_set_property (GObject         *object,
     case PROP_OPACITY:
       gtk_widget_set_opacity (widget, g_value_get_double (value));
       break;
+    case PROP_CSS_NAME:
+      if (g_value_get_string (value) != NULL)
+        gtk_css_node_set_name (widget->priv->cssnode, g_intern_string (g_value_get_string (value)));
+      else
+        gtk_css_node_set_name (widget->priv->cssnode, GTK_WIDGET_GET_CLASS (widget)->priv->css_name);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3468,6 +3489,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_SCALE_FACTOR:
       g_value_set_int (value, gtk_widget_get_scale_factor (widget));
+      break;
+    case PROP_CSS_NAME:
+      g_value_set_string (value, gtk_css_node_get_name (priv->cssnode));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3851,7 +3875,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_state (priv->cssnode, priv->state_flags);
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
-  gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
 }
 
 
