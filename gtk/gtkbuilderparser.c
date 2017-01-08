@@ -967,22 +967,22 @@ start_element (GMarkupParseContext  *context,
         return;
     }
 
-  if (strcmp (element_name, "property") == 0)
-    parse_property (data, element_name, names, values, error);
-  else if (strcmp (element_name, "object") == 0)
+  if (strcmp (element_name, "object") == 0)
     parse_object (context, data, element_name, names, values, error);
-  else if (strcmp (element_name, "child") == 0)
-    parse_child (data, element_name, names, values, error);
-  else if (strcmp (element_name, "signal") == 0)
-    parse_signal (data, element_name, names, values, error);
-  else if (strcmp (element_name, "requires") == 0)
-    parse_requires (data, element_name, names, values, error);
-  else if (strcmp (element_name, "template") == 0)
-    parse_template (context, data, element_name, names, values, error);
   else if (data->requested_objects && !data->inside_requested_object)
     {
       /* If outside a requested object, simply ignore this tag */
     }
+  else if (strcmp (element_name, "property") == 0)
+    parse_property (data, element_name, names, values, error);
+  else if (strcmp (element_name, "child") == 0)
+    parse_child (data, element_name, names, values, error);
+  else if (strcmp (element_name, "signal") == 0)
+    parse_signal (data, element_name, names, values, error);
+  else if (strcmp (element_name, "template") == 0)
+    parse_template (context, data, element_name, names, values, error);
+  else if (strcmp (element_name, "requires") == 0)
+    parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "interface") == 0)
     parse_interface (data, element_name, names, values, error);
   else if (strcmp (element_name, "menu") == 0)
@@ -1028,7 +1028,11 @@ end_element (GMarkupParseContext  *context,
       return;
     }
 
-  if (strcmp (element_name, "property") == 0)
+  if (data->requested_objects && !data->inside_requested_object)
+    {
+      /* If outside a requested object, simply ignore this tag */
+    }
+  else if (strcmp (element_name, "property") == 0)
     {
       PropertyInfo *prop_info = state_pop_info (data, PropertyInfo);
       CommonInfo *info = state_peek_info (data, CommonInfo);
@@ -1134,10 +1138,6 @@ end_element (GMarkupParseContext  *context,
     }
   else if (strcmp (element_name, "interface") == 0)
     {
-    }
-  else if (data->requested_objects && !data->inside_requested_object)
-    {
-      /* If outside a requested object, simply ignore this tag */
     }
   else if (strcmp (element_name, "menu") == 0)
     {
