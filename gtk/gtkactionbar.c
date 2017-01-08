@@ -65,10 +65,9 @@ enum {
   CHILD_PROP_POSITION
 };
 
-static void gtk_action_bar_finalize (GObject *object);
 static void gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkActionBar, gtk_action_bar, GTK_TYPE_BIN,
+G_DEFINE_TYPE_WITH_CODE (GtkActionBar, gtk_action_bar, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkActionBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_action_bar_buildable_interface_init))
@@ -79,16 +78,7 @@ gtk_action_bar_add (GtkContainer *container,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (container));
 
-  /* When constructing the widget, we want the revealer to be added
-   * as the first child of the bar, as an implementation detail.
-   * After that, the child added by the application should be added
-   * to box.
-   */
-
-  if (priv->box == NULL)
-    GTK_CONTAINER_CLASS (gtk_action_bar_parent_class)->add (container, child);
-  else
-    gtk_container_add (GTK_CONTAINER (priv->box), child);
+  gtk_container_add (GTK_CONTAINER (priv->box), child);
 }
 
 static void
@@ -97,10 +87,7 @@ gtk_action_bar_remove (GtkContainer *container,
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (container));
 
-  if (child == priv->revealer)
-    GTK_CONTAINER_CLASS (gtk_action_bar_parent_class)->remove (container, child);
-  else
-    gtk_container_remove (GTK_CONTAINER (priv->box), child);
+  gtk_container_remove (GTK_CONTAINER (priv->box), child);
 }
 
 static void
@@ -118,17 +105,14 @@ gtk_action_bar_forall (GtkContainer *container,
 }
 
 static void
-gtk_action_bar_destroy (GtkWidget *widget)
+gtk_action_bar_finalize (GObject *object)
 {
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (object));
 
-  if (priv->revealer)
-    {
-      gtk_widget_destroy (priv->revealer);
-      priv->revealer = NULL;
-    }
+  g_clear_object (&priv->gadget);
+  gtk_widget_unparent (priv->revealer);
 
-  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_action_bar_parent_class)->finalize (object);
 }
 
 static GType
@@ -216,7 +200,7 @@ gtk_action_bar_size_allocate (GtkWidget     *widget,
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
   GtkAllocation clip;
 
-  gtk_widget_set_allocation (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->size_allocate (widget, allocation);
 
   gtk_css_gadget_allocate (priv->gadget, allocation, gtk_widget_get_allocated_baseline (widget), &clip);
 
@@ -274,7 +258,6 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
 
   object_class->finalize = gtk_action_bar_finalize;
 
-  widget_class->destroy = gtk_action_bar_destroy;
   widget_class->snapshot = gtk_action_bar_snapshot;
   widget_class->size_allocate = gtk_action_bar_size_allocate;
   widget_class->measure = gtk_action_bar_measure_;
@@ -301,10 +284,6 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
                                                                 -1, G_MAXINT, 0,
                                                                 G_PARAM_READWRITE));
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkactionbar.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkActionBar, box);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkActionBar, revealer);
-
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
   gtk_widget_class_set_css_name (widget_class, "actionbar");
 }
@@ -316,10 +295,17 @@ gtk_action_bar_init (GtkActionBar *action_bar)
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
   GtkCssNode *widget_node;
 
-  gtk_widget_set_redraw_on_allocate (widget, TRUE);
+  gtk_widget_set_has_window (widget, FALSE);
 
-  gtk_widget_init_template (GTK_WIDGET (action_bar));
+  priv->revealer = gtk_revealer_new ();
+  gtk_widget_set_parent (priv->revealer, widget);
+  gtk_widget_show (priv->revealer);
 
+  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_container_add (GTK_CONTAINER (priv->revealer), priv->box);
+  gtk_widget_show (priv->box);
+
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
   gtk_revealer_set_transition_type (GTK_REVEALER (priv->revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (action_bar));
@@ -330,17 +316,6 @@ gtk_action_bar_init (GtkActionBar *action_bar)
                                                      gtk_action_bar_render,
                                                      NULL,
                                                      NULL);
-}
-
-static void
-gtk_action_bar_finalize (GObject *object)
-{
-  GtkActionBar *action_bar = GTK_ACTION_BAR (object);
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
-
-  g_clear_object (&priv->gadget);
-
-  G_OBJECT_CLASS (gtk_action_bar_parent_class)->finalize (object);
 }
 
 static void

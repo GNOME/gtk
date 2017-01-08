@@ -1141,7 +1141,6 @@ templates =				\
 	$(inspector_templates)		\
 	ui/gtkapplication-quartz.ui	\
 	ui/gtkaboutdialog.ui		\
-	ui/gtkactionbar.ui		\
 	ui/gtkappchooserdialog.ui	\
 	ui/gtkappchooserwidget.ui	\
 	ui/gtkassistant.ui		\
