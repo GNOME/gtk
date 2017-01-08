@@ -80,7 +80,6 @@ struct _GtkSwitchPrivate
   GtkGesture *multipress_gesture;
 
   GtkCssGadget *gadget;
-  GtkCssGadget *slider_gadget;
 
   double handle_pos;
   guint tick_id;
@@ -92,6 +91,7 @@ struct _GtkSwitchPrivate
 
   GtkWidget *on_label;
   GtkWidget *off_label;
+  GtkWidget *slider;
 };
 
 enum
@@ -337,11 +337,9 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
   self = GTK_SWITCH (widget);
   priv = self->priv;
 
-  gtk_css_gadget_get_preferred_size (priv->slider_gadget,
-                                     orientation,
-                                     -1,
-                                     &slider_minimum, &slider_natural,
-                                     NULL, NULL);
+  gtk_widget_measure (priv->slider, orientation, -1,
+                      &slider_minimum, &slider_natural,
+                      NULL, NULL);
 
   gtk_widget_measure (priv->on_label, orientation, for_size, NULL, &on_nat, NULL, NULL);
   gtk_widget_measure (priv->off_label, orientation, for_size, NULL, &off_nat, NULL, NULL);
@@ -394,10 +392,7 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
   slider_alloc.width = allocation->width / 2;
   slider_alloc.height = allocation->height;
 
-  gtk_css_gadget_allocate (priv->slider_gadget,
-                           &slider_alloc,
-                           baseline,
-                           out_clip);
+  gtk_widget_size_allocate (priv->slider, &slider_alloc);
 
   /* Center ON label in left half */
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
@@ -511,17 +506,6 @@ gtk_switch_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_switch_parent_class)->unmap (widget);
 }
 
-static gboolean
-gtk_switch_snapshot_slider (GtkCssGadget *gadget,
-                            GtkSnapshot  *snapshot,
-                            int           x,
-                            int           y,
-                            int           width,
-                            int           height,
-                            gpointer      data)
-{
-  return gtk_widget_has_visible_focus (gtk_css_gadget_get_owner (gadget));
-}
 
 static gboolean
 gtk_switch_snapshot_trough (GtkCssGadget *gadget,
@@ -537,8 +521,7 @@ gtk_switch_snapshot_trough (GtkCssGadget *gadget,
 
   gtk_widget_snapshot_child (widget, priv->on_label, snapshot);
   gtk_widget_snapshot_child (widget, priv->off_label, snapshot);
-
-  gtk_css_gadget_snapshot (priv->slider_gadget, snapshot);
+  gtk_widget_snapshot_child (widget, priv->slider, snapshot);
 
   return FALSE;
 }
@@ -668,7 +651,6 @@ gtk_switch_dispose (GObject *object)
 
   g_clear_object (&priv->action_helper);
   g_clear_object (&priv->gadget);
-  g_clear_object (&priv->slider_gadget);
 
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->multipress_gesture);
@@ -685,6 +667,7 @@ gtk_switch_finalize (GObject *object)
 
   gtk_widget_unparent (priv->on_label);
   gtk_widget_unparent (priv->off_label);
+  gtk_widget_unparent (priv->slider);
 
   G_OBJECT_CLASS (gtk_switch_parent_class)->finalize (object);
 }
@@ -835,15 +818,9 @@ gtk_switch_init (GtkSwitch *self)
                                                      NULL,
                                                      NULL);
 
-  priv->slider_gadget = gtk_css_custom_gadget_new ("slider",
-                                                   GTK_WIDGET (self),
-                                                   priv->gadget,
-                                                   NULL,
-                                                   NULL,
-                                                   NULL,
-                                                   gtk_switch_snapshot_slider,
-                                                   NULL,
-                                                   NULL);
+  priv->slider = g_object_new (GTK_TYPE_BUTTON, "css-name", "slider", NULL);
+  gtk_widget_set_parent (priv->slider, GTK_WIDGET (self));
+  gtk_widget_show (priv->slider);
 
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
