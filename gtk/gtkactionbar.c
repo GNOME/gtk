@@ -74,34 +74,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkActionBar, gtk_action_bar, GTK_TYPE_BIN,
                                                 gtk_action_bar_buildable_interface_init))
 
 static void
-gtk_action_bar_show (GtkWidget *widget)
-{
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-
-  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->show (widget);
-
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
-}
-
-static void
-child_revealed (GObject *object, GParamSpec *pspec, GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_action_bar_parent_class)->hide (widget);
-  g_signal_handlers_disconnect_by_func (object, child_revealed, widget);
-  g_object_notify (G_OBJECT (widget), "visible");
-}
-
-static void
-gtk_action_bar_hide (GtkWidget *widget)
-{
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-
-  g_signal_connect_object (priv->revealer, "notify::child-revealed",
-                            G_CALLBACK (child_revealed), widget, 0);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
-}
-
-static void
 gtk_action_bar_add (GtkContainer *container,
                     GtkWidget    *child)
 {
@@ -302,8 +274,6 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
 
   object_class->finalize = gtk_action_bar_finalize;
 
-  widget_class->show = gtk_action_bar_show;
-  widget_class->hide = gtk_action_bar_hide;
   widget_class->destroy = gtk_action_bar_destroy;
   widget_class->snapshot = gtk_action_bar_snapshot;
   widget_class->size_allocate = gtk_action_bar_size_allocate;
