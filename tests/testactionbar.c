@@ -25,9 +25,9 @@ toggle_visibility (GtkCheckButton *button,
                    GtkActionBar   *bar)
 {
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-    gtk_widget_show (GTK_WIDGET (bar));
+    gtk_action_bar_set_revealed (bar, TRUE);
   else
-    gtk_widget_hide (GTK_WIDGET (bar));
+    gtk_action_bar_set_revealed (bar, FALSE);
 }
 
 static void
@@ -102,7 +102,7 @@ activate (GApplication *gapp)
   gtk_application_add_window (app, GTK_WINDOW (window));
 
   bar = gtk_action_bar_new ();
-  gtk_widget_set_no_show_all (bar, TRUE);
+  gtk_action_bar_set_revealed (GTK_ACTION_BAR (bar), FALSE);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 

@@ -6446,6 +6446,8 @@ gtk_action_bar_pack_start
 gtk_action_bar_pack_end
 gtk_action_bar_get_center_widget
 gtk_action_bar_set_center_widget
+gtk_action_bar_get_revealed
+gtk_action_bar_set_revealed
 
 <SUBSECTION Standard>
 GTK_TYPE_ACTION_BAR

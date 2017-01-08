@@ -29,6 +29,7 @@
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
+#include "gtkprivate.h"
 
 #include <string.h>
 
@@ -64,6 +65,12 @@ enum {
   CHILD_PROP_PACK_TYPE,
   CHILD_PROP_POSITION
 };
+
+enum {
+  PROP_REVEALED,
+  LAST_PROP
+};
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 static void gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface);
 
@@ -246,6 +253,44 @@ gtk_action_bar_measure_ (GtkWidget *widget,
 }
 
 static void
+gtk_action_bar_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GtkActionBar *action_bar = GTK_ACTION_BAR (object);
+
+  switch (prop_id)
+    {
+    case PROP_REVEALED:
+      gtk_action_bar_set_revealed (action_bar, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_action_bar_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GtkActionBar *action_bar = GTK_ACTION_BAR (object);
+
+  switch (prop_id)
+    {
+    case PROP_REVEALED:
+      g_value_set_boolean (value, gtk_action_bar_get_revealed (action_bar));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_action_bar_class_init (GtkActionBarClass *klass)
 {
   GObjectClass *object_class;
@@ -256,6 +301,8 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   widget_class = GTK_WIDGET_CLASS (klass);
   container_class = GTK_CONTAINER_CLASS (klass);
 
+  object_class->set_property = gtk_action_bar_set_property;
+  object_class->get_property = gtk_action_bar_get_property;
   object_class->finalize = gtk_action_bar_finalize;
 
   widget_class->snapshot = gtk_action_bar_snapshot;
@@ -283,6 +330,13 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
                                                                 P_("The index of the child in the parent"),
                                                                 -1, G_MAXINT, 0,
                                                                 G_PARAM_READWRITE));
+
+  props[PROP_REVEALED] =
+    g_param_spec_boolean ("revealed",
+                          P_("Reveal"),
+                          P_("Controls whether the action bar shows its contents or not"),
+                          TRUE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
   gtk_widget_class_set_css_name (widget_class, "actionbar");
@@ -433,4 +487,47 @@ GtkWidget *
 gtk_action_bar_new (void)
 {
   return GTK_WIDGET (g_object_new (GTK_TYPE_ACTION_BAR, NULL));
+}
+
+/**
+ * gtk_action_bar_set_revealed:
+ * @action_bar: a #GtkActionBar
+ * @revealed: The new value of the property
+ *
+ * Sets the GtkActionBar:revealed property to @revealed. This will cause
+ * @action_bar to show up with a slide-in transition.
+ *
+ * Note that this settings does not automatically show @action_bar and thus won't
+ * have any effect if it is invisible.
+ *
+ * Since: 3.90
+ */
+void
+gtk_action_bar_set_revealed (GtkActionBar *action_bar,
+                             gboolean      revealed)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
+
+  g_return_if_fail (GTK_IS_ACTION_BAR (action_bar));
+
+  revealed = !!revealed;
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), revealed);
+}
+
+/**
+ * gtk_action_bar_get_revealed:
+ * @action_bar: a #GtkActionBar
+ *
+ * Returns:  the current value of the GtkActionBar:revealed property.
+ *
+ * Since: 3.90
+ */
+gboolean
+gtk_action_bar_get_revealed (GtkActionBar *action_bar)
+{
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
+
+  g_return_val_if_fail (GTK_IS_ACTION_BAR (action_bar), FALSE);
+
+  return gtk_revealer_get_reveal_child (GTK_REVEALER (priv->revealer));
 }

@@ -73,6 +73,14 @@ void         gtk_action_bar_pack_start        (GtkActionBar *action_bar,
 GDK_AVAILABLE_IN_3_12
 void         gtk_action_bar_pack_end          (GtkActionBar *action_bar,
                                                GtkWidget    *child);
+
+GDK_AVAILABLE_IN_3_90
+void        gtk_action_bar_set_revealed       (GtkActionBar *action_bar,
+                                               gboolean      revealed);
+GDK_AVAILABLE_IN_3_90
+gboolean    gtk_action_bar_get_revealed       (GtkActionBar *action_bar);
+
+
 G_END_DECLS
 
 #endif /* __GTK_ACTION_BAR_H__ */
