@@ -15708,6 +15708,14 @@ gtk_widget_render (GtkWidget            *widget,
   gsk_renderer_end_draw_frame (renderer, context);
 }
 
+/**
+ * gtk_widget_get_first_child:
+ * @widget: a #GtkWidget
+ *
+ * Returns: (transfer none) (nullable): The widget's first child
+ *
+ * Since: 3.90
+ */
 GtkWidget *
 gtk_widget_get_first_child (GtkWidget *widget)
 {
@@ -15716,6 +15724,14 @@ gtk_widget_get_first_child (GtkWidget *widget)
   return widget->priv->first_child;
 }
 
+/**
+ * gtk_widget_get_last_child:
+ * @widget: a #GtkWidget
+ *
+ * Returns: (transfer none) (nullable): The widget's last child
+ *
+ * Since: 3.90
+ */
 GtkWidget *
 gtk_widget_get_last_child (GtkWidget *widget)
 {
@@ -15724,6 +15740,14 @@ gtk_widget_get_last_child (GtkWidget *widget)
   return widget->priv->last_child;
 }
 
+/**
+ * gtk_widget_get_next_sibling:
+ * @widget: a #GtkWidget
+ *
+ * Returns: (transfer none) (nullable): The widget's next sibling
+ *
+ * Since: 3.90
+ */
 GtkWidget *
 gtk_widget_get_next_sibling (GtkWidget *widget)
 {
@@ -15732,6 +15756,14 @@ gtk_widget_get_next_sibling (GtkWidget *widget)
   return widget->priv->next_sibling;
 }
 
+/**
+ * gtk_widget_get_prev_sibling:
+ * @widget: a #GtkWidget
+ *
+ * Returns: (transfer none) (nullable): The widget's previous sibling
+ *
+ * Since: 3.90
+ */
 GtkWidget *
 gtk_widget_get_prev_sibling (GtkWidget *widget)
 {
