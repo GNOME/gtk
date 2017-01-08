@@ -386,7 +386,6 @@
                                     <property name="content-width">70</property>
                                     <property name="content-height">90</property>
                                     <property name="visible">1</property>
-                                    <signal name="draw" handler="draw_collate_cb" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
