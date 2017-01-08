@@ -24,7 +24,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkcontainer.h>
 
 G_BEGIN_DECLS
 
@@ -42,13 +42,13 @@ typedef struct _GtkActionBarClass         GtkActionBarClass;
 struct _GtkActionBar
 {
   /*< private >*/
-  GtkBin bin;
+  GtkContainer container;
 };
 
 struct _GtkActionBarClass
 {
   /*< private >*/
-  GtkBinClass parent_class;
+  GtkContainerClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
