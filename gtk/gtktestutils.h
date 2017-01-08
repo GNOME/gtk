@@ -39,10 +39,6 @@ GDK_AVAILABLE_IN_ALL
 const GType*    gtk_test_list_all_types         (guint          *n_types);
 GDK_AVAILABLE_IN_3_10
 void            gtk_test_widget_wait_for_draw   (GtkWidget      *widget);
-GDK_AVAILABLE_IN_ALL
-gboolean        gtk_test_widget_send_key        (GtkWidget      *widget,
-                                                 guint           keyval,
-                                                 GdkModifierType modifiers);
 
 G_END_DECLS
 

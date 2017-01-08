@@ -6013,7 +6013,6 @@ gtk_page_setup_unix_dialog_get_type
 gtk_test_init
 gtk_test_list_all_types
 gtk_test_register_all_types
-gtk_test_widget_send_key
 gtk_test_widget_wait_for_draw
 </SECTION>
 

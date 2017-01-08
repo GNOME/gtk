@@ -99,30 +99,6 @@ gtk_test_init (int    *argcp,
   gtk_init (argcp, argvp);
 }
 
-static GSList*
-test_find_widget_input_windows (GtkWidget *widget,
-                                gboolean   input_only)
-{
-  GdkWindow *window;
-  GList *node, *children;
-  GSList *matches = NULL;
-  gpointer udata;
-
-  window = gtk_widget_get_window (widget);
-
-  gdk_window_get_user_data (window, &udata);
-  if (udata == widget && (!input_only || (GDK_IS_WINDOW (window) && gdk_window_is_input_only (GDK_WINDOW (window)))))
-    matches = g_slist_prepend (matches, window);
-  children = gdk_window_get_children (gtk_widget_get_parent_window (widget));
-  for (node = children; node; node = node->next)
-    {
-      gdk_window_get_user_data (node->data, &udata);
-      if (udata == widget && (!input_only || (GDK_IS_WINDOW (node->data) && gdk_window_is_input_only (GDK_WINDOW (node->data)))))
-        matches = g_slist_prepend (matches, node->data);
-    }
-  return g_slist_reverse (matches);
-}
-
 static gboolean
 quit_main_loop_callback (GtkWidget     *widget,
                          GdkFrameClock *frame_clock,
@@ -162,42 +138,6 @@ gtk_test_widget_wait_for_draw (GtkWidget *widget)
                                 NULL);
 
   gtk_main ();
-}
-
-/**
- * gtk_test_widget_send_key:
- * @widget: Widget to generate a key press and release on.
- * @keyval: A Gdk keyboard value.
- * @modifiers: Keyboard modifiers the event is setup with.
- *
- * This function will generate keyboard press and release events in
- * the middle of the first GdkWindow found that belongs to @widget.
- * For windowless widgets like #GtkButton (which returns %FALSE from
- * gtk_widget_get_has_window()), this will often be an
- * input-only event window. For other widgets, this is usually widget->window.
- * Certain caveats should be considered when using this function, in
- * particular because the mouse pointer is warped to the key press
- * location, see gdk_test_simulate_key() for details.
- *
- * Returns: whether all actions neccessary for the key event simulation were carried out successfully.
- *
- * Since: 2.14
- **/
-gboolean
-gtk_test_widget_send_key (GtkWidget      *widget,
-                          guint           keyval,
-                          GdkModifierType modifiers)
-{
-  gboolean k1res, k2res;
-  GSList *iwindows = test_find_widget_input_windows (widget, FALSE);
-  if (!iwindows)
-    iwindows = test_find_widget_input_windows (widget, TRUE);
-  if (!iwindows)
-    return FALSE;
-  k1res = gdk_test_simulate_key (iwindows->data, -1, -1, keyval, modifiers, GDK_KEY_PRESS);
-  k2res = gdk_test_simulate_key (iwindows->data, -1, -1, keyval, modifiers, GDK_KEY_RELEASE);
-  g_slist_free (iwindows);
-  return k1res && k2res;
 }
 
 static GType *all_registered_types = NULL;
