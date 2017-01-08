@@ -1945,8 +1945,7 @@ test_add_objects (void)
   error = NULL;
   builder = gtk_builder_new ();
   ret = gtk_builder_add_objects_from_string (builder, buffer, -1, objects, &error);
-  g_assert (ret);
-  g_assert (error == NULL);
+  g_assert_no_error (error);
   obj = gtk_builder_get_object (builder, "window");
   g_assert (obj == NULL);
   obj = gtk_builder_get_object (builder, "window2");
