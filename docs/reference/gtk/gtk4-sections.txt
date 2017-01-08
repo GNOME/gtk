@@ -6010,9 +6010,6 @@ gtk_page_setup_unix_dialog_get_type
 <SECTION>
 <FILE>gtktesting</FILE>
 <TITLE>Testing</TITLE>
-gtk_test_find_label
-gtk_test_find_sibling
-gtk_test_find_widget
 gtk_test_init
 gtk_test_list_all_types
 gtk_test_register_all_types
