@@ -1,0 +1,16 @@
+@ECHO OFF
+
+cd ..\gsk
+
+if exist gskenumtypes.h del gskenumtypes.h
+if exist gskenumtypes.c del gskenumtypes.c
+
+call perl %1\bin\glib-mkenums ^
+--template gskenumtypes.h.template ^
+#include "gsk.enum.headers"
+&1> gskenumtypes.h
+
+call perl %1\bin\glib-mkenums ^
+--template gskenumtypes.c.template ^
+#include "gsk.enum.headers"
+&1> gskenumtypes.c

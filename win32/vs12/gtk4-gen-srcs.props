@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gtk4-build-defines.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <GenConfigH>copy ..\..\config.h.win32 ..\..\config.h</GenConfigH>
+    <GenGdkConfigHWin32>
+if exist ..\..\MSVC_$(Configuration) goto DONE_GDKCONFIG_H
+
+if exist ..\..\gdk\gdkconfig.h del ..\..\gdk\gdkconfig.h
+if exist ..\..\GDK_VULKAN_BUILD del ..\..\GDK_VULKAN_BUILD
+if exist ..\..\MSVC_$(Configuration)_Vulkan del ..\..\MSVC_$(Configuration)_Vulkan
+if exist $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll del $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll
+if exist $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib del $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib
+if "$(Configuration)" == "Release" del ..\..\MSVC_Debug
+if "$(Configuration)" == "Debug" del ..\..\MSVC_Release
+copy ..\..\gdk\gdkconfig.h.win32 ..\..\gdk\gdkconfig.h
+copy ..\..\gdk\gdkconfig.h.win32 ..\..\GDK_WIN32ONLY_BUILD
+echo $(Configuration) &gt; ..\..\MSVC_$(Configuration)
+
+:DONE_GDKCONFIG_H
+    </GenGdkConfigHWin32>
+    <GenGdkConfigHVulkan>
+if exist ..\..\MSVC_$(Configuration)_Vulkan goto DONE_GDKCONFIG_H
+
+if exist ..\..\gdk\gdkconfig.h del ..\..\gdk\gdkconfig.h
+if exist ..\..\GDK_WIN32ONLY_BUILD del ..\..\GDK_WIN32ONLY_BUILD
+if exist ..\..\MSVC_Release del ..\..\MSVC_Release
+if exist ..\..\MSVC_Debug del ..\..\MSVC_Debug
+
+if "$(Configuration)" == "Release_Vulkan" del ..\..\MSVC_Debug_Vulkan
+if "$(Configuration)" == "Debug_Vulkan" del ..\..\MSVC_Release_Vulkan
+
+copy ..\..\gdk\gdkconfig.h.win32_vulkan ..\..\gdk\gdkconfig.h
+copy ..\..\gdk\gdkconfig.h.win32_vulkan ..\..\GDK_VULKAN_BUILD
+echo $(Configuration) &gt; ..\..\MSVC_$(Configuration)_Vulkan
+
+:DONE_GDKCONFIG_H
+    </GenGdkConfigHVulkan>
+    <GDbusCodeGenCmd>$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml</GDbusCodeGenCmd>
+    <GenerateGtkDbusBuiltSources>cd ..\..\gtk &amp; $(PythonPath)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
+    <GenerateGtkDbusBuiltSourcesX64>cd ..\..\gtk &amp; $(PythonPathX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSourcesX64>
+    <CopyGtkWin32RC>copy ..\..\gtk\gtk-win32.rc.body ..\..\gtk\gtk-win32.rc</CopyGtkWin32RC>
+    <GenerateGtkWin32Manifest>$(PythonPath)\python ..\replace.py --action=replace-var --input=..\..\gtk\libgtk4.manifest.in --output=..\..\gtk\libgtk4.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
+    <CopyDemosH>copy ..\..\demos\gtk-demo\demos.h.win32 ..\..\demos\gtk-demo\demos.h</CopyDemosH>
+    <GenGSKEnumSrcs>(cd ..) &amp; (call gen-enums.bat $(GlibEtcInstallRoot)) &amp; (cd $(SolutionDir))</GenGSKEnumSrcs>
+    <GenGSKRsrcSrcs>
+echo ^&lt;?xml version='1.0' encoding='UTF-8'?^&gt; &gt; ..\..\gsk\gsk.gresource.xml
+echo ^&lt;gresources^&gt; &gt;&gt; ..\..\gsk\gsk.gresource.xml
+echo   ^&lt;gresource prefix='/org/gtk/libgsk'^&gt; &gt;&gt; ..\..\gsk\gsk.gresource.xml
+for /f &#37;&#37;f in ('dir /b ..\..\gsk\resources\glsl\*') do echo     ^&lt;file alias='glsl/&#37;&#37;f'^&gt;resources/glsl/&#37;&#37;f^&lt;/file^&gt; &gt;&gt; ..\..\gsk\gsk.gresource.xml
+for /f &#37;&#37;f in ('dir /b ..\..\gsk\resources\vulkan\*.spv') do echo     ^&lt;file alias='vulkan/&#37;&#37;f'^&gt;resources/vulkan/&#37;&#37;f^&lt;/file^&gt; &gt;&gt; ..\..\gsk\gsk.gresource.xml
+for /f &#37;&#37;f in ('dir /b ..\..\gsk\resources\vulkan\*.glsl') do echo     ^&lt;file alias='vulkan/&#37;&#37;f'^&gt;resources/vulkan/&#37;&#37;f^&lt;/file^&gt; &gt;&gt; ..\..\gsk\gsk.gresource.xml
+echo   ^&lt;/gresource^&gt; &gt;&gt; ..\..\gsk\gsk.gresource.xml
+echo ^&lt;/gresources^&gt; &gt;&gt; ..\..\gsk\gsk.gresource.xml
+
+$(GlibEtcInstallRoot)\bin\glib-compile-resources.exe --sourcedir=..\..\gsk --c-name _gsk --generate-header --manual-register --target=..\..\gsk\gskresources.h ..\..\gsk\gsk.gresource.xml
+$(GlibEtcInstallRoot)\bin\glib-compile-resources.exe --sourcedir=..\..\gsk --c-name _gsk --generate-source --manual-register --target=..\..\gsk\gskresources.c ..\..\gsk\gsk.gresource.xml
+    </GenGSKRsrcSrcs>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtk4gensrcsprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="GenConfigH">
+      <Value>$(GenConfigH)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenGdkConfigHWin32">
+      <Value>$(GenGdkConfigHWin32)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenGdkConfigHVulkan">
+      <Value>$(GenGdkConfigHVulkan)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GDbusCodeGenCmd">
+      <Value>$(GDbusCodeGenCmd)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkDbusBuiltSources">
+      <Value>$(GenerateGtkDbusBuiltSources)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkDbusBuiltSourcesX64">
+      <Value>$(GenerateGtkDbusBuiltSourcesX64)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CopyGtkWin32RC">
+      <Value>$(CopyGtkWin32RC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkWin32Manifest">
+      <Value>$(GenerateGtkWin32Manifest)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CopyDemosH">
+      <Value>$(CopyDemosH)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenGSKEnumSrcs">
+      <Value>$(GenGSKEnumSrcs)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenGSKRsrcSrcs">
+      <Value>$(GenGSKRsrcSrcs)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

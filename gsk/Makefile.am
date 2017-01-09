@@ -256,14 +256,14 @@ gsk_4_HEADERS_DIR = $(gskincludedir)
 gsk_4_HEADERS_INST = $(gskinclude_HEADERS)
 gsk_4_HEADERS_EXCLUDES = dummy
 
-include $(top_srcdir)/build/Makefile.msvcproj
+include $(top_srcdir)/win32/Makefile.msvcproj
 
-$(top_builddir)/build/win32/gsk.enum.headers: Makefile $(gsk_public_source_h)
-	-$(RM) $(top_builddir)/build/win32/gsk.enum.headers
+$(top_builddir)/win32/gsk.enum.headers: Makefile $(gsk_public_source_h)
+	-$(RM) $(top_builddir)/win32/gsk.enum.headers
 	for F in $(gsk_public_source_h); do \
 		case $$F in \
 		*.h) \
-			echo $$F' ^'>>$(top_builddir)/build/win32/gsk.enum.headers \
+			echo $$F' ^'>>$(top_builddir)/win32/gsk.enum.headers \
 			;; \
 		esac \
 	done
@@ -277,9 +277,9 @@ BASE_MSVC_GIR_CFLAGS =			\
 	-I../.. -I../../gdk -I.../../gsk
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
-	$(top_builddir)/build/win32/Gsk-4.0.gir.msvc.introspect	\
-	$(top_builddir)/build/win32/Gsk_4_0_gir_list		\
-	$(top_builddir)/build/win32/gsk.enum.headers
+	$(top_builddir)/win32/Gsk-4.0.gir.msvc.introspect	\
+	$(top_builddir)/win32/Gsk_4_0_gir_list		\
+	$(top_builddir)/win32/gsk.enum.headers
 
 Gsk_4_0_gir_MSVC_FILES = $(introspection_files)
 Gsk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gsk_noinst_4_0_gir_EXPORT_PACKAGES)
@@ -290,16 +290,16 @@ Gsk_4_0_gir_MSVC_SCANNERFLAGS =			\
 	--add-include-path=.			\
 	--include-uninstalled=../gdk/Gdk-4.0.gir
 
-include $(top_srcdir)/build/Makefile.msvc-introspection
+include $(top_srcdir)/win32/Makefile.msvc-introspection
 
 else
 INTROSPECTION_INTERMEDIATE_ITEMS =
 endif
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs12/gsk-4.vcxproj	\
-	$(top_builddir)/build/win32/vs12/gsk-4.vs12.headers	\
-	$(top_builddir)/build/win32/gsk.enum.headers	\
+	$(top_builddir)/win32/vs12/gsk-4.vcxproj	\
+	$(top_builddir)/win32/vs12/gsk-4.vs12.headers	\
+	$(top_builddir)/win32/gsk.enum.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 -include $(top_srcdir)/git.mk

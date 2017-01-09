@@ -194,11 +194,11 @@ gtk4_demo_EXCLUDES = font_features.c|pagesetup.c
 gtk4_demo_application_FILES = $(gtk4_demo_application_SOURCES)
 gtk4_demo_application_EXCLUDES = dummy
 
-include $(top_srcdir)/build/Makefile.msvcproj
+include $(top_srcdir)/win32/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs12/gtk4-demo.vcxproj	\
-	$(top_builddir)/build/win32/vs12/gtk4-demo-application.vcxproj
+	$(top_builddir)/win32/vs12/gtk4-demo.vcxproj	\
+	$(top_builddir)/win32/vs12/gtk4-demo-application.vcxproj
 
 DISTCLEANFILES = demos.h demos.h.win32
 

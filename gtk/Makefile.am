@@ -1416,7 +1416,7 @@ gtk_4_HEADERS_INST = \
 
 gtk_4_HEADERS_EXCLUDES = dummy
 
-include $(top_srcdir)/build/Makefile.msvcproj
+include $(top_srcdir)/win32/Makefile.msvcproj
 
 if HAVE_INTROSPECTION
 # Introspection Items for MSVC
@@ -1445,8 +1445,8 @@ GTK_MSVC_GIR_CFLAGS =						\
 	-I../.. -I../../gtk -I../../gdk
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
-	$(top_builddir)/build/win32/Gtk-4.0.gir.msvc.introspect		\
-	$(top_builddir)/build/win32/Gtk_4_0_gir_list
+	$(top_builddir)/win32/Gtk-4.0.gir.msvc.introspect		\
+	$(top_builddir)/win32/Gtk_4_0_gir_list
 
 Gtk_4_0_gir_MSVC_FILES =		\
 	$(introspected_pub_headers)	\
@@ -1461,7 +1461,7 @@ Gtk_4_0_gir_MSVC_LIBS = gtk-4
 Gtk_4_0_gir_MSVC_CFLAGS = $(GTK_MSVC_GIR_CFLAGS)
 Gtk_4_0_gir_MSVC_SCANNERFLAGS = --warn-all --add-include-path=. --include-uninstalled=./Gdk-4.0.gir --include-uninstalled=./Gsk-4.0.gir
 
-include $(top_srcdir)/build/Makefile.msvc-introspection
+include $(top_srcdir)/win32/Makefile.msvc-introspection
 
 else
 INTROSPECTION_INTERMEDIATE_ITEMS =
@@ -1469,8 +1469,8 @@ INTROSPECTION_INTERMEDIATE_ITEMS =
 endif
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs12/gtk-4.vcxproj	\
-	$(top_builddir)/build/win32/vs12/gtk-4.vs12.headers	\
+	$(top_builddir)/win32/vs12/gtk-4.vcxproj	\
+	$(top_builddir)/win32/vs12/gtk-4.vs12.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 # Install a RC file for the default GTK+ theme, and key themes

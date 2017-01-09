@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gtk4-build-defines.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
+    <GtkDoInstallBin>
+mkdir $(CopyDir)\bin
+mkdir $(CopyDir)\lib\pkgconfig
+
+if "$(Configuration)" == "Release_Vulkan" goto DO_VULKAN_RELEASE
+if "$(Configuration)" == "Debug_Vulkan" goto DO_VULKAN_DEBUG
+
+copy "$(BinDir)\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-$(ApiVersionShort).lib" $(CopyDir)\lib
+copy "$(BinDir)\gtk$(ApiVersionShort)-demo.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-demo.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-demo-application.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-demo-application.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-icon-browser.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-icon-browser.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-encode-symbolic-svg.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-encode-symbolic-svg.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-update-icon-cache.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-update-icon-cache.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-query-settings.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-query-settings.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-builder-tool.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk$(ApiVersionShort)-builder-tool.pdb" $(CopyDir)\bin
+
+:DO_VULKAN_RELEASE
+copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).dll $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-$(ApiVersionShort).lib $(CopyDir)\lib
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-demo.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-demo.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-demo-application.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-demo-application.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-icon-browser.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-icon-browser.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-encode-symbolic-svg.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-encode-symbolic-svg.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-update-icon-cache.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-update-icon-cache.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-query-settings.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-query-settings.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-builder-tool.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk$(ApiVersionShort)-builder-tool.pdb $(CopyDir)\bin
+
+goto DONE_BIN
+
+:DO_VULKAN_DEBUG
+copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).dll $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk-$(ApiVersionShort)$(GtkDllSuffix).pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-$(ApiVersionShort).lib $(CopyDir)\lib
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-demo.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-demo.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-demo-application.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-demo-application.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-icon-browser.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-icon-browser.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-encode-symbolic-svg.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-encode-symbolic-svg.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-update-icon-cache.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-update-icon-cache.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-query-settings.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-query-settings.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-builder-tool.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk$(ApiVersionShort)-builder-tool.pdb $(CopyDir)\bin
+
+:DONE_BIN
+
+copy "..\gtk+-$(ApiVersion).pc" $(CopyDir)\lib\pkgconfig
+copy "..\gtk+-$(ApiVersion).pc" "$(CopyDir)\lib\pkgconfig\gtk+-win32-$(ApiVersion).pc"
+    </GtkDoInstallBin>
+    <GtkDoInstall>
+echo off
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\deprecated
+copy ..\..\gdk\win32\gdkwin32.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
+#include "gdk-4.vs12.headers"
+#include "gdk4-win32.vs12.headers"
+
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gsk
+#include "gsk-4.vs12.headers"
+
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
+#include "gtk-4.vs12.headers"
+
+for &#37;&#37;s in (16 22 24 32 48 256) do ((mkdir $(CopyDir)\share\icons\hicolor\&#37;&#37;sx&#37;&#37;s\apps) &amp; (copy /b ..\..\demos\gtk-demo\data\&#37;&#37;sx&#37;&#37;s\gtk$(ApiVersionShort)-demo.png $(CopyDir)\share\icons\hicolor\&#37;&#37;sx&#37;&#37;s\apps))
+mkdir $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\gtk\org.gtk.Settings.ColorChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\gtk\org.gtk.Settings.Debug.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+    </GtkDoInstall>
+    <GtkPostInstall>
+echo "Compiling gsettings XML Files..."
+$(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
+
+echo "Generating icon cache..."
+$(CopyDir)\bin\gtk$(ApiVersionShort)-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
+    </GtkPostInstall>
+    <GenerateGtkPC>$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
+    <GenerateGtkPCX64>$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
+    <GtkPCFiles>..\gtk+-$(ApiVersion).pc</GtkPCFiles>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtk4installsprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="BinDir">
+      <Value>$(BinDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledDlls">
+      <Value>$(InstalledDlls)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledBins">
+      <Value>$(InstalledBins)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDoInstallBin">
+      <Value>$(GtkDoInstallBin)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDoInstall">
+      <Value>$(GtkDoInstall)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPostInstall">
+      <Value>$(GtkPostInstall)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPC">
+      <Value>$(GenerateGtkPC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPCX64">
+      <Value>$(GenerateGtkPCX64)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPCFiles">
+      <Value>$(GtkPCFiles)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

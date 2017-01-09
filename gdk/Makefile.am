@@ -476,7 +476,7 @@ gdk_4_HEADERS_INST = \
 
 gdk_4_HEADERS_EXCLUDES = dummy
 
-include $(top_srcdir)/build/Makefile.msvcproj
+include $(top_srcdir)/win32/Makefile.msvcproj
 
 if HAVE_INTROSPECTION
 # Introspection Items for MSVC
@@ -487,10 +487,10 @@ BASE_MSVC_GIR_CFLAGS =			\
 	-I../.. -I../../gdk -I.../../gdk/win32
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
-	$(top_builddir)/build/win32/Gdk-4.0.gir.msvc.introspect	\
-	$(top_builddir)/build/win32/Gdk_4_0_gir_list			\
-	$(top_builddir)/build/win32/GdkWin32-4.0.gir.msvc.introspect	\
-	$(top_builddir)/build/win32/GdkWin32_4_0_gir_list
+	$(top_builddir)/win32/Gdk-4.0.gir.msvc.introspect	\
+	$(top_builddir)/win32/Gdk_4_0_gir_list			\
+	$(top_builddir)/win32/GdkWin32-4.0.gir.msvc.introspect	\
+	$(top_builddir)/win32/GdkWin32_4_0_gir_list
 
 Gdk_4_0_gir_MSVC_FILES = $(introspection_files)
 Gdk_4_0_gir_MSVC_EXPORT_PACKAGES = $(Gdk_noinst_4_0_gir_EXPORT_PACKAGES)
@@ -508,15 +508,15 @@ GdkWin32_4_0_gir_MSVC_SCANNERFLAGS =	\
 	--c-include="gdk/gdkwin32.h"	\
 	--include-uninstalled=./Gdk-4.0.gir
 
-include $(top_srcdir)/build/Makefile.msvc-introspection
+include $(top_srcdir)/win32/Makefile.msvc-introspection
 
 else
 INTROSPECTION_INTERMEDIATE_ITEMS =
 endif
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs12/gdk-4.vcxproj	\
-	$(top_builddir)/build/win32/vs12/gdk-4.vs12.headers	\
+	$(top_builddir)/win32/vs12/gdk-4.vcxproj	\
+	$(top_builddir)/win32/vs12/gdk-4.vs12.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h

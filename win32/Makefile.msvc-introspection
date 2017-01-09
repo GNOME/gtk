@@ -1,0 +1,125 @@
+# Author: Fan, Chun-wei
+# Common autotools file for constructing the g-ir-scanner and
+# g-ir-compiler command lines for Visual Studio builds.
+
+# This is copied from $(srcroot)/win32 from the gobject-introspection
+# project, which may be included in projects that support both
+# Visual Studio builds and introspection.
+
+# * Input variables:
+#
+#   MSVC_INTROSPECT_GIRS - List of .gir's that should be built
+#                          in the NMake Makefiles
+#
+# * Simple tutorial
+#
+# Add this to Makefile.am where your library/program is built:
+#   (Either YourLib_1_0_gir_MSVC_LIBS or YourLib_1_0_gir_MSVC_PROGRAM
+#    is required unless --headers-only is specified in
+#    YourLib_1_0_gir__MSVC_SCANNERFLAGS)
+#
+#   include <this Makefile.msvc-introspection
+#   MSVC_INTROSPECT_GIRS = YourLib-1.0.gir
+#   YourLib_1_0_gir_NAMESPACE = YourLib # This is optional
+#   YourLib_1_0_gir_VERSION = 1.0 # This is optional
+#   YourLib_1_0_gir_MSVC_LIBS = yourlib-1.0
+#   YourLib_1_0_gir_MSVC_FILES = $(libyourlib_1_0_SOURCES)
+#   YourLib_1_0_gir_MSVC_PROGRAM = YourProgram
+#   YourLib_1_0_gir_MSVC_PACKAGES = (Dependent .pc files)
+#   YourLib_1_0_gir_MSVC_INCLUDE_GIRS = (Dependent external .gir's)
+#   YourLiv_1_0_gir_MSVC_EXPORT_PACKAGES = (Packages exported by this .gir)
+
+# Private functions
+
+## Transform the MSVC project filename (no filename extensions) to something which can reference through a variable
+## without automake/make complaining, eg Gtk-2.0 -> Gtk_2_0
+_gir_name=$(subst /,_,$(subst -,_,$(subst .,_,$(1))))
+
+# Namespace and Version is either fetched from the gir filename
+# or the _NAMESPACE/_VERSION variable combo
+_gir_namespace_msvc = $(or $($(_gir_name)_NAMESPACE),$(firstword $(subst -, ,$(notdir $(1)))))
+_gir_version_msvc = $(or $($(_gir_name)_VERSION),$(lastword $(subst -, ,$(1:.gir=))))
+_typelib_basename_msvc = $(_gir_namespace_msvc)'-'$(_gir_version_msvc)
+
+# _PROGRAM is an optional variable which needs its own --program argument
+_gir_program_msvc = $(if $($(_gir_name)_MSVC_PROGRAM),--program=$($(_gir_name)_MSVC_PROGRAM))
+
+# Deduce the sub-folder from $(srcroot) where the sources reside in
+_gir_source_path_raw_msvc:=$(subst $(abs_top_srcdir),,$(abs_srcdir))
+_gir_source_path_msvc=$(subst /,\\,$(_gir_source_path_raw_msvc))
+_gir_source_subdir_int_msvc=$(subst \\\\,\\,\\$(_gir_source_path_msvc)\\)
+_gir_source_subdir_msvc=$(subst \\.\\,\\,$(_gir_source_subdir_int_msvc))
+
+_gir_files_raw_msvc=$(subst /,\\,$($(_gir_name)_MSVC_FILES))
+_gir_files_msvc=$(subst $(srcdir)\\,,$(subst $(builddir)\\,,$(subst $(top_builddir)\\$(_gir_source_path_msvc)\\,\\,$(_gir_files_raw_msvc))))
+
+# Create a list of items for:
+# - Libraries
+# - Packages
+# - GIRs to include
+# - packages to export
+
+_gir_libraries_msvc = $(foreach lib,$($(_gir_name)_MSVC_LIBS),--library=$(lib))
+_gir_packages_msvc = $(foreach pkg,$($(_gir_name)_MSVC_PACKAGES),--pkg=$(pkg))
+_gir_includes_msvc = $(foreach include,$($(_gir_name)_MSVC_INCLUDE_GIRS),--include=$(include))
+_gir_export_packages_msvc = $(foreach pkg,$($(_gir_name)_MSVC_EXPORT_PACKAGES),--pkg-export=$(pkg))
+
+#
+# Create NMake Makefile Sections for Building Introspection files
+# from autotools files
+# $(1) - File Name of the .gir that is to be generated
+#
+
+define gir-nmake-builder
+
+# Basic sanity check, to make sure required variables are set
+$(if $($(_gir_name)_MSVC_FILES),,$(error Need to define $(_gir_name)_MSVC_FILES))
+$(if $(or $(findstring --header-only,$($(_gir_name)_MSVC_SCANNERFLAGS)),
+          $($(_gir_name)_MSVC_LIBS),
+          $($(_gir_name)_MSVC_PROGRAM)),,
+    $(error Need to define $(_gir_name)_MSVC_LIBS or $(_gir_name)_MSVC_PROGRAM))
+
+$(top_builddir)/win32/$(_gir_name)_list:
+	for F in $(_gir_files_msvc); do \
+		case $$$$F in \
+		*.c|*.cpp|*.cc|*.cxx|*.h|*.hpp|*.hh|*.hxx) \
+			echo '..\..'$(_gir_source_subdir_msvc)$$$$F >>$(top_builddir)/win32/$(_gir_name)_list \
+			;; \
+		esac; \
+	done
+
+$(top_builddir)/win32/$(1).msvc.introspect:
+	-$(RM) $(top_builddir)/win32/$(1).msvc.introspect
+
+# Assemble the Command to Run g-ir-scanner
+	echo $(1)': '$(_gir_name)'_list '$($(_gir_name)_MSVC_GIR_DEPS)>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	@-echo Generating $$$$@...'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	$$$$(PYTHON) $$$$(G_IR_SCANNER)	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--verbose -no-libtool	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--namespace='$(_gir_namespace_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--nsversion='$(_gir_version_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	'$(_gir_packages_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	'$(_gir_libraries_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	'$(_gir_program_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--add-include-path=$$$$(G_IR_INCLUDEDIR)	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	'$(_gir_includes_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	'$(_gir_export_packages_msvc)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--cflags-begin	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	'$($(_gir_name)_MSVC_CFLAGS)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--cflags-end	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	'$($(_gir_name)_MSVC_SCANNERFLAGS)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--filelist='$(_gir_name)'_list	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	-o $$$$@'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '' >>$(top_builddir)/win32/$(1).msvc.introspect
+
+# Finally Assemble the Command to Compile the generated .gir
+	echo '$(_typelib_basename_msvc).typelib: '$(_typelib_basename_msvc)'.gir'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	@-echo Compiling $$$$@...'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	$$$$(G_IR_COMPILER)	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--includedir=. --debug --verbose	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	'$(1)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	-o $$$$@'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '' >>$(top_builddir)/win32/$(1).msvc.introspect
+endef
+
+$(foreach gir,$(MSVC_INTROSPECT_GIRS),$(eval $(call gir-nmake-builder,$(gir))))

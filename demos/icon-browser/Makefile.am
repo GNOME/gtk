@@ -40,8 +40,8 @@ MSVCPROJS = gtk4-icon-browser
 gtk4_icon_browser_FILES = $(gtk4_icon_browser_SOURCES)
 gtk4_icon_browser_EXCLUDES = dummy
 
-include $(top_srcdir)/build/Makefile.msvcproj
+include $(top_srcdir)/win32/Makefile.msvcproj
 
-dist-hook: $(top_builddir)/build/win32/vs12/gtk4-icon-browser.vcxproj
+dist-hook: $(top_builddir)/win32/vs12/gtk4-icon-browser.vcxproj
 
 -include $(top_srcdir)/git.mk

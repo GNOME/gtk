@@ -2021,11 +2021,10 @@ docs/reference/gtk/Makefile
 docs/reference/gtk/gtk4.types
 docs/reference/gtk/version.xml
 docs/tools/Makefile
-build/Makefile
-build/win32/Makefile
-build/win32/vs12/Makefile
-build/win32/vs12/gtk4-version-paths.props
-build/win32/vs14/Makefile
+win32/Makefile
+win32/vs12/Makefile
+win32/vs12/gtk4-version-paths.props
+win32/vs14/Makefile
 gdk/Makefile
 gdk/broadway/Makefile
 gdk/x11/Makefile

@@ -2,7 +2,7 @@
 include $(top_srcdir)/Makefile.decl
 
 SRC_SUBDIRS = gdk gsk gtk modules demos tests testsuite examples
-SUBDIRS = po po-properties $(SRC_SUBDIRS) docs build
+SUBDIRS = po po-properties $(SRC_SUBDIRS) docs win32
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 

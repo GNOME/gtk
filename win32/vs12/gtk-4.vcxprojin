@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_Vulkan|Win32">
+      <Configuration>Debug_Vulkan</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_Vulkan|x64">
+      <Configuration>Debug_Vulkan</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Vulkan|Win32">
+      <Configuration>Release_Vulkan</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Vulkan|x64">
+      <Configuration>Release_Vulkan</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{95A4B53D-2773-4406-A2C1-8FD2840BBAD8}</ProjectGuid>
+    <RootNamespace>gtk4</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gtk4-gen-srcs.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gtk4-gen-srcs.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gtk4-gen-srcs.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gtk4-gen-srcs.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gtk4-gen-srcs.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gtk4-gen-srcs.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gtk4-gen-srcs.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gtk4-gen-srcs.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Debug_Vulkan'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Release_Vulkan'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\gtk;..\..\gdk;..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;G_ENABLE_DEBUG;$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\gtk;..\..\gdk;..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;G_ENABLE_DEBUG;$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(GtkAdditionalLibs);$(VulkanLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(SolutionDir)Debug\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\gtk;..\..\gdk;..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\gtk;..\..\gdk;..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(GtkAdditionalLibs);$(VulkanLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(SolutionDir)Release\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\gtk;..\..\gdk;..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;G_ENABLE_DEBUG;$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Vulkan|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\gtk;..\..\gdk;..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;G_ENABLE_DEBUG;$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(GtkAdditionalLibs);$(VulkanLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(SolutionDir)Debug\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)Debug\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\gtk;..\..\gdk;..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(GtkAdditionalLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Vulkan|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\gtk;..\..\gdk;..\..\gdk\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(GtkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(GtkAdditionalLibs);$(VulkanLibs);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
+      <ImportLibrary>$(SolutionDir)Release\$(Platform)\bin\$(ProjectName).lib</ImportLibrary>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)Release\$(Platform)\bin\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
+      <AdditionalOptions>$(GtkExportGdkWin32DisplayMgr) %(AdditionalOptions)</AdditionalOptions>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\gtk\gtkdbusinterfaces.xml">
+      <Message Condition="'$(Configuration)'=='Debug'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\gtk\gtk-win32.rc.body">
+      <Message Condition="'$(Configuration)'=='Debug'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Copying GTK+ Win32 Version Resource...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(CopyGtkWin32RC)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\gtk\libgtk4.manifest.in">
+      <Message Condition="'$(Configuration)'=='Debug'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Debug'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Release'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\gtk\gtk-win32.rc">
+      <AdditionalIncludeDirectories>..\..\gdk\win32\rc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+#include "gtk-4.vs12.sourcefiles"
+    <ClCompile Include="..\..\modules\input\gtkimcontextime.c" />
+    <ClCompile Include="..\..\modules\input\gtkimcontextmultipress.c" />
+    <ClCompile Include="..\..\modules\input\gtkimcontextthai.c" />
+    <ClCompile Include="..\..\modules\input\imam-et.c" />
+    <ClCompile Include="..\..\modules\input\imcedilla.c" />
+    <ClCompile Include="..\..\modules\input\imcyrillic-translit.c" />
+    <ClCompile Include="..\..\modules\input\imime.c" />
+    <ClCompile Include="..\..\modules\input\iminuktitut.c" />
+    <ClCompile Include="..\..\modules\input\imipa.c" />
+    <ClCompile Include="..\..\modules\input\immultipress.c" />
+    <ClCompile Include="..\..\modules\input\imthai.c" />
+    <ClCompile Include="..\..\modules\input\imti-er.c" />
+    <ClCompile Include="..\..\modules\input\imti-et.c" />
+    <ClCompile Include="..\..\modules\input\imviqr.c" />
+    <ClCompile Include="..\..\modules\input\thai-charprop.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\gtk\libgtk4.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="gdk4-win32.vcxproj">
+      <Project>{aba7685a-7cbb-4626-b5e5-6eeea5b489ef}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="gdk-4.vcxproj">
+      <Project>{5ae8f5ce-9103-4951-aede-ea2f3b573be8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="gsk-4.vcxproj">
+      <Project>{5ae8f5ce-9103-4951-aede-eb2f3b573be8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
