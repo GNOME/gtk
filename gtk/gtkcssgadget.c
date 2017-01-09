@@ -110,17 +110,6 @@ gtk_css_gadget_real_allocate (GtkCssGadget        *gadget,
   *out_clip = *allocation;
 }
 
-static void
-gtk_css_gadget_get_clip (GtkCssGadget    *gadget,
-                         graphene_rect_t *bounds)
-{
-  GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
-
-  graphene_rect_init (bounds,
-                      priv->clip.x - priv->allocated_size.x, priv->clip.y - priv->allocated_size.y,
-                      priv->clip.width, priv->clip.height);
-}
-
 static gboolean
 gtk_css_gadget_real_snapshot (GtkCssGadget *gadget,
                               GtkSnapshot  *snapshot,
@@ -837,14 +826,14 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
   GtkCssStyle *style;
   int x, y, width, height;
   int contents_x, contents_y, contents_width, contents_height;
-  GtkAllocation margin_box;
-  graphene_rect_t bounds;
+  GtkAllocation margin_box, clip;
 
   if (!gtk_css_gadget_get_visible (gadget))
     return;
 
-  gtk_css_gadget_get_clip (gadget, &bounds);
-  if (gtk_snapshot_clips_rect (snapshot, &bounds))
+  clip = priv->clip;
+  shift_allocation (gadget, &clip);
+  if (gtk_snapshot_clips_rect (snapshot, &GRAPHENE_RECT_INIT(clip.x, clip.y, clip.width, clip.height)))
     return;
 
   gtk_css_gadget_get_margin_box (gadget, &margin_box);
