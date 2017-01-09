@@ -571,6 +571,8 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
         case mir_input_event_type_pointer:
           handle_motion_event (window, input_event);
           break;
+        default:
+          break;
         }
 
       break;

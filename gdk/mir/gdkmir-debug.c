@@ -127,6 +127,7 @@ _gdk_mir_print_touch_event (const MirInputEvent *event)
         }
       switch (mir_touch_event_tooltype (touch_event, i))
         {
+        default:
         case mir_touch_tooltype_unknown:
           g_printerr (" ? ");
           break;
@@ -200,6 +201,12 @@ _gdk_mir_print_motion_event (const MirInputEvent *event)
 }
 
 static void
+_gdk_mir_print_input_event (const MirInputEvent *event)
+{
+  g_printerr ("INPUT\n");
+}
+
+static void
 _gdk_mir_print_surface_event (const MirSurfaceEvent *event)
 {
   g_printerr ("SURFACE\n");
@@ -259,6 +266,9 @@ _gdk_mir_print_event (const MirEvent *event)
             break;
           case mir_input_event_type_pointer:
             _gdk_mir_print_motion_event (mir_event_get_input_event (event));
+            break;
+          default:
+            _gdk_mir_print_input_event (mir_event_get_input_event (event));
             break;
         }
       break;
