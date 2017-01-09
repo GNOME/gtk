@@ -606,6 +606,8 @@ struct _GtkStateData
 {
   guint         flags_to_set;
   guint         flags_to_unset;
+
+  gint          old_scale_factor;
 };
 
 /* --- prototypes --- */
@@ -7882,6 +7884,7 @@ gtk_widget_update_state_flags (GtkWidget     *widget,
     {
       GtkStateData data;
 
+      data.old_scale_factor = gtk_widget_get_scale_factor (widget);
       data.flags_to_set = flags_to_set;
       data.flags_to_unset = flags_to_unset;
 
@@ -8304,6 +8307,8 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     {
       GtkStateData data;
 
+      data.old_scale_factor = gtk_widget_get_scale_factor (widget);
+
       if (sensitive)
         {
           data.flags_to_set = 0;
@@ -8398,6 +8403,8 @@ gtk_widget_set_parent (GtkWidget *widget,
       g_warning ("Can't set a parent on a toplevel widget");
       return;
     }
+
+  data.old_scale_factor = gtk_widget_get_scale_factor (widget);
 
   /* keep this function in sync with gtk_menu_attach_to_widget()
    */
@@ -11120,6 +11127,7 @@ gtk_widget_propagate_state (GtkWidget    *widget,
   GtkStateFlags new_flags, old_flags = priv->state_flags;
   GtkStateData child_data;
   GtkWidget *child;
+  gint new_scale_factor = gtk_widget_get_scale_factor (widget);
 
   priv->state_flags |= data->flags_to_set;
   priv->state_flags &= ~(data->flags_to_unset);
@@ -11139,6 +11147,9 @@ gtk_widget_propagate_state (GtkWidget    *widget,
     }
 
   new_flags = priv->state_flags;
+
+  if (data->old_scale_factor != new_scale_factor)
+    _gtk_widget_scale_changed (widget);
 
   if (old_flags != new_flags)
     {
@@ -11193,6 +11204,7 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
 
       /* Make sure to only propagate the right states further */
+      child_data.old_scale_factor = new_scale_factor;
       child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_PROPAGATE;
       child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_PROPAGATE;
 
