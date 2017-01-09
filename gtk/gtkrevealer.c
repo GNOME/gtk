@@ -765,7 +765,7 @@ gtk_revealer_get_reveal_child (GtkRevealer *revealer)
  * gtk_revealer_get_child_revealed:
  * @revealer: a #GtkRevealer
  *
- * Returns whether the child is fully revealed, ie wether
+ * Returns whether the child is fully revealed, in other words whether
  * the transition to the revealed state is completed.
  *
  * Returns: %TRUE if the child is fully revealed
