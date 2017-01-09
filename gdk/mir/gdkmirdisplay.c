@@ -703,10 +703,16 @@ gdk_mir_display_real_convert_selection (GdkDisplay *display,
 
   paste_data = g_variant_get_fixed_array (mir_display->paste_data, &paste_size, sizeof (guchar));
   paste_header = (const gint *) paste_data;
-  paste_formats = g_ptr_array_new_full (paste_header[0], g_free);
 
-  for (i = 0; i < paste_header[0]; i++)
-    g_ptr_array_add (paste_formats, g_strndup (paste_data + paste_header[1 + 4 * i], paste_header[2 + 4 * i]));
+  if (paste_data)
+    {
+      paste_formats = g_ptr_array_new_full (paste_header[0], g_free);
+
+      for (i = 0; i < paste_header[0]; i++)
+        g_ptr_array_add (paste_formats, g_strndup (paste_data + paste_header[1 + 4 * i], paste_header[2 + 4 * i]));
+    }
+  else
+    paste_formats = g_ptr_array_new_with_free_func (g_free);
 
   if (target == gdk_atom_intern_static_string ("TARGETS"))
     {
