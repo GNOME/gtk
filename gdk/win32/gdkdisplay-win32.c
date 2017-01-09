@@ -925,13 +925,9 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
                     break;
                 }
             }
-
-          /* Should not get here! */
-          if (status == DPI_STATUS_PENDING)
+          else
             {
-              g_assert_not_reached ();
-              display->dpi_aware_type = PROCESS_DPI_UNAWARE;
-              status = DPI_STATUS_FAILED;
+              check_for_dpi_awareness = TRUE;
             }
         }
       else
