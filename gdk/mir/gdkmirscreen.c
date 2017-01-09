@@ -354,6 +354,10 @@ gdk_mir_screen_get_monitor_plug_name (GdkScreen *screen,
             return g_strdup_printf ("eDP-%u", output->output_id);
           case mir_display_output_type_virtual:
             return g_strdup_printf ("Virtual-%u", output->output_id);
+          case mir_display_output_type_dsi:
+            return g_strdup_printf ("DSI-%u", output->output_id);
+          case mir_display_output_type_dpi:
+            return g_strdup_printf ("DPI-%u", output->output_id);
         }
     }
 
