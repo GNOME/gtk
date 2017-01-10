@@ -654,26 +654,26 @@ gtk_shortcuts_window_dispose (GObject *object)
   GtkShortcutsWindow *self = (GtkShortcutsWindow *)object;
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
 
-  g_signal_handlers_disconnect_by_func (priv->stack, G_CALLBACK (update_title_stack), self);
+  if (priv->stack)
+    g_signal_handlers_disconnect_by_func (priv->stack, G_CALLBACK (update_title_stack), self);
 
   gtk_shortcuts_window_set_window (self, NULL);
 
   if (priv->header_bar)
     {
-      gtk_widget_destroy (GTK_WIDGET (priv->header_bar));
+      gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (priv->header_bar));
       priv->header_bar = NULL;
       priv->popover = NULL;
     }
 
-  G_OBJECT_CLASS (gtk_shortcuts_window_parent_class)->dispose (object);
-
-#if 0
   if (priv->main_box)
     {
-      gtk_widget_destroy (GTK_WIDGET (priv->main_box));
+      gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (priv->main_box));
       priv->main_box = NULL;
+      priv->stack = NULL;
     }
-#endif
+
+  G_OBJECT_CLASS (gtk_shortcuts_window_parent_class)->dispose (object);
 }
 
 static void
