@@ -25,6 +25,7 @@ noinst_LTLIBRARIES =
 if HAVE_VULKAN
 gsk_private_vulkan_source_h = \
 	gskvulkanblendpipelineprivate.h \
+	gskvulkanborderpipelineprivate.h \
 	gskvulkanbufferprivate.h \
 	gskvulkanclipprivate.h \
 	gskvulkancolorpipelineprivate.h \
@@ -41,6 +42,7 @@ gsk_private_vulkan_source_h = \
 	gskvulkanshaderprivate.h
 gsk_private_vulkan_source_c = \
 	gskvulkanblendpipeline.c \
+	gskvulkanborderpipeline.c \
 	gskvulkanbuffer.c \
 	gskvulkanclip.c \
 	gskvulkancolorpipeline.c \
@@ -55,6 +57,8 @@ gsk_private_vulkan_source_c = \
 	gskvulkanrenderer.c \
 	gskvulkanrenderpass.c \
 	gskvulkanshader.c
+gsk_private_vulkan_include_shaders = \
+	resources/vulkan/rounded-rect.glsl
 gsk_private_vulkan_shaders = \
 	resources/vulkan/blend-clip.frag.glsl \
 	resources/vulkan/blend-clip-rounded.frag.glsl \
@@ -62,6 +66,12 @@ gsk_private_vulkan_shaders = \
 	resources/vulkan/blend-clip.vert.glsl \
 	resources/vulkan/blend.frag.glsl \
 	resources/vulkan/blend.vert.glsl \
+	resources/vulkan/border-clip.frag.glsl \
+	resources/vulkan/border-clip.vert.glsl \
+	resources/vulkan/border-clip-rounded.frag.glsl \
+	resources/vulkan/border-clip-rounded.vert.glsl \
+	resources/vulkan/border.frag.glsl \
+	resources/vulkan/border.vert.glsl \
 	resources/vulkan/color-clip.frag.glsl \
 	resources/vulkan/color-clip-rounded.frag.glsl \
 	resources/vulkan/color-clip-rounded.vert.glsl \
@@ -199,7 +209,7 @@ gskresources.c: gsk.resources.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gsk --generate-source --manual-register
 
-EXTRA_DIST += $(resource_files)
+EXTRA_DIST += $(resource_files) $(gsk_private_vulkan_include_shaders)
 CLEANFILES += gsk.resources.xml
 DISTCLEANFILES += gskresources.h gskresources.c
 

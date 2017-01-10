@@ -593,22 +593,20 @@ gsk_border_node_peek_outline (GskRenderNode *node)
   return &self->outline;
 }
 
-float
-gsk_border_node_get_width (GskRenderNode *node,
-                           guint          i)
+const float *
+gsk_border_node_peek_widths (GskRenderNode *node)
 {
   GskBorderNode *self = (GskBorderNode *) node;
 
-  return self->border_width[i];
+  return self->border_width;
 }
 
 const GdkRGBA *
-gsk_border_node_peek_color (GskRenderNode *node,
-                            guint          i)
+gsk_border_node_peek_colors (GskRenderNode *node)
 {
   GskBorderNode *self = (GskBorderNode *) node;
 
-  return &self->border_color[i];
+  return self->border_color;
 }
 
 /**

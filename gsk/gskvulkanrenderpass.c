@@ -7,6 +7,7 @@
 #include "gskrenderer.h"
 #include "gskroundedrectprivate.h"
 #include "gskvulkanblendpipelineprivate.h"
+#include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
 #include "gskvulkaneffectpipelineprivate.h"
@@ -30,6 +31,7 @@ typedef enum {
   GSK_VULKAN_OP_LINEAR_GRADIENT,
   GSK_VULKAN_OP_OPACITY,
   GSK_VULKAN_OP_COLOR_MATRIX,
+  GSK_VULKAN_OP_BORDER,
   /* GskVulkanOpPushConstants */
   GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS
 } GskVulkanOpType;
@@ -110,9 +112,9 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     case GSK_NOT_A_RENDER_NODE:
       g_assert_not_reached ();
       return;
-    case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
+    case GSK_REPEAT_NODE:
     case GSK_SHADOW_NODE:
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
@@ -206,6 +208,20 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       else
         FALLBACK ("Color matrix nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_COLOR_MATRIX;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+      g_array_append_val (self->render_ops, op);
+      return;
+
+    case GSK_BORDER_NODE:
+      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+        pipeline_type = GSK_VULKAN_PIPELINE_BORDER;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+        pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+        pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP_ROUNDED;
+      else
+        FALLBACK ("Border nodes can't deal with clip type %u\n", constants->clip.type);
+      op.type = GSK_VULKAN_OP_BORDER;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
       g_array_append_val (self->render_ops, op);
       return;
@@ -499,6 +515,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_BORDER:
           break;
         }
     }
@@ -540,6 +557,11 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_OPACITY:
         case GSK_VULKAN_OP_COLOR_MATRIX:
           op->render.vertex_count = gsk_vulkan_effect_pipeline_count_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline));
+          n_bytes += op->render.vertex_count;
+          break;
+
+        case GSK_VULKAN_OP_BORDER:
+          op->render.vertex_count = gsk_vulkan_border_pipeline_count_vertex_data (GSK_VULKAN_BORDER_PIPELINE (op->render.pipeline));
           n_bytes += op->render.vertex_count;
           break;
 
@@ -644,6 +666,18 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
           }
           break;
 
+        case GSK_VULKAN_OP_BORDER:
+          {
+            op->render.vertex_offset = offset + n_bytes;
+            gsk_vulkan_border_pipeline_collect_vertex_data (GSK_VULKAN_BORDER_PIPELINE (op->render.pipeline),
+                                                            data + n_bytes + offset,
+                                                            gsk_border_node_peek_outline (op->render.node),
+                                                            gsk_border_node_peek_widths (op->render.node),
+                                                            gsk_border_node_peek_colors (op->render.node));
+            n_bytes += op->render.vertex_count;
+          }
+          break;
+
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
@@ -684,6 +718,7 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_BORDER:
           break;
         }
     }
@@ -827,6 +862,27 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
           current_draw_index += gsk_vulkan_linear_gradient_pipeline_draw (GSK_VULKAN_LINEAR_GRADIENT_PIPELINE (current_pipeline),
                                                                           command_buffer,
                                                                           current_draw_index, 1);
+          break;
+
+        case GSK_VULKAN_OP_BORDER:
+          if (current_pipeline != op->render.pipeline)
+            {
+              current_pipeline = op->render.pipeline;
+              vkCmdBindPipeline (command_buffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                 gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+              vkCmdBindVertexBuffers (command_buffer,
+                                      0,
+                                      1,
+                                      (VkBuffer[1]) {
+                                          gsk_vulkan_buffer_get_buffer (vertex_buffer)
+                                      },
+                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+              current_draw_index = 0;
+            }
+          current_draw_index += gsk_vulkan_border_pipeline_draw (GSK_VULKAN_BORDER_PIPELINE (current_pipeline),
+                                                                 command_buffer,
+                                                                 current_draw_index, 1);
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:

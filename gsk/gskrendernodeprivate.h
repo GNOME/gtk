@@ -59,8 +59,8 @@ const gsize gsk_linear_gradient_node_get_n_color_stops (GskRenderNode *node);
 const GskColorStop * gsk_linear_gradient_node_peek_color_stops (GskRenderNode *node);
 
 const GskRoundedRect * gsk_border_node_peek_outline (GskRenderNode *node);
-float gsk_border_node_get_width (GskRenderNode *node, guint i);
-const GdkRGBA * gsk_border_node_peek_color (GskRenderNode *node, guint i);
+const float * gsk_border_node_peek_widths (GskRenderNode *node);
+const GdkRGBA * gsk_border_node_peek_colors (GskRenderNode *node);
 
 GskRenderNode *gsk_cairo_node_new_for_surface (const graphene_rect_t *bounds, cairo_surface_t *surface);
 cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
