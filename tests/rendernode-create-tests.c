@@ -304,6 +304,44 @@ linear_gradient (guint n)
   return container;
 }
 
+GskRenderNode *
+borders (guint n)
+{
+  GskRenderNode *nodes[n];
+  GskRenderNode *container;
+  GskRoundedRect outline;
+  GdkRGBA colors[4];
+  float widths[4];
+  guint i, j;
+
+  for (i = 0; i < n; i++)
+    {
+      outline.bounds.size.width = g_random_int_range (20, 100);
+      outline.bounds.origin.x = g_random_int_range (0, 1000 - outline.bounds.size.width);
+      outline.bounds.size.height = g_random_int_range (20, 100);
+      outline.bounds.origin.y = g_random_int_range (0, 1000 - outline.bounds.size.height);
+      outline.corner[1].width = outline.corner[1].height = 10 - (int) sqrt (g_random_int_range (0, 100));
+      outline.corner[2].width = outline.corner[2].height = 10 - (int) sqrt (g_random_int_range (0, 100));
+      outline.corner[3].width = outline.corner[3].height = 10 - (int) sqrt (g_random_int_range (0, 100));
+      for (j = 0; j < 4; j++)
+        {
+          outline.corner[0].width = 10 - (int) sqrt (g_random_int_range (0, 100));
+          outline.corner[0].height = 10 - (int) sqrt (g_random_int_range (0, 100));
+          hsv_to_rgb (&colors[j], g_random_double (), 1.0, 0.5); //g_random_double_range (0.15, 0.4), g_random_double_range (0.6, 0.85));
+          colors[j].alpha = 1.0; //g_random_double_range (0.8, 1.0);
+          widths[j] = g_random_int_range (1, 6);
+        }
+      nodes[i] = gsk_border_node_new (&outline, widths, colors);
+    }
+
+  container = gsk_container_node_new (nodes, n);
+
+  for (i = 0; i < n; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  return container;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -316,6 +354,7 @@ main (int argc, char **argv)
     { "rounded-borders.node", rounded_borders },
     { "rounded-backgrounds.node", rounded_backgrounds },
     { "linear-gradient.node", linear_gradient },
+    { "borders.node", borders },
   };
   GError *error = NULL;
   GskRenderNode *node;
