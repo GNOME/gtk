@@ -4986,8 +4986,8 @@ gtk_widget_real_queue_draw_child (GtkWidget            *widget,
   GdkWindow *child_window, *window;
   cairo_region_t *region;
 
-  window = gtk_widget_get_window (widget);
-  child_window = gtk_widget_get_window (child);
+  window = _gtk_widget_get_window (widget);
+  child_window = _gtk_widget_get_window (child);
 
   if (child_window == window)
     gtk_widget_queue_draw_region (widget, child_region);

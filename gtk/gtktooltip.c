@@ -612,7 +612,7 @@ _gtk_widget_find_at_coords (GdkWindow *window,
    * coordinates stay relative to the current window.
    * We end up with window == widget->window, coordinates relative to that.
    */
-  while (window && window != gtk_widget_get_window (event_widget))
+  while (window && window != _gtk_widget_get_window (event_widget))
     {
       gdouble px, py;
 

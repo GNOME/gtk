@@ -32,6 +32,7 @@
 #include "gtkiconthemeprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtksnapshot.h"
+#include "gtkwidgetprivate.h"
 
 struct _GtkIconHelperPrivate {
   GtkImageDefinition *def;
@@ -391,7 +392,7 @@ ensure_surface_from_pixbuf (GtkIconHelper *self,
   else
     pixbuf = g_object_ref (orig_pixbuf);
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, _gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
   g_object_unref (pixbuf);
 
   return surface;
@@ -464,7 +465,7 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
       symbolic = FALSE;
     }
 
-  surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
+  surface = gdk_cairo_surface_create_from_pixbuf (destination, scale, _gtk_widget_get_window (gtk_css_gadget_get_owner (GTK_CSS_GADGET (self))));
 
   if (symbolic)
     {
