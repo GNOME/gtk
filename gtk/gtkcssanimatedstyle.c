@@ -165,18 +165,9 @@ transition_info_add (TransitionInfo    infos[GTK_CSS_PROPERTY_N_PROPERTIES],
                      GtkStyleProperty *property,
                      guint             index)
 {
-  if (property == NULL)
-    {
-      guint i;
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROPERTY (property));
 
-      for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
-        {
-          GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (i);
-
-          transition_info_add (infos, GTK_STYLE_PROPERTY (prop), index);
-        }
-    }
-  else if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
+  if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
     {
       GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
       guint i;
@@ -188,10 +179,10 @@ transition_info_add (TransitionInfo    infos[GTK_CSS_PROPERTY_N_PROPERTIES],
           transition_info_add (infos, GTK_STYLE_PROPERTY (prop), index);
         }
     }
-  else if (GTK_IS_CSS_STYLE_PROPERTY (property))
+  else
     {
       guint id;
-      
+
       if (!_gtk_css_style_property_is_animated (GTK_CSS_STYLE_PROPERTY (property)))
         return;
 
@@ -199,10 +190,6 @@ transition_info_add (TransitionInfo    infos[GTK_CSS_PROPERTY_N_PROPERTIES],
       g_assert (id < GTK_CSS_PROPERTY_N_PROPERTIES);
       infos[id].index = index;
       infos[id].pending = TRUE;
-    }
-  else
-    {
-      g_assert_not_reached ();
     }
 }
 
@@ -219,15 +206,21 @@ transition_infos_set (TransitionInfo  infos[GTK_CSS_PROPERTY_N_PROPERTIES],
 
       prop_value = _gtk_css_array_value_get_nth (transitions, i);
       if (g_ascii_strcasecmp (_gtk_css_ident_value_get (prop_value), "all") == 0)
-        property = NULL;
+        {
+          guint j;
+
+          for (j = 0; j < _gtk_css_style_property_get_n_properties (); j++)
+            {
+              property = GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (j));
+              transition_info_add (infos, property, i);
+            }
+        }
       else
         {
           property = _gtk_style_property_lookup (_gtk_css_ident_value_get (prop_value));
-          if (property == NULL)
-            continue;
+          if (property)
+            transition_info_add (infos, property, i);
         }
-      
-      transition_info_add (infos, property, i);
     }
 }
 
