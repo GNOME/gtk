@@ -5124,18 +5124,18 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
 void
 gtk_widget_queue_draw (GtkWidget *widget)
 {
-  GdkRectangle rect;
+  GdkRectangle *rect;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_get_clip (widget, &rect);
+  rect = &widget->priv->clip;
 
   if (!_gtk_widget_get_has_window (widget))
     gtk_widget_queue_draw_area (widget,
-                                rect.x, rect.y, rect.width, rect.height);
+                                rect->x, rect->y, rect->width, rect->height);
   else
     gtk_widget_queue_draw_area (widget,
-                                0, 0, rect.width, rect.height);
+                                0, 0, rect->width, rect->height);
 }
 
 static void
@@ -15586,19 +15586,19 @@ gtk_widget_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
+  GtkWidgetPrivate *priv;
   graphene_rect_t bounds;
   GtkCssValue *filter_value;
-  GtkAllocation clip;
-  GtkAllocation alloc;
   RenderMode mode;
   double opacity;
 
   if (_gtk_widget_get_alloc_needed (widget))
     return;
 
-  gtk_widget_get_clip (widget, &clip);
-  _gtk_widget_get_allocation (widget, &alloc);
-  graphene_rect_init (&bounds, clip.x - alloc.x, clip.y - alloc.y, clip.width, clip.height);
+  priv = widget->priv;
+  graphene_rect_init (&bounds, priv->clip.x - priv->allocation.x,
+                      priv->clip.y - priv->allocation.y,
+                      priv->clip.width, priv->clip.height);
   if (gtk_snapshot_clips_rect (snapshot, &bounds))
     return;
 
