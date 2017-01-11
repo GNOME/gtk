@@ -136,7 +136,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
   GskColorStop *stops;
   GskRenderNode *node;
-  double off_x, off_y; /* snapshot offset */
+  int off_x, off_y; /* snapshot offset */
   double angle; /* actual angle of the gradiant line in degrees */
   double x, y; /* coordinates of start point */
   double length; /* distance in pixels for 100% */

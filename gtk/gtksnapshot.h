@@ -90,8 +90,8 @@ void            gtk_snapshot_translate_2d               (GtkSnapshot            
                                                          int                     y);
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_get_offset                 (GtkSnapshot            *snapshot,
-                                                         double                 *x,
-                                                         double                 *y);
+                                                         int                    *x,
+                                                         int                    *y);
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,
@@ -116,7 +116,7 @@ void            gtk_snapshot_append_color_node          (GtkSnapshot            
 
 GDK_AVAILABLE_IN_3_90
 gboolean        gtk_snapshot_clips_rect                 (GtkSnapshot            *snapshot,
-                                                         const graphene_rect_t  *bounds);
+                                                         const cairo_rectangle_int_t  *bounds);
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_render_background          (GtkSnapshot            *snapshot,

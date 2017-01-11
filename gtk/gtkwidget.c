@@ -15591,15 +15591,17 @@ gtk_widget_snapshot (GtkWidget   *widget,
   GtkCssValue *filter_value;
   RenderMode mode;
   double opacity;
+  cairo_rectangle_int_t offset_clip;
 
   if (_gtk_widget_get_alloc_needed (widget))
     return;
 
   priv = widget->priv;
-  graphene_rect_init (&bounds, priv->clip.x - priv->allocation.x,
-                      priv->clip.y - priv->allocation.y,
-                      priv->clip.width, priv->clip.height);
-  if (gtk_snapshot_clips_rect (snapshot, &bounds))
+  offset_clip = priv->clip;
+  offset_clip.x -= priv->allocation.x;
+  offset_clip.y -= priv->allocation.y;
+
+  if (gtk_snapshot_clips_rect (snapshot, &offset_clip))
     return;
 
   if (_gtk_widget_is_toplevel (widget))
@@ -15619,6 +15621,12 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
   filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
+
+  graphene_rect_init (&bounds,
+                      offset_clip.x,
+                      offset_clip.y,
+                      offset_clip.width,
+                      offset_clip.height);
 
   if (mode == RENDER_DRAW)
     {

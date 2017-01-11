@@ -37,8 +37,8 @@ struct _GtkSnapshotState {
   GPtrArray             *nodes;
 
   cairo_region_t        *clip_region;
-  double                 translate_x;
-  double                 translate_y;
+  int                    translate_x;
+  int                    translate_y;
 
   GtkSnapshotCollectFunc collect_func;
   union {

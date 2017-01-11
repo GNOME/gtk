@@ -834,7 +834,7 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
 
   clip = priv->clip;
   shift_allocation (gadget, &clip);
-  if (gtk_snapshot_clips_rect (snapshot, &GRAPHENE_RECT_INIT(clip.x, clip.y, clip.width, clip.height)))
+  if (gtk_snapshot_clips_rect (snapshot, &clip))
     return;
 
   gtk_css_gadget_get_margin_box (gadget, &margin_box);

@@ -78,8 +78,8 @@ static GtkSnapshotState *
 gtk_snapshot_state_new (GtkSnapshotState       *parent,
                         char                   *name,
                         cairo_region_t         *clip,
-                        double                  translate_x,
-                        double                  translate_y,
+                        int                     translate_x,
+                        int                     translate_y,
                         GtkSnapshotCollectFunc  collect_func)
 {
   GtkSnapshotState *state;
@@ -797,8 +797,8 @@ gtk_snapshot_translate_2d (GtkSnapshot *snapshot,
  **/
 void
 gtk_snapshot_get_offset (GtkSnapshot *snapshot,
-                         double      *x,
-                         double      *y)
+                         int         *x,
+                         int         *y)
 {
   if (x)
     *x = snapshot->state->translate_x;
@@ -996,18 +996,19 @@ gtk_snapshot_append_color_node (GtkSnapshot           *snapshot,
  */
 gboolean
 gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
-                         const graphene_rect_t *bounds)
+                         const cairo_rectangle_int_t *rect)
 {
-  graphene_rect_t offset_bounds;
-  cairo_rectangle_int_t rect;
+  cairo_rectangle_int_t offset_rect;
 
   if (snapshot->state->clip_region == NULL)
     return FALSE;
 
-  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &offset_bounds);
-  rectangle_init_from_graphene (&rect, &offset_bounds);
+  offset_rect.x = rect->x + snapshot->state->translate_x;
+  offset_rect.y = rect->y + snapshot->state->translate_y;
+  offset_rect.width = rect->width;
+  offset_rect.height = rect->height;
 
-  return cairo_region_contains_rectangle (snapshot->state->clip_region, &rect) == CAIRO_REGION_OVERLAP_OUT;
+  return cairo_region_contains_rectangle (snapshot->state->clip_region, &offset_rect) == CAIRO_REGION_OVERLAP_OUT;
 }
 
 /**

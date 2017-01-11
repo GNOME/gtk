@@ -1039,7 +1039,7 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *shadow,
 {
   GskRoundedRect outline;
   GskRenderNode *node;
-  double off_x, off_y;
+  int off_x, off_y;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
@@ -1070,7 +1070,7 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
 {
   GskRoundedRect outline;
   GskRenderNode *node;
-  double off_x, off_y;
+  int off_x, off_y;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 

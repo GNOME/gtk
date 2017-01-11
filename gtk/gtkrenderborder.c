@@ -414,7 +414,7 @@ snapshot_frame_fill (GtkSnapshot          *snapshot,
 {
   GskRoundedRect offset_outline;
   GskRenderNode *node;
-  double off_x, off_y;
+  int off_x, off_y;
 
   if (hidden_side)
     {
