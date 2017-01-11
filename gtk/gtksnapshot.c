@@ -84,11 +84,18 @@ gtk_snapshot_state_new (GtkSnapshotState       *parent,
 {
   GtkSnapshotState *state;
 
-  state = g_slice_new0 (GtkSnapshotState);
+  if (parent != NULL && parent->cached_state != NULL)
+    {
+      state = parent->cached_state;
+      parent->cached_state = NULL;
+    }
+  else
+    {
+      state = g_slice_new0 (GtkSnapshotState);
+      state->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
+      state->parent = parent;
+    }
 
-  state->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
-
-  state->parent = parent;
   state->name = name;
   if (clip)
     state->clip_region = cairo_region_reference (clip);
@@ -100,15 +107,20 @@ gtk_snapshot_state_new (GtkSnapshotState       *parent,
 }
 
 static void
+gtk_snapshot_state_clear (GtkSnapshotState *state)
+{
+  g_ptr_array_set_size (state->nodes, 0);
+  g_clear_pointer (&state->clip_region, cairo_region_destroy);
+  g_clear_pointer (&state->name, g_free);
+}
+
+static void
 gtk_snapshot_state_free (GtkSnapshotState *state)
 {
+  if (state->cached_state)
+    gtk_snapshot_state_free (state->cached_state);
+  gtk_snapshot_state_clear (state);
   g_ptr_array_unref (state->nodes);
-
-  if (state->clip_region)
-    cairo_region_destroy (state->clip_region);
-
-  g_free (state->name);
-
   g_slice_free (GtkSnapshotState, state);
 }
 
@@ -697,7 +709,13 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
                               state->nodes->len,
                               state->name);
 
-  gtk_snapshot_state_free (state);
+  if (snapshot->state == NULL)
+    gtk_snapshot_state_free (state);
+  else
+    {
+      gtk_snapshot_state_clear (state);
+      snapshot->state->cached_state = state;
+    }
 
   return node;
 }

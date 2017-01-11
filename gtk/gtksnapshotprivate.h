@@ -31,6 +31,7 @@ typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshotState *state,
 
 struct _GtkSnapshotState {
   GtkSnapshotState      *parent;
+  GtkSnapshotState      *cached_state; /* A cleared state object we can (re)use */
 
   char                  *name;
   GPtrArray             *nodes;
