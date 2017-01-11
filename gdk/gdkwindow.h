@@ -1054,9 +1054,9 @@ void       gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window);
 GDK_DEPRECATED_IN_3_16
 void       gdk_window_thaw_toplevel_updates_libgtk_only   (GdkWindow *window);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 void       gdk_window_process_all_updates (void);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22
 void       gdk_window_process_updates     (GdkWindow    *window,
 					   gboolean      update_children);
 

@@ -4056,6 +4056,7 @@ after_process_all_updates (void)
  * Calls gdk_window_process_updates() for all windows (see #GdkWindow)
  * in the application.
  *
+ * Deprecated: 3.22
  **/
 void
 gdk_window_process_all_updates (void)
@@ -4203,6 +4204,7 @@ gdk_window_process_updates_with_mode (GdkWindow     *window,
  * case, where GDK delivers them in an idle handler). Occasionally
  * this is useful to produce nicer scrolling behavior, for example.
  *
+ * Deprecated: 3.22
  **/
 void
 gdk_window_process_updates (GdkWindow *window,
