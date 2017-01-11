@@ -2233,9 +2233,10 @@ keyboard_handle_modifiers (void               *data,
   keymap = seat->keymap;
   direction = gdk_keymap_get_direction (keymap);
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
-  seat->key_modifiers = mods_depressed | mods_latched | mods_locked;
 
   xkb_state_update_mask (xkb_state, mods_depressed, mods_latched, mods_locked, group, 0, 0);
+
+  seat->key_modifiers = gdk_keymap_get_modifier_state (keymap);
 
   g_signal_emit_by_name (keymap, "state-changed");
   if (direction != gdk_keymap_get_direction (keymap))
