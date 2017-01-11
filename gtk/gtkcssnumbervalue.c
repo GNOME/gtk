@@ -22,6 +22,7 @@
 #include "gtkcsscalcvalueprivate.h"
 #include "gtkcssdimensionvalueprivate.h"
 #include "gtkcsswin32sizevalueprivate.h"
+#include "gtkprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -164,7 +165,7 @@ _gtk_css_number_value_get (const GtkCssValue *number,
 {
   GtkCssNumberValueClass *number_value_class;
 
-  g_return_val_if_fail (number != NULL, 0.0);
+  gtk_internal_return_val_if_fail (number != NULL, 0.0);
 
   number_value_class = (GtkCssNumberValueClass *) number->class;
 
