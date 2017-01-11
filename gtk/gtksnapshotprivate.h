@@ -24,10 +24,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
 
-typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GskRenderNode **nodes,
-                                                    guint           n_nodes,
-                                                    const char     *name,
-                                                    gpointer        user_data);
+typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshotState *state,
+                                                    GskRenderNode   **nodes,
+                                                    guint             n_nodes,
+                                                    const char       *name);
 
 struct _GtkSnapshotState {
   GtkSnapshotState      *parent;
@@ -40,7 +40,33 @@ struct _GtkSnapshotState {
   double                 translate_y;
 
   GtkSnapshotCollectFunc collect_func;
-  gpointer               collect_data;
+  union {
+    struct {
+      graphene_matrix_t transform;
+    } transform;
+    struct {
+      double            opacity;
+    } opacity;
+    struct {
+      graphene_matrix_t matrix;
+      graphene_vec4_t offset;
+    } color_matrix;
+    struct {
+      graphene_rect_t bounds;
+      graphene_rect_t child_bounds;
+    } repeat;
+    struct {
+      graphene_rect_t bounds;
+    } clip;
+    struct {
+      GskRoundedRect bounds;
+    } rounded_clip;
+    struct {
+      gsize n_shadows;
+      GskShadow *shadows;
+      GskShadow a_shadow; /* Used if n_shadows == 1 */
+    } shadow;
+  } data;
 };
 
 struct _GtkSnapshot {
