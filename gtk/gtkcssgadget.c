@@ -30,6 +30,7 @@
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 
@@ -506,10 +507,10 @@ shift_allocation (GtkCssGadget  *gadget,
 {
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
 
-  if (priv->owner && !gtk_widget_get_has_window (priv->owner))
+  if (priv->owner && !_gtk_widget_get_has_window (priv->owner))
     {
       GtkAllocation widget_alloc;
-      gtk_widget_get_allocation (priv->owner, &widget_alloc);
+      _gtk_widget_get_allocation (priv->owner, &widget_alloc);
       allocation->x -= widget_alloc.x;
       allocation->y -= widget_alloc.y;
     }
