@@ -118,8 +118,8 @@ gsk_rounded_rect_init (GskRoundedRect        *self,
  *
  * Initializes @self using the given @src rectangle.
  *
- * This function will implicitly normalize the #GskRoundedRect
- * before returning.
+ * This function will not normalize the #GskRoundedRect, so
+ * make sure the source is normalized.
  *
  * Returns: (transfer none): the initialized rectangle
  *
@@ -130,8 +130,6 @@ gsk_rounded_rect_init_copy (GskRoundedRect       *self,
                             const GskRoundedRect *src)
 {
   *self = *src;
-
-  gsk_rounded_rect_normalize_in_place (self);
 
   return self;
 }
