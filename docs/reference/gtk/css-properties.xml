@@ -120,7 +120,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
     </para>
 
       <table pgwide="1">
-        <title>Color Properties</title>
+        <title>Color and Filter Properties</title>
         <tgroup cols="7">
           <colspec colnum="4" align="center"/>
           <colspec colnum="5" align="center"/>
@@ -147,14 +147,35 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><ulink url="http://www.w3.org/TR/css3-color/#opacity">CSS3</ulink></entry>
               <entry></entry>
             </row>
+            <row>
+              <entry>filter</entry>
+              <entry><code>none | 〈filter-function-list〉</code></entry>
+              <entry><code>none</code></entry>
+              <entry></entry>
+              <entry>✓</entry>
+              <entry><ulink url="https://drafts.fxtf.org/filters/#FilterProperty">CSS3</ulink></entry>
+              <entry></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
 
+<literallayout><code>〈filter-function-list〉 = [ 〈filter〉]+</code>
+<code>〈filter〉 = brightness( 〈number〉 ) |</code>
+<code>             contrast( 〈number〉 ) |</code>
+<code>             grayscale( 〈number〉 ) |</code>
+<code>             hue-rotate( 〈number〉 ) |</code>
+<code>             invert( 〈number〉 ) |</code>
+<code>             opacity( 〈number〉 ) |</code>
+<code>             saturate( 〈number〉 ) |</code>
+<code>             sepia( 〈number〉 )</code>
+</literallayout>
+
       <para>
         The color property specifies the color to use for text, icons and other
         foreground rendering. The opacity property specifies the opacity that is
-        used to composite the widget onto its parent widget.
+        used to composite the widget onto its parent widget. The filter property
+        specifies filters to be applied to the rendering.
       </para>
 
       <table pgwide="1">
@@ -466,15 +487,6 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <code>                rotateX( 〈angle〉 ) | rotateY( 〈angle〉 ) | rotateZ( 〈angle〉 ) |</code>
 <code>                skew( 〈angle〉 [ , 〈angle〉 ]? ) | skewX( 〈angle〉 ) |  skewY( 〈angle〉 )</code>
 <code>〈color palette〉 = default | 〈name〉 〈color〉 [ , 〈name〉 〈color〉 ]*</code>
-<code>〈filter-function-list〉 = [ 〈filter〉]+</code>
-<code>〈filter〉 = brightness( 〈number〉 ) |</code>
-<code>             contrast( 〈number〉 ) |</code>
-<code>             grayscale( 〈number〉 ) |</code>
-<code>             hue-rotate( 〈number〉 ) |</code>
-<code>             invert( 〈number〉 ) |</code>
-<code>             opacity( 〈number〉 ) |</code>
-<code>             saturate( 〈number〉 ) |</code>
-<code>             sepia( 〈number〉 )</code>
 </literallayout>
 
       <para>
