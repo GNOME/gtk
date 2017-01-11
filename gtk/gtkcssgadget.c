@@ -976,7 +976,7 @@ gtk_css_gadget_get_margin_allocation (GtkCssGadget  *gadget,
 {
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
 
-  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+  gtk_internal_return_if_fail (GTK_IS_CSS_GADGET (gadget));
 
   if (!gtk_css_gadget_get_visible (gadget))
     {
@@ -1001,7 +1001,7 @@ gtk_css_gadget_get_border_allocation (GtkCssGadget  *gadget,
   GtkCssGadgetPrivate *priv = gtk_css_gadget_get_instance_private (gadget);
   GtkBorder margin;
 
-  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+  gtk_internal_return_if_fail (GTK_IS_CSS_GADGET (gadget));
 
   if (!gtk_css_gadget_get_visible (gadget))
     {
@@ -1039,7 +1039,7 @@ gtk_css_gadget_get_content_allocation (GtkCssGadget  *gadget,
   GtkBorder margin, border, padding, extents;
   GtkCssStyle *style;
 
-  g_return_if_fail (GTK_IS_CSS_GADGET (gadget));
+  gtk_internal_return_if_fail (GTK_IS_CSS_GADGET (gadget));
 
   if (!gtk_css_gadget_get_visible (gadget))
     {
