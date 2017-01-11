@@ -724,7 +724,7 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
       gint nat_width, width, height;
       gfloat xalign;
 
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+      if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	xalign = priv->label_xalign;
       else
 	xalign = 1 - priv->label_xalign;

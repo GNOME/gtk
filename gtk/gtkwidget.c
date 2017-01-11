@@ -15617,7 +15617,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
   if (GTK_DEBUG_CHECK (SNAPSHOT))
     gtk_snapshot_push (snapshot, TRUE, "%s<%p>", gtk_widget_get_name (widget), widget);
 
-  filter_value = _gtk_style_context_peek_property (gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
+  filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   if (mode == RENDER_DRAW)
@@ -15869,8 +15869,6 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
 {
   int x, y;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 

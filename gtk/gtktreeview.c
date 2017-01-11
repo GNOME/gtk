@@ -2466,7 +2466,7 @@ gtk_tree_view_calculate_width_before_expander (GtkTreeView *tree_view)
   GList *list;
   gboolean rtl;
 
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
   for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
        list->data != tree_view->priv->expander_column;
        list = (rtl ? list->prev : list->next))
@@ -2513,7 +2513,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
   if (first_column == NULL)
     return;
 
-  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   /* find out how many extra space and expandable columns we have */
   for (list = tree_view->priv->columns; list != last_column->next; list = list->next)
@@ -2678,7 +2678,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
                                  tree_view->priv->width));
   g_object_thaw_notify (G_OBJECT (tree_view->priv->hadjustment));
 
-  if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)   
+  if (_gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
     {
       if (allocation->width < tree_view->priv->width)
         {
@@ -2774,7 +2774,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       int size;
       GtkTextDirection direction;
 
-      direction = gtk_widget_get_direction (child->widget);
+      direction = _gtk_widget_get_direction (child->widget);
       path = _gtk_tree_path_new_from_rbtree (child->tree, child->node);
       gtk_tree_view_get_cell_area (tree_view, path, child->column, &child_rect);
       child_rect.x += child->border.left;
@@ -2929,7 +2929,7 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   GList *list;
   gboolean rtl;
 
-  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   gtk_tree_view_stop_editing (tree_view, FALSE);
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
@@ -3004,7 +3004,7 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   background_area.x = 0;
 
   /* Let the column have a chance at selecting it. */
-  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
        list; list = (rtl ? list->prev : list->next))
     {
@@ -4751,7 +4751,7 @@ gtk_tree_view_snapshot_grid_lines (GtkTreeView *tree_view,
       && tree_view->priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_BOTH)
     return;
 
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
   first = g_list_first (tree_view->priv->columns);
   last = g_list_last (tree_view->priv->columns);
@@ -4816,7 +4816,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
   GtkStyleContext *context;
   gboolean parity;
 
-  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   context = gtk_widget_get_style_context (widget);
 
   if (tree_view->priv->tree == NULL)
@@ -9193,7 +9193,7 @@ gtk_tree_view_get_background_xrange (GtkTreeView       *tree_view,
   if (x2)
     *x2 = 0;
 
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
   total_width = 0;
   for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
@@ -9240,7 +9240,7 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
   gint expander_size, expander_render_size;
   gboolean rtl;
 
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
   expander_size = gtk_tree_view_get_expander_size (tree_view);
   expander_render_size = expander_size - (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
 
@@ -10013,7 +10013,7 @@ gtk_tree_view_snapshot_arrow (GtkTreeView *tree_view,
 
   widget = GTK_WIDGET (tree_view);
   context = gtk_widget_get_style_context (widget);
-  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  rtl = (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
     return;
@@ -10133,7 +10133,7 @@ gtk_tree_view_focus_to_cursor (GtkTreeView *tree_view)
                     {
                       gboolean rtl;
 
-                      rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+                      rtl = (_gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
                       gtk_cell_area_focus (cell_area,
                                            rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT);
                     }
@@ -13088,7 +13088,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
       gboolean rtl;
       gint width;
 
-      rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+      rtl = (_gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
       for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
 	   list;
 	   list = (rtl ? list->prev : list->next))
@@ -13257,7 +13257,7 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 	  gint depth = gtk_tree_path_get_depth (path);
 	  gboolean rtl;
 
-	  rtl = gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL;
+	  rtl = _gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL;
 
 	  if (!rtl)
 	    rect->x += (depth - 1) * tree_view->priv->level_indentation;

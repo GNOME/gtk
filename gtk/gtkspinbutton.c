@@ -675,7 +675,7 @@ update_node_ordering (GtkSpinButton *spin_button)
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (gtk_widget_get_direction (GTK_WIDGET (spin_button)) == GTK_TEXT_DIR_LTR)
+      if (_gtk_widget_get_direction (GTK_WIDGET (spin_button)) == GTK_TEXT_DIR_LTR)
         {
           down_button_pos = 1;
           up_button_pos = -1;

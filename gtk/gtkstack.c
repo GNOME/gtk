@@ -945,7 +945,7 @@ static GtkStackTransitionType
 effective_transition_type (GtkStack               *stack,
                            GtkStackTransitionType  transition_type)
 {
-  if (gtk_widget_get_direction (GTK_WIDGET (stack)) == GTK_TEXT_DIR_RTL)
+  if (_gtk_widget_get_direction (GTK_WIDGET (stack)) == GTK_TEXT_DIR_RTL)
     {
       switch (transition_type)
         {

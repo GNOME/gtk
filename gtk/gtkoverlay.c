@@ -23,6 +23,7 @@
 #include "gtkoverlay.h"
 #include "gtkbuildable.h"
 #include "gtkscrolledwindow.h"
+#include "gtkwidgetprivate.h"
 #include "gtkmarshalers.h"
 
 #include "gtkprivate.h"
@@ -342,7 +343,7 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
   alloc->x = main_alloc.x;
   alloc->width = MAX (min.width, MIN (main_alloc.width, req.width));
 
-  direction = gtk_widget_get_direction (widget);
+  direction = _gtk_widget_get_direction (widget);
 
   halign = gtk_widget_get_halign (widget);
   switch (effective_align (halign, direction))

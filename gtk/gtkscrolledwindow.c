@@ -485,7 +485,7 @@ update_scrollbar_positions (GtkScrolledWindow *scrolled_window)
   if (priv->vscrollbar != NULL)
     {
       context = gtk_widget_get_style_context (priv->vscrollbar);
-      is_rtl = gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL;
+      is_rtl = _gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL;
       if ((is_rtl &&
           (priv->window_placement == GTK_CORNER_TOP_RIGHT ||
            priv->window_placement == GTK_CORNER_BOTTOM_RIGHT)) ||
@@ -3062,7 +3062,7 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
     {
       gboolean is_rtl;
 
-      is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+      is_rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
       if ((!is_rtl &&
 	   (priv->window_placement == GTK_CORNER_TOP_RIGHT ||
@@ -3192,10 +3192,10 @@ gtk_scrolled_window_allocate_scrollbar (GtkScrolledWindow *scrolled_window,
     }
   else if (scrollbar == priv->vscrollbar)
     {
-      if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL &&
+      if ((_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL &&
 	   (priv->window_placement == GTK_CORNER_TOP_RIGHT ||
 	    priv->window_placement == GTK_CORNER_BOTTOM_RIGHT)) ||
-	  (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR &&
+	  (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR &&
 	   (priv->window_placement == GTK_CORNER_TOP_LEFT ||
 	    priv->window_placement == GTK_CORNER_BOTTOM_LEFT)))
         {
@@ -3496,7 +3496,7 @@ _gtk_scrolled_window_set_adjustment_value (GtkScrolledWindow *scrolled_window,
 
   /* Invert horizontal edge position on RTL */
   if (!vertical &&
-      gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL)
+      _gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL)
     edge_pos = (edge_pos == GTK_POS_LEFT) ? GTK_POS_RIGHT : GTK_POS_LEFT;
 
   g_signal_emit (scrolled_window, signals[EDGE_OVERSHOT], 0, edge_pos);
@@ -3743,7 +3743,7 @@ maybe_emit_edge_reached (GtkScrolledWindow *scrolled_window,
     return;
 
   if (!vertical &&
-      gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL)
+      _gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL)
     edge_pos = (edge_pos == GTK_POS_LEFT) ? GTK_POS_RIGHT : GTK_POS_LEFT;
 
   g_signal_emit (scrolled_window, signals[EDGE_REACHED], 0, edge_pos);

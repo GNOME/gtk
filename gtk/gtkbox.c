@@ -496,7 +496,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
   if (nvis_children <= 0)
     return;
 
-  direction = gtk_widget_get_direction (widget);
+  direction = _gtk_widget_get_direction (widget);
   sizes = g_newa (GtkRequestedSize, nvis_children);
   spacing = get_spacing (box);
 
@@ -837,7 +837,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
         }
     }
 
-  direction = gtk_widget_get_direction (widget);
+  direction = _gtk_widget_get_direction (widget);
   sizes[0] = g_newa (GtkRequestedSize, nvis[0]);
   sizes[1] = g_newa (GtkRequestedSize, nvis[1]);
 
@@ -1377,7 +1377,7 @@ gtk_box_get_path_for_child (GtkContainer *container,
       /* get_children works in visible order */
       children = gtk_container_get_children (container);
       if (private->orientation == GTK_ORIENTATION_HORIZONTAL &&
-          gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
+          _gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
         children = g_list_reverse (children);
 
       for (list = children; list; list = list->next)
@@ -1445,7 +1445,7 @@ gtk_box_update_child_css_position (GtkBox      *box,
 
   reverse = child_info->pack == GTK_PACK_END;
   if (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
+      _gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
     reverse = !reverse;
 
   if (reverse)

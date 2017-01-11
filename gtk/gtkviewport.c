@@ -215,7 +215,7 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
 
   /* We clamp to the left in RTL mode */
   if (orientation == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (GTK_WIDGET (viewport)) == GTK_TEXT_DIR_RTL)
+      _gtk_widget_get_direction (GTK_WIDGET (viewport)) == GTK_TEXT_DIR_RTL)
     {
       gdouble dist = gtk_adjustment_get_upper (adjustment)
                      - value

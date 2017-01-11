@@ -663,7 +663,7 @@ static GtkPositionType
 get_effective_position (GtkPopover      *popover,
                         GtkPositionType  pos)
 {
-  if (gtk_widget_get_direction (GTK_WIDGET (popover)) == GTK_TEXT_DIR_RTL)
+  if (_gtk_widget_get_direction (GTK_WIDGET (popover)) == GTK_TEXT_DIR_RTL)
     {
       if (pos == GTK_POS_LEFT)
         pos = GTK_POS_RIGHT;
@@ -730,7 +730,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 
   get_margin (widget, &margin);
 
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+  if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     {
       widget_margin.left = gtk_widget_get_margin_start (widget);
       widget_margin.right = gtk_widget_get_margin_end (widget);

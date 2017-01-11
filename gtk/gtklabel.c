@@ -3518,7 +3518,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 
   widget = GTK_WIDGET (label);
 
-  rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (!priv->layout)
     {
@@ -3900,7 +3900,7 @@ get_layout_location (GtkLabel  *label,
   xalign = priv->xalign;
   yalign = priv->yalign;
 
-  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+  if (_gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
   pango_layout_get_extents (priv->layout, NULL, &logical);
@@ -4200,13 +4200,13 @@ gtk_label_render (GtkCssGadget *gadget,
 
   gtk_label_ensure_layout (label);
 
-  context = gtk_widget_get_style_context (widget);
+  context = _gtk_widget_get_style_context (widget);
 
   if (GTK_IS_ACCEL_LABEL (widget))
     {
       guint ac_width = gtk_accel_label_get_accel_width (GTK_ACCEL_LABEL (widget));
       width -= ac_width;
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+      if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         x += ac_width;
     }
 
@@ -4514,7 +4514,7 @@ window_to_layout_coords (GtkLabel *label,
 
   /* get layout location in widget->window coords */
   get_layout_location (label, &lx, &ly);
-  gtk_widget_get_allocation (GTK_WIDGET (label), &allocation);
+  _gtk_widget_get_allocation (GTK_WIDGET (label), &allocation);
 
   *x += allocation.x; /* go to widget->window */
   *x -= lx;                   /* go to layout */
@@ -4533,7 +4533,7 @@ layout_to_window_coords (GtkLabel *label,
 
   /* get layout location in widget->window coords */
   get_layout_location (label, &lx, &ly);
-  gtk_widget_get_allocation (GTK_WIDGET (label), &allocation);
+  _gtk_widget_get_allocation (GTK_WIDGET (label), &allocation);
 
   *x += lx;           /* go to widget->window */
   *x -= allocation.x; /* go to selection window */
