@@ -172,7 +172,10 @@ gskenumtypes.c: $(gsk_public_source_h) gskenumtypes.c.template
 EXTRA_DIST += gskenumtypes.h.template gskenumtypes.c.template
 DISTCLEANFILES += gskenumtypes.h gskenumtypes.c
 
-resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/gsk.resources.xml)
+resource_files = \
+	$(gsk_private_source_shaders) \
+	$(gsk_private_vulkan_compiled_shaders) \
+	$(gsk_private_vulkan_shaders)
 
 resources/vulkan/%.frag.spv: resources/vulkan/%.frag.glsl
 	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
@@ -201,7 +204,7 @@ gsk.resources.xml: Makefile.am
 	echo "  </gresource>" >> $@; \
 	echo "</gresources>" >> $@
 
-gskresources.h: gsk.resources.xml
+gskresources.h: gsk.resources.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gsk --generate-header --manual-register
 
