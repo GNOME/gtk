@@ -150,14 +150,14 @@ gtk_css_image_cross_fade_snapshot (GtkCssImage *image,
         }
       else if (start_node)
         {
-          gtk_snapshot_push_opacity (snapshot, cross_fade->progress, "CrossFadeStart");
+          gtk_snapshot_push_opacity (snapshot, 1.0 - cross_fade->progress, "CrossFadeStart");
           gtk_snapshot_append_node (snapshot, start_node);
           gtk_snapshot_pop_and_append (snapshot);
           gsk_render_node_unref (start_node);
         }
       else if (end_node)
         {
-          gtk_snapshot_push_opacity (snapshot, 1.0 - cross_fade->progress, "CrossFadeEnd");
+          gtk_snapshot_push_opacity (snapshot, cross_fade->progress, "CrossFadeEnd");
           gtk_snapshot_append_node (snapshot, end_node);
           gtk_snapshot_pop_and_append (snapshot);
           gsk_render_node_unref (end_node);
