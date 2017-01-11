@@ -156,8 +156,6 @@ _gtk_css_image_get_width (GtkCssImage *image)
 {
   GtkCssImageClass *klass;
 
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), 0);
-
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
   return klass->get_width (image);
@@ -168,8 +166,6 @@ _gtk_css_image_get_height (GtkCssImage *image)
 {
   GtkCssImageClass *klass;
 
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), 0);
-
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
   return klass->get_height (image);
@@ -179,8 +175,6 @@ double
 _gtk_css_image_get_aspect_ratio (GtkCssImage *image)
 {
   GtkCssImageClass *klass;
-
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), 0);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
