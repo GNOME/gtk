@@ -1137,6 +1137,19 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   GtkCssValue *shadow;
   cairo_t *cr;
 
+  {
+    static int no_layout = 0;
+    if (no_layout == 0)
+      {
+        if (g_getenv ("GSK_NO_LAYOUT") != NULL)
+          no_layout = 2;
+        else
+          no_layout = 1;
+      }
+    if (no_layout == 2)
+      return;
+  }
+
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));

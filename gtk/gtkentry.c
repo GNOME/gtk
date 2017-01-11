@@ -3592,6 +3592,8 @@ gtk_entry_render (GtkCssGadget *gadget,
   cairo_t *cr;
   int i;
 
+  return FALSE;
+
   widget = gtk_css_gadget_get_owner (gadget);
   entry = GTK_ENTRY (widget);
   priv = entry->priv;

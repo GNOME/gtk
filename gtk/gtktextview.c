@@ -428,6 +428,8 @@ static gint gtk_text_view_motion_event         (GtkWidget        *widget,
                                                 GdkEventMotion   *event);
 static gint gtk_text_view_draw                 (GtkWidget        *widget,
                                                 cairo_t          *cr);
+static void gtk_text_view_snapshot             (GtkWidget        *widget,
+                                                GtkSnapshot      *snapshot);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
@@ -737,6 +739,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gobject_class->get_property = gtk_text_view_get_property;
   gobject_class->finalize = gtk_text_view_finalize;
 
+  widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->destroy = gtk_text_view_destroy;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
@@ -5899,6 +5902,12 @@ paint_border_window (GtkTextView     *text_view,
   cairo_restore (cr);
 
   gtk_style_context_restore (context);
+}
+
+static void
+gtk_text_view_snapshot (GtkWidget        *widget,
+                        GtkSnapshot      *snapshot)
+{
 }
 
 static gboolean

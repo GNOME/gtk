@@ -15690,8 +15690,23 @@ gtk_widget_render (GtkWidget            *widget,
                      clip,
                      "Render<%s>", G_OBJECT_TYPE_NAME (widget));
   cairo_region_destroy (clip);
+  gint64 start_snapshot = g_get_monotonic_time ();
   gtk_widget_snapshot (widget, &snapshot);
   root = gtk_snapshot_finish (&snapshot);
+  gint64 end_snapshot = g_get_monotonic_time ();
+  {
+    gint64 delta = end_snapshot - start_snapshot;
+    static gint64 min_delta = G_MAXINT64;
+    static gint64 max_delta = 0;
+    static gint64 n_delta = 0;
+    static gint64 total_delta = 0;
+    min_delta = MIN (min_delta, delta);
+    max_delta = MAX (max_delta, delta);
+    n_delta++;
+    total_delta += delta;
+    g_print ("Snapshot took %.1fms (min: %.1f, max: %.1f, avg: %.1f)\n",
+             delta / 1000.0, min_delta / 1000.0, max_delta / 1000.0, total_delta / (1000.0 * n_delta));
+  }
   if (root != NULL)
     {
       gtk_inspector_record_render (widget,
@@ -15700,8 +15715,26 @@ gtk_widget_render (GtkWidget            *widget,
                                    region,
                                    context,
                                    root);
+      if (g_getenv ("GSK_NO_RENDER") == NULL)
+        {
+          gint64 start_render = g_get_monotonic_time ();
+          gsk_renderer_render (renderer, root, context);
+          gint64 end_render = g_get_monotonic_time ();
+          {
+            gint64 delta = end_render - start_render;
+            static gint64 min_delta = G_MAXINT64;
+            static gint64 max_delta = 0;
+            static gint64 n_delta = 0;
+            static gint64 total_delta = 0;
+            min_delta = MIN (min_delta, delta);
+            max_delta = MAX (max_delta, delta);
+            n_delta++;
+            total_delta += delta;
+            g_print ("Render took %.1fms (min: %.1f, max: %.1f, avg: %.1f)\n",
+                     delta / 1000.0, min_delta / 1000.0, max_delta / 1000.0, total_delta / (1000.0 * n_delta));
+          }
+        }
 
-      gsk_renderer_render (renderer, root, context);
       gsk_render_node_unref (root);
     }
 
