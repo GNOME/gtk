@@ -135,6 +135,13 @@
         gdk_wayland_window_new_subsurface(). Use the appropriate ones to create
         your windows.
       </para>
+      <para>
+        Native and foreign subwindows are no longer supported. These concepts were
+        complicating the code and could not be supported across backends.
+      </para>
+      <para>
+        gdk_window_reparent() is no longer available.
+      </para>
     </section>
 
     <section>
@@ -161,8 +168,8 @@
       <title>Stop using GtkContainer::border-width</title>
       <para>
         GTK+ 4 has removed the #GtkContainer::border-width property.
-        Use other means to influence the spacing of your containers.
-        FIXME: what are those ?
+        Use other means to influence the spacing of your containers,
+        such as the CSS border-spacing property.
       </para>
     </section>
 
@@ -178,10 +185,31 @@
     </section>
 
     <section>
+      <title>Switch to GtkWidget's children APIs</title>
+      <para>
+        Instead of the GtkContainer subclass, in GTK+ 4, any widget can
+        have children, and there is new API to navigate the widget tree:
+        gtk_widget_get_first_child(), gtk_widget_get_last_child(),
+        gtk_widget_get_next_sibling(), gtk_widget_get_prev_sibling().
+        The GtkContainer API still works, but if you are implementing
+        your own widgets, you should consider using the new APIs.
+      </para>
+    </section>
+
+    <section>
       <title>Don't use -gtk-gradient in your CSS</title>
       <para>
         GTK+ now supports standard CSS syntax for both linear and radial
         gradients, just use those.
+      </para>
+    </section>
+
+    <section>
+      <title>Don't use -gtk-icon-effect in your CSS</title>
+      <para>
+        GTK+ now supports a more versatile -gtk-icon-filter instead. Replace
+        -gtk-icon-effect: dim; with -gtk-icon-filter: opacity(0.5); and
+        -gtk-icon-effect: hilight; with -gtk-icon-filter: brightness(1.2);.
       </para>
     </section>
 
@@ -214,6 +242,25 @@
       </para>
     </section>
 
+    <section>
+      <title>Stop using APIs to query GdkWindows</title>
+      <para>
+        A number of APIs for querying special-purpose windows have been removed,
+        since these windows are no longer publically available:
+        gtk_tree_view_get_pin_window(), gtk_viewport_get_bin_window(),
+        gtk_viewport_get_view_window().
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to changes in animated hiding and showing of widgets</title>
+      <para>
+        Widgets that appear and disappear with an animation, such as GtkPopover,
+        GtkInfoBar, GtkRevealer no longer use gtk_widget_show() and gtk_widget_hide()
+        for this, but have gained dedicated APIs for this purpose that you should
+        use.
+      </para>
+    </section>
   </section>
 
 </chapter>
