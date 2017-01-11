@@ -69,8 +69,6 @@ GtkCssValue *
 gtk_css_style_get_value (GtkCssStyle *style,
                           guint        id)
 {
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
-
   return GTK_CSS_STYLE_GET_CLASS (style)->get_value (style, id);
 }
 

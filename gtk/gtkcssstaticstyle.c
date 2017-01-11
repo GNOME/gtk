@@ -44,7 +44,8 @@ static GtkCssValue *
 gtk_css_static_style_get_value (GtkCssStyle *style,
                                 guint        id)
 {
-  GtkCssStaticStyle *sstyle = GTK_CSS_STATIC_STYLE (style);
+  /* This is called a lot, so we avoid a dynamic type check here */
+  GtkCssStaticStyle *sstyle = (GtkCssStaticStyle *) style;
 
   return sstyle->values[id];
 }

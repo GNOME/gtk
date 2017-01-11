@@ -44,7 +44,8 @@ static GtkCssValue *
 gtk_css_animated_style_get_value (GtkCssStyle *style,
                                   guint        id)
 {
-  GtkCssAnimatedStyle *animated = GTK_CSS_ANIMATED_STYLE (style);
+  /* This is called a lot, so we avoid a dynamic type check here */
+  GtkCssAnimatedStyle *animated = (GtkCssAnimatedStyle *) style;
 
   if (animated->animated_values &&
       id < animated->animated_values->len &&
@@ -147,8 +148,6 @@ GtkCssValue *
 gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
                                             guint                id)
 {
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style), NULL);
-
   return gtk_css_style_get_value (style->style, id);
 }
 
