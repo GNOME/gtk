@@ -106,6 +106,7 @@ void       gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow 
 
 void       gtk_inspector_window_rescan     (GtkWidget          *iw);
 
+gboolean   gtk_inspector_is_recording      (GtkWidget          *widget);
 void       gtk_inspector_record_render     (GtkWidget          *widget,
                                             GskRenderer        *renderer,
                                             GdkWindow          *window,

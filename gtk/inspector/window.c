@@ -368,4 +368,20 @@ gtk_inspector_record_render (GtkWidget            *widget,
                                         node);
 }
 
+gboolean
+gtk_inspector_is_recording (GtkWidget *widget)
+{
+  GtkInspectorWindow *iw;
+
+  iw = gtk_inspector_window_get_for_display (gtk_widget_get_display (widget));
+  if (iw == NULL)
+    return FALSE;
+
+  /* sanity check for single-display GDK backends */
+  if (GTK_WIDGET (iw) == widget)
+    return FALSE;
+
+  return gtk_inspector_recorder_is_recording (GTK_INSPECTOR_RECORDER (iw->widget_recorder));
+}
+
 // vim: set et sw=2 ts=2:

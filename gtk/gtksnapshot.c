@@ -67,7 +67,8 @@ gtk_snapshot_collect_default (GskRenderNode **nodes,
   else
     {
       node = gsk_container_node_new (nodes, n_nodes);
-      gsk_render_node_set_name (node, name);
+      if (name)
+        gsk_render_node_set_name (node, name);
     }
 
   return node;
@@ -116,6 +117,7 @@ gtk_snapshot_state_free (GtkSnapshotState *state)
 void
 gtk_snapshot_init (GtkSnapshot          *snapshot,
                    GskRenderer          *renderer,
+                   gboolean              record_names,
                    const cairo_region_t *clip,
                    const char           *name,
                    ...)
@@ -123,9 +125,10 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
   char *str;
 
   snapshot->state = NULL;
+  snapshot->record_names = record_names;
   snapshot->renderer = renderer;
 
-  if (name)
+  if (name && record_names)
     {
       va_list args;
 
@@ -181,7 +184,7 @@ gtk_snapshot_push (GtkSnapshot           *snapshot,
 {
   char *str;
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
 
@@ -226,7 +229,8 @@ gtk_snapshot_collect_transform (GskRenderNode **nodes,
     return NULL;
 
   transform_node = gsk_transform_node_new (node, transform);
-  gsk_render_node_set_name (transform_node, name);
+  if (name)
+    gsk_render_node_set_name (transform_node, name);
 
   gsk_render_node_unref (node);
   g_slice_free (graphene_matrix_t, transform);
@@ -255,7 +259,7 @@ gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
 
   char *str;
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
 
@@ -287,7 +291,8 @@ gtk_snapshot_collect_opacity (GskRenderNode **nodes,
     return NULL;
 
   opacity_node = gsk_opacity_node_new (node, *(double *) opacity);
-  gsk_render_node_set_name (opacity_node, name);
+  if (name)
+    gsk_render_node_set_name (opacity_node, name);
 
   gsk_render_node_unref (node);
   g_free (opacity);
@@ -310,7 +315,7 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
   double *real_opacity;
   char *str;
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
 
@@ -348,7 +353,8 @@ gtk_snapshot_collect_color_matrix (GskRenderNode **nodes,
   color_matrix_node = gsk_color_matrix_node_new (node,
                                                  &color_matrix->matrix,
                                                  &color_matrix->offset);
-  gsk_render_node_set_name (color_matrix_node, name);
+  if (name)
+    gsk_render_node_set_name (color_matrix_node, name);
 
   gsk_render_node_unref (node);
   g_free (color_matrix);
@@ -366,7 +372,7 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
   ColorMatrix *color_matrix_data;
   char *str;
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
 
@@ -416,7 +422,8 @@ gtk_snapshot_collect_repeat (GskRenderNode **nodes,
   repeat_node = gsk_repeat_node_new (&bounds[0],
                                      node,
                                      bounds[1].size.width > 0 ? &bounds[1] : NULL);
-  gsk_render_node_set_name (repeat_node, name);
+  if (name)
+    gsk_render_node_set_name (repeat_node, name);
 
   gsk_render_node_unref (node);
   g_free (data);
@@ -435,7 +442,7 @@ gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
   graphene_rect_t *data;
   char *str;
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
 
@@ -483,7 +490,8 @@ gtk_snapshot_collect_clip (GskRenderNode **nodes,
     return NULL;
 
   clip_node = gsk_clip_node_new (node, bounds);
-  gsk_render_node_set_name (clip_node, name);
+  if (name)
+    gsk_render_node_set_name (clip_node, name);
 
   gsk_render_node_unref (node);
   g_slice_free (graphene_rect_t, bounds);
@@ -505,7 +513,7 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
   real_bounds = g_slice_new (graphene_rect_t);
   graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, real_bounds);
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
 
@@ -550,7 +558,8 @@ gtk_snapshot_collect_rounded_clip (GskRenderNode **nodes,
     return NULL;
 
   clip_node = gsk_rounded_clip_node_new (node, bounds);
-  gsk_render_node_set_name (clip_node, name);
+  if (name)
+    gsk_render_node_set_name (clip_node, name);
 
   gsk_render_node_unref (node);
   g_slice_free (GskRoundedRect, bounds);
@@ -573,7 +582,7 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
   gsk_rounded_rect_init_copy (real_bounds, bounds);
   gsk_rounded_rect_offset (real_bounds, snapshot->state->translate_x, snapshot->state->translate_y);
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
 
@@ -624,7 +633,8 @@ gtk_snapshot_collect_shadow (GskRenderNode **nodes,
     return NULL;
 
   shadow_node = gsk_shadow_node_new (node, shadow->shadows, shadow->n_shadows);
-  gsk_render_node_set_name (shadow_node, name);
+  if (name)
+    gsk_render_node_set_name (shadow_node, name);
 
   gsk_render_node_unref (node);
   g_free (shadow);
@@ -646,7 +656,7 @@ gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
   real_shadow->n_shadows = n_shadows;
   memcpy (real_shadow->shadows, shadow, sizeof (GskShadow) * n_shadows);
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
 
@@ -849,7 +859,7 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
   graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
   node = gsk_cairo_node_new (&real_bounds);
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
       char *str;
@@ -901,7 +911,7 @@ gtk_snapshot_append_texture_node (GtkSnapshot            *snapshot,
   graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
   node = gsk_texture_node_new (texture, &real_bounds);
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
       char *str;
@@ -949,7 +959,7 @@ gtk_snapshot_append_color_node (GtkSnapshot           *snapshot,
   graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
   node = gsk_color_node_new (color, &real_bounds);
 
-  if (name)
+  if (name && snapshot->record_names)
     {
       va_list args;
       char *str;

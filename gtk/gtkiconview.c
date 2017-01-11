@@ -7013,7 +7013,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
                                                        rect.width,
                                                        rect.height);
 
-          gtk_snapshot_init (&snapshot, NULL, NULL, "IconView DragIcon");
+          gtk_snapshot_init (&snapshot, NULL, FALSE, NULL, "IconView DragIcon");
 	  gtk_icon_view_snapshot_item (icon_view, &snapshot, item, 
                                        icon_view->priv->item_padding,
                                        icon_view->priv->item_padding,

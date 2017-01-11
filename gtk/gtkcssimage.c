@@ -107,7 +107,7 @@ gtk_css_image_real_draw (GtkCssImage *image,
   cairo_region_t *clip;
 
   clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, width, height });
-  gtk_snapshot_init (&snapshot, NULL, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+  gtk_snapshot_init (&snapshot, NULL, FALSE, clip, "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
   gtk_css_image_snapshot (image, &snapshot, width, height);
   node = gtk_snapshot_finish (&snapshot);
 

@@ -681,7 +681,8 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
                 bottom = gsk_container_node_new (NULL, 0);
 
               blend = gsk_blend_node_new (bottom, top, blend_mode);
-              gsk_render_node_set_name (blend, "BackgroundBlend");
+              if (snapshot->record_names)
+                gsk_render_node_set_name (blend, "BackgroundBlend");
 
               gtk_snapshot_push (snapshot, TRUE, "BackgroundBlendGroup");
               gtk_snapshot_append_node (snapshot, blend);

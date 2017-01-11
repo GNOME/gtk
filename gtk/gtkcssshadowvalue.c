@@ -24,7 +24,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
-#include "gtksnapshot.h"
+#include "gtksnapshotprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkpango.h"
 
@@ -1057,7 +1057,8 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *shadow,
                                      _gtk_css_number_value_get (shadow->voffset, 0),
                                      _gtk_css_number_value_get (shadow->spread, 0),
                                      _gtk_css_number_value_get (shadow->radius, 0));
-  gsk_render_node_set_name (node, "Outset Shadow");
+  if (snapshot->record_names)
+    gsk_render_node_set_name (node, "Outset Shadow");
   gtk_snapshot_append_node (snapshot, node);
   gsk_render_node_unref (node);
 }
@@ -1087,7 +1088,8 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
                                     _gtk_css_number_value_get (shadow->voffset, 0),
                                     _gtk_css_number_value_get (shadow->spread, 0),
                                     _gtk_css_number_value_get (shadow->radius, 0));
-  gsk_render_node_set_name (node, "Inset Shadow");
+  if (snapshot->record_names)
+    gsk_render_node_set_name (node, "Inset Shadow");
   gtk_snapshot_append_node (snapshot, node);
   gsk_render_node_unref (node);
 }

@@ -45,15 +45,16 @@ struct _GtkSnapshotState {
 
 struct _GtkSnapshot {
   GtkSnapshotState      *state;
-
+  gboolean               record_names;
   GskRenderer           *renderer;
 };
 
 void            gtk_snapshot_init               (GtkSnapshot             *state,
                                                  GskRenderer             *renderer,
+                                                 gboolean                 record_names,
                                                  const cairo_region_t    *clip,
                                                  const char              *name,
-                                                 ...) G_GNUC_PRINTF (4, 5);
+                                                 ...) G_GNUC_PRINTF (5, 6);
 GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
 
 GskRenderer *   gtk_snapshot_get_renderer       (const GtkSnapshot       *snapshot);

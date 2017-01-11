@@ -254,9 +254,12 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
           linear->stops->len);
     }
 
-  name = g_strdup_printf ("%sLinearGradient<%ustops>", linear->repeating ? "Repeating" : "", linear->stops->len);
-  gsk_render_node_set_name (node, name);
-  g_free (name);
+  if (snapshot->record_names)
+    {
+      name = g_strdup_printf ("%sLinearGradient<%ustops>", linear->repeating ? "Repeating" : "", linear->stops->len);
+      gsk_render_node_set_name (node, name);
+      g_free (name);
+    }
 
   gtk_snapshot_append_node (snapshot, node);
 

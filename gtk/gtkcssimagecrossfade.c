@@ -141,7 +141,8 @@ gtk_css_image_cross_fade_snapshot (GtkCssImage *image,
         {
           GskRenderNode *node = gsk_cross_fade_node_new (start_node, end_node, cross_fade->progress);
 
-          gsk_render_node_set_name (node, "CrossFade");
+          if (snapshot->record_names)
+            gsk_render_node_set_name (node, "CrossFade");
           gtk_snapshot_append_node (snapshot, node);
 
           gsk_render_node_unref (node);

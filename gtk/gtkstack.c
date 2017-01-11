@@ -29,6 +29,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtksnapshotprivate.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkstackaccessible.h"
 #include "a11y/gtkstackaccessibleprivate.h"
@@ -1940,9 +1941,12 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
       node = gsk_opacity_node_new (end_node, 1.0 - progress);
     }
 
-  name = g_strdup_printf ("CrossFade<%g>", progress);
-  gsk_render_node_set_name (node, name);
-  g_free (name);
+  if (snapshot->record_names)
+    {
+      name = g_strdup_printf ("CrossFade<%g>", progress);
+      gsk_render_node_set_name (node, name);
+      g_free (name);
+    }
 
   gtk_snapshot_append_node (snapshot, node);
 
