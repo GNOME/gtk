@@ -90,9 +90,7 @@ void            gtk_snapshot_push_cross_fade            (GtkSnapshot            
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF (3, 4);
 GDK_AVAILABLE_IN_3_90
-GskRenderNode * gtk_snapshot_pop                        (GtkSnapshot            *snapshot) G_GNUC_WARN_UNUSED_RESULT;
-GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_pop_and_append             (GtkSnapshot            *snapshot);
+void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_translate_2d               (GtkSnapshot            *snapshot,

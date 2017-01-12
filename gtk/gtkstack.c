@@ -1925,14 +1925,14 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
 
       gtk_snapshot_push_transform (snapshot, &identity, "CrossFadeStart");
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 
   gtk_widget_snapshot_child (widget,
                              priv->visible_child->widget,
                              snapshot);
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
@@ -1984,7 +1984,7 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
                              priv->visible_child->widget,
                              snapshot);
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 
   if (priv->last_visible_node)
     {
@@ -1994,7 +1994,7 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
 
       gtk_snapshot_push_transform (snapshot, &matrix, "StackUnder");
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 }
 
@@ -2055,7 +2055,7 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
       graphene_matrix_init_translate (&matrix, &GRAPHENE_POINT3D_INIT (x, y, 0));
       gtk_snapshot_push_transform (snapshot, &matrix, "StackSlide");
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
      }
 
   gtk_widget_snapshot_child (widget,
@@ -2139,7 +2139,7 @@ gtk_stack_render (GtkCssGadget *gadget,
               g_assert_not_reached ();
             }
 
-          gtk_snapshot_pop_and_append (snapshot);
+          gtk_snapshot_pop (snapshot);
         }
       else
         gtk_widget_snapshot_child (widget,

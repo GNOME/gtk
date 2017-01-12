@@ -851,7 +851,7 @@ gtk_revealer_snapshot (GtkWidget   *widget,
                               ),
                               "RevealerClip");
       gtk_widget_snapshot_child (widget, child, snapshot);
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 }
 

@@ -2970,7 +2970,7 @@ gtk_menu_snapshot (GtkWidget   *widget,
 
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->snapshot (widget, snapshot);
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static void

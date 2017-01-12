@@ -140,12 +140,12 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
 
       gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
 
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 
   if (shadows)
     {
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
       g_free (shadows);
     }
   
@@ -322,12 +322,12 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
       graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
       gtk_snapshot_append_texture_node (snapshot, texture, &bounds, "Icon");
 
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 
   if (shadows)
     {
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
       g_free (shadows);
     }
   

@@ -110,11 +110,11 @@ gtk_css_image_cross_fade_snapshot (GtkCssImage *image,
 
   if (cross_fade->start)
     gtk_css_image_snapshot (cross_fade->start, snapshot, width, height);
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 
   if (cross_fade->end)
     gtk_css_image_snapshot (cross_fade->end, snapshot, width, height);
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static gboolean

@@ -859,5 +859,5 @@ gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
   if (gtk_css_filter_value_is_none (filter))
     return;
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 }

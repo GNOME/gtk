@@ -15661,13 +15661,13 @@ gtk_widget_snapshot (GtkWidget   *widget,
         }
 
       if (opacity < 1.0)
-        gtk_snapshot_pop_and_append (snapshot);
+        gtk_snapshot_pop (snapshot);
     }
 
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
   if (GTK_DEBUG_CHECK (SNAPSHOT))
-    gtk_snapshot_pop_and_append (snapshot);
+    gtk_snapshot_pop (snapshot);
 }
 
 void

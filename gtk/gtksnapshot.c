@@ -156,21 +156,6 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
                                             gtk_snapshot_collect_default);
 }
 
-GskRenderNode *
-gtk_snapshot_finish (GtkSnapshot *snapshot)
-{
-  GskRenderNode *result;
-  
-  result = gtk_snapshot_pop (snapshot);
-
-  if (snapshot->state != NULL)
-    {
-      g_warning ("Too many gtk_snapshot_push() calls.");
-    }
-
-  return result;
-}
-
 /**
  * gtk_snapshot_push:
  * @snapshot: a #GtkSnapshot
@@ -887,21 +872,8 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
   snapshot->state = state;
 }
 
-/**
- * gtk_snapshot_pop:
- * @snapshot: a #GtkSnapshot
- *
- * Removes the top element from the stack of render nodes,
- * making the node underneath the current node again.
- *
- * Returns: (transfer full) (nullable): A #GskRenderNode for
- *     the contents that were rendered to @snapshot since
- *     the corresponding gtk_snapshot_push() call
- *
- * Since: 3.90
- */
-GskRenderNode *
-gtk_snapshot_pop (GtkSnapshot *snapshot)
+static GskRenderNode *
+gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
 {
   GtkSnapshotState *state;
   GskRenderNode *node;
@@ -931,8 +903,23 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
   return node;
 }
 
+GskRenderNode *
+gtk_snapshot_finish (GtkSnapshot *snapshot)
+{
+  GskRenderNode *result;
+  
+  result = gtk_snapshot_pop_internal (snapshot);
+
+  if (snapshot->state != NULL)
+    {
+      g_warning ("Too many gtk_snapshot_push() calls.");
+    }
+
+  return result;
+}
+
 /**
- * gtk_snapshot_pop_and_append:
+ * gtk_snapshot_pop:
  * @snapshot: a #GtkSnapshot
  *
  * Removes the top element from the stack of render nodes,
@@ -941,11 +928,11 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
  * Since: 3.90
  */
 void
-gtk_snapshot_pop_and_append (GtkSnapshot *snapshot)
+gtk_snapshot_pop (GtkSnapshot *snapshot)
 {
   GskRenderNode *node;
 
-  node = gtk_snapshot_pop (snapshot);
+  node = gtk_snapshot_pop_internal (snapshot);
   if (node)
     {
       gtk_snapshot_append_node (snapshot, node);

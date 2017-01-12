@@ -176,7 +176,7 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
                                           "ColorSwatch Opaque Color");
         }
 
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 
   gtk_css_gadget_snapshot (swatch->priv->overlay_gadget, snapshot);

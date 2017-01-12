@@ -1846,7 +1846,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   if (icon_view->priv->doing_rubberband)
     gtk_icon_view_snapshot_rubberband (icon_view, snapshot);
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 
   GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->snapshot (widget, snapshot);
 }

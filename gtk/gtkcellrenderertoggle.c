@@ -465,7 +465,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
                                image_type);
 
   gtk_style_context_restore (context);
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static gint

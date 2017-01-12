@@ -5412,7 +5412,7 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
       gtk_widget_snapshot_child (widget, child->widget, snapshot);
     }
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
   
 #if 0
   Thyis clearly does not work. priv->drag_highlight_window is potentially a toplevel...
@@ -5478,7 +5478,7 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
 
   gtk_style_context_restore (context);
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 enum

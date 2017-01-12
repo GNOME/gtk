@@ -298,7 +298,7 @@ gtk_viewport_render (GtkCssGadget *gadget,
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->snapshot (widget, snapshot);
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 
   return FALSE;
 }

@@ -105,7 +105,7 @@ gtk_theming_background_snapshot_color (GtkThemingBackground *bg,
                                       bg_color,
                                       &bg->boxes[clip].bounds,
                                       "BackgroundColor");
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 }
 
@@ -506,12 +506,12 @@ gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
                                  position_y + 0.5 * (repeat_height - image_height));
       gtk_css_image_snapshot (image, snapshot, image_width, image_height);
 
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 
   gtk_snapshot_translate_2d (snapshot, - origin->bounds.origin.x, - origin->bounds.origin.y);
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
@@ -664,9 +664,9 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
         }
       else
         {
-          gtk_snapshot_pop_and_append (snapshot);
+          gtk_snapshot_pop (snapshot);
           gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
-          gtk_snapshot_pop_and_append (snapshot);
+          gtk_snapshot_pop (snapshot);
         }
     }
 

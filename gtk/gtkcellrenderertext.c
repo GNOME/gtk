@@ -1767,7 +1767,7 @@ gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
                               cell_area->y + y_offset + ypad,
                               layout);
 
-  gtk_snapshot_pop_and_append (snapshot);
+  gtk_snapshot_pop (snapshot);
 
   g_object_unref (layout);
 }

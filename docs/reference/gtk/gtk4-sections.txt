@@ -4461,7 +4461,6 @@ gtk_snapshot_push_rounded_clip
 gtk_snapshot_push_cross_fade
 gtk_snapshot_push_blend
 gtk_snapshot_pop
-gtk_snapshot_pop_and_append
 gtk_snapshot_set_transform
 gtk_snapshot_transform
 gtk_snapshot_translate_2d

@@ -1679,7 +1679,7 @@ gtk_paned_render (GtkCssGadget *gadget,
                               ),
                               "GtkPanedChild1");
       gtk_widget_snapshot_child (widget, priv->child1, snapshot);
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 
   if (priv->child2 && gtk_widget_get_visible (priv->child2))
@@ -1694,7 +1694,7 @@ gtk_paned_render (GtkCssGadget *gadget,
                               ),
                               "GtkPanedChild2");
       gtk_widget_snapshot_child (widget, priv->child2, snapshot);
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 
   return FALSE;

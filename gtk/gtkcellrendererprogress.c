@@ -671,7 +671,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
                                   layout);
 
       gtk_style_context_restore (context);
-      gtk_snapshot_pop_and_append (snapshot);
+      gtk_snapshot_pop (snapshot);
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
@@ -700,7 +700,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
                                       x_pos, y_pos,
                                       layout);
 
-          gtk_snapshot_pop_and_append (snapshot);
+          gtk_snapshot_pop (snapshot);
         }
 
       if (bar_position + bar_size < start + full_size)
@@ -727,7 +727,7 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
                                       x_pos, y_pos,
                                       layout);
 
-          gtk_snapshot_pop_and_append (snapshot);
+          gtk_snapshot_pop (snapshot);
         }
 
       gtk_style_context_restore (context);
