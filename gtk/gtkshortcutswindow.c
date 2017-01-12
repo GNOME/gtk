@@ -867,7 +867,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkWidget *scroller;
   GtkWidget *label;
   GtkWidget *empty;
-  GtkWidget *search_icon;
   PangoAttrList *attributes;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
@@ -887,13 +886,9 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                    NULL);
   gtk_window_set_titlebar (GTK_WINDOW (self), GTK_WIDGET (priv->header_bar));
 
-  search_icon = gtk_image_new_from_icon_name ("edit-find-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_show (search_icon);
-
-  search_button = gtk_toggle_button_new ();
-  gtk_container_add (GTK_CONTAINER (search_button), search_icon);
-  gtk_style_context_add_class (gtk_widget_get_style_context (search_button), "image-button");
-  gtk_widget_show (search_button);
+  search_button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                                "icon-name", "edit-find-symbolic",
+                                NULL);
   gtk_container_add (GTK_CONTAINER (priv->header_bar), search_button);
 
   priv->main_box = g_object_new (GTK_TYPE_BOX,
