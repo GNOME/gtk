@@ -1367,6 +1367,8 @@ _gdk_x11_display_open (const gchar *display_name)
   gint ignore;
   gint maj, min;
 
+  XInitThreads ();
+
   xdisplay = XOpenDisplay (display_name);
   if (!xdisplay)
     return NULL;
