@@ -232,7 +232,7 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK+ themes and widgets",
                          "authors", authors,
-                         "logo-icon-name", "gtk3-widget-factory",
+                         "logo-icon-name", "gtk4-widget-factory",
                          "title", "About GTK+ Widget Factory",
                          "system-information", s->str,
                          NULL);
@@ -1901,7 +1901,7 @@ activate (GApplication *app)
 static void
 print_version (void)
 {
-  g_print ("gtk3-widget-factory %d.%d.%d\n",
+  g_print ("gtk4-widget-factory %d.%d.%d\n",
            gtk_get_major_version (),
            gtk_get_minor_version (),
            gtk_get_micro_version ());
