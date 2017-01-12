@@ -442,6 +442,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                                  "halign", GTK_ALIGN_CENTER,
                                  "stack", self->stack,
                                  "spacing", 12,
+                                 "visible", FALSE,
                                  "no-show-all", TRUE,
                                  NULL);
 
@@ -449,6 +450,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
 
   self->show_all = gtk_button_new_with_mnemonic (_("_Show All"));
   gtk_widget_set_no_show_all (self->show_all, TRUE);
+  gtk_widget_set_visible (self->show_all, FALSE);
   g_signal_connect_swapped (self->show_all, "clicked",
                             G_CALLBACK (gtk_shortcuts_section_show_all), self);
 

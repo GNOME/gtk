@@ -327,14 +327,12 @@ gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
     gtk_stack_set_visible_child (priv->stack, GTK_WIDGET (section));
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "visible", TRUE,
                       NULL);
   g_object_set_data (G_OBJECT (row), "gtk-shortcuts-section", section);
   label = g_object_new (GTK_TYPE_LABEL,
                         "margin", 6,
                         "label", title,
                         "xalign", 0.5f,
-                        "visible", TRUE,
                         NULL);
   g_object_set_data (G_OBJECT (section), "gtk-shortcuts-title", label);
   gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
@@ -886,7 +884,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   priv->header_bar = g_object_new (GTK_TYPE_HEADER_BAR,
                                    "show-close-button", TRUE,
-                                   "visible", TRUE,
                                    NULL);
   gtk_window_set_titlebar (GTK_WINDOW (self), GTK_WIDGET (priv->header_bar));
 
@@ -901,12 +898,10 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   priv->main_box = g_object_new (GTK_TYPE_BOX,
                            "orientation", GTK_ORIENTATION_VERTICAL,
-                           "visible", TRUE,
                            NULL);
   GTK_CONTAINER_CLASS (gtk_shortcuts_window_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (priv->main_box));
 
   priv->search_bar = g_object_new (GTK_TYPE_SEARCH_BAR,
-                                   "visible", TRUE,
                                    NULL);
   g_object_bind_property (priv->search_bar, "search-mode-enabled",
                           search_button, "active",
@@ -917,12 +912,10 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                               "expand", TRUE,
                               "homogeneous", TRUE,
                               "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
-                              "visible", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (priv->main_box), GTK_WIDGET (priv->stack));
 
   priv->title_stack = g_object_new (GTK_TYPE_STACK,
-                                    "visible", TRUE,
                                     NULL);
   gtk_header_bar_set_custom_title (priv->header_bar, GTK_WIDGET (priv->title_stack));
 
@@ -938,7 +931,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   priv->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "focus-on-click", FALSE,
-                                    "visible", TRUE,
                                     "relief", GTK_RELIEF_NONE,
                                     NULL);
   gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "sections");
@@ -951,7 +943,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_container_add (GTK_CONTAINER (priv->menu_button), GTK_WIDGET (menu_box));
 
   priv->menu_label = g_object_new (GTK_TYPE_LABEL,
-                                   "visible", TRUE,
                                    NULL);
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (priv->menu_label));
 
@@ -968,7 +959,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   priv->list_box = g_object_new (GTK_TYPE_LIST_BOX,
                                  "selection-mode", GTK_SELECTION_NONE,
-                                 "visible", TRUE,
                                  NULL);
   g_signal_connect_object (priv->list_box,
                            "row-activated",
@@ -996,13 +986,11 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                            G_CONNECT_SWAPPED);
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                           "visible", TRUE,
                            NULL);
   box = g_object_new (GTK_TYPE_BOX,
                       "halign", GTK_ALIGN_CENTER,
                       "spacing", 24,
                       "orientation", GTK_ORIENTATION_VERTICAL,
-                      "visible", TRUE,
                       NULL);
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (box));
   gtk_stack_add_named (priv->stack, scroller, "internal-search");
@@ -1011,7 +999,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                          "halign", GTK_ALIGN_CENTER,
                                          "spacing", 6,
                                          "orientation", GTK_ORIENTATION_VERTICAL,
-                                         "visible", TRUE,
                                          NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->search_shortcuts));
 
@@ -1019,12 +1006,10 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                         "halign", GTK_ALIGN_CENTER,
                                         "spacing", 6,
                                         "orientation", GTK_ORIENTATION_VERTICAL,
-                                        "visible", TRUE,
                                         NULL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->search_gestures));
 
   empty = g_object_new (GTK_TYPE_GRID,
-                        "visible", TRUE,
                         "row-spacing", 12,
                         "margin", 12,
                         "hexpand", TRUE,
@@ -1035,7 +1020,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_style_context_add_class (gtk_widget_get_style_context (empty), GTK_STYLE_CLASS_DIM_LABEL);
   gtk_grid_attach (GTK_GRID (empty),
                    g_object_new (GTK_TYPE_IMAGE,
-                                 "visible", TRUE,
                                  "icon-name", "edit-find-symbolic",
                                  "pixel-size", 72,
                                  NULL),
@@ -1044,14 +1028,12 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   pango_attr_list_insert (attributes, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
   pango_attr_list_insert (attributes, pango_attr_scale_new (1.44));
   label = g_object_new (GTK_TYPE_LABEL,
-                        "visible", TRUE,
                         "label", _("No Results Found"),
                         "attributes", attributes,
                         NULL);
   pango_attr_list_unref (attributes);
   gtk_grid_attach (GTK_GRID (empty), label, 0, 1, 1, 1);
   label = g_object_new (GTK_TYPE_LABEL,
-                        "visible", TRUE,
                         "label", _("Try a different search"),
                         NULL);
   gtk_grid_attach (GTK_GRID (empty), label, 0, 2, 1, 1);
