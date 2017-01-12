@@ -88,6 +88,7 @@ struct _GdkMirWindowImpl
   /* Desired surface attributes */
   GdkWindowTypeHint type_hint;
   MirSurfaceState surface_state;
+  gboolean modal;
 
   /* Pattern for background */
   cairo_pattern_t *background;
@@ -305,6 +306,7 @@ create_window_type_spec (GdkDisplay *display,
                          gint y,
                          gint width,
                          gint height,
+                         gboolean modal,
                          GdkWindowTypeHint type,
                          const MirRectangle *rect,
                          MirEdgeAttachment edge,
@@ -358,6 +360,17 @@ create_window_type_spec (GdkDisplay *display,
   switch (type)
     {
       case GDK_WINDOW_TYPE_HINT_DIALOG:
+        if (modal)
+          return mir_connection_create_spec_for_modal_dialog (connection,
+                                                              width,
+                                                              height,
+                                                              format,
+                                                              parent_surface);
+        else
+          return mir_connection_create_spec_for_dialog (connection,
+                                                        width,
+                                                        height,
+                                                        format);
       case GDK_WINDOW_TYPE_HINT_DOCK:
         return mir_connection_create_spec_for_dialog (connection,
                                                       width,
@@ -430,6 +443,7 @@ create_spec (GdkWindow *window, GdkMirWindowImpl *impl)
                                   impl->transient_for,
                                   impl->transient_x, impl->transient_y,
                                   window->width, window->height,
+                                  impl->modal,
                                   impl->type_hint,
                                   impl->has_rect ? &impl->rect : NULL,
                                   impl->has_rect ? impl->edge : mir_edge_attachment_any,
@@ -1133,8 +1147,15 @@ void
 gdk_mir_window_impl_set_modal_hint (GdkWindow *window,
                                     gboolean   modal)
 {
-  //g_printerr ("gdk_mir_window_impl_set_modal_hint window=%p\n", window);
-  /* Mir doesn't support modal windows */
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  if (modal != impl->modal)
+    {
+      impl->modal = modal;
+
+      if (impl->surface && !impl->pending_spec_update)
+        update_surface_spec (window);
+    }
 }
 
 static void
