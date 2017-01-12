@@ -5,6 +5,7 @@
     <child>
       <object class="GtkRevealer" id="revealer">
         <property name="visible">1</property>
+        <property name="reveal-child">1</property>
         <child>
           <object class="GtkBox" id="content">
             <property name="visible">1</property>
