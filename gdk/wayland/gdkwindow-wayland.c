@@ -2635,6 +2635,34 @@ gdk_window_wayland_move_resize (GdkWindow *window,
     gdk_wayland_window_maybe_configure (window, width, height, impl->scale);
 }
 
+/* Avoid zero width/height as this is a protocol error */
+static void
+sanitize_anchor_rect (GdkWindow    *window,
+                      GdkRectangle *rect)
+{
+  gint original_width = rect->width;
+  gint original_height = rect->height;
+  GdkWindow *parent = get_popup_parent (window);
+
+  rect->width  = MAX (1, rect->width);
+  rect->height = MAX (1, rect->height);
+  rect->x -= rect->width - original_width;
+  rect->y -= rect->height - original_height;
+
+  /* Make sure the anchor rectangle does not extend outside the window
+   * geometry of the parent surface.
+   */
+  if (parent)
+    {
+      GdkRectangle geometry;
+
+      /* The rectangle is relative to the parent window geometry */
+      gdk_wayland_window_get_window_geometry (parent, &geometry);
+      rect->x = CLAMP (rect->x, 0, geometry.width);
+      rect->y = CLAMP (rect->y, 0, geometry.height);
+    }
+}
+
 static void
 gdk_window_wayland_move_to_rect (GdkWindow          *window,
                                  const GdkRectangle *rect,
@@ -2647,6 +2675,8 @@ gdk_window_wayland_move_to_rect (GdkWindow          *window,
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->pending_move_to_rect.rect = *rect;
+  sanitize_anchor_rect (window, &impl->pending_move_to_rect.rect);
+
   impl->pending_move_to_rect.rect_anchor = rect_anchor;
   impl->pending_move_to_rect.window_anchor = window_anchor;
   impl->pending_move_to_rect.anchor_hints = anchor_hints;
