@@ -647,7 +647,6 @@ gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
   GtkSnapshotState *state;
   char *str;
 
-
   if (name && snapshot->record_names)
     {
       va_list args;
@@ -672,6 +671,127 @@ gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
   else
     state->data.shadow.shadows = g_malloc (sizeof (GskShadow) * n_shadows);
   memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow) * n_shadows);
+
+  snapshot->state = state;
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_cross_fade_end (GtkSnapshotState *state,
+                                     GskRenderNode   **nodes,
+                                     guint             n_nodes,
+                                     const char       *name)
+{
+  GskRenderNode *start_node, *end_node, *node;
+
+  end_node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  start_node = state->data.cross_fade.start_node;
+
+  if (state->data.cross_fade.progress <= 0.0)
+    {
+      node = start_node;
+
+      if (end_node)
+        gsk_render_node_unref (end_node);
+    }
+  else if (state->data.cross_fade.progress >= 1.0)
+    {
+      node = end_node;
+
+      if (start_node)
+        gsk_render_node_unref (start_node);
+    }
+  else if (start_node && end_node)
+    {
+      node = gsk_cross_fade_node_new (start_node, end_node, state->data.cross_fade.progress);
+      gsk_render_node_set_name (node, name);
+
+      gsk_render_node_unref (start_node);
+      gsk_render_node_unref (end_node);
+    }
+  else if (start_node)
+    {
+      node = gsk_opacity_node_new (start_node, 1.0 - state->data.cross_fade.progress);
+      gsk_render_node_set_name (node, name);
+
+      gsk_render_node_unref (start_node);
+    }
+  else if (end_node)
+    {
+      node = gsk_opacity_node_new (end_node, state->data.cross_fade.progress);
+      gsk_render_node_set_name (node, name);
+
+      gsk_render_node_unref (end_node);
+    }
+  else
+    {
+      node = NULL;
+    }
+
+  return node;
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_cross_fade_start (GtkSnapshotState *state,
+                                       GskRenderNode   **nodes,
+                                       guint             n_nodes,
+                                       const char       *name)
+{
+  state->parent->data.cross_fade.start_node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  
+  return NULL;
+}
+
+/**
+ * gtk_snapshot_push_cross_fade:
+ * @snapshot: a #GtkSnapshot
+ * @progress: progress between 0.0 and 1.0
+ * @name: printf format string for name of the pushed node
+ * @...: printf-style arguments for the @name string
+ *
+ * Snapshots a cross-fade operation between two images with the
+ * given @progress.
+ *
+ * Until the first call to gtk_snapshot_pop(), the start image
+ * will be snapshot. After that call, the end image will be recorded
+ * until the second call to gtk_snapshot_pop().
+ *
+ * Calling this function requires 2 calls to gtk_snapshot_pop().
+ **/
+void
+gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
+                              double       progress,
+                              const char  *name,
+                              ...)
+{
+  GtkSnapshotState *state;
+  char *str;
+
+  if (name && snapshot->record_names)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  state = gtk_snapshot_state_new (snapshot->state,
+                                  str,
+                                  snapshot->state->clip_region,
+                                  snapshot->state->translate_x,
+                                  snapshot->state->translate_y,
+                                  gtk_snapshot_collect_cross_fade_end);
+  state->data.cross_fade.progress = progress;
+  state->data.cross_fade.start_node = NULL;
+
+  state = gtk_snapshot_state_new (state,
+                                  str,
+                                  state->clip_region,
+                                  state->translate_x,
+                                  state->translate_y,
+                                  gtk_snapshot_collect_cross_fade_start);
 
   snapshot->state = state;
 }

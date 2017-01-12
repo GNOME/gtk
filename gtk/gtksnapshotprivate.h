@@ -67,6 +67,10 @@ struct _GtkSnapshotState {
       GskShadow *shadows;
       GskShadow a_shadow; /* Used if n_shadows == 1 */
     } shadow;
+    struct {
+      double progress;
+      GskRenderNode *start_node;
+    } cross_fade;
   } data;
 };
 

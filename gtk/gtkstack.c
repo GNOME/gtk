@@ -1914,44 +1914,25 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   gdouble progress = gtk_progress_tracker_get_progress (&priv->tracker, FALSE);
-  GskRenderNode *end_node, *node;
-  char *name;
 
-  gtk_snapshot_push (snapshot, TRUE, "GtkStackCrossFadeEnd");
-  gtk_widget_snapshot_child (widget,
-                             priv->visible_child->widget,
-                             snapshot);
-  end_node = gtk_snapshot_pop (snapshot);
+  gtk_snapshot_push_cross_fade (snapshot, progress, "CrossFade<%g>", progress);
 
   if (priv->last_visible_node)
     {
       graphene_matrix_t identity;
-      GskRenderNode *start_node;
 
       graphene_matrix_init_identity (&identity);
 
       gtk_snapshot_push_transform (snapshot, &identity, "CrossFadeStart");
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
-      start_node = gtk_snapshot_pop (snapshot);
-      node = gsk_cross_fade_node_new (start_node, end_node, progress);
-      gsk_render_node_unref (start_node);
+      gtk_snapshot_pop_and_append (snapshot);
     }
-  else
-    {
-      node = gsk_opacity_node_new (end_node, 1.0 - progress);
-    }
+  gtk_snapshot_pop_and_append (snapshot);
 
-  if (snapshot->record_names)
-    {
-      name = g_strdup_printf ("CrossFade<%g>", progress);
-      gsk_render_node_set_name (node, name);
-      g_free (name);
-    }
-
-  gtk_snapshot_append_node (snapshot, node);
-
-  gsk_render_node_unref (node);
-  gsk_render_node_unref (end_node);
+  gtk_widget_snapshot_child (widget,
+                             priv->visible_child->widget,
+                             snapshot);
+  gtk_snapshot_pop_and_append (snapshot);
 }
 
 static void

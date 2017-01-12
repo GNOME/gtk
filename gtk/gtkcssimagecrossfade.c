@@ -106,64 +106,15 @@ gtk_css_image_cross_fade_snapshot (GtkCssImage *image,
 {
   GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
 
-  if (cross_fade->progress <= 0.0)
-    {
-      if (cross_fade->start)
-        gtk_css_image_snapshot (cross_fade->start, snapshot, width, height);
-    }
-  else if (cross_fade->progress >= 1.0)
-    {
-      if (cross_fade->end)
-        gtk_css_image_snapshot (cross_fade->end, snapshot, width, height);
-    }
-  else
-    {
-      GskRenderNode *start_node, *end_node;
-      if (cross_fade->start)
-        {
-          gtk_snapshot_push (snapshot, TRUE, "CrossFadeStart");
-          gtk_css_image_snapshot (cross_fade->start, snapshot, width, height);
-          start_node = gtk_snapshot_pop (snapshot);
-        }
-      else
-        start_node = NULL;
+  gtk_snapshot_push_cross_fade (snapshot, cross_fade->progress, "CrossFadeImage<%g>", cross_fade->progress);
 
-      if (cross_fade->end)
-        {
-          gtk_snapshot_push (snapshot, TRUE, "CrossFadeStart");
-          gtk_css_image_snapshot (cross_fade->end, snapshot, width, height);
-          end_node = gtk_snapshot_pop (snapshot);
-        }
-      else
-        end_node = NULL;
+  if (cross_fade->start)
+    gtk_css_image_snapshot (cross_fade->start, snapshot, width, height);
+  gtk_snapshot_pop_and_append (snapshot);
 
-      if (start_node && end_node)
-        {
-          GskRenderNode *node = gsk_cross_fade_node_new (start_node, end_node, cross_fade->progress);
-
-          if (snapshot->record_names)
-            gsk_render_node_set_name (node, "CrossFade");
-          gtk_snapshot_append_node (snapshot, node);
-
-          gsk_render_node_unref (node);
-          gsk_render_node_unref (start_node);
-          gsk_render_node_unref (end_node);
-        }
-      else if (start_node)
-        {
-          gtk_snapshot_push_opacity (snapshot, 1.0 - cross_fade->progress, "CrossFadeStart");
-          gtk_snapshot_append_node (snapshot, start_node);
-          gtk_snapshot_pop_and_append (snapshot);
-          gsk_render_node_unref (start_node);
-        }
-      else if (end_node)
-        {
-          gtk_snapshot_push_opacity (snapshot, cross_fade->progress, "CrossFadeEnd");
-          gtk_snapshot_append_node (snapshot, end_node);
-          gtk_snapshot_pop_and_append (snapshot);
-          gsk_render_node_unref (end_node);
-        }
-    }
+  if (cross_fade->end)
+    gtk_css_image_snapshot (cross_fade->end, snapshot, width, height);
+  gtk_snapshot_pop_and_append (snapshot);
 }
 
 static gboolean
