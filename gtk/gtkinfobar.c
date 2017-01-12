@@ -369,7 +369,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * @response_id: the response ID
    *
    * Emitted when an action widget is clicked or the application programmer
-   * calls gtk_dialog_response(). The @response_id depends on which action
+   * calls gtk_info_bar_response(). The @response_id depends on which action
    * widget was clicked.
    *
    * Since: 2.18
