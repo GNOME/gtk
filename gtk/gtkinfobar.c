@@ -133,7 +133,8 @@ enum
 {
   PROP_0,
   PROP_MESSAGE_TYPE,
-  PROP_SHOW_CLOSE_BUTTON
+  PROP_SHOW_CLOSE_BUTTON,
+  LAST_PROP
 };
 
 struct _GtkInfoBarPrivate
@@ -161,6 +162,7 @@ enum
   LAST_SIGNAL
 };
 
+static GParamSpec *props[LAST_PROP] = { NULL, };
 static guint signals[LAST_SIGNAL];
 
 #define ACTION_AREA_DEFAULT_BORDER 5
@@ -358,14 +360,13 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MESSAGE_TYPE,
-                                   g_param_spec_enum ("message-type",
-                                                      P_("Message Type"),
-                                                      P_("The type of message"),
-                                                      GTK_TYPE_MESSAGE_TYPE,
-                                                      GTK_MESSAGE_INFO,
-                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MESSAGE_TYPE] =
+    g_param_spec_enum ("message-type",
+                       P_("Message Type"),
+                       P_("The type of message"),
+                       GTK_TYPE_MESSAGE_TYPE,
+                       GTK_MESSAGE_INFO,
+                       GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkInfoBar:show-close-button:
@@ -374,13 +375,15 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    *
    * Since: 3.10
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SHOW_CLOSE_BUTTON,
-                                   g_param_spec_boolean ("show-close-button",
-                                                         P_("Show Close Button"),
-                                                         P_("Whether to include a standard close button"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SHOW_CLOSE_BUTTON] =
+    g_param_spec_boolean ("show-close-button",
+                          P_("Show Close Button"),
+                          P_("Whether to include a standard close button"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
+
   /**
    * GtkInfoBar::response:
    * @info_bar: the object on which the signal is emitted
@@ -1195,7 +1198,7 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
       if (type_class[priv->message_type])
         gtk_style_context_add_class (context, type_class[priv->message_type]);
 
-      g_object_notify (G_OBJECT (info_bar), "message-type");
+      g_object_notify_by_pspec (G_OBJECT (info_bar), props[PROP_MESSAGE_TYPE]);
     }
 }
 
@@ -1238,7 +1241,7 @@ gtk_info_bar_set_show_close_button (GtkInfoBar *info_bar,
     {
       info_bar->priv->show_close_button = setting;
       gtk_widget_set_visible (info_bar->priv->close_button, setting);
-      g_object_notify (G_OBJECT (info_bar), "show-close-button");
+      g_object_notify_by_pspec (G_OBJECT (info_bar), props[PROP_SHOW_CLOSE_BUTTON]);
     }
 }
 
