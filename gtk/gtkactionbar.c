@@ -511,7 +511,11 @@ gtk_action_bar_set_revealed (GtkActionBar *action_bar,
   g_return_if_fail (GTK_IS_ACTION_BAR (action_bar));
 
   revealed = !!revealed;
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), revealed);
+  if (revealed != gtk_revealer_get_reveal_child (GTK_REVEALER (priv->revealer)))
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), revealed);
+      g_object_notify_by_pspec (G_OBJECT (action_bar), props[PROP_REVEALED]);
+    }
 }
 
 /**
