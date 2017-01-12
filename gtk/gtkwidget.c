@@ -1110,7 +1110,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
       g_param_spec_boolean ("visible",
                             P_("Visible"),
                             P_("Whether the widget is visible"),
-                            FALSE,
+                            TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_SENSITIVE] =
@@ -3814,6 +3814,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   widget->priv = gtk_widget_get_instance_private (widget); 
   priv = widget->priv;
 
+  priv->visible = TRUE;
   priv->child_visible = TRUE;
   priv->name = NULL;
   priv->allocation.x = -1;
@@ -3873,6 +3874,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 
   priv->cssnode = gtk_css_widget_node_new (widget);
   gtk_css_node_set_state (priv->cssnode, priv->state_flags);
+  gtk_css_node_set_visible (priv->cssnode, TRUE);
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 }
