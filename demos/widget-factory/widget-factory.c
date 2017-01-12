@@ -203,6 +203,20 @@ activate_about (GSimpleAction *action,
     NULL
   };
   gchar *version;
+  GString *s;
+
+  s = g_string_new ("");
+
+  g_string_append (s, "System libraries\n");
+  g_string_append_printf (s, "\tGLib\t%d.%d.%d\n",
+                          glib_major_version,
+                          glib_minor_version,
+                          glib_micro_version);
+  g_string_append_printf (s, "\tGTK+\t%d.%d.%d\n",
+                          gtk_get_major_version (),
+                          gtk_get_minor_version (),
+                          gtk_get_micro_version ());
+  g_string_append_printf (s, "\nA link can apppear here: <http://www.gtk.org>");
 
   version = g_strdup_printf ("%s\nRunning against GTK+ %d.%d.%d",
                              PACKAGE_VERSION,
@@ -220,8 +234,10 @@ activate_about (GSimpleAction *action,
                          "authors", authors,
                          "logo-icon-name", "gtk3-widget-factory",
                          "title", "About GTK+ Widget Factory",
+                         "system-information", s->str,
                          NULL);
 
+  g_string_free (s, TRUE);
   g_free (version);
 }
 
