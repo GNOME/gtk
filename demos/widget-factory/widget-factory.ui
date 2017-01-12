@@ -400,17 +400,14 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
     <property name="title">GTK+ Widget Factory</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
-        <property name="visible">1</property>
         <property name="show-close-button">1</property>
         <child type="title">
           <object class="GtkStackSwitcher" id="stack_switcher">
-            <property name="visible">1</property>
             <property name="stack">toplevel_stack</property>
           </object>
         </child>
         <child>
           <object class="GtkMenuButton" id="gear_menu_button">
-            <property name="visible">1</property>
             <property name="valign">center</property>
             <property name="menu_model">gear_menu</property>
             <property name="icon-name">open-menu-symbolic</property>
@@ -423,30 +420,24 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
     </child>
     <child>
       <object class="GtkBox" id="box1">
-        <property name="visible">1</property>
         <property name="orientation">vertical</property>
         <property name="margin">10</property>
         <child>
           <object class="GtkStack" id="toplevel_stack">
-            <property name="visible">1</property>
             <property name="transition-duration">1000</property>
             <child>
               <object class="GtkBox" id="page1">
-                <property name="visible">1</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkBox" id="box2">
-                    <property name="visible">1</property>
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox" id="box3">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkComboBoxText" id="comboboxtext1">
-                            <property name="visible">1</property>
                             <property name="has_entry">1</property>
                             <child internal-child="entry">
                               <object class="GtkEntry" id="comboboxtext-entry">
@@ -465,7 +456,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkComboBoxText" id="comboboxtext2">
-                            <property name="visible">1</property>
                             <property name="sensitive">0</property>
                             <property name="has_entry">1</property>
                             <child internal-child="entry">
@@ -482,7 +472,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkEntry" id="entry1">
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="invisible_char">•</property>
                             <property name="placeholder-text" translatable="yes">Click icon to change mode</property>
@@ -496,7 +485,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkEntry" id="entry2">
-                            <property name="visible">1</property>
                             <property name="sensitive">0</property>
                             <property name="can_focus">1</property>
                             <property name="invisible_char">•</property>
@@ -509,13 +497,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box223">
-                            <property name="visible">1</property>
                             <style>
                               <class name="linked"/>
                             </style>
                             <child>
                               <object class="GtkEntry" id="entry24">
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="invisible_char">•</property>
                                 <property name="text" translatable="yes">entry</property>
@@ -526,7 +512,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkButton" id="button224">
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="icon-name">window-close-symbolic</property>
                               </object>
@@ -542,13 +527,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                             <style>
                               <class name="linked"/>
                             </style>
                             <child>
                               <object class="GtkComboBox">
-                                <property name="visible">1</property>
                                 <property name="model">lrmodel</property>
                                 <property name="active">0</property>
                                 <child>
@@ -564,7 +547,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkComboBox">
-                                <property name="visible">1</property>
                                 <property name="model">lrmodel</property>
                                 <property name="active">1</property>
                                 <child>
@@ -580,7 +562,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkComboBox">
-                                <property name="visible">1</property>
                                 <property name="model">lrmodel</property>
                                 <property name="active">2</property>
                                 <child>
@@ -598,17 +579,14 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box18">
-                            <property name="visible">1</property>
                             <property name="spacing">20</property>
                             <child>
                               <object class="GtkLabel" id="label3">
-                                <property name="visible">1</property>
                                 <property name="label" translatable="yes">label</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label4">
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                                 <property name="label" translatable="yes">label</property>
                               </object>
@@ -618,7 +596,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="spinbutton1">
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="invisible_char">•</property>
                                 <property name="width-chars">2</property>
@@ -632,7 +609,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="spinbutton2">
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="invisible_char">•</property>
                                 <property name="sensitive">0</property>
@@ -651,14 +627,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkGrid" id="grid1">
-                            <property name="visible">1</property>
                             <property name="row_homogeneous">1</property>
                             <property name="column_spacing">18</property>
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton1">
                                 <property name="label" translatable="yes">checkbutton</property>
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
                               </object>
@@ -670,7 +644,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton2">
                                 <property name="label" translatable="yes">checkbutton</property>
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                               </object>
                               <packing>
@@ -681,7 +654,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton3">
                                 <property name="label" translatable="yes">checkbutton</property>
-                                <property name="visible">1</property>
                                 <property name="inconsistent">1</property>
                                 <property name="can_focus">1</property>
                               </object>
@@ -693,7 +665,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton4">
                                 <property name="label" translatable="yes">checkbutton</property>
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -706,7 +677,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton5">
                                 <property name="label" translatable="yes">checkbutton</property>
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                                 <property name="can_focus">1</property>
                               </object>
@@ -718,7 +688,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton6">
                                 <property name="label" translatable="yes">checkbutton</property>
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                                 <property name="inconsistent">1</property>
                                 <property name="can_focus">1</property>
@@ -731,7 +700,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkRadioButton" id="radiobutton1">
                                 <property name="label" translatable="yes">radiobutton</property>
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
                               </object>
@@ -743,7 +711,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkRadioButton" id="radiobutton2">
                                 <property name="label" translatable="yes">radiobutton</property>
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
                                 <property name="group">radiobutton1</property>
@@ -756,7 +723,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkRadioButton" id="radiobutton3">
                                 <property name="label" translatable="yes">radiobutton</property>
-                                <property name="visible">1</property>
                                 <property name="inconsistent">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -770,7 +736,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkRadioButton" id="radiobutton4">
                                 <property name="label" translatable="yes">radiobutton</property>
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -783,7 +748,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkRadioButton" id="radiobutton5">
                                 <property name="label" translatable="yes">radiobutton</property>
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                                 <property name="can_focus">1</property>
                                 <property name="active">1</property>
@@ -797,7 +761,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkRadioButton" id="radiobutton6">
                                 <property name="label" translatable="yes">radiobutton</property>
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                                 <property name="inconsistent">1</property>
                                 <property name="can_focus">1</property>
@@ -811,7 +774,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkSpinner" id="spinner1">
-                                <property name="visible">1</property>
                                 <property name="active">1</property>
                               </object>
                               <packing>
@@ -821,7 +783,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkSpinner" id="spinner2">
-                                <property name="visible">1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -830,7 +791,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkSpinner" id="spinner3">
-                                <property name="visible">1</property>
                                 <property name="active">1</property>
                                 <property name="sensitive">0</property>
                               </object>
@@ -841,7 +801,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkSpinner" id="spinner4">
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                               </object>
                               <packing>
@@ -861,7 +820,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="separator1">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                       </object>
                       <packing>
@@ -870,13 +828,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkBox" id="box19">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkToggleButton" id="togglebutton1">
                             <property name="label" translatable="yes">togglebutton</property>
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
                           </object>
@@ -887,7 +843,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkToggleButton" id="togglebutton2">
                             <property name="label" translatable="yes">togglebutton</property>
-                            <property name="visible">1</property>
                             <property name="sensitive">0</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
@@ -900,7 +855,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkToggleButton" id="togglebutton3">
                             <property name="label" translatable="yes">togglebutton</property>
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
                             <property name="active">1</property>
@@ -913,7 +867,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkToggleButton" id="togglebutton4">
                             <property name="label" translatable="yes">togglebutton</property>
-                            <property name="visible">1</property>
                             <property name="sensitive">0</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
@@ -926,7 +879,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="combobox1">
-                            <property name="visible">1</property>
                             <property name="model">liststore1</property>
                             <property name="active">0</property>
                             <child>
@@ -942,7 +894,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="combobox2">
-                            <property name="visible">1</property>
                             <property name="sensitive">0</property>
                             <property name="model">liststore1</property>
                             <property name="active">1</property>
@@ -960,7 +911,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkFontButton" id="fontbutton1">
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
                           </object>
@@ -971,7 +921,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkColorButton" id="colorbutton1">
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
                             <property name="rgba">#31316867a09f</property>
@@ -983,7 +932,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkFileChooserButton" id="filechooserbutton1">
-                            <property name="visible">1</property>
                             <property name="local_only">0</property>
                           </object>
                           <packing>
@@ -993,7 +941,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkLinkButton" id="linkbutton1">
                             <property name="label" translatable="yes">link button</property>
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
                             <property name="has_tooltip">1</property>
@@ -1006,7 +953,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkSwitch" id="switch1">
-                            <property name="visible">1</property>
                             <property name="halign">center</property>
                           </object>
                           <packing>
@@ -1015,7 +961,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkSwitch" id="switch2">
-                            <property name="visible">1</property>
                             <property name="sensitive">0</property>
                             <property name="halign">center</property>
                           </object>
@@ -1031,7 +976,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="separator2">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                       </object>
                       <packing>
@@ -1040,17 +984,14 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkBox" id="box20">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="box21">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkProgressBar" id="progressbar1">
-                                <property name="visible">1</property>
                                 <property name="fraction">0.5</property>
                               </object>
                               <packing>
@@ -1059,7 +1000,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkProgressBar" id="progressbar2">
-                                <property name="visible">1</property>
                                 <property name="fraction">0.5</property>
                                 <property name="inverted">1</property>
                               </object>
@@ -1070,7 +1010,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkProgressBar" id="progressbar3">
-                                <property name="visible">1</property>
                                 <property name="fraction">0.5</property>
                                 <property name="show_text">1</property>
                               </object>
@@ -1081,7 +1020,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkLevelBar" id="levelbar1">
-                                <property name="visible">1</property>
                                 <property name="value">0.6</property>
                               </object>
                               <packing>
@@ -1090,7 +1028,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkLevelBar" id="levelbar2">
-                                <property name="visible">1</property>
                                 <property name="max-value">5</property>
                                 <property name="value">2</property>
                                 <property name="mode">1</property>
@@ -1111,16 +1048,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box27">
-                            <property name="visible">1</property>
                             <child>
                               <object class="GtkBox" id="box24">
-                                <property name="visible">1</property>
                                 <property name="hexpand">1</property>
                                 <property name="orientation">vertical</property>
                                 <property name="homogeneous">1</property>
                                 <child>
                                   <object class="GtkScale" id="scale1">
-                                    <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="adjustment">adjustment1</property>
                                     <property name="restrict_to_fill_level">0</property>
@@ -1130,7 +1064,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkScale" id="scale2">
-                                    <property name="visible">1</property>
                                     <property name="sensitive">0</property>
                                     <property name="can_focus">1</property>
                                     <property name="adjustment">adjustment1</property>
@@ -1155,7 +1088,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkScale" id="scale5">
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="draw_value">0</property>
                             <property name="has_origin">0</property>
@@ -1176,23 +1108,19 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box25">
-                            <property name="visible">1</property>
                             <property name="homogeneous">1</property>
                             <child>
                               <object class="GtkBox" id="box28">
-                                <property name="visible">1</property>
                                 <property name="vexpand">1</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkProgressBar" id="progressbar5">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="fraction">0.5</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkProgressBar" id="progressbar6">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="fraction">0.5</property>
                                     <property name="inverted">1</property>
@@ -1208,13 +1136,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkBox" id="box23">
-                                <property name="visible">1</property>
                                 <property name="vexpand">1</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkScale" id="scale3">
                                     <property name="height_request">100</property>
-                                    <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="adjustment">adjustment1</property>
@@ -1228,7 +1154,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <child>
                                   <object class="GtkScale" id="scale4">
                                     <property name="height_request">100</property>
-                                    <property name="visible">1</property>
                                     <property name="sensitive">0</property>
                                     <property name="can_focus">1</property>
                                     <property name="orientation">vertical</property>
@@ -1262,7 +1187,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="separator3">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                       </object>
                       <packing>
@@ -1271,17 +1195,14 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkBox" id="box26">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="homogeneous">1</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkFrame" id="frame1">
-                            <property name="visible">1</property>
                             <property name="shadow_type">in</property>
                             <child type="label">
                               <object class="GtkLabel" id="label1">
-                                <property name="visible">1</property>
                                 <property name="label" translatable="yes">&lt;b&gt;In&lt;/b&gt;</property>
                                 <property name="use_markup">1</property>
                               </object>
@@ -1293,11 +1214,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkFrame" id="frame2">
-                            <property name="visible">1</property>
                             <property name="shadow_type">out</property>
                             <child type="label">
                               <object class="GtkLabel" id="label2">
-                                <property name="visible">1</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Out&lt;/b&gt;</property>
                                 <property name="use_markup">1</property>
                               </object>
@@ -1310,10 +1229,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkFrame" id="frame3">
-                            <property name="visible">1</property>
                             <child type="label">
                               <object class="GtkLabel" id="label17">
-                                <property name="visible">1</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Etched in&lt;/b&gt;</property>
                                 <property name="use_markup">1</property>
                               </object>
@@ -1326,11 +1243,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkFrame" id="frame4">
-                            <property name="visible">1</property>
                             <property name="shadow_type">etched-out</property>
                             <child type="label">
                               <object class="GtkLabel" id="label18">
-                                <property name="visible">1</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Etched out&lt;/b&gt;</property>
                                 <property name="use_markup">1</property>
                               </object>
@@ -1349,7 +1264,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="separator4">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                       </object>
                       <packing>
@@ -1358,19 +1272,16 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkBox" id="box4">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow1">
                             <property name="width_request">150</property>
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="vscrollbar_policy">always</property>
                             <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTreeView" id="treeview1">
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="model">liststore1</property>
                                 <property name="headers_clickable">0</property>
@@ -1445,12 +1356,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow2">
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTextView" id="textview1">
-                                <property name="visible">1</property>
                                 <property name="can_focus">1</property>
                                 <property name="buffer">textbuffer1</property>
                                 <property name="wrap_mode">2</property>
@@ -1478,7 +1387,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                 </child>
                 <child>
                   <object class="GtkSeparator" id="separator5">
-                    <property name="visible">1</property>
                   </object>
                   <packing>
                     <property name="position">3</property>
@@ -1486,22 +1394,18 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                 </child>
                 <child>
                   <object class="GtkBox" id="box5">
-                    <property name="visible">1</property>
                     <property name="spacing">10</property>
                     <property name="homogeneous">1</property>
                     <child>
                       <object class="GtkNotebook" id="notebook1">
-                        <property name="visible">1</property>
                         <property name="can_focus">1</property>
                         <child>
                           <object class="GtkBox" id="box6">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label5">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 1</property>
                           </object>
                           <packing>
@@ -1510,7 +1414,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box7">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1519,7 +1422,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label6">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 2</property>
                           </object>
                           <packing>
@@ -1529,7 +1431,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box8">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1538,7 +1439,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label7">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 3</property>
                           </object>
                           <packing>
@@ -1550,18 +1450,15 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkNotebook" id="notebook2">
-                        <property name="visible">1</property>
                         <property name="can_focus">1</property>
                         <property name="tab_pos">right</property>
                         <child>
                           <object class="GtkBox" id="box9">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label8">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 1</property>
                           </object>
                           <packing>
@@ -1570,7 +1467,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box10">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1579,7 +1475,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label9">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 2</property>
                           </object>
                           <packing>
@@ -1589,7 +1484,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box11">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1598,7 +1492,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label10">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 3</property>
                           </object>
                           <packing>
@@ -1613,18 +1506,15 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkNotebook" id="notebook3">
-                        <property name="visible">1</property>
                         <property name="can_focus">1</property>
                         <property name="tab_pos">bottom</property>
                         <child>
                           <object class="GtkBox" id="box12">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label11">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 1</property>
                           </object>
                           <packing>
@@ -1633,7 +1523,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box13">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1642,7 +1531,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label12">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 2</property>
                           </object>
                           <packing>
@@ -1652,7 +1540,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box14">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1661,7 +1548,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label13">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 3</property>
                           </object>
                           <packing>
@@ -1676,18 +1562,15 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                     <child>
                       <object class="GtkNotebook" id="notebook4">
-                        <property name="visible">1</property>
                         <property name="can_focus">1</property>
                         <property name="tab_pos">left</property>
                         <child>
                           <object class="GtkBox" id="box15">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label14">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 1</property>
                           </object>
                           <packing>
@@ -1696,7 +1579,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box16">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1705,7 +1587,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label15">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 2</property>
                           </object>
                           <packing>
@@ -1715,7 +1596,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box17">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -1724,7 +1604,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel" id="label16">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">page 3</property>
                           </object>
                           <packing>
@@ -1751,26 +1630,21 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             </child>
             <child>
               <object class="GtkOverlay" id="page2">
-                <property name="visible">1</property>
                 <child type="overlay">
                   <object class="GtkRevealer" id="page2revealer">
-                    <property name="visible">1</property>
                     <property name="halign">center</property>
                     <property name="valign">start</property>
                     <child>
                       <object class="GtkFrame" id="page2frame">
-                        <property name="visible">1</property>
                         <style>
                           <class name="app-notification"/>
                         </style>
                         <child>
                           <object class="GtkBox" id="page2box">
-                            <property name="visible">1</property>
                             <property name="spacing">20</property>
                             <property name="margin">10</property>
                             <child>
                               <object class="GtkLabel" id="page2note">
-                                <property name="visible">1</property>
                                 <property name="hexpand">1</property>
                                 <property name="halign">start</property>
                                 <property name="label">NEWS!</property>
@@ -1778,14 +1652,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkButton" id="page2reset">
-                                <property name="visible">1</property>
                                 <property name="valign">center</property>
                                 <property name="label" translatable="yes">Reset</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkButton" id="page2dismiss">
-                                <property name="visible">1</property>
                                 <property name="focus-on-click">0</property>
                                 <property name="relief">none</property>
                                 <property name="icon-name">window-close-symbolic</property>
@@ -1799,27 +1671,22 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkSpinButton" id="verticalspin1">
-                                <property name="visible">1</property>
                                 <property name="orientation">vertical</property>
                                 <property name="adjustment">adjustment2</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="verticalspin2">
-                                <property name="visible">1</property>
                                 <property name="sensitive">0</property>
                                 <property name="orientation">vertical</property>
                                 <property name="adjustment">adjustment2</property>
@@ -1827,14 +1694,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkGrid">
-                                <property name="visible">1</property>
                                 <property name="row-spacing">6</property>
                                 <property name="column-spacing">6</property>
                                 <property name="halign">center</property>
                                 <property name="valign">center</property>
                                 <child>
                                   <object class="GtkVolumeButton">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="valign">center</property>
                                     <property name="value">.5</property>
@@ -1847,7 +1712,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkScaleButton" id="mic-button">
-                                    <property name="visible">1</property>
                                     <property name="has-tooltip">1</property>
                                     <property name="icons">microphone-sensitivity-muted-symbolic
 microphone-sensitivity-high-symbolic
@@ -1870,28 +1734,22 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkSeparator">
-                            <property name="visible">1</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkFrame" id="page2frame1">
-                            <property name="visible">1</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkStack" id="stack">
-                                    <property name="visible">1</property>
                                     <property name="transition-type">crossfade</property>
                                     <property name="transition-duration">1000</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="swo">
-                                        <property name="visible">1</property>
                                         <property name="hscrollbar_policy">never</property>
                                         <child>
                                           <object class="GtkTextView" id="tvo">
-                                            <property name="visible">1</property>
                                             <property name="can_focus">1</property>
                                             <property name="buffer">textbuffer2</property>
                                             <property name="left_margin">10</property>
@@ -1907,7 +1765,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkImage" id="imageo">
-                                        <property name="visible">1</property>
                                         <property name="icon-name">gtk3-widget-factory</property>
                                         <property name="pixel-size">256</property>
                                       </object>
@@ -1921,17 +1778,14 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkActionBar" id="actionbar1">
-                                    <property name="visible">1</property>
                                     <child type="center">
                                       <object class="GtkStackSwitcher" id="switcher">
-                                        <property name="visible">1</property>
                                         <property name="stack">stack</property>
                                         <property name="halign">center</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkMenuButton">
-                                        <property name="visible">1</property>
                                         <property name="menu-model">dinner_menu</property>
                                         <property name="halign">center</property>
                                         <property name="valign">center</property>
@@ -1949,30 +1803,24 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkSeparator">
-                            <property name="visible">1</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkScrolledWindow">
-                            <property name="visible">1</property>
                             <property name="shadow-type">in</property>
                             <property name="hscrollbar-policy">never</property>
                             <property name="min-content-height">200</property>
                             <child>
                               <object class="GtkListBox" id="listbox">
-                                <property name="visible">1</property>
                                 <property name="selection-mode">none</property>
                                 <child>
                                   <object class="GtkListBoxRow" id="listboxrow1">
-                                    <property name="visible">1</property>
                                     <property name="activatable">0</property>
                                     <property name="selectable">0</property>
                                     <child>
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label" translatable="yes">Row 1</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
@@ -1984,7 +1832,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkSwitch" id="listboxrow1switch">
-                                            <property name="visible">1</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="margin-top">6</property>
@@ -1999,14 +1846,11 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkListBoxRow" id="listboxrow2">
-                                    <property name="visible">1</property>
                                     <property name="activatable">0</property>
                                     <child>
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label" translatable="yes">Row 2</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
@@ -2018,7 +1862,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkScale">
-                                            <property name="visible">1</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="margin-top">6</property>
@@ -2036,13 +1879,10 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkListBoxRow" id="listboxrow3">
-                                    <property name="visible">1</property>
                                     <child>
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label" translatable="yes">Row 3</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
@@ -2054,7 +1894,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkImage" id="listboxrow3image">
-                                            <property name="visible">1</property>
                                             <property name="icon-name">object-select-symbolic</property>
                                             <property name="icon-size">1</property>
                                             <property name="halign">end</property>
@@ -2072,13 +1911,10 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkListBoxRow" id="listboxrow4">
-                                    <property name="visible">1</property>
                                     <child>
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label" translatable="yes">Row 4</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
@@ -2090,7 +1926,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkImage">
-                                            <property name="visible">1</property>
                                             <property name="icon-name">object-select-symbolic</property>
                                             <property name="icon-size">1</property>
                                             <property name="halign">end</property>
@@ -2108,14 +1943,11 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkListBoxRow" id="listboxrow5">
-                                    <property name="visible">1</property>
                                     <property name="activatable">0</property>
                                     <child>
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label" translatable="yes">Row 5</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
@@ -2127,7 +1959,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkButton" id="listboxrow5button">
-                                            <property name="visible">1</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="margin-top">6</property>
@@ -2143,14 +1974,11 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkListBoxRow" id="listboxrow6">
-                                    <property name="visible">1</property>
                                     <property name="activatable">0</property>
                                     <child>
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label" translatable="yes">Row 6</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
@@ -2162,7 +1990,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkCheckButton">
-                                            <property name="visible">1</property>
                                             <property name="halign">end</property>
                                             <property name="valign">center</property>
                                             <property name="margin-top">6</property>
@@ -2183,70 +2010,57 @@ microphone-sensitivity-medium-symbolic</property>
                     </child>
                     <child>
                       <object class="GtkSeparator">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkFrame" id="page2frame2">
-                            <property name="visible">1</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkMenuBar">
-                                    <property name="visible">1</property>
                                     <child>
                                       <object class="GtkMenuItem" id="menuitem1">
-                                        <property name="visible">1</property>
                                         <property name="label" translatable="yes">_File</property>
                                         <property name="use_underline">1</property>
                                         <child type="submenu">
                                           <object class="GtkMenu" id="menu1">
-                                            <property name="visible">1</property>
                                             <child>
                                               <object class="GtkMenuItem" id="menuitem101">
                                                 <property name="label" translatable="yes">_New</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkMenuItem" id="menuitem102">
                                                 <property name="label" translatable="yes">_Open</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkMenuItem" id="menuitem103">
                                                 <property name="label" translatable="yes">_Save</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkMenuItem" id="menuitem104">
                                                 <property name="label" translatable="yes">Save _As</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
-                                                <property name="visible">1</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkMenuItem" id="quitmenuitem">
                                                 <property name="label" translatable="yes">_Quit</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">app.quit</property>
                                               </object>
@@ -2257,16 +2071,13 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkMenuItem" id="menuitem2">
-                                        <property name="visible">1</property>
                                         <property name="label" translatable="yes">_Edit</property>
                                         <property name="use_underline">1</property>
                                         <child type="submenu">
                                           <object class="GtkMenu" id="menu2">
-                                            <property name="visible">1</property>
                                             <child>
                                               <object class="GtkMenuItem" id="menuitem106">
                                                 <property name="label" translatable="yes">Cu_t</property>
-                                                <property name="visible">1</property>
                                                 <property name="can_focus">1</property>
                                                 <property name="use_underline">1</property>
                                               </object>
@@ -2274,21 +2085,18 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkMenuItem" id="menuitem107">
                                                 <property name="label" translatable="yes">_Copy</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkMenuItem" id="menuitem108">
                                                 <property name="label" translatable="yes">_Paste</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                               </object>
                                             </child>
                                             <child>
                                               <object class="GtkMenuItem" id="deletemenuitem">
                                                 <property name="label" translatable="yes">_Delete</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.delete</property>
                                               </object>
@@ -2296,7 +2104,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkMenuItem" id="searchmenuitem">
                                                 <property name="label" translatable="yes">_Search</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.search</property>
                                               </object>
@@ -2304,16 +2111,13 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkMenuItem" id="togglesmenuitem">
                                                 <property name="label">Checks &amp; Radios</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                                 <child type="submenu">
                                                   <object class="GtkMenu" id="togglessubmenu">
-                                                    <property name="visible">1</property>
                                                     <child>
                                                       <object class="GtkCheckMenuItem" id="checkmenuitem1">
                                                         <property name="label">_Check</property>
                                                         <property name="active">1</property>
-                                                        <property name="visible">1</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2321,7 +2125,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                       <object class="GtkCheckMenuItem" id="checkmenuitem2">
                                                         <property name="label">_Check</property>
                                                         <property name="active">1</property>
-                                                        <property name="visible">1</property>
                                                         <property name="sensitive">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
@@ -2329,7 +2132,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                     <child>
                                                       <object class="GtkCheckMenuItem" id="checkmenuitem3">
                                                         <property name="label">_Check</property>
-                                                        <property name="visible">1</property>
                                                         <property name="inconsistent">1</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
@@ -2337,14 +2139,12 @@ microphone-sensitivity-medium-symbolic</property>
                                                     <child>
                                                       <object class="GtkCheckMenuItem" id="checkmenuitem4">
                                                         <property name="label">_Check</property>
-                                                        <property name="visible">1</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
                                                     <child>
                                                       <object class="GtkCheckMenuItem" id="checkmenuitem5">
                                                         <property name="label">_Check</property>
-                                                        <property name="visible">1</property>
                                                         <property name="sensitive">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
@@ -2352,7 +2152,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                     <child>
                                                       <object class="GtkCheckMenuItem" id="checkmenuitem6">
                                                         <property name="label">_Check</property>
-                                                        <property name="visible">1</property>
                                                         <property name="inconsistent">1</property>
                                                         <property name="sensitive">0</property>
                                                         <property name="use_underline">1</property>
@@ -2360,14 +2159,12 @@ microphone-sensitivity-medium-symbolic</property>
                                                     </child>
                                                     <child>
                                                       <object class="GtkSeparatorMenuItem" id="separatormenuitem">
-                                                        <property name="visible">1</property>
                                                       </object>
                                                     </child>
                                                     <child>
                                                       <object class="GtkRadioMenuItem" id="radiomenuitem1">
                                                         <property name="label">_Radio</property>
                                                         <property name="active">1</property>
-                                                        <property name="visible">1</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
@@ -2375,7 +2172,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                       <object class="GtkRadioMenuItem" id="radiomenuitem2">
                                                         <property name="label">_Radio</property>
                                                         <property name="active">1</property>
-                                                        <property name="visible">1</property>
                                                         <property name="sensitive">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
@@ -2383,7 +2179,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                     <child>
                                                       <object class="GtkRadioMenuItem" id="radiomenuitem3">
                                                         <property name="label">_Radio</property>
-                                                        <property name="visible">1</property>
                                                         <property name="inconsistent">1</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
@@ -2391,14 +2186,12 @@ microphone-sensitivity-medium-symbolic</property>
                                                     <child>
                                                       <object class="GtkRadioMenuItem" id="radiomenuitem4">
                                                         <property name="label">_Radio</property>
-                                                        <property name="visible">1</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
                                                     </child>
                                                     <child>
                                                       <object class="GtkRadioMenuItem" id="radiomenuitem5">
                                                         <property name="label">_Radio</property>
-                                                        <property name="visible">1</property>
                                                         <property name="sensitive">0</property>
                                                         <property name="use_underline">1</property>
                                                       </object>
@@ -2406,7 +2199,6 @@ microphone-sensitivity-medium-symbolic</property>
                                                     <child>
                                                       <object class="GtkRadioMenuItem" id="radiomenuitem6">
                                                         <property name="label">_Radio</property>
-                                                        <property name="visible">1</property>
                                                         <property name="inconsistent">1</property>
                                                         <property name="sensitive">0</property>
                                                         <property name="use_underline">1</property>
@@ -2422,16 +2214,13 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkMenuItem" id="menuitem3">
-                                        <property name="visible">1</property>
                                         <property name="label" translatable="yes">_View</property>
                                         <property name="use_underline">1</property>
                                         <child type="submenu">
                                           <object class="GtkMenu" id="view-menu">
-                                            <property name="visible">1</property>
                                             <child>
                                               <object class="GtkCheckMenuItem" id="darkmenuitem">
                                                 <property name="label">_Dark theme</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.dark</property>
                                               </object>
@@ -2439,7 +2228,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkCheckMenuItem" id="toolbarmenuitem">
                                                 <property name="label">_Toolbar</property>
-                                                <property name="visible">1</property>
                                                 <property name="active">1</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.toolbar</property>
@@ -2448,7 +2236,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkCheckMenuItem" id="statusbarmenuitem">
                                                 <property name="label">_Statusbar</property>
-                                                <property name="visible">1</property>
                                                 <property name="active">1</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.statusbar</property>
@@ -2457,7 +2244,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <child>
                                               <object class="GtkMenuItem" id="bgmenuitem">
                                                 <property name="label">_Select Background</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">win.background</property>
                                               </object>
@@ -2468,16 +2254,13 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkMenuItem" id="menuitem4">
-                                        <property name="visible">1</property>
                                         <property name="label" translatable="yes">_Help</property>
                                         <property name="use_underline">1</property>
                                         <child type="submenu">
                                           <object class="GtkMenu" id="menu3">
-                                            <property name="visible">1</property>
                                             <child>
                                               <object class="GtkMenuItem" id="aboutmenuitem">
                                                 <property name="label" translatable="yes">_About</property>
-                                                <property name="visible">1</property>
                                                 <property name="use_underline">1</property>
                                                 <property name="action_name">app.about</property>
                                               </object>
@@ -2490,10 +2273,8 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkToolbar" id="toolbar">
-                                    <property name="visible">1</property>
                                     <child>
                                       <object class="GtkToolButton">
-                                        <property name="visible">1</property>
                                         <property name="label" translatable="yes">New</property>
                                         <property name="icon-name">document-new</property>
                                         <property name="tooltip-text" translatable="yes">Create a new document</property>
@@ -2501,7 +2282,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton">
-                                        <property name="visible">1</property>
                                         <property name="label" translatable="yes">Save</property>
                                         <property name="icon-name">document-save</property>
                                         <property name="tooltip-text" translatable="yes">Save the current document</property>
@@ -2509,7 +2289,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton">
-                                        <property name="visible">1</property>
                                         <property name="label" translatable="yes">Search</property>
                                         <property name="icon-name">edit-find</property>
                                         <property name="action-name">win.search</property>
@@ -2518,7 +2297,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton">
-                                        <property name="visible">1</property>
                                         <property name="sensitive">0</property>
                                         <property name="label" translatable="yes">Insert</property>
                                         <property name="icon-name">insert-image</property>
@@ -2529,23 +2307,21 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkSearchBar" id="searchbar">
-                                    <property name="visible">1</property>
                                     <child>
                                       <object class="GtkSearchEntry">
-                                        <property name="visible">1</property>
                                       </object>
                                     </child>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkInfoBar" id="infobar">
+                                    <property name="visible">0</property>
                                     <property name="show-close-button">1</property>
                                     <property name="no-show-all">1</property>
                                     <child internal-child="content_area">
                                       <object class="GtkBox">
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label">You wanted to delete something.</property>
                                           </object>
                                         </child>
@@ -2555,7 +2331,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkScrolledWindow">
-                                    <property name="visible">1</property>
                                     <property name="shadow_type">in</property>
                                     <property name="vexpand">1</property>
                                     <child>
@@ -2572,7 +2347,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkStatusbar" id="statusbar">
-                                    <property name="visible">1</property>
                                     <property name="no-show-all">1</property>
                                   </object>
                                 </child>
@@ -2582,35 +2356,29 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkSeparator">
-                            <property name="visible">1</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                             <child>
                               <object class="GtkBox">
                                 <property name="spacing">10</property>
                                 <property name="expand">1</property>
                                 <child>
                                   <object class="GtkFrame" id="panedframe1">
-                                    <property name="visible">1</property>
                                     <property name="expand">1</property>
                                     <child>
                                       <object class="GtkPaned">
-                                        <property name="visible">1</property>
                                         <style>
                                           <class name="view"/>
                                         </style>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label">Left</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label">Right</property>
                                           </object>
                                         </child>
@@ -2620,24 +2388,20 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkFrame" id="panedframe2">
-                                    <property name="visible">1</property>
                                     <property name="expand">1</property>
                                     <child>
                                       <object class="GtkPaned">
-                                        <property name="visible">1</property>
                                         <property name="orientation">vertical</property>
                                         <style>
                                           <class name="view"/>
                                         </style>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label">Top</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label">Bottom</property>
                                           </object>
                                         </child>
@@ -2656,45 +2420,37 @@ microphone-sensitivity-medium-symbolic</property>
                     </child>
                     <child>
                       <object class="GtkSeparator">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkBox" id="filler2">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkCalendar">
-                            <property name="visible">1</property>
                             <property name="halign">center</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkSeparator">
-                            <property name="visible">1</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkExpander" id="expander1">
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="expanded">1</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkScrolledWindow" id="scrolledwindow3">
-                                    <property name="visible">1</property>
                                     <property name="can_focus">1</property>
                                     <property name="shadow_type">in</property>
                                     <property name="margin-top">6</property>
                                     <property name="height_request">226</property>
                                     <child>
                                       <object class="GtkIconView" id="iconview1">
-                                        <property name="visible">1</property>
                                         <property name="can_focus">1</property>
                                         <property name="selection_mode">multiple</property>
                                         <property name="model">iconsmodel</property>
@@ -2712,7 +2468,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkToolbar">
-                                    <property name="visible">1</property>
                                     <property name="icon-size">1</property>
                                     <property name="toolbar-style">icons</property>
                                     <style>
@@ -2720,7 +2475,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </style>
                                     <child>
                                       <object class="GtkToolButton" id="decrease_button">
-                                        <property name="visible">1</property>
                                         <property name="icon-name">zoom-out-symbolic</property>
                                         <property name="label">Remove item</property>
                                         <signal name="clicked" handler="decrease_icon_size" object="iconview1" swapped="yes"/>
@@ -2728,7 +2482,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton" id="increase_button">
-                                        <property name="visible">1</property>
                                         <property name="icon-name">zoom-in-symbolic</property>
                                         <property name="label">Add item</property>
                                         <signal name="clicked" handler="increase_icon_size" object="iconview1" swapped="yes"/>
@@ -2736,7 +2489,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkToolButton" id="reset_button">
-                                        <property name="visible">1</property>
                                         <property name="icon-name">zoom-original-symbolic</property>
                                         <property name="label">Refresh</property>
                                         <signal name="clicked" handler="reset_icon_size" object="iconview1" swapped="yes"/>
@@ -2748,7 +2500,6 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child type="label">
                               <object class="GtkLabel" id="label19">
-                                <property name="visible">1</property>
                                 <property name="label" translatable="yes">Expander</property>
                               </object>
                             </child>
@@ -2756,28 +2507,24 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkButton" id="info_dialog_button">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">_Inform</property>
                             <property name="use_underline">1</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="action_dialog_button">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">_Act</property>
                             <property name="use_underline">1</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="preference_dialog_button">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">_Configure</property>
                             <property name="use_underline">1</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="selection_dialog_button">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">_Select</property>
                             <property name="use_underline">1</property>
                           </object>
@@ -2794,21 +2541,17 @@ microphone-sensitivity-medium-symbolic</property>
             </child>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">1</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">4</property>
                         <child>
                           <object class="GtkScrolledWindow">
-                            <property name="visible">1</property>
                             <property name="hscrollbar-policy">never</property>
                             <property name="vscrollbar-policy">always</property>
                             <property name="height-request">300</property>
@@ -2816,7 +2559,6 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="shadow-type">in</property>
                             <child>
                               <object class="GtkTreeView" id="charletree">
-                                <property name="visible">1</property>
                                 <property name="enable-grid-lines">vertical</property>
                                 <property name="enable-tree-lines">1</property>
                                 <property name="rubber-banding">1</property>
@@ -2865,7 +2607,6 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="selectable">1</property>
                             <property name="halign">start</property>
                             <property name="use-markup">1</property>
@@ -2876,18 +2617,15 @@ microphone-sensitivity-medium-symbolic</property>
                     </child>
                     <child>
                       <object class="GtkSeparator">
-                        <property name="visible">1</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="visible">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <property name="vexpand">1</property>
                         <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkListBox" id="munsell">
-                            <property name="visible">1</property>
                             <property name="selection-mode">multiple</property>
                             <property name="activate-on-single-click">0</property>
                           </object>
@@ -2898,28 +2636,23 @@ microphone-sensitivity-medium-symbolic</property>
                 </child>
                 <child>
                   <object class="GtkSeparator">
-                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">1</property>
                         <property name="halign">start</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="lockbox">
-                            <property name="visible">1</property>
                             <property name="halign">start</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkMenuButton" id="open_menubutton">
-                                <property name="visible">1</property>
                                 <property name="halign">center</property>
                                 <property name="popover">open_popover</property>
                                 <style>
@@ -2928,18 +2661,15 @@ microphone-sensitivity-medium-symbolic</property>
                                 </style>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="visible">1</property>
                                     <property name="spacing">6</property>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="visible">1</property>
                                         <property name="valign">baseline</property>
                                         <property name="label">Open</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkImage">
-                                        <property name="visible">1</property>
                                         <property name="valign">baseline</property>
                                         <property name="icon_name">pan-down-symbolic</property>
                                       </object>
@@ -2950,7 +2680,6 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkToggleButton" id="record_button">
-                                <property name="visible">1</property>
                                 <property name="halign">center</property>
                                 <signal name="toggled" handler="on_record_button_toggled"/>
                                 <style>
@@ -2960,18 +2689,15 @@ microphone-sensitivity-medium-symbolic</property>
                                 </style>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="visible">1</property>
                                     <property name="spacing">6</property>
                                     <child>
                                       <object class="GtkImage">
-                                        <property name="visible">1</property>
                                         <property name="valign">baseline</property>
                                         <property name="icon_name">media-record-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="visible">1</property>
                                         <property name="valign">baseline</property>
                                         <property name="label">Record</property>
                                       </object>
@@ -2982,13 +2708,11 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <style>
                                   <class name="linked"/>
                                 </style>
                                 <child>
                                   <object class="GtkRadioButton" id="grid_button">
-                                    <property name="visible">1</property>
                                     <property name="draw-indicator">0</property>
                                     <property name="active">1</property>
                                     <property name="icon-name">view-grid-symbolic</property>
@@ -2997,7 +2721,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 <child>
                                   <object class="GtkRadioButton" id="list_button">
                                     <property name="active">1</property>
-                                    <property name="visible">1</property>
                                     <property name="draw-indicator">0</property>
                                     <property name="group">grid_button</property>
                                     <property name="icon-name">view-list-symbolic</property>
@@ -3007,7 +2730,6 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkButton" id="circular_button">
-                                <property name="visible">1</property>
                                 <property name="icon-name">emblem-system-symbolic</property>
                                 <style>
                                   <class name="circular"/>
@@ -3018,34 +2740,27 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkLockButton" id="lockbutton">
-                            <property name="visible">1</property>
                           </object>
                         </child>
                       </object>
                     </child>
                     <child>
                       <object class="GtkSeparator">
-                        <property name="visible">1</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkFrame">
-                        <property name="visible">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                             <child>
                               <object class="GtkStackSidebar">
-                                <property name="visible">1</property>
                                 <property name="stack">sidebar_stack</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkStack" id="sidebar_stack">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="margin">20</property>
                                     <property name="spacing">10</property>
@@ -3053,13 +2768,11 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="valign">center</property>
                                     <child>
                                       <object class="GtkEntry">
-                                        <property name="visible">1</property>
                                         <property name="placeholder-text">First Name</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkEntry">
-                                        <property name="visible">1</property>
                                         <property name="placeholder-text">Last Name</property>
                                       </object>
                                     </child>
@@ -3071,7 +2784,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="margin">20</property>
                                     <property name="spacing">10</property>
@@ -3079,11 +2791,9 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="valign">center</property>
                                     <child>
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkComboBoxText">
-                                            <property name="visible">1</property>
                                             <property name="active">9</property>
                                             <items>
                                               <item>1</item>
@@ -3122,7 +2832,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkComboBoxText">
-                                            <property name="visible">1</property>
                                             <property name="active">9</property>
                                             <items>
                                               <item>January</item>
@@ -3144,7 +2853,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkEntry">
-                                        <property name="visible">1</property>
                                         <property name="placeholder-text">Year</property>
                                       </object>
                                     </child>
@@ -3156,7 +2864,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="margin">20</property>
                                     <property name="halign">center</property>
@@ -3166,19 +2873,16 @@ microphone-sensitivity-medium-symbolic</property>
                                     </style>
                                     <child>
                                       <object class="GtkEntry">
-                                        <property name="visible">1</property>
                                         <property name="placeholder-text">Street</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkEntry">
-                                        <property name="visible">1</property>
                                         <property name="placeholder-text">City</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkEntry">
-                                        <property name="visible">1</property>
                                         <property name="placeholder-text">Province</property>
                                       </object>
                                     </child>
@@ -3190,7 +2894,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="margin">20</property>
                                     <property name="halign">center</property>
@@ -3200,7 +2903,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </style>
                                     <child>
                                       <object class="GtkComboBoxText" id="page_combo">
-                                        <property name="visible">1</property>
                                         <property name="active">0</property>
                                         <signal name="changed" handler="on_page_combo_changed"/>
                                         <items>
@@ -3214,21 +2916,18 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkSpinButton" id="range_from_spin">
-                                        <property name="visible">1</property>
                                         <property name="adjustment">pg_adjustment</property>
                                         <signal name="value-changed" handler="on_range_from_changed"/>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkSpinButton" id="range_to_spin">
-                                        <property name="visible">1</property>
                                         <property name="adjustment">pg_adjustment2</property>
                                         <signal name="value-changed" handler="on_range_to_changed"/>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="print_button">
-                                        <property name="visible">1</property>
                                         <property name="label">Print</property>
                                       </object>
                                     </child>
@@ -3246,37 +2945,30 @@ microphone-sensitivity-medium-symbolic</property>
                     </child>
                     <child>
                       <object class="GtkFrame">
-                        <property name="visible">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                             <child>
                               <object class="GtkToolbar">
-                                <property name="visible">1</property>
                                 <property name="orientation">vertical</property>
                                 <property name="toolbar-style">icons</property>
                                 <property name="icon-size">1</property>
                                 <child>
                                   <object class="GtkToolButton" id="toolbutton1">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">document-open-symbolic</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkToolButton" id="toolbutton2">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">send-to-symbolic</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkToolButton" id="toolbutton3">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">view-fullscreen-symbolic</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkToolButton" id="toolbutton4">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">star-new-symbolic</property>
                                   </object>
                                 </child>
@@ -3284,10 +2976,8 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkScrolledWindow">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkTextView" id="tooltextview">
-                                    <property name="visible">1</property>
                                   </object>
                                 </child>
                               </object>
@@ -3297,33 +2987,28 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <property name="orientation">vertical</property>
                                 <property name="margin">6</property>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <style>
                                       <class name="linked"/>
                                     </style>
                                     <child>
                                       <object class="GtkButton" id="cutbutton">
-                                        <property name="visible">1</property>
                                         <property name="sensitive">0</property>
                                         <property name="icon-name">edit-cut-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="copybutton">
-                                        <property name="visible">1</property>
                                         <property name="sensitive">0</property>
                                         <property name="icon-name">edit-copy-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="pastebutton">
-                                        <property name="visible">1</property>
                                         <property name="sensitive">0</property>
                                         <property name="icon-name">edit-paste-symbolic</property>
                                       </object>
@@ -3332,7 +3017,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="deletebutton">
-                                    <property name="visible">1</property>
                                     <property name="sensitive">0</property>
                                     <property name="valign">end</property>
                                     <property name="icon-name">edit-delete-symbolic</property>
@@ -3349,9 +3033,9 @@ microphone-sensitivity-medium-symbolic</property>
                     </child>
                     <child>
                       <object class="GtkOverlay">
-                        <property name="visible">1</property>
                         <child type="overlay">
                           <object class="GtkToolbar" id="totem_like_osd">
+                            <property name="visible">0</property>
                             <property name="no-show-all">1</property>
                             <property name="opacity">0.9</property>
                             <property name="margin">20</property>
@@ -3361,22 +3045,18 @@ microphone-sensitivity-medium-symbolic</property>
                             </style>
                             <child>
                               <object class="GtkToolItem">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkBox">
-                                    <property name="visible">1</property>
                                     <style>
                                       <class name="linked"/>
                                     </style>
                                     <child>
                                       <object class="GtkButton">
-                                        <property name="visible">1</property>
                                         <property name="icon-name">pan-start-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton">
-                                        <property name="visible">1</property>
                                         <property name="icon-name">pan-end-symbolic</property>
                                       </object>
                                     </child>
@@ -3386,10 +3066,8 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkToolItem">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkScale">
-                                    <property name="visible">1</property>
                                     <property name="draw-value">0</property>
                                     <property name="adjustment">adjustment1</property>
                                   </object>
@@ -3401,10 +3079,8 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkToolItem">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkVolumeButton">
-                                    <property name="visible">1</property>
                                     <property name="orientation">vertical</property>
                                     <property name="value">.5</property>
                                     <style>
@@ -3418,19 +3094,15 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkFrame" id="osd_frame">
-                            <property name="visible">1</property>
                             <signal name="button-press-event" handler="osd_frame_button_press"/>
                             <child>
                               <object class="GtkPaned">
-                                <property name="visible">1</property>
                                 <property name="wide-handle">1</property>
                                 <child>
                                   <object class="GtkNotebook">
-                                    <property name="visible">1</property>
                                     <property name="show-border">0</property>
                                     <child>
                                       <object class="GtkBox" id="closable_page_1">
-                                        <property name="visible">1</property>
                                         <property name="height-request">120</property>
                                       </object>
                                       <packing>
@@ -3439,16 +3111,13 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child type="tab">
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <child type="center">
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label" translatable="yes">Page 1</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkButton">
-                                            <property name="visible">1</property>
                                             <property name="relief">none</property>
                                             <property name="focus-on-click">0</property>
                                             <property name="icon-name">window-close-symbolic</property>
@@ -3465,7 +3134,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkBox" id="closable_page_2">
-                                        <property name="visible">1</property>
                                         <property name="vexpand">1</property>
                                       </object>
                                       <packing>
@@ -3474,16 +3142,13 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child type="tab">
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <child type="center">
                                           <object class="GtkLabel">
-                                            <property name="visible">1</property>
                                             <property name="label" translatable="yes">Page 2</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkButton">
-                                            <property name="visible">1</property>
                                             <property name="relief">none</property>
                                             <property name="focus-on-click">0</property>
                                             <property name="icon-name">window-close-symbolic</property>
@@ -3502,17 +3167,14 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkNotebook">
-                                    <property name="visible">1</property>
                                     <property name="show-border">0</property>
                                     <child>
                                       <object class="GtkBox">
-                                        <property name="visible">1</property>
                                         <property name="vexpand">1</property>
                                       </object>
                                     </child>
                                     <child type="tab">
                                       <object class="GtkLabel">
-                                        <property name="visible">1</property>
                                         <property name="label" translatable="yes">Page 3</property>
                                       </object>
                                     </child>
@@ -3528,22 +3190,18 @@ microphone-sensitivity-medium-symbolic</property>
                 </child>
                 <child>
                   <object class="GtkSeparator">
-                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">1</property>
                         <property name="halign">center</property>
                         <child>
                           <object class="GtkEntry">
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="placeholder_text" translatable="yes">Name…</property>
                             <property name="completion">name_completion</property>
@@ -3551,7 +3209,6 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkEntry">
-                            <property name="visible">1</property>
                             <property name="can_focus">1</property>
                             <property name="placeholder_text" translatable="yes">Age…</property>
                           </object>
@@ -3566,17 +3223,14 @@ microphone-sensitivity-medium-symbolic</property>
                     </child>
                     <child>
                       <object class="GtkSeparator">
-                        <property name="visible">1</property>
                         <property name="orientation">horizontal</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkNotebook">
-                        <property name="visible">1</property>
                         <property name="scrollable">1</property>
                         <child type="action-end">
                           <object class="GtkMenuButton">
-                            <property name="visible">1</property>
                             <property name="valign">center</property>
                             <property name="popover">notebook_info_popover</property>
                             <property name="icon-name">emblem-important-symbolic</property>
@@ -3588,7 +3242,6 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                             <property name="height-request">120</property>
                           </object>
                           <packing>
@@ -3597,13 +3250,11 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Page 1</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                             <property name="height-request">40</property>
                           </object>
                           <packing>
@@ -3612,13 +3263,11 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Page 2</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                           </object>
                           <packing>
                             <property name="tab-expand">1</property>
@@ -3626,13 +3275,11 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Page 3</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                           </object>
                           <packing>
                             <property name="tab-expand">1</property>
@@ -3640,13 +3287,11 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Page 4</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                           </object>
                           <packing>
                             <property name="tab-expand">1</property>
@@ -3654,7 +3299,6 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child type="tab">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Page 5</property>
                           </object>
                         </child>
@@ -3662,7 +3306,6 @@ microphone-sensitivity-medium-symbolic</property>
                     </child>
                     <child>
                       <object class="GtkColorChooserWidget" id="cchooser">
-                        <property name="visible">1</property>
                         <property name="show-editor">1</property>
                       </object>
                     </child>
@@ -3689,14 +3332,12 @@ bad things might happen.</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete"/>
     <child type="action">
       <object class="GtkButton" id="cancel_info_dialog">
-        <property name="visible">1</property>
         <property name="label" translatable="yes">_Cancel</property>
         <property name="use_underline">1</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="doit_info_dialog">
-        <property name="visible">1</property>
         <property name="label" translatable="yes">_Do It</property>
         <property name="use_underline">1</property>
       </object>
@@ -3717,7 +3358,6 @@ bad things might happen.</property>
       <object class="GtkBox">
         <child>
           <object class="GtkLabel">
-            <property name="visible">1</property>
             <property name="margin">20</property>
             <property name="label" translatable="yes">To free the princess, you have to slay the dragon.</property>
           </object>
@@ -3726,14 +3366,12 @@ bad things might happen.</property>
     </child>
     <child type="action">
       <object class="GtkButton" id="cancel_action_dialog">
-        <property name="visible">1</property>
         <property name="label" translatable="yes">_Run</property>
         <property name="use_underline">1</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="act_action_dialog">
-        <property name="visible">1</property>
         <property name="can-default">1</property>
         <property name="has-default">1</property>
         <property name="label" translatable="yes">_Act</property>
@@ -3756,13 +3394,11 @@ bad things might happen.</property>
       <object class="GtkBox">
         <child>
           <object class="GtkGrid">
-            <property name="visible">1</property>
             <property name="row-spacing">10</property>
             <property name="column-spacing">10</property>
             <property name="margin">20</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
                 <property name="label">_Details</property>
@@ -3779,7 +3415,6 @@ bad things might happen.</property>
             </child>
             <child>
               <object class="GtkEntry" id="details_entry">
-                <property name="visible">1</property>
                 <property name="valign">baseline</property>
               </object>
               <packing>
@@ -3789,7 +3424,6 @@ bad things might happen.</property>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
                 <property name="label">More D_etails</property>
@@ -3806,7 +3440,6 @@ bad things might happen.</property>
             </child>
             <child>
               <object class="GtkEntry" id="more_details_entry">
-                <property name="visible">1</property>
                 <property name="valign">baseline</property>
               </object>
               <packing>
@@ -3816,7 +3449,6 @@ bad things might happen.</property>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
                 <property name="label">_Level</property>
@@ -3833,7 +3465,6 @@ bad things might happen.</property>
             </child>
             <child>
               <object class="GtkScale" id="level_scale">
-                <property name="visible">1</property>
                 <property name="valign">baseline</property>
                 <property name="draw-value">0</property>
                 <property name="adjustment">adjustment1</property>
@@ -3845,7 +3476,6 @@ bad things might happen.</property>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
                 <property name="label">_Mode</property>
@@ -3862,7 +3492,6 @@ bad things might happen.</property>
             </child>
             <child>
               <object class="GtkSwitch" id="mode_switch">
-                <property name="visible">1</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
               </object>
@@ -3886,7 +3515,6 @@ bad things might happen.</property>
       <object class="GtkBox">
         <child>
           <object class="GtkFlowBox" id="selection_flowbox">
-            <property name="visible">1</property>
             <property name="row-spacing">10</property>
             <property name="column-spacing">10</property>
             <property name="margin">10</property>
@@ -3898,14 +3526,12 @@ bad things might happen.</property>
     </child>
     <child type="action">
       <object class="GtkButton" id="cancel_selection_dialog">
-        <property name="visible">1</property>
         <property name="label" translatable="yes">_Cancel</property>
         <property name="use_underline">1</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="select_selection_dialog">
-        <property name="visible">1</property>
         <property name="can-default">1</property>
         <property name="has-default">1</property>
         <property name="label" translatable="yes">_Select</property>
@@ -3920,13 +3546,11 @@ bad things might happen.</property>
   <object class="GtkPopover" id="open_popover">
     <child>
       <object class="GtkGrid">
-        <property name="visible">1</property>
         <property name="margin">10</property>
         <property name="row-spacing">10</property>
         <property name="column-spacing">10</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">1</property>
             <property name="label">Title:</property>
             <property name="xalign">1</property>
           </object>
@@ -3938,7 +3562,6 @@ bad things might happen.</property>
         <child>
           <object class="GtkLabel">
             <property name="valign">start</property>
-            <property name="visible">1</property>
             <property name="label">Description:</property>
             <property name="xalign">1</property>
           </object>
@@ -3950,7 +3573,6 @@ bad things might happen.</property>
         <child>
           <object class="GtkScrolledWindow">
             <property name="valign">start</property>
-            <property name="visible">1</property>
             <property name="shadow-type">in</property>
             <property name="min-content-height">70</property>
             <property name="max-content-height">120</property>
@@ -3958,7 +3580,6 @@ bad things might happen.</property>
             <property name="max-content-width">100</property>
             <child>
               <object class="GtkTextView" id="open_popover_textview">
-                <property name="visible">1</property>
               </object>
             </child>
           </object>
@@ -3969,7 +3590,6 @@ bad things might happen.</property>
         </child>
         <child>
           <object class="GtkEntry" id="open_popover_entry">
-            <property name="visible">1</property>
             <property name="activates-default">1</property>
           </object>
           <packing>
@@ -3980,7 +3600,6 @@ bad things might happen.</property>
         <child>
           <object class="GtkButton" id="open_popover_button">
             <property name="halign">end</property>
-            <property name="visible">1</property>
             <property name="label">_Open</property>
             <property name="use-underline">1</property>
             <property name="sensitive">0</property>
@@ -4018,8 +3637,6 @@ bad things might happen.</property>
   <object class="GtkPopover" id="notebook_info_popover">
     <child>
       <object class="GtkLabel" id="notebook_info_label">
-        <property name="visible">1</property>
-        <property name="margin">10</property>
         <property name="label">No updates at this time</property>
       </object>
     </child>
