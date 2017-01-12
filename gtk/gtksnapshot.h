@@ -80,6 +80,11 @@ void            gtk_snapshot_push_shadow                (GtkSnapshot            
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF (4, 5);
 GDK_AVAILABLE_IN_3_90
+void            gtk_snapshot_push_blend                 (GtkSnapshot            *snapshot,
+                                                         GskBlendMode            blend_mode,
+                                                         const char             *name,
+                                                         ...) G_GNUC_PRINTF (3, 4);
+GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
                                                          double                  progress,
                                                          const char             *name,

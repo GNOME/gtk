@@ -676,6 +676,97 @@ gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
 }
 
 static GskRenderNode *
+gtk_snapshot_collect_blend_top (GtkSnapshotState *state,
+                                GskRenderNode   **nodes,
+                                guint             n_nodes,
+                                const char       *name)
+{
+  GskRenderNode *bottom_node, *top_node, *blend_node;
+
+  top_node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  bottom_node = state->data.blend.bottom_node;
+
+  /* XXX: Is this necessary? Do we need a NULL node? */
+  if (top_node == NULL)
+    top_node = gsk_container_node_new (NULL, 0);
+  if (bottom_node == NULL)
+    bottom_node = gsk_container_node_new (NULL, 0);
+
+  blend_node = gsk_blend_node_new (bottom_node, top_node, state->data.blend.blend_mode);
+  gsk_render_node_set_name (blend_node, name);
+
+  gsk_render_node_unref (top_node);
+  gsk_render_node_unref (bottom_node);
+
+  return blend_node;
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_blend_bottom (GtkSnapshotState *state,
+                                   GskRenderNode   **nodes,
+                                   guint             n_nodes,
+                                   const char       *name)
+{
+  state->parent->data.blend.bottom_node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  
+  return NULL;
+}
+
+/**
+ * gtk_snapshot_push_blend:
+ * @snapshot: a #GtkSnapshot
+ * @blend_mode: blend mode to use
+ * @name: printf format string for name of the pushed node
+ * @...: printf-style arguments for the @name string
+ *
+ * Blends together 2 images with the given blend mode.
+ *
+ * Until the first call to gtk_snapshot_pop(), the bottom image for the
+ * blend operation will be recorded. After that call, the top image to
+ * be blended will be recorded until the second call to gtk_snapshot_pop().
+ *
+ * Calling this function requires 2 subsequent calls to gtk_snapshot_pop().
+ **/
+void
+gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
+                         GskBlendMode  blend_mode,
+                         const char   *name,
+                         ...)
+{
+  GtkSnapshotState *state;
+  char *str;
+
+  if (name && snapshot->record_names)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  state = gtk_snapshot_state_new (snapshot->state,
+                                  str,
+                                  snapshot->state->clip_region,
+                                  snapshot->state->translate_x,
+                                  snapshot->state->translate_y,
+                                  gtk_snapshot_collect_blend_top);
+  state->data.blend.blend_mode = blend_mode;
+  state->data.blend.bottom_node = NULL;
+
+  state = gtk_snapshot_state_new (state,
+                                  str,
+                                  state->clip_region,
+                                  state->translate_x,
+                                  state->translate_y,
+                                  gtk_snapshot_collect_blend_bottom);
+
+  snapshot->state = state;
+}
+
+static GskRenderNode *
 gtk_snapshot_collect_cross_fade_end (GtkSnapshotState *state,
                                      GskRenderNode   **nodes,
                                      guint             n_nodes,

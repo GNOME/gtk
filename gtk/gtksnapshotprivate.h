@@ -68,6 +68,10 @@ struct _GtkSnapshotState {
       GskShadow a_shadow; /* Used if n_shadows == 1 */
     } shadow;
     struct {
+      GskBlendMode blend_mode;
+      GskRenderNode *bottom_node;
+    } blend;
+    struct {
       double progress;
       GskRenderNode *start_node;
     } cross_fade;

@@ -619,6 +619,8 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
   gint idx;
   GtkCssValue *background_image;
   GtkCssValue *box_shadow;
+  GtkCssValue *blend_modes;
+  GskBlendMode blend_mode;
   const GdkRGBA *bg_color;
   gint number_of_layers;
 
@@ -639,71 +641,32 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
                                          snapshot,
                                          &bg.boxes[GTK_CSS_AREA_BORDER_BOX]);
 
-  /*
-   * When we have a blend mode set for the background, we must blend on a transparent
-   * background. GSK can't do that yet.
-   */
-  if (_gtk_theming_background_needs_push_group (style))
+  blend_modes = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
+  number_of_layers = _gtk_css_array_value_get_n_values (background_image);
+
+  for (idx = number_of_layers - 1; idx >= 0; idx--)
     {
-      GtkCssValue *blend_modes;
-      GskBlendMode blend_mode;
+      blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
 
-      blend_modes = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
-
-      gtk_snapshot_push (snapshot, TRUE, "BackgroundBlendGroup");
-
-      gtk_theming_background_snapshot_color (&bg, snapshot, bg_color, background_image);
-
-      number_of_layers = _gtk_css_array_value_get_n_values (background_image);
-
-      for (idx = number_of_layers - 1; idx >= 0; idx--)
-        {
-          blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
-
-          if (blend_mode == GSK_BLEND_MODE_DEFAULT)
-            {
-              gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
-            }
-          else
-            {
-              GskRenderNode *bottom, *top, *blend;
-
-              bottom = gtk_snapshot_pop (snapshot);
-
-              gtk_snapshot_push (snapshot, TRUE, "BackgroundBlendGroup<Mode%u>", blend_mode);
-              gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
-              top = gtk_snapshot_pop (snapshot);
-
-              /* XXX: Is this necessary? Do we need a NULL node? */
-              if (top == NULL)
-                top = gsk_container_node_new (NULL, 0);
-              if (bottom == NULL)
-                bottom = gsk_container_node_new (NULL, 0);
-
-              blend = gsk_blend_node_new (bottom, top, blend_mode);
-              if (snapshot->record_names)
-                gsk_render_node_set_name (blend, "BackgroundBlend");
-
-              gtk_snapshot_push (snapshot, TRUE, "BackgroundBlendGroup");
-              gtk_snapshot_append_node (snapshot, blend);
-
-              gsk_render_node_unref (blend);
-              gsk_render_node_unref (top);
-              gsk_render_node_unref (bottom);
-            }
-        }
-
-      gtk_snapshot_pop_and_append (snapshot);
+      if (blend_mode != GSK_BLEND_MODE_DEFAULT)
+        gtk_snapshot_push_blend (snapshot, blend_mode, "Background<%u>Blend<%u>", idx, blend_mode);
     }
-  else
+
+  gtk_theming_background_snapshot_color (&bg, snapshot, bg_color, background_image);
+
+  for (idx = number_of_layers - 1; idx >= 0; idx--)
     {
-      gtk_theming_background_snapshot_color (&bg, snapshot, bg_color, background_image);
+      blend_mode = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
 
-      number_of_layers = _gtk_css_array_value_get_n_values (background_image);
-
-      for (idx = number_of_layers - 1; idx >= 0; idx--)
+      if (blend_mode == GSK_BLEND_MODE_DEFAULT)
         {
           gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
+        }
+      else
+        {
+          gtk_snapshot_pop_and_append (snapshot);
+          gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
+          gtk_snapshot_pop_and_append (snapshot);
         }
     }
 
