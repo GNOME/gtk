@@ -1714,6 +1714,9 @@ gtk_window_init (GtkWindow *window)
                      GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
                      dnd_dest_targets, G_N_ELEMENTS (dnd_dest_targets),
                      GDK_ACTION_MOVE);
+
+
+  gtk_widget_hide (GTK_WIDGET (window));
 }
 
 static void
