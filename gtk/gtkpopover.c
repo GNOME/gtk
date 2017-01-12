@@ -220,6 +220,8 @@ gtk_popover_init (GtkPopover *popover)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (popover));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+
+  gtk_widget_hide (widget);
 }
 
 static void
