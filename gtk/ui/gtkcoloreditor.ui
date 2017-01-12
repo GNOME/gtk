@@ -134,6 +134,7 @@
     </child>
   </template>
   <object class="GtkBox" id="a_popup">
+    <property name="visible">0</property>
     <property name="no-show-all">1</property>
     <style>
       <class name="popover"/>
@@ -180,6 +181,7 @@
     </child>
   </object>
   <object class="GtkBox" id="h_popup">
+    <property name="visible">0</property>
     <property name="no-show-all">1</property>
     <style>
       <class name="popover"/>
@@ -226,6 +228,7 @@
     </child>
   </object>
   <object class="GtkBox" id="sv_popup">
+    <property name="visible">0</property>
     <property name="no-show-all">1</property>
     <style>
       <class name="popover"/>
