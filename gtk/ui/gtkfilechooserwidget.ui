@@ -6,14 +6,11 @@
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkBox" id="browse_widgets_box">
-        <property name="visible">1</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkPaned" id="browse_widgets_hpaned">
-            <property name="visible">1</property>
             <child>
               <object class="GtkPlacesSidebar" id="places_sidebar">
-                <property name="visible">1</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="local-only">1</property>
                 <property name="show-other-locations">1</property>
@@ -31,15 +28,12 @@
             </child>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRevealer" id="browse_header_revealer">
-                    <property name="visible">1</property>
                     <property name="hexpand">1</property>
                     <child>
                       <object class="GtkBox">
-                        <property name="visible">1</property>
                         <property name="name">pathbarbox</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
@@ -48,11 +42,9 @@
                         </style>
                         <child>
                           <object class="GtkStack" id="browse_header_stack">
-                            <property name="visible">1</property>
                             <property name="transition-type">crossfade</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <property name="spacing">6</property>
                                 <property name="margin">6</property>
                                 <child>
@@ -85,7 +77,6 @@
                             </child>
                             <child>
                               <object class="GtkBox" id="location_entry_box">
-                                <property name="visible">1</property>
                                 <property name="no-show-all">1</property>
                                 <property name="spacing">6</property>
                                 <property name="margin">6</property>
@@ -96,13 +87,11 @@
                             </child>
                             <child>
                               <object class="GtkBox" id="search_entry_box">
-                                <property name="visible">1</property>
                                 <property name="no-show-all">1</property>
                                 <property name="spacing">6</property>
                                 <property name="margin">6</property>
                                 <child type="center">
                                   <object class="GtkSearchEntry" id="search_entry">
-                                    <property name="visible">1</property>
                                     <property name="width-chars">45</property>
                                     <signal name="search-changed" handler="search_entry_activate_cb" swapped="yes"/>
                                     <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
@@ -135,26 +124,21 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="list_and_preview_box">
-                    <property name="visible">1</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkStack" id="browse_files_stack">
-                        <property name="visible">1</property>
                         <property name="transition-type">crossfade</property>
                         <style>
                           <class name="view"/>
                         </style>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkScrolledWindow" id="browse_files_swin">
-                                <property name="visible">1</property>
                                 <property name="hscrollbar-policy">never</property>
                                 <child>
                                   <object class="GtkTreeView" id="browse_files_tree_view">
-                                    <property name="visible">1</property>
                                     <property name="has-tooltip">1</property>
                                     <property name="enable-search">0</property>
                                     <child internal-child="accessible">
@@ -249,9 +233,10 @@
                             </child>
                             <child>
                               <object class="GtkActionBar" id="remote_warning_bar">
+                                <property name="visible">0</property>
+
                                 <child type="center">
                                   <object class="GtkLabel">
-                                    <property name="visible">1</property>
                                     <property name="label" translatable="yes">Remote location — only searching the current folder</property>
                                   </object>
                                 </child>
@@ -275,7 +260,6 @@
                         </child>
                         <child>
                           <object class="GtkGrid">
-                            <property name="visible">1</property>
                             <property name="row-spacing">12</property>
                             <property name="hexpand">1</property>
                             <property name="vexpand">1</property>
@@ -286,7 +270,6 @@
                             </style>
                             <child>
                               <object class="GtkImage">
-                                <property name="visible">1</property>
                                 <property name="icon-name">edit-find-symbolic</property>
                                 <property name="pixel-size">72</property>
                                 <style>
@@ -300,7 +283,6 @@
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">1</property>
                                 <property name="label" translatable="yes">No Results Found</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
@@ -314,7 +296,6 @@
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">1</property>
                                 <property name="label" translatable="yes">Try a different search</property>
                                 <style>
                                   <class name="dim-label"/>
@@ -337,6 +318,7 @@
                     </child>
                     <child>
                       <object class="GtkBox" id="preview_box">
+                        <property name="visible">0</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                       </object>
@@ -369,20 +351,18 @@
     </child>
     <child>
       <object class="GtkActionBar" id="extra_and_filters">
+        <property name="visible">0</property>
         <property name="no-show-all">1</property>
         <child>
           <object class="GtkBox" id="extra_align">
-            <property name="visible">1</property>
             <property name="spacing">12</property>
           </object>
         </child>
         <child>
           <object class="GtkBox" id="filter_combo_hbox">
-            <property name="visible">1</property>
-            <property name="spacing">12</property>
+            <!--<property name="spacing">12</property>-->
             <child>
               <object class="GtkComboBoxText" id="filter_combo">
-                <property name="visible">1</property>
                 <property name="tooltip-text" translatable="yes">Select which types of files are shown</property>
                 <property name="focus-on-click">0</property>
                 <property name="entry-text-column">0</property>
@@ -417,13 +397,11 @@
   <object class="GtkPopover" id="new_folder_popover">
     <child>
       <object class="GtkGrid">
-        <property name="visible">1</property>
         <property name="margin">10</property>
         <property name="column-spacing">6</property>
         <property name="row-spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Folder Name</property>
             <property name="halign">start</property>
             <property name="mnemonic-widget">new_folder_name_entry</property>
@@ -437,7 +415,6 @@
         </child>
         <child>
           <object class="GtkEntry" id="new_folder_name_entry">
-            <property name="visible">1</property>
             <property name="width-chars">25</property>
             <property name="activates-default">1</property>
             <signal name="changed" handler="new_folder_name_changed"/>
@@ -449,7 +426,6 @@
         </child>
         <child>
           <object class="GtkButton" id="new_folder_create_button">
-            <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="label" translatable="yes">_Create</property>
             <property name="use-underline">1</property>
@@ -466,7 +442,6 @@
         </child>
         <child>
           <object class="GtkLabel" id="new_folder_error_label">
-            <property name="visible">1</property>
             <property name="halign">start</property>
           </object>
           <packing>
@@ -483,13 +458,11 @@
     <signal name="closed" handler="rename_file_end"/>
     <child>
       <object class="GtkGrid">
-        <property name="visible">1</property>
         <property name="margin">10</property>
         <property name="row-spacing">6</property>
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">1</property>
             <property name="label" translatable="yes">Name</property>
             <property name="halign">start</property>
             <property name="mnemonic-widget">rename_file_name_entry</property>
@@ -503,7 +476,6 @@
         </child>
         <child>
           <object class="GtkEntry" id="rename_file_name_entry">
-            <property name="visible">1</property>
             <property name="activates-default">1</property>
             <signal name="changed" handler="rename_file_name_changed"/>
           </object>
@@ -514,7 +486,6 @@
         </child>
         <child>
           <object class="GtkButton" id="rename_file_rename_button">
-            <property name="visible">1</property>
             <property name="sensitive">0</property>
             <property name="label" translatable="yes">_Rename</property>
             <property name="use-underline">1</property>
@@ -531,7 +502,6 @@
         </child>
         <child>
           <object class="GtkLabel" id="rename_file_error_label">
-            <property name="visible">1</property>
             <property name="halign">start</property>
           </object>
           <packing>
