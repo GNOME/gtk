@@ -669,6 +669,7 @@ gtk_shortcuts_window_dispose (GObject *object)
       gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (priv->main_box));
       priv->main_box = NULL;
       priv->stack = NULL;
+      priv->search_bar = NULL;
     }
 
   G_OBJECT_CLASS (gtk_shortcuts_window_parent_class)->dispose (object);
@@ -739,7 +740,8 @@ gtk_shortcuts_window_unmap (GtkWidget *widget)
   GtkShortcutsWindow *self = (GtkShortcutsWindow *)widget;
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
 
-  gtk_search_bar_set_search_mode (priv->search_bar, FALSE);
+  if (priv->search_bar)
+    gtk_search_bar_set_search_mode (priv->search_bar, FALSE);
 
   GTK_WIDGET_CLASS (gtk_shortcuts_window_parent_class)->unmap (widget);
 }
