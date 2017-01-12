@@ -36,8 +36,9 @@
 
 struct _GtkShortcutsShortcut
 {
-  GtkBox            parent_instance;
+  GtkWidget         parent_instance;
 
+  GtkBox           *box;
   GtkImage         *image;
   GtkShortcutLabel *accelerator;
   GtkLabel         *title;
@@ -56,10 +57,10 @@ struct _GtkShortcutsShortcut
 
 struct _GtkShortcutsShortcutClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkShortcutsShortcut, gtk_shortcuts_shortcut, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkShortcutsShortcut, gtk_shortcuts_shortcut, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -465,21 +466,9 @@ gtk_shortcuts_shortcut_finalize (GObject *object)
   g_clear_object (&self->accel_size_group);
   g_clear_object (&self->title_size_group);
   g_free (self->action_name);
+  gtk_widget_unparent (GTK_WIDGET (self->box));
 
   G_OBJECT_CLASS (gtk_shortcuts_shortcut_parent_class)->finalize (object);
-}
-
-static void
-gtk_shortcuts_shortcut_add (GtkContainer *container,
-                            GtkWidget    *widget)
-{
-  g_warning ("Can't add children to %s", G_OBJECT_TYPE_NAME (container));
-}
-
-static GType
-gtk_shortcuts_shortcut_child_type (GtkContainer *container)
-{
-  return G_TYPE_NONE;
 }
 
 void
@@ -507,20 +496,50 @@ gtk_shortcuts_shortcut_update_accel (GtkShortcutsShortcut *self,
 }
 
 static void
+gtk_shortcuts_shortcut_measure (GtkWidget      *widget,
+                                GtkOrientation  orientation,
+                                int            for_size,
+                                int           *minimum,
+                                int           *natural,
+                                int           *minimum_baseline,
+                                int           *natural_baseline)
+{
+  gtk_widget_measure (GTK_WIDGET (GTK_SHORTCUTS_SHORTCUT (widget)->box),
+                      orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_shortcuts_shortcut_snapshot (GtkWidget   *widget,
+                                 GtkSnapshot *snapshot)
+{
+  gtk_widget_snapshot_child (widget, GTK_WIDGET (GTK_SHORTCUTS_SHORTCUT (widget)->box), snapshot);
+}
+
+static void
+gtk_shortcuts_shortcut_size_allocate (GtkWidget     *widget,
+                                      GtkAllocation *allocation)
+{
+  GTK_WIDGET_CLASS (gtk_shortcuts_shortcut_parent_class)->size_allocate (widget, allocation);
+
+  gtk_widget_size_allocate (GTK_WIDGET (GTK_SHORTCUTS_SHORTCUT (widget)->box), allocation);
+}
+
+static void
 gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
   object_class->finalize = gtk_shortcuts_shortcut_finalize;
   object_class->get_property = gtk_shortcuts_shortcut_get_property;
   object_class->set_property = gtk_shortcuts_shortcut_set_property;
 
   widget_class->direction_changed = gtk_shortcuts_shortcut_direction_changed;
-
-  container_class->add = gtk_shortcuts_shortcut_add;
-  container_class->child_type = gtk_shortcuts_shortcut_child_type;
+  widget_class->measure = gtk_shortcuts_shortcut_measure;
+  widget_class->snapshot = gtk_shortcuts_shortcut_snapshot;
+  widget_class->size_allocate = gtk_shortcuts_shortcut_size_allocate;
 
   /**
    * GtkShortcutsShortcut:accelerator:
@@ -702,8 +721,13 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
 static void
 gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
 {
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_set_spacing (GTK_BOX (self), 12);
+  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+
+  self->box = g_object_new (GTK_TYPE_BOX,
+                            "orientation", GTK_ORIENTATION_HORIZONTAL,
+                            "spacing", 12,
+                            NULL);
+  gtk_widget_set_parent (GTK_WIDGET (self->box), GTK_WIDGET (self));
 
   self->direction = GTK_TEXT_DIR_NONE;
   self->shortcut_type = GTK_SHORTCUT_ACCELERATOR;
@@ -713,14 +737,14 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
                               "valign", GTK_ALIGN_CENTER,
                               "no-show-all", TRUE,
                               NULL);
-  GTK_CONTAINER_CLASS (gtk_shortcuts_shortcut_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->image));
+  gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (self->image));
 
   self->accelerator = g_object_new (GTK_TYPE_SHORTCUT_LABEL,
                                     "visible", TRUE,
                                     "valign", GTK_ALIGN_CENTER,
                                     "no-show-all", TRUE,
                                     NULL);
-  GTK_CONTAINER_CLASS (gtk_shortcuts_shortcut_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->accelerator));
+  gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (self->accelerator));
 
   self->title_box = g_object_new (GTK_TYPE_BOX,
                                   "visible", TRUE,
@@ -728,7 +752,7 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
                                   "hexpand", TRUE,
                                   "orientation", GTK_ORIENTATION_VERTICAL,
                                   NULL);
-  GTK_CONTAINER_CLASS (gtk_shortcuts_shortcut_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->title_box));
+  gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (self->title_box));
 
   self->title = g_object_new (GTK_TYPE_LABEL,
                               "visible", TRUE,
