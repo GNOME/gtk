@@ -248,7 +248,6 @@ struct _GtkEntryPrivate
 
   gint64        handle_place_time;
 
-  guint         shadow_type             : 4;
   guint         editable                : 1;
   guint         in_drag                 : 1;
   guint         overwrite_mode          : 1;
