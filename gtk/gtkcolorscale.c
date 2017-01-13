@@ -67,9 +67,9 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
   if (width <= 1 || height <= 1)
     return;
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT(x, y, width, height),
-                                       "ColorScaleTrough");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT(x, y, width, height),
+                                  "ColorScaleTrough");
   cairo_translate (cr, x, y);
 
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&

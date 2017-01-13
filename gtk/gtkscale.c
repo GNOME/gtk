@@ -1758,15 +1758,15 @@ gtk_scale_render_mark_indicator (GtkCssGadget *gadget,
 
   gtk_style_context_get_color (context, &color);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_snapshot_append_color_node (snapshot,
-                                    &color, 
-                                    &GRAPHENE_RECT_INIT(x + width / 2, y, 1, height),
-                                    "ScaleMark");
+    gtk_snapshot_append_color (snapshot,
+                               &color, 
+                               &GRAPHENE_RECT_INIT(x + width / 2, y, 1, height),
+                               "ScaleMark");
   else
-    gtk_snapshot_append_color_node (snapshot,
-                                    &color, 
-                                    &GRAPHENE_RECT_INIT(x, y + height / 2, width, 1),
-                                    "ScaleMark");
+    gtk_snapshot_append_color (snapshot,
+                               &color, 
+                               &GRAPHENE_RECT_INIT(x, y + height / 2, width, 1),
+                               "ScaleMark");
 
   gtk_style_context_restore (context);
 

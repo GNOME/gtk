@@ -86,15 +86,15 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
   texture_width = (double) gdk_pixbuf_get_width (pixbuf) / icon_theme->scale;
   texture_height = (double) gdk_pixbuf_get_height (pixbuf) / icon_theme->scale;
 
-  gtk_snapshot_append_texture_node (snapshot,
-                                    texture,
-                                    &GRAPHENE_RECT_INIT(
-                                        (width - texture_width) / 2.0,
-                                        (height - texture_height) / 2.0,
-                                        texture_width,
-                                        texture_height
-                                    ),
-                                    "CssImageIconTheme<%s@%d>", icon_theme->name, icon_theme->scale);
+  gtk_snapshot_append_texture (snapshot,
+                               texture,
+                               &GRAPHENE_RECT_INIT(
+                                   (width - texture_width) / 2.0,
+                                   (height - texture_height) / 2.0,
+                                   texture_width,
+                                   texture_height
+                               ),
+                               "CssImageIconTheme<%s@%d>", icon_theme->name, icon_theme->scale);
 
   g_object_unref (texture);
   g_object_unref (pixbuf);

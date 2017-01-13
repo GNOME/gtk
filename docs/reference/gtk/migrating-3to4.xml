@@ -229,7 +229,7 @@
         to a cairo surface. Instead, they have a snapshot() function that creates
         one or more GskRenderNodes to represent their content. Third-party widgets
         that use a draw() function or a #GtkWidget::draw signal handler for custom
-        drawing will need to be converted to use gtk_snapshot_append_cairo_node().
+        drawing will need to be converted to use gtk_snapshot_append_cairo().
       </para>
       <para>
         The auxiliary #GtkSnapshot object has APIs to help with creating render

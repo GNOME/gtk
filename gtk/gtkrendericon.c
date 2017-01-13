@@ -305,7 +305,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
                           0, 0,
                           gsk_texture_get_width (texture) / texture_scale,
                           gsk_texture_get_height (texture) / texture_scale);
-      gtk_snapshot_append_texture_node (snapshot, texture, &bounds, "Icon");
+      gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
     }
   else
     {
@@ -320,7 +320,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
       gtk_snapshot_push_transform (snapshot, &matrix, "Icon Transform");
 
       graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
-      gtk_snapshot_append_texture_node (snapshot, texture, &bounds, "Icon");
+      gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
 
       gtk_snapshot_pop (snapshot);
     }

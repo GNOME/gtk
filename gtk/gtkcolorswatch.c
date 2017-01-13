@@ -143,9 +143,9 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
         {
           cairo_t *cr;
 
-          cr = gtk_snapshot_append_cairo_node (snapshot,
-                                               &content_box.bounds,
-                                               "CheckeredBackground");
+          cr = gtk_snapshot_append_cairo (snapshot,
+                                          &content_box.bounds,
+                                          "CheckeredBackground");
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
           cairo_paint (cr);
 
@@ -159,10 +159,10 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
 
           cairo_destroy (cr);
 
-          gtk_snapshot_append_color_node (snapshot,
-                                          &swatch->priv->color,
-                                          &content_box.bounds,
-                                          "ColorSwatch Color");
+          gtk_snapshot_append_color (snapshot,
+                                     &swatch->priv->color,
+                                     &content_box.bounds,
+                                     "ColorSwatch Color");
         }
       else
         {
@@ -170,10 +170,10 @@ gtk_color_swatch_render (GtkCssGadget *gadget,
 
           color.alpha = 1.0;
 
-          gtk_snapshot_append_color_node (snapshot,
-                                          &color,
-                                          &content_box.bounds,
-                                          "ColorSwatch Opaque Color");
+          gtk_snapshot_append_color (snapshot,
+                                     &color,
+                                     &content_box.bounds,
+                                     "ColorSwatch Opaque Color");
         }
 
       gtk_snapshot_pop (snapshot);

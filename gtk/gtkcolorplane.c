@@ -80,9 +80,9 @@ plane_snapshot (GtkWidget   *widget,
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                       "ColorPlane");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                  "ColorPlane");
 
   cairo_set_source_surface (cr, plane->priv->surface, 0, 0);
   cairo_paint (cr);

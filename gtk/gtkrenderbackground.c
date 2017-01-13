@@ -91,20 +91,20 @@ gtk_theming_background_snapshot_color (GtkThemingBackground *bg,
 
   if (gsk_rounded_rect_is_rectilinear (&bg->boxes[clip]))
     {
-      gtk_snapshot_append_color_node (snapshot,
-                                      bg_color,
-                                      &bg->boxes[clip].bounds,
-                                      "BackgroundColor");
+      gtk_snapshot_append_color (snapshot,
+                                 bg_color,
+                                 &bg->boxes[clip].bounds,
+                                 "BackgroundColor");
     }
   else
     {
       gtk_snapshot_push_rounded_clip (snapshot,
                                       &bg->boxes[clip],
                                       "BackgroundColorClip");
-      gtk_snapshot_append_color_node (snapshot,
-                                      bg_color,
-                                      &bg->boxes[clip].bounds,
-                                      "BackgroundColor");
+      gtk_snapshot_append_color (snapshot,
+                                 bg_color,
+                                 &bg->boxes[clip].bounds,
+                                 "BackgroundColor");
       gtk_snapshot_pop (snapshot);
     }
 }

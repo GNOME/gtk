@@ -105,18 +105,18 @@ GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);
 GDK_AVAILABLE_IN_3_90
-cairo_t *       gtk_snapshot_append_cairo_node          (GtkSnapshot            *snapshot,
+cairo_t *       gtk_snapshot_append_cairo               (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF(3, 4);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_append_texture_node        (GtkSnapshot            *snapshot,
+void            gtk_snapshot_append_texture             (GtkSnapshot            *snapshot,
                                                          GskTexture             *texture,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,
                                                          ...) G_GNUC_PRINTF (4, 5);
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_append_color_node          (GtkSnapshot            *snapshot,
+void            gtk_snapshot_append_color               (GtkSnapshot            *snapshot,
                                                          const GdkRGBA          *color,
                                                          const graphene_rect_t  *bounds,
                                                          const char             *name,

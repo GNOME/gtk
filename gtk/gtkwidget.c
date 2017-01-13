@@ -15632,9 +15632,9 @@ gtk_widget_snapshot (GtkWidget   *widget,
     {
       cairo_t *cr;
 
-      cr = gtk_snapshot_append_cairo_node (snapshot, 
-                                           &bounds, "Fallback<%s>",
-                                           G_OBJECT_TYPE_NAME (widget));
+      cr = gtk_snapshot_append_cairo (snapshot, 
+                                      &bounds, "Fallback<%s>",
+                                      G_OBJECT_TYPE_NAME (widget));
       gtk_widget_draw_internal (widget, cr, TRUE);
       cairo_destroy (cr);
     }
@@ -15653,9 +15653,9 @@ gtk_widget_snapshot (GtkWidget   *widget,
           gboolean result;
           cairo_t *cr;
 
-          cr = gtk_snapshot_append_cairo_node (snapshot, 
-                                               &bounds,
-                                               "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
+          cr = gtk_snapshot_append_cairo (snapshot, 
+                                          &bounds,
+                                          "DrawSignalContents<%s>", G_OBJECT_TYPE_NAME (widget));
           g_signal_emit (widget, widget_signals[DRAW], 0, cr, &result);
           cairo_destroy (cr);
         }

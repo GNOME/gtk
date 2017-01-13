@@ -417,12 +417,12 @@ gtk_cell_renderer_spinner_snapshot (GtkCellRenderer      *cellr,
   if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     return;
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (
-                                           cell_area->x, cell_area->y,
-                                           cell_area->width, cell_area->height
-                                       ),
-                                       "CellSpinner");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (
+                                      cell_area->x, cell_area->y,
+                                      cell_area->width, cell_area->height
+                                  ),
+                                  "CellSpinner");
 
   gtk_paint_spinner (gtk_widget_get_style_context (widget),
                      cr,

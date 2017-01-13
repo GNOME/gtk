@@ -284,10 +284,10 @@ gtk_debug_updates_snapshot (GtkWidget   *widget,
       for (i = 0; i < cairo_region_num_rectangles (draw->region); i++)
         {
           cairo_region_get_rectangle (draw->region, i, &rect);
-          gtk_snapshot_append_color_node (snapshot,
-                                          &(GdkRGBA) { 1, 0, 0, 0.4 * (1 - progress) },
-                                          &GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height),
-                                          "Debug Updates<%g>", progress);
+          gtk_snapshot_append_color (snapshot,
+                                     &(GdkRGBA) { 1, 0, 0, 0.4 * (1 - progress) },
+                                     &GRAPHENE_RECT_INIT(rect.x, rect.y, rect.width, rect.height),
+                                     "Debug Updates<%g>", progress);
         }
     }
 }

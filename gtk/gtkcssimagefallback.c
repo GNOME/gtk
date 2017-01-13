@@ -79,7 +79,7 @@ gtk_css_image_fallback_snapshot (GtkCssImage *image,
       else
         color = &red;
 
-      gtk_snapshot_append_color_node (snapshot, color, &GRAPHENE_RECT_INIT (0, 0, width, height), "image() Fallback Color");
+      gtk_snapshot_append_color (snapshot, color, &GRAPHENE_RECT_INIT (0, 0, width, height), "image() Fallback Color");
     }
   else
     gtk_css_image_snapshot (fallback->images[fallback->used], snapshot, width, height);

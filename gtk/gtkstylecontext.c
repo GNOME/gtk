@@ -2123,9 +2123,9 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
   cairo_t *cr;
   
   get_insertion_cursor_bounds (height, direction, draw_arrow, &bounds);
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &bounds,
-                                       "%s Cursor", is_primary ? "Primary" : "Secondary");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &bounds,
+                                  "%s Cursor", is_primary ? "Primary" : "Secondary");
 
   draw_insertion_cursor (context, cr, 0, 0, height, is_primary, direction, draw_arrow);
 

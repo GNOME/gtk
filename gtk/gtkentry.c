@@ -3601,12 +3601,12 @@ gtk_entry_render (GtkCssGadget *gadget,
     gtk_css_gadget_snapshot (priv->progress_gadget, snapshot);
 
   /* Draw text and cursor */
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (x + priv->text_x,
-                                                            y,
-                                                            priv->text_width,
-                                                            height),
-                                       "Entry Text");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (x + priv->text_x,
+                                                       y,
+                                                       priv->text_width,
+                                                       height),
+                                  "Entry Text");
 
   if (priv->dnd_position != -1)
     gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);

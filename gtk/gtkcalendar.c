@@ -2588,13 +2588,13 @@ calendar_snapshot_day (GtkCalendar *calendar,
 
       gtk_style_context_get_color (context, &color);
 
-      gtk_snapshot_append_color_node (snapshot,
-                                      &color,
-                                      &GRAPHENE_RECT_INIT (
-                                          day_rect.x + 2, y_loc,
-                                          day_rect.width - 2, 1
-                                      ),
-                                      "CalendarDetailSeparator");
+      gtk_snapshot_append_color (snapshot,
+                                 &color,
+                                 &GRAPHENE_RECT_INIT (
+                                     day_rect.x + 2, y_loc,
+                                     day_rect.width - 2, 1
+                                 ),
+                                 "CalendarDetailSeparator");
 
       y_loc += 2;
     }

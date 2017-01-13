@@ -195,12 +195,12 @@ gtk_cell_renderer_graph_snapshot (GtkCellRenderer      *cell,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (context, &color);
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (
-                                           background_area->x, background_area->y,
-                                           background_area->width, background_area->height
-                                       ),
-                                       "CellGraph");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (
+                                      background_area->x, background_area->y,
+                                      background_area->width, background_area->height
+                                  ),
+                                  "CellGraph");
 
   cairo_set_line_width (cr, 1.0);
 

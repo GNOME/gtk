@@ -126,9 +126,9 @@ gtk_css_image_real_snapshot (GtkCssImage *image,
 {
   cairo_t *cr;
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                       "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                  "Fallback<%s>", G_OBJECT_TYPE_NAME (image));
   _gtk_css_image_draw (image, cr, width, height);
   cairo_destroy (cr);
 }

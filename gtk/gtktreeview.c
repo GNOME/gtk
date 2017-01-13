@@ -4678,14 +4678,14 @@ gtk_tree_view_snapshot_line (GtkTreeView         *tree_view,
   GtkStyleContext *context;
   cairo_t *cr;
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (
-                                          MIN (x1, x2),
-                                          MIN (y1, y2),
-                                          ABS (x2 - x1) + 1,
-                                          ABS (y2 - y1) + 1
-                                       ),
-                                       "TreeViewGridLine");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (
+                                     MIN (x1, x2),
+                                     MIN (y1, y2),
+                                     ABS (x2 - x1) + 1,
+                                     ABS (y2 - y1) + 1
+                                  ),
+                                  "TreeViewGridLine");
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
 
@@ -5078,15 +5078,15 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
                   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 
                   gtk_style_context_get_color (context, &color);
-                  gtk_snapshot_append_color_node (snapshot,
-                                                  &color, 
-                                                  &GRAPHENE_RECT_INIT(
-                                                      cell_area.x,
-                                                      cell_area.y + cell_area.height / 2,
-                                                      cell_area.x + cell_area.width,
-                                                      1
-                                                  ),
-                                                  "Separator");
+                  gtk_snapshot_append_color (snapshot,
+                                             &color, 
+                                             &GRAPHENE_RECT_INIT(
+                                                 cell_area.x,
+                                                 cell_area.y + cell_area.height / 2,
+                                                 cell_area.x + cell_area.width,
+                                                 1
+                                             ),
+                                             "Separator");
 
                   gtk_style_context_restore (context);
                 }
@@ -5119,15 +5119,15 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
                   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 
                   gtk_style_context_get_color (context, &color);
-                  gtk_snapshot_append_color_node (snapshot,
-                                                  &color, 
-                                                  &GRAPHENE_RECT_INIT(
-                                                      cell_area.x,
-                                                      cell_area.y + cell_area.height / 2,
-                                                      cell_area.x + cell_area.width,
-                                                      1
-                                                  ),
-                                                  "Separator");
+                  gtk_snapshot_append_color (snapshot,
+                                             &color, 
+                                             &GRAPHENE_RECT_INIT(
+                                                 cell_area.x,
+                                                 cell_area.y + cell_area.height / 2,
+                                                 cell_area.x + cell_area.width,
+                                                 1
+                                             ),
+                                             "Separator");
 
                   gtk_style_context_restore (context);
                 }
@@ -14228,15 +14228,15 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 
               gtk_style_context_get_color (context, &color);
-              gtk_snapshot_append_color_node (&snapshot,
-                                              &color, 
-                                              &GRAPHENE_RECT_INIT(
-                                                  cell_area.x,
-                                                  cell_area.y + cell_area.height / 2,
-                                                  cell_area.x + cell_area.width,
-                                                  1
-                                              ),
-                                              "Separator");
+              gtk_snapshot_append_color (&snapshot,
+                                         &color, 
+                                         &GRAPHENE_RECT_INIT(
+                                             cell_area.x,
+                                             cell_area.y + cell_area.height / 2,
+                                             cell_area.x + cell_area.width,
+                                             1
+                                         ),
+                                         "Separator");
 
               gtk_style_context_restore (context);
             }

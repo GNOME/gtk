@@ -239,11 +239,13 @@ gtk_drawing_area_snapshot (GtkWidget   *widget,
   if (!priv->draw_func)
     return;
 
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &GRAPHENE_RECT_INIT (0, 0,
-                                         gtk_widget_get_allocated_width (widget),
-                                         gtk_widget_get_allocated_height (widget)),
-                                       "DrawingAreaContents");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (
+                                      0, 0,
+                                      gtk_widget_get_allocated_width (widget),
+                                      gtk_widget_get_allocated_height (widget)
+                                  ),
+                                  "DrawingAreaContents");
   priv->draw_func (self,
                    cr,
                    gtk_widget_get_allocated_width (widget),

@@ -4236,9 +4236,9 @@ gtk_label_render (GtkCssGadget *gadget,
 
           range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
           cairo_region_get_extents (range_clip, &clip_extents);
-          cr = gtk_snapshot_append_cairo_node (snapshot,
-                                               &GRAPHENE_RECT_FROM_RECT (&clip_extents),
-                                               "Selected Text");
+          cr = gtk_snapshot_append_cairo (snapshot,
+                                          &GRAPHENE_RECT_FROM_RECT (&clip_extents),
+                                          "Selected Text");
           gtk_style_context_save_to_node (context, info->selection_node);
 
           gdk_cairo_region (cr, range_clip);
@@ -4286,9 +4286,9 @@ gtk_label_render (GtkCssGadget *gadget,
 
               range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
               cairo_region_get_extents (range_clip, &clip_extents);
-              cr = gtk_snapshot_append_cairo_node (snapshot,
-                                                   &GRAPHENE_RECT_FROM_RECT(&clip_extents),
-                                                   "Active Link");
+              cr = gtk_snapshot_append_cairo (snapshot,
+                                              &GRAPHENE_RECT_FROM_RECT(&clip_extents),
+                                              "Active Link");
               gdk_cairo_region (cr, range_clip);
               cairo_clip (cr);
               cairo_region_destroy (range_clip);

@@ -40,7 +40,7 @@
  * a cairo context, and maintains a stack of render nodes and their associated
  * transformations.
  *
- * The node at the top of the stack is the the one that gtk_snapshot_append_node()
+ * The node at the top of the stack is the the one that gtk_snapshot_append()
  * operates on. Use the gtk_snapshot_push() and gtk_snapshot_pop() functions to
  * change the current node.
  *
@@ -987,10 +987,10 @@ gtk_snapshot_translate_2d (GtkSnapshot *snapshot,
  *
  * Use this offset to determine how to offset nodes that you
  * manually add to the snapshot using
- * gtk_snapshot_append_node().
+ * gtk_snapshot_append().
  *
  * Note that other functions that add nodes for you, such as
- * gtk_snapshot_append_cairo_node() will add this offset for
+ * gtk_snapshot_append_cairo() will add this offset for
  * you.
  **/
 void
@@ -1033,7 +1033,7 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
 }
 
 /**
- * gtk_snapshot_append_cairo_node:
+ * gtk_snapshot_append_cairo:
  * @snapshot: a #GtkSnapshot
  * @bounds: the bounds for the new node
  * @name: (transfer none): a printf() style format string for the name for the new node
@@ -1048,10 +1048,10 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
  * Since: 3.90
  */
 cairo_t *
-gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
-                                const graphene_rect_t *bounds,
-                                const char            *name,
-                                ...)
+gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
+                           const graphene_rect_t *bounds,
+                           const char            *name,
+                           ...)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
@@ -1088,7 +1088,7 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
 }
 
 /**
- * gtk_snapshot_append_texture_node:
+ * gtk_snapshot_append_texture:
  * @snapshot: a #GtkSnapshot
  * @texture: the #GskTexture to render
  * @bounds: the bounds for the new node
@@ -1099,11 +1099,11 @@ gtk_snapshot_append_cairo_node (GtkSnapshot           *snapshot,
  * to the current render node of @snapshot.
  **/
 void
-gtk_snapshot_append_texture_node (GtkSnapshot            *snapshot,
-                                  GskTexture             *texture,
-                                  const graphene_rect_t  *bounds,
-                                  const char             *name,
-                                  ...)
+gtk_snapshot_append_texture (GtkSnapshot            *snapshot,
+                             GskTexture             *texture,
+                             const graphene_rect_t  *bounds,
+                             const char             *name,
+                             ...)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
@@ -1134,7 +1134,7 @@ gtk_snapshot_append_texture_node (GtkSnapshot            *snapshot,
 }
 
 /**
- * gtk_snapshot_append_color_node:
+ * gtk_snapshot_append_color:
  * @snapshot: a #GtkSnapshot
  * @color: the #GdkRGBA to draw
  * @bounds: the bounds for the new node
@@ -1147,11 +1147,11 @@ gtk_snapshot_append_texture_node (GtkSnapshot            *snapshot,
  * You should try to avoid calling this function if @color is transparent.
  **/
 void
-gtk_snapshot_append_color_node (GtkSnapshot           *snapshot,
-                                const GdkRGBA         *color,
-                                const graphene_rect_t *bounds,
-                                const char            *name,
-                                ...)
+gtk_snapshot_append_color (GtkSnapshot           *snapshot,
+                           const GdkRGBA         *color,
+                           const graphene_rect_t *bounds,
+                           const char            *name,
+                           ...)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
@@ -1193,7 +1193,7 @@ gtk_snapshot_append_color_node (GtkSnapshot           *snapshot,
  * Since: 3.90
  */
 gboolean
-gtk_snapshot_clips_rect (GtkSnapshot           *snapshot,
+gtk_snapshot_clips_rect (GtkSnapshot                 *snapshot,
                          const cairo_rectangle_int_t *rect)
 {
   cairo_rectangle_int_t offset_rect;
@@ -1352,7 +1352,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
 
   gtk_snapshot_translate_2d (snapshot, x, y);
 
-  cr = gtk_snapshot_append_cairo_node (snapshot, &bounds, "Text<%dchars>", pango_layout_get_character_count (layout));
+  cr = gtk_snapshot_append_cairo (snapshot, &bounds, "Text<%dchars>", pango_layout_get_character_count (layout));
 
   _gtk_css_shadows_value_paint_layout (shadow, cr, layout);
 

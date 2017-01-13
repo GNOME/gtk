@@ -1127,9 +1127,9 @@ gtk_popover_snapshot (GtkWidget   *widget,
   graphene_rect_init (&bounds,
                       clip.x - allocation.x, clip.y - allocation.y,
                       clip.width, clip.height);
-  cr = gtk_snapshot_append_cairo_node (snapshot,
-                                       &bounds,
-                                       "Popover");
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &bounds,
+                                  "Popover");
   /* Render the rect background */
   gtk_render_background (context, cr,
                          rect_x, rect_y,

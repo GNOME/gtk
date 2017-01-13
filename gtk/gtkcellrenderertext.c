@@ -1735,13 +1735,13 @@ gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
 
   if (priv->background_set && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
-      gtk_snapshot_append_color_node (snapshot,
-                                      &priv->background,
-                                      &GRAPHENE_RECT_INIT(
-                                          background_area->x, background_area->y,
-                                          background_area->width, background_area->height
-                                      ),
-                                      "CellTextBackground");
+      gtk_snapshot_append_color (snapshot,
+                                 &priv->background,
+                                 &GRAPHENE_RECT_INIT(
+                                     background_area->x, background_area->y,
+                                     background_area->width, background_area->height
+                                 ),
+                                 "CellTextBackground");
     }
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);

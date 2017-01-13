@@ -756,13 +756,13 @@ gtk_cell_renderer_snapshot (GtkCellRenderer      *cell,
 
   if (priv->cell_background_set && !selected)
     {
-      gtk_snapshot_append_color_node (snapshot,
-                                      &priv->cell_background,
-                                      &GRAPHENE_RECT_INIT (
-                                          background_area->x, background_area->y,
-                                          background_area->width, background_area->height
-                                      ),
-                                      "CellBackground");
+      gtk_snapshot_append_color (snapshot,
+                                 &priv->cell_background,
+                                 &GRAPHENE_RECT_INIT (
+                                     background_area->x, background_area->y,
+                                     background_area->width, background_area->height
+                                 ),
+                                 "CellBackground");
     }
 
   gtk_snapshot_push_clip (snapshot,

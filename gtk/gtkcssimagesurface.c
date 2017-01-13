@@ -56,12 +56,12 @@ gtk_css_image_surface_snapshot (GtkCssImage *image,
   if (surface->texture == NULL)
     return;
 
-  gtk_snapshot_append_texture_node (snapshot,
-                                    surface->texture,
-                                    &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                    "Surface Image %dx%d",
-                                    gsk_texture_get_width (surface->texture),
-                                    gsk_texture_get_height (surface->texture));
+  gtk_snapshot_append_texture (snapshot,
+                               surface->texture,
+                               &GRAPHENE_RECT_INIT (0, 0, width, height),
+                               "Surface Image %dx%d",
+                               gsk_texture_get_width (surface->texture),
+                               gsk_texture_get_height (surface->texture));
 }
 
 static void
