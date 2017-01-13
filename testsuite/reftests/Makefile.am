@@ -201,6 +201,9 @@ testdata = \
 	css-image-aspect-ratio.css \
 	css-image-aspect-ratio.ui \
 	css-image-aspect-ratio.ref.ui \
+	css-image-color-aspect-ratio.css \
+	css-image-color-aspect-ratio.ui \
+	css-image-color-aspect-ratio.ref.ui \
 	css-match-class.css \
 	css-match-class.ref.ui \
 	css-match-class.ui \

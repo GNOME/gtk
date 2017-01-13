@@ -56,7 +56,7 @@ gtk_css_image_fallback_get_aspect_ratio (GtkCssImage *image)
   GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
 
   if (fallback->used < 0)
-    return 1;
+    return 0;
 
   return _gtk_css_image_get_aspect_ratio (fallback->images[fallback->used]);
 }
