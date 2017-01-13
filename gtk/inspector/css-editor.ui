@@ -32,17 +32,8 @@
             <property name="visible">True</property>
             <property name="relief">none</property>
             <property name="tooltip-text" translatable="yes">Disable this custom CSS</property>
+            <property name="icon-name">media-playback-pause-symbolic</property>
             <signal name="toggled" handler="disable_toggled"/>
-            <style>
-              <class name="image-button"/>
-            </style>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="icon-name">media-playback-pause-symbolic</property>
-                <property name="icon-size">1</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="pack-type">start</property>
@@ -53,17 +44,8 @@
             <property name="visible">True</property>
             <property name="relief">none</property>
             <property name="tooltip-text" translatable="yes">Save the current CSS</property>
+            <property name="icon-name">document-save-symbolic</property>
             <signal name="clicked" handler="save_clicked"/>
-            <style>
-              <class name="image-button"/>
-            </style>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="icon-name">document-save-symbolic</property>
-                <property name="icon-size">1</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="pack-type">start</property>
