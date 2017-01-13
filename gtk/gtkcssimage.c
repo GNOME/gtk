@@ -358,13 +358,13 @@ _gtk_css_image_get_concrete_size (GtkCssImage *image,
         {
           if (image_aspect * default_height > default_width)
             {
-              *concrete_width = default_height * image_aspect;
-              *concrete_height = default_height;
+              *concrete_width = default_width;
+              *concrete_height = default_width / image_aspect;
             }
           else
             {
-              *concrete_width = default_width;
-              *concrete_height = default_width / image_aspect;
+              *concrete_width = default_height * image_aspect;
+              *concrete_height = default_height;
             }
         }
       else
