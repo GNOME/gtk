@@ -1463,9 +1463,9 @@ gtk_image_render_contents (GtkCssGadget *gadget,
     }
   else
     {
-      gtk_snapshot_translate_2d (snapshot, x, y);
+      gtk_snapshot_offset (snapshot, x, y);
       gtk_icon_helper_snapshot (priv->icon_helper, snapshot);
-      gtk_snapshot_translate_2d (snapshot, -x, -y);
+      gtk_snapshot_offset (snapshot, -x, -y);
     }
 
   return FALSE;

@@ -861,7 +861,7 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  gtk_snapshot_translate_2d (snapshot, x + margin.left, y + margin.top);
+  gtk_snapshot_offset (snapshot, x + margin.left, y + margin.top);
   gtk_css_style_snapshot_background (style,
                                      snapshot,
                                      width - margin.left - margin.right,
@@ -870,7 +870,7 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
                                  snapshot,
                                  width - margin.left - margin.right,
                                  height - margin.top - margin.bottom);
-  gtk_snapshot_translate_2d (snapshot, - x - margin.left, - y - margin.top);
+  gtk_snapshot_offset (snapshot, - x - margin.left, - y - margin.top);
 
   contents_x = x + margin.left + border.left + padding.left;
   contents_y = y + margin.top + border.top + padding.top;
@@ -885,12 +885,12 @@ gtk_css_gadget_snapshot (GtkCssGadget *gadget,
 
   if (draw_focus)
     {
-      gtk_snapshot_translate_2d (snapshot, x + margin.left, y + margin.top);
+      gtk_snapshot_offset (snapshot, x + margin.left, y + margin.top);
       gtk_css_style_snapshot_outline (style,
                                       snapshot,
                                       width - margin.left - margin.right,
                                       height - margin.top - margin.bottom);
-      gtk_snapshot_translate_2d (snapshot, - x - margin.left, - y - margin.top);
+      gtk_snapshot_offset (snapshot, - x - margin.left, - y - margin.top);
   }
 }
 

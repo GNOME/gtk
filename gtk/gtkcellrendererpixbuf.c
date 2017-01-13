@@ -541,9 +541,9 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   if (icon_helper == NULL)
     icon_helper = create_icon_helper (cellpixbuf, widget);
 
-  gtk_snapshot_translate_2d (snapshot, pix_rect.x, pix_rect.y);
+  gtk_snapshot_offset (snapshot, pix_rect.x, pix_rect.y);
   gtk_icon_helper_snapshot (icon_helper, snapshot);
-  gtk_snapshot_translate_2d (snapshot, - pix_rect.x, - pix_rect.y);
+  gtk_snapshot_offset (snapshot, - pix_rect.x, - pix_rect.y);
 
   g_object_unref (icon_helper);
 

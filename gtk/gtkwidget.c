@@ -15854,8 +15854,8 @@ gtk_widget_get_translation_to_child (GtkWidget *widget,
  * gtk_widget_snapshot_child:
  * @widget: a #GtkWidget
  * @child: a child of @widget
- * @snapshot: $GtkSnapshot as passed to the container. In particular, no
- *   calls to gtk_snapshot_translate_2d() should have been applied by the
+ * @snapshot: #GtkSnapshot as passed to the container. In particular, no
+ *   calls to gtk_snapshot_offset() should have been applied by the
  *   parent.
  *
  * When a widget receives a call to the snapshot function, it must send
@@ -15882,9 +15882,9 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
 
   gtk_widget_get_translation_to_child (widget, child, &x, &y);
 
-  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_snapshot_offset (snapshot, x, y);
   gtk_widget_snapshot (child, snapshot);
-  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gtk_snapshot_offset (snapshot, -x, -y);
 }
 
 void

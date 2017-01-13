@@ -389,7 +389,7 @@ gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
 
   gtk_snapshot_push_rounded_clip (snapshot, clip, "BackgroundLayerClip<%u>", idx);
 
-  gtk_snapshot_translate_2d (snapshot, origin->bounds.origin.x, origin->bounds.origin.y);
+  gtk_snapshot_offset (snapshot, origin->bounds.origin.x, origin->bounds.origin.y);
 
   if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
     {
@@ -399,11 +399,11 @@ gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
       x = _gtk_css_position_value_get_x (pos, width - image_width);
       y = _gtk_css_position_value_get_y (pos, height - image_height);
 
-      gtk_snapshot_translate_2d (snapshot, x, y);
+      gtk_snapshot_offset (snapshot, x, y);
 
       gtk_css_image_snapshot (image, snapshot, image_width, image_height);
 
-      gtk_snapshot_translate_2d (snapshot, -x, -y);
+      gtk_snapshot_offset (snapshot, -x, -y);
     }
   else
     {
@@ -501,15 +501,15 @@ gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
                                 ),
                                 "BackgroundLayerRepeat<%u>", idx);
                                 
-      gtk_snapshot_translate_2d (snapshot,
-                                 position_x + 0.5 * (repeat_width - image_width),
-                                 position_y + 0.5 * (repeat_height - image_height));
+      gtk_snapshot_offset (snapshot,
+                           position_x + 0.5 * (repeat_width - image_width),
+                           position_y + 0.5 * (repeat_height - image_height));
       gtk_css_image_snapshot (image, snapshot, image_width, image_height);
 
       gtk_snapshot_pop (snapshot);
     }
 
-  gtk_snapshot_translate_2d (snapshot, - origin->bounds.origin.x, - origin->bounds.origin.y);
+  gtk_snapshot_offset (snapshot, - origin->bounds.origin.x, - origin->bounds.origin.y);
 
   gtk_snapshot_pop (snapshot);
 }

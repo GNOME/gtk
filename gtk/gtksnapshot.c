@@ -958,7 +958,7 @@ gtk_snapshot_get_renderer (const GtkSnapshot *snapshot)
 }
 
 /**
- * gtk_snapshot_translate_2d:
+ * gtk_snapshot_offset:
  * @snapshot: a $GtkSnapshot
  * @x: horizontal translation
  * @y: vertical translation
@@ -968,9 +968,9 @@ gtk_snapshot_get_renderer (const GtkSnapshot *snapshot)
  * Since: 3.90
  */
 void
-gtk_snapshot_translate_2d (GtkSnapshot *snapshot,
-                           int          x,
-                           int          y)
+gtk_snapshot_offset (GtkSnapshot *snapshot,
+                     int          x,
+                     int          y)
 {
   snapshot->state->translate_x += x;
   snapshot->state->translate_y += y;
@@ -983,7 +983,7 @@ gtk_snapshot_translate_2d (GtkSnapshot *snapshot,
  * @y: (out) (optional): return location for y offset
  *
  * Queries the offset managed by @snapshot. This offset is the
- * accumulated sum of calls to gtk_snapshot_translate_2d().
+ * accumulated sum of calls to gtk_snapshot_offset().
  *
  * Use this offset to determine how to offset nodes that you
  * manually add to the snapshot using
@@ -1235,11 +1235,11 @@ gtk_snapshot_render_background (GtkSnapshot     *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_snapshot_offset (snapshot, x, y);
   gtk_css_style_snapshot_background (gtk_style_context_lookup_style (context),
                                      snapshot,
                                      width, height);
-  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gtk_snapshot_offset (snapshot, -x, -y);
 }
 
 /**
@@ -1268,11 +1268,11 @@ gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_snapshot_offset (snapshot, x, y);
   gtk_css_style_snapshot_border (gtk_style_context_lookup_style (context),
                                  snapshot,
                                  width, height);
-  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gtk_snapshot_offset (snapshot, -x, -y);
 }
 
 /**
@@ -1301,11 +1301,11 @@ gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_snapshot_offset (snapshot, x, y);
   gtk_css_style_snapshot_outline (gtk_style_context_lookup_style (context),
                                   snapshot,
                                   width, height);
-  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gtk_snapshot_offset (snapshot, -x, -y);
 }
 
 /**
@@ -1350,7 +1350,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
                       ink_rect.width + shadow_extents.left + shadow_extents.right,
                       ink_rect.height + shadow_extents.top + shadow_extents.bottom);
 
-  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_snapshot_offset (snapshot, x, y);
 
   cr = gtk_snapshot_append_cairo (snapshot, &bounds, "Text<%dchars>", pango_layout_get_character_count (layout));
 
@@ -1360,7 +1360,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   pango_cairo_show_layout (cr, layout);
 
   cairo_destroy (cr);
-  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gtk_snapshot_offset (snapshot, -x, -y);
 }
 
 /**
@@ -1387,12 +1387,12 @@ gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
   GskTexture *texture;
 
   texture = gsk_texture_new_for_pixbuf (pixbuf);
-  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_snapshot_offset (snapshot, x, y);
   gtk_css_style_snapshot_icon_texture (gtk_style_context_lookup_style (context),
                                        snapshot,
                                        texture,
                                        1);
-  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gtk_snapshot_offset (snapshot, -x, -y);
   g_object_unref (texture);
 }
 

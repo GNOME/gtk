@@ -2284,25 +2284,25 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
         cursor1 = &weak_pos;
     }
 
-  gtk_snapshot_translate_2d (snapshot, x + PANGO_PIXELS (cursor1->x), y + PANGO_PIXELS (cursor1->y));
+  gtk_snapshot_offset (snapshot, x + PANGO_PIXELS (cursor1->x), y + PANGO_PIXELS (cursor1->y));
   snapshot_insertion_cursor (snapshot,
                              context,
                              PANGO_PIXELS (cursor1->height),
                              TRUE,
                              direction,
                              direction2 != PANGO_DIRECTION_NEUTRAL);
-  gtk_snapshot_translate_2d (snapshot, - x - PANGO_PIXELS (cursor1->x), - y - PANGO_PIXELS (cursor1->y));
+  gtk_snapshot_offset (snapshot, - x - PANGO_PIXELS (cursor1->x), - y - PANGO_PIXELS (cursor1->y));
 
   if (direction2 != PANGO_DIRECTION_NEUTRAL)
     {
-      gtk_snapshot_translate_2d (snapshot, x + PANGO_PIXELS (cursor2->x), y + PANGO_PIXELS (cursor2->y));
+      gtk_snapshot_offset (snapshot, x + PANGO_PIXELS (cursor2->x), y + PANGO_PIXELS (cursor2->y));
       snapshot_insertion_cursor (snapshot,
                                  context,
                                  PANGO_PIXELS (cursor2->height),
                                  FALSE,
                                  direction2,
                                  TRUE);
-      gtk_snapshot_translate_2d (snapshot, - x - PANGO_PIXELS (cursor2->x), - y - PANGO_PIXELS (cursor2->y));
+      gtk_snapshot_offset (snapshot, - x - PANGO_PIXELS (cursor2->x), - y - PANGO_PIXELS (cursor2->y));
     }
 }
 

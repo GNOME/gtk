@@ -5393,13 +5393,13 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
                           ),
                           "TreeViewContentClip");
 
-  gtk_snapshot_translate_2d (snapshot,
-                             - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
-                             gtk_tree_view_get_effective_header_height (tree_view));
+  gtk_snapshot_offset (snapshot,
+                       - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
+                       gtk_tree_view_get_effective_header_height (tree_view));
   gtk_tree_view_bin_snapshot (widget, snapshot);
-  gtk_snapshot_translate_2d (snapshot,
-                             (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
-                             - gtk_tree_view_get_effective_header_height (tree_view));
+  gtk_snapshot_offset (snapshot,
+                       (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
+                       - gtk_tree_view_get_effective_header_height (tree_view));
 
   /* We can't just chain up to Container::draw as it will try to send the
    * event to the headers, so we handle propagating it to our children
@@ -10052,10 +10052,10 @@ gtk_tree_view_snapshot_arrow (GtkTreeView *tree_view,
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
 
-  gtk_snapshot_translate_2d (snapshot, area.x, area.y);
+  gtk_snapshot_offset (snapshot, area.x, area.y);
   gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context), snapshot,
                                area.width, area.height, image_type);
-  gtk_snapshot_translate_2d (snapshot, -area.x, -area.y);
+  gtk_snapshot_offset (snapshot, -area.x, -area.y);
 
   gtk_style_context_restore (context);
 }

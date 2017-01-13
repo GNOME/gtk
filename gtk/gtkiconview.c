@@ -1766,9 +1766,9 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
                           ),
                           "IconView Clip");
 
-  gtk_snapshot_translate_2d (snapshot,
-                             - gtk_adjustment_get_value (icon_view->priv->hadjustment),
-                             - gtk_adjustment_get_value (icon_view->priv->vadjustment));
+  gtk_snapshot_offset (snapshot,
+                       - gtk_adjustment_get_value (icon_view->priv->hadjustment),
+                       - gtk_adjustment_get_value (icon_view->priv->vadjustment));
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &dest_pos);
 

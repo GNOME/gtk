@@ -143,13 +143,13 @@ gtk_icon_helper_real_snapshot (GtkCssGadget *gadget,
   int icon_width, icon_height;
 
   _gtk_icon_helper_get_size (self, &icon_width, &icon_height);
-  gtk_snapshot_translate_2d (snapshot,
-                             x + (width - icon_width) / 2,
-                             y + (height - icon_height) / 2);
+  gtk_snapshot_offset (snapshot,
+                       x + (width - icon_width) / 2,
+                       y + (height - icon_height) / 2);
   gtk_icon_helper_snapshot (self, snapshot);
-  gtk_snapshot_translate_2d (snapshot,
-                             - (x + (width - icon_width) / 2),
-                             - (y + (height - icon_height) / 2));
+  gtk_snapshot_offset (snapshot,
+                       - (x + (width - icon_width) / 2),
+                       - (y + (height - icon_height) / 2));
 
   return FALSE;
 }

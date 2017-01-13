@@ -456,9 +456,9 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
         image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
     }
 
-  gtk_snapshot_translate_2d (snapshot,
-                             cell_area->x + x_offset + xpad + padding.left + border.left,
-                             cell_area->y + y_offset + ypad + padding.top + border.top);
+  gtk_snapshot_offset (snapshot,
+                       cell_area->x + x_offset + xpad + padding.left + border.left,
+                       cell_area->y + y_offset + ypad + padding.top + border.top);
   gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context), snapshot,
                                width - padding.left - padding.right - border.left - border.right,
                                height - padding.top - padding.bottom - border.top - border.bottom,

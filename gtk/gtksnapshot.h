@@ -93,7 +93,7 @@ GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_3_90
-void            gtk_snapshot_translate_2d               (GtkSnapshot            *snapshot,
+void            gtk_snapshot_offset                     (GtkSnapshot            *snapshot,
                                                          int                     x,
                                                          int                     y);
 GDK_AVAILABLE_IN_3_90

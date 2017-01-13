@@ -1715,14 +1715,14 @@ gtk_paned_render_handle (GtkCssGadget *gadget,
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save_to_node (context, gtk_css_gadget_get_node (priv->handle_gadget));
-  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_snapshot_offset (snapshot, x, y);
 
   gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context),
                                snapshot,
                                width, height,
                                GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
 
-  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gtk_snapshot_offset (snapshot, -x, -y);
   gtk_style_context_restore (context);
 
   return FALSE;

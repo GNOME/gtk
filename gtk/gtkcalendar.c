@@ -2158,7 +2158,7 @@ calendar_snapshot_header (GtkCalendar *calendar,
   get_component_paddings (calendar, &padding, NULL, NULL, NULL);
   context = gtk_widget_get_style_context (widget);
 
-  gtk_snapshot_translate_2d (snapshot, padding.left, padding.top);
+  gtk_snapshot_offset (snapshot, padding.left, padding.top);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     year_left = priv->year_before;
@@ -2246,7 +2246,7 @@ calendar_snapshot_header (GtkCalendar *calendar,
   g_object_unref (layout);
 
   gtk_style_context_restore (context);
-  gtk_snapshot_translate_2d (snapshot, -padding.left, -padding.top);
+  gtk_snapshot_offset (snapshot, -padding.left, -padding.top);
 }
 
 static void
@@ -2272,9 +2272,9 @@ calendar_snapshot_day_names (GtkCalendar *calendar,
   get_component_paddings (calendar, &padding, NULL, &day_name_padding, NULL);
   context = gtk_widget_get_style_context (widget);
 
-  gtk_snapshot_translate_2d (snapshot,
-                             padding.left + inner_border,
-                             priv->header_h + padding.top + inner_border);
+  gtk_snapshot_offset (snapshot,
+                       padding.left + inner_border,
+                       priv->header_h + padding.top + inner_border);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -2337,9 +2337,9 @@ calendar_snapshot_day_names (GtkCalendar *calendar,
   g_object_unref (layout);
 
   gtk_style_context_restore (context);
-  gtk_snapshot_translate_2d (snapshot,
-                             - (padding.left + inner_border),
-                             - (priv->header_h + padding.top + inner_border));
+  gtk_snapshot_offset (snapshot,
+                       - (padding.left + inner_border),
+                       - (priv->header_h + padding.top + inner_border));
 }
 
 static void
@@ -2717,16 +2717,16 @@ calendar_snapshot_arrow (GtkCalendar *calendar,
   else
     image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
 
-  gtk_snapshot_translate_2d (snapshot,
-                             rect.x + (rect.width - 8) / 2,
-                             rect.y + (rect.height - 8) / 2);
+  gtk_snapshot_offset (snapshot,
+                       rect.x + (rect.width - 8) / 2,
+                       rect.y + (rect.height - 8) / 2);
   gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context),
                                snapshot,
                                8, 8,
                                image_type);
-  gtk_snapshot_translate_2d (snapshot,
-                             - rect.x - (rect.width - 8) / 2,
-                             - rect.y - (rect.height - 8) / 2);
+  gtk_snapshot_offset (snapshot,
+                       - rect.x - (rect.width - 8) / 2,
+                       - rect.y - (rect.height - 8) / 2);
 
   gtk_style_context_restore (context);
 }

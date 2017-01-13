@@ -137,12 +137,12 @@ gtk_builtin_icon_snapshot (GtkCssGadget *gadget,
 {
   GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
 
-  gtk_snapshot_translate_2d (snapshot, x, y);
+  gtk_snapshot_offset (snapshot, x, y);
   gtk_css_style_snapshot_icon (gtk_css_gadget_get_style (gadget),
                                snapshot,
                                width, height,
                                priv->image_type);
-  gtk_snapshot_translate_2d (snapshot, -x, -y);
+  gtk_snapshot_offset (snapshot, -x, -y);
 
   return FALSE;
 }
