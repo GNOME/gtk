@@ -2556,7 +2556,7 @@ gtk_builder_new_from_file (const gchar *filename)
 
   builder = gtk_builder_new ();
   if (!gtk_builder_add_from_file (builder, filename, &error))
-    g_error ("failed to add UI: %s", error->message);
+    g_error ("failed to add UI from file %s: %s", filename, error->message);
 
   return builder;
 }
@@ -2583,7 +2583,7 @@ gtk_builder_new_from_resource (const gchar *resource_path)
 
   builder = gtk_builder_new ();
   if (!gtk_builder_add_from_resource (builder, resource_path, &error))
-    g_error ("failed to add UI: %s", error->message);
+    g_error ("failed to add UI from resource %s: %s", resource_path, error->message);
 
   return builder;
 }
