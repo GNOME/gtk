@@ -559,7 +559,7 @@ check_that_active_layout_is_in_sync (GdkWin32Keymap *keymap)
   if (hkl != cached_hkl)
     {
       if (!GetKeyboardLayoutNameW (hkl_name))
-        wcscpy_s (hkl_name, KL_NAMELENGTH, L"(NULL)");
+        wcsncpy (hkl_name, L"(NULL)", KL_NAMELENGTH);
 
       g_warning ("Cached active layout #%d (0x%p) does not match actual layout %S, 0x%p",
                  keymap->active_layout, cached_hkl, hkl_name, hkl);
@@ -656,7 +656,7 @@ update_keymap (GdkKeymap *gdk_keymap)
           wchar_t hkl_name[KL_NAMELENGTH];
 
           if (!GetKeyboardLayoutNameW (hkl_name))
-            wcscpy_s (hkl_name, KL_NAMELENGTH, L"(NULL)");
+            wcsncpy (hkl_name, L"(NULL)", KL_NAMELENGTH);
 
           GDK_NOTE (EVENTS, g_print ("(active, %S)", hkl_name));
         }
