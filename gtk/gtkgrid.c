@@ -36,7 +36,7 @@
 
 /**
  * SECTION:gtkgrid
- * @Short_description: Pack widgets in a rows and columns
+ * @Short_description: Pack widgets in rows and columns
  * @Title: GtkGrid
  * @See_also: #GtkBox
  *
