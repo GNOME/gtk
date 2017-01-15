@@ -38,7 +38,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-10 07:06+0100\n"
+"POT-Creation-Date: 2017-01-15 20:15+0100\n"
 "PO-Revision-Date: 2016-09-12 21:16+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -248,11 +248,11 @@ msgstr "Renderitzador de cel·la"
 msgid "The cell renderer represented by this accessible"
 msgstr "El renderitzador de cel·la que representa aquest accessible"
 
-#: ../gtk/gtkaboutdialog.c:341
+#: ../gtk/gtkaboutdialog.c:356
 msgid "Program name"
 msgstr "Nom del programa"
 
-#: ../gtk/gtkaboutdialog.c:342
+#: ../gtk/gtkaboutdialog.c:357
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -260,100 +260,108 @@ msgstr ""
 "El nom del programa. Si no està definit, per defecte serà el valor de "
 "g_get_application_name()"
 
-#: ../gtk/gtkaboutdialog.c:355
+#: ../gtk/gtkaboutdialog.c:370
 msgid "Program version"
 msgstr "Versió del programa"
 
-#: ../gtk/gtkaboutdialog.c:356
+#: ../gtk/gtkaboutdialog.c:371
 msgid "The version of the program"
 msgstr "La versió del programa"
 
-#: ../gtk/gtkaboutdialog.c:369
+#: ../gtk/gtkaboutdialog.c:384
 msgid "Copyright string"
 msgstr "Cadena del copyright"
 
-#: ../gtk/gtkaboutdialog.c:370
+#: ../gtk/gtkaboutdialog.c:385
 msgid "Copyright information for the program"
 msgstr "Informació de copyright per al programa"
 
-#: ../gtk/gtkaboutdialog.c:385
+#: ../gtk/gtkaboutdialog.c:400
 msgid "Comments string"
 msgstr "Cadena de comentaris"
 
-#: ../gtk/gtkaboutdialog.c:386
+#: ../gtk/gtkaboutdialog.c:401
 msgid "Comments about the program"
 msgstr "Comentaris sobre el programa"
 
-#: ../gtk/gtkaboutdialog.c:406
+#: ../gtk/gtkaboutdialog.c:425
 msgid "License"
 msgstr "Llicència"
 
-#: ../gtk/gtkaboutdialog.c:407
+#: ../gtk/gtkaboutdialog.c:426
 msgid "The license of the program"
 msgstr "La llicència del programa"
 
-#: ../gtk/gtkaboutdialog.c:434
+#: ../gtk/gtkaboutdialog.c:446
+msgid "System Information"
+msgstr "Informació del sistema"
+
+#: ../gtk/gtkaboutdialog.c:447
+msgid "Information about the system on which the program is running"
+msgstr "Informació sobre el sistema en què s'està executant el programa"
+
+#: ../gtk/gtkaboutdialog.c:474
 msgid "License Type"
 msgstr "Tipus de llicència"
 
-#: ../gtk/gtkaboutdialog.c:435
+#: ../gtk/gtkaboutdialog.c:475
 msgid "The license type of the program"
 msgstr "El tipus de llicència del programa"
 
-#: ../gtk/gtkaboutdialog.c:450
+#: ../gtk/gtkaboutdialog.c:490
 msgid "Website URL"
 msgstr "URL del lloc web"
 
-#: ../gtk/gtkaboutdialog.c:451
+#: ../gtk/gtkaboutdialog.c:491
 msgid "The URL for the link to the website of the program"
 msgstr "L'URL per al lloc web del programa"
 
-#: ../gtk/gtkaboutdialog.c:464
+#: ../gtk/gtkaboutdialog.c:504
 msgid "Website label"
 msgstr "Etiqueta del lloc web"
 
-#: ../gtk/gtkaboutdialog.c:465
+#: ../gtk/gtkaboutdialog.c:505
 msgid "The label for the link to the website of the program"
 msgstr "L'etiqueta de l'enllaç al lloc web del programa"
 
-#: ../gtk/gtkaboutdialog.c:480
+#: ../gtk/gtkaboutdialog.c:520
 msgid "Authors"
 msgstr "Autors"
 
-#: ../gtk/gtkaboutdialog.c:481
+#: ../gtk/gtkaboutdialog.c:521
 msgid "List of authors of the program"
 msgstr "Llista d'autors del programa"
 
-#: ../gtk/gtkaboutdialog.c:496
+#: ../gtk/gtkaboutdialog.c:536
 msgid "Documenters"
 msgstr "Documentadors"
 
-#: ../gtk/gtkaboutdialog.c:497
+#: ../gtk/gtkaboutdialog.c:537
 msgid "List of people documenting the program"
 msgstr "Llista de gent que documenta el programa"
 
-#: ../gtk/gtkaboutdialog.c:512
+#: ../gtk/gtkaboutdialog.c:552
 msgid "Artists"
 msgstr "Artistes"
 
-#: ../gtk/gtkaboutdialog.c:513
+#: ../gtk/gtkaboutdialog.c:553
 msgid "List of people who have contributed artwork to the program"
 msgstr "Llista de gent que ha contribuït amb imatges al programa"
 
-#: ../gtk/gtkaboutdialog.c:528
+#: ../gtk/gtkaboutdialog.c:568
 msgid "Translator credits"
 msgstr "Traductors"
 
-#: ../gtk/gtkaboutdialog.c:529
+#: ../gtk/gtkaboutdialog.c:569
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "El nom dels traductors. Aquesta cadena s'ha de marcar com a traduïble"
 
-#: ../gtk/gtkaboutdialog.c:543
+#: ../gtk/gtkaboutdialog.c:583
 msgid "Logo"
 msgstr "Logotip"
 
-#: ../gtk/gtkaboutdialog.c:544
+#: ../gtk/gtkaboutdialog.c:584
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -361,19 +369,19 @@ msgstr ""
 "Un logotip per a la caixa d'informació de l'aplicació. Si no està definit, "
 "es fa servir el valor de gtk_window_get_default_icon_list()"
 
-#: ../gtk/gtkaboutdialog.c:558
+#: ../gtk/gtkaboutdialog.c:598
 msgid "Logo Icon Name"
 msgstr "Nom de la icona del logotip"
 
-#: ../gtk/gtkaboutdialog.c:559
+#: ../gtk/gtkaboutdialog.c:599
 msgid "A named icon to use as the logo for the about box."
 msgstr "Una icona amb nom per emprar com a logotip a la caixa d'informació."
 
-#: ../gtk/gtkaboutdialog.c:572
+#: ../gtk/gtkaboutdialog.c:612
 msgid "Wrap license"
 msgstr "Ajusta la llicència"
 
-#: ../gtk/gtkaboutdialog.c:573
+#: ../gtk/gtkaboutdialog.c:613
 msgid "Whether to wrap the license text."
 msgstr "Si s'han d'ajustar els finals de línia del text de la llicència."
 
@@ -432,21 +440,21 @@ msgstr ""
 
 #: ../gtk/gtkactionbar.c:329 ../gtk/gtkbox.c:322 ../gtk/gtkheaderbar.c:1950
 #: ../gtk/gtknotebook.c:834 ../gtk/gtkpaned.c:353 ../gtk/gtkpopover.c:1630
-#: ../gtk/gtkpopovermenu.c:384 ../gtk/gtkstack.c:503
+#: ../gtk/gtkpopovermenu.c:384 ../gtk/gtkstack.c:504
 #: ../gtk/gtktoolitemgroup.c:1661
 msgid "Position"
 msgstr "Posició"
 
 #: ../gtk/gtkactionbar.c:330 ../gtk/gtkbox.c:323 ../gtk/gtkheaderbar.c:1951
-#: ../gtk/gtknotebook.c:835 ../gtk/gtkpopovermenu.c:385 ../gtk/gtkstack.c:504
+#: ../gtk/gtknotebook.c:835 ../gtk/gtkpopovermenu.c:385 ../gtk/gtkstack.c:505
 msgid "The index of the child in the parent"
 msgstr "L'índex del fill en el pare"
 
-#: ../gtk/gtkactionbar.c:336
+#: ../gtk/gtkactionbar.c:336 ../gtk/gtkinfobar.c:359
 msgid "Reveal"
 msgstr "Descobreix"
 
-#: ../gtk/gtkactionbar.c:337
+#: ../gtk/gtkactionbar.c:337 ../gtk/gtkinfobar.c:360
 msgid "Controls whether the action bar shows its contents or not"
 msgstr "Controla si l'barra d'accions mostra o no els seus continguts"
 
@@ -748,7 +756,7 @@ msgstr "Espaiament"
 msgid "The amount of space between children"
 msgstr "La quantitat d'espai entre fills"
 
-#: ../gtk/gtkbox.c:263 ../gtk/gtkflowbox.c:3773 ../gtk/gtkstack.c:425
+#: ../gtk/gtkbox.c:263 ../gtk/gtkflowbox.c:3773 ../gtk/gtkstack.c:426
 #: ../gtk/gtktoolbar.c:590 ../gtk/gtktoolitemgroup.c:1633
 msgid "Homogeneous"
 msgstr "Homogeni"
@@ -1872,7 +1880,7 @@ msgstr "Si s'ha de donar un valor alfa al color"
 #: ../gtk/gtkfontbutton.c:476 ../gtk/gtkheaderbar.c:1957
 #: ../gtk/gtkprintjob.c:132 ../gtk/gtkshortcutsgroup.c:308
 #: ../gtk/gtkshortcutssection.c:376 ../gtk/gtkshortcutsshortcut.c:591
-#: ../gtk/gtkstack.c:489 ../gtk/gtktreeviewcolumn.c:315
+#: ../gtk/gtkstack.c:490 ../gtk/gtktreeviewcolumn.c:315
 msgid "Title"
 msgstr "Títol"
 
@@ -2067,7 +2075,7 @@ msgstr "ID"
 msgid "Unique ID"
 msgstr "ID únic"
 
-#: ../gtk/gtkcssnode.c:634 ../gtk/gtkprinter.c:121 ../gtk/gtkstack.c:482
+#: ../gtk/gtkcssnode.c:634 ../gtk/gtkprinter.c:121 ../gtk/gtkstack.c:483
 #: ../gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Nom"
@@ -2141,19 +2149,19 @@ msgstr "Valor inicial"
 msgid "The initial specified value used for this property"
 msgstr "El valor inicial especificat que s'utilitza per aquesta propietat"
 
-#: ../gtk/gtkdrawingarea.c:277
+#: ../gtk/gtkdrawingarea.c:279
 msgid "Content Width"
 msgstr "Amplada del contingut"
 
-#: ../gtk/gtkdrawingarea.c:278
+#: ../gtk/gtkdrawingarea.c:280
 msgid "Desired width for displayed content"
 msgstr "Amplada desitjada per mostrar contingut"
 
-#: ../gtk/gtkdrawingarea.c:291
+#: ../gtk/gtkdrawingarea.c:293
 msgid "Content Height"
 msgstr "Alçada del contingut"
 
-#: ../gtk/gtkdrawingarea.c:292
+#: ../gtk/gtkdrawingarea.c:294
 msgid "Desired height for displayed content"
 msgstr "Alçada desitjada per mostrar contingut"
 
@@ -3395,19 +3403,19 @@ msgstr "Utilitza les alternatives"
 msgid "Whether to use icon names fallback"
 msgstr "Si s'han d'utilitzar els noms d'icones alternatius"
 
-#: ../gtk/gtkinfobar.c:362 ../gtk/gtkmessagedialog.c:176
+#: ../gtk/gtkinfobar.c:337 ../gtk/gtkmessagedialog.c:176
 msgid "Message Type"
 msgstr "Tipus de missatge"
 
-#: ../gtk/gtkinfobar.c:363 ../gtk/gtkmessagedialog.c:177
+#: ../gtk/gtkinfobar.c:338 ../gtk/gtkmessagedialog.c:177
 msgid "The type of message"
 msgstr "El tipus de missatge"
 
-#: ../gtk/gtkinfobar.c:378 ../gtk/gtksearchbar.c:415
+#: ../gtk/gtkinfobar.c:352 ../gtk/gtksearchbar.c:415
 msgid "Show Close Button"
 msgstr "Mostra el botó de tancament"
 
-#: ../gtk/gtkinfobar.c:379
+#: ../gtk/gtkinfobar.c:353
 msgid "Whether to include a standard close button"
 msgstr "Si s'ha d'incloure un botó de tancament estàndard"
 
@@ -4179,19 +4187,19 @@ msgstr "Visualitza el botó d'avanç estàndard"
 msgid "The orientation of the orientable"
 msgstr "L'orientació de l'orientable"
 
-#: ../gtk/gtkoverlay.c:762
+#: ../gtk/gtkoverlay.c:763
 msgid "Pass Through"
 msgstr "Passa a través"
 
-#: ../gtk/gtkoverlay.c:762
+#: ../gtk/gtkoverlay.c:763
 msgid "Pass through input, does not affect main child"
 msgstr "L'entrada passa a través, no afecta el fill principal"
 
-#: ../gtk/gtkoverlay.c:775
+#: ../gtk/gtkoverlay.c:776
 msgid "Index"
 msgstr "Índex"
 
-#: ../gtk/gtkoverlay.c:776
+#: ../gtk/gtkoverlay.c:777
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "L'índex de superposició en el pare, -1 pel fill principal"
 
@@ -4209,7 +4217,7 @@ msgstr "Dispositiu pad"
 
 #: ../gtk/gtkpadcontroller.c:380
 msgid "Pad device to control"
-msgstr "Dispositiu pad a control·lar"
+msgstr "Dispositiu pad a controlar"
 
 #: ../gtk/gtkpaned.c:354
 msgid ""
@@ -4973,19 +4981,19 @@ msgstr "El camí sencer al fitxer a utilitzar per desar i llegir la llista"
 msgid "The size of the recently used resources list"
 msgstr "La mida de la llista de recursos utilitzada recentment"
 
-#: ../gtk/gtkrevealer.c:233 ../gtk/gtkstack.c:465
+#: ../gtk/gtkrevealer.c:233 ../gtk/gtkstack.c:466
 msgid "Transition type"
 msgstr "Tipus de transició"
 
-#: ../gtk/gtkrevealer.c:234 ../gtk/gtkstack.c:465
+#: ../gtk/gtkrevealer.c:234 ../gtk/gtkstack.c:466
 msgid "The type of animation used to transition"
 msgstr "El tipus d'animació emprada a la transició"
 
-#: ../gtk/gtkrevealer.c:241 ../gtk/gtkstack.c:461
+#: ../gtk/gtkrevealer.c:241 ../gtk/gtkstack.c:462
 msgid "Transition duration"
 msgstr "Duració de la transició"
 
-#: ../gtk/gtkrevealer.c:242 ../gtk/gtkstack.c:461
+#: ../gtk/gtkrevealer.c:242 ../gtk/gtkstack.c:462
 msgid "The animation duration, in milliseconds"
 msgstr "La durada de l'animació, en mil·lisegons"
 
@@ -5859,55 +5867,55 @@ msgstr "Llegeix el valor actual, o fixa'n un de nou"
 msgid "Whether the spinner is active"
 msgstr "Si l'indicador rotatiu és actiu"
 
-#: ../gtk/gtkstack.c:425
+#: ../gtk/gtkstack.c:426
 msgid "Homogeneous sizing"
 msgstr "Dimensionat homogeni"
 
-#: ../gtk/gtkstack.c:437
+#: ../gtk/gtkstack.c:438
 msgid "Horizontally homogeneous"
 msgstr "Homogeni horitzontalment"
 
-#: ../gtk/gtkstack.c:437
+#: ../gtk/gtkstack.c:438
 msgid "Horizontally homogeneous sizing"
 msgstr "Dimensionat homogeni horitzontal"
 
-#: ../gtk/gtkstack.c:449
+#: ../gtk/gtkstack.c:450
 msgid "Vertically homogeneous"
 msgstr "Homogeni verticalment"
 
-#: ../gtk/gtkstack.c:449
+#: ../gtk/gtkstack.c:450
 msgid "Vertically homogeneous sizing"
 msgstr "Dimensionat homogeni vertical"
 
-#: ../gtk/gtkstack.c:453
+#: ../gtk/gtkstack.c:454
 msgid "Visible child"
 msgstr "Fill visible"
 
-#: ../gtk/gtkstack.c:453
+#: ../gtk/gtkstack.c:454
 msgid "The widget currently visible in the stack"
 msgstr "El giny de la pila visible actualment"
 
-#: ../gtk/gtkstack.c:457
+#: ../gtk/gtkstack.c:458
 msgid "Name of visible child"
 msgstr "Nom del fill visible"
 
-#: ../gtk/gtkstack.c:457
+#: ../gtk/gtkstack.c:458
 msgid "The name of the widget currently visible in the stack"
 msgstr "El nom del giny de la pila actualment visible"
 
-#: ../gtk/gtkstack.c:469
+#: ../gtk/gtkstack.c:470
 msgid "Transition running"
 msgstr "Transició en execució"
 
-#: ../gtk/gtkstack.c:469
+#: ../gtk/gtkstack.c:470
 msgid "Whether or not the transition is currently running"
 msgstr "Si s'està executant la transició"
 
-#: ../gtk/gtkstack.c:473
+#: ../gtk/gtkstack.c:474
 msgid "Interpolate size"
 msgstr "Mida de la interpolació"
 
-#: ../gtk/gtkstack.c:473
+#: ../gtk/gtkstack.c:474
 msgid ""
 "Whether or not the size should smoothly change when changing between "
 "differently sized children"
@@ -5915,27 +5923,27 @@ msgstr ""
 "Si la mida ha de canviar suaument o no en canviar entre fills de diferent "
 "mida"
 
-#: ../gtk/gtkstack.c:483
+#: ../gtk/gtkstack.c:484
 msgid "The name of the child page"
 msgstr "El nom de la pàgina filla"
 
-#: ../gtk/gtkstack.c:490
+#: ../gtk/gtkstack.c:491
 msgid "The title of the child page"
 msgstr "El títol de la pàgina filla"
 
-#: ../gtk/gtkstack.c:496 ../gtk/gtktoolbutton.c:245
+#: ../gtk/gtkstack.c:497 ../gtk/gtktoolbutton.c:245
 msgid "Icon name"
 msgstr "Nom de la icona"
 
-#: ../gtk/gtkstack.c:497
+#: ../gtk/gtkstack.c:498
 msgid "The icon name of the child page"
 msgstr "El nom de la icona de la pàgina filla"
 
-#: ../gtk/gtkstack.c:521
+#: ../gtk/gtkstack.c:522
 msgid "Needs Attention"
 msgstr "Requereix atenció"
 
-#: ../gtk/gtkstack.c:522
+#: ../gtk/gtkstack.c:523
 msgid "Whether this page needs attention"
 msgstr "Si aquesta pàgina requereix atenció"
 
