@@ -191,7 +191,9 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                        GtkSwitch            *sw)
 {
   GtkSwitchPrivate *priv = sw->priv;
+  GtkAllocation allocation;
 
+  gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   /* If the press didn't happen in the draggable handle,
