@@ -1,3 +1,23 @@
+Overview of Changes in GTK+ 3.22.7
+==================================
+
+* Bugs fixed:
+ 165385 Win32 keyboard handling still incomplete
+ 769214 keyval field not filled correctly for Pause key
+ 769835 On Wayland, application containing GtkGLArea stops responding if it's not...
+ 774726 GtkTreeView dnd: gtk_drag_finish remove row when reorder sinse 3.20
+ 775846 gdk/wayland: Add support for the gtk-enable-primary-paste gsetting
+ 776031 W32: Winkey+down minimizes maximized window instead of restoring it
+ 776225 [wayland] dropdown placed somewhere in the screen
+ 776485 GDK W32: Impossible to restore maximized window via system menu
+ 776807 GtkInspector doesn't show up when Gtk is initialized through option group
+ 777031 win32 HiDPI assert
+ 777176 [wayland] gedit killed by protocol error "Invalid anchor rectangle size"
+
+* Translation updates:
+ Lithuanian
+
+
 Overview of Changes in GTK+ 3.22.6
 ==================================
 
