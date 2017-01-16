@@ -191,9 +191,7 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                        GtkSwitch            *sw)
 {
   GtkSwitchPrivate *priv = sw->priv;
-  GtkAllocation allocation;
 
-  gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   /* If the press didn't happen in the draggable handle,
@@ -257,15 +255,12 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
 {
   GtkSwitchPrivate *priv = sw->priv;
   GdkEventSequence *sequence;
-  GtkAllocation allocation;
   gboolean active;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
   if (gtk_gesture_get_sequence_state (GTK_GESTURE (gesture), sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
     {
-      gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
-
       /* if half the handle passed the middle of the switch, then we
        * consider it to be on
        */
