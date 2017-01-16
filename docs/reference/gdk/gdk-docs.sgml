@@ -49,7 +49,6 @@
     <xi:include href="xml/x_interaction.xml" />
     <xi:include href="xml/wayland_interaction.xml" />
     <xi:include href="xml/gdkapplaunchcontext.xml" />
-    <xi:include href="xml/gdktestutils.xml" />
   </reference>
 
   <reference>
