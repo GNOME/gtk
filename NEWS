@@ -1,3 +1,67 @@
+Overview of Changes in GTK+ 3.89.3
+==================================
+
+* GtkWidget now has API to navigate child widgets:
+  - gtk_widget_get_{first,last}_child and gtk_widget_get_{prev,next}_sibling
+  - A number of non-container widgets have been converted to use
+    child widgets internally: GtkSwitch, GtkSpinButton, GtkActionBar
+
+* GtkAboutDialog can show a 'System' tab
+
+* GTK+ CSS now supports the filter: property and a -gtk-icon-filter
+  function that replaces and generalizes -gtk-icon-effect
+
+* GtkInspector can now save render nodes for testing and debugging
+
+* More tests for render nodes have been added
+
+* GtkTreeView and cell renderers have been more completely converted to
+  the snapshot() api
+
+* More widgets have been converted to snapshot(): GtkCalendar, GtkColorPlane
+
+* Vulkan renderer:
+ - Combine draw calls when possible
+ - Handle (some) clipping on the GPU
+ - Handle linear gradients
+ - Handle opacity
+ - Support color transformations
+ - Handle borders
+
+* Wayland
+ - Support the Vulkan renderer
+
+* X11
+ - Call XInitThreads(), since this is needed with Mesa Vulkan drivers
+
+* Mir
+ - Implement window properties
+ - Track the focus window
+ - Connect to content-hub and use it for copy/paste
+ - Support modal windows
+
+* Bug fixes:
+ 775732 mir: clipboard support missing
+ 775846 gdk/wayland: Add support for the gtk-enable-primary-paste gsetting
+ 776524 GtkAboutDialog: Fix formatting of example email address in html documentation
+ 776560 icon-browser: window opens at very narrow size, only showing 1 column of icons
+ 776604 about dialog: Add a "system" tab
+ 776627 Correct PostScript capitalization
+ 776807 GtkInspector doesn't show up when Gtk is initialized through option group
+ 776868 Improve the documentation of GtkEntry:attributes
+ 777176 [wayland] gedit killed by protocol error "Invalid anchor rectangle size"
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan
+ Czech
+ German
+ Hungarian
+ Norwegian bokmål
+ Russian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.89.2
 ==================================
 
