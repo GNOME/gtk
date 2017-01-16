@@ -143,9 +143,11 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               gint minimum_height;
               gint natural_height;
 
-	      /* Pull the base natural height from the cache as it's needed to adjust
-	       * the proposed 'for_size' */
-	      gtk_widget_get_preferred_height (widget, &minimum_height, &natural_height);
+              /* Pull the base natural height from the cache as it's needed to adjust
+               * the proposed 'for_size' */
+              gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
+                                  &minimum_height, &natural_height,
+                                  NULL, NULL);
 
               /* convert for_size to unadjusted height (for_size is a proposed allocation) */
               gtk_widget_adjust_size_allocation (widget,
@@ -182,9 +184,11 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               gint minimum_width;
               gint natural_width;
 
-	      /* Pull the base natural width from the cache as it's needed to adjust
-	       * the proposed 'for_size' */
-	      gtk_widget_get_preferred_width (widget, &minimum_width, &natural_width);
+              /* Pull the base natural width from the cache as it's needed to adjust
+               * the proposed 'for_size' */
+              gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                                  &minimum_width, &natural_width,
+                                  NULL, NULL);
 
               /* convert for_size to unadjusted width (for_size is a proposed allocation) */
               gtk_widget_adjust_size_allocation (widget,
