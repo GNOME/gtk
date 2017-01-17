@@ -1,6 +1,7 @@
 #version 420 core
 
-#include "constants.glsl"
+#define CLIP_NONE
+#include "clip.vert.glsl"
 
 struct ColorStop {
   float offset;
@@ -39,16 +40,6 @@ vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 0.0),
                     vec2(1.0, 1.0) };
 
-vec4 intersect(vec4 a, vec4 b)
-{
-  a = vec4(a.xy, a.xy + a.zw);
-  b = vec4(b.xy, b.xy + b.zw);
-  vec4 result = vec4(max(a.xy, b.xy), min(a.zw, b.zw));
-  if (any (greaterThanEqual (result.xy, result.zw)))
-    return vec4(0.0,0.0,0.0,0.0);
-  return vec4(result.xy, result.zw - result.xy);
-}
-
 float
 get_gradient_pos (vec2 pos)
 {
@@ -59,7 +50,7 @@ get_gradient_pos (vec2 pos)
 }
 
 void main() {
-  vec4 rect = intersect(inRect, push.clip_bounds);
+  vec4 rect = clip (inRect);
   vec2 pos = rect.xy + rect.zw * offsets[gl_VertexIndex];
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
   outGradientPos = get_gradient_pos (pos);

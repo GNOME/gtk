@@ -1,6 +1,7 @@
 #version 420 core
 
-#include "constants.glsl"
+#define CLIP_RECT
+#include "clip.vert.glsl"
 
 struct ColorStop {
   float offset;
@@ -49,7 +50,8 @@ get_gradient_pos (vec2 pos)
 }
 
 void main() {
-  vec2 pos = inRect.xy + inRect.zw * offsets[gl_VertexIndex];
+  vec4 rect = clip (inRect);
+  vec2 pos = rect.xy + rect.zw * offsets[gl_VertexIndex];
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
   outGradientPos = get_gradient_pos (pos);
   outRepeating = inRepeating;

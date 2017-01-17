@@ -1,6 +1,7 @@
 #version 420 core
 
-#include "constants.glsl"
+#define CLIP_ROUNDED_RECT
+#include "clip.vert.glsl"
 
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inCornerWidths;
@@ -45,16 +46,6 @@ vec2 offsets[6] = { vec2(0.0, 0.0),
 #define SLICE_BOTTOM_LEFT 6
 #define SLICE_LEFT 7
 
-vec4 intersect(vec4 a, vec4 b)
-{
-  a = vec4(a.xy, a.xy + a.zw);
-  b = vec4(b.xy, b.xy + b.zw);
-  vec4 result = vec4(max(a.xy, b.xy), min(a.zw, b.zw));
-  if (any (greaterThanEqual (result.xy, result.zw)))
-    return vec4(0.0,0.0,0.0,0.0);
-  return vec4(result.xy, result.zw - result.xy);
-}
-
 void main() {
   int slice_index = gl_VertexIndex / 6;
   int vert_index = gl_VertexIndex % 6;
@@ -96,7 +87,7 @@ void main() {
       break;
     }
 
-  rect = intersect (rect, push.clip_bounds);
+  rect = clip (rect);
   vec2 pos;
   if ((slice_index % 4) != 0 || (vert_index % 3) != 2)
     pos = rect.xy + rect.zw * offsets[vert_index];

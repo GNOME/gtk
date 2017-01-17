@@ -59,6 +59,7 @@ gsk_private_vulkan_source_c = \
 	gskvulkanshader.c
 gsk_private_vulkan_include_shaders = \
 	resources/vulkan/clip.frag.glsl \
+	resources/vulkan/clip.vert.glsl \
 	resources/vulkan/constants.glsl \
 	resources/vulkan/rounded-rect.glsl
 gsk_private_vulkan_shaders = \
