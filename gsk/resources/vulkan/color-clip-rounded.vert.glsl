@@ -7,8 +7,6 @@ layout(location = 1) in vec4 inColor;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out flat vec4 outColor;
-layout(location = 2) out flat vec4 outClipBounds;
-layout(location = 3) out flat vec4 outClipWidths;
 
 out gl_PerVertex {
   vec4 gl_Position;
@@ -26,6 +24,4 @@ void main() {
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
   outPos = pos;
   outColor = inColor;
-  outClipBounds = push.clip_bounds;
-  outClipWidths = push.clip_widths;
 }

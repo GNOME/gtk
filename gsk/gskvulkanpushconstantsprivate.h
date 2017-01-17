@@ -8,24 +8,11 @@
 G_BEGIN_DECLS
 
 typedef struct _GskVulkanPushConstants GskVulkanPushConstants;
-typedef struct _GskVulkanPushConstantsWire GskVulkanPushConstantsWire;
 
 struct _GskVulkanPushConstants
 {
   graphene_matrix_t mvp;
   GskVulkanClip clip;
-};
-
-struct _GskVulkanPushConstantsWire
-{
-  struct {
-    float mvp[16];
-    float clip[12];
-  } vertex;
-#if 0
-  struct {
-  } fragment;
-#endif
 };
 
 const VkPushConstantRange *
@@ -49,7 +36,7 @@ gboolean                gsk_vulkan_push_constants_intersect_rounded     (GskVulk
                                                                          const GskVulkanPushConstants   *src,
                                                                          const GskRoundedRect           *rect);
 
-void                    gsk_vulkan_push_constants_push_vertex           (const GskVulkanPushConstants   *self,
+void                    gsk_vulkan_push_constants_push                  (const GskVulkanPushConstants   *self,
                                                                          VkCommandBuffer                 command_buffer,
                                                                          VkPipelineLayout                pipeline_layout);
 

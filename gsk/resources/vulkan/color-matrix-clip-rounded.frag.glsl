@@ -1,5 +1,7 @@
 #version 420 core
 
+#include "constants.glsl"
+
 struct RoundedRect {
   vec4 bounds;
   vec4 corners;
@@ -7,10 +9,8 @@ struct RoundedRect {
 
 layout(location = 0) in vec2 inPos;
 layout(location = 1) in vec2 inTexCoord;
-layout(location = 2) in flat vec4 inClipBounds;
-layout(location = 3) in flat vec4 inClipWidths;
-layout(location = 4) in flat mat4 inColorMatrix;
-layout(location = 8) in flat vec4 inColorOffset;
+layout(location = 2) in flat mat4 inColorMatrix;
+layout(location = 6) in flat vec4 inColorOffset;
 
 layout(set = 0, binding = 0) uniform sampler2D inTexture;
 
@@ -70,7 +70,7 @@ color_matrix (vec4 color, mat4 color_matrix, vec4 color_offset)
 
 void main()
 {
-  RoundedRect r = RoundedRect(vec4(inClipBounds.xy, inClipBounds.xy + inClipBounds.zw), inClipWidths);
+  RoundedRect r = RoundedRect(vec4(push.clip_bounds.xy, push.clip_bounds.xy + push.clip_bounds.zw), push.clip_widths);
 
   color = color_matrix (texture (inTexture, inTexCoord), inColorMatrix, inColorOffset) * clip (inPos, r);
 }

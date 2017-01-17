@@ -4,6 +4,16 @@
 
 #include "gskroundedrectprivate.h"
 
+typedef struct _GskVulkanPushConstantsWire GskVulkanPushConstantsWire;
+
+struct _GskVulkanPushConstantsWire
+{
+  struct {
+    float mvp[16];
+    float clip[12];
+  } common;
+};
+
 void
 gsk_vulkan_push_constants_init (GskVulkanPushConstants  *constants,
                                 const graphene_matrix_t *mvp,
@@ -62,14 +72,14 @@ static void
 gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire   *wire,
                                      const GskVulkanPushConstants *self)
 {
-  graphene_matrix_to_float (&self->mvp, wire->vertex.mvp);
-  gsk_rounded_rect_to_float (&self->clip.rect, wire->vertex.clip);
+  graphene_matrix_to_float (&self->mvp, wire->common.mvp);
+  gsk_rounded_rect_to_float (&self->clip.rect, wire->common.clip);
 }
 
 void
-gsk_vulkan_push_constants_push_vertex (const GskVulkanPushConstants *self,
-                                       VkCommandBuffer               command_buffer,
-                                       VkPipelineLayout              pipeline_layout)
+gsk_vulkan_push_constants_push (const GskVulkanPushConstants *self,
+                                VkCommandBuffer               command_buffer,
+                                VkPipelineLayout              pipeline_layout)
 {
   GskVulkanPushConstantsWire wire;
 
@@ -77,26 +87,11 @@ gsk_vulkan_push_constants_push_vertex (const GskVulkanPushConstants *self,
 
   vkCmdPushConstants (command_buffer,
                       pipeline_layout,
-                      VK_SHADER_STAGE_VERTEX_BIT,
-                      G_STRUCT_OFFSET (GskVulkanPushConstantsWire, vertex),
-                      sizeof (wire.vertex),
-                      &wire.vertex);
+                      VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                      G_STRUCT_OFFSET (GskVulkanPushConstantsWire, common),
+                      sizeof (wire.common),
+                      &wire.common);
 }
-
-#if 0
-void
-gsk_vulkan_push_constants_push_fragment (GskVulkanPushConstants *self,
-                                         VkCommandBuffer         command_buffer,
-                                         VkPipelineLayout        pipeline_layout)
-{
-  vkCmdPushConstants (command_buffer,
-                      pipeline_layout,
-                      VK_SHADER_STAGE_FRAGMENT_BIT,
-                      G_STRUCT_OFFSET (GskVulkanPushConstants, fragment),
-                      sizeof (self->fragment),
-                      &self->fragment);
-}
-#endif
 
 uint32_t
 gst_vulkan_push_constants_get_range_count (void)
@@ -109,16 +104,9 @@ gst_vulkan_push_constants_get_ranges (void)
 {
   static const VkPushConstantRange ranges[1] = {
       {
-          .stageFlags = VK_SHADER_STAGE_VERTEX_BIT,
-          .offset = G_STRUCT_OFFSET (GskVulkanPushConstantsWire, vertex),
-          .size = sizeof (((GskVulkanPushConstantsWire *) 0)->vertex)
-#if 0
-      },
-      {
-          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-          .offset = G_STRUCT_OFFSET (GskVulkanPushConstants, fragment),
-          .size = sizeof (((GskVulkanPushConstants *) 0)->fragment)
-#endif
+          .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+          .offset = G_STRUCT_OFFSET (GskVulkanPushConstantsWire, common),
+          .size = sizeof (((GskVulkanPushConstantsWire *) 0)->common)
       }
   };
 

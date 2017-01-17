@@ -1,5 +1,6 @@
 #version 420 core
 
+#include "constants.glsl"
 #include "rounded-rect.glsl"
 
 layout(location = 0) in vec2 inPos;
@@ -8,16 +9,13 @@ layout(location = 2) in vec4 inRect;
 layout(location = 3) in vec4 inCornerWidths;
 layout(location = 4) in vec4 inCornerHeights;
 layout(location = 5) in vec4 inBorderWidths;
-layout(location = 6) in flat vec4 inClipBounds;
-layout(location = 7) in flat vec4 inClipWidths;
-layout(location = 8) in flat vec4 inClipHeights;
 
 layout(location = 0) out vec4 color;
 
 vec4
 clip (vec4 color)
 {
-  RoundedRect r = RoundedRect (vec4(inClipBounds.xy, inClipBounds.xy + inClipBounds.zw), inClipWidths, inClipHeights);
+  RoundedRect r = RoundedRect(vec4(push.clip_bounds.xy, push.clip_bounds.xy + push.clip_bounds.zw), push.clip_widths, push.clip_heights);
 
   return color * rounded_rect_coverage (r, inPos);
 }

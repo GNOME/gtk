@@ -1,9 +1,9 @@
 #version 420 core
 
+#include "constants.glsl"
+
 layout(location = 0) in vec2 inPos;
 layout(location = 1) in vec4 inColor;
-layout(location = 2) in vec4 inClipBounds;
-layout(location = 3) in vec4 inClipWidths;
 
 layout(location = 0) out vec4 color;
 
@@ -50,7 +50,7 @@ float clip(vec2 pos, RoundedRect r) {
 
 void main()
 {
-    RoundedRect r = RoundedRect(vec4(inClipBounds.xy, inClipBounds.xy + inClipBounds.zw), inClipWidths);
+  RoundedRect r = RoundedRect(vec4(push.clip_bounds.xy, push.clip_bounds.xy + push.clip_bounds.zw), push.clip_widths);
 
-    color = vec4(inColor.rgb * inColor.a, inColor.a) * clip (inPos, r);
+  color = vec4(inColor.rgb * inColor.a, inColor.a) * clip (inPos, r);
 }

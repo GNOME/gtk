@@ -9,10 +9,8 @@ layout(location = 6) in vec4 inColorOffset;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out vec2 outTexCoord;
-layout(location = 2) out flat vec4 outClipBounds;
-layout(location = 3) out flat vec4 outClipWidths;
-layout(location = 4) out flat mat4 outColorMatrix;
-layout(location = 8) out flat vec4 outColorOffset;
+layout(location = 2) out flat mat4 outColorMatrix;
+layout(location = 6) out flat vec4 outColorOffset;
 
 out gl_PerVertex {
   vec4 gl_Position;
@@ -41,8 +39,6 @@ void main() {
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
 
   outPos = pos;
-  outClipBounds = push.clip_bounds;
-  outClipWidths = push.clip_widths;
 
   vec4 texrect = vec4((rect.xy - inRect.xy) / inRect.zw,
                       rect.zw / inRect.zw);

@@ -27,9 +27,7 @@ layout(location = 0) out vec2 outPos;
 layout(location = 1) out float outGradientPos;
 layout(location = 2) out flat int outRepeating;
 layout(location = 3) out flat int outStopCount;
-layout(location = 4) out flat vec4 outClipBounds;
-layout(location = 5) out flat vec4 outClipWidths;
-layout(location = 6) out flat ColorStop outStops[8];
+layout(location = 4) out flat ColorStop outStops[8];
 
 out gl_PerVertex {
   vec4 gl_Position;
@@ -56,8 +54,6 @@ void main() {
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
   outPos = pos;
   outGradientPos = get_gradient_pos (pos);
-  outClipBounds = push.clip_bounds;
-  outClipWidths = push.clip_widths;
   outRepeating = inRepeating;
   outStopCount = inStopCount;
   outStops[0].offset = inOffsets0[0];

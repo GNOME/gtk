@@ -1,5 +1,7 @@
 #version 420 core
 
+#include "constants.glsl"
+
 struct RoundedRect {
   vec4 bounds;
   vec4 corners;
@@ -7,8 +9,6 @@ struct RoundedRect {
 
 layout(location = 0) in vec2 inPos;
 layout(location = 1) in vec2 inTexCoord;
-layout(location = 2) in flat vec4 inClipBounds;
-layout(location = 3) in flat vec4 inClipWidths;
 
 layout(set = 0, binding = 0) uniform sampler2D inTexture;
 
@@ -51,7 +51,7 @@ float clip(vec2 pos, RoundedRect r) {
 
 void main()
 {
-  RoundedRect r = RoundedRect(vec4(inClipBounds.xy, inClipBounds.xy + inClipBounds.zw), inClipWidths);
+  RoundedRect r = RoundedRect(vec4(push.clip_bounds.xy, push.clip_bounds.xy + push.clip_bounds.zw), push.clip_widths);
 
   color = texture (inTexture, inTexCoord) * clip (inPos, r);
 }

@@ -14,9 +14,6 @@ layout(location = 2) out flat vec4 outRect;
 layout(location = 3) out flat vec4 outCornerWidths;
 layout(location = 4) out flat vec4 outCornerHeights;
 layout(location = 5) out flat vec4 outBorderWidths;
-layout(location = 6) out flat vec4 outClipBounds;
-layout(location = 7) out flat vec4 outClipWidths;
-layout(location = 8) out flat vec4 outClipHeights;
 
 out gl_PerVertex {
   vec4 gl_Position;
@@ -112,7 +109,4 @@ void main() {
   outCornerWidths = inCornerWidths;
   outCornerHeights = inCornerHeights;
   outBorderWidths = inBorderWidths;
-  outClipBounds = push.clip_bounds;
-  outClipWidths = push.clip_widths;
-  outClipHeights = push.clip_heights;
 }

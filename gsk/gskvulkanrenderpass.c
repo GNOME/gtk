@@ -886,9 +886,9 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          gsk_vulkan_push_constants_push_vertex (&op->constants.constants,
-                                                 command_buffer, 
-                                                 gsk_vulkan_pipeline_layout_get_pipeline_layout (layout));
+          gsk_vulkan_push_constants_push (&op->constants.constants,
+                                          command_buffer, 
+                                          gsk_vulkan_pipeline_layout_get_pipeline_layout (layout));
           break;
 
         default:
