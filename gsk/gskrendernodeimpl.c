@@ -1303,6 +1303,66 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
   return &self->render_node;
 }
 
+const GskRoundedRect *
+gsk_inset_shadow_node_peek_outline (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_INSET_SHADOW_NODE), NULL);
+
+  return &self->outline;
+}
+
+const GdkRGBA *
+gsk_inset_shadow_node_peek_color (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_INSET_SHADOW_NODE), NULL);
+
+  return &self->color;
+}
+
+float
+gsk_inset_shadow_node_get_dx (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_INSET_SHADOW_NODE), 0.0f);
+
+  return self->dx;
+}
+
+float
+gsk_inset_shadow_node_get_dy (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_INSET_SHADOW_NODE), 0.0f);
+
+  return self->dy;
+}
+
+float
+gsk_inset_shadow_node_get_spread (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_INSET_SHADOW_NODE), 0.0f);
+
+  return self->spread;
+}
+
+float
+gsk_inset_shadow_node_get_blur_radius (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_INSET_SHADOW_NODE), 0.0f);
+
+  return self->blur_radius;
+}
+
 /*** GSK_OUTSET_SHADOW_NODE ***/
 
 typedef struct _GskOutsetShadowNode GskOutsetShadowNode;
@@ -1552,6 +1612,66 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
   self->render_node.bounds.size.height += top + bottom;
 
   return &self->render_node;
+}
+
+const GskRoundedRect *
+gsk_outset_shadow_node_peek_outline (GskRenderNode *node)
+{
+  GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OUTSET_SHADOW_NODE), NULL);
+
+  return &self->outline;
+}
+
+const GdkRGBA *
+gsk_outset_shadow_node_peek_color (GskRenderNode *node)
+{
+  GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OUTSET_SHADOW_NODE), NULL);
+
+  return &self->color;
+}
+
+float
+gsk_outset_shadow_node_get_dx (GskRenderNode *node)
+{
+  GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OUTSET_SHADOW_NODE), 0.0f);
+
+  return self->dx;
+}
+
+float
+gsk_outset_shadow_node_get_dy (GskRenderNode *node)
+{
+  GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OUTSET_SHADOW_NODE), 0.0f);
+
+  return self->dy;
+}
+
+float
+gsk_outset_shadow_node_get_spread (GskRenderNode *node)
+{
+  GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OUTSET_SHADOW_NODE), 0.0f);
+
+  return self->spread;
+}
+
+float
+gsk_outset_shadow_node_get_blur_radius (GskRenderNode *node)
+{
+  GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_OUTSET_SHADOW_NODE), 0.0f);
+
+  return self->blur_radius;
 }
 
 /*** GSK_CAIRO_NODE ***/

@@ -62,6 +62,20 @@ const GskRoundedRect * gsk_border_node_peek_outline (GskRenderNode *node);
 const float * gsk_border_node_peek_widths (GskRenderNode *node);
 const GdkRGBA * gsk_border_node_peek_colors (GskRenderNode *node);
 
+const GskRoundedRect * gsk_inset_shadow_node_peek_outline (GskRenderNode *node);
+const GdkRGBA * gsk_inset_shadow_node_peek_color (GskRenderNode *node);
+float gsk_inset_shadow_node_get_dx (GskRenderNode *node);
+float gsk_inset_shadow_node_get_dy (GskRenderNode *node);
+float gsk_inset_shadow_node_get_spread (GskRenderNode *node);
+float gsk_inset_shadow_node_get_blur_radius (GskRenderNode *node);
+
+const GskRoundedRect * gsk_outset_shadow_node_peek_outline (GskRenderNode *node);
+const GdkRGBA * gsk_outset_shadow_node_peek_color (GskRenderNode *node);
+float gsk_outset_shadow_node_get_dx (GskRenderNode *node);
+float gsk_outset_shadow_node_get_dy (GskRenderNode *node);
+float gsk_outset_shadow_node_get_spread (GskRenderNode *node);
+float gsk_outset_shadow_node_get_blur_radius (GskRenderNode *node);
+
 GskRenderNode *gsk_cairo_node_new_for_surface (const graphene_rect_t *bounds, cairo_surface_t *surface);
 cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
