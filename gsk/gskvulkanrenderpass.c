@@ -369,6 +369,10 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
         }
     }
 
+  GSK_NOTE (FALLBACK, g_print ("Node as texture not implemented. Using %gx%g fallback surface\n",
+                               ceil (bounds->size.width),
+                               ceil (bounds->size.height)));
+
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         ceil (bounds->size.width),
