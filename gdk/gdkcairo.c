@@ -34,9 +34,8 @@
  *
  * GDK does not wrap the cairo API, instead it allows to create cairo
  * contexts which can be used to draw on #GdkWindows. Additional
- * functions allow use #GdkRectangles with cairo and to use #GdkColors,
- * #GdkRGBAs, #GdkPixbufs and #GdkWindows as sources for drawing
- * operations.
+ * functions allow use #GdkRectangles with cairo and to use #GdkRGBAs,
+ * #GdkPixbufs and #GdkWindows as sources for drawing operations.
  */
 
 
