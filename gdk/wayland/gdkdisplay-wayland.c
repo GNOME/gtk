@@ -552,7 +552,7 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   /* Wait for initializing to complete. This means waiting for all
    * asynchrounous roundtrips that were triggered during initial roundtrip. */
-  while (g_list_length (display_wayland->async_roundtrips) > 0)
+  while (display_wayland->async_roundtrips != NULL)
     {
       if (wl_display_dispatch (display_wayland->wl_display) < 0)
         {
