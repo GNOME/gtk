@@ -1,13 +1,14 @@
 #version 420 core
 
+#include "clip.frag.glsl"
 #include "rounded-rect.glsl"
 
 layout(location = 0) in vec2 inPos;
-layout(location = 1) in flat vec4 inColor;
-layout(location = 2) in flat vec4 inRect;
-layout(location = 3) in flat vec4 inCornerWidths;
-layout(location = 4) in flat vec4 inCornerHeights;
-layout(location = 5) in flat vec4 inBorderWidths;
+layout(location = 1) in vec4 inColor;
+layout(location = 2) in vec4 inRect;
+layout(location = 3) in vec4 inCornerWidths;
+layout(location = 4) in vec4 inCornerHeights;
+layout(location = 5) in vec4 inBorderWidths;
 
 layout(location = 0) out vec4 color;
 
@@ -19,5 +20,5 @@ void main()
   float alpha = clamp (rounded_rect_coverage (routside, inPos) -
                        rounded_rect_coverage (rinside, inPos),
                        0.0, 1.0);
-  color = inColor * alpha;
+  color = clip (inPos, inColor * alpha);
 }

@@ -1,14 +1,17 @@
 #version 420 core
 
+#include "clip.frag.glsl"
+
 struct ColorStop {
   float offset;
   vec4 color;
 };
 
-layout(location = 0) in float inGradientPos;
-layout(location = 1) in flat int inRepeating;
-layout(location = 2) in flat int inStopCount;
-layout(location = 3) in flat ColorStop inStops[8];
+layout(location = 0) in vec2 inPos;
+layout(location = 1) in float inGradientPos;
+layout(location = 2) in flat int inRepeating;
+layout(location = 3) in flat int inStopCount;
+layout(location = 4) in flat ColorStop inStops[8];
 
 layout(location = 0) out vec4 outColor;
 
@@ -29,5 +32,5 @@ void main()
     }
   
   //outColor = vec4(pos, pos, pos, 1.0);
-  outColor = color;
+  outColor = clip (inPos, color);
 }

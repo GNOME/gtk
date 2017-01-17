@@ -1,6 +1,5 @@
 #version 420 core
 
-#define CLIP_RECT
 #include "clip.vert.glsl"
 
 struct ColorStop {
@@ -24,10 +23,11 @@ layout(location = 12) in vec4 inColors5;
 layout(location = 13) in vec4 inColors6;
 layout(location = 14) in vec4 inColors7;
 
-layout(location = 0) out float outGradientPos;
-layout(location = 1) out flat int outRepeating;
-layout(location = 2) out flat int outStopCount;
-layout(location = 3) out flat ColorStop outStops[8];
+layout(location = 0) out vec2 outPos;
+layout(location = 1) out float outGradientPos;
+layout(location = 2) out flat int outRepeating;
+layout(location = 3) out flat int outStopCount;
+layout(location = 4) out flat ColorStop outStops[8];
 
 out gl_PerVertex {
   vec4 gl_Position;
@@ -53,6 +53,7 @@ void main() {
   vec4 rect = clip (inRect);
   vec2 pos = rect.xy + rect.zw * offsets[gl_VertexIndex];
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
+  outPos = pos;
   outGradientPos = get_gradient_pos (pos);
   outRepeating = inRepeating;
   outStopCount = inStopCount;

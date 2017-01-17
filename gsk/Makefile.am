@@ -62,39 +62,28 @@ gsk_private_vulkan_include_shaders = \
 	resources/vulkan/clip.vert.glsl \
 	resources/vulkan/constants.glsl \
 	resources/vulkan/rounded-rect.glsl
+gsk_private_vulkan_fragment_shaders = \
+	resources/vulkan/blend.frag \
+	resources/vulkan/border.frag \
+	resources/vulkan/color.frag \
+	resources/vulkan/color-matrix.frag \
+	resources/vulkan/linear.frag
+gsk_private_vulkan_vertex_shaders = \
+	resources/vulkan/blend.vert \
+	resources/vulkan/border.vert \
+	resources/vulkan/color.vert \
+	resources/vulkan/color-matrix.vert \
+	resources/vulkan/linear.vert
 gsk_private_vulkan_shaders = \
-	resources/vulkan/blend-clip.frag.glsl \
-	resources/vulkan/blend-clip-rounded.frag.glsl \
-	resources/vulkan/blend-clip-rounded.vert.glsl \
-	resources/vulkan/blend-clip.vert.glsl \
-	resources/vulkan/blend.frag.glsl \
-	resources/vulkan/blend.vert.glsl \
-	resources/vulkan/border-clip.frag.glsl \
-	resources/vulkan/border-clip.vert.glsl \
-	resources/vulkan/border-clip-rounded.frag.glsl \
-	resources/vulkan/border-clip-rounded.vert.glsl \
-	resources/vulkan/border.frag.glsl \
-	resources/vulkan/border.vert.glsl \
-	resources/vulkan/color-clip.frag.glsl \
-	resources/vulkan/color-clip-rounded.frag.glsl \
-	resources/vulkan/color-clip-rounded.vert.glsl \
-	resources/vulkan/color-clip.vert.glsl \
-	resources/vulkan/color.frag.glsl \
-	resources/vulkan/color.vert.glsl \
-	resources/vulkan/color-matrix-clip.frag.glsl \
-	resources/vulkan/color-matrix-clip-rounded.frag.glsl \
-	resources/vulkan/color-matrix-clip-rounded.vert.glsl \
-	resources/vulkan/color-matrix-clip.vert.glsl \
-	resources/vulkan/color-matrix.frag.glsl \
-	resources/vulkan/color-matrix.vert.glsl \
-	resources/vulkan/linear-clip.frag.glsl \
-	resources/vulkan/linear-clip-rounded.frag.glsl \
-	resources/vulkan/linear-clip-rounded.vert.glsl \
-	resources/vulkan/linear-clip.vert.glsl \
-	resources/vulkan/linear.frag.glsl \
-	resources/vulkan/linear.vert.glsl
+	$(gsk_private_vulkan_fragment_shaders) \
+	$(gsk_private_vulkan_vertex_shaders)
 gsk_private_vulkan_compiled_shaders = \
-	$(gsk_private_vulkan_shaders:.glsl=.spv)
+	$(gsk_private_vulkan_fragment_shaders:.frag=.frag.spv) \
+	$(gsk_private_vulkan_vertex_shaders:.vert=.vert.spv) \
+	$(gsk_private_vulkan_fragment_shaders:.frag=-clip.frag.spv) \
+	$(gsk_private_vulkan_vertex_shaders:.vert=-clip.vert.spv) \
+	$(gsk_private_vulkan_fragment_shaders:.frag=-clip-rounded.frag.spv) \
+	$(gsk_private_vulkan_vertex_shaders:.vert=-clip-rounded.vert.spv)
 endif
 
 gsk_public_source_h = \
@@ -180,13 +169,29 @@ resource_files = \
 	$(gsk_private_vulkan_compiled_shaders) \
 	$(gsk_private_vulkan_shaders)
 
-resources/vulkan/%.frag.spv: resources/vulkan/%.frag.glsl
+resources/vulkan/%-clip-rounded.frag.spv: resources/vulkan/%.frag
 	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
-	$(AM_V_GEN) $(GLSLC) -fshader-stage=fragment -o $@.tmp $< && mv $@.tmp $@
+	$(AM_V_GEN) $(GLSLC) -fshader-stage=fragment -DCLIP_ROUNDED_RECT -o $@.tmp $< && mv $@.tmp $@
 
-resources/vulkan/%.vert.spv: resources/vulkan/%.vert.glsl
+resources/vulkan/%-clip-rounded.vert.spv: resources/vulkan/%.vert
 	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
-	$(AM_V_GEN) $(GLSLC) -fshader-stage=vertex -o $@.tmp $< && mv $@.tmp $@
+	$(AM_V_GEN) $(GLSLC) -fshader-stage=vertex -DCLIP_ROUNDED_RECT -o $@.tmp $< && mv $@.tmp $@
+
+resources/vulkan/%-clip.frag.spv: resources/vulkan/%.frag
+	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
+	$(AM_V_GEN) $(GLSLC) -fshader-stage=fragment -DCLIP_RECT -o $@.tmp $< && mv $@.tmp $@
+
+resources/vulkan/%-clip.vert.spv: resources/vulkan/%.vert
+	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
+	$(AM_V_GEN) $(GLSLC) -fshader-stage=vertex -DCLIP_RECT -o $@.tmp $< && mv $@.tmp $@
+
+resources/vulkan/%.frag.spv: resources/vulkan/%.frag
+	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
+	$(AM_V_GEN) $(GLSLC) -fshader-stage=fragment -DCLIP_NONE -o $@.tmp $< && mv $@.tmp $@
+
+resources/vulkan/%.vert.spv: resources/vulkan/%.vert
+	@if test -z "$(GLSLC)"; then echo "Missing glslc. See https://github.com/google/shaderc"; exit 1; fi
+	$(AM_V_GEN) $(GLSLC) -fshader-stage=vertex -DCLIP_NONE -o $@.tmp $< && mv $@.tmp $@
 
 gsk.resources.xml: Makefile.am
 	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \

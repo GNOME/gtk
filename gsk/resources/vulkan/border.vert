@@ -1,6 +1,5 @@
 #version 420 core
 
-#define CLIP_RECT
 #include "clip.vert.glsl"
 
 layout(location = 0) in vec4 inRect;

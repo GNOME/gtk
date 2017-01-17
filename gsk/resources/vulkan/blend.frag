@@ -1,6 +1,5 @@
 #version 420 core
 
-#define CLIP_ROUNDED_RECT
 #include "clip.frag.glsl"
 
 layout(location = 0) in vec2 inPos;

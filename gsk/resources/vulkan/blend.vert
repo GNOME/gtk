@@ -1,17 +1,12 @@
 #version 420 core
 
-#define CLIP_ROUNDED_RECT
 #include "clip.vert.glsl"
 
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inTexRect;
-layout(location = 2) in mat4 inColorMatrix;
-layout(location = 6) in vec4 inColorOffset;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out vec2 outTexCoord;
-layout(location = 2) out flat mat4 outColorMatrix;
-layout(location = 6) out flat vec4 outColorOffset;
 
 out gl_PerVertex {
   vec4 gl_Position;
@@ -36,6 +31,4 @@ void main() {
   texrect = vec4(inTexRect.xy + inTexRect.zw * texrect.xy,
                  inTexRect.zw * texrect.zw);
   outTexCoord = texrect.xy + texrect.zw * offsets[gl_VertexIndex];
-  outColorMatrix = inColorMatrix;
-  outColorOffset = inColorOffset;
 }
