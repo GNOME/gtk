@@ -1,14 +1,9 @@
 #version 420 core
 
+#include "constants.glsl"
+
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inColor;
-
-layout(push_constant) uniform PushConstants {
-    mat4 mvp;
-    vec4 clip_bounds;
-    vec4 clip_widths;
-    vec4 clip_heights;
-} push;
 
 out gl_PerVertex {
   vec4 gl_Position;

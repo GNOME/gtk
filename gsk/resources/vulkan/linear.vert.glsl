@@ -1,5 +1,7 @@
 #version 420 core
 
+#include "constants.glsl"
+
 struct ColorStop {
   float offset;
   vec4 color;
@@ -20,13 +22,6 @@ layout(location = 11) in vec4 inColors4;
 layout(location = 12) in vec4 inColors5;
 layout(location = 13) in vec4 inColors6;
 layout(location = 14) in vec4 inColors7;
-
-layout(push_constant) uniform PushConstants {
-    mat4 mvp;
-    vec4 clip_bounds;
-    vec4 clip_widths;
-    vec4 clip_heights;
-} push;
 
 layout(location = 0) out float outGradientPos;
 layout(location = 1) out flat int outRepeating;
