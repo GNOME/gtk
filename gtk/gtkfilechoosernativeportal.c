@@ -53,7 +53,6 @@ typedef struct {
   char *portal_handle;
   guint portal_response_signal_id;
   gboolean modal;
-  gboolean writable;
 
   gboolean hidden;
 
@@ -305,8 +304,6 @@ show_portal_file_chooser (GtkFileChooserNative *self,
                            g_variant_new_string (self->cancel_label));
   g_variant_builder_add (&opt_builder, "{sv}", "modal",
                          g_variant_new_boolean (data->modal));
-  g_variant_builder_add (&opt_builder, "{sv}", "writable",
-                         g_variant_new_boolean (data->writable));
   g_variant_builder_add (&opt_builder, "{sv}", "filters", get_filters (GTK_FILE_CHOOSER (self)));
   if (GTK_FILE_CHOOSER_NATIVE (self)->current_name)
     g_variant_builder_add (&opt_builder, "{sv}", "current_name",
@@ -379,7 +376,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   GDBusConnection *connection;
   GtkFileChooserAction action;
   const char *method_name;
-  gboolean writable;
 
   if (!gtk_should_use_portal ())
     return FALSE;
@@ -391,15 +387,9 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
 
   if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
-    {
-      method_name = "OpenFile";
-      writable = FALSE;
-    }
+    method_name = "OpenFile";
   else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    {
-      method_name = "SaveFile";
-      writable = FALSE;
-    }
+    method_name = "SaveFile";
   else
     {
       g_warning ("GTK_FILE_CHOOSER_ACTION_%s is not supported by GtkFileChooserNativePortal", action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ? "SELECT_FOLDER" : "CREATE_FOLDER");
@@ -411,7 +401,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   data->connection = connection;
 
   data->method_name = method_name;
-  data->writable = writable;
 
   if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
     data->modal = TRUE;
