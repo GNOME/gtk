@@ -2304,15 +2304,15 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
                           guint32      activate_time)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
-  GtkTreePath *path;
   gint active_item;
-  gint width, min_width, nat_width;
 
   update_menu_sensitivity (combo_box, priv->popup_widget);
 
   active_item = -1;
   if (gtk_tree_row_reference_valid (priv->active_row))
     {
+      GtkTreePath *path;
+
       path = gtk_tree_row_reference_get_path (priv->active_row);
       active_item = gtk_tree_path_get_indices (path)[0];
       gtk_tree_path_free (path);
@@ -2327,6 +2327,7 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
   if (priv->wrap_width == 0)
     {
       GtkAllocation content_allocation;
+      gint width, min_width, nat_width;
 
       gtk_css_gadget_get_content_allocation (priv->gadget, &content_allocation, NULL);
       width = content_allocation.width;
