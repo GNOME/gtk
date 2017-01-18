@@ -2179,7 +2179,7 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
       GList *i;
       GtkWidget *child;
 
-      if (!active)
+      if (!(active && gtk_widget_get_visible (active)))
         {
           for (i = GTK_MENU_SHELL (priv->popup_widget)->priv->children; i && !active; i = i->next)
             {
