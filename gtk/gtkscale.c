@@ -1101,12 +1101,11 @@ gtk_scale_new_with_range (GtkOrientation orientation,
 /**
  * gtk_scale_set_digits:
  * @scale: a #GtkScale
- * @digits: the number of decimal places to display,
- *     e.g. use 1 to display 1.0, 2 to display 1.00, etc
+ * @digits: the number of decimal places to which the value will be rounded
  *
- * Sets the number of decimal places that are displayed in the value.
- * Also causes the value of the adjustment to be rounded off to this
- * number of digits, so the retrieved value matches the value the user saw.
+ * Sets the number of decimal places to which the value is rounded when it is
+ * changed. This also sets the number of digits shown in the displayed value
+ * when using the default handler for the #GtkScale::format-value signal.
  *
  * Note that rounding to a small number of digits can interfere with
  * the smooth autoscrolling that is built into #GtkScale. As an alternative,
@@ -1130,8 +1129,7 @@ gtk_scale_set_digits (GtkScale *scale,
   if (priv->digits != digits)
     {
       priv->digits = digits;
-      if (priv->draw_value)
-        gtk_range_set_round_digits (range, digits);
+      gtk_range_set_round_digits (range, digits);
 
       gtk_scale_clear_layout (scale);
       gtk_widget_queue_resize (GTK_WIDGET (scale));
@@ -1297,7 +1295,6 @@ gtk_scale_set_draw_value (GtkScale *scale,
           else
             gtk_css_node_insert_before (widget_node, gtk_css_gadget_get_node (priv->value_gadget), NULL);
 
-          gtk_range_set_round_digits (GTK_RANGE (scale), priv->digits);
           update_value_position (scale);
         }
       else
@@ -1305,8 +1302,6 @@ gtk_scale_set_draw_value (GtkScale *scale,
           if (priv->value_gadget)
             gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->value_gadget), NULL);
           g_clear_object (&priv->value_gadget);
-
-          gtk_range_set_round_digits (GTK_RANGE (scale), -1);
         }
 
       gtk_scale_clear_layout (scale);
