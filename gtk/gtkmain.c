@@ -92,6 +92,7 @@
 
 #include "gdk/gdk.h"
 #include "gdk/gdk-private.h"
+#include "gsk/gskprivate.h"
 
 #include <locale.h>
 
@@ -652,6 +653,7 @@ do_post_parse_initialization (void)
 
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
+  gsk_ensure_resources ();
   _gtk_ensure_resources ();
 
   _gtk_accel_map_init ();
