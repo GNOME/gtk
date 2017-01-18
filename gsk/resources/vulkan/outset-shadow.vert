@@ -17,6 +17,7 @@ layout(location = 3) out flat vec4 outOutlineCornerHeights;
 layout(location = 4) out flat vec4 outColor;
 layout(location = 5) out flat vec2 outOffset;
 layout(location = 6) out flat float outSpread;
+layout(location = 7) out flat float outBlurRadius;
 
 out gl_PerVertex {
   vec4 gl_Position;
@@ -29,8 +30,16 @@ vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 0.0),
                     vec2(1.0, 1.0) };
 
+float radius_pixels(float radius) {
+  return radius * (3.0 * sqrt(2 * 3.141592653589793) / 4) * 1.5;
+}
+
 void main() {
-  vec4 rect = clip (inOutline);
+  vec4 rect = inOutline;
+  float spread = inSpread + radius_pixels(inBlurRadius);
+  rect += vec4(inOffset - spread, vec2(2 * spread));
+  
+  clip (inOutline);
 
   vec2 pos = rect.xy + rect.zw * offsets[gl_VertexIndex];
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
@@ -42,4 +51,5 @@ void main() {
   outColor = inColor;
   outOffset = inOffset;
   outSpread = inSpread;
+  outBlurRadius = inBlurRadius;
 }
