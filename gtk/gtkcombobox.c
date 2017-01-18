@@ -1755,7 +1755,6 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
     {
       /* FIXME handle nested menus better */
       GtkWidget *active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));;
-      GtkWidget *select = active;
       gint rect_anchor_dy = -2;
       GList *i;
       GtkWidget *child;
@@ -1807,8 +1806,13 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
                                 GDK_GRAVITY_NORTH_WEST,
                                 trigger_event);
 
-      if (select)
-        gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget), select);
+      /* As a hack, re-get the active item, in case a popup handler, like that
+       * of FileChooserButton, just caused the menu to be refiltered, making the
+       * previous active item pointer invalid now. This seems pretty ugly and
+       * makes the y-offset loop pointless for such cases, so FIXME later? */
+      active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
+      if (active)
+        gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget), active);
     }
 }
 
