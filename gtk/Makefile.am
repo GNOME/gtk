@@ -1148,7 +1148,6 @@ templates =				\
 	ui/gtkcoloreditor.ui		\
 	ui/gtkcombobox.ui		\
 	ui/gtkdialog.ui		\
-	ui/gtkfilechooserbutton.ui	\
 	ui/gtkfilechooserwidget.ui	\
 	ui/gtkfilechooserdialog.ui	\
 	ui/gtkfontbutton.ui		\
