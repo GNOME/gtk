@@ -1691,23 +1691,17 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
                           const GdkEvent *trigger_event)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
-  GtkTreePath *path;
   gint active_item;
-  gint width, min_width, nat_width;
   GtkAllocation border_allocation;
   GtkAllocation content_allocation;
-  gint rect_anchor_dy = -2;
-  gint child_height;
-  GtkWidget *active;
-  GtkWidget *select;
-  GtkWidget *child;
-  GList *i;
 
   update_menu_sensitivity (combo_box, priv->popup_widget);
 
   active_item = -1;
   if (gtk_tree_row_reference_valid (priv->active_row))
     {
+      GtkTreePath *path;
+
       path = gtk_tree_row_reference_get_path (priv->active_row);
       active_item = gtk_tree_path_get_indices (path)[0];
       gtk_tree_path_free (path);
@@ -1718,6 +1712,8 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
 
   if (priv->wrap_width == 0)
     {
+      gint width, min_width, nat_width;
+
       gtk_css_gadget_get_content_allocation (priv->gadget, &content_allocation, NULL);
       width = content_allocation.width;
       gtk_widget_set_size_request (priv->popup_widget, -1, -1);
@@ -1758,8 +1754,11 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
   else
     {
       /* FIXME handle nested menus better */
-      active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
-      select = active;
+      GtkWidget *active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));;
+      GtkWidget *select = active;
+      gint rect_anchor_dy = -2;
+      GList *i;
+      GtkWidget *child;
 
       if (!active)
         {
@@ -1774,6 +1773,8 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
 
       if (active)
         {
+          gint child_height;
+
           for (i = GTK_MENU_SHELL (priv->popup_widget)->priv->children; i && i->data != active; i = i->next)
             {
               child = i->data;
