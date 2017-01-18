@@ -667,8 +667,7 @@ gtk_css_font_size_value_parse (GtkCssParser *parser)
   return _gtk_css_number_value_parse (parser,
                                       GTK_CSS_PARSE_LENGTH
                                       | GTK_CSS_PARSE_PERCENT
-                                      | GTK_CSS_POSITIVE_ONLY
-                                      | GTK_CSS_NUMBER_AS_PIXELS);
+                                      | GTK_CSS_POSITIVE_ONLY);
 }
 
 static GtkCssValue *
@@ -683,8 +682,7 @@ outline_parse (GtkCssStyleProperty *property,
                GtkCssParser        *parser)
 {
   return _gtk_css_number_value_parse (parser,
-                                      GTK_CSS_NUMBER_AS_PIXELS
-                                      | GTK_CSS_PARSE_LENGTH);
+                                      GTK_CSS_PARSE_LENGTH);
 }
 
 static GtkCssValue *
@@ -800,8 +798,7 @@ parse_margin (GtkCssStyleProperty *property,
               GtkCssParser        *parser)
 {
   return _gtk_css_number_value_parse (parser,
-                                      GTK_CSS_NUMBER_AS_PIXELS
-                                      | GTK_CSS_PARSE_LENGTH);
+                                      GTK_CSS_PARSE_LENGTH);
 }
 
 static GtkCssValue *
@@ -810,7 +807,6 @@ parse_padding (GtkCssStyleProperty *property,
 {
   return _gtk_css_number_value_parse (parser,
                                       GTK_CSS_POSITIVE_ONLY
-                                      | GTK_CSS_NUMBER_AS_PIXELS
                                       | GTK_CSS_PARSE_LENGTH);
 }
 
@@ -820,7 +816,6 @@ parse_border_width (GtkCssStyleProperty *property,
 {
   return _gtk_css_number_value_parse (parser,
                                       GTK_CSS_POSITIVE_ONLY
-                                      | GTK_CSS_NUMBER_AS_PIXELS
                                       | GTK_CSS_PARSE_LENGTH);
 }
 

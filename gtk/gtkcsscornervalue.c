@@ -127,7 +127,6 @@ _gtk_css_corner_value_parse (GtkCssParser *parser)
   x = _gtk_css_number_value_parse (parser,
                                    GTK_CSS_POSITIVE_ONLY
                                    | GTK_CSS_PARSE_PERCENT
-                                   | GTK_CSS_NUMBER_AS_PIXELS
                                    | GTK_CSS_PARSE_LENGTH);
   if (x == NULL)
     return NULL;
@@ -139,7 +138,6 @@ _gtk_css_corner_value_parse (GtkCssParser *parser)
       y = _gtk_css_number_value_parse (parser,
                                        GTK_CSS_POSITIVE_ONLY
                                        | GTK_CSS_PARSE_PERCENT
-                                       | GTK_CSS_NUMBER_AS_PIXELS
                                        | GTK_CSS_PARSE_LENGTH);
       if (y == NULL)
         {

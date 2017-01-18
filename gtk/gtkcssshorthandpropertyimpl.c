@@ -97,8 +97,7 @@ parse_margin (GtkCssShorthandProperty  *shorthand,
   return parse_four_numbers (shorthand,
                              values,
                              parser,
-                             GTK_CSS_NUMBER_AS_PIXELS
-                             | GTK_CSS_PARSE_LENGTH);
+                             GTK_CSS_PARSE_LENGTH);
 }
 
 static gboolean
@@ -110,7 +109,6 @@ parse_padding (GtkCssShorthandProperty  *shorthand,
                              values,
                              parser,
                              GTK_CSS_POSITIVE_ONLY
-                             | GTK_CSS_NUMBER_AS_PIXELS
                              | GTK_CSS_PARSE_LENGTH);
 }
 
@@ -123,7 +121,6 @@ parse_border_width (GtkCssShorthandProperty  *shorthand,
                              values,
                              parser,
                              GTK_CSS_POSITIVE_ONLY
-                             | GTK_CSS_NUMBER_AS_PIXELS
                              | GTK_CSS_PARSE_LENGTH);
 }
 
@@ -142,7 +139,6 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
       x[i] = _gtk_css_number_value_parse (parser,
                                           GTK_CSS_POSITIVE_ONLY
                                           | GTK_CSS_PARSE_PERCENT
-                                          | GTK_CSS_NUMBER_AS_PIXELS
                                           | GTK_CSS_PARSE_LENGTH);
       if (x[i] == NULL)
         goto fail;
@@ -169,7 +165,6 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
           y[i] = _gtk_css_number_value_parse (parser,
                                               GTK_CSS_POSITIVE_ONLY
                                               | GTK_CSS_PARSE_PERCENT
-                                              | GTK_CSS_NUMBER_AS_PIXELS
                                               | GTK_CSS_PARSE_LENGTH);
           if (y[i] == NULL)
             goto fail;
@@ -338,7 +333,6 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
       {
         values[0] = _gtk_css_number_value_parse (parser,
                                                  GTK_CSS_POSITIVE_ONLY
-                                                 | GTK_CSS_NUMBER_AS_PIXELS
                                                  | GTK_CSS_PARSE_LENGTH);
         if (values[0] == NULL)
           return FALSE;
@@ -380,7 +374,6 @@ parse_border (GtkCssShorthandProperty  *shorthand,
       {
         values[0] = _gtk_css_number_value_parse (parser,
                                                  GTK_CSS_POSITIVE_ONLY
-                                                 | GTK_CSS_NUMBER_AS_PIXELS
                                                  | GTK_CSS_PARSE_LENGTH);
         if (values[0] == NULL)
           return FALSE;

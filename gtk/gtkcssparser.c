@@ -707,13 +707,6 @@ gtk_css_dimension_value_parse (GtkCssParser           *parser,
           else
             unit = GTK_CSS_PERCENT;
         }
-      else if (flags & GTK_CSS_NUMBER_AS_PIXELS)
-        {
-          _gtk_css_parser_error_full (parser,
-                                      GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                      "Not using units is deprecated. Assuming 'px'.");
-          unit = GTK_CSS_PX;
-        }
       else if (flags & GTK_CSS_PARSE_NUMBER)
         {
           unit = GTK_CSS_NUMBER;

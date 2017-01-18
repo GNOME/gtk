@@ -460,8 +460,6 @@ gtk_css_calc_value_parse (GtkCssParser           *parser,
 {
   GtkCssValue *value;
 
-  /* This confuses '*' and '/' so we disallow backwards compat. */
-  flags &= ~GTK_CSS_NUMBER_AS_PIXELS;
   /* This can only be handled at compute time, we allow '-' after all */
   flags &= ~GTK_CSS_POSITIVE_ONLY;
 

@@ -203,7 +203,7 @@ int_value_parse (GtkCssParser *parser,
 
   if (_gtk_css_parser_has_prefix (parser, "-gtk"))
     {
-      GtkCssValue *cssvalue = gtk_css_win32_size_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_NUMBER_AS_PIXELS);
+      GtkCssValue *cssvalue = gtk_css_win32_size_value_parse (parser, GTK_CSS_PARSE_NUMBER);
 
       if (cssvalue)
         {
@@ -333,7 +333,7 @@ border_value_parse (GtkCssParser *parser,
     {
       if (_gtk_css_parser_has_prefix (parser, "-gtk"))
         {
-          GtkCssValue *cssvalue = gtk_css_win32_size_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_NUMBER_AS_PIXELS);
+          GtkCssValue *cssvalue = gtk_css_win32_size_value_parse (parser, GTK_CSS_PARSE_NUMBER);
 
           if (cssvalue)
             {
