@@ -26,6 +26,7 @@ if HAVE_VULKAN
 gsk_private_vulkan_source_h = \
 	gskvulkanblendpipelineprivate.h \
 	gskvulkanborderpipelineprivate.h \
+	gskvulkanboxshadowpipelineprivate.h \
 	gskvulkanbufferprivate.h \
 	gskvulkanclipprivate.h \
 	gskvulkancolorpipelineprivate.h \
@@ -43,6 +44,7 @@ gsk_private_vulkan_source_h = \
 gsk_private_vulkan_source_c = \
 	gskvulkanblendpipeline.c \
 	gskvulkanborderpipeline.c \
+	gskvulkanboxshadowpipeline.c \
 	gskvulkanbuffer.c \
 	gskvulkanclip.c \
 	gskvulkancolorpipeline.c \
@@ -67,13 +69,17 @@ gsk_private_vulkan_fragment_shaders = \
 	resources/vulkan/border.frag \
 	resources/vulkan/color.frag \
 	resources/vulkan/color-matrix.frag \
-	resources/vulkan/linear.frag
+	resources/vulkan/inset-shadow.frag \
+	resources/vulkan/linear.frag \
+	resources/vulkan/outset-shadow.frag
 gsk_private_vulkan_vertex_shaders = \
 	resources/vulkan/blend.vert \
 	resources/vulkan/border.vert \
 	resources/vulkan/color.vert \
 	resources/vulkan/color-matrix.vert \
-	resources/vulkan/linear.vert
+	resources/vulkan/inset-shadow.vert \
+	resources/vulkan/linear.vert \
+	resources/vulkan/outset-shadow.vert
 gsk_private_vulkan_shaders = \
 	$(gsk_private_vulkan_fragment_shaders) \
 	$(gsk_private_vulkan_vertex_shaders)

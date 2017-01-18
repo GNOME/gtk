@@ -10,6 +10,7 @@
 
 #include "gskvulkanblendpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
+#include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
@@ -330,7 +331,13 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "color-matrix-clip-rounded", gsk_vulkan_effect_pipeline_new },
     { "border", gsk_vulkan_border_pipeline_new },
     { "border-clip", gsk_vulkan_border_pipeline_new },
-    { "border-clip-rounded", gsk_vulkan_border_pipeline_new }
+    { "border-clip-rounded", gsk_vulkan_border_pipeline_new },
+    { "inset-shadow", gsk_vulkan_box_shadow_pipeline_new },
+    { "inset-shadow-clip", gsk_vulkan_box_shadow_pipeline_new },
+    { "inset-shadow-clip-rounded", gsk_vulkan_box_shadow_pipeline_new },
+    { "outset-shadow", gsk_vulkan_box_shadow_pipeline_new },
+    { "outset-shadow-clip", gsk_vulkan_box_shadow_pipeline_new },
+    { "outset-shadow-clip-rounded", gsk_vulkan_box_shadow_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
