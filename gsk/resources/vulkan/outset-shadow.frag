@@ -20,7 +20,7 @@ void main()
 
   color = vec4(inColor.rgb * inColor.a, inColor.a);
   color = color * clamp (rounded_rect_coverage (outside, inPos - inOffset) -
-                         rounded_rect_coverage (outline, inPos - inOffset),
+                         rounded_rect_coverage (outline, inPos),
                          0.0, 1.0);
   color = clip (inPos, color);
 }
