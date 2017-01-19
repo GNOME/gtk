@@ -139,8 +139,6 @@ struct _GtkWidget
  * @destroy: Signals that all holders of a reference to the widget
  *   should release the reference that they hold.
  * @show: Signal emitted when widget is shown
- * @show_all: Recursively shows a widget, and any child widgets (if the widget is
- * a container).
  * @hide: Signal emitted when widget is hidden.
  * @map: Signal emitted when widget is going to be mapped, that is
  *   when the widget is visible (which is controlled with
@@ -301,7 +299,6 @@ struct _GtkWidgetClass
   /* basics */
   void (* destroy)             (GtkWidget        *widget);
   void (* show)		       (GtkWidget        *widget);
-  void (* show_all)            (GtkWidget        *widget);
   void (* hide)		       (GtkWidget        *widget);
   void (* map)		       (GtkWidget        *widget);
   void (* unmap)	       (GtkWidget        *widget);

@@ -201,7 +201,6 @@ static GSList *          gtk_recent_chooser_default_list_filters       (GtkRecen
 
 
 static void gtk_recent_chooser_default_map      (GtkWidget *widget);
-static void gtk_recent_chooser_default_show_all (GtkWidget *widget);
 
 static void set_current_filter        (GtkRecentChooserDefault *impl,
 				       GtkRecentFilter         *filter);
@@ -306,7 +305,6 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
   gobject_class->finalize = gtk_recent_chooser_default_finalize;
   
   widget_class->map = gtk_recent_chooser_default_map;
-  widget_class->show_all = gtk_recent_chooser_default_show_all;
   
   _gtk_recent_chooser_install_properties (gobject_class);
 
@@ -576,17 +574,6 @@ gtk_recent_chooser_default_finalize (GObject *object)
   
   G_OBJECT_CLASS (_gtk_recent_chooser_default_parent_class)->finalize (object);
 }
-
-/* override GtkWidget::show_all since we have internal widgets we wish to keep
- * hidden unless we decide otherwise, like the filter combo box.
- */
-static void
-gtk_recent_chooser_default_show_all (GtkWidget *widget)
-{
-  gtk_widget_show (widget);
-}
-
-
 
 /* Shows an error dialog set as transient for the specified window */
 static void

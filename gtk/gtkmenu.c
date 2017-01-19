@@ -288,7 +288,6 @@ static void     gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
                                                         GdkEventCrossing *event);
  
 static void gtk_menu_deactivate     (GtkMenuShell      *menu_shell);
-static void gtk_menu_show_all       (GtkWidget         *widget);
 static void gtk_menu_position       (GtkMenu           *menu,
                                      gboolean           set_scroll_offset);
 static void gtk_menu_remove         (GtkContainer      *menu,
@@ -519,7 +518,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->scroll_event = gtk_menu_scroll;
   widget_class->key_press_event = gtk_menu_key_press;
   widget_class->motion_notify_event = gtk_menu_motion_notify;
-  widget_class->show_all = gtk_menu_show_all;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
   widget_class->leave_notify_event = gtk_menu_leave_notify;
   widget_class->focus = gtk_menu_focus;
@@ -4758,14 +4756,6 @@ gtk_menu_select_item (GtkMenuShell *menu_shell,
     gtk_menu_scroll_item_visible (menu_shell, menu_item);
 
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->select_item (menu_shell, menu_item);
-}
-
-
-static void
-gtk_menu_show_all (GtkWidget *widget)
-{
-  /* Show children, but not self. */
-  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_show_all, NULL);
 }
 
 /**
