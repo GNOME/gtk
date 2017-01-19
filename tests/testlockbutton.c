@@ -260,8 +260,8 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), content);
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), button);
 
-  gtk_widget_show_all (window);
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (window);
+  gtk_widget_show (dialog);
 
   gtk_main ();
 

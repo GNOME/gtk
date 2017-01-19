@@ -97,7 +97,7 @@ main (int argc, char **argv)
                   G_CALLBACK (orient_toggled), orientables);
 
   gtk_container_add (GTK_CONTAINER (window), grid);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   g_signal_connect (window, "destroy",
                   G_CALLBACK (gtk_main_quit), NULL);

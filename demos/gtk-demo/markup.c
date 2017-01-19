@@ -70,7 +70,6 @@ do_markup (GtkWidget *do_widget)
       header = gtk_header_bar_new ();
       gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), TRUE);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), show_source);
-      gtk_widget_show_all (header);
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
       gtk_window_set_title (GTK_WINDOW (window), "Markup");
@@ -86,7 +85,6 @@ do_markup (GtkWidget *do_widget)
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
       gtk_container_add (GTK_CONTAINER (sw), view);
-      gtk_widget_show_all (sw);
 
       gtk_stack_add_named (GTK_STACK (stack), sw, "formatted");
 
@@ -100,7 +98,6 @@ do_markup (GtkWidget *do_widget)
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
       gtk_container_add (GTK_CONTAINER (sw), view2);
-      gtk_widget_show_all (sw);
 
       gtk_stack_add_named (GTK_STACK (stack), sw, "source");
 

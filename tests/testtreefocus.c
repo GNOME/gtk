@@ -460,7 +460,7 @@ main (int argc, char *argv[])
 		    NULL);
   gtk_window_set_default_size (GTK_WINDOW (window),
 			       650, 400);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Model");
@@ -528,7 +528,7 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window),
 			       650, 400);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_main ();
 
   return 0;

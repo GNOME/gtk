@@ -66,7 +66,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (remove_fullscreen_cb), NULL);
   gtk_container_add (GTK_CONTAINER (vbox), button);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

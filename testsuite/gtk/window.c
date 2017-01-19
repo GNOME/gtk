@@ -79,7 +79,7 @@ test_default_size (void)
   g_assert_cmpint (w, ==, 300);
   g_assert_cmpint (h, ==, 300);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   if (!interactive)
     g_timeout_add (200, stop_main, NULL);
@@ -150,7 +150,7 @@ test_resize (void)
 
   gtk_window_resize (GTK_WINDOW (window), 400, 200);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   if (!interactive)
     g_timeout_add (200, stop_main, NULL);

@@ -76,8 +76,6 @@ do_overlay (GtkWidget *do_widget)
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
-
-      gtk_widget_show_all (overlay);
     }
 
   if (!gtk_widget_get_visible (window))

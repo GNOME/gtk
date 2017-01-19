@@ -379,7 +379,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   image = gtk_image_new ();
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
-                  gtk_widget_show_all (button);
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Application menu"));
@@ -399,7 +398,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
-                  gtk_widget_show_all (button);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_iconify), window);
                   accessible = gtk_widget_get_accessible (button);
@@ -422,7 +420,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
-                  gtk_widget_show_all (button);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (_gtk_window_toggle_maximized), window);
                   accessible = gtk_widget_get_accessible (button);
@@ -440,7 +437,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   g_object_set (image, "use-fallback", TRUE, NULL);
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
-                  gtk_widget_show_all (button);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_close), window);
                   accessible = gtk_widget_get_accessible (button);

@@ -772,7 +772,7 @@ activate (GApplication *app)
 
   update_ui ();
 
-  gtk_widget_show_all (main_window);
+  gtk_widget_show (main_window);
 }
 
 int

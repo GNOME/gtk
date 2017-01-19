@@ -535,8 +535,6 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (palette_scroller), palette);
       gtk_container_add (GTK_CONTAINER (hbox), palette_scroller);
 
-      gtk_widget_show_all (box);
-
       /* Connect signals: */
       g_signal_connect (combo_orientation, "changed",
                         G_CALLBACK (on_combo_orientation_changed), palette);
@@ -620,7 +618,7 @@ do_toolpalette (GtkWidget *do_widget)
 
   if (!gtk_widget_get_visible (window))
     {
-      gtk_widget_show_all (window);
+      gtk_widget_show (window);
     }
   else
     {

@@ -26,8 +26,6 @@ create_tab_label (GtkWidget *toplevel)
 
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (remove_notebook_page), toplevel);
-
-  gtk_widget_show_all (box);
   return box;
 }
 
@@ -98,7 +96,7 @@ main (gint argc, gchar **argv)
   toplevel_delete_event (widget, NULL, NULL);
   g_signal_connect (widget, "delete-event", G_CALLBACK (toplevel_delete_event), NULL);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_main ();
 
   return 0;

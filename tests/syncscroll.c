@@ -61,7 +61,7 @@ main (int argc, char *argv[])
 
   gtk_container_add (GTK_CONTAINER (box), sb);
 
-  gtk_widget_show_all (win);
+  gtk_widget_show (win);
 
   gtk_main ();
 

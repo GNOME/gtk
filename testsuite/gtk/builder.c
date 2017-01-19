@@ -2074,7 +2074,7 @@ test_menus (void)
   window = (GtkWidget *)gtk_builder_get_object (builder, "window1");
   item = (GtkWidget *)gtk_builder_get_object (builder, "imagemenuitem1");
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   /* Check the menu hierarchy worked here  */
   g_assert (get_parent_menubar (item));
@@ -2129,7 +2129,7 @@ test_file (const gchar *filename)
 	  g_signal_connect (obj, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 	  g_print ("Showing %s.\n",
 		   gtk_widget_get_name (GTK_WIDGET (obj)));
-	  gtk_widget_show_all (GTK_WIDGET (obj));
+	  gtk_widget_show (GTK_WIDGET (obj));
 	}
     }
 

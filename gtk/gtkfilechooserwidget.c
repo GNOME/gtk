@@ -8726,7 +8726,6 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
       widget = check;
     }
 
-  gtk_widget_show_all (widget);
   gtk_container_add (GTK_CONTAINER (priv->choice_box), widget);
 }
 

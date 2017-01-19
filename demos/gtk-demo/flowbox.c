@@ -38,7 +38,6 @@ color_swatch_new (const gchar *color)
   gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (area), 24);
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (area), draw_color, (gpointer) color, NULL);
   gtk_container_add (GTK_CONTAINER (button), area);
-  gtk_widget_show_all (button);
 
   return button;
 }
@@ -741,8 +740,6 @@ do_flowbox (GtkWidget *do_widget)
 
       for (i = 0; colors[i]; i++)
         gtk_container_add (GTK_CONTAINER (flowbox), color_swatch_new (colors[i]));
-
-      gtk_widget_show_all (scrolled);
     }
 
   if (!gtk_widget_get_visible (window))

@@ -599,7 +599,7 @@ main (gint argc, gchar **argv)
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_paned_add2 (GTK_PANED (paned), scrolled_window);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

@@ -724,7 +724,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   else if (priv->screen)
     gtk_window_set_screen (GTK_WINDOW (dialog), priv->screen);
 
-  gtk_widget_show_all (GTK_WIDGET (dialog));
+  gtk_widget_show (GTK_WIDGET (dialog));
 
   g_object_ref (operation);
 }
@@ -1270,7 +1270,7 @@ on_end_process_activated (GtkMenuItem *item,
                                                 "%s",
                                                 error->message);
 
-      gtk_widget_show_all (dialog);
+      gtk_widget_show (dialog);
       response = gtk_dialog_run (GTK_DIALOG (dialog));
 
       /* GTK_RESPONSE_NONE means the dialog were programmatically destroy, e.g. that
@@ -1304,7 +1304,7 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
                     G_CALLBACK (on_end_process_activated),
                     op);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show_all (menu);
+  gtk_widget_show (menu);
 
   if (event && gdk_event_triggers_context_menu (event))
     {
@@ -1591,7 +1591,7 @@ gtk_mount_operation_show_processes_do_gtk (GtkMountOperation *op,
 
   if (dialog != NULL)
     {
-      gtk_widget_show_all (dialog);
+      gtk_widget_show (dialog);
     }
 }
 

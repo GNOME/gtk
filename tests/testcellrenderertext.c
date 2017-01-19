@@ -279,7 +279,7 @@ main (int argc, char **argv)
   tree = create_tree (TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), tree, TRUE, TRUE);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_main ();
 
   return 0;

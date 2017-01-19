@@ -37,7 +37,7 @@ new_widget_info (const char *name,
     {
       info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       info->include_decorations = FALSE;
-      gtk_widget_show_all (widget);
+      gtk_widget_show (widget);
       gtk_container_add (GTK_CONTAINER (info->window), widget);
     }
   info->no_focus = TRUE;
@@ -1262,7 +1262,6 @@ create_headerbar (void)
   button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (bar), button);
-  gtk_widget_show_all (bar);
 
   return new_widget_info ("headerbar", window, ASIS);
 }

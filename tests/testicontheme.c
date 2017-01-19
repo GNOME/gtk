@@ -124,7 +124,7 @@ main (int argc, char *argv[])
       gtk_container_add (GTK_CONTAINER (window), image);
       g_signal_connect (window, "delete-event",
                         G_CALLBACK (gtk_main_quit), window);
-      gtk_widget_show_all (window);
+      gtk_widget_show (window);
       
       gtk_main ();
     }
@@ -151,7 +151,7 @@ main (int argc, char *argv[])
       gtk_container_add (GTK_CONTAINER (window), image);
       g_signal_connect (window, "delete-event",
                         G_CALLBACK (gtk_main_quit), window);
-      gtk_widget_show_all (window);
+      gtk_widget_show (window);
 
       info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, argv[3], size, scale, flags);
 

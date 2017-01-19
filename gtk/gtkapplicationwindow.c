@@ -266,7 +266,6 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
 
       window->priv->menubar = gtk_menu_bar_new_from_model (G_MENU_MODEL (combined));
       gtk_widget_set_parent (window->priv->menubar, GTK_WIDGET (window));
-      gtk_widget_show_all (window->priv->menubar);
       g_object_unref (combined);
 
       gtk_widget_queue_resize (GTK_WIDGET (window));

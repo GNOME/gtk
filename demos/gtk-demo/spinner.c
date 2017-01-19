@@ -88,7 +88,7 @@ do_spinner (GtkWidget *do_widget)
   }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
+    gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
 

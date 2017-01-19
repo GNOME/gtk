@@ -49,12 +49,7 @@ activate (GtkApplication *app,
    */
   gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 2, 1);
 
-  /* Now that we are done packing our widgets, we show them all
-   * in one go, by calling gtk_widget_show_all() on the window.
-   * This call recursively calls gtk_widget_show() on all widgets
-   * that are contained in the window, directly or indirectly.
-   */
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
 }
 

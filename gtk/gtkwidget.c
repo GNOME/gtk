@@ -4194,9 +4194,7 @@ gtk_widget_destroyed (GtkWidget      *widget,
  * @widget: a #GtkWidget
  *
  * Flags a widget to be displayed. Any widget that isn’t shown will
- * not appear on the screen. If you want to show all the widgets in a
- * container, it’s easier to call gtk_widget_show_all() on the
- * container, instead of individually showing the widgets.
+ * not appear on the screen.
  *
  * Remember that you have to show the containers containing a widget,
  * in addition to the widget itself, before it will appear onscreen.
@@ -4382,19 +4380,6 @@ gtk_widget_hide_on_delete (GtkWidget *widget)
   gtk_widget_hide (widget);
 
   return TRUE;
-}
-
-/**
- * gtk_widget_show_all:
- * @widget: a #GtkWidget
- *
- * Recursively shows a widget, and any child widgets (if the widget is
- * a container).
- **/
-void
-gtk_widget_show_all (GtkWidget *widget)
-{
-  gtk_widget_show (widget);
 }
 
 /**

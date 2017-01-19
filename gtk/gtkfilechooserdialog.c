@@ -541,7 +541,6 @@ setup_save_entry (GtkFileChooserDialog *dialog)
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
       gtk_container_add (GTK_CONTAINER (box), label);
       gtk_container_add (GTK_CONTAINER (box), entry);
-      gtk_widget_show_all (box);
 
       gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
       gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (dialog->priv->widget), entry);

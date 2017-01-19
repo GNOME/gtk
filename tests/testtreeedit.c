@@ -382,7 +382,7 @@ main (gint argc, gchar **argv)
   create_control (cntl_vbox, 3, CNTL_FIXED, &callback[2]);
   create_control (cntl_vbox, 4, CNTL_FIXED, &callback[3]);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_main ();
 
   return 0;

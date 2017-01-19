@@ -106,7 +106,7 @@ main (gint argc,
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
   gtk_grid_attach (GTK_GRID (box), revealer, 2, 3, 1, 1);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_main ();
 
   gtk_widget_destroy (window);

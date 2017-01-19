@@ -289,8 +289,6 @@ do_hypertext (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (sw), view);
 
       show_page (buffer, 1);
-
-      gtk_widget_show_all (sw);
     }
 
   if (!gtk_widget_get_visible (window))

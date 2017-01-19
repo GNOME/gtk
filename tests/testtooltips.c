@@ -414,7 +414,7 @@ main (int argc, char *argv[])
 		    G_CALLBACK (query_tooltip_label_cb), label);
 
   /* Done! */
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

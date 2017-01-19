@@ -533,8 +533,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (box->separator), separator, TRUE, TRUE);
-
-      gtk_widget_show_all (box->separator);
     }
   else
     {

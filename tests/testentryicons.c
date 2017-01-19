@@ -250,7 +250,7 @@ main (int argc, char **argv)
   g_signal_connect (button4, "toggled", G_CALLBACK (set_pixbuf), entry);
   gtk_container_add (GTK_CONTAINER (box), button4);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main();
 

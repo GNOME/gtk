@@ -199,7 +199,7 @@ int main (int argc, char **argv)
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (yalign_spin), yalign);
   gtk_grid_attach (GTK_GRID (grid), yalign_spin, 1, 3, 1, 1);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

@@ -229,7 +229,7 @@ do_transparent (GtkWidget *do_widget)
       gtk_widget_set_halign (entry, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (entry, GTK_ALIGN_START);
 
-      gtk_widget_show_all (overlay);
+      gtk_widget_show (overlay);
     }
 
   if (!gtk_widget_get_visible (window))

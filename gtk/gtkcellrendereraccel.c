@@ -489,7 +489,6 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
 
   gtk_container_add (GTK_CONTAINER (eventbox), label);
 
-  gtk_widget_show_all (eventbox);
   gtk_grab_add (eventbox);
 
   return GTK_CELL_EDITABLE (eventbox);

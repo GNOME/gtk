@@ -110,7 +110,7 @@ main (int    argc,
                     G_CALLBACK (toggle_orientation),
                     button2);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_button_clicked (GTK_BUTTON (button));
   g_timeout_add (4000, (GSourceFunc) show_error, window);
 

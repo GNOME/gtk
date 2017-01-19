@@ -41,7 +41,7 @@ int main (int argc, char *argv[])
 
   gtk_window_set_screen (GTK_WINDOW (window), gdk_display_get_default_screen (display));
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

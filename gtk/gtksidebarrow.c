@@ -261,7 +261,7 @@ on_child_revealed (GObject    *self,
 void
 gtk_sidebar_row_reveal (GtkSidebarRow *self)
 {
-  gtk_widget_show_all (GTK_WIDGET (self));
+  gtk_widget_show (GTK_WIDGET (self));
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), TRUE);
 }
 

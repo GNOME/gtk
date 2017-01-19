@@ -212,7 +212,7 @@ main(int argc, char **argv)
                    monitor_bounds.x + (monitor_bounds.width - window_width) / 2,
                    monitor_bounds.y + (monitor_bounds.height - window_height) / 2);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

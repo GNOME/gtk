@@ -406,7 +406,6 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
   gtk_container_add (GTK_CONTAINER (frame), priv->label_widget);
-  gtk_widget_show_all (frame);
 
   priv->header = gtk_button_new ();
   g_object_ref_sink (priv->header);

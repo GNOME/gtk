@@ -452,8 +452,6 @@ attach_widgets (GtkTextView *text_view)
                                          widget,
                                          anchor);
 
-      gtk_widget_show_all (widget);
-
       ++i;
     }
 }
@@ -515,8 +513,6 @@ do_textview (GtkWidget *do_widget)
 
       attach_widgets (GTK_TEXT_VIEW (view1));
       attach_widgets (GTK_TEXT_VIEW (view2));
-
-      gtk_widget_show_all (vpaned);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -601,5 +597,5 @@ easter_egg_callback (GtkWidget *button,
 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }

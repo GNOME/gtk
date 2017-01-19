@@ -381,7 +381,7 @@ main (int argc, char *Argv[])
 
   gtk_grid_attach (GTK_GRID (grid), make_image2 ("dialog-information", CENTER), 1, 3, 1, 1);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_main ();
 
   return 0;

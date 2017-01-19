@@ -390,7 +390,7 @@ test_phases (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -439,7 +439,7 @@ test_mixed (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -495,7 +495,7 @@ test_early_exit (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -546,7 +546,7 @@ test_claim_capture (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -590,7 +590,7 @@ test_claim_target (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -635,7 +635,7 @@ test_claim_bubble (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -687,7 +687,7 @@ test_early_claim_capture (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -742,7 +742,7 @@ test_late_claim_capture (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -799,7 +799,7 @@ test_group (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -848,7 +848,7 @@ test_gestures_outside_grab (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   D = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_show (D);
@@ -906,7 +906,7 @@ test_gestures_inside_grab (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -964,7 +964,7 @@ test_multitouch_on_single (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -1012,7 +1012,7 @@ test_multitouch_activation (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 
@@ -1086,7 +1086,7 @@ test_multitouch_interaction (void)
   gtk_container_add (GTK_CONTAINER (A), B);
   gtk_container_add (GTK_CONTAINER (B), C);
 
-  gtk_widget_show_all (A);
+  gtk_widget_show (A);
 
   str = g_string_new ("");
 

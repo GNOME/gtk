@@ -53,7 +53,7 @@ change_color_callback (GtkWidget *button,
   g_signal_connect (dialog, "response",
                     G_CALLBACK (response_cb), NULL);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 }
 
 GtkWidget *
@@ -107,7 +107,7 @@ do_colorsel (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
+    gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
 

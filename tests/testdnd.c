@@ -521,8 +521,6 @@ popup_cb (gpointer data)
 		g_signal_connect (button, "drag_leave",
 				  G_CALLBACK (popup_leave), NULL);
 	      }
-
-	  gtk_widget_show_all (grid);
 	  gtk_container_add (GTK_CONTAINER (popup_window), grid);
 
 	}
@@ -672,7 +670,7 @@ main (int argc, char **argv)
   g_signal_connect (button, "drag_data_delete",
 		    G_CALLBACK (source_drag_data_delete), NULL);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

@@ -73,7 +73,6 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (sw), tv);
   gtk_container_add (GTK_CONTAINER (expander), sw);
   gtk_box_pack_end (GTK_BOX (area), expander, TRUE, TRUE);
-  gtk_widget_show_all (expander);
   g_signal_connect (expander, "notify::expanded",
                     G_CALLBACK (expander_cb), dialog);
 

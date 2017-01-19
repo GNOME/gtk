@@ -300,7 +300,7 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE);
   g_signal_connect (button, "clicked", G_CALLBACK (on_animate), NULL);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
   gtk_dialog_run (GTK_DIALOG (dialog));
 
   return 0;

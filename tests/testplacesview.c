@@ -16,7 +16,7 @@ main (int argc, char *argv[])
   view = gtk_places_view_new ();
 
   gtk_container_add (GTK_CONTAINER (win), view);
-  gtk_widget_show_all (win);
+  gtk_widget_show (win);
 
   g_signal_connect (win, "delete-event", G_CALLBACK (gtk_main_quit), win);
 

@@ -104,8 +104,6 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
       if (i % 5 == 0)
         gtk_container_add (GTK_CONTAINER (box), gtk_switch_new ());
 
-      gtk_widget_show_all (frame);
-
       gtk_container_add (GTK_CONTAINER (flowbox), frame);
       if (!sensitive)
         gtk_widget_set_sensitive (gtk_widget_get_parent (frame), FALSE);
@@ -185,7 +183,6 @@ populate_flowbox_images (GtkFlowBox *flowbox)
 
       gtk_container_add (GTK_CONTAINER (widget), image);
       gtk_container_add (GTK_CONTAINER (widget), label);
-      gtk_widget_show_all (widget);
 
       if (text_orientation == GTK_ORIENTATION_VERTICAL)
         gtk_label_set_angle (GTK_LABEL (widget), 90);

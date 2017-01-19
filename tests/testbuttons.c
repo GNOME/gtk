@@ -113,7 +113,7 @@ int main (int argc, char *argv[])
 	g_free (text);
 	gtk_container_add (GTK_CONTAINER (hbox), label);
 
-	gtk_widget_show_all (window);
+	gtk_widget_show (window);
 
 	gtk_main ();
 

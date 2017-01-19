@@ -186,8 +186,6 @@ do_panes (GtkWidget *do_widget)
                                                "Top",
                                                "Bottom"),
                           FALSE, FALSE);
-
-      gtk_widget_show_all (vbox);
     }
 
   if (!gtk_widget_get_visible (window))

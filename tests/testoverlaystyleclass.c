@@ -155,7 +155,7 @@ main (int argc, char *argv[])
 
   g_print ("\n");
 
-  gtk_widget_show_all (win);
+  gtk_widget_show (win);
 
   gtk_main ();
 

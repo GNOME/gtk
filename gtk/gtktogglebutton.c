@@ -96,7 +96,7 @@
  *    gtk_box_pack_start (GTK_BOX (content_area),
  *                        toggle2, FALSE, FALSE, 2);
  *
- *    gtk_widget_show_all (dialog);
+ *    gtk_widget_show (dialog);
  * }
  * ]|
  */

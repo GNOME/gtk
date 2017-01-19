@@ -293,7 +293,7 @@ new_window (GApplication *app,
                     G_CALLBACK (text_buffer_changed_cb), window);
   text_buffer_changed_cb (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)), window);
 
-  gtk_widget_show_all (GTK_WIDGET (window));
+  gtk_widget_show (GTK_WIDGET (window));
 }
 
 static void
@@ -430,7 +430,7 @@ edit_accels (GSimpleAction *action,
   g_object_set_data (G_OBJECT (dialog), "combo", combo);
   g_object_set_data (G_OBJECT (dialog), "entry", entry);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 }
 
 static gboolean

@@ -79,7 +79,7 @@ simple_grid (void)
   g_assert (gtk_grid_get_child_at (GTK_GRID (grid), -1, 0) == test6);
   g_assert (gtk_grid_get_child_at (GTK_GRID (grid), -1, 1) == test6);
   g_assert (gtk_grid_get_child_at (GTK_GRID (grid), -1, 2) == NULL);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 static void
@@ -121,7 +121,7 @@ text_grid (void)
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
   gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 static void
@@ -186,7 +186,7 @@ box_comparison (void)
   gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
   gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Below"));
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 static void
@@ -214,7 +214,7 @@ empty_line (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(10, 0)", "green"), 10, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(10, 1)", "magenta"), 10, 1, 1, 1);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 static void
@@ -238,7 +238,7 @@ empty_grid (void)
   gtk_widget_set_hexpand (child, TRUE);
   gtk_widget_set_vexpand (child, TRUE);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_widget_hide (child);
 }
 
@@ -287,7 +287,7 @@ scrolling (void)
       g_free (color);
     }
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 static void
@@ -332,7 +332,7 @@ insert_cb (GtkButton *button, GtkWidget *window)
       gtk_grid_attach (g4, test_widget ("(1, 0)", "red"), 1, 0, 1, 1);
       gtk_grid_attach (g4, test_widget ("(1, 2)", "red"), 1, 2, 1, 1);
 
-      gtk_widget_show_all (GTK_WIDGET (g));
+      gtk_widget_show (GTK_WIDGET (g));
     }
 
   gtk_button_set_label (button, inserted ? "Insert" : "Remove");
@@ -398,7 +398,7 @@ insert (void)
   g_signal_connect (button, "clicked", G_CALLBACK (insert_cb), window);
   gtk_grid_attach (GTK_GRID (g), button, 0, 2, 2, 1);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 static void
@@ -447,7 +447,7 @@ spanning_grid (void)
   c = test_widget ("7", "cyan");
   gtk_grid_attach (GTK_GRID (g), c, 1, 0, 1, 1);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

@@ -34,7 +34,7 @@ on_bar_response (GtkInfoBar *info_bar,
                             G_CALLBACK (gtk_widget_destroy),
                             dialog);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 }
 
 GtkWidget *
@@ -140,12 +140,11 @@ do_infobar (GtkWidget *do_widget)
       label = gtk_label_new ("An example of different info bars");
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, FALSE);
 
-      gtk_widget_show_all (actions);
       gtk_box_pack_start (GTK_BOX (vbox2), actions, FALSE, FALSE);
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
+    gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
 

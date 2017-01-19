@@ -115,8 +115,6 @@ variant_editor_new (const GVariantType   *type,
   d->editor = editor;
   g_object_set_data_full (G_OBJECT (editor), "callback", d, g_free);
 
-  gtk_widget_show_all (editor);
-
   return editor;
 }
 
@@ -312,8 +310,6 @@ constructed (GObject *object)
                     G_CALLBACK (action_enabled_changed_cb), r);
   g_signal_connect (r->priv->group, "action-state-changed",
                     G_CALLBACK (action_state_changed_cb), r);
-
-  gtk_widget_show_all (GTK_WIDGET (r));
 }
 
 static void

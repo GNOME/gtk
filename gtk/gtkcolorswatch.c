@@ -376,7 +376,6 @@ do_popup (GtkColorSwatch *swatch)
       g_signal_connect_swapped (item, "clicked",
                                 G_CALLBACK (emit_customize), swatch);
       gtk_container_add (GTK_CONTAINER (box), item);
-      gtk_widget_show_all (box);
     }
 
   gtk_popover_popup (GTK_POPOVER (swatch->priv->popover));

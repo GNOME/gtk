@@ -702,7 +702,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (path_bar->priv->up_slider_button, &child_allocation);
 
       gtk_widget_set_child_visible (path_bar->priv->up_slider_button, TRUE);
-      gtk_widget_show_all (path_bar->priv->up_slider_button);
+      gtk_widget_show (path_bar->priv->up_slider_button);
 
       if (direction == GTK_TEXT_DIR_LTR)
         down_slider_offset += path_bar->priv->slider_width;
@@ -720,7 +720,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (path_bar->priv->down_slider_button, &child_allocation);
 
       gtk_widget_set_child_visible (path_bar->priv->down_slider_button, TRUE);
-      gtk_widget_show_all (path_bar->priv->down_slider_button);
+      gtk_widget_show (path_bar->priv->down_slider_button);
       gtk_path_bar_update_slider_buttons (path_bar);
     }
   else
@@ -1494,7 +1494,6 @@ make_directory_button (GtkPathBar  *path_bar,
   button_data->file_is_hidden = file_is_hidden;
 
   gtk_container_add (GTK_CONTAINER (button_data->button), child);
-  gtk_widget_show_all (button_data->button);
 
   gtk_path_bar_update_button_appearance (path_bar, button_data, current_dir);
 

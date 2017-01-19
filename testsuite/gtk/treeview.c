@@ -209,7 +209,7 @@ test_row_separator_height (void)
                                                NULL);
 
   gtk_container_add (GTK_CONTAINER (window), tree_view);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_test_widget_wait_for_draw (window);
 

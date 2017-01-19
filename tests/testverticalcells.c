@@ -370,7 +370,7 @@ main (gint argc, gchar **argv)
   gtk_window_set_default_size (GTK_WINDOW (window),
 			       800, 400);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_main ();
 
   return 0;

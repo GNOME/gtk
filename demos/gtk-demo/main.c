@@ -592,7 +592,6 @@ add_data_tab (const gchar *demoname)
           g_bytes_unref (bytes);
         }
 
-      gtk_widget_show_all (widget);
       label = gtk_label_new (resources[i]);
       gtk_widget_show (label);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
@@ -1022,8 +1021,6 @@ activate (GApplication *app)
   g_signal_connect (item, "activate", G_CALLBACK (end_cb), scrollbar);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-  gtk_widget_show_all (menu);
-
   g_signal_connect (scrollbar, "popup-menu", G_CALLBACK (scrollbar_popup), menu);
 
   load_file (gtk_demos[0].name, gtk_demos[0].filename);
@@ -1040,7 +1037,7 @@ activate (GApplication *app)
 
   gtk_tree_view_collapse_all (GTK_TREE_VIEW (treeview));
 
-  gtk_widget_show_all (GTK_WIDGET (window));
+  gtk_widget_show (GTK_WIDGET (window));
 
   g_object_unref (builder);
 }

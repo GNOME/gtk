@@ -394,7 +394,7 @@ popup_context_menu (GtkToolbar *toolbar, gint x, gint y, gint button_number)
       item = gtk_menu_item_new_with_mnemonic (label);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     }
-  gtk_widget_show_all (GTK_WIDGET (menu));
+  gtk_widget_show (GTK_WIDGET (menu));
 
   if (button_number != -1)
     {
@@ -725,7 +725,7 @@ main (gint argc, gchar **argv)
   g_signal_connect (toolbar, "drag_drop",
 		    G_CALLBACK (toolbar_drag_drop), label);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   g_signal_connect (window, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
   

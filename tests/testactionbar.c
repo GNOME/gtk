@@ -149,7 +149,7 @@ activate (GApplication *gapp)
 
   gtk_box_pack_end (GTK_BOX (box), bar, FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (window), box);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

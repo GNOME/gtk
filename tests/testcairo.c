@@ -203,7 +203,7 @@ main (int argc, char **argv)
   g_signal_connect (window, "destroy-event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   
   gtk_main ();
 

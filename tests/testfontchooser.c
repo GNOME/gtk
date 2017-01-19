@@ -71,7 +71,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_container_add (GTK_CONTAINER (box), fontchooser);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   g_signal_connect (window, "delete-event",
                     G_CALLBACK (gtk_main_quit), NULL);

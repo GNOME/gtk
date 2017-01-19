@@ -104,7 +104,7 @@ create_box_window (void)
   gtk_box_pack_start (GTK_BOX (box3), colorbox, FALSE, TRUE);
 
   gtk_container_add (GTK_CONTAINER (window), box1);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 static void
@@ -150,7 +150,7 @@ create_grid_window (void)
   gtk_grid_attach (GTK_GRID (grid), colorbox, 1, 2, 1, 1); 
 
   gtk_container_add (GTK_CONTAINER (window), grid);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

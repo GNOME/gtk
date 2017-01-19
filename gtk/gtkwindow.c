@@ -5869,7 +5869,6 @@ create_decoration (GtkWidget *widget)
     {
       priv->titlebar = create_titlebar (window);
       gtk_widget_set_parent (priv->titlebar, widget);
-      gtk_widget_show_all (priv->titlebar);
       priv->title_box = priv->titlebar;
     }
 

@@ -689,7 +689,7 @@ main (int argc, char *argv[])
       gtk_container_add (GTK_CONTAINER (box), button);
     }
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

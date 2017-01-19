@@ -32,8 +32,6 @@ on_activate (GApplication *app,
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header),
                                gtk_label_new ("Animations"));
 
-      gtk_widget_show_all (header);
-
       /* content */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (window), hbox);
@@ -57,7 +55,6 @@ on_activate (GApplication *app,
                          "valign", GTK_ALIGN_CENTER,
                          NULL);
       gtk_container_add (GTK_CONTAINER (hbox), img);
-      gtk_widget_show_all (hbox);
 
       g_object_bind_property (sidebar_toggle, "active",
                               revealer, "reveal-child",

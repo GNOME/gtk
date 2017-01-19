@@ -43,7 +43,7 @@ on_map_event (GtkWidget *parent,
   gtk_window_set_transient_for (GTK_WINDOW (popup), GTK_WINDOW (parent));
   g_signal_connect (parent, "motion-notify-event", G_CALLBACK (place_popup), popup);
 
-  gtk_widget_show_all (popup);
+  gtk_widget_show (popup);
 
   return FALSE;
 }

@@ -130,7 +130,7 @@ create_window (void)
   g_signal_connect (button, "clicked", G_CALLBACK (show_dialog), NULL);
   gtk_grid_attach (GTK_GRID (grid), button, 2, 4, 1, 1);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

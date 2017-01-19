@@ -58,7 +58,6 @@ add_row_below (GtkButton *button, GtkWidget *child)
   row = create_row ("Extra row");
   revealer = gtk_revealer_new ();
   gtk_container_add (GTK_CONTAINER (revealer), row);
-  gtk_widget_show_all (revealer);
   g_signal_connect (revealer, "notify::child-revealed",
                     G_CALLBACK (row_revealed), NULL);
   gtk_list_box_insert (GTK_LIST_BOX (list), revealer, index + 1);
@@ -121,7 +120,7 @@ int main (int argc, char *argv[])
       gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
     }
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

@@ -19,7 +19,6 @@ keep_size (int      direction,
   g_object_set (settings, "gtk-enable-animations", animations, NULL);
 
   gtk_container_add (GTK_CONTAINER (revealer), child);
-  gtk_widget_show_all (GTK_WIDGET (revealer));
 
   gtk_revealer_set_transition_type (revealer, transition_type);
 

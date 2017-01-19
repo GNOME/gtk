@@ -220,7 +220,7 @@ main (int argc, char **argv)
 
   gtk_container_add (GTK_CONTAINER (toplevel), grid);
 
-  gtk_widget_show_all (toplevel);
+  gtk_widget_show (toplevel);
   g_signal_connect (toplevel, "delete-event",
                     G_CALLBACK (gtk_main_quit), NULL);
 

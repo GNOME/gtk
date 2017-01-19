@@ -167,7 +167,7 @@ main (gint   argc,
 
   gtk_container_add (GTK_CONTAINER (sw), view);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   if (0)
     gtk_main ();
 

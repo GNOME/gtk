@@ -27,7 +27,7 @@ activate (GtkApplication *app,
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
   gtk_container_add (GTK_CONTAINER (button_box), button);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

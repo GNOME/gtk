@@ -125,7 +125,7 @@ main (gint argc, gchar **argv)
 
   dialog = key_test ();
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 
   gtk_main ();
 

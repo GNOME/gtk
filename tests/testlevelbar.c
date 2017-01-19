@@ -100,7 +100,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box2), sw);
   g_signal_connect (sw, "notify::active", G_CALLBACK (toggle), bar);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   g_signal_connect (window, "delete-event",
                     G_CALLBACK (window_delete_event), NULL);

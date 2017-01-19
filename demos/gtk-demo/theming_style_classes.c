@@ -31,7 +31,6 @@ do_theming_style_classes (GtkWidget *do_widget)
       builder = gtk_builder_new_from_resource ("/theming_style_classes/theming.ui");
 
       grid = (GtkWidget *)gtk_builder_get_object (builder, "grid");
-      gtk_widget_show_all (grid);
       gtk_container_add (GTK_CONTAINER (window), grid);
       g_object_unref (builder);
     }
