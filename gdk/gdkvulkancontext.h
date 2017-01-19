@@ -46,6 +46,7 @@ GQuark gdk_vulkan_error_quark (void);
 GDK_AVAILABLE_IN_3_90
 GType gdk_vulkan_context_get_type (void) G_GNUC_CONST;
 
+#ifndef __GI_SCANNER__
 #ifdef GDK_RENDERING_VULKAN
 
 GDK_AVAILABLE_IN_3_90
@@ -74,6 +75,7 @@ GDK_AVAILABLE_IN_3_90
 VkSemaphore             gdk_vulkan_context_get_draw_semaphore       (GdkVulkanContext  *context);
 
 #endif /* GDK_RENDERING_VULKAN */
+#endif /* __GI_SCANNER__ */
 
 G_END_DECLS
 
