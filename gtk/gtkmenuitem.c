@@ -164,7 +164,6 @@ static gboolean gtk_menu_item_mnemonic_activate     (GtkWidget   *widget,
 
 static void gtk_menu_item_ensure_label   (GtkMenuItem      *menu_item);
 static gint gtk_menu_item_popup_timeout  (gpointer          data);
-static void gtk_menu_item_show_all       (GtkWidget        *widget);
 
 static void gtk_menu_item_forall         (GtkContainer    *container,
                                           gboolean         include_internals,
@@ -595,7 +594,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->unmap = gtk_menu_item_unmap;
   widget_class->enter_notify_event = gtk_menu_item_enter;
   widget_class->leave_notify_event = gtk_menu_item_leave;
-  widget_class->show_all = gtk_menu_item_show_all;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
   widget_class->parent_set = gtk_menu_item_parent_set;
   widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
@@ -1723,20 +1721,6 @@ _gtk_menu_item_popdown_submenu (GtkWidget *widget)
 
       gtk_widget_queue_draw (widget);
     }
-}
-
-static void
-gtk_menu_item_show_all (GtkWidget *widget)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
-  /* show children including submenu */
-  if (priv->submenu)
-    gtk_widget_show_all (priv->submenu);
-  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_show_all, NULL);
-
-  gtk_widget_show (widget);
 }
 
 static gboolean

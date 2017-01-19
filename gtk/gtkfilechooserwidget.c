@@ -455,7 +455,6 @@ static void     gtk_file_chooser_widget_get_property (GObject               *obj
                                                        GValue                *value,
                                                        GParamSpec            *pspec);
 static void     gtk_file_chooser_widget_dispose      (GObject               *object);
-static void     gtk_file_chooser_widget_show_all       (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_realize        (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_map            (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_unmap          (GtkWidget             *widget);
@@ -3659,22 +3658,6 @@ gtk_file_chooser_widget_dispose (GObject *object)
   g_clear_object (&priv->long_press_gesture);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
-}
-
-/* We override show-all since we have internal widgets that
- * shouldn’t be shown when you call show_all(), like the filter
- * combo box.
- */
-static void
-gtk_file_chooser_widget_show_all (GtkWidget *widget)
-{
-  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) widget;
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-
-  gtk_widget_show (widget);
-
-  if (priv->extra_widget)
-    gtk_widget_show_all (priv->extra_widget);
 }
 
 /* Handler for GtkWindow::set-focus; this is where we save the last-focused
@@ -8099,7 +8082,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gobject_class->get_property = gtk_file_chooser_widget_get_property;
   gobject_class->dispose = gtk_file_chooser_widget_dispose;
 
-  widget_class->show_all = gtk_file_chooser_widget_show_all;
   widget_class->realize = gtk_file_chooser_widget_realize;
   widget_class->map = gtk_file_chooser_widget_map;
   widget_class->unmap = gtk_file_chooser_widget_unmap;

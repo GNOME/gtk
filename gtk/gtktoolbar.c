@@ -229,7 +229,6 @@ static void       gtk_toolbar_get_child_property   (GtkContainer        *contain
 						    GParamSpec          *pspec);
 static void       gtk_toolbar_finalize             (GObject             *object);
 static void       gtk_toolbar_dispose              (GObject             *object);
-static void       gtk_toolbar_show_all             (GtkWidget           *widget);
 static void       gtk_toolbar_add                  (GtkContainer        *container,
 						    GtkWidget           *widget);
 static void       gtk_toolbar_remove               (GtkContainer        *container,
@@ -334,7 +333,6 @@ static void            toolbar_content_toolbar_reconfigured (ToolbarContent     
 static GtkWidget *     toolbar_content_retrieve_menu_item   (ToolbarContent      *content);
 static gboolean        toolbar_content_has_proxy_menu_item  (ToolbarContent	 *content);
 static gboolean        toolbar_content_is_separator         (ToolbarContent      *content);
-static void            toolbar_content_show_all             (ToolbarContent      *content);
 static void	       toolbar_content_set_expand	    (ToolbarContent      *content,
 							     gboolean		  expand);
 
@@ -423,7 +421,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->map = gtk_toolbar_map;
   widget_class->unmap = gtk_toolbar_unmap;
   widget_class->popup_menu = gtk_toolbar_popup_menu;
-  widget_class->show_all = gtk_toolbar_show_all;
   widget_class->direction_changed = gtk_toolbar_direction_changed;
   
   container_class->add    = gtk_toolbar_add;
@@ -2333,23 +2330,6 @@ gtk_toolbar_set_child_property (GtkContainer *container,
 }
 
 static void
-gtk_toolbar_show_all (GtkWidget *widget)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = toolbar->priv;
-  GList *list;
-
-  for (list = priv->content; list != NULL; list = list->next)
-    {
-      ToolbarContent *content = list->data;
-      
-      toolbar_content_show_all (content);
-    }
-  
-  gtk_widget_show (widget);
-}
-
-static void
 gtk_toolbar_add (GtkContainer *container,
 		 GtkWidget    *widget)
 {
@@ -3399,16 +3379,6 @@ toolbar_content_set_expand (ToolbarContent *content,
                             gboolean        expand)
 {
   gtk_tool_item_set_expand (content->item, expand);
-}
-
-static void
-toolbar_content_show_all (ToolbarContent  *content)
-{
-  GtkWidget *widget;
-  
-  widget = toolbar_content_get_widget (content);
-  if (widget)
-    gtk_widget_show_all (widget);
 }
 
 /* GTK+ internal methods */
