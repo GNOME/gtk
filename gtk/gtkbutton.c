@@ -683,7 +683,6 @@ gtk_button_new_from_icon_name (const gchar *icon_name,
 
   image = gtk_image_new_from_icon_name (icon_name, size);
   button =  g_object_new (GTK_TYPE_BUTTON, NULL);
-  gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (button), image);
 
   return button;
@@ -1164,7 +1163,6 @@ gtk_button_set_label (GtkButton   *button,
           gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
           gtk_label_set_mnemonic_widget (GTK_LABEL (child), GTK_WIDGET (button));
         }
-      gtk_widget_show (child);
       gtk_container_add (GTK_CONTAINER (button), child);
       gtk_style_context_remove_class (context, "image-button");
       gtk_style_context_add_class (context, "text-button");
@@ -1361,7 +1359,6 @@ gtk_button_set_icon_name (GtkButton  *button,
         gtk_container_remove (GTK_CONTAINER (button), child);
 
       child = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
-      gtk_widget_show (child);
       gtk_container_add (GTK_CONTAINER (button), child);
       gtk_style_context_remove_class (context, "text-button");
       gtk_style_context_add_class (context, "image-button");
