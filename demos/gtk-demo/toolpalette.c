@@ -781,7 +781,7 @@ load_special_items (GtkToolPalette *palette)
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "edit-delete");
   gtk_tool_item_set_tooltip_text (item, "Do not show at all");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  gtk_widget_set_no_show_all (GTK_WIDGET (item), TRUE);
+  gtk_widget_hide (GTK_WIDGET (item));
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "view-fullscreen");

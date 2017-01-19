@@ -280,13 +280,11 @@ update_visible_from_direction (GtkShortcutsShortcut *self)
   if (self->direction == GTK_TEXT_DIR_NONE ||
       self->direction == gtk_widget_get_direction (GTK_WIDGET (self)))
     {
-      gtk_widget_set_visible (GTK_WIDGET (self), TRUE);
-      gtk_widget_set_no_show_all (GTK_WIDGET (self), FALSE);
+      gtk_widget_show (GTK_WIDGET (self));
     }
   else
     {
-      gtk_widget_set_visible (GTK_WIDGET (self), FALSE);
-      gtk_widget_set_no_show_all (GTK_WIDGET (self), TRUE);
+      gtk_widget_hide (GTK_WIDGET (self));
     }
 }
 
@@ -735,14 +733,12 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
   self->image = g_object_new (GTK_TYPE_IMAGE,
                               "visible", FALSE,
                               "valign", GTK_ALIGN_CENTER,
-                              "no-show-all", TRUE,
                               NULL);
   gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (self->image));
 
   self->accelerator = g_object_new (GTK_TYPE_SHORTCUT_LABEL,
                                     "visible", TRUE,
                                     "valign", GTK_ALIGN_CENTER,
-                                    "no-show-all", TRUE,
                                     NULL);
   gtk_container_add (GTK_CONTAINER (self->box), GTK_WIDGET (self->accelerator));
 
@@ -762,7 +758,6 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
 
   self->subtitle = g_object_new (GTK_TYPE_LABEL,
                                  "visible", FALSE,
-                                 "no-show-all", TRUE,
                                  "xalign", 0.0f,
                                  NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->subtitle)),

@@ -191,7 +191,6 @@ create_title_box (const char *title,
   gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
   gtk_box_pack_start (GTK_BOX (label_box), subtitle_label, FALSE, FALSE);
-  gtk_widget_set_no_show_all (subtitle_label, TRUE);
   gtk_widget_set_visible (subtitle_label, subtitle && subtitle[0]);
 
   if (ret_title_label)
@@ -340,7 +339,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           t = g_strsplit (tokens[i], ",", -1);
 
           separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-          gtk_widget_set_no_show_all (separator, TRUE);
           gtk_style_context_add_class (gtk_widget_get_style_context (separator), "titlebutton");
 
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, priv->spacing);

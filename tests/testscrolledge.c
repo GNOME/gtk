@@ -114,7 +114,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (popup), spinner);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), popup);
-  gtk_widget_set_no_show_all (popup, TRUE);
+  gtk_widget_hide (popup);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);

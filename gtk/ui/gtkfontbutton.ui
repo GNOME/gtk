@@ -20,7 +20,6 @@
         <child>
           <object class="GtkBox" id="font_size_box">
             <property name="visible">1</property>
-            <property name="no-show-all">1</property>
             <child>
               <object class="GtkSeparator" id="separator">
                 <property name="visible">1</property>

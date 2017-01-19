@@ -14,8 +14,8 @@
         <property name="show-close-button">1</property>
         <child type="title">
           <object class="GtkStackSwitcher" id="stack_switcher">
+            <property name="visible">0</property>
             <property name="stack">stack</property>
-            <property name="no-show-all">1</property>
           </object>
         </child>
       </object>
@@ -67,10 +67,10 @@
                     <property name="spacing">8</property>
                     <child>
                       <object class="GtkLabel" id="version_label">
+                        <property name="visible">0</property>
                         <property name="label">version 1.0</property>
                         <property name="justify">center</property>
                         <property name="selectable">1</property>
-                        <property name="no-show-all">1</property>
                       </object>
                       <packing>
                         <property name="fill">0</property>
@@ -78,11 +78,11 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="comments_label">
+                        <property name="visible">0</property>
                         <property name="label">comments</property>
                         <property name="justify">center</property>
                         <property name="wrap">1</property>
                         <property name="selectable">1</property>
-                        <property name="no-show-all">1</property>
                         <property name="max-width-chars">60</property>
                       </object>
                       <packing>
@@ -91,7 +91,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="website_label">
-                        <property name="no-show-all">1</property>
+                        <property name="visible">0</property>
                         <property name="label">http://website.com</property>
                         <property name="selectable">1</property>
                         <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
@@ -102,11 +102,11 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="copyright_label">
+                        <property name="visible">0</property>
                         <property name="label">copyright</property>
                         <property name="justify">center</property>
                         <property name="wrap">1</property>
                         <property name="selectable">1</property>
-                        <property name="no-show-all">1</property>
                         <property name="max-width-chars">60</property>
                       </object>
                       <packing>
@@ -115,12 +115,12 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="license_label">
+                        <property name="visible">0</property>
                         <property name="label">license</property>
                         <property name="use-markup">1</property>
                         <property name="justify">center</property>
                         <property name="wrap">1</property>
                         <property name="selectable">1</property>
-                        <property name="no-show-all">1</property>
                         <property name="max-width-chars">60</property>
                       </object>
                       <packing>
@@ -135,7 +135,7 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="credits_page">
-                    <property name="no-show-all">1</property>
+                    <property name="visible">0</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">8</property>
                     <child>
@@ -175,7 +175,7 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="license_page">
-                    <property name="no-show-all">1</property>
+                    <property name="visible">0</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">8</property>
                     <child>
@@ -208,7 +208,7 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="system_page">
-                    <property name="no-show-all">1</property>
+                    <property name="visible">0</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">8</property>
                     <child>

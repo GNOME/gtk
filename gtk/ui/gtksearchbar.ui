@@ -40,7 +40,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkButton" id="close_button">
-                    <property name="visible">1</property>
+                    <property name="visible">0</property>
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="relief">none</property>

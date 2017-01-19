@@ -282,7 +282,7 @@ create_accel_label (void)
 
   button = gtk_button_new_with_label ("Quit");
   gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (widget), button);
-  gtk_widget_set_no_show_all (button, TRUE);
+  gtk_widget_hide (button);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (box), widget);

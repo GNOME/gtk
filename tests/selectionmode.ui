@@ -20,7 +20,6 @@
         <child>
           <object class="GtkButton" id="headerbutton">
             <property name="visible">True</property>
-            <property name="no-show-all">True</property>
             <style>
               <class name="image-button"/>
             </style>
@@ -48,7 +47,7 @@
               <packing>
                 <property name="name">title</property>
               </packing>
-            </child> 
+            </child>
             <child>
               <object class="GtkMenuButton">
                 <property name="visible">True</property>
@@ -83,7 +82,6 @@
         <child>
           <object class="GtkButton" id="select-button">
             <property name="visible">True</property>
-            <property name="no-show-all">True</property>
             <style>
               <class name="image-button"/>
             </style>
@@ -101,7 +99,7 @@
         </child>
         <child>
           <object class="GtkButton" id="cancel-button">
-            <property name="no-show-all">True</property>
+            <property name="visible">0</property>
             <property name="label">Cancel</property>
           </object>
           <packing>
@@ -120,7 +118,7 @@
             <property name="visible">True</property>
             <property name="selection-mode">none</property>
             <property name="activate-on-single-click">True</property>
-          </object> 
+          </object>
         </child>
       </object>
     </child>

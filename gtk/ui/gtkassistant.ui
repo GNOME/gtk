@@ -47,11 +47,11 @@
                 <property name="margin">6</property>
                 <child>
                   <object class="GtkButton" id="apply">
+                    <property name="visible">0</property>
                     <property name="label" translatable="yes">_Apply</property>
                     <property name="can-focus">1</property>
                     <property name="can-default">1</property>
                     <property name="receives-default">1</property>
-                    <property name="no-show-all">1</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="text-button"/>
@@ -70,7 +70,6 @@
                     <property name="can-focus">1</property>
                     <property name="can-default">1</property>
                     <property name="receives-default">1</property>
-                    <property name="no-show-all">1</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="text-button"/>
@@ -89,7 +88,6 @@
                     <property name="visible">1</property>
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
-                    <property name="no-show-all">1</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="text-button"/>
@@ -104,10 +102,10 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="last">
+                    <property name="visible">0</property>
                     <property name="label" translatable="yes">_Finish</property>
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
-                    <property name="no-show-all">1</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="text-button"/>
@@ -122,11 +120,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="cancel">
+                    <property name="visible">0</property>
                     <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">1</property>
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
-                    <property name="no-show-all">1</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="text-button"/>
@@ -141,11 +139,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="close">
+                    <property name="visible">0</property>
                     <property name="label" translatable="yes">_Close</property>
                     <property name="can-focus">1</property>
                     <property name="can-default">1</property>
                     <property name="receives-default">1</property>
-                    <property name="no-show-all">1</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="text-button"/>

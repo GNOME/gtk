@@ -594,9 +594,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc), &color);
 
   gtk_widget_hide (GTK_WIDGET (cc->priv->editor));
-
-  gtk_widget_set_no_show_all (cc->priv->palette, TRUE);
-  gtk_widget_set_no_show_all (cc->priv->editor, TRUE);
+  gtk_widget_hide (GTK_WIDGET (cc->priv->palette));
 
   cc->priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   gtk_size_group_add_widget (cc->priv->size_group, cc->priv->palette);

@@ -2317,7 +2317,6 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkInfoBar" id="infobar">
                                     <property name="visible">0</property>
                                     <property name="show-close-button">1</property>
-                                    <property name="no-show-all">1</property>
                                     <child internal-child="content_area">
                                       <object class="GtkBox">
                                         <child>
@@ -2347,7 +2346,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkStatusbar" id="statusbar">
-                                    <property name="no-show-all">1</property>
+                                    <property name="visible">0</property>
                                   </object>
                                 </child>
                               </object>
@@ -3036,7 +3035,6 @@ microphone-sensitivity-medium-symbolic</property>
                         <child type="overlay">
                           <object class="GtkToolbar" id="totem_like_osd">
                             <property name="visible">0</property>
-                            <property name="no-show-all">1</property>
                             <property name="opacity">0.9</property>
                             <property name="margin">20</property>
                             <property name="valign">end</property>

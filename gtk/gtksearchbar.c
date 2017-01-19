@@ -445,7 +445,6 @@ gtk_search_bar_init (GtkSearchBar *bar)
   g_signal_connect (priv->revealer, "notify::child-revealed",
                     G_CALLBACK (child_revealed_changed_cb), bar);
 
-  gtk_widget_set_no_show_all (priv->close_button, TRUE);
   g_signal_connect (priv->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), bar);
 };

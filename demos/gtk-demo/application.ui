@@ -48,7 +48,7 @@
         </child>
         <child>
           <object class="GtkInfoBar" id="infobar">
-            <property name="no-show-all">1</property>
+            <property name="visible">0</property>
             <property name="hexpand">1</property>
             <child internal-child="content_area">
               <object class="GtkBox" id="content_area">
