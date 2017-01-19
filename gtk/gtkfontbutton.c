@@ -74,6 +74,7 @@ struct _GtkFontButtonPrivate
   guint         show_size : 1;
   guint         show_preview_entry : 1;
 
+  GtkWidget     *button;
   GtkWidget     *font_dialog;
   GtkWidget     *font_label;
   GtkWidget     *size_label;
@@ -120,7 +121,8 @@ static void gtk_font_button_set_property           (GObject            *object,
                                                     const GValue       *value,
                                                     GParamSpec         *pspec);
 
-static void gtk_font_button_clicked                 (GtkButton         *button);
+static void gtk_font_button_clicked                 (GtkButton         *button,
+                                                     gpointer           user_data);
 
 /* Dialog response functions */
 static void response_cb                             (GtkDialog         *dialog,
@@ -437,28 +439,66 @@ gtk_font_button_font_chooser_iface_init (GtkFontChooserIface *iface)
   iface->get_font_map = gtk_font_button_font_chooser_get_font_map;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkFontButton, gtk_font_button, GTK_TYPE_BUTTON,
+G_DEFINE_TYPE_WITH_CODE (GtkFontButton, gtk_font_button, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkFontButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FONT_CHOOSER,
                                                 gtk_font_button_font_chooser_iface_init))
+
+
+static void
+gtk_font_button_measure (GtkWidget       *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
+{
+  GtkFontButton *button = GTK_FONT_BUTTON (widget);
+  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
+
+  gtk_widget_measure (priv->button, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_font_button_snapshot (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
+{
+  GtkFontButton *button = GTK_FONT_BUTTON (widget);
+  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
+
+  gtk_widget_snapshot_child (widget, priv->button, snapshot);
+}
+
+static void
+gtk_font_button_size_allocate (GtkWidget     *widget,
+                               GtkAllocation *allocation)
+{
+  GtkFontButton *button = GTK_FONT_BUTTON (widget);
+  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
+
+  gtk_widget_size_allocate (priv->button, allocation);
+}
 
 static void
 gtk_font_button_class_init (GtkFontButtonClass *klass)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GtkButtonClass *button_class;
   
   gobject_class = (GObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
-  button_class = (GtkButtonClass *) klass;
 
   gobject_class->finalize = gtk_font_button_finalize;
   gobject_class->set_property = gtk_font_button_set_property;
   gobject_class->get_property = gtk_font_button_get_property;
-  
-  button_class->clicked = gtk_font_button_clicked;
-  
+
+  widget_class->measure = gtk_font_button_measure;
+  widget_class->size_allocate = gtk_font_button_size_allocate;
+  widget_class->snapshot = gtk_font_button_snapshot;
+
   klass->font_set = NULL;
 
   _gtk_font_chooser_install_properties (gobject_class);
@@ -580,13 +620,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                 g_cclosure_marshal_VOID__VOID,
                                                 G_TYPE_NONE, 0);
 
-  /* Bind class to template
-   */
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkfontbutton.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFontButton, font_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFontButton, size_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFontButton, font_size_box);
-
   gtk_widget_class_set_css_name (widget_class, "button");
 }
 
@@ -594,8 +627,29 @@ static void
 gtk_font_button_init (GtkFontButton *font_button)
 {
   GtkStyleContext *context;
+  GtkFontButtonPrivate *priv;
+  GtkWidget *box;
 
   font_button->priv = gtk_font_button_get_instance_private (font_button);
+  priv = font_button->priv;
+
+  gtk_widget_set_has_window (GTK_WIDGET (font_button), FALSE);
+
+  priv->button = gtk_button_new ();
+  g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_font_button_clicked), font_button);
+  priv->font_label = gtk_label_new (_("Font"));
+  priv->size_label = gtk_label_new ("14");
+  priv->font_size_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (box), priv->font_label);
+ 
+  gtk_container_add (GTK_CONTAINER (priv->font_size_box), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+  gtk_container_add (GTK_CONTAINER (priv->font_size_box), priv->size_label);
+  gtk_container_add (GTK_CONTAINER (box), priv->font_size_box);
+
+  gtk_container_add (GTK_CONTAINER (priv->button), box);
+  gtk_widget_set_parent (priv->button, GTK_WIDGET (font_button));
 
   /* Initialize fields */
   font_button->priv->use_font = FALSE;
@@ -609,11 +663,9 @@ gtk_font_button_init (GtkFontButton *font_button)
   font_button->priv->font_size = -1;
   font_button->priv->title = g_strdup (_("Pick a Font"));
 
-  gtk_widget_init_template (GTK_WIDGET (font_button));
-
   gtk_font_button_take_font_desc (font_button, NULL);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (font_button));
+  context = gtk_widget_get_style_context (GTK_WIDGET (priv->button));
   gtk_style_context_add_class (context, "font");
 }
 
@@ -634,6 +686,8 @@ gtk_font_button_finalize (GObject *object)
   g_free (priv->preview_text);
 
   g_clear_object (&priv->provider);
+
+  gtk_widget_unparent (priv->button);
 
   G_OBJECT_CLASS (gtk_font_button_parent_class)->finalize (object);
 }
@@ -1039,10 +1093,11 @@ gtk_font_button_set_font_name (GtkFontButton *font_button,
 }
 
 static void
-gtk_font_button_clicked (GtkButton *button)
+gtk_font_button_clicked (GtkButton *button,
+                         gpointer   user_data)
 {
   GtkFontChooser *font_dialog;
-  GtkFontButton  *font_button = GTK_FONT_BUTTON (button);
+  GtkFontButton  *font_button = user_data;
   GtkFontButtonPrivate *priv = font_button->priv;
   
   if (!font_button->priv->font_dialog) 

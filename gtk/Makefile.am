@@ -1150,7 +1150,6 @@ templates =				\
 	ui/gtkdialog.ui		\
 	ui/gtkfilechooserwidget.ui	\
 	ui/gtkfilechooserdialog.ui	\
-	ui/gtkfontbutton.ui		\
 	ui/gtkfontchooserdialog.ui	\
 	ui/gtkfontchooserwidget.ui	\
 	ui/gtkinfobar.ui		\

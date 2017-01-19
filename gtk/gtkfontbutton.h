@@ -50,14 +50,14 @@ typedef struct _GtkFontButtonClass   GtkFontButtonClass;
 typedef struct _GtkFontButtonPrivate GtkFontButtonPrivate;
 
 struct _GtkFontButton {
-  GtkButton button;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkFontButtonPrivate *priv;
 };
 
 struct _GtkFontButtonClass {
-  GtkButtonClass parent_class;
+  GtkWidgetClass parent_class;
 
   /* font_set signal is emitted when font is chosen */
   void (* font_set) (GtkFontButton *gfp);
