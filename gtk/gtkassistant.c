@@ -1389,6 +1389,10 @@ gtk_assistant_remove (GtkContainer *container,
       gtk_container_remove (GTK_CONTAINER (box), page);
       gtk_container_remove (GTK_CONTAINER (assistant->priv->content), box);
     }
+  else
+    {
+      GTK_CONTAINER_CLASS (gtk_assistant_parent_class)->remove (container, page);
+    }
 }
 
 /**
