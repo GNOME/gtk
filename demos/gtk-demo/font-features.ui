@@ -7,20 +7,17 @@
     <property name="default-height">500</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
-        <property name="visible">1</property>
-        <property name="show_close_button">1</property>
+        <property name="show-close-button">1</property>
         <property name="title">Font Features</property>
         <child>
           <object class="GtkButton" id="reset">
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="receives_default">1</property>
+            <property name="can-focus">1</property>
+            <property name="receives-default">1</property>
             <property name="tooltip-text">Reset</property>
             <signal name="clicked" handler="reset" swapped="no"/>
             <child>
               <object class="GtkImage">
-                <property name="visible">1</property>
-                <property name="icon_name">view-refresh-symbolic</property>
+                <property name="icon-name">view-refresh-symbolic</property>
               </object>
             </child>
           </object>
@@ -29,34 +26,28 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="visible">1</property>
-            <property name="can_focus">1</property>
-            <property name="hscrollbar_policy">never</property>
+            <property name="can-focus">1</property>
+            <property name="hscrollbar-policy">never</property>
             <child>
               <object class="GtkViewport">
-                <property name="visible">1</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
                     <property name="margin">10</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkFontButton" id="font">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
-                        <property name="receives_default">1</property>
+                        <property name="can-focus">1</property>
+                        <property name="receives-default">1</property>
                         <property name="font">Sans 12</property>
                         <signal name="font-set" handler="font_changed" swapped="no"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkComboBox" id="script_lang">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <signal name="changed" handler="script_changed" swapped="no"/>
                         <child>
                           <object class="GtkCellRendererText"/>
@@ -68,30 +59,25 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="kern_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="kern_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -99,9 +85,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="kern">
                                     <property name="label" translatable="yes">Enabled</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="kern_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -113,7 +98,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Kerning</property>
                           </object>
                         </child>
@@ -121,30 +105,25 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="liga_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="liga_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -152,9 +131,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="liga">
                                     <property name="label" translatable="yes">Common Ligatures</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="liga_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -164,19 +142,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="dlig_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="dlig_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -184,9 +159,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="dlig">
                                     <property name="label" translatable="yes">Discretionary Ligatures</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="dlig_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -196,19 +170,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="hlig_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="hlig_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -216,9 +187,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="hlig">
                                     <property name="label" translatable="yes">Historical Ligatures</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="hlig_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -228,19 +198,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="clig_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="clig_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -248,9 +215,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="clig">
                                     <property name="label" translatable="yes">Contextual Ligatures</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="clig_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -262,7 +228,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Ligatures</property>
                           </object>
                         </child>
@@ -270,30 +235,25 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="smcp_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="smcp_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -301,9 +261,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="smcp">
                                     <property name="label" translatable="yes">Small Caps</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="valign">baseline</property>
                                     <property name="sensitive" bind-source="smcp_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -313,19 +272,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="c2sc_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="c2sc_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -333,9 +289,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="c2sc">
                                     <property name="label" translatable="yes">Small Caps from Caps</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="c2sc_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -345,19 +300,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="pcap_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="pcap_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -365,9 +317,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="pcap">
                                     <property name="label" translatable="yes">Petite Caps</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="pcap_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -377,19 +328,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="c2pc_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="c2pc_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -397,9 +345,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="c2pc">
                                     <property name="label" translatable="yes">Caps to Petite Caps</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="c2pc_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -409,19 +356,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="unic_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="unic_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -429,9 +373,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="unic">
                                     <property name="label" translatable="yes">Unicase</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="unic_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -441,19 +384,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="cpsp_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="cpsp_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -461,9 +401,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="cpsp">
                                     <property name="label" translatable="yes">Capital Spacing</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="cpsp_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -473,19 +412,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="case_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="case_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -493,9 +429,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="case">
                                     <property name="label" translatable="yes">Case-sensitive Forms</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="case_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -507,7 +442,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Letter Case</property>
                           </object>
                         </child>
@@ -515,21 +449,17 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="numcasedefault_pres">
-                                    <property name="visible">1</property>
                                     <property name="opacity">0</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
@@ -538,10 +468,9 @@
                                 <child>
                                   <object class="GtkRadioButton" id="numcasedefault">
                                     <property name="label" translatable="yes">Default</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -550,10 +479,8 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="lnum_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
@@ -561,10 +488,9 @@
                                 <child>
                                   <object class="GtkRadioButton" id="lnum">
                                     <property name="label" translatable="yes">Lining</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <property name="group">numcasedefault</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
@@ -574,10 +500,8 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="onum_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
@@ -585,11 +509,10 @@
                                 <child>
                                   <object class="GtkRadioButton" id="onum">
                                     <property name="label" translatable="yes">Old-Style</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <property name="valign">baseline</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="group">numcasedefault</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -600,7 +523,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Number Case</property>
                           </object>
                         </child>
@@ -608,21 +530,17 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="numspacedefault_pres">
-                                    <property name="visible">1</property>
                                     <property name="opacity">0</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
@@ -631,10 +549,9 @@
                                 <child>
                                   <object class="GtkRadioButton" id="numspacedefault">
                                     <property name="label" translatable="yes">Default</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -643,10 +560,8 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="pnum_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
@@ -654,10 +569,9 @@
                                 <child>
                                   <object class="GtkRadioButton" id="pnum">
                                     <property name="label" translatable="yes">Proportional</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="group">numspacedefault</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
@@ -667,10 +581,8 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="tnum_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
@@ -678,10 +590,9 @@
                                 <child>
                                   <object class="GtkRadioButton" id="tnum">
                                     <property name="label" translatable="yes">Tabular</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="group">numspacedefault</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
@@ -693,7 +604,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Number Spacing</property>
                           </object>
                         </child>
@@ -701,21 +611,17 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="fractiondefault_pres">
-                                    <property name="visible">1</property>
                                     <property name="opacity">0</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
@@ -724,10 +630,9 @@
                                 <child>
                                   <object class="GtkRadioButton" id="fractiondefault">
                                     <property name="label" translatable="yes">Off</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -736,10 +641,8 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="frac_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
@@ -747,10 +650,9 @@
                                 <child>
                                   <object class="GtkRadioButton" id="frac">
                                     <property name="label" translatable="yes">Normal</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="group">fractiondefault</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
@@ -760,10 +662,8 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="afrc_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
@@ -771,10 +671,9 @@
                                 <child>
                                   <object class="GtkRadioButton" id="afrc">
                                     <property name="label" translatable="yes">Alternate</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
+                                    <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="group">fractiondefault</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
@@ -786,7 +685,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Fractions</property>
                           </object>
                         </child>
@@ -794,30 +692,25 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="zero_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="zero_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -825,9 +718,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="zero">
                                     <property name="label" translatable="yes">Slashed Zero</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="zero_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -837,19 +729,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="nalt_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="nalt_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -857,9 +746,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="nalt">
                                     <property name="label" translatable="yes">Alternative Annotations</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="nalt_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -869,19 +757,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="sinf_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="sinf_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -889,9 +774,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="sinf">
                                     <property name="label" translatable="yes">Scientific Inferiors</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="sinf_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -903,7 +787,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Numeric Extras</property>
                           </object>
                         </child>
@@ -911,30 +794,25 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="swsh_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="swsh_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -942,9 +820,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="swsh">
                                     <property name="label" translatable="yes">Swash Glyphs</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="swsh_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -954,19 +831,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="cswh_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="cswh_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -974,9 +848,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="cswh">
                                     <property name="label" translatable="yes">Contextual Swash</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="cswh_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -986,19 +859,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="locl_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="locl_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1006,9 +876,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="locl">
                                     <property name="label" translatable="yes">Localized Forms</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="locl_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1018,19 +887,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="calt_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="calt_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1038,9 +904,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="calt">
                                     <property name="label" translatable="yes">Contextual Alternatives</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="calt_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1050,19 +915,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="hist_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="hist_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1070,9 +932,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="hist">
                                     <property name="label" translatable="yes">Historical Alternatives</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="hist_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1082,19 +943,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="salt_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="salt_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1102,9 +960,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="salt">
                                     <property name="label" translatable="yes">Stylistic Alternatives</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="salt_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1114,19 +971,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="titl_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="titl_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1134,9 +988,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="titl">
                                     <property name="label" translatable="yes">Titling Alternatives</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="titl_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1146,19 +999,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="rand_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="rand_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1166,9 +1016,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="rand">
                                     <property name="label" translatable="yes">Randomize</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="rand_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1178,19 +1027,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="subs_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="subs_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1198,9 +1044,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="subs">
                                     <property name="label" translatable="yes">Subscript</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="subs_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1210,19 +1055,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="sups_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="sups_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1230,9 +1072,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="sups">
                                     <property name="label" translatable="yes">Superscript</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="sups_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1244,7 +1085,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Character Alternatives</property>
                           </object>
                         </child>
@@ -1252,30 +1092,25 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="init_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="init_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1283,9 +1118,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="init">
                                     <property name="label" translatable="yes">Initial Forms</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="init_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1295,19 +1129,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="medi_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="medi_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1315,9 +1146,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="medi">
                                     <property name="label" translatable="yes">Medial Forms</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="medi_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1327,19 +1157,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="fina_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="fina_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1347,9 +1174,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="fina">
                                     <property name="label" translatable="yes">Final Forms</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="fina_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1359,19 +1185,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="isol_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="isol_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1379,9 +1202,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="isol">
                                     <property name="label" translatable="yes">Isolated Forms</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="isol_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1393,7 +1215,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Positional Alternatives</property>
                           </object>
                         </child>
@@ -1401,30 +1222,25 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <property name="visible">1</property>
-                        <property name="can_focus">1</property>
+                        <property name="can-focus">1</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <property name="margin_start">10</property>
-                            <property name="margin_end">10</property>
-                            <property name="margin_top">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="ss01_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss01_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1432,9 +1248,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="ss01">
                                     <property name="label" translatable="yes">Set 1</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="ss01_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1444,19 +1259,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="ss02_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss02_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1464,9 +1276,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="ss02">
                                     <property name="label" translatable="yes">Set 2</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="ss02_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1476,19 +1287,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="ss03_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss03_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1496,9 +1304,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="ss03">
                                     <property name="label" translatable="yes">Set 3</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="ss03_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1508,19 +1315,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="ss04_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss04_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1528,9 +1332,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="ss04">
                                     <property name="label" translatable="yes">Set 4</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="ss04_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1540,19 +1343,16 @@
                             </child>
                             <child>
                               <object class="GtkBox">
-                                <property name="visible">1</property>
                                 <child>
                                   <object class="GtkImage" id="ss05_pres">
-                                    <property name="visible">1</property>
                                     <property name="icon-name">object-select-symbolic</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ss05_dflt">
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                   </object>
@@ -1560,9 +1360,8 @@
                                 <child>
                                   <object class="GtkCheckButton" id="ss05">
                                     <property name="label" translatable="yes">Set 5</property>
-                                    <property name="visible">1</property>
-                                    <property name="can_focus">1</property>
-                                    <property name="draw_indicator">1</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="draw-indicator">1</property>
                                     <property name="valign">baseline</property>
                                     <signal name="notify::active" handler="update_display" swapped="no"/>
                                     <property name="sensitive" bind-source="ss05_dflt" bind-property="active" bind-flags="sync-create|bidirectional"/>
@@ -1574,7 +1373,6 @@
                         </child>
                         <child type="label">
                           <object class="GtkLabel">
-                            <property name="visible">1</property>
                             <property name="label" translatable="yes">Alternative Stylistic Sets</property>
                           </object>
                         </child>
@@ -1591,22 +1389,18 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">1</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkStack" id="stack">
-                <property name="visible">1</property>
-                <property name="margin_start">20</property>
-                <property name="margin_end">20</property>
-                <property name="margin_top">20</property>
-                <property name="margin_bottom">20</property>
+                <property name="margin-start">20</property>
+                <property name="margin-end">20</property>
+                <property name="margin-top">20</property>
+                <property name="margin-bottom">20</property>
                 <child>
                   <object class="GtkEventBox">
-                    <property name="visible">1</property>
                     <signal name="button-press-event" handler="switch_to_entry"/>
                     <child>
                       <object class="GtkLabel" id="label">
-                        <property name="visible">1</property>
                         <property name="wrap">1</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
@@ -1620,7 +1414,6 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="entry">
-                    <property name="visible">1</property>
                     <property name="text">Grumpy wizards make toxic brew for the evil Queen and Jack. A quick movement of the enemy will jeopardize six gunboats. The job of waxing linoleum frequently peeves chintzy kids. My girl wove six dozen plaid jackets before she quit. Twelve ziggurats quickly jumped a finch box.
 
 Разъяренный чтец эгоистично бьёт пятью жердями шустрого фехтовальщика. Наш банк вчера же выплатил Ф.Я. Эйхгольду комиссию за ценные вещи. Эх, чужак, общий съём цен шляп (юфть) – вдрызг! В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!
@@ -1639,10 +1432,9 @@
             </child>
             <child>
               <object class="GtkLabel" id="settings">
-                <property name="visible">1</property>
-                <property name="margin_start">20</property>
-                <property name="margin_end">20</property>
-                <property name="margin_bottom">20</property>
+                <property name="margin-start">20</property>
+                <property name="margin-end">20</property>
+                <property name="margin-bottom">20</property>
                 <property name="xalign">0</property>
                 <property name="valign">end</property>
                 <property name="width-chars">50</property>
