@@ -261,6 +261,18 @@
         use.
       </para>
     </section>
+
+    <section>
+      <title>Stop passing commandline arguments to gtk_init()</title>
+      <para>
+        The gtk_init() and gtk_init_check() functions no longer accept commandline
+        arguments. Just call them without arguments. Other initialization functions
+        that were purely related to commandline argument handling, such as
+        gtk_parse_args() and gtk_get_option_group(), are gone. The APIs to
+        initialize GDK separately are also gone, but it is very unlikely
+        that you are affected by that.
+      </para>
+    </section>
   </section>
 
 </chapter>
