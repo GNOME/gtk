@@ -2153,8 +2153,6 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
 
   g_object_set (priv->popup_widget, "menu-type-hint", GDK_WINDOW_TYPE_HINT_COMBO, NULL);
 
-  active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
-
   if (priv->wrap_width > 0 || priv->cell_view == NULL)
     {
       gtk_css_gadget_get_border_allocation (priv->gadget, &border_allocation, NULL);
@@ -2179,6 +2177,8 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
       gint rect_anchor_dy = -2;
       GList *i;
       GtkWidget *child;
+
+      active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
 
       if (!(active && gtk_widget_get_visible (active)))
         {
