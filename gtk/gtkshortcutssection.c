@@ -443,14 +443,12 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                                  "stack", self->stack,
                                  "spacing", 12,
                                  "visible", FALSE,
-                                 "no-show-all", TRUE,
                                  NULL);
 
   gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)), GTK_STYLE_CLASS_LINKED);
 
   self->show_all = gtk_button_new_with_mnemonic (_("_Show All"));
-  gtk_widget_set_no_show_all (self->show_all, TRUE);
-  gtk_widget_set_visible (self->show_all, FALSE);
+  gtk_widget_hide (self->show_all);
   g_signal_connect_swapped (self->show_all, "clicked",
                             G_CALLBACK (gtk_shortcuts_section_show_all), self);
 

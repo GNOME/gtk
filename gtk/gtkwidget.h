@@ -509,11 +509,6 @@ void       gtk_widget_hide                (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_show_now            (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_set_no_show_all     (GtkWidget           *widget,
-                                           gboolean             no_show_all);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_get_no_show_all     (GtkWidget           *widget);
-GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_map		  (GtkWidget	       *widget);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_unmap		  (GtkWidget	       *widget);

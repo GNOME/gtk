@@ -417,7 +417,7 @@ gtk_message_dialog_constructed (GObject *object)
       gtk_widget_show (box);
       gtk_widget_set_size_request (box, -1, 16);
       label = gtk_label_new ("");
-      gtk_widget_set_no_show_all (label, TRUE);
+      gtk_widget_hide (label);
       gtk_widget_set_margin_top (label, 6);
       gtk_widget_set_margin_bottom (label, 6);
       gtk_widget_set_halign (label, GTK_ALIGN_CENTER);

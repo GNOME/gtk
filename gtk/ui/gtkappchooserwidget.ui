@@ -96,8 +96,8 @@
         </child>
         <child type="overlay">
           <object class="GtkBox" id="no_apps">
+            <property name="visible">0</property>
             <property name="orientation">vertical</property>
-            <property name="no-show-all">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <child>

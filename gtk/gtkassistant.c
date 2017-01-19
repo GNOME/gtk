@@ -1693,9 +1693,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   page_info->page  = page;
   page_info->regular_title = gtk_label_new (NULL);
   page_info->has_padding = TRUE;
-  gtk_widget_set_no_show_all (page_info->regular_title, TRUE);
   page_info->current_title = gtk_label_new (NULL);
-  gtk_widget_set_no_show_all (page_info->current_title, TRUE);
 
   gtk_label_set_xalign (GTK_LABEL (page_info->regular_title), 0.0);
   gtk_label_set_xalign (GTK_LABEL (page_info->current_title), 0.0);

@@ -83,7 +83,6 @@
  * widget = gtk_info_bar_new ();
  * bar = GTK_INFO_BAR (bar);
  *
- * gtk_widget_set_no_show_all (widget, TRUE);
  * message_label = gtk_label_new ("");
  * gtk_widget_show (message_label);
  * content_area = gtk_info_bar_get_content_area (bar);
@@ -443,7 +442,6 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
 
   gtk_widget_init_template (widget);
 
-  gtk_widget_set_no_show_all (priv->close_button, TRUE);
   g_signal_connect (priv->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), info_bar);
 }

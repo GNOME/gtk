@@ -576,7 +576,6 @@ enum {
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
   PROP_EVENTS,
-  PROP_NO_SHOW_ALL,
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
@@ -1171,13 +1170,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                           GDK_TYPE_EVENT_MASK,
                           GDK_STRUCTURE_MASK,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  widget_props[PROP_NO_SHOW_ALL] =
-      g_param_spec_boolean ("no-show-all",
-                            P_("No show all"),
-                            P_("Whether gtk_widget_show_all() should not affect this widget"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
 /**
  * GtkWidget:has-tooltip:
@@ -3228,9 +3220,6 @@ gtk_widget_set_property (GObject         *object,
       if (!_gtk_widget_get_realized (widget) && _gtk_widget_get_has_window (widget))
 	gtk_widget_set_events (widget, g_value_get_flags (value));
       break;
-    case PROP_NO_SHOW_ALL:
-      gtk_widget_set_no_show_all (widget, g_value_get_boolean (value));
-      break;
     case PROP_HAS_TOOLTIP:
       gtk_widget_real_set_has_tooltip (widget,
 				       g_value_get_boolean (value), FALSE);
@@ -3402,9 +3391,6 @@ gtk_widget_get_property (GObject         *object,
     case PROP_EVENTS:
       eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
       g_value_set_flags (value, GPOINTER_TO_INT (eventp));
-      break;
-    case PROP_NO_SHOW_ALL:
-      g_value_set_boolean (value, gtk_widget_get_no_show_all (widget));
       break;
     case PROP_HAS_TOOLTIP:
       g_value_set_boolean (value, gtk_widget_get_has_tooltip (widget));
@@ -13271,56 +13257,6 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
     g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
 			     new_list, (GDestroyNotify) g_slist_free);
 }
-
-/**
- * gtk_widget_get_no_show_all:
- * @widget: a #GtkWidget
- *
- * Returns the current value of the #GtkWidget:no-show-all property,
- * which determines whether calls to gtk_widget_show_all()
- * will affect this widget.
- *
- * Returns: the current value of the “no-show-all” property.
- *
- * Since: 2.4
- **/
-gboolean
-gtk_widget_get_no_show_all (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return widget->priv->no_show_all;
-}
-
-/**
- * gtk_widget_set_no_show_all:
- * @widget: a #GtkWidget
- * @no_show_all: the new value for the “no-show-all” property
- *
- * Sets the #GtkWidget:no-show-all property, which determines whether
- * calls to gtk_widget_show_all() will affect this widget.
- *
- * This is mostly for use in constructing widget hierarchies with externally
- * controlled visibility.
- *
- * Since: 2.4
- **/
-void
-gtk_widget_set_no_show_all (GtkWidget *widget,
-			    gboolean   no_show_all)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  no_show_all = (no_show_all != FALSE);
-
-  if (widget->priv->no_show_all != no_show_all)
-    {
-      widget->priv->no_show_all = no_show_all;
-
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_NO_SHOW_ALL]);
-    }
-}
-
 
 static void
 gtk_widget_real_set_has_tooltip (GtkWidget *widget,

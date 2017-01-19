@@ -196,8 +196,6 @@ gtk_stack_sidebar_init (GtkStackSidebar *sidebar)
   priv = gtk_stack_sidebar_get_instance_private (sidebar);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_show (sw);
-  gtk_widget_set_no_show_all (sw, TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
@@ -205,7 +203,6 @@ gtk_stack_sidebar_init (GtkStackSidebar *sidebar)
   gtk_container_add (GTK_CONTAINER (sidebar), sw);
 
   priv->list = GTK_LIST_BOX (gtk_list_box_new ());
-  gtk_widget_show (GTK_WIDGET (priv->list));
 
   gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (priv->list));
 

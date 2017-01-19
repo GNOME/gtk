@@ -40,7 +40,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="secondary_label">
-                    <property name="no-show-all">1</property>
+                    <property name="visible">0</property>
                     <property name="margin-bottom">2</property>
                     <property name="halign">center</property>
                     <property name="valign">start</property>

@@ -1143,9 +1143,9 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_widget_set_halign (button->box, GTK_ALIGN_FILL);
   gtk_widget_show (button->box);
   button->image = gtk_image_new ();
-  gtk_widget_set_no_show_all (button->image, TRUE);
+  gtk_widget_hide (button->image);
   button->label = gtk_label_new ("");
-  gtk_widget_set_no_show_all (button->label, TRUE);
+  gtk_widget_hide (button->label);
   gtk_container_add (GTK_CONTAINER (button->box), button->image);
   gtk_container_add (GTK_CONTAINER (button->box), button->label);
   gtk_container_add (GTK_CONTAINER (button), button->box);
