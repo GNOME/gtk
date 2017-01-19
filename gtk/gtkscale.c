@@ -1110,12 +1110,11 @@ gtk_scale_new_with_range (GtkOrientation orientation,
 /**
  * gtk_scale_set_digits:
  * @scale: a #GtkScale
- * @digits: the number of decimal places to display,
- *     e.g. use 1 to display 1.0, 2 to display 1.00, etc
+ * @digits: the number of decimal places to which the value will be rounded
  *
- * Sets the number of decimal places that are displayed in the value. Also
- * causes the value of the adjustment to be rounded to this number of digits
- * whenever it is changed, so the retrieved value matches the displayed one.
+ * Sets the number of decimal places to which the value is rounded when it is
+ * changed. This also sets the number of digits shown in the displayed value
+ * when using the default handler for the #GtkScale::format-value signal.
  *
  * Note that rounding to a small number of digits can interfere with
  * the smooth autoscrolling that is built into #GtkScale. As an alternative,
