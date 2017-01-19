@@ -2110,6 +2110,7 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
   gint active_item;
   GtkAllocation border_allocation;
   GtkAllocation content_allocation;
+  GtkWidget *active;
 
   update_menu_sensitivity (combo_box, priv->popup_widget);
 
@@ -2152,6 +2153,8 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
 
   g_object_set (priv->popup_widget, "menu-type-hint", GDK_WINDOW_TYPE_HINT_COMBO, NULL);
 
+  active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
+
   if (priv->wrap_width > 0 || priv->cell_view == NULL)
     {
       gtk_css_gadget_get_border_allocation (priv->gadget, &border_allocation, NULL);
@@ -2173,7 +2176,6 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
   else
     {
       /* FIXME handle nested menus better */
-      GtkWidget *active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));;
       gint rect_anchor_dy = -2;
       GList *i;
       GtkWidget *child;
@@ -2224,15 +2226,15 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
                                 GDK_GRAVITY_WEST,
                                 GDK_GRAVITY_NORTH_WEST,
                                 trigger_event);
-
-      /* As a hack, re-get the active item, in case a popup handler, like that
-       * of FileChooserButton, just caused the menu to be refiltered, making the
-       * previous active item pointer invalid now. This seems pretty ugly and
-       * makes the y-offset loop pointless for such cases, so FIXME later? */
-      active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
-      if (active)
-        gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget), active);
     }
+
+    /* Re-get the active item before selecting it, as a popped-up handler – like
+     * that of FileChooserButton in folder mode – can refilter the model, making
+     * the original active item pointer invalid. This seems ugly and makes some
+     * of the above code pointless in such cases, so hopefully we can FIXME. */
+    active = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
+    if (active && gtk_widget_get_visible (active))
+      gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget), active);
 }
 
 static gboolean
