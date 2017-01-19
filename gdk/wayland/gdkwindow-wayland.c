@@ -2454,7 +2454,7 @@ unmap_popups_for_window (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_hide_surface (GdkWindow *window)
+gdk_wayland_window_clear_surface (GdkWindow *window)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
@@ -2549,7 +2549,10 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
 static void
 gdk_wayland_window_hide (GdkWindow *window)
 {
-  gdk_wayland_window_hide_surface (window);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  wl_surface_attach (impl->display_server.wl_surface, NULL, 0, 0);
+  wl_surface_commit (impl->display_server.wl_surface);
   _gdk_window_clear_update_area (window);
 }
 
@@ -2563,7 +2566,7 @@ gdk_window_wayland_withdraw (GdkWindow *window)
 
       g_assert (!GDK_WINDOW_IS_MAPPED (window));
 
-      gdk_wayland_window_hide_surface (window);
+      gdk_wayland_window_clear_surface (window);
     }
 }
 
@@ -2871,7 +2874,7 @@ gdk_wayland_window_destroy (GdkWindow *window,
    */
   g_return_if_fail (!foreign_destroy);
 
-  gdk_wayland_window_hide_surface (window);
+  gdk_wayland_window_clear_surface (window);
   drop_cairo_surfaces (window);
 }
 
