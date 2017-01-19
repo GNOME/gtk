@@ -2775,7 +2775,8 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
     {
       priv->wrap_width = width;
 
-      gtk_combo_box_check_appearance (combo_box);
+      if (GTK_IS_TREE_MENU (priv->popup_widget))
+        _gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (priv->popup_widget), priv->wrap_width);
 
       g_object_notify (G_OBJECT (combo_box), "wrap-width");
     }
