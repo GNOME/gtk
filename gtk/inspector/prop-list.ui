@@ -16,23 +16,19 @@
     <signal name="hierarchy-changed" handler="hierarchy_changed"/>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="expand">True</property>
+        <property name="expand">1</property>
         <property name="hscrollbar-policy">never</property>
-        <property name="vscrollbar-policy">automatic</property>
         <child>
           <object class="GtkTreeView" id="tree">
-            <property name="visible">True</property>
             <property name="model">model</property>
             <property name="tooltip-column">4</property>
             <property name="search-column">0</property>
-            <property name="enable-search">True</property>
             <property name="enable-grid-lines">vertical</property>
             <signal name="row-activated" handler="row_activated"/>
             <child>
               <object class="GtkTreeViewColumn">
                 <property name="title" translatable="yes">Property</property>
-                <property name="resizable">True</property>
+                <property name="resizable">1</property>
                 <property name="sort-column-id">0</property>
                 <child>
                   <object class="GtkCellRendererText">
@@ -48,11 +44,10 @@
             <child>
               <object class="GtkTreeViewColumn">
                 <property name="title" translatable="yes">Value</property>
-                <property name="resizable">True</property>
+                <property name="resizable">1</property>
                 <child>
                   <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>
-                    <property name="editable">False</property>
                     <property name="width-chars">20</property>
                     <property name="ellipsize">end</property>
                   </object>
@@ -66,11 +61,10 @@
             <child>
               <object class="GtkTreeViewColumn">
                 <property name="title" translatable="yes">Type</property>
-                <property name="resizable">True</property>
+                <property name="resizable">1</property>
                 <child>
                   <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>
-                    <property name="editable">False</property>
                     <property name="width-chars">20</property>
                     <property name="ellipsize">end</property>
                   </object>
@@ -84,11 +78,10 @@
             <child>
               <object class="GtkTreeViewColumn" id="attribute_column">
                 <property name="title" translatable="yes">Attribute</property>
-                <property name="resizable">True</property>
+                <property name="resizable">1</property>
                 <child>
                   <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>
-                    <property name="editable">False</property>
                   </object>
                   <attributes>
                     <attribute name="text">6</attribute>

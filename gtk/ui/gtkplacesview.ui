@@ -19,13 +19,11 @@
     <property name="relative-to">address_entry</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <property name="margin">18</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">1</property>
             <property name="hexpand">1</property>
             <property name="label" translatable="yes">Server Addresses</property>
             <attributes>
@@ -38,7 +36,6 @@
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">1</property>
             <property name="hexpand">1</property>
             <property name="label" translatable="yes">Server addresses are made up of a protocol prefix and an address. Examples:</property>
             <property name="wrap">1</property>
@@ -52,7 +49,6 @@
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">1</property>
             <property name="hexpand">1</property>
             <property name="label" translatable="yes">smb://foo.example.com, ssh://192.168.0.1, ftp://[2001:db8::1]</property>
             <property name="wrap">1</property>
@@ -66,14 +62,12 @@
         </child>
         <child>
           <object class="GtkGrid">
-            <property name="visible">1</property>
             <property name="margin-top">12</property>
             <property name="hexpand">1</property>
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="hexpand">1</property>
                 <property name="label" translatable="yes">Available Protocols</property>
                 <property name="xalign">0</property>
@@ -88,7 +82,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">AppleTalk</property>
                 <property name="xalign">0</property>
               </object>
@@ -99,7 +92,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">File Transfer Protocol</property>
                 <property name="xalign">0</property>
               </object>
@@ -110,7 +102,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">Network File System</property>
                 <property name="xalign">0</property>
               </object>
@@ -121,7 +112,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">Samba</property>
                 <property name="xalign">0</property>
               </object>
@@ -132,7 +122,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">SSH File Transfer Protocol</property>
                 <property name="xalign">0</property>
               </object>
@@ -143,7 +132,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">WebDAV</property>
                 <property name="xalign">0</property>
               </object>
@@ -154,7 +142,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">Prefix</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -168,7 +155,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label">afp://</property>
                 <property name="xalign">0</property>
               </object>
@@ -179,7 +165,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes" comments="Translators: do not translate ftp:// and ftps://">ftp:// or ftps://</property>
                 <property name="xalign">0</property>
               </object>
@@ -190,7 +175,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label">nfs://</property>
                 <property name="xalign">0</property>
               </object>
@@ -201,7 +185,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">smb://</property>
                 <property name="xalign">0</property>
               </object>
@@ -212,7 +195,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes" comments="Translators: do not translate sftp:// and ssh://">sftp:// or ssh://</property>
                 <property name="xalign">0</property>
               </object>
@@ -223,7 +205,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes" comments="Translators: do not translate dav:// and davs://">dav:// or davs://</property>
                 <property name="xalign">0</property>
               </object>
@@ -243,17 +224,14 @@
   <object class="GtkPopover" id="recent_servers_popover">
     <child>
       <object class="GtkStack" id="recent_servers_stack">
-        <property name="visible">1</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">1</property>
             <property name="vexpand">1</property>
             <property name="valign">center</property>
             <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">1</property>
                 <property name="pixel-size">48</property>
                 <property name="icon-name">network-server-symbolic</property>
                 <style>
@@ -263,7 +241,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
                 <style>
                   <class name="dim-label"/>
@@ -280,13 +257,11 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">1</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <property name="margin">12</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">Recent Servers</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -295,7 +270,6 @@
             </child>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="visible">1</property>
                 <property name="can-focus">1</property>
                 <property name="vexpand">1</property>
                 <property name="shadow-type">in</property>
@@ -303,11 +277,9 @@
                 <property name="min-content-height">200</property>
                 <child>
                   <object class="GtkViewport">
-                    <property name="visible">1</property>
                     <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkListBox" id="recent_servers_listbox">
-                        <property name="visible">1</property>
                         <property name="can-focus">1</property>
                         <property name="selection-mode">none</property>
                         <signal name="row-activated" handler="on_recent_servers_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
@@ -335,25 +307,20 @@
     <signal name="key-press-event" handler="on_key_press_event" object="GtkPlacesView" swapped="no"/>
     <child>
       <object class="GtkStack" id="stack">
-        <property name="visible">1</property>
         <property name="vhomogeneous">0</property>
         <property name="transition-type">crossfade</property>
         <child>
           <object class="GtkFrame">
-            <property name="visible">1</property>
             <property name="shadow-type">none</property>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="visible">1</property>
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
                 <child>
                   <object class="GtkViewport">
-                    <property name="visible">1</property>
                     <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkListBox" id="listbox">
-                        <property name="visible">1</property>
                         <property name="can-focus">1</property>
                         <property name="selection-mode">none</property>
                         <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
@@ -370,7 +337,6 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <property name="hexpand">1</property>
@@ -379,7 +345,6 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">1</property>
                 <property name="pixel-size">72</property>
                 <property name="icon-name">edit-find-symbolic</property>
                 <style>
@@ -389,7 +354,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">No results found</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -402,7 +366,6 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">1</property>
                 <property name="label" translatable="yes">Try a different search</property>
                 <style>
                   <class name="dim-label"/>
@@ -426,14 +389,12 @@
     </child>
     <child>
       <object class="GtkActionBar" id="actionbar">
-        <property name="visible">1</property>
         <property name="hexpand">1</property>
         <style>
           <class name="background"/>
         </style>
         <child>
           <object class="GtkLabel">
-            <property name="visible">1</property>
             <property name="hexpand">1</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Connect to _Server</property>
@@ -448,7 +409,6 @@
           <object class="GtkButton" id="connect_button">
             <property name="label" translatable="yes">Con_nect</property>
             <property name="use-underline">1</property>
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="sensitive">0</property>
             <property name="receives-default">1</property>
@@ -461,11 +421,9 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">1</property>
             <property name="hexpand">1</property>
             <child>
               <object class="GtkEntry" id="address_entry">
-                <property name="visible">1</property>
                 <property name="can-focus">1</property>
                 <property name="hexpand">1</property>
                 <property name="width-chars">20</property>
@@ -479,7 +437,6 @@
             </child>
             <child>
               <object class="GtkMenuButton" id="server_list_button">
-                <property name="visible">1</property>
                 <property name="can-focus">1</property>
                 <property name="receives-default">1</property>
                 <property name="direction">up</property>
@@ -489,7 +446,6 @@
                 </style>
                 <child>
                   <object class="GtkImage">
-                    <property name="visible">1</property>
                     <property name="icon-name">pan-down-symbolic</property>
                   </object>
                 </child>

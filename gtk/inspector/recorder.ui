@@ -4,16 +4,13 @@
   <template class="GtkInspectorRecorder" parent="GtkBin">
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">1</property>
             <property name="spacing">6</property>
             <property name="margin">6</property>
             <child>
               <object class="GtkToggleButton">
-                <property name="visible">1</property>
                 <property name="relief">none</property>
                 <property name="icon-name">media-record-symbolic</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="recording" bind-flags="bidirectional|sync-create"/>
@@ -21,7 +18,6 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="visible">1</property>
                 <property name="relief">none</property>
                 <property name="icon-name">edit-clear-all-symbolic</property>
                 <signal name="clicked" handler="recordings_clear_all"/>
@@ -29,13 +25,11 @@
             </child>
             <child type="center">
               <object class="GtkStackSwitcher">
-                <property name="visible">1</property>
                 <property name="stack">render_stack</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="render_node_save_button">
-                <property name="visible">1</property>
                 <property name="relief">none</property>
                 <property name="sensitive">0</property>
                 <property name="icon-name">document-save-as-symbolic</property>
@@ -49,16 +43,13 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">1</property>
             <style>
               <class name="view"/>
             </style>
             <child>
               <object class="GtkFrame">
-                <property name="visible">1</property>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="visible">1</property>
                     <property name="hscrollbar-policy">never</property>
                     <property name="propagate-natural-width">1</property>
                     <style>
@@ -66,7 +57,6 @@
                     </style>
                     <child>
                       <object class="GtkListBox" id="recordings_list">
-                        <property name="visible">1</property>
                         <property name="vexpand">1</property>
                         <signal name="row-selected" handler="recordings_list_row_selected"/>
                       </object>
@@ -77,10 +67,8 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="visible">1</property>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="visible">1</property>
                     <property name="hscrollbar-policy">never</property>
                     <property name="propagate-natural-width">1</property>
                     <style>
@@ -88,7 +76,6 @@
                     </style>
                     <child>
                       <object class="GtkTreeView" id="render_node_tree">
-                        <property name="visible">1</property>
                         <property name="vexpand">1</property>
                         <property name="search-column">0</property>
                         <property name="enable-search">0</property>
@@ -117,10 +104,8 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="visible">True</property>
                 <child>
                   <object class="GtkStack" id="render_stack">
-                    <property name="visible">True</property>
                     <child>
                       <object class="GtkRenderNodeView" id="render_node_view">
                         <property name="visible">True</property>
@@ -133,7 +118,6 @@
                     </child>
                     <child>
                       <object class="GtkTreeView" id="node_property_tree">
-                        <property name="visible">True</property>
                         <child>
                           <object class="GtkTreeViewColumn">
                             <property name="title">Property</property>

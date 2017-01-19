@@ -6,7 +6,6 @@
     <property name="type-hint">tooltip</property>
     <child>
       <object class="GtkBox" id="box">
-        <property name="visible">1</property>
         <property name="spacing">6</property>
         <property name="margin-top">6</property>
         <property name="margin-bottom">6</property>

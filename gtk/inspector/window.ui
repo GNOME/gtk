@@ -3,7 +3,6 @@
   <object class="GtkAdjustment" id="magnification_adjustment">
     <property name="lower">1.0</property>
     <property name="upper">5.0</property>
-    <property name="page-size">0.0</property>
     <property name="page-increment">0.1</property>
     <property name="step-increment">0.1</property>
     <property name="value">2.0</property>
@@ -14,19 +13,15 @@
     <property name="icon">resource:///org/gtk/libgtk/inspector/logo.png</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
-        <property name="visible">1</property>
         <property name="show-close-button">1</property>
         <child>
           <object class="GtkStack" id="button_stack">
-            <property name="visible">1</property>
             <property name="visible-child-name" bind-source="top_stack" bind-property="visible-child-name"/>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkButton" id="select_object">
-                    <property name="visible">1</property>
                     <property name="focus-on-click">0</property>
                     <property name="tooltip-text" translatable="yes">Select an Object</property>
                     <property name="halign">center</property>
@@ -37,10 +32,8 @@
                 </child>
                 <child>
                   <object class="GtkStack" id="object_buttons">
-                    <property name="visible">1</property>
                     <child>
                       <object class="GtkButton" id="object_details_button">
-                        <property name="visible">1</property>
                         <property name="focus-on-click">0</property>
                         <property name="tooltip-text" translatable="yes">Show Details</property>
                         <property name="halign">center</property>
@@ -54,7 +47,6 @@
                     </child>
                     <child>
                       <object class="GtkButton">
-                        <property name="visible">1</property>
                         <property name="focus-on-click">0</property>
                         <property name="tooltip-text" translatable="yes">Show all Objects</property>
                         <property name="halign">center</property>
@@ -75,7 +67,6 @@
             </child>
             <child>
               <object class="GtkToggleButton" id="record_statistics_button">
-                <property name="visible">1</property>
                 <property name="focus-on-click">0</property>
                 <property name="tooltip-text" translatable="yes">Collect Statistics</property>
                 <property name="halign">start</property>
@@ -88,12 +79,10 @@
             </child>
             <child>
               <object class="GtkStack" id="resource_buttons">
-                <property name="visible">1</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <child>
                   <object class="GtkButton">
-                    <property name="visible">1</property>
                     <property name="focus-on-click">0</property>
                     <property name="tooltip-text" translatable="yes">Show Details</property>
                     <property name="halign">center</property>
@@ -106,7 +95,6 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="visible">1</property>
                     <property name="focus-on-click">0</property>
                     <property name="tooltip-text" translatable="yes">Show all Resources</property>
                     <property name="halign">center</property>
@@ -124,7 +112,6 @@
             </child>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
               </object>
               <packing>
                 <property name="name">css</property>
@@ -132,7 +119,6 @@
             </child>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
               </object>
               <packing>
                 <property name="name">recorder</property>
@@ -140,7 +126,6 @@
             </child>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
               </object>
               <packing>
                 <property name="name">visual</property>
@@ -148,7 +133,6 @@
             </child>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
               </object>
               <packing>
                 <property name="name">general</property>
@@ -158,7 +142,6 @@
         </child>
         <child type="title">
           <object class="GtkStackSwitcher">
-            <property name="visible">1</property>
             <property name="margin-start">6</property>
             <property name="margin-end">6</property>
             <property name="stack">top_stack</property>
@@ -168,10 +151,8 @@
     </child>
     <child>
       <object class="GtkStack" id="top_stack">
-        <property name="visible">1</property>
         <child>
           <object class="GtkStack" id="object_stack">
-            <property name="visible">1</property>
             <child>
               <object class="GtkInspectorObjectTree" id="object_tree">
                 <property name="visible">True</property>
@@ -184,11 +165,9 @@
             </child>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkStackCombo" id="stackcombo">
@@ -199,10 +178,8 @@
                     </child>
                     <child>
                       <object class="GtkStack" id="object_start_stack">
-                        <property name="visible">True</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="name">empty</property>
@@ -210,13 +187,10 @@
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
                             <property name="spacing">6</property>
                             <property name="margin">6</property>
                             <child>
                               <object class="GtkToggleButton" id="signals_trace_button">
-                                <property name="visible">True</property>
                                 <property name="relief">none</property>
                                 <property name="tooltip-text" translatable="yes">Trace signal emissions on this object</property>
                                 <property name="icon-name">media-record-symbolic</property>
@@ -224,7 +198,6 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="signals_clear_button">
-                                <property name="visible">True</property>
                                 <property name="relief">none</property>
                                 <property name="tooltip-text" translatable="yes">Clear log</property>
                                 <property name="icon-name">edit-clear-symbolic</property>
@@ -237,17 +210,15 @@
                         </child>
                         <child>
                           <object class="GtkScale">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
                             <property name="width-request">150</property>
-                            <property name="draw-value">False</property>
+                            <property name="draw-value">0</property>
                             <property name="adjustment">magnification_adjustment</property>
                             <marks>
-                              <mark value="1.0" position="bottom"/>
-                              <mark value="2.0" position="bottom"/>
-                              <mark value="3.0" position="bottom"/>
-                              <mark value="4.0" position="bottom"/>
-                              <mark value="5.0" position="bottom"/>
+                              <mark value="1.0" position="bottom"></mark>
+                              <mark value="2.0" position="bottom"></mark>
+                              <mark value="3.0" position="bottom"></mark>
+                              <mark value="4.0" position="bottom"></mark>
+                              <mark value="5.0" position="bottom"></mark>
                             </marks>
                           </object>
                           <packing>
@@ -258,11 +229,9 @@
                     </child>
                     <child type="center">
                       <object class="GtkStack" id="object_center_stack">
-                        <property name="visible">1</property>
                         <property name="transition-type">crossfade</property>
                         <child>
                           <object class="GtkLabel" id="object_title">
-                            <property name="visible">1</property>
                           </object>
                           <packing>
                             <property name="name">title</property>
@@ -270,7 +239,6 @@
                         </child>
                         <child>
                           <object class="GtkSearchEntry" id="prop_search_entry">
-                            <property name="visible">1</property>
                             <property name="margin">6</property>
                             <property name="max-width-chars">40</property>
                           </object>
@@ -280,7 +248,6 @@
                         </child>
                         <child>
                           <object class="GtkSearchEntry" id="child_prop_search_entry">
-                            <property name="visible">1</property>
                             <property name="margin">6</property>
                             <property name="max-width-chars">40</property>
                           </object>
@@ -294,7 +261,6 @@
                 </child>
                 <child>
                   <object class="GtkStack" id="object_details">
-                    <property name="visible">1</property>
                     <signal name="notify::visible-child" handler="object_details_changed"/>
                     <child>
                       <object class="GtkInspectorMiscInfo" id="misc_info">

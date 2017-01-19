@@ -9,7 +9,6 @@
     </style>
     <child>
       <object class="GtkRevealer" id="revealer">
-        <property name="visible">1</property>
         <property name="reveal-child">1</property>
         <signal name="notify::child-revealed" handler="on_child_revealed"/>
         <style>
@@ -17,13 +16,10 @@
         </style>
         <child>
           <object class="GtkEventBox" id="event_box">
-            <property name="visible">1</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
                 <child>
                   <object class="GtkImage" id="icon_widget">
-                    <property name="visible">1</property>
                     <style>
                       <class name="sidebar-icon"/>
                     </style>
@@ -31,7 +27,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_widget">
-                    <property name="visible">1</property>
                     <property name="hexpand">1</property>
                     <property name="xalign">0</property>
                     <style>
@@ -41,7 +36,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="eject_button">
-                    <property name="visible">1</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="margin-start">4px</property>

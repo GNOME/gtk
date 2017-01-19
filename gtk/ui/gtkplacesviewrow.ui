@@ -7,10 +7,8 @@
     <property name="can-focus">True</property>
     <child>
       <object class="GtkEventBox" id="event_box">
-        <property name="visible">1</property>
         <child>
           <object class="GtkBox" id="box">
-            <property name="visible">1</property>
             <property name="margin-start">12</property>
             <property name="margin-end">12</property>
             <property name="margin-top">6</property>
@@ -18,13 +16,11 @@
             <property name="spacing">18</property>
             <child>
               <object class="GtkImage" id="icon_image">
-                <property name="visible">1</property>
                 <property name="pixel-size">32</property>
               </object>
             </child>
             <child>
               <object class="GtkLabel" id="name_label">
-                <property name="visible">1</property>
                 <property name="hexpand">1</property>
                 <property name="xalign">0</property>
                 <property name="ellipsize">end</property>
@@ -46,7 +42,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="path_label">
-                <property name="visible">1</property>
                 <property name="justify">right</property>
                 <property name="ellipsize">middle</property>
                 <property name="xalign">0</property>
@@ -61,9 +56,6 @@
             </child>
             <child>
               <object class="GtkStack" id="mount_stack">
-                <property name="visible">1</property>
-                <property name="hhomogeneous">1</property>
-                <property name="vhomogeneous">1</property>
                 <child>
                   <object class="GtkButton" id="eject_button">
                     <property name="visible">0</property>
@@ -72,7 +64,6 @@
                     <property name="tooltip-text" translatable="yes">Unmount</property>
                     <child>
                       <object class="GtkImage" id="eject_icon">
-                        <property name="visible">1</property>
                         <property name="icon-name">media-eject-symbolic</property>
                         <property name="icon-size">1</property>
                       </object>
@@ -85,7 +76,6 @@
                 </child>
                 <child>
                   <object class="GtkSpinner" id="busy_spinner">
-                    <property name="visible">1</property>
                     <property name="active">1</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>

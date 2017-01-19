@@ -12,7 +12,6 @@
         <property name="margin">5</property>
         <child>
           <object class="GtkColorChooserWidget" id="chooser">
-            <property name="visible">1</property>
             <property name="orientation">vertical</property>
             <property name="margin">5</property>
             <property name="rgba">rgb(255,255,255)</property>
@@ -29,14 +28,12 @@
     </child>
     <child type="action">
       <object class="GtkButton" id="cancel_button">
-        <property name="visible">1</property>
         <property name="use-underline">1</property>
         <property name="label" translatable="yes">_Cancel</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="ok_button">
-        <property name="visible">1</property>
         <property name="label" translatable="yes">_Select</property>
         <property name="use-underline">1</property>
         <property name="can-default">1</property>

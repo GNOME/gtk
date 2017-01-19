@@ -2,24 +2,26 @@
 <interface domain="gtk40">
   <object class="GtkTreeStore" id="model">
     <columns>
-      <column type="gchararray"/> <!-- type -->
-      <column type="gchararray"/> <!-- label -->
-      <column type="gchararray"/> <!-- action -->
-      <column type="gchararray"/> <!-- target -->
-      <column type="gchararray"/> <!-- icon -->
+      <column type="gchararray"/>
+      <!-- type -->
+      <column type="gchararray"/>
+      <!-- label -->
+      <column type="gchararray"/>
+      <!-- action -->
+      <column type="gchararray"/>
+      <!-- target -->
+      <column type="gchararray"/>
+      <!-- icon -->
     </columns>
   </object>
   <template class="GtkInspectorMenu" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="expand">True</property>
-        <property name="hscrollbar-policy">automatic</property>
+        <property name="expand">1</property>
         <property name="vscrollbar-policy">always</property>
         <child>
-          <object class= "GtkTreeView">
-            <property name="visible">True</property>
+          <object class="GtkTreeView">
             <property name="model">model</property>
             <child>
               <object class="GtkTreeViewColumn">
