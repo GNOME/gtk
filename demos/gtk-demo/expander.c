@@ -86,7 +86,6 @@ do_expander (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (sw), tv);
       gtk_container_add (GTK_CONTAINER (expander), sw);
       gtk_box_pack_end (GTK_BOX (area), expander, TRUE, TRUE);
-      gtk_widget_show_all (expander);
       g_signal_connect (expander, "notify::expanded",
                         G_CALLBACK (expander_cb), window);
 
@@ -94,7 +93,7 @@ do_expander (GtkWidget *do_widget)
   }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
+    gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
 

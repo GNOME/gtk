@@ -92,8 +92,6 @@ do_overlay2 (GtkWidget *do_widget)
       gtk_widget_set_tooltip_text (scale, "Margin");
 
       gtk_adjustment_set_value (adjustment, 100);
-
-      gtk_widget_show_all (overlay);
     }
 
   if (!gtk_widget_get_visible (window))

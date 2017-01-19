@@ -693,7 +693,7 @@ main (int argc, char **argv)
     set_current_folder (GTK_FILE_CHOOSER (dialog), initial_folder);
 
   /* show_all() to reveal bugs in composite widget handling */
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 
   /* Extra controls for manipulating the test environment
    */
@@ -751,7 +751,7 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (unmap_and_remap_cb), dialog);
 
-  gtk_widget_show_all (control_window);
+  gtk_widget_show (control_window);
 
   g_object_ref (control_window);
   g_signal_connect (dialog, "destroy",

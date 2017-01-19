@@ -33,7 +33,7 @@ int main (int argc, char **argv)
         button = gtk_image_new_from_gicon (icon2, GTK_ICON_SIZE_MENU);
 	gtk_grid_attach (GTK_GRID (grid), button, 2, 2, 1, 1);
 
-	gtk_widget_show_all (window);
+	gtk_widget_show (window);
 
 	gtk_main ();
 

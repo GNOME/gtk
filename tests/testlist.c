@@ -199,7 +199,6 @@ add_clicked_cb (GtkButton *button,
   static int new_button_nr = 1;
 
   new_row = row_new( g_strdup_printf ("blah2 new %d", new_button_nr), new_button_nr);
-  gtk_widget_show_all (new_row);
   gtk_container_add (GTK_CONTAINER (list), new_row);
   new_button_nr++;
 }
@@ -366,7 +365,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (visibility_clicked_cb), row3);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

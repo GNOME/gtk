@@ -172,7 +172,7 @@ activate (GtkApplication *app,
                                      | GDK_BUTTON_PRESS_MASK
                                      | GDK_POINTER_MOTION_MASK);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

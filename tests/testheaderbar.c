@@ -96,7 +96,6 @@ change_header (GtkButton *button, gpointer data)
       widget = gtk_level_bar_new ();
       gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), 0.4);
       gtk_box_pack_start (GTK_BOX (box), widget, TRUE, TRUE);
-      gtk_widget_show_all (header);
     }
   else
     {
@@ -117,7 +116,6 @@ change_header (GtkButton *button, gpointer data)
       gtk_container_add (GTK_CONTAINER (widget), image);
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), widget);
-      gtk_widget_show_all (header);
     }
 
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
@@ -168,7 +166,7 @@ main (int argc, char *argv[])
 
   gtk_box_pack_start (GTK_BOX (box), content, FALSE, TRUE);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

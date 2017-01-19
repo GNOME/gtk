@@ -1239,7 +1239,6 @@ attribute_editor (GObject                *object,
                     G_CALLBACK (attribute_mapping_changed), editor);
   gtk_container_add (GTK_CONTAINER (box), combo);
   gtk_container_add (GTK_CONTAINER (vbox), box);
-  gtk_widget_show_all (vbox);
 
   return vbox;
 }
@@ -1337,7 +1336,6 @@ action_editor (GObject                *object,
                         G_CALLBACK (show_action_owner), editor);
       gtk_container_add (GTK_CONTAINER (box), button);
       gtk_container_add (GTK_CONTAINER (vbox), box);
-      gtk_widget_show_all (vbox);
     }
 
   return vbox;
@@ -1448,7 +1446,6 @@ add_binding_info (GtkInspectorPropEditor *editor)
                         G_CALLBACK (binding_object_properties), editor);
       gtk_container_add (GTK_CONTAINER (row), button);
 
-       gtk_widget_show_all (row);
        gtk_container_add (GTK_CONTAINER (editor), row);
     }
 }
@@ -1574,7 +1571,6 @@ add_settings_info (GtkInspectorPropEditor *editor)
   gtk_container_add (GTK_CONTAINER (row), label);
   g_free (str);
 
-  gtk_widget_show_all (row);
   gtk_container_add (GTK_CONTAINER (editor), row);
 }
 
@@ -1632,7 +1628,6 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
     }
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new (source));
 
-  gtk_widget_show_all (row);
   gtk_container_add (GTK_CONTAINER (editor), row);
 }
 

@@ -105,7 +105,6 @@ create_page1 (GtkWidget *assistant)
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (on_entry_changed), assistant);
 
-  gtk_widget_show_all (box);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), box);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), box, "Page 1");
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), box, GTK_ASSISTANT_PAGE_INTRO);
@@ -122,7 +121,6 @@ create_page2 (GtkWidget *assistant)
                                                  "even if you do not check this");
   gtk_box_pack_start (GTK_BOX (box), checkbutton, FALSE, FALSE);
 
-  gtk_widget_show_all (box);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), box);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), box, TRUE);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), box, "Page 2");

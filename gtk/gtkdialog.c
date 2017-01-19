@@ -126,7 +126,7 @@
  *  // Add the label, and show everything we’ve added
  *
  *  gtk_container_add (GTK_CONTAINER (content_area), label);
- *  gtk_widget_show_all (dialog);
+ *  gtk_widget_show (dialog);
  * }
  * ]|
  *

@@ -80,7 +80,6 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_grid_attach (GTK_GRID (table), local_entry2, 1, 1, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry2);
 
-  gtk_widget_show_all (hbox);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
   if (response == GTK_RESPONSE_OK)
@@ -163,7 +162,7 @@ do_dialog (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
+    gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
 

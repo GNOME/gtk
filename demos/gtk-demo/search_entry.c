@@ -145,8 +145,6 @@ create_search_menu (GtkWidget *entry)
                     G_CALLBACK (search_by_file), entry);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-  gtk_widget_show_all (menu);
-
   return menu;
 }
 
@@ -290,7 +288,7 @@ do_search_entry (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show_all (window);
+    gtk_widget_show (window);
   else
     {
       gtk_widget_destroy (menu);

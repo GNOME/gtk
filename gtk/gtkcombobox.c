@@ -2014,7 +2014,7 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
     gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
                                  GTK_WINDOW (priv->popup_window));
 
-  gtk_widget_show_all (priv->scrolled_window);
+  gtk_widget_show (priv->scrolled_window);
   gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
 
   gtk_widget_set_size_request (priv->popup_window, width, height);

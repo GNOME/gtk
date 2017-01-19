@@ -97,7 +97,7 @@ main (int argc, char *argv[])
       gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
     }
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

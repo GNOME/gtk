@@ -613,8 +613,6 @@ populate_servers (GtkPlacesView *view)
                                 G_CALLBACK (on_remove_server_button_clicked),
                                 data);
 
-      gtk_widget_show_all (row);
-
       g_free (name);
     }
 
@@ -886,14 +884,14 @@ update_network_state (GtkPlacesView *view)
        * otherwise just show the spinner in the header */
       if (!has_networks (view))
         {
-          gtk_widget_show_all (priv->network_placeholder);
+          gtk_widget_show (priv->network_placeholder);
           gtk_label_set_text (GTK_LABEL (priv->network_placeholder_label),
                               _("Searching for network locations"));
         }
     }
   else if (!has_networks (view))
     {
-      gtk_widget_show_all (priv->network_placeholder);
+      gtk_widget_show (priv->network_placeholder);
       gtk_label_set_text (GTK_LABEL (priv->network_placeholder_label),
                           _("No network locations found"));
     }
@@ -2037,7 +2035,6 @@ listbox_header_func (GtkListBoxRow *row,
         }
 
       gtk_container_add (GTK_CONTAINER (header), separator);
-      gtk_widget_show_all (header);
 
       gtk_list_box_row_set_header (row, header);
 

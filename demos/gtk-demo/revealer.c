@@ -82,7 +82,7 @@ do_revealer (GtkWidget *do_widget)
     {
       count = 0;
       timeout = g_timeout_add (690, reveal_one, window);
-      gtk_widget_show_all (window);
+      gtk_widget_show (window);
     }
   else
     {

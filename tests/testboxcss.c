@@ -230,7 +230,7 @@ main (gint argc, gchar **argv)
   add_button (GTK_BOX (box));
   add_button (GTK_BOX (box));
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
   

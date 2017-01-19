@@ -147,7 +147,7 @@ main (int argc, char **argv)
 					   NULL);
   gtk_tree_view_insert_column (GTK_TREE_VIEW (tv), column, 0);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

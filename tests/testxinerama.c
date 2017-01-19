@@ -94,7 +94,7 @@ monitor_added (GdkDisplay *display,
   button = gtk_button_new_with_label ("Close");
   g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL);
   gtk_container_add (GTK_CONTAINER (vbox), button);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   g_signal_connect (monitor, "notify",
                     G_CALLBACK (monitor_changed_cb), label);

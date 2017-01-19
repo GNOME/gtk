@@ -43,7 +43,6 @@ populate_list (GtkListBox *list)
       g_object_set (label, "margin", 10, NULL);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_container_add (GTK_CONTAINER (row), label);
-      gtk_widget_show_all (row);
       gtk_container_add (GTK_CONTAINER (list), row);
     }
 }
@@ -130,7 +129,7 @@ main (int argc, char *argv[])
   g_signal_connect (sw, "edge-overshot", G_CALLBACK (edge_overshot), list);
   g_signal_connect (sw, "edge-reached", G_CALLBACK (edge_reached), list);
 
-  gtk_widget_show_all (win);
+  gtk_widget_show (win);
 
   gtk_main ();
 

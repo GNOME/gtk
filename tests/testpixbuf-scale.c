@@ -124,8 +124,6 @@ main(int argc, char **argv)
 	gtk_scale_set_digits (GTK_SCALE (hscale), 0);
 	gtk_box_pack_start (GTK_BOX (hbox), hscale, TRUE, TRUE);
 
-	gtk_widget_show_all (vbox);
-
 	/* Compute the size without the drawing area, so we know how big to make the default size */
         gtk_widget_get_preferred_size ( (vbox),
                                    &scratch_requisition, NULL);
@@ -139,7 +137,7 @@ main(int argc, char **argv)
 				     gdk_pixbuf_get_width (pixbuf),
 				     scratch_requisition.height + gdk_pixbuf_get_height (pixbuf));
 	
-	gtk_widget_show_all (window);
+	gtk_widget_show (window);
 
 	gtk_main ();
 

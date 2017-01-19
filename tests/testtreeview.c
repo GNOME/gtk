@@ -752,7 +752,7 @@ main (int    argc,
   
   gtk_container_add (GTK_CONTAINER (sw), tv);
   
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   
   gtk_main ();
 

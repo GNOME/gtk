@@ -319,7 +319,7 @@ main (int   argc,
 
   g_object_unref (label_group);
 
-  gtk_widget_show_all (win);
+  gtk_widget_show (win);
   gtk_window_present (GTK_WINDOW (win));
 
   gtk_main ();

@@ -816,7 +816,6 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (box), swatch);
   gtk_box_pack_start (GTK_BOX (row), box, FALSE, FALSE);
-  gtk_widget_show_all (row);
   gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
   row = gtk_widget_get_parent (row);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -927,7 +926,6 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box), swatch);
       gtk_box_pack_start (GTK_BOX (row), box, FALSE, FALSE);
-      gtk_widget_show_all (row);
       gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
       row = gtk_widget_get_parent (row);
       gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -1893,7 +1891,7 @@ activate (GApplication *app)
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget);
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
 
-  gtk_widget_show_all (GTK_WIDGET (window));
+  gtk_widget_show (GTK_WIDGET (window));
 
   g_object_unref (builder);
 }

@@ -167,7 +167,6 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
   priv->box = box;
 
   gtk_container_add (GTK_CONTAINER (button), priv->box);
-  gtk_widget_show_all (priv->box);
 
   gtk_widget_queue_resize (GTK_WIDGET (button));
 }
@@ -291,8 +290,6 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
 
   /* the arrow button is insentive until we set a menu */
   gtk_widget_set_sensitive (arrow_button, FALSE);
-
-  gtk_widget_show_all (box);
 
   gtk_container_add (GTK_CONTAINER (button), box);
   gtk_menu_button_set_align_widget (GTK_MENU_BUTTON (arrow_button),

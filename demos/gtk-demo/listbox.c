@@ -370,8 +370,6 @@ do_listbox (GtkWidget *do_widget)
       gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (listbox), FALSE);
       g_signal_connect (listbox, "row-activated", G_CALLBACK (row_activated), NULL);
 
-      gtk_widget_show_all (vbox);
-
       data = g_resources_lookup_data ("/listbox/messages.txt", 0, NULL);
       lines = g_strsplit (g_bytes_get_data (data, NULL), "\n", 0);
 

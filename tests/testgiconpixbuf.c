@@ -61,7 +61,7 @@ main (int argc,
   gtk_label_set_label (GTK_LABEL (label), str);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
 
-  gtk_widget_show_all (toplevel);
+  gtk_widget_show (toplevel);
 
   g_signal_connect (toplevel, "delete-event",
 		    G_CALLBACK (gtk_main_quit), NULL);

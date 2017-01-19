@@ -382,7 +382,7 @@ main(int argc, char **argv)
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window), da);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   frame_queue = g_queue_new ();
   g_mutex_init (&frame_mutex);

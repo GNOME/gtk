@@ -18,8 +18,6 @@ test_window_focus (void)
   entry2 = gtk_entry_new ();
   gtk_container_add (GTK_CONTAINER (box), entry2);
 
-  gtk_widget_show_all (box);
-
   g_assert_null (gtk_window_get_focus (GTK_WINDOW (window)));
 
   gtk_window_set_focus (GTK_WINDOW (window), entry1);

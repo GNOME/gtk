@@ -167,7 +167,7 @@ main (int argc, char *argv[])
   g_signal_connect (scale, "value-changed", G_CALLBACK (scale_changed_cb), label);
 
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

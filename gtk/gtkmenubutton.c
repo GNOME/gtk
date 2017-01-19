@@ -834,7 +834,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
           GtkWidget *menu;
 
           menu = gtk_menu_new_from_model (menu_model);
-          gtk_widget_show_all (menu);
+          gtk_widget_show (menu);
           gtk_menu_button_set_popup (menu_button, menu);
         }
     }

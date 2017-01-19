@@ -92,7 +92,7 @@ make_selection_dialog (GdkScreen * screen,
   g_signal_connect (window, "response",
 		    G_CALLBACK (entry_dialog_response), double_entry);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int
@@ -132,7 +132,6 @@ main (int argc, char *argv[])
 		    G_CALLBACK (get_screen_response), display_entry);
 
   gtk_widget_grab_focus (display_entry);
-  gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (dialog)));
   
   while (!correct_second_display)
     {

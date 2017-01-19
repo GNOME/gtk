@@ -25,7 +25,6 @@ test_size (GtkOrientation orientation,
   gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
   gtk_container_add (GTK_CONTAINER (scrolledwindow), box);
-  gtk_widget_show_all (scrolledwindow);
 
   /* Testing the content-width property */
   if (orientation == GTK_ORIENTATION_HORIZONTAL)

@@ -74,7 +74,7 @@
  *   ...
  *
  *   // Show the application window
- *   gtk_widget_show_all (mainwin);
+ *   gtk_widget_show (mainwin);
  *
  *   // Enter the main event loop, and wait for user interaction
  *   gtk_main ();
@@ -1954,7 +1954,7 @@ gtk_main_do_event (GdkEvent *event)
  *                             win);
  *   gtk_container_add (GTK_CONTAINER (win), but);
  *
- *   gtk_widget_show_all (win);
+ *   gtk_widget_show (win);
  *
  *   gtk_main ();
  *

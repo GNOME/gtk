@@ -18,7 +18,7 @@ action_activated (GSimpleAction *action,
   g_signal_connect_swapped (dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), dialog);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 }
 
 static GActionEntry doc_entries[] = {
@@ -114,7 +114,7 @@ activate (GApplication *app,
   gtk_widget_set_halign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_START);
   gtk_container_add (GTK_CONTAINER (win), button);
-  gtk_widget_show_all (win);
+  gtk_widget_show (win);
 
   g_object_unref (button_menu);
   g_object_unref (doc_actions);

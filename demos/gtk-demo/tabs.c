@@ -48,8 +48,6 @@ do_tabs (GtkWidget *do_widget)
                                       GTK_POLICY_AUTOMATIC);
       gtk_container_add (GTK_CONTAINER (window), sw);
       gtk_container_add (GTK_CONTAINER (sw), view);
-
-      gtk_widget_show_all (sw);
     }
 
   if (!gtk_widget_get_visible (window))

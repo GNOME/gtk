@@ -93,8 +93,6 @@ edit_widget (GtkWidget *button)
       gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
       gtk_grid_attach (GTK_GRID (grid), check, 1, 3, 1, 1);
 
-      gtk_widget_show_all (grid);
-
       g_object_set_data (G_OBJECT (button), "dialog", dialog);
     }
 
@@ -174,7 +172,7 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (b), spin, FALSE, TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), b);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

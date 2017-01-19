@@ -852,7 +852,7 @@ request_password (GtkPrintBackend  *backend,
   g_signal_connect (G_OBJECT (dialog), "response",
                     G_CALLBACK (password_dialog_response), backend);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 }
 
 void

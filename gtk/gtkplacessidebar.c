@@ -473,7 +473,6 @@ add_place (GtkPlacesSidebar            *sidebar,
                     G_CALLBACK (on_button_release_event), row);
 
   gtk_container_add (GTK_CONTAINER (sidebar->list_box), GTK_WIDGET (row));
-  gtk_widget_show_all (row);
 
   return row;
 }
@@ -1334,7 +1333,7 @@ update_places (GtkPlacesSidebar *sidebar)
       g_object_unref (icon);
     }
 
-  gtk_widget_show_all (GTK_WIDGET (sidebar));
+  gtk_widget_show (GTK_WIDGET (sidebar));
   /* We want this hidden by default, but need to do it after the show_all call */
   gtk_sidebar_row_hide (GTK_SIDEBAR_ROW (sidebar->new_bookmark_row), TRUE);
 
@@ -1575,7 +1574,7 @@ drag_begin_callback (GtkWidget      *widget,
   gtk_widget_set_size_request (window, allocation.width, allocation.height);
 
   gtk_container_add (GTK_CONTAINER (window), drag_widget);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_widget_set_opacity (window, 0.8);
 
   gtk_drag_set_icon_widget (context,
@@ -2506,7 +2505,6 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   gtk_grid_attach (GTK_GRID (grid), entry, 0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), button,1, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), error, 0, 2, 2, 1);
-  gtk_widget_show_all (grid);
   gtk_popover_set_default_widget (GTK_POPOVER (popover), button);
 
   sidebar->rename_popover = popover;

@@ -92,7 +92,7 @@ open_test_window (void)
       gtk_grid_attach (GTK_GRID (grid), test_widgets[i], i % 3, i / 3, 1, 1);
     }
 
-  gtk_widget_show_all (test_window);
+  gtk_widget_show (test_window);
 }
 
 static void
@@ -160,7 +160,7 @@ open_control_window (void)
   gtk_container_add (GTK_CONTAINER (box), toggle);
 
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 #define TEST_WIDGET(outer) (gtk_bin_get_child (GTK_BIN (gtk_bin_get_child (GTK_BIN(outer)))))
@@ -191,8 +191,6 @@ create_widget_visible_border (const char *text)
   gtk_container_add (GTK_CONTAINER (test_widget), label);
 
   g_assert (TEST_WIDGET (outer_box) == test_widget);
-
-  gtk_widget_show_all (outer_box);
 
   return outer_box;
 }
@@ -268,7 +266,7 @@ open_alignment_window (void)
         }
     }
 
-  gtk_widget_show_all (test_window);
+  gtk_widget_show (test_window);
 }
 
 static GtkWidget*
@@ -320,7 +318,7 @@ open_margin_window (void)
       gtk_container_add (GTK_CONTAINER (box), child);
     }
 
-  gtk_widget_show_all (test_window);
+  gtk_widget_show (test_window);
 }
 
 static void

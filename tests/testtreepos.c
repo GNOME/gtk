@@ -132,7 +132,7 @@ int main (int argc, char *argv[])
   g_signal_connect (tv, "button-release-event",
                     G_CALLBACK (release_event), NULL);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

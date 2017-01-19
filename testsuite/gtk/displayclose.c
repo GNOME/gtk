@@ -31,7 +31,7 @@ main (int argc, char **argv)
 			    G_CALLBACK (gtk_widget_destroy), win);
   gtk_container_add (GTK_CONTAINER (win), but);
 
-  gtk_widget_show_all (win);
+  gtk_widget_show (win);
 
   gtk_test_widget_wait_for_draw (win);
 

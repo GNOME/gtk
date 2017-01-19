@@ -165,7 +165,7 @@ main (int   argc,
   gtk_recent_filter_add_mime_type (filter, "image/jpeg");
   gtk_recent_chooser_add_filter (GTK_RECENT_CHOOSER (dialog), filter);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -185,7 +185,7 @@ main (int   argc,
   g_signal_connect_swapped (button, "clicked",
 		            G_CALLBACK (gtk_recent_chooser_unselect_all), dialog);
 
-  gtk_widget_show_all (control_window);
+  gtk_widget_show (control_window);
   
   g_object_ref (control_window);
   g_signal_connect (dialog, "destroy",

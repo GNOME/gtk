@@ -433,7 +433,7 @@ make_window (gint view_type)
       iter_append (NULL, GTK_TREE_VIEW (tree_view));
     }
   /* Show it all */
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

@@ -561,31 +561,31 @@ main (int argc, char *argv[])
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   win1 = test_nonzerox ();
-  gtk_widget_show_all (win1);
+  gtk_widget_show (win1);
 
   win2 = test_relative ();
-  gtk_widget_show_all (win2);
+  gtk_widget_show (win2);
 
   win3 = test_fullwidth ();
-  gtk_widget_show_all (win3);
+  gtk_widget_show (win3);
 
   win4 = test_scrolling ();
-  gtk_widget_show_all (win4);
+  gtk_widget_show (win4);
 
   win5 = test_builder ();
-  gtk_widget_show_all (win5);
+  gtk_widget_show (win5);
 
   win6 = test_chase ();
-  gtk_widget_show_all (win6);
+  gtk_widget_show (win6);
 
   win7 = test_stacking ();
-  gtk_widget_show_all (win7);
+  gtk_widget_show (win7);
 
   win8 = test_input_stacking ();
-  gtk_widget_show_all (win8);
+  gtk_widget_show (win8);
 
   win9 = test_child_order ();
-  gtk_widget_show_all (win9);
+  gtk_widget_show (win9);
 
   gtk_main ();
 

@@ -228,7 +228,7 @@ main (int argc, char **argv)
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
   /* Done */
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

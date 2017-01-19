@@ -505,7 +505,7 @@ main (int    argc,
     add (GTK_TREE_VIEW (treeview));
   gtk_container_add (GTK_CONTAINER (sw), treeview);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   g_idle_add (dance, treeview);
   

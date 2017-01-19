@@ -122,7 +122,7 @@ int main (int argc, char **argv)
 				 0, 1,
 				 i - 1, i);
 	}
-	gtk_widget_show_all (menu_widget);
+	gtk_widget_show (menu_widget);
 
 	button = gtk_menu_button_new ();
 	gtk_widget_set_halign (button, GTK_ALIGN_START);
@@ -156,7 +156,7 @@ int main (int argc, char **argv)
 	gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), G_MENU_MODEL (menu));
 	gtk_grid_attach (GTK_GRID (grid), button, 1, row++, 1, 1);
 
-	gtk_widget_show_all (window);
+	gtk_widget_show (window);
 
 	gtk_main ();
 

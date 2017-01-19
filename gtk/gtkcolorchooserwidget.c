@@ -414,8 +414,6 @@ add_palette (GtkColorChooserWidget  *cc,
           gtk_grid_attach (GTK_GRID (grid), p, line, pos, 1, 1);
        }
     }
-
-  gtk_widget_show_all (grid);
 }
 
 static void
@@ -595,9 +593,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   if (selected)
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc), &color);
 
-  gtk_widget_show_all (GTK_WIDGET (cc));
   gtk_widget_hide (GTK_WIDGET (cc->priv->editor));
-  gtk_widget_hide (GTK_WIDGET (cc));
 
   gtk_widget_set_no_show_all (cc->priv->palette, TRUE);
   gtk_widget_set_no_show_all (cc->priv->editor, TRUE);

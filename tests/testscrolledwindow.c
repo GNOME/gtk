@@ -72,8 +72,6 @@ add_row (GtkButton  *button,
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW, NULL);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("test"));
   gtk_container_add (GTK_CONTAINER (listbox), row);
-
-  gtk_widget_show_all (row);
 }
 
 static void
@@ -251,7 +249,6 @@ scrollable_policy (void)
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), popover);
   gtk_container_add (GTK_CONTAINER (widget), gtk_label_new ("Popover"));
   gtk_box_pack_start (GTK_BOX (cntl), widget, FALSE, FALSE);
-  gtk_widget_show_all (widget);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (popover), vbox);

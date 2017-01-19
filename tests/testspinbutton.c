@@ -61,7 +61,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
       gtk_container_add (GTK_CONTAINER (mainbox), hbox);
     }
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   num_windows++;
 }
 

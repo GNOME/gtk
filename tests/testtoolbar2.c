@@ -32,7 +32,7 @@ int main (int argc, char *argv[])
 
   gtk_container_add (GTK_CONTAINER (frame), box3);
   
-  gtk_widget_show_all (GTK_WIDGET (window));
+  gtk_widget_show (GTK_WIDGET (window));
 
   gtk_main ();
 

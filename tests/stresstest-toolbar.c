@@ -37,7 +37,6 @@ add_random (GtkToolbar *toolbar, gint n)
   gtk_tool_item_set_tooltip_text (toolitem, "Bar");
 
   g_free (label);
-  gtk_widget_show_all (GTK_WIDGET (toolitem));
 
   n_items = gtk_toolbar_get_n_items (toolbar);
   if (n_items == 0)
@@ -145,7 +144,7 @@ main (gint argc, gchar **argv)
   
   gdk_threads_add_idle (stress_test_old_api, &info);
 
-  gtk_widget_show_all (GTK_WIDGET (info.window));
+  gtk_widget_show (GTK_WIDGET (info.window));
   
   gtk_main ();
 

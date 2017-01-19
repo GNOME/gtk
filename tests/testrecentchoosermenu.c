@@ -99,7 +99,7 @@ create_recent_chooser_menu (gint limit)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
 
-  gtk_widget_show_all (menu);
+  gtk_widget_show (menu);
 
   return menu;
 }

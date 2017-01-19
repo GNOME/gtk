@@ -2473,7 +2473,7 @@ show_menu (GtkToolbar     *toolbar,
 
   rebuild_menu (toolbar);
 
-  gtk_widget_show_all (GTK_WIDGET (priv->menu));
+  gtk_widget_show (GTK_WIDGET (priv->menu));
 
   switch (priv->orientation)
     {

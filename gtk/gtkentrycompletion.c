@@ -1636,7 +1636,7 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   completion->priv->ignore_enter = TRUE;
 
-  gtk_widget_show_all (completion->priv->vbox);
+  gtk_widget_show (completion->priv->vbox);
 
   /* default on no match */
   completion->priv->current_selected = -1;

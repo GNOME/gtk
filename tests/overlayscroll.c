@@ -90,7 +90,7 @@ main (int argc, char *argv[])
   sb2 = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adj);
   gtk_container_add (GTK_CONTAINER (box), sb2);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

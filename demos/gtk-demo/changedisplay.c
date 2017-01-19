@@ -123,7 +123,7 @@ query_for_toplevel (GdkScreen  *screen,
   g_object_set (label, "margin", 10, NULL);
   gtk_container_add (GTK_CONTAINER (frame), label);
 
-  gtk_widget_show_all (popup);
+  gtk_widget_show (popup);
   cursor = gdk_cursor_new_from_name (display, "crosshair");
   device = gtk_get_current_event_device ();
 
@@ -224,7 +224,6 @@ open_display_cb (GtkWidget         *button,
   gtk_container_add (GTK_CONTAINER (content_area), display_entry);
 
   gtk_widget_grab_focus (display_entry);
-  gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (dialog)));
 
   while (!result)
     {
@@ -547,7 +546,7 @@ do_changedisplay (GtkWidget *do_widget)
 
       initialize_displays (info);
 
-      gtk_widget_show_all (info->window);
+      gtk_widget_show (info->window);
       return info->window;
     }
   else

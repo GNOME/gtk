@@ -94,7 +94,7 @@ main (int argc, char *argv[])
   g_signal_connect (dialog, "notify::color", G_CALLBACK (color_changed), NULL);
   g_signal_connect (dialog, "response", G_CALLBACK (dialog_response), NULL);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show (dialog);
 
   gtk_main ();
 

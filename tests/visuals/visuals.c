@@ -52,7 +52,7 @@ create_dark_popup (GtkWidget *parent)
 
   gtk_window_set_transient_for (GTK_WINDOW (popup), GTK_WINDOW (parent));
 
-  gtk_widget_show_all (popup);
+  gtk_widget_show (popup);
 }
 
 int

@@ -80,7 +80,7 @@ counter (void *data)
                     G_CALLBACK (close_cb), &flag);
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   /* Since flag is only checked or set inside the GTK lock,
    * we don't have to worry about locking it explicitly

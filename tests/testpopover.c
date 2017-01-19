@@ -146,7 +146,7 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), combo, 2, 5, 1, 1);
 
 
-  gtk_widget_show_all (win);
+  gtk_widget_show (win);
 
   gtk_main ();
 

@@ -185,7 +185,7 @@ activate (GApplication *gapp)
   gtk_grid_attach (GTK_GRID (grid), spin, 2, 3, 2, 1);
   
   gtk_container_add (GTK_CONTAINER (window), grid);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

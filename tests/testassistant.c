@@ -73,8 +73,7 @@ add_completion_test_page (GtkWidget   *assistant,
 		    G_CALLBACK (complete_cb), pdata);
 
 
-  if (visible)
-    gtk_widget_show_all (page);
+  gtk_widget_set_visible (page, visible);
 
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, text);
@@ -294,7 +293,6 @@ create_generous_assistant (GtkWidget *widget)
       gtk_widget_set_valign (page, GTK_ALIGN_CENTER);
       gtk_widget_set_margin_start (page, 20);
       gtk_widget_set_margin_end (page, 20);
-      gtk_widget_show_all (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Progress");
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_PROGRESS);
@@ -388,7 +386,6 @@ create_nonlinear_assistant (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (page), button, FALSE, FALSE);
       g_signal_connect (G_OBJECT (button), "toggled", G_CALLBACK (select_branch), GINT_TO_POINTER ('B'));
 
-      gtk_widget_show_all (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 1");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
@@ -607,7 +604,7 @@ flip_pages (GtkButton *button, GtkAssistant *assistant)
   gtk_assistant_remove_page (assistant, 1);
   gtk_assistant_insert_page (assistant, page, 2);
 
-  gtk_widget_show_all (page);
+  gtk_widget_show (page);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, title);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
@@ -655,7 +652,6 @@ create_page_flipping_assistant (GtkWidget *widget)
                           get_test_page ("Page 2"),
                           TRUE,
                           TRUE);
-      gtk_widget_show_all (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
@@ -729,7 +725,7 @@ main (int argc, gchar *argv[])
       gtk_box_pack_start (GTK_BOX (box), button, TRUE, TRUE);
     }
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_main ();
 
   return 0;

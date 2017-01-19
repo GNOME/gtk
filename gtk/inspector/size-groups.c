@@ -247,8 +247,6 @@ add_size_group (GtkInspectorSizeGroups *sl,
   widgets = gtk_size_group_get_widgets (group);
   for (l = widgets; l; l = l->next)
     add_widget (sl, GTK_LIST_BOX (listbox), GTK_WIDGET (l->data));
-
-  gtk_widget_show_all (frame);
 }
 
 void

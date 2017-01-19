@@ -164,7 +164,7 @@ main (int    argc,
 
   gtk_box_pack_start (GTK_BOX (hbox), option, FALSE, FALSE);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
   gtk_widget_hide (vbbox);
 
   gtk_main ();

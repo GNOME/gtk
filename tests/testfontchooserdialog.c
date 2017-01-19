@@ -96,7 +96,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_container_add (GTK_CONTAINER (window), font_button);
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   g_signal_connect (font_button, "notify::font",
                     G_CALLBACK (notify_font_cb), NULL);

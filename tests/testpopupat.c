@@ -54,7 +54,7 @@ main (int   argc,
   app_chooser_widget = GTK_WIDGET (gtk_builder_get_object (builder, "appchooserwidget"));
   g_signal_connect (app_chooser_widget, "populate-popup", G_CALLBACK (populate_popup_cb), builder);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   gtk_main ();
 

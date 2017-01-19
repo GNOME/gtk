@@ -828,7 +828,6 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
 
   item = gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_widget_show_all (box);
   gtk_container_add (GTK_CONTAINER (item), box);
 
   g_signal_connect (item, "activate",

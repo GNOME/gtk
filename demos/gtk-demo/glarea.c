@@ -436,7 +436,7 @@ do_glarea (GtkWidget *do_widget)
     demo_window = create_glarea_window (do_widget);
 
   if (!gtk_widget_get_visible (demo_window))
-    gtk_widget_show_all (demo_window);
+    gtk_widget_show (demo_window);
   else
     gtk_widget_destroy (demo_window);
 

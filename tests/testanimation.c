@@ -354,7 +354,7 @@ do_image (const char *filename)
   g_signal_connect (window, "delete_event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 
   return window;
 }
@@ -401,7 +401,7 @@ do_nonprogressive (const gchar *filename)
   g_signal_connect (window, "delete_event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
-  gtk_widget_show_all (window);
+  gtk_widget_show (window);
 }
 
 int

@@ -126,7 +126,7 @@ main (int argc,
   gtk_app_chooser_button_set_active_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
                                                  CUSTOM_ITEM);
 #endif
-  gtk_widget_show_all (toplevel);
+  gtk_widget_show (toplevel);
 
   g_signal_connect (toplevel, "delete-event",
                     G_CALLBACK (gtk_main_quit), NULL);
