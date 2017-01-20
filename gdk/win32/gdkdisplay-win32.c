@@ -1095,10 +1095,10 @@ gdk_win32_display_get_monitor (GdkDisplay *display,
 {
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
 
-  if (0 <= monitor_num || monitor_num < win32_display->monitors->len)
-    return (GdkMonitor *) g_ptr_array_index (win32_display->monitors, monitor_num);
+  if (monitor_num < 0 || monitor_num >= win32_display->monitors->len)
+    return NULL;
 
-  return NULL;
+  return (GdkMonitor *) g_ptr_array_index (win32_display->monitors, monitor_num);
 }
 
 static GdkMonitor *
