@@ -106,7 +106,6 @@ struct _GtkScaleButtonPrivate
   GtkWidget *image;
   GtkWidget *active_button;
 
-  GtkIconSize size;
   GtkOrientation orientation;
   GtkOrientation applied_orientation;
 
@@ -202,15 +201,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							G_MAXDOUBLE,
 							0,
 							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  g_object_class_install_property (gobject_class,
-				   PROP_SIZE,
-				   g_param_spec_enum ("size",
-						      P_("Icon size"),
-						      P_("The icon size"),
-						      GTK_TYPE_ICON_SIZE,
-						      GTK_ICON_SIZE_SMALL_TOOLBAR,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
@@ -383,12 +373,10 @@ static void
 gtk_scale_button_constructed (GObject *object)
 {
   GtkScaleButton *button = GTK_SCALE_BUTTON (object);
-  GtkScaleButtonPrivate *priv = button->priv;
 
   G_OBJECT_CLASS (gtk_scale_button_parent_class)->constructed (object);
 
   /* set button text and size */
-  priv->size = GTK_ICON_SIZE_SMALL_TOOLBAR;
   gtk_scale_button_update_icon (button);
 }
 
@@ -407,14 +395,6 @@ gtk_scale_button_set_property (GObject       *object,
       break;
     case PROP_VALUE:
       gtk_scale_button_set_value (button, g_value_get_double (value));
-      break;
-    case PROP_SIZE:
-      if (button->priv->size != g_value_get_enum (value))
-        {
-          button->priv->size = g_value_get_enum (value);
-          gtk_scale_button_update_icon (button);
-          g_object_notify_by_pspec (object, pspec);
-        }
       break;
     case PROP_ADJUSTMENT:
       gtk_scale_button_set_adjustment (button, g_value_get_object (value));
@@ -445,9 +425,6 @@ gtk_scale_button_get_property (GObject     *object,
       break;
     case PROP_VALUE:
       g_value_set_double (value, gtk_scale_button_get_value (button));
-      break;
-    case PROP_SIZE:
-      g_value_set_enum (value, priv->size);
       break;
     case PROP_ADJUSTMENT:
       g_value_set_object (value, gtk_scale_button_get_adjustment (button));
@@ -507,7 +484,6 @@ gtk_scale_button_dispose (GObject *object)
 
 /**
  * gtk_scale_button_new:
- * @size: (type int): a stock icon size (#GtkIconSize)
  * @min: the minimum value of the scale (usually 0)
  * @max: the maximum value of the scale (usually 100)
  * @step: the stepping of value when a scroll-wheel event,
@@ -524,8 +500,7 @@ gtk_scale_button_dispose (GObject *object)
  * Since: 2.12
  */
 GtkWidget *
-gtk_scale_button_new (GtkIconSize   size,
-		      gdouble       min,
+gtk_scale_button_new (gdouble       min,
 		      gdouble       max,
 		      gdouble       step,
 		      const gchar **icons)
@@ -538,7 +513,6 @@ gtk_scale_button_new (GtkIconSize   size,
   button = g_object_new (GTK_TYPE_SCALE_BUTTON,
                          "adjustment", adjustment,
                          "icons", icons,
-                         "size", size,
                          NULL);
 
   return GTK_WIDGET (button);
@@ -980,7 +954,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
     {
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
                                     "image-missing",
-                                    priv->size);
+                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
       return;
     }
 
@@ -991,7 +965,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
     {
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
                                     priv->icon_list[0],
-                                    priv->size);
+                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
       return;
     }
 
@@ -1011,7 +985,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
                                     name,
-                                    priv->size);
+                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
       return;
     }
 
@@ -1036,7 +1010,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 
   gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
                                 name,
-                                priv->size);
+                                GTK_ICON_SIZE_SMALL_TOOLBAR);
 }
 
 static void
