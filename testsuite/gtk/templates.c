@@ -117,8 +117,7 @@ test_scale_button_basic (void)
 {
   GtkWidget *widget;
 
-  widget = gtk_scale_button_new (GTK_ICON_SIZE_MENU,
-				 0, 100, 10, NULL);
+  widget = gtk_scale_button_new (0, 100, 10, NULL);
   g_assert (GTK_IS_SCALE_BUTTON (widget));
   gtk_widget_destroy (widget);
 }
