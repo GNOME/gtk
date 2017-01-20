@@ -84,20 +84,16 @@ gboolean gtk_init_check           (void);
  * when building GTK+-using code.
  */
 GDK_AVAILABLE_IN_ALL
-void     gtk_init_abi_check       (int    *argc,
-                                   char ***argv,
-                                   int     num_checks,
+void     gtk_init_abi_check       (int     num_checks,
                                    size_t  sizeof_GtkWindow,
                                    size_t  sizeof_GtkBox);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_init_check_abi_check (int    *argc,
-                                   char ***argv,
-                                   int     num_checks,
+gboolean gtk_init_check_abi_check (int     num_checks,
                                    size_t  sizeof_GtkWindow,
                                    size_t  sizeof_GtkBox);
 
-#define gtk_init(argc, argv) gtk_init_abi_check (argc, argv, 2, sizeof (GtkWindow), sizeof (GtkBox))
-#define gtk_init_check(argc, argv) gtk_init_check_abi_check (argc, argv, 2, sizeof (GtkWindow), sizeof (GtkBox))
+#define gtk_init() gtk_init_abi_check (2, sizeof (GtkWindow), sizeof (GtkBox))
+#define gtk_init_check() gtk_init_check_abi_check (2, sizeof (GtkWindow), sizeof (GtkBox))
 
 #endif
 

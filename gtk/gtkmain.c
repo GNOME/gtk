@@ -875,21 +875,21 @@ check_sizeof_GtkBox (size_t sizeof_GtkBox)
  * in the number of extra args.
  */
 void
-gtk_init_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow, size_t sizeof_GtkBox)
+gtk_init_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof_GtkBox)
 {
   check_sizeof_GtkWindow (sizeof_GtkWindow);
   if (num_checks >= 2)
     check_sizeof_GtkBox (sizeof_GtkBox);
-  gtk_init (argc, argv);
+  gtk_init ();
 }
 
 gboolean
-gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof_GtkWindow, size_t sizeof_GtkBox)
+gtk_init_check_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof_GtkBox)
 {
   check_sizeof_GtkWindow (sizeof_GtkWindow);
   if (num_checks >= 2)
     check_sizeof_GtkBox (sizeof_GtkBox);
-  return gtk_init_check (argc, argv);
+  return gtk_init_check ();
 }
 
 #endif
