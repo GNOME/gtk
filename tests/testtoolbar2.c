@@ -23,11 +23,11 @@ int main (int argc, char *argv[])
   box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   g_object_set (box3, "margin", 10, NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (box3), GTK_STYLE_CLASS_LINKED);
-  button = gtk_button_new_from_icon_name ("document-new-symbolic", GTK_ICON_SIZE_BUTTON);
+  button = gtk_button_new_from_icon_name ("document-new-symbolic");
   gtk_container_add (GTK_CONTAINER (box3), button);
-  button = gtk_button_new_from_icon_name ("document-open-symbolic", GTK_ICON_SIZE_BUTTON);
+  button = gtk_button_new_from_icon_name ("document-open-symbolic");
   gtk_container_add (GTK_CONTAINER (box3), button);
-  button = gtk_button_new_from_icon_name ("document-save-symbolic", GTK_ICON_SIZE_BUTTON);
+  button = gtk_button_new_from_icon_name ("document-save-symbolic");
   gtk_container_add (GTK_CONTAINER (box3), button);
 
   gtk_container_add (GTK_CONTAINER (frame), box3);

@@ -84,7 +84,7 @@ int main (int argc, char *argv[])
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
-	button = gtk_button_new_from_icon_name ("help-about", GTK_ICON_SIZE_BUTTON);
+	button = gtk_button_new_from_icon_name ("help-about");
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 
 	g_object_get (button,

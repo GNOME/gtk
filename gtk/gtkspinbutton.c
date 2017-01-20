@@ -849,7 +849,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
                                 -1, gtk_entry_get_gadget (GTK_ENTRY (spin_button)),
                                 TRUE, GTK_ALIGN_FILL);
 
-  priv->down_button = gtk_button_new_from_icon_name ("list-remove-symbolic", GTK_ICON_SIZE_BUTTON);
+  priv->down_button = gtk_button_new_from_icon_name ("list-remove-symbolic");
   gtk_widget_set_can_focus (priv->down_button, FALSE);
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->down_button), "down");
   gtk_widget_set_parent (priv->down_button, GTK_WIDGET (spin_button));
@@ -862,7 +862,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect (priv->down_click_gesture, "pressed", G_CALLBACK (button_pressed_cb), spin_button);
   g_signal_connect (priv->down_click_gesture, "released", G_CALLBACK (button_released_cb), spin_button);
 
-  priv->up_button = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON);
+  priv->up_button = gtk_button_new_from_icon_name ("list-add-symbolic");
   gtk_widget_set_can_focus (priv->up_button, FALSE);
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->up_button), "up");
   gtk_widget_set_parent (priv->up_button, GTK_WIDGET (spin_button));
