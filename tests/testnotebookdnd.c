@@ -179,7 +179,7 @@ create_notebook (gchar           **labels,
   gtk_widget_set_vexpand (notebook, TRUE);
   gtk_widget_set_hexpand (notebook, TRUE);
 
-  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON);
+  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic");
   g_signal_connect (action_widget, "clicked", G_CALLBACK (action_clicked_cb), notebook);
   gtk_widget_show (action_widget);
   gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), action_widget, GTK_PACK_END);
@@ -223,7 +223,7 @@ create_notebook_non_dragable_content (gchar           **labels,
   gtk_widget_set_vexpand (notebook, TRUE);
   gtk_widget_set_hexpand (notebook, TRUE);
 
-  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON);
+  action_widget = gtk_button_new_from_icon_name ("list-add-symbolic");
   g_signal_connect (action_widget, "clicked", G_CALLBACK (action_clicked_cb), notebook);
   gtk_widget_show (action_widget);
   gtk_notebook_set_action_widget (GTK_NOTEBOOK (notebook), action_widget, GTK_PACK_END);

@@ -72,7 +72,7 @@ add_string (GtkInspectorStrvEditor *editor,
   g_object_set_data (G_OBJECT (box), "entry", entry);
   g_signal_connect_swapped (entry, "notify::text", G_CALLBACK (emit_changed), editor);
 
-  button = gtk_button_new_from_icon_name ("user-trash-symbolic", GTK_ICON_SIZE_MENU);
+  button = gtk_button_new_from_icon_name ("user-trash-symbolic");
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
   gtk_widget_show (button);
   gtk_box_pack_start (GTK_BOX (box), button);
@@ -100,7 +100,7 @@ gtk_inspector_strv_editor_init (GtkInspectorStrvEditor *editor)
   editor->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show (editor->box);
 
-  editor->button = gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_MENU);
+  editor->button = gtk_button_new_from_icon_name ("list-add-symbolic");
   gtk_style_context_add_class (gtk_widget_get_style_context (editor->button), "image-button");
   gtk_widget_set_focus_on_click (editor->button, FALSE);
   gtk_widget_set_halign (editor->button, GTK_ALIGN_END);

@@ -425,10 +425,10 @@ create_action_bar (void)
 
   widget = gtk_action_bar_new ();
 
-  button = gtk_button_new_from_icon_name ("object-select-symbolic", GTK_ICON_SIZE_MENU);
+  button = gtk_button_new_from_icon_name ("object-select-symbolic");
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (widget), button);
-  button = gtk_button_new_from_icon_name ("call-start-symbolic", GTK_ICON_SIZE_MENU);
+  button = gtk_button_new_from_icon_name ("call-start-symbolic");
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (widget), button);
   g_object_set (gtk_widget_get_parent (button), "margin", 6, "spacing", 6, NULL);
