@@ -614,7 +614,6 @@ gtk_button_new_with_label (const gchar *label)
 /**
  * gtk_button_new_from_icon_name:
  * @icon_name: (nullable): an icon name or %NULL
- * @size: (type int): an icon size (#GtkIconSize)
  *
  * Creates a new button containing an icon from the current icon theme.
  *
@@ -627,15 +626,13 @@ gtk_button_new_with_label (const gchar *label)
  * Since: 3.10
  */
 GtkWidget*
-gtk_button_new_from_icon_name (const gchar *icon_name,
-                               GtkIconSize  size)
+gtk_button_new_from_icon_name (const gchar *icon_name)
 {
   GtkWidget *button;
-  GtkWidget *image;
 
-  image = gtk_image_new_from_icon_name (icon_name, size);
-  button =  g_object_new (GTK_TYPE_BUTTON, NULL);
-  gtk_container_add (GTK_CONTAINER (button), image);
+  button = g_object_new (GTK_TYPE_BUTTON,
+                         "icon-name", icon_name,
+                         NULL);
 
   return button;
 }
