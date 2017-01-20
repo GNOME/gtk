@@ -293,7 +293,6 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
  * gtk_tooltip_set_icon_from_icon_name:
  * @tooltip: a #GtkTooltip
  * @icon_name: (allow-none): an icon name, or %NULL
- * @size: (type int): a stock icon size (#GtkIconSize)
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * the icon indicated by @icon_name with the size indicated
@@ -303,21 +302,18 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
  */
 void
 gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
-				     const gchar *icon_name,
-				     GtkIconSize  size)
+				     const gchar *icon_name)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
   gtk_tooltip_window_set_image_icon_from_name (GTK_TOOLTIP_WINDOW (tooltip->window),
-                                               icon_name,
-                                               size);
+                                               icon_name);
 }
 
 /**
  * gtk_tooltip_set_icon_from_gicon:
  * @tooltip: a #GtkTooltip
  * @gicon: (allow-none): a #GIcon representing the icon, or %NULL
- * @size: (type int): a stock icon size (#GtkIconSize)
  *
  * Sets the icon of the tooltip (which is in front of the text)
  * to be the icon indicated by @gicon with the size indicated
@@ -327,14 +323,12 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
  */
 void
 gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
-				 GIcon       *gicon,
-				 GtkIconSize  size)
+				 GIcon       *gicon)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
   gtk_tooltip_window_set_image_icon_from_gicon (GTK_TOOLTIP_WINDOW (tooltip->window),
-                                                gicon,
-                                                size);
+                                                gicon);
 }
 
 /**
