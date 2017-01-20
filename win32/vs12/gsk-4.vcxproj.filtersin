@@ -22,6 +22,7 @@
 #include "gsk-4.vs12.sourcefiles.filters"
    <ClCompile Include="..\..\gsk\gskvulkanblendpipeline.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\gsk\gskvulkanborderpipeline.c"><Filter>Source Files</Filter></ClCompile>
+   <ClCompile Include="..\..\gsk\gskvulkanboxshadowpipeline.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\gsk\gskvulkanbuffer.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\gsk\gskvulkanclip.c"><Filter>Source Files</Filter></ClCompile>
    <ClCompile Include="..\..\gsk\gskvulkancolorpipeline.c"><Filter>Source Files</Filter></ClCompile>
