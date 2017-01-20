@@ -772,6 +772,9 @@ static gboolean event_window_is_still_viewable (GdkEvent *event);
 
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
+static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
+
+
 /* --- variables --- */
 static gint             GtkWidget_private_offset = 0;
 static gpointer         gtk_widget_parent_class = NULL;
@@ -3783,7 +3786,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   widget->priv = gtk_widget_get_instance_private (widget); 
   priv = widget->priv;
 
-  priv->visible = TRUE;
+  priv->visible = gtk_widget_class_get_visible_by_default (g_class);
   priv->child_visible = TRUE;
   priv->name = NULL;
   priv->allocation.x = -1;
@@ -3843,7 +3846,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 
   priv->cssnode = gtk_css_widget_node_new (widget);
   gtk_css_node_set_state (priv->cssnode, priv->state_flags);
-  gtk_css_node_set_visible (priv->cssnode, TRUE);
+  gtk_css_node_set_visible (priv->cssnode, priv->visible);
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 }
@@ -14534,6 +14537,13 @@ gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
   priv = widget_class->priv;
 
   priv->css_name = g_intern_string (name);
+}
+
+static gboolean
+gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class)
+{
+  return !(GTK_IS_WINDOW_CLASS (widget_class) ||
+           GTK_IS_POPOVER_CLASS (widget_class));
 }
 
 /**
