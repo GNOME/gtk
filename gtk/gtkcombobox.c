@@ -2415,7 +2415,7 @@ void
 gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
                                 GdkDevice   *device)
 {
-  GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkComboBoxPrivate *priv;
   gint x, y, width, height;
   GtkTreePath *path = NULL, *ppath;
   GtkWidget *toplevel;
@@ -2423,6 +2423,8 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (GDK_IS_DEVICE (device));
+
+  priv = combo_box->priv;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (combo_box)))
     return;
@@ -2545,9 +2547,11 @@ gtk_combo_box_real_popdown (GtkComboBox *combo_box)
 void
 gtk_combo_box_popdown (GtkComboBox *combo_box)
 {
-  GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkComboBoxPrivate *priv;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  priv = combo_box->priv;
 
   if (GTK_IS_MENU (priv->popup_widget))
     {
@@ -4077,7 +4081,7 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
 
   priv = combo_box->priv;
 
-  if (model == combo_box->priv->model)
+  if (model == priv->model)
     return;
 
   gtk_combo_box_unset_model (combo_box);
@@ -4967,11 +4971,12 @@ void
 gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
                                      gint         text_column)
 {
-  GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkComboBoxPrivate *priv;
   GtkTreeModel *model;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
+  priv = combo_box->priv;
   model = gtk_combo_box_get_model (combo_box);
 
   g_return_if_fail (text_column >= 0);
