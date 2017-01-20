@@ -228,6 +228,7 @@ static void     gtk_combo_box_cell_editable_init   (GtkCellEditableIface *iface)
 static void     gtk_combo_box_constructed          (GObject          *object);
 static void     gtk_combo_box_dispose              (GObject          *object);
 static void     gtk_combo_box_finalize             (GObject          *object);
+static void     gtk_combo_box_unmap                (GtkWidget        *widget);
 static void     gtk_combo_box_destroy              (GtkWidget        *widget);
 
 static void     gtk_combo_box_set_property         (GObject         *object,
@@ -525,6 +526,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->measure = gtk_combo_box_measure_;
+  widget_class->unmap = gtk_combo_box_unmap;
   widget_class->destroy = gtk_combo_box_destroy;
   widget_class->compute_expand = gtk_combo_box_compute_expand;
 
@@ -1683,6 +1685,8 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
  * This function is mostly intended for use by accessibility technologies;
  * applications should have little use for it.
  *
+ * Before calling this, @combo_box must be mapped, or nothing will happen.
+ *
  * Since: 2.4
  */
 void
@@ -1690,7 +1694,8 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
-  g_signal_emit (combo_box, combo_box_signals[POPUP], 0);
+  if (gtk_widget_get_mapped (GTK_WIDGET (combo_box)))
+    g_signal_emit (combo_box, combo_box_signals[POPUP], 0);
 }
 
 /**
@@ -2976,6 +2981,14 @@ gtk_combo_box_grab_focus (GtkWidget *widget)
 }
 
 static void
+gtk_combo_box_unmap (GtkWidget *widget)
+{
+  gtk_combo_box_popdown (GTK_COMBO_BOX (widget));
+
+  GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->unmap (widget);
+}
+
+static void
 gtk_combo_box_destroy (GtkWidget *widget)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
@@ -3001,8 +3014,6 @@ gtk_combo_box_destroy (GtkWidget *widget)
       priv->cell_view = NULL;
       _gtk_bin_set_child (GTK_BIN (combo_box), NULL);
     }
-
-  gtk_combo_box_popdown (combo_box);
 
   if (priv->row_separator_destroy)
     priv->row_separator_destroy (priv->row_separator_data);
