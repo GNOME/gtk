@@ -150,17 +150,6 @@ gtk_tool_item_group_get_style (GtkToolShell *shell)
   return GTK_TOOLBAR_ICONS;
 }
 
-static GtkIconSize
-gtk_tool_item_group_get_icon_size (GtkToolShell *shell)
-{
-  GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (shell));
-
-  if (GTK_IS_TOOL_PALETTE (parent))
-    return gtk_tool_palette_get_icon_size (GTK_TOOL_PALETTE (parent));
-
-  return GTK_ICON_SIZE_SMALL_TOOLBAR;
-}
-
 static PangoEllipsizeMode
 gtk_tool_item_group_get_ellipsize_mode (GtkToolShell *shell)
 {
@@ -257,7 +246,6 @@ gtk_tool_item_group_display_changed (GtkWidget  *widget,
 static void
 gtk_tool_item_group_tool_shell_init (GtkToolShellIface *iface)
 {
-  iface->get_icon_size = gtk_tool_item_group_get_icon_size;
   iface->get_orientation = gtk_tool_item_group_get_orientation;
   iface->get_style = gtk_tool_item_group_get_style;
   iface->get_text_alignment = gtk_tool_item_group_get_text_alignment;

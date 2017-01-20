@@ -3214,7 +3214,6 @@ GtkToggleButtonPrivate
 GtkToolShell
 GtkToolShellIface
 gtk_tool_shell_get_ellipsize_mode
-gtk_tool_shell_get_icon_size
 gtk_tool_shell_get_orientation
 gtk_tool_shell_get_style
 gtk_tool_shell_get_text_alignment
@@ -3244,13 +3243,10 @@ gtk_toolbar_get_nth_item
 gtk_toolbar_get_drop_index
 gtk_toolbar_set_drop_highlight_item
 gtk_toolbar_set_show_arrow
-gtk_toolbar_unset_icon_size
 gtk_toolbar_get_show_arrow
 gtk_toolbar_get_style
-gtk_toolbar_get_icon_size
 
 gtk_toolbar_set_style
-gtk_toolbar_set_icon_size
 gtk_toolbar_unset_style
 
 <SUBSECTION Standard>
@@ -3284,7 +3280,6 @@ gtk_tool_item_get_visible_vertical
 gtk_tool_item_set_is_important
 gtk_tool_item_get_is_important
 gtk_tool_item_get_ellipsize_mode
-gtk_tool_item_get_icon_size
 gtk_tool_item_get_orientation
 gtk_tool_item_get_toolbar_style
 gtk_tool_item_get_text_alignment
@@ -3476,9 +3471,6 @@ gtk_tool_palette_get_expand
 gtk_tool_palette_set_expand
 gtk_tool_palette_get_group_position
 gtk_tool_palette_set_group_position
-gtk_tool_palette_get_icon_size
-gtk_tool_palette_set_icon_size
-gtk_tool_palette_unset_icon_size
 gtk_tool_palette_get_style
 gtk_tool_palette_set_style
 gtk_tool_palette_unset_style
