@@ -311,7 +311,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   GtkToolbarStyle style;
   gboolean need_label = FALSE;
   gboolean need_icon = FALSE;
-  GtkIconSize icon_size;
   GtkWidget *box = NULL;
   GtkOrientation text_orientation = GTK_ORIENTATION_HORIZONTAL;
   GtkSizeGroup *size_group = NULL;
@@ -446,7 +445,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
         }
     }
 
-  icon_size = gtk_tool_item_get_icon_size (GTK_TOOL_ITEM (button));
   if (need_icon)
     {
       if (button->priv->icon_widget)
@@ -456,13 +454,13 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  if (GTK_IS_IMAGE (icon))
 	    {
 	      g_object_set (button->priv->icon_widget,
-			    "icon-size", icon_size,
+			    "icon-size", GTK_ICON_SIZE_SMALL_TOOLBAR,
 			    NULL);
 	    }
 	}
       else if (button->priv->icon_name)
 	{
-	  icon = gtk_image_new_from_icon_name (button->priv->icon_name, icon_size);
+	  icon = gtk_image_new_from_icon_name (button->priv->icon_name, GTK_ICON_SIZE_SMALL_TOOLBAR);
 	}
 
       if (icon)

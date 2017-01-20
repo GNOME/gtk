@@ -113,18 +113,11 @@ gboolean                       gtk_tool_palette_get_expand            (GtkToolPa
                                                                        GtkToolItemGroup          *group);
 
 GDK_AVAILABLE_IN_ALL
-void                           gtk_tool_palette_set_icon_size         (GtkToolPalette            *palette,
-                                                                       GtkIconSize                icon_size);
-GDK_AVAILABLE_IN_ALL
-void                           gtk_tool_palette_unset_icon_size       (GtkToolPalette            *palette);
-GDK_AVAILABLE_IN_ALL
 void                           gtk_tool_palette_set_style             (GtkToolPalette            *palette,
                                                                        GtkToolbarStyle            style);
 GDK_AVAILABLE_IN_ALL
 void                           gtk_tool_palette_unset_style           (GtkToolPalette            *palette);
 
-GDK_AVAILABLE_IN_ALL
-GtkIconSize                    gtk_tool_palette_get_icon_size         (GtkToolPalette            *palette);
 GDK_AVAILABLE_IN_ALL
 GtkToolbarStyle                gtk_tool_palette_get_style             (GtkToolPalette            *palette);
 

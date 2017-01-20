@@ -1074,7 +1074,6 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (treeview);
 
   toolbar = gtk_toolbar_new ();
-  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_MENU);
 
   context = gtk_widget_get_style_context (toolbar);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);

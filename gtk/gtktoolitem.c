@@ -359,33 +359,6 @@ gtk_tool_item_get_ellipsize_mode (GtkToolItem *tool_item)
 }
 
 /**
- * gtk_tool_item_get_icon_size:
- * @tool_item: a #GtkToolItem
- * 
- * Returns the icon size used for @tool_item. Custom subclasses of
- * #GtkToolItem should call this function to find out what size icons
- * they should use.
- * 
- * Returns: (type int): a #GtkIconSize indicating the icon size
- * used for @tool_item
- * 
- * Since: 2.4
- **/
-GtkIconSize
-gtk_tool_item_get_icon_size (GtkToolItem *tool_item)
-{
-  GtkWidget *parent;
-
-  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ICON_SIZE_LARGE_TOOLBAR);
-
-  parent = gtk_widget_get_parent (GTK_WIDGET (tool_item));
-  if (!parent || !GTK_IS_TOOL_SHELL (parent))
-    return GTK_ICON_SIZE_LARGE_TOOLBAR;
-
-  return gtk_tool_shell_get_icon_size (GTK_TOOL_SHELL (parent));
-}
-
-/**
  * gtk_tool_item_get_orientation:
  * @tool_item: a #GtkToolItem 
  * 

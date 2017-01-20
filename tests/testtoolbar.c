@@ -292,44 +292,6 @@ bold_toggled (GtkToggleToolButton *button)
 	     gtk_toggle_tool_button_get_active (button));
 }
 
-static void
-set_icon_size_toggled (GtkCheckButton *button, GtkToolbar *toolbar)
-{
-  GtkWidget *option_menu;
-  int icon_size;
-  
-  option_menu = g_object_get_data (G_OBJECT (button), "option-menu");
-
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-    {
-      if (gtk_combo_box_get_active (GTK_COMBO_BOX (option_menu)) == 0)
-        icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-      else
-        icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-
-      gtk_toolbar_set_icon_size (toolbar, icon_size);
-      gtk_widget_set_sensitive (option_menu, TRUE);
-    }
-  else
-    {
-      gtk_toolbar_unset_icon_size (toolbar);
-      gtk_widget_set_sensitive (option_menu, FALSE);
-    }
-}
-
-static void
-icon_size_history_changed (GtkComboBox *menu, GtkToolbar *toolbar)
-{
-  int icon_size;
-
-  if (gtk_combo_box_get_active (menu) == 0)
-    icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-  else
-    icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-
-  gtk_toolbar_set_icon_size (toolbar, icon_size);
-}
-
 static gboolean
 toolbar_drag_drop (GtkWidget *widget, GdkDragContext *context,
 		   gint x, gint y, guint time, GtkWidget *label)
@@ -534,20 +496,6 @@ main (gint argc, gchar **argv)
   gtk_box_pack_start (GTK_BOX (hbox2), option_menu);
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (change_toolbar_style), toolbar);
-
-  checkbox = gtk_check_button_new_with_mnemonic("_Set Icon Size:");
-  g_signal_connect (checkbox, "toggled", G_CALLBACK (set_icon_size_toggled), toolbar);
-  gtk_box_pack_start (GTK_BOX (hbox2), checkbox);
-
-  option_menu = gtk_combo_box_text_new ();
-  g_object_set_data (G_OBJECT (checkbox), "option-menu", option_menu);
-  gtk_widget_set_sensitive (option_menu, FALSE);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (option_menu), "small toolbar");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (option_menu), "large toolbar");
-
-  gtk_box_pack_start (GTK_BOX (hbox2), option_menu);
-  g_signal_connect (option_menu, "changed",
-		    G_CALLBACK (icon_size_history_changed), toolbar);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),

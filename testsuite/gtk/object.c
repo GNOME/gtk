@@ -78,7 +78,6 @@ list_ignore_properties (gboolean buglist)
     { "GtkMenuItem",            "accel-path",           (void*) MATCH_ANY_VALUE },      /* has odd restrictions in the setter */
     { "GtkRecentChooserMenu",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkTextView",            "overwrite",            (void*) MATCH_ANY_VALUE },      /* needs text buffer */
-    { "GtkToolbar",             "icon-size",            (void*) GTK_ICON_SIZE_INVALID },
     { "GtkTreeView",            "expander-column",      (void*) MATCH_ANY_VALUE },      /* assertion list != NULL */
     { "GtkWindow",              "display",              (void*) MATCH_ANY_VALUE },
     { NULL, NULL, NULL }
