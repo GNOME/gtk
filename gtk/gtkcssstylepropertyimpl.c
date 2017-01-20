@@ -391,6 +391,16 @@ parse_css_fill_mode (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+icon_size_parse (GtkCssStyleProperty *property,
+		 GtkCssParser        *parser)
+{
+  return _gtk_css_number_value_parse (parser, 
+                                      GTK_CSS_PARSE_LENGTH
+                                      | GTK_CSS_PARSE_PERCENT
+                                      | GTK_CSS_POSITIVE_ONLY);
+}
+
+static GtkCssValue *
 icon_palette_parse (GtkCssStyleProperty *property,
 		    GtkCssParser        *parser)
 {
@@ -1580,6 +1590,14 @@ _gtk_css_style_property_init_properties (void)
                                           css_image_value_parse_with_builtin,
                                           NULL,
                                           _gtk_css_image_value_new (gtk_css_image_builtin_new ()));
+  gtk_css_style_property_register        ("-gtk-icon-size",
+                                          GTK_CSS_PROPERTY_ICON_SIZE,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
+                                          icon_size_parse,
+                                          NULL,
+                                          _gtk_css_number_value_new (16, GTK_CSS_PX));
   gtk_css_style_property_register        ("-gtk-icon-shadow",
                                           GTK_CSS_PROPERTY_ICON_SHADOW,
                                           G_TYPE_NONE,
