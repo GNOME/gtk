@@ -91,8 +91,6 @@ struct _GtkCellRendererPixbufPrivate
 
   GdkPixbuf *pixbuf_expander_open;
   GdkPixbuf *pixbuf_expander_closed;
-
-  gchar *stock_detail;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererPixbuf, gtk_cell_renderer_pixbuf, GTK_TYPE_CELL_RENDERER)
@@ -121,8 +119,6 @@ gtk_cell_renderer_pixbuf_finalize (GObject *object)
     g_object_unref (priv->pixbuf_expander_open);
   if (priv->pixbuf_expander_closed)
     g_object_unref (priv->pixbuf_expander_closed);
-
-  g_free (priv->stock_detail);
 
   G_OBJECT_CLASS (gtk_cell_renderer_pixbuf_parent_class)->finalize (object);
 }
@@ -200,15 +196,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 						      GTK_ICON_SIZE_MENU,
 						      GTK_PARAM_READWRITE));
 
-  g_object_class_install_property (object_class,
-				   PROP_STOCK_DETAIL,
-				   g_param_spec_string ("stock-detail",
-							P_("Detail"),
-							P_("Render detail to pass to the theme engine"),
-							NULL,
-							GTK_PARAM_READWRITE));
-
-  
   /**
    * GtkCellRendererPixbuf:icon-name:
    *
@@ -287,9 +274,6 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       break;
     case PROP_STOCK_SIZE:
       g_value_set_uint (value, priv->icon_size);
-      break;
-    case PROP_STOCK_DETAIL:
-      g_value_set_string (value, priv->stock_detail);
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_image_definition_get_icon_name (priv->image_def));
@@ -387,10 +371,6 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       break;
     case PROP_STOCK_SIZE:
       priv->icon_size = g_value_get_uint (value);
-      break;
-    case PROP_STOCK_DETAIL:
-      g_free (priv->stock_detail);
-      priv->stock_detail = g_value_dup_string (value);
       break;
     case PROP_ICON_NAME:
       take_image_definition (cellpixbuf, gtk_image_definition_new_icon_name (g_value_get_string (value)));
