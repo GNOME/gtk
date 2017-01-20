@@ -76,23 +76,6 @@ gtk_tool_shell_real_get_ellipsize_mode (GtkToolShell *shell)
 
 
 /**
- * gtk_tool_shell_get_icon_size:
- * @shell: a #GtkToolShell
- *
- * Retrieves the icon size for the tool shell. Tool items must not call this
- * function directly, but rely on gtk_tool_item_get_icon_size() instead.
- *
- * Returns: (type int): the current size (#GtkIconSize) for icons of @shell
- *
- * Since: 2.14
- **/
-GtkIconSize
-gtk_tool_shell_get_icon_size (GtkToolShell *shell)
-{
-  return GTK_TOOL_SHELL_GET_IFACE (shell)->get_icon_size (shell);
-}
-
-/**
  * gtk_tool_shell_get_orientation:
  * @shell: a #GtkToolShell
  *
