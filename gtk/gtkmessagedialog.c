@@ -34,7 +34,6 @@
 #include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtkbbox.h"
-#include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
