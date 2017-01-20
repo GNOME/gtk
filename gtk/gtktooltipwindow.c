@@ -137,12 +137,11 @@ gtk_tooltip_window_set_image_icon (GtkTooltipWindow *window,
 
 void
 gtk_tooltip_window_set_image_icon_from_name (GtkTooltipWindow *window,
-                                             const char       *icon_name,
-                                             GtkIconSize       icon_size)
+                                             const char       *icon_name)
 {
   if (icon_name)
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (window->image), icon_name, icon_size);
+      gtk_image_set_from_icon_name (GTK_IMAGE (window->image), icon_name, GTK_ICON_SIZE_MENU);
       gtk_widget_show (window->image);
     }
   else
@@ -153,12 +152,11 @@ gtk_tooltip_window_set_image_icon_from_name (GtkTooltipWindow *window,
 
 void
 gtk_tooltip_window_set_image_icon_from_gicon (GtkTooltipWindow *window,
-                                              GIcon            *gicon,
-                                              GtkIconSize       icon_size)
+                                              GIcon            *gicon)
 {
   if (gicon != NULL)
     {
-      gtk_image_set_from_gicon (GTK_IMAGE (window->image), gicon, icon_size);
+      gtk_image_set_from_gicon (GTK_IMAGE (window->image), gicon, GTK_ICON_SIZE_MENU);
       gtk_widget_show (window->image);
     }
   else

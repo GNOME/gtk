@@ -64,8 +64,7 @@ query_tooltip_cb (GtkWidget  *widget,
 		  gpointer    data)
 {
   gtk_tooltip_set_markup (tooltip, gtk_button_get_label (GTK_BUTTON (widget)));
-  gtk_tooltip_set_icon_from_icon_name (tooltip, "edit-delete",
-                                       GTK_ICON_SIZE_MENU);
+  gtk_tooltip_set_icon_from_icon_name (tooltip, "edit-delete");
 
   return TRUE;
 }
