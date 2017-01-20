@@ -722,6 +722,25 @@ enum_monitor (HMONITOR hmonitor,
   return TRUE;
 }
 
+static void
+prune_monitors (EnumMonitorData *data)
+{
+  gint i;
+
+  for (i = 0; i < data->monitors->len; i++)
+    {
+      GdkWin32Monitor *m;
+
+      m = g_ptr_array_index (data->monitors, i);
+
+      if (m->remove)
+        {
+          g_ptr_array_remove_index (data->monitors, i);
+          continue;
+        }
+    }
+}
+
 GPtrArray *
 _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
 {
@@ -743,6 +762,18 @@ _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
 
   EnumDisplayMonitors (NULL, NULL, enum_monitor, (LPARAM) &data);
 
+  prune_monitors (&data);
+
+  if (data.monitors->len == 0 && data.have_monitor_devices)
+    {
+      /* We thought we had monitors, but enumeration eventually failed, and
+       * we have none. Try again, this time making stuff up as we go.
+       */
+      data.have_monitor_devices = FALSE;
+      EnumDisplayMonitors (NULL, NULL, enum_monitor, (LPARAM) &data);
+      prune_monitors (&data);
+    }
+
   _gdk_offset_x = G_MININT;
   _gdk_offset_y = G_MININT;
 
@@ -752,12 +783,6 @@ _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
       GdkRectangle rect;
 
       m = g_ptr_array_index (data.monitors, i);
-
-      if (m->remove)
-        {
-          g_ptr_array_remove_index (data.monitors, i);
-          continue;
-        }
 
       /* Calculate offset */
       gdk_monitor_get_geometry (GDK_MONITOR (m), &rect);
