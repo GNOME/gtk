@@ -1496,7 +1496,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_CSS_NAME] =
       g_param_spec_string ("css-name",
                            P_("CSS Name"),
-                           P_("The name of this widget in the css tree"),
+                           P_("The name of this widget in the CSS tree"),
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
