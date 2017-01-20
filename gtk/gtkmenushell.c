@@ -1241,12 +1241,13 @@ void
 gtk_menu_shell_select_item (GtkMenuShell *menu_shell,
                             GtkWidget    *menu_item)
 {
-  GtkMenuShellPrivate *priv = menu_shell->priv;
+  GtkMenuShellPrivate *priv;
   GtkMenuShellClass *class;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
+  priv = menu_shell->priv;
   class = GTK_MENU_SHELL_GET_CLASS (menu_shell);
 
   if (class->select_item &&
@@ -1308,9 +1309,11 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
 void
 gtk_menu_shell_deselect (GtkMenuShell *menu_shell)
 {
-  GtkMenuShellPrivate *priv = menu_shell->priv;
+  GtkMenuShellPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
+  priv = menu_shell->priv;
 
   if (priv->active_menu_item)
     {
@@ -1855,10 +1858,12 @@ void
 _gtk_menu_shell_set_grab_device (GtkMenuShell *menu_shell,
                                  GdkDevice    *device)
 {
-  GtkMenuShellPrivate *priv = menu_shell->priv;
+  GtkMenuShellPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (device == NULL || GDK_IS_DEVICE (device));
+
+  priv = menu_shell->priv;
 
   if (!device)
     priv->grab_pointer = NULL;
@@ -1933,9 +1938,11 @@ void
 gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
                                gboolean      take_focus)
 {
-  GtkMenuShellPrivate *priv = menu_shell->priv;
+  GtkMenuShellPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
+  priv = menu_shell->priv;
 
   if (priv->take_focus != take_focus)
     {
