@@ -2713,7 +2713,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 <child>
                                   <object class="GtkToolbar">
                                     <property name="visible">1</property>
-                                    <property name="icon-size">1</property>
                                     <property name="toolbar-style">icons</property>
                                     <style>
                                       <class name="inline-toolbar"/>
@@ -3255,7 +3254,6 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="visible">1</property>
                                 <property name="orientation">vertical</property>
                                 <property name="toolbar-style">icons</property>
-                                <property name="icon-size">1</property>
                                 <child>
                                   <object class="GtkToolButton" id="toolbutton1">
                                     <property name="visible">1</property>
