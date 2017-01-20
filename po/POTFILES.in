@@ -327,10 +327,8 @@ gtk/ui/gtkassistant.ui
 gtk/ui/gtkcolorchooserdialog.ui
 gtk/ui/gtkcoloreditor.ui
 gtk/ui/gtkdialog.ui
-gtk/ui/gtkfilechooserbutton.ui
 gtk/ui/gtkfilechooserdialog.ui
 gtk/ui/gtkfilechooserwidget.ui
-gtk/ui/gtkfontbutton.ui
 gtk/ui/gtkfontchooserdialog.ui
 gtk/ui/gtkfontchooserwidget.ui
 gtk/ui/gtkinfobar.ui
