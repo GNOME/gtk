@@ -5097,6 +5097,8 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   gtk_notebook_update_labels (notebook);
   if (need_resize)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
+  if (!destroying && priv->scrollable)
+    gtk_notebook_redraw_arrows (notebook);
 }
 
 static void
