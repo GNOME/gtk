@@ -638,12 +638,13 @@ gtk_font_button_init (GtkFontButton *font_button)
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_font_button_clicked), font_button);
   priv->font_label = gtk_label_new (_("Font"));
+  gtk_widget_set_hexpand (priv->font_label, TRUE);
   priv->size_label = gtk_label_new ("14");
   priv->font_size_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (box), priv->font_label);
- 
+
   gtk_container_add (GTK_CONTAINER (priv->font_size_box), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
   gtk_container_add (GTK_CONTAINER (priv->font_size_box), priv->size_label);
   gtk_container_add (GTK_CONTAINER (box), priv->font_size_box);
