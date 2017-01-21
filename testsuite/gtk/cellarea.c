@@ -202,37 +202,6 @@ test_combobox_new (void)
   g_object_unref (view);
 }
 
-/* test that new_with_area() keeps the provided area */
-static void
-test_combobox_new_with_area (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  area = gtk_cell_area_box_new ();
-  view = gtk_combo_box_new_with_area (area);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-/* test that g_object_new keeps the provided area */
-static void
-test_combobox_object_new (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  area = gtk_cell_area_box_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_HORIZONTAL);
-  view = g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", area, NULL);
-  g_assert (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)) == area);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
 typedef GtkComboBox MyComboBox;
 typedef GtkComboBoxClass MyComboBoxClass;
 
@@ -281,24 +250,6 @@ test_combobox_subclass0 (void)
   g_object_unref (view);
 }
 
-/* test that a combobox subclass keeps the provided area */
-static void
-test_combobox_subclass1 (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  area = gtk_cell_area_box_new ();
-  view = g_object_new (my_combo_box_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
 /* test we can access the area in subclass init */
 static void
 test_combobox_subclass2 (void)
@@ -315,32 +266,6 @@ test_combobox_subclass2 (void)
 
   g_object_ref_sink (view);
   g_object_unref (view);
-}
-
-static void
-test_combobox_subclass3_subprocess (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  area = gtk_cell_area_box_new ();
-  view = g_object_new (my_combo_box_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-/* test we get a warning if an area is provided, but ignored */
-static void
-test_combobox_subclass3 (void)
-{
-  g_test_trap_subprocess ("/tests/combobox-subclass3/subprocess", 0, 0);
-  g_test_trap_assert_failed ();
-  g_test_trap_assert_stderr ("*ignoring construct property*");
 }
 
 /* test that we have a cell area after new() */
@@ -833,13 +758,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/iconview-subclass3/subprocess", test_iconview_subclass3_subprocess);
 
   g_test_add_func ("/tests/combobox-new", test_combobox_new);
-  g_test_add_func ("/tests/combobox-new-with-area", test_combobox_new_with_area);
-  g_test_add_func ("/tests/combobox-object-new", test_combobox_object_new);
   g_test_add_func ("/tests/combobox-subclass0", test_combobox_subclass0);
-  g_test_add_func ("/tests/combobox-subclass1", test_combobox_subclass1);
   g_test_add_func ("/tests/combobox-subclass2", test_combobox_subclass2);
-  g_test_add_func ("/tests/combobox-subclass3", test_combobox_subclass3);
-  g_test_add_func ("/tests/combobox-subclass3/subprocess", test_combobox_subclass3_subprocess);
 
   g_test_add_func ("/tests/cellview-new", test_cellview_new);
   g_test_add_func ("/tests/cellview-new-with-context", test_cellview_new_with_context);

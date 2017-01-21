@@ -426,7 +426,6 @@ tree_menu (void)
   GtkWidget *window, *widget;
   GtkWidget *menubar, *vbox;
   GtkCellArea *area;
-  GtkTreeModel *store;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -438,7 +437,6 @@ tree_menu (void)
   menubar = gtk_menu_bar_new ();
   gtk_widget_show (menubar);
 
-  store = simple_tree_model ();
   area  = create_cell_area ();
 
 #if _GTK_TREE_MENU_WAS_A_PUBLIC_CLASS_
@@ -460,13 +458,6 @@ tree_menu (void)
 
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE);
 #endif
-
-  /* Add a combo box with the same menu ! */
-  widget = gtk_combo_box_new_with_area (area);
-  gtk_combo_box_set_model (GTK_COMBO_BOX (widget), store);
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
-  gtk_box_pack_end (GTK_BOX (vbox), widget, FALSE, FALSE);
 
   /* Now add some controls */
   widget = gtk_combo_box_text_new ();

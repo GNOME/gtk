@@ -215,8 +215,7 @@ enum {
   PROP_ENTRY_TEXT_COLUMN,
   PROP_POPUP_FIXED_WIDTH,
   PROP_ID_COLUMN,
-  PROP_ACTIVE_ID,
-  PROP_CELL_AREA
+  PROP_ACTIVE_ID
 };
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
@@ -970,24 +969,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                           TRUE,
                                                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-   /**
-    * GtkComboBox:cell-area:
-    *
-    * The #GtkCellArea used to layout cell renderers for this combo box.
-    *
-    * If no area is specified when creating the combo box with gtk_combo_box_new_with_area()
-    * a horizontally oriented #GtkCellAreaBox will be used.
-    *
-    * Since: 3.0
-    */
-   g_object_class_install_property (object_class,
-                                    PROP_CELL_AREA,
-                                    g_param_spec_object ("cell-area",
-                                                         P_("Cell Area"),
-                                                         P_("The GtkCellArea used to layout cells"),
-                                                         GTK_TYPE_CELL_AREA,
-                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombobox.ui");
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, box);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, button);
@@ -1077,7 +1058,6 @@ gtk_combo_box_set_property (GObject      *object,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
   GtkComboBoxPrivate *priv = combo_box->priv;
-  GtkCellArea *area;
 
   switch (prop_id)
     {
@@ -1153,22 +1133,6 @@ gtk_combo_box_set_property (GObject      *object,
       gtk_combo_box_set_active_id (combo_box, g_value_get_string (value));
       break;
 
-    case PROP_CELL_AREA:
-      /* Construct-only, can only be assigned once */
-      area = g_value_get_object (value);
-      if (area)
-        {
-          if (priv->area != NULL)
-            {
-              g_warning ("cell-area has already been set, ignoring construct property");
-              g_object_ref_sink (area);
-              g_object_unref (area);
-            }
-          else
-            priv->area = g_object_ref_sink (area);
-        }
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1240,10 +1204,6 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_ACTIVE_ID:
         g_value_set_string (value, gtk_combo_box_get_active_id (combo_box));
-        break;
-
-      case PROP_CELL_AREA:
-        g_value_set_object (value, priv->area);
         break;
 
       default:
@@ -2291,40 +2251,6 @@ gtk_combo_box_new (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX, NULL);
 }
-
-/**
- * gtk_combo_box_new_with_area:
- * @area: the #GtkCellArea to use to layout cell renderers
- *
- * Creates a new empty #GtkComboBox using @area to layout cells.
- *
- * Returns: A new #GtkComboBox.
- */
-GtkWidget *
-gtk_combo_box_new_with_area (GtkCellArea  *area)
-{
-  return g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", area, NULL);
-}
-
-/**
- * gtk_combo_box_new_with_area_and_entry:
- * @area: the #GtkCellArea to use to layout cell renderers
- *
- * Creates a new empty #GtkComboBox with an entry.
- *
- * The new combo box will use @area to layout cells.
- *
- * Returns: A new #GtkComboBox.
- */
-GtkWidget *
-gtk_combo_box_new_with_area_and_entry (GtkCellArea *area)
-{
-  return g_object_new (GTK_TYPE_COMBO_BOX,
-                       "has-entry", TRUE,
-                       "cell-area", area,
-                       NULL);
-}
-
 
 /**
  * gtk_combo_box_new_with_entry:

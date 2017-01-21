@@ -80,10 +80,6 @@ GType         gtk_combo_box_get_type                 (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget    *gtk_combo_box_new                      (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget    *gtk_combo_box_new_with_area            (GtkCellArea  *area);
-GDK_AVAILABLE_IN_ALL
-GtkWidget    *gtk_combo_box_new_with_area_and_entry  (GtkCellArea  *area);
-GDK_AVAILABLE_IN_ALL
 GtkWidget    *gtk_combo_box_new_with_entry           (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget    *gtk_combo_box_new_with_model           (GtkTreeModel *model);
