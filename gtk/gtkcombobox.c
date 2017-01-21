@@ -1794,10 +1794,7 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
                                    priv->reordered_id);
       g_signal_handler_disconnect (priv->model,
                                    priv->changed_id);
-    }
 
-  if (priv->model)
-    {
       g_object_unref (priv->model);
       priv->model = NULL;
     }
@@ -3143,7 +3140,7 @@ gtk_combo_box_constructed (GObject *object)
 
 
 static void
-gtk_combo_box_dispose(GObject* object)
+gtk_combo_box_dispose (GObject* object)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
   GtkComboBoxPrivate *priv = combo_box->priv;
