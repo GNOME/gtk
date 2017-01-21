@@ -169,7 +169,7 @@
       <para>
         GTK+ 4 has removed the #GtkContainer::border-width property.
         Use other means to influence the spacing of your containers,
-        such as the CSS border-spacing property.
+        such ss the CSS margin and padding properties on child widgets.
       </para>
     </section>
 
