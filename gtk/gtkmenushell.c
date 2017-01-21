@@ -1439,7 +1439,6 @@ _gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
                              gboolean      search_sensitive)
 {
   GtkMenuShellPrivate *priv = menu_shell->priv;
-  GtkWidget *to_select = NULL;
   GList *tmp_list;
 
   tmp_list = g_list_last (priv->children);
@@ -1450,14 +1449,12 @@ _gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
       if ((!search_sensitive && gtk_widget_get_visible (child)) ||
           _gtk_menu_item_is_selectable (child))
         {
-          to_select = child;
+          gtk_menu_shell_select_item (menu_shell, child);
+          return;
         }
 
       tmp_list = tmp_list->prev;
     }
-
-  if (to_select)
-    gtk_menu_shell_select_item (menu_shell, to_select);
 }
 
 static gboolean
