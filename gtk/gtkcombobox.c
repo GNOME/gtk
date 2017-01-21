@@ -1466,17 +1466,6 @@ cell_layout_is_sensitive (GtkCellLayout *layout)
 }
 
 static gboolean
-cell_is_sensitive (GtkCellRenderer *cell,
-                   gpointer         data)
-{
-  gboolean *sensitive = data;
-
-  g_object_get (cell, "sensitive", sensitive, NULL);
-
-  return *sensitive;
-}
-
-static gboolean
 tree_column_row_is_sensitive (GtkComboBox *combo_box,
                               GtkTreeIter *iter)
 {
@@ -1489,20 +1478,8 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
         return FALSE;
     }
 
-  if (priv->area)
-    {
-      gboolean sensitive;
-
-      gtk_cell_area_apply_attributes (priv->area, priv->model, iter, FALSE, FALSE);
-
-      sensitive = FALSE;
-
-      gtk_cell_area_foreach (priv->area, cell_is_sensitive, &sensitive);
-
-      return sensitive;
-    }
-
-  return TRUE;
+  gtk_cell_area_apply_attributes (priv->area, priv->model, iter, FALSE, FALSE);
+  return cell_layout_is_sensitive (GTK_CELL_LAYOUT (priv->area));
 }
 
 static void
