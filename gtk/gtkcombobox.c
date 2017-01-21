@@ -286,11 +286,6 @@ static void     gtk_combo_box_model_row_changed    (GtkTreeModel     *model,
                                                     GtkTreeIter      *iter,
                                                     gpointer          data);
 
-/* menu */
-static void     gtk_combo_box_menu_setup           (GtkComboBox      *combo_box);
-static void     gtk_combo_box_menu_destroy         (GtkComboBox      *combo_box);
-
-
 static gboolean gtk_combo_box_menu_button_press    (GtkWidget        *widget,
                                                     GdkEventButton   *event,
                                                     gpointer          user_data);
@@ -973,7 +968,14 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, box);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, button);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, arrow);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, popup_widget);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_button_toggled);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_button_press);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_activate);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_key_press);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_show);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_hide);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMBO_BOX_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, "combobox");
@@ -1001,17 +1003,30 @@ gtk_combo_box_cell_editable_init (GtkCellEditableIface *iface)
   iface->start_editing = gtk_combo_box_start_editing;
 }
 
+static gboolean
+gtk_combo_box_row_separator_func (GtkTreeModel      *model,
+                                  GtkTreeIter       *iter,
+                                  GtkComboBox       *combo)
+{
+  GtkComboBoxPrivate *priv = combo->priv;
+
+  if (priv->row_separator_func)
+    return priv->row_separator_func (model, iter, priv->row_separator_data);
+
+  return FALSE;
+}
+
 static void
 gtk_combo_box_init (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv;
   GtkCssNode *widget_node;
   GtkStyleContext *context;
+  GtkTreeMenu *menu;
 
   combo_box->priv = gtk_combo_box_get_instance_private (combo_box);
   priv = combo_box->priv;
 
-  priv->popup_widget = NULL;
   priv->wrap_width = 0;
 
   priv->active = -1;
@@ -1033,6 +1048,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->id_column = -1;
 
   g_type_ensure (GTK_TYPE_ICON);
+  g_type_ensure (GTK_TYPE_TREE_MENU);
   gtk_widget_init_template (GTK_WIDGET (combo_box));
 
   gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
@@ -1048,6 +1064,17 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                                                      gtk_combo_box_allocate,
                                                      gtk_combo_box_render,
                                                      NULL, NULL);
+
+  menu = GTK_TREE_MENU (priv->popup_widget);
+  _gtk_tree_menu_set_wrap_width (menu, priv->wrap_width);
+  _gtk_tree_menu_set_row_span_column (menu, priv->row_column);
+  _gtk_tree_menu_set_column_span_column (menu, priv->col_column);
+  _gtk_tree_menu_set_row_separator_func (menu,
+                                         (GtkTreeViewRowSeparatorFunc)gtk_combo_box_row_separator_func,
+                                         combo_box, NULL);
+  gtk_menu_attach_to_widget (GTK_MENU (menu),
+                             GTK_WIDGET (combo_box),
+                             NULL);
 }
 
 static void
@@ -1335,16 +1362,7 @@ gtk_combo_box_remove (GtkContainer *container,
 
   gtk_widget_queue_resize (GTK_WIDGET (container));
 
-  if (priv->popup_widget)
-    {
-      gtk_combo_box_menu_destroy (combo_box);
-      gtk_menu_detach (GTK_MENU (priv->popup_widget));
-      priv->popup_widget = NULL;
-    }
-
   gtk_combo_box_create_child (combo_box);
-
-  gtk_combo_box_menu_setup (combo_box);
 
   if (gtk_tree_row_reference_valid (priv->active_row))
     {
@@ -1383,25 +1401,6 @@ gtk_combo_box_menu_hide (GtkWidget *menu,
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 FALSE);
-}
-
-static void
-gtk_combo_box_detacher (GtkWidget *widget,
-                        GtkMenu   *menu)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-  GtkComboBoxPrivate *priv = combo_box->priv;
-
-  g_return_if_fail (priv->popup_widget == (GtkWidget *) menu);
-
-  g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
-                                        gtk_combo_box_menu_show,
-                                        combo_box);
-  g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
-                                        gtk_combo_box_menu_hide,
-                                        combo_box);
-
-  priv->popup_widget = NULL;
 }
 
 static gboolean
@@ -1982,91 +1981,6 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
   return TRUE;
 }
 
-/*
- * menu style
- */
-static gboolean
-gtk_combo_box_row_separator_func (GtkTreeModel      *model,
-                                  GtkTreeIter       *iter,
-                                  GtkComboBox       *combo)
-{
-  GtkComboBoxPrivate *priv = combo->priv;
-
-  if (priv->row_separator_func)
-    return priv->row_separator_func (model, iter, priv->row_separator_data);
-
-  return FALSE;
-}
-
-static void
-gtk_combo_box_menu_setup (GtkComboBox *combo_box)
-{
-  GtkComboBoxPrivate *priv = combo_box->priv;
-  GtkWidget *menu;
-
-  g_signal_connect (priv->button, "button-press-event",
-                    G_CALLBACK (gtk_combo_box_menu_button_press),
-                    combo_box);
-
-  /* create our funky menu */
-  menu = _gtk_tree_menu_new_with_area (priv->area);
-  gtk_widget_set_name (menu, "gtk-combobox-popup-menu");
-
-  _gtk_tree_menu_set_model (GTK_TREE_MENU (menu), priv->model);
-
-  _gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (menu), priv->wrap_width);
-  _gtk_tree_menu_set_row_span_column (GTK_TREE_MENU (menu), priv->row_column);
-  _gtk_tree_menu_set_column_span_column (GTK_TREE_MENU (menu), priv->col_column);
-
-  g_signal_connect (menu, "menu-activate",
-                    G_CALLBACK (gtk_combo_box_menu_activate), combo_box);
-
-  /* Chain our row_separator_func through */
-  _gtk_tree_menu_set_row_separator_func (GTK_TREE_MENU (menu),
-                                         (GtkTreeViewRowSeparatorFunc)gtk_combo_box_row_separator_func,
-                                         combo_box, NULL);
-
-  g_signal_connect (menu, "key-press-event",
-                    G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);
-
-  /* Set up the popup menu */
-  if (priv->popup_widget)
-    gtk_menu_detach (GTK_MENU (priv->popup_widget));
-
-  priv->popup_widget = menu;
-
-  /*
-   * Note that we connect to show/hide on the toplevel, not the
-   * menu itself, since the menu is not shown/hidden when it is
-   * popped up while torn-off.
-   */
-  g_signal_connect (GTK_MENU (menu)->priv->toplevel, "show",
-                    G_CALLBACK (gtk_combo_box_menu_show), combo_box);
-  g_signal_connect (GTK_MENU (menu)->priv->toplevel, "hide",
-                    G_CALLBACK (gtk_combo_box_menu_hide), combo_box);
-
-  gtk_menu_attach_to_widget (GTK_MENU (menu),
-                             GTK_WIDGET (combo_box),
-                             gtk_combo_box_detacher);
-}
-
-static void
-gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
-{
-  GtkComboBoxPrivate *priv = combo_box->priv;
-
-  g_signal_handlers_disconnect_matched (priv->button,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_menu_button_press, NULL);
-  g_signal_handlers_disconnect_matched (priv->popup_widget,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_menu_activate, combo_box);
-
-  /* changing the popup window will unref the menu and the children */
-}
-
 /* callbacks */
 static gboolean
 gtk_combo_box_menu_button_press (GtkWidget      *widget,
@@ -2221,16 +2135,8 @@ gtk_combo_box_menu_key_press (GtkWidget   *widget,
 static GtkCellArea *
 gtk_combo_box_cell_layout_get_area (GtkCellLayout *cell_layout)
 {
-  GtkComboBox *combo = GTK_COMBO_BOX (cell_layout);
-  GtkComboBoxPrivate *priv = combo->priv;
-
-  if (G_UNLIKELY (!priv->area))
-    {
-      priv->area = gtk_cell_area_box_new ();
-      g_object_ref_sink (priv->area);
-    }
-
-  return priv->area;
+  GtkComboBox *combo_box = GTK_COMBO_BOX (cell_layout);
+  return combo_box->priv->area;
 }
 
 /*
@@ -2915,7 +2821,6 @@ gtk_combo_box_destroy (GtkWidget *widget)
       priv->box = NULL;
       priv->button = NULL;
       priv->arrow = NULL;
-      priv->cell_view = NULL;
       _gtk_bin_set_child (GTK_BIN (combo_box), NULL);
     }
 
@@ -3019,17 +2924,7 @@ gtk_combo_box_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_combo_box_parent_class)->constructed (object);
 
-  if (!priv->area)
-    {
-      priv->area = gtk_cell_area_box_new ();
-      g_object_ref_sink (priv->area);
-    }
-
   gtk_combo_box_create_child (combo_box);
-
-  /* Create the popup menu, if it doesn’t already exist. */
-  if (!priv->popup_widget)
-    gtk_combo_box_menu_setup (combo_box);
 
   if (priv->has_entry)
     {
@@ -3041,7 +2936,6 @@ gtk_combo_box_constructed (GObject *object)
     }
 }
 
-
 static void
 gtk_combo_box_dispose (GObject* object)
 {
@@ -3050,15 +2944,12 @@ gtk_combo_box_dispose (GObject* object)
 
   if (priv->popup_widget)
     {
-      gtk_combo_box_menu_destroy (combo_box);
+      /* Stop menu destruction triggering toggle on a now-invalid button */
+      g_signal_handlers_disconnect_by_func (priv->popup_widget,
+                                            gtk_combo_box_menu_hide,
+                                            combo_box);
       gtk_menu_detach (GTK_MENU (priv->popup_widget));
       priv->popup_widget = NULL;
-    }
-
-  if (priv->area)
-    {
-      g_object_unref (priv->area);
-      priv->area = NULL;
     }
 
   gtk_combo_box_unset_model (combo_box);

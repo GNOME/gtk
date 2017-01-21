@@ -26,6 +26,7 @@
                 </child>
               </object>
             </child>
+            <signal name="button-press-event" handler="gtk_combo_box_menu_button_press" swapped="no" />
           </object>
           <packing>
             <property name="pack-type">end</property>
@@ -34,4 +35,12 @@
       </object>
     </child>
   </template>
+  <object class="GtkCellAreaBox" id="area" />
+  <object class="GtkTreeMenu" id="popup_widget">
+    <property name="cell-area">area</property>
+    <signal name="menu-activate" handler="gtk_combo_box_menu_activate" swapped="no" />
+    <signal name="key-press-event" handler="gtk_combo_box_menu_key_press" swapped="no" />
+    <signal name="show" handler="gtk_combo_box_menu_show" swapped="no" />
+    <signal name="hide" handler="gtk_combo_box_menu_hide" swapped="no" />
+  </object>
 </interface>
