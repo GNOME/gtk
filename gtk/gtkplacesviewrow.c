@@ -214,16 +214,13 @@ gtk_places_view_row_get_property (GObject    *object,
                                   GParamSpec *pspec)
 {
   GtkPlacesViewRow *self;
-  GIcon *icon;
 
   self = GTK_PLACES_VIEW_ROW (object);
-  icon = NULL;
 
   switch (prop_id)
     {
     case PROP_ICON:
-      gtk_image_get_gicon (self->icon_image, &icon, NULL);
-      g_value_set_object (value, icon);
+      g_value_set_object (value, gtk_image_get_gicon (self->icon_image));
       break;
 
     case PROP_NAME:

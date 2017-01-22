@@ -159,15 +159,13 @@ GDK_AVAILABLE_IN_3_94
 GdkTexture *gtk_image_get_texture  (GtkImage       *image);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_image_get_icon_name (GtkImage     *image,
-				    const gchar **icon_name,
-				    GtkIconSize  *size);
+const char *gtk_image_get_icon_name (GtkImage     *image);
 GDK_AVAILABLE_IN_ALL
-void       gtk_image_get_gicon     (GtkImage              *image,
-				    GIcon                **gicon,
-				    GtkIconSize           *size);
+GIcon *    gtk_image_get_gicon     (GtkImage              *image);
 GDK_AVAILABLE_IN_ALL
 gint       gtk_image_get_pixel_size (GtkImage             *image);
+GDK_AVAILABLE_IN_3_94
+GtkIconSize gtk_image_get_icon_size (GtkImage             *image);
 
 G_END_DECLS
 

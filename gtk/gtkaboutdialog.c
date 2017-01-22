@@ -961,12 +961,7 @@ gtk_about_dialog_get_property (GObject    *object,
       break;
     case PROP_LOGO_ICON_NAME:
       if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
-        {
-          const gchar *icon_name;
-
-          gtk_image_get_icon_name (GTK_IMAGE (priv->logo_image), &icon_name, NULL);
-          g_value_set_string (value, icon_name);
-        }
+        g_value_set_string (value, gtk_image_get_icon_name (GTK_IMAGE (priv->logo_image)));
       else
         g_value_set_string (value, NULL);
       break;
@@ -1862,16 +1857,15 @@ const gchar *
 gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
-  const gchar *icon_name = NULL;
 
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
   priv = about->priv;
 
-  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
-    gtk_image_get_icon_name (GTK_IMAGE (priv->logo_image), &icon_name, NULL);
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) != GTK_IMAGE_ICON_NAME)
+    return NULL;
 
-  return icon_name;
+  return gtk_image_get_icon_name (GTK_IMAGE (priv->logo_image));
 }
 
 /**

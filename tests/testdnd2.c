@@ -4,8 +4,6 @@ static cairo_surface_t *
 get_image_surface (GtkImage *image,
                    int      *out_size)
 {
-  const gchar *icon_name;
-  GtkIconSize size;
   GtkIconTheme *icon_theme;
   int width;
   cairo_surface_t *surface;
@@ -17,7 +15,8 @@ get_image_surface (GtkImage *image,
       *out_size = cairo_image_surface_get_width (surface);
       return cairo_surface_reference (surface);
     case GTK_IMAGE_ICON_NAME:
-      gtk_image_get_icon_name (image, &icon_name, &size);
+<<<<<<< HEAD
+      icon_name = gtk_image_get_icon_name (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       gtk_icon_size_lookup (size, &width, NULL);
       *out_size = width;
@@ -175,7 +174,7 @@ image_drag_data_get (GtkWidget        *widget,
       break;
     case TARGET_TEXT:
       if (gtk_image_get_storage_type (GTK_IMAGE (data)) == GTK_IMAGE_ICON_NAME)
-        gtk_image_get_icon_name (GTK_IMAGE (data), &name, NULL);
+        name = gtk_image_get_icon_name (GTK_IMAGE (data));
       else
         name = "Boo!";
       gtk_selection_data_set_text (selection_data, name, -1);

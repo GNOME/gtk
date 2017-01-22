@@ -1139,11 +1139,9 @@ gtk_button_get_icon_name (GtkButton *button)
 
   if (priv->child_type == ICON_CHILD)
     {
-      const char *icon_name;
       GtkWidget *child = gtk_bin_get_child (GTK_BIN (button));
-      gtk_image_get_icon_name (GTK_IMAGE (child), &icon_name, NULL);
 
-      return icon_name;
+      return gtk_image_get_icon_name (GTK_IMAGE (child));
     }
 
   return NULL;
