@@ -1267,10 +1267,9 @@ get_max_item_size (GtkFlowBox     *box,
       if (!child_is_visible (child))
         continue;
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-      else
-        gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+      gtk_widget_measure (child, orientation, -1,
+                          &child_min, &child_nat,
+                          NULL, NULL);
 
       max_min_size = MAX (max_min_size, child_min);
       max_nat_size = MAX (max_nat_size, child_nat);
@@ -1310,14 +1309,9 @@ get_largest_size_for_opposing_orientation (GtkFlowBox     *box,
       if (!child_is_visible (child))
         continue;
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_get_preferred_height_for_width (child,
-                                                   item_size,
-                                                   &child_min, &child_nat);
-      else
-        gtk_widget_get_preferred_width_for_height (child,
-                                                   item_size,
-                                                   &child_min, &child_nat);
+      gtk_widget_measure (child, 1 - orientation, item_size,
+                          &child_min, &child_nat,
+                          NULL, NULL);
 
       max_min_size = MAX (max_min_size, child_min);
       max_nat_size = MAX (max_nat_size, child_nat);
@@ -1371,14 +1365,9 @@ get_largest_size_for_line_in_opposing_orientation (GtkFlowBox       *box,
           extra_pixels--;
         }
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_get_preferred_height_for_width (child,
-                                                   this_item_size,
-                                                   &child_min, &child_nat);
-      else
-        gtk_widget_get_preferred_width_for_height (child,
-                                                   this_item_size,
-                                                   &child_min, &child_nat);
+      gtk_widget_measure (child, 1 - orientation, this_item_size,
+                          &child_min, &child_nat,
+                          NULL, NULL);
 
       max_min_size = MAX (max_min_size, child_min);
       max_nat_size = MAX (max_nat_size, child_nat);
@@ -1426,12 +1415,9 @@ gather_aligned_item_requests (GtkFlowBox       *box,
       if (!child_is_visible (child))
         continue;
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_get_preferred_width (child,
-                                        &child_min, &child_nat);
-      else
-        gtk_widget_get_preferred_height (child,
-                                         &child_min, &child_nat);
+      gtk_widget_measure (child, orientation, -1,
+                          &child_min, &child_nat,
+                          NULL, NULL);
 
       /* Get the index and push it over for the last line when spreading to the end */
       position = i % line_length;
@@ -1970,12 +1956,9 @@ get_largest_aligned_line_length (GtkFlowBox     *box,
       if (!child_is_visible (child))
         continue;
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_get_preferred_width (child,
-                                        &child_min, &child_nat);
-      else /* GTK_ORIENTATION_VERTICAL */
-        gtk_widget_get_preferred_height (child,
-                                         &child_min, &child_nat);
+      gtk_widget_measure (child, orientation, -1,
+                          &child_min, &child_nat,
+                          NULL, NULL);
 
       aligned_item_sizes[i % line_length].minimum_size =
         MAX (aligned_item_sizes[i % line_length].minimum_size, child_min);
