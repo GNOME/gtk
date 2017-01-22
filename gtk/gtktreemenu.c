@@ -1220,7 +1220,6 @@ gtk_tree_menu_create_item (GtkTreeMenu *menu,
   if (is_separator)
     {
       item = gtk_separator_menu_item_new ();
-      gtk_widget_show (item);
 
       g_object_set_qdata_full (G_OBJECT (item),
                                tree_menu_path_quark,
@@ -1231,13 +1230,10 @@ gtk_tree_menu_create_item (GtkTreeMenu *menu,
     {
       view = gtk_cell_view_new_with_context (priv->area, priv->context);
       item = gtk_menu_item_new ();
-      gtk_widget_show (view);
-      gtk_widget_show (item);
 
       gtk_cell_view_set_model (GTK_CELL_VIEW (view), priv->model);
       gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (view), path);
 
-      gtk_widget_show (view);
       gtk_container_add (GTK_CONTAINER (item), view);
 
       g_signal_connect (item, "activate", G_CALLBACK (item_activated_cb), menu);

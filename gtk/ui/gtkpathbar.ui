@@ -2,7 +2,6 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkButton" id="down_slider_button">
-    <property name="visible">1</property>
     <property name="can-focus">1</property>
     <property name="receives-default">1</property>
     <property name="focus-on-click">0</property>
@@ -17,7 +16,6 @@
     <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
     <child>
       <object class="GtkImage">
-        <property name="visible">1</property>
         <property name="icon-name">pan-end-symbolic</property>
         <property name="icon-size">1</property>
       </object>
@@ -27,7 +25,6 @@
     </style>
   </object>
   <object class="GtkButton" id="up_slider_button">
-    <property name="visible">1</property>
     <property name="can-focus">1</property>
     <property name="receives-default">1</property>
     <property name="focus-on-click">0</property>
@@ -42,7 +39,6 @@
     <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
     <child>
       <object class="GtkImage">
-        <property name="visible">1</property>
         <property name="icon-name">pan-start-symbolic</property>
         <property name="icon-size">1</property>
       </object>

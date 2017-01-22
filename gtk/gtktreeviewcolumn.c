@@ -820,7 +820,6 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   priv->button = gtk_button_new ();
   g_object_ref_sink (priv->button);
 
-  gtk_widget_show (priv->button);
   gtk_widget_add_events (priv->button, GDK_POINTER_MOTION_MASK);
 
   g_signal_connect (priv->button, "event",
@@ -842,7 +841,6 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   else
     {
       child = gtk_label_new (priv->title);
-      gtk_widget_show (child);
     }
 
   g_signal_connect (child, "mnemonic-activate",
@@ -862,9 +860,6 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   gtk_container_add (GTK_CONTAINER (priv->frame), child);
   gtk_container_add (GTK_CONTAINER (priv->button), hbox);
-
-  gtk_widget_show (hbox);
-  gtk_widget_show (priv->frame);
 }
 
 static void 

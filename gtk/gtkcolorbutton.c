@@ -355,7 +355,6 @@ gtk_color_button_init (GtkColorButton *button)
   gtk_widget_set_size_request (priv->swatch, rect.width, rect.height);
 
   gtk_container_add (GTK_CONTAINER (button), priv->swatch);
-  gtk_widget_show (priv->swatch);
 
   button->priv->title = g_strdup (_("Pick a Color")); /* default title */
 

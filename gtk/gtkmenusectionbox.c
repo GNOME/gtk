@@ -323,8 +323,6 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
       g_signal_connect (widget, "clicked", G_CALLBACK (gtk_popover_item_activate), item);
     }
 
-  gtk_widget_show (widget);
-
   g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
 
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
@@ -350,7 +348,6 @@ gtk_menu_section_box_init (GtkMenuSectionBox *box)
   box->item_box = GTK_BOX (item_box);
   gtk_box_pack_end (GTK_BOX (box), item_box, FALSE, FALSE);
   gtk_widget_set_halign (GTK_WIDGET (item_box), GTK_ALIGN_FILL);
-  gtk_widget_show (item_box);
 
   gtk_widget_set_halign (GTK_WIDGET (box), GTK_ALIGN_FILL);
   g_object_set (box, "margin", 0, NULL);
@@ -432,9 +429,6 @@ gtk_menu_section_box_new_toplevel (GtkStack    *stack,
                                        gtk_menu_section_box_remove_func, box);
 
   g_signal_connect (G_OBJECT (popover), "notify::position", G_CALLBACK (update_popover_position_cb), box);
-
-
-  gtk_widget_show (GTK_WIDGET (box));
 }
 
 static void
@@ -461,14 +455,12 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
   g_object_set_data (G_OBJECT (focus), "focus", button);
 
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE);
-  gtk_widget_show (button);
 
   g_signal_connect (focus, "clicked", G_CALLBACK (open_submenu), item);
   g_signal_connect (button, "clicked", G_CALLBACK (close_submenu), item);
 
   gtk_stack_add_named (GTK_STACK (gtk_widget_get_ancestor (GTK_WIDGET (toplevel), GTK_TYPE_STACK)),
                        GTK_WIDGET (box), gtk_menu_tracker_item_get_label (item));
-  gtk_widget_show (GTK_WIDGET (box));
 
   box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SUBMENU, FALSE, FALSE,
                                                      gtk_menu_section_box_insert_func,
@@ -538,8 +530,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
     {
       box->separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       g_object_ref_sink (box->separator);
-
-      gtk_widget_show (box->separator);
     }
 
   box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SECTION, FALSE, FALSE,

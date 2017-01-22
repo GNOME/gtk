@@ -2144,7 +2144,6 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
 
       gtk_widget_set_parent (priv->hscrollbar, GTK_WIDGET (scrolled_window));
       g_object_ref (priv->hscrollbar);
-      gtk_widget_show (priv->hscrollbar);
       update_scrollbar_positions (scrolled_window);
     }
   else
@@ -2212,7 +2211,6 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
 
       gtk_widget_set_parent (priv->vscrollbar, GTK_WIDGET (scrolled_window));
       g_object_ref (priv->vscrollbar);
-      gtk_widget_show (priv->vscrollbar);
       update_scrollbar_positions (scrolled_window);
     }
   else
@@ -3805,7 +3803,6 @@ gtk_scrolled_window_add (GtkContainer *container,
   else
     {
       scrollable_child = gtk_viewport_new (hadj, vadj);
-      gtk_widget_show (scrollable_child);
       gtk_container_set_focus_hadjustment (GTK_CONTAINER (scrollable_child),
                                            gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_container_set_focus_vadjustment (GTK_CONTAINER (scrollable_child),

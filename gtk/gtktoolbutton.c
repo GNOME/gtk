@@ -299,7 +299,6 @@ gtk_tool_button_init (GtkToolButton      *button,
 			   G_CALLBACK (button_clicked), button, 0);
 
   gtk_container_add (GTK_CONTAINER (button), button->priv->button);
-  gtk_widget_show (button->priv->button);
 }
 
 static void
@@ -412,8 +411,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  label = gtk_label_new (label_text);
 
 	  g_free (label_text);
-	  
-	  gtk_widget_show (label);
 	}
 
       if (GTK_IS_LABEL (label))
@@ -471,7 +468,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       else if (button->priv->icon_name)
 	{
 	  icon = gtk_image_new_from_icon_name (button->priv->icon_name, icon_size);
-	  gtk_widget_show (icon);
 	}
 
       if (icon)

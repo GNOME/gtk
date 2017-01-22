@@ -31,18 +31,15 @@
     <signal name="notify::visible" handler="dismiss_current_popup" swapped="no"/>
     <child>
       <object class="GtkOverlay" id="overlay">
-        <property name="visible">1</property>
         <signal name="get-child-position" handler="get_child_position" swapped="no"/>
         <child>
           <object class="GtkGrid" id="grid">
-            <property name="visible">1</property>
             <property name="margin-start">30</property>
             <property name="margin-end">30</property>
             <property name="row-spacing">12</property>
             <property name="column-spacing">12</property>
             <child>
               <object class="GtkColorSwatch" id="swatch">
-                <property name="visible">True</property>
                 <property name="name">editor-color-sample</property>
                 <property name="can-focus">False</property>
                 <property name="rgba">rgb(255,255,255)</property>
@@ -56,7 +53,6 @@
             </child>
             <child>
               <object class="GtkEntry" id="entry">
-                <property name="visible">1</property>
                 <property name="can-focus">1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry-atkobject">
@@ -74,7 +70,6 @@
             </child>
             <child>
               <object class="GtkColorScale" id="h_slider">
-                <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="orientation">vertical</property>
                 <property name="adjustment">h_adj</property>
@@ -89,7 +84,6 @@
             </child>
             <child>
               <object class="GtkColorScale" id="a_slider">
-                <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="adjustment">a_adj</property>
                 <property name="draw-value">False</property>
@@ -110,7 +104,6 @@
               <object class="GtkColorPlane" id="sv_plane">
                 <property name="width-request">300</property>
                 <property name="height-request">300</property>
-                <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="h-adjustment">h_adj</property>
                 <property name="s-adjustment">s_adj</property>
@@ -141,7 +134,6 @@
     </style>
     <child>
       <object class="GtkGrid" id="grid4">
-        <property name="visible">1</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
         <property name="margin-top">12</property>
@@ -149,7 +141,6 @@
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label4">
-            <property name="visible">1</property>
             <property name="label" translatable="yes" context="Color channel">A</property>
           </object>
           <packing>
@@ -159,7 +150,6 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="a_entry">
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
@@ -187,7 +177,6 @@
     </style>
     <child>
       <object class="GtkGrid" id="grid3">
-        <property name="visible">1</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
         <property name="margin-top">12</property>
@@ -195,7 +184,6 @@
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label3">
-            <property name="visible">1</property>
             <property name="label" translatable="yes" context="Color channel">H</property>
           </object>
           <packing>
@@ -205,7 +193,6 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="h_entry">
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
@@ -233,7 +220,6 @@
     </style>
     <child>
       <object class="GtkGrid" id="grid2">
-        <property name="visible">1</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
         <property name="margin-top">12</property>
@@ -242,7 +228,6 @@
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label1">
-            <property name="visible">1</property>
             <property name="label" translatable="yes" context="Color Channel">S</property>
           </object>
           <packing>
@@ -252,7 +237,6 @@
         </child>
         <child>
           <object class="GtkLabel" id="label2">
-            <property name="visible">1</property>
             <property name="label" translatable="yes" context="Color Channel">V</property>
           </object>
           <packing>
@@ -262,7 +246,6 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="s_entry">
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>
@@ -281,7 +264,6 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="v_entry">
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="width-chars">2</property>
             <property name="max-width-chars">2</property>

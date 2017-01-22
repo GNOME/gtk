@@ -917,12 +917,10 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_header_bar_set_custom_title (priv->header_bar, GTK_WIDGET (priv->title_stack));
 
   label = gtk_label_new (_("Shortcuts"));
-  gtk_widget_show (label);
   gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
   gtk_stack_add_named (priv->title_stack, label, "title");
 
   label = gtk_label_new (_("Search Results"));
-  gtk_widget_show (label);
   gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
   gtk_stack_add_named (priv->title_stack, label, "search");
 
@@ -945,7 +943,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   arrow = gtk_image_new_from_icon_name ("pan-down-symbolic",
                                         GTK_ICON_SIZE_BUTTON);
-  gtk_widget_show (arrow);
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (arrow));
 
   priv->popover = g_object_new (GTK_TYPE_POPOVER,
@@ -965,7 +962,6 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   gtk_container_add (GTK_CONTAINER (priv->popover), GTK_WIDGET (priv->list_box));
 
   priv->search_entry = GTK_SEARCH_ENTRY (gtk_search_entry_new ());
-  gtk_widget_show (GTK_WIDGET (priv->search_entry));
   gtk_container_add (GTK_CONTAINER (priv->search_bar), GTK_WIDGET (priv->search_entry));
   g_object_set (priv->search_entry,
                 "placeholder-text", _("Search Shortcuts"),

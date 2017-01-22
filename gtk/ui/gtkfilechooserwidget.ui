@@ -49,7 +49,6 @@
                                 <property name="margin">6</property>
                                 <child>
                                   <object class="GtkPathBar" id="browse_path_bar">
-                                    <property name="visible">True</property>
                                     <signal name="path-clicked" handler="path_bar_clicked" after="yes" swapped="no"/>
                                   </object>
                                   <packing>
@@ -248,7 +247,6 @@
                         </child>
                         <child>
                           <object class="GtkPlacesView" id="places_view">
-                            <property name="visible">True</property>
                             <property name="local-only" bind-source="GtkFileChooserWidget" bind-property="local-only" bind-flags="default|sync-create"/>
                             <signal name="open-location" handler="places_sidebar_open_location_cb" swapped="no"/>
                             <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>

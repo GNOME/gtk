@@ -1268,7 +1268,6 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
       GtkStyleContext *context;
 
       entry = gtk_entry_new ();
-      gtk_widget_show (entry);
       gtk_container_add (GTK_CONTAINER (combo_box), entry);
 
       context = gtk_widget_get_style_context (GTK_WIDGET (entry));
@@ -1287,7 +1286,6 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
       gtk_container_add (GTK_CONTAINER (gtk_widget_get_parent (priv->arrow)),
                          priv->cell_view);
       _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
-      gtk_widget_show (priv->cell_view);
     }
 }
 

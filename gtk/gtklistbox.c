@@ -2899,7 +2899,6 @@ gtk_list_box_insert (GtkListBox *box,
   else
     {
       row = GTK_LIST_BOX_ROW (gtk_list_box_row_new ());
-      gtk_widget_show (GTK_WIDGET (row));
       gtk_container_add (GTK_CONTAINER (row), child);
     }
 

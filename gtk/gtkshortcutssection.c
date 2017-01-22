@@ -648,7 +648,6 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
           GtkSizeGroup *size_group;
 
           column_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
-          gtk_widget_show (column_box);
 
           size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
           g_object_set_data_full (G_OBJECT (column_box), "accel-size-group", size_group, g_object_unref);
@@ -660,7 +659,6 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
               GtkWidget *page;
 
               page = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 22);
-              gtk_widget_show (page);
 
               pages = g_list_append (pages, page);
               current_page = page;
@@ -694,7 +692,6 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
       guint n;
 
       column_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 22);
-      gtk_widget_show (column_box);
 
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
       g_object_set_data_full (G_OBJECT (column_box), "accel-size-group", size_group, g_object_unref);

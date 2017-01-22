@@ -9,7 +9,6 @@
     <property name="focus-on-click">0</property>
     <child>
       <object class="GtkImage" id="image">
-        <property name="visible">1</property>
         <property name="icon-name">image-missing</property>
         <property name="use-fallback">1</property>
       </object>
@@ -22,13 +21,11 @@
     </style>
     <child>
       <object class="GtkBox" id="box">
-        <property name="visible">1</property>
         <property name="orientation">vertical</property>
         <property name="margin">4</property>
         <property name="spacing">4</property>
         <child>
           <object class="GtkButton" id="plus_button">
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="receives-default">1</property>
             <property name="relief">none</property>
@@ -46,7 +43,6 @@
         <child>
           <object class="GtkScale" id="scale">
             <property name="height-request">100</property>
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="orientation">vertical</property>
             <property name="inverted">1</property>
@@ -60,7 +56,6 @@
         </child>
         <child>
           <object class="GtkButton" id="minus_button">
-            <property name="visible">1</property>
             <property name="can-focus">1</property>
             <property name="receives-default">1</property>
             <property name="relief">none</property>

@@ -1642,7 +1642,6 @@ build_popup_menu (GtkPlacesView    *view,
                     "activate",
                     G_CALLBACK (open_cb),
                     row);
-  gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), item);
 
   if (priv->open_flags & GTK_PLACES_OPEN_NEW_TAB)
@@ -1652,7 +1651,6 @@ build_popup_menu (GtkPlacesView    *view,
                         "activate",
                         G_CALLBACK (open_in_new_tab_cb),
                         row);
-      gtk_widget_show (item);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), item);
     }
 
@@ -1663,7 +1661,6 @@ build_popup_menu (GtkPlacesView    *view,
                         "activate",
                         G_CALLBACK (open_in_new_window_cb),
                         row);
-      gtk_widget_show (item);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), item);
     }
 
@@ -1676,7 +1673,6 @@ build_popup_menu (GtkPlacesView    *view,
 
   /* Separator */
   item = gtk_separator_menu_item_new ();
-  gtk_widget_show (item);
   gtk_menu_shell_insert (GTK_MENU_SHELL (priv->popup_menu), item, -1);
 
   /* Mount/Unmount items */
@@ -1687,7 +1683,6 @@ build_popup_menu (GtkPlacesView    *view,
                         "activate",
                         G_CALLBACK (unmount_cb),
                         row);
-      gtk_widget_show (item);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), item);
     }
   else
@@ -1697,7 +1692,6 @@ build_popup_menu (GtkPlacesView    *view,
                         "activate",
                         G_CALLBACK (mount_cb),
                         row);
-      gtk_widget_show (item);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), item);
     }
 }

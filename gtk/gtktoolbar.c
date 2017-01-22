@@ -663,7 +663,6 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 
   priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
   gtk_widget_set_name (priv->arrow, "gtk-toolbar-arrow");
-  gtk_widget_show (priv->arrow);
   gtk_container_add (GTK_CONTAINER (priv->arrow_button), priv->arrow);
   
   gtk_widget_set_parent (priv->arrow_button, widget);
@@ -2242,7 +2241,6 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
       content = toolbar_content_new_tool_item (toolbar,
 					       GTK_TOOL_ITEM (placeholder),
 					       TRUE, index_);
-      gtk_widget_show (placeholder);
     }
   
   g_assert (content);

@@ -2,18 +2,15 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.6 -->
   <template class="GtkLockButton" parent="GtkButton">
-    <property name="visible">1</property>
     <property name="can-focus">1</property>
     <property name="receives-default">1</property>
     <child>
       <object class="GtkBox" id="box">
-        <property name="visible">1</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkImage" id="image">
-            <property name="visible">1</property>
             <property name="icon-name">image-missing</property>
           </object>
           <packing>
@@ -22,7 +19,6 @@
         </child>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="visible">1</property>
             <child>
               <object class="GtkLabel" id="label_lock">
                 <property name="visible">1</property>
@@ -32,7 +28,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="label_unlock">
-                <property name="visible">1</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Unlock</property>
               </object>

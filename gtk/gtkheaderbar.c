@@ -135,11 +135,9 @@ init_sizing_box (GtkHeaderBar *bar)
    * in case we have only the title.
    */
   w = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_show (w);
   priv->label_sizing_box = g_object_ref_sink (w);
 
   w = gtk_label_new (NULL);
-  gtk_widget_show (w);
   context = gtk_widget_get_style_context (w);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLE);
   gtk_box_pack_start (GTK_BOX (priv->label_sizing_box), w, FALSE, FALSE);
@@ -172,7 +170,6 @@ create_title_box (const char *title,
 
   label_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_valign (label_box, GTK_ALIGN_CENTER);
-  gtk_widget_show (label_box);
 
   title_label = gtk_label_new (title);
   context = gtk_widget_get_style_context (title_label);
@@ -181,7 +178,6 @@ create_title_box (const char *title,
   gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
   gtk_box_pack_start (GTK_BOX (label_box), title_label, FALSE, FALSE);
-  gtk_widget_show (title_label);
   gtk_label_set_width_chars (GTK_LABEL (title_label), MIN_TITLE_CHARS);
 
   subtitle_label = gtk_label_new (subtitle);
@@ -357,7 +353,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   priv->titlebar_icon = button;
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_widget_set_size_request (button, 20, 20);
-                  gtk_widget_show (button);
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     {
                       gtk_widget_destroy (button);
@@ -479,7 +474,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                                           NULL);
             }
 
-          gtk_widget_show (box);
           gtk_widget_set_parent (box, GTK_WIDGET (bar));
 
           if (i == 0)

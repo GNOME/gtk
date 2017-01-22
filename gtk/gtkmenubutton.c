@@ -604,7 +604,6 @@ add_arrow (GtkMenuButton *menu_button)
   arrow = gtk_image_new ();
   set_arrow_type (GTK_IMAGE (arrow), menu_button->priv->arrow_type);
   gtk_container_add (GTK_CONTAINER (menu_button), arrow);
-  gtk_widget_show (arrow);
   menu_button->priv->arrow_widget = arrow;
 }
 

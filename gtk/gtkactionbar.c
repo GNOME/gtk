@@ -353,11 +353,9 @@ gtk_action_bar_init (GtkActionBar *action_bar)
 
   priv->revealer = gtk_revealer_new ();
   gtk_widget_set_parent (priv->revealer, widget);
-  gtk_widget_show (priv->revealer);
 
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_container_add (GTK_CONTAINER (priv->revealer), priv->box);
-  gtk_widget_show (priv->box);
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
   gtk_revealer_set_transition_type (GTK_REVEALER (priv->revealer), GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP);
