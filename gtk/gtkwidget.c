@@ -9692,7 +9692,7 @@ gtk_widget_set_size_request (GtkWidget *widget,
  * @height indicates that that dimension has not been set explicitly
  * and the natural requisition of the widget will be used instead. See
  * gtk_widget_set_size_request(). To get the size a widget will
- * actually request, call gtk_widget_get_preferred_size() instead of
+ * actually request, call gtk_widget_measure() instead of
  * this function.
  **/
 void
