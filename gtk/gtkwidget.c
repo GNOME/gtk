@@ -4226,10 +4226,6 @@ gtk_widget_show (GtkWidget *widget)
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
     }
-  else
-    {
-      g_warning ("%s is already visible", gtk_widget_get_name (widget));
-    }
 }
 
 static void
