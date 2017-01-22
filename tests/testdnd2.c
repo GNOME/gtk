@@ -3,8 +3,6 @@
 static GdkPixbuf *
 get_image_pixbuf (GtkImage *image)
 {
-  const gchar *icon_name;
-  GtkIconSize size;
   GtkIconTheme *icon_theme;
   int width;
 
@@ -13,11 +11,10 @@ get_image_pixbuf (GtkImage *image)
     case GTK_IMAGE_PIXBUF:
       return g_object_ref (gtk_image_get_pixbuf (image));
     case GTK_IMAGE_ICON_NAME:
-      gtk_image_get_icon_name (image, &icon_name, &size);
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (image)));
-      gtk_icon_size_lookup (size, &width, NULL);
+      gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &width, NULL);
       return gtk_icon_theme_load_icon (icon_theme,
-                                       icon_name,
+                                       gtk_image_get_icon_name (image),
                                        width,
                                        GTK_ICON_LOOKUP_GENERIC_FALLBACK,
                                        NULL);
@@ -175,7 +172,7 @@ image_drag_data_get (GtkWidget        *widget,
       break;
     case TARGET_TEXT:
       if (gtk_image_get_storage_type (GTK_IMAGE (data)) == GTK_IMAGE_ICON_NAME)
-        gtk_image_get_icon_name (GTK_IMAGE (data), &name, NULL);
+        name = gtk_image_get_icon_name (GTK_IMAGE (data));
       else
         name = "Boo!";
       gtk_selection_data_set_text (selection_data, name, -1);

@@ -192,17 +192,14 @@ gtk_image_accessible_get_name (AtkObject *accessible)
 
   if (storage_type == GTK_IMAGE_ICON_NAME)
     {
-      const gchar *icon_name;
-
-      gtk_image_get_icon_name (image, &icon_name, NULL);
-      image_accessible->priv->stock_name = name_from_icon_name (icon_name);
+      image_accessible->priv->stock_name = name_from_icon_name (gtk_image_get_icon_name (image));
     }
   else if (storage_type == GTK_IMAGE_GICON)
     {
       GIcon *icon;
       const gchar * const *icon_names;
 
-      gtk_image_get_gicon (image, &icon, NULL);
+      icon = gtk_image_get_gicon (image);
       if (G_IS_THEMED_ICON (icon))
         {
 	  icon_names = g_themed_icon_get_names (G_THEMED_ICON (icon));
