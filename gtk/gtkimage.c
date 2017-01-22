@@ -1053,42 +1053,30 @@ gtk_image_get_texture (GtkImage *image)
 /**
  * gtk_image_get_icon_name:
  * @image: a #GtkImage
- * @icon_name: (out) (transfer none) (allow-none): place to store an
- *     icon name, or %NULL
- * @size: (out) (allow-none) (type int): place to store an icon size
- *     (#GtkIconSize), or %NULL
  *
  * Gets the icon name and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
  * %GTK_IMAGE_ICON_NAME (see gtk_image_get_storage_type()).
  * The returned string is owned by the #GtkImage and should not
  * be freed.
- * 
+ *
+ * Returns: (transfer none) (allow-none): the icon name, or %NULL
+ *
  * Since: 2.6
  **/
-void
-gtk_image_get_icon_name  (GtkImage     *image,
-			  const gchar **icon_name,
-			  GtkIconSize  *size)
+const gchar *
+gtk_image_get_icon_name (GtkImage *image)
 {
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
 
-  g_return_if_fail (GTK_IS_IMAGE (image));
+  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
 
-  if (icon_name)
-    *icon_name = _gtk_icon_helper_get_icon_name (&priv->icon_helper);
-
-  if (size)
-    *size = _gtk_icon_helper_get_icon_size (&priv->icon_helper);
+  return _gtk_icon_helper_get_icon_name (&priv->icon_helper);
 }
 
 /**
  * gtk_image_get_gicon:
  * @image: a #GtkImage
- * @gicon: (out) (transfer none) (allow-none): place to store a
- *     #GIcon, or %NULL
- * @size: (out) (allow-none) (type int): place to store an icon size
- *     (#GtkIconSize), or %NULL
  *
  * Gets the #GIcon and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1096,22 +1084,18 @@ gtk_image_get_icon_name  (GtkImage     *image,
  * The caller of this function does not own a reference to the
  * returned #GIcon.
  * 
+ * Returns: (transfer none) (allow-none): a #GIcon, or %NULL
+ *
  * Since: 2.14
  **/
-void
-gtk_image_get_gicon (GtkImage     *image,
-		     GIcon       **gicon,
-		     GtkIconSize  *size)
+GIcon *
+gtk_image_get_gicon (GtkImage *image)
 {
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
 
-  g_return_if_fail (GTK_IS_IMAGE (image));
+  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
 
-  if (gicon)
-    *gicon = _gtk_icon_helper_peek_gicon (&priv->icon_helper);
-
-  if (size)
-    *size = _gtk_icon_helper_get_icon_size (&priv->icon_helper);
+  return _gtk_icon_helper_peek_gicon (&priv->icon_helper);
 }
 
 /**
@@ -1395,4 +1379,22 @@ gtk_image_get_pixel_size (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), -1);
 
   return _gtk_icon_helper_get_pixel_size (&priv->icon_helper);
+}
+
+/**
+ * gtk_image_get_icon_size:
+ * @image: a #GtkImage
+ *
+ * Gets the icon size used by the @image when rendering icons.
+ *
+ * Returns: the image size used by icons
+ *
+ * Since: 3.90
+ **/
+GtkIconSize
+gtk_image_get_icon_size (GtkImage *image)
+{
+  g_return_val_if_fail (GTK_IS_IMAGE (image), GTK_ICON_SIZE_INVALID);
+
+  return _gtk_icon_helper_get_icon_size (image->priv->icon_helper);
 }

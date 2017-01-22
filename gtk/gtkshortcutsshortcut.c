@@ -369,12 +369,7 @@ gtk_shortcuts_shortcut_get_property (GObject    *object,
       break;
 
     case PROP_ICON:
-      {
-        GIcon *icon;
-
-        gtk_image_get_gicon (self->image, &icon, NULL);
-        g_value_set_object (value, icon);
-      }
+      g_value_set_object (value, gtk_image_get_gicon (self->image));
       break;
 
     case PROP_ICON_SET:

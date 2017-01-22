@@ -496,11 +496,7 @@ gtk_model_button_get_property (GObject    *object,
       break;
 
     case PROP_ICON:
-      {
-        GIcon *icon;
-        gtk_image_get_gicon (GTK_IMAGE (button->image), &icon, NULL);
-        g_value_set_object (value, icon);
-      }
+      g_value_set_object (value, gtk_image_get_gicon (GTK_IMAGE (button->image)));
       break;
 
     case PROP_TEXT:

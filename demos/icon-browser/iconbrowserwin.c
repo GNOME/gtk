@@ -390,7 +390,7 @@ get_image_data (GtkWidget        *widget,
 
   image = gtk_bin_get_child (GTK_BIN (widget));
 
-  gtk_image_get_icon_name (GTK_IMAGE (image), &name, NULL);
+  name = gtk_image_get_icon_name (GTK_IMAGE (image));
   size = gtk_image_get_pixel_size (GTK_IMAGE (image));
 
   pixbuf = get_icon (image, name, size);

@@ -711,14 +711,14 @@ clone_image_menu_size (GtkImage *image)
 
   if (storage_type == GTK_IMAGE_ICON_NAME)
     {
-      const gchar *icon_name;
-      gtk_image_get_icon_name (image, &icon_name, NULL);
+      const gchar *icon_name = gtk_image_get_icon_name (image);
+
       return gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
     }
   else if (storage_type == GTK_IMAGE_GICON)
     {
-      GIcon *icon;
-      gtk_image_get_gicon (image, &icon, NULL);
+      GIcon *icon = gtk_image_get_gicon (image);
+
       return gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
     }
   else if (storage_type == GTK_IMAGE_SURFACE)
