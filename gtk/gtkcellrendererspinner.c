@@ -66,7 +66,7 @@ struct _GtkCellRendererSpinnerPrivate
 {
   gboolean active;
   guint pulse;
-  GtkIconSize icon_size, old_icon_size;
+  GtkIconSize icon_size;
   gint size;
 };
 
@@ -162,7 +162,6 @@ gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
 {
   cell->priv = gtk_cell_renderer_spinner_get_instance_private (cell);
   cell->priv->pulse = 0;
-  cell->priv->old_icon_size = GTK_ICON_SIZE_INVALID;
   cell->priv->icon_size = GTK_ICON_SIZE_MENU;
 }
 
@@ -187,9 +186,6 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
                                        GtkWidget              *widget)
 {
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
-
-  if (priv->old_icon_size == priv->icon_size)
-    return;
 
   if (!gtk_icon_size_lookup (priv->icon_size, &priv->size, NULL))
     {
@@ -251,7 +247,6 @@ gtk_cell_renderer_spinner_set_property (GObject      *object,
       case PROP_SIZE:
         if (priv->icon_size != g_value_get_enum (value))
           {
-            priv->old_icon_size = priv->icon_size;
             priv->icon_size = g_value_get_enum (value);
             g_object_notify (object, "size");
           }
