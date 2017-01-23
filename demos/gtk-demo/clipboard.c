@@ -265,8 +265,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
 
       /* Create the first image */
-      image = gtk_image_new_from_icon_name ("dialog-warning",
-                                            GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("dialog-warning");
       ebox = gtk_event_box_new ();
       gtk_container_add (GTK_CONTAINER (ebox), image);
       gtk_container_add (GTK_CONTAINER (hbox), ebox);
@@ -291,8 +290,7 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (button_press), image);
 
       /* Create the second image */
-      image = gtk_image_new_from_icon_name ("process-stop",
-                                            GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("process-stop");
       ebox = gtk_event_box_new ();
       gtk_container_add (GTK_CONTAINER (ebox), image);
       gtk_container_add (GTK_CONTAINER (hbox), ebox);

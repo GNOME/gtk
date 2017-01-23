@@ -33,7 +33,8 @@ show_message_dialog1a (GtkWindow *parent)
                                                GTK_BUTTONS_OK,
                                                "The system network services are not compatible with this version."));
 
-  image = gtk_image_new_from_icon_name ("computer-fail", GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name ("computer-fail");
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_DIALOG);
   gtk_widget_show (image);
 
   gtk_dialog_run (GTK_DIALOG (dialog));

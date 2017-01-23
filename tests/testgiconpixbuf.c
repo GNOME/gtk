@@ -38,7 +38,8 @@ main (int argc,
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE);
 
-  image = gtk_image_new_from_gicon (G_ICON (pixbuf), GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_gicon (G_ICON (pixbuf));
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (vbox), image, FALSE, FALSE);
 
   label = gtk_label_new (NULL);
@@ -53,7 +54,8 @@ main (int argc,
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE);
 
-  image2 = gtk_image_new_from_gicon (emblemed, GTK_ICON_SIZE_DIALOG);
+  image2 = gtk_image_new_from_gicon (emblemed);
+  gtk_image_set_icon_size (GTK_IMAGE (image2), GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (vbox), image2, FALSE, FALSE);
 
   label = gtk_label_new (NULL);

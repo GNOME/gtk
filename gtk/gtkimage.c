@@ -400,10 +400,6 @@ gtk_image_set_property (GObject      *object,
 {
   GtkImage *image = GTK_IMAGE (object);
   GtkImagePrivate *priv = image->priv;
-  GtkIconSize icon_size = _gtk_icon_helper_get_icon_size (priv->icon_helper);
-
-  if (icon_size == GTK_ICON_SIZE_INVALID)
-    icon_size = DEFAULT_ICON_SIZE;
 
   switch (prop_id)
     {
@@ -417,11 +413,7 @@ gtk_image_set_property (GObject      *object,
       gtk_image_set_from_file (image, g_value_get_string (value));
       break;
     case PROP_ICON_SIZE:
-      if (_gtk_icon_helper_set_icon_size (priv->icon_helper, g_value_get_int (value)))
-        {
-          g_object_notify_by_pspec (object, pspec);
-          gtk_widget_queue_resize (GTK_WIDGET (image));
-        }
+      gtk_image_set_icon_size (image, g_value_get_int (value));
       break;
     case PROP_PIXEL_SIZE:
       gtk_image_set_pixel_size (image, g_value_get_int (value));
@@ -430,10 +422,10 @@ gtk_image_set_property (GObject      *object,
       gtk_image_set_from_animation (image, g_value_get_object (value));
       break;
     case PROP_ICON_NAME:
-      gtk_image_set_from_icon_name (image, g_value_get_string (value), icon_size);
+      gtk_image_set_from_icon_name (image, g_value_get_string (value));
       break;
     case PROP_GICON:
-      gtk_image_set_from_gicon (image, g_value_get_object (value), icon_size);
+      gtk_image_set_from_gicon (image, g_value_get_object (value));
       break;
     case PROP_RESOURCE:
       gtk_image_set_from_resource (image, g_value_get_string (value));
@@ -658,7 +650,6 @@ gtk_image_new_from_animation (GdkPixbufAnimation *animation)
 /**
  * gtk_image_new_from_icon_name:
  * @icon_name: an icon name
- * @size: (type int): a stock icon size (#GtkIconSize)
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
  * If the icon name isn’t known, a “broken image” icon will be
@@ -670,14 +661,13 @@ gtk_image_new_from_animation (GdkPixbufAnimation *animation)
  * Since: 2.6
  **/
 GtkWidget*
-gtk_image_new_from_icon_name (const gchar    *icon_name,
-			      GtkIconSize     size)
+gtk_image_new_from_icon_name (const gchar *icon_name)
 {
   GtkImage *image;
 
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
-  gtk_image_set_from_icon_name (image, icon_name, size);
+  gtk_image_set_from_icon_name (image, icon_name);
 
   return GTK_WIDGET (image);
 }
@@ -685,7 +675,6 @@ gtk_image_new_from_icon_name (const gchar    *icon_name,
 /**
  * gtk_image_new_from_gicon:
  * @icon: an icon
- * @size: (type int): a stock icon size (#GtkIconSize)
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
  * If the icon name isn’t known, a “broken image” icon will be
@@ -697,14 +686,13 @@ gtk_image_new_from_icon_name (const gchar    *icon_name,
  * Since: 2.14
  **/
 GtkWidget*
-gtk_image_new_from_gicon (GIcon *icon,
-			  GtkIconSize     size)
+gtk_image_new_from_gicon (GIcon *icon)
 {
   GtkImage *image;
 
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
-  gtk_image_set_from_gicon (image, icon, size);
+  gtk_image_set_from_gicon (image, icon);
 
   return GTK_WIDGET (image);
 }
@@ -833,9 +821,7 @@ gtk_image_set_from_file   (GtkImage    *image,
 
   if (anim == NULL)
     {
-      gtk_image_set_from_icon_name (image,
-                                    "image-missing",
-                                    DEFAULT_ICON_SIZE);
+      gtk_image_set_from_icon_name (image, "image-missing");
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
@@ -893,9 +879,7 @@ gtk_image_set_from_resource (GtkImage    *image,
 
   if (animation == NULL)
     {
-      gtk_image_set_from_icon_name (image,
-                                    "image-missing",
-                                    DEFAULT_ICON_SIZE);
+      gtk_image_set_from_icon_name (image, "image-missing");
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
@@ -990,16 +974,14 @@ gtk_image_set_from_animation (GtkImage           *image,
  * gtk_image_set_from_icon_name:
  * @image: a #GtkImage
  * @icon_name: an icon name
- * @size: (type int): an icon size (#GtkIconSize)
  *
  * See gtk_image_new_from_icon_name() for details.
  * 
  * Since: 2.6
  **/
 void
-gtk_image_set_from_icon_name  (GtkImage       *image,
-			       const gchar    *icon_name,
-			       GtkIconSize     size)
+gtk_image_set_from_icon_name  (GtkImage    *image,
+			       const gchar *icon_name)
 {
   GtkImagePrivate *priv;
 
@@ -1012,10 +994,9 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
   gtk_image_clear (image);
 
   if (icon_name)
-    _gtk_icon_helper_set_icon_name (priv->icon_helper, icon_name, size);
+    _gtk_icon_helper_set_icon_name (priv->icon_helper, icon_name);
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_NAME]);
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1024,16 +1005,14 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
  * gtk_image_set_from_gicon:
  * @image: a #GtkImage
  * @icon: an icon
- * @size: (type int): an icon size (#GtkIconSize)
  *
  * See gtk_image_new_from_gicon() for details.
  * 
  * Since: 2.14
  **/
 void
-gtk_image_set_from_gicon  (GtkImage       *image,
-			   GIcon          *icon,
-			   GtkIconSize     size)
+gtk_image_set_from_gicon  (GtkImage *image,
+			   GIcon    *icon)
 {
   GtkImagePrivate *priv;
 
@@ -1050,12 +1029,11 @@ gtk_image_set_from_gicon  (GtkImage       *image,
 
   if (icon)
     {
-      _gtk_icon_helper_set_gicon (priv->icon_helper, icon, size);
+      _gtk_icon_helper_set_gicon (priv->icon_helper, icon);
       g_object_unref (icon);
     }
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_GICON]);
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1518,8 +1496,6 @@ gtk_image_reset (GtkImage *image)
   if (storage_type != GTK_IMAGE_EMPTY)
     g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STORAGE_TYPE]);
 
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
-
   gtk_image_reset_anim_iter (image);
 
   gtk_image_notify_for_storage_type (image, storage_type);
@@ -1632,6 +1608,28 @@ gtk_image_get_pixel_size (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), -1);
 
   return _gtk_icon_helper_get_pixel_size (image->priv->icon_helper);
+}
+
+/**
+ * gtk_image_set_icon_size:
+ * @image: a #GtkImage
+ * @icon_size: the new icon size
+ * 
+ * Suggests an icon size to the theme for named icons.
+ *
+ * Since: 3.90
+ */
+void 
+gtk_image_set_icon_size (GtkImage    *image,
+			 GtkIconSize  icon_size)
+{
+  g_return_if_fail (GTK_IS_IMAGE (image));
+
+  if (_gtk_icon_helper_set_icon_size (image->priv->icon_helper, icon_size)) 
+    {
+      gtk_widget_queue_resize (GTK_WIDGET (image));
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
+    }
 }
 
 /**

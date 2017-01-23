@@ -962,8 +962,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   if (!priv->icon_list || priv->icon_list[0] == '\0')
     {
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-                                    "image-missing",
-                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
+                                    "image-missing");
       return;
     }
 
@@ -973,8 +972,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   if (num_icons == 1)
     {
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-                                    priv->icon_list[0],
-                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
+                                    priv->icon_list[0]);
       return;
     }
 
@@ -993,8 +991,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
         name = priv->icon_list[1];
 
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-                                    name,
-                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
+                                    name);
       return;
     }
 
@@ -1018,8 +1015,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
     }
 
   gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-                                name,
-                                GTK_ICON_SIZE_SMALL_TOOLBAR);
+                                name);
 }
 
 static void

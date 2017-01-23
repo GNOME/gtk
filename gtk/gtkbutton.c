@@ -1356,7 +1356,7 @@ gtk_button_set_icon_name (GtkButton  *button,
       if (child != NULL)
         gtk_container_remove (GTK_CONTAINER (button), child);
 
-      child = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
+      child = gtk_image_new_from_icon_name (icon_name);
       gtk_widget_show (child);
       gtk_container_add (GTK_CONTAINER (button), child);
       gtk_style_context_remove_class (context, "text-button");
@@ -1364,7 +1364,7 @@ gtk_button_set_icon_name (GtkButton  *button,
     }
   else
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (child), icon_name, GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (GTK_IMAGE (child), icon_name);
     }
 
   gtk_button_set_child_type (button, ICON_CHILD);

@@ -404,8 +404,8 @@ gtk_fishbowl_set_count (GtkFishbowl *fishbowl,
     {
       GtkWidget *new_widget;
         
-      new_widget = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()),
-                                                 GTK_ICON_SIZE_DIALOG);
+      new_widget = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()));
+      gtk_image_set_icon_size (GTK_IMAGE (new_widget), GTK_ICON_SIZE_DIALOG);
       gtk_widget_show (new_widget);
       gtk_container_add (GTK_CONTAINER (fishbowl), new_widget);
     }

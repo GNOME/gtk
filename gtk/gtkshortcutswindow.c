@@ -890,7 +890,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                    NULL);
   gtk_window_set_titlebar (GTK_WINDOW (self), GTK_WIDGET (priv->header_bar));
 
-  search_icon = gtk_image_new_from_icon_name ("edit-find-symbolic", GTK_ICON_SIZE_BUTTON);
+  search_icon = gtk_image_new_from_icon_name ("edit-find-symbolic");
   gtk_widget_show (search_icon);
 
   search_button = gtk_toggle_button_new ();
@@ -955,8 +955,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                    NULL);
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (priv->menu_label));
 
-  arrow = gtk_image_new_from_icon_name ("pan-down-symbolic",
-                                        GTK_ICON_SIZE_BUTTON);
+  arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
   gtk_widget_show (arrow);
   gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (arrow));
 

@@ -18,7 +18,7 @@ create_tab_label (GtkWidget *toplevel)
   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   GtkWidget *label = gtk_label_new (G_OBJECT_TYPE_NAME (toplevel));
   GtkWidget *button = gtk_button_new ();
-  GtkWidget *image = gtk_image_new_from_icon_name ("window-close", GTK_ICON_SIZE_MENU);
+  GtkWidget *image = gtk_image_new_from_icon_name ("window-close");
 
   gtk_container_add (GTK_CONTAINER (button), image);
   gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE);

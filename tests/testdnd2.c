@@ -207,7 +207,7 @@ image_drag_data_received (GtkWidget        *widget,
       break;
     case TARGET_TEXT:
       text = (gchar *)gtk_selection_data_get_text (selection_data);
-      gtk_image_set_from_icon_name (GTK_IMAGE (data), text, GTK_ICON_SIZE_DIALOG);
+      gtk_image_set_from_icon_name (GTK_IMAGE (data), text);
       g_free (text);
       break;
     default:
@@ -221,7 +221,8 @@ make_image (const gchar *icon_name, int hotspot)
 {
   GtkWidget *image, *ebox;
 
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name (icon_name);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_DIALOG);
   ebox = gtk_event_box_new ();
 
   gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
@@ -246,7 +247,8 @@ make_image2 (const gchar *icon_name, int hotspot)
 {
   GtkWidget *image, *ebox;
 
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name (icon_name);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_DIALOG);
   ebox = gtk_event_box_new ();
 
   gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);

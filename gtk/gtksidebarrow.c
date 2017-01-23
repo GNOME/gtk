@@ -290,8 +290,7 @@ gtk_sidebar_row_set_icon (GtkSidebarRow *self,
     {
       g_set_object (&self->icon, icon);
       if (self->icon != NULL)
-        gtk_image_set_from_gicon (GTK_IMAGE (self->icon_widget), self->icon,
-                                  GTK_ICON_SIZE_MENU);
+        gtk_image_set_from_gicon (GTK_IMAGE (self->icon_widget), self->icon);
       else
         gtk_image_clear (GTK_IMAGE (self->icon_widget));
 

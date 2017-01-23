@@ -178,7 +178,7 @@ main (int    argc,
 
           gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
           gtk_container_add (GTK_CONTAINER (box),
-                             gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
+                             gtk_image_new_from_icon_name ("face-sad"));
           gtk_container_add (GTK_CONTAINER (button), box);
 
           set_font_size (button, i);
@@ -194,7 +194,7 @@ main (int    argc,
 	gtk_widget_set_valign (ebox, GTK_ALIGN_BASELINE);
       gtk_container_add (GTK_CONTAINER (hbox), ebox);
 
-      image = gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("face-sad");
       gtk_image_set_pixel_size (GTK_IMAGE (image), 34);
       if (j == 0)
 	gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
@@ -277,7 +277,7 @@ main (int    argc,
 
           gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
           gtk_container_add (GTK_CONTAINER (box),
-                             gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
+                             gtk_image_new_from_icon_name ("face-sad"));
           gtk_container_add (GTK_CONTAINER (button), box);
 
           set_font_size (button, i);
@@ -342,7 +342,7 @@ main (int    argc,
       gtk_container_add (GTK_CONTAINER (hbox), label);
       gtk_widget_set_vexpand (label, TRUE);
 
-      image = gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("face-sad");
       gtk_image_set_pixel_size (GTK_IMAGE (image), 34);
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
@@ -366,7 +366,7 @@ main (int    argc,
           button = gtk_button_new ();
 
           gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
-          image = gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON);
+          image = gtk_image_new_from_icon_name ("face-sad");
           gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
           gtk_container_add (GTK_CONTAINER (box), image);
           gtk_container_add (GTK_CONTAINER (button), box);

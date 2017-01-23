@@ -2069,8 +2069,7 @@ create_image (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       pack_image (vbox, "Stock Warning Dialog",
-                  gtk_image_new_from_icon_name ("dialog-warning",
-                                                GTK_ICON_SIZE_DIALOG));
+                  gtk_image_new_from_icon_name ("dialog-warning"));
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       
@@ -2279,8 +2278,7 @@ create_menu (GdkScreen *screen, gint depth, gint length)
 
   group = NULL;
 
-  image = gtk_image_new_from_icon_name ("document-open",
-                                        GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name ("document-open");
   gtk_widget_show (image);
   menuitem = gtk_menu_item_new ();
   label = gtk_label_new ("Image Item");
@@ -2342,8 +2340,7 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
   j++;
 
   /* now fill the items submenu */
-  image = gtk_image_new_from_icon_name ("help-broswer",
-                                        GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name ("help-browser");
   gtk_widget_show (image);
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   menuitem = gtk_menu_item_new ();
@@ -2363,8 +2360,7 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 1, 2);
   gtk_widget_show (menuitem);
 
-  image = gtk_image_new_from_icon_name ("help-browser",
-                                        GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name ("help-browser");
   gtk_widget_show (image);
   menuitem = gtk_menu_item_new ();
   label = gtk_label_new ("Image");
@@ -2573,8 +2569,7 @@ create_menus (GtkWidget *widget)
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
-      image = gtk_image_new_from_icon_name ("help-browser",
-                                            GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_icon_name ("help-browser");
       gtk_widget_show (image);
       menuitem = gtk_menu_item_new ();
       label = gtk_label_new ("Help");

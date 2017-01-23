@@ -563,9 +563,9 @@ update_icon (GtkColorSwatch *swatch)
   GtkIconHelper *icon_helper = GTK_ICON_HELPER (swatch->priv->overlay_gadget);
 
   if (swatch->priv->icon)
-    _gtk_icon_helper_set_icon_name (icon_helper, swatch->priv->icon, GTK_ICON_SIZE_BUTTON);
+    _gtk_icon_helper_set_icon_name (icon_helper, swatch->priv->icon);
   else if (gtk_widget_get_state_flags (GTK_WIDGET (swatch)) & GTK_STATE_FLAG_SELECTED)
-    _gtk_icon_helper_set_icon_name (icon_helper, "object-select-symbolic", GTK_ICON_SIZE_BUTTON);
+    _gtk_icon_helper_set_icon_name (icon_helper, "object-select-symbolic");
   else
     _gtk_icon_helper_clear (icon_helper);
 }

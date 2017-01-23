@@ -80,8 +80,7 @@ gboolean _gtk_icon_helper_get_is_empty (GtkIconHelper *self);
 void _gtk_icon_helper_set_definition (GtkIconHelper *self,
                                       GtkImageDefinition *def);
 void _gtk_icon_helper_set_gicon (GtkIconHelper *self,
-                                 GIcon *gicon,
-                                 GtkIconSize icon_size);
+                                 GIcon *gicon);
 void _gtk_icon_helper_set_pixbuf (GtkIconHelper *self,
 				  GdkPixbuf *pixbuf);
 void _gtk_icon_helper_set_pixbuf_scale (GtkIconHelper *self,
@@ -90,8 +89,7 @@ void _gtk_icon_helper_set_animation (GtkIconHelper *self,
                                      GdkPixbufAnimation *animation);
 
 void _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
-                                     const gchar *icon_name,
-                                     GtkIconSize icon_size);
+                                     const gchar *icon_name);
 void _gtk_icon_helper_set_surface (GtkIconHelper *self,
 				   cairo_surface_t *surface);
 

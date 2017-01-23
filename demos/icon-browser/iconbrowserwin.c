@@ -78,7 +78,7 @@ set_image (GtkWidget *image, const gchar *name, gint size)
 {
   GdkPixbuf *pixbuf;
 
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), name, 1);
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
   pixbuf = get_icon (image, name, size);
   gtk_drag_source_set_icon_pixbuf (gtk_widget_get_parent (image), pixbuf);

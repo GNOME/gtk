@@ -8002,7 +8002,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
   if (icon_name != NULL)
     {
-      _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (icon_info->gadget), icon_name, GTK_ICON_SIZE_MENU);
+      _gtk_icon_helper_set_icon_name (GTK_ICON_HELPER (icon_info->gadget), icon_name);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -8062,7 +8062,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 
   if (icon)
     {
-      _gtk_icon_helper_set_gicon (GTK_ICON_HELPER (icon_info->gadget), icon, GTK_ICON_SIZE_MENU);
+      _gtk_icon_helper_set_gicon (GTK_ICON_HELPER (icon_info->gadget), icon);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -9029,7 +9029,7 @@ append_bubble_action (GtkEntry     *entry,
 
   item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name (icon_name);
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);
   gtk_widget_set_tooltip_text (item, label);

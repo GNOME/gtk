@@ -65,7 +65,7 @@ do_sidebar (GtkWidget *do_widget)
         {
           if (i == 0)
             {
-              widget = gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_MENU);
+              widget = gtk_image_new_from_icon_name ("help-about");
               gtk_image_set_pixel_size (GTK_IMAGE (widget), 256);
             }
           else

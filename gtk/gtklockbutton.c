@@ -384,7 +384,7 @@ update_state (GtkLockButton *button)
       g_assert_not_reached ();
     }
 
-  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
   gtk_stack_set_visible_child (GTK_STACK (priv->stack),
                                allowed ? priv->label_lock : priv->label_unlock);
   _gtk_lock_button_accessible_name_changed (button);
