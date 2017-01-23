@@ -340,7 +340,6 @@ struct _GtkFileChooserWidgetPrivate {
   guint location_changed_id;
 
   gulong settings_signal_id;
-  int icon_size;
 
   GSource *focus_entry_idle;
 
@@ -434,8 +433,7 @@ enum {
 
 #define DEFAULT_RECENT_FILES_LIMIT 50
 
-/* Icon size for if we can't get it from the theme */
-#define FALLBACK_ICON_SIZE 16
+#define ICON_SIZE 16
 
 #define PREVIEW_HBOX_SPACING 12
 #define NUM_LINES 45
@@ -2537,8 +2535,8 @@ set_icon_cell_renderer_fixed_size (GtkFileChooserWidget *impl)
 
   gtk_cell_renderer_get_padding (priv->list_pixbuf_renderer, &xpad, &ypad);
   gtk_cell_renderer_set_fixed_size (priv->list_pixbuf_renderer,
-                                    xpad * 2 + priv->icon_size,
-                                    ypad * 2 + priv->icon_size);
+                                    xpad * 2 + ICON_SIZE,
+                                    ypad * 2 + ICON_SIZE);
 }
 
 static gboolean
@@ -3726,14 +3724,8 @@ static void
 change_icon_theme (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  gint width, height;
 
   profile_start ("start", NULL);
-
-  if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
-    priv->icon_size = MAX (width, height);
-  else
-    priv->icon_size = FALLBACK_ICON_SIZE;
 
   /* the first cell in the first column is the icon column, and we have a fixed size there */
   set_icon_cell_renderer_fixed_size (impl);
@@ -4970,7 +4962,7 @@ file_system_model_set (GtkFileSystemModel *model,
         {
           if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
             {
-              g_value_take_boxed (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), priv->icon_size));
+              g_value_take_boxed (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), ICON_SIZE));
             }
           else
             {
@@ -8585,9 +8577,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   _gtk_path_bar_set_file (GTK_PATH_BAR (impl->priv->browse_path_bar), file, FALSE);
   g_object_unref (file);
 
-  /* Set the fixed size icon renderer, this requires
-   * that priv->icon_size be already setup.
-   */
+  /* Set the fixed size icon renderer */
   set_icon_cell_renderer_fixed_size (impl);
 
   gtk_popover_set_default_widget (GTK_POPOVER (impl->priv->new_folder_popover), impl->priv->new_folder_create_button);
@@ -8634,7 +8624,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   priv->select_multiple = FALSE;
   priv->show_hidden = FALSE;
   priv->show_size_column = TRUE;
-  priv->icon_size = FALLBACK_ICON_SIZE;
   priv->load_state = LOAD_EMPTY;
   priv->reload_state = RELOAD_EMPTY;
   priv->pending_select_files = NULL;
