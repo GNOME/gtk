@@ -33,8 +33,7 @@
 G_BEGIN_DECLS
 
 void            gtk_image_set_from_definition           (GtkImage               *image,
-                                                         GtkImageDefinition     *def,
-                                                         GtkIconSize             size);
+                                                         GtkImageDefinition     *def);
 
 G_END_DECLS
 
