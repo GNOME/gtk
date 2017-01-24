@@ -1193,8 +1193,7 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
 
 void
 gtk_image_set_from_definition (GtkImage           *image,
-                               GtkImageDefinition *def,
-                               GtkIconSize         icon_size)
+                               GtkImageDefinition *def)
 {
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
 
@@ -1211,8 +1210,6 @@ gtk_image_set_from_definition (GtkImage           *image,
       gtk_image_notify_for_storage_type (image, gtk_image_definition_get_storage_type (def));
     }
 
-  _gtk_icon_helper_set_icon_size (&priv->icon_helper, icon_size);
-  
   g_object_thaw_notify (G_OBJECT (image));
 }
 
