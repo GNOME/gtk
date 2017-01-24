@@ -212,7 +212,7 @@ gtk_icon_helper_init (GtkIconHelper *self)
 
   self->priv->def = gtk_image_definition_new_empty ();
 
-  self->priv->icon_size = GTK_ICON_SIZE_INVALID;
+  self->priv->icon_size = GTK_ICON_SIZE_INHERIT;
   self->priv->pixel_size = -1;
   self->priv->rendered_surface_is_symbolic = FALSE;
 }
@@ -230,7 +230,7 @@ ensure_icon_size (GtkIconHelper *self,
     }
   else if (!gtk_icon_size_lookup (self->priv->icon_size, &width, &height))
     {
-      if (self->priv->icon_size == GTK_ICON_SIZE_INVALID)
+      if (self->priv->icon_size == GTK_ICON_SIZE_INHERIT)
         {
           width = height = 0;
         }
@@ -334,7 +334,7 @@ get_pixbuf_size (GtkIconHelper   *self,
 
   if (self->priv->force_scale_pixbuf &&
       (self->priv->pixel_size != -1 ||
-       self->priv->icon_size != GTK_ICON_SIZE_INVALID))
+       self->priv->icon_size != GTK_ICON_SIZE_INHERIT))
     {
       ensure_icon_size (self, &width, &height);
 
@@ -644,7 +644,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
         {
           get_surface_size (self, self->priv->rendered_surface, &width, &height);
         }
-      else if (self->priv->icon_size != GTK_ICON_SIZE_INVALID)
+      else if (self->priv->icon_size != GTK_ICON_SIZE_INHERIT)
         {
           ensure_icon_size (self, &width, &height);
         }

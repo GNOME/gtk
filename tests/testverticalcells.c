@@ -322,7 +322,7 @@ main (gint argc, gchar **argv)
   column = gtk_tree_view_column_new ();
 
   renderer = gtk_cell_renderer_pixbuf_new ();
-  g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DIALOG, NULL);
+  g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE, NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "icon-name", ICON_COLUMN, NULL);

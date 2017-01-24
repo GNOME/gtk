@@ -141,7 +141,7 @@ struct _GtkImagePrivate
 };
 
 
-#define DEFAULT_ICON_SIZE GTK_ICON_SIZE_BUTTON
+#define DEFAULT_ICON_SIZE GTK_ICON_SIZE_INHERIT
 static void gtk_image_snapshot             (GtkWidget    *widget,
                                             GtkSnapshot  *snapshot);
 static void gtk_image_size_allocate        (GtkWidget    *widget,
@@ -1642,7 +1642,7 @@ gtk_image_set_icon_size (GtkImage    *image,
 GtkIconSize
 gtk_image_get_icon_size (GtkImage *image)
 {
-  g_return_val_if_fail (GTK_IS_IMAGE (image), GTK_ICON_SIZE_INVALID);
+  g_return_val_if_fail (GTK_IS_IMAGE (image), GTK_ICON_SIZE_INHERIT);
 
   return _gtk_icon_helper_get_icon_size (image->priv->icon_helper);
 }

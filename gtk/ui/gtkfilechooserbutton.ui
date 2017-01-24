@@ -52,7 +52,6 @@
               <object class="GtkImage" id="open_file_icon">
                 <property name="visible">1</property>
                 <property name="icon-name">document-open-symbolic</property>
-                <property name="icon-size">1</property>
                 <property name="use-fallback">1</property>
                 <property name="valign">baseline</property>
               </object>

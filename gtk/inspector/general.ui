@@ -416,7 +416,6 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
-                            <property name="icon-size">1</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -450,7 +449,6 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
-                            <property name="icon-size">1</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>

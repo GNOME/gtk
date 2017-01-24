@@ -458,13 +458,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       if (button->priv->icon_widget)
 	{
 	  icon = button->priv->icon_widget;
-
-	  if (GTK_IS_IMAGE (icon))
-	    {
-	      g_object_set (button->priv->icon_widget,
-			    "icon-size", GTK_ICON_SIZE_SMALL_TOOLBAR,
-			    NULL);
-	    }
 	}
       else if (button->priv->icon_name)
 	{
@@ -733,7 +726,7 @@ clone_image_menu_size (GtkImage *image)
     {
       gint width, height;
       
-      if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
+      if (gtk_icon_size_lookup (GTK_ICON_SIZE_NORMAL, &width, &height))
 	{
 	  GdkPixbuf *src_pixbuf, *dest_pixbuf;
 	  GtkWidget *cloned_image;

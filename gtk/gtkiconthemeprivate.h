@@ -19,6 +19,7 @@
 #define __GTK_ICON_THEME_PRIVATE_H__
 
 #include <gtk/gtkicontheme.h>
+#include <gtk/gtkcssnodeprivate.h>
 #include <gtk/gtkcssstyleprivate.h>
 
 void        gtk_icon_theme_lookup_symbolic_colors       (GtkCssStyle    *style,

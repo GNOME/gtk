@@ -39,7 +39,6 @@
                           <object class="GtkImage" id="camera_icon">
                             <property name="visible">True</property>
                             <property name="icon_name">camera-web-symbolic</property>
-                            <property name="icon_size">1</property>
                           </object>
                         </child>
                       </object>
@@ -52,7 +51,6 @@
                           <object class="GtkImage" id="volume_icon">
                             <property name="visible">True</property>
                             <property name="icon_name">audio-volume-medium-symbolic</property>
-                            <property name="icon_size">1</property>
                           </object>
                         </child>
                       </object>
@@ -65,7 +63,6 @@
                           <object class="GtkImage" id="microphone_icon">
                             <property name="visible">True</property>
                             <property name="icon_name">audio-input-microphone-symbolic</property>
-                            <property name="icon_size">1</property>
                           </object>
                         </child>
                       </object>
@@ -79,7 +76,6 @@
                           <object class="GtkImage" id="bt_icon">
                             <property name="visible">True</property>
                             <property name="icon_name">bluetooth-active-symbolic</property>
-                            <property name="icon_size">1</property>
                           </object>
                         </child>
                       </object>
@@ -125,7 +121,6 @@
                           <object class="GtkImage" id="opt_icon">
                             <property name="visible">True</property>
                             <property name="icon_name">media-optical-symbolic</property>
-                            <property name="icon_size">1</property>
                           </object>
                         </child>
                       </object>
@@ -138,7 +133,6 @@
                           <object class="GtkImage" id="hdd_icon">
                             <property name="visible">True</property>
                             <property name="icon_name">drive-harddisk-symbolic</property>
-                            <property name="icon_size">1</property>
                           </object>
                         </child>
                       </object>
@@ -151,7 +145,6 @@
                           <object class="GtkImage" id="joy_icon">
                             <property name="visible">True</property>
                             <property name="icon_name">input-gaming-symbolic</property>
-                            <property name="icon_size">1</property>
                           </object>
                         </child>
                       </object>
@@ -169,7 +162,6 @@
             <property name="halign">center</property>
             <property name="valign">start</property>
             <property name="margin_top">24</property>
-            <property name="icon_size">1</property>
             <style>
                 <class name="osd"/>
             </style>

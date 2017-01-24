@@ -199,7 +199,7 @@ gtk_message_row_update (GtkMessageRow *row)
   if (strcmp (priv->message->sender_nick, "@GTKtoolkit") == 0)
     {
       gtk_image_set_from_icon_name (priv->avatar_image, "gtk3-demo");
-      gtk_image_set_icon_size (priv->avatar_image, GTK_ICON_SIZE_DND);
+      gtk_image_set_icon_size (priv->avatar_image, GTK_ICON_SIZE_LARGE);
     }
   else
     gtk_image_set_from_pixbuf (priv->avatar_image, avatar_pixbuf_other);

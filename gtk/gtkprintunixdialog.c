@@ -2319,7 +2319,7 @@ gtk_print_unix_dialog_style_updated (GtkWidget *widget)
       gint size;
       gfloat scale;
 
-      gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
+      gtk_icon_size_lookup (GTK_ICON_SIZE_LARGE, &size, NULL);
       scale = size / 48.0;
 
       gtk_widget_set_size_request (priv->collate_image,

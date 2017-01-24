@@ -487,7 +487,6 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
-                            <property name="icon-size">1</property>
                           </object>
                         </child>
                       </object>
@@ -696,7 +695,6 @@
                             <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-size">1</property>
                             <property name="icon-name">object-select-symbolic</property>
                           </object>
                         </child>
@@ -732,7 +730,6 @@
                             <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-size">1</property>
                             <property name="icon-name">object-select-symbolic</property>
                           </object>
                         </child>
@@ -768,7 +765,6 @@
                             <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-size">1</property>
                             <property name="icon-name">object-select-symbolic</property>
                           </object>
                         </child>
@@ -804,7 +800,6 @@
                             <property name="visible">true</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <property name="icon-size">1</property>
                             <property name="icon-name">object-select-symbolic</property>
                           </object>
                         </child>

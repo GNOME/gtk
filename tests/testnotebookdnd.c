@@ -96,26 +96,15 @@ on_notebook_drag_begin (GtkWidget      *widget,
                         GdkDragContext *context,
                         gpointer        data)
 {
-  GdkPixbuf *pixbuf;
   guint page_num;
 
   page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (widget));
 
   if (page_num > 2)
     {
-      GtkIconTheme *icon_theme;
-      int width;
-
-      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
-      gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &width, NULL);
-      pixbuf = gtk_icon_theme_load_icon (icon_theme,
-                                         (page_num % 2) ? "help-browser" : "process-stop",
-                                         width,
-                                         GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                         NULL);
-
-      gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
-      g_object_unref (pixbuf);
+      gtk_drag_set_icon_name (context,
+                              (page_num % 2) ? "help-browser" : "process-stop",
+                              0, 0);
     }
 }
 

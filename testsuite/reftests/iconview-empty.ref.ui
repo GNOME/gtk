@@ -16,7 +16,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">0</property>
             <property name="height-request">0</property>
           </object>
@@ -33,7 +32,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">0</property>
             <property name="height-request">0</property>
           </object>
@@ -50,7 +48,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">0</property>
             <property name="height-request">0</property>
           </object>
@@ -67,7 +64,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">0</property>
             <property name="height-request">0</property>
           </object>
@@ -84,7 +80,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">0</property>
             <property name="height-request">0</property>
           </object>
@@ -101,7 +96,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">0</property>
             <property name="height-request">0</property>
           </object>
@@ -118,7 +112,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">0</property>
             <property name="height-request">0</property>
           </object>
@@ -135,7 +128,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">0</property>
             <property name="height-request">0</property>
           </object>
@@ -152,7 +144,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">10</property>
             <property name="height-request">10</property>
           </object>
@@ -169,7 +160,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">10</property>
             <property name="height-request">10</property>
           </object>
@@ -186,7 +176,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">10</property>
             <property name="height-request">10</property>
           </object>
@@ -203,7 +192,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">10</property>
             <property name="height-request">10</property>
           </object>
@@ -220,7 +208,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">10</property>
             <property name="height-request">10</property>
           </object>
@@ -237,7 +224,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">10</property>
             <property name="height-request">10</property>
           </object>
@@ -254,7 +240,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">10</property>
             <property name="height-request">10</property>
           </object>
@@ -271,7 +256,6 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="icon-size">0</property>
             <property name="width-request">10</property>
             <property name="height-request">10</property>
           </object>

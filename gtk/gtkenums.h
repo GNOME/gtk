@@ -175,25 +175,20 @@ typedef enum
 
 /**
  * GtkIconSize:
- * @GTK_ICON_SIZE_INVALID: Invalid size.
- * @GTK_ICON_SIZE_MENU: Size appropriate for menus (16px).
- * @GTK_ICON_SIZE_SMALL_TOOLBAR: Size appropriate for small toolbars (16px).
- * @GTK_ICON_SIZE_LARGE_TOOLBAR: Size appropriate for large toolbars (24px)
- * @GTK_ICON_SIZE_BUTTON: Size appropriate for buttons (16px)
- * @GTK_ICON_SIZE_DND: Size appropriate for drag and drop (32px)
- * @GTK_ICON_SIZE_DIALOG: Size appropriate for dialogs (48px)
+ * @GTK_ICON_SIZE_INHERIT: Keep the size of the parent element
+ * @GTK_ICON_SIZE_NORMAL: Size similar to text size
+ * @GTK_ICON_SIZE_LARGE: Large size, for example in an icon view
  *
- * Built-in stock icon sizes.
+ * Built-in icon sizes.
+ *
+ * Icon sizes default to being inherited. Where they cannot be
+ * inherited, text size is the default.
  */
 typedef enum
 {
-  GTK_ICON_SIZE_INVALID,
-  GTK_ICON_SIZE_MENU,
-  GTK_ICON_SIZE_SMALL_TOOLBAR,
-  GTK_ICON_SIZE_LARGE_TOOLBAR,
-  GTK_ICON_SIZE_BUTTON,
-  GTK_ICON_SIZE_DND,
-  GTK_ICON_SIZE_DIALOG
+  GTK_ICON_SIZE_INHERIT,
+  GTK_ICON_SIZE_NORMAL,
+  GTK_ICON_SIZE_LARGE
 } GtkIconSize;
 
 /**

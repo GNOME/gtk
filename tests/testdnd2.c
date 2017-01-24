@@ -12,7 +12,7 @@ get_image_pixbuf (GtkImage *image)
       return g_object_ref (gtk_image_get_pixbuf (image));
     case GTK_IMAGE_ICON_NAME:
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (image)));
-      gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &width, NULL);
+      gtk_icon_size_lookup (GTK_ICON_SIZE_LARGE, &width, NULL);
       return gtk_icon_theme_load_icon (icon_theme,
                                        gtk_image_get_icon_name (image),
                                        width,
@@ -222,7 +222,7 @@ make_image (const gchar *icon_name, int hotspot)
   GtkWidget *image, *ebox;
 
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   ebox = gtk_event_box_new ();
 
   gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
@@ -248,7 +248,7 @@ make_image2 (const gchar *icon_name, int hotspot)
   GtkWidget *image, *ebox;
 
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   ebox = gtk_event_box_new ();
 
   gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);

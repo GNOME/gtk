@@ -43,7 +43,6 @@
                   <object class="GtkImage" id="search-icon">
                     <property name="visible">True</property>
                     <property name="icon-name">edit-find-symbolic</property>
-                    <property name="icon-size">1</property>
                   </object>
                 </child>
               </object>

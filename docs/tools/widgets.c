@@ -1095,7 +1095,7 @@ create_image (void)
   GtkWidget *vbox;
 
   widget = gtk_image_new_from_icon_name ("applications-graphics");
-  gtk_image_set_icon_size (GTK_IMAGE (widget), GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_icon_size (GTK_IMAGE (widget), GTK_ICON_SIZE_LARGE);
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
 

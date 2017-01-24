@@ -7937,8 +7937,6 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
   if (pixbuf)
     {
       _gtk_icon_helper_set_pixbuf (GTK_ICON_HELPER (icon_info->gadget), pixbuf);
-      _gtk_icon_helper_set_icon_size (GTK_ICON_HELPER (icon_info->gadget),
-                                      GTK_ICON_SIZE_MENU);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
