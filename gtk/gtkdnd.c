@@ -1588,7 +1588,7 @@ set_icon_helper (GdkDragContext     *context,
   widget = gtk_image_new ();
   gtk_widget_show (widget);
 
-  gtk_image_set_from_definition (GTK_IMAGE (widget), def, GTK_ICON_SIZE_DND);
+  gtk_image_set_from_definition (GTK_IMAGE (widget), def);
 
   gtk_drag_set_icon_widget_internal (context, widget, hot_x, hot_y, TRUE);
 }
