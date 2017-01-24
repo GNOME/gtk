@@ -5575,7 +5575,7 @@ gdk_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)
 {
   GdkDisplay *display;
-  guint32 cardinal;
+  gulong cardinal;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
