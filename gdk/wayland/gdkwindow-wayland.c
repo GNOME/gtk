@@ -2513,6 +2513,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
         {
           gtk_surface1_destroy (impl->display_server.gtk_surface);
           impl->display_server.gtk_surface = NULL;
+          impl->application.was_set = FALSE;
         }
 
       wl_surface_destroy (impl->display_server.wl_surface);
