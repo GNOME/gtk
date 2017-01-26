@@ -2242,8 +2242,25 @@ _gdk_win32_window_fill_min_max_info (GdkWindow  *window,
            * window will actually end up.
            * "0" here is the top-left corner of the primary monitor.
            */
-          mmi->ptMaxPosition.x = 0 + (nearest_info.rcWork.left - nearest_info.rcMonitor.left);
-          mmi->ptMaxPosition.y = 0 + (nearest_info.rcWork.top - nearest_info.rcMonitor.top);
+          /* An investigation into bug 765161 turned up a weird Windows WM behaviour
+           * where it would interpret "0:0" as "top-left of the workea" (accounting for a taskbar
+           * possibly being along the left/top edge of the screen) when window has styles
+           * (i.e. not CSD), and interpret the same "0:0" as "top-left of the screen" (not
+           * accounting for a taskbar) when window has no styles (i.e. a CSD window).
+           * This doesn't seem to be documented anywhere.
+           * The following code uses a simple CSD/non-CSD test, but it could be that
+           * this behaviour hinges on just one particular window style.
+           * Finding exactly which style that could be is not very useful for GTK, however.
+           */
+          mmi->ptMaxPosition.x = 0;
+          mmi->ptMaxPosition.y = 0;
+
+          if (_gdk_win32_window_lacks_wm_decorations (window))
+            {
+              mmi->ptMaxPosition.x += (nearest_info.rcWork.left - nearest_info.rcMonitor.left);
+              mmi->ptMaxPosition.y += (nearest_info.rcWork.top - nearest_info.rcMonitor.top);
+            }
+
           mmi->ptMaxSize.x = nearest_info.rcWork.right - nearest_info.rcWork.left;
           mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
         }
