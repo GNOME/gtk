@@ -975,9 +975,6 @@ GDK_AVAILABLE_IN_ALL
 GParamSpec*  gtk_widget_class_find_style_property   (GtkWidgetClass     *klass,
 						     const gchar        *property_name);
 GDK_AVAILABLE_IN_ALL
-GParamSpec** gtk_widget_class_list_style_properties (GtkWidgetClass     *klass,
-						     guint              *n_properties);
-GDK_AVAILABLE_IN_ALL
 void gtk_widget_style_get_valist   (GtkWidget	     *widget,
 				    const gchar    *first_property_name,
 				    va_list         var_args);

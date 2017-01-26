@@ -11410,35 +11410,6 @@ gtk_widget_class_find_style_property (GtkWidgetClass *klass,
 }
 
 /**
- * gtk_widget_class_list_style_properties:
- * @klass: a #GtkWidgetClass
- * @n_properties: (out): location to return the number of style properties found
- *
- * Returns all style properties of a widget class.
- *
- * Returns: (array length=n_properties) (transfer container): a
- *     newly allocated array of #GParamSpec*. The array must be
- *     freed with g_free().
- *
- * Since: 2.2
- */
-GParamSpec**
-gtk_widget_class_list_style_properties (GtkWidgetClass *klass,
-					guint          *n_properties)
-{
-  GParamSpec **pspecs;
-  guint n;
-
-  pspecs = g_param_spec_pool_list (style_property_spec_pool,
-				   G_OBJECT_CLASS_TYPE (klass),
-				   &n);
-  if (n_properties)
-    *n_properties = n;
-
-  return pspecs;
-}
-
-/**
  * gtk_widget_style_get_valist:
  * @widget: a #GtkWidget
  * @first_property_name: the name of the first property to get
