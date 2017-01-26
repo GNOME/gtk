@@ -1257,7 +1257,7 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	done; \
 	for f in $(srcdir)/ui/*.ui; do \
 	  n=`basename $$f`; \
-	  echo "    <file compressed='true'>ui/$$n</file>" >> $@; \
+	  echo "    <file preprocess='xml-stripblanks'>ui/$$n</file>" >> $@; \
 	done; \
 	for s in 16x16 22x22 24x24 32x32 48x48; do \
 	  for c in actions status; do \
@@ -1270,7 +1270,7 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	done; \
 	for f in $(srcdir)/inspector/*.ui; do \
 	  n=`basename $$f`; \
-	  echo "    <file compressed='true'>inspector/$$n</file>" >> $@; \
+	  echo "    <file preprocess='xml-stripblanks'>inspector/$$n</file>" >> $@; \
 	done; \
 	echo "    <file>inspector/logo.png</file>" >> $@; \
 	echo "  </gresource>" >> $@; \
