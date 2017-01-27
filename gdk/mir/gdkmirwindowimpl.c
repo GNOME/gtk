@@ -80,10 +80,15 @@ struct _GdkMirWindowImpl
   gint transient_x;
   gint transient_y;
 
-  /* Anchor rectangle */
-  gboolean has_rect;
-  MirRectangle rect;
-  MirEdgeAttachment edge;
+  /* gdk_window_move_to_rect */
+  gboolean            has_rect;
+  GdkRectangle        rect;
+  MirRectangle        mir_rect;
+  MirPlacementGravity rect_anchor;
+  MirPlacementGravity window_anchor;
+  MirPlacementHints   anchor_hints;
+  gint                rect_anchor_dx;
+  gint                rect_anchor_dy;
 
   /* Desired surface attributes */
   GdkWindowTypeHint type_hint;
@@ -308,16 +313,12 @@ create_window_type_spec (GdkDisplay *display,
                          gint height,
                          gboolean modal,
                          GdkWindowTypeHint type,
-                         const MirRectangle *rect,
-                         MirEdgeAttachment edge,
                          MirBufferUsage buffer_usage)
 {
-  MirPixelFormat format;
-  MirSurface *parent_surface = NULL;
   MirConnection *connection = gdk_mir_display_get_mir_connection (display);
-  MirRectangle real_rect;
-
-  format = _gdk_mir_display_get_pixel_format (display, buffer_usage);
+  MirSurface *parent_surface = NULL;
+  MirPixelFormat format;
+  MirRectangle rect;
 
   if (parent && parent->impl)
     {
@@ -338,24 +339,12 @@ create_window_type_spec (GdkDisplay *display,
         }
     }
 
-  if (rect)
-    {
-      real_rect = *rect;
+  format = _gdk_mir_display_get_pixel_format (display, buffer_usage);
 
-      while (parent && !gdk_window_has_native (parent) && gdk_window_get_effective_parent (parent))
-        {
-          real_rect.left += parent->x;
-          real_rect.top += parent->y;
-          parent = gdk_window_get_effective_parent (parent);
-        }
-    }
-  else
-    {
-      real_rect.left = x;
-      real_rect.top = y;
-      real_rect.width = 1;
-      real_rect.height = 1;
-    }
+  rect.left = x;
+  rect.top = y;
+  rect.width = 1;
+  rect.height = 1;
 
   switch (type)
     {
@@ -389,9 +378,8 @@ create_window_type_spec (GdkDisplay *display,
                                                     height,
                                                     format,
                                                     parent_surface,
-                                                    &real_rect,
-                                                    edge);
-        break;
+                                                    &rect,
+                                                    0);
       case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
       case GDK_WINDOW_TYPE_HINT_UTILITY:
         return mir_connection_create_spec_for_modal_dialog (connection,
@@ -438,21 +426,48 @@ static MirSurfaceSpec*
 create_spec (GdkWindow *window, GdkMirWindowImpl *impl)
 {
   MirSurfaceSpec *spec = NULL;
+  GdkWindow *parent;
 
   spec = create_window_type_spec (impl->display,
                                   impl->transient_for,
-                                  impl->transient_x, impl->transient_y,
-                                  window->width, window->height,
+                                  impl->transient_x,
+                                  impl->transient_y,
+                                  window->width,
+                                  window->height,
                                   impl->modal,
                                   impl->type_hint,
-                                  impl->has_rect ? &impl->rect : NULL,
-                                  impl->has_rect ? impl->edge : mir_edge_attachment_any,
                                   impl->buffer_usage);
 
   mir_surface_spec_set_name (spec, impl->title);
   mir_surface_spec_set_buffer_usage (spec, impl->buffer_usage);
 
   apply_geometry_hints (spec, impl);
+
+  if (impl->has_rect)
+    {
+      impl->mir_rect.left = impl->rect.x;
+      impl->mir_rect.top = impl->rect.y;
+      impl->mir_rect.width = impl->rect.width;
+      impl->mir_rect.height = impl->rect.height;
+
+      parent = impl->transient_for;
+
+      while (parent && !gdk_window_has_native (parent))
+        {
+          impl->mir_rect.left += parent->x;
+          impl->mir_rect.top += parent->y;
+
+          parent = gdk_window_get_parent (parent);
+        }
+
+      mir_surface_spec_set_placement (spec,
+                                      &impl->mir_rect,
+                                      impl->rect_anchor,
+                                      impl->window_anchor,
+                                      impl->anchor_hints,
+                                      impl->rect_anchor_dx,
+                                      impl->rect_anchor_dy);
+    }
 
   return spec;
 }
@@ -861,52 +876,117 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
     }
 }
 
-static MirEdgeAttachment
-get_edge_for_anchors (GdkGravity     rect_anchor,
-                      GdkGravity     window_anchor,
-                      GdkAnchorHints anchor_hints)
+static MirPlacementGravity
+get_mir_placement_gravity (GdkGravity gravity)
 {
-  MirEdgeAttachment edge = 0;
+  switch (gravity)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+      return mir_placement_gravity_northwest;
+    case GDK_GRAVITY_NORTH:
+      return mir_placement_gravity_north;
+    case GDK_GRAVITY_NORTH_EAST:
+      return mir_placement_gravity_northeast;
+    case GDK_GRAVITY_WEST:
+      return mir_placement_gravity_west;
+    case GDK_GRAVITY_CENTER:
+      return mir_placement_gravity_center;
+    case GDK_GRAVITY_EAST:
+      return mir_placement_gravity_east;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return mir_placement_gravity_southwest;
+    case GDK_GRAVITY_SOUTH:
+      return mir_placement_gravity_south;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return mir_placement_gravity_southeast;
+    }
 
-  if (anchor_hints & GDK_ANCHOR_FLIP_X)
-    edge |= mir_edge_attachment_vertical;
+  g_warn_if_reached ();
 
-  if (anchor_hints & GDK_ANCHOR_FLIP_Y)
-    edge |= mir_edge_attachment_horizontal;
-
-  return edge;
+  return mir_placement_gravity_center;
 }
 
-static void
-get_rect_for_edge (MirRectangle       *out_rect,
-                   const GdkRectangle *in_rect,
-                   MirEdgeAttachment   edge,
-                   GdkWindow          *window)
+static MirPlacementHints
+get_mir_placement_hints (GdkAnchorHints hints)
 {
-  out_rect->left = in_rect->x;
-  out_rect->top = in_rect->y;
-  out_rect->width = in_rect->width;
-  out_rect->height = in_rect->height;
+  MirPlacementHints mir_hints = 0;
 
-  switch (edge)
+  if (hints & GDK_ANCHOR_FLIP_X)
+    mir_hints |= mir_placement_hints_flip_x;
+
+  if (hints & GDK_ANCHOR_FLIP_Y)
+    mir_hints |= mir_placement_hints_flip_y;
+
+  if (hints & GDK_ANCHOR_SLIDE_X)
+    mir_hints |= mir_placement_hints_slide_x;
+
+  if (hints & GDK_ANCHOR_SLIDE_Y)
+    mir_hints |= mir_placement_hints_slide_y;
+
+  if (hints & GDK_ANCHOR_RESIZE_X)
+    mir_hints |= mir_placement_hints_resize_x;
+
+  if (hints & GDK_ANCHOR_RESIZE_Y)
+    mir_hints |= mir_placement_hints_resize_y;
+
+  return mir_hints;
+}
+
+static gint
+get_window_shadow_dx (GdkWindow  *window,
+                      GdkGravity  window_anchor)
+{
+  switch (window_anchor)
     {
-    case mir_edge_attachment_vertical:
-      out_rect->left += window->shadow_right;
-      out_rect->top -= window->shadow_top;
-      out_rect->width -= window->shadow_left + window->shadow_right;
-      out_rect->height += window->shadow_top + window->shadow_bottom;
-      break;
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_WEST:
+    case GDK_GRAVITY_SOUTH_WEST:
+      return -window->shadow_left;
 
-    case mir_edge_attachment_horizontal:
-      out_rect->left -= window->shadow_left;
-      out_rect->top += window->shadow_bottom;
-      out_rect->width += window->shadow_left + window->shadow_right;
-      out_rect->height -= window->shadow_top + window->shadow_bottom;
-      break;
+    case GDK_GRAVITY_NORTH:
+    case GDK_GRAVITY_CENTER:
+    case GDK_GRAVITY_SOUTH:
+      return (window->shadow_right - window->shadow_left) / 2;
 
-    default:
-      break;
+    case GDK_GRAVITY_NORTH_EAST:
+    case GDK_GRAVITY_EAST:
+    case GDK_GRAVITY_SOUTH_EAST:
+      return window->shadow_right;
     }
+
+  g_warn_if_reached ();
+
+  return 0;
+}
+
+static gint
+get_window_shadow_dy (GdkWindow  *window,
+                      GdkGravity  window_anchor)
+{
+  switch (window_anchor)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_NORTH:
+    case GDK_GRAVITY_NORTH_EAST:
+      return -window->shadow_top;
+
+    case GDK_GRAVITY_WEST:
+    case GDK_GRAVITY_CENTER:
+    case GDK_GRAVITY_EAST:
+      return (window->shadow_bottom - window->shadow_top) / 2;
+
+    case GDK_GRAVITY_SOUTH_WEST:
+    case GDK_GRAVITY_SOUTH:
+    case GDK_GRAVITY_SOUTH_EAST:
+      return window->shadow_bottom;
+    }
+
+  g_warn_if_reached ();
+
+  return 0;
 }
 
 static void
@@ -920,18 +1000,16 @@ gdk_mir_window_impl_move_to_rect (GdkWindow          *window,
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
-  impl->edge = get_edge_for_anchors (rect_anchor, window_anchor, anchor_hints);
-  get_rect_for_edge (&impl->rect, rect, impl->edge, window);
   impl->has_rect = TRUE;
+  impl->rect = *rect;
+  impl->rect_anchor = get_mir_placement_gravity (rect_anchor);
+  impl->window_anchor = get_mir_placement_gravity (window_anchor);
+  impl->anchor_hints = get_mir_placement_hints (anchor_hints);
+  impl->rect_anchor_dx = rect_anchor_dx + get_window_shadow_dx (window, window_anchor);
+  impl->rect_anchor_dy = rect_anchor_dy + get_window_shadow_dy (window, window_anchor);
 
-  ensure_no_surface (window);
-
-  g_signal_emit_by_name (window,
-                         "moved-to-rect",
-                         NULL,
-                         NULL,
-                         FALSE,
-                         FALSE);
+  if (impl->surface && !impl->pending_spec_update)
+    update_surface_spec (window);
 }
 
 static void
