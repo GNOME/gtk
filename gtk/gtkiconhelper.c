@@ -26,6 +26,7 @@
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransientnodeprivate.h"
@@ -37,7 +38,6 @@
 struct _GtkIconHelperPrivate {
   GtkImageDefinition *def;
 
-  GtkIconSize icon_size;
   gint pixel_size;
 
   guint use_fallback : 1;
@@ -212,7 +212,6 @@ gtk_icon_helper_init (GtkIconHelper *self)
 
   self->priv->def = gtk_image_definition_new_empty ();
 
-  self->priv->icon_size = GTK_ICON_SIZE_INHERIT;
   self->priv->pixel_size = -1;
   self->priv->rendered_surface_is_symbolic = FALSE;
 }
@@ -228,17 +227,10 @@ ensure_icon_size (GtkIconHelper *self,
     {
       width = height = self->priv->pixel_size;
     }
-  else if (!gtk_icon_size_lookup (self->priv->icon_size, &width, &height))
+  else
     {
-      if (self->priv->icon_size == GTK_ICON_SIZE_INHERIT)
-        {
-          width = height = 0;
-        }
-      else
-        {
-          g_warning ("Invalid icon size %d", self->priv->icon_size);
-          width = height = 24;
-        }
+      GtkCssStyle *style = gtk_css_node_get_style (gtk_css_gadget_get_node (GTK_CSS_GADGET (self)));
+      width = height = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
     }
 
   *width_out = width;
@@ -333,8 +325,7 @@ get_pixbuf_size (GtkIconHelper   *self,
   scale_pixmap = FALSE;
 
   if (self->priv->force_scale_pixbuf &&
-      (self->priv->pixel_size != -1 ||
-       self->priv->icon_size != GTK_ICON_SIZE_INHERIT))
+      self->priv->pixel_size != -1)
     {
       ensure_icon_size (self, &width, &height);
 
@@ -644,7 +635,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
         {
           get_surface_size (self, self->priv->rendered_surface, &width, &height);
         }
-      else if (self->priv->icon_size != GTK_ICON_SIZE_INHERIT)
+      else
         {
           ensure_icon_size (self, &width, &height);
         }
@@ -702,19 +693,6 @@ _gtk_icon_helper_set_surface (GtkIconHelper *self,
 }
 
 gboolean
-_gtk_icon_helper_set_icon_size (GtkIconHelper *self,
-                                GtkIconSize    icon_size)
-{
-  if (self->priv->icon_size != icon_size)
-    {
-      self->priv->icon_size = icon_size;
-      gtk_icon_helper_invalidate (self);
-      return TRUE;
-    }
-  return FALSE;
-}
-
-gboolean
 _gtk_icon_helper_set_pixel_size (GtkIconHelper *self,
                                  gint           pixel_size)
 {
@@ -750,12 +728,6 @@ gboolean
 _gtk_icon_helper_get_use_fallback (GtkIconHelper *self)
 {
   return self->priv->use_fallback;
-}
-
-GtkIconSize
-_gtk_icon_helper_get_icon_size (GtkIconHelper *self)
-{
-  return self->priv->icon_size;
 }
 
 gint
@@ -916,3 +888,26 @@ _gtk_icon_helper_set_pixbuf_scale (GtkIconHelper *self,
       break;
   }
 }
+
+void
+gtk_icon_size_set_style_classes (GtkCssNode  *cssnode,
+                                 GtkIconSize  icon_size)
+{
+  struct {
+    GtkIconSize icon_size;
+    const char *class_name;
+  } class_names[] = {
+    { GTK_ICON_SIZE_NORMAL, "normal-icons" },
+    { GTK_ICON_SIZE_LARGE, "large-icons" }
+  };
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (class_names); i++)
+    {
+      if (icon_size == class_names[i].icon_size)
+        gtk_css_node_add_class (cssnode, g_quark_from_string (class_names[i].class_name));
+      else
+        gtk_css_node_remove_class (cssnode, g_quark_from_string (class_names[i].class_name));
+    }
+}
+

@@ -47,6 +47,7 @@ $button_transition: all 200ms $ease-out-quad;
 .background {
   color: $fg_color;
   background-color: $bg_color;
+  -gtk-icon-size: 16px;
 
   &:backdrop {
     color: $backdrop_fg_color;
@@ -54,6 +55,14 @@ $button_transition: all 200ms $ease-out-quad;
     text-shadow: none;
     -gtk-icon-shadow: none;
   }
+}
+
+.normal-icons {
+  -gtk-icon-size: 16px;
+}
+
+.large-icons {
+  -gtk-icon-size: 32px;
 }
 
 /*

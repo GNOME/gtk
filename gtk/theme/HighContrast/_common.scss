@@ -44,6 +44,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 .background {
     color: $fg_color;
     background-color: $bg_color;
+    -gtk-icon-size: 16px;
 }
 
 .background:backdrop {
@@ -86,6 +87,14 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     background-color: $selected_bg_color;
     color: $selected_fg_color;
   }
+}
+
+.normal-icons {
+  -gtk-icon-size: 16px;
+}
+
+.large-icons {
+  -gtk-icon-size: 32px;
 }
 
 .view {

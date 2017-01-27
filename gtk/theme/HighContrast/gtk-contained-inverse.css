@@ -53,7 +53,8 @@
  ***************/
 .background {
   color: #fff;
-  background-color: #000; }
+  background-color: #000;
+  -gtk-icon-size: 16px; }
 
 .background:backdrop {
   text-shadow: none;
@@ -85,6 +86,12 @@
   .gtkstyle-fallback:selected {
     background-color: #ddd;
     color: #000; }
+
+.normal-icons {
+  -gtk-icon-size: 16px; }
+
+.large-icons {
+  -gtk-icon-size: 32px; }
 
 .view, textview text, iconview {
   color: #fff;

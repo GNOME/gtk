@@ -20,12 +20,19 @@
  ***************/
 .background {
   color: #eeeeec;
-  background-color: #33393b; }
+  background-color: #33393b;
+  -gtk-icon-size: 16px; }
   .background:backdrop {
     color: #919494;
     background-color: #33393b;
     text-shadow: none;
     -gtk-icon-shadow: none; }
+
+.normal-icons {
+  -gtk-icon-size: 16px; }
+
+.large-icons {
+  -gtk-icon-size: 32px; }
 
 /*
    These wildcard seems unavoidable, need to investigate.
@@ -2965,19 +2972,19 @@ radio {
 check {
   border-radius: 3px; }
   check:checked {
-    -gtk-icon-source: image(-gtk-recolor(url("assets/check-symbolic.svg")), -gtk-recolor(url("assets/check-symbolic.symbolic.png"))); }
+    -gtk-icon-source: -gtk-recolor(url("assets/check-symbolic.symbolic.png")); }
   check:indeterminate {
-    -gtk-icon-source: image(-gtk-recolor(url("assets/dash-symbolic.svg")), -gtk-recolor(url("assets/dash-symbolic.symbolic.png"))); }
+    -gtk-icon-source: -gtk-recolor(url("assets/dash-symbolic.symbolic.png")); }
 
 treeview.view radio:selected:focus, treeview.view radio:selected,
 radio {
   border-radius: 100%; }
   treeview.view radio:checked:selected,
   radio:checked {
-    -gtk-icon-source: image(-gtk-recolor(url("assets/bullet-symbolic.svg")), -gtk-recolor(url("assets/bullet-symbolic.symbolic.png"))); }
+    -gtk-icon-source: -gtk-recolor(url("assets/bullet-symbolic.symbolic.png")); }
   treeview.view radio:indeterminate:selected,
   radio:indeterminate {
-    -gtk-icon-source: image(-gtk-recolor(url("assets/dash-symbolic.svg")), -gtk-recolor(url("assets/dash-symbolic.symbolic.png"))); }
+    -gtk-icon-source: -gtk-recolor(url("assets/dash-symbolic.symbolic.png")); }
 
 radio:not(:indeterminate):not(:checked):active:not(:backdrop) {
   -gtk-icon-transform: scale(0); }
