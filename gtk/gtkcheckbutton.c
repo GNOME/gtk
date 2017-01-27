@@ -63,7 +63,7 @@
  * ╰── <child>
  * ]|
  *
- * A GtkCheckButton with indicator (see gtk_toggle_button_set_mode()) has a
+ * A GtkCheckButton with indicator (see gtk_check_button_set_draw_indicator()) has a
  * main CSS node with name checkbutton and a subnode with name check.
  *
  * |[<!-- language="plain" -->
@@ -86,9 +86,20 @@ static void gtk_check_button_snapshot            (GtkWidget           *widget,
 typedef struct {
   GtkCssGadget *gadget;
   GtkCssGadget *indicator_gadget;
+
+  guint draw_indicator : 1;
 } GtkCheckButtonPrivate;
 
+enum {
+  PROP_0,
+  PROP_DRAW_INDICATOR,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCheckButton, gtk_check_button, GTK_TYPE_TOGGLE_BUTTON)
+
 
 static void
 gtk_check_button_update_node_state (GtkWidget *widget)
@@ -186,7 +197,7 @@ gtk_check_button_measure (GtkWidget      *widget,
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
   GtkCssGadget *gadget;
 
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
+  if (priv->draw_indicator)
     gadget = priv->gadget;
   else
     gadget = GTK_BUTTON (widget)->priv->gadget;
@@ -199,6 +210,42 @@ gtk_check_button_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_check_button_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  switch (prop_id)
+    {
+      case PROP_DRAW_INDICATOR:
+        gtk_check_button_set_draw_indicator (GTK_CHECK_BUTTON (object),
+                                             g_value_get_boolean (value));
+
+      break;
+      default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_check_button_get_property (GObject      *object,
+                               guint         prop_id,
+                               GValue       *value,
+                               GParamSpec   *pspec)
+{
+  switch (prop_id)
+    {
+      case PROP_DRAW_INDICATOR:
+        g_value_set_boolean (value, gtk_check_button_get_draw_indicator (GTK_CHECK_BUTTON (object)));
+      break;
+      default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -206,6 +253,8 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
   object_class->finalize = gtk_check_button_finalize;
+  object_class->set_property = gtk_check_button_set_property;
+  object_class->get_property = gtk_check_button_get_property;
 
   widget_class->measure = gtk_check_button_measure;
   widget_class->size_allocate = gtk_check_button_size_allocate;
@@ -216,32 +265,38 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   container_class->add = gtk_check_button_add;
   container_class->remove = gtk_check_button_remove;
 
+  props[PROP_DRAW_INDICATOR] =
+      g_param_spec_boolean ("draw-indicator",
+                            P_("Draw Indicator"),
+                            P_("If the indicator part of the button is displayed"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
   gtk_widget_class_set_css_name (widget_class, "checkbutton");
 }
 
 static void
-draw_indicator_changed (GObject    *object,
-                        GParamSpec *pspec,
-                        gpointer    user_data)
+draw_indicator_changed (GtkCheckButton *check_button)
 {
-  GtkButton *button = GTK_BUTTON (object);
-  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (button));
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
   GtkCssNode *widget_node;
   GtkCssNode *indicator_node;
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (button));
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (check_button));
   indicator_node = gtk_css_gadget_get_node (priv->indicator_gadget);
 
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (button)))
+  if (priv->draw_indicator)
     {
       gtk_css_node_set_visible (indicator_node, TRUE);
-      if (GTK_IS_RADIO_BUTTON (button))
+      if (GTK_IS_RADIO_BUTTON (check_button))
         {
           gtk_css_node_remove_class (widget_node, g_quark_from_static_string ("radio"));
           gtk_css_node_set_name (widget_node, I_("radiobutton"));
         }
-      else if (GTK_IS_CHECK_BUTTON (button))
+      else if (GTK_IS_CHECK_BUTTON (check_button))
         {
           gtk_css_node_remove_class (widget_node, g_quark_from_static_string ("check"));
           gtk_css_node_set_name (widget_node, I_("checkbutton"));
@@ -250,12 +305,12 @@ draw_indicator_changed (GObject    *object,
   else
     {
       gtk_css_node_set_visible (indicator_node, FALSE);
-      if (GTK_IS_RADIO_BUTTON (button))
+      if (GTK_IS_RADIO_BUTTON (check_button))
         {
           gtk_css_node_add_class (widget_node, g_quark_from_static_string ("radio"));
           gtk_css_node_set_name (widget_node, I_("button"));
         }
-      else if (GTK_IS_CHECK_BUTTON (button))
+      else if (GTK_IS_CHECK_BUTTON (check_button))
         {
           gtk_css_node_add_class (widget_node, g_quark_from_static_string ("check"));
           gtk_css_node_set_name (widget_node, I_("button"));
@@ -269,9 +324,9 @@ gtk_check_button_init (GtkCheckButton *check_button)
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
   GtkCssNode *widget_node;
 
+  priv->draw_indicator = TRUE;
+
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
-  g_signal_connect (check_button, "notify::draw-indicator", G_CALLBACK (draw_indicator_changed), NULL);
-  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (check_button), TRUE);
 
   gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (check_button)), "toggle");
 
@@ -347,7 +402,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
   PangoContext *pango_context;
   PangoFontMetrics *metrics;
 
-  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
+  if (priv->draw_indicator)
     gadget = priv->gadget;
   else
     gadget = button->priv->gadget;
@@ -387,7 +442,7 @@ gtk_check_button_snapshot (GtkWidget   *widget,
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
 
-  if (!gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
+  if (!priv->draw_indicator)
     GTK_WIDGET_CLASS (gtk_check_button_parent_class)->snapshot (widget, snapshot);
   else
     gtk_css_gadget_snapshot (priv->gadget, snapshot);
@@ -399,4 +454,50 @@ gtk_check_button_get_indicator_node (GtkCheckButton *check_button)
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
 
   return gtk_css_gadget_get_node (priv->indicator_gadget);
+}
+
+/**
+ * gtk_check_button_set_draw_indicator:
+ * @check_button: a #GtkCheckButton
+ * @draw_indicator: Whether or not to draw the indicator part of the button
+ *
+ * Sets whether the indicator part of the button is drawn. This is important for
+ * cases where the check button should have the functinality of a check button,
+ * but the visuals of a regular button, like in a #GtkStackSwitcher.
+ */
+void
+gtk_check_button_set_draw_indicator (GtkCheckButton *check_button,
+                                     gboolean        draw_indicator)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+
+  g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
+
+  draw_indicator = !!draw_indicator;
+
+  if (draw_indicator != priv->draw_indicator)
+    {
+      priv->draw_indicator = draw_indicator;
+      draw_indicator_changed (check_button);
+      gtk_widget_queue_resize (GTK_WIDGET (check_button));
+      g_object_notify_by_pspec (G_OBJECT (check_button), props[PROP_DRAW_INDICATOR]);
+    }
+}
+
+/**
+ * gtk_check_button_get_draw_indicator:
+ * @check_button: a #GtkCheckButton
+ *
+ * Returns Whether or not the indicator part of the button gets drawn.
+ *
+ * Returns: The value of the GtkCheckButton:draw-indicator property.
+ */
+gboolean
+gtk_check_button_get_draw_indicator (GtkCheckButton *check_button)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+
+  g_return_val_if_fail (GTK_IS_CHECK_BUTTON (check_button), FALSE);
+
+  return priv->draw_indicator;
 }

@@ -80,7 +80,7 @@
  * ╰── <child>
  * ]|
  *
- * A GtkRadioButton with indicator (see gtk_toggle_button_set_mode()) has a
+ * A GtkRadioButton with indicator (see gtk_check_button_set_draw_indicator())) has a
  * main CSS node with name radiobutton and a subnode with name radio.
  *
  * |[<!-- language="plain" -->
@@ -631,7 +631,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
   /* Radio buttons with draw_indicator unset focus "normally", since
    * they look like buttons to the user.
    */
-  if (!gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
+  if (!gtk_check_button_get_draw_indicator (GTK_CHECK_BUTTON (widget)))
     return GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->focus (widget, direction);
 
   if (gtk_widget_is_focus (widget))

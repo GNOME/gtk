@@ -76,10 +76,6 @@
  *    text = "Hi, i’m a toggle button.";
  *    toggle1 = gtk_toggle_button_new_with_label (text);
  *
- *    // Makes this toggle button invisible
- *    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle1),
- *                                TRUE);
- *
  *    g_signal_connect (toggle1, "toggled",
  *                      G_CALLBACK (output_state),
  *                      NULL);
@@ -88,8 +84,6 @@
  *
  *    text = "Hi, i’m a toggle button.";
  *    toggle2 = gtk_toggle_button_new_with_label (text);
- *    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle2),
- *                                FALSE);
  *    g_signal_connect (toggle2, "toggled",
  *                      G_CALLBACK (output_state),
  *                      NULL);
@@ -104,7 +98,6 @@
 struct _GtkToggleButtonPrivate
 {
   guint active         : 1;
-  guint draw_indicator : 1;
   guint inconsistent   : 1;
 };
 
@@ -117,7 +110,6 @@ enum {
   PROP_0,
   PROP_ACTIVE,
   PROP_INCONSISTENT,
-  PROP_DRAW_INDICATOR,
   NUM_PROPERTIES
 };
 
@@ -175,13 +167,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  toggle_button_props[PROP_DRAW_INDICATOR] =
-      g_param_spec_boolean ("draw-indicator",
-                            P_("Draw Indicator"),
-                            P_("If the toggle part of the button is displayed"),
-                            FALSE,
-                            GTK_PARAM_READWRITE);
-
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, toggle_button_props);
 
   /**
@@ -211,7 +196,6 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
 
   toggle_button->priv = gtk_toggle_button_get_instance_private (toggle_button);
   toggle_button->priv->active = FALSE;
-  toggle_button->priv->draw_indicator = FALSE;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (toggle_button));
   gtk_style_context_add_class (context, "toggle");
@@ -283,9 +267,6 @@ gtk_toggle_button_set_property (GObject      *object,
     case PROP_INCONSISTENT:
       gtk_toggle_button_set_inconsistent (tb, g_value_get_boolean (value));
       break;
-    case PROP_DRAW_INDICATOR:
-      gtk_toggle_button_set_mode (tb, g_value_get_boolean (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -309,71 +290,10 @@ gtk_toggle_button_get_property (GObject      *object,
     case PROP_INCONSISTENT:
       g_value_set_boolean (value, priv->inconsistent);
       break;
-    case PROP_DRAW_INDICATOR:
-      g_value_set_boolean (value, priv->draw_indicator);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-/**
- * gtk_toggle_button_set_mode:
- * @toggle_button: a #GtkToggleButton
- * @draw_indicator: if %TRUE, draw the button as a separate indicator
- * and label; if %FALSE, draw the button like a normal button
- *
- * Sets whether the button is displayed as a separate indicator and label.
- * You can call this function on a checkbutton or a radiobutton with
- * @draw_indicator = %FALSE to make the button look like a normal button.
- *
- * This can be used to create linked strip of buttons that work like
- * a #GtkStackSwitcher.
- *
- * This function only affects instances of classes like #GtkCheckButton
- * and #GtkRadioButton that derive from #GtkToggleButton,
- * not instances of #GtkToggleButton itself.
- */
-void
-gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
-			    gboolean         draw_indicator)
-{
-  GtkToggleButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
-
-  priv = toggle_button->priv;
-
-  draw_indicator = draw_indicator ? TRUE : FALSE;
-
-  if (priv->draw_indicator != draw_indicator)
-    {
-      priv->draw_indicator = draw_indicator;
-
-      if (gtk_widget_get_visible (GTK_WIDGET (toggle_button)))
-	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
-
-      g_object_notify_by_pspec (G_OBJECT (toggle_button), toggle_button_props[PROP_DRAW_INDICATOR]);
-    }
-}
-
-/**
- * gtk_toggle_button_get_mode:
- * @toggle_button: a #GtkToggleButton
- *
- * Retrieves whether the button is displayed as a separate indicator
- * and label. See gtk_toggle_button_set_mode().
- *
- * Returns: %TRUE if the togglebutton is drawn as a separate indicator
- *   and label.
- **/
-gboolean
-gtk_toggle_button_get_mode (GtkToggleButton *toggle_button)
-{
-  g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button), FALSE);
-
-  return toggle_button->priv->draw_indicator;
 }
 
 /**

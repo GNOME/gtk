@@ -78,11 +78,6 @@ GtkWidget* gtk_toggle_button_new_with_label    (const gchar     *label);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_toggle_button_new_with_mnemonic (const gchar     *label);
 GDK_AVAILABLE_IN_ALL
-void       gtk_toggle_button_set_mode          (GtkToggleButton *toggle_button,
-                                                gboolean         draw_indicator);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_toggle_button_get_mode          (GtkToggleButton *toggle_button);
-GDK_AVAILABLE_IN_ALL
 void       gtk_toggle_button_set_active        (GtkToggleButton *toggle_button,
                                                 gboolean         is_active);
 GDK_AVAILABLE_IN_ALL

@@ -626,20 +626,20 @@ create_radio_buttons (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE);
 
       button = gtk_radio_button_new_with_label (NULL, "button4");
-      gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
+      gtk_check_button_set_draw_indicator (GTK_CHECK_BUTTON (button), FALSE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
 
       button = gtk_radio_button_new_with_label (
 	         gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button5");
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-      gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
+      gtk_check_button_set_draw_indicator (GTK_CHECK_BUTTON (button), FALSE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
 
       button = gtk_radio_button_new_with_label (
                  gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "button6");
-      gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
+      gtk_check_button_set_draw_indicator (GTK_CHECK_BUTTON (button), FALSE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);

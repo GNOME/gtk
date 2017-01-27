@@ -360,7 +360,7 @@ add_child (GtkWidget        *widget,
   button = gtk_radio_button_new (NULL);
 
   gtk_widget_set_focus_on_click (button, FALSE);
-  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
+  gtk_check_button_set_draw_indicator (GTK_CHECK_BUTTON (button), FALSE);
 
   update_button (self, widget, button);
 

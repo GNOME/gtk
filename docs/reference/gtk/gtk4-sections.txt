@@ -565,6 +565,8 @@ GtkCheckButton
 gtk_check_button_new
 gtk_check_button_new_with_label
 gtk_check_button_new_with_mnemonic
+gtk_check_button_get_draw_indicator
+gtk_check_button_set_draw_indicator
 <SUBSECTION Standard>
 GTK_CHECK_BUTTON
 GTK_IS_CHECK_BUTTON
@@ -3188,8 +3190,6 @@ GtkToggleButton
 gtk_toggle_button_new
 gtk_toggle_button_new_with_label
 gtk_toggle_button_new_with_mnemonic
-gtk_toggle_button_set_mode
-gtk_toggle_button_get_mode
 gtk_toggle_button_toggled
 gtk_toggle_button_get_active
 gtk_toggle_button_set_active
