@@ -165,7 +165,6 @@
       <object class="GtkToolbar">
         <property name="visible">1</property>
         <property name="hexpand">1</property>
-        <property name="icon_size">1</property>
         <property name="toolbar-style">icons</property>
         <style>
           <class name="inline-toolbar"/>
