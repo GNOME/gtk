@@ -485,14 +485,6 @@ free_object_info (ObjectInfo *info)
 }
 
 static void
-free_menu_info (MenuInfo *info)
-{
-  g_free (info->id);
-  g_hash_table_unref (info->objects);
-  g_slice_free (MenuInfo, info);
-}
-
-static void
 parse_child (ParserData   *data,
              const gchar  *element_name,
              const gchar **names,
@@ -1214,9 +1206,6 @@ free_info (CommonInfo *info)
         break;
       case TAG_REQUIRES:
         free_requires_info ((RequiresInfo *)info, NULL);
-        break;
-      case TAG_MENU:
-        free_menu_info ((MenuInfo *)info);
         break;
       default:
         g_assert_not_reached ();
