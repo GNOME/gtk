@@ -5425,10 +5425,10 @@ cups_printer_get_options (GtkPrinter           *printer,
         "topsecret",
         "unclassified"
       };
-      /* Translators, these strings are names for various 'standard' cover
-       * pages that the printing system may support.
-       */
       char *cover_display_default[] = {
+        /* Translators, these strings are names for various 'standard' cover
+         * pages that the printing system may support.
+         */
         NC_("cover page", "None"),
         NC_("cover page", "Classified"),
         NC_("cover page", "Confidential"),
@@ -5701,8 +5701,8 @@ cups_printer_get_options (GtkPrinter           *printer,
   cupsFreeOptions (num_opts, opts);
 
 #ifdef HAVE_COLORD
-  /* TRANSLATORS: this this the ICC color profile to use for this job */
   option = gtk_printer_option_new ("colord-profile",
+                                   /* TRANSLATORS: this this the ICC color profile to use for this job */
                                    C_("printer option", "Printer Profile"),
                                    GTK_PRINTER_OPTION_TYPE_INFO);
 

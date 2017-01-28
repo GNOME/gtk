@@ -4771,12 +4771,12 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
                                     0, 0, 0);
   days_ago = g_date_time_difference (now_date, date) / G_TIME_SPAN_DAY;
 
-  /* Translators: see g_date_time_format() for details on the format */
   if (days_ago < 1)
     {
       if (priv->show_time)
         format = "";
       else if (clock_format == CLOCK_FORMAT_24)
+        /* Translators: see g_date_time_format() for details on the format */
         format = _("%H:%M");
       else
         format = _("%l:%M %p");
