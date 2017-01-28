@@ -99,8 +99,6 @@ typedef struct
   gpointer sort_data;
   GDestroyNotify sort_data_destroy;
 
-  GtkIconTheme *icon_theme;
-  
   GtkWidget *recent_view;
   GtkListStore *recent_store;
   GtkTreeViewColumn *icon_column;
@@ -203,8 +201,6 @@ static void gtk_recent_chooser_default_show_all (GtkWidget *widget);
 
 static void set_current_filter        (GtkRecentChooserDefault *impl,
 				       GtkRecentFilter         *filter);
-
-static GtkIconTheme *get_icon_theme_for_widget (GtkWidget   *widget);
 
 static void reload_recent_items (GtkRecentChooserDefault *impl);
 static void chooser_set_model   (GtkRecentChooserDefault *impl);
@@ -350,8 +346,6 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
   priv->show_tips = FALSE;
   priv->select_multiple = FALSE;
   priv->local_only = TRUE;
-  
-  priv->icon_theme = NULL;
   
   priv->current_filter = NULL;
 
@@ -781,20 +775,13 @@ cleanup_after_load (gpointer user_data)
 static void
 reload_recent_items (GtkRecentChooserDefault *impl)
 {
-  GtkWidget *widget;
-
   /* reload is already in progress - do not disturb */
   if (impl->priv->load_id)
     return;
   
-  widget = GTK_WIDGET (impl);
-
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->priv->recent_view), NULL);
   gtk_list_store_clear (impl->priv->recent_store);
   
-  if (!impl->priv->icon_theme)
-    impl->priv->icon_theme = get_icon_theme_for_widget (widget);
-
   if (!impl->priv->limit_set)
     impl->priv->limit = DEFAULT_RECENT_FILES_LIMIT;
 
@@ -1277,15 +1264,6 @@ chooser_set_sort_type (GtkRecentChooserDefault *impl,
       reload_recent_items (impl);
       g_object_notify (G_OBJECT (impl), "sort-type");
     }
-}
-
-
-static GtkIconTheme *
-get_icon_theme_for_widget (GtkWidget *widget)
-{
-  return gtk_css_icon_theme_value_get_icon_theme
-    (_gtk_style_context_peek_property (gtk_widget_get_style_context (widget),
-                                       GTK_CSS_PROPERTY_ICON_THEME));
 }
 
 static void
