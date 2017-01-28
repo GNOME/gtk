@@ -205,8 +205,6 @@ static void set_current_filter        (GtkRecentChooserDefault *impl,
 				       GtkRecentFilter         *filter);
 
 static GtkIconTheme *get_icon_theme_for_widget (GtkWidget   *widget);
-static gint          get_icon_size_for_widget  (GtkWidget   *widget,
-						GtkIconSize  icon_size);
 
 static void reload_recent_items (GtkRecentChooserDefault *impl);
 static void chooser_set_model   (GtkRecentChooserDefault *impl);
@@ -1290,18 +1288,6 @@ get_icon_theme_for_widget (GtkWidget *widget)
                                        GTK_CSS_PROPERTY_ICON_THEME));
 }
 
-static gint
-get_icon_size_for_widget (GtkWidget   *widget,
-			  GtkIconSize  icon_size)
-{
-  gint width, height;
-
-  if (gtk_icon_size_lookup (icon_size, &width, &height))
-    return MAX (width, height);
-
-  return FALLBACK_ICON_SIZE;
-}
-
 static void
 recent_manager_changed_cb (GtkRecentManager *manager,
 			   gpointer          user_data)
@@ -1343,12 +1329,11 @@ filter_combo_changed_cb (GtkComboBox *combo_box,
   set_current_filter (impl, filter);
 }
 
-static GdkPixbuf *
-get_drag_pixbuf (GtkRecentChooserDefault *impl)
+static GIcon *
+get_drag_icon (GtkRecentChooserDefault *impl)
 {
   GtkRecentInfo *info;
-  GdkPixbuf *retval;
-  gint size;
+  GIcon *retval;
   
   g_assert (GTK_IS_RECENT_CHOOSER_DEFAULT (impl));
 
@@ -1356,9 +1341,7 @@ get_drag_pixbuf (GtkRecentChooserDefault *impl)
   if (!info)
     return NULL;
 
-  size = get_icon_size_for_widget (GTK_WIDGET (impl), GTK_ICON_SIZE_NORMAL);
-
-  retval = gtk_recent_info_get_icon (info, size);
+  retval = gtk_recent_info_get_gicon (info);
   gtk_recent_info_unref (info);
 
   return retval;
@@ -1370,13 +1353,13 @@ recent_view_drag_begin_cb (GtkWidget      *widget,
 			   gpointer        user_data)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
-  GdkPixbuf *pixbuf;
+  GIcon *icon;
 
-  pixbuf = get_drag_pixbuf (impl);
-  if (pixbuf)
+  icon = get_drag_icon (impl);
+  if (icon)
     {
-      gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
-      g_object_unref (pixbuf);
+      gtk_drag_set_icon_gicon (context, icon, 0, 0);
+      g_object_unref (icon);
     }
   else
     gtk_drag_set_icon_default (context);
