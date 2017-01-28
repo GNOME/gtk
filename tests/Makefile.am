@@ -133,7 +133,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testswitch			\
 	testcellarea			\
 	testswitch			\
-	testtreemenu			\
 	testtoplevelembed		\
 	testnoscreen			\
 	testtreepos			\
@@ -251,7 +250,6 @@ testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 testscrolledwindow_DEPENDENCIES = $(TEST_DEPS)
 testscrolledge_DEPENDENCIES = $(TEST_DEPS)
 testcellarea_DEPENDENCIES = $(TEST_DEPS)
-testtreemenu_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
@@ -404,9 +402,6 @@ testscrolledwindow_SOURCES =	\
 
 testcellarea_SOURCES =		\
 	testcellarea.c
-
-testtreemenu_SOURCES =		\
-	testtreemenu.c
 
 testoverlay_SOURCES =	\
 	testoverlay.c
