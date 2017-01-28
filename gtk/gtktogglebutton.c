@@ -98,7 +98,6 @@
 struct _GtkToggleButtonPrivate
 {
   guint active         : 1;
-  guint inconsistent   : 1;
 };
 
 enum {
@@ -109,7 +108,6 @@ enum {
 enum {
   PROP_0,
   PROP_ACTIVE,
-  PROP_INCONSISTENT,
   NUM_PROPERTIES
 };
 
@@ -157,13 +155,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
       g_param_spec_boolean ("active",
                             P_("Active"),
                             P_("If the toggle button should be pressed in"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  toggle_button_props[PROP_INCONSISTENT] =
-      g_param_spec_boolean ("inconsistent",
-                            P_("Inconsistent"),
-                            P_("If the toggle button is in an “in between” state"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -264,9 +255,6 @@ gtk_toggle_button_set_property (GObject      *object,
     case PROP_ACTIVE:
       gtk_toggle_button_set_active (tb, g_value_get_boolean (value));
       break;
-    case PROP_INCONSISTENT:
-      gtk_toggle_button_set_inconsistent (tb, g_value_get_boolean (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -286,9 +274,6 @@ gtk_toggle_button_get_property (GObject      *object,
     {
     case PROP_ACTIVE:
       g_value_set_boolean (value, priv->active);
-      break;
-    case PROP_INCONSISTENT:
-      g_value_set_boolean (value, priv->inconsistent);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -369,62 +354,6 @@ gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
   g_signal_emit (toggle_button, toggle_button_signals[TOGGLED], 0);
-}
-
-/**
- * gtk_toggle_button_set_inconsistent:
- * @toggle_button: a #GtkToggleButton
- * @setting: %TRUE if state is inconsistent
- *
- * If the user has selected a range of elements (such as some text or
- * spreadsheet cells) that are affected by a toggle button, and the
- * current values in that range are inconsistent, you may want to
- * display the toggle in an “in between” state. This function turns on
- * “in between” display.  Normally you would turn off the inconsistent
- * state again if the user toggles the toggle button. This has to be
- * done manually, gtk_toggle_button_set_inconsistent() only affects
- * visual appearance, it doesn’t affect the semantics of the button.
- * 
- **/
-void
-gtk_toggle_button_set_inconsistent (GtkToggleButton *toggle_button,
-                                    gboolean         setting)
-{
-  GtkToggleButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
-
-  priv = toggle_button->priv;
-
-  setting = setting != FALSE;
-
-  if (setting != priv->inconsistent)
-    {
-      priv->inconsistent = setting;
-
-      if (setting)
-        gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_INCONSISTENT, FALSE);
-      else
-        gtk_widget_unset_state_flags (GTK_WIDGET (toggle_button), GTK_STATE_FLAG_INCONSISTENT);
-
-      g_object_notify_by_pspec (G_OBJECT (toggle_button), toggle_button_props[PROP_INCONSISTENT]);
-    }
-}
-
-/**
- * gtk_toggle_button_get_inconsistent:
- * @toggle_button: a #GtkToggleButton
- * 
- * Gets the value set by gtk_toggle_button_set_inconsistent().
- * 
- * Returns: %TRUE if the button is displayed as inconsistent, %FALSE otherwise
- **/
-gboolean
-gtk_toggle_button_get_inconsistent (GtkToggleButton *toggle_button)
-{
-  g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button), FALSE);
-
-  return toggle_button->priv->inconsistent;
 }
 
 static gboolean

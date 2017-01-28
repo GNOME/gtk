@@ -421,10 +421,6 @@ create_toggle_buttons (GtkWidget *widget)
       button = gtk_toggle_button_new_with_label ("button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
 
-      button = gtk_toggle_button_new_with_label ("inconsistent");
-      gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
-
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE);
 
@@ -546,7 +542,7 @@ create_check_buttons (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
 
       button = gtk_check_button_new_with_label ("inconsistent");
-      gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
@@ -616,7 +612,7 @@ create_radio_buttons (GtkWidget *widget)
       button = gtk_radio_button_new_with_label (
                  gtk_radio_button_get_group (GTK_RADIO_BUTTON (button)),
 		 "inconsistent");
-      gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);

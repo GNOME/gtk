@@ -76,6 +76,11 @@ void       gtk_check_button_set_draw_indicator (GtkCheckButton *check_button,
                                                 gboolean        draw_indicator);
 GDK_AVAILABLE_IN_3_90
 gboolean   gtk_check_button_get_draw_indicator (GtkCheckButton *check_button);
+GDK_AVAILABLE_IN_3_90
+void       gtk_check_button_set_inconsistent   (GtkCheckButton *check_button,
+                                                gboolean        inconsistent);
+GDK_AVAILABLE_IN_3_90
+gboolean   gtk_check_button_get_inconsistent   (GtkCheckButton *check_button);
 
 G_END_DECLS
 

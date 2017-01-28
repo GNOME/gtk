@@ -56,22 +56,15 @@ gtk_toggle_button_accessible_notify_gtk (GObject    *obj,
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (obj);
   AtkObject *atk_obj;
   gboolean sensitive;
-  gboolean inconsistent;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (toggle_button));
   sensitive = gtk_widget_get_sensitive (GTK_WIDGET (toggle_button));
-  inconsistent = gtk_toggle_button_get_inconsistent (toggle_button);
 
-  if (strcmp (pspec->name, "inconsistent") == 0)
-    {
-      atk_object_notify_state_change (atk_obj, ATK_STATE_INDETERMINATE, inconsistent);
-      atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, (sensitive && !inconsistent));
-    }
-  else if (strcmp (pspec->name, "sensitive") == 0)
+  if (strcmp (pspec->name, "sensitive") == 0)
     {
       /* Need to override gailwidget behavior of notifying for ENABLED */
       atk_object_notify_state_change (atk_obj, ATK_STATE_SENSITIVE, sensitive);
-      atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, (sensitive && !inconsistent));
+      atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, sensitive);
     }
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (gtk_toggle_button_accessible_parent_class)->notify_gtk (obj, pspec);
@@ -93,12 +86,6 @@ gtk_toggle_button_accessible_ref_state_set (AtkObject *accessible)
 
   if (gtk_toggle_button_get_active (toggle_button))
     atk_state_set_add_state (state_set, ATK_STATE_CHECKED);
-
-  if (gtk_toggle_button_get_inconsistent (toggle_button))
-    {
-      atk_state_set_remove_state (state_set, ATK_STATE_ENABLED);
-      atk_state_set_add_state (state_set, ATK_STATE_INDETERMINATE);
-    }
 
   return state_set;
 }

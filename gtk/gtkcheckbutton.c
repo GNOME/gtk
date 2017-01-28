@@ -88,11 +88,13 @@ typedef struct {
   GtkCssGadget *indicator_gadget;
 
   guint draw_indicator : 1;
+  guint inconsistent   : 1;
 } GtkCheckButtonPrivate;
 
 enum {
   PROP_0,
   PROP_DRAW_INDICATOR,
+  PROP_INCONSISTENT,
   NUM_PROPERTIES
 };
 
@@ -222,6 +224,10 @@ gtk_check_button_set_property (GObject      *object,
                                              g_value_get_boolean (value));
 
       break;
+      case PROP_INCONSISTENT:
+        gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (object),
+                                           g_value_get_boolean (value));
+      break;
       default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -238,6 +244,9 @@ gtk_check_button_get_property (GObject      *object,
     {
       case PROP_DRAW_INDICATOR:
         g_value_set_boolean (value, gtk_check_button_get_draw_indicator (GTK_CHECK_BUTTON (object)));
+      break;
+      case PROP_INCONSISTENT:
+        g_value_set_boolean (value, gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (object)));
       break;
       default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -270,6 +279,13 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             P_("Draw Indicator"),
                             P_("If the indicator part of the button is displayed"),
                             TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_INCONSISTENT] =
+      g_param_spec_boolean ("inconsistent",
+                            P_("Inconsistent"),
+                            P_("If the check button is in an “in between” state"),
+                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
@@ -500,4 +516,55 @@ gtk_check_button_get_draw_indicator (GtkCheckButton *check_button)
   g_return_val_if_fail (GTK_IS_CHECK_BUTTON (check_button), FALSE);
 
   return priv->draw_indicator;
+}
+
+/**
+ * gtk_check_button_set_inconsistent:
+ * @check_button: a #GtkCheckButton
+ * @inconsistent: %TRUE if state is inconsistent
+ *
+ * If the user has selected a range of elements (such as some text or
+ * spreadsheet cells) that are affected by a check button, and the
+ * current values in that range are inconsistent, you may want to
+ * display the toggle in an "in between" state. Normally you would
+ * turn off the inconsistent state again if the user checks the
+ * check button. This has to be done manually,
+ * gtk_check_button_set_inconsistent only affects visual appearance,
+ * not the semantics of the button.
+ */
+void
+gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
+                                   gboolean        inconsistent)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+
+  g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
+
+  inconsistent = !!inconsistent;
+  if (inconsistent != priv->inconsistent)
+    {
+      if (inconsistent)
+        gtk_widget_set_state_flags (GTK_WIDGET (check_button), GTK_STATE_FLAG_INCONSISTENT, FALSE);
+      else
+        gtk_widget_unset_state_flags (GTK_WIDGET (check_button), GTK_STATE_FLAG_INCONSISTENT);
+
+      g_object_notify_by_pspec (G_OBJECT (check_button), props[PROP_INCONSISTENT]);
+    }
+}
+
+/**
+ * gtk_check_button_get_inconsistent:
+ * @check_button: a #GtkCheckButton
+ *
+ * Returns: %TRUE if @check_button is currently in an 'in between' state,
+ *   %FALSE otherwise.
+ */
+gboolean
+gtk_check_button_get_inconsistent (GtkCheckButton *check_button)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+
+  g_return_val_if_fail (GTK_IS_CHECK_BUTTON (check_button), FALSE);
+
+  return priv->inconsistent;
 }
