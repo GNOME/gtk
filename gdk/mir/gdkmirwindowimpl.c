@@ -1012,6 +1012,213 @@ gdk_mir_window_impl_move_to_rect (GdkWindow          *window,
     update_surface_spec (window);
 }
 
+static gint
+get_mir_placement_gravity_x (MirPlacementGravity gravity)
+{
+  switch (gravity)
+    {
+    case mir_placement_gravity_west:
+    case mir_placement_gravity_northwest:
+    case mir_placement_gravity_southwest:
+      return 0;
+
+    case mir_placement_gravity_center:
+    case mir_placement_gravity_north:
+    case mir_placement_gravity_south:
+      return 1;
+
+    case mir_placement_gravity_east:
+    case mir_placement_gravity_northeast:
+    case mir_placement_gravity_southeast:
+      return 2;
+    }
+
+  g_warn_if_reached ();
+
+  return 1;
+}
+
+static gint
+get_mir_placement_gravity_y (MirPlacementGravity gravity)
+{
+  switch (gravity)
+    {
+    case mir_placement_gravity_north:
+    case mir_placement_gravity_northwest:
+    case mir_placement_gravity_northeast:
+      return 0;
+
+    case mir_placement_gravity_center:
+    case mir_placement_gravity_west:
+    case mir_placement_gravity_east:
+      return 1;
+
+    case mir_placement_gravity_south:
+    case mir_placement_gravity_southwest:
+    case mir_placement_gravity_southeast:
+      return 2;
+    }
+
+  g_warn_if_reached ();
+
+  return 1;
+}
+
+static GdkRectangle
+get_unflipped_rect (const GdkRectangle  *rect,
+                    gint                 width,
+                    gint                 height,
+                    MirPlacementGravity  rect_anchor,
+                    MirPlacementGravity  window_anchor,
+                    gint                 rect_anchor_dx,
+                    gint                 rect_anchor_dy)
+{
+  GdkRectangle unflipped_rect;
+
+  unflipped_rect.x = rect->x;
+  unflipped_rect.x += rect->width * get_mir_placement_gravity_x (rect_anchor) / 2;
+  unflipped_rect.x -= width * get_mir_placement_gravity_x (window_anchor) / 2;
+  unflipped_rect.x += rect_anchor_dx;
+  unflipped_rect.y = rect->y;
+  unflipped_rect.y += rect->height * get_mir_placement_gravity_y (rect_anchor) / 2;
+  unflipped_rect.y -= height * get_mir_placement_gravity_y (window_anchor) / 2;
+  unflipped_rect.y += rect_anchor_dy;
+  unflipped_rect.width = width;
+  unflipped_rect.height = height;
+
+  return unflipped_rect;
+}
+
+static MirPlacementGravity
+get_opposite_mir_placement_gravity (MirPlacementGravity gravity)
+{
+  switch (gravity)
+    {
+    case mir_placement_gravity_center:
+      return mir_placement_gravity_center;
+    case mir_placement_gravity_west:
+      return mir_placement_gravity_east;
+    case mir_placement_gravity_east:
+      return mir_placement_gravity_west;
+    case mir_placement_gravity_north:
+      return mir_placement_gravity_south;
+    case mir_placement_gravity_south:
+      return mir_placement_gravity_north;
+    case mir_placement_gravity_northwest:
+      return mir_placement_gravity_southeast;
+    case mir_placement_gravity_northeast:
+      return mir_placement_gravity_southwest;
+    case mir_placement_gravity_southwest:
+      return mir_placement_gravity_northeast;
+    case mir_placement_gravity_southeast:
+      return mir_placement_gravity_northwest;
+    }
+
+  g_warn_if_reached ();
+
+  return gravity;
+}
+
+static gint
+get_anchor_x (const GdkRectangle  *rect,
+              MirPlacementGravity  anchor)
+{
+  return rect->x + rect->width * get_mir_placement_gravity_x (anchor) / 2;
+}
+
+static gint
+get_anchor_y (const GdkRectangle  *rect,
+              MirPlacementGravity  anchor)
+{
+  return rect->y + rect->height * get_mir_placement_gravity_y (anchor) / 2;
+}
+
+void
+_gdk_mir_window_set_final_rect (GdkWindow    *window,
+                                MirRectangle  rect)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  GdkRectangle best_rect;
+  GdkRectangle worst_rect;
+  GdkRectangle flipped_rect;
+  GdkRectangle final_rect;
+  gboolean flipped_x = FALSE;
+  gboolean flipped_y = FALSE;
+  gint test_position;
+  gint final_position;
+  gint unflipped_offset;
+  gint flipped_offset;
+
+  g_return_if_fail (impl->has_rect);
+
+  best_rect = get_unflipped_rect (&impl->rect,
+                                  window->width,
+                                  window->height,
+                                  impl->rect_anchor,
+                                  impl->window_anchor,
+                                  impl->rect_anchor_dx,
+                                  impl->rect_anchor_dy);
+
+  worst_rect = get_unflipped_rect (&impl->rect,
+                                   window->width,
+                                   window->height,
+                                   get_opposite_mir_placement_gravity (impl->rect_anchor),
+                                   get_opposite_mir_placement_gravity (impl->window_anchor),
+                                   -impl->rect_anchor_dx,
+                                   -impl->rect_anchor_dy);
+
+  flipped_rect.x = best_rect.x;
+  flipped_rect.y = best_rect.y;
+  flipped_rect.width = window->width;
+  flipped_rect.height = window->height;
+
+  final_rect.x = rect.left - (impl->mir_rect.left - impl->rect.x);
+  final_rect.y = rect.top - (impl->mir_rect.top - impl->rect.y);
+  final_rect.width = rect.width;
+  final_rect.height = rect.height;
+
+  if (impl->anchor_hints & mir_placement_hints_flip_x)
+    {
+      test_position = get_anchor_x (&best_rect, impl->window_anchor);
+      final_position = get_anchor_x (&final_rect, impl->window_anchor);
+      unflipped_offset = final_position - test_position;
+
+      test_position = get_anchor_x (&worst_rect, get_opposite_mir_placement_gravity (impl->window_anchor));
+      final_position = get_anchor_x (&final_rect, get_opposite_mir_placement_gravity (impl->window_anchor));
+      flipped_offset = final_position - test_position;
+
+      if (ABS (flipped_offset) < ABS (unflipped_offset))
+        {
+          flipped_rect.x = worst_rect.x;
+          flipped_x = TRUE;
+        }
+    }
+
+  if (impl->anchor_hints & mir_placement_hints_flip_y)
+    {
+      test_position = get_anchor_y (&best_rect, impl->window_anchor);
+      final_position = get_anchor_y (&final_rect, impl->window_anchor);
+      unflipped_offset = final_position - test_position;
+
+      test_position = get_anchor_y (&worst_rect, get_opposite_mir_placement_gravity (impl->window_anchor));
+      final_position = get_anchor_y (&final_rect, get_opposite_mir_placement_gravity (impl->window_anchor));
+      flipped_offset = final_position - test_position;
+
+      if (ABS (flipped_offset) < ABS (unflipped_offset))
+        {
+          flipped_rect.y = worst_rect.y;
+          flipped_y = TRUE;
+        }
+    }
+
+  g_signal_emit_by_name (window,
+                         "moved-to-rect",
+                         &flipped_rect,
+                         &final_rect,
+                         flipped_x,
+                         flipped_y);
+}
+
 static void
 gdk_mir_window_impl_set_background (GdkWindow       *window,
                                     cairo_pattern_t *pattern)

@@ -541,6 +541,13 @@ handle_surface_output_event (GdkWindow                  *window,
   _gdk_mir_window_set_surface_output (window, mir_surface_output_event_get_scale (event));
 }
 
+static void
+handle_surface_placement_event (GdkWindow                      *window,
+                                const MirSurfacePlacementEvent *event)
+{
+  _gdk_mir_window_set_final_rect (window, mir_surface_placement_get_relative_position (event));
+}
+
 typedef struct
 {
   GdkWindow *window;
@@ -599,6 +606,9 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
       break;
     case mir_event_type_surface_output:
       handle_surface_output_event (window, mir_event_get_surface_output_event (event));
+      break;
+    case mir_event_type_surface_placement:
+      handle_surface_placement_event (window, mir_event_get_surface_placement_event (event));
       break;
     default:
       g_warning ("Ignoring unknown Mir event %d", mir_event_get_type (event));
