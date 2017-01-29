@@ -1919,11 +1919,16 @@ gtk_stack_snapshot_crossfade (GtkWidget   *widget,
 
   if (priv->last_visible_node)
     {
-      graphene_matrix_t identity;
+      graphene_matrix_t translate;
 
-      graphene_matrix_init_identity (&identity);
+      graphene_matrix_init_translate (&translate,
+                                      &GRAPHENE_POINT3D_INIT (
+                                        priv->last_visible_surface_allocation.x,
+                                        priv->last_visible_surface_allocation.y,
+                                        0)
+                                      );
 
-      gtk_snapshot_push_transform (snapshot, &identity, "CrossFadeStart");
+      gtk_snapshot_push_transform (snapshot, &translate, "CrossFadeStart");
       gtk_snapshot_append_node (snapshot, priv->last_visible_node);
       gtk_snapshot_pop (snapshot);
     }
