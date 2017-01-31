@@ -58,7 +58,7 @@
  * be used instead of the #GtkEditable::changed signal.
  *
  * The #GtkSearchEntry::previous-match, #GtkSearchEntry::next-match
- * and #GtkSearchEntry::stop-search signals can be uesd to implement
+ * and #GtkSearchEntry::stop-search signals can be used to implement
  * moving between search results and ending the search.
  *
  * Often, GtkSearchEntry will be fed events by means of being
