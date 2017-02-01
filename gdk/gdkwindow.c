@@ -456,6 +456,12 @@ gdk_window_get_property (GObject    *object,
     }
 }
 
+static gboolean
+gdk_window_is_subsurface (GdkWindow *window)
+{
+   return window->window_type == GDK_WINDOW_SUBSURFACE;
+}
+
 static GdkWindow *
 gdk_window_get_impl_window (GdkWindow *window)
 {
@@ -1729,7 +1735,10 @@ gdk_window_get_parent (GdkWindow *window)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  return window->parent;
+  if (gdk_window_is_subsurface (window))
+    return window->transient_for;
+  else
+    return window->parent;
 }
 
 /**
