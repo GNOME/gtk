@@ -2655,25 +2655,11 @@ sanitize_anchor_rect (GdkWindow    *window,
 {
   gint original_width = rect->width;
   gint original_height = rect->height;
-  GdkWindow *parent = get_popup_parent (window);
 
   rect->width  = MAX (1, rect->width);
   rect->height = MAX (1, rect->height);
-  rect->x -= rect->width - original_width;
-  rect->y -= rect->height - original_height;
-
-  /* Make sure the anchor rectangle does not extend outside the window
-   * geometry of the parent surface.
-   */
-  if (parent)
-    {
-      GdkRectangle geometry;
-
-      /* The rectangle is relative to the parent window geometry */
-      gdk_wayland_window_get_window_geometry (parent, &geometry);
-      rect->x = CLAMP (rect->x, 0, geometry.width);
-      rect->y = CLAMP (rect->y, 0, geometry.height);
-    }
+  rect->x = MAX (rect->x + original_width - rect->width, 0);
+  rect->y = MAX (rect->y + original_height - rect->height, 0);
 }
 
 static void
