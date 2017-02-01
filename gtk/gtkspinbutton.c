@@ -761,6 +761,8 @@ button_pressed_cb (GtkGestureMultiPress *gesture,
 
   gtk_widget_grab_focus (GTK_WIDGET (spin_button));
 
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
   if (gtk_editable_get_editable (GTK_EDITABLE (spin_button)))
     {
       int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
@@ -856,6 +858,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->gadget),
                                 -1, priv->down_button);
   priv->down_click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (priv->down_button));
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->down_click_gesture), 0);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->down_click_gesture), FALSE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->down_click_gesture),
                                               GTK_PHASE_CAPTURE);
@@ -869,6 +872,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->gadget),
                                 -1, priv->up_button);
   priv->up_click_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (priv->up_button));
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->up_click_gesture), 0);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->up_click_gesture), FALSE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->up_click_gesture),
                                               GTK_PHASE_CAPTURE);
