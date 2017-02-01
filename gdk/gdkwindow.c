@@ -637,6 +637,12 @@ gdk_window_is_offscreen (GdkWindow *window)
   return window->window_type == GDK_WINDOW_OFFSCREEN;
 }
 
+static gboolean
+gdk_window_is_subsurface (GdkWindow *window)
+{
+   return window->window_type == GDK_WINDOW_SUBSURFACE;
+}
+
 static GdkWindow *
 gdk_window_get_impl_window (GdkWindow *window)
 {
@@ -2429,6 +2435,8 @@ gdk_window_get_effective_parent (GdkWindow *window)
 
   if (gdk_window_is_offscreen (window))
     return gdk_offscreen_window_get_embedder (window);
+  else if (gdk_window_is_subsurface (window))
+    return window->transient_for;
   else
     return window->parent;
 }
