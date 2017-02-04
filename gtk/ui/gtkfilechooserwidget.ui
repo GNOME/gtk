@@ -402,6 +402,7 @@
           <object class="GtkEntry" id="new_folder_name_entry">
             <property name="width-chars">25</property>
             <property name="activates-default">1</property>
+            <property name="hexpand">true</property>
             <signal name="changed" handler="new_folder_name_changed"/>
           </object>
           <packing>
