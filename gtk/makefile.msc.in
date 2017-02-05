@@ -58,7 +58,7 @@ gtkbuiltincache.h: gtk-update-icon-cache.exe
 GENERATED = \
 	gtktypebuiltins.h gtktypebuiltins.c \
 	gtkmarshalers.h gtkmarshalers.c \
-	gtk.def gtktypefuncs.c
+	gtk.def gtktypefuncs.inc
 
 all :						\
 	..\config.h				\
@@ -576,8 +576,8 @@ gtkmarshalers.h : gtkmarshalers.list makefile.msc
 gtkmarshalers.c : gtkmarshalers.list makefile.msc
 	$(GLIB)\gobject\glib-genmarshal --prefix=_gtk_marshal gtkmarshalers.list --body >gtkmarshalers.c
 
-gtktypefuncs.c : makefile.msc
-	echo /*none*/ > gtktypefuncs.c
+gtktypefuncs.inc : makefile.msc
+	echo /*none*/ > gtktypefuncs.inc
 
 gtk-win32.res : gtk-win32.rc
 	rc -DBUILDNUMBER=0 -r -fo gtk-win32.res gtk-win32.rc

@@ -181,7 +181,7 @@ gtk_test_register_all_types (void)
       GType *tp;
       all_registered_types = g_new0 (GType, max_gtk_types);
       tp = all_registered_types;
-#include <gtktypefuncs.c>
+#include <gtktypefuncs.inc>
       n_all_registered_types = tp - all_registered_types;
       g_assert (n_all_registered_types + 1 < max_gtk_types);
       *tp = 0;

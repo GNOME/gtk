@@ -684,11 +684,11 @@ gtkprivatetypebuiltins_c = custom_target(
 )
 
 gentypefuncs_prog = find_program('gentypefuncs.py')
-# Generate gtktypefuncs.c
+# Generate gtktypefuncs.inc
 typefuncs = custom_target(
   'typefuncs',
   depends: gdkenum_h,
-  output : 'gtktypefuncs.c',
+  output : 'gtktypefuncs.inc',
   input  : gdk_headers + gtk_public_headers + gtk_deprecated_headers + gtk_private_headers + [gtktypebuiltins_h] + [gdkenum_h],
   command: [gentypefuncs_prog, '@OUTPUT@', '@INPUT@'],
   install: false,
