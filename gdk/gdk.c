@@ -745,7 +745,10 @@ gdk_threads_add_timeout_seconds (guint       interval,
 const char *
 gdk_get_program_class (void)
 {
-  return gdk_progclass;
+  if (gdk_progclass)
+    return gdk_progclass;
+
+  return "GTK+ Application";
 }
 
 /**
