@@ -63,6 +63,8 @@
 
 struct _GtkColorButtonPrivate
 {
+  GtkWidget *button;
+
   GtkWidget *swatch;    /* Widget where we draw the color sample */
   GtkWidget *cs_dialog; /* Color selection dialog */
 
@@ -102,7 +104,8 @@ static void gtk_color_button_get_property  (GObject          *object,
                                             GParamSpec       *pspec);
 
 /* gtkbutton signals */
-static void gtk_color_button_clicked       (GtkButton        *button);
+static void gtk_color_button_clicked       (GtkButton        *button,
+                                            gpointer          user_data);
 
 /* source side drag signals */
 static void gtk_color_button_drag_begin    (GtkWidget        *widget,
@@ -132,24 +135,64 @@ static const GtkTargetEntry drop_types[] = { { (char *) "application/x-color", 0
 
 static void gtk_color_button_iface_init (GtkColorChooserInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkColorButton, gtk_color_button, GTK_TYPE_BUTTON,
+G_DEFINE_TYPE_WITH_CODE (GtkColorButton, gtk_color_button, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkColorButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_COLOR_CHOOSER,
                                                 gtk_color_button_iface_init))
 
 static void
+gtk_color_button_measure (GtkWidget       *widget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline)
+{
+  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
+
+  gtk_widget_measure (priv->button, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_color_button_snapshot (GtkWidget   *widget,
+                           GtkSnapshot *snapshot)
+{
+  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
+
+  gtk_widget_snapshot_child (widget, priv->button, snapshot);
+}
+
+static void
+gtk_color_button_size_allocate (GtkWidget     *widget,
+                                GtkAllocation *allocation)
+{
+  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
+
+  gtk_widget_size_allocate (priv->button, allocation);
+}
+
+static void
 gtk_color_button_class_init (GtkColorButtonClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkButtonClass *button_class;
+  GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  button_class = GTK_BUTTON_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
 
   gobject_class->get_property = gtk_color_button_get_property;
   gobject_class->set_property = gtk_color_button_set_property;
   gobject_class->finalize = gtk_color_button_finalize;
-  button_class->clicked = gtk_color_button_clicked;
+
+  widget_class->snapshot = gtk_color_button_snapshot;
+  widget_class->measure = gtk_color_button_measure;
+  widget_class->size_allocate = gtk_color_button_size_allocate;
   klass->color_set = NULL;
 
   /**
@@ -288,7 +331,7 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
 
 static void
 set_color_icon (GdkDragContext *context,
-                GdkRGBA        *rgba)
+                const GdkRGBA  *rgba)
 {
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -344,8 +387,14 @@ gtk_color_button_init (GtkColorButton *button)
   PangoRectangle rect;
   GtkStyleContext *context;
 
+  gtk_widget_set_has_window (GTK_WIDGET (button), FALSE);
+
   /* Create the widgets */
   priv = button->priv = gtk_color_button_get_instance_private (button);
+
+  priv->button = gtk_button_new ();
+  g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
+  gtk_widget_set_parent (priv->button, GTK_WIDGET (button));
 
   priv->swatch = gtk_color_swatch_new ();
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");
@@ -354,7 +403,7 @@ gtk_color_button_init (GtkColorButton *button)
 
   gtk_widget_set_size_request (priv->swatch, rect.width, rect.height);
 
-  gtk_container_add (GTK_CONTAINER (button), priv->swatch);
+  gtk_container_add (GTK_CONTAINER (priv->button), priv->swatch);
 
   button->priv->title = g_strdup (_("Pick a Color")); /* default title */
 
@@ -365,23 +414,23 @@ gtk_color_button_init (GtkColorButton *button)
   priv->rgba.alpha = 1;
   priv->use_alpha = FALSE;
 
-  gtk_drag_dest_set (GTK_WIDGET (button),
+  gtk_drag_dest_set (priv->button,
                      GTK_DEST_DEFAULT_MOTION |
                      GTK_DEST_DEFAULT_HIGHLIGHT |
                      GTK_DEST_DEFAULT_DROP,
                      drop_types, 1, GDK_ACTION_COPY);
-  gtk_drag_source_set (GTK_WIDGET (button),
+  gtk_drag_source_set (priv->button,
                        GDK_BUTTON1_MASK|GDK_BUTTON3_MASK,
                        drop_types, 1,
                        GDK_ACTION_COPY);
-  g_signal_connect (button, "drag-begin",
+  g_signal_connect (priv->button, "drag-begin",
                     G_CALLBACK (gtk_color_button_drag_begin), button);
-  g_signal_connect (button, "drag-data-received",
+  g_signal_connect (priv->button, "drag-data-received",
                     G_CALLBACK (gtk_color_button_drag_data_received), button);
-  g_signal_connect (button, "drag-data-get",
+  g_signal_connect (priv->button, "drag-data-get",
                     G_CALLBACK (gtk_color_button_drag_data_get), button);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  context = gtk_widget_get_style_context (GTK_WIDGET (priv->button));
   gtk_style_context_add_class (context, "color");
 }
 
@@ -395,6 +444,7 @@ gtk_color_button_finalize (GObject *object)
     gtk_widget_destroy (priv->cs_dialog);
 
   g_free (priv->title);
+  gtk_widget_unparent (priv->button);
 
   G_OBJECT_CLASS (gtk_color_button_parent_class)->finalize (object);
 }
@@ -506,9 +556,10 @@ ensure_dialog (GtkColorButton *button)
 
 
 static void
-gtk_color_button_clicked (GtkButton *b)
+gtk_color_button_clicked (GtkButton *b,
+                          gpointer   user_data)
 {
-  GtkColorButton *button = GTK_COLOR_BUTTON (b);
+  GtkColorButton *button = user_data;
   GtkColorButtonPrivate *priv = button->priv;
 
   /* if dialog already exists, make sure it's shown and raised */

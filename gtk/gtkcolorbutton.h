@@ -52,14 +52,14 @@ typedef struct _GtkColorButtonClass     GtkColorButtonClass;
 typedef struct _GtkColorButtonPrivate   GtkColorButtonPrivate;
 
 struct _GtkColorButton {
-  GtkButton button;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkColorButtonPrivate *priv;
 };
 
 struct _GtkColorButtonClass {
-  GtkButtonClass parent_class;
+  GtkWidgetClass parent_class;
 
   void (* color_set) (GtkColorButton *cp);
 
