@@ -761,6 +761,12 @@ tooltip_browse_mode_expired (gpointer data)
   tooltip->browse_mode_enabled = FALSE;
   tooltip->browse_mode_timeout_id = 0;
 
+  if (tooltip->timeout_id)
+    {
+      g_source_remove (tooltip->timeout_id);
+      tooltip->timeout_id = 0;
+    }
+
   /* destroy tooltip */
   display = gtk_widget_get_display (tooltip->window);
   g_object_set_qdata (G_OBJECT (display), quark_current_tooltip, NULL);
@@ -773,6 +779,12 @@ gtk_tooltip_display_closed (GdkDisplay *display,
 			    gboolean    was_error,
 			    GtkTooltip *tooltip)
 {
+  if (tooltip->timeout_id)
+    {
+      g_source_remove (tooltip->timeout_id);
+      tooltip->timeout_id = 0;
+    }
+
   g_object_set_qdata (G_OBJECT (display), quark_current_tooltip, NULL);
 }
 
