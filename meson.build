@@ -2,7 +2,6 @@ project('gtk+-3.0', 'c',
         version: '3.90.0',
         default_options: [
           'buildtype=debugoptimized',
-          'c_std=gnu89',
           'warning_level=1'
         ],
         license: 'LGPLv2.1+')
@@ -180,7 +179,7 @@ colord_dep     = dependency('colord', version: '>= 0.1.9', required: false)
 fontconfig_dep = dependency('fontconfig')
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: '>= 0.2.0')
-graphene_dep   = dependency('graphene-1.0')
+graphene_dep   = dependency('graphene-1.0', fallback : ['graphene', 'graphene_dep'])
 
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  '>= 1.9.91')
