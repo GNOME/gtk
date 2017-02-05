@@ -1272,9 +1272,10 @@ gtk_popover_measure (GtkWidget      *widget,
 
   if (child != NULL)
     {
+      int child_size = -1;
+
       if (for_size >= 0)
         {
-          int child_size;
           GdkRectangle child_rect;
 
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1287,14 +1288,9 @@ gtk_popover_measure (GtkWidget      *widget,
               gtk_popover_get_rect_for_size (popover, 0, for_size, &child_rect);
               child_size = child_rect.height;
             }
-
-          gtk_widget_measure (child, orientation, child_size, minimum, natural, NULL, NULL);
-
         }
-      else
-        {
-          gtk_widget_measure (child, orientation, -1, minimum, natural, NULL, NULL);
-        }
+
+      gtk_widget_measure (child, orientation, child_size, minimum, natural, NULL, NULL);
     }
 
   minimal_size = get_minimal_size (popover, orientation);
