@@ -2035,6 +2035,8 @@ _gdk_x11_window_drag_begin (GdkWindow *window,
 
   GDK_X11_DRAG_CONTEXT (context)->start_x = x_root;
   GDK_X11_DRAG_CONTEXT (context)->start_y = y_root;
+  GDK_X11_DRAG_CONTEXT (context)->last_x = x_root;
+  GDK_X11_DRAG_CONTEXT (context)->last_y = y_root;
 
   GDK_X11_DRAG_CONTEXT (context)->drag_window = create_drag_window (gdk_window_get_screen (window));
 
@@ -2179,6 +2181,19 @@ gdk_x11_drag_context_find_window (GdkDragContext  *context,
   return dest_window;
 }
 
+static void
+move_drag_window (GdkDragContext *context,
+                  guint           x_root,
+                  guint           y_root)
+{
+  GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
+
+  gdk_window_move (context_x11->drag_window,
+                   x_root - context_x11->hot_x,
+                   y_root - context_x11->hot_y);
+  gdk_window_raise (context_x11->drag_window);
+}
+
 static gboolean
 gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                                   GdkWindow      *dest_window,
@@ -2193,12 +2208,7 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
   GdkWindowImplX11 *impl;
 
   if (context_x11->drag_window)
-    {
-      gdk_window_move (context_x11->drag_window,
-                       x_root - context_x11->hot_x,
-                       y_root - context_x11->hot_y);
-      gdk_window_raise (context_x11->drag_window);
-    }
+    move_drag_window (context, x_root, y_root);
 
   context_x11->old_actions = context->actions;
   context->actions = possible_actions;
@@ -2549,6 +2559,12 @@ gdk_x11_drag_context_set_hotspot (GdkDragContext *context,
 
   x11_context->hot_x = hot_x;
   x11_context->hot_y = hot_y;
+
+  if (x11_context->grab_seat)
+    {
+      /* DnD is managed, update current position */
+      move_drag_window (context, x11_context->last_x, x11_context->last_y);
+    }
 }
 
 static double
@@ -2804,6 +2820,7 @@ gdk_x11_drag_context_manage_dnd (GdkDragContext *context,
   if (drag_context_grab (context))
     {
       x11_context->actions = actions;
+      move_drag_window (context, x11_context->start_x, x11_context->start_y);
       return TRUE;
     }
   else
