@@ -2492,21 +2492,16 @@ void
 gtk_window_set_focus (GtkWindow *window,
 		      GtkWidget *focus)
 {
-  GtkWindowPrivate *priv;
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *parent;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = window->priv;
 
   if (focus)
     {
       g_return_if_fail (GTK_IS_WIDGET (focus));
       g_return_if_fail (gtk_widget_get_can_focus (focus));
-    }
 
-  if (focus)
-    {
       if (!gtk_widget_get_visible (GTK_WIDGET (window)))
         priv->initial_focus = focus;
       else
