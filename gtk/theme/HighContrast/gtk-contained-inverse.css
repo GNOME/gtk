@@ -92,6 +92,9 @@
   .view:backdrop, textview text:backdrop, iconview:backdrop {
     color: #fff;
     background-color: #111; }
+  .view:disabled, textview text:disabled, iconview:disabled {
+    color: gray;
+    background-color: #070707; }
 
 .rubberband,
 rubberband,
