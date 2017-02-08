@@ -4735,9 +4735,11 @@ gtk_label_focus (GtkWidget        *widget,
                     }
                 }
             }
+
+          return TRUE;
         }
 
-      return TRUE;
+      return FALSE;
     }
 
   if (!info)
