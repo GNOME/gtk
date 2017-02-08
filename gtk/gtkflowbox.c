@@ -342,7 +342,7 @@ gtk_flow_box_child_focus (GtkWidget        *widget,
 
       return FALSE;
     }
-  else if (gtk_container_get_focus_child (GTK_CONTAINER (widget)) != NULL)
+  else if (gtk_widget_get_focus_child (widget) != NULL)
     {
       /* Child has focus, always navigate inside it first */
       if (gtk_widget_child_focus (child, direction))
@@ -3188,7 +3188,7 @@ gtk_flow_box_focus (GtkWidget        *widget,
       return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->focus (widget, direction);
     }
 
-  focus_child = gtk_container_get_focus_child (GTK_CONTAINER (box));
+  focus_child = gtk_widget_get_focus_child (widget);
   next_focus_child = NULL;
 
   if (focus_child != NULL)

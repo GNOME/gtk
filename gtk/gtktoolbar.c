@@ -1836,7 +1836,7 @@ gtk_toolbar_focus_home_or_end (GtkToolbar *toolbar,
     {
       GtkWidget *child = list->data;
 
-      if (gtk_container_get_focus_child (GTK_CONTAINER (toolbar)) == child)
+      if (gtk_widget_get_focus_child (GTK_WIDGET (toolbar)) == child)
 	break;
       
       if (gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
@@ -1856,13 +1856,12 @@ gtk_toolbar_move_focus (GtkWidget        *widget,
 			GtkDirectionType  dir)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkContainer *container = GTK_CONTAINER (toolbar);
   GtkWidget *focus_child;
   GList *list;
   gboolean try_focus = FALSE;
   GList *children;
 
-  focus_child = gtk_container_get_focus_child (container);
+  focus_child = gtk_widget_get_focus_child (widget);
 
   if (focus_child && gtk_widget_child_focus (focus_child, dir))
     return;
@@ -1899,7 +1898,7 @@ gtk_toolbar_focus (GtkWidget        *widget,
    * arrow keys or Ctrl TAB (both of which are handled by the
    * gtk_toolbar_move_focus() keybinding function.
    */
-  if (gtk_container_get_focus_child (GTK_CONTAINER (widget)))
+  if (gtk_widget_get_focus_child (widget))
     return FALSE;
 
   children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);

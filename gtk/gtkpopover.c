@@ -1511,7 +1511,7 @@ gtk_popover_focus (GtkWidget        *widget,
        */
       while (focus && focus != widget)
         {
-          gtk_container_set_focus_child (GTK_CONTAINER (focus), NULL);
+          gtk_widget_set_focus_child (focus, NULL);
           focus = gtk_widget_get_parent (focus);
         }
 

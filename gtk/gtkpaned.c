@@ -2449,7 +2449,7 @@ gtk_paned_set_focus_child (GtkContainer *container,
 	    if (GTK_IS_PANED (w))
 	      last_focus = w;
 
-          container_focus_child = gtk_container_get_focus_child (container);
+          container_focus_child = gtk_widget_get_focus_child (GTK_WIDGET (container));
           if (container_focus_child == priv->child1)
 	    gtk_paned_set_last_child1_focus (paned, last_focus);
 	  else if (container_focus_child == priv->child2)
@@ -2467,7 +2467,6 @@ gtk_paned_get_cycle_chain (GtkPaned          *paned,
 			   GList            **widgets)
 {
   GtkPanedPrivate *priv = paned->priv;
-  GtkContainer *container = GTK_CONTAINER (paned);
   GtkWidget *ancestor = NULL;
   GtkWidget *focus_child;
   GtkWidget *parent;
@@ -2504,7 +2503,7 @@ gtk_paned_get_cycle_chain (GtkPaned          *paned,
    * priv->last_child?_focus before priv->child?, both when we
    * are going forward and backward.
    */
-  focus_child = gtk_container_get_focus_child (container);
+  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (paned));
   if (direction == GTK_DIR_TAB_FORWARD)
     {
       if (focus_child == priv->child1)
@@ -2880,14 +2879,13 @@ gtk_paned_cycle_handle_focus (GtkPaned *paned,
     }
   else
     {
-      GtkContainer *container = GTK_CONTAINER (paned);
       GtkPaned *focus;
       GtkPaned *first;
       GtkWidget *toplevel;
       GtkWidget *focus_child;
 
       gtk_paned_find_neighbours (paned, &next, &prev);
-      focus_child = gtk_container_get_focus_child (container);
+      focus_child = gtk_widget_get_focus_child (GTK_WIDGET (paned));
 
       if (focus_child == priv->child1)
 	{

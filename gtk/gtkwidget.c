@@ -4011,11 +4011,8 @@ gtk_widget_unparent (GtkWidget *widget)
   if (_gtk_widget_is_toplevel (toplevel))
     _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
 
-  if (GTK_IS_CONTAINER (priv->parent))
-    {
-      if (gtk_container_get_focus_child (GTK_CONTAINER (priv->parent)) == widget)
-        gtk_container_set_focus_child (GTK_CONTAINER (priv->parent), NULL);
-    }
+  if (gtk_widget_get_focus_child (priv->parent) == widget)
+    gtk_widget_set_focus_child (priv->parent, NULL);
 
   if (_gtk_widget_is_drawable (priv->parent))
     gtk_widget_queue_draw_area (priv->parent,
@@ -7154,12 +7151,9 @@ reset_focus_recurse (GtkWidget *widget,
 {
   if (GTK_IS_CONTAINER (widget))
     {
-      GtkContainer *container;
+      gtk_widget_set_focus_child (widget, NULL);
 
-      container = GTK_CONTAINER (widget);
-      gtk_container_set_focus_child (container, NULL);
-
-      gtk_container_foreach (container,
+      gtk_container_foreach (GTK_CONTAINER (widget),
 			     reset_focus_recurse,
 			     NULL);
     }
@@ -15744,6 +15738,8 @@ void
 gtk_widget_set_focus_child (GtkWidget *widget,
                             GtkWidget *child)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (child != NULL)
@@ -15752,8 +15748,20 @@ gtk_widget_set_focus_child (GtkWidget *widget,
       g_return_if_fail (gtk_widget_get_parent (child) == widget);
     }
 
+  g_set_object (&priv->focus_child, child);
+
   if (GTK_IS_CONTAINER (widget))
     gtk_container_set_focus_child (GTK_CONTAINER (widget), child);
 
   /* TODO: ??? */
+}
+
+GtkWidget *
+gtk_widget_get_focus_child (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return priv->focus_child;
 }

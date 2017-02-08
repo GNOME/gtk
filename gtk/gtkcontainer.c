@@ -2114,10 +2114,9 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
         {
 
           focus_child = priv->focus_child;
-          while (GTK_IS_CONTAINER (focus_child) && gtk_container_get_focus_child (GTK_CONTAINER (focus_child)))
-            {
-              focus_child = gtk_container_get_focus_child (GTK_CONTAINER (focus_child));
-            }
+
+          while (gtk_widget_get_focus_child (focus_child))
+            focus_child = gtk_widget_get_focus_child (focus_child);
 
           gtk_widget_translate_coordinates (focus_child, priv->focus_child,
                                             0, 0, &x, &y);
@@ -2310,7 +2309,7 @@ find_old_focus (GtkContainer *container,
 
           parent = _gtk_widget_get_parent (widget);
 
-          if (parent && (gtk_container_get_focus_child (GTK_CONTAINER (parent)) != widget))
+          if (parent && (gtk_widget_get_focus_child (parent) != widget))
             goto next;
 
           widget = parent;

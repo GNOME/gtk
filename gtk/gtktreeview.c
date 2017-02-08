@@ -8294,7 +8294,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
   if (! tree_view->priv->headers_visible)
     return FALSE;
 
-  focus_child = gtk_container_get_focus_child (GTK_CONTAINER (tree_view));
+  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (tree_view));
 
   first_column = tree_view->priv->columns;
   while (first_column)
@@ -8491,13 +8491,12 @@ gtk_tree_view_focus (GtkWidget        *widget,
 		     GtkDirectionType  direction)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  GtkContainer *container = GTK_CONTAINER (widget);
   GtkWidget *focus_child;
 
   if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_can_focus (widget))
     return FALSE;
 
-  focus_child = gtk_container_get_focus_child (container);
+  focus_child = gtk_widget_get_focus_child (widget);
 
   gtk_tree_view_stop_editing (GTK_TREE_VIEW (widget), FALSE);
   /* Case 1.  Headers currently have focus. */

@@ -5959,13 +5959,10 @@ static gboolean
 gtk_text_view_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
 {
-  GtkContainer *container;
   gboolean result;
 
-  container = GTK_CONTAINER (widget);
-
   if (!gtk_widget_is_focus (widget) &&
-      gtk_container_get_focus_child (container) == NULL)
+      gtk_widget_get_focus_child (widget) == NULL)
     {
       if (gtk_widget_get_can_focus (widget))
         {

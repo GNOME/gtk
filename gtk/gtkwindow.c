@@ -7977,7 +7977,7 @@ gtk_window_focus (GtkWidget        *widget,
   priv = window->priv;
   bin = GTK_BIN (widget);
 
-  old_focus_child = gtk_container_get_focus_child (container);
+  old_focus_child = gtk_widget_get_focus_child (widget);
 
   /* We need a special implementation here to deal properly with wrapping
    * around in the tab chain without the danger of going into an
@@ -8003,7 +8003,7 @@ gtk_window_focus (GtkWidget        *widget,
       parent = _gtk_widget_get_parent (priv->focus_widget);
       while (parent)
 	{
-	  gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
+          gtk_widget_set_focus_child (parent, NULL);
 	  parent = _gtk_widget_get_parent (parent);
 	}
       
@@ -8042,7 +8042,7 @@ gtk_window_move_focus (GtkWidget        *widget,
 
   gtk_widget_child_focus (widget, dir);
 
-  if (! gtk_container_get_focus_child (GTK_CONTAINER (widget)))
+  if (!gtk_widget_get_focus_child (widget))
     gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 
@@ -8208,7 +8208,7 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   g_object_ref (widget);
 
   parent = _gtk_widget_get_parent (widget);
-  if (gtk_container_get_focus_child (GTK_CONTAINER (parent)) == widget)
+  if (gtk_widget_get_focus_child (parent) == widget)
     {
       child = priv->focus_widget;
       

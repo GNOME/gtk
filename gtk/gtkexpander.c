@@ -796,7 +796,7 @@ focus_current_site (GtkExpander      *expander,
 {
   GtkWidget *current_focus;
 
-  current_focus = gtk_container_get_focus_child (GTK_CONTAINER (expander));
+  current_focus = gtk_widget_get_focus_child (GTK_WIDGET (expander));
 
   if (!current_focus)
     return FALSE;
@@ -962,7 +962,7 @@ gtk_expander_focus (GtkWidget        *widget,
       FocusSite site = FOCUS_NONE;
 
       widget_is_focus = gtk_widget_is_focus (widget);
-      old_focus_child = gtk_container_get_focus_child (GTK_CONTAINER (widget));
+      old_focus_child = gtk_widget_get_focus_child (GTK_WIDGET (widget));
 
       if (old_focus_child && old_focus_child == expander->priv->label_widget)
         site = FOCUS_LABEL;

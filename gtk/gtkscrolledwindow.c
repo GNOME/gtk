@@ -3630,7 +3630,7 @@ gtk_scrolled_window_focus (GtkWidget        *widget,
   GtkWidget *child;
   gboolean had_focus_child;
 
-  had_focus_child = gtk_container_get_focus_child (GTK_CONTAINER (widget)) != NULL;
+  had_focus_child = gtk_widget_get_focus_child (widget) != NULL;
 
   if (priv->focus_out)
     {
