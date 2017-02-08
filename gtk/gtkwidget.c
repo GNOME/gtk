@@ -7159,71 +7159,68 @@ reset_focus_recurse (GtkWidget *widget,
 static void
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
-  if (gtk_widget_get_can_focus (focus_widget))
+  GtkWidget *toplevel;
+  GtkWidget *widget;
+
+  /* clear the current focus setting, break if the current widget
+   * is the focus widget's parent, since containers above that will
+   * be set by the next loop.
+   */
+  toplevel = _gtk_widget_get_toplevel (focus_widget);
+  if (_gtk_widget_is_toplevel (toplevel) && GTK_IS_WINDOW (toplevel))
     {
-      GtkWidget *toplevel;
-      GtkWidget *widget;
+      widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
 
-      /* clear the current focus setting, break if the current widget
-       * is the focus widget's parent, since containers above that will
-       * be set by the next loop.
-       */
-      toplevel = _gtk_widget_get_toplevel (focus_widget);
-      if (_gtk_widget_is_toplevel (toplevel) && GTK_IS_WINDOW (toplevel))
-	{
-          widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
+      if (widget == focus_widget)
+        {
+          /* We call _gtk_window_internal_set_focus() here so that the
+           * toplevel window can request the focus if necessary.
+           * This is needed when the toplevel is a GtkPlug
+           */
+          if (!gtk_widget_has_focus (widget))
+            _gtk_window_internal_set_focus (GTK_WINDOW (toplevel), focus_widget);
 
-	  if (widget == focus_widget)
-	    {
-	      /* We call _gtk_window_internal_set_focus() here so that the
-	       * toplevel window can request the focus if necessary.
-	       * This is needed when the toplevel is a GtkPlug
-	       */
-	      if (!gtk_widget_has_focus (widget))
-		_gtk_window_internal_set_focus (GTK_WINDOW (toplevel), focus_widget);
+          return;
+        }
 
-	      return;
-	    }
+      if (widget)
+        {
+          GtkWidget *common_ancestor = gtk_widget_common_ancestor (widget, focus_widget);
 
-	  if (widget)
-	    {
-	      GtkWidget *common_ancestor = gtk_widget_common_ancestor (widget, focus_widget);
-
-	      if (widget != common_ancestor)
-		{
-		  while (widget->priv->parent)
-		    {
-		      widget = widget->priv->parent;
-                      gtk_widget_set_focus_child (widget, NULL);
-		      if (widget == common_ancestor)
-		        break;
-		    }
-		}
-	    }
-	}
-      else if (toplevel != focus_widget)
-	{
-	  /* gtk_widget_grab_focus() operates on a tree without window...
-	   * actually, this is very questionable behavior.
-	   */
-
-          gtk_widget_forall (toplevel,
-                             reset_focus_recurse,
-                             NULL);
-	}
-
-      /* now propagate the new focus up the widget tree and finally
-       * set it on the window
-       */
-      widget = focus_widget;
-      while (widget->priv->parent)
-	{
-          gtk_widget_set_focus_child (widget->priv->parent, widget);
-	  widget = widget->priv->parent;
-	}
-      if (GTK_IS_WINDOW (widget))
-	_gtk_window_internal_set_focus (GTK_WINDOW (widget), focus_widget);
+          if (widget != common_ancestor)
+            {
+              while (widget->priv->parent)
+                {
+                  widget = widget->priv->parent;
+                  gtk_widget_set_focus_child (widget, NULL);
+                  if (widget == common_ancestor)
+                    break;
+                }
+            }
+        }
     }
+  else if (toplevel != focus_widget)
+    {
+      /* gtk_widget_grab_focus() operates on a tree without window...
+       * actually, this is very questionable behavior.
+       */
+
+      gtk_widget_forall (toplevel,
+                         reset_focus_recurse,
+                         NULL);
+    }
+
+  /* now propagate the new focus up the widget tree and finally
+   * set it on the window
+   */
+  widget = focus_widget;
+  while (widget->priv->parent)
+    {
+      gtk_widget_set_focus_child (widget->priv->parent, widget);
+      widget = widget->priv->parent;
+    }
+  if (GTK_IS_WINDOW (widget))
+    _gtk_window_internal_set_focus (GTK_WINDOW (widget), focus_widget);
 }
 
 static gboolean
@@ -7314,7 +7311,35 @@ gtk_widget_real_focus (GtkWidget         *widget,
                        GtkDirectionType   direction)
 {
   if (!gtk_widget_get_can_focus (widget))
-    return FALSE;
+    {
+      /* @widget can't be focused, but maybe one of its child widgets. */
+      GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
+      GtkWidget *child;
+
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
+        {
+          if (focus_child)
+            {
+              if (focus_child == child)
+                {
+                  focus_child = NULL;
+
+                  if (gtk_widget_child_focus (child, direction))
+                    return TRUE;
+                }
+            }
+          else if (_gtk_widget_is_drawable (child) &&
+                   gtk_widget_is_ancestor (child, widget))
+            {
+              if (gtk_widget_child_focus (child, direction))
+                  return TRUE;
+            }
+        }
+
+      return FALSE;
+    }
 
   if (!gtk_widget_is_focus (widget))
     {
