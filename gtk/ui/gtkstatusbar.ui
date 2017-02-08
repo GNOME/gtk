@@ -3,10 +3,6 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkStatusbar" parent="GtkBox">
     <property name="spacing">2</property>
-    <property name="margin-start">10</property>
-    <property name="margin-end">10</property>
-    <property name="margin-top">6</property>
-    <property name="margin-bottom">6</property>
     <child>
       <object class="GtkFrame" id="frame">
         <property name="shadow-type">none</property>
