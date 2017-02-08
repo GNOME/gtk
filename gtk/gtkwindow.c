@@ -7915,11 +7915,7 @@ gtk_window_remove (GtkContainer *container,
 static void
 gtk_window_check_resize (GtkContainer *container)
 {
-  /* If the window is not toplevel anymore than it's embedded somewhere,
-   * so handle it like a normal window */
-  if (!_gtk_widget_is_toplevel (GTK_WIDGET (container)))
-    GTK_CONTAINER_CLASS (gtk_window_parent_class)->check_resize (container);
-  else if (!_gtk_widget_get_alloc_needed (GTK_WIDGET (container)))
+  if (!_gtk_widget_get_alloc_needed (GTK_WIDGET (container)))
     GTK_CONTAINER_CLASS (gtk_window_parent_class)->check_resize (container);
   else if (gtk_widget_get_visible (GTK_WIDGET (container)))
     gtk_window_move_resize (GTK_WINDOW (container));
