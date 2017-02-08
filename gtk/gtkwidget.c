@@ -9486,12 +9486,10 @@ gtk_widget_child_focus (GtkWidget       *widget,
       !gtk_widget_is_sensitive (widget))
     return FALSE;
 
-  /* child widgets must set CAN_FOCUS, containers
-   * don't have to though.
+  /* Emit ::focus in any case, even if can-focus is FALSE,
+   * since any widget might have child widgets that will take
+   * focus
    */
-  if (!GTK_IS_CONTAINER (widget) &&
-      !gtk_widget_get_can_focus (widget))
-    return FALSE;
 
   g_signal_emit (widget,
 		 widget_signals[FOCUS],
