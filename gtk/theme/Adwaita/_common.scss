@@ -98,6 +98,12 @@ $button_transition: all 200ms $ease-out-quad;
   &:backdrop {
     color: $backdrop_text_color;
     background-color: $backdrop_base_color;
+    &:disabled { color: $backdrop_insensitive_color; }
+  }
+
+  &:disabled {
+    color: $insensitive_fg_color;
+    background-color: $insensitive_bg_color;
   }
 
   &:selected {
