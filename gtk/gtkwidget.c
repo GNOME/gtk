@@ -9161,6 +9161,7 @@ gtk_widget_set_parent_window (GtkWidget *widget,
   GdkWindow *old_parent_window;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (!GTK_IS_WINDOW (widget));
 
   old_parent_window = g_object_get_qdata (G_OBJECT (widget),
 					  quark_parent_window);
@@ -9173,13 +9174,6 @@ gtk_widget_set_parent_window (GtkWidget *widget,
 	g_object_unref (old_parent_window);
       if (parent_window)
 	g_object_ref (parent_window);
-
-      /* Unset toplevel flag when adding a parent window to a widget,
-       * this is the primary entry point to allow toplevels to be
-       * embeddable.
-       */
-      if (GTK_IS_WINDOW (widget))
-	_gtk_window_set_is_toplevel (GTK_WINDOW (widget), parent_window == NULL);
     }
 }
 

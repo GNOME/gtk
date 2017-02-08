@@ -52,9 +52,6 @@ void            _gtk_window_unset_focus_and_default (GtkWindow *window,
 void            _gtk_window_set_is_active          (GtkWindow *window,
                                                     gboolean   is_active);
 
-void            _gtk_window_set_is_toplevel        (GtkWindow *window,
-                                                    gboolean   is_toplevel);
-
 void            _gtk_window_set_allocation         (GtkWindow           *window,
                                                     const GtkAllocation *allocation,
                                                     GtkAllocation       *allocation_out);
