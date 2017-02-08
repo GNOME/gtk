@@ -1988,28 +1988,6 @@ gtk_container_set_focus_child (GtkContainer *container,
 }
 
 /**
- * gtk_container_get_focus_child:
- * @container: a #GtkContainer
- *
- * Returns the current focus child widget inside @container. This is not the
- * currently focused widget. That can be obtained by calling
- * gtk_window_get_focus().
- *
- * Returns: (nullable) (transfer none): The child widget which will receive the
- *          focus inside @container when the @container is focused,
- *          or %NULL if none is set.
- *
- * Since: 2.14
- **/
-GtkWidget *
-gtk_container_get_focus_child (GtkContainer *container)
-{
-  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
-
-  return container->priv->focus_child;
-}
-
-/**
  * gtk_container_get_children:
  * @container: a #GtkContainer
  *
