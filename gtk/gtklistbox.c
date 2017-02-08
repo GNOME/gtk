@@ -2016,7 +2016,7 @@ gtk_list_box_focus (GtkWidget        *widget,
   GtkWidget *row;
   GtkWidget *header;
 
-  focus_child = gtk_container_get_focus_child ((GtkContainer *)box);
+  focus_child = gtk_widget_get_focus_child (widget);
 
   next_focus_row = NULL;
   if (focus_child != NULL)
@@ -3207,7 +3207,7 @@ gtk_list_box_row_focus (GtkWidget        *widget,
 
       return FALSE;
     }
-  else if (gtk_container_get_focus_child (GTK_CONTAINER (row)) != NULL)
+  else if (gtk_widget_get_focus_child (widget) != NULL)
     {
       /* Child has focus, always navigate inside it first */
       if (gtk_widget_child_focus (child, direction))

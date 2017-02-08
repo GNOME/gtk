@@ -1436,7 +1436,7 @@ gtk_notebook_move_focus_out (GtkNotebook      *notebook,
   GtkDirectionType effective_direction = get_effective_direction (notebook, direction_type);
   GtkWidget *toplevel;
 
-  if (gtk_container_get_focus_child (GTK_CONTAINER (notebook)) && effective_direction == GTK_DIR_UP)
+  if (gtk_widget_get_focus_child (GTK_WIDGET (notebook)) && effective_direction == GTK_DIR_UP)
     if (focus_tabs_in (notebook))
       return;
   if (gtk_widget_is_focus (GTK_WIDGET (notebook)) && effective_direction == GTK_DIR_DOWN)
@@ -4180,9 +4180,6 @@ gtk_notebook_focus (GtkWidget        *widget,
   gint last_action;
 
   gboolean widget_is_focus;
-  GtkContainer *container;
-
-  container = GTK_CONTAINER (widget);
 
   if (priv->tab_pos == GTK_POS_TOP ||
       priv->tab_pos == GTK_POS_LEFT)
@@ -4203,7 +4200,7 @@ gtk_notebook_focus (GtkWidget        *widget,
     }
 
   widget_is_focus = gtk_widget_is_focus (widget);
-  old_focus_child = gtk_container_get_focus_child (container);
+  old_focus_child = gtk_widget_get_focus_child (widget);
 
   effective_direction = get_effective_direction (notebook, direction);
 
