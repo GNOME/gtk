@@ -251,7 +251,7 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
 
   window = GTK_WINDOW (widget);
 
-  if (gtk_window_has_toplevel_focus (window) && gtk_window_is_active (window))
+  if (gtk_window_is_active (window))
     atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
 
   gdk_window = gtk_widget_get_window (widget);
