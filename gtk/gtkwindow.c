@@ -236,7 +236,6 @@ struct _GtkWindowPrivate
   guint    destroy_with_parent       : 1;
   guint    focus_on_map              : 1;
   guint    fullscreen_initially      : 1;
-  guint    has_focus                 : 1;
   guint    has_user_ref_count        : 1;
   guint    hide_titlebar_when_maximized : 1;
   guint    iconify_initially         : 1; /* gtk_window_iconify() called before realization */
@@ -8066,7 +8065,7 @@ gtk_window_real_set_focus (GtkWindow *window,
 
       priv->focus_widget = NULL;
 
-      if (priv->has_focus)
+      if (priv->is_active)
 	do_focus_change (old_focus, FALSE);
 
       g_object_notify (G_OBJECT (old_focus), "is-focus");
@@ -8089,7 +8088,7 @@ gtk_window_real_set_focus (GtkWindow *window,
             _gtk_widget_set_has_default (priv->default_widget, FALSE);
 	}
 
-      if (priv->has_focus)
+      if (priv->is_active)
 	do_focus_change (priv->focus_widget, TRUE);
 
       /* It's possible for do_focus_change() above to have callbacks
@@ -10621,34 +10620,6 @@ gtk_window_activate_key (GtkWindow   *window,
   return gtk_window_activate_menubar (window, event);
 }
 
-static void
-window_update_has_focus (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = window->priv;
-  GtkWidget *widget = GTK_WIDGET (window);
-  gboolean has_focus = priv->is_active;
-
-  if (has_focus != priv->has_focus)
-    {
-      priv->has_focus = has_focus;
-
-      if (has_focus)
-	{
-	  if (priv->focus_widget &&
-	      priv->focus_widget != widget &&
-	      !gtk_widget_has_focus (priv->focus_widget))
-	    do_focus_change (priv->focus_widget, TRUE);
-	}
-      else
-	{
-	  if (priv->focus_widget &&
-	      priv->focus_widget != widget &&
-	      gtk_widget_has_focus (priv->focus_widget))
-	    do_focus_change (priv->focus_widget, FALSE);
-	}
-    }
-}
-
 /**
  * _gtk_window_set_is_active:
  * @window: a #GtkWindow
@@ -10672,8 +10643,24 @@ _gtk_window_set_is_active (GtkWindow *window,
 
   if (is_active != priv->is_active)
     {
+      GtkWidget *widget = GTK_WIDGET (window);
+
       priv->is_active = is_active;
-      window_update_has_focus (window);
+
+      if (is_active)
+        {
+          if (priv->focus_widget &&
+              priv->focus_widget != widget &&
+              !gtk_widget_has_focus (priv->focus_widget))
+            do_focus_change (priv->focus_widget, TRUE);
+        }
+      else
+        {
+          if (priv->focus_widget &&
+              priv->focus_widget != widget &&
+              gtk_widget_has_focus (priv->focus_widget))
+            do_focus_change (priv->focus_widget, FALSE);
+        }
 
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
     }
