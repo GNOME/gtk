@@ -64,6 +64,17 @@ textview text {
   textview text:backdrop {
     color: #323232;
     background-color: #fcfcfc; }
+    .view:backdrop:disabled, iconview:backdrop:disabled,
+    .view text:backdrop:disabled,
+    iconview text:backdrop:disabled,
+    textview text:backdrop:disabled {
+      color: #c3c3c0; }
+  .view:disabled, iconview:disabled,
+  .view text:disabled,
+  iconview text:disabled,
+  textview text:disabled {
+    color: #8b8e8f;
+    background-color: #f1f1f1; }
   .view:selected:focus, iconview:selected:focus, .view:selected, iconview:selected,
   .view text:selected:focus,
   iconview text:selected:focus,
