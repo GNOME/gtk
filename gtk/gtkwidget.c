@@ -7149,14 +7149,11 @@ static void
 reset_focus_recurse (GtkWidget *widget,
 		     gpointer   data)
 {
-  if (GTK_IS_CONTAINER (widget))
-    {
-      gtk_widget_set_focus_child (widget, NULL);
+  gtk_widget_set_focus_child (widget, NULL);
 
-      gtk_container_foreach (GTK_CONTAINER (widget),
-			     reset_focus_recurse,
-			     NULL);
-    }
+  gtk_widget_forall (widget,
+                     reset_focus_recurse,
+                     NULL);
 }
 
 static void
@@ -7210,9 +7207,9 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 	   * actually, this is very questionable behavior.
 	   */
 
-	  gtk_container_foreach (GTK_CONTAINER (toplevel),
-				 reset_focus_recurse,
-				 NULL);
+          gtk_widget_forall (toplevel,
+                             reset_focus_recurse,
+                             NULL);
 	}
 
       /* now propagate the new focus up the widget tree and finally
