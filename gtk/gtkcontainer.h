@@ -153,10 +153,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
 /* Widget-level methods */
-
-GDK_AVAILABLE_IN_ALL
-void   gtk_container_set_focus_child	   (GtkContainer     *container,
-					    GtkWidget	     *child);
 GDK_AVAILABLE_IN_ALL
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
