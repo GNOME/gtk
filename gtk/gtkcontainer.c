@@ -276,8 +276,6 @@
 
 struct _GtkContainerPrivate
 {
-  GtkWidget *focus_child;
-
   GdkFrameClock *resize_clock;
   guint resize_handler;
 
@@ -1590,12 +1588,7 @@ gtk_container_remove_unimplemented (GtkContainer     *container,
 static void
 gtk_container_init (GtkContainer *container)
 {
-  GtkContainerPrivate *priv;
-
   container->priv = gtk_container_get_instance_private (container);
-  priv = container->priv;
-
-  priv->focus_child = NULL;
 }
 
 static void
@@ -1606,8 +1599,6 @@ gtk_container_destroy (GtkWidget *widget)
 
   if (priv->restyle_pending)
     priv->restyle_pending = FALSE;
-
-  g_clear_object (&priv->focus_child);
 
   /* do this before walking child widgets, to avoid
    * removing children from focus chain one by one.
@@ -2059,47 +2050,33 @@ static void
 gtk_container_real_set_focus_child (GtkContainer     *container,
                                     GtkWidget        *child)
 {
-  GtkContainerPrivate *priv;
+  GtkWidget *focus_child;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
-  priv = container->priv;
-
-  if (child != priv->focus_child)
-    {
-      if (priv->focus_child)
-        g_object_unref (priv->focus_child);
-      priv->focus_child = child;
-      if (priv->focus_child)
-        g_object_ref (priv->focus_child);
-    }
-
+  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (container));
 
   /* check for h/v adjustments
    */
-  if (priv->focus_child)
+  if (focus_child)
     {
       GtkAdjustment *hadj;
       GtkAdjustment *vadj;
       GtkAllocation allocation;
-      GtkWidget *focus_child;
       gint x, y;
 
       hadj = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
       vadj = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
       if (hadj || vadj)
         {
-
-          focus_child = priv->focus_child;
-
           while (gtk_widget_get_focus_child (focus_child))
             focus_child = gtk_widget_get_focus_child (focus_child);
 
-          gtk_widget_translate_coordinates (focus_child, priv->focus_child,
+          gtk_widget_translate_coordinates (focus_child, focus_child,
                                             0, 0, &x, &y);
 
-          _gtk_widget_get_allocation (priv->focus_child, &allocation);
+          _gtk_widget_get_allocation (focus_child, &allocation);
           x += allocation.x;
           y += allocation.y;
 
@@ -2647,11 +2624,10 @@ gtk_container_focus_move (GtkContainer     *container,
                           GList            *children,
                           GtkDirectionType  direction)
 {
-  GtkContainerPrivate *priv = container->priv;
   GtkWidget *focus_child;
   GtkWidget *child;
 
-  focus_child = priv->focus_child;
+  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (container));
 
   while (children)
     {
