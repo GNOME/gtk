@@ -263,8 +263,6 @@ GdkScreen* gtk_window_get_screen	       (GtkWindow	    *window);
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_is_active                (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_has_toplevel_focus       (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_decorated            (GtkWindow *window,

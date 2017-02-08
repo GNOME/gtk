@@ -46,8 +46,6 @@ gboolean        _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *
                                                                 GtkWidget      *widget,
                                                                 GdkDevice      *device);
 
-void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
-                                                    gboolean   has_toplevel_focus);
 void            _gtk_window_unset_focus_and_default (GtkWindow *window,
                                                      GtkWidget *widget);
 

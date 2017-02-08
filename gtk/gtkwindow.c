@@ -238,7 +238,6 @@ struct _GtkWindowPrivate
   guint    fullscreen_initially      : 1;
   guint    has_focus                 : 1;
   guint    has_user_ref_count        : 1;
-  guint    has_toplevel_focus        : 1;
   guint    hide_titlebar_when_maximized : 1;
   guint    iconify_initially         : 1; /* gtk_window_iconify() called before realization */
   guint    is_active                 : 1;
@@ -324,7 +323,6 @@ enum {
   PROP_APPLICATION,
   /* Readonly properties */
   PROP_IS_ACTIVE,
-  PROP_HAS_TOPLEVEL_FOCUS,
 
   /* Writeonly properties */
   PROP_STARTUP_ID,
@@ -951,13 +949,6 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_boolean ("is-active",
                             P_("Is Active"),
                             P_("Whether the toplevel is the current active window"),
-                            FALSE,
-                            GTK_PARAM_READABLE);
-
-  window_props[PROP_HAS_TOPLEVEL_FOCUS] =
-      g_param_spec_boolean ("has-toplevel-focus",
-                            P_("Focus in Toplevel"),
-                            P_("Whether the input focus is within this GtkWindow"),
                             FALSE,
                             GTK_PARAM_READABLE);
 
@@ -1913,9 +1904,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_IS_ACTIVE:
       g_value_set_boolean (value, priv->is_active);
-      break;
-    case PROP_HAS_TOPLEVEL_FOCUS:
-      g_value_set_boolean (value, priv->has_toplevel_focus);
       break;
     case PROP_TYPE_HINT:
       g_value_set_enum (value, priv->type_hint);
@@ -7855,7 +7843,6 @@ gtk_window_focus_in_event (GtkWidget     *widget,
    */
   if (gtk_widget_get_visible (widget))
     {
-      _gtk_window_set_has_toplevel_focus (window, TRUE);
       _gtk_window_set_is_active (window, TRUE);
 
       if (gtk_window_has_mnemonic_modifier_pressed (window))
@@ -7871,7 +7858,6 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  _gtk_window_set_has_toplevel_focus (window, FALSE);
   _gtk_window_set_is_active (window, FALSE);
 
   /* set the mnemonic-visible property to false */
@@ -10260,7 +10246,6 @@ _gtk_window_get_screen (GtkWindow *window)
  * The return value is %TRUE if the window is active toplevel itself.
  * You might use this function if you wanted to draw a widget
  * differently in an active window from a widget in an inactive window.
- * See gtk_window_has_toplevel_focus()
  * 
  * Returns: %TRUE if the window part of the current active window.
  *
@@ -10272,26 +10257,6 @@ gtk_window_is_active (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   return window->priv->is_active;
-}
-
-/**
- * gtk_window_has_toplevel_focus:
- * @window: a #GtkWindow
- * 
- * Returns whether the input focus is within this GtkWindow.
- * For real toplevel windows, this is identical to gtk_window_is_active(),
- * but for embedded windows, like #GtkPlug, the results will differ.
- * 
- * Returns: %TRUE if the input focus is within this GtkWindow
- *
- * Since: 2.4
- **/
-gboolean
-gtk_window_has_toplevel_focus (GtkWindow *window)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return window->priv->has_toplevel_focus;
 }
 
 /**
@@ -10661,7 +10626,7 @@ window_update_has_focus (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *widget = GTK_WIDGET (window);
-  gboolean has_focus = priv->has_toplevel_focus && priv->is_active;
+  gboolean has_focus = priv->is_active;
 
   if (has_focus != priv->has_focus)
     {
@@ -10784,35 +10749,6 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
       _gtk_widget_propagate_hierarchy_changed (widget, widget);
     }
   gtk_window_update_debugging ();
-}
-
-/**
- * _gtk_window_set_has_toplevel_focus:
- * @window: a #GtkWindow
- * @has_toplevel_focus: %TRUE if the in
- * 
- * Internal function that sets whether the keyboard focus for the
- * toplevel window (taking into account inter-process embedding.)
- **/
-void
-_gtk_window_set_has_toplevel_focus (GtkWindow *window,
-				   gboolean   has_toplevel_focus)
-{
-  GtkWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = window->priv;
-
-  has_toplevel_focus = has_toplevel_focus != FALSE;
-
-  if (has_toplevel_focus != priv->has_toplevel_focus)
-    {
-      priv->has_toplevel_focus = has_toplevel_focus;
-      window_update_has_focus (window);
-
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_HAS_TOPLEVEL_FOCUS]);
-    }
 }
 
 /**
