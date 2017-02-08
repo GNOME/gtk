@@ -528,7 +528,6 @@ static gchar       *default_icon_name = NULL;
 static guint        default_icon_serial = 0;
 static gboolean     disable_startup_notification = FALSE;
 
-static GQuark       quark_gtk_embedded = 0;
 static GQuark       quark_gtk_window_key_hash = 0;
 static GQuark       quark_gtk_window_icon_info = 0;
 static GQuark       quark_gtk_buildable_accels = 0;
@@ -742,7 +741,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
-  quark_gtk_embedded = g_quark_from_static_string ("gtk-embedded");
   quark_gtk_window_key_hash = g_quark_from_static_string ("gtk-window-key-hash");
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
   quark_gtk_buildable_accels = g_quark_from_static_string ("gtk-window-buildable-accels");
