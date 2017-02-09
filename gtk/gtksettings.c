@@ -1281,8 +1281,10 @@ gtk_settings_get_default (void)
 
   if (display)
     return gtk_settings_get_for_display (display);
-  else
-    return NULL;
+
+  g_debug ("%s() returning NULL GtkSettings object. Is a display available?",
+           G_STRFUNC);
+  return NULL;
 }
 
 static void
