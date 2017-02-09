@@ -156,6 +156,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpopup			\
 	testpopupat			\
 	testgaction 			\
+	testwidgetfocus 		\
 	$(NULL)
 
 if USE_X11
@@ -268,6 +269,7 @@ testrevealer2_DEPENDENCIES = $(TEST_DEPS)
 testtitlebar_DEPENDENCIES = $(TEST_DEPS)
 testwindowsize_DEPENDENCIES = $(TEST_DEPS)
 listmodel_DEPENDENCIES = $(TEST_DEPS)
+testwidgetfocus_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -456,6 +458,8 @@ testglblending_SOURCES =	\
 	gtkgears.h
 
 listmodel_SOURCES = listmodel.c
+
+testwidgetfocus_SOURCES = testwidgetfocus.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
