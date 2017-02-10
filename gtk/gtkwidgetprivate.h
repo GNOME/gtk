@@ -307,6 +307,13 @@ void              gtk_widget_forall                        (GtkWidget           
 
 GtkWidget        *gtk_widget_get_focus_child               (GtkWidget            *widget);
 
+void              gtk_widget_focus_sort                    (GtkWidget        *widget,
+                                                            GtkDirectionType  direction,
+                                                            GPtrArray        *focus_order);
+gboolean          gtk_widget_focus_move                    (GtkWidget        *widget,
+                                                            GtkDirectionType  direction,
+                                                            GPtrArray        *focus_order);
+
 /* inline getters */
 
 static inline gboolean

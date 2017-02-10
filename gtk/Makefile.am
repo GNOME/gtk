@@ -931,6 +931,7 @@ gtk_base_c_sources = 		\
 	gtkvolumebutton.c	\
 	gtkviewport.c		\
 	gtkwidget.c		\
+	gtkwidgetfocus.c	\
 	gtkwidgetpath.c		\
 	gtkwindow.c		\
 	gtkwindowgroup.c	\
