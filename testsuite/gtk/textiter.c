@@ -743,6 +743,42 @@ test_sentence_boundaries (void)
   check_backward_sentence_start (" Hi.", 0, 0, FALSE);
 }
 
+static void
+test_backward_line (void)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter, start, end;
+  gboolean ret;
+  gint offset;
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, "Hi line 1\nHi line 2", -1);
+
+  /* Go to middle of first line */
+  gtk_text_iter_backward_line (&iter);
+  gtk_text_iter_set_line_offset (&iter, 4);
+
+  /* Now insert some chars with gtk_text_buffer_insert_range() */
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  start = end;
+  gtk_text_iter_backward_cursor_positions (&start, 5);
+  gtk_text_buffer_insert_range (buffer, &iter, &start, &end);
+
+  /* Check we are still at the first line */
+  g_assert_cmpint (gtk_text_iter_get_line (&iter), ==, 0);
+
+  /* Now a call to gtk_text_iter_backward_line() should return TRUE
+     and move &iter to start of the line, or return FALSE if &iter
+     was already at start of the line, so in both cases &iter should
+     be at the start of the line, so check that */
+  gtk_text_iter_backward_line (&iter);
+  offset = gtk_text_iter_get_line_offset (&iter);
+  g_assert_cmpint (offset, ==, 0);
+
+  g_object_unref (buffer);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -759,6 +795,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextIter/Cursor Positions", test_cursor_positions);
   g_test_add_func ("/TextIter/Visible Cursor Positions", test_visible_cursor_positions);
   g_test_add_func ("/TextIter/Sentence Boundaries", test_sentence_boundaries);
+  g_test_add_func ("/TextIter/Backward line", test_backward_line);
 
   return g_test_run();
 }
