@@ -2604,6 +2604,8 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
   if (real == NULL)
     return FALSE;
 
+  ensure_char_offsets (real);
+
   check_invariants (iter);
 
   new_line = _gtk_text_line_previous (real->line);
