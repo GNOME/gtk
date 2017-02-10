@@ -7310,44 +7310,47 @@ static gboolean
 gtk_widget_real_focus (GtkWidget         *widget,
                        GtkDirectionType   direction)
 {
-  if (!gtk_widget_get_can_focus (widget))
+  if (gtk_widget_get_can_focus (widget))
+    {
+      if (!gtk_widget_is_focus (widget))
+        {
+          gtk_widget_grab_focus (widget);
+          return TRUE;
+        }
+    }
+  else
     {
       /* @widget can't be focused, but maybe one of its child widgets. */
       GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
       GtkWidget *child;
 
-      for (child = _gtk_widget_get_first_child (widget);
+      if (focus_child != NULL)
+        {
+          if (gtk_widget_child_focus (focus_child, direction))
+            return TRUE;
+
+          child = focus_child;
+        }
+      else
+        {
+          child = _gtk_widget_get_first_child (widget);
+        }
+
+      /* The current focus child didn't handle the focus, so lets'
+         try all its siblings. If  none of them accepts it, we simply
+         have to return FALSE since we couldn't handle it either. */
+      for (;
            child != NULL;
            child = _gtk_widget_get_next_sibling (child))
         {
-          if (focus_child)
-            {
-              if (focus_child == child)
-                {
-                  focus_child = NULL;
 
-                  if (gtk_widget_child_focus (child, direction))
-                    return TRUE;
-                }
-            }
-          else if (_gtk_widget_is_drawable (child) &&
-                   gtk_widget_is_ancestor (child, widget))
-            {
-              if (gtk_widget_child_focus (child, direction))
-                  return TRUE;
-            }
+          if (_gtk_widget_is_drawable (child) &&
+              gtk_widget_child_focus (child, direction))
+            return TRUE;
         }
-
-      return FALSE;
     }
 
-  if (!gtk_widget_is_focus (widget))
-    {
-      gtk_widget_grab_focus (widget);
-      return TRUE;
-    }
-  else
-    return FALSE;
+  return FALSE;
 }
 
 static void
