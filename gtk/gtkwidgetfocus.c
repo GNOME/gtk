@@ -20,13 +20,39 @@
 
 typedef struct _CompareInfo CompareInfo;
 
+enum Axis {
+  HORIZONTAL = 0,
+  VERTICAL   = 1
+};
+
 struct _CompareInfo
 {
   GtkWidget *widget;
   int x;
   int y;
-  gboolean reverse : 1;
+  guint reverse : 1;
+  guint axis : 1;
 };
+
+static inline void
+get_axis_info (const GdkRectangle *rect,
+               int                 axis,
+               int                *origin,
+               int                *bounds)
+{
+  if (axis == HORIZONTAL)
+    {
+      *origin = rect->x;
+      *bounds = rect->width;
+    }
+  else if (axis == VERTICAL)
+    {
+      *origin = rect->y;
+      *bounds = rect->height;
+    }
+  else
+    g_assert(FALSE);
+}
 
 /* Utility function, equivalent to g_list_reverse */
 static void
@@ -156,61 +182,34 @@ old_focus_coords (GtkWidget *widget,
   return FALSE;
 }
 
-
 static int
-left_right_compare (gconstpointer a,
-                    gconstpointer b,
-                    gpointer      user_data)
+axis_compare (gconstpointer a,
+              gconstpointer b,
+              gpointer      user_data)
 {
-  const GtkWidget *child1 = *((GtkWidget **)a);
-  const GtkWidget *child2 = *((GtkWidget **)b);
   GdkRectangle allocation1;
   GdkRectangle allocation2;
   CompareInfo *compare = user_data;
-  int x1, x2;
+  int origin1, origin2;
+  int bounds1, bounds2;
 
-  get_allocation_coords (compare->widget, (GtkWidget *)child1, &allocation1);
-  get_allocation_coords (compare->widget, (GtkWidget *)child2, &allocation2);
+  get_allocation_coords (compare->widget, *((GtkWidget **)a), &allocation1);
+  get_allocation_coords (compare->widget, *((GtkWidget **)b), &allocation2);
 
-  x1 = allocation1.x + allocation1.width / 2;
-  x2 = allocation2.x + allocation2.width / 2;
+  get_axis_info (&allocation1, compare->axis, &origin1, &bounds1);
+  get_axis_info (&allocation2, compare->axis, &origin2, &bounds2);
 
-  if (x1 == x2)
+  origin1 = origin1 + (bounds1 / 2);
+  origin2 = origin2 + (bounds2 / 2);
+
+  if (origin1 == origin2)
     {
-      int y1 = abs (allocation1.y + allocation1.height / 2 - compare->y);
-      int y2 = abs (allocation2.y + allocation2.height / 2 - compare->y);
+      /* Now use origin/bounds to compare the 2 widgets on the other axis */
+      get_axis_info (&allocation1, 1 - compare->axis, &origin1, &bounds1);
+      get_axis_info (&allocation2, 1 - compare->axis, &origin2, &bounds2);
 
-      if (compare->reverse)
-        return (y1 < y2) ? 1 : ((y1 == y2) ? 0 : -1);
-      else
-        return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
-    }
-  else
-    return (x1 < x2) ? -1 : 1;
-}
-
-static int
-up_down_compare (gconstpointer a,
-                 gconstpointer b,
-                 gpointer      user_data)
-{
-  const GtkWidget *child1 = *((GtkWidget **)a);
-  const GtkWidget *child2 = *((GtkWidget **)b);
-  GdkRectangle allocation1;
-  GdkRectangle allocation2;
-  CompareInfo *compare = user_data;
-  int y1, y2;
-
-  get_allocation_coords (compare->widget, (GtkWidget *)child1, &allocation1);
-  get_allocation_coords (compare->widget, (GtkWidget *)child2, &allocation2);
-
-  y1 = allocation1.y + allocation1.height / 2;
-  y2 = allocation2.y + allocation2.height / 2;
-
-  if (y1 == y2)
-    {
-      int x1 = abs (allocation1.x + allocation1.width / 2 - compare->x);
-      int x2 = abs (allocation2.x + allocation2.width / 2 - compare->x);
+      int x1 = abs (origin1 + (bounds2 / 2) - compare->x);
+      int x2 = abs (origin2 + (bounds2 / 2) - compare->x);
 
       if (compare->reverse)
         return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
@@ -218,7 +217,7 @@ up_down_compare (gconstpointer a,
         return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
     }
   else
-    return (y1 < y2) ? -1 : 1;
+    return (origin1 < origin2) ? -1 : 1;
 }
 
 static void
@@ -313,7 +312,8 @@ focus_sort_left_right (GtkWidget        *widget,
     }
 
 
-  g_ptr_array_sort_with_data (focus_order, left_right_compare, &compare_info);
+  compare_info.axis = HORIZONTAL;
+  g_ptr_array_sort_with_data (focus_order, axis_compare, &compare_info);
 
   if (compare_info.reverse)
     reverse_ptr_array (focus_order);
@@ -410,7 +410,8 @@ focus_sort_up_down (GtkWidget        *widget,
         compare_info.y = (direction == GTK_DIR_DOWN) ? 0 : + allocation.height;
     }
 
-  g_ptr_array_sort_with_data (focus_order, up_down_compare, &compare_info);
+  compare_info.axis = VERTICAL;
+  g_ptr_array_sort_with_data (focus_order, axis_compare, &compare_info);
 
   if (compare_info.reverse)
     reverse_ptr_array (focus_order);
