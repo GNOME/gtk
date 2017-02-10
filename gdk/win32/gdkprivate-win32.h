@@ -273,7 +273,7 @@ extern HDC		 _gdk_display_hdc;
 extern HINSTANCE	 _gdk_dll_hinstance;
 extern HINSTANCE	 _gdk_app_hmodule;
 
-extern gboolean		 _gdk_input_ignore_core;
+extern gint		 _gdk_input_ignore_core;
 
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.

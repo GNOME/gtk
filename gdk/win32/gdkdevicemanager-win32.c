@@ -923,6 +923,54 @@ gdk_input_other_event (GdkDisplay *display,
   switch (msg->message)
     {
     case WT_PACKET:
+      source_device = gdk_device_manager_find_wintab_device (device_manager,
+							     (HCTX) msg->lParam,
+							     packet.pkCursor);
+
+      /* Check this first, as we get WT_PROXIMITY for disabled devices too */
+      if (device_manager->dev_entered_proximity > 0)
+	{
+	  /* This is the same code as in WT_CSRCHANGE. Some drivers send
+	   * WT_CSRCHANGE after each WT_PROXIMITY with LOWORD(lParam) != 0,
+	   * this code is for those that don't.
+	   */
+	  device_manager->dev_entered_proximity -= 1;
+
+	  if (source_device != NULL &&
+	      source_device->sends_core &&
+	      gdk_device_get_mode (GDK_DEVICE (source_device)) != GDK_MODE_DISABLED)
+	    {
+	      _gdk_device_virtual_set_active (device_manager->core_pointer,
+					      GDK_DEVICE (source_device));
+	      _gdk_input_ignore_core += 1;
+	    }
+	}
+      else if (source_device != NULL &&
+	       source_device->sends_core &&
+	       gdk_device_get_mode (GDK_DEVICE (source_device)) != GDK_MODE_DISABLED &&
+               _gdk_input_ignore_core == 0)
+        {
+          /* A fallback for cases when two devices (disabled and enabled)
+           * were in proximity simultaneously.
+           * In this case the removal of a disabled device would also
+           * make the system pointer active, as we don't know which
+           * device was removed and assume it was the enabled one.
+           * If we are still getting packets for the enabled device,
+           * it means that the device that was removed was the disabled
+           * device, so we must make the enabled device active again and
+           * start ignoring the core pointer events. In practice this means that
+           * removing a disabled device while an enabled device is still
+           * in proximity might briefly make the core pointer active/visible.
+           */
+	  _gdk_device_virtual_set_active (device_manager->core_pointer,
+					  GDK_DEVICE (source_device));
+	  _gdk_input_ignore_core += 1;
+        }
+
+      if (source_device == NULL ||
+	  gdk_device_get_mode (GDK_DEVICE (source_device)) == GDK_MODE_DISABLED)
+	return FALSE;
+
       /* Don't produce any button or motion events while a window is being
        * moved or resized, see bug #151090.
        */
@@ -931,14 +979,6 @@ gdk_input_other_event (GdkDisplay *display,
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... ignored when moving/sizing\n"));
           return FALSE;
         }
-
-      if ((source_device = gdk_device_manager_find_wintab_device (device_manager,
-                                                                  (HCTX) msg->lParam,
-                                                                  packet.pkCursor)) == NULL)
-        return FALSE;
-
-      if (gdk_device_get_mode (GDK_DEVICE (source_device)) == GDK_MODE_DISABLED)
-        return FALSE;
 
       last_grab = _gdk_display_get_last_device_grab (display, GDK_DEVICE (source_device));
 
@@ -1113,18 +1153,20 @@ gdk_input_other_event (GdkDisplay *display,
       return TRUE;
 
     case WT_CSRCHANGE:
+      if (device_manager->dev_entered_proximity > 0)
+	device_manager->dev_entered_proximity -= 1;
+
       if ((source_device = gdk_device_manager_find_wintab_device (device_manager,
-                                                                  (HCTX) msg->lParam,
-                                                                  packet.pkCursor)) == NULL)
-        return FALSE;
+								  (HCTX) msg->lParam,
+								  packet.pkCursor)) == NULL)
+	return FALSE;
 
-      if (gdk_device_get_mode (GDK_DEVICE (source_device)) == GDK_MODE_DISABLED)
-        return FALSE;
-
-      if (source_device->sends_core)
+      if (source_device->sends_core &&
+	  gdk_device_get_mode (GDK_DEVICE (source_device)) != GDK_MODE_DISABLED)
 	{
-	  _gdk_device_virtual_set_active (device_manager->core_pointer, GDK_DEVICE (source_device));
-	  _gdk_input_ignore_core = TRUE;
+	  _gdk_device_virtual_set_active (device_manager->core_pointer,
+					  GDK_DEVICE (source_device));
+	  _gdk_input_ignore_core += 1;
 	}
 
       return FALSE;
@@ -1132,10 +1174,19 @@ gdk_input_other_event (GdkDisplay *display,
     case WT_PROXIMITY:
       if (LOWORD (msg->lParam) == 0)
         {
-	  _gdk_input_ignore_core = FALSE;
-	  _gdk_device_virtual_set_active (device_manager->core_pointer,
-					  device_manager->system_pointer);
-        }
+          if (_gdk_input_ignore_core > 0)
+            {
+	      _gdk_input_ignore_core -= 1;
+
+	      if (_gdk_input_ignore_core == 0)
+		_gdk_device_virtual_set_active (device_manager->core_pointer,
+						device_manager->system_pointer);
+	    }
+	}
+      else
+	{
+	  device_manager->dev_entered_proximity += 1;
+	}
 
       return FALSE;
     }

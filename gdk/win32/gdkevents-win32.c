@@ -1872,7 +1872,7 @@ generate_button_event (GdkEventType      type,
   GdkDeviceManagerWin32 *device_manager;
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  if (_gdk_input_ignore_core)
+  if (_gdk_input_ignore_core > 0)
     return;
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
@@ -2932,7 +2932,7 @@ gdk_event_translate (MSG  *msg,
         {
           gdk_win32_window_do_move_resize_drag (window, current_root_x, current_root_y);
         }
-      else if (!_gdk_input_ignore_core)
+      else if (_gdk_input_ignore_core == 0)
 	{
 	  event = gdk_event_new (GDK_MOTION_NOTIFY);
 	  event->motion.window = window;

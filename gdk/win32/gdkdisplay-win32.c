@@ -408,7 +408,7 @@ _gdk_win32_display_open (const gchar *display_name)
 
   _gdk_events_init (_gdk_display);
 
-  _gdk_input_ignore_core = FALSE;
+  _gdk_input_ignore_core = 0;
 
   _gdk_device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_WIN32,
                                       NULL);
