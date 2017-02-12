@@ -1832,7 +1832,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::mnemonic-activate:
    * @widget: the object which received the signal.
-   * @arg1:
+   * @group_cycling: %TRUE if there are other widgets with the same mnemonic
+   *
+   * The default handler for this signal activates @widget if @group_cycling
+   * is %FALSE, or just makes @widget grab focus if @group_cycling is %TRUE.
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event.
    * %FALSE to propagate the event further.
@@ -6205,13 +6208,9 @@ _gtk_widget_get_accel_path (GtkWidget *widget,
 /**
  * gtk_widget_mnemonic_activate:
  * @widget: a #GtkWidget
- * @group_cycling:  %TRUE if there are other widgets with the same mnemonic
+ * @group_cycling: %TRUE if there are other widgets with the same mnemonic
  *
  * Emits the #GtkWidget::mnemonic-activate signal.
- *
- * The default handler for this signal activates the @widget if
- * @group_cycling is %FALSE, and just grabs the focus if @group_cycling
- * is %TRUE.
  *
  * Returns: %TRUE if the signal has been handled
  */
