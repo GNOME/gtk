@@ -142,6 +142,7 @@ gtk_sources = files([
   'gtkcssvalue.c',
   'gtkcsswidgetnode.c',
   'gtkcsswin32sizevalue.c',
+  'gtkdebugupdates.c',
   'gtkdialog.c',
   'gtkdragdest.c',
   'gtkdragsource.c',
