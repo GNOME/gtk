@@ -1,3 +1,30 @@
+Overview of Changes in GTK+ 3.22.8
+==================================
+
+* Wayland:
+ - Avoid overlap between Alt and Meta
+
+* Mir:
+ - Implement window properties
+ - Track window focus
+ - Connect to content-hub and use it for copy/paste
+ - Use modal hint
+
+* Bugs fixed:
+ 358970 gtk_scale_set_digits does not cause value to be rounded if draw-value...
+ 765161 on win32 maximized window position wrong when windows toolbar is on l...
+ 765410 Scrollbar does not update since 3.20
+ 770112 The documented <alt>left shortcut doesn’t work on Wayland
+ 773686 Software when launched shows in dash with wrong icon, name and menu
+ 775732 mir: clipboard support missing
+ 775864 getting-started: typo tie->the
+ 777527 GDK W32: Invisible drop-down menus in GTK apps when working via RDP
+ 777547 Notebook arrow icon wrong color after closing final tab
+
+* Translation updates:
+ Simplified Chinese
+
+
 Overview of Changes in GTK+ 3.22.7
 ==================================
 
