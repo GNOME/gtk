@@ -4206,7 +4206,7 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
   GtkTreePath *path;
   GtkTreeIter iter;
   GFile *file;
-  gchar *filename;
+  char *parse_name;
 
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     return FALSE;
@@ -4228,13 +4228,13 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
       return FALSE;
     }
 
-  filename = g_file_get_path (file);
-  gtk_tooltip_set_text (tooltip, filename);
+  parse_name = g_file_get_parse_name (file);
+  gtk_tooltip_set_text (tooltip, parse_name);
   gtk_tree_view_set_tooltip_row (GTK_TREE_VIEW (impl->browse_files_tree_view),
                                  tooltip,
                                  path);
 
-  g_free (filename);
+  g_free (parse_name);
   g_object_unref (file);
   gtk_tree_path_free (path);
 
