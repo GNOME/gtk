@@ -1,3 +1,41 @@
+Overview of Changes in GTK+ 3.89.4
+==================================
+
+* API changes
+ - gtk_init and other init functions no longer take commandline arguments
+ - Functions that are only useful with commandline arguments have been dropped
+ - Widgets, except for toplevels, are now visible by default
+ - Style properties are no longer supported
+
+* Vulkan rendrerer
+ - Implement more clipping
+
+* CSS
+ - Specifying px for pixels is now required
+
+* Bugs fixed:
+ 358970 gtk_scale_set_digits does not cause value to be rounded if draw-value...
+ 770112 The documented <alt>left shortcut doesn’t work on Wayland
+ 773299 Ensure GTK+-4.x builds and works on Windows (MSVC in particular)
+ 773686 Software when launched shows in dash with wrong icon, name and menu
+ 775864 getting-started: typo tie->the
+ 776225 [wayland] dropdown placed somewhere in the screen
+ 777363 wayland: avoid an unnecessary g_list_length call
+ 777547 Notebook arrow icon wrong color after closing final tab
+ 778009 menu drawn on top of menubar in Fedora
+
+* Translation updates:
+ Finnish
+ Galician
+ German
+ Icelandic
+ Kazakh
+ Polish
+ Simplified Chinese
+ Slovak
+ Spanish
+
+
 Overview of Changes in GTK+ 3.89.3
 ==================================
 
