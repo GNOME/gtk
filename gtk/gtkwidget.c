@@ -5346,7 +5346,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
   if (gtk_widget_get_resize_needed (widget))
     {
-      g_warning ("Allocating size to %s %p without calling gtk_widget_get_preferred_width/height(). "
+      g_warning ("Allocating size to %s %p without calling gtk_widget_measure(). "
                  "How does the code know the size to allocate?",
                  gtk_widget_get_name (widget), widget);
     }
