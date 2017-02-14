@@ -742,7 +742,7 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
   state->data.blend.bottom_node = NULL;
 
   state = gtk_snapshot_state_new (state,
-                                  str,
+                                  g_strdup (str),
                                   state->clip_region,
                                   state->translate_x,
                                   state->translate_y,
@@ -863,7 +863,7 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
   state->data.cross_fade.start_node = NULL;
 
   state = gtk_snapshot_state_new (state,
-                                  str,
+                                  g_strdup (str),
                                   state->clip_region,
                                   state->translate_x,
                                   state->translate_y,
