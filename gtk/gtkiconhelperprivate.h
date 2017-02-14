@@ -119,10 +119,6 @@ void _gtk_icon_helper_get_size (GtkIconHelper *self,
                                 gint *width_out,
                                 gint *height_out);
 
-void _gtk_icon_helper_draw (GtkIconHelper *self,
-                            cairo_t *cr,
-                            gdouble x,
-                            gdouble y);
 void gtk_icon_helper_snapshot (GtkIconHelper *self,
                                GtkSnapshot *snapshot);
 
