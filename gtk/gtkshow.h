@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_22_FOR(gtk_show_uri_on_window)
 gboolean gtk_show_uri  (GdkScreen   *screen,
                         const gchar *uri,
                         guint32      timestamp,

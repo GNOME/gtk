@@ -33,18 +33,13 @@
  * @timestamp: a timestamp to prevent focus stealing
  * @error: a #GError that is returned in case of errors
  *
- * This is a convenience function for launching the default application
- * to show the uri. The uri must be of a form understood by GIO (i.e. you
- * need to install gvfs to get support for uri schemes such as http://
- * or ftp://, as only local files are handled by GIO itself).
- * Typical examples are
- * - `file:///home/gnome/pict.jpg`
- * - `http://www.gnome.org`
- * - `mailto:me@gnome.org`
+ * A convenience function for launching the default application
+ * to show the uri. Like gtk_show_uri_on_window(), but takes a screen
+ * as transient parent instead of a window.
  *
- * Ideally the timestamp is taken from the event triggering
- * the gtk_show_uri() call. If timestamp is not known you can take
- * %GDK_CURRENT_TIME.
+ * Note that this function is deprecated as it does not pass the necessary
+ * information for helpers to parent their dialog properly, when run from
+ * sandboxed applications for example.
  *
  * Returns: %TRUE on success, %FALSE on error
  *
@@ -114,9 +109,21 @@ window_handle_exported (GtkWindow  *window,
  * @timestamp: a timestamp to prevent focus stealing
  * @error: a #GError that is returned in case of errors
  *
- * A convenience function for launching the default application
- * to show the uri. Like gtk_show_uri(), but takes a window
- * as transient parent instead of a screen.
+ * This is a convenience function for launching the default application
+ * to show the uri. The uri must be of a form understood by GIO (i.e. you
+ * need to install gvfs to get support for uri schemes such as http://
+ * or ftp://, as only local files are handled by GIO itself).
+ * Typical examples are
+ * - `file:///home/gnome/pict.jpg`
+ * - `http://www.gnome.org`
+ * - `mailto:me@gnome.org`
+ *
+ * Ideally the timestamp is taken from the event triggering
+ * the gtk_show_uri() call. If timestamp is not known you can take
+ * %GDK_CURRENT_TIME.
+ *
+ * This is the recommended call to be used as it passes information
+ * necessary for sandbox helpers to parent their dialogs properly.
  *
  * Returns: %TRUE on success, %FALSE on error
  *
