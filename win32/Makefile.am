@@ -35,7 +35,8 @@ gen-enums.bat: $(srcdir)/gen-enums.batin gsk.enum.headers
 
 SUBDIRS =	\
 	vs12	\
-	vs14
+	vs14	\
+	vs15
 
 EXTRA_DIST +=	\
 	detectenv-msvc.mak		\

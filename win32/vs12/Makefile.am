@@ -64,6 +64,7 @@ DISTCLEANFILES = \
 
 gtk4-install.props: $(top_srcdir)/win32/vs12/gtk4-install.propsin $(MSVC12_HEADERS_LISTS)
 	-$(RM) $(top_builddir)/win32/vs14/gtk4-install.props
+	-$(RM) $(top_builddir)/win32/vs15/gtk4-install.props
 	$(CPP) -P - <$(top_srcdir)/win32/vs12/gtk4-install.propsin >$@
 	rm $(MSVC12_HEADERS_LISTS)
 

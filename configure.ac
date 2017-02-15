@@ -1969,6 +1969,12 @@ if test "x${enable_Bsymbolic}" = "xyes" ; then
 fi
 AC_SUBST(GTK_LINK_FLAGS)
 
+dnl
+dnl Check whether MSVC toolset is explicitly set
+dnl
+AM_CONDITIONAL(MSVC_BASE_NO_TOOLSET_SET, [test x$MSVC_BASE_TOOLSET = x])
+AM_CONDITIONAL(MSVC_NO_TOOLSET_SET, [test x$MSVC_TOOLSET = x])
+
 AC_CONFIG_FILES([
 README
 INSTALL
@@ -2025,6 +2031,7 @@ win32/Makefile
 win32/vs12/Makefile
 win32/vs12/gtk4-version-paths.props
 win32/vs14/Makefile
+win32/vs15/Makefile
 gdk/Makefile
 gdk/broadway/Makefile
 gdk/x11/Makefile
