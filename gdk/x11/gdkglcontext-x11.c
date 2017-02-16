@@ -799,6 +799,9 @@ gdk_x11_screen_init_gl (GdkScreen *screen)
 
   dpy = gdk_x11_display_get_xdisplay (display);
 
+  if (!epoxy_has_glx (dpy))
+    return FALSE;
+
   if (!glXQueryExtension (dpy, &error_base, &event_base))
     return FALSE;
 
