@@ -1523,12 +1523,12 @@ _gtk_gesture_check (GtkGesture *gesture)
 /**
  * gtk_gesture_handles_sequence:
  * @gesture: a #GtkGesture
- * @sequence: a #GdkEventSequence
+ * @sequence: (nullable): a #GdkEventSequence or %NULL
  *
  * Returns %TRUE if @gesture is currently handling events corresponding to
  * @sequence.
  *
- * Returns: %TRUE if @gesture is handling @sequence
+ * Returns: %TRUE if @gesture is handling @sequence, %FALSE otherwise
  *
  * Since: 3.14
  **/
