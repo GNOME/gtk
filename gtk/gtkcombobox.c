@@ -286,9 +286,6 @@ static void     gtk_combo_box_model_row_changed    (GtkTreeModel     *model,
                                                     GtkTreeIter      *iter,
                                                     gpointer          data);
 
-static gboolean gtk_combo_box_menu_button_press    (GtkWidget        *widget,
-                                                    GdkEventButton   *event,
-                                                    gpointer          user_data);
 static void     gtk_combo_box_menu_activate        (GtkWidget        *menu,
                                                     const gchar      *path,
                                                     GtkComboBox      *combo_box);
@@ -971,7 +968,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, area);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, popup_widget);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_button_toggled);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_button_press);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_activate);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_key_press);
   gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_menu_show);
@@ -1977,28 +1973,6 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
 }
 
 /* callbacks */
-static gboolean
-gtk_combo_box_menu_button_press (GtkWidget      *widget,
-                                 GdkEventButton *event,
-                                 gpointer        user_data)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
-  GtkComboBoxPrivate *priv = combo_box->priv;
-
-  if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_PRIMARY)
-    {
-      if (gtk_widget_get_focus_on_click (GTK_WIDGET (combo_box)) &&
-          !gtk_widget_has_focus (priv->button))
-        gtk_widget_grab_focus (priv->button);
-
-      gtk_combo_box_menu_popup (combo_box, (const GdkEvent *) event);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
 gtk_combo_box_menu_activate (GtkWidget   *menu,
                              const gchar *path,

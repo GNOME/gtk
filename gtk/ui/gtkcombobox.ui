@@ -22,7 +22,6 @@
                 </child>
               </object>
             </child>
-            <signal name="button-press-event" handler="gtk_combo_box_menu_button_press" swapped="no" />
           </object>
           <packing>
             <property name="pack-type">end</property>
