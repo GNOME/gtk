@@ -1284,7 +1284,7 @@ gtk_image_set_from_gicon  (GtkImage       *image,
 /**
  * gtk_image_set_from_surface:
  * @image: a #GtkImage
- * @surface: a cairo_surface_t
+ * @surface: (nullable): a cairo_surface_t or %NULL
  *
  * See gtk_image_new_from_surface() for details.
  * 
