@@ -72,7 +72,7 @@
  * When necessary, #GtkMountOperation shows dialogs to ask for
  * passwords, questions or show processes blocking unmount.
  *
- * gtk_show_uri() is a convenient way to launch applications for URIs.
+ * gtk_show_uri_on_window() is a convenient way to launch applications for URIs.
  *
  * Another object that is worth mentioning in this context is
  * #GdkAppLaunchContext, which provides visual feedback when lauching
