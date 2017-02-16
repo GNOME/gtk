@@ -134,7 +134,7 @@ profile_add_indent (int indent)
     g_error ("You screwed up your indentation");
 }
 
-void
+static void
 _gtk_file_chooser_profile_log (const char *func, int indent, const char *msg1, const char *msg2)
 {
   char *str;
