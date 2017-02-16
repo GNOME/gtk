@@ -97,10 +97,21 @@ treeview.view rubberband,
   background-color: rgba(42, 118, 198, 0.2); }
 
 flowbox flowboxchild {
-  padding: 3px;
-  border-radius: 3px; }
+  padding: 3px; }
   flowbox flowboxchild:selected {
     outline-offset: -2px; }
+
+.content-view .tile {
+  margin: 2px;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0; }
+  .content-view .tile:backdrop {
+    background-color: transparent; }
+  .content-view .tile:active, .content-view .tile:selected {
+    background-color: transparent; }
+  .content-view .tile:insensitive {
+    background-color: transparent; }
 
 label {
   caret-color: currentColor; }
@@ -3820,7 +3831,7 @@ frame > border,
   padding: 0;
   border-radius: 0;
   border: 1px solid #b6b6b3; }
-  frame.flat > border,
+  frame > border.flat,
   .frame.flat {
     border-style: none; }
   frame > border:backdrop,

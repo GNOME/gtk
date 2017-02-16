@@ -139,7 +139,6 @@ flowbox {
 
   flowboxchild {
     padding: 3px;
-    border-radius: 3px;
 
     &:selected {
       @extend %selected_items;
@@ -147,6 +146,17 @@ flowbox {
       outline-offset: -2px;
     }
   }
+}
+
+.content-view .tile {
+  margin: 2px;
+  background-color: if($variant=='light', transparent, black);
+  border-radius: 0;
+  padding: 0;
+  
+  &:backdrop { background-color: if($variant=='light', transparent, darken($backdrop_base_color,5%)); }
+  &:active, &:selected { background-color: if($variant=='light', transparent, $selected_bg_color); }
+  &:insensitive { background-color: if($variant=='light', transparent, $insensitive_bg_color); }
 }
 
 label {
