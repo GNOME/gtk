@@ -38,7 +38,7 @@
  * The URI bound to a GtkLinkButton can be set specifically using
  * gtk_link_button_set_uri(), and retrieved using gtk_link_button_get_uri().
  *
- * By default, GtkLinkButton calls gtk_show_uri() when the button is
+ * By default, GtkLinkButton calls gtk_show_uri_on_window() when the button is
  * clicked. This behaviour can be overridden by connecting to the
  * #GtkLinkButton::activate-link signal and returning %TRUE from the
  * signal handler.
@@ -193,7 +193,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    * The ::activate-link signal is emitted each time the #GtkLinkButton
    * has been clicked.
    *
-   * The default handler will call gtk_show_uri() with the URI stored inside
+   * The default handler will call gtk_show_uri_on_window() with the URI stored inside
    * the #GtkLinkButton:uri property.
    *
    * To override the default behavior, you can connect to the ::activate-link
