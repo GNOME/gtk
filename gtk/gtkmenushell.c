@@ -1580,7 +1580,7 @@ gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
 				    menu_shell->active_menu_item,
 				    force_hide);
     else
-      _gtk_menu_item_popup_submenu (menu_shell->active_menu_item, FALSE);
+      gtk_menu_shell_select_submenu_first (menu_shell);
   }
 }
 
