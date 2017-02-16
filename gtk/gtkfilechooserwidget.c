@@ -1629,8 +1629,8 @@ rename_selected_cb (GtkTreeModel *model,
   gtk_tree_view_get_cell_area (GTK_TREE_VIEW (priv->browse_files_tree_view),
                                path, priv->list_name_column, &rect);
 
-  gtk_tree_view_convert_tree_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                                               rect.x, rect.y, &rect.x, &rect.y);
+  gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view),
+                                                     rect.x, rect.y, &rect.x, &rect.y);
 
   filename = g_file_get_basename (priv->rename_file_source_file);
   gtk_entry_set_text (GTK_ENTRY(priv->rename_file_name_entry), filename);
