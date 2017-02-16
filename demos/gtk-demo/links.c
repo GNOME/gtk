@@ -1,7 +1,7 @@
 /* Links
  *
  * GtkLabel can show hyperlinks. The default action is to call
- * gtk_show_uri() on their URI, but it is possible to override
+ * gtk_show_uri_on_window() on their URI, but it is possible to override
  * this with a custom handler.
  */
 
