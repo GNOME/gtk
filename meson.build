@@ -37,7 +37,7 @@ wayland_req        = '>= 1.9.91'
 mirclient_req      = '>= 0.22.0'
 mircookie_req      = '>= 0.17.0'
 graphene_req       = '>= 1.5.1'
-epoxy_req          = '>= 1.0'
+epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.2.0'
 xkbcommon_req      = '>= 0.2.0'
 
