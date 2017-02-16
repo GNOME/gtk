@@ -147,7 +147,6 @@ struct _GtkComboBoxPrivate
   gulong reordered_id;
   gulong changed_id;
   guint popup_idle_id;
-  GdkEvent *trigger_event;
   guint scroll_timer;
   guint resize_idle_id;
 
@@ -293,8 +292,7 @@ static void     gtk_combo_box_update_sensitivity   (GtkComboBox      *combo_box)
 static gboolean gtk_combo_box_menu_key_press       (GtkWidget        *widget,
                                                     GdkEventKey      *event,
                                                     gpointer          data);
-static void     gtk_combo_box_menu_popup           (GtkComboBox      *combo_box,
-                                                    const GdkEvent   *trigger_event);
+static void     gtk_combo_box_menu_popup           (GtkComboBox      *combo_box);
 
 /* cell layout */
 static GtkCellArea *gtk_combo_box_cell_layout_get_area       (GtkCellLayout    *cell_layout);
@@ -1475,8 +1473,7 @@ update_menu_sensitivity (GtkComboBox *combo_box,
 }
 
 static void
-gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
-                          const GdkEvent *trigger_event)
+gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   gint active_item;
@@ -1538,7 +1535,7 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
                                 gtk_bin_get_child (GTK_BIN (combo_box)),
                                 GDK_GRAVITY_SOUTH_WEST,
                                 GDK_GRAVITY_NORTH_WEST,
-                                trigger_event);
+                                NULL);
     }
   else
     {
@@ -1594,7 +1591,7 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box,
                                 GTK_WIDGET (combo_box),
                                 GDK_GRAVITY_WEST,
                                 GDK_GRAVITY_NORTH_WEST,
-                                trigger_event);
+                                NULL);
     }
 
     /* Re-get the active item before selecting it, as a popped-up handler – like
@@ -1660,15 +1657,13 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
   if (gtk_widget_get_mapped (priv->popup_widget))
     return;
 
-  gtk_combo_box_menu_popup (combo_box, priv->trigger_event);
+  gtk_combo_box_menu_popup (combo_box);
 }
 
 static void
 gtk_combo_box_real_popup (GtkComboBox *combo_box)
 {
-  GtkComboBoxPrivate *priv = combo_box->priv;
-
-  gtk_combo_box_menu_popup (combo_box, priv->trigger_event);
+  gtk_combo_box_menu_popup (combo_box);
 }
 
 static gboolean
@@ -2765,8 +2760,6 @@ gtk_combo_box_destroy (GtkWidget *widget)
       g_source_remove (priv->popup_idle_id);
       priv->popup_idle_id = 0;
     }
-
-  g_clear_pointer (&priv->trigger_event, gdk_event_free);
 
   if (priv->box)
     {
