@@ -213,7 +213,7 @@ match_func (GtkEntryCompletion *compl,
       needed_flags = gtk_file_filter_get_needed (chooser_entry->current_filter);
 
       filter_info.display_name = g_file_info_get_display_name (file_info);
-      filter_info.contains |= GTK_FILE_FILTER_DISPLAY_NAME;
+      filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME;
 
       if (needed_flags & GTK_FILE_FILTER_MIME_TYPE)
         {
