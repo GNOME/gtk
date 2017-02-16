@@ -184,8 +184,9 @@
         <listitem>If you are opening a document or URI by launching a command
         like <literal>firefox http://my-favourite-website.com</literal> or
         <literal>gnome-open ghelp:epiphany</literal>, it is best to just use
-        gtk_show_uri(); as an added benefit, your application will henceforth
-        respect the users preference for what application to use.</listitem>
+        gtk_show_uri_on_window(); as an added benefit, your application will
+        henceforth respect the users preference for what application to use and
+        correctly open links in sandboxed applications.</listitem>
         <listitem>If you are launching a regular, installed application that
         has a desktop file, it is best to use GIOs #GAppInfo with a suitable
         launch context.
