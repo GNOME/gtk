@@ -1648,6 +1648,8 @@ gtk_builder_connect_signals (GtkBuilder *builder,
 
   if (g_module_supported ())
     args.module = g_module_open (NULL, G_MODULE_BIND_LAZY);
+  else
+    args.module = NULL;
 
   gtk_builder_connect_signals_full (builder,
                                     gtk_builder_connect_signals_default,
