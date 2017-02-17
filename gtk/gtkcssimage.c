@@ -116,6 +116,8 @@ gtk_css_image_real_draw (GtkCssImage *image,
       gsk_render_node_draw (node, cr);
       gsk_render_node_unref (node);
     }
+
+  cairo_region_destroy (clip);
 }
 
 static void
