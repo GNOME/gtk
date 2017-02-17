@@ -396,9 +396,11 @@ gtk_combo_box_allocate (GtkCssGadget        *gadget,
           gtk_widget_set_size_request (priv->popup_widget, -1, -1);
 
           if (priv->popup_fixed_width)
-            gtk_widget_get_preferred_width (priv->popup_widget, &menu_width, NULL);
+            gtk_widget_measure (priv->popup_widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                                &menu_width, NULL, NULL, NULL);
           else
-            gtk_widget_get_preferred_width (priv->popup_widget, NULL, &menu_width);
+            gtk_widget_measure (priv->popup_widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                                NULL, &menu_width, NULL, NULL);
 
           gtk_widget_set_size_request (priv->popup_widget,
                                        MAX (allocation->width, menu_width), -1);
@@ -1503,7 +1505,8 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
       gtk_css_gadget_get_content_allocation (priv->gadget, &content_allocation, NULL);
       width = content_allocation.width;
       gtk_widget_set_size_request (priv->popup_widget, -1, -1);
-      gtk_widget_get_preferred_width (priv->popup_widget, &min_width, &nat_width);
+      gtk_widget_measure (priv->popup_widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &min_width, &nat_width, NULL, NULL);
 
       if (priv->popup_fixed_width)
         width = MAX (width, min_width);
@@ -1567,12 +1570,14 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
 
               if (child && gtk_widget_get_visible (child))
                 {
-                  gtk_widget_get_preferred_height (child, &child_height, NULL);
+                  gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, -1,
+                                      &child_height, NULL, NULL, NULL);
                   rect_anchor_dy -= child_height;
                 }
             }
 
-          gtk_widget_get_preferred_height (active, &child_height, NULL);
+          gtk_widget_measure (active, GTK_ORIENTATION_VERTICAL, -1,
+                              &child_height, NULL, NULL, NULL);
           rect_anchor_dy -= child_height / 2;
         }
 
