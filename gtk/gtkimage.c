@@ -657,7 +657,7 @@ gtk_image_new_from_animation (GdkPixbufAnimation *animation)
 
 /**
  * gtk_image_new_from_icon_name:
- * @icon_name: an icon name
+ * @icon_name: (nullable): an icon name or %NULL
  * @size: (type int): a stock icon size (#GtkIconSize)
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
@@ -989,7 +989,7 @@ gtk_image_set_from_animation (GtkImage           *image,
 /**
  * gtk_image_set_from_icon_name:
  * @image: a #GtkImage
- * @icon_name: an icon name
+ * @icon_name: (nullable): an icon name or %NULL
  * @size: (type int): an icon size (#GtkIconSize)
  *
  * See gtk_image_new_from_icon_name() for details.
