@@ -108,7 +108,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           <term>4 values: </term><listitem>top right bottom left</listitem>
         </varlistentry>
         <varlistentry>
-          <term>3 values: </term><listitem>top horizontal left</listitem>
+          <term>3 values: </term><listitem>top horizontal bottom</listitem>
         </varlistentry>
         <varlistentry>
           <term>2 values: </term><listitem>vertical horizontal</listitem>
