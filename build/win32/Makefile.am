@@ -31,7 +31,8 @@ SUBDIRS =	\
 	vs10	\
 	vs11	\
 	vs12	\
-	vs14
+	vs14	\
+	vs15
 
 EXTRA_DIST +=	\
 	detectenv-msvc.mak		\
