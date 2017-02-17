@@ -1784,7 +1784,7 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
    * Now add to the requisition any additional space for surrounding scrollbars
    * and the special scrollable border.
    */
-  if (policy_may_be_visible (priv->hscrollbar_policy))
+  if (priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
     {
       minimum_req.width = MAX (minimum_req.width, hscrollbar_requisition.width + sborder.left + sborder.right);
       natural_req.width = MAX (natural_req.width, hscrollbar_requisition.width + sborder.left + sborder.right);
@@ -1796,7 +1796,7 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 	}
     }
 
-  if (policy_may_be_visible (priv->vscrollbar_policy))
+  if (priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
     {
       minimum_req.height = MAX (minimum_req.height, vscrollbar_requisition.height + sborder.top + sborder.bottom);
       natural_req.height = MAX (natural_req.height, vscrollbar_requisition.height + sborder.top + sborder.bottom);
