@@ -199,42 +199,6 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
       g_ptr_array_insert (win32_display->monitors, 0, primary_to_move);
       changed = TRUE;
     }
-
-  for (i = 0; i < win32_display->monitors->len; i++)
-    {
-      GdkMonitor *monitor;
-      GdkWin32Monitor *win32_monitor;
-
-      monitor = GDK_MONITOR (g_ptr_array_index (win32_display->monitors, i));
-
-      if (win32_display->has_fixed_scale)
-        gdk_monitor_set_scale_factor (monitor, win32_display->window_scale);
-      else
-        {
-          /* First acquire the scale using the current screen */
-          GdkRectangle workarea;
-          POINT pt;
-          guint scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, NULL);
-
-          gdk_monitor_get_workarea (monitor, &workarea);
-          workarea.x -= _gdk_offset_x;
-          workarea.y -= _gdk_offset_y;
-          workarea.x += workarea.width / scale;
-          workarea.y += workarea.height / scale;
-          pt.x = workarea.x;
-          pt.y = workarea.y;
-
-          /* acquire the scale using the monitor which the window is nearest on Windows 8.1+ */
-          if (win32_display->have_at_least_win81)
-            {
-              HMONITOR hmonitor = MonitorFromPoint (pt, MONITOR_DEFAULTTONEAREST);
-              scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, hmonitor, NULL, NULL);
-            }
-
-          gdk_monitor_set_scale_factor (monitor, scale);
-        }
-    }
-
   return changed;
 }
 
