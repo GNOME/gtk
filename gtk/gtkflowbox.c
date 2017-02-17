@@ -458,52 +458,8 @@ gtk_flow_box_child_measure (GtkCssGadget   *gadget,
       return;
     }
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      if (for_size < 0)
-        {
-          if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-            {
-              gtk_widget_get_preferred_width (child, minimum, natural);
-            }
-          else
-            {
-              gint height;
-              gtk_widget_get_preferred_height (child, NULL, &height);
-              gtk_widget_get_preferred_width_for_height (child, height, minimum, natural);
-            }
-        }
-      else
-        {
-          if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-            gtk_widget_get_preferred_width (child, minimum, natural);
-          else
-            gtk_widget_get_preferred_width_for_height (child, for_size, minimum, natural);
-        }
-    }
-  else
-    {
-      if (for_size < 0)
-        {
-          if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-            {
-              gint width;
-              gtk_widget_get_preferred_width (child, NULL, &width);
-              gtk_widget_get_preferred_height_for_width (child, width, minimum, natural);
-            }
-          else
-            {
-              gtk_widget_get_preferred_height (child, minimum, natural);
-            }
-        }
-      else
-        {
-          if (gtk_flow_box_child_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-            gtk_widget_get_preferred_height_for_width (child, for_size, minimum, natural);
-          else
-            gtk_widget_get_preferred_height (child, minimum, natural);
-        }
-    }
+  gtk_widget_measure (child, orientation, for_size,
+                      minimum, natural, minimum_baseline, natural_baseline);
 }
 
 static void
