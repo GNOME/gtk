@@ -1623,6 +1623,12 @@ fi
 
 AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)
 
+##################################################
+# Check whether MSVC toolset is explicitly set
+##################################################
+
+AM_CONDITIONAL(MSVC_BASE_NO_TOOLSET_SET, [test x$MSVC_BASE_TOOLSET = x])
+AM_CONDITIONAL(MSVC_NO_TOOLSET_SET, [test x$MSVC_TOOLSET = x])
 
 ##################################################
 # Output commands
@@ -1747,6 +1753,7 @@ build/win32/vs10/gtk-version-paths.props
 build/win32/vs11/Makefile
 build/win32/vs12/Makefile
 build/win32/vs14/Makefile
+build/win32/vs15/Makefile
 gdk/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile

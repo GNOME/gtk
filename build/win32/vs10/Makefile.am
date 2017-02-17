@@ -46,6 +46,7 @@ gtk-install.props: $(MSVC_INTERMEDIATE_FILES)
 	-$(RM) $(top_builddir)/build/win32/vs11/gtk-install.props
 	-$(RM) $(top_builddir)/build/win32/vs12/gtk-install.props
 	-$(RM) $(top_builddir)/build/win32/vs14/gtk-install.props
+	-$(RM) $(top_builddir)/build/win32/vs15/gtk-install.props
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk-install.propsin >$@
 	rm $(MSVC_INTERMEDIATE_FILES)
 
