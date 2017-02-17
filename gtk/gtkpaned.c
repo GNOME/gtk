@@ -1285,12 +1285,12 @@ gtk_paned_allocate (GtkCssGadget        *gadget,
         {
           gint child1_width, child2_width;
 
-          gtk_widget_get_preferred_width_for_height (priv->child1,
-                                                     allocation->height,
-                                                     &child1_width, NULL);
-          gtk_widget_get_preferred_width_for_height (priv->child2,
-                                                     allocation->height,
-                                                     &child2_width, NULL);
+          gtk_widget_measure (priv->child1, GTK_ORIENTATION_HORIZONTAL,
+                              allocation->height,
+                              &child1_width, NULL, NULL, NULL);
+          gtk_widget_measure (priv->child2, GTK_ORIENTATION_HORIZONTAL,
+                              allocation->height,
+                              &child2_width, NULL, NULL, NULL);
 
           gtk_paned_calc_position (paned,
                                    MAX (1, allocation->width - handle_size),
@@ -1341,12 +1341,12 @@ gtk_paned_allocate (GtkCssGadget        *gadget,
         {
           gint child1_height, child2_height;
 
-          gtk_widget_get_preferred_height_for_width (priv->child1,
-                                                     allocation->width,
-                                                     &child1_height, NULL);
-          gtk_widget_get_preferred_height_for_width (priv->child2,
-                                                     allocation->width,
-                                                     &child2_height, NULL);
+          gtk_widget_measure (priv->child1, GTK_ORIENTATION_VERTICAL,
+                              allocation->width,
+                              &child1_height, NULL, NULL, NULL);
+          gtk_widget_measure (priv->child2, GTK_ORIENTATION_VERTICAL,
+                              allocation->width,
+                              &child2_height, NULL, NULL, NULL);
 
           gtk_paned_calc_position (paned,
                                    MAX (1, allocation->height - handle_size),
