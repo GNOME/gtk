@@ -1571,9 +1571,6 @@ void
 gtk_image_clear (GtkImage *image)
 {
   gtk_image_reset (image);
-
-  if (gtk_widget_get_visible (GTK_WIDGET (image)))
-      gtk_widget_queue_resize (GTK_WIDGET (image));
 }
 
 static void
