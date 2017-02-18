@@ -5177,8 +5177,11 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	      new_pos = current_x > bound_x ? priv->current_pos : priv->selection_bound;
 	    break;
 	  }
-	case GTK_MOVEMENT_LOGICAL_POSITIONS:
 	case GTK_MOVEMENT_WORDS:
+          if (priv->resolved_dir == PANGO_DIRECTION_RTL)
+            count *= -1;
+          /* Fall through */
+	case GTK_MOVEMENT_LOGICAL_POSITIONS:
 	  if (count < 0)
 	    new_pos = MIN (priv->current_pos, priv->selection_bound);
 	  else
@@ -5228,6 +5231,8 @@ gtk_entry_move_cursor (GtkEntry       *entry,
             }
 	  break;
 	case GTK_MOVEMENT_WORDS:
+          if (priv->resolved_dir == PANGO_DIRECTION_RTL)
+            count *= -1;
 	  while (count > 0)
 	    {
 	      new_pos = gtk_entry_move_forward_word (entry, new_pos, FALSE);
