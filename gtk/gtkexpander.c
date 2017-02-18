@@ -934,7 +934,8 @@ gtk_expander_resize_toplevel (GtkExpander *expander)
             {
               GtkRequisition child_requisition;
 
-              gtk_widget_get_preferred_height_for_width (child, child_allocation.width, &child_requisition.height, NULL);
+              gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, child_allocation.width,
+                                  &child_requisition.height, NULL, NULL, NULL);
 
               toplevel_allocation.height += child_requisition.height;
             }
