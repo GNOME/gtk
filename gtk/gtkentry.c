@@ -5532,23 +5532,28 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	      new_pos = current_x < bound_x ? priv->current_pos : priv->selection_bound;
 	    else 
 	      new_pos = current_x > bound_x ? priv->current_pos : priv->selection_bound;
-	    break;
 	  }
+	  break;
+
 	case GTK_MOVEMENT_WORDS:
           if (priv->resolved_dir == PANGO_DIRECTION_RTL)
             count *= -1;
           /* Fall through */
+
 	case GTK_MOVEMENT_LOGICAL_POSITIONS:
 	  if (count < 0)
 	    new_pos = MIN (priv->current_pos, priv->selection_bound);
 	  else
 	    new_pos = MAX (priv->current_pos, priv->selection_bound);
+
 	  break;
+
 	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
 	case GTK_MOVEMENT_PARAGRAPH_ENDS:
 	case GTK_MOVEMENT_BUFFER_ENDS:
 	  new_pos = count < 0 ? 0 : gtk_entry_buffer_get_length (get_buffer (entry));
 	  break;
+
 	case GTK_MOVEMENT_DISPLAY_LINES:
 	case GTK_MOVEMENT_PARAGRAPHS:
 	case GTK_MOVEMENT_PAGES:
@@ -5563,8 +5568,10 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	case GTK_MOVEMENT_LOGICAL_POSITIONS:
 	  new_pos = gtk_entry_move_logically (entry, new_pos, count);
 	  break;
+
 	case GTK_MOVEMENT_VISUAL_POSITIONS:
 	  new_pos = gtk_entry_move_visually (entry, new_pos, count);
+
           if (priv->current_pos == new_pos)
             {
               if (!extend_selection)
@@ -5587,29 +5594,38 @@ gtk_entry_move_cursor (GtkEntry       *entry,
                 }
             }
 	  break;
+
 	case GTK_MOVEMENT_WORDS:
           if (priv->resolved_dir == PANGO_DIRECTION_RTL)
             count *= -1;
+
 	  while (count > 0)
 	    {
 	      new_pos = gtk_entry_move_forward_word (entry, new_pos, FALSE);
 	      count--;
 	    }
+
 	  while (count < 0)
 	    {
 	      new_pos = gtk_entry_move_backward_word (entry, new_pos, FALSE);
 	      count++;
 	    }
+
           if (priv->current_pos == new_pos)
             gtk_widget_error_bell (GTK_WIDGET (entry));
+
 	  break;
+
 	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
 	case GTK_MOVEMENT_PARAGRAPH_ENDS:
 	case GTK_MOVEMENT_BUFFER_ENDS:
 	  new_pos = count < 0 ? 0 : gtk_entry_buffer_get_length (get_buffer (entry));
+
           if (priv->current_pos == new_pos)
             gtk_widget_error_bell (GTK_WIDGET (entry));
+
 	  break;
+
 	case GTK_MOVEMENT_DISPLAY_LINES:
 	case GTK_MOVEMENT_PARAGRAPHS:
 	case GTK_MOVEMENT_PAGES:
@@ -5673,6 +5689,7 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
       end_pos = gtk_entry_move_logically (entry, priv->current_pos, count);
       gtk_editable_delete_text (editable, MIN (start_pos, end_pos), MAX (start_pos, end_pos));
       break;
+
     case GTK_DELETE_WORDS:
       if (count < 0)
 	{
@@ -5694,24 +5711,30 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
 	  start_pos = gtk_entry_move_backward_word (entry, start_pos, FALSE);
 	  count++;
 	}
+
       while (count > 0)
 	{
 	  end_pos = gtk_entry_move_forward_word (entry, end_pos, FALSE);
 	  count--;
 	}
+
       gtk_editable_delete_text (editable, start_pos, end_pos);
       break;
+
     case GTK_DELETE_DISPLAY_LINE_ENDS:
     case GTK_DELETE_PARAGRAPH_ENDS:
       if (count < 0)
 	gtk_editable_delete_text (editable, 0, priv->current_pos);
       else
 	gtk_editable_delete_text (editable, priv->current_pos, -1);
+
       break;
+
     case GTK_DELETE_DISPLAY_LINES:
     case GTK_DELETE_PARAGRAPHS:
       gtk_editable_delete_text (editable, 0, -1);  
       break;
+
     case GTK_DELETE_WHITESPACE:
       gtk_entry_delete_whitespace (entry);
       break;
