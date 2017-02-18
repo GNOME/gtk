@@ -748,7 +748,6 @@ test_backward_line (void)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter, start, end;
-  gboolean ret;
   gint offset;
 
   buffer = gtk_text_buffer_new (NULL);
