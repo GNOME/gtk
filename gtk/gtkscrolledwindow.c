@@ -173,8 +173,6 @@
  *    under A) at least correspond to the space taken up by its scrollbars.
  */
 
-#define TOUCH_BYPASS_CAPTURED_THRESHOLD 30
-
 /* Kinetic scrolling */
 #define MAX_OVERSHOOT_DISTANCE 100
 #define DECELERATION_FRICTION 4
