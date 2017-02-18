@@ -772,7 +772,8 @@ test_backward_line (void)
      and move &iter to start of the line, or return FALSE if &iter
      was already at start of the line, so in both cases &iter should
      be at the start of the line, so check that */
-  gtk_text_iter_backward_line (&iter);
+  ret = gtk_text_iter_backward_line (&iter);
+  g_assert_true (ret);
   offset = gtk_text_iter_get_line_offset (&iter);
   g_assert_cmpint (offset, ==, 0);
 
