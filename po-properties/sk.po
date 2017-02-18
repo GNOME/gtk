@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-28 00:15+0000\n"
+"POT-Creation-Date: 2017-02-15 21:53+0000\n"
 "PO-Revision-Date: 2017-01-29 10:28+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
@@ -139,7 +139,6 @@ msgid "Composited"
 msgstr "Zložený"
 
 #: gdk/gdkdisplay.c:230 gdk/gdkdisplay.c:231
-#| msgid "Xft RGBA"
 msgid "RGBA"
 msgstr "RGBA"
 
@@ -415,7 +414,7 @@ msgstr ""
 "koniec rodiča"
 
 #: gtk/gtkactionbar.c:329 gtk/gtkbox.c:322 gtk/gtkheaderbar.c:1938
-#: gtk/gtknotebook.c:834 gtk/gtkpaned.c:353 gtk/gtkpopover.c:1630
+#: gtk/gtknotebook.c:834 gtk/gtkpaned.c:353 gtk/gtkpopover.c:1626
 #: gtk/gtkpopovermenu.c:367 gtk/gtkstack.c:504 gtk/gtktoolitemgroup.c:1660
 msgid "Position"
 msgstr "Pozícia"
@@ -1346,7 +1345,7 @@ msgstr "Počet zobrazených desatinných miest"
 
 #: gtk/gtkcellrendererspinner.c:119 gtk/gtkcheckmenuitem.c:195
 #: gtk/gtkmenu.c:616 gtk/gtkmodelbutton.c:1063 gtk/gtkmodelbutton.c:1064
-#: gtk/gtkspinner.c:209 gtk/gtkswitch.c:696 gtk/gtktogglebutton.c:166
+#: gtk/gtkspinner.c:209 gtk/gtkswitch.c:696 gtk/gtktogglebutton.c:156
 #: gtk/gtktoggletoolbutton.c:115
 msgid "Active"
 msgstr "Aktívne"
@@ -1801,18 +1800,31 @@ msgstr "Prispôsobiť sa modelu"
 msgid "Whether to request enough space for every row in the model"
 msgstr "Či požiadať o dostatočný priestor pre všetky riadky modelu"
 
+#: gtk/gtkcheckbutton.c:279
+msgid "Draw Indicator"
+msgstr "Kresliť indikátor"
+
+#: gtk/gtkcheckbutton.c:280
+#| msgid "If the toggle part of the button is displayed"
+msgid "If the indicator part of the button is displayed"
+msgstr "Určuje, či má byť zobrazená indikačná časť tlačidla"
+
+#: gtk/gtkcheckbutton.c:286 gtk/gtkcheckmenuitem.c:203
+msgid "Inconsistent"
+msgstr "Nekonzistentný"
+
+#: gtk/gtkcheckbutton.c:287
+#| msgid "If the toggle button is in an “in between” state"
+msgid "If the check button is in an “in between” state"
+msgstr "Určuje, či je zaškrtávacie tlačidlo v stave „medzi“"
+
 #: gtk/gtkcheckmenuitem.c:196
 msgid "Whether the menu item is checked"
 msgstr "Určuje, či je položka ponuky zaškrtnutá"
 
-#: gtk/gtkcheckmenuitem.c:203 gtk/gtktogglebutton.c:173
-msgid "Inconsistent"
-msgstr "Nekonzistentný"
-
-# PK: report bug
 #: gtk/gtkcheckmenuitem.c:204
 msgid "Whether to display an “inconsistent” state"
-msgstr "Určuje, či zobraziť „nekonzistentný“ stav"
+msgstr "Určuje, či sa má zobraziť „nekonzistentný“ stav"
 
 #: gtk/gtkcheckmenuitem.c:211
 msgid "Draw as radio menu item"
@@ -1822,15 +1834,15 @@ msgstr "Vykresliť ako rádiovú položku ponuky"
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Určuje, či má položka ponuky vyzeraz ako rádiová položka"
 
-#: gtk/gtkcolorbutton.c:166 gtk/gtkcolorchooser.c:87
+#: gtk/gtkcolorbutton.c:209 gtk/gtkcolorchooser.c:87
 msgid "Use alpha"
 msgstr "Použiť alfu"
 
-#: gtk/gtkcolorbutton.c:167
+#: gtk/gtkcolorbutton.c:210
 msgid "Whether to give the color an alpha value"
 msgstr "Určuje, či priradiť farbe alfa hodnotu"
 
-#: gtk/gtkcolorbutton.c:181 gtk/gtkfilechooserbutton.c:474
+#: gtk/gtkcolorbutton.c:224 gtk/gtkfilechooserbutton.c:474
 #: gtk/gtkfontbutton.c:516 gtk/gtkheaderbar.c:1945 gtk/gtkprintjob.c:132
 #: gtk/gtkshortcutsgroup.c:308 gtk/gtkshortcutssection.c:376
 #: gtk/gtkshortcutsshortcut.c:608 gtk/gtkstack.c:490
@@ -1838,23 +1850,23 @@ msgstr "Určuje, či priradiť farbe alfa hodnotu"
 msgid "Title"
 msgstr "Titulok"
 
-#: gtk/gtkcolorbutton.c:182
+#: gtk/gtkcolorbutton.c:225
 msgid "The title of the color selection dialog"
 msgstr "Titulok dialógového okna výberu farby"
 
-#: gtk/gtkcolorbutton.c:196
+#: gtk/gtkcolorbutton.c:239
 msgid "Current RGBA Color"
 msgstr "Aktuálna farba RGBA"
 
-#: gtk/gtkcolorbutton.c:197
+#: gtk/gtkcolorbutton.c:240
 msgid "The selected RGBA color"
 msgstr "Vybraná farba RGBA"
 
-#: gtk/gtkcolorbutton.c:238
+#: gtk/gtkcolorbutton.c:281
 msgid "Show Editor"
 msgstr "Zobraziť editor"
 
-#: gtk/gtkcolorbutton.c:239
+#: gtk/gtkcolorbutton.c:282
 msgid "Whether to show the color editor right away"
 msgstr "Či sa má okamžite zobraziť editor"
 
@@ -1870,7 +1882,7 @@ msgstr "Aktuálna farba, ako GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Určuje, či má byť zobrazená alfa"
 
-#: gtk/gtkcolorchooserdialog.c:206 gtk/gtkcolorchooserwidget.c:698
+#: gtk/gtkcolorchooserdialog.c:206 gtk/gtkcolorchooserwidget.c:697
 msgid "Show editor"
 msgstr "Zobraziť editor"
 
@@ -3944,7 +3956,7 @@ msgstr "Titulok dialógového okna"
 msgid "The title of the file chooser dialog"
 msgstr "Titulok dialógového okna výberu súboru"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1645 gtk/gtkwindow.c:840
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1641 gtk/gtkwindow.c:840
 msgid "Modal"
 msgstr "Modálne"
 
@@ -4355,35 +4367,35 @@ msgstr "Ak existuje, bude súbor reprezentovaný riadkom"
 msgid "Whether the row represents a network location"
 msgstr "Určuje, či riadok reprezentuje umiestnenie v sieti"
 
-#: gtk/gtkpopover.c:1602
+#: gtk/gtkpopover.c:1598
 msgid "Relative to"
 msgstr "Relatívne k"
 
-#: gtk/gtkpopover.c:1603
+#: gtk/gtkpopover.c:1599
 msgid "Widget the bubble window points to"
 msgstr "Ovládací prvok, na ktorý ukazuje bublinové okno"
 
-#: gtk/gtkpopover.c:1616
+#: gtk/gtkpopover.c:1612
 msgid "Pointing to"
 msgstr "Ukazuje k"
 
-#: gtk/gtkpopover.c:1617
+#: gtk/gtkpopover.c:1613
 msgid "Rectangle the bubble window points to"
 msgstr "Obdĺžnik, ku ktorému ukazuje bublinové okno"
 
-#: gtk/gtkpopover.c:1631
+#: gtk/gtkpopover.c:1627
 msgid "Position to place the bubble window"
 msgstr "Pozícia, na ktorú umiestniť bublinové okno"
 
-#: gtk/gtkpopover.c:1646
+#: gtk/gtkpopover.c:1642
 msgid "Whether the popover is modal"
 msgstr "Určuje, či je bublinové okno modálne"
 
-#: gtk/gtkpopover.c:1659
+#: gtk/gtkpopover.c:1655
 msgid "Constraint"
 msgstr "Obmedzenie"
 
-#: gtk/gtkpopover.c:1660
+#: gtk/gtkpopover.c:1656
 msgid "Constraint for the popover position"
 msgstr "Obmedzenie pre pozíciu bublinového okna"
 
@@ -6390,21 +6402,9 @@ msgstr "Písmo s pevnou šírkou"
 msgid "Whether to use a monospace font"
 msgstr "Či sa má použiť písmo s pevnou šírkou"
 
-#: gtk/gtktogglebutton.c:167 gtk/gtktoggletoolbutton.c:116
+#: gtk/gtktogglebutton.c:157 gtk/gtktoggletoolbutton.c:116
 msgid "If the toggle button should be pressed in"
 msgstr "Či má byť prepínacie tlačidlo stlačené"
-
-#: gtk/gtktogglebutton.c:174
-msgid "If the toggle button is in an “in between” state"
-msgstr "Určuje, či je tlačidlo v stave „medzi“"
-
-#: gtk/gtktogglebutton.c:180
-msgid "Draw Indicator"
-msgstr "Kresliť indikátor"
-
-#: gtk/gtktogglebutton.c:181
-msgid "If the toggle part of the button is displayed"
-msgstr "Určuje, či má byť zobrazený prepínacia časť tlačidla"
 
 #: gtk/gtktoolbar.c:525 gtk/gtktoolpalette.c:967
 msgid "Toolbar Style"
