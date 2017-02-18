@@ -1189,7 +1189,7 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
         }
     }
       
-  _gtk_css_parser_error (parser, "Missing name of pseudo-class");
+  _gtk_css_parser_error (parser, "Invalid name of pseudo-class");
   if (selector)
     _gtk_css_selector_free (selector);
   return NULL;
