@@ -3188,8 +3188,10 @@ gtk_scrolled_window_allocate_scrollbar (GtkScrolledWindow *scrolled_window,
       child_allocation.width = content_allocation.width;
       child_allocation.height = sb_height;
     }
-  else if (scrollbar == priv->vscrollbar)
+  else
     {
+      g_assert (scrollbar == priv->vscrollbar);
+
       if ((_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL &&
 	   (priv->window_placement == GTK_CORNER_TOP_RIGHT ||
 	    priv->window_placement == GTK_CORNER_BOTTOM_RIGHT)) ||
