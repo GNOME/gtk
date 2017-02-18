@@ -4544,10 +4544,8 @@ allocate_tab (GtkCssGadget        *gadget,
     {
       if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
         {
-          gtk_widget_get_preferred_width_for_height (page->tab_label,
-                                                     allocation->height,
-                                                     NULL,
-                                                     &child_allocation.width);
+          gtk_widget_measure (page->tab_label, GTK_ORIENTATION_HORIZONTAL, allocation->height,
+                              NULL, &child_allocation.width, NULL, NULL);
           if (child_allocation.width > allocation->width)
             child_allocation.width = allocation->width;
           else
@@ -4556,10 +4554,9 @@ allocate_tab (GtkCssGadget        *gadget,
         }
       else
         {
-          gtk_widget_get_preferred_height_for_width (page->tab_label,
-                                                     allocation->width,
-                                                     NULL,
-                                                     &child_allocation.height);
+          gtk_widget_measure (page->tab_label, GTK_ORIENTATION_VERTICAL, allocation->width,
+                              NULL, &child_allocation.height, NULL, NULL);
+
           if (child_allocation.height > allocation->height)
             child_allocation.height = allocation->height;
           else
