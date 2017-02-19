@@ -234,13 +234,16 @@ gtk_scale_class_init (GtkScaleClass *class)
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;
 
   /**
-   * GtkScale::format-value:
+   * GtkScale:format-value:
    * @scale: the object which received the signal
    * @value: the value to format
    *
    * Signal which allows you to change how the scale value is displayed.
    * Connect a signal handler which returns an allocated string representing 
    * @value. That string will then be used to display the scale's value.
+   *
+   * If no user-provided handlers are installed, the value will be displayed on
+   * its own, rounded according to the value of the #GtkScale:digits property.
    *
    * Here's an example signal handler which displays a value 1.0 as
    * with "--&gt;1.0&lt;--".
@@ -1272,8 +1275,7 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
  * @scale: a #GtkScale
  * @value: adjustment value
  * 
- * Emits #GtkScale::format-value signal to format the value, 
- * if no user signal handlers, falls back to a default format.
+ * Emits the #GtkScale:format-value signal.
  * 
  * Return value: formatted value
  */
