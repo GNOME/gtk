@@ -59,7 +59,7 @@
  * its base class, #GtkRange, in addition to the methods for GtkScale itself.
  * To set the value of a scale, you would normally use gtk_range_set_value().
  * To detect changes to the value, you would normally use the
- * #GtkRange::value-changed signal.
+ * #GtkRange:value-changed signal.
  *
  * Note that using the same upper and lower bounds for the #GtkScale (through
  * the #GtkRange methods) will hide the slider itself. This is useful for
@@ -727,7 +727,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;
 
   /**
-   * GtkScale::format-value:
+   * GtkScale:format-value:
    * @scale: the object which received the signal
    * @value: the value to format
    *
@@ -1081,11 +1081,11 @@ gtk_scale_new_with_range (GtkOrientation orientation,
  *
  * Sets the number of decimal places to which the value is rounded when it is
  * changed. This also sets the number of digits shown in the displayed value
- * when using the default handler for the #GtkScale::format-value signal.
+ * when using the default handler for the #GtkScale:format-value signal.
  *
  * Note that rounding to a small number of digits can interfere with
  * the smooth autoscrolling that is built into #GtkScale. As an alternative,
- * you can use the #GtkScale::format-value signal to format the displayed
+ * you can use the #GtkScale:format-value signal to format the displayed
  * value yourself.
  */
 void
@@ -1893,7 +1893,7 @@ weed_out_neg_zero (gchar *str,
 }
 
 /*
- * Emits #GtkScale::format-value signal to format the value,
+ * Emits #GtkScale:format-value signal to format the value,
  * if no user signal handlers, falls back to a default format.
  *
  * Returns: formatted value
