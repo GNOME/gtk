@@ -735,6 +735,9 @@ gtk_scale_class_init (GtkScaleClass *class)
    * Connect a signal handler which returns an allocated string representing 
    * @value. That string will then be used to display the scale's value.
    *
+   * If no user-provided handlers are installed, the value will be displayed on
+   * its own, rounded according to the value of the #GtkScale:digits property.
+   *
    * Here's an example signal handler which displays a value 1.0 as
    * with "-->1.0<--".
    * |[<!-- language="C" -->
@@ -1901,8 +1904,7 @@ weed_out_neg_zero (gchar *str,
 }
 
 /*
- * Emits #GtkScale:format-value signal to format the value,
- * if no user signal handlers, falls back to a default format.
+ * Emits the #GtkScale:format-value signal.
  *
  * Returns: formatted value
  */
