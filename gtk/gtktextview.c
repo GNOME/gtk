@@ -5172,7 +5172,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &sel_bound,
                                         gtk_text_buffer_get_selection_bound (get_buffer (text_view)));
 
-      if (iter_line_is_rtl (&insert, priv->layout))
+      if (iter_line_is_rtl (&insert, text_view->layout))
         move_forward = !move_forward;
 
       /* if we move forward, assume the cursor is at the end of the selection;
@@ -5210,7 +5210,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       break;
 
     case GTK_MOVEMENT_WORDS:
-      if (iter_line_is_rtl (&newplace, priv->layout))
+      if (iter_line_is_rtl (&newplace, text_view->layout))
         count *= -1;
 
       if (count < 0)
