@@ -759,10 +759,17 @@ gtk_scale_class_init (GtkScaleClass *class)
                   G_TYPE_STRING, 1,
                   G_TYPE_DOUBLE);
 
+  /**
+   * GtkScale:digits:
+   *
+   * The number of decimal places to which the value is rounded when it is
+   * changed. This also sets the number of digits shown in the displayed value
+   * when using the default handler for the #GtkScale:format-value signal.
+   */
   properties[PROP_DIGITS] =
       g_param_spec_int ("digits",
                         P_("Digits"),
-                        P_("The number of decimal places that are displayed in the value"),
+                        P_("The number of decimal places to which the value is rounded"),
                         -1, MAX_DIGITS,
                         1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -1151,9 +1158,10 @@ gtk_scale_set_digits (GtkScale *scale,
  * gtk_scale_get_digits:
  * @scale: a #GtkScale
  *
- * Gets the number of decimal places that are displayed in the value.
+ * Gets the number of decimal places to which the value is rounded on change.
+ * This number is also used by the default #GtkScale:format-value handler.
  *
- * Returns: the number of decimal places that are displayed
+ * Returns: the number of decimal places
  */
 gint
 gtk_scale_get_digits (GtkScale *scale)
