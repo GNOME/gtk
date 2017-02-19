@@ -4778,7 +4778,7 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	  break;
 
 	case GTK_MOVEMENT_WORDS:
-          if (priv->resolved_dir == PANGO_DIRECTION_RTL)
+          if (entry->resolved_dir == PANGO_DIRECTION_RTL)
             count *= -1;
           /* Fall through */
 
@@ -4839,7 +4839,7 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	  break;
 
 	case GTK_MOVEMENT_WORDS:
-          if (priv->resolved_dir == PANGO_DIRECTION_RTL)
+          if (entry->resolved_dir == PANGO_DIRECTION_RTL)
             count *= -1;
 
 	  while (count > 0)
