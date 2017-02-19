@@ -2623,7 +2623,7 @@ frame border,
 .frame {
   border: 1px solid gray;
   padding: 0; }
-  frame border.flat,
+  frame.flat > border,
   .frame.flat {
     border-style: none; }
   frame border:backdrop,
