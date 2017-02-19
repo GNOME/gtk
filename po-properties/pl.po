@@ -1,5 +1,5 @@
 # Polish translation for gtk+-properties.
-# Copyright © 1998-2016 the gtk+ authors.
+# Copyright © 1998-2017 the gtk+ authors.
 # This file is distributed under the same license as the gtk+ package.
 # Krzysztof Krzyżaniak <eloy@venco.com.pl>, 1998.
 # Tomasz Kłoczko <kloczek@rudy.mif.pg.gda.pl>, 1999.
@@ -9,15 +9,15 @@
 # Wadim Dziedzic <wdziedzic@aviary.pl>, 2007-2009.
 # Piotr Zaryk <pzaryk@aviary.pl>, 2008.
 # Tomasz Dominikowski <dominikowski@gmail.com>, 2009.
-# Piotr Drąg <piotrdrag@gmail.com>, 2009-2016.
-# Aviary.pl <community-poland@mozilla.org>, 2007-2016.
+# Piotr Drąg <piotrdrag@gmail.com>, 2009-2017.
+# Aviary.pl <community-poland@mozilla.org>, 2007-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-12 19:22+0200\n"
-"PO-Revision-Date: 2016-10-12 19:23+0200\n"
+"POT-Creation-Date: 2017-02-19 18:22+0100\n"
+"PO-Revision-Date: 2017-02-19 18:24+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1240,7 +1240,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "Identyfikator rysowanej standardowej ikony"
 
 #: ../gtk/gtkcellrendererpixbuf.c:143 ../gtk/gtkcellrendererspinner.c:158
-#: ../gtk/gtkrecentmanager.c:253 ../gtk/gtkstatusicon.c:271
+#: ../gtk/gtkrecentmanager.c:258 ../gtk/gtkstatusicon.c:271
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -1343,7 +1343,7 @@ msgstr "Szybkość wzrostu"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Przyśpieszenie przy przytrzymaniu przycisku"
 
-#: ../gtk/gtkcellrendererspin.c:123 ../gtk/gtkscale.c:272
+#: ../gtk/gtkcellrendererspin.c:123 ../gtk/gtkscale.c:282
 #: ../gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "Cyfry"
@@ -1434,12 +1434,12 @@ msgid "Foreground color as a GdkColor"
 msgstr "Kolor elementu jako GdkColor"
 
 #: ../gtk/gtkcellrenderertext.c:261 ../gtk/gtkentry.c:659
-#: ../gtk/gtktexttag.c:251 ../gtk/gtktextview.c:576
+#: ../gtk/gtktexttag.c:251 ../gtk/gtktextview.c:577
 msgid "Editable"
 msgstr "Modyfikowalny"
 
 #: ../gtk/gtkcellrenderertext.c:262 ../gtk/gtktexttag.c:252
-#: ../gtk/gtktextview.c:577
+#: ../gtk/gtktextview.c:578
 msgid "Whether the text can be modified by the user"
 msgstr "Określa, czy tekst może być modyfikowany przez użytkownika"
 
@@ -2318,7 +2318,7 @@ msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Rodzaj cienia rysowany wokół elementu, gdy opcja ma-ramkę jest ustawiona"
 
-#: ../gtk/gtkentry.c:800 ../gtk/gtktextview.c:656
+#: ../gtk/gtkentry.c:800 ../gtk/gtktextview.c:657
 msgid "Overwrite mode"
 msgstr "Tryb nadpisywania"
 
@@ -2508,11 +2508,11 @@ msgstr "Znacznik podpowiedzi ikony podstawowej"
 msgid "Secondary icon tooltip markup"
 msgstr "Znacznik podpowiedzi ikony drugorzędnej"
 
-#: ../gtk/gtkentry.c:1216 ../gtk/gtktextview.c:684
+#: ../gtk/gtkentry.c:1216 ../gtk/gtktextview.c:685
 msgid "IM module"
 msgstr "Moduł metody wprowadzania"
 
-#: ../gtk/gtkentry.c:1217 ../gtk/gtktextview.c:685
+#: ../gtk/gtkentry.c:1217 ../gtk/gtktextview.c:686
 msgid "Which IM module should be used"
 msgstr ""
 "Określa, który moduł metody wprowadzania powinien być używany domyślnie"
@@ -2829,7 +2829,7 @@ msgstr "Tytuł okna dialogowego wyboru plików."
 msgid "The desired width of the button widget, in characters."
 msgstr "Żądana szerokość widżetu przycisku w znakach."
 
-#: ../gtk/gtkfilesel.c:526 ../gtk/gtkimage.c:256 ../gtk/gtkrecentmanager.c:217
+#: ../gtk/gtkfilesel.c:526 ../gtk/gtkimage.c:256 ../gtk/gtkrecentmanager.c:222
 #: ../gtk/gtkstatusicon.c:222
 msgid "Filename"
 msgstr "Nazwa pliku"
@@ -3276,7 +3276,7 @@ msgstr "Tekst etykiety"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Lista atrybutów stylu stosowanych do tekstu etykiety"
 
-#: ../gtk/gtklabel.c:536 ../gtk/gtktexttag.c:359 ../gtk/gtktextview.c:593
+#: ../gtk/gtklabel.c:536 ../gtk/gtktexttag.c:359 ../gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "Wyrównanie"
 
@@ -4841,7 +4841,7 @@ msgstr ""
 "Określa, czy zaznaczone zasoby powinny być ograniczone do lokalnych adresów "
 "URI file:"
 
-#: ../gtk/gtkrecentchooser.c:234 ../gtk/gtkrecentmanager.c:237
+#: ../gtk/gtkrecentchooser.c:234 ../gtk/gtkrecentmanager.c:242
 msgid "Limit"
 msgstr "Ograniczenie"
 
@@ -4861,17 +4861,17 @@ msgstr "Porządek sortowania wyświetlanych elementów"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Bieżący filtr służący do zaznaczania które zasoby mają być wyświetlane"
 
-#: ../gtk/gtkrecentmanager.c:218
+#: ../gtk/gtkrecentmanager.c:223
 msgid "The full path to the file to be used to store and read the list"
 msgstr "Pełna ścieżka do pliku używanego do przechowywania i odczytu listy"
 
-#: ../gtk/gtkrecentmanager.c:238
+#: ../gtk/gtkrecentmanager.c:243
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "Maksymalna liczba elementów zwracanych przez gtk_recent_manager_get_items()"
 
-#: ../gtk/gtkrecentmanager.c:254
+#: ../gtk/gtkrecentmanager.c:259
 msgid "The size of the recently used resources list"
 msgstr "Rozmiar listy ostatnio używanych zasobów"
 
@@ -4911,41 +4911,41 @@ msgstr "Miara"
 msgid "The metric used for the ruler"
 msgstr "Miara używana przez linijkę"
 
-#: ../gtk/gtkscale.c:273
-msgid "The number of decimal places that are displayed in the value"
-msgstr "Maksymalna liczba wyświetlanych cyfr dziesiętnych wartości"
+#: ../gtk/gtkscale.c:283
+msgid "The number of decimal places to which the value is rounded"
+msgstr "Liczba cyfr dziesiętnych, do których wartość jest zaokrąglana"
 
-#: ../gtk/gtkscale.c:282
+#: ../gtk/gtkscale.c:292
 msgid "Draw Value"
 msgstr "Wyświetlanie wartości"
 
-#: ../gtk/gtkscale.c:283
+#: ../gtk/gtkscale.c:293
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Określa, czy obok suwaka powinna być wyświetlana w formie tekstu bieżąca "
 "wartość"
 
-#: ../gtk/gtkscale.c:290
+#: ../gtk/gtkscale.c:300
 msgid "Value Position"
 msgstr "Pozycja wartości"
 
-#: ../gtk/gtkscale.c:291
+#: ../gtk/gtkscale.c:301
 msgid "The position in which the current value is displayed"
 msgstr "Pozycja, na której powinna być wyświetlana bieżąca wartość"
 
-#: ../gtk/gtkscale.c:298
+#: ../gtk/gtkscale.c:308
 msgid "Slider Length"
 msgstr "Długość suwaka"
 
-#: ../gtk/gtkscale.c:299
+#: ../gtk/gtkscale.c:309
 msgid "Length of scale's slider"
 msgstr "Długość suwaka skali"
 
-#: ../gtk/gtkscale.c:307
+#: ../gtk/gtkscale.c:317
 msgid "Value spacing"
 msgstr "Odstęp wartości"
 
-#: ../gtk/gtkscale.c:308
+#: ../gtk/gtkscale.c:318
 msgid "Space between value text and the slider/trough area"
 msgstr "Odstęp między tekstem zawierającym wartość i obszarem suwaka"
 
@@ -6157,7 +6157,7 @@ msgstr ""
 "Biblioteka Pango definiuje standardowo kilka wartości skalujących, takich "
 "jak PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:594
+#: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:595
 msgid "Left, right, or center justification"
 msgstr "Wyrównanie do lewej, prawej, lub do środka"
 
@@ -6174,7 +6174,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Lewy margines"
 
-#: ../gtk/gtktexttag.c:387 ../gtk/gtktextview.c:603
+#: ../gtk/gtktexttag.c:387 ../gtk/gtktextview.c:604
 msgid "Width of the left margin in pixels"
 msgstr "Szerokość lewego marginesu w pikselach"
 
@@ -6182,15 +6182,15 @@ msgstr "Szerokość lewego marginesu w pikselach"
 msgid "Right margin"
 msgstr "Prawy margines"
 
-#: ../gtk/gtktexttag.c:397 ../gtk/gtktextview.c:613
+#: ../gtk/gtktexttag.c:397 ../gtk/gtktextview.c:614
 msgid "Width of the right margin in pixels"
 msgstr "Szerokość prawego marginesu w pikselach"
 
-#: ../gtk/gtktexttag.c:407 ../gtk/gtktextview.c:622
+#: ../gtk/gtktexttag.c:407 ../gtk/gtktextview.c:623
 msgid "Indent"
 msgstr "Wcięcie"
 
-#: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:623
+#: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:624
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Rozmiar wcięcia akapitu w pikselach"
 
@@ -6206,7 +6206,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Miejsce nad wierszami"
 
-#: ../gtk/gtktexttag.c:429 ../gtk/gtktextview.c:547
+#: ../gtk/gtktexttag.c:429 ../gtk/gtktextview.c:548
 msgid "Pixels of blank space above paragraphs"
 msgstr "Ilość wolnego miejsca nad akapitami w pikselach"
 
@@ -6214,7 +6214,7 @@ msgstr "Ilość wolnego miejsca nad akapitami w pikselach"
 msgid "Pixels below lines"
 msgstr "Pikseli nad wierszami"
 
-#: ../gtk/gtktexttag.c:439 ../gtk/gtktextview.c:557
+#: ../gtk/gtktexttag.c:439 ../gtk/gtktextview.c:558
 msgid "Pixels of blank space below paragraphs"
 msgstr "Ilość wolnego miejsca pod akapitami w pikselach"
 
@@ -6222,22 +6222,22 @@ msgstr "Ilość wolnego miejsca pod akapitami w pikselach"
 msgid "Pixels inside wrap"
 msgstr "Piksele w zawinięciu"
 
-#: ../gtk/gtktexttag.c:449 ../gtk/gtktextview.c:567
+#: ../gtk/gtktexttag.c:449 ../gtk/gtktextview.c:568
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Ilość wolnego miejsca między zawiniętymi wierszami akapitu w pikselach"
 
-#: ../gtk/gtktexttag.c:476 ../gtk/gtktextview.c:585
+#: ../gtk/gtktexttag.c:476 ../gtk/gtktextview.c:586
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Określa sposób zawijania wierszy: nigdy, na granicach słów lub na granicach "
 "znaków"
 
-#: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:632
+#: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:633
 msgid "Tabs"
 msgstr "Tabulatory"
 
-#: ../gtk/gtktexttag.c:486 ../gtk/gtktextview.c:633
+#: ../gtk/gtktexttag.c:486 ../gtk/gtktextview.c:634
 msgid "Custom tabs for this text"
 msgstr "Niestandardowe tabulatory powiązane z tekstem"
 
@@ -6383,63 +6383,63 @@ msgstr "Ustawienie tła akapitu"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Określa, czy ten znacznik wpływa na kolor tła akapitu"
 
-#: ../gtk/gtktextview.c:546
+#: ../gtk/gtktextview.c:547
 msgid "Pixels Above Lines"
 msgstr "Miejsce nad wierszami"
 
-#: ../gtk/gtktextview.c:556
+#: ../gtk/gtktextview.c:557
 msgid "Pixels Below Lines"
 msgstr "Miejsce pod wierszami"
 
-#: ../gtk/gtktextview.c:566
+#: ../gtk/gtktextview.c:567
 msgid "Pixels Inside Wrap"
 msgstr "Piksele w zawinięciu"
 
-#: ../gtk/gtktextview.c:584
+#: ../gtk/gtktextview.c:585
 msgid "Wrap Mode"
 msgstr "Tryb zawijania"
 
-#: ../gtk/gtktextview.c:602
+#: ../gtk/gtktextview.c:603
 msgid "Left Margin"
 msgstr "Lewy margines"
 
-#: ../gtk/gtktextview.c:612
+#: ../gtk/gtktextview.c:613
 msgid "Right Margin"
 msgstr "Prawy margines"
 
-#: ../gtk/gtktextview.c:640
+#: ../gtk/gtktextview.c:641
 msgid "Cursor Visible"
 msgstr "Widoczność kursora"
 
-#: ../gtk/gtktextview.c:641
+#: ../gtk/gtktextview.c:642
 msgid "If the insertion cursor is shown"
 msgstr "Określa, czy kursor wstawiania jest wyświetlany"
 
-#: ../gtk/gtktextview.c:648
+#: ../gtk/gtktextview.c:649
 msgid "Buffer"
 msgstr "Bufor"
 
-#: ../gtk/gtktextview.c:649
+#: ../gtk/gtktextview.c:650
 msgid "The buffer which is displayed"
 msgstr "Wyświetlany bufor"
 
-#: ../gtk/gtktextview.c:657
+#: ../gtk/gtktextview.c:658
 msgid "Whether entered text overwrites existing contents"
 msgstr "Określa, czy wprowadzony tekst nadpisuje istniejącą zawartość"
 
-#: ../gtk/gtktextview.c:664
+#: ../gtk/gtktextview.c:665
 msgid "Accepts tab"
 msgstr "Akceptowanie tabulacji"
 
-#: ../gtk/gtktextview.c:665
+#: ../gtk/gtktextview.c:666
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Określa, czy tabulacja powinna być uwzględniana jako wprowadzany znak"
 
-#: ../gtk/gtktextview.c:694
+#: ../gtk/gtktextview.c:695
 msgid "Error underline color"
 msgstr "Kolor podkreślenia błędu"
 
-#: ../gtk/gtktextview.c:695
+#: ../gtk/gtktextview.c:696
 msgid "Color with which to draw error-indication underlines"
 msgstr "Kolor, przy użyciu którego będą rysowane podkreślenia błędów"
 
