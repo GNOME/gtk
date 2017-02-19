@@ -81,7 +81,8 @@
  *
  * GtkFrame has a main CSS node with name frame and a subnode with
  * name border. The border node is used to render the visible border.
- * The style class .flat can appear with the main node.
+ * The main frame node can be given the style class .flat, which disables
+ * drawing of the border.
  */
 
 
