@@ -3879,7 +3879,7 @@ frame > border,
   padding: 0;
   border-radius: 0;
   border: 1px solid #b6b6b3; }
-  frame > border.flat,
+  frame.flat > border,
   .frame.flat {
     border-style: none; }
   frame > border:backdrop,
