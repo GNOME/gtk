@@ -25,8 +25,6 @@
 #include "gtksettingsprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
-/* widgets for special casing go here */
-#include "gtkbox.h"
 
 /* When these change we do a full restyling. Otherwise we try to figure out
  * if we need to change things. */
