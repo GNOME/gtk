@@ -78,8 +78,8 @@
  * ╰── <child>
  * ]|
  *
- * GtkFrame has a main CSS node with name frame.
- * The style class .flat can appear with the main node.
+ * GtkFrame has a main CSS node with name frame. This node can be given the
+ * style class .flat, which disables drawing of the border.
  */
 
 struct _GtkFramePrivate
