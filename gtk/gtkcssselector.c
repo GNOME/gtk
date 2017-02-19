@@ -68,7 +68,6 @@ typedef enum {
   POSITION_FORWARD,
   POSITION_BACKWARD,
   POSITION_ONLY,
-  POSITION_SORTED
 } PositionType;
 #define POSITION_TYPE_BITS 4
 #define POSITION_NUMBER_BITS ((sizeof (gpointer) * 8 - POSITION_TYPE_BITS) / 2)
@@ -802,9 +801,6 @@ print_pseudoclass_position (const GtkCssSelector *selector,
     case POSITION_ONLY:
       g_string_append (string, ":only-child");
       break;
-    case POSITION_SORTED:
-      g_string_append (string, ":sorted");
-      break;
     default:
       g_assert_not_reached ();
       break;
@@ -830,8 +826,6 @@ match_pseudoclass_position (const GtkCssSelector *selector,
           !_gtk_css_matcher_has_position (matcher, FALSE, 0, 1))
         return FALSE;
       break;
-    case POSITION_SORTED:
-      return FALSE;
     default:
       g_assert_not_reached ();
       return FALSE;
@@ -882,8 +876,6 @@ change_pseudoclass_position (const GtkCssSelector *selector)
       return GTK_CSS_CHANGE_FIRST_CHILD | GTK_CSS_CHANGE_LAST_CHILD;
     default:
       g_assert_not_reached ();
-    case POSITION_SORTED:
-      return 0;
     }
 }
 
@@ -1119,16 +1111,11 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "first-child",   0, 0,                           POSITION_FORWARD,  0, 1 },
     { "last-child",    0, 0,                           POSITION_BACKWARD, 0, 1 },
     { "only-child",    0, 0,                           POSITION_ONLY,     0, 0 },
-    { "sorted",        1, 0,                           POSITION_SORTED,   0, 0 },
     { "active",        0, GTK_STATE_FLAG_ACTIVE, },
-    { "prelight",      1, GTK_STATE_FLAG_PRELIGHT, },
     { "hover",         0, GTK_STATE_FLAG_PRELIGHT, },
     { "selected",      0, GTK_STATE_FLAG_SELECTED, },
-    { "insensitive",   1, GTK_STATE_FLAG_INSENSITIVE, },
     { "disabled",      0, GTK_STATE_FLAG_INSENSITIVE, },
-    { "inconsistent",  1, GTK_STATE_FLAG_INCONSISTENT, },
     { "indeterminate", 0, GTK_STATE_FLAG_INCONSISTENT, },
-    { "focused",       1, GTK_STATE_FLAG_FOCUSED, },
     { "focus",         0, GTK_STATE_FLAG_FOCUSED, },
     { "backdrop",      0, GTK_STATE_FLAG_BACKDROP, },
     { "dir(ltr)",      0, GTK_STATE_FLAG_DIR_LTR, },
