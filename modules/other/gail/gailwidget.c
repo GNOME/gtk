@@ -983,6 +983,12 @@ gail_widget_real_notify_gtk (GObject     *obj,
      * focus changes so we ignore this.
      */
     return;
+  else if (atk_obj->description == NULL &&
+           strcmp (pspec->name, "tooltip-text") == 0)
+    {
+      g_object_notify (G_OBJECT (atk_obj), "accessible-description");
+      return;
+    }
   else if (strcmp (pspec->name, "visible") == 0)
     {
       state = ATK_STATE_VISIBLE;
