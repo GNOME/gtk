@@ -483,6 +483,9 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
     {
       gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
                                             widget);
+
+      if (atk_obj->description == NULL)
+        g_object_notify (G_OBJECT (atk_obj), "accessible-description");
       return;
     }
   else if (g_strcmp0 (pspec->name, "visible") == 0)
