@@ -1,3 +1,35 @@
+Overview of Changes in GTK+ 3.20.10
+===================================
+
+* Bug fixes:
+ 358970 gtk_scale_set_digits does not cause value to be rounded if draw-value is false...
+ 767391 cross-fade() not cross-fading
+ 770166 Can GtkButtons of arbitrary size be circular? The style class only accommodate...
+ 770236 gtkbindings: Add an example for gtk_binding_entry_add_signal()
+ 770242 gtkbindings: Clarify that widgets need has-focus for bindings to work
+ 770332 Notebook arrow icon wrong color after creating new tab
+ 770374 Gtk Treeview Editable overshoots column width when column width is small
+ 770550 gtkplacessidebar: fix signal marshal
+ 770614 GtkScale in HighContrast theme with value = 0: WARNING: allocates negative con...
+ 770624 Fix typos.
+ 770703 Fix crash when using page-down on GtkListBox
+ 770849 GtkLabel with padding brokenness
+ 774695 GtkProgressbar needs full and empty classes
+ 774726 GtkTreeView dnd: gtk_drag_finish remove row when reorder sinse 3.20
+ 775525 gtk_flow_box_get_child_at_index shouldn't crash with an invalid index
+ 775864 getting-started: typo tie->the
+ 776560 icon-browser: window opens at very narrow size, only showing 1 column of icons
+ 779002 Race enumerating the monitors
+
+* Translation updates:
+ Brazilian Portuguese
+ Dutch
+ Icelandic
+ Kazakh
+ Scottisch Gaelic
+ Serbian
+
+
 Overview of Changes in GTK+ 3.20.9
 ==================================
 
