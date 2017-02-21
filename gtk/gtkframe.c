@@ -420,8 +420,8 @@ gtk_frame_forall (GtkContainer *container,
  * @frame: a #GtkFrame
  * @label: (allow-none): the text to use as the label of the frame
  *
- * Sets the text of the label. If @label is %NULL,
- * the current label is removed.
+ * Removes the current #GtkFrame:label-widget. If @label is not %NULL, creates a
+ * new #GtkLabel with that text and adds it as the #GtkFrame:label-widget.
  **/
 void
 gtk_frame_set_label (GtkFrame *frame,
@@ -476,9 +476,8 @@ gtk_frame_get_label (GtkFrame *frame)
  * @frame: a #GtkFrame
  * @label_widget: (nullable): the new label widget
  * 
- * Sets the label widget for the frame. This is the widget that
- * will appear embedded in the top edge of the frame as a
- * title.
+ * Sets the #GtkFrame:label-widget for the frame. This is the widget that
+ * will appear embedded in the top edge of the frame as a title.
  **/
 void
 gtk_frame_set_label_widget (GtkFrame  *frame,
