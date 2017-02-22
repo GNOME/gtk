@@ -6421,12 +6421,11 @@ iter_line_is_rtl (GtkTextIter *iter, GtkTextLayout *layout)
 {
   GtkTextLine *line = _gtk_text_iter_get_text_line (iter);
   GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, FALSE);
-  const gchar *text = pango_layout_get_text (display->layout);
-  PangoDirection pango_dir = pango_find_base_dir (text, -1);
+  GtkTextDirection direction = display->direction;
 
   gtk_text_layout_free_line_display (layout, display);
 
-  return pango_dir == PANGO_DIRECTION_RTL;
+  return direction == GTK_TEXT_DIR_RTL;
 }
 
 static void
