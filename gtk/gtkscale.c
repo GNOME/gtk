@@ -59,7 +59,7 @@
  * its base class, #GtkRange, in addition to the methods for GtkScale itself.
  * To set the value of a scale, you would normally use gtk_range_set_value().
  * To detect changes to the value, you would normally use the
- * #GtkRange:value-changed signal.
+ * #GtkRange::value-changed signal.
  *
  * Note that using the same upper and lower bounds for the #GtkScale (through
  * the #GtkRange methods) will hide the slider itself. This is useful for
