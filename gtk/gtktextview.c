@@ -6424,6 +6424,8 @@ iter_line_is_rtl (GtkTextIter *iter, GtkTextLayout *layout)
   const gchar *text = pango_layout_get_text (display->layout);
   PangoDirection pango_dir = pango_find_base_dir (text, -1);
 
+  gtk_text_layout_free_line_display (layout, display);
+
   return pango_dir == PANGO_DIRECTION_RTL;
 }
 
