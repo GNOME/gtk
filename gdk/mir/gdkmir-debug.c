@@ -207,30 +207,30 @@ _gdk_mir_print_input_event (const MirInputEvent *event)
 }
 
 static void
-_gdk_mir_print_surface_event (const MirSurfaceEvent *event)
+_gdk_mir_print_window_event (const MirWindowEvent *event)
 {
-  g_printerr ("SURFACE\n");
+  g_printerr ("WINDOW\n");
   g_printerr (" Attribute ");
-  switch (mir_surface_event_get_attribute (event))
+  switch (mir_window_event_get_attribute (event))
     {
-    case mir_surface_attrib_type:
+    case mir_window_attrib_type:
       g_printerr ("type");
       break;
-    case mir_surface_attrib_state:
+    case mir_window_attrib_state:
       g_printerr ("state");
       break;
-    case mir_surface_attrib_swapinterval:
+    case mir_window_attrib_swapinterval:
       g_printerr ("swapinterval");
       break;
-    case mir_surface_attrib_focus:
+    case mir_window_attrib_focus:
       g_printerr ("focus");
       break;
     default:
-      g_printerr ("%u", mir_surface_event_get_attribute (event));
+      g_printerr ("%u", mir_window_event_get_attribute (event));
       break;
     }
   g_printerr ("\n");
-  g_printerr (" Value %i\n", mir_surface_event_get_attribute_value (event));
+  g_printerr (" Value %i\n", mir_window_event_get_attribute_value (event));
 }
 
 static void
@@ -278,13 +278,13 @@ _gdk_mir_print_event (const MirEvent *event)
     case mir_event_type_motion:
       _gdk_mir_print_motion_event (mir_event_get_input_event (event));
       break;
-    case mir_event_type_surface:
-      _gdk_mir_print_surface_event (mir_event_get_surface_event (event));
+    case mir_event_type_window:
+      _gdk_mir_print_window_event (mir_event_get_window_event (event));
       break;
     case mir_event_type_resize:
       _gdk_mir_print_resize_event (mir_event_get_resize_event (event));
       break;
-    case mir_event_type_close_surface:
+    case mir_event_type_close_window:
       _gdk_mir_print_close_event ();
       break;
     default:
