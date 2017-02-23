@@ -22,6 +22,8 @@
 #include "gdkmir.h"
 #include "gdkmir-private.h"
 
+#include <mir_toolkit/events/surface_placement.h>
+
 #define NANO_TO_MILLI(x) ((x) / 1000000)
 
 struct _GdkMirWindowReference {
