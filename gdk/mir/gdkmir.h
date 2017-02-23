@@ -20,7 +20,6 @@
 
 #include <gdk/gdk.h>
 #include <mir_toolkit/mir_client_library.h>
-#include <mir_toolkit/events/surface_placement.h>
 
 G_BEGIN_DECLS
 
