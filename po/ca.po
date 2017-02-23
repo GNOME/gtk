@@ -5448,7 +5448,7 @@ msgstr "Còpie_s:"
 
 #: gtk/ui/gtkprintunixdialog.ui:358
 msgid "C_ollate"
-msgstr "E_nganxa"
+msgstr "_Compagina"
 
 #: gtk/ui/gtkprintunixdialog.ui:372
 msgid "_Reverse"
