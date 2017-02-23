@@ -817,7 +817,6 @@ gtk_switch_init (GtkSwitch *self)
 
   priv->slider = g_object_new (GTK_TYPE_BUTTON, "css-name", "slider", NULL);
   gtk_widget_set_parent (priv->slider, GTK_WIDGET (self));
-  gtk_widget_show (priv->slider);
 
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
@@ -848,14 +847,12 @@ gtk_switch_init (GtkSwitch *self)
    */
   priv->on_label = gtk_label_new (C_("switch", "ON"));
   gtk_widget_set_parent (priv->on_label, GTK_WIDGET (self));
-  gtk_widget_show (priv->on_label);
 
   /* Translators: if the "off" state label requires more than three
    * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
    */
   priv->off_label = gtk_label_new (C_("switch", "OFF"));
   gtk_widget_set_parent (priv->off_label, GTK_WIDGET (self));
-  gtk_widget_show (priv->off_label);
 }
 
 /**
