@@ -4683,21 +4683,17 @@ gtk_combo_box_get_popup_fixed_width (GtkComboBox *combo_box)
  *
  * Since: 2.6
  */
-AtkObject*
+AtkObject *
 gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv;
-  AtkObject *atk_obj;
 
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
 
   priv = combo_box->priv;
 
   if (priv->popup_widget)
-    {
-      atk_obj = gtk_widget_get_accessible (priv->popup_widget);
-      return atk_obj;
-    }
+    return gtk_widget_get_accessible (priv->popup_widget);
 
   return NULL;
 }
