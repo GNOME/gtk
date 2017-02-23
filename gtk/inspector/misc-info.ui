@@ -65,7 +65,7 @@
                         <child>
                           <object class="GtkLabel" id="refcount_label">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Reference Count</property>
+                            <property name="label" translatable="yes">Reference count</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
@@ -291,7 +291,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Request Mode</property>
+                            <property name="label" translatable="yes">Request mode</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -393,7 +393,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Clip Area</property>
+                            <property name="label" translatable="yes">Clip area</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -472,7 +472,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Tick Callback</property>
+                            <property name="label" translatable="yes">Tick callback</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -508,7 +508,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Frame Count</property>
+                            <property name="label" translatable="yes">Frame count</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -542,7 +542,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Frame Rate</property>
+                            <property name="label" translatable="yes">Frame rate</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -576,7 +576,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Accessible Role</property>
+                            <property name="label" translatable="yes">Accessible role</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -610,7 +610,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Accessible Name</property>
+                            <property name="label" translatable="yes">Accessible name</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -646,7 +646,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">true</property>
-                            <property name="label" translatable="yes">Accessible Description</property>
+                            <property name="label" translatable="yes">Accessible description</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>

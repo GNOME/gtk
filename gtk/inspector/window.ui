@@ -428,7 +428,7 @@
                       </object>
                       <packing>
                         <property name="name">css-nodes</property>
-                        <property name="title" translatable="yes">CSS Nodes</property>
+                        <property name="title" translatable="yes">CSS nodes</property>
                       </packing>
                     </child>
                     <child>

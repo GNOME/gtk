@@ -344,7 +344,7 @@
                         <child>
                           <object class="GtkLabel" id="hidpi_label">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Window Scaling</property>
+                            <property name="label" translatable="yes">Window scaling</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
@@ -680,7 +680,7 @@
                         <child>
                           <object class="GtkLabel" id="touchscreen_label">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Simulate Touchscreen</property>
+                            <property name="label" translatable="yes">Simulate touchscreen</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
@@ -737,7 +737,7 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <items>
-                              <item translatable="yes" id="maybe">When Needed</item>
+                              <item translatable="yes" id="maybe">When needed</item>
                               <item translatable="yes" id="always">Always</item>
                               <item translatable="yes" id="disable">Disabled</item>
                             </items>
