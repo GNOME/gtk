@@ -827,8 +827,8 @@ gdk_mir_display_convert_selection (GdkDisplay *display,
                                    guint32     time)
 {
   GdkMirDisplay *mir_display = GDK_MIR_DISPLAY (display);
-  MirSurface *surface;
-  MirPersistentId *persistent_id;
+  MirWindow *mir_window;
+  MirWindowId *mir_window_id;
   ConvertInfo *info;
 
   if (selection != GDK_SELECTION_CLIPBOARD)
@@ -837,17 +837,17 @@ gdk_mir_display_convert_selection (GdkDisplay *display,
     gdk_mir_display_real_convert_selection (display, requestor, selection, target, time);
   else if (mir_display->focused_window)
     {
-      surface = gdk_mir_window_get_mir_surface (mir_display->focused_window);
+      mir_window = _gdk_mir_window_get_mir_window (mir_display->focused_window);
 
-      if (!surface)
+      if (!mir_window)
         return;
 
-      persistent_id = mir_surface_request_persistent_id_sync (surface);
+      mir_window_id = mir_window_request_window_id_sync (mir_window);
 
-      if (!persistent_id)
+      if (!mir_window_id)
         return;
 
-      if (mir_persistent_id_is_valid (persistent_id))
+      if (mir_window_id_is_valid (mir_window_id))
         {
           info = g_new (ConvertInfo, 1);
           info->display = g_object_ref (display);
@@ -858,13 +858,13 @@ gdk_mir_display_convert_selection (GdkDisplay *display,
 
           content_hub_service_call_get_latest_paste_data (
             mir_display->content_service,
-            mir_persistent_id_as_string (persistent_id),
+            mir_window_id_as_string (mir_window_id),
             NULL,
             paste_data_ready_cb,
             info);
         }
 
-      mir_persistent_id_release (persistent_id);
+      mir_window_id_release (mir_window_id);
     }
 }
 
@@ -1010,34 +1010,34 @@ _gdk_mir_display_create_paste (GdkDisplay          *display,
                                gsize                paste_size)
 {
   GdkMirDisplay *mir_display = GDK_MIR_DISPLAY (display);
-  MirSurface *surface;
-  MirPersistentId *persistent_id;
+  MirWindow *mir_window;
+  MirWindowId *mir_window_id;
 
   if (!mir_display->focused_window)
     return;
 
-  surface = gdk_mir_window_get_mir_surface (mir_display->focused_window);
+  mir_window = _gdk_mir_window_get_mir_window (mir_display->focused_window);
 
-  if (!surface)
+  if (!mir_window)
     return;
 
-  persistent_id = mir_surface_request_persistent_id_sync (surface);
+  mir_window_id = mir_window_request_window_id_sync (mir_window);
 
-  if (!persistent_id)
+  if (!mir_window_id)
     return;
 
-  if (mir_persistent_id_is_valid (persistent_id))
+  if (mir_window_id_is_valid (mir_window_id))
     content_hub_service_call_create_paste_sync (
       mir_display->content_service,
       g_application_get_application_id (g_application_get_default ()),
-      mir_persistent_id_as_string (persistent_id),
+      mir_window_id_as_string (mir_window_id),
       g_variant_new_fixed_array (G_VARIANT_TYPE_BYTE, paste_data, paste_size, sizeof (guchar)),
       paste_formats,
       NULL,
       NULL,
       NULL);
 
-  mir_persistent_id_release (persistent_id);
+  mir_window_id_release (mir_window_id);
 }
 
 gboolean

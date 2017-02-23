@@ -83,13 +83,15 @@ GdkCursor *_gdk_mir_cursor_new_for_name (GdkDisplay *display, const gchar *name)
 
 const gchar *_gdk_mir_cursor_get_name (GdkCursor *cursor);
 
+MirWindow *_gdk_mir_window_get_mir_window (GdkWindow *window);
+
 GdkWindowImpl *_gdk_mir_window_impl_new (GdkDisplay *display, GdkWindow *window, GdkWindowAttr *attributes, gint attributes_mask);
 
-void _gdk_mir_window_impl_set_surface_state (GdkMirWindowImpl *impl, MirSurfaceState state);
+void _gdk_mir_window_impl_set_window_state (GdkMirWindowImpl *impl, MirWindowState state);
 
-void _gdk_mir_window_impl_set_surface_type (GdkMirWindowImpl *impl, MirSurfaceType type);
+void _gdk_mir_window_impl_set_window_type (GdkMirWindowImpl *impl, MirWindowType type);
 
-void _gdk_mir_window_set_surface_output (GdkWindow *window, gdouble scale);
+void _gdk_mir_window_set_scale (GdkWindow *window, gdouble scale);
 
 void _gdk_mir_window_set_final_rect (GdkWindow *window, MirRectangle rect);
 

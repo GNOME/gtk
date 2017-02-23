@@ -22,7 +22,7 @@
 #include "gdkmir.h"
 #include "gdkmir-private.h"
 
-#include <mir_toolkit/events/surface_placement.h>
+#include <mir_toolkit/events/window_placement.h>
 
 #define NANO_TO_MILLI(x) ((x) / 1000000)
 
@@ -444,45 +444,46 @@ handle_motion_event (GdkWindow *window, const MirInputEvent *event)
 }
 
 static void
-handle_surface_event (GdkWindow *window, const MirSurfaceEvent *event)
+handle_window_event (GdkWindow            *window,
+                     const MirWindowEvent *event)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-  MirSurfaceState state;
+  MirWindowState state;
 
-  switch (mir_surface_event_get_attribute (event))
+  switch (mir_window_event_get_attribute (event))
     {
-    case mir_surface_attrib_type:
-      _gdk_mir_window_impl_set_surface_type (impl, mir_surface_event_get_attribute_value (event));
+    case mir_window_attrib_type:
+      _gdk_mir_window_impl_set_window_type (impl, mir_window_event_get_attribute_value (event));
       break;
-    case mir_surface_attrib_state:
-      state = mir_surface_event_get_attribute_value (event);
-      _gdk_mir_window_impl_set_surface_state (impl, state);
+    case mir_window_attrib_state:
+      state = mir_window_event_get_attribute_value (event);
+      _gdk_mir_window_impl_set_window_state (impl, state);
 
       switch (state)
         {
-        case mir_surface_state_restored:
-        case mir_surface_state_hidden:
+        case mir_window_state_restored:
+        case mir_window_state_hidden:
           gdk_synthesize_window_state (window,
                                        GDK_WINDOW_STATE_ICONIFIED |
                                        GDK_WINDOW_STATE_MAXIMIZED |
                                        GDK_WINDOW_STATE_FULLSCREEN,
                                        0);
           break;
-        case mir_surface_state_minimized:
+        case mir_window_state_minimized:
           gdk_synthesize_window_state (window,
                                        GDK_WINDOW_STATE_MAXIMIZED |
                                        GDK_WINDOW_STATE_FULLSCREEN,
                                        GDK_WINDOW_STATE_ICONIFIED);
           break;
-        case mir_surface_state_maximized:
-        case mir_surface_state_vertmaximized:
-        case mir_surface_state_horizmaximized:
+        case mir_window_state_maximized:
+        case mir_window_state_vertmaximized:
+        case mir_window_state_horizmaximized:
           gdk_synthesize_window_state (window,
                                        GDK_WINDOW_STATE_ICONIFIED |
                                        GDK_WINDOW_STATE_FULLSCREEN,
                                        GDK_WINDOW_STATE_MAXIMIZED);
           break;
-        case mir_surface_state_fullscreen:
+        case mir_window_state_fullscreen:
           gdk_synthesize_window_state (window,
                                        GDK_WINDOW_STATE_ICONIFIED |
                                        GDK_WINDOW_STATE_MAXIMIZED,
@@ -493,10 +494,10 @@ handle_surface_event (GdkWindow *window, const MirSurfaceEvent *event)
         }
 
       break;
-    case mir_surface_attrib_swapinterval:
+    case mir_window_attrib_swapinterval:
       break;
-    case mir_surface_attrib_focus:
-      generate_focus_event (window, mir_surface_event_get_attribute_value (event) != 0);
+    case mir_window_attrib_focus:
+      generate_focus_event (window, mir_window_event_get_attribute_value (event) != 0);
       break;
     default:
       break;
@@ -537,17 +538,17 @@ handle_close_event (GdkWindow *window)
 }
 
 static void
-handle_surface_output_event (GdkWindow                  *window,
-                             const MirSurfaceOutputEvent *event)
+handle_window_output_event (GdkWindow                  *window,
+                            const MirWindowOutputEvent *event)
 {
-  _gdk_mir_window_set_surface_output (window, mir_surface_output_event_get_scale (event));
+  _gdk_mir_window_set_scale (window, mir_window_output_event_get_scale (event));
 }
 
 static void
-handle_surface_placement_event (GdkWindow                      *window,
-                                const MirSurfacePlacementEvent *event)
+handle_window_placement_event (GdkWindow                     *window,
+                               const MirWindowPlacementEvent *event)
 {
-  _gdk_mir_window_set_final_rect (window, mir_surface_placement_get_relative_position (event));
+  _gdk_mir_window_set_final_rect (window, mir_window_placement_get_relative_position (event));
 }
 
 typedef struct
@@ -591,8 +592,8 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
     case mir_event_type_motion:
       handle_motion_event (window, mir_event_get_input_event (event));
       break;
-    case mir_event_type_surface:
-      handle_surface_event (window, mir_event_get_surface_event (event));
+    case mir_event_type_window:
+      handle_window_event (window, mir_event_get_window_event (event));
       break;
     case mir_event_type_resize:
       handle_resize_event (window, mir_event_get_resize_event (event));
@@ -603,14 +604,14 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
     case mir_event_type_orientation:
       // FIXME?
       break;
-    case mir_event_type_close_surface:
+    case mir_event_type_close_window:
       handle_close_event (window);
       break;
-    case mir_event_type_surface_output:
-      handle_surface_output_event (window, mir_event_get_surface_output_event (event));
+    case mir_event_type_window_output:
+      handle_window_output_event (window, mir_event_get_window_output_event (event));
       break;
-    case mir_event_type_surface_placement:
-      handle_surface_placement_event (window, mir_event_get_surface_placement_event (event));
+    case mir_event_type_window_placement:
+      handle_window_placement_event (window, mir_event_get_window_placement_event (event));
       break;
     default:
       g_warning ("Ignoring unknown Mir event %d", mir_event_get_type (event));
