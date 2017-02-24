@@ -1880,7 +1880,7 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
       minimum_req.width = MAX (minimum_req.width, hscrollbar_requisition.width + sborder.left + sborder.right);
       natural_req.width = MAX (natural_req.width, hscrollbar_requisition.width + sborder.left + sborder.right);
 
-      if (!priv->use_indicators)
+      if (!priv->use_indicators && priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
 	{
 	  minimum_req.height += scrollbar_spacing + hscrollbar_requisition.height;
 	  natural_req.height += scrollbar_spacing + hscrollbar_requisition.height;
@@ -1892,7 +1892,7 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
       minimum_req.height = MAX (minimum_req.height, vscrollbar_requisition.height + sborder.top + sborder.bottom);
       natural_req.height = MAX (natural_req.height, vscrollbar_requisition.height + sborder.top + sborder.bottom);
 
-      if (!priv->use_indicators)
+      if (!priv->use_indicators && priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
 	{
 	  minimum_req.width += scrollbar_spacing + vscrollbar_requisition.width;
 	  natural_req.width += scrollbar_spacing + vscrollbar_requisition.width;
