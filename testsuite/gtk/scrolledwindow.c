@@ -11,11 +11,14 @@ typedef enum
 } TestProperty;
 
 static void
-test_size (GtkOrientation orientation,
+test_size (gboolean       overlay,
+           GtkPolicyType  policy,
+           GtkOrientation orientation,
            TestProperty   prop)
 {
   GtkWidget *scrolledwindow, *box;
-  int size, child_size;
+  int min_size, max_size, child_size;
+  int scrollbar_size = 0;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_hexpand (box, TRUE);
@@ -24,6 +27,8 @@ test_size (GtkOrientation orientation,
   scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (scrolledwindow), TRUE);
+  gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (scrolledwindow), overlay);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow), policy, policy);
   gtk_container_add (GTK_CONTAINER (scrolledwindow), box);
 
   /* Testing the content-width property */
@@ -34,9 +39,8 @@ test_size (GtkOrientation orientation,
           gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (scrolledwindow), MIN_SIZE);
 
           gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_HORIZONTAL, -1,
-                              &size, NULL, NULL, NULL);
+                              &min_size, NULL, NULL, NULL);
 
-          g_assert_cmpint (size, ==, MIN_SIZE);
         }
 
       if (prop & MAXIMUM_CONTENT)
@@ -49,12 +53,19 @@ test_size (GtkOrientation orientation,
            * so it should grow up to max-content-width.
            */
           gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_HORIZONTAL, -1,
-                              NULL, &size, NULL, NULL);
+                              NULL, &max_size, NULL, NULL);
           gtk_widget_measure (box, GTK_ORIENTATION_HORIZONTAL, -1,
                               &child_size, NULL, NULL, NULL);
+        }
 
-          g_assert_cmpint (child_size, ==, BOX_SIZE);
-          g_assert_cmpint (size, ==, MAX_SIZE);
+      /* If the relevant scrollbar is non-overlay and always shown, it is added
+       * to the preferred size. When comparing to the expected size, we need to
+       * to exclude that extra, as we are only interested in the content size */
+      if (!overlay && policy == GTK_POLICY_ALWAYS)
+        {
+          GtkWidget *scrollbar = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scrolledwindow));
+          gtk_widget_measure (scrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
+                              &scrollbar_size, NULL, NULL, NULL);
         }
     }
   /* Testing the content-height property */
@@ -65,9 +76,7 @@ test_size (GtkOrientation orientation,
           gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (scrolledwindow), MIN_SIZE);
 
           gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_VERTICAL, -1,
-                              &size, NULL, NULL, NULL);
-
-          g_assert_cmpint (size, ==, MIN_SIZE);
+                              &min_size, NULL, NULL, NULL);
         }
 
       if (prop & MAXIMUM_CONTENT)
@@ -80,52 +89,182 @@ test_size (GtkOrientation orientation,
            * so it should grow up to max-content-height.
            */
           gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_VERTICAL, -1,
-                              NULL, &size, NULL, NULL);
+                              NULL, &max_size, NULL, NULL);
           gtk_widget_measure (box, GTK_ORIENTATION_VERTICAL, -1,
                               &child_size, NULL, NULL, NULL);
-
-          g_assert_cmpint (child_size, ==, BOX_SIZE);
-          g_assert_cmpint (size, ==, MAX_SIZE);
         }
+
+      if (!overlay && policy == GTK_POLICY_ALWAYS)
+        {
+          GtkWidget *scrollbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW (scrolledwindow));
+          gtk_widget_measure (scrollbar, GTK_ORIENTATION_VERTICAL, -1,
+                              &scrollbar_size, NULL, NULL, NULL);
+        }
+    }
+
+  if (prop & MINIMUM_CONTENT)
+    {
+      min_size -= scrollbar_size;
+      g_assert_cmpint (min_size, ==, MIN_SIZE);
+    }
+
+  if (prop & MAXIMUM_CONTENT)
+    {
+      g_assert_cmpint (child_size, ==, BOX_SIZE);
+
+      max_size -= scrollbar_size;
+      g_assert_cmpint (max_size, ==, MAX_SIZE);
     }
 }
 
 
 static void
-min_content_width (void)
+overlay_automatic_width_min (void)
 {
-  test_size (GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT);
+  test_size (TRUE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT);
 }
 
 static void
-min_content_height (void)
+overlay_automatic_height_min (void)
 {
-  test_size (GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT);
+  test_size (TRUE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT);
 }
 
 static void
-max_content_width (void)
+overlay_automatic_width_max (void)
 {
-  test_size (GTK_ORIENTATION_HORIZONTAL, MAXIMUM_CONTENT);
+  test_size (TRUE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_HORIZONTAL, MAXIMUM_CONTENT);
 }
 
 static void
-max_content_height (void)
+overlay_automatic_height_max (void)
 {
-  test_size (GTK_ORIENTATION_VERTICAL, MAXIMUM_CONTENT);
+  test_size (TRUE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_VERTICAL, MAXIMUM_CONTENT);
 }
 
 static void
-min_max_content_width (void)
+overlay_automatic_width_min_max (void)
 {
-  test_size (GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
+  test_size (TRUE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
 }
 
 static void
-min_max_content_height (void)
+overlay_automatic_height_min_max (void)
 {
-  test_size (GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
+  test_size (TRUE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
 }
+
+
+static void
+nonoverlay_automatic_width_min (void)
+{
+  test_size (FALSE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT);
+}
+
+static void
+nonoverlay_automatic_height_min (void)
+{
+  test_size (FALSE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT);
+}
+
+static void
+nonoverlay_automatic_width_max (void)
+{
+  test_size (FALSE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_HORIZONTAL, MAXIMUM_CONTENT);
+}
+
+static void
+nonoverlay_automatic_height_max (void)
+{
+  test_size (FALSE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_VERTICAL, MAXIMUM_CONTENT);
+}
+
+static void
+nonoverlay_automatic_width_min_max (void)
+{
+  test_size (FALSE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
+}
+
+static void
+nonoverlay_automatic_height_min_max (void)
+{
+  test_size (FALSE, GTK_POLICY_AUTOMATIC, GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
+}
+
+
+static void
+overlay_always_width_min (void)
+{
+  test_size (TRUE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT);
+}
+
+static void
+overlay_always_height_min (void)
+{
+  test_size (TRUE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT);
+}
+
+static void
+overlay_always_width_max (void)
+{
+  test_size (TRUE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_HORIZONTAL, MAXIMUM_CONTENT);
+}
+
+static void
+overlay_always_height_max (void)
+{
+  test_size (TRUE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_VERTICAL, MAXIMUM_CONTENT);
+}
+
+static void
+overlay_always_width_min_max (void)
+{
+  test_size (TRUE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
+}
+
+static void
+overlay_always_height_min_max (void)
+{
+  test_size (TRUE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
+}
+
+
+static void
+nonoverlay_always_width_min (void)
+{
+  test_size (FALSE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT);
+}
+
+static void
+nonoverlay_always_height_min (void)
+{
+  test_size (FALSE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT);
+}
+
+static void
+nonoverlay_always_width_max (void)
+{
+  test_size (FALSE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_HORIZONTAL, MAXIMUM_CONTENT);
+}
+
+static void
+nonoverlay_always_height_max (void)
+{
+  test_size (FALSE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_VERTICAL, MAXIMUM_CONTENT);
+}
+
+static void
+nonoverlay_always_width_min_max (void)
+{
+  test_size (FALSE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_HORIZONTAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
+}
+
+static void
+nonoverlay_always_height_min_max (void)
+{
+  test_size (FALSE, GTK_POLICY_ALWAYS, GTK_ORIENTATION_VERTICAL, MINIMUM_CONTENT | MAXIMUM_CONTENT);
+}
+
 
 int
 main (int argc, char **argv)
@@ -133,14 +272,33 @@ main (int argc, char **argv)
   gtk_init ();
   g_test_init (&argc, &argv, NULL);
 
-  g_test_add_func ("/sizing/scrolledwindow/min_content_width", min_content_width);
-  g_test_add_func ("/sizing/scrolledwindow/min_content_height", min_content_height);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_automatic_width_min", overlay_automatic_width_min);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_automatic_height_min", overlay_automatic_height_min);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_automatic_width_max", overlay_automatic_width_max);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_automatic_height_max", overlay_automatic_height_max);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_automatic_width_min_max", overlay_automatic_width_min_max);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_automatic_height_min_max", overlay_automatic_height_min_max);
 
-  g_test_add_func ("/sizing/scrolledwindow/max_content_width", max_content_width);
-  g_test_add_func ("/sizing/scrolledwindow/max_content_height", max_content_height);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_automatic_width_min", nonoverlay_automatic_width_min);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_automatic_height_min", nonoverlay_automatic_height_min);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_automatic_width_max", nonoverlay_automatic_width_max);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_automatic_height_max", nonoverlay_automatic_height_max);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_automatic_width_min_max", nonoverlay_automatic_width_min_max);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_automatic_height_min_max", nonoverlay_automatic_height_min_max);
 
-  g_test_add_func ("/sizing/scrolledwindow/min_max_content_width", min_max_content_width);
-  g_test_add_func ("/sizing/scrolledwindow/min_max_content_height", min_max_content_height);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_always_width_min", overlay_always_width_min);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_always_height_min", overlay_always_height_min);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_always_width_max", overlay_always_width_max);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_always_height_max", overlay_always_height_max);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_always_width_min_max", overlay_always_width_min_max);
+  g_test_add_func ("/sizing/scrolledwindow/overlay_always_height_min_max", overlay_always_height_min_max);
+
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_always_width_min", nonoverlay_always_width_min);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_always_height_min", nonoverlay_always_height_min);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_always_width_max", nonoverlay_always_width_max);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_always_height_max", nonoverlay_always_height_max);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_always_width_min_max", nonoverlay_always_width_min_max);
+  g_test_add_func ("/sizing/scrolledwindow/nonoverlay_always_height_min_max", nonoverlay_always_height_min_max);
 
   return g_test_run ();
 }
