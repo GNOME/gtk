@@ -2298,6 +2298,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
 {
   GtkWidget *child;
   GtkWidget *stack;
+  GtkStyleContext *style_context;
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
@@ -2305,6 +2306,8 @@ gtk_popover_bind_model (GtkPopover  *popover,
   child = gtk_bin_get_child (GTK_BIN (popover));
   if (child)
     gtk_widget_destroy (child);
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
 
   if (model)
     {
@@ -2322,6 +2325,12 @@ gtk_popover_bind_model (GtkPopover  *popover,
 
       g_signal_connect (popover, "unmap", G_CALLBACK (back_to_main), NULL);
       g_signal_connect (popover, "map", G_CALLBACK (back_to_main), NULL);
+
+      gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
+    }
+  else
+    {
+      gtk_style_context_remove_class (style_context, GTK_STYLE_CLASS_MENU);
     }
 }
 
@@ -2350,16 +2359,12 @@ gtk_popover_new_from_model (GtkWidget  *relative_to,
                             GMenuModel *model)
 {
   GtkWidget *popover;
-  GtkStyleContext *style_context;
 
   g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
   g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
 
   popover = gtk_popover_new (relative_to);
   gtk_popover_bind_model (GTK_POPOVER (popover), model, NULL);
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
-  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
 
   return popover;
 }
