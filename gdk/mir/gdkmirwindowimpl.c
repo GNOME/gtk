@@ -645,7 +645,6 @@ send_buffer (GdkWindow *window)
 static cairo_surface_t *
 gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_ref_cairo_surface window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   MirGraphicsRegion region;
   cairo_format_t pixel_format = CAIRO_FORMAT_ARGB32;
@@ -725,7 +724,6 @@ gdk_mir_window_impl_create_similar_image_surface (GdkWindow      *window,
                                                   int             width,
                                                   int             height)
 {
-  //g_printerr ("gdk_mir_window_impl_create_similar_image_surface window=%p\n", window);
   return cairo_image_surface_create (format, width, height);
 }
 
@@ -750,8 +748,6 @@ gdk_mir_window_impl_show (GdkWindow *window,
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   cairo_surface_t *s;
 
-  //g_printerr ("gdk_mir_window_impl_show window=%p\n", window);
-
   impl->visible = TRUE;
   set_window_state (impl, mir_window_state_restored);
 
@@ -770,7 +766,6 @@ gdk_mir_window_impl_show (GdkWindow *window,
 static void
 gdk_mir_window_impl_hide (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_hide window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   impl->cursor_inside = FALSE;
@@ -782,7 +777,6 @@ gdk_mir_window_impl_hide (GdkWindow *window)
 static void
 gdk_mir_window_impl_withdraw (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_withdraw window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   impl->cursor_inside = FALSE;
@@ -794,14 +788,12 @@ gdk_mir_window_impl_withdraw (GdkWindow *window)
 static void
 gdk_mir_window_impl_raise (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_raise window=%p\n", window);
   /* We don't support client window stacking */
 }
 
 static void
 gdk_mir_window_impl_lower (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_lower window=%p\n", window);
   /* We don't support client window stacking */
 }
 
@@ -810,7 +802,6 @@ gdk_mir_window_impl_restack_toplevel (GdkWindow *window,
                                       GdkWindow *sibling,
                                       gboolean   above)
 {
-  //g_printerr ("gdk_mir_window_impl_restack_toplevel window=%p sibling=%p\n", window, sibling);
   /* We don't support client window stacking */
 }
 
@@ -822,15 +813,6 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
                                  gint       width,
                                  gint       height)
 {
-  /*
-  g_printerr ("gdk_mir_window_impl_move_resize");
-  g_printerr (" window=%p", window);
-  if (with_move)
-    g_printerr (" location=%d,%d", x, y);
-  if (width > 0)
-    g_printerr (" size=%dx%dpx", width, height);
-  g_printerr ("\n");
-  */
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   /* If resize requested then rebuild window */
@@ -1202,7 +1184,6 @@ _gdk_mir_window_set_final_rect (GdkWindow    *window,
 static GdkEventMask
 gdk_mir_window_impl_get_events (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_get_events window=%p\n", window);
   return window->event_mask;
 }
 
@@ -1210,7 +1191,6 @@ static void
 gdk_mir_window_impl_set_events (GdkWindow    *window,
                                 GdkEventMask  event_mask)
 {
-  //g_printerr ("gdk_mir_window_impl_set_events window=%p\n", window);
   /* We send all events and let GDK decide */
 }
 
@@ -1242,8 +1222,6 @@ gdk_mir_window_impl_get_geometry (GdkWindow *window,
                                   gint      *width,
                                   gint      *height)
 {
-  //g_printerr ("gdk_mir_window_impl_get_geometry window=%p\n", window);
-
   if (x)
     *x = 0; // FIXME
   if (y)
@@ -1261,8 +1239,6 @@ gdk_mir_window_impl_get_root_coords (GdkWindow *window,
                                      gint      *root_x,
                                      gint      *root_y)
 {
-  //g_printerr ("gdk_mir_window_impl_get_root_coords window=%p\n", window);
-
   if (root_x)
     *root_x = x; // FIXME
   if (root_y)
@@ -1276,7 +1252,6 @@ gdk_mir_window_impl_get_device_state (GdkWindow       *window,
                                       gdouble         *y,
                                       GdkModifierType *mask)
 {
-  //g_printerr ("gdk_mir_window_impl_get_device_state window=%p\n", window);
   GdkWindow *child;
 
   _gdk_device_query_state (device, window, NULL, &child, NULL, NULL, x, y, mask);
@@ -1287,7 +1262,6 @@ gdk_mir_window_impl_get_device_state (GdkWindow       *window,
 static gboolean
 gdk_mir_window_impl_begin_paint (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_begin_paint window=%p\n", window);
   /* Indicate we are ready to be drawn onto directly? */
   return FALSE;
 }
@@ -1307,7 +1281,6 @@ gdk_mir_window_impl_shape_combine_region (GdkWindow            *window,
                                           gint                  offset_x,
                                           gint                  offset_y)
 {
-  //g_printerr ("gdk_mir_window_impl_shape_combine_region window=%p\n", window);
 }
 
 static void
@@ -1316,7 +1289,6 @@ gdk_mir_window_impl_input_shape_combine_region (GdkWindow            *window,
                                                 gint                  offset_x,
                                                 gint                  offset_y)
 {
-  // g_printerr ("gdk_mir_window_impl_input_shape_combine_region window=%p\n", window);
 }
 
 static void
@@ -1324,7 +1296,6 @@ gdk_mir_window_impl_destroy (GdkWindow *window,
                              gboolean   recursing,
                              gboolean   foreign_destroy)
 {
-  //g_printerr ("gdk_mir_window_impl_destroy window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   impl->visible = FALSE;
@@ -1333,9 +1304,8 @@ gdk_mir_window_impl_destroy (GdkWindow *window,
 
 static void
 gdk_mir_window_impl_focus (GdkWindow *window,
-                      guint32    timestamp)
+                           guint32    timestamp)
 {
-  //g_printerr ("gdk_mir_window_impl_focus window=%p\n", window);
 }
 
 static void
@@ -1380,21 +1350,18 @@ static void
 gdk_mir_window_impl_set_skip_taskbar_hint (GdkWindow *window,
                                            gboolean   skips_taskbar)
 {
-  //g_printerr ("gdk_mir_window_impl_set_skip_taskbar_hint window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_skip_pager_hint (GdkWindow *window,
                                          gboolean   skips_pager)
 {
-  //g_printerr ("gdk_mir_window_impl_set_skip_pager_hint window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_urgency_hint (GdkWindow *window,
                                       gboolean   urgent)
 {
-  //g_printerr ("gdk_mir_window_impl_set_urgency_hint window=%p\n", window);
 }
 
 static void
@@ -1405,7 +1372,6 @@ gdk_mir_window_impl_set_geometry_hints (GdkWindow         *window,
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   MirConnection *connection = gdk_mir_display_get_mir_connection (impl->display);
   MirWindowSpec *spec;
-  //g_printerr ("gdk_mir_window_impl_set_geometry_hints window=%p impl=%p\n", window, impl);
 
   impl->geometry_hints = *geometry;
   impl->geometry_mask = geom_mask;
@@ -1426,7 +1392,6 @@ gdk_mir_window_impl_set_title (GdkWindow   *window,
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   MirConnection *connection = gdk_mir_display_get_mir_connection (impl->display);
   MirWindowSpec *spec;
-  //g_printerr ("gdk_mir_window_impl_set_title window=%p\n", window);
 
   g_free (impl->title);
   impl->title = g_strdup (title);
@@ -1444,21 +1409,18 @@ static void
 gdk_mir_window_impl_set_role (GdkWindow   *window,
                               const gchar *role)
 {
-  //g_printerr ("gdk_mir_window_impl_set_role window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_startup_id (GdkWindow   *window,
                                     const gchar *startup_id)
 {
-  //g_printerr ("gdk_mir_window_impl_set_startup_id window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_transient_for (GdkWindow *window,
                                        GdkWindow *parent)
 {
-  //g_printerr ("gdk_mir_window_impl_set_transient_for window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   if (impl->transient_for == parent)
@@ -1475,14 +1437,12 @@ static void
 gdk_mir_window_impl_get_frame_extents (GdkWindow    *window,
                                        GdkRectangle *rect)
 {
-  //g_printerr ("gdk_mir_window_impl_get_frame_extents window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_accept_focus (GdkWindow *window,
                                       gboolean   accept_focus)
 {
-  //g_printerr ("gdk_mir_window_impl_set_accept_focus window=%p\n", window);
   /* Mir clients cannot control focus */
 }
 
@@ -1490,7 +1450,6 @@ static void
 gdk_mir_window_impl_set_focus_on_map (GdkWindow *window,
                                       gboolean focus_on_map)
 {
-  //g_printerr ("gdk_mir_window_impl_set_focus_on_map window=%p\n", window);
   /* Mir clients cannot control focus */
 }
 
@@ -1498,7 +1457,6 @@ static void
 gdk_mir_window_impl_set_icon_list (GdkWindow *window,
                                    GList     *pixbufs)
 {
-  //g_printerr ("gdk_mir_window_impl_set_icon_list window=%p\n", window);
   // ??
 }
 
@@ -1506,68 +1464,58 @@ static void
 gdk_mir_window_impl_set_icon_name (GdkWindow   *window,
                                    const gchar *name)
 {
-  //g_printerr ("gdk_mir_window_impl_set_icon_name window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_iconify (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_iconify window=%p\n", window);
   /* We don't support iconification */
 }
 
 static void
 gdk_mir_window_impl_deiconify (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_deiconify window=%p\n", window);
   /* We don't support iconification */
 }
 
 static void
 gdk_mir_window_impl_stick (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_stick window=%p\n", window);
   /* We do not support stick/unstick in Mir */
 }
 
 static void
 gdk_mir_window_impl_unstick (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_unstick window=%p\n", window);
   /* We do not support stick/unstick in Mir */
 }
 
 static void
 gdk_mir_window_impl_maximize (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_maximize window=%p\n", window);
   set_window_state (GDK_MIR_WINDOW_IMPL (window->impl), mir_window_state_maximized);
 }
 
 static void
 gdk_mir_window_impl_unmaximize (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_unmaximize window=%p\n", window);
   set_window_state (GDK_MIR_WINDOW_IMPL (window->impl), mir_window_state_restored);
 }
 
 static void
 gdk_mir_window_impl_fullscreen (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_fullscreen window=%p\n", window);
   set_window_state (GDK_MIR_WINDOW_IMPL (window->impl), mir_window_state_fullscreen);
 }
 
 static void
 gdk_mir_window_impl_apply_fullscreen_mode (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_apply_fullscreen_mode window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_unfullscreen (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_unfullscreen window=%p\n", window);
   set_window_state (GDK_MIR_WINDOW_IMPL (window->impl), mir_window_state_restored);
 }
 
@@ -1575,7 +1523,6 @@ static void
 gdk_mir_window_impl_set_keep_above (GdkWindow *window,
                                     gboolean   setting)
 {
-  //g_printerr ("gdk_mir_window_impl_set_keep_above window=%p\n", window);
   /* We do not support keep above/below in Mir */
 }
 
@@ -1583,14 +1530,12 @@ static void
 gdk_mir_window_impl_set_keep_below (GdkWindow *window,
                                     gboolean setting)
 {
-  //g_printerr ("gdk_mir_window_impl_set_keep_below window=%p\n", window);
   /* We do not support keep above/below in Mir */
 }
 
 static GdkWindow *
 gdk_mir_window_impl_get_group (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_get_group window=%p\n", window);
   return NULL;
 }
 
@@ -1598,21 +1543,18 @@ static void
 gdk_mir_window_impl_set_group (GdkWindow *window,
                                GdkWindow *leader)
 {
-  //g_printerr ("gdk_mir_window_impl_set_group window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_decorations (GdkWindow       *window,
                                      GdkWMDecoration  decorations)
 {
-  //g_printerr ("gdk_mir_window_impl_set_decorations window=%p decorations=%d\n", window, decorations);
 }
 
 static gboolean
 gdk_mir_window_impl_get_decorations (GdkWindow       *window,
                                      GdkWMDecoration *decorations)
 {
-  //g_printerr ("gdk_mir_window_impl_get_decorations window=%p\n", window);
   return FALSE;
 }
 
@@ -1620,7 +1562,6 @@ static void
 gdk_mir_window_impl_set_functions (GdkWindow     *window,
                                    GdkWMFunction  functions)
 {
-  //g_printerr ("gdk_mir_window_impl_set_functions window=%p\n", window);
 }
 
 static void
@@ -1632,7 +1573,6 @@ gdk_mir_window_impl_begin_resize_drag (GdkWindow     *window,
                                        gint           root_y,
                                        guint32        timestamp)
 {
-  //g_printerr ("gdk_mir_window_impl_begin_resize_drag window=%p\n", window);
 }
 
 static void
@@ -1643,47 +1583,40 @@ gdk_mir_window_impl_begin_move_drag (GdkWindow *window,
                                      gint       root_y,
                                      guint32    timestamp)
 {
-  //g_printerr ("gdk_mir_window_impl_begin_move_drag window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_enable_synchronized_configure (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_enable_synchronized_configure window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_configure_finished (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_configure_finished window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_opacity (GdkWindow *window,
                                  gdouble    opacity)
 {
-  //g_printerr ("gdk_mir_window_impl_set_opacity window=%p\n", window);
   // FIXME
 }
 
 static void
 gdk_mir_window_impl_destroy_notify (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_destroy_notify window=%p\n", window);
 }
 
 static GdkDragProtocol
 gdk_mir_window_impl_get_drag_protocol (GdkWindow *window,
                                        GdkWindow **target)
 {
-  //g_printerr ("gdk_mir_window_impl_get_drag_protocol window=%p\n", window);
   return 0;
 }
 
 static void
 gdk_mir_window_impl_register_dnd (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_register_dnd window=%p\n", window);
 }
 
 static GdkDragContext *
@@ -1693,7 +1626,6 @@ gdk_mir_window_impl_drag_begin (GdkWindow *window,
                                 gint       x_root,
                                 gint       y_root)
 {
-  //g_printerr ("gdk_mir_window_impl_drag_begin window=%p\n", window);
   return NULL;
 }
 
@@ -1701,7 +1633,6 @@ static void
 gdk_mir_window_impl_process_updates_recurse (GdkWindow      *window,
                                              cairo_region_t *region)
 {
-  //g_printerr ("gdk_mir_window_impl_process_updates_recurse window=%p\n", window);
   cairo_rectangle_int_t rectangle;
 
   /* We redraw the whole region, but we should track the buffers and only redraw what has changed since we sent this buffer */
@@ -2009,7 +1940,6 @@ gdk_mir_window_impl_delete_property (GdkWindow *window,
 static gint
 gdk_mir_window_impl_get_scale_factor (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_get_scale_factor window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   return impl->output_scale;
 }
@@ -2018,7 +1948,6 @@ static void
 gdk_mir_window_impl_set_opaque_region (GdkWindow      *window,
                                        cairo_region_t *region)
 {
-  //g_printerr ("gdk_mir_window_impl_set_opaque_region window=%p\n", window);
   /* FIXME: An optimisation to tell the compositor which regions of the window are fully transparent */
 }
 
@@ -2029,7 +1958,6 @@ gdk_mir_window_impl_set_shadow_width (GdkWindow *window,
                                       gint       top,
                                       gint       bottom)
 {
-  // g_printerr ("gdk_mir_window_impl_set_shadow_width window=%p\n", window);
 }
 
 static gboolean
@@ -2204,7 +2132,6 @@ _gdk_mir_window_set_scale (GdkWindow *window,
   GdkRectangle area = {0, 0, window->width, window->height};
   cairo_region_t *region;
   gint new_scale = (gint) round (scale);
-  // g_printerr ("_gdk_mir_window_set_scale impl=%p\n", impl);
 
   if (impl->output_scale != new_scale)
     {

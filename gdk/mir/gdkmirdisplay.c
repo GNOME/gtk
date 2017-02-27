@@ -177,8 +177,6 @@ _gdk_mir_display_open (const gchar *display_name)
   GdkMirDisplay *display;
   GDBusConnection *session;
 
-  //g_printerr ("gdk_mir_display_open\n");
-
   connection = mir_connect_sync (NULL, "GDK-Mir");
   if (!connection)
      return NULL;
@@ -314,40 +312,34 @@ gdk_mir_display_finalize (GObject *object)
 static const gchar *
 gdk_mir_display_get_name (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_get_name\n");
   return "Mir";
 }
 
 static GdkScreen *
 gdk_mir_display_get_default_screen (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_get_default_screen\n");
   return GDK_MIR_DISPLAY (display)->screen;
 }
 
 static void
 gdk_mir_display_beep (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_beep\n");
   /* No system level beep... */
 }
 
 static void
 gdk_mir_display_sync (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_sync\n");
 }
 
 static void
 gdk_mir_display_flush (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_flush\n");
 }
 
 static gboolean
 gdk_mir_display_has_pending (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_has_pending\n");
   /* We don't need to poll for events - so nothing pending */
   return FALSE;
 }
@@ -355,27 +347,23 @@ gdk_mir_display_has_pending (GdkDisplay *display)
 static void
 gdk_mir_display_queue_events (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_queue_events\n");
   /* We don't need to poll for events - so don't do anything*/
 }
 
 static void
 gdk_mir_display_make_default (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_make_default\n");
 }
 
 static GdkWindow *
 gdk_mir_display_get_default_group (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_get_default_group\n");
   return NULL;
 }
 
 static gboolean
 gdk_mir_display_supports_shapes (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_supports_shapes\n");
   /* Mir doesn't support shaped windows */
   return FALSE;
 }
@@ -383,35 +371,30 @@ gdk_mir_display_supports_shapes (GdkDisplay *display)
 static gboolean
 gdk_mir_display_supports_input_shapes (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_supports_input_shapes\n");
   return FALSE;
 }
 
 static gboolean
 gdk_mir_display_supports_clipboard_persistence (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_supports_clipboard_persistence\n");
   return FALSE;
 }
 
 static gboolean
 gdk_mir_display_supports_cursor_alpha (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_supports_cursor_alpha\n");
   return FALSE;
 }
 
 static gboolean
 gdk_mir_display_supports_cursor_color (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_supports_cursor_color\n");
   return FALSE;
 }
 
 static gboolean
 gdk_mir_display_supports_selection_notification (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_supports_selection_notification\n");
   return FALSE;
 }
 
@@ -419,7 +402,6 @@ static gboolean
 gdk_mir_display_request_selection_notification (GdkDisplay *display,
                                                 GdkAtom     selection)
 {
-  //g_printerr ("gdk_mir_display_request_selection_notification\n");
   return FALSE;
 }
 
@@ -430,7 +412,6 @@ gdk_mir_display_store_clipboard (GdkDisplay    *display,
                                  const GdkAtom *targets,
                                  gint           n_targets)
 {
-  //g_printerr ("gdk_mir_display_store_clipboard\n");
 }
 
 static void
@@ -438,7 +419,6 @@ gdk_mir_display_get_default_cursor_size (GdkDisplay *display,
                                          guint      *width,
                                          guint      *height)
 {
-  //g_printerr ("gdk_mir_display_get_default_cursor_size\n");
   *width = *height = 32; // FIXME: Random value
 }
 
@@ -447,7 +427,6 @@ gdk_mir_display_get_maximal_cursor_size (GdkDisplay *display,
                                          guint      *width,
                                          guint      *height)
 {
-  //g_printerr ("gdk_mir_display_get_maximal_cursor_size\n");
   *width = *height = 32; // FIXME: Random value
 }
 
@@ -471,21 +450,18 @@ gdk_mir_display_get_cursor_for_surface (GdkDisplay      *display,
                                         gdouble          x,
                                         gdouble          y)
 {
-  //g_printerr ("gdk_mir_display_get_cursor_for_surface (%f, %f)\n", x, y);
   return NULL;
 }
 
 static GdkAppLaunchContext *
 gdk_mir_display_get_app_launch_context (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_get_app_launch_context\n");
   return NULL;
 }
 
 static gulong
 gdk_mir_display_get_next_serial (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_get_next_serial\n");
   return GDK_MIR_DISPLAY (display)->serial++;
 }
 
@@ -493,7 +469,6 @@ static void
 gdk_mir_display_notify_startup_complete (GdkDisplay  *display,
                                          const gchar *startup_id)
 {
-  //g_printerr ("gdk_mir_display_notify_startup_complete\n");
 }
 
 static void
@@ -504,12 +479,6 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
                                     GdkEventMask   event_mask,
                                     GdkWindowAttr *attributes)
 {
-  //g_printerr ("gdk_mir_display_create_window_impl");
-  //g_printerr (" window=%p", window);
-  //g_printerr (" location=(%d, %d)", window->x, window->y);
-  //g_printerr (" size=(%d, %d)", window->width, window->height);
-  //g_printerr ("\n");
-
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
       window->impl = _gdk_mir_window_impl_new (display, window);
@@ -528,21 +497,18 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
 static GdkKeymap *
 gdk_mir_display_get_keymap (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_get_keymap\n");
   return GDK_MIR_DISPLAY (display)->keymap;
 }
 
 static void
 gdk_mir_display_push_error_trap (GdkDisplay *display)
 {
-  //g_printerr ("gdk_mir_display_push_error_trap\n");
 }
 
 static gint
 gdk_mir_display_pop_error_trap (GdkDisplay *display,
                                 gboolean    ignored)
 {
-  //g_printerr ("gdk_mir_display_pop_error_trap\n");
   return 0;
 }
 
@@ -550,7 +516,6 @@ static GdkWindow *
 gdk_mir_display_get_selection_owner (GdkDisplay *display,
                                      GdkAtom     selection)
 {
-  //g_printerr ("gdk_mir_display_get_selection_owner\n");
   return NULL;
 }
 
@@ -594,7 +559,6 @@ gdk_mir_display_send_selection_notify (GdkDisplay *display,
                                        GdkAtom     property,
                                        guint32     time)
 {
-  //g_printerr ("gdk_mir_display_send_selection_notify\n");
 }
 
 static gint
@@ -954,7 +918,6 @@ static gchar *
 gdk_mir_display_utf8_to_string_target (GdkDisplay  *display,
                                        const gchar *str)
 {
-  //g_printerr ("gdk_mir_display_utf8_to_string_target\n");
   return NULL;
 }
 

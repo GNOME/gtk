@@ -156,7 +156,6 @@ gdk_mir_screen_finalize (GObject *object)
 static GdkDisplay *
 gdk_mir_screen_get_display (GdkScreen *screen)
 {
-  //g_printerr ("gdk_mir_screen_get_display\n");
   return GDK_DISPLAY (GDK_MIR_SCREEN (screen)->display);
 }
 
@@ -190,7 +189,6 @@ get_output (GdkScreen *screen,
 static GdkWindow *
 gdk_mir_screen_get_root_window (GdkScreen *screen)
 {
-  //g_printerr ("gdk_mir_screen_get_root_window\n");
   GdkMirScreen *s = GDK_MIR_SCREEN (screen);
   gint width, height;
 
@@ -217,7 +215,6 @@ gdk_mir_screen_get_root_window (GdkScreen *screen)
 static gint
 gdk_mir_screen_get_n_monitors (GdkScreen *screen)
 {
-  //g_printerr ("gdk_mir_screen_get_n_monitors\n");
   MirDisplayConfig *config;
   gint count = 0;
   gint i;
@@ -234,7 +231,6 @@ gdk_mir_screen_get_n_monitors (GdkScreen *screen)
 static gint
 gdk_mir_screen_get_primary_monitor (GdkScreen *screen)
 {
-  //g_printerr ("gdk_mir_screen_get_primary_monitor\n");
   return 0; //?
 }
 
@@ -242,7 +238,6 @@ static gint
 gdk_mir_screen_get_monitor_width_mm	(GdkScreen *screen,
                                      gint       monitor_num)
 {
-  //g_printerr ("gdk_mir_screen_get_monitor_width_mm (%d)\n", monitor_num);
   const MirOutput *output = get_output (screen, monitor_num);
 
   return output ? mir_output_get_physical_width_mm (output) : 0;
@@ -252,7 +247,6 @@ static gint
 gdk_mir_screen_get_monitor_height_mm (GdkScreen *screen,
                                       gint       monitor_num)
 {
-  //g_printerr ("gdk_mir_screen_get_monitor_height_mm (%d)\n", monitor_num);
   const MirOutput *output = get_output (screen, monitor_num);
 
   return output ? mir_output_get_physical_height_mm (output) : 0;
@@ -262,7 +256,6 @@ static gchar *
 gdk_mir_screen_get_monitor_plug_name (GdkScreen *screen,
                                       gint       monitor_num)
 {
-  //g_printerr ("gdk_mir_screen_get_monitor_plug_name (%d)\n", monitor_num);
   const MirOutput *output = get_output (screen, monitor_num);
 
   if (output)
@@ -312,7 +305,6 @@ gdk_mir_screen_get_monitor_geometry (GdkScreen    *screen,
                                      gint          monitor_num,
                                      GdkRectangle *dest)
 {
-  //g_printerr ("gdk_mir_screen_get_monitor_geometry (%d)\n", monitor_num);
   const MirOutput *output;
   const MirOutputMode *mode;
 
@@ -341,7 +333,6 @@ gdk_mir_screen_get_monitor_workarea (GdkScreen    *screen,
                                      gint          monitor_num,
                                      GdkRectangle *dest)
 {
-  //g_printerr ("gdk_mir_screen_get_monitor_workarea (%d)\n", monitor_num);
   // FIXME: Don't know what this is
   gdk_mir_screen_get_monitor_geometry (screen, monitor_num, dest);
 }
@@ -351,8 +342,6 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
                             const gchar *name,
                             GValue      *value)
 {
-  //g_printerr ("gdk_mir_screen_get_setting (\"%s\")\n", name);
-
   if (strcmp (name, "gtk-theme-name") == 0)
     {
       g_value_set_string (value, "Ambiance");
@@ -608,7 +597,6 @@ static gint
 gdk_mir_screen_get_monitor_scale_factor (GdkScreen *screen,
                                          gint       monitor_num)
 {
-  //g_printerr ("gdk_mir_screen_get_monitor_scale_factor (%d)\n", monitor_num);
   /* Don't support monitor scaling */
   return 1;
 }
