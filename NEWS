@@ -1,3 +1,39 @@
+Overview of Changes in GTK+ 3.22.9
+==================================
+
+* Bugs fixed:
+ 136059	Ctrl-navigation works in opposite direction in right-to-left text
+ 776821	Scale factor not properly propagated upon reparent
+ 778203	icon shown at top left corner when dnd begins
+ 778328	Pressure sensitivity lost after removing pen from screen (Surface Book/MyPaint)
+ 778534	Widget: Document signal mnemonic-activate
+ 778678	gtkshow: Prefer gtk_show_uri_on_window() which works for sandboxed apps
+ 778726	Use gtk_show_uri_on_window()
+ 778746	Rename popover is sometimes misplaced
+ 778835	Wrong screen size returned when in HiDPI mode
+ 778905	Frame: documented flat style class is not usable
+ 779005	GtkFrame: Fix shadow after theme changes
+ 136059 Ctrl-navigation works in opposite direction in right-to-left text
+ 772505 Wayland: menu does not resize after disabling an action
+ 774148 Gtk.Popover misplacement in Wayland
+ 778019 Key repeat under wayland behaves differently, making keyboard navigation e.g. in
+        vim annoyingly unreliable
+
+* Translation updates:
+ Brazilian Portuguese
+ Chinese
+ Chinese (Taiwan)
+ Galician
+ German
+ Hungarian
+ Italian
+ Lithuanian
+ Polish
+ Serbian
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.22.8
 ==================================
 
