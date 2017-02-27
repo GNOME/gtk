@@ -407,9 +407,6 @@ gtk_range_class_init (GtkRangeClass *class)
    * value to the desired number of decimal digits; the default GTK+
    * handler clamps the value based on #GtkRange:round-digits.
    *
-   * It is not possible to use delayed update policies in an overridden
-   * #GtkRange::change-value handler.
-   *
    * Returns: %TRUE to prevent other handlers from being invoked for
    *     the signal, %FALSE to propagate the signal further
    *
