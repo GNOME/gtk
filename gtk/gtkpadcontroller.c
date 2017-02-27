@@ -514,7 +514,7 @@ gtk_pad_controller_set_action (GtkPadController *controller,
                               (gchar *) label, (gchar *) action_name };
 
   g_return_if_fail (GTK_IS_PAD_CONTROLLER (controller));
-  g_return_if_fail (type <= GTK_PAD_ACTION_RING);
+  g_return_if_fail (type <= GTK_PAD_ACTION_STRIP);
 
   gtk_pad_controller_add_entry (controller, &entry);
 }
