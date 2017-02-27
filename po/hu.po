@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-22 08:59+0000\n"
-"PO-Revision-Date: 2017-02-22 18:10+0100\n"
+"POT-Creation-Date: 2017-02-27 08:47+0000\n"
+"PO-Revision-Date: 2017-02-27 12:54+0100\n"
 "Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -1754,40 +1754,40 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: gtk/gtkentry.c:8928 gtk/gtklabel.c:6544 gtk/gtktextview.c:9311
+#: gtk/gtkentry.c:8928 gtk/gtklabel.c:6544 gtk/gtktextview.c:9312
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtkentry.c:8932 gtk/gtklabel.c:6545 gtk/gtktextview.c:9315
+#: gtk/gtkentry.c:8932 gtk/gtklabel.c:6545 gtk/gtktextview.c:9316
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtkentry.c:8936 gtk/gtklabel.c:6546 gtk/gtktextview.c:9317
+#: gtk/gtkentry.c:8936 gtk/gtklabel.c:6546 gtk/gtktextview.c:9318
 msgid "_Paste"
 msgstr "_Beillesztés"
 
 #: gtk/gtkentry.c:8939 gtk/gtkfilechooserwidget.c:1479
-#: gtk/gtkfilechooserwidget.c:2273 gtk/gtklabel.c:6548 gtk/gtktextview.c:9320
+#: gtk/gtkfilechooserwidget.c:2273 gtk/gtklabel.c:6548 gtk/gtktextview.c:9321
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: gtk/gtkentry.c:8950 gtk/gtklabel.c:6557 gtk/gtktextview.c:9334
+#: gtk/gtkentry.c:8950 gtk/gtklabel.c:6557 gtk/gtktextview.c:9335
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: gtk/gtkentry.c:9126 gtk/gtktextview.c:9559
+#: gtk/gtkentry.c:9126 gtk/gtktextview.c:9560
 msgid "Select all"
 msgstr "Összes kijelölése"
 
-#: gtk/gtkentry.c:9129 gtk/gtktextview.c:9562
+#: gtk/gtkentry.c:9129 gtk/gtktextview.c:9563
 msgid "Cut"
 msgstr "Kivágás"
 
-#: gtk/gtkentry.c:9132 gtk/gtktextview.c:9565
+#: gtk/gtkentry.c:9132 gtk/gtktextview.c:9566
 msgid "Copy"
 msgstr "Másolás"
 
-#: gtk/gtkentry.c:9135 gtk/gtktextview.c:9568
+#: gtk/gtkentry.c:9135 gtk/gtktextview.c:9569
 msgid "Paste"
 msgstr "Beillesztés"
 
@@ -3486,7 +3486,7 @@ msgid "Display"
 msgstr "Kijelző"
 
 #: gtk/inspector/general.ui:408
-msgid "RGBA visual"
+msgid "RGBA Visual"
 msgstr "RGBA vizuális"
 
 #: gtk/inspector/general.ui:442
@@ -3546,7 +3546,7 @@ msgid "Address"
 msgstr "Cím"
 
 #: gtk/inspector/misc-info.ui:68
-msgid "Reference count"
+msgid "Reference Count"
 msgstr "Hivatkozásszám"
 
 #: gtk/inspector/misc-info.ui:136
@@ -3573,7 +3573,7 @@ msgid "Mnemonic Label"
 msgstr "Címke hívóbetűje"
 
 #: gtk/inspector/misc-info.ui:294
-msgid "Request mode"
+msgid "Request Mode"
 msgstr "Kérés mód"
 
 #: gtk/inspector/misc-info.ui:328
@@ -3585,7 +3585,7 @@ msgid "Baseline"
 msgstr "Alapvonal"
 
 #: gtk/inspector/misc-info.ui:396
-msgid "Clip area"
+msgid "Clip Area"
 msgstr "Vágási terület"
 
 #: gtk/inspector/misc-info.ui:430
@@ -3593,27 +3593,27 @@ msgid "Frame Clock"
 msgstr "Képkockaszám óra"
 
 #: gtk/inspector/misc-info.ui:475
-msgid "Tick callback"
+msgid "Tick Callback"
 msgstr "Órajel visszahívás"
 
 #: gtk/inspector/misc-info.ui:511
-msgid "Frame count"
+msgid "Frame Count"
 msgstr "Képkockaszám"
 
 #: gtk/inspector/misc-info.ui:545
-msgid "Frame rate"
+msgid "Frame Rate"
 msgstr "Képkockasebesség"
 
 #: gtk/inspector/misc-info.ui:579
-msgid "Accessible role"
+msgid "Accessible Role"
 msgstr "Akadálymentes szerep"
 
 #: gtk/inspector/misc-info.ui:613
-msgid "Accessible name"
+msgid "Accessible Name"
 msgstr "Akadálymentes név"
 
 #: gtk/inspector/misc-info.ui:649
-msgid "Accessible description"
+msgid "Accessible Description"
 msgstr "Akadálymentes leírás"
 
 #: gtk/inspector/misc-info.ui:685
@@ -3902,7 +3902,7 @@ msgid "Right-to-Left"
 msgstr "Jobbról balra"
 
 #: gtk/inspector/visual.ui:347
-msgid "Window scaling"
+msgid "Window Scaling"
 msgstr "Ablakok méretezése"
 
 #: gtk/inspector/visual.ui:382
@@ -3950,7 +3950,7 @@ msgid "Show Widget Resizes"
 msgstr "Felületielem-átméretezések megjelenítése"
 
 #: gtk/inspector/visual.ui:683
-msgid "Simulate touchscreen"
+msgid "Simulate Touchscreen"
 msgstr "Érintőképernyő szimulálása"
 
 #: gtk/inspector/visual.ui:728
@@ -3958,7 +3958,7 @@ msgid "GL Rendering"
 msgstr "GL megjelenítés"
 
 #: gtk/inspector/visual.ui:740
-msgid "When needed"
+msgid "When Needed"
 msgstr "Amikor szükséges"
 
 #: gtk/inspector/visual.ui:741
@@ -4030,7 +4030,7 @@ msgid "CSS Selector"
 msgstr "CSS-kiválasztó"
 
 #: gtk/inspector/window.ui:367
-msgid "CSS nodes"
+msgid "CSS Nodes"
 msgstr "CSS csomópontok"
 
 #: gtk/inspector/window.ui:374
