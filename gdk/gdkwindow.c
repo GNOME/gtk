@@ -2428,9 +2428,13 @@ gdk_window_end_draw_frame (GdkWindow         *window,
   paint_context = gdk_drawing_context_get_paint_context (context);
   if (paint_context)
     {
+      cairo_region_t *clip = gdk_drawing_context_get_clip (context);
+
       gdk_draw_context_end_frame (paint_context,
-                                  gdk_drawing_context_get_clip (context),
+                                  clip,
                                   window->active_update_area);
+
+      cairo_region_destroy (clip);
     }
   else
     {
