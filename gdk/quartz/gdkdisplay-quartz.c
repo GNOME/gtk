@@ -26,17 +26,10 @@
 #include "gdkquartzwindow.h"
 #include "gdkquartzdisplay.h"
 #include "gdkquartzdevicemanager-core.h"
+#include "gdkscreen.h"
+#include "gdkmonitorprivate.h"
+#include "gdkdisplay-quartz.h"
 
-
-struct _GdkQuartzDisplay
-{
-  GdkDisplay display;
-};
-
-struct _GdkQuartzDisplayClass
-{
-  GdkDisplayClass display_class;
-};
 
 static GdkWindow *
 gdk_quartz_display_get_default_group (GdkDisplay *display)
@@ -187,18 +180,53 @@ gdk_quartz_display_notify_startup_complete (GdkDisplay  *display,
   /* FIXME: Implement? */
 }
 
+static int
+gdk_quartz_display_get_n_monitors (GdkDisplay *display)
+{
+  GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
+
+  return quartz_display->monitors->len;
+}
+
+
+static GdkMonitor *
+gdk_quartz_display_get_monitor (GdkDisplay *display,
+                                int         monitor_num)
+{
+  GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
+
+  if (0 <= monitor_num || monitor_num < quartz_display->monitors->len)
+    return (GdkMonitor *)quartz_display->monitors->pdata[monitor_num];
+
+  return NULL;
+}
+
+static GdkMonitor *
+gdk_quartz_display_get_primary_monitor (GdkDisplay *display)
+{
+  GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
+
+  return quartz_display->monitors->pdata[0];
+}
 
 G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 
 static void
 gdk_quartz_display_init (GdkQuartzDisplay *display)
 {
+  GDK_QUARTZ_ALLOC_POOL;
+
+  display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
+
+  GDK_QUARTZ_RELEASE_POOL;
 }
 
 static void
 gdk_quartz_display_dispose (GObject *object)
 {
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
+
+  g_ptr_array_free (display_quartz->monitors, TRUE);
 
   G_OBJECT_CLASS (gdk_quartz_display_parent_class)->dispose (object);
 }
@@ -256,6 +284,9 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->convert_selection = _gdk_quartz_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;
+  display_class->get_n_monitors = gdk_quartz_display_get_n_monitors;
+  display_class->get_monitor = gdk_quartz_display_get_monitor;
+  display_class->get_primary_monitor = gdk_quartz_display_get_primary_monitor;
 
   ProcessSerialNumber psn = { 0, kCurrentProcess };
 

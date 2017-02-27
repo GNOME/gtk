@@ -29,6 +29,7 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkdevicemanager-core-quartz.c	\
 	gdkdevicemanager-core-quartz.h	\
 	gdkdisplay-quartz.c	\
+	gdkdisplay-quartz.h	\
 	gdkdisplaymanager-quartz.c	\
 	gdkdnd-quartz.c		\
 	gdkdnd-quartz.h		\
@@ -38,6 +39,8 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkglcontext-quartz.h	\
 	gdkglobals-quartz.c	\
 	gdkkeys-quartz.c	\
+	gdkmonitor-quartz.c     \
+	gdkmonitor-quartz.h     \
 	gdkprivate-quartz.h	\
 	gdkproperty-quartz.c	\
 	gdkquartz.h		\
@@ -60,6 +63,7 @@ libgdkquartzinclude_HEADERS =		\
 	gdkquartzdisplaymanager.h	\
 	gdkquartzdnd.h			\
 	gdkquartzkeys.h			\
+	gdkquartzmonitor.h		\
 	gdkquartzscreen.h		\
 	gdkquartzutils.h		\
 	gdkquartzwindow.h

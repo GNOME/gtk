@@ -75,6 +75,7 @@ G_END_DECLS
 #include <gdk/quartz/gdkquartzdisplaymanager.h>
 #include <gdk/quartz/gdkquartzdnd.h>
 #include <gdk/quartz/gdkquartzkeys.h>
+#include <gdk/quartz/gdkquartzmonitor.h>
 #include <gdk/quartz/gdkquartzscreen.h>
 #include <gdk/quartz/gdkquartzutils.h>
 #include <gdk/quartz/gdkquartzwindow.h>
