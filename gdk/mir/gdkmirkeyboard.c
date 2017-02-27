@@ -63,7 +63,6 @@ gdk_mir_keyboard_get_history (GdkDevice      *device,
                               GdkTimeCoord ***events,
                               gint           *n_events)
 {
-  g_printerr ("gdk_mir_keyboard_get_history\n");
   return FALSE;
 }
 
@@ -73,7 +72,6 @@ gdk_mir_keyboard_get_state (GdkDevice      *device,
                             gdouble         *axes,
                             GdkModifierType *mask)
 {
-  g_printerr ("gdk_mir_keyboard_get_state\n");
 }
 
 static void
@@ -81,7 +79,6 @@ gdk_mir_keyboard_set_window_cursor (GdkDevice *device,
                                     GdkWindow *window,
                                     GdkCursor *cursor)
 {
-  //g_printerr ("gdk_mir_keyboard_set_window_cursor\n");
   /* Keyboards don't have cursors... */
 }
 
@@ -91,7 +88,6 @@ gdk_mir_keyboard_warp (GdkDevice *device,
                        gdouble    x,
                        gdouble    y)
 {
-  //g_printerr ("gdk_mir_keyboard_warp\n");
   /* Can't warp a keyboard... */
 }
 
@@ -106,7 +102,6 @@ gdk_mir_keyboard_query_state (GdkDevice        *device,
                               gdouble          *win_y,
                               GdkModifierType  *mask)
 {
-  g_printerr ("gdk_mir_keyboard_query_state\n");
 }
 
 static GdkGrabStatus
@@ -118,7 +113,6 @@ gdk_mir_keyboard_grab (GdkDevice    *device,
                        GdkCursor    *cursor,
                        guint32       time_)
 {
-  //g_printerr ("gdk_mir_keyboard_grab\n");
   /* Mir doesn't do grabs, so sure, you have the grab */
   return GDK_GRAB_SUCCESS;
 }
@@ -127,7 +121,6 @@ static void
 gdk_mir_keyboard_ungrab (GdkDevice *device,
                          guint32    time_)
 {
-  //g_printerr ("gdk_mir_keyboard_ungrab\n");
   /* Mir doesn't do grabs */
 }
 
@@ -138,7 +131,6 @@ gdk_mir_keyboard_window_at_position (GdkDevice       *device,
                                      GdkModifierType *mask,
                                      gboolean         get_toplevel)
 {
-  //g_printerr ("gdk_mir_keyboard_window_at_position (%f, %f)\n", *win_x, *win_y);
   /* Keyboard don't have locations... */
   return NULL; // FIXME: Or the window with the keyboard focus?
 }
@@ -148,7 +140,6 @@ gdk_mir_keyboard_select_window_events (GdkDevice    *device,
                                        GdkWindow    *window,
                                        GdkEventMask  event_mask)
 {
-  g_printerr ("gdk_mir_keyboard_select_window_events\n");
 }
 
 static void

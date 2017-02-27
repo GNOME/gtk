@@ -64,7 +64,6 @@ _gdk_mir_keymap_new (void)
 static PangoDirection
 gdk_mir_keymap_get_direction (GdkKeymap *keymap)
 {
-  //g_printerr ("gdk_mir_keymap_get_direction\n");
   GdkMirKeymap *mir_keymap = GDK_MIR_KEYMAP (keymap);
   gint i;
 
@@ -80,28 +79,24 @@ gdk_mir_keymap_get_direction (GdkKeymap *keymap)
 static gboolean
 gdk_mir_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
-  //g_printerr ("gdk_mir_keymap_have_bidi_layouts\n");
   return FALSE;
 }
 
 static gboolean
 gdk_mir_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
-  //g_printerr ("gdk_mir_keymap_get_caps_lock_state\n");
   return xkb_state_led_name_is_active (GDK_MIR_KEYMAP (keymap)->xkb_state, XKB_LED_NAME_CAPS);
 }
 
 static gboolean
 gdk_mir_keymap_get_num_lock_state (GdkKeymap *keymap)
 {
-  //g_printerr ("gdk_mir_keymap_get_num_lock_state\n");
   return xkb_state_led_name_is_active (GDK_MIR_KEYMAP (keymap)->xkb_state, XKB_LED_NAME_NUM);
 }
 
 static gboolean
 gdk_mir_keymap_get_scroll_lock_state (GdkKeymap *keymap)
 {
-  //g_printerr ("gdk_mir_keymap_get_scroll_lock_state\n");
   return xkb_state_led_name_is_active (GDK_MIR_KEYMAP (keymap)->xkb_state, XKB_LED_NAME_SCROLL);
 }
 
@@ -111,7 +106,6 @@ gdk_mir_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                        GdkKeymapKey **keys,
                                        gint          *n_keys)
 {
-  //g_printerr ("gdk_mir_keymap_get_entries_for_keyval\n");
   GdkMirKeymap *mir_keymap = GDK_MIR_KEYMAP (keymap);
   GArray *key_array;
   guint keycode;
@@ -164,7 +158,6 @@ gdk_mir_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                         guint        **keyvals,
                                         gint          *n_entries)
 {
-  //g_printerr ("gdk_mir_keymap_get_entries_for_keycode\n");
   GdkMirKeymap *mir_keymap = GDK_MIR_KEYMAP (keymap);
   gint num_layouts, layout;
   gint num_entries;
@@ -214,7 +207,6 @@ static guint
 gdk_mir_keymap_lookup_key (GdkKeymap          *keymap,
                            const GdkKeymapKey *key)
 {
-  //g_printerr ("gdk_mir_keymap_lookup_key\n");
   GdkMirKeymap *mir_keymap = GDK_MIR_KEYMAP (keymap);
   const xkb_keysym_t *syms;
   int num_syms;
@@ -292,7 +284,6 @@ gdk_mir_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                          gint            *effective_level,
                                          GdkModifierType *consumed_modifiers)
 {
-  //g_printerr ("gdk_mir_keymap_translate_keyboard_state\n");
   GdkMirKeymap *mir_keymap = GDK_MIR_KEYMAP (keymap);
   struct xkb_state *xkb_state;
   guint32 modifiers;
@@ -330,7 +321,6 @@ static void
 gdk_mir_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
                                       GdkModifierType *state)
 {
-  //g_printerr ("gdk_mir_keymap_add_virtual_modifiers\n");
   // FIXME: What is this?
 }
 
@@ -338,7 +328,6 @@ static gboolean
 gdk_mir_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
                                       GdkModifierType *state)
 {
-  //g_printerr ("gdk_mir_keymap_map_virtual_modifiers\n");
   // FIXME: What is this?
   return TRUE;
 }
@@ -346,7 +335,6 @@ gdk_mir_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 static guint
 gdk_mir_keymap_get_modifier_state (GdkKeymap *keymap)
 {
-  //g_printerr ("gdk_mir_keymap_get_modifier_state\n");
   GdkMirKeymap *mir_keymap = GDK_MIR_KEYMAP (keymap);
   xkb_mod_mask_t mods;
 

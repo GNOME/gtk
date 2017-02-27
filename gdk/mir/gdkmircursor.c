@@ -147,7 +147,6 @@ gdk_mir_cursor_get_surface (GdkCursor *cursor,
                             gdouble   *x_hot,
                             gdouble   *y_hot)
 {
-  g_printerr ("gdk_mir_cursor_get_surface\n");
   return NULL;
 }
 

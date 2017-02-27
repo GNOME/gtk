@@ -60,7 +60,6 @@ static GList *
 gdk_mir_device_manager_list_devices (GdkDeviceManager *device_manager,
                                      GdkDeviceType     type)
 {
-  //g_printerr ("gdk_mir_device_manager_list_devices (%u)\n", type);
   GdkMirDeviceManager *dm = GDK_MIR_DEVICE_MANAGER (device_manager);
 
   if (type == GDK_DEVICE_TYPE_MASTER)
@@ -79,7 +78,6 @@ gdk_mir_device_manager_list_devices (GdkDeviceManager *device_manager,
 static GdkDevice *
 gdk_mir_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
 {
-  //g_printerr ("gdk_mir_device_manager_get_client_pointer\n");
   return GDK_MIR_DEVICE_MANAGER (device_manager)->pointer;
 }
 

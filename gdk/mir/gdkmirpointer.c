@@ -93,7 +93,6 @@ gdk_mir_pointer_get_history (GdkDevice      *device,
                              GdkTimeCoord ***events,
                              gint           *n_events)
 {
-  g_printerr ("gdk_mir_pointer_get_history\n");
   return FALSE;
 }
 
@@ -103,7 +102,6 @@ gdk_mir_pointer_get_state (GdkDevice       *device,
                            gdouble         *axes,
                            GdkModifierType *mask)
 {
-  //g_printerr ("gdk_mir_pointer_get_state\n");
   GdkMirPointer *p = GDK_MIR_POINTER (device);
   gdouble x, y;
 
@@ -120,7 +118,6 @@ gdk_mir_pointer_set_window_cursor (GdkDevice *device,
                                    GdkWindow *window,
                                    GdkCursor *cursor)
 {
-  //g_printerr ("gdk_mir_pointer_set_window_cursor\n");
   /* Mir doesn't support cursors */
 }
 
@@ -130,7 +127,6 @@ gdk_mir_pointer_warp (GdkDevice *device,
                       gdouble    x,
                       gdouble    y)
 {
-  //g_printerr ("gdk_mir_pointer_warp\n");
   /* Mir doesn't support warping */
 }
 
@@ -145,7 +141,6 @@ gdk_mir_pointer_query_state (GdkDevice        *device,
                              gdouble          *win_y,
                              GdkModifierType  *mask)
 {
-  //g_printerr ("gdk_mir_pointer_query_state\n");
   GdkMirPointer *p = GDK_MIR_POINTER (device);
 
   if (root_window)
@@ -173,7 +168,6 @@ gdk_mir_pointer_grab (GdkDevice    *device,
                       GdkCursor    *cursor,
                       guint32       time_)
 {
-  //g_printerr ("gdk_mir_pointer_grab\n");
   /* Mir doesn't do grabs, so sure, you have the grab */
   return GDK_GRAB_SUCCESS;
 }
@@ -182,7 +176,6 @@ static void
 gdk_mir_pointer_ungrab (GdkDevice *device,
                         guint32    time_)
 {
-  //g_printerr ("gdk_mir_pointer_ungrab\n");
   /* Mir doesn't do grabs */
 
   GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (gdk_device_get_display (device), device);
@@ -198,7 +191,6 @@ gdk_mir_pointer_window_at_position (GdkDevice       *device,
                                     GdkModifierType *mask,
                                     gboolean         get_toplevel)
 {
-  //g_printerr ("gdk_mir_pointer_window_at_position\n");
   GdkMirPointer *p = GDK_MIR_POINTER (device);
 
   if (win_x)
@@ -216,7 +208,6 @@ gdk_mir_pointer_select_window_events (GdkDevice    *device,
                                       GdkWindow    *window,
                                       GdkEventMask  event_mask)
 {
-  g_printerr ("gdk_mir_pointer_select_window_events\n");
   // FIXME?
 }
 
