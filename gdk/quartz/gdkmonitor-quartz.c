@@ -26,37 +26,6 @@
 
 G_DEFINE_TYPE (GdkQuartzMonitor, gdk_quartz_monitor, GDK_TYPE_MONITOR)
 
-static gboolean
-gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
-{
-  GdkScreen *screen = gdk_display_get_default_screen (monitor->display);
-  GList *toplevels, *l;
-  GdkWindow *window;
-  gboolean has_fullscreen;
-
-  toplevels = gdk_screen_get_toplevel_windows (screen);
-
-  has_fullscreen = FALSE;
-  for (l = toplevels; l; l = l->next)
-    {
-      window = l->data;
-
-      if ((gdk_window_get_state (window) & GDK_WINDOW_STATE_FULLSCREEN) == 0)
-        continue;
-
-      if (gdk_window_get_fullscreen_mode (window) == GDK_FULLSCREEN_ON_ALL_MONITORS ||
-          gdk_display_get_monitor_at_window (monitor->display, window) == monitor)
-        {
-          has_fullscreen = TRUE;
-          break;
-        }
-    }
-
-  g_list_free (toplevels);
-
-  return has_fullscreen;
-}
-
 static void
 gdk_quartz_monitor_get_workarea (GdkMonitor   *monitor,
                                  GdkRectangle *dest)

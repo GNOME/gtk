@@ -30,10 +30,7 @@ struct _GdkQuartzMonitor
 {
   GdkMonitor parent;
 
-  //guint add     : 1;
-  //guint remove  : 1;
   NSScreen *nsscreen;
-  int index;
 };
 
 struct _GdkQuartzMonitorClass {
