@@ -2422,7 +2422,10 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
         }
 
       if (new_mask == NSBorderlessWindowMask)
-        [impl->toplevel setContentSize:rect.size];
+        {
+          [impl->toplevel setContentSize:rect.size];
+          [impl->toplevel setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+        }
       else
         [impl->toplevel setFrame:rect display:YES];
 
