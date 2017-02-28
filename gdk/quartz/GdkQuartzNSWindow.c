@@ -838,4 +838,19 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   inMaximizeTransition = NO;
 }
 
+-(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
+{
+  return [[window screen] frame].size;
+}
+
+-(void)windowWillEnterFullScreen:(NSNotification *)aNotification
+{
+  lastUnfullscreenFrame = [self frame];
+}
+
+-(void)windowWillExitFullScreen:(NSNotification *)aNotification
+{
+  [self setFrame:lastUnfullscreenFrame display:YES]
+}
+
 @end
