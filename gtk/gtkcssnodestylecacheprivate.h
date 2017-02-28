@@ -36,10 +36,10 @@ GtkCssNodeStyleCache *  gtk_css_node_style_cache_insert         (GtkCssNodeStyle
                                                                  gboolean                is_first,
                                                                  gboolean                is_last,
                                                                  GtkCssStyle            *style);
-GtkCssNodeStyleCache *  gtk_css_node_style_cache_lookup         (GtkCssNodeStyleCache   *parent,
-                                                                 GtkCssNodeDeclaration  *decl,
-                                                                 gboolean                is_first,
-                                                                 gboolean                is_last);
+GtkCssNodeStyleCache *  gtk_css_node_style_cache_lookup         (GtkCssNodeStyleCache        *parent,
+                                                                 const GtkCssNodeDeclaration *decl,
+                                                                 gboolean                     is_first,
+                                                                 gboolean                     is_last);
 
 G_END_DECLS
 
