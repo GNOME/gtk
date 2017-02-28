@@ -26,10 +26,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
-/* When these change we do a full restyling. Otherwise we try to figure out
- * if we need to change things. */
-#define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_PARENT_STYLE)
-
 G_DEFINE_TYPE (GtkCssWidgetNode, gtk_css_widget_node, GTK_TYPE_CSS_NODE)
 
 static void
