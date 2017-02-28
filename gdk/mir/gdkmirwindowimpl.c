@@ -2110,11 +2110,16 @@ _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window,
   return impl->dummy_egl_surface;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 MirSurface *
 gdk_mir_window_get_mir_surface (GdkWindow *window)
 {
   return _gdk_mir_window_get_mir_window (window);
 }
+
+#pragma GCC diagnostic pop
 
 MirWindow *
 _gdk_mir_window_get_mir_window (GdkWindow *window)

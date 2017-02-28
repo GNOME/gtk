@@ -41,7 +41,7 @@ MirConnection *gdk_mir_display_get_mir_connection (GdkDisplay *display);
 GDK_AVAILABLE_IN_3_16
 GType gdk_mir_window_get_type (void);
 
-GDK_AVAILABLE_IN_3_16
+GDK_DEPRECATED_IN_3_22
 MirSurface *gdk_mir_window_get_mir_surface (GdkWindow *window);
 
 GDK_AVAILABLE_IN_3_16
