@@ -14,21 +14,22 @@
 # Yannick Tailliez <ytdispatch-libre@yahoo.com>, 2008.
 # Laurent Coudeur <laurentc@iol.ie>, 2009
 # Bruno Brouard <annoa.b@gmail.com>, 2011-13
-# Charles Monzat <superboa@hotmail.fr>, 2016.
+# Charles Monzat <superboa@hotmail.fr>, 2016, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-18 02:56+0000\n"
-"PO-Revision-Date: 2017-02-18 14:21+0100\n"
-"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
-"Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
+"POT-Creation-Date: 2017-02-26 20:11+0000\n"
+"PO-Revision-Date: 2017-02-27 18:27+0100\n"
+"Last-Translator: Charles Monzat <superboa@hotmail.fr>\n"
+"Language-Team: français <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n>1;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -1760,44 +1761,44 @@ msgstr "_Droite :"
 msgid "Paper Margins"
 msgstr "Marges du papier"
 
-#: gtk/gtkentry.c:8900 gtk/gtklabel.c:6544 gtk/gtktextview.c:9293
+#: gtk/gtkentry.c:8928 gtk/gtklabel.c:6544 gtk/gtktextview.c:9312
 msgid "Cu_t"
 msgstr "Co_uper"
 
-#: gtk/gtkentry.c:8904 gtk/gtklabel.c:6545 gtk/gtktextview.c:9297
+#: gtk/gtkentry.c:8932 gtk/gtklabel.c:6545 gtk/gtktextview.c:9316
 msgid "_Copy"
 msgstr "_Copier"
 
-#: gtk/gtkentry.c:8908 gtk/gtklabel.c:6546 gtk/gtktextview.c:9299
+#: gtk/gtkentry.c:8936 gtk/gtklabel.c:6546 gtk/gtktextview.c:9318
 msgid "_Paste"
 msgstr "C_oller"
 
-#: gtk/gtkentry.c:8911 gtk/gtkfilechooserwidget.c:1479
-#: gtk/gtkfilechooserwidget.c:2273 gtk/gtklabel.c:6548 gtk/gtktextview.c:9302
+#: gtk/gtkentry.c:8939 gtk/gtkfilechooserwidget.c:1479
+#: gtk/gtkfilechooserwidget.c:2273 gtk/gtklabel.c:6548 gtk/gtktextview.c:9321
 msgid "_Delete"
 msgstr "_Supprimer"
 
-#: gtk/gtkentry.c:8922 gtk/gtklabel.c:6557 gtk/gtktextview.c:9316
+#: gtk/gtkentry.c:8950 gtk/gtklabel.c:6557 gtk/gtktextview.c:9335
 msgid "Select _All"
 msgstr "_Tout sélectionner"
 
-#: gtk/gtkentry.c:9098 gtk/gtktextview.c:9541
+#: gtk/gtkentry.c:9126 gtk/gtktextview.c:9560
 msgid "Select all"
 msgstr "Tout sélectionner"
 
-#: gtk/gtkentry.c:9101 gtk/gtktextview.c:9544
+#: gtk/gtkentry.c:9129 gtk/gtktextview.c:9563
 msgid "Cut"
 msgstr "Couper"
 
-#: gtk/gtkentry.c:9104 gtk/gtktextview.c:9547
+#: gtk/gtkentry.c:9132 gtk/gtktextview.c:9566
 msgid "Copy"
 msgstr "Copier"
 
-#: gtk/gtkentry.c:9107 gtk/gtktextview.c:9550
+#: gtk/gtkentry.c:9135 gtk/gtktextview.c:9569
 msgid "Paste"
 msgstr "Coller"
 
-#: gtk/gtkentry.c:10174
+#: gtk/gtkentry.c:10202
 msgid "Caps Lock is on"
 msgstr "Verr. maj. est activé"
 
@@ -2436,7 +2437,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Impossible de terminer le processus ayant le PID %d : %s"
 
-#: gtk/gtknotebook.c:4974 gtk/gtknotebook.c:7201
+#: gtk/gtknotebook.c:4971 gtk/gtknotebook.c:7198
 #, c-format
 msgid "Page %u"
 msgstr "Page %u"
@@ -3506,7 +3507,8 @@ msgid "Display"
 msgstr "Affichage"
 
 #: gtk/inspector/general.ui:408
-msgid "RGBA visual"
+#| msgid "RGBA visual"
+msgid "RGBA Visual"
 msgstr "Visuel RGBA"
 
 #: gtk/inspector/general.ui:442
@@ -3566,7 +3568,8 @@ msgid "Address"
 msgstr "Adresse"
 
 #: gtk/inspector/misc-info.ui:68
-msgid "Reference count"
+#| msgid "Reference count"
+msgid "Reference Count"
 msgstr "Comptage de références"
 
 #: gtk/inspector/misc-info.ui:136
@@ -3593,7 +3596,8 @@ msgid "Mnemonic Label"
 msgstr "Étiquette mnémonique"
 
 #: gtk/inspector/misc-info.ui:294
-msgid "Request mode"
+#| msgid "Request mode"
+msgid "Request Mode"
 msgstr "Mode de requête"
 
 #: gtk/inspector/misc-info.ui:328
@@ -3605,7 +3609,8 @@ msgid "Baseline"
 msgstr "Ligne de base"
 
 #: gtk/inspector/misc-info.ui:396
-msgid "Clip area"
+#| msgid "Clip area"
+msgid "Clip Area"
 msgstr "Zone de découpage"
 
 #: gtk/inspector/misc-info.ui:430
@@ -3613,27 +3618,33 @@ msgid "Frame Clock"
 msgstr "Horloge d'images"
 
 #: gtk/inspector/misc-info.ui:475
-msgid "Tick callback"
+#| msgid "Tick callback"
+msgid "Tick Callback"
 msgstr "Fonction de rappel de tic"
 
 #: gtk/inspector/misc-info.ui:511
-msgid "Frame count"
+#| msgid "Frame count"
+msgid "Frame Count"
 msgstr "Nombre d'images"
 
 #: gtk/inspector/misc-info.ui:545
-msgid "Frame rate"
+#| msgid "Frame rate"
+msgid "Frame Rate"
 msgstr "Fréquence d'image"
 
 #: gtk/inspector/misc-info.ui:579
-msgid "Accessible role"
+#| msgid "Accessible role"
+msgid "Accessible Role"
 msgstr "Rôle accessible"
 
 #: gtk/inspector/misc-info.ui:613
-msgid "Accessible name"
+#| msgid "Accessible name"
+msgid "Accessible Name"
 msgstr "Nom accessible"
 
 #: gtk/inspector/misc-info.ui:649
-msgid "Accessible description"
+#| msgid "Accessible description"
+msgid "Accessible Description"
 msgstr "Description accessible"
 
 #: gtk/inspector/misc-info.ui:685
@@ -3760,6 +3771,7 @@ msgid "Defined At"
 msgstr "Défini à"
 
 #: gtk/inspector/recorder.c:269
+#, c-format
 msgid "Saving RenderNode failed"
 msgstr "L'enregistrement de RenderNode a échoué"
 
@@ -3921,7 +3933,8 @@ msgid "Right-to-Left"
 msgstr "De droite à gauche"
 
 #: gtk/inspector/visual.ui:347
-msgid "Window scaling"
+#| msgid "Window scaling"
+msgid "Window Scaling"
 msgstr "Mise à l'échelle des fenêtres"
 
 #: gtk/inspector/visual.ui:382
@@ -3969,7 +3982,8 @@ msgid "Show Widget Resizes"
 msgstr "Afficher les redimensionnements de composants"
 
 #: gtk/inspector/visual.ui:683
-msgid "Simulate touchscreen"
+#| msgid "Simulate touchscreen"
+msgid "Simulate Touchscreen"
 msgstr "Simuler l'écran tactile"
 
 #: gtk/inspector/visual.ui:728
@@ -3977,7 +3991,8 @@ msgid "GL Rendering"
 msgstr "Rendu GL"
 
 #: gtk/inspector/visual.ui:740
-msgid "When needed"
+#| msgid "When needed"
+msgid "When Needed"
 msgstr "En case de besoin"
 
 #: gtk/inspector/visual.ui:741
@@ -4049,8 +4064,9 @@ msgid "CSS Selector"
 msgstr "Sélecteur CSS"
 
 #: gtk/inspector/window.ui:367
-msgid "CSS nodes"
-msgstr "Nœud CSS"
+#| msgid "CSS nodes"
+msgid "CSS Nodes"
+msgstr "Nœuds CSS"
 
 #: gtk/inspector/window.ui:374
 msgid "Size Groups"
