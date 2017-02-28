@@ -37,6 +37,7 @@
 
   NSRect  lastUnmaximizedFrame;
   NSRect  lastMaximizedFrame;
+  NSRect  lastUnfullscreenFrame;
   BOOL    inMaximizeTransition;
 }
 
