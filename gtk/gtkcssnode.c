@@ -318,7 +318,7 @@ lookup_in_global_parent_cache (GtkCssNode                  *node,
 
   g_assert (node->cache == NULL);
   node->cache = gtk_css_node_style_cache_lookup (parent->cache,
-                                                 (GtkCssNodeDeclaration *) decl,
+                                                 decl,
                                                  gtk_css_node_is_first_child (node),
                                                  gtk_css_node_is_last_child (node));
   if (node->cache == NULL)
