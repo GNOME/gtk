@@ -1869,6 +1869,7 @@ keyboard_handle_enter (void               *data,
 
   seat->keyboard_focus = wl_surface_get_user_data (surface);
   g_object_ref (seat->keyboard_focus);
+  seat->nkeys = 0;
 
   event = gdk_event_new (GDK_FOCUS_CHANGE);
   event->focus_change.window = g_object_ref (seat->keyboard_focus);
@@ -1925,6 +1926,7 @@ keyboard_handle_leave (void               *data,
 
   g_object_unref (seat->keyboard_focus);
   seat->keyboard_focus = NULL;
+  seat->nkeys = 0;
 
   GDK_NOTE (EVENTS,
             g_message ("focus out, seat %p surface %p",
