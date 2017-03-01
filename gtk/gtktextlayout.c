@@ -2299,11 +2299,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
    */
   if (totally_invisible_line (layout, line, &iter))
     {
-      if (display->direction == GTK_TEXT_DIR_RTL)
-	display->layout = pango_layout_new (layout->rtl_context);
-      else
-	display->layout = pango_layout_new (layout->ltr_context);
-      
+      display->layout = pango_layout_new (layout->ltr_context);
       return display;
     }
 
