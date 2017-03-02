@@ -1,5 +1,5 @@
 # Danish translation of GTK+.
-# Copyright (C) 1999-2016 Free Software Foundation, Inc.
+# Copyright (C) 1999-2017 Free Software Foundation, Inc.
 # Birger Langkjer <birger.langkjer@image.dk>, 1999.
 # Kenneth Christiansen, 1999-2000
 # Keld Simonsen <keld@dkuug.dk>, 2000.
@@ -7,7 +7,7 @@
 # Martin Willemoes Hansen <mwh@sysrq.dk>, 2005.
 # Marie Lund <marielund@post.cybercity.dk>, 2005.
 # Kenneth Nielsen <k.nielsen81@gmail.com>, 2011.
-# Ask Hjorth Larsen <asklarsen@gmail.com>, 2007, 08, 09, 10, 11, 12, 13, 14, 15, 16.
+# Ask Hjorth Larsen <asklarsen@gmail.com>, 2007, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17.
 # scootergrisen, 2015, 2016.
 # Konventioner:
 # attribute -> egenskab
@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 02:33+0000\n"
-"PO-Revision-Date: 2016-11-19 16:23+0100\n"
+"POT-Creation-Date: 2017-02-26 08:09+0000\n"
+"PO-Revision-Date: 2017-03-02 11:32+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -57,10 +57,8 @@ msgid "The current backend does not support OpenGL"
 msgstr "Den nuværende motor understøtter ikke OpenGL"
 
 #: gdk/gdkwindow.c:2190
-#, fuzzy
-#| msgid "GL support disabled via GDK_DEBUG"
 msgid "Vulkan support disabled via GDK_DEBUG"
-msgstr "GL-understøttelse slået fra via GDK_DEBUG"
+msgstr "Understøttelse for Vulkan slået fra via GDK_DEBUG"
 
 # scootergrisen: skal det ikke være uden "tast"? Ellers kan alle knapper jo hedde tast til sidst
 #.
@@ -1283,7 +1281,7 @@ msgstr "Relaterede programmer"
 msgid "Other Applications"
 msgstr "Andre programmer"
 
-#: gtk/gtkapplicationwindow.c:344 gtk/gtkprintoperation-unix.c:482
+#: gtk/gtkapplicationwindow.c:344 gtk/gtkprintoperation-unix.c:484
 #: gtk/gtkprintoperation-win32.c:1466 gtk/inspector/prop-editor.c:1623
 msgid "Application"
 msgstr "Program"
@@ -1339,22 +1337,7 @@ msgid "Can’t parse file: %s\n"
 msgstr "Kan ikke fortolke filen: %s\n"
 
 #: gtk/gtk-builder-tool.c:1049
-#, c-format, fuzzy
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate           Validate the file\n"
-#| "  simplify           Simplify the file\n"
-#| "  enumerate          List all named objects\n"
-#| "  preview [OPTIONS]  Preview the file\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID            Preview only the named object\n"
-#| "  --css=FILE         Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
@@ -1379,11 +1362,14 @@ msgstr ""
 "\n"
 "Kommandoer:\n"
 "  validate           Validér filen\n"
-"  simplify           Simplificér filen\n"
+"  simplify [TILVALG] Forenkl filen\n"
 "  enumerate          Vis alle navngivne objekter\n"
 "  preview [TILVALG]  Forhåndsvis filen\n"
 "\n"
-"Tilvalg for preview:\n"
+"Tilvalg for forenkling:\n"
+"  --replace          Erstat filen\n"
+"\n"
+"Tilvalg for forhåndsvisning:\n"
 "  --id=ID            Forhåndsvis kun the navngivne objekt\n"
 "  --css=FIL          Brug typografi fra CSS-fil\n"
 "\n"
@@ -1498,7 +1484,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:183 gtk/gtkcolorbutton.c:359
+#: gtk/gtkcolorbutton.c:226 gtk/gtkcolorbutton.c:408
 msgid "Pick a Color"
 msgstr "Vælg en farve"
 
@@ -1797,44 +1783,44 @@ msgstr "_Højre:"
 msgid "Paper Margins"
 msgstr "Papirmargener"
 
-#: gtk/gtkentry.c:8900 gtk/gtklabel.c:6544 gtk/gtktextview.c:9293
+#: gtk/gtkentry.c:8928 gtk/gtklabel.c:6544 gtk/gtktextview.c:9312
 msgid "Cu_t"
 msgstr "K_lip"
 
-#: gtk/gtkentry.c:8904 gtk/gtklabel.c:6545 gtk/gtktextview.c:9297
+#: gtk/gtkentry.c:8932 gtk/gtklabel.c:6545 gtk/gtktextview.c:9316
 msgid "_Copy"
 msgstr "_Kopiér"
 
-#: gtk/gtkentry.c:8908 gtk/gtklabel.c:6546 gtk/gtktextview.c:9299
+#: gtk/gtkentry.c:8936 gtk/gtklabel.c:6546 gtk/gtktextview.c:9318
 msgid "_Paste"
 msgstr "_Indsæt"
 
-#: gtk/gtkentry.c:8911 gtk/gtkfilechooserwidget.c:1479
-#: gtk/gtkfilechooserwidget.c:2271 gtk/gtklabel.c:6548 gtk/gtktextview.c:9302
+#: gtk/gtkentry.c:8939 gtk/gtkfilechooserwidget.c:1479
+#: gtk/gtkfilechooserwidget.c:2273 gtk/gtklabel.c:6548 gtk/gtktextview.c:9321
 msgid "_Delete"
 msgstr "_Slet"
 
-#: gtk/gtkentry.c:8922 gtk/gtklabel.c:6557 gtk/gtktextview.c:9316
+#: gtk/gtkentry.c:8950 gtk/gtklabel.c:6557 gtk/gtktextview.c:9335
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: gtk/gtkentry.c:9098 gtk/gtktextview.c:9541
+#: gtk/gtkentry.c:9126 gtk/gtktextview.c:9560
 msgid "Select all"
 msgstr "Markér alt"
 
-#: gtk/gtkentry.c:9101 gtk/gtktextview.c:9544
+#: gtk/gtkentry.c:9129 gtk/gtktextview.c:9563
 msgid "Cut"
 msgstr "Klip"
 
-#: gtk/gtkentry.c:9104 gtk/gtktextview.c:9547
+#: gtk/gtkentry.c:9132 gtk/gtktextview.c:9566
 msgid "Copy"
 msgstr "Kopiér"
 
-#: gtk/gtkentry.c:9107 gtk/gtktextview.c:9550
+#: gtk/gtkentry.c:9135 gtk/gtktextview.c:9569
 msgid "Paste"
 msgstr "Indsæt"
 
-#: gtk/gtkentry.c:10174
+#: gtk/gtkentry.c:10202
 msgid "Caps Lock is on"
 msgstr "Caps Lock er slået til"
 
@@ -1859,7 +1845,7 @@ msgid "_Name"
 msgstr "_Navn"
 
 #: gtk/gtkfilechoosernative.c:514 gtk/gtkfilechoosernative.c:599
-#: gtk/gtkfilechooserwidget.c:1478 gtk/gtkfilechooserwidget.c:6350
+#: gtk/gtkfilechooserwidget.c:1478 gtk/gtkfilechooserwidget.c:6352
 #: gtk/gtkmessagedialog.c:852 gtk/gtkmessagedialog.c:861
 #: gtk/gtkmountoperation.c:542 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
@@ -2018,136 +2004,136 @@ msgstr "Hvis du sletter et element, vil det gå tabt permanent."
 msgid "The file could not be renamed"
 msgstr "Filen kunne ikke omdøbes"
 
-#: gtk/gtkfilechooserwidget.c:1917
+#: gtk/gtkfilechooserwidget.c:1919
 msgid "Could not select file"
 msgstr "Kunne ikke vælge filen"
 
-#: gtk/gtkfilechooserwidget.c:2266
+#: gtk/gtkfilechooserwidget.c:2268
 msgid "_Visit File"
 msgstr "_Gå til fil"
 
-#: gtk/gtkfilechooserwidget.c:2267
+#: gtk/gtkfilechooserwidget.c:2269
 msgid "_Open With File Manager"
 msgstr "_Åbn med filhåndtering"
 
-#: gtk/gtkfilechooserwidget.c:2268
+#: gtk/gtkfilechooserwidget.c:2270
 msgid "_Copy Location"
 msgstr "_Kopiér sted"
 
-#: gtk/gtkfilechooserwidget.c:2269
+#: gtk/gtkfilechooserwidget.c:2271
 msgid "_Add to Bookmarks"
 msgstr "_Føj til bogmærker"
 
-#: gtk/gtkfilechooserwidget.c:2270 gtk/gtkplacessidebar.c:2498
+#: gtk/gtkfilechooserwidget.c:2272 gtk/gtkplacessidebar.c:2498
 #: gtk/ui/gtkfilechooserwidget.ui:486
 msgid "_Rename"
 msgstr "_Omdøb"
 
-#: gtk/gtkfilechooserwidget.c:2272
+#: gtk/gtkfilechooserwidget.c:2274
 msgid "_Move to Trash"
 msgstr "_Flyt til papirkurv"
 
-#: gtk/gtkfilechooserwidget.c:2276
+#: gtk/gtkfilechooserwidget.c:2278
 msgid "Show _Hidden Files"
 msgstr "Vis _skjulte filer"
 
-#: gtk/gtkfilechooserwidget.c:2277
+#: gtk/gtkfilechooserwidget.c:2279
 msgid "Show _Size Column"
 msgstr "Vis _størrelseskolonne"
 
-#: gtk/gtkfilechooserwidget.c:2278
+#: gtk/gtkfilechooserwidget.c:2280
 msgid "Show _Time"
 msgstr "Vis _tidspunkt"
 
-#: gtk/gtkfilechooserwidget.c:2279
+#: gtk/gtkfilechooserwidget.c:2281
 msgid "Sort _Folders before Files"
 msgstr "Sortér _mapper før filer"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2603 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2605 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:183 gtk/ui/gtkprintunixdialog.ui:122
 msgid "Location"
 msgstr "Sted"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2693
+#: gtk/gtkfilechooserwidget.c:2695
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: gtk/gtkfilechooserwidget.c:3315
+#: gtk/gtkfilechooserwidget.c:3317
 msgid "Searching"
 msgstr "Søger"
 
-#: gtk/gtkfilechooserwidget.c:3320 gtk/gtkfilechooserwidget.c:3334
+#: gtk/gtkfilechooserwidget.c:3322 gtk/gtkfilechooserwidget.c:3336
 #, c-format
 msgid "Searching in %s"
 msgstr "Søger i %s"
 
-#: gtk/gtkfilechooserwidget.c:3344
+#: gtk/gtkfilechooserwidget.c:3346
 msgid "Enter location"
 msgstr "Indtast sted"
 
-#: gtk/gtkfilechooserwidget.c:3346
+#: gtk/gtkfilechooserwidget.c:3348
 msgid "Enter location or URL"
 msgstr "Indtast sted eller URL"
 
-#: gtk/gtkfilechooserwidget.c:4368 gtk/gtkfilechooserwidget.c:7271
+#: gtk/gtkfilechooserwidget.c:4370 gtk/gtkfilechooserwidget.c:7273
 #: gtk/ui/gtkfilechooserwidget.ui:211
 msgid "Modified"
 msgstr "Ændret"
 
-#: gtk/gtkfilechooserwidget.c:4646
+#: gtk/gtkfilechooserwidget.c:4648
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Kunne ikke læse indholdet af %s"
 
-#: gtk/gtkfilechooserwidget.c:4650
+#: gtk/gtkfilechooserwidget.c:4652
 msgid "Could not read the contents of the folder"
 msgstr "Kunne ikke læse indholdet af mappen"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4780 gtk/gtkfilechooserwidget.c:4828
+#: gtk/gtkfilechooserwidget.c:4782 gtk/gtkfilechooserwidget.c:4830
 msgid "%H:%M"
 msgstr "%H:%M"
 
 # Der er også en %H:%M.  Forhåbentlig bliver denne aldrig vist hvis regionsindstillingerne fungerer
-#: gtk/gtkfilechooserwidget.c:4782 gtk/gtkfilechooserwidget.c:4830
+#: gtk/gtkfilechooserwidget.c:4784 gtk/gtkfilechooserwidget.c:4832
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4786
+#: gtk/gtkfilechooserwidget.c:4788
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserwidget.c:4794
+#: gtk/gtkfilechooserwidget.c:4796
 msgid "%-e %b"
 msgstr "%-e. %b"
 
-#: gtk/gtkfilechooserwidget.c:4798
+#: gtk/gtkfilechooserwidget.c:4800
 msgid "%-e %b %Y"
 msgstr "%-e. %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5033 gtk/inspector/prop-editor.c:1626
+#: gtk/gtkfilechooserwidget.c:5035 gtk/inspector/prop-editor.c:1626
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: gtk/gtkfilechooserwidget.c:5072 gtk/gtkplacessidebar.c:940
+#: gtk/gtkfilechooserwidget.c:5074 gtk/gtkplacessidebar.c:940
 msgid "Home"
 msgstr "Hjem"
 
-#: gtk/gtkfilechooserwidget.c:5565
+#: gtk/gtkfilechooserwidget.c:5567
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke skifte til mappen fordi den ikke er lokal"
 
-#: gtk/gtkfilechooserwidget.c:6343 gtk/gtkprintunixdialog.c:666
+#: gtk/gtkfilechooserwidget.c:6345 gtk/gtkprintunixdialog.c:666
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Der findes allerede en fil som hedder \"%s\". Vil du erstatte den?"
 
-#: gtk/gtkfilechooserwidget.c:6346 gtk/gtkprintunixdialog.c:670
+#: gtk/gtkfilechooserwidget.c:6348 gtk/gtkprintunixdialog.c:670
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2155,19 +2141,19 @@ msgstr ""
 "Filen findes allerede i \"%s\".  Hvis den erstattes, vil dens indhold blive "
 "overskrevet."
 
-#: gtk/gtkfilechooserwidget.c:6351 gtk/gtkprintunixdialog.c:678
+#: gtk/gtkfilechooserwidget.c:6353 gtk/gtkprintunixdialog.c:678
 msgid "_Replace"
 msgstr "_Erstat"
 
-#: gtk/gtkfilechooserwidget.c:6559
+#: gtk/gtkfilechooserwidget.c:6561
 msgid "You do not have access to the specified folder."
 msgstr "Du har ikke adgang til den angivne mappe."
 
-#: gtk/gtkfilechooserwidget.c:7182
+#: gtk/gtkfilechooserwidget.c:7184
 msgid "Could not start the search process"
 msgstr "Kunne ikke starte søgeprocessen"
 
-#: gtk/gtkfilechooserwidget.c:7183
+#: gtk/gtkfilechooserwidget.c:7185
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2175,11 +2161,11 @@ msgstr ""
 "Programmet kunne ikke oprette en forbindelse til indekseringsdæmonen. Sørg "
 "venligst for at den kører."
 
-#: gtk/gtkfilechooserwidget.c:7195
+#: gtk/gtkfilechooserwidget.c:7197
 msgid "Could not send the search request"
 msgstr "Kunne ikke sende søgeforespørgslen"
 
-#: gtk/gtkfilechooserwidget.c:7489
+#: gtk/gtkfilechooserwidget.c:7491
 msgid "Accessed"
 msgstr "Tilgået"
 
@@ -2473,7 +2459,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke afbryde processen med PID %d: %s"
 
-#: gtk/gtknotebook.c:4974 gtk/gtknotebook.c:7201
+#: gtk/gtknotebook.c:4971 gtk/gtknotebook.c:7198
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -2881,8 +2867,7 @@ msgstr "Fejl ved oprettelse af forhåndsvisning til udskrift"
 
 #: gtk/gtkprintoperation.c:3039
 #, c-format
-msgid ""
-"The most probable reason is that a temporary file could not be created."
+msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "Den mest sandsynlige årsag er, at en midlertidig fil ikke kunne oprettes."
 
@@ -3089,10 +3074,9 @@ msgid "No recently used resource found with URI “%s”"
 msgstr "Der blev ikke fundet nogen nyligt brugt ressource med URI \"%s\""
 
 #: gtk/gtkrecentchoosermenu.c:749
-#, c-format, fuzzy
-#| msgid "Opening “%s”."
+#, c-format
 msgid "Open “%s”"
-msgstr "Åbner \"%s\"."
+msgstr "Åbn \"%s\""
 
 #: gtk/gtkrecentchoosermenu.c:780
 msgid "Unknown item"
@@ -3190,13 +3174,11 @@ msgstr "To-finger-strøg til højre"
 
 #: gtk/gtkshortcutsshortcut.c:161
 msgid "Swipe left"
-msgstr ""
+msgstr "Stryg til venstre"
 
 #: gtk/gtkshortcutsshortcut.c:165
-#, fuzzy
-#| msgid "Two finger swipe right"
 msgid "Swipe right"
-msgstr "To-finger-strøg til højre"
+msgstr "Stryg til højre"
 
 #: gtk/gtkshortcutswindow.c:919
 msgid "Shortcuts"
@@ -3549,7 +3531,7 @@ msgid "Display"
 msgstr "Skærm"
 
 #: gtk/inspector/general.ui:408
-msgid "RGBA visual"
+msgid "RGBA Visual"
 msgstr "RGBA visuel"
 
 #: gtk/inspector/general.ui:442
@@ -3617,7 +3599,7 @@ msgid "Address"
 msgstr "Adresse"
 
 #: gtk/inspector/misc-info.ui:68
-msgid "Reference count"
+msgid "Reference Count"
 msgstr "Referencetal"
 
 # ?
@@ -3645,7 +3627,7 @@ msgid "Mnemonic Label"
 msgstr "Huskevenlig etiket"
 
 #: gtk/inspector/misc-info.ui:294
-msgid "Request mode"
+msgid "Request Mode"
 msgstr "Anmodningstilstand"
 
 #: gtk/inspector/misc-info.ui:328
@@ -3657,7 +3639,7 @@ msgid "Baseline"
 msgstr "Grundlinje"
 
 #: gtk/inspector/misc-info.ui:396
-msgid "Clip area"
+msgid "Clip Area"
 msgstr "Klippeområde"
 
 #: gtk/inspector/misc-info.ui:430
@@ -3665,27 +3647,27 @@ msgid "Frame Clock"
 msgstr "Billedur"
 
 #: gtk/inspector/misc-info.ui:475
-msgid "Tick callback"
+msgid "Tick Callback"
 msgstr "Tilbagekald for tik"
 
 #: gtk/inspector/misc-info.ui:511
-msgid "Frame count"
+msgid "Frame Count"
 msgstr "Antal billeder"
 
 #: gtk/inspector/misc-info.ui:545
-msgid "Frame rate"
+msgid "Frame Rate"
 msgstr "Billedrate"
 
 #: gtk/inspector/misc-info.ui:579
-msgid "Accessible role"
+msgid "Accessible Role"
 msgstr "Tilgængelig rolle"
 
 #: gtk/inspector/misc-info.ui:613
-msgid "Accessible name"
+msgid "Accessible Name"
 msgstr "Tilgængeligt navn"
 
 #: gtk/inspector/misc-info.ui:649
-msgid "Accessible description"
+msgid "Accessible Description"
 msgstr "Tilgængelig beskrivelse"
 
 # ??
@@ -3815,10 +3797,9 @@ msgid "Defined At"
 msgstr "Definition"
 
 #: gtk/inspector/recorder.c:269
-#, c-format, fuzzy
-#| msgid "Saving CSS failed"
+#, c-format
 msgid "Saving RenderNode failed"
-msgstr "Kunne ikke gemme CSS"
+msgstr "Kunne ikke gemme RenderNode"
 
 # Det er nok når man navigerer og kan se knapper i f.eks. nautilus eller file choosers med f.eks [home] [user] [work], og kan navigere "op og ned"
 #: gtk/inspector/resource-list.ui:82
@@ -3980,7 +3961,7 @@ msgid "Right-to-Left"
 msgstr "Højre til venstre"
 
 #: gtk/inspector/visual.ui:347
-msgid "Window scaling"
+msgid "Window Scaling"
 msgstr "Vinduesskalering"
 
 #: gtk/inspector/visual.ui:382
@@ -4023,16 +4004,17 @@ msgstr "Vis grundlinjer"
 msgid "Show Layout Borders"
 msgstr "Vis layoutgrænser"
 
+# Tror det er en knap (men kan ikke helt finde ud af det med sikkerhed)
 #: gtk/inspector/visual.ui:615
 msgid "Snapshot Debug Nodes"
-msgstr ""
+msgstr "Tag øjebliksbillede af fejlsøgningsknuder"
 
 #: gtk/inspector/visual.ui:649
 msgid "Show Widget Resizes"
 msgstr "Vis størrelsesændringer af kontrol"
 
 #: gtk/inspector/visual.ui:683
-msgid "Simulate touchscreen"
+msgid "Simulate Touchscreen"
 msgstr "Simulér berøringsfølsom skærm"
 
 #: gtk/inspector/visual.ui:728
@@ -4040,7 +4022,7 @@ msgid "GL Rendering"
 msgstr "GL-optegning"
 
 #: gtk/inspector/visual.ui:740
-msgid "When needed"
+msgid "When Needed"
 msgstr "Når nødvendigt"
 
 #: gtk/inspector/visual.ui:741
@@ -4113,7 +4095,7 @@ msgstr "CSS-vælger"
 
 # scootergrisen: CSS-punkter
 #: gtk/inspector/window.ui:367
-msgid "CSS nodes"
+msgid "CSS Nodes"
 msgstr "CSS-knuder"
 
 # ?
@@ -4154,11 +4136,8 @@ msgid "CSS"
 msgstr "CSS"
 
 #: gtk/inspector/window.ui:464
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Record"
 msgid "Recorder"
-msgstr "_Optag"
+msgstr "Optager"
 
 #: gtk/inspector/window.ui:473
 msgid "Visual"
@@ -5283,10 +5262,8 @@ msgid ""
 msgstr "Serveradresser består af et protokolpræfiks og en adresse. Eksempler:"
 
 #: gtk/ui/gtkplacesview.ui:53
-#, fuzzy
-#| msgid "smb://foo.example.com, ssh://192.168.0.1"
 msgid "smb://foo.example.com, ssh://192.168.0.1, ftp://[2001:db8::1]"
-msgstr "smb://foo.eksempel.dk, ssh://192.168.0.1"
+msgstr "smb://foo.eksempel.dk, ssh://192.168.0.1, ftp://[2001:db8::1]"
 
 #: gtk/ui/gtkplacesview.ui:72
 msgid "Available Protocols"
@@ -5697,8 +5674,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "Ingen temaindeksfil i \"%s\".\n"
-"Hvis du virkelig vil oprette et ikonlager her, så brug "
-"--ignore-theme-index.\n"
+"Hvis du virkelig vil oprette et ikonlager her, så brug --ignore-theme-"
+"index.\n"
 
 #. ID
 #: modules/input/imam-et.c:452
@@ -6346,12 +6323,9 @@ msgstr "Udskriv til fil"
 msgid "PDF"
 msgstr "PDF"
 
-# scootergrisen: skal vel rettes til PostScript i både kilde og mål
 #: modules/printbackends/file/gtkprintbackendfile.c:663
-#, fuzzy
-#| msgid "Postscript"
 msgid "PostScript"
-msgstr "Postscript"
+msgstr "PostScript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "SVG"
@@ -6446,8 +6420,8 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "GDK-fejlfindingsflag der skal fjernes"
 
 #~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is not "
-#~ "available"
+#~ "The WGL_ARB_create_context extension needed to create core profiles is "
+#~ "not available"
 #~ msgstr ""
 #~ "Udvidelsen WGL_ARB_create_context, som er nødvendig for at kunne oprette "
 #~ "kerneprofiler, er ikke tilgængeligt"
@@ -6456,15 +6430,15 @@ msgstr "Udskriv til testprinter"
 #~ "Select the color you want from the outer ring. Select the darkness or "
 #~ "lightness of that color using the inner triangle."
 #~ msgstr ""
-#~ "Vælg den ønskede farve fra den ydre ring. Vælg lysstyrken for farven fra den "
-#~ "indre trekant."
+#~ "Vælg den ønskede farve fra den ydre ring. Vælg lysstyrken for farven fra "
+#~ "den indre trekant."
 
 #~ msgid ""
-#~ "Click the eyedropper, then click a color anywhere on your screen to select "
-#~ "that color."
+#~ "Click the eyedropper, then click a color anywhere on your screen to "
+#~ "select that color."
 #~ msgstr ""
-#~ "Klik på pipetten og klik derefter på en farve et eller andet sted på skærmen "
-#~ "for at vælge den farve."
+#~ "Klik på pipetten og klik derefter på en farve et eller andet sted på "
+#~ "skærmen for at vælge den farve."
 
 #~ msgid "_Hue:"
 #~ msgstr "_Farvetone:"
@@ -6511,10 +6485,10 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Color _name:"
 #~ msgstr "Farve_navn:"
 
-#~ # "orange" ville være et dårligt eksempel eftersom det hedder det samme på de to sprog
+# "orange" ville være et dårligt eksempel eftersom det hedder det samme på de to sprog
 #~ msgid ""
-#~ "You can enter an HTML-style hexadecimal color value, or simply a color name "
-#~ "such as “orange” in this entry."
+#~ "You can enter an HTML-style hexadecimal color value, or simply a color "
+#~ "name such as “orange” in this entry."
 #~ msgstr ""
 #~ "Du kan indtaste en hexadecimal farveværdi i HTML-stil eller simpelthen et "
 #~ "farvenavn (på engelsk) såsom \"purple\" her."
@@ -6526,24 +6500,25 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Farvehjul"
 
 #~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re selecting "
-#~ "now. You can drag this color to a palette entry, or select this color as "
-#~ "current by dragging it to the other color swatch alongside."
+#~ "The previously-selected color, for comparison to the color you’re "
+#~ "selecting now. You can drag this color to a palette entry, or select this "
+#~ "color as current by dragging it to the other color swatch alongside."
 #~ msgstr ""
 #~ "Den foregående valgte farve, til sammenligning med den farve du er ved at "
-#~ "vælge nu. Du kan trække denne farve til et palet-element eller vælge den som "
-#~ "den aktive farve ved trække den til den anden farvestrimmel ved siden af."
+#~ "vælge nu. Du kan trække denne farve til et palet-element eller vælge den "
+#~ "som den aktive farve ved trække den til den anden farvestrimmel ved siden "
+#~ "af."
 
 #~ msgid ""
-#~ "The color you’ve chosen. You can drag this color to a palette entry to save "
-#~ "it for use in the future."
+#~ "The color you’ve chosen. You can drag this color to a palette entry to "
+#~ "save it for use in the future."
 #~ msgstr ""
-#~ "Den farve du har valgt. Du kan trække denne farve til et palet-element for "
-#~ "at gemme den til fremtidig brug."
+#~ "Den farve du har valgt. Du kan trække denne farve til et palet-element "
+#~ "for at gemme den til fremtidig brug."
 
 #~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re selecting "
-#~ "now."
+#~ "The previously-selected color, for comparison to the color you’re "
+#~ "selecting now."
 #~ msgstr ""
 #~ "Den tidligere valgte farve, til sammenligning med farven, du nu vælger."
 
@@ -6553,10 +6528,11 @@ msgstr "Udskriv til testprinter"
 #~ msgid "_Save color here"
 #~ msgstr "_Gem farve her"
 
-#~ # RETMIG: er det nu elementet der skal højreklikkes?
+# RETMIG: er det nu elementet der skal højreklikkes?
 #~ msgid ""
-#~ "Click this palette entry to make it the current color. To change this entry, "
-#~ "drag a color swatch here or right-click it and select “Save color here.”"
+#~ "Click this palette entry to make it the current color. To change this "
+#~ "entry, drag a color swatch here or right-click it and select “Save color "
+#~ "here.”"
 #~ msgstr ""
 #~ "Klik på dette palet-element for at gøre det til den aktive farve. Træk en "
 #~ "farvestrimmel herhen eller højreklik på dette element og vælg \"Gem farve "
@@ -6580,7 +6556,7 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Si_ze:"
 #~ msgstr "Stø_rrelse:"
 
-#~ # passer godt her
+# passer godt her
 #~ msgid "_Preview:"
 #~ msgstr "_Udseende:"
 
@@ -6728,8 +6704,8 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Vis pixel-lager"
 
 #~ msgid ""
-#~ "The GLX_ARB_create_context_profile extension needed to create core profiles "
-#~ "is not available"
+#~ "The GLX_ARB_create_context_profile extension needed to create core "
+#~ "profiles is not available"
 #~ msgstr ""
 #~ "Udvidelsen GLX_ARB_create_context_profile, som er nødvendig for at kunne "
 #~ "oprette kerneprofiler, er ikke tilgængelig"
@@ -7007,11 +6983,11 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Ingen tilgængelige programmer til at åbne “%s”-filer"
 
 #~ msgid ""
-#~ "Click \"Show other applications\", for more options, or \"Find applications "
-#~ "online\" to install a new application"
+#~ "Click \"Show other applications\", for more options, or \"Find "
+#~ "applications online\" to install a new application"
 #~ msgstr ""
-#~ "Klik \"Vis andre programmer\" for at få flere valgmuligheder, eller \"Find "
-#~ "programmer på nettet\" for at installere et nyt program"
+#~ "Klik \"Vis andre programmer\" for at få flere valgmuligheder, eller "
+#~ "\"Find programmer på nettet\" for at installere et nyt program"
 
 #~ msgid ""
 #~ "%s cannot quit at this time:\n"
@@ -7161,10 +7137,12 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
 
 #~ msgid "This function is not implemented for widgets of class '%s'"
-#~ msgstr "Denne funktion er ikke implementeret for kontroller af klassen \"%s\""
+#~ msgstr ""
+#~ "Denne funktion er ikke implementeret for kontroller af klassen \"%s\""
 
 #~ msgid "different idatas found for symlinked '%s' and '%s'\n"
-#~ msgstr "forskellige idata fundet for den symbolsk lænkede \"%s\" og \"%s\"\n"
+#~ msgstr ""
+#~ "forskellige idata fundet for den symbolsk lænkede \"%s\" og \"%s\"\n"
 
 #~ msgid "Could not get information for file '%s': %s"
 #~ msgstr "Kunne ikke indhente oplysninger om filen \"%s\": %s"
@@ -7240,8 +7218,10 @@ msgstr "Udskriv til testprinter"
 #~ msgid "New Folder"
 #~ msgstr "Ny mappe"
 
-#~ msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
 #~ msgid "Error deleting file '%s': %s"
 #~ msgstr "Fejl ved sletning af filen \"%s\": %s"
@@ -7350,18 +7330,18 @@ msgstr "Udskriv til testprinter"
 #~ "Failed to load animation '%s': reason not known, probably a corrupt "
 #~ "animation file"
 #~ msgstr ""
-#~ "Kunne ikke indlæse animationen \"%s\": årsag ukendt, formentlig en ødelagt "
-#~ "animationsfil"
+#~ "Kunne ikke indlæse animationen \"%s\": årsag ukendt, formentlig en "
+#~ "ødelagt animationsfil"
 
 #~ msgid "Unable to load image-loading module: %s: %s"
 #~ msgstr "Kunne ikke indlæse billedindlæsningmodulet %s: %s"
 
 #~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps it's "
-#~ "from a different GTK version?"
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
 #~ msgstr ""
-#~ "Billedindlæsningsmodulet %s  eksporterer ikke den rigtige grænseflade; måske "
-#~ "er den fra en anden Gtk-version?"
+#~ "Billedindlæsningsmodulet %s  eksporterer ikke den rigtige grænseflade; "
+#~ "måske er den fra en anden Gtk-version?"
 
 #~ msgid "Image type '%s' is not supported"
 #~ msgstr "Billedtypen \"%s\" er ikke understøttet"
@@ -7378,9 +7358,11 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Error writing to image file: %s"
 #~ msgstr "Fejl ved skrivning af billedfil: %s"
 
-#~ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
 #~ msgstr ""
-#~ "Denne bygning af gdk-pixbuf understøtter ikke gemning af billedformatet: %s"
+#~ "Denne bygning af gdk-pixbuf understøtter ikke gemning af billedformatet: "
+#~ "%s"
 
 #~ msgid "Insufficient memory to save image to callback"
 #~ msgstr "Ikke tilstrækkelig hukommelse til at gemme billede til tilbagekald"
@@ -7395,8 +7377,8 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Kunne ikke åbne \"%s\" til skrivning: %s"
 
 #~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been saved: "
-#~ "%s"
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
 #~ msgstr ""
 #~ "Kunne ikke lukke \"%s\" ved skrivning af billede, formentlig er ikke alle "
 #~ "data blevet gemt: %s"
@@ -7513,8 +7495,8 @@ msgstr "Udskriv til testprinter"
 #~ "GIF image has no global colormap, and a frame inside it has no local "
 #~ "colormap."
 #~ msgstr ""
-#~ "GIF-animation har ikke en global farvetabel, og et billede i den mangler en "
-#~ "lokal farvetabel."
+#~ "GIF-animation har ikke en global farvetabel, og et billede i den mangler "
+#~ "en lokal farvetabel."
 
 #~ msgid "GIF image was truncated or incomplete."
 #~ msgstr "GIF-billedet er afkortet eller ikke komplet."
@@ -7582,7 +7564,7 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Insufficient memory to open JPEG 2000 file"
 #~ msgstr "Utilstrækkelig hukommelse til at åbne JPEG 2000-fil"
 
-#~ # Jeg tror man skal læse buffer som et udsagnsord, altså i stil med "buffering"
+# Jeg tror man skal læse buffer som et udsagnsord, altså i stil med "buffering"
 #~ msgid "Couldn't allocate memory to buffer image data"
 #~ msgstr "Kunne ikke tildele hukommelse til buffer for billeddata"
 
@@ -7596,8 +7578,8 @@ msgstr "Udskriv til testprinter"
 #~ "Insufficient memory to load image, try exiting some applications to free "
 #~ "memory"
 #~ msgstr ""
-#~ "Ikke tilstrækkelig hukommelse til at indlæse billede, prøv at afslutte nogle "
-#~ "programmer for at frigøre hukommelse"
+#~ "Ikke tilstrækkelig hukommelse til at indlæse billede, prøv at afslutte "
+#~ "nogle programmer for at frigøre hukommelse"
 
 #~ msgid "Unsupported JPEG color space (%s)"
 #~ msgstr "JPEG-farverum understøttes ikke (%s)"
@@ -7612,8 +7594,8 @@ msgstr "Udskriv til testprinter"
 #~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 #~ "parsed."
 #~ msgstr ""
-#~ "JPEG-kvalitet skal være en værdi mellem 0 og 100; værdien \"%s\" kunne ikke "
-#~ "fortolkes."
+#~ "JPEG-kvalitet skal være en værdi mellem 0 og 100; værdien \"%s\" kunne "
+#~ "ikke fortolkes."
 
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -7671,8 +7653,8 @@ msgstr "Udskriv til testprinter"
 
 #~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 #~ msgstr ""
-#~ "Transformeret PNG har et kanalantal der ikke understøttes - skal være enten "
-#~ "3 eller 4."
+#~ "Transformeret PNG har et kanalantal der ikke understøttes - skal være "
+#~ "enten 3 eller 4."
 
 #~ msgid "Fatal error in PNG image file: %s"
 #~ msgstr "Uoprettelig fejl i PNG-billedfil: %s"
@@ -7684,8 +7666,8 @@ msgstr "Udskriv til testprinter"
 #~ "Insufficient memory to store a %ld by %ld image; try exiting some "
 #~ "applications to reduce memory usage"
 #~ msgstr ""
-#~ "Utilstrækkelig hukommelse til opbevaring af et %ld gange %ld billede; prøv "
-#~ "at afslutte nogle programmer for at frigøre hukommelse"
+#~ "Utilstrækkelig hukommelse til opbevaring af et %ld gange %ld billede; "
+#~ "prøv at afslutte nogle programmer for at frigøre hukommelse"
 
 #~ msgid "Fatal error reading PNG image file"
 #~ msgstr "Uoprettelig fejl ved læsning af PNG-billedfil"
@@ -7704,8 +7686,8 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Farveprofil har ugyldig længde %d."
 
 #~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could not "
-#~ "be parsed."
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
 #~ msgstr ""
 #~ "PNG-komprimeringsniveau skal være en værdi mellem 0 og 9; værdien \"%s\" "
 #~ "kunne ikke fortolkes."
@@ -7714,13 +7696,14 @@ msgstr "Udskriv til testprinter"
 #~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
 #~ "allowed."
 #~ msgstr ""
-#~ "PNG-komprimeringsniveau skal være en værdi mellem 0 og 9; værdien \"%d\" er "
-#~ "ikke gyldig."
+#~ "PNG-komprimeringsniveau skal være en værdi mellem 0 og 9; værdien \"%d\" "
+#~ "er ikke gyldig."
 
 #~ msgid ""
 #~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 #~ msgstr ""
-#~ "Værdi for PNG-tekstblokken %s kan ikke konverteres til ISO-8859-1-kodningen."
+#~ "Værdi for PNG-tekstblokken %s kan ikke konverteres til ISO-8859-1-"
+#~ "kodningen."
 
 #~ msgid "The PNG image format"
 #~ msgstr "PNG-billedformatet"
@@ -7759,7 +7742,8 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Kan ikke tildele hukommelse til indlæsning af PNM-billede"
 
 #~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "Ikke tilstrækkelig hukommelse til indlæsning af PNM-kontekststruktur"
+#~ msgstr ""
+#~ "Ikke tilstrækkelig hukommelse til indlæsning af PNM-kontekststruktur"
 
 #~ msgid "Unexpected end of PNM image data"
 #~ msgstr "Uventet slutning på PNM-billeddata"
@@ -7773,7 +7757,7 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Input file descriptor is NULL."
 #~ msgstr "Fildeskriptoren for inddata er NULL."
 
-#~ # Ved ikke hvilken betydning af header der gør sig gældende, så lad os lade header blive stående indtil nogen får en god idé
+# Ved ikke hvilken betydning af header der gør sig gældende, så lad os lade header blive stående indtil nogen får en god idé
 #~ msgid "Failed to read QTIF header"
 #~ msgstr "Kunne ikke læse QTIF-header"
 
@@ -7922,7 +7906,8 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Ikke tilstrækkelig hukommelse til indlæsning af XBM-billedfil"
 
 #~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "Fejl ved skriving til midlertidig fil under indlæsning af XBM-billede"
+#~ msgstr ""
+#~ "Fejl ved skriving til midlertidig fil under indlæsning af XBM-billede"
 
 #~ msgid "The XBM image format"
 #~ msgstr "XBM-billedformatet"
@@ -8162,7 +8147,7 @@ msgstr "Udskriv til testprinter"
 #~ msgid "print operation status|Waiting"
 #~ msgstr "Venter"
 
-#~ # Usikker
+# Usikker
 #~ msgid "print operation status|Blocking on issue"
 #~ msgstr "Venter på grund af problem"
 
@@ -8229,7 +8214,7 @@ msgstr "Udskriv til testprinter"
 #~ msgid "volume percentage|%d %%"
 #~ msgstr "%d %%"
 
-#~ # Hvad er dette?
+# Hvad er dette?
 #~ msgid "paper size|asme_f"
 #~ msgstr "asme_f"
 
@@ -8293,7 +8278,7 @@ msgstr "Udskriv til testprinter"
 #~ msgid "paper size|A4 Extra"
 #~ msgstr "A4 ekstra"
 
-#~ # Gad vide hvad tab er
+# Gad vide hvad tab er
 #~ msgid "paper size|A4 Tab"
 #~ msgstr "A4 tab"
 
@@ -8492,7 +8477,7 @@ msgstr "Udskriv til testprinter"
 #~ msgid "paper size|5x7"
 #~ msgstr "5x7"
 
-#~ # Gad vide hvad Arch er for noget
+# Gad vide hvad Arch er for noget
 #~ msgid "paper size|Arch A"
 #~ msgstr "Arch A"
 
@@ -8538,7 +8523,7 @@ msgstr "Udskriv til testprinter"
 #~ msgid "paper size|Invoice"
 #~ msgstr "Faktura"
 
-#~ # Jeg tror ikke de refererer til "sensationspresse"
+# Jeg tror ikke de refererer til "sensationspresse"
 #~ msgid "paper size|Tabloid"
 #~ msgstr "Tabloid"
 
@@ -8596,9 +8581,11 @@ msgstr "Udskriv til testprinter"
 #~ msgid "The radio tool button whose group this button belongs to."
 #~ msgstr "Den radioværktøjsknap hvis gruppe denne knap tilhører."
 
-#~ msgid "Could not add a bookmark for '%s' because it is an invalid path name."
+#~ msgid ""
+#~ "Could not add a bookmark for '%s' because it is an invalid path name."
 #~ msgstr ""
-#~ "Kunne ikke tilføje et bogmærke for \"%s\" fordi det er et ugyldigt stinavn."
+#~ "Kunne ikke tilføje et bogmærke for \"%s\" fordi det er et ugyldigt "
+#~ "stinavn."
 
 #~ msgid "Could not select file '%s' because it is an invalid path name."
 #~ msgstr "Kunne ikke vælge filen \"%s\" fordi det er et ugyldigt stinavn."
@@ -8656,10 +8643,11 @@ msgstr "Udskriv til testprinter"
 #~ "element til \"%s\" i stedet"
 
 #~ msgid ""
-#~ "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
+#~ "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" "
+#~ "instead"
 #~ msgstr ""
-#~ "Linje %d, kolonne %d: forventede \"%s\" på øverste niveau, men fandt \"%s\" "
-#~ "i stedet"
+#~ "Linje %d, kolonne %d: forventede \"%s\" på øverste niveau, men fandt \"%s"
+#~ "\" i stedet"
 
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
@@ -8699,7 +8687,8 @@ msgstr "Udskriv til testprinter"
 
 #~ msgid ""
 #~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
+#~ msgstr ""
+#~ "Filnavnet \"%s\" indeholder symboler der ikke er tilladte i filnavne"
 
 #~ msgid "Error getting information for '/': %s"
 #~ msgstr "Fejl ved indhentning af oplysninger om \"/\": %s"
@@ -8708,7 +8697,8 @@ msgstr "Udskriv til testprinter"
 #~ msgstr "Genvejen %s findes allerede"
 
 #~ msgid "Cannot handle PNM files with maximum color values greater than 255"
-#~ msgstr "Kan ikke håndtere PNM-filer med maksimale farveværdier større end 255"
+#~ msgstr ""
+#~ "Kan ikke håndtere PNM-filer med maksimale farveværdier større end 255"
 
 #~ msgid "Could not get information about '%s': %s"
 #~ msgstr "Kunne ikke indhente oplysninger om \"%s\": %s"
@@ -8782,4 +8772,3 @@ msgstr "Udskriv til testprinter"
 
 #~ msgid "Zoom _100%"
 #~ msgstr "Zoom _100%"
-
