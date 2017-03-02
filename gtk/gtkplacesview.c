@@ -588,15 +588,12 @@ populate_servers (GtkPlacesView *view)
       gtk_container_add (GTK_CONTAINER (grid), label);
 
       /* remove button */
-      button = gtk_button_new ();
+      button = gtk_button_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
       gtk_widget_set_halign (button, GTK_ALIGN_END);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
       gtk_style_context_add_class (gtk_widget_get_style_context (button), "sidebar-button");
       gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 2);
-      gtk_container_add (GTK_CONTAINER (button),
-                         gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON));
 
       gtk_container_add (GTK_CONTAINER (row), grid);
       gtk_container_add (GTK_CONTAINER (priv->recent_servers_listbox), row);
