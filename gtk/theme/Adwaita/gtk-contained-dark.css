@@ -110,7 +110,7 @@ flowbox flowboxchild {
     background-color: #1a1d1e; }
   .content-view .tile:active, .content-view .tile:selected {
     background-color: #215d9c; }
-  .content-view .tile:insensitive {
+  .content-view .tile:disabled {
     background-color: #2d3234; }
 
 label {

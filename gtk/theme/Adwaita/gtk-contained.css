@@ -110,7 +110,7 @@ flowbox flowboxchild {
     background-color: transparent; }
   .content-view .tile:active, .content-view .tile:selected {
     background-color: transparent; }
-  .content-view .tile:insensitive {
+  .content-view .tile:disabled {
     background-color: transparent; }
 
 label {
