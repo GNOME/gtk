@@ -91,7 +91,7 @@
  *
  * # CSS nodes
  *
- * GtkPlacesSidebar uses a single CSS node with name placesidebar and style
+ * GtkPlacesSidebar uses a single CSS node with name placessidebar and style
  * class .sidebar.
  *
  * Among the children of the places sidebar, the following style classes can
