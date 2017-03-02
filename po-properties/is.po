@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk 2.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-22 21:46+0000\n"
-"PO-Revision-Date: 2017-03-02 11:52+0000\n"
+"PO-Revision-Date: 2017-03-02 12:58+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.org>\n"
 "Language: is\n"
@@ -611,7 +611,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkhandlebox.c:232
 msgid "Handle position"
-msgstr ""
+msgstr "Staða haldfangs"
 
 #: gtk/deprecated/gtkhandlebox.c:233
 msgid "Position of the handle relative to the child widget"
@@ -1564,10 +1564,9 @@ msgid "Whether all required fields on the page have been filled out"
 msgstr ""
 
 #: gtk/gtkassistant.c:647
-#, fuzzy
 #| msgid "Padding"
 msgid "Has padding"
-msgstr "Millibil"
+msgstr "Er með millibil"
 
 #: gtk/gtkassistant.c:647
 msgid "Whether the assistant adds padding around the page"
@@ -1794,9 +1793,8 @@ msgid "Border between button edges and child."
 msgstr ""
 
 #: gtk/gtkbutton.c:626
-#, fuzzy
 msgid "Image spacing"
-msgstr "B_il milli mynda:"
+msgstr "Bil frá mynd"
 
 #: gtk/gtkbutton.c:627
 msgid "Spacing in pixels between the image and label"
@@ -1853,9 +1851,8 @@ msgid "If TRUE, the selected month cannot be changed"
 msgstr ""
 
 #: gtk/gtkcalendar.c:486
-#, fuzzy
 msgid "Show Week Numbers"
-msgstr "Sýna _vikunúmer"
+msgstr "Sýna vikunúmer"
 
 #: gtk/gtkcalendar.c:487
 msgid "If TRUE, week numbers are displayed"
@@ -2536,9 +2533,8 @@ msgid "The maximum width of the cell, in characters"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:542 gtk/gtktexttag.c:568
-#, fuzzy
 msgid "Wrap mode"
-msgstr "Flettihamur"
+msgstr "Línuskriðshamur"
 
 #: gtk/gtkcellrenderertext.c:543
 msgid ""
@@ -2846,10 +2842,9 @@ msgid "The selected RGBA color"
 msgstr ""
 
 #: gtk/gtkcolorbutton.c:274
-#, fuzzy
 #| msgid "Show size"
 msgid "Show Editor"
-msgstr "Sýna stærð"
+msgstr "Birta ritil"
 
 #: gtk/gtkcolorbutton.c:275
 msgid "Whether to show the color editor right away"
@@ -2869,7 +2864,7 @@ msgstr ""
 
 #: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:704
 msgid "Show editor"
-msgstr ""
+msgstr "Birta ritil"
 
 #: gtk/gtkcolorscale.c:258
 msgid "Scale type"
@@ -2885,23 +2880,21 @@ msgstr ""
 
 #: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3799
 msgid "Selectable"
-msgstr ""
+msgstr "Veljanlegt"
 
 #: gtk/gtkcolorswatch.c:722
 msgid "Whether the swatch is selectable"
 msgstr ""
 
 #: gtk/gtkcolorswatch.c:725
-#, fuzzy
 #| msgid "Menu"
 msgid "Has Menu"
-msgstr "Valmynd"
+msgstr "Er með valmynd"
 
 #: gtk/gtkcolorswatch.c:725
-#, fuzzy
 #| msgid "Whether the children should all be the same size"
 msgid "Whether the swatch should offer customization"
-msgstr "Hvort börnin skuli öll vera af sömu stærð"
+msgstr ""
 
 #: gtk/gtkcombobox.c:910
 msgid "ComboBox model"
@@ -3763,7 +3756,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4483
 #: gtk/gtkplacesview.c:2223
 msgid "Local Only"
-msgstr "Einungis staðvæt"
+msgstr "Einungis staðvært"
 
 #: gtk/gtkfilechooser.c:389
 msgid "Whether the selected file(s) should be limited to local file: URLs"
@@ -3811,9 +3804,8 @@ msgid "Whether to allow multiple files to be selected"
 msgstr "Stillir hvort velja má margar skrár"
 
 #: gtk/gtkfilechooser.c:425
-#, fuzzy
 msgid "Show Hidden"
-msgstr "Sýna _faldar skrár"
+msgstr "Birta falið"
 
 #: gtk/gtkfilechooser.c:426
 msgid "Whether the hidden files and folders should be displayed"
@@ -3926,7 +3918,6 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkflowbox.c:3874
-#, fuzzy
 msgid "Vertical spacing"
 msgstr "Lóðrétt millibil"
 
@@ -3935,7 +3926,6 @@ msgid "The amount of vertical space between two children"
 msgstr ""
 
 #: gtk/gtkflowbox.c:3886
-#, fuzzy
 msgid "Horizontal spacing"
 msgstr "Lárétt millibil"
 
@@ -4089,7 +4079,6 @@ msgid "Whether the GtkGLArea renders on each redraw"
 msgstr "Stillir hvort velja má margar skrár"
 
 #: gtk/gtkglarea.c:827
-#, fuzzy
 msgid "Has alpha"
 msgstr "Með gegnsæisrás (alpha)"
 
@@ -4362,7 +4351,6 @@ msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 
 #: gtk/gtkimage.c:319
-#, fuzzy
 msgid "Pixel size"
 msgstr "Stærð mynddíla"
 
@@ -4456,13 +4444,12 @@ msgid "Line wrap"
 msgstr "Línuskrið"
 
 #: gtk/gtklabel.c:881
-#, fuzzy
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr "Ef virkt, þá umbrjótið línur ef texti verður of breiður."
+msgstr "Ef virkt, þá umbrjóta línur ef texti verður of langur."
 
 #: gtk/gtklabel.c:896
 msgid "Line wrap mode"
-msgstr ""
+msgstr "Línuskriðshamur"
 
 #: gtk/gtklabel.c:897
 msgid "If wrap is set, controls how linewrapping is done"
@@ -4672,9 +4659,8 @@ msgid "Inspected widget"
 msgstr ""
 
 #: gtk/gtkmagnifier.c:302 gtk/gtkmagnifier.c:303
-#, fuzzy
 msgid "magnification"
-msgstr "Stækkun:"
+msgstr "stækkun"
 
 #: gtk/gtkmagnifier.c:309 gtk/gtkmagnifier.c:310
 msgid "resize"
@@ -4738,9 +4724,8 @@ msgid "Direction"
 msgstr "Stefna"
 
 #: gtk/gtkmenubutton.c:535
-#, fuzzy
 msgid "The direction the arrow should point."
-msgstr "Áttin sem pílan á að benda í"
+msgstr "Áttin sem pílan á að benda í."
 
 #: gtk/gtkmenubutton.c:550
 msgid "Use a popover"
@@ -5033,7 +5018,7 @@ msgstr "Mynd"
 
 #: gtk/gtkmessagedialog.c:278
 msgid "The image"
-msgstr ""
+msgstr "Myndin"
 
 #: gtk/gtkmessagedialog.c:294
 msgid "Message area"
@@ -5109,10 +5094,9 @@ msgid "The screen where this window will be displayed."
 msgstr ""
 
 #: gtk/gtknativedialog.c:214
-#, fuzzy
 #| msgid "Dialog"
 msgid "Dialog Title"
-msgstr "Samskiptagluggi"
+msgstr "Titill samskiptaglugga"
 
 #: gtk/gtknativedialog.c:215
 msgid "The title of the file chooser dialog"
@@ -5336,20 +5320,18 @@ msgid "Pass through input, does not affect main child"
 msgstr ""
 
 #: gtk/gtkoverlay.c:786
-#, fuzzy
 #| msgid "_Index"
 msgid "Index"
-msgstr "Atriðaskrá"
+msgstr "Vísir"
 
 #: gtk/gtkoverlay.c:787
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr ""
 
 #: gtk/gtkpadcontroller.c:373
-#, fuzzy
 #| msgid "Action"
 msgid "Action group"
-msgstr "Aðgerð"
+msgstr "Aðgerðahópur"
 
 #: gtk/gtkpadcontroller.c:374
 msgid "Action group to launch actions from"
@@ -5394,7 +5376,7 @@ msgstr ""
 
 #: gtk/gtkpaned.c:427
 msgid "Wide Handle"
-msgstr ""
+msgstr "Breitt haldfang"
 
 #: gtk/gtkpaned.c:428
 #, fuzzy
@@ -5402,13 +5384,12 @@ msgid "Whether the paned should have a prominent handle"
 msgstr "Hvort barnið fái meira pláss þegar foreldrið stækkar"
 
 #: gtk/gtkpaned.c:441
-#, fuzzy
 msgid "Handle Size"
-msgstr "Stærð _haldfangs:"
+msgstr "Stærð haldfangs"
 
 #: gtk/gtkpaned.c:442
 msgid "Width of handle"
-msgstr ""
+msgstr "Breidd haldfangs"
 
 #: gtk/gtkpaned.c:459
 msgid "Resize"
@@ -5445,19 +5426,17 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:4459
-#, fuzzy
 #| msgid "Show Details"
 msgid "Show recent files"
-msgstr "Sýna ítarlegri upplýsingar"
+msgstr "Birta nýlegar skrár"
 
 #: gtk/gtkplacessidebar.c:4460
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:4465
-#, fuzzy
 msgid "Show 'Desktop'"
-msgstr "Sýna skjáborðið"
+msgstr "Birta 'Skjáborð'"
 
 #: gtk/gtkplacessidebar.c:4466
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
@@ -5495,9 +5474,8 @@ msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:4495
-#, fuzzy
 msgid "Show 'Other locations'"
-msgstr "Sýna aðrar staðsetningar"
+msgstr "Birta 'Aðrar staðsetningar'"
 
 #: gtk/gtkplacessidebar.c:4496
 msgid "Whether the sidebar includes an item to show external locations"
@@ -5594,9 +5572,8 @@ msgid "The window of the socket the plug is embedded in"
 msgstr ""
 
 #: gtk/gtkpopover.c:1701
-#, fuzzy
 msgid "Relative to"
-msgstr "Miðað við: "
+msgstr "Miðað við"
 
 #: gtk/gtkpopover.c:1702
 msgid "Widget the bubble window points to"
@@ -5627,9 +5604,8 @@ msgid "Whether show/hide transitions are enabled or not"
 msgstr ""
 
 #: gtk/gtkpopover.c:1772
-#, fuzzy
 msgid "Constraint"
-msgstr "skorðað"
+msgstr "Skorður"
 
 #: gtk/gtkpopover.c:1773
 msgid "Constraint for the popover position"
@@ -5637,17 +5613,15 @@ msgstr ""
 
 #: gtk/gtkpopovermenu.c:359
 msgid "Visible submenu"
-msgstr ""
+msgstr "Sýnileg undirvalmynd"
 
 #: gtk/gtkpopovermenu.c:360
-#, fuzzy
 msgid "The name of the visible submenu"
-msgstr "Skráin sem nú er valin"
+msgstr "Heiti á sýnilegri undirvalmynd"
 
 #: gtk/gtkpopovermenu.c:377
-#, fuzzy
 msgid "The name of the submenu"
-msgstr "Skráin sem nú er valin"
+msgstr "Heiti á undirvalmyndinni"
 
 #: gtk/gtkprinter.c:122
 msgid "Name of the printer"
@@ -5925,7 +5899,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:438
 msgid "Selected Printer"
-msgstr ""
+msgstr "Valinn prentari"
 
 #: gtk/gtkprintunixdialog.c:439
 msgid "The GtkPrinter which is selected"
@@ -5968,9 +5942,8 @@ msgid "Text to be displayed in the progress bar"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:309
-#, fuzzy
 msgid "Show text"
-msgstr "Sýna texta"
+msgstr "Birta texta"
 
 #: gtk/gtkprogressbar.c:310
 msgid "Whether the progress is shown as text."
@@ -6215,9 +6188,8 @@ msgid "Whether to allow multiple items to be selected"
 msgstr ""
 
 #: gtk/gtkrecentchooser.c:221
-#, fuzzy
 msgid "Local only"
-msgstr "Einungis staðvæt"
+msgstr "Einungis staðvært"
 
 #: gtk/gtkrecentchooser.c:222
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
@@ -6232,7 +6204,6 @@ msgid "The maximum number of items to be displayed"
 msgstr ""
 
 #: gtk/gtkrecentchooser.c:250
-#, fuzzy
 msgid "Sort Type"
 msgstr "Tegund röðunar"
 
@@ -6458,9 +6429,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:627 gtk/gtkspinbutton.c:452
-#, fuzzy
 msgid "Shadow Type"
-msgstr "Skuggagerð"
+msgstr "Tegund skugga"
 
 #: gtk/gtkscrolledwindow.c:628
 msgid "Style of bevel around the contents"
@@ -6958,7 +6928,6 @@ msgid "Timestamp of current fontconfig configuration"
 msgstr ""
 
 #: gtk/gtksettings.c:1150
-#, fuzzy
 msgid "Sound Theme Name"
 msgstr "Heiti á hljóðþema"
 
@@ -6984,7 +6953,6 @@ msgid "Whether to play any event sounds at all"
 msgstr ""
 
 #: gtk/gtksettings.c:1213
-#, fuzzy
 msgid "Enable Tooltips"
 msgstr "Virkja ábendingar"
 
@@ -7129,7 +7097,6 @@ msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
 
 #: gtk/gtksettings.c:1511
-#, fuzzy
 msgid "Custom palette"
 msgstr "Sérsniðið litaspjald"
 
@@ -7251,7 +7218,6 @@ msgid "Whether to show cursor in text"
 msgstr "Hvort það eigi að yfirstrika textan"
 
 #: gtk/gtkshortcutlabel.c:479 gtk/gtkshortcutsshortcut.c:536
-#, fuzzy
 #| msgid "Accelerator key"
 msgid "Accelerator"
 msgstr "Flýtilykill"
@@ -7261,9 +7227,8 @@ msgid "Disabled text"
 msgstr ""
 
 #: gtk/gtkshortcutsgroup.c:322
-#, fuzzy
 msgid "View"
-msgstr "Skoða"
+msgstr "Sýn"
 
 #: gtk/gtkshortcutsgroup.c:335 gtk/gtkshortcutsgroup.c:336
 #: gtk/gtkshortcutsshortcut.c:617 gtk/gtkshortcutsshortcut.c:618
@@ -7284,16 +7249,14 @@ msgid "Section Name"
 msgstr "Valhamur"
 
 #: gtk/gtkshortcutssection.c:363 gtk/gtkshortcutswindow.c:802
-#, fuzzy
 #| msgid "Theme Name"
 msgid "View Name"
-msgstr "Heiti þema"
+msgstr "Heiti sýnar"
 
 #: gtk/gtkshortcutssection.c:388
-#, fuzzy
 #| msgid "Maximum Value"
 msgid "Maximum Height"
-msgstr "_Hámarkshæð:"
+msgstr "Hámarkshæð"
 
 #: gtk/gtkshortcutsshortcut.c:537
 msgid "The accelerator keys for shortcuts of type 'Accelerator'"
@@ -7304,10 +7267,9 @@ msgid "The icon to show for shortcuts of type 'Other Gesture'"
 msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:562
-#, fuzzy
 #| msgid "Icon set"
 msgid "Icon Set"
-msgstr "Táknmyndasett"
+msgstr "Stilling táknmyndar"
 
 #: gtk/gtkshortcutsshortcut.c:563
 #, fuzzy
@@ -7347,16 +7309,14 @@ msgid "The type of shortcut that is represented"
 msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:677
-#, fuzzy
 #| msgid "Icon Name"
 msgid "Action Name"
-msgstr "Heiti táknmyndar"
+msgstr "Heiti aðgerðar"
 
 #: gtk/gtkshortcutsshortcut.c:678
-#, fuzzy
 #| msgid "The name of the menu to open"
 msgid "The name of the action"
-msgstr "Þetta er heitið á valmyndinni sem á að opna"
+msgstr "Þetta er heitið á aðgerðinni"
 
 #: gtk/gtksizegroup.c:228 gtk/gtktreeselection.c:130
 msgid "Mode"
@@ -7400,7 +7360,6 @@ msgid "Whether non-numeric characters should be ignored"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:416
-#, fuzzy
 msgid "Wrap"
 msgstr "Línuskrið"
 
@@ -7575,7 +7534,7 @@ msgstr ""
 
 #: gtk/gtkswitch.c:948
 msgid "The minimum width of the handle"
-msgstr ""
+msgstr "Lágmarksbreidd haldfangs"
 
 #: gtk/gtkswitch.c:964
 #, fuzzy
@@ -7584,10 +7543,9 @@ msgid "Slider Height"
 msgstr "Hæð"
 
 #: gtk/gtkswitch.c:965
-#, fuzzy
 #| msgid "Minimum height of buttons inside the box"
 msgid "The minimum height of the handle"
-msgstr "Lágmarks hæð hnappa innan rammans"
+msgstr "Lágmarkshæð haldfangs"
 
 #: gtk/gtktextbuffer.c:201
 msgid "Tag Table"
@@ -7753,7 +7711,6 @@ msgid ""
 msgstr ""
 
 #: gtk/gtktexttag.c:485
-#, fuzzy
 msgid "Pixels above lines"
 msgstr "Mynddílar fyrir ofan línur"
 
@@ -7762,7 +7719,6 @@ msgid "Pixels of blank space above paragraphs"
 msgstr ""
 
 #: gtk/gtktexttag.c:495
-#, fuzzy
 msgid "Pixels below lines"
 msgstr "Mynddílar fyrir neðan línur"
 
@@ -7771,9 +7727,8 @@ msgid "Pixels of blank space below paragraphs"
 msgstr ""
 
 #: gtk/gtktexttag.c:505
-#, fuzzy
 msgid "Pixels inside wrap"
-msgstr "Mynddílar í flettingu"
+msgstr "Mynddílar innan línuskriðs"
 
 #: gtk/gtktexttag.c:506 gtk/gtktextview.c:814
 msgid "Pixels of blank space between wrapped lines in a paragraph"
@@ -7854,10 +7809,9 @@ msgid "Extra spacing between graphemes"
 msgstr ""
 
 #: gtk/gtktexttag.c:692
-#, fuzzy
 #| msgid "Font stretch"
 msgid "Font Features"
-msgstr "Teyging leturs"
+msgstr "Eiginleikar leturs"
 
 #: gtk/gtktexttag.c:693
 msgid "OpenType Font Features to use"
@@ -8037,7 +7991,6 @@ msgid "Right Margin"
 msgstr "Hægri spássía"
 
 #: gtk/gtktextview.c:900
-#, fuzzy
 #| msgid "Margin"
 msgid "Top Margin"
 msgstr "Efri spássía"
@@ -8047,7 +8000,6 @@ msgid "Height of the top margin in pixels"
 msgstr ""
 
 #: gtk/gtktextview.c:921
-#, fuzzy
 #| msgid "Left Margin"
 msgid "Bottom Margin"
 msgstr "Neðri spássía"
@@ -8182,16 +8134,15 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:659
 msgid "Button relief"
-msgstr ""
+msgstr "Upphleyping hnappa"
 
 #: gtk/gtktoolbar.c:660
 msgid "Type of bevel around toolbar buttons"
 msgstr ""
 
 #: gtk/gtktoolbar.c:676
-#, fuzzy
 msgid "Style of bevel around the toolbar"
-msgstr "Stíll rammans utanum tækjastikuna"
+msgstr "Stíll rammans utan um verkfærastikuna"
 
 #: gtk/gtktoolbutton.c:244
 msgid "Text to show in the item."
@@ -8208,7 +8159,6 @@ msgid "Widget to use as the item label"
 msgstr ""
 
 #: gtk/gtktoolbutton.c:269
-#, fuzzy
 msgid "Stock Id"
 msgstr "Lagerauðkenni (ID)"
 
@@ -8356,10 +8306,9 @@ msgid "Wrap width for laying out items in a grid"
 msgstr ""
 
 #: gtk/gtktreemodelfilter.c:532
-#, fuzzy
 #| msgid "The selection mode"
 msgid "The child model"
-msgstr "Valhamurinn"
+msgstr ""
 
 #: gtk/gtktreemodelfilter.c:533
 msgid "The model for the filtermodel to filter"
@@ -8776,9 +8725,8 @@ msgid "Focus on click"
 msgstr ""
 
 #: gtk/gtkwidget.c:1194
-#, fuzzy
 msgid "Whether the widget should grab focus when it is clicked with the mouse"
-msgstr "Hvort börnin skuli öll vera af sömu stærð"
+msgstr ""
 
 #: gtk/gtkwidget.c:1200
 msgid "Can default"
@@ -9242,18 +9190,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkwindow.c:920
-#, fuzzy
 msgid "Skip taskbar"
-msgstr "Skip taskbar"
+msgstr "Sleppa verkefnastiku"
 
 #: gtk/gtkwindow.c:921
 msgid "TRUE if the window should not be in the task bar."
 msgstr ""
 
 #: gtk/gtkwindow.c:927
-#, fuzzy
 msgid "Skip pager"
-msgstr "Skip pager"
+msgstr "Sleppa flettara"
 
 #: gtk/gtkwindow.c:928
 msgid "TRUE if the window should not be in the pager."
@@ -9373,7 +9319,7 @@ msgstr ""
 
 #: modules/printbackends/cups/gtkprintercups.c:93
 msgid "Color Profile Title"
-msgstr ""
+msgstr "Titill litasniðs"
 
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
