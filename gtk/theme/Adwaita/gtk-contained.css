@@ -3879,12 +3879,13 @@ frame > border,
   padding: 0;
   border-radius: 0;
   border: 1px solid #b6b6b3; }
-  frame.flat > border,
-  .frame.flat {
-    border-style: none; }
   frame > border:backdrop,
   .frame:backdrop {
     border-color: #c0c0bd; }
+
+frame.flat > border,
+.frame.flat {
+  border-style: none; }
 
 actionbar > revealer > box {
   padding: 6px;
