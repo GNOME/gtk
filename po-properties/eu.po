@@ -6,10 +6,10 @@
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+_properties master\n"
+"Project-Id-Version: gtk+_properties gtk-3-22\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-02 17:25+0000\n"
-"PO-Revision-Date: 2017-03-03 12:46+0100\n"
+"PO-Revision-Date: 2017-03-03 12:56+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -6594,7 +6594,7 @@ msgstr "Ikonoen izenen zerrenda"
 #: gtk/gtkscale.c:775
 #| msgid "The number of decimal places that are displayed in the value"
 msgid "The number of decimal places to which the value is rounded"
-msgstr "Dezimalen posizioen kopurua, balioa horra biribiltzeko"
+msgstr "Dezimalen kopurua, balioa horra biribiltzeko"
 
 #: gtk/gtkscale.c:782
 msgid "Draw Value"
