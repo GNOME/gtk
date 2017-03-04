@@ -609,9 +609,9 @@ gtk_application_window_real_size_allocate (GtkWidget     *widget,
       _gtk_window_set_allocation (GTK_WINDOW (widget), allocation, &child_allocation);
       menubar_allocation = child_allocation;
 
-      gtk_widget_get_preferred_height_for_width (window->priv->menubar,
-                                                 menubar_allocation.width,
-                                                 &menubar_height, NULL);
+      gtk_widget_measure (window->priv->menubar, GTK_ORIENTATION_VERTICAL,
+                          menubar_allocation.width,
+                          &menubar_height, NULL, NULL, NULL);
 
       menubar_allocation.height = menubar_height;
       gtk_widget_size_allocate (window->priv->menubar, &menubar_allocation);
