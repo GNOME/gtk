@@ -93,14 +93,10 @@
  * to fewer lines, and therefore needs less height.
  *
  * Height-for-width geometry management is implemented in GTK+ by way
- * of five virtual methods:
+ * of two virtual methods:
  *
  * - #GtkWidgetClass.get_request_mode()
- * - #GtkWidgetClass.get_preferred_width()
- * - #GtkWidgetClass.get_preferred_height()
- * - #GtkWidgetClass.get_preferred_height_for_width()
- * - #GtkWidgetClass.get_preferred_width_for_height()
- * - #GtkWidgetClass.get_preferred_height_and_baseline_for_width()
+ * - #GtkWidgetClass.measure()
  *
  * There are some important things to keep in mind when implementing
  * height-for-width and when using it in container implementations.
@@ -113,14 +109,16 @@
  * For example, when queried in the normal
  * %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH mode:
  * First, the default minimum and natural width for each widget
- * in the interface will be computed using gtk_widget_get_preferred_width().
+ * in the interface will be computed using gtk_widget_measure() with an orientation
+ * or %GTK_ORIENTATION_HORIZONTAL and a for_size of -1.
  * Because the preferred widths for each container depend on the preferred
  * widths of their children, this information propagates up the hierarchy,
  * and finally a minimum and natural width is determined for the entire
  * toplevel. Next, the toplevel will use the minimum width to query for the
- * minimum height contextual to that width using
- * gtk_widget_get_preferred_height_for_width(), which will also be a highly
- * recursive operation. The minimum height for the minimum width is normally
+ * minimum height contextual to that width using gtk_widget_measure() with an
+ * orientation of %GTK_ORIENTATION_VERTICAL and a for_size of the just computed
+ * width. This will also be a highly recursive operation.
+ * The minimum height for the minimum width is normally
  * used to set the minimum size constraint on the toplevel
  * (unless gtk_window_set_geometry_hints() is explicitly used instead).
  *
