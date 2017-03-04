@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-18 02:56+0000\n"
-"PO-Revision-Date: 2017-02-18 16:33+0200\n"
-"Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
+"POT-Creation-Date: 2017-03-03 15:43+0000\n"
+"PO-Revision-Date: 2017-03-03 19:55+0200\n"
+"Last-Translator: Moo\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -41,7 +41,6 @@ msgid "The current backend does not support OpenGL"
 msgstr "Dabartinė realizacija nepalaiko OpenGL"
 
 #: gdk/gdkwindow.c:2190
-#| msgid "GL support disabled via GDK_DEBUG"
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan palaikymas išjungtas naudojant GDK_DEBUG"
 
@@ -387,7 +386,7 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2100
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2036
 #: gdk/wayland/gdkglcontext-wayland.c:433 gdk/win32/gdkglcontext-win32.c:754
 #: gdk/x11/gdkglcontext-x11.c:1213
 msgid "No GL implementation is available"
@@ -399,14 +398,14 @@ msgstr "Nėra galimo GL realizacijos"
 msgid "Unable to create a GL context"
 msgstr "Nepavyko sukurti GL konteksto"
 
-#: gdk/mir/gdkmirwindowimpl.c:2062 gdk/mir/gdkmirwindowimpl.c:2072
+#: gdk/mir/gdkmirwindowimpl.c:1998 gdk/mir/gdkmirwindowimpl.c:2008
 #: gdk/wayland/gdkglcontext-wayland.c:394
 #: gdk/wayland/gdkglcontext-wayland.c:404 gdk/win32/gdkglcontext-win32.c:643
 #: gdk/x11/gdkglcontext-x11.c:908
 msgid "No available configurations for the given pixel format"
 msgstr "Nėra galimų konfigūracijų nurodytam pikselių formatui"
 
-#: gdk/mir/gdkmirwindowimpl.c:2108
+#: gdk/mir/gdkmirwindowimpl.c:2044
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 pagrindinis GL profilis neprieinamas EGL realizacijoje"
 
@@ -420,13 +419,11 @@ msgstr "Pagrindinis GL profilis neprieinamas EGL realizacijoje"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:53
-#| msgid "Don't batch GDI requests"
 msgid "Don’t batch GDI requests"
 msgstr "Negrupuoti GDI užklausų"
 
 #. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:55
-#| msgid "Don't use the Wintab API for tablet support"
 msgid "Don’t use the Wintab API for tablet support"
 msgstr "Nenaudoti Wintab API planšečių palaikymui"
 
@@ -1001,19 +998,16 @@ msgstr "Netinkamas dydis %s\n"
 
 #: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:668
 #, c-format
-#| msgid "Can't load file: %s\n"
 msgid "Can’t load file: %s\n"
 msgstr "Nepavyko įkelti failo: %s\n"
 
 #: gtk/encodesymbolic.c:307 gtk/encodesymbolic.c:313
 #, c-format
-#| msgid "Can't save file %s: %s\n"
 msgid "Can’t save file %s: %s\n"
 msgstr "Nepavyko įrašyti failo %s: %s\n"
 
 #: gtk/encodesymbolic.c:319
 #, c-format
-#| msgid "Can't close stream"
 msgid "Can’t close stream"
 msgstr "Nepavyko užverti srauto"
 
@@ -1311,33 +1305,16 @@ msgstr "Nerasta savybė %s::%s\n"
 
 #: gtk/gtk-builder-tool.c:136
 #, c-format
-#| msgid "Couldn't parse value for %s::%s: %s\n"
 msgid "Couldn’t parse value for %s::%s: %s\n"
 msgstr "Nepavyko perskaityti %s::%s vertės: %s\n"
 
 #: gtk/gtk-builder-tool.c:689
 #, c-format
-#| msgid "Can't parse file: %s\n"
 msgid "Can’t parse file: %s\n"
 msgstr "Nepavyko perskaityti failo: %s\n"
 
 #: gtk/gtk-builder-tool.c:1049
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate           Validate the file\n"
-#| "  simplify           Simplify the file\n"
-#| "  enumerate          List all named objects\n"
-#| "  preview [OPTIONS]  Preview the file\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID            Preview only the named object\n"
-#| "  --css=FILE         Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
@@ -1783,44 +1760,44 @@ msgstr "_Dešinė:"
 msgid "Paper Margins"
 msgstr "Popieriaus paraštės"
 
-#: gtk/gtkentry.c:8900 gtk/gtklabel.c:6544 gtk/gtktextview.c:9293
+#: gtk/gtkentry.c:8928 gtk/gtklabel.c:6544 gtk/gtktextview.c:9312
 msgid "Cu_t"
 msgstr "_Iškirpti"
 
-#: gtk/gtkentry.c:8904 gtk/gtklabel.c:6545 gtk/gtktextview.c:9297
+#: gtk/gtkentry.c:8932 gtk/gtklabel.c:6545 gtk/gtktextview.c:9316
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: gtk/gtkentry.c:8908 gtk/gtklabel.c:6546 gtk/gtktextview.c:9299
+#: gtk/gtkentry.c:8936 gtk/gtklabel.c:6546 gtk/gtktextview.c:9318
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: gtk/gtkentry.c:8911 gtk/gtkfilechooserwidget.c:1479
-#: gtk/gtkfilechooserwidget.c:2273 gtk/gtklabel.c:6548 gtk/gtktextview.c:9302
+#: gtk/gtkentry.c:8939 gtk/gtkfilechooserwidget.c:1479
+#: gtk/gtkfilechooserwidget.c:2273 gtk/gtklabel.c:6548 gtk/gtktextview.c:9321
 msgid "_Delete"
 msgstr "Iš_trinti"
 
-#: gtk/gtkentry.c:8922 gtk/gtklabel.c:6557 gtk/gtktextview.c:9316
+#: gtk/gtkentry.c:8950 gtk/gtklabel.c:6557 gtk/gtktextview.c:9335
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
-#: gtk/gtkentry.c:9098 gtk/gtktextview.c:9541
+#: gtk/gtkentry.c:9126 gtk/gtktextview.c:9560
 msgid "Select all"
 msgstr "Pažymėti viską"
 
-#: gtk/gtkentry.c:9101 gtk/gtktextview.c:9544
+#: gtk/gtkentry.c:9129 gtk/gtktextview.c:9563
 msgid "Cut"
 msgstr "Iškirpti"
 
-#: gtk/gtkentry.c:9104 gtk/gtktextview.c:9547
+#: gtk/gtkentry.c:9132 gtk/gtktextview.c:9566
 msgid "Copy"
 msgstr "Kopijuoti"
 
-#: gtk/gtkentry.c:9107 gtk/gtktextview.c:9550
+#: gtk/gtkentry.c:9135 gtk/gtktextview.c:9569
 msgid "Paste"
 msgstr "Įdėti"
 
-#: gtk/gtkentry.c:10174
+#: gtk/gtkentry.c:10202
 msgid "Caps Lock is on"
 msgstr "Caps Lock įjungtas"
 
@@ -1859,7 +1836,7 @@ msgstr "_Atsisakyti"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:593
-#: gtk/gtkplacessidebar.c:3380 gtk/gtkplacesview.c:1640
+#: gtk/gtkplacessidebar.c:3380 gtk/gtkplacesview.c:1637
 msgid "_Open"
 msgstr "At_verti"
 
@@ -2206,7 +2183,6 @@ msgstr "Užverti"
 
 #: gtk/gtkicontheme.c:2304 gtk/gtkicontheme.c:2368
 #, c-format
-#| msgid "Icon '%s' not present in theme %s"
 msgid "Icon “%s” not present in theme %s"
 msgstr "Piktogramos „%s“ nėra temoje %s"
 
@@ -2257,7 +2233,6 @@ msgstr "Rodyti programos versiją"
 #. Translators: this message will appear immediately after the
 #. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
 #: gtk/gtk-launch.c:74
-#| msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgid "APPLICATION [URI…] — launch an APPLICATION"
 msgstr "PROGRAMA [URI…] — paleisti PROGRAMĄ"
 
@@ -2278,7 +2253,6 @@ msgstr "Klaida skaitant komandų eilutės parinktis: %s\n"
 
 #: gtk/gtk-launch.c:90 gtk/gtk-launch.c:111
 #, c-format
-#| msgid "Try \"%s --help\" for more information."
 msgid "Try “%s --help” for more information."
 msgstr "Daugiau informacijos gausite įvykdę „%s --help“."
 
@@ -2455,7 +2429,7 @@ msgstr "Z aplinka"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nepavyko užbaigti proceso su PID %d: %s"
 
-#: gtk/gtknotebook.c:4974 gtk/gtknotebook.c:7201
+#: gtk/gtknotebook.c:4971 gtk/gtknotebook.c:7198
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"
@@ -2650,11 +2624,11 @@ msgstr "Nepavyko išstumti %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nepavyko užklausti „%s“ dėl laikmenų pasikeitimų"
 
-#: gtk/gtkplacessidebar.c:3383 gtk/gtkplacesview.c:1649
+#: gtk/gtkplacessidebar.c:3383 gtk/gtkplacesview.c:1646
 msgid "Open in New _Tab"
 msgstr "Atverti naujoje _kortelėje"
 
-#: gtk/gtkplacessidebar.c:3386 gtk/gtkplacesview.c:1659
+#: gtk/gtkplacessidebar.c:3386 gtk/gtkplacesview.c:1656
 msgid "Open in New _Window"
 msgstr "Atverti naujame _lange"
 
@@ -2670,11 +2644,11 @@ msgstr "_Pašalinti"
 msgid "Rename…"
 msgstr "Pervadinti…"
 
-#: gtk/gtkplacessidebar.c:3396 gtk/gtkplacesview.c:1690
+#: gtk/gtkplacessidebar.c:3396 gtk/gtkplacesview.c:1687
 msgid "_Mount"
 msgstr "_Prijungti"
 
-#: gtk/gtkplacessidebar.c:3397 gtk/gtkplacesview.c:1681
+#: gtk/gtkplacessidebar.c:3397 gtk/gtkplacesview.c:1678
 msgid "_Unmount"
 msgstr "_Atjungti"
 
@@ -2686,55 +2660,55 @@ msgstr "iš_stumti"
 msgid "_Detect Media"
 msgstr "_Aptikti laikmeną"
 
-#: gtk/gtkplacessidebar.c:3844 gtk/gtkplacesview.c:1078
+#: gtk/gtkplacessidebar.c:3844 gtk/gtkplacesview.c:1075
 msgid "Computer"
 msgstr "Kompiuteris"
 
-#: gtk/gtkplacesview.c:889
+#: gtk/gtkplacesview.c:886
 msgid "Searching for network locations"
 msgstr "Ieškoma tinklo vietų"
 
-#: gtk/gtkplacesview.c:896
+#: gtk/gtkplacesview.c:893
 msgid "No network locations found"
 msgstr "Nerasta tinklo vietų"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1189 gtk/gtkplacesview.c:1264
+#: gtk/gtkplacesview.c:1186 gtk/gtkplacesview.c:1261
 msgid "Unable to access location"
 msgstr "Nepavyko pasiekti vietos"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1207 gtk/ui/gtkplacesview.ui:409
+#: gtk/gtkplacesview.c:1204 gtk/ui/gtkplacesview.ui:409
 msgid "Con_nect"
 msgstr "Prisi_jungti"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1327
+#: gtk/gtkplacesview.c:1324
 msgid "Unable to unmount volume"
 msgstr "Nepavyko atjungti tomo"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1428
+#: gtk/gtkplacesview.c:1425
 msgid "Cance_l"
 msgstr "_Atsisakyti"
 
-#: gtk/gtkplacesview.c:1681
+#: gtk/gtkplacesview.c:1678
 msgid "_Disconnect"
 msgstr "Atsij_ungti"
 
-#: gtk/gtkplacesview.c:1690
+#: gtk/gtkplacesview.c:1687
 msgid "_Connect"
 msgstr "Prisi_jungti"
 
-#: gtk/gtkplacesview.c:1830
+#: gtk/gtkplacesview.c:1827
 msgid "Unable to get remote server location"
 msgstr "Nepavyko gauti nutolusio serverio vietos"
 
-#: gtk/gtkplacesview.c:1969 gtk/gtkplacesview.c:1978
+#: gtk/gtkplacesview.c:1966 gtk/gtkplacesview.c:1975
 msgid "Networks"
 msgstr "Tinklai"
 
-#: gtk/gtkplacesview.c:1969 gtk/gtkplacesview.c:1978
+#: gtk/gtkplacesview.c:1966 gtk/gtkplacesview.c:1975
 msgid "On This Computer"
 msgstr "Šiame kompiuteryje"
 
@@ -3009,7 +2983,6 @@ msgstr "%.0f %%"
 
 #: gtk/gtkrecentchooserdefault.c:1013 gtk/gtkrecentchooserdefault.c:1050
 #, c-format
-#| msgid "No item for URI '%s' found"
 msgid "No item for URI “%s” found"
 msgstr "Elementų URI „%s“ nerasta"
 
@@ -3057,13 +3030,11 @@ msgstr "Elementų nerasta"
 
 #: gtk/gtkrecentchoosermenu.c:494 gtk/gtkrecentchoosermenu.c:550
 #, c-format
-#| msgid "No recently used resource found with URI '%s'"
 msgid "No recently used resource found with URI “%s”"
 msgstr "Nerasta neseniai naudoto resurso su URI „%s“"
 
 #: gtk/gtkrecentchoosermenu.c:749
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Open “%s”"
 msgstr "Atverti „%s“"
 
@@ -3095,20 +3066,16 @@ msgstr "%d. %s"
 #: gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213
 #: gtk/gtkrecentmanager.c:1265 gtk/gtkrecentmanager.c:1274
 #, c-format
-#| msgid "Unable to find an item with URI '%s'"
 msgid "Unable to find an item with URI “%s”"
 msgstr "Nepavyko rasti elemento su URI „%s“"
 
 #: gtk/gtkrecentmanager.c:1289
 #, c-format
-#| msgid "Unable to move the item with URI '%s' to '%s'"
 msgid "Unable to move the item with URI “%s” to “%s”"
 msgstr "Nepavyko perkelti elemento su URI „%s“ į „%s“"
 
 #: gtk/gtkrecentmanager.c:2507
 #, c-format
-#| msgid ""
-#| "No registered application with name '%s' for item with URI '%s' found"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "Nerasta registruota programa pavadinimu „%s“ elementui su URI „%s“"
 
@@ -3169,7 +3136,6 @@ msgid "Swipe left"
 msgstr "Perbraukti kairėn"
 
 #: gtk/gtkshortcutsshortcut.c:165
-#| msgid "Two finger swipe right"
 msgid "Swipe right"
 msgstr "Perbraukti dešinėn"
 
@@ -3198,7 +3164,7 @@ msgstr "Bandykite kitą paiešką"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:849
+#: gtk/gtkswitch.c:848
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3206,7 +3172,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:856
+#: gtk/gtkswitch.c:854
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3223,43 +3189,36 @@ msgstr "Formatui %s nuoseklinimo funkcija nerasta"
 
 #: gtk/gtktextbufferserialize.c:709 gtk/gtktextbufferserialize.c:735
 #, c-format
-#| msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgid "Both “id” and “name” were found on the <%s> element"
 msgstr "Elemente <%s> buvo rasta ir „id“ ir „name“"
 
 #: gtk/gtktextbufferserialize.c:719 gtk/gtktextbufferserialize.c:745
 #, c-format
-#| msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgid "The attribute “%s” was found twice on the <%s> element"
 msgstr "Atributas „%s“ elemente <%s> buvo rastas du kartus"
 
 #: gtk/gtktextbufferserialize.c:761
 #, c-format
-#| msgid "<%s> element has invalid ID \"%s\""
 msgid "<%s> element has invalid ID “%s”"
 msgstr "<%s> elementas turi netinkamą ID „%s“"
 
 #: gtk/gtktextbufferserialize.c:771
 #, c-format
-#| msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgid "<%s> element has neither a “name” nor an “id” attribute"
 msgstr "<%s> elementas neturi nei „name“, nei „id“ požymio"
 
 #: gtk/gtktextbufferserialize.c:858
 #, c-format
-#| msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgid "Attribute “%s” repeated twice on the same <%s> element"
 msgstr "Atributas „%s“ pakartotas du kartus tame pačiame elemente <%s>"
 
 #: gtk/gtktextbufferserialize.c:876 gtk/gtktextbufferserialize.c:901
 #, c-format
-#| msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgid "Attribute “%s” is invalid on <%s> element in this context"
 msgstr "Atributas „%s“ šiame kontekste netinkamas elementui <%s>"
 
 #: gtk/gtktextbufferserialize.c:940
 #, c-format
-#| msgid "Tag \"%s\" has not been defined."
 msgid "Tag “%s” has not been defined."
 msgstr "Žyma „%s“ neapibrėžta."
 
@@ -3269,7 +3228,6 @@ msgstr "Rasta anoniminė žyma ir žymos negali būti sukurtos."
 
 #: gtk/gtktextbufferserialize.c:963
 #, c-format
-#| msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgid "Tag “%s” does not exist in buffer and tags can not be created."
 msgstr "Žymos „%s“ buferyje nėra ir žymos negali būti sukurtos."
 
@@ -3281,39 +3239,31 @@ msgstr "Elementas <%s> neleistinas žemiau <%s>"
 
 #: gtk/gtktextbufferserialize.c:1095
 #, c-format
-#| msgid "\"%s\" is not a valid attribute type"
 msgid "“%s” is not a valid attribute type"
 msgstr "„%s“ nėra tinkamas atributo tipas"
 
 #: gtk/gtktextbufferserialize.c:1103
 #, c-format
-#| msgid "\"%s\" is not a valid attribute name"
 msgid "“%s” is not a valid attribute name"
 msgstr "„%s“ nėra tinkamas atributo pavadinimas"
 
 #: gtk/gtktextbufferserialize.c:1113
 #, c-format
-#| msgid ""
-#| "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s"
-#| "\""
 msgid "“%s” could not be converted to a value of type “%s” for attribute “%s”"
 msgstr "„%s“ nepavyko konvertuoti į „%s“ tipo reikšmę atributui „%s“"
 
 #: gtk/gtktextbufferserialize.c:1122
 #, c-format
-#| msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgid "“%s” is not a valid value for attribute “%s”"
 msgstr "„%s“ nėra tinkama reikšmė atributui „%s“"
 
 #: gtk/gtktextbufferserialize.c:1207
 #, c-format
-#| msgid "Tag \"%s\" already defined"
 msgid "Tag “%s” already defined"
 msgstr "Žyma „%s“ jau apibrėžta"
 
 #: gtk/gtktextbufferserialize.c:1220
 #, c-format
-#| msgid "Tag \"%s\" has invalid priority \"%s\""
 msgid "Tag “%s” has invalid priority “%s”"
 msgstr "Žymos „%s“ netinkamas prioritetas „%s“"
 
@@ -3328,7 +3278,6 @@ msgid "A <%s> element has already been specified"
 msgstr "Elementas <%s> jau buvo nurodytas"
 
 #: gtk/gtktextbufferserialize.c:1304
-#| msgid "A <text> element can't occur before a <tags> element"
 msgid "A <text> element can’t occur before a <tags> element"
 msgstr "Elementas <text> negali būti naudojamas prieš elementą <tags>"
 
@@ -3337,9 +3286,6 @@ msgid "Serialized data is malformed"
 msgstr "Nuoseklinti duomenys yra netinkamai suformuoti"
 
 #: gtk/gtktextbufferserialize.c:1789
-#| msgid ""
-#| "Serialized data is malformed. First section isn't "
-#| "GTKTEXTBUFFERCONTENTS-0001"
 msgid ""
 "Serialized data is malformed. First section isn’t GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
@@ -3438,7 +3384,6 @@ msgstr ""
 "problemų ar ją nulaužti."
 
 #: gtk/gtkwindow.c:11351
-#| msgid "Don't show this message again"
 msgid "Don’t show this message again"
 msgstr "Daugiau nerodyti šio pranešimo"
 
@@ -3537,7 +3482,7 @@ msgid "Display"
 msgstr "Vaizduoklis"
 
 #: gtk/inspector/general.ui:408
-msgid "RGBA visual"
+msgid "RGBA Visual"
 msgstr "RGBA vaizdas"
 
 #: gtk/inspector/general.ui:442
@@ -3597,7 +3542,7 @@ msgid "Address"
 msgstr "Adresas"
 
 #: gtk/inspector/misc-info.ui:68
-msgid "Reference count"
+msgid "Reference Count"
 msgstr "Nuorodų skaičius"
 
 #: gtk/inspector/misc-info.ui:136
@@ -3624,7 +3569,7 @@ msgid "Mnemonic Label"
 msgstr "Mnemonikos užrašas"
 
 #: gtk/inspector/misc-info.ui:294
-msgid "Request mode"
+msgid "Request Mode"
 msgstr "Užklausos veiksena"
 
 #: gtk/inspector/misc-info.ui:328
@@ -3636,35 +3581,35 @@ msgid "Baseline"
 msgstr "Bazinė linija"
 
 #: gtk/inspector/misc-info.ui:396
-msgid "Clip area"
-msgstr "Klipo vieta"
+msgid "Clip Area"
+msgstr "Iškarpos vieta"
 
 #: gtk/inspector/misc-info.ui:430
 msgid "Frame Clock"
 msgstr "Kadrų laikrodis"
 
 #: gtk/inspector/misc-info.ui:475
-msgid "Tick callback"
-msgstr "Tiksėjimų iškvietimas"
+msgid "Tick Callback"
+msgstr "Tiksėjimų iškvieta"
 
 #: gtk/inspector/misc-info.ui:511
-msgid "Frame count"
+msgid "Frame Count"
 msgstr "Kadrų skaičius"
 
 #: gtk/inspector/misc-info.ui:545
-msgid "Frame rate"
+msgid "Frame Rate"
 msgstr "Kadrų dažnis"
 
 #: gtk/inspector/misc-info.ui:579
-msgid "Accessible role"
+msgid "Accessible Role"
 msgstr "Prieinama rolė"
 
 #: gtk/inspector/misc-info.ui:613
-msgid "Accessible name"
+msgid "Accessible Name"
 msgstr "Prieinamas pavadinimas"
 
 #: gtk/inspector/misc-info.ui:649
-msgid "Accessible description"
+msgid "Accessible Description"
 msgstr "Prieinamas aprašymas"
 
 #: gtk/inspector/misc-info.ui:685
@@ -3792,7 +3737,6 @@ msgstr "Apibrėžtas"
 
 #: gtk/inspector/recorder.c:269
 #, c-format
-#| msgid "Saving CSS failed"
 msgid "Saving RenderNode failed"
 msgstr "Nepavyko įrašyti RenderNode"
 
@@ -3954,7 +3898,7 @@ msgid "Right-to-Left"
 msgstr "Iš dešinės į kairę"
 
 #: gtk/inspector/visual.ui:347
-msgid "Window scaling"
+msgid "Window Scaling"
 msgstr "Lango didinimas"
 
 #: gtk/inspector/visual.ui:382
@@ -4002,15 +3946,15 @@ msgid "Show Widget Resizes"
 msgstr "Rodyti valdiklių dydžių pakeitimus"
 
 #: gtk/inspector/visual.ui:683
-msgid "Simulate touchscreen"
-msgstr "Simuliuota liečiamą ekraną"
+msgid "Simulate Touchscreen"
+msgstr "Simuliuoti liečiamą ekraną"
 
 #: gtk/inspector/visual.ui:728
 msgid "GL Rendering"
 msgstr "GL piešimas"
 
 #: gtk/inspector/visual.ui:740
-msgid "When needed"
+msgid "When Needed"
 msgstr "Kai reikia"
 
 #: gtk/inspector/visual.ui:741
@@ -4082,7 +4026,7 @@ msgid "CSS Selector"
 msgstr "CSS parinkimo įrankis"
 
 #: gtk/inspector/window.ui:367
-msgid "CSS nodes"
+msgid "CSS Nodes"
 msgstr "CSS mazgai"
 
 #: gtk/inspector/window.ui:374
@@ -4122,8 +4066,6 @@ msgid "CSS"
 msgstr "CSS"
 
 #: gtk/inspector/window.ui:464
-#| msgctxt "Stock label, media"
-#| msgid "_Record"
 msgid "Recorder"
 msgstr "Įrašymas"
 
@@ -5054,8 +4996,6 @@ msgid "Credits"
 msgstr "Padėkos"
 
 #: gtk/ui/gtkaboutdialog.ui:239
-#| msgctxt "input method menu"
-#| msgid "System"
 msgid "System"
 msgstr "Sistema"
 
@@ -5245,7 +5185,6 @@ msgid ""
 msgstr "Serverio adresai susideda iš protokolo ir adreso. Pavyzdžiai:"
 
 #: gtk/ui/gtkplacesview.ui:53
-#| msgid "smb://foo.example.com, ssh://192.168.0.1"
 msgid "smb://foo.example.com, ssh://192.168.0.1, ftp://[2001:db8::1]"
 msgstr "smb://foo.example.com, ssh://192.168.0.1, ftp://[2001:db8::1]"
 
@@ -5610,12 +5549,10 @@ msgid "Overwrite an existing cache, even if up to date"
 msgstr "Perrašyti esamą podėlį, netgi jei nepasenęs"
 
 #: gtk/updateiconcache.c:1657
-#| msgid "Don't check for the existence of index.theme"
 msgid "Don’t check for the existence of index.theme"
 msgstr "Netikrinti, ar egzistuoja index.theme"
 
 #: gtk/updateiconcache.c:1658
-#| msgid "Don't include image data in the cache"
 msgid "Don’t include image data in the cache"
 msgstr "Neįtraukti paveikslėlio duomenų į podėlį"
 
@@ -5652,10 +5589,6 @@ msgstr "Nėra temos indekso failo.\n"
 
 #: gtk/updateiconcache.c:1752
 #, c-format
-#| msgid ""
-#| "No theme index file in '%s'.\n"
-#| "If you really want to create an icon cache here, use --ignore-theme-"
-#| "index.\n"
 msgid ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
@@ -6313,7 +6246,6 @@ msgid "PDF"
 msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
-#| msgid "Postscript"
 msgid "PostScript"
 msgstr "Postscript"
 
