@@ -6,10 +6,10 @@
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+_properties gtk-3-22\n"
+"Project-Id-Version: gtk+_properties master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-02 17:25+0000\n"
-"PO-Revision-Date: 2017-03-03 12:56+0100\n"
+"PO-Revision-Date: 2017-03-04 17:09+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -4981,21 +4981,25 @@ msgstr "Norabidea"
 msgid "The direction the arrow should point."
 msgstr "Geziak seinalatu behar duen noranzkoa."
 
+# Popover = Bunbuilo
+# 
+# Komikietako "bunbuiloa" bezalakoa da, ez da laster-leiho bat.
+# https://developer.gnome.org/hig/stable/popovers.html.en
 #: gtk/gtkmenubutton.c:550
 msgid "Use a popover"
-msgstr "Erabili lastergaina"
+msgstr "Erabili bunbuiloa"
 
 #: gtk/gtkmenubutton.c:551
 msgid "Use a popover instead of a menu"
-msgstr "Erabili lastergaina menuaren ordez"
+msgstr "Erabili bunbuiloa menuaren ordez"
 
 #: gtk/gtkmenubutton.c:564
 msgid "Popover"
-msgstr "Lastergaina"
+msgstr "Bunbuiloa"
 
 #: gtk/gtkmenubutton.c:565
 msgid "The popover"
-msgstr "Lastergaina"
+msgstr "Bunbuiloa"
 
 #: gtk/gtkmenu.c:633
 msgid "The currently selected menu item"
@@ -5871,7 +5875,7 @@ msgstr "Burbuila-leihoa kokatzeko posizioa"
 
 #: gtk/gtkpopover.c:1745
 msgid "Whether the popover is modal"
-msgstr "Lastergaina modala den edo ez"
+msgstr "Bunbuiloa modala den edo ez"
 
 #: gtk/gtkpopover.c:1758
 msgid "Transitions enabled"
@@ -5887,7 +5891,7 @@ msgstr "Murriztapena"
 
 #: gtk/gtkpopover.c:1773
 msgid "Constraint for the popover position"
-msgstr "Laster-leihoaren posizioaren murriztapena"
+msgstr "Bunbuiloaren posizioaren murriztapena"
 
 #: gtk/gtkpopovermenu.c:359
 msgid "Visible submenu"
