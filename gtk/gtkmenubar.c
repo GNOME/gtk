@@ -454,10 +454,10 @@ gtk_menu_bar_allocate (GtkCssGadget        *gadget,
             continue;
 
           request.data = child;
-          gtk_widget_get_preferred_width_for_height (child, 
-                                                     remaining_space.height,
-                                                     &request.minimum_size, 
-                                                     &request.natural_size);
+          gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
+                              remaining_space.height,
+                              &request.minimum_size, &request.natural_size,
+                              NULL, NULL);
           gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
                                              &toggle_size);
           request.minimum_size += toggle_size;
@@ -508,10 +508,10 @@ gtk_menu_bar_allocate (GtkCssGadget        *gadget,
             continue;
 
           request.data = child;
-          gtk_widget_get_preferred_height_for_width (child, 
-                                                     remaining_space.width,
-                                                     &request.minimum_size, 
-                                                     &request.natural_size);
+          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
+                              remaining_space.width,
+                              &request.minimum_size, &request.natural_size,
+                              NULL, NULL);
           gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
                                              &toggle_size);
           request.minimum_size += toggle_size;

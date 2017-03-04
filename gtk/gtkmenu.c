@@ -2771,8 +2771,10 @@ calculate_line_heights (GtkMenu *menu,
 
       part = avail_width / (r - l);
 
-      gtk_widget_get_preferred_height_for_width (child, part,
-                                                 &child_min, &child_nat);
+      gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
+                          part,
+                          &child_min, &child_nat,
+                          NULL, NULL);
 
       gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
 
@@ -3028,7 +3030,8 @@ static void gtk_menu_measure (GtkWidget      *widget,
            * case the toggle size request depends on the size
            * request of a child of the child (e.g. for ImageMenuItem)
            */
-           gtk_widget_get_preferred_width (child, &child_min, &child_nat);
+           gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
+                               -1, &child_min, &child_nat, NULL, NULL);
 
            gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
            max_toggle_size = MAX (max_toggle_size, toggle_size);

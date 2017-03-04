@@ -444,7 +444,8 @@ gtk_menu_item_real_get_width (GtkWidget *widget,
     {
       gint child_min, child_nat;
 
-      gtk_widget_get_preferred_width (child, &child_min, &child_nat);
+      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &child_min, &child_nat, NULL, NULL);
 
       if ((priv->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
 	{
@@ -511,14 +512,17 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
       if (for_size != -1)
         {
           avail_size -= arrow_size;
-          gtk_widget_get_preferred_height_for_width (child,
-                                                     avail_size,
-                                                     &child_min,
-                                                     &child_nat);
+          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
+                              avail_size,
+                              &child_min, &child_nat,
+                              NULL, NULL);
         }
       else
         {
-          gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, -1,
+                              &child_min, &child_nat,
+                              NULL, NULL);
+
         }
 
       min_height += child_min;
