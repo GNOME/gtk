@@ -2782,7 +2782,8 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       child_rect.width -= child->border.left + child->border.right;
       child_rect.height -= child->border.top + child->border.bottom;
 
-      gtk_widget_get_preferred_width (GTK_WIDGET (child->widget), &size, NULL);
+      gtk_widget_measure (GTK_WIDGET (child->widget), GTK_ORIENTATION_HORIZONTAL, -1,
+                          &size, NULL, NULL, NULL);
 
       if (size > child_rect.width)
         {
@@ -2796,9 +2797,10 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
           child_rect.width = size;
         }
 
-      gtk_widget_get_preferred_height_for_width (GTK_WIDGET (child->widget),
-                                                 child_rect.width,
-                                                 &size, NULL);
+      gtk_widget_measure (GTK_WIDGET (child->widget), GTK_ORIENTATION_VERTICAL,
+                          child_rect.width,
+                          &size, NULL,
+                          NULL, NULL);
       if (size > child_rect.height)
         {
           /* Enlarge the child, extending in both directions equally */
