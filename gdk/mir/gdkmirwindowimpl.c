@@ -543,6 +543,9 @@ ensure_mir_window_full (GdkWindow      *window,
   GdkMirWindowReference *window_ref;
   MirWindowSpec *spec;
 
+  if (window->input_only)
+    return;
+
   if (impl->mir_window)
     {
       if (impl->pending_spec_update)
@@ -632,7 +635,8 @@ send_buffer (GdkWindow *window)
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   /* Send the completed buffer to Mir */
-  mir_buffer_stream_swap_buffers_sync (mir_window_get_buffer_stream (impl->mir_window));
+  if (impl->mir_window)
+    mir_buffer_stream_swap_buffers_sync (mir_window_get_buffer_stream (impl->mir_window));
 
   /* The Cairo context is no longer valid */
   g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
@@ -657,6 +661,9 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
     }
 
   ensure_mir_window (window);
+
+  if (!impl->mir_window)
+    return NULL;
 
   if (window->gl_paint_context)
     {
@@ -755,12 +762,12 @@ gdk_mir_window_impl_show (GdkWindow *window,
   ensure_mir_window (window);
 
   if (!window->gl_paint_context)
-  {
-    /* Make sure something is rendered and then show first frame */
-    s = gdk_mir_window_impl_ref_cairo_surface (window);
-    send_buffer (window);
-    cairo_surface_destroy (s);
-  }
+    {
+      /* Make sure something is rendered and then show first frame */
+      s = gdk_mir_window_impl_ref_cairo_surface (window);
+      send_buffer (window);
+      cairo_surface_destroy (s);
+    }
 }
 
 static void
