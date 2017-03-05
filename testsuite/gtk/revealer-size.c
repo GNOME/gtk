@@ -24,19 +24,25 @@ keep_size (int      direction,
 
   gtk_revealer_set_reveal_child (revealer, TRUE);
 
-  gtk_widget_get_preferred_width (GTK_WIDGET (child), &min_child_width, NULL);
-  gtk_widget_get_preferred_height (GTK_WIDGET (child), &min_child_height, NULL);
+  gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1,
+                      &min_child_width, NULL, NULL, NULL);
+  gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, -1,
+                      &min_child_height, NULL, NULL, NULL);
 
-  gtk_widget_get_preferred_width (GTK_WIDGET (revealer), &min_width, NULL);
-  gtk_widget_get_preferred_height (GTK_WIDGET (revealer), &min_height, NULL);
+  gtk_widget_measure (GTK_WIDGET (revealer), GTK_ORIENTATION_HORIZONTAL, -1,
+                      &min_width, NULL, NULL, NULL);
+  gtk_widget_measure (GTK_WIDGET (revealer), GTK_ORIENTATION_VERTICAL, -1,
+                      &min_height, NULL, NULL, NULL);
 
   g_assert_cmpint (min_width, ==, min_child_width);
   g_assert_cmpint (min_height, ==, min_child_height);
 
 
   gtk_revealer_set_reveal_child (revealer, FALSE);
-  gtk_widget_get_preferred_width (GTK_WIDGET (revealer), &min_width, NULL);
-  gtk_widget_get_preferred_height (GTK_WIDGET (revealer), &min_height, NULL);
+  gtk_widget_measure (GTK_WIDGET (revealer), GTK_ORIENTATION_HORIZONTAL, -1,
+                      &min_width, NULL, NULL, NULL);
+  gtk_widget_measure (GTK_WIDGET (revealer), GTK_ORIENTATION_VERTICAL, -1,
+                      &min_height, NULL, NULL, NULL);
 
   if (direction & KEEP_WIDTH)
     g_assert_cmpint (min_width, ==, min_child_width);
