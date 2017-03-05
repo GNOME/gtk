@@ -2049,7 +2049,8 @@ _gtk_tree_view_column_request_width (GtkTreeViewColumn *tree_column)
       gtk_cell_area_context_get_preferred_width (priv->cell_area_context, &requested_width, NULL);
       requested_width += priv->padding;
 
-      gtk_widget_get_preferred_width (priv->button, &button_request, NULL);
+      gtk_widget_measure (priv->button, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &button_request, NULL, NULL, NULL);
       real_requested_width = MAX (requested_width, button_request);
     }
   else
