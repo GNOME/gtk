@@ -354,8 +354,10 @@ gtk_path_bar_measure (GtkWidget *widget,
       for (list = path_bar->priv->button_list; list; list = list->next)
         {
           button_data = BUTTON_DATA (list->data);
-          gtk_widget_get_preferred_width (button_data->button, &child_min, &child_nat);
-          gtk_widget_get_preferred_height (button_data->button, &child_size, NULL);
+          gtk_widget_measure (button_data->button, GTK_ORIENTATION_HORIZONTAL, -1,
+                              &child_min, &child_nat, NULL, NULL);
+          gtk_widget_measure (button_data->button, GTK_ORIENTATION_VERTICAL, -1,
+                              &child_size, NULL, NULL, NULL);
           size = MAX (size, child_size);
 
           if (button_data->type == NORMAL_BUTTON)
@@ -375,7 +377,8 @@ gtk_path_bar_measure (GtkWidget *widget,
        */
       path_bar->priv->slider_width = 0;
 
-      gtk_widget_get_preferred_width (path_bar->priv->up_slider_button, &child_min, &child_nat);
+      gtk_widget_measure (path_bar->priv->up_slider_button, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &child_min, &child_nat, NULL, NULL);
       if (path_bar->priv->button_list && path_bar->priv->button_list->next != NULL)
         {
           *minimum += child_min;
@@ -383,7 +386,8 @@ gtk_path_bar_measure (GtkWidget *widget,
         }
       path_bar->priv->slider_width = MAX (path_bar->priv->slider_width, child_min);
 
-      gtk_widget_get_preferred_width (path_bar->priv->down_slider_button, &child_min, &child_nat);
+      gtk_widget_measure (path_bar->priv->down_slider_button, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &child_min, &child_nat, NULL, NULL);
       if (path_bar->priv->button_list && path_bar->priv->button_list->next != NULL)
         {
           *minimum += child_min;
@@ -397,17 +401,20 @@ gtk_path_bar_measure (GtkWidget *widget,
       for (list = path_bar->priv->button_list; list; list = list->next)
         {
           button_data = BUTTON_DATA (list->data);
-          gtk_widget_get_preferred_height (button_data->button, &child_min, &child_nat);
+          gtk_widget_measure (button_data->button, GTK_ORIENTATION_VERTICAL, -1,
+                              &child_min, &child_nat, NULL, NULL);
 
           *minimum = MAX (*minimum, child_min);
           *natural = MAX (*natural, child_nat);
         }
 
-      gtk_widget_get_preferred_height (path_bar->priv->up_slider_button, &child_min, &child_nat);
+      gtk_widget_measure (path_bar->priv->up_slider_button, GTK_ORIENTATION_VERTICAL, -1,
+                          &child_min, &child_nat, NULL, NULL);
       *minimum = MAX (*minimum, child_min);
       *natural = MAX (*natural, child_nat);
 
-      gtk_widget_get_preferred_height (path_bar->priv->down_slider_button, &child_min, &child_nat);
+      gtk_widget_measure (path_bar->priv->up_slider_button, GTK_ORIENTATION_VERTICAL, -1,
+                          &child_min, &child_nat, NULL, NULL);
       *minimum = MAX (*minimum, child_min);
       *natural = MAX (*natural, child_nat);
     }
