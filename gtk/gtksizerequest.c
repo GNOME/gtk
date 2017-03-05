@@ -81,16 +81,6 @@ pop_recursion_check (GtkWidget       *widget,
 #define pop_recursion_check(widget, orientation)
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
-static const char *
-get_vfunc_name (GtkOrientation orientation,
-                gint           for_size)
-{
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    return for_size < 0 ? "get_preferred_width" : "get_preferred_width_for_height";
-  else
-    return for_size < 0 ? "get_preferred_height" : "get_preferred_height_for_width";
-}
-
 static void
 gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                        GtkOrientation    orientation,
@@ -208,10 +198,19 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
             }
         }
 
-      if (min_size > nat_size)
+      if (G_UNLIKELY (min_size > nat_size))
         {
-          g_warning ("%s %p reported min size %d and natural size %d in %s(); natural size must be >= min size",
-                     G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size, get_vfunc_name (orientation, for_size));
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              g_warning ("%s %p reported min width %d and natural width %d in measure() with for_size=%d; natural size must be >= min size",
+                         G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size, for_size);
+            }
+          else
+            {
+              g_warning ("%s %p reported min height %d and natural height %d in measure() with for_size=%d; natural size must be >= min size",
+                         G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size, for_size);
+
+            }
         }
 
       adjusted_min     = min_size;
