@@ -12904,10 +12904,7 @@ gtk_widget_get_margin_start (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    return widget->priv->margin.right;
-  else
-    return widget->priv->margin.left;
+  return widget->priv->margin.left;
 }
 
 /**
@@ -12924,23 +12921,15 @@ void
 gtk_widget_set_margin_start (GtkWidget *widget,
                              gint       margin)
 {
-  gint16 *start;
-  gboolean rtl;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (margin <= G_MAXINT16);
 
-  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  /* We always save margin-start as .left */
 
-  if (rtl)
-    start = &widget->priv->margin.right;
-  else
-    start = &widget->priv->margin.left;
-
-  if (*start == margin)
+  if (widget->priv->margin.left == margin)
     return;
 
-  *start = margin;
+  widget->priv->margin.left = margin;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_START]);
 }
@@ -12960,10 +12949,7 @@ gtk_widget_get_margin_end (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    return widget->priv->margin.left;
-  else
-    return widget->priv->margin.right;
+  return widget->priv->margin.right;
 }
 
 /**
@@ -12980,23 +12966,15 @@ void
 gtk_widget_set_margin_end (GtkWidget *widget,
                            gint       margin)
 {
-  gint16 *end;
-  gboolean rtl;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (margin <= G_MAXINT16);
 
-  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  /* We always set margin-end as .right */
 
-  if (rtl)
-    end = &widget->priv->margin.left;
-  else
-    end = &widget->priv->margin.right;
-
-  if (*end == margin)
+  if (widget->priv->margin.right == margin)
     return;
 
-  *end = margin;
+  widget->priv->margin.right = margin;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_END]);
 }
