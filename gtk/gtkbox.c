@@ -631,7 +631,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	  sizes[i].natural_size = child_size;
 
 	  if (private->orientation == GTK_ORIENTATION_HORIZONTAL &&
-	      gtk_widget_get_valign_with_baseline (child->widget) == GTK_ALIGN_BASELINE)
+	      gtk_widget_get_valign (child->widget) == GTK_ALIGN_BASELINE)
 	    {
 	      int child_allocation_width;
 	      int child_minimum_height, child_natural_height;
@@ -976,7 +976,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
           sizes[packing][i].natural_size = child_size;
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-              gtk_widget_get_valign_with_baseline (child->widget) == GTK_ALIGN_BASELINE)
+              gtk_widget_get_valign (child->widget) == GTK_ALIGN_BASELINE)
             {
               gint child_allocation_width;
 	      gint child_minimum_height, child_natural_height;

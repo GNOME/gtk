@@ -3422,7 +3422,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_enum (value, gtk_widget_get_halign (widget));
       break;
     case PROP_VALIGN:
-      g_value_set_enum (value, gtk_widget_get_valign_with_baseline (widget));
+      g_value_set_enum (value, gtk_widget_get_valign (widget));
       break;
     case PROP_MARGIN_START:
       g_value_set_int (value, gtk_widget_get_margin_start (widget));
@@ -5380,7 +5380,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   /* Never pass a baseline to a child unless it requested it.
      This means containers don't have to manually check for this. */
   if (baseline != -1 &&
-      gtk_widget_get_valign_with_baseline (widget) != GTK_ALIGN_BASELINE)
+      gtk_widget_get_valign (widget) != GTK_ALIGN_BASELINE)
     baseline = -1;
 
   alloc_needed = priv->alloc_needed;
@@ -12852,47 +12852,19 @@ gtk_widget_set_halign (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_get_valign_with_baseline:
- * @widget: a #GtkWidget
- *
- * Gets the value of the #GtkWidget:valign property, including
- * %GTK_ALIGN_BASELINE.
- *
- * Returns: the vertical alignment of @widget
- *
- * Since: 3.10
- */
-GtkAlign
-gtk_widget_get_valign_with_baseline (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
-  return widget->priv->valign;
-}
-
-/**
  * gtk_widget_get_valign:
  * @widget: a #GtkWidget
  *
  * Gets the value of the #GtkWidget:valign property.
  *
- * For backwards compatibility reasons this method will never return
- * %GTK_ALIGN_BASELINE, but instead it will convert it to
- * %GTK_ALIGN_FILL. If your widget want to support baseline aligned
- * children it must use gtk_widget_get_valign_with_baseline(), or
- * `g_object_get (widget, "valign", &value, NULL)`, which will
- * also report the true value.
- *
- * Returns: the vertical alignment of @widget, ignoring baseline alignment
+ * Returns: the vertical alignment of @widget
  */
 GtkAlign
 gtk_widget_get_valign (GtkWidget *widget)
 {
-  GtkAlign align;
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
 
-  align = gtk_widget_get_valign_with_baseline (widget);
-  if (align == GTK_ALIGN_BASELINE)
-    return GTK_ALIGN_FILL;
-  return align;
+  return widget->priv->valign;
 }
 
 /**

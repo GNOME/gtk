@@ -553,7 +553,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
           _gtk_widget_get_preferred_size_and_baseline (child,
                                                        &child_requisition, NULL, &child_baseline, NULL);
 	  if (orientation == GTK_ORIENTATION_HORIZONTAL &&
-	      gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
+	      gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE &&
 	      child_baseline != -1)
 	    {
 	      have_baseline = TRUE;
@@ -618,7 +618,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
               (*heights)[i] = -1;
 
 	      if (orientation == GTK_ORIENTATION_HORIZONTAL &&
-		  gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
+		  gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE &&
 		  child_baseline != -1)
 		{
 		  (*baselines)[i] = child_baseline;
@@ -639,7 +639,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
               (*heights)[i] = child_requisition.height + ipad_h;
 
 	      if (orientation == GTK_ORIENTATION_HORIZONTAL &&
-		  gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
+		  gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE &&
 		  child_baseline != -1)
 		(*baselines)[i] = child_baseline;
             }

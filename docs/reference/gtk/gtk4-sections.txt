@@ -4675,7 +4675,6 @@ GtkAlign
 gtk_widget_get_halign
 gtk_widget_set_halign
 gtk_widget_get_valign
-gtk_widget_get_valign_with_baseline
 gtk_widget_set_valign
 gtk_widget_get_margin_start
 gtk_widget_set_margin_start
