@@ -81,9 +81,11 @@
  *
  * GtkFrame has a main CSS node with name frame and a subnode with
  * name border. The border node is used to render the visible border.
- * The main frame node can be given the style class .flat, which disables
- * drawing of the border, equivalent to calling gtk_frame_set_shadow_type() with
- * GTK_SHADOW_NONE.
+ *
+ * The border node can be given the style class .flat, which is used by themes
+ * to disable drawing of the border. To do this from code, call
+ * gtk_frame_set_shadow_type() with GTK_SHADOW_NONE to add the .flat class or
+ * any other shadow type to remove it.
  */
 
 
@@ -684,9 +686,9 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
       priv->shadow_type = type;
 
       if (type == GTK_SHADOW_NONE)
-        gtk_css_gadget_add_class (priv->gadget, GTK_STYLE_CLASS_FLAT);
+        gtk_css_gadget_add_class (priv->border_gadget, GTK_STYLE_CLASS_FLAT);
       else
-        gtk_css_gadget_remove_class (priv->gadget, GTK_STYLE_CLASS_FLAT);
+        gtk_css_gadget_remove_class (priv->border_gadget, GTK_STYLE_CLASS_FLAT);
 
       g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_SHADOW_TYPE]);
     }

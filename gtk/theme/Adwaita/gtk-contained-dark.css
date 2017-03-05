@@ -3848,13 +3848,12 @@ frame > border,
   padding: 0;
   border-radius: 0;
   border: 1px solid #1b1f20; }
+  frame > border.flat,
+  .frame.flat {
+    border-style: none; }
   frame > border:backdrop,
   .frame:backdrop {
     border-color: #202425; }
-
-frame.flat > border,
-.frame.flat {
-  border-style: none; }
 
 actionbar > revealer > box {
   padding: 6px;
