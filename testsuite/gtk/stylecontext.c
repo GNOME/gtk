@@ -26,7 +26,6 @@ test_parse_selectors (void)
     "tab:nth-child(last) {}",
     "tab:nth-child(even) {}",
     "tab:nth-child(odd) {}",
-    "tab:sorted {}",
     ".some-class {}",
     ".some-class.another-class {}",
     ".some-class .another-class {}",
