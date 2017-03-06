@@ -79,8 +79,9 @@
  * ]|
  *
  * GtkFrame has a main CSS node with name frame. This node can be given the
- * style class .flat, which disables drawing of the border, equivalent to
- * calling gtk_frame_set_shadow_type() with GTK_SHADOW_NONE.
+ * style class .flat, which is used by themes to disable drawing of the border.
+ * Another way to do this in code is to call gtk_frame_set_shadow_type() with
+ * GTK_SHADOW_NONE to add the .flat class or any other shadow type to remove it.
  */
 
 struct _GtkFramePrivate
