@@ -32,19 +32,19 @@ typedef struct {
  *
  *     IFS=""; while read line; do echo -n \"; echo -n $line | sed -e 's|\"|\\"|g'; echo \"; done < file.glade
  */
-TestInterface interfaces[] = {
+static TestInterface interfaces[] = {
   {
     "Ellipsizing Labels",
     "Demonstrates how labels will request a natural size in a horizontal space",
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <requires lib=\"gtk+\" version=\"3.22\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <property name=\"default_width\">450</property>"
     "    <property name=\"default_height\">50</property>"
     "    <child>"
     "      <object class=\"GtkBox\" id=\"hbox5\">"
-    "        <property name\"orientation\"horizontal</property>"
+    "        <property name=\"orientation\">horizontal</property>"
     "        <property name=\"visible\">True</property>"
     "        <child>"
     "          <object class=\"GtkLabel\" id=\"label9\">"
@@ -99,16 +99,18 @@ TestInterface interfaces[] = {
     "Wrapping Label",
     "Demonstrates how a wrapping label can require a height contextual to its allocated width",
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"2.18\"/>"
+    "  <requires lib=\"gtk+\" version=\"3.22\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <property name=\"default_width\">300</property>"
     "    <child>"
-    "      <object class=\"GtkHPaned\" id=\"hpaned1\">"
+    "      <object class=\"GtkPaned\" id=\"hpaned1\">"
+    "        <property name=\"orientation\">horizontal</property>"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"can_focus\">True</property>"
     "        <child>"
-    "          <object class=\"GtkVBox\" id=\"vbox2\">"
+    "          <object class=\"GtkBox\" id=\"vbox2\">"
+    "            <property name=\"orientation\">vertical</property>"
     "            <property name=\"visible\">True</property>"
     "            <child>"
     "              <object class=\"GtkLabel\" id=\"label3\">"
@@ -198,28 +200,29 @@ TestInterface interfaces[] = {
     "Horizontal Box",
     "Demonstrates how a horizontal box can calculate the collective height for an allocated width",
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <requires lib=\"gtk+\" version=\"3.22\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <property name=\"default_height\">200</property>"
     "    <property name=\"default_width\">600</property>"
     "    <child>"
-    "      <object class=\"GtkHPaned\" id=\"hpaned1\">"
+    "      <object class=\"GtkPaned\" id=\"hpaned1\">"
+    "        <property name=\"orientation\">horizontal</property>"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"can_focus\">True</property>"
     "        <child>"
-    "          <object class=\"GtkVBox\" id=\"vbox1\">"
+    "          <object class=\"GtkBox\" id=\"vbox1\">"
+    "            <property name=\"orientation\">vertical</property>"
     "            <property name=\"visible\">True</property>"
     "            <child>"
     "              <object class=\"GtkBox\" id=\"hbox1\">"
-    "                <property name\"orientation\"horizontal</property>"
+    "                <property name=\"orientation\">horizontal</property>"
     "                <property name=\"visible\">True</property>"
     "                <child>"
     "                  <object class=\"GtkButton\" id=\"button1\">"
     "                    <property name=\"visible\">True</property>"
     "                    <property name=\"can_focus\">True</property>"
     "                    <property name=\"receives_default\">True</property>"
-    "                    <property name=\"use_action_appearance\">False</property>"
     "                    <child>"
     "                      <object class=\"GtkLabel\" id=\"label2\">"
     "                        <property name=\"visible\">True</property>"
@@ -263,7 +266,6 @@ TestInterface interfaces[] = {
     "                <property name=\"visible\">True</property>"
     "                <property name=\"can_focus\">True</property>"
     "                <property name=\"receives_default\">True</property>"
-    "                <property name=\"use_action_appearance\">False</property>"
     "              </object>"
     "              <packing>"
     "                <property name=\"position\">1</property>"
@@ -304,18 +306,19 @@ TestInterface interfaces[] = {
     "Demonstrates how a horizontal box will consider width-for-height when allocating children "
     "even if the toplevel window is requested as height-for-width.",
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <requires lib=\"gtk+\" version=\"3.22\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <property name=\"default_width\">400</property>"
     "    <property name=\"default_height\">300</property>"
     "    <child>"
-    "      <object class=\"GtkVPaned\" id=\"vpaned1\">"
+    "      <object class=\"GtkPaned\" id=\"vpaned1\">"
+    "        <property name=\"orientation\">vertical</property>"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"can_focus\">True</property>"
     "        <child>"
     "          <object class=\"GtkBox\" id=\"hbox1\">"
-    "            <property name\"orientation\"horizontal</property>"
+    "            <property name=\"orientation\">horizontal</property>"
     "            <property name=\"visible\">True</property>"
     "            <child>"
     "              <object class=\"GtkLabel\" id=\"label1\">"
@@ -367,7 +370,7 @@ TestInterface interfaces[] = {
     "        </child>"
     "        <child>"
     "          <object class=\"GtkBox\" id=\"hbox2\">"
-    "            <property name\"orientation\"horizontal</property>"
+    "            <property name=\"orientation\">horizontal</property>"
     "            <property name=\"visible\">True</property>"
     "            <child>"
     "              <object class=\"GtkFrame\" id=\"frame2\">"
@@ -429,20 +432,22 @@ TestInterface interfaces[] = {
     "This test demonstrates how \"width-chars\" and \"max-width-chars\" can be used "
     "to effect minimum and natural widths in wrapping labels.",
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <requires lib=\"gtk+\" version=\"3.22\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <property name=\"default_width\">900</property>"
     "    <child>"
-    "      <object class=\"GtkHPaned\" id=\"hpaned1\">"
+    "      <object class=\"GtkPaned\" id=\"hpaned1\">"
+    "        <property name=\"orientation\">horizontal</property>"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"can_focus\">True</property>"
     "        <child>"
-    "          <object class=\"GtkVBox\" id=\"vbox1\">"
+    "          <object class=\"GtkBox\" id=\"vbox1\">"
+    "            <property name=\"orientation\">vertical</property>"
     "            <property name=\"visible\">True</property>"
     "            <child>"
     "              <object class=\"GtkBox\" id=\"hbox1\">"
-    "                <property name\"orientation\"horizontal</property>"
+    "                <property name=\"orientation\">horizontal</property>"
     "                <property name=\"visible\">True</property>"
     "                <property name=\"spacing\">6</property>"
     "                <child>"
@@ -554,12 +559,13 @@ TestInterface interfaces[] = {
     "and also trade height for width.",
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <requires lib=\"gtk+\" version=\"3.22\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <property name=\"default_width\">500</property>"
     "    <child>"
-    "      <object class=\"GtkHPaned\" id=\"hpaned1\">"
+    "      <object class=\"GtkPaned\" id=\"hpaned1\">"
+    "        <property name=\"orientation\">horizontal</property>"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"can_focus\">True</property>"
     "        <child>"
@@ -624,7 +630,7 @@ TestInterface interfaces[] = {
     "and also trade height for width.",
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <requires lib=\"gtk+\" version=\"3.22\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <property name=\"default_width\">400</property>"
@@ -636,7 +642,7 @@ TestInterface interfaces[] = {
     "        <child>"
     "          <object class=\"GtkLabel\" id=\"label2\">"
     "            <property name=\"visible\">True</property>"
-    "            <property name=\"margin-start\">12</property>"
+    "            <property name=\"margin_start\">12</property>"
     "            <property name=\"label\" translatable=\"yes\">some content</property>"
     "          </object>"
     "        </child>"
@@ -660,21 +666,23 @@ TestInterface interfaces[] = {
     "This test shows wrapping and ellipsizing text in combo boxes (and consequently in menu items).",
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     "<interface>"
-    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <requires lib=\"gtk+\" version=\"3.22\"/>"
     "  <!-- interface-naming-policy project-wide -->"
     "  <object class=\"GtkWindow\" id=\"window\">"
     "    <property name=\"default_width\">600</property>"
     "    <child>"
-    "      <object class=\"GtkHPaned\" id=\"hpaned1\">"
+    "      <object class=\"GtkPaned\" id=\"hpaned1\">"
+    "        <property name=\"orientation\">horizontal</property>"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"can_focus\">True</property>"
     "        <child>"
-    "          <object class=\"GtkVBox\" id=\"vbox1\">"
+    "          <object class=\"GtkBox\" id=\"vbox1\">"
+    "            <property name=\"orientation\">vertical</property>"
     "            <property name=\"visible\">True</property>"
     "            <property name=\"spacing\">5</property>"
     "            <child>"
     "              <object class=\"GtkBox\" id=\"hbox1\">"
-    "                <property name\"orientation\"horizontal</property>"
+    "                <property name=\"orientation\">horizontal</property>"
     "                <property name=\"visible\">True</property>"
     "                <property name=\"spacing\">5</property>"
     "                <child>"
@@ -776,7 +784,7 @@ TestInterface interfaces[] = {
     "            </child>"
     "            <child>"
     "              <object class=\"GtkBox\" id=\"hbox2\">"
-    "                <property name\"orientation\"horizontal</property>"
+    "                <property name=\"orientation\">horizontal</property>"
     "                <property name=\"visible\">True</property>"
     "                <property name=\"spacing\">5</property>"
     "                <child>"
@@ -920,12 +928,24 @@ test_clicked (GtkWidget     *button,
   if (!interface->window)
     {
       GtkBuilder *builder = gtk_builder_new ();
+      GError *error = NULL;
       
-      gtk_builder_add_from_string (builder, interface->interface, -1, NULL);
+      gtk_builder_add_from_string (builder, interface->interface, -1, &error);
+
+      if (error)
+        {
+          g_printerr ("GtkBuilder for interface \"%s\" returned error \"%s\"\n",
+                      interface->name, error->message);
+          g_error_free (error);
+          return;
+        }
+
       interface->window = (GtkWidget *)gtk_builder_get_object (builder, "window");
 
       g_signal_connect (interface->window, "delete_event", 
 			G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+
+      g_object_unref (builder);
     }
 
   gtk_widget_show (interface->window);
@@ -960,7 +980,19 @@ create_window (void)
   return window;
 }
 
+static void
+main_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+  for (gsize i = 0; i < sizeof(interfaces) / sizeof(TestInterface); ++i)
+    {
+      if (interfaces[i].window)
+        {
+          gtk_widget_destroy (interfaces[i].window);
+        }
+    }
 
+  gtk_main_quit ();
+}
 
 int
 main (int argc, char *argv[])
@@ -972,7 +1004,7 @@ main (int argc, char *argv[])
   window = create_window ();
 
   g_signal_connect (window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), window);
+                    G_CALLBACK (main_window_delete_cb), window);
 
   gtk_widget_show (window);
 
