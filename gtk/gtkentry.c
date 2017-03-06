@@ -2917,6 +2917,8 @@ gtk_entry_dispose (GObject *object)
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_completion (entry, NULL);
 
+  priv->current_pos = 0;
+
   if (priv->buffer)
     {
       buffer_disconnect_signals (entry);
