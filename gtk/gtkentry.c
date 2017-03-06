@@ -586,7 +586,6 @@ static void         gtk_entry_recompute                (GtkEntry       *entry);
 static gint         gtk_entry_find_position            (GtkEntry       *entry,
 							gint            x);
 static void         gtk_entry_get_cursor_locations     (GtkEntry       *entry,
-							CursorType      type,
 							gint           *strong_x,
 							gint           *weak_x);
 static void         gtk_entry_adjust_scroll            (GtkEntry       *entry);
@@ -3830,7 +3829,7 @@ gtk_entry_update_handles (GtkEntry          *entry,
 
   height = gdk_window_get_height (priv->text_area);
 
-  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
+  gtk_entry_get_cursor_locations (entry, &strong_x, NULL);
   cursor = strong_x - priv->scroll_offset;
 
   if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
@@ -5803,7 +5802,7 @@ update_im_cursor_location (GtkEntry *entry)
   gint strong_x;
   gint strong_xoffset;
 
-  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
+  gtk_entry_get_cursor_locations (entry, &strong_x, NULL);
   gtk_entry_get_text_allocation (entry, &text_area);
 
   strong_xoffset = strong_x - priv->scroll_offset;
@@ -6414,7 +6413,6 @@ gtk_entry_find_position (GtkEntry *entry,
 
 static void
 gtk_entry_get_cursor_locations (GtkEntry   *entry,
-				CursorType  type,
 				gint       *strong_x,
 				gint       *weak_x)
 {
@@ -6437,26 +6435,8 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
       PangoRectangle strong_pos, weak_pos;
       gint index;
   
-      if (type == CURSOR_STANDARD)
-	{
-	  index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
-	}
-      else /* type == CURSOR_DND */
-	{
-	  index = g_utf8_offset_to_pointer (text, priv->dnd_position) - text;
+      index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
 
-	  if (priv->dnd_position > priv->current_pos)
-	    {
-	      if (mode == DISPLAY_NORMAL)
-		index += priv->preedit_length;
-	      else
-		{
-		  gint preedit_len_chars = g_utf8_strlen (text, -1) - gtk_entry_buffer_get_length (get_buffer (entry));
-		  index += preedit_len_chars * g_unichar_to_utf8 (priv->invisible_char, NULL);
-		}
-	    }
-	}
-      
       pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
       
       if (strong_x)
@@ -6568,7 +6548,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
        * We always make sure that the strong cursor is on screen, and
        * put the weak cursor on screen if possible.
        */
-      gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, &weak_x);
+      gtk_entry_get_cursor_locations (entry, &strong_x, &weak_x);
     }
 
   strong_xoffset = strong_x - priv->scroll_offset;
@@ -6625,7 +6605,7 @@ gtk_entry_move_adjustments (GtkEntry *entry)
   gtk_css_gadget_get_content_allocation (entry->priv->gadget, &allocation, NULL);
 
   /* Cursor/char position, layout offset, border width, and widget allocation */
-  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &x, NULL);
+  gtk_entry_get_cursor_locations (entry, &x, NULL);
   get_layout_position (entry, &layout_x, NULL);
   x += allocation.x + layout_x;
 
@@ -8960,7 +8940,7 @@ popup_targets_received (GtkClipboard     *clipboard,
         gtk_menu_popup_at_pointer (GTK_MENU (menu), info->trigger_event);
       else
         {
-          gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &rect.x, NULL);
+          gtk_entry_get_cursor_locations (entry, &rect.x, NULL);
           rect.x -= info_entry_priv->scroll_offset;
           rect.height = gdk_window_get_height (info_entry_priv->text_area);
 
@@ -9139,7 +9119,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
 
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 
-  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &start_x, NULL);
+  gtk_entry_get_cursor_locations (entry, &start_x, NULL);
 
   start_x -= priv->scroll_offset;
   start_x = CLAMP (start_x, 0, text_allocation.width);
