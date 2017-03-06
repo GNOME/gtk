@@ -19,7 +19,7 @@
 #include <math.h>
 
 static void
-spin_ythickness_cb (GtkSpinButton *spin, gpointer user_data)
+spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
 {
   GtkWidget *frame = user_data;
   GtkCssProvider *provider;
@@ -55,7 +55,7 @@ spin_ythickness_cb (GtkSpinButton *spin, gpointer user_data)
 }
 
 static void
-spin_xthickness_cb (GtkSpinButton *spin, gpointer user_data)
+spin_vpadding_cb (GtkSpinButton *spin, gpointer user_data)
 {
   GtkWidget *frame = user_data;
   GtkCssProvider *provider;
@@ -148,13 +148,15 @@ int main (int argc, char **argv)
   vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 5));
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (vbox));
 
-  frame = GTK_FRAME (gtk_frame_new ("Testing"));
+  frame = GTK_FRAME (gtk_frame_new ("Test GtkFrame"));
   gtk_box_pack_start (vbox, GTK_WIDGET (frame), TRUE, TRUE);
 
   widget = gtk_button_new_with_label ("Hello!");
   gtk_container_add (GTK_CONTAINER (frame), widget);
 
   grid = GTK_GRID (gtk_grid_new ());
+  gtk_grid_set_row_spacing (grid, 12);
+  gtk_grid_set_column_spacing (grid, 6);
   gtk_box_pack_start (vbox, GTK_WIDGET (grid), FALSE, FALSE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (frame));
@@ -163,42 +165,42 @@ int main (int argc, char **argv)
   gtk_style_context_get_padding (context, &pad);
   gtk_style_context_restore (context);
 
-  /* Spin to control xthickness */
-  widget = gtk_label_new ("xthickness: ");
-  gtk_grid_attach (grid, widget, 0, 0, 1, 1);
-
-  widget = gtk_spin_button_new_with_range (0, 250, 1);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.left);
-  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_xthickness_cb), frame);
-  gtk_grid_attach (grid, widget, 1, 0, 1, 1);
-
-  /* Spin to control ythickness */
-  widget = gtk_label_new ("ythickness: ");
-  gtk_grid_attach (grid, widget, 0, 1, 1, 1);
-
-  widget = gtk_spin_button_new_with_range (0, 250, 1);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.top);
-  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_ythickness_cb), frame);
-  gtk_grid_attach (grid, widget, 1, 1, 1, 1);
-
   gtk_frame_get_label_align (frame, &xalign, &yalign);
 
-  /* Spin to control label xalign */
-  widget = gtk_label_new ("xalign: ");
-  gtk_grid_attach (grid, widget, 0, 2, 1, 1);
+  /* Spin to control :label-xalign */
+  widget = gtk_label_new ("label xalign:");
+  gtk_grid_attach (grid, widget, 0, 0, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), xalign);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_xalign_cb), frame);
-  gtk_grid_attach (grid, widget, 1, 2, 1, 1);
+  gtk_grid_attach (grid, widget, 1, 0, 1, 1);
 
-  /* Spin to control label yalign */
-  widget = gtk_label_new ("yalign: ");
-  gtk_grid_attach (grid, widget, 0, 3, 1, 1);
+  /* Spin to control :label-yalign */
+  widget = gtk_label_new ("label yalign:");
+  gtk_grid_attach (grid, widget, 0, 1, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), yalign);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_yalign_cb), frame);
+  gtk_grid_attach (grid, widget, 1, 1, 1, 1);
+
+  /* Spin to control vertical padding */
+  widget = gtk_label_new ("vertical padding:");
+  gtk_grid_attach (grid, widget, 0, 2, 1, 1);
+
+  widget = gtk_spin_button_new_with_range (0, 250, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.top);
+  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_vpadding_cb), frame);
+  gtk_grid_attach (grid, widget, 1, 2, 1, 1);
+
+  /* Spin to control horizontal padding */
+  widget = gtk_label_new ("horizontal padding:");
+  gtk_grid_attach (grid, widget, 0, 3, 1, 1);
+
+  widget = gtk_spin_button_new_with_range (0, 250, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.left);
+  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_hpadding_cb), frame);
   gtk_grid_attach (grid, widget, 1, 3, 1, 1);
 
   gtk_widget_show (window);
