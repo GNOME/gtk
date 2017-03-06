@@ -18,6 +18,8 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+static gint hpadding = 0, vpadding = 0;
+
 static void
 spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
 {
@@ -43,10 +45,9 @@ spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
   gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
   gtk_style_context_restore (context);
 
-
-  data = g_strdup_printf ("GtkFrame { padding: %dpx %dpx }",
-                          pad.top,
-                          (gint)gtk_spin_button_get_value (spin));
+  hpadding = (gint)gtk_spin_button_get_value (spin);
+  data = g_strdup_printf ("frame > border { padding: %dpx %dpx %dpx %dpx }",
+                          vpadding, hpadding, vpadding, hpadding);
 
   gtk_css_provider_load_from_data (provider, data, -1, NULL);
   g_free (data);
@@ -79,10 +80,9 @@ spin_vpadding_cb (GtkSpinButton *spin, gpointer user_data)
   gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
   gtk_style_context_restore (context);
 
-
-  data = g_strdup_printf ("GtkFrame { padding: %dpx %dpx }",
-                          (gint)gtk_spin_button_get_value (spin),
-                          pad.left);
+  vpadding = (gint)gtk_spin_button_get_value (spin);
+  data = g_strdup_printf ("frame > border { padding: %dpx %dpx %dpx %dpx }",
+                          vpadding, hpadding, vpadding, hpadding);
 
   gtk_css_provider_load_from_data (provider, data, -1, NULL);
   g_free (data);
@@ -139,8 +139,6 @@ draw_border_cb (GtkToggleButton *toggle_button, GtkFrame *frame)
 
 int main (int argc, char **argv)
 {
-  GtkStyleContext *context;
-  GtkBorder pad;
   GtkWidget *window, *widget;
   GtkBox *vbox;
   GtkFrame *frame;
@@ -171,12 +169,6 @@ int main (int argc, char **argv)
   gtk_grid_set_column_spacing (grid, 6);
   gtk_box_pack_start (vbox, GTK_WIDGET (grid), FALSE, FALSE, 0);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (frame));
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
-  gtk_style_context_restore (context);
-
   gtk_frame_get_label_align (frame, &xalign, &yalign);
 
   /* Spin to control :label-xalign */
@@ -202,8 +194,8 @@ int main (int argc, char **argv)
   gtk_grid_attach (grid, widget, 0, 2, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.top);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_vpadding_cb), frame);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), vpadding);
   gtk_grid_attach (grid, widget, 1, 2, 1, 1);
 
   /* Spin to control horizontal padding */
@@ -211,8 +203,8 @@ int main (int argc, char **argv)
   gtk_grid_attach (grid, widget, 0, 3, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.left);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_hpadding_cb), frame);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), hpadding);
   gtk_grid_attach (grid, widget, 1, 3, 1, 1);
 
   /* CheckButton to control whether to draw border */
