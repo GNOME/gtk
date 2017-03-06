@@ -165,8 +165,8 @@ int main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), widget, 0, 0, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
-  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_xthickness_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.left);
+  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_xthickness_cb), frame);
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 0, 1, 1);
 
   /* Spin to control ythickness */
@@ -174,8 +174,8 @@ int main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), widget, 0, 1, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
-  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_ythickness_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.top);
+  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_ythickness_cb), frame);
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 1, 1, 1);
 
   gtk_frame_get_label_align (GTK_FRAME (frame), &xalign, &yalign);
@@ -185,8 +185,8 @@ int main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), widget, 0, 2, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
-  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_xalign_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), xalign);
+  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_xalign_cb), frame);
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 2, 1, 1);
 
   /* Spin to control label yalign */
@@ -194,8 +194,8 @@ int main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), widget, 0, 3, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
-  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_yalign_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), yalign);
+  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_yalign_cb), frame);
   gtk_grid_attach (GTK_GRID (grid), widget, 1, 3, 1, 1);
 
   gtk_widget_show (window);
