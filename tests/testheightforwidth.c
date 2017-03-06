@@ -939,7 +939,10 @@ test_clicked (GtkWidget     *button,
         {
           g_printerr ("GtkBuilder for interface \"%s\" returned error \"%s\"\n",
                       interface->name, error->message);
+
           g_error_free (error);
+          g_object_unref (builder);
+
           return;
         }
 
