@@ -117,6 +117,7 @@ spin_xalign_cb (GtkSpinButton *spin, GtkFrame *frame)
   gtk_frame_set_label_align (frame, xalign, yalign);
 }
 
+#if 0
 static void
 spin_yalign_cb (GtkSpinButton *spin, GtkFrame *frame)
 {
@@ -127,6 +128,7 @@ spin_yalign_cb (GtkSpinButton *spin, GtkFrame *frame)
   gtk_frame_get_label_align (frame, &xalign, NULL);
   gtk_frame_set_label_align (frame, xalign, yalign);
 }
+#endif
 
 static void
 draw_border_cb (GtkToggleButton *toggle_button, GtkFrame *frame)
@@ -179,6 +181,8 @@ int main (int argc, char **argv)
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_xalign_cb), frame);
   gtk_grid_attach (grid, widget, 1, 0, 1, 1);
 
+/* Frame:label-yalign does nothing since the border node was removed */
+#if 0
   /* Spin to control :label-yalign */
   widget = gtk_label_new ("label yalign:");
   gtk_grid_attach (grid, widget, 0, 1, 1, 1);
@@ -187,31 +191,32 @@ int main (int argc, char **argv)
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), yalign);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_yalign_cb), frame);
   gtk_grid_attach (grid, widget, 1, 1, 1, 1);
+#endif
 
   /* Spin to control vertical padding */
   widget = gtk_label_new ("vertical padding:");
-  gtk_grid_attach (grid, widget, 0, 2, 1, 1);
+  gtk_grid_attach (grid, widget, 0, 1, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_vpadding_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0);
-  gtk_grid_attach (grid, widget, 1, 2, 1, 1);
+  gtk_grid_attach (grid, widget, 1, 1, 1, 1);
 
   /* Spin to control horizontal padding */
   widget = gtk_label_new ("horizontal padding:");
-  gtk_grid_attach (grid, widget, 0, 3, 1, 1);
+  gtk_grid_attach (grid, widget, 0, 2, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_hpadding_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0);
-  gtk_grid_attach (grid, widget, 1, 3, 1, 1);
+  gtk_grid_attach (grid, widget, 1, 2, 1, 1);
 
   /* CheckButton to control whether to draw border */
   draw_border = gtk_frame_get_shadow_type (frame) != GTK_SHADOW_NONE;
   widget = gtk_check_button_new_with_label ("draw border");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), draw_border);
   g_signal_connect (widget, "toggled", G_CALLBACK (draw_border_cb), frame);
-  gtk_grid_attach (grid, widget, 0, 4, 1, 1);
+  gtk_grid_attach (grid, widget, 0, 3, 1, 1);
 
   gtk_widget_show (window);
 
