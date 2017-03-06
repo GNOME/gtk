@@ -132,7 +132,10 @@ int main (int argc, char **argv)
 {
   GtkStyleContext *context;
   GtkBorder pad;
-  GtkWidget *window, *frame, *vbox, *grid, *widget;
+  GtkWidget *window, *widget;
+  GtkBox *vbox;
+  GtkFrame *frame;
+  GtkGrid *grid;
   gfloat xalign, yalign;
 
   gtk_init (&argc, &argv);
@@ -141,21 +144,21 @@ int main (int argc, char **argv)
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
 
-  g_signal_connect (G_OBJECT (window), "delete-event", gtk_main_quit, NULL);
+  g_signal_connect (window, "delete-event", gtk_main_quit, NULL);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_container_add (GTK_CONTAINER (window), vbox);
+  vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 5));
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (vbox));
 
-  frame = gtk_frame_new ("Testing");
-  gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
+  frame = GTK_FRAME (gtk_frame_new ("Testing"));
+  gtk_box_pack_start (vbox, GTK_WIDGET (frame), TRUE, TRUE, 0);
 
   widget = gtk_button_new_with_label ("Hello!");
   gtk_container_add (GTK_CONTAINER (frame), widget);
 
-  grid = gtk_grid_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
+  grid = GTK_GRID (gtk_grid_new ());
+  gtk_box_pack_start (vbox, GTK_WIDGET (grid), FALSE, FALSE, 0);
 
-  context = gtk_widget_get_style_context (frame);
+  context = gtk_widget_get_style_context (GTK_WIDGET (frame));
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
   gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
@@ -163,41 +166,41 @@ int main (int argc, char **argv)
 
   /* Spin to control xthickness */
   widget = gtk_label_new ("xthickness: ");
-  gtk_grid_attach (GTK_GRID (grid), widget, 0, 0, 1, 1);
+  gtk_grid_attach (grid, widget, 0, 0, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.left);
-  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_xthickness_cb), frame);
-  gtk_grid_attach (GTK_GRID (grid), widget, 1, 0, 1, 1);
+  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_xthickness_cb), frame);
+  gtk_grid_attach (grid, widget, 1, 0, 1, 1);
 
   /* Spin to control ythickness */
   widget = gtk_label_new ("ythickness: ");
-  gtk_grid_attach (GTK_GRID (grid), widget, 0, 1, 1, 1);
+  gtk_grid_attach (grid, widget, 0, 1, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.top);
-  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_ythickness_cb), frame);
-  gtk_grid_attach (GTK_GRID (grid), widget, 1, 1, 1, 1);
+  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_ythickness_cb), frame);
+  gtk_grid_attach (grid, widget, 1, 1, 1, 1);
 
-  gtk_frame_get_label_align (GTK_FRAME (frame), &xalign, &yalign);
+  gtk_frame_get_label_align (frame, &xalign, &yalign);
 
   /* Spin to control label xalign */
   widget = gtk_label_new ("xalign: ");
-  gtk_grid_attach (GTK_GRID (grid), widget, 0, 2, 1, 1);
+  gtk_grid_attach (grid, widget, 0, 2, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), xalign);
-  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_xalign_cb), frame);
-  gtk_grid_attach (GTK_GRID (grid), widget, 1, 2, 1, 1);
+  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_xalign_cb), frame);
+  gtk_grid_attach (grid, widget, 1, 2, 1, 1);
 
   /* Spin to control label yalign */
   widget = gtk_label_new ("yalign: ");
-  gtk_grid_attach (GTK_GRID (grid), widget, 0, 3, 1, 1);
+  gtk_grid_attach (grid, widget, 0, 3, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), yalign);
-  g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (spin_yalign_cb), frame);
-  gtk_grid_attach (GTK_GRID (grid), widget, 1, 3, 1, 1);
+  g_signal_connect (widget, "value-changed", G_CALLBACK (spin_yalign_cb), frame);
+  gtk_grid_attach (grid, widget, 1, 3, 1, 1);
 
   gtk_widget_show_all (window);
 
