@@ -128,6 +128,15 @@ spin_yalign_cb (GtkSpinButton *spin, GtkFrame *frame)
   gtk_frame_set_label_align (frame, xalign, yalign);
 }
 
+static void
+draw_border_cb (GtkToggleButton *toggle_button, GtkFrame *frame)
+{
+  GtkShadowType shadow_type = gtk_toggle_button_get_active (toggle_button)
+                              ? GTK_SHADOW_IN : GTK_SHADOW_NONE;
+
+  gtk_frame_set_shadow_type (frame, shadow_type);
+}
+
 int main (int argc, char **argv)
 {
   GtkStyleContext *context;
@@ -137,6 +146,7 @@ int main (int argc, char **argv)
   GtkFrame *frame;
   GtkGrid *grid;
   gfloat xalign, yalign;
+  gboolean draw_border;
 
   gtk_init (&argc, &argv);
 
@@ -147,6 +157,7 @@ int main (int argc, char **argv)
   g_signal_connect (window, "delete-event", gtk_main_quit, NULL);
 
   vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 5));
+  g_object_set (vbox, "margin", 12, NULL);
   gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (vbox));
 
   frame = GTK_FRAME (gtk_frame_new ("Test GtkFrame"));
@@ -203,6 +214,13 @@ int main (int argc, char **argv)
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), pad.left);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_hpadding_cb), frame);
   gtk_grid_attach (grid, widget, 1, 3, 1, 1);
+
+  /* CheckButton to control whether to draw border */
+  draw_border = gtk_frame_get_shadow_type (frame) != GTK_SHADOW_NONE;
+  widget = gtk_check_button_new_with_label ("draw border");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), draw_border);
+  g_signal_connect (widget, "toggled", G_CALLBACK (draw_border_cb), frame);
+  gtk_grid_attach (grid, widget, 0, 4, 2, 1);
 
   gtk_widget_show_all (window);
 
