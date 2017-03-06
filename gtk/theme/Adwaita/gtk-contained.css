@@ -2836,7 +2836,8 @@ switch {
   min-height: 40px;
   background-image: none;
   transition: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border-width: 0; }
 
 .view.content-view.check:hover:not(list), iconview.content-view.check:hover:not(list),
 .content-view .tile check:hover:not(list) {
@@ -2847,7 +2848,8 @@ switch {
   min-height: 40px;
   background-image: none;
   transition: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border-width: 0; }
 
 .view.content-view.check:active:not(list), iconview.content-view.check:active:not(list),
 .content-view .tile check:active:not(list) {
@@ -2858,7 +2860,8 @@ switch {
   min-height: 40px;
   background-image: none;
   transition: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border-width: 0; }
 
 .view.content-view.check:backdrop:not(list), iconview.content-view.check:backdrop:not(list),
 .content-view .tile check:backdrop:not(list) {
@@ -2869,7 +2872,8 @@ switch {
   min-height: 40px;
   background-image: none;
   transition: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border-width: 0; }
 
 .view.content-view.check:checked:not(list), iconview.content-view.check:checked:not(list),
 .content-view .tile check:checked:not(list) {
@@ -2880,7 +2884,8 @@ switch {
   min-height: 40px;
   background-image: none;
   transition: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border-width: 0; }
 
 .view.content-view.check:checked:hover:not(list), iconview.content-view.check:checked:hover:not(list),
 .content-view .tile check:checked:hover:not(list) {
@@ -2891,7 +2896,8 @@ switch {
   min-height: 40px;
   background-image: none;
   transition: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border-width: 0; }
 
 .view.content-view.check:checked:active:not(list), iconview.content-view.check:checked:active:not(list),
 .content-view .tile check:checked:active:not(list) {
@@ -2902,7 +2908,8 @@ switch {
   min-height: 40px;
   background-image: none;
   transition: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border-width: 0; }
 
 .view.content-view.check:backdrop:checked:not(list), iconview.content-view.check:backdrop:checked:not(list),
 .content-view .tile check:backdrop:checked:not(list) {
@@ -2913,7 +2920,8 @@ switch {
   min-height: 40px;
   background-image: none;
   transition: none;
-  box-shadow: none; }
+  box-shadow: none;
+  border-width: 0; }
 
 checkbutton.text-button, radiobutton.text-button {
   padding: 2px 0;
