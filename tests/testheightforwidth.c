@@ -923,7 +923,7 @@ static TestInterface interfaces[] = {
 
 static void
 test_clicked (GtkWidget     *button, 
-	      TestInterface *interface)
+              TestInterface *interface)
 {
   if (!interface->window)
     {
@@ -945,8 +945,8 @@ test_clicked (GtkWidget     *button,
 
       interface->window = (GtkWidget *)gtk_builder_get_object (builder, "window");
 
-      g_signal_connect (interface->window, "delete_event", 
-			G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+      g_signal_connect (interface->window, "delete_event",
+                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 
       g_object_unref (builder);
     }
@@ -964,7 +964,8 @@ create_window (void)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
-  gtk_widget_show (vbox);
+  g_object_set (vbox, "margin", 8, NULL);
+
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   for (i = 0; i < G_N_ELEMENTS (interfaces); i++)
@@ -973,28 +974,29 @@ create_window (void)
 
       gtk_widget_set_tooltip_text (button, interfaces[i].tooltip);
 
-      g_signal_connect (G_OBJECT (button), "clicked", 
-			G_CALLBACK (test_clicked), &interfaces[i]);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (test_clicked), &interfaces[i]);
 
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
-      gtk_widget_show (button);
     }
 
   return window;
 }
 
-static void
+static gboolean
 main_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
-  for (gsize i = 0; i < sizeof(interfaces) / sizeof(TestInterface); ++i)
+  for (gsize i = 0; i < G_N_ELEMENTS (interfaces); ++i)
     {
       if (interfaces[i].window)
-        {
-          gtk_widget_destroy (interfaces[i].window);
-        }
+        gtk_widget_destroy (interfaces[i].window);
     }
 
+  gtk_widget_destroy (widget);
+
   gtk_main_quit ();
+
+  return TRUE;
 }
 
 int
