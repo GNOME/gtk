@@ -986,7 +986,9 @@ create_window (void)
 static gboolean
 main_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
-  for (gsize i = 0; i < G_N_ELEMENTS (interfaces); ++i)
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (interfaces); ++i)
     {
       if (interfaces[i].window)
         gtk_widget_destroy (interfaces[i].window);
