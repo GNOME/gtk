@@ -2686,7 +2686,6 @@ save_widgets_create (GtkFileChooserWidget *impl)
 
   priv->save_widgets_table = gtk_grid_new ();
   gtk_box_pack_start (GTK_BOX (vbox), priv->save_widgets_table, FALSE, FALSE);
-  gtk_widget_show (priv->save_widgets_table);
   gtk_grid_set_row_spacing (GTK_GRID (priv->save_widgets_table), 12);
   gtk_grid_set_column_spacing (GTK_GRID (priv->save_widgets_table), 12);
 
@@ -2696,7 +2695,6 @@ save_widgets_create (GtkFileChooserWidget *impl)
   gtk_widget_set_halign (widget, GTK_ALIGN_START);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
   gtk_grid_attach (GTK_GRID (priv->save_widgets_table), widget, 0, 0, 1, 1);
-  gtk_widget_show (widget);
 
   /* Location entry */
 
