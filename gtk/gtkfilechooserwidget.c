@@ -2743,7 +2743,8 @@ location_switch_to_path_bar (GtkFileChooserWidget *impl)
 
   if (priv->location_entry)
     {
-      gtk_widget_destroy (priv->location_entry);
+      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (priv->location_entry)),
+                            priv->location_entry);
       priv->location_entry = NULL;
     }
 
