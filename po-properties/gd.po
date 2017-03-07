@@ -2,13 +2,13 @@
 # Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
 # This file is distributed under the same license as the gtk+3.0 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
-# GunChleoc <fios@foramnagaidhlig.net>, 2014, 2015, 2016.
+# GunChleoc <fios@foramnagaidhlig.net>, 2014, 2015, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-05 14:18+0000\n"
-"PO-Revision-Date: 2016-09-05 15:23+0100\n"
+"POT-Creation-Date: 2017-03-03 11:54+0000\n"
+"PO-Revision-Date: 2017-03-07 12:16+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
 "Language: gd\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Project-Style: gnome\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
-#: gdk/gdkglcontext.c:315 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Uidheam-taisbeanaidh"
 
@@ -119,12 +119,10 @@ msgid "Axes"
 msgstr "Aislean"
 
 #: gdk/gdkdevice.c:328
-#| msgid "Tooltip"
 msgid "Tool"
 msgstr "Inneal"
 
 #: gdk/gdkdevice.c:329
-#| msgid "The cell which is currently being edited"
 msgid "The tool that is currently used with this device"
 msgstr "An t-inneal thathar a' cleachdadh leis an uidheam seo an-dràsta"
 
@@ -140,24 +138,24 @@ msgstr "An taisbeanadh bunaiteach"
 msgid "The default display for GDK"
 msgstr "An taisbeanadh bunaiteach airson GDK"
 
-#: gdk/gdkglcontext.c:316
+#: gdk/gdkglcontext.c:318
 msgid "The GDK display used to create the GL context"
 msgstr ""
 "An sealladh GDK a thèid a chleachdadh gus an co-theacsa GL a chruthachadh"
 
-#: gdk/gdkglcontext.c:331 gtk/gtkwidget.c:1336
+#: gdk/gdkglcontext.c:333 gtk/gtkwidget.c:1338
 msgid "Window"
 msgstr "Uinneag"
 
-#: gdk/gdkglcontext.c:332
+#: gdk/gdkglcontext.c:334
 msgid "The GDK window bound to the GL context"
 msgstr "An uinneag GDK a thèid a nasgadh ris a' cho-theacs GL"
 
-#: gdk/gdkglcontext.c:347
+#: gdk/gdkglcontext.c:349
 msgid "Shared context"
 msgstr "Co-theacsa co-roinnte"
 
-#: gdk/gdkglcontext.c:348
+#: gdk/gdkglcontext.c:350
 msgid "The GL context this context shares data with"
 msgstr "An co-theacsa GL leis a' cho-roinneas an co-theacsa seo dàta"
 
@@ -232,7 +230,7 @@ msgid "A unique name for the action."
 msgstr "Ainm àraid airson a' ghnìomha"
 
 #: gtk/deprecated/gtkaction.c:264 gtk/gtkbutton.c:281 gtk/gtkexpander.c:304
-#: gtk/gtkframe.c:226 gtk/gtklabel.c:801 gtk/gtkmenuitem.c:787
+#: gtk/gtkframe.c:228 gtk/gtklabel.c:801 gtk/gtkmenuitem.c:787
 #: gtk/gtktoolbutton.c:243 gtk/gtktoolitemgroup.c:1641
 msgid "Label"
 msgstr "Leubail"
@@ -350,7 +348,7 @@ msgstr ""
 "ghnìomh seo am falach."
 
 #: gtk/deprecated/gtkaction.c:466 gtk/deprecated/gtkactiongroup.c:214
-#: gtk/gtkcellrenderer.c:301 gtk/gtkwidget.c:1144
+#: gtk/gtkcellrenderer.c:301 gtk/gtkwidget.c:1146
 msgid "Sensitive"
 msgstr "Mothachail"
 
@@ -360,7 +358,7 @@ msgstr "Co-dhiù a bheil an gnìomh an comas gus nach eil."
 
 #: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:228
 #: gtk/deprecated/gtkstatusicon.c:307 gtk/gtkcssnode.c:645
-#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1137
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1139
 msgid "Visible"
 msgstr "Ri fhaicinn"
 
@@ -845,7 +843,7 @@ msgid "A GdkPixbuf to display"
 msgstr "An GdkPixbuf a thèid a thaisbeanadh"
 
 #: gtk/deprecated/gtkstatusicon.c:235 gtk/gtkimage.c:269
-#: gtk/gtkrecentmanager.c:283
+#: gtk/gtkrecentmanager.c:289
 msgid "Filename"
 msgstr "Ainm an fhaidhle"
 
@@ -871,7 +869,7 @@ msgid "The representation being used for image data"
 msgstr "An riochdachadh a chleachdar airson dàta an deilbh"
 
 #: gtk/deprecated/gtkstatusicon.c:289 gtk/gtkcellrendererpixbuf.c:201
-#: gtk/gtkcellrendererspinner.c:159 gtk/gtkrecentmanager.c:298
+#: gtk/gtkcellrendererspinner.c:159 gtk/gtkrecentmanager.c:304
 msgid "Size"
 msgstr "Meud"
 
@@ -909,7 +907,7 @@ msgstr "Comhair"
 msgid "The orientation of the tray"
 msgstr "Comhair na treidhe"
 
-#: gtk/deprecated/gtkstatusicon.c:367 gtk/gtkwidget.c:1274
+#: gtk/deprecated/gtkstatusicon.c:367 gtk/gtkwidget.c:1276
 msgid "Has tooltip"
 msgstr "Tha gliocas-sgrìn aige"
 
@@ -917,15 +915,15 @@ msgstr "Tha gliocas-sgrìn aige"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Co-dhiù am bi gliocas-sgrìn aig an ìomhaigheag treidhe seo"
 
-#: gtk/deprecated/gtkstatusicon.c:394 gtk/gtkwidget.c:1298
+#: gtk/deprecated/gtkstatusicon.c:394 gtk/gtkwidget.c:1300
 msgid "Tooltip Text"
 msgstr "Teacsa a' ghliocais-sgrìn"
 
-#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1299 gtk/gtkwidget.c:1323
+#: gtk/deprecated/gtkstatusicon.c:395 gtk/gtkwidget.c:1301 gtk/gtkwidget.c:1325
 msgid "The contents of the tooltip for this widget"
 msgstr "Susbaint a' ghliocais-sgrìn airson a' widget seo"
 
-#: gtk/deprecated/gtkstatusicon.c:418 gtk/gtkwidget.c:1322
+#: gtk/deprecated/gtkstatusicon.c:418 gtk/gtkwidget.c:1324
 msgid "Tooltip markup"
 msgstr "Markup a' ghliocais-sgrìn"
 
@@ -935,7 +933,7 @@ msgstr "Susbaint a' ghliocais-sgrìn aig an ìomhaigheag treidhe seo"
 
 #: gtk/deprecated/gtkstatusicon.c:436 gtk/gtkcolorbutton.c:183
 #: gtk/gtkfilechooserbutton.c:438 gtk/gtkfontbutton.c:476
-#: gtk/gtkheaderbar.c:1997 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:289
+#: gtk/gtkheaderbar.c:2008 gtk/gtkprintjob.c:132 gtk/gtkshortcutsgroup.c:308
 #: gtk/gtkshortcutssection.c:375 gtk/gtkshortcutsshortcut.c:575
 #: gtk/gtkstack.c:523 gtk/gtktreeviewcolumn.c:316
 msgid "Title"
@@ -985,7 +983,7 @@ msgstr "Bèarnadh nan colbhan"
 msgid "The amount of space between two consecutive columns"
 msgstr "An t-àite eadar colbhan a tha ri taobh a chèile"
 
-#: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:289 gtk/gtkflowbox.c:3848
+#: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:289 gtk/gtkflowbox.c:3830
 #: gtk/gtkstack.c:459 gtk/gtktoolbar.c:592 gtk/gtktoolitemgroup.c:1690
 msgid "Homogeneous"
 msgstr "Aon-ghnèitheach"
@@ -1334,11 +1332,11 @@ msgstr "Luach targaid a' ghnìomha"
 msgid "The parameter for action invocations"
 msgstr "Am paramadair airson gairmean air gnìomhan"
 
-#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:1983
+#: gtk/gtkactionbar.c:338 gtk/gtkbox.c:353 gtk/gtkheaderbar.c:1994
 msgid "Pack type"
 msgstr "Seòrsa na pacaide"
 
-#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:1984
+#: gtk/gtkactionbar.c:339 gtk/gtkbox.c:354 gtk/gtkheaderbar.c:1995
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1346,13 +1344,13 @@ msgstr ""
 "GtkPackType a nochdas an dèid am pàiste a phacadh a thaobh toiseach no "
 "deireadh a' phàraint"
 
-#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:1990
-#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1726
+#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:360 gtk/gtkheaderbar.c:2001
+#: gtk/gtknotebook.c:838 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1729
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1718
 msgid "Position"
 msgstr "Ionad"
 
-#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:1991
+#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:361 gtk/gtkheaderbar.c:2002
 #: gtk/gtknotebook.c:839 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
 msgid "The index of the child in the parent"
 msgstr "Inneacs a' phàiste sa phàrant"
@@ -1534,17 +1532,17 @@ msgstr "An uinneag ghnìomhach"
 msgid "The window which most recently had focus"
 msgstr "An uinneag air an robh fòcas turas mu dheireadh"
 
-#: gtk/gtkapplicationwindow.c:866
+#: gtk/gtkapplicationwindow.c:874
 msgid "Show a menubar"
 msgstr "Seall bàr clair-thaice"
 
-#: gtk/gtkapplicationwindow.c:867
+#: gtk/gtkapplicationwindow.c:875
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr ""
 "Tagh TRUE air a shon ma tha thu airson 's gun seall an uinneag bàr clàir-"
 "thaice aig barr na h-uinneige"
 
-#: gtk/gtkaspectframe.c:111 gtk/gtkwidget.c:1366
+#: gtk/gtkaspectframe.c:111 gtk/gtkwidget.c:1368
 msgid "Horizontal Alignment"
 msgstr "Co-thaobhadh còmhnard"
 
@@ -1552,7 +1550,7 @@ msgstr "Co-thaobhadh còmhnard"
 msgid "X alignment of the child"
 msgstr "Co-thaobhadh x a' phàiste"
 
-#: gtk/gtkaspectframe.c:118 gtk/gtkwidget.c:1381
+#: gtk/gtkaspectframe.c:118 gtk/gtkwidget.c:1383
 msgid "Vertical Alignment"
 msgstr "Co-thaobhadh inghearach"
 
@@ -1715,15 +1713,15 @@ msgstr ""
 "Ma tha seo TRUE, cha bhi am pàiste fo bhuaidh meudachadh aon-ghnèitheach"
 
 #: gtk/gtkbox.c:282 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:337
-#: gtk/gtkheaderbar.c:2018 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
+#: gtk/gtkheaderbar.c:2029 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
 msgid "Spacing"
 msgstr "Beàrnadh"
 
-#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:2019
+#: gtk/gtkbox.c:283 gtk/gtkheaderbar.c:2030
 msgid "The amount of space between children"
 msgstr "An uimhir de dh'àite eadar pàistean"
 
-#: gtk/gtkbox.c:290 gtk/gtkflowbox.c:3849
+#: gtk/gtkbox.c:290 gtk/gtkflowbox.c:3831
 msgid "Whether the children should all be the same size"
 msgstr "Co-dhiù am bi na pàistean air fad dhen aon mheud"
 
@@ -1886,7 +1884,7 @@ msgstr ""
 "Co-dhiù am bi buaidh air ceart-cheàrnachan an fhòcais aig roghainnean "
 "child_displacement_x/_y"
 
-#: gtk/gtkbutton.c:610 gtk/gtkentry.c:889 gtk/gtkentry.c:2061
+#: gtk/gtkbutton.c:610 gtk/gtkentry.c:889 gtk/gtkentry.c:2064
 msgid "Inner Border"
 msgstr "An t-iomall a-staigh"
 
@@ -2401,8 +2399,8 @@ msgstr "Co-thaobhadh y an teacsa"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Co-thaobhadh y an teacsa, eadar 0 (barr) gu 1 (bonn)."
 
-#: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1087
-#: gtk/gtkmodelbutton.c:1176 gtk/gtkprogressbar.c:264 gtk/gtkrange.c:444
+#: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1083
+#: gtk/gtkmodelbutton.c:1176 gtk/gtkprogressbar.c:264 gtk/gtkrange.c:441
 msgid "Inverted"
 msgstr "Ais-thionndaichte"
 
@@ -2410,7 +2408,7 @@ msgstr "Ais-thionndaichte"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Ais-thionndaich a' chomhair a dh'fhàsas bàr an adhartais 'ga ionnsaigh"
 
-#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:437 gtk/gtkscalebutton.c:215
+#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:434 gtk/gtkscalebutton.c:215
 #: gtk/gtkspinbutton.c:376
 msgid "Adjustment"
 msgstr "Socrachadh"
@@ -2427,7 +2425,7 @@ msgstr "An reat dìridh"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Reat an luathachaidh nuair a chumar sìos putan"
 
-#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:764 gtk/gtkspinbutton.c:392
+#: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:774 gtk/gtkspinbutton.c:392
 msgid "Digits"
 msgstr "Figearan"
 
@@ -2462,7 +2460,7 @@ msgstr "Markup"
 msgid "Marked up text to render"
 msgstr "An teacsa markup a tha ri reandaradh"
 
-#: gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:1480 gtk/gtklabel.c:808
+#: gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:1483 gtk/gtklabel.c:808
 msgid "Attributes"
 msgstr "Buadhan"
 
@@ -2523,11 +2521,11 @@ msgid "Foreground color as a GdkRGBA"
 msgstr "Dath a' bheulaibh mar GdkRGBA"
 
 #: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:851 gtk/gtktexttag.c:308
-#: gtk/gtktextview.c:820
+#: gtk/gtktextview.c:821
 msgid "Editable"
 msgstr "So-dheasachaidh"
 
-#: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:309 gtk/gtktextview.c:821
+#: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:309 gtk/gtktextview.c:822
 msgid "Whether the text can be modified by the user"
 msgstr "Co-dhiù an urrainn dhan chleachdaiche an teacsa atharrachadh"
 
@@ -2847,7 +2845,7 @@ msgstr "Staid neo-chunbhalach"
 msgid "The inconsistent state of the button"
 msgstr "Staid neo-chunbhalach a' phutain"
 
-#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3780
+#: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3785
 msgid "Activatable"
 msgstr "Gabhaidh a ghnìomhachadh"
 
@@ -3019,7 +3017,7 @@ msgstr "Dath RGBA"
 msgid "Color as RGBA"
 msgstr "Dath mar RGBA"
 
-#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3794
+#: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:904 gtk/gtklistbox.c:3799
 msgid "Selectable"
 msgstr "Gabhaidh a thaghadh"
 
@@ -3400,11 +3398,11 @@ msgstr ""
 "An t-iomall eadar an teacsa 's am frèam. Tar-àithnidh seo roghainn stoidhle "
 "an iomaill a-staigh"
 
-#: gtk/gtkentry.c:896 gtk/gtkentry.c:1568
+#: gtk/gtkentry.c:896 gtk/gtkentry.c:1571
 msgid "Invisible character"
 msgstr "Caractar do-fhaicsinneach"
 
-#: gtk/gtkentry.c:897 gtk/gtkentry.c:1569
+#: gtk/gtkentry.c:897 gtk/gtkentry.c:1572
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "An caractar a thèid a chleachdadh nuair a bhios susbaint nan innteartan 'gam "
@@ -3468,7 +3466,7 @@ msgstr ""
 "Dè seòrsa sgàil a thèid a tharraing timcheall air an innteart ma chaidh has-"
 "frame a shuidheachadh"
 
-#: gtk/gtkentry.c:1006 gtk/gtktextview.c:960
+#: gtk/gtkentry.c:1006 gtk/gtktextview.c:961
 msgid "Overwrite mode"
 msgstr "Modh tar-sgrìobhaidh"
 
@@ -3660,11 +3658,11 @@ msgstr "Markup a' ghliocais-sgrìn air a' phrìomh-ìomhaigheag"
 msgid "Secondary icon tooltip markup"
 msgstr "Markup a' ghliocais-sgrìn air an ìomhaigheag dhàrnach"
 
-#: gtk/gtkentry.c:1412 gtk/gtktextview.c:988
+#: gtk/gtkentry.c:1412 gtk/gtktextview.c:989
 msgid "IM module"
 msgstr "Modail IM"
 
-#: gtk/gtkentry.c:1413 gtk/gtktextview.c:989
+#: gtk/gtkentry.c:1413 gtk/gtktextview.c:990
 msgid "Which IM module should be used"
 msgstr "Dè am modail IM a thèid a chleachdadh"
 
@@ -3676,63 +3674,63 @@ msgstr "Coileanadh"
 msgid "The auxiliary completion object"
 msgstr "An t-oibseact coileanaidh taiceil"
 
-#: gtk/gtkentry.c:1447 gtk/gtkimcontext.c:331 gtk/gtktextview.c:1006
+#: gtk/gtkentry.c:1447 gtk/gtkimcontext.c:331 gtk/gtktextview.c:1007
 msgid "Purpose"
 msgstr "Adhbhar"
 
-#: gtk/gtkentry.c:1448 gtk/gtkimcontext.c:332 gtk/gtktextview.c:1007
+#: gtk/gtkentry.c:1448 gtk/gtkimcontext.c:332 gtk/gtktextview.c:1008
 msgid "Purpose of the text field"
 msgstr "Adhbhar raon an teacsa"
 
-#: gtk/gtkentry.c:1463 gtk/gtkimcontext.c:339 gtk/gtktextview.c:1024
+#: gtk/gtkentry.c:1463 gtk/gtkimcontext.c:339 gtk/gtktextview.c:1025
 msgid "hints"
 msgstr "Oidheaman"
 
-#: gtk/gtkentry.c:1464 gtk/gtkimcontext.c:340 gtk/gtktextview.c:1025
+#: gtk/gtkentry.c:1464 gtk/gtkimcontext.c:340 gtk/gtktextview.c:1026
 msgid "Hints for the text field behaviour"
 msgstr "Oidheaman airson giùlan raon an teacsa"
 
-#: gtk/gtkentry.c:1481 gtk/gtklabel.c:809
+#: gtk/gtkentry.c:1484 gtk/gtklabel.c:809
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Liosta de bhuadhan stoidhle a thèid a chur air teacsa na bileige"
 
-#: gtk/gtkentry.c:1495 gtk/gtkplacessidebar.c:4510 gtk/gtktextview.c:1041
+#: gtk/gtkentry.c:1498 gtk/gtkplacessidebar.c:4510 gtk/gtktextview.c:1042
 msgid "Populate all"
 msgstr "Lìon na h-uile le sluagh"
 
-#: gtk/gtkentry.c:1496 gtk/gtktextview.c:1042
+#: gtk/gtkentry.c:1499 gtk/gtktextview.c:1043
 msgid "Whether to emit ::populate-popup for touch popups"
 msgstr ""
 "Co-dhiù an dèid ::populate-popup fhoillseachadh airson priob-uinneagan "
 "suathaidh"
 
-#: gtk/gtkentry.c:1509 gtk/gtktexttag.c:578 gtk/gtktextview.c:936
+#: gtk/gtkentry.c:1512 gtk/gtktexttag.c:578 gtk/gtktextview.c:937
 msgid "Tabs"
 msgstr "Tabaichean"
 
-#: gtk/gtkentry.c:1510
+#: gtk/gtkentry.c:1513
 msgid "A list of tabstop locations to apply to the text of the entry"
 msgstr "Liosta de dh'ionadan taba-stada a thèid a chur air teacsa an innteirt"
 
-#: gtk/gtkentry.c:1529
+#: gtk/gtkentry.c:1532
 msgid "Icon Prelight"
 msgstr "Ro-shoillsich an ìomhaigheag"
 
-#: gtk/gtkentry.c:1530
+#: gtk/gtkentry.c:1533
 msgid "Whether activatable icons should prelight when hovered"
 msgstr ""
 "Co-dhiù an dèid ìomhaigheagan a ghabhas a chur an gnìomh a ro-shoillseachadh "
 "nuair a dh'fhanas os an cionn"
 
-#: gtk/gtkentry.c:1547
+#: gtk/gtkentry.c:1550
 msgid "Progress Border"
 msgstr "Iomall an adhartais"
 
-#: gtk/gtkentry.c:1548
+#: gtk/gtkentry.c:1551
 msgid "Border around the progress bar"
 msgstr "An t-iomall timcheall air bàr an adhartais"
 
-#: gtk/gtkentry.c:2062
+#: gtk/gtkentry.c:2065
 msgid "Border between text and frame."
 msgstr "An t-iomall eadar an teacsa agus am frèam"
 
@@ -3868,7 +3866,7 @@ msgstr ""
 msgid "Space to put between the label and the child"
 msgstr "An t-àite a thèid a chur eadar an leubail agus am pàiste"
 
-#: gtk/gtkexpander.c:347 gtk/gtkframe.c:257 gtk/gtktoolbutton.c:257
+#: gtk/gtkexpander.c:347 gtk/gtkframe.c:259 gtk/gtktoolbutton.c:257
 #: gtk/gtktoolitemgroup.c:1648
 msgid "Label widget"
 msgstr "Widget na leubail"
@@ -3943,7 +3941,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "A' chriathrag làithreach airson taghadh nam faidhlichean a chithear"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4483
-#: gtk/gtkplacesview.c:2176
+#: gtk/gtkplacesview.c:2220
 msgid "Local Only"
 msgstr "Feadhainn ionadail a-mhàin"
 
@@ -4050,12 +4048,12 @@ msgstr "Leubail an sguir dheth"
 msgid "The label on the cancel button"
 msgstr "An leubail air a' phutan \"Sguir dheth\""
 
-#: gtk/gtkfilechooserwidget.c:8460 gtk/gtkfilechooserwidget.c:8461
+#: gtk/gtkfilechooserwidget.c:8468 gtk/gtkfilechooserwidget.c:8469
 msgid "Search mode"
 msgstr "Modh an luirg"
 
-#: gtk/gtkfilechooserwidget.c:8467 gtk/gtkfilechooserwidget.c:8468
-#: gtk/gtkheaderbar.c:2004 gtk/gtkshortcutsshortcut.c:591
+#: gtk/gtkfilechooserwidget.c:8475 gtk/gtkfilechooserwidget.c:8476
+#: gtk/gtkheaderbar.c:2015 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Fo-thiotal"
 
@@ -4075,30 +4073,30 @@ msgstr "An t-ionad y"
 msgid "Y position of child widget"
 msgstr "Ionad y widget a' phàiste"
 
-#: gtk/gtkflowbox.c:3821 gtk/gtkiconview.c:408 gtk/gtklistbox.c:448
+#: gtk/gtkflowbox.c:3803 gtk/gtkiconview.c:408 gtk/gtklistbox.c:453
 #: gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Am modh taghaidh"
 
-#: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:409 gtk/gtklistbox.c:449
+#: gtk/gtkflowbox.c:3804 gtk/gtkiconview.c:409 gtk/gtklistbox.c:454
 msgid "The selection mode"
 msgstr "Am modh taghaidh"
 
-#: gtk/gtkflowbox.c:3835 gtk/gtkiconview.c:665 gtk/gtklistbox.c:456
+#: gtk/gtkflowbox.c:3817 gtk/gtkiconview.c:665 gtk/gtklistbox.c:461
 #: gtk/gtktreeview.c:1222
 msgid "Activate on Single Click"
 msgstr "Cuir an gnìomh le aon bhriogadh"
 
-#: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:666 gtk/gtklistbox.c:457
+#: gtk/gtkflowbox.c:3818 gtk/gtkiconview.c:666 gtk/gtklistbox.c:462
 #: gtk/gtktreeview.c:1223
 msgid "Activate row on a single click"
 msgstr "Cuir an ràgh an gnìomh le aon bhriogadh"
 
-#: gtk/gtkflowbox.c:3865
+#: gtk/gtkflowbox.c:3847
 msgid "Minimum Children Per Line"
 msgstr "Uiread as lugha de phàistean air gach loidhne"
 
-#: gtk/gtkflowbox.c:3866
+#: gtk/gtkflowbox.c:3848
 msgid ""
 "The minimum number of children to allocate consecutively in the given "
 "orientation."
@@ -4106,11 +4104,11 @@ msgstr ""
 "An àireamh as lugha de phàistean a thèid a chur às dèidh càch a chèile sa "
 "chomhair seo."
 
-#: gtk/gtkflowbox.c:3879
+#: gtk/gtkflowbox.c:3861
 msgid "Maximum Children Per Line"
 msgstr "Uiread as motha de phàistean air gach loidhne"
 
-#: gtk/gtkflowbox.c:3880
+#: gtk/gtkflowbox.c:3862
 msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
@@ -4118,19 +4116,19 @@ msgstr ""
 "An àireamh as motha de phàistean airson a thèid rum iarraidh gus an cur às "
 "dèidh càch a chèile sa chomhair seo."
 
-#: gtk/gtkflowbox.c:3892
+#: gtk/gtkflowbox.c:3874
 msgid "Vertical spacing"
 msgstr "Beàrnadh inghearach"
 
-#: gtk/gtkflowbox.c:3893
+#: gtk/gtkflowbox.c:3875
 msgid "The amount of vertical space between two children"
 msgstr "An uimhir de dh'àite inghearach eadar dà phàiste"
 
-#: gtk/gtkflowbox.c:3904
+#: gtk/gtkflowbox.c:3886
 msgid "Horizontal spacing"
 msgstr "Beàrnadh còmhnard"
 
-#: gtk/gtkflowbox.c:3905
+#: gtk/gtkflowbox.c:3887
 msgid "The amount of horizontal space between two children"
 msgstr "An uimhir de dh'àite chòmhnard eadar dà phàiste"
 
@@ -4191,35 +4189,35 @@ msgstr "Seall ro-shealladh na h-innteirt teacsa"
 msgid "Whether the preview text entry is shown or not"
 msgstr "Co-dhiù an dèid an innteart teacsa a ro-shealladh gus nach dèid"
 
-#: gtk/gtkframe.c:227
+#: gtk/gtkframe.c:229
 msgid "Text of the frame's label"
 msgstr "Teacsa leubail an fhrèam"
 
-#: gtk/gtkframe.c:233
+#: gtk/gtkframe.c:235
 msgid "Label xalign"
 msgstr "Xalign na leubail"
 
-#: gtk/gtkframe.c:234
+#: gtk/gtkframe.c:236
 msgid "The horizontal alignment of the label"
 msgstr "Co-thaobhadh còmhnard na leubail"
 
-#: gtk/gtkframe.c:241
+#: gtk/gtkframe.c:243
 msgid "Label yalign"
 msgstr "Yalign na leubail"
 
-#: gtk/gtkframe.c:242
+#: gtk/gtkframe.c:244
 msgid "The vertical alignment of the label"
 msgstr "Co-thaobhadh inghearach na leubail"
 
-#: gtk/gtkframe.c:249
+#: gtk/gtkframe.c:251
 msgid "Frame shadow"
 msgstr "Sgàil an fhrèama"
 
-#: gtk/gtkframe.c:250
+#: gtk/gtkframe.c:252
 msgid "Appearance of the frame border"
 msgstr "Dreach iomall an fhrèama"
 
-#: gtk/gtkframe.c:258
+#: gtk/gtkframe.c:260
 msgid "A widget to display in place of the usual frame label"
 msgstr "Widget a thèid a thaisbeanadh an àite leubail an fhrèama àbhaisteach"
 
@@ -4248,23 +4246,23 @@ msgstr ""
 msgid "Allowed orientations"
 msgstr "Comhairean ceadaichte"
 
-#: gtk/gtkgesturesingle.c:261
+#: gtk/gtkgesturesingle.c:262
 msgid "Handle only touch events"
 msgstr "Na làimhsich ach tachartasan suathaidh"
 
-#: gtk/gtkgesturesingle.c:262
+#: gtk/gtkgesturesingle.c:263
 msgid "Whether the gesture handles only touch events"
 msgstr "Co-dhiù nach làimhsich an gluasad ach tachartasan suathaidh"
 
-#: gtk/gtkgesturesingle.c:276 gtk/gtkgesturesingle.c:277
+#: gtk/gtkgesturesingle.c:277 gtk/gtkgesturesingle.c:278
 msgid "Whether the gesture is exclusive"
 msgstr "Co-dhiù a bheil an gluasad seo às-dùnach"
 
-#: gtk/gtkgesturesingle.c:290
+#: gtk/gtkgesturesingle.c:291
 msgid "Button number"
 msgstr "Àireamh a' phutain"
 
-#: gtk/gtkgesturesingle.c:291
+#: gtk/gtkgesturesingle.c:292
 msgid "Button number to listen to"
 msgstr "Àireamh a' phutain a thèid èisteachd ris"
 
@@ -4355,7 +4353,7 @@ msgstr "Leud"
 msgid "The number of columns that a child spans"
 msgstr "An àireamh de cholbhan a ruigeas pàiste"
 
-#: gtk/gtkgrid.c:1821 gtk/gtklayout.c:682 gtk/gtkshortcutsgroup.c:343
+#: gtk/gtkgrid.c:1821 gtk/gtklayout.c:682 gtk/gtkshortcutsgroup.c:362
 msgid "Height"
 msgstr "Àirde"
 
@@ -4363,52 +4361,52 @@ msgstr "Àirde"
 msgid "The number of rows that a child spans"
 msgstr "An àireamh de ràghan a ruigeas pàiste"
 
-#: gtk/gtkheaderbar.c:1998
+#: gtk/gtkheaderbar.c:2009
 msgid "The title to display"
 msgstr "An tiotal a nochdas"
 
-#: gtk/gtkheaderbar.c:2005
+#: gtk/gtkheaderbar.c:2016
 msgid "The subtitle to display"
 msgstr "Am fo-thiotal a nochdas"
 
-#: gtk/gtkheaderbar.c:2011
+#: gtk/gtkheaderbar.c:2022
 msgid "Custom Title"
 msgstr "Tiotal gnàthaichte"
 
-#: gtk/gtkheaderbar.c:2012
+#: gtk/gtkheaderbar.c:2023
 msgid "Custom title widget to display"
 msgstr "Tiotal gnàthaichte a widget a thèid a sehalltainn"
 
-#: gtk/gtkheaderbar.c:2036
+#: gtk/gtkheaderbar.c:2047
 msgid "Show decorations"
 msgstr "Seall na sgeadachaidhean"
 
-#: gtk/gtkheaderbar.c:2037
+#: gtk/gtkheaderbar.c:2048
 msgid "Whether to show window decorations"
 msgstr "Co-dhiù an dèid sgeadachaidhean uinneige a shealltainn gus nach dèid"
 
-#: gtk/gtkheaderbar.c:2055 gtk/gtksettings.c:1610
+#: gtk/gtkheaderbar.c:2066 gtk/gtksettings.c:1610
 msgid "Decoration Layout"
 msgstr "Co-dhealbhachd nan sgeadachaidhean"
 
-#: gtk/gtkheaderbar.c:2056 gtk/gtksettings.c:1611
+#: gtk/gtkheaderbar.c:2067 gtk/gtksettings.c:1611
 msgid "The layout for window decorations"
 msgstr "An co-dhealbhachd airson sgeadachaidhean uinneige"
 
-#: gtk/gtkheaderbar.c:2069
+#: gtk/gtkheaderbar.c:2080
 msgid "Decoration Layout Set"
 msgstr "Seata co-dhealbhachd nan sgeadachaidhean"
 
-#: gtk/gtkheaderbar.c:2070
+#: gtk/gtkheaderbar.c:2081
 msgid "Whether the decoration-layout property has been set"
 msgstr ""
 "Co-dhiù an deach roghainn co-dhealbhachd nan sgeadachaidhean a shuidheachadh"
 
-#: gtk/gtkheaderbar.c:2084
+#: gtk/gtkheaderbar.c:2095
 msgid "Has Subtitle"
 msgstr "Tha fo-thiotal aige"
 
-#: gtk/gtkheaderbar.c:2085
+#: gtk/gtkheaderbar.c:2096
 msgid "Whether to reserve space for a subtitle"
 msgstr "Co-dhiù an iarrar rum gu leòr airson fo-thiotal"
 
@@ -4636,7 +4634,7 @@ msgstr "An sgrìn far am bi an uinneag seo 'ga thaisbeanadh"
 msgid "The text of the label"
 msgstr "Teacsa na leubail"
 
-#: gtk/gtklabel.c:829 gtk/gtktexttag.c:416 gtk/gtktextview.c:837
+#: gtk/gtklabel.c:829 gtk/gtktexttag.c:416 gtk/gtktextview.c:838
 msgid "Justification"
 msgstr "Blocachadh"
 
@@ -4759,55 +4757,55 @@ msgstr "Leud na co-dhealbhachd"
 msgid "The height of the layout"
 msgstr "Àirde na co-dhealbhachd"
 
-#: gtk/gtklevelbar.c:1020
+#: gtk/gtklevelbar.c:1016
 msgid "Currently filled value level"
 msgstr "An luach làithreach a tha san leubail"
 
-#: gtk/gtklevelbar.c:1021
+#: gtk/gtklevelbar.c:1017
 msgid "Currently filled value level of the level bar"
 msgstr "An luach làithreach a tha ann am bàr na leubail"
 
-#: gtk/gtklevelbar.c:1035
+#: gtk/gtklevelbar.c:1031
 msgid "Minimum value level for the bar"
 msgstr "Luach as lugha na leibheil airson a' bhàr"
 
-#: gtk/gtklevelbar.c:1036
+#: gtk/gtklevelbar.c:1032
 msgid "Minimum value level that can be displayed by the bar"
 msgstr "Luach as lugha na leibheil a ghabhas a thaisbeanadh air a' bhàr"
 
-#: gtk/gtklevelbar.c:1050
+#: gtk/gtklevelbar.c:1046
 msgid "Maximum value level for the bar"
 msgstr "Luach as motha na leibheil airson a' bhàr"
 
-#: gtk/gtklevelbar.c:1051
+#: gtk/gtklevelbar.c:1047
 msgid "Maximum value level that can be displayed by the bar"
 msgstr "Luach as motha na leibheil a ghabhas a thaisbeanadh air a' bhàr"
 
-#: gtk/gtklevelbar.c:1071
+#: gtk/gtklevelbar.c:1067
 msgid "The mode of the value indicator"
 msgstr "Modh taisbeanair nan luachan"
 
-#: gtk/gtklevelbar.c:1072
+#: gtk/gtklevelbar.c:1068
 msgid "The mode of the value indicator displayed by the bar"
 msgstr "Modh taisbeanair nan luachan a chithear air a' bhàr"
 
-#: gtk/gtklevelbar.c:1088
+#: gtk/gtklevelbar.c:1084
 msgid "Invert the direction in which the level bar grows"
 msgstr "Ais-thionndaidh a' chomhair a dh'fhàsas bàr an leibheil rithe"
 
-#: gtk/gtklevelbar.c:1105
+#: gtk/gtklevelbar.c:1101
 msgid "Minimum height for filling blocks"
 msgstr "An àirde as lugha airson blocaichean lìonaidh"
 
-#: gtk/gtklevelbar.c:1106
+#: gtk/gtklevelbar.c:1102
 msgid "Minimum height for blocks that fill the bar"
 msgstr "An àirde as lugha airson blocaichean a lìonas am bàr"
 
-#: gtk/gtklevelbar.c:1122
+#: gtk/gtklevelbar.c:1118
 msgid "Minimum width for filling blocks"
 msgstr "An leud as lugha airson blocaichean lìonaidh"
 
-#: gtk/gtklevelbar.c:1123
+#: gtk/gtklevelbar.c:1119
 msgid "Minimum width for blocks that fill the bar"
 msgstr "An leud as lugha airson blocaichean a lìonas am bàr"
 
@@ -4827,11 +4825,11 @@ msgstr "Chaidh tadhal air"
 msgid "Whether this link has been visited."
 msgstr "Co-dhiù an deach tadhal air a' cheangal seo gus nach deach"
 
-#: gtk/gtklistbox.c:3781
+#: gtk/gtklistbox.c:3786
 msgid "Whether this row can be activated"
 msgstr "Co-dhiù an gabh an ràgh seo a ghnìomhachadh gus nach gabh"
 
-#: gtk/gtklistbox.c:3795
+#: gtk/gtklistbox.c:3800
 msgid "Whether this row can be selected"
 msgstr "Co-dhiù an gabh an ràgh seo a thaghadh gus nach gabh"
 
@@ -5065,26 +5063,23 @@ msgstr ""
 
 #: gtk/gtkmenu.c:806
 msgid "Rect anchor dx"
-msgstr ""
+msgstr "dx aig acair a' cheart-cheàrnaich"
 
 #: gtk/gtkmenu.c:807
-#, fuzzy
 #| msgid "Horizontal Offset"
 msgid "Rect anchor horizontal offset"
-msgstr "Offset còmhnard"
+msgstr "Frith-àireamh chòmhnard aig acair a' cheart-cheàrnaich"
 
 #: gtk/gtkmenu.c:833
 msgid "Rect anchor dy"
-msgstr ""
+msgstr "dy aig acair a' cheart-cheàrnaich"
 
 #: gtk/gtkmenu.c:834
-#, fuzzy
 #| msgid "Vertical Offset"
 msgid "Rect anchor vertical offset"
-msgstr "Offset inghearach"
+msgstr "Frith-àireamh inghearach aig acair a' cheart-cheàrnaich"
 
 #: gtk/gtkmenu.c:860
-#| msgid "Type hint"
 msgid "Menu type hint"
 msgstr "Oidheam air t-seòrsa a' chlàir-thaice"
 
@@ -5371,7 +5366,7 @@ msgstr "Tiotal a' chòmhraidh"
 msgid "The title of the file chooser dialog"
 msgstr "Tiotal a' chòmhraidh airson taghadh fhaidhlichean."
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1741 gtk/gtkwindow.c:783
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1744 gtk/gtkwindow.c:783
 msgid "Modal"
 msgstr "Mòdach"
 
@@ -5586,24 +5581,23 @@ msgstr "Thèid an taba gnìomhach a tharraing leis a' bheàrn seo aig a' bhonn"
 msgid "The orientation of the orientable"
 msgstr "Comhair an rud a ghabhas a thionndadh"
 
-#: gtk/gtkoverlay.c:764
+#: gtk/gtkoverlay.c:773
 msgid "Pass Through"
 msgstr "Thoir troimhe"
 
-#: gtk/gtkoverlay.c:764
+#: gtk/gtkoverlay.c:773
 msgid "Pass through input, does not affect main child"
 msgstr "Thoir an t-ion-chur troimhe, cha bhi buaidh air a' phrìomh-chlann"
 
-#: gtk/gtkoverlay.c:769
+#: gtk/gtkoverlay.c:786
 msgid "Index"
 msgstr "Inneacs"
 
-#: gtk/gtkoverlay.c:770
+#: gtk/gtkoverlay.c:787
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "Inneacs an tar-chòmhdachaidh sa phàrant, -1 airson a' phrìomh-chlann"
 
 #: gtk/gtkpadcontroller.c:373
-#| msgid "Action Group"
 msgid "Action group"
 msgstr "Buidheann ghnìomhan"
 
@@ -5612,14 +5606,13 @@ msgid "Action group to launch actions from"
 msgstr "Am buidheann ghnìomhan on a thèid gnìomhan a chur gu dol"
 
 #: gtk/gtkpadcontroller.c:379
-#, fuzzy
 #| msgid "Associated device"
 msgid "Pad device"
-msgstr "Uidheam co-cheangailte"
+msgstr "Uidheam pada"
 
 #: gtk/gtkpadcontroller.c:380
 msgid "Pad device to control"
-msgstr ""
+msgstr "Uidheam pada gus a stiùireadh"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -5695,11 +5688,11 @@ msgstr "Ionad ri taghadh"
 msgid "The location to highlight in the sidebar"
 msgstr "An t-ionad a thèid a shoillseachadh sa bhàr-taoibh"
 
-#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2197
+#: gtk/gtkplacessidebar.c:4452 gtk/gtkplacesview.c:2241
 msgid "Open Flags"
 msgstr "Brataich fosglaidh"
 
-#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2198
+#: gtk/gtkplacessidebar.c:4453 gtk/gtkplacesview.c:2242
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5750,7 +5743,7 @@ msgstr ""
 "Co-dhiù am bi ath-ghoirid gus ionad a chur a-steach a làimh am broinn a' "
 "bhàr-taoibh gus nach bi"
 
-#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2177
+#: gtk/gtkplacessidebar.c:4484 gtk/gtkplacesview.c:2221
 msgid "Whether the sidebar only includes local files"
 msgstr ""
 "Co-dhiù am bi faidhlichean ionadail a-mhàin ri làimh sa bhàr-taoibh gus nach "
@@ -5782,72 +5775,72 @@ msgstr ""
 "Co-dhiù an dèid ::populate-popup fhoillseachadh airson priob-uinneagan nach "
 "eil nan clàran-taice"
 
-#: gtk/gtkplacesview.c:2183
+#: gtk/gtkplacesview.c:2227
 msgid "Loading"
 msgstr "Luchdadh"
 
-#: gtk/gtkplacesview.c:2184
+#: gtk/gtkplacesview.c:2228
 msgid "Whether the view is loading locations"
 msgstr "Co-dhiù a bheil an sealladh a' luchdadh ionadan gus nach eil"
 
-#: gtk/gtkplacesview.c:2190
+#: gtk/gtkplacesview.c:2234
 msgid "Fetching networks"
 msgstr "Faighinn lìonraidhean"
 
-#: gtk/gtkplacesview.c:2191
+#: gtk/gtkplacesview.c:2235
 msgid "Whether the view is fetching networks"
 msgstr "Co-dhiù a bheil an sealladh a' faighinn lìonraidhean gus nach eil"
 
-#: gtk/gtkplacesviewrow.c:327
+#: gtk/gtkplacesviewrow.c:329
 msgid "Icon of the row"
 msgstr "Ìomhaigheag an ràigh"
 
-#: gtk/gtkplacesviewrow.c:328
+#: gtk/gtkplacesviewrow.c:330
 msgid "The icon representing the volume"
 msgstr "An ìomhaigheag a riochdaicheas an draibh"
 
-#: gtk/gtkplacesviewrow.c:334
+#: gtk/gtkplacesviewrow.c:336
 msgid "Name of the volume"
 msgstr "Ainm an iom-dhraibh"
 
-#: gtk/gtkplacesviewrow.c:335
+#: gtk/gtkplacesviewrow.c:337
 msgid "The name of the volume"
 msgstr "Ainm an iom-dhraibh"
 
-#: gtk/gtkplacesviewrow.c:341
+#: gtk/gtkplacesviewrow.c:343
 msgid "Path of the volume"
 msgstr "Slighe an iom-dhraibh"
 
-#: gtk/gtkplacesviewrow.c:342
+#: gtk/gtkplacesviewrow.c:344
 msgid "The path of the volume"
 msgstr "Slighe an iom-dhraibh"
 
-#: gtk/gtkplacesviewrow.c:348
+#: gtk/gtkplacesviewrow.c:350
 msgid "Volume represented by the row"
 msgstr "An t-iom-dhraibh a tha 'ga riochdachadh leis an ràgh"
 
-#: gtk/gtkplacesviewrow.c:349
+#: gtk/gtkplacesviewrow.c:351
 msgid "The volume represented by the row"
 msgstr "An t-iom-dhraibh a tha 'ga riochdachadh leis an ràgh"
 
-#: gtk/gtkplacesviewrow.c:355
+#: gtk/gtkplacesviewrow.c:357
 msgid "Mount represented by the row"
 msgstr "Am munntachadh a tha 'ga riochdachadh leis an ràgh"
 
-#: gtk/gtkplacesviewrow.c:356
+#: gtk/gtkplacesviewrow.c:358
 msgid "The mount point represented by the row, if any"
 msgstr ""
 "A' phuing munntachaidh a tha 'ga riochdachadh leis an ràgh ma tha gin ann"
 
-#: gtk/gtkplacesviewrow.c:362
+#: gtk/gtkplacesviewrow.c:364
 msgid "File represented by the row"
 msgstr "Am faidhle a tha 'ga riochdachadh leis an ràgh"
 
-#: gtk/gtkplacesviewrow.c:363
+#: gtk/gtkplacesviewrow.c:365
 msgid "The file represented by the row, if any"
 msgstr "Am faidhle a tha 'ga riochdachadh leis an ràgh ma tha gin ann"
 
-#: gtk/gtkplacesviewrow.c:369 gtk/gtkplacesviewrow.c:370
+#: gtk/gtkplacesviewrow.c:371 gtk/gtkplacesviewrow.c:372
 msgid "Whether the row represents a network location"
 msgstr "Co-dhiù an riochdaich an ràgh ionad lìonraidh gus nach riochdaich"
 
@@ -5863,43 +5856,43 @@ msgstr "Uinneag na socaide"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Uinneag na socaide a tha am plugan leabaichte ann"
 
-#: gtk/gtkpopover.c:1698
+#: gtk/gtkpopover.c:1701
 msgid "Relative to"
 msgstr "Dàimheach ri"
 
-#: gtk/gtkpopover.c:1699
+#: gtk/gtkpopover.c:1702
 msgid "Widget the bubble window points to"
 msgstr "A' widget a thomhas uinneag a' bhuilgein ris"
 
-#: gtk/gtkpopover.c:1712
+#: gtk/gtkpopover.c:1715
 msgid "Pointing to"
 msgstr "A' tomhadh ri"
 
-#: gtk/gtkpopover.c:1713
+#: gtk/gtkpopover.c:1716
 msgid "Rectangle the bubble window points to"
 msgstr "An ceart-cheàrnachan a thomhas uinneag a' bhuilgein ris"
 
-#: gtk/gtkpopover.c:1727
+#: gtk/gtkpopover.c:1730
 msgid "Position to place the bubble window"
 msgstr "An t-ionad far an dèid uinneag a' bhuilgein a chur"
 
-#: gtk/gtkpopover.c:1742
+#: gtk/gtkpopover.c:1745
 msgid "Whether the popover is modal"
 msgstr "Co-dhiù a bheil a' popover mòdach gus nach eil"
 
-#: gtk/gtkpopover.c:1755
+#: gtk/gtkpopover.c:1758
 msgid "Transitions enabled"
 msgstr "Tar-mhùthaidhean an comas"
 
-#: gtk/gtkpopover.c:1756
+#: gtk/gtkpopover.c:1759
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Co-dhiù an dèid tar-mhùthaidhean a shealltainn gus nach dèid"
 
-#: gtk/gtkpopover.c:1769
+#: gtk/gtkpopover.c:1772
 msgid "Constraint"
 msgstr "Cuingeachadh"
 
-#: gtk/gtkpopover.c:1770
+#: gtk/gtkpopover.c:1773
 msgid "Constraint for the popover position"
 msgstr "Cuingeachadh airson ionad a' popover"
 
@@ -6325,21 +6318,21 @@ msgstr "Ball rèidio gnìomhach a' bhuidhinn aig a bheil a' widget seo."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Putan inneal rèidio a' bhuidhinn aig a bheil am putan seo."
 
-#: gtk/gtkrange.c:438
+#: gtk/gtkrange.c:435
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "An GtkAdjustment sa bheil an luach làithreach dhen oibseact rainse seo"
 
-#: gtk/gtkrange.c:445
+#: gtk/gtkrange.c:442
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Gluasadan bun os cionn sleamhnachan na comhair a chuireas am meud luach na "
 "rainse"
 
-#: gtk/gtkrange.c:451
+#: gtk/gtkrange.c:448
 msgid "Lower stepper sensitivity"
 msgstr "Mothalachd ìochdarach a' cheumadair"
 
-#: gtk/gtkrange.c:452
+#: gtk/gtkrange.c:449
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -6347,11 +6340,11 @@ msgstr ""
 "Poileasaidh mothachadh a' cheumadair a thomhas ri taobh ìochdarach an "
 "rèiteachaidh"
 
-#: gtk/gtkrange.c:459
+#: gtk/gtkrange.c:456
 msgid "Upper stepper sensitivity"
 msgstr "Mothalachd uachdarach a' cheumadair"
 
-#: gtk/gtkrange.c:460
+#: gtk/gtkrange.c:457
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -6359,101 +6352,101 @@ msgstr ""
 "Poileasaidh mothachadh a' cheumadair a thomhas ri taobh uachdarach an "
 "rèiteachaidh"
 
-#: gtk/gtkrange.c:476
+#: gtk/gtkrange.c:473
 msgid "Show Fill Level"
 msgstr "Seall ìre an lìonaidh"
 
-#: gtk/gtkrange.c:477
+#: gtk/gtkrange.c:474
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr ""
 "Co-dhiù am faicear taisbeanair grafaigeach ìre an lìonaidh air an amar."
 
-#: gtk/gtkrange.c:492
+#: gtk/gtkrange.c:489
 msgid "Restrict to Fill Level"
 msgstr "Cuingich ri leibheil an lìonaidh"
 
-#: gtk/gtkrange.c:493
+#: gtk/gtkrange.c:490
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr ""
 "Co-dhiù an dèid a' chrìoch uachdarach a chuingeachadh ri leibheil an "
 "lìonaidh."
 
-#: gtk/gtkrange.c:507
+#: gtk/gtkrange.c:504
 msgid "Fill Level"
 msgstr "Leibheil an lìonaidh"
 
-#: gtk/gtkrange.c:508
+#: gtk/gtkrange.c:505
 msgid "The fill level."
 msgstr "Leibheil an lìonaidh."
 
-#: gtk/gtkrange.c:523
+#: gtk/gtkrange.c:520
 msgid "Round Digits"
 msgstr "Figearan cruinneachaidh"
 
-#: gtk/gtkrange.c:524
+#: gtk/gtkrange.c:521
 msgid "The number of digits to round the value to."
 msgstr "Co mheud figearan a thèid an luach a chruinneachaidh ris."
 
-#: gtk/gtkrange.c:541 gtk/gtkswitch.c:947
+#: gtk/gtkrange.c:538 gtk/gtkswitch.c:947
 msgid "Slider Width"
 msgstr "Leud an t-sleamhnachain"
 
-#: gtk/gtkrange.c:542
+#: gtk/gtkrange.c:539
 msgid "Width of scrollbar or scale thumb"
 msgstr "Leud a' bhàr-sgrolaidh no sgèile na dealbhaige"
 
-#: gtk/gtkrange.c:557
+#: gtk/gtkrange.c:554
 msgid "Trough Border"
 msgstr "Iomall an amair"
 
-#: gtk/gtkrange.c:558
+#: gtk/gtkrange.c:555
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Am beàrnadh eadar na dealbhagan/ceumadairean agus beibheil a-muigh an amair"
 
-#: gtk/gtkrange.c:573
+#: gtk/gtkrange.c:570
 msgid "Stepper Size"
 msgstr "Meud a' cheumadair"
 
-#: gtk/gtkrange.c:574
+#: gtk/gtkrange.c:571
 msgid "Length of step buttons at ends"
 msgstr "Faid nam putain ceumnachaidh aig an dà dheireadh"
 
-#: gtk/gtkrange.c:590
+#: gtk/gtkrange.c:587
 msgid "Stepper Spacing"
 msgstr "Beàrnadh a' cheumadair"
 
-#: gtk/gtkrange.c:591
+#: gtk/gtkrange.c:588
 msgid "Spacing between step buttons and thumb"
 msgstr "Am beàrnadh eadar na putanan ceumnachaidh agus na dealbhagan"
 
-#: gtk/gtkrange.c:606
+#: gtk/gtkrange.c:603
 msgid "Arrow X Displacement"
 msgstr "Fuadachadh x na saighde"
 
-#: gtk/gtkrange.c:607
+#: gtk/gtkrange.c:604
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Dè cho fhad ann an comhair x a thèid an t-saighead a ghluasad nuair a bhios "
 "am putan 'ga bhrùthadh"
 
-#: gtk/gtkrange.c:622
+#: gtk/gtkrange.c:619
 msgid "Arrow Y Displacement"
 msgstr "Fuadachadh y na saighde"
 
-#: gtk/gtkrange.c:623
+#: gtk/gtkrange.c:620
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Dè cho fhad ann an comhair y a thèid an t-saighead a ghluasad nuair a bhios "
 "am putan 'ga bhrùthadh"
 
-#: gtk/gtkrange.c:642
+#: gtk/gtkrange.c:639
 msgid "Trough Under Steppers"
 msgstr "An t-amar fo na ceumadairean"
 
-#: gtk/gtkrange.c:643
+#: gtk/gtkrange.c:640
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -6461,11 +6454,11 @@ msgstr ""
 "Co-dhiù an dèid an t-amar a tharraing airson làn fhaid na rainse no an dèid "
 "na ceumadairean agus am beàrnadh fhàgail às"
 
-#: gtk/gtkrange.c:659
+#: gtk/gtkrange.c:656
 msgid "Arrow scaling"
 msgstr "Sgèileadh nan saighdean"
 
-#: gtk/gtkrange.c:660
+#: gtk/gtkrange.c:657
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Sgèileadh nan saighdean a-rèir meud nam putanan-sgrolaidh"
 
@@ -6544,13 +6537,13 @@ msgstr "Òrdugh seòrsachaidh nan nithean a chithear"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "A' chriathrag làithreach gus na goireasan a chithear a thaghadh"
 
-#: gtk/gtkrecentmanager.c:284
+#: gtk/gtkrecentmanager.c:290
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 "An t-slighe shlàn gun fhaidhle a thèid a chleachdadh gus an liosta a stòradh "
 "agus a leughadh"
 
-#: gtk/gtkrecentmanager.c:299
+#: gtk/gtkrecentmanager.c:305
 msgid "The size of the recently used resources list"
 msgstr "Meud liosta nan goireasan a chaidh a chleachdadh o chionn ghoirid"
 
@@ -6610,49 +6603,52 @@ msgstr "Ìomhaigheagan"
 msgid "List of icon names"
 msgstr "Liosta ainmean nan ìomhaigheagan"
 
-#: gtk/gtkscale.c:765
-msgid "The number of decimal places that are displayed in the value"
-msgstr "Uiread nan ionadan deicheach a thèid a shealltainn san luach"
+#: gtk/gtkscale.c:775
+#| msgid "The number of decimal places that are displayed in the value"
+msgid "The number of decimal places to which the value is rounded"
+msgstr ""
+"Uiread nan ionadan deicheach a thèid a shealltainn nuair chaidh an luach a "
+"chuairteachadh"
 
-#: gtk/gtkscale.c:772
+#: gtk/gtkscale.c:782
 msgid "Draw Value"
 msgstr "Nochd an luach"
 
-#: gtk/gtkscale.c:773
+#: gtk/gtkscale.c:783
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Co-dhiù an dèid an luach làithreach a shealltainn mar shreang ri taobh an t-"
 "sleamhnachain"
 
-#: gtk/gtkscale.c:779
+#: gtk/gtkscale.c:789
 msgid "Has Origin"
 msgstr "Tha tùs aige"
 
-#: gtk/gtkscale.c:780
+#: gtk/gtkscale.c:790
 msgid "Whether the scale has an origin"
 msgstr "Co-dhiù a bheil tùs aig an sgèile"
 
-#: gtk/gtkscale.c:786
+#: gtk/gtkscale.c:796
 msgid "Value Position"
 msgstr "Ionad an luach"
 
-#: gtk/gtkscale.c:787
+#: gtk/gtkscale.c:797
 msgid "The position in which the current value is displayed"
 msgstr "An t-àite far an dèid an luach làithreach a shealltainn"
 
-#: gtk/gtkscale.c:804
+#: gtk/gtkscale.c:814
 msgid "Slider Length"
 msgstr "Faid an t-sleamhnachain"
 
-#: gtk/gtkscale.c:805
+#: gtk/gtkscale.c:815
 msgid "Length of scale's slider"
 msgstr "Faid sleamhnachan na sgèile"
 
-#: gtk/gtkscale.c:819
+#: gtk/gtkscale.c:829
 msgid "Value spacing"
 msgstr "Beàrnadh nan luachan"
 
-#: gtk/gtkscale.c:820
+#: gtk/gtkscale.c:830
 msgid "Space between value text and the slider/trough area"
 msgstr "SpAn t-àite eadar teacsa an luach agus raon an t-sleamhnachain/amair"
 
@@ -6835,25 +6831,19 @@ msgid "Overlay scrolling mode"
 msgstr "Modh sgroladh tar-mhùthaidh"
 
 #: gtk/gtkscrolledwindow.c:727
-#| msgid "Minimum Content Width"
 msgid "Maximum Content Width"
 msgstr "Leud as motha na susbaint"
 
 #: gtk/gtkscrolledwindow.c:728
-#| msgid ""
-#| "The minimum width that the scrolled window will allocate to its content"
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "An leud as motha a riaraicheas an uinneag sgrolaichte dhan t-susbaint aice"
 
 #: gtk/gtkscrolledwindow.c:741
-#| msgid "Minimum Content Height"
 msgid "Maximum Content Height"
 msgstr "Àirde as motha na susbaint"
 
 #: gtk/gtkscrolledwindow.c:742
-#| msgid ""
-#| "The minimum height that the scrolled window will allocate to its content"
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr ""
@@ -6861,13 +6851,12 @@ msgstr ""
 
 #: gtk/gtkscrolledwindow.c:759 gtk/gtkscrolledwindow.c:760
 msgid "Propagate Natural Width"
-msgstr ""
+msgstr "Sìolaich an leud nàdarra"
 
 #: gtk/gtkscrolledwindow.c:777 gtk/gtkscrolledwindow.c:778
-#, fuzzy
 #| msgid "Separator Height"
 msgid "Propagate Natural Height"
-msgstr "Àirde an sgaradair"
+msgstr "Sìolaich an àirde nàdarra"
 
 #: gtk/gtksearchbar.c:405
 msgid "Search Mode Enabled"
@@ -7671,16 +7660,16 @@ msgstr "Luathaichear"
 msgid "Disabled text"
 msgstr "Teacsa à comas"
 
-#: gtk/gtkshortcutsgroup.c:303
+#: gtk/gtkshortcutsgroup.c:322
 msgid "View"
 msgstr "Sealladh"
 
-#: gtk/gtkshortcutsgroup.c:316 gtk/gtkshortcutsgroup.c:317
+#: gtk/gtkshortcutsgroup.c:335 gtk/gtkshortcutsgroup.c:336
 #: gtk/gtkshortcutsshortcut.c:617 gtk/gtkshortcutsshortcut.c:618
 msgid "Accelerator Size Group"
 msgstr "Buidheann meud luathaichearan"
 
-#: gtk/gtkshortcutsgroup.c:330 gtk/gtkshortcutsgroup.c:331
+#: gtk/gtkshortcutsgroup.c:349 gtk/gtkshortcutsgroup.c:350
 #: gtk/gtkshortcutsshortcut.c:631 gtk/gtkshortcutsshortcut.c:632
 msgid "Title Size Group"
 msgstr "Buidheann meud tiotail"
@@ -7746,12 +7735,10 @@ msgid "The type of shortcut that is represented"
 msgstr "An seòrsa dhe dh'ath-ghoirid a tha 'ga riochdachadh"
 
 #: gtk/gtkshortcutsshortcut.c:677
-#| msgid "Action name"
 msgid "Action Name"
 msgstr "Ainm a' ghnìomha"
 
 #: gtk/gtkshortcutsshortcut.c:678
-#| msgid "The name of the selected font"
 msgid "The name of the action"
 msgstr "Ainm a' ghnìomha"
 
@@ -8043,7 +8030,7 @@ msgstr ""
 "Liosta nan targaidean a bheir am bufair seo taic ris airson cur ann susbaint "
 "an stòr-bhùird agus targaidean DND"
 
-#: gtk/gtktexthandle.c:725 gtk/gtktexthandle.c:726 gtk/gtkwidget.c:1114
+#: gtk/gtktexthandle.c:721 gtk/gtktexthandle.c:722 gtk/gtkwidget.c:1116
 msgid "Parent widget"
 msgstr "A' widget pàraint"
 
@@ -8128,7 +8115,7 @@ msgstr ""
 "a. agus mholamaid e mar sin. Ro-shocraich Pango cuid a sgèilean mar "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:417 gtk/gtktextview.c:838
+#: gtk/gtktexttag.c:417 gtk/gtktextview.c:839
 msgid "Left, right, or center justification"
 msgstr "Blocachadh clì, deas ris a' mheadhan"
 
@@ -8145,7 +8132,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Am marghan clì"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:859
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:860
 msgid "Width of the left margin in pixels"
 msgstr "Leud a' mharghain chlì ann am piogsailean"
 
@@ -8153,15 +8140,15 @@ msgstr "Leud a' mharghain chlì ann am piogsailean"
 msgid "Right margin"
 msgstr "Am marghan deas"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:879
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:880
 msgid "Width of the right margin in pixels"
 msgstr "Leud a' mharghain dheas ann am piogsailean"
 
-#: gtk/gtktexttag.c:464 gtk/gtktextview.c:928
+#: gtk/gtktexttag.c:464 gtk/gtktextview.c:929
 msgid "Indent"
 msgstr "Eag"
 
-#: gtk/gtktexttag.c:465 gtk/gtktextview.c:929
+#: gtk/gtktexttag.c:465 gtk/gtktextview.c:930
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Meud eag a' pharagraif, ann am piogsailean"
 
@@ -8177,7 +8164,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Piogsailean os cionn nan loidhnichean"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:797
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:798
 msgid "Pixels of blank space above paragraphs"
 msgstr "Piogsailean de dh'àite bàn os cionn pharagrafan"
 
@@ -8185,7 +8172,7 @@ msgstr "Piogsailean de dh'àite bàn os cionn pharagrafan"
 msgid "Pixels below lines"
 msgstr "Piogsailean fo na loidhnichean"
 
-#: gtk/gtktexttag.c:496 gtk/gtktextview.c:805
+#: gtk/gtktexttag.c:496 gtk/gtktextview.c:806
 msgid "Pixels of blank space below paragraphs"
 msgstr "Piogsailean a dh'àite bàn fo pharagrafan"
 
@@ -8193,7 +8180,7 @@ msgstr "Piogsailean a dh'àite bàn fo pharagrafan"
 msgid "Pixels inside wrap"
 msgstr "Piogsailean am broinn a' phasgaidh"
 
-#: gtk/gtktexttag.c:506 gtk/gtktextview.c:813
+#: gtk/gtktexttag.c:506 gtk/gtktextview.c:814
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Piogsailean a dh'àite bàn eadar loidhnichean paisgte ann am paragraf"
 
@@ -8213,14 +8200,14 @@ msgstr "RGBA na loidhne troimhe"
 msgid "Color of strikethrough for this text"
 msgstr "Dath na loidhne tron teacsa seo"
 
-#: gtk/gtktexttag.c:569 gtk/gtktextview.c:829
+#: gtk/gtktexttag.c:569 gtk/gtktextview.c:830
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Co-dhiù am bi casg air pasgadh loidhnichean an-còmhnaidh aig crìochan "
 "fhaclan no iomallan charactaran"
 
-#: gtk/gtktexttag.c:579 gtk/gtktextview.c:937
+#: gtk/gtktexttag.c:579 gtk/gtktextview.c:938
 msgid "Custom tabs for this text"
 msgstr "Yabaichean gnàthaichte airson an teacsa seo"
 
@@ -8424,89 +8411,89 @@ msgstr "Suidhich gleusan a' chrutha-chlò"
 msgid "Whether this tag affects font features"
 msgstr "Co-dhiù am bi buaidh aig an taga seo air gleusan a' chrutha-chlò"
 
-#: gtk/gtktextview.c:796
+#: gtk/gtktextview.c:797
 msgid "Pixels Above Lines"
 msgstr "Piogsailean os cionn loidhnichean"
 
-#: gtk/gtktextview.c:804
+#: gtk/gtktextview.c:805
 msgid "Pixels Below Lines"
 msgstr "Piogsailean fo loidhnichean"
 
-#: gtk/gtktextview.c:812
+#: gtk/gtktextview.c:813
 msgid "Pixels Inside Wrap"
 msgstr "Piogsailean am broinn a' phasgaidh"
 
-#: gtk/gtktextview.c:828
+#: gtk/gtktextview.c:829
 msgid "Wrap Mode"
 msgstr "Am modh pasgaidh"
 
-#: gtk/gtktextview.c:858
+#: gtk/gtktextview.c:859
 msgid "Left Margin"
 msgstr "Am marghan clì"
 
-#: gtk/gtktextview.c:878
+#: gtk/gtktextview.c:879
 msgid "Right Margin"
 msgstr "A marghan deas"
 
-#: gtk/gtktextview.c:899
+#: gtk/gtktextview.c:900
 msgid "Top Margin"
 msgstr "Am marghan aig a' bharr"
 
-#: gtk/gtktextview.c:900
+#: gtk/gtktextview.c:901
 msgid "Height of the top margin in pixels"
 msgstr "Àirde a' mharghain aig a' bharr ann am piogsailean"
 
-#: gtk/gtktextview.c:920
+#: gtk/gtktextview.c:921
 msgid "Bottom Margin"
 msgstr "Am marghan aig a' bhonn"
 
-#: gtk/gtktextview.c:921
+#: gtk/gtktextview.c:922
 msgid "Height of the bottom margin in pixels"
 msgstr "Àirde a' mharghain aig a' bhonn ann am piogsailean"
 
-#: gtk/gtktextview.c:944
+#: gtk/gtktextview.c:945
 msgid "Cursor Visible"
 msgstr "Cùrsair ri fhaicinn"
 
-#: gtk/gtktextview.c:945
+#: gtk/gtktextview.c:946
 msgid "If the insertion cursor is shown"
 msgstr "Co-dhiù am faicear cùrsair an ion-chuir"
 
-#: gtk/gtktextview.c:952
+#: gtk/gtktextview.c:953
 msgid "Buffer"
 msgstr "Bufair"
 
-#: gtk/gtktextview.c:953
+#: gtk/gtktextview.c:954
 msgid "The buffer which is displayed"
 msgstr "Am bufair a thèid a thaisbeanadh"
 
-#: gtk/gtktextview.c:961
+#: gtk/gtktextview.c:962
 msgid "Whether entered text overwrites existing contents"
 msgstr ""
 "Co-dhiù an dèid teacsa a chuirear a-steach a sgrìobhadh thairis air na tha "
 "ann"
 
-#: gtk/gtktextview.c:968
+#: gtk/gtktextview.c:969
 msgid "Accepts tab"
 msgstr "Gabhaidh e ri taba"
 
-#: gtk/gtktextview.c:969
+#: gtk/gtktextview.c:970
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Co-dhiù an dèid taba a chuir a-steach nuair a bhrùthar Tab"
 
-#: gtk/gtktextview.c:1057
+#: gtk/gtktextview.c:1058
 msgid "Monospace"
 msgstr "Clò aon-leud"
 
-#: gtk/gtktextview.c:1058
+#: gtk/gtktextview.c:1059
 msgid "Whether to use a monospace font"
 msgstr "Co-dhiù an tèid cruth-clò aon-leud a chleachdadh gus nach tèid"
 
-#: gtk/gtktextview.c:1076
+#: gtk/gtktextview.c:1077
 msgid "Error underline color"
 msgstr "Dath fo-loidhne nam mearachdan"
 
-#: gtk/gtktextview.c:1077
+#: gtk/gtktextview.c:1078
 msgid "Color with which to draw error-indication underlines"
 msgstr "An dath a bhios air na fo-loidhnichean a chomharraicheas mearachdan"
 
@@ -8779,24 +8766,24 @@ msgid "Wrap width for laying out items in a grid"
 msgstr "Leud a' phasgaidh airson sgaoileadh nithean ann an griod"
 
 #: gtk/gtktreemodelfilter.c:532
-#, fuzzy
 #| msgid "The selection mode"
 msgid "The child model"
-msgstr "Am modh taghaidh"
+msgstr "Modal na cloinne"
 
 #: gtk/gtktreemodelfilter.c:533
-#, fuzzy
 #| msgid "The model for the tree view"
 msgid "The model for the filtermodel to filter"
-msgstr "Am modail airson sealladh nan craobhan"
+msgstr "Am modal a chleachdas am modal criathraidh a chum criathraidh"
 
 #: gtk/gtktreemodelfilter.c:540
 msgid "The virtual root"
-msgstr ""
+msgstr "Am freumh biortail"
 
 #: gtk/gtktreemodelfilter.c:541
 msgid "The virtual root (relative to the child model) for this filtermodel"
 msgstr ""
+"Am freumh biortail (dàimheach ri modal na cloinne) airson a' mhodail "
+"criathraidh seo"
 
 #: gtk/gtktreemodelsort.c:484
 msgid "TreeModelSort Model"
@@ -9158,24 +9145,24 @@ msgid "Whether to use symbolic icons"
 msgstr ""
 "Co-dhiù an dèid na h-ìomhaigheagan samhlachail a chleachdadh gus nach dèid"
 
-#: gtk/gtkwidget.c:1107
+#: gtk/gtkwidget.c:1109
 msgid "Widget name"
 msgstr "Ainm a' widget"
 
-#: gtk/gtkwidget.c:1108
+#: gtk/gtkwidget.c:1110
 msgid "The name of the widget"
 msgstr "Ainm a' widget"
 
-#: gtk/gtkwidget.c:1115
+#: gtk/gtkwidget.c:1117
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 "Widget pàraint a' widget seo. Feumaidh seo a bhith 'na shoitheach widget"
 
-#: gtk/gtkwidget.c:1121
+#: gtk/gtkwidget.c:1123
 msgid "Width request"
 msgstr "Iarrtas leud"
 
-#: gtk/gtkwidget.c:1122
+#: gtk/gtkwidget.c:1124
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -9183,11 +9170,11 @@ msgstr ""
 "Tar-àithne airson iarratas leud a' widget no -1 ma bu chòir dha iarrtas "
 "nàdarra a chleachdadh"
 
-#: gtk/gtkwidget.c:1129
+#: gtk/gtkwidget.c:1131
 msgid "Height request"
 msgstr "Iarrtas àirde"
 
-#: gtk/gtkwidget.c:1130
+#: gtk/gtkwidget.c:1132
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -9195,96 +9182,96 @@ msgstr ""
 "Tar-àithne airson iarratas àirde a' widget no -1 ma bu chòir dha iarrtas "
 "nàdarra a chleachdadh"
 
-#: gtk/gtkwidget.c:1138
+#: gtk/gtkwidget.c:1140
 msgid "Whether the widget is visible"
 msgstr "Co-dhiù am faicear a' widget"
 
-#: gtk/gtkwidget.c:1145
+#: gtk/gtkwidget.c:1147
 msgid "Whether the widget responds to input"
 msgstr "Co-dhiù am freagair a' widget ri ion-chur"
 
-#: gtk/gtkwidget.c:1151
+#: gtk/gtkwidget.c:1153
 msgid "Application paintable"
 msgstr "Comas peantaidh aig an aplacaid"
 
-#: gtk/gtkwidget.c:1152
+#: gtk/gtkwidget.c:1154
 msgid "Whether the application will paint directly on the widget"
 msgstr "Co-dhiù am peant an aplacaid air a' widget fhèin"
 
-#: gtk/gtkwidget.c:1158
+#: gtk/gtkwidget.c:1160
 msgid "Can focus"
 msgstr "Gabhaidh fòcas a dhèanamh air"
 
-#: gtk/gtkwidget.c:1159
+#: gtk/gtkwidget.c:1161
 msgid "Whether the widget can accept the input focus"
 msgstr "Co-dhiù an gabh a' widget ri fòcas ion-chuir"
 
-#: gtk/gtkwidget.c:1165
+#: gtk/gtkwidget.c:1167
 msgid "Has focus"
 msgstr "Tha fòcas air"
 
-#: gtk/gtkwidget.c:1166
+#: gtk/gtkwidget.c:1168
 msgid "Whether the widget has the input focus"
 msgstr "Co-dhiù a bheil fòcas ion-chuir air a' widget"
 
-#: gtk/gtkwidget.c:1172
+#: gtk/gtkwidget.c:1174
 msgid "Is focus"
 msgstr "Tha e 'na fhòcas"
 
-#: gtk/gtkwidget.c:1173
+#: gtk/gtkwidget.c:1175
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 "Co-dhiù a bheil a' widget 'na fhòcas widget am broinn na leibheil as àirde"
 
-#: gtk/gtkwidget.c:1191
+#: gtk/gtkwidget.c:1193
 msgid "Focus on click"
 msgstr "Fòcas air a' bhriogadh"
 
-#: gtk/gtkwidget.c:1192
+#: gtk/gtkwidget.c:1194
 msgid "Whether the widget should grab focus when it is clicked with the mouse"
 msgstr ""
 "Co-dhiù am bu chòir an widget am fòcas a ghlacadh nuair a bhriogar air leis "
 "an luchag"
 
-#: gtk/gtkwidget.c:1198
+#: gtk/gtkwidget.c:1200
 msgid "Can default"
 msgstr "Faodaidh e a bhith 'na bun-roghainn"
 
-#: gtk/gtkwidget.c:1199
+#: gtk/gtkwidget.c:1201
 msgid "Whether the widget can be the default widget"
 msgstr "Co-dhiù am faod a' widget a bhith 'na widget bunaiteach"
 
-#: gtk/gtkwidget.c:1205
+#: gtk/gtkwidget.c:1207
 msgid "Has default"
 msgstr "Tha e 'na bhun-roghainn"
 
-#: gtk/gtkwidget.c:1206
+#: gtk/gtkwidget.c:1208
 msgid "Whether the widget is the default widget"
 msgstr "Co-dhiù a' bheil a' widget 'na widget bunaiteach gus nach eil"
 
-#: gtk/gtkwidget.c:1212
+#: gtk/gtkwidget.c:1214
 msgid "Receives default"
 msgstr "Nithear an gnìomh bunaiteach air"
 
-#: gtk/gtkwidget.c:1213
+#: gtk/gtkwidget.c:1215
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Ma tha seo TRUE, thèid an gnìomh bunaiteach a dhèanamh air a' widget nuair a "
 "chuirear fòcas air"
 
-#: gtk/gtkwidget.c:1219
+#: gtk/gtkwidget.c:1221
 msgid "Composite child"
 msgstr "Pàiste co-dhèanta"
 
-#: gtk/gtkwidget.c:1220
+#: gtk/gtkwidget.c:1222
 msgid "Whether the widget is part of a composite widget"
 msgstr "Co-dhiù a bheil a' widget 'na phàirt de widget co-dhèanta"
 
-#: gtk/gtkwidget.c:1235
+#: gtk/gtkwidget.c:1237
 msgid "Style"
 msgstr "Stoidhle"
 
-#: gtk/gtkwidget.c:1236
+#: gtk/gtkwidget.c:1238
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -9292,182 +9279,182 @@ msgstr ""
 "Stoidhle a' widget sa bheil fiosrachadh mun choltas a bhios air (datha is "
 "msaa)"
 
-#: gtk/gtkwidget.c:1244
+#: gtk/gtkwidget.c:1246
 msgid "Events"
 msgstr "Tachartasan"
 
-#: gtk/gtkwidget.c:1245
+#: gtk/gtkwidget.c:1247
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Am masg tachartais a a cho-dhùineas dè seòrsa de GdkEvents a gheibh a' widget"
 
-#: gtk/gtkwidget.c:1252
+#: gtk/gtkwidget.c:1254
 msgid "No show all"
 msgstr "Na seall na h-uile"
 
-#: gtk/gtkwidget.c:1253
+#: gtk/gtkwidget.c:1255
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 "Co-dhiù am bu chòir do bhuaidh a bhith air a' widget seo aig "
 "gtk_widget_show_all() gus nach bi"
 
-#: gtk/gtkwidget.c:1275
+#: gtk/gtkwidget.c:1277
 msgid "Whether this widget has a tooltip"
 msgstr "Co-dhiù a bheil gliocas-sgrìn aig a' widget seo gus nach eil"
 
-#: gtk/gtkwidget.c:1337
+#: gtk/gtkwidget.c:1339
 msgid "The widget's window if it is realized"
 msgstr "Uinneag a' widget ma tha e ann"
 
-#: gtk/gtkwidget.c:1352
+#: gtk/gtkwidget.c:1354
 msgid "Double Buffered"
 msgstr "Air a bhufaireadh dà thuras"
 
-#: gtk/gtkwidget.c:1353
+#: gtk/gtkwidget.c:1355
 msgid "Whether the widget is double buffered"
 msgstr "Co-dhiù a bheil a' widget air a bhufaireadh dà thuras"
 
-#: gtk/gtkwidget.c:1367
+#: gtk/gtkwidget.c:1369
 msgid "How to position in extra horizontal space"
 msgstr "Càit an dèid a chur ma bhios àite còmhnard a bharrachd ann"
 
-#: gtk/gtkwidget.c:1382
+#: gtk/gtkwidget.c:1384
 msgid "How to position in extra vertical space"
 msgstr "Càit an dèid a chur ma bhios àite inghearach a bharrachd ann"
 
-#: gtk/gtkwidget.c:1402
+#: gtk/gtkwidget.c:1404
 msgid "Margin on Left"
 msgstr "Am marghan air an taobh chlì"
 
-#: gtk/gtkwidget.c:1403
+#: gtk/gtkwidget.c:1405
 msgid "Pixels of extra space on the left side"
 msgstr "Piogsailean a dh'àite a bharrachd air an taobh chlì"
 
-#: gtk/gtkwidget.c:1423
+#: gtk/gtkwidget.c:1425
 msgid "Margin on Right"
 msgstr "Am marghan air an taobh deas"
 
-#: gtk/gtkwidget.c:1424
+#: gtk/gtkwidget.c:1426
 msgid "Pixels of extra space on the right side"
 msgstr "Piogsailean a dh'àite a bharrachd air an taobh deas"
 
-#: gtk/gtkwidget.c:1443
+#: gtk/gtkwidget.c:1445
 msgid "Margin on Start"
 msgstr "Am marghan aig an toiseach"
 
-#: gtk/gtkwidget.c:1444
+#: gtk/gtkwidget.c:1446
 msgid "Pixels of extra space on the start"
 msgstr "Piogsailean a dh'àite a bharrachd air an toiseach"
 
-#: gtk/gtkwidget.c:1463
+#: gtk/gtkwidget.c:1465
 msgid "Margin on End"
 msgstr "Am marghan aig an deireadh"
 
-#: gtk/gtkwidget.c:1464
+#: gtk/gtkwidget.c:1466
 msgid "Pixels of extra space on the end"
 msgstr "Piogsailean a dh'àite a bharrachd air an deireadh"
 
-#: gtk/gtkwidget.c:1482
+#: gtk/gtkwidget.c:1484
 msgid "Margin on Top"
 msgstr "Am marghan aig a' bharr"
 
-#: gtk/gtkwidget.c:1483
+#: gtk/gtkwidget.c:1485
 msgid "Pixels of extra space on the top side"
 msgstr "Piogsailean a dh'àite a bharrachd aig a' bharr"
 
-#: gtk/gtkwidget.c:1501
+#: gtk/gtkwidget.c:1503
 msgid "Margin on Bottom"
 msgstr "Am marghan aig a' bhonn"
 
-#: gtk/gtkwidget.c:1502
+#: gtk/gtkwidget.c:1504
 msgid "Pixels of extra space on the bottom side"
 msgstr "Piogsailean a dh'àite a bharrachd aig a' bhonn"
 
-#: gtk/gtkwidget.c:1517
+#: gtk/gtkwidget.c:1519
 msgid "All Margins"
 msgstr "Na h-uile marghan"
 
-#: gtk/gtkwidget.c:1518
+#: gtk/gtkwidget.c:1520
 msgid "Pixels of extra space on all four sides"
 msgstr "Piogsailean a dh'àite a bharrachd air na ceithir taobhan"
 
-#: gtk/gtkwidget.c:1532
+#: gtk/gtkwidget.c:1534
 msgid "Horizontal Expand"
 msgstr "Leudachadh còmhnard"
 
-#: gtk/gtkwidget.c:1533
+#: gtk/gtkwidget.c:1535
 msgid "Whether widget wants more horizontal space"
 msgstr "Co-dhiù an iarr a' widget barrachd àite còmhnaird"
 
-#: gtk/gtkwidget.c:1546
+#: gtk/gtkwidget.c:1548
 msgid "Horizontal Expand Set"
 msgstr "Suidhich an leudachadh air a' chòmhnard"
 
-#: gtk/gtkwidget.c:1547
+#: gtk/gtkwidget.c:1549
 msgid "Whether to use the hexpand property"
 msgstr "Co-dhiù an dèid an roghainn hexpand a chleachdadh"
 
-#: gtk/gtkwidget.c:1560
+#: gtk/gtkwidget.c:1562
 msgid "Vertical Expand"
 msgstr "Leudachadh inghearach"
 
-#: gtk/gtkwidget.c:1561
+#: gtk/gtkwidget.c:1563
 msgid "Whether widget wants more vertical space"
 msgstr "Co-dhiù an iarr a' widget barrachd àite inghearaich"
 
-#: gtk/gtkwidget.c:1574
+#: gtk/gtkwidget.c:1576
 msgid "Vertical Expand Set"
 msgstr "Suidhich an leudachadh inghearach"
 
-#: gtk/gtkwidget.c:1575
+#: gtk/gtkwidget.c:1577
 msgid "Whether to use the vexpand property"
 msgstr "Co-dhiù an dèid an roghainn vexpand a chleachdadh"
 
-#: gtk/gtkwidget.c:1588
+#: gtk/gtkwidget.c:1590
 msgid "Expand Both"
 msgstr "Leudaich an dà dhiubh"
 
-#: gtk/gtkwidget.c:1589
+#: gtk/gtkwidget.c:1591
 msgid "Whether widget wants to expand in both directions"
 msgstr "Co-dhiù an iarr a' widget leudachadh san dà chomhair"
 
-#: gtk/gtkwidget.c:1605
+#: gtk/gtkwidget.c:1607
 msgid "Opacity for Widget"
 msgstr "Trìd-shoilleireachd a' widget"
 
-#: gtk/gtkwidget.c:1606
+#: gtk/gtkwidget.c:1608
 msgid "The opacity of the widget, from 0 to 1"
 msgstr "Trìd-shoilleireachd a' widget eadar 0 is 1"
 
-#: gtk/gtkwidget.c:1621
+#: gtk/gtkwidget.c:1623
 msgid "Scale factor"
 msgstr "Am factar sgèilidh"
 
-#: gtk/gtkwidget.c:1622
+#: gtk/gtkwidget.c:1624
 msgid "The scaling factor of the window"
 msgstr "Factar sgèileadh na h-uinneige"
 
-#: gtk/gtkwidget.c:3436
+#: gtk/gtkwidget.c:3443
 msgid "Interior Focus"
 msgstr "Fòcas a-staigh"
 
-#: gtk/gtkwidget.c:3437
+#: gtk/gtkwidget.c:3444
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Co-dhiù an dèid taisbeanair an fhòcais a tharraing am broinn widgets"
 
-#: gtk/gtkwidget.c:3450
+#: gtk/gtkwidget.c:3457
 msgid "Focus linewidth"
 msgstr "Leud loidhne an fhòcais"
 
-#: gtk/gtkwidget.c:3451
+#: gtk/gtkwidget.c:3458
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Leud loidhne taisbeanair an fhòcais, ann am piogsailean"
 
-#: gtk/gtkwidget.c:3465
+#: gtk/gtkwidget.c:3472
 msgid "Focus line dash pattern"
 msgstr "Pàtran strìochagan loidhne an fhòcais"
 
-#: gtk/gtkwidget.c:3466
+#: gtk/gtkwidget.c:3473
 msgid ""
 "Dash pattern used to draw the focus indicator. The character values are "
 "interpreted as pixel widths of alternating on and off segments of the line."
@@ -9476,29 +9463,29 @@ msgstr ""
 "tharraing. Thèid luachan nan caractaran a thuigsinn mar leud piogsail de "
 "dh'earrannan na loidhne a bhios air 's dheth mu seach."
 
-#: gtk/gtkwidget.c:3479
+#: gtk/gtkwidget.c:3486
 msgid "Focus padding"
 msgstr "Padadh an fhòcais"
 
-#: gtk/gtkwidget.c:3480
+#: gtk/gtkwidget.c:3487
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "An leud eadar taisbeanair an fhòcais agus \"bogsa\" a' widget, ann am "
 "piogsailean"
 
-#: gtk/gtkwidget.c:3494
+#: gtk/gtkwidget.c:3501
 msgid "Cursor color"
 msgstr "Dath a' chùrsair"
 
-#: gtk/gtkwidget.c:3495
+#: gtk/gtkwidget.c:3502
 msgid "Color with which to draw insertion cursor"
 msgstr "An dath anns an dèid cùrsair an ion-chuir a tharraing"
 
-#: gtk/gtkwidget.c:3508
+#: gtk/gtkwidget.c:3515
 msgid "Secondary cursor color"
 msgstr "Dath dàrnach a' chùrsair"
 
-#: gtk/gtkwidget.c:3509
+#: gtk/gtkwidget.c:3516
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -9506,45 +9493,45 @@ msgstr ""
 "An dath anns an dèid cùrsair dàrnach an ion-chuir a tharraing nuair a bhios "
 "teacsa deas gu clì agus clì gu deas am measg a chèile"
 
-#: gtk/gtkwidget.c:3515
+#: gtk/gtkwidget.c:3522
 msgid "Cursor line aspect ratio"
 msgstr "Co-mheas deilbh loidhne a' chùrsair"
 
-#: gtk/gtkwidget.c:3516
+#: gtk/gtkwidget.c:3523
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "An co-mheas deilbh san dèid cùrsair an ion-chuir a tharraing"
 
-#: gtk/gtkwidget.c:3522
+#: gtk/gtkwidget.c:3529
 msgid "Window dragging"
 msgstr "Slaodadh uinneagan"
 
-#: gtk/gtkwidget.c:3523
+#: gtk/gtkwidget.c:3530
 msgid "Whether windows can be dragged and maximized by clicking on empty areas"
 msgstr ""
 "Co-dhiù an gabh uinneagan a shlaodadh 's a làn-mheudachadh le bhith a' "
 "briogadh air raointean falamh"
 
-#: gtk/gtkwidget.c:3540
+#: gtk/gtkwidget.c:3547
 msgid "Unvisited Link Color"
 msgstr "Dath ceangail nach deach a thadhal air"
 
-#: gtk/gtkwidget.c:3541
+#: gtk/gtkwidget.c:3548
 msgid "Color of unvisited links"
 msgstr "Dath nan ceanglaichean nach deach a thadhal air"
 
-#: gtk/gtkwidget.c:3557
+#: gtk/gtkwidget.c:3564
 msgid "Visited Link Color"
 msgstr "Dath ceangail a chaidh a thadhal air"
 
-#: gtk/gtkwidget.c:3558
+#: gtk/gtkwidget.c:3565
 msgid "Color of visited links"
 msgstr "Dath nan ceanglaichean a chaidh a thadhal air"
 
-#: gtk/gtkwidget.c:3576
+#: gtk/gtkwidget.c:3583
 msgid "Wide Separators"
 msgstr "Sgaradairean leathann"
 
-#: gtk/gtkwidget.c:3577
+#: gtk/gtkwidget.c:3584
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -9552,43 +9539,43 @@ msgstr ""
 "Co-dhiù an gabh leud nan sgaradairean atharrachadh agus an dèidh an tarraing "
 "le bogsa seach loidhne"
 
-#: gtk/gtkwidget.c:3594
+#: gtk/gtkwidget.c:3601
 msgid "Separator Width"
 msgstr "Leud an sgaradair"
 
-#: gtk/gtkwidget.c:3595
+#: gtk/gtkwidget.c:3602
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Leud nan sgaradairean ma tha wide-separators TRUE"
 
-#: gtk/gtkwidget.c:3612
+#: gtk/gtkwidget.c:3619
 msgid "Separator Height"
 msgstr "Àirde an sgaradair"
 
-#: gtk/gtkwidget.c:3613
+#: gtk/gtkwidget.c:3620
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Àirde nan sgaradairean ma tha wide-separators TRUE"
 
-#: gtk/gtkwidget.c:3627
+#: gtk/gtkwidget.c:3634
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Faid saighdean an sgrolaidh chòmhnaird"
 
-#: gtk/gtkwidget.c:3628
+#: gtk/gtkwidget.c:3635
 msgid "The length of horizontal scroll arrows"
 msgstr "Faid saighdean an sgrolaidh chòmhnaird"
 
-#: gtk/gtkwidget.c:3642
+#: gtk/gtkwidget.c:3649
 msgid "Vertical Scroll Arrow Length"
 msgstr "Faid saighdean an sgrolaidh inghearaich"
 
-#: gtk/gtkwidget.c:3643
+#: gtk/gtkwidget.c:3650
 msgid "The length of vertical scroll arrows"
 msgstr "Faid saighdean an sgrolaidh inghearaich"
 
-#: gtk/gtkwidget.c:3649 gtk/gtkwidget.c:3650
+#: gtk/gtkwidget.c:3656 gtk/gtkwidget.c:3657
 msgid "Width of text selection handles"
 msgstr "Leud làmhrachain an taghaidh teacsa"
 
-#: gtk/gtkwidget.c:3655 gtk/gtkwidget.c:3656
+#: gtk/gtkwidget.c:3662 gtk/gtkwidget.c:3663
 msgid "Height of text selection handles"
 msgstr "Àirde làmhrachain an taghaidh teacsa"
 
