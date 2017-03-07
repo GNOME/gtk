@@ -27,7 +27,6 @@ spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
   GtkCssProvider *provider;
   GtkStyleContext *context;
   gchar *data;
-  GtkBorder pad;
 
   context = gtk_widget_get_style_context (frame);
   provider = g_object_get_data (G_OBJECT (frame), "provider");
@@ -40,14 +39,9 @@ spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
-  gtk_style_context_restore (context);
-
   hpadding = (gint)gtk_spin_button_get_value (spin);
-  data = g_strdup_printf ("frame > border { padding: %dpx %dpx %dpx %dpx }",
-                          vpadding, hpadding, vpadding, hpadding);
+  data = g_strdup_printf ("frame > border { padding: %dpx %dpx }",
+                          vpadding, hpadding);
 
   gtk_css_provider_load_from_data (provider, data, -1, NULL);
   g_free (data);
@@ -62,7 +56,6 @@ spin_vpadding_cb (GtkSpinButton *spin, gpointer user_data)
   GtkCssProvider *provider;
   GtkStyleContext *context;
   gchar *data;
-  GtkBorder pad;
 
   context = gtk_widget_get_style_context (frame);
   provider = g_object_get_data (G_OBJECT (frame), "provider");
@@ -75,14 +68,9 @@ spin_vpadding_cb (GtkSpinButton *spin, gpointer user_data)
                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
-  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &pad);
-  gtk_style_context_restore (context);
-
   vpadding = (gint)gtk_spin_button_get_value (spin);
-  data = g_strdup_printf ("frame > border { padding: %dpx %dpx %dpx %dpx }",
-                          vpadding, hpadding, vpadding, hpadding);
+  data = g_strdup_printf ("frame > border { padding: %dpx %dpx }",
+                          vpadding, hpadding);
 
   gtk_css_provider_load_from_data (provider, data, -1, NULL);
   g_free (data);
