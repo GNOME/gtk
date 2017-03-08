@@ -17,6 +17,8 @@
 
 #include "gdkmir-private.h"
 
+#include <mir_toolkit/events/window_placement.h>
+
 static void
 _gdk_mir_print_modifiers (unsigned int modifiers)
 {
@@ -225,6 +227,15 @@ _gdk_mir_print_window_event (const MirWindowEvent *event)
     case mir_window_attrib_focus:
       g_printerr ("focus");
       break;
+    case mir_window_attrib_dpi:
+      g_printerr ("dpi");
+      break;
+    case mir_window_attrib_visibility:
+      g_printerr ("visibility");
+      break;
+    case mir_window_attrib_preferred_orientation:
+      g_printerr ("preferred_orientation");
+      break;
     default:
       g_printerr ("%u", mir_window_event_get_attribute (event));
       break;
@@ -241,9 +252,234 @@ _gdk_mir_print_resize_event (const MirResizeEvent *event)
 }
 
 static void
+_gdk_mir_print_prompt_session_state_change_event (const MirPromptSessionEvent *event)
+{
+  g_printerr ("PROMPT_SESSION_STATE_CHANGE\n");
+  g_printerr (" State ");
+
+  switch (mir_prompt_session_event_get_state (event))
+    {
+    case mir_prompt_session_state_stopped:
+      g_printerr ("stopped");
+      break;
+    case mir_prompt_session_state_started:
+      g_printerr ("started");
+      break;
+    case mir_prompt_session_state_suspended:
+      g_printerr ("suspended");
+      break;
+    default:
+      g_printerr ("%u", mir_prompt_session_event_get_state (event));
+      break;
+    }
+
+  g_printerr ("\n");
+}
+
+static void
+_gdk_mir_print_orientation_event (const MirOrientationEvent *event)
+{
+  g_printerr ("ORIENTATION\n");
+  g_printerr (" Direction ");
+
+  switch (mir_orientation_event_get_direction (event))
+    {
+    case mir_orientation_normal:
+      g_printerr ("normal");
+      break;
+    case mir_orientation_left:
+      g_printerr ("left");
+      break;
+    case mir_orientation_inverted:
+      g_printerr ("inverted");
+      break;
+    case mir_orientation_right:
+      g_printerr ("right");
+      break;
+    default:
+      g_printerr ("%u", mir_orientation_event_get_direction (event));
+      break;
+    }
+
+  g_printerr ("\n");
+}
+
+static void
 _gdk_mir_print_close_event (void)
 {
   g_printerr ("CLOSED\n");
+}
+
+static void
+_gdk_mir_print_keymap_event (const MirKeymapEvent *event)
+{
+  g_printerr ("KEYMAP\n");
+}
+
+static void
+_gdk_mir_print_window_output_event (const MirWindowOutputEvent *event)
+{
+  g_printerr ("WINDOW_OUTPUT\n");
+  g_printerr (" DPI %d\n", mir_window_output_event_get_dpi (event));
+  g_printerr (" Form Factor ");
+
+  switch (mir_window_output_event_get_form_factor (event))
+    {
+    case mir_form_factor_unknown:
+      g_printerr ("unknown");
+      break;
+    case mir_form_factor_phone:
+      g_printerr ("phone");
+      break;
+    case mir_form_factor_tablet:
+      g_printerr ("tablet");
+      break;
+    case mir_form_factor_monitor:
+      g_printerr ("monitor");
+      break;
+    case mir_form_factor_tv:
+      g_printerr ("tv");
+      break;
+    case mir_form_factor_projector:
+      g_printerr ("projector");
+      break;
+    default:
+      g_printerr ("%u", mir_window_output_event_get_form_factor (event));
+      break;
+    }
+
+  g_printerr ("\n");
+  g_printerr (" Scale %f\n", mir_window_output_event_get_scale (event));
+  g_printerr (" Refresh Rate %lf\n", mir_window_output_event_get_refresh_rate (event));
+  g_printerr (" Output ID %u\n", mir_window_output_event_get_output_id (event));
+}
+
+static void
+_gdk_mir_print_input_device_state_event (const MirInputDeviceStateEvent *event)
+{
+  MirPointerButtons buttons;
+  MirInputEventModifiers modifiers;
+  gint i;
+  gint j;
+
+  g_printerr ("INPUT_DEVICE_STATE\n");
+  g_printerr (" Pointer Buttons\n");
+  buttons = mir_input_device_state_event_pointer_buttons (event);
+
+  if (buttons == 0)
+    g_printerr ("  none\n");
+  else
+    {
+      if (buttons & mir_pointer_button_primary)
+        g_printerr ("  primary\n");
+      if (buttons & mir_pointer_button_secondary)
+        g_printerr ("  secondary\n");
+      if (buttons & mir_pointer_button_tertiary)
+        g_printerr ("  tertiary\n");
+      if (buttons & mir_pointer_button_back)
+        g_printerr ("  back\n");
+      if (buttons & mir_pointer_button_forward)
+        g_printerr ("  forward\n");
+      if (buttons & mir_pointer_button_side)
+        g_printerr ("  side\n");
+      if (buttons & mir_pointer_button_extra)
+        g_printerr ("  extra\n");
+      if (buttons & mir_pointer_button_task)
+        g_printerr ("  task\n");
+    }
+
+  g_printerr (" Pointer Axis\n");
+  g_printerr ("  X %f\n", mir_input_device_state_event_pointer_axis (event, mir_pointer_axis_x));
+  g_printerr ("  Y %f\n", mir_input_device_state_event_pointer_axis (event, mir_pointer_axis_y));
+  g_printerr ("  V Scroll %f\n", mir_input_device_state_event_pointer_axis (event, mir_pointer_axis_vscroll));
+  g_printerr ("  H Scroll %f\n", mir_input_device_state_event_pointer_axis (event, mir_pointer_axis_hscroll));
+  g_printerr ("  Relative X %f\n", mir_input_device_state_event_pointer_axis (event, mir_pointer_axis_relative_x));
+  g_printerr ("  Relative Y %f\n", mir_input_device_state_event_pointer_axis (event, mir_pointer_axis_relative_y));
+  g_printerr (" Time %ld\n", mir_input_device_state_event_time (event));
+  g_printerr (" Event Modifiers\n");
+  modifiers = mir_input_device_state_event_modifiers (event);
+
+  if (modifiers & mir_input_event_modifier_none)
+    g_printerr ("  none\n");
+  if (modifiers & mir_input_event_modifier_alt)
+    g_printerr ("  alt\n");
+  if (modifiers & mir_input_event_modifier_alt_left)
+    g_printerr ("  alt_left\n");
+  if (modifiers & mir_input_event_modifier_alt_right)
+    g_printerr ("  alt_right\n");
+  if (modifiers & mir_input_event_modifier_shift)
+    g_printerr ("  shift\n");
+  if (modifiers & mir_input_event_modifier_shift_left)
+    g_printerr ("  shift_left\n");
+  if (modifiers & mir_input_event_modifier_shift_right)
+    g_printerr ("  shift_right\n");
+  if (modifiers & mir_input_event_modifier_sym)
+    g_printerr ("  sym\n");
+  if (modifiers & mir_input_event_modifier_function)
+    g_printerr ("  function\n");
+  if (modifiers & mir_input_event_modifier_ctrl)
+    g_printerr ("  ctrl\n");
+  if (modifiers & mir_input_event_modifier_ctrl_left)
+    g_printerr ("  ctrl_left\n");
+  if (modifiers & mir_input_event_modifier_ctrl_right)
+    g_printerr ("  ctrl_right\n");
+  if (modifiers & mir_input_event_modifier_meta)
+    g_printerr ("  meta\n");
+  if (modifiers & mir_input_event_modifier_meta_left)
+    g_printerr ("  meta_left\n");
+  if (modifiers & mir_input_event_modifier_meta_right)
+    g_printerr ("  meta_right\n");
+  if (modifiers & mir_input_event_modifier_caps_lock)
+    g_printerr ("  caps_lock\n");
+  if (modifiers & mir_input_event_modifier_num_lock)
+    g_printerr ("  num_lock\n");
+  if (modifiers & mir_input_event_modifier_scroll_lock)
+    g_printerr ("  scroll_lock\n");
+
+  for (i = 0; i < mir_input_device_state_event_device_count (event); i++)
+    {
+      g_printerr (" Device %ld\n", mir_input_device_state_event_device_id (event, i));
+
+      for (j = 0; j < mir_input_device_state_event_device_pressed_keys_count (event, i); j++)
+        g_printerr ("  Pressed %u\n", mir_input_device_state_event_device_pressed_keys_for_index (event, i, j));
+
+      g_printerr ("  Pointer Buttons\n");
+      buttons = mir_input_device_state_event_device_pointer_buttons (event, i);
+
+      if (buttons == 0)
+        g_printerr ("   none\n");
+      else
+        {
+          if (buttons & mir_pointer_button_primary)
+            g_printerr ("   primary\n");
+          if (buttons & mir_pointer_button_secondary)
+            g_printerr ("   secondary\n");
+          if (buttons & mir_pointer_button_tertiary)
+            g_printerr ("   tertiary\n");
+          if (buttons & mir_pointer_button_back)
+            g_printerr ("   back\n");
+          if (buttons & mir_pointer_button_forward)
+            g_printerr ("   forward\n");
+          if (buttons & mir_pointer_button_side)
+            g_printerr ("   side\n");
+          if (buttons & mir_pointer_button_extra)
+            g_printerr ("   extra\n");
+          if (buttons & mir_pointer_button_task)
+            g_printerr ("   task\n");
+        }
+    }
+}
+
+static void
+_gdk_mir_print_window_placement_event (const MirWindowPlacementEvent *event)
+{
+  MirRectangle rect = mir_window_placement_get_relative_position (event);
+
+  g_printerr ("WINDOW_PLACEMENT\n");
+  g_printerr (" X %d\n", rect.left);
+  g_printerr (" Y %d\n", rect.top);
+  g_printerr (" Width %u\n", rect.width);
+  g_printerr (" Height %u\n", rect.height);
 }
 
 void
@@ -284,8 +520,26 @@ _gdk_mir_print_event (const MirEvent *event)
     case mir_event_type_resize:
       _gdk_mir_print_resize_event (mir_event_get_resize_event (event));
       break;
+    case mir_event_type_prompt_session_state_change:
+      _gdk_mir_print_prompt_session_state_change_event (mir_event_get_prompt_session_event (event));
+      break;
+    case mir_event_type_orientation:
+      _gdk_mir_print_orientation_event (mir_event_get_orientation_event (event));
+      break;
     case mir_event_type_close_window:
       _gdk_mir_print_close_event ();
+      break;
+    case mir_event_type_keymap:
+      _gdk_mir_print_keymap_event (mir_event_get_keymap_event (event));
+      break;
+    case mir_event_type_window_output:
+      _gdk_mir_print_window_output_event (mir_event_get_window_output_event (event));
+      break;
+    case mir_event_type_input_device_state:
+      _gdk_mir_print_input_device_state_event (mir_event_get_input_device_state_event (event));
+      break;
+    case mir_event_type_window_placement:
+      _gdk_mir_print_window_placement_event (mir_event_get_window_placement_event (event));
       break;
     default:
       g_printerr ("EVENT %u\n", mir_event_get_type (event));
