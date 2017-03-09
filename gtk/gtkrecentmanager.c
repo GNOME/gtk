@@ -775,7 +775,7 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
   GtkRecentManager *manager = user_data;
   GtkRecentData recent_data;
   GFileInfo *file_info;
-  gchar *uri, *basename;
+  gchar *uri, *basename, *content_type;
 
   uri = g_file_get_uri (file);
 
@@ -801,8 +801,10 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
   else
     {
       basename = g_file_get_basename (file);
-      recent_data.mime_type = g_content_type_guess (basename, NULL, 0, NULL);
+      content_type = g_content_type_guess (basename, NULL, 0, NULL);
+      recent_data.mime_type = g_content_type_get_mime_type (content_type);
       g_free (basename);
+      g_free (content_type);
     }
 
   recent_data.app_name = g_strdup (g_get_application_name ());
