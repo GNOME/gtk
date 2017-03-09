@@ -187,6 +187,11 @@ populate_details (GtkInspectorResourceList *rl,
   else
     {
       gchar *text;
+      gchar *content_image;
+      gchar *content_text;
+
+      content_image = g_content_type_from_mime_type ("image/*");
+      content_text = g_content_type_from_mime_type ("text/*");
 
       data = g_bytes_get_data (bytes, &size);
       type = g_content_type_guess (name, data, size, NULL);
@@ -199,12 +204,12 @@ populate_details (GtkInspectorResourceList *rl,
       gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
       g_free (text);
 
-      if (g_content_type_is_a (type, "text/*"))
+      if (g_content_type_is_a (type, content_text))
         {
           gtk_text_buffer_set_text (rl->priv->buffer, data, -1);
           gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
         }
-      else if (g_content_type_is_a (type, "image/*"))
+      else if (g_content_type_is_a (type, content_image))
         {
           gtk_image_set_from_resource (GTK_IMAGE (rl->priv->image), path);
           gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "image");
@@ -217,6 +222,9 @@ populate_details (GtkInspectorResourceList *rl,
 
       g_free (type);
       g_bytes_unref (bytes);
+
+      g_free (content_image);
+      g_free (content_text);
     }
 
   g_free (path);
