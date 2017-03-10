@@ -2479,7 +2479,7 @@ gdk_quartz_window_set_functions (GdkWindow    *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  imple = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
   if (functions & GDK_FUNC_ALL)
     {
