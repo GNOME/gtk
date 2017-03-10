@@ -852,7 +852,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 -(void)windowWillExitFullScreen:(NSNotification *)aNotification
 {
-  [self setFrame:lastUnfullscreenFrame display:YES]
+  [self setFrame:lastUnfullscreenFrame display:YES];
 }
 
 @end
