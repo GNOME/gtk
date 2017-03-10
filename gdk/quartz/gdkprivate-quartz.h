@@ -116,17 +116,6 @@ void       _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
                                                         guint      *width,
                                                         guint      *height);
 
-/* Display methods - window */
-void       _gdk_quartz_display_before_process_all_updates (GdkDisplay *display);
-void       _gdk_quartz_display_after_process_all_updates  (GdkDisplay *display);
-void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
-                                                   GdkWindow     *window,
-                                                   GdkWindow     *real_parent,
-                                                   GdkScreen     *screen,
-                                                   GdkEventMask   event_mask,
-                                                   GdkWindowAttr *attributes,
-                                                   gint           attributes_mask);
-
 /* Display methods - keymap */
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
