@@ -1445,12 +1445,13 @@ gtk_scrolled_window_allocate (GtkCssGadget        *gadget,
       gboolean previous_hvis;
       gboolean previous_vvis;
       guint count = 0;
+      GtkScrollable *scrollable_child = GTK_SCROLLABLE (child);
 
-      hscroll_policy = GTK_IS_SCROLLABLE (child)
-                       ? gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (child))
+      hscroll_policy = scrollable_child != NULL
+                       ? gtk_scrollable_get_hscroll_policy (scrollable_child)
                        : GTK_SCROLL_MINIMUM;
-      vscroll_policy = GTK_IS_SCROLLABLE (child)
-                       ? gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (child))
+      vscroll_policy = scrollable_child != NULL
+                       ? gtk_scrollable_get_vscroll_policy (scrollable_child)
                        : GTK_SCROLL_MINIMUM;
 
       /* Determine scrollbar visibility first via hfw apis */
@@ -1713,7 +1714,7 @@ gtk_scrolled_window_measure (GtkCssGadget   *gadget,
 
   child = gtk_bin_get_child (bin);
 
-  if (GTK_IS_SCROLLABLE (child))
+  if (child)
     gtk_scrollable_get_border (GTK_SCROLLABLE (child), &sborder);
 
   /*
@@ -2159,7 +2160,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
   gtk_scrolled_window_adjustment_value_changed (hadjustment, scrolled_window);
 
   child = gtk_bin_get_child (bin);
-  if (GTK_IS_SCROLLABLE (child))
+  if (child)
     gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (child), hadjustment);
 
   if (gtk_widget_should_animate (GTK_WIDGET (scrolled_window)))
@@ -2226,7 +2227,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
   gtk_scrolled_window_adjustment_value_changed (vadjustment, scrolled_window);
 
   child = gtk_bin_get_child (bin);
-  if (GTK_IS_SCROLLABLE (child))
+  if (child)
     gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (child), vadjustment);
 
   if (gtk_widget_should_animate (GTK_WIDGET (scrolled_window)))
@@ -2837,8 +2838,7 @@ gtk_scrolled_window_inner_allocation (GtkWidget     *widget,
 
   gtk_scrolled_window_relative_allocation (widget, rect);
   child = gtk_bin_get_child (GTK_BIN (widget));
-  if (GTK_IS_SCROLLABLE (child) &&
-      gtk_scrollable_get_border (GTK_SCROLLABLE (child), &border))
+  if (child && gtk_scrollable_get_border (GTK_SCROLLABLE (child), &border))
     {
       rect->x += border.left;
       rect->y += border.top;
