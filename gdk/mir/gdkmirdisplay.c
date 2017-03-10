@@ -183,7 +183,6 @@ _gdk_mir_display_open (const gchar *display_name)
 
   if (!mir_connection_is_valid (connection))
     {
-      g_printerr ("Failed to connect to Mir: %s\n", mir_connection_get_error_message (connection));
       mir_connection_release (connection);
       return NULL;
     }
