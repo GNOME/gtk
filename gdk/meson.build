@@ -1,5 +1,4 @@
 gdk_sources = files([
-  'gdk-private.c',
   'gdk.c',
   'gdkapplaunchcontext.c',
   'gdkcairo.c',
@@ -12,6 +11,7 @@ gdk_sources = files([
   'gdkdisplay.c',
   'gdkdisplaymanager.c',
   'gdkdnd.c',
+  'gdkdrawcontext.c',
   'gdkdrawingcontext.c',
   'gdkevents.c',
   'gdkframeclock.c',
@@ -33,6 +33,7 @@ gdk_sources = files([
   'gdkseatdefault.c',
   'gdkselection.c',
   'gdkvisual.c',
+  'gdkvulkancontext.c',
   'gdkwindow.c',
   'gdkwindowimpl.c',
 ])
@@ -69,7 +70,6 @@ gdk_public_h_sources = files([
   'gdkscreen.h',
   'gdkseat.h',
   'gdkselection.h',
-  'gdktestutils.h',
   'gdkthreads.h',
   'gdktypes.h',
   'gdkvisual.h',
@@ -114,7 +114,6 @@ gdk_x_sources = files([
   'x11/gdkscreen-x11.c',
   'x11/gdkscreen-x11.h',
   'x11/gdkselection-x11.c',
-  'x11/gdktestutils-x11.c',
   'x11/gdkvisual-x11.c',
   'x11/gdkwindow-x11.c',
   'x11/gdkwindow-x11.h',
@@ -223,8 +222,6 @@ gdk_broadway_sources = files([
   'broadway/gdkscreen-broadway.c',
   'broadway/gdkscreen-broadway.h',
   'broadway/gdkselection-broadway.c',
-  'broadway/gdktestutils-broadway.c',
-  'broadway/gdkvisual-broadway.c',
   'broadway/gdkwindow-broadway.c',
   'broadway/gdkwindow-broadway.h',
 ])

@@ -1,7 +1,14 @@
-gsk_sources = files([
+gsk_public_sources = files([
   'gskrenderer.c',
   'gskrendernode.c',
-  'gskrendernodeiter.c',
+  'gskrendernodeimpl.c',
+  'gskroundedrect.c',
+  'gsktexture.c',
+])
+
+# FIXME: + $(gsk_private_vulkan_source_c)
+gsk_private_sources = files([
+  'gskcairoblur.c',
   'gskcairorenderer.c',
   'gskdebug.c',
   'gskgldriver.c',
@@ -12,11 +19,13 @@ gsk_sources = files([
   'gskshaderbuilder.c',
 ])
 
+# FIXME: do we need this variable?
+gsk_sources = gsk_public_sources + gsk_private_sources
+
 gsk_headers = files([
   'gskenums.h',
   'gskrenderer.h',
   'gskrendernode.h',
-  'gskrendernodeiter.h',
   'gsktypes.h',
   'gskcairorendererprivate.h',
   'gskdebugprivate.h',
