@@ -608,10 +608,19 @@ gtk_unix_sources = files([
   'gtksearchenginetracker.c',
 ])
 
+gen_gtk_gresources_xml = find_program('gen-gtk-gresources-xml.py')
+# FIXME: absolute path to work around meson bug with @OUTPUT@ etc. not being
+# handled here, and also with the working dir from which the script is called.
+# Hopefully all to be fixed in Meson 0.39
+outfile = '@0@/gtk.gresources.xml'.format(meson.current_build_dir())
+gtk_gresources_xml = configure_file(output : 'gtk.gresources.xml',
+  input : 'gtk/ui/gtkdialog.ui', # FIXME: shouldn't be needed
+  command : [gen_gtk_gresources_xml, meson.current_source_dir(), outfile])
+
 gtkresources = gnome.compile_resources(
   'gtkresources',
-  'gtk.gresource.xml',
-  source_dir: '.',
+  gtk_gresources_xml,
+  source_dir: meson.current_source_dir(),
   c_name: '_gtk',
   extra_args: '--manual-register'
 )
