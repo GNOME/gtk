@@ -1,4 +1,3 @@
-
 test_animated_resizing = executable('animated-resizing',
   'animated-resizing.c',
   'frame-stats.c',
@@ -25,7 +24,7 @@ test_scrolling_performance = executable('scrolling-performance',
 )
 test_blur_performance = executable('blur-performance',
   'blur-performance.c',
-  '../gtk/gtkcairoblur.c',
+  '../gsk/gskcairoblur.c',
   dependencies: libgtk_dep
 )
 test_video_timer = executable('video-timer',
@@ -93,20 +92,16 @@ test_recentchoosermenu = executable('testrecentchoosermenu', 'testrecentchooserm
 test_volumebutton = executable('testvolumebutton', 'testvolumebutton.c', dependencies: libgtk_dep)
 test_scrolledwindow = executable('testscrolledwindow', 'testscrolledwindow.c', dependencies: libgtk_dep)
 test_cellarea = executable('testcellarea', 'testcellarea.c', dependencies: libgtk_dep)
-test_treemenu = executable('testtreemenu', 'testtreemenu.c', dependencies: libgtk_dep)
 test_overlay = executable('testoverlay', 'testoverlay.c', dependencies: libgtk_dep)
 test_overlaystyleclass = executable('testoverlaystyleclass', 'testoverlaystyleclass.c', dependencies: libgtk_dep)
 test_appchooser = executable('testappchooser', 'testappchooser.c', dependencies: libgtk_dep)
 test_expand = executable('testexpand', 'testexpand.c', dependencies: libgtk_dep)
 test_expander = executable('testexpander', 'testexpander.c', dependencies: libgtk_dep)
 test_switch = executable('testswitch', 'testswitch.c', dependencies: libgtk_dep)
-test_styleexamples = executable('styleexamples', 'styleexamples.c', dependencies: libgtk_dep)
 test_toplevelembed = executable('testtoplevelembed', 'testtoplevelembed.c', dependencies: libgtk_dep)
 test_textview = executable('testtextview', 'testtextview.c', dependencies: libgtk_dep)
 test_animation = executable('testanimation', 'testanimation.c', dependencies: libgtk_dep)
 test_pixbuf_scale = executable('testpixbuf_scale', 'testpixbuf-scale.c', dependencies: libgtk_dep)
-test_pixbuf_color = executable('testpixbuf_color', 'testpixbuf-color.c', dependencies: libgtk_dep)
-test_pixbuf_save = executable('testpixbuf_save', 'testpixbuf-save.c', dependencies: libgtk_dep)
 test_colorchooser = executable('testcolorchooser', 'testcolorchooser.c', dependencies: libgtk_dep)
 test_colorchooser2 = executable('testcolorchooser2', 'testcolorchooser2.c', dependencies: libgtk_dep)
 test_kineticscrolling = executable('testkineticscrolling', 'testkineticscrolling.c', dependencies: libgtk_dep)
@@ -120,7 +115,6 @@ test_popover = executable('testpopover', 'testpopover.c', dependencies: libgtk_d
 test_cairo = executable('testcairo', 'testcairo.c', dependencies: libgtk_dep)
 test_overlayscroll = executable('overlayscroll', 'overlayscroll.c', dependencies: libgtk_dep)
 test_syncscroll = executable('syncscroll', 'syncscroll.c', dependencies: libgtk_dep)
-test_subsurface = executable('subsurface', 'subsurface.c', dependencies: libgtk_dep)
 test_motion_compression = executable('motion-compression', 'motion-compression.c', dependencies: libgtk_dep)
 test_simple = executable('simple', 'simple.c', dependencies: libgtk_dep)
 test_flicker = executable('flicker', 'flicker.c', dependencies: libgtk_dep)
