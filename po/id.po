@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+ gtk-3-22\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-10 06:39+0000\n"
-"PO-Revision-Date: 2017-03-11 14:46+0700\n"
+"PO-Revision-Date: 2017-03-11 15:49+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -3624,7 +3624,7 @@ msgstr "Bagian \"id\" dan \"nama\" ditemukan pada bagian <%s>"
 #: gtk/gtktextbufferserialize.c:794 gtk/gtktextbufferserialize.c:820
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "Atribu \"%s\" ditemukan dua kali di bagian <%s>"
+msgstr "Atribut \"%s\" ditemukan dua kali di bagian <%s>"
 
 #: gtk/gtktextbufferserialize.c:836
 #, c-format
