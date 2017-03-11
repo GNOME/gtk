@@ -89,7 +89,7 @@ check_headers = [
   ['HAVE_SYS_TIME_H', 'sys/time.h'],
   ['HAVE_SYS_TYPES_H', 'sys/types.h'],
   ['HAVE_UNISTD_H', 'unistd.h'],
-  ['HAVE_LINUX_MEMFD_H', 'linux/memfd.h'],
+  #['HAVE_LINUX_MEMFD_H', 'linux/memfd.h'], # FIXME: doesn't work, see below
 ]
 
 foreach h : check_headers
@@ -97,6 +97,13 @@ foreach h : check_headers
     cdata.set(h.get(0), 1)
   endif
 endforeach
+
+# FIXME: cc.has_header('linux/memfd.h') doesn't work with meson 0.39 and gcc
+# https://github.com/mesonbuild/meson/issues/1458
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80005
+if cc.has_header_symbol('linux/memfd.h', 'MFD_CLOEXEC')
+  cdata.set('HAVE_LINUX_MEMFD_H', 1)
+endif
 
 check_functions = [
 # check token HAVE_BIND_TEXTDOMAIN_CODESET
