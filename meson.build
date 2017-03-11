@@ -4,6 +4,7 @@ project('gtk+-3.0', 'c',
           'buildtype=debugoptimized',
           'warning_level=1'
         ],
+        meson_version : '>= 0.38.1',  # for array.get() with fallback
         license: 'LGPLv2.1+')
 
 gnome = import('gnome')
@@ -105,14 +106,17 @@ if cc.has_header_symbol('linux/memfd.h', 'MFD_CLOEXEC')
   cdata.set('HAVE_LINUX_MEMFD_H', 1)
 endif
 
+# Maths functions might be implemented in libm
+libm = cc.find_library('m', required : false)
+
 check_functions = [
 # check token HAVE_BIND_TEXTDOMAIN_CODESET
 # check token HAVE_CUPS_API_1_6
   ['HAVE_DCGETTEXT', 'dcgettext', '#include<libintl.h>'],
-  ['HAVE_DECL_ISINF', 'isinf', '#include<math.h>'],
-  ['HAVE_DECL_ISNAN', 'isnan', '#include<math.h>'],
+  ['HAVE_DECL_ISINF', 'isinf', '#include<math.h>', libm],
+  ['HAVE_DECL_ISNAN', 'isnan', '#include<math.h>', libm],
   ['HAVE_GETPAGESIZE', 'getpagesize', '#include<unistd.h>'],
-  ['HAVE_GETRESUID', 'getresuid', '#include<unistd.h>'],
+  ['HAVE_GETRESUID', 'getresuid', '#define _GNU_SOURCE\n#include<unistd.h>'],
 # check token HAVE_GETTEXT
 # check token HAVE_GIO_UNIX
 # check token HAVE_GNU_FTW
@@ -123,18 +127,17 @@ check_functions = [
 # check token HAVE_LOCALTIME_R
   ['HAVE_LSTAT', 'lstat', '#include<sys/stat.h>'],
   ['HAVE_MMAP', 'mmap', '#include<sys/mman.h>'],
-  ['HAVE_NEARBYINT', 'nearbyint', '#include<math.h>'],
+  ['HAVE_NEARBYINT', 'nearbyint', '#include<math.h>', libm],
   ['HAVE_POSIX_FALLOCATE', 'posix_fallocate', '#include<fcntl.h>'],
   ['HAVE__LOCK_FILE', '_lock_file', '#include<stdio.h>'],
   ['HAVE_FLOCKFILE', 'flockfile', '#include<stdio.h>'],
   ['HAVE_MKSTEMP', 'mkstemp', '#include<stdlib.h>'],
   ['HAVE_MALLINFO', 'mallinfo', '#include<malloc.h>'],
-  ['HAVE_ROUND', 'round', '#include<math.h>'],
-  ['HAVE_RINT', 'rint', '#include<math.h>'],
-  ['HAVE_LOG2', 'log2', '#include<math.h>'],
-  ['HAVE_EXP2', 'exp2', '#include<math.h>'],
-  ['HAVE_SINCOS', 'sincos', '#include<math.h>'],
-  ['HAVE_XKB', 'XkbQueryExtension', '#include<X11/XKBlib.h>'],
+  ['HAVE_ROUND', 'round', '#include<math.h>', libm],
+  ['HAVE_RINT', 'rint', '#include<math.h>', libm],
+  ['HAVE_LOG2', 'log2', '#include<math.h>', libm],
+  ['HAVE_EXP2', 'exp2', '#include<math.h>', libm],
+  ['HAVE_SINCOS', 'sincos', '#define _GNU_SOURCE\n#include<math.h>', libm],
 # check token HAVE_SOCKADDR_UN_SUN_LEN
 # check token HAVE_SOLARIS_XINERAMA
 # check token HAVE_XFREE_XINERAMA
@@ -145,15 +148,9 @@ check_functions = [
 # check token HAVE__NL_TIME_FIRST_WEEKDAY
 # check token HAVE__NSGETENVIRON
 ]
-if x11_enabled
-check_functions += [
-  ['HAVE_XGENERICEVENTS', 'XGetEventData', '#include<X11/Xlib.h>'],
-  ['HAVE_XSYNC', 'XSyncQueryExtension', '#include<X11/Xlib.h>\n#include</usr/include/X11/extensions/sync.h>']
-]
-endif
 
 foreach f : check_functions
-  if cc.has_function(f.get(1), prefix : f.get(2))
+  if cc.has_function(f.get(1), prefix : f.get(2), dependencies : f.get(3, []))
     cdata.set(f.get(0), 1)
   endif
 endforeach
@@ -209,7 +206,6 @@ if x11_enabled
   xfixes_dep     = dependency('xfixes', required: false)
   xcomposite_dep = dependency('xcomposite', required: false)
 
-
   if xdamage_dep.found()
     cdata.set('HAVE_XDAMAGE', 1)
   endif
@@ -226,7 +222,21 @@ if x11_enabled
     cdata.set('HAVE_XFIXES', 1)
   endif
 
+  if cc.has_function('XkbQueryExtension', dependencies : x11_dep,
+                     prefix : '#include <X11/XKBlib.h>')
+    cdata.set('HAVE_XKB', 1)
+  endif
 
+  if cc.has_function('XSyncQueryExtension', dependencies : xext_dep,
+                     prefix : '''#include <X11/Xlib.h>
+                                 #include <X11/extensions/sync.h>''')
+    cdata.set('HAVE_XSYNC', 1)
+  endif
+
+  if cc.has_function('XGetEventData', dependencies : x11_dep,
+                     prefix : '#include <X11/Xlib.h>')
+    cdata.set('HAVE_XGENERICEVENTS', 1)
+  endif
 
   if xi_dep.found() and cc.has_header('X11/extensions/XInput2.h')
     cdata.set('XINPUT_2', 1)
