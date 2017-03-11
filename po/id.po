@@ -5,15 +5,15 @@
 # Mohammad DAMT <mdamt@bisnisweb.com>, 2003, 2004, 2005.
 # Ahmad Riza H Nst  <rizahnst@gnome.org>, 2006.
 # Muhammad Hilman <hilman09121991@yahoo.com>, 2008.
-# Andika Triwidada <andika@gmail.com>, 2010, 2011, 2012, 2013, 2014.
+# Andika Triwidada <andika@gmail.com>, 2010-2014, 2017.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2010.
 # Dirgita Devina <dirgitadevina@yahoo.co.id>, 2010, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-3-22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-03 11:48+0000\n"
-"PO-Revision-Date: 2017-03-09 10:48+0700\n"
+"POT-Creation-Date: 2017-03-10 06:39+0000\n"
+"PO-Revision-Date: 2017-03-11 14:46+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -436,7 +436,7 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2153
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2160
 #: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:796
 #: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
@@ -448,14 +448,14 @@ msgstr "Tak ada implementasi GL yang tersedia"
 msgid "Unable to create a GL context"
 msgstr "Tak dapat membuat sebuah konteks GL"
 
-#: gdk/mir/gdkmirwindowimpl.c:2115 gdk/mir/gdkmirwindowimpl.c:2125
+#: gdk/mir/gdkmirwindowimpl.c:2122 gdk/mir/gdkmirwindowimpl.c:2132
 #: gdk/wayland/gdkglcontext-wayland.c:418
 #: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:702
 #: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr "Tak ada konfigurasi yang tersedia bagi format piksel yang diberikan"
 
-#: gdk/mir/gdkmirwindowimpl.c:2161
+#: gdk/mir/gdkmirwindowimpl.c:2168
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "Profil GL inti 3.2 tak tersedia pada implementasi EGL"
 
@@ -1722,7 +1722,7 @@ msgstr "Tak bisa mengurai nilai untuk %s::%s: %s\n"
 #: gtk/gtk-builder-tool.c:692
 #, c-format
 msgid "Can't parse file: %s\n"
-msgstr "Tak bisa mengurai berkasi: %s\n"
+msgstr "Tak bisa mengurai berkas: %s\n"
 
 #: gtk/gtk-builder-tool.c:1056
 #, c-format
@@ -3498,19 +3498,19 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1053 gtk/gtkrecentmanager.c:1066
-#: gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213
-#: gtk/gtkrecentmanager.c:1265 gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1055 gtk/gtkrecentmanager.c:1068
+#: gtk/gtkrecentmanager.c:1205 gtk/gtkrecentmanager.c:1215
+#: gtk/gtkrecentmanager.c:1267 gtk/gtkrecentmanager.c:1276
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Tidak dapat menemukan objek dengan URI '%s'"
 
-#: gtk/gtkrecentmanager.c:1289
+#: gtk/gtkrecentmanager.c:1291
 #, c-format
 msgid "Unable to move the item with URI '%s' to '%s'"
 msgstr "Tidak bisa memindah objek dengan URI '%s' ke '%s'"
 
-#: gtk/gtkrecentmanager.c:2507
+#: gtk/gtkrecentmanager.c:2509
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
