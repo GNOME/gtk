@@ -19,6 +19,8 @@ gtk_micro_version = gtk_version[2].to_int()
 gtk_interface_age = 0
 add_global_arguments('-DGTK_VERSION="' + meson.project_version() + '"', language: 'c')
 
+add_project_arguments('-D_GNU_SOURCE', language : 'c')
+
 # Define a string for the earliest version that this release has
 # backwards binary compatibility with for all interfaces a module
 # might. Unless we add module-only API with lower stability
