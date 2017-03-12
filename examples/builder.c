@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 static void
 print_hello (GtkWidget *widget,
@@ -14,6 +15,10 @@ main (int   argc,
   GtkBuilder *builder;
   GObject *window;
   GObject *button;
+
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
   gtk_init ();
 
