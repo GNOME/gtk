@@ -1,13 +1,5 @@
-
-bp_resources = gnome.compile_resources(
-  'bloatpad resources',
+bp_resources = gnome.compile_resources('bloatpad_resources',
   'bloatpad.gresources.xml',
-  source_dir: '.'
-)
+  source_dir: '.')
 
-bloatpad = executable(
-  'bloatpad',
-  'bloatpad.c',
-  bp_resources,
-  dependencies: libgtk_dep
-)
+executable('bloatpad', 'bloatpad.c', bp_resources, dependencies: libgtk_dep)
