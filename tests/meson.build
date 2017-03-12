@@ -137,12 +137,16 @@ if x11_enabled
   gtk_tests += [['testerrors']]
 endif
 
-# TODO: need to pass source dir so progs can find .ui files and such
-# (with autotools this only works in the builddir == srcdir case)
+# Pass the source dir here so programs can change into the source directory
+# and find .ui files and .png files and such that they load at runtime
+test_args = ['-DGTK_SRCDIR="@0@"'.format(meson.current_source_dir())]
+
 foreach t : gtk_tests
   test_name = t.get(0)
   test_srcs = ['@0@.c'.format(test_name), t.get(1, [])]
-  executable(test_name, test_srcs, dependencies: [libgtk_dep, libm])
+  executable(test_name, test_srcs,
+    c_args : test_args,
+    dependencies : [libgtk_dep, libm])
 endforeach
 
 subdir('visuals')

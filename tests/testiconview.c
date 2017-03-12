@@ -16,6 +16,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include <sys/types.h>
 #include <string.h>
 
@@ -420,6 +421,10 @@ main (gint argc, gchar **argv)
   GtkCellRenderer *cell;
   GtkTreeViewColumn *tvc;
   
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
+
   gtk_init ();
 
   /* to test rtl layout, set RTL=1 in the environment */

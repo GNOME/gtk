@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 static void
 split_decorations (GtkSettings *settings,
@@ -41,6 +42,10 @@ main (int argc, char *argv[])
   GtkWidget *entry;
   GtkWidget *check;
   GtkWidget *header;
+
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
   gtk_init ();
 

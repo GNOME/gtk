@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 static GtkWidget *header_stack;
 static GtkWidget *page_stack;
@@ -22,6 +23,10 @@ main (int argc, char *argv[])
 {
   GtkBuilder *builder;
   GtkWidget *win;
+
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
   gtk_init ();
 

@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 static void
 show_message_dialog1 (GtkWindow *parent)
@@ -315,6 +316,10 @@ main (int argc, char *argv[])
   GtkWidget *vbox;
   GtkWidget *box;
   GtkWidget *button;
+
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
   gtk_init ();
 

@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 typedef struct {
   GtkListBoxRow parent;
@@ -178,6 +179,10 @@ main (int argc, char *argv[])
   gint i;
   GSimpleActionGroup *group;
   GSimpleAction *action;
+
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
   gtk_init ();
 
