@@ -1,3 +1,3 @@
-  subdir('icon-browser')
-  subdir('widget-factory')
-  subdir('gtk-demo')
+subdir('gtk-demo')
+subdir('icon-browser')
+subdir('widget-factory')
