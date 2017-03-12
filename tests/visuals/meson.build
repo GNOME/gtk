@@ -1,6 +1,1 @@
-
-visuals = executable(
-  'visuals',
-  'visuals.c',
-  dependencies: libgtk_dep,
-)
+executable('visuals', 'visuals.c', dependencies: libgtk_dep)
