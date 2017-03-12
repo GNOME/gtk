@@ -9,16 +9,17 @@ project('gtk+-3.0', 'c',
 
 gnome = import('gnome')
 
-add_global_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
-add_global_arguments('-DG_ENABLE_DEBUG', language: 'c')
-add_global_arguments('-DG_ENABLE_CONSISTENCY_CHECKS', language: 'c')
+# FIXME: add GLIB_MIN_REQUIRED_VERSION and GLIB_MAX_ALLOWED_VERSION
+add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
+add_project_arguments('-DG_ENABLE_DEBUG', language: 'c')
+add_project_arguments('-DG_ENABLE_CONSISTENCY_CHECKS', language: 'c')
 
 gtk_version       = meson.project_version().split('.')
 gtk_major_version = gtk_version[0].to_int()
 gtk_minor_version = gtk_version[1].to_int()
 gtk_micro_version = gtk_version[2].to_int()
 gtk_interface_age = 0
-add_global_arguments('-DGTK_VERSION="' + meson.project_version() + '"', language: 'c')
+add_project_arguments('-DGTK_VERSION="' + meson.project_version() + '"', language: 'c')
 
 add_project_arguments('-D_GNU_SOURCE', language : 'c')
 
