@@ -37,6 +37,8 @@
 #include <unistd.h>
 #endif
 
+#include <glib/gstdio.h>
+
 #include "gtk/gtk.h"
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
@@ -8804,6 +8806,10 @@ main (int argc, char *argv[])
   test_init ();
 
   g_set_application_name ("GTK+ Test Program");
+
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
   gtk_init ();
 

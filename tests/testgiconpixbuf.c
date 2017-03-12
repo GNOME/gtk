@@ -17,6 +17,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 int
 main (int argc,
@@ -27,6 +28,10 @@ main (int argc,
   GIcon *emblemed;
   GEmblem *emblem;
   gchar *str;
+
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
   gtk_init ();
 
