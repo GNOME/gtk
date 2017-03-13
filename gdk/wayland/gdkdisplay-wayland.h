@@ -110,6 +110,8 @@ struct _GdkWaylandDisplay
 
   GPtrArray *monitors;
 
+  gint64 last_bell_time_ms;
+
   /* egl info */
   EGLDisplay egl_display;
   int egl_major_version;
