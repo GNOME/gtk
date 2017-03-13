@@ -436,6 +436,7 @@ create_spec (GdkWindow        *window,
 {
   MirWindowSpec *spec = NULL;
   GdkWindow *parent;
+  MirRectangle rect;
 
   spec = create_window_type_spec (impl->display,
                                   impl->transient_for,
@@ -476,6 +477,41 @@ create_spec (GdkWindow        *window,
                                      impl->anchor_hints,
                                      impl->rect_anchor_dx,
                                      impl->rect_anchor_dy);
+    }
+  else
+    {
+      switch (impl->type_hint)
+        {
+        case GDK_WINDOW_TYPE_HINT_MENU:
+        case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
+        case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+        case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+        case GDK_WINDOW_TYPE_HINT_COMBO:
+        case GDK_WINDOW_TYPE_HINT_DND:
+        case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+        case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+          rect.left = impl->transient_x;
+          rect.top = impl->transient_y;
+          rect.width = 1;
+          rect.height = 1;
+
+          mir_window_spec_set_placement (spec,
+                                         &rect,
+                                         mir_placement_gravity_southeast,
+                                         mir_placement_gravity_northwest,
+                                         (mir_placement_hints_flip_x |
+                                          mir_placement_hints_flip_y |
+                                          mir_placement_hints_slide_x |
+                                          mir_placement_hints_slide_y |
+                                          mir_placement_hints_resize_x |
+                                          mir_placement_hints_resize_y),
+                                         -window->shadow_left,
+                                         -window->shadow_top);
+
+          break;
+        default:
+          break;
+        }
     }
 
   return spec;
@@ -1155,7 +1191,8 @@ _gdk_mir_window_set_final_rect (GdkWindow    *window,
   gint unflipped_offset;
   gint flipped_offset;
 
-  g_return_if_fail (impl->has_rect);
+  if (!impl->has_rect)
+    return;
 
   best_rect = get_unflipped_rect (&impl->rect,
                                   window->width,
