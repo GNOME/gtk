@@ -1,3 +1,65 @@
+Overview of Changes in GTK+ 3.89.5
+==================================
+
+* Convert many more widgets to use gtk_widget_measure for size allocation
+
+* gtk3-demo: Add an example for touchpad swipe handling
+
+* Theme: Improve styling for flow boxes
+
+* Quartz:
+ - Support fullscreen CSD windows
+ - Implement backdrop
+ - Implement gdk_window_set_functions
+
+* Bugs fixed:
+ 136059 Ctrl-navigation works in opposite direction in right-to-left text
+ 734946 Implement GContentType on OSX
+ 772505 Wayland: menu does not resize after disabling an action
+ 776821 Scale factor not properly propagated upon reparent
+ 778019 Key repeat under wayland behaves differently, making keyboard navigation...
+ 778203 icon shown at top left corner when dnd begins
+ 778534 Widget: Document signal mnemonic-activate
+ 778678 gtkshow: Prefer gtk_show_uri_on_window() which works for sandboxed apps
+ 778726 Use gtk_show_uri_on_window()
+ 778746 Rename popover is sometimes misplaced
+ 779073 style flowbox tiles
+ 779074 style selectionmode checkboxes for flowbox
+ 779147 Inspector: Use Title Case for labels & menu items
+ 779317 gtk_pad_controllerpad_set_action issue with incorrect assert
+ 779374 Unprovoked key repeat in gnome-terminal after in 3.22.9
+ 779383 quartz: Let CSD windows be fullscreen
+ 779392 Implement backdrop for Quartz
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Chinese
+ Chinese (Taiwan)
+ Czech
+ Danish
+ Finnish
+ French
+ Friulian
+ Galician
+ German
+ Hungarian
+ Icelandic
+ Indonesian
+ Italian
+ Kazakh
+ Korean
+ Lithuanian
+ Norwegian bokmål
+ Polish
+ Scottish Gaelic
+ Serbian
+ Slovak
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.89.4
 ==================================
 
