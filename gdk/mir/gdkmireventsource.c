@@ -505,6 +505,32 @@ handle_window_event (GdkWindow            *window,
 }
 
 static void
+generate_configure_event (GdkWindow *window,
+                          gint       width,
+                          gint       height)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_CONFIGURE);
+  event->configure.send_event = FALSE;
+  event->configure.width = width;
+  event->configure.height = height;
+
+  send_event (window, get_pointer (window), event);
+}
+
+static void
+handle_resize_event (GdkWindow            *window,
+                     const MirResizeEvent *event)
+{
+  window->width = mir_resize_event_get_width (event);
+  window->height = mir_resize_event_get_height (event);
+  _gdk_window_update_size (window);
+
+  generate_configure_event (window, mir_resize_event_get_width (event), mir_resize_event_get_height (event));
+}
+
+static void
 handle_close_event (GdkWindow *window)
 {
   send_event (window, get_pointer (window), gdk_event_new (GDK_DESTROY));
@@ -570,6 +596,7 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
       handle_window_event (window, mir_event_get_window_event (event));
       break;
     case mir_event_type_resize:
+      handle_resize_event (window, mir_event_get_resize_event (event));
       break;
     case mir_event_type_prompt_session_state_change:
       break;
