@@ -958,15 +958,8 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
 static gboolean
 gdk_window_impl_wayland_beep (GdkWindow *window)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-
-  if (!display_wayland->gtk_shell)
-    return FALSE;
-
-  gtk_shell1_system_bell (display_wayland->gtk_shell,
-                          impl->display_server.gtk_surface);
+  gdk_wayland_display_system_bell (gdk_window_get_display (window),
+                                   window);
 
   return TRUE;
 }
@@ -3891,6 +3884,13 @@ gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
   return impl->dummy_egl_surface;
 }
 
+struct gtk_surface1 *
+gdk_wayland_window_get_gtk_surface (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  return GDK_WINDOW_IMPL_WAYLAND (window->impl)->display_server.gtk_surface;
+}
 
 /**
  * gdk_wayland_window_set_use_custom_surface:
