@@ -2923,11 +2923,7 @@ set_extra_widget (GtkFileChooserWidget *impl,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   if (extra_widget)
-    {
-      g_object_ref (extra_widget);
-      /* FIXME: is this right ? */
-      gtk_widget_show (extra_widget);
-    }
+    g_object_ref (extra_widget);
 
   if (priv->extra_widget)
     {
