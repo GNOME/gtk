@@ -184,7 +184,6 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
       g_object_unref (child);
 
       gtk_container_add (GTK_CONTAINER (item), box);
-      gtk_widget_show (box);
 
       /* Now we have a box */
       child = box;
@@ -202,7 +201,6 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
       image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
       gtk_box_pack_start (GTK_BOX (child), image, FALSE, FALSE);
-      gtk_widget_show (image);
     }
 
   g_object_notify (G_OBJECT (item), "icon");
