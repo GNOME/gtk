@@ -536,6 +536,28 @@ generate_configure_event (GdkWindow *window,
 }
 
 static void
+maybe_synthesize_resize (GdkWindow *window)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  MirWindowParameters params;
+
+  if (!impl->mir_window)
+    return;
+
+  mir_window_get_parameters (impl->mir_window, &params);
+
+  if (params.width != window->width || params.height != window->height)
+    {
+      window->width = params.width;
+      window->height = params.height;
+
+      _gdk_window_update_size (window);
+
+      generate_configure_event (window, window->width, window->height);
+    }
+}
+
+static void
 ensure_mir_window_full (GdkWindow      *window,
                         MirBufferUsage  buffer_usage)
 {
@@ -568,21 +590,7 @@ ensure_mir_window_full (GdkWindow      *window,
   impl->pending_spec_update = FALSE;
   impl->buffer_stream = mir_window_get_buffer_stream (impl->mir_window);
 
-  /* FIXME: can't make an initial resize event */
-  // MirEvent *resize_event;
-
-  /* Send the initial configure with the size the server gave... */
-  /* FIXME: can't make an initial resize event */
-  /*
-  resize_event.resize.type = mir_event_type_resize;
-  resize_event.resize.surface_id = 0;
-  resize_event.resize.width = window->width;
-  resize_event.resize.height = window->height;
-
-  _gdk_mir_event_source_queue (window_ref, &resize_event);
-  */
-
-  generate_configure_event (window, window->width, window->height);
+  maybe_synthesize_resize (window);
 
   /* FIXME: Ignore some events until shown */
   mir_window_set_event_handler (impl->mir_window, event_cb, window_ref);
@@ -644,6 +652,8 @@ send_buffer (GdkWindow *window)
     update_window_spec (window);
 
   impl->pending_spec_update = FALSE;
+
+  maybe_synthesize_resize (window);
 }
 
 static cairo_surface_t *
