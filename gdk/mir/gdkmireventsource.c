@@ -505,21 +505,6 @@ handle_window_event (GdkWindow            *window,
 }
 
 static void
-generate_configure_event (GdkWindow *window,
-                          gint       width,
-                          gint       height)
-{
-  GdkEvent *event;
-
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.send_event = FALSE;
-  event->configure.width = width;
-  event->configure.height = height;
-
-  send_event (window, get_pointer (window), event);
-}
-
-static void
 handle_close_event (GdkWindow *window)
 {
   send_event (window, get_pointer (window), gdk_event_new (GDK_DESTROY));
