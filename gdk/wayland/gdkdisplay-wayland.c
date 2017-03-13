@@ -660,10 +660,12 @@ gdk_wayland_display_get_default_screen (GdkDisplay *display)
   return GDK_WAYLAND_DISPLAY (display)->screen;
 }
 
-static void
-gdk_wayland_display_beep (GdkDisplay *display)
+void
+gdk_wayland_display_system_bell (GdkDisplay *display,
+                                 GdkWindow  *window)
 {
   GdkWaylandDisplay *display_wayland;
+  struct gtk_surface1 *gtk_surface;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
@@ -672,7 +674,18 @@ gdk_wayland_display_beep (GdkDisplay *display)
   if (!display_wayland->gtk_shell)
     return;
 
-  gtk_shell1_system_bell (display_wayland->gtk_shell, NULL);
+  if (window)
+    gtk_surface = gdk_wayland_window_get_gtk_surface (window);
+  else
+    gtk_surface = NULL;
+
+  gtk_shell1_system_bell (display_wayland->gtk_shell, gtk_surface);
+}
+
+static void
+gdk_wayland_display_beep (GdkDisplay *display)
+{
+  gdk_wayland_display_system_bell (display, NULL);
 }
 
 static void

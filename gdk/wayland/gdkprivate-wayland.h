@@ -83,6 +83,9 @@ void       _gdk_wayland_display_get_maximal_cursor_size (GdkDisplay *display,
 gboolean   _gdk_wayland_display_supports_cursor_alpha (GdkDisplay *display);
 gboolean   _gdk_wayland_display_supports_cursor_color (GdkDisplay *display);
 
+void       gdk_wayland_display_system_bell (GdkDisplay *display,
+                                            GdkWindow  *window);
+
 struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
                                                   guint      image_index,
                                                   int       *hotspot_x,
@@ -270,6 +273,8 @@ EGLSurface gdk_wayland_window_get_egl_surface (GdkWindow *window,
                                                EGLConfig config);
 EGLSurface gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
 						     EGLConfig config);
+
+struct gtk_surface1 * gdk_wayland_window_get_gtk_surface (GdkWindow *window);
 
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
