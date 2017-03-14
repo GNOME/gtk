@@ -2496,7 +2496,7 @@ gdk_quartz_window_set_functions (GdkWindow    *window,
 
   if (impl->toplevel)
     {
-      NSWindowStyleMask mask = [impl->toplevel styleMask];
+      NSUInteger mask = [impl->toplevel styleMask];
 
       if (min)
         mask = mask | NSMiniaturizableWindowMask;
