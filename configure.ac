@@ -1869,6 +1869,14 @@ esac
 AC_SUBST(GDK_HIDDEN_VISIBILITY_CFLAGS)
 
 ##################################################
+# Theming
+##################################################
+
+AC_PATH_PROG([SASSC], [sassc])
+AC_ARG_VAR(SASSC)
+AM_CONDITIONAL([REBUILD_SCSS], [test "xSASSC" != x])
+
+##################################################
 # Output commands
 ##################################################
 
