@@ -1323,36 +1323,61 @@ gesture_sources = 				\
 	gesture/gesture-two-finger-swipe-left-symbolic.svg	\
 	gesture/gesture-two-finger-swipe-right-symbolic.svg
 
-theme_sources = 				\
-	theme/win32/gtk.css	 		\
-	theme/win32/gtk-win32-base.css 		\
-	theme/Adwaita/assets.txt 		\
-	theme/Adwaita/assets.svg 		\
+adwaita_theme_scss = \
 	theme/Adwaita/_colors-public.scss 	\
 	theme/Adwaita/_colors.scss 		\
 	theme/Adwaita/_common.scss 		\
 	theme/Adwaita/_drawing.scss 		\
 	theme/Adwaita/gtk-contained-dark.scss 	\
 	theme/Adwaita/gtk-contained.scss 	\
-	theme/Adwaita/parse-sass.sh 		\
-	theme/Adwaita/render-assets.sh 		\
-	theme/Adwaita/Gemfile 			\
-	theme/Adwaita/README 			\
-	theme/Adwaita/gtk-contained.css 	\
-	theme/Adwaita/gtk-contained-dark.css 	\
-	theme/Adwaita/gtk.css 			\
-	theme/Adwaita/gtk-dark.css 		\
+	$()
+
+highcontrast_theme_scss = \
 	theme/HighContrast/_colors.scss 	\
 	theme/HighContrast/_common.scss 	\
 	theme/HighContrast/_drawing.scss 	\
 	theme/HighContrast/gtk-contained-inverse.scss \
 	theme/HighContrast/gtk-contained.scss 	\
-	theme/HighContrast/Gemfile 		\
+	$()
+
+if REBUILD_SCSS
+# If we have sassc then we can rebuild the theme CSS as soon as the SCSS
+# files have been changed
+
+scss_verbose = $(scss_verbose_@AM_V@)
+scss_verbose_ = $(scss_verbose_@AM_DEFAULT_V@)
+scss_verbose_0 = @echo "  SCSS     $@";
+
+theme/Adwaita/gtk-contained.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained.scss
+	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
+
+theme/Adwaita/gtk-contained-dark.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained-dark.scss
+	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
+
+theme/HighContrast/gtk-contained.css: $(top_srcdir)/gtk/theme/HighContrast/gtk-contained.scss
+	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
+
+theme/HighContrast/gtk-contained-inverse.css: $(top_srcdir)/gtk/theme/HighContrast/gtk-contained-inverse.scss
+	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
+
+endif # REBUILD_SCSS
+
+theme_sources = 				\
+	theme/win32/gtk.css	 		\
+	theme/win32/gtk-win32-base.css 		\
+	$(adwaita_theme_scss)			\
+	theme/Adwaita/assets.txt 		\
+	theme/Adwaita/assets.svg 		\
+	theme/Adwaita/README 			\
+	theme/Adwaita/gtk-contained.css 	\
+	theme/Adwaita/gtk-contained-dark.css 	\
+	theme/Adwaita/gtk.css 			\
+	theme/Adwaita/gtk-dark.css 		\
+	$(highcontrast_theme_scss)		\
 	theme/HighContrast/gtk-contained.css 	\
 	theme/HighContrast/gtk-contained-inverse.css \
 	theme/HighContrast/gtk.css 		\
 	theme/HighContrast/gtk-inverse.css 	\
-	theme/HighContrast/parse-sass.sh 	\
 	theme/Raleigh/gtk-default.css
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/gtk.gresource.xml)
