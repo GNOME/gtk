@@ -1,3 +1,33 @@
+Overview of Changes in GTK+ 3.22.10
+===================================
+
+* Theme: Improve styling for flow boxes
+
+* Quartz:
+ - Support fullscreen CSD windows
+ - Implement backdrop
+ - Implement gdk_window_set_functions
+
+* Bugs fixed:
+ 778905 Frame: documented flat style class is not usable
+ 779073 style flowbox tiles
+ 779074 style selectionmode checkboxes for flowbox
+ 779317 gtk_pad_controllerpad_set_action issue with incorrect assert
+ 779374 Unprovoked key repeat in gnome-terminal after in 3.22.9
+ 779383 quartz: Let CSD windows be fullscreen
+ 779392 Implement backdrop for Quartz
+
+* Translation updates:
+ Basque
+ Czech
+ Danish
+ Icelandic
+ Indonesian
+ Korean
+ Scottish Gaelic
+ Slovak
+
+
 Overview of Changes in GTK+ 3.22.9
 ==================================
 
