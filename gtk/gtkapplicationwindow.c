@@ -30,7 +30,7 @@
 #include "gtksettings.h"
 #include "gtkshortcutswindowprivate.h"
 
-#ifdef HAVE_GIO_UNIX
+#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
 #include <gio/gdesktopappinfo.h>
 #endif
 
@@ -277,7 +277,7 @@ gtk_application_window_get_app_desktop_name (void)
 {
   gchar *retval = NULL;
 
-#ifdef HAVE_GIO_UNIX
+#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
   GDesktopAppInfo *app_info;
   const gchar *app_name = NULL;
   gchar *desktop_file;

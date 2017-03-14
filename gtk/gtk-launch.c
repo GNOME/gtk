@@ -28,7 +28,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-#ifdef G_OS_UNIX
+#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
 #include <gio/gdesktopappinfo.h>
 #endif
 #include <gtk.h>
@@ -117,7 +117,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   app_name = *args;
-#ifdef G_OS_UNIX
+#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
   bus_name = g_strdup (app_name);
   if (g_str_has_suffix (app_name, ".desktop"))
     {
