@@ -1,19 +1,19 @@
 # Hungarian translation of gtk+-properties.
-# Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Free Software Foundation, Inc.
+# Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2013, 2017. Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+-properties package.
 #
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011.
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
 # Szabolcs Varga <shirokuma at shirokuma dot hu>, 2005.
-# Balázs Úr <urbalazs at gmail dot com>, 2013.
+# Balázs Úr <urbalazs at gmail dot com>, 2013, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-28 13:37+0000\n"
-"PO-Revision-Date: 2013-04-04 21:58+0200\n"
-"Last-Translator: Balázs Úr <urbalazs at gmail dot com>\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=.General\n"
+"POT-Creation-Date: 2017-03-09 03:50+0000\n"
+"PO-Revision-Date: 2017-03-15 17:55+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -531,7 +531,7 @@ msgstr "Nyíl árnyéka"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "A nyilat körülvevő árnyék megjelenése"
 
-#: ../gtk/gtkarrow.c:112 ../gtk/gtkmenu.c:717 ../gtk/gtkmenuitem.c:368
+#: ../gtk/gtkarrow.c:112 ../gtk/gtkmenu.c:715 ../gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "Nyíl méretezése"
 
@@ -885,7 +885,7 @@ msgstr ""
 "Azt adja meg, hogy a child_displacement_x/_y tulajdonságok befolyásolják-e a "
 "fókusztéglalapot"
 
-#: ../gtk/gtkbutton.c:501 ../gtk/gtkentry.c:695 ../gtk/gtkentry.c:1740
+#: ../gtk/gtkbutton.c:501 ../gtk/gtkentry.c:692 ../gtk/gtkentry.c:1737
 msgid "Inner Border"
 msgstr "Belső szegély"
 
@@ -900,14 +900,6 @@ msgstr "Képtávolság"
 #: ../gtk/gtkbutton.c:516
 msgid "Spacing in pixels between the image and label"
 msgstr "A kép és a címke közötti távolság képpontokban"
-
-#: ../gtk/gtkbutton.c:530
-msgid "Show button images"
-msgstr "Gombképek megjelenítése"
-
-#: ../gtk/gtkbutton.c:531
-msgid "Whether images should be shown on buttons"
-msgstr "Megjelenjenek-e képek a gombokon"
 
 #: ../gtk/gtkcalendar.c:436
 msgid "Year"
@@ -1233,7 +1225,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "A megjelenítendő gyári ikon gyári azonosítója"
 
 #: ../gtk/gtkcellrendererpixbuf.c:143 ../gtk/gtkcellrendererspinner.c:158
-#: ../gtk/gtkrecentmanager.c:253 ../gtk/gtkstatusicon.c:271
+#: ../gtk/gtkrecentmanager.c:258 ../gtk/gtkstatusicon.c:271
 msgid "Size"
 msgstr "Méret"
 
@@ -1267,7 +1259,7 @@ msgid "Value of the progress bar"
 msgstr "A folyamatjelző értéke"
 
 #: ../gtk/gtkcellrendererprogress.c:146 ../gtk/gtkcellrenderertext.c:195
-#: ../gtk/gtkentry.c:738 ../gtk/gtkentrybuffer.c:353
+#: ../gtk/gtkentry.c:735 ../gtk/gtkentrybuffer.c:353
 #: ../gtk/gtkmessagedialog.c:243 ../gtk/gtkprogressbar.c:184
 #: ../gtk/gtktextbuffer.c:198
 msgid "Text"
@@ -1319,8 +1311,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "A folyamatjelző tájolása és a növekedés iránya"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:118
-#: ../gtk/gtkrange.c:378 ../gtk/gtkscalebutton.c:225
-#: ../gtk/gtkspinbutton.c:208
+#: ../gtk/gtkrange.c:378 ../gtk/gtkscalebutton.c:225 ../gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Igazítás"
 
@@ -1336,7 +1327,7 @@ msgstr "Emelkedési sebesség"
 msgid "The acceleration rate when you hold down a button"
 msgstr "A gomb lenyomásakor a gyorsulási sebesség"
 
-#: ../gtk/gtkcellrendererspin.c:123 ../gtk/gtkscale.c:272
+#: ../gtk/gtkcellrendererspin.c:123 ../gtk/gtkscale.c:282
 #: ../gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "Számjegyek"
@@ -1346,7 +1337,7 @@ msgid "The number of decimal places to display"
 msgstr "A megjelenítendő tizedesjegyek száma"
 
 #: ../gtk/gtkcellrendererspinner.c:124 ../gtk/gtkcheckmenuitem.c:98
-#: ../gtk/gtkmenu.c:507 ../gtk/gtkspinner.c:128 ../gtk/gtktoggleaction.c:119
+#: ../gtk/gtkmenu.c:505 ../gtk/gtkspinner.c:128 ../gtk/gtktoggleaction.c:119
 #: ../gtk/gtktogglebutton.c:115 ../gtk/gtktoggletoolbutton.c:114
 msgid "Active"
 msgstr "Aktív"
@@ -1426,13 +1417,13 @@ msgstr "Előtérszín"
 msgid "Foreground color as a GdkColor"
 msgstr "Előtérszín GdkColor-ként"
 
-#: ../gtk/gtkcellrenderertext.c:261 ../gtk/gtkentry.c:662
-#: ../gtk/gtktexttag.c:251 ../gtk/gtktextview.c:576
+#: ../gtk/gtkcellrenderertext.c:261 ../gtk/gtkentry.c:659
+#: ../gtk/gtktexttag.c:251 ../gtk/gtktextview.c:577
 msgid "Editable"
 msgstr "Szerkeszthető"
 
 #: ../gtk/gtkcellrenderertext.c:262 ../gtk/gtktexttag.c:252
-#: ../gtk/gtktextview.c:577
+#: ../gtk/gtktextview.c:578
 msgid "Whether the text can be modified by the user"
 msgstr "A szöveg szerkeszthető-e a felhasználó által"
 
@@ -1822,7 +1813,7 @@ msgstr "Cím"
 msgid "The title of the color selection dialog"
 msgstr "A színválasztó ablak címkéje"
 
-#: ../gtk/gtkcolorbutton.c:191 ../gtk/gtkcolorsel.c:302
+#: ../gtk/gtkcolorbutton.c:191 ../gtk/gtkcolorsel.c:303
 msgid "Current Color"
 msgstr "Jelenlegi szín"
 
@@ -1830,7 +1821,7 @@ msgstr "Jelenlegi szín"
 msgid "The selected color"
 msgstr "A kiválasztott szín"
 
-#: ../gtk/gtkcolorbutton.c:206 ../gtk/gtkcolorsel.c:309
+#: ../gtk/gtkcolorbutton.c:206 ../gtk/gtkcolorsel.c:310
 msgid "Current Alpha"
 msgstr "Jelenlegi alfa"
 
@@ -1840,39 +1831,31 @@ msgstr ""
 "A jelenlegi átlátszósági érték (0 teljesen átlátszó, 65535 teljesen "
 "átlátszatlan)"
 
-#: ../gtk/gtkcolorsel.c:288
+#: ../gtk/gtkcolorsel.c:289
 msgid "Has Opacity Control"
 msgstr "Van átlátszóság-vezérlés"
 
-#: ../gtk/gtkcolorsel.c:289
+#: ../gtk/gtkcolorsel.c:290
 msgid "Whether the color selector should allow setting opacity"
 msgstr "A színválasztóban lehessen-e megadni az átlátszóságot"
 
-#: ../gtk/gtkcolorsel.c:295
+#: ../gtk/gtkcolorsel.c:296
 msgid "Has palette"
 msgstr "Van palettája"
 
-#: ../gtk/gtkcolorsel.c:296
+#: ../gtk/gtkcolorsel.c:297
 msgid "Whether a palette should be used"
 msgstr "Kell-e palettát használni"
 
-#: ../gtk/gtkcolorsel.c:303
+#: ../gtk/gtkcolorsel.c:304
 msgid "The current color"
 msgstr "A jelenlegi szín"
 
-#: ../gtk/gtkcolorsel.c:310
+#: ../gtk/gtkcolorsel.c:311
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "A jelenlegi átlátszósági érték (0 teljesen átlátszó, 65535 teljesen "
 "átlátszatlan)"
-
-#: ../gtk/gtkcolorsel.c:324
-msgid "Custom palette"
-msgstr "Egyéni paletta"
-
-#: ../gtk/gtkcolorsel.c:325
-msgid "Palette to use in the color selector"
-msgstr "A színválasztóban használandó paletta"
 
 #: ../gtk/gtkcolorseldialog.c:102
 msgid "Color Selection"
@@ -1992,7 +1975,7 @@ msgstr "Leválasztók hozzáadása menükhöz"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Legyen-e leválasztó elem a legördülő menükben"
 
-#: ../gtk/gtkcombobox.c:843 ../gtk/gtkentry.c:687
+#: ../gtk/gtkcombobox.c:843 ../gtk/gtkentry.c:684
 msgid "Has Frame"
 msgstr "Van kerete"
 
@@ -2004,7 +1987,7 @@ msgstr "A kombinált mező rajzol-e keretet a gyermek körül"
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "A kombinált mező megkapja-e a fókuszt, ha az egérrel rákattintanak"
 
-#: ../gtk/gtkcombobox.c:867 ../gtk/gtkmenu.c:562
+#: ../gtk/gtkcombobox.c:867 ../gtk/gtkmenu.c:560
 msgid "Tearoff Title"
 msgstr "Leválasztó címe"
 
@@ -2064,7 +2047,7 @@ msgstr "Nyíl mérete"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "A nyíl minimális mérete a kombinált mezőben"
 
-#: ../gtk/gtkcombobox.c:976 ../gtk/gtkentry.c:787 ../gtk/gtkhandlebox.c:174
+#: ../gtk/gtkcombobox.c:976 ../gtk/gtkentry.c:784 ../gtk/gtkhandlebox.c:174
 #: ../gtk/gtkmenubar.c:194 ../gtk/gtkstatusbar.c:193 ../gtk/gtktoolbar.c:625
 #: ../gtk/gtkviewport.c:141
 msgid "Shadow type"
@@ -2178,51 +2161,51 @@ msgstr "Műveletterület-szegély"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "A párbeszédablak alján a gombterület körüli szegély"
 
-#: ../gtk/gtkentry.c:634
+#: ../gtk/gtkentry.c:631
 msgid "Text Buffer"
 msgstr "Szöveges puffer"
 
-#: ../gtk/gtkentry.c:635
+#: ../gtk/gtkentry.c:632
 msgid "Text buffer object which actually stores entry text"
 msgstr "A beviteli mező szövegét ténylegesen tároló szöveges puffer"
 
-#: ../gtk/gtkentry.c:642 ../gtk/gtklabel.c:602
+#: ../gtk/gtkentry.c:639 ../gtk/gtklabel.c:602
 msgid "Cursor Position"
 msgstr "Kurzorpozíció"
 
-#: ../gtk/gtkentry.c:643 ../gtk/gtklabel.c:603
+#: ../gtk/gtkentry.c:640 ../gtk/gtklabel.c:603
 msgid "The current position of the insertion cursor in chars"
 msgstr "A beszúrási kurzor aktuális helye karakterekben megadva"
 
-#: ../gtk/gtkentry.c:652 ../gtk/gtklabel.c:612
+#: ../gtk/gtkentry.c:649 ../gtk/gtklabel.c:612
 msgid "Selection Bound"
 msgstr "Kijelölés mérete"
 
-#: ../gtk/gtkentry.c:653 ../gtk/gtklabel.c:613
+#: ../gtk/gtkentry.c:650 ../gtk/gtklabel.c:613
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "A kurzortól a kijelölés túlsó végének a távolsága karakterekben megadva"
 
-#: ../gtk/gtkentry.c:663
+#: ../gtk/gtkentry.c:660
 msgid "Whether the entry contents can be edited"
 msgstr "Szerkeszthető-e a bejegyzés tartalma"
 
-#: ../gtk/gtkentry.c:670 ../gtk/gtkentrybuffer.c:383
+#: ../gtk/gtkentry.c:667 ../gtk/gtkentrybuffer.c:383
 msgid "Maximum length"
 msgstr "Maximális hossz"
 
-#: ../gtk/gtkentry.c:671 ../gtk/gtkentrybuffer.c:384
+#: ../gtk/gtkentry.c:668 ../gtk/gtkentrybuffer.c:384
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "A bejegyzésben felhasználható karakterek maximális száma. Ha nulla, akkor "
 "nincs maximum "
 
-#: ../gtk/gtkentry.c:679
+#: ../gtk/gtkentry.c:676
 msgid "Visibility"
 msgstr "Láthatóság"
 
-#: ../gtk/gtkentry.c:680
+#: ../gtk/gtkentry.c:677
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2230,30 +2213,30 @@ msgstr ""
 "FALSE hatására a „Láthatatlan karakter” jelenik meg a tényleges szöveg "
 "helyett (jelszó módban)"
 
-#: ../gtk/gtkentry.c:688
+#: ../gtk/gtkentry.c:685
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE hatására törlésre kerül a bejegyzés külső élkidolgozása"
 
-#: ../gtk/gtkentry.c:696
+#: ../gtk/gtkentry.c:693
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "A szöveg és keret közötti szegély. Felülírja a belső szegély "
 "stílustulajdonságot."
 
-#: ../gtk/gtkentry.c:703 ../gtk/gtkentry.c:1269
+#: ../gtk/gtkentry.c:700 ../gtk/gtkentry.c:1266
 msgid "Invisible character"
 msgstr "Láthatatlan karakter"
 
-#: ../gtk/gtkentry.c:704 ../gtk/gtkentry.c:1270
+#: ../gtk/gtkentry.c:701 ../gtk/gtkentry.c:1267
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "A bevitel elrejtésére használt karakter („jelszó módban”)"
 
-#: ../gtk/gtkentry.c:711
+#: ../gtk/gtkentry.c:708
 msgid "Activates default"
 msgstr "Alapértelmezés aktiválása"
 
-#: ../gtk/gtkentry.c:712
+#: ../gtk/gtkentry.c:709
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2261,31 +2244,31 @@ msgstr ""
 "Az alapértelmezett felületi elem (például egy párbeszédablak alapértelmezett "
 "gombjának) aktiválása az Enter lenyomására"
 
-#: ../gtk/gtkentry.c:718
+#: ../gtk/gtkentry.c:715
 msgid "Width in chars"
 msgstr "Szélesség karakterekben"
 
-#: ../gtk/gtkentry.c:719
+#: ../gtk/gtkentry.c:716
 msgid "Number of characters to leave space for in the entry"
 msgstr "Hely kihagyása a bejegyzésben ennyi karakternek"
 
-#: ../gtk/gtkentry.c:728
+#: ../gtk/gtkentry.c:725
 msgid "Scroll offset"
 msgstr "Görgetési eltolás"
 
-#: ../gtk/gtkentry.c:729
+#: ../gtk/gtkentry.c:726
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "A bejegyzésnek balra, a képernyőről legörgetett képpontjainak száma"
 
-#: ../gtk/gtkentry.c:739
+#: ../gtk/gtkentry.c:736
 msgid "The contents of the entry"
 msgstr "A bejegyzés tartalma"
 
-#: ../gtk/gtkentry.c:754 ../gtk/gtkmisc.c:73
+#: ../gtk/gtkentry.c:751 ../gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "X-igazítás"
 
-#: ../gtk/gtkentry.c:755 ../gtk/gtkmisc.c:74
+#: ../gtk/gtkentry.c:752 ../gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2293,66 +2276,66 @@ msgstr ""
 "A vízszintes igazítás, 0 (bal) és 1 (jobb) közötti számként megadva. RTL "
 "elrendezéseknél fordított az érték."
 
-#: ../gtk/gtkentry.c:771
+#: ../gtk/gtkentry.c:768
 msgid "Truncate multiline"
 msgstr "Több sor csonkítása"
 
-#: ../gtk/gtkentry.c:772
+#: ../gtk/gtkentry.c:769
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Több beillesztett sor csonkítva legyen-e az első sorra"
 
-#: ../gtk/gtkentry.c:788
+#: ../gtk/gtkentry.c:785
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "A bejegyzés köré rajzolandó árnyék típusa, ha a Van kerete be van állítva."
 
-#: ../gtk/gtkentry.c:803 ../gtk/gtktextview.c:656
+#: ../gtk/gtkentry.c:800 ../gtk/gtktextview.c:657
 msgid "Overwrite mode"
 msgstr "Felülírás mód"
 
-#: ../gtk/gtkentry.c:804
+#: ../gtk/gtkentry.c:801
 msgid "Whether new text overwrites existing text"
 msgstr "A beírt szöveg felülírja-e a meglévő tartalmat"
 
-#: ../gtk/gtkentry.c:818 ../gtk/gtkentrybuffer.c:368
+#: ../gtk/gtkentry.c:815 ../gtk/gtkentrybuffer.c:368
 msgid "Text length"
 msgstr "Szöveg hossza"
 
-#: ../gtk/gtkentry.c:819
+#: ../gtk/gtkentry.c:816
 msgid "Length of the text currently in the entry"
 msgstr "A beviteli mezőben lévő szöveg aktuális hossza"
 
-#: ../gtk/gtkentry.c:834
+#: ../gtk/gtkentry.c:831
 msgid "Invisible char set"
 msgstr "Láthatatlan karakter beállítva"
 
-#: ../gtk/gtkentry.c:835
+#: ../gtk/gtkentry.c:832
 msgid "Whether the invisible char has been set"
 msgstr "A láthatatlan karakter tulajdonság be van-e állítva"
 
-#: ../gtk/gtkentry.c:853
+#: ../gtk/gtkentry.c:850
 msgid "Caps Lock warning"
 msgstr "Caps Lock figyelmeztetés"
 
-#: ../gtk/gtkentry.c:854
+#: ../gtk/gtkentry.c:851
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 "A jelszóbeviteli mezők megjelenítsenek-e figyelmeztetést ha a Caps Lock be "
 "van kapcsolva"
 
-#: ../gtk/gtkentry.c:868
+#: ../gtk/gtkentry.c:865
 msgid "Progress Fraction"
 msgstr "Előrehaladás törtrésze"
 
-#: ../gtk/gtkentry.c:869
+#: ../gtk/gtkentry.c:866
 msgid "The current fraction of the task that's been completed"
 msgstr "A teljes feladat elkészült része törtként"
 
-#: ../gtk/gtkentry.c:886
+#: ../gtk/gtkentry.c:883
 msgid "Progress Pulse Step"
 msgstr "Előrehaladás lépésegysége"
 
-#: ../gtk/gtkentry.c:887
+#: ../gtk/gtkentry.c:884
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
@@ -2360,195 +2343,177 @@ msgstr ""
 "A teljes bejegyzésszélesség része törtként, amennyivel a pattogó tégla "
 "elmozdul a gtk_entry_progress_pulse() minden hívásakor"
 
-#: ../gtk/gtkentry.c:903
+#: ../gtk/gtkentry.c:900
 msgid "Primary pixbuf"
 msgstr "Elsődleges pixbuf"
 
-#: ../gtk/gtkentry.c:904
+#: ../gtk/gtkentry.c:901
 msgid "Primary pixbuf for the entry"
 msgstr "A beviteli mező elsődleges pixbufja"
 
-#: ../gtk/gtkentry.c:918
+#: ../gtk/gtkentry.c:915
 msgid "Secondary pixbuf"
 msgstr "Másodlagos pixbuf"
 
-#: ../gtk/gtkentry.c:919
+#: ../gtk/gtkentry.c:916
 msgid "Secondary pixbuf for the entry"
 msgstr "A beviteli mező másodlagos pixbufja"
 
-#: ../gtk/gtkentry.c:933
+#: ../gtk/gtkentry.c:930
 msgid "Primary stock ID"
 msgstr "Elsődleges alap azonosító"
 
-#: ../gtk/gtkentry.c:934
+#: ../gtk/gtkentry.c:931
 msgid "Stock ID for primary icon"
 msgstr "Az elsődleges ikon alap azonosítója"
 
-#: ../gtk/gtkentry.c:948
+#: ../gtk/gtkentry.c:945
 msgid "Secondary stock ID"
 msgstr "Másodlagos alap azonosító"
 
-#: ../gtk/gtkentry.c:949
+#: ../gtk/gtkentry.c:946
 msgid "Stock ID for secondary icon"
 msgstr "A másodlagos ikon alap azonosítója"
 
-#: ../gtk/gtkentry.c:963
+#: ../gtk/gtkentry.c:960
 msgid "Primary icon name"
 msgstr "Elsődleges ikonnév"
 
-#: ../gtk/gtkentry.c:964
+#: ../gtk/gtkentry.c:961
 msgid "Icon name for primary icon"
 msgstr "Az elsődleges ikon neve"
 
-#: ../gtk/gtkentry.c:978
+#: ../gtk/gtkentry.c:975
 msgid "Secondary icon name"
 msgstr "Másodlagos ikonnév"
 
-#: ../gtk/gtkentry.c:979
+#: ../gtk/gtkentry.c:976
 msgid "Icon name for secondary icon"
 msgstr "A másodlagos ikon neve"
 
-#: ../gtk/gtkentry.c:993
+#: ../gtk/gtkentry.c:990
 msgid "Primary GIcon"
 msgstr "Elsődleges GIcon"
 
-#: ../gtk/gtkentry.c:994
+#: ../gtk/gtkentry.c:991
 msgid "GIcon for primary icon"
 msgstr "Az elsődleges ikon GIconja"
 
-#: ../gtk/gtkentry.c:1008
+#: ../gtk/gtkentry.c:1005
 msgid "Secondary GIcon"
 msgstr "Másodlagos GIcon"
 
-#: ../gtk/gtkentry.c:1009
+#: ../gtk/gtkentry.c:1006
 msgid "GIcon for secondary icon"
 msgstr "A másodlagos ikon GIconja"
 
-#: ../gtk/gtkentry.c:1023
+#: ../gtk/gtkentry.c:1020
 msgid "Primary storage type"
 msgstr "Elsődleges tárolótípus"
 
-#: ../gtk/gtkentry.c:1024
+#: ../gtk/gtkentry.c:1021
 msgid "The representation being used for primary icon"
 msgstr "Az elsődleges ikonhoz használt ábrázolás"
 
-#: ../gtk/gtkentry.c:1039
+#: ../gtk/gtkentry.c:1036
 msgid "Secondary storage type"
 msgstr "Másodlagos tárolótípus"
 
-#: ../gtk/gtkentry.c:1040
+#: ../gtk/gtkentry.c:1037
 msgid "The representation being used for secondary icon"
 msgstr "A másodlagos ikonhoz használt ábrázolás"
 
-#: ../gtk/gtkentry.c:1061
+#: ../gtk/gtkentry.c:1058
 msgid "Primary icon activatable"
 msgstr "Elsődleges ikon aktiválható"
 
-#: ../gtk/gtkentry.c:1062
+#: ../gtk/gtkentry.c:1059
 msgid "Whether the primary icon is activatable"
 msgstr "Az elsődleges ikon aktiválható-e"
 
-#: ../gtk/gtkentry.c:1082
+#: ../gtk/gtkentry.c:1079
 msgid "Secondary icon activatable"
 msgstr "Másodlagos ikon aktiválható"
 
-#: ../gtk/gtkentry.c:1083
+#: ../gtk/gtkentry.c:1080
 msgid "Whether the secondary icon is activatable"
 msgstr "A másodlagos ikon aktiválható-e"
 
-#: ../gtk/gtkentry.c:1105
+#: ../gtk/gtkentry.c:1102
 msgid "Primary icon sensitive"
 msgstr "Elsődleges ikon érzékeny"
 
-#: ../gtk/gtkentry.c:1106
+#: ../gtk/gtkentry.c:1103
 msgid "Whether the primary icon is sensitive"
 msgstr "Az elsődleges ikon érzékeny-e"
 
-#: ../gtk/gtkentry.c:1127
+#: ../gtk/gtkentry.c:1124
 msgid "Secondary icon sensitive"
 msgstr "Másodlagos ikon érzékeny"
 
-#: ../gtk/gtkentry.c:1128
+#: ../gtk/gtkentry.c:1125
 msgid "Whether the secondary icon is sensitive"
 msgstr "A másodlagos ikon érzékeny-e"
 
-#: ../gtk/gtkentry.c:1144
+#: ../gtk/gtkentry.c:1141
 msgid "Primary icon tooltip text"
 msgstr "Elsődleges ikon buboréksúgó-szövege"
 
-#: ../gtk/gtkentry.c:1145 ../gtk/gtkentry.c:1181
+#: ../gtk/gtkentry.c:1142 ../gtk/gtkentry.c:1178
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Elsődleges ikon buboréksúgójának tartalma"
 
-#: ../gtk/gtkentry.c:1161
+#: ../gtk/gtkentry.c:1158
 msgid "Secondary icon tooltip text"
 msgstr "Másodlagos ikon buboréksúgó-szövege"
 
-#: ../gtk/gtkentry.c:1162 ../gtk/gtkentry.c:1200
+#: ../gtk/gtkentry.c:1159 ../gtk/gtkentry.c:1197
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Másodlagos ikon buboréksúgójának tartalma"
 
-#: ../gtk/gtkentry.c:1180
+#: ../gtk/gtkentry.c:1177
 msgid "Primary icon tooltip markup"
 msgstr "Elsődleges ikon buboréksúgójának jelölőkódja"
 
-#: ../gtk/gtkentry.c:1199
+#: ../gtk/gtkentry.c:1196
 msgid "Secondary icon tooltip markup"
 msgstr "Másodlagos ikon buboréksúgójának jelölőkódja"
 
-#: ../gtk/gtkentry.c:1219 ../gtk/gtktextview.c:684
+#: ../gtk/gtkentry.c:1216 ../gtk/gtktextview.c:685
 msgid "IM module"
 msgstr "Beviteli mód modul"
 
-#: ../gtk/gtkentry.c:1220 ../gtk/gtktextview.c:685
+#: ../gtk/gtkentry.c:1217 ../gtk/gtktextview.c:686
 msgid "Which IM module should be used"
 msgstr "A használandó beviteli modul"
 
-#: ../gtk/gtkentry.c:1234
+#: ../gtk/gtkentry.c:1231
 msgid "Icon Prelight"
 msgstr "Ikon elővilágítása"
 
-#: ../gtk/gtkentry.c:1235
+#: ../gtk/gtkentry.c:1232
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Az aktiválható ikonok kapjanak-e elővilágítást rájuk mutatáskor"
 
-#: ../gtk/gtkentry.c:1248
+#: ../gtk/gtkentry.c:1245
 msgid "Progress Border"
 msgstr "Folyamatjelző szegélye"
 
-#: ../gtk/gtkentry.c:1249
+#: ../gtk/gtkentry.c:1246
 msgid "Border around the progress bar"
 msgstr "Szegély a folyamatjelző körül"
 
-#: ../gtk/gtkentry.c:1741
+#: ../gtk/gtkentry.c:1738
 msgid "Border between text and frame."
 msgstr "Szöveg és keret közti szegély"
 
-#: ../gtk/gtkentry.c:1757
+#: ../gtk/gtkentry.c:1754
 msgid "State Hint"
 msgstr "Állapottipp"
 
-#: ../gtk/gtkentry.c:1758
+#: ../gtk/gtkentry.c:1755
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Átadandó-e teljes állapot árnyék vagy háttér rajzolásakor"
-
-#: ../gtk/gtkentry.c:1763 ../gtk/gtklabel.c:859
-msgid "Select on focus"
-msgstr "Kijelölés fókusz esetén"
-
-#: ../gtk/gtkentry.c:1764
-msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
-"Kijelölésre kerüljön-e a bejegyzés tartalma a fókusz megszerzése esetén"
-
-#: ../gtk/gtkentry.c:1778
-msgid "Password Hint Timeout"
-msgstr "Jelszótipp időtúllépése"
-
-#: ../gtk/gtkentry.c:1779
-msgid "How long to show the last input character in hidden entries"
-msgstr ""
-"Meddig jelenjen meg az utoljára bevitt karakter a rejtett bejegyzésekben"
 
 #: ../gtk/gtkentrybuffer.c:354
 msgid "The contents of the buffer"
@@ -2706,96 +2671,96 @@ msgstr "A kiterjesztő nyíl mérete"
 msgid "Spacing around expander arrow"
 msgstr "Távolság a kiterjesztő nyíl körül"
 
-#: ../gtk/gtkfilechooser.c:766
+#: ../gtk/gtkfilechooser.c:858
 msgid "Action"
 msgstr "Művelet"
 
-#: ../gtk/gtkfilechooser.c:767
+#: ../gtk/gtkfilechooser.c:859
 msgid "The type of operation that the file selector is performing"
 msgstr "A fájlválasztó által végzett művelet típusa"
 
-#: ../gtk/gtkfilechooser.c:773
+#: ../gtk/gtkfilechooser.c:865
 msgid "File System Backend"
 msgstr "Fájlrendszer-háttérprogram"
 
-#: ../gtk/gtkfilechooser.c:774
+#: ../gtk/gtkfilechooser.c:866
 msgid "Name of file system backend to use"
 msgstr "A használandó fájlrendszer-háttérprogram neve"
 
-#: ../gtk/gtkfilechooser.c:779 ../gtk/gtkrecentchooser.c:264
+#: ../gtk/gtkfilechooser.c:871 ../gtk/gtkrecentchooser.c:264
 msgid "Filter"
 msgstr "Szűrő"
 
-#: ../gtk/gtkfilechooser.c:780
+#: ../gtk/gtkfilechooser.c:872
 msgid "The current filter for selecting which files are displayed"
 msgstr "A megjelenítendő fájlok kiválasztására használt aktuális szűrő"
 
-#: ../gtk/gtkfilechooser.c:785
+#: ../gtk/gtkfilechooser.c:877
 msgid "Local Only"
 msgstr "Csak helyi"
 
-#: ../gtk/gtkfilechooser.c:786
+#: ../gtk/gtkfilechooser.c:878
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "A kijelölt fájlok csak helyi URL-ek lehetnek-e"
 
-#: ../gtk/gtkfilechooser.c:791
+#: ../gtk/gtkfilechooser.c:883
 msgid "Preview widget"
 msgstr "Előnézet felületi elem"
 
-#: ../gtk/gtkfilechooser.c:792
+#: ../gtk/gtkfilechooser.c:884
 msgid "Application supplied widget for custom previews."
 msgstr "Az alkalmazás által biztosított felületi elem egyedi előképekhez."
 
-#: ../gtk/gtkfilechooser.c:797
+#: ../gtk/gtkfilechooser.c:889
 msgid "Preview Widget Active"
 msgstr "Előkép felületi elem aktív"
 
-#: ../gtk/gtkfilechooser.c:798
+#: ../gtk/gtkfilechooser.c:890
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
 "Az alkalmazás által az egyedi előképekhez biztosított felületi elem "
 "megjelenítésre kerüljön-e."
 
-#: ../gtk/gtkfilechooser.c:803
+#: ../gtk/gtkfilechooser.c:895
 msgid "Use Preview Label"
 msgstr "Előnézet címke használata"
 
-#: ../gtk/gtkfilechooser.c:804
+#: ../gtk/gtkfilechooser.c:896
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr ""
 "A megjelenített fájl neve mellé megjelenítésre kerüljön-e egy gyári címke."
 
-#: ../gtk/gtkfilechooser.c:809
+#: ../gtk/gtkfilechooser.c:901
 msgid "Extra widget"
 msgstr "Extra felületi elem"
 
-#: ../gtk/gtkfilechooser.c:810
+#: ../gtk/gtkfilechooser.c:902
 msgid "Application supplied widget for extra options."
 msgstr "Az alkalmazás által biztosított felületi elem extra beállításokhoz."
 
-#: ../gtk/gtkfilechooser.c:815 ../gtk/gtkfilesel.c:540
+#: ../gtk/gtkfilechooser.c:907 ../gtk/gtkfilesel.c:540
 #: ../gtk/gtkrecentchooser.c:203
 msgid "Select Multiple"
 msgstr "Többszörös kijelölés"
 
-#: ../gtk/gtkfilechooser.c:816 ../gtk/gtkfilesel.c:541
+#: ../gtk/gtkfilechooser.c:908 ../gtk/gtkfilesel.c:541
 msgid "Whether to allow multiple files to be selected"
 msgstr "Lehet-e egyszerre több fájlt kijelölni"
 
-#: ../gtk/gtkfilechooser.c:822
+#: ../gtk/gtkfilechooser.c:914
 msgid "Show Hidden"
 msgstr "Rejtett megjelenítése"
 
-#: ../gtk/gtkfilechooser.c:823
+#: ../gtk/gtkfilechooser.c:915
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "A rejtett fájlok és mappák megjelenítésre kerüljenek-e"
 
-#: ../gtk/gtkfilechooser.c:838
+#: ../gtk/gtkfilechooser.c:930
 msgid "Do overwrite confirmation"
 msgstr "Felülírási megerősítés kérése"
 
-#: ../gtk/gtkfilechooser.c:839
+#: ../gtk/gtkfilechooser.c:931
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
@@ -2803,11 +2768,11 @@ msgstr ""
 "A fájlválasztó mentési módban megjelenítsen-e felülírás megerősítése "
 "párbeszédablakot, ha az szükséges."
 
-#: ../gtk/gtkfilechooser.c:855
+#: ../gtk/gtkfilechooser.c:947
 msgid "Allow folders creation"
 msgstr "Mappalétrehozás engedélyezése"
 
-#: ../gtk/gtkfilechooser.c:856
+#: ../gtk/gtkfilechooser.c:948
 msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
@@ -2831,7 +2796,7 @@ msgstr "A fájlválasztó párbeszédablak címe."
 msgid "The desired width of the button widget, in characters."
 msgstr "A gomb felületi elem kívánt szélessége, karakterekben megadva."
 
-#: ../gtk/gtkfilesel.c:526 ../gtk/gtkimage.c:256 ../gtk/gtkrecentmanager.c:217
+#: ../gtk/gtkfilesel.c:526 ../gtk/gtkimage.c:256 ../gtk/gtkrecentmanager.c:222
 #: ../gtk/gtkstatusicon.c:222
 msgid "Filename"
 msgstr "Fájlnév"
@@ -3235,21 +3200,13 @@ msgstr "A menüszöveg mellett megjelenő gyermek felületi elem"
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "A címke szövege használandó-e alap menüelem létrehozásához"
 
-#: ../gtk/gtkimagemenuitem.c:184 ../gtk/gtkmenu.c:522
+#: ../gtk/gtkimagemenuitem.c:184 ../gtk/gtkmenu.c:520
 msgid "Accel Group"
 msgstr "Gyorsítócsoport"
 
 #: ../gtk/gtkimagemenuitem.c:185
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "Az alapértelmezett gyorsbillentyűkhöz használandó gyorsítócsoport"
-
-#: ../gtk/gtkimagemenuitem.c:190
-msgid "Show menu images"
-msgstr "Menüképek megjelenítése"
-
-#: ../gtk/gtkimagemenuitem.c:191
-msgid "Whether images should be shown in menus"
-msgstr "Megjelenjenek-e képek a menükben"
 
 #: ../gtk/gtkinfobar.c:384 ../gtk/gtkmessagedialog.c:218
 msgid "Message Type"
@@ -3283,7 +3240,7 @@ msgstr "A címke szövege"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "A címke szövegén alkalmazandó stílusattribútumok listája"
 
-#: ../gtk/gtklabel.c:536 ../gtk/gtktexttag.c:359 ../gtk/gtktextview.c:593
+#: ../gtk/gtklabel.c:536 ../gtk/gtktexttag.c:359 ../gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "Sorkizárás"
 
@@ -3388,12 +3345,6 @@ msgstr "Látogatott hivatkozások követése"
 msgid "Whether visited links should be tracked"
 msgstr "A látogatott hivatkozások követésre kerüljenek-e?"
 
-#: ../gtk/gtklabel.c:860
-msgid "Whether to select the contents of a selectable label when it is focused"
-msgstr ""
-"Kijelölésre kerüljön-e a kiválasztható címke tartalma a fókusz megszerzése "
-"esetén"
-
 #: ../gtk/gtklayout.c:619 ../gtk/gtkviewport.c:125
 msgid "Horizontal adjustment"
 msgstr "Vízszintes igazítás"
@@ -3442,67 +3393,67 @@ msgstr "Látogatott"
 msgid "Whether this link has been visited."
 msgstr "A hivatkozás meg lett-e látogatva."
 
-#: ../gtk/gtkmenu.c:508
+#: ../gtk/gtkmenu.c:506
 msgid "The currently selected menu item"
 msgstr "A jelenleg kiválasztott menüelem"
 
-#: ../gtk/gtkmenu.c:523
+#: ../gtk/gtkmenu.c:521
 msgid "The accel group holding accelerators for the menu"
 msgstr "A menü gyorsbillentyűit tartalmazó gyorsítócsoport"
 
-#: ../gtk/gtkmenu.c:537 ../gtk/gtkmenuitem.c:290
+#: ../gtk/gtkmenu.c:535 ../gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "Gyorsítóútvonal"
 
-#: ../gtk/gtkmenu.c:538
+#: ../gtk/gtkmenu.c:536
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 "A gyermekelemek gyorsítóútvonalainak kényelmes létrehozására használt "
 "gyorsítóútvonal"
 
-#: ../gtk/gtkmenu.c:554
+#: ../gtk/gtkmenu.c:552
 msgid "Attach Widget"
 msgstr "Felületi elem csatolása"
 
-#: ../gtk/gtkmenu.c:555
+#: ../gtk/gtkmenu.c:553
 msgid "The widget the menu is attached to"
 msgstr "A felületi elem, amelyhez a menü csatolva van"
 
-#: ../gtk/gtkmenu.c:563
+#: ../gtk/gtkmenu.c:561
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Az ablakkezelő által megjeleníthető cím, ha a menü le van választva"
 
-#: ../gtk/gtkmenu.c:577
+#: ../gtk/gtkmenu.c:575
 msgid "Tearoff State"
 msgstr "Leválasztó állapota"
 
-#: ../gtk/gtkmenu.c:578
+#: ../gtk/gtkmenu.c:576
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Ez a logikai érték jelzi, hogy a menü le van-e választva"
 
-#: ../gtk/gtkmenu.c:592
+#: ../gtk/gtkmenu.c:590
 msgid "Monitor"
 msgstr "Monitor"
 
-#: ../gtk/gtkmenu.c:593
+#: ../gtk/gtkmenu.c:591
 msgid "The monitor the menu will be popped up on"
 msgstr "Az a monitor, amelyen a menü megjelenik"
 
-#: ../gtk/gtkmenu.c:599
+#: ../gtk/gtkmenu.c:597
 msgid "Vertical Padding"
 msgstr "Függőleges térköz"
 
-#: ../gtk/gtkmenu.c:600
+#: ../gtk/gtkmenu.c:598
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Extra terület a menü tetején és alján"
 
-#: ../gtk/gtkmenu.c:622
+#: ../gtk/gtkmenu.c:620
 msgid "Reserve Toggle Size"
 msgstr "Átkapcsoló méretének lefoglalása"
 
-#: ../gtk/gtkmenu.c:623
+#: ../gtk/gtkmenu.c:621
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
@@ -3510,19 +3461,19 @@ msgstr ""
 "Ez a logikai érték jelzi, hogy a menü lefoglalja-e a területet az "
 "átkapcsolók és ikonok számára"
 
-#: ../gtk/gtkmenu.c:629
+#: ../gtk/gtkmenu.c:627
 msgid "Horizontal Padding"
 msgstr "Vízszintes térköz"
 
-#: ../gtk/gtkmenu.c:630
+#: ../gtk/gtkmenu.c:628
 msgid "Extra space at the left and right edges of the menu"
 msgstr "Extra terület a menü bal és jobb szélén"
 
-#: ../gtk/gtkmenu.c:638
+#: ../gtk/gtkmenu.c:636
 msgid "Vertical Offset"
 msgstr "Függőleges eltolás"
 
-#: ../gtk/gtkmenu.c:639
+#: ../gtk/gtkmenu.c:637
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -3530,11 +3481,11 @@ msgstr ""
 "Ha a menü egy almenü, akkor a képpontok száma, amellyel függőlegesen "
 "eltolásra kerül"
 
-#: ../gtk/gtkmenu.c:647
+#: ../gtk/gtkmenu.c:645
 msgid "Horizontal Offset"
 msgstr "Vízszintes eltolás"
 
-#: ../gtk/gtkmenu.c:648
+#: ../gtk/gtkmenu.c:646
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -3542,91 +3493,57 @@ msgstr ""
 "Ha a menü egy almenü, akkor a képpontok száma, amellyel vízszintesen "
 "eltolásra kerül"
 
-#: ../gtk/gtkmenu.c:656
+#: ../gtk/gtkmenu.c:654
 msgid "Double Arrows"
 msgstr "Dupla nyilak"
 
-#: ../gtk/gtkmenu.c:657
+#: ../gtk/gtkmenu.c:655
 msgid "When scrolling, always show both arrows."
 msgstr "Görgetésnél jelenjen meg mindkét nyíl"
 
-#: ../gtk/gtkmenu.c:670
+#: ../gtk/gtkmenu.c:668
 msgid "Arrow Placement"
 msgstr "Nyíl elhelyezése"
 
-#: ../gtk/gtkmenu.c:671
+#: ../gtk/gtkmenu.c:669
 msgid "Indicates where scroll arrows should be placed"
 msgstr "Jelzi a görgetőnyilak elhelyezkedését"
 
-#: ../gtk/gtkmenu.c:679
+#: ../gtk/gtkmenu.c:677
 msgid "Left Attach"
 msgstr "Bal csatolás"
 
-#: ../gtk/gtkmenu.c:680 ../gtk/gtktable.c:174
+#: ../gtk/gtkmenu.c:678 ../gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "Az oszlop száma, amelyhez a gyermek bal széle csatolásra kerül."
 
-#: ../gtk/gtkmenu.c:687
+#: ../gtk/gtkmenu.c:685
 msgid "Right Attach"
 msgstr "Jobb csatolás"
 
-#: ../gtk/gtkmenu.c:688
+#: ../gtk/gtkmenu.c:686
 msgid "The column number to attach the right side of the child to"
 msgstr "Az oszlop száma, amelyhez a gyermek jobb széle csatolásra kerül."
 
-#: ../gtk/gtkmenu.c:695
+#: ../gtk/gtkmenu.c:693
 msgid "Top Attach"
 msgstr "Felső csatolás"
 
-#: ../gtk/gtkmenu.c:696
+#: ../gtk/gtkmenu.c:694
 msgid "The row number to attach the top of the child to"
 msgstr "A sor száma, amelyhez a gyermek felső széle csatolásra kerül."
 
-#: ../gtk/gtkmenu.c:703
+#: ../gtk/gtkmenu.c:701
 msgid "Bottom Attach"
 msgstr "Alsó csatolás"
 
-#: ../gtk/gtkmenu.c:704 ../gtk/gtktable.c:195
+#: ../gtk/gtkmenu.c:702 ../gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "A sor száma, amelyhez a gyermek alsó széle csatolásra kerül."
 
-#: ../gtk/gtkmenu.c:718
+#: ../gtk/gtkmenu.c:716
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "Tetszőleges konstans a görgetőnyíl méretének csökkentéséhez"
-
-#: ../gtk/gtkmenu.c:805
-msgid "Can change accelerators"
-msgstr "Gyorsbillentyűk módosíthatók"
-
-#: ../gtk/gtkmenu.c:806
-msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr ""
-"A menü gyorsbillentyűi módosíthatók-e egy billentyű lenyomásával a menüelem "
-"felett"
-
-#: ../gtk/gtkmenu.c:811
-msgid "Delay before submenus appear"
-msgstr "Késleltetés az almenük megjelenítése előtt"
-
-#: ../gtk/gtkmenu.c:812
-msgid ""
-"Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
-"Minimális idő, ameddig a mutatónak a menüelem felett kell állnia, hogy "
-"megjelenjen az almenü"
-
-#: ../gtk/gtkmenu.c:819
-msgid "Delay before hiding a submenu"
-msgstr "Késleltetés egy almenü elrejtése előtt"
-
-#: ../gtk/gtkmenu.c:820
-msgid ""
-"The time before hiding a submenu when the pointer is moving towards the "
-"submenu"
-msgstr ""
-"Egy almenü elrejtésének minimális ideje, amikor a mutató az almenü felé "
-"közelít"
 
 #: ../gtk/gtkmenubar.c:168
 msgid "Pack direction"
@@ -3655,14 +3572,6 @@ msgstr "Belső térköz"
 #: ../gtk/gtkmenubar.c:203
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "A menüsor árnyéka és a menüelemek közötti szegélyterület"
-
-#: ../gtk/gtkmenubar.c:210
-msgid "Delay before drop down menus appear"
-msgstr "Késleltetés a menüelemek megjelenése előtt."
-
-#: ../gtk/gtkmenubar.c:211
-msgid "Delay before the submenus of a menu bar appear"
-msgstr "Késleltetés egy menüsor almenüinek megjelenése előtt."
 
 #: ../gtk/gtkmenuitem.c:257
 msgid "Right Justified"
@@ -4267,7 +4176,7 @@ msgstr "Nyomtató beállításai"
 msgid "Page Setup"
 msgstr "Oldalbeállítás"
 
-#: ../gtk/gtkprintjob.c:152 ../gtk/gtkprintoperation.c:1125
+#: ../gtk/gtkprintjob.c:152 ../gtk/gtkprintoperation.c:1147
 msgid "Track Print Status"
 msgstr "Nyomtatási állapot követése"
 
@@ -4280,51 +4189,51 @@ msgstr ""
 "nyomtatókiszolgálóra küldése után is folytatja az állapot megváltozott "
 "szignálok kibocsátását"
 
-#: ../gtk/gtkprintoperation.c:997
+#: ../gtk/gtkprintoperation.c:1019
 msgid "Default Page Setup"
 msgstr "Alapértelmezett oldalbeállítás"
 
-#: ../gtk/gtkprintoperation.c:998
+#: ../gtk/gtkprintoperation.c:1020
 msgid "The GtkPageSetup used by default"
 msgstr "Az alapértelmezetten használandó GtkPageSetup"
 
-#: ../gtk/gtkprintoperation.c:1016 ../gtk/gtkprintunixdialog.c:320
+#: ../gtk/gtkprintoperation.c:1038 ../gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "Nyomtatási beállítások"
 
-#: ../gtk/gtkprintoperation.c:1017 ../gtk/gtkprintunixdialog.c:321
+#: ../gtk/gtkprintoperation.c:1039 ../gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "A párbeszédablak előkészítésére használt GtkPrintSettings"
 
-#: ../gtk/gtkprintoperation.c:1035
+#: ../gtk/gtkprintoperation.c:1057
 msgid "Job Name"
 msgstr "Feladatnév"
 
-#: ../gtk/gtkprintoperation.c:1036
+#: ../gtk/gtkprintoperation.c:1058
 msgid "A string used for identifying the print job."
 msgstr "A nyomtatási feladat azonosítására használt karakterlánc"
 
-#: ../gtk/gtkprintoperation.c:1060
+#: ../gtk/gtkprintoperation.c:1082
 msgid "Number of Pages"
 msgstr "Oldalak száma"
 
-#: ../gtk/gtkprintoperation.c:1061
+#: ../gtk/gtkprintoperation.c:1083
 msgid "The number of pages in the document."
 msgstr "A dokumentum oldalainak száma"
 
-#: ../gtk/gtkprintoperation.c:1082 ../gtk/gtkprintunixdialog.c:310
+#: ../gtk/gtkprintoperation.c:1104 ../gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "Jelenlegi oldal"
 
-#: ../gtk/gtkprintoperation.c:1083 ../gtk/gtkprintunixdialog.c:311
+#: ../gtk/gtkprintoperation.c:1105 ../gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "A dokumentum jelenlegi oldala"
 
-#: ../gtk/gtkprintoperation.c:1104
+#: ../gtk/gtkprintoperation.c:1126
 msgid "Use full page"
 msgstr "Teljes oldal használata"
 
-#: ../gtk/gtkprintoperation.c:1105
+#: ../gtk/gtkprintoperation.c:1127
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4332,7 +4241,7 @@ msgstr ""
 "Ha TRUE, akkor a kontextus eredetének az oldal sarkában kell lennie és nem a "
 "leképezhető terület sarkában"
 
-#: ../gtk/gtkprintoperation.c:1126
+#: ../gtk/gtkprintoperation.c:1148
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4341,91 +4250,91 @@ msgstr ""
 "jelentését a nyomtatási adatok nyomtatóra vagy nyomtatókiszolgálóra küldése "
 "után is"
 
-#: ../gtk/gtkprintoperation.c:1143
+#: ../gtk/gtkprintoperation.c:1165
 msgid "Unit"
 msgstr "Egység"
 
-#: ../gtk/gtkprintoperation.c:1144
+#: ../gtk/gtkprintoperation.c:1166
 msgid "The unit in which distances can be measured in the context"
 msgstr "A kontextusban távolságok mérésére használt mértékegység"
 
-#: ../gtk/gtkprintoperation.c:1161
+#: ../gtk/gtkprintoperation.c:1183
 msgid "Show Dialog"
 msgstr "Párbeszédablak megjelenítése"
 
-#: ../gtk/gtkprintoperation.c:1162
+#: ../gtk/gtkprintoperation.c:1184
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 "Ha TRUE, akkor az előrehaladási párbeszédablak megjelenik nyomtatás közben"
 
-#: ../gtk/gtkprintoperation.c:1185
+#: ../gtk/gtkprintoperation.c:1207
 msgid "Allow Async"
 msgstr "Async engedélyezése"
 
-#: ../gtk/gtkprintoperation.c:1186
+#: ../gtk/gtkprintoperation.c:1208
 msgid "TRUE if print process may run asynchronous."
 msgstr "Ha TRUE, akkor a nyomtatási folyamat futhat aszinkron módon"
 
-#: ../gtk/gtkprintoperation.c:1208 ../gtk/gtkprintoperation.c:1209
+#: ../gtk/gtkprintoperation.c:1230 ../gtk/gtkprintoperation.c:1231
 msgid "Export filename"
 msgstr "Fájlnév exportálása"
 
-#: ../gtk/gtkprintoperation.c:1223
+#: ../gtk/gtkprintoperation.c:1245
 msgid "Status"
 msgstr "Állapot"
 
-#: ../gtk/gtkprintoperation.c:1224
+#: ../gtk/gtkprintoperation.c:1246
 msgid "The status of the print operation"
 msgstr "A nyomtatási folyamat állapota"
 
-#: ../gtk/gtkprintoperation.c:1244
+#: ../gtk/gtkprintoperation.c:1266
 msgid "Status String"
 msgstr "Állapot-karakterlánc"
 
-#: ../gtk/gtkprintoperation.c:1245
+#: ../gtk/gtkprintoperation.c:1267
 msgid "A human-readable description of the status"
 msgstr "Az állapot emberek által olvasható leírása"
 
-#: ../gtk/gtkprintoperation.c:1263
+#: ../gtk/gtkprintoperation.c:1285
 msgid "Custom tab label"
 msgstr "Egyéni lapcímke"
 
-#: ../gtk/gtkprintoperation.c:1264
+#: ../gtk/gtkprintoperation.c:1286
 msgid "Label for the tab containing custom widgets."
 msgstr "Az egyéni felületi elemeket tartalmazó lap címkéje"
 
-#: ../gtk/gtkprintoperation.c:1279 ../gtk/gtkprintunixdialog.c:345
+#: ../gtk/gtkprintoperation.c:1301 ../gtk/gtkprintunixdialog.c:345
 msgid "Support Selection"
 msgstr "Kiválasztás támogatása"
 
-#: ../gtk/gtkprintoperation.c:1280
+#: ../gtk/gtkprintoperation.c:1302
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 "Ha TRUE, akkor a nyomtatási művelet támogatni fogja a kijelölés nyomtatását."
 
-#: ../gtk/gtkprintoperation.c:1296 ../gtk/gtkprintunixdialog.c:353
+#: ../gtk/gtkprintoperation.c:1318 ../gtk/gtkprintunixdialog.c:353
 msgid "Has Selection"
 msgstr "Van kijelölése"
 
-#: ../gtk/gtkprintoperation.c:1297
+#: ../gtk/gtkprintoperation.c:1319
 msgid "TRUE if a selection exists."
 msgstr "TRUE, ha van kijelölés."
 
-#: ../gtk/gtkprintoperation.c:1312 ../gtk/gtkprintunixdialog.c:361
+#: ../gtk/gtkprintoperation.c:1334 ../gtk/gtkprintunixdialog.c:361
 msgid "Embed Page Setup"
 msgstr "Oldalbeállítás beágyazása"
 
-#: ../gtk/gtkprintoperation.c:1313
+#: ../gtk/gtkprintoperation.c:1335
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
 "Ha TRUE, akkor a nyomtatási párbeszédablak tartalmazza az oldalbeállítási "
 "legördülő listákat"
 
-#: ../gtk/gtkprintoperation.c:1334
+#: ../gtk/gtkprintoperation.c:1356
 msgid "Number of Pages To Print"
 msgstr "Nyomtatandó oldalak száma"
 
-#: ../gtk/gtkprintoperation.c:1335
+#: ../gtk/gtkprintoperation.c:1357
 msgid "The number of pages that will be printed."
 msgstr "A nyomtatásra kerülő oldalak száma."
 
@@ -4887,7 +4796,7 @@ msgstr "Csak helyi"
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "A kijelölt erőforrások csak helyi file: URI-címek lehetnek-e"
 
-#: ../gtk/gtkrecentchooser.c:234 ../gtk/gtkrecentmanager.c:237
+#: ../gtk/gtkrecentchooser.c:234 ../gtk/gtkrecentmanager.c:242
 msgid "Limit"
 msgstr "Korlátozás"
 
@@ -4907,17 +4816,17 @@ msgstr "A megjelenített elemek rendezési sorrendje"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "A megjelenítendő erőforrások kiválasztására használt aktuális szűrő"
 
-#: ../gtk/gtkrecentmanager.c:218
+#: ../gtk/gtkrecentmanager.c:223
 msgid "The full path to the file to be used to store and read the list"
 msgstr "A lista tárolására és beolvasására használandó fájl teljes útvonala"
 
-#: ../gtk/gtkrecentmanager.c:238
+#: ../gtk/gtkrecentmanager.c:243
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "A gtk_recent_manager_get_items() által visszaadandó elemek legnagyobb száma"
 
-#: ../gtk/gtkrecentmanager.c:254
+#: ../gtk/gtkrecentmanager.c:259
 msgid "The size of the recently used resources list"
 msgstr "A legutóbb használt erőforrások listájának mérete"
 
@@ -4957,41 +4866,42 @@ msgstr "Metrika"
 msgid "The metric used for the ruler"
 msgstr "A vonalzóhoz használt metrika"
 
-#: ../gtk/gtkscale.c:273
-msgid "The number of decimal places that are displayed in the value"
-msgstr "A értékben megjelenített tizedesjegyek száma"
+#: ../gtk/gtkscale.c:283
+#| msgid "The number of decimal places that are displayed in the value"
+msgid "The number of decimal places to which the value is rounded"
+msgstr "A tizedesjegyek száma, amelyre az érték kerekítve van"
 
-#: ../gtk/gtkscale.c:282
+#: ../gtk/gtkscale.c:292
 msgid "Draw Value"
 msgstr "Rajzérték"
 
-#: ../gtk/gtkscale.c:283
+#: ../gtk/gtkscale.c:293
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Az aktuális érték karakterláncként megjelenítésre kerüljön-e a csúszka "
 "mellett"
 
-#: ../gtk/gtkscale.c:290
+#: ../gtk/gtkscale.c:300
 msgid "Value Position"
 msgstr "Érték pozíciója"
 
-#: ../gtk/gtkscale.c:291
+#: ../gtk/gtkscale.c:301
 msgid "The position in which the current value is displayed"
 msgstr "A pozíció, ahol az aktuális érték megjelenítésre kerül"
 
-#: ../gtk/gtkscale.c:298
+#: ../gtk/gtkscale.c:308
 msgid "Slider Length"
 msgstr "Csúszka hossza"
 
-#: ../gtk/gtkscale.c:299
+#: ../gtk/gtkscale.c:309
 msgid "Length of scale's slider"
 msgstr "A csúszka hossza"
 
-#: ../gtk/gtkscale.c:307
+#: ../gtk/gtkscale.c:317
 msgid "Value spacing"
 msgstr "Értékek távolsága"
 
-#: ../gtk/gtkscale.c:308
+#: ../gtk/gtkscale.c:318
 msgid "Space between value text and the slider/trough area"
 msgstr "Az érték szövege és a csúszka/vályú terület közötti távolság"
 
@@ -5044,13 +4954,11 @@ msgid ""
 msgstr ""
 "Egy második előre léptető nyíl gomb megjelenítése a görgetősáv túlsó szélén"
 
-#: ../gtk/gtkscrolledwindow.c:218 ../gtk/gtktext.c:545
-#: ../gtk/gtktreeview.c:575
+#: ../gtk/gtkscrolledwindow.c:218 ../gtk/gtktext.c:545 ../gtk/gtktreeview.c:575
 msgid "Horizontal Adjustment"
 msgstr "Vízszintes igazítás"
 
-#: ../gtk/gtkscrolledwindow.c:225 ../gtk/gtktext.c:553
-#: ../gtk/gtktreeview.c:583
+#: ../gtk/gtkscrolledwindow.c:225 ../gtk/gtktext.c:553 ../gtk/gtktreeview.c:583
 msgid "Vertical Adjustment"
 msgstr "Függőleges igazítás"
 
@@ -5119,18 +5027,6 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "A görgetősáv és a görgetett ablak közötti távolság képpontokban megadva"
 
-#: ../gtk/gtkscrolledwindow.c:312
-msgid "Scrolled Window Placement"
-msgstr "Görgetett ablak elhelyezése"
-
-#: ../gtk/gtkscrolledwindow.c:313
-msgid ""
-"Where the contents of scrolled windows are located with respect to the "
-"scrollbars, if not overridden by the scrolled window's own placement."
-msgstr ""
-"Hol legyen a görgetett ablak tartalma a görgetősávokhoz képest, ha nincs "
-"felülbírálva a görgetett ablak saját elhelyezése által"
-
 #: ../gtk/gtkseparatortoolitem.c:105
 msgid "Draw"
 msgstr "Rajzolás"
@@ -5139,11 +5035,11 @@ msgstr "Rajzolás"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Az elválasztó legyen-e kirajzolva, vagy csak legyen üres"
 
-#: ../gtk/gtksettings.c:225
+#: ../gtk/gtksettings.c:241
 msgid "Double Click Time"
 msgstr "Dupla kattintás ideje"
 
-#: ../gtk/gtksettings.c:226
+#: ../gtk/gtksettings.c:242
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -5151,11 +5047,11 @@ msgstr ""
 "Két kattintás közötti maximális idő, amely még dupla kattintásnak tekintendő "
 "(ezredmásodpercben)"
 
-#: ../gtk/gtksettings.c:233
+#: ../gtk/gtksettings.c:249
 msgid "Double Click Distance"
 msgstr "Dupla kattintás távolsága"
 
-#: ../gtk/gtksettings.c:234
+#: ../gtk/gtksettings.c:250
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -5163,35 +5059,35 @@ msgstr ""
 "Két kattintás közötti maximális távolság, amely még dupla kattintásnak "
 "tekintendő (képpontban)"
 
-#: ../gtk/gtksettings.c:250
+#: ../gtk/gtksettings.c:266
 msgid "Cursor Blink"
 msgstr "Villogó kurzor"
 
-#: ../gtk/gtksettings.c:251
+#: ../gtk/gtksettings.c:267
 msgid "Whether the cursor should blink"
 msgstr "A kurzor villogjon-e"
 
-#: ../gtk/gtksettings.c:258
+#: ../gtk/gtksettings.c:274
 msgid "Cursor Blink Time"
 msgstr "Kurzor villogási ideje"
 
-#: ../gtk/gtksettings.c:259
+#: ../gtk/gtksettings.c:275
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "A kurzor villogási ciklusának hossza ezredmásodpercben"
 
-#: ../gtk/gtksettings.c:278
+#: ../gtk/gtksettings.c:294
 msgid "Cursor Blink Timeout"
 msgstr "Kurzor villogási időkorlátja"
 
-#: ../gtk/gtksettings.c:279
+#: ../gtk/gtksettings.c:295
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "A kurzor ennyi másodperc után befejezi a villogást"
 
-#: ../gtk/gtksettings.c:286
+#: ../gtk/gtksettings.c:302
 msgid "Split Cursor"
 msgstr "Kurzor szétvágása"
 
-#: ../gtk/gtksettings.c:287
+#: ../gtk/gtksettings.c:303
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -5199,159 +5095,159 @@ msgstr ""
 "Legyen-e két külön kurzor megjelenítve a balról jobbra és jobbról balra "
 "olvasandó szövegeket vegyesen tartalmazó szövegben"
 
-#: ../gtk/gtksettings.c:294
+#: ../gtk/gtksettings.c:310
 msgid "Theme Name"
 msgstr "Téma neve"
 
-#: ../gtk/gtksettings.c:295
+#: ../gtk/gtksettings.c:311
 msgid "Name of theme RC file to load"
 msgstr "A betöltendő téma RC-fájl neve"
 
-#: ../gtk/gtksettings.c:307
+#: ../gtk/gtksettings.c:323
 msgid "Icon Theme Name"
 msgstr "Ikontéma neve"
 
-#: ../gtk/gtksettings.c:308
+#: ../gtk/gtksettings.c:324
 msgid "Name of icon theme to use"
 msgstr "A használni kívánt ikontéma neve."
 
-#: ../gtk/gtksettings.c:316
+#: ../gtk/gtksettings.c:332
 msgid "Fallback Icon Theme Name"
 msgstr "Tartalék ikontéma neve"
 
-#: ../gtk/gtksettings.c:317
+#: ../gtk/gtksettings.c:333
 msgid "Name of a icon theme to fall back to"
 msgstr "A tartalék ikontéma neve"
 
-#: ../gtk/gtksettings.c:325
+#: ../gtk/gtksettings.c:341
 msgid "Key Theme Name"
 msgstr "Billentyűtéma neve"
 
-#: ../gtk/gtksettings.c:326
+#: ../gtk/gtksettings.c:342
 msgid "Name of key theme RC file to load"
 msgstr "A betöltendő billentyűtéma RC-fájl neve"
 
-#: ../gtk/gtksettings.c:334
+#: ../gtk/gtksettings.c:350
 msgid "Menu bar accelerator"
 msgstr "Menüsor-gyorsbillentyű"
 
-#: ../gtk/gtksettings.c:335
+#: ../gtk/gtksettings.c:351
 msgid "Keybinding to activate the menu bar"
 msgstr "A menüsort aktiváló billentyűkombináció"
 
-#: ../gtk/gtksettings.c:343
+#: ../gtk/gtksettings.c:359
 msgid "Drag threshold"
 msgstr "Húzási küszöb"
 
-#: ../gtk/gtksettings.c:344
+#: ../gtk/gtksettings.c:360
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Hány képpontnyi távolságot mozoghat el a kurzor a húzás megkezdése előtt"
 
-#: ../gtk/gtksettings.c:352
+#: ../gtk/gtksettings.c:368
 msgid "Font Name"
 msgstr "Betűkészlet neve"
 
-#: ../gtk/gtksettings.c:353
+#: ../gtk/gtksettings.c:369
 msgid "Name of default font to use"
 msgstr "Az alapértelmezés szerint használandó betűkészlet neve"
 
-#: ../gtk/gtksettings.c:375
+#: ../gtk/gtksettings.c:391
 msgid "Icon Sizes"
 msgstr "Ikonméretek"
 
-#: ../gtk/gtksettings.c:376
+#: ../gtk/gtksettings.c:392
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Ikonméretek listája (gtk-menu=16,16;gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:384
+#: ../gtk/gtksettings.c:400
 msgid "GTK Modules"
 msgstr "GTK-modulok"
 
-#: ../gtk/gtksettings.c:385
+#: ../gtk/gtksettings.c:401
 msgid "List of currently active GTK modules"
 msgstr "Az éppen aktív GTK-modulok listája"
 
-#: ../gtk/gtksettings.c:394
+#: ../gtk/gtksettings.c:410
 msgid "Xft Antialias"
 msgstr "Xft élsimítás"
 
-#: ../gtk/gtksettings.c:395
+#: ../gtk/gtksettings.c:411
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Szükséges-e az Xft betűkészletek élsimítása; 0=nem, 1=igen, -1=alapértelmezés"
 
-#: ../gtk/gtksettings.c:404
+#: ../gtk/gtksettings.c:420
 msgid "Xft Hinting"
 msgstr "Xft hinting"
 
-#: ../gtk/gtksettings.c:405
+#: ../gtk/gtksettings.c:421
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "A hinting (raszterizálási segítség) funkció bekapcsolása Xft "
 "betűkészleteken; 0=nem, 1=igen, -1=alapértelmezés"
 
-#: ../gtk/gtksettings.c:414
+#: ../gtk/gtksettings.c:430
 msgid "Xft Hint Style"
 msgstr "Xft hinting stílus"
 
-#: ../gtk/gtksettings.c:415
+#: ../gtk/gtksettings.c:431
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Milyen szintű hinting kerüljön alkalmazásra: semennyi, kevés, közepes vagy "
 "teljes"
 
-#: ../gtk/gtksettings.c:424
+#: ../gtk/gtksettings.c:440
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: ../gtk/gtksettings.c:425
+#: ../gtk/gtksettings.c:441
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "A képpontrész szintű élsimítás típusa: nincs, rgb, bgr, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:434
+#: ../gtk/gtksettings.c:450
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: ../gtk/gtksettings.c:435
+#: ../gtk/gtksettings.c:451
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Xft felbontás, 1024 * pont/hüvelyk értékként megadva; -1 az alapértelmezett "
 "érték használatához"
 
-#: ../gtk/gtksettings.c:444
+#: ../gtk/gtksettings.c:460
 msgid "Cursor theme name"
 msgstr "Kurzortéma neve"
 
-#: ../gtk/gtksettings.c:445
+#: ../gtk/gtksettings.c:461
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr ""
 "A használni kívánt kurzortéma neve, vagy NULL az alapértelmezett téma "
 "használatához"
 
-#: ../gtk/gtksettings.c:453
+#: ../gtk/gtksettings.c:469
 msgid "Cursor theme size"
 msgstr "Kurzortéma mérete"
 
-#: ../gtk/gtksettings.c:454
+#: ../gtk/gtksettings.c:470
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr ""
 "A kurzorokhoz használt méret vagy 0 az alapértelmezett méret használatához"
 
-#: ../gtk/gtksettings.c:464
+#: ../gtk/gtksettings.c:480
 msgid "Alternative button order"
 msgstr "Alternatív gombsorrend"
 
-#: ../gtk/gtksettings.c:465
+#: ../gtk/gtksettings.c:481
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "A párbeszédablak gombjai az alternatív gombsorrendet használják-e"
 
-#: ../gtk/gtksettings.c:482
+#: ../gtk/gtksettings.c:498
 msgid "Alternative sort indicator direction"
 msgstr "Alternatív rendezésjelző-irány"
 
-#: ../gtk/gtksettings.c:483
+#: ../gtk/gtksettings.c:499
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -5359,11 +5255,11 @@ msgstr ""
 "A lista- és fanézetek rendezésjelzőinek iránya fordított-e az "
 "alapértelmezéshez (növekvő) képest."
 
-#: ../gtk/gtksettings.c:491
+#: ../gtk/gtksettings.c:507
 msgid "Show the 'Input Methods' menu"
 msgstr "A „Beviteli módok” menü megjelenítése"
 
-#: ../gtk/gtksettings.c:492
+#: ../gtk/gtksettings.c:508
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -5371,11 +5267,11 @@ msgstr ""
 "A beviteli mezők és szövegnézetek helyi menüi felajánlják-e a beviteli "
 "módszer megváltoztatását"
 
-#: ../gtk/gtksettings.c:500
+#: ../gtk/gtksettings.c:516
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Az „Unicode vezérlőkarakter beszúrása” menü megjelenítése"
 
-#: ../gtk/gtksettings.c:501
+#: ../gtk/gtksettings.c:517
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -5383,252 +5279,252 @@ msgstr ""
 "A beviteli mezők és szövegnézetek helyi menüi felajánlják-e "
 "vezérlőkarakterek beszúrását"
 
-#: ../gtk/gtksettings.c:509
+#: ../gtk/gtksettings.c:525
 msgid "Start timeout"
 msgstr "Kezdő időkorlát"
 
-#: ../gtk/gtksettings.c:510
+#: ../gtk/gtksettings.c:526
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Az időkorlátok kezdőértéke gomb megnyomásakor"
 
-#: ../gtk/gtksettings.c:519
+#: ../gtk/gtksettings.c:535
 msgid "Repeat timeout"
 msgstr "Ismétlési időkorlát"
 
-#: ../gtk/gtksettings.c:520
+#: ../gtk/gtksettings.c:536
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Az időkorlátok ismétlési értéke gomb megnyomásakor"
 
-#: ../gtk/gtksettings.c:529
+#: ../gtk/gtksettings.c:545
 msgid "Expand timeout"
 msgstr "Időkorlát kiterjesztése"
 
-#: ../gtk/gtksettings.c:530
+#: ../gtk/gtksettings.c:546
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 "Időkorlátok értékének kiterjesztése, ha a felületi elem új területre terjed "
 "ki"
 
-#: ../gtk/gtksettings.c:565
+#: ../gtk/gtksettings.c:581
 msgid "Color scheme"
 msgstr "Színséma"
 
-#: ../gtk/gtksettings.c:566
+#: ../gtk/gtksettings.c:582
 msgid "A palette of named colors for use in themes"
 msgstr "A témákban használandó megnevezett színek palettája"
 
-#: ../gtk/gtksettings.c:575
+#: ../gtk/gtksettings.c:591
 msgid "Enable Animations"
 msgstr "Animációk bekapcsolása"
 
-#: ../gtk/gtksettings.c:576
+#: ../gtk/gtksettings.c:592
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Eszközkészlet szintű animációk engedélyezése"
 
-#: ../gtk/gtksettings.c:594
+#: ../gtk/gtksettings.c:610
 msgid "Enable Touchscreen Mode"
 msgstr "Érintőképernyő mód engedélyezése"
 
-#: ../gtk/gtksettings.c:595
+#: ../gtk/gtksettings.c:611
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 "Ha TRUE, akkor nem kerülnek mozgásértesítési események továbbításra erre a "
 "képernyőre"
 
-#: ../gtk/gtksettings.c:612
+#: ../gtk/gtksettings.c:628
 msgid "Tooltip timeout"
 msgstr "Buboréksúgó időkorlátja"
 
-#: ../gtk/gtksettings.c:613
+#: ../gtk/gtksettings.c:629
 msgid "Timeout before tooltip is shown"
 msgstr "Időkorlát a buboréksúgó megjelenítése előtt"
 
-#: ../gtk/gtksettings.c:638
+#: ../gtk/gtksettings.c:654
 msgid "Tooltip browse timeout"
 msgstr "Buboréksúgó böngészési időkorlátja"
 
-#: ../gtk/gtksettings.c:639
+#: ../gtk/gtksettings.c:655
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 "Időkorlát a buboréksúgó megjelenítése előtt, ha a böngésző mód be van "
 "kapcsolva"
 
-#: ../gtk/gtksettings.c:660
+#: ../gtk/gtksettings.c:676
 msgid "Tooltip browse mode timeout"
 msgstr "Buboréksúgó böngészési módjának időkorlátja"
 
-#: ../gtk/gtksettings.c:661
+#: ../gtk/gtksettings.c:677
 msgid "Timeout after which browse mode is disabled"
 msgstr "A böngésző mód letiltása ezen időkorlát után"
 
-#: ../gtk/gtksettings.c:680
+#: ../gtk/gtksettings.c:696
 msgid "Keynav Cursor Only"
 msgstr "Billentyűnavigáció csak kurzorral"
 
-#: ../gtk/gtksettings.c:681
+#: ../gtk/gtksettings.c:697
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 "Ha TRUE, akkor a felületi elemek között csak a kurzorbillentyűkkel lehet "
 "navigálni"
 
-#: ../gtk/gtksettings.c:698
+#: ../gtk/gtksettings.c:714
 msgid "Keynav Wrap Around"
 msgstr "Körkörös billentyűnavigáció"
 
-#: ../gtk/gtksettings.c:699
+#: ../gtk/gtksettings.c:715
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr ""
 "A felületi elemeken körbe lehet-e lépkedni a billentyűnavigáció használatával"
 
-#: ../gtk/gtksettings.c:719
+#: ../gtk/gtksettings.c:735
 msgid "Error Bell"
 msgstr "Hibacsengő"
 
-#: ../gtk/gtksettings.c:720
+#: ../gtk/gtksettings.c:736
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Ha TRUE, akkor a billentyűnavigációs és egyéb hibák hangjelzést okoznak"
 
-#: ../gtk/gtksettings.c:737
+#: ../gtk/gtksettings.c:753
 msgid "Color Hash"
 msgstr "Szín hash"
 
-#: ../gtk/gtksettings.c:738
+#: ../gtk/gtksettings.c:754
 msgid "A hash table representation of the color scheme."
 msgstr "A színséma hashtábla-reprezentációja"
 
-#: ../gtk/gtksettings.c:746
+#: ../gtk/gtksettings.c:762
 msgid "Default file chooser backend"
 msgstr "A fájlválasztó alapértelmezett háttérprogramja"
 
-#: ../gtk/gtksettings.c:747
+#: ../gtk/gtksettings.c:763
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 "Az alapértelmezés szerint használandó GtkFileChooser háttérprogram neve"
 
-#: ../gtk/gtksettings.c:764
+#: ../gtk/gtksettings.c:780
 msgid "Default print backend"
 msgstr "Alapértelmezett nyomtatási háttérprogram"
 
-#: ../gtk/gtksettings.c:765
+#: ../gtk/gtksettings.c:781
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr ""
 "Az alapértelmezés szerint használandó GtkPrintBackend háttérprogramok listája"
 
-#: ../gtk/gtksettings.c:788
+#: ../gtk/gtksettings.c:804
 msgid "Default command to run when displaying a print preview"
 msgstr ""
 "Nyomtatási előnézet megjelenítésekor futtatandó alapértelmezett parancs"
 
-#: ../gtk/gtksettings.c:789
+#: ../gtk/gtksettings.c:805
 msgid "Command to run when displaying a print preview"
 msgstr "Nyomtatási előnézet megjelenítésekor futtatandó parancs"
 
-#: ../gtk/gtksettings.c:805
+#: ../gtk/gtksettings.c:821
 msgid "Enable Mnemonics"
 msgstr "Gyorsbillentyűk bekapcsolása"
 
-#: ../gtk/gtksettings.c:806
+#: ../gtk/gtksettings.c:822
 msgid "Whether labels should have mnemonics"
 msgstr "A címkék rendelkezzenek-e hívóbetűkkel"
 
-#: ../gtk/gtksettings.c:822
+#: ../gtk/gtksettings.c:838
 msgid "Enable Accelerators"
 msgstr "Gyorsbillentyűk engedélyezése"
 
-#: ../gtk/gtksettings.c:823
+#: ../gtk/gtksettings.c:839
 msgid "Whether menu items should have accelerators"
 msgstr "A menüelemek rendelkezzenek-e gyorsbillentyűkkel"
 
-#: ../gtk/gtksettings.c:840
+#: ../gtk/gtksettings.c:856
 msgid "Recent Files Limit"
 msgstr "Legutóbbi fájlok korlátja"
 
-#: ../gtk/gtksettings.c:841
+#: ../gtk/gtksettings.c:857
 msgid "Number of recently used files"
 msgstr "A legutóbb használt fájlok száma"
 
-#: ../gtk/gtksettings.c:861
+#: ../gtk/gtksettings.c:877
 msgid "Default IM module"
 msgstr "Alapértelmezett beviteli modul"
 
-#: ../gtk/gtksettings.c:862
+#: ../gtk/gtksettings.c:878
 msgid "Which IM module should be used by default"
 msgstr "Az alapértelmezetten használandó beviteli modul"
 
-#: ../gtk/gtksettings.c:880
+#: ../gtk/gtksettings.c:896
 msgid "Recent Files Max Age"
 msgstr "Legutóbbi fájlok maximális kora"
 
-#: ../gtk/gtksettings.c:881
+#: ../gtk/gtksettings.c:897
 msgid "Maximum age of recently used files, in days"
 msgstr "A legutóbb használt fájlok maximális kora napokban"
 
-#: ../gtk/gtksettings.c:890
+#: ../gtk/gtksettings.c:906
 msgid "Fontconfig configuration timestamp"
 msgstr "Fontconfig konfigurációs időbélyeg"
 
-#: ../gtk/gtksettings.c:891
+#: ../gtk/gtksettings.c:907
 msgid "Timestamp of current fontconfig configuration"
 msgstr "A jelenlegi Fontconfig konfiguráció időbélyege"
 
-#: ../gtk/gtksettings.c:913
+#: ../gtk/gtksettings.c:929
 msgid "Sound Theme Name"
 msgstr "Hangtéma neve"
 
-#: ../gtk/gtksettings.c:914
+#: ../gtk/gtksettings.c:930
 msgid "XDG sound theme name"
 msgstr "XDG hangtéma neve"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: ../gtk/gtksettings.c:936
+#: ../gtk/gtksettings.c:952
 msgid "Audible Input Feedback"
 msgstr "Hallható bemenet-visszajelzés"
 
-#: ../gtk/gtksettings.c:937
+#: ../gtk/gtksettings.c:953
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "Lejátszandók-e eseményhangok a felhasználói adatbevitelre válaszul"
 
-#: ../gtk/gtksettings.c:958
+#: ../gtk/gtksettings.c:974
 msgid "Enable Event Sounds"
 msgstr "Eseményhangok bekapcsolása"
 
-#: ../gtk/gtksettings.c:959
+#: ../gtk/gtksettings.c:975
 msgid "Whether to play any event sounds at all"
 msgstr "Lejátszásra kerüljenek-e az eseményhangok"
 
-#: ../gtk/gtksettings.c:974
+#: ../gtk/gtksettings.c:990
 msgid "Enable Tooltips"
 msgstr "Buboréksúgók engedélyezése"
 
-#: ../gtk/gtksettings.c:975
+#: ../gtk/gtksettings.c:991
 msgid "Whether tooltips should be shown on widgets"
 msgstr "A felületi elemeken megjelenjenek-e buboréksúgók"
 
-#: ../gtk/gtksettings.c:988
+#: ../gtk/gtksettings.c:1004
 msgid "Toolbar style"
 msgstr "Eszköztár stílusa"
 
-#: ../gtk/gtksettings.c:989
+#: ../gtk/gtksettings.c:1005
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Az alapértelmezett eszköztárak csak szövegesek, szöveget és ikont, csak "
 "ikont tartalmaznak, stb."
 
-#: ../gtk/gtksettings.c:1003
+#: ../gtk/gtksettings.c:1019
 msgid "Toolbar Icon Size"
 msgstr "Eszköztárikonok mérete"
 
-#: ../gtk/gtksettings.c:1004
+#: ../gtk/gtksettings.c:1020
 msgid "The size of icons in default toolbars."
 msgstr "Az alapértelmezett eszköztárak ikonjainak mérete."
 
-#: ../gtk/gtksettings.c:1021
+#: ../gtk/gtksettings.c:1037
 msgid "Auto Mnemonics"
 msgstr "Automatikus gyorsbillentyűk"
 
-#: ../gtk/gtksettings.c:1022
+#: ../gtk/gtksettings.c:1038
 msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
 "presses the mnemonic activator."
@@ -5636,16 +5532,133 @@ msgstr ""
 "A hívóbetűk automatikusan megjelenjenek és eltűnjenek-e, amikor a "
 "felhasználó megnyomja a hívóbetű-aktiválót?"
 
-#: ../gtk/gtksettings.c:1038
-#| msgid "Primary icon sensitive"
+#: ../gtk/gtksettings.c:1054
 msgid "Primary button warps slider"
 msgstr "Elsődleges gomb ugratja a csúszkát"
 
-#: ../gtk/gtksettings.c:1039
+#: ../gtk/gtksettings.c:1055
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
 msgstr ""
 "Az elsődleges kattintás a vályún az adott pozícióba ugratja-e a csúszkát."
+
+#: ../gtk/gtksettings.c:1070
+msgid "Show button images"
+msgstr "Gombképek megjelenítése"
+
+#: ../gtk/gtksettings.c:1071
+msgid "Whether images should be shown on buttons"
+msgstr "Megjelenjenek-e képek a gombokon"
+
+#: ../gtk/gtksettings.c:1079 ../gtk/gtksettings.c:1173
+msgid "Select on focus"
+msgstr "Kijelölés fókusz esetén"
+
+#: ../gtk/gtksettings.c:1080
+msgid "Whether to select the contents of an entry when it is focused"
+msgstr ""
+"Kijelölésre kerüljön-e a bejegyzés tartalma a fókusz megszerzése esetén"
+
+#: ../gtk/gtksettings.c:1097
+msgid "Password Hint Timeout"
+msgstr "Jelszótipp időtúllépése"
+
+#: ../gtk/gtksettings.c:1098
+msgid "How long to show the last input character in hidden entries"
+msgstr ""
+"Meddig jelenjen meg az utoljára bevitt karakter a rejtett bejegyzésekben"
+
+#: ../gtk/gtksettings.c:1107
+msgid "Show menu images"
+msgstr "Menüképek megjelenítése"
+
+#: ../gtk/gtksettings.c:1108
+msgid "Whether images should be shown in menus"
+msgstr "Megjelenjenek-e képek a menükben"
+
+#: ../gtk/gtksettings.c:1116
+msgid "Delay before drop down menus appear"
+msgstr "Késleltetés a menüelemek megjelenése előtt."
+
+#: ../gtk/gtksettings.c:1117
+msgid "Delay before the submenus of a menu bar appear"
+msgstr "Késleltetés egy menüsor almenüinek megjelenése előtt."
+
+#: ../gtk/gtksettings.c:1134
+msgid "Scrolled Window Placement"
+msgstr "Görgetett ablak elhelyezése"
+
+#: ../gtk/gtksettings.c:1135
+msgid ""
+"Where the contents of scrolled windows are located with respect to the "
+"scrollbars, if not overridden by the scrolled window's own placement."
+msgstr ""
+"Hol legyen a görgetett ablak tartalma a görgetősávokhoz képest, ha nincs "
+"felülbírálva a görgetett ablak saját elhelyezése által"
+
+#: ../gtk/gtksettings.c:1144
+msgid "Can change accelerators"
+msgstr "Gyorsbillentyűk módosíthatók"
+
+#: ../gtk/gtksettings.c:1145
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgstr ""
+"A menü gyorsbillentyűi módosíthatók-e egy billentyű lenyomásával a menüelem "
+"felett"
+
+#: ../gtk/gtksettings.c:1153
+msgid "Delay before submenus appear"
+msgstr "Késleltetés az almenük megjelenítése előtt"
+
+#: ../gtk/gtksettings.c:1154
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+"Minimális idő, ameddig a mutatónak a menüelem felett kell állnia, hogy "
+"megjelenjen az almenü"
+
+#: ../gtk/gtksettings.c:1163
+msgid "Delay before hiding a submenu"
+msgstr "Késleltetés egy almenü elrejtése előtt"
+
+#: ../gtk/gtksettings.c:1164
+msgid ""
+"The time before hiding a submenu when the pointer is moving towards the "
+"submenu"
+msgstr ""
+"Egy almenü elrejtésének minimális ideje, amikor a mutató az almenü felé "
+"közelít"
+
+#: ../gtk/gtksettings.c:1174
+msgid "Whether to select the contents of a selectable label when it is focused"
+msgstr ""
+"Kijelölésre kerüljön-e a kiválasztható címke tartalma a fókusz megszerzése "
+"esetén"
+
+#: ../gtk/gtksettings.c:1182
+msgid "Custom palette"
+msgstr "Egyéni paletta"
+
+#: ../gtk/gtksettings.c:1183
+msgid "Palette to use in the color selector"
+msgstr "A színválasztóban használandó paletta"
+
+#: ../gtk/gtksettings.c:1191
+msgid "IM Preedit style"
+msgstr "IM előszerkesztési stílus"
+
+#: ../gtk/gtksettings.c:1192
+msgid "How to draw the input method preedit string"
+msgstr "A beviteli módszer előszerkesztési karakterláncának kirajzolása"
+
+#: ../gtk/gtksettings.c:1201
+msgid "IM Status style"
+msgstr "IM-állapotstílus"
+
+#: ../gtk/gtksettings.c:1202
+msgid "How to draw the input method statusbar"
+msgstr "A beviteli módszer állapotsorának kirajzolása"
 
 #: ../gtk/gtksizegroup.c:301
 msgid "Mode"
@@ -6099,7 +6112,7 @@ msgstr ""
 "javasolt. A Pango előre meghatároz bizonyos arányokat, mint például a "
 "PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:594
+#: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:595
 msgid "Left, right, or center justification"
 msgstr "Balra, jobbra vagy középre igazítás"
 
@@ -6116,7 +6129,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Bal oldali margó"
 
-#: ../gtk/gtktexttag.c:387 ../gtk/gtktextview.c:603
+#: ../gtk/gtktexttag.c:387 ../gtk/gtktextview.c:604
 msgid "Width of the left margin in pixels"
 msgstr "A bal margó szélessége, képpontokban megadva"
 
@@ -6124,15 +6137,15 @@ msgstr "A bal margó szélessége, képpontokban megadva"
 msgid "Right margin"
 msgstr "Jobb oldali margó"
 
-#: ../gtk/gtktexttag.c:397 ../gtk/gtktextview.c:613
+#: ../gtk/gtktexttag.c:397 ../gtk/gtktextview.c:614
 msgid "Width of the right margin in pixels"
 msgstr "A jobb margó szélessége, képpontokban megadva"
 
-#: ../gtk/gtktexttag.c:407 ../gtk/gtktextview.c:622
+#: ../gtk/gtktexttag.c:407 ../gtk/gtktextview.c:623
 msgid "Indent"
 msgstr "Behúzás"
 
-#: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:623
+#: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:624
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "A bekezdés behúzása, képpontokban megadva"
 
@@ -6148,7 +6161,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Vonalak feletti képpontok"
 
-#: ../gtk/gtktexttag.c:429 ../gtk/gtktextview.c:547
+#: ../gtk/gtktexttag.c:429 ../gtk/gtktextview.c:548
 msgid "Pixels of blank space above paragraphs"
 msgstr "A bekezdések feletti üres terület, képpontokban megadva"
 
@@ -6156,7 +6169,7 @@ msgstr "A bekezdések feletti üres terület, képpontokban megadva"
 msgid "Pixels below lines"
 msgstr "Vonalak alatti képpontok"
 
-#: ../gtk/gtktexttag.c:439 ../gtk/gtktextview.c:557
+#: ../gtk/gtktexttag.c:439 ../gtk/gtktextview.c:558
 msgid "Pixels of blank space below paragraphs"
 msgstr "A bekezdések alatti üres terület, képpontokban megadva"
 
@@ -6164,20 +6177,20 @@ msgstr "A bekezdések alatti üres terület, képpontokban megadva"
 msgid "Pixels inside wrap"
 msgstr "Tördelésen belüli képpontok"
 
-#: ../gtk/gtktexttag.c:449 ../gtk/gtktextview.c:567
+#: ../gtk/gtktexttag.c:449 ../gtk/gtktextview.c:568
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "A bekezdés áttördelt sorai közötti üres terület, képpontokban megadva"
 
-#: ../gtk/gtktexttag.c:476 ../gtk/gtktextview.c:585
+#: ../gtk/gtktexttag.c:476 ../gtk/gtktextview.c:586
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "A sorok tördelésének módja: soha, szóhatárokon, karakterhatárokon"
 
-#: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:632
+#: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:633
 msgid "Tabs"
 msgstr "Lapok"
 
-#: ../gtk/gtktexttag.c:486 ../gtk/gtktextview.c:633
+#: ../gtk/gtktexttag.c:486 ../gtk/gtktextview.c:634
 msgid "Custom tabs for this text"
 msgstr "A szöveg egyedi lapjai"
 
@@ -6321,63 +6334,63 @@ msgstr "Bekezdés háttérszínének beállítása"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Ez a címke befolyásolja-e a bekezdés háttérszínét"
 
-#: ../gtk/gtktextview.c:546
+#: ../gtk/gtktextview.c:547
 msgid "Pixels Above Lines"
 msgstr "Sorok feletti képpontok"
 
-#: ../gtk/gtktextview.c:556
+#: ../gtk/gtktextview.c:557
 msgid "Pixels Below Lines"
 msgstr "Sorok alatti képpontok"
 
-#: ../gtk/gtktextview.c:566
+#: ../gtk/gtktextview.c:567
 msgid "Pixels Inside Wrap"
 msgstr "Tördelésen belüli képpontok"
 
-#: ../gtk/gtktextview.c:584
+#: ../gtk/gtktextview.c:585
 msgid "Wrap Mode"
 msgstr "Sortördelés módja"
 
-#: ../gtk/gtktextview.c:602
+#: ../gtk/gtktextview.c:603
 msgid "Left Margin"
 msgstr "Bal oldali margó"
 
-#: ../gtk/gtktextview.c:612
+#: ../gtk/gtktextview.c:613
 msgid "Right Margin"
 msgstr "Jobb oldali margó"
 
-#: ../gtk/gtktextview.c:640
+#: ../gtk/gtktextview.c:641
 msgid "Cursor Visible"
 msgstr "Kurzor látható"
 
-#: ../gtk/gtktextview.c:641
+#: ../gtk/gtktextview.c:642
 msgid "If the insertion cursor is shown"
 msgstr "A beszúrási kurzor látható-e"
 
-#: ../gtk/gtktextview.c:648
+#: ../gtk/gtktextview.c:649
 msgid "Buffer"
 msgstr "Puffer"
 
-#: ../gtk/gtktextview.c:649
+#: ../gtk/gtktextview.c:650
 msgid "The buffer which is displayed"
 msgstr "A megjelenített puffer"
 
-#: ../gtk/gtktextview.c:657
+#: ../gtk/gtktextview.c:658
 msgid "Whether entered text overwrites existing contents"
 msgstr "A beírt szöveg felülírja-e a meglévő tartalmat"
 
-#: ../gtk/gtktextview.c:664
+#: ../gtk/gtktextview.c:665
 msgid "Accepts tab"
 msgstr "Tabulátor elfogadása"
 
-#: ../gtk/gtktextview.c:665
+#: ../gtk/gtktextview.c:666
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "A Tab gomb megnyomása tabulátor karakter beírását eredményezi-e"
 
-#: ../gtk/gtktextview.c:694
+#: ../gtk/gtktextview.c:695
 msgid "Error underline color"
 msgstr "Hiba aláhúzásának színe"
 
-#: ../gtk/gtktextview.c:695
+#: ../gtk/gtktextview.c:696
 msgid "Color with which to draw error-indication underlines"
 msgstr "Az a szín, amellyel a hibát jelző aláhúzás kerül kirajzolásra"
 
@@ -7313,7 +7326,6 @@ msgid "The length of vertical scroll arrows"
 msgstr "A függőleges görgetőnyilak hossza"
 
 #: ../gtk/gtkwidget.c:2598
-#| msgid "Tooltips"
 msgid "Tooltips opacity"
 msgstr "Buboréksúgók átlátszatlansága"
 
@@ -7322,7 +7334,6 @@ msgid "The opacity to be used when drawing tooltips"
 msgstr "A buboréksúgók rajzolásakor használandó átlátszatlanság"
 
 #: ../gtk/gtkwidget.c:2611
-#| msgid "Tooltips"
 msgid "Tooltips radius"
 msgstr "Buboréksúgók sugara"
 
@@ -7563,20 +7574,4 @@ msgstr "Az ablak áttetszősége"
 #: ../gtk/gtkwindow.c:802
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Az ablak áttetszősége 0 és 1 között"
-
-#: ../modules/input/gtkimcontextxim.c:334
-msgid "IM Preedit style"
-msgstr "IM előszerkesztési stílus"
-
-#: ../modules/input/gtkimcontextxim.c:335
-msgid "How to draw the input method preedit string"
-msgstr "A beviteli módszer előszerkesztési karakterláncának kirajzolása"
-
-#: ../modules/input/gtkimcontextxim.c:343
-msgid "IM Status style"
-msgstr "IM-állapotstílus"
-
-#: ../modules/input/gtkimcontextxim.c:344
-msgid "How to draw the input method statusbar"
-msgstr "A beviteli módszer állapotsorának kirajzolása"
 
