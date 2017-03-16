@@ -147,7 +147,7 @@ gsk_shader_builder_add_define (GskShaderBuilder *builder,
 {
   g_return_if_fail (GSK_IS_SHADER_BUILDER (builder));
   g_return_if_fail (define_name != NULL && *define_name != '\0');
-  g_return_if_fail (define_value != NULL && *define_name != '\0');
+  g_return_if_fail (define_value != NULL && *define_value != '\0');
 
   g_ptr_array_add (builder->defines, g_strdup (define_name));
   g_ptr_array_add (builder->defines, g_strdup (define_value));
