@@ -111,6 +111,7 @@ gdk_drawing_context_set_property (GObject      *gobject,
                       G_OBJECT_TYPE_NAME (gobject));
           return;
         }
+      break;
 
     case PROP_PAINT_CONTEXT:
       priv->paint_context = g_value_dup_object (value);
