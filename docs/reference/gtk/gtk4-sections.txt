@@ -4890,7 +4890,6 @@ gtk_get_locale_direction
 gtk_parse_args
 gtk_init
 gtk_init_check
-gtk_init_with_args
 gtk_get_option_group
 gtk_events_pending
 gtk_main

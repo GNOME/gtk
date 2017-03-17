@@ -373,8 +373,8 @@ static gboolean do_setlocale = TRUE;
 
 /**
  * gtk_disable_setlocale:
- * 
- * Prevents gtk_init(), gtk_init_check(), gtk_init_with_args() and
+ *
+ * Prevents gtk_init(), gtk_init_check() and
  * gtk_parse_args() from automatically
  * calling `setlocale (LC_ALL, "")`. You would
  * want to use this function if you wanted to set the locale for

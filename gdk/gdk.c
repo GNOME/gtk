@@ -777,7 +777,7 @@ gdk_set_program_class (const char *program_class)
  * gdk_disable_multidevice:
  *
  * Disables multidevice support in GDK. This call must happen prior
- * to gdk_display_open(), gtk_init(), gtk_init_with_args() or
+ * to gdk_display_open(), gtk_init() or
  * gtk_init_check() in order to take effect.
  *
  * Most common GTK+ applications won’t ever need to call this. Only

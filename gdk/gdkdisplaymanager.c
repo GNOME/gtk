@@ -244,7 +244,7 @@ static const gchar *allowed_backends;
  * list to try all remaining backends.
  *
  * This call must happen prior to gdk_display_open(),
- * gtk_init(), gtk_init_with_args() or gtk_init_check()
+ * gtk_init(), or gtk_init_check()
  * in order to take effect.
  *
  * Since: 3.10
