@@ -582,9 +582,14 @@ background-color: @bg_color;
     </example>
 
     <para>
-      GTK+ also allows to form color expressions, which can be nested and
-      provide a rich language to define colors which are derived from a
-      set of base colors.
+      GTK+ also supports color expressions, which allow colors to be transformed
+      to new ones and can be nested, providing a rich language to define colors.
+    </para>
+    <para>
+      Color expressions resemble functions, taking 1 or more colors and in some
+      cases a number as their arguments. The number is floating-point, clamped
+      between 0 and 1, and specifies the degree to which the expression will
+      transform the given color(s) in the manner that is indicated by its name.
     </para>
 
 <literallayout><code>〈color expression〉 = lighter(〈color〉) | darker(〈color〉) | shade(〈color〉,〈number〉) | alpha(〈color〉,〈number〉) | mix(〈color〉,〈color〉,〈number〉)</code>
