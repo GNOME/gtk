@@ -587,7 +587,7 @@ background-color: @bg_color;
       set of base colors.
     </para>
 
-<literallayout><code>〈color expression〉 = lighter(〈color〉) | darker(〈color〉) | shade(〈number〉,〈color〉) | alpha(〈number〉,〈color〉) | mix(〈number〉,〈color〉,〈color〉)</code>
+<literallayout><code>〈color expression〉 = lighter(〈color〉) | darker(〈color〉) | shade(〈color〉,〈number〉) | alpha(〈color〉,〈number〉) | mix(〈color〉,〈color〉,〈number〉)</code>
 </literallayout>
 
     <para>
