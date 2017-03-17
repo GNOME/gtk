@@ -856,7 +856,7 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
   if (priv->titlebar_start_box != NULL)
     {
       gtk_widget_measure (priv->titlebar_start_box, GTK_ORIENTATION_VERTICAL, -1,
-                          &center_min, &center_nat, NULL, NULL);
+                          &child_minimum, &child_natural, NULL, NULL);
 
       computed_minimum = MAX (computed_minimum, child_minimum);
       computed_natural = MAX (computed_natural, child_natural);
@@ -865,7 +865,7 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
   if (priv->titlebar_end_box != NULL)
     {
       gtk_widget_measure (priv->titlebar_end_box, GTK_ORIENTATION_VERTICAL, -1,
-                          &center_min, &center_nat, NULL, NULL);
+                          &child_minimum, &child_natural, NULL, NULL);
 
       computed_minimum = MAX (computed_minimum, child_minimum);
       computed_natural = MAX (computed_natural, child_natural);
