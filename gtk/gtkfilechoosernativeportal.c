@@ -110,15 +110,17 @@ response_cb (GDBusConnection  *connection,
 
   choices = g_variant_lookup_value (response_data, "choices", G_VARIANT_TYPE ("a(ss)"));
   if (choices)
-    for (i = 0; i < g_variant_n_children (choices); i++)
-      {
-        const char *id;
-        const char *selected;
-        g_variant_get_child (choices, i, "(&s&s)", &id, &selected);
-        gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (self), id, selected);
-      }
+    {
+      for (i = 0; i < g_variant_n_children (choices); i++)
+        {
+          const char *id;
+          const char *selected;
+          g_variant_get_child (choices, i, "(&s&s)", &id, &selected);
+          gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (self), id, selected);
+        }
+      g_variant_unref (choices);
+    }
 
-  g_variant_unref (choices);
   g_slist_free_full (self->custom_files, g_object_unref);
   self->custom_files = NULL;
   for (i = 0; uris[i]; i++)
