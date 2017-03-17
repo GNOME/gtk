@@ -760,6 +760,49 @@ gsk_renderer_get_profiler (GskRenderer *renderer)
 }
 
 static GType
+get_renderer_for_name (const char *renderer_name)
+{
+  if (renderer_name == NULL)
+    return G_TYPE_INVALID;
+  else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
+    return GSK_TYPE_CAIRO_RENDERER;
+  else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0
+           || g_ascii_strcasecmp (renderer_name, "gl") == 0)
+    return GSK_TYPE_GL_RENDERER;
+#ifdef GDK_RENDERING_VULKAN
+  else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
+    return = GSK_TYPE_VULKAN_RENDERER;
+#endif
+  else if (g_ascii_strcasecmp (renderer_name, "help") == 0)
+    {
+      g_print ("Supported arguments for GSK_RENDERER environment variable:\n");
+      g_print ("   cairo - Use the Cairo fallback renderer\n");
+      g_print ("  opengl - Use the default OpenGL renderer\n");
+#ifdef GDK_RENDERING_VULKAN
+      g_print ("  vulkan - Use the Vulkan renderer\n");
+#endif
+      g_print ("    help - Print this help\n\n");
+      g_print ("Other arguments will cause a warning and be ignored.\n");
+    }
+  else
+    {
+      g_warning ("Unrecognized renderer \"%s\". Try GSK_RENDERER=help", renderer_name);
+    }
+
+  return G_TYPE_INVALID;
+}
+
+static GType
+get_renderer_for_display (GdkWindow *window)
+{
+  GdkDisplay *display = gdk_window_get_display (window);
+  const char *renderer_name;
+
+  renderer_name = g_object_get_data (display, "gsk-renderer");
+  return get_renderer_for_name (renderer_name);
+}
+
+static GType
 get_renderer_for_env_var (GdkWindow *window)
 {
   static GType env_var_type = G_TYPE_NONE;
@@ -767,35 +810,7 @@ get_renderer_for_env_var (GdkWindow *window)
   if (env_var_type == G_TYPE_NONE)
     {
       const char *renderer_name = g_getenv ("GSK_RENDERER");
-
-      if (renderer_name == NULL)
-        env_var_type = G_TYPE_INVALID;
-      else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
-        env_var_type = GSK_TYPE_CAIRO_RENDERER;
-      else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0
-            || g_ascii_strcasecmp (renderer_name, "gl") == 0)
-        env_var_type = GSK_TYPE_GL_RENDERER;
-#ifdef GDK_RENDERING_VULKAN
-      else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
-        env_var_type = GSK_TYPE_VULKAN_RENDERER;
-#endif
-      else if (g_ascii_strcasecmp (renderer_name, "help") == 0)
-        {
-          g_print ("Supported arguments for GSK_RENDERER environment variable:\n");
-          g_print ("   cairo - Use the Cairo fallback renderer\n");
-          g_print ("  opengl - Use the default OpenGL renderer\n");
-#ifdef GDK_RENDERING_VULKAN
-          g_print ("  vulkan - Use the Vulkan renderer\n");
-#endif
-          g_print ("    help - Print this help\n\n");
-          g_print ("Other arguments will cause a warning and be ignored.\n");
-          env_var_type = G_TYPE_INVALID;
-        }
-      else
-        {
-          g_warning ("Unrecognized renderer \"%s\". Try GSK_RENDERER=help", renderer_name);
-          env_var_type = G_TYPE_INVALID;
-        }
+      env_var_type = get_renderer_for_name (renderer_name);
     }
 
   return env_var_type;
@@ -826,6 +841,7 @@ static struct {
   gboolean verbose;
   GType (* get_renderer) (GdkWindow *window);
 } renderer_possibilities[] = {
+  { TRUE,  get_renderer_for_display },
   { TRUE,  get_renderer_for_env_var },
   { FALSE, get_renderer_for_backend },
   { FALSE, get_renderer_fallback },

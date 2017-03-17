@@ -313,6 +313,17 @@ get_inspector_screen (void)
         g_message ("Failed to separate connection to default display");
     }
 
+
+  if (display)
+    {
+      const gchar *name;
+
+      name = g_getenv ("GTK_INSPECTOR_RENDERER");
+
+      g_object_set_data_full (G_OBJECT (display), "gsk-renderer",
+                              g_strdup (name), g_free);
+    }
+
   if (!display)
     display = gdk_display_get_default ();
 
