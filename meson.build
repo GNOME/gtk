@@ -271,6 +271,26 @@ if mlib.found()
   cdata.set('HAVE_LIBM', 1)
 endif
 
+# Check for Vulkan support
+# TODO: move to gsk subfolder maybe? Or will it be used elsewhere too?
+have_vulkan = false
+vulkan_lib = []
+enable_vulkan = get_option('enable-vulkan')
+if enable_vulkan != 'no'
+  vulkan_lib = cc.find_library('vulkan', required : false)
+  if vulkan_lib.found() and cc.has_function('vkCreateInstance', dependencies : vulkan_lib) and cc.has_header('vulkan/vulkan.h')
+    glslc = find_program('glslc', required : false)
+    if glslc.found()
+      have_vulkan = true
+      # FIXME: -lvulkan needs to go into gtk+-4.0.pc (GDK_EXTRA_LIBS)
+    else
+      error('Need glslc for Vulkan support. See https://github.com/google/shaderc or compile with -Denable-vulkan=no')
+    endif
+  endif
+else
+  message('Vulkan support explicitly disabled')
+endif
+
 configure_file(
   input : 'config.h.meson',
   output: 'config.h',
