@@ -14,6 +14,8 @@ G_BEGIN_DECLS
 #mesondefine GDK_WINDOWING_BROADWAY
 #mesondefine GDK_WINDOWING_WAYLAND
 
+#mesondefine GDK_RENDERING_VULKAN
+
 G_END_DECLS
 
 #endif  /* __GDKCONFIG_H__ */

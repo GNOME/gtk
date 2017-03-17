@@ -1,3 +1,4 @@
 option('enable-x11-backend', type: 'boolean', value: 'true')
 option('enable-wayland-backend', type: 'boolean', value: 'true')
 option('enable-broadway-backend', type: 'boolean', value: 'false')
+option('enable-vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto')

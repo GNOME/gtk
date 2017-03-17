@@ -19,36 +19,84 @@ gsk_private_sources = files([
   'gskshaderbuilder.c',
 ])
 
-# FIXME: do we need this variable?
-gsk_sources = gsk_public_sources + gsk_private_sources
-
-gsk_headers = files([
+# FIXME: install gsk_public_headers ?
+gsk_public_headers = files([
   'gskenums.h',
   'gskrenderer.h',
   'gskrendernode.h',
+  'gskroundedrect.h',
+  'gsktexture.h',
   'gsktypes.h',
-  'gskcairorendererprivate.h',
-  'gskdebugprivate.h',
-  'gskgldriverprivate.h',
-  'gskglprofilerprivate.h',
-  'gskglrendererprivate.h',
-  'gskprivate.h',
-  'gskprofilerprivate.h',
-  'gskrendererprivate.h',
-  'gskrendernodeprivate.h',
-  'gskshaderbuilderprivate.h',
 ])
+
+if have_vulkan
+  gsk_private_sources += files([
+    'gskvulkanblendpipeline.c',
+    'gskvulkanborderpipeline.c',
+    'gskvulkanboxshadowpipeline.c',
+    'gskvulkanbuffer.c',
+    'gskvulkanclip.c',
+    'gskvulkancolorpipeline.c',
+    'gskvulkancommandpool.c',
+    'gskvulkaneffectpipeline.c',
+    'gskvulkanlineargradientpipeline.c',
+    'gskvulkanimage.c',
+    'gskvulkanmemory.c',
+    'gskvulkanpipeline.c',
+    'gskvulkanpushconstants.c',
+    'gskvulkanrender.c',
+    'gskvulkanrenderer.c',
+    'gskvulkanrenderpass.c',
+    'gskvulkanshader.c',
+  ])
+
+# FIXME: vulkan shaders
+#gsk_private_vulkan_include_shaders =',
+#  'resources/vulkan/clip.frag.glsl',
+#  'resources/vulkan/clip.vert.glsl',
+#  'resources/vulkan/constants.glsl',
+#  'resources/vulkan/rounded-rect.glsl
+#gsk_private_vulkan_fragment_shaders =',
+#  'resources/vulkan/blend.frag',
+#  'resources/vulkan/border.frag',
+#  'resources/vulkan/color.frag',
+#  'resources/vulkan/color-matrix.frag',
+#  'resources/vulkan/inset-shadow.frag',
+#  'resources/vulkan/linear.frag',
+#  'resources/vulkan/outset-shadow.frag
+#gsk_private_vulkan_vertex_shaders =',
+#  'resources/vulkan/blend.vert',
+#  'resources/vulkan/border.vert',
+#  'resources/vulkan/color.vert',
+#  'resources/vulkan/color-matrix.vert',
+#  'resources/vulkan/inset-shadow.vert',
+#  'resources/vulkan/linear.vert',
+#  'resources/vulkan/outset-shadow.vert
+#gsk_private_vulkan_shaders =',
+#  '$(gsk_private_vulkan_fragment_shaders)',
+#  '$(gsk_private_vulkan_vertex_shaders)
+#gsk_private_vulkan_compiled_shaders =',
+#  '$(gsk_private_vulkan_fragment_shaders:.frag=.frag.spv)',
+#  '$(gsk_private_vulkan_vertex_shaders:.vert=.vert.spv)',
+#  '$(gsk_private_vulkan_fragment_shaders:.frag=-clip.frag.spv)',
+#  '$(gsk_private_vulkan_vertex_shaders:.vert=-clip.vert.spv)',
+#  '$(gsk_private_vulkan_fragment_shaders:.frag=-clip-rounded.frag.spv)',
+#  '$(gsk_private_vulkan_vertex_shaders:.vert=-clip-rounded.vert.spv)
+endif
+
+# FIXME: do we need this variable?
+gsk_sources = gsk_public_sources + gsk_private_sources
 
 gskenum_h = custom_target(
   'gskenum_h',
   output  : 'gskenumtypes.h',
-  input   : gsk_headers,
+  input   : gsk_public_headers,
   command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gskenumtypes.h.template', '@OUTPUT@', '@INPUT@'])
 
 gskenum_c = custom_target(
   'gskenum_c',
   output  : 'gskenumtypes.c',
-  input   : gsk_headers,
+  input   : gsk_public_headers,
   depends : gskenum_h,
   command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gskenumtypes.c.template', '@OUTPUT@', '@INPUT@'])
 
@@ -74,7 +122,7 @@ libgsk = static_library(
   sources: [gsk_sources, gskenum_h, gskresources],
   dependencies: gsk_deps,
   include_directories: [confinc],
-  c_args: ['-DGSK_COMPILATION'],
+  c_args: ['-DGSK_COMPILATION', '-DG_LOG_DOMAIN="Gsk"'],
 )
 
 libgsk_dep = declare_dependency(

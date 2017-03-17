@@ -115,6 +115,7 @@ gdk_x_sources = files([
   'x11/gdkscreen-x11.h',
   'x11/gdkselection-x11.c',
   'x11/gdkvisual-x11.c',
+  'x11/gdkvulkancontext-x11.c',
   'x11/gdkwindow-x11.c',
   'x11/gdkwindow-x11.h',
   'x11/gdkx.h',
@@ -170,6 +171,7 @@ gdk_wayland_sources = files([
   'wayland/gdkscreen-wayland.c',
   'wayland/gdkseat-wayland.h',
   'wayland/gdkselection-wayland.c',
+  'wayland/gdkvulkancontext-wayland.c',
   'wayland/gdkwayland.h',
   'wayland/gdkwaylanddevice.h',
   'wayland/gdkwaylanddisplay.h',
@@ -300,14 +302,16 @@ cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 
 
+gdkconfig_cdata = configuration_data()
+gdkconfig_cdata.set('GDK_WINDOWING_X11', x11_enabled)
+gdkconfig_cdata.set('GDK_WINDOWING_WAYLAND', wayland_enabled)
+gdkconfig_cdata.set('GDK_WINDOWING_BROADWAY', broadway_enabled)
+gdkconfig_cdata.set('GDK_RENDERING_VULKAN', have_vulkan)
 
-if x11_enabled      cdata.set('GDK_WINDOWING_X11', '')      endif
-if wayland_enabled  cdata.set('GDK_WINDOWING_WAYLAND', '')  endif
-if broadway_enabled cdata.set('GDK_WINDOWING_BROADWAY', '') endif
 gdkconfig = configure_file(
   input  : 'gdkconfig.h.meson',
   output : 'gdkconfig.h',
-  configuration : cdata,
+  configuration : gdkconfig_cdata,
   install_dir: 'include/gtk-4.0/gdk/' # XXX ???
 )
 
@@ -332,7 +336,8 @@ gdk_deps = [
   epoxy_dep,
   fontconfig_dep,
   giounix_dep,
-  pangocairo_dep
+  pangocairo_dep,
+  vulkan_lib
 ]
 
 gdk_sources = [
