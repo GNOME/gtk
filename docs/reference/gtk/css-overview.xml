@@ -592,7 +592,7 @@ background-color: @bg_color;
       to black or white as the number approaches 0 or 2 respectively. For mix(),
       0 or 1 return the unaltered 1st or 2nd color respectively; numbers between
       0 and 1 return blends of the two; and numbers below 0 or above 1 intensify
-      the RGB components of the 1st or 2nd colour respectively. alpha() takes a
+      the RGB components of the 1st or 2nd color respectively. alpha() takes a
       number from 0 to 1 and applies that as the opacity of the supplied color.
     </para>
 
