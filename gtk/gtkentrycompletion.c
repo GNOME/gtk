@@ -2236,7 +2236,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       event->keyval == GDK_KEY_ISO_Enter ||
       event->keyval == GDK_KEY_Escape)
     {
-      if (completion && completion->priv->completion_timeout)
+      if (completion->priv->completion_timeout)
         {
           g_source_remove (completion->priv->completion_timeout);
           completion->priv->completion_timeout = 0;
