@@ -31,7 +31,6 @@ gsk_private_sources = files([
   'gskshaderbuilder.c',
 ])
 
-# FIXME: install gsk_public_headers ?
 gsk_public_headers = files([
   'gskenums.h',
   'gskrenderer.h',
@@ -40,6 +39,8 @@ gsk_public_headers = files([
   'gsktexture.h',
   'gsktypes.h',
 ])
+
+install_headers(gsk_public_headers, 'gsk.h', subdir : 'gtk-4.0/gsk')
 
 gsk_private_vulkan_shaders = []
 gsk_private_vulkan_compiled_shaders = []
