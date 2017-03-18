@@ -1,3 +1,16 @@
+gsk_private_source_shaders = [
+  'resources/glsl/blend.fs.glsl',
+  'resources/glsl/blend.vs.glsl',
+  'resources/glsl/blit.fs.glsl',
+  'resources/glsl/blit.vs.glsl',
+  'resources/glsl/es2_common.fs.glsl',
+  'resources/glsl/es2_common.vs.glsl',
+  'resources/glsl/gl3_common.fs.glsl',
+  'resources/glsl/gl3_common.vs.glsl',
+  'resources/glsl/gl_common.fs.glsl',
+  'resources/glsl/gl_common.vs.glsl',
+]
+
 gsk_public_sources = files([
   'gskrenderer.c',
   'gskrendernode.c',
@@ -6,7 +19,6 @@ gsk_public_sources = files([
   'gsktexture.c',
 ])
 
-# FIXME: + $(gsk_private_vulkan_source_c)
 gsk_private_sources = files([
   'gskcairoblur.c',
   'gskcairorenderer.c',
@@ -29,6 +41,9 @@ gsk_public_headers = files([
   'gsktypes.h',
 ])
 
+gsk_private_vulkan_shaders = []
+gsk_private_vulkan_compiled_shaders = []
+
 if have_vulkan
   gsk_private_sources += files([
     'gskvulkanblendpipeline.c',
@@ -50,39 +65,64 @@ if have_vulkan
     'gskvulkanshader.c',
   ])
 
-# FIXME: vulkan shaders
-#gsk_private_vulkan_include_shaders =',
-#  'resources/vulkan/clip.frag.glsl',
-#  'resources/vulkan/clip.vert.glsl',
-#  'resources/vulkan/constants.glsl',
-#  'resources/vulkan/rounded-rect.glsl
-#gsk_private_vulkan_fragment_shaders =',
-#  'resources/vulkan/blend.frag',
-#  'resources/vulkan/border.frag',
-#  'resources/vulkan/color.frag',
-#  'resources/vulkan/color-matrix.frag',
-#  'resources/vulkan/inset-shadow.frag',
-#  'resources/vulkan/linear.frag',
-#  'resources/vulkan/outset-shadow.frag
-#gsk_private_vulkan_vertex_shaders =',
-#  'resources/vulkan/blend.vert',
-#  'resources/vulkan/border.vert',
-#  'resources/vulkan/color.vert',
-#  'resources/vulkan/color-matrix.vert',
-#  'resources/vulkan/inset-shadow.vert',
-#  'resources/vulkan/linear.vert',
-#  'resources/vulkan/outset-shadow.vert
-#gsk_private_vulkan_shaders =',
-#  '$(gsk_private_vulkan_fragment_shaders)',
-#  '$(gsk_private_vulkan_vertex_shaders)
-#gsk_private_vulkan_compiled_shaders =',
-#  '$(gsk_private_vulkan_fragment_shaders:.frag=.frag.spv)',
-#  '$(gsk_private_vulkan_vertex_shaders:.vert=.vert.spv)',
-#  '$(gsk_private_vulkan_fragment_shaders:.frag=-clip.frag.spv)',
-#  '$(gsk_private_vulkan_vertex_shaders:.vert=-clip.vert.spv)',
-#  '$(gsk_private_vulkan_fragment_shaders:.frag=-clip-rounded.frag.spv)',
-#  '$(gsk_private_vulkan_vertex_shaders:.vert=-clip-rounded.vert.spv)
-endif
+# FIXME: what's up with these?
+#  gsk_private_vulkan_include_shaders = [
+#    'resources/vulkan/clip.frag.glsl',
+#    'resources/vulkan/clip.vert.glsl',
+#    'resources/vulkan/constants.glsl',
+#    'resources/vulkan/rounded-rect.glsl',
+#  ]
+
+  gsk_private_vulkan_fragment_shaders = [
+    'resources/vulkan/blend.frag',
+    'resources/vulkan/border.frag',
+    'resources/vulkan/color.frag',
+    'resources/vulkan/color-matrix.frag',
+    'resources/vulkan/inset-shadow.frag',
+    'resources/vulkan/linear.frag',
+    'resources/vulkan/outset-shadow.frag',
+  ]
+
+  gsk_private_vulkan_vertex_shaders = [
+    'resources/vulkan/blend.vert',
+    'resources/vulkan/border.vert',
+    'resources/vulkan/color.vert',
+    'resources/vulkan/color-matrix.vert',
+    'resources/vulkan/inset-shadow.vert',
+    'resources/vulkan/linear.vert',
+    'resources/vulkan/outset-shadow.vert',
+  ]
+
+  gsk_private_vulkan_shaders += gsk_private_vulkan_fragment_shaders
+  gsk_private_vulkan_shaders += gsk_private_vulkan_vertex_shaders
+
+  foreach shader : gsk_private_vulkan_shaders
+    basefn = shader.split('.').get(0)
+    suffix = shader.split('.').get(1)
+
+    # FIXME: the compiled shaders seem to exist in the srcdir already, do we
+    # want to or need to add a target to create them with glslc? Do we need to
+    # check for glslc at all then?
+    #
+    # stage_arg = suffix == 'frag' ? '-fshader-stage=fragment' : '-fshader-stage=vertex'
+    # compiled_shader = custom_target('xyz', input : shader,
+    #   output : '@0@.@1@.spv'.format(basefn, suffix),
+    #   command: [glslc, stage_arg, '-DCLIP_NONE', '-o', '@OUTPUT@'])
+
+    gsk_private_vulkan_compiled_shaders += '@0@.@1@.spv'.format(basefn, suffix)
+    gsk_private_vulkan_compiled_shaders += '@0@-clip.@1@.spv'.format(basefn, suffix)
+    gsk_private_vulkan_compiled_shaders += '@0@-clip-rounded.@1@.spv'.format(basefn, suffix)
+  endforeach
+
+endif # have_vulkan
+
+gsk_resources_xml = configure_file(output : 'gsk.resources.xml',
+  input : 'gen-gsk-resources-xml.py',
+  command : [find_program('gen-gsk-resources-xml.py'),
+             '@OUTPUT@',
+             gsk_private_source_shaders,
+             gsk_private_vulkan_compiled_shaders,
+             gsk_private_vulkan_shaders])
 
 # FIXME: do we need this variable?
 gsk_sources = gsk_public_sources + gsk_private_sources
@@ -100,13 +140,11 @@ gskenum_c = custom_target(
   depends : gskenum_h,
   command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gskenumtypes.c.template', '@OUTPUT@', '@INPUT@'])
 
-gskresources = gnome.compile_resources(
-  'gskresources',
-  'gsk.resources.xml',
+gskresources = gnome.compile_resources('gskresources',
+  gsk_resources_xml,
   source_dir: '.',
   c_name: '_gsk',
-  extra_args: '--manual-register'
-)
+  extra_args: '--manual-register')
 
 
 gsk_deps = [
