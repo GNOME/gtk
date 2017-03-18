@@ -127,18 +127,14 @@ gsk_resources_xml = configure_file(output : 'gsk.resources.xml',
 # FIXME: do we need this variable?
 gsk_sources = gsk_public_sources + gsk_private_sources
 
-gskenum_h = custom_target(
-  'gskenum_h',
-  output  : 'gskenumtypes.h',
-  input   : gsk_public_headers,
-  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gskenumtypes.h.template', '@OUTPUT@', '@INPUT@'])
+gsk_enums = gnome.mkenums('gskenumtypes',
+  sources: gsk_public_headers,
+  c_template : 'gskenumtypes.c.template',
+  h_template : 'gskenumtypes.h.template',
+  install_dir : 'gtk-4.0/gsk',
+  install_header : true)
 
-gskenum_c = custom_target(
-  'gskenum_c',
-  output  : 'gskenumtypes.c',
-  input   : gsk_public_headers,
-  depends : gskenum_h,
-  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gskenumtypes.c.template', '@OUTPUT@', '@INPUT@'])
+gskenum_h = gsk_enums[1]
 
 gskresources = gnome.compile_resources('gskresources',
   gsk_resources_xml,
@@ -155,9 +151,8 @@ gsk_deps = [
   libgdk_dep,
 ]
 
-libgsk = static_library(
-  'gsk',
-  sources: [gsk_sources, gskenum_h, gskresources],
+libgsk = static_library('gsk',
+  sources: [gsk_sources, gsk_enums, gskresources],
   dependencies: gsk_deps,
   include_directories: [confinc],
   c_args: ['-DGSK_COMPILATION', '-DG_LOG_DOMAIN="Gsk"'],
