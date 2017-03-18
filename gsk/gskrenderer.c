@@ -771,7 +771,7 @@ get_renderer_for_name (const char *renderer_name)
     return GSK_TYPE_GL_RENDERER;
 #ifdef GDK_RENDERING_VULKAN
   else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
-    return = GSK_TYPE_VULKAN_RENDERER;
+    return GSK_TYPE_VULKAN_RENDERER;
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "help") == 0)
     {
