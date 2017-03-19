@@ -30,8 +30,9 @@ foreach icon_size : ['16x16', '22x22', '24x24', '32x32', '48x48', '256x256']
 endforeach
 
 if not meson.is_cross_build() or meson.has_exe_wrapper()
-  meson.add_install_script(gtk_update_icon_cache.full_path(),
-    '--ignore-theme-index',
-    '--force',
-    icontheme_dir)
+  # FIXME: this errors out, probably needs to be done differently or with wrapper script
+  #meson.add_install_script(gtk_update_icon_cache.full_path(),
+  #  '--ignore-theme-index',
+  #  '--force',
+  # icontheme_dir)
 endif

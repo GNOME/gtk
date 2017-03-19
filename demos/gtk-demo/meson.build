@@ -124,10 +124,11 @@ endforeach
 # TODO: uninstall script, once we have an uninstall target (Meson issue)
 # TODO: should we be able to pass a locally-built exe here? (Meson issue)
 if not meson.is_cross_build() or meson.has_exe_wrapper()
-  meson.add_install_script(gtk_update_icon_cache.full_path(),
-    '--ignore-theme-index',
-    '--force',
-    icontheme_dir)
+  # FIXME: this errors out, probably needs to be done differently or with wrapper script
+  #meson.add_install_script(gtk_update_icon_cache.full_path(),
+  #  '--ignore-theme-index',
+  #  '--force',
+  #  icontheme_dir)
 endif
 
 # desktop file
