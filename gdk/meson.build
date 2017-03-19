@@ -85,76 +85,6 @@ gdk_private_h_sources = files([
   'gdkseatdefaultprivate.h',
 ])
 
-gdk_x_sources = files([
-  'x11/MwmUtil.h',
-  'x11/gdkapplaunchcontext-x11.c',
-  'x11/gdkasync.c',
-  'x11/gdkasync.h',
-  'x11/gdkcursor-x11.c',
-  'x11/gdkdevice-core-x11.c',
-  'x11/gdkdevice-xi2.c',
-  'x11/gdkdevicemanager-core-x11.c',
-  'x11/gdkdevicemanager-x11.c',
-  'x11/gdkdevicemanager-xi2.c',
-  'x11/gdkdisplay-x11.c',
-  'x11/gdkdisplay-x11.h',
-  'x11/gdkdisplaymanager-x11.c',
-  'x11/gdkdnd-x11.c',
-  'x11/gdkeventsource.c',
-  'x11/gdkeventsource.h',
-  'x11/gdkeventtranslator.c',
-  'x11/gdkeventtranslator.h',
-  'x11/gdkgeometry-x11.c',
-  'x11/gdkglcontext-x11.c',
-  'x11/gdkglcontext-x11.h',
-  'x11/gdkkeys-x11.c',
-  'x11/gdkmain-x11.c',
-  'x11/gdkmonitor-x11.c',
-  'x11/gdkmonitor-x11.h',
-  'x11/gdkproperty-x11.c',
-  'x11/gdkscreen-x11.c',
-  'x11/gdkscreen-x11.h',
-  'x11/gdkselection-x11.c',
-  'x11/gdkvisual-x11.c',
-  'x11/gdkvulkancontext-x11.c',
-  'x11/gdkwindow-x11.c',
-  'x11/gdkwindow-x11.h',
-  'x11/gdkx.h',
-  'x11/gdkx11monitor.h',
-  'x11/gdkxftdefaults.c',
-  'x11/gdkxid.c',
-  'x11/xsettings-client.c',
-  'x11/xsettings-client.h',
-])
-
-gdk_x_private_sources = files([
-  'x11/gdkdevicemanagerprivate-core.h',
-  'x11/gdkprivate-x11.h',
-])
-
-gdk_x_public_headers = files([
-  'x11/gdkx-autocleanups.h',
-  'x11/gdkx11applaunchcontext.h',
-  'x11/gdkx11cursor.h',
-  'x11/gdkx11device-core.h',
-  'x11/gdkx11device-xi2.h',
-  'x11/gdkx11device.h',
-  'x11/gdkx11devicemanager-core.h',
-  'x11/gdkx11devicemanager-xi2.h',
-  'x11/gdkx11devicemanager.h',
-  'x11/gdkx11display.h',
-  'x11/gdkx11displaymanager.h',
-  'x11/gdkx11dnd.h',
-  'x11/gdkx11glcontext.h',
-  'x11/gdkx11keys.h',
-  'x11/gdkx11monitor.h',
-  'x11/gdkx11property.h',
-  'x11/gdkx11screen.h',
-  'x11/gdkx11selection.h',
-  'x11/gdkx11utils.h',
-  'x11/gdkx11visual.h',
-  'x11/gdkx11window.h',
-])
 
 gdk_wayland_sources = files([
   'wayland/gdkapplaunchcontext-wayland.c',
@@ -325,23 +255,9 @@ if wayland_enabled or broadway_enabled
 endif
 
 if x11_enabled
-  gdk_deps += [
-    xrender_dep,
-    xi_dep,
-    xext_dep,
-    x11_dep,
-    xcursor_dep,
-    xdamage_dep,
-    xfixes_dep,
-    xcomposite_dep,
-    xrandr_dep
-  ]
-  gdk_sources += [
-    gdk_x_sources,
-    gdk_x_private_sources
-  ]
-
-  # install_headers(gdk_x_public_headers, subdir: 'gtk-3.0/gdk/x11/')
+  subdir('x11')
+  gdk_deps += gdk_x11_deps
+  gdk_sources += gdk_x11_sources
 endif
 
 if wayland_enabled
