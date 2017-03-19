@@ -474,7 +474,7 @@ create_device (GdkDeviceManager *device_manager,
   GDK_NOTE (INPUT,
             ({
               const gchar *type_names[] = { "master", "slave", "floating" };
-              const gchar *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch" };
+              const gchar *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
               const gchar *mode_names[] = { "disabled", "screen", "window" };
               g_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\tmode: %s\n\thas cursor: %d\n\ttouches: %d",
                          dev->name,
