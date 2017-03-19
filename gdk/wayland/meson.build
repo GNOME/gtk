@@ -1,111 +1,45 @@
-if wayland_enabled
-  runcmd = run_command('pkg-config', '--variable=pkgdatadir', 'wayland-protocols')
-  if runcmd.returncode() == 0
-    wayland_protocols_datadir = runcmd.stdout().strip() + '/'
-  else
-    error('Could not get wayland-protocols pkgdatadir via pkg-config.')
-  endif
+proto_dir = dependency('wayland-protocols').get_pkgconfig_variable('pkgdatadir')
+assert(proto_dir != '', 'Could not get pkgdatadir from wayland-protocols.pc')
 
-  wayland_scanner = find_program('wayland-scanner')
-  genprotocols = find_program('genprotocolfiles.py')
+wayland_scanner = find_program('wayland-scanner')
+genprotocols = find_program('genprotocolfiles.py')
 
-  gtk_shell_h = custom_target(
-    'gtk shell protocol header',
-    input  : 'protocol/gtk-shell.xml',
-    output : 'gtk-shell-client-protocol.h',
-    command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'client-header']
-  )
+proto_sources = [
+  ['gtk-shell',
+   'protocol/gtk-shell.xml'],
 
-  gtk_shell_c = custom_target(
-    'gtk shell protocol source',
-    input  : 'protocol/gtk-shell.xml',
-    output : 'gtk-shell-protocol.c',
-    command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'code']
-  )
+  ['gtk-primary-selection',
+   'protocol/gtk-primary-selection.xml'],
 
-  pointer_gestures_h = custom_target(
-    'pointer gestures header',
-    input  : wayland_protocols_datadir + 'unstable/pointer-gestures/pointer-gestures-unstable-v1.xml',
-    output : 'pointer-gestures-unstable-v1-client-protocol.h',
-    command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'client-header']
-  )
+  ['pointer-gestures-unstable-v1',
+   join_paths(proto_dir, 'unstable/pointer-gestures/pointer-gestures-unstable-v1.xml')],
 
-  pointer_gestures_c = custom_target(
-    'pointer gestures source',
-    input  : wayland_protocols_datadir + 'unstable/pointer-gestures/pointer-gestures-unstable-v1.xml',
-    output : 'pointer-gestures-unstable-v1-protocol.c',
-    command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'code']
-  )
+  ['xdg-shell-unstable-v6',
+   join_paths(proto_dir, 'unstable/xdg-shell/xdg-shell-unstable-v6.xml')],
 
-  primary_selection_h = custom_target(
-    'primary selection header',
-    input  : 'protocol/gtk-primary-selection.xml',
-    output : 'gtk-primary-selection-client-protocol.h',
-    command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'client-header']
-  )
+  ['xdg-foreign-unstable-v1',
+   join_paths(proto_dir, 'unstable/xdg-foreign/xdg-foreign-unstable-v1.xml')],
 
-  primary_selection_c = custom_target(
-    'primary selection source',
-    input  : 'protocol/gtk-primary-selection.xml',
-    output : 'gtk-primary-selection-protocol.c',
-    command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'code']
-  )
+  ['tablet-unstable-v2',
+   join_paths(proto_dir, 'unstable/tablet/tablet-unstable-v2.xml')],
+]
 
-  xdg_shell_h = custom_target(
-    'xdg shell v6 header',
-    input  : wayland_protocols_datadir + 'unstable/xdg-shell/xdg-shell-unstable-v6.xml',
-    output : 'xdg-shell-unstable-v6-client-protocol.h',
-    command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'client-header']
-  )
+wayland_proto_targets = []
+foreach p : proto_sources
+  output_base = p[0]
+  input = p[1]
 
-  xdg_shell_c = custom_target(
-    'xdg shell v6 source',
-    input  : wayland_protocols_datadir + 'unstable/xdg-shell/xdg-shell-unstable-v6.xml',
-    output : 'xdg-shell-unstable-v6-protocol.c',
-    command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'code']
-  )
+  hdr = custom_target('@0@ client header'.format(output_base),
+    input : input,
+    output : '@0@-client-protocol.h'.format(output_base),
+    command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'client-header'])
 
-  xdg_foreign_h = custom_target(
-    'xdg foreign v1 header',
-    input  : wayland_protocols_datadir + 'unstable/xdg-foreign/xdg-foreign-unstable-v1.xml',
-    output : 'xdg-foreign-unstable-v1-client-protocol.h',
-    command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'client-header']
-  )
+  src = custom_target('@0@ source'.format(output_base),
+    input : input,
+    output : '@0@-protocol.c'.format(output_base),
+    command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'code'])
 
-  xdg_foreign_c = custom_target(
-    'xdg foreign v1 source',
-    input  : wayland_protocols_datadir + 'unstable/xdg-foreign/xdg-foreign-unstable-v1.xml',
-    output : 'xdg-foreign-unstable-v1-protocol.c',
-    command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'code']
-  )
+  wayland_proto_targets += [hdr, src]
+endforeach
 
-  tablet_h = custom_target(
-    'tablet v2 header',
-    input  : wayland_protocols_datadir + 'unstable/tablet/tablet-unstable-v2.xml',
-    output : 'tablet-unstable-v2-client-protocol.h',
-    command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'client-header']
-  )
-
-  tablet_c = custom_target(
-    'tablet v2 source',
-    input  : wayland_protocols_datadir + 'unstable/tablet/tablet-unstable-v2.xml',
-    output : 'tablet-unstable-v2-protocol.c',
-    command: [genprotocols, wayland_scanner,'@INPUT@', '@OUTPUT@', 'code']
-  )
-
-  gdk_sources += [
-    gtk_shell_c,
-    gtk_shell_h,
-    pointer_gestures_h,
-    pointer_gestures_c,
-    primary_selection_h,
-    primary_selection_c,
-    xdg_shell_h,
-    xdg_shell_c,
-    xdg_foreign_h,
-    xdg_foreign_c,
-    tablet_h,
-    tablet_c
-  ]
-
-endif
+gdk_sources += wayland_proto_targets
