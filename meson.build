@@ -256,8 +256,7 @@ if x11_enabled
   endif
 endif
 
-mlib   = cc.find_library('m', required: false)
-shmlib = cc.find_library('rt')
+mlib = cc.find_library('m', required: false)
 
 if giounix_dep.found()
   cdata.set('HAVE_GIO_UNIX', 1)

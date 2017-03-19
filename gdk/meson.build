@@ -38,7 +38,7 @@ gdk_sources = files([
   'gdkwindowimpl.c',
 ])
 
-gdk_public_h_sources = files([
+gdk_public_headers = files([
   'gdk-autocleanup.h',
   'gdk.h',
   'gdkapplaunchcontext.h',
@@ -75,6 +75,7 @@ gdk_public_h_sources = files([
   'gdkvisual.h',
   'gdkwindow.h',
 ])
+install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
 
 gdk_private_h_sources = files([
   'gdkdevicetoolprivate.h',
@@ -232,75 +233,34 @@ gdk_broadway_private_sources = files([
   'broadway/gdkprivate-broadway.h'
 ])
 
-# glsl_sources = [
-  # 'gl3-texture-2d.fs.glsl',
-  # 'gl3-texture-2d.vs.glsl',
-  # 'gl3-texture-rect.fs.glsl',
-  # 'gl3-texture-rect.vs.glsl',
-  # 'gl2-texture-2d.fs.glsl',
-  # 'gl2-texture-2d.fs.glsl',
-  # 'gl2-texture-rect.vs.glsl',
-  # 'gl2-texture-rect.vs.glsl',
-  # 'gles2-texture.fs.glsl',
-  # 'gles2-texture.vs.glsl',
-# ]
-# resource_xml = ''
-# foreach glsl_file : glsl_sources
-  # resource_xml += '    <file alias="glsl/@0@">resources/glsl/@0@</file>\n'.format(glsl_file)
-# endforeach
+gdk_gresource_xml = configure_file(output : 'gdk.gresource.xml',
+  input : 'gen-gsk-resources-xml.py',
+  command : [find_program('gen-gdk-gresources-xml.py'),
+             meson.current_source_dir(), '@OUTPUT@'])
 
-
-# cdata = configuration_data()
-# cdata.set('GDK_GRESOURCE_XML_FILES', resource_xml)
-# gdkresources_xml = configure_file(
-  # input  : 'gdk.gresource.xml.meson',
-  # output : 'gdk.gresource.xml',
-  # configuration : cdata
-# )
-
-gdkresources = gnome.compile_resources(
-  'gdkresources',
-  'gdk.gresource.xml',
+gdkresources = gnome.compile_resources('gdkresources',
+  gdk_gresource_xml,
   source_dir: '.',
   c_name: '_gdk',
-  extra_args: '--manual-register'
-)
+  extra_args: '--manual-register')
 
+gdk_headers = gdk_public_headers  + gdk_private_h_sources
 
-gdk_headers = gdk_public_h_sources  + gdk_private_h_sources
+gdk_enums = gnome.mkenums('gdkenumtypes',
+  sources: gdk_public_headers,
+  c_template : 'gdkenumtypes.c.template',
+  h_template : 'gdkenumtypes.h.template',
+  install_dir : 'gtk-4.0/gdk',
+  install_header : true)
 
-gdkenum_h = custom_target(
-  'gdkenum_h',
-  output  : 'gdkenumtypes.h',
-  input   : gdk_headers,
-  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gdkenumtypes.h.template', '@OUTPUT@', '@INPUT@'])
+gdkenum_h = gdk_enums[1]
 
-gdkenum_c = custom_target(
-  'gdkenum_c',
-  output  : 'gdkenumtypes.c',
-  input   : gdk_headers,
-  depends : gdkenum_h,
-  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gdkenumtypes.c.template', '@OUTPUT@', '@INPUT@'])
+gdk_marshalers = gnome.genmarshal('gdkmarshalers',
+  sources : 'gdkmarshalers.list',
+  prefix : '_gdk_marshal',
+  valist_marshallers : true)
 
-gdkmarshal_h = custom_target(
-  'gdkmarshal_h',
-  output  : 'gdkmarshalers.h',
-  input   : 'gdkmarshalers.list',
-  command : [mkmarshal, glib_marshal, '_gdk_marshal', '@INPUT@', '@OUTPUT@']
-)
-
-gdkmarshal_c = custom_target(
-  'gdkmarshal_c',
-  output  : 'gdkmarshalers.c',
-  input   : 'gdkmarshalers.list',
-  command : [mkmarshal, glib_marshal, '_gdk_marshal', '@INPUT@', '@OUTPUT@']
-)
-
-cdata = configuration_data()
-cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
-cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
-cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
-
+gdkmarshal_h = gdk_marshalers[1]
 
 gdkconfig_cdata = configuration_data()
 gdkconfig_cdata.set('GDK_WINDOWING_X11', x11_enabled)
@@ -312,15 +272,19 @@ gdkconfig = configure_file(
   input  : 'gdkconfig.h.meson',
   output : 'gdkconfig.h',
   configuration : gdkconfig_cdata,
-  install_dir: 'include/gtk-4.0/gdk/' # XXX ???
-)
+  install_dir: 'include/gtk-4.0/gdk/')
+
+
+gdkversion_cdata = configuration_data()
+gdkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
+gdkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
+gdkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 
 gdkversionmacros = configure_file(
   input  : 'gdkversionmacros.h.in',
   output : 'gdkversionmacros.h',
-  configuration: cdata,
-  install_dir: 'include/gtk-4.0/gdk/' # XXX ???
-)
+  configuration: gdkversion_cdata,
+  install_dir: 'include/gtk-4.0/gdk/')
 
 xinc = include_directories('x11')
 wlinc = include_directories('.')
@@ -340,15 +304,25 @@ gdk_deps = [
   vulkan_lib
 ]
 
-gdk_sources = [
+# add generated gdk sources
+gdk_sources += [
   gdkconfig,
-  gdk_sources,
-  gdkenum_c, gdkenum_h,
-  gdkmarshal_c, gdkmarshal_h,
+  gdk_enums,
+  gdk_marshalers,
   gdkresources,
   gdkversionmacros,
   gdk_headers
 ]
+
+if wayland_enabled or broadway_enabled
+  if cc.has_function('shm_open', name : 'shm_open() in libc')
+    shmlib = []
+  elif cc.has_function('shm_open', args : '-lrt', name : 'shm_open() in librt')
+    shmlib = cc.find_library('rt')
+  else
+    shmlib = []
+  endif
+endif
 
 if x11_enabled
   gdk_deps += [
@@ -398,12 +372,9 @@ if broadway_enabled
   ]
 endif
 
-
-# install_headers(gdk_public_h_sources, subdir: 'gtk-3.0/gdk/')
-
 libgdk = static_library('gdk',
-  sources: [gdk_sources, gdkconfig, gdkenum_h],
-  c_args: ['-DHAVE_CONFIG_H', '-DGDK_COMPILATION'],
+  sources: [gdk_sources, gdkconfig],
+  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
   include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps,
 )
