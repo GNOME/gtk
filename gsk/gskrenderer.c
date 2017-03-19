@@ -798,7 +798,7 @@ get_renderer_for_display (GdkWindow *window)
   GdkDisplay *display = gdk_window_get_display (window);
   const char *renderer_name;
 
-  renderer_name = g_object_get_data (display, "gsk-renderer");
+  renderer_name = g_object_get_data (G_OBJECT (display), "gsk-renderer");
   return get_renderer_for_name (renderer_name);
 }
 
