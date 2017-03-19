@@ -5394,7 +5394,6 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook          *notebook,
           priv->first_tab = priv->focus_tab;
           *last_child = gtk_notebook_search_page (notebook, priv->focus_tab,
                                                   STEP_NEXT, TRUE);
-          page = priv->first_tab->data;
           *n = 1;
         }
       else
