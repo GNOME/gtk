@@ -40,12 +40,6 @@ mir_enabled      = get_option('enable-mir-backend')
 quartz_enabled   = false # FIXME
 win32_enabled    = false # FIXME
 
-mkmarshal    = find_program('build_marshal.py')
-glib_marshal = find_program('glib-genmarshal')
-mkenum       = find_program('build_enum.py')
-perl         = find_program('perl')
-glib_mkenums = find_program('glib-mkenums')
-
 os_unix   = false
 os_linux  = false
 os_win32  = false

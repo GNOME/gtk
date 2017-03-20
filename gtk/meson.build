@@ -650,60 +650,35 @@ gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated', 'gtkdbusinterfaces.xml',
                                    interface_prefix: 'org.Gtk.',
                                    namespace: '_Gtk')
 
-gtkmarshal_h = custom_target(
-  'gtkmarshal_h',
-  output  : 'gtkmarshalers.h',
-  input   : 'gtkmarshalers.list',
-  command : [mkmarshal, glib_marshal, '_gtk_marshal', '@INPUT@', '@OUTPUT@']
-)
+gtkmarshalers = gnome.genmarshal('gtkmarshalers',
+  sources : 'gtkmarshalers.list',
+  prefix : '_gtk_marshal',
+  valist_marshallers : true)
 
-gtkmarshal_c = custom_target(
-  'gtkmarshal_c',
-  output  : 'gtkmarshalers.c',
-  input   : 'gtkmarshalers.list',
-  command : [mkmarshal, glib_marshal, '_gtk_marshal', '@INPUT@', '@OUTPUT@']
-)
+gtkmarshal_h = gtkmarshalers[1]
 
-gtktypebuiltins_h = custom_target(
-  'gtkypebuiltins_h',
-  output  : 'gtktypebuiltins.h',
-  input   : gtk_public_headers + gtk_deprecated_headers,
-  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtktypebuiltins.h.template', '@OUTPUT@', '@INPUT@'],
-  install: true,
-  install_dir: 'include/gtk-4.0/gtk/'
-)
+gtktypebuiltins = gnome.mkenums('gtktypebuiltins',
+  sources: gtk_public_headers + gtk_deprecated_headers,
+  c_template : 'gtktypebuiltins.c.template',
+  h_template : 'gtktypebuiltins.h.template',
+  install_dir : 'include/gtk-4.0/gtk',
+  install_header : true)
 
-gtktypebuiltins_c = custom_target(
-  'gtkypebuiltins_c',
-  output  : 'gtktypebuiltins.c',
-  input   : gtk_public_headers +  gtk_deprecated_headers,
-  depends : gtktypebuiltins_h,
-  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtktypebuiltins.c.template', '@OUTPUT@', '@INPUT@']
-)
+gtktypebuiltins_h = gtktypebuiltins[1]
 
-gtkprivatetypebuiltins_h = custom_target(
-  'gtkprivateypebuiltins_h',
-  output  : 'gtkprivatetypebuiltins.h',
-  input   : gtk_private_type_headers,
-  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtkprivatetypebuiltins.h.template', '@OUTPUT@', '@INPUT@']
-)
+gtkprivatetypebuiltins = gnome.mkenums('gtkprivatetypebuiltins',
+  sources: gtk_private_type_headers,
+  c_template : 'gtkprivatetypebuiltins.c.template',
+  h_template : 'gtkprivatetypebuiltins.h.template')
 
-gtkprivatetypebuiltins_c = custom_target(
-  'gtkprivateypebuiltins_c',
-  output  : 'gtkprivatetypebuiltins.c',
-  input   : gtk_private_type_headers,
-  depends : [gtkprivatetypebuiltins_h, gtktypebuiltins_h],
-  command : [mkenum, perl, glib_mkenums, meson.current_source_dir() + '/gtkprivatetypebuiltins.c.template', '@OUTPUT@', '@INPUT@']
-)
+gtkprivatetypebuiltins_h = gtkprivatetypebuiltins[1]
 
-gentypefuncs_prog = find_program('gentypefuncs.py')
 # Generate gtktypefuncs.inc
-typefuncs = custom_target(
-  'typefuncs',
+typefuncs = custom_target('gtktypefuncs.inc',
   depends: gdkenum_h,
   output : 'gtktypefuncs.inc',
   input  : gdk_headers + gtk_public_headers + gtk_deprecated_headers + gtk_private_headers + [gtktypebuiltins_h] + [gdkenum_h],
-  command: [gentypefuncs_prog, '@OUTPUT@', '@INPUT@'],
+  command: [find_program('gentypefuncs.py'), '@OUTPUT@', '@INPUT@'],
   install: false,
 )
 
@@ -740,9 +715,9 @@ gtk_sources += [
   inspector_sources,
   a11y_sources,
   gtkresources,
-  gtkmarshal_c,
-  gtkprivatetypebuiltins_c,
-  gtktypebuiltins_c,
+  gtkmarshalers,
+  gtkprivatetypebuiltins,
+  gtktypebuiltins,
 ]
 
 gtk_deps = [
@@ -801,7 +776,6 @@ libgtk_dep = declare_dependency(
   sources: [
     'gtk.h',
     gtkversion,
-    gtktypebuiltins_c,
     gtktypebuiltins_h,
   ],
   include_directories: [confinc],
