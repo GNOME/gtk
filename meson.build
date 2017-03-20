@@ -36,7 +36,7 @@ gtk_api_version = '@0@.0'.format(gtk_major_version)
 x11_enabled      = get_option('enable-x11-backend')
 wayland_enabled  = get_option('enable-wayland-backend')
 broadway_enabled = get_option('enable-broadway-backend')
-
+mir_enabled      = get_option('enable-mir-backend')
 
 mkmarshal    = find_program('build_marshal.py')
 glib_marshal = find_program('glib-genmarshal')
@@ -254,6 +254,12 @@ if x11_enabled
       cdata.set('HAVE_RANDR15', 1)
     endif
   endif
+endif
+
+if mir_enabled
+  mirclient_dep = dependency('mirclient', version : '>= 0.22.0')
+  mircookie_dep = dependency('mircookie', version : '>= 0.17.0')
+  libcontent_hub_glib_dep = dependency('libcontenthub-glib')
 endif
 
 mlib = cc.find_library('m', required: false)

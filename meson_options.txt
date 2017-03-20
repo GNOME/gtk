@@ -1,4 +1,10 @@
-option('enable-x11-backend', type: 'boolean', value: 'true')
-option('enable-wayland-backend', type: 'boolean', value: 'true')
-option('enable-broadway-backend', type: 'boolean', value: 'false')
-option('enable-vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto')
+option('enable-x11-backend', type: 'boolean', value: 'true',
+  description : 'Enable the X11 gdk backend')
+option('enable-wayland-backend', type: 'boolean', value: 'true',
+  description : 'Enable the wayland gdk backend')
+option('enable-broadway-backend', type: 'boolean', value: 'false',
+  description : 'Enable the broadway (HTML5) gdk backend')
+option('enable-mir-backend', type: 'boolean', value: 'false',
+  description : 'Enable the Mir gdk backend (UNTESTED, NEEDS WORK)')
+option('enable-vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable support for the Vulkan graphics API')
