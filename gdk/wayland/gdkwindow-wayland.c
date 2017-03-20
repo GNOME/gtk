@@ -3041,6 +3041,8 @@ gdk_wayland_window_set_title (GdkWindow   *window,
 {
   GdkWindowImplWayland *impl;
   const char *end;
+  gsize title_length;
+
   g_return_if_fail (title != NULL);
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -3053,10 +3055,18 @@ gdk_wayland_window_set_title (GdkWindow   *window,
 
   g_free (impl->title);
 
-  g_utf8_validate (title, MAX_WL_BUFFER_SIZE, &end);
-  impl->title = g_malloc (end - title + 1);
-  memcpy (impl->title, title, end - title);
-  impl->title[end - title] = '\0';
+  title_length = MIN (strlen (title), MAX_WL_BUFFER_SIZE);
+  if (g_utf8_validate (title, title_length, &end))
+    {
+      impl->title = g_malloc (end - title + 1);
+      memcpy (impl->title, title, end - title);
+      impl->title[end - title] = '\0';
+    }
+  else
+    {
+      impl->title = g_utf8_make_valid (title, title_length);
+      g_warning ("Invalid utf8 passed to gdk_window_set_title: '%s'", title);
+    }
 
   gdk_wayland_window_sync_title (window);
 }
