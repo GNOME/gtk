@@ -180,16 +180,22 @@ if wayland_enabled or broadway_enabled
 endif
 
 gdk_backends = []
+gdk_backends_gen_headers = []  # non-public generated headers
 foreach backend : ['broadway', 'wayland', 'x11', 'mir']
   if get_variable('@0@_enabled'.format(backend))
     subdir(backend)
     gdk_deps += get_variable('gdk_@0@_deps'.format(backend))
     gdk_backends += get_variable('libgdk_@0@'.format(backend))
+    # Special-case this for now to work around Meson bug with get_variable()
+    # fallback being an empty array, or any array (#1481)
+    if backend == 'wayland'
+      gdk_backends_gen_headers += get_variable('gdk_@0@_gen_headers'.format(backend))
+    endif
   endif
 endforeach
 
 libgdk = static_library('gdk',
-  sources: [gdk_sources, gdkconfig],
+  sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
   include_directories: [confinc, xinc, wlinc],
   link_with: gdk_backends,
