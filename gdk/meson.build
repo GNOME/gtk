@@ -118,6 +118,7 @@ gdkconfig_cdata = configuration_data()
 gdkconfig_cdata.set('GDK_WINDOWING_X11', x11_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WAYLAND', wayland_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_BROADWAY', broadway_enabled)
+gdkconfig_cdata.set('GDK_WINDOWING_MIR', mir_enabled)
 gdkconfig_cdata.set('GDK_RENDERING_VULKAN', have_vulkan)
 
 gdkconfig = configure_file(
@@ -179,7 +180,7 @@ if wayland_enabled or broadway_enabled
 endif
 
 gdk_backends = []
-foreach backend : ['broadway', 'wayland', 'x11']
+foreach backend : ['broadway', 'wayland', 'x11', 'mir']
   if get_variable('@0@_enabled'.format(backend))
     subdir(backend)
     gdk_deps += get_variable('gdk_@0@_deps'.format(backend))
