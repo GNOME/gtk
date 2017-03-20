@@ -132,7 +132,7 @@ gsk_enums = gnome.mkenums('gskenumtypes',
   sources: gsk_public_headers,
   c_template : 'gskenumtypes.c.template',
   h_template : 'gskenumtypes.h.template',
-  install_dir : 'gtk-4.0/gsk',
+  install_dir : 'include/gtk-4.0/gsk',
   install_header : true)
 
 gskenum_h = gsk_enums[1]

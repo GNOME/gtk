@@ -102,7 +102,7 @@ gdk_enums = gnome.mkenums('gdkenumtypes',
   sources: gdk_public_headers,
   c_template : 'gdkenumtypes.c.template',
   h_template : 'gdkenumtypes.h.template',
-  install_dir : 'gtk-4.0/gdk',
+  install_dir : 'include/gtk-4.0/gdk',
   install_header : true)
 
 gdkenum_h = gdk_enums[1]
