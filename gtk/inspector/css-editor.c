@@ -107,21 +107,14 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssEditor, gtk_inspector_css_editor, GTK
 static void
 set_initial_text (GtkInspectorCssEditor *ce)
 {
-  const gchar *text = NULL;
-
-  if (text)
-    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (ce->priv->text), text, -1);
-  else
-    {
-      gchar *initial_text;
-      initial_text = g_strconcat ("/*\n",
-                                  _("You can type here any CSS rule recognized by GTK+."), "\n",
-                                  _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
-                                  _("Changes are applied instantly and globally, for the whole application."), "\n",
-                                  "*/\n\n", NULL);
-      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (ce->priv->text), initial_text, -1);
-      g_free (initial_text);
-    }
+  gchar *initial_text;
+  initial_text = g_strconcat ("/*\n",
+                              _("You can type here any CSS rule recognized by GTK+."), "\n",
+                              _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
+                              _("Changes are applied instantly and globally, for the whole application."), "\n",
+                              "*/\n\n", NULL);
+  gtk_text_buffer_set_text (GTK_TEXT_BUFFER (ce->priv->text), initial_text, -1);
+  g_free (initial_text);
 }
 
 static void
