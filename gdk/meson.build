@@ -85,49 +85,6 @@ gdk_private_h_sources = files([
   'gdkseatdefaultprivate.h',
 ])
 
-
-gdk_wayland_sources = files([
-  'wayland/gdkapplaunchcontext-wayland.c',
-  'wayland/gdkcursor-wayland.c',
-  'wayland/gdkdevice-wayland.c',
-  'wayland/gdkdisplay-wayland.c',
-  'wayland/gdkdisplay-wayland.h',
-  'wayland/gdkdnd-wayland.c',
-  'wayland/gdkeventsource.c',
-  'wayland/gdkglcontext-wayland.c',
-  'wayland/gdkglcontext-wayland.h',
-  'wayland/gdkkeys-wayland.c',
-  'wayland/gdkmonitor-wayland.c',
-  'wayland/gdkmonitor-wayland.h',
-  'wayland/gdkscreen-wayland.c',
-  'wayland/gdkseat-wayland.h',
-  'wayland/gdkselection-wayland.c',
-  'wayland/gdkvulkancontext-wayland.c',
-  'wayland/gdkwayland.h',
-  'wayland/gdkwaylanddevice.h',
-  'wayland/gdkwaylanddisplay.h',
-  'wayland/gdkwaylandglcontext.h',
-  'wayland/gdkwaylandmonitor.h',
-  'wayland/gdkwaylandselection.h',
-  'wayland/gdkwaylandwindow.h',
-  'wayland/gdkwindow-wayland.c',
-  'wayland/wm-button-layout-translation.c',
-])
-
-gdk_wayland_public_headers = files([
-  'wayland/gdkwaylanddevice.h',
-  'wayland/gdkwaylanddisplay.h',
-  'wayland/gdkwaylandglcontext.h',
-  'wayland/gdkwaylandselection.h',
-  'wayland/gdkwaylandwindow.h'
-])
-
-gdk_wayland_private_sources = files([
-  'wayland/gdkprivate-wayland.h',
-])
-
-
-
 gdk_broadway_sources = files([
   'broadway/broadway-buffer.c',
   'broadway/broadway-buffer.h',
@@ -262,20 +219,8 @@ endif
 
 if wayland_enabled
   subdir('wayland')
-  gdk_deps += [
-    shmlib,
-    xkbdep,
-    wlclientdep,
-    wlprotocolsdep,
-    wlcursordep,
-    wlegldep
-  ]
-  gdk_sources += [
-    gdk_wayland_sources,
-    gdk_wayland_private_sources
-  ]
-
-  # install_headers(gdk_wayland_public_headers, subdir: 'gtk-3.0/gdk/wayland/')
+  gdk_deps += gdk_wayland_deps
+  gdk_sources += gdk_wayland_sources
 endif
 
 if broadway_enabled
