@@ -181,7 +181,7 @@ endif
 
 gdk_backends = []
 gdk_backends_gen_headers = []  # non-public generated headers
-foreach backend : ['broadway', 'wayland', 'x11', 'mir', 'win32']
+foreach backend : ['broadway', 'mir', 'quartz', 'wayland', 'win32', 'x11']
   if get_variable('@0@_enabled'.format(backend))
     subdir(backend)
     gdk_deps += get_variable('gdk_@0@_deps'.format(backend))
@@ -194,6 +194,7 @@ foreach backend : ['broadway', 'wayland', 'x11', 'mir', 'win32']
   endif
 endforeach
 
+# FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],

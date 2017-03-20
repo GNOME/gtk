@@ -37,6 +37,7 @@ x11_enabled      = get_option('enable-x11-backend')
 wayland_enabled  = get_option('enable-wayland-backend')
 broadway_enabled = get_option('enable-broadway-backend')
 mir_enabled      = get_option('enable-mir-backend')
+quartz_enabled   = false # FIXME
 win32_enabled    = false # FIXME
 
 mkmarshal    = find_program('build_marshal.py')
