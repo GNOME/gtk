@@ -1417,8 +1417,7 @@ static void
 gtk_tooltip_handle_event_internal (GdkEvent *event)
 {
   gint x, y;
-  gboolean return_value = FALSE;
-  GtkWidget *has_tooltip_widget = NULL;
+  GtkWidget *has_tooltip_widget;
   GdkDisplay *display;
   GtkTooltip *current_tooltip;
 
@@ -1434,6 +1433,8 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
 
   if (current_tooltip && current_tooltip->keyboard_mode_enabled)
     {
+      gboolean return_value;
+
       has_tooltip_widget = current_tooltip->keyboard_widget;
       if (!has_tooltip_widget)
 	return;
