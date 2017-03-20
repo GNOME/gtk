@@ -85,41 +85,6 @@ gdk_private_h_sources = files([
   'gdkseatdefaultprivate.h',
 ])
 
-gdk_broadway_sources = files([
-  'broadway/broadway-buffer.c',
-  'broadway/broadway-buffer.h',
-  'broadway/broadway-output.c',
-  'broadway/broadway-output.h',
-  'broadway/broadway-server.c',
-  'broadway/broadway-server.h',
-  'broadway/broadwayd.c',
-  'broadway/gdkbroadway-server.c',
-  'broadway/gdkcursor-broadway.c',
-  'broadway/gdkdevice-broadway.c',
-  'broadway/gdkdevice-broadway.h',
-  'broadway/gdkdevicemanager-broadway.c',
-  'broadway/gdkdevicemanager-broadway.h',
-  'broadway/gdkdisplay-broadway.c',
-  'broadway/gdkdisplay-broadway.h',
-  'broadway/gdkdnd-broadway.c',
-  'broadway/gdkeventsource.c',
-  'broadway/gdkeventsource.h',
-  'broadway/gdkglobals-broadway.c',
-  'broadway/gdkkeys-broadway.c',
-  'broadway/gdkmonitor-broadway.c',
-  'broadway/gdkmonitor-broadway.h',
-  'broadway/gdkproperty-broadway.c',
-  'broadway/gdkscreen-broadway.c',
-  'broadway/gdkscreen-broadway.h',
-  'broadway/gdkselection-broadway.c',
-  'broadway/gdkwindow-broadway.c',
-  'broadway/gdkwindow-broadway.h',
-])
-
-gdk_broadway_private_sources = files([
-  'broadway/gdkprivate-broadway.h'
-])
-
 gdk_gresource_xml = configure_file(output : 'gdk.gresource.xml',
   input : 'gen-gsk-resources-xml.py',
   command : [find_program('gen-gdk-gresources-xml.py'),
@@ -173,6 +138,8 @@ gdkversionmacros = configure_file(
   configuration: gdkversion_cdata,
   install_dir: 'include/gtk-4.0/gdk/')
 
+gdkinc = include_directories('.')
+
 xinc = include_directories('x11')
 wlinc = include_directories('.')
 
@@ -211,32 +178,20 @@ if wayland_enabled or broadway_enabled
   endif
 endif
 
-if x11_enabled
-  subdir('x11')
-  gdk_deps += gdk_x11_deps
-  gdk_sources += gdk_x11_sources
-endif
-
-if wayland_enabled
-  subdir('wayland')
-  gdk_deps += gdk_wayland_deps
-  gdk_sources += gdk_wayland_sources
-endif
-
-if broadway_enabled
-  gdk_deps += [
-    shmlib,
-  ]
-  gdk_sources += [
-    gdk_broadway_sources,
-    gdk_broadway_private_sources
-  ]
-endif
+gdk_backends = []
+foreach backend : ['broadway', 'wayland', 'x11']
+  if get_variable('@0@_enabled'.format(backend))
+    subdir(backend)
+    gdk_deps += get_variable('gdk_@0@_deps'.format(backend))
+    gdk_backends += get_variable('libgdk_@0@'.format(backend))
+  endif
+endforeach
 
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdkconfig],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
   include_directories: [confinc, xinc, wlinc],
+  link_with: gdk_backends,
   dependencies: gdk_deps,
 )
 

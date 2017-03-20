@@ -65,3 +65,9 @@ gdk_x11_deps = [
   xcomposite_dep,
   xrandr_dep,
 ]
+
+libgdk_x11 = static_library('libgdk-x11',
+  gdk_x11_sources, gdkconfig, gdkenum_h,
+  include_directories: [confinc, gdkinc],
+  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
+  dependencies: [gdk_deps, gdk_x11_deps])
