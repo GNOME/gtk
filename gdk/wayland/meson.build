@@ -64,12 +64,14 @@ proto_sources = [
    join_paths(proto_dir, 'unstable/tablet/tablet-unstable-v2.xml')],
 ]
 
+gdk_wayland_gen_headers = []
+
 # FIXME: there's some protostability/protoname stuff in Makefile.am I don't grok
 foreach p : proto_sources
   output_base = p[0]
   input = p[1]
 
-  gdk_wayland_sources += custom_target('@0@ client header'.format(output_base),
+  gdk_wayland_gen_headers += custom_target('@0@ client header'.format(output_base),
     input : input,
     output : '@0@-client-protocol.h'.format(output_base),
     command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'client-header'])
@@ -81,7 +83,7 @@ foreach p : proto_sources
 endforeach
 
 libgdk_wayland = static_library('libgdk-wayland',
-  gdk_wayland_sources, gdkconfig, gdkenum_h,
+  gdk_wayland_sources, gdk_wayland_gen_headers, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
   dependencies: [gdk_deps, gdk_wayland_deps])
