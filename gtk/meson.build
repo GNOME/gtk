@@ -810,48 +810,24 @@ libgtk_dep = declare_dependency(
   include_directories: [confinc, gtkinc]
 )
 
+# Installed tools
 
+gtk_tools = [
+  ['gtk4-query-settings', ['gtk-query-settings.c']],
+  ['gtk4-builder-tool', ['gtk-builder-tool.c']],
+  ['gtk4-update-icon-cache', ['updateiconcache.c']],
+  ['gtk4-encode-symbolic-svg', ['encodesymbolic.c']],
+  ['gtk4-launch', ['gtk-launch.c']],
+  ['gtk4-query-immodules', ['queryimmodules.c', 'gtkutils.c']],
+]
 
-####### Utils ######
-gtk_query_settings = executable(
-  'gtk4-query-settings',
-  'gtk-query-settings.c',
-  dependencies: libgtk_dep,
-  install: true
-)
+foreach tool : gtk_tools
+  tool_name = tool.get(0)
+  tool_srcs = tool.get(1)
 
-gtk_builder_tool = executable(
-  'gtk4-builder-tool',
-  'gtk-builder-tool.c',
-  dependencies: libgtk_dep,
-  install: true
-)
-
-gtk_update_icon_cache = executable(
-  'gtk4-update-icon-cache',
-  'updateiconcache.c',
-  dependencies: libgtk_dep,
-  install: true
-)
-
-# gtk_query_immodules = executable(
-  # 'gtk-query-immodules-3.0',
-  # 'queryimmodules.c',
-  # 'gtkutils.c',
-  # dependencies: libgtk_dep,
-  # install: true
-# )
-
-gtk_encode_symbolic_svg = executable(
-  'gtk4-encode-symbolic-svg',
-  'encodesymbolic.c',
-  dependencies: libgtk_dep,
-  install: true
-)
-
-gtk_launch = executable(
-  'gtk4-launch',
-  'gtk-launch.c',
-  dependencies: libgtk_dep,
-  install: true
-)
+  executable(tool_name, tool_srcs,
+    include_directories: [confinc],
+    c_args: gtk_cargs,
+    dependencies: libgtk_dep,
+    install: true)
+endforeach
