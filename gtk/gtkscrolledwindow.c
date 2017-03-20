@@ -56,31 +56,21 @@
  * @Title: GtkScrolledWindow
  * @See_also: #GtkScrollable, #GtkViewport, #GtkAdjustment
  *
- * GtkScrolledWindow is a #GtkBin subclass: it’s a container
- * the accepts a single child widget. GtkScrolledWindow adds scrollbars
- * to the child widget and optionally draws a beveled frame around the
- * child widget.
+ * GtkScrolledWindow is a container that accepts a single child widget, makes
+ * that child scrollable using either internally added scrollbars or externally
+ * associated adjustments, and optionally draws a frame around the child.
  *
- * The scrolled window can work in two ways. Some widgets have native
- * scrolling support; these widgets implement the #GtkScrollable interface.
- * Widgets with native scroll support include #GtkTreeView, #GtkTextView,
- * and #GtkLayout.
- *
- * For widgets that lack native scrolling support, the #GtkViewport
- * widget acts as an adaptor class, implementing scrollability for child
- * widgets that lack their own scrolling capabilities. Use #GtkViewport
- * to scroll child widgets such as #GtkGrid, #GtkBox, and so on.
- *
- * If a widget has native scrolling abilities, it can be added to the
- * GtkScrolledWindow with gtk_container_add(). If a widget does not, you
- * must first add the widget to a #GtkViewport, then add the #GtkViewport
- * to the scrolled window. gtk_container_add() will do this for you for
- * widgets that don’t implement #GtkScrollable natively, so you can
- * ignore the presence of the viewport.
+ * Widgets with native scrolling support, i.e. those whose classes implement the
+ * #GtkScrollable interface, are added directly. For other types of widget, the
+ * class #GtkViewport acts as an adaptor, giving scrollability to other widgets.
+ * GtkScrolledWindow’s implementation of gtk_container_add() intelligently
+ * accounts for whether or not the added child is a #GtkScrollable. If it isn’t,
+ * #GtkScrolledWindow wraps the child in a #GtkViewport and adds that for you.
+ * Therefore, you can just add any child widget and not worry about the details.
  *
  * If gtk_container_add() has added a #GtkViewport for you, you can remove
- * both your added child widget from the #GtkViewport and the #GtkViewport
- * from the GtkScrolledWindow with either of the calls
+ * both your added child widget from the #GtkViewport, and the #GtkViewport
+ * from the GtkScrolledWindow, with either of these calls:
  * |[<!-- language="C" -->
  * gtk_container_remove (GTK_CONTAINER (scrolled_window),
  *                       child_widget);
@@ -89,15 +79,13 @@
  *                       gtk_bin_get_child (GTK_BIN (scrolled_window)));
  * ]|
  *
- * The position of the scrollbars is controlled by the scroll adjustments.
- * See #GtkAdjustment for the fields in an adjustment — for
- * #GtkScrollbar, used by GtkScrolledWindow, the “value” field
- * represents the position of the scrollbar, which must be between the
- * “lower” field and “upper - page_size.” The “page_size” field
- * represents the size of the visible scrollable area. The
- * “step_increment” and “page_increment” fields are used when the user
- * asks to step down (using the small stepper arrows) or page down (using
- * for example the PageDown key).
+ * Unless #GtkScrolledWindow:policy is GTK_POLICY_NEVER or GTK_POLICY_EXTERNAL,
+ * GtkScrolledWindow adds internal #GtkScrollbar widgets around its child. The
+ * scroll position of the child, and if applicable the scrollbars, is controlled
+ * by the #GtkScrolledWindow:hadjustment and #GtkScrolledWindow:vadjustment
+ * that are associated with the GtkScrolledWindow. See the docs on #GtkScrollbar
+ * for the details, but note that the “step_increment” and “page_increment”
+ * fields are only effective if the policy causes scrollbars to be present.
  *
  * If a GtkScrolledWindow doesn’t behave quite as you would like, or
  * doesn’t have exactly the right layout, it’s very possible to set up
