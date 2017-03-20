@@ -43,16 +43,15 @@
  * The #GtkScrollbar widget is a horizontal or vertical scrollbar,
  * depending on the value of the #GtkOrientable:orientation property.
  *
- * The position of the thumb in a scrollbar is controlled by the scroll
- * adjustments. See #GtkAdjustment for the fields in an adjustment - for
- * #GtkScrollbar, the #GtkAdjustment:value field represents the position
- * of the scrollbar, which must be between the #GtkAdjustment:lower field
- * and #GtkAdjustment:upper - #GtkAdjustment:page-size. The
- * #GtkAdjustment:page-size field represents the size of the visible
- * scrollable area. The #GtkAdjustment:step-increment and
- * #GtkAdjustment:page-increment fields are properties when the user asks to
- * step down (using the small stepper arrows) or page down (using for
- * example the `Page Down` key).
+ * Its position and movement are controlled by the adjustment that is passed to
+ * or created by gtk_scrollbar_new(). See #GtkAdjustment for more details. The
+ * #GtkAdjustment:value field sets the position of the thumb and must be between
+ * #GtkAdjustment:lower and #GtkAdjustment:upper - #GtkAdjustment:page-size. The
+ * #GtkAdjustment:page-size represents the size of the visible scrollable area.
+ * The fields #GtkAdjustment:step-increment and #GtkAdjustment:page-increment
+ * fields are added or subtracted to the #GtkAdjustment:value when the user asks
+ * to move by a step (using e.g. the cursor arrow keys or, if present, the
+ * stepper buttons) or by a page (using e.g. the Page Down/Up keys).
  *
  * # CSS nodes
  *
