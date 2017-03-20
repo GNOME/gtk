@@ -1624,27 +1624,27 @@ window_anchor_to_gravity (GdkGravity rect_anchor)
     {
     case GDK_GRAVITY_NORTH_WEST:
     case GDK_GRAVITY_STATIC:
-      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
-              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+      return (ZXDG_POSITIONER_V6_GRAVITY_BOTTOM |
+              ZXDG_POSITIONER_V6_GRAVITY_RIGHT);
     case GDK_GRAVITY_NORTH:
-      return ZXDG_POSITIONER_V6_ANCHOR_BOTTOM;
+      return ZXDG_POSITIONER_V6_GRAVITY_BOTTOM;
     case GDK_GRAVITY_NORTH_EAST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_BOTTOM |
-              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+      return (ZXDG_POSITIONER_V6_GRAVITY_BOTTOM |
+              ZXDG_POSITIONER_V6_GRAVITY_LEFT);
     case GDK_GRAVITY_WEST:
-      return ZXDG_POSITIONER_V6_ANCHOR_RIGHT;
+      return ZXDG_POSITIONER_V6_GRAVITY_RIGHT;
     case GDK_GRAVITY_CENTER:
-      return ZXDG_POSITIONER_V6_ANCHOR_NONE;
+      return ZXDG_POSITIONER_V6_GRAVITY_NONE;
     case GDK_GRAVITY_EAST:
-      return ZXDG_POSITIONER_V6_ANCHOR_LEFT;
+      return ZXDG_POSITIONER_V6_GRAVITY_LEFT;
     case GDK_GRAVITY_SOUTH_WEST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
-              ZXDG_POSITIONER_V6_ANCHOR_RIGHT);
+      return (ZXDG_POSITIONER_V6_GRAVITY_TOP |
+              ZXDG_POSITIONER_V6_GRAVITY_RIGHT);
     case GDK_GRAVITY_SOUTH:
-      return ZXDG_POSITIONER_V6_ANCHOR_TOP;
+      return ZXDG_POSITIONER_V6_GRAVITY_TOP;
     case GDK_GRAVITY_SOUTH_EAST:
-      return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
-              ZXDG_POSITIONER_V6_ANCHOR_LEFT);
+      return (ZXDG_POSITIONER_V6_GRAVITY_TOP |
+              ZXDG_POSITIONER_V6_GRAVITY_LEFT);
     default:
       g_assert_not_reached ();
     }
@@ -1975,7 +1975,7 @@ create_dynamic_positioner (GdkWindow *window)
   struct zxdg_positioner_v6 *positioner;
   GdkRectangle geometry;
   enum zxdg_positioner_v6_anchor anchor;
-  enum zxdg_positioner_v6_anchor gravity;
+  enum zxdg_positioner_v6_gravity gravity;
   uint32_t constraint_adjustment = ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_NONE;
   gint real_anchor_rect_x, real_anchor_rect_y;
   gint anchor_rect_width, anchor_rect_height;
