@@ -1779,19 +1779,14 @@ calculate_popup_rect (GdkWindow    *window,
     {
     case GDK_GRAVITY_STATIC:
     case GDK_GRAVITY_NORTH_WEST:
-      x = x;
-      y = y;
       break;
     case GDK_GRAVITY_NORTH:
       x -= geometry.width / 2;
-      y = y;
       break;
     case GDK_GRAVITY_NORTH_EAST:
       x -= geometry.width;
-      y = y;
       break;
     case GDK_GRAVITY_WEST:
-      x = x;
       y -= geometry.height / 2;
       break;
     case GDK_GRAVITY_CENTER:
@@ -1803,7 +1798,6 @@ calculate_popup_rect (GdkWindow    *window,
       y -= geometry.height / 2;
       break;
     case GDK_GRAVITY_SOUTH_WEST:
-      x = x;
       y -= geometry.height;
       break;
     case GDK_GRAVITY_SOUTH:
