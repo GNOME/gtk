@@ -1486,12 +1486,9 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
 	    tip_area_set = current_tooltip->tip_area_set;
 	    tip_area = current_tooltip->tip_area;
 
-	    return_value = gtk_tooltip_run_requery (&has_tooltip_widget,
-						    current_tooltip,
-						    &x, &y);
-
-	    /* Requested to be hidden? */
-	    hide_tooltip = !return_value;
+	    gtk_tooltip_run_requery (&has_tooltip_widget,
+                                     current_tooltip,
+                                     &x, &y);
 
 	    /* Leave notify should override the query function */
 	    hide_tooltip = (event->type == GDK_LEAVE_NOTIFY);
