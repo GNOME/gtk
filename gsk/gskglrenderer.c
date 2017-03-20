@@ -908,8 +908,13 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
         GdkDrawingContext *context = gsk_renderer_get_drawing_context (GSK_RENDERER (self));
         GdkWindow *window = gsk_renderer_get_window (GSK_RENDERER (self));
         GdkRectangle extents;
+        int scale_factor = gsk_renderer_get_scale_factor (GSK_RENDERER (self));
+
         cairo_region_get_extents (gdk_drawing_context_get_clip (context), &extents);
-        glScissor (extents.x, gdk_window_get_height (window) - extents.height - extents.y, extents.width, extents.height);
+
+        glScissor (extents.x * scale_factor,
+                   (gdk_window_get_height (window) - extents.height - extents.y) * scale_factor,
+                   extents.width * scale_factor, extents.height * scale_factor);
         glEnable (GL_SCISSOR_TEST);
         break;
       }
