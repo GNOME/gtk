@@ -3406,7 +3406,7 @@ gtk_label_update_layout_width (GtkLabel *label)
 
               x0 = width / 2;
               y0 = dx ? x0 * dy / dx : G_MAXDOUBLE;
-              vertical = fabs (y0) > height / 2;
+              vertical = fabs (y0) > height / 2.0;
 
               if (vertical)
                 {
