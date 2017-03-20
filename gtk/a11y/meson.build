@@ -107,3 +107,4 @@ a11y_headers = files([
   'gtkwidgetaccessible.h',
   'gtkwindowaccessible.h',
 ])
+install_headers(a11y_headers, subdir : 'gtk-4.0/gtk/a11y')
