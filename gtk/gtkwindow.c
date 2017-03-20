@@ -685,8 +685,7 @@ gtk_window_measure (GtkWidget      *widget,
           int size = for_size;
           if (orientation == GTK_ORIENTATION_HORIZONTAL && for_size >= 0)
             gtk_widget_measure (priv->title_box,
-                                orientation == GTK_ORIENTATION_HORIZONTAL ? GTK_ORIENTATION_VERTICAL :
-                                                                            GTK_ORIENTATION_HORIZONTAL,
+                                GTK_ORIENTATION_VERTICAL,
                                 -1,
                                 NULL, &size,
                                 NULL, NULL);
