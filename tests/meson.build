@@ -145,6 +145,7 @@ foreach t : gtk_tests
   test_name = t.get(0)
   test_srcs = ['@0@.c'.format(test_name), t.get(1, [])]
   executable(test_name, test_srcs,
+    include_directories : [confinc, gdkinc],
     c_args : test_args,
     dependencies : [libgtk_dep, libm])
 endforeach

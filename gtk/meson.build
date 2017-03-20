@@ -804,7 +804,8 @@ libgtk_dep = declare_dependency(
     gtktypebuiltins_c,
     gtktypebuiltins_h,
   ],
-  dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
+  include_directories: [confinc],
+  dependencies: gtk_deps,
   link_with: libgtk,
   link_args: ['-Bsymbolic'],
   include_directories: [confinc, gtkinc]
