@@ -4,7 +4,7 @@ gdk_wayland_sources = files([
   'gdkdevice-wayland.c',
   'gdkdisplay-wayland.c',
   'gdkdnd-wayland.c',
-  'gdkeventsource-wayland.c',
+  'gdkeventsource.c',
   'gdkglcontext-wayland.c',
   'gdkkeys-wayland.c',
   'gdkmonitor-wayland.c',
@@ -79,3 +79,9 @@ foreach p : proto_sources
     output : '@0@-protocol.c'.format(output_base),
     command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'code'])
 endforeach
+
+libgdk_wayland = static_library('libgdk-wayland',
+  gdk_wayland_sources, gdkconfig, gdkenum_h,
+  include_directories: [confinc, gdkinc],
+  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
+  dependencies: [gdk_deps, gdk_wayland_deps])

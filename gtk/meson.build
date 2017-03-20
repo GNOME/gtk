@@ -795,7 +795,7 @@ gnome.compile_schemas()
 # install_headers(a11y_headers,           subdir: 'gtk-3.0/gtk/a11y/')
 
 libgtk = shared_library('gtk',
-  sources: [typefuncs, gtk_sources, gtkmarshal_h],
+  sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
   c_args: gtk_cargs,
   include_directories: [confinc, gdkinc, gtkinc],
   dependencies: [gtk_deps, libgdk_dep, libgsk_dep],
