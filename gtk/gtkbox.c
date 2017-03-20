@@ -802,7 +802,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
   GtkTextDirection direction;
   GtkAllocation child_allocation;
   GtkRequestedSize *sizes[2];
-  GtkRequestedSize center_req;
+  GtkRequestedSize center_req = {0, 0};
   gint child_minimum_baseline, child_natural_baseline;
   gint minimum_above, natural_above;
   gint minimum_below, natural_below;
