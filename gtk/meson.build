@@ -143,7 +143,6 @@ gtk_sources = files([
   'gtkcsswin32sizevalue.c',
   'gtkdebugupdates.c',
   'gtkdialog.c',
-  'gtkdragdest.c',
   'gtkdragsource.c',
   'gtkdrawingarea.c',
   'gtkeditable.c',
@@ -546,8 +545,8 @@ gtk_public_headers = files([
   'gtkshow.h',
   'gtksizegroup.h',
   'gtksizerequest.h',
-  'gtkspinbutton.h',
   'gtksnapshot.h',
+  'gtkspinbutton.h',
   'gtkspinner.h',
   'gtkstack.h',
   'gtkstacksidebar.h',
@@ -557,13 +556,11 @@ gtk_public_headers = files([
   'gtkstyleprovider.h',
   'gtkswitch.h',
   'gtktestutils.h',
-  'gtktextattributes.h',
   'gtktextbuffer.h',
   'gtktextbufferrichtext.h',
   'gtktextchild.h',
   'gtktextdisplay.h',
   'gtktextiter.h',
-  'gtktextlayout.h',
   'gtktextmark.h',
   'gtktexttag.h',
   'gtktexttagtable.h',
@@ -597,19 +594,72 @@ gtk_public_headers = files([
 
 install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
 
-gtk_unix_sources = files([
-  'gtkcustompaperunixdialog.c',
-  'gtkpagesetupunixdialog.c',
-  'gtkprintbackend.c',
-  'gtkprinter.c',
-  'gtkprinteroption.c',
-  'gtkprinteroptionset.c',
-  'gtkprinteroptionwidget.c',
-  'gtkprintjob.c',
-  'gtkprintoperation-unix.c',
-  'gtkprintunixdialog.c',
-  'gtksearchenginetracker.c',
-])
+if os_unix
+  gtk_unix_print_headers = [
+    'gtkpagesetupunixdialog.h',
+    'gtkprintunixdialog.h',
+    'gtkprinter.h',
+    'gtkprintjob.h',
+    'gtkunixprint-autocleanups.h',
+    'gtkunixprint.h',
+  ]
+  install_headers(gtk_unix_print_headers, subdir : 'gtk-4.0/unix-print/gtk')
+
+  gtk_sources += files([
+    'gtkcustompaperunixdialog.c',
+    'gtkpagesetupunixdialog.c',
+    'gtkprintbackend.c',
+    'gtkprinter.c',
+    'gtkprinteroption.c',
+    'gtkprinteroptionset.c',
+    'gtkprinteroptionwidget.c',
+    'gtkprintjob.c',
+    'gtkprintoperation-unix.c',
+    'gtkprintoperation-portal.c',
+    'gtkprintunixdialog.c',
+    'gtksearchenginetracker.c',
+  ])
+endif
+
+if os_win32
+  gtk_sources += [
+    'gtkprint-win32.c',
+    'gtkprintoperation-win32.c',
+    'gtkfilechoosernativewin32.c',
+    'gtkwin32.c',
+  ]
+endif
+
+if x11_enabled
+  gtk_sources += ['gtkapplication-x11.c', 'gtkmountoperation-x11.c']
+endif
+
+if wayland_enabled
+  gtk_sources += ['gtkapplication-wayland.c']
+endif
+
+if x11_enabled or wayland_enabled
+  gtk_sources += ['gtkapplication-dbus.c']
+endif
+
+if win32_enabled
+  gtk_sources += ['gtkmountoperation-stub.c']
+endif
+
+if quartz_enabled
+  gtk_sources += [
+    'gtksearchenginequartz.c',
+    'gtkmountoperation-stub.c',
+    'gtkapplication-quartz.c',
+    'gtkapplication-quartz-menu.c',
+    'gtkquartz.c',
+  ]
+  gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
+endif
+
+if not (x11_enabled or win32_enabled or quartz_enabled)
+  gtk_sources += ['gtkmountoperation-stub.c']
+endif
 
 gen_gtk_gresources_xml = find_program('gen-gtk-gresources-xml.py')
 # FIXME: absolute path to work around meson bug with @OUTPUT@ etc. not being
@@ -637,18 +687,27 @@ gtk_wayland_sources = files([
   'gtkapplication-wayland.c'
 ])
 
-dnd_sources = files([
-  'gtkclipboard.c',
-  'gtkdnd.c'
-])
+if quartz_enabled
+  dnd_sources = files([
+    'gtkclipboard-quartz.c',
+    'gtkdnd-quartz.c',
+  ])
+else
+  dnd_sources = files([
+    'gtkclipboard.c',
+    'gtkdnd.c',
+    'gtkdragdest.c',
+  ])
+endif
 
 gtk_use_wayland_or_x11_c_sources = files([
   'gtkapplication-dbus.c'
 ])
 
-gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated', 'gtkdbusinterfaces.xml',
-                                   interface_prefix: 'org.Gtk.',
-                                   namespace: '_Gtk')
+gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated',
+  'gtkdbusinterfaces.xml',
+  interface_prefix: 'org.Gtk.',
+  namespace: '_Gtk')
 
 gtkmarshalers = gnome.genmarshal('gtkmarshalers',
   sources : 'gtkmarshalers.list',
@@ -658,7 +717,7 @@ gtkmarshalers = gnome.genmarshal('gtkmarshalers',
 gtkmarshal_h = gtkmarshalers[1]
 
 gtktypebuiltins = gnome.mkenums('gtktypebuiltins',
-  sources: gtk_public_headers + gtk_deprecated_headers,
+  sources: gtk_public_headers + gtk_deprecated_headers + a11y_headers,
   c_template : 'gtktypebuiltins.c.template',
   h_template : 'gtktypebuiltins.h.template',
   install_dir : 'include/gtk-4.0/gtk',
@@ -698,18 +757,18 @@ gtkversion = configure_file(
 
 gtk_cargs = [
   '-DGTK_COMPILATION',
+  '-DG_LOG_DOMAIN="Gtk"',
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
   '-DGTK_BINARY_VERSION="' + gtk_binary_version + '"',
   '-DGTK_HOST="' + host_machine.system() + '"',
   '-DGTK_SYSCONFDIR="' + get_option('prefix') + '/etc"',
   '-DGTK_DATADIR="' + get_option('datadir') + '"',
   '-DGTK_DATA_PREFIX="'+ get_option('prefix') + '"',
-  '-DGTK_PRINT_BACKENDS="null"',
+  '-DGTK_PRINT_BACKENDS="null"', # FIXME
 ]
 
 gtk_sources += [
   gtk_dbus_src,
-  gtk_unix_sources,
   gtk_deprecated_sources,
   dnd_sources,
   inspector_sources,
@@ -762,6 +821,9 @@ if x11_enabled or wayland_enabled
   gtk_deps += pangoft_dep
 endif
 
+# org.gtk.Settings.FileChooser.gschema.xml
+# org.gtk.Settings.ColorChooser.gschema.xml
+# org.gtk.Settings.Debug.gschema.xml
 gnome.compile_schemas()
 
 libgtk = shared_library('gtk',
@@ -806,3 +868,20 @@ foreach tool : gtk_tools
     dependencies: libgtk_dep,
     install: true)
 endforeach
+
+# Data to install
+
+install_data('gtkbuilder.rng',
+  install_dir : join_paths(get_option('datadir'),'gtk-4.0'))
+
+install_data('gtkbuilder.loc', 'gtkbuilder.its',
+  install_dir : join_paths(get_option('datadir'),'gettext/its'))
+
+if quartz_enabled
+  # HACK: install_data() doesn't allow installing under a different name (#1487)
+  # FIXME: or maybe just rename it to gtk-keys.css in the src tree?
+  configure_file(input : 'gtk-keys.css.mac',
+    output : 'gtk-keys.css',
+    configuration : configuration_data(),
+    install_dir : join_paths(get_option('datadir'),'themes/Mac/gtk-4.0'))
+endif
