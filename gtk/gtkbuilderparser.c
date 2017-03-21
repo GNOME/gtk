@@ -225,7 +225,7 @@ parse_requires (ParserData   *data,
   req_info->major = version_major;
   req_info->minor = version_minor;
   state_push (data, req_info);
-  req_info->tag.tag_type = TAG_REQUIRES;
+  req_info->tag_type = TAG_REQUIRES;
 }
 
 static gboolean
@@ -262,7 +262,7 @@ parse_object (GMarkupParseContext  *context,
   gint line;
 
   child_info = state_peek_info (data, ChildInfo);
-  if (child_info && child_info->tag.tag_type == TAG_OBJECT)
+  if (child_info && child_info->tag_type == TAG_OBJECT)
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -343,7 +343,7 @@ parse_object (GMarkupParseContext  *context,
     }
 
   object_info = g_slice_new0 (ObjectInfo);
-  object_info->tag.tag_type = TAG_OBJECT;
+  object_info->tag_type = TAG_OBJECT;
   object_info->type = object_type;
   object_info->oclass = g_type_class_ref (object_type);
   object_info->id = (internal_id) ? internal_id : g_strdup (object_id);
@@ -448,7 +448,7 @@ parse_template (GMarkupParseContext  *context,
   ++data->cur_object_level;
 
   object_info = g_slice_new0 (ObjectInfo);
-  object_info->tag.tag_type = TAG_TEMPLATE;
+  object_info->tag_type = TAG_TEMPLATE;
   object_info->type = parsed_type;
   object_info->oclass = g_type_class_ref (parsed_type);
   object_info->id = g_strdup (object_class);
@@ -499,8 +499,8 @@ parse_child (ParserData   *data,
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
-      !(object_info->tag.tag_type == TAG_OBJECT ||
-        object_info->tag.tag_type == TAG_TEMPLATE))
+      !(object_info->tag_type == TAG_OBJECT ||
+        object_info->tag_type == TAG_TEMPLATE))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -516,7 +516,7 @@ parse_child (ParserData   *data,
     }
 
   child_info = g_slice_new0 (ChildInfo);
-  child_info->tag.tag_type = TAG_CHILD;
+  child_info->tag_type = TAG_CHILD;
   child_info->type = g_strdup (type);
   child_info->internal_child = g_strdup (internal_child);
   child_info->parent = (CommonInfo*)object_info;
@@ -554,8 +554,8 @@ parse_property (ParserData   *data,
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
-      !(object_info->tag.tag_type == TAG_OBJECT ||
-        object_info->tag.tag_type == TAG_TEMPLATE))
+      !(object_info->tag_type == TAG_OBJECT ||
+        object_info->tag_type == TAG_TEMPLATE))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -623,7 +623,7 @@ parse_property (ParserData   *data,
     }
 
   info = g_slice_new (PropertyInfo);
-  info->tag.tag_type = TAG_PROPERTY;
+  info->tag_type = TAG_PROPERTY;
   info->pspec = pspec;
   info->text = g_string_new ("");
   info->translatable = translatable;
@@ -662,8 +662,8 @@ parse_signal (ParserData   *data,
 
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
-      !(object_info->tag.tag_type == TAG_OBJECT||
-        object_info->tag.tag_type == TAG_TEMPLATE))
+      !(object_info->tag_type == TAG_OBJECT||
+        object_info->tag_type == TAG_TEMPLATE))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -713,7 +713,7 @@ parse_signal (ParserData   *data,
   info->connect_object_name = g_strdup (object);
   state_push (data, info);
 
-  info->tag.tag_type = TAG_SIGNAL;
+  info->tag_type = TAG_SIGNAL;
 }
 
 /* Called by GtkBuilder */
@@ -871,8 +871,8 @@ parse_custom (GMarkupParseContext  *context,
   if (!parent_info)
     return FALSE;
 
-  if (parent_info->tag.tag_type == TAG_OBJECT ||
-      parent_info->tag.tag_type == TAG_TEMPLATE)
+  if (parent_info->tag_type == TAG_OBJECT ||
+      parent_info->tag_type == TAG_TEMPLATE)
     {
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
@@ -888,7 +888,7 @@ parse_custom (GMarkupParseContext  *context,
       object = object_info->object;
       child = NULL;
     }
-  else if (parent_info->tag.tag_type == TAG_CHILD)
+  else if (parent_info->tag_type == TAG_CHILD)
     {
       ChildInfo* child_info = (ChildInfo*)parent_info;
 
@@ -1032,8 +1032,8 @@ end_element (GMarkupParseContext  *context,
       g_assert (info != NULL);
 
       /* Normal properties */
-      if (info->tag.tag_type == TAG_OBJECT ||
-          info->tag.tag_type == TAG_TEMPLATE)
+      if (info->tag_type == TAG_OBJECT ||
+          info->tag_type == TAG_TEMPLATE)
         {
           ObjectInfo *object_info = (ObjectInfo*)info;
 
@@ -1189,7 +1189,7 @@ text (GMarkupParseContext  *context,
 static void
 free_info (CommonInfo *info)
 {
-  switch (info->tag.tag_type)
+  switch (info->tag_type)
     {
       case TAG_OBJECT:
       case TAG_TEMPLATE:

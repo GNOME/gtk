@@ -23,14 +23,10 @@
 
 typedef struct {
   guint tag_type;
-} TagInfo;
-
-typedef struct {
-  TagInfo tag;
 } CommonInfo;
 
 typedef struct {
-  TagInfo tag;
+  guint tag_type;
   GType type;
   GObjectClass *oclass;
   gchar *id;
@@ -44,7 +40,7 @@ typedef struct {
 } ObjectInfo;
 
 typedef struct {
-  TagInfo tag;
+  guint tag_type;
   GSList *packing_properties;
   GObject *object;
   CommonInfo *parent;
@@ -54,7 +50,7 @@ typedef struct {
 } ChildInfo;
 
 typedef struct {
-  TagInfo tag;
+  guint tag_type;
   GParamSpec *pspec;
   GString *text;
   gboolean translatable:1;
@@ -65,7 +61,7 @@ typedef struct {
 } PropertyInfo;
 
 typedef struct {
-  TagInfo tag;
+  guint tag_type;
   gchar *object_name;
   guint  id;
   GQuark detail;
@@ -86,7 +82,7 @@ typedef struct
 } BindingInfo;
 
 typedef struct {
-  TagInfo  tag;
+  guint    tag_type;
   gchar   *library;
   gint     major;
   gint     minor;
