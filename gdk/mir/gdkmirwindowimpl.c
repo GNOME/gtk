@@ -572,6 +572,25 @@ generate_configure_event (GdkWindow *window,
 }
 
 static void
+synthesize_resize (GdkWindow *window)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  MirWindowParameters params;
+
+  if (!impl->mir_window)
+    return;
+
+  mir_window_get_parameters (impl->mir_window, &params);
+
+  window->width = params.width;
+  window->height = params.height;
+
+  _gdk_window_update_size (window);
+
+  generate_configure_event (window, window->width, window->height);
+}
+
+static void
 maybe_synthesize_resize (GdkWindow *window)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
@@ -626,7 +645,7 @@ ensure_mir_window_full (GdkWindow      *window,
   impl->pending_spec_update = FALSE;
   impl->buffer_stream = mir_window_get_buffer_stream (impl->mir_window);
 
-  maybe_synthesize_resize (window);
+  synthesize_resize (window);
 
   /* FIXME: Ignore some events until shown */
   mir_window_set_event_handler (impl->mir_window, event_cb, window_ref);
