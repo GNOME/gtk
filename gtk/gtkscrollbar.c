@@ -49,8 +49,8 @@
  * #GtkAdjustment:lower and #GtkAdjustment:upper - #GtkAdjustment:page-size. The
  * #GtkAdjustment:page-size represents the size of the visible scrollable area.
  * The fields #GtkAdjustment:step-increment and #GtkAdjustment:page-increment
- * fields are added or subtracted to the #GtkAdjustment:value when the user asks
- * to move by a step (using e.g. the cursor arrow keys or, if present, the
+ * fields are added to or subtracted from the #GtkAdjustment:value when the user
+ * asks to move by a step (using e.g. the cursor arrow keys or, if present, the
  * stepper buttons) or by a page (using e.g. the Page Down/Up keys).
  *
  * # CSS nodes
