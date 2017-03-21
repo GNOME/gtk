@@ -58,6 +58,8 @@ gtk_drag_source_gesture_begin (GtkGesture       *gesture,
   else
     button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
+  g_assert (button >= 1);
+
   if (!site->start_button_mask ||
       !(site->start_button_mask & (GDK_BUTTON1_MASK << (button - 1))))
     gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
