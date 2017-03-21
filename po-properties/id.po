@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties gtk-3-22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-03 11:54+0000\n"
-"PO-Revision-Date: 2017-03-09 10:44+0700\n"
+"POT-Creation-Date: 2017-03-21 00:07+0000\n"
+"PO-Revision-Date: 2017-03-21 21:15+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -231,7 +231,7 @@ msgid "A unique name for the action."
 msgstr "Nama unik untuk aksi ini."
 
 #: gtk/deprecated/gtkaction.c:264 gtk/gtkbutton.c:281 gtk/gtkexpander.c:304
-#: gtk/gtkframe.c:228 gtk/gtklabel.c:801 gtk/gtkmenuitem.c:787
+#: gtk/gtkframe.c:230 gtk/gtklabel.c:801 gtk/gtkmenuitem.c:787
 #: gtk/gtktoolbutton.c:243 gtk/gtktoolitemgroup.c:1641
 msgid "Label"
 msgstr "Label"
@@ -2611,7 +2611,7 @@ msgstr "Lebar maksimum sel, dalam karakter"
 
 #: gtk/gtkcellrenderertext.c:542 gtk/gtktexttag.c:568
 msgid "Wrap mode"
-msgstr "Mode potong"
+msgstr "Mode lipat"
 
 #: gtk/gtkcellrenderertext.c:543
 msgid ""
@@ -2623,7 +2623,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:561 gtk/gtkcombobox.c:927
 msgid "Wrap width"
-msgstr "Lebar pembengkokan"
+msgstr "Lebar pelipatan"
 
 #: gtk/gtkcellrenderertext.c:562
 msgid "The width at which the text is wrapped"
@@ -3783,7 +3783,7 @@ msgstr ""
 msgid "Space to put between the label and the child"
 msgstr "Ruang antar label dan anaknya"
 
-#: gtk/gtkexpander.c:347 gtk/gtkframe.c:259 gtk/gtktoolbutton.c:257
+#: gtk/gtkexpander.c:347 gtk/gtkframe.c:261 gtk/gtktoolbutton.c:257
 #: gtk/gtktoolitemgroup.c:1648
 msgid "Label widget"
 msgstr "Widget label"
@@ -4095,35 +4095,35 @@ msgstr "Tampilkan entri teks pratilik"
 msgid "Whether the preview text entry is shown or not"
 msgstr "Apakah entri teks pratilik ditampilkan atau tidak"
 
-#: gtk/gtkframe.c:229
+#: gtk/gtkframe.c:231
 msgid "Text of the frame's label"
 msgstr "Teks pada bingkai label"
 
-#: gtk/gtkframe.c:235
+#: gtk/gtkframe.c:237
 msgid "Label xalign"
 msgstr "Label xalign"
 
-#: gtk/gtkframe.c:236
+#: gtk/gtkframe.c:238
 msgid "The horizontal alignment of the label"
 msgstr "Penyesuaian letak horisontal label"
 
-#: gtk/gtkframe.c:243
+#: gtk/gtkframe.c:245
 msgid "Label yalign"
 msgstr "Label yalign"
 
-#: gtk/gtkframe.c:244
+#: gtk/gtkframe.c:246
 msgid "The vertical alignment of the label"
 msgstr "Penyesuaian letak vertikal label"
 
-#: gtk/gtkframe.c:251
+#: gtk/gtkframe.c:253
 msgid "Frame shadow"
 msgstr "Bayangan bingkai"
 
-#: gtk/gtkframe.c:252
+#: gtk/gtkframe.c:254
 msgid "Appearance of the frame border"
 msgstr "Bagaimanana batas bingkai ditampilkan"
 
-#: gtk/gtkframe.c:260
+#: gtk/gtkframe.c:262
 msgid "A widget to display in place of the usual frame label"
 msgstr "Widget yang digunakan untuk menampilkan letak label bingkai"
 
@@ -5359,7 +5359,7 @@ msgstr "Tab dapat dilepas"
 msgid "Whether the tab is detachable"
 msgstr "Apakah tab dapat dilepas"
 
-#: gtk/gtknotebook.c:883 gtk/gtkscrollbar.c:137
+#: gtk/gtknotebook.c:883 gtk/gtkscrollbar.c:136
 msgid "Secondary backward stepper"
 msgstr "Tangga mundur sekunder"
 
@@ -5368,7 +5368,7 @@ msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Menampilkan tombol panah mundur sekunder pada sisi ujung area tab"
 
-#: gtk/gtknotebook.c:899 gtk/gtkscrollbar.c:144
+#: gtk/gtknotebook.c:899 gtk/gtkscrollbar.c:143
 msgid "Secondary forward stepper"
 msgstr "Tangga maju sekunder"
 
@@ -5377,19 +5377,19 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Menampilkan tombol panah maju sekunder pada sisi ujung area tab"
 
-#: gtk/gtknotebook.c:914 gtk/gtkscrollbar.c:123
+#: gtk/gtknotebook.c:914 gtk/gtkscrollbar.c:122
 msgid "Backward stepper"
 msgstr "Tangga Mundur"
 
-#: gtk/gtknotebook.c:915 gtk/gtkscrollbar.c:124
+#: gtk/gtknotebook.c:915 gtk/gtkscrollbar.c:123
 msgid "Display the standard backward arrow button"
 msgstr "Menampilkan tombol panah mundur standar"
 
-#: gtk/gtknotebook.c:929 gtk/gtkscrollbar.c:130
+#: gtk/gtknotebook.c:929 gtk/gtkscrollbar.c:129
 msgid "Forward stepper"
 msgstr "Tangga maju"
 
-#: gtk/gtknotebook.c:930 gtk/gtkscrollbar.c:131
+#: gtk/gtknotebook.c:930 gtk/gtkscrollbar.c:130
 msgid "Display the standard forward arrow button"
 msgstr "Menampilkan tombol panah maju standar"
 
@@ -6502,78 +6502,78 @@ msgstr "Bagaimana ukuran isi mesti ditentukan"
 msgid "Vertical Scrollable Policy"
 msgstr "Kebijakan Dapat Digulung Vertikal"
 
-#: gtk/gtkscrollbar.c:107
+#: gtk/gtkscrollbar.c:106
 msgid "Minimum Slider Length"
 msgstr "Panjang slider minimal"
 
-#: gtk/gtkscrollbar.c:108
+#: gtk/gtkscrollbar.c:107
 msgid "Minimum length of scrollbar slider"
 msgstr "Panjang slider scrollbar minimal"
 
-#: gtk/gtkscrollbar.c:116
+#: gtk/gtkscrollbar.c:115
 msgid "Fixed slider size"
 msgstr "Ukuran slider tetap"
 
-#: gtk/gtkscrollbar.c:117
+#: gtk/gtkscrollbar.c:116
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "Ukuran slider tidak diganti dan dikunci pada panjang minimum"
 
-#: gtk/gtkscrollbar.c:138
+#: gtk/gtkscrollbar.c:137
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Menampilkan tombol panah kedua dengan arah mundur pada sisi lawan scrollbar"
 
-#: gtk/gtkscrollbar.c:145
+#: gtk/gtkscrollbar.c:144
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Tampilkan tombol panah maju kedua di ujung lain dari batang penggulung"
 
-#: gtk/gtkscrolledwindow.c:571
+#: gtk/gtkscrolledwindow.c:559
 msgid "Horizontal Adjustment"
 msgstr "Penyesuaian Horisontal"
 
-#: gtk/gtkscrolledwindow.c:572
+#: gtk/gtkscrolledwindow.c:560
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "GtkAdjustment untuk posisi horisontal"
 
-#: gtk/gtkscrolledwindow.c:578
+#: gtk/gtkscrolledwindow.c:566
 msgid "Vertical Adjustment"
 msgstr "Penyesuaian Vertikal"
 
-#: gtk/gtkscrolledwindow.c:579
+#: gtk/gtkscrolledwindow.c:567
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment untuk posisi vertikal"
 
-#: gtk/gtkscrolledwindow.c:585
+#: gtk/gtkscrolledwindow.c:573
 msgid "Horizontal Scrollbar Policy"
 msgstr "Kebijakan Scrollbar Horisontal"
 
-#: gtk/gtkscrolledwindow.c:586
+#: gtk/gtkscrolledwindow.c:574
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Saat scrollbar horisontal ditampilkan"
 
-#: gtk/gtkscrolledwindow.c:593
+#: gtk/gtkscrolledwindow.c:581
 msgid "Vertical Scrollbar Policy"
 msgstr "Kebijakan Scrollbar Vertikal"
 
-#: gtk/gtkscrolledwindow.c:594
+#: gtk/gtkscrolledwindow.c:582
 msgid "When the vertical scrollbar is displayed"
 msgstr "Saat scrollbar vertikal ditampilkan"
 
-#: gtk/gtkscrolledwindow.c:601
+#: gtk/gtkscrolledwindow.c:589
 msgid "Window Placement"
 msgstr "Penempatan window"
 
-#: gtk/gtkscrolledwindow.c:602
+#: gtk/gtkscrolledwindow.c:590
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Dimana isi diletakkan terhadap batang penggulung."
 
-#: gtk/gtkscrolledwindow.c:620
+#: gtk/gtkscrolledwindow.c:608
 msgid "Window Placement Set"
 msgstr "Penempatan Jendela Ditata"
 
-#: gtk/gtkscrolledwindow.c:621
+#: gtk/gtkscrolledwindow.c:609
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -6581,90 +6581,90 @@ msgstr ""
 "Apakah \"window-placement\" mesti dipakai untuk menentukan lokasi isi "
 "terhadap batang penggulung."
 
-#: gtk/gtkscrolledwindow.c:627 gtk/gtkspinbutton.c:452
+#: gtk/gtkscrolledwindow.c:615 gtk/gtkspinbutton.c:452
 msgid "Shadow Type"
 msgstr "Tipe Bayangan"
 
-#: gtk/gtkscrolledwindow.c:628
+#: gtk/gtkscrolledwindow.c:616
 msgid "Style of bevel around the contents"
 msgstr "Gaya bevel disekeliling isi"
 
-#: gtk/gtkscrolledwindow.c:644
+#: gtk/gtkscrolledwindow.c:632
 msgid "Scrollbars within bevel"
 msgstr "Bilah gulir dengan bevel"
 
-#: gtk/gtkscrolledwindow.c:645
+#: gtk/gtkscrolledwindow.c:633
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Tempatkan bilah gulir di dalam bevel jendela yang digulirkan"
 
-#: gtk/gtkscrolledwindow.c:651
+#: gtk/gtkscrolledwindow.c:639
 msgid "Scrollbar spacing"
 msgstr "Jarak scrollbar"
 
-#: gtk/gtkscrolledwindow.c:652
+#: gtk/gtkscrolledwindow.c:640
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Jumlah piksel yang ditempatkan antara scrollbar dengan jendela yang discroll"
 
-#: gtk/gtkscrolledwindow.c:667
+#: gtk/gtkscrolledwindow.c:655
 msgid "Minimum Content Width"
 msgstr "Lebar Minimal Isi"
 
-#: gtk/gtkscrolledwindow.c:668
+#: gtk/gtkscrolledwindow.c:656
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 "Lebar minimal yang akan dialokasikan oleh jendela yang digulung ke isinya"
 
-#: gtk/gtkscrolledwindow.c:681
+#: gtk/gtkscrolledwindow.c:669
 msgid "Minimum Content Height"
 msgstr "Tinggi Minimal Isi"
 
-#: gtk/gtkscrolledwindow.c:682
+#: gtk/gtkscrolledwindow.c:670
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr ""
 "Tinggi minimal yang akan dialokasikan oleh jendela yang digulung ke isinya"
 
-#: gtk/gtkscrolledwindow.c:696
+#: gtk/gtkscrolledwindow.c:684
 msgid "Kinetic Scrolling"
 msgstr "Penggulungan Kinetik"
 
-#: gtk/gtkscrolledwindow.c:697
+#: gtk/gtkscrolledwindow.c:685
 msgid "Kinetic scrolling mode."
 msgstr "Mode penggulungan kinektik."
 
-#: gtk/gtkscrolledwindow.c:713
+#: gtk/gtkscrolledwindow.c:701
 msgid "Overlay Scrolling"
 msgstr "Penggulungan Overlay"
 
-#: gtk/gtkscrolledwindow.c:714
+#: gtk/gtkscrolledwindow.c:702
 msgid "Overlay scrolling mode"
 msgstr "Mode penggulungan overlay"
 
-#: gtk/gtkscrolledwindow.c:727
+#: gtk/gtkscrolledwindow.c:715
 msgid "Maximum Content Width"
 msgstr "Lebar Maksimal Isi"
 
-#: gtk/gtkscrolledwindow.c:728
+#: gtk/gtkscrolledwindow.c:716
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "Lebar maksimal yang akan dialokasikan oleh jendela yang digulung ke isinya"
 
-#: gtk/gtkscrolledwindow.c:741
+#: gtk/gtkscrolledwindow.c:729
 msgid "Maximum Content Height"
 msgstr "Tinggi Maksimal Isi"
 
-#: gtk/gtkscrolledwindow.c:742
+#: gtk/gtkscrolledwindow.c:730
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr ""
 "Tinggi maksimal yang akan dialokasikan oleh jendela yang digulung ke isinya"
 
-#: gtk/gtkscrolledwindow.c:759 gtk/gtkscrolledwindow.c:760
+#: gtk/gtkscrolledwindow.c:747 gtk/gtkscrolledwindow.c:748
 msgid "Propagate Natural Width"
 msgstr "Propagasikan Lebar Alami"
 
-#: gtk/gtkscrolledwindow.c:777 gtk/gtkscrolledwindow.c:778
+#: gtk/gtkscrolledwindow.c:765 gtk/gtkscrolledwindow.c:766
 msgid "Propagate Natural Height"
 msgstr "Propagasikan Tinggi Alami"
 
@@ -7558,7 +7558,7 @@ msgstr "Menentukan apakah karakter non-numerik diabaikan"
 
 #: gtk/gtkspinbutton.c:416
 msgid "Wrap"
-msgstr "Genap"
+msgstr "Lipat"
 
 #: gtk/gtkspinbutton.c:417
 msgid "Whether a spin button should wrap upon reaching its limits"
@@ -8118,11 +8118,11 @@ msgstr "Apakah tag ini mempengaruhi warna coretan"
 
 #: gtk/gtktexttag.c:831
 msgid "Wrap mode set"
-msgstr "Set modus potongan"
+msgstr "Set mode lipat"
 
 #: gtk/gtktexttag.c:832
 msgid "Whether this tag affects line wrap mode"
-msgstr "Menentukan apakah tag berpengaruh pada modus pemotongan garis"
+msgstr "Menentukan apakah tag berpengaruh pada modus pelipatan garis"
 
 #: gtk/gtktexttag.c:835
 msgid "Tabs set"
@@ -8186,7 +8186,7 @@ msgstr "Piksel Dalam Pelipatan"
 
 #: gtk/gtktextview.c:829
 msgid "Wrap Mode"
-msgstr "Mode Pembengkokan"
+msgstr "Mode Pelipatan"
 
 #: gtk/gtktextview.c:859
 msgid "Left Margin"
