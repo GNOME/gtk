@@ -14348,7 +14348,7 @@ style_start_element (GMarkupParseContext  *context,
           return;
         }
 
-      data->classes = g_slist_append (data->classes, g_strdup (name));
+      data->classes = g_slist_prepend (data->classes, g_strdup (name));
     }
   else if (strcmp (element_name, "style") == 0)
     {
