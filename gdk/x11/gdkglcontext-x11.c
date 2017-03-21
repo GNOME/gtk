@@ -212,12 +212,12 @@ gdk_x11_gl_context_get_damage (GdkGLContext *context)
       glXQueryDrawable(dpy, shared_x11->attached_drawable,
 		       GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
 
-      if (buffer_age >= 2)
+      if (buffer_age == 2)
         {
           if (window->old_updated_area[0])
             return cairo_region_copy (window->old_updated_area[0]);
         }
-      else if (buffer_age >= 3)
+      else if (buffer_age == 3)
         {
           if (window->old_updated_area[0] &&
               window->old_updated_area[1])
