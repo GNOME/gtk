@@ -1,11 +1,24 @@
-project('gtk+-3.0', 'c',
-        version: '3.90.0',
+project('gtk+-4.0', 'c',
+        version: '3.89.50',
         default_options: [
           'buildtype=debugoptimized',
           'warning_level=1'
         ],
-        meson_version : '>= 0.38.1',  # for array.get() with fallback
+        meson_version : '>= 0.39.1',
         license: 'LGPLv2.1+')
+
+glib_req          = '>= 2.49.4'
+pango_req         = '>= 1.37.3'
+atk_req           = '>= 2.15.1'
+cairo_req         = '>= 1.14.0'
+gdk_pixbuf_req    = '>= 2.30.0'
+introspection_req = '>= 1.39.0'
+wayland_proto_req = '>= 1.7'
+wayland_req       = '>= 1.9.91'
+mirclient_req     = '>= 0.22.0'
+mircookie_req     = '>= 0.17.0'
+graphene_req      = '>= 1.5.1'
+epoxy_req         = '>= 1.0'
 
 gnome = import('gnome')
 
@@ -14,10 +27,15 @@ add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
 add_project_arguments('-DG_ENABLE_DEBUG', language: 'c')
 add_project_arguments('-DG_ENABLE_CONSISTENCY_CHECKS', language: 'c')
 
-gtk_version       = meson.project_version().split('.')
-gtk_major_version = gtk_version[0].to_int()
-gtk_minor_version = gtk_version[1].to_int()
-gtk_micro_version = gtk_version[2].to_int()
+# Making releases:
+#  1. gtk_micro_version += 1;
+#  2. gtk_interface_age += 1;
+#  3. if any functions have been added, set gtk_interface_age to 0.
+#  4. if backwards compatibility has been broken, we're in trouble
+gtk_version       = meson.project_version()
+gtk_major_version = gtk_version.split('.')[0].to_int()
+gtk_minor_version = gtk_version.split('.')[1].to_int()
+gtk_micro_version = gtk_version.split('.')[2].to_int()
 gtk_interface_age = 0
 add_project_arguments('-DGTK_VERSION="' + meson.project_version() + '"', language: 'c')
 
@@ -28,10 +46,11 @@ add_project_arguments('-D_GNU_SOURCE', language : 'c')
 # might. Unless we add module-only API with lower stability
 # guarantees, this should be unchanged until we break binary compat
 # for GTK+.
-gtk_binary_version = '3.0.0'
+gtk_binary_version = '4.0.0'
 
 gtk_binary_age = 100 * gtk_minor_version + gtk_micro_version
-gtk_api_version = '@0@.0'.format(gtk_major_version)
+
+gtk_api_version = '4.0'
 
 x11_enabled      = get_option('enable-x11-backend')
 wayland_enabled  = get_option('enable-wayland-backend')
@@ -166,31 +185,57 @@ confinc = include_directories('.')
 gdkinc = include_directories('gdk')
 gtkinc = include_directories('gtk')
 
-glib_dep       = dependency('glib-2.0', version: '>= 2.49.4')
-giounix_dep    = dependency('gio-unix-2.0', required : false)
-pango_dep      = dependency('pango', version: '>=1.37.3')
+glib_dep       = dependency('glib-2.0', version: glib_req)
+giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required : false)
+pango_dep      = dependency('pango', version: pango_req)
 pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled)
-cairo_dep      = dependency('cairo', version: '>= 1.14.0')
-pangocairo_dep = dependency('pangocairo')
-cairogobj_dep  = dependency('cairo-gobject')
-pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: '>= 2.30.0')
-epoxy_dep      = dependency('epoxy', version: '>= 1.0')
-atk_dep        = dependency('atk', version: '>= 2.15.1')
-atkbridge_dep  = dependency('atk-bridge-2.0')
-gmodule_dep    = dependency('gmodule-2.0')
+cairo_dep      = dependency('cairo', version: cairo_req)
+pangocairo_dep = dependency('pangocairo', version: cairo_req)
+cairogobj_dep  = dependency('cairo-gobject', version: cairo_req)
+pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req)
+epoxy_dep      = dependency('epoxy', version: epoxy_req)
+atk_dep        = dependency('atk', version: atk_req)
+gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
 colord_dep     = dependency('colord', version: '>= 0.1.9', required: false)
-fontconfig_dep = dependency('fontconfig')
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: '>= 0.2.0')
-graphene_dep   = dependency('graphene-1.0', fallback : ['graphene', 'graphene_dep'])
+graphene_dep   = dependency('graphene-1.0', version: graphene_req,
+                            fallback : ['graphene', 'graphene_dep'])
+fontconfig_dep = [] # only used in x11 backend
+atkbridge_dep  = [] # only used in x11 backend
 
+pc_gdk_extra_libs = []
+
+cairo_backends = []
+foreach backend : [['cairo-xlib', x11_enabled],
+                   ['cairo-win32', win32_enabled],
+                   ['cairo-quartz', quartz_enabled],
+                   ['cairo', broadway_enabled or wayland_enabled or mir_enabled]]
+ if backend[1]
+   dependency(backend[0], version : cairo_req)
+   cairo_backends += [backend[0]]
+ endif
+endforeach
+
+atk_pkgs = ['atk']
+
+wayland_pkgs = []
 if wayland_enabled
-  wlclientdep    = dependency('wayland-client', version:  '>= 1.9.91')
-  wlprotocolsdep = dependency('wayland-protocols', version: '>= 1.7')
-  wlcursordep    = dependency('wayland-cursor', version: '>= 1.9.91')
+  wlclientdep    = dependency('wayland-client', version:  wayland_req)
+  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
+  wlcursordep    = dependency('wayland-cursor', version: wayland_req)
   wlegldep       = dependency('wayland-egl')
+
+  wayland_pkgs = [
+    'wayland-client', wayland_req,
+    'wayland-protocols', wayland_proto_req,
+    'xkbcommon', '>= 0.2.0',
+    'wayland-cursor', wayland_req,
+    'wayland-egl',
+  ]
 endif
 
+x11_pkgs = []
 if x11_enabled
   xrandr_dep     = dependency('xrandr', version: '>= 1.2.99')
   xrandr15_dep   = dependency('xrandr', version: '>= 1.5', required: false)
@@ -202,22 +247,32 @@ if x11_enabled
   xdamage_dep    = dependency('xdamage', required: false)
   xfixes_dep     = dependency('xfixes', required: false)
   xcomposite_dep = dependency('xcomposite', required: false)
+  fontconfig_dep = dependency('fontconfig')
+  atkbridge_dep  = dependency('atk-bridge-2.0', version: atk_req)
 
-  if xdamage_dep.found()
-    cdata.set('HAVE_XDAMAGE', 1)
-  endif
+  # FIXME: check for xinerama + add to x11_pkgs
+
+  x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr']
 
   if xcursor_dep.found()
-    cdata.set('HAVE_XCURSOR', 1)
+    x11_pkgs += ['xcursor']
   endif
-
-  if xcomposite_dep.found()
-    cdata.set('HAVE_XCOMPOSITE', 1)
-  endif
-
   if xfixes_dep.found()
-    cdata.set('HAVE_XFIXES', 1)
+    x11_pkgs += ['xfixes']
   endif
+  if xcomposite_dep.found()
+    x11_pkgs += ['xcomposite']
+  endif
+  if xdamage_dep.found()
+    x11_pkgs += ['xdamage']
+  endif
+
+  atk_pkgs += ['atk-bridge-2.0']
+
+  cdata.set('HAVE_XDAMAGE', xdamage_dep.found())
+  cdata.set('HAVE_XCURSOR', xcursor_dep.found())
+  cdata.set('HAVE_XCOMPOSITE', xcomposite_dep.found())
+  cdata.set('HAVE_XFIXES', xfixes_dep.found())
 
   if cc.has_function('XkbQueryExtension', dependencies : x11_dep,
                      prefix : '#include <X11/XKBlib.h>')
@@ -243,34 +298,41 @@ if x11_enabled
     endif
   endif
 
-  if xrandr_dep.found()
-    cdata.set('HAVE_RANDR', 1)
-
-    if xrandr15_dep.found()
-      cdata.set('HAVE_RANDR15', 1)
-    endif
-  endif
+  cdata.set('HAVE_RANDR', xrandr_dep.found())
+  cdata.set('HAVE_RANDR15', xrandr15_dep.found())
 endif
 
+mir_pkgs = []
 if mir_enabled
-  mirclient_dep = dependency('mirclient', version : '>= 0.22.0')
-  mircookie_dep = dependency('mircookie', version : '>= 0.17.0')
+  mirclient_dep = dependency('mirclient', version : mirclient_req)
+  mircookie_dep = dependency('mircookie', version : mircookie_req)
   libcontent_hub_glib_dep = dependency('libcontenthub-glib')
+
+  mir_pkgs = [
+    'mirclient', mirclient_req,
+    'mircookie', mircookie_req,
+    'libcontent-hub-glib',
+  ]
+endif
+
+if broadway_enabled
+  pc_gdk_extra_libs += ['-lz']
+endif
+
+if quartz_enabled
+  pc_gdk_extra_libs += ['-framework Cocoa', '-framework Carbon']
+endif
+
+if win32_enabled
+  pc_gdk_extra_libs += ['-lgdi32', '-limm32', '-lshell32', '-lole32',
+                        '-Wl,-luuid', '-lwinmm', '-ldwmapi', '-lsetupapi',
+                        '-lcfgmgr32']
 endif
 
 mlib = cc.find_library('m', required: false)
 
-if giounix_dep.found()
-  cdata.set('HAVE_GIO_UNIX', 1)
-endif
-
-if colord_dep.found()
-  cdata.set('HAVE_COLORD', 1)
-endif
-
-if mlib.found()
-  cdata.set('HAVE_LIBM', 1)
-endif
+cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
+cdata.set('HAVE_COLORD', colord_dep.found())
 
 # Check for Vulkan support
 # TODO: move to gsk subfolder maybe? Or will it be used elsewhere too?
@@ -283,7 +345,7 @@ if enable_vulkan != 'no'
     glslc = find_program('glslc', required : false)
     if glslc.found()
       have_vulkan = true
-      # FIXME: -lvulkan needs to go into gtk+-4.0.pc (GDK_EXTRA_LIBS)
+      pc_gdk_extra_libs += ['-lvulkan']
     else
       error('Need glslc for Vulkan support. See https://github.com/google/shaderc or compile with -Denable-vulkan=no')
     endif
@@ -305,3 +367,81 @@ subdir('demos')
 subdir('tests')
 subdir('testsuite')
 subdir('examples')
+
+# pkg-config files - bit of a mess all of this
+
+pkgconf = configuration_data()
+
+pkgconf.set('prefix', get_option('prefix'))
+pkgconf.set('exec_prefix', '${prefix}')
+pkgconf.set('libdir', '${prefix}/@0@'.format(get_option('libdir')))
+pkgconf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
+pkgconf.set('GTK_API_VERSION', gtk_api_version)
+pkgconf.set('VERSION', meson.project_version())
+pkgconf.set('GTK_BINARY_VERSION', gtk_binary_version)
+hm = host_machine
+pkgconf.set('host', '@0@-@1@'.format(hm.cpu_family(), hm.system())) # FIXME
+
+# Requires
+pango_pkgname = win32_enabled ? 'pangowin32' : 'pango'
+pkgconf.set('GDK_PACKAGES', ' '.join([
+  pango_pkgname, pango_req,
+  'pangocairo', pango_req,
+  'gdk-pixbuf-2.0', gdk_pixbuf_req,
+  'cairo', cairo_req,
+  'cairo-gobject', cairo_req]))
+pkgconf.set('GSK_PACKAGES', ' '.join([
+  #'gdk-pixbuf-2.0', gdk_pixbuf_req,
+  #'cairo', cairo_req,
+  #'cairo-gobject', cairo_req,
+  'graphene-gobject-1.0', graphene_req]))
+pkgconf.set('GTK_PACKAGES', ' '.join([
+  'atk', atk_req,
+  #'cairo', cairo_req,
+  #'cairo-gobject', cairo_req,
+  #'gdk-pixbuf-2.0', gdk_pixbuf_req,
+  'gio-2.0', glib_req]))
+
+# Requires.private
+gio_pkgname = os_unix ? 'gio-unix-2.0' : 'gio-2.0'
+pkgconf.set('GDK_PRIVATE_PACKAGES', ' '.join([
+  gio_pkgname, glib_req,
+  'epoxy', epoxy_req] + x11_pkgs + wayland_pkgs + mir_pkgs + cairo_backends))
+pkgconf.set('GSK_PRIVATE_PACKAGES', '') # all already in GDK_PRIVATE_PACKAGES
+pangoft2_pkgs = (wayland_enabled or x11_enabled) ? ['pangoft2'] : []
+pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(atk_pkgs + pangoft2_pkgs))
+
+pkgconf.set('GDK_EXTRA_LIBS', ' '.join(pc_gdk_extra_libs))
+pkgconf.set('GSK_EXTRA_LIBS', '')
+pkgconf.set('GTK_EXTRA_LIBS', '')
+
+pkgconf.set('GDK_EXTRA_CFLAGS', '')
+pkgconf.set('GSK_EXTRA_CFLAGS', '')
+pkgconf.set('GTK_EXTRA_CFLAGS', '')
+
+pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
+
+pkgs = ['gtk+-4.0.pc']
+
+pkg_targets = ''
+foreach backend : ['broadway', 'mir', 'quartz', 'wayland', 'win32', 'x11']
+  if get_variable('@0@_enabled'.format(backend))
+    pkgs += ['gtk+-@0@-4.0.pc'.format(backend)]
+    pkg_targets += ' ' + backend
+  endif
+endforeach
+pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
+
+foreach pkg : pkgs
+  configure_file(input : 'gtk+-4.0.pc.in',
+    output : pkg,
+    configuration : pkgconf,
+    install_dir : pkg_install_dir)
+endforeach
+
+if host_machine.system() != 'windows'
+  configure_file(input : 'gtk+-unix-print-4.0.pc.in',
+    output : 'gtk+-unix-print-4.0.pc',
+    configuration : pkgconf,
+    install_dir : pkg_install_dir)
+endif
