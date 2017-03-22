@@ -17,7 +17,7 @@ test('gdk/keysyms', test_keysyms)
 test_rectangle = executable('rectangle', 'rectangle.c', dependencies: libgtk_dep)
 test('gdk/rectangle', test_rectangle)
 
-test_rgba = executable('rgba', 'rgba.c', dependencies: libgdk_dep)
+test_rgba = executable('rgba', 'rgba.c', dependencies: libgtk_dep)
 test('gdk/rgba', test_rgba)
 
 test_seat = executable('seat', 'seat.c', dependencies: libgtk_dep)
