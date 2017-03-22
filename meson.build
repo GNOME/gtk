@@ -196,11 +196,11 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req)
 epoxy_dep      = dependency('epoxy', version: epoxy_req)
 atk_dep        = dependency('atk', version: atk_req)
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
-colord_dep     = dependency('colord', version: '>= 0.1.9', required: false)
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: '>= 0.2.0')
 graphene_dep   = dependency('graphene-1.0', version: graphene_req,
                             fallback : ['graphene', 'graphene_dep'])
+
 fontconfig_dep = [] # only used in x11 backend
 atkbridge_dep  = [] # only used in x11 backend
 
@@ -332,7 +332,6 @@ endif
 mlib = cc.find_library('m', required: false)
 
 cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
-cdata.set('HAVE_COLORD', colord_dep.found())
 
 # Check for Vulkan support
 # TODO: move to gsk subfolder maybe? Or will it be used elsewhere too?
