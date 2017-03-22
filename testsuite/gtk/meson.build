@@ -1,146 +1,190 @@
-test_accel = executable('accel', 'accel.c', dependencies: libgtk_dep)
-test('gtk/accel test', test_accel)
+tests = [
+  ['accel'],
+  ['accessible'],
+  ['adjustment'],
+  ['bitmask', ['../../gtk/gtkallocatedbitmask.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
+  ['builder', [], [], ['-export-dynamic']],
+  ['builderparser'],
+  ['cellarea'],
+  ['check-icon-names'],
+  ['check-cursor-names'],
+  ['clipboard'],
+  ['cssprovider'],
+  ['entry'],
+  ['firefox-stylecontext'],
+  ['floating'],
+  ['focus'],
+  ['gestures'],
+  ['grid'],
+  ['gtkmenu'],
+  ['icontheme'],
+  ['keyhash', ['../../gtk/gtkkeyhash.c', gtkresources, '../../gtk/gtkprivate.c'], gtk_cargs],
+  ['listbox'],
+  ['notify'],
+  ['no-gtk-init'],
+  ['object'],
+  ['objects-finalize'],
+  ['papersize'],
+  ['rbtree', ['../../gtk/gtkrbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
+  ['recentmanager'],
+  ['regression-tests'],
+  ['scrolledwindow'],
+  ['spinbutton'],
+  ['stylecontext'],
+  ['templates'],
+  ['textbuffer'],
+  ['textiter'],
+  ['treemodel', ['treemodel.c', 'liststore.c', 'treestore.c', 'filtermodel.c',
+                 'modelrefcount.c', 'sortmodel.c', 'gtktreemodelrefcount.c']],
+  ['treepath'],
+  ['treeview'],
+  ['typename'],
+  ['window'],
+  ['displayclose'],
+  ['revealer-size'],
+]
 
-test_accessible = executable('accessible', 'accessible.c', dependencies: libgtk_dep)
-test('gtk/accessible test', test_accessible)
+test_env = environment()
+test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+test_env.set('G_ENABLE_DIAGNOSTIC', '0')
+test_env.set('GIO_USE_VFS', 'local')
+test_env.set('GSETTINGS_BACKEND', 'memory')
 
-test_adjustment = executable('adjustment', 'adjustment.c', dependencies: libgtk_dep)
-test('gtk/adjustment test', test_adjustment)
+test_cargs = []
 
-test_bitmask = executable('bitmask', 'bitmask.c', dependencies: libgtk_dep)
-test('gtk/bitmask test', test_bitmask)
+if os_unix
+  # tests += [['defaultvalue']]  # disabled in Makefile.am as well
+  test_cargs += ['-DHAVE_UNIX_PRINT_WIDGETS']
+endif
 
-test_builder = executable('builder', 'builder.c', dependencies: libgtk_dep)
-test('gtk/builder test', test_builder)
+foreach t : tests
+  test_name = t.get(0)
+  test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
+  test_extra_cargs = t.get(2, [])
+  test_extra_ldflags = t.get(3, [])
 
-test_builderparser = executable(
-  'builderparser',
-  'builderparser.c',
-  dependencies: libgtk_dep,
-  link_with: libgtk,
+  test_exe = executable(test_name, test_srcs,
+    c_args : test_cargs + test_extra_cargs,
+    link_args : test_extra_ldflags,
+    dependencies : libgtk_dep)
 
-)
-test(
-  'gtk/builderparser test',
-  test_builderparser,
-  env: [
-      'G_TEST_SRCDIR='+meson.source_root(),
-      'G_TEST_BUILDDIR='+meson.build_root()
-  ]
-)
+  test('@0@ test'.format(test_name), test_exe, suite : 'gtk', env : test_env)
+endforeach
 
-test_cellarea = executable('cellarea', 'cellarea.c', dependencies: libgtk_dep)
-test('gtk/cellarea test', test_cellarea)
+# FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
+if add_languages('cpp')
+  test_exe = executable('autotestkeywords',
+    'autotestkeywords.cc',
+    c_args : test_cargs + ['-Idummy-headers'],
+    dependencies : libgtk_dep)
+  test('autotestkeywords test', test_exe, suite : 'gtk', env : test_env)
+endif
 
-test_check_icon_names = executable('check_icon_names', 'check-icon-names.c', dependencies: libgtk_dep)
-test('gtk/check_icon_names test', test_check_icon_names)
+# FIXME: schemas from gtk+ dir?
+# $(top_srcdir)/gtk/org.gtk.Settings.ColorChooser.gschema.xml
+# $(top_srcdir)/gtk/org.gtk.Settings.FileChooser.gschema.xml
+# gnome.compile_schemas()
 
-test_check_cursor_names = executable('check_cursor_names', 'check-cursor-names.c', dependencies: libgtk_dep)
-test('gtk/check_cursor_names test', test_check_cursor_names)
+# Installed data
 
-test_clipboard = executable('clipboard', 'clipboard.c', dependencies: libgtk_dep)
-test('gtk/clipboard test', test_clipboard)
+test_icontheme = [
+  'icons/index.theme',
+  'icons/16x16/simple.png',
+  'icons/16x16/twosize-fixed.svg',
+  'icons/16x16s/twosize.svg',
+  'icons/32x32/only32-symbolic.svg',
+  'icons/32x32/twosize-fixed.svg',
+  'icons/32x32s/twosize.svg',
+  'icons/scalable/everything-justregular.svg',
+  'icons/scalable/everything-justrtl-rtl.svg',
+  'icons/scalable/everything-rtl.svg',
+  'icons/scalable/everything-symbolic-rtl.svg',
+  'icons/scalable/everything-justsymbolic-symbolic.svg',
+  'icons/scalable/everything.svg',
+  'icons/scalable/everything-symbolic.svg',
+  'icons/scalable/nonsquare-symbolic.svg',
+  'icons/15/size-test.png',
+  'icons/16-22/size-test.png',
+  'icons/25+/size-test.svg',
+  'icons/35+/size-test.svg',
+  'icons/scalable/one-two.svg',
+  'icons/scalable/one-two-rtl.svg',
+  'icons2/scalable/one-two-three-symbolic.svg',
+  'icons2/scalable/one-two-symbolic.svg',
+  'icons2/scalable/one-two-symbolic-rtl.svg',
+  'icons2/index.theme',
+]
 
-test_cssprovider = executable('cssprovider', 'cssprovider.c', dependencies: libgtk_dep)
-test('gtk/cssprovider test', test_cssprovider)
+test_ui = [
+  'ui/test1.ui', 'ui/test1.expected',
+  'ui/test2.ui', 'ui/test2.expected',
+  'ui/test3.ui', 'ui/test3.expected',
+  'ui/test4.ui', 'ui/test4.expected',
+  'ui/test5.ui', 'ui/test5.expected',
+  'ui/test6.ui', 'ui/test6.expected',
+  'ui/test7.ui', 'ui/test7.expected',
+  'ui/label1.ui', 'ui/label1.expected',
+  'ui/label2.ui', 'ui/label2.expected',
+  'ui/label3.ui', 'ui/label3.expected',
+  'ui/label4.ui', 'ui/label4.expected',
+  'ui/label5.ui', 'ui/label5.expected',
+  'ui/celllayout1.ui', 'ui/celllayout1.expected',
+  'ui/celllayout2.ui', 'ui/celllayout2.expected',
+  'ui/celllayout3.ui', 'ui/celllayout3.expected',
+  'ui/celllayout4.ui', 'ui/celllayout4.expected',
+  'ui/celllayout5.ui', 'ui/celllayout5.expected',
+  'ui/celllayout6.ui', 'ui/celllayout6.expected',
+  'ui/celllayout7.ui', 'ui/celllayout7.expected',
+  'ui/container1.ui', 'ui/container1.expected',
+  'ui/container2.ui', 'ui/container2.expected',
+  'ui/container3.ui', 'ui/container3.expected',
+  'ui/container4.ui', 'ui/container4.expected',
+  'ui/container5.ui', 'ui/container5.expected',
+  'ui/container6.ui', 'ui/container6.expected',
+  'ui/container7.ui', 'ui/container7.expected',
+  'ui/container8.ui', 'ui/container8.expected',
+  'ui/scale1.ui', 'ui/scale1.expected',
+  'ui/scale2.ui', 'ui/scale2.expected',
+  'ui/scale3.ui', 'ui/scale3.expected',
+  'ui/scale4.ui', 'ui/scale4.expected',
+  'ui/scale5.ui', 'ui/scale5.expected',
+  'ui/scale6.ui', 'ui/scale6.expected',
+  'ui/scale7.ui', 'ui/scale7.expected',
+  'ui/levelbar1.ui', 'ui/levelbar1.expected',
+  'ui/levelbar2.ui', 'ui/levelbar2.expected',
+  'ui/levelbar3.ui', 'ui/levelbar3.expected',
+  'ui/levelbar4.ui', 'ui/levelbar4.expected',
+  'ui/levelbar5.ui', 'ui/levelbar5.expected',
+  'ui/levelbar6.ui', 'ui/levelbar6.expected',
+  'ui/dialog1.ui', 'ui/dialog1.expected',
+  'ui/dialog2.ui', 'ui/dialog2.expected',
+  'ui/dialog3.ui', 'ui/dialog3.expected',
+  'ui/dialog4.ui', 'ui/dialog4.expected',
+  'ui/dialog5.ui', 'ui/dialog5.expected',
+  'ui/dialog6.ui', 'ui/dialog6.expected',
+  'ui/filefilter1.ui', 'ui/filefilter1.expected',
+  'ui/filefilter2.ui', 'ui/filefilter2.expected',
+  'ui/filefilter3.ui', 'ui/filefilter3.expected',
+  'ui/filefilter4.ui', 'ui/filefilter4.expected',
+  'ui/filefilter5.ui', 'ui/filefilter5.expected',
+  'ui/filefilter6.ui', 'ui/filefilter6.expected',
+  'ui/filefilter7.ui', 'ui/filefilter7.expected',
+  'ui/filefilter8.ui', 'ui/filefilter8.expected',
+  'ui/filefilter9.ui', 'ui/filefilter9.expected',
+  'ui/filefilter10.ui', 'ui/filefilter10.expected',
+  'ui/infobar1.ui', 'ui/infobar1.expected',
+  'ui/infobar2.ui', 'ui/infobar2.expected',
+  'ui/infobar3.ui', 'ui/infobar3.expected',
+  'ui/infobar4.ui', 'ui/infobar4.expected',
+  'ui/infobar5.ui', 'ui/infobar5.expected',
+  'ui/infobar6.ui', 'ui/infobar6.expected',
+  'ui/image1.ui', 'ui/image1.expected',
+  'ui/image2.ui', 'ui/image2.expected',
+]
 
-test_defaultvalue = executable('defaultvalue', 'defaultvalue.c', dependencies: libgtk_dep)
-test('gtk/defaultvalue test', test_defaultvalue)
-
-test_entry = executable('entry', 'entry.c', dependencies: libgtk_dep)
-test('gtk/entry test', test_entry)
-
-test_firefox_stylecontext = executable('firefox_stylecontext', 'firefox-stylecontext.c', dependencies: libgtk_dep)
-test('gtk/firefox_stylecontext test', test_firefox_stylecontext)
-
-test_floating = executable('floating', 'floating.c', dependencies: libgtk_dep)
-test('gtk/floating test', test_floating)
-
-test_focus = executable('focus', 'focus.c', dependencies: libgtk_dep)
-test('gtk/focus test', test_focus)
-
-test_gestures = executable('gestures', 'gestures.c', dependencies: libgtk_dep)
-test('gtk/gestures test', test_gestures)
-
-test_grid = executable('grid', 'grid.c', dependencies: libgtk_dep)
-test('gtk/grid test', test_grid)
-
-test_gtkmenu = executable('gtkmenu', 'gtkmenu.c', dependencies: libgtk_dep)
-test('gtk/gtkmenu test', test_gtkmenu)
-
-test_icontheme = executable('icontheme', 'icontheme.c', dependencies: libgtk_dep)
-test('gtk/icontheme test', test_icontheme)
-
-test_keyhash = executable('keyhash', 'keyhash.c', dependencies: libgtk_dep)
-test('gtk/keyhash test', test_keyhash)
-
-test_listbox = executable('listbox', 'listbox.c', dependencies: libgtk_dep)
-test('gtk/listbox test', test_listbox)
-
-test_notify = executable('notify', 'notify.c', dependencies: libgtk_dep)
-test('gtk/notify test', test_notify)
-
-test_no_gtk_init = executable('no_gtk_init', 'no-gtk-init.c', dependencies: libgtk_dep)
-test('gtk/no_gtk_init test', test_no_gtk_init)
-
-test_object = executable('object', 'object.c', dependencies: libgtk_dep)
-test('gtk/object test', test_object)
-
-test_objects_finalize = executable('objects_finalize', 'objects-finalize.c', dependencies: libgtk_dep)
-test('gtk/objects_finalize test', test_objects_finalize)
-
-test_papersize = executable('papersize', 'papersize.c', dependencies: libgtk_dep)
-test('gtk/papersize test', test_papersize)
-
-test_rbtree = executable('rbtree', 'rbtree.c', dependencies: libgtk_dep)
-test('gtk/rbtree test', test_rbtree)
-
-test_recentmanager = executable('recentmanager', 'recentmanager.c', dependencies: libgtk_dep)
-test('gtk/recentmanager test', test_recentmanager)
-
-test_regression_tests = executable('regression_tests', 'regression-tests.c', dependencies: libgtk_dep)
-test('gtk/regression_tests test', test_regression_tests)
-
-test_scrolledwindow = executable('scrolledwindow', 'scrolledwindow.c', dependencies: libgtk_dep)
-test('gtk/scrolledwindow test', test_scrolledwindow)
-
-test_spinbutton = executable('spinbutton', 'spinbutton.c', dependencies: libgtk_dep)
-test('gtk/spinbutton test', test_spinbutton)
-
-test_stylecontext = executable('stylecontext', 'stylecontext.c', dependencies: libgtk_dep)
-test('gtk/stylecontext test', test_stylecontext)
-
-test_templates = executable('templates', 'templates.c', dependencies: libgtk_dep)
-test('gtk/templates test', test_templates)
-
-test_textbuffer = executable('textbuffer', 'textbuffer.c', dependencies: libgtk_dep)
-test('gtk/textbuffer test', test_textbuffer)
-
-test_textiter = executable('textiter', 'textiter.c', dependencies: libgtk_dep)
-test('gtk/textiter test', test_textiter)
-
-test_treemodel = executable(
-  'treemodel',
-  'treemodel.c', 'liststore.c', 'treestore.c', 'filtermodel.c',
-  'modelrefcount.c', 'sortmodel.c', 'gtktreemodelrefcount.c',
-  dependencies: libgtk_dep
-)
-test('gtk/treemodel test', test_treemodel)
-
-test_treepath = executable('treepath', 'treepath.c', dependencies: libgtk_dep)
-test('gtk/treepath test', test_treepath)
-
-test_treeview = executable('treeview', 'treeview.c', dependencies: libgtk_dep)
-test('gtk/treeview test', test_treeview)
-
-test_typename = executable('typename', 'typename.c', dependencies: libgtk_dep)
-test('gtk/typename test', test_typename)
-
-test_window = executable('window', 'window.c', dependencies: libgtk_dep)
-test('gtk/window test', test_window)
-
-test_displayclose = executable('displayclose', 'displayclose.c', dependencies: libgtk_dep)
-test('gtk/displayclose test', test_displayclose)
-
-test_revealer_size = executable('revealer_size', 'revealer-size.c', dependencies: libgtk_dep)
-test('gtk/revealer_size test', test_revealer_size)
+# TODO: installed tests + .test files
+# if install_tests
+#   install_data(test_icontheme + test_ui,
+#     install_dir : join_paths(libexecdir, 'installed-tests/gtk+'))
+# endif
