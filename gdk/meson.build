@@ -200,15 +200,13 @@ libgdk = static_library('gdk',
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
   include_directories: [confinc, xinc, wlinc],
   link_with: gdk_backends,
-  dependencies: gdk_deps,
-)
+  dependencies: gdk_deps)
 
-
+# We don't have link_with: to internal static libs here on purpose, just
+# list the dependencies and generated headers and such, for use in the
+# "public" libgtk_dep used by internal executables.
 libgdk_dep = declare_dependency(
   sources: ['gdk.h', gdkconfig, gdkenum_h],
   depends: gdk_sources,
   include_directories: [confinc, xinc, wlinc],
-  dependencies: gdk_deps,
-  link_with: libgdk,
-  link_args: ['-Bsymbolic'],
-)
+  dependencies: gdk_deps)

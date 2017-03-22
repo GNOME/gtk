@@ -157,12 +157,14 @@ libgsk = static_library('gsk',
   dependencies: gsk_deps,
   include_directories: [confinc],
   c_args: ['-DGSK_COMPILATION', '-DG_LOG_DOMAIN="Gsk"'],
-)
+  link_with: libgdk,
+  link_args: ['-Bsymbolic'])
 
+# We don't have link_with: to internal static libs here on purpose, just
+# list the dependencies and generated headers and such, for use in the
+# "public" libgtk_dep used by internal executables.
 libgsk_dep = declare_dependency(
   depends: gsk_sources,
-  link_with: libgsk,
-  link_args: ['-Bsymbolic'],
   include_directories: [confinc],
-  sources: [gskenum_h, gskresources]
-)
+  sources: [gskenum_h, gskresources],
+  dependencies: libgdk_dep)

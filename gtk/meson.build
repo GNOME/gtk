@@ -830,22 +830,17 @@ libgtk = shared_library('gtk-4',
   sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
   c_args: gtk_cargs,
   include_directories: [confinc, gdkinc, gtkinc],
-  dependencies: [gtk_deps, libgdk_dep, libgsk_dep],
-  install: true
-)
+  dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
+  link_with: [libgdk, libgsk],
+  link_args: ['-Bsymbolic'],
+  install: true)
 
 libgtk_dep = declare_dependency(
-  sources: [
-    'gtk.h',
-    gtkversion,
-    gtktypebuiltins_h,
-  ],
-  include_directories: [confinc],
-  dependencies: gtk_deps,
+  sources: [gtkversion, gtktypebuiltins_h],
+  include_directories: [confinc, gtkinc],
+  dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
   link_with: libgtk,
-  link_args: ['-Bsymbolic'],
-  include_directories: [confinc, gtkinc]
-)
+  link_args: ['-Bsymbolic'])
 
 # Installed tools
 
