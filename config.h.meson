@@ -315,3 +315,5 @@
 #mesondefine GTK_DATADIR
 
 #mesondefine GTK_LIBDIR
+
+#mesondefine GTK_PRINT_BACKENDS

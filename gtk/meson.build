@@ -768,7 +768,6 @@ gtk_cargs = [
   '-DGTK_SYSCONFDIR="' + get_option('prefix') + '/etc"',
   '-DGTK_DATADIR="' + get_option('datadir') + '"',
   '-DGTK_DATA_PREFIX="'+ get_option('prefix') + '"',
-  '-DGTK_PRINT_BACKENDS="null"', # FIXME
 ]
 
 gtk_sources += [
