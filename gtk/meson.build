@@ -826,7 +826,7 @@ endif
 # org.gtk.Settings.Debug.gschema.xml
 gnome.compile_schemas()
 
-libgtk = shared_library('gtk',
+libgtk = shared_library('gtk-4',
   sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
   c_args: gtk_cargs,
   include_directories: [confinc, gdkinc, gtkinc],

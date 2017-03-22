@@ -71,9 +71,6 @@
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 #mesondefine HAVE_LC_MESSAGES
 
-/* Define to 1 if you have the `m' library (-lm). */
-#mesondefine HAVE_LIBM
-
 /* Define to 1 if you have the <locale.h> header file. */
 #mesondefine HAVE_LOCALE_H
 
