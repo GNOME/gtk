@@ -8,3 +8,11 @@ option('enable-mir-backend', type: 'boolean', value: 'false',
   description : 'Enable the Mir gdk backend (UNTESTED, NEEDS WORK)')
 option('enable-vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable support for the Vulkan graphics API')
+option('enable-test-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'no',
+  description : 'Enable the test print backend')
+option('enable-cups-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable the CUPS print backend')
+option('enable-papi-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable the papi print backend')
+option('enable-cloudprint-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable the cloudprint print backend')

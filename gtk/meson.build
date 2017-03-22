@@ -628,6 +628,10 @@ if os_win32
     'gtkfilechoosernativewin32.c',
     'gtkwin32.c',
   ]
+
+  if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
+    cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)
+  endif
 endif
 
 if x11_enabled

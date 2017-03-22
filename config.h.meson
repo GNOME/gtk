@@ -95,9 +95,6 @@
 /* Define to 1 if you have the `nearbyint' function. */
 #mesondefine HAVE_NEARBYINT
 
-/* Define to 1 if libpapi available */
-#mesondefine HAVE_PAPI
-
 /* Define to 1 if you have the `posix_fallocate' function. */
 #mesondefine HAVE_POSIX_FALLOCATE
 

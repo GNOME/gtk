@@ -354,19 +354,21 @@ else
   message('Vulkan support explicitly disabled')
 endif
 
-configure_file(
-  input : 'config.h.meson',
-  output: 'config.h',
-  configuration: cdata
-)
-
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
 subdir('demos')
+subdir('modules')
 subdir('tests')
 subdir('testsuite')
 subdir('examples')
+
+# config.h
+
+configure_file(
+  input : 'config.h.meson',
+  output: 'config.h',
+  configuration: cdata)
 
 # pkg-config files - bit of a mess all of this
 
