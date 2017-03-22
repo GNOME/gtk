@@ -111,6 +111,8 @@ printbackends_install_dir = join_paths(get_option('libdir'), printbackends_subdi
 
 message('Print backends: ' + ' '.join(print_backends))
 
+cdata.set_quoted('GTK_PRINT_BACKENDS', ','.join(print_backends))
+
 foreach print_backend : print_backends
   subdir(print_backend)
 endforeach
