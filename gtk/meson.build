@@ -857,11 +857,13 @@ foreach tool : gtk_tools
   tool_name = tool.get(0)
   tool_srcs = tool.get(1)
 
-  executable(tool_name, tool_srcs,
+  exe = executable(tool_name, tool_srcs,
     include_directories: [confinc],
     c_args: gtk_cargs,
     dependencies: libgtk_dep,
     install: true)
+
+  set_variable(tool_name.underscorify(), exe) # used in testsuites
 endforeach
 
 # Data to install
