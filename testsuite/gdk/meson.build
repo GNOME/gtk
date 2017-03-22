@@ -1,24 +1,23 @@
-# FIXME: use array + foreach
-test_cairo = executable('cairo', 'cairo.c', dependencies: libgtk_dep)
-test('gdk/cairo', test_cairo)
+tests = [
+  'cairo',
+  # 'check-gdk-cairo' # disabled in Makefile.am
+  'cursor',
+  'display',
+  'encoding',
+  'keysyms',
+  'rectangle',
+  'rgba',
+  'seat',
+]
 
-test_cursor = executable('cursor', 'cursor.c', dependencies: libgtk_dep)
-test('gdk/cursor', test_cursor)
+test_env = environment()
+test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
 
-test_display = executable('display', 'display.c', dependencies: libgtk_dep)
-test('gdk/display', test_display)
+foreach t : tests
+  test_exe = executable(t, '@0@.c'.format(t), dependencies : libgtk_dep)
 
-test_encoding = executable('encoding', 'encoding.c', dependencies: libgtk_dep)
-test('gdk/encoding', test_encoding)
+  test('@0@ test'.format(t), test_exe, suite : 'gdk', env : test_env)
+endforeach
 
-test_keysyms = executable('keysyms', 'keysyms.c', dependencies: libgtk_dep)
-test('gdk/keysyms', test_keysyms)
-
-test_rectangle = executable('rectangle', 'rectangle.c', dependencies: libgtk_dep)
-test('gdk/rectangle', test_rectangle)
-
-test_rgba = executable('rgba', 'rgba.c', dependencies: libgtk_dep)
-test('gdk/rgba', test_rgba)
-
-test_seat = executable('seat', 'seat.c', dependencies: libgtk_dep)
-test('gdk/seat', test_seat)
+# TODO: installed tests + .test files
