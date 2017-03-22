@@ -756,6 +756,8 @@ gdk_wayland_device_grab (GdkDevice    *device,
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       /* Device is a keyboard */
+      gdk_wayland_window_inhibit_shortcuts (window,
+                                            gdk_device_get_seat (device));
       return GDK_GRAB_SUCCESS;
     }
   else
@@ -812,6 +814,9 @@ gdk_wayland_device_ungrab (GdkDevice *device,
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       /* Device is a keyboard */
+      if (prev_focus)
+        gdk_wayland_window_restore_shortcuts (prev_focus,
+                                              gdk_device_get_seat (device));
     }
   else
     {
@@ -4781,6 +4786,10 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
                                     _gdk_display_get_next_serial (display),
                                     evtime,
                                     FALSE);
+
+      /* Inhibit shortcuts if the seat grab is for the keyboard only */
+      if (capabilities == GDK_SEAT_CAPABILITY_KEYBOARD)
+        gdk_wayland_window_inhibit_shortcuts (window, seat);
     }
 
   if (wayland_seat->tablets &&
@@ -4852,7 +4861,11 @@ gdk_wayland_seat_ungrab (GdkSeat *seat)
       grab = _gdk_display_get_last_device_grab (display, wayland_seat->master_keyboard);
 
       if (grab)
-        grab->serial_end = grab->serial_start;
+        {
+          grab->serial_end = grab->serial_start;
+          if (grab->window)
+            gdk_wayland_window_restore_shortcuts (grab->window, seat);
+        }
     }
 
   if (wayland_seat->touch_master)

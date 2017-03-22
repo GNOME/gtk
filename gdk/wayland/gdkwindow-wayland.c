@@ -214,6 +214,7 @@ struct _GdkWindowImplWayland
   } exported;
 
   struct zxdg_imported_v1 *imported_transient_for;
+  GHashTable *shortcuts_inhibitors;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -685,6 +686,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
   impl->wrapper = GDK_WINDOW (window);
+  impl->shortcuts_inhibitors = g_hash_table_new (NULL, NULL);
 
   if (window->width > 65535)
     {
@@ -989,6 +991,8 @@ gdk_window_impl_wayland_finalize (GObject *object)
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
   g_clear_pointer (&impl->staged_updates_region, cairo_region_destroy);
+
+  g_hash_table_destroy (impl->shortcuts_inhibitors);
 
   G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
@@ -4310,3 +4314,50 @@ gdk_wayland_window_set_transient_for_exported (GdkWindow *window,
 
   return TRUE;
 }
+
+static struct zwp_keyboard_shortcuts_inhibitor_v1 *
+gdk_wayland_window_get_inhibitor (GdkWindowImplWayland *impl,
+                                  struct wl_seat *seat)
+{
+  return g_hash_table_lookup (impl->shortcuts_inhibitors, seat);
+}
+
+void
+gdk_wayland_window_inhibit_shortcuts (GdkWindow *window,
+                                      GdkSeat   *gdk_seat)
+{
+  GdkWindowImplWayland *impl= GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  struct wl_surface *surface = impl->display_server.wl_surface;
+  struct wl_seat *seat = gdk_wayland_seat_get_wl_seat (gdk_seat);
+  struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
+
+  if (display->keyboard_shortcuts_inhibit == NULL)
+    return;
+
+  if (gdk_wayland_window_get_inhibitor (impl, seat))
+    return; /* Already inhibitted */
+
+  inhibitor =
+      zwp_keyboard_shortcuts_inhibit_manager_v1_inhibit_shortcuts (
+          display->keyboard_shortcuts_inhibit, surface, seat);
+
+  g_hash_table_insert (impl->shortcuts_inhibitors, seat, inhibitor);
+}
+
+void
+gdk_wayland_window_restore_shortcuts (GdkWindow *window,
+                                      GdkSeat   *gdk_seat)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  struct wl_seat *seat = gdk_wayland_seat_get_wl_seat (gdk_seat);
+  struct zwp_keyboard_shortcuts_inhibitor_v1 *inhibitor;
+
+  inhibitor = gdk_wayland_window_get_inhibitor (impl, seat);
+  if (inhibitor == NULL)
+    return; /* Not inhibitted */
+
+  zwp_keyboard_shortcuts_inhibitor_v1_destroy (inhibitor);
+  g_hash_table_remove (impl->shortcuts_inhibitors, seat);
+}
+

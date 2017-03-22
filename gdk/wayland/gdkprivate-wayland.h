@@ -281,4 +281,9 @@ void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
 
 struct wl_output *gdk_wayland_window_get_wl_output (GdkWindow *window);
 
+void gdk_wayland_window_inhibit_shortcuts (GdkWindow *window,
+                                           GdkSeat   *gdk_seat);
+void gdk_wayland_window_restore_shortcuts (GdkWindow *window,
+                                           GdkSeat   *gdk_seat);
+
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */
