@@ -741,17 +741,17 @@ typefuncs = custom_target('gtktypefuncs.inc',
   install: false,
 )
 
-cdata = configuration_data()
-cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
-cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
-cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
-cdata.set('GTK_BINARY_AGE', gtk_binary_age)
-cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
+gtkversion_cdata = configuration_data()
+gtkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
+gtkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
+gtkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
+gtkversion_cdata.set('GTK_BINARY_AGE', gtk_binary_age)
+gtkversion_cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
 
 gtkversion = configure_file(
   input  : 'gtkversion.h.in',
   output : 'gtkversion.h',
-  configuration: cdata,
+  configuration: gtkversion_cdata,
   install_dir: 'include/gtk-4.0/gtk/'
 )
 
