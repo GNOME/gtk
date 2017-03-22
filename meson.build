@@ -445,3 +445,6 @@ if host_machine.system() != 'windows'
     configuration : pkgconf,
     install_dir : pkg_install_dir)
 endif
+
+subdir('po')
+subdir('po-properties')
