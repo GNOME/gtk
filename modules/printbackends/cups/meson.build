@@ -1,3 +1,12 @@
+enable_colord = get_option('enable-colord')
+if enable_colord != 'no'
+  want_colord = enable_colord == 'yes'
+  colord_dep = dependency('colord', version: '>= 0.1.9', required: want_colord)
+  cdata.set('HAVE_COLORD', colord_dep.found())
+else
+  colord_dep = []
+endif
+
 shared_module('printbackend-cups',
   'gtkprintbackendcups.c',
   'gtkprintercups.c',
