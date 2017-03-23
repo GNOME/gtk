@@ -90,40 +90,34 @@ cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 cdata.set('GTK_BINARY_AGE', gtk_binary_age)
 cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
+
 check_headers = [
-  ['HAVE_CRT_EXTERNS_H', 'crt/externs.h'],
-  ['HAVE_DLFCN_H', 'dlfcn.h'],
-  ['HAVE_FTW_H', 'ftw.h'],
-  ['HAVE_INTTYPES_H', 'inttypes.h'],
-  ['HAVE_LOCALE_H', 'locale.h'],
-  ['HAVE_MEMORY_H', 'memory.h'],
-  ['HAVE_STDINT_H', 'stdint.h'],
-  ['HAVE_STDLIB_H', 'stdlib.h'],
-  ['HAVE_STRINGS_H', 'strings.h'],
-  ['HAVE_STRING_H', 'string.h'],
-  ['HAVE_SYS_MMAN_H', 'sys/mman.h'],
-  ['HAVE_SYS_PARAM_H', 'sys/param.h'],
-  ['HAVE_SYS_STAT_H', 'sys/stat.h'],
-  ['HAVE_SYS_SYSINFO_H', 'sys/sysinfo.h'],
-  ['HAVE_SYS_SYSTEMINFO_H', 'sys/systeminfo.h'],
-  ['HAVE_SYS_TIME_H', 'sys/time.h'],
-  ['HAVE_SYS_TYPES_H', 'sys/types.h'],
-  ['HAVE_UNISTD_H', 'unistd.h'],
-  #['HAVE_LINUX_MEMFD_H', 'linux/memfd.h'], # FIXME: doesn't work, see below
+  'crt/externs.h',
+  'dlfcn.h',
+  'ftw.h',
+  'inttypes.h',
+  'linux/memfd.h',
+  'locale.h',
+  'memory.h',
+  'stdint.h',
+  'stdlib.h',
+  'strings.h',
+  'string.h',
+  'sys/mman.h',
+  'sys/param.h',
+  'sys/stat.h',
+  'sys/sysinfo.h',
+  'sys/systeminfo.h',
+  'sys/time.h',
+  'sys/types.h',
+  'unistd.h',
 ]
 
 foreach h : check_headers
-  if cc.has_header(h.get(1))
-    cdata.set(h.get(0), 1)
+  if cc.has_header(h)
+    cdata.set('HAVE_' + h.underscorify().to_upper(), 1)
   endif
 endforeach
-
-# FIXME: cc.has_header('linux/memfd.h') doesn't work with meson 0.39 and gcc
-# https://github.com/mesonbuild/meson/issues/1458
-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80005
-if cc.has_header_symbol('linux/memfd.h', 'MFD_CLOEXEC')
-  cdata.set('HAVE_LINUX_MEMFD_H', 1)
-endif
 
 # Maths functions might be implemented in libm
 libm = cc.find_library('m', required : false)
