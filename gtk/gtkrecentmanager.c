@@ -987,7 +987,7 @@ gtk_recent_manager_add_full (GtkRecentManager    *manager,
 
   g_bookmark_file_set_mime_type (priv->recent_items, uri, data->mime_type);
 
-  if (data->groups && data->groups[0] != '\0')
+  if (data->groups && ((char*)data->groups)[0] != '\0')
     {
       gint j;
 
